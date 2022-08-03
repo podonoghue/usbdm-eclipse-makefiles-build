@@ -377,6 +377,8 @@ public:
    static void writeUnlock(uint16_t wdogUnlock1, uint16_t wdogUnlock2) {
       wdog->UNLOCK = wdogUnlock1;
       wdog->UNLOCK = wdogUnlock2;
+      // Read-back to delay until change effected
+      (void)(wdog->UNLOCK);
    }
 
    /**

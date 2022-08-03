@@ -9,18 +9,18 @@ Devices using this peripheral:
    <xi:include href="_default_instance.xml"/>
 
    <!-- Indicates RTC/OSC0 share XTAL/EXTAL pins -->
-   <constant name="rtcSharesPins" value="true"  derived="true"/>
+   <constant key="rtcSharesPins" value="true"  derived="true"/>
    
    <!-- Oscillator used for OSC0 -->
-   <constant name="osc0_peripheral"   value="/OSC0"    derived="true"/>
+   <constant key="osc0_peripheral"   value="/OSC0"    derived="true"/>
    
    <!-- No OSC1, RTC uses external pin or OSC0 in low range (OSC32KCLK) -->
    
    <!-- RTC clock in (EXTAL32K) -->
-   <constant name="rtc_clkin"         value="/RTC/rtcclkin_clock" derived="true"/>
+   <constant key="rtc_clkin"         value="/RTC/rtcclkin_clock" derived="true"/>
    
    <category name="SOPT1" description="RTC signals">
-      <choiceOption name="sim_sopt1_osc32ksel" 
+      <choiceOption key="sim_sopt1_osc32ksel" 
          description="ERCLK32K source"
          toolTip="Clock source of External 32k Reference Clock [ERCLK32K]\n
             Used by LPTMR">
@@ -30,7 +30,7 @@ Devices using this peripheral:
          <choice value="3"  name="LPO 1kHz clock" isDefault="true" />
       </choiceOption>
       
-      <intOption name="system_erclk32k_clock" 
+      <intOption key="system_erclk32k_clock" 
          units="Hz"
          description="Frequency of External 32k Reference Clock [ERCLK32K]"
          toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
@@ -38,7 +38,7 @@ Devices using this peripheral:
          value="32768"
          constant="true" />
    
-      <choiceOption name="sim_sopt1_osc32kout" 
+      <choiceOption key="sim_sopt1_osc32kout" 
          description="ERCLK32K Clock Output"
          toolTip="Outputs the ERCLK32K on the selected pin in all modes of operation">
          <choice value="0"  name="ERCLK32K is not output" isDefault="true" />
@@ -114,7 +114,7 @@ Devices using this peripheral:
          \t}\n\n
       ]]></template>
       
-      <choiceOption name="sim_sopt2_fbsl" 
+      <choiceOption key="sim_sopt2_fbsl" 
          description="FlexBus security level"
          toolTip="This field affects what CPU operations can access off-chip via the FlexBus interface" >
          <choice value="0"  name="All off-chip accesses (instruction and data) are disallowed" />
@@ -123,7 +123,7 @@ Devices using this peripheral:
          <choice value="3"  name="Off-chip instruction and data accesses are allowed" />
       </choiceOption>
 
-      <choiceOption name="sim_sopt2_lpuartsrc" 
+      <choiceOption key="sim_sopt2_lpuartsrc" 
          description="LPUART Clock select"
          toolTip="Selects the clock source for the transmit and receive clock\n
 	     This is selection is shared by all LPUARTs">
@@ -133,7 +133,7 @@ Devices using this peripheral:
          <choice value="3"  name="MCGIRCLK clock"  isDefault="true" />
       </choiceOption>
    
-      <intOption name="system_lpuart_clock" 
+      <intOption key="system_lpuart_clock" 
          derived="true" 
          constant="true"
          units="Hz"
@@ -181,7 +181,7 @@ Devices using this peripheral:
       ]]></template>
       
       
-      <choiceOption name="sim_sopt2_clkoutsel" 
+      <choiceOption key="sim_sopt2_clkoutsel" 
          description="CLKOUT select"
          toolTip="Selects the clock to output on the CLKOUT pin" >
          <choice value="0"  name="FlexBus CLKOUT" />
@@ -194,7 +194,7 @@ Devices using this peripheral:
          <choice value="7"  name="IRC 48 MHz clock" />
       </choiceOption>
       
-      <binaryOption name="sim_sopt2_traceclksel" 
+      <binaryOption key="sim_sopt2_traceclksel" 
          description="Debug trace clock select"
          toolTip="Selects the core/system clock or MCG output clock (MCGOUTCLK)
 	          as the trace clock source" >
@@ -249,63 +249,63 @@ Devices using this peripheral:
    </category>
    
    <category name="SOPT4" description="FTM signals">
-      <binaryOption name="sim_sopt4_ftm3trg1src" 
+      <binaryOption key="sim_sopt4_ftm3trg1src" 
          description="FlexTimer 3 Hardware Trigger 1 Source Select"
          toolTip="Selects the source of FTM hardware trigger 1" >
          <choice value="0"  name="Reserved" />
          <choice value="1"  name="FTM2 channel match" isDefault="true" />
       </binaryOption>
       
-      <binaryOption name="sim_sopt4_ftm3trg0src" 
+      <binaryOption key="sim_sopt4_ftm3trg0src" 
          description="FlexTimer 3 Hardware Trigger 0 Source Select"
          toolTip="Selects the source of FTM hardware trigger 0" >
          <choice value="0"  name="Reserved" />
          <choice value="1"  name="FTM1 channel match" isDefault="true" />
       </binaryOption>
       
-      <binaryOption name="sim_sopt4_ftm0trg1src" 
+      <binaryOption key="sim_sopt4_ftm0trg1src" 
          description="FlexTimer 0 Hardware Trigger 1 Source Select"
          toolTip="Selects the source of FTM hardware trigger 1" >
          <choice value="0"  name="PDB output trigger 1" isDefault="true" />
          <choice value="1"  name="FTM2 channel match" />
       </binaryOption>
       
-      <binaryOption name="sim_sopt4_ftm0trg0src" 
+      <binaryOption key="sim_sopt4_ftm0trg0src" 
          description="FlexTimer 0 Hardware Trigger 0 Source Select"
          toolTip="Selects the source of FTM hardware trigger 0" >
          <choice value="0"  name="CMP0 output" isDefault="true" />
          <choice value="1"  name="FTM1 channel match" />
       </binaryOption>
       
-      <binaryOption name="sim_sopt4_ftm3clksel" 
+      <binaryOption key="sim_sopt4_ftm3clksel" 
          description="FlexTimer 3 External Clock Pin Select"
          toolTip="Selects the external pin used to drive the clock to the FTM module">
          <choice value="0"  name="FTM_CLKIN0 pin" isDefault="true" />
          <choice value="1"  name="FTM_CLKIN1 pin" />
       </binaryOption>
       
-      <binaryOption name="sim_sopt4_ftm2clksel" 
+      <binaryOption key="sim_sopt4_ftm2clksel" 
          description="FlexTimer 2 External Clock Pin Select"
          toolTip="Selects the external pin used to drive the clock to the FTM module">
          <choice value="0"  name="FTM_CLKIN0 pin" isDefault="true" />
          <choice value="1"  name="FTM_CLKIN1 pin" />
       </binaryOption>
       
-      <binaryOption name="sim_sopt4_ftm1clksel" 
+      <binaryOption key="sim_sopt4_ftm1clksel" 
          description="FlexTimer 1 External Clock Pin Select"
          toolTip="Selects the external pin used to drive the clock to the FTM module">
          <choice value="0"  name="FTM_CLKIN0 pin" isDefault="true" />
          <choice value="1"  name="FTM_CLKIN1 pin" />
       </binaryOption>
       
-      <binaryOption name="sim_sopt4_ftm0clksel" 
+      <binaryOption key="sim_sopt4_ftm0clksel" 
          description="FlexTimer 0 External Clock Pin Select"
          toolTip="Selects the external pin used to drive the clock to the FTM module">
          <choice value="0"  name="FTM_CLKIN0 pin" isDefault="true" />
          <choice value="1"  name="FTM_CLKIN1 pin" />
       </binaryOption>
       
-      <binaryOption name="sim_sopt4_ftm2ch1src" 
+      <binaryOption key="sim_sopt4_ftm2ch1src" 
          description="FlexTimer 2 channel 1 input capture source select"
          toolTip="Selects the source for FTM channel 1 input capture\n
             NOTE: When the FTM is not in input capture mode, clear this field">
@@ -313,7 +313,7 @@ Devices using this peripheral:
          <choice value="2" name="FTM2_CH1 xor FTM2_CH0 xor FTM1_CH1" />
       </binaryOption>
    
-      <choiceOption name="sim_sopt4_ftm2ch0src" 
+      <choiceOption key="sim_sopt4_ftm2ch0src" 
          description="FlexTimer 2 channel 0 input capture source select"
          toolTip="Selects the source for FTM channel 0 input capture\n
             NOTE: When the FTM is not in input capture mode, clear this field">
@@ -323,7 +323,7 @@ Devices using this peripheral:
          <choice value="3" name="Reserved" />
       </choiceOption>
       
-      <choiceOption name="sim_sopt4_ftm1ch0src" 
+      <choiceOption key="sim_sopt4_ftm1ch0src" 
          description="FlexTimer 1 channel 0 input capture source select"
          toolTip="Selects the source for FTM channel 0 input capture\n
             NOTE: When the FTM is not in input capture mode, clear this field">
@@ -332,35 +332,35 @@ Devices using this peripheral:
          <choice value="2" name="CMP1 output" />
       </choiceOption>
       
-      <binaryOption name="sim_sopt4_ftm3flt0" 
+      <binaryOption key="sim_sopt4_ftm3flt0" 
          description="FlexTimer 3 Fault 0 Select"
          toolTip="Selects the source of FTM fault 0" >
          <choice value="0"  name="FTM3_FLT0 pin" isDefault="true" />
          <choice value="1"  name="CMP0 output" />
       </binaryOption>
    
-      <binaryOption name="sim_sopt4_ftm2flt0" 
+      <binaryOption key="sim_sopt4_ftm2flt0" 
          description="FlexTimer 2 Fault 0 Select"
          toolTip="Selects the source of FTM fault input  0" >
          <choice value="0"  name="FTM2_FLT0 pin" isDefault="true" />
          <choice value="1"  name="CMP0 output" />
       </binaryOption>
       
-      <binaryOption name="sim_sopt4_ftm1flt0" 
+      <binaryOption key="sim_sopt4_ftm1flt0" 
          description="FlexTimer 1 Fault 0 Select"
          toolTip="Selects the source of FTM fault input 0" >
          <choice value="0"  name="FTM1_FLT0 pin" isDefault="true" />
          <choice value="1"  name="CMP0 output" />
       </binaryOption>
       
-      <binaryOption name="sim_sopt4_ftm0flt1" 
+      <binaryOption key="sim_sopt4_ftm0flt1" 
          description="FlexTimer 0 Fault 1 Select"
          toolTip="Selects the source of FTM fault input 1" >
          <choice value="0"  name="FTM0_FLT1 pin" isDefault="true" />
          <choice value="1"  name="CMP1 output" />
       </binaryOption>
       
-      <binaryOption name="sim_sopt4_ftm0flt0" 
+      <binaryOption key="sim_sopt4_ftm0flt0" 
          description="FlexTimer 0 Fault 0 Select"
          toolTip="Selects the source of FTM fault input 0" >
          <choice value="0"  name="FTM0_FLT0 pin" isDefault="true" />
@@ -424,7 +424,7 @@ Devices using this peripheral:
    </category>
    
    <category name="SOPT5" description="UART signals">
-      <choiceOption name="sim_sopt5_uart0txsrc" 
+      <choiceOption key="sim_sopt5_uart0txsrc" 
          description="UART 0 transmit data source select"
          toolTip="Selects the source for the UART 0 transmit data">
          <choice value="0" name="UART0_TX pin" isDefault="true" />
@@ -433,7 +433,7 @@ Devices using this peripheral:
          <choice value="3" name="Reserved" />
       </choiceOption>
       
-      <choiceOption name="sim_sopt5_uart0rxsrc" 
+      <choiceOption key="sim_sopt5_uart0rxsrc" 
          description="UART 0 receive data source select"
          toolTip="Selects the source for the UART 0 receive data">
          <choice value="0" name="UART0_RX pin" isDefault="true" />
@@ -442,7 +442,7 @@ Devices using this peripheral:
          <choice value="3" name="Reserved" />
       </choiceOption>
       
-      <choiceOption name="sim_sopt5_uart1txsrc" 
+      <choiceOption key="sim_sopt5_uart1txsrc" 
          description="UART 1 transmit data source select"
          toolTip="Selects the source for the UART 1 transmit data">
          <choice value="0" name="UART1_TX pin" isDefault="true" />
@@ -451,7 +451,7 @@ Devices using this peripheral:
          <choice value="3" name="Reserved" />
       </choiceOption>
       
-      <choiceOption name="sim_sopt5_uart1rxsrc" 
+      <choiceOption key="sim_sopt5_uart1rxsrc" 
          description="UART 1 receive data source select"
          toolTip="Selects the source for the UART 1 receive data">
          <choice value="0" name="UART1_RX pin" isDefault="true" />
@@ -460,7 +460,7 @@ Devices using this peripheral:
          <choice value="3" name="Reserved" />
       </choiceOption>
       
-      <choiceOption name="sim_sopt5_lpuart0rxsrc" 
+      <choiceOption key="sim_sopt5_lpuart0rxsrc" 
          description="LPUART 0 receive data source select"
          toolTip="Selects the source for the LPUART 0 receive data">
          <choice value="0" name="LPUART0_RX pin" isDefault="true" />
@@ -493,21 +493,21 @@ Devices using this peripheral:
    </category>
    
    <category name="SOPT7" description="ADC signals">
-      <binaryOption name="sim_sopt7_adc0alttrgen" 
+      <binaryOption key="sim_sopt7_adc0alttrgen" 
          description="ADC0 alternate trigger enable"
          toolTip="Enable alternative conversion triggers for ADC0">
          <choice value="0" name="PDB trigger selected" isDefault="true" />
          <choice value="1" name="Alternate trigger selected" />
       </binaryOption>
       
-      <binaryOption name="sim_sopt7_adc0pretrgsel" 
+      <binaryOption key="sim_sopt7_adc0pretrgsel" 
          description="ADC0 pretrigger select"
          toolTip="Selects the pre-trigger source when alternative triggers are enabled through ADC0ALTTRGEN">
          <choice value="0" name="Pre-trigger 0 (A)" isDefault="true" />
          <choice value="1" name="Pre-trigger 1 (B)" />
       </binaryOption>
       
-      <choiceOption name="sim_sopt7_adc0trgsel" 
+      <choiceOption key="sim_sopt7_adc0trgsel" 
          description="ADC0 trigger select"
          toolTip="Selects the trigger source when alternative triggers are functional in stop and VLPS modes">
          <choice value="0"  name="PDB external trigger pin input (PDB0_EXTRG)" isDefault="true" />
@@ -580,21 +580,21 @@ Devices using this peripheral:
          \t};\n\n
       ]]></template>
       
-      <binaryOption name="sim_sopt7_adc1alttrgen" 
+      <binaryOption key="sim_sopt7_adc1alttrgen" 
          description="ADC1 alternate trigger enable"
          toolTip="Enable alternative conversion triggers for ADC1">
          <choice value="0" name="PDB trigger selected" isDefault="true" />
          <choice value="1" name="Alternate trigger selected" />
       </binaryOption>
    
-      <binaryOption name="sim_sopt7_adc1pretrgsel" 
+      <binaryOption key="sim_sopt7_adc1pretrgsel" 
          description="ADC1 pretrigger select"
          toolTip="Selects the pre-trigger source when alternative triggers are enabled through ADC1ALTTRGEN">
          <choice value="0" name="Pre-trigger 0 (A)" isDefault="true" />
          <choice value="1" name="Pre-trigger 1 (B)" />
       </binaryOption>
    
-      <choiceOption name="sim_sopt7_adc1trgsel" 
+      <choiceOption key="sim_sopt7_adc1trgsel" 
          description="ADC1 trigger select"
          toolTip="Selects the trigger source when alternative triggers are functional in stop and VLPS modes">
          <choice value="0"  name="PDB external trigger pin input (PDB0_EXTRG)" isDefault="true" />
@@ -682,97 +682,97 @@ Devices using this peripheral:
    </category>
    
    <category name="SOPT8" description="FTM signals">
-      <binaryOption name="sim_sopt8_ftm3och7src" 
+      <binaryOption key="sim_sopt8_ftm3och7src" 
          description="FTM3 channel 7 output source" >
          <choice value="0" name="FTM3_CH7 pin is FTM3 ch 7 output" />
          <choice value="1" name="FTM3_CH7 pin is FTM3 ch 7 output, modulated by FTM2 ch 1" />
       </binaryOption>
 
-      <binaryOption name="sim_sopt8_ftm3och6src" 
+      <binaryOption key="sim_sopt8_ftm3och6src" 
          description="FTM3 channel 6 output source" >
          <choice value="0" name="FTM3_CH6 pin is FTM3 ch 6 output" />
          <choice value="1" name="FTM3_CH6 pin is FTM3 ch 6 output, modulated by FTM2 ch 1" />
       </binaryOption>
 
-      <binaryOption name="sim_sopt8_ftm3och5src" 
+      <binaryOption key="sim_sopt8_ftm3och5src" 
          description="FTM3 channel 5 output source" >
          <choice value="0" name="FTM3_CH5 pin is FTM3 ch 5 output" />
          <choice value="1" name="FTM3_CH5 pin is FTM3 ch 5 output, modulated by FTM2 ch 1" />
       </binaryOption>
 
-      <binaryOption name="sim_sopt8_ftm3och4src" 
+      <binaryOption key="sim_sopt8_ftm3och4src" 
          description="FTM3 channel 4 output source" >
          <choice value="0" name="FTM3_CH4 pin is FTM3 ch 4 output" />
          <choice value="1" name="FTM3_CH4 pin is FTM3 ch 4 output, modulated by FTM2 ch 1" />
       </binaryOption>
 
-      <binaryOption name="sim_sopt8_ftm3och3src" 
+      <binaryOption key="sim_sopt8_ftm3och3src" 
          description="FTM3 channel 3 output source" >
          <choice value="0" name="FTM3_CH3 pin is FTM3 ch 3 output" />
          <choice value="1" name="FTM3_CH3 pin is FTM3 ch 3 output, modulated by FTM2 ch 1" />
       </binaryOption>
 
-      <binaryOption name="sim_sopt8_ftm3och2src" 
+      <binaryOption key="sim_sopt8_ftm3och2src" 
          description="FTM3 channel 2 output source" >
          <choice value="0" name="FTM3_CH2 pin is FTM3 ch 2 output" />
          <choice value="1" name="FTM3_CH2 pin is FTM3 ch 2 output, modulated by FTM2 ch 1" />
       </binaryOption>
 
-      <binaryOption name="sim_sopt8_ftm3och1src" 
+      <binaryOption key="sim_sopt8_ftm3och1src" 
          description="FTM3 channel 1 output source" >
          <choice value="0" name="FTM3_CH1 pin is FTM3 ch 1 output" />
          <choice value="1" name="FTM3_CH1 pin is FTM3 ch 1 output, modulated by FTM2 ch 1" />
       </binaryOption>
 
-      <binaryOption name="sim_sopt8_ftm3och0src" 
+      <binaryOption key="sim_sopt8_ftm3och0src" 
          description="FTM3 channel 0 output source" >
          <choice value="3" name="FTM3_CH0 pin is FTM3 ch 0 output" />
          <choice value="1" name="FTM3_CH0 pin is FTM3 ch 0 output, modulated by FTM2 ch 1" />
       </binaryOption>
       
-      <binaryOption name="sim_sopt8_ftm0och7src" 
+      <binaryOption key="sim_sopt8_ftm0och7src" 
          description="FTM0 channel 7 output source" >
          <choice value="0" name="FTM0_CH7 pin is FTM0 ch 7 output" />
          <choice value="1" name="FTM0_CH7 pin is FTM0 ch 7 output, modulated by FTM1 ch 1" />
       </binaryOption>
 
-      <binaryOption name="sim_sopt8_ftm0och6src" 
+      <binaryOption key="sim_sopt8_ftm0och6src" 
          description="FTM0 channel 6 output source" >
          <choice value="0" name="FTM0_CH6 pin is FTM0 ch 6 output" />
          <choice value="1" name="FTM0_CH6 pin is FTM0 ch 6 output, modulated by FTM1 ch 1" />
       </binaryOption>
 
-      <binaryOption name="sim_sopt8_ftm0och5src" 
+      <binaryOption key="sim_sopt8_ftm0och5src" 
          description="FTM0 channel 5 output source" >
          <choice value="0" name="FTM0_CH5 pin is FTM0 ch 5 output" />
          <choice value="1" name="FTM0_CH5 pin is FTM0 ch 5 output, modulated by FTM1 ch 1" />
       </binaryOption>
 
-      <binaryOption name="sim_sopt8_ftm0och4src" 
+      <binaryOption key="sim_sopt8_ftm0och4src" 
          description="FTM0 channel 4 output source" >
          <choice value="0" name="FTM0_CH4 pin is FTM0 ch 4 output" />
          <choice value="1" name="FTM0_CH4 pin is FTM0 ch 4 output, modulated by FTM1 ch 1" />
       </binaryOption>
 
-      <binaryOption name="sim_sopt8_ftm0och3src" 
+      <binaryOption key="sim_sopt8_ftm0och3src" 
          description="FTM0 channel 3 output source" >
          <choice value="0" name="FTM0_CH3 pin is FTM0 ch 3 output" />
          <choice value="1" name="FTM0_CH3 pin is FTM0 ch 3 output, modulated by FTM1 ch 1" />
       </binaryOption>
 
-      <binaryOption name="sim_sopt8_ftm0och2src" 
+      <binaryOption key="sim_sopt8_ftm0och2src" 
          description="FTM0 channel 2 output source" >
          <choice value="0" name="FTM0_CH2 pin is FTM0 ch 2 output" />
          <choice value="1" name="FTM0_CH2 pin is FTM0 ch 2 output, modulated by FTM1 ch 1" />
       </binaryOption>
 
-      <binaryOption name="sim_sopt8_ftm0och1src" 
+      <binaryOption key="sim_sopt8_ftm0och1src" 
          description="FTM0 channel 1 output source" >
          <choice value="0" name="FTM0_CH1 pin is FTM0 ch 1 output" />
          <choice value="1" name="FTM0_CH1 pin is FTM0 ch 1 output, modulated by FTM1 ch 1" />
       </binaryOption>
 
-      <binaryOption name="sim_sopt8_ftm0och0src" 
+      <binaryOption key="sim_sopt8_ftm0och0src" 
          description="FTM0 channel 0 output source" >
          <choice value="0" name="FTM0_CH0 pin is FTM0 ch 0 output" />
          <choice value="1" name="FTM0_CH0 pin is FTM0 ch 0 output, modulated by FTM1 ch 1" />
@@ -809,7 +809,7 @@ Devices using this peripheral:
       <aliasOption key="/MCG/ClockConfig[]"
         constant="true"/>
       
-      <choiceOption name="sim_sopt2_pllfllsel[]"
+      <choiceOption key="sim_sopt2_pllfllsel[]"
          description="Peripheral Clock select"
          toolTip="Selects the clock for various peripherals (LPUART, TPM etc.)">
          <choice value="0"  name="MCGFLLCLK clock" isDefault="true" />
@@ -818,34 +818,34 @@ Devices using this peripheral:
          <choice value="3"  name="IRC48 MHz clock" />
       </choiceOption>
    
-      <intOption name="system_peripheral_clock[]"
+      <intOption key="system_peripheral_clock[]"
          derived="true"
          constant="true"
          units="Hz"
          description="Peripheral Clock frequency"
          toolTip="Frequency of Peripheral Clock available to various peripherals"  />
 	 
-      <intOption name="system_core_clock[]" 
+      <intOption key="system_core_clock[]" 
          units="Hz"
          description="System Core Clock"
          toolTip="Clocks the ARM Cortex-M4 core and bus masters"
          value="120000000" />
       
-      <intOption name="system_bus_clock[]" 
+      <intOption key="system_bus_clock[]" 
          units="Hz"
          description="System Bus Clock"
          toolTip="Clocks the bus slaves and peripherals\n
                   Must be &lt;= Core Clock frequency and an integer divisor"
          value="60000000" />
    
-      <intOption name="system_flexbus_clock[]" 
+      <intOption key="system_flexbus_clock[]" 
          units="Hz"
          description="System Flexbus Clock"
          toolTip="Clocks the flexbus interface\n
                   Must be &lt;= Bus Clock frequency"
          value="60000000" />
       
-      <intOption name="system_flash_clock[]" 
+      <intOption key="system_flash_clock[]" 
          units="Hz"
          description="System Flash Clock"
          toolTip="Clocks the flash memory\n
@@ -854,7 +854,7 @@ Devices using this peripheral:
          value="24000000" />
       
       <category name="CLKDIV1" description="System Clock Dividers">
-         <intOption name="sim_clkdiv1_outdiv1[]" 
+         <intOption key="sim_clkdiv1_outdiv1[]" 
             derived="true"
             constant="true"
             description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
@@ -862,7 +862,7 @@ Devices using this peripheral:
                      Divides MCGOUT Clock to generate system_core_clock"
             value="1" offset="-1" min="1" max="16" />
          
-         <intOption name="sim_clkdiv1_outdiv2[]" 
+         <intOption key="sim_clkdiv1_outdiv2[]" 
             derived="true"
             constant="true"
             description="Bus Clock Divider (OUTDIV2) - Divide by [1-16]"
@@ -871,7 +871,7 @@ Devices using this peripheral:
                MCGOUTCLK clock is source. Default /2"
             value="1" offset="-1" min="1" max="16" />
       
-         <intOption name="sim_clkdiv1_outdiv3[]" 
+         <intOption key="sim_clkdiv1_outdiv3[]" 
             derived="true"
             constant="true"
             description="Flexbus Clock Divider (OUTDIV3) - Divide by [1-16]"
@@ -880,7 +880,7 @@ Devices using this peripheral:
                      MCGOUTCLK clock is source. Default /2"
             value="1" offset="-1" min="1" max="16" />
          
-         <intOption name="sim_clkdiv1_outdiv4[]" 
+         <intOption key="sim_clkdiv1_outdiv4[]" 
             derived="true"
             constant="true"
             description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"

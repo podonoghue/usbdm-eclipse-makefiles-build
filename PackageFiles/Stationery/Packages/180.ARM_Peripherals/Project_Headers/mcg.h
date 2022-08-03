@@ -46,6 +46,8 @@ $(/MCG/ClockConfig:// XXXX !!!!!!!ClockConfig - Not found!!!!!!!)
    ClockConfig_default = 0,
 };
 
+$(/MCG/ClockInfoType:!!!!!!!Not found!!!!!!!)
+
 /**
  * Type definition for MCG interrupt call back
  */
@@ -72,7 +74,7 @@ public:
    /**
     * Table of clock settings
     */
-   static const McgInfo::ClockInfo clockInfo[];
+   static const ClockInfo clockInfo[];
 
    /**
     * Transition from current clock mode to mode given
@@ -81,7 +83,7 @@ public:
     *
     * @return E_NO_ERROR on success
     */
-   static ErrorCode clockTransition(const McgInfo::ClockInfo &clockInfo);
+   static ErrorCode clockTransition(const ClockInfo &clockInfo);
 
    /**
     * Write main MCG registers from clockInfo
@@ -94,7 +96,7 @@ public:
     * @param clockInfo  Clock settings information
     * @param bugFix     Mask to flip MCG.C4 value
     */
-   static void writeMainRegs(const McgInfo::ClockInfo &clockInfo, uint8_t bugFix);
+   static void writeMainRegs(const ClockInfo &clockInfo, uint8_t bugFix);
 
    /**
     * Update SystemCoreClock variable
@@ -145,14 +147,14 @@ public:
    }
 
    /** Current clock mode (FEI out of reset) */
-   static McgInfo::ClockMode currentClockMode;
+   static McgClockMode currentClockMode;
 
    /**
     * Get current clock mode
     *
     * @return
     */
-   static McgInfo::ClockMode getClockMode() {
+   static McgClockMode getClockMode() {
       return currentClockMode;
    }
 
@@ -161,7 +163,7 @@ public:
     *
     * @return Pointer to static string
     */
-   static const char *getClockModeName(McgInfo::ClockMode);
+   static const char *getClockModeName(McgClockMode);
 
    /**
     * Get name for current clock mode

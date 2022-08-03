@@ -84,19 +84,6 @@ enum SmcExitVeryLowPowerOnInt {
 #endif
 
 /**
- * Sets Run mode
- *
- * @note Not all modes are supported on all processors
- */
-enum SmcRunMode {
-   SmcRunMode_Normal       = SMC_PMCTRL_RUNM(0),   //!< Normal run mode (RUN)
-   SmcRunMode_VeryLowPower = SMC_PMCTRL_RUNM(2),   //!< Very low power run mode (VLPR)
-#ifdef SMC_PMPROT_AHSRUN
-   SmcRunMode_HighSpeed    = SMC_PMCTRL_RUNM(3),   //!< High Speed Run mode (HSRUN)
-#endif
-};
-
-/**
  * Sets Stop mode
  */
 enum SmcStopMode {
@@ -172,30 +159,6 @@ enum SmcSleepOnExit {
    SmcSleepOnExit_Disabled = 0,                       //!< Processor does not re-enter SLEEP/DEEPSLEEP mode on completion of interrupt.
    SmcSleepOnExit_Enabled  = SCB_SCR_SLEEPONEXIT_Msk, //!< Processor re-enters SLEEP/DEEPSLEEP mode on completion of interrupt.
 };
-
-#if defined(SMC_STOPCTRL_LLSM) || defined(SMC_STOPCTRL_VLLSM)
-/**
- *  VLS or VLLS Mode Control\n
- *  This field controls which LLS/VLLS sub-mode to enter if STOPM=LLS/VLLS
- *
- * @note Not all modes are supported on all processors
- */
-enum SmcLowLeakageStopMode {
-#ifdef SMC_STOPCTRL_LLSM
-   SmcLowLeakageStopMode_VLLS0 = SMC_STOPCTRL_LLSM(0),  //!< Enter VLLS0 in VLLSx mode
-   SmcLowLeakageStopMode_VLLS1 = SMC_STOPCTRL_LLSM(1),  //!< Enter VLLS1 in VLLSx mode
-   SmcLowLeakageStopMode_VLLS2 = SMC_STOPCTRL_LLSM(2),  //!< Enter VLLS2 in VLLSx mode, LLS2 in LLSx mode
-   SmcLowLeakageStopMode_VLLS3 = SMC_STOPCTRL_LLSM(3),  //!< Enter VLLS3 in VLLSx mode, LLS3 in LLSx mode
-   SmcLowLeakageStopMode_LLS2  = SMC_STOPCTRL_LLSM(2),  //!< Enter VLLS2 in VLLSx mode, LLS2 in LLSx mode
-   SmcLowLeakageStopMode_LLS3  = SMC_STOPCTRL_LLSM(3),  //!< Enter VLLS3 in VLLSx mode, LLS3 in LLSx mode
-#else
-   SmcLowLeakageStopMode_VLLS0 = SMC_STOPCTRL_VLLSM(0),  //!< Enter VLLS0 in VLLSx mode
-   SmcLowLeakageStopMode_VLLS1 = SMC_STOPCTRL_VLLSM(1),  //!< Enter VLLS1 in VLLSx mode
-   SmcLowLeakageStopMode_VLLS2 = SMC_STOPCTRL_VLLSM(2),  //!< Enter VLLS2 in VLLSx mode, LLS2 in LLSx mode
-   SmcLowLeakageStopMode_VLLS3 = SMC_STOPCTRL_VLLSM(3),  //!< Enter VLLS3 in VLLSx mode, LLS3 in LLSx mode
-#endif
-};
-#endif
 
 /**
  *  Indicates the current stop mode
@@ -321,6 +284,7 @@ public:
       return E_NO_ERROR;
    }
 
+$(/SMC/powerModes)
 $(/SMC/enablePowerModes)
 $(/SMC/setStopOptions)
    /**
@@ -412,10 +376,14 @@ $(/SMC/setStopOptions)
     * Peripherals affected will depend on the stop mode selected.
     *
     * @param[in] smcStopMode Stop mode to set.  This will become the default STOP mode.
+    *
+    * @return E_NO_ERROR    Processor entered STOP
+    * @return E_INTERRUPTED Processor failed to enter STOP mode due to interrupt
     */
-   static void enterStopMode(SmcStopMode smcStopMode) {
+   static ErrorCode enterStopMode(SmcStopMode smcStopMode) {
       setStopMode(smcStopMode);
       SmcBase::enterStopMode();
+      return (smc->PMCTRL & SMC_PMCTRL_STOPA_MASK)?E_INTERRUPTED:E_NO_ERROR;
    }
 
    /**

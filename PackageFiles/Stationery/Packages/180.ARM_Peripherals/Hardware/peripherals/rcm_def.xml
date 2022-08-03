@@ -6,14 +6,14 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <binaryOption name="rcm_rpfc_rstfltss" 
+   <binaryOption key="rcm_rpfc_rstfltss" 
       description="Reset pin filter select in stop mode"
       toolTip="Selects how the reset pin filter is enabled in STOP and VLPS modes">
       <choice value="0" name="All filtering disabled" isDefault="true" />
       <choice value="1" name="LPO clock filter enabled" />
    </binaryOption>
    
-   <choiceOption name="rcm_rpfc_rstfltsrw" 
+   <choiceOption key="rcm_rpfc_rstfltsrw" 
       description="Reset pin filter select in run and wait modes"
       toolTip="Selects how the reset pin filter is enabled in run and wait modes">
       <choice value="0" name="All filtering disabled" />
@@ -29,7 +29,7 @@
       \t   RCM_RPFC_RSTFLTSRW($(rcm_rpfc_rstfltsrw));  // Reset pin filter select in run and wait modes\n\n
    ]]></template>
 
-   <intOption name="rcm_rpfw_rstfltsel" 
+   <intOption key="rcm_rpfw_rstfltsel" 
       description="Reset pin filter bus clock select" 
       toolTip="Selects the reset pin bus clock filter width"
       value="1" min="1" max="32" offset="-1" />
@@ -40,7 +40,7 @@
       \t   RCM_RPFW_RSTFLTSEL($(rcm_rpfw_rstfltsel)); \n\n
    ]]></template>
    
-   <template name="/RCM/declarations" namespace="all"  ><![CDATA[
+   <template key="/RCM/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */

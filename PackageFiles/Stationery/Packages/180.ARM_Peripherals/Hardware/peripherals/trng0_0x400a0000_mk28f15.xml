@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- trng0_0x400a0000_mk28f15.svd.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">

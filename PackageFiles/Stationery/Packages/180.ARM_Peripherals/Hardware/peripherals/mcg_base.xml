@@ -34,15 +34,16 @@
    
    <category name="Clocks" description="Clock Sources"
       toolTip="SLOW_IRC, FAST_IRC, USB_CLKIN, LPO" >
+      
       <intOption key="system_slow_irc_clock"
-         origin="SLOW IRC"
+         origin="Slow IRC"
          units="Hz"
          description="Frequency of Slow Internal Reference [SIRC] Clock"
          toolTip="Dependent on device and clock Trim. [Typically ~32kHz]"
          value="32768" />
 
       <intOption key="system_fast_irc_clock"
-         origin="FAST IRC"
+         origin="Fast IRC"
          units="Hz"
          description="Frequency of Fast Internal Reference [FIRC] Clock"
          toolTip="Dependent on device and clock Trim. [Typically ~4MHz]"
@@ -59,109 +60,33 @@
       
    <aliasOption key="/SIM/numberOfClockSettings" />     
 
+   <binaryOption key="enableClockConfiguration[0]" constant="true" hidden="true" >
+      <choice value="true" name="Enabled"  isDefault="true"/>
+   </binaryOption>
+   
+   <for keys="n" dim="1,/SIM/numberOfClockSettings">
+      <binaryOption key="enableClockConfiguration[%(n)]"
+         hidden="true"
+         description="Enable this clock settings"
+         toolTip="If disabled this clock setting will be removed from the generated code" >
+         <choice value="false" name="Disabled" isDefault="true" />
+         <choice value="true" name="Enabled" />
+      </binaryOption>
+   </for>
+
    <for keys="n" dim="/SIM/numberOfClockSettings">
       <categoryOption key="ClockConfig[%(n)]"
          description="Clock configuration" 
          toolTip="Clock configurations for different run modes"
+         value="ClockConfig_[%(n)]" 
          disabledValue="Disabled" >
-         
-         <binaryOption key="enableClockConfiguration[%(n)]"
-            description="Enable this clock settings"
-            toolTip="If disabled this clock setting will be removed from the generated code" >
-            <choice value="0" name="Disabled" isDefault="true" />
-            <choice value="1" name="Enabled" />
-         </binaryOption>
-   
-         <category name="Clock monitors" 
-            description="Clock monitors" >
-            <binaryOption key="mcg_c6_cme0[%(n)]"
-               description="OSC0 Clock Monitor Enable"
-               toolTip="Enables the loss of clock monitoring circuit for the OSC0 external reference.\n
-                        C2.LOCRE0 determines if an interrupt or a reset request is generated.\n
-                        The CME0 bit must only be when using an external clock mode (FEE, FBE, PEE, PBE, or BLPE)[%(n)]" >
-               <choice value="0" name="Clock monitor disabled" />
-               <choice value="1" name="Clock monitor enabled" />
-            </binaryOption>
-            <binaryOption key="mcg_c2_locre0[%(n)]"
-               description="OSC0 Action on Loss of Clock" 
-               toolTip="Determines if an Interrupt or Reset occurs on loss of OSC0 external reference\n
-                        This option only has effect if the clock monitor is first enabled bye C6.CME0">
-               <choice value="0" name="Interrupt request" />
-               <choice value="1" name="Reset request" />
-            </binaryOption>
-      
-            <binaryOption key="mcg_c6_lolie0[%(n)]" 
-               description="PLL Loss of Lock Interrupt Enable"
-               toolTip="Determines if an interrupt request is made following a PLL loss of lock indication.\n
-                        This bit has effect when S.LOLS0 is set">
-               <choice value="0" name="No interrupt request" />
-               <choice value="1" name="Interrupt request on LOL" />
-            </binaryOption>
-            <aliasOption key="mcg_c8_lolre[%(n)]" optional="true" constant="false" />
             
-            <aliasOption key="mcg_c8_cme1[%(n)]" optional="true" constant="false" />
-            <aliasOption key="mcg_c8_locre1[%(n)]" optional="true" constant="false" />
-            <aliasOption key="mcg_c9_pll_cme[%(n)]" optional="true" constant="false" />
-            <aliasOption key="mcg_c9_pll_locre[%(n)]" optional="true" constant="false" />
-         </category>
+         <aliasOption key="enableClockConfiguration[%(n)]" constant="false" />
          
-         <category name="MCGIR" description="Internal Reference Clock Sources [MCGIRCLK]" >
-            <choiceOption key="mcg_sc_fcrdiv[%(n)]"
-               description="Fast Internal Clock [FIRC] Reference Divider"
-               toolTip="Selects the amount to divide down the fast internal reference clock\n
-                  The FIR clock is available for use as MCGIRCLK or MCGOUTCLK">
-               <choice value="0" name="Divide by 1" isDefault="true" />
-               <choice value="1" name="Divide by 2" />
-               <choice value="2" name="Divide by 4" />
-               <choice value="3" name="Divide by 8" />
-               <choice value="4" name="Divide by 16" />
-               <choice value="5" name="Divide by 32" />
-               <choice value="6" name="Divide by 64" />
-               <choice value="7" name="Divide by 128" />
-            </choiceOption>
-      
-            <binaryOption key="mcg_c2_ircs[%(n)]"
-               enumStem="McgIrClkSrc"
-               description="Internal Reference Clock [MCGIRCLK] Source" 
-               toolTip="Clock Source for MCGIRCLK" >
-               <choice value="0" name="Slow internal reference clock" enum="Slow" />
-               <choice value="1" name="Fast internal reference clock" enum="Fast" isDefault="true" />
-            </binaryOption>
-      
-            <binaryOption key="mcg_c1_irclken[%(n)]"
-               enumStem="McgIrClkEn"
-               description="Internal Reference Clock [MCGIRCLK]"
-               toolTip="Enables the internal reference clock for use by peripherals" >
-               <choice value="0" name="Disabled" enum="Disabled" />
-               <choice value="1" name="Enabled"  enum="Enabled"  isDefault="true"/>
-            </binaryOption>
-      
-            <binaryOption key="mcg_c1_irefsten[%(n)]"
-               description="Internal Reference [MCGIRCLK] Stop Enable" 
-               toolTip="Determines if MCGIRCLK is enabled in Stop mode">
-               <choice value="0" name="IR disabled in STOP" />
-               <choice value="1" name="IR enabled in STOP" />
-            </binaryOption>
-      
-            <intOption key="system_mcgirclk_clock[%(n)]" 
-               derived="true" 
-               constant="true"
-               units="Hz"
-               description="Frequency of Internal Reference [MCGIRCLK] "
-               toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock/fcrdiv"
-               value="48000000" />
-         </category>
-      
-         <category name="OSC2 (USBPHY1 clock)" >
-            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_frac[%(n)]" constant="false" />
-            <aliasOption key="/USBPHY1/internal_pfd_clock_frequency[%(n)]" />
-            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_clk_sel[%(n)]" constant="false" />
-            <aliasOption key="/SIM/usb1pfdclk_Clock[%(n)]" />           
-         </category>
-         <aliasOption key="/SIM/mcg_c7_oscsel[%(n)]" optional="true" constant="false" />
-         <aliasOption key="/SIM/mcg_erc_clock[%(n)]" optional="true" />
-      
-         <choiceOption key="clock_mode[%(n)]" 
+         <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" constant="false" />
+         <choiceOption key="mcgClockMode[%(n)]"
+            enumStem="McgClockMode" 
+            valueFormat="%s"
             description="Default Clock Mode"
             toolTip="FLL Engaged Internal(FEI)\n
                      In FEI mode, MCGOUT is derived from the FLL clock (DCOCLK) that is controlled by the 32 kHz Internal Reference Clock (IRC).\n
@@ -205,16 +130,111 @@
                      Bypassed Low Power External (BLPE/FBELP)\n
                      In BLPE mode, MCGOUT is derived from the external reference clock. The FLL is disabled and PLL is disabled even if the\n
                      C5[PLLCLKEN] is set to 1[%(n)]">
-            <choice name="FLL Engaged Internal (FEI)"          value="ClockMode_FEI" />
-            <choice name="FLL Engaged External (FEE)"          value="ClockMode_FEE" />
-            <choice name="FLL bypassed internal (FBI)"         value="ClockMode_FBI" />
-            <choice name="FLL bypassed external (FBE)"         value="ClockMode_FBE" />
-            <choice name="PLL Bypassed External (PBE)"         value="ClockMode_PBE" />
-            <choice name="PLL Engaged External (PEE)"          value="ClockMode_PEE" />
-            <choice name="Bypassed low power internal (BLPI)"  value="ClockMode_BLPI" />
-            <choice name="Bypassed low power external (BLPE)"  value="ClockMode_BLPE" />
+            <choice name="FLL Engaged Internal (FEI)"          enum="FEI"  code="McgClockMode_FEI"  value="0" />
+            <choice name="FLL Engaged External (FEE)"          enum="FEE"  code="McgClockMode_FEE"  value="1" />
+            <choice name="FLL bypassed internal (FBI)"         enum="FBI"  code="McgClockMode_FBI"  value="2" />
+            <choice name="FLL bypassed external (FBE)"         enum="FBE"  code="McgClockMode_FBE"  value="4" />
+            <choice name="PLL Bypassed External (PBE)"         enum="PBE"  code="McgClockMode_PBE"  value="6" />
+            <choice name="PLL Engaged External (PEE)"          enum="PEE"  code="McgClockMode_PEE"  value="7" />
+            <choice name="Bypassed low power internal (BLPI)"  enum="BLPI" code="McgClockMode_BLPI" value="3" />
+            <choice name="Bypassed low power external (BLPE)"  enum="BLPE" code="McgClockMode_BLPE" value="5" />
          </choiceOption>
      
+         <category name="Clock monitors" 
+            description="Clock monitors" >
+            <binaryOption key="mcg_c6_cme0[%(n)]"
+               description="OSC0 Clock Monitor Enable"
+               toolTip="Enables the loss of clock monitoring circuit for the OSC0 external reference.\n
+                        C2.LOCRE0 determines if an interrupt or a reset request is generated.\n
+                        The CME0 bit must only be when using an external clock mode (FEE, FBE, PEE, PBE, or BLPE)[%(n)]" >
+               <choice value="0" name="Clock monitor disabled" />
+               <choice value="1" name="Clock monitor enabled" />
+            </binaryOption>
+            <binaryOption key="mcg_c2_locre0[%(n)]"
+               description="OSC0 Action on Loss of Clock" 
+               toolTip="Determines if an Interrupt or Reset occurs on loss of OSC0 external reference\n
+                        This option only has effect if the clock monitor is first enabled bye C6.CME0">
+               <choice value="0" name="Interrupt request" />
+               <choice value="1" name="Reset request" />
+            </binaryOption>
+      
+            <binaryOption key="mcg_c6_lolie0[%(n)]" 
+               description="PLL Loss of Lock Interrupt Enable"
+               toolTip="Determines if an interrupt request is made following a PLL loss of lock indication.\n
+                        This bit has effect when S.LOLS0 is set">
+               <choice value="0" name="No interrupt request" />
+               <choice value="1" name="Interrupt request on LOL" />
+            </binaryOption>
+            <aliasOption key="mcg_c8_lolre[%(n)]" optional="true" constant="false" />
+            
+            <aliasOption key="mcg_c8_cme1[%(n)]" optional="true" constant="false" />
+            <aliasOption key="mcg_c8_locre1[%(n)]" optional="true" constant="false" />
+            <aliasOption key="mcg_c9_pll_cme[%(n)]" optional="true" constant="false" />
+            <aliasOption key="mcg_c9_pll_locre[%(n)]" optional="true" constant="false" />
+         </category>
+         
+         <category name="MCGIR" description="Internal Reference Clock Sources [MCGIRCLK]" >
+            <choiceOption key="mcg_sc_fcrdiv[%(n)]"
+               target="firc_divided_clock[%(n)]"
+               description="Fast Internal Clock [FIRC] Reference Divider"
+               toolTip="Selects the amount to divide down the fast internal reference clock\n
+                  The FIR clock is available for use as MCGIRCLK or MCGOUTCLK">
+               <choice value="0" ref="system_fast_irc_clock"      name="Divide by 1" isDefault="true" />
+               <choice value="1" ref="system_fast_irc_clock,/2"   name="Divide by 2" />
+               <choice value="2" ref="system_fast_irc_clock,/4"   name="Divide by 4" />
+               <choice value="3" ref="system_fast_irc_clock,/8"   name="Divide by 8" />
+               <choice value="4" ref="system_fast_irc_clock,/16"  name="Divide by 16" />
+               <choice value="5" ref="system_fast_irc_clock,/32"  name="Divide by 32" />
+               <choice value="6" ref="system_fast_irc_clock,/64"  name="Divide by 64" />
+               <choice value="7" ref="system_fast_irc_clock,/128" name="Divide by 128" />
+            </choiceOption>
+      
+            <intOption key="firc_divided_clock[%(n)]" units="Hz" constant="true" derived="true" />
+
+            <binaryOption key="mcg_c2_ircs[%(n)]"
+               target="system_mcgirclk_ungated[%(n)]"
+               enumStem="McgIrClkSrc"
+               description="Internal Reference Clock [MCGIRCLK] Source" 
+               toolTip="Clock Source for MCGIRCLK" >
+               <choice value="0" ref="system_slow_irc_clock"    name="Slow internal reference clock" enum="Slow" />
+               <choice value="1" ref="firc_divided_clock[%(n)]" name="Fast internal reference clock" enum="Fast" isDefault="true" />
+            </binaryOption>
+      
+            <intOption key="system_mcgirclk_ungated[%(n)]" units="Hz" constant="true" derived="true" />
+
+            <binaryOption key="mcg_c1_irclken[%(n)]"
+               target="system_mcgirclk_clock[%(n)]"            
+               enumStem="McgIrClkEn"
+               description="Internal Reference Clock [MCGIRCLK]"
+               toolTip="Enables the internal reference clock for use by peripherals" >
+               <choice value="0" ref="Disabled"                      name="Disabled" enum="Disabled" />
+               <choice value="1" ref="system_mcgirclk_ungated[%(n)]" name="Enabled"  enum="Enabled"  isDefault="true"/>
+            </binaryOption>
+      
+            <binaryOption key="mcg_c1_irefsten[%(n)]"
+               description="Internal Reference [MCGIRCLK] Stop Enable" 
+               toolTip="Determines if MCGIRCLK is enabled in Stop mode">
+               <choice value="0" name="IR disabled in STOP" />
+               <choice value="1" name="IR enabled in STOP" />
+            </binaryOption>
+      
+            <intOption key="system_mcgirclk_clock[%(n)]" 
+               derived="true" 
+               constant="true"
+               units="Hz"
+               description="Frequency of Internal Reference [MCGIRCLK] "
+               toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock/fcrdiv" />
+         </category>
+      
+         <category name="OSC2 (USBPHY1 clock)" >
+            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_frac[%(n)]" constant="false" optional="true" />
+            <aliasOption key="/USBPHY1/internal_pfd_clock_frequency[%(n)]"  optional="true"/>
+            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_clk_sel[%(n)]" constant="false"  optional="true"/>
+            <aliasOption key="/SIM/usb1pfdclk_Clock[%(n)]"  optional="true"/>           
+         </category>
+         <aliasOption key="/SIM/mcg_c7_oscsel[%(n)]" optional="true" constant="false" />
+         <aliasOption key="/SIM/mcg_erc_clock[%(n)]" optional="true" />
+
          <category name="FLL" description="FLL Settings">
             <binaryOption key="fll_enabled[%(n)]"
                derived="true"
@@ -300,10 +320,10 @@
          </category>
          
          <category name="USB PLL1" description="USB PLL1 Settings">
-            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_frac[%(n)]" constant="false" />
-            <aliasOption key="/USBPHY1/internal_pfd_clock_frequency[%(n)]" />
-            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_clk_sel[%(n)]" constant="false" />
-            <aliasOption key="/SIM/usb1pfdclk_Clock[%(n)]" />           
+            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_frac[%(n)]" constant="false"  optional="true"/>
+            <aliasOption key="/USBPHY1/internal_pfd_clock_frequency[%(n)]"  optional="true"/>
+            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_clk_sel[%(n)]" constant="false" optional="true"/>
+            <aliasOption key="/SIM/usb1pfdclk_Clock[%(n)]"  optional="true"/>           
          </category>
       
          <category name="PLL0" description="PLL0 Settings">
@@ -537,17 +557,6 @@
       \t */
       #define USBDM_ERRATA_E7993 $(ERRATA_E7993:1)
       
-      \tenum ClockMode : uint8_t {
-      \t   ClockMode_FEI      = 0,
-      \t   ClockMode_FEE,
-      \t   ClockMode_FBI,
-      \t   ClockMode_BLPI,
-      \t   ClockMode_FBE,
-      \t   ClockMode_BLPE,
-      \t   ClockMode_PBE,
-      \t   ClockMode_PEE,
-      \t};
-      
       \t//! Frequency of Slow Internal Reference Clock [~32kHz]
       \tstatic constexpr uint32_t system_slow_irc_clock = $(system_slow_irc_clock)UL;
       
@@ -559,52 +568,6 @@
 
       \t//! PLL post divider
       \tstatic constexpr uint32_t pll_post_divider = $(pll_post_divider);
-
-      \t//! Structure for clock configurations
-      \tstruct ClockInfo {
-      \t   //! System Clock Divider Register 1
-      \t   const uint32_t clkdiv1;
-      
-      \t#ifdef SIM_CLKDIV3_PLLFLLDIV
-      \t   //! PLLFLL clock divider divisor & fraction
-      \t   const uint32_t clkdiv3;
-      \t#endif
-      
-      \t   //! SIM SOPT2 - Clock selectors for various peripherals
-      \t   const uint32_t sopt2;
-       
-      \t   //! Clock Mode
-      \t   const ClockMode clockMode;
-      
-      \t   //! Control Register 1 - FRDIV, IRCLKEN, IREFSTEN, (-CLKS, -IREFS)
-      \t   const uint8_t c1;
-      \t   //! Control Register 2 - LOCRE0, RANGE0, HGO0, EREFS0, IRCS, (-LP)
-      \t   const uint8_t c2;
-      \t   //! Control Register 4 - DMX32, DRST_DRS
-      \t   const uint8_t c4;
-      \t   //! Control Register 5 - PLLCLKEN0, PLLSTEN0, PRDIV0
-      \t   const uint8_t c5;
-      \t   //! Control Register 6 - LOLIE0, CME0, VDIV0, (-PLLS)
-      \t   const uint8_t c6;
-      \t   //! Status and Control Register - FCRDIV
-      \t   const uint8_t sc;
-      \t#ifdef MCG_C7_OSCSEL
-      \t   //! Control Register 7 - OSCSEL
-      \t   const uint8_t c7;
-      \t#endif
-      \t#if defined(MCG_C8_LOCRE1) || defined(MCG_C8_LOLRE) || defined(MCG_C8_CME1)
-      \t   //! Control Register 8 - LOCRE1, LOLRE, CME1
-      \t   const uint8_t c8;
-      \t#endif
-      \t#ifdef MCG_C9_PLL_CME
-      \t   //! Control Register 9
-      \t   const uint8_t c9;
-      \t#endif
-      \t#ifdef MCG_C11_PLLCS
-      \t   //! Control Register 11
-      \t   const uint8_t c11;
-      \t#endif
-      \t};
 
       \t/**
       \t * Get MCGERCLK
@@ -662,6 +625,57 @@
       \t}\n\n
    ]]></template>
    
+   <template key="ClockInfoType" namespace="all" ><![CDATA[
+      \t//! Structure for clock configurations
+      \tstruct ClockInfo {
+      \t   //! System Clock Divider Register 1
+      \t   const uint32_t clkdiv1;
+      
+      \t#ifdef SIM_CLKDIV3_PLLFLLDIV
+      \t   //! PLLFLL clock divider divisor & fraction
+      \t   const uint32_t clkdiv3;
+      \t#endif
+      
+      \t   //! SIM SOPT2 - Clock selectors for various peripherals
+      \t   const uint32_t sopt2;
+       
+      \t   //! Clock Mode
+      \t   const McgClockMode clockMode;
+       
+      \t   //! Run Mode
+      \t   const SmcRunMode runMode;
+      
+      \t   //! Control Register 1 - FRDIV, IRCLKEN, IREFSTEN, (-CLKS, -IREFS)
+      \t   const uint8_t c1;
+      \t   //! Control Register 2 - LOCRE0, RANGE0, HGO0, EREFS0, IRCS, (-LP)
+      \t   const uint8_t c2;
+      \t   //! Control Register 4 - DMX32, DRST_DRS
+      \t   const uint8_t c4;
+      \t   //! Control Register 5 - PLLCLKEN0, PLLSTEN0, PRDIV0
+      \t   const uint8_t c5;
+      \t   //! Control Register 6 - LOLIE0, CME0, VDIV0, (-PLLS)
+      \t   const uint8_t c6;
+      \t   //! Status and Control Register - FCRDIV
+      \t   const uint8_t sc;
+      \t#ifdef MCG_C7_OSCSEL
+      \t   //! Control Register 7 - OSCSEL
+      \t   const uint8_t c7;
+      \t#endif
+      \t#if defined(MCG_C8_LOCRE1) || defined(MCG_C8_LOLRE) || defined(MCG_C8_CME1)
+      \t   //! Control Register 8 - LOCRE1, LOLRE, CME1
+      \t   const uint8_t c8;
+      \t#endif
+      \t#ifdef MCG_C9_PLL_CME
+      \t   //! Control Register 9
+      \t   const uint8_t c9;
+      \t#endif
+      \t#ifdef MCG_C11_PLLCS
+      \t   //! Control Register 11
+      \t   const uint8_t c11;
+      \t#endif
+      \t};
+   ]]></template>
+
    <for keys="n" dim="/SIM/numberOfClockSettings">
       <template key="ClockConfig" namespace="all" ><![CDATA[
          #if $(enableClockConfiguration[%(n)])
@@ -673,7 +687,7 @@
    <for keys="n" dim="/SIM/numberOfClockSettings">
       <template key="McgClockInfoEntries" namespace="all" ><![CDATA[
          \t#if $(enableClockConfiguration[%(n)])
-         \t   {  // $(ClockConfig[%(n)]) ($(clock_mode[%(n)]))
+         \t   {  // $(ClockConfig[%(n)]) ($(mcgClockMode[%(n)].enum[]))
          \t      
          \t      //! SIM CLKDIV1 System Clock Divider Register 1
          \t      SIM_CLKDIV1_OUTDIV4($(/SIM/sim_clkdiv1_outdiv4[%(n)]:0))|  // Flash clock
@@ -690,7 +704,10 @@
          \t      SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel[%(n)])),      // PLL/FLL clock select
       
          \t      //! Clock Mode
-         \t      McgInfo::$(clock_mode[%(n)]),
+         \t      $(mcgClockMode[%(n)].enum[]),
+              
+         \t      //! Run Mode
+         \t      $(/SMC/smc_pmctrl_runm[%(n)].enum[]),
               
          \t      //! Control Register 1 - Excluding CLKS, IREFS
          \t      MCG_C1_FRDIV($(mcg_c1_frdiv[%(n)]))   | // FRDIV    FLL External Reference Divider
@@ -756,19 +773,7 @@
       ]]></template>
    </for>
    
-   <enumTemplate namespace="usbdm" condition="mcg_c1_irclken" 
-   ><![CDATA[    
-      \t/**
-      \t * %description
-      \t *
-      \t * %tooltip
-      \t */
-      \tenum %enumClass {
-      %body
-      \t};\n\n
-   ]]></enumTemplate>
-         
-   <clockCodeTemplate condition="mcg_c1_irclken"
+   <clockCodeTemplate variable="mcg_c1_irclken"
    ><![CDATA[
       \t/**
       \t * %description
@@ -782,19 +787,7 @@
       \t}\n\n
    ]]></clockCodeTemplate>
    
-   <enumTemplate namespace="usbdm" condition="mcg_c2_ircs" 
-   ><![CDATA[    
-      \t/**
-      \t * %description
-      \t *
-      \t * %tooltip
-      \t */
-      \tenum %enumClass {
-      %body
-      \t};\n\n
-   ]]></enumTemplate>
-         
-   <clockCodeTemplate condition="mcg_c2_ircs"
+   <clockCodeTemplate variable="mcg_c2_ircs"
    ><![CDATA[
       \t/**
       \t * %description

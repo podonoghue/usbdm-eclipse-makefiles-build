@@ -7,7 +7,7 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <template name="/MCM/declarations" namespace="all"  ><![CDATA[
+   <template key="/MCM/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */

@@ -103,7 +103,7 @@
       <choice value="1" name="Hardware trigger (ADHWT source)" />
    </binaryOption>
    
-   <category key="Advanced" description="Advanced Options" >
+   <category name="Advanced" description="Advanced Options" >
       <aliasOption key="/SIM/sim_sopt7_adc$(_instance)alttrgen"  constant="false" optional="true" />
       <aliasOption key="/SIM/sim_sopt7_adc$(_instance)pretrgsel" constant="false" optional="true"/>
       <aliasOption key="/SIM/sim_sopt7_adc$(_instance)trgsel"    constant="false" optional="true"/>

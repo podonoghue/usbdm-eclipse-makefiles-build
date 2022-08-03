@@ -10,7 +10,7 @@
             constant="true"
             derived="true" >
 
-         <binaryOption name="mcg_c8_cme1[%(n)]" 
+         <binaryOption key="mcg_c8_cme1[%(n)]" 
             description="OSC1 (RTC) Clock Monitor Enable"
             toolTip="Determines if the clock monitor is enabled for the RTC external clock.\n
                      CME1 bit must be set to a logic 0 before the MCG enters any Stop mode">
@@ -18,7 +18,7 @@
             <choice value="1" name="Clock monitor enabled" />
          </binaryOption>
          
-         <binaryOption name="mcg_c8_locre1[%(n)]" 
+         <binaryOption key="mcg_c8_locre1[%(n)]" 
             description="OSC1 (RTC) Loss of Clock Reset Enable"
             toolTip="Determines if a interrupt or a reset request is made following a loss of RTC external reference clock.\n 
                      Only has an affect when CME1 is set[%(n)]" >
@@ -26,7 +26,7 @@
             <choice value="1" name="Reset request" />
          </binaryOption>
    
-         <binaryOption name="mcg_c8_lolre[%(n)]" 
+         <binaryOption key="mcg_c8_lolre[%(n)]" 
             description="PLL Loss of Lock Reset Enable"
             toolTip="Determines if an interrupt or a reset request is made following a PLL loss of lock.\n
                      Only has an affect when CME1 is set">
@@ -54,19 +54,19 @@
    <xi:include href="mcg_base.xml"/>
 
    <category name="Hardware bugs" description="">
-      <binaryOption name="ERRATA_E2448" 
+      <binaryOption key="ERRATA_E2448" 
          description="Flash prefetch could result in incorrect read data"
          toolTip="Issue: Flash prefetch could result in incorrect read data when CLKDIV1 changed\n
          Workaround: Use code in RAM that disables/restores prefetch around changing CLKDIV1" >
          <choice value="0" name="No special handling" />
-         <choice value="1" name="Special handing" isdefault="true" />
+         <choice value="1" name="Special handing" isDefault="true" />
       </binaryOption>
-      <binaryOption name="ERRATA_E7993" 
+      <binaryOption key="ERRATA_E7993" 
          description="FLL frequency may be incorrect"
          toolTip="Issue: FLL frequency may be incorrect after changing the FLL reference clock\n
          Workaround: Invert MCG_C4[DMX32] before clock source changes and restore afterwards">
          <choice value="0" name="No special handling" />
-         <choice value="1" name="Special handing" isdefault="true" />
+         <choice value="1" name="Special handing" isDefault="true" />
       </binaryOption>
    </category>
 

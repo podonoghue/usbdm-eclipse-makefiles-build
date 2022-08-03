@@ -346,9 +346,9 @@ public:
    }
 
    /**
-    *  Get current alarm time
+    *  Get current time
     *
-    *  @return alarm time as 32-bit number
+    *  @return Time in seconds relative to the epoch
     */
    static uint32_t getTime(void) {
       return rtc->TSR;

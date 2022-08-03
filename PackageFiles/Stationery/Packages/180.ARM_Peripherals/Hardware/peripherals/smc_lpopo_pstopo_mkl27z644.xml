@@ -7,21 +7,21 @@
    
    <xi:include href="_default_instance.xml"/>
 
-   <binaryOption name="smc_pmprot_avlp" 
+   <binaryOption key="smc_pmprot_avlp" 
       description="Allow very low power modes" 
       toolTip="This write-once bit allows the MCU to enter any very low power modes: VLPR, VLPW, and VLPS" >
       <choice name="VLPR, VLPW and VLPS are not allowed" value="0" />
       <choice name="VLPR, VLPW and VLPS are allowed"     value="1" isDefault="true" />
    </binaryOption>   
    
-   <binaryOption name="smc_pmprot_alls" 
+   <binaryOption key="smc_pmprot_alls" 
       description="Allow low leakage stop mode" 
       toolTip="This write once bit allows the MCU to enter any low leakage stop mode: LLS" >
       <choice name="LLS is not allowed" value="0" />
       <choice name="LLS is allowed"     value="1" isDefault="true" />
    </binaryOption>   
    
-   <binaryOption name="smc_pmprot_avlls" 
+   <binaryOption key="smc_pmprot_avlls" 
       description="Allow very low leakage stop mode" 
       toolTip="This write once bit allows the MCU to enter any low leakage stop mode: VLLSx" >
       <choice name="VLLSx is not allowed" value="0" />
@@ -36,7 +36,7 @@
       \t   SMC_PMPROT_AVLLS($(smc_pmprot_avlls:0));  // Allow very low leakage stop mode\n\n
    ]]></template>
       
-   <choiceOption name="smc_stopctrl_pstopo" 
+   <choiceOption key="smc_stopctrl_pstopo" 
       description="Partial Stop Option"
       toolTip="These bits control whether a Partial Stop mode is entered when STOPM=STOP">
       <choice value="0" name="STOP - Normal Stop mode" />
@@ -45,21 +45,21 @@
       <choice value="3" name="Reserved" />
    </choiceOption>
 
-   <binaryOption name="smc_stopctrl_porpo" 
+   <binaryOption key="smc_stopctrl_porpo" 
       description="POR Power Option" 
       toolTip="This bit controls whether the POR detect circuit is enabled in VLLS0 mode" >
       <choice name="POR detect circuit is enabled in VLLS0"  value="0" isDefault="true" />
       <choice name="POR detect circuit is disabled in VLLS0" value="1" />
    </binaryOption>   
    
-   <binaryOption name="smc_stopctrl_lpopo" 
+   <binaryOption key="smc_stopctrl_lpopo" 
       description="Controls whether the 1 kHz LPO clock is enabled in LLS/VLLSx modes" 
       toolTip="This bit controls whether the POR detect circuit is enabled in VLLS0 mode" >
       <choice name="LPO clock is enabled in LLS/VLLSx"   value="0" isDefault="true" />
       <choice name="LPO clock is disabled in LLS/VLLSx"  value="1" />
    </binaryOption>   
    
-   <choiceOption name="smc_stopctrl_llsm" 
+   <choiceOption key="smc_stopctrl_llsm" 
       description="LLS or VLLS Mode Control"
       toolTip="This field controls which LLS or VLLS sub-mode to enter if STOPM = VLLS">
       <choice value="0" name="VLLS0" />
@@ -72,7 +72,7 @@
       <choice value="7" name="Reserved" />
    </choiceOption>
 
-   <template name="enablePowerModes" namespace="all"  ><![CDATA[
+   <template key="enablePowerModes" namespace="all"  ><![CDATA[
    \t/* smc_lpopo_pstopo_mkl27z644.xml */
    \t/**
    \t * Enable the given power modes.
@@ -94,7 +94,7 @@
    \t}\n\n
    ]]></template>
 
-   <template name="setStopOptions" namespace="all"  ><![CDATA[
+   <template key="setStopOptions" namespace="all"  ><![CDATA[
    \t/* smc_lpopo_pstopo_mkl27z644.xml */
    \t/**
    \t * Allows the detailed operation in STOP mode to be controlled.
@@ -125,7 +125,7 @@
       \t   SMC_STOPCTRL_LLSM($(smc_stopctrl_llsm:0));   // LLS or VLLS Mode Control\n\n
    ]]></template>
 
-   <template name="/SMC/declarations" namespace="all"  ><![CDATA[
+   <template key="/SMC/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */

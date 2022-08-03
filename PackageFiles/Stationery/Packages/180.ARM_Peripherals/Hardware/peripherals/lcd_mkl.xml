@@ -13,7 +13,7 @@
    <aliasOption key="/SIM/sim_sopt1_osc32ksel"   constant="false" />
    <aliasOption key="/SIM/system_erclk32k_clock" constant="true"/>
    
-   <choiceOption name="lcd_gcr_clock" 
+   <choiceOption key="lcd_gcr_clock" 
       description="LCD Clock select" 
       toolTip="Used to select Clock source">
       <choice value="LCD_GCR_SOURCE(0)|LCD_GCR_ALTSOURCE(0)"  name="ERCLK32K (32K clock must be selected)" isDefault="true" />
@@ -21,7 +21,7 @@
       <choice value="LCD_GCR_SOURCE(1)|LCD_GCR_ALTSOURCE(1)"  name="OSCERCLK / ALTDIV" />
    </choiceOption>
    
-   <choiceOption name="lcd_gcr_altdiv" 
+   <choiceOption key="lcd_gcr_altdiv" 
       description="Clock divider" 
       toolTip="Applies to MCGIRCLK, OSCERCLK sources only" >
       <choice value="0"  name="Divide / 1" isDefault="true" />
@@ -30,21 +30,21 @@
       <choice value="3"  name="Divide / 512" />
    </choiceOption>
 
-   <floatOption name="lcdClock" 
+   <floatOption key="lcdClock" 
       description="LCD clock" 
       constant="true"
       toolTip="Calculated from input clock and dividers\n
          (Nominally 32kHz)"
       units="Hz" />
    
-   <binaryOption name="lcd_gcr_rven" 
+   <binaryOption key="lcd_gcr_rven" 
       description="Regulated Voltage Enable"
       toolTip="Enables internal voltage regulator. It must have the charge pump enabled">
       <choice value="0" name="Disabled" />
       <choice value="1" name="Enabled" />
    </binaryOption>
 
-   <choiceOption name="lcd_gcr_rvtrim" 
+   <choiceOption key="lcd_gcr_rvtrim" 
       description="Regulated Voltage Trim"
       toolTip="Trims the regulated input voltage.\n
          Each bit in the register has equal weight.\n
@@ -67,7 +67,7 @@
       <choice value="0b1111"  name="1.09" />
    </choiceOption>
 
-   <binaryOption name="lcd_gcr_cpsel" 
+   <binaryOption key="lcd_gcr_cpsel" 
       description="Charge Pump or Resistor Bias Select"
       toolTip="Selects the whether a charge pump or a resistor network is \n
          used to supply the LCD voltages VLL1, VLL2, and VLL3">
@@ -75,7 +75,7 @@
       <choice value="1" name="Charge Pump" />
    </binaryOption>
 
-   <choiceOption name="lcd_gcr_ladj" 
+   <choiceOption key="lcd_gcr_ladj" 
       description="Load Adjust (LCD glass capacitance)"
       toolTip="Configures SLCD to handle different LCD glass capacitance\n
       This affects the Resistor Divider (CPSEL=0) or Charge Pump (CPSEL=1)">
@@ -85,34 +85,34 @@
       <choice value="3"  name="Resistor &lt;=8000pF, Pump &lt;=1000/500pF (if FFR)" />
    </choiceOption>
 
-   <binaryOption name="lcd_gcr_vsupply" 
+   <binaryOption key="lcd_gcr_vsupply" 
       description="Voltage Supply Control"
       toolTip="Configures whether the LCD controller power supply is external or internal" >
       <choice value="0" name="Drive VLL3 internally from VDD" />
       <choice value="1" name="Drive VLL3 externally from VDD or drive VLL internally from vIREG" />
    </binaryOption>
 
-   <binaryOption name="lcd_gcr_ffr" 
+   <binaryOption key="lcd_gcr_ffr" 
       description="Fast Frame Rate Select"
       toolTip="Increases the Frame Clock Frequency" >
       <choice value="0" name="Standard Frame Rate LCD Frame Freq: 23.3 Hz(min) 73.1 Hz(max)" />
       <choice value="1" name="Fast Frame Rate (Rate x2) LCD Frame Freq: 46.6 Hz(min) 146.2 Hz(max)" />
    </binaryOption>
 
-   <binaryOption name="lcd_gcr_lcddoze" 
+   <binaryOption key="lcd_gcr_lcddoze" 
       description="LCD Doze enable"
       toolTip="Operation of driver, charge pump, bias network and regulator while in Doze mode" >
       <choice value="0" name="Continue running" />
       <choice value="1" name="Disabled" />
    </binaryOption>
 
-   <binaryOption name="lcd_gcr_lcdstp" 
+   <binaryOption key="lcd_gcr_lcdstp" 
       description="LCD Stop enable"
       toolTip="Operation of driver, charge pump, bias network and regulator while in Stop mode" >
       <choice value="0" name="Continue running" />
       <choice value="1" name="Disabled" />
    </binaryOption>
-   <choiceOption name="lcd_gcr_duty" 
+   <choiceOption key="lcd_gcr_duty" 
       description="LCD duty select"
       toolTip="Selects the duty cycle of the LCD controller driver.\n
          (Number of back planes, A..H)">
@@ -127,14 +127,14 @@
    </choiceOption>
 
 
-   <pinListOption name="backplanes" 
+   <pinListOption key="backplanes" 
       description="Pins used for Backplane" 
       toolTip="Comma separated list of lcd signal numbers in backplane order e.g. 40,52,19,18\n
          Number must agree with LCD Duty Select"
       value="40, 52, 19, 18" 
       constant="false" />
 
-   <pinListOption name="frontplanes" 
+   <pinListOption key="frontplanes" 
       description="Pins used for Frontplane" 
       toolTip="Comma separated list of lcd signal numbers in frontplane order e.g. 37,17,7,8,53,38,10,11"
       value="37, 17, 7, 8, 53, 38, 10, 11" 
@@ -153,7 +153,7 @@
       <copy source="Snippets/segment-lcd-example.cpp"      target="Snippets/segment-lcd-example.cpp"      overwrite="true"  derived="true" />
    </projectActionList>
    
-   <template name="lcdPins" namespace="all" ><![CDATA[
+   <template key="lcdPins" namespace="all" ><![CDATA[
    /** Pins used for back planes */
    static const int8_t backplanePins[]  = { $(backplanes) };
 

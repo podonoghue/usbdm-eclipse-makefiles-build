@@ -26,12 +26,12 @@
       \t\n\n
    ]]></template>
 
-   <template name="llwu_base_init" namespace="all"  ><![CDATA[
+   <template key="llwu_base_init" namespace="all"  ><![CDATA[
       \t   llwu->PE1   = Info::pe1;
       \t   llwu->PE2   = Info::pe2;\n
    ]]></template>
    
-   <choiceOption name="llwu_pe1_wupe_t" hidden="true" 
+   <choiceOption key="llwu_pe1_wupe_t" hidden="true" 
       description="" 
       toolTip="Enables and configures the edge detection for the wakeup pin">
       <choice name="Disabled" value="LlwuPinMode_Disabled" isDefault="true" /> 
@@ -40,10 +40,10 @@
       <choice name="Either"   value="LlwuPinMode_EitherEdge" />
    </choiceOption>
       
-   <choiceOption name="llwu_pe1_wupe0" derivedFrom="llwu_pe1_wupe_t"/>
-   <choiceOption name="llwu_pe1_wupe1" derivedFrom="llwu_pe1_wupe_t"/>
-   <choiceOption name="llwu_pe1_wupe2" derivedFrom="llwu_pe1_wupe_t"/>
-   <choiceOption name="llwu_pe1_wupe3" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption key="llwu_pe1_wupe0" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption key="llwu_pe1_wupe1" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption key="llwu_pe1_wupe2" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption key="llwu_pe1_wupe3" derivedFrom="llwu_pe1_wupe_t"/>
    <template><![CDATA[
       \t// LLWU Pin Enable registers
       \tstatic constexpr uint8_t pe1 = 
@@ -53,10 +53,10 @@
       \t   /* LLWUP 3 */ (LLWU_PE1_WUPE3_MASK&$(llwu_pe1_wupe3)); // $(llwu_pe1_wupe3.description)\n\n
    ]]></template>
 
-   <choiceOption name="llwu_pe2_wupe4" derivedFrom="llwu_pe1_wupe_t"/>
-   <choiceOption name="llwu_pe2_wupe5" derivedFrom="llwu_pe1_wupe_t"/>
-   <choiceOption name="llwu_pe2_wupe6" derivedFrom="llwu_pe1_wupe_t"/>
-   <choiceOption name="llwu_pe2_wupe7" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption key="llwu_pe2_wupe4" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption key="llwu_pe2_wupe5" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption key="llwu_pe2_wupe6" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption key="llwu_pe2_wupe7" derivedFrom="llwu_pe1_wupe_t"/>
    <template><![CDATA[
       \tstatic constexpr uint8_t pe2 = 
       \t   /* LLWUP 4 */ (LLWU_PE2_WUPE4_MASK&$(llwu_pe2_wupe4))| // $(llwu_pe2_wupe4.description)
@@ -65,7 +65,7 @@
       \t   /* LLWUP 7 */ (LLWU_PE2_WUPE7_MASK&$(llwu_pe2_wupe7)); // $(llwu_pe2_wupe7.description) \n\n
    ]]></template>
          
-   <template name="declarations" namespace="all"  ><![CDATA[
+   <template key="declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing LLWU
    \t */

@@ -10,7 +10,7 @@
       pattern=".*PORT%i.*" 
       classHandler="%c%i::irqHandler" />
       
-   <choiceOption name="irqLevel"
+   <choiceOption key="irqLevel"
       description="Default IRQ level for this peripheral"
       toolTip="Sets the default priority level used to configure the NVIC">
       <choice name="VeryHigh"      value="NvicPriority_VeryHigh" />
@@ -54,7 +54,7 @@
    </projectActionList>
 
    <!--
-   <choiceOption name="port_pcr_irqc" 
+   <choiceOption key="port_pcr_irqc" 
          description="Interrupt Configuration"
          toolTip="The pin interrupt configuration is valid in all digital pin muxing modes" >
       <choice value="0" name="Interrupt/DMA request disabled" />
@@ -108,7 +108,7 @@
       <choice value="1" name="Slow slew" />
    </binaryOption>
 
-   <choiceOption name="port_pcr_pull_mode" 
+   <choiceOption key="port_pcr_pull_mode" 
       description="Pull Up/Down Enable"
       toolTip="Pull configuration when in digital pin muxing modes\n
          with the pin configured as an input">
@@ -132,7 +132,7 @@
    ]]></template>
    -->
    
-   <template name="/GPIO/declarations" namespace="all"  ><![CDATA[
+   <template key="/GPIO/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * @brief Convenience template for $(_class). See @ref Gpio_T
    \t *

@@ -29,6 +29,7 @@
  *
  * Under Linux drivers for bulk and CDC are automatically loaded
  */
+
 #define MS_COMPATIBLE_ID_FEATURE
 
 #define UNIQUE_ID
@@ -65,7 +66,6 @@ static constexpr unsigned  CONTROL_EP_MAXSIZE           = 64; //!< Control in/ou
 static constexpr unsigned  BULK_OUT_EP_MAXSIZE          = 64; //!< Bulk out
 static constexpr unsigned  BULK_IN_EP_MAXSIZE           = 64; //!< Bulk in
 
-#ifdef USBDM_USB0_IS_DEFINED
 /**
  * Class representing USB0
  */
@@ -294,8 +294,6 @@ protected:
 };
 
 using UsbImplementation = Usb0;
-
-#endif // USBDM_USB0_IS_DEFINED
 
 } // End namespace USBDM
 

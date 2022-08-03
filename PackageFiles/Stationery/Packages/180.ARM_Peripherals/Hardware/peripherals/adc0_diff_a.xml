@@ -4,226 +4,29 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analogue to Digital Converter">
 
-   <xi:include href="_default_instance.xml"/>
-   
-   <constant key="disable_peripheral" derived = "true" value = "adc->SC1[0] = ADC_SC1_ADCH(-1);"  />
-   <xi:include href="_mapPinsOption.xml"/>
-   
-   <aliasOption key="/SIM/adc$(_instance)_cfg1_adiclk" constant="false" />
-   <addDependency key="/SIM/adc$(_instance)_cfg1_adiclk"/>
-   
-   <choiceOption key="adc_cfg1_adiv" description="Clock Divide Select"
-      toolTip="Selects the divide ratio used by the ADC to generate the internal clock ADCK">
-      <choice value="0" name="Divide by 1" isDefault="true" />
-      <choice value="1" name="Divide by 2" />
-      <choice value="2" name="Divide by 4" />
-      <choice value="3" name="Divide by 8" />
-   </choiceOption>
-
-   <intOption key="adcInternalClock" 
-      derived="true"
-      constant="true"
-      description="Frequency of Internal ADC clock"
-      toolTip="Varies with ADLPC and ADHSC"
-      value="2000000"
-      origin="Internal ADC clock"
-      units="Hz"/>
-
-   <intOption key="clockFrequency" 
-      constant="true"
-      description="Frequency of ADC clock"
-      toolTip="Determined from clock source and prescaler"
-      derived="true"
-      units="Hz"/>
-
-   <choiceOption key="adc_cfg1_mode" description="Conversion mode selection"
-      toolTip="Selects the ADC resolution mode">
-      <choice value="0" name="8-bit single/9-bit differential" />
-      <choice value="1" name="12-bit single/13-bit differential" />
-      <choice value="2" name="10-bit single/11-bit differential" isDefault="true" />
-      <choice value="3" name="16-bit single or differential" />
-   </choiceOption>
-
-   <binaryOption key="adc_cfg1_adlpc" description="Low-Power Configuration"
-      toolTip="Adjust power consumption">
-      <choice value="0" name="Normal power configuration" isDefault="true" />
-      <choice value="1" name="Low-power configuration (reduced speed)" />
-   </binaryOption>
-
-   <binaryOption key="adc_cfg1_adlsmp" description="Sample Time Configuration"
-      toolTip="Selects between different sample times based on the conversion mode selected\n
-      Longer sample times are advantageous for high impedance sources and also reduces power consumption">
-      <choice value="0" name="Short sample time" isDefault="true" />
-      <choice value="1" name="Long sample time" />
-   </binaryOption>
-
-   <choiceOption key="adc_cfg2_adlsts" description="Long Sample Time Select"
-      toolTip="Selects between the extended sample times when long sample time is selected">
-      <choice value="0" name="+20 ADCK cycles; 24 ADCK total" isDefault="true" />
-      <choice value="1" name="+12 ADCK cycles; 16 ADCK total" />
-      <choice value="2" name="+6 ADCK cycles; 10 ADCK total" />
-      <choice value="3" name="+2 ADCK cycles; 6 ADCK total" />
-   </choiceOption>
-
-   <binaryOption key="adc_cfg2_adhsc" description="High-Speed Configuration"
-      toolTip="Configures the ADC for high-speed clock operation by adding 2\n
-         additional ADCK cycles to total conversion time">
-      <choice value="0" name="Normal conversion sequence selected" isDefault="true" />
-      <choice value="1" name="High-speed conversion sequence selected" />
-   </binaryOption>
-
-   <binaryOption key="adc_cfg2_adacken" description="Asynchronous Clock Output Enable"
-      toolTip="Enables the ADC internal asynchronous clock source irrespective of ADC need.\n
-         This reduces the initial delay at the start of a sequence of conversions.\n
-	 It also allows use of the ADC internal clock as a clock source for other peripherals">
-      <choice value="0" name="Asynchronous clock output disabled" isDefault="true" />
-      <choice value="1" name="Asynchronous clock output enabled" />
-   </binaryOption>
-
-   <choiceOption key="adc_sc2_refsel" description="Voltage Reference Selection"
-      toolTip="Selects the voltage reference source used for conversions">
-      <choice value="0" name="VRefH and VRefl" isDefault="true" />
-      <choice value="1" name="Gnd and VrefOut(1.2V)" />
-      <choice value="2" name="Reserved" />
-      <choice value="3" name="Reserved" />
+   <choiceOption key="adc_cfg1_mode" description="ADC Resolution"
+      hidden="true"
+      enumStem="AdcResolution"
+      toolTip="The resolutions available vary with single-ended/differential modes\n
+               Note the equivalence between modes e.g. 8-bit-se = 9-bit-diff" >
+      <choice value="0" name="8-bit unsigned (single-ended mode)"   enum="8bit_se"    />
+      <choice value="2" name="10-bit unsigned (single-ended mode)"  enum="10bit_se"   />
+      <choice value="1" name="12-bit unsigned (single-ended mode)"  enum="12bit_se"   />
+      <choice value="3" name="16-bit unsigned (single-ended mode)"  enum="16bit_se"   />
+      <choice value="0" name="9-bit signed (differential mode)"     enum="9bit_diff"  />
+      <choice value="2" name="11-bit signed (differential mode)"    enum="11bit_diff" />
+      <choice value="1" name="13-bit signed (differential mode)"    enum="13bit_diff" />
+      <choice value="3" name="16-bit signed (differential mode)"    enum="16bit_diff" />
    </choiceOption>
 
    <binaryOption key="adc_sc2_dmaen" description="DMA Enable"
+      hidden="true"
+      enumStem="AdcDma"
       toolTip="Enables use of DMA with ADC">
-      <choice value="0" name="Disabled" isDefault="true" />
-      <choice value="1" name="Enabled" />
+      <choice value="0" enum="Disabled" name="Disabled" isDefault="true" />
+      <choice value="1" enum="Enabled"  name="Enabled" />
    </binaryOption>
 
-   <choiceOption key="adc_sc2_compare" description="Compare function"
-      toolTip="Enables comparison of ADC result with CV1 and CV2" >
-      <choice value="0" name="Disabled" isDefault="true" />
-      <choice value="1" name="ADC &lt; low" />
-      <choice value="2" name="ADC &gt;= low" />
-      <choice value="3" name="(ADC &lt; low) or (high &lt; ADC)" />
-      <choice value="4" name="(low &lt; ADC &lt; high)" />
-      <choice value="5" name="(low &lt;= ADC &lt;= high)" />
-      <choice value="6" name="(ADC &lt;= low) or (high &lt;= ADC)" />
-   </choiceOption>
+   <xi:include href="_adc_base.xml"/>
 
-   <intOption key="low_comparison_value" description="ADC low comparison value" 
-      toolTip="Low value for ADC automatic comparison\n
-         This value is assumed unsigned"
-      min="0" max="0xFFFF"
-      />
-   
-   <intOption key="high_comparison_value" description="ADC high comparison value" 
-      toolTip="High value for ADC automatic comparison\n
-         This value is assumed unsigned"
-      min="0" max="0xFFFF"
-      />
-   
-   <intOption key="adc_cv1" description="ADC CV1 value" 
-      toolTip="CV1 threshold value\n
-         Either low or high value" 
-      constant="true" 
-      derived="true" />
-   <intOption key="adc_cv2" description="ADC CV2 value" 
-      toolTip="CV2 threshold value\n
-         Either low or high value"  
-      constant="true" 
-      derived="true" />
-   
-   <intOption key="adc_sc2_acfe"  description="Compare Function Enable"               
-      toolTip="Enable comparison" 
-      constant="true" 
-      derived="true" />
-   <intOption key="adc_sc2_acfgt" description="Compare Function Greater Than Enable"  
-      toolTip="Greater-than enable" 
-      constant="true" 
-      derived="true" />
-   <intOption key="adc_sc2_acren" description="Compare Function Range Enable"         
-      toolTip="Compare using range" 
-      constant="true" 
-      derived="true" />
-   
-   <binaryOption key="adc_sc2_adtrg" description="Conversion Trigger Select"
-      toolTip="Selects the type of trigger used for initiating a conversion">
-      <choice value="0" name="Software trigger (write to SC1A)" isDefault="true" />
-      <choice value="1" name="Hardware trigger (ADHWT source)" />
-   </binaryOption>
-   
-   <category key="Advanced" description="Advanced Options" >
-      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)alttrgen"  constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)pretrgsel" constant="false" optional="true"/>
-      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)trgsel"    constant="false" optional="true"/>
-   </category>
-
-   <xi:include href="_irqOption.xml"/>
-      
-   <template><![CDATA[
-     
-      \t/**
-      \t *  Get input clock frequency for ADC
-      \t *
-      \t *  @return Frequency in Hz
-      \t */
-      \tstatic unsigned getInputClockFrequency() {
-      \t   return SimInfo::getAdcClock(static_cast<AdcClockSource>(adc->CFG1 & ADC_CFG1_ADICLK_MASK));
-      \t}\n\n
-   ]]></template>
-   
-   <template><![CDATA[
-     \t//! Default resolution
-     \tstatic constexpr uint32_t defaultAdcResolution = ADC_CFG1_MODE($(adc_cfg1_mode));
-
-     \t//! Default value for ADCx_CFG1 register
-     \tstatic constexpr uint32_t cfg1  = 
-     \t    ADC_CFG1_ADICLK($(/SIM/adc$(_instance)_cfg1_adiclk))|
-     \t    ADC_CFG1_MODE($(adc_cfg1_mode))|
-     \t    ADC_CFG1_ADLSMP($(adc_cfg1_adlsmp))|
-     \t    ADC_CFG1_ADIV($(adc_cfg1_adiv))|
-     \t    ADC_CFG1_ADLPC($(adc_cfg1_adlpc));
-     
-     \t//! Default value for ADCx_CFG2 register
-     \t static constexpr uint32_t cfg2  = 
-     \t    ADC_CFG2_MUXSEL_MASK | // Choose 'b' channels
-     \t    ADC_CFG2_ADLSTS($(adc_cfg2_adlsts))|
-     \t    ADC_CFG2_ADHSC($(adc_cfg2_adhsc))|
-     \t    ADC_CFG2_ADACKEN($(adc_cfg2_adacken));
-     
-     \t//! Default value for ADCx_SC2 register
-     \tstatic constexpr uint32_t sc2  =
-     \t    ADC_SC2_ACFE($(adc_sc2_acfe))|
-     \t    ADC_SC2_ACFGT($(adc_sc2_acfgt))|
-     \t    ADC_SC2_ACREN($(adc_sc2_acren))|
-     \t    ADC_SC2_REFSEL($(adc_sc2_refsel))|
-     \t    ADC_SC2_DMAEN($(adc_sc2_dmaen))|
-     \t    ADC_SC2_ADTRG($(adc_sc2_adtrg));
-     
-     \t//! Default value for ADCx_CV1 register
-     \tstatic constexpr uint32_t cv1  = $(adc_cv1);
-     
-     \t//! Default value for ADCx_CV2 register
-     \tstatic constexpr uint32_t cv2  = $(adc_cv2);\n\n
-   ]]></template>
-   
-   <template name="/ADC/declarations" namespace="all"  ><![CDATA[
-   \t/**
-   \t * Class representing $(_name)
-   \t */
-   \ttypedef AdcBase_T<$(_class)Info> $(_class);\n
-   ]]></template>
-      
-   <signals/>
-   
-   <xi:include href="_clockOption.xml"/>
-      
-   <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.AdcValidate">
-   </validate>
-
-   <projectActionList id = "adc_files" >
-      <copy source="Project_Headers/adc.h"                    target="Project_Headers/adc.h"                    overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-comparison-example.cpp" target="Snippets/analogue-comparison-example.cpp" overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-example.cpp"            target="Snippets/analogue-example.cpp"            overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-diff-example.cpp"       target="Snippets/analogue-diff-example.cpp"       overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-interrupt-example.cpp"  target="Snippets/analogue-interrupt-example.cpp"  overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-joystick-example.cpp"   target="Snippets/analogue-joystick-example.cpp"   overwrite="true"  derived="true" />
-   </projectActionList>
-   
 </peripheralPage>

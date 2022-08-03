@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
-<!-- _clockOption.xml -->
+<!-- _default_instance.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
          
 <!-- 
       Predefined symbols generated for current peripheral
       _base_class FTM0 => Ftm
-      _instance   FTM0 => 0
+      _instance   FTM0 => 0, PTA => A
       _class      FTM0 => Ftm0
       _name       FTM0 => FTM0
+      _basename   FTM0 => FTM, PTA => PT
  -->
  
 <template><![CDATA[
@@ -20,4 +21,7 @@
       \tstatic constexpr HardwarePtr<$(_base_class::toupper)_Type> $(_base_class::tolower) = baseAddress;\n\n
 ]]></template>
       
+
+   <constant key="class_present" derived = "true" value = "true"  />
+
 </fragment>

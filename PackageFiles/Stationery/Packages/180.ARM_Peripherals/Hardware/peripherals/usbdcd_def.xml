@@ -8,7 +8,7 @@
    \tusing USBHSDCD_Type = USBDCD_Type;\n\n
    ]]></template>
 
-   <template name="/USBDCD/declarations" namespace="all"  ><![CDATA[
+   <template key="/USBDCD/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */

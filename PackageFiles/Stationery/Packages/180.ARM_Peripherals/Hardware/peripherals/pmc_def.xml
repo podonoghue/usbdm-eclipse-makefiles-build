@@ -8,7 +8,7 @@
    <xi:include href="_default_instance.xml"/>
 
    <category name="LPO" description="Low Power Clock Sources" >
-      <intOption name="system_low_power_clock"
+      <intOption key="system_low_power_clock"
          constant="true" 
          origin="LPO Clock"
          units="Hz"
@@ -17,14 +17,14 @@
          value="1000"/>
       </category>
 
-   <binaryOption name="pmc_lvdsc1_lvdie" 
+   <binaryOption key="pmc_lvdsc1_lvdie" 
       description="Low-Voltage Detect Interrupt Enable"
       toolTip="Enables hardware interrupt requests for LVDF">
       <choice value="0" name="Disabled" isDefault="true" />
       <choice value="1" name="Enabled" />
    </binaryOption>
 
-   <binaryOption name="pmc_lvdsc1_lvdre" 
+   <binaryOption key="pmc_lvdsc1_lvdre" 
       description="Low-Voltage Detect Reset Enable"
       toolTip="This write-once bit enables LVDF events to generate a hardware reset.\n 
                Additional writes are ignored">
@@ -32,7 +32,7 @@
       <choice value="1" name="Enabled" />
    </binaryOption>
 
-   <choiceOption name="pmc_lvdsc1_lvdv" 
+   <choiceOption key="pmc_lvdsc1_lvdv" 
       description="Low-Voltage Detect Voltage Select"
       toolTip="Selects the LVD trip point voltage (Vlvd)">
       <choice value="0" name="Low trip point selected (Vlvd = Vlvdl)"/>
@@ -51,14 +51,14 @@
       \t   PMC_LVDSC1_LVDRE($(pmc_lvdsc1_lvdre));  // Low-Voltage Detect Reset Enable\n\n
    ]]></template>
 
-   <binaryOption name="pmc_lvdsc2_lvwie" 
+   <binaryOption key="pmc_lvdsc2_lvwie" 
       description="Low-Voltage Warning Interrupt Enable"
       toolTip="Enables hardware interrupt requests for LVWF">
       <choice value="0" name="Disabled" isDefault="true" />
       <choice value="1" name="Enabled" />
    </binaryOption>
 
-   <choiceOption name="pmc_lvdsc2_lvwv" 
+   <choiceOption key="pmc_lvdsc2_lvwv" 
       description="Low-Voltage Warning Voltage Select"
       toolTip="Selects the LVW trip point voltage (Vlvw)\n
                The actual voltage for the warning depends on LVDSC1.LVDV">
@@ -89,7 +89,7 @@
       \t}\n\n
    ]]></template>
 
-   <binaryOption name="pmc_regsc_bgen" 
+   <binaryOption key="pmc_regsc_bgen" 
       description="Bandgap Enable In VLPx Operation"
       toolTip="BGEN controls whether the bandgap is enabled in \n
                lower power modes of operation (VLPx, LLS, and VLLSx)">
@@ -97,7 +97,7 @@
       <choice value="1" name="Enabled" />
    </binaryOption>
 
-   <binaryOption name="pmc_regsc_bgbe" 
+   <binaryOption key="pmc_regsc_bgbe" 
       description="Bandgap Buffer Enable"
       toolTip="Enables the bandgap buffer">
       <choice value="0" name="Disabled" isDefault="true" />
@@ -113,7 +113,7 @@
       \t#endif\n\n
    ]]></template>
 
-   <template name="/PMC/declarations" namespace="all"  ><![CDATA[
+   <template key="/PMC/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */

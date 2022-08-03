@@ -22,7 +22,7 @@
       <copy source="Snippets/flash-programming-example.cpp"  target="Snippets/flash-programming-example.cpp"  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <template name="FlashConfig" namespace="all"> <![CDATA[
+   <template key="FlashConfig" namespace="all"> <![CDATA[
       \t// Sector size for program flash (minimum erase element)
       \tstatic constexpr unsigned programFlashSectorSize = $(pflash_sector_size);
    

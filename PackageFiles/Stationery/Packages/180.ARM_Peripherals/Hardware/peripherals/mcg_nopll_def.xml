@@ -17,7 +17,7 @@
       </category>
    </for>
 
-   <binaryOption name="mcg_c2_erefs0"
+   <binaryOption key="mcg_c2_erefs0"
       description="External Reference Select" 
       toolTip="Determines whether a clock or crystal is used for the external reference clock"
       hidden="true" >
@@ -25,7 +25,7 @@
       <choice value="1" name="Oscillator" isDefault="true" />
    </binaryOption>
    
-   <binaryOption name="mcg_c2_hgo0"
+   <binaryOption key="mcg_c2_hgo0"
       description="Oscillator Gain" 
       toolTip="Controls the crystal oscillator mode of operation"
       hidden="true" >
@@ -41,19 +41,19 @@
    <xi:include href="mcg_base_nopll.xml"/>
 
    <category name="Hardware bugs" description="">
-      <binaryOption name="ERRATA_E2448" 
+      <binaryOption key="ERRATA_E2448" 
          description="Flash prefetch could result in incorrect read data"
          toolTip="Issue: Flash prefetch could result in incorrect read data when CLKDIV1 changed\n
          Workaround: Use code in RAM that disables/restores prefetch around changing CLKDIV1" >
          <choice value="0" name="No special handling" />
-         <choice value="1" name="Special handing" isdefault="true" />
+         <choice value="1" name="Special handing" isDefault="true" />
       </binaryOption>
-      <binaryOption name="ERRATA_E7993" 
+      <binaryOption key="ERRATA_E7993" 
          description="FLL frequency may be incorrect"
          toolTip="Issue: FLL frequency may be incorrect after changing the FLL reference clock\n
          Workaround: Invert MCG_C4[DMX32] before clock source changes and restore afterwards">
          <choice value="0" name="No special handling" />
-         <choice value="1" name="Special handing" isdefault="true" />
+         <choice value="1" name="Special handing" isDefault="true" />
       </binaryOption>
    </category>
 

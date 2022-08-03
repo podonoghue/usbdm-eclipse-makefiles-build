@@ -47,7 +47,7 @@ namespace USBDM {
 /**
  * Table of clock settings
  */
-const McgInfo::ClockInfo Mcg::clockInfo[] = {
+const ClockInfo Mcg::clockInfo[] = {
 $(/MCG/McgClockInfoEntries:!!!!!!!Not found!!!!!!!)
 };
 
@@ -77,22 +77,22 @@ static void setSysDividers(uint32_t simClkDiv1) {
 MCGCallbackFunction Mcg::callback = {0};
 
 /** Current clock mode (FEI out of reset) */
-McgInfo::ClockMode Mcg::currentClockMode = McgInfo::ClockMode::ClockMode_LIRC_2M;
+McgClockMode Mcg::currentClockMode = McgClockMode_LIRC_2M;
 
-constexpr McgInfo::ClockMode clockTransitionTable[4][4] = {
-         /*  from                     to =>   ClockMode_LIRC_2M,           ClockMode_LIRC_8M,           ClockMode_HIRC_48M,           ClockMode_EXT,   */
-         /* ClockMode_LIRC_2M,  */ { McgInfo::ClockMode_LIRC_2M,  McgInfo::ClockMode_HIRC_48M, McgInfo::ClockMode_HIRC_48M,  McgInfo::ClockMode_EXT,   },
-         /* ClockMode_LIRC_8M,  */ { McgInfo::ClockMode_HIRC_48M, McgInfo::ClockMode_LIRC_8M,  McgInfo::ClockMode_HIRC_48M,  McgInfo::ClockMode_EXT,   },
-         /* ClockMode_HIRC_48M, */ { McgInfo::ClockMode_LIRC_2M,  McgInfo::ClockMode_LIRC_8M,  McgInfo::ClockMode_HIRC_48M,  McgInfo::ClockMode_EXT,   },
-         /* ClockMode_EXT,      */ { McgInfo::ClockMode_LIRC_2M,  McgInfo::ClockMode_LIRC_8M,  McgInfo::ClockMode_HIRC_48M,  McgInfo::ClockMode_EXT,   },
-   };
+constexpr McgClockMode clockTransitionTable[4][4] = {
+         /*  from  to =>   LIRC_2M,                  LIRC_8M,                  HIRC_48M,                  EXT,   */
+         /* LIRC_2M,  */ { McgMcgClockMode_LIRC_2M,  McgMcgClockMode_HIRC_48M, McgMcgClockMode_HIRC_48M,  McgMcgClockMode_EXT,   },
+         /* LIRC_8M,  */ { McgMcgClockMode_HIRC_48M, McgMcgClockMode_LIRC_8M,  McgMcgClockMode_HIRC_48M,  McgMcgClockMode_EXT,   },
+         /* HIRC_48M, */ { McgMcgClockMode_LIRC_2M,  McgMcgClockMode_LIRC_8M,  McgMcgClockMode_HIRC_48M,  McgMcgClockMode_EXT,   },
+         /* EXT,      */ { McgMcgClockMode_LIRC_2M,  McgMcgClockMode_LIRC_8M,  McgMcgClockMode_HIRC_48M,  McgMcgClockMode_EXT,   },
+};
 
 /**
  * Get name for clock mode
  *
  * @return Pointer to static string
  */
-const char *Mcg::getClockModeName(McgInfo::ClockMode clockMode) {
+const char *Mcg::getClockModeName(McgClockMode clockMode) {
    static const char *modeNames[] {
          "LIRC_2M",
          "LIRC_8M",
@@ -113,9 +113,9 @@ const char *Mcg::getClockModeName(McgInfo::ClockMode clockMode) {
  *
  * @return E_NO_ERROR on success
  */
-ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
+ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
 
-   McgInfo::ClockMode finalMode = clockInfo.clockMode;
+   McgClockMode finalMode = clockInfo.clockMode;
 
 
    // Set conservative clock dividers
@@ -133,11 +133,11 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
       // Used to indicate that clock stabilization wait is needed
       bool externalClockInUse = false;
 
-      McgInfo::ClockMode next = clockTransitionTable[currentClockMode][finalMode];
+      McgClockMode next = clockTransitionTable[currentClockMode][finalMode];
 
       switch (next) {
 
-      case McgInfo::ClockMode_LIRC_2M: // From HIRC48, EXT or reset(FEI)
+      case McgClockMode_LIRC_2M: // From HIRC48, EXT or reset(FEI)
 
          mcg->C2 =
                MCG_C2_IRCS(0)   | // IRCS = 0 -> LIRC is in 2 MHz mode
@@ -153,7 +153,7 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
          } while ((mcg->S & MCG_S_CLKST_MASK) != (MCG_S_CLKST(1)));
          break;
 
-      case McgInfo::ClockMode_LIRC_8M: // From HIRC48, EXT or reset(FEI)
+      case McgClockMode_LIRC_8M: // From HIRC48, EXT or reset(FEI)
 
          mcg->C2 =
                MCG_C2_IRCS(1)   | // IRCS = 1 -> LIRC is in 2 MHz mode
@@ -169,7 +169,7 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
          } while ((mcg->S & MCG_S_CLKST_MASK) != (MCG_S_CLKST(1)));
          break;
 
-      case McgInfo::ClockMode_HIRC_48M: // from LIRC_2M, LIRC_8M, EXT
+      case McgClockMode_HIRC_48M: // from LIRC_2M, LIRC_8M, EXT
 
          mcg->C2 =
                clockInfo.c2;      // IRCS, RANGE0, HGO0, EREFS0
@@ -184,7 +184,7 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
          } while ((mcg->S & MCG_S_CLKST_MASK) != MCG_S_CLKST(0));
          break;
 
-      case McgInfo::ClockMode_EXT:  // from LIRC_2M, LIRC_8M, HIRC
+      case McgClockMode_EXT:  // from LIRC_2M, LIRC_8M, HIRC
 
          mcg->C2 =
                clockInfo.c2;      // IRCS, RANGE0, HGO0, EREFS0
@@ -253,10 +253,10 @@ void Mcg::defaultConfigure() {
 
 #if !defined(INITIAL_CLOCK_STATE)
 // Needed for use with a boot-loader that changes the clock
-#define INITIAL_CLOCK_STATE ClockMode_LIRC_2M;
+#define INITIAL_CLOCK_STATE McgClockMode_LIRC_2M;
 #endif
 
-   currentClockMode = McgInfo::ClockMode::INITIAL_CLOCK_STATE;
+   currentClockMode = INITIAL_CLOCK_STATE;
 
    // Transition to desired clock mode
    clockTransition(clockInfo[ClockConfig_default]);

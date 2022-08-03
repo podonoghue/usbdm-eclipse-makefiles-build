@@ -4,7 +4,7 @@
 <!-- osc0_div.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="OSC">
-   <intOption name="oscer_undiv_clock"
+   <intOption key="oscer_undiv_clock"
       hidden="true"
       units="Hz"
       description="Oscillator clock to some peripherals [OSCERCLK_UNDIV]"
@@ -13,7 +13,7 @@
       constant="true" 
       disabledValue="0" />
 
-   <choiceOption name="osc_div_erps"
+   <choiceOption key="osc_div_erps"
       enumStem="OscErClkDiv"
       hidden="true"
       description="External clock output [OSCERCLK] prescaler"

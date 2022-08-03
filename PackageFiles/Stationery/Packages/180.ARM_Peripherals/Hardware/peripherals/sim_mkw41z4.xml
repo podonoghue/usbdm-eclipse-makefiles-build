@@ -7,25 +7,28 @@
    <xi:include href="_default_instance.xml"/>
 
    <xi:include href="_simCommon.xml"/>
-   <xi:include href="_sim_rtc_independent.xml"/>
    
-   <deleteOption key="rtc_independent"        mustExist="true" />
-   <deleteOption key="sim_sopt2_rtcclkoutsel" mustExist="true" />
-   
-   <choiceOption name="sim_sopt1_osc32ksel" 
+   <choiceOption key="sim_sopt1_osc32ksel" 
+      enumStem="SimOsc32kSel"
       target="system_erclk32k_clock"
+      hidden="true"
       description="ERCLK32K clock source" 
-      replace="true" 
       toolTip="Clock source of External 32k Reference Clock [ERCLK32K]\n
                RTC OSC is independent of OSC0 (32MHz rf_osc)">
-      <choice value="0" name="OSC1 (RTC) 32kHz OSC32KCLK"  ref="/RTC/osc_clock"              enum="Osc32kClk" code="RtcInfo::getExternalClock()" />
-      <choice value="2" name="RTC clock in (EXTAL32)"      ref="/RTC/osc_input_freq"         enum="RtcClkin" code="RtcInfo::osc_input_freq"      />
-      <choice value="3" name="LPO 1kHz clock"              ref="/PMC/system_low_power_clock" enum="LpoClk" code="1000"                           isDefault="true"/>
+      <choice value="0" name="OSC1 (RTC) 32kHz OSC32KCLK"  ref="/RTC/osc_clock"              enum="Osc32kClk"  code="RtcInfo::getExternalClock()" />
+      <choice value="2" name="RTC clock in (EXTAL32)"      ref="/RTC/osc_input_freq"         enum="RtcClkin"   code="RtcInfo::osc_input_freq"     />
+      <choice value="3" name="LPO 1kHz clock"              ref="/PMC/system_low_power_clock" enum="LpoClk"     code="1000"                        isDefault="true"/>
    </choiceOption>
 
+   <constant key="sim_sopt2_rtcclkoutsel" value="false" hidden="true" />
+   <xi:include href="_sim_rtc_independent.xml"/>
+   
+   <deleteOption key="rtc_independent"           mustExist="true" />
+   <deleteOption key="sim_sopt2_rtcclkoutsel"    mustExist="true" />
+   
    <category name="COPC" description="COP Control Register">
       
-      <choiceOption name="sim_copc_copt" 
+      <choiceOption key="sim_copc_copt" 
          description="COP Watchdog Timeout"
          toolTip="This write-once field selects the Computer Operating Properly Timeout" >
          <choice value="SIM_COPC_COPCLKS(0)|SIM_COPC_COPT(0)" name="Disabled" />
@@ -37,7 +40,7 @@
          <choice value="SIM_COPC_COPCLKS(1)|SIM_COPC_COPT(3)" name="Timeout after 2^18 clock cycles" />
       </choiceOption>
 
-      <choiceOption name="sim_copc_copclksel" 
+      <choiceOption key="sim_copc_copclksel" 
          description="COP Clock Select"
          toolTip="This write-once field selects the clock source of the COP watchdog">
          <choice value="0" name="LPO clock (1 kHz)" isDefault="true" />
@@ -46,21 +49,21 @@
          <choice value="3" name="Bus clock" />
       </choiceOption>
 
-      <binaryOption name="sim_copc_copdbgen" 
+      <binaryOption key="sim_copc_copdbgen" 
          description="COP Debug Enable"
          toolTip="Controls whether COP is enabled in debug mode">
          <choice value="0"  name="COP is disabled and the counter is reset" isDefault="true" />
          <choice value="1"  name="COP is enabled" />
       </binaryOption>
       
-      <binaryOption name="sim_copc_copstpen" 
+      <binaryOption key="sim_copc_copstpen" 
          description="COP Stop Enable"
          toolTip="Controls whether COP is enabled in stop mode">
          <choice value="0"  name="COP is disabled and the counter is reset" isDefault="true" />
          <choice value="1"  name="COP is enabled" />
       </binaryOption>
       
-      <binaryOption name="sim_copc_copw" 
+      <binaryOption key="sim_copc_copw" 
          description="COP Windowed Mode"
          toolTip="Windowed mode is only supported when COP is using longer periods\n
                   The COP window is opened three quarters through the timeout period">
@@ -74,6 +77,7 @@
       <choiceOption key="adc%(n)_cfg1_adiclk" 
          description="ADC%(n) Clock Source"
          hidden="true"
+         valueFormat="ADC_CFG1_ADICLK(%s)"
          enumStem="AdcClockSource"
          target="system_adc%(n)_clock"
          toolTip="Clock source for the ADC module" >
@@ -94,9 +98,10 @@
    
    <category name="SOPT1" description="RTC clocks" >
 
+      <aliasOption key="sim_sopt1_osc32ksel" constant="false" />
       <aliasOption key="system_erclk32k_clock" />
       
-      <choiceOption name="sim_sopt1_osc32kout" 
+      <choiceOption key="sim_sopt1_osc32kout" 
          enumStem="SimErc32kClkoutPinSelect"
          description="ERCLK32K Clock Output"
          toolTip="Outputs the ERCLK32K on the selected pin in all modes of operation">
@@ -125,9 +130,9 @@
    
       <aliasOption key="/SIM/system_peripheral_clock[]" optional="true" />
       <aliasOption key="/OSC0/oscer_clock" optional="true" />
-      <aliasOption key="/MCG/system_mcgirclk_clock[]" optional="true" />
+      <aliasOption key="/MCG/system_mcgirclk_clock[0]" optional="true" />
       
-      <choiceOption name="sim_sopt2_lpuart0src" 
+      <choiceOption key="sim_sopt2_lpuart0src" 
          enumStem="SimLpuart0ClockSource"
          target="system_lpuart0_clock"
          description="LPUART0 Clock"
@@ -138,7 +143,7 @@
          <choice value="3"  name="MCGIRCLK clock"   ref="/MCG/system_mcgirclk_clock"  enum="McgIrClk"        code="McgInfo::getMcgIrClock()"  />
       </choiceOption>
          
-      <intOption name="system_lpuart0_clock" 
+      <intOption key="system_lpuart0_clock" 
          constant="true"
          derived="true"
          units="Hz"
@@ -146,7 +151,7 @@
          toolTip="Frequency of clock to LPUART"
          value="0" />
       
-      <choiceOption name="sim_sopt2_tpmsrc" 
+      <choiceOption key="sim_sopt2_tpmsrc" 
          enumStem="SimTpmClockSource"
          target="system_tpm_clock"
          description="TPM Clock source"
@@ -157,7 +162,7 @@
          <choice value="3"  name="MCGIRCLK clock"   ref="/MCG/system_mcgirclk_clock"  enum="McgIrClk"        code="McgInfo::getMcgIrClock()"    />
       </choiceOption>
       
-      <intOption name="system_tpm_clock"
+      <intOption key="system_tpm_clock"
          derived="true" 
          constant="true"
          units="Hz"
@@ -165,7 +170,7 @@
          toolTip="Frequency of clock to TPM"
          value="0" />
       
-      <choiceOption name="sim_sopt2_clkoutsel" 
+      <choiceOption key="sim_sopt2_clkoutsel" 
          enumStem="SimClkoutSel"
          description="CLKOUT pin clock"
          toolTip="Clock to output on the CLKOUT pin" >
@@ -182,7 +187,7 @@
    
    <category name="SOPT4" description="TPM signals">
       <for keys="p" values="0;1;2">
-         <binaryOption name="sim_sopt4_tpm%(p)clksel" 
+         <binaryOption key="sim_sopt4_tpm%(p)clksel" 
             enumStem="SimTpm%(p)ClkSel"
             description="TPM %(p) External Clock Pin "
             toolTip="External pin used to drive the clock to the TPM module">
@@ -191,23 +196,16 @@
          </binaryOption>
       </for>
    
-      <binaryOption name="sim_sopt4_tpm1ch0src" 
-         enumStem="SimTpm1Ch0Src"
-         description="TPM 1 channel 0 input capture source"
-         toolTip="Source for TPM channel input capture\n
-            NOTE: When the TPM is not in input capture mode, clear this field">
-         <choice value="0" name="TPM1_CH0 signal"           enum="IcPin"  isDefault="true"/>
-         <choice value="1" name="CMP0 output"               enum="Cmp0"   />
-      </binaryOption>   
-      
-      <binaryOption name="sim_sopt4_tpm2ch0src" 
-         enumStem="SimTpm2Ch0Src"
-         description="TPM 2 channel 0 input capture source select"
-         toolTip="Source for TPM channel input capture\n
-            NOTE: When the TPM is not in input capture mode, clear this field">
-         <choice value="0" name="TPM2_CH0 signal"           enum="IcPin"  isDefault="true"/>
-         <choice value="1" name="CMP0 output"               enum="Cmp0"   />
-      </binaryOption>
+      <for keys="p" values="1;2">
+         <binaryOption key="sim_sopt4_tpm%(p)ch0src" 
+            enumStem="SimTpm%(p)Ch0Src"
+            description="TPM %(p) channel 0 input capture source"
+            toolTip="Source for TPM channel input capture\n
+               NOTE: When the TPM is not in input capture mode, clear this field">
+            <choice value="0" name="TPM_CH0 signal"       enum="IcPin"  isDefault="true"/>
+            <choice value="1" name="CMP0 output"          enum="Cmp0"   />
+         </binaryOption>   
+      </for>
    </category>
    
    <category name="SOPT5" description="UART signals">
@@ -243,12 +241,13 @@
       <for keys="adc" values="0">
          <choiceOption key="sim_sopt7_adc%(adc)trigger" 
             enumStem="SimAdc%(adc)TriggerMode"
+            valueFormat="(%s)"
             description="ADC%(adc) trigger mode"
             toolTip="Alternative conversion triggers for ADC\n
                _Tpm              - ADC is triggered by TPM. Pre-triggers are TPM channel 0 (A) and channel 1 (B)\n
                _Alt_PreTrigger_0 - ADC is triggered by SimAdc0Trigger selection and uses pretrigger 0 = A (SC1[0]/R[0])\n
                _Alt_PreTrigger_1 - ADC is triggered by SimAdc0Trigger selection and uses pretrigger 1 = B (SC1[1]/R[1])" >
-         <choice value="SIM_SOPT7_ADC0ALTTRGEN(0)"                                           name="Triggered by TPM Ch0 and Ch1" enum="Tpm"  isDefault="true" />
+            <choice value="SIM_SOPT7_ADC%(adc)ALTTRGEN(0)"                                   name="Triggered by TPM Ch0 and Ch1" enum="Tpm"  isDefault="true" />
             <choice value="SIM_SOPT7_ADC%(adc)ALTTRGEN(1)|SIM_SOPT7_ADC%(adc)PRETRGSEL(0)"   name="Pre-trigger 0 = A (SC1[0])"   enum="Alt_PreTrigger_0" />
             <choice value="SIM_SOPT7_ADC%(adc)ALTTRGEN(1)|SIM_SOPT7_ADC%(adc)PRETRGSEL(1)"   name="Pre-trigger 1 = B (SC1[1])"   enum="Alt_PreTrigger_1" />
          </choiceOption>
@@ -256,7 +255,7 @@
          <choiceOption key="sim_sopt7_adc%(adc)trgsel"
             enumStem="SimAdc%(adc)Trigger"
             description="ADC%(adc) trigger"
-         toolTip="Trigger source when alternative triggers are functional in stop and VLPS modes">
+            toolTip="ADC Trigger source in STOP and VLPS modes, or when ADC Alternative Trigger is active">
             <choice value="0"  name="External trigger pin input (EXTRG_IN)"   enum="External" isDefault="true" />
             <choice value="1"  name="CMP 0 output"                            enum="Cmp0"        />
             <choice value="4"  name="PIT trigger 0"                           enum="PitCh0"      />
@@ -272,38 +271,37 @@
    </category>
 
    <for keys="n" dim="/SIM/numberOfClockSettings" >
-      <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" constant="true" >
+      <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" >
       
-         <choiceOption name="sim_sopt2_pllfllsel[%(n)]_Fixed"
-            enumStem="SimPeripheralClockSource"
+         <choiceOption key="sim_sopt2_pllfllsel[%(n)]_Fixed"
             target="system_peripheral_clock[%(n)]"
             description="Peripheral Clock"
             toolTip="Clock for various peripherals (LPUART, TPM etc.)">
             <choice value="0"  name="MCGFLLCLK clock"   ref="/MCG/system_mcgfllclk_clock[%(n)]"    enum="McgFllClk"  code="SystemMcgFllClock"      isDefault="true" />
          </choiceOption>
    
-         <intOption name="system_peripheral_clock[%(n)]"
+         <intOption key="system_peripheral_clock[%(n)]"
             derived="true"
             constant="true"
             units="Hz"
             description="Peripheral Clock frequency"
             toolTip="Frequency of Peripheral Clock available to various peripherals"  />
 	 
-         <intOption name="system_core_clock[%(n)]" 
+         <intOption key="system_core_clock[%(n)]" 
             units="Hz"
             description="System Core Clock"
             toolTip="Clocks the ARM Cortex-M4 core and bus masters"
             value="48 MHz" />
       
-         <intOption name="system_bus_clock[%(n)]" 
+         <intOption key="system_bus_clock[%(n)]" 
             units="Hz"
             description="System Bus Clock"
             toolTip="Clocks the bus slaves and peripherals\n
-                  Must be &lt;= Core Clock frequency"
-         value="24 MHz" />
+                     Must be &lt;= Core Clock frequency"
+            value="24 MHz" />
       
          <category name="CLKDIV1" description="System Clock Dividers">
-            <intOption name="sim_clkdiv1_outdiv1[%(n)]" 
+            <intOption key="sim_clkdiv1_outdiv1[%(n)]" 
                derived="true"
                constant="true"
                description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
@@ -311,7 +309,7 @@
                         Divides MCGOUT Clock to generate system_core_clock"
                value="1" offset="-1" min="1" max="16" />
          
-            <intOption name="sim_clkdiv1_outdiv4[%(n)]" 
+            <intOption key="sim_clkdiv1_outdiv4[%(n)]" 
                derived="true"
                constant="true"
                description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"

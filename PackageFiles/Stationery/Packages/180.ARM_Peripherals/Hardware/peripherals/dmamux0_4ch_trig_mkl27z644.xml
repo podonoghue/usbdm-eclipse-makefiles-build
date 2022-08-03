@@ -9,7 +9,7 @@
 
    <aliasOption key="/DMA0/NumChannels" displayName="NumChannels" constant="true" />
 
-   <choiceOption name="dma_chcfg0"
+   <choiceOption key="dma_chcfg0"
       description="Mapping of DMA source (slot) to DMA channel" >
       <choice name="Disabled"             value="0" />
       <choice name="LPUART0 Receive"      value="2" />
@@ -54,9 +54,9 @@
       <choice name="Always Enabled 63"    value="63" />
    </choiceOption>
 
-   <choiceOption name="dma_chcfg1"  derivedFrom="dma_chcfg0"/>
-   <choiceOption name="dma_chcfg2"  derivedFrom="dma_chcfg0"/>
-   <choiceOption name="dma_chcfg3"  derivedFrom="dma_chcfg0"/>
+   <choiceOption key="dma_chcfg1"  derivedFrom="dma_chcfg0"/>
+   <choiceOption key="dma_chcfg2"  derivedFrom="dma_chcfg0"/>
+   <choiceOption key="dma_chcfg3"  derivedFrom="dma_chcfg0"/>
    
    <xi:include href="_clockOption.xml"/>
    

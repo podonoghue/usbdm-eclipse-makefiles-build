@@ -36,10 +36,11 @@ namespace USBDM {
 #define SIM_CLKDIV1_OUTDIV3(x) (0)
 #endif
 
+
 /**
  * Table of clock settings
  */
-const McgInfo::ClockInfo Mcg::clockInfo[] = {
+const ClockInfo Mcg::clockInfo[] = {
 $(/MCG/McgClockInfoEntries:!!!!!!!Not found!!!!!!!)
 };
 
@@ -100,18 +101,18 @@ static void setSysDividers(uint32_t simClkDiv1) {
 MCGCallbackFunction Mcg::callback = {0};
 
 /** Current clock mode (FEI out of reset) */
-McgInfo::ClockMode Mcg::currentClockMode = McgInfo::ClockMode::ClockMode_FEI;
+McgClockMode Mcg::currentClockMode = McgClockMode_FEI;
 
-constexpr McgInfo::ClockMode clockTransitionTable[8][8] = {
-      /*  from                 to =>   ClockMode_FEI,           ClockMode_FEE,           ClockMode_FBI,           ClockMode_BLPI,          ClockMode_FBE,           ClockMode_BLPE,          ClockMode_PBE,           ClockMode_PEE */
-      /* ClockMode_FEI,  */ { McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE, },
-      /* ClockMode_FEE,  */ { McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE, },
-      /* ClockMode_FBI,  */ { McgInfo::ClockMode_FEI,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_BLPI, McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE, },
-      /* ClockMode_BLPI, */ { McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI, },
-      /* ClockMode_FBE,  */ { McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FEE,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_BLPE, McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE, },
-      /* ClockMode_BLPE, */ { McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE, },
-      /* ClockMode_PBE,  */ { McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_BLPE, McgInfo::ClockMode_FBE,  McgInfo::ClockMode_PEE, },
-      /* ClockMode_PEE,  */ { McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE, },
+constexpr McgClockMode clockTransitionTable[8][8] = {
+   /* from to => FEI                FEE,               FBI,               BLPI,              FBE,              BLPE,               PBE,               PEE */
+   /* FEI,  */ { McgClockMode_FBI,  McgClockMode_FBE,  McgClockMode_FBI,  McgClockMode_FBI,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE, },
+   /* FEE,  */ { McgClockMode_FBI,  McgClockMode_FBE,  McgClockMode_FBI,  McgClockMode_FBI,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE, },
+   /* FBI,  */ { McgClockMode_FEI,  McgClockMode_FBE,  McgClockMode_FBI,  McgClockMode_BLPI, McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE, },
+   /* BLPI, */ { McgClockMode_FBI,  McgClockMode_FBI,  McgClockMode_FBI,  McgClockMode_FBI,  McgClockMode_FBI,  McgClockMode_FBI,  McgClockMode_FBI,  McgClockMode_FBI, },
+   /* FBE,  */ { McgClockMode_FBI,  McgClockMode_FEE,  McgClockMode_FBI,  McgClockMode_FBI,  McgClockMode_FBE,  McgClockMode_BLPE, McgClockMode_PBE,  McgClockMode_PBE, },
+   /* BLPE, */ { McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_PBE,  McgClockMode_PBE, },
+   /* PBE,  */ { McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_BLPE, McgClockMode_FBE,  McgClockMode_PEE, },
+   /* PEE,  */ { McgClockMode_PBE,  McgClockMode_PBE,  McgClockMode_PBE,  McgClockMode_PBE,  McgClockMode_PBE,  McgClockMode_PBE,  McgClockMode_PBE,  McgClockMode_PBE, },
 };
 
 /**
@@ -119,7 +120,7 @@ constexpr McgInfo::ClockMode clockTransitionTable[8][8] = {
  *
  * @return Pointer to static string
  */
-const char *Mcg::getClockModeName(McgInfo::ClockMode clockMode) {
+const char *Mcg::getClockModeName(McgClockMode clockMode) {
    static const char *modeNames[] {
          "FEI",
          "FEE",
@@ -148,7 +149,7 @@ const char *Mcg::getClockModeName(McgInfo::ClockMode clockMode) {
  * @param clockInfo  Clock settings information
  * @param bugFix     Mask to flip MCG.C4 value
  */
-void Mcg::writeMainRegs(const McgInfo::ClockInfo &clockInfo, uint8_t bugFix) {
+void Mcg::writeMainRegs(const ClockInfo &clockInfo, uint8_t bugFix) {
 
 #if defined(MCG_C7_OSCSEL)
    // Select OSCCLK Source (input clock to PLL/FLL and possibly MCGOUTCLK)
@@ -185,9 +186,9 @@ void Mcg::writeMainRegs(const McgInfo::ClockInfo &clockInfo, uint8_t bugFix) {
  *
  * @return E_NO_ERROR on success
  */
-ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
+ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
 
-   McgInfo::ClockMode finalMode = clockInfo.clockMode;
+   McgClockMode finalMode = clockInfo.clockMode;
 
 #ifdef USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK
    if (clockInfo.c7&&MCG_C7_OSCSEL_MASK) {
@@ -210,11 +211,11 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 #endif
    int transitionCount = 0;
    do {
-      McgInfo::ClockMode next = clockTransitionTable[currentClockMode][finalMode];
+      McgClockMode next = clockTransitionTable[currentClockMode][finalMode];
 
       switch (next) {
 
-         case McgInfo::ClockMode_FEI: // From FBI or startup
+         case McgClockMode_FEI: // From FBI or startup
 
             // Note: C2, C4, C6 and C7 set up in FBI or default from reset
 
@@ -230,7 +231,7 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
             } while ((mcg->S & (MCG_S_CLKST_MASK|MCG_S_IREFST_MASK)) != (MCG_S_CLKST(0)|MCG_S_IREFST(1)));
             break;
 
-         case McgInfo::ClockMode_FEE: // from FBE
+         case McgClockMode_FEE: // from FBE
 
             // Note: C2, C4, C6 and C7 set up in FBE
 
@@ -246,7 +247,7 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
             } while ((mcg->S & (MCG_S_CLKST_MASK|MCG_S_IREFST_MASK)) != (MCG_S_CLKST(0)|MCG_S_IREFST(0)));
             break;
 
-         case McgInfo::ClockMode_FBI: // from BLPI, FEI, FEE, FBE
+         case McgClockMode_FBI: // from BLPI, FEI, FEE, FBE
 
             mcg->C1 =
                   MCG_C1_CLKS(0b01)   | // CLKS     = 1     -> MCGOUTCLK = Internal reference clock is selected
@@ -271,7 +272,7 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 
             break;
 
-         case McgInfo::ClockMode_FBE: // from FEI, FEE, FBI, BLPE, PBE
+         case McgClockMode_FBE: // from FEI, FEE, FBI, BLPE, PBE
 
             mcg->C1 =
                   MCG_C1_CLKS(0b10)   | // CLKS     = 2     -> MCGOUTCLK = External reference clock
@@ -294,7 +295,7 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 #endif
             break;
 
-         case McgInfo::ClockMode_PBE: // from FBE, BLPE, PEE
+         case McgClockMode_PBE: // from FBE, BLPE, PEE
 
             mcg->C1 =
                   MCG_C1_CLKS(0b10)   | // CLKS     = 2     -> MCGOUTCLK = External reference clock
@@ -312,17 +313,17 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
             }
             break;
 
-         case McgInfo::ClockMode_PEE: // from PBE
+         case McgClockMode_PEE: // from PBE
             mcg->C1 =
                   MCG_C1_CLKS(0b00)   | // CLKS     = 0     -> MCGOUTCLK = Output of FLL/PLL (depends on mcg_c6.PLLS)
                   MCG_C1_IREFS(0)     | // IREFS    = 0     -> FLL source = External reference clock
                   clockInfo.c1;         // FRDIV, IRCLKEN, IREFSTEN
             break;
 
-         case McgInfo::ClockMode_BLPE: // from FBE, PBE (registers differ depending on transition)
+         case McgClockMode_BLPE: // from FBE, PBE (registers differ depending on transition)
             // Fall through - no break
 
-         case McgInfo::ClockMode_BLPI: // from FBI
+         case McgClockMode_BLPI: // from FBI
             // Set LP (low-power)
             mcg->C2 = mcg->C2|MCG_C2_LP(1);
             break;
@@ -449,10 +450,10 @@ void Mcg::defaultConfigure() {
 
 #if !defined(INITIAL_CLOCK_STATE)
 // Needed for use with a boot-loader that changes the clock
-#define INITIAL_CLOCK_STATE ClockMode_FEI;
+#define INITIAL_CLOCK_STATE McgClockMode_FEI;
 #endif
 
-   currentClockMode = McgInfo::ClockMode::INITIAL_CLOCK_STATE;
+   currentClockMode = INITIAL_CLOCK_STATE;
 
    // Transition to desired clock mode
    clockTransition(clockInfo[ClockConfig_default]);

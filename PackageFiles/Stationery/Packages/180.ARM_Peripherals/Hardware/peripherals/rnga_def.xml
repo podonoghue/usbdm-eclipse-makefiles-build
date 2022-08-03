@@ -4,7 +4,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="External Watchdog Monitor">
 
-   <template name="/RNGA/declarations" namespace="all"  ><![CDATA[
+   <template key="/RNGA/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */

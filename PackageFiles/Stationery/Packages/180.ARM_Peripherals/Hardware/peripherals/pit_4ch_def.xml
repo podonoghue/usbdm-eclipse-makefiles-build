@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- pit.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
@@ -8,40 +8,40 @@
 
    <aliasOption key="/SIM/system_bus_clock" displayName="PIT input clock" constant="true"/>
 
-   <intOption name="pit_ldval" description="Reload value"
+   <intOption key="pit_ldval" description="Reload value"
       toolTip="Value loaded in timer register on roll-over"
       value="4799" min="0" max="0xFFFFFFFF" />
 
-   <floatOption name="pit_period" description="Default period of timer"
+   <floatOption key="pit_period" description="Default period of timer"
       toolTip="Used to calculate the timer load value"
       derived="true"
       value="1m" min="0" units="s" />
 
-   <floatOption name="pit_frequency" description="Default frequency of timer"
+   <floatOption key="pit_frequency" description="Default frequency of timer"
       toolTip="Used to calculate the timer load value"
       derived="true"
       value="1k" min="0" units="Hz" />
 
-   <binaryOption name="pit_mcr_frz" description="Freeze in debug mode"
+   <binaryOption key="pit_mcr_frz" description="Freeze in debug mode"
       toolTip="Controls whether the timer continues to run in debug mode">
       <choice value="0" name="Timers continue to run in debug mode" />
       <choice value="1" name="Timers are stopped in Debug mode" />
    </binaryOption>
 
-   <binaryOption name="pit_tctrl_ch1" description="Chain timers 1-0"
+   <binaryOption key="pit_tctrl_ch1" description="Chain timers 1-0"
       toolTip="Controls whether the timer channels are chained to creater a larger counter">
       <choice value="0" name="Timers are not chained" />
       <choice value="1" name="Timers are chained" />
    </binaryOption>
 
-   <binaryOption name="pit_tctrl_ch3" description="Chain timers 3-2"
+   <binaryOption key="pit_tctrl_ch3" description="Chain timers 3-2"
       toolTip="Controls whether the timer channels are chained to creater a larger counter">
       <choice value="0" name="Timers are not chained" />
       <choice value="1" name="Timers are chained" />
    </binaryOption>
 
-   <constant name = "irq_pattern"      derived = "true" value = "^%b(\d+)$"  />
-   <constant name = "irq_classHandler" derived = "true" value = "%c%i::Channel&lt;$1&gt;::irqHandler"  />
+   <constant key = "irq_pattern"      derived = "true" value = "^%b(\d+)$"  />
+   <constant key = "irq_classHandler" derived = "true" value = "%c%i::Channel&lt;$1&gt;::irqHandler"  />
    <xi:include href="_irqOptionSubstituted.xml"/>
  
    <validate
@@ -76,7 +76,7 @@
       \t}\n\n
    ]]></template>
    
-   <template name="/PIT/declarations" namespace="all"  ><![CDATA[
+   <template key="/PIT/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */

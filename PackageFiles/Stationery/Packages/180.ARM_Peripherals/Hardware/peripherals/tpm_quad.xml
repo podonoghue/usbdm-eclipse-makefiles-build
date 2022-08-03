@@ -2,7 +2,7 @@
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- tpm_quad.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
    <xi:include href="_default_instance.xml"/>
 
@@ -10,33 +10,33 @@
    <aliasOption key="/SIM/sim_sopt2_tpmsrc" constant="false"  optional="true"/>
    <aliasOption key="/SIM/system_tpm_clock"  optional="true"/>
 
-   <binaryOption name="check_minimums" description="Check minimum interval and minimum resolution"
+   <binaryOption key="check_minimums" description="Check minimum interval and minimum resolution"
          toolTip="Enables boundary checks of minimum interval and minimum resolution when setting TPM values" >
       <choice value="0" name="No checks done" />
       <choice value="1" name="Do checks"  isDefault="true" />
    </binaryOption>
 
-   <intOption name="minimumInterval" description="Minimum usable interval in ticks"
+   <intOption key="minimumInterval" description="Minimum usable interval in ticks"
       toolTip="This value is used as a minimum acceptable value for the timer interval in ticks\n
                when using convertMicrosecondsToTicks() or convertSecondsToTicks()"
       value="20" min="0" max="65535"/>
       
-   <intOption name="minimumResolution" description="Minimum resolution for PWM interval"
+   <intOption key="minimumResolution" description="Minimum resolution for PWM interval"
       toolTip="This value is used as a minimum value for the timer period in ticks \n
          so that a reasonable resolution is available for PWM duty-cycle"
       value="100" min="0" max="65535" />
       
-   <intOption name="tpmExternalClock" description="TPM External clock "
+   <intOption key="tpmExternalClock" description="TPM External clock "
       toolTip="Clock frequency of external clock supplied to TPM_CLKINx pin"
       value="0" min="0" units="Hz"/>
-   <choiceOption name="tpm_sc_cmod" description="Clock Mode Selection"
+   <choiceOption key="tpm_sc_cmod" description="Clock Mode Selection"
       toolTip="Selects the clock source for the module">
       <choice value="0" name="Disabled" />
       <choice value="1" name="System TPM Clock" isDefault="true" />
       <choice value="2" name="External clock (synchonized to System Clock)" />
       <choice value="3" name="Reserved" />
    </choiceOption>
-   <choiceOption name="tpm_sc_ps" description="Clock prescaler"
+   <choiceOption key="tpm_sc_ps" description="Clock prescaler"
       toolTip="Selects the prescaler for the module">
       <choice value="0" name="Divide by 1" isDefault="true" />
       <choice value="1" name="Divide by 2" />
@@ -48,35 +48,35 @@
       <choice value="7" name="Divide by 128" />
    </choiceOption>
       
-   <floatOption name="clockFrequency" 
+   <floatOption key="clockFrequency" 
       constant="true"
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
       units="Hz"/>
-   <floatOption name="clockPeriod" 
+   <floatOption key="clockPeriod" 
       constant="true"
       description="Period of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
       units="s"/>
-   <intOption name="tpm_mod" description="Modulo of timer"
+   <intOption key="tpm_mod" description="Modulo of timer"
       toolTip="Default period of the timer"
       value="10000" min="0" max="65535" />     
-   <floatOption name="tpm_mod_period" 
+   <floatOption key="tpm_mod_period" 
       description="Period of timer"
       toolTip="Period of the timer"
       origin="Clock period * tpm_mod"
       derived="true"
       min="0" units="s"/>
-   <binaryOption name="tpm_sc_cpwms" 
+   <binaryOption key="tpm_sc_cpwms" 
       description="Center-Aligned PWM Select"
       toolTip="Selects CPWM mode\n
          This mode configures the TPM to operate in Up-Down Counting mode">
       <choice value="0" name="Left-aligned (count up)" />
       <choice value="1" name="Centre-aligned (count up-down)" />
    </binaryOption>
-   <binaryOption name="tpm_sc_toie" description="Timer Overflow Interrupt Enable"
+   <binaryOption key="tpm_sc_toie" description="Timer Overflow Interrupt Enable"
       toolTip="Enables TPM overflow interrupts">
       <choice value="0" name="Disabled" />
       <choice value="1" name="Enabled" />
@@ -96,7 +96,7 @@
       \t    TPM_SC_PS($(tpm_sc_ps));     // Prescale Factor Selection \n\n
    ]]></template>
 
-   <binaryOption name="tpm_combine_comswap0" 
+   <binaryOption key="tpm_combine_comswap0" 
    description="Combine Channel 0 and 1 Swap"
       toolTip="When set in combine mode,\n
          the even channel is used for the input capture and 1st compare,\n
@@ -104,7 +104,7 @@
       <choice value="0" name="Even channel is used for input capture and 1st compare" isDefault="true" />
       <choice value="1" name="Odd channel is used for input capture and 1st compare" />
    </binaryOption>
-   <binaryOption name="tpm_combine_combine0" 
+   <binaryOption key="tpm_combine_combine0" 
    description="Combine Channels 0 and 1"
       toolTip="Enables the combine feature for channels 0 and 1.\n
          In input capture mode, the combined channels use the even channel input. \n
@@ -121,12 +121,12 @@
       \t    TPM_COMBINE_COMBINE0($(tpm_combine_combine0));  // Combine Channels 0 and 1\n\n
    ]]></template>
 
-   <binaryOption name="tpm_pol_pol0" 
+   <binaryOption key="tpm_pol_pol0" 
       description="Channel 0 Polarity" >
       <choice value="0" name="The channel polarity is active high" isDefault="true" />
       <choice value="1" name="The channel polarity is active low" />
    </binaryOption>
-   <binaryOption name="tpm_pol_pol1" 
+   <binaryOption key="tpm_pol_pol1" 
       description="Channel 1 Polarity" >
       <choice value="0" name="The channel polarity is active high" isDefault="true" />
       <choice value="1" name="The channel polarity is active low" />
@@ -138,10 +138,10 @@
       \t    TPM_POL_POL0($(tpm_pol_pol0));  // Channel 0 Polarity\n\n
    ]]></template>
 
-   <intOption name="tpm_filter_ch0val"  description="Channel 0 Filter Value" 
+   <intOption key="tpm_filter_ch0val"  description="Channel 0 Filter Value" 
       toolTip="Filter/delay is (4 * CHxFVAL) clock cycles, 0 disables"
       min="0" max="15" value="0" />
-   <intOption name="tpm_filter_ch1val"  description="Channel 1 Filter Value" 
+   <intOption key="tpm_filter_ch1val"  description="Channel 1 Filter Value" 
       toolTip="Filter/delay is (4 * CHxFVAL) clock cycles, 0 disables"
       min="0" max="15" value="0" />
    <template><![CDATA[
@@ -197,14 +197,14 @@
       \t}\n\n
    ]]></template>
    
-   <template name="/TPM/declarations" namespace="all"  ><![CDATA[
+   <template key="/TPM/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */
    \ttypedef $(_base_class)Base_T<$(_class)Info> $(_class);\n
    ]]></template>
 
-   <template name="/TPM/quadDeclarations" namespace="all"  ><![CDATA[
+   <template key="/TPM/quadDeclarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_class) as Quadrature decoder
    \t */

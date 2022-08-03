@@ -8,7 +8,7 @@
 
    <xi:include href="_mapPinsOption_on.xml"/>
 
-   <intOption name="osc_input_freq"
+   <intOption key="osc_input_freq"
       units="Hz"
       description="Frequency of External Crystal or Clock"
       toolTip="Frequency of external crystal or clock on XTAL/EXTAL"
@@ -16,7 +16,7 @@
 
    <aliasOption key="/MCG/mcg_c2_erefs0" constant="false" />
 
-   <binaryOption name="osc_cr_erclken"
+   <binaryOption key="osc_cr_erclken"
       enumStem="OscErClkEn"
       description="External Reference Enable"
       toolTip="Enables the OSC clock [OSCERCLK] for use by peripherals\n
@@ -25,7 +25,7 @@
       <choice value="1" name="Enabled"  enum="Enabled"   isDefault="true" />
    </binaryOption>
    
-   <intOption name="osc_clock"
+   <intOption key="osc_clock"
       constant="true"
       derived="true"
       units="Hz"
@@ -34,7 +34,7 @@
       value="8000000"
       disabledValue="0" />
 
-   <choiceOption name="oscillatorRange"
+   <choiceOption key="oscillatorRange"
       derived="true"
       constant="true"
       description="Frequency Range Select"
@@ -48,7 +48,7 @@
 
    <aliasOption key="/MCG/mcg_c2_hgo0" constant="false" />
    
-   <choiceOption name="osc_cr_scp"
+   <choiceOption key="osc_cr_scp"
       description="Oscillator load capacitance"
       toolTip="Configures the oscillator load capacitance" >
       <choice value="0"  name="0 pF" />
@@ -69,18 +69,18 @@
       <choice value="15" name="30 pF" />
    </choiceOption>
 
-   <binaryOption name="osc_cr_erefsten"
+   <binaryOption key="osc_cr_erefsten"
       description="External Reference Stop Enable"
       toolTip="Determines if external reference clock is enabled in Stop mode" >
       <choice value="0" name="Disabled in Stop mode" />
       <choice value="1" name="Enabled in Stop mode" />
    </binaryOption>
    
-   <aliasOption name="oscer_undiv_clock"  optional="true" />
+   <aliasOption key="oscer_undiv_clock"  optional="true" />
 
-   <aliasOption name="osc_div_erps"  optional="true" constant="false" />
+   <aliasOption key="osc_div_erps"  optional="true" constant="false" />
  
-   <intOption name="oscer_clock"
+   <intOption key="oscer_clock"
          derived="true"
          units="Hz"
          description="Oscillator clock [OSCERCLK]"
@@ -90,7 +90,7 @@
          disabledValue="0"  
          constant="true" />
 
-   <intOption name="osc32k_clock"
+   <intOption key="osc32k_clock"
          derived="true"
          units="Hz"
          description="Oscillator low range 32K clock [OSC32KCLK]"
@@ -122,7 +122,7 @@
       \t   OSC_CR_SCP($(osc_cr_scp));       // Oscillator load capacitance\n\n
    ]]></template>
 
-   <template condition="osc_div_erps" ><![CDATA[
+   <template variable="osc_div_erps" ><![CDATA[
       \t//! OSC Clock divider register
       \tstatic constexpr uint32_t div =
       \t   OSC_DIV_ERPS($(osc_div_erps));   // ERCLK prescaler\n\n
@@ -139,29 +139,31 @@
       \t}\n\n
    ]]></template>
       
-   <template condition="!osc_div_erps" ><![CDATA[
-      \t/**
-      \t * Get OSC clock (external, gated by OSC_CR_ERCLKEN)
-      \t *
-      \t * @return Clock frequency as uint32_t in Hz
-      \t */
-      \tstatic uint32_t getOscerClock() {
-      \t   return (osc->CR&OSC_CR_ERCLKEN_MASK)?osc_clock:0;
-      \t}\n\n
-   ]]></template>
-      
-   <template condition="osc_div_erps" ><![CDATA[
-      \t/**
-      \t * Get OSC clock (external, gated by OSC_CR_ERCLKEN)
-      \t *
-      \t * @return Clock frequency as uint32_t in Hz
-      \t */
-      \tstatic uint32_t getOscerClock() {
-      \t   return (osc->CR&OSC_CR_ERCLKEN_MASK)?
-      \t      (osc_clock/(1<<((osc->DIV&OSC_DIV_ERPS_MASK)>>OSC_DIV_ERPS_SHIFT))):
-      \t      0;
-      \t}\n\n
-   ]]></template>
+   <if condition="osc_div_erps">
+      <template><![CDATA[
+         \t/**
+         \t * Get OSC clock (external, gated by OSC_CR_ERCLKEN)
+         \t *
+         \t * @return Clock frequency as uint32_t in Hz
+         \t */
+         \tstatic uint32_t getOscerClock() {
+         \t   return (osc->CR&OSC_CR_ERCLKEN_MASK)?
+         \t      (osc_clock/(1<<((osc->DIV&OSC_DIV_ERPS_MASK)>>OSC_DIV_ERPS_SHIFT))):
+         \t      0;
+         \t}\n\n
+      ]]></template>
+   <else />
+      <template><![CDATA[
+         \t/**
+         \t * Get OSC clock (external, gated by OSC_CR_ERCLKEN)
+         \t *
+         \t * @return Clock frequency as uint32_t in Hz
+         \t */
+         \tstatic uint32_t getOscerClock() {
+         \t   return (osc->CR&OSC_CR_ERCLKEN_MASK)?osc_clock:0;
+         \t}\n\n
+      ]]></template>
+   </if>
       
    <template><![CDATA[
       \t/**
@@ -176,19 +178,7 @@
       \t}\n\n
    ]]></template>
    
-   <enumTemplate namespace="usbdm" condition="osc_cr_erclken" 
-   ><![CDATA[    
-      \t/**
-      \t * %description
-      \t *
-      \t * %tooltip
-      \t */
-      \tenum %enumClass {
-      %body
-      \t};\n\n
-   ]]></enumTemplate>
-         
-   <clockCodeTemplate condition="osc_cr_erclken"
+   <clockCodeTemplate variable="osc_cr_erclken"
    ><![CDATA[
       \t/**
       \t * %description
@@ -200,19 +190,7 @@
       \t}\n\n
    ]]></clockCodeTemplate>  
    
-   <enumTemplate namespace="usbdm" condition="osc_div_erps" 
-   ><![CDATA[    
-      \t/**
-      \t * %description
-      \t *
-      \t * %tooltip
-      \t */
-      \tenum %enumClass {
-      %body
-      \t};\n\n
-   ]]></enumTemplate>
-         
-   <clockCodeTemplate condition="osc_div_erps"
+   <clockCodeTemplate variable="osc_div_erps"
    ><![CDATA[
       \t/**
       \t * %description
@@ -224,18 +202,18 @@
       \t}\n\n
    ]]></clockCodeTemplate>  
 
-   <template name="/OSC/declarations" namespace="all"  ><![CDATA[
+   <template key="/OSC/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */
    \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
    ]]></template>
 
-   <template name="/MCG/Includes" namespace="all"  ><![CDATA[
+   <template key="/MCG/Includes" namespace="all"  ><![CDATA[
    #include "osc.h"\n
    ]]></template>
       
-   <template name="/MCG/Initialisation" namespace="all"  ><![CDATA[
+   <template key="/MCG/Initialisation" namespace="all"  ><![CDATA[
    \tUSBDM::$(_class)::initialise();\n
    ]]></template>
       

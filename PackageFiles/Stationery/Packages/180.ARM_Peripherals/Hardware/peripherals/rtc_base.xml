@@ -7,7 +7,7 @@
    <xi:include href="_mapPinsOption_on.xml"/>
    <xi:include href="_default_instance.xml"/>
 
-   <binaryOption name="configure_rtc"
+   <binaryOption key="configure_rtc"
       description="Configure RTC"
       toolTip="Enables configuration of RTC during startup\n If disabled no RTC registers are accessed">
       <choice value="0" name="Disabled" />
@@ -21,7 +21,7 @@
       <aliasOption key="/SIM/system_erclk32k_clock"   optional="true" />
    </category>
    
-   <intOption name="osc_input_freq"
+   <intOption key="osc_input_freq"
       units="Hz"
       description="32kHz clock"
       toolTip="RTC Crystal frequency"
@@ -30,7 +30,7 @@
       disabledValue="0"
       min="32000" max="40000" />
 
-   <binaryOption name="rtc_cr_osce"
+   <binaryOption key="rtc_cr_osce"
       description="Enable RTC oscillator"
       toolTip="Enable 32kHz RTC oscillator">
       <choice value="0" name="Disabled" isDefault="true" />
@@ -157,7 +157,7 @@
       \t   RTC_TCR_TCR($(rtc_tcr_tcr));  // Time Compensation Register\n\n
     ]]></template>     
    
-   <category key="Register Locks" description="Locks RTC Registers">
+   <category name="Register Locks" description="Locks RTC Registers">
 	   <binaryOption key="rtc_lr_lrl" 
 	      description="Lock Register Lock"
 	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
@@ -196,7 +196,7 @@
       \t   RTC_LR_TCL($(rtc_lr_tcl));  // Time Compensation Lock\n\n
     ]]></template>     
 
-   <category key="Write Access" description="Controls write access to RTC Registers">
+   <category name="Write Access" description="Controls write access to RTC Registers">
       <aliasOption key="rtc_war_ierw" constant="false" optional="true" />
       <aliasOption key="rtc_war_lrw"  constant="false" optional="true" />
       <aliasOption key="rtc_war_srw"  constant="false" optional="true" />
@@ -207,7 +207,7 @@
       <aliasOption key="rtc_war_tsrw" constant="false" optional="true" />
    </category>   
    
-   <category key="Read Access" description="Controls read access to RTC Registers">
+   <category name="Read Access" description="Controls read access to RTC Registers">
       <aliasOption key="rtc_rar_ierr" constant="false" optional="true" />
       <aliasOption key="rtc_rar_lrr"  constant="false" optional="true" />
       <aliasOption key="rtc_rar_srr"  constant="false" optional="true" />
@@ -289,8 +289,8 @@
       \t          ($(rtc_minute)))*60;\n\n
     ]]></template>     
 
-   <category key="Device Registers (view only)" description="RTC Register values">
-      <category key="RTC CR" description="RTC Control Register">
+   <category name="Device Registers (view only)" description="RTC Register values">
+      <category name="RTC CR" description="RTC Control Register">
          <aliasOption key="rtc_cr_scp" />
          <aliasOption key="rtc_cr_clko" />
          <aliasOption key="rtc_cr_osce" />
@@ -298,17 +298,17 @@
          <aliasOption key="rtc_cr_sup" />
          <aliasOption key="rtc_cr_wpe" />
       </category>   
-      <category key="RTC LR" description="RTC Lock Register">
+      <category name="RTC LR" description="RTC Lock Register">
          <aliasOption key="rtc_lr_lrl" />
          <aliasOption key="rtc_lr_srl" />
          <aliasOption key="rtc_lr_crl" />
          <aliasOption key="rtc_lr_tcl" />
       </category>   
-      <category key="RTC TCR" description="RTC Time Compensation Register">
+      <category name="RTC TCR" description="RTC Time Compensation Register">
          <aliasOption key="rtc_tcr_cir" />
          <aliasOption key="rtc_tcr_tcr" />
       </category>   
-      <category key="RTC WAR" description="RTC Write Access Register">
+      <category name="RTC WAR" description="RTC Write Access Register">
          <aliasOption key="rtc_war_ierw" optional="true" />
          <aliasOption key="rtc_war_lrw"  optional="true" />
          <aliasOption key="rtc_war_srw"  optional="true" />
@@ -318,7 +318,7 @@
          <aliasOption key="rtc_war_tprw" optional="true" />
          <aliasOption key="rtc_war_tsrw" optional="true" />
       </category>   
-      <category key="RTC RAR" description="RTC Read Access Register">
+      <category name="RTC RAR" description="RTC Read Access Register">
          <aliasOption key="rtc_rar_ierr" optional="true" />
          <aliasOption key="rtc_rar_lrr"  optional="true" />
          <aliasOption key="rtc_rar_srr"  optional="true" />

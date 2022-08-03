@@ -8,28 +8,28 @@
 
    <xi:include href="_simFiles-MK.xml"/>
 
-   <binaryOption name="chipctl_sraml_reten"
+   <binaryOption key="chipctl_sraml_reten"
       description="SRAML retention enable"
       toolTip="Enables SRAML contents retention across resets">
       <choice name="Disabled"  value="1"/>   
       <choice name="Enabled"   value="0" isDefault="true"/>   
    </binaryOption>
    
-   <binaryOption name="chipctl_sramu_reten"
+   <binaryOption key="chipctl_sramu_reten"
       description="SRAMU retention enable"
       toolTip="Enables SRAMU contents retention across resets">
       <choice name="Disabled"  value="1"/>   
       <choice name="Enabled"   value="0" isDefault="true"/>   
    </binaryOption>
    
-   <binaryOption name="chipctl_adc_supplyen"
+   <binaryOption key="chipctl_adc_supplyen"
       description="ADC supply monitoring enable"
       toolTip="Enable for internal supply monitored on ADC0 internal channel 0 (ADC0_SC1n[ADCH] = 010101b)">
       <choice name="Disabled" value="0"/>   
       <choice name="Enabled"  value="1"/>   
    </binaryOption>
    
-   <choiceOption name="chipctl_adc_supply"
+   <choiceOption key="chipctl_adc_supply"
       description="ADC supply monitoring selection"
       toolTip="Selects the internal supply monitored on ADC0 internal channel 0 (ADC0_SC1n[ADCH] = 010101b)">
       <choice value="0" name="5 V input VDD supply (VDD)"/>
@@ -42,7 +42,7 @@
       <choice value="7" name="Reserved"/>
    </choiceOption>
    
-   <binaryOption name="chipctl_pdb_bb_sel"
+   <binaryOption key="chipctl_pdb_bb_sel"
       description="PDB back-to-back select"
       toolTip="Determines whether PDB0, PDB1 in conjunction with ADC0.COCO[7..0] and ADC1.COCO[7..0]\n
                operate as independent back-to-back rings or as a single larger ring ">
@@ -50,7 +50,7 @@
       <choice name="Single ring" value="1"/>
    </binaryOption>
    
-   <binaryOption name="chipctl_traceclk_sel" 
+   <binaryOption key="chipctl_traceclk_sel" 
       description="Debug trace clock select"
       toolTip="Selects the the trace clock source" 
       constant="true">
@@ -58,20 +58,19 @@
       <choice value="1"  name="Reserved" />
    </binaryOption>   
    
-   <binaryOption name="chipctl_clkouten"
+   <binaryOption key="chipctl_clkouten"
       description="CLKOUT enable"
       toolTip="Used to enable the clock on the clockout pin">
       <choice name="Disabled" value="0"/>   
       <choice name="Enabled"  value="1"/>   
    </binaryOption>
    
-   <intOption name="chipctl_clkoutdiv"
+   <intOption key="chipctl_clkoutdiv"
       description="CLKOUT Divide Ratio"
       toolTip="Used to select the divisor for the clock on the clockout pin"
-      min="1" max="8" offset="-1" value="1" >
-   
-   </intOption>
-   <choiceOption name="chipctl_clkoutsel" 
+      min="1" max="8" offset="-1" value="1" />
+
+   <choiceOption key="chipctl_clkoutsel" 
       description="CLKOUT select"
       toolTip="Selects the clock to output on the CLKOUT pin" >
       <choice value="0"   name="SCG CLKOUT" />
@@ -92,45 +91,45 @@
       <choice value="15"  name="QSPI_2xSFIF_CLK (if present)" />
    </choiceOption>
    
-   <binaryOption name="chipctl_adc_interleave_en_0"
+   <binaryOption key="chipctl_adc_interleave_en_0"
       description="ADC interleave channel enable">
       <choice name="PTB15&lt;-ADC1_SE14, PTB0&lt;-ADC0_SE4"  value="0b0000"/>
       <choice name="PTB0&lt;-(ADC0_SE4/ADC1_SE14)"           value="0b0001"/>
    </binaryOption>
 
-   <binaryOption name="chipctl_adc_interleave_en_1"
+   <binaryOption key="chipctl_adc_interleave_en_1"
       description="ADC interleave channel enable">
       <choice name="PTB1&lt;-ADC0_SE5, PTB16&lt;-ADC1_SE15" value="0b0000"/>
       <choice name="PTB1&lt;-(ADC0_SE5/ADC1_SE15)"          value="0b0010"/>
    </binaryOption>
 
-   <binaryOption name="chipctl_adc_interleave_en_2"
+   <binaryOption key="chipctl_adc_interleave_en_2"
       description="ADC interleave channel enable">
       <choice name="PTC0&lt;-ADC0_SE8, PTB13&lt;-ADC1_SE8" value="0b0000"/>
       <choice name="PTB13&lt;-(ADC0_SE8/ADC1_SE8)"         value="0b0100"/>
    </binaryOption>
 
-   <binaryOption name="chipctl_adc_interleave_en_3"
+   <binaryOption key="chipctl_adc_interleave_en_3"
       description="ADC interleave channel enable">
       <choice name="PTC1&lt;-ADC0_SE9, PTB14&lt;-ADC1_SE9" value="0b0000"/>
       <choice name="PTB14&lt;-(ADC0_SE9/ADC1_SE9)"         value="0b1000"/>
    </binaryOption>
 
-   <binaryOption name="lpoclks_lpo32kclken"
+   <binaryOption key="lpoclks_lpo32kclken"
       description="32 kHz LPO_CLK (LPO32K_CLK) enable"
       toolTip="derived from 128 kHz LPO clock (LPO128_CLK)">
       <choice value="0" name="Disabled" />
       <choice value="1" name="Enabled"  />
    </binaryOption>
 
-   <binaryOption name="lpoclks_lpo1kclken"
+   <binaryOption key="lpoclks_lpo1kclken"
       description="1 kHz LPO_CLK (LPO1K_CLK) enable"
       toolTip="Derived from 128 kHz LPO clock (LPO128K_CLK)">
       <choice value="0" name="Disabled" />
       <choice value="1" name="Enabled"  />
    </binaryOption>
 
-   <choiceOption name="lpoclks_rtcclksel" 
+   <choiceOption key="lpoclks_rtcclksel" 
       description="RTC clock (RTC_CLK) source select"
       toolTip="Selects RTC clock source for peripherals">
       <choice value="0" name="System Oscillator/DIV1 (SOSCDIV1_CLK)" />
@@ -139,7 +138,7 @@
       <choice value="3" name="Fast IRC/DIV1 (FIRCDIV1_CLK)" />
    </choiceOption>
    
-   <choiceOption name="lpoclks_lpoclksel" 
+   <choiceOption key="lpoclks_lpoclksel" 
       description="LPO clock (LPO_CLK) source select"
       toolTip="Selects LPO clock source for peripherals">
       <choice value="0" name="128 kHz LPO clock (LPO12K_CLK)" />
@@ -159,66 +158,60 @@
          ]]>
    </template>
 
+   <for keys="instance" values="0;1" >
    <template namespace="usbdm">
-      <for 
-       var="instance" 
-       enumeration="0, 1"
-       >
          <![CDATA[
          \t/**
-         \t * ADC$(instance) trigger source selection
+         \t * ADC%instance trigger source selection
          \t *
-         \t * This selects the trigger source for ADC$(instance).
+         \t * This selects the trigger source for ADC%instance.
          \t */
-         \tenum SimAdc$(instance)TriggerSelect {
-         \t   SimAdc$(instance)TriggerSelect_Pdb    = SIM_ADCOPT_ADC$(instance)TRGSEL(0b0), //!< PDB output
-         \t   SimAdc$(instance)TriggerSelect_Trgmux = SIM_ADCOPT_ADC$(instance)TRGSEL(0b1), //!< TRGMUX output
+         \tenum SimAdc%instanceTriggerSelect {
+         \t   SimAdc%instanceTriggerSelect_Pdb    = SIM_ADCOPT_ADC%instanceTRGSEL(0b0), //!< PDB output
+         \t   SimAdc%instanceTriggerSelect_Trgmux = SIM_ADCOPT_ADC%instanceTRGSEL(0b1), //!< TRGMUX output
          \t};
          
          \t/**
-         \t * ADC$(instance) pre-trigger source selection
+         \t * ADC%instance pre-trigger source selection
          \t *
-         \t * This selects the pre-trigger source for ADC$(instance).
+         \t * This selects the pre-trigger source for ADC%instance.
          \t */
-         \tenum SimAdc$(instance)PretriggerSelect {
-         \t   SimAdc$(instance)PretriggerSelect_Pdb       = SIM_ADCOPT_ADC$(instance)PRETRGSEL(0b00), //!< PDB pre-trigger
-         \t   SimAdc$(instance)PretriggerSelect_Trgmux    = SIM_ADCOPT_ADC$(instance)PRETRGSEL(0b01), //!< TRGMUX pre-trigger
-         \t   SimAdc$(instance)PretriggerSelect_Disabled  = SIM_ADCOPT_ADC$(instance)PRETRGSEL(0b10)|SIM_ADCOPT_ADC$(instance)SWPRETRG(0b000), //!< Disabled Software pre-trigger
-         \t   SimAdc$(instance)PretriggerSelect_Software0 = SIM_ADCOPT_ADC$(instance)PRETRGSEL(0b10)|SIM_ADCOPT_ADC$(instance)SWPRETRG(0b100), //!< Software pre-trigger 0
-         \t   SimAdc$(instance)PretriggerSelect_Software1 = SIM_ADCOPT_ADC$(instance)PRETRGSEL(0b10)|SIM_ADCOPT_ADC$(instance)SWPRETRG(0b101), //!< Software pre-trigger 1
-         \t   SimAdc$(instance)PretriggerSelect_Software2 = SIM_ADCOPT_ADC$(instance)PRETRGSEL(0b10)|SIM_ADCOPT_ADC$(instance)SWPRETRG(0b110), //!< Software pre-trigger 2
-         \t   SimAdc$(instance)PretriggerSelect_Software3 = SIM_ADCOPT_ADC$(instance)PRETRGSEL(0b10)|SIM_ADCOPT_ADC$(instance)SWPRETRG(0b111), //!< Software pre-trigger 3
+         \tenum SimAdc%instancePretriggerSelect {
+         \t   SimAdc%instancePretriggerSelect_Pdb       = SIM_ADCOPT_ADC%instancePRETRGSEL(0b00), //!< PDB pre-trigger
+         \t   SimAdc%instancePretriggerSelect_Trgmux    = SIM_ADCOPT_ADC%instancePRETRGSEL(0b01), //!< TRGMUX pre-trigger
+         \t   SimAdc%instancePretriggerSelect_Disabled  = SIM_ADCOPT_ADC%instancePRETRGSEL(0b10)|SIM_ADCOPT_ADC%instanceSWPRETRG(0b000), //!< Disabled Software pre-trigger
+         \t   SimAdc%instancePretriggerSelect_Software0 = SIM_ADCOPT_ADC%instancePRETRGSEL(0b10)|SIM_ADCOPT_ADC%instanceSWPRETRG(0b100), //!< Software pre-trigger 0
+         \t   SimAdc%instancePretriggerSelect_Software1 = SIM_ADCOPT_ADC%instancePRETRGSEL(0b10)|SIM_ADCOPT_ADC%instanceSWPRETRG(0b101), //!< Software pre-trigger 1
+         \t   SimAdc%instancePretriggerSelect_Software2 = SIM_ADCOPT_ADC%instancePRETRGSEL(0b10)|SIM_ADCOPT_ADC%instanceSWPRETRG(0b110), //!< Software pre-trigger 2
+         \t   SimAdc%instancePretriggerSelect_Software3 = SIM_ADCOPT_ADC%instancePRETRGSEL(0b10)|SIM_ADCOPT_ADC%instanceSWPRETRG(0b111), //!< Software pre-trigger 3
          \t};\n\n
          ]]>
-      </for>
-   </template>
+      </template>
+   </for>
 
-   <template>
-      <for 
-       var="instance" 
-       enumeration="0, 1"
-      >
+   <for keys="instance" values="0;1"  >
+      <template>
          <![CDATA[
          \t/**
-         \t * Selects ADC$(instance) trigger source
+         \t * Selects ADC%instance trigger source
          \t *
-         \t * @param simAdc$(instance)TriggerSelect
+         \t * @param simAdc%instanceTriggerSelect
          \t */
-         \tstatic void setAdc$(instance)Trigger(SimAdc$(instance)TriggerSelect simAdc$(instance)TriggerSelect) {
-         \t   sim->ADCOPT = (sim->ADCOPT & SIM_ADCOPT_ADC$(instance)TRGSEL_MASK) | simAdc$(instance)TriggerSelect;
+         \tstatic void setAdc%instanceTrigger(SimAdc%instanceTriggerSelect simAdc%instanceTriggerSelect) {
+         \t   sim->ADCOPT = (sim->ADCOPT & SIM_ADCOPT_ADC%instanceTRGSEL_MASK) | simAdc%instanceTriggerSelect;
          \t}
          
          \t/**
-         \t * Selects ADC$(instance) pre-trigger source
+         \t * Selects ADC%instance pre-trigger source
          \t *
-         \t * @param simAdc$(instance)PretriggerSelect
+         \t * @param simAdc%instancePretriggerSelect
          \t */
-         \tstatic void setAdc$(instance)PreTrigger(SimAdc$(instance)PretriggerSelect simAdc$(instance)PretriggerSelect) {
-         \t   sim->ADCOPT = (sim->ADCOPT & (SIM_ADCOPT_ADC$(instance)PRETRGSEL_MASK|SIM_ADCOPT_ADC$(instance)SWPRETRG_MASK)) | simAdc$(instance)PretriggerSelect;
+         \tstatic void setAdc%instancePreTrigger(SimAdc%instancePretriggerSelect simAdc%instancePretriggerSelect) {
+         \t   sim->ADCOPT = (sim->ADCOPT & (SIM_ADCOPT_ADC%instancePRETRGSEL_MASK|SIM_ADCOPT_ADC%instanceSWPRETRG_MASK)) | simAdc%instancePretriggerSelect;
          \t}\n\n
          ]]>
-      </for>
-   </template>
+      </template>
+   </for>
 
    <template namespace="usbdm"><![CDATA[
       \t/**
@@ -468,28 +461,25 @@
       \t}\n\n
    ]]></template>
 
-   <template>
-      <for 
-       var="instance" 
-       enumeration="Lpo32k, Lpo1k"
-      >
+   <for keys="instance" values="Lpo32k, Lpo1k" >
+      <template>
          <![CDATA[
          \t/**
          \t * Enable $(instance::toupper)_CLK clock
          \t */
-         \tstatic void enable$(instance)Clock() {
+         \tstatic void enable%instanceClock() {
          \t   sim->LPOCLKS |= SIM_LPOCLKS_$(instance::toupper)CLKEN_MASK;
          \t}
       
          \t/**
          \t * Disable $(instance::toupper)_CLK clock
          \t */
-         \tstatic void disable$(instance)Clock() {
+         \tstatic void disable%instanceClock() {
          \t   sim->LPOCLKS &= SIM_LPOCLKS_$(instance::toupper)CLKEN_MASK;
          \t}\n\n
          ]]>
-      </for>
-   </template>
+      </template>
+   </for>
    
    <template namespace="usbdm"><![CDATA[
       \t/**
@@ -551,111 +541,99 @@
       \t}\n\n
    ]]></template>
    
-   <template namespace="usbdm">
-      <for 
-       var="instance" 
-       enumeration="0, 1, 2, 3"
-      >
+   <for keys="instance" values="0, 1, 2, 3" >
+      <template namespace="usbdm">
          <![CDATA[
          \t/**
          \t * FTM external clock pin selection
          \t */
-         \tenum SimFtm$(instance)ExternalClockSource {
-         \t   SimFtm$(instance)ExternalClockSource_Tclk0 = SIM_FTMOPT0_FTM$(instance)CLKSEL(0), //!< TCLK0 pin
-         \t   SimFtm$(instance)ExternalClockSource_Tclk1 = SIM_FTMOPT0_FTM$(instance)CLKSEL(1), //!< TCLK1 pin
-         \t   SimFtm$(instance)ExternalClockSource_Tclk2 = SIM_FTMOPT0_FTM$(instance)CLKSEL(2), //!< TCLK2 pin
+         \tenum SimFtm%instanceExternalClockSource {
+         \t   SimFtm%instanceExternalClockSource_Tclk0 = SIM_FTMOPT0_FTM%instanceCLKSEL(0), //!< TCLK0 pin
+         \t   SimFtm%instanceExternalClockSource_Tclk1 = SIM_FTMOPT0_FTM%instanceCLKSEL(1), //!< TCLK1 pin
+         \t   SimFtm%instanceExternalClockSource_Tclk2 = SIM_FTMOPT0_FTM%instanceCLKSEL(2), //!< TCLK2 pin
          \t};\n\n
          ]]>
-      </for>
-   </template>
+      </template>
+   </for>
      
-   <template>
-      <for 
-       var="instance" 
-       enumeration="0, 1, 2, 3"
-      >
+   <for keys="instance" values="0, 1, 2, 3" >
+      <template>
          <![CDATA[
          \t/**
-         \t * Select FTM$(instance) external clock pin
+         \t * Select FTM%instance external clock pin
          \t *
-         \t * @param simFtm$(instance)ExternalClockSource Selects the external clock source for PccInfo::setFtm$(instance)Source(PccDiv1Clock_FtmExternal)
+         \t * @param simFtm%instanceExternalClockSource Selects the external clock source for PccInfo::setFtm%instanceSource(PccDiv1Clock_FtmExternal)
          \t */
-         \tstatic void setFtm$(instance)ExternalClockSource(SimFtm$(instance)ExternalClockSource simFtm$(instance)ExternalClockSource) {
-         \t   sim->FTMOPT0 = (sim->FTMOPT0&~SIM_FTMOPT0_FTM$(instance)CLKSEL_MASK)|simFtm$(instance)ExternalClockSource;
+         \tstatic void setFtm%instanceExternalClockSource(SimFtm%instanceExternalClockSource simFtm%instanceExternalClockSource) {
+         \t   sim->FTMOPT0 = (sim->FTMOPT0&~SIM_FTMOPT0_FTM%instanceCLKSEL_MASK)|simFtm%instanceExternalClockSource;
          \t}\n\n
          ]]>
-      </for>
-   </template>
+      </template>
+   </for>
    
-   <template namespace="usbdm">
-      <for 
-       var="instance" 
-       enumeration="0, 1, 2, 3"
-      >
+   <for keys="instance" values="0;1;2;3" >
+      <template namespace="usbdm">
          <![CDATA[
          \t/**
-         \t * FTM$(instance) Fault 0 input selection
+         \t * FTM%instance Fault 0 input selection
          \t *
          \t * This selects between a Fault pin or the output of the trigger multiplexor
          \t */
-         \tenum SimFtm$(instance)Fault0Select {
-         \t   SimFtm$(instance)Fault0Select_Flt0   = SIM_FTMOPT0_FTM$(instance)FLTxSEL(0b000), //!< FTM$(instance)_FLT0 pin
-         \t   SimFtm$(instance)Fault0Select_TrgMux = SIM_FTMOPT0_FTM$(instance)FLTxSEL(0b001), //!< FTM$(instance) Trigger Multiplexor
+         \tenum SimFtm%instanceFault0Select {
+         \t   SimFtm%instanceFault0Select_Flt0   = SIM_FTMOPT0_FTM%instanceFLTxSEL(0b000), //!< FTM%instance_FLT0 pin
+         \t   SimFtm%instanceFault0Select_TrgMux = SIM_FTMOPT0_FTM%instanceFLTxSEL(0b001), //!< FTM%instance Trigger Multiplexor
          \t};
          
          \t/**
-         \t * FTM$(instance) Fault 1 input selection
+         \t * FTM%instance Fault 1 input selection
          \t *
          \t * This selects between a Fault pin or the output of the trigger multiplexor
          \t */
-         \tenum SimFtm$(instance)Fault1Select {
-         \t   SimFtm$(instance)Fault1Select_Flt1   = SIM_FTMOPT0_FTM$(instance)FLTxSEL(0b000), //!< FTM$(instance)_FLT1 pin
-         \t   SimFtm$(instance)Fault1Select_TrgMux = SIM_FTMOPT0_FTM$(instance)FLTxSEL(0b010), //!< FTM$(instance) Trigger Multiplexor
+         \tenum SimFtm%instanceFault1Select {
+         \t   SimFtm%instanceFault1Select_Flt1   = SIM_FTMOPT0_FTM%instanceFLTxSEL(0b000), //!< FTM%instance_FLT1 pin
+         \t   SimFtm%instanceFault1Select_TrgMux = SIM_FTMOPT0_FTM%instanceFLTxSEL(0b010), //!< FTM%instance Trigger Multiplexor
          \t};
          
          \t/**
-         \t * FTM$(instance) Fault 2 input selection
+         \t * FTM%instance Fault 2 input selection
          \t *
          \t * This selects between a Fault pin or the output of the trigger multiplexor
          \t */
-         \tenum SimFtm$(instance)Fault2Select {
-         \t   SimFtm$(instance)Fault2Select_Flt2   = SIM_FTMOPT0_FTM$(instance)FLTxSEL(0b000), //!< FTM$(instance)_FLT2 pin
-         \t   SimFtm$(instance)Fault2Select_TrgMux = SIM_FTMOPT0_FTM$(instance)FLTxSEL(0b100), //!< FTM$(instance) Trigger Multiplexor
+         \tenum SimFtm%instanceFault2Select {
+         \t   SimFtm%instanceFault2Select_Flt2   = SIM_FTMOPT0_FTM%instanceFLTxSEL(0b000), //!< FTM%instance_FLT2 pin
+         \t   SimFtm%instanceFault2Select_TrgMux = SIM_FTMOPT0_FTM%instanceFLTxSEL(0b100), //!< FTM%instance Trigger Multiplexor
          \t};\n\n
          ]]>
-      </for>
-   </template>
-     
-   <template>
-      <for 
-       var="instance" 
-       enumeration="0, 1, 2, 3"
-      >
+      </template>
+   </for>
+  
+   <for keys="instance" values="0;1;2;3" >
+      <template>
          <![CDATA[
          \t/**
-         \t * Select FTM$(instance) fault source
+         \t * Select FTM%instance fault source
          \t *
-         \t * This selects between a FTM$(instance) Fault pin or the output of the FTM$(instance) trigger multiplexor
+         \t * This selects between a FTM%instance Fault pin or the output of the FTM%instance trigger multiplexor
          \t * for each fault input. 
          \t *
-         \t * @param simFtm$(instance)Fault0Select Fault input 0 select
-         \t * @param simFtm$(instance)Fault1Select Fault input 1 select
-         \t * @param simFtm$(instance)Fault2Select Fault input 2 select
+         \t * @param simFtm%instanceFault0Select Fault input 0 select
+         \t * @param simFtm%instanceFault1Select Fault input 1 select
+         \t * @param simFtm%instanceFault2Select Fault input 2 select
          \t */
-         \tstatic void setFtm$(instance)FaultSource(
-         \t      SimFtm$(instance)Fault0Select simFtm$(instance)Fault0Select,
-         \t      SimFtm$(instance)Fault1Select simFtm$(instance)Fault1Select,
-         \t      SimFtm$(instance)Fault2Select simFtm$(instance)Fault2Select) {
-         \t   sim->FTMOPT0 = (sim->FTMOPT0&~SIM_FTMOPT0_FTM$(instance)FLTxSEL_MASK)|
-         \t         (simFtm$(instance)Fault0Select|simFtm$(instance)Fault1Select|simFtm$(instance)Fault2Select);
+         \tstatic void setFtm%instanceFaultSource(
+         \t      SimFtm%instanceFault0Select simFtm%instanceFault0Select,
+         \t      SimFtm%instanceFault1Select simFtm%instanceFault1Select,
+         \t      SimFtm%instanceFault2Select simFtm%instanceFault2Select) {
+         \t   sim->FTMOPT0 = (sim->FTMOPT0&~SIM_FTMOPT0_FTM%instanceFLTxSEL_MASK)|
+         \t         (simFtm%instanceFault0Select|simFtm%instanceFault1Select|simFtm%instanceFault2Select);
          \t}\n\n
          ]]>
-      </for>
-   </template>
+      </template>
+   </for>
    
    <category name="Device Parameters" description="" toolTip="Parameters controlling device">
    
-      <intOption name="system_lpo_frequency"
+      <intOption key="system_lpo_frequency"
          description="Frequency of internal 128kHz LPO Clock [LPO12K_CLK]"
          toolTip="Dependent on clock trim. [Typically ~128kHz]" 
          constant="true" 
@@ -663,7 +641,7 @@
          units="Hz"
          value="128000"/>
    
-      <intOption name="system_rtcclkin_frequency"
+      <intOption key="system_rtcclkin_frequency"
          description="Frequency of External RTC_CLKIN Clock"
          toolTip="Externally supplied [Typically ~32kHz]" 
          constant="false" 
@@ -671,28 +649,28 @@
          units="Hz"
          value="32000"/>
             
-      <stringOption name="pdb_input_clock"   constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption name="ftm0_input1_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption name="ftm0_input2_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption name="ftm0_input3_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption name="ftm1_input1_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption name="ftm1_input2_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption name="ftm1_input3_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption name="ftm2_input1_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption name="ftm2_input2_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption name="ftm2_input3_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption name="ftm3_input1_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption name="ftm3_input2_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption name="ftm3_input3_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <floatOption  name="vlpr_mode_max_core_frequency"   constant="true" value="4MHz"    units="Hz" />
-      <floatOption  name="vlpr_mode_max_bus_frequency"    constant="true" value="4MHz"    units="Hz" />
-      <floatOption  name="vlpr_mode_max_flash_frequency"  constant="true" value="1MHz"    units="Hz" />
-      <floatOption  name="run_mode_max_core_frequency"    constant="true" value="80MHz"   units="Hz" />
-      <floatOption  name="run_mode_max_bus_frequency"     constant="true" value="48MHz"   units="Hz" />
-      <floatOption  name="run_mode_max_flash_frequency"   constant="true" value="18.7MHz" units="Hz" />
-      <floatOption  name="hsrun_mode_max_core_frequency"  constant="true" value="112MHz"  units="Hz" />
-      <floatOption  name="hsrun_mode_max_bus_frequency"   constant="true" value="56MHz"   units="Hz" />
-      <floatOption  name="hsrun_mode_max_flash_frequency" constant="true" value="28MHz"   units="Hz" />
+      <stringOption key="pdb_input_clock"   constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm0_input1_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm0_input2_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm0_input3_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm1_input1_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm1_input2_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm1_input3_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm2_input1_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm2_input2_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm2_input3_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm3_input1_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm3_input2_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm3_input3_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <floatOption  key="vlpr_mode_max_core_frequency"   constant="true" value="4MHz"    units="Hz" />
+      <floatOption  key="vlpr_mode_max_bus_frequency"    constant="true" value="4MHz"    units="Hz" />
+      <floatOption  key="vlpr_mode_max_flash_frequency"  constant="true" value="1MHz"    units="Hz" />
+      <floatOption  key="run_mode_max_core_frequency"    constant="true" value="80MHz"   units="Hz" />
+      <floatOption  key="run_mode_max_bus_frequency"     constant="true" value="48MHz"   units="Hz" />
+      <floatOption  key="run_mode_max_flash_frequency"   constant="true" value="18.7MHz" units="Hz" />
+      <floatOption  key="hsrun_mode_max_core_frequency"  constant="true" value="112MHz"  units="Hz" />
+      <floatOption  key="hsrun_mode_max_bus_frequency"   constant="true" value="56MHz"   units="Hz" />
+      <floatOption  key="hsrun_mode_max_flash_frequency" constant="true" value="28MHz"   units="Hz" />
    </category>
 
    <signals name="CONTROL" />

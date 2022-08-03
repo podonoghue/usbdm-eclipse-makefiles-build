@@ -8,7 +8,7 @@
    <xi:include href="_default_instance.xml"/>
    <xi:include href="_irqOption.xml"/>
    
-   <template name="/QSPI/declarations" namespace="all"  ><![CDATA[
+   <template key="/QSPI/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */

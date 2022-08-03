@@ -5,8 +5,8 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <choiceOption name="llwu_filt3_filte"   derivedFrom="llwu_filt_filte_t"   />
-   <choiceOption name="llwu_filt3_filtsel" derivedFrom="llwu_filt_filtsel_t" />
+   <choiceOption key="llwu_filt3_filte"   derivedFrom="llwu_filt_filte_t"   />
+   <choiceOption key="llwu_filt3_filtsel" derivedFrom="llwu_filt_filtsel_t" />
    <template><![CDATA[
       \t// Pin Filter 3 register (Attached to pin $(llwu_filt3_filtsel))
       \tstatic constexpr uint8_t filt3 =
@@ -14,8 +14,8 @@
       \t   LLWU_FILT_FILTSEL($(llwu_filt3_filtsel));\n\n
    ]]></template>
 
-   <choiceOption name="llwu_filt4_filte"   derivedFrom="llwu_filt_filte_t"   />
-   <choiceOption name="llwu_filt4_filtsel" derivedFrom="llwu_filt_filtsel_t" />
+   <choiceOption key="llwu_filt4_filte"   derivedFrom="llwu_filt_filte_t"   />
+   <choiceOption key="llwu_filt4_filtsel" derivedFrom="llwu_filt_filtsel_t" />
    <template><![CDATA[
       \t// Pin Filter 4 register (Attached to pin $(llwu_filt4_filtsel))
       \tstatic constexpr uint8_t filt4 =
@@ -23,7 +23,7 @@
       \t   LLWU_FILT_FILTSEL($(llwu_filt4_filtsel));\n\n
    ]]></template>         
       
-   <template name="llwu_base_init" namespace="all"  ><![CDATA[
+   <template key="llwu_base_init" namespace="all"  ><![CDATA[
       \t   llwu->FILT3 = Info::filt3|LLWU_FILT_FILTF_MASK;
       \t   llwu->FILT4 = Info::filt4|LLWU_FILT_FILTF_MASK;\n
    ]]></template>

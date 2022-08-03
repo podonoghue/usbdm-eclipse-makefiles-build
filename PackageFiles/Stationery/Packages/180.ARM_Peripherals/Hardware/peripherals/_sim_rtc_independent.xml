@@ -45,16 +45,19 @@
    </for>
    
    <!-- ERCCLK32K Sources -->
-   <choiceOption key="sim_sopt1_osc32ksel"
-      target="system_erclk32k_clock"
-      hidden="true"
-      description="ERCLK32K clock source" 
-      toolTip="Clock source for External 32k Reference Clock [ERCLK32K]">
-      <choice value="0" name="OSC0 in low range (OSC32KCLK)"  ref="/OSC0/osc32k_clock"          enum="Osc32kClk" code="Osc0Info::getOsc32kClock()"  />
-      <choice value="2" name="RTC 32kHz clock"                ref="/RTC/osc_clock"              enum="Rtc32kClk" code="RtcInfo::getExternalClock()" />
-      <choice value="3" name="LPO 1kHz clock"                 ref="/PMC/system_low_power_clock" enum="LpoClk"    code="1000"                           isDefault="true"/>
-   </choiceOption>
-
+   <if condition="!sim_sopt1_osc32ksel" >
+      <choiceOption key="sim_sopt1_osc32ksel"
+         enumStem="SimOsc32kSel"
+         target="system_erclk32k_clock"
+         hidden="true"
+         description="ERCLK32K clock source" 
+         toolTip="Clock source for External 32k Reference Clock [ERCLK32K]">
+         <choice value="0" name="OSC0 in low range (OSC32KCLK)"  ref="/OSC0/osc32k_clock"          enum="Osc32kClk" code="Osc0Info::getOsc32kClock()"  />
+         <choice value="2" name="RTC 32kHz clock"                ref="/RTC/osc_clock"              enum="Rtc32kClk" code="RtcInfo::getExternalClock()" />
+         <choice value="3" name="LPO 1kHz clock"                 ref="/PMC/system_low_power_clock" enum="LpoClk"    code="1000"                           isDefault="true"/>
+      </choiceOption>
+   </if>
+   
    <intOption key="system_erclk32k_clock" 
       hidden="true"
       constant="true"
@@ -65,15 +68,18 @@
       origin="Derived from OSC32KCLK, RTC or LPO" 
       value="32768" />
       
-   <choiceOption key="sim_sopt2_rtcclkoutsel"
-      target="rtc_clkout" 
-      hidden="true"
-      description="RTC clock out [RTC_CLKOUT pin]"
-      toolTip="Clock output on the RTC_CLKOUT pin">
-      <choice value="0"  name="RTC 1 Hz clock"                  ref="/RTC/rtc_1hz_clock"      enum="1Hz"   />
-      <choice value="1"  name="RTC 32kHz clock (from RTC_OSC)"  ref="/RTC/rtcclk_gated_clock" enum="32kHz" isDefault="true" />
+   <if condition="!sim_sopt2_rtcclkoutsel" >
+      <choiceOption key="sim_sopt2_rtcclkoutsel"
+         enumStem="SimRtcClkoutSel"
+         target="rtc_clkout" 
+         hidden="true"
+         description="RTC clock out [RTC_CLKOUT pin]"
+         toolTip="Clock output on the RTC_CLKOUT pin">
+         <choice value="0"  name="RTC 1 Hz clock"                  ref="/RTC/rtc_1hz_clock"      enum="1Hz"   />
+         <choice value="1"  name="RTC 32kHz clock (from RTC_OSC)"  ref="/RTC/rtcclk_gated_clock" enum="32kHz" isDefault="true" />
    </choiceOption>
-      
+   </if>
+   
    <intOption key="rtc_clkout"
       hidden="true"
       constant="true"

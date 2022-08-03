@@ -4,20 +4,20 @@
 <!-- llwu_base_me2.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
-   <binaryOption name="llwu_me_wume_t" hidden="true"
+   <binaryOption key="llwu_me_wume_t" hidden="true"
       toolTip="Enables this peripheral to wakeup the processor">
       <choice name="Disabled" value="0" isDefault="true" />
       <choice name="Enabled"  value="1" />
    </binaryOption>
    <category name="Peripheral sources" description="Wakeups from peripherals">
-      <binaryOption name="llwu_me_wume0" description="LPTMR"         derivedFrom="llwu_me_wume_t" />
-      <binaryOption name="llwu_me_wume1" description="CMP0"          derivedFrom="llwu_me_wume_t" />
-      <binaryOption name="llwu_me_wume2" description=""              derivedFrom="llwu_me_wume_t" />
-      <binaryOption name="llwu_me_wume3" description=""              derivedFrom="llwu_me_wume_t" />
-      <binaryOption name="llwu_me_wume4" description="TSI0"          derivedFrom="llwu_me_wume_t" />
-      <binaryOption name="llwu_me_wume5" description="RTC Alarm"     derivedFrom="llwu_me_wume_t" />
-      <binaryOption name="llwu_me_wume6" description=""              derivedFrom="llwu_me_wume_t" />
-      <binaryOption name="llwu_me_wume7" description="RTC Seconds"   derivedFrom="llwu_me_wume_t" />
+      <binaryOption key="llwu_me_wume0" description="LPTMR"         derivedFrom="llwu_me_wume_t" />
+      <binaryOption key="llwu_me_wume1" description="CMP0"          derivedFrom="llwu_me_wume_t" />
+      <binaryOption key="llwu_me_wume2" description=""              derivedFrom="llwu_me_wume_t" />
+      <binaryOption key="llwu_me_wume3" description=""              derivedFrom="llwu_me_wume_t" />
+      <binaryOption key="llwu_me_wume4" description="TSI0"          derivedFrom="llwu_me_wume_t" />
+      <binaryOption key="llwu_me_wume5" description="RTC Alarm"     derivedFrom="llwu_me_wume_t" />
+      <binaryOption key="llwu_me_wume6" description=""              derivedFrom="llwu_me_wume_t" />
+      <binaryOption key="llwu_me_wume7" description="RTC Seconds"   derivedFrom="llwu_me_wume_t" />
    </category>
    <template><![CDATA[
       \t// Module wake ups
@@ -32,7 +32,7 @@
       \t   LLWU_ME_WUME7($(llwu_me_wume7:0));   // $(llwu_me_wume7.description)\n\n
    ]]></template>  
     
-   <template name="llwu_base_methods" namespace="all"  ><![CDATA[
+   <template key="llwu_base_methods" namespace="all"  ><![CDATA[
       \t/* Template /LLWU/llwu_base_methods */
    
       \t/**
@@ -86,7 +86,7 @@
       \t}\n\n
    ]]></template>
       
-   <template name="llwu_base_init" namespace="all"  ><![CDATA[
+   <template key="llwu_base_init" namespace="all"  ><![CDATA[
       \t
       \t   /* Template /LLWU/llwu_base_init */
       

@@ -158,175 +158,146 @@
    };
 
    ]]></template>
-
-   <template>
-      <for 
-       var="channel" 
-       enumeration="0, 1, 2, 3"
-      >
+   
+   <for keys="channel" values="0;1;2;3" >
+      <template>
          <![CDATA[
          \t/** 
-         \t * Select trigger source for DMAMUX0 Channel$(channel) Trigger
+         \t * Select trigger source for DMAMUX0 Channel%channel Trigger
          \t *
          \t * @param[in] trgmuxSelection  Trigger source selection
          \t * @param[in] trgmuxLock       Lock trigger settings.  This is once-off operation.
          \t */
-         \tstatic void setDmamuxChannel$(channel)Trigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
-         \t   trgmux().TRGMUX_DMAMUX0 = (trgmux().TRGMUX_DMAMUX0 & ~TRGMUX_TRGMUXn_SEL$(channel)_MASK ) | 
-         \t         TRGMUX_TRGMUXn_SEL$(channel)(trgmuxSelection) | trgmuxLock;
+         \tstatic void setDmamuxChannel%channelTrigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
+         \t   trgmux().TRGMUX_DMAMUX0 = (trgmux().TRGMUX_DMAMUX0 & ~TRGMUX_TRGMUXn_SEL%channel_MASK ) | 
+         \t         TRGMUX_TRGMUXn_SEL%channel(trgmuxSelection) | trgmuxLock;
          \t}\n\n
          ]]>
-      </for>
-   </template>
+      </template>
+   </for>
 
-   <template>
-      <for 
-       var="trigger" 
-       enumeration="0, 1, 2, 3"
-      >
-         <![CDATA[
-         \t/** 
-         \t * Select trigger source for FLEXIO Trigger$(trigger)
-         \t *
-         \t * @param[in] trgmuxSelection  Trigger source selection
-         \t * @param[in] trgmuxLock       Lock trigger settings.  This is once-off operation.
-         \t */
-         \tstatic void setFlexioTimer$(trigger)Trigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
-         \t   trgmux().TRGMUX_FLEXIO = (trgmux().TRGMUX_FLEXIO & ~TRGMUX_TRGMUXn_SEL$(trigger)_MASK ) | 
-         \t         TRGMUX_TRGMUXn_SEL$(trigger)(trgmuxSelection) | trgmuxLock;
-         \t}\n\n
-         ]]>
-      </for>
-   </template>
-
-   <template>
-      <for 
-       var="instance:reg:mask" 
-       enumeration="0:0:0, 1:0:1, 2:0:2, 3:0:3, 4:1:0, 5:1:1, 6:1:2, 7:1:3"
-      >
-         <![CDATA[
-         \t/** 
-         \t * Select trigger source for TRGMUX Out$(instance)
-         \t *
-         \t * @param[in] trgmuxSelection  Trigger source selection
-         \t * @param[in] trgmuxLock       Lock trigger settings.  This is once-off operation.
-         \t */
-         \tstatic void setTrgmuxOutput$(instance)Trigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
-         \t   trgmux().TRGMUX_EXTOUT$(reg) = (trgmux().TRGMUX_EXTOUT$(reg) & ~TRGMUX_TRGMUXn_SEL$(mask)_MASK ) | 
-         \t         TRGMUX_TRGMUXn_SEL$(mask)(trgmuxSelection) | trgmuxLock;
-         \t}\n\n
-         ]]>
-      </for>
-   </template>
-
-   <template>
-      <for 
-       var="instance" 
-       enumeration="0, 1"
-      >
-         <for 
-          var="trigNum" 
-          enumeration="0, 1, 2, 3"
-         ><![CDATA[
+   <for keys="trigger" values="0;1;2;3" >
+      <template>
+            <![CDATA[
             \t/** 
-            \t * Select trigger source for ADC$(instance) Trigger$(trigNum)
+            \t * Select trigger source for FLEXIO Trigger%trigger
             \t *
             \t * @param[in] trgmuxSelection  Trigger source selection
             \t * @param[in] trgmuxLock       Lock trigger settings.  This is once-off operation.
             \t */
-            \tstatic void setAdc$(instance)Trigger$(trigNum)(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
-            \t   trgmux().TRGMUX_ADC$(instance) = (trgmux().TRGMUX_ADC$(instance) & ~TRGMUX_TRGMUXn_SEL$(trigNum)_MASK ) | 
-            \t         TRGMUX_TRGMUXn_SEL$(trigNum)(trgmuxSelection) | trgmuxLock;
+            \tstatic void setFlexioTimer%triggerTrigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
+            \t   trgmux().TRGMUX_FLEXIO = (trgmux().TRGMUX_FLEXIO & ~TRGMUX_TRGMUXn_SEL%trigger_MASK ) | 
+            \t         TRGMUX_TRGMUXn_SEL%trigger(trgmuxSelection) | trgmuxLock;
             \t}\n\n
             ]]>
-         </for>
-      </for>
-   </template>
+      </template>
+   </for>
 
-   <template>
-      <for 
-       var="instance" 
-       enumeration="0, 1, 2, 3"
-      >
+   <for keys="instance,reg,mask" values="0,0,0; 1,0,1; 2,0,2; 3,0,3; 4,1,0; 5,1,1; 6,1,2; 7,1,3" >
+      <template>
          <![CDATA[
          \t/** 
-         \t * Select trigger source for FTM$(instance) Hardware trigger
+         \t * Select trigger source for TRGMUX Out%instance
          \t *
          \t * @param[in] trgmuxSelection  Trigger source selection
          \t * @param[in] trgmuxLock       Lock trigger settings.  This is once-off operation.
          \t */
-         \tstatic void setFtm$(instance)HardwareTrigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
-         \t   trgmux().TRGMUX_FTM$(instance) = (trgmux().TRGMUX_FTM$(instance) & ~TRGMUX_TRGMUXn_SEL0_MASK ) | 
+         \tstatic void setTrgmuxOutput%instanceTrigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
+         \t   trgmux().TRGMUX_EXTOUT%reg = (trgmux().TRGMUX_EXTOUT%reg & ~TRGMUX_TRGMUXn_SEL%mask_MASK ) | 
+         \t         TRGMUX_TRGMUXn_SEL%mask(trgmuxSelection) | trgmuxLock;
+         \t}\n\n
+         ]]>
+      </template>
+   </for>
+
+   <for keys="instance" values="0;1">
+      <for keys="trigNum" values="0;1;2;3">
+         <template>
+            <![CDATA[
+            \t/** 
+            \t * Select trigger source for ADC%instance Trigger%trigNum
+            \t *
+            \t * @param[in] trgmuxSelection  Trigger source selection
+            \t * @param[in] trgmuxLock       Lock trigger settings.  This is once-off operation.
+            \t */
+            \tstatic void setAdc%instanceTrigger%trigNum(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
+            \t   trgmux().TRGMUX_ADC%instance = (trgmux().TRGMUX_ADC%instance & ~TRGMUX_TRGMUXn_SEL%trigNum_MASK ) | 
+            \t         TRGMUX_TRGMUXn_SEL%trigNum(trgmuxSelection) | trgmuxLock;
+            \t}\n\n
+            ]]>
+         </template>
+      </for>
+   </for>
+
+   <for keys="instance" values="0;1;2;3" >
+      <template>
+         <![CDATA[
+         \t/** 
+         \t * Select trigger source for FTM%instance Hardware trigger
+         \t *
+         \t * @param[in] trgmuxSelection  Trigger source selection
+         \t * @param[in] trgmuxLock       Lock trigger settings.  This is once-off operation.
+         \t */
+         \tstatic void setFtm%instanceHardwareTrigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
+         \t   trgmux().TRGMUX_FTM%instance = (trgmux().TRGMUX_FTM%instance & ~TRGMUX_TRGMUXn_SEL0_MASK ) | 
          \t         TRGMUX_TRGMUXn_SEL0(trgmuxSelection) | trgmuxLock;
          \t}
          
          \t/** 
-         \t * Select trigger source for FTM$(instance) Fault0 trigger
+         \t * Select trigger source for FTM%instance Fault0 trigger
          \t *
          \t * @param[in] trgmuxSelection  Trigger source selection
          \t * @param[in] trgmuxLock       Lock trigger settings.  This is once-off operation.
          \t */
-         \tstatic void setFtm$(instance)Fault0Trigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
-         \t   trgmux().TRGMUX_FTM$(instance) = (trgmux().TRGMUX_FTM$(instance) & ~TRGMUX_TRGMUXn_SEL1_MASK ) | 
+         \tstatic void setFtm%instanceFault0Trigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
+         \t   trgmux().TRGMUX_FTM%instance = (trgmux().TRGMUX_FTM%instance & ~TRGMUX_TRGMUXn_SEL1_MASK ) | 
          \t         TRGMUX_TRGMUXn_SEL1(trgmuxSelection) | trgmuxLock;
          \t}
          
          \t/** 
-         \t * Select trigger source for FTM$(instance) Fault1 trigger
+         \t * Select trigger source for FTM%instance Fault1 trigger
          \t *
          \t * @param[in] trgmuxSelection  Trigger source selection
          \t * @param[in] trgmuxLock       Lock trigger settings.  This is once-off operation.
          \t */
-         \tstatic void setFtm$(instance)Fault1Trigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
-         \t   trgmux().TRGMUX_FTM$(instance) = (trgmux().TRGMUX_FTM$(instance) & ~TRGMUX_TRGMUXn_SEL2_MASK ) | 
+         \tstatic void setFtm%instanceFault1Trigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
+         \t   trgmux().TRGMUX_FTM%instance = (trgmux().TRGMUX_FTM%instance & ~TRGMUX_TRGMUXn_SEL2_MASK ) | 
          \t         TRGMUX_TRGMUXn_SEL2(trgmuxSelection) | trgmuxLock;
          \t}
          
          \t/** 
-         \t * Select trigger source for FTM$(instance) Fault2 trigger
+         \t * Select trigger source for FTM%instance Fault2 trigger
          \t *
          \t * @param[in] trgmuxSelection  Trigger source selection
          \t * @param[in] trgmuxLock       Lock trigger settings.  This is once-off operation.
          \t */
-         \tstatic void setFtm$(instance)Fault2Trigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
-         \t   trgmux().TRGMUX_FTM$(instance) = (trgmux().TRGMUX_FTM$(instance) & ~TRGMUX_TRGMUXn_SEL3_MASK ) | 
+         \tstatic void setFtm%instanceFault2Trigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
+         \t   trgmux().TRGMUX_FTM%instance = (trgmux().TRGMUX_FTM%instance & ~TRGMUX_TRGMUXn_SEL3_MASK ) | 
          \t         TRGMUX_TRGMUXn_SEL3(trgmuxSelection) | trgmuxLock;
          \t}\n\n
          ]]>
-      </for>
-   </template>
+      </template>
+   </for>
 
-   <template>
-      <for 
-       var="instance" 
-       enumeration="0, 1, 2, 3"
-      >
+   <for keys="instance" values="0;1;2;3" >
+      <template>
          <![CDATA[
          \t/** 
-         \t * Select trigger source for LPIT0 Channel$(instance) Trigger
+         \t * Select trigger source for LPIT0 Channel%instance Trigger
          \t *
          \t * @param[in] trgmuxSelection  Trigger source selection
          \t * @param[in] trgmuxLock       Lock trigger settings.  This is once-off operation.
          \t */
-         \tstatic void setLpit0Channel$(instance)Trigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
-         \t   trgmux().TRGMUX_LPIT0 = (trgmux().TRGMUX_LPIT0 & ~TRGMUX_TRGMUXn_SEL$(instance)_MASK ) | 
-         \t         TRGMUX_TRGMUXn_SEL$(instance)(trgmuxSelection) | trgmuxLock;
+         \tstatic void setLpit0Channel%instanceTrigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
+         \t   trgmux().TRGMUX_LPIT0 = (trgmux().TRGMUX_LPIT0 & ~TRGMUX_TRGMUXn_SEL%instance_MASK ) | 
+         \t         TRGMUX_TRGMUXn_SEL%instance(trgmuxSelection) | trgmuxLock;
          \t}\n\n
          ]]>
-      </for>
-   </template>
+      </template>
+   </for>
 
-   <template>
-      <for 
-       var="instance" 
-       enumeration="
-         Cmp0,
-         Lpuart0, Lpuart1, 
-         Lpi2c0,
-         LpSpi0, LpSpi1, 
-         Lptmr0,
-         Pdb0, Pdb1"
-      >
+   <for keys="instance" values="Cmp0;Lpuart0;Lpuart1;Lpi2c0;LpSpi0;LpSpi1;Lptmr0;Pdb0;Pdb1" >
+      <template>
          <![CDATA[
          \t/** 
          \t * Select trigger source for $(instance::toupper) Trigger
@@ -334,13 +305,13 @@
          \t * @param[in] trgmuxSelection  Trigger source selection
          \t * @param[in] trgmuxLock       Lock trigger settings.  This is once-off operation.
          \t */
-         \tstatic void set$(instance)Trigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
+         \tstatic void set%instanceTrigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
          \t   trgmux().TRGMUX_$(instance::toupper) = (trgmux().TRGMUX_$(instance::toupper) & ~TRGMUX_TRGMUXn_SEL0_MASK ) | 
          \t         TRGMUX_TRGMUXn_SEL0(trgmuxSelection) | trgmuxLock;
          \t}\n\n
          ]]>
-      </for>
-   </template>
+      </template>
+   </for>
 
    <signals/>
    

@@ -23,7 +23,7 @@
       description="Phrase size for data flash (minimum program element)"
       toolTip="Only for device with FlexNVM" />
       
-   <choiceOption name="EepromSize" 
+   <choiceOption key="EepromSize" 
       description="FlexNVM - EEPROM size"
       toolTip="Selects emulated EEPROM size">
       <choice value="EepromSel_32Bytes"  name="32 bytes" />
@@ -36,7 +36,7 @@
       <choice value="EepromSel_4KBytes"  name="4 KiB" isDefault="true"/>
    </choiceOption>
    
-   <choiceOption name="FlashPartition" 
+   <choiceOption key="FlashPartition" 
       description="FlexNVM - Flash EEPROM partition"
       toolTip="Selects division of FlexNVM between flash and EEPROM backing storage\n
                The larger the EEPROM backing the better the wear characteristic">
@@ -47,7 +47,7 @@
       <choice value="PartitionSel_flash0K_eeprom128K" name="flash=0B eeprom backing=128KiB" isDefault="true" />
    </choiceOption>
    
-   <choiceOption name="FlexNVM_Partition" 
+   <choiceOption key="FlexNVM_Partition" 
       description="FlexNVM - EEPROM partition"
       toolTip="Selects division of the two regions of EEPROM (if supported on device)\n
                This allows A/B regions to have different wear characteristics">
@@ -64,7 +64,7 @@
       <copy source="Snippets/flash-programming-example.cpp"  target="Snippets/flash-programming-example.cpp"  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <template name="FlashConfig" namespace="all"> <![CDATA[
+   <template key="FlashConfig" namespace="all"> <![CDATA[
       \t// Sector size for program flash (minimum erase element)
       \tstatic constexpr unsigned programFlashSectorSize = $(pflash_sector_size);
    

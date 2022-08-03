@@ -8,7 +8,7 @@
 
    <xi:include href="_irqOption.xml"/>         
    
-   <template name="/TRNG/declarations" namespace="all"  ><![CDATA[
+   <template key="/TRNG/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */

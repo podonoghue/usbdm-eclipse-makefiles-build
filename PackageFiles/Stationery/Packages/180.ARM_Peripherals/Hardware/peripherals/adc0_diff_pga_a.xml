@@ -1,7 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- adc0_diff_pga_a.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="adc0_diff_a.xml"/>
-</fragment>
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analogue to Digital Converter">
+
+   <choiceOption key="adc_pga_pgaen" description="PGA Enable and mode"
+      valueFormat="(%s)"
+      enumStem="AdcPgaMode"
+      toolTip="">
+      <choice value="ADC_PGA_PGAEN(0)"                   name="PGA is disabled"          enum="Disabled" isDefault="true" />
+      <choice value="ADC_PGA_PGAEN(1)|ADC_PGA_PGALPb(0)" name="PGA is in low power mode" enum="LowPower"      />
+      <choice value="ADC_PGA_PGAEN(1)|ADC_PGA_PGALPb(1)" name="PGA is in normal mode"    enum="NormalPower"   />
+   </choiceOption>
+
+   <choiceOption key="adc_pga_pgag" description="PGA Gain Setting"
+      enumStem="AdcPgaGain"
+      toolTip="Sets gain of PGA amplifier">
+      <choice value="0" name="Gain = x1"  enum="x1" isDefault="true" />
+      <choice value="1" name="Gain = x2"  enum="x2"   />
+      <choice value="2" name="Gain = x4"  enum="x4"   />
+      <choice value="3" name="Gain = x8"  enum="x8"   />
+      <choice value="4" name="Gain = x16" enum="x16"  />
+      <choice value="5" name="Gain = x32" enum="x32"  />
+      <choice value="6" name="Gain = x64" enum="x64"  />
+   </choiceOption>
+
+   <binaryOption key="adc_pga_pgachp" description="PGA chopping"
+      valueFormat="ADC_PGA_PGACHPb(%s)"
+      enumStem="AdcPgaChop"
+      toolTip="Controls PGA chopping to remove/reduce offset">
+      <choice value="0" enum="Disabled" name="No chopping"        isDefault="true" />
+      <choice value="1" enum="Enabled"  name="Chopping enabled"   />
+   </binaryOption>
+
+   <choiceOption key="adc_cfg1_mode" description="ADC Resolution"
+      hidden="true"
+      enumStem="AdcResolution"
+      toolTip="The resolutions available vary with single-ended/differential modes\n
+               Note the equivalence between modes e.g. 8-bit-se = 9-bit-diff" >
+      <choice value="0" name="8-bit unsigned (single-ended mode)"   enum="8bit_se"    />
+      <choice value="2" name="10-bit unsigned (single-ended mode)"  enum="10bit_se"   />
+      <choice value="1" name="12-bit unsigned (single-ended mode)"  enum="12bit_se"   />
+      <choice value="3" name="16-bit unsigned (single-ended mode)"  enum="16bit_se"   />
+      <choice value="0" name="9-bit signed (differential mode)"     enum="9bit_diff"  />
+      <choice value="2" name="11-bit signed (differential mode)"    enum="11bit_diff" />
+      <choice value="1" name="13-bit signed (differential mode)"    enum="13bit_diff" />
+      <choice value="3" name="16-bit signed (differential mode)"    enum="16bit_diff" />
+   </choiceOption>
+
+   <binaryOption key="adc_sc2_dmaen" description="DMA Enable"
+      hidden="true"
+      enumStem="AdcDma"
+      toolTip="Enables use of DMA with ADC">
+      <choice value="0" enum="Disabled" name="Disabled" isDefault="true" />
+      <choice value="1" enum="Enabled"  name="Enabled" />
+   </binaryOption>
+
+   <xi:include href="_adc_base.xml"/>
+
+</peripheralPage>

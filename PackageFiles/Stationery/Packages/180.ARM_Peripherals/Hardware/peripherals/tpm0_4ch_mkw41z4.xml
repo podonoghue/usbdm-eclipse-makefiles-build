@@ -4,15 +4,15 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
 
-   <constant name = "disable_peripheral"      derived = "true" value = "tpm->SC = TPM_SC_CMOD(0);"  />
+   <constant key="disable_peripheral"      derived = "true" value = "tpm->SC = TPM_SC_CMOD(0);"  />
    <xi:include href="_mapPinsOption.xml"/>   
 
-   <intOption name="NumChannels" constant="true" derived="true"
+   <intOption key="NumChannels" constant="true" derived="true"
       description="Number of Channels" 
       toolTip="The number of timer channels available" 
       value="4" />
 
-   <intOption name="NumChannelVectors" constant="true" derived="true"
+   <intOption key="NumChannelVectors" constant="true" derived="true"
       description="Number of Channel interrupt vectors" 
       toolTip="Number of channel event interrupt vectors - \n
                Multiple Channels may be mapped to the same vector" 

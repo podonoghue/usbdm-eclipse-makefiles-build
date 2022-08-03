@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- tsi0_mkl.xml -->
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
@@ -43,7 +43,7 @@
       toolTip="Number of Consecutive Scans Per Electrode"
       value="8" 
       min="1" max="32" />
-   <choiceOption name="tsi_gencs_ps"
+   <choiceOption key="tsi_gencs_ps"
       description="Electrode Oscillator Prescaler" >
       <choice value="0" name="Divide by 1" />
       <choice value="1" name="Divide by 2" />

@@ -8,21 +8,21 @@
 
    <aliasOption key="/PCC/pcc_lpit$(_instance)" constant="false" optional="true" />
 
-   <intOption name="lpit_ldval" description="Reload value"
+   <intOption key="lpit_ldval" description="Reload value"
       toolTip="Value loaded in timer register on roll-over"
       value="4799" min="0" max="0xFFFFFFFF" />
 
-   <floatOption name="lpit_period" description="Default period of timer"
+   <floatOption key="lpit_period" description="Default period of timer"
       toolTip="Used to calculate the timer load value"
       derived="true"
       value="1m" min="0" units="s" />
 
-   <floatOption name="lpit_frequency" description="Default frequency of timer"
+   <floatOption key="lpit_frequency" description="Default frequency of timer"
       toolTip="Used to calculate the timer load value"
       derived="true"
       value="1k" min="0" units="Hz" />
 
-   <binaryOption name="lpit_mcr_dbg_en" description="Debug Enable Bit"
+   <binaryOption key="lpit_mcr_dbg_en" description="Debug Enable Bit"
       toolTip="Stops the timer channels when the device enters Debug mode">
       <choice value="0" name="Stop timer channels in Debug mode" />
       <choice value="1" name="Allow timer channels to continue to run in Debug mode" isDefault="true" />
@@ -35,7 +35,7 @@
      -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
      -  _IRQHandler is appended to the pattern (only)
      -->
-   <irqOption name="irqHandlers"  
+   <irqOption key="irqHandlers"  
       description="Channel interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
       pattern="^%b%i_Ch(\d+)$" 
@@ -46,7 +46,7 @@
        \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlers) == 1);\n\n
    ]]></template>
        
-   <intOption name="irqLevel" 
+   <intOption key="irqLevel" 
       description="IRQ Level in NVIC [0-15]"
       toolTip="Sets the priority level used to configure the NVIC\n
                Lower numbers represent higher priorities"

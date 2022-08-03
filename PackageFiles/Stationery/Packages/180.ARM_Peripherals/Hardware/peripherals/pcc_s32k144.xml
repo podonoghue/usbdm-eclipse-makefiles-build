@@ -69,7 +69,7 @@
              ftm1,      FTM1;
              ftm2,      FTM2;
              ftm3,      FTM3;
-             enet,      ENET;>
+             enet,      ENET">
    <choiceOption key="pcc_%(instance)" 
       description="Clock to %(INSTANCE)"
       toolTip="Default clock for %(INSTANCE)">
@@ -95,8 +95,8 @@
              Lpi2c1,    LPI2C1; 
              Lpi2c2,    LPI2C2; 
              Lpit0,     LPIT0;  
-             Lptmr0,    LPTRM0 />
-   <choiceOption key="pcc_$(instance)" 
+             Lptmr0,    LPTRM0" >
+   <choiceOption key="pcc_%instance" 
       description="Clock to $(INSTANCE)"
       toolTip="Default clock for $(INSTANCE)">
       <choice value="PccDiv2Clock_Disabled"                   name="Disabled" />
@@ -125,8 +125,8 @@
              Porte      PORTE;
              Sai0,      SAI0;
              Sai1,      SAI1;
-             Ewm,       EWM;  />
-   <binaryOption key="pcc_$(instance)" 
+             Ewm,       EWM; " >
+   <binaryOption key="pcc_%instance" 
       description="Clock to $(INSTANCE)"
       toolTip="Default clock for $(INSTANCE)">
       <choice value="PCC_PCCn_CGC(0)"  name="Disabled" />
@@ -172,13 +172,8 @@
    \t}\n\n
 ]]></template>
 
-<template>
-   <for 
-   var="instance" 
-   enumeration="
-      Ftm0, Ftm1, Ftm2, Ftm3, 
-      Enet"
-   >
+<for keys="instance" values="Ftm0;Ftm1;Ftm2;Ftm3;Enet" >
+   <template>
       <![CDATA[
       #ifdef PCC_PCC_$(instance::toupper)_CGC_MASK
       \t/**
@@ -189,7 +184,7 @@
       \t * @note These peripherals use the DIV1 peripheral clocks e.g. SOSCDIV1_CLK 
       \t * @note The peripheral bus clock will be disabled before changing the clock source.  It is left disabled. 
       \t */
-      \tstatic void set$(instance)ClockSource(PccDiv1Clock pccDiv1Clock) {
+      \tstatic void set%instanceClockSource(PccDiv1Clock pccDiv1Clock) {
       \t   // Disable bus clock before change 
       \t   pcc().PCC_$(instance::toupper) = 0;
       \t   pcc().PCC_$(instance::toupper) = pccDiv1Clock;
@@ -202,39 +197,37 @@
       \t *
       \t * @return Frequency as a uint32_t in Hz
       \t */
-      \tstatic uint32_t get$(instance)Frequency() {
+      \tstatic uint32_t get%instanceFrequency() {
       \t   return getDivideBy1Frequency((PccDiv1Clock)pcc().PCC_$(instance::toupper));
       \t}\n\n
    
       \t/**
       \t *  Enable $(instance::toupper) clock
       \t */
-      \tstatic void enable$(instance)Clock() {
+      \tstatic void enable%instanceClock() {
       \t   pcc().PCC_$(instance::toupper) |= PCC_PCCn_CGC_MASK;
       \t}\n\n
    
       \t/**
       \t *  Disable $(instance::toupper) clock
       \t */
-      \tstatic void disable$(instance)Clock() {
+      \tstatic void disable%instanceClock() {
       \t   pcc().PCC_$(instance::toupper) &= ~PCC_PCCn_CGC_MASK;
       \t}
       #endif\n\n
       ]]>
-   </for>
-</template>
+   </template>
+</for>
       
-<template>
-   <for 
-   var="instance" 
-   enumeration="
-      Adc0, Adc1, 
-      Flexio, 
-      Lpuart0, Lpuart1, Lpuart2, 
-      Lpspi0, Lpspi1, Lpspi2, 
-      Lpi2c0, Lpi2c1, Lpi2c2, 
+<for keys="instance" values="
+      Adc0; Adc1; 
+      Flexio; 
+      Lpuart0; Lpuart1; Lpuart2; 
+      Lpspi0; Lpspi1; Lpspi2; 
+      Lpi2c0; Lpi2c1; Lpi2c2; 
       Lpit0"
    >
+   <template>
       <![CDATA[
       #ifdef PCC_PCC_$(instance::toupper)_CGC_MASK
       \t/**
@@ -245,7 +238,7 @@
       \t * @note These peripherals use the DIV2 peripheral clocks e.g. SOSCDIV2_CLK.
       \t * @note The peripheral bus clock will be disabled before changing the clock source.  It is left disabled.
       \t */
-      \tstatic void set$(instance)ClockSource(PccDiv2Clock pccDiv2Clock) {
+      \tstatic void set%instanceClockSource(PccDiv2Clock pccDiv2Clock) {
       \t   // Disable bus clock before change
       \t   pcc().PCC_$(instance::toupper) = 0;
       \t   pcc().PCC_$(instance::toupper) = pccDiv2Clock;
@@ -258,34 +251,30 @@
       \t *
       \t * @return Frequency as a uint32_t in Hz
       \t */
-      \tstatic uint32_t get$(instance)Frequency() {
+      \tstatic uint32_t get%instanceFrequency() {
       \t   return getDivideBy2Frequency((PccDiv2Clock)pcc().PCC_$(instance::toupper));
       \t}\n\n
    
       \t/**
       \t *  Enable $(instance::toupper) default clock
       \t */
-      \tstatic void enable$(instance)Clock() {
+      \tstatic void enable%instanceClock() {
       \t   pcc().PCC_$(instance::toupper) |= PCC_PCCn_CGC_MASK;
       \t}\n\n
    
       \t/**
       \t *  Disable $(instance::toupper) clock
       \t */
-      \tstatic void disable$(instance)Clock() {
+      \tstatic void disable%instanceClock() {
       \t   pcc().PCC_$(instance::toupper) &= ~PCC_PCCn_CGC_MASK;
       \t}
       #endif\n\n
       ]]>
-   </for>
-</template>
+   </template>
+</for>
 
-<template>
-   <for 
-   var="instance" 
-   enumeration="
-      Lptmr0"
-   >
+<for keys="instance" values="Lptmr0" >
+   <template>
       <![CDATA[
       #ifdef PCC_PCC_$(instance::toupper)_CGC_MASK
       \t/**
@@ -297,7 +286,7 @@
       \t * @note These peripherals use the DIV2 peripheral clocks e.g. SOSCDIV2_CLK.
       \t * @note The peripheral bus clock will be disabled before changing the clock source.  It is left disabled.
       \t */
-      \tstatic void set$(instance)ClockSource(PccDiv2Clock pccDiv2Clock, PccDivider pccDivider=PccDivider_Div1) {
+      \tstatic void set%instanceClockSource(PccDiv2Clock pccDiv2Clock, PccDivider pccDivider=PccDivider_Div1) {
       \t   // Disable bus clock before change
       \t   pcc().PCC_$(instance::toupper) = 0;
       \t   pcc().PCC_$(instance::toupper) = pccDiv2Clock|pccDivider;
@@ -310,7 +299,7 @@
       \t *
       \t * @return Frequency as a uint32_t in Hz
       \t */
-      \tstatic uint32_t get$(instance)Frequency() {
+      \tstatic uint32_t get%instanceFrequency() {
       \t   static const int dividerX2[] = {
       \t      2,4,6,8,10,12,14,16,-2,2,3,4,5,6,7,8,
       \t   };
@@ -325,95 +314,90 @@
       \t/**
       \t *  Enable $(instance::toupper) clock
       \t */
-      \tstatic void enable$(instance)Clock() {
+      \tstatic void enable%instanceClock() {
       \t   pcc().PCC_$(instance::toupper) |= PCC_PCCn_CGC_MASK;
       \t}\n\n
    
       \t/**
       \t *  Disable $(instance::toupper) clock
       \t */
-      \tstatic void disable$(instance)Clock() {
+      \tstatic void disable%instanceClock() {
       \t   pcc().PCC_$(instance::toupper) &= ~PCC_PCCn_CGC_MASK;
       \t}
       #endif\n\n
       ]]>
-   </for>
-</template>
+   </template>
+</for>
 
-<template>
-   <for 
-   var="instance" 
-   enumeration="
-      Ftfc, 
-      Dmamux0, 
-      Can0, Can1, Can2, 
-      Cmp0,
-      Crc0,
-      Pdb0, Pdb1, 
-      Rtc, 
-      Porta, Portb, Portc, Portd, Porte, 
-      Sai0, Sai1, 
-      Ewm"
-   >
+<for keys="instance" values="
+   Ftfc; 
+   Dmamux0; 
+   Can0; Can1; Can2; 
+   Cmp0;
+   Crc0;
+   Pdb0; Pdb1; 
+   Rtc; 
+   Porta; Portb; Portc; Portd; Porte; 
+   Sai0; Sai1; 
+   Ewm"
+>
+   <template>
       <![CDATA[
       #ifdef PCC_PCC_$(instance::toupper)_CGC_MASK
       \t/**
       \t *  Enable $(instance::toupper) default clock
       \t */
-      \tstatic void enable$(instance)Clock() {
+      \tstatic void enable%instanceClock() {
       \t   pcc().PCC_$(instance::toupper) |= PCC_PCCn_CGC_MASK;
       \t}\n\n
    
       \t/**
       \t *  Disable $(instance::toupper) clock
       \t */
-      \tstatic void disable$(instance)Clock() {
+      \tstatic void disable%instanceClock() {
       \t   pcc().PCC_$(instance::toupper) &= ~PCC_PCCn_CGC_MASK;
       \t}
       #endif
       ]]>
-   </for>
-</template>
+   </template>
+</for>
 
-<template>
-   <![CDATA[
-   \t/**
-   \t *  Initialise default peripheral clocks
-   \t */
-   \tstatic void enablePeripheralClocks() {
-   ]]>
-   <for 
-   var="instance" 
-   enumeration="
-      Adc0, Adc1, 
-      Flexio, 
-      Lpuart0, Lpuart1, Lpuart2, 
-      Lpspi0, Lpspi1, Lpspi2, 
-      Lpi2c0, Lpi2c1, Lpi2c2, 
-      Lpit0,
-      Lptmr0,
-      Ftm0, Ftm1, Ftm2, Ftm3, 
-      Enet,
-      Ftfc, 
-      Dmamux0, 
-      Can0, Can1, Can2, 
-      Cmp0,
-      Crc0,
-      Pdb0, Pdb1, 
-      Rtc, 
-      Porta, Portb, Portc, Portd, Porte, 
-      Sai0, Sai1, 
-      Ewm"
-   >
-   <![CDATA[
-   #ifdef PCC_PCC_$(instance::toupper)_CGC_MASK
-   \t   pcc().PCC_$(instance::toupper) = $(pcc_$(instance::tolower));
-   #endif
-   ]]>
-   </for>
-   <![CDATA[
-   \t}
-   ]]>
-</template>
-
+<for keys="instance" values="
+   Adc0; Adc1; 
+   Flexio; 
+   Lpuart0; Lpuart1; Lpuart2; 
+   Lpspi0; Lpspi1; Lpspi2; 
+   Lpi2c0; Lpi2c1; Lpi2c2; 
+   Lpit0;
+   Lptmr0;
+   Ftm0; Ftm1; Ftm2; Ftm3; 
+   Enet;
+   Ftfc; 
+   Dmamux0; 
+   Can0; Can1; Can2; 
+   Cmp0;
+   Crc0;
+   Pdb0; Pdb1; 
+   Rtc; 
+   Porta; Portb; Portc; Portd; Porte; 
+   Sai0; Sai1; 
+   Ewm"
+>
+   <template>
+      <![CDATA[
+      \t/**
+      \t *  Initialise default peripheral clocks
+      \t */
+      \tstatic void enablePeripheralClocks() {
+      ]]>
+      <![CDATA[
+      #ifdef PCC_PCC_$(instance::toupper)_CGC_MASK
+      \t   pcc().PCC_$(instance::toupper) = $(pcc_$(instance::tolower));
+      #endif
+      ]]>
+      <![CDATA[
+      \t}
+      ]]>
+   </template>
+</for>
 </peripheralPage>

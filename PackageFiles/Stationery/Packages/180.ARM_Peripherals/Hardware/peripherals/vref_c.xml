@@ -13,10 +13,10 @@ Devices using this peripheral:
       \tstatic constexpr int outputPin  = 0;\n\n
    ]]></template>
    
-   <constant name = "disable_peripheral"      derived = "true" value = "vref->SC = 0;"  />
+   <constant key="disable_peripheral"      derived = "true" value = "vref->SC = 0;"  />
    <xi:include href="_mapPinsOption.xml"/>   
 
-   <binaryOption name="vref_trm_chopen" 
+   <binaryOption key="vref_trm_chopen" 
       description="Chop oscillator enable"
       toolTip="This enables the internal chopping operation to minimize the internal analog offset">
       <choice value="0" name="Disabled" />
@@ -33,14 +33,14 @@ Devices using this peripheral:
    \t    //                  // Trim bits are preserved\n\n
    ]]></template>
 
-   <binaryOption name="vref_sc_vrefen" 
+   <binaryOption key="vref_sc_vrefen" 
       description="Internal Voltage Reference enable"
       toolTip="This bit is used to enable the bandgap reference within the Voltage Reference module">
       <choice value="0" name="Disabled" />
       <choice value="1" name="Enabled" isDefault="true" />
    </binaryOption>
 
-   <binaryOption name="vref_sc_regen" 
+   <binaryOption key="vref_sc_regen" 
       description="Regulator enable"
       toolTip="This bit is used to enable the internal 1.75 V regulator to produce a constant\n
          internal voltage supply in order to reduce the sensitivity to external supply noise and variation">
@@ -48,14 +48,14 @@ Devices using this peripheral:
       <choice value="1" name="Enabled" isDefault="true" />
    </binaryOption>
 
-   <binaryOption name="vref_sc_icompen" 
+   <binaryOption key="vref_sc_icompen" 
       description="Second order curvature compensation enable"
       toolTip="This bit is set during factory trimming of the VREF voltage">
       <choice value="0" name="Disabled" />
       <choice value="1" name="Enabled" isDefault="true" />
    </binaryOption>
 
-   <choiceOption name="vref_sc_mode_lv" 
+   <choiceOption key="vref_sc_mode_lv" 
       description="Buffer Mode selection"
       toolTip="These bits select the buffer modes for the Voltage Reference module">
       <choice value="0" name="Bandgap on only, for stabilization and startup" />
@@ -72,7 +72,7 @@ Devices using this peripheral:
    \t    VREF_SC_MODE_LV($(vref_sc_mode_lv));   // Buffer Mode selection \n\n
    ]]></template>
 
-   <template name="/VREF/declarations" namespace="all"  ><![CDATA[
+   <template key="/VREF/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */

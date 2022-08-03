@@ -2,9 +2,9 @@
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- rtc_base_war_rar.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time Clock">
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <binaryOption name="rtc_war_ierw" 
+   <binaryOption key="rtc_war_ierw" 
       hidden="true"
       description="Interrupt Enable Register Write"
       toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset" >
@@ -12,7 +12,7 @@
       <choice value="1" name="Writes allowed"  isDefault="true" />
    </binaryOption>
 	   
-   <binaryOption name="rtc_war_lrw" 
+   <binaryOption key="rtc_war_lrw" 
       hidden="true"
       description="Lock Register Write"
       toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset" >
@@ -20,7 +20,7 @@
       <choice value="1" name="Writes allowed"  isDefault="true" />
    </binaryOption>
 	   
-   <binaryOption name="rtc_war_srw" 
+   <binaryOption key="rtc_war_srw" 
       hidden="true"
       description="Status Register Write"
       toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset" >
@@ -28,7 +28,7 @@
       <choice value="1" name="Writes allowed"  isDefault="true" />
    </binaryOption>
 	   
-   <binaryOption name="rtc_war_crw" 
+   <binaryOption key="rtc_war_crw" 
       hidden="true"
       description="Control Register Write"
       toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset" >
@@ -36,7 +36,7 @@
       <choice value="1" name="Writes allowed"  isDefault="true" />
    </binaryOption>
 	   
-   <binaryOption name="rtc_war_tcrw" 
+   <binaryOption key="rtc_war_tcrw" 
       hidden="true"
       description="Time Compensation Register Write"
       toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset" >
@@ -44,7 +44,7 @@
       <choice value="1" name="Writes allowed"  isDefault="true" />
    </binaryOption>
 	   
-   <binaryOption name="rtc_war_tarw" 
+   <binaryOption key="rtc_war_tarw" 
       hidden="true"
       description="Time Alarm Register Write"
       toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset" >
@@ -52,7 +52,7 @@
       <choice value="1" name="Writes allowed"  isDefault="true" />
    </binaryOption>
 	   
-   <binaryOption name="rtc_war_tprw" 
+   <binaryOption key="rtc_war_tprw" 
       hidden="true"
       description="Time Prescaler Register Write"
       toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset" >
@@ -60,7 +60,7 @@
       <choice value="1" name="Writes allowed"  isDefault="true" />
    </binaryOption>
 	   
-   <binaryOption name="rtc_war_tsrw" 
+   <binaryOption key="rtc_war_tsrw" 
       hidden="true"
       description="Time Seconds Register Write"
       toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset" >
@@ -83,7 +83,7 @@
       \t#endif\n\n
     ]]></template>     
 
-   <binaryOption name="rtc_rar_ierr" 
+   <binaryOption key="rtc_rar_ierr" 
       hidden="true"
       description="Interrupt Enable Register Read"
       toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset" >
@@ -91,7 +91,7 @@
       <choice value="1" name="Reads allowed"  isDefault="true" />
    </binaryOption>
 	   
-   <binaryOption name="rtc_rar_lrr" 
+   <binaryOption key="rtc_rar_lrr" 
       hidden="true"
       description="Lock Register Read"
       toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset" >
@@ -99,7 +99,7 @@
       <choice value="1" name="Reads allowed"  isDefault="true" />
    </binaryOption>
 	   
-   <binaryOption name="rtc_rar_srr" 
+   <binaryOption key="rtc_rar_srr" 
       hidden="true"
       description="Status Register Read"
       toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset" >
@@ -107,7 +107,7 @@
       <choice value="1" name="Reads allowed"  isDefault="true" />
    </binaryOption>
 	   
-   <binaryOption name="rtc_rar_crr" 
+   <binaryOption key="rtc_rar_crr" 
       hidden="true"
       description="Control Register Read"
       toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset" >
@@ -115,7 +115,7 @@
       <choice value="1" name="Reads allowed"  isDefault="true" />
    </binaryOption>
 	   
-   <binaryOption name="rtc_rar_tcrr" 
+   <binaryOption key="rtc_rar_tcrr" 
       hidden="true"
       description="Time Compensation Register Read"
       toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset" >
@@ -123,7 +123,7 @@
       <choice value="1" name="Reads allowed"  isDefault="true" />
    </binaryOption>
 	   
-   <binaryOption name="rtc_rar_tarr" 
+   <binaryOption key="rtc_rar_tarr" 
       hidden="true"
       description="Time Alarm Register Read"
       toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset" >
@@ -131,7 +131,7 @@
       <choice value="1" name="Reads allowed"  isDefault="true" />
    </binaryOption>
 	   
-   <binaryOption name="rtc_rar_tprr" 
+   <binaryOption key="rtc_rar_tprr" 
       hidden="true"
       description="Time Prescaler Register Read"
       toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset" >
@@ -139,7 +139,7 @@
       <choice value="1" name="Reads allowed"  isDefault="true" />
    </binaryOption>
 	   
-   <binaryOption name="rtc_rar_tsrr" 
+   <binaryOption key="rtc_rar_tsrr" 
       hidden="true"
       description="Time Seconds Register Read"
       toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset" >

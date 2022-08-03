@@ -12,7 +12,7 @@ Devices using this peripheral:
 
    <aliasOption key="/SIM/system_bus_clock" displayName="PDB input clock" constant="true"/>
 
-   <choiceOption name="pdb_sc_prescaler" 
+   <choiceOption key="pdb_sc_prescaler" 
       description="Clock Prescaler Divider Select"
       toolTip="The PDB clock = Bus Clock/(Prescaler * Divider)">
       <choice value="0" name="Divide by 1" />
@@ -25,7 +25,7 @@ Devices using this peripheral:
       <choice value="7" name="Divide by 128" />
    </choiceOption>
 
-   <choiceOption name="pdb_sc_mult" 
+   <choiceOption key="pdb_sc_mult" 
       description="Clock Divider Select"
       toolTip="The PDB clock = Bus Clock/(Prescaler * Divider)">
       <choice value="0" name="Divide by 1" />
@@ -34,21 +34,21 @@ Devices using this peripheral:
       <choice value="3" name="Divide by 40" />
    </choiceOption>
 
-   <floatOption name="pdb_frequency" 
+   <floatOption key="pdb_frequency" 
       description="Frequency of PDB clock"
       toolTip="PDB clock frequency"
       derived="true"
       constant="true" 
       value="1k" min="0" units="Hz" />
 
-   <floatOption name="pdb_period" 
+   <floatOption key="pdb_period" 
       description="Period of PDB clock"
       toolTip="PDB clock period"
       derived="true"
       constant="true" 
       value="1k" min="0" units="s" />
 
-   <choiceOption name="pdb_sc_trgsel" 
+   <choiceOption key="pdb_sc_trgsel" 
       description="Trigger Input Source Select"
       toolTip="Selects the trigger input source for the PDB.\n
          The trigger input source can be internal or external (EXTRG pin),\n
@@ -71,21 +71,21 @@ Devices using this peripheral:
       <choice value="15" name="Software trigger is selected" />
    </choiceOption>
 
-   <binaryOption name="pdb_sc_dmaen" 
+   <binaryOption key="pdb_sc_dmaen" 
       description="DMA Enable"
       toolTip="When DMA is enabled, the PDBIF flag generates a DMA request instead of an interrupt">
       <choice value="0" name="DMA disabled" />
       <choice value="1" name="DMA enabled" />
    </binaryOption>
 
-   <binaryOption name="pdb_sc_cont" 
+   <binaryOption key="pdb_sc_cont" 
       description="Continuous Mode Enable"
       toolTip="This bit enables the PDB operation in continuous mode with the pdb_cnt counter rolling over at the pdb_mod">
       <choice value="0" name="One-Shot mode" />
       <choice value="1" name="Continuous mode" />
    </binaryOption>
 
-   <binaryOption name="pdb_sc_pdbie" 
+   <binaryOption key="pdb_sc_pdbie" 
       description="Interrupt Enable"
       toolTip="This bit enables the interrupt.\n
          When this bit is set and DMAEN is cleared, PDBIF generates a interrupt" >
@@ -93,7 +93,7 @@ Devices using this peripheral:
       <choice value="1" name="Interrupt enabled" />
    </binaryOption>
 
-   <binaryOption name="pdb_sc_pdbeie" 
+   <binaryOption key="pdb_sc_pdbeie" 
       description="Sequence Error Interrupt Enable"
       toolTip="This bit enables the sequence error interrupt\n
          When this bit is set, any of the channel sequence error flags generates a sequence error interrupt" >
@@ -101,7 +101,7 @@ Devices using this peripheral:
       <choice value="1" name="Interrupt enabled" />
    </binaryOption>
 
-   <choiceOption name="pdb_sc_ldmod" 
+   <choiceOption key="pdb_sc_ldmod" 
       description="Load Mode Select"
       toolTip="Selects when to load the MOD, IDLY, CHnDLYm, INTx, and POyDLY registers,\n
          after 1 is written to LDOK">
@@ -123,14 +123,14 @@ Devices using this peripheral:
    \t   PDB_SC_LDMOD($(pdb_sc_ldmod));      // Load Mode Select\n\n
    ]]></template>
 
-   <intOption name="pdb_mod" 
+   <intOption key="pdb_mod" 
       description="Counter Modulus" 
       toolTip="Specifies the period of the main PDB counter\n
          When the counter reaches this value, it will be reset back to zero.\n
          If the PDB is in Continuous mode, the count begins anew"
       value="65535" min="0" max="65535"/>
 
-   <floatOption name="pdb_mod_period" 
+   <floatOption key="pdb_mod_period" 
       description="Period of counter"
       derivedFrom="pdb_mod"
       derived="true"
@@ -141,13 +141,13 @@ Devices using this peripheral:
    \t   PDB_MOD_MOD($(pdb_mod));  // PDB Modulus\n\n
    ]]></template>
 
-   <intOption name="pdb_idly" 
+   <intOption key="pdb_idly" 
       description="Interrupt Delay" 
       toolTip="Specifies the delay value to schedule the PDB interrupt.\n
          It can be used to schedule an independent interrupt at some point in the PDB cycle"
       value="0" min="0" max="65535" />
 
-   <floatOption name="pdb_idly_delay" 
+   <floatOption key="pdb_idly_delay" 
       derivedFrom="pdb_idly"
       derived="true"
       value="0" min="0" units="s" />
@@ -158,7 +158,7 @@ Devices using this peripheral:
    ]]></template>
 
    <category name="Channel 0" description="ADC0 triggers">
-   <bitmaskOption name="pdb_ch0_c1_en" 
+   <bitmaskOption key="pdb_ch0_c1_en" 
       description="Channel 0 Pre-Trigger Enables" 
       toolTip="These bits enable the ADC pre-trigger outputs\n
          Each pre-trigger corresponds to a conversion in the ADC as specified by SC1[n]"
@@ -166,7 +166,7 @@ Devices using this peripheral:
       bitmask="0x3" 
       bitList="ADC0.SC1[0],ADC0.SC1[1]" />
       
-   <bitmaskOption name="pdb_ch0_c1_tos" 
+   <bitmaskOption key="pdb_ch0_c1_tos" 
       description="Channel 0 Pre-Trigger Delay Enables" 
       toolTip="These bits enable the ADC pre-trigger delay\n
          If disabled, the pre-trigger asserts 1-clock-cycle after trigger\n
@@ -175,27 +175,27 @@ Devices using this peripheral:
       bitmask="0x3" 
       bitList="ADC0.SC1[0],ADC0.SC1[1]" />
    
-   <intOption name="pdb_ch0_dly0" 
+   <intOption key="pdb_ch0_dly0" 
       description="Channel 0 Delay 0 - ADC0.SC1[0]" 
       toolTip="Specifies the delay value for the channel's corresponding pre-trigger"
       value="0" min="0" max="65535" />
 
-   <floatOption name="pdb_ch0_dly0_delay" 
+   <floatOption key="pdb_ch0_dly0_delay" 
       derivedFrom="pdb_ch0_dly0"
       derived="true"
       value="1k" min="0" units="s" />
 
-   <intOption name="pdb_ch0_dly1" 
+   <intOption key="pdb_ch0_dly1" 
       description="Channel 0 Delay 1 - ADC1.SC1[1]" 
       toolTip="Specifies the delay value for the channel's corresponding pre-trigger"
       value="0" min="0" max="65535" />
    
-   <floatOption name="pdb_ch0_dly1_delay" 
+   <floatOption key="pdb_ch0_dly1_delay" 
       derivedFrom="pdb_ch0_dly1"
       derived="true"
       value="1k" min="0" units="s" />
 
-   <bitmaskOption name="pdb_ch0_c1_bb" 
+   <bitmaskOption key="pdb_ch0_c1_bb" 
       description="Channel 0 Pre-Trigger Back-to-Back Operation Enable" 
       toolTip="These bits enable the ADC pre-trigger operation as back-to-back mode.\n
          Back-to-back operation enables the ADC conversions complete to trigger the next PDB channel\n
@@ -209,14 +209,14 @@ Devices using this peripheral:
    </category>
 
    <category name="Channel 1" description="ADC1 triggers (or FTM1 if not present)" >
-   <bitmaskOption name="pdb_ch1_c1_en" 
+   <bitmaskOption key="pdb_ch1_c1_en" 
       description="Channel 1 Pre-Trigger Enables" 
       toolTip="These bits enable the ADC pre-trigger outputs"
       value="0"
       bitmask="0x3" 
       bitList="ADC0.SC1[0],ADC0.SC1[1]" />
       
-   <bitmaskOption name="pdb_ch1_c1_tos" 
+   <bitmaskOption key="pdb_ch1_c1_tos" 
       description="Channel 1 Pre-Trigger Delay Enables" 
       toolTip="These bits enable the ADC pre-trigger delay\n
          If disabled, the pre-trigger asserts 1-clock-cycle after trigger\n
@@ -225,27 +225,27 @@ Devices using this peripheral:
       bitmask="0x3" 
       bitList="ADC0.SC1[0],ADC0.SC1[1]" />
    
-   <intOption name="pdb_ch1_dly0" 
+   <intOption key="pdb_ch1_dly0" 
       description="Channel 1 Delay 0 - ADC1.SC1[0]" 
       toolTip="Specifies the delay value for the channel's corresponding pre-trigger"
       value="0" min="0" max="65535" />
 
-   <floatOption name="pdb_ch1_dly0_delay" 
+   <floatOption key="pdb_ch1_dly0_delay" 
       derivedFrom="pdb_ch1_dly0"
       derived="true"
       value="1k" min="0" units="s" />
 
-   <intOption name="pdb_ch1_dly1" 
+   <intOption key="pdb_ch1_dly1" 
       description="Channel 1 Delay 1 - ADC1.SC1[1]" 
       toolTip="Specifies the delay value for the channel's corresponding pre-trigger"
       value="0" min="0" max="65535" />
    
-   <floatOption name="pdb_ch1_dly1_delay" 
+   <floatOption key="pdb_ch1_dly1_delay" 
       derivedFrom="pdb_ch1_dly1"
       derived="true"
       value="1k" min="0" units="s" />
       
-   <bitmaskOption name="pdb_ch1_c1_bb" 
+   <bitmaskOption key="pdb_ch1_c1_bb" 
       description="Channel 1 Pre-Trigger Back-to-Back Operation Enable" 
       toolTip="These bits enable the ADC pre-trigger operation as back-to-back mode.\n
          Back-to-back operation enables the ADC conversions complete to trigger the next PDB channel\n
@@ -287,27 +287,27 @@ Devices using this peripheral:
    ]]></template>
 
    <category name="Dac0 Interval Trigger" description="">
-      <binaryOption name="pdb_int0c_toe" 
+      <binaryOption key="pdb_int0c_toe" 
          description="DAC Interval Trigger Enable"
          toolTip="This bit enables the DAC interval trigger">
          <choice value="0" name="Trigger disabled" />
          <choice value="1" name="Trigger enabled" />
       </binaryOption>
 
-      <binaryOption name="pdb_int0c_ext" 
+      <binaryOption key="pdb_int0c_ext" 
          description="DAC External Trigger Input Enable"
          toolTip="Enables the external trigger for DAC interval counter">
          <choice value="0" name="Input disabled" />
          <choice value="1" name="Input enabled" />
       </binaryOption>
 
-      <intOption name="pdb_int0_int" 
+      <intOption key="pdb_int0_int" 
          description="DAC Interval" 
          toolTip="Specifies the interval value for DAC interval trigger.\n
                   DAC interval trigger triggers DAC update when the DAC interval counter is equal to the DACINT"
          value="0" min="0" max="65535" />
          
-      <floatOption name="pdb_int0_int_delay" 
+      <floatOption key="pdb_int0_int_delay" 
          derivedFrom="pdb_int0_int"
          derived="true"
          min="0" units="s" />
@@ -332,7 +332,7 @@ Devices using this peripheral:
    \t};\n\n
    ]]></template>
 
-   <bitmaskOption name="pdb_poen" 
+   <bitmaskOption key="pdb_poen" 
       description="Pulse-Out Enable" 
       toolTip="These bits enable the pulse output"
       value="0"
@@ -346,72 +346,72 @@ Devices using this peripheral:
    ]]></template>
 
    <category name="Pulse Output 0" description="Pulse Output to CMP0" >
-   <intOption name="pdb_po0_dly_dly1" 
+   <intOption key="pdb_po0_dly_dly1" 
       description="Pulse-Out 0 Delay 1 - rising edge" 
       toolTip="These bits specify the delay 1 value for the Pulse-Out.\n
          Pulse-Out goes high when the counter is equal to the DLY1"
       value="0" min="0" max="65535" />
 
-   <floatOption name="pdb_po0_dly_dly1_delay" 
+   <floatOption key="pdb_po0_dly_dly1_delay" 
    	  derivedFrom="pdb_po0_dly_dly1"
       derived="true"
       value="1" min="0" units="s" />
 
-   <intOption name="pdb_po0_dly_dly2" 
+   <intOption key="pdb_po0_dly_dly2" 
       description="Pulse-Out 0 Delay 2 - falling edge" 
       toolTip="These bits specify the delay 2 value for the Pulse-Out.\n
          Pulse-Out goes low when the counter is equal to the DLY2"
       value="0" min="0" max="65535" />
    
-   <floatOption name="pdb_po0_dly_dly2_delay" 
+   <floatOption key="pdb_po0_dly_dly2_delay" 
    	  derivedFrom="pdb_po0_dly_dly2"
       derived="true"
       value="1" min="0" units="s" />
    </category>
 
    <category name="Pulse Output 1" description="Pulse Output to CMP1" >
-   <intOption name="pdb_po1_dly_dly1" 
+   <intOption key="pdb_po1_dly_dly1" 
       description="Pulse-Out 1 Delay 1 - rising edge" 
       toolTip="These bits specify the delay 1 value for the Pulse-Out.\n
          Pulse-Out goes high when the counter is equal to the DLY1"
       value="0" min="0" max="65535" />
 
-   <floatOption name="pdb_po1_dly_dly1_delay" 
+   <floatOption key="pdb_po1_dly_dly1_delay" 
    	  derivedFrom="pdb_po1_dly_dly1"
       derived="true"
       value="1k" min="0" units="s" />
 
-   <intOption name="pdb_po1_dly_dly2" 
+   <intOption key="pdb_po1_dly_dly2" 
       description="Pulse-Out 1 Delay 2 - falling edge" 
       toolTip="These bits specify the delay 2 value for the Pulse-Out.\n
          Pulse-Out goes low when the counter is equal to the DLY2"
       value="0" min="0" max="65535" />
 
-   <floatOption name="pdb_po1_dly_dly2_delay" 
+   <floatOption key="pdb_po1_dly_dly2_delay" 
    	  derivedFrom="pdb_po1_dly_dly2"
       derived="true"
       value="1k" min="0" units="s" />
    </category>
    
    <category name="Pulse Output 2" description="Pulse Output to CMP2" >
-   <intOption name="pdb_po2_dly_dly1" 
+   <intOption key="pdb_po2_dly_dly1" 
       description="Pulse-Out 1 Delay 1 - rising edge" 
       toolTip="These bits specify the delay 1 value for the Pulse-Out.\n
          Pulse-Out goes high when the PDB counter is equal to the DLY1"
       value="0" min="0" max="65535" />
 
-   <floatOption name="pdb_po2_dly_dly1_delay" 
+   <floatOption key="pdb_po2_dly_dly1_delay" 
    	  derivedFrom="pdb_po2_dly_dly1"
       derived="true"
       value="1k" min="0" units="s" />
 
-   <intOption name="pdb_po2_dly_dly2" 
+   <intOption key="pdb_po2_dly_dly2" 
       description="Pulse-Out 2 Delay 2 - falling edge" 
       toolTip="These bits specify the delay 2 value for the Pulse-Out.\n
          Pulse-Out goes low when the PDB counter is equal to the DLY2"
       value="0" min="0" max="65535" />
 
-   <floatOption name="pdb_po2_dly_dly2_delay" 
+   <floatOption key="pdb_po2_dly_dly2_delay" 
    	  derivedFrom="pdb_po2_dly_dly2"
       derived="true"
       value="1k" min="0" units="s" />
@@ -449,7 +449,7 @@ Devices using this peripheral:
    \t}\n\n
    ]]></template>
 
-   <template name="/PDB/declarations" namespace="all"  ><![CDATA[
+   <template key="/PDB/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */

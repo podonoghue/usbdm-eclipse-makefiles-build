@@ -4,7 +4,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="TSI">
 
-   <choiceOption name="tsi_gencs_dvolt"
+   <choiceOption key="tsi_gencs_dvolt"
       hidden="true"
       description="Oscillator's voltage rails" >
       <choice value="0" name="dV = 1.03 V; Vp = 1.33 V; Vm = 0.30 V" />

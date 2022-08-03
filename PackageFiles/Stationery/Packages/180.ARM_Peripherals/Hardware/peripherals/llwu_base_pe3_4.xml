@@ -4,10 +4,10 @@
 <!-- llwu_base_pe3_4.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-   <choiceOption name="llwu_pe3_wupe8"  derivedFrom="llwu_pe1_wupe_t"/>
-   <choiceOption name="llwu_pe3_wupe9"  derivedFrom="llwu_pe1_wupe_t"/>
-   <choiceOption name="llwu_pe3_wupe10" derivedFrom="llwu_pe1_wupe_t"/>
-   <choiceOption name="llwu_pe3_wupe11" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption key="llwu_pe3_wupe8"  derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption key="llwu_pe3_wupe9"  derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption key="llwu_pe3_wupe10" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption key="llwu_pe3_wupe11" derivedFrom="llwu_pe1_wupe_t"/>
    <template><![CDATA[
       \tstatic constexpr uint8_t pe3 = 
       \t   /* LLWUP 8  */ (LLWU_PE3_WUPE8_MASK&$(llwu_pe3_wupe8))|   // $(llwu_pe3_wupe8.description)
@@ -16,10 +16,10 @@
       \t   /* LLWUP 11 */ (LLWU_PE3_WUPE11_MASK&$(llwu_pe3_wupe11)); // $(llwu_pe3_wupe11.description)\n\n
    ]]></template>
 
-   <choiceOption name="llwu_pe4_wupe12" derivedFrom="llwu_pe1_wupe_t"/>
-   <choiceOption name="llwu_pe4_wupe13" derivedFrom="llwu_pe1_wupe_t"/>
-   <choiceOption name="llwu_pe4_wupe14" derivedFrom="llwu_pe1_wupe_t"/>
-   <choiceOption name="llwu_pe4_wupe15" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption key="llwu_pe4_wupe12" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption key="llwu_pe4_wupe13" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption key="llwu_pe4_wupe14" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption key="llwu_pe4_wupe15" derivedFrom="llwu_pe1_wupe_t"/>
    <template><![CDATA[
       \tstatic constexpr uint8_t pe4 = 
       \t   /* LLWUP 12 */ (LLWU_PE4_WUPE12_MASK&$(llwu_pe4_wupe12))| // $(llwu_pe4_wupe12.description)
@@ -28,7 +28,7 @@
       \t   /* LLWUP 15 */ (LLWU_PE4_WUPE15_MASK&$(llwu_pe4_wupe15)); // $(llwu_pe4_wupe15.description)\n\n
    ]]></template>        
 
-   <template name="llwu_base_init" namespace="all"  ><![CDATA[
+   <template key="llwu_base_init" namespace="all"  ><![CDATA[
       \t   llwu->PE3   = Info::pe3;
       \t   llwu->PE4   = Info::pe4;\n
    ]]></template>

@@ -86,7 +86,7 @@
       \t}\n\n
    ]]></template>
 
-   <template name="/FLEXBUS/declarations" namespace="all"  ><![CDATA[
+   <template key="/FLEXBUS/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */

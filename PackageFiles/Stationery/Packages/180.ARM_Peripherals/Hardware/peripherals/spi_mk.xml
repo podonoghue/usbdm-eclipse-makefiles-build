@@ -19,13 +19,13 @@
 
    <xi:include href="_mapPinsOption_on.xml"/>
    
-   <intOption name="speed" 
+   <intOption key="speed" 
       description="Speed of interface"
       toolTip="Speed of transmission"
       value="10000000" units="Hz"
       min="0" max="10000000" />
 
-   <choiceOption name="spi_mode"  
+   <choiceOption key="spi_mode"  
       description="Mode"
       toolTip="Communication mode">
       <choice value="0" name="Mode 0: CPOL=0, CPHA=0" isDefault="true" />
@@ -34,7 +34,7 @@
       <choice value="3" name="Mode 3: CPOL=1, CPHA=1" />
    </choiceOption>
 
-   <binaryOption name="spi_lsbfe" 
+   <binaryOption key="spi_lsbfe" 
       description="Transmission order"
       toolTip="Transmission order">
       <choice value="0" name="MSB first" />
@@ -49,7 +49,7 @@
       <copy source="Snippets/spi-2-config-example.cpp"   target="Snippets/spi-2-config-example.cpp" overwrite="true"  derived="true" />
    </projectActionList>
    
-   <template name="/SPI/declarations" namespace="all"  ><![CDATA[
+   <template key="/SPI/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name) interface
    \t * <b>Example</b>

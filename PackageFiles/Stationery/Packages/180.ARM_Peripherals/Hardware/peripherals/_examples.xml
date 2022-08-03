@@ -16,56 +16,58 @@ Symbols
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
    <category name="OSC0" description="Oscillator">
    
-   <aliasOption key="system_mcgir_clock" />
+      <aliasOption key="system_mcgir_clock" />
+   
+      <choiceOption key="KKKKK" 
+         target="TTTTT"
+         enumStem="SSSS" 
+         description="YYYYY"
+         toolTip="ZZZZZZZ">
+         <choice value="0" name="Reserved" enum="yyyy" code="cccc" ref = "zzzz" />
+         <choice value="1" name="Reserved" enum="yyyy" code="cccc" ref = "zzzz" />
+         <choice value="2" name="Reserved" enum="yyyy" code="cccc" ref = "zzzz" />
+         <choice value="3" name="Reserved" enum="yyyy" code="cccc" ref = "zzzz" />
+      </choiceOption>
+      
+   </category>
 
-   <choiceOption key="KKKKK" 
-      target="TTTTT"
-      enumStem="SSSS" 
-      description="YYYYY"
-      toolTip="ZZZZZZZ">
-      <choice value="0" name="Reserved" enum="yyyy" code="cccc" ref = "zzzz" />
-      <choice value="1" name="Reserved" enum="yyyy" code="cccc" ref = "zzzz" />
-      <choice value="2" name="Reserved" enum="yyyy" code="cccc" ref = "zzzz" />
-      <choice value="3" name="Reserved" enum="yyyy" code="cccc" ref = "zzzz" />
-   </choiceOption>
+   <enumTemplate namespace="usbdm" variable="KKKKK" 
+   ><![CDATA[    
+      \t/**
+      \t * %description
+      \t *
+      \t * %tooltip
+      \t */
+      \tenum %enumClass {
+      %body
+      \t};\n\n
+   ]]></enumTemplate>
+      
+   <clockCodeTemplate variable="KKKKK"
+      returnFormat="%s"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setLpuart%(n)Clock(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t}
 
-      <enumTemplate namespace="usbdm" condition="KKKKK" 
-      ><![CDATA[    
-         \t/**
-         \t * %description
-         \t *
-         \t * %tooltip
-         \t */
-         \tenum %enumClass {
-         %body
-         \t};\n\n
-      ]]></enumTemplate>
-         
-      <clockCodeTemplate condition="KKKKK"
-         returnFormat="%s"
-      ><![CDATA[
-         \t/**
-         \t * Set %description
-         \t *
-         \t * @param %enumParam %tooltip
-         \t */
-         \tstatic void setLpuart%(n)Clock(%enumClass %enumParam) {
-         \t   %defaultClockExpression
-         \t}
-
-         \t/**
-         \t * Get %description
-         \t *
-         \t * @return Clock frequency in Hz
-         \t */
-         \tstatic uint32_t getLpuart%(n)Clock() {
-         \t   
-         \t   switch(%defaultMaskingExpression) {
-         \t      default: return 0;
-         %body
-         \t   }
-         \t}\n\n
-      ]]></clockCodeTemplate>
+      \t/**
+      \t * Get %description
+      \t *
+      \t * @return Clock frequency in Hz
+      \t */
+      \tstatic uint32_t getLpuart%(n)Clock() {
+      \t   
+      \t   switch(%defaultMaskingExpression) {
+      \t      default: return 0;
+      %body
+      \t   }
+      \t}\n\n
+   ]]></clockCodeTemplate>
 
    <!-- Note: second entry gets the tick irrespective of true/false value -->
    <binaryOption key="XXXXX" 
@@ -81,7 +83,6 @@ Symbols
       value="4000000" 
       constant="true" />
       
-   </category>
    
    <bitmaskOption key="XXX" 
       description="YYYYYY" 

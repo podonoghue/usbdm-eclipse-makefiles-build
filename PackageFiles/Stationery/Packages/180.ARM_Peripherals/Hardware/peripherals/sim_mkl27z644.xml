@@ -11,7 +11,7 @@
 
    <category name="COPC" description="COP Control Register">
       
-      <choiceOption name="sim_copc_copt" 
+      <choiceOption key="sim_copc_copt" 
          description="COP Watchdog Timeout"
          toolTip="This write-once field selects the Computer Operating Properly Timeout" >
          <choice value="SIM_COPC_COPCLKS(0)|SIM_COPC_COPT(0)" name="Disabled" />
@@ -23,7 +23,7 @@
          <choice value="SIM_COPC_COPCLKS(1)|SIM_COPC_COPT(3)" name="Timeout after 2^18 clock cycles" />
       </choiceOption>
 
-      <choiceOption name="sim_copc_copclksel" 
+      <choiceOption key="sim_copc_copclksel" 
          description="COP Clock Select"
          toolTip="This write-once field selects the clock source of the COP watchdog">
          <choice value="0" name="LPO clock (1 kHz)" isDefault="true" />
@@ -32,21 +32,21 @@
          <choice value="3" name="Bus clock" />
       </choiceOption>
 
-      <binaryOption name="sim_copc_copdbgen" 
+      <binaryOption key="sim_copc_copdbgen" 
          description="COP Debug Enable"
          toolTip="Controls whether COP is enabled in debug mode">
          <choice value="0"  name="COP is disabled and the counter is reset" isDefault="true" />
          <choice value="1"  name="COP is enabled" />
       </binaryOption>
       
-      <binaryOption name="sim_copc_copstpen" 
+      <binaryOption key="sim_copc_copstpen" 
          description="COP Stop Enable"
          toolTip="Controls whether COP is enabled in stop mode">
          <choice value="0"  name="COP is disabled and the counter is reset" isDefault="true" />
          <choice value="1"  name="COP is enabled" />
       </binaryOption>
       
-      <binaryOption name="sim_copc_copw" 
+      <binaryOption key="sim_copc_copw" 
          description="COP Windowed Mode"
          toolTip="Windowed mode is only supported when COP is using longer periods\n
                   The COP window is opened three quarters through the timeout period">
@@ -60,6 +60,7 @@
       <choiceOption key="adc%(n)_cfg1_adiclk" 
          description="ADC%(n) Clock Source"
          hidden="true"
+         valueFormat="ADC_CFG1_ADICLK(%s)"
          enumStem="AdcClockSource"
          target="system_adc%(n)_clock"
          toolTip="Clock source for the ADC module" >
@@ -85,7 +86,7 @@
       <aliasOption key="sim_sopt1_osc32ksel" constant="false" />
       <aliasOption key="system_erclk32k_clock" />
       
-      <choiceOption name="sim_sopt1_osc32kout" 
+      <choiceOption key="sim_sopt1_osc32kout" 
          enumStem="SimErc32kClkoutPinSelect"
          description="ERCLK32K Clock Output"
          toolTip="Outputs the ERCLK32K on the selected pin in all modes of operation">
@@ -165,7 +166,7 @@
             toolTip="Frequency of clock to UART" />
       </for>
       
-      <choiceOption name="sim_sopt2_tpmsrc" 
+      <choiceOption key="sim_sopt2_tpmsrc" 
          enumStem="SimTpmClockSource"
          target="system_tpm_clock"
          description="TPM Clock source"
@@ -176,7 +177,7 @@
          <choice value="3"  name="MCGIRCLK clock"              ref="/MCG/system_mcgirclk_clock"  enum="McgIrClk"        code="McgInfo::getMcgIrClock()"  />
       </choiceOption>
       
-      <intOption name="system_tpm_clock"
+      <intOption key="system_tpm_clock"
          derived="true" 
          constant="true"
          units="Hz"
@@ -184,7 +185,7 @@
          toolTip="Frequency of clock to TPM"
          value="0" />
       
-      <choiceOption name="sim_sopt2_flexiosrc"
+      <choiceOption key="sim_sopt2_flexiosrc"
          target="system_flexio_clock"
          enumStem="SimFlexioClockSource"
          description="FLEXIO Clock select"
@@ -195,14 +196,14 @@
          <choice value="3"  name="MCGIRCLK clock"              ref="/MCG/system_mcgirclk_clock"  enum="McgIrClk"        code="McgInfo::getMcgIrClock()"  />
       </choiceOption>
       
-      <intOption name="system_flexio_clock" 
+      <intOption key="system_flexio_clock" 
          constant="true"
          units="Hz"
          description="FLEXIO Clock frequency"
          toolTip="Frequency of clock to FLEXIO"
          value="0" />
       
-      <choiceOption name="sim_sopt2_clkoutsel" 
+      <choiceOption key="sim_sopt2_clkoutsel" 
          enumStem="SimClkoutSel"
          description="CLKOUT pin clock"
          toolTip="Clock to output on the CLKOUT pin" >
@@ -226,7 +227,7 @@
          </binaryOption>
       </for>
    
-      <choiceOption name="sim_sopt4_tpm1ch0src" 
+      <choiceOption key="sim_sopt4_tpm1ch0src" 
          enumStem="SimTpm1Ch0Src"
          description="TPM 1 channel 0 input capture source"
          toolTip="Source for TPM channel input capture\n
@@ -236,7 +237,7 @@
          <choice value="3" name="USB start of frame pulse"  enum="UsbSof" />
       </choiceOption>   
       
-      <binaryOption name="sim_sopt4_tpm2ch0src" 
+      <binaryOption key="sim_sopt4_tpm2ch0src" 
          enumStem="SimTpm2Ch0Src"
          description="TPM 2 channel 0 input capture source"
          toolTip="Source for TPM channel 0 input capture\n
@@ -292,6 +293,7 @@
       <for keys="adc" values="0">
          <choiceOption key="sim_sopt7_adc%(adc)trigger" 
             enumStem="SimAdc%(adc)TriggerMode"
+            valueFormat="(%s)"
             description="ADC%(adc) trigger mode"
             toolTip="Alternative conversion triggers for ADC\n
                _Tpm              - ADC is triggered by TPM. Pre-triggers are TPM channel 0 (A) and channel 1 (B)\n
@@ -305,7 +307,7 @@
          <choiceOption key="sim_sopt7_adc%(adc)trgsel"
             enumStem="SimAdc%(adc)Trigger"
             description="ADC%(adc) trigger"
-         toolTip="Trigger source when alternative triggers are functional in stop and VLPS modes">
+            toolTip="ADC Trigger source in STOP and VLPS modes, or when ADC Alternative Trigger is active">
          <choice value="0"  name="External trigger pin input (EXTRG_IN)" enum="External" isDefault="true" />
          <choice value="1"  name="CMP 0 output"                            enum="Cmp0"        />
          <choice value="4"  name="PIT trigger 0"                           enum="PitCh0"      />
@@ -330,10 +332,9 @@
          value="0" />
 
    <for keys="n" dim="/SIM/numberOfClockSettings" >
-      <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" constant="true" >
+      <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" >
       
          <choiceOption key="sim_sopt2_pllfllsel_Fixed[%(n)]"
-            enumStem="SimPeripheralClockSource"
             target="system_peripheral_clock[%(n)]"
             description="Peripheral Clock"
             toolTip="Clock for various peripherals (LPUART, TPM etc.)">
@@ -364,8 +365,7 @@
             units="Hz"
             description="USB Full Speed Clock"
             toolTip="Frequency of clock to USB full speed controller"
-            min="48MHz" max="48MHz"
-            value="48MHz" />
+            value="48 MHz" min="48 MHz" max="48 MHz" />
     
          <intOption key="system_core_clock[%(n)]" 
             units="Hz"

@@ -16,7 +16,7 @@
    
    <xi:include href="_mapPinsOption_on.xml"/>
 
-   <stringOption name="clockSource" 
+   <stringOption key="clockSource" 
       description="I2C Clock Select"
       constant="true" 
       value="SystemBusClock"
@@ -77,7 +77,7 @@
       \t}\n\n
    ]]></template>
    
-   <template name="/I2C/declarations" namespace="all"  ><![CDATA[
+   <template key="/I2C/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */

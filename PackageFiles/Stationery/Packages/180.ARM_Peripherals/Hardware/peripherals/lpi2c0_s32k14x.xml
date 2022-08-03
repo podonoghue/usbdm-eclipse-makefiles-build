@@ -15,7 +15,7 @@
    
    <xi:include href="_clockOption.xml"/>
    
-   <irqOption name="irqHandlers"  
+   <irqOption key="irqHandlers"  
       description="I2C Tx/Rx interrupt handler"
       toolTip="This selection allow the interrupt handlers for this peripheral to be installed using several different methods"
       pattern="^LPI2C%i_(Master|Slave)$"
@@ -26,7 +26,7 @@
        \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlers) == 1);\n\n
    ]]></template>
        
-   <intOption name="irqLevel" 
+   <intOption key="irqLevel" 
       description="IRQ Level in NVIC [0-15]"
       toolTip="Sets the priority level used to configure the NVIC\n
                Lower numbers represent higher priorities"

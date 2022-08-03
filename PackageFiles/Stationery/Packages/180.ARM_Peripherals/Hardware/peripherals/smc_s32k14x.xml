@@ -7,14 +7,14 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <binaryOption name="smc_pmprot_ahsrun" 
+   <binaryOption key="smc_pmprot_ahsrun" 
       description="Allow High Speed Run mode" 
       toolTip="This write-once field allows the MCU to enter High Speed Run mode (HSRUN)" >
       <choice name="HSRUN are not allowed" value="0" />
       <choice name="HSRUN are allowed"     value="1" isDefault="true" />
    </binaryOption>   
    
-   <binaryOption name="smc_pmprot_avlp" 
+   <binaryOption key="smc_pmprot_avlp" 
       description="Allow very low power modes" 
       toolTip="This write-once bit allows the MCU to enter any very low power modes: VLPR, VLPW, and VLPS" >
       <choice name="VLxx modes are not allowed" value="0" />
@@ -28,7 +28,7 @@
       \t   SMC_PMPROT_AVLP($(smc_pmprot_avlp:0));  // Allow very low power modes\n\n
    ]]></template>
       
-   <choiceOption name="smc_stopctrl_stopo" 
+   <choiceOption key="smc_stopctrl_stopo" 
       description="Stop Option"
       toolTip="These bits control whether a Partial Stop mode is entered when STOPM=STOP">
       <choice value="0" name="Reserved" />
@@ -37,7 +37,7 @@
       <choice value="3" name="Reserved" />
    </choiceOption>
 
-   <template name="enablePowerModes" namespace="all"  ><![CDATA[
+   <template key="enablePowerModes" namespace="all"  ><![CDATA[
    \t/* smc_s32k14x.xml */
    \t/**
    \t * Enable the given power modes.
@@ -57,7 +57,7 @@
    \t}\n\n
    ]]></template>
 
-   <template name="setStopOptions" namespace="all"  ><![CDATA[
+   <template key="setStopOptions" namespace="all"  ><![CDATA[
    \t/* smc_s32k14x.xml */
    \t/**
    \t * Allows the detailed operation in STOP mode to be controlled.
@@ -77,7 +77,7 @@
       \t   SMC_STOPCTRL_STOPO($(smc_stopctrl_stopo:0));  // Partial Stop Option\n\n
    ]]></template>
 
-   <template name="/SMC/declarations" namespace="all"  ><![CDATA[
+   <template key="/SMC/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */
@@ -89,7 +89,6 @@
       <copy source="Project_Headers/KinetisPowerModes.png"  target="Project_Headers/KinetisPowerModes.png"  overwrite="true" derived="true" macroReplace="false" />
       <copy source="Project_Headers/PowerModes.png"         target="Project_Headers/PowerModes.png"         overwrite="true" derived="true" macroReplace="false" />
       <copy source="Snippets/vlpr-run-hsrun-example.cpp"    target="Snippets/vlpr-run-hsrun-example.cpp"    overwrite="true" derived="true" />
-      <copy source="Snippets/vlpr-run-example.cpp"          target="Snippets/vlpr-run-example.cpp"          overwrite="true" derived="true" />
    </projectActionList>
          
 </peripheralPage>

@@ -7,12 +7,12 @@
    <constant name = "disable_peripheral"      derived = "true" value = "ftm->SC = FTM_SC_CLKS(0);"  />
    <xi:include href="_mapPinsOption.xml"/>   
 
-   <intOption name="NumChannels" constant="true" derived="true"
+   <intOption key="NumChannels" constant="true" derived="true"
       description="Number of Channels" 
       toolTip="The number of timer channels available" 
       value="8" />
 
-   <intOption name="NumChannelVectors" constant="true" derived="true"
+   <intOption key="NumChannelVectors" constant="true" derived="true"
       description="Number of Channel interrupt vectors" 
       toolTip="Number of channel event interrupt vectors - \n
                Multiple Channels may be mapped to the same vector" 
@@ -26,27 +26,27 @@
       \tstatic constexpr unsigned NumChannelVectors = $(NumChannelVectors);\n\n
    ]]></template>
    
-   <intOption name="minimumInterval" description="Minimum usable interval in ticks"
+   <intOption key="minimumInterval" description="Minimum usable interval in ticks"
       toolTip="This value is used as a minimum acceptable value for the timer interval in ticks\n
                when using convertMicrosecondsToTicks() or convertSecondsToTicks()"
       value="20" min="0" max="65535"/>
       
-   <intOption name="minimumResolution" description="Minimum resolution for PWM interval"
+   <intOption key="minimumResolution" description="Minimum resolution for PWM interval"
       toolTip="This value is used as a minimum value for the timer period in ticks \n
          so that a reasonable resolution is available for PWM duty-cycle"
       value="100" min="0" max="65535" />
       
-   <intOption name="ftmExternalClock" description="FTM External clock"
+   <intOption key="ftmExternalClock" description="FTM External clock"
       toolTip="Clock frequency of external clock supplied to FTM_CLKIN pin"
       value="0" min="0" units="Hz"/>
-   <choiceOption name="ftm_sc_clks" description="Clock Mode Selection"
+   <choiceOption key="ftm_sc_clks" description="Clock Mode Selection"
       toolTip="Selects the clock source for the module">
       <choice value="0" name="Disabled" />
       <choice value="1" name="System clock" isDefault="true" />
       <choice value="2" name="Fixed frequency clock" />
       <choice value="3" name="External clock" />
    </choiceOption>
-   <choiceOption name="ftm_sc_ps" description="Clock prescaler"
+   <choiceOption key="ftm_sc_ps" description="Clock prescaler"
       toolTip="Selects the prescaler for the module">
       <choice value="0" name="Divide by 1" isDefault="true" />
       <choice value="1" name="Divide by 2" />
@@ -58,35 +58,35 @@
       <choice value="7" name="Divide by 128" />
    </choiceOption>
       
-   <floatOption name="clockFrequency" 
+   <floatOption key="clockFrequency" 
       constant="true"
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
       units="Hz"/>
-   <floatOption name="clockPeriod" 
+   <floatOption key="clockPeriod" 
       constant="true"
       description="Period of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
       units="s"/>
-   <intOption name="ftm_mod" description="Modulo of timer"
+   <intOption key="ftm_mod" description="Modulo of timer"
       toolTip="Default period of the timer"
       value="10000" min="0" max="65535" />     
-   <floatOption name="ftm_mod_period" 
+   <floatOption key="ftm_mod_period" 
       description="Period of timer"
       toolTip="Period of the timer"
       origin="Clock period * ftm_mod"
       derived="true"
       min="0" units="s"/>
-   <binaryOption name="ftm_sc_cpwms" 
+   <binaryOption key="ftm_sc_cpwms" 
       description="Center-Aligned PWM Select"
       toolTip="Selects CPWM mode\n
          This mode configures the FTM to operate in Up-Down Counting mode">
       <choice value="0" name="Left-aligned (count up)" />
       <choice value="1" name="Centre-aligned (count up-down)" />
    </binaryOption>
-   <binaryOption name="ftm_sc_toie" description="Timer Overflow Interrupt Enable"
+   <binaryOption key="ftm_sc_toie" description="Timer Overflow Interrupt Enable"
       toolTip="Enables FTM overflow interrupts">
       <choice value="0" name="Disabled" />
       <choice value="1" name="Enabled" />
@@ -107,14 +107,14 @@
    ]]></template>
 
    <category name="External Triggers" description="External Triggers">
-      <bitmaskOption name="ftm_exttrig_trig"   description="External Trigger Enable" 
+      <bitmaskOption key="ftm_exttrig_trig"   description="External Trigger Enable" 
          toolTip="Enables the generation of the trigger when the FTM counter \n
           is equal to the channel CnV register"
          value="0"
          bitmask="0x3F" 
          bitList="CH2TRIG,CH3TRIG,CH4TRIG,CH5TRIG,CH0TRIG,CH1TRIG," 
          />
-      <binaryOption name="ftm_exttrig_inittrigen" description="Initialisation Trigger Enable"
+      <binaryOption key="ftm_exttrig_inittrigen" description="Initialisation Trigger Enable"
          toolTip="Enables the generation of the trigger when the FTM counter \n
           is equal to the CNTIN register">
          <choice value="0" name="Disabled" />
@@ -156,7 +156,7 @@
      -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
      -  _IRQHandler is appended to the pattern (only)
    -->
-   <irqOption name="irqHandlingMethod"  
+   <irqOption key="irqHandlingMethod"  
       description="Channel interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
       pattern="^%b%i_Ch(\d+)_Ch(\d+)$" 
@@ -169,7 +169,7 @@
      -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
      -  _IRQHandler is appended to the pattern (only)
    -->
-   <irqOption name="faultIrqHandlingMethod"  
+   <irqOption key="faultIrqHandlingMethod"  
       description="Fault interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
       pattern="^%b%i_Fault$" 
@@ -182,7 +182,7 @@
      -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
      -  _IRQHandler is appended to the pattern (only)
    -->
-   <irqOption name="overflowIrqHandlingMethod"  
+   <irqOption key="overflowIrqHandlingMethod"  
       description="Overflow interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
       pattern="^%b%i_Ovf_Reload$"
@@ -194,7 +194,7 @@
        \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlingMethod) == 1);\n\n
    ]]></template>
        
-   <intOption name="irqLevel" 
+   <intOption key="irqLevel" 
       description="IRQ Level in NVIC [0-15]"
       toolTip="Sets the priority level used to configure the NVIC
                Lower numbers represent higher priorities"
@@ -248,14 +248,14 @@
    <xi:include href="_clockOption.xml"/>
 
    
-   <template name="/FTM/declarations" namespace="all"  ><![CDATA[
+   <template key="/FTM/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */
    \ttypedef FtmBase_T<$(_class)Info> $(_class);\n
    ]]></template>
 
-   <template name="/FTM/quadDeclarations" namespace="all"  ><![CDATA[
+   <template key="/FTM/quadDeclarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_class) as Quadrature decoder
    \t */

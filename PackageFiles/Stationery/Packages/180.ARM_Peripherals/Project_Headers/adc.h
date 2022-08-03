@@ -53,192 +53,6 @@ namespace USBDM {
  */
 
 /**
- * ADC Resolutions.
- * The resolutions available vary with single-ended/differential modes\n
- * Note the equivalence between modes e.g. 8-bit-se = 9-bit-diff
- */
-enum AdcResolution {
-#ifdef ADC_SC1_DIFF_MASK
-   AdcResolution_8bit_se_9bit_diff   = ADC_CFG1_MODE(0),  //!<  8-bit unsigned/9-bit signed
-   AdcResolution_10bit_se_11bit_diff = ADC_CFG1_MODE(2),  //!< 10-bit unsigned/11-bit signed
-   AdcResolution_12bit_se_13bit_diff = ADC_CFG1_MODE(1),  //!< 12-bit unsigned/13-bit signed
-   AdcResolution_9bit_diff           = ADC_CFG1_MODE(0),  //!<  9-bit signed for use with differential mode
-   AdcResolution_11bit_diff          = ADC_CFG1_MODE(2),  //!< 11-bit signed for use with differential mode
-   AdcResolution_13bit_diff          = ADC_CFG1_MODE(1),  //!< 12-bit signed for use with differential mode
-   AdcResolution_16bit_diff          = ADC_CFG1_MODE(3),  //!< 16-bit signed for use with differential mode
-#endif
-   AdcResolution_16bit               = ADC_CFG1_MODE(3),  //!< 16-bit unsigned/unsigned
-   AdcResolution_8bit_se             = ADC_CFG1_MODE(0),  //!<  8-bit unsigned for use with single-ended mode
-   AdcResolution_10bit_se            = ADC_CFG1_MODE(2),  //!< 10-bit unsigned for use with single-ended mode
-   AdcResolution_12bit_se            = ADC_CFG1_MODE(1),  //!< 12-bit unsigned for use with single-ended mode
-   AdcResolution_16bit_se            = ADC_CFG1_MODE(3),  //!< 16-bit unsigned for use with single-ended mode
-};
-
-/**
- * ADC Averaging
- */
-enum AdcAveraging {
-   AdcAveraging_off = ADC_SC3_AVGE(0),                  //!< No averaging - single conversion
-   AdcAveraging_4   = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(0),  //!< Average across 4 conversions
-   AdcAveraging_8   = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(1),  //!< Average across 8 conversions
-   AdcAveraging_16  = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(2),  //!< Average across 16 conversions
-   AdcAveraging_32  = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(3),  //!< Average across 32 conversions
-   /// Average across 32 conversions + clear flag + start calibration
-   AdcAveraging_Cal = AdcAveraging_32|ADC_SC3_CAL_MASK|ADC_SC3_CALF_MASK,
-};
-
-/**
- * ADC clock divider
- */
-enum AdcClockDivider {
-   AdcClockDivider_1       = ADC_CFG1_ADIV(0), //!< Clock divide by 1
-   AdcClockDivider_2       = ADC_CFG1_ADIV(1), //!< Clock divide by 2
-   AdcClockDivider_4       = ADC_CFG1_ADIV(2), //!< Clock divide by 4
-   AdcClockDivider_8       = ADC_CFG1_ADIV(3), //!< Clock divide by 8
-};
-
-/**
- * Controls whether an interrupt is triggered at the end of a conversion
- */
-enum AdcInterrupt {
-   AdcInterrupt_Disabled = ADC_SC1_AIEN(0), //!< No interrupt on conversion complete
-   AdcInterrupt_Enabled  = ADC_SC1_AIEN(1), //!< Interrupt on conversion complete
-};
-
-/**
- * Select the pretrigger
- */
-enum AdcPretrigger {
-   AdcPretrigger_0  = 0, //!< Use pretrigger A = SC1[0]/R[0]
-   AdcPretrigger_1  = 1, //!< Use pretrigger B = SC1[1]/R[1]
-};
-
-#ifdef ADC_SC2_DMAEN
-/**
- * Selects DMA operation
- */
-enum AdcDma {
-   AdcDma_Disabled = ADC_SC2_DMAEN(0), //!< DMA disabled
-   AdcDma_Enabled  = ADC_SC2_DMAEN(1), //!< DMA enabled
-};
-#endif
-
-/**
- *  Input sample interval.
- *  Long sample times allow the use of higher input impedance sources
- */
-enum AdcSample {
-   AdcSample_Normal  = ADC_CFG1_ADLSMP(0),                    //!< Normal sample interval
-   AdcSample_2       = ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(3), //!< Extra 2 sample clocks (6 clocks total)
-   AdcSample_6       = ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(2), //!< Extra 6 sample clocks (10 clocks total)
-   AdcSample_12      = ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(1), //!< Extra 12 sample clocks (16 clocks total)
-   AdcSample_20      = ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(0), //!< Extra 20 sample clocks (24 clocks total)
-};
-
-/**
- * Selects between A/B multiplexor inputs on some ADC channels
- */
-enum AdcMuxsel {
-   AdcMuxsel_A  = ADC_CFG2_MUXSEL(0), //!< The multiplexor selects A channels
-   AdcMuxsel_B  = ADC_CFG2_MUXSEL(1), //!< The multiplexor selects B channels
-};
-
-/**
- * Allows reduced power consumption but with restricted input clock speed
- */
-enum AdcPower {
-   AdcPower_Normal  = ADC_CFG1_ADLPC(0), //!< Normal power operation
-   AdcPower_Low     = ADC_CFG1_ADLPC(1), //!< Low power operation
-};
-
-/**
- * Allows higher input clock speed operation.
- * This actually extends the number of conversion clock cycles but is offset by allowing a faster input clock.
- */
-enum AdcClockRange {
-   AdcClockRange_Normal = ADC_CFG2_ADHSC(0), //!< Normal input clock range
-   AdcClockRange_High   = ADC_CFG2_ADHSC(1), //!< Higher speed input clock range selected
-};
-
-/**
- * Controls whether the internal ADC clock is always enabled.
- * In any case, if internal clock is selected for use by the converter (AdcClockSource_Asynch) then\n
- * it will be enabled when needed for a conversion but with an extended conversion time.\n
- * If always enable this startup delay is avoided and the clock may be use by other peripherals.
- */
-enum AdcAsyncClock {
-   AdcAsyncClock_Disabled = ADC_CFG2_ADACKEN(0), //!< ADC Asynchronous clock enable on demand.
-   AdcAsyncClock_Enabled  = ADC_CFG2_ADACKEN(0), //!< ADC Asynchronous clock always enabled
-};
-
-/**
- * Selects between single and continuous conversions
- */
-enum AdcContinuous {
-   AdcContinuous_Disabled = ADC_SC3_ADCO(0), //!< Normal operation i.e. a single conversion will be done when triggered.
-   AdcContinuous_Enabled  = ADC_SC3_ADCO(1), //!< Continuous conversions enabled i.e. a continuous sequence of conversion will e triggered.
-};
-
-/**
- * Controls the ADC compare function
- */
-enum AdcCompare {
-   AdcCompare_Disabled              = ADC_SC2_ACFE(0),                                          //!< Comparisons disabled
-   AdcCompare_LessThan              = ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(0)|ADC_SC2_ACREN(0),        //!< ADC_value < low
-   AdcCompare_GreaterThanOrEqual    = ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(0),        //!< ADC_value >= low
-   AdcCompare_OutsideRangeExclusive = (0<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(0)|ADC_SC2_ACREN(1), //!< (ADC_value < low) || (ADC_value > high)
-   AdcCompare_OutsideRangeInclusive = (1<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1), //!< (ADC_value <= low) || (ADC_value >= high)
-   AdcCompare_InsideRangeExclusive  = (1<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(0)|ADC_SC2_ACREN(1), //!<  low < ADC_value < high
-   AdcCompare_InsideRangeInclusive  = (0<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1), //!<  low <= ADC_value <= high
-};
-
-/**
- * Voltage reference for ADC and PGA if present
- */
-enum AdcRefSel {
-   AdcRefSel_0 = ADC_SC2_REFSEL(0b00),  /**< AdcRefSel_0                */
-   AdcRefSel_1 = ADC_SC2_REFSEL(0b01),  /**< AdcRefSel_1                */
-   AdcRefSel_Default = AdcRefSel_0,     /**< Default = VrefH/VrefL pins */
-   AdcRefSel_VrefHL  = AdcRefSel_0,     /**< VrefH/VrefL pins           */
-   AdcRefSel_VrefOut = AdcRefSel_1,     /**< VrefOut pin (internally generated ~1.2V or externally applied) */
-};
-
-#if defined(ADC_PGA_PGAEN_MASK)
-
-/**
- * PGA Enable and mode
- */
-enum AdcPgaMode {
-   AdcPgaMode_Disabled    = ADC_PGA_PGAEN(0),                    // PGA Disabled
-   AdcPgaMode_LowPower    = ADC_PGA_PGAEN(1)|ADC_PGA_PGALPb(0),  // PGA Low power mode
-   AdcPgaMode_NormalPower = ADC_PGA_PGAEN(1)|ADC_PGA_PGALPb(1),  // PGA Normal power mode
-};
-
-/**
- * PGA Gain Setting
- */
-enum AdcPgaGain {
-   AdcPgaGain_1  = ADC_PGA_PGAG(0),     // PGA gain = x1
-   AdcPgaGain_2  = ADC_PGA_PGAG(1),     // PGA gain = x2
-   AdcPgaGain_4  = ADC_PGA_PGAG(2),     // PGA gain = x4
-   AdcPgaGain_8  = ADC_PGA_PGAG(3),     // PGA gain = x8
-   AdcPgaGain_16 = ADC_PGA_PGAG(4),     // PGA gain = x16
-   AdcPgaGain_32 = ADC_PGA_PGAG(5),     // PGA gain = x32
-   AdcPgaGain_64 = ADC_PGA_PGAG(6),     // PGA gain = x64
-};
-#endif
-
-#if defined(ADC_PGA_PGACHPb_MASK)
-/**
- * Controls PGA chopping to remove/reduce offset
- */
-enum AdcPgaChop {
-   AdcPgaChop_Disabled = ADC_PGA_PGACHPb(1), // PGA chopping disabled
-   AdcPgaChop_Enabled  = ADC_PGA_PGACHPb(0), // PGA chopping enabled
-};
-#endif
-
-/**
  * Type definition for ADC interrupt call back.
  *
  * @param[in] result  Conversion result from channel
@@ -937,8 +751,8 @@ public:
     */
    static void configure(
          AdcResolution   adcResolution,
-         AdcClockSource  adcClockSource  = AdcClockSource_Default,
-         AdcSample       adcSample       = AdcSample_Normal,
+         AdcClockSource  adcClockSource  = AdcClockSource_Asynch,
+         AdcSample       adcSample       = AdcSample_4,
          AdcPower        adcPower        = AdcPower_Normal,
          AdcMuxsel       adcMuxsel       = AdcMuxsel_B,
          AdcClockRange   adcClockRange   = AdcClockRange_High,
@@ -1662,7 +1476,7 @@ public:
 
 template<class Info> AdcCallbackFunction AdcBase_T<Info>::sCallback = Adc::unhandledCallback;
 
-$(/ADC/declarations:No declarations found)
+$(/ADC/declarations:// #error "No declarations found")
 /**
  * End ADC_Group
  * @}

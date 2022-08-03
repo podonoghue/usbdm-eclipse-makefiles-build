@@ -16,7 +16,7 @@
 
    <xi:include href="_mapPinsOption_on.xml"/>
 
-   <choiceOption name="rf_osc_en"
+   <choiceOption key="rf_osc_en"
       description="RF Reference Oscillator Enable Select"
       toolTip="The oscillator can be enabled by a Radio link layer,\n
         by an internal SoC clock mode, by an External Pin request, or by this field">
@@ -27,7 +27,7 @@
          <choice value="0b1111"  name="RF Ref Osc on in VLPS" />
       </choiceOption>
 
-   <choiceOption name="osc_input_freq"
+   <choiceOption key="osc_input_freq"
       units="Hz"
       description="Frequency of External Crystal"
       toolTip="Frequency of external crystal on RF_XTAL/RF_EXTAL pins">
@@ -35,7 +35,7 @@
          <choice value="32000000"  name="32 MHz" isDefault="true" />
       </choiceOption>
 
-   <intOption name="osc_clock"
+   <intOption key="osc_clock"
       constant="true"
       derived="true"
       units="Hz"
@@ -43,7 +43,7 @@
       toolTip="Frequency of RF oscillator"
       value="32000000" />
 
-   <choiceOption name="oscillatorRange"
+   <choiceOption key="oscillatorRange"
       derived="true"
       constant="true"
       description="Frequency Range Select"
@@ -55,7 +55,7 @@
       <choice value="0" name="Unconstrained by Oscillator" />
    </choiceOption>
 
-   <intOption name="oscer_clock"
+   <intOption key="oscer_clock"
          derived="true"
          units="Hz"
          description="Oscillator clock [OSCERCLK]"
@@ -96,18 +96,18 @@
       \t}\n\n
    ]]></template>
 
-   <template name="/OSC_RF/declarations" namespace="all"  ><![CDATA[
+   <template key="/OSC_RF/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */
    \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
    ]]></template>
 
-   <template name="/MCG/Includes" namespace="all"  ><![CDATA[
+   <template key="/MCG/Includes" namespace="all"  ><![CDATA[
    #include "osc.h"\n
    ]]></template>
       
-   <template name="/MCG/Initialisation" namespace="all"  ><![CDATA[
+   <template key="/MCG/Initialisation" namespace="all"  ><![CDATA[
    \tUSBDM::$(_class)::initialise();\n
    ]]></template>
       

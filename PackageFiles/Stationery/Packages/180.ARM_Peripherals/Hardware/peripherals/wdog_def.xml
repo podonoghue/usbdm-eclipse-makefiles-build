@@ -29,7 +29,7 @@
    \t}\n\n
    ]]></template>
    
-   <template name="/WDOG/declarations" namespace="all"  ><![CDATA[
+   <template key="/WDOG/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!ENTITY % gui_items        "(xi:include|addDependency|category|categoryOption|aliasCategoryOption|if|for|aliasCategory|constant|floatOption|intOption|bitmaskOption|choiceOption|binaryOption|irqOption|stringOption|numericListOption|pinListOption|aliasOption|signals)" >
+<!ENTITY % gui_items        "(xi:include|addDependency|deleteOption|category|categoryOption|addChoices|aliasCategoryOption|if|for|aliasCategory|constant|floatOption|intOption|bitmaskOption|choiceOption|binaryOption|irqOption|stringOption|numericListOption|pinListOption|aliasOption|signals)" >
 <!ENTITY % structure_items  "(xi:include|section|list)" >
 <!ENTITY % control_items    "(xi:include|template|enumTemplate|clockCodeTemplate|validate|projectActionList)" >
 
@@ -56,6 +56,10 @@
    <!ATTLIST categoryOption  disabledValue   CDATA        #IMPLIED>
    <!ATTLIST categoryOption  toolTip         CDATA        #IMPLIED>
    <!ATTLIST categoryOption  hidden          (false|true) #IMPLIED>
+
+<!ELEMENT deleteOption EMPTY >
+   <!ATTLIST deleteOption key           CDATA        #REQUIRED>
+   <!ATTLIST deleteOption mustExist     (false|true)  #IMPLIED>
 
 <!ELEMENT intOption EMPTY >
    <!ATTLIST intOption constant     (false|true)  #IMPLIED>
@@ -199,6 +203,11 @@
    <!ATTLIST choiceOption enumStem            CDATA        #IMPLIED>
    <!ATTLIST choiceOption target              CDATA        #IMPLIED>
    <!ATTLIST choiceOption register            CDATA        #IMPLIED>
+   <!ATTLIST choiceOption replace             CDATA        #IMPLIED>
+   <!ATTLIST choiceOption valueFormat         CDATA        #IMPLIED>
+  
+<!ELEMENT addChoices ((choice)*) >
+   <!ATTLIST addChoices key                 CDATA        #REQUIRED>
   
 <!ELEMENT choice EMPTY >
    <!ATTLIST choice value                     CDATA        #REQUIRED>
@@ -224,6 +233,7 @@
    <!ATTLIST binaryOption derivedFrom   CDATA        #IMPLIED>
    <!ATTLIST binaryOption enumStem      CDATA        #IMPLIED>
    <!ATTLIST binaryOption register      CDATA        #IMPLIED>
+   <!ATTLIST binaryOption valueFormat   CDATA        #IMPLIED>
 
 <!ELEMENT irqOption EMPTY >
    <!ATTLIST irqOption constant      (false|true) #IMPLIED>
@@ -240,37 +250,49 @@
    <!ATTLIST irqOption derived       (false|true) #IMPLIED>
    <!ATTLIST irqOption derivedFrom   CDATA        #IMPLIED>
 
+<!-- 
+   info  Appear within peripheral info class e.g. Osc0Info
+   usbdm Appears in pin_mapping.h immediately before the class declaration
+   all   Can appear anywhere. Requires explicit key use.
+   class Appears as classInfo variable with peripheral path e.g. /ADC/classInfo 
+-->
 <!ELEMENT template (#PCDATA)* >
    <!ATTLIST template namespace (info|usbdm|class|all)  "info" >
-   <!ATTLIST template key        CDATA                "" >
-   <!ATTLIST template dim        CDATA                "0" >
-   <!ATTLIST template condition  CDATA        #IMPLIED>
+   <!ATTLIST template key        CDATA                  "" >
+   <!ATTLIST template dim        CDATA                  "0" >
+   <!ATTLIST template variable   CDATA                  #IMPLIED>
 
 <!ELEMENT enumTemplate (#PCDATA)* >
-   <!ATTLIST enumTemplate namespace (info|usbdm|class|all)   "info" >
-   <!ATTLIST enumTemplate name        CDATA                  "" >
-   <!ATTLIST enumTemplate dim         CDATA                  "0" >
-   <!ATTLIST enumTemplate condition   CDATA                  #IMPLIED>
-   <!ATTLIST enumTemplate template    CDATA                  #IMPLIED>
-   <!ATTLIST enumTemplate enumStem    CDATA                  #IMPLIED>
-   <!ATTLIST enumTemplate valueFormat CDATA                  #IMPLIED>
+   <!ATTLIST enumTemplate namespace     (info|usbdm|class|all)  "info" >
+   <!ATTLIST enumTemplate name          CDATA                   "" >
+   <!ATTLIST enumTemplate dim           CDATA                   "0" >
+   <!ATTLIST enumTemplate variable      CDATA                   #IMPLIED>
+   <!ATTLIST enumTemplate template      CDATA                   #IMPLIED>
+   <!ATTLIST enumTemplate enumStem      CDATA                   #IMPLIED>
+   <!ATTLIST enumTemplate valueFormat   CDATA                   #IMPLIED>
 
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
-   <!ATTLIST clockCodeTemplate namespace (info|usbdm|class|all) "info" >
-   <!ATTLIST clockCodeTemplate name         CDATA               "" >
-   <!ATTLIST clockCodeTemplate dim          CDATA               "0" >
-   <!ATTLIST clockCodeTemplate condition    CDATA               #IMPLIED>
-   <!ATTLIST clockCodeTemplate enumStem     CDATA               #IMPLIED>
-   <!ATTLIST clockCodeTemplate returnFormat CDATA               #IMPLIED>
-   <!ATTLIST clockCodeTemplate mask         CDATA               #IMPLIED>
+   <!ATTLIST clockCodeTemplate namespace    (info|usbdm|class|all) "info" >
+   <!ATTLIST clockCodeTemplate name         CDATA                  "" >
+   <!ATTLIST clockCodeTemplate dim          CDATA                  "0" >
+   <!ATTLIST clockCodeTemplate variable     CDATA                  #IMPLIED>
+   <!ATTLIST clockCodeTemplate enumStem     CDATA                  #IMPLIED>
+   <!ATTLIST clockCodeTemplate returnFormat CDATA                  #IMPLIED>
+   <!ATTLIST clockCodeTemplate mask         CDATA                  #IMPLIED>
 
 <!ELEMENT for (%gui_items;|%structure_items;|%control_items;|template)* >
    <!ATTLIST for keys                 CDATA        #REQUIRED>
    <!ATTLIST for values               CDATA        #IMPLIED>
    <!ATTLIST for dim                  CDATA        #IMPLIED>
 
-<!ELEMENT if (%gui_items;|%structure_items;|%control_items;|template)* >
+<!ELEMENT if ( (%gui_items;|%structure_items;|%control_items;|template|elsif)*, 
+               (else, (%gui_items;|%structure_items;|%control_items;|template)*))? >
    <!ATTLIST if condition             CDATA        #REQUIRED>
+
+<!ELEMENT else EMPTY >
+
+<!ELEMENT elsif EMPTY >
+   <!ATTLIST elsif condition             CDATA        #REQUIRED>
 
 <!ELEMENT validate (param*) >
    <!ATTLIST validate class         CDATA        #REQUIRED>
@@ -285,11 +307,11 @@
    <!ATTLIST signals optional    (false|true)   #IMPLIED>
 
 <!-- List of actions to be applied to a project -->
-<!ELEMENT projectActionList ((deleteResource|copy|constant)*) >
-   <!ATTLIST projectActionList id          ID            #REQUIRED>
-   <!ATTLIST projectActionList root        CDATA         #IMPLIED>
-   <!ATTLIST projectActionList doOnceOnly  (true|false)  "true">
-   
+<!ELEMENT projectActionList ((deleteResource|copy|constant|createFolder)*) >
+   <!ATTLIST projectActionList id            ID            #REQUIRED>
+   <!ATTLIST projectActionList root          CDATA         #IMPLIED>
+   <!ATTLIST projectActionList doOnceOnly    (true|false)  "true">
+      
 <!-- Exclude/include source file in Eclipse project -->
 <!ELEMENT excludeSourceFile EMPTY >
    <!ATTLIST excludeSourceFile   target     CDATA          #REQUIRED>

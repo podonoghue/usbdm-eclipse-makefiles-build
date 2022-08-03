@@ -14,7 +14,7 @@ Devices using this peripheral:
    <aliasOption key="/SIM/system_uart$(_instance)_fixedclocksource" optional="true"/>
    <aliasOption key="/SIM/system_uart$(_instance)_clock" optional="true" />
 
-   <intOption name="oversampleRatio" description="Number of samples per bit" 
+   <intOption key="oversampleRatio" description="Number of samples per bit" 
       toolTip="This value determines the number of times an Rx bit is sampled.\n
                This also affects the clock divider and hence the range of baud rates available"
        value="8" min="4" max="32"
@@ -25,7 +25,7 @@ Devices using this peripheral:
    \tstatic constexpr uint32_t oversampleRatio = $(oversampleRatio);\n\n
    ]]></template>
 
-   <choiceOption name="defaultBaudRate" 
+   <choiceOption key="defaultBaudRate" 
       description="UART default baud rate"
       toolTip="Used by default UART setup for stdio">
       <choice value="110"     name="110" />
@@ -44,7 +44,7 @@ Devices using this peripheral:
       <choice value="115200"  name="115200" isDefault="true" />
    </choiceOption>
 
-   <binaryOption name="uartClass" 
+   <binaryOption key="uartClass" 
       description="Input buffering"
       toolTip="This option determines whether an interrupt-driven driver\n 
                incorporating a queue is used to buffer input data" >
@@ -52,13 +52,13 @@ Devices using this peripheral:
       <choice name="Buffered"   value="UartBuffered_osr_T" />
    </binaryOption>
    
-   <intOption name="receiveBufferSize" description="Size of input buffer" 
+   <intOption key="receiveBufferSize" description="Size of input buffer" 
       toolTip="This value determines the size of the receive buffer\n
                for the interrupt driven driver version  "
        value="50" min="1" max="1000"
       />
 
-   <intOption name="transmitBufferSize" description="Size of output buffer" 
+   <intOption key="transmitBufferSize" description="Size of output buffer" 
       toolTip="This value determines the size of the transmit buffer\n
                for the interrupt driven driver version  "
        value="50" min="1" max="1000"
@@ -70,8 +70,8 @@ Devices using this peripheral:
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" optional="true" constant="false" />
    </category>
    
-   <stringOption name="irq_pattern"        constant="true" value="^UART%i_?(RxTx|Error|Lon)?$" hidden="true" />
-   <stringOption name="irq_classHandler"   constant="true" value="%c%i::irq$1Handler" hidden="true" />
+   <stringOption key="irq_pattern"        constant="true" value="^UART%i_?(RxTx|Error|Lon)?$" hidden="true" />
+   <stringOption key="irq_classHandler"   constant="true" value="%c%i::irq$1Handler" hidden="true" />
    <xi:include href="_irqOptionSubstituted.xml"/>
    
    <xi:include href="_clockOption.xml"/>
@@ -109,9 +109,9 @@ Devices using this peripheral:
    \t}\n\n
    ]]></template>
    
-   <template name="/UART/Present" namespace="all"  ><![CDATA[\ ||\ 1]]></template>
+   <template key="/UART/Present" namespace="all"  ><![CDATA[\ ||\ 1]]></template>
 
-   <template name="/UART/declarations" namespace="all"  ><![CDATA[
+   <template key="/UART/declarations" namespace="all"  ><![CDATA[
       \t/**
       \t * Class representing $(_name) interface
       \t *
