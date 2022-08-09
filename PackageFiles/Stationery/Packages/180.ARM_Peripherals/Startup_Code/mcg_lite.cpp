@@ -77,14 +77,14 @@ static void setSysDividers(uint32_t simClkDiv1) {
 MCGCallbackFunction Mcg::callback = {0};
 
 /** Current clock mode (FEI out of reset) */
-McgClockMode Mcg::currentClockMode = McgClockMode_LIRC_2M;
+McgClockMode Mcg::currentClockMode = McgClockMode_LIRC_2MHz;
 
 constexpr McgClockMode clockTransitionTable[4][4] = {
          /*  from  to =>   LIRC_2M,                  LIRC_8M,                  HIRC_48M,                  EXT,   */
-         /* LIRC_2M,  */ { McgMcgClockMode_LIRC_2M,  McgMcgClockMode_HIRC_48M, McgMcgClockMode_HIRC_48M,  McgMcgClockMode_EXT,   },
-         /* LIRC_8M,  */ { McgMcgClockMode_HIRC_48M, McgMcgClockMode_LIRC_8M,  McgMcgClockMode_HIRC_48M,  McgMcgClockMode_EXT,   },
-         /* HIRC_48M, */ { McgMcgClockMode_LIRC_2M,  McgMcgClockMode_LIRC_8M,  McgMcgClockMode_HIRC_48M,  McgMcgClockMode_EXT,   },
-         /* EXT,      */ { McgMcgClockMode_LIRC_2M,  McgMcgClockMode_LIRC_8M,  McgMcgClockMode_HIRC_48M,  McgMcgClockMode_EXT,   },
+         /* LIRC_2M,  */ { McgClockMode_LIRC_2MHz,  McgClockMode_HIRC_48MHz, McgClockMode_HIRC_48MHz,  McgClockMode_EXT,   },
+         /* LIRC_8M,  */ { McgClockMode_HIRC_48MHz, McgClockMode_LIRC_8MHz,  McgClockMode_HIRC_48MHz,  McgClockMode_EXT,   },
+         /* HIRC_48M, */ { McgClockMode_LIRC_2MHz,  McgClockMode_LIRC_8MHz,  McgClockMode_HIRC_48MHz,  McgClockMode_EXT,   },
+         /* EXT,      */ { McgClockMode_LIRC_2MHz,  McgClockMode_LIRC_8MHz,  McgClockMode_HIRC_48MHz,  McgClockMode_EXT,   },
 };
 
 /**
@@ -137,7 +137,7 @@ ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
 
       switch (next) {
 
-      case McgClockMode_LIRC_2M: // From HIRC48, EXT or reset(FEI)
+      case McgClockMode_LIRC_2MHz: // From HIRC48, EXT or reset(FEI)
 
          mcg->C2 =
                MCG_C2_IRCS(0)   | // IRCS = 0 -> LIRC is in 2 MHz mode
@@ -153,7 +153,7 @@ ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
          } while ((mcg->S & MCG_S_CLKST_MASK) != (MCG_S_CLKST(1)));
          break;
 
-      case McgClockMode_LIRC_8M: // From HIRC48, EXT or reset(FEI)
+      case McgClockMode_LIRC_8MHz: // From HIRC48, EXT or reset(FEI)
 
          mcg->C2 =
                MCG_C2_IRCS(1)   | // IRCS = 1 -> LIRC is in 2 MHz mode
@@ -169,7 +169,7 @@ ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
          } while ((mcg->S & MCG_S_CLKST_MASK) != (MCG_S_CLKST(1)));
          break;
 
-      case McgClockMode_HIRC_48M: // from LIRC_2M, LIRC_8M, EXT
+      case McgClockMode_HIRC_48MHz: // from LIRC_2M, LIRC_8M, EXT
 
          mcg->C2 =
                clockInfo.c2;      // IRCS, RANGE0, HGO0, EREFS0
@@ -253,7 +253,7 @@ void Mcg::defaultConfigure() {
 
 #if !defined(INITIAL_CLOCK_STATE)
 // Needed for use with a boot-loader that changes the clock
-#define INITIAL_CLOCK_STATE McgClockMode_LIRC_2M;
+#define INITIAL_CLOCK_STATE McgClockMode_LIRC_2MHz;
 #endif
 
    currentClockMode = INITIAL_CLOCK_STATE;

@@ -10,7 +10,7 @@
 
    <intOption key="osc_input_freq"
       units="Hz"
-      description="Frequency of External Crystal or Clock"
+      description="OSC frequency"
       toolTip="Frequency of external crystal or clock on XTAL/EXTAL"
       value="8000000" />
 

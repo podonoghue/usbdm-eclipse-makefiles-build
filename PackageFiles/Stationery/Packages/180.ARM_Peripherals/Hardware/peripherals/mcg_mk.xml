@@ -21,7 +21,7 @@
          <binaryOption key="mcg_c8_locre1[%(n)]" 
             description="OSC1 (RTC) Loss of Clock Reset Enable"
             toolTip="Determines if a interrupt or a reset request is made following a loss of RTC external reference clock.\n 
-                     Only has an affect when CME1 is set[%(n)]" >
+                     Only has an affect when CME1 is set" >
             <choice value="0" name="Interrupt request" />
             <choice value="1" name="Reset request" />
          </binaryOption>

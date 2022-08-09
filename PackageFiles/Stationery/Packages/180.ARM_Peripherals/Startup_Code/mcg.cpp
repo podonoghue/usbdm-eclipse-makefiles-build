@@ -36,7 +36,6 @@ namespace USBDM {
 #define SIM_CLKDIV1_OUTDIV3(x) (0)
 #endif
 
-
 /**
  * Table of clock settings
  */
@@ -103,7 +102,7 @@ MCGCallbackFunction Mcg::callback = {0};
 /** Current clock mode (FEI out of reset) */
 McgClockMode Mcg::currentClockMode = McgClockMode_FEI;
 
-constexpr McgClockMode clockTransitionTable[8][8] = {
+constexpr McgClockMode clockTransitionTable[][8] = {
    /* from to => FEI                FEE,               FBI,               BLPI,              FBE,              BLPE,               PBE,               PEE */
    /* FEI,  */ { McgClockMode_FBI,  McgClockMode_FBE,  McgClockMode_FBI,  McgClockMode_FBI,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE, },
    /* FEE,  */ { McgClockMode_FBI,  McgClockMode_FBE,  McgClockMode_FBI,  McgClockMode_FBI,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE, },
@@ -184,7 +183,8 @@ void Mcg::writeMainRegs(const ClockInfo &clockInfo, uint8_t bugFix) {
  *
  * @param[in]  clockInfo Clock mode to transition to
  *
- * @return E_NO_ERROR on success
+ * @return E_NO_ERROR          on success
+ * @return E_CLOCK_INIT_FAILED on failure
  */
 ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
 
@@ -379,7 +379,7 @@ ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
  * Updates the SystemCoreClock variable with current core Clock retrieved from CPU registers.
  */
 void Mcg::SystemCoreClockUpdate(void) {
-#if $(/SIM/rtcSharesPins)
+#if $(/SIM/rtc_shared:false) || !defined(MCG_C7_OSCSEL)
    const bool lowRange = ((mcg->C2&MCG_C2_RANGE0_MASK) == MCG_C2_RANGE0(0));
 #else
    // Selection of RTC as MCG clock input also forces low-range dividers

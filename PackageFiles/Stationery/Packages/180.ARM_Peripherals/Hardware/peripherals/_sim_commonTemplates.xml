@@ -9,7 +9,160 @@
       \t * Template:sim_commonTemplates.xml
       \t */ \n
    ]]></template>
- 
+
+   <if condition="!osc0_peripheral" >
+      <!-- Oscillator peripheral used for OSC0 input to MCG = OSC0 -->
+      <!-- This peripheral is tied closely to the MCG              -->
+      <constant key="osc0_peripheral"  value="/OSC0" />
+      <constant key="osc0_description" value="OSC0 - Main System Oscillator (OSCCLK0)" />
+   </if>
+   
+   <if condition="rtc_independent" >
+   <!-- *********************** rtc_independent *********************** -->
+
+      <!-- Uses RTC EXTAL32/XTAL32 pins -->
+      <intOption key="rtc_input_freq"
+         hidden="true"
+         units="Hz"
+         description="External RTC Crystal"
+         toolTip="Frequency of external crystal XTAL32/EXTAL32 (usually 32.768 kHz)"
+         origin="Crystal on XTAL32/EXTAL32"
+         value="32768"
+         min="0" max="33000" />
+
+      <!-- ERCCLK32K Sources -->
+      <if condition="!sim_sopt1_osc32ksel" >
+         <choiceOption key="sim_sopt1_osc32ksel"
+            enumStem="SimOsc32kSel"
+            target="system_erclk32k_clock"
+            hidden="true"
+            description="ERCLK32K clock source" 
+            toolTip="Clock source for External 32k Reference Clock [ERCLK32K]">
+            <choice value="0" name="OSC0 in low range (OSC32KCLK)"  ref="/OSC0/osc32k_clock"          enum="Osc32kClk" code="Osc0Info::getOsc32kClock()"  />
+            <choice value="2" name="RTC 32kHz clock"                ref="/RTC/osc_clock"              enum="Rtc32kClk" code="RtcInfo::getExternalClock()" />
+            <choice value="3" name="LPO 1kHz clock"                 ref="/PMC/system_low_power_clock" enum="LpoClk"    code="PmcInfo::getLpoClock()"     isDefault="true"/>
+         </choiceOption>
+      </if>
+      
+      <if condition="!sim_sopt2_rtcclkoutsel" >
+         <choiceOption key="sim_sopt2_rtcclkoutsel"
+            enumStem="SimRtcClkoutSel"
+            target="rtc_clkout" 
+            hidden="true"
+            description="RTC clock out source"
+            toolTip="Clock output on the RTC_CLKOUT pin">
+            <choice value="0"  name="RTC 1 Hz clock"                  ref="/RTC/rtc_1hz_clock"      enum="1Hz"   />
+            <choice value="1"  name="RTC 32kHz clock (from RTC_OSC)x"  ref="/RTC/rtcclk_gated_clock" enum="32kHz" isDefault="true" />
+         </choiceOption>
+   
+         <intOption key="rtc_clkout"
+            hidden="true"
+            constant="true"
+            derived="true"
+            units="Hz"
+            description="RTC clock out frequency"
+            toolTip="Clock frequency on the RTC_CLKOUT pin"  />
+   
+         <clockCodeTemplate variable="sim_sopt2_rtcclkoutsel"
+         ><![CDATA[
+            \t/**
+            \t * Set %description
+            \t *
+            \t * @param %enumParam %tooltip
+            \t */
+            \tstatic void setRtcClockout(%enumClass %enumParam) {
+            \t   %defaultClockExpression
+            \t}\n\n
+         ]]></clockCodeTemplate>
+      </if>
+      
+   <else_if condition="rtc_shared" />
+      <!-- *********************** rtc_shared *********************** -->
+
+      <!-- Uses RTC_CLKIN pin -->
+      <intOption key="rtc_clkin_clock" 
+         hidden="true"
+         units="Hz"
+         description="RTC_CLKIN pin"
+         toolTip="External clock for the RTC (usually 32.768 kHz)"
+         origin="RTC_CLKIN pin"
+         value="0"
+         min="0" max="33000" />
+
+      <!-- ERCCLK32K Sources -->
+      <if condition="!sim_sopt1_osc32ksel" >
+         <choiceOption key="sim_sopt1_osc32ksel"
+            enumStem="SimOsc32kSel"
+            target="system_erclk32k_clock"
+            hidden="true"
+            description="ERCLK32K clock source" 
+            toolTip="Clock source for External 32k Reference Clock [ERCLK32K]">
+            <choice value="0" name="OSC0 in low range (OSC32KCLK)"  ref="/OSC0/osc32k_clock"          enum="Osc32kClk" code="Osc0Info::getOsc32kClock()" />
+            <choice value="2" name="RTC_CLKIN pin"                  ref="/SIM/rtc_clkin_clock"        enum="RtcClkin"  code="rtc_clkin_clock"            />
+            <choice value="3" name="LPO 1kHz clock"                 ref="/PMC/system_low_power_clock" enum="LpoClk"    code="PmcInfo::getLpoClock()"  isDefault="true"/>
+         </choiceOption>
+      </if>
+      
+      <if condition="!sim_sopt2_rtcclkoutsel" >
+         <choiceOption key="sim_sopt2_rtcclkoutsel"
+            enumStem="SimRtcClkoutSel"
+            target="rtc_clkout" 
+            hidden="true"
+            description="RTC clock out source"
+            toolTip="Clock output on the RTC_CLKOUT pin">
+            <choice value="0"  name="RTC 1 Hz clock"                  ref="/RTC/rtc_1hz_clock"      enum="1Hz"   />
+            <choice value="1"  name="OSC32KCLK clock (from OSC0)"     ref="/OSC0/oscer_clock"       enum="32kHz" isDefault="true" />
+         </choiceOption>
+   
+         <intOption key="rtc_clkout"
+            hidden="true"
+            constant="true"
+            derived="true"
+            units="Hz"
+            description="RTC clock out frequency"
+            toolTip="Clock frequency on the RTC_CLKOUT pin"  />
+   
+         <clockCodeTemplate variable="sim_sopt2_rtcclkoutsel"
+         ><![CDATA[
+            \t/**
+            \t * Set %description
+            \t *
+            \t * @param %enumParam %tooltip
+            \t */
+            \tstatic void setRtcClockout(%enumClass %enumParam) {
+            \t   %defaultClockExpression
+            \t}\n\n
+         ]]></clockCodeTemplate>
+      </if>
+      
+   <else />
+      <!-- *********************** !rtc_independent && !rtc_shared = rtc_none *********************** -->
+
+      <!-- ERCCLK32K Sources -->
+      <if condition="!sim_sopt1_osc32ksel" >
+         <choiceOption key="sim_sopt1_osc32ksel_Fixed"
+            target="system_erclk32k_clock"
+            hidden="true"
+            description="ERCLK32K clock source" 
+            toolTip="Clock source for External 32k Reference Clock [ERCLK32K]">
+            <choice value="0" name="OSC0 in low range (OSC32KCLK)"  ref="/OSC0/osc32k_clock"          enum="Osc32kClk" code="Osc0Info::getOsc32kClock()"  />
+         </choiceOption>
+      </if>
+   
+   </if>
+   
+   <if condition="sim_sopt1_osc32ksel||sim_sopt1_osc32ksel_Fixed">
+      <intOption key="system_erclk32k_clock" 
+         hidden="true"
+         constant="true"
+         units="Hz" 
+         derived="true" 
+         description="Frequency of External 32k Reference Clock [ERCLK32K]"
+         toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
+         origin="Derived from OSC32KCLK, RTC or LPO" 
+         value="32768" />
+   </if>
+
 <!-- ========== External clock sources =============================== -->
    <template variable="system_usb_clkin_clock" ><![CDATA[
    \t//!  %description
@@ -26,27 +179,6 @@
    \tstatic constexpr uint32_t irc48mClock=$(system_irc48m_clock);\n\n
    ]]></template>
       
-<!-- ========== ADC clock sources =============================== -->
-
-   <clockCodeTemplate variable="adc0_cfg1_adiclk"
-      returnFormat="%s"
-   ><![CDATA[
-      \t/**
-      \t * Get %description
-      \t *
-      \t * @param %enumParam %tooltip
-      \t *
-      \t * @return Clock frequency in Hz
-      \t */
-      \tstatic uint32_t getAdcClock(%enumClass %enumParam) {
-      \t   
-      \t   switch(%enumParam) {
-      \t      default: return 0;
-      %body
-      \t   }
-      \t}\n\n
-   ]]></clockCodeTemplate>
-   
 <!-- ========== SOPT1 =============================== -->
    <template namespace="usbdm" variable="sim_sopt1_ramsize"><![CDATA[
       \t/**
@@ -77,6 +209,11 @@
       \t
       \t   return static_cast<SimRamSize>(sim->SOPT1&SIM_SOPT1_RAMSIZE_MASK);
       \t}\n\n
+   ]]></template>
+
+   <template variable="rtc_clkin_clock" ><![CDATA[
+      \t/// Frequency of clock provided to RTC external input pin
+      \tstatic constexpr uint32_t rtc_clkin_clock = $(rtc_clkin_clock);  \n\n
    ]]></template>
 
    <clockCodeTemplate variable="sim_sopt1_osc32ksel"
@@ -143,19 +280,15 @@
       \t}\n\n
    ]]></clockCodeTemplate>
    
-   <if condition="sim_sopt1_osc32kout||sim_sopt1_osc32ksel||sim_sopt1_usbpower" >   
-      <template><![CDATA[
-         \t//! System Options Register 1
-         \tstatic constexpr uint32_t sopt1 = \n
-      ]]></template>
-      <template variable="sim_sopt1_osc32kout" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template variable="sim_sopt1_osc32ksel" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template variable="sim_sopt1_usbpower"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template>
-      <![CDATA[
-         \t   0;\n\n
-      ]]></template>
-   </if>
+   <initialValueTemplate 
+      variables="
+         sim_sopt1_osc32kout,     
+         sim_sopt1_osc32ksel,  
+         sim_sopt1_usbpower"     
+   ><![CDATA[
+      \t//! System Options Register 1
+      \tstatic constexpr uint32_t sopt1 = %expression\n\n
+   ]]></initialValueTemplate>
    
 <!-- ========== SOPT2 =============================== -->
 
@@ -229,7 +362,7 @@
       ]]></clockCodeTemplate>
    </for>         
 
-   <for keys="n" values=";0;1;2;3">
+   <for keys="n" values=";0;1;2;3;4;5;6">
       <template variable="system_uart%(n)_fixedclocksource" ><![CDATA[
          \t/** 
          \t * Get UART%(n) input clock frequency
@@ -277,18 +410,6 @@
       \t */
       \tstatic void setTraceClockout(%enumClass %enumParam) {
       \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_TRACECLKSEL_MASK) | %enumParam;
-      \t}\n\n
-   ]]></clockCodeTemplate>
-   
-   <clockCodeTemplate variable="sim_sopt2_rtcclkoutsel"
-   ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      \t * @param %enumParam %tooltip
-      \t */
-      \tstatic void setRtcClockout(%enumClass %enumParam) {
-      \t   %defaultClockExpression
       \t}\n\n
    ]]></clockCodeTemplate>
          
@@ -484,28 +605,29 @@
       \t}\n\n
    ]]></clockCodeTemplate>
    
-   <template><![CDATA[
+   <initialValueTemplate 
+      variables="
+         sim_sopt2_ptd7pad,     
+         sim_sopt2_lpuart0src,  
+         sim_sopt2_lpuart1src,  
+         sim_sopt2_uart0src,    
+         sim_sopt2_tpmsrc,      
+         sim_sopt2_usbsrc[],    
+         sim_sopt2_traceclksel, 
+         sim_sopt2_rtcclkoutsel,
+         sim_sopt2_clkoutsel,   
+         sim_sopt2_pllfllsel[], 
+         sim_sopt2_lpuartsrc,   
+         sim_sopt2_emvsimsrc,   
+         sim_sopt2_sdhcsrc,     
+         sim_sopt2_fbsl,        
+         sim_sopt2_flexiosrc,   
+         sim_sopt2_timesrc,     
+         sim_sopt2_rmiisrc"     
+   ><![CDATA[
       \t//! System Options Register 2
-      \tstatic constexpr uint32_t sopt2 = \n
-   ]]></template>
-   <template variable="sim_sopt2_ptd7pad"      > <![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt2_lpuart0src"   > <![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt2_lpuart1src"   > <![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt2_uart0src"     > <![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt2_tpmsrc"       > <![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt2_usbsrc[]"     > <![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt2_traceclksel"  > <![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt2_rtcclkoutsel" > <![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt2_clkoutsel"    > <![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt2_pllfllsel[]"  > <![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt2_lpuartsrc"    > <![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt2_emvsimsrc"    > <![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt2_sdhcsrc"      > <![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt2_fbsl"         > <![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt2_flexiosrc"    > <![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt2_timesrc"      > <![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt2_rmiisrc"      > <![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template                                   > <![CDATA[ \t   0;                    \n\n ]]></template>
+      \tstatic constexpr uint32_t sopt2 = %expression\n\n
+   ]]></initialValueTemplate>
    
 <!-- ========== SOPT4 =============================== -->
    <for keys="ftm" values="0;1;2;3">
@@ -729,21 +851,22 @@
          \t * For example, setAdc%(p)Triggers(SimAdc%(p)TriggerMode_Alt_PreTrigger_1, SimAdc0Trigger_PitCh0) will set the trigger source
          \t * to PIT channel 0 and conversion will use SC1[1]/R[1]
          \t */
-         \tstatic void setAdc%(p)Triggers(SimAdc%(p)TriggerMode simAdc%(p)TriggerMode, SimAdc%(p)Trigger simAdc%(p)Trigger=SimAdc%(p)Trigger_External) {
-         \t   sim->SOPT7 = (sim->SOPT7&~(SIM_SOPT7_ADC%(p)TRGSEL_MASK|SIM_SOPT7_ADC%(p)ALTTRGEN_MASK))|simAdc%(p)Trigger|simAdc%(p)TriggerMode;
+         \tstatic void setAdc%(p)Triggers(SimAdc%(p)TriggerMode simAdc%(p)TriggerMode, SimAdc%(p)TriggerSrc simAdc%(p)TriggerSrc=SimAdc%(p)TriggerSrc_External) {
+         \t   sim->SOPT7 = (sim->SOPT7&~(SIM_SOPT7_ADC%(p)TRGSEL_MASK|SIM_SOPT7_ADC%(p)ALTTRGEN_MASK))|simAdc%(p)TriggerMode|simAdc%(p)TriggerSrc;
          \t};\n\n
       ]]></template>
    </for>
    
-   <template><![CDATA[
+   <initialValueTemplate 
+      variables="
+         sim_sopt7_adc0trigger,     
+         sim_sopt7_adc0trgsel,  
+         sim_sopt7_adc1trigger,  
+         sim_sopt7_adc1trgsel"     
+   ><![CDATA[
       \t//! System Options Register 7
-      \tstatic constexpr uint32_t sopt7 = \n
-   ]]></template>
-   <template variable="sim_sopt7_adc0trigger" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt7_adc0trgsel"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt7_adc1trigger" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="sim_sopt7_adc1trgsel"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template                                   ><![CDATA[ \t   0;                    \n\n    ]]></template>
+      \tstatic constexpr uint32_t sopt7 = %expression\n\n
+   ]]></initialValueTemplate>
    
 <!-- ========== SOPT8 =============================== -->
 
@@ -797,19 +920,20 @@
       \t      ~(SIM_SOPT8_FTM0SYNCBIT_MASK|SIM_SOPT8_FTM1SYNCBIT_MASK|SIM_SOPT8_FTM2SYNCBIT_MASK|SIM_SOPT8_FTM3SYNCBIT_MASK);
       \t}\n\n
    ]]></clockCodeTemplate>
-   
-   <template variable="sim_sopt8_ftm0och0src" ><![CDATA[
-      \t//! System Options Register 8
-      \tstatic constexpr uint32_t sopt8 = \n
-   ]]></template>
-   <for keys="ch" values="0;1;2;3;4;5;6;7">
-      <template variable="sim_sopt8_ftm0och%(ch)src"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template variable="sim_sopt8_ftm3och%(ch)src"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   </for>
-   <template variable="sim_sopt8_ftm0och0src" ><![CDATA[
-      \t   0;\n\n
-   ]]></template>
-   
+
+   <if condition="sim_sopt8_ftm0och0src||sim_sopt8_ftm3och0src" >   
+      <template><![CDATA[
+         \t//! System Options Register 8
+         \tstatic constexpr uint32_t sopt8 = \n
+      ]]></template>
+      <for keys="ch" values="0;1;2;3;4;5;6;7">
+         <template variable="sim_sopt8_ftm0och%(ch)src"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+         <template variable="sim_sopt8_ftm3och%(ch)src"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      </for>
+      <template variable="sim_sopt8_ftm0och0src" ><![CDATA[
+         \t   0;\n\n
+      ]]></template>
+   </if>
 <!-- ========== SOPT9 =============================== -->   
 
    <for keys="p" values="1;2">
@@ -953,29 +1077,40 @@
    ]]></clockCodeTemplate>
 
 <!-- ========== COP Watchdog =============================== -->
-   <template variable="sim_copc_copt"><![CDATA[
-      \t//! COP Control Register
-      \tstatic constexpr uint32_t copc =
-      \t   ($(sim_copc_copt))| // COP period\n
-   ]]></template>
-   <template variable="sim_copc_copdbgen"><![CDATA[
-      \t   SIM_COPC_COPDBGEN($(sim_copc_copdbgen))| // COP enable in debug mode\n
-   ]]></template>
-   <template variable="sim_copc_copstpen"><![CDATA[
-      \t   SIM_COPC_COPSTPEN($(sim_copc_copstpen))| // COP enable in stop mode\n
-   ]]></template>
-   <template variable="sim_copc_copt"><![CDATA[
-      \t   SIM_COPC_COPW($(sim_copc_copw));  // COP Windowed Mode
+   <initialValueTemplate 
+      variables="
+         sim_copc_copdbgen,     
+         sim_copc_copstpen,  
+         sim_copc_copw,  
+         sim_copc_copt"     
+   ><![CDATA[
+         \t//! COP Control Register
+         \tstatic constexpr uint32_t copc = %expression\n\n
+   ]]></initialValueTemplate>
+   
+   <if condition="sim_copc_copt" >
+      <template><![CDATA[
+         \t/**
+         \t * Feed COP watchdog
+         \t */
+         \tstatic void refreshCop() {
+         \t   sim->SRVCOP = 0x55;
+         \t   sim->SRVCOP = 0xAA;
+         \t}\n\n
+      ]]></template>
 
-      \t/**
-      \t * Feed COP watchdog
-      \t */
-      \tstatic void feedCop() {
-      \t   sim->SRVCOP = 0x55;
-      \t   sim->SRVCOP = 0xAA;
-      \t}\n\n
-   ]]></template>
-
+      <template key="/SYSTEM/Includes" namespace="all" ><![CDATA[
+      ]]></template>
+   
+      <template key="/SYSTEM/WatchdogInitialise" namespace="all" variable="sim_copc_copt" ><![CDATA[
+         \t/*
+         \t * Initialise watchdog
+         \t */
+         \tUSBDM::SimInfo::sim->COPC = USBDM::SimInfo::copc;
+         \t
+      ]]></template>
+   </if>
+   
  <!-- ========== Common =============================== -->
    <template><![CDATA[
       \t/**

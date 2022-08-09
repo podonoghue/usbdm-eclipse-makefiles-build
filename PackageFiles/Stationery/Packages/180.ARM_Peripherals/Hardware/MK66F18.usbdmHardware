@@ -7,11 +7,11 @@
 
 <root version="1.3.0">
    <family name="MK66F18">
-      <device variant="FRDM_K66F" manual="K66P144M180SF5RMV2" package="FRDM_K66F" deviceName="" />
-      <device variant="MK66FN2M0VLQ18" manual="K66P144M180SF5RMV2" package="LQFP_144"  deviceName="" />
-      <device variant="MK66FN2M0VMD18" manual="K66P144M180SF5RMV2" package="BGA_144"   deviceName="" />
-      <device variant="MK66FX1M0VLQ18" manual="K66P144M180SF5RMV2" package="LQFP_144"  deviceName="" />
-      <device variant="MK66FX1M0VMD18" manual="K66P144M180SF5RMV2" package="BGA_144"   deviceName="" />
+      <device variant="FRDM_K66F" manual="K66P144M180SF5RMV2" package="FRDM_K66F" deviceName="MK66FN2M0M18" />
+      <device variant="MK66FN2M0VLQ18" manual="K66P144M180SF5RMV2" package="LQFP_144_MK66F" deviceName="MK66FN2M0M18" />
+      <device variant="MK66FN2M0VMD18" manual="K66P144M180SF5RMV2" package="BGA_144_MK66F" deviceName="MK66FN2M0M18" />
+      <device variant="MK66FX1M0VLQ18" manual="K66P144M180SF5RMV2" package="LQFP_144_MK66F" deviceName="MK66FX2M0M18" />
+      <device variant="MK66FX1M0VMD18" manual="K66P144M180SF5RMV2" package="BGA_144_MK66F" deviceName="MK66FX2M0M18" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_diff_a">
@@ -449,6 +449,10 @@
       <peripheral baseName="VREF"     instance=""         version="vref_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForVref" />
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_VREF_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_VREF_MASK;" />
+      </peripheral>
+      <peripheral baseName="WDOG"     instance=""         version="wdog_mk">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForWdog" />
+         <irq num="WDOG_IRQn" />
       </peripheral>
    </peripherals>
    <pins>
@@ -1635,7 +1639,7 @@
       </pin>
    </pins>
    <packages>
-      <package name="BGA_144">
+      <package name="BGA_144_MK66F">
          <placement pin="ADC0_DM0"      location="L2" />
          <placement pin="ADC0_SE16"     location="J3" />
          <placement pin="ADC1_DM0"      location="M2" />
@@ -1924,7 +1928,7 @@
          <placement pin="VSSA"          location="VSS" />
          <placement pin="XTAL32"        location="XTAL32" />
       </package>
-      <package name="LQFP_144">
+      <package name="LQFP_144_MK66F">
          <placement pin="ADC0_DM0"      location="p28" />
          <placement pin="ADC0_SE16"     location="p36" />
          <placement pin="ADC1_DM0"      location="p30" />

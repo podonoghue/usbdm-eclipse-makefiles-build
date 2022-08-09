@@ -85,7 +85,7 @@
       <categoryOption key="ClockConfig[%(n)]"
          description="Clock configuration" 
          toolTip="Clock configurations for different run modes"
-         value="ClockConfig_[%(n)]" 
+         value="ClockConfig_%(n)" 
          disabledValue="Disabled" >
          
          <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" constant="false" />
@@ -149,16 +149,16 @@
          <choiceOption key="mcgClockMode[%(n)]"
             enumStem="McgClockMode" 
             valueFormat="%s"
-            description="Default Clock Mode"
+            description="MCG Clock Mode"
             toolTip="Clock Modes\n
-               LIRC_8MHZ -  8 MHz low power internal reference clock\n
-               LIRC_2MHZ -  2 MHz low power internal reference clock\n
-               HIRC_48M  -  48 MHz high speed internal reference clock\n
-               EXT       -  External reference clock (OSCCLK)" >
-            <choice name="2 MHz low power IRC (LIRC_2MHz)"  enum="LIRC_2MHz"  code="ClockMode_LIRC_2M"  value="0"  />
-            <choice name="8 MHz low power IRC (LIRC_8MHz)"  enum="LIRC_8MHz"  code="ClockMode_LIRC_8M"  value="1"  />
-            <choice name="48 MHz IRC (HIRC)"                enum="HIRC"       code="ClockMode_HIRC_48M" value="2"  />
-            <choice name="External (EXT)"                   enum="EXT"        code="ClockMode_EXT"      value="3"  />
+               LIRC_8MHz  -  8 MHz low power internal reference clock\n
+               LIRC_2MHz  -  2 MHz low power internal reference clock\n
+               HIRC_48MHz -  48 MHz high speed internal reference clock\n
+               EXT        -  External reference clock (OSCCLK)" >
+            <choice name="2 MHz low power IRC (LIRC_2MHz)"  enum="LIRC_2MHz"  code="McgClockMode_LIRC_2M"    value="0"  />
+            <choice name="8 MHz low power IRC (LIRC_8MHz)"  enum="LIRC_8MHz"  code="McgClockMode_LIRC_8M"    value="1"  />
+            <choice name="48 MHz IRC (HIRC_48MHz)"          enum="HIRC_48MHz" code="McgClockMode_HIRC_48MHz" value="2"  />
+            <choice name="External (EXT)"                   enum="EXT"        code="McgClockMode_EXT"        value="3"  />
          </choiceOption>
   
       <intOption key="system_lirc_div1_clock[%(n)]" 
@@ -194,7 +194,7 @@
          constant="true"
          units="Hz"
          description="MCGPCLK Output clock frequency"
-         toolTip="Output of HIRC available as peripheral clock"
+         toolTip="Output of HIRC_48MHz available as peripheral clock"
          value="48000000" />
          
       <aliasOption key="/OSC0/osc_undiv_clock" optional="true" />
@@ -215,7 +215,7 @@
          units="Hz"
          description="System MCG Output Clock [MCGOUTCLK]"
          toolTip="MCG Main clock output\n
-                  Derived from HIRC, LIRC-8M/2M, EXT" />
+                  Derived from HIRC_48MHz, LIRC-8M/2M, EXT" />
    
       <aliasOption key="/SIM/system_core_clock[%(n)]"    constant="false" />
       <aliasOption key="/SIM/system_bus_clock[%(n)]"     constant="false" />
@@ -270,7 +270,7 @@
       <deleteResource target="Startup_Code/clock.c" />
    </projectActionList>
          
-      
+   <template><![CDATA[
       \t//! Frequency of Slow Internal Reference Clock [~2MHz]
       \tstatic constexpr uint32_t system_slow_lirc_clock = $(system_slow_irc_clock)UL;
       
@@ -445,16 +445,17 @@
       \t      SIM_SOPT2_RTCCLKOUTSEL($(/SIM/sim_sopt2_rtcclkoutsel)) |  // RTC clock out select
       \t      SIM_SOPT2_CLKOUTSEL($(/SIM/sim_sopt2_clkoutsel)),      // CLKOUT pin clock source select
       
-         \t      //! Clock Mode
-         \t      $(mcgClockMode[%(n)].enum[]),
+      \t      //! Clock Mode
+      \t      $(mcgClockMode[%(n)].enum[]),
+              
+      \t      //! Run Mode
+      \t      $(/SMC/smc_pmctrl_runm[%(n)].enum[]),
               
       \t      //! Control Register 1 - Excluding CLKS
       \t      MCG_C1_IRCLKEN($(mcg_c1_irclken[%(n)])) | // IRCLEN   Internal Reference Clock Enable
       \t      MCG_C1_IREFSTEN($(mcg_c1_irefsten[%(n)])), // IREFSTEN Internal Reference Stop Enable
               
       \t      //! Control Register 2
-      \t      MCG_C2_RANGE0($(mcg_c2_range[%(n)])) | // RANGE   Frequency Range Select
-      \t      MCG_C2_HGO0($(mcg_c2_hgo0:0))   | // HGO     High Gain Oscillator Select
       \t      MCG_C2_EREFS0($(mcg_c2_erefs0:0)) | // EREFS   External Reference Select
       \t      MCG_C2_IRCS($(mcg_c2_ircs[%(n)])),    // IRCS    Internal Reference Clock Select
               

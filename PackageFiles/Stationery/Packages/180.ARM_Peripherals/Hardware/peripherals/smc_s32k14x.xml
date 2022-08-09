@@ -2,93 +2,19 @@
 ?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- smc_s32k14x.xml -->
-
+ 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Mode Controller">
+ 
+   <!-- ************** PMPROT ************** -->
 
-   <xi:include href="_default_instance.xml"/>
+   <constant key="smc_pmprot_ahsrun_available" />   
+    
+   <!-- ************** STOPCTRL ************** -->
 
-   <binaryOption key="smc_pmprot_ahsrun" 
-      description="Allow High Speed Run mode" 
-      toolTip="This write-once field allows the MCU to enter High Speed Run mode (HSRUN)" >
-      <choice name="HSRUN are not allowed" value="0" />
-      <choice name="HSRUN are allowed"     value="1" isDefault="true" />
-   </binaryOption>   
-   
-   <binaryOption key="smc_pmprot_avlp" 
-      description="Allow very low power modes" 
-      toolTip="This write-once bit allows the MCU to enter any very low power modes: VLPR, VLPW, and VLPS" >
-      <choice name="VLxx modes are not allowed" value="0" />
-      <choice name="VLxx are allowed"           value="1" isDefault="true" />
-   </binaryOption>   
-   
-   <template><![CDATA[
-      \t// Power Mode Protection Register
-      \tstatic constexpr uint8_t pmprot =  
-      \t   SMC_PMPROT_AHSRUN($(smc_pmprot_ahsrun:0)) |  // Allow High Speed Run mode
-      \t   SMC_PMPROT_AVLP($(smc_pmprot_avlp:0));  // Allow very low power modes\n\n
-   ]]></template>
-      
-   <choiceOption key="smc_stopctrl_stopo" 
-      description="Stop Option"
-      toolTip="These bits control whether a Partial Stop mode is entered when STOPM=STOP">
-      <choice value="0" name="Reserved" />
-      <choice value="1" name="STOP1 - Partial Stop with both system and bus clocks disabled" />
-      <choice value="2" name="STOP2 - Partial Stop with system clock disabled and bus clock enabled" />
-      <choice value="3" name="Reserved" />
-   </choiceOption>
+   <!-- ************** PMCTRL ************** -->
 
-   <template key="enablePowerModes" namespace="all"  ><![CDATA[
-   \t/* smc_s32k14x.xml */
-   \t/**
-   \t * Enable the given power modes.
-   \t * A mode must be enabled before it can be entered.
-   \t *
-   \t * @param[in] smcVeryLowPower        Allows VLPR, VLPW, and VLPS modes
-   \t * @param[in] smcHighSpeedRun        Allows HSRUN mode (if supported)
-   \t *
-   \t * @note This is a write-once-after-reset operation
-   \t */
-   \tstatic ErrorCode enablePowerModes(
-   \t      SmcVeryLowPower         smcVeryLowPower,
-   \t      SmcHighSpeedRun         smcHighSpeedRun) {
+   <!-- ************** Common ************** -->
 
-   \t   smc->PMPROT = smcVeryLowPower|smcHighSpeedRun;
-   \t   return E_NO_ERROR;
-   \t}\n\n
-   ]]></template>
+   <xi:include href="_smc_base.xml"/>
 
-   <template key="setStopOptions" namespace="all"  ><![CDATA[
-   \t/* smc_s32k14x.xml */
-   \t/**
-   \t * Allows the detailed operation in STOP mode to be controlled.
-   \t *
-   \t * @param[in] smcPartialStopMode     Controls whether a Partial Stop mode is entered when STOPM=STOP
-   \t */
-   \tstatic void setStopOptions(
-   \t      SmcPartialStopMode      smcPartialStopMode      = SmcPartialStopMode_Normal) {
-   \t
-   \t   smc->STOPCTRL = smcPartialStopMode;
-   \t}\n\n
-   ]]></template>
-   
-   <template><![CDATA[
-      \t// VLLS Control Register
-      \tstatic constexpr uint8_t stopctrl =  
-      \t   SMC_STOPCTRL_STOPO($(smc_stopctrl_stopo:0));  // Partial Stop Option\n\n
-   ]]></template>
-
-   <template key="/SMC/declarations" namespace="all"  ><![CDATA[
-   \t/**
-   \t * Class representing $(_name)
-   \t */
-   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
-   ]]></template>
-      
-   <projectActionList id = "smc_files" >
-      <copy source="Project_Headers/smc_S32K.h"             target="Project_Headers/smc.h"                  overwrite="true" derived="true" />
-      <copy source="Project_Headers/KinetisPowerModes.png"  target="Project_Headers/KinetisPowerModes.png"  overwrite="true" derived="true" macroReplace="false" />
-      <copy source="Project_Headers/PowerModes.png"         target="Project_Headers/PowerModes.png"         overwrite="true" derived="true" macroReplace="false" />
-      <copy source="Snippets/vlpr-run-hsrun-example.cpp"    target="Snippets/vlpr-run-hsrun-example.cpp"    overwrite="true" derived="true" />
-   </projectActionList>
-         
 </peripheralPage>

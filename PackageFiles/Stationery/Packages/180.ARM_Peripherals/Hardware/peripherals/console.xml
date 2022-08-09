@@ -15,18 +15,18 @@
    <choiceOption key="consoleDevice" 
       description="UART to use for console"
       toolTip="Not all UARTs listed may be available on a particular device" >
-      <choice name="Uart 0"   value="USBDM::Uart0"    requiresPeripheral="Uart0" />
-      <choice name="Uart 1"   value="USBDM::Uart1"    requiresPeripheral="Uart1" />
-      <choice name="Uart 2"   value="USBDM::Uart2"    requiresPeripheral="Uart2" />
-      <choice name="Uart 3"   value="USBDM::Uart3"    requiresPeripheral="Uart3" />
-      <choice name="Uart 4"   value="USBDM::Uart4"    requiresPeripheral="Uart4" />
-      <choice name="Uart 5"   value="USBDM::Uart5"    requiresPeripheral="Uart5" />
-      <choice name="Lpuart 0" value="USBDM::Lpuart0"  requiresPeripheral="Lpuart0" />
-      <choice name="Lpuart 1" value="USBDM::Lpuart1"  requiresPeripheral="Lpuart1" />
-      <choice name="Lpuart 2" value="USBDM::Lpuart2"  requiresPeripheral="Lpuart2" />
-      <choice name="Lpuart 3" value="USBDM::Lpuart3"  requiresPeripheral="Lpuart3" />
-      <choice name="Lpuart 4" value="USBDM::Lpuart4"  requiresPeripheral="Lpuart4" />
-      <choice name="Lpuart 5" value="USBDM::Lpuart5"  requiresPeripheral="Lpuart5" />
+      <choice name="Uart 0"   value="USBDM::Uart0"    requiredPeripherals="Uart0" />
+      <choice name="Uart 1"   value="USBDM::Uart1"    requiredPeripherals="Uart1" />
+      <choice name="Uart 2"   value="USBDM::Uart2"    requiredPeripherals="Uart2" />
+      <choice name="Uart 3"   value="USBDM::Uart3"    requiredPeripherals="Uart3" />
+      <choice name="Uart 4"   value="USBDM::Uart4"    requiredPeripherals="Uart4" />
+      <choice name="Uart 5"   value="USBDM::Uart5"    requiredPeripherals="Uart5" />
+      <choice name="Lpuart 0" value="USBDM::Lpuart0"  requiredPeripherals="Lpuart0" />
+      <choice name="Lpuart 1" value="USBDM::Lpuart1"  requiredPeripherals="Lpuart1" />
+      <choice name="Lpuart 2" value="USBDM::Lpuart2"  requiredPeripherals="Lpuart2" />
+      <choice name="Lpuart 3" value="USBDM::Lpuart3"  requiredPeripherals="Lpuart3" />
+      <choice name="Lpuart 4" value="USBDM::Lpuart4"  requiredPeripherals="Lpuart4" />
+      <choice name="Lpuart 5" value="USBDM::Lpuart5"  requiredPeripherals="Lpuart5" />
    </choiceOption>
    
    <choiceOption key="defaultBaudRate" 

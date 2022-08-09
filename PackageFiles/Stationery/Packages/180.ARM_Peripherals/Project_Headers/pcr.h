@@ -25,6 +25,15 @@
 #define consteval constexpr
 #endif
 
+// Variable Argument Macro (VA_MACRO) up to 10 arguments
+#define USBDM_COUNT_ARGUMENTS_(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, value, ...) value
+#define USBDM_COUNT_ARGUMENTS(...) USBDM_COUNT_ARGUMENTS_( __VA_ARGS__ __VA_OPT__(,) 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+
+#define USBDM_CONCAT_(left, right) left ## right
+#define USBDM_CONCAT(left, right)  USBDM_CONCAT_(left, right)
+
+#define USBDM_VA_MACRO(MACRO, ...) USBDM_CONCAT(MACRO, USBDM_COUNT_ARGUMENTS(__VA_ARGS__))(__VA_ARGS__)
+
 /*
  * Default port information
  */
@@ -537,7 +546,7 @@ constexpr uint32_t operator &(PcrValue pcrValue, uint32_t mask) {
    return static_cast<uint32_t>(pcrValue) & mask;
 }
 
-constexpr uint32_t operator &(uint32_t mask, PcrValue pcrValue) {
+constexpr bool operator ==(PcrValue pcrValue, uint32_t mask) {
    return static_cast<uint32_t>(pcrValue) & mask;
 }
 
@@ -640,85 +649,85 @@ enum PinMux : uint32_t {
    PinMux_7         = PORT_PCR_MUX(7), //!< Multiplexor 7
 };
 
-constexpr PcrValue operator|(PcrValue         op1, PinPull op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinPull          op1, PinPull op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinDriveStrength op1, PinPull op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinDriveMode     op1, PinPull op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinSlewRate      op1, PinPull op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinFilter        op1, PinPull op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinAction        op1, PinPull op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinMux           op1, PinPull op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinLock          op1, PinPull op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PcrValue         op1, PinPull op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinPull          op1, PinPull op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinDriveStrength op1, PinPull op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinDriveMode     op1, PinPull op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinSlewRate      op1, PinPull op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinFilter        op1, PinPull op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinAction        op1, PinPull op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinMux           op1, PinPull op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinLock          op1, PinPull op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
 
-constexpr PcrValue operator|(PcrValue         op1, PinDriveStrength op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinPull          op1, PinDriveStrength op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinDriveStrength op1, PinDriveStrength op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinDriveMode     op1, PinDriveStrength op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinSlewRate      op1, PinDriveStrength op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinFilter        op1, PinDriveStrength op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinAction        op1, PinDriveStrength op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinMux           op1, PinDriveStrength op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinLock          op1, PinDriveStrength op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PcrValue         op1, PinDriveStrength op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinPull          op1, PinDriveStrength op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinDriveStrength op1, PinDriveStrength op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinDriveMode     op1, PinDriveStrength op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinSlewRate      op1, PinDriveStrength op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinFilter        op1, PinDriveStrength op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinAction        op1, PinDriveStrength op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinMux           op1, PinDriveStrength op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinLock          op1, PinDriveStrength op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
 
-constexpr PcrValue operator|(PcrValue         op1, PinDriveMode op2)     { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinPull          op1, PinDriveMode op2)     { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinDriveStrength op1, PinDriveMode op2)     { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinDriveMode     op1, PinDriveMode op2)     { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinSlewRate      op1, PinDriveMode op2)     { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinFilter        op1, PinDriveMode op2)     { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinAction        op1, PinDriveMode op2)     { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinMux           op1, PinDriveMode op2)     { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinLock          op1, PinDriveMode op2)     { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PcrValue         op1, PinDriveMode op2)     { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinPull          op1, PinDriveMode op2)     { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinDriveStrength op1, PinDriveMode op2)     { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinDriveMode     op1, PinDriveMode op2)     { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinSlewRate      op1, PinDriveMode op2)     { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinFilter        op1, PinDriveMode op2)     { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinAction        op1, PinDriveMode op2)     { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinMux           op1, PinDriveMode op2)     { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinLock          op1, PinDriveMode op2)     { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
 
-constexpr PcrValue operator|(PcrValue         op1, PinSlewRate op2)      { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinPull          op1, PinSlewRate op2)      { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinDriveStrength op1, PinSlewRate op2)      { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinDriveMode     op1, PinSlewRate op2)      { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinSlewRate      op1, PinSlewRate op2)      { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinFilter        op1, PinSlewRate op2)      { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinAction        op1, PinSlewRate op2)      { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinMux           op1, PinSlewRate op2)      { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinLock          op1, PinSlewRate op2)      { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PcrValue         op1, PinSlewRate op2)      { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinPull          op1, PinSlewRate op2)      { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinDriveStrength op1, PinSlewRate op2)      { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinDriveMode     op1, PinSlewRate op2)      { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinSlewRate      op1, PinSlewRate op2)      { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinFilter        op1, PinSlewRate op2)      { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinAction        op1, PinSlewRate op2)      { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinMux           op1, PinSlewRate op2)      { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinLock          op1, PinSlewRate op2)      { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
 
-constexpr PcrValue operator|(PcrValue         op1, PinFilter op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinPull          op1, PinFilter op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinDriveStrength op1, PinFilter op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinDriveMode     op1, PinFilter op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinSlewRate      op1, PinFilter op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinFilter        op1, PinFilter op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinAction        op1, PinFilter op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinMux           op1, PinFilter op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinLock          op1, PinFilter op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PcrValue         op1, PinFilter op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinPull          op1, PinFilter op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinDriveStrength op1, PinFilter op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinDriveMode     op1, PinFilter op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinSlewRate      op1, PinFilter op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinFilter        op1, PinFilter op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinAction        op1, PinFilter op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinMux           op1, PinFilter op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinLock          op1, PinFilter op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
 
-constexpr PcrValue operator|(PcrValue         op1, PinAction op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinPull          op1, PinAction op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinDriveStrength op1, PinAction op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinDriveMode     op1, PinAction op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinSlewRate      op1, PinAction op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinFilter        op1, PinAction op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinAction        op1, PinAction op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinMux           op1, PinAction op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinLock          op1, PinAction op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PcrValue         op1, PinAction op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinPull          op1, PinAction op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinDriveStrength op1, PinAction op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinDriveMode     op1, PinAction op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinSlewRate      op1, PinAction op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinFilter        op1, PinAction op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinAction        op1, PinAction op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinMux           op1, PinAction op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinLock          op1, PinAction op2)        { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
 
-constexpr PcrValue operator|(PcrValue         op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinPull          op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinDriveStrength op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinDriveMode     op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinSlewRate      op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinFilter        op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinAction        op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinMux           op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinLock          op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PcrValue         op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinPull          op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinDriveStrength op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinDriveMode     op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinSlewRate      op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinFilter        op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinAction        op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinMux           op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinLock          op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
 
-constexpr PcrValue operator|(PcrValue         op1, PinLock op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinPull          op1, PinLock op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinDriveStrength op1, PinLock op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinDriveMode     op1, PinLock op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinSlewRate      op1, PinLock op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinFilter        op1, PinLock op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinAction        op1, PinLock op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinMux           op1, PinLock op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
-constexpr PcrValue operator|(PinLock          op1, PinLock op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PcrValue         op1, PinLock op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinPull          op1, PinLock op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinDriveStrength op1, PinLock op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinDriveMode     op1, PinLock op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinSlewRate      op1, PinLock op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinFilter        op1, PinLock op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinAction        op1, PinLock op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinMux           op1, PinLock op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
+constexpr inline PcrValue operator|(PinLock          op1, PinLock op2)          { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
 
 template<typename ... V>
 constexpr PcrValue pcrOr(const V &... v) {
@@ -1789,6 +1798,18 @@ class PcrTable_T : public Pcr_T<Info::info[index].clockInfo, Info::info[index].p
  * @}
  ** PeripheralPinTables
  */
+
+#if defined(RELEASE_BUILD)
+// MACRO to do OR operation
+#define USBDM_PCR_OR(...) USBDM_CONCAT(USBDM_OR, USBDM_COUNT_ARGUMENTS(__VA_ARGS__))(__VA_ARGS__)
+#define USBDM_OR0()
+#define USBDM_OR1(a)           (PcrValue)(a)
+#define USBDM_OR2(a,b)         (PcrValue)(a|b)
+#define USBDM_OR3(a,b,c)       (PcrValue)(a|b|c)
+#define USBDM_OR4(a,b,c,d)     (PcrValue)(a|b|c|d)
+#define USBDM_OR5(a,b,c,d,e)   (PcrValue)(a|b|c|d|e)
+#define USBDM_OR6(a,b,c,d,e,f) (PcrValue)(a|b|c|d|e|f)
+#endif
 
 #pragma GCC pop_options
 

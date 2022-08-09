@@ -508,6 +508,8 @@ union CanFifoIdFilterMask {
    constexpr CanFifoIdFilterMask(unsigned  rxid0Mask, unsigned  rxid1Mask, unsigned  rxid2Mask, unsigned  rxid3Mask) :
             rxidc3Mask(rxid3Mask), rxidc2Mask(rxid2Mask), rxidc1Mask(rxid1Mask), rxidc0Mask(rxid0Mask) {}
 
+   constexpr CanFifoIdFilterMask(const CanFifoIdFilterMask &other) : raw(other.raw){}
+
    constexpr CanFifoIdFilterMask(uint32_t value)     : raw(value) {}
    constexpr CanFifoIdFilterMask(const CanId &other) : raw(other.raw) {}
    constexpr CanFifoIdFilterMask() : raw(~0UL) {}
@@ -813,7 +815,7 @@ enum {
  * @endcode
  */
 template<class Info>
-class Can_T {
+class Can_T : public Info {
 
 public:
 
@@ -945,7 +947,7 @@ public:
        *
        * @note Use isValid to check for success or check USBDM error code
        */
-      CanParameters(unsigned bitRate, CanClockSource clockSource = CanClockSource_Default) : ctrl1(0), ctrl2(0), mcr(0) {
+      CanParameters(unsigned bitRate, CanClockSource clockSource = CanClockSource_BusClk) : ctrl1(0), ctrl2(0), mcr(0) {
 
          clksrc = clockSource;
          calculateParameters(bitRate, Info::getPeClockFrequency(clockSource));
@@ -1761,7 +1763,7 @@ public:
     *  5 : Receive frame available - At least 1 frame available in Receive FIFO
     */
    static void enableFifoInterrupts(uint32_t mask) {
-      can->IMASK1 = can->IMASK1 | mask & (CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK);
+      can->IMASK1 = can->IMASK1 | (mask & (CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK));
    }
 
    /**
@@ -1903,8 +1905,6 @@ public:
       NVIC_DisableIRQ(Info::irqNums[Info::Error_IrqNumIndex]);
    }
 
-$(/CAN/NvicControl)
-
 protected:
    static constexpr unsigned MailboxNone = NUM_MAILBOXES;
 
@@ -1991,6 +1991,12 @@ public:
       // Only CanHandler_T can allocate
       friend CanHandler_T<Info>;
 
+   public:
+      /**
+       * Destructor
+       */
+      ~CanMailboxInfo() = default;
+
    private:
       // CAN mailbox number (also index in mailboxInformation[])
       unsigned mailboxNumber;
@@ -2010,11 +2016,6 @@ public:
             mailbox(nullptr),
             callback((CanMailboxCallbackFunction)Can_T<Info>::noHandlerCallback) {
       }
-
-      /**
-       * Destructor
-       */
-      ~CanMailboxInfo() {};
 
       /**
        * Initialises the Mailbox Information.
@@ -2087,7 +2088,7 @@ public:
       }
 
       /**
-       * Get pointer to CAN message buffer for the mailbox assuming default size (8 data bytes)
+       * Get reference to CAN message buffer for the mailbox assuming default size (8 data bytes)
        *
        * @return Pointer to mailbox
        */
@@ -2255,17 +2256,7 @@ typename CanHandler_T<Info>::CanMailboxInfo CanHandler_T<Info>::mailboxInformati
 template<class Info>
 typename CanHandler_T<Info>::CanMailboxInfo CanHandler_T<Info>::MailboxNone;
 
-#if defined(USBDM_CAN0_IS_DEFINED)
-using Can0 = CanHandler_T<Can0Info>;
-#endif
-
-#if defined(USBDM_CAN1_IS_DEFINED)
-using Can1 = CanHandler_T<Can1Info>;
-#endif
-
-#if defined(USBDM_CAN2_IS_DEFINED)
-using Can2 = CanHandler_T<Can2Info>;
-#endif
+$(/CAN/declarations: // No declaration found)
 /**
  * @}
  */

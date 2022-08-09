@@ -192,7 +192,6 @@
       <peripheral baseName="LLWU"     instance=""         version="llwu_me_pe4_filt2_rst_mk20d5">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
-         <param name="Wakeup sources" key="/LLWU/device_list" value="LPTMR0;CMP0;CMP1;;TSI;RTC_Alarm;;RTC_Seconds" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />

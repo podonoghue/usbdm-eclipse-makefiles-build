@@ -10,11 +10,6 @@
             constant="true"
             derived="true" >
 
-      <choiceOption key="mcg_c7_oscsel[%(n)]" 
-         description="MCG External Reference Clock source [OSCSEL]"
-         toolTip="Selects the MCG FLL/PLL external reference clock source">
-         <choice value="0" name="dummy" />
-      </choiceOption>
 
       <binaryOption key="mcg_c8_cme1[%(n)]" 
          description="OSC1 (RTC) Clock Monitor Enable"

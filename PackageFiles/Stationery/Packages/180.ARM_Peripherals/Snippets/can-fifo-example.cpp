@@ -56,7 +56,7 @@ void canErrorCallback() {
    console.writeln("                                         V OYxxEECRRTxxDxLLxOR");
    console.writeln("                                         R FNWWRRKCMFEEL TT FR");
    console.writeln("canErrorCallback(), status = 0b", status, Radix_2).writeln();
-   console.reset();
+   console.resetFormat();
 }
 
 void canWakeupCallback() {
@@ -65,6 +65,7 @@ void canWakeupCallback() {
 
 /**
  * Receive FIFO filters.
+ *
  * This table controls which messages are accepted into the receive FIFO.
  * All entries in this table must be provided.
  *
@@ -84,6 +85,7 @@ static const CanFifoIdFilter fifoIdFilters[Can::NUM_FIFO_MESSAGE_FILTERS] = {
 
 /**
  * Receive FIFO filter masks.
+ *
  * These masks are applied to the first few fifoIdFilters entries (0 to 31).
  * The remaining filters use a single shared mask.
  * The number of masks available depends on the number of filters: min(8 + 2*((FIFO_FILTER_ENTRY_COUNT/8)-1),31)
@@ -105,7 +107,7 @@ void fifoCallback() {
    console.setPadding(Padding_LeadingZeroes);
    console.writeln("\n                              OWF");
    console.writeln("fifoCallback(), fifoFlags = 0b", fifoFlags>>5,    Radix_2);
-   console.reset();
+   console.resetFormat();
 
    auto mailbox = Can::getFifoMessageBuffer();
    console.write("fifoCallback() - Rx ");
@@ -120,7 +122,7 @@ void fifoCallback() {
  */
 void fifoExample() {
 
-   Can::CanParameters canParameters(125000, CanClockSource_1);
+   Can::CanParameters canParameters(125000, CanClockSource_BusClk);
    canParameters.idam      = CanAcceptanceMode_FormatA;
    canParameters.wrnen     = true;
    canParameters.errmsk    = true;
@@ -156,7 +158,7 @@ void fifoExample() {
       // Report errors
       CanErrorCounts canErrorCounts = Can::getErrorCounters();
       if ((canErrorCounts.receiveErrorCount > 0) || (canErrorCounts.transmitFastErrorCount > 0)) {
-         console.write("receiveErrorCount  = ", canErrorCounts.receiveErrorCount, 
+         console.write("receiveErrorCount  = ", canErrorCounts.receiveErrorCount,
              ", transmitErrorCount = ", canErrorCounts.transmitErrorCount);
       }
    }

@@ -775,6 +775,10 @@ public:
     * @return ADC_CFG1_ADIV|ADC_CFG1_ADICLK value
     */
    static unsigned calculateClockDivider(AdcClockSource adcClockSource, AdcClockRange adcClockRange, AdcPower adcPower) {
+      if (adcClockSource == AdcClockSource_Asynch) {
+         // Internal clock is always OK with /1
+         return AdcClockSource_Asynch|AdcClockDivider_1;
+      }
       static constexpr unsigned MinClock =  2000000;
       unsigned maxClock = 0;
       switch(adcPower|adcClockRange) {
@@ -793,7 +797,7 @@ public:
       }
       unsigned adiv;
       for(;;) {
-         unsigned clockFrequency = SimInfo::getAdcClock(adcClockSource);
+         unsigned clockFrequency = Info::getAdcClock(adcClockSource);
          for (adiv=0; adiv<=3; adiv++) {
             if ((clockFrequency <= maxClock) && (clockFrequency >= MinClock)) {
                break;

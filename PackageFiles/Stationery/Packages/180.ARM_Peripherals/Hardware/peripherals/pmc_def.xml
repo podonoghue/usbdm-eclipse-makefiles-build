@@ -1,84 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- pmc.xml -->
-<!-- INCOMPLETE -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Power Management Controller">
 
    <xi:include href="_default_instance.xml"/>
 
-   <category name="LPO" description="Low Power Clock Sources" >
-      <intOption key="system_low_power_clock"
-         constant="true" 
-         origin="LPO Clock"
-         units="Hz"
-         description="Frequency of Internal Low Power Oscillator [LPO] Clock"
-         toolTip="Dependent on device. [Typically ~1kHz]" 
-         value="1000"/>
-      </category>
-
-   <binaryOption key="pmc_lvdsc1_lvdie" 
-      description="Low-Voltage Detect Interrupt Enable"
-      toolTip="Enables hardware interrupt requests for LVDF">
-      <choice value="0" name="Disabled" isDefault="true" />
-      <choice value="1" name="Enabled" />
-   </binaryOption>
-
-   <binaryOption key="pmc_lvdsc1_lvdre" 
-      description="Low-Voltage Detect Reset Enable"
-      toolTip="This write-once bit enables LVDF events to generate a hardware reset.\n 
-               Additional writes are ignored">
-      <choice value="0" name="Disabled" isDefault="true" />
-      <choice value="1" name="Enabled" />
-   </binaryOption>
-
-   <choiceOption key="pmc_lvdsc1_lvdv" 
-      description="Low-Voltage Detect Voltage Select"
-      toolTip="Selects the LVD trip point voltage (Vlvd)">
-      <choice value="0" name="Low trip point selected (Vlvd = Vlvdl)"/>
-      <choice value="1" name="High trip point selected (Vlvd = Vlvdh)" />
-      <choice value="2" name="Reserved" />
-      <choice value="3" name="Reserved" />
-   </choiceOption>
-
-   <template><![CDATA[
-      \t//! Default value for Low Voltage Detect Status And Control 1 register
-      \tstatic constexpr uint32_t pmc_lvdsc1  = 
-      \t#ifdef PMC_LVDSC1_LVDV
-      \t   PMC_LVDSC1_LVDV($(pmc_lvdsc1_lvdv))   | // Low-Voltage Detect Voltage Select
-      \t#endif
-      \t   PMC_LVDSC1_LVDIE($(pmc_lvdsc1_lvdie)) | // Low-Voltage Detect Interrupt Enable
-      \t   PMC_LVDSC1_LVDRE($(pmc_lvdsc1_lvdre));  // Low-Voltage Detect Reset Enable\n\n
-   ]]></template>
-
-   <binaryOption key="pmc_lvdsc2_lvwie" 
-      description="Low-Voltage Warning Interrupt Enable"
-      toolTip="Enables hardware interrupt requests for LVWF">
-      <choice value="0" name="Disabled" isDefault="true" />
-      <choice value="1" name="Enabled" />
-   </binaryOption>
-
-   <choiceOption key="pmc_lvdsc2_lvwv" 
-      description="Low-Voltage Warning Voltage Select"
-      toolTip="Selects the LVW trip point voltage (Vlvw)\n
-               The actual voltage for the warning depends on LVDSC1.LVDV">
-      <choice value="0" name="Low trip point selected (Vlvw = Vlvw1)"/>
-      <choice value="1" name="Mid 1 trip point selected (Vlvw = Vlvw2)" />
-      <choice value="2" name="Mid 2 trip point selected (Vlvw = Vlvw3)" />
-      <choice value="3" name="High trip point selected (Vlvw = Vlvw4)" />
-   </choiceOption>
+   <intOption key="system_low_power_clock"
+      constant="true" 
+      origin="LPO Clock"
+      units="Hz"
+      description="Frequency of Internal Low Power Oscillator [LPO] Clock"
+      toolTip="Dependent on device. [Typically ~1kHz]" 
+      value="1000"/>
 
    <template><![CDATA[
       \t//! Frequency of Low Power Oscillator (LPO) Clock [~1kHz]
       \tstatic constexpr uint32_t system_low_power_clock = $(system_low_power_clock)UL;
       
-      \t//! Default value for Low Voltage Detect Status And Control 2 register
-      \tstatic constexpr uint32_t pmc_lvdsc2  = 
-      \t#ifdef PMC_LVDSC2_LVWV
-      \t   PMC_LVDSC2_LVWV($(pmc_lvdsc2_lvwv))   | // Low-Voltage Warning Voltage Select
-      \t#endif
-      \t   PMC_LVDSC2_LVWIE($(pmc_lvdsc2_lvwie));  // Low-Voltage Warning Interrupt Enable
-
       \t/**
       \t * Get LPO clock
       \t *
@@ -89,30 +28,118 @@
       \t}\n\n
    ]]></template>
 
-   <binaryOption key="pmc_regsc_bgen" 
-      description="Bandgap Enable In VLPx Operation"
-      toolTip="BGEN controls whether the bandgap is enabled in \n
-               lower power modes of operation (VLPx, LLS, and VLLSx)">
-      <choice value="0" name="Disabled" isDefault="true" />
-      <choice value="1" name="Enabled" />
+   <!-- ************* LVDSC1 ****************** -->
+   <choiceOption key="pmc_lvdsc1_lvdie_lvdre"
+      enumStem="PmcLowVoltageDetectAction" 
+      valueFormat="(%s)"
+      description="Low-Voltage Detect action select"
+      toolTip="Selects the action to take on low voltage detect\n
+               Note that Reset action is a write-once selection">
+      <choice value="PMC_LVDSC1_LVDRE(0)|PMC_LVDSC1_LVDIE(0)" enum="None"        name="No Action"/>
+      <choice value="PMC_LVDSC1_LVDRE(0)|PMC_LVDSC1_LVDIE(1)" enum="Interrupt"   name="Interrupt"/>
+      <choice value="PMC_LVDSC1_LVDRE(1)|PMC_LVDSC1_LVDIE(0)" enum="Reset"       name="Reset"/>
+   </choiceOption>
+
+   <choiceOption key="pmc_lvdsc1_lvdv" 
+      enumStem="PmcLowVoltageDetectLevel" 
+      description="Low-Voltage Detect voltage select"
+      toolTip="Selects the LVD trip point voltage (Vlvd)">
+      <choice value="0" enum="Low"  name="Low trip point selected"/>
+      <choice value="1" enum="High" name="High trip point selected" />
+   </choiceOption>
+
+   <if condition="pmc_lvdsc1_lvdie_lvdre||pmc_lvdsc1_lvdv" >   
+      <template><![CDATA[
+         \t//! Default value for Low Voltage Detect Status And Control 1 register
+         \tstatic constexpr uint32_t pmc_lvdsc1  = \n
+      ]]></template>
+      <template variable="pmc_lvdsc1_lvdie_lvdre" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template variable="pmc_lvdsc1_lvdv"        ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template>
+      <![CDATA[
+         \t   0;\n\n
+      ]]></template>
+   </if>
+   
+   <!-- ************* LVDSC2 ****************** -->
+   <binaryOption key="pmc_lvdsc2_lvwie" 
+      enumStem="PmcLowVoltageWarningAction" 
+      description="Low-Voltage Warning Interrupt Enable"
+      toolTip="Action to take on Low Voltage Warning">
+      <choice value="0" enum="None"      name="No action" isDefault="true" />
+      <choice value="1" enum="Interrupt" name="Interrupt" />
    </binaryOption>
 
+   <choiceOption key="pmc_lvdsc2_lvwv" 
+      enumStem="PmcLowVoltageWarningLevel" 
+      description="Low-Voltage Warning Voltage Select"
+      toolTip="Selects the LVW trip point voltage (Vlvw)\n
+               The actual voltage for the warning depends on pmc_lvdsc1_lvdv">
+      <choice value="0" enum="Low"     name="Low trip point selected"   />
+      <choice value="1" enum="MidLow"  name="Mid 1 trip point selected" />
+      <choice value="2" enum="MidHigh" name="Mid 2 trip point selected" />
+      <choice value="3" enum="High"    name="High trip point selected"  />
+   </choiceOption>
+   
+   <if condition="pmc_lvdsc2_lvwie||pmc_lvdsc2_lvwv" >   
+      <template><![CDATA[
+      \t//! Default value for Low Voltage Detect Status And Control 2 register
+      \tstatic constexpr uint32_t pmc_lvdsc2  = \n
+      ]]></template>
+      <template variable="pmc_lvdsc2_lvwie" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template variable="pmc_lvdsc2_lvwv"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template>
+      <![CDATA[
+         \t   0;\n\n
+      ]]></template>
+   </if>
+
+   <!-- ************* REGSC ****************** -->
+
+   <if condition="PmcBandgapOperationInLowPower_EnabledHighSpeed" >
+      <choiceOption key="pmc_regsc_bgen" 
+         enumStem="PmcBandgapOperationInLowPower" 
+         description="Bandgap Enable In VLPx Operation"
+         toolTip="BGEN controls whether the bandgap is enabled in \n
+                  lower power modes of operation (VLPx, LLS, and VLLSx)">
+         <choice value="0" enum="Disabled"         name="Disabled" isDefault="true" />
+         <choice value="1" enum="Enabled"          name="Enabled" />
+         <choice value="1" enum="EnabledHighSpeed" name="Enabled HighSpeed" />
+      </choiceOption>
+   <else/>
+      <binaryOption key="pmc_regsc_bgen" 
+         enumStem="PmcBandgapOperationInLowPower" 
+         description="Bandgap Enable In VLPx Operation"
+         toolTip="BGEN controls whether the bandgap is enabled in \n
+                  lower power modes of operation (VLPx, LLS, and VLLSx)">
+         <choice value="0" enum="Disabled" name="Disabled" isDefault="true" />
+         <choice value="1" enum="Enabled"  name="Enabled" />
+      </binaryOption>
+   </if>
+   
    <binaryOption key="pmc_regsc_bgbe" 
+      enumStem="PmcBandgapBuffer" 
       description="Bandgap Buffer Enable"
-      toolTip="Enables the bandgap buffer">
-      <choice value="0" name="Disabled" isDefault="true" />
-      <choice value="1" name="Enabled" />
+      toolTip="Controls whether the band-gap reference is available to internal devices e.g. CMP etc">
+      <choice value="0" enum="Disabled" name="Disabled" isDefault="true" />
+      <choice value="1" enum="Enabled"  name="Enabled" />
    </binaryOption>
 
-   <template><![CDATA[
-      \t#ifdef PMC_REGSC_BGEN
+   <if condition="pmc_regsc_bgen||pmc_regsc_bgbe" >   
+      <template><![CDATA[
       \t//! Default value for Regulator Status And Control register
-      \tstatic constexpr uint32_t pmc_regsc  = 
-      \t   PMC_REGSC_BGEN($(pmc_regsc_bgen)) | // Bandgap Enable In VLPx Operation
-      \t   PMC_REGSC_BGBE($(pmc_regsc_bgbe));  // Bandgap Buffer Enable  
-      \t#endif\n\n
-   ]]></template>
-
+      \tstatic constexpr uint32_t pmc_regsc  = \n
+      ]]></template>
+      <template variable="pmc_regsc_bgen"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template variable="pmc_regsc_bgbe"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template>
+      <![CDATA[
+         \t   0;\n\n
+      ]]></template>
+   </if>
+   
+   <!-- ************* Common ****************** -->
+   
    <template key="/PMC/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
@@ -128,7 +155,7 @@
 
    <projectActionList id = "pmc_files" >
       <copy source="Project_Headers/pmc.h"     target="Project_Headers/pmc.h"     overwrite="true" derived="true" />
-      <copy source="Snippets/pmc-example.cpp"  target="Snippets/pmc-example.cpp"       overwrite="true" derived="true" />
+      <copy source="Snippets/pmc-example.cpp"  target="Snippets/pmc-example.cpp"  overwrite="true" derived="true" />
    </projectActionList>
          
 </peripheralPage>

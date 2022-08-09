@@ -24,8 +24,7 @@
    <intOption key="osc_input_freq"
       units="Hz"
       description="32kHz clock"
-      toolTip="RTC Crystal frequency"
-      origin="Crystal on XTAL32/EXTAL32"
+      toolTip="Frequency of RTC Crystal on XTAL32/EXTAL32"
       value="32768"
       disabledValue="0"
       min="32000" max="40000" />

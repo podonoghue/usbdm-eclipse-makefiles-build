@@ -59,7 +59,7 @@ void canErrorCallback() {
    console.writeln("                                         V OYxxEECRRTxxDxLLxOR");
    console.writeln("                                         R FNWWRRKCMFEEL TT FR");
    console.writeln(  "canErrorCallback(), status = 0b", status, Radix_2);
-   console.reset();
+   console.resetFormat();
 }
 
 void canWakeupCallback() {
@@ -115,7 +115,7 @@ void mailboxOnlyExample() {
 //   usbdm_assert(!Can::FIFO_AVAILABLE, "This example assumes no FIFO is configured");
    static_assert(Can::NUM_MAILBOXES>=4, "This example requires at least 3 mailboxes to be allocated");
 
-   Can::CanParameters canParameters(125000, CanClockSource_1);
+   Can::CanParameters canParameters(125000, CanClockSource_BusClk);
    canParameters.idam      = CanAcceptanceMode_FormatA;
    canParameters.wrnen     = true;
    canParameters.errmsk    = true;

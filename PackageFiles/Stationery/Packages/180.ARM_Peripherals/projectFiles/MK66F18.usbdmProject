@@ -12,37 +12,40 @@
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_120MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
    <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_PEE_HSRUN_180MHz" />
-   <item key="/MCG/clock_mode[0]"                          value="ClockMode_PEE" />
-   <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
-   <item key="/MCG/clock_mode[2]"                          value="ClockMode_PEE" />
+   <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_FEI" />
+   <item key="/MCG/fllOutputFrequency[3]"                  value="95944704" />
+   <item key="/MCG/mcgClockMode[0]"                        value="7" />
+   <item key="/MCG/mcgClockMode[1]"                        value="5" />
+   <item key="/MCG/mcgClockMode[2]"                        value="7" />
+   <item key="/MCG/mcg_c4_dmx32[3]"                        value="true" />
    <item key="/MCG/pll0OutputFrequency[2]"                 value="180000000" />
-   <item key="/MCG/usbphy_pll_en_usb_clks"                 value="true" />
-   <item key="/MCG/usbphy_pll_enable"                      value="true" />
-   <item key="/MCG/usbphy_pll_sic_div"                     value="1" />
-   <item key="/MCG/usbphy_power_enable"                    value="true" />
    <item key="/OSC0/osc_cr_scp"                            value="4" />
    <item key="/OSC0/osc_input_freq"                        value="12000000" />
    <item key="/OSC0/oscer_undiv_clock"                     value="12000000" />
-   <item key="/RTC/rtc_cr_scp"                             value="4" />
-   <item key="/SIM/busFreq"                                value="60MHz" />
-   <item key="/SIM/coreFreq"                               value="180MHz" />
-   <item key="/SIM/flashFreq"                              value="28MHz" />
-   <item key="/SIM/flexFreq"                               value="60MHz" />
-   <item key="/SIM/sim_clkdiv2_usb"                        value="9" />
+   <item key="/RTC/rtc_cr_osce"                            value="true" />
+   <item key="/RTC/rtc_cr_scp"                             value="0" />
+   <item key="/SIM/mcg_c7_oscsel[3]"                       value="1" />
+   <item key="/SIM/sim_clkdiv2_usb[0]"                     value="9" />
+   <item key="/SIM/sim_clkdiv3_pllfll[0]"                  value="2" />
+   <item key="/SIM/sim_clkdiv3_pllfll[2]"                  value="9" />
+   <item key="/SIM/sim_clkdiv3_pllfll[3]"                  value="5" />
+   <item key="/SIM/sim_sopt1_ramsize"                      value="Not initialised" />
    <item key="/SIM/sim_sopt2_clkoutsel"                    value="0" />
    <item key="/SIM/sim_sopt2_lpuartsrc"                    value="1" />
    <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
    <item key="/SIM/sim_sopt2_pllfllsel[1]"                 value="3" />
    <item key="/SIM/sim_sopt2_pllfllsel[2]"                 value="1" />
    <item key="/SIM/sim_sopt2_tpmsrc"                       value="1" />
-   <item key="/SIM/system_bus_clock[1]"                    value="4000000" />
-   <item key="/SIM/system_core_clock[1]"                   value="4000000" />
+   <item key="/SIM/system_bus_clock[3]"                    value="47972352" />
    <item key="/SIM/system_core_clock[2]"                   value="180000000" />
-   <item key="/SIM/system_flash_clock[1]"                  value="800000" />
+   <item key="/SIM/system_core_clock[3]"                   value="95944704" />
    <item key="/SIM/system_flash_clock[2]"                  value="25714285" />
-   <item key="/SIM/system_flexbus_clock[1]"                value="4000000" />
-   <item key="/SIM/system_usbfs_clock"                     value="48000000" />
+   <item key="/SIM/system_flash_clock[3]"                  value="23986176" />
+   <item key="/SIM/system_flexbus_clock[3]"                value="47972352" />
+   <item key="/SMC/smc_pmctrl_runm[1]"                     value="2" />
+   <item key="/SMC/smc_pmctrl_runm[2]"                     value="3" />
    <item key="/SPI0/speed"                                 value="100000" />
    <item key="/SPI1/speed"                                 value="100000" />
    <item key="/SPI2/speed"                                 value="100000" />
+   <item key="/USBPHY1/usbphy_pll_sic_pll_div_sel"         value="0b10" />
 </section>

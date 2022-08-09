@@ -97,24 +97,15 @@
          description="PFD clock [USBPFDCLK] output selection"
          toolTip="Clock to output as PFD output clock [USBPFDCLK]">
          <choice value="0b00" name="XTAL input clock" enum="Xtal"     ref="/OSC0/oscer_clock"   isDefault="true" />
-         <choice value="0b11" name="pfd_clk"          enum="Pfd"      ref="internal_pfd_clock_frequency" />
-         <choice value="0b10" name="pfd_clk/2"        enum="PfdDiv2"  ref="internal_pfd_clock_frequency,/2" />
-         <choice value="0b01" name="pfd_clk/4"        enum="PfdDiv4"  ref="internal_pfd_clock_frequency,/4" />
+         <choice value="0b11" name="pfd_clk"          enum="Pfd"      ref="internal_pfd_clock_frequency[%(n)]" />
+         <choice value="0b10" name="pfd_clk/2"        enum="PfdDiv2"  ref="internal_pfd_clock_frequency[%(n)],/2" />
+         <choice value="0b01" name="pfd_clk/4"        enum="PfdDiv4"  ref="internal_pfd_clock_frequency[%(n)],/4" />
       </choiceOption>
 
       <aliasOption key="/SIM/usb1pfdclk_Clock[%(n)]" />
       </aliasCategoryOption>
    </for>
    
-   <intOption key="system_pfdclk_frequency" 
-      description="PFD clock available to peripherals" 
-      toolTip="This clock is available to some peripherals"
-      value="4000000"
-      units="Hz" 
-      constant="true" 
-      max="180000000" />
-      
-
    <clockCodeTemplate variable="usbphy_ctrl_sftrst"
    ><![CDATA[
       \t/**

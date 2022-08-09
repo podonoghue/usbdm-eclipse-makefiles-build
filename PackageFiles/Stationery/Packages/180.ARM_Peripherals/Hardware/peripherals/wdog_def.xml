@@ -13,22 +13,227 @@
       <copy source="Snippets/wdog-example.cpp"      target="Snippets/wdog-example.cpp"       overwrite="true" derived="true" />
    </projectActionList>
    
+   <!-- ************* WDOG_STCTRLH ****************** -->
+   <binaryOption key="wdog_stctrlh_distestwdog" 
+      enumStem="WdogTestMode" 
+      description="Test mode disable"
+      toolTip="Disables watchdog test mode until next reset">
+      <choice value="0" enum="Enabled"  name="Test mode enabled" />
+      <choice value="1" enum="Disabled" name="Test mode disabled" isDefault="true" />
+   </binaryOption>
+
+   <binaryOption key="wdog_stctrlh_waiten" 
+      enumStem="WdogEnableInWait" 
+      description="Enable watchdog in WAIT mode"
+      toolTip="Control watchdog operation in WAIT mode">
+      <choice value="1" enum="Enabled"  name="Enabled in WAIT mode" />
+      <choice value="0" enum="Disabled" name="Disabled in WAIT mode" isDefault="true" />
+   </binaryOption>
+
+   <binaryOption key="wdog_stctrlh_stopen" 
+      enumStem="WdogEnableInStop" 
+      description="Enable watchdog in STOP mode"
+      toolTip="Control watchdog operation in STOP mode">
+      <choice value="1" enum="Enabled"  name="Enabled in STOP mode" />
+      <choice value="0" enum="Disabled" name="Disabled in STOP mode" isDefault="true" />
+   </binaryOption>
+
+   <binaryOption key="wdog_stctrlh_dbgen" 
+      enumStem="WdogEnableInDebug" 
+      description="Enable watchdog in DEBUG mode"
+      toolTip="Control watchdog operation in DEBUG mode">
+      <choice value="1" enum="Enabled"  name="Enabled in DEBUG mode" />
+      <choice value="0" enum="Disabled" name="Disabled in DEBUG mode" isDefault="true" />
+   </binaryOption>
+
+   <binaryOption key="wdog_stctrlh_allowupdate" 
+      enumStem="WdogAllowUpdate" 
+      description="Allow watchdog update"
+      toolTip="Enables updates to watchdog write-once registers, after \n
+               the reset-triggered initial configuration window closes\n
+               This still requires the unlock sequence">
+      <choice value="0" enum="Disabled" name="Update Disabled" />
+      <choice value="1" enum="Enabled"  name="Update Enabled" isDefault="true" />
+   </binaryOption>
+
+   <binaryOption key="wdog_stctrlh_winen" 
+      enumStem="WdogWindow" 
+      description="Enable watchdog windowing mode"
+      toolTip="Windowing mode only allows refresh during a restricted window">
+      <choice value="0" enum="Disabled" name="Windowing mode is disabled" isDefault="true" />
+      <choice value="1" enum="Enabled"  name="Windowing mode is enabled" />
+   </binaryOption>
+
+   <binaryOption key="wdog_stctrlh_irqrsten" 
+      enumStem="WdogIntBeforeReset" 
+      description="Enable interrupt before reset"
+      toolTip="Allows an interrupt handler to record state before the watchdog reset occurs">
+      <choice value="0" enum="Disabled" name="Reset only" isDefault="true" />
+      <choice value="1" enum="Enabled"  name="Interrupt followed by reset" />
+   </binaryOption>
+
+   <binaryOption key="wdog_stctrlh_clksrc" 
+      enumStem="WdogClock" 
+      description="Watchdog clock source"
+      toolTip="Clock source for WDOG">
+      <choice value="0" enum="LpoClk" code="PmcInfo::getLpoClock()"  name="LPO oscillator" isDefault="true" />
+      <choice value="1" enum="AltClk" code="SystemBusClock"          name="System bus clock" />
+   </binaryOption>
+
+   <binaryOption key="wdog_stctrlh_wdogen" 
+      enumStem="WdogEnable" 
+      description="Watchdog enable"
+      toolTip="Main enable for WDOG">
+      <choice value="0" enum="Disabled" name="Watchdog disabled" isDefault="true" />
+      <choice value="1" enum="Enabled"  name="Watchdog enabled" />
+   </binaryOption>  
+   
    <template><![CDATA[
-   \t/**
-   \t * Get input clock frequency
-   \t *
-   \t * @return Input clock frequency as a uint32_t in Hz
-   \t */
-   \tstatic uint32_t getInputClockFrequency() {
-   \t
-   \t   switch(wdog->STCTRLH&WDOG_STCTRLH_CLKSRC_MASK) {
-   \t   default:
-   \t   case WDOG_STCTRLH_CLKSRC(0): return PmcInfo::getLpoClock(); // LPO
-   \t   case WDOG_STCTRLH_CLKSRC(1): return SystemBusClock;         // Alt = System Bus Clock
-   \t   }
-   \t}\n\n
+      \t//! Watchdog Status and Control Register High
+      \tstatic constexpr uint32_t stctrlh = \n
+   ]]></template>
+   <template variable="wdog_stctrlh_distestwdog" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+   <template variable="wdog_stctrlh_waiten"      ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+   <template variable="wdog_stctrlh_stopen"      ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+   <template variable="wdog_stctrlh_dbgen"       ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+   <template variable="wdog_stctrlh_allowupdate" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+   <template variable="wdog_stctrlh_winen"       ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+   <template variable="wdog_stctrlh_irqrsten"    ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+   <template variable="wdog_stctrlh_clksrc"      ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+   <template variable="wdog_stctrlh_wdogen"      ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+   <template>
+   <![CDATA[
+      \t   0;\n\n
    ]]></template>
    
+   <template key="/SYSTEM/Includes" namespace="all" ><![CDATA[
+      #include "wdog.h"\n
+   ]]></template>
+   
+   <template key="/SYSTEM/WatchdogInitialise" namespace="all" ><![CDATA[
+      \t/*
+      \t * Initialise watchdog
+      \t */
+      \t//   Unlock before changing settings
+      \tUSBDM::Wdog::unlock(USBDM::WdogUnlock_1, USBDM::WdogUnlock_2);
+      \t
+      \t// Update settings
+      \tUSBDM::Wdog::wdog->STCTRLH = USBDM::WdogInfo::stctrlh;
+      \t
+   ]]></template>
+   
+   <setTemplate 
+      variables="
+         wdog_stctrlh_wdogen,
+         wdog_stctrlh_clksrc,
+         wdog_stctrlh_winen,
+         wdog_stctrlh_irqrsten,
+         wdog_stctrlh_dbgen,
+         wdog_stctrlh_stopen,
+         wdog_stctrlh_waiten"
+   ><![CDATA[
+      \t/**
+      \t * Writing the sequence of 0xA602 (WdogRefresh_1) followed by 0xB480 (WdogRefresh_2) within 20 bus clock
+      \t * cycles refreshes the WDOG and prevents it from resetting the system. Writing a value other than
+      \t * the above mentioned sequence or if the sequence is longer than 20 bus cycles, resets the system,
+      \t * or if IRQRSTEN is set, it interrupts and then resets the system.
+      \t *
+      \t * @param wdogRefresh_1 1st value to write (WdogRefresh_1)
+      \t * @param wdogRefresh_2 2nd value to write (WdogRefresh_2)
+      \t *
+      \t * @note This operation is time-critical so is protected by a CriticalSection
+      \t */
+      \tstatic void refresh(WdogRefresh wdogRefresh_1, WdogRefresh wdogRefresh_2) {
+      \t
+      \t   // Protect sequence from interrupts
+      \t   CriticalSection cs;
+      \t
+      \t   wdog->REFRESH = wdogRefresh_1;
+      \t   wdog->REFRESH = wdogRefresh_2;
+      \t}
+      \t
+      \t/**
+      \t * Writes the unlock sequence values to this register to make
+      \t * the watchdog write-once registers writable again
+      \t *
+      \t * @param wdogUnlock_1 1st value to write (WdogUnlock_1)
+      \t * @param wdogUnlock_2 2nd value to write (WdogUnlock_2)
+      \t *
+      \t * @note This operation is time-critical so is protected by a CriticalSection
+      \t */
+      \tstatic void unlock(WdogUnlock wdogUnlock_1, WdogUnlock wdogUnlock_2) {
+      \t
+      \t   // Protect sequence from interrupts
+      \t   CriticalSection cs;
+      \t
+      \t   wdog->UNLOCK = wdogUnlock_1;
+      \t   wdog->UNLOCK = wdogUnlock_2;
+      \t
+      \t   // Read-back to delay until change effected
+      \t   (void)(wdog->UNLOCK);
+      \t}
+      \t
+      \t/**
+      \t * Configure watchdog
+      \t
+      \t * @note This is a protected operation which uses unlock
+      \t * @note Register changes after unlock is enabled
+      \t
+      %comments
+      \t */
+      \tstatic void configure(
+      %params) {
+      \t
+      \t   // Protect sequence from interrupts
+      \t   CriticalSection cs;
+      \t
+      \t   //   Unlock before changing settings
+      \t   unlock(WdogUnlock_1, WdogUnlock_2);
+      \t   
+      \t   %register = %expression;
+      \t}\n\n
+   ]]></setTemplate>
+   
+   <!-- ************* MISC ****************** -->
+   <choiceOption key="wdog_constants1"
+      hidden="true"
+      enumStem="WdogRefresh"
+      valueFormat="%s"
+      description="Values for refresh and update registers"
+      toolTip="" 
+      >
+      <choice value="0xA602" enum="1" name="1st refresh value"   />
+      <choice value="0xB480" enum="2" name="2nd refresh value"  />
+   </choiceOption>
+   
+   <choiceOption key="wdog_constants2"
+      hidden="true"
+      enumStem="WdogUnlock"
+      valueFormat="%s"
+      description="Values for refresh and update registers"
+      toolTip="" 
+      >
+      <choice value="0xC520" enum="1"  name="1st unlock value"  />
+      <choice value="0xD928" enum="2"  name="2nd unlock value"  />
+   </choiceOption>
+   
+   <clockCodeTemplate variable="wdog_stctrlh_clksrc"
+      returnFormat="%s"
+   ><![CDATA[
+      \t/**
+      \t * Get %description
+      \t *
+      \t * @return Clock frequency in Hz
+      \t */
+      \tstatic uint32_t getInputClockFrequency() {
+      \t   
+      \t   switch(%defaultMaskingExpression) {
+      \t      default: return 0;
+      %body
+      \t   }
+      \t}\n\n
+   ]]></clockCodeTemplate>
+
    <template key="/WDOG/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)

@@ -239,7 +239,6 @@
       <peripheral baseName="LLWU"     instance=""         version="llwu_me_pe4_filt2_rst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
-         <param name="Wakeup sources" key="/LLWU/device_list" value="LPTMR0;CMP0;CMP1;CMP2;;RTC_Alarm;;RTC_Seconds" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
@@ -333,6 +332,10 @@
       <peripheral baseName="VREF"     instance=""         version="vref_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForVref" />
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_VREF_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_VREF_MASK;" />
+      </peripheral>
+      <peripheral baseName="WDOG"     instance=""         version="wdog_mk">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForWdog" />
+         <irq num="WDOG_IRQn" />
       </peripheral>
    </peripherals>
    <pins>

@@ -42,70 +42,6 @@ enum PmcInterruptReason {
 typedef void (*PmcCallbackFunction)(PmcInterruptReason pmcInterruptReason);
 
 /**
- * Action to take on Low Voltage Detect
- */
-enum PmcLowVoltageDetectAction {
-   PmcLowVoltageDetectAction_None      = PMC_LVDSC1_LVDRE(0)|PMC_LVDSC1_LVDIE(0),//!< No action on Low Voltage Detect
-   PmcLowVoltageDetectAction_Interrupt = PMC_LVDSC1_LVDRE(1)|PMC_LVDSC1_LVDIE(1),//!< Interrupt on Low Voltage Detect
-   PmcLowVoltageDetectAction_Reset     = PMC_LVDSC1_LVDRE(0)|PMC_LVDSC1_LVDIE(0),//!< Reset on Low Voltage Detect
-};
-
-#ifdef PMC_LVDSC1_LVDV
-/**
- * Level at which Low Voltage Detect operates
- */
-enum PmcLowVoltageDetectLevel {
-   PmcLowVoltageDetectLevel_Low        = PMC_LVDSC1_LVDV(0),//!< Lowest level - Vlvdl
-   PmcLowVoltageDetectLevel_High       = PMC_LVDSC1_LVDV(1),//!< Lowest level - Vlvdh
-//   PmcLowVoltageDetectLevel_Reserved1  = PMC_LVDSC1_LVDV(2),//!< Reserved
-//   PmcLowVoltageDetectLevel_Reserved2  = PMC_LVDSC1_LVDV(3),//!< Reserved
-};
-#endif
-
-/**
- * Action to take on Low Voltage Warning
- */
-enum PmcLowVoltageWarningAction {
-   PmcLowVoltageWarningAction_None      = PMC_LVDSC2_LVWIE(0),//!< No action on Low Voltage Warning
-   PmcLowVoltageWarningAction_Interrupt = PMC_LVDSC2_LVWIE(1),//!< Interrupt on Low Voltage Warning
-};
-
-#ifdef PMC_LVDSC2_LVWV
-/**
- * Level at which Low Voltage Warning operates
- */
-enum PmcLowVoltageWarningLevel {
-   PmcLowVoltageWarningLevel_low    = PMC_LVDSC2_LVWV(0), //!< Lowest level - Vlvw1
-   PmcLowVoltageWarningLevel_Mid1   = PMC_LVDSC2_LVWV(1), //!< Low middle - Vlvw2
-   PmcLowVoltageWarningLevel_Mid2   = PMC_LVDSC2_LVWV(2), //!< High middle - Vlvw3
-   PmcLowVoltageWarningLevel_High   = PMC_LVDSC2_LVWV(3), //!< Highest level - Vlvw4
-};
-#endif
-
-#ifdef PMC_REGSC_BGBE
-/**
- * Controls whether the band-gap reference is available to internal devices e.g. CMP etc
- */
-enum PmcBandgapBuffer {
-   PmcBandgapBuffer_Off   = PMC_REGSC_BGBE(0),  //!< Buffer off, band-gap unavailable to peripherals
-   PmcBandgapBuffer_On    = PMC_REGSC_BGBE(1),  //!< Buffer on, band-gap available to peripherals
-};
-#endif
-
-#ifdef PMC_REGSC_BGEN
-/**
- * Controls operation of the band-gap in low power modes
- */
-enum PmcBandgapLowPowerEnable {
-   PmcBandgapLowPowerEnable_Off       = PMC_REGSC_BGEN(0),                    //!< Band-gap off in VLPx, LLSx and VLLSx
-   PmcBandgapLowPowerEnable_On        = PMC_REGSC_BGEN(1),                    //!< Band-gap on, in VLPx, LLSx and VLLSx
-#ifdef PMC_REGSC_VLPO_MASK
-   PmcBandgapLowPowerEnable_HighSpeed = PMC_REGSC_BGEN(1)|PMC_REGSC_VLPO(1),  //!< High-speed operation with band-gap on in VLPx, LLSx and VLLSx
-#endif
-};
-#endif
-
-/**
  * Template class providing interface to Power Management Controller
  *
  * @tparam info      Information class for PMC
@@ -348,9 +284,9 @@ public:
     * @param[in] pmcBandgapLowPowerEnable Controls operation of the band-gap in low power modes
     */
    static void configureBandgapOperation(
-         PmcBandgapBuffer           pmcBandgapBuffer,
-         PmcBandgapLowPowerEnable   pmcBandgapLowPowerEnable=PmcBandgapLowPowerEnable_Off) {
-      pmc->REGSC = pmc->REGSC | (pmcBandgapBuffer|pmcBandgapLowPowerEnable);
+         PmcBandgapBuffer              pmcBandgapBuffer,
+         PmcBandgapOperationInLowPower pmcBandgapOperationInLowPower=PmcBandgapOperationInLowPower_Disabled) {
+      pmc->REGSC = pmc->REGSC | (pmcBandgapBuffer|pmcBandgapOperationInLowPower);
    }
 #endif
 

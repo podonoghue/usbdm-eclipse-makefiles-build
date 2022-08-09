@@ -8,15 +8,9 @@
 
    <xi:include href="_simCommon.xml"/>
 
-   <xi:include href="_sim_rtc_independent.xml"/>
+   <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) does not share XTAL/EXTAL pins -->
+   <constant key="rtc_independent" />
 
-   <!-- Add Oscillator OSC2 = IRC48 to MCG inputs -->
-   <for keys="n" dim="/SIM/numberOfClockSettings">
-      <addChoices key="mcg_c7_oscsel[%(n)]">
-         <choice value="2" ref="/SIM/system_irc48m_clock" name="OSC2(IRC48MCLK) - 48 MHz " />
-      </addChoices>
-   </for>
-   
    <intOption key="system_irc48m_clock" 
       constant="true"  
       hidden="true"
@@ -25,7 +19,7 @@
       toolTip="48 MHz Internal Oscillator [May be trimmed against USB bus]"
       origin="48MHz clock from IRC48MCLK"
       value="48000000"/>
-   
+
    <intOption key="system_usb_clkin_clock"  
       constant="true" 
       hidden="true"
@@ -35,32 +29,10 @@
       toolTip="Externally provided clock for USB on USB_CLKIN" 
       value="0" />
 
-   <for keys="n" values="0">
-      <choiceOption key="adc%(n)_cfg1_adiclk" 
-         description="ADC%(n) Clock Source"
-         hidden="true"
-         valueFormat="ADC_CFG1_ADICLK(%s)"
-         enumStem="AdcClockSource"
-         target="system_adc%(n)_clock"
-         toolTip="Clock source for the ADC module" >
-         <choice value="0" name="Bus clock"                   ref="system_bus_clock"       enum="Bus"       code="SystemBusClock"            />
-         <choice value="1" name="Irc48M clock"                ref="system_irc48m_clock"    enum="Irc48mClk" code="irc48mClock"               />
-         <choice value="2" name="Alternate clock (OSCERCLK)"  ref="/OSC0/oscer_clock"      enum="OscerClk"  code="Osc0Info::getOscerClock()" />
-         <choice value="3" name="Asynchronous clock (ADACK)"  ref="/ADC0/adcInternalClock" enum="Asynch"    code="2000000"                   isDefault="true" />
-      </choiceOption>
-   
-      <intOption key="system_adc%(n)_clock"  
-         hidden="true"
-         constant="true"
-         derived="true" 
-         origin="ADC%(n) clock"
-         units="Hz"
-         description="Frequency of ADC Clock" />
-   </for>
-   
    <category name="SOPT1" description="RTC clocks" >
 
-      <stringOption key="sim_sopt1_ramsize" />
+      <constant key="sim_sopt1_ramsize" />
+      
       <aliasOption key="sim_sopt1_osc32ksel" constant="false" />
       <aliasOption key="system_erclk32k_clock" />
       
@@ -76,7 +48,6 @@
          <choice value="SIM_SOPT1_USBREGEN(1)|SIM_SOPT1_USBSSTBY(0)|SIM_SOPT1_USBVSTBY(1)"  name="Enabled in run and stop"       enum="EnabledInRun_Stop"      />
          <choice value="SIM_SOPT1_USBREGEN(1)|SIM_SOPT1_USBSSTBY(1)|SIM_SOPT1_USBVSTBY(1)"  name="Enabled in run only"           enum="EnabledInRun"           />
       </choiceOption>
-
    </category>
 
    <category name="SOPT2" description="Clock Gating">
@@ -88,7 +59,7 @@
       <aliasOption key="/SIM/system_peripheral_clock[]" optional="true" />
 
       <aliasOption key="/SIM/sim_sopt2_usbsrc[]" constant="false" />
-      <aliasOption key="/SIM/system_usbfs_clock[0]" />
+      <aliasOption key="/SIM/system_usbfs_clock[]" />
 
       <aliasOption key="/OSC0/oscer_clock" optional="true" />
       <aliasOption key="/MCG/system_mcgirclk_clock[0]" optional="true" />
@@ -111,7 +82,8 @@
          units="Hz"
          description="LPUART Clock frequency"
          toolTip="Frequency of clock to LPUART"
-         value="0" />
+         value="0" 
+         max="75MHz"/>
       
       <choiceOption key="sim_sopt2_flexiosrc" 
          enumStem="SimFlexioClockSource"
@@ -130,7 +102,8 @@
          units="Hz"
          description="FLEXIO Clock frequency"
          toolTip="Frequency of clock to FLEXIO"
-         value="0" />
+         value="0"
+         max="120MHz" />
       
       <choiceOption key="sim_sopt2_tpmsrc" 
          enumStem="SimTpmClockSource"
@@ -149,7 +122,7 @@
          units="Hz"
          description="TPM Clock frequency"
          toolTip="Frequency of clock to TPM"
-         value="0" />
+         value="0" max="75MHz" />
       
       <choiceOption key="sim_sopt2_fbsl" 
          enumStem="SimFlexbusSecurity"
@@ -184,7 +157,7 @@
          units="Hz"
          description="SDHC Clock frequency (not implemented)"
          toolTip="Frequency of clock to SDHC"
-         value="0" />
+         value="0" max="120MHz" />
          
       <choiceOption key="sim_sopt2_clkoutsel" 
          enumStem="SimClkoutSel"
@@ -196,7 +169,7 @@
          <choice value="4"  name="MCGIRCLK"            enum="McgIrClk"     />
          <choice value="5"  name="RTC 32.768kHz clock" enum="RtcClk"       />
          <choice value="6"  name="OSCERCLK0"           enum="OscerClk0"    />
-         <choice value="7"  name="IRC 48 MHz clock"    enum="Irc48MClk" />
+         <choice value="7"  name="IRC 48 MHz clock"    enum="Irc48MClk" condition="system_irc48m_clock" />
       </choiceOption>
       
       <binaryOption key="sim_sopt2_traceclksel" 
@@ -353,15 +326,15 @@
             description="ADC%(adc) trigger mode"
             toolTip="Alternative conversion triggers for ADC\n
                _Pdb              - ADC is triggered by PDB\n
-               _Alt_PreTrigger_0 - ADC is triggered by SimAdc0Trigger selection and uses pretrigger 0 = A (SC1[0]/R[0])\n
-               _Alt_PreTrigger_1 - ADC is triggered by SimAdc0Trigger selection and uses pretrigger 1 = B (SC1[1]/R[1])" >
-            <choice value="SIM_SOPT7_ADC0ALTTRGEN(0)"                                        name="Triggered by PDB"            enum="Pdb" isDefault="true" />
-            <choice value="SIM_SOPT7_ADC%(adc)ALTTRGEN(1)|SIM_SOPT7_ADC%(adc)PRETRGSEL(0)"   name="Pre-trigger 0 = A (SC1[0])"  enum="Alt_PreTrigger_0" />
-            <choice value="SIM_SOPT7_ADC%(adc)ALTTRGEN(1)|SIM_SOPT7_ADC%(adc)PRETRGSEL(1)"   name="Pre-trigger 1 = B (SC1[1])"  enum="Alt_PreTrigger_1" />
+               _Alt_PreTrigger_0 - ADC is triggered by SimAdc%(adc)Trigger selection and uses pretrigger 0 = A (SC1[0]/R[0])\n
+               _Alt_PreTrigger_1 - ADC is triggered by SimAdc%(adc)Trigger selection and uses pretrigger 1 = B (SC1[1]/R[1])" >
+            <choice value="SIM_SOPT7_ADC%(adc)ALTTRGEN(0)"                                   name="Triggered by PDB"             enum="Pdb" isDefault="true" />
+            <choice value="SIM_SOPT7_ADC%(adc)ALTTRGEN(1)|SIM_SOPT7_ADC%(adc)PRETRGSEL(0)"   name="Pre-trigger 0 = A (SC1[0])"   enum="Alt_PreTrigger_0" />
+            <choice value="SIM_SOPT7_ADC%(adc)ALTTRGEN(1)|SIM_SOPT7_ADC%(adc)PRETRGSEL(1)"   name="Pre-trigger 1 = B (SC1[1])"   enum="Alt_PreTrigger_1" />
          </choiceOption>
       
          <choiceOption key="sim_sopt7_adc%(adc)trgsel"
-            enumStem="SimAdc%(adc)Trigger"
+            enumStem="SimAdc%(adc)TriggerSrc"
             description="ADC%(adc) trigger"
             toolTip="ADC Trigger source in STOP and VLPS modes, or when ADC Alternative Trigger is active">
             <choice value="0"  name="External trigger pin input (PDB0_EXTRG)" enum="External" isDefault="true" />
@@ -445,23 +418,27 @@
    <for keys="n" dim="/SIM/numberOfClockSettings" >
       <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" constant="true" >
       
+         <aliasOption key="/MCG/enableClockConfiguration[%(n)]" constant="false" />
+         
+         <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" constant="false" />
+
          <intOption key="usb1pfdclk_Clock[%(n)]"
             derived="true"
             constant="true"
             units="Hz"
             description="USB1PFD clock"
             toolTip="USB1PFD Clock available as peripheral clock"  
-            max="180MHz" />
+            max="120MHz" />
 	 
          <choiceOption key="sim_sopt2_pllfllsel[%(n)]"
             enumStem="SimPeripheralClockSource"
             target="system_peripheral_clock[%(n)]"
             description="Peripheral Clock"
             toolTip="Clock for various peripherals (LPUART, TPM etc.)">
-            <choice value="0"  name="MCGFLLCLK clock" ref="/MCG/system_mcgfllclk_clock[%(n)]" enum="McgFllClk"  code="SystemMcgFllClock"     isDefault="true" />
-            <choice value="1"  name="MCGPLLCLK clock" ref="/MCG/system_mcgpllclk_clock[%(n)]" enum="McgPllClk"  code="SystemMcgPllClock"     />
-            <choice value="2"  name="USB1 PFD clock"  ref="usb1pfdclk_Clock[%(n)]"            enum="Usb1PfdClk" code="0"                     />
-            <choice value="3"  name="IRC48 MHz clock" ref="/SIM/system_irc48m_clock"          enum="Irc48mClk"  code="irc48mClock"           />
+            <choice value="0"  name="MCGFLLCLK clock"   ref="/MCG/system_mcgfllclk_clock[%(n)]"    enum="McgFllClk"  code="SystemMcgFllClock"   isDefault="true" />
+            <choice value="1"  name="MCGPLLCLK clock"   ref="/MCG/system_mcgpllclk_clock[%(n)]"    enum="McgPllClk"  code="SystemMcgPllClock"   />
+            <choice value="2"  name="USB1 PFD clock"    ref="usb1pfdclk_Clock[%(n)]"               enum="Usb1PfdClk" code="0"                     />
+            <choice value="3"  name="IRC48 MHz clock"   ref="/SIM/system_irc48m_clock"             enum="Irc48mClk"  code="irc48mClock"         condition="system_irc48m_clock" />
          </choiceOption>
    
          <intOption key="system_peripheral_clock[%(n)]"
@@ -515,6 +492,7 @@
          </choiceOption>
       
          <aliasOption key="system_usb_clkin_clock" constant="false" />
+         
          <intOption key="system_usbfs_clock[%(n)]" 
             errorPropagate="error"
             derived="true"
@@ -647,10 +625,20 @@
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="/SIM/numberOfClockSettings">
-      <param type="long" value="150MHz" />     <!-- Core         -->
-      <param type="long" value="75MHz"  />     <!-- Bus          -->
-      <param type="long" value="25MHz"  />     <!-- Flash        -->
-      <param type="long" value="75MHz"  />     <!-- FlexBus      -->
+      <param type="long" value="120MHz" />     <!-- RUN Core          -->
+      <param type="long" value="60MHz"  />     <!-- RUN Bus           -->
+      <param type="long" value="60MHz"  />     <!-- RUN FlexBus       -->
+      <param type="long" value="25MHz"  />     <!-- RUN Flash         -->
+
+      <param type="long" value="4MHz"   />     <!-- VLPR Core         -->
+      <param type="long" value="4MHz"   />     <!-- VLPR Bus          -->
+      <param type="long" value="4MHz"   />     <!-- VLPR FlexBus      -->
+      <param type="long" value="800kHz" />     <!-- VLPR Flash        -->
+      
+      <param type="long" value="150MHz" />     <!-- HSRUN Core        -->
+      <param type="long" value="75MHz"  />     <!-- HSRUN Bus         -->
+      <param type="long" value="75MHz"  />     <!-- HSRUN FlexBus     -->
+      <param type="long" value="25MHz"  />     <!-- HSRUN Flash       -->
    </validate>
    
    <xi:include href="_simFiles-MK.xml"/>

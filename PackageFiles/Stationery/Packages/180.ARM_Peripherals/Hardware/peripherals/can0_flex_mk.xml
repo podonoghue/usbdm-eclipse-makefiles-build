@@ -77,6 +77,7 @@
      -  _IRQHandler is appended to the pattern (only)
    Multiple patterns and classsHandlers may be used separated by ';'
    -->
+   
    <irqOption key="miscellaneousIrqHandlingMethod"  
       description="Miscellaneous Interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods\n
@@ -128,32 +129,39 @@
       value="8" min="0" max="15" 
    />
    
-      <template namespace="usbdm"><![CDATA[
-      #ifndef USBDM_CAN1_IS_DEFINED
-         \t/**
-         \t * FlexCAN Clock sources
-         \t */
-         \tenum CanClockSource {
-         \t   CanClockSource_0 = false,
-         \t   CanClockSource_1 = true,
-         \t   CanClockSource_Oserclk   = CanClockSource_0,
-         \t   CanClockSource_Busclk    = CanClockSource_1,
-         \t   CanClockSource_Default   = CanClockSource_0,
-         \t};
-      #endif\n\n
-      ]]></template>
-      
-   <template><![CDATA[
-      \t/**
-      \t * Get Controller Host Interface input clock frequency
-      \t *
-      \t * @return Input clock frequency as a uint32_t in Hz
-      \t */
-      \tstatic uint32_t getChiClockFrequency() {
-      \t   return SystemCoreClock;
-      \t}\n\n
-   ]]></template>
+   <choiceOption key="can_ctrl1_clksrc" 
+      enumStem="CanClockSource"
+      description="FlexCAN Clock"
+      toolTip="Selects the clock source for the CAN interface">
+      <choice value="0"  name="OSCERCLK Clock" enum="OscerClk"  code="Osc0Info::getOscerClock()" />
+      <choice value="1"  name="Bus clock"      enum="BusClk"    code="SystemBusClock"            />
+   </choiceOption>
 
+   <clockCodeTemplate variable="can_ctrl1_clksrc"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setCanClock(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t}
+      \t
+      \t/**
+      \t * Get %description
+      \t *
+      \t * @return Clock frequency in Hz
+      \t */
+      \tstatic uint32_t getCanClock() {
+      \t   
+      \t   switch(%defaultMaskingExpression) {
+      \t      default: return 0;
+      %body
+      \t   }
+      \t}\n\n
+   ]]></clockCodeTemplate>
+         
    <template><![CDATA[
       \t/**
       \t * Get Protocol Engine input clock frequency
@@ -182,18 +190,29 @@
    ]]></template>
 
    <template><![CDATA[
+      \t/**
+      \t * Get Controller Host Interface input clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic uint32_t getChiClockFrequency() {
+      \t   return SystemCoreClock;
+      \t}\n\n
+   ]]></template>
+
+   <template><![CDATA[
        \t//! Default IRQ level
        \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
    ]]></template>
 
-   <template key="/CAN/NvicControl" namespace="all" ><![CDATA[
+   <template><![CDATA[
       \t/**
       \t * Enable Miscellaneous interrupts in NVIC
       \t */
       \tstatic void enableMiscellaneousNvicInterrupts() {
-      \t   NVIC_EnableIRQ(Info::irqNums[Info::BusOff_IrqNumIndex]);
-      \t   NVIC_EnableIRQ(Info::irqNums[Info::TransmitWarning_IrqNumIndex]);
-      \t   NVIC_EnableIRQ(Info::irqNums[Info::ReceiveWarning_IrqNumIndex]);
+      \t   NVIC_EnableIRQ(irqNums[BusOff_IrqNumIndex]);
+      \t   NVIC_EnableIRQ(irqNums[TransmitWarning_IrqNumIndex]);
+      \t   NVIC_EnableIRQ(irqNums[ReceiveWarning_IrqNumIndex]);
       \t}
       
       \t/**
@@ -203,25 +222,25 @@
       \t * @param[in]  nvicPriority  Interrupt priority
       \t */
       \tstatic void enableMiscellaneousNvicInterrupts(uint32_t nvicPriority) {
-      \t   enableNvicInterrupt(Info::irqNums[Info::BusOff_IrqNumIndex], nvicPriority);
-      \t   enableNvicInterrupt(Info::irqNums[Info::TransmitWarning_IrqNumIndex], nvicPriority);
-      \t   enableNvicInterrupt(Info::irqNums[Info::ReceiveWarning_IrqNumIndex], nvicPriority);
+      \t   enableNvicInterrupt(irqNums[BusOff_IrqNumIndex], nvicPriority);
+      \t   enableNvicInterrupt(irqNums[TransmitWarning_IrqNumIndex], nvicPriority);
+      \t   enableNvicInterrupt(irqNums[ReceiveWarning_IrqNumIndex], nvicPriority);
       \t}
       
       \t/**
       \t * Disable Miscellaneous interrupts in NVIC
       \t */
       \tstatic void disableMiscellaneousNvicInterrupts() {
-      \t   NVIC_DisableIRQ(Info::irqNums[Info::BusOff_IrqNumIndex]);
-      \t   NVIC_DisableIRQ(Info::irqNums[Info::TransmitWarning_IrqNumIndex]);
-      \t   NVIC_DisableIRQ(Info::irqNums[Info::ReceiveWarning_IrqNumIndex]);
+      \t   NVIC_DisableIRQ(irqNums[BusOff_IrqNumIndex]);
+      \t   NVIC_DisableIRQ(irqNums[TransmitWarning_IrqNumIndex]);
+      \t   NVIC_DisableIRQ(irqNums[ReceiveWarning_IrqNumIndex]);
       \t}
       
       \t/**
       \t * Enable Message Buffer interrupts in NVIC
       \t */
       \tstatic void enableMessageBufferNvicInterrupts() {
-      \t   NVIC_EnableIRQ(Info::irqNums[Info::MessageBuffer_IrqNumIndex]);
+      \t   NVIC_EnableIRQ(irqNums[MessageBuffer_IrqNumIndex]);
       \t}
       
       \t/**
@@ -231,16 +250,24 @@
       \t * @param[in]  nvicPriority  Interrupt priority
       \t */
       \tstatic void enableMessageBufferNvicInterrupts(uint32_t nvicPriority) {
-      \t   enableNvicInterrupt(Info::irqNums[Info::MessageBuffer_IrqNumIndex], nvicPriority);
+      \t   enableNvicInterrupt(irqNums[MessageBuffer_IrqNumIndex], nvicPriority);
       \t}
       
       \t/**
       \t * Disable Message Buffer interrupts in NVIC
       \t */
       \tstatic void disableMessageBufferNvicInterrupts() {
-      \t   NVIC_DisableIRQ(Info::irqNums[Info::MessageBuffer_IrqNumIndex]);
+      \t   NVIC_DisableIRQ(irqNums[MessageBuffer_IrqNumIndex]);
       \t}\n
    ]]></template>
+
+   <template key="/$(_basename)/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tusing $(_class) = $(_base_class)Handler_T<$(_class)Info>;\n
+   ]]></template>
+      
 
    <xi:include href="_clockOption.xml"/>
       

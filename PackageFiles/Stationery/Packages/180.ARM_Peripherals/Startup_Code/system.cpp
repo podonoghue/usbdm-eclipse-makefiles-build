@@ -9,6 +9,7 @@
 #include <stdint.h>
 #include "derivative.h"
 #include "pmc.h"
+$(/SYSTEM/Includes:// No extra includes found)
 
 /* This definition is overridden if Clock initialisation is provided */
 __attribute__((__weak__))
@@ -95,55 +96,36 @@ void SystemInitLowLevel(void) {
    RCM->MR = RCM_MR_BOOTROM(3);
 #endif
 
-#if defined(SIM_COPC_COPT_MASK)
-   // Configure watch-dog
-   SIM->COPC = USBDM::SimInfo::copc;
-#endif
+//#ifdef WDOG_CS_UPDATE
+//   /* Unlocking Watchdog word */
+//#define WDOG_UPDATE_KEY  (0xD928C520U)
+//
+//   // Disable watch-dog
+//   WDOG->CNT    = WDOG_UPDATE_KEY; // Write the unlock word
+//   WDOG->TOVAL  = -1;              // Setting time-out value
+//   WDOG->CS     =
+//#ifdef WDOG_CS_CMD32EN
+//         WDOG_CS_CMD32EN(1) |    // Enable 32 bit writes
+//#endif
+//         WDOG_CS_EN(0) |         // Disable watch-dog
+//         WDOG_CS_CLK(1) |        // Setting 1-kHz clock source
+//         WDOG_CS_UPDATE(1);      // Allow future update
+//#endif
 
-#ifdef WDOG_CS_UPDATE
-   /* Unlocking Watchdog word */
-#define WDOG_UPDATE_KEY  (0xD928C520U)
+//#ifdef WDOG_CS1_UPDATE_MASK
+//   /* Unlocking Watchdog sequence words*/
+//#define WDOG_KEY1    (0x20C5)
+//#define WDOG_KEY2    (0x28D9)
+//
+//   /* Disable watch-dog */
+//   WDOG->CNT    = WDOG_KEY1;               // Write the 1st unlock word
+//   WDOG->CNT    = WDOG_KEY2;               // Write the 2nd unlock word
+//   WDOG->TOVAL  = -1;                      // Setting time-out value
+//   WDOG->CS2    = WDOG_CS2_CLK(1);         // Setting 1-kHz clock source
+//   WDOG->CS1    = WDOG_CS1_UPDATE(1);      // Disable watchdog and allow future changes
+//#endif
 
-   // Disable watch-dog
-   WDOG->CNT    = WDOG_UPDATE_KEY; // Write the unlock word
-   WDOG->TOVAL  = -1;              // Setting time-out value
-   WDOG->CS     =
-#ifdef WDOG_CS_CMD32EN
-         WDOG_CS_CMD32EN(1) |    // Enable 32 bit writes
-#endif
-         WDOG_CS_EN(0) |         // Disable watch-dog
-         WDOG_CS_CLK(1) |        // Setting 1-kHz clock source
-         WDOG_CS_UPDATE(1);      // Allow future update
-#endif
-
-#ifdef WDOG_CS1_UPDATE_MASK
-   /* Unlocking Watchdog sequence words*/
-#define WDOG_KEY1    (0x20C5)
-#define WDOG_KEY2    (0x28D9)
-
-   /* Disable watch-dog */
-   WDOG->CNT    = WDOG_KEY1;               // Write the 1st unlock word
-   WDOG->CNT    = WDOG_KEY2;               // Write the 2nd unlock word
-   WDOG->TOVAL  = -1;                      // Setting time-out value
-   WDOG->CS2    = WDOG_CS2_CLK(1);         // Setting 1-kHz clock source
-   WDOG->CS1    = WDOG_CS1_UPDATE(1);      // Disable watchdog and allow future changes
-#endif
-
-#ifdef WDOG_UNLOCK_WDOGUNLOCK_MASK
-   /* Unlocking Watchdog sequence words*/
-#define WDOG_KEY1   (0xC520)
-#define WDOG_KEY2   (0xD928)
-
-   /* Disable watch-dog */
-   WDOG->UNLOCK  = WDOG_UNLOCK_WDOGUNLOCK(WDOG_KEY1);
-   WDOG->UNLOCK  = WDOG_UNLOCK_WDOGUNLOCK(WDOG_KEY2);
-   __DSB();
-   WDOG->STCTRLH =
-         WDOG_STCTRLH_WDOGEN(0)|          // Disable WDOG
-         WDOG_STCTRLH_ALLOWUPDATE(1)|     // Allow future updates
-         WDOG_STCTRLH_CLKSRC(0);          // WDOG clk=LPO
-#endif
-
+$(/SYSTEM/WatchdogInitialise: #error Watchdog initialisation code not found)
 #if defined(KINETIS_BOOTLOADER_CHECK)
    /**
     * Hook for ICP code
@@ -154,7 +136,7 @@ void SystemInitLowLevel(void) {
 }
 
 /**
- * @brief Initialize the system
+ * @brief Initialise the system
  *
  * Setup the microcontroller system.
  */

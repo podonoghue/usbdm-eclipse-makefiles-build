@@ -3,15 +3,15 @@
  * @file    can-mailbox-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Basic C++ demo of using FlexCAN mailboxes
  *
- *  Created on: 6Dec.,2018
+ *  Created on: 5 Aug, 2022
  *      Author: podonoghue
  ============================================================================
  */
 #include "hardware.h"
 #include "can.h"
 #include "ftm.h"
-#include "lpit.h"
 #include "adc.h"
+#include "pit.h"
 #include "system.h"
 
 using namespace USBDM;
@@ -27,19 +27,19 @@ class Leds {
 private:
    using Pwm = Ftm0;
 
-   using RGB_Red   = Ftm0::Channel<0>;
-   using RGB_Green = Ftm0::Channel<1>;
-   using RGB_Blue  = Ftm0::Channel<2>;
+   using RGB_Red   = RedLED_PWM;
+   using RGB_Green = GreenLED_PWM;
+   using RGB_Blue  = BlueLED_PWM;
 
    bool     redOn;
    bool     greenOn;
    bool     blueOn;
-   unsigned intensity;
+   int      intensity;
 
    void update() {
-      RGB_Red::setDutyCycle(redOn?intensity:0U);
-      RGB_Green::setDutyCycle(greenOn?intensity:0U);
-      RGB_Blue::setDutyCycle(blueOn?intensity:0U);
+      RGB_Red::setDutyCycle(redOn?intensity:0);
+      RGB_Green::setDutyCycle(greenOn?intensity:0);
+      RGB_Blue::setDutyCycle(blueOn?intensity:0);
    }
 
 public:
@@ -90,7 +90,7 @@ public:
 class Switches {
    using Switch2   = GpioC<12, ActiveLow>;
    using Switch3   = GpioC<13, ActiveLow>;
-   using Tmr       = Lpit0;
+   using Tmr       = Pit;
 
    static unsigned switchValue;
 
@@ -127,12 +127,11 @@ public:
       Switch2::setInput(PinPull_Up, PinAction_None, PinFilter_Passive);
       Switch3::setInput(PinPull_Up, PinAction_None, PinFilter_Passive);
 
-      PccInfo::setLpit0ClockSource(PccDiv2Clock_Sosc);
-      Tmr::configure(LpitDozeMode_Stop, LpitDebugMode_Stop);
+      Tmr::configure();
 
-      LpitChannelNum tmrChannel = Tmr::allocateChannel();
+      PitChannelNum tmrChannel = Tmr::allocateChannel();
       Tmr::setCallback(tmrChannel, callback);
-      Tmr::configureChannel(tmrChannel, 5_ms, LpitChannelIrq_Enabled);
+      Tmr::configureChannel(tmrChannel, 5_ms, PitChannelIrq_Enabled);
       Tmr::enableNvicInterrupts(tmrChannel, NvicPriority_Normal);
       Tmr::enableInterrupts(tmrChannel);
    }
@@ -148,7 +147,6 @@ class Potentiometer {
 
 public:
    Potentiometer() {
-      PccInfo::setAdc0ClockSource(PccDiv2Clock_Spll);
       Adc::configure(AdcResolution_8bit_se);
       Adc::calibrate();
    }
@@ -219,7 +217,7 @@ void canErrorCallback() {
    console.writeln(  "                                         R FNWWRRKCMFEEL TT FR");
    console.write(    "canErrorCallback(), status = 0b").write(status, Radix_2).writeln();
    console.writeln(  "                               10987654321098765432109876543210");
-   console.reset();
+   console.resetFormat();
 }
 
 void canWakeupCallback() {
@@ -275,7 +273,7 @@ void mailboxOnlyExample() {
 //   usbdm_assert(!Can::FIFO_AVAILABLE, "This example assumes no FIFO is configured");
    usbdm_assert(Can::NUM_MAILBOXES>=3, "This example requires > 3 mailboxes");
 
-   Can::CanParameters canParameters(125000, CanClockSource_1);
+   Can::CanParameters canParameters(125000);
    canParameters.idam      = CanAcceptanceMode_FormatA;
    canParameters.wrnen     = true;
    canParameters.errmsk    = true;
@@ -299,29 +297,29 @@ void mailboxOnlyExample() {
    static auto txMailbox1 = Can::allocateMailbox();
    txMailbox1.setCallback(canTxMailboxCallback);
    txMailbox1.enableInterrupt();
-   auto *canTxMailbox1 = txMailbox1.getMailbox();
-   canTxMailbox1->ID = CanId(CAN_MODE, LED_ON_OFF_MAILBOX_ID_NODE_TX);
-   canTxMailbox1->CS = CanControlStatus(CanMessageCode_TxInactive, CanFrameType_Data);
+   auto & canTxMailbox1 = txMailbox1.getMailbox();
+   canTxMailbox1.ID = CanId(CAN_MODE, LED_ON_OFF_MAILBOX_ID_NODE_TX);
+   canTxMailbox1.CS = CanControlStatus(CanMessageCode_TxInactive, CanFrameType_Data);
 
    static auto txMailbox2 = Can::allocateMailbox();
    txMailbox2.setCallback(canTxMailboxCallback);
    txMailbox2.enableInterrupt();
-   auto *canTxMailbox2 = txMailbox2.getMailbox();
-   canTxMailbox2->ID = CanId(CAN_MODE, LED_INTENSITY_MAILBOX_ID_NODE_TX);
-   canTxMailbox2->CS = CanControlStatus(CanMessageCode_TxInactive, CanFrameType_Data);
+   auto & canTxMailbox2 = txMailbox2.getMailbox();
+   canTxMailbox2.ID = CanId(CAN_MODE, LED_INTENSITY_MAILBOX_ID_NODE_TX);
+   canTxMailbox2.CS = CanControlStatus(CanMessageCode_TxInactive, CanFrameType_Data);
 
    static auto rxMailbox1 = Can::allocateMailbox();
    rxMailbox1.setCallback(ledIntensityCallback);
-   auto *canRxMailbox1 = rxMailbox1.getMailbox();
-   canRxMailbox1->ID = CanId(CAN_MODE, LED_INTENSITY_MAILBOX_ID_NODE_RX);
-   canRxMailbox1->CS = CanControlStatus(CanMessageCode_RxEmpty, CanFrameType_Remote);
+   auto & canRxMailbox1 = rxMailbox1.getMailbox();
+   canRxMailbox1.ID = CanId(CAN_MODE, LED_INTENSITY_MAILBOX_ID_NODE_RX);
+   canRxMailbox1.CS = CanControlStatus(CanMessageCode_RxEmpty, CanFrameType_Remote);
    rxMailbox1.enableInterrupt();
 
    static auto rxMailbox2 = Can::allocateMailbox();
    rxMailbox2.setCallback(ledOnOffCallback);
-   auto *canRxMailbox2 = rxMailbox2.getMailbox();
-   canRxMailbox2->ID = CanId(CAN_MODE, LED_ON_OFF_MAILBOX_ID_NODE_RX);
-   canRxMailbox2->CS = CanControlStatus(CanMessageCode_RxEmpty, CanFrameType_Remote);
+   auto & canRxMailbox2 = rxMailbox2.getMailbox();
+   canRxMailbox2.ID = CanId(CAN_MODE, LED_ON_OFF_MAILBOX_ID_NODE_RX);
+   canRxMailbox2.CS = CanControlStatus(CanMessageCode_RxEmpty, CanFrameType_Remote);
    rxMailbox2.enableInterrupt();
 
    Can::start();
@@ -332,7 +330,7 @@ void mailboxOnlyExample() {
    // This loop monitors the transmit buffers and fills them at min 100 ms intervals
    for(;;) {
       waitMS(100);
-      if (canTxMailbox1->CS.code == CanMessageCode_TxInactive) {
+      if (canTxMailbox1.CS.code == CanMessageCode_TxInactive) {
          static unsigned ledValue = 0b010;
          unsigned switchValue = switches.getValue();
          switch (switchValue) {
@@ -355,12 +353,12 @@ void mailboxOnlyExample() {
             default:
                break;
          }
-         canTxMailbox1->data8(0) = ledValue;
-         canTxMailbox1->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_1, CanFrameType_Data);
+         canTxMailbox1.data8(0) = ledValue;
+         canTxMailbox1.CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_1, CanFrameType_Data);
       }
-      if (canTxMailbox2->CS.code == CanMessageCode_TxInactive) {
-         canTxMailbox2->data8(0) = potentiometer.readValue();
-         canTxMailbox2->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_1, CanFrameType_Data);
+      if (canTxMailbox2.CS.code == CanMessageCode_TxInactive) {
+         canTxMailbox2.data8(0) = potentiometer.readValue();
+         canTxMailbox2.CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_1, CanFrameType_Data);
       }
       CanErrorCounts canErrorCounts = Can::getErrorCounters();
       if ((canErrorCounts.receiveErrorCount > 0) || (canErrorCounts.transmitFastErrorCount > 0)) {

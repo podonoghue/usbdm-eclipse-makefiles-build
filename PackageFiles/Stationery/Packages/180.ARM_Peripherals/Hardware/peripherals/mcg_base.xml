@@ -78,12 +78,13 @@
       <categoryOption key="ClockConfig[%(n)]"
          description="Clock configuration" 
          toolTip="Clock configurations for different run modes"
-         value="ClockConfig_[%(n)]" 
+         value="ClockConfig_%(n)" 
          disabledValue="Disabled" >
             
          <aliasOption key="enableClockConfiguration[%(n)]" constant="false" />
          
          <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" constant="false" />
+         
          <choiceOption key="mcgClockMode[%(n)]"
             enumStem="McgClockMode" 
             valueFormat="%s"
@@ -129,7 +130,7 @@
                      \n
                      Bypassed Low Power External (BLPE/FBELP)\n
                      In BLPE mode, MCGOUT is derived from the external reference clock. The FLL is disabled and PLL is disabled even if the\n
-                     C5[PLLCLKEN] is set to 1[%(n)]">
+                     C5[PLLCLKEN] is set to 1">
             <choice name="FLL Engaged Internal (FEI)"          enum="FEI"  code="McgClockMode_FEI"  value="0" />
             <choice name="FLL Engaged External (FEE)"          enum="FEE"  code="McgClockMode_FEE"  value="1" />
             <choice name="FLL bypassed internal (FBI)"         enum="FBI"  code="McgClockMode_FBI"  value="2" />
@@ -226,14 +227,22 @@
                toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock/fcrdiv" />
          </category>
       
-         <category name="OSC2 (USBPHY1 clock)" >
-            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_frac[%(n)]" constant="false" optional="true" />
-            <aliasOption key="/USBPHY1/internal_pfd_clock_frequency[%(n)]"  optional="true"/>
-            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_clk_sel[%(n)]" constant="false"  optional="true"/>
-            <aliasOption key="/SIM/usb1pfdclk_Clock[%(n)]"  optional="true"/>           
-         </category>
-         <aliasOption key="/SIM/mcg_c7_oscsel[%(n)]" optional="true" constant="false" />
-         <aliasOption key="/SIM/mcg_erc_clock[%(n)]" optional="true" />
+         <choiceOption key="mcg_c7_oscsel[%(n)]"
+            target="mcg_erc_clock[%(n)]"
+            description="MCG External reference clock" 
+            toolTip="Source for MCG External Reference Clock">
+            <choice value="0" ref="/OSC0/osc_clock"          condition="/OSC0/osc_clock"           name="OSC0 Clock"                />
+            <choice value="1" ref="/RTC/osc_clock"           condition="/RTC/osc_clock"            name="RTC 32kHz clock"           />
+            <choice value="2" ref="/SIM/system_irc48m_clock" condition="/SIM/system_irc48m_clock"  name="OSC2(IRC48MCLK) - 48 MHz " />
+         </choiceOption>
+
+         <intOption key="mcg_erc_clock[%(n)]" 
+            constant="true"
+            units="Hz" 
+            derived="true" 
+            description="Frequency of MCG External reference"
+            toolTip="External reference clock used by MCG" 
+            value="32768" />
 
          <category name="FLL" description="FLL Settings">
             <binaryOption key="fll_enabled[%(n)]"
@@ -319,16 +328,7 @@
                value="12000000" />
          </category>
          
-         <category name="USB PLL1" description="USB PLL1 Settings">
-            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_frac[%(n)]" constant="false"  optional="true"/>
-            <aliasOption key="/USBPHY1/internal_pfd_clock_frequency[%(n)]"  optional="true"/>
-            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_clk_sel[%(n)]" constant="false" optional="true"/>
-            <aliasOption key="/SIM/usb1pfdclk_Clock[%(n)]"  optional="true"/>           
-         </category>
-      
          <category name="PLL0" description="PLL0 Settings">
-            <aliasOption key="mcg_c11_pllcs[%(n)]" optional="true" constant="false" />
-            
             <binaryOption key="pll0Enabled[%(n)]"
                derived="true"
                constant="true"
@@ -382,6 +382,15 @@
                         This value is calculated from PLL0 input and output clock frequencies"
                value="24" />
          </category>
+
+         <category name="USB PLL1" description="USB PLL1 Settings">
+            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_frac[%(n)]" constant="false"  optional="true"/>
+            <aliasOption key="/USBPHY1/internal_pfd_clock_frequency[%(n)]"  optional="true"/>
+            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_clk_sel[%(n)]" constant="false" optional="true"/>
+            <aliasOption key="/SIM/usb1pfdclk_Clock[%(n)]"  optional="true"/>           
+         </category>
+      
+         <aliasOption key="mcg_c11_pllcs[%(n)]" optional="true" constant="false" />           
       
          <intOption key="system_mcgfllclk_clock[%(n)]" 
             derived="true" 
@@ -390,6 +399,15 @@
             description="FLL Output clock frequency"
             toolTip="Output of FLL. Available as MCGFLLCLK and used for MCGOUTCLK in FEI or FEE clock modes" />
       
+         <if condition="!mcg_c11_pllcs" >
+            <!-- system_mcgpllclk_clock = pll0OutputFrequency directly -->
+            <stringOption key="mcg_c11_pllcs_fixed[%(n)]" 
+               hidden="true"
+               constant="true"
+               value="pll0OutputFrequency[%(n)]" 
+               target="system_mcgpllclk_clock[%(n)]" />
+         </if>
+         
          <intOption key="system_mcgpllclk_clock[%(n)]"
             derived="true" 
             constant="true"
@@ -511,7 +529,7 @@
             </category>
             
             <category name="MCG_C7" description="MCG Control Register 7">
-               <aliasOption key="/SIM/mcg_c7_oscsel[%(n)]" optional="true"/>
+               <aliasOption key="mcg_c7_oscsel[%(n)]" optional="true"/>
             </category>
          
             <category name="MCG_C8" description="MCG Control Register 8">
@@ -741,7 +759,7 @@
               
          \t#ifdef MCG_C7_OSCSEL
          \t      //! Control Register 7
-         \t      MCG_C7_OSCSEL($(/SIM/mcg_c7_oscsel[%(n)]:0)), // OSCSEL MCG OSC Clock Select
+         \t      MCG_C7_OSCSEL($(mcg_c7_oscsel[%(n)]:0)), // OSCSEL MCG OSC Clock Select
          \t#endif
               
          \t#if defined(MCG_C8_LOCRE1) || defined(MCG_C8_CME1) || defined(MCG_C8_LOLRE)

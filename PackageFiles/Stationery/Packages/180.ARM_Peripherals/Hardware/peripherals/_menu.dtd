@@ -2,7 +2,7 @@
 
 <!ENTITY % gui_items        "(xi:include|addDependency|deleteOption|category|categoryOption|addChoices|aliasCategoryOption|if|for|aliasCategory|constant|floatOption|intOption|bitmaskOption|choiceOption|binaryOption|irqOption|stringOption|numericListOption|pinListOption|aliasOption|signals)" >
 <!ENTITY % structure_items  "(xi:include|section|list)" >
-<!ENTITY % control_items    "(xi:include|template|enumTemplate|clockCodeTemplate|validate|projectActionList)" >
+<!ENTITY % control_items    "(xi:include|template|setTemplate|enumTemplate|clockCodeTemplate|validate|projectActionList)" >
 
 <!-- Include another file -->
 <!ELEMENT xi:include EMPTY>
@@ -69,6 +69,7 @@
    <!ATTLIST intOption origin        CDATA        #IMPLIED>
    <!ATTLIST intOption description   CDATA        #IMPLIED>
    <!ATTLIST intOption toolTip       CDATA        #IMPLIED>
+   <!ATTLIST intOption typeName      CDATA        #IMPLIED>
    <!ATTLIST intOption disabledValue CDATA        #IMPLIED>
    <!ATTLIST intOption value         CDATA        #IMPLIED>
    <!ATTLIST intOption units         (None|Hz|s)  #IMPLIED>
@@ -109,6 +110,7 @@
    <!ATTLIST floatOption origin        CDATA        #IMPLIED>
    <!ATTLIST floatOption description   CDATA        #IMPLIED>
    <!ATTLIST floatOption toolTip       CDATA        #IMPLIED>
+   <!ATTLIST floatOption typeName      CDATA        #IMPLIED>
    <!ATTLIST floatOption value         CDATA        #IMPLIED>
    <!ATTLIST floatOption disabledValue CDATA        #IMPLIED>
    <!ATTLIST floatOption units         (None|Hz|s)  #IMPLIED>
@@ -142,6 +144,7 @@
    <!ATTLIST stringOption description   CDATA        #IMPLIED>
    <!ATTLIST stringOption toolTip       CDATA        #IMPLIED>
    <!ATTLIST stringOption value         CDATA        #IMPLIED>
+   <!ATTLIST stringOption typeName      CDATA        #IMPLIED>
    <!ATTLIST stringOption modify        CDATA        #IMPLIED>
    <!ATTLIST stringOption replace       CDATA        #IMPLIED>
    <!ATTLIST stringOption disabledValue CDATA        #IMPLIED>
@@ -201,6 +204,7 @@
    <!ATTLIST choiceOption derived             (false|true) #IMPLIED>
    <!ATTLIST choiceOption derivedFrom         CDATA        #IMPLIED>
    <!ATTLIST choiceOption enumStem            CDATA        #IMPLIED>
+   <!ATTLIST choiceOption typeName            CDATA        #IMPLIED>
    <!ATTLIST choiceOption target              CDATA        #IMPLIED>
    <!ATTLIST choiceOption register            CDATA        #IMPLIED>
    <!ATTLIST choiceOption replace             CDATA        #IMPLIED>
@@ -212,13 +216,14 @@
 <!ELEMENT choice EMPTY >
    <!ATTLIST choice value                     CDATA        #REQUIRED>
    <!ATTLIST choice name                      CDATA        #REQUIRED>
-   <!ATTLIST choice requiresPeripheral        CDATA        #IMPLIED>
+   <!ATTLIST choice requiredPeripherals       CDATA        #IMPLIED>
+   <!ATTLIST choice condition                 CDATA        #IMPLIED>
    <!ATTLIST choice isDefault                 (false|true) #IMPLIED>
    <!ATTLIST choice ref                       CDATA        #IMPLIED>
    <!ATTLIST choice enum                      CDATA        #IMPLIED>
    <!ATTLIST choice code                      CDATA        #IMPLIED>
 
-<!ELEMENT binaryOption (choice, choice)? >
+<!ELEMENT binaryOption (choice, choice?) >
    <!ATTLIST binaryOption key           CDATA        #REQUIRED>
    <!ATTLIST binaryOption name          CDATA        #IMPLIED>
    <!ATTLIST binaryOption value         CDATA        #IMPLIED>
@@ -232,8 +237,10 @@
    <!ATTLIST binaryOption derived       (false|true) #IMPLIED>
    <!ATTLIST binaryOption derivedFrom   CDATA        #IMPLIED>
    <!ATTLIST binaryOption enumStem      CDATA        #IMPLIED>
+   <!ATTLIST binaryOption typeName      CDATA        #IMPLIED>
    <!ATTLIST binaryOption register      CDATA        #IMPLIED>
    <!ATTLIST binaryOption valueFormat   CDATA        #IMPLIED>
+   <!ATTLIST binaryOption target        CDATA        #IMPLIED>
 
 <!ELEMENT irqOption EMPTY >
    <!ATTLIST irqOption constant      (false|true) #IMPLIED>
@@ -259,24 +266,34 @@
 <!ELEMENT template (#PCDATA)* >
    <!ATTLIST template namespace (info|usbdm|class|all)  "info" >
    <!ATTLIST template key        CDATA                  "" >
-   <!ATTLIST template dim        CDATA                  "0" >
    <!ATTLIST template variable   CDATA                  #IMPLIED>
+
+<!ELEMENT setTemplate (#PCDATA)* >
+   <!ATTLIST setTemplate namespace        (info|usbdm|class|all)  "info" >
+   <!ATTLIST setTemplate key               CDATA                  #IMPLIED >
+   <!ATTLIST setTemplate variables         CDATA                  #REQUIRED>
+   <!ATTLIST setTemplate nonDefaultParams  CDATA                  "1">
+
+<!ELEMENT initialValueTemplate (#PCDATA)* >
+   <!ATTLIST initialValueTemplate namespace        (info|usbdm|class|all)  "info" >
+   <!ATTLIST initialValueTemplate key               CDATA                  #IMPLIED >
+   <!ATTLIST initialValueTemplate variables         CDATA                  #REQUIRED>
 
 <!ELEMENT enumTemplate (#PCDATA)* >
    <!ATTLIST enumTemplate namespace     (info|usbdm|class|all)  "info" >
    <!ATTLIST enumTemplate name          CDATA                   "" >
-   <!ATTLIST enumTemplate dim           CDATA                   "0" >
    <!ATTLIST enumTemplate variable      CDATA                   #IMPLIED>
    <!ATTLIST enumTemplate template      CDATA                   #IMPLIED>
    <!ATTLIST enumTemplate enumStem      CDATA                   #IMPLIED>
+   <!ATTLIST enumTemplate typeName      CDATA                   #IMPLIED>
    <!ATTLIST enumTemplate valueFormat   CDATA                   #IMPLIED>
 
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
    <!ATTLIST clockCodeTemplate namespace    (info|usbdm|class|all) "info" >
    <!ATTLIST clockCodeTemplate name         CDATA                  "" >
-   <!ATTLIST clockCodeTemplate dim          CDATA                  "0" >
    <!ATTLIST clockCodeTemplate variable     CDATA                  #IMPLIED>
    <!ATTLIST clockCodeTemplate enumStem     CDATA                  #IMPLIED>
+   <!ATTLIST clockCodeTemplate typeName     CDATA                  #IMPLIED>
    <!ATTLIST clockCodeTemplate returnFormat CDATA                  #IMPLIED>
    <!ATTLIST clockCodeTemplate mask         CDATA                  #IMPLIED>
 
@@ -285,14 +302,14 @@
    <!ATTLIST for values               CDATA        #IMPLIED>
    <!ATTLIST for dim                  CDATA        #IMPLIED>
 
-<!ELEMENT if ( (%gui_items;|%structure_items;|%control_items;|template|elsif)*, 
-               (else, (%gui_items;|%structure_items;|%control_items;|template)*))? >
+<!ELEMENT if ( (%gui_items;|%structure_items;|%control_items;|template|else_if)*, 
+               (else?, (%gui_items;|%structure_items;|%control_items;|template)*))? >
    <!ATTLIST if condition             CDATA        #REQUIRED>
 
 <!ELEMENT else EMPTY >
 
-<!ELEMENT elsif EMPTY >
-   <!ATTLIST elsif condition             CDATA        #REQUIRED>
+<!ELEMENT else_if EMPTY >
+   <!ATTLIST else_if condition             CDATA        #REQUIRED>
 
 <!ELEMENT validate (param*) >
    <!ATTLIST validate class         CDATA        #REQUIRED>
@@ -342,20 +359,21 @@
    
 <!ELEMENT constant EMPTY >
    <!-- constant 
-   key       Allows specification of a explicit key rather than based upon the name.
-   name      In the absence of a key it is used to create a key tied to the current peripheral/file. 
-             Used as visible name in GUI (model)
-             Supports validation as an ID.
-   weak	     If true indicates the constant may already exist and this constant is discarded
-   overwrite Replaces any existing constant of the same key
+   key       Key for variable
+   name      Used as visible name in GUI (model)
+   weak	    If true indicates the constant may already exist and this constant is discarded
+   replace   Replaces any existing constant of the same key
+   derived   By default constants are derived/  Used to disable this.
    -->
    <!ATTLIST constant name         CDATA        #IMPLIED>
    <!ATTLIST constant key          CDATA        #REQUIRED>
    <!ATTLIST constant value        CDATA        #IMPLIED>
-   <!ATTLIST constant type         (boolean|int|string)  "string" >
+   <!ATTLIST constant description  CDATA        #IMPLIED>
+   <!-- ATTLIST constant type         (boolean|int|string)  "string" -->
    <!ATTLIST constant weak         (true|false)          #IMPLIED>
    <!ATTLIST constant replace      (true|false)          #IMPLIED>
-   <!ATTLIST constant derived      (true|false)          #IMPLIED>
+   <!ATTLIST constant derived      (false)               #IMPLIED>
+   <!ATTLIST constant hidden       (false)               #IMPLIED>
    
 <!ELEMENT divider EMPTY >
    

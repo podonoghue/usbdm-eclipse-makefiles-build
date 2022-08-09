@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="UTF-8"
+?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- smc_mk22f51212.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
+ 
+   <xi:include href="_default_instance.xml"/>
+
+   <!-- ************** PMPROT ************** -->
+
+   <if condition="smc_pmprot_ahsrun_available" >
+      <binaryOption key="smc_pmprot_ahsrun"
+         enumStem="SmcHighSpeedRun" 
+         description="Allow High Speed Run mode" 
+         toolTip="Allows the MCU to enter High Speed Run mode (HSRUN)" >
+         <choice name="HSRUN is not allowed" enum="Disabled" value="0" />
+         <choice name="HSRUN is allowed"     enum="Enabled"  value="1" isDefault="true" />
+      </binaryOption>   
+   </if>
+   <binaryOption key="smc_pmprot_avlp" 
+      enumStem="SmcVeryLowPower" 
+      description="Allow very low power modes" 
+      toolTip="Allows the MCU to enter any very low power modes: VLPR, VLPW, and VLPS" >
+      <choice name="VLPR, VLPW and VLPS are not allowed" enum="Disabled" value="0" />
+      <choice name="VLPR, VLPW and VLPS are allowed"     enum="Enabled"  value="1" isDefault="true" />
+   </binaryOption>   
+   
+   <if condition="smc_pmprot_alls_available">
+      <binaryOption key="smc_pmprot_alls" 
+         enumStem="SmcLowLeakageStop" 
+         description="Allow low leakage stop mode" 
+         toolTip="Allows the MCU to enter any low leakage stop mode: LLS" >
+         <choice name="LLS is not allowed" enum="Disabled" value="0" />
+         <choice name="LLS is allowed"     enum="Enabled"  value="1" isDefault="true" />
+      </binaryOption>   
+   </if>
+   
+   <binaryOption key="smc_pmprot_avlls" 
+      enumStem="SmcVeryLowLeakageStop" 
+      description="Allow very low leakage stop mode" 
+      toolTip="Allows the MCU to enter any low leakage stop mode: VLLSx" >
+      <choice name="VLLSx is not allowed" enum="Disabled" value="0" />
+      <choice name="VLLSx is allowed"     enum="Enabled"  value="1" isDefault="true" />
+   </binaryOption>   
+   
+   <initialValueTemplate 
+      variables="
+         smc_pmprot_ahsrun,     
+         smc_pmprot_avlp,     
+         smc_pmprot_alls,     
+         smc_pmprot_avlls"     
+   ><![CDATA[
+      \t// Power Mode Protection Register
+      \tstatic constexpr uint8_t pmprot =  %expression
+      \t\n
+   ]]></initialValueTemplate>
+   
+   <setTemplate  
+      variables="smc_pmprot_ahsrun,smc_pmprot_avlp,smc_pmprot_alls,smc_pmprot_avlls" > <![CDATA[
+      \t/**
+      \t * Enable all power modes.
+      \t * A power mode must be enabled before it can be entered.
+      \t *
+      \t * @note This is a write-once-after-reset operation
+      \t */
+      \tstatic ErrorCode enableAllPowerModes() {
+      \t   smc->PMPROT = 0xFF;
+      \t   return E_NO_ERROR;
+      \t}
+      
+      \t/**
+      \t * Enable the given power modes
+      \t * A mode must be enabled before it can be entered.
+      \t
+      \t * @note This is a write-once operation after reset
+      \t *
+      %comments
+      \t */
+      \tstatic void enablePowerModes(
+      %params) {
+      
+      \t   %register = %expression;
+      \t}\n\n
+   ]]></setTemplate>      
+   
+   <!-- ************** PMCTRL ************** -->
+
+   <if condition="smc_pmctrl_lpwui_available" >
+      <binaryOption key="smc_pmctrl_lpwui" 
+         enumStem="SmcExitLowPowerOnInt" 
+         description="Exit low power on interrupt" 
+         toolTip="Causes the SMC to exit to normal RUN mode when any active interrupt\n
+                  occurs while in a VLP mode (VLPR, VLPW or VLPS)" >
+         <choice name="Stay in VLPR on int" enum="Disabled" value="0" isDefault="true" />
+         <choice name="Exit VLPR on int"    enum="Enabled"  value="1" />
+      </binaryOption>   
+   </if>
+   
+   <clockCodeTemplate variable="smc_pmctrl_lpwui" ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t *
+      \t * @return E_NO_ERROR                 Success
+      \t * @return E_ILLEGAL_POWER_TRANSITION If not in RUN mode
+      \t */
+      \tstatic ErrorCode setExitVeryLowPowerOnInterrupt(%enumClass %enumParam) {
+      \t   if (getStatus() != SmcStatus_RUN) {
+      \t      // Can only change in RUN mode
+      \t      return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
+      \t   }
+      \t
+      \t   %defaultClockExpression
+      \t
+      \t   // Make sure write completes
+      \t   (void)smc->PMCTRL;
+      \t   return E_NO_ERROR;
+      \t}\n\n
+   ]]></clockCodeTemplate>
+
+   <for keys="n" dim="/SIM/numberOfClockSettings" >
+      <choiceOption key="smc_pmctrl_runm[%(n)]"
+         hidden="true"
+         enumStem="SmcRunMode"
+         description="Run mode"
+         toolTip="Determines the clock speed restrictions that apply">
+         <choice value="0"  name="Normal RUN"         enum="Normal"        isDefault="true" />
+         <choice value="2"  name="Very Low Power RUN" enum="VeryLowPower"  condition="smc_pmprot_avlp" />
+         <choice value="3"  name="High Speed RUN"     enum="HighSpeed"     condition="smc_pmprot_ahsrun" />
+      </choiceOption>
+   </for>
+   
+   <choiceOption key="smc_pmctrl_stopm" 
+      enumStem="SmcStopMode" 
+      description="Stop Mode Control"
+      toolTip="Controls entry into the selected stop mode when Sleep-Now or Sleep-On-Exit \n
+               mode is entered with SLEEPDEEP=1">
+      <choice value="0" enum="NormalStop"          name="Normal Stop (STOP)" />
+      <choice value="2" enum="VeryLowPowerStop"    name="Very-Low-Power Stop (VLPS)" />
+      <choice value="3" enum="LowLeakageStop"      name="Low-Leakage Stop (LLSx)" />
+      <choice value="4" enum="VeryLowLeakageStop"  name="Very-Low-Leakage Stop (VLLSx)" />
+   </choiceOption>
+      
+   <clockCodeTemplate variable="smc_pmctrl_stopm" ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setStopMode(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t   // Make sure write completes
+      \t   (void)(%register);
+      \t}\n\n
+   ]]></clockCodeTemplate>
+
+   <initialValueTemplate 
+      variables="
+         smc_pmctrl_lpwui,     
+         smc_pmctrl_stopm"     
+   ><![CDATA[
+         \t/// Power Mode Control Register
+         \tstatic constexpr uint8_t pmctrl =  %expression
+         \t\n
+   ]]></initialValueTemplate>
+   
+   <!-- ************** STOPCTRL ************** -->
+
+   <if condition="smc_stopctrl_pstopo_available">
+      <choiceOption key="smc_stopctrl_pstopo" 
+         enumStem="SmcPartialStopMode" 
+         description="Partial Stop Mode"
+         toolTip="Controls whether a Partial Stop mode is entered when STOPM=STOP">
+         <choice value="0" enum="Normal"    name="STOP - Normal Stop mode" />
+         <choice value="1" enum="Partial1"  name="PSTOP1 - Partial Stop with both system and bus clocks disabled" />
+         <choice value="2" enum="Partial2"  name="PSTOP2 - Partial Stop with system clock disabled and bus clock enabled" />
+      </choiceOption>
+   </if>
+         
+   <clockCodeTemplate variable="smc_stopctrl_pstopo"><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setPartialStopMode(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t}\n\n
+   ]]></clockCodeTemplate>
+
+   <binaryOption key="smc_stopctrl_porpo" 
+      enumStem="SmcPowerOnReset" 
+      description="POR Power Option" 
+      toolTip="Controls whether the POR detect circuit is enabled in VLLS0 mode" >
+      <choice value="0" enum="Enabled"  name="POR detect circuit is enabled in VLLS0"  isDefault="true" />
+      <choice value="1" enum="Disabled" name="POR detect circuit is disabled in VLLS0"  />
+   </binaryOption>   
+   
+   <clockCodeTemplate variable="smc_stopctrl_porpo"><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setPowerOnResetInVLLS0(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t}\n\n
+   ]]></clockCodeTemplate>
+
+   <if condition="smc_stopctrl_ram2po_available">
+      <binaryOption key="smc_stopctrl_ram2po" 
+         enumStem="SmcLowLeakageRam2" 
+         description="RAM2 Power Option" 
+         toolTip="Controls powering of RAM partition 2 in LLS2/VLLS2 mode" >
+         <choice value="0" enum="Disabled" name="RAM2 not powered in VLLS2"     isDefault="true" />
+         <choice value="1" enum="Enabled"  name="RAM2 powered in VLLS2" />
+      </binaryOption>   
+   </if>
+   
+   <clockCodeTemplate variable="smc_stopctrl_ram2po"><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setRam2PoweredInLLS2_VLLS2(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t}\n\n
+   ]]></clockCodeTemplate>
+
+   <if condition="smc_stopctrl_lpopo_available">
+      <binaryOption key="smc_stopctrl_lpopo" 
+         enumStem="SmcLpoInLowLeakage" 
+         description="Stop mode LPO Option" 
+         toolTip="Controls whether the 1 kHz LPO clock is enabled in LLS/VLLSx modes" >
+         <choice value="0" enum="Disabled" name="LPO clock is enabled in LLS/VLLSx"  isDefault="true" />
+         <choice value="1" enum="Enabled"  name="LPO clock is disabled in LLS/VLLSx" />
+      </binaryOption>   
+   </if>
+   
+   <clockCodeTemplate variable="smc_stopctrl_lpopo"><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setLpoPoweredInLLS_VLLS(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t}\n\n
+   ]]></clockCodeTemplate>
+
+   <choiceOption key="smc_stopctrl_llsm" 
+      enumStem="SmcLowLeakageStopMode" 
+      description="LLS or VLLS Mode Control"
+      toolTip="Controls which VLLS/LLS sub-mode to enter if STOPM = LLSx/VLLSx\n
+               Note that shared options apply to both modes _VLLS2=_LLS2 applies to LLS &amp; VLLS">
+      <choice value="0" enum="VLLS0" name="Enter VLLS0 in VLLSx mode" />
+      <choice value="1" enum="VLLS1" name="Enter VLLS1 in VLLSx mode" />
+      <choice value="2" enum="VLLS2" name="Enter VLLS2/LLS2 in VLLSx/LLSx mode" />
+      <choice value="3" enum="VLLS3" name="Enter VLLS3/LLS3 in VLLSx/LLSx mode" />
+      <choice value="2" enum="LLS2"  name="Enter VLLS2/LLS2 in VLLSx/LLSx mode" />
+      <choice value="3" enum="LLS3"  name="Enter VLLS3/LLS3 in VLLSx/LLSx mode" />
+   </choiceOption>
+
+   <clockCodeTemplate variable="smc_stopctrl_llsm"><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setLowLeakageStopMode(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t}\n\n
+   ]]></clockCodeTemplate>
+
+   <setTemplate 
+      variables="smc_stopctrl_pstopo,smc_stopctrl_llsm,smc_stopctrl_porpo,smc_stopctrl_ram2po,smc_stopctrl_lpopo">
+      <![CDATA[
+      \t/**
+      \t * Allows the detailed operation in STOP mode to be controlled.
+      \t *
+      %comments
+      \t */
+      \tstatic void setStopOptions(
+      %params) {
+   
+      \t   %register = %expression;
+      \t}\n\n
+   ]]></setTemplate>      
+   
+   <initialValueTemplate 
+      variables="
+         smc_stopctrl_pstopo,     
+         smc_stopctrl_porpo,     
+         smc_stopctrl_ram2po,     
+         smc_stopctrl_lpopo,     
+         smc_stopctrl_llsm"     
+   ><![CDATA[
+      \t// Stop Control Register
+         \tstatic constexpr uint8_t stopctrl =  %expression
+         \t\n
+   ]]></initialValueTemplate>
+   
+   <!-- ************** PMSTAT ************** -->
+
+   <choiceOption key="smc_pmstat_pmstat" 
+      hidden="true"
+      enumStem="SmcStatus"
+      description="Processor execution state"
+      toolTip="This register changes to reflect the execution state of the processor">
+      <choice value="1&lt;&lt;7" enum="HSRUN" name="Processor is in High Speed Run mode"  condition="smc_pmprot_ahsrun" />
+      <choice value="1&lt;&lt;0" enum="RUN"   name="Processor is in Normal Run mode"            />
+      <choice value="1&lt;&lt;2" enum="VLPR"  name="Processor is in Very Low Power Run mode"    />
+      <choice value="1&lt;&lt;3" enum="VLPW"  name="Processor is in Very Low Power Wait mode"   />
+      <choice value="1&lt;&lt;1" enum="STOP"  name="Processor is in Stop mode"                  />
+      <choice value="1&lt;&lt;4" enum="VLPS"  name="Processor is in Very Low Power Stop mode"   />
+      <choice value="1&lt;&lt;5" enum="LLS"   name="Processor is in Low Leakage Stop mode"      />
+      <choice value="1&lt;&lt;6" enum="VLLS"  name="Processor is in Very Low Leakage Stop mode" />
+   </choiceOption>
+   
+   <clockCodeTemplate variable="smc_pmstat_pmstat"
+   ><![CDATA[
+      \t/**
+      \t * Get %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t *
+      \t * @return Processor execution state
+      \t */
+      \tstatic %enumClass getStatus() {
+      \t   
+      \t   return (%enumClass) (%register & %mask);
+      \t}\n\n
+   ]]></clockCodeTemplate>
+   
+   <!-- ************** General ************** -->
+
+   <if condition="smc_pmprot_ahsrun" >
+      <template key="enterRunMode" namespace="all" ><![CDATA[
+         \t/**
+         \t * Enter Run Mode.
+         \t *
+         \t * This may be used to change between supported RUN modes (RUN, VLPR, HSRUN).\n
+         \t * Only the following transitions are allowed: VLPR <-> RUN <-> HSRUN.
+         \t *
+         \t * @param[in] clockConfig Clock configuration (Includes run mode to enter)
+         \t *
+         \t * @return E_NO_ERROR                 No error
+         \t * @return E_CLOCK_INIT_FAILED        Clock transition failure
+         \t * @return E_ILLEGAL_POWER_TRANSITION Cannot transition to smcRunMode from current run mode
+         \t */
+         \tstatic ErrorCode enterRunMode(ClockConfig clockConfig) {
+         \t
+         \t   SmcRunMode smcRunMode = Mcg::clockInfo[clockConfig].runMode;
+         \t
+         \t   ErrorCode rc = E_NO_ERROR;
+         \t
+         \t   /*
+         \t    * Transition    Change clock configuration
+         \t    * HSRUN->RUN    Before
+         \t    * VLPR->RUN     After
+         \t    * RUN->HSRUN    After
+         \t    * RUN->VLPR     Before
+         \t    */
+         \t   auto smcStatus = Info::getStatus();
+         \t   bool changeBefore = (smcStatus == SmcStatus_HSRUN);
+         \t   
+         \t   switch(smcRunMode) {
+         \t   
+         \t      case SmcRunMode_Normal:
+         \t         if (changeBefore) {
+         \t            // Change clock mode
+         \t            rc = Mcg::clockTransition(Mcg::clockInfo[clockConfig]);
+         \t            if (rc != E_NO_ERROR) {
+         \t               break;
+         \t            }
+         \t         }
+         \t         // Change power mode
+         \t         SMC->PMCTRL = (SMC->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
+         \t   
+         \t         // Wait for power status to change
+         \t         while (Info::getStatus() != SmcStatus_RUN) {
+         \t            __asm__("nop");
+         \t         }
+         \t         if (!changeBefore) {
+         \t            // Change clock mode
+         \t            rc = Mcg::clockTransition(Mcg::clockInfo[clockConfig]);
+         \t         }
+         \t         break;
+         \t   
+         \t      case SmcRunMode_HighSpeed:
+         \t         if (smcStatus != SmcStatus_RUN) {
+         \t            // Can only transition from RUN mode
+         \t            return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
+         \t         }
+         \t         // Change power mode
+         \t         SMC->PMCTRL = (SMC->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
+         \t   
+         \t         // Wait for power status to change
+         \t         while (Info::getStatus() != SmcStatus_HSRUN) {
+         \t            __asm__("nop");
+         \t         }
+         \t         rc = Mcg::clockTransition(Mcg::clockInfo[clockConfig]);
+         \t         break;
+         \t   
+         \t      case SmcRunMode_VeryLowPower:
+         \t         if (smcStatus != SmcStatus_RUN) {
+         \t            // Can only transition from RUN mode
+         \t            return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
+         \t         }
+         \t         // Change clock mode
+         \t         rc = Mcg::clockTransition(Mcg::clockInfo[clockConfig]);
+         \t         if (rc != E_NO_ERROR) {
+         \t            break;
+         \t         }
+         \t         // Change power mode
+         \t         SMC->PMCTRL = (SMC->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
+         \t   
+         \t         // Wait for power status to change
+         \t         while (Info::getStatus() != SmcStatus_VLPR) {
+         \t            __asm__("nop");
+         \t         }
+         \t         break;
+         \t   
+         \t      default:
+         \t         return setErrorCode(E_ILLEGAL_PARAM);
+         \t   }
+         \t   return rc;
+         \t}\n\n
+      ]]></template>
+   <else />
+      <template key="enterRunMode" namespace="all" ><![CDATA[
+         \t/**
+         \t * Enter Run Mode.
+         \t *
+         \t * This may be used to change between supported RUN modes (RUN, VLPR, HSRUN).\n
+         \t * Only the following transitions are allowed: VLPR <-> RUN <-> HSRUN.
+         \t *
+         \t * @param[in] clockConfig Clock configuration (Includes run mode to enter)
+         \t *
+         \t * @return E_NO_ERROR                 No error
+         \t * @return E_CLOCK_INIT_FAILED        Clock transition failure
+         \t * @return E_ILLEGAL_POWER_TRANSITION Cannot transition to smcRunMode from current run mode
+         \t */
+         \tstatic ErrorCode enterRunMode(ClockConfig clockConfig) {
+         \t
+         \t   SmcRunMode smcRunMode = Mcg::clockInfo[clockConfig].runMode;
+         \t
+         \t   ErrorCode rc = E_NO_ERROR;
+         \t
+         \t   /*
+         \t    * Transition    Change clock configuration
+         \t    * VLPR->RUN     After
+         \t    * RUN->VLPR     Before
+         \t    */
+         \t   switch(smcRunMode) {
+         \t   
+         \t      case SmcRunMode_Normal:
+         \t         // Change power mode
+         \t         SMC->PMCTRL = (SMC->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
+         \t   
+         \t         // Wait for power status to change
+         \t         while (Info::getStatus() != SmcStatus_RUN) {
+         \t            __asm__("nop");
+         \t         }
+         \t         // Change clock mode
+         \t         rc = Mcg::clockTransition(Mcg::clockInfo[clockConfig]);
+         \t         break;
+         \t   
+         \t      case SmcRunMode_VeryLowPower:
+         \t         // Change clock mode
+         \t         rc = Mcg::clockTransition(Mcg::clockInfo[clockConfig]);
+         \t         if (rc != E_NO_ERROR) {
+         \t            break;
+         \t         }
+         \t         // Change power mode
+         \t         SMC->PMCTRL = (SMC->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
+         \t   
+         \t         // Wait for power status to change
+         \t         while (Info::getStatus() != SmcStatus_VLPR) {
+         \t            __asm__("nop");
+         \t         }
+         \t         break;
+         \t      default:
+         \t         return setErrorCode(E_ILLEGAL_PARAM);
+         \t   }
+         \t   return rc;
+         \t}\n\n
+      ]]></template>
+   </if>
+
+   <template key="enterPowerMode" namespace="all" ><![CDATA[
+      \t/**
+      \t * Change power mode
+      \t *
+      \t * @param smcPowerMode  Power mode to change to (apart from SmcPowerMode_RUN/VLPR/HSRUN) 
+      \t *
+      \t * @return E_NOERROR                   Success
+      \t * @return E_ILLEGAL_PARAM             Clock clockConfig provided is not appropriate for run mode
+      \t * @return E_ILLEGAL_POWER_TRANSITION  It is not possible to transition directly to the given power mode
+      \t * @return E_INTERRUPTED               Processor failed to change mode due to interrupt
+      \t */
+      \tstatic ErrorCode enterPowerMode(SmcPowerMode smcPowerMode) {
+      \t
+      \t   switch(smcPowerMode) {
+      \t
+      \t      // Transition refers to Figure 15-5. Power mode state diagram in MK22F Manual (K22P121M120SF7RM)
+      \t
+      \t      case SmcPowerMode_RUN   : // (VLPR,HSRUN)->RUN Transition 3,12
+      \t      case SmcPowerMode_VLPR  : // RUN->VLPR         Transition 3\n
+   ]]></template>
+   <template variable="smc_pmprot_ahsrun" key="enterPowerMode" namespace="all" ><![CDATA[
+      \t      case SmcPowerMode_HSRUN : // RUN->HSRUN        Transition 12\n
+   ]]></template>
+   <template key="enterPowerMode" namespace="all" ><![CDATA[
+      \t         // Clock changes needed etc use enterRunMode
+      \t         return E_ILLEGAL_PARAM;
+      \t
+      \t      case SmcPowerMode_VLPW  : // VLPR->VLPW        Transition 4
+      \t         // Check if in correct run mode
+      \t         if (SmcRunMode_VeryLowPower != (SMC->PMCTRL&SMC_PMCTRL_RUNM_MASK)) {
+      \t            return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
+      \t         }
+      \t         [[fallthrough]];
+      \t      case SmcPowerMode_WAIT  : // (RUN,VLPR)->VLPW  Transition 1,4
+      \t         enterWaitMode();
+      \t         return E_NO_ERROR;
+      \t         break;
+      \t
+      \t      case SmcPowerMode_NormalSTOP   : // RUN->STOP Transition 2a\n
+   ]]></template>
+   <template variable="smc_stopctrl_pstopo" key="enterPowerMode" namespace="all" ><![CDATA[
+      \t      case SmcPowerMode_PartialSTOP1 : // RUN->STOP Transition 2b
+      \t      case SmcPowerMode_PartialSTOP2 : // RUN->STOP Transition 2c
+   ]]></template>
+   <template key="enterPowerMode" namespace="all" ><![CDATA[
+      \t         // Check if in correct run mode
+      \t         if (SmcRunMode_Normal != (SMC->PMCTRL&SMC_PMCTRL_RUNM_MASK)) {
+      \t            return E_ILLEGAL_POWER_TRANSITION;
+      \t         }
+      \t         [[fallthrough]];
+      \t      case SmcPowerMode_VLPS  :        // (RUN,VLPR)->VLPS  Transition 7,6
+      \t      case SmcPowerMode_LLS2  :        // (RUN,VLPR)->LLS   Transition 10a,11a
+      \t      case SmcPowerMode_LLS3  :        // (RUN,VLPR)->LLS   Transition 10b,11b
+      \t      case SmcPowerMode_VLLS0 :        // (RUN,VLPR)->VLLS0 Transition 8a,9a
+      \t      case SmcPowerMode_VLLS1 :        // (RUN,VLPR)->VLLS0 Transition 8b,9b
+      \t      case SmcPowerMode_VLLS2 :        // (RUN,VLPR)->VLLS0 Transition 8c,9c
+      \t      case SmcPowerMode_VLLS3 :        // (RUN,VLPR)->VLLS0 Transition 8d,9d
+   ]]></template>
+   <template variable="smc_pmprot_ahsrun" key="enterPowerMode" namespace="all" ><![CDATA[
+      \t         // Check if in allowable run modes
+      \t         if (SmcRunMode_HighSpeed == (SMC->PMCTRL&SMC_PMCTRL_RUNM_MASK)) {
+      \t            return E_ILLEGAL_POWER_TRANSITION;
+      \t         }
+   ]]></template>
+   <template key="enterPowerMode" namespace="all" ><![CDATA[
+      \t         smc->STOPCTRL = (smcPowerMode>>8);
+      \t         return enterStopMode((SmcStopMode)(smcPowerMode&SMC_PMCTRL_STOPM_MASK));
+      \t   }
+      \t   return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
+      \t}\n\n
+   ]]></template>
+
+   <template namespace="usbdm" ><![CDATA[
+   \tconsteval uint32_t make16(uint8_t pmctrl, uint8_t stopctrl=0, uint8_t bias=0) {
+   \t   return pmctrl+(stopctrl<<8)+(bias<<16);
+   \t}
+
+   \tenum SmcPowerMode {
+   \t   /*                           value                                                                                    Entry             Trans  Core       Requirements                                           */ //                                
+   \t   SmcPowerMode_RUN           = make16(SmcRunMode_Normal),                                                            /* (VLPR,HSRUN)->RUN 3,12   Run        SMC_PMCTRL_RUNM(0)                                     */ ///<  Run mode                    
+   \t   SmcPowerMode_VLPR          = make16(SmcRunMode_VeryLowPower),                                                      /* RUN->VLPR         3      Run        SMC_PMCTRL_RUNM(2)                                     */ ///<  Very low power run mode     \n
+   ]]></template>
+   <template namespace="usbdm" variable="smc_pmprot_ahsrun" ><![CDATA[
+   \t   SmcPowerMode_HSRUN         = make16(SmcRunMode_HighSpeed),                                                         /* RUN->HSRUN        12     Run        SMC_PMCTRL_RUNM(3)                                     */ ///<  High-speed run mode         \n
+   ]]></template>
+   <template namespace="usbdm" ><![CDATA[
+   \t                                                                                                                                                                                                                                                       
+   \t   SmcPowerMode_WAIT          = make16(SmcRunMode_Normal,0,1),                                                        /* RUN->WAIT         1      Sleep      wfi+SMC_PMCTRL_RUNM(0)                                 */ ///<  Wait mode                   
+   \t   SmcPowerMode_VLPW          = make16(SmcRunMode_VeryLowPower,0,1),                                                  /* VLPR->VLPW        4      Sleep      wfi+SMC_PMCTRL_RUNM(2)                                 */ ///<  Very low power wait mode    
+   \t                                                                                                                                                                                                                                               
+   \t   SmcPowerMode_NormalSTOP    = make16(SmcRunMode_Normal|SmcStopMode_NormalStop,0,2),                                 /* RUN->STOP         2a     Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(0) RUN<->STOP           */ ///<  Stop mode                   \n
+   ]]></template>
+   <template namespace="usbdm" variable="smc_stopctrl_pstopo" ><![CDATA[
+   \t   SmcPowerMode_PartialSTOP1  = make16(SmcRunMode_Normal|SmcStopMode_NormalStop,SmcPartialStopMode_Partial1),         /* RUN->STOP         2b     Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(0) RUN<->STOP           */ ///<  Stop mode                   
+   \t   SmcPowerMode_PartialSTOP2  = make16(SmcRunMode_Normal|SmcStopMode_NormalStop,SmcPartialStopMode_Partial2),         /* RUN->STOP         2c     Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(0) RUN<->STOP           */ ///<  Stop mode                   \n
+   ]]></template>
+   <template namespace="usbdm" ><![CDATA[
+   \t   SmcPowerMode_VLPS          = make16(SmcRunMode_Normal|SmcStopMode_VeryLowPowerStop),                               /* (RUN,VLPR)->VLPS  7,6    Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(2)                      */ ///<  Very low power stop mode    
+   \t   /*                               or if SmcRunMode_VeryLowPower,                                                       VLPR->VLPS        6      Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(0/2)                    */ ///<  Very low power stop mode    
+   \t                                                                                                                                                                                                                                       
+   \t   SmcPowerMode_LLS2          = make16(SmcRunMode_Normal|SmcStopMode_LowLeakageStop,SmcLowLeakageStopMode_LLS2),      /* (RUN,VLPR)->LLS   10,11a Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(3)+SMC_STOPCTRL_LLSM(2) */ ///<  Low leakage stop mode 2     
+   \t   SmcPowerMode_LLS3          = make16(SmcRunMode_Normal|SmcStopMode_LowLeakageStop,SmcLowLeakageStopMode_LLS3),      /* (RUN,VLPR)->LLS   10,11b Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(3)+SMC_STOPCTRL_LLSM(3) */ ///<  Low leakage stop mode 3     
+   \t                                                                                                                                                                                                                                     
+   \t   SmcPowerMode_VLLS0         = make16(SmcRunMode_Normal|SmcStopMode_VeryLowLeakageStop,SmcLowLeakageStopMode_VLLS0), /* (RUN,VLPR)->VLLS0 8,9a   Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(4)+SMC_STOPCTRL_LLSM(0) */ ///<  Very low leakage stop mode 0
+   \t   SmcPowerMode_VLLS1         = make16(SmcRunMode_Normal|SmcStopMode_VeryLowLeakageStop,SmcLowLeakageStopMode_VLLS1), /* (RUN,VLPR)->VLLS1 8,9b   Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(4)+SMC_STOPCTRL_LLSM(1) */ ///<  Very low leakage stop mode 1
+   \t   SmcPowerMode_VLLS2         = make16(SmcRunMode_Normal|SmcStopMode_VeryLowLeakageStop,SmcLowLeakageStopMode_VLLS2), /* (RUN,VLPR)->VLLS2 8,9c   Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(4)+SMC_STOPCTRL_LLSM(2) */ ///<  Very low leakage stop mode 2
+   \t   SmcPowerMode_VLLS3         = make16(SmcRunMode_Normal|SmcStopMode_VeryLowLeakageStop,SmcLowLeakageStopMode_VLLS3), /* (RUN,VLPR)->VLLS3 8,9d   Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(4)+SMC_STOPCTRL_LLSM(3) */ ///<  Very low leakage stop mode 3
+   \t};\n\n
+   ]]></template>
+
+   <template key="powerModes" namespace="all" ><![CDATA[
+   ]]></template>
+
+   <template key="/SMC/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   ]]></template>
+      
+   <projectActionList id = "smc_files" >
+      <copy source="Project_Headers/smc.h"                  target="Project_Headers/smc.h"                  overwrite="true" derived="true" />
+      <copy source="Project_Headers/KinetisPowerModes.png"  target="Project_Headers/KinetisPowerModes.png"  overwrite="true" derived="true" macroReplace="false" />
+      <copy source="Project_Headers/PowerModes.png"         target="Project_Headers/PowerModes.png"         overwrite="true" derived="true" macroReplace="false" />
+      <copy source="Snippets/vlpr-run-hsrun-example.cpp"    target="Snippets/vlpr-run-hsrun-example.cpp"    overwrite="true" derived="true" />
+   </projectActionList>
+         
+</fragment>

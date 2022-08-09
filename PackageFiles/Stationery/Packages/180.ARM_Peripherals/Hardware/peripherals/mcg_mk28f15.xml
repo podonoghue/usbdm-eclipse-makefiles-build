@@ -21,7 +21,7 @@
          <binaryOption key="mcg_c8_locre1[%(n)]" 
             description="OSC1 (RTC) Loss of Clock Reset Enable"
             toolTip="Determines if a interrupt or a reset request is made following a loss of RTC external reference clock.\n 
-                     Only has an affect when CME1 is set[%(n)]" >
+                     Only has an affect when CME1 is set" >
             <choice value="0" name="Interrupt request" />
             <choice value="1" name="Reset request" />
          </binaryOption>
@@ -49,14 +49,6 @@
             <choice value="1" name="Reset request" />
          </binaryOption>
    
-         <binaryOption key="mcg_c11_pllcs[%(n)]" 
-            description="PLL Clock Select"
-            toolTip="Controls whether PLL0 or PLL1 (USB1 PFDCLK) is selected as the MCG\n
-                    source when CLKS are programmed in PLL Engaged External (PEE) mode[%(n)]">
-            <choice value="0" name="PLL0 output clock is selected" />
-            <choice value="1" name="External PLL clock (USB1 PFDCLK) is selected" />
-         </binaryOption>
-      
          <binaryOption key="usbphy_pll_enable[%(n)]" 
             hidden="true"
             description="Enable clock output"
@@ -91,12 +83,14 @@
                <choice value="3" name="Reserved" />
          </choiceOption>
    
-         <intOption key="usb1pfdclk_Clock[%(n)]"
-            units="Hz"
-            description="USB1 PLL output frequency"
-            hidden="true"
-            toolTip="Used as input to high speed USB and available as general clock source"
-            value="180000000" max="180000000" />
+         <binaryOption key="mcg_c11_pllcs[%(n)]" 
+            target="system_mcgpllclk_clock[%(n)]"
+            description="PLL Clock Select"
+            toolTip="Controls whether PLL0 or PLL1 (USB1 PFDCLK) is selected as the MCG\n
+                    source when CLKS are programmed in PLL Engaged External (PEE) mode[%(n)]">
+            <choice value="0" ref="pll0OutputFrequency[%(n)]"    name="Internal PLL0" />
+            <choice value="1" ref="/SIM/usb1pfdclk_Clock[%(n)]"  name="External PLL (USB1 PFDCLK)" />
+         </binaryOption>
       </category>
    </for>
 

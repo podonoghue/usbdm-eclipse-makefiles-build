@@ -11,91 +11,83 @@
  * This examples assumes that appropriate clock configurations have been created:
  *  - ClockConfig_PEE_120MHz  For HSRUN mode (Core=120MHz, Bus=60MHz, Flash=24MHz)
  *  - ClockConfig_PEE_80MHz   For RUN mode (Core=80MHz, Bus=40MHz, Flash=27MHz)
- *  - ClockConfig_BLPE_4MHz   For VLPR (Core/Bus = 4MHz, Flash = 1MHz)
+ *  - ClockConfig_BLPE_4MHz   For VLPR (Core/Bus = 4MHz, Flash = 800KHz)
  *
  *  It is also necessary to configure the CLKOUT Pin
  */
 #include "hardware.h"
 #include "mcg.h"
 #include "smc.h"
+#include "rcm.h"
 
 using namespace USBDM;
 
 // Map clock settings for each mode to available settings
+#if defined(SMC_PMPROT_AHSRUN_MASK)
 static constexpr ClockConfig ClockConfig_HSRUN = ClockConfig_PEE_120MHz;
-static constexpr ClockConfig ClockConfig_RUN   = ClockConfig_PEE_120MHz;
+#endif
+static constexpr ClockConfig ClockConfig_RUN   = ClockConfig_PEE_80MHz;
 static constexpr ClockConfig ClockConfig_VLPR  = ClockConfig_BLPE_4MHz;
 
-using namespace USBDM;
 
 void report() {
-   console.write("Run mode = ").write(Smc::getSmcStatusName());
-   console.write(", Clock = ").write(Mcg::getClockModeName());
-   console.write("@").write(::SystemCoreClock).writeln(" Hz").flushOutput();
+   checkError();
+   console_setBaudRate(defaultBaudRate);
+   console.writeln(
+         "Run mode = ", Smc::getSmcStatusName(),
+         ", Clock = ", Mcg::getClockModeName(),
+         "@", SystemCoreClock, " Hz").flushOutput();
 }
 
 int main() {
+
    // Change clock so console (LPUART) will continue working
    SimInfo::setLpuartClock(SimLpuartClockSource_OscerClk);
    console.setBaudRate(defaultBaudRate);
+
    console.writeln("Starting\n");
-   console.write("SystemCoreClock = ").writeln(::SystemCoreClock);
-   console.write("SystemBusClock  = ").writeln(::SystemBusClock);
+   console.writeln("SystemCoreClock = ", SystemCoreClock);
+   console.writeln("SystemBusClock  = ", SystemBusClock);
+
+   console.writeln("Reset Source = ", Rcm::getResetSourceDescription()).flushOutput();
 
    // Monitor clock changes on CLKOUT pin
-   using ClkOut = PcrTable_T<ControlInfo,10>; // Check this
-   ClkOut::setPCR();
-   SimInfo::setClkout(SimClkoutSel_FlexBus);
+   ControlInfo::CLKOUT_pin::setOutput();
+   SimInfo::setClkout(SimClkoutSel_FlexBusClk);
 
    report();
 
-   Smc::enablePowerModes(
-         SmcVeryLowPower_Enabled,
-         SmcLowLeakageStop_Enabled,
-         SmcVeryLowLeakageStop_Enabled,
-         SmcHighSpeedRun_Enabled);
+   Smc::enableAllPowerModes();
 
    for (;;) {
       /*
        * RUN -> VLPR
-       * Change clock down then run mode
        */
-      Mcg::clockTransition(Mcg::clockInfo[ClockConfig_VLPR]);
-      Smc::enterRunMode(SmcRunMode_VeryLowPower);
-      console_setBaudRate(defaultBaudRate);
+      Smc::enterRunMode(SmcRunMode_VeryLowPower, ClockConfig_VLPR);
       report();
-      waitMS(2000);
+      wait(5_s);
 
       /*
        * VLPR -> RUN
-       * Change mode then clock up
        */
-      Smc::enterRunMode(SmcRunMode_Normal);
-      Mcg::clockTransition(Mcg::clockInfo[ClockConfig_RUN]);
-      console_setBaudRate(defaultBaudRate);
+      Smc::enterRunMode(SmcRunMode_Normal, ClockConfig_RUN);
       report();
-      waitMS(2000);
+      wait(5_s);
 
-#ifdef SMC_PMPROT_AHSRUN
+#if defined(SMC_PMPROT_AHSRUN_MASK)
       /*
        * RUN -> HSRUN
-       * Change mode then clock up
        */
-      Smc::enterRunMode(SmcRunMode_HighSpeed);
-      Mcg::clockTransition(Mcg::clockInfo[ClockConfig_HSRUN]);
-      console_setBaudRate(defaultBaudRate);
+      Smc::enterRunMode(SmcRunMode_HighSpeed, ClockConfig_HSRUN);
       report();
-      waitMS(2000);
+      wait(5_s);
 
       /*
        * HSRUN -> RUN
-       * Change clock down then run mode
        */
-      Mcg::clockTransition(Mcg::clockInfo[ClockConfig_RUN]);
-      Smc::enterRunMode(SmcRunMode_Normal);
-      console_setBaudRate(defaultBaudRate);
+      Smc::enterRunMode(SmcRunMode_Normal, ClockConfig_RUN);
       report();
-      waitMS(2000);
+      wait(5_s);
 #endif
    }
    return 0;
