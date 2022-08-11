@@ -3,109 +3,29 @@
 <!-- mcg_mk28f15.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Multipurpose Clock Generator">
-
-   <for keys="n" dim="/SIM/numberOfClockSettings">
-      <category name=""
-            hidden="true"
-            constant="true"
-            derived="true" >
-
-         <binaryOption key="mcg_c8_cme1[%(n)]" 
-            description="OSC1 (RTC) Clock Monitor Enable"
-            toolTip="Determines if the clock monitor is enabled for the RTC external clock.\n
-                     CME1 bit must be set to a logic 0 before the MCG enters any Stop mode">
-            <choice value="0" name="Clock monitor disabled" />
-            <choice value="1" name="Clock monitor enabled" />
-         </binaryOption>
-         
-         <binaryOption key="mcg_c8_locre1[%(n)]" 
-            description="OSC1 (RTC) Loss of Clock Reset Enable"
-            toolTip="Determines if a interrupt or a reset request is made following a loss of RTC external reference clock.\n 
-                     Only has an affect when CME1 is set" >
-            <choice value="0" name="Interrupt request" />
-            <choice value="1" name="Reset request" />
-         </binaryOption>
+ 
+   <constant key="mcg_c2_erefs0_present"  />
+   <constant key="mcg_c2_hgo0_present"    />
+   <constant key="mcg_c7_oscsel_present"  />
+   <constant key="mcg_c8_cme1_present"    />
+   <constant key="mcg_c8_locre1_present"  />
+   <constant key="mcg_c8_lolre_present"   />
+   <constant key="mcg_c9_pll_cme_present"   />
+   <constant key="mcg_c9_pll_locre_present"   />
+   <constant key="mcg_c11_pllcs_present"   />
    
-         <binaryOption key="mcg_c8_lolre[%(n)]" 
-            description="PLL Loss of Lock Reset Enable"
-            toolTip="Determines if an interrupt or a reset request is made following a PLL loss of lock.\n
-                     Only has an affect when CME1 is set">
-            <choice value="0" name="Interrupt request" />
-            <choice value="1" name="Reset request" />
-         </binaryOption>
-      
-         <binaryOption key="mcg_c9_pll_cme[%(n)]" 
-            description="MCG External PLL Clock Monitor Enable"
-            toolTip="Enables the loss of clock monitoring circuit for the MCG External PLL (EXT_PLL) reference clock">
-            <choice value="0" name="PLL clock monitor disabled" />
-            <choice value="1" name="PLL clock monitor enabled" />
-         </binaryOption>
-
-         <binaryOption key="mcg_c9_pll_locre[%(n)]" 
-            description="MCG External PLL Loss of Clock Reset Enable"
-            toolTip="Determines wheather an interrupt or a reset request is made following a loss of the\n
-                     MCG External PLL clock when the MCG is running in PEE mode">
-            <choice value="0" name="Interrupt request" />
-            <choice value="1" name="Reset request" />
-         </binaryOption>
-   
-         <binaryOption key="usbphy_pll_enable[%(n)]" 
-            hidden="true"
-            description="Enable clock output"
-            toolTip="Enables the clock output from the USB PLL[%(n)]">
-            <choice value="0" name="Disabled" />
-            <choice value="1" name="Enabled" />
-         </binaryOption>
-   
-         <binaryOption key="usbphy_power_enable[%(n)]" 
-            hidden="true"
-            description="Enable clock output"
-            toolTip="Enables the clock output from the USB PLL[%(n)]">
-            <choice value="0" name="Disabled" />
-            <choice value="1" name="Enabled" />
-         </binaryOption>
-   
-         <binaryOption key="usbphy_pll_en_usb_clks[%(n)]" 
-            hidden="true"
-            description="Enable USB clock output"
-            toolTip="Enables the USB clock output from the USB PHY PLL[%(n)]">
-            <choice value="0" name="Disabled" />
-            <choice value="1" name="Enabled" />
-         </binaryOption>
-   
-         <choiceOption key="usbphy_pll_sic_div[%(n)]"
-            hidden="true"
-            description="USB PLL feedback loop divider"
-            toolTip="Allows the PLL to be adjusted for input frequencies of 12, 16 or 24 MHz" >
-               <choice value="0" name="24 MHz Crystal" />
-               <choice value="1" name="16 MHz Crystal" />
-               <choice value="2" name="12 MHz Crystal" />
-               <choice value="3" name="Reserved" />
-         </choiceOption>
-   
-         <binaryOption key="mcg_c11_pllcs[%(n)]" 
-            target="system_mcgpllclk_clock[%(n)]"
-            description="PLL Clock Select"
-            toolTip="Controls whether PLL0 or PLL1 (USB1 PFDCLK) is selected as the MCG\n
-                    source when CLKS are programmed in PLL Engaged External (PEE) mode[%(n)]">
-            <choice value="0" ref="pll0OutputFrequency[%(n)]"    name="Internal PLL0" />
-            <choice value="1" ref="/SIM/usb1pfdclk_Clock[%(n)]"  name="External PLL (USB1 PFDCLK)" />
-         </binaryOption>
-      </category>
-   </for>
-
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG" dim="/SIM/numberOfClockSettings" >
-      <param type="long" value="3" />              <!-- mcg_c4_drst_drs   -->
-      <param type="long" value="8000000" />        <!-- pllInMin     -->
-      <param type="long" value="16000000" />       <!-- pllInMax     -->
-      <param type="long" value="90000000" />       <!-- pllOutMin    -->
-      <param type="long" value="180000000" />      <!-- pllOutMax    -->
-      <param type="long" value="1" />              <!-- prDivMin     -->
-      <param type="long" value="8" />              <!-- prDivMax     -->
-      <param type="long" value="16" />             <!-- vDivMin    - available as pll_vdiv_min -->
-      <param type="long" value="47" />             <!-- vDivMax      -->
-      <param type="long" value="2" />              <!-- pllPostDiv - available as pll_post_divider -->
+      <param type="long" value="3"         />    <!-- mcg_c4_drst_drs max -->
+      <param type="long" value="8000000"   />    <!-- pllInMin     -->
+      <param type="long" value="16000000"  />    <!-- pllInMax     -->
+      <param type="long" value="90000000"  />    <!-- pllOutMin    -->
+      <param type="long" value="180000000" />    <!-- pllOutMax    -->
+      <param type="long" value="1"         />    <!-- prDivMin     -->
+      <param type="long" value="8"         />    <!-- prDivMax     -->
+      <param type="long" value="16"        />    <!-- vDivMin    - available as pll_vdiv_min -->
+      <param type="long" value="47"        />    <!-- vDivMax      -->
+      <param type="long" value="2"         />    <!-- pllPostDiv - available as pll_post_divider -->
    </validate>
    
    <xi:include href="mcg_base.xml"/>

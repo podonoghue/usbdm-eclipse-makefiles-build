@@ -12,6 +12,7 @@
    <if condition="smc_pmprot_ahsrun_available" >
       <binaryOption key="smc_pmprot_ahsrun"
          enumStem="SmcHighSpeedRun" 
+         enumType="uint8_t" 
          description="Allow High Speed Run mode" 
          toolTip="Allows the MCU to enter High Speed Run mode (HSRUN)" >
          <choice name="HSRUN is not allowed" enum="Disabled" value="0" />
@@ -20,6 +21,7 @@
    </if>
    <binaryOption key="smc_pmprot_avlp" 
       enumStem="SmcVeryLowPower" 
+      enumType="uint8_t" 
       description="Allow very low power modes" 
       toolTip="Allows the MCU to enter any very low power modes: VLPR, VLPW, and VLPS" >
       <choice name="VLPR, VLPW and VLPS are not allowed" enum="Disabled" value="0" />
@@ -29,6 +31,7 @@
    <if condition="smc_pmprot_alls_available">
       <binaryOption key="smc_pmprot_alls" 
          enumStem="SmcLowLeakageStop" 
+         enumType="uint8_t" 
          description="Allow low leakage stop mode" 
          toolTip="Allows the MCU to enter any low leakage stop mode: LLS" >
          <choice name="LLS is not allowed" enum="Disabled" value="0" />
@@ -38,6 +41,7 @@
    
    <binaryOption key="smc_pmprot_avlls" 
       enumStem="SmcVeryLowLeakageStop" 
+      enumType="uint8_t" 
       description="Allow very low leakage stop mode" 
       toolTip="Allows the MCU to enter any low leakage stop mode: VLLSx" >
       <choice name="VLLSx is not allowed" enum="Disabled" value="0" />
@@ -89,6 +93,7 @@
    <if condition="smc_pmctrl_lpwui_available" >
       <binaryOption key="smc_pmctrl_lpwui" 
          enumStem="SmcExitLowPowerOnInt" 
+         enumType="uint8_t" 
          description="Exit low power on interrupt" 
          toolTip="Causes the SMC to exit to normal RUN mode when any active interrupt\n
                   occurs while in a VLP mode (VLPR, VLPW or VLPS)" >
@@ -124,6 +129,7 @@
       <choiceOption key="smc_pmctrl_runm[%(n)]"
          hidden="true"
          enumStem="SmcRunMode"
+         enumType="uint8_t" 
          description="Run mode"
          toolTip="Determines the clock speed restrictions that apply">
          <choice value="0"  name="Normal RUN"         enum="Normal"        isDefault="true" />
@@ -134,6 +140,7 @@
    
    <choiceOption key="smc_pmctrl_stopm" 
       enumStem="SmcStopMode" 
+      enumType="uint8_t" 
       description="Stop Mode Control"
       toolTip="Controls entry into the selected stop mode when Sleep-Now or Sleep-On-Exit \n
                mode is entered with SLEEPDEEP=1">
@@ -171,6 +178,7 @@
    <if condition="smc_stopctrl_pstopo_available">
       <choiceOption key="smc_stopctrl_pstopo" 
          enumStem="SmcPartialStopMode" 
+         enumType="uint8_t" 
          description="Partial Stop Mode"
          toolTip="Controls whether a Partial Stop mode is entered when STOPM=STOP">
          <choice value="0" enum="Normal"    name="STOP - Normal Stop mode" />
@@ -192,6 +200,7 @@
 
    <binaryOption key="smc_stopctrl_porpo" 
       enumStem="SmcPowerOnReset" 
+      enumType="uint8_t" 
       description="POR Power Option" 
       toolTip="Controls whether the POR detect circuit is enabled in VLLS0 mode" >
       <choice value="0" enum="Enabled"  name="POR detect circuit is enabled in VLLS0"  isDefault="true" />
@@ -212,6 +221,7 @@
    <if condition="smc_stopctrl_ram2po_available">
       <binaryOption key="smc_stopctrl_ram2po" 
          enumStem="SmcLowLeakageRam2" 
+         enumType="uint8_t" 
          description="RAM2 Power Option" 
          toolTip="Controls powering of RAM partition 2 in LLS2/VLLS2 mode" >
          <choice value="0" enum="Disabled" name="RAM2 not powered in VLLS2"     isDefault="true" />
@@ -233,6 +243,7 @@
    <if condition="smc_stopctrl_lpopo_available">
       <binaryOption key="smc_stopctrl_lpopo" 
          enumStem="SmcLpoInLowLeakage" 
+         enumType="uint8_t" 
          description="Stop mode LPO Option" 
          toolTip="Controls whether the 1 kHz LPO clock is enabled in LLS/VLLSx modes" >
          <choice value="0" enum="Disabled" name="LPO clock is enabled in LLS/VLLSx"  isDefault="true" />
@@ -253,6 +264,7 @@
 
    <choiceOption key="smc_stopctrl_llsm" 
       enumStem="SmcLowLeakageStopMode" 
+      enumType="uint8_t" 
       description="LLS or VLLS Mode Control"
       toolTip="Controls which VLLS/LLS sub-mode to enter if STOPM = LLSx/VLLSx\n
                Note that shared options apply to both modes _VLLS2=_LLS2 applies to LLS &amp; VLLS">
@@ -308,6 +320,7 @@
    <choiceOption key="smc_pmstat_pmstat" 
       hidden="true"
       enumStem="SmcStatus"
+      enumType="uint8_t" 
       description="Processor execution state"
       toolTip="This register changes to reflect the execution state of the processor">
       <choice value="1&lt;&lt;7" enum="HSRUN" name="Processor is in High Speed Run mode"  condition="smc_pmprot_ahsrun" />

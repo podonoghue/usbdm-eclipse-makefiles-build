@@ -2,7 +2,7 @@
 
 <!ENTITY % gui_items        "(xi:include|addDependency|deleteOption|category|categoryOption|addChoices|aliasCategoryOption|if|for|aliasCategory|constant|floatOption|intOption|bitmaskOption|choiceOption|binaryOption|irqOption|stringOption|numericListOption|pinListOption|aliasOption|signals)" >
 <!ENTITY % structure_items  "(xi:include|section|list)" >
-<!ENTITY % control_items    "(xi:include|template|setTemplate|enumTemplate|clockCodeTemplate|validate|projectActionList)" >
+<!ENTITY % control_items    "(xi:include|template|setTemplate|enumTemplate|initialValueTemplate|clockCodeTemplate|validate|projectActionList)" >
 
 <!-- Include another file -->
 <!ELEMENT xi:include EMPTY>
@@ -58,10 +58,12 @@
    <!ATTLIST categoryOption  hidden          (false|true) #IMPLIED>
 
 <!ELEMENT deleteOption EMPTY >
-   <!ATTLIST deleteOption key           CDATA        #REQUIRED>
+   <!ATTLIST deleteOption condition     CDATA         #IMPLIED>
+   <!ATTLIST deleteOption key           CDATA         #REQUIRED>
    <!ATTLIST deleteOption mustExist     (false|true)  #IMPLIED>
 
 <!ELEMENT intOption EMPTY >
+   <!ATTLIST intOption condition     CDATA        #IMPLIED>
    <!ATTLIST intOption constant     (false|true)  #IMPLIED>
    <!ATTLIST intOption hidden       (false|true)  #IMPLIED>
    <!ATTLIST intOption name          CDATA        #IMPLIED>
@@ -87,6 +89,7 @@
    <!ATTLIST intOption radix         CDATA        #IMPLIED>
   
 <!ELEMENT bitmaskOption EMPTY >
+   <!ATTLIST bitmaskOption condition      CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption constant       (false|true) #IMPLIED>
    <!ATTLIST bitmaskOption hidden         (false|true) #IMPLIED>
    <!ATTLIST bitmaskOption name           CDATA        #IMPLIED>
@@ -136,6 +139,7 @@
    <!ATTLIST aliasOption optional    (false|true) #IMPLIED>
 
 <!ELEMENT stringOption EMPTY >
+   <!ATTLIST stringOption condition     CDATA        #IMPLIED>
    <!ATTLIST stringOption constant      (false|true) #IMPLIED>
    <!ATTLIST stringOption hidden        (false|true) #IMPLIED>
    <!ATTLIST stringOption name          CDATA        #IMPLIED>
@@ -156,6 +160,7 @@
    <!ATTLIST stringOption code          CDATA        #IMPLIED>
   
 <!ELEMENT numericListOption EMPTY >
+   <!ATTLIST numericListOption condition     CDATA        #IMPLIED>
    <!ATTLIST numericListOption constant      (false|true) #IMPLIED>
    <!ATTLIST numericListOption hidden        (false|true) #IMPLIED>
    <!ATTLIST numericListOption name          CDATA        #IMPLIED>
@@ -177,6 +182,7 @@
    <!ATTLIST addDependency key           CDATA        #REQUIRED>
 
 <!ELEMENT pinListOption EMPTY >
+   <!ATTLIST pinListOption condition     CDATA        #IMPLIED>
    <!ATTLIST pinListOption constant      (false|true) #IMPLIED>
    <!ATTLIST pinListOption hidden        (false|true) #IMPLIED>
    <!ATTLIST pinListOption name          CDATA        #IMPLIED>
@@ -192,6 +198,7 @@
    <!ATTLIST pinListOption derivedFrom   CDATA        #IMPLIED>
    
 <!ELEMENT choiceOption ((choice)*) >
+   <!ATTLIST choiceOption condition           CDATA        #IMPLIED>
    <!ATTLIST choiceOption constant            (false|true) #IMPLIED>
    <!ATTLIST choiceOption hidden              (false|true) #IMPLIED>
    <!ATTLIST choiceOption name                CDATA        #IMPLIED>
@@ -204,6 +211,7 @@
    <!ATTLIST choiceOption derived             (false|true) #IMPLIED>
    <!ATTLIST choiceOption derivedFrom         CDATA        #IMPLIED>
    <!ATTLIST choiceOption enumStem            CDATA        #IMPLIED>
+   <!ATTLIST choiceOption enumType            CDATA        #IMPLIED>
    <!ATTLIST choiceOption typeName            CDATA        #IMPLIED>
    <!ATTLIST choiceOption target              CDATA        #IMPLIED>
    <!ATTLIST choiceOption register            CDATA        #IMPLIED>
@@ -224,6 +232,7 @@
    <!ATTLIST choice code                      CDATA        #IMPLIED>
 
 <!ELEMENT binaryOption (choice, choice?) >
+   <!ATTLIST binaryOption condition     CDATA        #IMPLIED>
    <!ATTLIST binaryOption key           CDATA        #REQUIRED>
    <!ATTLIST binaryOption name          CDATA        #IMPLIED>
    <!ATTLIST binaryOption value         CDATA        #IMPLIED>
@@ -243,6 +252,7 @@
    <!ATTLIST binaryOption target        CDATA        #IMPLIED>
 
 <!ELEMENT irqOption EMPTY >
+   <!ATTLIST irqOption condition     CDATA        #IMPLIED>
    <!ATTLIST irqOption constant      (false|true) #IMPLIED>
    <!ATTLIST irqOption hidden        (false|true) #IMPLIED>
    <!ATTLIST irqOption name          CDATA        #IMPLIED>
@@ -267,8 +277,10 @@
    <!ATTLIST template namespace (info|usbdm|class|all)  "info" >
    <!ATTLIST template key        CDATA                  "" >
    <!ATTLIST template variable   CDATA                  #IMPLIED>
+   <!ATTLIST template condition  CDATA                  #IMPLIED>
 
 <!ELEMENT setTemplate (#PCDATA)* >
+   <!ATTLIST setTemplate condition         CDATA                  #IMPLIED>
    <!ATTLIST setTemplate namespace        (info|usbdm|class|all)  "info" >
    <!ATTLIST setTemplate key               CDATA                  #IMPLIED >
    <!ATTLIST setTemplate variables         CDATA                  #REQUIRED>
@@ -278,6 +290,7 @@
    <!ATTLIST initialValueTemplate namespace        (info|usbdm|class|all)  "info" >
    <!ATTLIST initialValueTemplate key               CDATA                  #IMPLIED >
    <!ATTLIST initialValueTemplate variables         CDATA                  #REQUIRED>
+   <!ATTLIST initialValueTemplate terminator        CDATA                  #IMPLIED>
 
 <!ELEMENT enumTemplate (#PCDATA)* >
    <!ATTLIST enumTemplate namespace     (info|usbdm|class|all)  "info" >
@@ -287,15 +300,17 @@
    <!ATTLIST enumTemplate enumStem      CDATA                   #IMPLIED>
    <!ATTLIST enumTemplate typeName      CDATA                   #IMPLIED>
    <!ATTLIST enumTemplate valueFormat   CDATA                   #IMPLIED>
+   <!ATTLIST enumTemplate enumType      CDATA                   #IMPLIED>
 
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
+   <!ATTLIST clockCodeTemplate condition    CDATA               #IMPLIED>
    <!ATTLIST clockCodeTemplate namespace    (info|usbdm|class|all) "info" >
-   <!ATTLIST clockCodeTemplate name         CDATA                  "" >
-   <!ATTLIST clockCodeTemplate variable     CDATA                  #IMPLIED>
-   <!ATTLIST clockCodeTemplate enumStem     CDATA                  #IMPLIED>
-   <!ATTLIST clockCodeTemplate typeName     CDATA                  #IMPLIED>
-   <!ATTLIST clockCodeTemplate returnFormat CDATA                  #IMPLIED>
-   <!ATTLIST clockCodeTemplate mask         CDATA                  #IMPLIED>
+   <!ATTLIST clockCodeTemplate name         CDATA               "" >
+   <!ATTLIST clockCodeTemplate variable     CDATA               #IMPLIED>
+   <!ATTLIST clockCodeTemplate enumStem     CDATA               #IMPLIED>
+   <!ATTLIST clockCodeTemplate typeName     CDATA               #IMPLIED>
+   <!ATTLIST clockCodeTemplate returnFormat CDATA               #IMPLIED>
+   <!ATTLIST clockCodeTemplate mask         CDATA               #IMPLIED>
 
 <!ELEMENT for (%gui_items;|%structure_items;|%control_items;|template)* >
    <!ATTLIST for keys                 CDATA        #REQUIRED>

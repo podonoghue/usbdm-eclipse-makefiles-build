@@ -3,19 +3,26 @@
 <!-- mcg_mk_ics48m.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Multipurpose Clock Generator">
-   
+
+   <constant key="mcg_c2_erefs0_present"  />
+   <constant key="mcg_c2_hgo0_present"    />
+   <constant key="mcg_c7_oscsel_present"  />
+   <constant key="mcg_c8_cme1_present"    />
+   <constant key="mcg_c8_locre1_present"  />
+   <constant key="mcg_c8_lolre_present"   />
+
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG" dim="/SIM/numberOfClockSettings" >
-      <param type="long" value="3" />              <!-- mcg_c4_drst_drs   -->
-      <param type="long" value="2000000" />        <!-- pllInMin     -->
-      <param type="long" value="4000000" />        <!-- pllInMax     -->
-      <param type="long" value="48000000" />       <!-- pllOutMin    -->
-      <param type="long" value="120000000" />      <!-- pllOutMax    -->
-      <param type="long" value="1" />              <!-- prDivMin     -->
-      <param type="long" value="25" />             <!-- prDivMax     -->
-      <param type="long" value="24" />             <!-- vDivMin      available as pll_vdiv_min -->
-      <param type="long" value="55" />             <!-- vDivMax      -->
-      <param type="long" value="1" />              <!-- pllPostDiv   available as pll_post_divider -->
+      <param type="long" value="3"         />    <!-- mcg_c4_drst_drs max -->
+      <param type="long" value="2000000"   />    <!-- pllInMin     -->
+      <param type="long" value="4000000"   />    <!-- pllInMax     -->
+      <param type="long" value="48000000"  />    <!-- pllOutMin    -->
+      <param type="long" value="120000000" />    <!-- pllOutMax    -->
+      <param type="long" value="1"         />    <!-- prDivMin     -->
+      <param type="long" value="25"        />    <!-- prDivMax     -->
+      <param type="long" value="24"        />    <!-- vDivMin      available as pll_vdiv_min -->
+      <param type="long" value="55"        />    <!-- vDivMax      -->
+      <param type="long" value="1"         />    <!-- pllPostDiv   available as pll_post_divider -->
    </validate>
    
    <xi:include href="mcg_base.xml"/>

@@ -6,9 +6,43 @@
 
    <xi:include href="_default_instance.xml"/>
    
-   <constant key="disable_peripheral" derived = "true" value = "adc->SC1[0] = ADC_SC1_ADCH(-1);"  />
+   <constant key="disable_peripheral" value = "adc->SC1[0] = ADC_SC1_ADCH(-1);"  />
+   
    <xi:include href="_mapPinsOption.xml"/>
    
+<!-- ========== PGA features =============================== -->
+   <choiceOption key="adc_pga_pgaen" condition="adc_pga_present"
+      description="PGA Enable and mode"
+      valueFormat="(%s)"
+      enumStem="AdcPgaMode"
+      toolTip="">
+      <choice value="ADC_PGA_PGAEN(0)"                   name="PGA is disabled"          enum="Disabled" isDefault="true" />
+      <choice value="ADC_PGA_PGAEN(1)|ADC_PGA_PGALPb(0)" name="PGA is in low power mode" enum="LowPower"      />
+      <choice value="ADC_PGA_PGAEN(1)|ADC_PGA_PGALPb(1)" name="PGA is in normal mode"    enum="NormalPower"   />
+   </choiceOption>
+
+   <choiceOption key="adc_pga_pgag" condition="adc_pga_present" 
+      description="PGA Gain Setting"
+      enumStem="AdcPgaGain"
+      toolTip="Sets gain of PGA amplifier">
+      <choice value="0" name="Gain = x1"  enum="x1" isDefault="true" />
+      <choice value="1" name="Gain = x2"  enum="x2"   />
+      <choice value="2" name="Gain = x4"  enum="x4"   />
+      <choice value="3" name="Gain = x8"  enum="x8"   />
+      <choice value="4" name="Gain = x16" enum="x16"  />
+      <choice value="5" name="Gain = x32" enum="x32"  />
+      <choice value="6" name="Gain = x64" enum="x64"  />
+   </choiceOption>
+
+   <binaryOption key="adc_pga_pgachp" condition="adc_pga_present" 
+      description="PGA chopping"
+      valueFormat="ADC_PGA_PGACHPb(%s)"
+      enumStem="AdcPgaChop"
+      toolTip="Controls PGA chopping to remove/reduce offset">
+      <choice value="0" enum="Disabled" name="No chopping"        isDefault="true" />
+      <choice value="1" enum="Enabled"  name="Chopping enabled"   />
+   </binaryOption>
+
 <!-- ========== ADC clock sources =============================== -->
 
    <intOption key="adcInternalClock" 
@@ -78,7 +112,19 @@
 
 <!-- ========== ADC =============================== -->
 
-   <aliasOption key="adc_cfg1_mode" constant="false" />
+   <choiceOption key="adc_cfg1_mode" description="ADC Resolution"
+      enumStem="AdcResolution"
+      toolTip="The resolutions available vary with single-ended/differential modes\n
+               Note the equivalence between modes e.g. 8-bit-se = 9-bit-diff" >
+      <choice value="0" name="8-bit unsigned (single-ended mode)"   enum="8bit_se"    />
+      <choice value="2" name="10-bit unsigned (single-ended mode)"  enum="10bit_se"   />
+      <choice value="1" name="12-bit unsigned (single-ended mode)"  enum="12bit_se"   />
+      <choice value="3" name="16-bit unsigned (single-ended mode)"  enum="16bit_se"   condition="adc_cfg1_mode_16bit_present" />
+      <choice value="0" name="9-bit signed (differential mode)"     enum="9bit_diff"  condition="adc_cfg1_mode_diff_present" />
+      <choice value="2" name="11-bit signed (differential mode)"    enum="11bit_diff" condition="adc_cfg1_mode_diff_present" />
+      <choice value="1" name="13-bit signed (differential mode)"    enum="13bit_diff" condition="adc_cfg1_mode_diff_present" />
+      <choice value="3" name="16-bit signed (differential mode)"    enum="16bit_diff" condition="adc_cfg1_mode_diff_present&amp;&amp;adc_cfg1_mode_16bit_present" />
+   </choiceOption>
 
    <binaryOption key="adc_cfg1_adlpc" description="Low-Power Configuration"
       enumStem="AdcPower"
@@ -140,7 +186,13 @@
       <choice value="0" enum="Default" name="Default" />
    </choiceOption>
 
-   <aliasOption key="adc_sc2_dmaen" constant="false" optional="true" />
+   <binaryOption key="adc_sc2_dmaen" condition="adc_sc2_dmaen_present"
+      description="DMA Enable"
+      enumStem="AdcDma"
+      toolTip="Enables use of DMA with ADC">
+      <choice value="0" enum="Disabled" name="Disabled" isDefault="true" />
+      <choice value="1" enum="Enabled"  name="Enabled" />
+   </binaryOption>
 
    <binaryOption key="adc_sc1_aien" description="Enables conversion interrupts"
       enumStem="AdcInterrupt"

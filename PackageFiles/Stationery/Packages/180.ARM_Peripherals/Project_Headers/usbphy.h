@@ -160,7 +160,7 @@ public:
       Info::enableClock();
 
       // Release PHY from reset
-      Info::resetPhy();
+      Info::assertPhyReset();
       Info::releasePhyReset();
 
       // Enable UTMI Clocks

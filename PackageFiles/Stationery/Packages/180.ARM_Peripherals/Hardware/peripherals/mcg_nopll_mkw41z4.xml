@@ -1,42 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- mgc_mkl.xml -->
+<!-- mcg_nopll_mkw41z4.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Multipurpose Clock Generator">
 
-   <for keys="n" dim="/SIM/numberOfClockSettings">
-      <category name=""
-            hidden="true"
-            constant="true"
-            derived="true" >
-
-
-      <binaryOption key="mcg_c8_cme1[%(n)]" 
-         description="OSC1 (RTC) Clock Monitor Enable"
-         toolTip="Determines if the clock monitor is enabled for the RTC external clock.\n
-                  CME1 bit must be set to a logic 0 before the MCG enters any Stop mode">
-         <choice value="0" name="Clock monitor disabled" />
-         <choice value="1" name="Clock monitor enabled" />
-      </binaryOption>
-      
-      <binaryOption key="mcg_c8_locre1[%(n)]" 
-         description="OSC1 (RTC) Loss of Clock Reset Enable"
-         toolTip="Determines if a interrupt or a reset request is made following a loss of RTC external reference clock.\n 
-                  Only has an affect when CME1 is set" >
-         <choice value="0" name="Interrupt request" />
-         <choice value="1" name="Reset request" />
-      </binaryOption>
-      </category>
-   </for>
-
-   
-   <!-- mcg_c2_erefs0 always 0 -->
-
-   <!-- mcg_c2_hgo0 always 0 -->
+   <constant key="mcg_c7_oscsel_present"  />
+   <constant key="mcg_c8_cme1_present"    />
+   <constant key="mcg_c8_locre1_present"  />
+   <!-- mcg_c8_lolre not used    -->
+   <!-- mcg_c2_erefs0 always 0   -->
+   <!-- mcg_c2_hgo0 always 0     -->
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_no_pll" dim="/SIM/numberOfClockSettings" >
-      <param type="long" value="1" />              <!-- mcg_c4_drst_drs max -->
+      <param type="long" value="1"         />    <!-- mcg_c4_drst_drs max -->
    </validate>
    
    <xi:include href="mcg_base_nopll.xml"/>

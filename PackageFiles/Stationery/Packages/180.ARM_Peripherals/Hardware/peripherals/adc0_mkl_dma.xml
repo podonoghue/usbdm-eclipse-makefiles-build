@@ -4,23 +4,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analogue to Digital Converter">
 
-   <choiceOption key="adc_cfg1_mode" description="ADC Resolution"
-      hidden="true"
-      enumStem="AdcResolution"
-      toolTip="The resolutions available vary with single-ended/differential modes\n
-               Note the equivalence between modes e.g. 8-bit-se = 9-bit-diff" >
-      <choice value="0" name="8-bit unsigned (single-ended mode)"   enum="8bit_se"    />
-      <choice value="2" name="10-bit unsigned (single-ended mode)"  enum="10bit_se"   />
-      <choice value="1" name="12-bit unsigned (single-ended mode)"  enum="12bit_se"   />
-   </choiceOption>
-
-   <binaryOption key="adc_sc2_dmaen" description="DMA Enable"
-      hidden="true"
-      enumStem="AdcDma"
-      toolTip="Enables use of DMA with ADC">
-      <choice value="0" enum="Disabled" name="Disabled" isDefault="true" />
-      <choice value="1" enum="Enabled"  name="Enabled" />
-   </binaryOption>
+   <constant key="adc_sc2_dmaen_present" />
 
    <xi:include href="_adc_base.xml"/>
 

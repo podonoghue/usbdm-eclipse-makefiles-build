@@ -60,7 +60,7 @@
          <choice value="0" name="Low power" isDefault="true"/>
          <choice value="1" name="High gain" />
       </binaryOption>
-      <choiceOption key="mcg_c2_range"
+      <choiceOption key="mcg_c2_range0"
          derived="true"
          constant="true"
          description="Frequency Range Select"
@@ -238,7 +238,7 @@
          </category>
          
          <category name="MCG_C2" description="MCG Control Register 2">
-            <aliasOption key="mcg_c2_range" />
+            <aliasOption key="mcg_c2_range0" />
             <aliasOption key="mcg_c2_hgo0" />
             <aliasOption key="mcg_c2_erefs0" />
             <aliasOption key="mcg_c2_ircs[%(n)]" />
@@ -389,83 +389,88 @@
    <for keys="n" dim="/SIM/numberOfClockSettings">
       <template key="McgClockInfoEntries" namespace="all" ><![CDATA[
          \t#if $(enableClockConfiguration[%(n)])
-         \t   {  // $(ClockConfig[%(n)]) ($(mcgClockMode[%(n)].enum[]))
-         \t      
-         \t      //! SIM CLKDIV1 System Clock Divider Register 1
-         \t      SIM_CLKDIV1_OUTDIV4($(/SIM/sim_clkdiv1_outdiv4[%(n)]:0))|  // Flash clock
-         \t      SIM_CLKDIV1_OUTDIV3($(/SIM/sim_clkdiv1_outdiv3[%(n)]:0))|  // FlexBus clock
-         \t      SIM_CLKDIV1_OUTDIV2($(/SIM/sim_clkdiv1_outdiv2[%(n)]:0))|  // Bus clock
-         \t      SIM_CLKDIV1_OUTDIV1($(/SIM/sim_clkdiv1_outdiv1[%(n)]:0)),  // Core/system clock
+         \t{  // $(ClockConfig[%(n)]) ($(mcgClockMode[%(n)].enum[]))
+         \t\n
+      ]]></template>
+
+      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
+         terminator="," 
+         variables="
+            /SIM/sim_clkdiv1_outdiv4[%(n)],     
+            /SIM/sim_clkdiv1_outdiv3[%(n)],
+            /SIM/sim_clkdiv1_outdiv2[%(n)],  
+            /SIM/sim_clkdiv1_outdiv1[%(n)]"     
+      ><![CDATA[\t   /// SIM CLKDIV1 System Clock Divider Register 1 %expression\n\n ]]></initialValueTemplate>
               
-      \t#if defined(SIM_CLKDIV3_PLLFLLDIV)
-      \t      //! SIM CLKDIV3 System Clock Divider Register 3
-      \t      $(/SIM/sim_clkdiv3_pllfll.:0),
-      \t#endif
-      
-      \t      //! SIM SOPT2 System Options Register 2
-      \t#ifdef SIM_SOPT2_TRACECLKSEL
-      \t   SIM_SOPT2_TRACECLKSEL($(/SIM/sim_sopt2_traceclksel:0)) |      // Debug trace clock select
-      \t#endif
-      \t#ifdef SIM_SOPT2_TIMESRC
-      \t   SIM_SOPT2_TIMESRC($(/SIM/sim_sopt2_timesrc:0)) |          // IEEE 1588 timestamp clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_RMIISRC
-      \t   SIM_SOPT2_RMIISRC($(/SIM/sim_sopt2_rmiisrc:0)) |          // Ethernet RMII clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_SDHCSRC
-      \t      SIM_SOPT2_SDHCSRC($(/SIM/sim_sopt2_sdhcsrc:0)) |       // SDHC clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_UART0SRC
-      \t   SIM_SOPT2_UART0SRC($(/SIM/sim_sopt2_uart0src:0)) |         // UART0 clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_FLEXIOSRC
-      \t      SIM_SOPT2_FLEXIOSRC($(/SIM/sim_sopt2_flexiosrc:0)) |        // FLEXIO clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_LPUARTSRC
-      \t      SIM_SOPT2_LPUARTSRC($(/SIM/sim_sopt2_lpuartsrc:0)) |     // LPUART clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_LPUART0SRC
-      \t      SIM_SOPT2_LPUART0SRC($(/SIM/sim_sopt2_lpuart0src:0)) |    // LPUART0 clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_LPUART1SRC
-      \t      SIM_SOPT2_LPUART1SRC($(/SIM/sim_sopt2_lpuart1src:0)) |    // LPUART1 clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_PTD7PAD
-      \t      SIM_SOPT2_PTD7PAD($(/SIM/sim_sopt2_ptd7pad:0)) |       // PTD7 pad drive strength
-      \t#endif
-      \t#ifdef SIM_SOPT2_TPMSRC
-      \t      SIM_SOPT2_TPMSRC($(/SIM/sim_sopt2_tpmsrc:0)) |        // TPM clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_USBSRC
-      \t      SIM_SOPT2_USBSRC($(/SIM/sim_sopt2_usbsrc:0)) |        // USB clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_FBSL
-      \t      SIM_SOPT2_FBSL($(/SIM/sim_sopt2_fbsl:0)) |          // FlexBus security level
-      \t#endif
-      \t      SIM_SOPT2_RTCCLKOUTSEL($(/SIM/sim_sopt2_rtcclkoutsel)) |  // RTC clock out select
-      \t      SIM_SOPT2_CLKOUTSEL($(/SIM/sim_sopt2_clkoutsel)),      // CLKOUT pin clock source select
-      
-      \t      //! Clock Mode
-      \t      $(mcgClockMode[%(n)].enum[]),
+      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
+         terminator="," 
+         variables=
+            "/SIM/sim_clkdiv3_pllfll[%(n)]"     
+      ><![CDATA[\t   /// SIM CLKDIV3 System Clock Divider Register 3 %expression\n\n ]]></initialValueTemplate>
+
+      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
+         terminator="," 
+         variables="
+            /SIM/sim_sopt2_traceclksel,
+            /SIM/sim_sopt2_timesrc,
+            /SIM/sim_sopt2_rmiisrc,
+            /SIM/sim_sopt2_sdhcsrc,
+            /SIM/sim_sopt2_uart0src,
+            /SIM/sim_sopt2_flexiosrc,
+            /SIM/sim_sopt2_lpuartsrc,
+            /SIM/sim_sopt2_lpuart0src,
+            /SIM/sim_sopt2_lpuart1src,
+            /SIM/sim_sopt2_ptd7pad,
+            /SIM/sim_sopt2_tpmsrc,
+            /SIM/sim_sopt2_usbsrc,
+            /SIM/sim_sopt2_fbsl,
+            /SIM/sim_sopt2_rtcclkoutsel,
+            /SIM/sim_sopt2_clkoutsel"     
+      ><![CDATA[\t   /// SIM SOPT2 System Options Register 2 %expression\n\n ]]></initialValueTemplate>
+
+      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
+         terminator="," 
+         variables="
+            mcgClockMode[%(n)]"     
+      ><![CDATA[\t   /// Clock Mode %expression\n\n ]]></initialValueTemplate>
+
+      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
+         terminator="," 
+         variables=
+            "/SMC/smc_pmctrl_runm[%(n)]"     
+      ><![CDATA[\t   /// Run Mode %expression\n\n ]]></initialValueTemplate>
+
+      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
+         terminator="," 
+         variables="
+            mcg_c1_irclken[%(n)],
+            mcg_c1_irefsten[%(n)]"     
+      ><![CDATA[\t   /// Control Register 1 - Excluding CLKS %expression\n\n ]]></initialValueTemplate>
+
+      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
+         terminator="," 
+         variables="
+             mcg_c2_range0,
+             mcg_c2_hgo0,
+             mcg_c2_erefs0,
+             mcg_c2_ircs[%(n)]"     
+      ><![CDATA[\t   /// Control Register 2 - %expression\n\n ]]></initialValueTemplate>
+
+      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
+         terminator="," 
+         variables=
+            "mcg_sc_fcrdiv[%(n)]"     
+      ><![CDATA[\t   /// Status and Control Register %expression\n\n ]]></initialValueTemplate>
               
-      \t      //! Run Mode
-      \t      $(/SMC/smc_pmctrl_runm[%(n)].enum[]),
+      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
+         terminator="," 
+         variables="
+            mcg_mc_hircen[%(n)],
+            mcg_mc_lirc_div2[%(n)]"     
+      ><![CDATA[\t   /// Miscellaneous Control Register - Excluding HIRCLPEN %expression\n\n ]]></initialValueTemplate>
               
-      \t      //! Control Register 1 - Excluding CLKS
-      \t      MCG_C1_IRCLKEN($(mcg_c1_irclken[%(n)])) | // IRCLEN   Internal Reference Clock Enable
-      \t      MCG_C1_IREFSTEN($(mcg_c1_irefsten[%(n)])), // IREFSTEN Internal Reference Stop Enable
-              
-      \t      //! Control Register 2
-      \t      MCG_C2_EREFS0($(mcg_c2_erefs0:0)) | // EREFS   External Reference Select
-      \t      MCG_C2_IRCS($(mcg_c2_ircs[%(n)])),    // IRCS    Internal Reference Clock Select
-              
-      \t      //! Status and Control Register
-      \t      MCG_SC_FCRDIV($(mcg_sc_fcrdiv[%(n)])), // FCRDIV (LIRC_DIV1) Internal Clock Reference Divider 1
-              
-      \t      //! Miscellaneous Control Register - Excluding HIRCLPEN
-      \t      MCG_MC_HIRCEN($(mcg_mc_hircen[%(n)])) |    // HIRCEN   Internal Reference Clock Enable
-      \t      MCG_MC_LIRC_DIV2($(mcg_mc_lirc_div2[%(n)])), // LIRC_DIV2 Internal Reference Divider 2
-         \t   },
+      <template key="McgClockInfoEntries" namespace="all" ><![CDATA[
+         \t},
          \t#endif\n
       ]]></template>
    </for>
