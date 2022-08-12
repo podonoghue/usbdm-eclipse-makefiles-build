@@ -5,30 +5,24 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
       
-   <xi:include href="_default_instance.xml"/>
- 
    <xi:include href="llwu_base_me.xml"/>   
 
-   <category name="Pin sources" description="Wakeups from pins">
-      <xi:include href="llwu_base_pe1_2.xml"/>   
-      <xi:include href="llwu_base_pe3_4.xml"/>   
-      <xi:include href="llwu_base_pe5_8.xml"/>   
-      <xi:include href="llwu_base_filt1.xml"/>   
-      <xi:include href="llwu_base_filt2.xml"/>
-      <xi:include href="llwu_base_filt3_4.xml"/>
-   </category>
-      
-   <xi:include href="_mapPinsOption.xml"/>   
-   <xi:include href="_irqOption.xml"/>
+   <constant key="llwu_filt1_present" />
+   <constant key="llwu_filt2_present" />
+   <constant key="llwu_filt3_present" />
+   <constant key="llwu_filt4_present" />
+   <constant key="llwu_pe1_present" />
+   <constant key="llwu_pe2_present" />
+   <constant key="llwu_pe3_present" />
+   <constant key="llwu_pe4_present" />
+   <constant key="llwu_pe5_present" />
+   <constant key="llwu_pe6_present" />
+   <constant key="llwu_pe7_present" />
+   <constant key="llwu_pe8_present" />
+   
+   <xi:include href="_llwu_base.xml"/>   
 
-   <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.LlwuValidate">
-   </validate>
-
-   <signals/>
-
-   <projectActionList id = "llwu_files" >
-      <copy source="Project_Headers/llwu.h"            target="Project_Headers/llwu.h"           overwrite="true" derived="true" />
+   <projectActionList id = "llwu_files_extra" >
       <copy source="Snippets/llwu-example-mk20.cpp"    target="Snippets/llwu-example-mk20.cpp"   overwrite="true" derived="true" />
       <copy source="Snippets/llwu-example-mk22f.cpp"   target="Snippets/llwu-example-mk22f.cpp"  overwrite="true" derived="true" />
       <copy source="Snippets/llwu-example-mk28f.cpp"   target="Snippets/llwu-example-mk28f.cpp"  overwrite="true" derived="true" />

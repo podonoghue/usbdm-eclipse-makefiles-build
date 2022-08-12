@@ -73,6 +73,8 @@ protected:
    /** Callback function for ISR */
    static WdogCallbackFunction callback;
 
+$(/WDOG/protectedMethods: // No private methods found)
+
 public:
    /**
     * Hardware instance pointer.
@@ -80,6 +82,28 @@ public:
     * @return Reference to WDOG hardware
     */
    static constexpr HardwarePtr<WDOG_Type> wdog = Info::baseAddress;
+
+   /**
+    * Writing the sequence of 0xA602 (WdogRefresh_1) followed by 0xB480 (WdogRefresh_2) within 20 bus clock
+    * cycles refreshes the WDOG and prevents it from resetting the system. Writing a value other than
+    * the above mentioned sequence or if the sequence is longer than 20 bus cycles, resets the system,
+    * or if IRQRSTEN is set, it interrupts and then resets the system.
+    *
+    * @param wdogRefresh_1 1st value to write (WdogRefresh_1)
+    * @param wdogRefresh_2 2nd value to write (WdogRefresh_2)
+    *
+    * @note This operation is time-critical so is protected by a CriticalSection
+    */
+   static void refresh(WdogRefresh wdogRefresh_1, WdogRefresh wdogRefresh_2) {
+   
+      // Protect sequence from interrupts
+      CriticalSection cs;
+   
+      wdog->REFRESH = wdogRefresh_1;
+      wdog->REFRESH = wdogRefresh_2;
+   }
+   
+$(/WDOG/publicMethods: // No public methods found)
 
    /**
     * IRQ handler
@@ -277,8 +301,18 @@ public:
     * Includes configuring all pins
     */
    static void defaultConfigure() {
-      enable();
-      // Initialise hardware
+
+      // Protect sequence from interrupts
+      CriticalSection cs;
+
+      wdog->UNLOCK = WdogUnlock_1;
+      wdog->UNLOCK = WdogUnlock_2;
+
+      // Read-back to delay until change effected
+      (void)(wdog->UNLOCK);
+
+      // Update settings
+      wdog->STCTRLH = USBDM::WdogInfo::stctrlh;
    }
 
    /**
@@ -289,7 +323,12 @@ public:
       CriticalSection cs;
 
       // Unlock before changing settings
-      Info::writeUnlock(WdogUnlock1, WdogUnlock2);
+      wdog->UNLOCK = WdogUnlock_1;
+      wdog->UNLOCK = WdogUnlock_2;
+
+      // Read-back to delay until change effected
+      (void)(wdog->UNLOCK);
+
       wdog->STCTRLH = wdog->STCTRLH & ~WDOG_STCTRLH_ALLOWUPDATE_MASK;
    }
 

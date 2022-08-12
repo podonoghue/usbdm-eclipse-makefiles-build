@@ -423,7 +423,7 @@ public:
     *
     * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value)
     */
-   static void setInput(PcrValue pcrValue) {
+   static void _setInput(PcrValue pcrValue) {
       // Make pin an input
       setIn();
 

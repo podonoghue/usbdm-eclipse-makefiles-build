@@ -42,11 +42,11 @@ extern volatile uint32_t SystemMcgPllClock;
  * Clock configurations
  */
 enum ClockConfig : uint8_t {
-$(/MCG/ClockConfig:// XXXX !!!!!!!ClockConfig - Not found!!!!!!!)
+$(/MCG/ClockConfig: #error ClockConfig not found)
    ClockConfig_default = 0,
 };
 
-$(/MCG/ClockInfoType:!!!!!!!Not found!!!!!!!)
+$(/MCG/ClockInfoType:#error ClockInfoType not found)
 
 /**
  * Type definition for MCG interrupt call back
@@ -70,7 +70,12 @@ private:
    /** Hardware instance */
    static constexpr HardwarePtr<MCG_Type> mcg = McgInfo::baseAddress;
 
+$(/MCG/privateMethods: // No private methods found)
+
 public:
+
+$(/MCG/publicMethods: // No public methods found)
+
    /**
     * Table of clock settings
     */

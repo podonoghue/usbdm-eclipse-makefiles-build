@@ -1393,57 +1393,58 @@
          <placement pin="XTAL32"        location="H3" />
       </package>
       <package name="FRDM_K22F">
-         <placement pin="ADC0_DM0"      location="A7/J24_3" />
-         <placement pin="ADC0_DP0"      location="A6/J24_1" />
-         <placement pin="ADC1_DM0"      location="A9/J24_7" />
-         <placement pin="ADC1_DP0"      location="A8/J24_5" />
+         <placement pin="ADC0_DM0"      location="A7" />
+         <placement pin="ADC0_DP0"      location="A6" />
+         <placement pin="ADC1_DM0"      location="A9" />
+         <placement pin="ADC1_DP0"      location="A8/LightSensor" />
          <placement pin="BANDGAP"       location="Internal" />
          <placement pin="CMP_DAC"       location="Internal" />
-         <placement pin="DAC0_OUT"      location="A11/J24_11" />
+         <placement pin="DAC0_OUT"      location="A11" />
          <placement pin="EXTAL32"       location="EXTAL32" />
          <placement pin="PIT_CH0"       location="Internal" />
          <placement pin="PIT_CH1"       location="Internal" />
          <placement pin="PIT_CH2"       location="Internal" />
          <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="SWD_CLK" />
-         <placement pin="PTA1"          location="D9/J2_4/LED_RED" />
-         <placement pin="PTA12"         location="D18/J1_5" />
-         <placement pin="PTA13"         location="D17/J1_3" />
+         <placement pin="PTA1"          location="D9/LED_RED" />
+         <placement pin="PTA12"         location="D18" />
+         <placement pin="PTA13"         location="D17" />
          <placement pin="PTA18"         location="EXTAL0" />
          <placement pin="PTA19"         location="XTAL0" />
-         <placement pin="PTA2"          location="D3/J1_8/LED_GREEN" />
+         <placement pin="PTA2"          location="D3/LED_GREEN" />
          <placement pin="PTA3"          location="SWD_DIO" />
-         <placement pin="PTA4"          location="D4/J1_10" />
-         <placement pin="PTA5"          location="D16/J1_1" />
-         <placement pin="PTB0"          location="A0/J24_2" />
-         <placement pin="PTB1"          location="A1/J24_4" />
-         <placement pin="PTB16"         location="D2/J1_6/SD_DETECT" />
+         <placement pin="PTA4"          location="D4" />
+         <placement pin="PTA5"          location="D16" />
+         <placement pin="PTB0"          location="A0" />
+         <placement pin="PTB1"          location="A1" />
+         <placement pin="PTB16"         location="D2/SD_DETECT" />
          <placement pin="PTB17"         location="SW3" />
-         <placement pin="PTB18"         location="D5/J1_12" />
-         <placement pin="PTB19"         location="D8/J2_2" />
-         <placement pin="PTB2"          location="A5/J24_12/ONBOARD_SCL" />
-         <placement pin="PTB3"          location="A4/J24_10/ONBOARD_SDA" />
+         <placement pin="PTB18"         location="D5" />
+         <placement pin="PTB19"         location="D8" />
+         <placement pin="PTB2"          location="A5/ONBOARD_SCL" />
+         <placement pin="PTB3"          location="A4/ONBOARD_SDA" />
          <placement pin="PTC0"          location="USB_FLAG" />
-         <placement pin="PTC1"          location="A2/J24_6/SW2" />
-         <placement pin="PTC10"         location="D22/J1_13" />
-         <placement pin="PTC2"          location="A3/J24_8" />
-         <placement pin="PTC3"          location="D6/J1_14" />
-         <placement pin="PTC4"          location="A10/J24_9/SD_SS" />
-         <placement pin="PTC5"          location="D23/J1_15" />
-         <placement pin="PTC6"          location="D7/J1_16" />
-         <placement pin="PTC7"          location="D21/J1_11" />
-         <placement pin="PTC8"          location="D19/J1_7" />
-         <placement pin="PTC9"          location="D20/J1_9" />
-         <placement pin="PTD0"          location="ACCEL_INT1" />
-         <placement pin="PTD1"          location="SD_CLK/ACCEL_INT2" />
-         <placement pin="PTD2"          location="D0/J1_2/SD_MOSI/BT_RX" />
-         <placement pin="PTD3"          location="D1/J1_4/SD_MISO/BT_TX" />
-         <placement pin="PTD4"          location="D10/J2_6" />
-         <placement pin="PTD5"          location="D13/J2_12/LED_BLUE" />
-         <placement pin="PTD6"          location="D11/J2_8" />
-         <placement pin="PTD7"          location="D12/J2_10" />
-         <placement pin="PTE0"          location="D14/J2_18/ConTx" />
-         <placement pin="PTE1"          location="D15/J2_19/ConRx" />
+         <placement pin="PTC1"          location="A2/SW2" />
+         <placement pin="PTC10"         location="D22" />
+         <placement pin="PTC11"         location="D27/RF_CE" />
+         <placement pin="PTC2"          location="A3" />
+         <placement pin="PTC3"          location="D6" />
+         <placement pin="PTC4"          location="A10/SD_SS" />
+         <placement pin="PTC5"          location="D23" />
+         <placement pin="PTC6"          location="D7" />
+         <placement pin="PTC7"          location="D21" />
+         <placement pin="PTC8"          location="D19" />
+         <placement pin="PTC9"          location="D20" />
+         <placement pin="PTD0"          location="ACC_INT1/RF_IRQ" />
+         <placement pin="PTD1"          location="SD_CLK/ACC_INT2/RF_SCK" />
+         <placement pin="PTD2"          location="D0/SD_MOSI/BT_RX/RF_MOSI" />
+         <placement pin="PTD3"          location="D1/SD_MISO/BT_TX/RF_MISO" />
+         <placement pin="PTD4"          location="D10/RF_CS" />
+         <placement pin="PTD5"          location="D13/LED_BLUE" />
+         <placement pin="PTD6"          location="D11" />
+         <placement pin="PTD7"          location="D12" />
+         <placement pin="PTE0"          location="D14/ConTx" />
+         <placement pin="PTE1"          location="D15/ConRx" />
          <placement pin="RESET_b"       location="RESET_b" />
          <placement pin="TEMP_SENSOR"   location="Internal" />
          <placement pin="USB0_DM"       location="USB0_DM" />

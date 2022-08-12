@@ -286,7 +286,7 @@
    <!ATTLIST setTemplate variables         CDATA                  #REQUIRED>
    <!ATTLIST setTemplate nonDefaultParams  CDATA                  "1">
 
-<!ELEMENT initialValueTemplate (#PCDATA)* >
+<!ELEMENT initialValueTemplate (#PCDATA|variable|for)* >
    <!ATTLIST initialValueTemplate namespace        (info|usbdm|class|all)  "info" >
    <!ATTLIST initialValueTemplate key               CDATA                  #IMPLIED >
    <!ATTLIST initialValueTemplate variables         CDATA                  #REQUIRED>

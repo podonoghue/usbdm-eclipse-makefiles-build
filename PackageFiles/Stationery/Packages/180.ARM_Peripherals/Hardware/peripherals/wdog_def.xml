@@ -88,23 +88,21 @@
       <choice value="1" enum="Enabled"  name="Watchdog enabled" />
    </binaryOption>  
    
-   <template><![CDATA[
+   <initialValueTemplate
+      variables="
+         wdog_stctrlh_distestwdog,
+         wdog_stctrlh_waiten,
+         wdog_stctrlh_stopen,
+         wdog_stctrlh_dbgen,
+         wdog_stctrlh_allowupdate,
+         wdog_stctrlh_winen,
+         wdog_stctrlh_irqrsten,
+         wdog_stctrlh_clksrc,
+         wdog_stctrlh_wdogen"
+   ><![CDATA[
       \t//! Watchdog Status and Control Register High
-      \tstatic constexpr uint32_t stctrlh = \n
-   ]]></template>
-   <template variable="wdog_stctrlh_distestwdog" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="wdog_stctrlh_waiten"      ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="wdog_stctrlh_stopen"      ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="wdog_stctrlh_dbgen"       ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="wdog_stctrlh_allowupdate" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="wdog_stctrlh_winen"       ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="wdog_stctrlh_irqrsten"    ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="wdog_stctrlh_clksrc"      ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template variable="wdog_stctrlh_wdogen"      ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   <template>
-   <![CDATA[
-      \t   0;\n\n
-   ]]></template>
+      \tstatic constexpr uint32_t stctrlh = %expression\n\n
+   ]]></initialValueTemplate>
    
    <template key="/SYSTEM/Includes" namespace="all" ><![CDATA[
       #include "wdog.h"\n
@@ -114,15 +112,11 @@
       \t/*
       \t * Initialise watchdog
       \t */
-      \t//   Unlock before changing settings
-      \tUSBDM::Wdog::unlock(USBDM::WdogUnlock_1, USBDM::WdogUnlock_2);
-      \t
-      \t// Update settings
-      \tUSBDM::Wdog::wdog->STCTRLH = USBDM::WdogInfo::stctrlh;
+      \tUSBDM::Wdog::defaultConfigure();
       \t
    ]]></template>
    
-   <setTemplate 
+   <setTemplate key="/WDOG/publicMethods" namespace="all" 
       variables="
          wdog_stctrlh_wdogen,
          wdog_stctrlh_clksrc,
@@ -132,47 +126,6 @@
          wdog_stctrlh_stopen,
          wdog_stctrlh_waiten"
    ><![CDATA[
-      \t/**
-      \t * Writing the sequence of 0xA602 (WdogRefresh_1) followed by 0xB480 (WdogRefresh_2) within 20 bus clock
-      \t * cycles refreshes the WDOG and prevents it from resetting the system. Writing a value other than
-      \t * the above mentioned sequence or if the sequence is longer than 20 bus cycles, resets the system,
-      \t * or if IRQRSTEN is set, it interrupts and then resets the system.
-      \t *
-      \t * @param wdogRefresh_1 1st value to write (WdogRefresh_1)
-      \t * @param wdogRefresh_2 2nd value to write (WdogRefresh_2)
-      \t *
-      \t * @note This operation is time-critical so is protected by a CriticalSection
-      \t */
-      \tstatic void refresh(WdogRefresh wdogRefresh_1, WdogRefresh wdogRefresh_2) {
-      \t
-      \t   // Protect sequence from interrupts
-      \t   CriticalSection cs;
-      \t
-      \t   wdog->REFRESH = wdogRefresh_1;
-      \t   wdog->REFRESH = wdogRefresh_2;
-      \t}
-      \t
-      \t/**
-      \t * Writes the unlock sequence values to this register to make
-      \t * the watchdog write-once registers writable again
-      \t *
-      \t * @param wdogUnlock_1 1st value to write (WdogUnlock_1)
-      \t * @param wdogUnlock_2 2nd value to write (WdogUnlock_2)
-      \t *
-      \t * @note This operation is time-critical so is protected by a CriticalSection
-      \t */
-      \tstatic void unlock(WdogUnlock wdogUnlock_1, WdogUnlock wdogUnlock_2) {
-      \t
-      \t   // Protect sequence from interrupts
-      \t   CriticalSection cs;
-      \t
-      \t   wdog->UNLOCK = wdogUnlock_1;
-      \t   wdog->UNLOCK = wdogUnlock_2;
-      \t
-      \t   // Read-back to delay until change effected
-      \t   (void)(wdog->UNLOCK);
-      \t}
-      \t
       \t/**
       \t * Configure watchdog
       \t
@@ -187,11 +140,15 @@
       \t   // Protect sequence from interrupts
       \t   CriticalSection cs;
       \t
-      \t   //   Unlock before changing settings
-      \t   unlock(WdogUnlock_1, WdogUnlock_2);
-      \t   
+      \t   // Unlock before changing settings
+      \t   wdog->UNLOCK = WdogUnlock_1;
+      \t   wdog->UNLOCK = WdogUnlock_2;
+      \t
+      \t   // Read-back to delay until change effected
+      \t   (void)(wdog->UNLOCK);
+      \t
       \t   %register = %expression;
-      \t}\n\n
+      \t}
    ]]></setTemplate>
    
    <!-- ************* MISC ****************** -->

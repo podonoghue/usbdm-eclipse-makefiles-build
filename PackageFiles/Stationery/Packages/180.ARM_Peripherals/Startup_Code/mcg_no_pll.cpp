@@ -357,7 +357,7 @@ void Mcg::SystemCoreClockUpdate(void) {
 #endif
 
    // MCG external reference clock
-   uint32_t mcg_erc_clock = McgInfo::getErcClock();
+   uint32_t mcg_erc_clock = McgInfo::getMcgExternalReferenceClock();
 
    // Calculate SystemMcgffClock
    if ((mcg->C1&MCG_C1_IREFS_MASK) == 0) {

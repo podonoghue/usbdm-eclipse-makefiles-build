@@ -2622,7 +2622,7 @@ public:
       using Pcr = PcrTable_T<Info, limitIndex<Info>(channel)>;
 
       /** Allow access owning FTM */
-      using Ftm = FtmBase_T<Info>;
+      using OwningFtm = FtmBase_T<Info>;
 
       /** @return Base address of FTM.CONTROL struct as uint32_t */
       static constexpr uint32_t ftmCONTROL() { return ftmBase() + offsetof(FTM_Type, CONTROLS[channel]); }
@@ -2647,7 +2647,7 @@ public:
        * @return Reference to the FTM channel registers
        */
       static __attribute__((always_inline)) volatile FtmChannelRegs &channelRegs() {
-         return *reinterpret_cast<FtmChannelRegs *>(&Ftm::tmr->CONTROLS[CHANNEL]);
+         return *reinterpret_cast<FtmChannelRegs *>(&OwningFtm::tmr->CONTROLS[CHANNEL]);
       }
 
       /** Timer channel number */
@@ -2664,7 +2664,7 @@ public:
        */
       static void defaultConfigure() {
 
-         Ftm::tmr->CONTROLS[channel].CnSC = FtmChMode_PwmHighTruePulses|FtmChannelAction_None;
+         OwningFtm::tmr->CONTROLS[channel].CnSC = FtmChMode_PwmHighTruePulses|FtmChannelAction_None;
       }
 
       /**
@@ -2681,7 +2681,7 @@ public:
             FtmChMode         ftmChMode,
             FtmChannelAction  ftmChannelAction = FtmChannelAction_None) {
 
-         Ftm::tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelAction;
+         OwningFtm::tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelAction;
       }
 
       /**
@@ -2697,7 +2697,7 @@ public:
        * @return Current mode of operation for the channel
        */
       static FtmChMode getMode() {
-         return static_cast<FtmChMode>(Ftm::tmr->CONTROLS[channel].CnSC &
+         return static_cast<FtmChMode>(OwningFtm::tmr->CONTROLS[channel].CnSC &
                (FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK));
       }
 
@@ -2710,8 +2710,8 @@ public:
        *       pending CnV register updates are discarded.
        */
       static void setMode(FtmChMode ftmChMode) {
-         Ftm::tmr->CONTROLS[channel].CnSC =
-               (Ftm::tmr->CONTROLS[channel].CnSC & ~(FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK))|ftmChMode;
+         OwningFtm::tmr->CONTROLS[channel].CnSC =
+               (OwningFtm::tmr->CONTROLS[channel].CnSC & ~(FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK))|ftmChMode;
       }
 
       /**
@@ -2723,8 +2723,8 @@ public:
        *       pending CnV register updates are discarded.
        */
       static void setAction(FtmChannelAction ftmChannelAction) {
-         Ftm::tmr->CONTROLS[channel].CnSC =
-               (Ftm::tmr->CONTROLS[channel].CnSC & ~(FTM_CnSC_CHIE_MASK|FTM_CnSC_DMA_MASK))|
+         OwningFtm::tmr->CONTROLS[channel].CnSC =
+               (OwningFtm::tmr->CONTROLS[channel].CnSC & ~(FTM_CnSC_CHIE_MASK|FTM_CnSC_DMA_MASK))|
                ftmChannelAction;
       }
 
@@ -2739,7 +2739,7 @@ public:
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
       static ErrorCode setHighTime(Ticks highTime) {
-         return Ftm::setHighTime(highTime, channel);
+         return OwningFtm::setHighTime(highTime, channel);
       }
 
       /**
@@ -2753,7 +2753,7 @@ public:
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
       static ErrorCode setHighTime(Seconds highTime) {
-         return Ftm::setHighTime(highTime, channel);
+         return OwningFtm::setHighTime(highTime, channel);
       }
       /**
        * Set PWM duty cycle.
@@ -2763,7 +2763,7 @@ public:
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
       static void setDutyCycle(int dutyCycle) {
-         Ftm::setDutyCycle(dutyCycle, channel);
+         OwningFtm::setDutyCycle(dutyCycle, channel);
       }
 
       /**
@@ -2774,7 +2774,7 @@ public:
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
       static void setDutyCycle(float dutyCycle) {
-         Ftm::setDutyCycle(dutyCycle, channel);
+         OwningFtm::setDutyCycle(dutyCycle, channel);
       }
 
       /**
@@ -2785,7 +2785,7 @@ public:
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
       static void setDeltaEventTime(Ticks offset) {
-         Ftm::setDeltaEventTime(offset, channel);
+         OwningFtm::setDeltaEventTime(offset, channel);
       }
 
       /**
@@ -2796,7 +2796,7 @@ public:
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
       static void setRelativeEventTime(Ticks offset) {
-         Ftm::setRelativeEventTime(offset, channel);
+         OwningFtm::setRelativeEventTime(offset, channel);
       }
 
       /**
@@ -2807,7 +2807,7 @@ public:
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
       static void setEventTime(Ticks eventTime) {
-         Ftm::setEventTime(eventTime, channel);
+         OwningFtm::setEventTime(eventTime, channel);
       }
 
       /**
@@ -2816,7 +2816,7 @@ public:
        * @return Absolute time of last event in ticks i.e. value from timer event register
        */
       static Ticks getEventTime() {
-         return Ftm::getEventTime(channel);
+         return OwningFtm::getEventTime(channel);
       }
 
       /**
@@ -2826,7 +2826,7 @@ public:
        * @return false Indicates no event has occurred on a channel since last polled
        */
       static bool getInterruptFlag() {
-         return (Ftm::tmr->STATUS&CHANNEL_MASK) != 0;
+         return (OwningFtm::tmr->STATUS&CHANNEL_MASK) != 0;
       }
 
       /**
@@ -2840,8 +2840,8 @@ public:
       static bool getAndClearInterruptFlag() {
          // Note - requires read and write zero to clear flags
          // so only flags captured in status are cleared
-         bool status = (Ftm::tmr->STATUS&CHANNEL_MASK) != 0;
-         Ftm::tmr->STATUS = ~CHANNEL_MASK;
+         bool status = (OwningFtm::tmr->STATUS&CHANNEL_MASK) != 0;
+         OwningFtm::tmr->STATUS = ~CHANNEL_MASK;
          return status;
       }
 
@@ -2850,7 +2850,7 @@ public:
        */
       static void clearInterruptFlag() {
          // Note - requires read and write zero to clear flag
-         Ftm::tmr->CONTROLS[CHANNEL].CnSC = Ftm::tmr->CONTROLS[CHANNEL].CnSC & ~FTM_CnSC_CHF_MASK;
+         OwningFtm::tmr->CONTROLS[CHANNEL].CnSC = OwningFtm::tmr->CONTROLS[CHANNEL].CnSC & ~FTM_CnSC_CHF_MASK;
       }
 
 
@@ -2860,7 +2860,7 @@ public:
        * @param polarity Polarity to set
        */
       static void setPolarity(Polarity polarity) {
-         Ftm::setPolarity(polarity, CHANNEL_MASK);
+         OwningFtm::setPolarity(polarity, CHANNEL_MASK);
       }
 
       /**
@@ -2874,7 +2874,7 @@ public:
        */
       static void forceChannelOutput(FtmChannelForce ftmChannelForce) {
          static constexpr uint32_t MASK = ((1<<channel)|(1<<(channel+8)));
-         Ftm::tmr->SWOCTRL = ((Ftm::tmr->SWOCTRL & ~MASK)) | (ftmChannelForce & MASK);
+         OwningFtm::tmr->SWOCTRL = ((OwningFtm::tmr->SWOCTRL & ~MASK)) | (ftmChannelForce & MASK);
       }
 
       /**
@@ -2891,10 +2891,10 @@ public:
        */
       static ErrorCode setChannelCallback(FtmChannelCallbackFunction callback) {
          if constexpr (Info::NumChannelVectors > 1) {
-            return Ftm::setChannelCallback(callback, channel);
+            return OwningFtm::setChannelCallback(callback, channel);
          }
          else {
-            return Ftm::setChannelCallback(callback);
+            return OwningFtm::setChannelCallback(callback);
          }
       }
 
@@ -3093,7 +3093,7 @@ public:
    static constexpr HardwarePtr<FTM_Type> tmr = Info::baseAddress;
 
    /** Allow more convenient access associated Ftm */
-   using Ftm = FtmBase_T<Info>;
+   using OwningFtm = FtmBase_T<Info>;
 
    /** Allow access to PCR of associated phase-A pin */
    using Pcr0 = PcrTable_T<typename Info::InfoQUAD, 0>;
@@ -3155,21 +3155,21 @@ public:
     *                        nullptr to indicate none
     */
    static __attribute__((always_inline)) void setTimerOverflowCallback(FtmCallbackFunction theCallback) {
-      Ftm::setTimerOverflowCallback(theCallback);
+      OwningFtm::setTimerOverflowCallback(theCallback);
    }
 
    /**
     * Enable Timer Overflow interrupts
     */
    static __attribute__((always_inline)) void enableTimerOverflowInterrupts() {
-      Ftm::enableTimerOverflowInterrupts();
+      OwningFtm::enableTimerOverflowInterrupts();
    }
 
    /**
     * Disable Timer Overflow interrupts
     */
    static __attribute__((always_inline)) void disableTimerOverflowInterrupts() {
-      Ftm::disableTimerOverflowInterrupts();
+      OwningFtm::disableTimerOverflowInterrupts();
    }
 
    /**
