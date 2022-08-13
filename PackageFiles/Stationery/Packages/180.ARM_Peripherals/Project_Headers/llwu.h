@@ -142,29 +142,6 @@ enum LlwuResetFilter {
 typedef void (*LlwuCallbackFunction)();
 
 /**
- * Base class representing a LLWU pin
- */
-class LlwuPinInfo {
-
-private:
-   LlwuPinInfo(const LlwuPinInfo&) = delete;
-   LlwuPinInfo(LlwuPinInfo&&)      = delete;
-
-
-public:
-   const LlwuPin     fLlwuPin;
-   const LlwuPinMode fLwuPinMode;
-
-   /**
-    * Constructor
-    *
-    * @param llwuPin     Pin being used for wakeup
-    * @param llwuPinMode LLWU pin wake-up mode
-    */
-   constexpr LlwuPinInfo(LlwuPin llwuPin, LlwuPinMode llwuPinMode) : fLlwuPin(llwuPin), fLwuPinMode(llwuPinMode) {}
-};
-
-/**
  * Template class providing interface to Low Leakage Wake-up Unit
  *
  * @tparam info      Information class for LLWU
@@ -309,11 +286,10 @@ public:
       sCallback = callback;
    }
 
-protected:
+public:
    /** Pointer to hardware */
    static constexpr HardwarePtr<LLWU_Type> llwu = Info::baseAddress;
 
-public:
    $(/LLWU/classInfo: // No class Info found)
    /**
     * Configure with settings from Configure.usbdmProject.
@@ -341,23 +317,11 @@ $(/LLWU/llwu_base_init:// No initialisation found - /LLWU/llwu_base_init)
          LlwuPin     llwuPin,
          LlwuPinMode llwuPinMode) {
 
-      static const uint8_t masks[] = {(0x3<<0),(0x3<<2),(0x3<<4),(0x3<<6)};
+      static const uint8_t masks[] = 
+         {LLWU_PE1_WUPE0_MASK, LLWU_PE1_WUPE1_MASK, LLWU_PE1_WUPE2_MASK, LLWU_PE1_WUPE3_MASK, };
       volatile uint8_t &llwuPe = llwu->PE[llwuPin>>2];
       uint8_t mask = masks[llwuPin&3];
       llwuPe = (llwuPe&~mask) | (llwuPinMode&mask);
-   }
-
-   /**
-    * Configure pin as wake-up source
-    *
-    * @param[in] llwuPinInfo   Pin information used to configure source
-    */
-   static void configurePinSource(const LlwuPinInfo &llwuPinInfo) {
-
-      static const uint8_t masks[] = {(0x3<<0),(0x3<<2),(0x3<<4),(0x3<<6)};
-      volatile uint8_t &llwuPe = llwu->PE[llwuPinInfo.fLlwuPin>>2];
-      uint8_t mask = masks[llwuPinInfo.fLlwuPin&3];
-      llwuPe = (llwuPe&~mask) | (llwuPinInfo.fLwuPinMode&mask);
    }
 
    /**
@@ -479,7 +443,7 @@ $(/LLWU/llwu_base_init:// No initialisation found - /LLWU/llwu_base_init)
          llwu->FILT[index] = llwu->FILT[index] | LLWU_FILT_FILTF_MASK;
       }
    }
-$(/LLWU/llwu_base_methods:// No peripheral devices found - /LLWU/llwu_base_methods)
+
    /**
     * Disable all wake-up sources (pins and peripherals)
     */
@@ -518,11 +482,7 @@ $(/LLWU/llwu_base_methods:// No peripheral devices found - /LLWU/llwu_base_metho
    }
 
    template<LlwuPin llwuPin>
-   class Pin : public PcrTable_T<Info, llwuPin>, public LlwuPinInfo {
-
-   private:
-      Pin(const LlwuPinInfo&) = delete;
-      Pin(LlwuPinInfo&&) = delete;
+   class Pin : public PcrTable_T<Info, llwuPin> {
 
    private:
       // Checks pin mapping is valid
@@ -539,7 +499,7 @@ $(/LLWU/llwu_base_methods:// No peripheral devices found - /LLWU/llwu_base_metho
        *
        * @param llwuPinMode LLWU pin wake-up mode
        */
-      constexpr Pin(LlwuPinMode llwuPinMode=LlwuPinMode_EitherEdge) : LlwuPinInfo(llwuPin, llwuPinMode) {}
+      constexpr Pin(LlwuPinMode llwuPinMode=LlwuPinMode_EitherEdge) {}
 
       /**
        * Set callback for Pin interrupts
@@ -558,6 +518,8 @@ $(/LLWU/llwu_base_methods:// No peripheral devices found - /LLWU/llwu_base_metho
          Pcr::setPinCallback(pinCallback);
       }
    };
+
+$(/LLWU/llwu_base_methods:// No peripheral devices found - /LLWU/llwu_base_methods)
 };
 
 template<class Info> LlwuCallbackFunction LlwuBase_T<Info>::sCallback = LlwuBase_T<Info>::unhandledCallback;

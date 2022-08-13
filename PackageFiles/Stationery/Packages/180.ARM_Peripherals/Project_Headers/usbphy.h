@@ -151,7 +151,7 @@ public:
       Osc0Info::enableExternalReference(OscErClkEn_Enabled);
 
       // IRC enable
-      McgInfo::enableMcgIrClk(McgIrClkEn_Enabled);
+      McgInfo::enableMcgIrClock(McgIrClkEn_Enabled);
 
       // Power PHY
       SimInfo::enableUsbPhyRegulator(SimUsbPhyRegEn_Enabled);

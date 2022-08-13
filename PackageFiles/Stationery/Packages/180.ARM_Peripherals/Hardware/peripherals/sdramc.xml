@@ -7,7 +7,7 @@
    <xi:include href="_mapPinsOption_on.xml"/>
    <xi:include href="_default_instance.xml"/>
    
-   <template name="/SDRAMC/declarations" namespace="all"  ><![CDATA[
+   <template key="/SDRAMC/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */

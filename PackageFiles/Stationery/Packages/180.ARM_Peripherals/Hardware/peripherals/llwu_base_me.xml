@@ -4,11 +4,13 @@
 <!-- llwu_base_me2.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
+
    <binaryOption key="llwu_me_wume_t" hidden="true"
       toolTip="Enables this peripheral to wakeup the processor">
       <choice name="Disabled" value="0" isDefault="true" />
       <choice name="Enabled"  value="1" />
    </binaryOption>
+   
    <category name="Peripheral sources" description="Wakeups from peripherals">
       <binaryOption key="llwu_me_wume0" description="LPTMR"         derivedFrom="llwu_me_wume_t" />
       <binaryOption key="llwu_me_wume1" description="CMP0"          derivedFrom="llwu_me_wume_t" />
@@ -19,6 +21,7 @@
       <binaryOption key="llwu_me_wume6" description=""              derivedFrom="llwu_me_wume_t" />
       <binaryOption key="llwu_me_wume7" description="RTC Seconds"   derivedFrom="llwu_me_wume_t" />
    </category>
+   
    <template><![CDATA[
       \t// Module wake ups
       \tstatic constexpr uint8_t me =  
