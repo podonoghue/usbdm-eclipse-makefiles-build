@@ -42,7 +42,7 @@ using namespace USBDM;
 
 // Debug LED connection - change as required
 //using DebugLed = GpioC<3,ActiveLow>;
-   
+
 // Constant describing transmission
 static constexpr unsigned SONY_CARRIER     = 40000;  //!< Sony SIRC carrier frequency (Hz)
 static constexpr unsigned SONY_ONE_TIME    =  1200;  //!< Sony SIRC on time (us) for '1'
@@ -129,7 +129,7 @@ static void configureCmtTime() {
 
    Cmt::configure(CmtMode_Direct);
    Cmt::outputControl(CmtOutput_Enabled);
-   Cmt::setOutput(PinDriveMode_PushPull);
+   Cmt::setOutput(PinDriveStrength_High);
 
    Cmt::setCallback(cmtCallback);
    Cmt::enableInterruptDma(CmtInterruptDma_Irq);
@@ -302,12 +302,6 @@ int main() {
    console.writeln("Starting\n");
    console.writeln("SystemCoreClock = ", ::SystemCoreClock);
    console.writeln("SystemBusClock  = ", ::SystemBusClock);
-
-   // Configure CMT output and connect to pin
-   Cmt::setOutput(
-         PinDriveStrength_High,
-         PinDriveMode_PushPull,
-         PinSlewRate_Slow);
 
    ActivityLed::setOutput(
          PinDriveStrength_High,

@@ -184,21 +184,23 @@
             <intOption key="firc_divided_clock[%(n)]" units="Hz" constant="true" derived="true" />
 
             <binaryOption key="mcg_c2_ircs[%(n)]"
+               enumStem="McgIrClkSrc"
                target="system_mcgirclk_ungated[%(n)]"
                description="Internal Reference Clock [MCGIRCLK] Source" 
                toolTip="Clock Source for MCGIRCLK" >
-               <choice value="0" ref="system_slow_irc_clock"    name="Slow internal reference clock" />
-               <choice value="1" ref="firc_divided_clock[%(n)]" name="Fast internal reference clock" isDefault="true" />
+               <choice value="0" ref="system_slow_irc_clock"    enum="Slow" name="Slow internal reference clock" code="system_slow_irc_clock"           />
+               <choice value="1" ref="firc_divided_clock[%(n)]" enum="Fast" name="Fast internal reference clock" code="getFastInternalReferenceClock()" isDefault="true" />
             </binaryOption>
       
             <intOption key="system_mcgirclk_ungated[%(n)]" units="Hz" constant="true" derived="true" />
 
             <binaryOption key="mcg_c1_irclken[%(n)]"
+               enumStem="McgIrClkEn"
                target="system_mcgirclk_clock[%(n)]"            
                description="Internal Reference Clock [MCGIRCLK]"
                toolTip="Enables the internal reference clock for use by peripherals" >
-               <choice value="0" ref="Disabled"                      name="Disabled"  />
-               <choice value="1" ref="system_mcgirclk_ungated[%(n)]" name="Enabled"   isDefault="true"/>
+               <choice value="0" ref="Disabled"                      enum="Disabled" name="Disabled" code="0"                             />
+               <choice value="1" ref="system_mcgirclk_ungated[%(n)]" enum="Enabled"  name="Enabled"  code="getInternalReferenceClock()"    isDefault="true"/>
             </binaryOption>
       
             <binaryOption key="mcg_c1_irefsten[%(n)]"
@@ -218,19 +220,20 @@
 
          <if condition="mcg_c7_oscsel_present">
             <choiceOption key="mcg_c7_oscsel[%(n)]"
+               enumStem="McgErcSelect"
                target="mcg_erc_clock[%(n)]"
                description="MCG External reference clock" 
                toolTip="Source for MCG External Reference Clock">
-               <choice value="0" ref="/OSC0/osc_clock"          condition="/OSC0/osc_clock"           name="OSC0 Clock"                />
-               <choice value="1" ref="/RTC/osc_clock"           condition="/RTC/osc_clock"            name="RTC 32kHz clock"           />
-               <choice value="2" ref="/SIM/system_irc48m_clock" condition="/SIM/system_irc48m_clock"  name="OSC2(IRC48MCLK) - 48 MHz " />
+               <choice value="0" ref="/OSC0/osc_clock"          condition="/OSC0/osc_clock"           enum="OscClk"   code="Osc0Info::getOscClock()"      name="OSC0 Clock"                />
+               <choice value="1" ref="/RTC/osc_clock"           condition="/RTC/osc_clock"            enum="RtcClk"   code="RtcInfo::getInternalClock()"  name="RTC 32kHz clock"           />
+               <choice value="2" ref="/SIM/system_irc48m_clock" condition="/SIM/system_irc48m_clock"  enum="Irc48MHz" code="$(/SIM/system_irc48m_clock)"  name="OSC2(IRC48MCLK) - 48 MHz " />
             </choiceOption>
          <else/>
             <choiceOption key="mcg_c7_oscsel_fixed[%(n)]"
                target="mcg_erc_clock[%(n)]"
                description="MCG External reference clock" 
                toolTip="Source for MCG External Reference Clock">
-               <choice value="0" ref="/OSC0/osc_clock"          condition="/OSC0/osc_clock"           name="OSC0 Clock"                />
+               <choice value="0" ref="/OSC0/osc_clock"          enum="OscClk"   code="Osc0Info::getOscClock()"      name="OSC0 Clock" />
             </choiceOption>
          </if>
          
@@ -453,6 +456,101 @@
       </categoryOption>
    </for>
    
+   <clockCodeTemplate variable="mcg_c7_oscsel"
+      returnFormat="%s"
+   ><![CDATA[
+      \t/**
+      \t * Get %description
+      \t *
+      \t * @return Clock frequency in Hz
+      \t */
+      \tstatic uint32_t getExternalReferenceClock() {
+      \t   
+      \t   switch(%defaultMaskingExpression) {
+      \t      default: return 0;
+      %body
+      \t   }
+      \t}\n\n
+      ]]></clockCodeTemplate>
+         
+   <template variable="mcg_c7_oscsel_fixed"
+   ><![CDATA[
+      \t/**
+      \t * Get %description
+      \t *
+      \t * @return Clock frequency in Hz
+      \t */
+      \tstatic uint32_t getExternalReferenceClock() {
+      \t   
+      \t   return $(%variable[0].code[0]);
+      \t}\n\n
+      ]]></template>
+         
+   <template condition="mcg_sc_fcrdiv"
+   ><![CDATA[
+      \t/**
+      \t * Get Fast Internal Reference Clock (undivided)
+      \t *
+      \t * @return Clock frequency in Hz
+      \t */
+      \tstatic uint32_t getFastInternalReferenceClock() {
+      \t   
+      \t   return (system_fast_irc_clock/(1<<((mcg->SC&MCG_SC_FCRDIV_MASK)>>MCG_SC_FCRDIV_SHIFT)));
+      \t}\n\n
+      ]]></template>
+      
+   <clockCodeTemplate variable="mcg_c2_ircs"
+      returnFormat="%s"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setInternalReferenceClock(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t}
+ 
+      \t/**
+      \t * Get %description
+      \t *
+      \t * @return Clock frequency in Hz
+      \t */
+      \tstatic uint32_t getInternalReferenceClock() {
+      \t   
+      \t   switch(%defaultMaskingExpression) {
+      \t      default: return 0;
+      %body
+      \t   }
+      \t}\n\n
+      ]]></clockCodeTemplate>
+      
+   <clockCodeTemplate variable="mcg_c1_irclken"
+      returnFormat="%s"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void enableMcgIrClock(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t}
+ 
+      \t/**
+      \t * Get %description
+      \t *
+      \t * @return Clock frequency in Hz
+      \t */
+      \tstatic uint32_t getMcgIrClock() {
+      \t   
+      \t   switch(%defaultMaskingExpression) {
+      \t      default: return 0;
+      %body
+      \t   }
+      \t}\n\n
+      ]]></clockCodeTemplate>
+      
    <projectActionList id = "mcg_files" >
       <copy source="Startup_Code/mcg_no_pll.cpp"          target="Startup_Code/mcg_no_pll.cpp"           overwrite="true"  derived="true" />
       <copy source="Project_Headers/mcg.h"                target="Project_Headers/mcg.h"                 overwrite="true"  derived="true" />
@@ -482,60 +580,6 @@
       \t/// Frequency of Fast Internal Reference Clock [~4MHz]
       \tstatic constexpr uint32_t system_fast_irc_clock = $(system_fast_irc_clock)UL;
 
-      \t/**
-      \t * Get MCGERCLK
-      \t *
-      \t * @return MCGERCLK as uint32_t
-      \t */
-      \tstatic uint32_t getErcClock() {
-      \t
-      \t#if defined(MCG_C7_OSCSEL)
-      \t   switch((mcg->C7&MCG_C7_OSCSEL_MASK)) {
-      \t      default               : return 0;
-      \t      case MCG_C7_OSCSEL(0) : return Osc0Info::getOscClock();
-      \t#if defined(SIM_SOPT1_OSC32KSEL)
-      \t      case MCG_C7_OSCSEL(1) : return RtcInfo::getInternalClock();
-      \t#endif
-      \t#if defined(USB_CLK_RECOVER_IRC_EN_REG_EN_MASK)
-      \t      case MCG_C7_OSCSEL(2) : return $(/SIM/system_irc48m_clock:0);
-      \t#endif
-      \t   }
-      \t#else
-      \t   return Osc0Info::getOscClock();
-      \t#endif
-      \t}
-      
-      \t/**
-      \t * Get Internal MCGIRCLK (ungated by MCG_C1_IRCLKEN_MASK)
-      \t *
-      \t * @return MCGIRCLK as uint32_t
-      \t */
-      \tstatic uint32_t getInternalIrcClock() {
-      \t      if (mcg->C2&MCG_C2_IRCS_MASK) {
-      \t#ifdef MCG_SC_FCRDIV_MASK
-      \t         return (system_fast_irc_clock/(1<<((mcg->SC&MCG_SC_FCRDIV_MASK)>>MCG_SC_FCRDIV_SHIFT)));
-      \t#else
-      \t         return system_fast_irc_clock;
-      \t#endif
-      \t      }
-      \t      else {
-      \t         return system_slow_irc_clock;
-      \t      }
-      \t}
-      
-      \t/**
-      \t * Get MCGIRCLK (gated by MCG_C1_IRCLKEN_MASK)
-      \t *
-      \t * @return MCGIRCLK as uint32_t
-      \t */
-      \tstatic uint32_t getMcgIrClock() {
-      \t   if (mcg->C1&MCG_C1_IRCLKEN_MASK) {
-      \t      return getInternalIrcClock();
-      \t   }
-      \t   else {
-      \t      return 0;
-      \t   }
-      \t}\n\n
    ]]></template>
    
    <for keys="n" dim="/SIM/numberOfClockSettings">
@@ -614,8 +658,8 @@
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
          variables="
-            mcg_c5_pllclken[%(n)],
-            mcg_c5_pllsten[%(n)],
+            mcg_c5_pllclken0[%(n)],
+            mcg_c5_pllsten0[%(n)],
             mcg_c5_prdiv0[%(n)]"     
       ><![CDATA[\t   /// Control Register 5 %expression\n\n ]]></initialValueTemplate>
       
@@ -758,13 +802,13 @@
    <template key="ClockInfoType" namespace="all"
       condition="mcg_c9_pll_cme||mcg_c9_pll_locre"     
    ><![CDATA[
-      \t   /// Control Register 9 - 
+      \t   /// Control Register 9 - PLL_CME
       \t   const uint8_t c9;\n ]]></template>
       
    <template key="ClockInfoType" namespace="all"
       condition="mcg_c11_pllcs"     
    ><![CDATA[
-      \t   /// Control Register 11 - 
+      \t   /// Control Register 11 - PLLCS
       \t   const uint8_t c11;\n ]]></template>
       
    <template key="ClockInfoType" namespace="all" ><![CDATA[

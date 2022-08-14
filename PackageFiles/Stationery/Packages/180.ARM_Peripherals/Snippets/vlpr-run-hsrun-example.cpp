@@ -63,14 +63,14 @@ int main() {
       /*
        * RUN -> VLPR
        */
-      Smc::enterRunMode(SmcRunMode_VeryLowPower, ClockConfig_VLPR);
+      Smc::enterRunMode(ClockConfig_VLPR);
       report();
       wait(5_s);
 
       /*
        * VLPR -> RUN
        */
-      Smc::enterRunMode(SmcRunMode_Normal, ClockConfig_RUN);
+      Smc::enterRunMode(ClockConfig_RUN);
       report();
       wait(5_s);
 
@@ -78,14 +78,14 @@ int main() {
       /*
        * RUN -> HSRUN
        */
-      Smc::enterRunMode(SmcRunMode_HighSpeed, ClockConfig_HSRUN);
+      Smc::enterRunMode(ClockConfig_HSRUN);
       report();
       wait(5_s);
 
       /*
        * HSRUN -> RUN
        */
-      Smc::enterRunMode(SmcRunMode_Normal, ClockConfig_RUN);
+      Smc::enterRunMode(ClockConfig_RUN);
       report();
       wait(5_s);
 #endif

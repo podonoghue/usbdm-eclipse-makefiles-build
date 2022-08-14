@@ -149,6 +149,8 @@ private:
 
 #ifdef MCU_MK22F51212
    static const uint8_t DEVICE_ADDRESS = 0x1C<<1;  // SA1,0 pins : 00=>0x1E, 01=>1D, 10=>1C, 11=>1F
+#elif defined(MCU_MKW41Z4)
+   static const uint8_t DEVICE_ADDRESS = 0x1F<<1;  // SA1,0 pins : 00=>0x1E, 01=>1D, 10=>1C, 11=>1F
 #else
    static const uint8_t DEVICE_ADDRESS = 0x1D<<1;  // SA1,0 pins : 00=>0x1E, 01=>1D, 10=>1C, 11=>1F
 #endif

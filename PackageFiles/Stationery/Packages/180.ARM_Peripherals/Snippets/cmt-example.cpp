@@ -17,6 +17,7 @@ using namespace USBDM;
 // LED connection - change as required
 using Led   = GpioA<2,ActiveLow>;
 
+// Assumes prescaler set to obtain 8MHz clock
 constexpr uint8_t  PrimaryCarrierHalfTime   = ((8000000UL/40000)/2); // 40kHz
 constexpr uint8_t  SecondaryCarrierHalfTime = ((8000000UL/80000)/2); // 80kHz
 
@@ -32,7 +33,6 @@ volatile int bitNum = 15;
 void cmtCallback() {
 
    if (Cmt::getStatus()) {
-      Led::toggle();
       // LSB
       if (data&(1<<bitNum)) {
          Cmt::setMarkSpaceTiming(OneMarkTime, OneSpaceTime);
@@ -55,7 +55,7 @@ void configureCmtFrequencyShiftKeying() {
    Cmt::setSecondaryTiming(SecondaryCarrierHalfTime,SecondaryCarrierHalfTime);
    Cmt::setMarkSpaceTiming(ZeroMarkTime, ZeroSpaceTime);
    Cmt::outputControl(CmtOutput_Enabled);
-   Cmt::setOutput(PinDriveMode_PushPull);
+   Cmt::setOutput(PinDriveStrength_High);
 
    Cmt::setCallback(cmtCallback);
    Cmt::enableInterruptDma(CmtInterruptDma_Irq);
@@ -68,7 +68,7 @@ void configureCmtTime() {
    Cmt::setPrimaryTiming(PrimaryCarrierHalfTime,PrimaryCarrierHalfTime);
    Cmt::setMarkSpaceTiming(ZeroMarkTime, ZeroSpaceTime);
    Cmt::outputControl(CmtOutput_Enabled);
-   Cmt::setOutput(PinDriveMode_PushPull);
+   Cmt::setOutput(PinDriveStrength_High);
 
    Cmt::setCallback(cmtCallback);
    Cmt::enableInterruptDma(CmtInterruptDma_Irq);
@@ -96,6 +96,7 @@ int main() {
       waitMS(500);
       bitNum = 15;
       console.writeln(count, ": Tick...");
+      Led::toggle();
    }
    return 0;
 }

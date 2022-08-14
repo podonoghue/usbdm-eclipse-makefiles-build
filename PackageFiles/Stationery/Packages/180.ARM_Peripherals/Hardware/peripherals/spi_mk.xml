@@ -47,6 +47,9 @@
       <copy source="Snippets/spi-example.cpp"            target="Snippets/spi-example.cpp"          overwrite="true"  derived="true" />
       <copy source="Snippets/spi-N-config-example.cpp"   target="Snippets/spi-N-config-example.cpp" overwrite="true"  derived="true" />
       <copy source="Snippets/spi-2-config-example.cpp"   target="Snippets/spi-2-config-example.cpp" overwrite="true"  derived="true" />
+      <copy source="Snippets/spi-flash-example.cpp"      target="Snippets/spi-flash-example.cpp"    overwrite="true"  derived="true" />
+      <copy source="Snippets/at45db041e.h"               target="Snippets/at45db041e.h"             overwrite="true"  derived="true" />
+      
    </projectActionList>
    
    <template key="/SPI/declarations" namespace="all"  ><![CDATA[

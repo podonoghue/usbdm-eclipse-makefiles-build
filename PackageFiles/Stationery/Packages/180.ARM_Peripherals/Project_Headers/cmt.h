@@ -274,7 +274,7 @@ $(/CMT/classInfo: // No class Info found)
     */
    static void configure(CmtMode cmtMode, CmtClockDivideBy cmtClockDivideBy=CmtClockDivideBy_1) {
       enable();
-      setPrescaler((CmtPrescaler)((SystemBusClock/8000000)-1));
+      setPrescaler((CmtPrescaler)(((SystemBusClock+4000000)/8000000)-1));
       cmt->MSC = cmtMode|cmtClockDivideBy;
    }
 

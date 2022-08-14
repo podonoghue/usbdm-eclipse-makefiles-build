@@ -21,11 +21,11 @@ using namespace USBDM;
  * Global objects representing hardware
  **************************************************/
 
-// I2C interface
-I2c0     i2c0;
+// I2C interface (Change as needed)
+I2c1     i2cSensor;
 
 // Magnetometer/Accelerometer via I2C
-FXOS8700CQ  accelmag(i2c0, FXOS8700CQ::ACCEL_2Gmode);
+FXOS8700CQ  accelmag(i2cSensor, FXOS8700CQ::ACCEL_2Gmode);
 
 /**************************************************/
 
@@ -41,9 +41,9 @@ void report(FXOS8700CQ &accelerometer) {
 
    accelerometer.readAccelerometerXYZ(&accelStatus, &accelX, &accelY, &accelZ);
    accelerometer.readMagnetometerXYZ(&magStatus, &magX, &magY, &magZ);
-   console.write("s=0x", accelStatus, Radix_16, ", aX=", accelX, "aY=", accelY, ", aZ=", accelZ);
-   console.write("s=0x", magStatus, Radix_16, ", aX=", magX, "aY=", magY, ", aZ=", magZ);
-   console.writeln("a=", (int)(180*atan2(magX, magY)/3.14159));
+   console.write("s=0x", accelStatus, Radix_16, ", aX=", accelX, ", aY=", accelY, ", aZ=", accelZ);
+   console.write(" || s=0x", magStatus, Radix_16, ", aX=", magX, ", aY=", magY, ", aZ=", magZ);
+   console.writeln(" || a=", (int)(180*atan2(magX, magY)/3.14159));
 }
 
 int main() {

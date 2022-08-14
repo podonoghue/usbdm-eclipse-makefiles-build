@@ -228,134 +228,134 @@
    </if>
    
    <template key="llwu_base_methods" namespace="all" condition="llwu_me_wume0" ><![CDATA[
-      \t
-      \t/**
-      \t * Constructor for peripheral source
-      \t *
-      \t * @param llwuPeripheral  Peripheral to enable as wake-up source
-      \t */
+      \t   
+      \t   /**
+      \t    * Constructor for peripheral source
+      \t    *
+      \t    * @param llwuPeripheral  Peripheral to enable as wake-up source
+      \t    */
       \t   constexpr LlwuInit(LlwuPeripheral llwuPeripheral) {
-      \t
+      \t   
       \t      me |= llwuPeripheral;
       \t   }
-      
-      \t/**
-      \t * Constructor for peripheral source
-      \t *
-      \t * @tparam Types
-      \t * @param rest
-      \t *
-      \t * @param llwuPeripheral  Peripheral to enable as wake-up source
-      \t */
+           
+      \t   /**
+      \t    * Constructor for peripheral source
+      \t    *
+      \t    * @tparam Types
+      \t    * @param rest
+      \t    *
+      \t    * @param llwuPeripheral  Peripheral to enable as wake-up source
+      \t    */
       \t   template <typename... Types>
       \t   constexpr LlwuInit(LlwuPeripheral llwuPeripheral, Types... rest) : LlwuInit(rest...) {
-      \t
+      \t   
       \t      me |= llwuPeripheral;
       \t   }
       \t\n
    ]]></template>
    
    <template key="llwu_base_methods" namespace="all" condition="llwu_filt1_filte" ><![CDATA[
-      \t
-      \t/**
-      \t * Constructor for filtered pin source
-      \t *
-      \t * @param llwuFilterNum       Filter to use
-      \t * @param llwuPin             Peripheral to enable as wake-up source
-      \t * @param llwuFilterPinMode   Sensitivity of pin
-      \t */
+      \t   
+      \t   /**
+      \t    * Constructor for filtered pin source
+      \t    *
+      \t    * @param llwuFilterNum       Filter to use
+      \t    * @param llwuPin             Peripheral to enable as wake-up source
+      \t    * @param llwuFilterPinMode   Sensitivity of pin
+      \t    */
       \t   constexpr LlwuInit(
       \t         LlwuFilterNum     llwuFilterNum,
       \t         LlwuPin           llwuPin,
       \t         LlwuFilterPinMode llwuFilterPinMode) {
-      \t
+      \t   
       \t      filt[llwuFilterNum] = llwuPin|llwuFilterPinMode;
       \t   }
-      
-      \t/**
-      \t * Constructor for filtered pin source
-      \t *
-      \t * @tparam Types
-      \t * @param rest
-      \t *
-      \t * @param llwuFilterNum       Filter to use
-      \t * @param llwuPin             Peripheral to enable as wake-up source
-      \t * @param llwuFilterPinMode   Sensitivity of pin
-      \t */
+           
+      \t   /**
+      \t    * Constructor for filtered pin source
+      \t    *
+      \t    * @tparam Types
+      \t    * @param rest
+      \t    *
+      \t    * @param llwuFilterNum       Filter to use
+      \t    * @param llwuPin             Peripheral to enable as wake-up source
+      \t    * @param llwuFilterPinMode   Sensitivity of pin
+      \t    */
       \t   template <typename... Types>
       \t   constexpr LlwuInit(
       \t         LlwuFilterNum     llwuFilterNum,
       \t         LlwuPin           llwuPin,
       \t         LlwuFilterPinMode llwuFilterPinMode,
       \t         Types... rest) : LlwuInit(rest...) {
-      \t
+      \t   
       \t      filt[llwuFilterNum] = llwuPin|llwuFilterPinMode;
       \t   }
       \t\n
    ]]></template>
    
    <template key="llwu_base_methods" namespace="all" condition="llwu_pe1_wupe0" ><![CDATA[
-      \t
-      \t/**
-      \t * Constructor for unfiltered pin source
-      \t *
-      \t * @param llwuPin       Peripheral to enable as wake-up source
-      \t * @param llwuPinMode   Sensitivity of pin
-      \t */
+      \t   
+      \t   /**
+      \t    * Constructor for unfiltered pin source
+      \t    *
+      \t    * @param llwuPin       Peripheral to enable as wake-up source
+      \t    * @param llwuPinMode   Sensitivity of pin
+      \t    */
       \t   constexpr LlwuInit(LlwuPin llwuPin, LlwuPinMode llwuPinMode) {
-      \t
+      \t   
       \t      const int      index = llwuPin>>2;
       \t      const uint8_t  value = llwuPinMode & masks[llwuPin&3];
-      \t
+      \t   
       \t      pe[index] |= value;
       \t   }
-      
-      \t/**
-      \t * Constructor for unfiltered pin source
-      \t *
-      \t * @tparam Types
-      \t * @param rest
-      \t *
-      \t * @param llwuPin       Peripheral to enable as wake-up source
-      \t * @param llwuPinMode   Sensitivity of pin
-      \t */
+           
+      \t   /**
+      \t    * Constructor for unfiltered pin source
+      \t    *
+      \t    * @tparam Types
+      \t    * @param rest
+      \t    *
+      \t    * @param llwuPin       Peripheral to enable as wake-up source
+      \t    * @param llwuPinMode   Sensitivity of pin
+      \t    */
       \t   template <typename... Types>
       \t   constexpr LlwuInit(LlwuPin llwuPin, LlwuPinMode llwuPinMode, Types... rest) : LlwuInit(rest...) {
-      \t
+      \t   
       \t      const int      index = llwuPin>>2;
       \t      const uint8_t  value = llwuPinMode & masks[llwuPin&3];
-      \t
+      \t   
       \t      pe[index] |= value;
       \t   }
       \t\n
    ]]></template>
 
    <template key="llwu_base_methods" namespace="all" condition="llwu_rst_llrste" ><![CDATA[
-      \t/**
-      \t * Constructor for Reset as wake-up source
-      \t *
-      \t * @param llwuResetWakeup  Enable/Disable Reset source
-      \t * @param llwuResetFilter  Enable/Disable Reset pin filter
-      \t */
-      \tconstexpr LlwuInit(LlwuResetWakeup llwuResetWakeup, LlwuResetFilter llwuResetFilter) {
-      \t
-      \t   rst = llwuResetWakeup|llwuResetFilter;
-      \t}
-      
-      \t/**
-      \t * Constructor for Reset as wake-up source
-      \t *
-      \t * @tparam Types
-      \t * @param rest
-      \t *
-      \t * @param llwuResetWakeup  Enable/Disable Reset source
-      \t * @param llwuResetFilter  Enable/Disable Reset pin filter
-      \t */
-      \ttemplate <typename... Types>
-      \tconstexpr LlwuInit(LlwuResetWakeup llwuResetWakeup, LlwuResetFilter llwuResetFilter, Types... rest) : LlwuInit(rest...) {
-      \t
-      \t   rst = llwuResetWakeup|llwuResetFilter;
-      \t}
+      \t   /**
+      \t    * Constructor for Reset as wake-up source
+      \t    *
+      \t    * @param llwuResetWakeup  Enable/Disable Reset source
+      \t    * @param llwuResetFilter  Enable/Disable Reset pin filter
+      \t    */
+      \t   constexpr LlwuInit(LlwuResetWakeup llwuResetWakeup, LlwuResetFilter llwuResetFilter) {
+      \t   
+      \t      rst = llwuResetWakeup|llwuResetFilter;
+      \t   }
+           
+      \t   /**
+      \t    * Constructor for Reset as wake-up source
+      \t    *
+      \t    * @tparam Types
+      \t    * @param rest
+      \t    *
+      \t    * @param llwuResetWakeup  Enable/Disable Reset source
+      \t    * @param llwuResetFilter  Enable/Disable Reset pin filter
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr LlwuInit(LlwuResetWakeup llwuResetWakeup, LlwuResetFilter llwuResetFilter, Types... rest) : LlwuInit(rest...) {
+      \t   
+      \t      rst = llwuResetWakeup|llwuResetFilter;
+      \t   }
       \t\n
    ]]></template>
 

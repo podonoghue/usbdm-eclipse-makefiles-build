@@ -50,7 +50,7 @@ using WakeupTimer = Lptmr0;
 static constexpr LlwuFilterNum FILTER_NUM = LlwuFilterNum_0;
 
 // LLWU Pin to use for wake-up
-using WakeupPin = Llwu::Pin<LlwuPin_Switch2>;
+using WakeupPin = Llwu::Pin<LlwuPin_Switch2_llwu>;
 
 /** Possible tests - must be in this order */
 enum Test {
@@ -164,15 +164,14 @@ static void testStopMode(
    }
 
    // Set STOP mode to enter
-   Smc::setStopMode(smcStopMode);
-   Smc::setStopOptions(smcLowLeakageStopMode);
+   Smc::setLowLeakageStopMode(smcLowLeakageStopMode);
 
    /*
     * Go to sleep - LPTMR or PIN wake-up
     */
    console.writeln("Deep Sleeping...").flushOutput();
 
-   Smc::enterStopMode();
+   Smc::enterStopMode(smcStopMode);
 
    Llwu::disableAllSources();
    WakeupTimer::disableNvicInterrupts();
@@ -421,27 +420,23 @@ static SmcStatus changeRunMode() {
    console.flushOutput();
    if (smcStatus == SmcStatus_HSRUN) {
       // HSRUN->RUN
-      Mcg::clockTransition(Mcg::clockInfo[RUN_CLOCK_CONFIG]);
-      Smc::enterRunMode(SmcRunMode_Normal);
+      Smc::enterRunMode(RUN_CLOCK_CONFIG);
       console.setBaudRate(defaultBaudRate);
       console.writeln("Changed to RUN mode").flushOutput();
       // RUN->VLPR
-      Mcg::clockTransition(Mcg::clockInfo[VLPR_CLOCK_CONFIG]);
-      Smc::enterRunMode(SmcRunMode_VeryLowPower);
+      Smc::enterRunMode(VLPR_CLOCK_CONFIG);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to VLPR mode").flushOutput();
    }
    else if (smcStatus == SmcStatus_VLPR) {
       // VLPR->RUN mode
-      Smc::enterRunMode(SmcRunMode_Normal);
-      Mcg::clockTransition(Mcg::clockInfo[RUN_CLOCK_CONFIG]);
+      Smc::enterRunMode(RUN_CLOCK_CONFIG);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to RUN mode").flushOutput();
    }
    else if (smcStatus == SmcStatus_RUN) {
       // RUN->HSRUN
-      Smc::enterRunMode(SmcRunMode_HighSpeed);
-      Mcg::clockTransition(Mcg::clockInfo[HSRUN_CLOCK_CONFIG]);
+      Smc::enterRunMode(HSRUN_CLOCK_CONFIG);
       console.setBaudRate(defaultBaudRate);
       console.writeln("Changed to HSRUN mode").flushOutput();
    }
@@ -519,12 +514,7 @@ int main() {
    BlueLED::disablePin();
 
    // Enable all power modes
-   Smc::enablePowerModes(
-         SmcVeryLowPower_Enabled,
-         SmcLowLeakageStop_Enabled,
-         SmcVeryLowLeakageStop_Enabled,
-         SmcHighSpeedRun_Enabled
-   );
+   Smc::enableAllPowerModes();
 
    //Errata e4481 STOP mode recovery unstable
 //   Pmc::configureBandgapOperation(PmcBandgapBuffer_Off, PmcBandgapLowPowerEnable_On);

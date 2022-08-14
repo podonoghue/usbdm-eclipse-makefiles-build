@@ -126,13 +126,11 @@
   
 <!ELEMENT aliasOption EMPTY >
    <!-- alias Option 
-   name 		Refers to another option within the same file and will be used as key and validated as a reference to an ID
-   key  		Allows reference to an option (possibly) in another file while passing validation
-   displayName	Allows the name of the model (visible in the GUI) to differ from the aliased option's name
+   key  		Allows reference to an option (possibly) in another file
+   name     Allows the name of the model (visible in the GUI) to differ from the aliased option's name
    -->
-   <!ATTLIST aliasOption name        CDATA        #IMPLIED>
    <!ATTLIST aliasOption key         CDATA        #REQUIRED>
-   <!ATTLIST aliasOption displayName CDATA        #IMPLIED>
+   <!ATTLIST aliasOption name        CDATA        #IMPLIED>
    <!ATTLIST aliasOption description CDATA        #IMPLIED>
    <!ATTLIST aliasOption toolTip     CDATA        #IMPLIED>
    <!ATTLIST aliasOption constant    (false|true) "true">

@@ -42,7 +42,7 @@
          <choice value="3" name="LPO 1kHz clock"                 ref="/PMC/system_low_power_clock" enum="LpoClk"    code="PmcInfo::getLpoClock()"     isDefault="true"/>
       </choiceOption>
       
-      <if condition="!sim_sopt2_rtcclkoutsel" >
+      <if condition="!sim_sopt2_rtcclkoutsel_not_present" >
          <choiceOption key="sim_sopt2_rtcclkoutsel"
             enumStem="SimRtcClkoutSel"
             target="rtc_clkout" 
@@ -99,7 +99,7 @@
          <choice value="3" name="LPO 1kHz clock"                 ref="/PMC/system_low_power_clock" enum="LpoClk"    code="PmcInfo::getLpoClock()"  isDefault="true"/>
       </choiceOption>
       
-      <if condition="!sim_sopt2_rtcclkoutsel" >
+      <if condition="!sim_sopt2_rtcclkoutsel_not_present" >
          <choiceOption key="sim_sopt2_rtcclkoutsel"
             enumStem="SimRtcClkoutSel"
             target="rtc_clkout" 

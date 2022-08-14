@@ -215,7 +215,7 @@
          
          <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" constant="false" />
 
-         <choiceOption key="sim_sopt2_pllfllsel[%(n)]_Fixed"
+         <choiceOption key="sim_sopt2_pllfllsel_Fixed[%(n)]"
             target="system_peripheral_clock[%(n)]"
             description="Peripheral Clock"
             toolTip="Clock for various peripherals (LPUART, TPM etc.)">

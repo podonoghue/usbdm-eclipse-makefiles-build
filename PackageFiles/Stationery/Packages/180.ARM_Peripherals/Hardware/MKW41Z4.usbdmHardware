@@ -236,6 +236,7 @@
       </pin>
       <pin name="ADC0_DP0"     isFixed="true">
          <mux sel="fixed"         signal="ADC0_DP0" />
+         <mux sel="fixed"         signal="ADC0_SE0" />
          <mux sel="fixed"         signal="CMP0_IN0" />
          <reset sel="fixed" />
       </pin>

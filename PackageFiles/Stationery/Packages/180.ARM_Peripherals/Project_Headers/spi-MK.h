@@ -689,12 +689,12 @@ public:
 
       pushrMask = spiPeripheralSelect|spiSelectMode|SPI_PUSHR_CTAS(spiCtarSelect);
 
-      if (polarity) {
-         // ActiveHigh
+      if (polarity == ActiveHigh) {
+         // ActiveHigh (inactive level is low)
          spi->MCR = spi->MCR & ~spiPeripheralSelect;
       }
       else {
-         // ActiveLow
+         // ActiveLow (inactive level is high)
          spi->MCR = spi->MCR | spiPeripheralSelect;
       }
    }

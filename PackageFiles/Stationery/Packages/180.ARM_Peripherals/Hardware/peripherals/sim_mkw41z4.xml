@@ -10,7 +10,7 @@
 
    <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) do not share XTAL/EXTAL pins -->
    <constant key="rtc_independent" />
-   <constant key="sim_sopt2_rtcclkoutsel" />   
+   <constant key="sim_sopt2_rtcclkoutsel_not_present" />   
    
    <choiceOption key="sim_sopt1_osc32ksel" 
       enumStem="SimOsc32kSel"

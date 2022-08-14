@@ -357,7 +357,7 @@ void Mcg::SystemCoreClockUpdate(void) {
 #endif
 
    // MCG external reference clock
-   uint32_t mcg_erc_clock = McgInfo::getMcgExternalReferenceClock();
+   uint32_t mcg_erc_clock = McgInfo::getExternalReferenceClock();
 
    // Calculate SystemMcgffClock
    if ((mcg->C1&MCG_C1_IREFS_MASK) == 0) {
@@ -390,10 +390,10 @@ void Mcg::SystemCoreClockUpdate(void) {
          SystemMcgFllClock = systemFllClock;
          break;
       case MCG_S_CLKST(1) : // Internal Reference Clock
-         SystemMcgOutClock = McgInfo::getInternalIrcClock();
+         SystemMcgOutClock = McgInfo::getInternalReferenceClock();
          break;
       case MCG_S_CLKST(2) : // External Reference Clock
-         SystemMcgOutClock = McgInfo::getErcClock();
+         SystemMcgOutClock = mcg_erc_clock;
          break;
       case MCG_S_CLKST(3) : // PLL - not available
          SystemMcgOutClock = 0;
