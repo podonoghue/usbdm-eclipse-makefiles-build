@@ -6,7 +6,7 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <aliasOption key="/SIM/system_bus_clock" displayName="PIT input clock" constant="true"/>
+   <aliasOption key="/SIM/system_bus_clock" name="PIT input clock" constant="true"/>
 
    <intOption key="pit_ldval" description="Reload value"
       toolTip="Value loaded in timer register on roll-over"

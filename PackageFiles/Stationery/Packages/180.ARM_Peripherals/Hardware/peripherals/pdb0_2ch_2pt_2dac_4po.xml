@@ -10,7 +10,7 @@ Devices using this peripheral:
 
    <xi:include href="_mapPinsOption.xml"/>  
 
-   <aliasOption key="/SIM/system_bus_clock" displayName="PDB input clock" constant="true"/>
+   <aliasOption key="/SIM/system_bus_clock" name="PDB input clock" constant="true"/>
 
    <choiceOption key="pdb_sc_prescaler" 
       description="Clock Prescaler Divider Select"
