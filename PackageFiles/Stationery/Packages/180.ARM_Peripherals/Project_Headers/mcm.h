@@ -26,25 +26,26 @@ namespace USBDM {
  * @{
  */
 
+#if $(/MCM/irqOption_present:false)
 /**
  * Type definition for MCM interrupt call back
  */
 typedef void (*McmCallbackFunction)();
 
 /**
- * Template class providing interface to Low Leakage Wake-up Unit
+ * Template class providing interface to Miscellaneous Control Module
  *
  * @tparam info      Information class for MCM
  *
  * @code
- * using mcm = McmBase_T<McmInfo>;
+ * using mcm = McmInterrupt_T<McmInfo>;
  *
  *  mcm::configure();
  *
  * @endcode
  */
 template <class Info>
-class McmBase_T {
+class McmInterrupt_T {
 
 protected:
    /** Callback function for ISR */
@@ -156,10 +157,6 @@ public:
       sCallback = callback;
    }
 
-protected:
-   /** Pointer to hardware */
-   static constexpr HardwarePtr<MCM_Type> mcm = McgInfo::baseAddress;
-
 public:
 
    /**
@@ -202,9 +199,44 @@ public:
    }
 };
 
-template<class Info> McmCallbackFunction McmBase_T<Info>::sCallback = McmBase_T<Info>::unhandledCallback;
+template<class Info> McmCallbackFunction McmInterrupt_T<Info>::sCallback = McmInterrupt_T<Info>::unhandledCallback;
 
-$(/MCM/declarations: // No declarations found)
+/**
+ * Template class providing interface to Miscellaneous Control Module
+ *
+ * @tparam info      Information class for MCM
+ *
+ * @code
+ * using mcm = McmInterrupt_T<McmInfo>;
+ *
+ *  mcm::configure();
+ *
+ * @endcode
+ */
+class Mcm : public McmInfo, public McmInterrupt_T<McmInfo> {
+#else
+
+class Mcm : public McmInfo {
+
+#endif
+
+public:
+
+   /**
+    * Basic enable of MCM\n
+    * Includes configuring all pins
+    */
+   static void enable() {
+   }
+
+   /**
+    * Configure with settings from Configure.usbdmProject.
+    */
+   static void defaultConfigure() {
+   }
+
+};
+
 /**
  * End MCM_Group
  * @}

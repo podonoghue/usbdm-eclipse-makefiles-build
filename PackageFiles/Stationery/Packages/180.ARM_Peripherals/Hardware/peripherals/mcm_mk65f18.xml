@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- mcm_mk65f18.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="mcm_def.xml"/>
-</fragment>
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Miscellaneous Control Module (MCM)">
+
+   <constant key="irqOption_present"                     />
+   <constant key="mcm_placr_arb_present"                 />
+   <constant key="mcm_cpo_present"                       />
+
+   <xi:include href="mcm_def.xml"/>
+
+</peripheralPage>

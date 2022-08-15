@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- mcm_mk02f12810.xml -->
+<!-- mcm_mkw41z4.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Miscellaneous Control Module (MCM)">
+
+   <constant key="mcm_placr_esfc_present"                />
+   <constant key="mcm_placr_flash_speculation_present"   />
+   <constant key="mcm_placr_flash_cache_present"         />
+   <constant key="mcm_placr_cfcc_present"                />
    <constant key="mcm_placr_arb_present"                 />
+   <constant key="mcm_cpo_present"                       />
 
    <xi:include href="mcm_def.xml"/>
 

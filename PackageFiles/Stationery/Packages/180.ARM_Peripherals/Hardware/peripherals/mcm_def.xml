@@ -1,21 +1,174 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- mcm_def.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Miscellaneous Control Module (MCM)">
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
    <xi:include href="_default_instance.xml"/>
-
+   
+   <if condition="irqOption_present" >
+      <xi:include href="_irqOption.xml"/>
+   </if>   
+   
+   <binaryOption key="mcm_placr_esfc" condition="mcm_placr_esfc_present"
+      enumStem="McmStallFlashController"
+      description="Enable Stalling Flash Controller"
+      toolTip="Enables stalling flash controller when flash is busy \n
+      When software needs to access the flash memory while a flash memory resource is being manipulated \n
+      by a flash command, software can enable a stall mechanism to avoid a read collision.  \n
+      The stall mechanism allows software to execute code from the same block on which flash operations \n
+      are being performed. \n
+      However, software must ensure the sector the flash operations are being performed on is not \n
+      the same sector from which the code is executing. \n
+      This must be set only just before the flash operation is executed and cleared when the operation completes"
+      >
+      <choice name="Disabled" value="0" enum="Disabled" isDefault="true" />
+      <choice name="Enabled"  value="1" enum="Enabled"  />
+   </binaryOption>
+   
+   <clockCodeTemplate variable="mcm_placr_esfc"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setStallFlashController(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t}\n\n
+   ]]></clockCodeTemplate>
+   
+   <choiceOption key="mcm_placr_flash_speculation" condition="mcm_placr_flash_speculation_present"
+      enumStem="McmFlashSpeculation"
+      valueFormat="(%s)"
+      description="Flash Controller Speculation Buffer"
+      toolTip="Controls the operation of the Flash Controller Speculation Buffer"
+      >
+      <choice value="MCM_PLACR_DFCS(0)|MCM_PLACR_EFDS(0)" name="Instructions Only"     enum="InstructionsOnly"       isDefault="true" />
+      <choice value="MCM_PLACR_DFCS(0)|MCM_PLACR_EFDS(1)" name="Instructions and Data" enum="InstructionsAndData"  />
+      <choice value="MCM_PLACR_DFCS(1)|MCM_PLACR_EFDS(0)" name="Off"                   enum="Off"                    />
+   </choiceOption>
+   
+   <clockCodeTemplate variable="mcm_placr_flash_speculation"
+      mask="(MCM_PLACR_DFCS_MASK|MCM_PLACR_EFDS_MASK)"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setFlashControllerSpeculation(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t}\n\n
+   ]]></clockCodeTemplate>
+   
+   <choiceOption key="mcm_placr_flash_cache" condition="mcm_placr_flash_cache_present"
+      enumStem="McmFlashCache"
+      valueFormat="(%s)"
+      description="Flash Controller Cache"
+      toolTip="Controls the operation of the Flash Controller Speculation Cache"
+      >
+      <choice value="MCM_PLACR_DFCC(0)|MCM_PLACR_DFCIC(0)|MCM_PLACR_DFCDA(0)" name="Instructions and Data"  enum="InstructionsAndData" />
+      <choice value="MCM_PLACR_DFCC(0)|MCM_PLACR_DFCIC(0)|MCM_PLACR_DFCDA(1)" name="Instructions Only"      enum="InstructionsOnly" />
+      <choice value="MCM_PLACR_DFCC(0)|MCM_PLACR_DFCIC(1)|MCM_PLACR_DFCDA(0)" name="Data Only"              enum="DataOnly" />
+      <choice value="MCM_PLACR_DFCC(1)|MCM_PLACR_DFCIC(0)|MCM_PLACR_DFCDA(0)" name="Disabled"               enum="Disabled" />
+   </choiceOption>
+   
+   <clockCodeTemplate variable="mcm_placr_flash_cache"
+      mask="(MCM_PLACR_DFCC_MASK|MCM_PLACR_DFCIC_MASK|MCM_PLACR_DFCDA_MASK)"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setFlashControllerCache(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t}\n\n
+   ]]></clockCodeTemplate>
+   
+   <binaryOption key="mcm_placr_cfcc" condition="mcm_placr_cfcc_present"
+      enumStem="McmFlashControllerCache"
+      description="Clear Flash Controller Cache"
+      toolTip="Write to clear flash controller cache"
+      >
+      <choice name="Clear" value="1" enum="Clear" isDefault="true" />
+   </binaryOption>
+   
+   <clockCodeTemplate variable="mcm_placr_cfcc"
+   ><![CDATA[
+      \t/**
+      \t * %description
+      \t * %tooltip
+      \t */
+      \tstatic void clearFlashControllerCache() {
+      \t   %register = %register | %mask;
+      \t}\n\n
+   ]]></clockCodeTemplate>
+   
+   <binaryOption key="mcm_placr_arb" condition="mcm_placr_arb_present"
+      enumStem="McmArbitration"
+      description="Arbitration select for the crossbar masters"
+      toolTip="Arbitration select for the crossbar masters"
+      >
+      <choice name="Fixed-priority" value="0" enum="FixedPriority" isDefault="true" />
+      <choice name="Round-robin"  value="1" enum="RoundRobin"  />
+   </binaryOption>
+   
+   <clockCodeTemplate variable="mcm_placr_arb"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setCrossbarArbitration(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t}\n\n
+   ]]></clockCodeTemplate>
+   
+   <choiceOption key="mcm_cpo_request" condition="mcm_cpo_present"
+      enumStem="McmComputeOnlyMode"
+      valueFormat="(%s)"
+      description="Request Compute Operation (with Wake on interrupt)"
+      toolTip="Request for Compute Operation with optional wake-on-interrupt"
+      >
+      <choice value="MCM_CPO_CPOREQ(0)|MCM_CPO_CPOWOI(0)" name="No request"                     enum="No_request"                   isDefault="true" />
+      <choice value="MCM_CPO_CPOREQ(1)|MCM_CPO_CPOWOI(0)" name="Request"                        enum="Request"                      />
+      <choice value="MCM_CPO_CPOREQ(1)|MCM_CPO_CPOWOI(1)" name="Request with wake-on-interrupt" enum="Request_With_WakeOnInterrupt" />
+   </choiceOption>
+   
+   <clockCodeTemplate variable="mcm_cpo_request"
+      mask="(MCM_CPO_CPOREQ_MASK|MCM_CPO_CPOWOI_MASK)"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void requestComputeMode(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t}\n\n
+   ]]></clockCodeTemplate>
+   
+   <binaryOption key="mcm_cpo_cpoack" condition="mcm_cpo_present"
+      enumStem="McmCpoAcknowledge"
+      description="Acknowledge entry to Computer Operation mode"
+      toolTip="Acknowledge entry to Computer Operation mode"
+      >
+      <choice name="Ack" value="1" enum="Ack" isDefault="true" />
+   </binaryOption>
+   
    <template key="/MCM/declarations" namespace="all"  ><![CDATA[
-   \t/**
-   \t * Class representing $(_name)
-   \t */
-   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+         \t/**
+         \t * Class representing $(_name)
+         \t */
+         \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
    ]]></template>
-      
+         
    <projectActionList id = "mcm_files" >
       <copy source="Project_Headers/mcm.h"         target="Project_Headers/mcm.h"          overwrite="true" derived="true" />
    </projectActionList>
 
-</peripheralPage>
+</fragment>
