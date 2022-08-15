@@ -150,6 +150,9 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
          <irq num="MCG_IRQn" />
       </peripheral>
+      <peripheral baseName="MCM"      instance=""         version="mcm_mkw41z4">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcm" />
+      </peripheral>
       <peripheral baseName="OSC"      instance="0"        version="osc0_rf">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOscRf" />
       </peripheral>

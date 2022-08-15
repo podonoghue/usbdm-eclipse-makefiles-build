@@ -24,7 +24,7 @@ int main() {
    // Flash interface
    FlashInterface flashInterface{spiFlash, Spi0::Pcs_FlashCS};
 
-   while(!flashInterface.initialise()) {
+   while(flashInterface.initialise() != E_NO_ERROR) {
       console.writeln("Failed initialise()");
    }
 
@@ -43,11 +43,11 @@ int main() {
    console.writeArray(data, sizeof(data), 0);
 
    // Write to RAM buffer
-   flashInterface.writeDataBuffer(data);
+   console.writeln("RAM buffer write result = ", getErrorMessage(flashInterface.writeDataBuffer(data)), "\n" );
 
    // Read-back and verify against same random number sequence
    memset(data, 0, sizeof(data));
-   flashInterface.readDataBuffer(data);
+   console.writeln("RAM buffer read result = ", getErrorMessage(flashInterface.readDataBuffer(data)), "\n" );
 
    console.writeln("Test Buffer from RAM read");
    console.writeArray(data, sizeof(data), 0);
@@ -78,21 +78,24 @@ int main() {
    for (size_t index=0; index<sizeofArray(data); index++) {
       data[index] = (uint8_t)rand();
    }
-   console.writeln("Test Buffer for Flash write");
-   console.writeArray(data, sizeof(data), 0);
 
    // Choose a ~random block address
    const uint32_t flashAddress = ((data[0]<<16)|(data[1]<<8)|data[2])&((1<<19)-1)&~0xFF;
 
+   console.writeln("Testing page @0x", flashAddress, Radix_16, "\n");
+
+   console.writeln("Test Buffer for Flash write");
+   console.writeArray(data, sizeof(data), flashAddress);
+
    // Write to Flash
-   flashInterface.writePage(data, flashAddress);
+   console.writeln("Flash write result = ", getErrorMessage(flashInterface.writePage(data, flashAddress)), "\n" );
 
    // Read-back and verify against same random number sequence
    memset(data, 0, sizeof(data));
-   flashInterface.readPage(data, flashAddress);
+   console.writeln("Flash read result = ", getErrorMessage(flashInterface.readPage(data, flashAddress)), "\n" );
 
    console.writeln("Test Buffer from Flash read");
-   console.writeArray(data, sizeof(data), 0);
+   console.writeArray(data, sizeof(data), flashAddress);
 
    failed = false;
    srand(seed2);
@@ -111,13 +114,13 @@ int main() {
    /*
     * Erase check
     */
-   console.writeln("Chip erase result = ", flashInterface.eraseChip()?"OK\n":"Failed\n");
+   console.writeln("Chip erase result = ", getErrorMessage(flashInterface.eraseChip()), "\n" );
 
    // Read back page programmed earlier
    flashInterface.readPage(data, flashAddress);
 
    console.writeln("Test Buffer from Flash read after erase");
-   console.writeArray(data, sizeof(data), 0);
+   console.writeArray(data, sizeof(data), flashAddress);
 
    for (size_t index=0; index<sizeofArray(data); index++) {
       uint8_t probe     = data[index];
@@ -128,10 +131,25 @@ int main() {
       }
    }
    if (!failed) {
-      console.writeln("Page blank check passed");
+      console.writeln("Page blank check passed\n");
    }
 
+   flashInterface.deepPowerDown();
+   wait(10_us);
+   flashInterface.wakeup();
+   wait(100_us);
+   console.writeln("Chip response after deepPowerDown(),wakeup() = ", getErrorMessage(flashInterface.poll()), "\n" );
+
+   flashInterface.ultraDeepPowerDown();
+   wait(10_us);
+   flashInterface.wakeup();
+   wait(300_us);
+   console.writeln("Chip response after ultraDeepPowerDown(),wakeup() = ", getErrorMessage(flashInterface.poll()), "\n" );
+
+   console.writeln("Testing completed");
+
    for(;;) {
+//      __asm__("bkpt");
       __asm__("nop");
    }
 

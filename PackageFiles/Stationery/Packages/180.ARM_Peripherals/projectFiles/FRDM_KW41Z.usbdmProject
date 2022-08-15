@@ -10,6 +10,7 @@
    <item key="$$Hardware_Source_Filename"                  value="MKW41Z4.usbdmHardware" />
    <item key="$peripheral$GPIOA_polarity"                  value="196608" />
    <item key="$peripheral$GPIOC_polarity"                  value="48" />
+   <item key="$peripheral$I2C1_codeIdentifier"             value="I2C_Accelerometer" />
    <item key="$peripheral$SPI0_codeIdentifier"             value="SpiFlash" />
    <item key="$pin$PTA0_pcrSetting_7"                      value="700" />
    <item key="$pin$PTA16_pcrSetting_1"                     value="100" />
@@ -17,6 +18,7 @@
    <item key="$pin$PTA18_pcrSetting_1"                     value="100" />
    <item key="$pin$PTA18_pcrSetting_5"                     value="500" />
    <item key="$pin$PTA19_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTA19_pcrSetting_5"                     value="500" />
    <item key="$pin$PTA1_pcrSetting_7"                      value="700" />
    <item key="$pin$PTA2_pcrSetting_7"                      value="700" />
    <item key="$pin$PTB0_pcrSetting_1"                      value="100" />
@@ -24,29 +26,36 @@
    <item key="$pin$PTB16_pcrSetting_0"                     value="0" />
    <item key="$pin$PTB17_pcrSetting_0"                     value="0" />
    <item key="$pin$PTB18_pcrSetting_0"                     value="0" />
+   <item key="$pin$PTB18_pcrSetting_1"                     value="100" />
    <item key="$pin$PTB18_pcrSetting_4"                     value="400" />
    <item key="$pin$PTB1_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTB1_pcrSetting_1"                      value="100" />
    <item key="$pin$PTB1_pcrSetting_7"                      value="700" />
    <item key="$pin$PTB2_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTB2_pcrSetting_1"                      value="100" />
    <item key="$pin$PTB3_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTB3_pcrSetting_1"                      value="100" />
    <item key="$pin$PTC16_pcrSetting_0"                     value="0" />
+   <item key="$pin$PTC16_pcrSetting_1"                     value="100" />
    <item key="$pin$PTC16_pcrSetting_2"                     value="200" />
    <item key="$pin$PTC17_pcrSetting_1"                     value="100" />
    <item key="$pin$PTC17_pcrSetting_2"                     value="200" />
    <item key="$pin$PTC18_pcrSetting_1"                     value="100" />
    <item key="$pin$PTC18_pcrSetting_2"                     value="200" />
    <item key="$pin$PTC19_pcrSetting_0"                     value="0" />
+   <item key="$pin$PTC19_pcrSetting_1"                     value="100" />
    <item key="$pin$PTC19_pcrSetting_2"                     value="200" />
    <item key="$pin$PTC1_pcrSetting_1"                      value="100" />
    <item key="$pin$PTC1_pcrSetting_5"                      value="500" />
    <item key="$pin$PTC2_pcrSetting_3"                      value="320" />
+   <item key="$pin$PTC3_pcrSetting_1"                      value="100" />
    <item key="$pin$PTC3_pcrSetting_3"                      value="320" />
    <item key="$pin$PTC4_pcrSetting_1"                      value="100" />
    <item key="$pin$PTC5_pcrSetting_1"                      value="100" />
    <item key="$pin$PTC6_pcrSetting_4"                      value="400" />
    <item key="$pin$PTC7_pcrSetting_4"                      value="400" />
    <item key="$signal$ADC0_DM0_codeIdentifier"             value="Thermistor" />
-   <item key="$signal$ADC0_DM0_descriptionSetting"         value="Differential Measurement of thermistor" />
+   <item key="$signal$ADC0_DM0_descriptionSetting"         value="Thermistor" />
    <item key="$signal$ADC0_DP0_codeIdentifier"             value="Thermistor" />
    <item key="$signal$ADC0_SE1_codeIdentifier"             value="Analogue_A4" />
    <item key="$signal$ADC0_SE2_codeIdentifier"             value="Analogue_A3" />
@@ -58,9 +67,16 @@
    <item key="$signal$GPIOA_18_codeIdentifier"             value="RGB_Blue" />
    <item key="$signal$GPIOA_19_codeIdentifier"             value="RGB_Green" />
    <item key="$signal$GPIOB_0_codeIdentifier"              value="LED" />
+   <item key="$signal$GPIOB_18_codeIdentifier"             value="Digital_A1" />
+   <item key="$signal$GPIOB_1_codeIdentifier"              value="Digital_A4" />
+   <item key="$signal$GPIOB_2_codeIdentifier"              value="Digital_A2" />
+   <item key="$signal$GPIOB_3_codeIdentifier"              value="Digital_A3" />
+   <item key="$signal$GPIOC_16_codeIdentifier"             value="Digital_D3" />
    <item key="$signal$GPIOC_17_codeIdentifier"             value="Digital_D5" />
    <item key="$signal$GPIOC_18_codeIdentifier"             value="Digital_D6" />
+   <item key="$signal$GPIOC_19_codeIdentifier"             value="Digital_D2" />
    <item key="$signal$GPIOC_1_codeIdentifier"              value="RGB_Red" />
+   <item key="$signal$GPIOC_3_codeIdentifier"              value="Digital_D14" />
    <item key="$signal$GPIOC_4_codeIdentifier"              value="Button3" />
    <item key="$signal$GPIOC_5_codeIdentifier"              value="Button4" />
    <item key="$signal$I2C1_SCL_descriptionSetting"         value="Accel_SCL" />
@@ -79,9 +95,10 @@
    <item key="$signal$SPI0_SOUT_codeIdentifier"            value="FlashSI" />
    <item key="$signal$SWD_CLK_descriptionSetting"          value="SWDCLK" />
    <item key="$signal$SWD_DIO_descriptionSetting"          value="SWDIO" />
-   <item key="$signal$TPM0_CH1_codeIdentifier"             value="RGB_Blue_Pwm" />
+   <item key="$signal$TPM0_CH1_codeIdentifier"             value="Led_Pwm" />
    <item key="$signal$TPM0_CH2_codeIdentifier"             value="RGB_Red_Pwm" />
    <item key="$signal$TPM2_CH0_codeIdentifier"             value="RGB_Blue_Pwm" />
+   <item key="$signal$TPM2_CH1_codeIdentifier"             value="RGB_Green_Pwm" />
    <item key="$signal$TPM_CLKIN0_codeIdentifier"           value="TpmClkin0" />
    <item key="$signal$TSI0_CH4_codeIdentifier"             value="Button1" />
    <item key="$signal$TSI0_CH4_descriptionSetting"         value="Button1" />

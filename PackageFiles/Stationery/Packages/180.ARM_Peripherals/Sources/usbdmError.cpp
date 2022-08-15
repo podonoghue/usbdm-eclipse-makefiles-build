@@ -34,6 +34,7 @@ static const char *messages[] {
       "Failed resource allocation",
       "Timeout occurred during operation",
       "Interrupt occurred during operation",
+      "Device is busy",
 };
 #endif
 
