@@ -69,22 +69,22 @@
    <item key="$pin$PTD7_pcrSetting_7"                      value="700" />
    <item key="$pin$PTE0_pcrSetting_3"                      value="300" />
    <item key="$pin$PTE1_pcrSetting_3"                      value="300" />
-   <item key="$signal$ADC0_DM0_codeIdentifier"             value="analogueDiff_a6_a7" />
-   <item key="$signal$ADC0_DM3_codeIdentifier"             value="analogueDiff_a8_a9" />
-   <item key="$signal$ADC0_DP0_codeIdentifier"             value="analogueDiff_a6_a7" />
-   <item key="$signal$ADC0_DP3_codeIdentifier"             value="analogueDiff_a8_a9" />
-   <item key="$signal$ADC0_SE0_codeIdentifier"             value="analogue_A6" />
-   <item key="$signal$ADC0_SE12_codeIdentifier"            value="analogue_A5" />
-   <item key="$signal$ADC0_SE13_codeIdentifier"            value="analogue_A4" />
-   <item key="$signal$ADC0_SE15_codeIdentifier"            value="analogue_A2" />
-   <item key="$signal$ADC0_SE19_codeIdentifier"            value="analogue_A7" />
-   <item key="$signal$ADC0_SE23_codeIdentifier"            value="analogue_A11" />
+   <item key="$signal$ADC0_DM0_codeIdentifier"             value="AnalogueDiff_a6_a7" />
+   <item key="$signal$ADC0_DM3_codeIdentifier"             value="AnalogueDiff_a8_a9" />
+   <item key="$signal$ADC0_DP0_codeIdentifier"             value="AnalogueDiff_a6_a7" />
+   <item key="$signal$ADC0_DP3_codeIdentifier"             value="AnalogueDiff_a8_a9" />
+   <item key="$signal$ADC0_SE0_codeIdentifier"             value="Analogue_A6" />
+   <item key="$signal$ADC0_SE12_codeIdentifier"            value="Analogue_A5" />
+   <item key="$signal$ADC0_SE13_codeIdentifier"            value="Analogue_A4" />
+   <item key="$signal$ADC0_SE15_codeIdentifier"            value="Analogue_A2" />
+   <item key="$signal$ADC0_SE19_codeIdentifier"            value="Analogue_A7" />
+   <item key="$signal$ADC0_SE23_codeIdentifier"            value="Analogue_A11" />
    <item key="$signal$ADC0_SE26_codeIdentifier"            value="TempSensor" />
    <item key="$signal$ADC0_SE27_codeIdentifier"            value="Bandgap" />
-   <item key="$signal$ADC0_SE3_codeIdentifier"             value="analogue_A8/LightSensor" />
-   <item key="$signal$ADC0_SE4b_codeIdentifier"            value="analogue_A3" />
-   <item key="$signal$ADC0_SE8_codeIdentifier"             value="analogue_A0" />
-   <item key="$signal$ADC0_SE9_codeIdentifier"             value="analogue_A1" />
+   <item key="$signal$ADC0_SE3_codeIdentifier"             value="Analogue_A8/LightSensor" />
+   <item key="$signal$ADC0_SE4b_codeIdentifier"            value="Analogue_A3" />
+   <item key="$signal$ADC0_SE8_codeIdentifier"             value="Analogue_A0" />
+   <item key="$signal$ADC0_SE9_codeIdentifier"             value="Analogue_A1" />
    <item key="$signal$ADC1_SE7b_descriptionSetting"        value="RF_ce" />
    <item key="$signal$EXTAL0_descriptionSetting"           value="8MHz Crystal" />
    <item key="$signal$EXTAL32_descriptionSetting"          value="32kHz Crystal" />

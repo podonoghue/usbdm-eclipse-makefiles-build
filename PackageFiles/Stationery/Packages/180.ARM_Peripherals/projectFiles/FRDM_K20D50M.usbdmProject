@@ -92,69 +92,69 @@
    <item key="$signal$FTM0_CH2_codeIdentifier"             value="RedLED_PWM" />
    <item key="$signal$FTM0_CH4_codeIdentifier"             value="GreenLED_PWM" />
    <item key="$signal$FTM0_CH7_codeIdentifier"             value="BlueLED_PWM" />
-   <item key="$signal$GPIOA_12_codeIdentifier"             value="Gpio_D8/Lcd_Reset" />
+   <item key="$signal$GPIOA_12_codeIdentifier"             value="Digital_D8/Lcd_Reset" />
    <item key="$signal$GPIOA_12_descriptionSetting"         value="D8/LCD Reset" />
-   <item key="$signal$GPIOA_13_codeIdentifier"             value="Gpio_D24" />
+   <item key="$signal$GPIOA_13_codeIdentifier"             value="Digital_D24" />
    <item key="$signal$GPIOA_13_descriptionSetting"         value="D24" />
-   <item key="$signal$GPIOA_1_codeIdentifier"              value="Gpio_A1" />
+   <item key="$signal$GPIOA_1_codeIdentifier"              value="Digital_A1" />
    <item key="$signal$GPIOA_1_descriptionSetting"          value="D5" />
-   <item key="$signal$GPIOA_2_codeIdentifier"              value="Gpio_D9/BlueLed" />
+   <item key="$signal$GPIOA_2_codeIdentifier"              value="Digital_D9/BlueLed" />
    <item key="$signal$GPIOA_2_descriptionSetting"          value="D9/Blue LED/LCD CS" />
-   <item key="$signal$GPIOA_4_codeIdentifier"              value="Gpio_D21" />
+   <item key="$signal$GPIOA_4_codeIdentifier"              value="Digital_D21" />
    <item key="$signal$GPIOA_4_descriptionSetting"          value="D21" />
-   <item key="$signal$GPIOA_5_codeIdentifier"              value="Gpio_D2" />
+   <item key="$signal$GPIOA_5_codeIdentifier"              value="Digital_D2" />
    <item key="$signal$GPIOA_5_descriptionSetting"          value="D2" />
-   <item key="$signal$GPIOB_0_codeIdentifier"              value="Gpio_A5" />
+   <item key="$signal$GPIOB_0_codeIdentifier"              value="Digital_A5" />
    <item key="$signal$GPIOB_0_descriptionSetting"          value="D5" />
-   <item key="$signal$GPIOB_1_codeIdentifier"              value="Gpio_A4" />
+   <item key="$signal$GPIOB_1_codeIdentifier"              value="Digital_A4" />
    <item key="$signal$GPIOB_1_descriptionSetting"          value="D4" />
-   <item key="$signal$GPIOB_2_codeIdentifier"              value="Gpio_D15/Lcd_CS" />
+   <item key="$signal$GPIOB_2_codeIdentifier"              value="Digital_D15/Lcd_CS" />
    <item key="$signal$GPIOB_2_descriptionSetting"          value="D15" />
-   <item key="$signal$GPIOB_3_codeIdentifier"              value="Gpio_D14" />
+   <item key="$signal$GPIOB_3_codeIdentifier"              value="Digital_D14" />
    <item key="$signal$GPIOB_3_descriptionSetting"          value="D14" />
-   <item key="$signal$GPIOC_0_codeIdentifier"              value="Gpio_A0" />
+   <item key="$signal$GPIOC_0_codeIdentifier"              value="Digital_A0" />
    <item key="$signal$GPIOC_0_descriptionSetting"          value="A0" />
-   <item key="$signal$GPIOC_10_codeIdentifier"             value="Gpio_D25" />
+   <item key="$signal$GPIOC_10_codeIdentifier"             value="Digital_D25" />
    <item key="$signal$GPIOC_10_descriptionSetting"         value="D25" />
-   <item key="$signal$GPIOC_11_codeIdentifier"             value="Gpio_D17" />
+   <item key="$signal$GPIOC_11_codeIdentifier"             value="Digital_D17" />
    <item key="$signal$GPIOC_11_descriptionSetting"         value="D17" />
-   <item key="$signal$GPIOC_1_codeIdentifier"              value="Gpio_A1" />
+   <item key="$signal$GPIOC_1_codeIdentifier"              value="Digital_A1" />
    <item key="$signal$GPIOC_1_descriptionSetting"          value="A1" />
-   <item key="$signal$GPIOC_2_codeIdentifier"              value="Gpio_D10/Lcd_BackLight" />
+   <item key="$signal$GPIOC_2_codeIdentifier"              value="Digital_D10/Lcd_BackLight" />
    <item key="$signal$GPIOC_2_descriptionSetting"          value="D10/LCD Light" />
-   <item key="$signal$GPIOC_3_codeIdentifier"              value="Gpio_D6/RedLed" />
+   <item key="$signal$GPIOC_3_codeIdentifier"              value="Digital_D6/RedLed" />
    <item key="$signal$GPIOC_3_descriptionSetting"          value="D6/RedLed" />
-   <item key="$signal$GPIOC_4_codeIdentifier"              value="Gpio_D7" />
+   <item key="$signal$GPIOC_4_codeIdentifier"              value="Digital_D7" />
    <item key="$signal$GPIOC_4_descriptionSetting"          value="D7" />
-   <item key="$signal$GPIOC_5_codeIdentifier"              value="Gpio_D18" />
+   <item key="$signal$GPIOC_5_codeIdentifier"              value="Digital_D18" />
    <item key="$signal$GPIOC_5_descriptionSetting"          value="D18" />
-   <item key="$signal$GPIOC_6_codeIdentifier"              value="Gpio_D19" />
+   <item key="$signal$GPIOC_6_codeIdentifier"              value="Digital_D19" />
    <item key="$signal$GPIOC_6_descriptionSetting"          value="D19" />
-   <item key="$signal$GPIOC_7_codeIdentifier"              value="Gpio_D20" />
+   <item key="$signal$GPIOC_7_codeIdentifier"              value="Digital_D20" />
    <item key="$signal$GPIOC_7_descriptionSetting"          value="D20" />
-   <item key="$signal$GPIOC_8_codeIdentifier"              value="Gpio_D4" />
+   <item key="$signal$GPIOC_8_codeIdentifier"              value="Digital_D4" />
    <item key="$signal$GPIOC_8_descriptionSetting"          value="D4" />
-   <item key="$signal$GPIOC_9_codeIdentifier"              value="Gpio_D23" />
+   <item key="$signal$GPIOC_9_codeIdentifier"              value="Digital_D23" />
    <item key="$signal$GPIOC_9_descriptionSetting"          value="D23" />
-   <item key="$signal$GPIOD_0_codeIdentifier"              value="Gpio_D16" />
+   <item key="$signal$GPIOD_0_codeIdentifier"              value="Digital_D16" />
    <item key="$signal$GPIOD_0_descriptionSetting"          value="D16" />
-   <item key="$signal$GPIOD_1_codeIdentifier"              value="Gpio_D13" />
+   <item key="$signal$GPIOD_1_codeIdentifier"              value="Digital_D13" />
    <item key="$signal$GPIOD_1_descriptionSetting"          value="D13" />
-   <item key="$signal$GPIOD_2_codeIdentifier"              value="Gpio_D11" />
+   <item key="$signal$GPIOD_2_codeIdentifier"              value="Digital_D11" />
    <item key="$signal$GPIOD_2_descriptionSetting"          value="D11" />
-   <item key="$signal$GPIOD_3_codeIdentifier"              value="Gpio_D12" />
+   <item key="$signal$GPIOD_3_codeIdentifier"              value="Digital_D12" />
    <item key="$signal$GPIOD_3_descriptionSetting"          value="D12" />
-   <item key="$signal$GPIOD_4_codeIdentifier"              value="Gpio_D3/GreenLed" />
+   <item key="$signal$GPIOD_4_codeIdentifier"              value="Digital_D3/GreenLed" />
    <item key="$signal$GPIOD_4_descriptionSetting"          value="D4/Green LED" />
-   <item key="$signal$GPIOD_5_codeIdentifier"              value="Gpio_A3" />
+   <item key="$signal$GPIOD_5_codeIdentifier"              value="Digital_A3" />
    <item key="$signal$GPIOD_5_descriptionSetting"          value="A3" />
-   <item key="$signal$GPIOD_6_codeIdentifier"              value="Gpio_A2" />
+   <item key="$signal$GPIOD_6_codeIdentifier"              value="Digital_A2" />
    <item key="$signal$GPIOD_6_descriptionSetting"          value="A2" />
-   <item key="$signal$GPIOD_7_codeIdentifier"              value="Gpio_D22" />
+   <item key="$signal$GPIOD_7_codeIdentifier"              value="Digital_D22" />
    <item key="$signal$GPIOD_7_descriptionSetting"          value="D22" />
-   <item key="$signal$GPIOE_0_codeIdentifier"              value="Gpio_D1" />
+   <item key="$signal$GPIOE_0_codeIdentifier"              value="Digital_D1" />
    <item key="$signal$GPIOE_0_descriptionSetting"          value="D1" />
-   <item key="$signal$GPIOE_1_codeIdentifier"              value="Gpio_D0" />
+   <item key="$signal$GPIOE_1_codeIdentifier"              value="Digital_D0" />
    <item key="$signal$GPIOE_1_descriptionSetting"          value="D0" />
    <item key="$signal$I2C0_SCL_descriptionSetting"         value="Accelerometer_SCL" />
    <item key="$signal$I2C0_SDA_descriptionSetting"         value="Accelerometer_SDA" />
@@ -172,12 +172,14 @@
    <item key="$signal$XTAL32_descriptionSetting"           value="Reserved(XTAL32)" />
    <item key="/HARDWARE/Analogue0"                         value="Analogue_A0" />
    <item key="/HARDWARE/Analogue1"                         value="Analogue_A1" />
-   <item key="/HARDWARE/Digital0"                          value="Gpio_D0" />
-   <item key="/HARDWARE/Digital1"                          value="Gpio_D1" />
+   <item key="/HARDWARE/Digital0"                          value="Digital_D0" />
+   <item key="/HARDWARE/Digital1"                          value="Digital_D1" />
    <item key="/HARDWARE/Led1"                              value="RedLed" />
    <item key="/HARDWARE/Led2"                              value="GreenLed" />
    <item key="/HARDWARE/Led3"                              value="BlueLed" />
-   <item key="/HARDWARE/Switch1"                           value="Gpio_D0" />
+   <item key="/HARDWARE/Switch1"                           value="Digital_D0" />
+   <item key="/LLWU/llwu_filt1_filtsel"                    value="0" />
+   <item key="/LLWU/llwu_filt2_filtsel"                    value="0" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_48MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
    <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_FEE_40MHz" />
@@ -187,8 +189,6 @@
    <item key="/MCG/mcgClockMode[0]"                        value="7" />
    <item key="/MCG/mcgClockMode[1]"                        value="5" />
    <item key="/MCG/mcgClockMode[2]"                        value="1" />
-   <item key="/MCG/mcg_c5_pllclken[2]"                     value="true" />
-   <item key="/MCG/mcg_c5_pllclken[3]"                     value="true" />
    <item key="/MCG/pll0OutputFrequency[0]"                 value="96000000" />
    <item key="/MCG/pll0OutputFrequency[3]"                 value="96000000" />
    <item key="/RTC/rtc_cr_osce"                            value="true" />
@@ -197,16 +197,18 @@
    <item key="/SIM/sim_clkdiv2_usb[2]"                     value="9" />
    <item key="/SIM/sim_clkdiv2_usb[3]"                     value="2" />
    <item key="/SIM/sim_sopt1_osc32ksel"                    value="2" />
-   <item key="/SIM/sim_sopt1_ramsize"                      value="Not initialised" />
    <item key="/SIM/sim_sopt1_usbpower"                     value="SIM_SOPT1_USBREGEN(0)|SIM_SOPT1_USBSSTBY(0)|SIM_SOPT1_USBVSTBY(0)" />
    <item key="/SIM/sim_sopt2_clkoutsel"                    value="6" />
    <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
    <item key="/SIM/sim_sopt2_pllfllsel[2]"                 value="1" />
    <item key="/SIM/sim_sopt2_pllfllsel[3]"                 value="1" />
+   <item key="/SIM/system_bus_clock[1]"                    value="4000000" />
    <item key="/SIM/system_bus_clock[2]"                    value="40000000" />
    <item key="/SIM/system_bus_clock[3]"                    value="41943040" />
+   <item key="/SIM/system_core_clock[1]"                   value="4000000" />
    <item key="/SIM/system_core_clock[2]"                   value="40000000" />
    <item key="/SIM/system_core_clock[3]"                   value="41943040" />
+   <item key="/SIM/system_flash_clock[1]"                  value="800000" />
    <item key="/SIM/system_flash_clock[2]"                  value="20000000" />
    <item key="/SIM/system_flash_clock[3]"                  value="20971520" />
    <item key="/SMC/smc_pmctrl_runm[1]"                     value="2" />
