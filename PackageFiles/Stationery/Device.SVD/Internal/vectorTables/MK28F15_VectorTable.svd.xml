@@ -103,7 +103,7 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>DMA_Error</name>
-      <description>DMA0 error interrupt all channels</description>
+      <description>DMA error interrupt all channels</description>
       <value>16</value>
       <peripheral>DMA0</peripheral>
    </interrupt>

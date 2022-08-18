@@ -104,9 +104,15 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>DMA_Error</name>
-      <description>Direct memory access controller</description>
+      <description>DMA error interrupt all channels</description>
       <value>16</value>
       <peripheral>DMA0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>MCM</name>
+      <description>Miscellaneous Control Module</description>
+      <value>17</value>
+      <peripheral>MCM</peripheral>
    </interrupt>
    <interrupt>
       <name>FTF_Command</name>
