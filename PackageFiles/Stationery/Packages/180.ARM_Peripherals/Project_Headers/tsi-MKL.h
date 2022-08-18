@@ -546,7 +546,7 @@ public:
        * This function is of use if mapAllPins and mapAllPinsOnEnable are not selected in USBDM configuration.
        */
       static void setInput() {
-         // Map pin to ADC
+         // Map pin to TSI
          Pcr::setPCR(Info::info[channel].pcrValue);
       }
 

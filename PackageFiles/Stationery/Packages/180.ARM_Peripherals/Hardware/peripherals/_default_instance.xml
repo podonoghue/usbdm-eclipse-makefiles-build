@@ -20,8 +20,7 @@
       \t//! Hardware base pointer
       \tstatic constexpr HardwarePtr<$(_base_class::toupper)_Type> $(_base_class::tolower) = baseAddress;\n\n
 ]]></template>
-      
 
-   <constant key="class_present" derived = "true" value = "true"  />
+   <constant key="class_present" value = "true"  />
 
 </fragment>

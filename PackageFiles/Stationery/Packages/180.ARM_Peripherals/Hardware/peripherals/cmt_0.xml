@@ -12,11 +12,6 @@
    
    <xi:include href="_clockOption.xml"/>
       
-   <projectActionList id = "cmt_files" >
-      <copy source="Project_Headers/cmt.h"          target="Project_Headers/cmt.h"          overwrite="true" derived="true" />
-      <copy source="Snippets/cmt-example.cpp"       target="Snippets/cmt-example.cpp"       overwrite="true" derived="true" />
-      <copy source="Snippets/cmt-sirc-example.cpp"  target="Snippets/cmt-sirc-example.cpp"  overwrite="true" derived="true" />
-   </projectActionList>
    
    <template key="/CMT/declarations" namespace="all"  ><![CDATA[
    \t/**
@@ -25,6 +20,12 @@
    \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
    ]]></template>
       
+   <projectActionList id = "cmt_files" >
+      <copy source="Project_Headers/cmt.h"          target="Project_Headers/cmt.h"          overwrite="true" derived="true" />
+      <copy source="Snippets/cmt-example.cpp"       target="Snippets/cmt-example.cpp"       overwrite="true" derived="true" />
+      <copy source="Snippets/cmt-sirc-example.cpp"  target="Snippets/cmt-sirc-example.cpp"  overwrite="true" derived="true" />
+   </projectActionList>
+   
    <signals/>
    
 </peripheralPage>

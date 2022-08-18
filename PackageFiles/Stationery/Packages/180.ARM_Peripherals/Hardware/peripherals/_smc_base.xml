@@ -9,16 +9,15 @@
 
    <!-- ************** PMPROT ************** -->
 
-   <if condition="smc_pmprot_ahsrun_available" >
-      <binaryOption key="smc_pmprot_ahsrun"
-         enumStem="SmcHighSpeedRun" 
-         enumType="uint8_t" 
-         description="Allow High Speed Run mode" 
-         toolTip="Allows the MCU to enter High Speed Run mode (HSRUN)" >
-         <choice name="HSRUN is not allowed" enum="Disabled" value="0" />
-         <choice name="HSRUN is allowed"     enum="Enabled"  value="1" isDefault="true" />
-      </binaryOption>   
-   </if>
+   <binaryOption key="smc_pmprot_ahsrun" condition="smc_pmprot_ahsrun_present"
+      enumStem="SmcHighSpeedRun" 
+      enumType="uint8_t" 
+      description="Allow High Speed Run mode" 
+      toolTip="Allows the MCU to enter High Speed Run mode (HSRUN)" >
+      <choice name="HSRUN is not allowed" enum="Disabled" value="0" />
+      <choice name="HSRUN is allowed"     enum="Enabled"  value="1" isDefault="true" />
+   </binaryOption>   
+   
    <binaryOption key="smc_pmprot_avlp" 
       enumStem="SmcVeryLowPower" 
       enumType="uint8_t" 
@@ -28,16 +27,14 @@
       <choice name="VLPR, VLPW and VLPS are allowed"     enum="Enabled"  value="1" isDefault="true" />
    </binaryOption>   
    
-   <if condition="smc_pmprot_alls_available">
-      <binaryOption key="smc_pmprot_alls" 
-         enumStem="SmcLowLeakageStop" 
-         enumType="uint8_t" 
-         description="Allow low leakage stop mode" 
-         toolTip="Allows the MCU to enter any low leakage stop mode: LLS" >
-         <choice name="LLS is not allowed" enum="Disabled" value="0" />
-         <choice name="LLS is allowed"     enum="Enabled"  value="1" isDefault="true" />
-      </binaryOption>   
-   </if>
+   <binaryOption key="smc_pmprot_alls" condition="smc_pmprot_alls_present"
+      enumStem="SmcLowLeakageStop" 
+      enumType="uint8_t" 
+      description="Allow low leakage stop mode" 
+      toolTip="Allows the MCU to enter any low leakage stop mode: LLS" >
+      <choice name="LLS is not allowed" enum="Disabled" value="0" />
+      <choice name="LLS is allowed"     enum="Enabled"  value="1" isDefault="true" />
+   </binaryOption>   
    
    <binaryOption key="smc_pmprot_avlls" 
       enumStem="SmcVeryLowLeakageStop" 
@@ -90,17 +87,15 @@
    
    <!-- ************** PMCTRL ************** -->
 
-   <if condition="smc_pmctrl_lpwui_available" >
-      <binaryOption key="smc_pmctrl_lpwui" 
-         enumStem="SmcExitLowPowerOnInt" 
-         enumType="uint8_t" 
-         description="Exit low power on interrupt" 
-         toolTip="Causes the SMC to exit to normal RUN mode when any active interrupt\n
-                  occurs while in a VLP mode (VLPR, VLPW or VLPS)" >
-         <choice name="Stay in VLPR on int" enum="Disabled" value="0" isDefault="true" />
-         <choice name="Exit VLPR on int"    enum="Enabled"  value="1" />
-      </binaryOption>   
-   </if>
+   <binaryOption key="smc_pmctrl_lpwui" condition="smc_pmctrl_lpwui_present"
+      enumStem="SmcExitLowPowerOnInt" 
+      enumType="uint8_t" 
+      description="Exit low power on interrupt" 
+      toolTip="Causes the SMC to exit to normal RUN mode when any active interrupt\n
+               occurs while in a VLP mode (VLPR, VLPW or VLPS)" >
+      <choice name="Stay in VLPR on int" enum="Disabled" value="0" isDefault="true" />
+      <choice name="Exit VLPR on int"    enum="Enabled"  value="1" />
+   </binaryOption>   
    
    <clockCodeTemplate variable="smc_pmctrl_lpwui" ><![CDATA[
       \t/**
@@ -175,17 +170,15 @@
    
    <!-- ************** STOPCTRL ************** -->
 
-   <if condition="smc_stopctrl_pstopo_available">
-      <choiceOption key="smc_stopctrl_pstopo" 
-         enumStem="SmcPartialStopMode" 
-         enumType="uint8_t" 
-         description="Partial Stop Mode"
-         toolTip="Controls whether a Partial Stop mode is entered when STOPM=STOP">
-         <choice value="0" enum="Normal"    name="STOP - Normal Stop mode" />
-         <choice value="1" enum="Partial1"  name="PSTOP1 - Partial Stop with both system and bus clocks disabled" />
-         <choice value="2" enum="Partial2"  name="PSTOP2 - Partial Stop with system clock disabled and bus clock enabled" />
-      </choiceOption>
-   </if>
+   <choiceOption key="smc_stopctrl_pstopo" condition="smc_stopctrl_pstopo_present"
+      enumStem="SmcPartialStopMode" 
+      enumType="uint8_t" 
+      description="Partial Stop Mode"
+      toolTip="Controls whether a Partial Stop mode is entered when STOPM=STOP">
+      <choice value="0" enum="Normal"    name="STOP - Normal Stop mode" />
+      <choice value="1" enum="Partial1"  name="PSTOP1 - Partial Stop with both system and bus clocks disabled" />
+      <choice value="2" enum="Partial2"  name="PSTOP2 - Partial Stop with system clock disabled and bus clock enabled" />
+   </choiceOption>
          
    <clockCodeTemplate variable="smc_stopctrl_pstopo"><![CDATA[
       \t/**
@@ -218,16 +211,14 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
-   <if condition="smc_stopctrl_ram2po_available">
-      <binaryOption key="smc_stopctrl_ram2po" 
-         enumStem="SmcLowLeakageRam2" 
-         enumType="uint8_t" 
-         description="RAM2 Power Option" 
-         toolTip="Controls powering of RAM partition 2 in LLS2/VLLS2 mode" >
-         <choice value="0" enum="Disabled" name="RAM2 not powered in VLLS2"     isDefault="true" />
-         <choice value="1" enum="Enabled"  name="RAM2 powered in VLLS2" />
-      </binaryOption>   
-   </if>
+   <binaryOption key="smc_stopctrl_ram2po" condition="smc_stopctrl_ram2po_present"
+      enumStem="SmcLowLeakageRam2" 
+      enumType="uint8_t" 
+      description="RAM2 Power Option" 
+      toolTip="Controls powering of RAM partition 2 in LLS2/VLLS2 mode" >
+      <choice value="0" enum="Disabled" name="RAM2 not powered in VLLS2"     isDefault="true" />
+      <choice value="1" enum="Enabled"  name="RAM2 powered in VLLS2" />
+   </binaryOption>   
    
    <clockCodeTemplate variable="smc_stopctrl_ram2po"><![CDATA[
       \t/**
@@ -240,16 +231,14 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
-   <if condition="smc_stopctrl_lpopo_available">
-      <binaryOption key="smc_stopctrl_lpopo" 
-         enumStem="SmcLpoInLowLeakage" 
-         enumType="uint8_t" 
-         description="Stop mode LPO Option" 
-         toolTip="Controls whether the 1 kHz LPO clock is enabled in LLS/VLLSx modes" >
-         <choice value="0" enum="Disabled" name="LPO clock is enabled in LLS/VLLSx"  isDefault="true" />
-         <choice value="1" enum="Enabled"  name="LPO clock is disabled in LLS/VLLSx" />
-      </binaryOption>   
-   </if>
+   <binaryOption key="smc_stopctrl_lpopo" condition="smc_stopctrl_lpopo_present"
+      enumStem="SmcLpoInLowLeakage" 
+      enumType="uint8_t" 
+      description="Stop mode LPO Option" 
+      toolTip="Controls whether the 1 kHz LPO clock is enabled in LLS/VLLSx modes" >
+      <choice value="0" enum="Disabled" name="LPO clock is enabled in LLS/VLLSx"  isDefault="true" />
+      <choice value="1" enum="Enabled"  name="LPO clock is disabled in LLS/VLLSx" />
+   </binaryOption>   
    
    <clockCodeTemplate variable="smc_stopctrl_lpopo"><![CDATA[
       \t/**

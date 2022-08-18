@@ -126,6 +126,15 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="SIM->SCGC5 = SIM->SCGC5 | SIM_SCGC5_PORTA_MASK;" clockDisable="SIM->SCGC5 = SIM->SCGC5 &amp; ~SIM_SCGC5_PORTA_MASK;" />
          <irq num="PORTA_IRQn" />
+         <param name="dse_present"  key="/PCR/dse_present" value="true" />
+         <param name="irqc_present" key="/PCR/irqc_present" value="true" />
+         <param name="isf_present"  key="/PCR/isf_present" value="true" />
+         <param name="mux_present"  key="/PCR/mux_present" value="true" />
+         <param name="pd_present"   key="/PCR/pd_present" value="true" />
+         <param name="pe_present"   key="/PCR/pe_present" value="true" />
+         <param name="pfe_present"  key="/PCR/pfe_present" value="true" />
+         <param name="ps_present"   key="/PCR/ps_present" value="true" />
+         <param name="sre_present"  key="/PCR/sre_present" value="true" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="B"        version="fgpioa_0xf80ff000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
@@ -179,6 +188,21 @@
       </peripheral>
       <peripheral baseName="SMC"      instance=""         version="smc_alls_mkl04z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />
+         <param name="smc_pmctrl_runm_present" key="/SMC/smc_pmctrl_runm_present" value="true" />
+         <param name="smc_pmctrl_stopa_present" key="/SMC/smc_pmctrl_stopa_present" value="true" />
+         <param name="smc_pmctrl_stopm_present" key="/SMC/smc_pmctrl_stopm_present" value="true" />
+         <param name="smc_pmprot_alls_present" key="/SMC/smc_pmprot_alls_present" value="true" />
+         <param name="smc_pmprot_avlls_present" key="/SMC/smc_pmprot_avlls_present" value="true" />
+         <param name="smc_pmprot_avlp_present" key="/SMC/smc_pmprot_avlp_present" value="true" />
+         <param name="smc_pmstat_pmstat_present" key="/SMC/smc_pmstat_pmstat_present" value="true" />
+         <param name="smc_stopctrl_llsm_present" key="/SMC/smc_stopctrl_llsm_present" value="true" />
+         <param name="smc_stopctrl_porpo_present" key="/SMC/smc_stopctrl_porpo_present" value="true" />
+         <param name="smc_stopctrl_pstopo_present" key="/SMC/smc_stopctrl_pstopo_present" value="true" />
+         <param name="smc_stopctrl_vllsm_present" key="/SMC/smc_stopctrl_vllsm_present" value="true" />
+         <param name="smc_vllsctrl_llsm_present" key="/SMC/smc_vllsctrl_llsm_present" value="true" />
+         <param name="smc_vllsctrl_porpo_present" key="/SMC/smc_vllsctrl_porpo_present" value="true" />
+         <param name="smc_vllsctrl_pstopo_present" key="/SMC/smc_vllsctrl_pstopo_present" value="true" />
+         <param name="smc_vllsctrl_vllsm_present" key="/SMC/smc_vllsctrl_vllsm_present" value="true" />
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        version="spi0_mkl04z4_dma">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />

@@ -4,18 +4,6 @@
 <!-- smc_lpopo_mkl03z4.xml -->
  
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Mode Controller">
- 
-   <!-- ************** PMPROT ************** -->
-
-   <!-- ************** STOPCTRL ************** -->
-
-   <constant key="smc_stopctrl_pstopo_available" />
-   
-   <constant key="smc_stopctrl_lpopo_available" />   
-   
-   <!-- ************** PMCTRL ************** -->
-
-   <!-- ************** Common ************** -->
 
    <xi:include href="_smc_base.xml"/>
 

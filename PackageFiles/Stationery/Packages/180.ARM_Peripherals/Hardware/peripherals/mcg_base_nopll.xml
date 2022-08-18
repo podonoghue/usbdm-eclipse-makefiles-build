@@ -482,7 +482,7 @@
       \t */
       \tstatic uint32_t getExternalReferenceClock() {
       \t   
-      \t   return $(%variable[0].code[0]);
+      \t   return $(%variable.code[0]);
       \t}\n\n
       ]]></template>
          

@@ -200,43 +200,9 @@ public:
 };
 
 template<class Info> McmCallbackFunction McmInterrupt_T<Info>::sCallback = McmInterrupt_T<Info>::unhandledCallback;
-
-/**
- * Template class providing interface to Miscellaneous Control Module
- *
- * @tparam info      Information class for MCM
- *
- * @code
- * using mcm = McmInterrupt_T<McmInfo>;
- *
- *  mcm::configure();
- *
- * @endcode
- */
-class Mcm : public McmInfo, public McmInterrupt_T<McmInfo> {
-#else
-
-class Mcm : public McmInfo {
-
 #endif
 
-public:
-
-   /**
-    * Basic enable of MCM\n
-    * Includes configuring all pins
-    */
-   static void enable() {
-   }
-
-   /**
-    * Configure with settings from Configure.usbdmProject.
-    */
-   static void defaultConfigure() {
-   }
-
-};
-
+$(/MCM/declarations: // No declarations found)
 /**
  * End MCM_Group
  * @}

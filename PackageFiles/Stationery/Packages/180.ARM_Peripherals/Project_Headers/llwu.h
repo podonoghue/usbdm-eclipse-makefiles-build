@@ -317,7 +317,7 @@ $(/LLWU/llwu_base_init:// No initialisation found - /LLWU/llwu_base_init)
          LlwuPin     llwuPin,
          LlwuPinMode llwuPinMode) {
 
-      static const uint8_t masks[] = 
+      static const uint8_t masks[] =
          {LLWU_PE1_WUPE0_MASK, LLWU_PE1_WUPE1_MASK, LLWU_PE1_WUPE2_MASK, LLWU_PE1_WUPE3_MASK, };
       volatile uint8_t &llwuPe = llwu->PE[llwuPin>>2];
       uint8_t mask = masks[llwuPin&3];
@@ -489,6 +489,8 @@ $(/LLWU/llwu_base_init:// No initialisation found - /LLWU/llwu_base_init)
       LlwuBase_T::CheckPinExistsAndIsMapped<llwuPin> checkPin;
 
       using Pcr = PcrTable_T<Info, llwuPin>;
+
+      // Hide setOutput
       using Pcr::setOutput;
 
    public:

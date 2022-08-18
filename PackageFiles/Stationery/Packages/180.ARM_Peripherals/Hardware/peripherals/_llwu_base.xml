@@ -169,15 +169,24 @@
       \t *    // Reset
       \t *    LlwuResetWakeup_Enabled, LlwuResetFilter_Enabled
       \t * };
+      \t *
+      \t * // Initialise LLWU from values specified above
+      \t * llwuInit.initialise()
       \t * @endcode
       \t */
       \tclass LlwuInit {
       \t
+      \tpublic:
+      \t   /**
+      \t    * Constructor
+      \t    */
+      \t   constexpr LlwuInit() {
+      \t   }
+      \t           
       \tprivate:
       \t   static constexpr uint8_t masks[] =
       \t      {LLWU_PE1_WUPE0_MASK, LLWU_PE1_WUPE1_MASK, LLWU_PE1_WUPE2_MASK, LLWU_PE1_WUPE3_MASK, };
-      \t
-      \tpublic:\n
+      \t\n
    ]]></template>
    <template key="llwu_base_methods" namespace="all" condition="llwu_me_wume0" ><![CDATA[
       \t   uint8_t me      = 0;\n
@@ -227,18 +236,12 @@
       ]]></template>
    </if>
    
+   <template key="llwu_base_methods" namespace="all" ><![CDATA[
+      \t
+      \tpublic:\n
+   ]]></template>
+   
    <template key="llwu_base_methods" namespace="all" condition="llwu_me_wume0" ><![CDATA[
-      \t   
-      \t   /**
-      \t    * Constructor for peripheral source
-      \t    *
-      \t    * @param llwuPeripheral  Peripheral to enable as wake-up source
-      \t    */
-      \t   constexpr LlwuInit(LlwuPeripheral llwuPeripheral) {
-      \t   
-      \t      me |= llwuPeripheral;
-      \t   }
-           
       \t   /**
       \t    * Constructor for peripheral source
       \t    *
@@ -256,22 +259,6 @@
    ]]></template>
    
    <template key="llwu_base_methods" namespace="all" condition="llwu_filt1_filte" ><![CDATA[
-      \t   
-      \t   /**
-      \t    * Constructor for filtered pin source
-      \t    *
-      \t    * @param llwuFilterNum       Filter to use
-      \t    * @param llwuPin             Peripheral to enable as wake-up source
-      \t    * @param llwuFilterPinMode   Sensitivity of pin
-      \t    */
-      \t   constexpr LlwuInit(
-      \t         LlwuFilterNum     llwuFilterNum,
-      \t         LlwuPin           llwuPin,
-      \t         LlwuFilterPinMode llwuFilterPinMode) {
-      \t   
-      \t      filt[llwuFilterNum] = llwuPin|llwuFilterPinMode;
-      \t   }
-           
       \t   /**
       \t    * Constructor for filtered pin source
       \t    *
@@ -295,21 +282,6 @@
    ]]></template>
    
    <template key="llwu_base_methods" namespace="all" condition="llwu_pe1_wupe0" ><![CDATA[
-      \t   
-      \t   /**
-      \t    * Constructor for unfiltered pin source
-      \t    *
-      \t    * @param llwuPin       Peripheral to enable as wake-up source
-      \t    * @param llwuPinMode   Sensitivity of pin
-      \t    */
-      \t   constexpr LlwuInit(LlwuPin llwuPin, LlwuPinMode llwuPinMode) {
-      \t   
-      \t      const int      index = llwuPin>>2;
-      \t      const uint8_t  value = llwuPinMode & masks[llwuPin&3];
-      \t   
-      \t      pe[index] |= value;
-      \t   }
-           
       \t   /**
       \t    * Constructor for unfiltered pin source
       \t    *
@@ -334,17 +306,6 @@
       \t   /**
       \t    * Constructor for Reset as wake-up source
       \t    *
-      \t    * @param llwuResetWakeup  Enable/Disable Reset source
-      \t    * @param llwuResetFilter  Enable/Disable Reset pin filter
-      \t    */
-      \t   constexpr LlwuInit(LlwuResetWakeup llwuResetWakeup, LlwuResetFilter llwuResetFilter) {
-      \t   
-      \t      rst = llwuResetWakeup|llwuResetFilter;
-      \t   }
-           
-      \t   /**
-      \t    * Constructor for Reset as wake-up source
-      \t    *
       \t    * @tparam Types
       \t    * @param rest
       \t    *
@@ -359,63 +320,61 @@
       \t\n
    ]]></template>
 
+   <template key="llwu_base_methods" namespace="all"  ><![CDATA[
+      \t   /**
+      \t    * Initialise LLWU from values specified in constructor
+      \t    */
+      \t   void initialise() const {\n
+   ]]></template>
+   <template key="llwu_base_methods" namespace="all" condition="llwu_pe1_wupe0" ><![CDATA[
+      \t      llwu->PE[0]   = pe[0];\n
+   ]]></template>
+   <template key="llwu_base_methods" namespace="all"  condition="llwu_pe2_wupe4" ><![CDATA[
+      \t      llwu->PE[1]   = pe[1];\n
+   ]]></template>
+   <template key="llwu_base_methods" namespace="all"  condition="llwu_pe3_wupe8" ><![CDATA[
+      \t      llwu->PE[2]   = pe[2];\n
+   ]]></template>
+   <template key="llwu_base_methods" namespace="all"  condition="llwu_pe4_wupe12" ><![CDATA[
+      \t      llwu->PE[3]   = pe[3];\n
+   ]]></template>
+   <template key="llwu_base_methods" namespace="all"  condition="llwu_pe5_wupe16" ><![CDATA[
+      \t      llwu->PE[4]   = pe[4];
+      \t      llwu->PE[5]   = pe[5];
+      \t      llwu->PE[6]   = pe[6];
+      \t      llwu->PE[7]   = pe[7];\n
+   ]]></template>
+   <template key="llwu_base_methods" namespace="all"  condition="llwu_me_wume0" ><![CDATA[
+      \t
+      \t      llwu->ME      = me;\n
+   ]]></template>
+   <template key="llwu_base_methods" namespace="all" condition="llwu_rst_llrste" ><![CDATA[
+      \t
+      \t      llwu->RST     = rst;
+   ]]></template>
+   
+   <template key="llwu_base_methods" namespace="all"  condition="llwu_filt1_filte" ><![CDATA[
+      \t\n
+      \t      llwu->FILT[0] = filt[0];\n
+   ]]></template>
+   <template key="llwu_base_methods" namespace="all"  condition="llwu_filt2_filte" ><![CDATA[
+      \t      llwu->FILT[1] = filt[1];\n
+   ]]></template>
+   <template key="llwu_base_methods" namespace="all"  condition="llwu_filt3_filte" ><![CDATA[
+      \t      llwu->FILT[2] = filt[2];\n
+   ]]></template>
+   <template key="llwu_base_methods" namespace="all"  condition="llwu_filt4_filte" ><![CDATA[
+      \t      llwu->FILT[3] = filt[3];\n
+   ]]></template>
+   <template key="llwu_base_methods" namespace="all" ><![CDATA[
+      \t   }\n
+   ]]></template>
+
    <template key="llwu_base_methods" namespace="all" ><![CDATA[
       \t};\n\n
       
    ]]></template>
         
-   <template key="llwu_base_methods" namespace="all"  ><![CDATA[
-      \t/**
-      \t * Initialise LLWU from const data
-      \t *
-      \t * @param lwuInit Data to initialise LLWU
-      \t */
-      \tstatic void initialise(const LlwuInit &lwuInit) {\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all" condition="llwu_pe1_wupe0" ><![CDATA[
-      \t   LlwuInfo::llwu->PE[0]   = lwuInit.pe[0];\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all"  condition="llwu_pe2_wupe4" ><![CDATA[
-      \t   LlwuInfo::llwu->PE[1]   = lwuInit.pe[1];\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all"  condition="llwu_pe3_wupe8" ><![CDATA[
-      \t   LlwuInfo::llwu->PE[2]   = lwuInit.pe[2];\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all"  condition="llwu_pe4_wupe12" ><![CDATA[
-      \t   LlwuInfo::llwu->PE[3]   = lwuInit.pe[3];\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all"  condition="llwu_pe5_wupe16" ><![CDATA[
-      \t   LlwuInfo::llwu->PE[4]   = lwuInit.pe[4];
-      \t   LlwuInfo::llwu->PE[5]   = lwuInit.pe[5];
-      \t   LlwuInfo::llwu->PE[6]   = lwuInit.pe[6];
-      \t   LlwuInfo::llwu->PE[7]   = lwuInit.pe[7];\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all"  condition="llwu_me_wume0" ><![CDATA[
-      \t
-      \t   LlwuInfo::llwu->ME      = lwuInit.me;\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all" condition="llwu_rst_llrste" ><![CDATA[
-      \t
-      \t   LlwuInfo::llwu->RST     = lwuInit.rst;
-   ]]></template>
-   
-   <template key="llwu_base_methods" namespace="all"  condition="llwu_filt1_filte" ><![CDATA[
-      \t\n
-      \t   LlwuInfo::llwu->FILT[0] = lwuInit.filt[0];\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all"  condition="llwu_filt2_filte" ><![CDATA[
-      \t   LlwuInfo::llwu->FILT[1] = lwuInit.filt[1];\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all"  condition="llwu_filt3_filte" ><![CDATA[
-      \t   LlwuInfo::llwu->FILT[2] = lwuInit.filt[2];\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all"  condition="llwu_filt4_filte" ><![CDATA[
-      \t   LlwuInfo::llwu->FILT[3] = lwuInit.filt[3];\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all" ><![CDATA[
-      \t}\n
-   ]]></template>
-
    <template key="declarations" namespace="all"  ><![CDATA[
       \t/**
       \t * Class representing LLWU

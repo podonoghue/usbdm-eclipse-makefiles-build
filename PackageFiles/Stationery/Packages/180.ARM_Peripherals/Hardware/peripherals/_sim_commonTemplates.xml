@@ -285,7 +285,6 @@
 <!-- ========== SOPT2 =============================== -->
 
    <clockCodeTemplate variable="sim_sopt2_ptd7pad"
-      enumStem="simPortDPad"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -327,7 +326,6 @@
 
    <for keys="n" values=";0;1;2;3">
       <clockCodeTemplate variable="sim_sopt2_uart%(n)src"
-         enumStem="SimUart%(n)ClockSource"
          returnFormat="%s"
       ><![CDATA[
          \t/**
@@ -547,7 +545,6 @@
    ]]></clockCodeTemplate>
    
    <clockCodeTemplate variable="sim_sopt2_timesrc"
-      enumStem="SimTimestampClockSource"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -1039,7 +1036,6 @@
 
 <!-- ========== CLKDIV3 =============================== -->
    <clockCodeTemplate variable="sim_clkdiv3_pllfll"
-      enumStem="SimPeripheralClockDivider"
    ><![CDATA[
       \t/**
       \t * Set %description

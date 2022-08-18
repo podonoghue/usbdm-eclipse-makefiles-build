@@ -135,7 +135,11 @@ typedef void (*CMTCallbackFunction)();
  * @tparam info      Information class for CMT
  */
 template<class Info>
-class CmtBase_T {
+class CmtBase_T : public PcrTable_T<Info, 0> {
+
+private:
+   // Hide setInput
+   using PcrTable_T<Info, 0>::setInput;
 
 protected:
    /** Class to static check output is mapped to a pin - Assumes existence */
@@ -223,36 +227,6 @@ $(/CMT/classInfo: // No class Info found)
       enable();
 
       // Initialise hardware
-   }
-
-   /**
-    * Enable CMT output pin as output.
-    * Configures all Pin Control Register (PCR) values
-    *
-    * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value). See pcrValue()
-    */
-   static void setOutput(PcrValue pcrValue=OutputPin::defaultPcrValue) {
-      CheckOutputIsMapped<0>::check();
-      using Pcr = PcrTable_T<Info, 0>;
-
-      // Enable and map pin to CMP_OUT
-      Pcr::setPCR(pcrValue);
-   }
-
-   /**
-    * Enable CMT output pin as output.
-    * Configures all Pin Control Register (PCR) values
-    *
-    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
-    * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
-    * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
-    */
-   static void setOutput(
-         PinDriveStrength  pinDriveStrength,
-         PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
-         PinSlewRate       pinSlewRate       = PinSlewRate_Fast
-         ) {
-      setOutput(pinDriveStrength|pinDriveMode|pinSlewRate);
    }
 
    /**

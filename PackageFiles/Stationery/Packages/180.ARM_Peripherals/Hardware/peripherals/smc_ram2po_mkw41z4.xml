@@ -4,20 +4,6 @@
 <!-- smc_ram2po_mkw41z4.xml -->
  
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Mode Controller">
- 
-   <!-- ************** PMPROT ************** -->
-
-   <constant key="smc_pmprot_alls_available" />
-   
-   <!-- ************** STOPCTRL ************** -->
-
-   <constant key="smc_stopctrl_pstopo_available" />
-      
-   <constant key="smc_stopctrl_ram2po_available"  />   
-   
-   <!-- ************** PMCTRL ************** -->
-
-   <!-- ************** Common ************** -->
 
    <xi:include href="_smc_base.xml"/>
 

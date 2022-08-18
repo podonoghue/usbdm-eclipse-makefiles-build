@@ -219,42 +219,7 @@ protected:
 
 public:
 
-   /**
-    * Get ADC maximum conversion value for an single-ended range
-    *
-    * @param adcResolution
-    *
-    * @return range e.g. AdcResolution_8bit_se => (2^8)-1
-    */
-   static constexpr int getSingleEndedMaximum(AdcResolution adcResolution) {
-      switch(adcResolution) {
-         case AdcResolution_8bit_se:  return (1<<8)-1;
-         case AdcResolution_10bit_se: return (1<<10)-1;
-         case AdcResolution_12bit_se: return (1<<12)-1;
-         case AdcResolution_16bit_se: return (1<<16)-1;
-         default:                     return 0;
-      }
-   }
-
-#if defined(ADC_SC1_DIFF_MASK)
-   /**
-    * Get ADC maximum conversion value for an differential range
-    *
-    * @param adcResolution
-    *
-    * @return range e.g. AdcResolution_9bit_diff => (2^8)-1
-    */
-   static constexpr int getDifferentialMaximum(AdcResolution adcResolution) {
-      switch(adcResolution) {
-         case AdcResolution_9bit_diff:   return (1<<8)-1;
-         case AdcResolution_11bit_diff:  return (1<<10)-1;
-         case AdcResolution_13bit_diff:  return (1<<12)-1;
-         case AdcResolution_16bit_diff:  return (1<<15)-1;
-         default:                     return 0;
-      }
-   }
-#endif
-
+$(/ADC/get_maximums: // /ADC/get_maximums not found)
    /**
     * Set resolution
     *

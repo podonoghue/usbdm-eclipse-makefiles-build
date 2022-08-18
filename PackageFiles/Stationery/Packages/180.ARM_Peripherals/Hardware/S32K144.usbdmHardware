@@ -216,26 +216,41 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="PCC->PCC_GPIOA = PCC->PCC_GPIOA | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOA = PCC->PCC_GPIOA &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTA_IRQn" />
+         <param name="dfer_register_present" key="/GPIOA/dfer_register_present" value="true" />
+         <param name="dfer_register_present" key="/PCR/dfer_register_present" value="true" />
+         <param name="dse_present"  key="/PCR/dse_present" value="true" />
+         <param name="irqc_present" key="/PCR/irqc_present" value="true" />
+         <param name="isf_present"  key="/PCR/isf_present" value="true" />
+         <param name="lk_present"   key="/PCR/lk_present" value="true" />
+         <param name="mux_present"  key="/PCR/mux_present" value="true" />
+         <param name="pd_present"   key="/PCR/pd_present" value="true" />
+         <param name="pe_present"   key="/PCR/pe_present" value="true" />
+         <param name="pfe_present"  key="/PCR/pfe_present" value="true" />
+         <param name="ps_present"   key="/PCR/ps_present" value="true" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="B"        version="gpioa_s32k">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="PCC->PCC_GPIOB = PCC->PCC_GPIOB | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOB = PCC->PCC_GPIOB &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTB_IRQn" />
+         <param name="dfer_register_present" key="/GPIOB/dfer_register_present" value="true" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="C"        version="gpioa_s32k">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="PCC->PCC_GPIOC = PCC->PCC_GPIOC | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOC = PCC->PCC_GPIOC &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTC_IRQn" />
+         <param name="dfer_register_present" key="/GPIOC/dfer_register_present" value="true" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="D"        version="gpioa_s32k">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="PCC->PCC_GPIOD = PCC->PCC_GPIOD | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOD = PCC->PCC_GPIOD &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTD_IRQn" />
+         <param name="dfer_register_present" key="/GPIOD/dfer_register_present" value="true" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="E"        version="gpioa_s32k">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="PCC->PCC_GPIOE = PCC->PCC_GPIOE | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOE = PCC->PCC_GPIOE &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTE_IRQn" />
+         <param name="dfer_register_present" key="/GPIOE/dfer_register_present" value="true" />
       </peripheral>
       <peripheral baseName="LPI2C"    instance="0"        version="lpi2c0_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
@@ -322,6 +337,21 @@
       <peripheral baseName="SMC"      instance=""         version="smc_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />
          <clock clockEnable="PCC->PCC_SMC |= PCC_PCCn_CGC_MASK = PCC->PCC_SMC |= PCC_PCCn_CGC_MASK | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_SMC |= PCC_PCCn_CGC_MASK = PCC->PCC_SMC |= PCC_PCCn_CGC_MASK &amp; ~PCC_PCCn_CGC_MASK;" />
+         <param name="smc_param_ehsrun_present" key="/SMC/smc_param_ehsrun_present" value="true" />
+         <param name="smc_param_ells2_present" key="/SMC/smc_param_ells2_present" value="true" />
+         <param name="smc_param_ells_present" key="/SMC/smc_param_ells_present" value="true" />
+         <param name="smc_param_evlls0_present" key="/SMC/smc_param_evlls0_present" value="true" />
+         <param name="smc_pmctrl_runm_present" key="/SMC/smc_pmctrl_runm_present" value="true" />
+         <param name="smc_pmctrl_stopm_present" key="/SMC/smc_pmctrl_stopm_present" value="true" />
+         <param name="smc_pmctrl_vlpsa_present" key="/SMC/smc_pmctrl_vlpsa_present" value="true" />
+         <param name="smc_pmprot_ahsrun_present" key="/SMC/smc_pmprot_ahsrun_present" value="true" />
+         <param name="smc_pmprot_avlp_present" key="/SMC/smc_pmprot_avlp_present" value="true" />
+         <param name="smc_pmstat_pmstat_present" key="/SMC/smc_pmstat_pmstat_present" value="true" />
+         <param name="smc_stopctrl_pstopo_present" key="/SMC/smc_stopctrl_pstopo_present" value="true" />
+         <param name="smc_stopctrl_stopo_present" key="/SMC/smc_stopctrl_stopo_present" value="true" />
+         <param name="smc_verid_feature_present" key="/SMC/smc_verid_feature_present" value="true" />
+         <param name="smc_verid_major_present" key="/SMC/smc_verid_major_present" value="true" />
+         <param name="smc_verid_minor_present" key="/SMC/smc_verid_minor_present" value="true" />
       </peripheral>
       <peripheral baseName="TRGMUX"   instance=""         version="trgmux_s32k142">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForTrgmux" />

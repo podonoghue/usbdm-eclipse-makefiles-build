@@ -7,7 +7,7 @@
  
    <!-- ************** PMPROT ************** -->
 
-   <constant key="smc_pmprot_ahsrun_available" />   
+   <constant key="smc_pmprot_ahsrun_present" />   
     
    <!-- ************** STOPCTRL ************** -->
 

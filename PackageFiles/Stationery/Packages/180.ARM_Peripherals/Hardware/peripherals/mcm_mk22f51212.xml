@@ -7,6 +7,7 @@
    <constant key="irqOption_present"                     />
    <constant key="mcm_placr_arb_present"                 />
    <constant key="mcm_cpo_present"                       />
+   <constant key="mcm_iscr_floating_present"             />
 
    <xi:include href="mcm_def.xml"/>
 

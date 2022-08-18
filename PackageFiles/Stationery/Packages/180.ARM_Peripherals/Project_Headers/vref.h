@@ -173,7 +173,7 @@ public:
       vref->SC  = VREF_SC_VREFEN_MASK|vrefBuffer|VrefIcomp;
       if (vrefReg) {
          // Regulator must be enabled >300ns after Vref
-         waitUS(1);
+         USBDM::waitUS(1);
          vref->SC  = VREF_SC_VREFEN_MASK|VREF_SC_REGEN(1)|vrefBuffer|VrefIcomp;
       }
    }

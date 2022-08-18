@@ -3,7 +3,7 @@
 <!-- _common_settings.xml -->
 
 <list name="CommonSettings" >
-<binaryOption name="Map all pins on startup" key="/HARDWARE/mapAllPins" 
+<binaryOption name="Map all pins on startup" key="/HARDWARE/mapAllPins" condition="/PCR/lk_present"
    description="Execute mapAllPins() during startup"
    toolTip="Enables mapping of allocated pins during startup using mapAllPins()\n
    Multiply mapped pins cannot be assigned by mapAllPins()">
@@ -11,20 +11,20 @@
    <choice value="true"  name="Map pins during startup using mapAllPins()" />
 </binaryOption>
 
-<binaryOption name="Lock mapped pins" key="/HARDWARE/lockMappedPins" 
+<binaryOption name="Lock mapped pins" key="/HARDWARE/lockMappedPins" condition="/PCR/lk_present"
    description="Lock mapped pins during startup"
    toolTip="Lock pin control registers (PCRs) during mapAllPins()">
-   <choice value="PinLock_Unlocked" name="Don't force locked - Pins may still be individually locked" />
-   <choice value="PinLock_Locked"   name="Force all pins to be locked in mapAllPins()" isDefault="true" />
+   <choice value="PinLock_Unlocked" name="Don't force locked - Pins may still be individually locked" isDefault="true"/>
+   <choice value="PinLock_Locked"   name="Force all pins to be locked in mapAllPins()" />
 </binaryOption>
 
-<binaryOption name="Disable unbonded pins" key="/HARDWARE/lockoutUnbondedPins" 
+<binaryOption name="Disable unbonded pins" key="/HARDWARE/lockoutUnbondedPins"  condition="/PCR/lk_present"
    description="Lock out pins that are not bonded to physical pins on package"
    toolTip="In some smaller packages there are die pads that are not bonded to package pins\n
             For those pins the PCR can be set to 0 (analogue/disabled) to minimize power consumption\n
             This is the reset state">
-   <choice value="false" name="Leave unbonded pins unchanged" />
-   <choice value="true"  name="Force unbonded pins to analogue function" isDefault="true" />
+   <choice value="false" name="Leave unbonded pins unchanged" isDefault="true" />
+   <choice value="true"  name="Force unbonded pins to analogue function" />
 </binaryOption>
 
 <binaryOption name="Warn if multiple signals mapped to pin" key="/HARDWARE/warnMultipleSignalsOnPin" 
@@ -148,28 +148,9 @@
    </category>
 </category>
 
-<category name="Device Information" description="Information about this device"
-  toolTip=""
->
 
-</category>
-
-<!-- Template is added to pin_mapping.h -->
-<template namespace="usbdm"><![CDATA[
+<template namespace="usbdm" condition="/PCR/lk_present" ><![CDATA[
    /* Template:_common_settings.xml */
-   
-   // Use when in-lining makes the release build smaller
-   #ifdef DEBUG_BUILD
-   #define INLINE_RELEASE __attribute__((noinline))
-   #else
-   #define INLINE_RELEASE __attribute__((always_inline))
-   #endif
-
-   #ifdef DEBUG_BUILD
-   #define NOINLINE_DEBUG __attribute__((noinline))
-   #else
-   #define NOINLINE_DEBUG
-   #endif
    
    \t/**
    \t *  Enables mapping of all allocated pins during startup using mapAllPins() 
@@ -185,8 +166,48 @@
    \t *  Enables forcing unbonded pins to analogue function in mapAllPins() 
    \t */
    \tstatic constexpr bool ForceLockoutUnbondedPins = $(/HARDWARE/lockoutUnbondedPins);
+   \t\n
+]]></template>
 
+<template namespace="usbdm" condition="!/PCR/lk_present" ><![CDATA[
+   /* Template:_common_settings.xml */
+   
+   \t/**
+   \t * Enables mapping of all allocated pins during startup using mapAllPins() 
+   \t * Not available on this MCU
+   \t */
+   \tstatic constexpr bool MapAllPinsOnStartup = false;
 
+   \t/**
+   \t * Controls forcing all pins to be locked in mapAllPins() 
+   \t * Not available on this MCU
+   \t */
+   \tstatic constexpr uint32_t ForceLockedPins = 0;
+   \tstatic constexpr uint32_t PinLock_Locked  = 0;
+   
+   \t/**
+   \t * Enables forcing unbonded pins to analogue function in mapAllPins() 
+   \t * Not available on this MCU
+   \t */
+   \tstatic constexpr bool ForceLockoutUnbondedPins = false;
+   \t\n
+]]></template>
+
+<!-- Template is added to pin_mapping.h -->
+<template namespace="usbdm"><![CDATA[
+   // Use when in-lining makes the release build smaller
+   #ifdef DEBUG_BUILD
+   #define INLINE_RELEASE __attribute__((noinline))
+   #else
+   #define INLINE_RELEASE __attribute__((always_inline))
+   #endif
+
+   #ifdef DEBUG_BUILD
+   #define NOINLINE_DEBUG __attribute__((noinline))
+   #else
+   #define NOINLINE_DEBUG
+   #endif
+   
    \t/* MCGFFCLK - Fixed frequency clock (input to FLL) */
    \textern volatile uint32_t SystemMcgffClock;
 

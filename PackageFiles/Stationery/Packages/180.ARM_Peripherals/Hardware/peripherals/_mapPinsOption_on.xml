@@ -77,7 +77,7 @@
       \tstatic void configureAllPins() {
       \t
       \t   // Configure pins if selected and not already locked
-      \t   if constexpr (Info::mapPinsOnEnable && !(MapAllPinsOnStartup && (ForceLockedPins == PinLock_Locked))) {
+      \t   if constexpr (Info::mapPinsOnEnable && !(MapAllPinsOnStartup || ForceLockedPins)) {
       \t      Info::initPCRs();
       \t   }
       \t}
@@ -92,7 +92,7 @@
       \tstatic void disableAllPins() {
       \t
       \t   // Disable pins if selected and not already locked
-      \t   if constexpr (Info::mapPinsOnEnable && !(MapAllPinsOnStartup && (ForceLockedPins == PinLock_Locked))) {
+      \t   if constexpr (Info::mapPinsOnEnable && !(MapAllPinsOnStartup || ForceLockedPins)) {
       \t      Info::clearPCRs();
       \t   }
       \t}
