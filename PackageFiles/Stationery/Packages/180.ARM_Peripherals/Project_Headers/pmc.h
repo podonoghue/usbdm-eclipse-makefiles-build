@@ -280,8 +280,8 @@ public:
    /**
     * Determines availability of Band-gap reference
     *
-    * @param[in] pmcBandgapBuffer         Controls whether the band-gap reference is available to internal devices e.g. CMP etc
-    * @param[in] pmcBandgapLowPowerEnable Controls operation of the band-gap in low power modes
+    * @param[in] pmcBandgapBuffer              Controls whether the band-gap reference is available to internal devices e.g. CMP etc
+    * @param[in] pmcBandgapOperationInLowPower Controls operation of the band-gap in low power modes
     */
    static void configureBandgapOperation(
          PmcBandgapBuffer              pmcBandgapBuffer,

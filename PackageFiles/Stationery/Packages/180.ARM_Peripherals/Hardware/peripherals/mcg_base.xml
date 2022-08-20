@@ -464,8 +464,8 @@
             
          <aliasOption key="/SIM/sim_sopt2_pllfllsel[%(n)]" constant="false" />
    
-         <aliasOption key="/SIM/sim_clkdiv3_pllfll[%(n)]"                  constant="false" optional="true"/>
-         <aliasOption key="/SIM/system_peripheral_postdivider_clock[%(n)]" constant="true"  optional="true"/>
+         <aliasOption key="/SIM/sim_clkdiv3_pllfll[%(n)]"                  optional="true" constant="false" />
+         <aliasOption key="/SIM/system_peripheral_postdivider_clock[%(n)]" optional="true"/>
    
          <aliasOption key="/SIM/system_peripheral_clock[%(n)]" />
             
@@ -616,7 +616,7 @@
       \t}\n\n
       ]]></clockCodeTemplate>
          
-   <template variable="mcg_c7_oscsel_fixed"
+   <template variables="mcg_c7_oscsel_fixed"
    ><![CDATA[
       \t/**
       \t * Get %description
@@ -755,31 +755,31 @@
             /SIM/sim_clkdiv1_outdiv3[%(n)],
             /SIM/sim_clkdiv1_outdiv2[%(n)],  
             /SIM/sim_clkdiv1_outdiv1[%(n)]"     
-      ><![CDATA[\t   /// SIM CLKDIV1 System Clock Divider Register 1 %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// SIM CLKDIV1 System Clock Divider Register 1 %initExpression\n\n ]]></initialValueTemplate>
               
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
          variables=
             "/SIM/sim_clkdiv3_pllfll[%(n)]"     
-      ><![CDATA[\t   /// SIM CLKDIV3 System Clock Divider Register 3 %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// SIM CLKDIV3 System Clock Divider Register 3 %initExpression\n\n ]]></initialValueTemplate>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
          variables=
             "/SIM/sim_sopt2_pllfllsel[%(n)]"     
-      ><![CDATA[\t   /// SIM SOPT2 System Options Register 2 (PLLFLLSEL only) %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// SIM SOPT2 System Options Register 2 (PLLFLLSEL only) %initExpression\n\n ]]></initialValueTemplate>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
          variables="
             mcgClockMode[%(n)]"     
-      ><![CDATA[\t   /// Clock Mode %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Clock Mode %initExpression\n\n ]]></initialValueTemplate>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
          variables=
             "/SMC/smc_pmctrl_runm[%(n)]"     
-      ><![CDATA[\t   /// Run Mode %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Run Mode %initExpression\n\n ]]></initialValueTemplate>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
@@ -787,7 +787,7 @@
             mcg_c1_frdiv[%(n)],     
             mcg_c1_irclken[%(n)],
             mcg_c1_irefsten[%(n)]"     
-      ><![CDATA[\t   /// Control Register 1 - Excluding CLKS, IREFS %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 1 - Excluding CLKS, IREFS %initExpression\n\n ]]></initialValueTemplate>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
@@ -797,14 +797,14 @@
              mcg_c2_hgo0,
              mcg_c2_erefs0,
              mcg_c2_ircs[%(n)]"     
-      ><![CDATA[\t   /// Control Register 2 - Excluding LP, FCTRIM %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 2 - Excluding LP, FCTRIM %initExpression\n\n ]]></initialValueTemplate>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
          variables=
             "mcg_c4_dmx32[%(n)],
              mcg_c4_drst_drs[%(n)]"     
-      ><![CDATA[\t   /// Control Register 4 - Excluding FCTRIM, SCFTRIM %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 4 - Excluding FCTRIM, SCFTRIM %initExpression\n\n ]]></initialValueTemplate>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
@@ -812,7 +812,7 @@
             mcg_c5_pllclken0[%(n)],
             mcg_c5_pllsten0[%(n)],
             mcg_c5_prdiv0[%(n)]"     
-      ><![CDATA[\t   /// Control Register 5 %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 5 %initExpression\n\n ]]></initialValueTemplate>
       
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
@@ -821,19 +821,19 @@
             mcg_c6_plls[%(n)],
             mcg_c6_cme0[%(n)],
             mcg_c6_vdiv0[%(n)]"     
-      ><![CDATA[\t   /// Control Register 6 %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 6 %initExpression\n\n ]]></initialValueTemplate>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
          variables=
             "mcg_sc_fcrdiv[%(n)]"     
-      ><![CDATA[\t   /// Status and Control Register %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Status and Control Register %initExpression\n\n ]]></initialValueTemplate>
               
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
          variables=
             "mcg_c7_oscsel[%(n)]"     
-      ><![CDATA[\t   /// Control Register 7 %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 7 %initExpression\n\n ]]></initialValueTemplate>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
@@ -841,20 +841,20 @@
             "mcg_c8_locre1[%(n)],
              mcg_c8_cme1[%(n)],
              mcg_c8_lolre[%(n)]"     
-      ><![CDATA[\t   /// Control Register 8 %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 8 %initExpression\n\n ]]></initialValueTemplate>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
          variables=
             "mcg_c9_pll_cme[%(n)],
              mcg_c9_pll_locre[%(n)]"     
-      ><![CDATA[\t   /// Control Register 9 %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 9 %initExpression\n\n ]]></initialValueTemplate>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
          variables=
             "mcg_c11_pllcs[%(n)]"     
-      ><![CDATA[\t   /// Control Register 11 %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 11 %initExpression\n\n ]]></initialValueTemplate>
 
       <template key="McgClockInfoEntries" namespace="all" ><![CDATA[
          \t},

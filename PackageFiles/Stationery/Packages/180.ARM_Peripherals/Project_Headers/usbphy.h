@@ -173,7 +173,7 @@ public:
       Info::setPllInputFrequency(Usbphy1Info::usbPllInputClkFrq_default);
 
       // Set the output clock
-      Info::setPfdClk(Usbphy1Info::usbPfdClkFreq_default, Usbphy1Info::usbPfdClkSrc_default);
+      Info::setPfdClk(Usbphy1Info::usbPfdClkSrc_default, Usbphy1Info::usbPfdClkFreq_default);
    }
 };
 

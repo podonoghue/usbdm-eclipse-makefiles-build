@@ -238,22 +238,19 @@
       \t static constexpr %enumClass %enumParam_default = %symbolicValueExpression; // %shortDescription\n\n 
    ]]></clockCodeTemplate>
 
-   <if condition="usbphy_anactrl_pfd_frac&amp;&amp;usbphy_anactrl_pfd_clk_sel">
-      <clockCodeTemplate variable="usbphy_anactrl_pfd_frac"
-      mask="(USBPHY_ANACTRL_PFD_CLK_SEL_MASK|USBPHY_ANACTRL_PFD_FRAC_MASK)"
-      ><![CDATA[
-         \t/**
-         \t * Set USBPFD clock
-         \t *
-         \t * @param usbPfdClkFreq  Clock to output as PFD output clock [USBPFDCLK]
-         \t * @param usbPfdClkSrc   USBPFD (Phase Fractional Divider) input/output ratio
-         \t */
-         \tstatic void setPfdClk(UsbPfdClkFreq usbPfdClkFreq, UsbPfdClkSrc usbPfdClkSrc) {
-         \t   %register_CLR = %mask;
-         \t   %register_SET = usbPfdClkFreq|usbPfdClkSrc;
-         \t}\n\n
-      ]]></clockCodeTemplate>
-   </if>
+   <setTemplate variables="usbphy_anactrl_pfd_clk_sel,usbphy_anactrl_pfd_frac"
+   ><![CDATA[
+      \t/**
+      \t * %description0
+      \t * 
+      %comments
+      \t */
+      \tstatic void setPfdClk(
+      %params) {
+      \t   %register_CLR = %mask;
+      \t   %register_SET = %paramExpression;
+      \t}\n\n
+   ]]></setTemplate>
 
    <template key="/USBPHY/declarations" namespace="all"  ><![CDATA[
    \t/**

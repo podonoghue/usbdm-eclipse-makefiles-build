@@ -53,7 +53,7 @@
          smc_pmprot_avlls"     
    ><![CDATA[
       \t// Power Mode Protection Register
-      \tstatic constexpr uint8_t pmprot =  %expression
+      \tstatic constexpr uint8_t pmprot =  %initExpression
       \t\n
    ]]></initialValueTemplate>
    
@@ -81,7 +81,7 @@
       \tstatic void enablePowerModes(
       %params) {
       
-      \t   %register = %expression;
+      \t   %register = %paramExpression;
       \t}\n\n
    ]]></setTemplate>      
    
@@ -164,7 +164,7 @@
          smc_pmctrl_stopm"     
    ><![CDATA[
          \t/// Power Mode Control Register
-         \tstatic constexpr uint8_t pmctrl =  %expression
+         \tstatic constexpr uint8_t pmctrl =  %initExpression
          \t\n
    ]]></initialValueTemplate>
    
@@ -287,7 +287,7 @@
       \tstatic void setStopOptions(
       %params) {
    
-      \t   %register = %expression;
+      \t   %register = %paramExpression;
       \t}\n\n
    ]]></setTemplate>      
    
@@ -300,7 +300,7 @@
          smc_stopctrl_llsm"     
    ><![CDATA[
       \t// Stop Control Register
-         \tstatic constexpr uint8_t stopctrl =  %expression
+         \tstatic constexpr uint8_t stopctrl =  %initExpression
          \t\n
    ]]></initialValueTemplate>
    
@@ -513,7 +513,7 @@
       \t      case SmcPowerMode_RUN   : // (VLPR,HSRUN)->RUN Transition 3,12
       \t      case SmcPowerMode_VLPR  : // RUN->VLPR         Transition 3\n
    ]]></template>
-   <template variable="smc_pmprot_ahsrun" key="enterPowerMode" namespace="all" ><![CDATA[
+   <template variables="smc_pmprot_ahsrun" key="enterPowerMode" namespace="all" ><![CDATA[
       \t      case SmcPowerMode_HSRUN : // RUN->HSRUN        Transition 12\n
    ]]></template>
    <template key="enterPowerMode" namespace="all" ><![CDATA[
@@ -533,7 +533,7 @@
       \t
       \t      case SmcPowerMode_NormalSTOP   : // RUN->STOP Transition 2a\n
    ]]></template>
-   <template variable="smc_stopctrl_pstopo" key="enterPowerMode" namespace="all" ><![CDATA[
+   <template variables="smc_stopctrl_pstopo" key="enterPowerMode" namespace="all" ><![CDATA[
       \t      case SmcPowerMode_PartialSTOP1 : // RUN->STOP Transition 2b
       \t      case SmcPowerMode_PartialSTOP2 : // RUN->STOP Transition 2c
    ]]></template>
@@ -551,7 +551,7 @@
       \t      case SmcPowerMode_VLLS2 :        // (RUN,VLPR)->VLLS0 Transition 8c,9c
       \t      case SmcPowerMode_VLLS3 :        // (RUN,VLPR)->VLLS0 Transition 8d,9d
    ]]></template>
-   <template variable="smc_pmprot_ahsrun" key="enterPowerMode" namespace="all" ><![CDATA[
+   <template variables="smc_pmprot_ahsrun" key="enterPowerMode" namespace="all" ><![CDATA[
       \t         // Check if in allowable run modes
       \t         if (SmcRunMode_HighSpeed == (SMC->PMCTRL&SMC_PMCTRL_RUNM_MASK)) {
       \t            return E_ILLEGAL_POWER_TRANSITION;
@@ -575,7 +575,7 @@
    \t   SmcPowerMode_RUN           = make16(SmcRunMode_Normal),                                                            /* (VLPR,HSRUN)->RUN 3,12   Run        SMC_PMCTRL_RUNM(0)                                     */ ///<  Run mode                    
    \t   SmcPowerMode_VLPR          = make16(SmcRunMode_VeryLowPower),                                                      /* RUN->VLPR         3      Run        SMC_PMCTRL_RUNM(2)                                     */ ///<  Very low power run mode     \n
    ]]></template>
-   <template namespace="usbdm" variable="smc_pmprot_ahsrun" ><![CDATA[
+   <template namespace="usbdm" variables="smc_pmprot_ahsrun" ><![CDATA[
    \t   SmcPowerMode_HSRUN         = make16(SmcRunMode_HighSpeed),                                                         /* RUN->HSRUN        12     Run        SMC_PMCTRL_RUNM(3)                                     */ ///<  High-speed run mode         \n
    ]]></template>
    <template namespace="usbdm" ><![CDATA[
@@ -585,7 +585,7 @@
    \t                                                                                                                                                                                                                                               
    \t   SmcPowerMode_NormalSTOP    = make16(SmcRunMode_Normal|SmcStopMode_NormalStop,0,2),                                 /* RUN->STOP         2a     Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(0) RUN<->STOP           */ ///<  Stop mode                   \n
    ]]></template>
-   <template namespace="usbdm" variable="smc_stopctrl_pstopo" ><![CDATA[
+   <template namespace="usbdm" variables="smc_stopctrl_pstopo" ><![CDATA[
    \t   SmcPowerMode_PartialSTOP1  = make16(SmcRunMode_Normal|SmcStopMode_NormalStop,SmcPartialStopMode_Partial1),         /* RUN->STOP         2b     Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(0) RUN<->STOP           */ ///<  Stop mode                   
    \t   SmcPowerMode_PartialSTOP2  = make16(SmcRunMode_Normal|SmcStopMode_NormalStop,SmcPartialStopMode_Partial2),         /* RUN->STOP         2c     Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(0) RUN<->STOP           */ ///<  Stop mode                   \n
    ]]></template>

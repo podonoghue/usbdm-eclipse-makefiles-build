@@ -96,7 +96,7 @@
                llwu_pe%(r)_wupe%(p3)"     
          ><![CDATA[
             \t/// LLWU Pin Enable register %(r)
-            \tstatic constexpr uint8_t pe%(r) = %expression\n\n
+            \tstatic constexpr uint8_t pe%(r) = %initExpression\n\n
          ]]></initialValueTemplate>
       </for>
    
@@ -130,7 +130,7 @@
                llwu_filt%(n)_filtsel"     
          ><![CDATA[
             \t/// Pin Filter %(n) register
-            \tstatic constexpr uint8_t filt%(n) = %expression\n\n
+            \tstatic constexpr uint8_t filt%(n) = %initExpression\n\n
          ]]></initialValueTemplate>
       
          <template key="llwu_base_init" namespace="all"  condition="llwu_filt%(n)_present" ><![CDATA[

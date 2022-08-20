@@ -122,7 +122,7 @@
       \t   OSC_CR_SCP($(osc_cr_scp));       // Oscillator load capacitance\n\n
    ]]></template>
 
-   <template variable="osc_div_erps" ><![CDATA[
+   <template variables="osc_div_erps" ><![CDATA[
       \t//! OSC Clock divider register
       \tstatic constexpr uint32_t div =
       \t   OSC_DIV_ERPS($(osc_div_erps));   // ERCLK prescaler\n\n

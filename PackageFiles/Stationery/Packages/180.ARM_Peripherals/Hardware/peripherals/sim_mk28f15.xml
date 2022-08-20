@@ -37,16 +37,16 @@
       <aliasOption key="system_erclk32k_clock" />
       
       <choiceOption key="sim_sopt1_usbpower" 
-         valueFormat="(%s)"
+         valueFormat="SIM_SOPT1_USBREGEN(%s),SIM_SOPT1_USBSSTBY(%s),SIM_SOPT1_USBVSTBY(%s)"
          enumStem="SimUsbPower"
          description="USB voltage regulator power control"
          toolTip="Controls when the USB voltage regulator is enabled in\n
         (RUN), (STOP, VLPS, LLS and VLLS) or (VLPR and VLPW) modes">
-         <choice value="SIM_SOPT1_USBREGEN(0)|SIM_SOPT1_USBSSTBY(0)|SIM_SOPT1_USBVSTBY(0)"  name="Disabled in all modes"         enum="Disabled"               />
-         <choice value="SIM_SOPT1_USBREGEN(1)|SIM_SOPT1_USBSSTBY(0)|SIM_SOPT1_USBVSTBY(0)"  name="Enabled in all modes"          enum="EnabledInAll"           isDefault="true" />
-         <choice value="SIM_SOPT1_USBREGEN(1)|SIM_SOPT1_USBSSTBY(1)|SIM_SOPT1_USBVSTBY(0)"  name="Enabled in run and low power"  enum="EnabledInRun_LowPower"  />
-         <choice value="SIM_SOPT1_USBREGEN(1)|SIM_SOPT1_USBSSTBY(0)|SIM_SOPT1_USBVSTBY(1)"  name="Enabled in run and stop"       enum="EnabledInRun_Stop"      />
-         <choice value="SIM_SOPT1_USBREGEN(1)|SIM_SOPT1_USBSSTBY(1)|SIM_SOPT1_USBVSTBY(1)"  name="Enabled in run only"           enum="EnabledInRun"           />
+         <choice value="0,0,0"  name="Disabled in all modes"         enum="Disabled"               />
+         <choice value="1,0,0"  name="Enabled in all modes"          enum="EnabledInAll"           isDefault="true" />
+         <choice value="1,1,0"  name="Enabled in run and low power"  enum="EnabledInRun_LowPower"  />
+         <choice value="1,0,1"  name="Enabled in run and stop"       enum="EnabledInRun_Stop"      />
+         <choice value="1,1,1"  name="Enabled in run only"           enum="EnabledInRun"           />
       </choiceOption>
    </category>
 
@@ -322,15 +322,15 @@
       <for keys="adc" values="0">
          <choiceOption key="sim_sopt7_adc%(adc)trigger" 
             enumStem="SimAdc%(adc)TriggerMode"
-            valueFormat="(%s)"
+            valueFormat="SIM_SOPT7_ADC%(adc)ALTTRGEN(%s),SIM_SOPT7_ADC%(adc)PRETRGSEL(%s)"
             description="ADC%(adc) trigger mode"
-            toolTip="Alternative conversion triggers for ADC\n
+            toolTip="Alternative conversion triggers for ADC\n 
                _Pdb              - ADC is triggered by PDB\n
                _Alt_PreTrigger_0 - ADC is triggered by SimAdc%(adc)Trigger selection and uses pretrigger 0 = A (SC1[0]/R[0])\n
                _Alt_PreTrigger_1 - ADC is triggered by SimAdc%(adc)Trigger selection and uses pretrigger 1 = B (SC1[1]/R[1])" >
-            <choice value="SIM_SOPT7_ADC%(adc)ALTTRGEN(0)"                                   name="Triggered by PDB"             enum="Pdb" isDefault="true" />
-            <choice value="SIM_SOPT7_ADC%(adc)ALTTRGEN(1)|SIM_SOPT7_ADC%(adc)PRETRGSEL(0)"   name="Pre-trigger 0 = A (SC1[0])"   enum="Alt_PreTrigger_0" />
-            <choice value="SIM_SOPT7_ADC%(adc)ALTTRGEN(1)|SIM_SOPT7_ADC%(adc)PRETRGSEL(1)"   name="Pre-trigger 1 = B (SC1[1])"   enum="Alt_PreTrigger_1" />
+            <choice value="0,0"   name="Triggered by PDB"             enum="Pdb" isDefault="true" />
+            <choice value="1,0"   name="Pre-trigger 0 = A (SC1[0])"   enum="Alt_PreTrigger_0" />
+            <choice value="1,1"   name="Pre-trigger 1 = B (SC1[1])"   enum="Alt_PreTrigger_1" />
          </choiceOption>
       
          <choiceOption key="sim_sopt7_adc%(adc)trgsel"

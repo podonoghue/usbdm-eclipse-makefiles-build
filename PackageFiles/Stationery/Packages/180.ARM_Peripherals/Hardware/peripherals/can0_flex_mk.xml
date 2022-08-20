@@ -138,6 +138,7 @@
    </choiceOption>
 
    <clockCodeTemplate variable="can_ctrl1_clksrc"
+   returnFormat="%s"
    ><![CDATA[
       \t/**
       \t * Set %description

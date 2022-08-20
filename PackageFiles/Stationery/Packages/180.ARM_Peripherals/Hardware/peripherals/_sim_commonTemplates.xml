@@ -69,7 +69,7 @@
             \t * @param %enumParam %tooltip
             \t */
             \tstatic void setRtcClockout(%enumClass %enumParam) {
-            \t   %defaultClockExpression
+            \t   %defaultFieldExpression
             \t}\n\n
          ]]></clockCodeTemplate>
       </if>
@@ -126,7 +126,7 @@
             \t * @param %enumParam %tooltip
             \t */
             \tstatic void setRtcClockout(%enumClass %enumParam) {
-            \t   %defaultClockExpression
+            \t   %defaultFieldExpression
             \t}\n\n
          ]]></clockCodeTemplate>
       </if>
@@ -156,23 +156,23 @@
       value="32768" />
 
 <!-- ========== External clock sources =============================== -->
-   <template variable="system_usb_clkin_clock" ><![CDATA[
+   <template variables="system_usb_clkin_clock" ><![CDATA[
    \t//!  %description
    \tstatic constexpr uint32_t usbExternalClock=$(system_usb_clkin_clock);\n\n
    ]]></template>
 
-   <template variable="system_sdhc_clockin" ><![CDATA[
+   <template variables="system_sdhc_clockin" ><![CDATA[
    \t//! %description
    \tstatic constexpr uint32_t sdhcExternalClock=$(system_sdhc_clockin);\n\n
    ]]></template>
 
-   <template variable="system_irc48m_clock" ><![CDATA[
+   <template variables="system_irc48m_clock" ><![CDATA[
    \t//! %description
    \tstatic constexpr uint32_t irc48mClock=$(system_irc48m_clock);\n\n
    ]]></template>
       
 <!-- ========== SOPT1 =============================== -->
-   <template namespace="usbdm" variable="sim_sopt1_ramsize"><![CDATA[
+   <template namespace="usbdm" variables="sim_sopt1_ramsize"><![CDATA[
       \t/**
       \t * RAM size
       \t */
@@ -191,7 +191,7 @@
       \t};\n\n
    ]]></template>
 
-   <template variable="sim_sopt1_ramsize"><![CDATA[
+   <template variables="sim_sopt1_ramsize"><![CDATA[
       \t/**
       \t * Get RAM size
       \t *
@@ -203,7 +203,7 @@
       \t}\n\n
    ]]></template>
 
-   <template variable="rtc_clkin_clock" ><![CDATA[
+   <template variables="rtc_clkin_clock" ><![CDATA[
       \t/// Frequency of clock provided to RTC external input pin
       \tstatic constexpr uint32_t rtc_clkin_clock = $(rtc_clkin_clock);  \n\n
    ]]></template>
@@ -217,7 +217,7 @@
       \t * @param %enumParam %tooltip
       \t */
       \tstatic void setErc32kClock(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \t   %defaultFieldExpression
       \t}
 
       \t/**
@@ -234,7 +234,7 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
-   <template variable="rtc_none" ><![CDATA[
+   <template variables="rtc_none" ><![CDATA[
       \t/**
       \t * Get ERCLK32K clock frequency
       \t *
@@ -254,12 +254,11 @@
       \t * @param %enumParam %tooltip
       \t */
       \tstatic void setErc32kClkoutPin(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \t   %defaultFieldExpression
       \t}\n\n
    ]]></clockCodeTemplate>
 
    <clockCodeTemplate variable="sim_sopt1_usbpower"
-      mask="(SIM_SOPT1_USBREGEN_MASK|SIM_SOPT1_USBSSTBY_MASK|SIM_SOPT1_USBVSTBY_MASK)"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -268,7 +267,7 @@
       \t */
       \tstatic void setUsbPowerModes(%enumClass %enumParam) {
       \t   sim->SOPT1CFG = SIM_SOPT1CFG_USSWE_MASK|SIM_SOPT1CFG_UVSWE_MASK|SIM_SOPT1CFG_URWE_MASK;
-      \t   %defaultClockExpression
+      \t   %defaultFieldExpression
       \t}\n\n
    ]]></clockCodeTemplate>
    
@@ -276,10 +275,10 @@
       variables="
          sim_sopt1_osc32kout,     
          sim_sopt1_osc32ksel,  
-         sim_sopt1_usbpower"     
+         sim_sopt1_usbpower"
    ><![CDATA[
       \t//! System Options Register 1
-      \tstatic constexpr uint32_t sopt1 = %expression\n\n
+      \tstatic constexpr uint32_t sopt1 = %initExpression\n\n
    ]]></initialValueTemplate>
    
 <!-- ========== SOPT2 =============================== -->
@@ -292,7 +291,7 @@
       \t * @param %enumParam %tooltip
       \t */
       \tstatic void setPortDPad(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \t   %defaultFieldExpression
       \t}\n\n
    ]]></clockCodeTemplate>
          
@@ -306,7 +305,7 @@
          \t * @param %enumParam %tooltip
          \t */
          \tstatic void setLpuart%(n)Clock(%enumClass %enumParam) {
-         \t   %defaultClockExpression
+         \t   %defaultFieldExpression
          \t}
 
          \t/**
@@ -334,7 +333,7 @@
          \t * @param %enumParam %tooltip
          \t */
          \tstatic void setUart%(n)Clock(%enumClass %enumParam) {
-         \t   %defaultClockExpression
+         \t   %defaultFieldExpression
          \t}
 
          \t/**
@@ -353,7 +352,7 @@
    </for>         
 
    <for keys="n" values=";0;1;2;3;4;5;6">
-      <template variable="system_uart%(n)_fixedclocksource" ><![CDATA[
+      <template variables="system_uart%(n)_fixedclocksource" ><![CDATA[
          \t/** 
          \t * Get UART%(n) input clock frequency
          \t *
@@ -374,7 +373,7 @@
       \t * @param %enumParam %tooltip
       \t */
       \tstatic void setTpmClock(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \t   %defaultFieldExpression
       \t}
 
       \t/**
@@ -411,7 +410,7 @@
       \t * @param %enumParam %tooltip
       \t */
       \tstatic void setClkout(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \t   %defaultFieldExpression
       \t}\n\n
    ]]></clockCodeTemplate>
          
@@ -424,7 +423,7 @@
       \t * @param %enumParam %tooltip
       \t */
       \tstatic void setPeripheralClock(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \t   %defaultFieldExpression
       \t}
 
       \t/**
@@ -453,7 +452,7 @@
       \t * @param %enumParam %tooltip
       \t */
       \tstatic void setEmvsimClock(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \t   %defaultFieldExpression
       \t}
 
       \t/**
@@ -479,7 +478,7 @@
       \t * @param %enumParam %tooltip
       \t */
       \tstatic void setSdhcClock(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \t   %defaultFieldExpression
       \t}
 
       \t/**
@@ -504,7 +503,7 @@
       \t * @param %enumParam %tooltip
       \t */
       \tstatic void setFlexbusSecurity(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \t   %defaultFieldExpression
       \t}
 
       \t/**
@@ -527,7 +526,7 @@
       \t * @param %enumParam %tooltip
       \t */
       \tstatic void setFlexioClock(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \t   %defaultFieldExpression
       \t}
 
       \t/**
@@ -553,7 +552,7 @@
       \t * @param %enumParam %tooltip
       \t */
       \tstatic void setTimestampClock(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \t   %defaultFieldExpression
       \t}
 
       \t/**
@@ -578,7 +577,7 @@
       \t * @param %enumParam %tooltip
       \t */
       \tstatic void enableUsbPhyRegulator(%enumClass %enumParam) {
-      \t   %defaultClockExpression;
+      \t   %defaultFieldExpression;
       \t}\n\n
    ]]></clockCodeTemplate>
    
@@ -590,7 +589,7 @@
       \t * @param %enumParam %tooltip
       \t */
       \tstatic void setUsbSlowClock(%enumClass %enumParam) {
-      \t   %defaultClockExpression;
+      \t   %defaultFieldExpression;
       \t}\n\n
    ]]></clockCodeTemplate>
    
@@ -615,7 +614,7 @@
          sim_sopt2_rmiisrc"     
    ><![CDATA[
       \t//! System Options Register 2
-      \tstatic constexpr uint32_t sopt2 = %expression\n\n
+      \tstatic constexpr uint32_t sopt2 = %initExpression\n\n
    ]]></initialValueTemplate>
    
 <!-- ========== SOPT4 =============================== -->
@@ -629,7 +628,7 @@
             \t * @param %enumParam %tooltip
             \t */
             \tstatic void setFtm%(ftm)Flt%(flt)(%enumClass %enumParam) {
-            \t   %defaultClockExpression
+            \t   %defaultFieldExpression
             \t}\n\n
          ]]></clockCodeTemplate>
       </for>
@@ -645,7 +644,7 @@
             \t * @param %enumParam %tooltip
             \t */
             \tstatic void setFtm%(ftm)Ch%(ch)Src(%enumClass %enumParam) {
-            \t   %defaultClockExpression
+            \t   %defaultFieldExpression
             \t}\n\n
          ]]></clockCodeTemplate>
       </for>
@@ -660,7 +659,7 @@
          \t * @param %enumParam %tooltip
          \t */
          \tstatic void setFtm%(ftm)ClkSel(%enumClass %enumParam) {
-         \t   %defaultClockExpression
+         \t   %defaultFieldExpression
          \t}\n\n
       ]]></clockCodeTemplate>
    </for>
@@ -675,7 +674,7 @@
             \t * @param %enumParam %tooltip
             \t */
             \tstatic void setFtm%(ftm)Trg%(trg)Src(%enumClass %enumParam) {
-            \t   %defaultClockExpression
+            \t   %defaultFieldExpression
             \t}\n\n
          ]]></clockCodeTemplate>
       </for>
@@ -693,7 +692,7 @@
          \t * through the appropriate pin control register in the port control module
          \t */
          \tstatic void setTpm%(tpm)ExternalClockInput(%enumClass %enumParam) {
-         \t   %defaultClockExpression
+         \t   %defaultFieldExpression
          \t}\n\n
       ]]></clockCodeTemplate>
    </for>
@@ -711,7 +710,7 @@
             \t * through the appropriate pin control register in the port control module
             \t */
             \tstatic void setTpm%(tpm)Ch%(ch)InputCaptureSource(%enumClass %enumParam) {
-            \t   %defaultClockExpression
+            \t   %defaultFieldExpression
             \t}\n\n
          ]]></clockCodeTemplate>
       </for>
@@ -723,13 +722,13 @@
    ]]></template>
    <for keys="p" values="0;1;2;3" >
       <for keys="u" values="0;1;2;3" >
-         <template variable="sim_sopt4_ftm%(p)flt%(u)"    ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-         <template variable="sim_sopt4_ftm%(p)trg%(u)src" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-         <template variable="sim_sopt4_ftm%(p)ch%(u)src"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-         <template variable="sim_sopt4_tpm%(p)ch%(u)src"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+         <template variables="sim_sopt4_ftm%(p)flt%(u)"    ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+         <template variables="sim_sopt4_ftm%(p)trg%(u)src" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+         <template variables="sim_sopt4_ftm%(p)ch%(u)src"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+         <template variables="sim_sopt4_tpm%(p)ch%(u)src"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
       </for>   
-      <template variable="sim_sopt4_tpm%(p)clksel"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template variable="sim_sopt4_ftm%(p)clksel"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template variables="sim_sopt4_tpm%(p)clksel"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template variables="sim_sopt4_ftm%(p)clksel"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
    </for>   
    <template                                   ><![CDATA[ \t   0;                    \n\n ]]></template>
    
@@ -744,7 +743,7 @@
          \t * @param %enumParam %tooltip
          \t */
          \tstatic void setLpuart%(n)Drive(%enumClass %enumParam) {
-         \t   %defaultClockExpression
+         \t   %defaultFieldExpression
          \t}\n\n
       ]]></clockCodeTemplate>
       
@@ -756,7 +755,7 @@
          \t * @param %enumParam %tooltip
          \t */
          \tstatic void setLpuart%(n)RxSrc(%enumClass %enumParam) {
-         \t   %defaultClockExpression
+         \t   %defaultFieldExpression
          \t}\n\n
       ]]></clockCodeTemplate>
    
@@ -768,7 +767,7 @@
          \t * @param %enumParam %tooltip
          \t */
          \tstatic void setLpuart%(n)TxSrc(%enumClass %enumParam) {
-         \t   %defaultClockExpression
+         \t   %defaultFieldExpression
          \t}\n\n
       ]]></clockCodeTemplate>
    </for>
@@ -782,7 +781,7 @@
          \t * @param %enumParam %tooltip
          \t */
          \tstatic void setUart%(n)Drive(%enumClass %enumParam) {
-         \t   %defaultClockExpression
+         \t   %defaultFieldExpression
          \t}\n\n
       ]]></clockCodeTemplate>
    
@@ -794,7 +793,7 @@
          \t * @param %enumParam %tooltip
          \t */
          \tstatic void setUart%(n)RxSrc(%enumClass %enumParam) {
-         \t   %defaultClockExpression
+         \t   %defaultFieldExpression
          \t}\n\n
       ]]></clockCodeTemplate>
    
@@ -806,7 +805,7 @@
          \t * @param %enumParam %tooltip
          \t */
          \tstatic void setUart%(n)TxSrc(%enumClass %enumParam) {
-         \t   %defaultClockExpression
+         \t   %defaultFieldExpression
          \t}\n\n
       ]]></clockCodeTemplate>
    </for>
@@ -816,34 +815,32 @@
       \tstatic constexpr uint32_t sopt5 = \n
    ]]></template>
    <for keys="p" values=";0;1;2;3;4">
-      <template variable="sim_sopt5_uart%(p)ode"     ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template variable="sim_sopt5_uart%(p)rxsrc"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template variable="sim_sopt5_uart%(p)txsrc"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template variable="sim_sopt5_lpuart%(p)ode"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template variable="sim_sopt5_lpuart%(p)rxsrc" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template variable="sim_sopt5_lpuart%(p)txsrc" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template variables="sim_sopt5_uart%(p)ode"     ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template variables="sim_sopt5_uart%(p)rxsrc"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template variables="sim_sopt5_uart%(p)txsrc"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template variables="sim_sopt5_lpuart%(p)ode"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template variables="sim_sopt5_lpuart%(p)rxsrc" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template variables="sim_sopt5_lpuart%(p)txsrc" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
    </for>
    <template                                         ><![CDATA[ \t   0;                    \n\n ]]></template>
 
 <!-- ========== SOPT7 =============================== -->
    <for keys="p" values=";0;1">
-      <template variable="sim_sopt7_adc%(p)trigger" ><![CDATA[
+      <setTemplate variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel" ><![CDATA[
          \t/**
          \t * Set %description
          \t *
-         \t * @param[in] simAdc%(p)TriggerMode   %tooltip\n
-      ]]></template>
-      <template variable="sim_sopt7_adc%(p)trgsel" ><![CDATA[
-         \t *
-         \t * @param[in] simAdc%(p)Trigger   %tooltip
+         %comments
          \t *
          \t * For example, setAdc%(p)Triggers(SimAdc%(p)TriggerMode_Alt_PreTrigger_1, SimAdc0Trigger_PitCh0) will set the trigger source
          \t * to PIT channel 0 and conversion will use SC1[1]/R[1]
          \t */
-         \tstatic void setAdc%(p)Triggers(SimAdc%(p)TriggerMode simAdc%(p)TriggerMode, SimAdc%(p)TriggerSrc simAdc%(p)TriggerSrc=SimAdc%(p)TriggerSrc_External) {
-         \t   sim->SOPT7 = (sim->SOPT7&~(SIM_SOPT7_ADC%(p)TRGSEL_MASK|SIM_SOPT7_ADC%(p)ALTTRGEN_MASK))|simAdc%(p)TriggerMode|simAdc%(p)TriggerSrc;
+         \tstatic void setAdc%(p)Triggers(
+         %params) {
+         \t
+         \t   %register = (%register&~%mask)|(%paramExpression);
          \t};\n\n
-      ]]></template>
+      ]]></setTemplate>
    </for>
    
    <initialValueTemplate 
@@ -854,7 +851,7 @@
          sim_sopt7_adc1trgsel"     
    ><![CDATA[
       \t//! System Options Register 7
-      \tstatic constexpr uint32_t sopt7 = %expression\n\n
+      \tstatic constexpr uint32_t sopt7 = %initExpression\n\n
    ]]></initialValueTemplate>
    
 <!-- ========== SOPT8 =============================== -->
@@ -869,7 +866,7 @@
             \t * @param %enumParam %tooltip
             \t */
             \tstatic void setFtm%(p)Ch%(ch)OutputSrc(%enumClass %enumParam) {
-            \t   %defaultClockExpression
+            \t   %defaultFieldExpression
             \t}\n\n
          ]]></clockCodeTemplate>
       </for>
@@ -916,10 +913,10 @@
          \tstatic constexpr uint32_t sopt8 = \n
       ]]></template>
       <for keys="ch" values="0;1;2;3;4;5;6;7">
-         <template variable="sim_sopt8_ftm0och%(ch)src"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-         <template variable="sim_sopt8_ftm3och%(ch)src"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+         <template variables="sim_sopt8_ftm0och%(ch)src"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+         <template variables="sim_sopt8_ftm3och%(ch)src"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
       </for>
-      <template variable="sim_sopt8_ftm0och0src" ><![CDATA[
+      <template variables="sim_sopt8_ftm0och0src" ><![CDATA[
          \t   0;\n\n
       ]]></template>
    </if>
@@ -936,22 +933,22 @@
             \t * @param %enumParam %tooltip
             \t */
             \tstatic void setTpm%(p)%(Fn)(%enumClass %enumParam) {
-            \t   %defaultClockExpression
+            \t   %defaultFieldExpression
             \t}\n\n
          ]]></clockCodeTemplate>
       </for>
    </for>
    
-   <template variable="sim_sopt9_tpm1clksel" ><![CDATA[
+   <template variables="sim_sopt9_tpm1clksel" ><![CDATA[
       \t//! System Options Register 9
       \tstatic constexpr uint32_t sopt9 = \n
    ]]></template>
    <for keys="p" values="1;2">
       <for keys="Fn,FN,fn" values="ClkSel,CLKSEL,clksel;Ch0Src,CH0SRC,ch0src">
-         <template variable="sim_sopt9_tpm%(p)%(fn)"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+         <template variables="sim_sopt9_tpm%(p)%(fn)"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
       </for>
    </for>
-   <template variable="sim_sopt9_tpm1clksel" ><![CDATA[
+   <template variables="sim_sopt9_tpm1clksel" ><![CDATA[
       \t   0;\n\n
    ]]></template>
 
@@ -972,10 +969,10 @@
       \t   sim->SCGC4 = sim->SCGC4 & ~SIM_SCGC4_USBOTG_MASK;
       \t
       \t   // Set clock source
-      \t   %defaultClockExpression
+      \t   %defaultFieldExpression
       \t\n
    ]]></clockCodeTemplate>
-   <template variable="sim_clkdiv2_usb[]" ><![CDATA[
+   <template variables="sim_clkdiv2_usb[]" ><![CDATA[
       \t   if (simUsbFullSpeedClockSource == SimUsbFullSpeedClockSource_PeripheralClk) {
       \t      // Set clock divider for internal clock
       \t      rc = E_CLOCK_INIT_FAILED;
@@ -994,7 +991,7 @@
       \t   }
       \t   rc = setAndCheckErrorCode(rc);\n\n
    ]]></template>
-   <template variable="sim_sopt2_usbsrc" ><![CDATA[
+   <template variables="sim_sopt2_usbsrc" ><![CDATA[
       \t   // Restore USB clock
       \t   sim->SCGC4 = sim->SCGC4 | SIM_SCGC4_USBOTG_MASK;
       \t   return rc;
@@ -1010,7 +1007,7 @@
       \t      default:
       \t      case $(sim_sopt2_usbsrc[].enum[0]) : return usbExternalClock;\n
    ]]></template>
-   <template variable="sim_clkdiv2_usb[]" ><![CDATA[
+   <template variables="sim_clkdiv2_usb[]" ><![CDATA[
       \t      case $(sim_sopt2_usbsrc[].enum[1]) :
       \t         return  (getPeripheralClock()*
       \t            (((sim->CLKDIV2&SIM_CLKDIV2_USBFRAC_MASK)>>SIM_CLKDIV2_USBFRAC_SHIFT)+1))/
@@ -1019,12 +1016,12 @@
    <template condition="!sim_clkdiv2_usb[]&amp;&amp;sim_sopt2_usbsrc" ><![CDATA[
       \t      case $(sim_sopt2_usbsrc[].enum[1]) : return getPeripheralClock();\n
    ]]></template>
-   <template variable="sim_sopt2_usbsrc" ><![CDATA[
+   <template variables="sim_sopt2_usbsrc" ><![CDATA[
       \t   }
       \t}\n\n
    ]]></template>
 
-   <template variable="sim_clkdiv2_usb"><![CDATA[
+   <template variables="sim_clkdiv2_usb"><![CDATA[
       \t/**
       \t * Set USB clock divisors to suitable value and enable clock
       \t */
@@ -1072,7 +1069,7 @@
          sim_copc_copt"     
    ><![CDATA[
          \t//! COP Control Register
-         \tstatic constexpr uint32_t copc = %expression\n\n
+         \tstatic constexpr uint32_t copc = %initExpression\n\n
    ]]></initialValueTemplate>
    
    <if condition="sim_copc_copt" >
@@ -1089,7 +1086,7 @@
       <template key="/SYSTEM/Includes" namespace="all" ><![CDATA[
       ]]></template>
    
-      <template key="/SYSTEM/WatchdogInitialise" namespace="all" variable="sim_copc_copt" ><![CDATA[
+      <template key="/SYSTEM/WatchdogInitialise" namespace="all" variables="sim_copc_copt" ><![CDATA[
          \t/*
          \t * Initialise watchdog
          \t */
@@ -1115,13 +1112,13 @@
       \t   sim->SOPT5 = sopt5;
       \t   sim->SOPT7 = sopt7;\n
       ]]></template>
-   <template variable="sim_sopt8_ftm0och0src" ><![CDATA[
+   <template variables="sim_sopt8_ftm0och0src" ><![CDATA[
       \t   sim->SOPT8 = sopt8;\n
    ]]></template>
-   <template variable="sim_sopt9_tpm1clksel" ><![CDATA[
+   <template variables="sim_sopt9_tpm1clksel" ><![CDATA[
       \t   sim->SOPT9 = sopt9;\n
    ]]></template>
-   <template variable="sim_clkdiv2_usb" ><![CDATA[
+   <template variables="sim_clkdiv2_usb" ><![CDATA[
       \t
       \t   updateUsbClockDivider();\n
    ]]></template>

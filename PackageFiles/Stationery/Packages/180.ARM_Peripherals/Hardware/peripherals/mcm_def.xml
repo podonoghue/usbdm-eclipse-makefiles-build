@@ -40,7 +40,7 @@
       \t */
       \tstatic void setStallFlashController(%params) {
       
-      \t   %register = (%register&~(%mask)) | %expression;
+      \t   %register = (%register&~(%mask)) | %paramExpression;
       \t}\n\n
    ]]></setTemplate>
          
@@ -65,7 +65,7 @@
       \t */
       \tstatic void setFlashControllerSpeculation(%params) {
       
-      \t   %register = (%register&~(%mask))|%expression;
+      \t   %register = (%register&~%mask)|%paramExpression;
       \t}\n\n
    ]]></setTemplate>      
 
@@ -91,7 +91,7 @@
       \t */
       \tstatic void setFlashControllerCache(%params) {
       
-      \t   %register = (%register&~(%mask)) | %expression;
+      \t   %register = (%register&~%mask) | %paramExpression;
       \t}\n\n
    ]]></setTemplate>
          
@@ -128,8 +128,8 @@
       \tstatic void configureFlashController(
       %params) {
       
-      \t   %register = (%register&~(%mask))|
-      \t                %expression;
+      \t   %register = (%register&~%mask)|
+      \t                %paramExpression;
       \t}\n\n
    ]]></setTemplate>
          
@@ -167,7 +167,7 @@
       \t    * Configure Flash options as specified in the constructor
       \t    */
       \t   inline void initialise() const {
-      \t      %register = (%register & ~(%mask))|
+      \t      %register = (%register & ~%mask)|
       \t                   placr;
       \t   }
       \t   
@@ -262,7 +262,7 @@
       \t */
       \tstatic void enterComputeMode(%params) {
       \t     
-      \t   %register = %expression;
+      \t   %register = %paramExpression;
       \t   while ((%register & MCM_CPO_CPOACK_MASK) == 0) {
       \t      __asm__("nop");
       \t   }

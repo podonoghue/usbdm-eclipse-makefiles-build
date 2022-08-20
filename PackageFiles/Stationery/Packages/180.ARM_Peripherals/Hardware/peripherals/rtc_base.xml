@@ -2,7 +2,7 @@
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- rtc_base.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time Clock">
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
    <xi:include href="_mapPinsOption_on.xml"/>
    <xi:include href="_default_instance.xml"/>
@@ -15,7 +15,7 @@
    </binaryOption>
 
    <category name="ERCLK32K Selection" description="Control source of ERCLK32K clock (nominally 32kHz)">
-      <aliasOption key="/PMC/system_low_power_clock"  constant="true" optional="true" />
+      <aliasOption key="/PMC/system_low_power_clock"  optional="true" />
       <aliasOption key="/SIM/rtc_clkin_clock"         optional="true" constant="false" />
       <aliasOption key="/SIM/sim_sopt1_osc32ksel"     optional="true" constant="false" />
       <aliasOption key="/SIM/system_erclk32k_clock"   optional="true" />
@@ -113,8 +113,8 @@
       origin="RTC 1Hz output"
       units="Hz"/>
    
-   <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" constant="false" optional="true" />
-   <aliasOption key="/SIM/rtc_clkout" constant="true" optional="true" />
+   <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" optional="true" constant="false" />
+   <aliasOption key="/SIM/rtc_clkout"             optional="true" />
 
    <template><![CDATA[
       \t//! Whether to configure RTC
@@ -123,18 +123,15 @@
       \tstatic constexpr bool configure_rtc = $(configure_rtc);
    
       \t//! Frequency of RTC External Clock or Crystal
-      \tstatic constexpr uint32_t osc_input_freq = $(osc_input_freq)UL;
-      
-      \t//! Oscillator control register
-      \tstatic constexpr uint32_t cr =
-      \t   RTC_CR_OSCE($(rtc_cr_osce)) | // Enables 32kHz oscillator [RTC_32K]
-      \t   RTC_CR_CLKO($(rtc_cr_clko)) | // Disables RTC 32kHz Clock Output
-      \t   RTC_CR_UM($(rtc_cr_um))   | // Update Mode
-      \t   RTC_CR_SUP($(rtc_cr_sup))  | // Supervisor access
-      \t   RTC_CR_WPE($(rtc_cr_wpe))  | // Wakeup Pin Enable
-      \t   RTC_CR_SCP($(rtc_cr_scp));   // RTC Oscillator load capacitance\n\n
+      \tstatic constexpr uint32_t osc_input_freq = $(osc_input_freq)UL;\n\n
    ]]></template>
 
+   <initialValueTemplate variables="rtc_cr_osce,rtc_cr_clko,rtc_cr_um,rtc_cr_sup,rtc_cr_wpe,rtc_cr_scp" >
+   <![CDATA[
+      \t//! Oscillator control register
+      \tstatic constexpr uint32_t cr = %initExpression\n\n
+   ]]></initialValueTemplate>
+   
    <intOption key="rtc_tcr_cir"
       description="Compensation Interval Register"
       toolTip="Configures the compensation interval in seconds from 1 to 256 to control how frequently the TCR should\n
@@ -149,12 +146,11 @@
          This value+32768 determines the number of clock cycles that makes up a second"
       value="0" />
 
-   <template><![CDATA[
+   <initialValueTemplate variables="rtc_tcr_cir,rtc_tcr_tcr" >
+   <![CDATA[
       \t//! RTC Time Compensation Register
-      \tstatic constexpr uint32_t tcr =
-      \t   RTC_TCR_CIR($(rtc_tcr_cir)) | // Compensation Interval Register
-      \t   RTC_TCR_TCR($(rtc_tcr_tcr));  // Time Compensation Register\n\n
-    ]]></template>     
+      \tstatic constexpr uint32_t tcr = %initExpression\n\n
+   ]]></initialValueTemplate>
    
    <category name="Register Locks" description="Locks RTC Registers">
 	   <binaryOption key="rtc_lr_lrl" 
@@ -186,15 +182,12 @@
 	   </binaryOption>
    </category>
    
-   <template><![CDATA[
+   <initialValueTemplate variables="rtc_lr_lrl,rtc_lr_srl,rtc_lr_crl,rtc_lr_tcl" >
+   <![CDATA[
       \t//! RTC Lock Register
-      \tstatic constexpr uint32_t lr =
-      \t   RTC_LR_LRL($(rtc_lr_lrl)) | // Lock Register Lock
-      \t   RTC_LR_SRL($(rtc_lr_srl)) | // Status Register Lock 
-      \t   RTC_LR_CRL($(rtc_lr_crl)) | // Control Register Lock
-      \t   RTC_LR_TCL($(rtc_lr_tcl));  // Time Compensation Lock\n\n
-    ]]></template>     
-
+      \tstatic constexpr uint32_t lr = %initExpression\n\n
+   ]]></initialValueTemplate>
+   
    <category name="Write Access" description="Controls write access to RTC Registers">
       <aliasOption key="rtc_war_ierw" constant="false" optional="true" />
       <aliasOption key="rtc_war_lrw"  constant="false" optional="true" />

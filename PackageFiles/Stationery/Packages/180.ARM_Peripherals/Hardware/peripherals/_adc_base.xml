@@ -339,29 +339,29 @@
       \t//! Default value for ADCx_CFG1 register
       \tstatic constexpr uint32_t cfg1 = \n
    ]]></template>
-   <template variable="adc_cfg1_adiclk"     ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
-   <template variable="adc_cfg1_mode"       ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
-   <template variable="adc_sample"          ><![CDATA[ \t   (%symbolicValueExpression&ADC_CFG1_ADLSMP_MASK) | // %shortDescription\n ]]></template>
-   <template variable="adc_cfg1_adiv"       ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
-   <template variable="adc_cfg1_adlpc"      ><![CDATA[ \t   %symbolicValueExpression;  // %shortDescription\n\n]]></template>
+   <template variables="adc_cfg1_adiclk"     ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
+   <template variables="adc_cfg1_mode"       ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
+   <template variables="adc_sample"          ><![CDATA[ \t   (%symbolicValueExpression&ADC_CFG1_ADLSMP_MASK) | // %shortDescription\n ]]></template>
+   <template variables="adc_cfg1_adiv"       ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
+   <template variables="adc_cfg1_adlpc"      ><![CDATA[ \t   %symbolicValueExpression;  // %shortDescription\n\n]]></template>
 
    <template><![CDATA[
       \t//! Default value for ADCx_CFG2 register
       \tstatic constexpr uint32_t cfg2 = \n
    ]]></template>
-   <template variable="adc_cfg2_muxsel"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
-   <template variable="adc_sample"       ><![CDATA[ \t   (%symbolicValueExpression&ADC_CFG2_ADLSTS_MASK) | // %shortDescription\n ]]></template>
-   <template variable="adc_cfg2_adhsc"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
-   <template variable="adc_cfg2_adacken" ><![CDATA[ \t   %symbolicValueExpression;  // %shortDescription\n\n ]]></template>
+   <template variables="adc_cfg2_muxsel"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
+   <template variables="adc_sample"       ><![CDATA[ \t   (%symbolicValueExpression&ADC_CFG2_ADLSTS_MASK) | // %shortDescription\n ]]></template>
+   <template variables="adc_cfg2_adhsc"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
+   <template variables="adc_cfg2_adacken" ><![CDATA[ \t   %symbolicValueExpression;  // %shortDescription\n\n ]]></template>
 
    <template><![CDATA[
       \t//! Default value for ADCx_SC2 register
       \tstatic constexpr uint32_t sc2 = \n
    ]]></template>
-   <template variable="adc_sc2_compare" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
-   <template variable="adc_sc2_dmaen"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
-   <template variable="adc_sc2_adtrg"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
-   <template variable="adc_sc2_refsel"  ><![CDATA[ \t   %symbolicValueExpression;  // %shortDescription\n\n ]]></template>
+   <template variables="adc_sc2_compare" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
+   <template variables="adc_sc2_dmaen"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
+   <template variables="adc_sc2_adtrg"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
+   <template variables="adc_sc2_refsel"  ><![CDATA[ \t   %symbolicValueExpression;  // %shortDescription\n\n ]]></template>
    
    <template key="/ADC/declarations" namespace="all"  ><![CDATA[
    \t/**

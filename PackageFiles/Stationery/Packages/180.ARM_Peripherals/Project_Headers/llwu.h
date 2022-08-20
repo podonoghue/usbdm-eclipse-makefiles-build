@@ -399,7 +399,7 @@ $(/LLWU/llwu_base_init:// No initialisation found - /LLWU/llwu_base_init)
    /**
     * Configure one of the input pins as a filtered wake-up source
     *
-    * @param[in] filterNum          Filter to configure - number available depends on device
+    * @param[in] llwuFilterNum      Filter to configure - number available depends on device
     * @param[in] llwuPin            Pin to assign to filter
     * @param[in] llwuFilterPinMode  Mode for pin as wake-up input
     *

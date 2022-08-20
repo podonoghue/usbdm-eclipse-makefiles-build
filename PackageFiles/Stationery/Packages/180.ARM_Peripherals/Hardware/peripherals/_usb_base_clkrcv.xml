@@ -32,23 +32,23 @@
       </binaryOption>
    </category>
    
-   <template variable="usb_clk_enable"><![CDATA[
+   <template variables="usb_clk_enable"><![CDATA[
       \t//! 
       \tstatic constexpr uint32_t usb_clk_recover_irc_en =
-      \t   %bareValueExpression; // %shortDescription \n\n
+      \t   %symbolicValueExpression; // %shortDescription \n\n
    ]]></template>
 
    <template><![CDATA[
       \t//! 
       \tstatic constexpr uint32_t usb_clk_recover_ctrl = \n
    ]]></template>
-   <template variable="usb_clk_tracking_mode"      ><![CDATA[ \t   %bareValueExpression | // %shortDescription    \n ]]></template>
-   <template variable="usb_clk_recover_ctrl_restart_ifrtrim_en"    ><![CDATA[ \t   %defaultValueExpression | // %shortDescription    \n ]]></template>
+   <template variables="usb_clk_tracking_mode"      ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription    \n ]]></template>
+   <template variables="usb_clk_recover_ctrl_restart_ifrtrim_en"    ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription    \n ]]></template>
    <template><![CDATA[
       \t   0;\n\n
    ]]></template>
 
-   <template variable="usb_clk_enable" ><![CDATA[
+   <template variables="usb_clk_enable" ><![CDATA[
       \t/**
       \t * Set %description
       \t *
@@ -61,13 +61,13 @@
       \t}\n\n
    ]]></template>
    
-   <template variable="usb_clk_tracking_mode" ><![CDATA[
+   <template variables="usb_clk_tracking_mode" ><![CDATA[
       \t/**
       \t * Set IRC48M USB clock modes
       \t *
       \t * @param usbIrc48mClockTrackingMode %tooltip\n\n
    ]]></template>
-   <template variable="usb_clk_recover_ctrl_restart_ifrtrim_en" ><![CDATA[
+   <template variables="usb_clk_recover_ctrl_restart_ifrtrim_en" ><![CDATA[
       \t * @param usbIrc48mClockResetTrim %tooltip
       \t */
       \tstatic void setIrc48mTracking(UsbIrc48mClockTrackingMode usbIrc48mClockTrackingMode, UsbIrc48mClockResetTrim usbIrc48mClockResetTrim=UsbIrc48mClockResetTrim_Keep) {

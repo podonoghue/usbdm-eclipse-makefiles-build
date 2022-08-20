@@ -86,7 +86,8 @@ $(/MCG/publicMethods: // No public methods found)
     *
     * @param[in]  clockInfo Clock mode to transition to
     *
-    * @return E_NO_ERROR on success
+    * @return E_NO_ERROR          on success
+    * @return E_CLOCK_INIT_FAILED on failure
     */
    static ErrorCode clockTransition(const ClockInfo &clockInfo);
 

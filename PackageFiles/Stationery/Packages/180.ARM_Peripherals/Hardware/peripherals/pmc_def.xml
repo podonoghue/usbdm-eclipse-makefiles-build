@@ -55,8 +55,8 @@
          \t//! Default value for Low Voltage Detect Status And Control 1 register
          \tstatic constexpr uint32_t pmc_lvdsc1  = \n
       ]]></template>
-      <template variable="pmc_lvdsc1_lvdie_lvdre" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template variable="pmc_lvdsc1_lvdv"        ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template variables="pmc_lvdsc1_lvdie_lvdre" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template variables="pmc_lvdsc1_lvdv"        ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
       <template>
       <![CDATA[
          \t   0;\n\n
@@ -90,8 +90,8 @@
       \t//! Default value for Low Voltage Detect Status And Control 2 register
       \tstatic constexpr uint32_t pmc_lvdsc2  = \n
       ]]></template>
-      <template variable="pmc_lvdsc2_lvwie" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template variable="pmc_lvdsc2_lvwv"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template variables="pmc_lvdsc2_lvwie" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template variables="pmc_lvdsc2_lvwv"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
       <template>
       <![CDATA[
          \t   0;\n\n
@@ -137,8 +137,8 @@
       \t//! Default value for Regulator Status And Control register
       \tstatic constexpr uint32_t pmc_regsc  = \n
       ]]></template>
-      <template variable="pmc_regsc_bgen"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template variable="pmc_regsc_bgbe"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template variables="pmc_regsc_bgen"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
+      <template variables="pmc_regsc_bgbe"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
       <template>
       <![CDATA[
          \t   0;\n\n

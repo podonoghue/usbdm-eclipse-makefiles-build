@@ -400,13 +400,13 @@
             /SIM/sim_clkdiv1_outdiv3[%(n)],
             /SIM/sim_clkdiv1_outdiv2[%(n)],  
             /SIM/sim_clkdiv1_outdiv1[%(n)]"     
-      ><![CDATA[\t   /// SIM CLKDIV1 System Clock Divider Register 1 %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// SIM CLKDIV1 System Clock Divider Register 1 %initExpression\n\n ]]></initialValueTemplate>
               
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
          variables=
             "/SIM/sim_clkdiv3_pllfll[%(n)]"     
-      ><![CDATA[\t   /// SIM CLKDIV3 System Clock Divider Register 3 %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// SIM CLKDIV3 System Clock Divider Register 3 %initExpression\n\n ]]></initialValueTemplate>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
@@ -426,26 +426,26 @@
             /SIM/sim_sopt2_fbsl,
             /SIM/sim_sopt2_rtcclkoutsel,
             /SIM/sim_sopt2_clkoutsel"     
-      ><![CDATA[\t   /// SIM SOPT2 System Options Register 2 %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// SIM SOPT2 System Options Register 2 %initExpression\n\n ]]></initialValueTemplate>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
          variables="
             mcgClockMode[%(n)]"     
-      ><![CDATA[\t   /// Clock Mode %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Clock Mode %initExpression\n\n ]]></initialValueTemplate>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
          variables=
             "/SMC/smc_pmctrl_runm[%(n)]"     
-      ><![CDATA[\t   /// Run Mode %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Run Mode %initExpression\n\n ]]></initialValueTemplate>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
          variables="
             mcg_c1_irclken[%(n)],
             mcg_c1_irefsten[%(n)]"     
-      ><![CDATA[\t   /// Control Register 1 - Excluding CLKS %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 1 - Excluding CLKS %initExpression\n\n ]]></initialValueTemplate>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
@@ -454,20 +454,20 @@
              mcg_c2_hgo0,
              mcg_c2_erefs0,
              mcg_c2_ircs[%(n)]"     
-      ><![CDATA[\t   /// Control Register 2 - %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 2 - %initExpression\n\n ]]></initialValueTemplate>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
          variables=
             "mcg_sc_fcrdiv[%(n)]"     
-      ><![CDATA[\t   /// Status and Control Register %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Status and Control Register %initExpression\n\n ]]></initialValueTemplate>
               
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 
          variables="
             mcg_mc_hircen[%(n)],
             mcg_mc_lirc_div2[%(n)]"     
-      ><![CDATA[\t   /// Miscellaneous Control Register - Excluding HIRCLPEN %expression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Miscellaneous Control Register - Excluding HIRCLPEN %initExpression\n\n ]]></initialValueTemplate>
               
       <template key="McgClockInfoEntries" namespace="all" ><![CDATA[
          \t},

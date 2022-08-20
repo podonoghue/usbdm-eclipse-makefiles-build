@@ -305,19 +305,20 @@
 
    <for keys="right" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux" >
       <setTemplate variables="%(right)" namespace="all" key="/PCR/pcr_enums" discardRepeats="true" ><![CDATA[
-         \tconstexpr inline PcrValue operator|(PcrValue op1, %enumClass op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }\n
+         \tconstexpr inline PcrValue operator|(PcrValue op1, %enumClass op2) { return static_cast<PcrValue>(static_cast<uint32_t>(op1)|static_cast<uint32_t>(op2)); }\n
       ]]></setTemplate>      
    </for>
    <for keys="left" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux" >
       <for keys="right" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux">
-         <if condition="%(left)&amp;&amp;%(right)">      
-            <setTemplate variables="%(left)" namespace="all" key="/PCR/pcr_enums"  discardRepeats="true" ><![CDATA[
-               \tconstexpr inline PcrValue operator|(%enumClass op1,
-            ]]></setTemplate>
-            <setTemplate variables="%(right)" namespace="all" key="/PCR/pcr_enums" discardRepeats="true" ><![CDATA[
-               %enumClass op2) { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }\n
-            ]]></setTemplate>
-         </if>
+         <setTemplate 
+            variables="%(left),%(right)"
+            condition="%(left)&amp;&amp;%(right)" 
+            namespace="all" 
+            key="/PCR/pcr_enums"
+            nonDefaultParams="2"  
+            discardRepeats="true" ><![CDATA[
+            \tconstexpr inline PcrValue operator|(%enumClass0 op1, %enumClass1 op2) { return static_cast<PcrValue>(static_cast<uint32_t>(op1)|static_cast<uint32_t>(op2)); }\n
+         ]]></setTemplate>
       </for>
    </for>
       
@@ -342,14 +343,13 @@
       \t *
       \t * Example1:
       \t * @code
-      \t * const RedLed::P init{PinDriveStrength_High, PinDriveMode_OpenDrain, PinSlewRate_Slow};
-      \t *
-      \t * init.setOutput();  // Enable listed interrupts and disable others
-      \t * @endcode
-      \t *
-      \t * Example2:
-      \t * @code
-      \t * const Gpio::P {PinDriveStrength_High, PinDriveMode_OpenDrain, PinSlewRate_Slow}.setoutput();
+      \t * // Initialisation value
+      \t * static constexpr PcrInit pcrInit(PinDriveStrength_High, PinSlewRate_Slow, PinPull_Down, PinFilter_Passive);
+      \t * 
+      \t * Initialise devices
+      \t * Led::setOutput(pcrInit.value);
+      \t * Switch::setInput(pcrInit.value);
+      \t * Cmt::setOutput(pcrInit.value);
       \t * @endcode
       \t */
       \tclass PcrInit {
@@ -396,7 +396,7 @@
       \t    */
       \t   constexpr PcrInit(
       %params
-      \t   ) : value (%expression) {
+      \t   ) : value (%paramExpression) {
       \t   }
       \t\n   
    ]]></setTemplate>
@@ -414,7 +414,7 @@
       \t    */
       \t   constexpr PcrInit(
       %params
-      \t   ) : value (%expression) {
+      \t   ) : value (%paramExpression) {
       \t   }
       \t\n   
    ]]></setTemplate>
@@ -432,7 +432,7 @@
       \t    */
       \t   constexpr PcrInit(
       %params
-      \t   ) : value (%expression) {
+      \t   ) : value (%paramExpression) {
       \t   }
       \t\n   
    ]]></setTemplate>
@@ -461,10 +461,10 @@
 
    <for keys="n" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux">      
       <setTemplate variables="%(n)" namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
-         \t   constexpr operator         %enumClass() const { return static_cast<%enumClass>(value&(%mask)); }
-         \t   constexpr operator         %enumClass()       { return static_cast<%enumClass>(value&(%mask)); }
-         \t   constexpr %enumClass       %enumParam() const { return static_cast<%enumClass>(value&(%mask)); }
-         \t   constexpr %enumClass       %enumParam()       { return static_cast<%enumClass>(value&(%mask)); }
+         \t   constexpr operator         %enumClass() const { return static_cast<%enumClass>(value&%mask); }
+         \t   constexpr operator         %enumClass()       { return static_cast<%enumClass>(value&%mask); }
+         \t   constexpr %enumClass       %enumParam() const { return static_cast<%enumClass>(value&%mask); }
+         \t   constexpr %enumClass       %enumParam()       { return static_cast<%enumClass>(value&%mask); }
          \n
       ]]></setTemplate>
    </for>
@@ -583,7 +583,7 @@
       key="/PCR/set_pcr"  
       discardRepeats="true" ><![CDATA[
       \t      // Set PCR register for pin
-      \t      *PCR = %expression;
+      \t      *PCR = %paramExpression;
       \t   }
       \t}\n
    ]]></setTemplate>
@@ -626,7 +626,7 @@
       \tstatic void setOutput(
             %params)  {
       \t
-      \t   setPCR(%expression);
+      \t   setPCR(%paramExpression);
       \t}\n
    ]]></setTemplate>
    
@@ -670,7 +670,7 @@
       \tstatic void setInput(
             %params)  {
       \t
-      \t   setPCR(%expression);
+      \t   setPCR(%paramExpression);
       \t}\n
    ]]></setTemplate>
    
@@ -684,7 +684,7 @@
          \tstatic void setPcrOption(%enumClass %enumParam)  {
          \t
          \t   if constexpr (portAddress != 0) {
-         \t      *PCR = (*PCR & ~(%mask))|%enumParam;
+         \t      *PCR = (*PCR & ~%mask)|%enumParam;
          \t   }
          \t}\n
       ]]></setTemplate>
@@ -715,7 +715,7 @@
          \t   // Set inactive pin state (if later made output)
          \t   setInactive();
          \t   // Configure PCR
-         \t   Pcr::setPCR(%expression);
+         \t   Pcr::setPCR(%paramExpression);
          \t}\n
    ]]></setTemplate>
 
@@ -745,7 +745,7 @@
          \t   // Make pin an output
          \t   setOut();
          \t   // Configure PCR
-         \t   Pcr::setPCR(%expression);
+         \t   Pcr::setPCR(%paramExpression);
          \t}\n
    ]]></setTemplate>
 
@@ -771,7 +771,7 @@
    \t   // Make input
    \t   setIn();
    \t   // Configure PCR
-   \t   Pcr::setPCR(%expression);
+   \t   Pcr::setPCR(%paramExpression);
    \t}\n
    ]]></setTemplate>
 
@@ -795,7 +795,7 @@
    \tstatic void setInOut(
                   %params)  {
    \t
-   \t   setInOut(%expression);
+   \t   setInOut(%paramExpression);
    \t}\n
    ]]></setTemplate>
 
@@ -820,7 +820,7 @@
    \tstatic void setOutput(
                   %params)  {
    \t
-   \t   setOutput(%expression);
+   \t   setOutput(%paramExpression);
    \t}\n
    ]]></setTemplate>
 
@@ -843,7 +843,7 @@
    \tstatic void setInput(
                   %params)  {
    \t                  
-   \t   setInOut(%expression);
+   \t   setInOut(%paramExpression);
    \t}\n
    ]]></setTemplate>
 

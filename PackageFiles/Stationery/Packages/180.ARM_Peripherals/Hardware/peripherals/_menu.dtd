@@ -269,48 +269,48 @@
    class Appears as classInfo variable with peripheral path e.g. /ADC/classInfo 
 -->
 <!ELEMENT template (#PCDATA)* >
-   <!ATTLIST template namespace (info|usbdm|class|all)  "info" >
-   <!ATTLIST template key              CDATA                  #IMPLIED >
-   <!ATTLIST template condition        CDATA                  #IMPLIED>
-   <!ATTLIST template variable         CDATA                  #IMPLIED>
-   <!ATTLIST template discardRepeats   (true)                 #IMPLIED>
+   <!ATTLIST template namespace              (info|usbdm|class|all)  "info" >
+   <!ATTLIST template key                    CDATA                   #IMPLIED >
+   <!ATTLIST template condition              CDATA                   #IMPLIED>
+   <!ATTLIST template variables              CDATA                   #IMPLIED>
+   <!ATTLIST template discardRepeats         (true)                  #IMPLIED>
+   <!ATTLIST template expressionOnOneLine    (true)                  #IMPLIED>
 
 <!ELEMENT setTemplate (#PCDATA)* >
-   <!ATTLIST setTemplate namespace         (info|usbdm|class|all)  "info" >
-   <!ATTLIST setTemplate key                 CDATA                  #IMPLIED >
-   <!ATTLIST setTemplate condition           CDATA                  #IMPLIED>
-   <!ATTLIST setTemplate variables           CDATA                  #REQUIRED>
-   <!ATTLIST setTemplate nonDefaultParams    CDATA                  "1">
-   <!ATTLIST setTemplate discardRepeats      (true)                 #IMPLIED>
-   <!ATTLIST setTemplate defaultParamValue   CDATA                  #IMPLIED>
+   <!ATTLIST setTemplate namespace              (info|usbdm|class|all)  "info" >
+   <!ATTLIST setTemplate key                    CDATA                   #IMPLIED >
+   <!ATTLIST setTemplate condition              CDATA                   #IMPLIED>
+   <!ATTLIST setTemplate variables              CDATA                   #REQUIRED>
+   <!ATTLIST setTemplate discardRepeats         (true)                  #IMPLIED>
+   <!ATTLIST setTemplate expressionOnOneLine    (true)                  #IMPLIED>
+   <!ATTLIST setTemplate nonDefaultParams       CDATA                   "1">
+   <!ATTLIST setTemplate defaultParamValue      CDATA                   #IMPLIED>
 
 <!ELEMENT initialValueTemplate (#PCDATA|variable|for)* >
-   <!ATTLIST initialValueTemplate namespace        (info|usbdm|class|all)  "info" >
-   <!ATTLIST initialValueTemplate key               CDATA                  #IMPLIED >
-   <!ATTLIST initialValueTemplate variables         CDATA                  #REQUIRED>
-   <!ATTLIST initialValueTemplate terminator        CDATA                  #IMPLIED>
-   <!ATTLIST initialValueTemplate discardRepeats   (true)                 #IMPLIED>
+   <!ATTLIST initialValueTemplate namespace              (info|usbdm|class|all) "info" >
+   <!ATTLIST initialValueTemplate key                    CDATA                  #IMPLIED >
+   <!ATTLIST initialValueTemplate condition              CDATA                  #IMPLIED>
+   <!ATTLIST initialValueTemplate variables              CDATA                  #REQUIRED>
+   <!ATTLIST initialValueTemplate discardRepeats         (true)                 #IMPLIED>
+   <!ATTLIST initialValueTemplate terminator             CDATA                  #IMPLIED>
+   <!ATTLIST initialValueTemplate expressionOnOneLine    (true)                 #IMPLIED>
 
 <!ELEMENT enumTemplate (#PCDATA)* >
-   <!ATTLIST enumTemplate namespace     (info|usbdm|class|all)  "info" >
-   <!ATTLIST enumTemplate key           CDATA                   #IMPLIED >
-   <!ATTLIST enumTemplate variable      CDATA                   #IMPLIED>
-   <!ATTLIST enumTemplate template      CDATA                   #IMPLIED>
-   <!ATTLIST enumTemplate valueFormat   CDATA                   #IMPLIED>
-   <!ATTLIST enumTemplate enumStem      CDATA                   #IMPLIED> <!-- Type for enum and first part of enum name -->
-   <!ATTLIST enumTemplate typeName      CDATA                   #IMPLIED> <!-- as for enumStem -->
-   <!ATTLIST enumTemplate enumType      CDATA                   #IMPLIED> <!-- Type to use for enums e.g.uint8_t -->
-   <!ATTLIST enumTemplate discardRepeats   (true)                 #IMPLIED>
+   <!ATTLIST enumTemplate namespace       (info|usbdm|class|all)  "info" >
+   <!ATTLIST enumTemplate key             CDATA                   #IMPLIED >
+   <!ATTLIST enumTemplate condition       CDATA                   #IMPLIED>
+   <!ATTLIST enumTemplate variable        CDATA                   #REQUIRED>
+   <!ATTLIST enumTemplate discardRepeats  (true)                  #IMPLIED>
+   <!ATTLIST enumTemplate template        CDATA                   #IMPLIED>
 
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
-   <!ATTLIST clockCodeTemplate namespace    (info|usbdm|class|all) "info" >
-   <!ATTLIST clockCodeTemplate key          CDATA               #IMPLIED >
-   <!ATTLIST clockCodeTemplate condition    CDATA               #IMPLIED>
-   <!ATTLIST clockCodeTemplate variable     CDATA               #IMPLIED>
-   <!ATTLIST clockCodeTemplate typeName     CDATA               #IMPLIED>
-   <!ATTLIST clockCodeTemplate returnFormat CDATA               #IMPLIED>
-   <!ATTLIST clockCodeTemplate mask         CDATA               #IMPLIED>
-   <!ATTLIST clockCodeTemplate discardRepeats   (true)                 #IMPLIED>
+   <!ATTLIST clockCodeTemplate namespace              (info|usbdm|class|all) "info" >
+   <!ATTLIST clockCodeTemplate key                    CDATA               #IMPLIED >
+   <!ATTLIST clockCodeTemplate condition              CDATA               #IMPLIED>
+   <!ATTLIST clockCodeTemplate variable               CDATA               #REQUIRED>
+   <!ATTLIST clockCodeTemplate discardRepeats         (true)              #IMPLIED>
+   <!ATTLIST clockCodeTemplate returnFormat           CDATA               #IMPLIED>
+   <!ATTLIST clockCodeTemplate expressionOnOneLine    (true)              #IMPLIED>
 
 <!ELEMENT for (%gui_items;|%structure_items;|%control_items;|template)* >
    <!ATTLIST for keys                 CDATA        #REQUIRED>

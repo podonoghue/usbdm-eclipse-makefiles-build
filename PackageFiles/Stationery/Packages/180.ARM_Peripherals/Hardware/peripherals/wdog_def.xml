@@ -101,7 +101,7 @@
          wdog_stctrlh_wdogen"
    ><![CDATA[
       \t//! Watchdog Status and Control Register High
-      \tstatic constexpr uint32_t stctrlh = %expression\n\n
+      \tstatic constexpr uint32_t stctrlh = %initExpression\n\n
    ]]></initialValueTemplate>
    
    <template key="/SYSTEM/Includes" namespace="all" ><![CDATA[
@@ -147,7 +147,7 @@
       \t   // Read-back to delay until change effected
       \t   (void)(wdog->UNLOCK);
       \t
-      \t   %register = %expression;
+      \t   %register = %paramExpression;
       \t}
    ]]></setTemplate>
    

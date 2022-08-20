@@ -89,16 +89,16 @@
    <item key="$signal$ADC0_SE9_codeIdentifier"             value="Analogue_A4" />
    <item key="$signal$ADC0_SE9_descriptionSetting"         value="A4" />
    <item key="$signal$EXTAL32_descriptionSetting"          value="Reserved(EXTAL32)" />
-   <item key="$signal$FTM0_CH2_codeIdentifier"             value="RedLED_PWM" />
-   <item key="$signal$FTM0_CH4_codeIdentifier"             value="GreenLED_PWM" />
-   <item key="$signal$FTM0_CH7_codeIdentifier"             value="BlueLED_PWM" />
+   <item key="$signal$FTM0_CH2_codeIdentifier"             value="RGB_Red_Pwm" />
+   <item key="$signal$FTM0_CH4_codeIdentifier"             value="RGB_Green_Pwm" />
+   <item key="$signal$FTM0_CH7_codeIdentifier"             value="RGB_Blue_Pwm" />
    <item key="$signal$GPIOA_12_codeIdentifier"             value="Digital_D8/Lcd_Reset" />
    <item key="$signal$GPIOA_12_descriptionSetting"         value="D8/LCD Reset" />
    <item key="$signal$GPIOA_13_codeIdentifier"             value="Digital_D24" />
    <item key="$signal$GPIOA_13_descriptionSetting"         value="D24" />
    <item key="$signal$GPIOA_1_codeIdentifier"              value="Digital_A1" />
    <item key="$signal$GPIOA_1_descriptionSetting"          value="D5" />
-   <item key="$signal$GPIOA_2_codeIdentifier"              value="Digital_D9/BlueLed" />
+   <item key="$signal$GPIOA_2_codeIdentifier"              value="Digital_D9/RGB_Blue" />
    <item key="$signal$GPIOA_2_descriptionSetting"          value="D9/Blue LED/LCD CS" />
    <item key="$signal$GPIOA_4_codeIdentifier"              value="Digital_D21" />
    <item key="$signal$GPIOA_4_descriptionSetting"          value="D21" />
@@ -122,7 +122,7 @@
    <item key="$signal$GPIOC_1_descriptionSetting"          value="A1" />
    <item key="$signal$GPIOC_2_codeIdentifier"              value="Digital_D10/Lcd_BackLight" />
    <item key="$signal$GPIOC_2_descriptionSetting"          value="D10/LCD Light" />
-   <item key="$signal$GPIOC_3_codeIdentifier"              value="Digital_D6/RedLed" />
+   <item key="$signal$GPIOC_3_codeIdentifier"              value="Digital_D6/RGB_Red" />
    <item key="$signal$GPIOC_3_descriptionSetting"          value="D6/RedLed" />
    <item key="$signal$GPIOC_4_codeIdentifier"              value="Digital_D7" />
    <item key="$signal$GPIOC_4_descriptionSetting"          value="D7" />
@@ -144,7 +144,7 @@
    <item key="$signal$GPIOD_2_descriptionSetting"          value="D11" />
    <item key="$signal$GPIOD_3_codeIdentifier"              value="Digital_D12" />
    <item key="$signal$GPIOD_3_descriptionSetting"          value="D12" />
-   <item key="$signal$GPIOD_4_codeIdentifier"              value="Digital_D3/GreenLed" />
+   <item key="$signal$GPIOD_4_codeIdentifier"              value="Digital_D3/RGB_Green" />
    <item key="$signal$GPIOD_4_descriptionSetting"          value="D4/Green LED" />
    <item key="$signal$GPIOD_5_codeIdentifier"              value="Digital_A3" />
    <item key="$signal$GPIOD_5_descriptionSetting"          value="A3" />
@@ -174,9 +174,11 @@
    <item key="/HARDWARE/Analogue1"                         value="Analogue_A1" />
    <item key="/HARDWARE/Digital0"                          value="Digital_D0" />
    <item key="/HARDWARE/Digital1"                          value="Digital_D1" />
-   <item key="/HARDWARE/Led1"                              value="RedLed" />
-   <item key="/HARDWARE/Led2"                              value="GreenLed" />
-   <item key="/HARDWARE/Led3"                              value="BlueLed" />
+   <item key="/HARDWARE/Ftm1"                              value="RGB_Red_Pwm" />
+   <item key="/HARDWARE/Ftm2"                              value="RGB_Green_Pwm" />
+   <item key="/HARDWARE/Led1"                              value="RGB_Red" />
+   <item key="/HARDWARE/Led2"                              value="RGB_Green" />
+   <item key="/HARDWARE/Led3"                              value="RGB_Blue" />
    <item key="/HARDWARE/Switch1"                           value="Digital_D0" />
    <item key="/LLWU/llwu_filt1_filtsel"                    value="0" />
    <item key="/LLWU/llwu_filt2_filtsel"                    value="0" />

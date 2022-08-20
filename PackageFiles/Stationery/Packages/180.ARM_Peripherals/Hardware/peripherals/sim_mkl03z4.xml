@@ -8,7 +8,7 @@
 
    <xi:include href="_simCommon.xml"/>
 
-   <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) do not share XTAL/EXTAL pins -->
+   <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
    <constant key="rtc_shared" />
  
    <category name="COPC" description="COP Control Register">
@@ -16,15 +16,15 @@
       <choiceOption key="sim_copc_copt" 
          description="COP Watchdog Timeout"
          enumStem="SimCopDuration"
-         valueFormat="(%s)"
+         valueFormat="SIM_COPC_COPCLKS(%s),SIM_COPC_COPT(%s)"
          toolTip="This write-once field selects the Computer Operating Properly Timeout" >
-         <choice value="SIM_COPC_COPCLKS(0)|SIM_COPC_COPT(0)" enum="Disabled"          name="Disabled" />
-         <choice value="SIM_COPC_COPCLKS(0)|SIM_COPC_COPT(1)" enum="32_cycles"         name="Timeout after 2^5 clock cycles" />
-         <choice value="SIM_COPC_COPCLKS(0)|SIM_COPC_COPT(2)" enum="256_cycles"        name="Timeout after 2^8 clock cycles" />
-         <choice value="SIM_COPC_COPCLKS(0)|SIM_COPC_COPT(3)" enum="1024_cycles"       name="Timeout after 2^10 clock cycles" />
-         <choice value="SIM_COPC_COPCLKS(1)|SIM_COPC_COPT(1)" enum="8192_cycles"       name="Timeout after 2^13 clock cycles" />
-         <choice value="SIM_COPC_COPCLKS(1)|SIM_COPC_COPT(2)" enum="65536_cycles"      name="Timeout after 2^16 clock cycles" />
-         <choice value="SIM_COPC_COPCLKS(1)|SIM_COPC_COPT(3)" enum="262144_cycles"     name="Timeout after 2^18 clock cycles" />
+         <choice value="0,0" enum="Disabled"          name="Disabled" />
+         <choice value="0,1" enum="32_cycles"         name="Timeout after 2^5 clock cycles" />
+         <choice value="0,2" enum="256_cycles"        name="Timeout after 2^8 clock cycles" />
+         <choice value="0,3" enum="1024_cycles"       name="Timeout after 2^10 clock cycles" />
+         <choice value="1,1" enum="8192_cycles"       name="Timeout after 2^13 clock cycles" />
+         <choice value="1,2" enum="65536_cycles"      name="Timeout after 2^16 clock cycles" />
+         <choice value="1,3" enum="262144_cycles"     name="Timeout after 2^18 clock cycles" />
       </choiceOption>
 
       <choiceOption key="sim_copc_copclksel" 
@@ -216,15 +216,15 @@
       <for keys="adc" values="0">
          <choiceOption key="sim_sopt7_adc%(adc)trigger" 
             enumStem="SimAdc%(adc)TriggerMode"
-            valueFormat="(%s)"
+            valueFormat="SIM_SOPT7_ADC%(adc)ALTTRGEN(%s),SIM_SOPT7_ADC%(adc)PRETRGSEL(%s)"
             description="ADC%(adc) trigger mode"
             toolTip="Alternative conversion triggers for ADC\n
                _Tpm              - ADC is triggered by TPM. Pre-triggers are TPM channel 0 (A) and channel 1 (B)\n
                _Alt_PreTrigger_0 - ADC is triggered by SimAdc%(adc)Trigger selection and uses pretrigger 0 = A (SC1[0]/R[0])\n
                _Alt_PreTrigger_1 - ADC is triggered by SimAdc%(adc)Trigger selection and uses pretrigger 1 = B (SC1[1]/R[1])" >
-            <choice value="SIM_SOPT7_ADC%(adc)ALTTRGEN(0)"                                   name="Triggered by TPM Ch0 and Ch1" enum="Tpm"  isDefault="true" />
-            <choice value="SIM_SOPT7_ADC%(adc)ALTTRGEN(1)|SIM_SOPT7_ADC%(adc)PRETRGSEL(0)"   name="Pre-trigger 0 = A (SC1[0])"   enum="Alt_PreTrigger_0" />
-            <choice value="SIM_SOPT7_ADC%(adc)ALTTRGEN(1)|SIM_SOPT7_ADC%(adc)PRETRGSEL(1)"   name="Pre-trigger 1 = B (SC1[1])"   enum="Alt_PreTrigger_1" />
+            <choice value="0,0"   name="Triggered by TPM Ch0 and Ch1" enum="Tpm"  isDefault="true" />
+            <choice value="1,0"   name="Pre-trigger 0 = A (SC1[0])"   enum="Alt_PreTrigger_0" />
+            <choice value="1,1"   name="Pre-trigger 1 = B (SC1[1])"   enum="Alt_PreTrigger_1" />
          </choiceOption>
       
          <choiceOption key="sim_sopt7_adc%(adc)trgsel"
