@@ -210,7 +210,9 @@
    <!ATTLIST choiceOption register            CDATA        #IMPLIED>
    <!ATTLIST choiceOption replace             CDATA        #IMPLIED>
    <!ATTLIST choiceOption valueFormat         CDATA        #IMPLIED> <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
-  
+   <!ATTLIST choiceOption enumText            CDATA        #IMPLIED> <!-- Text to add to enum generated from choices -->
+   <!ATTLIST choiceOption disabledValue       CDATA        #IMPLIED>
+
 <!ELEMENT addChoices ((choice)*) >
    <!ATTLIST addChoices key                 CDATA        #REQUIRED>
   
@@ -225,7 +227,7 @@
    <!ATTLIST choice code                      CDATA        #IMPLIED>
    <!ATTLIST choice hidden                    CDATA        #IMPLIED>
 
-<!ELEMENT binaryOption (choice, choice?) >
+<!ELEMENT binaryOption (choice?, choice?) >
    <!ATTLIST binaryOption condition     CDATA        #IMPLIED>
    <!ATTLIST binaryOption key           CDATA        #REQUIRED>
    <!ATTLIST binaryOption name          CDATA        #IMPLIED>
@@ -245,6 +247,7 @@
    <!ATTLIST binaryOption register      CDATA        #IMPLIED>
    <!ATTLIST binaryOption valueFormat   CDATA        #IMPLIED>
    <!ATTLIST binaryOption target        CDATA        #IMPLIED>
+   <!ATTLIST binaryOption enumText      CDATA        #IMPLIED> <!-- Text to add to enum generated from choices -->
 
 <!ELEMENT irqOption EMPTY >
    <!ATTLIST irqOption condition     CDATA        #IMPLIED>
@@ -269,31 +272,40 @@
    class Appears as classInfo variable with peripheral path e.g. /ADC/classInfo 
 -->
 <!ELEMENT template (#PCDATA)* >
-   <!ATTLIST template namespace              (info|usbdm|class|all)  "info" >
-   <!ATTLIST template key                    CDATA                   #IMPLIED >
-   <!ATTLIST template condition              CDATA                   #IMPLIED>
-   <!ATTLIST template variables              CDATA                   #IMPLIED>
-   <!ATTLIST template discardRepeats         (true)                  #IMPLIED>
-   <!ATTLIST template expressionOnOneLine    (true)                  #IMPLIED>
+   <!ATTLIST template namespace                 (info|usbdm|class|all)  "info" >
+   <!ATTLIST template key                       CDATA                   #IMPLIED >
+   <!ATTLIST template condition                 CDATA                   #IMPLIED>
+   <!ATTLIST template variables                 CDATA                   #IMPLIED>
+   <!ATTLIST template discardRepeats            (true)                  #IMPLIED>
+   <!ATTLIST template initExpressionOnSameLine  (true)                  #IMPLIED>
+   <!ATTLIST template paramPadding              CDATA                   #IMPLIED>
+   <!ATTLIST template linePadding               CDATA                   #IMPLIED>
 
 <!ELEMENT setTemplate (#PCDATA)* >
-   <!ATTLIST setTemplate namespace              (info|usbdm|class|all)  "info" >
-   <!ATTLIST setTemplate key                    CDATA                   #IMPLIED >
-   <!ATTLIST setTemplate condition              CDATA                   #IMPLIED>
-   <!ATTLIST setTemplate variables              CDATA                   #REQUIRED>
-   <!ATTLIST setTemplate discardRepeats         (true)                  #IMPLIED>
-   <!ATTLIST setTemplate expressionOnOneLine    (true)                  #IMPLIED>
-   <!ATTLIST setTemplate nonDefaultParams       CDATA                   "1">
-   <!ATTLIST setTemplate defaultParamValue      CDATA                   #IMPLIED>
+   <!ATTLIST setTemplate namespace                 (info|usbdm|class|all)  "info" >
+   <!ATTLIST setTemplate key                       CDATA                   #IMPLIED >
+   <!ATTLIST setTemplate condition                 CDATA                   #IMPLIED>
+   <!ATTLIST setTemplate variables                 CDATA                   #REQUIRED>
+   <!ATTLIST setTemplate discardRepeats            (true)                  #IMPLIED>
+   <!ATTLIST setTemplate terminator                CDATA                   #IMPLIED> <!-- Terminator for initExpression -->
+   <!ATTLIST setTemplate separator                 CDATA                   #IMPLIED> <!-- Separator for initExpression -->
+   <!ATTLIST setTemplate initExpressionOnSameLine  (true)                  #IMPLIED>
+   <!ATTLIST setTemplate nonDefaultParams          CDATA                   #IMPLIED>
+   <!ATTLIST setTemplate defaultParamValue         CDATA                   #IMPLIED>
+   <!ATTLIST setTemplate paramPadding              CDATA                   #IMPLIED>
+   <!ATTLIST setTemplate linePadding               CDATA                   #IMPLIED>
 
 <!ELEMENT initialValueTemplate (#PCDATA|variable|for)* >
-   <!ATTLIST initialValueTemplate namespace              (info|usbdm|class|all) "info" >
-   <!ATTLIST initialValueTemplate key                    CDATA                  #IMPLIED >
-   <!ATTLIST initialValueTemplate condition              CDATA                  #IMPLIED>
-   <!ATTLIST initialValueTemplate variables              CDATA                  #REQUIRED>
-   <!ATTLIST initialValueTemplate discardRepeats         (true)                 #IMPLIED>
-   <!ATTLIST initialValueTemplate terminator             CDATA                  #IMPLIED>
-   <!ATTLIST initialValueTemplate expressionOnOneLine    (true)                 #IMPLIED>
+   <!ATTLIST initialValueTemplate namespace                 (info|usbdm|class|all) "info" >
+   <!ATTLIST initialValueTemplate key                       CDATA                   #IMPLIED >
+   <!ATTLIST initialValueTemplate condition                 CDATA                   #IMPLIED>
+   <!ATTLIST initialValueTemplate variables                 CDATA                   #REQUIRED>
+   <!ATTLIST initialValueTemplate discardRepeats            (true)                  #IMPLIED>
+   <!ATTLIST initialValueTemplate terminator                CDATA                   #IMPLIED> <!-- Terminator for initExpression -->
+   <!ATTLIST initialValueTemplate separator                 CDATA                   #IMPLIED> <!-- Separator for initExpression -->
+   <!ATTLIST initialValueTemplate initExpressionOnSameLine  (true)                  #IMPLIED>
+   <!ATTLIST initialValueTemplate paramPadding              CDATA                   #IMPLIED>
+   <!ATTLIST initialValueTemplate linePadding               CDATA                   #IMPLIED>
 
 <!ELEMENT enumTemplate (#PCDATA)* >
    <!ATTLIST enumTemplate namespace       (info|usbdm|class|all)  "info" >
@@ -304,21 +316,28 @@
    <!ATTLIST enumTemplate template        CDATA                   #IMPLIED>
 
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
-   <!ATTLIST clockCodeTemplate namespace              (info|usbdm|class|all) "info" >
-   <!ATTLIST clockCodeTemplate key                    CDATA               #IMPLIED >
-   <!ATTLIST clockCodeTemplate condition              CDATA               #IMPLIED>
-   <!ATTLIST clockCodeTemplate variable               CDATA               #REQUIRED>
-   <!ATTLIST clockCodeTemplate discardRepeats         (true)              #IMPLIED>
-   <!ATTLIST clockCodeTemplate returnFormat           CDATA               #IMPLIED>
-   <!ATTLIST clockCodeTemplate expressionOnOneLine    (true)              #IMPLIED>
+   <!ATTLIST clockCodeTemplate namespace                 (info|usbdm|class|all)  "info" >
+   <!ATTLIST clockCodeTemplate key                       CDATA                   #IMPLIED >
+   <!ATTLIST clockCodeTemplate condition                 CDATA                   #IMPLIED>
+   <!ATTLIST clockCodeTemplate variable                  CDATA                   #REQUIRED>
+   <!ATTLIST clockCodeTemplate discardRepeats            (true)                  #IMPLIED>
+   <!ATTLIST clockCodeTemplate returnFormat              CDATA                   #IMPLIED> <!-- Format for return value in generated case statement -->
+   <!ATTLIST clockCodeTemplate initExpressionOnSameLine  (true)                  #IMPLIED> <!-- No newline before initExpression (suitable fora single initialisation value) -->
+   <!ATTLIST clockCodeTemplate paramPadding              CDATA                   #IMPLIED> <!-- Padding applied to parameters if more than 1 parameter -->
+   <!ATTLIST clockCodeTemplate linePadding               CDATA                   #IMPLIED> <!-- Padding applied to start of line -->
 
-<!ELEMENT for (%gui_items;|%structure_items;|%control_items;|template)* >
+<!ELEMENT for (%gui_items;|%structure_items;|%control_items;|template|break|continue)* >
    <!ATTLIST for keys                 CDATA        #REQUIRED>
    <!ATTLIST for values               CDATA        #IMPLIED>
    <!ATTLIST for dim                  CDATA        #IMPLIED>
 
-<!ELEMENT if ( (%gui_items;|%structure_items;|%control_items;|template|else_if)*, 
-               (else?, (%gui_items;|%structure_items;|%control_items;|template)*))? >
+<!ELEMENT break EMPTY >
+
+<!ELEMENT continue EMPTY >
+
+
+<!ELEMENT if ( (%gui_items;|%structure_items;|%control_items;|template|else_if|break|continue)*, 
+               (else?, (%gui_items;|%structure_items;|%control_items;|template|break|continue)*))? >
    <!ATTLIST if condition             CDATA        #REQUIRED>
 
 <!ELEMENT else EMPTY >

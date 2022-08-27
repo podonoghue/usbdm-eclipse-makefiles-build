@@ -13,6 +13,7 @@
 #include "system.h"
 #include "stdbool.h"
 #include "pin_mapping.h"
+#include "sim.h"
 $(/MCG/Includes:// No extra includes found)
 #include "mcg.h"
 /*
@@ -458,7 +459,7 @@ void Mcg::defaultConfigure() {
    // Transition to desired clock mode
    clockTransition(clockInfo[ClockConfig_default]);
 
-   SimInfo::initRegs();
+   Sim::initRegs();
 
    enableNvicInterrupts();
 

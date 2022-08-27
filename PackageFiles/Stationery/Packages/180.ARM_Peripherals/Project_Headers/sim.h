@@ -35,6 +35,9 @@ namespace USBDM {
  * @image html KinetisPowerModes.png
  */
 class Sim : public SimInfo {
+public:
+$(/SIM/DefaultInitValue: // /SIM/DefaultInitValue not found)
+
 };
 
 /**

@@ -5,7 +5,6 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Miscellaneous Control Module (MCM)">
 
    <constant key="irqOption_present"                     />
-   <constant key="mcm_iscr_floating_present"             />
 
    <xi:include href="mcm_def.xml"/>
 

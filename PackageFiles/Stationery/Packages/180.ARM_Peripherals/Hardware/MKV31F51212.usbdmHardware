@@ -170,6 +170,52 @@
       </peripheral>
       <peripheral baseName="LLWU"     instance=""         version="llwu_me_pe4_filt2_mkv31f">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
+         <param name="llwu_f2_wuf10_present" key="/LLWU/llwu_f2_wuf10_present" value="true" />
+         <param name="llwu_f2_wuf11_present" key="/LLWU/llwu_f2_wuf11_present" value="true" />
+         <param name="llwu_f2_wuf12_present" key="/LLWU/llwu_f2_wuf12_present" value="true" />
+         <param name="llwu_f2_wuf13_present" key="/LLWU/llwu_f2_wuf13_present" value="true" />
+         <param name="llwu_f2_wuf14_present" key="/LLWU/llwu_f2_wuf14_present" value="true" />
+         <param name="llwu_f2_wuf15_present" key="/LLWU/llwu_f2_wuf15_present" value="true" />
+         <param name="llwu_f2_wuf8_present" key="/LLWU/llwu_f2_wuf8_present" value="true" />
+         <param name="llwu_f2_wuf9_present" key="/LLWU/llwu_f2_wuf9_present" value="true" />
+         <param name="llwu_filt1_filte_present" key="/LLWU/llwu_filt1_filte_present" value="true" />
+         <param name="llwu_filt1_filtf_present" key="/LLWU/llwu_filt1_filtf_present" value="true" />
+         <param name="llwu_filt1_filtsel_present" key="/LLWU/llwu_filt1_filtsel_present" value="true" />
+         <param name="llwu_filt2_filte_present" key="/LLWU/llwu_filt2_filte_present" value="true" />
+         <param name="llwu_filt2_filtf_present" key="/LLWU/llwu_filt2_filtf_present" value="true" />
+         <param name="llwu_filt2_filtsel_present" key="/LLWU/llwu_filt2_filtsel_present" value="true" />
+         <param name="llwu_me_wume0_present" key="/LLWU/llwu_me_wume0_present" value="true" />
+         <param name="llwu_me_wume1_present" key="/LLWU/llwu_me_wume1_present" value="true" />
+         <param name="llwu_me_wume2_present" key="/LLWU/llwu_me_wume2_present" value="true" />
+         <param name="llwu_me_wume3_present" key="/LLWU/llwu_me_wume3_present" value="true" />
+         <param name="llwu_me_wume4_present" key="/LLWU/llwu_me_wume4_present" value="true" />
+         <param name="llwu_me_wume5_present" key="/LLWU/llwu_me_wume5_present" value="true" />
+         <param name="llwu_me_wume6_present" key="/LLWU/llwu_me_wume6_present" value="true" />
+         <param name="llwu_me_wume7_present" key="/LLWU/llwu_me_wume7_present" value="true" />
+         <param name="llwu_pe1_wupe0_present" key="/LLWU/llwu_pe1_wupe0_present" value="true" />
+         <param name="llwu_pe1_wupe1_present" key="/LLWU/llwu_pe1_wupe1_present" value="true" />
+         <param name="llwu_pe1_wupe2_present" key="/LLWU/llwu_pe1_wupe2_present" value="true" />
+         <param name="llwu_pe1_wupe3_present" key="/LLWU/llwu_pe1_wupe3_present" value="true" />
+         <param name="llwu_pe2_wupe4_present" key="/LLWU/llwu_pe2_wupe4_present" value="true" />
+         <param name="llwu_pe2_wupe5_present" key="/LLWU/llwu_pe2_wupe5_present" value="true" />
+         <param name="llwu_pe2_wupe6_present" key="/LLWU/llwu_pe2_wupe6_present" value="true" />
+         <param name="llwu_pe2_wupe7_present" key="/LLWU/llwu_pe2_wupe7_present" value="true" />
+         <param name="llwu_pe3_wupe10_present" key="/LLWU/llwu_pe3_wupe10_present" value="true" />
+         <param name="llwu_pe3_wupe11_present" key="/LLWU/llwu_pe3_wupe11_present" value="true" />
+         <param name="llwu_pe3_wupe8_present" key="/LLWU/llwu_pe3_wupe8_present" value="true" />
+         <param name="llwu_pe3_wupe9_present" key="/LLWU/llwu_pe3_wupe9_present" value="true" />
+         <param name="llwu_pe4_wupe12_present" key="/LLWU/llwu_pe4_wupe12_present" value="true" />
+         <param name="llwu_pe4_wupe13_present" key="/LLWU/llwu_pe4_wupe13_present" value="true" />
+         <param name="llwu_pe4_wupe14_present" key="/LLWU/llwu_pe4_wupe14_present" value="true" />
+         <param name="llwu_pe4_wupe15_present" key="/LLWU/llwu_pe4_wupe15_present" value="true" />
+         <param name="llwu_pf1_wuf0_present" key="/LLWU/llwu_pf1_wuf0_present" value="true" />
+         <param name="llwu_pf1_wuf1_present" key="/LLWU/llwu_pf1_wuf1_present" value="true" />
+         <param name="llwu_pf1_wuf2_present" key="/LLWU/llwu_pf1_wuf2_present" value="true" />
+         <param name="llwu_pf1_wuf3_present" key="/LLWU/llwu_pf1_wuf3_present" value="true" />
+         <param name="llwu_pf1_wuf4_present" key="/LLWU/llwu_pf1_wuf4_present" value="true" />
+         <param name="llwu_pf1_wuf5_present" key="/LLWU/llwu_pf1_wuf5_present" value="true" />
+         <param name="llwu_pf1_wuf6_present" key="/LLWU/llwu_pf1_wuf6_present" value="true" />
+         <param name="llwu_pf1_wuf7_present" key="/LLWU/llwu_pf1_wuf7_present" value="true" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
@@ -216,9 +262,6 @@
          <param name="smc_stopctrl_llsm_present" key="/SMC/smc_stopctrl_llsm_present" value="true" />
          <param name="smc_stopctrl_porpo_present" key="/SMC/smc_stopctrl_porpo_present" value="true" />
          <param name="smc_stopctrl_pstopo_present" key="/SMC/smc_stopctrl_pstopo_present" value="true" />
-         <param name="smc_vllsctrl_llsm_present" key="/SMC/smc_vllsctrl_llsm_present" value="true" />
-         <param name="smc_vllsctrl_porpo_present" key="/SMC/smc_vllsctrl_porpo_present" value="true" />
-         <param name="smc_vllsctrl_pstopo_present" key="/SMC/smc_vllsctrl_pstopo_present" value="true" />
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        version="spi0_mk_pcsis6">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />

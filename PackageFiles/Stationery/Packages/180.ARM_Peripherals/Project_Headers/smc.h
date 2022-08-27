@@ -67,7 +67,7 @@ protected:
 __attribute__((section(".ram_functions")))
 __attribute__((long_call))
 __attribute__((noinline))
-   static void enterStopMode() {
+   static void _enterStopMode() {
       // Set deep sleep
       SCB->SCR = SCB->SCR | SCB_SCR_SLEEPDEEP_Msk;
       (void)SCB->SCR;
@@ -139,17 +139,49 @@ public:
     */
    static ErrorCode enterStopMode(SmcStopMode smcStopMode) {
       Info::setStopMode(smcStopMode);
-      enterStopMode();
+
+      return enterStopMode();
+   }
+
+   /**
+    * Enter Stop Mode (STOP, VLPS, LLSx, VLLSx)  with the current STOP settings
+    * (ARM core DEEPSLEEP mode)
+    *
+    * The processor will stop execution and enter the given STOP mode.\n
+    * Peripherals affected will depend on the stop mode selected.
+    *
+    *
+    * @return E_NO_ERROR    Processor entered STOP
+    * @return E_INTERRUPTED Processor failed to enter STOP mode due to interrupt
+    */
+   static ErrorCode enterStopMode() {
+      /*
+       * Actions required before entry to STOP modes
+       */
+$(/SMC/preEnterStopMode: // /SMC/preEnterStopMode not found)
+      _enterStopMode();
+      /*
+       * Actions required after exit from STOP modes
+       */
+$(/SMC/postExitStopMode: // /SMC/postExitStopMode not found)
       return (smc->PMCTRL & SMC_PMCTRL_STOPA_MASK)?E_INTERRUPTED:E_NO_ERROR;
    }
 
    /**
-    * Enter Deep Sleep mode with the current STOP settings
+    * Enter Stop Mode (STOP, VLPS, LLSx, VLLSx)  with given STOP settings
+    * (ARM core DEEPSLEEP mode)
     *
-    * See enterStopMode();
+    * The processor will stop execution and enter the given STOP mode.\n
+    * Peripherals affected will depend on the stop mode selected.
+    *
+    * @param smcInit    Settings to apply before entering STOP mode
+    *
+    * @return E_NO_ERROR    Processor entered STOP
+    * @return E_INTERRUPTED Processor failed to enter STOP mode due to interrupt
     */
-   static void deepSleep() {
-      enterStopMode();
+   static ErrorCode enterStopMode(typename Info::Init smcInit) {
+      smcInit.setOptions();
+      return enterStopMode();
    }
 
    /**
@@ -192,15 +224,6 @@ public:
    }
 
    /**
-    * Enter SLEEP mode
-    *
-    * See enterWaitMode();
-    */
-   static void sleep() {
-      enterWaitMode();
-   }
-
-   /**
     * Set Sleep-on-exit action
     *
     * If enabled, when the processor completes the execution of all exception handlers it
@@ -221,8 +244,9 @@ public:
       (void)(SCB->SCR);
    }
    
-$(/SMC/enterRunMode:    #error "Variable /SMC/enterRunMode not found" )   
-$(/SMC/enterPowerMode:  #error "Variable /SMC/enterPowerMode not found" )   
+$(/SMC/enterRunMode:    #error "/SMC/enterRunMode not found" )   
+$(/SMC/enterPowerMode:  #error "/SMC/enterPowerMode not found" )   
+$(/SMC/DefaultInitValue: // /SMC/DefaultInitValue not found)
 };
 
 $(/SMC/declarations: // No declarations found)

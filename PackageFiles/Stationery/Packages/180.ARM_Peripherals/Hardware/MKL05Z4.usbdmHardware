@@ -155,6 +155,36 @@
       <peripheral baseName="LLWU"     instance=""         version="llwu_me_pe2_filt2">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
+         <param name="llwu_filt1_filte_present" key="/LLWU/llwu_filt1_filte_present" value="true" />
+         <param name="llwu_filt1_filtf_present" key="/LLWU/llwu_filt1_filtf_present" value="true" />
+         <param name="llwu_filt1_filtsel_present" key="/LLWU/llwu_filt1_filtsel_present" value="true" />
+         <param name="llwu_filt2_filte_present" key="/LLWU/llwu_filt2_filte_present" value="true" />
+         <param name="llwu_filt2_filtf_present" key="/LLWU/llwu_filt2_filtf_present" value="true" />
+         <param name="llwu_filt2_filtsel_present" key="/LLWU/llwu_filt2_filtsel_present" value="true" />
+         <param name="llwu_me_wume0_present" key="/LLWU/llwu_me_wume0_present" value="true" />
+         <param name="llwu_me_wume1_present" key="/LLWU/llwu_me_wume1_present" value="true" />
+         <param name="llwu_me_wume2_present" key="/LLWU/llwu_me_wume2_present" value="true" />
+         <param name="llwu_me_wume3_present" key="/LLWU/llwu_me_wume3_present" value="true" />
+         <param name="llwu_me_wume4_present" key="/LLWU/llwu_me_wume4_present" value="true" />
+         <param name="llwu_me_wume5_present" key="/LLWU/llwu_me_wume5_present" value="true" />
+         <param name="llwu_me_wume6_present" key="/LLWU/llwu_me_wume6_present" value="true" />
+         <param name="llwu_me_wume7_present" key="/LLWU/llwu_me_wume7_present" value="true" />
+         <param name="llwu_pe1_wupe0_present" key="/LLWU/llwu_pe1_wupe0_present" value="true" />
+         <param name="llwu_pe1_wupe1_present" key="/LLWU/llwu_pe1_wupe1_present" value="true" />
+         <param name="llwu_pe1_wupe2_present" key="/LLWU/llwu_pe1_wupe2_present" value="true" />
+         <param name="llwu_pe1_wupe3_present" key="/LLWU/llwu_pe1_wupe3_present" value="true" />
+         <param name="llwu_pe2_wupe4_present" key="/LLWU/llwu_pe2_wupe4_present" value="true" />
+         <param name="llwu_pe2_wupe5_present" key="/LLWU/llwu_pe2_wupe5_present" value="true" />
+         <param name="llwu_pe2_wupe6_present" key="/LLWU/llwu_pe2_wupe6_present" value="true" />
+         <param name="llwu_pe2_wupe7_present" key="/LLWU/llwu_pe2_wupe7_present" value="true" />
+         <param name="llwu_pf1_wuf0_present" key="/LLWU/llwu_pf1_wuf0_present" value="true" />
+         <param name="llwu_pf1_wuf1_present" key="/LLWU/llwu_pf1_wuf1_present" value="true" />
+         <param name="llwu_pf1_wuf2_present" key="/LLWU/llwu_pf1_wuf2_present" value="true" />
+         <param name="llwu_pf1_wuf3_present" key="/LLWU/llwu_pf1_wuf3_present" value="true" />
+         <param name="llwu_pf1_wuf4_present" key="/LLWU/llwu_pf1_wuf4_present" value="true" />
+         <param name="llwu_pf1_wuf5_present" key="/LLWU/llwu_pf1_wuf5_present" value="true" />
+         <param name="llwu_pf1_wuf6_present" key="/LLWU/llwu_pf1_wuf6_present" value="true" />
+         <param name="llwu_pf1_wuf7_present" key="/LLWU/llwu_pf1_wuf7_present" value="true" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
@@ -205,10 +235,6 @@
          <param name="smc_stopctrl_porpo_present" key="/SMC/smc_stopctrl_porpo_present" value="true" />
          <param name="smc_stopctrl_pstopo_present" key="/SMC/smc_stopctrl_pstopo_present" value="true" />
          <param name="smc_stopctrl_vllsm_present" key="/SMC/smc_stopctrl_vllsm_present" value="true" />
-         <param name="smc_vllsctrl_llsm_present" key="/SMC/smc_vllsctrl_llsm_present" value="true" />
-         <param name="smc_vllsctrl_porpo_present" key="/SMC/smc_vllsctrl_porpo_present" value="true" />
-         <param name="smc_vllsctrl_pstopo_present" key="/SMC/smc_vllsctrl_pstopo_present" value="true" />
-         <param name="smc_vllsctrl_vllsm_present" key="/SMC/smc_vllsctrl_vllsm_present" value="true" />
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        version="spi0_mkl04z4_dma">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />

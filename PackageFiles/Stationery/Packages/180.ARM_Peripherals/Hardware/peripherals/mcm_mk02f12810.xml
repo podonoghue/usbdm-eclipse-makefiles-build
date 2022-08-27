@@ -3,7 +3,6 @@
 <!-- mcm_mk02f12810.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Miscellaneous Control Module (MCM)">
-   <constant key="mcm_placr_arb_present"                 />
 
    <xi:include href="mcm_def.xml"/>
 

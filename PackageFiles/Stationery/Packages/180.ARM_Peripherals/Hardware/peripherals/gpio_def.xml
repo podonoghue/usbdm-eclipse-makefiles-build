@@ -141,8 +141,8 @@
    <template namespace="all" key="/PCR/pcr_enums" condition="/PCR/dfer_register_present" discardRepeats="true" ><![CDATA[
       // 'Extra' bit used to map DFER use to PCR value
       #define PORT_PCR_DIGITALFILTER(x)    (((uint32_t)(((uint32_t)(x))<<PORT_PCR_DIGITALFILTER_SHIFT))&PORT_PCR_DIGITALFILTER_MASK)
-      #define PORT_PCR_DIGITALFILTER_MASK  (0xF0000U)
-      #define PORT_PCR_DIGITALFILTER_SHIFT (16U)\n\n
+      #define PORT_PCR_DIGITALFILTER_MASK  (0b1<<PORT_PCR_DIGITALFILTER_SHIFT)
+      #define PORT_PCR_DIGITALFILTER_SHIFT (20U)\n\n
    ]]></template>
    
    <choiceOption key="port_pcr_pfe" condition="/PCR/dfer_register_present"

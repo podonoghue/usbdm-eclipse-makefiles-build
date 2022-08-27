@@ -843,7 +843,7 @@ public:
    /**
     * Enable Pin interrupts in NVIC.
     */
-   static void enableNvicInterrupts() {
+   static void enablePinNvicInterrupts() {
       static_assert(irqNum>=0, "Pin does not support interrupts");
       NVIC_EnableIRQ(irqNum);
    }
@@ -854,7 +854,7 @@ public:
     *
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(NvicPriority nvicPriority) {
+   static void enablePinNvicInterrupts(NvicPriority nvicPriority) {
       static_assert(irqNum>=0, "Pin does not support interrupts");
       enableNvicInterrupt(irqNum, nvicPriority);
    }
@@ -862,7 +862,7 @@ public:
    /**
     * Disable Pin interrupts in NVIC.
     */
-   static void disableNvicInterrupts() {
+   static void disablePinNvicInterrupts() {
       static_assert(irqNum>=0, "Pin does not support interrupts");
       NVIC_DisableIRQ(irqNum);
    }

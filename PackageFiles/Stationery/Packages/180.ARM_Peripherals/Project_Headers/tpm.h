@@ -2068,7 +2068,7 @@ public:
       using Pcr = PcrTable_T<Info, limitIndex<Info>(channel)>;
 
       /** Allow access owning TPM */
-      using Tpm = TpmBase_T<Info>;
+      using OwningTpm = TpmBase_T<Info>;
 
       /** @return Base address of TPM.CONTROL struct as uint32_t */
       static constexpr uint32_t tpmCONTROL() { return tpmBase() + offsetof(TPM_Type, CONTROLS[channel]); }
@@ -2093,7 +2093,7 @@ public:
        * @return Reference to the TPM channel registers
        */
       static __attribute__((always_inline)) volatile TpmChannelRegs &channelRegs() {
-         return *reinterpret_cast<TpmChannelRegs *>(&Tpm::tmr->CONTROLS[CHANNEL]);
+         return *reinterpret_cast<TpmChannelRegs *>(&OwningTpm::tmr->CONTROLS[CHANNEL]);
       }
 
       /** Timer channel number */
@@ -2110,7 +2110,7 @@ public:
        */
       static void defaultConfigure() {
 
-         Tpm::tmr->CONTROLS[channel].CnSC = TpmChMode_PwmHighTruePulses|TpmChannelAction_None;
+         OwningTpm::tmr->CONTROLS[channel].CnSC = TpmChMode_PwmHighTruePulses|TpmChannelAction_None;
       }
 
       /**
@@ -2127,7 +2127,7 @@ public:
             TpmChMode         tpmChMode,
             TpmChannelAction  tpmChannelAction = TpmChannelAction_None) {
 
-         Tpm::tmr->CONTROLS[channel].CnSC = tpmChMode|tpmChannelAction;
+         OwningTpm::tmr->CONTROLS[channel].CnSC = tpmChMode|tpmChannelAction;
       }
 
       /**
@@ -2143,7 +2143,7 @@ public:
        * @return Current mode of operation for the channel
        */
       static TpmChMode getMode() {
-         return static_cast<TpmChMode>(Tpm::tmr->CONTROLS[channel].CnSC &
+         return static_cast<TpmChMode>(OwningTpm::tmr->CONTROLS[channel].CnSC &
                (TPM_CnSC_MS_MASK|TPM_CnSC_ELS_MASK));
       }
 
@@ -2156,8 +2156,8 @@ public:
        *       pending CnV register updates are discarded.
        */
       static void setMode(TpmChMode tpmChMode) {
-         Tpm::tmr->CONTROLS[channel].CnSC =
-               (Tpm::tmr->CONTROLS[channel].CnSC & ~(TPM_CnSC_MS_MASK|TPM_CnSC_ELS_MASK))|tpmChMode;
+         OwningTpm::tmr->CONTROLS[channel].CnSC =
+               (OwningTpm::tmr->CONTROLS[channel].CnSC & ~(TPM_CnSC_MS_MASK|TPM_CnSC_ELS_MASK))|tpmChMode;
       }
 
       /**
@@ -2170,12 +2170,12 @@ public:
        */
       static void setAction(TpmChannelAction tpmChannelAction) {
 #ifdef TPM_CnSC_DMA
-         Tpm::tmr->CONTROLS[channel].CnSC =
-               (Tpm::tmr->CONTROLS[channel].CnSC & ~(TPM_CnSC_CHIE_MASK|TPM_CnSC_DMA_MASK))|
+         OwningTpm::tmr->CONTROLS[channel].CnSC =
+               (OwningTpm::tmr->CONTROLS[channel].CnSC & ~(TPM_CnSC_CHIE_MASK|TPM_CnSC_DMA_MASK))|
                tpmChannelAction;
 #else
-         Tpm::tmr->CONTROLS[channel].CnSC =
-               (Tpm::tmr->CONTROLS[channel].CnSC & ~TPM_CnSC_CHIE_MASK)|tpmChannelAction;
+         OwningTpm::tmr->CONTROLS[channel].CnSC =
+               (OwningTpm::tmr->CONTROLS[channel].CnSC & ~TPM_CnSC_CHIE_MASK)|tpmChannelAction;
 #endif
       }
 
@@ -2190,7 +2190,7 @@ public:
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
       static ErrorCode setHighTime(Ticks highTime) {
-         return Tpm::setHighTime(highTime, channel);
+         return OwningTpm::setHighTime(highTime, channel);
       }
 
       /**
@@ -2204,7 +2204,7 @@ public:
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
       static ErrorCode setHighTime(Seconds highTime) {
-         return Tpm::setHighTime(highTime, channel);
+         return OwningTpm::setHighTime(highTime, channel);
       }
       /**
        * Set PWM duty cycle.
@@ -2214,7 +2214,7 @@ public:
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
       static void setDutyCycle(int dutyCycle) {
-         Tpm::setDutyCycle(dutyCycle, channel);
+         OwningTpm::setDutyCycle(dutyCycle, channel);
       }
 
       /**
@@ -2225,7 +2225,7 @@ public:
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
       static void setDutyCycle(float dutyCycle) {
-         Tpm::setDutyCycle(dutyCycle, channel);
+         OwningTpm::setDutyCycle(dutyCycle, channel);
       }
 
       /**
@@ -2236,7 +2236,7 @@ public:
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
       static void setDeltaEventTime(Ticks offset) {
-         Tpm::setDeltaEventTime(offset, channel);
+         OwningTpm::setDeltaEventTime(offset, channel);
       }
 
       /**
@@ -2247,7 +2247,7 @@ public:
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
       static void setRelativeEventTime(Ticks offset) {
-         Tpm::setRelativeEventTime(offset, channel);
+         OwningTpm::setRelativeEventTime(offset, channel);
       }
 
       /**
@@ -2258,7 +2258,7 @@ public:
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
       static void setEventTime(Ticks eventTime) {
-         Tpm::setEventTime(eventTime, channel);
+         OwningTpm::setEventTime(eventTime, channel);
       }
 
       /**
@@ -2267,7 +2267,7 @@ public:
        * @return Absolute time of last event in ticks i.e. value from timer event register
        */
       static Ticks getEventTime() {
-         return Tpm::getEventTime(channel);
+         return OwningTpm::getEventTime(channel);
       }
 
       /**
@@ -2277,7 +2277,7 @@ public:
        * @return false Indicates no event has occurred on a channel since last polled
        */
       static bool getInterruptFlag() {
-         return (Tpm::tmr->STATUS&CHANNEL_MASK) != 0;
+         return (OwningTpm::tmr->STATUS&CHANNEL_MASK) != 0;
       }
 
       /**
@@ -2291,8 +2291,8 @@ public:
       static bool getAndClearInterruptFlag() {
          // Note - w1c flags
          // so only flags captured in status are cleared
-         bool status = (Tpm::tmr->STATUS&CHANNEL_MASK) != 0;
-         Tpm::tmr->STATUS = CHANNEL_MASK;
+         bool status = (OwningTpm::tmr->STATUS&CHANNEL_MASK) != 0;
+         OwningTpm::tmr->STATUS = CHANNEL_MASK;
          return status;
       }
 
@@ -2301,7 +2301,7 @@ public:
        */
       static void clearInterruptFlag() {
          // Note - w1c flags
-         Tpm::tmr->STATUS = CHANNEL_MASK;
+         OwningTpm::tmr->STATUS = CHANNEL_MASK;
       }
 
 

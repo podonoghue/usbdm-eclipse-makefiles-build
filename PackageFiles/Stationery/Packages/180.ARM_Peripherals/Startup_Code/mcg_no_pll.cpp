@@ -420,7 +420,7 @@ void Mcg::defaultConfigure() {
    // Transition to desired clock mode
    clockTransition(clockInfo[ClockConfig_default]);
 
-   SimInfo::initRegs();
+   Sim::initRegs();
 
    enableNvicInterrupts();
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- fmc_mk65f18.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Controller (FMC)">
+
+   <!-- constant key="irqOption_present"                     / -->
+
+   <xi:include href="fmc_def.xml"/>
+
+</peripheralPage>

@@ -48,7 +48,7 @@ using WakeupTimer = Lptmr0;
 static constexpr LlwuFilterNum FILTER_NUM = LlwuFilterNum_0;
 
 // LLWU Pin to use for wake-up
-using WakeupPin = Llwu::Pin<LlwuPin_Switch3>;
+using WakeupPin = Llwu::Pin<LlwuPin_Button3_llwu>;
 
 /** Possible tests - must be in this order */
 enum Test {
@@ -162,15 +162,14 @@ static void testStopMode(
    }
 
    // Set STOP mode to enter
-   Smc::setStopMode(smcStopMode);
-   Smc::setStopOptions(smcLowLeakageStopMode);
+   Smc::setStopOptions(SmcPartialStopMode_Normal, smcLowLeakageStopMode, SmcPowerOnReset_Enabled, SmcLowLeakageRam2_Enabled);
 
    /*
     * Go to sleep - LPTMR or PIN wake-up
     */
    console.writeln("Deep Sleeping...").flushOutput();
 
-   Smc::enterStopMode();
+   Smc::enterStopMode(smcStopMode);
 
    Llwu::disableAllSources();
    WakeupTimer::disableNvicInterrupts();
@@ -419,15 +418,13 @@ static SmcStatus changeRunMode() {
    console.flushOutput();
    if (smcStatus == SmcStatus_RUN) {
       // RUN->VLPR
-      Mcg::clockTransition(Mcg::clockInfo[VLPR_CLOCK_CONFIG]);
-      Smc::enterRunMode(SmcRunMode_VeryLowPower);
+      Smc::enterRunMode(VLPR_CLOCK_CONFIG);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to VLPR mode").flushOutput();
    }
    else if (smcStatus == SmcStatus_VLPR) {
       // VLPR->RUN mode
-      Smc::enterRunMode(SmcRunMode_Normal);
-      Mcg::clockTransition(Mcg::clockInfo[RUN_CLOCK_CONFIG]);
+      Smc::enterRunMode(RUN_CLOCK_CONFIG);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to RUN mode").flushOutput();
    }
@@ -514,7 +511,7 @@ int main() {
          SmcVeryLowLeakageStop_Enabled);
 
    //Errata e4481 STOP mode recovery unstable
-   Pmc::configureBandgapOperation(PmcBandgapBuffer_Off, PmcBandgapLowPowerEnable_On);
+   Pmc::configureBandgapOperation(PmcBandgapBuffer_Disabled, PmcBandgapOperationInLowPower_Enabled);
 
    checkError();
 

@@ -7,108 +7,172 @@
 
    <xi:include href="_default_instance.xml"/>
  
-   <template namespace="usbdm" ><![CDATA[
+   <!-- ******************************** ME ******************************** -->
+    
+   <choiceOption key="llwu_me_peripherals" condition="llwu_me_wume0_present"
+      hidden="true"
+      enumStem="LlwuPeripheral"
+      description="LLWU peripheral wake-up source"
+      valueFormat="%s"
+      toolTip="Peripheral used as wake-up source"
+      enumText="$(/LLWU/InputModuleMapping:// No wake-up peripherals found)"
+      >
+      <choice name="No wake-up peripheral" value="0"          enum="None" /> 
+      <choice name="Wake-up peripheral 0"  value="1&lt;&lt;0" enum="0" /> 
+      <choice name="Wake-up peripheral 1"  value="1&lt;&lt;1" enum="1" /> 
+      <choice name="Wake-up peripheral 2"  value="1&lt;&lt;2" enum="2" /> 
+      <choice name="Wake-up peripheral 3"  value="1&lt;&lt;3" enum="3" /> 
+      <choice name="Wake-up peripheral 4"  value="1&lt;&lt;4" enum="4" /> 
+      <choice name="Wake-up peripheral 5"  value="1&lt;&lt;5" enum="5" /> 
+      <choice name="Wake-up peripheral 6"  value="1&lt;&lt;6" enum="6" /> 
+      <choice name="Wake-up peripheral 7"  value="1&lt;&lt;7" enum="7" /> 
+   </choiceOption>
+    
+   <binaryOption key="llwu_me_wume" condition="llwu_me_wume0_present"
+      hidden="true"
+      enumStem="LlwuPeripheralWakeup"
+      valueFormat="%s"
+      description="LLWU peripheral wake-up control"
+      toolTip="Whether this peripheral can wake-up the processor">
+      <choice name="Wake-up disabled" value="false" enum="Disabled" isDefault="true" />
+      <choice name="Wake-up enabled"  value="true"  enum="Enabled" />
+   </binaryOption>
+   
+   <category name="Peripheral sources" description="Wakeups from peripherals">
+      <for keys="n" dim="8">
+         <binaryOption key="llwu_me_wume%(n)" condition="llwu_me_wume%(n)_present"
+            enumStem="LlwuPeripheral"
+            valueFormat="%s"
+            description="LLWU peripheral wake-up control"
+            toolTip="Whether this peripheral can wake-up the processor">
+            <choice name="Wake-up disabled" value="false" enum="None" isDefault="true" />
+            <choice name="Wake-up enabled"  value="true"  enum="%(n)" />
+         </binaryOption>
+         
+      </for>
+   </category>
+   
+   <setTemplate key="llwu_base_methods" namespace="all"
+      variables="llwu_me_peripherals,llwu_me_wume" 
+      nonDefaultParams="2" ><![CDATA[
       \t/**
-      \t * LLWU peripheral wake-up mode
-      \t */
-      \tenum LlwuPeripheralMode {
-      \t   LlwuPeripheralMode_Disabled = false, //!< Wake-up by peripheral disabled
-      \t   LlwuPeripheralMode_Enabled  = true,  //!< Wake-up by peripheral enabled
-      \t};
-      \t\n\n
-   ]]></template>
-
-   <template namespace="usbdm" ><![CDATA[
-      \t/**
-      \t * Wake-up pin control
+      \t * Configure %description0
       \t *
-      \t * Enables and configures the edge detection for the wakeup pin
+      %paramDescription
       \t */
-      \tenum LlwuPinMode {
-      \t   LlwuPinMode_Disabled    = (LLWU_PE1_WUPE0(0)|LLWU_PE1_WUPE1(0)|LLWU_PE1_WUPE2(0)|LLWU_PE1_WUPE3(0)), ///< Wake-up pin disabled
-      \t   LlwuPinMode_RisingEdge  = (LLWU_PE1_WUPE0(1)|LLWU_PE1_WUPE1(1)|LLWU_PE1_WUPE2(1)|LLWU_PE1_WUPE3(1)), ///< Wake-up on pin rising edge
-      \t   LlwuPinMode_FallingEdge = (LLWU_PE1_WUPE0(2)|LLWU_PE1_WUPE1(2)|LLWU_PE1_WUPE2(2)|LLWU_PE1_WUPE3(2)), ///< Wake-up on pin falling edge
-      \t   LlwuPinMode_EitherEdge  = (LLWU_PE1_WUPE0(3)|LLWU_PE1_WUPE1(3)|LLWU_PE1_WUPE2(3)|LLWU_PE1_WUPE3(3)), ///< Wake-up on pin either edge
-      \t};\n\n
-   ]]></template>
+      \tstatic void configurePeripheralSource(
+      %params) {
+      \t
+      \t   if (%enumParam1) {
+      \t      %register = %register | %enumParam0;
+      \t   }
+      \t   else {
+      \t      %register = %register & (uint8_t)~%enumParam0;
+      \t   }
+      \t}
+      \t
+      \t/**
+      \t * Get flag bit mask indicating wake-up peripheral sources
+      \t * The mask returned correspond to (multiple) peripheral sources.
+      \t * These flags are cleared through the originating peripheral.
+      \t *
+      \t *
+      \t * Example checking source
+      \t * @code
+      \t *    if ((peripheralWakeupSource&LlwuPeripheral_Lptmr) != 0) {
+      \t *       // Wake-up from LPTMR
+      \t *    }
+      \t * @endcode
+      \t *
+      \t * @return Bit mask
+      \t */
+      \tstatic uint32_t getPeripheralWakeupSources() {
+      \t   return llwu->MF;
+      \t}
+
+      \t/**
+      \t *  Check if peripheral is source of wake-up
+      \t *  These flags are cleared through the originating peripheral.
+      \t *
+      %paramDescription0
+      \t *
+      \t * @return false Given peripheral is not source of wake-up.
+      \t * @return true  Given peripheral is source of wake-up.
+      \t */
+      \tstatic bool isPeripheralWakeupSource(%enumClass0 %enumParam0) {
+      \t   return llwu->MF & %enumParam0;
+      \t}\n\n
+   ]]></setTemplate>
+      
+   <!-- ******************************** RST ******************************** -->
+
+   <binaryOption key="llwu_rst_llrste" condition="llwu_rst_llrste_present"
+      enumStem="LlwuResetWakeup"
+      description="Low-Leakage Mode RESET Enable"
+      toolTip="This bit must be set to allow the device to be reset while in a low-leakage power mode.\n
+         On devices where Reset is not a dedicated pin, the RESET pin must also be enabled\n
+         in the explicit port mux control" >
+      <choice name="RESET pin not enabled as a LLWU mode exit source" enum="Disabled" value="0" />
+      <choice name="RESET pin enabled as a LLWU mode exit source"     enum="Enabled"  value="1" isDefault="true" />
+   </binaryOption>      
+   
+   <binaryOption key="llwu_rst_rstfilt" condition="llwu_rst_rstfilt_present"
+      enumStem="LlwuResetFilter"
+      description="Digital Filter On RESET Pin"
+      toolTip="Enables the digital filter for the RESET pin during LLS, VLLS3, VLLS2, or VLLS1 modes" >
+      <choice name="Filter not enabled" enum="Disabled" value="0" isDefault="true" />
+      <choice name="Filter enabled"     enum="Enabled"  value="1" />
+   </binaryOption>      
+   
+   <setTemplate key="llwu_base_methods" namespace="all" variables="llwu_rst_rstfilt,llwu_rst_llrste" ><![CDATA[
+      \t/**
+      \t * Controls Reset wake-up control
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void configureResetFilter(
+      %params) {
+      \t   %register = %paramExpression;
+      \t}\n
+   ]]></setTemplate>
+
+   <choiceOption key="llwu_pe"  hidden="true" condition="llwu_pe1_wupe0_present"
+      enumStem="LlwuPinMode"
+      description="Wake-up pin control"  
+      toolTip="Enables and configures the edge detection for a wake-up pin"
+      valueFormat="LLWU_PE1_WUPE0(%s),LLWU_PE1_WUPE1(%s),LLWU_PE1_WUPE2(%s),LLWU_PE1_WUPE3(%s)"
+      >
+      <choice name="Wake-up pin disabled"         enum="Disabled"     value="0,0,0,0" isDefault="true" />
+      <choice name="Wake-up on pin rising edge"   enum="RisingEdge"   value="1,1,1,1" />
+      <choice name="Wake-up on pin falling edge"  enum="FallingEdge"  value="2,2,2,2" />
+      <choice name="Wake-up on pin either edge"   enum="EitherEdge"   value="3,3,3,3" />
+   </choiceOption>   
 
    <category name="Pin sources" description="Wakeups from pins">  
-      <for keys  ="r,   p  " 
-           values="1,   0  ;
-                   1,   1  ;
-                   1,   2  ;
-                   1,   3  ;
-                   2,   4  ;
-                   2,   5  ;
-                   2,   6  ;
-                   2,   7  ;
-                   3,   8  ;
-                   3,   9  ;
-                   3,   10 ;
-                   3,   11 ;
-                   4,   12 ;
-                   4,   13 ;
-                   4,   14 ;
-                   4,   15 ;
-                   5,   16 ;
-                   5,   17 ;
-                   5,   18 ;
-                   5,   19 ;
-                   6,   20 ;
-                   6,   21 ;
-                   6,   22 ;
-                   6,   23 ;
-                   7,   24 ;
-                   7,   25 ;
-                   7,   26 ;
-                   7,   27 ;
-                   8,   28 ;
-                   8,   29 ;
-                   8,   30 ;
-                   8,   31 "
+
+      <!-- ******************************** PEx ******************************** -->
+
+      <for keys  ="r,p" 
+           values=
+           "1,0;1,1;1,2;1,3;2,4;2,5;2,6;2,7;3,8;3,9;3,10;3,11;4,12;4,13;4,14;4,15;5,16;
+            5,17;5,18;5,19;6,20;6,21;6,22;6,23;7,24;7,25;7,26;7,27;8,28;8,29;8,30;8,31"
            >
-         <choiceOption key="llwu_pe%(r)_wupe%(p)" condition="llwu_pe%(r)_present"
+         <choiceOption key="llwu_pe%(r)_wupe%(p)" condition="llwu_pe%(r)_wupe%(p)_present"
+            enumStem="LlwuPinMode"
             description="Unused input %(p)"
             valueFormat="(LLWU_PE%(r)_WUPE%(p)_MASK&amp;(%s))"
-            toolTip="Enables and configures the edge detection for the wakeup pin">
-            <choice name="Wake-up pin disabled"        value="LlwuPinMode_Disabled"     isDefault="true" /> 
-            <choice name="Wake-up on pin rising edge"  value="LlwuPinMode_RisingEdge"   /> 
-            <choice name="Wake-up on pin falling edge" value="LlwuPinMode_FallingEdge"  /> 
-            <choice name="Wake-up on pin either edge"  value="LlwuPinMode_EitherEdge"   />
+            toolTip="Enables and configures the edge detection for the wake-up pin">
+            <choice name="Wake-up pin disabled"        value="LlwuPinMode_Disabled"    enum="Disabled"     isDefault="true" /> 
+            <choice name="Wake-up on pin rising edge"  value="LlwuPinMode_RisingEdge"  enum="RisingEdge"    /> 
+            <choice name="Wake-up on pin falling edge" value="LlwuPinMode_FallingEdge" enum="FallingEdge"   /> 
+            <choice name="Wake-up on pin either edge"  value="LlwuPinMode_EitherEdge"  enum="EitherEdge"    />
          </choiceOption>
       </for>
    
-      <for keys  ="r,   p0,  p1,  p2,  p3  " 
-           values="1,    0,   1,   2,   3;
-                   2,    4,   5,   6,   7;
-                   3,    8,   9,  10,  11;
-                   4,   12,  13,  14,  15;
-                   5,   16,  17,  18,  19;
-                   6,   20,  21,  22,  23;
-                   7,   24,  25,  26,  27;
-                   8,   28,  29,  30,  31"
-           >
-         <initialValueTemplate 
-            variables="
-               llwu_pe%(r)_wupe%(p0),
-               llwu_pe%(r)_wupe%(p1),
-               llwu_pe%(r)_wupe%(p2),
-               llwu_pe%(r)_wupe%(p3)"     
-         ><![CDATA[
-            \t/// LLWU Pin Enable register %(r)
-            \tstatic constexpr uint8_t pe%(r) = %initExpression\n\n
-         ]]></initialValueTemplate>
-      </for>
-   
-      <for keys="r,p" values="1,0;2,4;3,8;4,12;5,16;6,20;7,24;8,28;"  > 
-         <template key="llwu_base_init" namespace="all" condition="llwu_pe%(r)_wupe%(p)" ><![CDATA[
-            \t   llwu->PE%(r)   = Info::pe%(r);\n
-         ]]></template>
-      </for>
-   
-      <choiceOption key="llwu_filt_filte"  hidden="true"
+   <!-- ******************************** FILTx ******************************** -->
+      <choiceOption key="llwu_filt_filte"  hidden="true" condition="llwu_filt1_filte_present"
          enumStem="LlwuFilterPinMode"
-         description="Wakup On External Pin with Digital Filter"  
+         description="Wake-up On External Pin with Digital Filter"  
          toolTip="Controls the digital filter options for the external pin detect">
          <choice name="Wake-up disabled"                  enum="Disabled"     value="0" isDefault="true" />
          <choice name="Wake-up on filtered rising edge"   enum="RisingEdge"   value="1" />
@@ -116,30 +180,58 @@
          <choice name="Wake-up on either filtered edge"   enum="EitherEdge"   value="3" />
       </choiceOption>   
       
-      <for keys="n" values="1;2;3;4">
-         <choiceOption key="llwu_filt%(n)_filte"   derivedFrom="llwu_filt_filte"   condition="llwu_filt%(n)_present" />
-         <choiceOption key="llwu_filt%(n)_filtsel"  condition="llwu_filt%(n)_present"
+      <for keys="n" values="1;2;3;4">                    
+         <choiceOption key="llwu_filt%(n)_filte"   condition="llwu_filt%(n)_filte_present" derivedFrom="llwu_filt_filte"   />
+         <choiceOption key="llwu_filt%(n)_filtsel" condition="llwu_filt%(n)_filte_present"
             description="Filter %(n) Pin Select" 
-            toolTip="Selects 1 of the external signals to be muxed into the filter">
+            toolTip="Selects 1 of the external signals to be muxed into the filter"
+            disabledValue="Disabled" >
             <choice name="" value="" enum="dummy" />
          </choiceOption>   
-   
-         <initialValueTemplate 
-            variables="
-               llwu_filt%(n)_filte,
-               llwu_filt%(n)_filtsel"     
-         ><![CDATA[
-            \t/// Pin Filter %(n) register
-            \tstatic constexpr uint8_t filt%(n) = %initExpression\n\n
-         ]]></initialValueTemplate>
-      
-         <template key="llwu_base_init" namespace="all"  condition="llwu_filt%(n)_present" ><![CDATA[
-            \t   llwu->FILT%(n) = Info::filt%(n)|LLWU_FILT_FILTF_MASK;\n
-         ]]></template>
       </for>
    </category>
 
-   <template key="llwu_base_methods" namespace="all"  ><![CDATA[
+   <template condition="llwu_filt1_filte_present" namespace="usbdm" 
+   ><![CDATA[
+      \t/**
+      \t * Pin filter numbers
+      \t *
+      \t * @note These are used as an index into the FILT table so numbers do NOT correspond to filter names FILT[0] <=> FILT1 etc
+      \t */
+      \tenum LlwuFilterNum {\n
+   ]]></template>
+   <for keys="m,n" values="0,1;1,2;2,3;3,4">
+      <template variables="llwu_filt%(n)_filte"   namespace="usbdm"    
+      ><![CDATA[
+         \t   LlwuFilterNum_%(n) = %(m),  //!<  Wake-up pin LLWU_P%(n)\n
+      ]]></template>
+   </for>
+   <template condition="llwu_filt1_filte_present"  namespace="usbdm"    
+   ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+   <template condition="llwu_pe1_wupe0_present" namespace="usbdm" 
+   ><![CDATA[
+      \tenum LlwuPin : uint32_t {\n
+   ]]></template>
+   <for keys  ="r,p" 
+        values=
+        "1,0;1,1;1,2;1,3;2,4;2,5;2,6;2,7;3,8;3,9;3,10;3,11;4,12;4,13;4,14;4,15;5,16;
+         5,17;5,18;5,19;6,20;6,21;6,22;6,23;7,24;7,25;7,26;7,27;8,28;8,29;8,30;8,31"
+        >
+      <template variables="llwu_pe%(r)_wupe%(p)"   namespace="usbdm"    
+      ><![CDATA[
+         \t   LlwuPin_%(p) = %(p),  //!<  Wake-up pin LLWU_P%(p)\n
+      ]]></template>
+   </for>
+   <template condition="llwu_pe1_wupe0_present"  namespace="usbdm"    
+   ><![CDATA[
+      $(/LLWU/InputPinMapping:// No user pin mappings found)
+      \t};\n\n
+   ]]></template>
+   
+   <template><![CDATA[
       \t/**
       \t * Class used to do initialisation of LLWU
       \t *
@@ -152,15 +244,15 @@
       \t *
       \t * Example:
       \t * @code
-      \t * const Llwu::LlwuInit llwuInit {
+      \t * const Llwu::Init llwuInit {
       \t *    // Pins
       \t *    LlwuPin_Pta4,  LlwuPinMode_FallingEdge,
       \t *    LlwuPin_Pta13, LlwuPinMode_EitherEdge,
       \t *    LlwuPin_Ptd4,  LlwuPinMode_RisingEdge,
       \t *
       \t *    // Filtered Pins
-      \t *    LlwuFilterNum_0, LlwuPin_Pta4, LlwuFilterPinMode_EitherEdge,
-      \t *    LlwuFilterNum_1, LlwuPin_Ptc3, LlwuFilterPinMode_RisingEdge,
+      \t *    LlwuFilterNum_1, LlwuPin_Pta4, LlwuFilterPinMode_EitherEdge,
+      \t *    LlwuFilterNum_2, LlwuPin_Ptc3, LlwuFilterPinMode_RisingEdge,
       \t *
       \t *    // Peripherals
       \t *    LlwuPeripheral_RtcAlarm,
@@ -171,16 +263,16 @@
       \t * };
       \t *
       \t * // Initialise LLWU from values specified above
-      \t * llwuInit.initialise()
+      \t * llwuInit.configure()
       \t * @endcode
       \t */
-      \tclass LlwuInit {
+      \tclass Init {
       \t
       \tpublic:
       \t   /**
       \t    * Constructor
       \t    */
-      \t   constexpr LlwuInit() {
+      \t   constexpr Init() {
       \t   }
       \t           
       \tprivate:
@@ -188,77 +280,50 @@
       \t      {LLWU_PE1_WUPE0_MASK, LLWU_PE1_WUPE1_MASK, LLWU_PE1_WUPE2_MASK, LLWU_PE1_WUPE3_MASK, };
       \t\n
    ]]></template>
-   <template key="llwu_base_methods" namespace="all" condition="llwu_me_wume0" ><![CDATA[
-      \t   uint8_t me      = 0;\n
-   ]]></template>
-
-   <template key="llwu_base_methods" namespace="all" condition="llwu_rst_llrste" ><![CDATA[
-      \t   uint8_t rst     = 0;\n
-   ]]></template>
+   <for keys="n,b" values="8,28;7,24;6,20;5,16;4,12;3,8;2,4;1,0;" >
+      <if condition="llwu_pe%(n)_wupe%(b)">
+         <template><![CDATA[
+            \t   uint8_t pe[%(n)]   = {0};\n
+         ]]></template>
+         <break/>
+      </if>
+   </for>
+   <for keys="n" values="4;3;2;1" >
+      <if condition="llwu_filt%(n)_filte">
+         <template ><![CDATA[
+            \t   uint8_t filt[%(n)] = {0};\n
+         ]]></template>
+         <break/>
+      </if>
+   </for>
+   <setTemplate  variables="llwu_me_peripherals" ><![CDATA[
+      \t   uint8_t %registerName      = 0;\n
+   ]]></setTemplate>
+   <setTemplate variables="llwu_rst_llrste" ><![CDATA[
+      \t   uint8_t %registerName     = 0;\n
+   ]]></setTemplate>
    
-   <if condition="llwu_pe5_wupe16" >
-      <template key="llwu_base_methods" namespace="all" ><![CDATA[
-         \t   uint8_t pe[8]   = {0};\n
-      ]]></template>
-   <else_if condition="llwu_pe4_wupe12" />
-      <template key="llwu_base_methods" namespace="all" ><![CDATA[
-         \t   uint8_t pe[4]   = {0};\n
-      ]]></template>
-   <else_if condition="llwu_pe3_wupe8" />
-      <template key="llwu_base_methods" namespace="all" ><![CDATA[
-         \t   uint8_t pe[3]   = {0};\n
-      ]]></template>
-   <else_if condition="llwu_pe2_wupe4" />
-      <template key="llwu_base_methods" namespace="all" ><![CDATA[
-         \t   uint8_t pe[2]   = {0};\n
-      ]]></template>
-   <else_if condition="llwu_pe1_wupe0" />
-      <template key="llwu_base_methods" namespace="all" ><![CDATA[
-         \t   uint8_t pe[1]   = {0};\n
-      ]]></template>
-   </if>
-
-   <if condition="llwu_filt4_filte" >
-      <template key="llwu_base_methods" namespace="all" ><![CDATA[
-         \t   uint8_t filt[4] = {0};\n
-      ]]></template>
-   <else_if condition="llwu_filt3_filte" />
-      <template key="llwu_base_methods" namespace="all" ><![CDATA[
-         \t   uint8_t filt[3] = {0};\n
-      ]]></template>
-   <else_if condition="llwu_filt2_filte" />
-      <template key="llwu_base_methods" namespace="all" ><![CDATA[
-         \t   uint8_t filt[2] = {0};\n
-      ]]></template>
-   <else_if condition="llwu_filt1_filte" />
-      <template key="llwu_base_methods" namespace="all" ><![CDATA[
-         \t   uint8_t filt[1] = {0};\n
-      ]]></template>
-   </if>
-   
-   <template key="llwu_base_methods" namespace="all" ><![CDATA[
+   <template ><![CDATA[
       \t
       \tpublic:\n
    ]]></template>
    
-   <template key="llwu_base_methods" namespace="all" condition="llwu_me_wume0" ><![CDATA[
+   <setTemplate variables="llwu_me_peripherals" ><![CDATA[
       \t   /**
-      \t    * Constructor for peripheral source
+      \t    * Constructor for %description
       \t    *
-      \t    * @tparam Types
-      \t    * @param rest
-      \t    *
-      \t    * @param llwuPeripheral  Peripheral to enable as wake-up source
+      \t    * @tparam   Types
+      \t%comments
       \t    */
       \t   template <typename... Types>
-      \t   constexpr LlwuInit(LlwuPeripheral llwuPeripheral, Types... rest) : LlwuInit(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t   
-      \t      me |= llwuPeripheral;
+      \t      %registerName |= %paramExpression;
       \t   }
       \t\n
-   ]]></template>
+   ]]></setTemplate>
    
-   <template key="llwu_base_methods" namespace="all" condition="llwu_filt1_filte" ><![CDATA[
+   <template condition="llwu_filt1_filte" ><![CDATA[
       \t   /**
       \t    * Constructor for filtered pin source
       \t    *
@@ -270,18 +335,19 @@
       \t    * @param llwuFilterPinMode   Sensitivity of pin
       \t    */
       \t   template <typename... Types>
-      \t   constexpr LlwuInit(
+      \t   constexpr Init(
       \t         LlwuFilterNum     llwuFilterNum,
       \t         LlwuPin           llwuPin,
       \t         LlwuFilterPinMode llwuFilterPinMode,
-      \t         Types... rest) : LlwuInit(rest...) {
+      \t         Types... rest) : Init(rest...) {
       \t   
-      \t      filt[llwuFilterNum] = llwuPin|llwuFilterPinMode;
+      \t      // LLWU_FILT_FILTF_MASK clears flag on write to register   
+      \t      filt[llwuFilterNum] = LLWU_FILT_FILTF_MASK|llwuFilterPinMode|llwuPin;
       \t   }
       \t\n
    ]]></template>
    
-   <template key="llwu_base_methods" namespace="all" condition="llwu_pe1_wupe0" ><![CDATA[
+   <template condition="llwu_pe1_wupe0" ><![CDATA[
       \t   /**
       \t    * Constructor for unfiltered pin source
       \t    *
@@ -292,7 +358,7 @@
       \t    * @param llwuPinMode   Sensitivity of pin
       \t    */
       \t   template <typename... Types>
-      \t   constexpr LlwuInit(LlwuPin llwuPin, LlwuPinMode llwuPinMode, Types... rest) : LlwuInit(rest...) {
+      \t   constexpr Init(LlwuPin llwuPin, LlwuPinMode llwuPinMode, Types... rest) : Init(rest...) {
       \t   
       \t      const int      index = llwuPin>>2;
       \t      const uint8_t  value = llwuPinMode & masks[llwuPin&3];
@@ -302,7 +368,7 @@
       \t\n
    ]]></template>
 
-   <template key="llwu_base_methods" namespace="all" condition="llwu_rst_llrste" ><![CDATA[
+   <template condition="llwu_rst_llrste" ><![CDATA[
       \t   /**
       \t    * Constructor for Reset as wake-up source
       \t    *
@@ -313,68 +379,112 @@
       \t    * @param llwuResetFilter  Enable/Disable Reset pin filter
       \t    */
       \t   template <typename... Types>
-      \t   constexpr LlwuInit(LlwuResetWakeup llwuResetWakeup, LlwuResetFilter llwuResetFilter, Types... rest) : LlwuInit(rest...) {
+      \t   constexpr Init(LlwuResetWakeup llwuResetWakeup, LlwuResetFilter llwuResetFilter, Types... rest) : Init(rest...) {
       \t   
       \t      rst = llwuResetWakeup|llwuResetFilter;
       \t   }
       \t\n
    ]]></template>
 
-   <template key="llwu_base_methods" namespace="all"  ><![CDATA[
+   <template  ><![CDATA[
       \t   /**
-      \t    * Initialise LLWU from values specified in constructor
+      \t    * Configure LLWU from values specified in constructor.
+      \t    * LLWU flags from pin events are cleared.
+      \t    * Requests from peripheral devices must be cleared at source
       \t    */
-      \t   void initialise() const {\n
+      \t   void configure() const {\n
    ]]></template>
-   <template key="llwu_base_methods" namespace="all" condition="llwu_pe1_wupe0" ><![CDATA[
-      \t      llwu->PE[0]   = pe[0];\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all"  condition="llwu_pe2_wupe4" ><![CDATA[
-      \t      llwu->PE[1]   = pe[1];\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all"  condition="llwu_pe3_wupe8" ><![CDATA[
-      \t      llwu->PE[2]   = pe[2];\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all"  condition="llwu_pe4_wupe12" ><![CDATA[
-      \t      llwu->PE[3]   = pe[3];\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all"  condition="llwu_pe5_wupe16" ><![CDATA[
-      \t      llwu->PE[4]   = pe[4];
-      \t      llwu->PE[5]   = pe[5];
-      \t      llwu->PE[6]   = pe[6];
-      \t      llwu->PE[7]   = pe[7];\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all"  condition="llwu_me_wume0" ><![CDATA[
-      \t
-      \t      llwu->ME      = me;\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all" condition="llwu_rst_llrste" ><![CDATA[
-      \t
-      \t      llwu->RST     = rst;
-   ]]></template>
-   
-   <template key="llwu_base_methods" namespace="all"  condition="llwu_filt1_filte" ><![CDATA[
-      \t\n
-      \t      llwu->FILT[0] = filt[0];\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all"  condition="llwu_filt2_filte" ><![CDATA[
-      \t      llwu->FILT[1] = filt[1];\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all"  condition="llwu_filt3_filte" ><![CDATA[
-      \t      llwu->FILT[2] = filt[2];\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all"  condition="llwu_filt4_filte" ><![CDATA[
-      \t      llwu->FILT[3] = filt[3];\n
-   ]]></template>
-   <template key="llwu_base_methods" namespace="all" ><![CDATA[
+   <for keys="n,b" values="1,0;2,8;3,16;4,24" >
+      <setTemplate variables="llwu_pf%(n)_wuf%(b)_present" ><![CDATA[
+         \t      // Clear pin flags
+         \t      %register  = 0xFF;\n
+      ]]></setTemplate>
+   </for>
+   <for keys="i,n,b" values="0,1,0;1,2,4;2,3,8;3,4,12;4,5,16;5,6,20;6,7,24;7,8,28;" >
+      <setTemplate variables="llwu_pe%(n)_wupe%(b)" ><![CDATA[
+         \t      // Configure pin source
+         \t      %register  = pe[%(i)];\n
+      ]]></setTemplate>
+   </for>
+   <for keys="i,n" values="0,1;1,2;2,3;3,4" >
+      <setTemplate variables="llwu_filt%(n)_filte" ><![CDATA[
+         \t      // Configure and clear filtered pin source
+         \t      %register = filt[%(i)];\n
+      ]]></setTemplate>
+   </for>
+   <setTemplate  variables="llwu_me_peripherals" ><![CDATA[
+         \t      // Configure peripheral sources
+         \t      %register    = %registerName;\n
+   ]]></setTemplate>
+   <setTemplate variables="llwu_rst_llrste" ><![CDATA[
+         \t      // Configure filtered reset pin source
+         \t      %register   = %registerName;\n
+   ]]></setTemplate>
+   <template ><![CDATA[
       \t   }\n
    ]]></template>
 
-   <template key="llwu_base_methods" namespace="all" ><![CDATA[
+   <template ><![CDATA[
       \t};\n\n
       
    ]]></template>
         
+   <template key="DefaultInitValue" namespace="all"
+   ><![CDATA[
+      \t// LLWU default init value
+      \tstatic constexpr LlwuInfo::Init DefaultInitValue {\n
+   ]]></template>
+   <for keys="n" dim="8" >
+      <initialValueTemplate key="DefaultInitValue" namespace="all"
+         variables="llwu_me_wume%(n)"
+         terminator=","
+         separator=","
+      ><![CDATA[
+         %initExpression  \n
+      ]]></initialValueTemplate>
+   </for>   
+   
+   <for keys  ="r,p" 
+        values=
+        "1,0;1,1;1,2;1,3;2,4;2,5;2,6;2,7;3,8;3,9;3,10;3,11;4,12;4,13;4,14;4,15;5,16;
+         5,17;5,18;5,19;6,20;6,21;6,22;6,23;7,24;7,25;7,26;7,27;8,28;8,29;8,30;8,31"
+        >
+      <initialValueTemplate key="DefaultInitValue" namespace="all"
+         variables="llwu_pe%(r)_wupe%(p)"     
+         terminator=","
+         separator=","
+         initExpressionOnSameLine="true"
+      ><![CDATA[
+          \t   LlwuPin_%(p), %initExpression, \n
+      ]]></initialValueTemplate>
+   </for>
+   
+   <for keys="n" values="1;2;3;4">                    
+      <initialValueTemplate key="DefaultInitValue" namespace="all"
+         variables="llwu_filt%(n)_filtsel, llwu_filt%(n)_filte"
+         terminator=","
+         separator=","
+         initExpressionOnSameLine="true"
+      ><![CDATA[
+         \t   LlwuFilterNum_%(n), %initExpression, \n
+      ]]></initialValueTemplate>
+   </for>
+   
+   <initialValueTemplate key="DefaultInitValue" namespace="all"
+      variables="llwu_rst_llrste, llwu_rst_rstfilt"
+      terminator=","
+      separator=","
+   ><![CDATA[
+      \t   %symbolicValueExpression0, %symbolicValueExpression1,  \n
+   ]]></initialValueTemplate>
+
+   
+   
+   <template key="DefaultInitValue" namespace="all"
+   ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
    <template key="declarations" namespace="all"  ><![CDATA[
       \t/**
       \t * Class representing LLWU
@@ -393,8 +503,7 @@
 
    <projectActionList id = "llwu_files" >
       <copy source="Project_Headers/llwu.h"            target="Project_Headers/llwu.h"            overwrite="true" derived="true" />
-      <copy source="Snippets/llwu-example-mk22f.cpp"   target="Snippets/llwu-example-mk22f.cpp"   overwrite="true" derived="true" />
-      <copy source="Snippets/llwu-example-mkl25z.cpp"  target="Snippets/llwu-example-mkl25z.cpp"  overwrite="true" derived="true" />
+      <copy source="Snippets/llwu-simple-example.cpp"  target="Snippets/llwu-simple-example.cpp"  overwrite="true" derived="true" />
    </projectActionList>
    
 </fragment>

@@ -26,115 +26,6 @@ namespace USBDM {
  * @{
  */
 
-/**
- * Pin filter numbers
- *
- * @note These are used as an index into the FILT table so numbers do NOT correspond to filter names FILT[0] <=> FILT1 etc
- */
-enum LlwuFilterNum {
-   LlwuFilterNum_0, //!< FILT1
-#ifdef LLWU_FILT2_FILTE_MASK
-   LlwuFilterNum_1, //!< FILT2
-#endif
-#ifdef LLWU_FILT3_FILTE_MASK
-   LlwuFilterNum_2, //!< FILT3
-#endif
-#ifdef LLWU_FILT4_FILTE_MASK
-   LlwuFilterNum_3, //!< FILT4
-#endif
-};
-
-/**
- * LLWU pin sources
- */
-enum LlwuPin : uint32_t {
-   LlwuPin_0            =   0,  //!< Wake-up pin LLWU_P0
-   LlwuPin_1            =   1,  //!< Wake-up pin LLWU_P1
-   LlwuPin_2            =   2,  //!< Wake-up pin LLWU_P2
-   LlwuPin_3            =   3,  //!< Wake-up pin LLWU_P3
-#ifdef LLWU_PE2_WUPE4_MASK
-   LlwuPin_4            =   4,  //!< Wake-up pin LLWU_P4
-   LlwuPin_5            =   5,  //!< Wake-up pin LLWU_P5
-   LlwuPin_6            =   6,  //!< Wake-up pin LLWU_P6
-   LlwuPin_7            =   7,  //!< Wake-up pin LLWU_P7
-#endif
-#ifdef LLWU_PE3_WUPE8_MASK
-   LlwuPin_8            =   8,  //!< Wake-up pin LLWU_P8
-   LlwuPin_9            =   9,  //!< Wake-up pin LLWU_P9
-   LlwuPin_10           =  10,  //!< Wake-up pin LLWU_P10
-   LlwuPin_11           =  11,  //!< Wake-up pin LLWU_P11
-#endif
-#ifdef LLWU_PE4_WUPE12_MASK
-   LlwuPin_12           =  12,  //!< Wake-up pin LLWU_P12
-   LlwuPin_13           =  13,  //!< Wake-up pin LLWU_P13
-   LlwuPin_14           =  14,  //!< Wake-up pin LLWU_P14
-   LlwuPin_15           =  15,  //!< Wake-up pin LLWU_P15
-#endif
-#ifdef LLWU_PE5_WUPE16_MASK
-   LlwuPin_16           =  16,  //!< Wake-up pin LLWU_P16
-   LlwuPin_17           =  17,  //!< Wake-up pin LLWU_P17
-   LlwuPin_18           =  18,  //!< Wake-up pin LLWU_P18
-   LlwuPin_19           =  19,  //!< Wake-up pin LLWU_P19
-#endif
-#ifdef LLWU_PE6_WUPE20_MASK
-   LlwuPin_20           =  20,  //!< Wake-up pin LLWU_P20
-   LlwuPin_21           =  21,  //!< Wake-up pin LLWU_P21
-   LlwuPin_22           =  22,  //!< Wake-up pin LLWU_P22
-   LlwuPin_23           =  23,  //!< Wake-up pin LLWU_P23
-#endif
-#ifdef LLWU_PE7_WUPE24_MASK
-   LlwuPin_24           =  24,  //!< Wake-up pin LLWU_P24
-   LlwuPin_25           =  25,  //!< Wake-up pin LLWU_P25
-   LlwuPin_26           =  26,  //!< Wake-up pin LLWU_P26
-   LlwuPin_27           =  27,  //!< Wake-up pin LLWU_P27
-#endif
-#ifdef LLWU_PE8_WUPE28_MASK
-   LlwuPin_28           =  28,  //!< Wake-up pin LLWU_P28
-   LlwuPin_29           =  29,  //!< Wake-up pin LLWU_P29
-   LlwuPin_30           =  30,  //!< Wake-up pin LLWU_P30
-   LlwuPin_31           =  31,  //!< Wake-up pin LLWU_P31
-#endif
-
-   // Mapped pins
-$(/LLWU/InputPinMapping:// No user pin mappings found)
-};
-
-#if defined(LLWU_MF_MWUF0_MASK)
-/**
- * LLWU peripheral sources
- */
-enum LlwuPeripheral : uint32_t {
-   LlwuPeripheral_0               = (1<<0), //!< Wake-up peripheral LLWU_M0IF
-   LlwuPeripheral_1               = (1<<1), //!< Wake-up peripheral LLWU_M1IF
-   LlwuPeripheral_2               = (1<<2), //!< Wake-up peripheral LLWU_M2IF
-   LlwuPeripheral_3               = (1<<3), //!< Wake-up peripheral LLWU_M3IF
-   LlwuPeripheral_4               = (1<<4), //!< Wake-up peripheral LLWU_M4IF
-   LlwuPeripheral_5               = (1<<5), //!< Wake-up peripheral LLWU_M5IF
-   LlwuPeripheral_6               = (1<<6), //!< Wake-up peripheral LLWU_M6IF
-   LlwuPeripheral_7               = (1<<7), //!< Wake-up peripheral LLWU_M7IF
-
-   // Connected peripherals
-$(/LLWU/InputModuleMapping:// None found)
-};
-#endif
-
-#ifdef LLWU_RST_LLRSTE
-/**
- * Controls Low-Leakage Mode RESET Enable
- */
-enum LlwuResetWakeup {
-   LlwuResetWakeup_Disabled = LLWU_RST_LLRSTE(0), //!< Wake-up by Reset disabled
-   LlwuResetWakeup_Enabled  = LLWU_RST_LLRSTE(1), //!< Wake-up by Reset enabled
-};
-
-/**
- * Controls Digital Filter On RESET Pin
- */
-enum LlwuResetFilter {
-   LlwuResetFilter_Disabled = LLWU_RST_RSTFILT(0), //!< Reset filter disabled
-   LlwuResetFilter_Enabled  = LLWU_RST_RSTFILT(1), //!< Reset filter enabled
-};
-#endif
 
 /**
  * Type definition for LLWU interrupt call back
@@ -154,7 +45,7 @@ typedef void (*LlwuCallbackFunction)();
  * @endcode
  */
 template <class Info>
-class LlwuBase_T {
+class LlwuBase_T : public Info {
 
 protected:
    /** Class to static check llwuPin exists and is mapped to a pin */
@@ -298,7 +189,10 @@ public:
 
       // Configure pins
       Info::initPCRs();
-$(/LLWU/llwu_base_init:// No initialisation found - /LLWU/llwu_base_init)
+      
+      // Configure registers
+      DefaultInitValue.configure();
+      
       enableNvicInterrupts(Info::irqLevel);
    }
 
@@ -521,7 +415,10 @@ $(/LLWU/llwu_base_init:// No initialisation found - /LLWU/llwu_base_init)
       }
    };
 
-$(/LLWU/llwu_base_methods:// No peripheral devices found - /LLWU/llwu_base_methods)
+$(/LLWU/llwu_base_methods:// /LLWU/llwu_base_methods not found)
+
+$(/LLWU/DefaultInitValue:// /LLWU/DefaultInitValue not found)
+
 };
 
 template<class Info> LlwuCallbackFunction LlwuBase_T<Info>::sCallback = LlwuBase_T<Info>::unhandledCallback;

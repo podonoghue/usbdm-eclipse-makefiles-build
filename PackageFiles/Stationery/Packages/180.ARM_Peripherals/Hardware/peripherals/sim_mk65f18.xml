@@ -203,6 +203,24 @@
          <choice value="0"  name="MCGOUTCLK"          enum="McgOutClk"  isDefault="true" />
          <choice value="1"  name="Core/system clock"  enum="CoreClk"    />
       </binaryOption>   
+      
+      <binaryOption key="sim_sopt2_usbregen" 
+         enumStem="SimUsbPhyRegEn"
+         description="USB PHY PLL Regulator Enable"
+         toolTip="Enables the PLL regulator in the USB PHY.\n
+                  The regulator must be enabled before enabling the PLL in the USB HS PHY" >
+         <choice value="0"  name="Disabled"   enum="Enabled"     isDefault="true" />
+         <choice value="1"  name="Enabled"    enum="Disabled"    />
+      </binaryOption>   
+      
+      <binaryOption key="sim_sopt2_usbslsrc" 
+         enumStem="SimUsbSlowClock"
+         description="USB Slow Clock Source"
+         toolTip="Configures the clock source for the USB PHY and HS Controller slow clock,\n
+                  used to detect wakeup and resume events" >
+         <choice value="0"  name="MCGIRCLK Clock"   enum="McgIrClk"     isDefault="true" />
+         <choice value="1"  name="RTC Clock"        enum="RtcClk"    />
+      </binaryOption>   
    </category>
    
    <category name="SOPT4" description="FTM signals">

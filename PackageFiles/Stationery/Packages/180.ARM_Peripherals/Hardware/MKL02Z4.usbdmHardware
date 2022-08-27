@@ -109,10 +109,6 @@
          <param name="smc_stopctrl_porpo_present" key="/SMC/smc_stopctrl_porpo_present" value="true" />
          <param name="smc_stopctrl_pstopo_present" key="/SMC/smc_stopctrl_pstopo_present" value="true" />
          <param name="smc_stopctrl_vllsm_present" key="/SMC/smc_stopctrl_vllsm_present" value="true" />
-         <param name="smc_vllsctrl_llsm_present" key="/SMC/smc_vllsctrl_llsm_present" value="true" />
-         <param name="smc_vllsctrl_porpo_present" key="/SMC/smc_vllsctrl_porpo_present" value="true" />
-         <param name="smc_vllsctrl_pstopo_present" key="/SMC/smc_vllsctrl_pstopo_present" value="true" />
-         <param name="smc_vllsctrl_vllsm_present" key="/SMC/smc_vllsctrl_vllsm_present" value="true" />
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        version="spi0_mke_8bit">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />

@@ -379,8 +379,8 @@ static void runSingleTest(PreservedData &preservedData) {
       case VLPW:  testWaitMode(SmcRunMode_VeryLowPower);       break;
       case STOP:  testStopMode(SmcStopMode_NormalStop);        break;
       case VLPS:  testStopMode(SmcStopMode_VeryLowPowerStop);  break;
-      case LLS2:  testStopMode(SmcStopMode_LowLeakageStop,     SmcLowLeakageStopMode_LLS2);  break;
-      case LLS3:  testStopMode(SmcStopMode_LowLeakageStop,     SmcLowLeakageStopMode_LLS3);  break;
+      case LLS2:  testStopMode(SmcStopMode_LowLeakageStop,     SmcLowLeakageStopMode_VLLS2);  break;
+      case LLS3:  testStopMode(SmcStopMode_LowLeakageStop,     SmcLowLeakageStopMode_VLLS3);  break;
       case VLLS0: testStopMode(SmcStopMode_VeryLowLeakageStop, SmcLowLeakageStopMode_VLLS0); break;
       case VLLS1: testStopMode(SmcStopMode_VeryLowLeakageStop, SmcLowLeakageStopMode_VLLS1); break;
       case VLLS2: testStopMode(SmcStopMode_VeryLowLeakageStop, SmcLowLeakageStopMode_VLLS2); break;

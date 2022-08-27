@@ -5,10 +5,10 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
       
-   <constant key="llwu_filt1_present" />
-   <constant key="llwu_pe1_present" />
-   <constant key="llwu_pe2_present" />
-   
    <xi:include href="_llwu_base.xml"/>   
+
+   <projectActionList id = "llwu_files_mkw41z" >
+      <copy source="Snippets/llwu-example-mkl25z.cpp"  target="Snippets/llwu-example-mkl25z.cpp"  overwrite="true" derived="true" />
+   </projectActionList>
 
 </peripheralPage>

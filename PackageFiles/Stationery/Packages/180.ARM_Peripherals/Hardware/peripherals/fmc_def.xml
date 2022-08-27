@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- fmc_def.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
+
+   <xi:include href="_default_instance.xml"/>
+   
+   <if condition="irqOption_present" >
+      <xi:include href="_irqOption.xml"/>
+   </if>   
+   
+   <!-- 
+      ******************** Flash Controller  ******************** 
+   -->   
+   <for keys="n,m" values ="0,0;1,1;01,0;23,1" >
+      <choiceOption key="fmc_pfb%(n)cr_flash_speculation" condition="fmc_pfb%(n)cr_b%(m)dpe_present||fmc_pfb%(n)cr_b%(m)ipe_present"
+         enumStem="FmcFlashSpeculation"
+         valueFormat="FMC_PFB%(n)CR_B%(m)DPE(%s),FMC_PFB%(n)CR_B%(m)IPE(%s)"
+         description="Bank %(n) Flash Controller Speculation Buffer"
+         toolTip="Controls the operation of the Speculation Buffer for each Flash Controller bank"
+         >
+         <choice value="0,0" name="Disabled"              enum="Disabled"               />
+         <choice value="1,0" name="Data Only"             enum="DataOnly"               />
+         <choice value="0,1" name="Instructions Only"     enum="InstructionsOnly"       />
+         <choice value="1,1" name="Instructions and Data" enum="InstructionsAndData"    isDefault="true" />
+      </choiceOption>
+
+      <setTemplate  
+         variables="fmc_pfb%(n)cr_flash_speculation"
+      > <![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %comments
+         \t */
+         \tstatic void setFlashBank%(n)Speculation(%params) {
+         
+         \t   %register = (%register&~(%mask)) | %paramExpression;
+         \t}\n\n
+      ]]></setTemplate>
+            
+      <choiceOption key="fmc_pfb%(n)cr_flash_cache" condition="fmc_pfb%(n)cr_b%(m)dce_present||fmc_pfb%(n)cr_b%(m)ice_present"
+         enumStem="FmcFlashCache"
+         valueFormat="FMC_PFB%(n)CR_B%(m)DCE(%s),FMC_PFB%(n)CR_B%(m)ICE(%s)"
+         description="Bank %(n) Flash Controller Cache"
+         toolTip="Controls the operation of the Cache for each Flash Controller bank"
+         >
+         <choice value="0,0" name="Disabled"              enum="Disabled"               />
+         <choice value="1,0" name="Data Only"             enum="DataOnly"               />
+         <choice value="0,1" name="Instructions Only"     enum="InstructionsOnly"       />
+         <choice value="1,1" name="Instructions and Data" enum="InstructionsAndData"    isDefault="true" />
+      </choiceOption>
+      
+      <setTemplate  
+         variables="fmc_pfb%(n)cr_flash_cache"
+      > <![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %comments
+         \t */
+         \tstatic void setFlashBank%(n)Cache(%params) {
+         
+         \t   %register = (%register&~(%mask)) | %paramExpression;
+         \t}\n\n
+      ]]></setTemplate>
+      
+      <setTemplate variables="fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_flash_speculation" 
+         ><![CDATA[
+         \t/**
+         \t **
+         \t * Class used to do initialisation of Flash bank %(n) controller
+         \t * Options not explicitly mentioned are cleared to 0.
+         \t *
+         \t * This class has a templated constructor that accepts a range of options
+         \t *
+         \t * @note This constructor may be used to create a const instance in ROM
+         \t *
+         \t * Example1:
+         \t * @code
+         \t * const Fmc::FlashBank%(n)Init flashInit {
+         \t *    // List of options
+         \t *    FmcFlashCache_Disabled, 
+         \t *    FmcFlashSpeculation_InstructionsAndData,
+         \t * };
+         \t *
+         \t * flashInit.configure();  // Configure selected options
+         \t * @endcode
+         \t */
+         \tclass FlashBank%(n)Init {
+         \t
+         \tprivate:
+         \t   /// Value for %registerName register
+         \t   uint32_t %registerName = 0;
+         \t
+         \tpublic:
+         \t   /**
+         \t    * Configure Flash options as specified in the constructor
+         \t    */
+         \t   inline void configure() const {
+         \t      %register = (%register & ~%mask)|
+         \t                   %registerName;
+         \t   }
+         \t  
+         \t   /**
+         \t    * Read the current settings from hardware registers 
+         \t    */
+         \t   void readConfig() {
+         \t      %registerName = %register & %mask;
+         \t   }
+         \t  
+         \t   /**                               
+         \t    * Copy Constructor                  
+         \t    */                             
+         \t   constexpr FlashBank%(n)Init(const FlashBank%(n)Init &other) = default;
+         \t   
+         \t   /**
+         \t    * Constructor
+         \t    */
+         \t   constexpr FlashBank%(n)Init()  {
+         \t   }
+         \t\n
+      ]]></setTemplate>
+
+      <for keys="v" values="fmc_pfb%(n)cr_flash_cache;fmc_pfb%(n)cr_flash_speculation" >      
+         <setTemplate 
+            variables="%(v)"
+         ><![CDATA[
+            \t   /**
+            \t    * Constructor
+            \t    *
+            \t    * @param %enumParam %description
+            \t    */
+            \t   template <typename... Types>
+            \t   constexpr FlashBank%(n)Init(%enumClass %enumParam, Types... rest) : FlashBank%(n)Init(rest...)  {
+            \t   
+            \t      %registerName = (%registerName&~%mask) | %enumParam;
+            \t   }\n\n
+      ]]></setTemplate>
+      </for>
+   
+      <template condition="fmc_pfb%(n)cr_flash_cache||fmc_pfb%(n)cr_flash_speculation" > 
+         ><![CDATA[
+         \t};\n\n
+      ]]></template>
+   
+      <setTemplate key="/FMC/DefaultFlashInitValue" namespace="all"
+         variables="fmc_pfb%(n)cr_flash_speculation, fmc_pfb%(n)cr_flash_cache"
+         terminator=","
+         separator=","
+      ><![CDATA[
+         \t/**
+         \t * Default value for FMC::FlashBank%(n)Init
+         \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->FMC)
+         \t */
+         \tstatic constexpr FmcInfo::FlashBank%(n)Init DefaultFlashBank%(n)InitValue {%initExpression
+         \t};
+         \t
+         \t/**
+         \t * Configure Flash Bank %(n)
+         \t *
+         \t * @param flashInit Initialisation value
+         \t */
+         \tstatic void configureFlashBank%(n)(const FmcInfo::FlashBank%(n)Init &flashInit) {
+         \t   flashInit.configure();
+         \t}\n
+      ]]></setTemplate>
+            
+      <template namespace="all" key="/SMC/preEnterStopMode" variables="fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_flash_speculation" ><![CDATA[
+      \t   // Save current Flash Bank%(n) settings
+      \t   FmcInfo::FlashBank%(n)Init savedFlashBank%(n)Settings;
+      \t   savedFlashBank%(n)Settings.readConfig();
+      \t   // Disable Flash Bank%(n) prefetch
+      \t   FmcInfo::setFlashBank%(n)Speculation(FmcFlashSpeculation_Disabled);\n
+      ]]></template>
+   
+      <template namespace="all" key="/SMC/postExitStopMode" variables="fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_flash_speculation" ><![CDATA[
+      \t   // Restore flash Bank%(n) settings
+      \t   savedFlashBank%(n)Settings.configure();\n
+      ]]></template>
+   </for>
+   
+   <!-- 
+      ******************** misc ******************** 
+   -->
+   <template key="/FMC/declarations" namespace="all" ><![CDATA[
+      \t/**
+      \t * Class representing $(_name)
+      \t */\n
+   ]]></template>
+   <template key="/FMC/declarations" namespace="all" condition="irqOption_present" ><![CDATA[
+      \tclass $(_class) : public $(_base_class)Base, public $(_base_class)Interrupt_T<$(_class)Info> {};\n
+   ]]></template>
+   <template key="/FMC/declarations" namespace="all" condition="!irqOption_present" ><![CDATA[
+      \tclass $(_class) : public $(_base_class)Base {};\n
+   ]]></template>
+   
+   <projectActionList id = "fmc_files" >
+      <copy source="Project_Headers/fmc.h"         target="Project_Headers/fmc.h"          overwrite="true" derived="true" />
+   </projectActionList>
+
+</fragment>

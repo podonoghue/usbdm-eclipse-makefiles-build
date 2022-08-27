@@ -183,6 +183,43 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexBus" />
          <clock clockEnable="SIM->SCGC7 = SIM->SCGC7 | SIM_SCGC7_FLEXBUS_MASK;" clockDisable="SIM->SCGC7 = SIM->SCGC7 &amp; ~SIM_SCGC7_FLEXBUS_MASK;" />
       </peripheral>
+      <peripheral baseName="FMC"      instance=""         version="fmc_mk24f12">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFmc" />
+         <param name="fmc_pfapr_m0ap_present" key="/FMC/fmc_pfapr_m0ap_present" value="true" />
+         <param name="fmc_pfapr_m0pfd_present" key="/FMC/fmc_pfapr_m0pfd_present" value="true" />
+         <param name="fmc_pfapr_m1ap_present" key="/FMC/fmc_pfapr_m1ap_present" value="true" />
+         <param name="fmc_pfapr_m1pfd_present" key="/FMC/fmc_pfapr_m1pfd_present" value="true" />
+         <param name="fmc_pfapr_m2ap_present" key="/FMC/fmc_pfapr_m2ap_present" value="true" />
+         <param name="fmc_pfapr_m2pfd_present" key="/FMC/fmc_pfapr_m2pfd_present" value="true" />
+         <param name="fmc_pfapr_m3ap_present" key="/FMC/fmc_pfapr_m3ap_present" value="true" />
+         <param name="fmc_pfapr_m3pfd_present" key="/FMC/fmc_pfapr_m3pfd_present" value="true" />
+         <param name="fmc_pfapr_m4ap_present" key="/FMC/fmc_pfapr_m4ap_present" value="true" />
+         <param name="fmc_pfapr_m4pfd_present" key="/FMC/fmc_pfapr_m4pfd_present" value="true" />
+         <param name="fmc_pfapr_m5ap_present" key="/FMC/fmc_pfapr_m5ap_present" value="true" />
+         <param name="fmc_pfapr_m5pfd_present" key="/FMC/fmc_pfapr_m5pfd_present" value="true" />
+         <param name="fmc_pfapr_m6ap_present" key="/FMC/fmc_pfapr_m6ap_present" value="true" />
+         <param name="fmc_pfapr_m6pfd_present" key="/FMC/fmc_pfapr_m6pfd_present" value="true" />
+         <param name="fmc_pfapr_m7ap_present" key="/FMC/fmc_pfapr_m7ap_present" value="true" />
+         <param name="fmc_pfapr_m7pfd_present" key="/FMC/fmc_pfapr_m7pfd_present" value="true" />
+         <param name="fmc_pfb0cr_b0dce_present" key="/FMC/fmc_pfb0cr_b0dce_present" value="true" />
+         <param name="fmc_pfb0cr_b0dpe_present" key="/FMC/fmc_pfb0cr_b0dpe_present" value="true" />
+         <param name="fmc_pfb0cr_b0ice_present" key="/FMC/fmc_pfb0cr_b0ice_present" value="true" />
+         <param name="fmc_pfb0cr_b0ipe_present" key="/FMC/fmc_pfb0cr_b0ipe_present" value="true" />
+         <param name="fmc_pfb0cr_b0mw_present" key="/FMC/fmc_pfb0cr_b0mw_present" value="true" />
+         <param name="fmc_pfb0cr_b0rwsc_present" key="/FMC/fmc_pfb0cr_b0rwsc_present" value="true" />
+         <param name="fmc_pfb0cr_b0sebe_present" key="/FMC/fmc_pfb0cr_b0sebe_present" value="true" />
+         <param name="fmc_pfb0cr_cinv_way_present" key="/FMC/fmc_pfb0cr_cinv_way_present" value="true" />
+         <param name="fmc_pfb0cr_clck_way_present" key="/FMC/fmc_pfb0cr_clck_way_present" value="true" />
+         <param name="fmc_pfb0cr_crc_present" key="/FMC/fmc_pfb0cr_crc_present" value="true" />
+         <param name="fmc_pfb0cr_s_b_inv_present" key="/FMC/fmc_pfb0cr_s_b_inv_present" value="true" />
+         <param name="fmc_pfb1cr_b1dce_present" key="/FMC/fmc_pfb1cr_b1dce_present" value="true" />
+         <param name="fmc_pfb1cr_b1dpe_present" key="/FMC/fmc_pfb1cr_b1dpe_present" value="true" />
+         <param name="fmc_pfb1cr_b1ice_present" key="/FMC/fmc_pfb1cr_b1ice_present" value="true" />
+         <param name="fmc_pfb1cr_b1ipe_present" key="/FMC/fmc_pfb1cr_b1ipe_present" value="true" />
+         <param name="fmc_pfb1cr_b1mw_present" key="/FMC/fmc_pfb1cr_b1mw_present" value="true" />
+         <param name="fmc_pfb1cr_b1rwsc_present" key="/FMC/fmc_pfb1cr_b1rwsc_present" value="true" />
+         <param name="fmc_pfb1cr_b1sebe_present" key="/FMC/fmc_pfb1cr_b1sebe_present" value="true" />
+      </peripheral>
       <peripheral baseName="FTFE"     instance=""         version="ftfe_128k_flexrom">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTF_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTF_MASK;" />
@@ -279,6 +316,54 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
          <param name="Wakeup sources" key="/LLWU/device_list" value="LPTMR0;CMP0;CMP1;CMP2;;RTC_Alarm;;RTC_Seconds" />
+         <param name="llwu_filt1_filte_present" key="/LLWU/llwu_filt1_filte_present" value="true" />
+         <param name="llwu_filt1_filtf_present" key="/LLWU/llwu_filt1_filtf_present" value="true" />
+         <param name="llwu_filt1_filtsel_present" key="/LLWU/llwu_filt1_filtsel_present" value="true" />
+         <param name="llwu_filt2_filte_present" key="/LLWU/llwu_filt2_filte_present" value="true" />
+         <param name="llwu_filt2_filtf_present" key="/LLWU/llwu_filt2_filtf_present" value="true" />
+         <param name="llwu_filt2_filtsel_present" key="/LLWU/llwu_filt2_filtsel_present" value="true" />
+         <param name="llwu_me_wume0_present" key="/LLWU/llwu_me_wume0_present" value="true" />
+         <param name="llwu_me_wume1_present" key="/LLWU/llwu_me_wume1_present" value="true" />
+         <param name="llwu_me_wume2_present" key="/LLWU/llwu_me_wume2_present" value="true" />
+         <param name="llwu_me_wume3_present" key="/LLWU/llwu_me_wume3_present" value="true" />
+         <param name="llwu_me_wume4_present" key="/LLWU/llwu_me_wume4_present" value="true" />
+         <param name="llwu_me_wume5_present" key="/LLWU/llwu_me_wume5_present" value="true" />
+         <param name="llwu_me_wume6_present" key="/LLWU/llwu_me_wume6_present" value="true" />
+         <param name="llwu_me_wume7_present" key="/LLWU/llwu_me_wume7_present" value="true" />
+         <param name="llwu_pe1_wupe0_present" key="/LLWU/llwu_pe1_wupe0_present" value="true" />
+         <param name="llwu_pe1_wupe1_present" key="/LLWU/llwu_pe1_wupe1_present" value="true" />
+         <param name="llwu_pe1_wupe2_present" key="/LLWU/llwu_pe1_wupe2_present" value="true" />
+         <param name="llwu_pe1_wupe3_present" key="/LLWU/llwu_pe1_wupe3_present" value="true" />
+         <param name="llwu_pe2_wupe4_present" key="/LLWU/llwu_pe2_wupe4_present" value="true" />
+         <param name="llwu_pe2_wupe5_present" key="/LLWU/llwu_pe2_wupe5_present" value="true" />
+         <param name="llwu_pe2_wupe6_present" key="/LLWU/llwu_pe2_wupe6_present" value="true" />
+         <param name="llwu_pe2_wupe7_present" key="/LLWU/llwu_pe2_wupe7_present" value="true" />
+         <param name="llwu_pe3_wupe10_present" key="/LLWU/llwu_pe3_wupe10_present" value="true" />
+         <param name="llwu_pe3_wupe11_present" key="/LLWU/llwu_pe3_wupe11_present" value="true" />
+         <param name="llwu_pe3_wupe8_present" key="/LLWU/llwu_pe3_wupe8_present" value="true" />
+         <param name="llwu_pe3_wupe9_present" key="/LLWU/llwu_pe3_wupe9_present" value="true" />
+         <param name="llwu_pe4_wupe12_present" key="/LLWU/llwu_pe4_wupe12_present" value="true" />
+         <param name="llwu_pe4_wupe13_present" key="/LLWU/llwu_pe4_wupe13_present" value="true" />
+         <param name="llwu_pe4_wupe14_present" key="/LLWU/llwu_pe4_wupe14_present" value="true" />
+         <param name="llwu_pe4_wupe15_present" key="/LLWU/llwu_pe4_wupe15_present" value="true" />
+         <param name="llwu_pf1_wuf0_present" key="/LLWU/llwu_pf1_wuf0_present" value="true" />
+         <param name="llwu_pf1_wuf1_present" key="/LLWU/llwu_pf1_wuf1_present" value="true" />
+         <param name="llwu_pf1_wuf2_present" key="/LLWU/llwu_pf1_wuf2_present" value="true" />
+         <param name="llwu_pf1_wuf3_present" key="/LLWU/llwu_pf1_wuf3_present" value="true" />
+         <param name="llwu_pf1_wuf4_present" key="/LLWU/llwu_pf1_wuf4_present" value="true" />
+         <param name="llwu_pf1_wuf5_present" key="/LLWU/llwu_pf1_wuf5_present" value="true" />
+         <param name="llwu_pf1_wuf6_present" key="/LLWU/llwu_pf1_wuf6_present" value="true" />
+         <param name="llwu_pf1_wuf7_present" key="/LLWU/llwu_pf1_wuf7_present" value="true" />
+         <param name="llwu_pf2_wuf10_present" key="/LLWU/llwu_pf2_wuf10_present" value="true" />
+         <param name="llwu_pf2_wuf11_present" key="/LLWU/llwu_pf2_wuf11_present" value="true" />
+         <param name="llwu_pf2_wuf12_present" key="/LLWU/llwu_pf2_wuf12_present" value="true" />
+         <param name="llwu_pf2_wuf13_present" key="/LLWU/llwu_pf2_wuf13_present" value="true" />
+         <param name="llwu_pf2_wuf14_present" key="/LLWU/llwu_pf2_wuf14_present" value="true" />
+         <param name="llwu_pf2_wuf15_present" key="/LLWU/llwu_pf2_wuf15_present" value="true" />
+         <param name="llwu_pf2_wuf8_present" key="/LLWU/llwu_pf2_wuf8_present" value="true" />
+         <param name="llwu_pf2_wuf9_present" key="/LLWU/llwu_pf2_wuf9_present" value="true" />
+         <param name="llwu_rst_llrste_present" key="/LLWU/llwu_rst_llrste_present" value="true" />
+         <param name="llwu_rst_rstfilt_present" key="/LLWU/llwu_rst_rstfilt_present" value="true" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
@@ -292,6 +377,35 @@
       <peripheral baseName="MCM"      instance=""         version="mcm_mk21fa12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcm" />
          <irq num="MCM_IRQn" />
+         <param name="mcm_cr_sramlap_present" key="/MCM/mcm_cr_sramlap_present" value="true" />
+         <param name="mcm_cr_sramlwp_present" key="/MCM/mcm_cr_sramlwp_present" value="true" />
+         <param name="mcm_cr_sramuap_present" key="/MCM/mcm_cr_sramuap_present" value="true" />
+         <param name="mcm_cr_sramuwp_present" key="/MCM/mcm_cr_sramuwp_present" value="true" />
+         <param name="mcm_etbcc_cnten_present" key="/MCM/mcm_etbcc_cnten_present" value="true" />
+         <param name="mcm_etbcc_etdis_present" key="/MCM/mcm_etbcc_etdis_present" value="true" />
+         <param name="mcm_etbcc_itdis_present" key="/MCM/mcm_etbcc_itdis_present" value="true" />
+         <param name="mcm_etbcc_rlrq_present" key="/MCM/mcm_etbcc_rlrq_present" value="true" />
+         <param name="mcm_etbcc_rspt_present" key="/MCM/mcm_etbcc_rspt_present" value="true" />
+         <param name="mcm_etbcnt_counter_present" key="/MCM/mcm_etbcnt_counter_present" value="true" />
+         <param name="mcm_etbrl_reload_present" key="/MCM/mcm_etbrl_reload_present" value="true" />
+         <param name="mcm_iscr_dhreq_present" key="/MCM/mcm_iscr_dhreq_present" value="true" />
+         <param name="mcm_iscr_fdzc_present" key="/MCM/mcm_iscr_fdzc_present" value="true" />
+         <param name="mcm_iscr_fdzce_present" key="/MCM/mcm_iscr_fdzce_present" value="true" />
+         <param name="mcm_iscr_fidc_present" key="/MCM/mcm_iscr_fidc_present" value="true" />
+         <param name="mcm_iscr_fidce_present" key="/MCM/mcm_iscr_fidce_present" value="true" />
+         <param name="mcm_iscr_fioc_present" key="/MCM/mcm_iscr_fioc_present" value="true" />
+         <param name="mcm_iscr_fioce_present" key="/MCM/mcm_iscr_fioce_present" value="true" />
+         <param name="mcm_iscr_fixc_present" key="/MCM/mcm_iscr_fixc_present" value="true" />
+         <param name="mcm_iscr_fixce_present" key="/MCM/mcm_iscr_fixce_present" value="true" />
+         <param name="mcm_iscr_fofc_present" key="/MCM/mcm_iscr_fofc_present" value="true" />
+         <param name="mcm_iscr_fofce_present" key="/MCM/mcm_iscr_fofce_present" value="true" />
+         <param name="mcm_iscr_fufc_present" key="/MCM/mcm_iscr_fufc_present" value="true" />
+         <param name="mcm_iscr_fufce_present" key="/MCM/mcm_iscr_fufce_present" value="true" />
+         <param name="mcm_iscr_irq_present" key="/MCM/mcm_iscr_irq_present" value="true" />
+         <param name="mcm_iscr_nmi_present" key="/MCM/mcm_iscr_nmi_present" value="true" />
+         <param name="mcm_pid_pid_present" key="/MCM/mcm_pid_pid_present" value="true" />
+         <param name="mcm_plamc_amc_present" key="/MCM/mcm_plamc_amc_present" value="true" />
+         <param name="mcm_plasc_asc_present" key="/MCM/mcm_plasc_asc_present" value="true" />
       </peripheral>
       <peripheral baseName="MPU"      instance=""         version="mpu_mk21f12_r12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
@@ -356,9 +470,6 @@
          <param name="smc_stopctrl_llsm_present" key="/SMC/smc_stopctrl_llsm_present" value="true" />
          <param name="smc_stopctrl_porpo_present" key="/SMC/smc_stopctrl_porpo_present" value="true" />
          <param name="smc_stopctrl_vllsm_present" key="/SMC/smc_stopctrl_vllsm_present" value="true" />
-         <param name="smc_vllsctrl_llsm_present" key="/SMC/smc_vllsctrl_llsm_present" value="true" />
-         <param name="smc_vllsctrl_porpo_present" key="/SMC/smc_vllsctrl_porpo_present" value="true" />
-         <param name="smc_vllsctrl_vllsm_present" key="/SMC/smc_vllsctrl_vllsm_present" value="true" />
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        version="spi0_mk_pcsis6">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
