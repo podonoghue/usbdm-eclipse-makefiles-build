@@ -884,7 +884,7 @@ USBDM_ErrorCode GdbHandlerCommon::programImage(FlashImagePtr flashImage) {
 
       FlashProgrammerPtr flashProgrammer = FlashProgrammerFactory::createFlashProgrammer(bdmInterface);
       flashProgrammer->setDeviceData(deviceData, getTclInterface());
-      USBDM_ErrorCode rc = flashProgrammer->setDeviceData(deviceData);
+      rc = flashProgrammer->setDeviceData(deviceData);
       if (rc == BDM_RC_OK) {
          rc = flashProgrammer->programFlash(flashImage, 0, true);
       }
