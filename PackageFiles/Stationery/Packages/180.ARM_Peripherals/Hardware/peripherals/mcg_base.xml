@@ -5,6 +5,8 @@
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
    
    <xi:include href="_default_instance.xml"/>
+   
+   <xi:include href="_currentClockSelection.xml"/>
 
    <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
       <aliasOption key="/OSC0/osc_input_freq" constant="false" />

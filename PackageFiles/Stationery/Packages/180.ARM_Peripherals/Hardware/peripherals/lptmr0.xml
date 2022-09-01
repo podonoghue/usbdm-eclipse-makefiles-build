@@ -21,42 +21,37 @@
    ]]></template>
    
    <choiceOption key="lptmr_psr_pcs" description="Clock Source"
+      enumStem="LptmrClockSel"
       toolTip="Low Power Timer clock source">
-      <choice value="0" name="MCG Internal Reference Clock (MCGIRCLK)" />
-      <choice value="1" name="Low power oscillator (LPO - 1kHz)" />
-      <choice value="2" name="32kHz Clock Source (ERCLK32)" />
-      <choice value="3" name="Oscillator External Reference Clock (OSCERCLK)" />
+      <choice value="0" name="MCG Internal Reference Clock (MCGIRCLK)"        enum="Mcgirclk" code="McgInfo::getMcgIrClock()"  />
+      <choice value="1" name="Low power oscillator (LPO - 1kHz)"              enum="Lpoclk"   code="PmcInfo::getLpoClock()"    isDefault="true" />
+      <choice value="2" name="32kHz Clock Source (ERCLK32)"                   enum="Erclk32"  code="SimInfo::getErc32kClock()" />
+      <choice value="3" name="Oscillator External Reference Clock (OSCERCLK)" enum="Oscerclk" code="Osc0Info::getOscerClock()" />
    </choiceOption>
 
-   <binaryOption key="lptmr_psr_pbyp" description="Prescaler Bypass"
-      toolTip="When PBYP is set:\n
-      - The selected prescaler clock in Time Counter mode or\n
-        the selected input source in Pulse Counter mode, directly clocks the lptmr_cnr.\n
-        When PBYP is clear:\n
-      - The lptmr_cnr is clocked by the output of the prescaler/glitch filter">
-      <choice value="0" name="Prescaler/glitch filter is enabled" />
-      <choice value="1" name="Prescaler/glitch filter is bypassed" />
-   </binaryOption>
-   
-   <choiceOption key="lptmr_psr_prescaler" description="Prescaler Value"
+   <choiceOption key="lptmr_psr_prescaler" 
+      description="Prescaler Value" 
+      valueFormat="LPTMR_PSR_PBYP(%s),LPTMR_PSR_PRESCALE(%s)"
+      enumStem="LptmrPrescale"
       toolTip="Configures the size of the Prescaler in Time Counter mode or\n
          width of the glitch filter in Pulse Counter mode">
-      <choice value="0"  name="Prescaler = 2, no glitch filter" />
-      <choice value="1"  name="Prescaler = 4, 2 clock glitch filter" />
-      <choice value="2"  name="Prescaler = 8, 4 clock glitch filter" />
-      <choice value="3"  name="Prescaler = 16, 8 clock glitch filter" />
-      <choice value="4"  name="Prescaler = 32, 16 clock glitch filter" />
-      <choice value="5"  name="Prescaler = 64, 32 clock glitch filter" />
-      <choice value="6"  name="Prescaler = 128, 64 clock glitch filter" />
-      <choice value="7"  name="Prescaler = 256, 128 clock glitch filter" />
-      <choice value="8"  name="Prescaler = 512, 256 clock glitch filter" />
-      <choice value="9"  name="Prescaler = 1024, 512 clock glitch filter" />
-      <choice value="10" name="Prescaler = 2048, 1024 clock glitch filter" />
-      <choice value="11" name="Prescaler = 4096, 2048 clock glitch filter" />
-      <choice value="12" name="Prescaler = 8192, 4096 clock glitch filter" />
-      <choice value="13" name="Prescaler = 16384, 8192 clock glitch filter" />
-      <choice value="14" name="Prescaler = 32768, 16384 clock glitch filter" />
-      <choice value="15" name="Prescaler = 65536, 32768 clock glitch filter" />
+      <choice value="1,0"  name="Prescaler = 1, no glitch filter"              enum="Direct_NoFilter"    />
+      <choice value="0,0"  name="Prescaler = 2, no glitch filter"              enum="DivBy2_NoFIlter"    />
+      <choice value="0,1"  name="Prescaler = 4, 2 clock glitch filter"         enum="DivBy4"             />
+      <choice value="0,2"  name="Prescaler = 8, 4 clock glitch filter"         enum="DivBy8"             />
+      <choice value="0,3"  name="Prescaler = 16, 8 clock glitch filter"        enum="DivBy16"            />
+      <choice value="0,4"  name="Prescaler = 32, 16 clock glitch filter"       enum="DivBy32"            />
+      <choice value="0,5"  name="Prescaler = 64, 32 clock glitch filter"       enum="DivBy64"            />
+      <choice value="0,6"  name="Prescaler = 128, 64 clock glitch filter"      enum="DivBy128"           />
+      <choice value="0,7"  name="Prescaler = 256, 128 clock glitch filter"     enum="DivBy256"           />
+      <choice value="0,8"  name="Prescaler = 512, 256 clock glitch filter"     enum="DivBy512"           />
+      <choice value="0,9"  name="Prescaler = 1024, 512 clock glitch filter"    enum="DivBy1024"          />
+      <choice value="0,10" name="Prescaler = 2048, 1024 clock glitch filter"   enum="DivBy2048"          />
+      <choice value="0,11" name="Prescaler = 4096, 2048 clock glitch filter"   enum="DivBy4096"          />
+      <choice value="0,12" name="Prescaler = 8192, 4096 clock glitch filter"   enum="DivBy8192"          />
+      <choice value="0,13" name="Prescaler = 16384, 8192 clock glitch filter"  enum="DivBy16384"         />
+      <choice value="0,14" name="Prescaler = 32768, 16384 clock glitch filter" enum="DivBy32768"         />
+      <choice value="0,15" name="Prescaler = 65536, 32768 clock glitch filter" enum="DivBy65536"         />
    </choiceOption>
    
    <floatOption key="clockFrequency" 
@@ -82,14 +77,15 @@
     
    <template><![CDATA[
       \t//! Default Timer Compare value
-      \tstatic constexpr uint32_t cmr = $(lptmr_cmr);
-      
-      \t//! Default PSR value
-      \tstatic constexpr uint32_t psr = 
-      \t   LPTMR_PSR_PRESCALE($(lptmr_psr_prescaler))|
-      \t   LPTMR_PSR_PBYP($(lptmr_psr_pbyp))|
-      \t   LPTMR_PSR_PCS($(lptmr_psr_pcs));\n\n
+      \tstatic constexpr uint32_t cmr = $(lptmr_cmr);\n\n
    ]]></template>
+   
+   <initialValueTemplate 
+      variables="lptmr_psr_pcs,lptmr_psr_prescaler"     
+   ><![CDATA[
+      \t//! Default PSR value
+      \tstatic constexpr uint32_t psr = %initExpression\n\n
+   ]]></initialValueTemplate>
    
    <binaryOption key="lptmr_csr_tms" description="Timer Mode Select"
       toolTip="Configures the mode of the LPTMR">
@@ -139,7 +135,7 @@
       lptmr_csr_tcf flag is set when lptmr_cnr equals the value in the lptmr_cmr and lptmr_cnr increments. \n
       The hardware trigger will assert until the next time the lptmr_cnr increments. \n
       If lptmr_csr_tfc=0 the lptmr_cnr will roll-over to zero" 
-      value="65535" min="0" max="65535" />
+      value="65535" min="1" max="65535" />
       
    <floatOption key="lptmr_cmrPeriod"     description="Timer Compare Interval"
       toolTip="This is determined from lptmr_cmr register and clock frequency.\n

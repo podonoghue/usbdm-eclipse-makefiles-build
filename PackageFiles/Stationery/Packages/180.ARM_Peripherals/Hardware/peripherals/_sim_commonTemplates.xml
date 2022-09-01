@@ -1047,7 +1047,7 @@
 <!-- ========== SOPT9 =============================== -->   
 
    <for keys="p" values="1;2">
-      <for keys="Fn,FN,fn" values="ClkSel,CLKSEL,clksel;Ch0Src,CH0SRC,ch0src">
+      <for keys="Fn:FN:fn" values="ClkSel:CLKSEL:clksel;Ch0Src:CH0SRC:ch0src">
          <clockCodeTemplate variable="sim_sopt9_tpm%(p)%(fn)" 
          ><![CDATA[
             \t/**
@@ -1067,7 +1067,7 @@
       \tstatic constexpr uint32_t sopt9 = \n
    ]]></template>
    <for keys="p" values="1;2">
-      <for keys="Fn,FN,fn" values="ClkSel,CLKSEL,clksel;Ch0Src,CH0SRC,ch0src">
+      <for keys="Fn:FN:fn" values="ClkSel:CLKSEL:clksel;Ch0Src:CH0SRC:ch0src">
          <template variables="sim_sopt9_tpm%(p)%(fn)"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
       </for>
    </for>

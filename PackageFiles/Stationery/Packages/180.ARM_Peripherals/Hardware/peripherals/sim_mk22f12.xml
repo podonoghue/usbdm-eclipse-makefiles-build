@@ -83,10 +83,10 @@
       <aliasOption key="/OSC0/oscer_clock" optional="true" />
       <aliasOption key="/MCG/system_mcgirclk_clock[0]" optional="true" />
       
-      <for keys="n, name,              code,            ref"
-         values="0, System core clock, SystemCoreClock, system_core_clock;
-                 1, System core clock, SystemCoreClock, system_core_clock;
-                 2, System bus clock,  SystemBusClock,  system_bus_clock" >
+      <for keys="n : name              : code            : ref"
+         values="0 : System core clock : SystemCoreClock : system_core_clock;
+                 1 : System core clock : SystemCoreClock : system_core_clock;
+                 2 : System bus clock  : SystemBusClock  : system_bus_clock" >
 
          <choiceOption key="system_uart%(n)_fixedclocksource" 
             target="system_uart%(n)_clock"

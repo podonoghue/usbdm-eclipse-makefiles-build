@@ -248,11 +248,51 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_TPM0_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_TPM0_MASK;" />
          <irq num="TPM0_IRQn" />
+         <param name="tpm_cnt_count_present" key="/TPM0/tpm_cnt_count_present" value="true" />
+         <param name="tpm_conf_crot_present" key="/TPM0/tpm_conf_crot_present" value="true" />
+         <param name="tpm_conf_csoo_present" key="/TPM0/tpm_conf_csoo_present" value="true" />
+         <param name="tpm_conf_csot_present" key="/TPM0/tpm_conf_csot_present" value="true" />
+         <param name="tpm_conf_dbgmode_present" key="/TPM0/tpm_conf_dbgmode_present" value="true" />
+         <param name="tpm_conf_dozeen_present" key="/TPM0/tpm_conf_dozeen_present" value="true" />
+         <param name="tpm_conf_gtbeen_present" key="/TPM0/tpm_conf_gtbeen_present" value="true" />
+         <param name="tpm_conf_trgsel_present" key="/TPM0/tpm_conf_trgsel_present" value="true" />
+         <param name="tpm_mod_mod_present" key="/TPM0/tpm_mod_mod_present" value="true" />
+         <param name="tpm_sc_cmod_present" key="/TPM0/tpm_sc_cmod_present" value="true" />
+         <param name="tpm_sc_cpwms_present" key="/TPM0/tpm_sc_cpwms_present" value="true" />
+         <param name="tpm_sc_dma_present" key="/TPM0/tpm_sc_dma_present" value="true" />
+         <param name="tpm_sc_ps_present" key="/TPM0/tpm_sc_ps_present" value="true" />
+         <param name="tpm_sc_tof_present" key="/TPM0/tpm_sc_tof_present" value="true" />
+         <param name="tpm_sc_toie_present" key="/TPM0/tpm_sc_toie_present" value="true" />
+         <param name="tpm_status_ch0f_present" key="/TPM0/tpm_status_ch0f_present" value="true" />
+         <param name="tpm_status_ch1f_present" key="/TPM0/tpm_status_ch1f_present" value="true" />
+         <param name="tpm_status_ch2f_present" key="/TPM0/tpm_status_ch2f_present" value="true" />
+         <param name="tpm_status_ch3f_present" key="/TPM0/tpm_status_ch3f_present" value="true" />
+         <param name="tpm_status_ch4f_present" key="/TPM0/tpm_status_ch4f_present" value="true" />
+         <param name="tpm_status_ch5f_present" key="/TPM0/tpm_status_ch5f_present" value="true" />
+         <param name="tpm_status_tof_present" key="/TPM0/tpm_status_tof_present" value="true" />
       </peripheral>
       <peripheral baseName="TPM"      instance="1"        version="tpm1_2ch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_TPM1_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_TPM1_MASK;" />
          <irq num="TPM1_IRQn" />
+         <param name="tpm_cnt_count_present" key="/TPM1/tpm_cnt_count_present" value="true" />
+         <param name="tpm_conf_crot_present" key="/TPM1/tpm_conf_crot_present" value="true" />
+         <param name="tpm_conf_csoo_present" key="/TPM1/tpm_conf_csoo_present" value="true" />
+         <param name="tpm_conf_csot_present" key="/TPM1/tpm_conf_csot_present" value="true" />
+         <param name="tpm_conf_dbgmode_present" key="/TPM1/tpm_conf_dbgmode_present" value="true" />
+         <param name="tpm_conf_dozeen_present" key="/TPM1/tpm_conf_dozeen_present" value="true" />
+         <param name="tpm_conf_gtbeen_present" key="/TPM1/tpm_conf_gtbeen_present" value="true" />
+         <param name="tpm_conf_trgsel_present" key="/TPM1/tpm_conf_trgsel_present" value="true" />
+         <param name="tpm_mod_mod_present" key="/TPM1/tpm_mod_mod_present" value="true" />
+         <param name="tpm_sc_cmod_present" key="/TPM1/tpm_sc_cmod_present" value="true" />
+         <param name="tpm_sc_cpwms_present" key="/TPM1/tpm_sc_cpwms_present" value="true" />
+         <param name="tpm_sc_dma_present" key="/TPM1/tpm_sc_dma_present" value="true" />
+         <param name="tpm_sc_ps_present" key="/TPM1/tpm_sc_ps_present" value="true" />
+         <param name="tpm_sc_tof_present" key="/TPM1/tpm_sc_tof_present" value="true" />
+         <param name="tpm_sc_toie_present" key="/TPM1/tpm_sc_toie_present" value="true" />
+         <param name="tpm_status_ch0f_present" key="/TPM1/tpm_status_ch0f_present" value="true" />
+         <param name="tpm_status_ch1f_present" key="/TPM1/tpm_status_ch1f_present" value="true" />
+         <param name="tpm_status_tof_present" key="/TPM1/tpm_status_tof_present" value="true" />
       </peripheral>
       <peripheral baseName="TSI"      instance="0"        version="tsi0_mkl">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForTsi" />

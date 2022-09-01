@@ -193,7 +193,7 @@
       </template>
    </for>
 
-   <for keys="instance,reg,mask" values="0,0,0; 1,0,1; 2,0,2; 3,0,3; 4,1,0; 5,1,1; 6,1,2; 7,1,3" >
+   <for keys="instance:reg:mask" values="0:0:0; 1:0:1; 2:0:2; 3:0:3; 4:1:0; 5:1:1; 6:1:2; 7:1:3" >
       <template>
          <![CDATA[
          \t/** 

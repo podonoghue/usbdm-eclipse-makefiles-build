@@ -93,10 +93,10 @@
          toolTip="Frequency of clock to LPUART"
          value="0" />
       
-      <for keys="n, name,              code,            ref"
-         values="0, System core clock, SystemCoreClock, system_core_clock;
-                 1, System core clock, SystemCoreClock, system_core_clock;
-                 2, System bus clock,  SystemBusClock,  system_bus_clock" >
+      <for keys="n : name              : code            : ref"
+         values="0 : System core clock : SystemCoreClock : system_core_clock;
+                 1 : System core clock : SystemCoreClock : system_core_clock;
+                 2 : System bus clock  : SystemBusClock  : system_bus_clock" >
 
          <choiceOption key="system_uart%(n)_fixedclocksource" 
             target="system_uart%(n)_clock"

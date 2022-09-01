@@ -85,12 +85,12 @@
          value="0" 
          max="75MHz"/>
       
-      <for keys="n, name,              code,            ref"
-         values="0, System core clock, SystemCoreClock, system_core_clock;
-                 1, System core clock, SystemCoreClock, system_core_clock;
-                 2, System bus clock,  SystemBusClock,  system_bus_clock;
-                 3, System bus clock,  SystemBusClock,  system_bus_clock;
-                 4, System bus clock,  SystemBusClock,  system_bus_clock;" >
+      <for keys="n : name              : code            : ref"
+         values="0 : System core clock : SystemCoreClock : system_core_clock;
+                 1 : System core clock : SystemCoreClock : system_core_clock;
+                 2 : System bus clock  : SystemBusClock  : system_bus_clock;
+                 3 : System bus clock  : SystemBusClock  : system_bus_clock;
+                 4 : System bus clock  : SystemBusClock  : system_bus_clock;" >
 
          <choiceOption key="system_uart%(n)_fixedclocksource" 
             target="system_uart%(n)_clock"

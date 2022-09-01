@@ -461,7 +461,7 @@
       \t}\n\n
    ]]></template>
 
-   <for keys="instance" values="Lpo32k, Lpo1k" >
+   <for keys="instance" values="Lpo32k; Lpo1k" >
       <template>
          <![CDATA[
          \t/**
@@ -541,7 +541,7 @@
       \t}\n\n
    ]]></template>
    
-   <for keys="instance" values="0, 1, 2, 3" >
+   <for keys="instance" values="0; 1; 2; 3" >
       <template namespace="usbdm">
          <![CDATA[
          \t/**
@@ -556,7 +556,7 @@
       </template>
    </for>
      
-   <for keys="instance" values="0, 1, 2, 3" >
+   <for keys="instance" values="0; 1; 2; 3" >
       <template>
          <![CDATA[
          \t/**

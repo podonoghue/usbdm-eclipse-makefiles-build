@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- _currentClockSelection.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+
+   <clockSelectionOption key="currentClockConfig"
+      derived="true"
+      description="Active clock selection"
+      target="currentClockConfigName"
+      toolTip="Selects active clock configuration" >
+      <choice value="0" name="ClockConfig[0]" ref="ClockConfig[0]" isDefault="true" />
+      <choice value="1" name="ClockConfig[1]" ref="ClockConfig[1]" />
+      <choice value="2" name="ClockConfig[2]" ref="ClockConfig[2]" />
+      <choice value="3" name="ClockConfig[3]" ref="ClockConfig[3]" />
+   </clockSelectionOption>   
+
+   <stringOption key="currentClockConfigName" 
+      value="" 
+      constant="true" 
+      derived="true" 
+      description="Name of current clock"
+      />
+      
+</fragment>

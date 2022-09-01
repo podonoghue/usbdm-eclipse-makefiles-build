@@ -33,18 +33,6 @@ namespace USBDM {
  */
 
 /**
- *  Control mode of operation of shared timer counter
- */
-enum TpmMode {
-   //! Up counter: Used for left-aligned PWM, input capture and output compare modes
-   TpmMode_LeftAlign   = TPM_SC_CPWMS(0),
-   //! Up-down counter: Used for centre-aligned PWM
-   TpmMode_CentreAlign = TPM_SC_CPWMS(1),
-   //! Dummy value: Used for quadrature decoder
-   TpmMode_Quadrature  = 0,
-};
-
-/**
  * Controls basic operation of PWM/Input capture/Output compare
  */
 enum TpmChMode {
@@ -58,30 +46,6 @@ enum TpmChMode {
    TpmChMode_OutputCompareSet        = TPM_CnSC_MS(1)|TPM_CnSC_ELS(3), //!< Set pin on output compare
    TpmChMode_PwmHighTruePulses       = TPM_CnSC_MS(2)|TPM_CnSC_ELS(2), //!< PWM with high-true pulses
    TpmChMode_PwmLowTruePulses        = TPM_CnSC_MS(2)|TPM_CnSC_ELS(1), //!< PWM with low-true pulses
-};
-
-/**
- * Control alignment of PWM function
- */
-enum TpmClockSource {
-   TpmClockSource_Disabled    = TPM_SC_CMOD(0),  //!< Timer is disabled
-   TpmClockSource_Internal    = TPM_SC_CMOD(1),  //!< Internal clock (usually determined by SIM->TPMCLKSRC clock )
-   TpmClockSource_External    = TPM_SC_CMOD(2),  //!< External clock provided to TPM_CLKINx pin
-   TpmClockSource_Reserved    = TPM_SC_CMOD(3),  //!< Reserved
-};
-
-/**
- * Control Prescaler for TPM clock
- */
-enum TpmPrescale {
-   TpmPrescale_1   = TPM_SC_PS(0),  //!< Divide by 1
-   TpmPrescale_2   = TPM_SC_PS(1),  //!< Divide by 2
-   TpmPrescale_4   = TPM_SC_PS(2),  //!< Divide by 4
-   TpmPrescale_8   = TPM_SC_PS(3),  //!< Divide by 8
-   TpmPrescale_16  = TPM_SC_PS(4),  //!< Divide by 16
-   TpmPrescale_32  = TPM_SC_PS(5),  //!< Divide by 32
-   TpmPrescale_64  = TPM_SC_PS(6),  //!< Divide by 64
-   TpmPrescale_128 = TPM_SC_PS(7),  //!< Divide by 128
 };
 
 /*
@@ -172,11 +136,11 @@ public:
 
 protected:
    // Constructor
-   constexpr TpmBase(uint32_t baseAddress) : tmr(baseAddress) {};
+   constexpr TpmBase(uint32_t baseAddress) : tpm(baseAddress) {};
    ~TpmBase() = default;
 
    /** Allow access owning TPM */
-   const HardwarePtr<TPM_Type> tmr;
+   const HardwarePtr<TPM_Type> tpm;
 
    /**
     * Limit index to permitted pin index range
@@ -230,108 +194,7 @@ public:
       __IO uint32_t  CnV;  /**< 0010: Channel  Value              */
    };
 
-   /**
-    * Set timer mode
-    *
-    * @param[in] tpmMode        Mode of operation
-    *
-    * @note This function will affect all channels of the timer.
-    * @note The timer will be disabled while making changes.
-    */
-   void setMode(TpmMode tpmMode) const {
-      // Disable timer to allow change
-      uint32_t sc = tmr->SC;
-      tmr->SC = 0;
-      (void)tmr->SC;
-
-      // Set new mode
-      tmr->SC = (sc&~TPM_SC_CPWMS_MASK)|tpmMode;
-   }
-
-   /**
-    * Stop timer counter.
-    * This simply disables the counter clock source. \n
-    * To restart use setClockSource() or configure();
-    *
-    * @note This function will affect all channels of the timer.
-    */
-   void stopCounter() const {
-      //if (isEnabled()) {
-      tmr->SC = (tmr->SC&~TPM_SC_CMOD_MASK);
-      //}
-   }
-
-   /**
-    * Set timer clock source
-    *
-    * @param[in] tpmClockSource Clock source for timer
-    *
-    * @note This function will affect all channels of the timer.
-    * @note The timer will be disabled while making changes.
-    */
-   void setClockSource(TpmClockSource tpmClockSource=TpmClockSource_Internal) const {
-      // Calculate new SC value
-      uint32_t sc = (tmr->SC&~TPM_SC_CMOD_MASK)|tpmClockSource;
-      // Disable timer to change clock (can't switch directly between clock sources)
-      tmr->SC = 0;
-      // Make sure write has completed (disabled)
-      (void)tmr->SC;
-      // Write new value
-      tmr->SC = sc;
-   }
-
-   /**
-    *  Set timer prescaler
-    *
-    * @param[in] tpmPrescale    Clock prescaler. Used to divide counter clock source before use
-    *
-    * @note This function will affect all channels of the timer.
-    * @note The timer will be disabled while making changes.
-    */
-   void setPrescaler(TpmPrescale tpmPrescale=TpmPrescale_128) const {
-      // Disable timer to allow change
-      uint32_t sc = tmr->SC;
-      tmr->SC = 0;
-      // Make sure write completes
-      (void)tmr->SC;
-      // Write new value
-      tmr->SC = (sc&~TPM_SC_PS_MASK)|tpmPrescale;
-   }
-
-   /**
-    * Set maximum value of timer counter.
-    *
-    * @param[in] endValue Modulo value in ticks (<65535), 0 = 65536.
-    * @param[in] suspend  Whether to suspend timer during change.
-    *
-    * @note This function will affect all channels of the timer.
-    * @note The timer will be disabled while making changes.
-    * @note This value is write-buffered and updated by MOD synchronisation
-    *       unless suspend is true.
-    */
-   void setCounterMaximumValue(Ticks endValue, bool suspend=false) const {
-      uint32_t sc;
-      if (suspend) {
-         // Disable timer so register changes are immediate
-         sc = tmr->SC;
-         tmr->SC = 0;
-         (void)tmr->SC;
-      }
-      tmr->MOD = (unsigned)endValue;
-      if (suspend) {
-         tmr->SC = sc;
-      }
-   }
-
-   /**
-    * Get maximum value of timer counter.
-    *
-    * @return Counter modulo value in ticks (<65535), 0 = 65536.
-    */
-   Ticks getCounterMaximumValue() const {
-      return Ticks((unsigned)(tmr->MOD));
-   }
-
+$(/TPM/non_static_functions:  // /TPM/non_static_functions not found)
    /**
     * Set period.
     *
@@ -351,7 +214,7 @@ public:
    ErrorCode setPeriod(Ticks period, bool suspend=false) const {
 
       // Check if CPWMS is set (affects period)
-      bool centreAlign = (tmr->SC&TPM_SC_CPWMS_MASK);
+      bool centreAlign = (tpm->SC&TPM_SC_CPWMS_MASK);
 
       if (centreAlign) {
          // Centre-aligned period is 2*MOD value but MOD is
@@ -376,15 +239,15 @@ public:
       }
       uint32_t sc;
       if (suspend) {
-         sc = tmr->SC;
-         tmr->SC = 0;
+         sc = tpm->SC;
+         tpm->SC = 0;
       }
       // Change modulo
-      tmr->MOD = (unsigned)period;
+      tpm->MOD = (unsigned)period;
 
       if (suspend) {
          // Restart timer
-         tmr->SC = sc;
+         tpm->SC = sc;
       }
       // OK period
       return E_NO_ERROR;
@@ -410,7 +273,7 @@ public:
       uint32_t maxPeriodInTicks = 65536;
 
       // Check if CPWMS is set (affects period calculation)
-      if (tmr->SC&TPM_SC_CPWMS_MASK) {
+      if (tpm->SC&TPM_SC_CPWMS_MASK) {
          // Centre-aligned period is ~double the MOD value but MOD is
          // limited to 0x7FFF for sensible PWM operation so
          // period in ticks is limited to 2*0x7FFF
@@ -462,15 +325,15 @@ public:
          return rc;
       }
       // Disable timer to change prescaler and period
-      uint32_t sc = tmr->SC;
-      tmr->SC = 0;
-      (void)tmr->SC;
+      uint32_t sc = tpm->SC;
+      tpm->SC = 0;
+      (void)tpm->SC;
       setPeriod(periodInTicks, false);
 
       // Restart counter
-      tmr->CNT   = 0;
+      tpm->CNT   = 0;
 
-      tmr->SC  = (sc&~TPM_SC_PS_MASK)|TPM_SC_PS(prescalerValue);
+      tpm->SC  = (sc&~TPM_SC_PS_MASK)|TPM_SC_PS(prescalerValue);
 
       return E_NO_ERROR;
    }
@@ -488,7 +351,7 @@ public:
     *
     * @note This function will affect all channels of the timer.
     * @note Adjusts Timer pre-scaler to appropriate value.
-    * @note TPM counter is configured for free-running mode i.e. 0-65535
+    * @note Counter is configured for free-running mode i.e. 0-65535
     * @note The Timer is stopped while being modified.
     * @note The Timer counter is restarted from zero
     */
@@ -502,18 +365,18 @@ public:
          return rc;
       }
       // Disable timer to change prescaler and period
-      uint32_t sc = tmr->SC;
-      tmr->SC = 0;
-      (void)tmr->SC;
+      uint32_t sc = tpm->SC;
+      tpm->SC = 0;
+      (void)tpm->SC;
 
       // Configure for free-running mode
       // This is the usual value for IC or OC set-up
-      tmr->MOD = 0;
+      tpm->MOD = 0;
 
       // Restart counter
-      tmr->CNT   = 0;
+      tpm->CNT   = 0;
 
-      tmr->SC  = (sc&~TPM_SC_PS_MASK)|TPM_SC_PS(prescalerValue);
+      tpm->SC  = (sc&~TPM_SC_PS_MASK)|TPM_SC_PS(prescalerValue);
 
       return E_NO_ERROR;
    }
@@ -526,7 +389,7 @@ public:
    float getTickFrequencyAsFloat() const {
 
       // Calculate timer prescale factor
-      int prescaleFactor = 1<<((tmr->SC&TPM_SC_PS_MASK)>>TPM_SC_PS_SHIFT);
+      int prescaleFactor = 1<<((tpm->SC&TPM_SC_PS_MASK)>>TPM_SC_PS_SHIFT);
 
       return static_cast<float>(getInputClockFrequencyVirtual())/prescaleFactor;
    }
@@ -539,7 +402,7 @@ public:
    uint32_t getTickFrequencyAsInt() const {
 
       // Calculate timer prescale factor
-      int prescaleFactor = 1<<((tmr->SC&TPM_SC_PS_MASK)>>TPM_SC_PS_SHIFT);
+      int prescaleFactor = 1<<((tpm->SC&TPM_SC_PS_MASK)>>TPM_SC_PS_SHIFT);
 
       return getInputClockFrequencyVirtual()/prescaleFactor;
    }
@@ -566,10 +429,10 @@ public:
 
          if ((100*std::abs((tickFrequency/frequency)-1)) < tolerance) {
             // Clear SC so immediate effect on prescale change
-            uint32_t sc = tmr->SC&~TPM_SC_PS_MASK;
-            tmr->SC = 0;
-            (void)tmr->SC;
-            tmr->SC = sc|TPM_SC_PS(prescalerValue);
+            uint32_t sc = tpm->SC&~TPM_SC_PS_MASK;
+            tpm->SC = 0;
+            (void)tpm->SC;
+            tpm->SC = sc|TPM_SC_PS(prescalerValue);
             return E_NO_ERROR;
          }
          prescalerValue++;
@@ -702,7 +565,7 @@ public:
     * @return Timer count value
     */
    Ticks getTime() {
-      return Ticks((unsigned)(tmr->CNT));
+      return Ticks((unsigned)(tpm->CNT));
    }
 
    /**
@@ -710,7 +573,7 @@ public:
     */
    void resetTime() const {
       // Note: writing ANY value loads CNT from CNTIN
-      tmr->CNT = 0;
+      tpm->CNT = 0;
    }
 
    /**
@@ -720,7 +583,7 @@ public:
     *         There is one bit for each channel
     */
    unsigned getInterruptFlags() const {
-      return tmr->STATUS;
+      return tpm->STATUS;
    }
 
    /**
@@ -732,8 +595,8 @@ public:
 	* @note Flags will not be cleared if the channel is configured for DMA
     */
    void clearSelectedInterruptFlags(uint32_t channelMask) const {
-      (void)tmr->STATUS;
-      tmr->STATUS = ~channelMask;
+      (void)tpm->STATUS;
+      tpm->STATUS = ~channelMask;
    }
 
    /**
@@ -748,8 +611,8 @@ public:
    unsigned getAndClearInterruptFlags() const {
       // Note requires read and write zero to clear flags
       // so only flags captured in status are cleared
-      unsigned status = tmr->STATUS;
-      tmr->STATUS = ~status;
+      unsigned status = tpm->STATUS;
+      tpm->STATUS = ~status;
       return status;
    }
 
@@ -757,14 +620,14 @@ public:
     * Enable/disable Timer Overflow interrupts
     */
    void enableTimerOverflowInterrupts() const {
-      tmr->SC = tmr->SC | TPM_SC_TOIE_MASK;
+      tpm->SC = tpm->SC | TPM_SC_TOIE_MASK;
    }
 
    /**
     * Disable Timer Overflow interrupts
     */
    void disableTimerOverflowInterrupts() const {
-      tmr->SC = tmr->SC & ~TPM_SC_TOIE_MASK;
+      tpm->SC = tpm->SC & ~TPM_SC_TOIE_MASK;
    }
 
    /**
@@ -777,11 +640,11 @@ public:
     * @note The actual CnV register update may be delayed by the register synchronisation mechanism
     */
    void setDutyCycle(float dutyCycle, int channel) const {
-      if (tmr->SC&TPM_SC_CPWMS_MASK) {
-         tmr->CONTROLS[channel].CnV  = round((dutyCycle*tmr->MOD)/100.0f);
+      if (tpm->SC&TPM_SC_CPWMS_MASK) {
+         tpm->CONTROLS[channel].CnV  = round((dutyCycle*tpm->MOD)/100.0f);
       }
       else {
-         tmr->CONTROLS[channel].CnV  = round((dutyCycle*(tmr->MOD+1))/100.0f);
+         tpm->CONTROLS[channel].CnV  = round((dutyCycle*(tpm->MOD+1))/100.0f);
       }
    }
 
@@ -794,11 +657,11 @@ public:
     * @note The actual CnV register update may be delayed by the register synchronisation mechanism
     */
    void setDutyCycle(int dutyCycle, int channel) const {
-      if (tmr->SC&TPM_SC_CPWMS_MASK) {
-         tmr->CONTROLS[channel].CnV  = (dutyCycle*tmr->MOD)/100;
+      if (tpm->SC&TPM_SC_CPWMS_MASK) {
+         tpm->CONTROLS[channel].CnV  = (dutyCycle*tpm->MOD)/100;
       }
       else {
-         tmr->CONTROLS[channel].CnV  = (dutyCycle*(tmr->MOD+1))/100;
+         tpm->CONTROLS[channel].CnV  = (dutyCycle*(tpm->MOD+1))/100;
       }
    }
 
@@ -816,16 +679,16 @@ public:
     */
    ErrorCode setHighTime(Ticks highTime, int channel) const {
 
-      if (tmr->SC&TPM_SC_CPWMS_MASK) {
+      if (tpm->SC&TPM_SC_CPWMS_MASK) {
          // In CPWM the pulse width is doubled
          highTime = (highTime+1_ticks)/2U;
       }
 #ifdef DEBUG_BUILD
-      if ((unsigned)highTime > tmr->MOD) {
+      if ((unsigned)highTime > tpm->MOD) {
          return setErrorCode(E_TOO_LARGE);
       }
 #endif
-      tmr->CONTROLS[channel].CnV  = (unsigned)highTime;
+      tpm->CONTROLS[channel].CnV  = (unsigned)highTime;
       return E_NO_ERROR;
    }
 };
@@ -840,7 +703,7 @@ protected:
    // Empty constructor
    constexpr TpmChannel(uint32_t baseAddress, unsigned channelNum) :
    TpmBase(baseAddress),
-   channelRegs((uint32_t)(tmr->CONTROLS+channelNum)),
+   channelRegs((uint32_t)(tpm->CONTROLS+channelNum)),
    CHANNEL(channelNum),
    CHANNEL_MASK(1<<channelNum) {
    }
@@ -870,7 +733,7 @@ public:
          TpmChMode         tpmChMode,
          TpmChannelAction  tpmChannelAction = TpmChannelAction_None) const {
 
-      tmr->CONTROLS[CHANNEL].CnSC = tpmChMode|tpmChannelAction;
+      tpm->CONTROLS[CHANNEL].CnSC = tpmChMode|tpmChannelAction;
    }
 
    /**
@@ -886,7 +749,7 @@ public:
     * @return Current mode of operation for the channel
     */
    TpmChMode getMode() const {
-      return (TpmChMode)(tmr->CONTROLS[CHANNEL].CnSC &
+      return (TpmChMode)(tpm->CONTROLS[CHANNEL].CnSC &
             (TPM_CnSC_MSA_MASK|TPM_CnSC_ELS_MASK));
    }
 
@@ -899,8 +762,8 @@ public:
     *       pending CnV register updates are discarded.
     */
    void setMode(TpmChMode tpmChMode) const {
-      tmr->CONTROLS[CHANNEL].CnSC =
-            (tmr->CONTROLS[CHANNEL].CnSC & ~(TPM_CnSC_MSA_MASK|TPM_CnSC_ELS_MASK))|
+      tpm->CONTROLS[CHANNEL].CnSC =
+            (tpm->CONTROLS[CHANNEL].CnSC & ~(TPM_CnSC_MSA_MASK|TPM_CnSC_ELS_MASK))|
             tpmChMode;
    }
 
@@ -916,8 +779,8 @@ public:
 #if !defined(TPM_CnSC_DMA_MASK)
       static constexpr uint32_t TPM_CnSC_DMA_MASK = 0;
 #endif
-      tmr->CONTROLS[CHANNEL].CnSC =
-            (tmr->CONTROLS[CHANNEL].CnSC & ~(TPM_CnSC_CHIE_MASK|TPM_CnSC_DMA_MASK))|
+      tpm->CONTROLS[CHANNEL].CnSC =
+            (tpm->CONTROLS[CHANNEL].CnSC & ~(TPM_CnSC_CHIE_MASK|TPM_CnSC_DMA_MASK))|
             tpmChannelAction;
    }
 
@@ -978,7 +841,7 @@ public:
     * @note The actual CnV register update will be delayed by the register synchronisation mechanism
     */
    void setDeltaEventTime(Ticks offset) {
-      tmr->CONTROLS[CHANNEL].CnV = tmr->CONTROLS[CHANNEL].CnV + (unsigned)offset;
+      tpm->CONTROLS[CHANNEL].CnV = tpm->CONTROLS[CHANNEL].CnV + (unsigned)offset;
    }
 
    /**
@@ -989,7 +852,7 @@ public:
     * @note The actual CnV register update will be delayed by the register synchronisation mechanism
     */
    void setRelativeEventTime(Ticks offset) const {
-      tmr->CONTROLS[CHANNEL].CnV = tmr->CNT + (unsigned)offset;
+      tpm->CONTROLS[CHANNEL].CnV = tpm->CNT + (unsigned)offset;
    }
 
    /**
@@ -1000,7 +863,7 @@ public:
     * @note The actual CnV register update will be delayed by the register synchronisation mechanism
     */
    void setEventTime(Ticks eventTime) const {
-      tmr->CONTROLS[CHANNEL].CnV = (unsigned)eventTime;
+      tpm->CONTROLS[CHANNEL].CnV = (unsigned)eventTime;
    }
 
    /**
@@ -1009,7 +872,7 @@ public:
     * @return Absolute time of last event in ticks i.e. value from timer event register
     */
    Ticks getEventTime() const {
-      return (unsigned)(tmr->CONTROLS[CHANNEL].CnV);
+      return (unsigned)(tpm->CONTROLS[CHANNEL].CnV);
    }
 
    /**
@@ -1019,7 +882,7 @@ public:
     * @return false Indicates no event has occurred on a channel since last polled
     */
    bool getInterruptFlag() const {
-      return (tmr->STATUS&CHANNEL_MASK) != 0;
+      return (tpm->STATUS&CHANNEL_MASK) != 0;
    }
 
    /**
@@ -1033,8 +896,8 @@ public:
    bool getAndClearInterruptFlag() const {
       // Note - requires read and write zero to clear flags
       // so only flags captured in status are cleared
-      bool status = (tmr->STATUS&CHANNEL_MASK) != 0;
-      tmr->STATUS = ~CHANNEL_MASK;
+      bool status = (tpm->STATUS&CHANNEL_MASK) != 0;
+      tpm->STATUS = ~CHANNEL_MASK;
       return status;
    }
 
@@ -1043,7 +906,7 @@ public:
     */
    void clearInterruptFlag() const {
       // Note - requires read and write zero to clear flag
-      tmr->CONTROLS[CHANNEL].CnSC = tmr->CONTROLS[CHANNEL].CnSC &  ~TPM_CnSC_CHF_MASK;
+      tpm->CONTROLS[CHANNEL].CnSC = tpm->CONTROLS[CHANNEL].CnSC &  ~TPM_CnSC_CHF_MASK;
    }
 
 };
@@ -1055,7 +918,7 @@ public:
  * @tparam Info  Class describing TPM hardware instance
  */
 template<class Info>
-class TpmBase_T : public TpmBase {
+class TpmBase_T : public TpmBase, public Info {
 
 private:
    /**
@@ -1072,9 +935,6 @@ public:
 
    /** Maximum counter value in ticks */
    static constexpr Ticks MaximumPeriodInTicks = 65535_ticks;
-
-   /** Hardware instance pointer */
-   static constexpr HardwarePtr<TPM_Type> tmr = Info::baseAddress;
 
    /** Get pointer to TPM hardware as struct */
    static constexpr HardwarePtr<TPM_Type> tpm = Info::baseAddress;
@@ -1122,16 +982,16 @@ public:
     * IRQ handler
     */
    static void irqHandler() {
-      if ((tmr->SC&(TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) == (TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) {
+      if ((tpm->SC&(TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) == (TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) {
          // Clear TOI flag (w1c)
-         tmr->SC = tmr->SC | TPM_SC_TOF_MASK;
+         tpm->SC = tpm->SC | TPM_SC_TOF_MASK;
          sToiCallback();
       }
       // Get status for channels
-      uint32_t status = tmr->STATUS;
+      uint32_t status = tpm->STATUS;
       if (status) {
          // Clear flags for channel events being handled (w1c register if read)
-         tmr->STATUS = status;
+         tpm->STATUS = status;
          sChannelCallbacks[0](status);
       }
    }
@@ -1274,12 +1134,12 @@ public:
       enable();
 
       // Disable so immediate effect
-      tmr->SC = 0;
-      (void)tmr->SC;
+      tpm->SC = 0;
+      (void)tpm->SC;
       // Common registers
-      tmr->CNT     = 0;
-      tmr->MOD     = Info::modulo;
-      tmr->SC      = Info::sc;
+      tpm->CNT     = 0;
+      tpm->MOD     = Info::modulo;
+      tpm->SC      = Info::sc;
 
       enableNvicInterrupts(Info::irqLevel);
    }
@@ -1288,14 +1148,14 @@ public:
     * Enables clock to peripheral and configures all pins.
     * Configures main operating settings for timer.
     *
-    * @param[in] tpmMode        Mode of operation.
+    * @param[in] tpmAlignment   Alignment.
     * @param[in] tpmClockSource Clock source for timer.
     * @param[in] tpmPrescale    Clock prescaler. Used to divide input clock.
     */
    static void configure(
-         TpmMode        tpmMode,
-         TpmClockSource tpmClockSource = TpmClockSource_Internal,
-         TpmPrescale    tpmPrescale    = TpmPrescale_128) {
+         TpmAlignment   tpmAlignment,
+         TpmClockSource tpmClockSource = TpmClockSource_SystemTpmClock,
+         TpmPrescale    tpmPrescale    = TpmPrescale_DivBy128) {
 
       enable();
 
@@ -1307,113 +1167,12 @@ public:
       }
 
       // Disable so immediate effect
-      tmr->SC = 0;
-      (void)tmr->SC;
-      tmr->SC = tpmMode|tpmClockSource|tpmPrescale;
+      tpm->SC = 0;
+      (void)tpm->SC;
+      tpm->SC = tpmAlignment|tpmClockSource|tpmPrescale;
    }
 
-   /**
-    * Set timer mode
-    *
-    * @param[in] tpmMode        Mode of operation
-    *
-    * @note This function will affect all channels of the timer.
-    * @note The timer will be disabled while making changes.
-    */
-   static void setMode(TpmMode tpmMode) {
-      // Disable timer to allow change
-      uint32_t sc = tmr->SC;
-      tmr->SC = 0;
-      (void)tmr->SC;
-
-      // Set new mode
-      tmr->SC = (sc&~TPM_SC_CPWMS_MASK)|tpmMode;
-   }
-
-   /**
-    * Stop timer counter.
-    * This simply disables the counter clock source. \n
-    * To restart use setClockSource() or configure();
-    *
-    * @note This function will affect all channels of the timer.
-    */
-   static void stopCounter() {
-      //if (isEnabled()) {
-         tmr->SC = (tmr->SC&~TPM_SC_CMOD_MASK);
-      //}
-   }
-
-   /**
-    * Set timer clock source
-    *
-    * @param[in] tpmClockSource Clock source for timer
-    *
-    * @note This function will affect all channels of the timer.
-    * @note The timer will be disabled while making changes.
-    */
-   static void setClockSource(TpmClockSource tpmClockSource=TpmClockSource_Internal) {
-      // Calculate new SC value
-      uint32_t sc = (tmr->SC&~TPM_SC_CMOD_MASK)|tpmClockSource;
-      // Disable timer to change clock (can't switch directly between clock sources)
-      tmr->SC = 0;
-      // Make sure write has completed (disabled)
-      (void)tmr->SC;
-      // Write new value
-      tmr->SC = sc;
-   }
-
-   /**
-    *  Set timer prescaler
-    *
-    * @param[in] tpmPrescale    Clock prescaler. Used to divide counter clock source before use
-    *
-    * @note This function will affect all channels of the timer.
-    * @note The timer will be disabled while making changes.
-    */
-   static void setPrescaler(TpmPrescale tpmPrescale=TpmPrescale_128) {
-      // Disable timer to allow change
-      uint32_t sc = tmr->SC;
-      tmr->SC = 0;
-      // Make sure write completes
-      (void)tmr->SC;
-      // Write new value
-      tmr->SC = (sc&~TPM_SC_PS_MASK)|tpmPrescale;
-   }
-
-   /**
-    * Set maximum value of timer counter.
-    *
-    * @param[in] endValue Modulo value in ticks (<65535), 0 = 65536.
-    * @param[in] suspend  Whether to suspend timer during change.
-    *
-    * @note This function will affect all channels of the timer.
-    * @note The timer will be disabled while making changes.
-    * @note This value is write-buffered and updated by MOD synchronisation
-    *       unless suspend is true.
-    */
-   static void setCounterMaximumValue(Ticks endValue, bool suspend=false) {
-      uint32_t sc;
-      if (suspend) {
-         // Disable timer so register changes are immediate
-         sc = tmr->SC;
-         tmr->SC = 0;
-         (void)tmr->SC;
-      }
-      tmr->MOD = (unsigned)endValue;
-      if (suspend) {
-         tmr->SC = sc;
-      }
-   }
-
-   /**
-    * Get maximum value of timer counter.
-    *
-    * @return Counter modulo value in ticks (<65535), 0 = 65536.
-    */
-   static Ticks getCounterMaximumValue() {
-      return (unsigned)(tmr->MOD);
-   }
-
+$(/TPM/static_functions:  // /TPM/static_functions not found)
    /**
     * Set period.
     *
@@ -1433,7 +1192,7 @@ public:
    static ErrorCode setPeriod(Ticks period, bool suspend=false) {
 
       // Check if CPWMS is set (affects period)
-      bool centreAlign = (tmr->SC&TPM_SC_CPWMS_MASK);
+      bool centreAlign = (tpm->SC&TPM_SC_CPWMS_MASK);
 
       if (centreAlign) {
          // Centre-aligned period is 2*MOD value but MOD is
@@ -1458,15 +1217,15 @@ public:
       }
       uint32_t sc;
       if (suspend) {
-         sc = tmr->SC;
-         tmr->SC = 0;
+         sc = tpm->SC;
+         tpm->SC = 0;
       }
       // Change modulo
-      tmr->MOD = (unsigned)period;
+      tpm->MOD = (unsigned)period;
 
       if (suspend) {
          // Restart timer
-         tmr->SC = sc;
+         tpm->SC = sc;
       }
       // OK period
       return E_NO_ERROR;
@@ -1492,7 +1251,7 @@ public:
       uint32_t maxPeriodInTicks = (unsigned)TpmBase_T::MaximumPeriodInTicks;
 
       // Check if CPWMS is set (affects period calculation)
-      if (tmr->SC&TPM_SC_CPWMS_MASK) {
+      if (tpm->SC&TPM_SC_CPWMS_MASK) {
          // Centre-aligned period is ~double the MOD value but MOD is
          // limited to 0x7FFF for sensible PWM operation so
          // period in ticks is limited to 2*0x7FFF
@@ -1545,15 +1304,15 @@ public:
          return rc;
       }
       // Disable timer to change prescaler and period
-      uint32_t sc = tmr->SC;
-      tmr->SC = 0;
-      (void)tmr->SC;
+      uint32_t sc = tpm->SC;
+      tpm->SC = 0;
+      (void)tpm->SC;
       setPeriod(periodInTicks, false);
 
       // Restart counter
-      tmr->CNT   = 0;
+      tpm->CNT   = 0;
 
-      tmr->SC  = (sc&~TPM_SC_PS_MASK)|TPM_SC_PS(prescalerValue);
+      tpm->SC  = (sc&~TPM_SC_PS_MASK)|TPM_SC_PS(prescalerValue);
 
       return E_NO_ERROR;
    }
@@ -1586,18 +1345,18 @@ public:
          return rc;
       }
       // Disable timer to change prescaler and period
-      uint32_t sc = tmr->SC;
-      tmr->SC = 0;
-      (void)tmr->SC;
+      uint32_t sc = tpm->SC;
+      tpm->SC = 0;
+      (void)tpm->SC;
 
       // Configure for free-running mode
       // This is the usual value for IC or OC set-up
-      tmr->MOD = 0;
+      tpm->MOD = 0;
 
       // Restart counter
-      tmr->CNT   = 0;
+      tpm->CNT   = 0;
 
-      tmr->SC  = (sc&~TPM_SC_PS_MASK)|TPM_SC_PS(prescalerValue);
+      tpm->SC  = (sc&~TPM_SC_PS_MASK)|TPM_SC_PS(prescalerValue);
 
       return E_NO_ERROR;
    }
@@ -1610,7 +1369,7 @@ public:
    static float getTickFrequencyAsFloat() {
 
       // Calculate timer prescale factor
-      int prescaleFactor = 1<<((tmr->SC&TPM_SC_PS_MASK)>>TPM_SC_PS_SHIFT);
+      int prescaleFactor = 1<<((tpm->SC&TPM_SC_PS_MASK)>>TPM_SC_PS_SHIFT);
 
       return static_cast<float>(Info::getInputClockFrequency())/prescaleFactor;
    }
@@ -1623,7 +1382,7 @@ public:
    static uint32_t getTickFrequencyAsInt() {
 
       // Calculate timer prescale factor
-      int prescaleFactor = 1<<((tmr->SC&TPM_SC_PS_MASK)>>TPM_SC_PS_SHIFT);
+      int prescaleFactor = 1<<((tpm->SC&TPM_SC_PS_MASK)>>TPM_SC_PS_SHIFT);
 
       return Info::getInputClockFrequency()/prescaleFactor;
    }
@@ -1650,10 +1409,10 @@ public:
 
          if ((100*std::abs((tickFrequency/(float)frequency)-1)) < tolerance) {
             // Clear SC so immediate effect on prescale change
-            uint32_t sc = tmr->SC&~TPM_SC_PS_MASK;
-            tmr->SC = 0;
-            (void)tmr->SC;
-            tmr->SC = sc|TPM_SC_PS(prescalerValue);
+            uint32_t sc = tpm->SC&~TPM_SC_PS_MASK;
+            tpm->SC = 0;
+            (void)tpm->SC;
+            tpm->SC = sc|TPM_SC_PS(prescalerValue);
             return E_NO_ERROR;
          }
          prescalerValue++;
@@ -1786,7 +1545,7 @@ public:
     * @return Timer count value
     */
    static uint16_t getTime() {
-      return tmr->CNT;
+      return tpm->CNT;
    }
 
    /**
@@ -1794,7 +1553,7 @@ public:
     */
    static void resetTime() {
       // Note: writing ANY value loads CNT from CNTIN
-      tmr->CNT = 0;
+      tpm->CNT = 0;
    }
 
    /**
@@ -1804,7 +1563,7 @@ public:
     *         There is one bit for each channel
     */
    static unsigned getInterruptFlags() {
-      return tmr->STATUS;
+      return tpm->STATUS;
    }
 
    /**
@@ -1816,8 +1575,8 @@ public:
     * @note Flags will not be cleared if the channel is configured for DMA
     */
    static void clearSelectedInterruptFlags(uint32_t channelMask) {
-      (void)tmr->STATUS;
-      tmr->STATUS = ~channelMask;
+      (void)tpm->STATUS;
+      tpm->STATUS = ~channelMask;
    }
 
    /**
@@ -1832,8 +1591,8 @@ public:
    static unsigned getAndClearInterruptFlags() {
       // Note requires read and write zero to clear flags
       // so only flags captured in status are cleared
-      unsigned status = tmr->STATUS;
-      tmr->STATUS = ~status;
+      unsigned status = tpm->STATUS;
+      tpm->STATUS = ~status;
       return status;
    }
 
@@ -1841,14 +1600,14 @@ public:
     * Enable/disable Timer Overflow interrupts
     */
    static void enableTimerOverflowInterrupts() {
-      tmr->SC = tmr->SC | TPM_SC_TOIE_MASK;
+      tpm->SC = tpm->SC | TPM_SC_TOIE_MASK;
    }
 
    /**
     * Disable Timer Overflow interrupts
     */
    static void disableTimerOverflowInterrupts() {
-      tmr->SC = tmr->SC & ~TPM_SC_TOIE_MASK;
+      tpm->SC = tpm->SC & ~TPM_SC_TOIE_MASK;
    }
 
 
@@ -1865,7 +1624,7 @@ public:
     * @return Absolute time of last event in ticks i.e. value from timer event register
     */
    static Ticks getEventTime(int channel) {
-      return (unsigned)(tmr->CONTROLS[channel].CnV);
+      return (unsigned)(tpm->CONTROLS[channel].CnV);
    }
 
    /**
@@ -1877,7 +1636,7 @@ public:
     * @param[in] channel    Timer channel
     */
    static void setEventTime(Ticks eventTime, int channel) {
-      tmr->CONTROLS[channel].CnV = (unsigned)eventTime;
+      tpm->CONTROLS[channel].CnV = (unsigned)eventTime;
    }
 
    /**
@@ -1889,7 +1648,7 @@ public:
     * @note This value is write-buffered and updated by CnV synchronisation.
     */
    static void setDeltaEventTime(Ticks offset, int channel) {
-      tmr->CONTROLS[channel].CnV = tmr->CONTROLS[channel].CnV + (unsigned)offset;
+      tpm->CONTROLS[channel].CnV = tpm->CONTROLS[channel].CnV + (unsigned)offset;
    }
 
    /**
@@ -1901,7 +1660,7 @@ public:
     * @note This value is write-buffered and updated by CnV synchronisation.
     */
    static void setRelativeEventTime(Ticks offset, int channel) {
-      tmr->CONTROLS[channel].CnV = tmr->CNT + (unsigned)offset;
+      tpm->CONTROLS[channel].CnV = tpm->CNT + (unsigned)offset;
    }
 
    /**
@@ -1914,11 +1673,11 @@ public:
     * @note The actual CnV register update may be delayed by the register synchronisation mechanism
     */
    static void setDutyCycle(float dutyCycle, int channel) {
-      if (tmr->SC&TPM_SC_CPWMS_MASK) {
-         tmr->CONTROLS[channel].CnV  = round((dutyCycle*tmr->MOD)/100.0f);
+      if (tpm->SC&TPM_SC_CPWMS_MASK) {
+         tpm->CONTROLS[channel].CnV  = round((dutyCycle*tpm->MOD)/100.0f);
       }
       else {
-         tmr->CONTROLS[channel].CnV  = round((dutyCycle*(tmr->MOD+1))/100.0f);
+         tpm->CONTROLS[channel].CnV  = round((dutyCycle*(tpm->MOD+1))/100.0f);
       }
    }
 
@@ -1931,11 +1690,11 @@ public:
     * @note The actual CnV register update may be delayed by the register synchronisation mechanism
     */
    static void setDutyCycle(int dutyCycle, int channel) {
-      if (tmr->SC&TPM_SC_CPWMS_MASK) {
-         tmr->CONTROLS[channel].CnV  = (dutyCycle*tmr->MOD)/100;
+      if (tpm->SC&TPM_SC_CPWMS_MASK) {
+         tpm->CONTROLS[channel].CnV  = (dutyCycle*tpm->MOD)/100;
       }
       else {
-         tmr->CONTROLS[channel].CnV  = (dutyCycle*(tmr->MOD+1))/100;
+         tpm->CONTROLS[channel].CnV  = (dutyCycle*(tpm->MOD+1))/100;
       }
    }
 
@@ -1952,16 +1711,16 @@ public:
     * @note The actual CnV register update may be delayed by the register synchronisation mechanism
     */
    static ErrorCode setHighTime(Ticks highTime, int channel) {
-      if (tmr->SC&TPM_SC_CPWMS_MASK) {
+      if (tpm->SC&TPM_SC_CPWMS_MASK) {
          // In CPWM the pulse width is doubled
          highTime = (highTime+1_ticks)/2U;
       }
 #ifdef DEBUG_BUILD
-      if ((unsigned)highTime > tmr->MOD) {
+      if ((unsigned)highTime > tpm->MOD) {
          return setErrorCode(E_TOO_LARGE);
       }
 #endif
-      tmr->CONTROLS[channel].CnV  = (unsigned)highTime;
+      tpm->CONTROLS[channel].CnV  = (unsigned)highTime;
       return E_NO_ERROR;
    }
 
@@ -2093,7 +1852,7 @@ public:
        * @return Reference to the TPM channel registers
        */
       static __attribute__((always_inline)) volatile TpmChannelRegs &channelRegs() {
-         return *reinterpret_cast<TpmChannelRegs *>(&OwningTpm::tmr->CONTROLS[CHANNEL]);
+         return *reinterpret_cast<TpmChannelRegs *>(&OwningTpm::tpm->CONTROLS[CHANNEL]);
       }
 
       /** Timer channel number */
@@ -2110,7 +1869,7 @@ public:
        */
       static void defaultConfigure() {
 
-         OwningTpm::tmr->CONTROLS[channel].CnSC = TpmChMode_PwmHighTruePulses|TpmChannelAction_None;
+         OwningTpm::tpm->CONTROLS[channel].CnSC = TpmChMode_PwmHighTruePulses|TpmChannelAction_None;
       }
 
       /**
@@ -2127,7 +1886,7 @@ public:
             TpmChMode         tpmChMode,
             TpmChannelAction  tpmChannelAction = TpmChannelAction_None) {
 
-         OwningTpm::tmr->CONTROLS[channel].CnSC = tpmChMode|tpmChannelAction;
+         OwningTpm::tpm->CONTROLS[channel].CnSC = tpmChMode|tpmChannelAction;
       }
 
       /**
@@ -2143,7 +1902,7 @@ public:
        * @return Current mode of operation for the channel
        */
       static TpmChMode getMode() {
-         return static_cast<TpmChMode>(OwningTpm::tmr->CONTROLS[channel].CnSC &
+         return static_cast<TpmChMode>(OwningTpm::tpm->CONTROLS[channel].CnSC &
                (TPM_CnSC_MS_MASK|TPM_CnSC_ELS_MASK));
       }
 
@@ -2156,8 +1915,8 @@ public:
        *       pending CnV register updates are discarded.
        */
       static void setMode(TpmChMode tpmChMode) {
-         OwningTpm::tmr->CONTROLS[channel].CnSC =
-               (OwningTpm::tmr->CONTROLS[channel].CnSC & ~(TPM_CnSC_MS_MASK|TPM_CnSC_ELS_MASK))|tpmChMode;
+         OwningTpm::tpm->CONTROLS[channel].CnSC =
+               (OwningTpm::tpm->CONTROLS[channel].CnSC & ~(TPM_CnSC_MS_MASK|TPM_CnSC_ELS_MASK))|tpmChMode;
       }
 
       /**
@@ -2170,12 +1929,12 @@ public:
        */
       static void setAction(TpmChannelAction tpmChannelAction) {
 #ifdef TPM_CnSC_DMA
-         OwningTpm::tmr->CONTROLS[channel].CnSC =
-               (OwningTpm::tmr->CONTROLS[channel].CnSC & ~(TPM_CnSC_CHIE_MASK|TPM_CnSC_DMA_MASK))|
+         OwningTpm::tpm->CONTROLS[channel].CnSC =
+               (OwningTpm::tpm->CONTROLS[channel].CnSC & ~(TPM_CnSC_CHIE_MASK|TPM_CnSC_DMA_MASK))|
                tpmChannelAction;
 #else
-         OwningTpm::tmr->CONTROLS[channel].CnSC =
-               (OwningTpm::tmr->CONTROLS[channel].CnSC & ~TPM_CnSC_CHIE_MASK)|tpmChannelAction;
+         OwningTpm::tpm->CONTROLS[channel].CnSC =
+               (OwningTpm::tpm->CONTROLS[channel].CnSC & ~TPM_CnSC_CHIE_MASK)|tpmChannelAction;
 #endif
       }
 
@@ -2277,7 +2036,7 @@ public:
        * @return false Indicates no event has occurred on a channel since last polled
        */
       static bool getInterruptFlag() {
-         return (OwningTpm::tmr->STATUS&CHANNEL_MASK) != 0;
+         return (OwningTpm::tpm->STATUS&CHANNEL_MASK) != 0;
       }
 
       /**
@@ -2291,8 +2050,8 @@ public:
       static bool getAndClearInterruptFlag() {
          // Note - w1c flags
          // so only flags captured in status are cleared
-         bool status = (OwningTpm::tmr->STATUS&CHANNEL_MASK) != 0;
-         OwningTpm::tmr->STATUS = CHANNEL_MASK;
+         bool status = (OwningTpm::tpm->STATUS&CHANNEL_MASK) != 0;
+         OwningTpm::tpm->STATUS = CHANNEL_MASK;
          return status;
       }
 
@@ -2301,7 +2060,7 @@ public:
        */
       static void clearInterruptFlag() {
          // Note - w1c flags
-         OwningTpm::tmr->STATUS = CHANNEL_MASK;
+         OwningTpm::tpm->STATUS = CHANNEL_MASK;
       }
 
 
@@ -2344,7 +2103,7 @@ public:
 
 #ifdef TPM_SC_PWMEN0_SHIFT
       // Enable output pin in TPM
-      tmr->SC = tmr->SC | (1<<(channel+TPM_SC_PWMEN0_SHIFT));
+      tpm->SC = tpm->SC | (1<<(channel+TPM_SC_PWMEN0_SHIFT));
 #endif
       Pcr::setPCR(pinDriveStrength|pinDriveMode|pinSlewRate);
    }
@@ -2366,7 +2125,7 @@ public:
 
 #ifdef TPM_SC_PWMEN0_SHIFT
       // Enable output pin in TPM
-      tmr->SC = tmr->SC | (1<<(channel+TPM_SC_PWMEN0_SHIFT));
+      tpm->SC = tpm->SC | (1<<(channel+TPM_SC_PWMEN0_SHIFT));
 #endif
       Pcr::setPCR(pinDriveStrength|pinDriveMode);
    }
@@ -2388,7 +2147,7 @@ public:
 
 #ifdef TPM_SC_PWMEN0_SHIFT
       // Enable output pin in TPM
-      tmr->SC = tmr->SC | (1<<(channel+TPM_SC_PWMEN0_SHIFT));
+      tpm->SC = tpm->SC | (1<<(channel+TPM_SC_PWMEN0_SHIFT));
 #endif
       Pcr::setPCR(pinDriveStrength|pinSlewRate);
    }
@@ -2408,7 +2167,7 @@ public:
 
 #ifdef TPM_SC_PWMEN0_SHIFT
       // Enable output pin in TPM
-      tmr->SC = tmr->SC | (1<<(channel+TPM_SC_PWMEN0_SHIFT));
+      tpm->SC = tpm->SC | (1<<(channel+TPM_SC_PWMEN0_SHIFT));
 #endif
 
       Pcr::setPCR(pinDriveStrength);
@@ -2437,7 +2196,7 @@ public:
 
 #ifdef TPM_SC_PWMEN0_SHIFT
          // Disable output pin in TPM
-         tmr->SC = tmr->SC & ~(1<<(channel+TPM_SC_PWMEN0_SHIFT));
+         tpm->SC = tpm->SC & ~(1<<(channel+TPM_SC_PWMEN0_SHIFT));
 #endif
 
          Pcr::setInput(pinPull,pinAction,pinFilter);
@@ -2498,7 +2257,7 @@ public:
    TpmQuadDecoder_T() = default;
 
    /** Hardware instance pointer */
-   static constexpr HardwarePtr<TPM_Type> tmr = Info::baseAddress;
+   static constexpr HardwarePtr<TPM_Type> tpm = Info::baseAddress;
 
    /** Allow more convenient access associated Tpm */
    using Tpm = TpmBase_T<Info>;
@@ -2620,7 +2379,7 @@ public:
       }
 
       // Disable TPM (clock source disabled)
-      tmr->QDCTRL = 0;
+      tpm->QDCTRL = 0;
 
       // Disable clock to peripheral interface
       Info::disableClock();
@@ -2635,7 +2394,7 @@ public:
     * @param tpmQuadratureMode Selects the encoding mode used to decode the input changes.
     */
    static void configure(
-         TpmPrescale       tpmPrescale       = TpmPrescale_1,
+         TpmPrescale       tpmPrescale       = TpmPrescale_DivBy1,
          TpmQuadratureMode tpmQuadratureMode = TpmQuadratureMode_Phase_AB_Mode
          ) {
       // Assertions placed here so only checked if TpmQuadDecoder actually used
@@ -2645,14 +2404,14 @@ public:
       enable();
 
       // Disable so immediate effect
-      tmr->SC = 0;
-      (void)tmr->SC;
-      tmr->SC = TpmMode_Quadrature|TpmClockSource_Disabled|tpmPrescale;
+      tpm->SC = 0;
+      (void)tpm->SC;
+      tpm->SC = TpmClockSource_Disabled|tpmPrescale;
 
-      tmr->QDCTRL =
+      tpm->QDCTRL =
             TPM_QDCTRL_QUADEN_MASK|      // Enable Quadrature decoder
             tpmQuadratureMode;           // Quadrature mode
-      tmr->CONF   = TPM_CONF_DBGMODE(3);
+      tpm->CONF   = TPM_CONF_DBGMODE(3);
    }
 
    /**
@@ -2660,7 +2419,7 @@ public:
     */
    static void resetPosition() {
       // Note: writing ANY value clears CNT (cannot set value)
-      tmr->CNT = 0;
+      tpm->CNT = 0;
    }
 
    /**
@@ -2673,7 +2432,7 @@ public:
     *       with overflow at 0xFFFF and underflow at 0.
     */
    static int16_t getPosition() {
-      return (int16_t)(tmr->CNT);
+      return (int16_t)(tpm->CNT);
    }
 
    /**
@@ -2685,7 +2444,7 @@ public:
     * @note Overflow occurs at MOD -> CNTIN, Underflow occurs at CNTIN -> MOD.
     */
    static bool getOverflowDirection() {
-      return (bool)(tmr->QDCTRL & TPM_QDCTRL_TOFDIR_MASK);
+      return (bool)(tpm->QDCTRL & TPM_QDCTRL_TOFDIR_MASK);
    }
 };
 #endif // defined(TPM_QDCTRL_QUADEN_MASK)

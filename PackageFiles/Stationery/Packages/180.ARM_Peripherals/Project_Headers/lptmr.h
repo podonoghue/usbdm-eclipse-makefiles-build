@@ -45,41 +45,7 @@ enum LptmrClockSel {
    LptmrClockSel_PccLptmrClk  = LPTMR_PSR_PCS(3), //!< Clock from PCC_LPTMRx multiplexor (PCC)
    LptmrClockSel_Default      = LptmrClockSel_Lpo1Kclk,
 };
-#else
-/**
- * Select the LPTMR clock source which determines count speed or glitch filtering
- */
-enum LptmrClockSel {
-   LptmrClockSel_Mcgirclk = LPTMR_PSR_PCS(0), //!< MCG Internal Reference Clock (MCGIRCLK)
-   LptmrClockSel_Lpoclk   = LPTMR_PSR_PCS(1), //!< Low power oscillator (LPO - 1kHz)
-   LptmrClockSel_Erclk32  = LPTMR_PSR_PCS(2), //!< 32kHz Clock Source (ERCLK32)
-   LptmrClockSel_Oscerclk = LPTMR_PSR_PCS(3), //!< Oscillator External Reference Clock (OSCERCLK)
-   LptmrClockSel_Default  = LptmrClockSel_Lpoclk,
-};
 #endif
-
-/**
- * Select the LPTMR clock pre-scale which affect counter speed/glitch filtering
- */
-enum LptmrPrescale {
-   LptmrPrescale_Bypass = LPTMR_PSR_PBYP(1),       //!< Divide is bypassed (no divider/glitch filtering)
-   LptmrPrescale_2      = LPTMR_PSR_PRESCALE(0),   //!< Divide by 2
-   LptmrPrescale_4      = LPTMR_PSR_PRESCALE(1),   //!< Divide by 4
-   LptmrPrescale_8      = LPTMR_PSR_PRESCALE(2),   //!< Divide by 8
-   LptmrPrescale_16     = LPTMR_PSR_PRESCALE(3),   //!< Divide by 16
-   LptmrPrescale_32     = LPTMR_PSR_PRESCALE(4),   //!< Divide by 32
-   LptmrPrescale_64     = LPTMR_PSR_PRESCALE(5),   //!< Divide by 64
-   LptmrPrescale_128    = LPTMR_PSR_PRESCALE(6),   //!< Divide by 128
-   LptmrPrescale_256    = LPTMR_PSR_PRESCALE(7),   //!< Divide by 256
-   LptmrPrescale_512    = LPTMR_PSR_PRESCALE(8),   //!< Divide by 512
-   LptmrPrescale_1024   = LPTMR_PSR_PRESCALE(9),   //!< Divide by 1024
-   LptmrPrescale_2048   = LPTMR_PSR_PRESCALE(10),  //!< Divide by 2048
-   LptmrPrescale_4096   = LPTMR_PSR_PRESCALE(11),  //!< Divide by 4096
-   LptmrPrescale_8192   = LPTMR_PSR_PRESCALE(12),  //!< Divide by 8192
-   LptmrPrescale_16384  = LPTMR_PSR_PRESCALE(13),  //!< Divide by 16384
-   LptmrPrescale_32768  = LPTMR_PSR_PRESCALE(14),  //!< Divide by 32768
-   LptmrPrescale_65536  = LPTMR_PSR_PRESCALE(15),  //!< Divide by 65536
-};
 
 /**
  * Select the LPTMR clock input pin
@@ -180,8 +146,8 @@ public:
    static void configureTimeCountingMode(
          LptmrResetOn      lptmrResetOn   = LptmrResetOn_Compare,
          LptmrInterrupt    lptmrInterrupt = LptmrInterrupt_Disabled,
-         LptmrClockSel     lptmrClockSel  = LptmrClockSel_Default,
-         LptmrPrescale     lptmrPrescale  = LptmrPrescale_Bypass) {
+         LptmrClockSel     lptmrClockSel  = LptmrClockSel_Lpoclk,
+         LptmrPrescale     lptmrPrescale  = LptmrPrescale_Direct_NoFilter) {
       enable();
       // Change settings with timer disabled
       lptmr->CSR = LptmrMode_Time|lptmrResetOn|lptmrInterrupt;
@@ -213,7 +179,7 @@ public:
     */
    static void setClock(
          LptmrClockSel lptmrClockSel,
-         LptmrPrescale lptmrPrescale   = LptmrPrescale_Bypass) {
+         LptmrPrescale lptmrPrescale   = LptmrPrescale_Direct_NoFilter) {
 
       uint32_t csr = lptmr->CSR;
       lptmr->CSR   = 0;

@@ -131,8 +131,8 @@
             value="0" />
       </for>
       
-      <for keys="n, name,              code,            ref"
-         values="2, System bus clock,  SystemBusClock,  system_bus_clock" >
+      <for keys="n : name             : code           : ref"
+         values="2 : System bus clock : SystemBusClock : system_bus_clock" >
 
          <choiceOption key="system_uart%(n)_fixedclocksource" 
             target="system_uart%(n)_clock"

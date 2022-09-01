@@ -92,9 +92,9 @@
          toolTip="Frequency of clock to UART"
          value="0" />
       
-      <for keys="n, name,              code,            ref"
-         values="1, System bus clock,  SystemBusClock,  system_bus_clock;
-                 2, System bus clock,  SystemBusClock,  system_bus_clock" >
+      <for keys="n : name             : code           : ref"
+         values="1 : System bus clock : SystemBusClock : system_bus_clock;
+                 2 : System bus clock : SystemBusClock : system_bus_clock" >
 
          <choiceOption key="system_uart%(n)_fixedclocksource" 
             target="system_uart%(n)_clock"

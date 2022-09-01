@@ -1,87 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
-<!-- tpm_def.xml -->
+<!-- tpm_quad.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
    <xi:include href="_default_instance.xml"/>
 
-   <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false" optional="true"/> 
-   <aliasOption key="/SIM/sim_sopt2_tpmsrc" constant="false"  optional="true"/>
-   <aliasOption key="/SIM/system_tpm_clock"  optional="true"/>
+   <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false"  optional="true" /> 
+   <aliasOption key="/SIM/sim_sopt2_tpmsrc"    constant="false"  optional="true" />
+   <aliasOption key="/SIM/system_tpm_clock"    optional="true"                   />
 
-   <binaryOption key="check_minimums" description="Check minimum interval and minimum resolution"
-         toolTip="Enables boundary checks of minimum interval and minimum resolution when setting TPM values" >
+   <binaryOption key="check_minimums" 
+      description="Check minimum interval and minimum resolution"
+      toolTip="Enables boundary checks of minimum interval and minimum resolution when setting values" >
       <choice value="0" name="No checks done" />
       <choice value="1" name="Do checks"  isDefault="true" />
    </binaryOption>
 
-   <intOption key="minimumInterval" description="Minimum usable interval in ticks"
+   <intOption key="minimumInterval" 
+      description="Minimum usable interval in ticks"
       toolTip="This value is used as a minimum acceptable value for the timer interval in ticks\n
                when using convertMicrosecondsToTicks() or convertSecondsToTicks()"
       value="20" min="0" max="65535"/>
       
-   <intOption key="minimumResolution" description="Minimum resolution for PWM interval"
+   <intOption key="minimumResolution" 
+      description="Minimum resolution for PWM interval"
       toolTip="This value is used as a minimum value for the timer period in ticks \n
          so that a reasonable resolution is available for PWM duty-cycle"
       value="100" min="0" max="65535" />
       
-   <intOption key="tpmExternalClock" description="TPM External clock "
-      toolTip="Clock frequency of external clock supplied to TPM_CLKINx pin"
+   <intOption key="tpmExternalClock" 
+      description="TPM External clock "
+      toolTip="Clock frequency of external clock supplied to TPM_CLKIN pin"
       value="0" min="0" units="Hz"/>
-   <choiceOption key="tpm_sc_cmod" description="Clock Mode Selection"
+
+   <choiceOption key="tpm_sc_cmod" 
+      description="Clock Source"
+      enumStem="TpmClockSource"
+      target="inputClockFrequency"
       toolTip="Selects the clock source for the module">
-      <choice value="0" name="Disabled" />
-      <choice value="1" name="System TPM Clock" isDefault="true" />
-      <choice value="2" name="External clock (synchonized to System Clock)" />
-      <choice value="3" name="Reserved" />
+      <choice value="0" name="Disabled"         ref="disabled"              code="0"                      enum="Disabled"        />
+      <choice value="1" name="System TPM Clock" ref="/SIM/system_tpm_clock" code="SimInfo::getTpmClock()" enum="SystemTpmClock"  isDefault="true"  />
+      <choice value="2" name="External clock"   ref="tpmExternalClock"      code="tpmExternalClock"       enum="ExternalClock"   />
    </choiceOption>
-   <choiceOption key="tpm_sc_ps" description="Clock prescaler"
+   
+   <intOption key="inputClockFrequency" 
+      constant="true"
+      description="Frequency of input clock to timer"
+      toolTip="Determined from timer clock source (tpm_sc_cmod)"
+      derived="true"
+      units="Hz"/>
+      
+   <choiceOption key="tpm_sc_ps" 
+      description="Clock prescaler"
+      enumStem="TpmPrescale"
+      target="clockFrequency"
       toolTip="Selects the prescaler for the module">
-      <choice value="0" name="Divide by 1" isDefault="true" />
-      <choice value="1" name="Divide by 2" />
-      <choice value="2" name="Divide by 4" />
-      <choice value="3" name="Divide by 8" />
-      <choice value="4" name="Divide by 16" />
-      <choice value="5" name="Divide by 32" />
-      <choice value="6" name="Divide by 64" />
-      <choice value="7" name="Divide by 128" />
+      <choice value="0" name="Divide by 1"   ref="inputClockFrequency"          enum="DivBy1"  isDefault="true" />
+      <choice value="1" name="Divide by 2"   ref="inputClockFrequency,(%%/2)"   enum="DivBy2" />
+      <choice value="2" name="Divide by 4"   ref="inputClockFrequency,(%%/4)"   enum="DivBy4" />
+      <choice value="3" name="Divide by 8"   ref="inputClockFrequency,(%%/8)"   enum="DivBy8" />
+      <choice value="4" name="Divide by 16"  ref="inputClockFrequency,(%%/16)"  enum="DivBy16" />
+      <choice value="5" name="Divide by 32"  ref="inputClockFrequency,(%%/32)"  enum="DivBy32" />
+      <choice value="6" name="Divide by 64"  ref="inputClockFrequency,(%%/64)"  enum="DivBy64" />
+      <choice value="7" name="Divide by 128" ref="inputClockFrequency,(%%/128)" enum="DivBy128" />
    </choiceOption>
       
-   <floatOption key="clockFrequency" 
+   <intOption key="clockFrequency" 
       constant="true"
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
       units="Hz"/>
+   
    <floatOption key="clockPeriod" 
+      ref="clockFrequency,(1/%%)"
       constant="true"
       description="Period of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
       units="s"/>
-   <intOption key="tpm_mod" description="Modulo of timer"
-      toolTip="Default period of the timer"
-      value="10000" min="0" max="65535" />     
+      
+   <intOption key="tpm_mod" description="End value for counter"
+      toolTip="The timer counts from 0 to this value"
+      typeName="Ticks"
+      value="10000" min="0" max="65535" />
+           
    <floatOption key="tpm_mod_period" 
       description="Period of timer"
       toolTip="Period of the timer"
       origin="Clock period * tpm_mod"
       derived="true"
       min="0" units="s"/>
+      
    <binaryOption key="tpm_sc_cpwms" 
-      description="Center-Aligned PWM Select"
-      toolTip="Selects CPWM mode\n
-         This mode configures the TPM to operate in Up-Down Counting mode">
-      <choice value="0" name="Left-aligned (count up)" />
-      <choice value="1" name="Centre-aligned (count up-down)" />
+      enumStem="TpmAlignment"
+      description="PWM Alignment"
+      toolTip="Alignment of PWM outputs relative to counter roll-over\n
+         This configures the counter to operate in Up or Up-Down Counting modes">
+      <choice value="0" name="Left-aligned (count up)"        enum="Left"    />
+      <choice value="1" name="Centre-aligned (count up-down)" enum="Centre"  />
    </binaryOption>
-   <binaryOption key="tpm_sc_toie" description="Timer Overflow Interrupt Enable"
+   
+   <binaryOption key="tpm_sc_toie" 
+      enumStem="TpmOverflowInterrupt"
+      description="Overflow Interrupt"
       toolTip="Enables TPM overflow interrupts">
-      <choice value="0" name="Disabled" />
-      <choice value="1" name="Enabled" />
+      <choice value="0" name="Interrupt Disabled" enum="Disabled" />
+      <choice value="1" name="Interrupt Enabled"  enum="Enabled"  />
    </binaryOption>
+   
    <template><![CDATA[
+      \t/** Minimum resolution for PWM interval */
+      \tstatic constexpr uint32_t minimumResolution=$(?check_minimums:$(minimumResolution):0);
+      
+      \t/** Minimum usable interval in ticks */      
+      \tstatic constexpr uint32_t minimumInterval=$(?check_minimums:$(minimumInterval):0);
+      
       \t//! Timer external input frequency
       \tstatic constexpr uint32_t tpmExternalClock =  $(tpmExternalClock);
       
@@ -96,12 +131,330 @@
       \t    TPM_SC_PS($(tpm_sc_ps));     // Prescale Factor Selection \n\n
    ]]></template>
 
+
+<!-- ========== Methods =============================== -->
+   <for  keys  =" k                    : static    : const" 
+         values=" non_static_functions : ''        : ' const';
+                  static_functions     : 'static ' : ''     
+   ">
+      <setTemplate key="/TPM/%(k)" namespace="all"
+         discardRepeats="true"
+         variables="tpm_sc_cmod,tpm_sc_ps"
+         nonDefaultParams="2" 
+      ><![CDATA[
+         \t/**
+         \t * Stop timer counter.
+         \t * This simply disables the counter clock source. \n
+         \t * To restart use setClockSource() or configure();
+         \t *
+         \t * @note This function will affect all channels of the timer.
+         \t * @note A illegal access trap will occur if the timer has not been enabled
+         \t */
+         \t%(static)void stopCounter()%(const) {
+         \t  %register = (%register&~%mask1);
+         \t}
+         \t
+         \t/**
+         \t * Set %description0 and %description1
+         \t *
+         %comments
+         \t */
+         \t%(static)void selectClock(
+         %params)%(const) {
+         \t
+         \t   // Calculate new SC value
+         \t   uint32_t %registerName = (%register&~%mask)|(%paramExpression);
+         
+         \t   // Disable timer to change clock (unable to switch directly between clock sources)
+         \t   %register=0;
+         
+         \t   // Make sure write has completed (disabled)
+         \t   (void)(%register);
+         
+         \t   // Write new value
+         \t   %register = %registerName;
+         \t}\n\n
+      ]]></setTemplate>
+            
+      <for keys="  f           :  n" 
+         values=" tpm_sc_cmod : setClockSource;
+                  tpm_sc_ps   : setPrescaler;
+                  tpm_sc_cpwms : setAlignment">
+         <setTemplate key="/TPM/%(k)" namespace="all"
+            discardRepeats="true"
+            variables="%(f)"
+            nonDefaultParams="2" 
+         ><![CDATA[
+            \t/**
+            \t * Set %description
+            \t *
+            %comments
+            \t *
+            \t * @note This function will affect all channels of the timer.
+            \t * @note The timer will be disabled while making changes.
+            \t */
+            \t%(static)void %(n)(%params)%(const) {
+            \t
+            \t   // Calculate new SC value
+            \t   uint32_t %registerName = (%register&~%mask)|(%paramExpression);
+            
+            \t   // Disable timer to change clock (unable to switch directly between clock sources)
+            \t   %register=0;
+            
+            \t   // Make sure write has completed (disabled)
+            \t   (void)(%register);
+            
+            \t   // Write new value
+            \t   %register = %registerName;
+            \t}\n\n
+         ]]></setTemplate>
+      </for>
+            
+      <setTemplate key="/TPM/%(k)" namespace="all"
+         discardRepeats="true"
+         variables="tpm_mod,tpm_sc_ps"
+      ><![CDATA[
+         \t/**
+         \t * Set maximum value of timer counter.
+         \t *
+         \t * @param[in] endValue Modulo value in ticks (<65535), 0 = 65536.
+         \t * @param[in] suspend  Whether to suspend timer during change.
+         \t *
+         \t * @note This function will affect all channels of the timer.
+         \t * @note The timer may be disabled while making changes.
+         \t * @note This value is write-buffered and updated by MOD synchronisation
+         \t *       unless suspend is true.
+         \t */
+         \t%(static)void setCounterMaximumValue(Ticks endValue, bool suspend=false)%(const) {
+         \t   uint32_t %registerName1;
+         \t   if (suspend) {
+         \t      // Disable timer so register changes are immediate
+         \t      sc = %register1;
+         \t      %register1 = 0;
+         \t      (void)(%register1);
+         \t   }
+         \t   %register0 = (unsigned)endValue;
+         \t   if (suspend) {
+         \t      %register1 = sc;
+         \t   }
+         \t}
+         \t/**
+         \t * Get maximum value of timer counter.
+         \t *
+         \t * @return Counter modulo value in ticks (<65535), 0 = 65536.
+         \t */
+         \t%(static)Ticks getCounterMaximumValue()%(const) {
+         \t   return Ticks((unsigned)(tpm->MOD));
+         \t}\n\n
+      ]]></setTemplate>
+   
+   </for>
+
+   <clockCodeTemplate variable="tpm_sc_cmod"
+      returnFormat="%s"
+   ><![CDATA[
+      \t/**
+      \t * Get %description
+      \t *
+      \t * @return Clock frequency in Hz
+      \t */
+      \tstatic uint32_t getInputClockFrequency() {
+      \t   
+      \t   switch(%defaultMaskingExpression) {
+      \t      default: return 0;
+      %body
+      \t   }
+      \t}\n\n
+   ]]></clockCodeTemplate>
+
+<!-- ========== TPM Init class =============================== -->
+   <template><![CDATA[
+      \t/**
+      \t * Class used to do initialisation of an TPM
+      \t *
+      \t * This class has a templated constructor that accepts various values:
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const Ftm::Init tpmInit {
+      \t *    FtmAlignment_Left,
+      \t *    FtmClockSource_SystemClock,
+      \t *    FtmPrescale_DivBy16,
+      \t *    FtmOverflowInterrupt_Disabled,
+      \t * };
+      \t *
+      \t * // Initialise TPM from values specified above
+      \t * tpmInit.configure()
+      \t * @endcode
+      \t */
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**                               
+      \t    * Copy Constructor                  
+      \t    */                             
+      \t   constexpr Init(const Init &other) = default;
+      \t   
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]></template>
+   <template><![CDATA[
+      \t   /**
+      \t    * Configure TPM from values specified in constructor.
+      \t    */
+      \t   void configure() const {\n
+   ]]></template>
+   <setTemplate variables="tpm_mod" ><![CDATA[
+      \t
+      \t      // Write modulo value
+      \t      %register = %registerName;\n
+   ]]></setTemplate>
+   <for keys="r" values="
+      tpm_sc_toie,tpm_sc_cpwms,tpm_sc_clks,tpm_sc_ps
+      ">
+      <setTemplate variables="%(r)" ><![CDATA[
+         \t      // Disable timer to change clock (unable to switch directly between clock sources)
+         \t      %register=0;
+         \t            
+         \t      // Make sure write has completed (disabled)
+         \t      (void)(%register);
+         \t   
+         \t      // Write new value
+         \t      %register = %registerName;\n
+      ]]></setTemplate>
+   </for>
+   <template><![CDATA[
+      \t   }\n\n
+   ]]></template>
+   <initialValueTemplate 
+      variables="tpm_sc_toie,tpm_sc_cpwms,tpm_sc_clks,tpm_sc_ps"
+   ><![CDATA[
+      \t   /// Status And Control Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+   <initialValueTemplate 
+      variables="tpm_mod"
+   ><![CDATA[
+      \t   /// Modulo Register
+      \t   %enumClass %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+   <for keys="r" values="tpm_sc_toie;tpm_sc_cpwms;tpm_sc_clks;tpm_sc_ps">
+      <setTemplate variables="%(r)"
+         linePadding="xxx" 
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t   
+         \t      %registerName |= %paramExpression;
+         \t   }
+         \t\n
+      ]]></setTemplate>
+   </for>
+   
+   <setTemplate variables="tpm_mod"
+      linePadding="xxx" 
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t   
+         \t      %registerName = %paramExpression;
+         \t   }
+         \t\n
+   ]]></setTemplate>
+   
+   <template ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+
+   <binaryOption key="tpm_combine_comswap0" condition="tpm_combine_comswap0_present"
+      description="Combine Channel 0 and 1 Swap"
+      toolTip="When set in combine mode,\n
+         the even channel is used for the input capture and 1st compare,\n
+         the odd channel is used for the 2nd compare" >
+      <choice value="0" name="Even channel is used for input capture and 1st compare" isDefault="true" />
+      <choice value="1" name="Odd channel is used for input capture and 1st compare" />
+   </binaryOption>
+   
+   <binaryOption key="tpm_combine_combine0" condition="tpm_combine_combine0_present"
+      description="Combine Channels 0 and 1"
+      toolTip="Enables the combine feature for channels 0 and 1.\n
+         In input capture mode, the combined channels use the even channel input. \n
+         In software compare modes, the even channel match asserts the output trigger and \n
+         the odd channel match negates the output trigger.\n
+         In PWM modes, the even channel match is used for the 1st compare and odd channel match for the 2nd compare" >
+      <choice value="0" name="Channels 0 and 1 are independent" isDefault="true" />
+      <choice value="1" name="Channels 0 and 1 are combined" />
+   </binaryOption>
+   
+   <template><![CDATA[
+      \t//! Default value for COMBINE register
+      \tstatic constexpr uint32_t combine  = 
+      \t    TPM_COMBINE_COMSWAP0($(tpm_combine_comswap0)) | // Combine Channel 0 and 1 Swap
+      \t    TPM_COMBINE_COMBINE0($(tpm_combine_combine0));  // Combine Channels 0 and 1\n\n
+   ]]></template>
+
+   <binaryOption key="tpm_pol_pol0"  condition="tpm_pol_pol0_present"
+      description="Channel 0 Polarity" >
+      <choice value="0" name="The channel polarity is active high" isDefault="true" />
+      <choice value="1" name="The channel polarity is active low" />
+   </binaryOption>
+   
+   <binaryOption key="tpm_pol_pol1"  condition="tpm_pol_pol1_present"
+      description="Channel 1 Polarity" >
+      <choice value="0" name="The channel polarity is active high" isDefault="true" />
+      <choice value="1" name="The channel polarity is active low" />
+   </binaryOption>
+   
+   <template><![CDATA[
+      \t//! Default value for POL register
+      \tstatic constexpr uint32_t polarity  = 
+      \t    TPM_POL_POL1($(tpm_pol_pol1)) | // Channel 1 Polarity
+      \t    TPM_POL_POL0($(tpm_pol_pol0));  // Channel 0 Polarity\n\n
+   ]]></template>
+
+   <intOption key="tpm_filter_ch0fval" condition="tpm_filter_ch0fval_present"
+      description="Channel 0 Filter Value" 
+      toolTip="Filter/delay is (4 * CHxFVAL) clock cycles, 0 disables"
+      min="0" max="15" value="0" />
+      
+   <intOption key="tpm_filter_ch1fval" condition="tpm_filter_ch1fval_present"
+      description="Channel 1 Filter Value" 
+      toolTip="Filter/delay is (4 * CHxFVAL) clock cycles, 0 disables"
+      min="0" max="15" value="0" />
+      
+   <template><![CDATA[
+      \t//! Default value for FILTER register
+      \tstatic constexpr uint32_t filter  = 
+      \t    TPM_FILTER_CH1FVAL($(tpm_filter_ch1fval)) | // Channel 1 Filter Value
+      \t    TPM_FILTER_CH0FVAL($(tpm_filter_ch0fval));  // Channel 0 Filter Value\n\n
+   ]]></template>
+
    <category name="Advanced" description="Advanced options">
       <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)clksel" optional="true" constant="false" />
       <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)ch0src" optional="true" constant="false" />
       <aliasOption key="/SIM/sim_sopt9_tpm$(_instance)clksel" optional="true" constant="false" />
       <aliasOption key="/SIM/sim_sopt9_tpm$(_instance)ch0src" optional="true" constant="false" />
    </category>
+
+<!-- ========== Misc =============================== -->
 
    <xi:include href="_irqOption.xml"/>
    
@@ -118,30 +471,6 @@
       <copy source="Snippets/tpm-oc-example.cpp"   target="Snippets/tpm-oc-example.cpp"    overwrite="true" derived="true"/>
    </projectActionList>
          
-   <template><![CDATA[
-      \t/** Minimum resolution for PWM interval */
-      \tstatic constexpr uint32_t minimumResolution=$(?check_minimums:$(minimumResolution):0);
-      
-      \t/** Minimum usable interval in ticks */      
-      \tstatic constexpr uint32_t minimumInterval=$(?check_minimums:$(minimumInterval):0);
-      
-      \t/**
-      \t * Get input clock frequency
-      \t *
-      \t * @return Input clock frequency as a uint32_t in Hz
-      \t */
-      \tstatic uint32_t getInputClockFrequency() {
-      \t
-      \t   switch(tpm->SC&TPM_SC_CMOD_MASK) {
-      \t   default:
-      \t   case TPM_SC_CMOD(0): return 0;
-      \t   case TPM_SC_CMOD(1): return SimInfo::getTpmClock();
-      \t   case TPM_SC_CMOD(2): return tpmExternalClock;
-      \t   case TPM_SC_CMOD(3): return 0;
-      \t   }
-      \t}\n\n
-   ]]></template>
-   
    <template key="/TPM/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)

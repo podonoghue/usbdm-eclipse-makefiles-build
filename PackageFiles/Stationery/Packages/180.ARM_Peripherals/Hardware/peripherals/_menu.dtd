@@ -86,6 +86,7 @@
    <!ATTLIST intOption derived       (false|true) #IMPLIED>
    <!ATTLIST intOption derivedFrom   CDATA        #IMPLIED>
    <!ATTLIST intOption radix         CDATA        #IMPLIED>
+   <!ATTLIST intOption ref           CDATA        #IMPLIED> <!-- Variable this variable depends on -->
   
 <!ELEMENT bitmaskOption EMPTY >
    <!ATTLIST bitmaskOption condition      CDATA        #IMPLIED>
@@ -121,6 +122,7 @@
    <!ATTLIST floatOption max           CDATA        #IMPLIED>
    <!ATTLIST floatOption derived       (false|true) #IMPLIED>
    <!ATTLIST floatOption derivedFrom   CDATA        #IMPLIED>
+   <!ATTLIST floatOption ref           CDATA        #IMPLIED> <!-- Variable this variable depends on -->
   
 <!ELEMENT aliasOption EMPTY >
    <!-- alias Option 
@@ -189,6 +191,29 @@
    <!ATTLIST pinListOption size               CDATA        #IMPLIED>
    <!ATTLIST pinListOption derived            (false|true) #IMPLIED>
    <!ATTLIST pinListOption derivedFrom        CDATA        #IMPLIED>
+
+<!ELEMENT clockSelectionOption ((choice)*) >
+   <!ATTLIST clockSelectionOption condition           CDATA        #IMPLIED>
+   <!ATTLIST clockSelectionOption constant            (false|true) #IMPLIED>
+   <!ATTLIST clockSelectionOption hidden              (false|true) #IMPLIED>
+   <!ATTLIST clockSelectionOption name                CDATA        #IMPLIED>
+   <!ATTLIST clockSelectionOption key                 CDATA        #REQUIRED>
+   <!ATTLIST clockSelectionOption templateKey         CDATA        #IMPLIED>
+   <!ATTLIST clockSelectionOption origin              CDATA        #IMPLIED>
+   <!ATTLIST clockSelectionOption description         CDATA        #IMPLIED>
+   <!ATTLIST clockSelectionOption toolTip             CDATA        #IMPLIED>
+   <!ATTLIST clockSelectionOption units               (None|Hz|s)  #IMPLIED>
+   <!ATTLIST clockSelectionOption derived             (false|true) #IMPLIED>
+   <!ATTLIST clockSelectionOption derivedFrom         CDATA        #IMPLIED>
+   <!ATTLIST clockSelectionOption enumStem            CDATA        #IMPLIED> <!-- Type for enum and first part of enum name -->
+   <!ATTLIST clockSelectionOption typeName            CDATA        #IMPLIED> <!-- as for enumStem -->
+   <!ATTLIST clockSelectionOption enumType            CDATA        #IMPLIED> <!-- Type to use for enums e.g.uint8_t -->
+   <!ATTLIST clockSelectionOption target              CDATA        #IMPLIED>
+   <!ATTLIST clockSelectionOption register            CDATA        #IMPLIED>
+   <!ATTLIST clockSelectionOption replace             CDATA        #IMPLIED>
+   <!ATTLIST clockSelectionOption valueFormat         CDATA        #IMPLIED> <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
+   <!ATTLIST clockSelectionOption enumText            CDATA        #IMPLIED> <!-- Text to add to enum generated from choices -->
+   <!ATTLIST clockSelectionOption disabledValue       CDATA        #IMPLIED>
    
 <!ELEMENT choiceOption ((choice)*) >
    <!ATTLIST choiceOption condition           CDATA        #IMPLIED>
