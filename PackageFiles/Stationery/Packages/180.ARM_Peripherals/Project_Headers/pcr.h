@@ -58,6 +58,8 @@ public:
    constexpr Ticks()                   : value(0) {}
    constexpr Ticks(unsigned value)     : value(value) {}
    constexpr Ticks(float    value)     : value(round(value)) {}
+   constexpr Ticks(unsigned long value): value((unsigned)value) {}
+   constexpr Ticks(double    value)    : value(roundf(value)) {}
    constexpr Ticks(const Ticks& other) : value(other.value) {}
    Ticks(const volatile Ticks& other)  : value(other.value) {}
 
@@ -99,7 +101,8 @@ private:
 
 public:
    constexpr Seconds()                       : value(0.0) {}
-   constexpr Seconds(float value)            : value(value) {}
+   constexpr Seconds(long value)             : value((float)value) {}
+   constexpr Seconds(double value)           : value((float)value) {}
    constexpr Seconds(const Seconds& other)   : value(other.value) {}
    Seconds(const volatile Seconds& other)    : value(other.getValue()) {}
 
@@ -168,6 +171,7 @@ private:
 public:
    constexpr Hertz()                      : value(0.0) {}
    constexpr Hertz(float value)           : value(value) {}
+   constexpr Hertz(double value)          : value((float)value) {}
    constexpr Hertz(const Hertz& other)    : value(other.value) {}
    Hertz(const volatile Hertz& other)     : value(other.value) {}
 
@@ -250,26 +254,26 @@ constexpr auto operator /(int left,       Hertz right)   { return Seconds(left/r
    consteval auto operator"" _ticks(unsigned long long int num) { return static_cast<Ticks>((unsigned)num); };
    consteval auto operator"" _ticks(long double num)            { return static_cast<Ticks>((float)num); };
 
-   consteval auto operator"" _s(unsigned long long int num)     { return static_cast<Seconds>(num); };
-   consteval auto operator"" _s(long double num)                { return static_cast<Seconds>(num); };
+   consteval auto operator"" _s(unsigned long long int num)     { return static_cast<Seconds>((double)num); };
+   consteval auto operator"" _s(long double num)                { return static_cast<Seconds>((double)num); };
 
-   consteval auto operator"" _ms(unsigned long long int num)    { return static_cast<Seconds>(num*0.001); };
-   consteval auto operator"" _ms(long double num)               { return static_cast<Seconds>(num*0.001); };
+   consteval auto operator"" _ms(unsigned long long int num)    { return static_cast<Seconds>((double)(num*0.001)); };
+   consteval auto operator"" _ms(long double num)               { return static_cast<Seconds>((double)(num*0.001)); };
 
-   consteval auto operator"" _us(unsigned long long int num)    { return static_cast<Seconds>(num*0.000001); };
-   consteval auto operator"" _us(long double num)               { return static_cast<Seconds>(num*0.000001); };
+   consteval auto operator"" _us(unsigned long long int num)    { return static_cast<Seconds>((double)(num*0.000001)); };
+   consteval auto operator"" _us(long double num)               { return static_cast<Seconds>((double)(num*0.000001)); };
 
-   consteval auto operator"" _ns(unsigned long long int num)    { return static_cast<Seconds>(num*0.000000001); };
-   consteval auto operator"" _ns(long double num)               { return static_cast<Seconds>(num*0.000000001); };
+   consteval auto operator"" _ns(unsigned long long int num)    { return static_cast<Seconds>((double)(num*0.000000001)); };
+   consteval auto operator"" _ns(long double num)               { return static_cast<Seconds>((double)(num*0.000000001)); };
 
-   consteval auto operator"" _Hz(unsigned long long int num)    { return static_cast<Hertz>(num); };
-   consteval auto operator"" _Hz(long double num)               { return static_cast<Hertz>(num); };
+   consteval auto operator"" _Hz(unsigned long long int num)    { return static_cast<Hertz>((double)num); };
+   consteval auto operator"" _Hz(long double num)               { return static_cast<Hertz>((double)num); };
 
-   consteval auto operator"" _kHz(unsigned long long int num)   { return static_cast<Hertz>(num*1000); };
-   consteval auto operator"" _kHz(long double num)              { return static_cast<Hertz>(num*1000); };
+   consteval auto operator"" _kHz(unsigned long long int num)   { return static_cast<Hertz>((double)(num*1000)); };
+   consteval auto operator"" _kHz(long double num)              { return static_cast<Hertz>((double)(num*1000)); };
 
-   consteval auto operator"" _MHz(unsigned long long int num)   { return static_cast<Hertz>(num*1000000); };
-   consteval auto operator"" _MHz(long double num)              { return static_cast<Hertz>(num*1000000); };
+   consteval auto operator"" _MHz(unsigned long long int num)   { return static_cast<Hertz>((double)(num*1000000)); };
+   consteval auto operator"" _MHz(long double num)              { return static_cast<Hertz>((double)(num*1000000)); };
 
 //   consteval auto operator"" _percent(unsigned long long int num)  { return static_cast<double>(num)*0.01; };
 //   consteval auto operator"" _percent(long double num)             { return static_cast<double>(num)*0.01; };

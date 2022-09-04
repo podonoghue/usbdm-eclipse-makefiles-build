@@ -87,6 +87,7 @@
    <!ATTLIST intOption derivedFrom   CDATA        #IMPLIED>
    <!ATTLIST intOption radix         CDATA        #IMPLIED>
    <!ATTLIST intOption ref           CDATA        #IMPLIED> <!-- Variable this variable depends on -->
+   <!ATTLIST intOption valueFormat   CDATA        #IMPLIED> <!-- How to format value e.g. %s_ticks-->
   
 <!ELEMENT bitmaskOption EMPTY >
    <!ATTLIST bitmaskOption condition      CDATA        #IMPLIED>
@@ -123,6 +124,7 @@
    <!ATTLIST floatOption derived       (false|true) #IMPLIED>
    <!ATTLIST floatOption derivedFrom   CDATA        #IMPLIED>
    <!ATTLIST floatOption ref           CDATA        #IMPLIED> <!-- Variable this variable depends on -->
+   <!ATTLIST floatOption valueFormat   CDATA        #IMPLIED> <!-- How to format value e.g. %s_Hz-->
   
 <!ELEMENT aliasOption EMPTY >
    <!-- alias Option 

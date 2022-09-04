@@ -412,8 +412,8 @@ $(/FTM/non_static_functions:  // /FTM/non_static_functions not found)
 
       // Configure for free-running mode
       // This is the usual value for IC or OC set-up
-      ftm->MOD = 0;
-      ftm->CNTIN = 0;
+      ftm->MOD   = 0_ticks;
+      ftm->CNTIN = 0_ticks;
 
       // Restart counter
       ftm->CNT   = 0;
@@ -1616,8 +1616,8 @@ $(/FTM/static_functions:  // /FTM/static_functions not found)
 
       // Configure for free-running mode
       // This is the usual value for IC or OC set-up
-      ftm->MOD = 0;
-      ftm->CNTIN = 0;
+      ftm->MOD   = 0_ticks;
+      ftm->CNTIN = 0_ticks;
 
       // Restart counter
       ftm->CNT   = 0;

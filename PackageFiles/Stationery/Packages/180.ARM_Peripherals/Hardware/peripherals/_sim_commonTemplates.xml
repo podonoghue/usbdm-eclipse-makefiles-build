@@ -271,6 +271,9 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
+
+ <!-- ========== Initialisation =============================== -->
+      
    <template key="DefaultInitValue" namespace="all" ><![CDATA[
       \t/**
       \t * Default value for Sim::DefaultInit
@@ -953,7 +956,7 @@
          \t/**
          \t * Set %description
          \t *
-         %comments
+         %paramDescription
          \t *
          \t * For example, setAdc%(p)Triggers(SimAdc%(p)TriggerMode_Alt_PreTrigger_1, SimAdc0Trigger_PitCh0) will set the trigger source
          \t * to PIT channel 0 and conversion will use SC1[1]/R[1]
@@ -1416,12 +1419,14 @@
          values="
              sim_sopt2_lpuart%(n)src;
              sim_sopt2_uart%(n)src">
-         <setTemplate variables="%(v)" ><![CDATA[
+         <setTemplate variables="%(v)" 
+            linePadding="xxx" 
+         ><![CDATA[
             \t   /**
             \t    * Constructor for %description
             \t    *
             \t    * @tparam   Types
-            \t%comments
+            %paramDescription
             \t    */
             \t   template <typename... Types>
             \t   constexpr Init(%params, Types... rest) : Init(rest...) {
@@ -1453,12 +1458,14 @@
          sim_sopt2_usbregen;
          sim_sopt2_usbslsrc
          ">
-      <setTemplate variables="%(v)" ><![CDATA[
+      <setTemplate variables="%(v)" 
+            linePadding="xxx" 
+      ><![CDATA[
          \t   /**
          \t    * Constructor for %description
          \t    *
          \t    * @tparam   Types
-         \t%comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
@@ -1476,12 +1483,14 @@
                 sim_sopt4_ftm%(p)trg%(u)src;
                 sim_sopt4_ftm%(p)ch%(u)src;
                 sim_sopt4_tpm%(p)ch%(u)src">
-            <setTemplate variables="%(v)" ><![CDATA[
+            <setTemplate variables="%(v)"  
+                  linePadding="xxx" 
+            ><![CDATA[
                \t   /**
                \t    * Constructor for %description
                \t    *
                \t    * @tparam   Types
-               \t%comments
+               %paramDescription
                \t    */
                \t   template <typename... Types>
                \t   constexpr Init(%params, Types... rest) : Init(rest...) {
@@ -1496,12 +1505,14 @@
          values="
              sim_sopt4_tpm%(p)clksel;
              sim_sopt4_ftm%(p)clksel">
-         <setTemplate variables="%(v)" ><![CDATA[
+         <setTemplate variables="%(v)"  
+            linePadding="xxx" 
+         ><![CDATA[
             \t   /**
             \t    * Constructor for %description
             \t    *
             \t    * @tparam   Types
-            \t%comments
+            %paramDescription
             \t    */
             \t   template <typename... Types>
             \t   constexpr Init(%params, Types... rest) : Init(rest...) {
@@ -1521,12 +1532,14 @@
              sim_sopt5_lpuart%(p)ode;
              sim_sopt5_lpuart%(p)rxsrc;
              sim_sopt5_lpuart%(p)txsrc">
-         <setTemplate variables="%(v)" ><![CDATA[
+         <setTemplate variables="%(v)"  
+                  linePadding="xxx" 
+         ><![CDATA[
             \t   /**
             \t    * Constructor for %description
             \t    *
             \t    * @tparam   Types
-            \t%comments
+            %paramDescription
             \t    */
             \t   template <typename... Types>
             \t   constexpr Init(%params, Types... rest) : Init(rest...) {
@@ -1545,7 +1558,7 @@
       \t    * Constructor for %description
       \t    *
       \t    * @tparam   Types
-      %comments
+      %paramDescription
       \t    */
       \t   template <typename... Types>
       \t   constexpr Init(
@@ -1561,12 +1574,14 @@
          values="
              sim_sopt8_ftm0och%(ch)src;
              sim_sopt8_ftm3och%(ch)src">
-         <setTemplate variables="%(v)" ><![CDATA[
+         <setTemplate variables="%(v)"  
+            linePadding="xxx" 
+         ><![CDATA[
             \t   /**
             \t    * Constructor for %description
             \t    *
             \t    * @tparam   Types
-            \t%comments
+            %paramDescription
             \t    */
             \t   template <typename... Types>
             \t   constexpr Init(%params, Types... rest) : Init(rest...) {

@@ -303,36 +303,9 @@
       \t   constexpr Init() = default;
       \t\n
    ]]></template>
-   <template><![CDATA[
-      \t   /**
-      \t    * Configure TPM from values specified in constructor.
-      \t    */
-      \t   void configure() const {\n
-   ]]></template>
-   <setTemplate variables="tpm_mod" ><![CDATA[
-      \t
-      \t      // Write modulo value
-      \t      %register = %registerName;\n
-   ]]></setTemplate>
-   <for keys="r" values="
-      tpm_sc_toie,tpm_sc_cpwms,tpm_sc_clks,tpm_sc_ps
-      ">
-      <setTemplate variables="%(r)" ><![CDATA[
-         \t      // Disable timer to change clock (unable to switch directly between clock sources)
-         \t      %register=0;
-         \t            
-         \t      // Make sure write has completed (disabled)
-         \t      (void)(%register);
-         \t   
-         \t      // Write new value
-         \t      %register = %registerName;\n
-      ]]></setTemplate>
-   </for>
-   <template><![CDATA[
-      \t   }\n\n
-   ]]></template>
+   
    <initialValueTemplate 
-      variables="tpm_sc_toie,tpm_sc_cpwms,tpm_sc_clks,tpm_sc_ps"
+      variables="tpm_sc_toie,tpm_sc_cpwms,tpm_sc_cmod,tpm_sc_ps"
    ><![CDATA[
       \t   /// Status And Control Register
       \t   uint32_t %registerName = 0;\n\n
@@ -340,10 +313,37 @@
    <initialValueTemplate 
       variables="tpm_mod"
    ><![CDATA[
-      \t   /// Modulo Register
-      \t   %enumClass %registerName = 0;\n\n
+      \t   /// %description
+      \t   %enumClass %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
-   <for keys="r" values="tpm_sc_toie;tpm_sc_cpwms;tpm_sc_clks;tpm_sc_ps">
+   
+   <setTemplate variables="tpm_sc_cmod" ><![CDATA[
+      \t   /**
+      \t    * Configure TPM from values specified in constructor.
+      \t    */
+      \t   void configure() const {
+      \t
+      \t      // Disable timer to change clock (unable to switch directly between clock sources)
+      \t      %register=0;
+      \t            
+      \t      // Make sure write has completed (disabled)
+      \t      (void)(%register);\n
+   ]]></setTemplate>
+   <setTemplate variables="tpm_mod" ><![CDATA[
+      \t
+      \t      // %description
+      \t      %register = %registerName;\n
+   ]]></setTemplate>
+   <setTemplate variables="tpm_sc_cmod" ><![CDATA[
+      \t   
+      \t      // Write new value
+      \t      %register = %registerName;\n
+   ]]></setTemplate>
+   <template><![CDATA[
+      \t   }\n\n
+   ]]></template>
+   
+   <for keys="r" values="tpm_sc_toie;tpm_sc_cpwms;tpm_sc_cmod;tpm_sc_ps">
       <setTemplate variables="%(r)"
          linePadding="xxx" 
       ><![CDATA[

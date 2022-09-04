@@ -8,6 +8,13 @@
    
    <xi:include href="_mapPinsOption.xml"/>
 
+   <binaryOption key="lptmr_csr_tms" description="Timer Mode Select"
+      enumStem="LptmrMode"
+      toolTip="Configures the mode of the LPTMR">
+      <choice value="0" name="Time Interval mode" enum="TimeInterval"  />
+      <choice value="1" name="Pulse Counter mode" enum="PulseCounting" />
+   </binaryOption>
+   
    <intOption key="minimumResolution" 
       description="Minimum resolution for time interval setting"
       toolTip="This value is used as a minimum value check when setting the time interval.\n
@@ -16,7 +23,7 @@
    />
 
    <template><![CDATA[
-      \t//! Minimum resolution for time interval setting
+      \t/// Minimum resolution for time interval setting
       \tstatic constexpr uint32_t minimumResolution = $(minimumResolution);\n\n
    ]]></template>
    
@@ -33,25 +40,47 @@
       description="Prescaler Value" 
       valueFormat="LPTMR_PSR_PBYP(%s),LPTMR_PSR_PRESCALE(%s)"
       enumStem="LptmrPrescale"
-      toolTip="Configures the size of the Prescaler in Time Counter mode or\n
-         width of the glitch filter in Pulse Counter mode">
-      <choice value="1,0"  name="Prescaler = 1, no glitch filter"              enum="Direct_NoFilter"    />
-      <choice value="0,0"  name="Prescaler = 2, no glitch filter"              enum="DivBy2_NoFIlter"    />
-      <choice value="0,1"  name="Prescaler = 4, 2 clock glitch filter"         enum="DivBy4"             />
-      <choice value="0,2"  name="Prescaler = 8, 4 clock glitch filter"         enum="DivBy8"             />
-      <choice value="0,3"  name="Prescaler = 16, 8 clock glitch filter"        enum="DivBy16"            />
-      <choice value="0,4"  name="Prescaler = 32, 16 clock glitch filter"       enum="DivBy32"            />
-      <choice value="0,5"  name="Prescaler = 64, 32 clock glitch filter"       enum="DivBy64"            />
-      <choice value="0,6"  name="Prescaler = 128, 64 clock glitch filter"      enum="DivBy128"           />
-      <choice value="0,7"  name="Prescaler = 256, 128 clock glitch filter"     enum="DivBy256"           />
-      <choice value="0,8"  name="Prescaler = 512, 256 clock glitch filter"     enum="DivBy512"           />
-      <choice value="0,9"  name="Prescaler = 1024, 512 clock glitch filter"    enum="DivBy1024"          />
-      <choice value="0,10" name="Prescaler = 2048, 1024 clock glitch filter"   enum="DivBy2048"          />
-      <choice value="0,11" name="Prescaler = 4096, 2048 clock glitch filter"   enum="DivBy4096"          />
-      <choice value="0,12" name="Prescaler = 8192, 4096 clock glitch filter"   enum="DivBy8192"          />
-      <choice value="0,13" name="Prescaler = 16384, 8192 clock glitch filter"  enum="DivBy16384"         />
-      <choice value="0,14" name="Prescaler = 32768, 16384 clock glitch filter" enum="DivBy32768"         />
-      <choice value="0,15" name="Prescaler = 65536, 32768 clock glitch filter" enum="DivBy65536"         />
+      toolTip="Configures the size of the Prescaler in Time Interval mode" >
+      <choice value="1,0"  name="Prescaler = 1"      enum="Direct"       />
+      <choice value="0,0"  name="Prescaler = 2"      enum="DivBy_2"      />
+      <choice value="0,1"  name="Prescaler = 4"      enum="DivBy_4"      />
+      <choice value="0,2"  name="Prescaler = 8"      enum="DivBy_8"      />
+      <choice value="0,3"  name="Prescaler = 16,"    enum="DivBy_16"     />
+      <choice value="0,4"  name="Prescaler = 32,"    enum="DivBy_32"     />
+      <choice value="0,5"  name="Prescaler = 64"     enum="DivBy_64"     />
+      <choice value="0,6"  name="Prescaler = 128"    enum="DivBy_128"    />
+      <choice value="0,7"  name="Prescaler = 256"    enum="DivBy_256"    />
+      <choice value="0,8"  name="Prescaler = 512"    enum="DivBy_512"    />
+      <choice value="0,9"  name="Prescaler = 1024"   enum="DivBy_1024"   />
+      <choice value="0,10" name="Prescaler = 2048"   enum="DivBy_2048"   />
+      <choice value="0,11" name="Prescaler = 4096"   enum="DivBy_4096"   />
+      <choice value="0,12" name="Prescaler = 8192"   enum="DivBy_8192"   />
+      <choice value="0,13" name="Prescaler = 16384"  enum="DivBy_16384"  />
+      <choice value="0,14" name="Prescaler = 32768"  enum="DivBy_32768"  />
+      <choice value="0,15" name="Prescaler = 65536"  enum="DivBy_65536"  />
+   </choiceOption>
+   
+   <choiceOption key="lptmr_psr_glitchFilter" 
+      description="Filter Value" 
+      valueFormat="LPTMR_PSR_PBYP(%s),LPTMR_PSR_PRESCALE(%s)"
+      enumStem="LptmrGlitchFilter"
+      toolTip="Configures the size of the glitch filter in Pulse Counting mode" >
+      <choice value="1,0"  name="No glitch filter"                 enum="Direct"       />
+      <choice value="0,1"  name="2 clock cycle glitch filter"      enum="2_clocks"     />
+      <choice value="0,2"  name="4 clock cycle glitch filter"      enum="3_clocks"     />
+      <choice value="0,3"  name="8 clock cycle glitch filter"      enum="8_clocks"     />
+      <choice value="0,4"  name="16 clock cycle glitch filter"     enum="16_clocks"    />
+      <choice value="0,5"  name="32 clock cycle glitch filter"     enum="32_clocks"    />
+      <choice value="0,6"  name="64 clock cycle glitch filter"     enum="64_clocks"    />
+      <choice value="0,7"  name="128 clock cycle glitch filter"    enum="128_clocks"   />
+      <choice value="0,8"  name="256 clock cycle glitch filter"    enum="256_clocks"   />
+      <choice value="0,9"  name="512 clock cycle glitch filter"    enum="512_clocks"   />
+      <choice value="0,10" name="1024 clock cycle glitch filter"   enum="1024_clocks"  />
+      <choice value="0,11" name="2048 clock cycle glitch filter"   enum="2048_clocks"  />
+      <choice value="0,12" name="4096 clock cycle glitch filter"   enum="4096_clocks"  />
+      <choice value="0,13" name="8192 clock cycle glitch filter"   enum="81924_clocks" />
+      <choice value="0,14" name="16384 clock cycle glitch filter"  enum="16384_clocks" />
+      <choice value="0,15" name="32768 clock cycle glitch filter"  enum="32768_clocks" />
    </choiceOption>
    
    <floatOption key="clockFrequency" 
@@ -62,6 +91,8 @@
       units="Hz"/>
       
    <floatOption key="clockPeriod" 
+      typeName="Seconds"
+      valueFormat="%s_s"
       constant="true"
       description="Period of timer clock"
       toolTip="Determined from timer clock source and prescaler"
@@ -69,75 +100,62 @@
       units="s"/>
       
    <floatOption key="maximumPeriod" 
+      typeName="Seconds"
       constant="true"
       description="Maximum period of timer"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
       units="s"/>
     
-   <template><![CDATA[
-      \t//! Default Timer Compare value
-      \tstatic constexpr uint32_t cmr = $(lptmr_cmr);\n\n
-   ]]></template>
-   
-   <initialValueTemplate 
-      variables="lptmr_psr_pcs,lptmr_psr_prescaler"     
-   ><![CDATA[
-      \t//! Default PSR value
-      \tstatic constexpr uint32_t psr = %initExpression\n\n
-   ]]></initialValueTemplate>
-   
-   <binaryOption key="lptmr_csr_tms" description="Timer Mode Select"
-      toolTip="Configures the mode of the LPTMR">
-      <choice value="0" name="Time Counter mode" />
-      <choice value="1" name="Pulse Counter mode" />
+   <binaryOption key="lptmr_csr_tie" 
+      enumStem="LptmrInterrupt"
+      description="Timer interrupt enable"
+      toolTip="Enables LPTMR interrupts">
+      <choice value="0" name="Interrupt disabled" enum="Disabled" />
+      <choice value="1" name="Interrupt enabled"  enum="Enabled"  />
    </binaryOption>
    
-   <binaryOption key="lptmr_csr_tie" description="Timer interrupt enable"
-      toolTip="Enables interrupts">
-      <choice value="0" name="Interrupt disabled" />
-      <choice value="1" name="Interrupt enabled" />
-   </binaryOption>
-   
-   <choiceOption key="lptmr_csr_tps" description="Timer Pin Select for Pulse Counter mode"
+   <choiceOption key="lptmr_csr_tps"
+      enumStem="LptmrPinSel" 
+      description="Timer Pin Select for Pulse Counter mode"
       toolTip="Configures the input source to be used in Pulse Counter mode.\n
       The input connections vary by device">
-      <choice value="0" name="CMP0 output" />
-      <choice value="1" name="LPTMR_ALT1 pin" />
-      <choice value="2" name="LPTMR_ALT2 pin" />
+      <choice value="0" name="CMP0 output"    enum="Cmp0" />
+      <choice value="1" name="LPTMR_ALT1 pin" enum="AltPin1" />
+      <choice value="2" name="LPTMR_ALT2 pin" enum="AltPin2" />
    </choiceOption>
    
-   <binaryOption key="lptmr_csr_tpp" description="Timer Pin Polarity for Pulse Counter mode"
+   <binaryOption key="lptmr_csr_tpp"
+      enumStem="LptmrPulseEdge" 
+      description="Timer Pin Polarity for Pulse Counter mode"
       toolTip="Configures the polarity of the input source in Pulse Counter mode">
-      <choice value="0" name="Active-high source, rising-edge increments lptmr_cnr" />
-      <choice value="1" name="Active-low source,  falling-edge increments lptmr_cnr" />
+      <choice value="0" name="Active-high source, rising-edge increments lptmr_cnr"  enum="Rising"  />
+      <choice value="1" name="Active-low source,  falling-edge increments lptmr_cnr" enum="Falling" />
    </binaryOption>
 
-   <binaryOption key="lptmr_csr_tfc" description="Timer Free-Running Counter enable"
+   <binaryOption key="lptmr_csr_tfc" 
+      enumStem="LptmrResetOn"
+      description="Timer Free-Running Counter enable"
       toolTip="When clear, lptmr_csr_tfc configures the lptmr_cnr to reset whenever lptmr_csr_tcf is set.\n
       When set, lptmr_csr_tfc configures the lptmr_cnr to reset on overflow">
-      <choice value="0" name="lptmr_cnr is reset whenever lptmr_csr_tcf is set" />
-      <choice value="1" name="lptmr_cnr is reset on overflow" />
+      <choice value="0" name="lptmr_cnr is reset whenever lptmr_csr_tcf is set" enum="Compare"  />
+      <choice value="1" name="lptmr_cnr is reset on overflow"                   enum="Overflow" />
    </binaryOption>
    
-   <template><![CDATA[
-      \t//! Default CSR value
-      \tstatic constexpr uint32_t csr = 
-      \t   LPTMR_CSR_TIE($(lptmr_csr_tie))|
-      \t   LPTMR_CSR_TMS($(lptmr_csr_tms))|
-      \t   LPTMR_CSR_TFC($(lptmr_csr_tfc))|
-      \t   LPTMR_CSR_TPP($(lptmr_csr_tpp))|
-      \t   LPTMR_CSR_TPS($(lptmr_csr_tps));\n\n
-   ]]></template>
-   
-   <intOption key="lptmr_cmr" description="Timer Compare Register"
+   <intOption key="lptmr_cmr_compare" 
+      description="Timer Compare Register"
+      typeName="Ticks"
+      valueFormat="%s_ticks"
       toolTip="Default value for comparison\n
-      lptmr_csr_tcf flag is set when lptmr_cnr equals the value in the lptmr_cmr and lptmr_cnr increments. \n
+      lptmr_csr_tcf flag is set when lptmr_cnr equals the value in the lptmr_cmr_compare and lptmr_cnr increments. \n
       The hardware trigger will assert until the next time the lptmr_cnr increments. \n
-      If lptmr_csr_tfc=0 the lptmr_cnr will roll-over to zero" 
+      This will determine the period in TimeInterval mode or the event time in Pulse Counting mode" 
       value="65535" min="1" max="65535" />
       
-   <floatOption key="lptmr_cmrPeriod"     description="Timer Compare Interval"
+   <floatOption key="lptmr_cmrPeriod"
+      typeName="Seconds"     
+      valueFormat="%s_s"
+      description="Timer Compare Interval"
       toolTip="This is determined from lptmr_cmr register and clock frequency.\n
       When lptmr_csr_tfc=0 this is the lptmr_cnr roll-over period"
       derived="true"
@@ -149,40 +167,77 @@
       derived="true"
       min="0" units="Hz"/>
   
-   <stringOption key="irq_pattern"        constant="true" value="^.*%b%i.*$" hidden="true" />
-   <stringOption key="irq_classHandler"   constant="true" value="%c%i::irqHandler" hidden="true" />
-   <xi:include href="_irqOptionSubstituted.xml"/>
-
-   <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.LptmrValidate">
-   </validate>
-
-   <projectActionList id = "lptmr_files" >
-      <copy source="Project_Headers/lptmr.h"                   target="Project_Headers/lptmr.h"                      overwrite="true" derived="true" />
-      <copy source="Snippets/lptmr-example.cpp"                target="Snippets/lptmr-example.cpp"                   overwrite="true" derived="true" />
-      <copy source="Snippets/lptmr-reaction-time.cpp"          target="Snippets/lptmr-reaction-time.cpp"             overwrite="true" derived="true" />
-      <copy source="Snippets/timer-inline-handler-example.cpp" target="Snippets/timer-inline-handler-example.cpp"   overwrite="true" derived="true" />
-   </projectActionList>
-      
-   <template><![CDATA[
+   <setTemplate variables="lptmr_csr_tie"
+   ><![CDATA[
       \t/**
-      \t * Get input clock frequency
+      \t * Set %description
       \t *
-      \t * @return Input clock frequency as an uint32_t in Hz
+      %paramDescription
       \t */
-      \tstatic uint32_t getInputClockFrequency() {
+      \tstatic void enableInterrupts(%params) {
       \t
-      \t   switch(lptmr->PSR&LPTMR_PSR_PCS_MASK) {
-      \t   default:
-      \t   case LPTMR_PSR_PCS(0): return McgInfo::getMcgIrClock();
-      \t   case LPTMR_PSR_PCS(1): return PmcInfo::getLpoClock();
-      \t   case LPTMR_PSR_PCS(2): return SimInfo::getErc32kClock();
-      \t   case LPTMR_PSR_PCS(3): return Osc0Info::getOscerClock();
+      \t   if(%paramExpression) {
+      \t      %register = %register | %mask;
+      \t   }
+      \t   else {
+      \t      %register = %register & ~%mask;
       \t   }
       \t}
-      
       \t/**
-      \t * Get clock frequency
+      \t * Clear interrupt flag
+      \t */
+      \tstatic void clearInterruptFlag() {
+      \t
+      \t   %register = %register | LPTMR_CSR_TCF_MASK;
+      \t}\n\n
+   ]]></setTemplate>
+      
+   <setTemplate variables="lptmr_psr_pcs,lptmr_psr_prescaler"
+   ><![CDATA[
+      \t/**
+      \t * Set %description0 and %description1
+      \t *
+      \t * These settings are used for the clock prescaler in timer mode and glitch filter in pulse-counting mode.
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void setClock(
+      %params) {
+      \t
+      \t   uint32_t csr = lptmr->CSR;
+      \t   lptmr->CSR   = 0;
+      \t   %register   = %paramExpression;
+      \t   lptmr->CSR   = csr;
+      \t}\n\n
+   ]]></setTemplate>
+      
+   <clockCodeTemplate variable="lptmr_psr_pcs"
+      returnFormat="%s"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setInputClockSource(%enumClass %enumParam) {
+      \t   %defaultFieldExpression
+      \t}
+
+      \t/**
+      \t * Get %description frequency
+      \t *
+      \t * @return Clock frequency in Hz
+      \t */
+      \tstatic uint32_t getInputClockFrequency() {
+      \t   
+      \t   switch(%defaultMaskingExpression) {
+      \t      default:
+      %body
+      \t   }
+      \t}
+      \t
+      \t/**
+      \t * Get clock frequency after prescaler
       \t *
       \t * @return Frequency as a float in Hz
       \t */
@@ -194,7 +249,7 @@
       \t   }
       \t   return freq/(1<<(((lptmr->PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
       \t}
-      
+      \t
       \t/**
       \t * Get clock frequency
       \t *
@@ -207,38 +262,46 @@
       \t      return freq;
       \t   }
       \t   return freq/(1<<(((lptmr->PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
-      \t}\n\n
-   ]]></template>
-   
-   <template key="/LPTMR/declarations" namespace="all"  ><![CDATA[
+      \t}
+      \t
       \t/**
-      \t * Class representing LPTMR1
+      \t * Set period of timer.
       \t *
-      \t * <b>Example</b>
-      \t * @code
+      \t * @param[in]  period Period in seconds as a float
       \t *
-      \t * // LPTMR callback
-      \t * void flash(void) {
-      \t *    RED_LED::toggle();
-      \t * }
+      \t * @note Will enable and adjust the pre-scaler to appropriate value.\n
+      \t *       The clock source should be selected before using this function.
       \t *
-      \t * ...
-      \t *
-      \t * // Configure LPTMR in time counting mode
-      \t * $(_class)::configureTimeCountingMode(
-      \t *      LptmrResetOn_Compare,
-      \t *      LptmrInterrupt_Enabled,
-      \t *      LptmrClockSel_Lpoclk);
-      \t *
-      \t * // Set period of timer event
-      \t * $(_class)::setPeriod(5*seconds);
-      \t *
-      \t * // Set call-back
-      \t * $(_class)::setCallback(flash);
-      \t * @endcode
+      \t * @return E_NO_ERROR      => Success
+      \t * @return E_ILLEGAL_PARAM => Failed to find suitable values for PBYP & PRESCALE
       \t */
-      \tusing $(_class) = $(_base_class)Base_T<$(_class)Info>;
-      
+      \tstatic ErrorCode setPeriod(Seconds period) {
+      \t
+      \t   float    inputClock = getInputClockFrequency();
+      \t   int      prescaleFactor=1;
+      \t   uint32_t prescalerValue=0;
+      \t   while (prescalerValue<=16) {
+      \t      float    clockFrequency = inputClock/prescaleFactor;
+      \t      uint32_t mod   = roundf(period*clockFrequency);
+      \t      if (mod < minimumResolution) {
+      \t         // Too short a period for reasonable resolution
+      \t         return setAndCheckErrorCode(E_TOO_SMALL);
+      \t      }
+      \t      if (mod <= LPTMR_CMR_COMPARE_MASK) {
+      \t         lptmr->CMR  = mod;
+      \t         lptmr->PSR  = (lptmr->PSR & ~(LPTMR_PSR_PRESCALE_MASK|LPTMR_PSR_PBYP_MASK))|
+      \t               LPTMR_PSR_PRESCALE(prescalerValue-1)|LPTMR_PSR_PBYP(prescalerValue==0);
+      \t         return E_NO_ERROR;
+      \t      }
+      \t      prescalerValue++;
+      \t      prescaleFactor <<= 1;
+      \t   }
+      \t   // Too long a period
+      \t   return setAndCheckErrorCode(E_TOO_LARGE);
+      \t}\n\n
+   ]]></clockCodeTemplate>
+
+   <template key="/LPTMR/declarations" namespace="all"  ><![CDATA[
       \t/**
       \t * MACRO defining the start of a interrupt handler for a LPTMR
       \t * This will override the handler incorporated within the LPTMR class.
@@ -252,6 +315,430 @@
       \t */
       \t#define LPTMR$(_instance)_HANDLER() template<> void $(_class)::irqHandler()\n\n
    ]]></template>
+   
+<!--  ========== LPTMR TimeIntervalModeInit class =============================== -->
+   <template><![CDATA[
+      \t/**
+      \t * Class used to do initialisation of LPTMR in Time Interval Mode
+      \t *
+      \t * This class has a templated constructor that accepts various values:
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const Lptmr$(_instance)::TimeIntervalModeInit lptmrInit {
+      \t *    LptmrResetOn_Compare,    // Timer Free-Running Counter enable
+      \t *    LptmrInterrupt_Disabled, // Timer interrupt enable
+      \t *    LptmrClockSel_Oscerclk,  // Clock Source
+      \t *    LptmrPrescale_Direct,    // Prescaler Value
+      \t *    100_ms,                  // Timer Compare Register
+      \t * };
+      \t *
+      \t * // Initialise LPTMR$(_instance) in Time Interval mode using values specified above
+      \t * lptmrInit.configure()
+      \t * @endcode
+      \t */
+      \tclass TimeIntervalModeInit {
+      \t
+      \tpublic:
+      \t   /**                               
+      \t    * Copy Constructor                  
+      \t    */                             
+      \t   constexpr TimeIntervalModeInit(const TimeIntervalModeInit &other) = default;
+      \t   
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr TimeIntervalModeInit() = default;
+      \t\n
+   ]]></template>
+   <setTemplate 
+      variables=
+         "lptmr_cmrPeriod"
+    ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = 0_s;\n\n
+   ]]></setTemplate >
+   <setTemplate 
+      variables=
+         "lptmr_cmr_compare"
+    ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = 0_ticks;\n\n
+   ]]></setTemplate >
+   <setTemplate 
+      variables=
+         "lptmr_csr_tie,
+          lptmr_csr_tfc"
+    ><![CDATA[
+      \t   /// Control and Status Register
+      \t   uint32_t %registerName = LptmrMode_TimeInterval|LPTMR_CSR_TEN_MASK;\n\n
+   ]]></setTemplate >
+   <setTemplate 
+      variables=
+         "lptmr_psr_prescaler,
+          lptmr_psr_pcs"
+    ><![CDATA[
+      \t   /// Prescale Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></setTemplate >
+
+   <setTemplate variables="lptmr_csr_tms" ><![CDATA[
+      \t   /**
+      \t    * Configure LPTMR from values specified in constructor.
+      \t    * Set LPTMR to time counting mode.
+      \t    * The timer is enabled.
+      \t    */
+      \t   void configure() const {
+      \t
+      \t      // Enable peripheral clock
+      \t      enableClock();
+      \t
+      \t      // Change settings with timer disabled
+      \t      %register = 0;\n
+   ]]></setTemplate>
+   <setTemplate variables="lptmr_psr_pcs" ><![CDATA[
+      \t
+      \t      // Update clock setting
+      \t      %register = %registerName;\n\n
+   ]]></setTemplate>
+   <setTemplate variables="lptmr_cmrPeriod" ><![CDATA[
+      \t      if (%registerName != 0) {
+      \t         // %description
+      \t         setPeriod(%registerName);
+      \t      }
+      \t      else {\n
+   ]]></setTemplate>
+   <setTemplate variables="lptmr_cmr_compare" ><![CDATA[
+      \t         // %description
+      \t         %register = %registerName;\n
+   ]]></setTemplate>
+   <template><![CDATA[
+      \t      }\n
+   ]]></template>
+   <setTemplate variables="lptmr_csr_tms" ><![CDATA[
+      \t
+      \t      // Enable timer
+      \t      %register = %registerName;\n
+   ]]></setTemplate>
+   <template><![CDATA[
+      \t   }\n\n
+   ]]></template>
+   
+   <for keys="v"
+      values="
+         lptmr_csr_tie;
+         lptmr_csr_tfc;
+         lptmr_psr_prescaler;
+         lptmr_psr_pcs">
+      <setTemplate 
+         variables="%(v)" 
+         linePadding="xxx"><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr TimeIntervalModeInit(%params, Types... rest) : TimeIntervalModeInit(rest...) {
+         \t   
+         \t      %registerName = (%registerName & ~%mask) | %paramExpression;
+         \t   }\n\n
+      ]]></setTemplate>
+   </for>
+   <for keys="v"
+      values="
+         lptmr_cmr_compare;
+         lptmr_cmrPeriod">
+      <setTemplate 
+         variables="%(v)" 
+         linePadding="xxx"><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr TimeIntervalModeInit(%params, Types... rest) : %registerName(%paramExpression) {
+         \t   }\n\n
+      ]]></setTemplate>
+   </for>
+   <template ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+<!--  ========== LPTMR PulseCountingModeInit class =============================== -->
+   <template><![CDATA[
+      \t/**
+      \t * Class used to do initialisation of LPTMR in Pulse Counting Mode
+      \t *
+      \t * This class has a templated constructor that accepts various values:
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const Lptmr$(_instance)::PulseCountingModeInit lptmrInit {
+      \t *    LptmrPinSel_Cmp0,           // Timer Pin Select for Pulse Counter mode
+      \t *    LptmrPulseEdge_Rising,      // Timer Pin Polarity for Pulse Counter mode
+      \t *    LptmrClockSel_Oscerclk,     // Clock Source
+      \t *    LptmrGlitchFilter_Direct,   // Filter Value
+      \t *    LptmrInterrupt_Disabled,    // Timer interrupt enable
+      \t *    LptmrResetOn_Compare,       // Timer Free-Running Counter enable
+      \t *    916_ticks,                  // Timer Compare Register
+      \t * };
+      \t *
+      \t * // Initialise LPTMR$(_instance) in Pulse Counting mode using values specified above
+      \t * lptmrInit.configure()
+      \t * @endcode
+      \t */
+      \tclass PulseCountingModeInit {
+      \t
+      \tpublic:
+      \t   /**                               
+      \t    * Copy Constructor                  
+      \t    */                             
+      \t   constexpr PulseCountingModeInit(const PulseCountingModeInit &other) = default;
+      \t   
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr PulseCountingModeInit() = default;
+      \t\n
+   ]]></template>
+   <setTemplate 
+      variables=
+         "lptmr_cmr_compare"
+    ><![CDATA[
+      \t   /// Compare Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></setTemplate >
+   <setTemplate 
+      variables=
+         "lptmr_csr_tms"
+    ><![CDATA[
+      \t   /// Control and Status Register
+      \t   uint32_t %registerName = LptmrMode_PulseCounting|LPTMR_CSR_TEN_MASK;\n\n
+   ]]></setTemplate >
+   <setTemplate 
+      variables=
+         "lptmr_psr_pcs"
+    ><![CDATA[
+      \t   /// Prescale Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></setTemplate >
+
+   <setTemplate variables="lptmr_csr_tms" ><![CDATA[
+      \t   /**
+      \t    * Configure LPTMR from values specified in constructor.
+      \t    * Set LPTMR to pulse counting mode.
+      \t    * Provides selection of input pin, edge selection and reset mode.\n
+      \t    * The timer is enabled.
+      \t    */
+      \t   void configure() const {
+      \t
+      \t      // Enable peripheral clock
+      \t      enableClock();
+      \t
+      \t      // Change settings with timer disabled
+      \t      %register = 0;\n
+   ]]></setTemplate>
+   <setTemplate variables="lptmr_cmr_compare" ><![CDATA[
+      \t
+      \t      // Set %description
+      \t      %register = %registerName;\n
+   ]]></setTemplate>
+   <setTemplate variables="lptmr_psr_pcs" ><![CDATA[
+      \t
+      \t      // Update clock setting
+      \t      %register = %registerName;\n
+   ]]></setTemplate>
+   <setTemplate variables="lptmr_csr_tms" ><![CDATA[
+      \t
+      \t      // Enable timer
+      \t      %register = %registerName;\n
+   ]]></setTemplate>
+   <template><![CDATA[
+      \t   }\n\n
+   ]]></template>
+   
+   <for keys="v"
+      values="
+         lptmr_csr_tie;
+         lptmr_csr_tps;
+         lptmr_csr_tpp;     
+         lptmr_csr_tfc;
+         lptmr_psr_pcs;
+         lptmr_psr_glitchFilter;">
+      <setTemplate variables="%(v)" 
+         linePadding="xxx" ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr PulseCountingModeInit(%params, Types... rest) : PulseCountingModeInit(rest...) {
+         \t   
+         \t      %registerName = (%registerName & ~%mask) | %paramExpression;
+         \t   }\n\n
+      ]]></setTemplate>
+   </for>
+   <for keys="v"
+      values="
+         lptmr_cmr_compare">
+      <setTemplate 
+         variables="%(v)" 
+         linePadding="xxx"><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr PulseCountingModeInit(%params, Types... rest) : %registerName(%paramExpression) {
+         \t   }\n\n
+      ]]></setTemplate>
+   </for>
+
+   <template ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+ <!-- ========== Instances =============================== -->
+      
+   <template key="/LPTMR/declarations" namespace="all"  ><![CDATA[
+      \t/**
+      \t * Class representing LPTMR$(_instance)
+      \t *
+      \t * <b>Example</b>
+      \t * @code
+      \t *
+      \t * // LPTMR callback
+      \t * void flash(void) {
+      \t *    RED_LED::toggle();
+      \t * }
+      \t *
+      \t * ...
+      \t *
+      \t * // Configure LPTMR in time counting mode
+      \t * $(_class)::configureTimeIntervalMode(
+      \t *      LptmrResetOn_Compare,
+      \t *      LptmrInterrupt_Enabled,
+      \t *      LptmrClockSel_Lpoclk);
+      \t *
+      \t * // Set period of timer event
+      \t * $(_class)::setPeriod(5_s);
+      \t *
+      \t * // Set call-back
+      \t * $(_class)::setCallback(flash);
+      \t * @endcode
+      \t */
+      \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {
+      \tpublic:\n
+   ]]></template>
+   <template key="/LPTMR/declarations" namespace="all" ><![CDATA[
+      \t   /**
+      \t    * Default value for Lptmr::PulseCountingModeInit
+      \t    * This value is created from Configure.usbdmProject settings (Peripheral Parameters->LPTMR)
+      \t    */
+      \t   static constexpr PulseCountingModeInit DefaultPulseCountingModeInitValue {\n
+   ]]></template>
+   <for keys="v" values="
+            lptmr_csr_tps;
+            lptmr_csr_tpp;
+            lptmr_psr_pcs;
+            lptmr_psr_glitchFilter;
+            lptmr_csr_tie;
+            lptmr_csr_tfc;
+            lptmr_cmr_compare">
+      <setTemplate key="/LPTMR/declarations" namespace="all"
+         variables="%(v)"
+         terminator=","
+         separator=","
+         linePadding="xxx"
+      ><![CDATA[
+         %initExpression\n
+      ]]></setTemplate>
+   </for>
+   <template key="/LPTMR/declarations" namespace="all" ><![CDATA[
+      \t   };\n\n
+   ]]></template>
+
+   <template key="/LPTMR/declarations" namespace="all" ><![CDATA[
+      \t   /**
+      \t    * Default value for Lptmr::TimeIntervalModeInit
+      \t    * This value is created from Configure.usbdmProject settings (Peripheral Parameters->LPTMR)
+      \t    */
+      \t   static constexpr TimeIntervalModeInit DefaultTimeIntervalModeInitValue {\n
+   ]]></template>
+   <for keys="v" values="
+            lptmr_csr_tfc;
+            lptmr_csr_tie;
+            lptmr_psr_pcs;
+            lptmr_psr_prescaler;
+            lptmr_cmr_compare">
+      <setTemplate key="/LPTMR/declarations" namespace="all"
+         variables="%(v)"
+         terminator=","
+         separator=","
+         linePadding="xxx"
+      ><![CDATA[
+         %initExpression\n
+      ]]></setTemplate>
+   </for>
+   <template key="/LPTMR/declarations" namespace="all" ><![CDATA[
+      \t   };\n\n
+   ]]></template>
+   <template key="/LPTMR/declarations" namespace="all" ><![CDATA[
+      \t   /**
+      \t    * Enable LPTMR with default configuration.
+      \t    *
+      \t    * Includes enabling clock and any pins used.\n
+      \t    * Sets LPTMR to default configuration
+      \t    */
+      \t   static void defaultConfigure() {
+      \t      enable();
+      \t   
+      \t      if constexpr ($(lptmr_csr_tms)) {
+      \t         DefaultPulseCountingModeInitValue.configure();
+      \t      }
+      \t      else {
+      \t         DefaultTimeIntervalModeInitValue.configure();
+      \t      }
+      \t   
+      \t      if constexpr ($(lptmr_csr_tie)) {
+      \t         // Set priority level
+      \t         NVIC_SetPriority(irqNums[0], irqLevel);
+      \t   
+      \t         // Enable timer interrupts
+      \t         NVIC_EnableIRQ(irqNums[0]);
+      \t      }
+      \t   }
+      \t};\n\n
+   ]]></template>
+
+ <!-- ========== Common =============================== -->
+      
+   <stringOption key="irq_pattern"        constant="true" value="^.*%b%i.*$" hidden="true" />
+   <stringOption key="irq_classHandler"   constant="true" value="%c%i::irqHandler" hidden="true" />
+   <xi:include href="_irqOptionSubstituted.xml"/>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.LptmrValidate">
+   </validate>
+
+   <projectActionList id = "lptmr_files" >
+      <copy source="Project_Headers/lptmr.h"                   target="Project_Headers/lptmr.h"                      overwrite="true" derived="true" />
+      <copy source="Snippets/lptmr-example.cpp"                target="Snippets/lptmr-example.cpp"                   overwrite="true" derived="true" />
+      <copy source="Snippets/lptmr-reaction-time.cpp"          target="Snippets/lptmr-reaction-time.cpp"             overwrite="true" derived="true" />
+      <copy source="Snippets/timer-inline-handler-example.cpp" target="Snippets/timer-inline-handler-example.cpp"    overwrite="true" derived="true" />
+   </projectActionList>
       
    <xi:include href="_clockOption.xml"/>
 

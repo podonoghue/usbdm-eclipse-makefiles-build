@@ -382,34 +382,7 @@
       \t   constexpr Init() = default;
       \t\n
    ]]></template>
-   <template><![CDATA[
-      \t   /**
-      \t    * Configure FTM from values specified in constructor.
-      \t    */
-      \t   void configure() const {\n
-   ]]></template>
-   <setTemplate variables="ftm_mod" ><![CDATA[
-      \t
-      \t      // Write modulo value
-      \t      %register = %registerName;\n
-   ]]></setTemplate>
-   <for keys="r" values="
-      ftm_sc_toie,ftm_sc_cpwms,ftm_sc_clks,ftm_sc_ps
-      ">
-      <setTemplate variables="%(r)" ><![CDATA[
-         \t      // Disable timer to change clock (unable to switch directly between clock sources)
-         \t      %register=0;
-         \t            
-         \t      // Make sure write has completed (disabled)
-         \t      (void)(%register);
-         \t   
-         \t      // Write new value
-         \t      %register = %registerName;\n
-      ]]></setTemplate>
-   </for>
-   <template><![CDATA[
-      \t   }\n\n
-   ]]></template>
+   
    <initialValueTemplate 
       variables="ftm_sc_toie,ftm_sc_cpwms,ftm_sc_clks,ftm_sc_ps"
    ><![CDATA[
@@ -419,15 +392,47 @@
    <initialValueTemplate 
       variables="ftm_cntin"
    ><![CDATA[
-      \t   /// Modulo Register
-      \t   %enumClass %registerName = 0;\n\n
+      \t   /// %description
+      \t   %enumClass %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
    <initialValueTemplate 
       variables="ftm_mod"
    ><![CDATA[
-      \t   /// Modulo Register
-      \t   %enumClass %registerName = 0;\n\n
+      \t   /// %description
+      \t   %enumClass %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
+   
+   <setTemplate variables="ftm_sc_clks" ><![CDATA[
+      \t   /**
+      \t    * Configure FTM from values specified in constructor.
+      \t    */
+      \t   void configure() const {
+      \t
+      \t      // Disable timer to change clock (unable to switch directly between clock sources)
+      \t      %register=0;
+      \t            
+      \t      // Make sure write has completed (disabled)
+      \t      (void)(%register);\n
+   ]]></setTemplate>
+   <setTemplate variables="ftm_cntin" ><![CDATA[
+      \t
+      \t      // %description
+      \t      %register = %registerName;\n
+   ]]></setTemplate>
+   <setTemplate variables="ftm_mod" ><![CDATA[
+      \t
+      \t      // %description
+      \t      %register = %registerName;\n
+   ]]></setTemplate>
+   <setTemplate variables="ftm_sc_clks" ><![CDATA[
+      \t
+      \t      // Write new value
+      \t      %register = %registerName;\n
+   ]]></setTemplate>
+   <template><![CDATA[
+      \t   }\n\n
+   ]]></template>
+   
    <for keys="r" values="ftm_sc_toie;ftm_sc_cpwms;ftm_sc_clks;ftm_sc_ps">
       <setTemplate variables="%(r)"
          linePadding="xxx" 
