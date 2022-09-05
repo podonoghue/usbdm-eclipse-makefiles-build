@@ -765,11 +765,9 @@
             "/SIM/sim_clkdiv3_pllfll[%(n)]"     
       ><![CDATA[\t   /// SIM CLKDIV3 System Clock Divider Register 3 %initExpression\n\n ]]></initialValueTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
-         terminator="," 
-         variables=
-            "/SIM/sim_sopt2_pllfllsel[%(n)]"     
-      ><![CDATA[\t   /// SIM SOPT2 System Options Register 2 (PLLFLLSEL only) %initExpression\n\n ]]></initialValueTemplate>
+      <template key="McgClockInfoEntries" namespace="all" ><![CDATA[
+         \t   Sim::DefaultSopt2Value%(n).sopt2,\n\n
+      ]]></template>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
          terminator="," 

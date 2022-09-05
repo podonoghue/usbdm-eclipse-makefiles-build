@@ -352,7 +352,7 @@ ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
 #endif
 
    // Clock sources
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK)|clockInfo.sopt2;
+   SIM->SOPT2 = clockInfo.sopt2;
 
    SystemCoreClockUpdate();
 

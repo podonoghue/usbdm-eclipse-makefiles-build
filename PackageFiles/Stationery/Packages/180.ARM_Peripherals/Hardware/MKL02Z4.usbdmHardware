@@ -96,6 +96,49 @@
       </peripheral>
       <peripheral baseName="SIM"      instance=""         version="sim_mkl02z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
+         <param name="sim_clkdiv1_outdiv1_present" key="/SIM/sim_clkdiv1_outdiv1_present" value="true" />
+         <param name="sim_clkdiv1_outdiv4_present" key="/SIM/sim_clkdiv1_outdiv4_present" value="true" />
+         <param name="sim_copc_copclks_present" key="/SIM/sim_copc_copclks_present" value="true" />
+         <param name="sim_copc_copt_present" key="/SIM/sim_copc_copt_present" value="true" />
+         <param name="sim_copc_copw_present" key="/SIM/sim_copc_copw_present" value="true" />
+         <param name="sim_fcfg1_flashdis_present" key="/SIM/sim_fcfg1_flashdis_present" value="true" />
+         <param name="sim_fcfg1_flashdoze_present" key="/SIM/sim_fcfg1_flashdoze_present" value="true" />
+         <param name="sim_fcfg1_pfsize_present" key="/SIM/sim_fcfg1_pfsize_present" value="true" />
+         <param name="sim_fcfg2_maxaddr0_present" key="/SIM/sim_fcfg2_maxaddr0_present" value="true" />
+         <param name="sim_scgc4_cmp_present" key="/SIM/sim_scgc4_cmp_present" value="true" />
+         <param name="sim_scgc4_i2c0_present" key="/SIM/sim_scgc4_i2c0_present" value="true" />
+         <param name="sim_scgc4_i2c1_present" key="/SIM/sim_scgc4_i2c1_present" value="true" />
+         <param name="sim_scgc4_spi0_present" key="/SIM/sim_scgc4_spi0_present" value="true" />
+         <param name="sim_scgc4_uart0_present" key="/SIM/sim_scgc4_uart0_present" value="true" />
+         <param name="sim_scgc5_lptmr_present" key="/SIM/sim_scgc5_lptmr_present" value="true" />
+         <param name="sim_scgc5_porta_present" key="/SIM/sim_scgc5_porta_present" value="true" />
+         <param name="sim_scgc5_portb_present" key="/SIM/sim_scgc5_portb_present" value="true" />
+         <param name="sim_scgc6_adc0_present" key="/SIM/sim_scgc6_adc0_present" value="true" />
+         <param name="sim_scgc6_ftf_present" key="/SIM/sim_scgc6_ftf_present" value="true" />
+         <param name="sim_scgc6_tpm0_present" key="/SIM/sim_scgc6_tpm0_present" value="true" />
+         <param name="sim_scgc6_tpm1_present" key="/SIM/sim_scgc6_tpm1_present" value="true" />
+         <param name="sim_sdid_dieid_present" key="/SIM/sim_sdid_dieid_present" value="true" />
+         <param name="sim_sdid_famid_present" key="/SIM/sim_sdid_famid_present" value="true" />
+         <param name="sim_sdid_pinid_present" key="/SIM/sim_sdid_pinid_present" value="true" />
+         <param name="sim_sdid_revid_present" key="/SIM/sim_sdid_revid_present" value="true" />
+         <param name="sim_sdid_seriesid_present" key="/SIM/sim_sdid_seriesid_present" value="true" />
+         <param name="sim_sdid_sramsize_present" key="/SIM/sim_sdid_sramsize_present" value="true" />
+         <param name="sim_sdid_subfamid_present" key="/SIM/sim_sdid_subfamid_present" value="true" />
+         <param name="sim_sopt2_tpmsrc_present" key="/SIM/sim_sopt2_tpmsrc_present" value="true" />
+         <param name="sim_sopt2_uart0src_present" key="/SIM/sim_sopt2_uart0src_present" value="true" />
+         <param name="sim_sopt4_tpm0clksel_present" key="/SIM/sim_sopt4_tpm0clksel_present" value="true" />
+         <param name="sim_sopt4_tpm1ch0src_present" key="/SIM/sim_sopt4_tpm1ch0src_present" value="true" />
+         <param name="sim_sopt4_tpm1clksel_present" key="/SIM/sim_sopt4_tpm1clksel_present" value="true" />
+         <param name="sim_sopt5_uart0ode_present" key="/SIM/sim_sopt5_uart0ode_present" value="true" />
+         <param name="sim_sopt5_uart0rxsrc_present" key="/SIM/sim_sopt5_uart0rxsrc_present" value="true" />
+         <param name="sim_sopt5_uart0txsrc_present" key="/SIM/sim_sopt5_uart0txsrc_present" value="true" />
+         <param name="sim_sopt7_adc0alttrgen_present" key="/SIM/sim_sopt7_adc0alttrgen_present" value="true" />
+         <param name="sim_sopt7_adc0pretrgsel_present" key="/SIM/sim_sopt7_adc0pretrgsel_present" value="true" />
+         <param name="sim_sopt7_adc0trgsel_present" key="/SIM/sim_sopt7_adc0trgsel_present" value="true" />
+         <param name="sim_srvcop_srvcop_present" key="/SIM/sim_srvcop_srvcop_present" value="true" />
+         <param name="sim_uidl_uid_present" key="/SIM/sim_uidl_uid_present" value="true" />
+         <param name="sim_uidmh_uid_present" key="/SIM/sim_uidmh_uid_present" value="true" />
+         <param name="sim_uidml_uid_present" key="/SIM/sim_uidml_uid_present" value="true" />
       </peripheral>
       <peripheral baseName="SMC"      instance=""         version="smc_mkl02z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />

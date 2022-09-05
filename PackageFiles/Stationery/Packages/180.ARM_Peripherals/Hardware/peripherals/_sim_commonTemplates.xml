@@ -10,6 +10,65 @@
       \t */ \n
    ]]></template>
 
+   <category name="SOPT8" description="FTM signals">
+      <for keys="ch" values="0;1;2;3;4;5;6;7">
+         <binaryOption key="sim_sopt8_ftm0och%(ch)src" condition="sim_sopt8_ftm0och%(ch)src_present"
+            enumStem="SimFtm0Ch%(ch)OutputSrc"
+            description="FTM0 channel %(ch) output source" 
+            toolTip="Allows modulation of FTM output">
+            <choice value="0" name="FTM0 ch %(ch) direct"                 enum="Direct"             isDefault="true" />
+            <choice value="1" name="FTM0 ch %(ch) modulated by FTM1 ch 1" enum="ModulatedByFtm1Ch1" />
+         </binaryOption>
+      </for>
+
+      <for keys="ch" values="0;1;2;3;4;5;6;7">
+         <binaryOption key="sim_sopt8_ftm3och%(ch)src"  condition="sim_sopt8_ftm3och%(ch)src_present"
+            enumStem="SimFtm3Ch%(ch)OutputSrc"
+            description="FTM3 channel %(ch) output source"  
+            toolTip="Allows modulation of FTM output">
+            <choice value="0" name="FTM3 ch %(ch) direct"                 enum="Direct"             isDefault="true" />
+            <choice value="1" name="FTM3 ch %(ch) modulated by FTM2 ch 1" enum="ModulatedByFtm2Ch1" />
+         </binaryOption>
+      </for>
+      
+      <choiceOption key="sim_sopt8_ftm_syncbits"  
+         enumStem="FtmSync"
+         valueFormat="%s"
+         hidden="true"
+         description="FTM Hardware Trigger 0 Software Asserts"
+         toolTip="This allows software to assert the hardware trigger (TRIG0) FTM inputs\n
+                  Use setFtmSyncBits() to assert TRIG0 input on multiple FTMs\n
+                  Use clearFtmSyncBits() or clearAllFtmSyncBits() to allow other trigger sources to assert">
+         <choice value="SIM_SOPT8_FTM0SYNCBIT_MASK" name="FTM0 trigger mask" enum="Ftm0" />
+         <choice value="SIM_SOPT8_FTM1SYNCBIT_MASK" name="FTM1 trigger mask" enum="Ftm1" />
+         <choice value="SIM_SOPT8_FTM2SYNCBIT_MASK" name="FTM2 trigger mask" enum="Ftm2" />
+         <choice value="SIM_SOPT8_FTM3SYNCBIT_MASK" name="FTM3 trigger mask" enum="Ftm3" />
+      </choiceOption>
+   </category>
+
+   <category name="SOPT9" description="TPM signals">
+
+      <for keys="p" values="0;1;2;3">
+         <binaryOption key="sim_sopt9_tpm%(p)clksel" condition="sim_sopt9_tpm%(p)clksel_present" 
+            enumStem="SimTpm%(p)ClkSel"
+            description="TPM%(p) External Clock Pin"
+            toolTip="External pin used to drive the clock to the TPM module">
+            <choice value="0"  name="TPM_CLKIN0 pin" enum="TpmClkin0" isDefault="true" />
+            <choice value="1"  name="TPM_CLKIN1 pin" enum="TpmClkin1" />
+         </binaryOption>
+      
+         <choiceOption key="sim_sopt9_tpm%(p)ch0src" condition="sim_sopt9_tpm%(p)ch0src_present"
+            enumStem="SimTpm%(p)Ch0Src"
+            description="TPM%(p) channel 0 input capture source"
+            toolTip="Source for TPM channel 0 input capture\n
+               NOTE: When the TPM is not in input capture mode, clear this field">
+            <choice value="0" name="TPM_CH0 signal"           enum="IcPin"  isDefault="true"/>
+            <choice value="1" name="CMP0 output"              enum="Cmp0"     />
+            <choice value="2" name="CMP1 output"              enum="Cmp1"     />
+         </choiceOption>      
+      </for>
+   </category>
+
    <if condition="!osc0_peripheral" >
       <!-- Oscillator peripheral used for OSC0 input to MCG = OSC0 -->
       <!-- This peripheral is tied closely to the MCG              -->
@@ -32,7 +91,7 @@
 
       <!-- ERCCLK32K Sources -->
       <choiceOption key="sim_sopt1_osc32ksel" condition="!sim_sopt1_osc32ksel"
-         enumStem="SimOsc32kSel"
+         enumStem="SimErc32kSel"
          target="system_erclk32k_clock"
          hidden="true"
          description="ERCLK32K clock source" 
@@ -89,7 +148,7 @@
 
       <!-- ERCCLK32K Sources -->
       <choiceOption key="sim_sopt1_osc32ksel" condition="!sim_sopt1_osc32ksel"
-         enumStem="SimOsc32kSel"
+         enumStem="SimErc32kSel"
          target="system_erclk32k_clock"
          hidden="true"
          description="ERCLK32K clock source" 
@@ -270,142 +329,6 @@
       \t   %defaultFieldExpression
       \t}\n\n
    ]]></clockCodeTemplate>
-
-
- <!-- ========== Initialisation =============================== -->
-      
-   <template key="DefaultInitValue" namespace="all" ><![CDATA[
-      \t/**
-      \t * Default value for Sim::DefaultInit
-      \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->SIM)
-      \t */
-      \tstatic constexpr Init DefaultInitValue {\n
-   ]]></template>
-   <setTemplate key="DefaultInitValue" namespace="all"
-      variables="sim_sopt1_osc32kout,sim_sopt1_osc32ksel,sim_sopt1_usbpower"
-      terminator=","
-      separator=","
-   ><![CDATA[
-      %initExpression\n
-   ]]></setTemplate>
-   <for keys="n" values=";0;1;2;3;4">
-      <for keys="v"
-         values="
-             sim_sopt2_lpuart%(n)src;
-             sim_sopt2_uart%(n)src"
-             >
-         <setTemplate key="DefaultInitValue" namespace="all" 
-            terminator=","
-            separator=","
-            variables="%(v)" 
-            ><![CDATA[
-            %initExpression\n
-         ]]></setTemplate>
-      </for>
-   </for>
-   <for keys="v"
-      values="
-         sim_sopt1_osc32kout;
-         sim_sopt1_osc32ksel;
-         sim_sopt1_usbpower;
-         sim_sopt2_ptd7pad;     
-         sim_sopt2_tpmsrc;      
-         sim_sopt2_usbsrc;    
-         sim_sopt2_traceclksel; 
-         sim_sopt2_rtcclkoutsel;
-         sim_sopt2_clkoutsel;   
-         sim_sopt2_pllfllsel; 
-         sim_sopt2_emvsimsrc;   
-         sim_sopt2_sdhcsrc;     
-         sim_sopt2_fbsl;        
-         sim_sopt2_flexiosrc;   
-         sim_sopt2_timesrc;     
-         sim_sopt2_rmiisrc;
-         sim_sopt2_usbregen;
-         sim_sopt2_usbslsrc
-         ">
-      <setTemplate key="DefaultInitValue" namespace="all" 
-         terminator=","
-         separator=","
-         variables="%(v)" 
-      ><![CDATA[
-         %initExpression\n
-      ]]></setTemplate>
-   </for>
-   <for keys="p" values="0;1;2;3" >
-      <for keys="u" values="0;1;2;3" >
-         <for keys="v"
-            values="
-                sim_sopt4_ftm%(p)flt%(u);
-                sim_sopt4_ftm%(p)trg%(u)src;
-                sim_sopt4_ftm%(p)ch%(u)src;
-                sim_sopt4_tpm%(p)ch%(u)src">
-            <setTemplate key="DefaultInitValue" namespace="all" 
-               terminator=","
-               separator=","
-               variables="%(v)" 
-            ><![CDATA[
-               %initExpression\n
-            ]]></setTemplate>
-         </for>
-      </for>   
-      <for keys="v"
-         values="
-             sim_sopt4_tpm%(p)clksel;
-             sim_sopt4_ftm%(p)clksel">
-         <setTemplate key="DefaultInitValue" namespace="all" 
-            terminator=","
-            separator=","
-            variables="%(v)"
-         ><![CDATA[
-            %initExpression\n
-         ]]></setTemplate>
-      </for>
-   </for>   
-   <for keys="p" values=";0;1;2;3;4">
-      <for keys="v"
-         values="
-             sim_sopt5_uart%(p)ode;
-             sim_sopt5_uart%(p)rxsrc;
-             sim_sopt5_uart%(p)txsrc;
-             sim_sopt5_lpuart%(p)ode;
-             sim_sopt5_lpuart%(p)rxsrc;
-             sim_sopt5_lpuart%(p)txsrc">
-         <setTemplate key="DefaultInitValue" namespace="all" 
-            terminator=","
-            separator=","
-            variables="%(v)" 
-         ><![CDATA[
-            %initExpression\n
-         ]]></setTemplate>
-      </for>
-   </for>
-   <for keys="p" values=";0;1">
-      <setTemplate key="DefaultInitValue" namespace="all" 
-         terminator=","
-         separator=","
-         variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel"
-       ><![CDATA[
-         %initExpression\n
-      ]]></setTemplate>
-   </for>
-   <for keys="ch" values="0;1;2;3;4;5;6;7">
-      <for keys="v"
-         values="
-             sim_sopt8_ftm0och%(ch)src;
-             sim_sopt8_ftm3och%(ch)src">
-         <setTemplate key="DefaultInitValue" namespace="all" 
-            terminator=","
-            separator=","
-            variables="%(v)" 
-            ><![CDATA[
-            %initExpression\n
-         ]]></setTemplate>
-      </for>
-   </for>
-   <template key="DefaultInitValue" namespace="all" ><![CDATA[
-      \t};\n\n
-   ]]></template>
 
 <!-- ========== SOPT2 =============================== -->
 
@@ -721,7 +644,9 @@
    
    <initialValueTemplate 
       variables="
+         sim_sopt2_pllfllsel[], 
          sim_sopt2_ptd7pad,     
+         sim_sopt2_lpuartsrc,
          sim_sopt2_lpuart0src,  
          sim_sopt2_lpuart1src,  
          sim_sopt2_uart0src,    
@@ -730,8 +655,6 @@
          sim_sopt2_traceclksel, 
          sim_sopt2_rtcclkoutsel,
          sim_sopt2_clkoutsel,   
-         sim_sopt2_pllfllsel[], 
-         sim_sopt2_lpuartsrc,   
          sim_sopt2_emvsimsrc,   
          sim_sopt2_sdhcsrc,     
          sim_sopt2_fbsl,        
@@ -743,6 +666,191 @@
       \tstatic constexpr uint32_t sopt2 = %initExpression\n\n
    ]]></initialValueTemplate>
    
+<!-- ========== SOPT2 ClockInit class =============================== -->
+   <initialValueTemplate 
+      variables="
+         sim_sopt2_pllfllsel[], 
+         sim_sopt2_usbsrc[],    
+         sim_sopt2_ptd7pad,     
+         sim_sopt2_lpuartsrc,
+         sim_sopt2_lpuart0src;
+         sim_sopt2_uart0src;
+         sim_sopt2_lpuart1src;
+         sim_sopt2_uart1src;
+         sim_sopt2_lpuart2src;
+         sim_sopt2_uart2src;
+         sim_sopt2_lpuart3src;
+         sim_sopt2_uart3src;
+         sim_sopt2_tpmsrc,      
+         sim_sopt2_traceclksel, 
+         sim_sopt2_rtcclkoutsel,
+         sim_sopt2_clkoutsel,   
+         sim_sopt2_lpuartsrc,   
+         sim_sopt2_emvsimsrc,   
+         sim_sopt2_sdhcsrc,     
+         sim_sopt2_fbsl,        
+         sim_sopt2_flexiosrc,   
+         sim_sopt2_timesrc,     
+         sim_sopt2_rmiisrc"     
+   ><![CDATA[
+      \t/**
+      \t * Class used to do initialisation of SIM Clock control
+      \t *
+      \t * This class has a templated constructor that accepts various values:
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const ClockInit clockInit {
+      \t * };
+      \t *
+      \t * // Initialise SIM Clock control from values specified above
+      \t * clockInit.configure()
+      \t * @endcode
+      \t */
+      \tclass ClockInit {
+      \t 
+      \tpublic:
+      \t
+      \t   /// System Options Register 1
+      \t   uint32_t sopt2 = 0;
+      \t
+      \t   static constexpr uint32_t MASK = 
+      \t        %mask; 
+      \t
+      \t   /**                               
+      \t    * Copy Constructor                  
+      \t    */                             
+      \t   constexpr ClockInit(const ClockInit &other) = default;
+      \t   
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr ClockInit() = default;
+      \t
+      \t   /**
+      \t    * Configure SIM Clock control from values specified in constructor.
+      \t    */
+      \t   void configure() const {\n
+      \t      %register = %registerName;
+      \t   }\n\n
+   ]]></initialValueTemplate>
+   <for keys="n" values=";0;1;2;3;4">
+      <for keys="v"
+         values="
+             sim_sopt2_lpuart%(n)src;
+             sim_sopt2_uart%(n)src">
+         <setTemplate variables="%(v)" 
+            linePadding="xxx" 
+         ><![CDATA[
+            \t   /**
+            \t    * Constructor for %description
+            \t    *
+            \t    * @tparam   Types
+            %paramDescription
+            \t    */
+            \t   template <typename... Types>
+            \t   constexpr ClockInit(%params, Types... rest) : ClockInit(rest...) {
+            \t   
+            \t      %registerName |= %paramExpression;
+            \t   }
+            \t\n
+         ]]></setTemplate>
+      </for>
+   </for>
+   <for keys="v"
+      values="
+         sim_sopt2_pllfllsel; 
+         sim_sopt2_usbsrc;    
+         sim_sopt2_ptd7pad;     
+         sim_sopt2_tpmsrc;      
+         sim_sopt2_traceclksel; 
+         sim_sopt2_rtcclkoutsel;
+         sim_sopt2_clkoutsel;   
+         sim_sopt2_emvsimsrc;   
+         sim_sopt2_sdhcsrc;     
+         sim_sopt2_fbsl;        
+         sim_sopt2_flexiosrc;   
+         sim_sopt2_timesrc;     
+         sim_sopt2_rmiisrc;
+         sim_sopt2_usbregen;
+         sim_sopt2_usbslsrc
+         ">
+      <setTemplate variables="%(v)" 
+            linePadding="xxx" 
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr ClockInit(%params, Types... rest) : ClockInit(rest...) {
+         \t   
+         \t      %registerName |= %paramExpression;
+         \t   }
+         \t\n
+      ]]></setTemplate>
+   </for>
+   <template ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+   <for keys="n" dim="/SIM/numberOfClockSettings" >
+      <template key="DefaultInitValue" namespace="all" ><![CDATA[
+         \t/**
+         \t * Default value for Sim::ClockInit
+         \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->SIM)
+         \t */
+         \tstatic constexpr ClockInit DefaultSopt2Value%(n) {\n
+      ]]></template>
+      <setTemplate key="DefaultInitValue" namespace="all"
+         variables="
+            sim_sopt2_pllfllsel[%(n)], 
+            sim_sopt2_usbsrc[%(n)],    
+            sim_sopt2_lpuartsrc,
+            sim_sopt2_sdhcsrc,     
+            sim_sopt2_tpmsrc,      
+            sim_sopt2_flexiosrc,   
+            sim_sopt2_traceclksel, 
+            sim_sopt2_fbsl,        
+            sim_sopt2_clkoutsel,   
+            sim_sopt2_rtcclkoutsel,
+
+            sim_sopt2_ptd7pad,     
+            sim_sopt2_emvsimsrc,   
+            sim_sopt2_timesrc,     
+            sim_sopt2_rmiisrc,
+
+            sim_sopt2_usbregen,
+            sim_sopt2_usbslsrc"
+         terminator=","
+         separator=","
+      ><![CDATA[
+         %initExpression\n
+      ]]></setTemplate>
+      <for keys="n" values="'';0;1;2;3;4">
+         <for keys="v"
+            values="
+                sim_sopt2_lpuart%(n)src;
+                sim_sopt2_uart%(n)src"
+                >
+            <setTemplate key="DefaultInitValue" namespace="all" 
+               terminator=","
+               separator=","
+               variables="%(v)" 
+               ><![CDATA[
+               %initExpression\n
+            ]]></setTemplate>
+         </for>
+      </for>
+      <template key="DefaultInitValue" namespace="all" ><![CDATA[
+         \t};\n\n
+      ]]></template>
+   </for>
+
 <!-- ========== SOPT4 =============================== -->
    <for keys="ftm" values="0;1;2;3">
       <for keys="flt" values="0;1;2;3">
@@ -842,116 +950,167 @@
       </for>
    </for>
    
-   <template><![CDATA[
-      \t/// System Options Register 4
-      \tstatic constexpr uint32_t sopt4 = \n
-   ]]></template>
-   <for keys="p" values="0;1;2;3" >
-      <for keys="u" values="0;1;2;3" >
-         <template variables="sim_sopt4_ftm%(p)flt%(u)"    ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-         <template variables="sim_sopt4_ftm%(p)trg%(u)src" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-         <template variables="sim_sopt4_ftm%(p)ch%(u)src"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-         <template variables="sim_sopt4_tpm%(p)ch%(u)src"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      </for>   
-      <template variables="sim_sopt4_tpm%(p)clksel"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template variables="sim_sopt4_ftm%(p)clksel"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   </for>   
-   <template                                   ><![CDATA[ \t   0;                    \n\n ]]></template>
-   
 <!-- ========== SOPT5 =============================== -->
 
    <for keys="n" values="0;1;2;3;4;5">
-      <clockCodeTemplate variable="sim_sopt5_lpuart%(n)ode"
-      ><![CDATA[
-         \t/**
-         \t * Set %description
-         \t *
-         \t * @param %enumParam %tooltip
-         \t */
-         \tstatic void setLpuart%(n)Drive(%enumClass %enumParam) {
-         \t   %defaultFieldExpression
-         \t}\n\n
-      ]]></clockCodeTemplate>
+      <for keys="name:Name" values="uart%(n):Uart%(n);lpuart%(n):Lpuart%(n)" >
+         <setTemplate 
+            variables="sim_sopt5_%(name)ode,sim_sopt5_%(name)txsrc,sim_sopt5_%(name)rxsrc"
+            linePadding="xxx"
+         ><![CDATA[
+            \t/**
+            \t * Class used to do initialisation of %(Name) signals
+            \t *
+            \t * @note This constructor may be used to create a const instance in ROM
+            \t *
+            \t * Example:
+            \t * @code
+            \t * static const %(Name)Init %(name)Init {
+            \t * };
+            \t *
+            \t * // Initialise %(Name) signals from values specified above
+            \t * %(name)Init.configure()
+            \t * @endcode
+            \t */
+            \tclass %(Name)Init {
+            \t
+            \tpublic:
+            \t   /// %(Name) signals
+            \t   uint32_t %registerName = 0;
+            \t
+            \t   /**                               
+            \t    * Copy Constructor                  
+            \t    */                             
+            \t   constexpr %(Name)Init(const %(Name)Init &other) = default;
+            \t   
+            \t   /**
+            \t    * Default Constructor
+            \t    */
+            \t   constexpr %(Name)Init() = default;
+            \t
+            \t   /**
+            \t    * Constructor 
+            %paramDescription
+            \t    */
+            \t   constexpr %(Name)Init(
+            %params) {
+            \t
+            \t      %registerName |= %paramExpression;
+            \t   }
+            \t   /**
+            \t    * Configure %(Name) signals from values specified in constructor.
+            \t    */
+            \t   void configure() const {\n
+            \t      %register = (%register&~%mask) | %registerName;
+            \t   }
+            \t};\n\n
+         ]]></setTemplate>
+   
+         <setTemplate variables="sim_sopt5_%(name)ode,sim_sopt5_%(name)txsrc,sim_sopt5_%(name)rxsrc"
+         ><![CDATA[
+            \t/**
+            \t * Set %description
+            \t *
+            %paramDescription
+            \t */
+            \tstatic void configureLpUart%(n)(
+            %params) {
+            \t   %defaultFieldExpression
+            \t}\n\n
+         ]]></setTemplate>
+   
+         <clockCodeTemplate variable="sim_sopt5_%(name)ode"
+         ><![CDATA[
+            \t/**
+            \t * Set %description
+            \t *
+            \t * @param %enumParam %tooltip
+            \t */
+            \tstatic void set%(Name)Drive(%enumClass %enumParam) {
+            \t   %defaultFieldExpression
+            \t}\n\n
+         ]]></clockCodeTemplate>
       
-      <clockCodeTemplate variable="sim_sopt5_lpuart%(n)rxsrc"
-      ><![CDATA[
-         \t/**
-         \t * Set %description
-         \t *
-         \t * @param %enumParam %tooltip
-         \t */
-         \tstatic void setLpuart%(n)RxSrc(%enumClass %enumParam) {
-         \t   %defaultFieldExpression
-         \t}\n\n
-      ]]></clockCodeTemplate>
+         <clockCodeTemplate variable="sim_sopt5_%(name)rxsrc"
+         ><![CDATA[
+            \t/**
+            \t * Set %description
+            \t *
+            \t * @param %enumParam %tooltip
+            \t */
+            \tstatic void set%(Name)RxSrc(%enumClass %enumParam) {
+            \t   %defaultFieldExpression
+            \t}\n\n
+         ]]></clockCodeTemplate>
    
-      <clockCodeTemplate variable="sim_sopt5_lpuart%(n)txsrc"
-      ><![CDATA[
-         \t/**
-         \t * Set %description
-         \t *
-         \t * @param %enumParam %tooltip
-         \t */
-         \tstatic void setLpuart%(n)TxSrc(%enumClass %enumParam) {
-         \t   %defaultFieldExpression
-         \t}\n\n
-      ]]></clockCodeTemplate>
+         <clockCodeTemplate variable="sim_sopt5_%(name)txsrc"
+         ><![CDATA[
+            \t/**
+            \t * Set %description
+            \t *
+            \t * @param %enumParam %tooltip
+            \t */
+            \tstatic void set%(Name)TxSrc(%enumClass %enumParam) {
+            \t   %defaultFieldExpression
+            \t}\n\n
+         ]]></clockCodeTemplate>
+      </for>
    </for>
-
-   <for keys="n" values="0;1;2;3;4;5">
-      <clockCodeTemplate variable="sim_sopt5_uart%(n)ode"
-      ><![CDATA[
-         \t/**
-         \t * Set %description
-         \t *
-         \t * @param %enumParam %tooltip
-         \t */
-         \tstatic void setUart%(n)Drive(%enumClass %enumParam) {
-         \t   %defaultFieldExpression
-         \t}\n\n
-      ]]></clockCodeTemplate>
-   
-      <clockCodeTemplate variable="sim_sopt5_uart%(n)rxsrc"
-      ><![CDATA[
-         \t/**
-         \t * Set %description
-         \t *
-         \t * @param %enumParam %tooltip
-         \t */
-         \tstatic void setUart%(n)RxSrc(%enumClass %enumParam) {
-         \t   %defaultFieldExpression
-         \t}\n\n
-      ]]></clockCodeTemplate>
-   
-      <clockCodeTemplate variable="sim_sopt5_uart%(n)txsrc"
-      ><![CDATA[
-         \t/**
-         \t * Set %description
-         \t *
-         \t * @param %enumParam %tooltip
-         \t */
-         \tstatic void setUart%(n)TxSrc(%enumClass %enumParam) {
-         \t   %defaultFieldExpression
-         \t}\n\n
-      ]]></clockCodeTemplate>
-   </for>
-   
-   <template><![CDATA[
-      \t/// System Options Register 5
-      \tstatic constexpr uint32_t sopt5 = \n
-   ]]></template>
-   <for keys="p" values=";0;1;2;3;4">
-      <template variables="sim_sopt5_uart%(p)ode"     ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template variables="sim_sopt5_uart%(p)rxsrc"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template variables="sim_sopt5_uart%(p)txsrc"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template variables="sim_sopt5_lpuart%(p)ode"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template variables="sim_sopt5_lpuart%(p)rxsrc" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      <template variables="sim_sopt5_lpuart%(p)txsrc" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-   </for>
-   <template                                         ><![CDATA[ \t   0;                    \n\n ]]></template>
 
 <!-- ========== SOPT7 =============================== -->
    <for keys="p" values=";0;1">
+      <setTemplate 
+         variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel"
+            linePadding="xxx"
+         ><![CDATA[
+            \t/**
+            \t * Class used to do initialisation of Adc%(p) signals
+            \t *
+            \t * @note This constructor may be used to create a const instance in ROM
+            \t *
+            \t * Example:
+            \t * @code
+            \t * static const Adc%(p)Init adc%(p)Init {
+            \t * };
+            \t *
+            \t * // Initialise Adc signals from values specified above
+            \t * adc%(p)Init.configure()
+            \t * @endcode
+            \t */
+            \tclass Adc%(p)Init {
+            \t
+            \tpublic:
+            \t   /// Adc signals
+            \t   uint32_t %registerName = 0;
+            \t
+            \t   /**                               
+            \t    * Copy Constructor                  
+            \t    */                             
+            \t   constexpr Adc%(p)Init(const Adc%(p)Init &other) = default;
+            \t   
+            \t   /**
+            \t    * Default Constructor
+            \t    */
+            \t   constexpr Adc%(p)Init() = default;
+            \t
+            \t   /**
+            \t    * Constructor 
+            %paramDescription
+            \t    */
+            \t   constexpr Adc%(p)Init(
+            %params) {
+            \t
+            \t      %registerName = %paramExpression;
+            \t   }
+            \t   /**
+            \t    * Configure Adc signals from values specified in constructor.
+            \t    */
+            \t   void configure() const {\n
+            \t      %register = (%register&~%mask) | %registerName;
+            \t   }
+            \t};\n\n
+         ]]></setTemplate>
+   
       <setTemplate variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel" ><![CDATA[
          \t/**
          \t * Set %description
@@ -968,17 +1127,6 @@
          \t};\n\n
       ]]></setTemplate>
    </for>
-   
-   <initialValueTemplate 
-      variables="
-         sim_sopt7_adc0trigger,     
-         sim_sopt7_adc0trgsel,  
-         sim_sopt7_adc1trigger,  
-         sim_sopt7_adc1trgsel"     
-   ><![CDATA[
-      \t/// System Options Register 7
-      \tstatic constexpr uint32_t sopt7 = %initExpression\n\n
-   ]]></initialValueTemplate>
    
 <!-- ========== SOPT8 =============================== -->
 
@@ -1033,20 +1181,6 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
-   <if condition="sim_sopt8_ftm0och0src||sim_sopt8_ftm3och0src" >   
-      <template><![CDATA[
-         \t/// System Options Register 8
-         \tstatic constexpr uint32_t sopt8 = \n
-      ]]></template>
-      <for keys="ch" values="0;1;2;3;4;5;6;7">
-         <template variables="sim_sopt8_ftm0och%(ch)src"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-         <template variables="sim_sopt8_ftm3och%(ch)src"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      </for>
-      <template variables="sim_sopt8_ftm0och0src" ><![CDATA[
-         \t   0;\n\n
-      ]]></template>
-   </if>
-   
 <!-- ========== SOPT9 =============================== -->   
 
    <for keys="p" values="1;2">
@@ -1065,19 +1199,6 @@
       </for>
    </for>
    
-   <template variables="sim_sopt9_tpm1clksel" ><![CDATA[
-      \t/// System Options Register 9
-      \tstatic constexpr uint32_t sopt9 = \n
-   ]]></template>
-   <for keys="p" values="1;2">
-      <for keys="Fn:FN:fn" values="ClkSel:CLKSEL:clksel;Ch0Src:CH0SRC:ch0src">
-         <template variables="sim_sopt9_tpm%(p)%(fn)"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription \n ]]></template>
-      </for>
-   </for>
-   <template variables="sim_sopt9_tpm1clksel" ><![CDATA[
-      \t   0;\n\n
-   ]]></template>
-
 <!-- ========== CLKDIV2 =============================== -->
    <clockCodeTemplate variable="sim_sopt2_usbsrc"
    ><![CDATA[
@@ -1233,58 +1354,66 @@
       \t * Example:
       \t * @code
       \t * static const Sim::Init simInit {
-      \t *    SimOsc32kSel_Osc32kClk,
-      \t *    SimUsbPower_EnabledInAll,
-      \t *    SimLpuartClockSource_OscerClk,
-      \t *    SimTpmClockSource_OscerClk,
-      \t *    SimUsbFullSpeedClockSource_PeripheralClk,
-      \t *    SimTraceClockoutSel_McgOutClk,
-      \t *    SimRtcClkoutSel_1Hz,
-      \t *    SimClkoutSel_FlexBusClk,
-      \t *    SimPeripheralClockSource_Irc48mClk,
-      \t *    SimLpuartClockSource_McgIrClk,
-      \t *    SimSdhcClockSource_OscerClk,
-      \t *    SimFlexbusSecurity_All,
-      \t *    SimFlexioClockSource_OscerClk,
-      \t *    SimUsbPhyRegEn_Enabled,
-      \t *    SimUsbSlowClock_McgIrClk,
-      \t *    SimFtm0Flt0_Ftm0Fault0,
-      \t *    SimFtm0Trg0Src_Cmp0,
-      \t *    SimFtm0Flt1_Cmp1,
-      \t *    SimFtm0Trg1Src_PdbTrigger1,
-      \t *    SimFtm0ClkSel_1,
-      \t *    SimFtm1Flt0_Ftm1Fault0,
-      \t *    SimFtm1Ch0Src_IcPin,
-      \t *    SimFtm1ClkSel_1,
-      \t *    SimFtm2Flt0_Ftm2Fault0,
-      \t *    SimFtm2Ch0Src_Cmp1,
-      \t *    SimFtm2Ch1Src_IcPin,
-      \t *    SimFtm2ClkSel_1,
-      \t *    SimFtm3Flt0_Cmp0,
-      \t *    SimFtm3Trg0Src_Ftm1,
-      \t *    SimFtm3Trg1Src_Ftm2,
-      \t *    SimFtm3ClkSel_0,
-      \t *    SimLpuart0RxSrc_Cmp0,
-      \t *    SimLpuart0TxSrc_Direct,
-      \t *    SimLpuart1RxSrc_RxPin,
-      \t *    SimLpuart1TxSrc_ModulatedByTpm1Ch0,
-      \t *    SimFtm0Ch0OutputSrc_Direct,
-      \t *    SimFtm0Ch1OutputSrc_ModulatedByFtm1Ch1,
-      \t *    SimFtm0Ch2OutputSrc_Direct,
-      \t *    SimFtm0Ch3OutputSrc_ModulatedByFtm1Ch1,
-      \t *    SimFtm0Ch4OutputSrc_Direct,
-      \t *    SimFtm0Ch5OutputSrc_ModulatedByFtm1Ch1,
-      \t *    SimFtm0Ch6OutputSrc_Direct,
-      \t *    SimFtm0Ch7OutputSrc_ModulatedByFtm1Ch1,
-      \t *    SimFtm3Ch0OutputSrc_Direct,
-      \t *    SimFtm3Ch1OutputSrc_ModulatedByFtm2Ch1,
-      \t *    SimFtm3Ch2OutputSrc_Direct,
-      \t *    SimFtm3Ch3OutputSrc_ModulatedByFtm2Ch1,
-      \t *    SimFtm3Ch4OutputSrc_Direct,
-      \t *    SimFtm3Ch5OutputSrc_ModulatedByFtm2Ch1,
-      \t *    SimFtm3Ch6OutputSrc_Direct,
-      \t *    SimFtm3Ch7OutputSrc_ModulatedByFtm2Ch1,
-      \t *    SimAdc0TriggerMode_Pdb, SimAdc0TriggerSrc_Cmp0,
+      \t *    SimErc32kClkoutPinSelect_None,            // ERCLK32K Clock Output
+      \t *    SimErc32kSel_LpoClk,                      // ERCLK32K clock source
+      \t *    SimUsbPower_EnabledInAll,                 // USB voltage regulator power control
+      \t *    SimUsbFullSpeedClockSource_PeripheralClk, // USB Clock
+      \t *    SimTraceClockoutSel_McgOutClk,            // Debug trace clock select
+      \t *    SimRtcClkoutSel_32kHz ,                   // RTC clock out source
+      \t *    SimClkoutSel_OscerClk0 ,                  // CLKOUT pin clock
+      \t *    SimPeripheralClockSource_Irc48mClk ,      // Peripheral Clock
+      \t *    SimFlexbusSecurity_None,                  // FlexBus off-chip access security level
+      \t *    SimLpuartClockSource_PeripheralClk,       // LPUART Clock select
+      \t *    SimTraceClockoutSel_McgOutClk,            // Debug trace clock select
+      \t *    SimRtcClkoutSel_32kHz,                    // RTC clock out source
+      \t *    SimClkoutSel_OscerClk0,                   // CLKOUT pin clock
+      \t *    SimPeripheralClockSource_Irc48mClk,       // Peripheral Clock
+      \t *    SimFlexbusSecurity_None,                  // FlexBus off-chip access security level
+      \t *    SimFtm0Flt0_Ftm0Fault0,                   // FTM0 Fault 0 Select
+      \t *    SimFtm0Trg0Src_Cmp0,                      // FTM0 Hardware Trigger 0 Source
+      \t *    SimFtm0Flt1_Ftm0Fault1,                   // FTM0 Fault 1 Select
+      \t *    SimFtm0Trg1Src_PdbTrigger1,               // FTM0 Hardware Trigger 1 Source
+      \t *    SimFtm0ClkSel_FtmClkin0,                  // FTM0 External Clock Pin
+      \t *    SimFtm1Flt0_Ftm1Fault0,                   // FTM1 Fault 0 Select
+      \t *    SimFtm1Ch0Src_IcPin,                      // FTM 1 channel 0 input capture source
+      \t *    SimFtm1ClkSel_FtmClkin0,                  // FTM1 External Clock Pin
+      \t *    SimFtm2Flt0_Ftm2Fault0,                   // FTM2 Fault 0 Select
+      \t *    SimFtm2Ch0Src_IcPin,                      // FTM2 channel 0 input capture source
+      \t *    SimFtm2Ch1Src_IcPin,                      // FTM2 channel 1 input capture source
+      \t *    SimFtm2ClkSel_FtmClkin0,                  // FTM2 External Clock Pin
+      \t *    SimFtm3Flt0_Ftm3Fault0,                   // FTM3 Fault 0 Select
+      \t *    SimFtm3Trg0Src_Ftm1,                      // FTM3 Hardware Trigger 0 Source
+      \t *    SimFtm3Trg1Src_Ftm2,                      // FTM3 Hardware Trigger 1 Source
+      \t *    SimFtm3ClkSel_FtmClkin0,                  // FTM3 External Clock Pin
+      \t *    SimUart0RxSrc_RxPin,                      // UART 0 receive data source
+      \t *    SimUart0TxSrc_Direct,                     // UART 0 transmit data source
+      \t *    SimLpuart0RxSrc_RxPin,                    // LPUART 0 receive data source
+      \t *    SimUart1RxSrc_RxPin,                      // UART 1 receive data source
+      \t *    SimUart1TxSrc_Direct,                     // UART 1 transmit data source
+      \t *    SimAdc0TriggerMode_Pdb ,                  // ADC0 trigger mode
+      \t *    SimAdc0TriggerSrc_External,               // ADC0 trigger
+      \t *    SimAdc1TriggerMode_Pdb ,                  // ADC1 trigger mode
+      \t *    SimAdc1TriggerSrc_External,               // ADC1 trigger
+      \t *    SimFtm0Ch0OutputSrc_Direct,               // FTM0 channel 0 output source
+      \t *    SimFtm3Ch0OutputSrc_Direct,               // FTM3 channel 0 output source
+      \t *    SimFtm0Ch1OutputSrc_Direct,               // FTM0 channel 1 output source
+      \t *    SimFtm3Ch1OutputSrc_Direct,               // FTM3 channel 1 output source
+      \t *    SimFtm0Ch2OutputSrc_Direct,               // FTM0 channel 2 output source
+      \t *    SimFtm3Ch2OutputSrc_Direct,               // FTM3 channel 2 output source
+      \t *    SimFtm0Ch3OutputSrc_Direct,               // FTM0 channel 3 output source
+      \t *    SimFtm3Ch3OutputSrc_Direct,               // FTM3 channel 3 output source
+      \t *    SimFtm0Ch4OutputSrc_Direct,               // FTM0 channel 4 output source
+      \t *    SimFtm3Ch4OutputSrc_Direct,               // FTM3 channel 4 output source
+      \t *    SimFtm0Ch5OutputSrc_Direct,               // FTM0 channel 5 output source
+      \t *    SimFtm3Ch5OutputSrc_Direct,               // FTM3 channel 5 output source
+      \t *    SimFtm0Ch6OutputSrc_Direct,               // FTM0 channel 6 output source
+      \t *    SimFtm3Ch6OutputSrc_Direct,               // FTM3 channel 6 output source
+      \t *    SimFtm0Ch7OutputSrc_Direct,               // FTM0 channel 7 output source
+      \t *    SimFtm3Ch7OutputSrc_Direct,               // FTM3 channel 7 output source
+      \t *    SimTpm1ClkSel_TpmClkin0,                  // TPM1 External Clock Pin
+      \t *    SimTpm1Ch0Src_IcPin,                      // TPM1 channel 0 input capture source
+      \t *    SimTpm2ClkSel_TpmClkin0,                  // TPM2 External Clock Pin
+      \t *    SimTpm2Ch0Src_IcPin,                      // TPM2 channel 0 input capture source
       \t * };
       \t *
       \t * // Initialise SIM from values specified above
@@ -1347,7 +1476,9 @@
    ]]></setTemplate >
    <initialValueTemplate 
       variables="
+         sim_sopt2_pllfllsel[], 
          sim_sopt2_ptd7pad,     
+         sim_sopt2_lpuartsrc,  
          sim_sopt2_lpuart0src,  
          sim_sopt2_lpuart1src,  
          sim_sopt2_uart0src,    
@@ -1356,8 +1487,6 @@
          sim_sopt2_traceclksel, 
          sim_sopt2_rtcclkoutsel,
          sim_sopt2_clkoutsel,   
-         sim_sopt2_pllfllsel[], 
-         sim_sopt2_lpuartsrc,   
          sim_sopt2_emvsimsrc,   
          sim_sopt2_sdhcsrc,     
          sim_sopt2_fbsl,        
@@ -1408,6 +1537,16 @@
       \t   /// System Options Register 8
       \t   uint32_t sopt8 = 0;\n\n
    ]]></initialValueTemplate>
+   <initialValueTemplate 
+      variables="
+         sim_sopt9_tpm1clksel,
+         sim_sopt9_tpm2ch0src,     
+         sim_sopt9_tpm1clksel,
+         sim_sopt9_tpm2ch0src"     
+   ><![CDATA[
+      \t   /// System Options Register 9
+      \t   uint32_t sopt9 = 0;\n\n
+   ]]></initialValueTemplate>
 
    <template ><![CDATA[
       \t
@@ -1439,6 +1578,7 @@
    </for>
    <for keys="v"
       values="
+         sim_sopt2_pllfllsel; 
          sim_sopt1_osc32kout;
          sim_sopt1_osc32ksel;
          sim_sopt1_usbpower;
@@ -1448,7 +1588,6 @@
          sim_sopt2_traceclksel; 
          sim_sopt2_rtcclkoutsel;
          sim_sopt2_clkoutsel;   
-         sim_sopt2_pllfllsel; 
          sim_sopt2_emvsimsrc;   
          sim_sopt2_sdhcsrc;     
          sim_sopt2_fbsl;        
@@ -1592,7 +1731,164 @@
          ]]></setTemplate>
       </for>
    </for>
+   <for keys="p" values="1;2">
+      <for keys="fn" values="clksel;ch0src">
+         <setTemplate variables="sim_sopt9_tpm%(p)%(fn)"  
+            linePadding="xxx" 
+         ><![CDATA[
+            \t   /**
+            \t    * Constructor for %description
+            \t    *
+            \t    * @tparam   Types
+            %paramDescription
+            \t    */
+            \t   template <typename... Types>
+            \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+            \t   
+            \t      %registerName |= %paramExpression;
+            \t   }
+            \t\n
+         ]]></setTemplate>
+      </for>
+   </for>
    <template ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+ <!-- ========== DefaultInitValue =============================== -->
+ 
+   <template key="DefaultInitValue" namespace="all" ><![CDATA[
+      \t/**
+      \t * Default value for Sim::DefaultInit
+      \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->SIM)
+      \t */
+      \tstatic constexpr Init DefaultInitValue {\n
+   ]]></template>
+   <setTemplate key="DefaultInitValue" namespace="all"
+      variables="
+         sim_sopt2_pllfllsel, 
+         sim_sopt1_osc32kout,
+         sim_sopt1_osc32ksel,
+         sim_sopt1_usbpower,
+         sim_sopt2_sdhcsrc,     
+         sim_sopt2_tpmsrc,      
+         sim_sopt2_flexiosrc,   
+         sim_sopt2_usbsrc,    
+         sim_sopt2_traceclksel, 
+         sim_sopt2_fbsl,        
+         sim_sopt2_clkoutsel,   
+         sim_sopt2_rtcclkoutsel,
+
+         sim_sopt2_ptd7pad,     
+         sim_sopt2_emvsimsrc,   
+         sim_sopt2_timesrc,     
+         sim_sopt2_rmiisrc,
+
+         sim_sopt2_usbregen,
+         sim_sopt2_usbslsrc"
+      terminator=","
+      separator=","
+   ><![CDATA[
+      %initExpression\n
+   ]]></setTemplate>
+   <for keys="n" values=";0;1;2;3;4">
+      <for keys="v"
+         values="
+             sim_sopt2_lpuart%(n)src;
+             sim_sopt2_uart%(n)src"
+             >
+         <setTemplate key="DefaultInitValue" namespace="all" 
+            terminator=","
+            separator=","
+            variables="%(v)" 
+            ><![CDATA[
+            %initExpression\n
+         ]]></setTemplate>
+      </for>
+   </for>
+   <for keys="p" values="0;1;2;3" >
+      <for keys="u" values="0;1;2;3" >
+         <for keys="v"
+            values="
+                sim_sopt4_ftm%(p)flt%(u);
+                sim_sopt4_ftm%(p)trg%(u)src;
+                sim_sopt4_ftm%(p)ch%(u)src;
+                sim_sopt4_tpm%(p)ch%(u)src">
+            <setTemplate key="DefaultInitValue" namespace="all" 
+               terminator=","
+               separator=","
+               variables="%(v)" 
+            ><![CDATA[
+               %initExpression\n
+            ]]></setTemplate>
+         </for>
+      </for>   
+      <for keys="v"
+         values="
+             sim_sopt4_tpm%(p)clksel;
+             sim_sopt4_ftm%(p)clksel">
+         <setTemplate key="DefaultInitValue" namespace="all" 
+            terminator=","
+            separator=","
+            variables="%(v)"
+         ><![CDATA[
+            %initExpression\n
+         ]]></setTemplate>
+      </for>
+   </for>   
+   <for keys="p" values=";0;1;2;3;4">
+      <for keys="v"
+         values="
+             sim_sopt5_uart%(p)ode;
+             sim_sopt5_uart%(p)rxsrc;
+             sim_sopt5_uart%(p)txsrc;
+             sim_sopt5_lpuart%(p)ode;
+             sim_sopt5_lpuart%(p)rxsrc;
+             sim_sopt5_lpuart%(p)txsrc">
+         <setTemplate key="DefaultInitValue" namespace="all" 
+            terminator=","
+            separator=","
+            variables="%(v)" 
+         ><![CDATA[
+            %initExpression\n
+         ]]></setTemplate>
+      </for>
+   </for>
+   <for keys="p" values=";0;1">
+      <setTemplate key="DefaultInitValue" namespace="all" 
+         terminator=","
+         separator=","
+         variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel"
+       ><![CDATA[
+         %initExpression\n
+      ]]></setTemplate>
+   </for>
+   <for keys="ch" values="0;1;2;3;4;5;6;7">
+      <for keys="v"
+         values="
+             sim_sopt8_ftm0och%(ch)src;
+             sim_sopt8_ftm3och%(ch)src">
+         <setTemplate key="DefaultInitValue" namespace="all" 
+            terminator=","
+            separator=","
+            variables="%(v)" 
+            ><![CDATA[
+            %initExpression\n
+         ]]></setTemplate>
+      </for>
+   </for>
+   <for keys="p" values="1;2">
+      <for keys="fn" values="clksel;ch0src">
+         <setTemplate key="DefaultInitValue" namespace="all" 
+            terminator=","
+            separator=","
+            variables="sim_sopt9_tpm%(p)%(fn)" 
+            ><![CDATA[
+            %initExpression\n
+         ]]></setTemplate>
+      </for>
+   </for>
+   <template key="DefaultInitValue" namespace="all" ><![CDATA[
       \t};\n\n
    ]]></template>
 

@@ -29,10 +29,6 @@ namespace USBDM {
 /**
  * @brief Template class representing the System Integration Module (SIM)
  *
- * Partially based on Freescale Application note AN4503\n
- * Support for Kinetis Low Power operation.
- *
- * @image html KinetisPowerModes.png
  */
 class Sim : public SimInfo {
 public:
