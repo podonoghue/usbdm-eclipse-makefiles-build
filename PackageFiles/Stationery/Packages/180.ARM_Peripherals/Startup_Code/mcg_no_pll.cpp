@@ -13,6 +13,7 @@
 #include "system.h"
 #include "stdbool.h"
 #include "pin_mapping.h"
+#include "sim.h"
 $(/MCG/Includes:// No extra includes found)
 #include "mcg.h"
 /*
@@ -35,6 +36,8 @@ namespace USBDM {
 #ifndef SIM_CLKDIV1_OUTDIV3
 #define SIM_CLKDIV1_OUTDIV3(x) (0)
 #endif
+
+ClockChangeCallback *Mcg::clockChangeCallbackQueue = nullptr;
 
 /**
  * Table of clock settings
@@ -186,6 +189,9 @@ void Mcg::writeMainRegs(const ClockInfo &clockInfo, uint8_t bugFix) {
  */
 ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
 
+   // Notify of clock changes (before)
+   notifyBeforeClockChange();
+
    McgClockMode finalMode = clockInfo.clockMode;
 
 #ifdef USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK
@@ -323,6 +329,9 @@ ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
    SimInfo::setPeripheralClockDivider((SimPeripheralClockDivider)clockInfo.clkdiv3);
 #endif
 
+   // Clock sources
+   SIM->SOPT2 = clockInfo.sopt2;
+
    SystemCoreClockUpdate();
 
 #if defined(SIM_CLKDIV2_USBDIV)
@@ -340,6 +349,9 @@ ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
    mcg->C8 = clockInfo.c8;
 #endif
 
+   // Notify of clock changes (after)
+   notifyAfterClockChange();
+   
    return E_NO_ERROR;
 }
 

@@ -42,11 +42,25 @@ extern volatile uint32_t SystemMcgPllClock;
  * Clock configurations
  */
 enum ClockConfig : uint8_t {
-$(/MCG/ClockConfig:// XXXX !!!!!!!ClockConfig - Not found!!!!!!!)
+$(/MCG/ClockConfig: #error ClockConfig not found)
    ClockConfig_default = 0,
 };
 
-$(/MCG/ClockInfoType:!!!!!!!Not found!!!!!!!)
+$(/MCG/ClockInfoType:#error ClockInfoType not found)
+
+class ClockChangeCallback {
+
+public:
+      // Pointer to next in chain
+      ClockChangeCallback *next = nullptr;
+
+      virtual ~ClockChangeCallback() = default;
+
+      // This method is overridden to obtain notification before clock change
+      virtual void beforeClockChange(){}
+      // This method is overridden to obtain notification after clock change
+      virtual void afterClockChange(){};
+};
 
 /**
  * Type definition for MCG interrupt call back
@@ -64,13 +78,46 @@ typedef void (*MCGCallbackFunction)(void);
 class Mcg {
 
 private:
+   static ClockChangeCallback *clockChangeCallbackQueue;
+
+   static void notifyBeforeClockChange() {
+      ClockChangeCallback *p = clockChangeCallbackQueue;
+      while (p != nullptr) {
+         p->beforeClockChange();
+         p = p->next;
+      }
+   }
+   static void notifyAfterClockChange() {
+      ClockChangeCallback *p = clockChangeCallbackQueue;
+      while (p != nullptr) {
+         p->afterClockChange();
+         p = p->next;
+      }
+   }
+public:
+   /**
+    * Add callback for clock configuration changes
+    *
+    * @param callback Call-back class to notify on clock configuration changes
+    */
+   static void addClockChangeCallback(ClockChangeCallback &callback) {
+      callback.next = clockChangeCallbackQueue;
+      clockChangeCallbackQueue = &callback;
+   }
+
+private:
    /** Callback function for ISR */
    static MCGCallbackFunction callback;
 
    /** Hardware instance */
    static constexpr HardwarePtr<MCG_Type> mcg = McgInfo::baseAddress;
 
+$(/MCG/privateMethods: // No private methods found)
+
 public:
+
+$(/MCG/publicMethods: // No public methods found)
+
    /**
     * Table of clock settings
     */

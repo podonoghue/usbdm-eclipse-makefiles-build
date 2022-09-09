@@ -8,6 +8,10 @@
    
    <xi:include href="_mapPinsOption.xml"/>
 
+   <stringOption key="irq_pattern"        constant="true" value="^.*%b%i.*$"       hidden="true" />
+   <stringOption key="irq_classHandler"   constant="true" value="%c%i::irqHandler" hidden="true" />
+   <xi:include href="_irqOptionSubstituted.xml"/>
+
    <binaryOption key="lptmr_csr_tms" description="Timer Mode Select"
       enumStem="LptmrMode"
       toolTip="Configures the mode of the LPTMR">
@@ -23,6 +27,20 @@
    />
 
    <template><![CDATA[
+      protected:
+      \t/// Type for Init class
+      \tusing Init = Lptmr$(_instance)Init;
+      
+      public:
+      \t/// Type for TimeIntervalModeInit class
+      \tusing TimeIntervalModeInit = Lptmr$(_instance)TimeIntervalModeInit;
+
+      \t/// Type for PulseCountingModeInit class
+      \tusing PulseCountingModeInit = Lptmr$(_instance)PulseCountingModeInit;\n
+   ]]></template>
+
+   <template><![CDATA[
+      \t
       \t/// Minimum resolution for time interval setting
       \tstatic constexpr uint32_t minimumResolution = $(minimumResolution);\n\n
    ]]></template>
@@ -316,8 +334,123 @@
       \t#define LPTMR$(_instance)_HANDLER() template<> void $(_class)::irqHandler()\n\n
    ]]></template>
    
-<!--  ========== LPTMR TimeIntervalModeInit class =============================== -->
-   <template><![CDATA[
+   <setTemplate variables="irqHandlingMethod"><![CDATA[
+      \t/// Type for %description
+      \ttypedef Lptmr$(_instance)Init::%enumClass %enumClass;\n\n
+   ]]></setTemplate>
+
+<!--  ========== LPTMR Init class =============================== -->
+   <template namespace="usbdm"><![CDATA[
+      \t/**
+      \t * Class used to do initialisation of LPTMR
+      \t */
+      \tclass Lptmr$(_instance)Init {
+      \t
+      \tpublic:
+      \t   /**                               
+      \t    * Copy Constructor                  
+      \t    */                             
+      \t   constexpr Lptmr$(_instance)Init(const Lptmr$(_instance)Init &other) = delete;
+      \t   
+      \t   /**
+      \t    * No Default Constructor
+      \t    */
+      \t   constexpr Lptmr$(_instance)Init() = delete;
+      \t   
+      \t   /**
+      \t    * Usual Constructor
+      \t    */
+      \t   constexpr Lptmr$(_instance)Init(LptmrMode lptmrMode) : csr(lptmrMode|LPTMR_CSR_TEN_MASK) {
+      \t   }\n
+   ]]></template >
+   <setTemplate namespace="usbdm" variables="irqHandlingMethod"
+    ><![CDATA[
+      \t
+      \t   /// Type for %description
+      \t   typedef void (*%enumClass)(void);
+      \t
+      #if $(irqHandlingMethod)
+      \t   /// %description
+      \t   %params = nullptr;
+      #endif\n\n
+   ]]></setTemplate>
+   <setTemplate namespace="usbdm" variables="lptmr_cmrPeriod"
+    ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = 0_s;\n\n
+   ]]></setTemplate >
+   <setTemplate namespace="usbdm" variables="lptmr_cmr_compare"
+    ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = 0_ticks;\n\n
+   ]]></setTemplate >
+   <setTemplate namespace="usbdm" 
+      variables=
+         "lptmr_csr_tie,
+          lptmr_csr_tfc"
+    ><![CDATA[
+      \t   /// Control and Status Register
+      \t   uint32_t %registerName;\n\n
+   ]]></setTemplate >
+   <setTemplate namespace="usbdm" 
+      variables=
+         "lptmr_psr_prescaler,
+          lptmr_psr_pcs"
+    ><![CDATA[
+      \t   /// Prescale Register
+      \t   uint32_t %registerName = 0;
+      \t};
+      \t\n\n
+   ]]></setTemplate >
+   
+   <setTemplate variables="lptmr_csr_tms" key="/LPTMR/InitMethod" namespace="all"><![CDATA[
+      \t/**
+      \t * Configure LPTMR from values specified in init.
+      \t *
+      \t * @param init Class containing initialisation information
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t
+      \t   // Enable peripheral clock and map pins
+      \t   enable();
+      \t
+      \t   if (init.callbackFunction != nullptr) {
+      \t      // Only set call-back if present
+      \t      setCallback(init.callbackFunction);
+      \t   }
+      \t   // Change settings with timer disabled
+      \t   %register = 0;\n
+   ]]></setTemplate>
+   <setTemplate variables="lptmr_psr_pcs" key="/LPTMR/InitMethod" namespace="all"><![CDATA[
+      \t
+      \t   // Update clock setting
+      \t   %register = init.%registerName;\n\n
+   ]]></setTemplate>
+   <setTemplate variables="lptmr_cmrPeriod" key="/LPTMR/InitMethod" namespace="all"><![CDATA[
+      \t   if (init.%registerName != 0) {
+      \t      // %description
+      \t      setPeriod(init.%registerName);
+      \t   }
+      \t   else {\n
+   ]]></setTemplate>
+   <setTemplate variables="lptmr_cmr_compare" key="/LPTMR/InitMethod" namespace="all"><![CDATA[
+      \t      // %description
+      \t      %register = init.%registerName;\n
+   ]]></setTemplate>
+   <template key="/LPTMR/InitMethod" namespace="all"><![CDATA[
+      \t   }\n
+   ]]></template>
+   <setTemplate variables="lptmr_csr_tms" key="/LPTMR/InitMethod" namespace="all"><![CDATA[
+      \t
+      \t   // Enable timer
+      \t   %register = init.%registerName;\n
+   ]]></setTemplate>
+   <template key="/LPTMR/InitMethod" namespace="all"><![CDATA[
+      \t}\n
+   ]]></template>
+   
+<!--  ========== LPTMR TimeIntervalModeInit class =============================== -->  
+   <template namespace="usbdm"><![CDATA[
       \t/**
       \t * Class used to do initialisation of LPTMR in Time Interval Mode
       \t *
@@ -327,7 +460,7 @@
       \t *
       \t * Example:
       \t * @code
-      \t * static const Lptmr$(_instance)::TimeIntervalModeInit lptmrInit {
+      \t * static const Lptmr$(_instance)::Lptmr$(_instance)TimeIntervalModeInit lptmrInit {
       \t *    LptmrResetOn_Compare,    // Timer Free-Running Counter enable
       \t *    LptmrInterrupt_Disabled, // Timer interrupt enable
       \t *    LptmrClockSel_Oscerclk,  // Clock Source
@@ -336,103 +469,47 @@
       \t * };
       \t *
       \t * // Initialise LPTMR$(_instance) in Time Interval mode using values specified above
-      \t * lptmrInit.configure()
+      \t * Lptmr$(_instance).configure(lptmrInit)
       \t * @endcode
       \t */
-      \tclass TimeIntervalModeInit {
+      \tclass Lptmr$(_instance)TimeIntervalModeInit : public Lptmr$(_instance)Init {
       \t
       \tpublic:
       \t   /**                               
       \t    * Copy Constructor                  
       \t    */                             
-      \t   constexpr TimeIntervalModeInit(const TimeIntervalModeInit &other) = default;
+      \t   constexpr Lptmr$(_instance)TimeIntervalModeInit(const Lptmr$(_instance)TimeIntervalModeInit &other) = delete;
       \t   
       \t   /**
       \t    * Default Constructor
       \t    */
-      \t   constexpr TimeIntervalModeInit() = default;
+      \t   constexpr Lptmr$(_instance)TimeIntervalModeInit() : Lptmr$(_instance)Init(LptmrMode_TimeInterval) {
+      \t   };
       \t\n
-   ]]></template>
-   <setTemplate 
-      variables=
-         "lptmr_cmrPeriod"
+   ]]></template >
+   <setTemplate namespace="usbdm" 
+      variables="irqHandlingMethod" 
+      linePadding="xxx"
     ><![CDATA[
-      \t   /// %description
-      \t   %enumClass %registerName = 0_s;\n\n
-   ]]></setTemplate >
-   <setTemplate 
-      variables=
-         "lptmr_cmr_compare"
-    ><![CDATA[
-      \t   /// %description
-      \t   %enumClass %registerName = 0_ticks;\n\n
-   ]]></setTemplate >
-   <setTemplate 
-      variables=
-         "lptmr_csr_tie,
-          lptmr_csr_tfc"
-    ><![CDATA[
-      \t   /// Control and Status Register
-      \t   uint32_t %registerName = LptmrMode_TimeInterval|LPTMR_CSR_TEN_MASK;\n\n
-   ]]></setTemplate >
-   <setTemplate 
-      variables=
-         "lptmr_psr_prescaler,
-          lptmr_psr_pcs"
-    ><![CDATA[
-      \t   /// Prescale Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></setTemplate >
-
-   <setTemplate variables="lptmr_csr_tms" ><![CDATA[
       \t   /**
-      \t    * Configure LPTMR from values specified in constructor.
-      \t    * Set LPTMR to time counting mode.
-      \t    * The timer is enabled.
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      %paramDescription
       \t    */
-      \t   void configure() const {
+      \t   template <typename... Types>
+      \t   constexpr Lptmr$(_instance)TimeIntervalModeInit(%params, Types... rest) : Lptmr$(_instance)TimeIntervalModeInit(rest...) {
       \t
-      \t      // Enable peripheral clock
-      \t      enableClock();
-      \t
-      \t      // Change settings with timer disabled
-      \t      %register = 0;\n
-   ]]></setTemplate>
-   <setTemplate variables="lptmr_psr_pcs" ><![CDATA[
-      \t
-      \t      // Update clock setting
-      \t      %register = %registerName;\n\n
-   ]]></setTemplate>
-   <setTemplate variables="lptmr_cmrPeriod" ><![CDATA[
-      \t      if (%registerName != 0) {
-      \t         // %description
-      \t         setPeriod(%registerName);
-      \t      }
-      \t      else {\n
-   ]]></setTemplate>
-   <setTemplate variables="lptmr_cmr_compare" ><![CDATA[
-      \t         // %description
-      \t         %register = %registerName;\n
-   ]]></setTemplate>
-   <template><![CDATA[
-      \t      }\n
-   ]]></template>
-   <setTemplate variables="lptmr_csr_tms" ><![CDATA[
-      \t
-      \t      // Enable timer
-      \t      %register = %registerName;\n
-   ]]></setTemplate>
-   <template><![CDATA[
+      \t      this->%enumParam0 = %paramExpression;
       \t   }\n\n
-   ]]></template>
-   
+   ]]></setTemplate>
    <for keys="v"
       values="
          lptmr_csr_tie;
          lptmr_csr_tfc;
          lptmr_psr_prescaler;
          lptmr_psr_pcs">
-      <setTemplate 
+      <setTemplate namespace="usbdm" 
          variables="%(v)" 
          linePadding="xxx"><![CDATA[
          \t   /**
@@ -442,7 +519,7 @@
          %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr TimeIntervalModeInit(%params, Types... rest) : TimeIntervalModeInit(rest...) {
+         \t   constexpr Lptmr$(_instance)TimeIntervalModeInit(%params, Types... rest) : Lptmr$(_instance)TimeIntervalModeInit(rest...) {
          \t   
          \t      %registerName = (%registerName & ~%mask) | %paramExpression;
          \t   }\n\n
@@ -452,7 +529,7 @@
       values="
          lptmr_cmr_compare;
          lptmr_cmrPeriod">
-      <setTemplate 
+      <setTemplate namespace="usbdm" 
          variables="%(v)" 
          linePadding="xxx"><![CDATA[
          \t   /**
@@ -462,16 +539,18 @@
          %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr TimeIntervalModeInit(%params, Types... rest) : %registerName(%paramExpression) {
+         \t   constexpr Lptmr$(_instance)TimeIntervalModeInit(%params) : Lptmr$(_instance)Init(LptmrMode_TimeInterval) {
+         \t   
+         \t      %registerName = %paramExpression;
          \t   }\n\n
       ]]></setTemplate>
    </for>
-   <template ><![CDATA[
+   <template namespace="usbdm"><![CDATA[
       \t};\n\n
    ]]></template>
 
 <!--  ========== LPTMR PulseCountingModeInit class =============================== -->
-   <template><![CDATA[
+   <template namespace="usbdm"><![CDATA[
       \t/**
       \t * Class used to do initialisation of LPTMR in Pulse Counting Mode
       \t *
@@ -481,7 +560,7 @@
       \t *
       \t * Example:
       \t * @code
-      \t * static const Lptmr$(_instance)::PulseCountingModeInit lptmrInit {
+      \t * static const Lptmr$(_instance)::Lptmr$(_instance)PulseCountingModeInit lptmrInit {
       \t *    LptmrPinSel_Cmp0,           // Timer Pin Select for Pulse Counter mode
       \t *    LptmrPulseEdge_Rising,      // Timer Pin Polarity for Pulse Counter mode
       \t *    LptmrClockSel_Oscerclk,     // Clock Source
@@ -492,79 +571,40 @@
       \t * };
       \t *
       \t * // Initialise LPTMR$(_instance) in Pulse Counting mode using values specified above
-      \t * lptmrInit.configure()
+      \t * Lptmr$(_instance).configure(lptmrInit)
       \t * @endcode
       \t */
-      \tclass PulseCountingModeInit {
+      \tclass Lptmr$(_instance)PulseCountingModeInit : public Lptmr$(_instance)Init {
       \t
       \tpublic:
       \t   /**                               
       \t    * Copy Constructor                  
       \t    */                             
-      \t   constexpr PulseCountingModeInit(const PulseCountingModeInit &other) = default;
+      \t   constexpr Lptmr$(_instance)PulseCountingModeInit(const Lptmr$(_instance)PulseCountingModeInit &other) = delete;
       \t   
       \t   /**
       \t    * Default Constructor
       \t    */
-      \t   constexpr PulseCountingModeInit() = default;
+      \t   constexpr Lptmr$(_instance)PulseCountingModeInit() : Lptmr$(_instance)Init(LptmrMode_PulseCounting) {
+      \t   }
       \t\n
    ]]></template>
-   <setTemplate 
-      variables=
-         "lptmr_cmr_compare"
+   <setTemplate namespace="usbdm" 
+      variables="irqHandlingMethod" 
+      linePadding="xxx"
     ><![CDATA[
-      \t   /// Compare Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></setTemplate >
-   <setTemplate 
-      variables=
-         "lptmr_csr_tms"
-    ><![CDATA[
-      \t   /// Control and Status Register
-      \t   uint32_t %registerName = LptmrMode_PulseCounting|LPTMR_CSR_TEN_MASK;\n\n
-   ]]></setTemplate >
-   <setTemplate 
-      variables=
-         "lptmr_psr_pcs"
-    ><![CDATA[
-      \t   /// Prescale Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></setTemplate >
-
-   <setTemplate variables="lptmr_csr_tms" ><![CDATA[
       \t   /**
-      \t    * Configure LPTMR from values specified in constructor.
-      \t    * Set LPTMR to pulse counting mode.
-      \t    * Provides selection of input pin, edge selection and reset mode.\n
-      \t    * The timer is enabled.
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      %paramDescription
       \t    */
-      \t   void configure() const {
+      \t   template <typename... Types>
+      \t   constexpr Lptmr$(_instance)PulseCountingModeInit(%params, Types... rest) : Lptmr$(_instance)PulseCountingModeInit(rest...) {
       \t
-      \t      // Enable peripheral clock
-      \t      enableClock();
-      \t
-      \t      // Change settings with timer disabled
-      \t      %register = 0;\n
-   ]]></setTemplate>
-   <setTemplate variables="lptmr_cmr_compare" ><![CDATA[
-      \t
-      \t      // Set %description
-      \t      %register = %registerName;\n
-   ]]></setTemplate>
-   <setTemplate variables="lptmr_psr_pcs" ><![CDATA[
-      \t
-      \t      // Update clock setting
-      \t      %register = %registerName;\n
-   ]]></setTemplate>
-   <setTemplate variables="lptmr_csr_tms" ><![CDATA[
-      \t
-      \t      // Enable timer
-      \t      %register = %registerName;\n
-   ]]></setTemplate>
-   <template><![CDATA[
+      \t      this->%enumParam0 = %enumParam0;
       \t   }\n\n
-   ]]></template>
-   
+   ]]></setTemplate>
    <for keys="v"
       values="
          lptmr_csr_tie;
@@ -573,7 +613,7 @@
          lptmr_csr_tfc;
          lptmr_psr_pcs;
          lptmr_psr_glitchFilter;">
-      <setTemplate variables="%(v)" 
+      <setTemplate namespace="usbdm" variables="%(v)" 
          linePadding="xxx" ><![CDATA[
          \t   /**
          \t    * Constructor for %description
@@ -582,7 +622,7 @@
          %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr PulseCountingModeInit(%params, Types... rest) : PulseCountingModeInit(rest...) {
+         \t   constexpr Lptmr$(_instance)PulseCountingModeInit(%params, Types... rest) : Lptmr$(_instance)PulseCountingModeInit(rest...) {
          \t   
          \t      %registerName = (%registerName & ~%mask) | %paramExpression;
          \t   }\n\n
@@ -591,7 +631,7 @@
    <for keys="v"
       values="
          lptmr_cmr_compare">
-      <setTemplate 
+      <setTemplate namespace="usbdm" 
          variables="%(v)" 
          linePadding="xxx"><![CDATA[
          \t   /**
@@ -601,12 +641,14 @@
          %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr PulseCountingModeInit(%params, Types... rest) : %registerName(%paramExpression) {
+         \t   constexpr Lptmr$(_instance)PulseCountingModeInit(%params) : Lptmr$(_instance)Init(LptmrMode_PulseCounting) {
+         \t   
+         \t      %registerName = %paramExpression;
          \t   }\n\n
       ]]></setTemplate>
    </for>
 
-   <template ><![CDATA[
+   <template namespace="usbdm"><![CDATA[
       \t};\n\n
    ]]></template>
 
@@ -644,10 +686,10 @@
    ]]></template>
    <template key="/LPTMR/declarations" namespace="all" ><![CDATA[
       \t   /**
-      \t    * Default value for Lptmr::PulseCountingModeInit
+      \t    * Default value for Lptmr::Lptmr$(_instance)PulseCountingModeInit
       \t    * This value is created from Configure.usbdmProject settings (Peripheral Parameters->LPTMR)
       \t    */
-      \t   static constexpr PulseCountingModeInit DefaultPulseCountingModeInitValue {\n
+      \t   static constexpr Lptmr$(_instance)PulseCountingModeInit DefaultPulseCountingModeInitValue {\n
    ]]></template>
    <for keys="v" values="
             lptmr_csr_tps;
@@ -675,7 +717,7 @@
       \t    * Default value for Lptmr::TimeIntervalModeInit
       \t    * This value is created from Configure.usbdmProject settings (Peripheral Parameters->LPTMR)
       \t    */
-      \t   static constexpr TimeIntervalModeInit DefaultTimeIntervalModeInitValue {\n
+      \t   static constexpr Lptmr$(_instance)TimeIntervalModeInit DefaultTimeIntervalModeInitValue {\n
    ]]></template>
    <for keys="v" values="
             lptmr_csr_tfc;
@@ -703,32 +745,22 @@
       \t    * Sets LPTMR to default configuration
       \t    */
       \t   static void defaultConfigure() {
-      \t      enable();
       \t   
       \t      if constexpr ($(lptmr_csr_tms)) {
-      \t         DefaultPulseCountingModeInitValue.configure();
+      \t         configure(DefaultPulseCountingModeInitValue);
       \t      }
       \t      else {
-      \t         DefaultTimeIntervalModeInitValue.configure();
+      \t         configure(DefaultTimeIntervalModeInitValue);
       \t      }
       \t   
-      \t      if constexpr ($(lptmr_csr_tie)) {
-      \t         // Set priority level
-      \t         NVIC_SetPriority(irqNums[0], irqLevel);
-      \t   
-      \t         // Enable timer interrupts
-      \t         NVIC_EnableIRQ(irqNums[0]);
-      \t      }
+      \t      // Set priority level
+      \t      NVIC_SetPriority(irqNums[0], irqLevel);
       \t   }
       \t};\n\n
    ]]></template>
 
  <!-- ========== Common =============================== -->
       
-   <stringOption key="irq_pattern"        constant="true" value="^.*%b%i.*$" hidden="true" />
-   <stringOption key="irq_classHandler"   constant="true" value="%c%i::irqHandler" hidden="true" />
-   <xi:include href="_irqOptionSubstituted.xml"/>
-
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.LptmrValidate">
    </validate>

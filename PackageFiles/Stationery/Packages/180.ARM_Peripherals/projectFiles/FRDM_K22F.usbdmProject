@@ -156,11 +156,11 @@
    <item key="/HARDWARE/Analogue1"                         value="Analogue_A1" />
    <item key="/HARDWARE/Digital0"                          value="Digital_D0" />
    <item key="/HARDWARE/Digital1"                          value="Digital_D1" />
-   <item key="/HARDWARE/Ftm1"                              value="GreenLED_PWM" />
-   <item key="/HARDWARE/Ftm2"                              value="RedLED_PWM" />
-   <item key="/HARDWARE/Led1"                              value="RedLed" />
-   <item key="/HARDWARE/Led2"                              value="GreenLed" />
-   <item key="/HARDWARE/Led3"                              value="BlueLed" />
+   <item key="/HARDWARE/Ftm1"                              value="RGB_Green_Pwm" />
+   <item key="/HARDWARE/Ftm2"                              value="RGB_Red_Pwm" />
+   <item key="/HARDWARE/Led1"                              value="RGB_Red" />
+   <item key="/HARDWARE/Led2"                              value="RGB_Green" />
+   <item key="/HARDWARE/Led3"                              value="RGB_Blue" />
    <item key="/HARDWARE/Switch1"                           value="Switch3" />
    <item key="/LLWU/llwu_filt1_filtsel"                    value="0" />
    <item key="/LLWU/llwu_filt2_filtsel"                    value="0" />

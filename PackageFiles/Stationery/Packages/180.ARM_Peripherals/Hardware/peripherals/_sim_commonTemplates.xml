@@ -798,13 +798,17 @@
       \t};\n\n
    ]]></template>
 
+   <template key="DefaultInitValue" namespace="all" ><![CDATA[
+      \t/**
+      \t * Default value for Sim::ClockInit
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr ClockInit DefaultSopt2Values[] = {\n
+   ]]></template>
    <for keys="n" dim="/SIM/numberOfClockSettings" >
       <template key="DefaultInitValue" namespace="all" ><![CDATA[
-         \t/**
-         \t * Default value for Sim::ClockInit
-         \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->SIM)
-         \t */
-         \tstatic constexpr ClockInit DefaultSopt2Value%(n) {\n
+         #if $(/MCG/enableClockConfiguration[%(n)])
+         \t { // $(/MCG/ClockConfig[%(n)]) ($(/MCG/mcgClockMode[%(n)].enum[]))\n
       ]]></template>
       <setTemplate key="DefaultInitValue" namespace="all"
          variables="
@@ -847,9 +851,13 @@
          </for>
       </for>
       <template key="DefaultInitValue" namespace="all" ><![CDATA[
-         \t};\n\n
+         \t},
+         #endif\n
       ]]></template>
    </for>
+   <template key="DefaultInitValue" namespace="all" ><![CDATA[
+      };\n\n
+   ]]></template>
 
 <!-- ========== SOPT4 =============================== -->
    <for keys="ftm" values="0;1;2;3">

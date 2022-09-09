@@ -7,20 +7,21 @@
    <!--
    Patterns for pattern and classHandler 
      -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
-     -  %b replaced with peripheral base name e.g. FTM1 => = FTM
-     -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
+     -  %b replaced with peripheral base name e.g. FTM1 => FTM
+     -  %c replaced with peripheral C++ base class name e.g. FTM1 => Ftm
      -  _IRQHandler is appended to the pattern (only)
    Multiple patterns and classsHandlers may be used separated by ';'
    -->
    <irqOption key="irqHandlingMethod"  
+      typeName="CallbackFunction"
       description="Peripheral interrupt handler"
-      toolTip="This selection allows the interrupt handler for this peripheral to be installed using several different methods"
+      toolTip="Interrupt handler for this peripheral"
       pattern="$(irq_pattern)" 
       classHandler="$(irq_classHandler)" />
       
    <choiceOption key="irqLevel"
-      description="Default IRQ level for this peripheral"
-      toolTip="Sets the default priority level used to configure the NVIC">
+      description="IRQ level for this peripheral"
+      toolTip="Priority level used to configure the NVIC">
       <choice name="VeryHigh"      value="NvicPriority_VeryHigh" />
       <choice name="High"          value="NvicPriority_High" />
       <choice name="MidHigh"       value="NvicPriority_MidHigh" />
@@ -30,7 +31,7 @@
       <choice name="VeryLow"       value="NvicPriority_VeryLow" />
    </choiceOption>
 
-   <template><![CDATA[
+   <setTemplate variables="irqHandlingMethod" ><![CDATA[
       \t/* Template_irqOptionSubstituted.xml */
       
       \t//! IRQ numbers for hardware
@@ -44,9 +45,9 @@
 
        \t//! Default IRQ level
        \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel):NvicPriority_NotInstalled);\n\n
-   ]]></template>
+   ]]></setTemplate>
       
-   <constant key = "enable_interrupts_code"  derived = "true" value = "enableNvicInterrupts();"  />
-   <constant key = "disable_interrupts_code" derived = "true" value = "disableNvicInterrupts();"  />
+   <constant key="enable_interrupts_code"  value="enableNvicInterrupts();"  />
+   <constant key="disable_interrupts_code" value="disableNvicInterrupts();"  />
 
 </fragment>

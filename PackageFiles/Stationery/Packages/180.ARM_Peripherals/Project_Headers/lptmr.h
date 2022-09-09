@@ -29,20 +29,15 @@ namespace USBDM {
  * @{
  */
 
-/**
- * Type definition for LPTMR interrupt call back
- */
-typedef void (*LptmrCallbackFunction)(void);
-
 #ifdef PCC_PCC_LPTMR0_CGC_MASK
 /**
  * Select the LPTMR clock source which determines count speed or glitch filtering
  */
 enum LptmrClockSel {
-   LptmrClockSel_SircDiv2Clk  = LPTMR_PSR_PCS(0), //!< Slow Internal Reference Div 2 Clock (SIRCDIV2_CLK)
-   LptmrClockSel_Lpo1Kclk     = LPTMR_PSR_PCS(1), //!< Low power oscillator 1kHz (LPO1K_CLK)
-   LptmrClockSel_Rtcclk       = LPTMR_PSR_PCS(2), //!< 32kHz Clock Source (RTC_CLK)
-   LptmrClockSel_PccLptmrClk  = LPTMR_PSR_PCS(3), //!< Clock from PCC_LPTMRx multiplexor (PCC)
+   LptmrClockSel_SircDiv2Clk  = LPTMR_PSR_PCS(0), ///< Slow Internal Reference Div 2 Clock (SIRCDIV2_CLK)
+   LptmrClockSel_Lpo1Kclk     = LPTMR_PSR_PCS(1), ///< Low power oscillator 1kHz (LPO1K_CLK)
+   LptmrClockSel_Rtcclk       = LPTMR_PSR_PCS(2), ///< 32kHz Clock Source (RTC_CLK)
+   LptmrClockSel_PccLptmrClk  = LPTMR_PSR_PCS(3), ///< Clock from PCC_LPTMRx multiplexor (PCC)
    LptmrClockSel_Default      = LptmrClockSel_Lpo1Kclk,
 };
 #endif
@@ -58,7 +53,7 @@ protected:
    static constexpr int MINIMUM_RESOLUTION = 100;
 
    /** Callback function for ISR */
-   static LptmrCallbackFunction sCallback;
+   static typename Info::CallbackFunction sCallback;
 
    /** Hardware instance */
    static constexpr HardwarePtr<LPTMR_Type> lptmr = Info::baseAddress;
@@ -126,10 +121,10 @@ public:
       lptmr->CSR = LptmrMode_TimeInterval|lptmrResetOn|lptmrInterrupt|LPTMR_CSR_TEN_MASK|LPTMR_CSR_TCF_MASK;
    }
 
+$(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
    /**
     * Restarts the counter\n
     * Mostly for debug.
-    *
     */
    static void restart() {
       uint32_t csr = lptmr->CSR;
@@ -177,7 +172,7 @@ public:
     *    int y;
     *
     *    // Member function used as callback
-    *    // This function must match LptmrCallbackFunction
+    *    // This function must match CallbackFunction
     *    void callback() {
     *       ...;
     *    }
@@ -193,8 +188,8 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(), T &object>
-   static LptmrCallbackFunction wrapCallback() {
-      static LptmrCallbackFunction fn = []() {
+   static typename Info::CallbackFunction wrapCallback() {
+      static typename Info::CallbackFunction fn = []() {
          (object.*callback)();
       };
       return fn;
@@ -216,7 +211,7 @@ public:
     *    int y;
     *
     *    // Member function used as callback
-    *    // This function must match LptmrCallbackFunction
+    *    // This function must match CallbackFunction
     *    void callback() {
     *       ...;
     *    }
@@ -232,9 +227,9 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)()>
-   static LptmrCallbackFunction wrapCallback(T &object) {
+   static typename Info::CallbackFunction wrapCallback(T &object) {
       static T &obj = object;
-      static LptmrCallbackFunction fn = []() {
+      static typename Info::CallbackFunction fn = []() {
          (obj.*callback)();
       };
       return fn;
@@ -246,7 +241,7 @@ public:
     *   @param[in]  callback Callback function to be executed on interrupt\n
     *                        Use nullptr to remove callback.
     */
-   static void setCallback(LptmrCallbackFunction callback) {
+   static void setCallback(typename Info::CallbackFunction callback) {
       static_assert(Info::irqLevel>=0, "LPTMR not configure for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
@@ -432,7 +427,7 @@ public:
     * @return E_ILLEGAL_PARAM => Failed to find suitable values for PBYP & PRESCALE
     */
    static ErrorCode setPeriod(Seconds period) {
-   
+
       float    inputClock = Info::getInputClockFrequency();
       int      prescaleFactor=1;
       uint32_t prescalerValue=0;
@@ -473,7 +468,7 @@ public:
     * @return E_ILLEGAL_PARAM => Failed to find suitable values for PBYP & PRESCALE
     */
    static ErrorCode setFilterInterval(Seconds interval) {
-   
+
       long     inputClock = Info::getInputClockFrequency();
       int      prescaleFactor=1;
       uint32_t prescalerValue=0;
@@ -507,7 +502,7 @@ public:
 
 };
 
-template<class Info> LptmrCallbackFunction LptmrBase_T<Info>::sCallback = LptmrBase_T<Info>::unhandledCallback;
+template<class Info> typename Info::CallbackFunction LptmrBase_T<Info>::sCallback = LptmrBase_T<Info>::unhandledCallback;
 
 $(/LPTMR/declarations: // No declarations found)
 /**

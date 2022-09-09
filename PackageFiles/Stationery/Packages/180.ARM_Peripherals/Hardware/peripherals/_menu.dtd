@@ -291,6 +291,8 @@
    <!ATTLIST irqOption toolTip       CDATA        #IMPLIED>
    <!ATTLIST irqOption derived       (false|true) #IMPLIED>
    <!ATTLIST irqOption derivedFrom   CDATA        #IMPLIED>
+   <!ATTLIST irqOption typeName      CDATA        #IMPLIED> <!-- e.g. CallbackFunction -->
+   <!ATTLIST irqOption valueFormat   CDATA        #IMPLIED> <!-- e.g. void (*%s)(void) -->
 
 <!-- 
    info  Appear within peripheral info class e.g. Osc0Info

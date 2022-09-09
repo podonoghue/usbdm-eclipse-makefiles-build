@@ -36,70 +36,66 @@ namespace USBDM {
  * Controls basic operation of PWM/Input capture/Output compare
  */
 enum FtmChMode {
-   FtmChMode_Disabled                              = FTM_CnSC_MS(0)|FTM_CnSC_ELS(0), //!< Channel disabled
-   FtmChMode_InputCaptureRisingEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), //!< Capture rising edge
-   FtmChMode_InputCaptureFallingEdge               = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), //!< Capture falling edge
-   FtmChMode_InputCaptureEitherEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(3), //!< Capture both rising and falling edges
-   FtmChMode_OutputCompare                         = FTM_CnSC_MS(1),                 //!< Output compare operation without pin action
-   FtmChMode_OutputCompareToggle                   = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1), //!< Toggle pin on output compare
-   FtmChMode_OutputCompareClear                    = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2), //!< Clear pin on output compare
-   FtmChMode_OutputCompareSet                      = FTM_CnSC_MS(1)|FTM_CnSC_ELS(3), //!< Set pin on output compare
-   FtmChMode_PwmHighTruePulses                     = FTM_CnSC_MS(2)|FTM_CnSC_ELS(2), //!< PWM with high-true pulses
-   FtmChMode_PwmLowTruePulses                      = FTM_CnSC_MS(2)|FTM_CnSC_ELS(1), //!< PWM with low-true pulses
-   FtmChMode_DualEdgeCaptureOneShotRisingEdge      = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), //!< Dual edge input capture one shot - CHn configuration
-   FtmChMode_DualEdgeCaptureContinuousRisingEdge   = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1), //!< Dual edge input capture continuous - CHn configuration
-   FtmChMode_DualEdgeCaptureOneShotFallingEdge     = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), //!< Dual edge input capture one shot - CHn configuration
-   FtmChMode_DualEdgeCaptureContinuousFallingEdge  = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2), //!< Dual edge input capture continuous - CHn configuration
-   FtmChMode_CombinePositivePulse                  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), //!< Combine mode - CHn configuration
-   FtmChMode_CombineNegativePulse                  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), //!< Combine mode - CHn configuration
+   FtmChMode_Disabled                              = FTM_CnSC_MS(0)|FTM_CnSC_ELS(0), ///< Channel disabled
+   FtmChMode_InputCaptureRisingEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), ///< Capture rising edge
+   FtmChMode_InputCaptureFallingEdge               = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), ///< Capture falling edge
+   FtmChMode_InputCaptureEitherEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(3), ///< Capture both rising and falling edges
+   FtmChMode_OutputCompare                         = FTM_CnSC_MS(1),                 ///< Output compare operation without pin action
+   FtmChMode_OutputCompareToggle                   = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1), ///< Toggle pin on output compare
+   FtmChMode_OutputCompareClear                    = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2), ///< Clear pin on output compare
+   FtmChMode_OutputCompareSet                      = FTM_CnSC_MS(1)|FTM_CnSC_ELS(3), ///< Set pin on output compare
+   FtmChMode_PwmHighTruePulses                     = FTM_CnSC_MS(2)|FTM_CnSC_ELS(2), ///< PWM with high-true pulses
+   FtmChMode_PwmLowTruePulses                      = FTM_CnSC_MS(2)|FTM_CnSC_ELS(1), ///< PWM with low-true pulses
+   FtmChMode_DualEdgeCaptureOneShotRisingEdge      = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), ///< Dual edge input capture one shot - CHn configuration
+   FtmChMode_DualEdgeCaptureContinuousRisingEdge   = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1), ///< Dual edge input capture continuous - CHn configuration
+   FtmChMode_DualEdgeCaptureOneShotFallingEdge     = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), ///< Dual edge input capture one shot - CHn configuration
+   FtmChMode_DualEdgeCaptureContinuousFallingEdge  = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2), ///< Dual edge input capture continuous - CHn configuration
+   FtmChMode_CombinePositivePulse                  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), ///< Combine mode - CHn configuration
+   FtmChMode_CombineNegativePulse                  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), ///< Combine mode - CHn configuration
 };
 
 /**
  * Enables External trigger on a channel comparison or initialisation event
  */
 enum FtmExternalTrigger {
-   FtmExternalTrigger_ch0   = FTM_EXTTRIG_CH0TRIG_MASK,    //!< External trigger on channel 0 event
-   FtmExternalTrigger_ch1   = FTM_EXTTRIG_CH1TRIG_MASK,    //!< External trigger on channel 1 event
-   FtmExternalTrigger_ch2   = FTM_EXTTRIG_CH2TRIG_MASK,    //!< External trigger on channel 2 event
-   FtmExternalTrigger_ch3   = FTM_EXTTRIG_CH3TRIG_MASK,    //!< External trigger on channel 3 event
-   FtmExternalTrigger_ch4   = FTM_EXTTRIG_CH4TRIG_MASK,    //!< External trigger on channel 4 event
-   FtmExternalTrigger_ch5   = FTM_EXTTRIG_CH5TRIG_MASK,    //!< External trigger on channel 5 event
-   FtmExternalTrigger_init  = FTM_EXTTRIG_INITTRIGEN_MASK, //!< External trigger on initialisation
-   FtmExternalTrigger_all   = 0x7F,                        //!< All triggers
+   FtmExternalTrigger_ch0   = FTM_EXTTRIG_CH0TRIG_MASK,    ///< External trigger on channel 0 event
+   FtmExternalTrigger_ch1   = FTM_EXTTRIG_CH1TRIG_MASK,    ///< External trigger on channel 1 event
+   FtmExternalTrigger_ch2   = FTM_EXTTRIG_CH2TRIG_MASK,    ///< External trigger on channel 2 event
+   FtmExternalTrigger_ch3   = FTM_EXTTRIG_CH3TRIG_MASK,    ///< External trigger on channel 3 event
+   FtmExternalTrigger_ch4   = FTM_EXTTRIG_CH4TRIG_MASK,    ///< External trigger on channel 4 event
+   FtmExternalTrigger_ch5   = FTM_EXTTRIG_CH5TRIG_MASK,    ///< External trigger on channel 5 event
+   FtmExternalTrigger_init  = FTM_EXTTRIG_INITTRIGEN_MASK, ///< External trigger on initialisation
+   FtmExternalTrigger_all   = 0x7F,                        ///< All triggers
 };
 
 /*
  * Enabled Timer interrupt or DMA
  */
 enum FtmChannelAction {
-   FtmChannelAction_None   = FTM_CnSC_CHIE(0)|FTM_CnSC_DMA(0), //!< No action on event
-   FtmChannelAction_Irq    = FTM_CnSC_CHIE(1)|FTM_CnSC_DMA(0), //!< Interrupt on event
-   FtmChannelAction_Dma    = FTM_CnSC_CHIE(1)|FTM_CnSC_DMA(1), //!< DMA on event
+   FtmChannelAction_None   = FTM_CnSC_CHIE(0)|FTM_CnSC_DMA(0), ///< No action on event
+   FtmChannelAction_Irq    = FTM_CnSC_CHIE(1)|FTM_CnSC_DMA(0), ///< Interrupt on event
+   FtmChannelAction_Dma    = FTM_CnSC_CHIE(1)|FTM_CnSC_DMA(1), ///< DMA on event
 };
 
 /**
  * Selects pairs of channels for some operations
  */
 enum FtmChannelPair {
-   FtmChannelPair_0_1 = (1<<0), //!< Channel Pair select for channels 0 and 1
-   FtmChannelPair_2_3 = (1<<1), //!< Channel Pair select for channels 2 and 3
-   FtmChannelPair_4_5 = (1<<2), //!< Channel Pair select for channels 4 and 5
-   FtmChannelPair_6_7 = (1<<3), //!< Channel Pair select for channels 6 and 6
+   FtmChannelPair_0_1 = (1<<0), ///< Channel Pair select for channels 0 and 1
+   FtmChannelPair_2_3 = (1<<1), ///< Channel Pair select for channels 2 and 3
+   FtmChannelPair_4_5 = (1<<2), ///< Channel Pair select for channels 4 and 5
+   FtmChannelPair_6_7 = (1<<3), ///< Channel Pair select for channels 6 and 6
 };
 
 /**
  * Controls value forced to pin by forceChannelOutputs()
  */
 enum FtmChannelForce {    // Enable|Value
-   FtmChannelForce_Release = 0x00|(0x00<<8), //!< Release channel output
-   FtmChannelForce_Low     = 0xFF|(0x00<<8), //!< Force channel output low
-   FtmChannelForce_High    = 0xFF|(0xFF<<8), //!< Force channel output high
+   FtmChannelForce_Release = 0x00|(0x00<<8), ///< Release channel output
+   FtmChannelForce_Low     = 0xFF|(0x00<<8), ///< Force channel output low
+   FtmChannelForce_High    = 0xFF|(0xFF<<8), ///< Force channel output high
 };
 
-/**
- * Type definition for timer overflow interrupt call back
- */
-typedef void (*FtmCallbackFunction)();
 /**
  * Type definition for channel interrupt call back
  *
@@ -1089,7 +1085,7 @@ public:
  * @tparam Info  Class describing FTM hardware instance
  */
 template<class Info>
-class FtmBase_T : public FtmBase {
+class FtmBase_T : public FtmBase, public Info  {
 
 private:
    /**
@@ -1103,9 +1099,6 @@ public:
    // Empty constructor
    constexpr FtmBase_T() : FtmBase(Info::baseAddress) {}
    virtual ~FtmBase_T() = default;
-
-   /** Maximum counter value in ticks */
-   static constexpr Ticks MaximumPeriodInTicks = 65535_ticks;
 
    /** Hardware instance pointer */
    static constexpr HardwarePtr<FTM_Type> ftm = Info::baseAddress;
@@ -1126,11 +1119,8 @@ public:
    static constexpr uint32_t ftmCnV(int index) { return ftmBase() + offsetof(FTM_Type, CONTROLS) + index*sizeof(FTM_Type::CONTROLS[0])+sizeof(uint32_t); }
 
 private:
-   /** Callback function for TOI ISR */
-   static FtmCallbackFunction sToiCallback;
-
-   /** Callback function for Channel Fault */
-   static FtmCallbackFunction sFaultCallback;
+   /** Callback function for Channel Fault and timer overflow */
+   static typename Info::CallbackFunction sCallback;
 
    /** Callback function for Channel ISR */
    static FtmChannelCallbackFunction sChannelCallbacks[Info::NumChannelVectors];
@@ -1145,7 +1135,7 @@ protected:
     * @return Timer frequency in Hz
     */
    virtual float getInputClockFrequencyVirtual() const override {
-      return Info::getInputClockFrequency();
+      return Info::getInputClockFrequency((FtmClockSource)ftm->SC);
    }
 
 public:
@@ -1166,34 +1156,34 @@ public:
    }
 
    /**
-    * Fault IRQ handler
+    * Fault IRQ handler (if individually available)
     */
    static void faultIrqHandler() {
       ftm->FMS = ftm->FMS & ~FTM_FMS_FAULTF_MASK;
-      sFaultCallback();
+      sCallback();
    }
 
    /**
-    * Overflow IRQ handler
+    * Overflow IRQ handler (if individually available)
     */
    static void overflowIrqHandler() {
       // Clear TOI flag
       ftm->SC = ftm->SC & ~FTM_SC_TOF_MASK;
-      sToiCallback();
+      sCallback();
    }
 
    /**
-    * IRQ handler
+    * Common IRQ handler
     */
    static void irqHandler() {
       if ((ftm->MODE&FTM_MODE_FAULTIE_MASK) && (ftm->FMS&FTM_FMS_FAULTF_MASK)) {
          ftm->FMS = ftm->FMS & ~FTM_FMS_FAULTF_MASK;
-         sFaultCallback();
+         sCallback();
       }
       if ((ftm->SC&(FTM_SC_TOF_MASK|FTM_SC_TOIE_MASK)) == (FTM_SC_TOF_MASK|FTM_SC_TOIE_MASK)) {
          // Clear TOI flag
          ftm->SC = ftm->SC & ~FTM_SC_TOF_MASK;
-         sToiCallback();
+         sCallback();
       }
       // Get status for channels
       uint32_t status = ftm->STATUS;
@@ -1349,60 +1339,23 @@ public:
    }
 
    /**
-    * Set fault callback function
-    *
-    * @param[in] theCallback Callback function to execute on fault interrupt.\n
-    *                        Use nullptr to remove handler.
-    */
-   static void setFaultCallback(FtmCallbackFunction theCallback) {
-      if (theCallback == nullptr) {
-         sFaultCallback = unhandledCallback;
-         return;
-      }
-      sFaultCallback = theCallback;
-      return;
-   }
-
-   /**
-    * Set TOI Callback function\n
-    * Note that one callback is shared by all channels of the timer
+    * Set common fault and Timer Overflow Callback function\n
     *
     * @param[in] theCallback Callback function to execute when timer overflows. \n
     *                        nullptr to indicate none
     */
-   static void setTimerOverflowCallback(FtmCallbackFunction theCallback) {
-      static_assert(Info::irqLevel>=0, "FTM not configured for interrupts - Modify Configure.usbdmF");
+   static void setCallback(typename Info::CallbackFunction theCallback) {
+      static_assert(Info::irqHandlerInstalled, "FTM not configured for interrupts - Modify Configure.usbdm");
       if (theCallback == nullptr) {
-         sToiCallback = unhandledCallback;
+         sCallback = unhandledCallback;
          return;
       }
-      sToiCallback = theCallback;
+      sCallback = theCallback;
    }
 
 public:
- $(/FTM/classInfo: // No class Info found)
-
-   /**
-    * Configure with settings from Configure.usbdmProject.
-    * Includes configuring all pins
-    */
-   static void defaultConfigure() {
-      enable();
-
-      // Disable so immediate effect
-      ftm->SC = 0;
-      (void)ftm->SC;
-      // Common registers
-      ftm->CNTIN   = 0;
-      ftm->CNT     = 0;
-      ftm->MOD     = Info::modulo;
-      ftm->SC      = Info::sc;
-      ftm->EXTTRIG = Info::exttrig;
-      ftm->CONF    = FTM_CONF_BDMMODE(1);
-      ftm->COMBINE = FTM_COMBINE_FAULTEN0_MASK|FTM_COMBINE_FAULTEN1_MASK|FTM_COMBINE_FAULTEN2_MASK|FTM_COMBINE_FAULTEN3_MASK;
-
-      enableNvicInterrupts(Info::irqLevel);
-   }
+$(/FTM/classInfo: // No class Info found)
+$(/FTM/InitMethod:// /FTM/InitMethod not found)
 
    /**
     * Enables clock to peripheral and configures all pins.
@@ -1443,7 +1396,6 @@ $(/FTM/static_functions:  // /FTM/static_functions not found)
     * @return E_TOO_LARGE      Requested period is too large
     *
     * @note Prescaler is not affected.
-    * @note Assumes prescale has been set to an appropriate value.
     * @note Only rudimentary range checking.
     * @note This function will affect all channels of the timer.
     * @note This value is write-buffered and updated by MOD synchronisation
@@ -1453,28 +1405,22 @@ $(/FTM/static_functions:  // /FTM/static_functions not found)
    static ErrorCode setPeriod(Ticks period, bool suspend=false) {
 
       // Check if CPWMS is set (affects period)
-      bool centreAlign = (ftm->SC&FTM_SC_CPWMS_MASK);
+      bool     centreAlign = (ftm->SC&FTM_SC_CPWMS_MASK);
+      uint32_t modValue;
 
       if (centreAlign) {
-         // Centre-aligned period is 2*MOD value but MOD is
-         // limited to 0x7FFF for sensible PWM operation
-
+         // Centre-aligned period is 2*MOD value
          // Halve with rounding
-         period = (period+1_ticks)/2U;
-         if ((unsigned)period > 0x7FFFUL) {
-            // Attempt to set too long a period
-            usbdm_assert(false, "Interval is too long");
-            return setErrorCode(E_TOO_LARGE);
-         }
+         modValue = (period+1_ticks)/2U;
       }
       else {
          // Left-aligned period is MOD+1 value
-         period = period-1_ticks;
-         if ((unsigned)period > 0xFFFF) {
-            // Attempt to set too long a period
-            usbdm_assert(false, "Interval is too long");
-            return setErrorCode(E_TOO_LARGE);
-         }
+         modValue = period-1_ticks;
+      }
+      if (modValue > FTM_MOD_MOD_MASK) {
+         // Attempt to set too long a period
+         usbdm_assert(false, "Interval is too long");
+         return setErrorCode(E_TOO_LARGE);
       }
       uint32_t sc;
       if (suspend) {
@@ -1484,8 +1430,11 @@ $(/FTM/static_functions:  // /FTM/static_functions not found)
       // Start counter from zero
       ftm->CNTIN = 0;
 
+      // Restart counter
+      ftm->CNT   = 0;
+
       // Change modulo
-      ftm->MOD = (unsigned)period;
+      ftm->MOD = (unsigned)modValue;
 
       if (suspend) {
          // Restart timer
@@ -1498,40 +1447,46 @@ $(/FTM/static_functions:  // /FTM/static_functions not found)
    /**
     * Calculate FTM timing parameters to achieve a given period
     *
-    * @param period           Period in seconds
-    * @param pPrescalerValue  Calculated prescaler value (for SC register)
-    * @param pPeriodInTicks   Calculated period in ticks.
+    * @param[in]    period  Period in seconds
+    * @param[inout] sc      Proposed FTM.SC value (must include CLKS, CPWMS fields)
+    *                       PS field is updated
+    * @param[out]   mod     Calculated FTM.MOD values
     *
-    * @return E_NO_ERROR   Success.
-    * @return E_TOO_SMALL  Requested period is too small for resolution (required resolution check to be enabled).
-    * @return E_TOO_LARGE  Requested period is too large.
+    * @return E_NO_ERROR   Success
+    * @return E_TOO_SMALL  Requested period is too small for resolution (required resolution check to be enabled)
+    * @return E_TOO_LARGE  Requested period is too large
     */
-   static ErrorCode calculateTimingParameters(Seconds period, unsigned &pPrescalerValue, Ticks &pPeriodInTicks) {
-      float inputClock = Info::getInputClockFrequency();
+   static ErrorCode calculateTimingParameters(Seconds period, uint8_t &sc, uint16_t &mod) {
+
+      float inputClock = Info::getInputClockFrequency((FtmClockSource)(sc&FTM_SC_CLKS_MASK));
       unsigned prescaleFactor=1;
       unsigned prescalerValue=0;
 
-      // Maximum period value in ticks
-      uint32_t maxPeriodInTicks = (unsigned)FtmBase_T::MaximumPeriodInTicks;
-
       // Check if CPWMS is set (affects period calculation)
-      if (ftm->SC&FTM_SC_CPWMS_MASK) {
-         // Centre-aligned period is ~double the MOD value but MOD is
-         // limited to 0x7FFF for sensible PWM operation so
-         // period in ticks is limited to 2*0x7FFF
-         maxPeriodInTicks = 65534;
-      }
+      bool centreAligned = (sc&FTM_SC_CPWMS_MASK);
+
+      constexpr uint32_t maxModValue = FTM_MOD_MOD_MASK;
+
       while (prescalerValue<=7) {
-         float    clock = inputClock/prescaleFactor;
-         unsigned periodInTicks   = round((float)period*clock);
-         if (periodInTicks < Info::minimumResolution) {
+         float clock    = inputClock/prescaleFactor;
+         float modValueF = period*clock;
+         if (centreAligned) {
+            // PeriodInTicks = 2*MOD
+            modValueF = modValueF/2;
+         }
+         else {
+            // PeriodInTicks = MOD+1
+            modValueF = modValueF - 1;
+         }
+         unsigned modValue = round(modValueF);
+         if (modValue < Info::minimumResolution) {
             usbdm_assert(false, "Interval is too short");
             // Too short a period for minimum resolution
             return setErrorCode(E_TOO_SMALL);
          }
-         if (periodInTicks <= maxPeriodInTicks) {
-            pPrescalerValue = prescalerValue;
-            pPeriodInTicks  = periodInTicks;
+         if (modValue <= maxModValue) {
+            sc   = (sc&~FTM_SC_PS_MASK)|FTM_SC_PS(prescalerValue);
+            mod  = modValue;
             return E_NO_ERROR;
          }
          prescalerValue++;
@@ -1560,24 +1515,27 @@ $(/FTM/static_functions:  // /FTM/static_functions not found)
     */
    static ErrorCode setPeriod(Seconds period) {
 
-      unsigned prescalerValue = 0;
-      Ticks    periodInTicks  = 0U;
+      uint16_t       modValue;
 
-      ErrorCode rc = calculateTimingParameters(period, prescalerValue, periodInTicks);
+      uint8_t sc = ftm->SC;
+
+      ErrorCode rc = calculateTimingParameters(period, sc, modValue);
 
       if (rc != E_NO_ERROR) {
          return rc;
       }
       // Disable timer to change prescaler and period
-      uint32_t sc = ftm->SC;
       ftm->SC = 0;
-      (void)ftm->SC;
-      setPeriod(periodInTicks, false);
 
-      // Restart counter
+      // Configure for modulo operation
+      ftm->MOD   = modValue;
+      ftm->CNTIN = 0_ticks;
+
+      // Clear counter
       ftm->CNT   = 0;
 
-      ftm->SC  = (sc&~FTM_SC_PS_MASK)|FTM_SC_PS(prescalerValue);
+      // Set prescale and enable timer
+      ftm->SC  = sc;
 
       return E_NO_ERROR;
    }
@@ -1601,28 +1559,28 @@ $(/FTM/static_functions:  // /FTM/static_functions not found)
     */
    static ErrorCode setMaximumInterval(Seconds interval) {
 
-      unsigned prescalerValue = 0;
-      Ticks    periodInTicks;
+      uint16_t       modValue;
 
-      ErrorCode rc = calculateTimingParameters(interval, prescalerValue, periodInTicks);
+      uint8_t sc = ftm->SC;
 
+      ErrorCode rc = calculateTimingParameters(interval, sc, modValue);
       if (rc != E_NO_ERROR) {
          return rc;
       }
+
       // Disable timer to change prescaler and period
-      uint32_t sc = ftm->SC;
       ftm->SC = 0;
-      (void)ftm->SC;
 
       // Configure for free-running mode
       // This is the usual value for IC or OC set-up
       ftm->MOD   = 0_ticks;
       ftm->CNTIN = 0_ticks;
 
-      // Restart counter
+      // Clear counter
       ftm->CNT   = 0;
 
-      ftm->SC  = (sc&~FTM_SC_PS_MASK)|FTM_SC_PS(prescalerValue);
+      // Set prescale and enable timer
+      ftm->SC  = sc;
 
       return E_NO_ERROR;
    }
@@ -1637,7 +1595,7 @@ $(/FTM/static_functions:  // /FTM/static_functions not found)
       // Calculate timer prescale factor
       int prescaleFactor = 1<<((ftm->SC&FTM_SC_PS_MASK)>>FTM_SC_PS_SHIFT);
 
-      return static_cast<float>(Info::getInputClockFrequency())/prescaleFactor;
+      return static_cast<float>(Info::getInputClockFrequency((FtmClockSource)ftm->SC))/prescaleFactor;
    }
 
    /**
@@ -2729,11 +2687,24 @@ public:
 
    };
 
+   /**
+    * Default configuration using settings from Configure.usbdmProject
+    */
+   static void defaultConfigure() {
+
+     configure(Info::DefaultInitValue);
+
+     ftm->EXTTRIG = Info::exttrig;
+     ftm->CONF    = FTM_CONF_BDMMODE(1);
+     ftm->COMBINE = FTM_COMBINE_FAULTEN0_MASK|FTM_COMBINE_FAULTEN1_MASK|FTM_COMBINE_FAULTEN2_MASK|FTM_COMBINE_FAULTEN3_MASK;
+
+     NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+   }
+
 };
 
-template<class Info> FtmCallbackFunction         FtmBase_T<Info>::sToiCallback        = FtmBase_T<Info>::unhandledCallback;
-template<class Info> FtmCallbackFunction         FtmBase_T<Info>::sFaultCallback      = FtmBase_T<Info>::unhandledCallback;
-template<class Info> FtmChannelCallbackFunction  FtmBase_T<Info>::sChannelCallbacks[] = {nullptr};
+template<class Info> typename Info::CallbackFunction FtmBase_T<Info>::sCallback           = FtmBase_T<Info>::unhandledCallback;
+template<class Info> FtmChannelCallbackFunction      FtmBase_T<Info>::sChannelCallbacks[] = {nullptr};
 
 #ifdef FTM_QDCTRL_QUADEN_MASK
 /**
@@ -2741,8 +2712,8 @@ template<class Info> FtmChannelCallbackFunction  FtmBase_T<Info>::sChannelCallba
  *  Selects the encoding mode used in the Quadrature Decoder mode.
  */
 enum FtmQuadratureMode {
-   FtmQuadratureMode_Phase_AB_Mode        = FTM_QDCTRL_QUADMODE(0),   //!< Phase A and phase B encoding mode.
-   FtmQuadratureMode_Count_Direction_Mode = FTM_QDCTRL_QUADMODE(1),   //!< Count and direction encoding mode.
+   FtmQuadratureMode_Phase_AB_Mode        = FTM_QDCTRL_QUADMODE(0),   ///< Phase A and phase B encoding mode.
+   FtmQuadratureMode_Count_Direction_Mode = FTM_QDCTRL_QUADMODE(1),   ///< Count and direction encoding mode.
 };
 
 /**
@@ -2847,7 +2818,7 @@ public:
     * @param[in] theCallback Callback function to execute when timer overflows. \n
     *                        nullptr to indicate none
     */
-   static __attribute__((always_inline)) void setTimerOverflowCallback(FtmCallbackFunction theCallback) {
+   static __attribute__((always_inline)) void setTimerOverflowCallback(typename Info::CallbackFunction theCallback) {
       OwningFtm::setTimerOverflowCallback(theCallback);
    }
 

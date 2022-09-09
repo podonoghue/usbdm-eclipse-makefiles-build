@@ -48,6 +48,20 @@ $(/MCG/ClockConfig: #error ClockConfig not found)
 
 $(/MCG/ClockInfoType:#error ClockInfoType not found)
 
+class ClockChangeCallback {
+
+public:
+      // Pointer to next in chain
+      ClockChangeCallback *next = nullptr;
+
+      virtual ~ClockChangeCallback() = default;
+
+      // This method is overridden to obtain notification before clock change
+      virtual void beforeClockChange(){}
+      // This method is overridden to obtain notification after clock change
+      virtual void afterClockChange(){};
+};
+
 /**
  * Type definition for MCG interrupt call back
  */
@@ -62,6 +76,34 @@ typedef void (*MCGCallbackFunction)(void);
  * @endcode
  */
 class Mcg {
+
+private:
+   static ClockChangeCallback *clockChangeCallbackQueue;
+
+   static void notifyBeforeClockChange() {
+      ClockChangeCallback *p = clockChangeCallbackQueue;
+      while (p != nullptr) {
+         p->beforeClockChange();
+         p = p->next;
+      }
+   }
+   static void notifyAfterClockChange() {
+      ClockChangeCallback *p = clockChangeCallbackQueue;
+      while (p != nullptr) {
+         p->afterClockChange();
+         p = p->next;
+      }
+   }
+public:
+   /**
+    * Add callback for clock configuration changes
+    *
+    * @param callback Call-back class to notify on clock configuration changes
+    */
+   static void addClockChangeCallback(ClockChangeCallback &callback) {
+      callback.next = clockChangeCallbackQueue;
+      clockChangeCallbackQueue = &callback;
+   }
 
 private:
    /** Callback function for ISR */

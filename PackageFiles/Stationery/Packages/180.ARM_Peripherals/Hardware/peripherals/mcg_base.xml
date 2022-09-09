@@ -745,7 +745,7 @@
    
    <for keys="n" dim="/SIM/numberOfClockSettings">
       <template key="McgClockInfoEntries" namespace="all" ><![CDATA[
-         \t#if $(enableClockConfiguration[%(n)])
+         #if $(enableClockConfiguration[%(n)])
          \t{  // $(ClockConfig[%(n)]) ($(mcgClockMode[%(n)].enum[]))
          \t\n
       ]]></template>
@@ -766,7 +766,7 @@
       ><![CDATA[\t   /// SIM CLKDIV3 System Clock Divider Register 3 %initExpression\n\n ]]></initialValueTemplate>
 
       <template key="McgClockInfoEntries" namespace="all" ><![CDATA[
-         \t   Sim::DefaultSopt2Value%(n).sopt2,\n\n
+         \t   Sim::DefaultSopt2Values[$(ClockConfig[%(n)])].sopt2,\n\n
       ]]></template>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all"
@@ -858,7 +858,7 @@
 
       <template key="McgClockInfoEntries" namespace="all" ><![CDATA[
          \t},
-         \t#endif\n
+         #endif\n
       ]]></template>
    </for>
          

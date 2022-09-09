@@ -37,6 +37,8 @@ namespace USBDM {
 #define SIM_CLKDIV1_OUTDIV3(x) (0)
 #endif
 
+ClockChangeCallback *Mcg::clockChangeCallbackQueue = nullptr;
+
 /**
  * Table of clock settings
  */
@@ -188,6 +190,9 @@ void Mcg::writeMainRegs(const ClockInfo &clockInfo, uint8_t bugFix) {
  * @return E_CLOCK_INIT_FAILED on failure
  */
 ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
+
+   // Notify of clock changes (before)
+   notifyBeforeClockChange();
 
    McgClockMode finalMode = clockInfo.clockMode;
 
@@ -371,6 +376,9 @@ ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
    mcg->C8 = clockInfo.c8;
 #endif
 
+   // Notify of clock changes (after)
+   notifyAfterClockChange();
+   
    return E_NO_ERROR;
 }
 

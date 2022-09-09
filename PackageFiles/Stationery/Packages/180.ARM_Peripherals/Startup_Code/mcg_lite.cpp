@@ -13,6 +13,7 @@
 #include "system.h"
 #include "stdbool.h"
 #include "pin_mapping.h"
+#include "sim.h"
 $(/MCG/Includes:// No extra includes found)
 #include "mcg.h"
 /*
@@ -35,6 +36,8 @@ namespace USBDM {
 #ifndef SIM_CLKDIV1_OUTDIV3
 #define SIM_CLKDIV1_OUTDIV3(x) (0)
 #endif
+
+ClockChangeCallback *Mcg::clockChangeCallbackQueue = nullptr;
 
 #ifndef MCG_C2_RANGE0
 #define MCG_C2_RANGE0(x) (0)
@@ -114,6 +117,9 @@ const char *Mcg::getClockModeName(McgClockMode clockMode) {
  * @return E_NO_ERROR on success
  */
 ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
+
+   // Notify of clock changes (before)
+   notifyBeforeClockChange();
 
    McgClockMode finalMode = clockInfo.clockMode;
 
@@ -227,6 +233,10 @@ ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
    SimInfo::updateUsbClockDivider();
 #endif
 
+
+   // Notify of clock changes (after)
+   notifyAfterClockChange();
+   
    return E_NO_ERROR;
 }
 

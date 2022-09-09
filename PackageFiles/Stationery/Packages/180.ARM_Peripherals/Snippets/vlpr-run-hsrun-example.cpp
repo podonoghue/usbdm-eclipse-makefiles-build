@@ -9,9 +9,9 @@
  */
 /*
  * This examples assumes that appropriate clock configurations have been created:
- *  - ClockConfig_PEE_120MHz  For HSRUN mode (Core=120MHz, Bus=60MHz, Flash=24MHz)
- *  - ClockConfig_PEE_80MHz   For RUN mode (Core=80MHz, Bus=40MHz, Flash=27MHz)
- *  - ClockConfig_BLPE_4MHz   For VLPR (Core/Bus = 4MHz, Flash = 800KHz)
+ *  - ClockConfig_HSRUN_PEE_120MHz  For HSRUN mode (Core=120MHz, Bus=60MHz, Flash=24MHz)
+ *  - ClockConfig_RUN_PEE_80MHz     For RUN mode (Core=80MHz, Bus=40MHz, Flash=27MHz)
+ *  - ClockConfig_VLPR_BLPE_4MHz    For VLPR (Core/Bus = 4MHz, Flash = 800KHz)
  *
  *  It is also necessary to configure the CLKOUT Pin
  */
@@ -24,19 +24,35 @@ using namespace USBDM;
 
 // Map clock settings for each mode to available settings
 #if defined(SMC_PMPROT_AHSRUN_MASK)
-static constexpr ClockConfig ClockConfig_HSRUN = ClockConfig_PEE_120MHz;
+static constexpr ClockConfig ClockConfig_HSRUN = ClockConfig_HSRUN_PEE_120MHz;
 #endif
-static constexpr ClockConfig ClockConfig_RUN   = ClockConfig_PEE_80MHz;
-static constexpr ClockConfig ClockConfig_VLPR  = ClockConfig_BLPE_4MHz;
+static constexpr ClockConfig ClockConfig_RUN   = ClockConfig_RUN_PEE_80MHz;
+static constexpr ClockConfig ClockConfig_VLPR  = ClockConfig_VLPR_BLPE_4MHz;
 
+/**
+ * Example clock change call-back class
+ * This just makes sure the console is kept up to date
+ */
+class MyClockChangeCallback : public ClockChangeCallback {
+public:
+   virtual void beforeClockChange() {
+      // Wait for pending writes to complete
+      console.flushOutput();
+   }
+   virtual void afterClockChange() {
+      // Fix baud rate after clock change
+      console_setBaudRate(defaultBaudRate);
+   }
+};
+
+MyClockChangeCallback clockChangeCallback;
 
 void report() {
    checkError();
-   console_setBaudRate(defaultBaudRate);
    console.writeln(
          "Run mode = ", Smc::getSmcStatusName(),
          ", Clock = ", Mcg::getClockModeName(),
-         "@", SystemCoreClock, " Hz").flushOutput();
+         "@", SystemCoreClock, " Hz");
 }
 
 int main() {
@@ -49,7 +65,7 @@ int main() {
    console.writeln("SystemCoreClock = ", SystemCoreClock);
    console.writeln("SystemBusClock  = ", SystemBusClock);
 
-   console.writeln("Reset Source = ", Rcm::getResetSourceDescription()).flushOutput();
+   console.writeln("Reset Source = ", Rcm::getResetSourceDescription());
 
    // Monitor clock changes on CLKOUT pin
    ControlInfo::CLKOUT_pin::setOutput();
@@ -58,6 +74,7 @@ int main() {
    report();
 
    Smc::enableAllPowerModes();
+   Mcg::addClockChangeCallback(clockChangeCallback);
 
    for (;;) {
       /*
