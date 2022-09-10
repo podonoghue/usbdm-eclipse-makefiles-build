@@ -52,19 +52,21 @@ namespace USBDM {
 class Ticks {
 
 private:
-   unsigned value;
+   unsigned value = 0;
 
 public:
-   constexpr Ticks()                   : value(0) {}
+   constexpr Ticks()                   = default;
+   constexpr Ticks(const Ticks& other) = default;
+
    constexpr Ticks(unsigned value)     : value(value) {}
    constexpr Ticks(float    value)     : value(round(value)) {}
    constexpr Ticks(unsigned long value): value((unsigned)value) {}
    constexpr Ticks(double    value)    : value(roundf(value)) {}
-   constexpr Ticks(const Ticks& other) : value(other.value) {}
    Ticks(const volatile Ticks& other)  : value(other.value) {}
 
+   Ticks &operator =(const Ticks &other) = default;
+
    auto &operator =(float other)                  {value = other;       return *this; }
-   auto &operator =(const Ticks &other)           {value = other.value; return *this; }
    auto &operator =(const volatile Ticks &other)  {value = other.value; return *this; }
 
    auto &operator =(const Ticks &other) volatile  {value = other.value;  return *this; }
@@ -97,18 +99,20 @@ public:
 class Seconds {
 
 private:
-   float value;
+   float value = 0.0;
 
 public:
-   constexpr Seconds()                       : value(0.0) {}
+   constexpr Seconds()                       = default;
+   constexpr Seconds(const Seconds& other)   = default;
+
    constexpr Seconds(long value)             : value((float)value) {}
    constexpr Seconds(double value)           : value((float)value) {}
-   constexpr Seconds(const Seconds& other)   : value(other.value) {}
    Seconds(const volatile Seconds& other)    : value(other.getValue()) {}
 
-   auto &operator =(float other)                   {value = other;       return *this; }
-   auto &operator =(const Seconds &other)          {value = other.value; return *this; }
-   auto &operator =(const volatile Seconds &other) {value = other.value; return *this; }
+   Seconds &operator =(const Seconds &other) = default;
+
+   auto &operator =(float other)                    {value = other;       return *this; }
+   auto &operator =(const volatile Seconds &other)  {value = other.value; return *this; }
 
    auto &operator =(const Seconds &other) volatile {value = other.value; return *this; }
 
@@ -166,17 +170,19 @@ public:
 
 class Hertz {
 private:
-   float value;
+   float value = 0.0;
 
 public:
-   constexpr Hertz()                      : value(0.0) {}
+   constexpr Hertz()                      = default;
+   constexpr Hertz(const Hertz& other)    = default;
+
    constexpr Hertz(float value)           : value(value) {}
    constexpr Hertz(double value)          : value((float)value) {}
-   constexpr Hertz(const Hertz& other)    : value(other.value) {}
    Hertz(const volatile Hertz& other)     : value(other.value) {}
 
+   Hertz &operator =(const Hertz &other) = default;
+
    auto &operator =(float other)                 {value = other;       return *this; }
-   auto &operator =(const Hertz &other)          {value = other.value; return *this; }
    auto &operator =(const volatile Hertz &other) {value = other.value; return *this; }
 
    auto &operator =(const Hertz &other) volatile {value = other.value; return *this; }

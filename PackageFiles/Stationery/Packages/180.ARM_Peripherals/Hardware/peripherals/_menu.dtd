@@ -83,7 +83,7 @@
    <!ATTLIST intOption max           CDATA        #IMPLIED>
    <!-- Offset to translate from displayed value to substitution value -->
    <!ATTLIST intOption offset        CDATA        #IMPLIED>
-   <!ATTLIST intOption derived       (false|true) #IMPLIED>
+   <!ATTLIST intOption derived       (true)       #IMPLIED>
    <!ATTLIST intOption derivedFrom   CDATA        #IMPLIED>
    <!ATTLIST intOption radix         CDATA        #IMPLIED>
    <!ATTLIST intOption ref           CDATA        #IMPLIED> <!-- Variable this variable depends on -->
@@ -102,7 +102,7 @@
    <!ATTLIST bitmaskOption disabledValue  CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption bitmask        CDATA        "0xFFFF">
    <!ATTLIST bitmaskOption bitList        CDATA        "">
-   <!ATTLIST bitmaskOption derived        (false|true) #IMPLIED>
+   <!ATTLIST bitmaskOption derived        (true)       #IMPLIED>
    <!ATTLIST bitmaskOption derivedFrom    CDATA        #IMPLIED>
   
 <!ELEMENT floatOption EMPTY >
@@ -121,7 +121,7 @@
    <!ATTLIST floatOption min           CDATA        #IMPLIED>
    <!-- Maximum value (displayed value) -->
    <!ATTLIST floatOption max           CDATA        #IMPLIED>
-   <!ATTLIST floatOption derived       (false|true) #IMPLIED>
+   <!ATTLIST floatOption derived       (true)       #IMPLIED>
    <!ATTLIST floatOption derivedFrom   CDATA        #IMPLIED>
    <!ATTLIST floatOption ref           CDATA        #IMPLIED> <!-- Variable this variable depends on -->
    <!ATTLIST floatOption valueFormat   CDATA        #IMPLIED> <!-- How to format value e.g. %s_Hz-->
@@ -152,7 +152,7 @@
    <!ATTLIST stringOption modify           CDATA        #IMPLIED>
    <!ATTLIST stringOption replace          CDATA        #IMPLIED>
    <!ATTLIST stringOption disabledValue    CDATA        #IMPLIED>
-   <!ATTLIST stringOption derived          (false|true) #IMPLIED>
+   <!ATTLIST stringOption derived          (true)       #IMPLIED>
    <!ATTLIST stringOption derivedFrom      CDATA        #IMPLIED>
    <!ATTLIST stringOption enum             CDATA        #IMPLIED>
    <!ATTLIST stringOption target           CDATA        #IMPLIED>
@@ -172,7 +172,7 @@
    <!ATTLIST numericListOption size          CDATA        #IMPLIED>
    <!ATTLIST numericListOption min           CDATA        #IMPLIED>
    <!ATTLIST numericListOption max           CDATA        #IMPLIED>
-   <!ATTLIST numericListOption derived       (false|true) #IMPLIED>
+   <!ATTLIST numericListOption derived       (true)       #IMPLIED>
    <!ATTLIST numericListOption derivedFrom   CDATA        #IMPLIED>
   
 <!-- Signal to add a dependency -->
@@ -191,7 +191,7 @@
    <!ATTLIST pinListOption value              CDATA        #IMPLIED>
    <!ATTLIST pinListOption disabledValue      CDATA        #IMPLIED>
    <!ATTLIST pinListOption size               CDATA        #IMPLIED>
-   <!ATTLIST pinListOption derived            (false|true) #IMPLIED>
+   <!ATTLIST pinListOption derived            (true)       #IMPLIED>
    <!ATTLIST pinListOption derivedFrom        CDATA        #IMPLIED>
 
 <!ELEMENT clockSelectionOption ((choice)*) >
@@ -205,7 +205,7 @@
    <!ATTLIST clockSelectionOption description         CDATA        #IMPLIED>
    <!ATTLIST clockSelectionOption toolTip             CDATA        #IMPLIED>
    <!ATTLIST clockSelectionOption units               (None|Hz|s)  #IMPLIED>
-   <!ATTLIST clockSelectionOption derived             (false|true) #IMPLIED>
+   <!ATTLIST clockSelectionOption derived             (true)       #IMPLIED>
    <!ATTLIST clockSelectionOption derivedFrom         CDATA        #IMPLIED>
    <!ATTLIST clockSelectionOption enumStem            CDATA        #IMPLIED> <!-- Type for enum and first part of enum name -->
    <!ATTLIST clockSelectionOption typeName            CDATA        #IMPLIED> <!-- as for enumStem -->
@@ -228,7 +228,7 @@
    <!ATTLIST choiceOption description         CDATA        #IMPLIED>
    <!ATTLIST choiceOption toolTip             CDATA        #IMPLIED>
    <!ATTLIST choiceOption units               (None|Hz|s)  #IMPLIED>
-   <!ATTLIST choiceOption derived             (false|true) #IMPLIED>
+   <!ATTLIST choiceOption derived             (true)       #IMPLIED>
    <!ATTLIST choiceOption derivedFrom         CDATA        #IMPLIED>
    <!ATTLIST choiceOption enumStem            CDATA        #IMPLIED> <!-- Type for enum and first part of enum name -->
    <!ATTLIST choiceOption typeName            CDATA        #IMPLIED> <!-- as for enumStem -->
@@ -266,7 +266,7 @@
    <!ATTLIST binaryOption origin        CDATA        #IMPLIED>
    <!ATTLIST binaryOption description   CDATA        #IMPLIED>
    <!ATTLIST binaryOption toolTip       CDATA        #IMPLIED>
-   <!ATTLIST binaryOption derived       (false|true) #IMPLIED>
+   <!ATTLIST binaryOption derived       (true)       #IMPLIED>
    <!ATTLIST binaryOption derivedFrom   CDATA        #IMPLIED>
    <!ATTLIST binaryOption enumStem      CDATA        #IMPLIED> <!-- Type for enum and first part of enum name -->
    <!ATTLIST binaryOption typeName      CDATA        #IMPLIED> <!-- as for enumStem -->
@@ -289,7 +289,7 @@
    <!ATTLIST irqOption origin        CDATA        #IMPLIED>
    <!ATTLIST irqOption description   CDATA        #IMPLIED>
    <!ATTLIST irqOption toolTip       CDATA        #IMPLIED>
-   <!ATTLIST irqOption derived       (false|true) #IMPLIED>
+   <!ATTLIST irqOption derived       (true)       #IMPLIED>
    <!ATTLIST irqOption derivedFrom   CDATA        #IMPLIED>
    <!ATTLIST irqOption typeName      CDATA        #IMPLIED> <!-- e.g. CallbackFunction -->
    <!ATTLIST irqOption valueFormat   CDATA        #IMPLIED> <!-- e.g. void (*%s)(void) -->

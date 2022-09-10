@@ -64,64 +64,51 @@ protected:
    }
 
 public:
-   $(/LPTMR/classInfo: // No class Info found)
-
-   /**
-    * Set LPTMR to pulse counting mode.
-    * Provides selection of input pin, edge selection and reset mode.\n
-    * The timer is enabled and pins configured.
-    *
-    * @param[in] lptmrPinSel        Input pin for Pulse Counting mode
-    * @param[in] lptmrPulseEdge     Edge for pulse counting (default = rising-edge)
-    * @param[in] lptmrClockSel      Clock source selection
-    * @param[in] lptmrGlitchFilter  Input glitch filter
-    * @param[in] lptmrResetOn       Selects when the LPTMR counter resets to zero (default = on overflow)
-    * @param[in] lptmrInterrupt     Enable/disable interrupts
-    */
-   static void configurePulseCountingMode(
-         LptmrPinSel       lptmrPinSel,
-         LptmrPulseEdge    lptmrPulseEdge    = LptmrPulseEdge_Rising,
-         LptmrClockSel     lptmrClockSel     = LptmrClockSel_Lpoclk,
-         LptmrGlitchFilter lptmrGlitchFilter = LptmrGlitchFilter_Direct,
-         LptmrResetOn      lptmrResetOn      = LptmrResetOn_Overflow,
-         LptmrInterrupt    lptmrInterrupt    = LptmrInterrupt_Disabled) {
-
-      enable();
-      // Change settings with timer disabled
-      lptmr->CSR = LptmrMode_PulseCounting|lptmrPinSel|lptmrPulseEdge|lptmrResetOn|lptmrInterrupt;
-      // Set clock source and prescaler
-      lptmr->PSR = lptmrClockSel|lptmrGlitchFilter;
-      // Enable timer
-      lptmr->CSR = LptmrMode_PulseCounting|lptmrPinSel|lptmrPulseEdge|lptmrResetOn|lptmrInterrupt|LPTMR_CSR_TEN_MASK;
-   }
-
-   /**
-    * Set LPTMR to time counting mode.
-    * The timer is enabled and pins configured.
-    *
-    * @param[in] lptmrResetOn    Selects when the LPTMR counter resets to zero
-    * @param[in] lptmrInterrupt  Enable/disable interrupts
-    * @param[in] lptmrClockSel   Clock source selection
-    * @param[in] lptmrPrescale   Clock divider
-    */
-   static void configureTimeIntervalMode(
-
-         LptmrResetOn      lptmrResetOn   = LptmrResetOn_Compare,
-         LptmrInterrupt    lptmrInterrupt = LptmrInterrupt_Disabled,
-         LptmrClockSel     lptmrClockSel  = LptmrClockSel_Lpoclk,
-         LptmrPrescale     lptmrPrescale  = LptmrPrescale_Direct) {
-      enable();
-      // Change settings with timer disabled
-      lptmr->CSR = LptmrMode_TimeInterval|lptmrResetOn|lptmrInterrupt;
-      // Set clock source and prescaler
-      lptmr->PSR = lptmrClockSel|lptmrPrescale;
-      // Set dummy timer value to avoid immediate interrupts
-      lptmr->CMR = (uint32_t)-1;
-      // Enable timer and clear interrupt flag
-      lptmr->CSR = LptmrMode_TimeInterval|lptmrResetOn|lptmrInterrupt|LPTMR_CSR_TEN_MASK|LPTMR_CSR_TCF_MASK;
-   }
-
+$(/LPTMR/classInfo: // No class Info found)
+$(/LPTMR/StaticMethods: // /LPTMR/StaticMethods not found)
 $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
+
+   /**
+    * Configure LPTMR from values specified in init.
+    *
+    * @param init Class containing initialisation information
+    */
+   static ErrorCode configure(const typename Lptmr0Info::Init &init) {
+
+      // Enable peripheral clock and map pins
+      enable();
+
+      if (init.callbackFunction != nullptr) {
+         // Only set call-back if present
+         setCallback(init.callbackFunction);
+      }
+
+      uint8_t  psr = init.psr;
+      uint32_t cmr = init.cmr;
+
+      if (init.cmrperiod != 0) {
+         // Calculate values form duration in seconds
+         ErrorCode rc = calculateDurationValues(init.cmrperiod, psr, cmr);
+         if (rc != E_NO_ERROR) {
+            return rc;
+         }
+      }
+
+      // Change settings with timer disabled
+      lptmr->CSR = 0;
+
+      // Update clock setting
+      lptmr->PSR = psr;
+
+      // Timer Compare Register
+      lptmr->CMR = cmr;
+
+      // Enable timer
+      lptmr->CSR = init.csr|LPTMR_CSR_TEN_MASK;
+
+      return E_NO_ERROR;
+   }
+
    /**
     * Restarts the counter\n
     * Mostly for debug.
@@ -322,11 +309,10 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
     * @return Time in seconds (as float)
     *
     * @note Assumes prescale has been chosen appropriately.
-    * @note Rudimentary range checking only. Sets error code.
     */
    static Seconds convertTicksToSeconds(Ticks ticks) {
-      uint32_t tickRate = Info::getClockFrequency();
-      return ((float)ticks)/(unsigned)tickRate;
+      float tickRate = Info::getClockFrequencyF();
+      return ((float)ticks)/tickRate;
    }
 
    /**
@@ -337,7 +323,6 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
     * @return Time in ticks
     *
     * @note Assumes prescale has been chosen appropriately.
-    * @note Rudimentary range checking only. Sets error code.
     */
    static Ticks convertMicrosecondsToTicks(int time) {
 
@@ -346,7 +331,7 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
       uint64_t rv       = (unsigned)((uint64_t)time*tickRate)/1000000;
 
 #ifdef DEBUG_BUILD
-      if (rv > 0xFFFFUL) {
+      if (rv > UINT_MAX) {
          // Attempt to set too long a period
          setErrorCode(E_TOO_LARGE);
       }
@@ -365,7 +350,6 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
     * @return Time in ticks
     *
     * @note Assumes prescale has been chosen appropriately.
-    * @note Rudimentary range checking only. Sets error code.
     */
    static Ticks convertMillisecondsToTicks(int time) {
 
@@ -374,7 +358,7 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
       uint64_t rv       = (unsigned)((uint64_t)time*tickRate)/1000;
 
 #ifdef DEBUG_BUILD
-      if (rv > 0xFFFFUL) {
+      if (rv > UINT_MAX) {
          // Attempt to set too long a period
          setErrorCode(E_TOO_LARGE);
       }
@@ -403,7 +387,7 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
       uint64_t rv       = (unsigned)((float)time*tickRate);
 
 #ifdef DEBUG_BUILD
-      if (rv > 0xFFFFUL) {
+      if (rv > UINT_MAX) {
          // Attempt to set too long a period
          setErrorCode(E_TOO_LARGE);
       }
@@ -416,6 +400,67 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
    }
 
    /**
+    * Calculate timing information based on desired duration
+    *
+    * @param[in]     duration  Desired period or event duration
+    * @param[in/out] psr        Input: psr.pcs Output: updated with psr.prescale and psr.pbyp
+    * @param[out]    cmr        Compare register value
+    *
+    * @return E_NO_ERROR      => Success
+    * @return E_ILLEGAL_PARAM => Failed to find suitable values for psr.prescale and psr.pbyp
+    */
+   static ErrorCode calculateDurationValues(Seconds duration, uint8_t &psr, uint32_t &cmr) {
+
+      float    inputClock = Info::getInputClockFrequency((LptmrClockSel)(psr&LPTMR_PSR_PCS_MASK));
+      int      prescaleFactor=1;
+      uint32_t prescalerValue=0;
+      while (prescalerValue<=16) {
+         float    clockFrequency = inputClock/prescaleFactor;
+         uint32_t mod   = rintf(duration*clockFrequency);
+         if (mod < Info::minimumResolution) {
+            // Too short a period for reasonable resolution
+            return setAndCheckErrorCode(E_TOO_SMALL);
+         }
+         if (mod <= LPTMR_CMR_COMPARE_MASK) {
+            cmr  = mod;
+            psr  = (psr&LPTMR_PSR_PCS_MASK)|LPTMR_PSR_PRESCALE(prescalerValue-1)|LPTMR_PSR_PBYP(prescalerValue==0);
+            return E_NO_ERROR;
+         }
+         prescalerValue++;
+         prescaleFactor <<= 1;
+      }
+      // Too long a period
+      return setAndCheckErrorCode(E_TOO_LARGE);
+   }
+
+   /**
+    * Calculate filter information based on desired interval
+    * This calculates a clock prescaler so that the filter interval is at least the given value.
+    *
+    * @param[in]     interval   Desired filter interval
+    * @param[in/out] psr        Input: psr.pcs Output: updated with psr.prescale and psr.pbyp
+    *
+    * @return E_NO_ERROR      => Success
+    * @return E_ILLEGAL_PARAM => Failed to find suitable values for psr.prescale and psr.pbyp
+    */
+   static ErrorCode calculateFilterValues(Seconds interval, uint8_t &psr) {
+
+      float    inputClock = Info::getInputClockFrequency((LptmrClockSel)(psr&LPTMR_PSR_PCS_MASK));
+      int      prescaleFactor=1;
+      uint32_t prescalerValue=0;
+      while (prescalerValue<=16) {
+         if ((float)(interval*prescaleFactor) < inputClock) {
+            psr  = (psr&LPTMR_PSR_PCS_MASK)|LPTMR_PSR_PRESCALE(prescalerValue-1)|LPTMR_PSR_PBYP(prescalerValue==0);
+            return E_NO_ERROR;
+         }
+         prescalerValue++;
+         prescaleFactor <<= 1;
+      }
+      // Too long a duration
+      return setAndCheckErrorCode(E_TOO_LARGE);
+   }
+
+   /**
     * Set period of timer.
     *
     * @param[in]  period Period in seconds as a float
@@ -424,35 +469,27 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
     *       The clock source should be selected by setClock() before using this function.
     *
     * @return E_NO_ERROR      => Success
-    * @return E_ILLEGAL_PARAM => Failed to find suitable values for PBYP & PRESCALE
+    * @return E_ILLEGAL_PARAM => Failed to find suitable values for psr.prescale and psr.pbyp
     */
    static ErrorCode setPeriod(Seconds period) {
 
-      float    inputClock = Info::getInputClockFrequency();
-      int      prescaleFactor=1;
-      uint32_t prescalerValue=0;
-      while (prescalerValue<=16) {
-         float    clockFrequency = inputClock/prescaleFactor;
-         uint32_t mod   = rintf(period*clockFrequency);
-         if (mod < MINIMUM_RESOLUTION) {
-            // Too short a period for reasonable resolution
-            return setAndCheckErrorCode(E_TOO_SMALL);
-         }
-         if (mod <= 65535) {
-            // Disable LPTMR before prescale change
-            uint32_t csr = lptmr->CSR;
-            lptmr->CSR = 0;
-            (void)(lptmr->CSR);
-            lptmr->CMR  = mod;
-            lptmr->PSR  = (lptmr->PSR & ~(LPTMR_PSR_PRESCALE_MASK|LPTMR_PSR_PBYP_MASK))|LPTMR_PSR_PRESCALE(prescalerValue-1)|LPTMR_PSR_PBYP(prescalerValue==0);
-            lptmr->CSR  = csr;
-            return E_NO_ERROR;
-         }
-         prescalerValue++;
-         prescaleFactor <<= 1;
+      uint8_t  psr = lptmr->PSR;
+      uint32_t cmr;
+      ErrorCode rc = calculateDurationValues(period, psr, cmr);
+      if (rc != E_NO_ERROR) {
+         return rc;
       }
-      // Too long a period
-      return setAndCheckErrorCode(E_TOO_LARGE);
+      // Disable before changing clock
+      uint32_t csr = lptmr->CSR;
+      lptmr->CSR = 0;
+      (void)(lptmr->CSR);
+
+      lptmr->CMR  = cmr;
+      lptmr->PSR  = psr;
+
+      lptmr->CSR  = csr;
+
+      return E_NO_ERROR;
    }
 
    /**
@@ -469,24 +506,22 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
     */
    static ErrorCode setFilterInterval(Seconds interval) {
 
-      long     inputClock = Info::getInputClockFrequency();
-      int      prescaleFactor=1;
-      uint32_t prescalerValue=0;
-      while (prescalerValue<=16) {
-         if ((float)(interval*prescaleFactor) < inputClock) {
-            // Disable LPTMR before prescale change
-            uint32_t csr = lptmr->CSR;
-            lptmr->CSR = 0;
-            __DSB();
-            lptmr->PSR  = (lptmr->PSR & ~(LPTMR_PSR_PRESCALE_MASK|LPTMR_PSR_PBYP_MASK))|LPTMR_PSR_PRESCALE(prescalerValue-1)|LPTMR_PSR_PBYP(prescalerValue==0);
-            lptmr->CSR  = csr;
-            return E_NO_ERROR;
-         }
-         prescalerValue++;
-         prescaleFactor <<= 1;
+      uint8_t  psr = lptmr->PSR;
+      
+      ErrorCode rc = calculateFilterValues(interval, psr);
+      if (rc != E_NO_ERROR) {
+         return rc;
       }
-      // Too long a period
-      return setAndCheckErrorCode(E_TOO_LARGE);
+      // Disable LPTMR before prescale change
+      uint32_t csr = lptmr->CSR;
+      lptmr->CSR = 0;
+      (void)(lptmr->CSR);
+
+      lptmr->PSR  = psr;
+
+      lptmr->CSR  = csr;
+
+      return E_NO_ERROR;
    }
 
    /**
