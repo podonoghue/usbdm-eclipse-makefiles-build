@@ -31,7 +31,7 @@
          </binaryOption>
       </for>
       
-      <choiceOption key="sim_sopt8_ftm_syncbits"  
+      <choiceOption key="sim_sopt8_ftm_syncbits"  condition="sim_sopt8_ftm0syncbit_present"
          enumStem="FtmSync"
          valueFormat="%s"
          hidden="true"
@@ -748,6 +748,7 @@
             \t    * Constructor for %description
             \t    *
             \t    * @tparam   Types
+            \t    * @param    rest
             %paramDescription
             \t    */
             \t   template <typename... Types>
@@ -784,6 +785,7 @@
          \t    * Constructor for %description
          \t    *
          \t    * @tparam   Types
+         \t    * @param    rest
          %paramDescription
          \t    */
          \t   template <typename... Types>
@@ -1161,7 +1163,7 @@
       \t *
       \t * %tooltip
       \t *
-      \t * @param mask Mask of bits made up from %enumClass values
+      \t * @param %enumParam Mask of bits made up from %enumClass values
       \t */
       \tstatic void setFtmSyncBits(uint32_t %enumParam) {
       \t   sim->SOPT8 = sim->SOPT8 | %enumParam;
@@ -1172,7 +1174,7 @@
       \t *
       \t * %tooltip
       \t *
-      \t * @param mask Mask of bits made up from %enumClass values
+      \t * @param %enumParam Mask of bits made up from %enumClass values
       \t */
       \tstatic void clearFtmSyncBits(uint32_t %enumParam) {
       \t   sim->SOPT8 = sim->SOPT8 & ~%enumParam;
@@ -1573,6 +1575,7 @@
             \t    * Constructor for %description
             \t    *
             \t    * @tparam   Types
+            \t    * @param    rest
             %paramDescription
             \t    */
             \t   template <typename... Types>
@@ -1612,6 +1615,7 @@
          \t    * Constructor for %description
          \t    *
          \t    * @tparam   Types
+         \t    * @param    rest
          %paramDescription
          \t    */
          \t   template <typename... Types>
@@ -1637,6 +1641,8 @@
                \t    * Constructor for %description
                \t    *
                \t    * @tparam   Types
+               \t    * @param    rest
+               \t    * @tparam   Types
                %paramDescription
                \t    */
                \t   template <typename... Types>
@@ -1659,6 +1665,7 @@
             \t    * Constructor for %description
             \t    *
             \t    * @tparam   Types
+            \t    * @param    rest
             %paramDescription
             \t    */
             \t   template <typename... Types>
@@ -1686,6 +1693,8 @@
             \t    * Constructor for %description
             \t    *
             \t    * @tparam   Types
+            \t    * @param    rest
+            \t    * @tparam   Types
             %paramDescription
             \t    */
             \t   template <typename... Types>
@@ -1705,6 +1714,7 @@
       \t    * Constructor for %description
       \t    *
       \t    * @tparam   Types
+      \t    * @param    rest
       %paramDescription
       \t    */
       \t   template <typename... Types>
@@ -1728,6 +1738,8 @@
             \t    * Constructor for %description
             \t    *
             \t    * @tparam   Types
+            \t    * @param    rest
+            \t    * @tparam   Types
             %paramDescription
             \t    */
             \t   template <typename... Types>
@@ -1748,6 +1760,7 @@
             \t    * Constructor for %description
             \t    *
             \t    * @tparam   Types
+            \t    * @param    rest
             %paramDescription
             \t    */
             \t   template <typename... Types>

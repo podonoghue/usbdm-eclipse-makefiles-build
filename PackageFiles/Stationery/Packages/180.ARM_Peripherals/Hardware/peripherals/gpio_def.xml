@@ -441,6 +441,9 @@
          \t   /**
          \t    * Constructor
          \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
          \t    * @param %enumParam %description
          \t    */
          \t   template <typename... Types>

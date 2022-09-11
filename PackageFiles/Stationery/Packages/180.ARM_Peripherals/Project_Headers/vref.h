@@ -26,7 +26,7 @@ namespace USBDM {
  * Regulator enable
  * This bit is used to enable the internal 1.75 V regulator to produce a constant internal voltage supply in
  * order to reduce the sensitivity to external supply noise and variation. \n
- * If it is desired to keep the regulator enabled in very low power modes see @ref PmcBandgapLowPowerEnable.
+ * If it is desired to keep the regulator enabled in very low power modes see PmcBandgapLowPowerEnable.
  */
 enum VrefReg {
    VrefReg_Disable = VREF_SC_REGEN(0), /**< Regulator Disabled */
@@ -62,7 +62,7 @@ enum VrefBuffer {
  * This option is enabled during factory trimming of the VREF voltage.
  * This should be enabled to achieve the performance stated in the data sheet.
  * If the chop oscillator is to be used in very low power modes, the system (bandgap)
- * voltage reference must also be enabled. See @ref PmcBandgapLowPowerEnable.
+ * voltage reference must also be enabled. See PmcBandgapLowPowerEnable.
  */
 enum VrefChop {
    VrefChop_Disable = VREF_TRM_CHOPEN(0), /**< Chop Disabled *//**< VrefChop_Disable */
@@ -173,7 +173,7 @@ public:
       vref->SC  = VREF_SC_VREFEN_MASK|vrefBuffer|VrefIcomp;
       if (vrefReg) {
          // Regulator must be enabled >300ns after Vref
-         USBDM::waitUS(1);
+         USBDM::waitUS(1U);
          vref->SC  = VREF_SC_VREFEN_MASK|VREF_SC_REGEN(1)|vrefBuffer|VrefIcomp;
       }
    }

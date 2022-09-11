@@ -362,6 +362,7 @@
 
    <setTemplate key="/LPTMR/StaticMethods" namespace="all" 
       nonDefaultParams="3"
+      discardRepeats="true"
       variables="
          lptmr_csr_tfc, 
          lptmr_csr_tie,
@@ -395,6 +396,7 @@
       
    <setTemplate key="/LPTMR/StaticMethods" namespace="all" 
       nonDefaultParams="3"
+      discardRepeats="true"
       variables="
          lptmr_csr_tfc, 
          lptmr_csr_tie, 
@@ -438,6 +440,7 @@
       
    <setTemplate key="/LPTMR/StaticMethods" namespace="all" 
       nonDefaultParams="2"
+      discardRepeats="true"
       variables="
          lptmr_csr_tps, 
          lptmr_csr_tpp, 
@@ -600,17 +603,21 @@
       variables="irqHandlingMethod" 
       linePadding="xxx"
     ><![CDATA[
+      #if $(irqHandlingMethod)
       \t   /**
       \t    * Constructor for %description
       \t    *
       \t    * @tparam   Types
+      \t    * @param    rest
+      \t
       %paramDescription
       \t    */
       \t   template <typename... Types>
       \t   constexpr Lptmr$(_instance)TimeIntervalModeInit(%params, Types... rest) : Lptmr$(_instance)TimeIntervalModeInit(rest...) {
       \t
       \t      this->%enumParam0 = %paramExpression;
-      \t   }\n\n
+      \t   }
+      #endif\n\n
    ]]></setTemplate>
    <for keys="v"
       values="
@@ -625,6 +632,8 @@
          \t    * Constructor for %description
          \t    *
          \t    * @tparam   Types
+         \t    * @param    rest
+         \t
          %paramDescription
          \t    */
          \t   template <typename... Types>
@@ -644,10 +653,8 @@
          \t   /**
          \t    * Constructor for %description
          \t    *
-         \t    * @tparam   Types
          %paramDescription
          \t    */
-         \t   template <typename... Types>
          \t   constexpr Lptmr$(_instance)TimeIntervalModeInit(%params) : Lptmr$(_instance)Init(LptmrMode_TimeInterval) {
          \t   
          \t      %registerName = %paramExpression;
@@ -702,17 +709,21 @@
       variables="irqHandlingMethod" 
       linePadding="xxx"
     ><![CDATA[
+      #if $(irqHandlingMethod)
       \t   /**
       \t    * Constructor for %description
       \t    *
       \t    * @tparam   Types
+      \t    * @param    rest
+      \t
       %paramDescription
       \t    */
       \t   template <typename... Types>
       \t   constexpr Lptmr$(_instance)PulseCountingModeInit(%params, Types... rest) : Lptmr$(_instance)PulseCountingModeInit(rest...) {
       \t
       \t      this->%enumParam0 = %enumParam0;
-      \t   }\n\n
+      \t   }
+      #endif\n\n
    ]]></setTemplate>
    <for keys="v"
       values="
@@ -728,6 +739,8 @@
          \t    * Constructor for %description
          \t    *
          \t    * @tparam   Types
+         \t    * @param    rest
+         \t
          %paramDescription
          \t    */
          \t   template <typename... Types>
@@ -746,10 +759,8 @@
          \t   /**
          \t    * Constructor for %description
          \t    *
-         \t    * @tparam   Types
          %paramDescription
          \t    */
-         \t   template <typename... Types>
          \t   constexpr Lptmr$(_instance)PulseCountingModeInit(%params) : Lptmr$(_instance)Init(LptmrMode_PulseCounting) {
          \t   
          \t      %registerName = %paramExpression;

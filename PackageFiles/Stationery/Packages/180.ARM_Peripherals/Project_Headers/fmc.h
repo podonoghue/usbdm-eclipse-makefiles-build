@@ -21,7 +21,7 @@
 namespace USBDM {
 
 /**
- * @addtogroup FMC_Group FMC, Miscellaneous Control Module
+ * @addtogroup FMC_Group FMC, Flash Memory Controller
  * @brief Abstraction for Miscellaneous Control Module
  * @{
  */

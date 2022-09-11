@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- pit_def.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <constant key = "irq_pattern"      value = "^%b(\d+)$"  />
+   <constant key = "irq_classHandler" value = "%c%i::Channel&lt;$1&gt;::irqHandler"  />
+   <xi:include href="_irqOptionSubstituted.xml"/>
+ 
+   <template><![CDATA[
+      \t//! Number of PIT channels
+      \tstatic constexpr uint32_t NumChannels  = $(numChannels);
+      
+      \ttypedef Pit$(_instance)Init Init;
+      
+      \ttypedef Pit$(_instance)Init::CallbackFunction CallbackFunction;\n\n
+   ]]></template>
+
+   <choiceOption key="pit_channelNumber" 
+      description="Pit Channel Number"
+      enumStem="PitChannelNum"
+      valueFormat="%s"
+      enumType="uint8_t"
+      toolTip="Select a PIT channel">
+      <choice value="0"          name="Channel 0"     enum="0" />
+      <choice value="1"          name="Channel 1"     enum="1" />
+      <choice value="2"          name="Channel 2"     enum="2" />
+      <choice value="3"          name="Channel 3"     enum="3" />
+      <choice value="0b10000000" name="Channel Not Allocated"  enum="None" />
+   </choiceOption>
+   
+   <intOption key="pitInputClock" constant="true" derived="true"
+      description="PIT input clock"  
+      ref="/SIM/system_bus_clock"
+      units="Hz"
+      />
+
+   <binaryOption key="pit_mcr_frz" condition="pit_mcr_frz_present"
+      enumStem="PitDebugMode" 
+      description="Freeze in debug mode"
+      toolTip="Controls whether the timer continues to run in debug mode">
+      <choice value="0" name="Timers continue to run in debug mode" enum="Run"  />
+      <choice value="1" name="Timers are stopped in Debug mode"     enum="Stop" isDefault="true" />
+   </binaryOption>
+
+   <for keys="ch" dim="numChannels">
+      <binaryOption key="pit_tctrl_ten[%(ch)]"  condition="pit_tctrl_tie_present"
+         enumStem="PitChannelEnable" 
+         description="Timer Channel Enable"
+         toolTip="Allows operation of this channel">
+         <choice value="0" name="Channel disabled" enum="Disabled" isDefault="true"/>
+         <choice value="1" name="Channel enabled"  enum="Enabled"  />
+      </binaryOption>
+
+      <intOption key="pit_ldval_tsv[%(ch)]" condition="pit_ldval_tsv_present"
+         typeName="Ticks"
+         valueFormat="%s_ticks"
+         description="Reload value channel %(ch)"
+         toolTip="Value loaded in timer register on roll-over"
+         min="0" max="0xFFFFFFFF" />
+
+      <floatOption key="pit_period[%(ch)]" condition="pit_ldval_tsv_present"
+         typeName="Seconds"
+         valueFormat="%s_s"
+         description="Default period of timer"
+         toolTip="Used to calculate the timer load value"
+         derived="true"
+         value="1m" min="0" units="s" />
+   
+      <floatOption key="pit_frequency[%(ch)]" condition="pit_ldval_tsv_present"
+         typeName="Hertz"
+         valueFormat="%s_Hz"
+         description="Default frequency of timer"
+         toolTip="Used to calculate the timer load value"
+         derived="true"
+         value="1k" min="0" units="Hz" />
+   
+      <binaryOption key="pit_tctrl_chn[%(ch)]"  condition="pit_tctrl_chn_present"
+         enumStem="PitChannelChain" 
+         description="Chain with previous channel"
+         toolTip="Controls whether the timer channels are chained to creater a larger counter">
+         <choice value="0" name="Timers are not chained" enum="Disabled" isDefault="true"/>
+         <choice value="1" name="Timers are chained"     enum="Enabled"  />
+      </binaryOption>
+
+      <binaryOption key="pit_tctrl_tie[%(ch)]"  condition="pit_tctrl_tie_present"
+         enumStem="PitChannelIrq" 
+         description="Timer Interrupt Enable"
+         toolTip="Allows interrupts from this channel">
+         <choice value="0" name="Interrupts are disabled" enum="Disabled" isDefault="true"/>
+         <choice value="1" name="Interrupts are enabled"  enum="Enabled"  />
+      </binaryOption>
+   </for>
+
+   <!-- ========== PIT Init class =============================== -->
+
+   <template namespace="usbdm" ><![CDATA[
+      \t/**
+      \t * Class used to do initialisation of an PIT
+      \t *
+      \t * This class has a templated constructor that accepts various values:
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const Pit$(_instance)::Pit$(_instance)Init pitInit {
+      \t *
+      \t * };
+      \t *
+      \t * // Initialise PIT from values specified above
+      \t * Pit$(_instance)::configure(pitInit)
+      \t * @endcode
+      \t */
+      \tclass Pit$(_instance)Init {
+      \t
+      \tpublic:
+      \t   /**                               
+      \t    * Copy Constructor                  
+      \t    */                             
+      \t   constexpr Pit$(_instance)Init(const Pit$(_instance)Init &other) = delete;
+      \t   
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Pit$(_instance)Init() = default;
+      \t\n
+   ]]></template>
+   
+   <setTemplate namespace="usbdm" variables="irqHandlingMethod"
+    ><![CDATA[
+      \t
+      \t   /// Type for %description
+      \t   typedef void (*%enumClass)(void);
+      \t
+      #if $(irqHandlingMethod)
+      \t   /// %description
+      \t   %params = nullptr;
+      #endif\n\n
+   ]]></setTemplate>
+   <initialValueTemplate namespace="usbdm" 
+      variables="pit_ldval_tsv[]"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = 0_ticks;\n\n
+   ]]></initialValueTemplate>
+   <initialValueTemplate namespace="usbdm" 
+      variables="pit_period[]"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = 0_s;\n\n
+   ]]></initialValueTemplate>
+   <initialValueTemplate namespace="usbdm" 
+      variables="pit_tctrl_ten[],pit_tctrl_chn[],pit_tctrl_tie[]"
+   ><![CDATA[
+      \t   /// Timer Control Register
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+   <initialValueTemplate namespace="usbdm" 
+      variables="pit_channelNumber"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = PitChannelNum_None;\n\n
+   ]]></initialValueTemplate>
+   
+   <setTemplate variables="pit_tctrl_ten[]" discardRepeats="true" key="/PIT/InitMethod" namespace="all" ><![CDATA[
+   \t/**
+   \t * Configure a PIT channel from values specified in init
+   \t *
+   \t * @param init Class containing initialisation values
+   \t */
+   \tstatic void configure(const typename Info::Init &init) {
+   \t
+   \t   // Enable peripheral clock and map pins
+   \t   enable();
+   \t
+   \t   // Configure PIT
+   \t   pit->MCR = Info::mcr;
+   \t
+   \t   if constexpr (Info::irqHandlerInstalled) {
+   \t      if (init.callbackFunction != nullptr) {
+   \t         // Only set call-back if present and feature enabled
+   \t         setCallback(init.channelnumber, init.callbackFunction);
+   \t      }
+   \t   }
+   \t   Ticks ldval = init.ldval;
+   \t   if (init.period != 0) {
+   \t      ldval = convertSecondsToTicks(init.period);
+   \t   }
+   \t   pit->CHANNEL[init.channelnumber].LDVAL = ldval;
+   \t   pit->CHANNEL[init.channelnumber].TCTRL = init.tctrl;
+   \t
+   \t   if constexpr (sizeofArray(Info::irqNums)>1) {
+   \t      NVIC_SetPriority(Info::irqNums[init.channelnumber], Info::irqLevel);
+   \t   }
+   \t   else {
+   \t      NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+   \t   }
+   \t}\n\n
+   ]]></setTemplate>
+   
+   <for keys="r" values="irqHandlingMethod">
+      <setTemplate namespace="usbdm" 
+         variables="%(r)" 
+         linePadding="xxx"
+       ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Pit$(_instance)Init(%params, Types... rest) : Pit$(_instance)Init(rest...) {
+         \t
+         #if $(irqHandlingMethod)
+         \t      this->%enumParam0 = %paramExpression;
+         #else
+         \t      (void)%paramExpression;
+         #endif
+         \t   }\n\n
+      ]]></setTemplate>
+   </for>
+   <for keys="r" values="pit_channelNumber;pit_ldval_tsv[];pit_period[]">
+      <setTemplate namespace="usbdm" 
+         variables="%(r)" 
+         linePadding="xxx"
+       ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Pit$(_instance)Init(%params, Types... rest) : Pit$(_instance)Init(rest...) {
+         \t
+         \t      %registerName = %paramExpression;
+         \t   }\n\n
+      ]]></setTemplate>
+   </for>
+   <for keys="r" values="pit_tctrl_ten[];pit_tctrl_chn[];pit_tctrl_tie[]">
+      <setTemplate namespace="usbdm" 
+         variables="%(r)"
+         linePadding="xxx" 
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Pit$(_instance)Init(%params, Types... rest) : Pit$(_instance)Init(rest...) {
+         \t   
+         \t      %registerName |= %paramExpression;
+         \t   }
+         \t\n\n
+      ]]></setTemplate>
+   </for>
+   
+   <template namespace="usbdm" ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+   <!-- ==================== Misc ======================== -->
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PitValidate">
+   </validate>
+
+   <projectActionList id = "pit_files" >
+      <copy source="Snippets/pit-example1.cpp"       target="Snippets/pit-example1.cpp" overwrite="true" derived="true" />
+      <copy source="Snippets/pit-example2-MK.cpp"    target="Snippets/pit-example2.cpp" overwrite="true" derived="true" />
+      <copy source="Snippets/pit-example3-MK.cpp"    target="Snippets/pit-example3.cpp" overwrite="true" derived="true" />
+      <copy source="Project_Headers/pit-MK.h"        target="Project_Headers/pit.h"     overwrite="true" derived="true" />
+      <copy source="Snippets/timer-inline-handler-example.cpp" target="Snippets/timer-inline-handler-example.cpp"   overwrite="true" derived="true" />
+   </projectActionList>
+         
+   <setTemplate 
+      variables="pit_mcr_frz"   
+   ><![CDATA[
+   
+      \t/// PIT operation in debug mode
+      \tstatic constexpr uint32_t %registerName = %initExpression; \n\n
+   ]]></setTemplate>
+   
+   <template variables="pit_ldval_tsv[]"><![CDATA[
+   
+      \t/// Default value for PIT load value register
+      \tstatic constexpr Ticks %registerName[] = {
+   ]]></template>
+   <for keys="ch" dim="numChannels">
+      <setTemplate
+         variables="pit_ldval_tsv[%(ch)]"
+         separator=","
+         terminator=","
+         >
+      <![CDATA[
+         \t   %initExpression
+      ]]></setTemplate>
+   </for>
+   <template><![CDATA[
+      \t
+      \t};\n\n
+   ]]></template>
+   
+   <!-- condition="pit_ltmr64l_lth"  -->
+   <template condition="pit_ltmr64h_lth_present" ><![CDATA[
+      \t/**
+      \t * Read chained counter value (Channels 0 and 1)
+      \t *
+      \t * @param[out] upper Upper 32-bits of combined counter
+      \t * @param[out] lower Lower 32-bits of combined counter
+      \t */
+      \tstatic void readChainedCounter(uint32_t &upper, uint32_t &lower) {
+      \t   upper = pit->LTMR64H;
+      \t   lower = pit->LTMR64L;
+      \t}\n\n
+   ]]></template>
+
+   <template><![CDATA[
+      \t/**
+      \t * Get clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic __attribute__((always_inline)) uint32_t getClockFrequency() {
+      \t   return SystemBusClock;
+      \t}\n\n
+   ]]></template>
+   
+   <template key="/PIT/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tusing $(_class) = $(_base_class)Base_T<$(_class)Info>;
+
+   \t/**
+   \t * MACRO defining the start of a interrupt handler for a PIT channel
+   \t * This will override the handler incorporated within the PIT class.
+   \t *
+   \t * @param channel Channel being used.
+   \t *
+   \t * @example
+   \t * PIT$(_instance)_CHANNEL0_HANDLER() {
+   \t *    console.writeln("PIT$(_instance) Channel 0 Handler");
+   \t *    // Clear interrupt flag
+   \t *    pit->CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
+   \t * }
+   \t */
+   #define PIT$(_instance)_CHANNEL0_HANDLER() template<>template<> void Pit$(_instance)::Channel<0>::irqHandler()
+   #define PIT$(_instance)_CHANNEL1_HANDLER() template<>template<> void Pit$(_instance)::Channel<1>::irqHandler()
+   #define PIT$(_instance)_CHANNEL2_HANDLER() template<>template<> void Pit$(_instance)::Channel<2>::irqHandler()
+   #define PIT$(_instance)_CHANNEL3_HANDLER() template<>template<> void Pit$(_instance)::Channel<3>::irqHandler()
+
+   \t/**
+   \t * @brief class representing a PIT channel
+   \t */
+   \tusing $(_class)Channel = $(_class)::PitChannel;
+   ]]></template>
+      
+   <xi:include href="_clockOption.xml"/>
+
+   <signals/>
+
+</fragment>

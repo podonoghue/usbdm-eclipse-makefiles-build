@@ -58,9 +58,11 @@ public:
    constexpr Ticks()                   = default;
    constexpr Ticks(const Ticks& other) = default;
 
+   constexpr Ticks(int value)          : value(value) {}
    constexpr Ticks(unsigned value)     : value(value) {}
-   constexpr Ticks(float    value)     : value(round(value)) {}
+   constexpr Ticks(long value)         : value((unsigned)value) {}
    constexpr Ticks(unsigned long value): value((unsigned)value) {}
+   constexpr Ticks(float    value)     : value(round(value)) {}
    constexpr Ticks(double    value)    : value(roundf(value)) {}
    Ticks(const volatile Ticks& other)  : value(other.value) {}
 
@@ -69,7 +71,7 @@ public:
    auto &operator =(float other)                  {value = other;       return *this; }
    auto &operator =(const volatile Ticks &other)  {value = other.value; return *this; }
 
-   auto &operator =(const Ticks &other) volatile  {value = other.value;  return *this; }
+   void  operator =(const Ticks &other) volatile  {value = other.value; }
 
    constexpr auto getValue() const { return value; }
    unsigned getValue() const volatile { return value; }
@@ -105,7 +107,10 @@ public:
    constexpr Seconds()                       = default;
    constexpr Seconds(const Seconds& other)   = default;
 
+   constexpr Seconds(int value)              : value((float)value) {}
+   constexpr Seconds(unsigned value)         : value((float)value) {}
    constexpr Seconds(long value)             : value((float)value) {}
+   constexpr Seconds(unsigned long value)    : value((float)value) {}
    constexpr Seconds(double value)           : value((float)value) {}
    Seconds(const volatile Seconds& other)    : value(other.getValue()) {}
 
@@ -114,7 +119,7 @@ public:
    auto &operator =(float other)                    {value = other;       return *this; }
    auto &operator =(const volatile Seconds &other)  {value = other.value; return *this; }
 
-   auto &operator =(const Seconds &other) volatile {value = other.value; return *this; }
+   void  operator =(const Seconds &other) volatile {value = other.value; }
 
    constexpr auto getValue() const { return value; }
    float getValue() const volatile { return value; }
@@ -176,7 +181,11 @@ public:
    constexpr Hertz()                      = default;
    constexpr Hertz(const Hertz& other)    = default;
 
-   constexpr Hertz(float value)           : value(value) {}
+   constexpr Hertz(int value)             : value((float)value) {}
+   constexpr Hertz(unsigned value)        : value((float)value) {}
+   constexpr Hertz(long value)            : value((float)value) {}
+   constexpr Hertz(unsigned long value)   : value((float)value) {}
+   constexpr Hertz(float value)           : value((float)value) {}
    constexpr Hertz(double value)          : value((float)value) {}
    Hertz(const volatile Hertz& other)     : value(other.value) {}
 
@@ -185,7 +194,7 @@ public:
    auto &operator =(float other)                 {value = other;       return *this; }
    auto &operator =(const volatile Hertz &other) {value = other.value; return *this; }
 
-   auto &operator =(const Hertz &other) volatile {value = other.value; return *this; }
+   void  operator =(const Hertz &other) volatile {value = other.value; }
 
    constexpr auto getValue() const { return value; }
    float getValue() const volatile { return value; }

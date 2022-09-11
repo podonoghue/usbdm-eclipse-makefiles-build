@@ -209,6 +209,8 @@
          \t   /**
          \t    * Constructor
          \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
          \t    * @param %enumParam %description
          \t    */
          \t   template <typename... Types>
@@ -509,6 +511,8 @@
          \t   /**
          \t    * Constructor
          \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
          \t    * @param %enumParam %description
          \t    */
          \t   template <typename... Types>
@@ -656,6 +660,8 @@
          \t   /**
          \t    * Constructor
          \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
          \t    * @param %enumParam %description
          \t    */
          \t   template <typename... Types>

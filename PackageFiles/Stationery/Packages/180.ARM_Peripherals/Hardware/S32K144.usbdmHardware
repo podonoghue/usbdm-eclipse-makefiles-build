@@ -181,8 +181,22 @@
          <irq num="FTM0_Ch6_Ch7_IRQn" />
          <irq num="FTM0_Fault_IRQn" />
          <irq num="FTM0_Ovf_Reload_IRQn" />
+         <param name="ftm_cnsc_chf_present" key="/FTM0/ftm_cnsc_chf_present" value="true" />
+         <param name="ftm_cnsc_chie_present" key="/FTM0/ftm_cnsc_chie_present" value="true" />
+         <param name="ftm_cnsc_chis_present" key="/FTM0/ftm_cnsc_chis_present" value="true" />
+         <param name="ftm_cnsc_chov_present" key="/FTM0/ftm_cnsc_chov_present" value="true" />
+         <param name="ftm_cnsc_dma_present" key="/FTM0/ftm_cnsc_dma_present" value="true" />
+         <param name="ftm_cnsc_els_present" key="/FTM0/ftm_cnsc_els_present" value="true" />
+         <param name="ftm_cnsc_elsa_present" key="/FTM0/ftm_cnsc_elsa_present" value="true" />
+         <param name="ftm_cnsc_elsb_present" key="/FTM0/ftm_cnsc_elsb_present" value="true" />
+         <param name="ftm_cnsc_icrst_present" key="/FTM0/ftm_cnsc_icrst_present" value="true" />
+         <param name="ftm_cnsc_ms_present" key="/FTM0/ftm_cnsc_ms_present" value="true" />
+         <param name="ftm_cnsc_msa_present" key="/FTM0/ftm_cnsc_msa_present" value="true" />
+         <param name="ftm_cnsc_msb_present" key="/FTM0/ftm_cnsc_msb_present" value="true" />
+         <param name="ftm_cnsc_trigmode_present" key="/FTM0/ftm_cnsc_trigmode_present" value="true" />
          <param name="ftm_cnt_count_present" key="/FTM0/ftm_cnt_count_present" value="true" />
          <param name="ftm_cntin_init_present" key="/FTM0/ftm_cntin_init_present" value="true" />
+         <param name="ftm_cnv_val_present" key="/FTM0/ftm_cnv_val_present" value="true" />
          <param name="ftm_combine_combine0_present" key="/FTM0/ftm_combine_combine0_present" value="true" />
          <param name="ftm_combine_combine1_present" key="/FTM0/ftm_combine_combine1_present" value="true" />
          <param name="ftm_combine_combine2_present" key="/FTM0/ftm_combine_combine2_present" value="true" />
@@ -400,8 +414,22 @@
          <irq num="FTM1_Ch6_Ch7_IRQn" />
          <irq num="FTM1_Fault_IRQn" />
          <irq num="FTM1_Ovf_Reload_IRQn" />
+         <param name="ftm_cnsc_chf_present" key="/FTM1/ftm_cnsc_chf_present" value="true" />
+         <param name="ftm_cnsc_chie_present" key="/FTM1/ftm_cnsc_chie_present" value="true" />
+         <param name="ftm_cnsc_chis_present" key="/FTM1/ftm_cnsc_chis_present" value="true" />
+         <param name="ftm_cnsc_chov_present" key="/FTM1/ftm_cnsc_chov_present" value="true" />
+         <param name="ftm_cnsc_dma_present" key="/FTM1/ftm_cnsc_dma_present" value="true" />
+         <param name="ftm_cnsc_els_present" key="/FTM1/ftm_cnsc_els_present" value="true" />
+         <param name="ftm_cnsc_elsa_present" key="/FTM1/ftm_cnsc_elsa_present" value="true" />
+         <param name="ftm_cnsc_elsb_present" key="/FTM1/ftm_cnsc_elsb_present" value="true" />
+         <param name="ftm_cnsc_icrst_present" key="/FTM1/ftm_cnsc_icrst_present" value="true" />
+         <param name="ftm_cnsc_ms_present" key="/FTM1/ftm_cnsc_ms_present" value="true" />
+         <param name="ftm_cnsc_msa_present" key="/FTM1/ftm_cnsc_msa_present" value="true" />
+         <param name="ftm_cnsc_msb_present" key="/FTM1/ftm_cnsc_msb_present" value="true" />
+         <param name="ftm_cnsc_trigmode_present" key="/FTM1/ftm_cnsc_trigmode_present" value="true" />
          <param name="ftm_cnt_count_present" key="/FTM1/ftm_cnt_count_present" value="true" />
          <param name="ftm_cntin_init_present" key="/FTM1/ftm_cntin_init_present" value="true" />
+         <param name="ftm_cnv_val_present" key="/FTM1/ftm_cnv_val_present" value="true" />
          <param name="ftm_combine_combine0_present" key="/FTM1/ftm_combine_combine0_present" value="true" />
          <param name="ftm_combine_combine1_present" key="/FTM1/ftm_combine_combine1_present" value="true" />
          <param name="ftm_combine_combine2_present" key="/FTM1/ftm_combine_combine2_present" value="true" />
@@ -619,8 +647,22 @@
          <irq num="FTM2_Ch6_Ch7_IRQn" />
          <irq num="FTM2_Fault_IRQn" />
          <irq num="FTM2_Ovf_Reload_IRQn" />
+         <param name="ftm_cnsc_chf_present" key="/FTM2/ftm_cnsc_chf_present" value="true" />
+         <param name="ftm_cnsc_chie_present" key="/FTM2/ftm_cnsc_chie_present" value="true" />
+         <param name="ftm_cnsc_chis_present" key="/FTM2/ftm_cnsc_chis_present" value="true" />
+         <param name="ftm_cnsc_chov_present" key="/FTM2/ftm_cnsc_chov_present" value="true" />
+         <param name="ftm_cnsc_dma_present" key="/FTM2/ftm_cnsc_dma_present" value="true" />
+         <param name="ftm_cnsc_els_present" key="/FTM2/ftm_cnsc_els_present" value="true" />
+         <param name="ftm_cnsc_elsa_present" key="/FTM2/ftm_cnsc_elsa_present" value="true" />
+         <param name="ftm_cnsc_elsb_present" key="/FTM2/ftm_cnsc_elsb_present" value="true" />
+         <param name="ftm_cnsc_icrst_present" key="/FTM2/ftm_cnsc_icrst_present" value="true" />
+         <param name="ftm_cnsc_ms_present" key="/FTM2/ftm_cnsc_ms_present" value="true" />
+         <param name="ftm_cnsc_msa_present" key="/FTM2/ftm_cnsc_msa_present" value="true" />
+         <param name="ftm_cnsc_msb_present" key="/FTM2/ftm_cnsc_msb_present" value="true" />
+         <param name="ftm_cnsc_trigmode_present" key="/FTM2/ftm_cnsc_trigmode_present" value="true" />
          <param name="ftm_cnt_count_present" key="/FTM2/ftm_cnt_count_present" value="true" />
          <param name="ftm_cntin_init_present" key="/FTM2/ftm_cntin_init_present" value="true" />
+         <param name="ftm_cnv_val_present" key="/FTM2/ftm_cnv_val_present" value="true" />
          <param name="ftm_combine_combine0_present" key="/FTM2/ftm_combine_combine0_present" value="true" />
          <param name="ftm_combine_combine1_present" key="/FTM2/ftm_combine_combine1_present" value="true" />
          <param name="ftm_combine_combine2_present" key="/FTM2/ftm_combine_combine2_present" value="true" />
@@ -838,8 +880,22 @@
          <irq num="FTM3_Ch6_Ch7_IRQn" />
          <irq num="FTM3_Fault_IRQn" />
          <irq num="FTM3_Ovf_Reload_IRQn" />
+         <param name="ftm_cnsc_chf_present" key="/FTM3/ftm_cnsc_chf_present" value="true" />
+         <param name="ftm_cnsc_chie_present" key="/FTM3/ftm_cnsc_chie_present" value="true" />
+         <param name="ftm_cnsc_chis_present" key="/FTM3/ftm_cnsc_chis_present" value="true" />
+         <param name="ftm_cnsc_chov_present" key="/FTM3/ftm_cnsc_chov_present" value="true" />
+         <param name="ftm_cnsc_dma_present" key="/FTM3/ftm_cnsc_dma_present" value="true" />
+         <param name="ftm_cnsc_els_present" key="/FTM3/ftm_cnsc_els_present" value="true" />
+         <param name="ftm_cnsc_elsa_present" key="/FTM3/ftm_cnsc_elsa_present" value="true" />
+         <param name="ftm_cnsc_elsb_present" key="/FTM3/ftm_cnsc_elsb_present" value="true" />
+         <param name="ftm_cnsc_icrst_present" key="/FTM3/ftm_cnsc_icrst_present" value="true" />
+         <param name="ftm_cnsc_ms_present" key="/FTM3/ftm_cnsc_ms_present" value="true" />
+         <param name="ftm_cnsc_msa_present" key="/FTM3/ftm_cnsc_msa_present" value="true" />
+         <param name="ftm_cnsc_msb_present" key="/FTM3/ftm_cnsc_msb_present" value="true" />
+         <param name="ftm_cnsc_trigmode_present" key="/FTM3/ftm_cnsc_trigmode_present" value="true" />
          <param name="ftm_cnt_count_present" key="/FTM3/ftm_cnt_count_present" value="true" />
          <param name="ftm_cntin_init_present" key="/FTM3/ftm_cntin_init_present" value="true" />
+         <param name="ftm_cnv_val_present" key="/FTM3/ftm_cnv_val_present" value="true" />
          <param name="ftm_combine_combine0_present" key="/FTM3/ftm_combine_combine0_present" value="true" />
          <param name="ftm_combine_combine1_present" key="/FTM3/ftm_combine_combine1_present" value="true" />
          <param name="ftm_combine_combine2_present" key="/FTM3/ftm_combine_combine2_present" value="true" />
@@ -1101,6 +1157,41 @@
          <irq num="LPIT0_Ch1_IRQn" />
          <irq num="LPIT0_Ch2_IRQn" />
          <irq num="LPIT0_Ch3_IRQn" />
+         <param name="lpit_clrten_clr_t_en_0_present" key="/LPIT0/lpit_clrten_clr_t_en_0_present" value="true" />
+         <param name="lpit_clrten_clr_t_en_1_present" key="/LPIT0/lpit_clrten_clr_t_en_1_present" value="true" />
+         <param name="lpit_clrten_clr_t_en_2_present" key="/LPIT0/lpit_clrten_clr_t_en_2_present" value="true" />
+         <param name="lpit_clrten_clr_t_en_3_present" key="/LPIT0/lpit_clrten_clr_t_en_3_present" value="true" />
+         <param name="lpit_cval_tmr_cur_val_present" key="/LPIT0/lpit_cval_tmr_cur_val_present" value="true" />
+         <param name="lpit_mcr_dbg_en_present" key="/LPIT0/lpit_mcr_dbg_en_present" value="true" />
+         <param name="lpit_mcr_doze_en_present" key="/LPIT0/lpit_mcr_doze_en_present" value="true" />
+         <param name="lpit_mcr_m_cen_present" key="/LPIT0/lpit_mcr_m_cen_present" value="true" />
+         <param name="lpit_mcr_sw_rst_present" key="/LPIT0/lpit_mcr_sw_rst_present" value="true" />
+         <param name="lpit_mier_tie0_present" key="/LPIT0/lpit_mier_tie0_present" value="true" />
+         <param name="lpit_mier_tie1_present" key="/LPIT0/lpit_mier_tie1_present" value="true" />
+         <param name="lpit_mier_tie2_present" key="/LPIT0/lpit_mier_tie2_present" value="true" />
+         <param name="lpit_mier_tie3_present" key="/LPIT0/lpit_mier_tie3_present" value="true" />
+         <param name="lpit_msr_tif0_present" key="/LPIT0/lpit_msr_tif0_present" value="true" />
+         <param name="lpit_msr_tif1_present" key="/LPIT0/lpit_msr_tif1_present" value="true" />
+         <param name="lpit_msr_tif2_present" key="/LPIT0/lpit_msr_tif2_present" value="true" />
+         <param name="lpit_msr_tif3_present" key="/LPIT0/lpit_msr_tif3_present" value="true" />
+         <param name="lpit_param_channel_present" key="/LPIT0/lpit_param_channel_present" value="true" />
+         <param name="lpit_param_ext_trig_present" key="/LPIT0/lpit_param_ext_trig_present" value="true" />
+         <param name="lpit_setten_set_t_en_0_present" key="/LPIT0/lpit_setten_set_t_en_0_present" value="true" />
+         <param name="lpit_setten_set_t_en_1_present" key="/LPIT0/lpit_setten_set_t_en_1_present" value="true" />
+         <param name="lpit_setten_set_t_en_2_present" key="/LPIT0/lpit_setten_set_t_en_2_present" value="true" />
+         <param name="lpit_setten_set_t_en_3_present" key="/LPIT0/lpit_setten_set_t_en_3_present" value="true" />
+         <param name="lpit_tctrl_chain_present" key="/LPIT0/lpit_tctrl_chain_present" value="true" />
+         <param name="lpit_tctrl_mode_present" key="/LPIT0/lpit_tctrl_mode_present" value="true" />
+         <param name="lpit_tctrl_t_en_present" key="/LPIT0/lpit_tctrl_t_en_present" value="true" />
+         <param name="lpit_tctrl_trg_sel_present" key="/LPIT0/lpit_tctrl_trg_sel_present" value="true" />
+         <param name="lpit_tctrl_trg_src_present" key="/LPIT0/lpit_tctrl_trg_src_present" value="true" />
+         <param name="lpit_tctrl_trot_present" key="/LPIT0/lpit_tctrl_trot_present" value="true" />
+         <param name="lpit_tctrl_tsoi_present" key="/LPIT0/lpit_tctrl_tsoi_present" value="true" />
+         <param name="lpit_tctrl_tsot_present" key="/LPIT0/lpit_tctrl_tsot_present" value="true" />
+         <param name="lpit_tval_tmr_val_present" key="/LPIT0/lpit_tval_tmr_val_present" value="true" />
+         <param name="lpit_verid_feature_present" key="/LPIT0/lpit_verid_feature_present" value="true" />
+         <param name="lpit_verid_major_present" key="/LPIT0/lpit_verid_major_present" value="true" />
+         <param name="lpit_verid_minor_present" key="/LPIT0/lpit_verid_minor_present" value="true" />
       </peripheral>
       <peripheral baseName="LPSPI"    instance="0"        version="lpspi0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />

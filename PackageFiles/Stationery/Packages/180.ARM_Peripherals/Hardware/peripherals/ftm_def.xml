@@ -528,6 +528,7 @@
       \t    * Constructor for %description
       \t    *
       \t    * @tparam   Types
+      \t    * @param    rest
       %paramDescription
       \t    */
       \t   template <typename... Types>
@@ -545,6 +546,7 @@
          \t    * Constructor for %description
          \t    *
          \t    * @tparam   Types
+         \t    * @param    rest
          %comments
          \t    */
          \t   template <typename... Types>
@@ -563,6 +565,8 @@
          \t   /**
          \t    * Constructor for %description0 and %description1
          \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
          %comments
          \t    */
          \t   template <typename... Types>

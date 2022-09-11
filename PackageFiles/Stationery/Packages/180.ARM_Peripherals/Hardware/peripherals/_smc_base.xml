@@ -744,6 +744,10 @@
          \t    * Constructor - %description
          \t    *
          \t    * @note - This value is only used by initialise() method to set write-once register PMPROT
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
          %comments
          \t    */
          \t   template <typename... Types>
@@ -761,6 +765,10 @@
       ><![CDATA[
          \t   /**
          \t    * Constructor - %description
+         \t    *
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
          \t    *
          %comments
          \t    */

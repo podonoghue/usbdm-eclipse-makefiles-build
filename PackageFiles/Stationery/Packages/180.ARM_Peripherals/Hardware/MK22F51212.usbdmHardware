@@ -177,6 +177,30 @@
          <param name="fmc_pfb1cr_b1mw_present" key="/FMC/fmc_pfb1cr_b1mw_present" value="true" />
          <param name="fmc_pfb1cr_b1rwsc_present" key="/FMC/fmc_pfb1cr_b1rwsc_present" value="true" />
          <param name="fmc_pfb1cr_b1sebe_present" key="/FMC/fmc_pfb1cr_b1sebe_present" value="true" />
+         <param name="fmc_s0,tagvd0_tag_present" key="/FMC/fmc_s0,tagvd0_tag_present" value="true" />
+         <param name="fmc_s0,tagvd0_valid_present" key="/FMC/fmc_s0,tagvd0_valid_present" value="true" />
+         <param name="fmc_s0lm,dataw0lm_data_present" key="/FMC/fmc_s0lm,dataw0lm_data_present" value="true" />
+         <param name="fmc_s0ml,dataw0ml_data_present" key="/FMC/fmc_s0ml,dataw0ml_data_present" value="true" />
+         <param name="fmc_s0mu,dataw0mu_data_present" key="/FMC/fmc_s0mu,dataw0mu_data_present" value="true" />
+         <param name="fmc_s0um,dataw0um_data_present" key="/FMC/fmc_s0um,dataw0um_data_present" value="true" />
+         <param name="fmc_s1,tagvd1_tag_present" key="/FMC/fmc_s1,tagvd1_tag_present" value="true" />
+         <param name="fmc_s1,tagvd1_valid_present" key="/FMC/fmc_s1,tagvd1_valid_present" value="true" />
+         <param name="fmc_s1lm,dataw1lm_data_present" key="/FMC/fmc_s1lm,dataw1lm_data_present" value="true" />
+         <param name="fmc_s1ml,dataw1ml_data_present" key="/FMC/fmc_s1ml,dataw1ml_data_present" value="true" />
+         <param name="fmc_s1mu,dataw1mu_data_present" key="/FMC/fmc_s1mu,dataw1mu_data_present" value="true" />
+         <param name="fmc_s1um,dataw1um_data_present" key="/FMC/fmc_s1um,dataw1um_data_present" value="true" />
+         <param name="fmc_s2,tagvd2_tag_present" key="/FMC/fmc_s2,tagvd2_tag_present" value="true" />
+         <param name="fmc_s2,tagvd2_valid_present" key="/FMC/fmc_s2,tagvd2_valid_present" value="true" />
+         <param name="fmc_s2lm,dataw2lm_data_present" key="/FMC/fmc_s2lm,dataw2lm_data_present" value="true" />
+         <param name="fmc_s2ml,dataw2ml_data_present" key="/FMC/fmc_s2ml,dataw2ml_data_present" value="true" />
+         <param name="fmc_s2mu,dataw2mu_data_present" key="/FMC/fmc_s2mu,dataw2mu_data_present" value="true" />
+         <param name="fmc_s2um,dataw2um_data_present" key="/FMC/fmc_s2um,dataw2um_data_present" value="true" />
+         <param name="fmc_s3,tagvd3_tag_present" key="/FMC/fmc_s3,tagvd3_tag_present" value="true" />
+         <param name="fmc_s3,tagvd3_valid_present" key="/FMC/fmc_s3,tagvd3_valid_present" value="true" />
+         <param name="fmc_s3lm,dataw3lm_data_present" key="/FMC/fmc_s3lm,dataw3lm_data_present" value="true" />
+         <param name="fmc_s3ml,dataw3ml_data_present" key="/FMC/fmc_s3ml,dataw3ml_data_present" value="true" />
+         <param name="fmc_s3mu,dataw3mu_data_present" key="/FMC/fmc_s3mu,dataw3mu_data_present" value="true" />
+         <param name="fmc_s3um,dataw3um_data_present" key="/FMC/fmc_s3um,dataw3um_data_present" value="true" />
       </peripheral>
       <peripheral baseName="FTFA"     instance=""         version="ftfa_xacch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
@@ -193,8 +217,19 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTM0_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTM0_MASK;" />
          <irq num="FTM0_IRQn" />
+         <param name="ftm_cnsc_chf_present" key="/FTM0/ftm_cnsc_chf_present" value="true" />
+         <param name="ftm_cnsc_chie_present" key="/FTM0/ftm_cnsc_chie_present" value="true" />
+         <param name="ftm_cnsc_dma_present" key="/FTM0/ftm_cnsc_dma_present" value="true" />
+         <param name="ftm_cnsc_els_present" key="/FTM0/ftm_cnsc_els_present" value="true" />
+         <param name="ftm_cnsc_elsa_present" key="/FTM0/ftm_cnsc_elsa_present" value="true" />
+         <param name="ftm_cnsc_elsb_present" key="/FTM0/ftm_cnsc_elsb_present" value="true" />
+         <param name="ftm_cnsc_icrst_present" key="/FTM0/ftm_cnsc_icrst_present" value="true" />
+         <param name="ftm_cnsc_ms_present" key="/FTM0/ftm_cnsc_ms_present" value="true" />
+         <param name="ftm_cnsc_msa_present" key="/FTM0/ftm_cnsc_msa_present" value="true" />
+         <param name="ftm_cnsc_msb_present" key="/FTM0/ftm_cnsc_msb_present" value="true" />
          <param name="ftm_cnt_count_present" key="/FTM0/ftm_cnt_count_present" value="true" />
          <param name="ftm_cntin_init_present" key="/FTM0/ftm_cntin_init_present" value="true" />
+         <param name="ftm_cnv_val_present" key="/FTM0/ftm_cnv_val_present" value="true" />
          <param name="ftm_combine_combine0_present" key="/FTM0/ftm_combine_combine0_present" value="true" />
          <param name="ftm_combine_combine1_present" key="/FTM0/ftm_combine_combine1_present" value="true" />
          <param name="ftm_combine_combine2_present" key="/FTM0/ftm_combine_combine2_present" value="true" />
@@ -371,8 +406,19 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTM1_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTM1_MASK;" />
          <irq num="FTM1_IRQn" />
+         <param name="ftm_cnsc_chf_present" key="/FTM1/ftm_cnsc_chf_present" value="true" />
+         <param name="ftm_cnsc_chie_present" key="/FTM1/ftm_cnsc_chie_present" value="true" />
+         <param name="ftm_cnsc_dma_present" key="/FTM1/ftm_cnsc_dma_present" value="true" />
+         <param name="ftm_cnsc_els_present" key="/FTM1/ftm_cnsc_els_present" value="true" />
+         <param name="ftm_cnsc_elsa_present" key="/FTM1/ftm_cnsc_elsa_present" value="true" />
+         <param name="ftm_cnsc_elsb_present" key="/FTM1/ftm_cnsc_elsb_present" value="true" />
+         <param name="ftm_cnsc_icrst_present" key="/FTM1/ftm_cnsc_icrst_present" value="true" />
+         <param name="ftm_cnsc_ms_present" key="/FTM1/ftm_cnsc_ms_present" value="true" />
+         <param name="ftm_cnsc_msa_present" key="/FTM1/ftm_cnsc_msa_present" value="true" />
+         <param name="ftm_cnsc_msb_present" key="/FTM1/ftm_cnsc_msb_present" value="true" />
          <param name="ftm_cnt_count_present" key="/FTM1/ftm_cnt_count_present" value="true" />
          <param name="ftm_cntin_init_present" key="/FTM1/ftm_cntin_init_present" value="true" />
+         <param name="ftm_cnv_val_present" key="/FTM1/ftm_cnv_val_present" value="true" />
          <param name="ftm_combine_combine0_present" key="/FTM1/ftm_combine_combine0_present" value="true" />
          <param name="ftm_combine_comp0_present" key="/FTM1/ftm_combine_comp0_present" value="true" />
          <param name="ftm_combine_decap0_present" key="/FTM1/ftm_combine_decap0_present" value="true" />
@@ -477,8 +523,19 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTM2_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTM2_MASK;" />
          <irq num="FTM2_IRQn" />
+         <param name="ftm_cnsc_chf_present" key="/FTM2/ftm_cnsc_chf_present" value="true" />
+         <param name="ftm_cnsc_chie_present" key="/FTM2/ftm_cnsc_chie_present" value="true" />
+         <param name="ftm_cnsc_dma_present" key="/FTM2/ftm_cnsc_dma_present" value="true" />
+         <param name="ftm_cnsc_els_present" key="/FTM2/ftm_cnsc_els_present" value="true" />
+         <param name="ftm_cnsc_elsa_present" key="/FTM2/ftm_cnsc_elsa_present" value="true" />
+         <param name="ftm_cnsc_elsb_present" key="/FTM2/ftm_cnsc_elsb_present" value="true" />
+         <param name="ftm_cnsc_icrst_present" key="/FTM2/ftm_cnsc_icrst_present" value="true" />
+         <param name="ftm_cnsc_ms_present" key="/FTM2/ftm_cnsc_ms_present" value="true" />
+         <param name="ftm_cnsc_msa_present" key="/FTM2/ftm_cnsc_msa_present" value="true" />
+         <param name="ftm_cnsc_msb_present" key="/FTM2/ftm_cnsc_msb_present" value="true" />
          <param name="ftm_cnt_count_present" key="/FTM2/ftm_cnt_count_present" value="true" />
          <param name="ftm_cntin_init_present" key="/FTM2/ftm_cntin_init_present" value="true" />
+         <param name="ftm_cnv_val_present" key="/FTM2/ftm_cnv_val_present" value="true" />
          <param name="ftm_combine_combine0_present" key="/FTM2/ftm_combine_combine0_present" value="true" />
          <param name="ftm_combine_comp0_present" key="/FTM2/ftm_combine_comp0_present" value="true" />
          <param name="ftm_combine_decap0_present" key="/FTM2/ftm_combine_decap0_present" value="true" />
@@ -583,8 +640,19 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTM3_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTM3_MASK;" />
          <irq num="FTM3_IRQn" />
+         <param name="ftm_cnsc_chf_present" key="/FTM3/ftm_cnsc_chf_present" value="true" />
+         <param name="ftm_cnsc_chie_present" key="/FTM3/ftm_cnsc_chie_present" value="true" />
+         <param name="ftm_cnsc_dma_present" key="/FTM3/ftm_cnsc_dma_present" value="true" />
+         <param name="ftm_cnsc_els_present" key="/FTM3/ftm_cnsc_els_present" value="true" />
+         <param name="ftm_cnsc_elsa_present" key="/FTM3/ftm_cnsc_elsa_present" value="true" />
+         <param name="ftm_cnsc_elsb_present" key="/FTM3/ftm_cnsc_elsb_present" value="true" />
+         <param name="ftm_cnsc_icrst_present" key="/FTM3/ftm_cnsc_icrst_present" value="true" />
+         <param name="ftm_cnsc_ms_present" key="/FTM3/ftm_cnsc_ms_present" value="true" />
+         <param name="ftm_cnsc_msa_present" key="/FTM3/ftm_cnsc_msa_present" value="true" />
+         <param name="ftm_cnsc_msb_present" key="/FTM3/ftm_cnsc_msb_present" value="true" />
          <param name="ftm_cnt_count_present" key="/FTM3/ftm_cnt_count_present" value="true" />
          <param name="ftm_cntin_init_present" key="/FTM3/ftm_cntin_init_present" value="true" />
+         <param name="ftm_cnv_val_present" key="/FTM3/ftm_cnv_val_present" value="true" />
          <param name="ftm_combine_combine0_present" key="/FTM3/ftm_combine_combine0_present" value="true" />
          <param name="ftm_combine_combine1_present" key="/FTM3/ftm_combine_combine1_present" value="true" />
          <param name="ftm_combine_combine2_present" key="/FTM3/ftm_combine_combine2_present" value="true" />
@@ -913,6 +981,14 @@
          <irq num="PIT1_IRQn" />
          <irq num="PIT2_IRQn" />
          <irq num="PIT3_IRQn" />
+         <param name="pit_cval_tvl_present" key="/PIT/pit_cval_tvl_present" value="true" />
+         <param name="pit_ldval_tsv_present" key="/PIT/pit_ldval_tsv_present" value="true" />
+         <param name="pit_mcr_frz_present" key="/PIT/pit_mcr_frz_present" value="true" />
+         <param name="pit_mcr_mdis_present" key="/PIT/pit_mcr_mdis_present" value="true" />
+         <param name="pit_tctrl_chn_present" key="/PIT/pit_tctrl_chn_present" value="true" />
+         <param name="pit_tctrl_ten_present" key="/PIT/pit_tctrl_ten_present" value="true" />
+         <param name="pit_tctrl_tie_present" key="/PIT/pit_tctrl_tie_present" value="true" />
+         <param name="pit_tflg_tif_present" key="/PIT/pit_tflg_tif_present" value="true" />
       </peripheral>
       <peripheral baseName="PMC"      instance=""         version="pmc_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPmc" />

@@ -106,6 +106,7 @@
    <!ATTLIST bitmaskOption derivedFrom    CDATA        #IMPLIED>
   
 <!ELEMENT floatOption EMPTY >
+   <!ATTLIST floatOption condition     CDATA        #IMPLIED>
    <!ATTLIST floatOption constant      (false|true) #IMPLIED>
    <!ATTLIST floatOption hidden        (false|true) #IMPLIED>
    <!ATTLIST floatOption name          CDATA        #IMPLIED>

@@ -67,22 +67,22 @@ public:
 $(/LPTMR/classInfo: // No class Info found)
 $(/LPTMR/StaticMethods: // /LPTMR/StaticMethods not found)
 $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
-
    /**
     * Configure LPTMR from values specified in init.
     *
     * @param init Class containing initialisation information
     */
-   static ErrorCode configure(const typename Lptmr0Info::Init &init) {
+   static ErrorCode configure(const typename Info::Init &init) {
 
       // Enable peripheral clock and map pins
       enable();
 
-      if (init.callbackFunction != nullptr) {
-         // Only set call-back if present
-         setCallback(init.callbackFunction);
+      if constexpr (Lptmr0Info::irqHandlerInstalled) {
+         if (init.callbackFunction != nullptr) {
+            // Only set call-back if feature enabled and present
+            sCallback = init.callbackFunction;
+         }
       }
-
       uint8_t  psr = init.psr;
       uint32_t cmr = init.cmr;
 
@@ -229,7 +229,7 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
     *                        Use nullptr to remove callback.
     */
    static void setCallback(typename Info::CallbackFunction callback) {
-      static_assert(Info::irqLevel>=0, "LPTMR not configure for interrupts");
+      static_assert(Info::irqHandlerInstalled, "LPTMR not configure for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }
@@ -403,7 +403,7 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
     * Calculate timing information based on desired duration
     *
     * @param[in]     duration  Desired period or event duration
-    * @param[in/out] psr        Input: psr.pcs Output: updated with psr.prescale and psr.pbyp
+    * @param[inout]  psr        Input: psr.pcs Output: updated with psr.prescale and psr.pbyp
     * @param[out]    cmr        Compare register value
     *
     * @return E_NO_ERROR      => Success
@@ -438,7 +438,7 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
     * This calculates a clock prescaler so that the filter interval is at least the given value.
     *
     * @param[in]     interval   Desired filter interval
-    * @param[in/out] psr        Input: psr.pcs Output: updated with psr.prescale and psr.pbyp
+    * @param[inout]  psr        Input: psr.pcs Output: updated with psr.prescale and psr.pbyp
     *
     * @return E_NO_ERROR      => Success
     * @return E_ILLEGAL_PARAM => Failed to find suitable values for psr.prescale and psr.pbyp
@@ -507,7 +507,7 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
    static ErrorCode setFilterInterval(Seconds interval) {
 
       uint8_t  psr = lptmr->PSR;
-      
+
       ErrorCode rc = calculateFilterValues(interval, psr);
       if (rc != E_NO_ERROR) {
          return rc;

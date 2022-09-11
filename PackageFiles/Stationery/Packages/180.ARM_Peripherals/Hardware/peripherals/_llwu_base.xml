@@ -313,6 +313,7 @@
       \t    * Constructor for %description
       \t    *
       \t    * @tparam   Types
+      \t    * @param    rest
       \t%comments
       \t    */
       \t   template <typename... Types>

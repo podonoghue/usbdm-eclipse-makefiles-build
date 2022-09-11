@@ -196,6 +196,16 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPit" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_PIT_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_PIT_MASK;" />
          <irq num="PIT_IRQn" />
+         <param name="pit_cval_tvl_present" key="/PIT/pit_cval_tvl_present" value="true" />
+         <param name="pit_ldval_tsv_present" key="/PIT/pit_ldval_tsv_present" value="true" />
+         <param name="pit_ltmr64h_lth_present" key="/PIT/pit_ltmr64h_lth_present" value="true" />
+         <param name="pit_ltmr64l_ltl_present" key="/PIT/pit_ltmr64l_ltl_present" value="true" />
+         <param name="pit_mcr_frz_present" key="/PIT/pit_mcr_frz_present" value="true" />
+         <param name="pit_mcr_mdis_present" key="/PIT/pit_mcr_mdis_present" value="true" />
+         <param name="pit_tctrl_chn_present" key="/PIT/pit_tctrl_chn_present" value="true" />
+         <param name="pit_tctrl_ten_present" key="/PIT/pit_tctrl_ten_present" value="true" />
+         <param name="pit_tctrl_tie_present" key="/PIT/pit_tctrl_tie_present" value="true" />
+         <param name="pit_tflg_tif_present" key="/PIT/pit_tflg_tif_present" value="true" />
       </peripheral>
       <peripheral baseName="PMC"      instance=""         version="pmc_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPmc" />
@@ -291,7 +301,17 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_TPM0_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_TPM0_MASK;" />
          <irq num="TPM0_IRQn" />
+         <param name="tpm_cnsc_chf_present" key="/TPM0/tpm_cnsc_chf_present" value="true" />
+         <param name="tpm_cnsc_chie_present" key="/TPM0/tpm_cnsc_chie_present" value="true" />
+         <param name="tpm_cnsc_dma_present" key="/TPM0/tpm_cnsc_dma_present" value="true" />
+         <param name="tpm_cnsc_els_present" key="/TPM0/tpm_cnsc_els_present" value="true" />
+         <param name="tpm_cnsc_elsa_present" key="/TPM0/tpm_cnsc_elsa_present" value="true" />
+         <param name="tpm_cnsc_elsb_present" key="/TPM0/tpm_cnsc_elsb_present" value="true" />
+         <param name="tpm_cnsc_ms_present" key="/TPM0/tpm_cnsc_ms_present" value="true" />
+         <param name="tpm_cnsc_msa_present" key="/TPM0/tpm_cnsc_msa_present" value="true" />
+         <param name="tpm_cnsc_msb_present" key="/TPM0/tpm_cnsc_msb_present" value="true" />
          <param name="tpm_cnt_count_present" key="/TPM0/tpm_cnt_count_present" value="true" />
+         <param name="tpm_cnv_val_present" key="/TPM0/tpm_cnv_val_present" value="true" />
          <param name="tpm_conf_crot_present" key="/TPM0/tpm_conf_crot_present" value="true" />
          <param name="tpm_conf_csoo_present" key="/TPM0/tpm_conf_csoo_present" value="true" />
          <param name="tpm_conf_csot_present" key="/TPM0/tpm_conf_csot_present" value="true" />
@@ -318,7 +338,17 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_TPM1_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_TPM1_MASK;" />
          <irq num="TPM1_IRQn" />
+         <param name="tpm_cnsc_chf_present" key="/TPM1/tpm_cnsc_chf_present" value="true" />
+         <param name="tpm_cnsc_chie_present" key="/TPM1/tpm_cnsc_chie_present" value="true" />
+         <param name="tpm_cnsc_dma_present" key="/TPM1/tpm_cnsc_dma_present" value="true" />
+         <param name="tpm_cnsc_els_present" key="/TPM1/tpm_cnsc_els_present" value="true" />
+         <param name="tpm_cnsc_elsa_present" key="/TPM1/tpm_cnsc_elsa_present" value="true" />
+         <param name="tpm_cnsc_elsb_present" key="/TPM1/tpm_cnsc_elsb_present" value="true" />
+         <param name="tpm_cnsc_ms_present" key="/TPM1/tpm_cnsc_ms_present" value="true" />
+         <param name="tpm_cnsc_msa_present" key="/TPM1/tpm_cnsc_msa_present" value="true" />
+         <param name="tpm_cnsc_msb_present" key="/TPM1/tpm_cnsc_msb_present" value="true" />
          <param name="tpm_cnt_count_present" key="/TPM1/tpm_cnt_count_present" value="true" />
+         <param name="tpm_cnv_val_present" key="/TPM1/tpm_cnv_val_present" value="true" />
          <param name="tpm_conf_crot_present" key="/TPM1/tpm_conf_crot_present" value="true" />
          <param name="tpm_conf_csoo_present" key="/TPM1/tpm_conf_csoo_present" value="true" />
          <param name="tpm_conf_csot_present" key="/TPM1/tpm_conf_csot_present" value="true" />
