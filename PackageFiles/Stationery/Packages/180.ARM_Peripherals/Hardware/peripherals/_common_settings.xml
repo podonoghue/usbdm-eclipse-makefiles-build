@@ -3,6 +3,7 @@
 <!-- _common_settings.xml -->
 
 <list name="CommonSettings" >
+
 <binaryOption name="Map all pins on startup" key="/HARDWARE/mapAllPins" condition="/PCR/lk_present"
    description="Execute mapAllPins() during startup"
    toolTip="Enables mapping of allocated pins during startup using mapAllPins()\n

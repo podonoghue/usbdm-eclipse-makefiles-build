@@ -231,6 +231,7 @@
    <!ATTLIST choiceOption units               (None|Hz|s)  #IMPLIED>
    <!ATTLIST choiceOption derived             (true)       #IMPLIED>
    <!ATTLIST choiceOption derivedFrom         CDATA        #IMPLIED>
+   <!ATTLIST choiceOption namespace           (info|usbdm|class|all)  #IMPLIED >
    <!ATTLIST choiceOption enumStem            CDATA        #IMPLIED> <!-- Type for enum and first part of enum name -->
    <!ATTLIST choiceOption typeName            CDATA        #IMPLIED> <!-- as for enumStem -->
    <!ATTLIST choiceOption enumType            CDATA        #IMPLIED> <!-- Type to use for enums e.g.uint8_t -->

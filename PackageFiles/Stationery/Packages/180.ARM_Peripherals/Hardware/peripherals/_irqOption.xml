@@ -21,14 +21,9 @@
       
    <choiceOption key="irqLevel"
       description="IRQ level for this peripheral"
-      toolTip="Priority level used to configure the NVIC">
-      <choice name="VeryHigh"      value="NvicPriority_VeryHigh" />
-      <choice name="High"          value="NvicPriority_High" />
-      <choice name="MidHigh"       value="NvicPriority_MidHigh" />
-      <choice name="Normal"        value="NvicPriority_Normal" isDefault="true"/>
-      <choice name="Midlow"        value="NvicPriority_Midlow" />
-      <choice name="Low"           value="NvicPriority_Low" />
-      <choice name="VeryLow"       value="NvicPriority_VeryLow" />
+      toolTip="Priority level used to configure the NVIC"
+      valueFormat="%s"  
+      derivedFrom="/PCR/nvic_irqLevel" >
    </choiceOption>
 
    <setTemplate variables="irqHandlingMethod" ><![CDATA[
@@ -44,7 +39,7 @@
        \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);
 
        \t//! Default IRQ level
-       \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel):NvicPriority_NotInstalled);\n\n
+       \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel.enum[]):NvicPriority_NotInstalled);\n\n
    ]]></setTemplate>
       
    <constant key="enable_interrupts_code"  value="enableNvicInterrupts();"  />
