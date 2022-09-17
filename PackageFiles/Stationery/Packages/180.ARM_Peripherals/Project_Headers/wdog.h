@@ -109,20 +109,18 @@ public:
 protected:
    /**
     *
-    * @param[in]     stctrlh          Used to obtain clock source (STCTRLH.CLKSRC)
-    * @param[in]     timeout .seconds Timeout value in seconds
-    * @param[out]    timeout .ticks   Timeout value in ticks
-    * @param[in]     window .seconds  Window value in seconds
-    * @param[out]    window .ticks    Window value in ticks
-    * @param[out]    presc            Calculated prescale value (PRESC.PRESCVAL)
+    * @param[in]     stctrlh   Used to obtain clock source (STCTRLH.CLKSRC)
+    * @param[in,out] timeout   .seconds Timeout value in seconds -> .ticks   Timeout value in ticks
+    * @param[in,out] window    .seconds  Window value in seconds -> .ticks    Window value in ticks
+    * @param[out]    presc     Calculated prescale value (PRESC.PRESCVAL)
     *
     * @return Error code
     */
    static ErrorCode calculateTimingParameters(
-         uint16_t stctrlh,
-         typename Info::Init::Seconds_Ticks &timeout,
-         typename Info::Init::Seconds_Ticks &window,
-         uint16_t &presc) {
+         uint16_t       stctrlh,
+         Seconds_Ticks &timeout,
+         Seconds_Ticks &window,
+         uint16_t      &presc) {
 
       float constexpr maxCount = ~1UL;
 

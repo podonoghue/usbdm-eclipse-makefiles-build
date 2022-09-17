@@ -263,6 +263,21 @@ constexpr auto operator /(int left,       Hertz right)   { return Seconds(left/r
    using Hertz    = float;
 #endif
 
+/**
+ * Convenience class for sharing storage of time measurements in ticks and seconds
+ */
+union Seconds_Ticks {
+   ///  Time in seconds
+   Seconds seconds;
+
+   ///  Time in ticks
+   Ticks ticks;
+
+   constexpr Seconds_Ticks(const Seconds_Ticks &other) : ticks(other.ticks) {};
+   constexpr Seconds_Ticks(Ticks   ticks)   : ticks(ticks) {}
+   constexpr Seconds_Ticks(Seconds seconds) : seconds(seconds) {}
+};
+
    /*
     * Allows writing numbers with units e.g. 100_ms
     */
