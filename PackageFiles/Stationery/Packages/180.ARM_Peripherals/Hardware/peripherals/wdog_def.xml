@@ -14,7 +14,18 @@
    </projectActionList>
    
    <!-- ************* WDOG_STCTRLH ****************** -->
+  
+   <binaryOption key="wdog_stctrlh_wdogen" 
+      enumStem="WdogEnable"
+      enumType="uint16_t" 
+      description="Watchdog enable"
+      toolTip="Main enable for WDOG">
+      <choice value="0" enum="Disabled" name="Watchdog disabled" isDefault="true" />
+      <choice value="1" enum="Enabled"  name="Watchdog enabled" />
+   </binaryOption>  
+
    <binaryOption key="wdog_stctrlh_distestwdog" 
+      enumType="uint16_t" 
       enumStem="WdogTestMode" 
       description="Test mode disable"
       toolTip="Disables watchdog test mode until next reset">
@@ -23,6 +34,7 @@
    </binaryOption>
 
    <binaryOption key="wdog_stctrlh_waiten" 
+      enumType="uint16_t" 
       enumStem="WdogEnableInWait" 
       description="Enable watchdog in WAIT mode"
       toolTip="Control watchdog operation in WAIT mode">
@@ -31,6 +43,7 @@
    </binaryOption>
 
    <binaryOption key="wdog_stctrlh_stopen" 
+      enumType="uint16_t" 
       enumStem="WdogEnableInStop" 
       description="Enable watchdog in STOP mode"
       toolTip="Control watchdog operation in STOP mode">
@@ -39,6 +52,7 @@
    </binaryOption>
 
    <binaryOption key="wdog_stctrlh_dbgen" 
+      enumType="uint16_t" 
       enumStem="WdogEnableInDebug" 
       description="Enable watchdog in DEBUG mode"
       toolTip="Control watchdog operation in DEBUG mode">
@@ -47,6 +61,7 @@
    </binaryOption>
 
    <binaryOption key="wdog_stctrlh_allowupdate" 
+      enumType="uint16_t" 
       enumStem="WdogAllowUpdate" 
       description="Allow watchdog update"
       toolTip="Enables updates to watchdog write-once registers, after \n
@@ -57,6 +72,7 @@
    </binaryOption>
 
    <binaryOption key="wdog_stctrlh_winen" 
+      enumType="uint16_t" 
       enumStem="WdogWindow" 
       description="Enable watchdog windowing mode"
       toolTip="Windowing mode only allows refresh during a restricted window">
@@ -65,6 +81,7 @@
    </binaryOption>
 
    <binaryOption key="wdog_stctrlh_irqrsten" 
+      enumType="uint16_t" 
       enumStem="WdogIntBeforeReset" 
       description="Enable interrupt before reset"
       toolTip="Allows an interrupt handler to record state before the watchdog reset occurs">
@@ -73,40 +90,129 @@
    </binaryOption>
 
    <binaryOption key="wdog_stctrlh_clksrc" 
+      target="inputClockFrequency"
+      enumType="uint16_t" 
       enumStem="WdogClock" 
       description="Watchdog clock source"
       toolTip="Clock source for WDOG">
-      <choice value="0" enum="LpoClk" code="PmcInfo::getLpoClock()"  name="LPO oscillator" isDefault="true" />
-      <choice value="1" enum="AltClk" code="SystemBusClock"          name="System bus clock" />
+      <choice value="0" enum="LpoClk"       code="PmcInfo::getLpoClock()"  ref="/PMC/system_low_power_clock" name="LPO oscillator"   isDefault="true" />
+      <choice value="1" enum="SystemBusClk" code="SystemBusClock"          ref="/SIM/system_bus_clock"       name="System bus clock" />
    </binaryOption>
-
-   <binaryOption key="wdog_stctrlh_wdogen" 
-      enumStem="WdogEnable" 
-      description="Watchdog enable"
-      toolTip="Main enable for WDOG">
-      <choice value="0" enum="Disabled" name="Watchdog disabled" isDefault="true" />
-      <choice value="1" enum="Enabled"  name="Watchdog enabled" />
-   </binaryOption>  
    
-   <initialValueTemplate
-      variables="
-         wdog_stctrlh_distestwdog,
-         wdog_stctrlh_waiten,
-         wdog_stctrlh_stopen,
-         wdog_stctrlh_dbgen,
-         wdog_stctrlh_allowupdate,
-         wdog_stctrlh_winen,
-         wdog_stctrlh_irqrsten,
-         wdog_stctrlh_clksrc,
-         wdog_stctrlh_wdogen"
+   <clockCodeTemplate variable="wdog_stctrlh_clksrc"
+      returnFormat="%s"
    ><![CDATA[
-      \t//! Watchdog Status and Control Register High
-      \tstatic constexpr uint32_t stctrlh = %initExpression\n\n
-   ]]></initialValueTemplate>
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setClockSource(%enumClass %enumParam) {
+      \t   %defaultFieldExpression
+      \t}
+
+      \t/**
+      \t * Get %description
+      \t *
+      %paramDescription
+      \t
+      \t * @return Clock frequency in Hz
+      \t */
+      \tstatic inline uint32_t getInputClockFrequency(%params) {
+      \t   
+      \t   switch(%enumParam) {
+      \t      default:
+      %body
+      \t   }
+      \t}
+      \t
+      \t/**
+      \t * Get %description
+      \t *
+      \t * @return Clock frequency in Hz
+      \t */
+      \tstatic uint32_t getInputClockFrequency() {
+      \t   
+      \t   return getInputClockFrequency((%enumClass)(%defaultMaskingExpression));
+      \t}\n\n
+   ]]></clockCodeTemplate>
+
+   <intOption key="inputClockFrequency" 
+      constant="true"
+      description="Watchdog Input clock frequency"
+      toolTip="Determined from timer clock source"
+      derived="true"
+      units="Hz"/>
+      
+   <choiceOption key="wdog_presc_prescval" 
+      target="timerTickPeriod"
+      description="Prescaler for the watchdog clock source" 
+      enumStem="WdogPrescale"
+      enumType="uint16_t"
+      toolTip="This prescaler divides the input clock for the watchdog counter">
+      <choice value="0"  name="Prescaler = 1"  ref="1.0/inputClockFrequency" enum="Direct" />
+      <choice value="1"  name="Prescaler = 2"  ref="2.0/inputClockFrequency" enum="DivBy2" />
+      <choice value="2"  name="Prescaler = 3"  ref="3.0/inputClockFrequency" enum="DivBy3" />
+      <choice value="3"  name="Prescaler = 4"  ref="4.0/inputClockFrequency" enum="DivBy4" />
+      <choice value="4"  name="Prescaler = 5"  ref="5.0/inputClockFrequency" enum="DivBy5" />
+      <choice value="5"  name="Prescaler = 6"  ref="6.0/inputClockFrequency" enum="DivBy6" />
+      <choice value="6"  name="Prescaler = 7"  ref="7.0/inputClockFrequency" enum="DivBy7" />
+      <choice value="7"  name="Prescaler = 8"  ref="8.0/inputClockFrequency" enum="DivBy8" />
+   </choiceOption>
+
+   <floatOption key="timerTickPeriod" 
+      constant="true"
+      description="Period of watchdog counter"
+      toolTip="Determined from timer clock source and prescaler"
+      derived="true"
+      units="s"/>
+      
+   <floatOption key="wdog_timeoutPeriod" 
+      description="Watchdog Timeout"
+      toolTip="The watchdog must be refreshed before this interval expires"
+      valueFormat="%s_s"
+      typeName="Seconds"
+      units="s"
+      value="1"/>
+   
+   <intOption key="wdog_timeout" 
+      ref="timerTickPeriod;(wdog_timeoutPeriod)/timerTickPeriod"
+      constant="true"
+      description="Watchdog Timeout in ticks"
+      toolTip="The watchdog must be refreshed before the counter reaches this value"
+      valueFormat="%s_ticks"
+      typeName="Ticks"
+      derived="true"
+      min="550" max="4294967295" 
+   />
+   
+   <floatOption key="wdog_windowPeriod" 
+      description="Watchdog Window"
+      toolTip="Refresh of the watchdog may not be carried out before this interval has expired i.e.\n
+               Refresh must occur within [window...timeout] if window mode is enabled.\n
+               A refresh outside of this range resets the system"
+      valueFormat="%s_s"
+      typeName="Seconds"
+      derived="true"
+      units="s"
+      value="0"/>
    
    <template key="/SYSTEM/Includes" namespace="all" ><![CDATA[
       #include "wdog.h"\n
    ]]></template>
+   
+   <intOption key="wdog_window" 
+      ref="timerTickPeriod;(wdog_windowPeriod)/timerTickPeriod"
+      constant="true"
+      description="Watchdog Window in ticks"
+      toolTip="If windowed operation is enabled, then the watchdog can only be refreshed \n
+               if the timer reaches a value greater than or equal to this window length value.\n
+               A refresh outside of this window resets the system"
+      valueFormat="%s_ticks"
+      typeName="Ticks"
+
+      value="0" min="0" max="4294967295" 
+   />
    
    <template key="/SYSTEM/WatchdogInitialise" namespace="all" ><![CDATA[
       \t/*
@@ -174,22 +280,13 @@
       <choice value="0xD928" enum="2"  name="2nd unlock value"  />
    </choiceOption>
    
-   <clockCodeTemplate variable="wdog_stctrlh_clksrc"
-      returnFormat="%s"
-   ><![CDATA[
+   <template><![CDATA[
+      \t
       \t/**
-      \t * Get %description
-      \t *
-      \t * @return Clock frequency in Hz
+      \t * Type definition for WDOG interrupt call back
       \t */
-      \tstatic uint32_t getInputClockFrequency() {
-      \t   
-      \t   switch(%defaultMaskingExpression) {
-      \t      default: return 0;
-      %body
-      \t   }
-      \t}\n\n
-   ]]></clockCodeTemplate>
+      \ttypedef void (*CallbackFunction)();\n\n
+   ]]></template>
 
    <template key="/WDOG/declarations" namespace="all"  ><![CDATA[
    \t/**
@@ -197,5 +294,332 @@
    \t */
    \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
    ]]></template>
+      
+      
+   
+<!-- ========== WDOG Init class =============================== -->
+
+   <template><![CDATA[
+      \t/**
+      \t * Class used to do initialisation of an WDOG
+      \t *
+      \t * This class has a templated constructor that accepts various values:
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const Wdog$(_instance)::Init wdogInit {
+      \t      WdogEnable_Enabled ,          // Watchdog enable - Watchdog enabled
+      \t      WdogEnableInWait_Disabled ,   // Enable watchdog in WAIT mode - Disabled in WAIT mode
+      \t      WdogEnableInStop_Disabled ,   // Enable watchdog in STOP mode - Disabled in STOP mode
+      \t      WdogEnableInDebug_Disabled ,  // Enable watchdog in DEBUG mode - Disabled in DEBUG mode
+      \t      WdogAllowUpdate_Enabled ,     // Allow watchdog update - Update Enabled
+      \t      WdogWindow_Disabled ,         // Enable watchdog windowing mode - Windowing mode is disabled
+      \t      WdogIntBeforeReset_Enabled ,  // Enable interrupt before reset - Interrupt followed by Reset
+      \t      wdogCallback,                 // Call-back
+      \t      WdogClock_SystemBusClk ,      // Watchdog clock source - System bus clock
+      \t      NvicPriority_Normal,          // IRQ level for this peripheral - Normal
+      \t      // Either
+      \t      WdogPrescale_DivBy2 ,         // Prescaler for the watchdog clock source (must be in this order and last entries)
+      \t      1000_ticks, 2000_ticks,       // Timeout and Window values
+      \t      // **** OR ****
+      \t      1000_ticks, 2000_ticks,       // Timeout and Window values (must be in this order and last entries)
+      \t * };
+      \t *
+      \t * // Initialise WDOG from values specified above
+      \t * Wdog$(_instance)::configure(wdogInit)
+      \t * @endcode
+      \t */
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**                               
+      \t    * Copy Constructor                  
+      \t    */                             
+      \t   constexpr Init(const Init &other) = delete;
+      \t   
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]></template>
+   
+<!-- Member variables -->
+  
+   <setTemplate variables="irqHandlingMethod"
+    ><![CDATA[
+      \t
+      #if $(irqHandlingMethod)
+      \t   /// %description
+      \t   %params = nullptr;
+      #endif\n\n
+   ]]></setTemplate>
+   
+   <initialValueTemplate 
+      variables="
+         wdog_timeout"
+   ><![CDATA[
+      \tunion Seconds_Ticks {
+      \t   ///  Time in seconds
+      \t   Seconds seconds;
+      \t
+      \t   ///  Time in ticks
+      \t   Ticks ticks;
+      \t
+      \t   constexpr Seconds_Ticks(Ticks   ticks)   : ticks(ticks) {}
+      \t   constexpr Seconds_Ticks(Seconds seconds) : seconds(seconds) {}
+      \t};\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate 
+      variables="
+         wdog_timeout"
+   ><![CDATA[
+      \t   ///  %description
+      \t   Seconds_Ticks %registerName = {0_ticks};\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate 
+      variables="
+         wdog_window"
+   ><![CDATA[
+      \t   ///  %description
+      \t   Seconds_Ticks %registerName = {0_ticks};\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate 
+      variables="
+         wdog_stctrlh_distestwdog,
+         wdog_stctrlh_waiten,
+         wdog_stctrlh_stopen,
+         wdog_stctrlh_dbgen,
+         wdog_stctrlh_allowupdate,
+         wdog_stctrlh_winen,
+         wdog_stctrlh_irqrsten,
+         wdog_stctrlh_clksrc,
+         wdog_stctrlh_wdogen"
+   ><![CDATA[
+      \t   ///  Watchdog Status and Control Register High
+      \t   uint16_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate 
+      variables="
+         wdog_presc_prescval"
+   ><![CDATA[
+      \t   ///  %description
+      \t   uint16_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate
+      variables="/PCR/nvic_irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+   ]]></initialValueTemplate>
+
+<!-- Configure method -->
+  
+   <setTemplate variables="wdog_stctrlh_wdogen" discardRepeats="true" key="/WDOG/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure WDOG from values specified in init
+      \t
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic ErrorCode configure(const typename Info::Init &init) {
+      \t   
+      \t   typename Info::Init::Seconds_Ticks timeout = init.timeout;
+      \t   typename Info::Init::Seconds_Ticks window  = init.window;
+      \t   uint16_t presc   = init.presc;
+      \t   
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-back if feature enabled and non-null
+      \t      if (init.callbackFunction != nullptr) {
+      \t         setCallback(init.callbackFunction);
+      \t      }
+      \t   }
+      \t   if (presc == ((uint16_t)-1)) {
+      \t   
+      \t      // Calculate timeout, window and prescaler
+      \t      ErrorCode rc = calculateTimingParameters(init.stctrlh, timeout, window, presc);
+      \t      if (rc != E_NO_ERROR) {
+      \t         return rc;
+      \t      }
+      \t   }
+      \t   // Protect sequence from interrupts
+      \t   CriticalSection cs;
+      \t   
+      \t   // Unlock before changing settings
+      \t   wdog->UNLOCK = WdogUnlock_1;
+      \t   wdog->UNLOCK = WdogUnlock_2;
+      \t   
+      \t   // Read-back to delay until change effected
+      \t   (void)(wdog->UNLOCK);
+      \t   
+      \t   // Configure watchdog
+      \t   wdog->STCTRLH  = init.stctrlh;
+      \t   wdog->PRESC    = presc;
+      \t   wdog->WINH     = window.ticks>>16;
+      \t   wdog->WINL     = window.ticks;
+      \t   wdog->TOVALH   = timeout.ticks>>16;
+      \t   wdog->TOVALL   = timeout.ticks;
+      \t   
+      \t   // For some reason this must be done after above
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
+      \t   return E_NO_ERROR;
+      \t}\n\n
+   ]]></setTemplate>
+
+<!-- Constructors -->
+  
+   <setTemplate 
+      variables="irqHandlingMethod" 
+      linePadding="xxx"
+    ><![CDATA[
+      #if $(irqHandlingMethod)
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%enumParam0 = %paramExpression;
+      \t   }
+      #endif\n\n
+   ]]></setTemplate>
+   
+   <for keys="r" values="/PCR/nvic_irqLevel">
+      <setTemplate
+         variables="%(r)" 
+         linePadding="xxx"
+       ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = %paramExpression;
+         \t   }\n\n
+      ]]></setTemplate>
+   </for>
+   
+   <for keys="r" values="
+         wdog_stctrlh_distestwdog;
+         wdog_stctrlh_waiten;
+         wdog_stctrlh_stopen;
+         wdog_stctrlh_dbgen;
+         wdog_stctrlh_allowupdate;
+         wdog_stctrlh_winen;
+         wdog_stctrlh_irqrsten;
+         wdog_stctrlh_clksrc;
+         wdog_stctrlh_wdogen">
+      <setTemplate variables="%(r)"
+         linePadding="xxx" 
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t   
+         \t      %registerName |= %paramExpression;
+         \t   }
+         \t\n
+      ]]></setTemplate>
+   </for>
+   
+   <setTemplate variables="wdog_presc_prescval,wdog_timeout,wdog_window"
+      linePadding="xxx" 
+      nonDefaultParams="2" 
+      params=",timeout,window"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description0, %description1 & %description2
+      \t    *
+      %paramDescription
+      \t    */
+      \t   constexpr Init(
+      %params) : %registerName1(%enumParam1), %registerName2(%enumParam2), %registerName0(%enumParam0) {
+      \t   }
+      \t\n
+   ]]></setTemplate>
+   
+   <setTemplate variables="wdog_timeoutPeriod,wdog_windowPeriod"
+      linePadding="xxx"
+      params="timeout,window"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description0, %description1 & %description2
+      \t    *
+      %paramDescription
+      \t    */
+      \t   constexpr Init(
+      %params) : %enumParam0(%enumParam0), %enumParam1(%enumParam1), presc((uint16_t)-1) {
+      \t   }
+      \t\n
+   ]]></setTemplate>
+   
+   <template ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+<!-- Default Initialisation value -->
+  
+   <template><![CDATA[
+      \t/**
+      \t * Default initialisation value for Wdog$(_instance)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic const Init DefaultInitValue;\n\n
+   ]]></template>
+
+   <initialValueTemplate key="/HARDWARE/StaticObjects" namespace="all"
+      separator=","
+      terminator=","     
+      variables="
+         wdog_stctrlh_distestwdog,
+         wdog_stctrlh_waiten,
+         wdog_stctrlh_stopen,
+         wdog_stctrlh_dbgen,
+         wdog_stctrlh_allowupdate,
+         wdog_stctrlh_winen,
+         wdog_stctrlh_irqrsten,
+         wdog_stctrlh_clksrc,
+         wdog_stctrlh_wdogen,
+         irqLevel,
+         wdog_presc_prescval,
+         wdog_timeout,
+         wdog_window,
+         "     
+   ><![CDATA[
+      \t/**
+      \t * Default initialisation value for Wdog$(_instance)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tconst Wdog$(_instance)Info::Init Wdog$(_instance)Info::DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
+   </validate>
       
 </peripheralPage>

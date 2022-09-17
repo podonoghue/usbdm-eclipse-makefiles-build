@@ -40,13 +40,6 @@ static constexpr uint16_t WdogUnlock1 = 0xC520;
 static constexpr uint16_t WdogUnlock2 = 0xD928;
 
 /**
- * Type definition for WDOG interrupt call back
- *
- * @param[in]  status Struct indicating interrupt source and state
- */
-typedef void (*WdogCallbackFunction)();
-
-/**
  * Template class representing the Watchdog Monitor
  *
  * The Watchdog Timer (WDOG) keeps a watch on the system functioning and resets it in
@@ -62,6 +55,8 @@ typedef void (*WdogCallbackFunction)();
 template<class Info>
 class WdogBase_T : public Info {
 
+   using CallbackFunction = typename Info::CallbackFunction;
+
 protected:
    /**
     * Callback to catch unhandled interrupt
@@ -71,7 +66,7 @@ protected:
    }
 
    /** Callback function for ISR */
-   static WdogCallbackFunction callback;
+   static CallbackFunction callback;
 
 $(/WDOG/protectedMethods: // No private methods found)
 
@@ -95,15 +90,13 @@ public:
     * @note This operation is time-critical so is protected by a CriticalSection
     */
    static void refresh(WdogRefresh wdogRefresh_1, WdogRefresh wdogRefresh_2) {
-   
+
       // Protect sequence from interrupts
       CriticalSection cs;
-   
+
       wdog->REFRESH = wdogRefresh_1;
       wdog->REFRESH = wdogRefresh_2;
    }
-   
-$(/WDOG/publicMethods: // No public methods found)
 
    /**
     * IRQ handler
@@ -112,6 +105,50 @@ $(/WDOG/publicMethods: // No public methods found)
       // Call handler
       callback();
    }
+
+protected:
+   /**
+    *
+    * @param[in]     stctrlh          Used to obtain clock source (STCTRLH.CLKSRC)
+    * @param[in]     timeout .seconds Timeout value in seconds
+    * @param[out]    timeout .ticks   Timeout value in ticks
+    * @param[in]     window .seconds  Window value in seconds
+    * @param[out]    window .ticks    Window value in ticks
+    * @param[out]    presc            Calculated prescale value (PRESC.PRESCVAL)
+    *
+    * @return Error code
+    */
+   static ErrorCode calculateTimingParameters(
+         uint16_t stctrlh,
+         typename Info::Init::Seconds_Ticks &timeout,
+         typename Info::Init::Seconds_Ticks &window,
+         uint16_t &presc) {
+
+      float constexpr maxCount = ~1UL;
+
+      if ((int)window.ticks>(int)timeout.ticks) {
+         return E_ILLEGAL_PARAM;
+      }
+      uint32_t clockFrequency = WdogInfo::getInputClockFrequency((WdogClock)(stctrlh & WDOG_STCTRLH_CLKSRC_MASK));
+      Seconds maxTime = maxCount/clockFrequency;
+
+      for(int prescale=1; prescale<=8; prescale++) {
+         float counterFrequency = clockFrequency/(float)prescale;
+         maxTime = maxCount/clockFrequency;
+         if (maxTime > timeout.seconds) {
+            timeout.ticks = roundf(timeout.seconds*counterFrequency);
+            window.ticks  = roundf(window.seconds*counterFrequency);
+            presc = WDOG_PRESC_PRESCVAL(prescale-1);
+            return E_NO_ERROR;
+         }
+      }
+      return E_TOO_LARGE;
+   }
+
+public:
+$(/WDOG/InitMethod: // /WDOG/InitMethod not found)
+   
+$(/WDOG/publicMethods: // No public methods found)
 
    /**
     * Wrapper to allow the use of a class member as a callback function
@@ -129,7 +166,7 @@ $(/WDOG/publicMethods: // No public methods found)
     *    int y;
     *
     *    // Member function used as callback
-    *    // This function must match WdogCallbackFunction
+    *    // This function must match CallbackFunction
     *    void callback() {
     *       ...;
     *    }
@@ -145,8 +182,8 @@ $(/WDOG/publicMethods: // No public methods found)
     * @endcode
     */
    template<class T, void(T::*callback)(), T &object>
-   static WdogCallbackFunction wrapCallback() {
-      static WdogCallbackFunction fn = []() {
+   static CallbackFunction wrapCallback() {
+      static CallbackFunction fn = []() {
          (object.*callback)();
       };
       return fn;
@@ -168,7 +205,7 @@ $(/WDOG/publicMethods: // No public methods found)
     *    int y;
     *
     *    // Member function used as callback
-    *    // This function must match WdogCallbackFunction
+    *    // This function must match CallbackFunction
     *    void callback() {
     *       ...;
     *    }
@@ -184,9 +221,9 @@ $(/WDOG/publicMethods: // No public methods found)
     * @endcode
     */
    template<class T, void(T::*callback)()>
-   static WdogCallbackFunction wrapCallback(T &object) {
+   static CallbackFunction wrapCallback(T &object) {
       static T &obj = object;
-      static WdogCallbackFunction fn = []() {
+      static CallbackFunction fn = []() {
          (obj.*callback)();
       };
       return fn;
@@ -200,7 +237,7 @@ $(/WDOG/publicMethods: // No public methods found)
     *
     * @param[in]  theCallback Callback function to execute on interrupt
     */
-   static void setCallback(WdogCallbackFunction theCallback) {
+   static void setCallback(CallbackFunction theCallback) {
       static_assert(Info::irqHandlerInstalled, "WDOG not configured for interrupts");
       if (theCallback == nullptr) {
          theCallback = unhandledCallback;
@@ -300,19 +337,10 @@ public:
     * Enable with default settings.
     * Includes configuring all pins
     */
-   static void defaultConfigure() {
-
-      // Protect sequence from interrupts
-      CriticalSection cs;
-
-      wdog->UNLOCK = WdogUnlock_1;
-      wdog->UNLOCK = WdogUnlock_2;
-
-      // Read-back to delay until change effected
-      (void)(wdog->UNLOCK);
+   static inline void defaultConfigure() {
 
       // Update settings
-      wdog->STCTRLH = USBDM::WdogInfo::stctrlh;
+      configure(Info::DefaultInitValue);
    }
 
    /**
@@ -383,7 +411,7 @@ public:
    }
 };
 
-template<class Info> WdogCallbackFunction WdogBase_T<Info>::callback = WdogBase_T<Info>::unhandledCallback;
+template<class Info> typename WdogBase_T<Info>::CallbackFunction WdogBase_T<Info>::callback = WdogBase_T<Info>::unhandledCallback;
 
 $(/WDOG/declarations: // No declarations found)
 /**
