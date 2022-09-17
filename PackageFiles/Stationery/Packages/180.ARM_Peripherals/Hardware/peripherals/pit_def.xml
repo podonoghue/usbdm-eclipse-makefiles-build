@@ -19,6 +19,7 @@
    ]]></template>
 
    <choiceOption key="pit_channelNumber" 
+      hidden="true"
       description="Pit Channel Number"
       enumStem="PitChannelNum"
       valueFormat="%s"
@@ -32,8 +33,8 @@
    </choiceOption>
    
    <intOption key="pitInputClock" constant="true" derived="true"
-      description="PIT input clock"  
       ref="/SIM/system_bus_clock"
+      description="PIT input clock"  
       units="Hz"
       />
 
@@ -94,7 +95,7 @@
       </binaryOption>
    </for>
 
-   <!--  ========== PIT Init class =============================== -->
+   <!-- ========== PIT Init class =============================== -->
 
    <template><![CDATA[
       \t/**
@@ -137,7 +138,7 @@
       \t\n
    ]]></template>
 
-<!--  Member variables -->
+<!-- Member variables -->
   
    <setTemplate variables="irqHandlingMethod"
     ><![CDATA[
@@ -183,7 +184,7 @@
       \t   %enumClass %registerName = PitChannelNum_None;\n\n
    ]]></initialValueTemplate>
 
-<!--  Configure method -->
+<!-- Configure method -->
   
    <setTemplate variables="pit_tctrl_ten[]" discardRepeats="true" key="/PIT/InitMethod" namespace="all" ><![CDATA[
    \t/**
@@ -209,8 +210,10 @@
    \t   pit->CHANNEL[init.channelnumber].LDVAL = ldval;
    \t
    \t   if constexpr (Info::irqHandlerInstalled) {
-   \t      // Only set call-back if feature enabled
-   \t      setCallback(init.channelnumber, init.callbackFunction);
+   \t      // Only set call-back if feature enabled and non-null
+   \t      if (init.callbackFunction != nullptr) {
+   \t         setCallback(init.channelnumber, init.callbackFunction);
+   \t      }
    \t      enableNvicInterrupts(init.channelnumber, init.irqlevel);
    \t   }
    \t   // Configure channel
@@ -218,7 +221,7 @@
    \t}\n\n
    ]]></setTemplate>
 
-<!--  Constructors -->
+<!-- Constructors -->
   
    <for keys="r" values="irqHandlingMethod">
       <setTemplate
@@ -289,7 +292,7 @@
       \t};\n\n
    ]]></template>
 
-<!--  Default Values -->
+<!-- Default Values -->
   
    <setTemplate 
       variables="pit_mcr_frz"   
@@ -300,15 +303,14 @@
    ]]></setTemplate>
    
    <for keys="ch" dim="numChannels">
-      <setTemplate
-         variables="pit_tctrl_ten[%(ch)],pit_tctrl_chn[%(ch)],pit_tctrl_tie[%(ch)],irqLevel,pit_ldval_tsv[%(ch)]">
+      <template>
       <![CDATA[
          \t/**
          \t * Default initialisation values for PIT channel %(ch)
          \t * This value is created from Configure.usbdmProject settings
          \t */
          \tstatic const Init DefaultChannel%(ch)InitValue;\n\n
-      ]]></setTemplate>
+      ]]></template>
    </for>
    
    <for keys="ch" dim="numChannels">
@@ -329,7 +331,7 @@
       ]]></setTemplate>
    </for>
    
-   <!--  ==================== Misc ======================== -->
+   <!-- ==================== Misc ======================== -->
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PitValidate">

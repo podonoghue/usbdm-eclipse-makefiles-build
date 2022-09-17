@@ -272,9 +272,9 @@ public:
     *                              Use nullptr to remove callback.
     */
    static void setCallback(PitChannelNum pitChannelNum, CallbackFunction callback) {
-   
+
       static_assert(Info::irqHandlerInstalled, "No interrupt handler installed for PIT - Modify Configure.usbdm");
-      
+
       if (callback == nullptr) {
          callback = unhandledCallback;
       }
@@ -867,7 +867,7 @@ public:
        * Enable interrupts in NVIC
        */
       void enableNvicInterrupts() const {
-         return PitBase_T<Info>::enableNvicInterrupts(chan);
+         PitBase_T<Info>::enableNvicInterrupts(chan);
       }
 
       /**
@@ -877,14 +877,14 @@ public:
        * @param[in]  nvicPriority  Interrupt priority
        */
       void enableNvicInterrupts(NvicPriority nvicPriority) const {
-         return PitBase_T<Info>::enableNvicInterrupts(chan, nvicPriority);
+         PitBase_T<Info>::enableNvicInterrupts(chan, nvicPriority);
       }
 
       /**
        * Disable interrupts in NVIC
        */
       void disableNvicInterrupts() const {
-         return PitBase_T<Info>::disableNvicInterrupts(chan);
+         PitBase_T<Info>::disableNvicInterrupts(chan);
       }
 
       /**
@@ -1111,7 +1111,7 @@ public:
        * Enable interrupts in NVIC
        */
       static void enableNvicInterrupts() {
-         return PitBase_T<Info>::enableNvicInterrupts(CHANNEL);
+         PitBase_T<Info>::enableNvicInterrupts(CHANNEL);
       }
 
       /**
@@ -1121,14 +1121,14 @@ public:
        * @param[in]  nvicPriority  Interrupt priority
        */
       static void enableNvicInterrupts(NvicPriority nvicPriority) {
-         return PitBase_T<Info>::enableNvicInterrupts(CHANNEL, nvicPriority);
+         PitBase_T<Info>::enableNvicInterrupts(CHANNEL, nvicPriority);
       }
 
       /**
        * Disable interrupts in NVIC
        */
       static void disableNvicInterrupts() {
-         return PitBase_T<Info>::disableNvicInterrupts(CHANNEL);
+         PitBase_T<Info>::disableNvicInterrupts(CHANNEL);
       }
 
       /**

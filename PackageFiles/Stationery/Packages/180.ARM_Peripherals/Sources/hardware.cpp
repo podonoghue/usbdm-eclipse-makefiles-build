@@ -54,6 +54,10 @@ $(/HARDWARE_CPP/PortInitialisations:   // No initialisation found)
  * End group USBDM_Group
  * @}
  */
+/*
+ *  Static objects
+ */
+$(/HARDWARE/StaticObjects:  // /HARDWARE/StaticObjects not found)
 
 } // End namespace USBDM
 

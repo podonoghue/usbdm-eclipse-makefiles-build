@@ -325,6 +325,7 @@
    <!ATTLIST setTemplate defaultParamValue         CDATA                   #IMPLIED>
    <!ATTLIST setTemplate paramPadding              CDATA                   #IMPLIED>
    <!ATTLIST setTemplate linePadding               CDATA                   #IMPLIED>
+   <!ATTLIST setTemplate params                    CDATA                   #IMPLIED>
 
 <!ELEMENT initialValueTemplate (#PCDATA|variable|for)* >
    <!ATTLIST initialValueTemplate namespace                 (info|usbdm|class|all) "info" >
@@ -356,6 +357,7 @@
    <!ATTLIST clockCodeTemplate initExpressionOnSameLine  (true)                  #IMPLIED> <!-- No newline before initExpression (suitable fora single initialisation value) -->
    <!ATTLIST clockCodeTemplate paramPadding              CDATA                   #IMPLIED> <!-- Padding applied to parameters if more than 1 parameter -->
    <!ATTLIST clockCodeTemplate linePadding               CDATA                   #IMPLIED> <!-- Padding applied to start of line -->
+   <!ATTLIST clockCodeTemplate params                    CDATA                   #IMPLIED>
 
 <!ELEMENT for (%gui_items;|%structure_items;|%control_items;|template|break|continue)* >
    <!ATTLIST for keys                 CDATA        #REQUIRED>

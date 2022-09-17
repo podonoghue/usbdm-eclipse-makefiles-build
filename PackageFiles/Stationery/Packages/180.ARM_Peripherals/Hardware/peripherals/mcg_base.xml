@@ -217,13 +217,13 @@
                toolTip="Selects the amount to divide down the fast internal reference clock\n
                   The FIR clock is available for use as MCGIRCLK or MCGOUTCLK">
                <choice value="0" ref="system_fast_irc_clock"      name="Divide by 1" isDefault="true" />
-               <choice value="1" ref="system_fast_irc_clock,/2"   name="Divide by 2" />
-               <choice value="2" ref="system_fast_irc_clock,/4"   name="Divide by 4" />
-               <choice value="3" ref="system_fast_irc_clock,/8"   name="Divide by 8" />
-               <choice value="4" ref="system_fast_irc_clock,/16"  name="Divide by 16" />
-               <choice value="5" ref="system_fast_irc_clock,/32"  name="Divide by 32" />
-               <choice value="6" ref="system_fast_irc_clock,/64"  name="Divide by 64" />
-               <choice value="7" ref="system_fast_irc_clock,/128" name="Divide by 128" />
+               <choice value="1" ref="system_fast_irc_clock;(system_fast_irc_clock)/2"   name="Divide by 2" />
+               <choice value="2" ref="system_fast_irc_clock;(system_fast_irc_clock)/4"   name="Divide by 4" />
+               <choice value="3" ref="system_fast_irc_clock;(system_fast_irc_clock)/8"   name="Divide by 8" />
+               <choice value="4" ref="system_fast_irc_clock;(system_fast_irc_clock)/16"  name="Divide by 16" />
+               <choice value="5" ref="system_fast_irc_clock;(system_fast_irc_clock)/32"  name="Divide by 32" />
+               <choice value="6" ref="system_fast_irc_clock;(system_fast_irc_clock)/64"  name="Divide by 64" />
+               <choice value="7" ref="system_fast_irc_clock;(system_fast_irc_clock)/128" name="Divide by 128" />
             </choiceOption>
       
             <intOption key="firc_divided_clock[%(n)]" units="Hz" constant="true" derived="true" />

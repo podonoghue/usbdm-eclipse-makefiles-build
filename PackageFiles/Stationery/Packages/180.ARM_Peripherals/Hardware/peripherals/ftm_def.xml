@@ -46,7 +46,6 @@
    <intOption key="inputClockFrequency" 
       constant="true"
       description="Frequency of input clock to timer"
-      toolTip="Determined from timer clock source (ftm_sc_clks)"
       derived="true"
       units="Hz"/>
       
@@ -56,13 +55,13 @@
       target="clockFrequency"
       toolTip="Selects the prescaler for the module">
       <choice value="0" name="Divide by 1"   ref="inputClockFrequency"          enum="DivBy1"  isDefault="true" />
-      <choice value="1" name="Divide by 2"   ref="inputClockFrequency,(%%/2)"   enum="DivBy2" />
-      <choice value="2" name="Divide by 4"   ref="inputClockFrequency,(%%/4)"   enum="DivBy4" />
-      <choice value="3" name="Divide by 8"   ref="inputClockFrequency,(%%/8)"   enum="DivBy8" />
-      <choice value="4" name="Divide by 16"  ref="inputClockFrequency,(%%/16)"  enum="DivBy16" />
-      <choice value="5" name="Divide by 32"  ref="inputClockFrequency,(%%/32)"  enum="DivBy32" />
-      <choice value="6" name="Divide by 64"  ref="inputClockFrequency,(%%/64)"  enum="DivBy64" />
-      <choice value="7" name="Divide by 128" ref="inputClockFrequency,(%%/128)" enum="DivBy128" />
+      <choice value="1" name="Divide by 2"   ref="inputClockFrequency;((inputClockFrequency)/2.)"   enum="DivBy2" />
+      <choice value="2" name="Divide by 4"   ref="inputClockFrequency;((inputClockFrequency)/4.)"   enum="DivBy4" />
+      <choice value="3" name="Divide by 8"   ref="inputClockFrequency;((inputClockFrequency)/8.)"   enum="DivBy8" />
+      <choice value="4" name="Divide by 16"  ref="inputClockFrequency;((inputClockFrequency)/16.)"  enum="DivBy16" />
+      <choice value="5" name="Divide by 32"  ref="inputClockFrequency;((inputClockFrequency)/32.)"  enum="DivBy32" />
+      <choice value="6" name="Divide by 64"  ref="inputClockFrequency;((inputClockFrequency)/64.)"  enum="DivBy64" />
+      <choice value="7" name="Divide by 128" ref="inputClockFrequency;((inputClockFrequency)/128.)" enum="DivBy128" />
    </choiceOption>
       
    <intOption key="clockFrequency" 
@@ -73,7 +72,7 @@
       units="Hz"/>
    
    <floatOption key="clockPeriod" 
-      ref="clockFrequency,(1/%%)"
+      ref="clockFrequency;(1.0/clockFrequency)"
       constant="true"
       description="Period of timer clock"
       toolTip="Determined from timer clock source and prescaler"
@@ -92,7 +91,8 @@
       valueFormat="%s_ticks"
       value="10000" min="0" max="65535" />
            
-   <floatOption key="ftm_modPeriod" 
+   <floatOption key="ftm_modPeriod"
+      ref="clockPeriod*(ftm_sc_cpwms?(2*(ftm_mod-ftm_cntin)):((ftm_mod-ftm_cntin+1)))" 
       typeName="Seconds"     
       valueFormat="%s_s"
       description="Period of timer"
@@ -404,7 +404,7 @@
       \t\n
    ]]></template>
    
-<!--  Member variables -->
+<!-- Member variables -->
   
    <setTemplate variables="irqHandlingMethod"
     ><![CDATA[
@@ -450,7 +450,7 @@
       \t   %enumClass %registerName = 0_s;\n\n
    ]]></initialValueTemplate >
 
-<!--  Configure method -->
+<!-- Configure method -->
   
    <setTemplate variables="ftm_sc_clks" discardRepeats="true" key="/FTM/InitMethod" namespace="all" ><![CDATA[
       \t/**
@@ -507,7 +507,7 @@
       \t}\n\n
    ]]></setTemplate>
 
-<!--  Constructors -->
+<!-- Constructors -->
   
    <setTemplate 
       variables="irqHandlingMethod" 
@@ -642,7 +642,7 @@
       \t};\n\n
    ]]></template>
 
-<!--  Default Initialisation value -->
+<!-- Default Initialisation value -->
   
    <template><![CDATA[
       \t/**
@@ -673,7 +673,7 @@
       \t};\n\n
    ]]></initialValueTemplate>
 
-<!--  ========== Misc =============================== -->
+<!-- ========== Misc =============================== -->
    
    <xi:include href="_clockOption.xml"/>
 

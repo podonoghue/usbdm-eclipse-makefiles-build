@@ -20,7 +20,7 @@
       enumStem="OscErClkEn"
       description="External Reference Enable"
       toolTip="Enables the OSC clock [OSCERCLK] for use by peripherals\n
-      The oscillator will also be enabled if used by MCG">
+               The oscillator will also be enabled if used by MCG">
       <choice value="0" name="Disabled" enum="Disabled"  />
       <choice value="1" name="Enabled"  enum="Enabled"   isDefault="true" />
    </binaryOption>
@@ -39,7 +39,7 @@
       constant="true"
       description="Frequency Range Select"
       toolTip="This range value is determined from the Oscillator frequency.\n
-      It some cases it will be unused and a range value suited to the FLL is used instead">
+               It some cases it will be unused and a range value suited to the FLL is used instead">
       <choice value="0" name="Low range" />
       <choice value="1" name="High range" />
       <choice value="2" name="Very High range" />

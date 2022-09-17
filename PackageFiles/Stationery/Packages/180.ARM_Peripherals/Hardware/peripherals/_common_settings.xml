@@ -4,7 +4,7 @@
 
 <list name="CommonSettings" >
 
-<binaryOption name="Map all pins on startup" key="/HARDWARE/mapAllPins" condition="/PCR/lk_present"
+<binaryOption name="Map all pins on startup" key="/HARDWARE/mapAllPins" condition="(/PCR/lk_present)"
    description="Execute mapAllPins() during startup"
    toolTip="Enables mapping of allocated pins during startup using mapAllPins()\n
    Multiply mapped pins cannot be assigned by mapAllPins()">
@@ -12,14 +12,14 @@
    <choice value="true"  name="Map pins during startup using mapAllPins()" />
 </binaryOption>
 
-<binaryOption name="Lock mapped pins" key="/HARDWARE/lockMappedPins" condition="/PCR/lk_present"
+<binaryOption name="Lock mapped pins" key="/HARDWARE/lockMappedPins" condition="(/PCR/lk_present)"
    description="Lock mapped pins during startup"
    toolTip="Lock pin control registers (PCRs) during mapAllPins()">
    <choice value="PinLock_Unlocked" name="Don't force locked - Pins may still be individually locked" isDefault="true"/>
    <choice value="PinLock_Locked"   name="Force all pins to be locked in mapAllPins()" />
 </binaryOption>
 
-<binaryOption name="Disable unbonded pins" key="/HARDWARE/lockoutUnbondedPins"  condition="/PCR/lk_present"
+<binaryOption name="Disable unbonded pins" key="/HARDWARE/lockoutUnbondedPins"  condition="(/PCR/lk_present)"
    description="Lock out pins that are not bonded to physical pins on package"
    toolTip="In some smaller packages there are die pads that are not bonded to package pins\n
             For those pins the PCR can be set to 0 (analogue/disabled) to minimize power consumption\n
@@ -150,7 +150,7 @@
 </category>
 
 
-<template namespace="usbdm" condition="/PCR/lk_present" ><![CDATA[
+<template namespace="usbdm" condition="(/PCR/lk_present)" ><![CDATA[
    /* Template:_common_settings.xml */
    
    \t/**
@@ -170,7 +170,7 @@
    \t\n
 ]]></template>
 
-<template namespace="usbdm" condition="!/PCR/lk_present" ><![CDATA[
+<template namespace="usbdm" condition="!(/PCR/lk_present)" ><![CDATA[
    /* Template:_common_settings.xml */
    
    \t/**

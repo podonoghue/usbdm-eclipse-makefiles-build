@@ -260,8 +260,8 @@
             target="system_peripheral_clock[%(n)]"
             description="Peripheral Clock"
             toolTip="Clock for various peripherals (LPUART, TPM etc.)">
-            <choice value="0"  name="MCGFLLCLK clock"   ref="/MCG/system_mcgfllclk_clock[%(n)]"    enum="McgFllClk"  code="SystemMcgFllClock"   isDefault="true" />
-            <choice value="1"  name="MCGPLLCLK clock/2" ref="/MCG/system_mcgpllclk_clock[%(n)],/2" enum="McgPllClk"  code="SystemMcgPllClock/2" />
+            <choice value="0"  name="MCGFLLCLK clock"   ref="/MCG/system_mcgfllclk_clock[%(n)]"                                       enum="McgFllClk"  code="SystemMcgFllClock"   isDefault="true" />
+            <choice value="1"  name="MCGPLLCLK clock/2" ref="/MCG/system_mcgpllclk_clock[%(n)];(/MCG/system_mcgpllclk_clock[%(n)]/2)" enum="McgPllClk"  code="SystemMcgPllClock/2" />
          </choiceOption>
    
          <intOption key="system_peripheral_clock[%(n)]"

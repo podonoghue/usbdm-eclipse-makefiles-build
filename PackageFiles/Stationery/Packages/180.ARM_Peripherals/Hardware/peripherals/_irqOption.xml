@@ -14,8 +14,11 @@
    -->
    <irqOption key="irqHandlingMethod"  
       typeName="CallbackFunction"
-      description="Peripheral interrupt handler"
-      toolTip="Interrupt handler for this peripheral"
+      description="Peripheral interrupt handling"
+      toolTip="If enabled, the handler may be set using the setCallback() function or\n
+         by overriding the interrupt handler method in the peripheral class\n
+         If not enabled, then interrupt handlers may be installed by naming them \n
+         (see weak names used in vector table)."
       pattern="^%b%i$" 
       classHandler="%c%i::irqHandler" />
       

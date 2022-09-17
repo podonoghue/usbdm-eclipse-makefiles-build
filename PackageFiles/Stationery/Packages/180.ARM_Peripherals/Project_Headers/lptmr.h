@@ -77,23 +77,23 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
       // Enable peripheral clock and map pins
       enable();
 
-      if constexpr (Lptmr0Info::irqHandlerInstalled) {
+      if constexpr (Info::irqHandlerInstalled) {
+         // Only set call-back if feature enabled and non-null
          if (init.callbackFunction != nullptr) {
-            // Only set call-back if feature enabled and present
-            sCallback = init.callbackFunction;
+            setCallback(init.callbackFunction);
          }
+         enableNvicInterrupts(init.irqlevel);
       }
       uint8_t  psr = init.psr;
       uint32_t cmr = init.cmr;
 
       if (init.cmrperiod != 0) {
-         // Calculate values form duration in seconds
+         // Calculate values from duration in seconds
          ErrorCode rc = calculateDurationValues(init.cmrperiod, psr, cmr);
          if (rc != E_NO_ERROR) {
             return rc;
          }
       }
-
       // Change settings with timer disabled
       lptmr->CSR = 0;
 
@@ -416,7 +416,7 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
       uint32_t prescalerValue=0;
       while (prescalerValue<=16) {
          float    clockFrequency = inputClock/prescaleFactor;
-         uint32_t mod   = rintf(duration*clockFrequency);
+         uint32_t mod   = rintf(duration*clockFrequency)-1;
          if (mod < Info::minimumResolution) {
             // Too short a period for reasonable resolution
             return setAndCheckErrorCode(E_TOO_SMALL);

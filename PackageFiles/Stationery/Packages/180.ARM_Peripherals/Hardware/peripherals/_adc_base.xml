@@ -10,6 +10,8 @@
    
    <xi:include href="_mapPinsOption.xml"/>
    
+   <aliasOption key="/MCG/currentClockConfig" constant ="false"/>
+   
 <!-- ========== PGA features =============================== -->
    <choiceOption key="adc_pga_pgaen" condition="adc_pga_present"
       description="PGA Enable and mode"
@@ -59,17 +61,16 @@
       enumStem="AdcClockSource"
       target="adcInputClock"
       toolTip="Clock source for the ADC module" >
-      <choice value="0" name="Bus clock"                   ref="/SIM/system_bus_clock[]"      enum="Bus"       code="SystemBusClock"            />
-      <choice value="1" name="Irc48M clock"                ref="/SIM/system_irc48m_clock"     enum="Irc48mClk" code="SimInfo::irc48mClock"      condition="/SIM/system_irc48m_clock"  />
-      <choice value="1" name="Bus clock/2"                 ref="/SIM/system_bus_clock,(%%/2)" enum="Busdiv2"   code="SystemBusClock/2"          condition="!/SIM/system_irc48m_clock" />
-      <choice value="2" name="Alternate clock (OSCERCLK)"  ref="/OSC0/oscer_clock"            enum="OscerClk"  code="Osc0Info::getOscerClock()" />
-      <choice value="3" name="Asynchronous clock (ADACK)"  ref="/ADC0/adcInternalClock"       enum="Asynch"    code="$(adcInternalClock)"       isDefault="true" />
+      <choice value="0" name="Bus clock"                   ref="/SIM/system_bus_clock[]"                              enum="Bus"       code="SystemBusClock"            />
+      <choice value="1" name="Irc48M clock"                ref="/SIM/system_irc48m_clock"                             enum="Irc48mClk" code="SimInfo::irc48mClock"      condition="/SIM/system_irc48m_clock"  />
+      <choice value="1" name="Bus clock/2"                 ref="/SIM/system_bus_clock[];(/SIM/system_bus_clock[])/2"  enum="Busdiv2"   code="SystemBusClock/2"          condition="!/SIM/system_irc48m_clock" />
+      <choice value="2" name="Alternate clock (OSCERCLK)"  ref="/OSC0/oscer_clock"                                    enum="OscerClk"  code="Osc0Info::getOscerClock()" />
+      <choice value="3" name="Asynchronous clock (ADACK)"  ref="/ADC0/adcInternalClock"                               enum="Asynch"    code="$(adcInternalClock)"       isDefault="true" />
    </choiceOption>
    
    <intOption key="adcInputClock"  
       constant="true"
       derived="true" 
-      origin="ADC clock"
       units="Hz"
       description="Frequency of ADC Clock" />
    
@@ -97,10 +98,10 @@
       enumStem="AdcClockDivider"
       target="adcClockFrequency"
       toolTip="Selects the divide ratio used by the ADC to generate the internal clock ADCK">
-      <choice value="0" name="Divide by 1" ref="adcInputClock"    enum="1" isDefault="true" />
-      <choice value="1" name="Divide by 2" ref="adcInputClock,(%%/2)" enum="2" />
-      <choice value="2" name="Divide by 4" ref="adcInputClock,(%%/4)" enum="4" />
-      <choice value="3" name="Divide by 8" ref="adcInputClock,(%%/8)" enum="8" />
+      <choice value="0" name="Divide by 1" ref="adcInputClock"     enum="1" isDefault="true" />
+      <choice value="1" name="Divide by 2" ref="(adcInputClock)/2" enum="2" />
+      <choice value="2" name="Divide by 4" ref="(adcInputClock)/4" enum="4" />
+      <choice value="3" name="Divide by 8" ref="(adcInputClock)/8" enum="8" />
    </choiceOption>
 
    <intOption key="adcClockFrequency" 

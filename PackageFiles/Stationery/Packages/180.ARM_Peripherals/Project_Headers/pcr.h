@@ -293,20 +293,7 @@ constexpr auto operator /(int left,       Hertz right)   { return Seconds(left/r
 //   consteval auto operator"" _percent(unsigned long long int num)  { return static_cast<double>(num)*0.01; };
 //   consteval auto operator"" _percent(long double num)             { return static_cast<double>(num)*0.01; };
 
-/**
- * Convenience names for common priority levels
- */
-enum NvicPriority {
-   NvicPriority_VeryHigh     = 0,  ///< NvicPriority_VeryHigh
-   NvicPriority_High         = 2,  ///< NvicPriority_High
-   NvicPriority_MidHigh      = 5,  ///< NvicPriority_MidHigh
-   NvicPriority_Normal       = 8,  ///< NvicPriority_Normal
-   NvicPriority_Midlow       = 11, ///< NvicPriority_Midlow
-   NvicPriority_Low          = 13, ///< NvicPriority_Low
-   NvicPriority_VeryLow      = 15, ///< NvicPriority_VeryLow
-   NvicPriority_NotInstalled = -1, ///< Indicates handler is not installed
-};
-
+$(/PCR/nvicPriority: // /PCR/nvicPriority not found)
 /**
  * Class to wrap a memory address as an array
  *

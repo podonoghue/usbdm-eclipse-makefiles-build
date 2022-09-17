@@ -215,7 +215,7 @@
       <choice name="Slow"  enum="*"  value="1" />
    </choiceOption>
 
-   <choiceOption key="port_pcr_lk" condition="/PCR/lk_present"
+   <choiceOption key="port_pcr_lk" condition="(/PCR/lk_present)"
       enumStem="PinLock"
       enumType="uint32_t"
       templateKey="/PCR/pcr_enums"
