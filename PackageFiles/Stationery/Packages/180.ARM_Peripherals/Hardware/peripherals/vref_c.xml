@@ -13,71 +13,297 @@ Devices using this peripheral:
       \tstatic constexpr int outputPin  = 0;\n\n
    ]]></template>
    
-   <constant key="disable_peripheral"      derived = "true" value = "vref->SC = 0;"  />
+   <constant key="disable_peripheral"  value = "vref->SC = 0;"  />
    <xi:include href="_mapPinsOption.xml"/>   
 
-   <binaryOption key="vref_trm_chopen" 
-      description="Chop oscillator enable"
-      toolTip="This enables the internal chopping operation to minimize the internal analog offset">
-      <choice value="0" name="Disabled" />
-      <choice value="1" name="Enabled" isDefault="true" />
-   </binaryOption>
-
-   <projectActionList id = "vref_files">
-      <copy source="Project_Headers/vref.h"  target="Project_Headers/vref.h"  overwrite="true"  derived="true" />
-   </projectActionList>
-         
-   <template><![CDATA[
-   \tstatic constexpr uint8_t vref_trm = 
-   \t    VREF_TRM_CHOPEN($(vref_trm_chopen)); // Chop oscillator enable
-   \t    //                  // Trim bits are preserved\n\n
-   ]]></template>
-
-   <binaryOption key="vref_sc_vrefen" 
+   <binaryOption key="vref_sc_vrefen" condition="vref_sc_vrefen_present"
+      enumStem="VrefEnable"
       description="Internal Voltage Reference enable"
-      toolTip="This bit is used to enable the bandgap reference within the Voltage Reference module">
-      <choice value="0" name="Disabled" />
-      <choice value="1" name="Enabled" isDefault="true" />
+      toolTip="This controls the bandgap reference within the Voltage Reference module">
+      <choice value="0" name="Disabled" enum="Disabled" />
+      <choice value="1" name="Enabled"  enum="Enabled"  isDefault="true" />
    </binaryOption>
 
-   <binaryOption key="vref_sc_regen" 
+   <binaryOption key="vref_trm_chopen" condition="vref_trm_chopen_present" 
+      enabledBy="vref_sc_vrefen"
+      enumStem="VrefChop"
+      description="Chop oscillator enable"
+      toolTip="Controls the internal chopping operation to minimise the internal analogue offset\n
+               This option is enabled during factory trimming of the VREF voltage.\n
+               This should be enabled to achieve the performance stated in the data sheet.\n
+               If the chop oscillator is to be used in very low power modes, the system (bandgap)\n
+               voltage reference must also be enabled. See PmcBandgapLowPowerEnable">
+      <choice value="0" name="Disabled" enum="Disabled" />
+      <choice value="1" name="Enabled"  enum="Enabled"  isDefault="true" />
+   </binaryOption>
+
+   <binaryOption key="vref_sc_regen" condition="vref_sc_regen_present"
+      enabledBy="vref_sc_vrefen"
+      enumStem="VrefReg"
       description="Regulator enable"
-      toolTip="This bit is used to enable the internal 1.75 V regulator to produce a constant\n
-         internal voltage supply in order to reduce the sensitivity to external supply noise and variation">
-      <choice value="0" name="Disabled" />
-      <choice value="1" name="Enabled" isDefault="true" />
+      toolTip="This controls the internal 1.75 V regulator which produce a constant\n
+         internal voltage supply in order to reduce the sensitivity to external supply noise and variation\n
+         If it is desired to keep the regulator enabled in very low power modes see PmcBandgapLowPowerEnable">
+      <choice value="0" name="Disabled" enum="Disabled" />
+      <choice value="1" name="Enabled"  enum="Enabled"  isDefault="true" />
    </binaryOption>
 
-   <binaryOption key="vref_sc_icompen" 
+   <binaryOption key="vref_sc_icompen" condition="vref_sc_icompen_present"
+      enabledBy="vref_sc_vrefen"
+      enumStem="VrefIcomp"
       description="Second order curvature compensation enable"
-      toolTip="This bit is set during factory trimming of the VREF voltage">
-      <choice value="0" name="Disabled" />
-      <choice value="1" name="Enabled" isDefault="true" />
+      toolTip="This should be enabled to achieve the performance stated in the data sheet">
+      <choice value="0" name="Disabled" enum="Disabled" />
+      <choice value="1" name="Enabled"  enum="Enabled" isDefault="true" />
    </binaryOption>
 
    <choiceOption key="vref_sc_mode_lv" 
+      enabledBy="vref_sc_vrefen"
+      enumStem="VrefBuffer"
       description="Buffer Mode selection"
-      toolTip="These bits select the buffer modes for the Voltage Reference module">
-      <choice value="0" name="Bandgap on only, for stabilization and startup" />
-      <choice value="1" name="High power buffer mode enabled" isDefault="true" />
-      <choice value="2" name="Low-power buffer mode enabled" />
-      <choice value="3" name="Reserved" />
+      toolTip="This selects the buffer modes for the Voltage Reference module">
+      <choice value="0" name="Bandgap on only, for stabilisation and startup" enum="Bandgap"    />
+      <choice value="1" name="High power buffer mode enabled"                 enum="HighPower"  isDefault="true" />
+      <choice value="2" name="Low-power buffer mode enabled"                  enum="LowPower"   />
    </choiceOption>
 
+<!-- ========== VREF Init class =============================== -->
+
    <template><![CDATA[
-   \tstatic constexpr uint8_t vref_sc = 
-   \t    VREF_SC_VREFEN($(vref_sc_vrefen)) |   // Internal Voltage Reference enable
-   \t    VREF_SC_REGEN($(vref_sc_regen)) |    // Regulator enable
-   \t    VREF_SC_ICOMPEN($(vref_sc_icompen)) |  // Second order curvature compensation enable
-   \t    VREF_SC_MODE_LV($(vref_sc_mode_lv));   // Buffer Mode selection \n\n
+      \t/**
+      \t * Class used to do initialisation of the VREF
+      \t *
+      \t * This class has a templated constructor that accepts various values:
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const Vref$(_instance)::Init vrefInit {
+      \t      VrefEnable_Enabled ,   // Internal Voltage Reference enable
+      \t      VrefChop_Enabled ,     // Chop oscillator enable
+      \t      VrefReg_Enabled ,      // Regulator enable
+      \t      VrefIcomp_Enabled ,    // Second order curvature compensation enable
+      \t      VrefBuffer_HighPower,  // Buffer Mode selection
+      \t * };
+      \t *
+      \t * // Initialise VREF from values specified above
+      \t * Vref$(_instance)::configure(vrefInit)
+      \t * @endcode
+      \t */
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**                               
+      \t    * Copy Constructor                  
+      \t    */                             
+      \t   constexpr Init(const Init &other) = delete;
+      \t   
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]></template>
+   
+<!-- Member variables -->
+  
+   <initialValueTemplate 
+      variables="
+         vref_trm_chopen"
+   ><![CDATA[
+      \t   ///  Voltage Reference Trim Register
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate 
+      variables="
+         vref_sc_regen"
+   ><![CDATA[
+      \t   ///  Voltage Reference Status and Control Register
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+   
+<!-- Configure method -->
+  
+   <setTemplate variables="vref_sc_regen, vref_trm_chopen" discardRepeats="true" key="/VREF/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure VREF from values specified in init
+      \t
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t   
+      \t   %register1 = (%register1&~%mask1)|init.%registerName1;
+      \t   %register0 = init.%registerName0 & ~%mask0;
+      \t   
+      \t   // Regulator must be enabled >300ns after other settings
+      \t   waitUS(1);
+      \t   %register0 = init.%registerName0;
+      \t}\n\n
+   ]]></setTemplate>
+
+   <setTemplate discardRepeats="true" key="/VREF/InitMethod" namespace="all" 
+      variables="
+         vref_sc_mode_lv,
+         vref_sc_regen,
+         vref_sc_icompen,
+         vref_trm_chopen
+         "
+   ><![CDATA[ 
+      \t/**
+      \t * Configure VREF from values specified
+      \t
+      %paramDescription
+      \t */
+      \tstatic void configure(
+      %params) {\n\n
+   ]]></setTemplate>
+   <setTemplate discardRepeats="true" key="/VREF/InitMethod" namespace="all" 
+      condition="vref_sc_regen&amp;&amp;vref_trm_chopen"
+      variables="vref_sc_regen,vref_trm_chopen"
+   ><![CDATA[ 
+      \t   if (%enumParam0) {
+      \t      // Chop must be enabled if regulator enabled
+      \t      %enumParam1 = %enumClass1_Enabled;
+      \t   }\n
+   ]]></setTemplate>
+   <setTemplate discardRepeats="true" key="/VREF/InitMethod" namespace="all" 
+      variables="vref_trm_chopen"
+   ><![CDATA[ 
+      \t   %register = (%register&~%mask)|%enumParam0;\n
+   ]]></setTemplate>
+   <setTemplate discardRepeats="true" key="/VREF/InitMethod" namespace="all" 
+      variables="
+         vref_sc_mode_lv,
+         vref_sc_icompen"
+   ><![CDATA[
+      \t   %register = %paramExpression;
+      \t\n
+   ]]></setTemplate>
+   <setTemplate discardRepeats="true" key="/VREF/InitMethod" namespace="all" 
+      variables="
+         vref_sc_mode_lv,
+         vref_sc_regen,
+         vref_sc_icompen"
+   ><![CDATA[ 
+      \t   // Regulator must be enabled >300ns after other settings
+      \t   waitUS(1);
+      \t   %register = %paramExpression;
+      \t}\n\n
+   ]]></setTemplate>
+
+<!-- Constructors -->
+  
+   <setTemplate variables="vref_sc_regen"
+      linePadding="xxx" 
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %comments
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t\n
+   ]]></setTemplate>
+   <if condition="vref_sc_regen&amp;&amp;vref_trm_chopen">
+      <setTemplate variables="vref_sc_regen, vref_trm_chopen"
+         linePadding="xxx" 
+      ><![CDATA[
+         \t      if (%enumParam0) {
+         \t         // Chop must be enabled as well
+         \t         %registerName1 |= %enumClass1_Enabled;
+         \t      }
+         \t\n
+      ]]></setTemplate>
+   </if>
+   <setTemplate variables="vref_sc_regen"
+      linePadding="xxx" 
+   ><![CDATA[      
+      \t      %registerName |= %paramExpression;
+      \t   }
+      \t\n
+   ]]></setTemplate>
+   
+   <for keys="r" values="
+         vref_trm_chopen;
+         vref_sc_vrefen;
+         vref_sc_icompen;
+         vref_sc_mode_lv">
+      <setTemplate variables="%(r)"
+         linePadding="xxx" 
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t   
+         \t      %registerName |= %paramExpression;
+         \t   }
+         \t\n
+      ]]></setTemplate>
+   </for>
+      
+   <template ><![CDATA[
+      \t};\n\n
    ]]></template>
 
+<!-- Default Initialisation value -->
+  
+   <initialValueTemplate
+      separator=","
+      terminator=","     
+      variables="vref_sc_vrefen"     
+   ><![CDATA[
+      \t/**
+      \t * Default initialisation value for Vref$(_instance)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic const Init DefaultInitValue;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate key="/HARDWARE/StaticObjects" namespace="all"
+      separator=","
+      terminator=","     
+      variables="
+         vref_trm_chopen,
+         vref_sc_vrefen,
+         vref_sc_regen,
+         vref_sc_icompen,
+         vref_sc_mode_lv"     
+   ><![CDATA[
+      \t/**
+      \t * Default initialisation value for Vref$(_instance)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tconst Vref$(_instance)Info::Init Vref$(_instance)Info::DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <!-- ********************* MISC ********************* -->
+
+   <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" />
+   
    <template key="/VREF/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */
    \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
    ]]></template>
+
+   <projectActionList id = "vref_files">
+      <copy source="Project_Headers/vref.h"  target="Project_Headers/vref.h"  overwrite="true"  derived="true" />
+   </projectActionList>
          
    <xi:include href="_clockOption.xml"/>
 
