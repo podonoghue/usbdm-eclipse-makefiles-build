@@ -153,6 +153,7 @@
       </peripheral>
       <peripheral baseName="FMC"      instance=""         version="fmc_mk10d7">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFmc" />
+         <param name="$present"     key="/FMC/$present" value="true" />
          <param name="fmc_pfapr_m0ap_present" key="/FMC/fmc_pfapr_m0ap_present" value="true" />
          <param name="fmc_pfapr_m0pfd_present" key="/FMC/fmc_pfapr_m0pfd_present" value="true" />
          <param name="fmc_pfapr_m1ap_present" key="/FMC/fmc_pfapr_m1ap_present" value="true" />
@@ -237,6 +238,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTM0_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTM0_MASK;" />
          <irq num="FTM0_IRQn" />
+         <param name="$present"     key="/FTM0/$present" value="true" />
          <param name="ftm_cnsc_chf_present" key="/FTM0/ftm_cnsc_chf_present" value="true" />
          <param name="ftm_cnsc_chie_present" key="/FTM0/ftm_cnsc_chie_present" value="true" />
          <param name="ftm_cnsc_dma_present" key="/FTM0/ftm_cnsc_dma_present" value="true" />
@@ -425,6 +427,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTM1_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTM1_MASK;" />
          <irq num="FTM1_IRQn" />
+         <param name="$present"     key="/FTM1/$present" value="true" />
          <param name="ftm_cnsc_chf_present" key="/FTM1/ftm_cnsc_chf_present" value="true" />
          <param name="ftm_cnsc_chie_present" key="/FTM1/ftm_cnsc_chie_present" value="true" />
          <param name="ftm_cnsc_dma_present" key="/FTM1/ftm_cnsc_dma_present" value="true" />
@@ -541,6 +544,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC3 = SIM->SCGC3 | SIM_SCGC3_FTM2_MASK;" clockDisable="SIM->SCGC3 = SIM->SCGC3 &amp; ~SIM_SCGC3_FTM2_MASK;" />
          <irq num="FTM2_IRQn" />
+         <param name="$present"     key="/FTM2/$present" value="true" />
          <param name="ftm_cnsc_chf_present" key="/FTM2/ftm_cnsc_chf_present" value="true" />
          <param name="ftm_cnsc_chie_present" key="/FTM2/ftm_cnsc_chie_present" value="true" />
          <param name="ftm_cnsc_dma_present" key="/FTM2/ftm_cnsc_dma_present" value="true" />
@@ -708,6 +712,7 @@
       <peripheral baseName="LLWU"     instance=""         version="llwu_me_pe4_filt2_rst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
+         <param name="$present"     key="/LLWU/$present" value="true" />
          <param name="Wakeup sources" key="/LLWU/device_list" value="LPTMR0;CMP0;CMP1;CMP2;TSI;RTC_Alarm;;RTC_Seconds" />
          <param name="llwu_filt1_filte_present" key="/LLWU/llwu_filt1_filte_present" value="true" />
          <param name="llwu_filt1_filtf_present" key="/LLWU/llwu_filt1_filtf_present" value="true" />
@@ -769,6 +774,7 @@
       </peripheral>
       <peripheral baseName="MCM"      instance=""         version="mcm_mk10d7">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcm" />
+         <param name="$present"     key="/MCM/$present" value="true" />
          <param name="mcm_cr_sramlap_present" key="/MCM/mcm_cr_sramlap_present" value="true" />
          <param name="mcm_cr_sramlwp_present" key="/MCM/mcm_cr_sramlwp_present" value="true" />
          <param name="mcm_cr_sramuap_present" key="/MCM/mcm_cr_sramuap_present" value="true" />
@@ -791,6 +797,7 @@
          <irq num="PIT1_IRQn" />
          <irq num="PIT2_IRQn" />
          <irq num="PIT3_IRQn" />
+         <param name="$present"     key="/PIT/$present" value="true" />
          <param name="pit_cval_tvl_present" key="/PIT/pit_cval_tvl_present" value="true" />
          <param name="pit_ldval_tsv_present" key="/PIT/pit_ldval_tsv_present" value="true" />
          <param name="pit_mcr_frz_present" key="/PIT/pit_mcr_frz_present" value="true" />
@@ -817,6 +824,7 @@
       </peripheral>
       <peripheral baseName="SIM"      instance=""         version="sim_mk20d7">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
+         <param name="$present"     key="/SIM/$present" value="true" />
          <param name="sim_clkdiv1_outdiv1_present" key="/SIM/sim_clkdiv1_outdiv1_present" value="true" />
          <param name="sim_clkdiv1_outdiv2_present" key="/SIM/sim_clkdiv1_outdiv2_present" value="true" />
          <param name="sim_clkdiv1_outdiv4_present" key="/SIM/sim_clkdiv1_outdiv4_present" value="true" />
@@ -913,6 +921,7 @@
       </peripheral>
       <peripheral baseName="SMC"      instance=""         version="smc_mk10d7">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />
+         <param name="$present"     key="/SMC/$present" value="true" />
          <param name="smc_pmctrl_runm_present" key="/SMC/smc_pmctrl_runm_present" value="true" />
          <param name="smc_pmctrl_stopa_present" key="/SMC/smc_pmctrl_stopa_present" value="true" />
          <param name="smc_pmctrl_stopm_present" key="/SMC/smc_pmctrl_stopm_present" value="true" />
@@ -944,18 +953,282 @@
          <irq num="UART0_Lon_IRQn" />
          <irq num="UART0_RxTx_IRQn" />
          <irq num="UART0_Error_IRQn" />
+         <param name="$present"     key="/UART0/$present" value="true" />
+         <param name="uart_bdh_lbkdie_present" key="/UART0/uart_bdh_lbkdie_present" value="true" />
+         <param name="uart_bdh_rxedgie_present" key="/UART0/uart_bdh_rxedgie_present" value="true" />
+         <param name="uart_bdh_sbr_present" key="/UART0/uart_bdh_sbr_present" value="true" />
+         <param name="uart_bdl_sbr_present" key="/UART0/uart_bdl_sbr_present" value="true" />
+         <param name="uart_c1_ilt_present" key="/UART0/uart_c1_ilt_present" value="true" />
+         <param name="uart_c1_loops_present" key="/UART0/uart_c1_loops_present" value="true" />
+         <param name="uart_c1_m_present" key="/UART0/uart_c1_m_present" value="true" />
+         <param name="uart_c1_pe_present" key="/UART0/uart_c1_pe_present" value="true" />
+         <param name="uart_c1_pt_present" key="/UART0/uart_c1_pt_present" value="true" />
+         <param name="uart_c1_rsrc_present" key="/UART0/uart_c1_rsrc_present" value="true" />
+         <param name="uart_c1_uartswai_present" key="/UART0/uart_c1_uartswai_present" value="true" />
+         <param name="uart_c1_wake_present" key="/UART0/uart_c1_wake_present" value="true" />
+         <param name="uart_c2_ilie_present" key="/UART0/uart_c2_ilie_present" value="true" />
+         <param name="uart_c2_re_present" key="/UART0/uart_c2_re_present" value="true" />
+         <param name="uart_c2_rie_present" key="/UART0/uart_c2_rie_present" value="true" />
+         <param name="uart_c2_rwu_present" key="/UART0/uart_c2_rwu_present" value="true" />
+         <param name="uart_c2_sbk_present" key="/UART0/uart_c2_sbk_present" value="true" />
+         <param name="uart_c2_tcie_present" key="/UART0/uart_c2_tcie_present" value="true" />
+         <param name="uart_c2_te_present" key="/UART0/uart_c2_te_present" value="true" />
+         <param name="uart_c2_tie_present" key="/UART0/uart_c2_tie_present" value="true" />
+         <param name="uart_c3_feie_present" key="/UART0/uart_c3_feie_present" value="true" />
+         <param name="uart_c3_neie_present" key="/UART0/uart_c3_neie_present" value="true" />
+         <param name="uart_c3_orie_present" key="/UART0/uart_c3_orie_present" value="true" />
+         <param name="uart_c3_peie_present" key="/UART0/uart_c3_peie_present" value="true" />
+         <param name="uart_c3_r8_present" key="/UART0/uart_c3_r8_present" value="true" />
+         <param name="uart_c3_t8_present" key="/UART0/uart_c3_t8_present" value="true" />
+         <param name="uart_c3_txdir_present" key="/UART0/uart_c3_txdir_present" value="true" />
+         <param name="uart_c3_txinv_present" key="/UART0/uart_c3_txinv_present" value="true" />
+         <param name="uart_c4_brfa_present" key="/UART0/uart_c4_brfa_present" value="true" />
+         <param name="uart_c4_m10_present" key="/UART0/uart_c4_m10_present" value="true" />
+         <param name="uart_c4_maen1_present" key="/UART0/uart_c4_maen1_present" value="true" />
+         <param name="uart_c4_maen2_present" key="/UART0/uart_c4_maen2_present" value="true" />
+         <param name="uart_c5_rdmas_present" key="/UART0/uart_c5_rdmas_present" value="true" />
+         <param name="uart_c5_tdmas_present" key="/UART0/uart_c5_tdmas_present" value="true" />
+         <param name="uart_c7816_anack_present" key="/UART0/uart_c7816_anack_present" value="true" />
+         <param name="uart_c7816_init_present" key="/UART0/uart_c7816_init_present" value="true" />
+         <param name="uart_c7816_iso_7816e_present" key="/UART0/uart_c7816_iso_7816e_present" value="true" />
+         <param name="uart_c7816_onack_present" key="/UART0/uart_c7816_onack_present" value="true" />
+         <param name="uart_c7816_ttype_present" key="/UART0/uart_c7816_ttype_present" value="true" />
+         <param name="uart_cfifo_rxflush_present" key="/UART0/uart_cfifo_rxflush_present" value="true" />
+         <param name="uart_cfifo_rxofe_present" key="/UART0/uart_cfifo_rxofe_present" value="true" />
+         <param name="uart_cfifo_rxufe_present" key="/UART0/uart_cfifo_rxufe_present" value="true" />
+         <param name="uart_cfifo_txflush_present" key="/UART0/uart_cfifo_txflush_present" value="true" />
+         <param name="uart_cfifo_txofe_present" key="/UART0/uart_cfifo_txofe_present" value="true" />
+         <param name="uart_d_rt_present" key="/UART0/uart_d_rt_present" value="true" />
+         <param name="uart_ed_noisy_present" key="/UART0/uart_ed_noisy_present" value="true" />
+         <param name="uart_ed_paritye_present" key="/UART0/uart_ed_paritye_present" value="true" />
+         <param name="uart_et7816_rxthreshold_present" key="/UART0/uart_et7816_rxthreshold_present" value="true" />
+         <param name="uart_et7816_txthreshold_present" key="/UART0/uart_et7816_txthreshold_present" value="true" />
+         <param name="uart_ie7816_bwte_present" key="/UART0/uart_ie7816_bwte_present" value="true" />
+         <param name="uart_ie7816_cwte_present" key="/UART0/uart_ie7816_cwte_present" value="true" />
+         <param name="uart_ie7816_gtve_present" key="/UART0/uart_ie7816_gtve_present" value="true" />
+         <param name="uart_ie7816_initde_present" key="/UART0/uart_ie7816_initde_present" value="true" />
+         <param name="uart_ie7816_rxte_present" key="/UART0/uart_ie7816_rxte_present" value="true" />
+         <param name="uart_ie7816_txte_present" key="/UART0/uart_ie7816_txte_present" value="true" />
+         <param name="uart_ie7816_wte_present" key="/UART0/uart_ie7816_wte_present" value="true" />
+         <param name="uart_ir_iren_present" key="/UART0/uart_ir_iren_present" value="true" />
+         <param name="uart_ir_tnp_present" key="/UART0/uart_ir_tnp_present" value="true" />
+         <param name="uart_is7816_bwt_present" key="/UART0/uart_is7816_bwt_present" value="true" />
+         <param name="uart_is7816_cwt_present" key="/UART0/uart_is7816_cwt_present" value="true" />
+         <param name="uart_is7816_gtv_present" key="/UART0/uart_is7816_gtv_present" value="true" />
+         <param name="uart_is7816_initd_present" key="/UART0/uart_is7816_initd_present" value="true" />
+         <param name="uart_is7816_rxt_present" key="/UART0/uart_is7816_rxt_present" value="true" />
+         <param name="uart_is7816_txt_present" key="/UART0/uart_is7816_txt_present" value="true" />
+         <param name="uart_is7816_wt_present" key="/UART0/uart_is7816_wt_present" value="true" />
+         <param name="uart_ma%s_ma_present" key="/UART0/uart_ma%s_ma_present" value="true" />
+         <param name="uart_modem_rxrtse_present" key="/UART0/uart_modem_rxrtse_present" value="true" />
+         <param name="uart_modem_txctse_present" key="/UART0/uart_modem_txctse_present" value="true" />
+         <param name="uart_modem_txrtse_present" key="/UART0/uart_modem_txrtse_present" value="true" />
+         <param name="uart_modem_txrtspol_present" key="/UART0/uart_modem_txrtspol_present" value="true" />
+         <param name="uart_pfifo_rxfe_present" key="/UART0/uart_pfifo_rxfe_present" value="true" />
+         <param name="uart_pfifo_rxfifosize_present" key="/UART0/uart_pfifo_rxfifosize_present" value="true" />
+         <param name="uart_pfifo_txfe_present" key="/UART0/uart_pfifo_txfe_present" value="true" />
+         <param name="uart_pfifo_txfifosize_present" key="/UART0/uart_pfifo_txfifosize_present" value="true" />
+         <param name="uart_rcfifo_rxcount_present" key="/UART0/uart_rcfifo_rxcount_present" value="true" />
+         <param name="uart_rwfifo_rxwater_present" key="/UART0/uart_rwfifo_rxwater_present" value="true" />
+         <param name="uart_s1_fe_present" key="/UART0/uart_s1_fe_present" value="true" />
+         <param name="uart_s1_idle_present" key="/UART0/uart_s1_idle_present" value="true" />
+         <param name="uart_s1_nf_present" key="/UART0/uart_s1_nf_present" value="true" />
+         <param name="uart_s1_or_present" key="/UART0/uart_s1_or_present" value="true" />
+         <param name="uart_s1_pf_present" key="/UART0/uart_s1_pf_present" value="true" />
+         <param name="uart_s1_rdrf_present" key="/UART0/uart_s1_rdrf_present" value="true" />
+         <param name="uart_s1_tc_present" key="/UART0/uart_s1_tc_present" value="true" />
+         <param name="uart_s1_tdre_present" key="/UART0/uart_s1_tdre_present" value="true" />
+         <param name="uart_s2_brk13_present" key="/UART0/uart_s2_brk13_present" value="true" />
+         <param name="uart_s2_lbkde_present" key="/UART0/uart_s2_lbkde_present" value="true" />
+         <param name="uart_s2_lbkdif_present" key="/UART0/uart_s2_lbkdif_present" value="true" />
+         <param name="uart_s2_msbf_present" key="/UART0/uart_s2_msbf_present" value="true" />
+         <param name="uart_s2_raf_present" key="/UART0/uart_s2_raf_present" value="true" />
+         <param name="uart_s2_rwuid_present" key="/UART0/uart_s2_rwuid_present" value="true" />
+         <param name="uart_s2_rxedgif_present" key="/UART0/uart_s2_rxedgif_present" value="true" />
+         <param name="uart_s2_rxinv_present" key="/UART0/uart_s2_rxinv_present" value="true" />
+         <param name="uart_sfifo_rxempt_present" key="/UART0/uart_sfifo_rxempt_present" value="true" />
+         <param name="uart_sfifo_rxof_present" key="/UART0/uart_sfifo_rxof_present" value="true" />
+         <param name="uart_sfifo_rxuf_present" key="/UART0/uart_sfifo_rxuf_present" value="true" />
+         <param name="uart_sfifo_txempt_present" key="/UART0/uart_sfifo_txempt_present" value="true" />
+         <param name="uart_sfifo_txof_present" key="/UART0/uart_sfifo_txof_present" value="true" />
+         <param name="uart_tcfifo_txcount_present" key="/UART0/uart_tcfifo_txcount_present" value="true" />
+         <param name="uart_tl7816_tlen_present" key="/UART0/uart_tl7816_tlen_present" value="true" />
+         <param name="uart_twfifo_txwater_present" key="/UART0/uart_twfifo_txwater_present" value="true" />
+         <param name="uart_wf7816_gtfd_present" key="/UART0/uart_wf7816_gtfd_present" value="true" />
+         <param name="uart_wn7816_gtn_present" key="/UART0/uart_wn7816_gtn_present" value="true" />
+         <param name="uart_wp7816t0_wi_present" key="/UART0/uart_wp7816t0_wi_present" value="true" />
+         <param name="uart_wp7816t1_bwi_present" key="/UART0/uart_wp7816t1_bwi_present" value="true" />
+         <param name="uart_wp7816t1_cwi_present" key="/UART0/uart_wp7816t1_cwi_present" value="true" />
       </peripheral>
       <peripheral baseName="UART"     instance="1"        version="uart1_mk10d10">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_UART1_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_UART1_MASK;" />
          <irq num="UART1_RxTx_IRQn" />
          <irq num="UART1_Error_IRQn" />
+         <param name="$present"     key="/UART1/$present" value="true" />
+         <param name="uart_bdh_lbkdie_present" key="/UART1/uart_bdh_lbkdie_present" value="true" />
+         <param name="uart_bdh_rxedgie_present" key="/UART1/uart_bdh_rxedgie_present" value="true" />
+         <param name="uart_bdh_sbr_present" key="/UART1/uart_bdh_sbr_present" value="true" />
+         <param name="uart_bdl_sbr_present" key="/UART1/uart_bdl_sbr_present" value="true" />
+         <param name="uart_c1_ilt_present" key="/UART1/uart_c1_ilt_present" value="true" />
+         <param name="uart_c1_loops_present" key="/UART1/uart_c1_loops_present" value="true" />
+         <param name="uart_c1_m_present" key="/UART1/uart_c1_m_present" value="true" />
+         <param name="uart_c1_pe_present" key="/UART1/uart_c1_pe_present" value="true" />
+         <param name="uart_c1_pt_present" key="/UART1/uart_c1_pt_present" value="true" />
+         <param name="uart_c1_rsrc_present" key="/UART1/uart_c1_rsrc_present" value="true" />
+         <param name="uart_c1_uartswai_present" key="/UART1/uart_c1_uartswai_present" value="true" />
+         <param name="uart_c1_wake_present" key="/UART1/uart_c1_wake_present" value="true" />
+         <param name="uart_c2_ilie_present" key="/UART1/uart_c2_ilie_present" value="true" />
+         <param name="uart_c2_re_present" key="/UART1/uart_c2_re_present" value="true" />
+         <param name="uart_c2_rie_present" key="/UART1/uart_c2_rie_present" value="true" />
+         <param name="uart_c2_rwu_present" key="/UART1/uart_c2_rwu_present" value="true" />
+         <param name="uart_c2_sbk_present" key="/UART1/uart_c2_sbk_present" value="true" />
+         <param name="uart_c2_tcie_present" key="/UART1/uart_c2_tcie_present" value="true" />
+         <param name="uart_c2_te_present" key="/UART1/uart_c2_te_present" value="true" />
+         <param name="uart_c2_tie_present" key="/UART1/uart_c2_tie_present" value="true" />
+         <param name="uart_c3_feie_present" key="/UART1/uart_c3_feie_present" value="true" />
+         <param name="uart_c3_neie_present" key="/UART1/uart_c3_neie_present" value="true" />
+         <param name="uart_c3_orie_present" key="/UART1/uart_c3_orie_present" value="true" />
+         <param name="uart_c3_peie_present" key="/UART1/uart_c3_peie_present" value="true" />
+         <param name="uart_c3_r8_present" key="/UART1/uart_c3_r8_present" value="true" />
+         <param name="uart_c3_t8_present" key="/UART1/uart_c3_t8_present" value="true" />
+         <param name="uart_c3_txdir_present" key="/UART1/uart_c3_txdir_present" value="true" />
+         <param name="uart_c3_txinv_present" key="/UART1/uart_c3_txinv_present" value="true" />
+         <param name="uart_c4_brfa_present" key="/UART1/uart_c4_brfa_present" value="true" />
+         <param name="uart_c4_m10_present" key="/UART1/uart_c4_m10_present" value="true" />
+         <param name="uart_c4_maen1_present" key="/UART1/uart_c4_maen1_present" value="true" />
+         <param name="uart_c4_maen2_present" key="/UART1/uart_c4_maen2_present" value="true" />
+         <param name="uart_c5_rdmas_present" key="/UART1/uart_c5_rdmas_present" value="true" />
+         <param name="uart_c5_tdmas_present" key="/UART1/uart_c5_tdmas_present" value="true" />
+         <param name="uart_cfifo_rxflush_present" key="/UART1/uart_cfifo_rxflush_present" value="true" />
+         <param name="uart_cfifo_rxofe_present" key="/UART1/uart_cfifo_rxofe_present" value="true" />
+         <param name="uart_cfifo_rxufe_present" key="/UART1/uart_cfifo_rxufe_present" value="true" />
+         <param name="uart_cfifo_txflush_present" key="/UART1/uart_cfifo_txflush_present" value="true" />
+         <param name="uart_cfifo_txofe_present" key="/UART1/uart_cfifo_txofe_present" value="true" />
+         <param name="uart_d_rt_present" key="/UART1/uart_d_rt_present" value="true" />
+         <param name="uart_ed_noisy_present" key="/UART1/uart_ed_noisy_present" value="true" />
+         <param name="uart_ed_paritye_present" key="/UART1/uart_ed_paritye_present" value="true" />
+         <param name="uart_ir_iren_present" key="/UART1/uart_ir_iren_present" value="true" />
+         <param name="uart_ir_tnp_present" key="/UART1/uart_ir_tnp_present" value="true" />
+         <param name="uart_ma%s_ma_present" key="/UART1/uart_ma%s_ma_present" value="true" />
+         <param name="uart_modem_rxrtse_present" key="/UART1/uart_modem_rxrtse_present" value="true" />
+         <param name="uart_modem_txctse_present" key="/UART1/uart_modem_txctse_present" value="true" />
+         <param name="uart_modem_txrtse_present" key="/UART1/uart_modem_txrtse_present" value="true" />
+         <param name="uart_modem_txrtspol_present" key="/UART1/uart_modem_txrtspol_present" value="true" />
+         <param name="uart_pfifo_rxfe_present" key="/UART1/uart_pfifo_rxfe_present" value="true" />
+         <param name="uart_pfifo_rxfifosize_present" key="/UART1/uart_pfifo_rxfifosize_present" value="true" />
+         <param name="uart_pfifo_txfe_present" key="/UART1/uart_pfifo_txfe_present" value="true" />
+         <param name="uart_pfifo_txfifosize_present" key="/UART1/uart_pfifo_txfifosize_present" value="true" />
+         <param name="uart_rcfifo_rxcount_present" key="/UART1/uart_rcfifo_rxcount_present" value="true" />
+         <param name="uart_rwfifo_rxwater_present" key="/UART1/uart_rwfifo_rxwater_present" value="true" />
+         <param name="uart_s1_fe_present" key="/UART1/uart_s1_fe_present" value="true" />
+         <param name="uart_s1_idle_present" key="/UART1/uart_s1_idle_present" value="true" />
+         <param name="uart_s1_nf_present" key="/UART1/uart_s1_nf_present" value="true" />
+         <param name="uart_s1_or_present" key="/UART1/uart_s1_or_present" value="true" />
+         <param name="uart_s1_pf_present" key="/UART1/uart_s1_pf_present" value="true" />
+         <param name="uart_s1_rdrf_present" key="/UART1/uart_s1_rdrf_present" value="true" />
+         <param name="uart_s1_tc_present" key="/UART1/uart_s1_tc_present" value="true" />
+         <param name="uart_s1_tdre_present" key="/UART1/uart_s1_tdre_present" value="true" />
+         <param name="uart_s2_brk13_present" key="/UART1/uart_s2_brk13_present" value="true" />
+         <param name="uart_s2_lbkde_present" key="/UART1/uart_s2_lbkde_present" value="true" />
+         <param name="uart_s2_lbkdif_present" key="/UART1/uart_s2_lbkdif_present" value="true" />
+         <param name="uart_s2_msbf_present" key="/UART1/uart_s2_msbf_present" value="true" />
+         <param name="uart_s2_raf_present" key="/UART1/uart_s2_raf_present" value="true" />
+         <param name="uart_s2_rwuid_present" key="/UART1/uart_s2_rwuid_present" value="true" />
+         <param name="uart_s2_rxedgif_present" key="/UART1/uart_s2_rxedgif_present" value="true" />
+         <param name="uart_s2_rxinv_present" key="/UART1/uart_s2_rxinv_present" value="true" />
+         <param name="uart_sfifo_rxempt_present" key="/UART1/uart_sfifo_rxempt_present" value="true" />
+         <param name="uart_sfifo_rxof_present" key="/UART1/uart_sfifo_rxof_present" value="true" />
+         <param name="uart_sfifo_rxuf_present" key="/UART1/uart_sfifo_rxuf_present" value="true" />
+         <param name="uart_sfifo_txempt_present" key="/UART1/uart_sfifo_txempt_present" value="true" />
+         <param name="uart_sfifo_txof_present" key="/UART1/uart_sfifo_txof_present" value="true" />
+         <param name="uart_tcfifo_txcount_present" key="/UART1/uart_tcfifo_txcount_present" value="true" />
+         <param name="uart_twfifo_txwater_present" key="/UART1/uart_twfifo_txwater_present" value="true" />
       </peripheral>
       <peripheral baseName="UART"     instance="2"        version="uart1_mk10d10">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_UART2_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_UART2_MASK;" />
          <irq num="UART2_RxTx_IRQn" />
          <irq num="UART2_Error_IRQn" />
+         <param name="$present"     key="/UART2/$present" value="true" />
+         <param name="uart_bdh_lbkdie_present" key="/UART2/uart_bdh_lbkdie_present" value="true" />
+         <param name="uart_bdh_rxedgie_present" key="/UART2/uart_bdh_rxedgie_present" value="true" />
+         <param name="uart_bdh_sbr_present" key="/UART2/uart_bdh_sbr_present" value="true" />
+         <param name="uart_bdl_sbr_present" key="/UART2/uart_bdl_sbr_present" value="true" />
+         <param name="uart_c1_ilt_present" key="/UART2/uart_c1_ilt_present" value="true" />
+         <param name="uart_c1_loops_present" key="/UART2/uart_c1_loops_present" value="true" />
+         <param name="uart_c1_m_present" key="/UART2/uart_c1_m_present" value="true" />
+         <param name="uart_c1_pe_present" key="/UART2/uart_c1_pe_present" value="true" />
+         <param name="uart_c1_pt_present" key="/UART2/uart_c1_pt_present" value="true" />
+         <param name="uart_c1_rsrc_present" key="/UART2/uart_c1_rsrc_present" value="true" />
+         <param name="uart_c1_uartswai_present" key="/UART2/uart_c1_uartswai_present" value="true" />
+         <param name="uart_c1_wake_present" key="/UART2/uart_c1_wake_present" value="true" />
+         <param name="uart_c2_ilie_present" key="/UART2/uart_c2_ilie_present" value="true" />
+         <param name="uart_c2_re_present" key="/UART2/uart_c2_re_present" value="true" />
+         <param name="uart_c2_rie_present" key="/UART2/uart_c2_rie_present" value="true" />
+         <param name="uart_c2_rwu_present" key="/UART2/uart_c2_rwu_present" value="true" />
+         <param name="uart_c2_sbk_present" key="/UART2/uart_c2_sbk_present" value="true" />
+         <param name="uart_c2_tcie_present" key="/UART2/uart_c2_tcie_present" value="true" />
+         <param name="uart_c2_te_present" key="/UART2/uart_c2_te_present" value="true" />
+         <param name="uart_c2_tie_present" key="/UART2/uart_c2_tie_present" value="true" />
+         <param name="uart_c3_feie_present" key="/UART2/uart_c3_feie_present" value="true" />
+         <param name="uart_c3_neie_present" key="/UART2/uart_c3_neie_present" value="true" />
+         <param name="uart_c3_orie_present" key="/UART2/uart_c3_orie_present" value="true" />
+         <param name="uart_c3_peie_present" key="/UART2/uart_c3_peie_present" value="true" />
+         <param name="uart_c3_r8_present" key="/UART2/uart_c3_r8_present" value="true" />
+         <param name="uart_c3_t8_present" key="/UART2/uart_c3_t8_present" value="true" />
+         <param name="uart_c3_txdir_present" key="/UART2/uart_c3_txdir_present" value="true" />
+         <param name="uart_c3_txinv_present" key="/UART2/uart_c3_txinv_present" value="true" />
+         <param name="uart_c4_brfa_present" key="/UART2/uart_c4_brfa_present" value="true" />
+         <param name="uart_c4_m10_present" key="/UART2/uart_c4_m10_present" value="true" />
+         <param name="uart_c4_maen1_present" key="/UART2/uart_c4_maen1_present" value="true" />
+         <param name="uart_c4_maen2_present" key="/UART2/uart_c4_maen2_present" value="true" />
+         <param name="uart_c5_rdmas_present" key="/UART2/uart_c5_rdmas_present" value="true" />
+         <param name="uart_c5_tdmas_present" key="/UART2/uart_c5_tdmas_present" value="true" />
+         <param name="uart_cfifo_rxflush_present" key="/UART2/uart_cfifo_rxflush_present" value="true" />
+         <param name="uart_cfifo_rxofe_present" key="/UART2/uart_cfifo_rxofe_present" value="true" />
+         <param name="uart_cfifo_rxufe_present" key="/UART2/uart_cfifo_rxufe_present" value="true" />
+         <param name="uart_cfifo_txflush_present" key="/UART2/uart_cfifo_txflush_present" value="true" />
+         <param name="uart_cfifo_txofe_present" key="/UART2/uart_cfifo_txofe_present" value="true" />
+         <param name="uart_d_rt_present" key="/UART2/uart_d_rt_present" value="true" />
+         <param name="uart_ed_noisy_present" key="/UART2/uart_ed_noisy_present" value="true" />
+         <param name="uart_ed_paritye_present" key="/UART2/uart_ed_paritye_present" value="true" />
+         <param name="uart_ir_iren_present" key="/UART2/uart_ir_iren_present" value="true" />
+         <param name="uart_ir_tnp_present" key="/UART2/uart_ir_tnp_present" value="true" />
+         <param name="uart_ma%s_ma_present" key="/UART2/uart_ma%s_ma_present" value="true" />
+         <param name="uart_modem_rxrtse_present" key="/UART2/uart_modem_rxrtse_present" value="true" />
+         <param name="uart_modem_txctse_present" key="/UART2/uart_modem_txctse_present" value="true" />
+         <param name="uart_modem_txrtse_present" key="/UART2/uart_modem_txrtse_present" value="true" />
+         <param name="uart_modem_txrtspol_present" key="/UART2/uart_modem_txrtspol_present" value="true" />
+         <param name="uart_pfifo_rxfe_present" key="/UART2/uart_pfifo_rxfe_present" value="true" />
+         <param name="uart_pfifo_rxfifosize_present" key="/UART2/uart_pfifo_rxfifosize_present" value="true" />
+         <param name="uart_pfifo_txfe_present" key="/UART2/uart_pfifo_txfe_present" value="true" />
+         <param name="uart_pfifo_txfifosize_present" key="/UART2/uart_pfifo_txfifosize_present" value="true" />
+         <param name="uart_rcfifo_rxcount_present" key="/UART2/uart_rcfifo_rxcount_present" value="true" />
+         <param name="uart_rwfifo_rxwater_present" key="/UART2/uart_rwfifo_rxwater_present" value="true" />
+         <param name="uart_s1_fe_present" key="/UART2/uart_s1_fe_present" value="true" />
+         <param name="uart_s1_idle_present" key="/UART2/uart_s1_idle_present" value="true" />
+         <param name="uart_s1_nf_present" key="/UART2/uart_s1_nf_present" value="true" />
+         <param name="uart_s1_or_present" key="/UART2/uart_s1_or_present" value="true" />
+         <param name="uart_s1_pf_present" key="/UART2/uart_s1_pf_present" value="true" />
+         <param name="uart_s1_rdrf_present" key="/UART2/uart_s1_rdrf_present" value="true" />
+         <param name="uart_s1_tc_present" key="/UART2/uart_s1_tc_present" value="true" />
+         <param name="uart_s1_tdre_present" key="/UART2/uart_s1_tdre_present" value="true" />
+         <param name="uart_s2_brk13_present" key="/UART2/uart_s2_brk13_present" value="true" />
+         <param name="uart_s2_lbkde_present" key="/UART2/uart_s2_lbkde_present" value="true" />
+         <param name="uart_s2_lbkdif_present" key="/UART2/uart_s2_lbkdif_present" value="true" />
+         <param name="uart_s2_msbf_present" key="/UART2/uart_s2_msbf_present" value="true" />
+         <param name="uart_s2_raf_present" key="/UART2/uart_s2_raf_present" value="true" />
+         <param name="uart_s2_rwuid_present" key="/UART2/uart_s2_rwuid_present" value="true" />
+         <param name="uart_s2_rxedgif_present" key="/UART2/uart_s2_rxedgif_present" value="true" />
+         <param name="uart_s2_rxinv_present" key="/UART2/uart_s2_rxinv_present" value="true" />
+         <param name="uart_sfifo_rxempt_present" key="/UART2/uart_sfifo_rxempt_present" value="true" />
+         <param name="uart_sfifo_rxof_present" key="/UART2/uart_sfifo_rxof_present" value="true" />
+         <param name="uart_sfifo_rxuf_present" key="/UART2/uart_sfifo_rxuf_present" value="true" />
+         <param name="uart_sfifo_txempt_present" key="/UART2/uart_sfifo_txempt_present" value="true" />
+         <param name="uart_sfifo_txof_present" key="/UART2/uart_sfifo_txof_present" value="true" />
+         <param name="uart_tcfifo_txcount_present" key="/UART2/uart_tcfifo_txcount_present" value="true" />
+         <param name="uart_twfifo_txwater_present" key="/UART2/uart_twfifo_txwater_present" value="true" />
       </peripheral>
       <peripheral baseName="USB"      instance="0"        version="usb0_otg_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsb" />
@@ -970,6 +1243,14 @@
       <peripheral baseName="VREF"     instance=""         version="vref_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForVref" />
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_VREF_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_VREF_MASK;" />
+         <param name="$present"     key="/VREF/$present" value="true" />
+         <param name="vref_sc_icompen_present" key="/VREF/vref_sc_icompen_present" value="true" />
+         <param name="vref_sc_mode_lv_present" key="/VREF/vref_sc_mode_lv_present" value="true" />
+         <param name="vref_sc_regen_present" key="/VREF/vref_sc_regen_present" value="true" />
+         <param name="vref_sc_vrefen_present" key="/VREF/vref_sc_vrefen_present" value="true" />
+         <param name="vref_sc_vrefst_present" key="/VREF/vref_sc_vrefst_present" value="true" />
+         <param name="vref_trm_chopen_present" key="/VREF/vref_trm_chopen_present" value="true" />
+         <param name="vref_trm_trim_present" key="/VREF/vref_trm_trim_present" value="true" />
       </peripheral>
       <peripheral baseName="WDOG"     instance=""         version="wdog_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForWdog" />
