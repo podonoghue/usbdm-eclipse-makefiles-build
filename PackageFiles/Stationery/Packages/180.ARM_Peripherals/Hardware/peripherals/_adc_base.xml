@@ -12,6 +12,8 @@
    
    <aliasOption key="/MCG/currentClockConfig" constant ="false"/>
    
+   <xi:include href="_irqOption.xml"/>
+
 <!-- ========== PGA features =============================== -->
    <choiceOption key="adc_pga_pgaen" condition="adc_pga_present"
       description="PGA Enable and mode"
@@ -74,6 +76,16 @@
       units="Hz"
       description="Frequency of ADC Clock" />
    
+   <template><![CDATA[
+      \t/**
+      \t * Type definition for ADC interrupt call back.
+      \t *
+      \t * @param[in] result  Conversion result from channel
+      \t * @param[in] channel Channel providing the result
+      \t */
+      \ttypedef void (*CallbackFunction)(uint32_t result, int channel);
+   ]]></template>
+
    <clockCodeTemplate variable="adc_cfg1_adiclk"
       returnFormat="%s"
    ><![CDATA[
@@ -247,6 +259,7 @@
 
    <binaryOption key="adc_sc1_aien" description="Enables conversion interrupts"
       enumStem="AdcInterrupt"
+      hidden="true"
       toolTip="An interrupt is triggered at the end of each conversion">
       <choice value="0" enum="Disabled" name="Disabled" isDefault="true" />
       <choice value="1" enum="Enabled"  name="Enabled" />
@@ -287,27 +300,16 @@
       <choice value="ADC_SC2_ACFE(1)|ADC_SC2_ACREN(1)|ADC_SC2_ACFGT(1)|(0&lt;&lt;8)" enum="InsideRangeInclusive"  name="(low &lt;= ADC value &lt;= high)"                />
    </choiceOption>
 
-   <intOption key="low_comparison_value" description="ADC low comparison value" 
-      toolTip="Low value for ADC automatic comparison\n
-         This value is assumed unsigned"
-      min="0" max="0xFFFF"
-      />
-   
-   <intOption key="high_comparison_value" description="ADC high comparison value" 
-      toolTip="High value for ADC automatic comparison\n
-         This value is assumed unsigned"
-      min="0" max="0xFFFF"
-      />
-   
-   <intOption key="adc_cv1" description="ADC CV1 value" 
-      toolTip="CV1 threshold value\n
-         Either low or high value" 
-      constant="true" 
+   <intOption key="adc_cv1" description="ADC CV low value" 
+      valueFormat="%s"
+      toolTip="CV Low threshold value\n
+         This value will be used for CV1 or CV2 as needed"  
       derived="true" />
-   <intOption key="adc_cv2" description="ADC CV2 value" 
-      toolTip="CV2 threshold value\n
-         Either low or high value"  
-      constant="true" 
+      
+   <intOption key="adc_cv2" description="ADC CV high value" 
+      valueFormat="%s"
+      toolTip="CV High threshold value\n
+         This value will be used for CV1 or CV2 as needed"  
       derived="true" />
    
    <binaryOption key="adc_sc2_adtrg" description="Conversion Trigger Select"
@@ -323,52 +325,340 @@
       <aliasOption key="/SIM/sim_sopt7_adc$(_instance)trgsel"    constant="false" optional="true"/>
    </category>
 
-   <xi:include href="_irqOption.xml"/>
-      
-   <template><![CDATA[
-     \t//! Default resolution
-     \tstatic constexpr uint32_t defaultAdcResolution = ADC_CFG1_MODE($(adc_cfg1_mode));
-     
-     \t//! Default value for ADCx_CV1 register
-     \tstatic constexpr uint32_t cv1  = $(adc_cv1);
-     
-     \t//! Default value for ADCx_CV2 register
-     \tstatic constexpr uint32_t cv2  = $(adc_cv2);\n\n
-   ]]></template>
+<!-- ========== ADC Init class =============================== -->
 
    <template><![CDATA[
-      \t//! Default value for ADCx_CFG1 register
-      \tstatic constexpr uint32_t cfg1 = \n
+      \t/**
+      \t * Class used to do initialisation of $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values:
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const Adc$(_instance)::Init adcInit {
+      \t *
+      \t *    // Omitted parameters are take to be zero
+      \t *    AdcClockSource_Asynch ,  // ADC Clock Source
+      \t *    AdcClockDivider_1 ,      // Clock Divide Select
+      \t *    AdcResolution_8bit_se ,  // ADC Resolution
+      \t *    AdcPower_Normal ,        // Low-Power Configuration
+      \t *    AdcClockRange_Normal ,   // High-Speed Configuration
+      \t *    AdcAsyncClock_Disabled , // Asynchronous Clock Output Enable
+      \t *    AdcRefSel_VrefHL ,       // Voltage Reference Selection
+      \t *    AdcDma_Disabled ,        // DMA Enable
+      \t *    AdcMuxsel_B ,            // Selects between A/B multiplexor inputs on some ADC channels
+      \t *    AdcInterrupt_Disabled ,  // Enables conversion interrupts
+      \t *    AdcDma_Disabled ,        // DMA Enable
+      \t *    AdcTrigger_Software ,    // Conversion Trigger Select
+      \t *    AdcAveraging_off ,       // Hardware Average Select
+      \t *    AdcContinuous_Disabled , // Selects between single and continuous conversion
+      \t *    NvicPriority_Normal ,    // IRQ level for this peripheral
+      \t *    adcCallback,             // Call-back to execute on completion
+      \t *
+      \t *    // These 2/3 parameters must appear last (if used)
+      \t *    AdcCompare_LessThan ,    // Compare function
+      \t *    5000 ,                   // ADC CV low value
+      \t *    0,                       // ADC CV high value (May be omitted)
+      \t * };
+      \t *
+      \t * // Initialise ADC from values specified above
+      \t * Adc$(_instance)::configure(adcInit)
+      \t * @endcode
+      \t */
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**                               
+      \t    * Copy Constructor                  
+      \t    */                             
+      \t   constexpr Init(const Init &other) = delete;
+      \t   
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
    ]]></template>
-   <template variables="adc_cfg1_adiclk"     ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
-   <template variables="adc_cfg1_mode"       ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
-   <template variables="adc_sample"          ><![CDATA[ \t   (%symbolicValueExpression&ADC_CFG1_ADLSMP_MASK) | // %shortDescription\n ]]></template>
-   <template variables="adc_cfg1_adiv"       ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
-   <template variables="adc_cfg1_adlpc"      ><![CDATA[ \t   %symbolicValueExpression;  // %shortDescription\n\n]]></template>
+   
+<!-- Member variables -->
+  
+   <setTemplate variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod" 
+    ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></setTemplate>
+   
+   <initialValueTemplate 
+      variables="
+         adc_cv1"
+   ><![CDATA[
+      \t   ///  %description
+      \t   uint16_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate 
+      variables="
+         adc_cv2"
+   ><![CDATA[
+      \t   ///  %description
+      \t   uint16_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate 
+      variables="
+         adc_cfg1_adiclk,
+         adc_cfg1_adiv,
+         adc_cfg1_mode,
+         adc_cfg1_adlpc"
+   ><![CDATA[
+      \t   ///  ADC Configuration Register 1
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate 
+      variables="
+         adc_cfg2_adhsc,
+         adc_cfg2_adacken,
+         adc_sc2_refsel,
+         adc_sc2_dmaen,
+         adc_cfg2_muxsel,
+         adc_sc2_compare"
+   ><![CDATA[
+      \t   ///  ADC Configuration Register 2
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate 
+      variables="
+         adc_sc2_dmaen,
+         adc_sc2_adtrg"
+   ><![CDATA[
+      \t   ///  ADC Status and Control Registers 2
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate 
+      variables="
+         adc_sc3_avg,
+         adc_sc3_adco"
+   ><![CDATA[
+      \t   ///  ADC Status and Control Registers 3
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate variables="/PCR/nvic_irqLevel" codeGenCondition="irqHandlingMethod" 
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+   ]]></initialValueTemplate>
 
-   <template><![CDATA[
-      \t//! Default value for ADCx_CFG2 register
-      \tstatic constexpr uint32_t cfg2 = \n
-   ]]></template>
-   <template variables="adc_cfg2_muxsel"  ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
-   <template variables="adc_sample"       ><![CDATA[ \t   (%symbolicValueExpression&ADC_CFG2_ADLSTS_MASK) | // %shortDescription\n ]]></template>
-   <template variables="adc_cfg2_adhsc"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
-   <template variables="adc_cfg2_adacken" ><![CDATA[ \t   %symbolicValueExpression;  // %shortDescription\n\n ]]></template>
+<!-- Configure methods -->
 
-   <template><![CDATA[
-      \t//! Default value for ADCx_SC2 register
-      \tstatic constexpr uint32_t sc2 = \n
+   <template discardRepeats="true" key="/ADC/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure ADC from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t   
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-back if feature enabled and non-null
+      \t      if (init.callbackFunction != nullptr) {
+      \t         setCallback(init.callbackFunction);
+      \t      }
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
+      \t   enable();
+      \t
+      \t   adc->CFG1    = init.cfg1;
+      \t   adc->CFG2    = init.cfg2;
+      \t   adc->SC2     = init.sc2;
+      \t   adc->SC3     = init.sc3;
+      \t   adc->CV1     = init.cv1;
+      \t   adc->CV1     = init.cv2;
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n
    ]]></template>
-   <template variables="adc_sc2_compare" ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
-   <template variables="adc_sc2_dmaen"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
-   <template variables="adc_sc2_adtrg"   ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription\n ]]></template>
-   <template variables="adc_sc2_refsel"  ><![CDATA[ \t   %symbolicValueExpression;  // %shortDescription\n\n ]]></template>
+  
+<!-- Constructors -->
+  
+   <setTemplate 
+      codeGenCondition="irqHandlingMethod"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%enumParam0 = %paramExpression;
+      \t   }\n\n
+   ]]></setTemplate>
+   
+   <setTemplate 
+      variables="/PCR/nvic_irqLevel" 
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      #if $(irqHandlingMethod)
+      \t      %registerName = %paramExpression;
+      #else
+      \t      (void)%paramExpression;
+      #endif
+      \t   }\n\n
+   ]]></setTemplate>
+   
+   <for keys="r" values="
+         adc_cfg1_adiclk;
+         adc_cfg1_adiv;
+         adc_cfg1_mode;
+         adc_cfg1_adlpc;
+         adc_cfg2_adhsc;
+         adc_cfg2_adacken;
+         adc_cfg2_muxsel;
+         adc_sc2_compare;
+         adc_sc2_refsel;
+         adc_sc2_dmaen;
+         adc_sc2_adtrg;
+         adc_sc3_avg;
+         adc_sc3_adco">
+      <setTemplate variables="%(r)"
+         linePadding="xxx" 
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t   
+         \t      %registerName |= %paramExpression;
+         \t   }
+         \t\n
+      ]]></setTemplate>
+   </for>
+   
+   <setTemplate variables="adc_sc2_compare,adc_cv1,adc_cv1"
+      linePadding="xxx" 
+   ><![CDATA[
+      \t   /**
+      \t    * Configure %description0, %description1 and %description2
+      \t    *
+      \t    * @param[in] adcCompare   Comparison operation to enable
+      \t    * @param[in] low          Lower threshold
+      \t    * @param[in] high         Higher threshold (if needed)
+      \t    */
+      \t   constexpr Init(AdcCompare adcCompare, int low, int high=0) {
+      \t   
+      \t      // Juggle CV1, CV2 values to satisfy comparison rules
+      \t      switch (adcCompare) {
+      \t         case AdcCompare_Disabled:
+      \t            break;
+      \t         case AdcCompare_LessThan:
+      \t         case AdcCompare_GreaterThanOrEqual:
+      \t            cv1 = low;
+      \t            break;
+      \t         case AdcCompare_OutsideRangeExclusive:
+      \t         case AdcCompare_InsideRangeInclusive:
+      \t            cv1 = low;
+      \t            cv2 = high;
+      \t            break;
+      \t         case AdcCompare_InsideRangeExclusive:
+      \t         case AdcCompare_OutsideRangeInclusive:
+      \t            cv1 = high;
+      \t            cv2 = low;
+      \t            break;
+      \t      }
+      \t      sc2 |= adcCompare;
+      \t   }
+      \t\n
+   ]]></setTemplate>
+
+   <template ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+<!-- Default Initialisation value -->
+  
+   <template><![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic const Init DefaultInitValue;\n\n
+   ]]></template>
+
+   <initialValueTemplate key="/HARDWARE/StaticObjects" namespace="all"
+      separator=","
+      terminator=","     
+      variables="
+         adc_cfg1_adiclk,
+         adc_cfg1_adiv,
+         adc_cfg1_mode,
+         adc_cfg1_adlpc,
+         adc_cfg2_adhsc,
+         adc_cfg2_adacken,
+         adc_sc2_refsel,
+         adc_sc2_dmaen,
+         adc_cfg2_muxsel,
+         adc_sc2_dmaen,
+         adc_sc2_adtrg,
+         adc_sc3_avg,
+         adc_sc3_adco,
+         irqLevel,
+         adc_sc2_compare,
+         adc_cv1,
+         adc_cv2,
+         "     
+   ><![CDATA[
+      \t/**
+      \t * Default initialisation value for Adc$(_instance)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tconst Adc$(_instance)Info::Init Adc$(_instance)Info::DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+
+
+
    
    <template key="/ADC/declarations" namespace="all"  ><![CDATA[
-   \t/**
-   \t * Class representing $(_name)
-   \t */
-   \ttypedef AdcBase_T<$(_class)Info> $(_class);\n
+      /**
+       * Class representing $(_name)
+       */
+      typedef AdcBase_T<$(_class)Info> $(_class);\n
    ]]></template>
       
    <signals/>

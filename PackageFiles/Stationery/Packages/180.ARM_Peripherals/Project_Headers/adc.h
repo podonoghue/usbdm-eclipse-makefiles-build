@@ -53,14 +53,6 @@ namespace USBDM {
  */
 
 /**
- * Type definition for ADC interrupt call back.
- *
- * @param[in] result  Conversion result from channel
- * @param[in] channel Channel providing the result
- */
-typedef void (*AdcCallbackFunction)(uint32_t result, int channel);
-
-/**
  * Provides:
  * - Common unhandledCallback for all ADCs.
  * - Shared constants
@@ -534,22 +526,25 @@ public:
  * @tparam info Table of information describing ADC
  */
 template<class Info>
-class AdcBase_T : public Adc {
+class AdcBase_T : public Adc, public Info {
 
 private:
    AdcBase_T(const AdcBase_T&) = delete;
    AdcBase_T(AdcBase_T&&) = delete;
 
+public:
+   /**
+    * Type definition for ADC interrupt call back.
+    */
+   using CallbackFunction = typename Info::CallbackFunction;
+
 protected:
    /** Callback function for ISR */
-   static AdcCallbackFunction sCallback;
+   static CallbackFunction sCallback;
 
 public:
    /** Hardware instance pointer */
    static constexpr HardwarePtr<ADC_Type> adc = Info::baseAddress;
-
-   /** Default ADC resolution */
-   static constexpr AdcResolution defaultAdcResolution = static_cast<AdcResolution>(Info::defaultAdcResolution);
 
    /** Get reference to ADC hardware as struct */
    static volatile ADC_Type &adcPtr() { return Info::adc(); }
@@ -595,7 +590,7 @@ public:
     * class AClass {
     * public:
     *    // Member function used as callback
-    *    // This function must match AdcCallbackFunction
+    *    // This function must match CallbackFunction
     *    void callback(uint32_t result, int channel) {
     *       ...;
     *    }
@@ -611,8 +606,8 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(uint32_t result, int channel), T &object>
-   static constexpr AdcCallbackFunction wrapCallback() {
-      AdcCallbackFunction fn = [](uint32_t result, int channel) {
+   static constexpr CallbackFunction wrapCallback() {
+      CallbackFunction fn = [](uint32_t result, int channel) {
          (object.*callback)(result, channel);
       };
       return fn;
@@ -632,7 +627,7 @@ public:
     * class AClass {
     * public:
     *    // Member function used as callback
-    *    // This function must match AdcCallbackFunction
+    *    // This function must match CallbackFunction
     *    void callback(uint32_t result, int channel) {
     *       ...;
     *    }
@@ -648,9 +643,9 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(uint32_t result, int channel)>
-   static AdcCallbackFunction wrapCallback(T &object) {
+   static CallbackFunction wrapCallback(T &object) {
       static T &obj = object;
-      AdcCallbackFunction fn = [](uint32_t result, int channel) {
+      CallbackFunction fn = [](uint32_t result, int channel) {
          (obj.*callback)(result, channel);
       };
       return fn;
@@ -669,7 +664,7 @@ public:
     *       It is necessary to identify the originating channel in the callback.
     * @note To change between handlers first use setCallback(nullptr).
     */
-   static void setCallback(AdcCallbackFunction callback) {
+   static void setCallback(CallbackFunction callback) {
       static_assert(Info::irqHandlerInstalled, "ADC not configured for interrupts. Modify Configure.usbdmProject");
       if (callback == nullptr) {
          sCallback = unhandledCallback;
@@ -681,23 +676,7 @@ public:
       sCallback = callback;
    }
 
-   /**
-    * Configure with settings from Configure.usbdmProject.
-    * Includes configuring all pins.
-    */
-   static void defaultConfigure() {
-      enable();
-
-      // Set mode to default
-      adc->CFG1 = Info::cfg1;
-      adc->CFG2 = Info::cfg2;
-      adc->SC2  = Info::sc2;
-      adc->CV1  = Info::cv1;
-      adc->CV1  = Info::cv2;
-
-      enableNvicInterrupts(Info::irqLevel);
-   }
-
+$(/ADC/InitMethod: // /ADC/InitMethod not found)
    /**
     * Configure the ADC
     *
@@ -1443,7 +1422,7 @@ public:
 
 };
 
-template<class Info> AdcCallbackFunction AdcBase_T<Info>::sCallback = Adc::unhandledCallback;
+template<class Info> typename AdcBase_T<Info>::CallbackFunction AdcBase_T<Info>::sCallback = Adc::unhandledCallback;
 
 $(/ADC/declarations:// #error "No declarations found")
 /**
