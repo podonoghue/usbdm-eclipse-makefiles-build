@@ -87,7 +87,10 @@ public:
     * @param wdogRefresh_1 1st value to write (WdogRefresh_1)
     * @param wdogRefresh_2 2nd value to write (WdogRefresh_2)
     *
-    * @note This operation is time-critical so is protected by a CriticalSection
+    * @note This operation is time-critical so interrupts are disabled during refresh
+    * @note Due to clock domain issues it is necessary to wait at least 5 clock
+    *       cycles between attempted refreshes.  This is most significant when 
+    *       using the LPO clock source (i.e. at least 5 ms in that case).
     */
    static void refresh(WdogRefresh wdogRefresh_1, WdogRefresh wdogRefresh_2) {
 
@@ -107,6 +110,7 @@ public:
    }
 
 protected:
+#if $(/WDOG/secondsSupport)
    /**
     *
     * @param[in]     stctrlh   Used to obtain clock source (STCTRLH.CLKSRC)
@@ -140,8 +144,9 @@ protected:
             return E_NO_ERROR;
          }
       }
-      return E_TOO_LARGE;
+      return setErrorCode(E_TOO_LARGE);
    }
+#endif
 
 public:
 $(/WDOG/InitMethod: // /WDOG/InitMethod not found)
@@ -281,15 +286,16 @@ public:
     *
     * @note This is a protected operation which uses unlock
     */
-   static void setTimeout(uint8_t prescaler, Ticks ticks) {
+   static void setTimeout(WdogPrescale wdogPrescale, Ticks ticks) {
       // Disable interrupts while accessing watchdog
       CriticalSection cs;
       Info::writeUnlock(WdogUnlock1, WdogUnlock2);
-      wdog->PRESC = WDOG_PRESC_PRESCVAL(prescaler-1);
+      wdog->PRESC  = wdogPrescale;
       wdog->TOVALH = (unsigned)ticks>>16;
       wdog->TOVALL = (unsigned)ticks;
    }
 
+#if $(/WDOG/secondsSupport)
    /**
     * Sets the watchdog time-out value in seconds.
     *
@@ -308,13 +314,14 @@ public:
             return setErrorCode(E_TOO_LARGE);
          }
          timerValue = (uint64_t)(((float)seconds*inputClockFreq)/prescaler);
-         if (timerValue <= 0xFFFF) {
+         if (timerValue <= 0xFFFFFFFF) {
             break;
          }
       }
-      setTimeout(prescaler, (unsigned)timerValue);
+      setTimeout((WdogPrescale)WDOG_PRESC_PRESCVAL(prescaler-1), (Ticks)timerValue);
       return E_NO_ERROR;
    }
+#endif
 
    /**
     * Sets the watchdog window value.
@@ -329,16 +336,6 @@ public:
       Info::writeUnlock(WdogUnlock1, WdogUnlock2);
       wdog->WINH = value>>16;
       wdog->WINL = value;
-   }
-
-   /**
-    * Enable with default settings.
-    * Includes configuring all pins
-    */
-   static inline void defaultConfigure() {
-
-      // Update settings
-      configure(Info::DefaultInitValue);
    }
 
    /**

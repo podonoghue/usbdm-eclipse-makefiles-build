@@ -13,9 +13,26 @@
       <copy source="Snippets/wdog-example.cpp"      target="Snippets/wdog-example.cpp"       overwrite="true" derived="true" />
    </projectActionList>
    
+   <binaryOption key="wdogSystemEnable" 
+      description="Enable Watchdog system"
+      toolTip="This cabn be used to disable the entire watchdog system">
+      <choice value="false" enum="Disabled" name="Watchdog system disabled" isDefault="true" />
+      <choice value="true"  enum="Enabled"  name="Watchdog system enabled" />
+   </binaryOption>  
+
+   <binaryOption key="secondsSupport" 
+      enabledBy="wdogSystemEnable" 
+      description="Enable use of Seconds for time"
+      toolTip="Use of floating point is necessary to support specifing watchdog timeouts in seconds in runtime code.\n
+               This is seldom needed and the overhead can be avoided by disabling this option">
+      <choice value="false" enum="Disabled" name="Seconds disabled" isDefault="true" />
+      <choice value="true"  enum="Enabled"  name="Seconds enabled" />
+   </binaryOption>  
+
    <!-- ************* WDOG_STCTRLH ****************** -->
   
    <binaryOption key="wdog_stctrlh_wdogen" 
+      enabledBy="wdogSystemEnable" 
       enumStem="WdogEnable"
       enumType="uint16_t" 
       description="Watchdog enable"
@@ -25,6 +42,7 @@
    </binaryOption>  
 
    <binaryOption key="wdog_stctrlh_distestwdog" 
+      enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable" 
       enumType="uint16_t" 
       enumStem="WdogTestMode" 
       description="Test mode disable"
@@ -34,6 +52,7 @@
    </binaryOption>
 
    <binaryOption key="wdog_stctrlh_waiten" 
+      enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable" 
       enumType="uint16_t" 
       enumStem="WdogEnableInWait" 
       description="Enable watchdog in WAIT mode"
@@ -43,6 +62,7 @@
    </binaryOption>
 
    <binaryOption key="wdog_stctrlh_stopen" 
+      enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable" 
       enumType="uint16_t" 
       enumStem="WdogEnableInStop" 
       description="Enable watchdog in STOP mode"
@@ -52,6 +72,7 @@
    </binaryOption>
 
    <binaryOption key="wdog_stctrlh_dbgen" 
+      enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable" 
       enumType="uint16_t" 
       enumStem="WdogEnableInDebug" 
       description="Enable watchdog in DEBUG mode"
@@ -61,6 +82,7 @@
    </binaryOption>
 
    <binaryOption key="wdog_stctrlh_allowupdate" 
+      enabledBy="wdogSystemEnable" 
       enumType="uint16_t" 
       enumStem="WdogAllowUpdate" 
       description="Allow watchdog update"
@@ -72,6 +94,7 @@
    </binaryOption>
 
    <binaryOption key="wdog_stctrlh_winen" 
+      enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable" 
       enumType="uint16_t" 
       enumStem="WdogWindow" 
       description="Enable watchdog windowing mode"
@@ -81,6 +104,7 @@
    </binaryOption>
 
    <binaryOption key="wdog_stctrlh_irqrsten" 
+      enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable" 
       enumType="uint16_t" 
       enumStem="WdogIntBeforeReset" 
       description="Enable interrupt before reset"
@@ -90,6 +114,7 @@
    </binaryOption>
 
    <binaryOption key="wdog_stctrlh_clksrc" 
+      enabledBy="wdogSystemEnable" 
       target="inputClockFrequency"
       enumType="uint16_t" 
       enumStem="WdogClock" 
@@ -138,6 +163,7 @@
    ]]></clockCodeTemplate>
 
    <intOption key="inputClockFrequency" 
+      enabledBy="wdogSystemEnable" 
       constant="true"
       description="Watchdog Input clock frequency"
       toolTip="Determined from timer clock source"
@@ -145,6 +171,7 @@
       units="Hz"/>
       
    <choiceOption key="wdog_presc_prescval" 
+      enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable" 
       target="timerTickPeriod"
       description="Prescaler for the watchdog clock source" 
       enumStem="WdogPrescale"
@@ -161,6 +188,7 @@
    </choiceOption>
 
    <floatOption key="timerTickPeriod" 
+      enabledBy="wdogSystemEnable" 
       constant="true"
       description="Period of watchdog counter"
       toolTip="Determined from timer clock source and prescaler"
@@ -168,6 +196,7 @@
       units="s"/>
       
    <floatOption key="wdog_timeoutPeriod" 
+      enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable" 
       description="Watchdog Timeout"
       toolTip="The watchdog must be refreshed before this interval expires"
       valueFormat="%s_s"
@@ -176,6 +205,7 @@
       value="1"/>
    
    <intOption key="wdog_timeout" 
+      enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable" 
       ref="timerTickPeriod;(wdog_timeoutPeriod)/timerTickPeriod"
       constant="true"
       description="Watchdog Timeout in ticks"
@@ -187,6 +217,7 @@
    />
    
    <floatOption key="wdog_windowPeriod" 
+      enabledBy="wdog_stctrlh_winen&amp;&amp;wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable" 
       description="Watchdog Window"
       toolTip="Refresh of the watchdog may not be carried out before this interval has expired i.e.\n
                Refresh must occur within [window...timeout] if window mode is enabled.\n
@@ -197,11 +228,8 @@
       units="s"
       value="0"/>
    
-   <template key="/SYSTEM/Includes" namespace="all" ><![CDATA[
-      #include "wdog.h"\n
-   ]]></template>
-   
-   <intOption key="wdog_window" 
+   <intOption key="wdog_window"
+      enabledBy="wdog_stctrlh_winen&amp;&amp;wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable" 
       ref="timerTickPeriod;(wdog_windowPeriod)/timerTickPeriod"
       constant="true"
       description="Watchdog Window in ticks"
@@ -210,9 +238,12 @@
                A refresh outside of this window resets the system"
       valueFormat="%s_ticks"
       typeName="Ticks"
-
       value="0" min="0" max="4294967295" 
    />
+   
+   <template key="/SYSTEM/Includes" namespace="all" ><![CDATA[
+      #include "wdog.h"\n
+   ]]></template>
    
    <template key="/SYSTEM/WatchdogInitialise" namespace="all" ><![CDATA[
       \t/*
@@ -295,8 +326,6 @@
    \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
    ]]></template>
       
-      
-   
 <!-- ========== WDOG Init class =============================== -->
 
    <template><![CDATA[
@@ -348,30 +377,11 @@
    
 <!-- Member variables -->
   
-   <setTemplate variables="irqHandlingMethod"
+   <setTemplate variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod" 
     ><![CDATA[
-      \t
-      #if $(irqHandlingMethod)
       \t   /// %description
-      \t   %params = nullptr;
-      #endif\n\n
+      \t   %params = nullptr;\n\n
    ]]></setTemplate>
-   
-   <initialValueTemplate 
-      variables="
-         wdog_timeout"
-   ><![CDATA[
-      \tunion Seconds_Ticks {
-      \t   ///  Time in seconds
-      \t   Seconds seconds;
-      \t
-      \t   ///  Time in ticks
-      \t   Ticks ticks;
-      \t
-      \t   constexpr Seconds_Ticks(Ticks   ticks)   : ticks(ticks) {}
-      \t   constexpr Seconds_Ticks(Seconds seconds) : seconds(seconds) {}
-      \t};\n\n
-   ]]></initialValueTemplate>
    
    <initialValueTemplate 
       variables="
@@ -413,14 +423,49 @@
       \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
    
-   <initialValueTemplate
-      variables="/PCR/nvic_irqLevel"
+   <initialValueTemplate variables="/PCR/nvic_irqLevel" codeGenCondition="irqHandlingMethod" 
    ><![CDATA[
       \t   /// %description
       \t   %enumClass %registerName = %enumClass_Normal;\n\n
    ]]></initialValueTemplate>
 
-<!-- Configure method -->
+<!-- Configure methods -->
+   <setTemplate key="/WDOG/InitMethod" namespace="all" discardRepeats="true"  
+      variables="wdogSystemEnable" 
+      codeGenCondition="wdogSystemEnable"
+      ><![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n\n
+   ]]></setTemplate>
+  
+   <setTemplate key="/WDOG/InitMethod" namespace="all" discardRepeats="true"  
+      variables="wdogSystemEnable" 
+      codeGenCondition="!wdogSystemEnable"
+      ><![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Unlock before changing settings
+      \t   wdog->UNLOCK  = WdogUnlock_1;
+      \t   wdog->UNLOCK  = WdogUnlock_2;
+      \t
+      \t   // Read-back to delay until change effected
+      \t   (void)(wdog->UNLOCK);
+      \t
+      \t   // Disable watchdog
+      \t   wdog->STCTRLH = WdogEnable_Disabled|WdogAllowUpdate_Disabled;
+      \t}\n\n
+   ]]></setTemplate>
   
    <setTemplate variables="wdog_stctrlh_wdogen" discardRepeats="true" key="/WDOG/InitMethod" namespace="all" ><![CDATA[
       \t/**
@@ -430,8 +475,8 @@
       \t */
       \tstatic ErrorCode configure(const typename Info::Init &init) {
       \t   
-      \t   typename Info::Init::Seconds_Ticks timeout = init.timeout;
-      \t   typename Info::Init::Seconds_Ticks window  = init.window;
+      \t   Seconds_Ticks timeout = init.timeout;
+      \t   Seconds_Ticks window  = init.window;
       \t   uint16_t presc   = init.presc;
       \t   
       \t   if constexpr (Info::irqHandlerInstalled) {
@@ -440,6 +485,7 @@
       \t         setCallback(init.callbackFunction);
       \t      }
       \t   }
+      #if $(/WDOG/secondsSupport)
       \t   if (presc == ((uint16_t)-1)) {
       \t   
       \t      // Calculate timeout, window and prescaler
@@ -448,6 +494,7 @@
       \t         return rc;
       \t      }
       \t   }
+      #endif
       \t   // Protect sequence from interrupts
       \t   CriticalSection cs;
       \t   
@@ -477,10 +524,10 @@
 <!-- Constructors -->
   
    <setTemplate 
-      variables="irqHandlingMethod" 
+      codeGenCondition="irqHandlingMethod"
+      variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
-      #if $(irqHandlingMethod)
       \t   /**
       \t    * Constructor for %description
       \t    *
@@ -492,29 +539,30 @@
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      this->%enumParam0 = %paramExpression;
-      \t   }
-      #endif\n\n
+      \t   }\n\n
    ]]></setTemplate>
    
-   <for keys="r" values="/PCR/nvic_irqLevel">
-      <setTemplate
-         variables="%(r)" 
-         linePadding="xxx"
-       ><![CDATA[
-         \t   /**
-         \t    * Constructor for %description
-         \t    *
-         \t    * @tparam   Types
-         \t    * @param    rest
-         %paramDescription
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-         \t
-         \t      %registerName = %paramExpression;
-         \t   }\n\n
-      ]]></setTemplate>
-   </for>
+   <setTemplate 
+      variables="/PCR/nvic_irqLevel" 
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      #if $(/WDOG/irqHandlingMethod)
+      \t      %registerName = %paramExpression;
+      #else
+      \t      (void)%paramExpression;
+      #endif
+      \t   }\n\n
+   ]]></setTemplate>
    
    <for keys="r" values="
          wdog_stctrlh_distestwdog;
@@ -566,6 +614,7 @@
       linePadding="xxx"
       params="timeout,window"
    ><![CDATA[
+      #if $(secondsSupport)
       \t   /**
       \t    * Constructor for %description0, %description1 & %description2
       \t    *
@@ -574,7 +623,7 @@
       \t   constexpr Init(
       %params) : %enumParam0(%enumParam0), %enumParam1(%enumParam1), presc((uint16_t)-1) {
       \t   }
-      \t\n
+      #endif\n
    ]]></setTemplate>
    
    <template ><![CDATA[
@@ -618,8 +667,6 @@
       \t};\n\n
    ]]></initialValueTemplate>
 
-   <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
-   </validate>
+   <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" />
       
 </peripheralPage>
