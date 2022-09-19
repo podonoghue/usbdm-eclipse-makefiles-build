@@ -18,17 +18,16 @@
       description="IRQ priority levels"
       toolTip="Priority level used to configure the NVIC\n
          Subset of available levels">
-      <choice name="VeryHigh"       value="0"   enum="VeryHigh"     />
-      <choice name="High"           value="2"   enum="High"         />
-      <choice name="MidHigh"        value="5"   enum="MidHigh"      />
-      <choice name="Normal"         value="8"   enum="Normal"       isDefault="true"/>
-      <choice name="Midlow"         value="11"  enum="Midlow"       />
-      <choice name="Low"            value="13"  enum="Low"          />
-      <choice name="VeryLow"        value="15"  enum="VeryLow"      />
-      <choice name="Not Installed"  value="(uint8_t)-1"  enum="NotInstalled" />
+      <choice name="VeryLow"        value="(1&lt;&lt;__NVIC_PRIO_BITS)-1" enum="VeryLow"      />
+      <choice name="Low"            value="(NvicPriority_VeryLow*5/6)"    enum="Low"          />
+      <choice name="Midlow"         value="(NvicPriority_VeryLow*4/6)"    enum="Midlow"       />
+      <choice name="Normal"         value="(NvicPriority_VeryLow*3/6)"    enum="Normal"       isDefault="true"/>
+      <choice name="MidHigh"        value="(NvicPriority_VeryLow*2/6)"    enum="MidHigh"      />
+      <choice name="High"           value="(NvicPriority_VeryLow*1/6)"    enum="High"         />
+      <choice name="VeryHigh"       value="0"                             enum="VeryHigh"     />
+      <choice name="Not Installed"  value="(uint8_t)-1"                   enum="NotInstalled" />
    </choiceOption>
    
-
    <category name="SOPT8" description="FTM signals">
       <for keys="ch" values="0;1;2;3;4;5;6;7">
          <binaryOption key="sim_sopt8_ftm0och%(ch)src" condition="sim_sopt8_ftm0och%(ch)src_present"

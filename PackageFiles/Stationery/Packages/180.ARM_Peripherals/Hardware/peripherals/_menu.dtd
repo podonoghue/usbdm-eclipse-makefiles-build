@@ -88,6 +88,7 @@
    <!ATTLIST intOption radix         CDATA        #IMPLIED>
    <!ATTLIST intOption ref           CDATA        #IMPLIED> <!-- Variable this variable depends on -->
    <!ATTLIST intOption valueFormat   CDATA        #IMPLIED> <!-- How to format value e.g. %s_ticks-->
+   <!ATTLIST intOption enabledBy     CDATA        #IMPLIED> <!-- Enabled by an expression -->
   
 <!ELEMENT bitmaskOption EMPTY >
    <!ATTLIST bitmaskOption condition      CDATA        #IMPLIED>
@@ -126,7 +127,8 @@
    <!ATTLIST floatOption derivedFrom   CDATA        #IMPLIED>
    <!ATTLIST floatOption ref           CDATA        #IMPLIED> <!-- Variable this variable depends on -->
    <!ATTLIST floatOption valueFormat   CDATA        #IMPLIED> <!-- How to format value e.g. %s_Hz-->
-  
+   <!ATTLIST floatOption enabledBy     CDATA        #IMPLIED> <!-- Enabled by an expression -->
+
 <!ELEMENT aliasOption EMPTY >
    <!-- alias Option 
    key  		Allows reference to an option (possibly) in another file
@@ -241,6 +243,7 @@
    <!ATTLIST choiceOption valueFormat         CDATA        #IMPLIED> <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
    <!ATTLIST choiceOption enumText            CDATA        #IMPLIED> <!-- Text to add to enum generated from choices -->
    <!ATTLIST choiceOption disabledValue       CDATA        #IMPLIED>
+   <!ATTLIST choiceOption enabledBy     CDATA        #IMPLIED> <!-- Enabled by an expression -->
 
 <!ELEMENT addChoices ((choice)*) >
    <!ATTLIST addChoices key                 CDATA        #REQUIRED>
@@ -277,6 +280,7 @@
    <!ATTLIST binaryOption valueFormat   CDATA        #IMPLIED>
    <!ATTLIST binaryOption target        CDATA        #IMPLIED>
    <!ATTLIST binaryOption enumText      CDATA        #IMPLIED> <!-- Text to add to enum generated from choices -->
+   <!ATTLIST binaryOption enabledBy     CDATA        #IMPLIED> <!-- Enabled by an expression -->
 
 <!ELEMENT irqOption EMPTY >
    <!ATTLIST irqOption condition     CDATA        #IMPLIED>
@@ -306,6 +310,7 @@
    <!ATTLIST template namespace                 (info|usbdm|class|all)  "info" >
    <!ATTLIST template key                       CDATA                   #IMPLIED >
    <!ATTLIST template condition                 CDATA                   #IMPLIED>
+   <!ATTLIST template codeGenCondition          CDATA                   #IMPLIED>
    <!ATTLIST template variables                 CDATA                   #IMPLIED>
    <!ATTLIST template discardRepeats            (true)                  #IMPLIED>
    <!ATTLIST template initExpressionOnSameLine  (true)                  #IMPLIED>
@@ -316,6 +321,7 @@
    <!ATTLIST setTemplate namespace                 (info|usbdm|class|all)  "info" >
    <!ATTLIST setTemplate key                       CDATA                   #IMPLIED >
    <!ATTLIST setTemplate condition                 CDATA                   #IMPLIED>
+   <!ATTLIST setTemplate codeGenCondition          CDATA                   #IMPLIED>
    <!ATTLIST setTemplate variables                 CDATA                   #REQUIRED>
    <!ATTLIST setTemplate discardRepeats            (true)                  #IMPLIED>
    <!ATTLIST setTemplate terminator                CDATA                   #IMPLIED> <!-- Terminator for initExpression -->
@@ -331,6 +337,7 @@
    <!ATTLIST initialValueTemplate namespace                 (info|usbdm|class|all) "info" >
    <!ATTLIST initialValueTemplate key                       CDATA                   #IMPLIED >
    <!ATTLIST initialValueTemplate condition                 CDATA                   #IMPLIED>
+   <!ATTLIST initialValueTemplate codeGenCondition          CDATA                   #IMPLIED>
    <!ATTLIST initialValueTemplate variables                 CDATA                   #REQUIRED>
    <!ATTLIST initialValueTemplate discardRepeats            (true)                  #IMPLIED>
    <!ATTLIST initialValueTemplate terminator                CDATA                   #IMPLIED> <!-- Terminator for initExpression -->
