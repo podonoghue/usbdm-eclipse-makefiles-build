@@ -76,16 +76,6 @@
       units="Hz"
       description="Frequency of ADC Clock" />
    
-   <template><![CDATA[
-      \t/**
-      \t * Type definition for ADC interrupt call back.
-      \t *
-      \t * @param[in] result  Conversion result from channel
-      \t * @param[in] channel Channel providing the result
-      \t */
-      \ttypedef void (*CallbackFunction)(uint32_t result, int channel);
-   ]]></template>
-
    <clockCodeTemplate variable="adc_cfg1_adiclk"
       returnFormat="%s"
    ><![CDATA[
@@ -212,15 +202,15 @@
 
    <choiceOption key="adc_sc3_avg" description="Hardware Average Select"
       enumStem="AdcAveraging"
-      valueFormat="(%s)"     
+      valueFormat="ADC_SC3_CAL(%s),ADC_SC3_CALF(%s),ADC_SC3_AVGE(%s),ADC_SC3_AVGS(%s)"     
       toolTip="Determines how many ADC conversions will be averaged\n
                by the hardware to create the ADC result">
-      <choice value="ADC_SC3_AVGE(0)"                                    enum="off"  name="1 sample" isDefault="true" />
-      <choice value="ADC_SC3_AVGE(1)|ADC_SC3_AVGS(0)"                    enum="4"    name="4 samples"    />
-      <choice value="ADC_SC3_AVGE(1)|ADC_SC3_AVGS(1)"                    enum="8"    name="8 samples"    />
-      <choice value="ADC_SC3_AVGE(1)|ADC_SC3_AVGS(2)"                    enum="16"   name="16 samples"   />
-      <choice value="ADC_SC3_AVGE(1)|ADC_SC3_AVGS(3)"                    enum="32"   name="32 samples"   />
-      <choice value="AdcAveraging_32|ADC_SC3_CAL_MASK|ADC_SC3_CALF_MASK" enum="Cal"  name="32 samples + clear flag + start calibration" />
+      <choice value="0,0,0,0" enum="off"  name="1 sample"     isDefault="true" />
+      <choice value="0,0,1,0" enum="4"    name="4 samples"    />
+      <choice value="0,0,1,1" enum="8"    name="8 samples"    />
+      <choice value="0,0,1,2" enum="16"   name="16 samples"   />
+      <choice value="0,0,1,3" enum="32"   name="32 samples"   />
+      <choice value="1,1,1,3" enum="Cal"  name="32 samples + clear flag + start calibration" />
    </choiceOption>
 
    <binaryOption key="adc_cfg2_adhsc" description="High-Speed Configuration"
@@ -289,15 +279,15 @@
 
    <choiceOption key="adc_sc2_compare" description="Compare function"
       enumStem="AdcCompare"
-      valueFormat="(%s)"
+      valueFormat="ADC_SC2_ACFE(%s),ADC_SC2_ACREN(%s),ADC_SC2_ACFGT(%s),(%s)"
       toolTip="Enables comparison of ADC result with CV1 and CV2" >
-      <choice value="ADC_SC2_ACFE(0)"                                                enum="Disabled"              name="No comparison done"          isDefault="true"    />
-      <choice value="ADC_SC2_ACFE(1)|ADC_SC2_ACREN(0)|ADC_SC2_ACFGT(0)"              enum="LessThan"              name="ADC value &lt; low"                              />
-      <choice value="ADC_SC2_ACFE(1)|ADC_SC2_ACREN(0)|ADC_SC2_ACFGT(1)"              enum="GreaterThanOrEqual"    name="ADC value &gt;= low"                             />
-      <choice value="ADC_SC2_ACFE(1)|ADC_SC2_ACREN(1)|ADC_SC2_ACFGT(0)|(0&lt;&lt;8)" enum="OutsideRangeExclusive" name="(ADC value &lt; low) or (ADC value &gt; high)"   />
-      <choice value="ADC_SC2_ACFE(1)|ADC_SC2_ACREN(1)|ADC_SC2_ACFGT(1)|(1&lt;&lt;8)" enum="OutsideRangeInclusive" name="(ADC value &lt;= low) or (ADC value &gt;= high)" />
-      <choice value="ADC_SC2_ACFE(1)|ADC_SC2_ACREN(1)|ADC_SC2_ACFGT(0)|(1&lt;&lt;8)" enum="InsideRangeExclusive"  name="(low &lt; ADC value &lt; high)"                  />
-      <choice value="ADC_SC2_ACFE(1)|ADC_SC2_ACREN(1)|ADC_SC2_ACFGT(1)|(0&lt;&lt;8)" enum="InsideRangeInclusive"  name="(low &lt;= ADC value &lt;= high)"                />
+      <choice value="0,0,0,0"            enum="Disabled"              name="No comparison done"                              isDefault="true"    />
+      <choice value="1,0,0,0"            enum="LessThan"              name="ADC value &lt; low"                              />
+      <choice value="1,0,1,0"            enum="GreaterThanOrEqual"    name="ADC value &gt;= low"                             />
+      <choice value="1,1,0,(0&lt;&lt;8)" enum="OutsideRangeExclusive" name="(ADC value &lt; low) or (ADC value &gt; high)"   />
+      <choice value="1,1,1,(1&lt;&lt;8)" enum="OutsideRangeInclusive" name="(ADC value &lt;= low) or (ADC value &gt;= high)" />
+      <choice value="1,1,0,(1&lt;&lt;8)" enum="InsideRangeExclusive"  name="(low &lt; ADC value &lt; high)"                  />
+      <choice value="1,1,1,(0&lt;&lt;8)" enum="InsideRangeInclusive"  name="(low &lt;= ADC value &lt;= high)"                />
    </choiceOption>
 
    <intOption key="adc_cv1" description="ADC CV low value" 
@@ -325,9 +315,9 @@
       <aliasOption key="/SIM/sim_sopt7_adc$(_instance)trgsel"    constant="false" optional="true"/>
    </category>
 
-<!-- ========== ADC Init class =============================== -->
+<!--  ========== ADC Init class =============================== -->
 
-   <template><![CDATA[
+   <template key="init_description" namespace="all" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of $(_class)
       \t *
@@ -339,7 +329,7 @@
       \t * @code
       \t * static const Adc$(_instance)::Init adcInit {
       \t *
-      \t *    // Omitted parameters are take to be zero
+      \t *    // Omitted parameters are take to be zero unless an base value is given
       \t *    AdcClockSource_Asynch ,  // ADC Clock Source
       \t *    AdcClockDivider_1 ,      // Clock Divide Select
       \t *    AdcResolution_8bit_se ,  // ADC Resolution
@@ -357,23 +347,44 @@
       \t *    NvicPriority_Normal ,    // IRQ level for this peripheral
       \t *    adcCallback,             // Call-back to execute on completion
       \t *
-      \t *    // These 2/3 parameters must appear last (if used)
+      \t *    // These 2/3 parameters must appear in this order
       \t *    AdcCompare_LessThan ,    // Compare function
       \t *    5000 ,                   // ADC CV low value
       \t *    0,                       // ADC CV high value (May be omitted)
+      \t
+      \t *    // Base value to start with
+      \t *    Adc$(_instance)::DefaultValue;
       \t * };
       \t *
       \t * // Initialise ADC from values specified above
-      \t * Adc$(_instance)::configure(adcInit)
+      \t * Adc$(_instance)::configure(adcInit);
+      \t * Adc$(_instance)::calibrate();
       \t * @endcode
       \t */
+   ]]></template>
+
+   <template namespace="usbdm" ><![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t/**
+      \t * Type definition for $(_class) interrupt call back.
+      \t *
+      \t * @param[in] result  Conversion result from channel
+      \t * @param[in] channel Channel providing the result
+      \t */
+      \ttypedef void (*CallbackFunction)(uint32_t result, int channel);\n\n
+   ]]></template>
+
+   <template namespace="usbdm"><![CDATA[
+      $(init_description)
       \tclass Init {
       \t
       \tpublic:
       \t   /**                               
       \t    * Copy Constructor                  
       \t    */                             
-      \t   constexpr Init(const Init &other) = delete;
+      \t   constexpr Init(const Init &other) = default;
       \t   
       \t   /**
       \t    * Default Constructor
@@ -382,15 +393,15 @@
       \t\n
    ]]></template>
    
-<!-- Member variables -->
+<!--  Member variables -->
   
-   <setTemplate variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod" 
+   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod" 
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></setTemplate>
    
-   <initialValueTemplate 
+   <initialValueTemplate namespace="usbdm" 
       variables="
          adc_cv1"
    ><![CDATA[
@@ -398,7 +409,7 @@
       \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
    
-   <initialValueTemplate 
+   <initialValueTemplate namespace="usbdm" 
       variables="
          adc_cv2"
    ><![CDATA[
@@ -406,7 +417,7 @@
       \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
    
-   <initialValueTemplate 
+   <initialValueTemplate namespace="usbdm" 
       variables="
          adc_cfg1_adiclk,
          adc_cfg1_adiv,
@@ -417,7 +428,7 @@
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
    
-   <initialValueTemplate 
+   <initialValueTemplate namespace="usbdm" 
       variables="
          adc_cfg2_adhsc,
          adc_cfg2_adacken,
@@ -430,7 +441,7 @@
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
    
-   <initialValueTemplate 
+   <initialValueTemplate namespace="usbdm" 
       variables="
          adc_sc2_dmaen,
          adc_sc2_adtrg"
@@ -439,7 +450,7 @@
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
    
-   <initialValueTemplate 
+   <initialValueTemplate namespace="usbdm" 
       variables="
          adc_sc3_avg,
          adc_sc3_adco"
@@ -448,13 +459,13 @@
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
    
-   <initialValueTemplate variables="/PCR/nvic_irqLevel" codeGenCondition="irqHandlingMethod" 
+   <initialValueTemplate namespace="usbdm" variables="/PCR/nvic_irqLevel" codeGenCondition="irqHandlingMethod" 
    ><![CDATA[
       \t   /// %description
       \t   %enumClass %registerName = %enumClass_Normal;\n\n
    ]]></initialValueTemplate>
 
-<!-- Configure methods -->
+<!--  Configure methods -->
 
    <template discardRepeats="true" key="/ADC/InitMethod" namespace="all" ><![CDATA[
       \t/**
@@ -492,9 +503,9 @@
       \t}\n
    ]]></template>
   
-<!-- Constructors -->
+<!--  Constructors -->
   
-   <setTemplate 
+   <setTemplate namespace="usbdm" 
       codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
@@ -513,7 +524,7 @@
       \t   }\n\n
    ]]></setTemplate>
    
-   <setTemplate 
+   <setTemplate namespace="usbdm" 
       variables="/PCR/nvic_irqLevel" 
       linePadding="xxx"
     ><![CDATA[
@@ -549,7 +560,7 @@
          adc_sc2_adtrg;
          adc_sc3_avg;
          adc_sc3_adco">
-      <setTemplate variables="%(r)"
+      <setTemplate namespace="usbdm" variables="%(r)"
          linePadding="xxx" 
       ><![CDATA[
          \t   /**
@@ -563,23 +574,27 @@
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t   
-         \t      %registerName |= %paramExpression;
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
       ]]></setTemplate>
    </for>
    
-   <setTemplate variables="adc_sc2_compare,adc_cv1,adc_cv1"
+   <setTemplate namespace="usbdm" variables="adc_sc2_compare,adc_cv1,adc_cv2"
       linePadding="xxx" 
    ><![CDATA[
       \t   /**
       \t    * Configure %description0, %description1 and %description2
       \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
       \t    * @param[in] adcCompare   Comparison operation to enable
       \t    * @param[in] low          Lower threshold
       \t    * @param[in] high         Higher threshold (if needed)
       \t    */
-      \t   constexpr Init(AdcCompare adcCompare, int low, int high=0) {
+      \t   template <typename... Types>
+      \t   constexpr Init(%enumClass0 %enumParam0, int low, int high=0, Types... rest) : Init(rest...) {
       \t   
       \t      // Juggle CV1, CV2 values to satisfy comparison rules
       \t      switch (adcCompare) {
@@ -600,26 +615,22 @@
       \t            cv2 = low;
       \t            break;
       \t      }
-      \t      sc2 |= adcCompare;
+      \t      %registerName0 = (%registerName0&~(%mask0)) | %enumParam0;
       \t   }
       \t\n
    ]]></setTemplate>
 
-   <template ><![CDATA[
-      \t};\n\n
+   <template namespace="usbdm" ><![CDATA[
+      \t};\n
    ]]></template>
 
-<!-- Default Initialisation value -->
+   <template namespace="usbdm" ><![CDATA[
+      };\n\n
+   ]]></template>
+
+<!--  Default Initialisation value -->
   
-   <template><![CDATA[
-      \t/**
-      \t * Default initialisation value for $(_class)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic const Init DefaultInitValue;\n\n
-   ]]></template>
-
-   <initialValueTemplate key="/HARDWARE/StaticObjects" namespace="all"
+   <initialValueTemplate
       separator=","
       terminator=","     
       variables="
@@ -642,23 +653,29 @@
          adc_cv2,
          "     
    ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
       \t/**
-      \t * Default initialisation value for Adc$(_instance)
+      \t * $(_class) interrupt call back
+      \t */
+      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \t
+      \t/**
+      \t * Default initialisation value for $(_class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tconst Adc$(_instance)Info::Init Adc$(_instance)Info::DefaultInitValue = {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
    ]]></initialValueTemplate>
 
-
-
-
+<!-- ==========  ADC MISC =============================== -->
    
    <template key="/ADC/declarations" namespace="all"  ><![CDATA[
       /**
        * Class representing $(_name)
        */
-      typedef AdcBase_T<$(_class)Info> $(_class);\n
+      class $(_class) : public AdcBase_T<$(_class)Info> {};\n
    ]]></template>
       
    <signals/>
