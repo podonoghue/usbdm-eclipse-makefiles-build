@@ -50,7 +50,7 @@
       </for>
       
       <choiceOption key="sim_sopt8_ftm_syncbits"  condition="sim_sopt8_ftm0syncbit_present"
-         enumStem="FtmSync"
+         enumStem="SimFtmSync"
          valueFormat="%s"
          hidden="true"
          description="FTM Hardware Trigger 0 Software Asserts"
