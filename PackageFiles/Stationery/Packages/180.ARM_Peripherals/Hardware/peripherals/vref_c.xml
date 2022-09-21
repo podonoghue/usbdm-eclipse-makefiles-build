@@ -67,9 +67,9 @@ Devices using this peripheral:
       <choice value="2" name="Low-power buffer mode enabled"                  enum="LowPower"   />
    </choiceOption>
 
-<!-- ========== VREF Init class =============================== -->
+<!--  ========== VREF Init class =============================== -->
 
-   <template><![CDATA[
+   <template key="init_description" namespace="all" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of the VREF
       \t *
@@ -91,6 +91,17 @@ Devices using this peripheral:
       \t * Vref$(_instance)::configure(vrefInit)
       \t * @endcode
       \t */
+   ]]></template>
+
+   <template namespace="usbdm" ><![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t
+   ]]></template>
+
+   <template namespace="usbdm"><![CDATA[
+      $(init_description)
       \tclass Init {
       \t
       \tpublic:
@@ -106,9 +117,9 @@ Devices using this peripheral:
       \t\n
    ]]></template>
    
-<!-- Member variables -->
+<!--  Member variables -->
   
-   <initialValueTemplate 
+   <initialValueTemplate namespace="usbdm" 
       variables="
          vref_trm_chopen"
    ><![CDATA[
@@ -116,7 +127,7 @@ Devices using this peripheral:
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
    
-   <initialValueTemplate 
+   <initialValueTemplate namespace="usbdm" 
       variables="
          vref_sc_regen"
    ><![CDATA[
@@ -124,9 +135,11 @@ Devices using this peripheral:
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
    
-<!-- Configure method -->
+<!--  Configure method -->
   
-   <setTemplate variables="vref_sc_regen, vref_trm_chopen" discardRepeats="true" key="/VREF/InitMethod" namespace="all" ><![CDATA[
+   <setTemplate  key="/VREF/InitMethod" namespace="all"  discardRepeats="true"
+      variables="vref_sc_regen, vref_trm_chopen" 
+   ><![CDATA[
       \t/**
       \t * Configure VREF from values specified in init
       \t
@@ -134,16 +147,34 @@ Devices using this peripheral:
       \t */
       \tstatic void configure(const typename Info::Init &init) {
       \t   
+      \t   enable();
+      \t
       \t   %register1 = (%register1&~%mask1)|init.%registerName1;
       \t   %register0 = init.%registerName0 & ~%mask0;
       \t   
       \t   // Regulator must be enabled >300ns after other settings
       \t   waitUS(1);
       \t   %register0 = init.%registerName0;
+      \t
+      \t   while ((vref->SC & VREF_SC_VREFST_MASK) == 0) {
+      \t      // Wait until stable
+      \t   }
       \t}\n\n
    ]]></setTemplate>
 
-   <setTemplate discardRepeats="true" key="/VREF/InitMethod" namespace="all" 
+   <setTemplate  key="/VREF/InitMethod" namespace="all"  discardRepeats="true"
+      variables="vref_sc_regen, vref_trm_chopen" 
+   ><![CDATA[
+      \t/**
+      \t * Configure VREF with default settings
+      \t */
+      \tstatic void defaultConfigure() {
+      \t   
+      \t   configure(Info::DefaultInitValue);
+      \t}\n\n
+   ]]></setTemplate>
+
+   <setTemplate key="/VREF/InitMethod" discardRepeats="true" namespace="all" 
       variables="
          vref_sc_mode_lv,
          vref_sc_regen,
@@ -153,27 +184,29 @@ Devices using this peripheral:
    ><![CDATA[ 
       \t/**
       \t * Configure VREF from values specified
-      \t
+      \t *
       %paramDescription
       \t */
       \tstatic void configure(
       %params) {\n\n
+      \t   enable();\n
    ]]></setTemplate>
-   <setTemplate discardRepeats="true" key="/VREF/InitMethod" namespace="all" 
+   <setTemplate key="/VREF/InitMethod" discardRepeats="true" namespace="all" 
       condition="vref_sc_regen&amp;&amp;vref_trm_chopen"
       variables="vref_sc_regen,vref_trm_chopen"
-   ><![CDATA[ 
+   ><![CDATA[
+      \t 
       \t   if (%enumParam0) {
       \t      // Chop must be enabled if regulator enabled
       \t      %enumParam1 = %enumClass1_Enabled;
       \t   }\n
    ]]></setTemplate>
-   <setTemplate discardRepeats="true" key="/VREF/InitMethod" namespace="all" 
+   <setTemplate key="/VREF/InitMethod" discardRepeats="true" namespace="all" 
       variables="vref_trm_chopen"
    ><![CDATA[ 
       \t   %register = (%register&~%mask)|%enumParam0;\n
    ]]></setTemplate>
-   <setTemplate discardRepeats="true" key="/VREF/InitMethod" namespace="all" 
+   <setTemplate key="/VREF/InitMethod" discardRepeats="true" namespace="all" 
       variables="
          vref_sc_mode_lv,
          vref_sc_icompen"
@@ -181,7 +214,7 @@ Devices using this peripheral:
       \t   %register = %paramExpression;
       \t\n
    ]]></setTemplate>
-   <setTemplate discardRepeats="true" key="/VREF/InitMethod" namespace="all" 
+   <setTemplate key="/VREF/InitMethod" discardRepeats="true" namespace="all" 
       variables="
          vref_sc_mode_lv,
          vref_sc_regen,
@@ -190,12 +223,17 @@ Devices using this peripheral:
       \t   // Regulator must be enabled >300ns after other settings
       \t   waitUS(1);
       \t   %register = %paramExpression;
+      \t
+      \t   while ((vref->SC & VREF_SC_VREFST_MASK) == 0) {
+      \t      // Wait until stable
+      \t   }
       \t}\n\n
    ]]></setTemplate>
 
-<!-- Constructors -->
+<!--  Constructors -->
   
-   <setTemplate variables="vref_sc_regen"
+   <setTemplate namespace="usbdm"  
+      variables="vref_sc_regen"
       linePadding="xxx" 
    ><![CDATA[
       \t   /**
@@ -211,7 +249,8 @@ Devices using this peripheral:
       \t\n
    ]]></setTemplate>
    <if condition="vref_sc_regen&amp;&amp;vref_trm_chopen">
-      <setTemplate variables="vref_sc_regen, vref_trm_chopen"
+      <setTemplate namespace="usbdm"  
+         variables="vref_sc_regen, vref_trm_chopen"
          linePadding="xxx" 
       ><![CDATA[
          \t      if (%enumParam0) {
@@ -221,10 +260,11 @@ Devices using this peripheral:
          \t\n
       ]]></setTemplate>
    </if>
-   <setTemplate variables="vref_sc_regen"
+   <setTemplate namespace="usbdm"  
+      variables="vref_sc_regen"
       linePadding="xxx" 
    ><![CDATA[      
-      \t      %registerName |= %paramExpression;
+      \t      %registerName = (%registerName&%mask) | %paramExpression;
       \t   }
       \t\n
    ]]></setTemplate>
@@ -234,7 +274,7 @@ Devices using this peripheral:
          vref_sc_vrefen;
          vref_sc_icompen;
          vref_sc_mode_lv">
-      <setTemplate variables="%(r)"
+      <setTemplate  namespace="usbdm" variables="%(r)"
          linePadding="xxx" 
       ><![CDATA[
          \t   /**
@@ -248,31 +288,23 @@ Devices using this peripheral:
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t   
-         \t      %registerName |= %paramExpression;
+         \t      %registerName = (%registerName&%mask) | %paramExpression;
          \t   }
          \t\n
       ]]></setTemplate>
    </for>
       
-   <template ><![CDATA[
+   <template namespace="usbdm" ><![CDATA[
       \t};\n\n
    ]]></template>
 
-<!-- Default Initialisation value -->
+   <template namespace="usbdm" ><![CDATA[
+      };\n\n
+   ]]></template>
+
+<!--  Default Initialisation value -->
   
    <initialValueTemplate
-      separator=","
-      terminator=","     
-      variables="vref_sc_vrefen"     
-   ><![CDATA[
-      \t/**
-      \t * Default initialisation value for Vref$(_instance)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic const Init DefaultInitValue;\n\n
-   ]]></initialValueTemplate>
-
-   <initialValueTemplate key="/HARDWARE/StaticObjects" namespace="all"
       separator=","
       terminator=","     
       variables="
@@ -282,15 +314,18 @@ Devices using this peripheral:
          vref_sc_icompen,
          vref_sc_mode_lv"     
    ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
       \t/**
       \t * Default initialisation value for Vref$(_instance)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tconst Vref$(_instance)Info::Init Vref$(_instance)Info::DefaultInitValue = {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
    ]]></initialValueTemplate>
 
-   <!-- ********************* MISC ********************* -->
+   <!--  ********************* MISC ********************* -->
 
    <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" />
    

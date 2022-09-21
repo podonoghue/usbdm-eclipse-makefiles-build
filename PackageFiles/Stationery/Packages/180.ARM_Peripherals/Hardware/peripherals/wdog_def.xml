@@ -344,9 +344,9 @@
       \t *    call-back,                    // Call-back
       \t *    // Either
       \t *    WdogPrescale_DivBy2 ,         // Prescaler for the watchdog clock source (must be in this order)
-      \t *    1000_ticks, 2000_ticks,       // Timeout and Window values
+      \t *    2000_ticks, 1000_ticks,       // Timeout and Window values
       \t *    // **** OR ****
-      \t *    10_seconds, 20_seconds,       // Timeout and Window values (must be in this order)
+      \t *    20_seconds, 10_seconds,       // Timeout and Window values (must be in this order)
       \t *    // Option
       \t *    Wdog::DefaultInitValue,       // Take base values from DefaultInitValue
       \t * };
@@ -440,6 +440,7 @@
    ]]></initialValueTemplate>
 
 <!--  Configure methods -->
+
    <setTemplate key="/WDOG/InitMethod" namespace="all" discardRepeats="true"  
       variables="wdogSystemEnable" 
       codeGenCondition="wdogSystemEnable"
