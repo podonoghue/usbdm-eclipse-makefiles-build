@@ -327,6 +327,7 @@
       \t *
       \t * Example:
       \t * @code
+      \t * // Initialisation values for $(_class)
       \t * static const Adc$(_instance)::Init adcInit {
       \t *
       \t *    // Omitted parameters are take to be zero unless an base value is given
@@ -350,10 +351,10 @@
       \t *    // These 2/3 parameters must appear in this order
       \t *    AdcCompare_LessThan ,    // Compare function
       \t *    5000 ,                   // ADC CV low value
-      \t *    0,                       // ADC CV high value (May be omitted)
+      \t *    6000 ,                   // ADC CV high value (May be omitted)
       \t
-      \t *    // Base value to start with
-      \t *    Adc$(_instance)::DefaultValue;
+      \t *    // Optional base value to start with (must be last parameter)
+      \t *    $(_class)::DefaultValue
       \t * };
       \t *
       \t * // Initialise ADC from values specified above
@@ -459,7 +460,8 @@
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
    
-   <initialValueTemplate namespace="usbdm" variables="/PCR/nvic_irqLevel" codeGenCondition="irqHandlingMethod" 
+   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="/PCR/nvic_irqLevel" 
    ><![CDATA[
       \t   /// %description
       \t   %enumClass %registerName = %enumClass_Normal;\n\n
@@ -505,8 +507,7 @@
   
 <!--  Constructors -->
   
-   <setTemplate namespace="usbdm" 
-      codeGenCondition="irqHandlingMethod"
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[

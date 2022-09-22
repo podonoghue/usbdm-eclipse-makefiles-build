@@ -7,7 +7,7 @@
    <xi:include href="_default_instance.xml"/>
 
    <xi:include href="_irqOption.xml"/>
-
+   
    <binaryOption key="check_minimums" 
       description="Check minimum interval and minimum resolution"
       toolTip="Enables boundary checks of minimum interval and minimum resolution when setting values" >
@@ -28,7 +28,7 @@
       value="100" min="0" max="65535" />
       
    <intOption key="ftmExternalClock" 
-   description="FTM External clock"
+      description="FTM External clock"
       toolTip="Clock frequency of external clock supplied to FTM_CLKIN pin"
       value="0" min="0" units="Hz"/>
 
@@ -79,46 +79,43 @@
       derived="true"
       units="s"/>
       
+   <choiceOption key="ftm_sc_mode"
+      valueFormat="FTM_SC_TOF(%s),FTM_SC_CPWMS(%s)"
+      enumStem="FtmMode"
+      description="Alignment and whether interval or free-running mode"
+      toolTip="Left-aligned   (cntin...mod) or\n
+               Centre-aligned (cntin...mod...cntin) or\n
+               Free-running   (0...maximum_value) mode   ">
+      <choice value="0,0" name="Left-aligned (count up)"         enum="Left"    />
+      <choice value="0,1" name="Centre-aligned (count up-down)"  enum="Centre"  />
+      <choice value="1,0" name="Free-running (count up)"         enum="FreeRunning"  isDefault="true" />
+   </choiceOption>
+   
    <intOption key="ftm_cntin" description="Start value for counter"
+      enabledBy="ftm_sc_mode!=2"
       toolTip="The timer counts from this value to ftm_mod"
       typeName="Ticks"
       valueFormat="%s_ticks"
       value="0" min="0" max="65535" />
            
    <intOption key="ftm_mod" description="End value for counter"
+      enabledBy="ftm_sc_mode!=2"
       toolTip="The timer counts from ftm_cntin to this value"
       typeName="Ticks"
       valueFormat="%s_ticks"
-      value="10000" min="0" max="65535" />
+      value="0" min="0" max="65535" />
            
    <floatOption key="ftm_modPeriod"
-      ref="clockPeriod*(ftm_sc_cpwms?(2*(ftm_mod-ftm_cntin)):((ftm_mod-ftm_cntin+1)))" 
+      ref="clockPeriod*((ftm_sc_mode==2)?(65536):((ftm_sc_mode==1)?(2*(ftm_mod-ftm_cntin)):(ftm_mod-ftm_cntin+1)))" 
       typeName="Seconds"     
       valueFormat="%s_s"
-      description="Period of timer"
-      toolTip="Period of the timer"
+      description="Period or minimum interval of timer"
+      toolTip="In left-aligned or centre-aligned this is the period of the timer\n
+               In free-running mode it is the minimum interval"
       origin="Clock period * ftm_mod"
       derived="true"
       min="0" units="s"/>
       
-   <binaryOption key="ftm_sc_cpwms" 
-      enumStem="FtmAlignment"
-      description="PWM Alignment"
-      toolTip="Alignment of PWM outputs relative to counter roll-over\n
-         This configures the counter to operate in Up or Up-Down Counting modes">
-      <choice value="0" name="Left-aligned (count up)"        enum="Left"    />
-      <choice value="1" name="Centre-aligned (count up-down)" enum="Centre"  />
-   </binaryOption>
-
-   <binaryOption key="ftm_sc_freeRunning"
-      enumStem="FtmFreerunning"
-      description="Counter will operate in free-running mode"
-      valueFormat="(%s)"
-      toolTip="Enables FTM free-running mode (0-maximum)">
-      <choice value="0&lt;&lt;7" name="Disabled" enum="Disabled" />
-      <choice value="1&lt;&lt;7" name="Enabled"  enum="Enabled"  />
-   </binaryOption>
-   
    <binaryOption key="ftm_sc_toie"
       enumStem="FtmOverflowInterrupt"
       description="Overflow Interrupt"
@@ -127,11 +124,6 @@
       <choice value="1" name="Interrupt Enabled"  enum="Enabled"  />
    </binaryOption>
    
-   <setTemplate variables="irqHandlingMethod"><![CDATA[
-      \t/// Type for %description
-      \ttypedef void (*%enumClass)();\n\n
-   ]]></setTemplate>
-
    <initialValueTemplate variables="minimumResolution"     
    ><![CDATA[
       \t/// %description
@@ -193,7 +185,7 @@
       <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och0src" optional="true" constant="false"/>
    </category>
 
-<!-- ========== Methods =============================== -->
+<!--  ========== Methods =============================== -->
    <for  keys  =" k                    : static    : const" 
          values=" non_static_functions : ''        : ' const';
                   static_functions     : 'static ' : ''     
@@ -240,7 +232,7 @@
       <for keys="  f           :  n" 
          values=" ftm_sc_clks  : setClockSource;
                   ftm_sc_ps    : setPrescaler;
-                  ftm_sc_cpwms : setAlignment">
+                  ftm_sc_mode  : setMode">
          <setTemplate key="/FTM/%(k)" namespace="all"
             discardRepeats="true"
             variables="%(f)"
@@ -365,11 +357,11 @@
       \t}\n\n
    ]]></clockCodeTemplate>
    
-<!-- ========== FTM Init class =============================== -->
+<!--  ========== FTM Init class =============================== -->
 
-   <template><![CDATA[
+   <template key="init_description" namespace="all" ><![CDATA[
       \t/**
-      \t * Class used to do initialisation of an FTM
+      \t * Class used to do initialisation of $(_class)
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
@@ -378,24 +370,53 @@
       \t * Example:
       \t * @code
       \t * static const Ftm$(_instance)::Init ftmInit {
-      \t *    FtmAlignment_Left,
-      \t *    FtmClockSource_SystemClock,
-      \t *    FtmPrescale_DivBy16,
-      \t *    FtmOverflowInterrupt_Disabled,
-      \t *    10_us // or specify in ticks 100_ticks
+      \t *
+      \t *    // Omitted parameters are take to be zero unless an base value is given
+      \t *    FtmMode_Freerunning,           // Alignment and whether interval or free-running mode
+      \t *    FtmOverflowInterrupt_Disabled, // Overflow Interrupt
+      \t *    NvicPriority_Normal,           // IRQ level for this peripheral
+      \t *    FtmClockSource_SystemClock,    // Clock Source
+      \t *
+      \t *    // Either 
+      \t *    FtmPrescale_DivBy16,           // Clock prescaler
+      \t *    10_ticks, 3000_ticks,          // Counter start (cntin) and end (mod) values
+      \t *    // OR
+      \t *    100_ms,                        // Timer period or minimum interval in seconds
+      \t *
+      \t *    // Optional base value to start with (must be last parameter)
+      \t *    $(_class)::DefaultValue
       \t * };
       \t *
       \t * // Initialise FTM from values specified above
       \t * Ftm$(_instance)::configure(ftmInit)
       \t * @endcode
       \t */
+   ]]></template>
+
+   <template namespace="usbdm" ><![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:\n\n
+   ]]></template>
+
+   <setTemplate namespace="usbdm"
+       variables="irqHandlingMethod">
+   <![CDATA[
+      \t/**
+      \t * Type definition for $(_class) %description call back.
+      \t */
+      \ttypedef void (*%enumClass)();\n\n
+   ]]></setTemplate>
+
+   <template namespace="usbdm"><![CDATA[
+$(init_description)
       \tclass Init {
       \t
       \tpublic:
       \t   /**                               
       \t    * Copy Constructor                  
       \t    */                             
-      \t   constexpr Init(const Init &other) = delete;
+      \t   constexpr Init(const Init &other) = default;
       \t   
       \t   /**
       \t    * Default Constructor
@@ -404,53 +425,51 @@
       \t\n
    ]]></template>
    
-<!-- Member variables -->
+<!--  Member variables -->
   
-   <setTemplate variables="irqHandlingMethod"
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod" 
+      variables="irqHandlingMethod" 
     ><![CDATA[
-      \t
-      #if $(irqHandlingMethod)
       \t   /// %description
-      \t   %params = nullptr;
-      #endif\n\n
+      \t   %params = nullptr;\n\n
    ]]></setTemplate>
    
-   <initialValueTemplate 
-      variables="ftm_sc_toie,ftm_sc_cpwms,ftm_sc_clks,ftm_sc_ps,ftm_sc_freeRunning"
+   <initialValueTemplate namespace="usbdm"  
+      variables="ftm_sc_toie,ftm_sc_cpwms,ftm_sc_clks,ftm_sc_ps,ftm_sc_mode"
    ><![CDATA[
       \t   /// Status And Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
    
-   <initialValueTemplate
+   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod" 
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %enumClass %registerName = %enumClass_Normal;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate 
+   <initialValueTemplate namespace="usbdm"  
       variables="ftm_cntin"
    ><![CDATA[
       \t   /// %description
       \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
    
-   <initialValueTemplate 
+   <initialValueTemplate namespace="usbdm"  
       variables="ftm_mod"
    ><![CDATA[
       \t   /// %description
       \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
    
-   <initialValueTemplate 
+   <initialValueTemplate namespace="usbdm"  
       variables= "ftm_modPeriod"
     ><![CDATA[
       \t   /// %description
       \t   %enumClass %registerName = 0_s;\n\n
    ]]></initialValueTemplate >
 
-<!-- Configure method -->
+<!--  Configure method -->
   
    <setTemplate variables="ftm_sc_clks" discardRepeats="true" key="/FTM/InitMethod" namespace="all" ><![CDATA[
       \t/**
@@ -476,7 +495,7 @@
       \t
       \t   if (init.modperiod != 0) {
       \t
-      \t      // Calculate sc.ps, mod
+      \t      // Calculate sc.ps, mod (assumes cntin=0)
       \t      ErrorCode rc = calculateTimingParameters(init.modperiod, sc, mod);
       \t      if (rc != E_NO_ERROR) {
       \t         return rc;
@@ -484,9 +503,10 @@
       \t      // Configure for modulo operation
       \t      cntin = 0;
       \t   }
-      \t   if (init.sc&FtmFreerunning_Enabled) {
+      \t   if (init.sc&FtmMode_FreeRunning) {
       \t      // Make free-running
-      \t      mod = 0;
+      \t      cntin = 0;
+      \t      mod   = 0;
       \t   }
       \t   // Disable timer to change clock (unable to switch directly between clock sources)
       \t   ftm->SC  = 0;
@@ -507,13 +527,12 @@
       \t}\n\n
    ]]></setTemplate>
 
-<!-- Constructors -->
+<!--  Constructors -->
   
-   <setTemplate 
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod" 
       linePadding="xxx"
     ><![CDATA[
-      #if $(irqHandlingMethod)
       \t   /**
       \t    * Constructor for %description
       \t    *
@@ -525,32 +544,34 @@
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      this->%enumParam0 = %paramExpression;
-      \t   }
-      #endif\n\n
+      \t   }\n\n
    ]]></setTemplate>
    
-   <for keys="r" values="/PCR/nvic_irqLevel">
-      <setTemplate
-         variables="%(r)" 
-         linePadding="xxx"
-       ><![CDATA[
-         \t   /**
-         \t    * Constructor for %description
-         \t    *
-         \t    * @tparam   Types
-         \t    * @param    rest
-         %paramDescription
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-         \t
-         \t      %registerName = %paramExpression;
-         \t   }\n\n
-      ]]></setTemplate>
-   </for>
+   <setTemplate namespace="usbdm"
+      variables="/PCR/nvic_irqLevel" 
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      #if $(irqHandlingMethod)
+      \t      %registerName = %paramExpression;
+      #else
+      \t      (void)%paramExpression;
+      #endif
+      \t   }\n\n
+   ]]></setTemplate>
    
-   <for keys="r" values="ftm_sc_toie;ftm_sc_cpwms;ftm_sc_clks;ftm_sc_freeRunning">
-      <setTemplate variables="%(r)"
+   <for keys="r" values="ftm_sc_toie;ftm_sc_cpwms;ftm_sc_mode;ftm_sc_clks">
+      <setTemplate  namespace="usbdm" 
+         variables="%(r)"
          linePadding="xxx" 
       ><![CDATA[
          \t   /**
@@ -563,18 +584,44 @@
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t   
-         \t      %registerName |= %paramExpression;
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
       ]]></setTemplate>
    </for>
    
-   <setTemplate variables="ftm_sc_clks,ftm_sc_ps"
+   <setTemplate namespace="usbdm" 
+      variables="ftm_sc_ps, ftm_cntin, ftm_mod"
       linePadding="xxx" 
       nonDefaultParams="2"
       ><![CDATA[
          \t   /**
-         \t    * Constructor for %description0 and %description1
+         \t    * Constructor for %description0, %description1 and %description2
+         \t    *
+         \t    * @param %enumParam0 %tooltip0
+         \t    * @param %enumParam1_cntin %tooltip1
+         \t    * @param %enumParam2_mod   %tooltip2
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(
+         \t      %enumClass0 %enumParam0,
+         \t      %enumClass1 %enumParam1_cntin,
+         \t      %enumClass2 %enumParam2_mod, Types... rest) : Init(rest...) {
+         \t   
+         \t      %registerName0 = (%registerName0&%mask0) | %enumParam0;
+         \t      %registerName1 = %enumParam1_cntin;
+         \t      %registerName2 = %enumParam2_mod;
+         \t   }
+         \t\n
+   ]]></setTemplate>
+   
+   <setTemplate namespace="usbdm" 
+      nonDefaultParams="2"
+      variables="ftm_modPeriod"
+      linePadding="xxx" 
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -584,80 +631,28 @@
          \t   constexpr Init(
          %params, Types... rest) : Init(rest...) {
          \t   
-         \t      %registerName |= %paramExpression;
-         \t   }
-         \t\n
-   ]]></setTemplate>
-   
-   <setTemplate variables="ftm_cntin, ftm_mod"
-      linePadding="xxx" 
-      nonDefaultParams="2"
-      ><![CDATA[
-         \t   /**
-         \t    * Constructor for %description0 and %description1 
-         \t    *
-         \t    * @param %enumParam0_cntin %tooltip0
-         \t    * @param %enumParam1_mod   %tooltip1
-         \t    */
-         \t   constexpr Init(%enumClass0 %enumParam0_cntin, %enumClass1 %enumParam1_mod) {
-         \t   
-         \t      %registerName0 = %enumParam0_cntin;
-         \t      %registerName1 = %enumParam1_mod;
-         \t   }
-         \t\n
-   ]]></setTemplate>
-   
-   <setTemplate variables="ftm_mod"
-      linePadding="xxx" 
-      ><![CDATA[
-         \t   /**
-         \t    * Constructor for %description
-         \t    *
-         %comments
-         \t    */
-         \t   constexpr Init(%params) {
-         \t   
+         \t      cntin = 0;
+         \t      mod   = 0;
          \t      %registerName = %paramExpression;
          \t   }
          \t\n
    ]]></setTemplate>
    
-   <setTemplate variables="ftm_modPeriod"
-      linePadding="xxx" 
-      ><![CDATA[
-         \t   /**
-         \t    * Constructor for %description
-         \t    *
-         \t    * @tparam   Types
-         %comments
-         \t    */
-         \t   constexpr Init(%params) {
-         \t   
-         \t      %registerName = %paramExpression;
-         \t   }
-         \t\n
-   ]]></setTemplate>
-   
-   <template ><![CDATA[
+   <template namespace="usbdm" ><![CDATA[
       \t};\n\n
    ]]></template>
 
-<!-- Default Initialisation value -->
-  
-   <template><![CDATA[
-      \t/**
-      \t * Default initialisation value for Ftm$(_instance)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic const Init DefaultInitValue;\n\n
+   <template namespace="usbdm" ><![CDATA[
+      };\n\n
    ]]></template>
 
-   <initialValueTemplate key="/HARDWARE/StaticObjects" namespace="all"
+<!--  Default Initialisation value -->
+  
+   <initialValueTemplate
       separator=","
       terminator=","     
       variables="
-         ftm_sc_freeRunning,
-         ftm_sc_cpwms, 
+         ftm_sc_mode,
          ftm_sc_toie,
          irqLevel,
          ftm_sc_clks,     
@@ -665,15 +660,23 @@
          ftm_cntin,     
          ftm_mod"     
    ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * $(_class) interrupt call back
+      \t */
+      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \t
       \t/**
       \t * Default initialisation value for Ftm$(_instance)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tconst Ftm$(_instance)Info::Init Ftm$(_instance)Info::DefaultInitValue = {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
    ]]></initialValueTemplate>
 
-<!-- ========== Misc =============================== -->
+<!--  ========== Misc =============================== -->
    
    <xi:include href="_clockOption.xml"/>
 

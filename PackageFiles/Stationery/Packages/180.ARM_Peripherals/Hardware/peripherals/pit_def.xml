@@ -12,10 +12,7 @@
  
    <template><![CDATA[
       \t/// Number of PIT channels
-      \tstatic constexpr uint32_t NumChannels  = $(numChannels);
-      
-      \t/// Type for PIT call-back function
-      \ttypedef void (*CallbackFunction)();\n\n
+      \tstatic constexpr uint32_t NumChannels  = $(numChannels);\n\n
    ]]></template>
 
    <choiceOption key="pit_channelNumber" 
@@ -95,11 +92,11 @@
       </binaryOption>
    </for>
 
-   <!-- ========== PIT Init class =============================== -->
+   <!--  ========== PIT Init class =============================== -->
 
-   <template><![CDATA[
+   <template key="init_description" namespace="all" ><![CDATA[
       \t/**
-      \t * Class used to do initialisation of a PIT channel
+      \t * Class used to do initialisation of a $(_class) channel
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
@@ -107,7 +104,7 @@
       \t *
       \t * Example:
       \t * @code
-      \t * // Initialisation values for PIT channel
+      \t * // Initialisation values for $(_class) channel
       \t * static const Pit::Init pitInit {
       \t *       PitChannelNum_0,
       \t *
@@ -123,6 +120,20 @@
       \t * Pit::configure(pitInit)
       \t * @endcode
       \t */
+   ]]></template>
+
+   <template namespace="usbdm" ><![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t/**
+      \t * Type definition for $(_class) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)();\n\n
+   ]]></template>
+
+   <template namespace="usbdm"><![CDATA[
+      $(init_description)
       \tclass Init {
       \t
       \tpublic:
@@ -140,51 +151,48 @@
 
 <!-- Member variables -->
   
-   <setTemplate variables="irqHandlingMethod"
+   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod" 
     ><![CDATA[
-      \t
-      #if $(irqHandlingMethod)
       \t   /// %description
-      \t   %params = nullptr;
-      #endif\n\n
+      \t   %params = nullptr;\n\n
    ]]></setTemplate>
    
-   <initialValueTemplate
+   <initialValueTemplate namespace="usbdm"
       variables="pit_ldval_tsv[]"
    ><![CDATA[
       \t   /// %description
       \t   %enumClass %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate
+   <initialValueTemplate namespace="usbdm"
       variables="pit_period[]"
    ><![CDATA[
       \t   /// %description
       \t   %enumClass %registerName = 0_s;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate
+   <initialValueTemplate namespace="usbdm"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %enumClass %registerName = %enumClass_Normal;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate
+   <initialValueTemplate namespace="usbdm"
       variables="pit_tctrl_ten[],pit_tctrl_chn[],pit_tctrl_tie[]"
    ><![CDATA[
       \t   /// Timer Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate
+   <initialValueTemplate namespace="usbdm"
       variables="pit_channelNumber"
    ><![CDATA[
       \t   /// %description
       \t   %enumClass %registerName = PitChannelNum_None;\n\n
    ]]></initialValueTemplate>
 
-<!-- Configure method -->
+<!--  Configure method -->
   
    <setTemplate variables="pit_tctrl_ten[]" discardRepeats="true" key="/PIT/InitMethod" namespace="all" ><![CDATA[
    \t/**
@@ -221,34 +229,29 @@
    \t}\n\n
    ]]></setTemplate>
 
-<!-- Constructors -->
+<!--  Constructors -->
   
-   <for keys="r" values="irqHandlingMethod">
-      <setTemplate
-         variables="%(r)" 
-         linePadding="xxx"
-       ><![CDATA[
-         \t   /**
-         \t    * Constructor for %description
-         \t    *
-         \t    * @tparam   Types
-         \t    * @param    rest
-         %paramDescription
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-         \t
-         #if $(irqHandlingMethod)
-         \t      this->%enumParam0 = %paramExpression;
-         #else
-         \t      (void)%paramExpression;
-         #endif
-         \t   }\n\n
-      ]]></setTemplate>
-   </for>
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%enumParam0 = %paramExpression;
+      \t   }\n\n
+   ]]></setTemplate>
+   
    
    <for keys="r" values="pit_channelNumber;pit_ldval_tsv[];pit_period[];/PCR/nvic_irqLevel">
-      <setTemplate
+      <setTemplate namespace="usbdm" 
          variables="%(r)" 
          linePadding="xxx"
        ><![CDATA[
@@ -268,7 +271,7 @@
    </for>
    
    <for keys="r" values="pit_tctrl_ten[];pit_tctrl_chn[];pit_tctrl_tie[]">
-      <setTemplate
+      <setTemplate namespace="usbdm" 
          variables="%(r)"
          linePadding="xxx" 
       ><![CDATA[
@@ -282,56 +285,62 @@
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t   
-         \t      %registerName |= %paramExpression;
-         \t   }
-         \t\n\n
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }\n\n
       ]]></setTemplate>
    </for>
    
-   <template><![CDATA[
+   <template namespace="usbdm" ><![CDATA[
       \t};\n\n
    ]]></template>
 
-<!-- Default Values -->
+   <template namespace="usbdm" ><![CDATA[
+      };\n\n
+   ]]></template>
+
+<!--  Default Values -->
   
    <setTemplate 
       variables="pit_mcr_frz"   
    ><![CDATA[
-      \t
       \t/// %description
       \tstatic constexpr uint32_t %registerName = %initExpression; \n\n
    ]]></setTemplate>
+  
+   <template><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * $(_class) interrupt call back
+      \t */
+      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;\n\n
+   ]]></template>
    
    <for keys="ch" dim="numChannels">
-      <template>
-      <![CDATA[
-         \t/**
-         \t * Default initialisation values for PIT channel %(ch)
-         \t * This value is created from Configure.usbdmProject settings
-         \t */
-         \tstatic const Init DefaultChannel%(ch)InitValue;\n\n
-      ]]></template>
-   </for>
-   
-   <for keys="ch" dim="numChannels">
-      <setTemplate key="/HARDWARE/StaticObjects" namespace="all"
-         variables="pit_tctrl_ten[%(ch)],pit_tctrl_chn[%(ch)],pit_tctrl_tie[%(ch)],irqLevel,pit_ldval_tsv[%(ch)]"
+      <setTemplate
          separator=","
          terminator=","
+         variables="
+            pit_tctrl_ten[%(ch)],
+            pit_tctrl_chn[%(ch)],
+            pit_tctrl_tie[%(ch)],
+            irqLevel,
+            pit_ldval_tsv[%(ch)]"
          >
       <![CDATA[
          \t/**
          \t * Default initialisation values for PIT channel %(ch)
          \t * This value is created from Configure.usbdmProject settings
          \t */
-         \tconst PitInfo$(_instance)::Init PitInfo$(_instance)::DefaultChannel%(ch)InitValue = {
+         \tstatic constexpr Init DefaultChannel%(ch)InitValue = {
          \t   PitChannelNum_%(ch),
          %initExpression
          \t   };\n\n
       ]]></setTemplate>
    </for>
    
-   <!-- ==================== Misc ======================== -->
+   <!--  ==================== Misc ======================== -->
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PitValidate">
