@@ -169,7 +169,7 @@
       <peripheral baseName="FTM"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="0"        version="ftm0_8ch">
+      <peripheral baseName="FTM"      instance="0"        version="ftm0_8ch_noquad">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTM0_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTM0_MASK;" />
          <irq num="FTM0_IRQn" />
@@ -297,14 +297,6 @@
          <param name="ftm_pwmload_ch6sel_present" key="/FTM0/ftm_pwmload_ch6sel_present" value="true" />
          <param name="ftm_pwmload_ch7sel_present" key="/FTM0/ftm_pwmload_ch7sel_present" value="true" />
          <param name="ftm_pwmload_ldok_present" key="/FTM0/ftm_pwmload_ldok_present" value="true" />
-         <param name="ftm_qdctrl_phafltren_present" key="/FTM0/ftm_qdctrl_phafltren_present" value="true" />
-         <param name="ftm_qdctrl_phapol_present" key="/FTM0/ftm_qdctrl_phapol_present" value="true" />
-         <param name="ftm_qdctrl_phbfltren_present" key="/FTM0/ftm_qdctrl_phbfltren_present" value="true" />
-         <param name="ftm_qdctrl_phbpol_present" key="/FTM0/ftm_qdctrl_phbpol_present" value="true" />
-         <param name="ftm_qdctrl_quaden_present" key="/FTM0/ftm_qdctrl_quaden_present" value="true" />
-         <param name="ftm_qdctrl_quadir_present" key="/FTM0/ftm_qdctrl_quadir_present" value="true" />
-         <param name="ftm_qdctrl_quadmode_present" key="/FTM0/ftm_qdctrl_quadmode_present" value="true" />
-         <param name="ftm_qdctrl_tofdir_present" key="/FTM0/ftm_qdctrl_tofdir_present" value="true" />
          <param name="ftm_sc_clks_present" key="/FTM0/ftm_sc_clks_present" value="true" />
          <param name="ftm_sc_cpwms_present" key="/FTM0/ftm_sc_cpwms_present" value="true" />
          <param name="ftm_sc_ps_present" key="/FTM0/ftm_sc_ps_present" value="true" />

@@ -41,7 +41,7 @@
       <xi:include href="peripherals/FPB.svd.xml"/>
       <xi:include href="peripherals/FPU.svd.xml"/>
       <xi:include href="peripherals/FTFA_XACCH.svd.xml"/>
-      <xi:include href="peripherals/FTM0_8CH_ICRST.svd.xml"/>
+      <xi:include href="peripherals/FTM0_8CH_ICRST_NOQUAD.svd.xml"/>
       <xi:include href="peripherals/FTM1_2CH_ICRST.svd.xml"/>
       <peripheral derivedFrom="FTM1"><name>FTM2</name><baseAddress>0x4003A000</baseAddress></peripheral>
       <peripheral derivedFrom="FTM0"><name>FTM3</name><baseAddress>0x40026000</baseAddress></peripheral>

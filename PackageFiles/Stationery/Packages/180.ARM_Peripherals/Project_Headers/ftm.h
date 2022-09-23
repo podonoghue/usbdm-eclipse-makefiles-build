@@ -1366,7 +1366,7 @@ $(/FTM/InitMethod:// /FTM/InitMethod not found)
     * @param[in] ftmPrescale    Clock prescaler. Used to divide input clock.
     */
    static void configure(
-         FtmAlignment   ftmAlignment,
+         FtmMode        ftmMode,
          FtmClockSource ftmClockSource = FtmClockSource_SystemClock,
          FtmPrescale    ftmPrescale    = FtmPrescale_DivBy128) {
 
@@ -1382,7 +1382,7 @@ $(/FTM/InitMethod:// /FTM/InitMethod not found)
       // Disable so immediate effect
       ftm->SC = 0;
       (void)ftm->SC;
-      ftm->SC = ftmAlignment|ftmClockSource|ftmPrescale;
+      ftm->SC = ftmMode|ftmClockSource|ftmPrescale;
    }
 
 $(/FTM/static_functions:  // /FTM/static_functions not found)
@@ -2707,14 +2707,6 @@ template<class Info> typename Info::CallbackFunction FtmBase_T<Info>::sCallback 
 template<class Info> FtmChannelCallbackFunction      FtmBase_T<Info>::sChannelCallbacks[] = {nullptr};
 
 #ifdef FTM_QDCTRL_QUADEN_MASK
-/**
- *  Quadrature Decoder Mode\n
- *  Selects the encoding mode used in the Quadrature Decoder mode.
- */
-enum FtmQuadratureMode {
-   FtmQuadratureMode_Phase_AB_Mode        = FTM_QDCTRL_QUADMODE(0),   ///< Phase A and phase B encoding mode.
-   FtmQuadratureMode_Count_Direction_Mode = FTM_QDCTRL_QUADMODE(1),   ///< Count and direction encoding mode.
-};
 
 /**
  * Template class representing a FTM configured as a Quadrature decoder
@@ -2740,7 +2732,7 @@ enum FtmQuadratureMode {
  * @endcode
  */
 template <class Info>
-class FtmQuadDecoder_T {
+class FtmQuadDecoder_T : protected FtmBase_T<Info> {
 
 private:
    FtmQuadDecoder_T(const FtmQuadDecoder_T&) = delete;
@@ -2753,8 +2745,22 @@ public:
    // Default constructor
    FtmQuadDecoder_T() = default;
 
+   /**
+    * Set common fault and Timer Overflow Callback function\n
+    *
+    * @param[in] theCallback Callback function to execute when timer overflows. \n
+    *                        nullptr to indicate none
+    */
+   void setCallback(typename Info::CallbackFunction theCallback) {
+      FtmBase_T<Info>::setCallback(theCallback);
+   }
+
+   using QuadInit = typename Info::QuadInit;
+
+   static constexpr QuadInit DefaultInitValue = Info::DefaultQuadInitValue;
+
    /** Hardware instance pointer */
-   static constexpr HardwarePtr<FTM_Type> ftm = Info::baseAddress;
+   static constexpr HardwarePtr<FTMQUAD_Type> ftm = Info::baseAddress;
 
    /** Allow more convenient access associated Ftm */
    using OwningFtm = FtmBase_T<Info>;
@@ -2909,6 +2915,8 @@ public:
       // Disable clock to peripheral interface
       Info::disableClock();
    }
+
+$(/FTM/QuadInitMethod:// /FTM/InitMethod not found)
 
    /**
     * Basic configuration of Quadrature decoder.
