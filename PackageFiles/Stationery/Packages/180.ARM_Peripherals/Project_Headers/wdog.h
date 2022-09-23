@@ -89,7 +89,7 @@ public:
     *
     * @note This operation is time-critical so interrupts are disabled during refresh
     * @note Due to clock domain issues it is necessary to wait at least 5 clock
-    *       cycles between attempted refreshes.  This is most significant when 
+    *       cycles between attempted refreshes.  This is most significant when
     *       using the LPO clock source (i.e. at least 5 ms in that case).
     */
    static void refresh(WdogRefresh wdogRefresh_1, WdogRefresh wdogRefresh_2) {
@@ -281,30 +281,45 @@ public:
     * Sets watchdog pre-scaler and time-out value in ticks.
     * The watchdog clock is divided by this value to provide the prescaled WDOG_CLK
     *
-    * @param prescaler [1.8]
-    * @param ticks
+    * @param wdogPrescale This prescaler divides the input clock for the watchdog counter
+    * @param timeout      The watchdog must be refreshed before the counter reaches this value
+    * @param window       If windowed operation is enabled, then the watchdog can only be refreshed
+    *        if the timer reaches a value greater than or equal to this window length value.
+    *        A refresh outside of this window resets the system
     *
     * @note This is a protected operation which uses unlock
     */
-   static void setTimeout(WdogPrescale wdogPrescale, Ticks ticks) {
+   static void setTimeout(
+            WdogPrescale wdogPrescale,
+            Ticks        timeout,
+            Ticks        window = 0_ticks) {
+
       // Disable interrupts while accessing watchdog
       CriticalSection cs;
       Info::writeUnlock(WdogUnlock1, WdogUnlock2);
       wdog->PRESC  = wdogPrescale;
-      wdog->TOVALH = (unsigned)ticks>>16;
-      wdog->TOVALL = (unsigned)ticks;
+      wdog->TOVALH = (unsigned)timeout>>16;
+      wdog->TOVALL = (unsigned)timeout;
+      wdog->WINH   = (unsigned)window>>16;
+      wdog->WINL   = (unsigned)window;
    }
 
 #if $(/WDOG/secondsSupport)
    /**
     * Sets the watchdog time-out value in seconds.
     *
-    * @param seconds
+    * @param timeout The watchdog must be refreshed before this interval expires
+    * @param window  Refresh of the watchdog may not be carried out before this interval has expired i.e.
+    *        Refresh must occur within [window...timeout] if window mode is enabled.
+    *        A refresh outside of this range resets the system
     *
     * @note This is a protected operation which uses unlock
     * @note This adjusts both the prescaler and the timeout value.
     */
-   static ErrorCode setTimeout(Seconds seconds) {
+   static ErrorCode setTimeout(
+            Seconds timeout,
+            Seconds window  = 0.0_s) {
+
       unsigned prescaler;
       uint64_t timerValue;
       uint32_t inputClockFreq = WdogInfo::getInputClockFrequency();
@@ -313,30 +328,16 @@ public:
          if (prescaler>8) {
             return setErrorCode(E_TOO_LARGE);
          }
-         timerValue = (uint64_t)(((float)seconds*inputClockFreq)/prescaler);
+         timerValue = (uint64_t)(((float)timeout*inputClockFreq)/prescaler);
          if (timerValue <= 0xFFFFFFFF) {
             break;
          }
       }
-      setTimeout((WdogPrescale)WDOG_PRESC_PRESCVAL(prescaler-1), (Ticks)timerValue);
+      uint64_t windowValue = (uint64_t)(((float)window*inputClockFreq)/prescaler);
+      setTimeout((WdogPrescale)WDOG_PRESC_PRESCVAL(prescaler-1), (Ticks)timerValue, (Ticks)windowValue);
       return E_NO_ERROR;
    }
 #endif
-
-   /**
-    * Sets the watchdog window value.
-    *
-    * @param value
-    *
-    * @note This is a protected operation which requires unlock
-    */
-   static void setWindow(uint32_t value) {
-      // Disable interrupts while accessing watchdog
-      CriticalSection cs;
-      Info::writeUnlock(WdogUnlock1, WdogUnlock2);
-      wdog->WINH = value>>16;
-      wdog->WINL = value;
-   }
 
    /**
     * Lock watchdog register against further changes

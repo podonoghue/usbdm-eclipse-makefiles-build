@@ -87,20 +87,6 @@ $(/VREF/InitMethod: // /VREF/InitMethod not found)
       Pcr::setPCR();
    }
 
-   /**
-    * Enable the voltage reference with default settings
-    */
-   static void defaultConfigure() {
-      enable();
-
-      // Initialise hardware
-      vref->TRM = (vref->TRM & VREF_TRM_TRIM_MASK)| Info::vref_trm;
-      vref->SC   = Info::vref_sc|VREF_SC_VREFEN_MASK;
-
-      while ((vref->SC & VREF_SC_VREFST_MASK) == 0) {
-         // Wait until stable
-      }
-   }
 
    /**
     * Sets the voltage reference mode
