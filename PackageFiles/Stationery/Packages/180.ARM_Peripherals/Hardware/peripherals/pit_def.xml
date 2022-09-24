@@ -44,6 +44,8 @@
    </binaryOption>
 
    <for keys="ch" dim="numChannels">
+      <stringOption name="PIT Channel %(ch)" derived="true" value="----- %(ch) -----"/>
+      
       <binaryOption key="pit_tctrl_ten[%(ch)]"  condition="pit_tctrl_tie_present"
          enumStem="PitChannelEnable" 
          description="Timer Channel Enable"
@@ -314,7 +316,13 @@
       \t/**
       \t * $(_class) interrupt call back
       \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;\n\n
+      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \t
+      \t/**
+      \t * Default initialisation values for PIT channels
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultChannelInitValues[] = {\n
    ]]></template>
    
    <for keys="ch" dim="numChannels">
@@ -329,16 +337,16 @@
             pit_ldval_tsv[%(ch)]"
          >
       <![CDATA[
-         \t/**
-         \t * Default initialisation values for PIT channel %(ch)
-         \t * This value is created from Configure.usbdmProject settings
-         \t */
-         \tstatic constexpr Init DefaultChannel%(ch)InitValue = {
+         \t   {
          \t   PitChannelNum_%(ch),
          %initExpression
-         \t   };\n\n
+         \t   },\n
       ]]></setTemplate>
    </for>
+   <template><![CDATA[
+         \t};\n\n
+   ]]></template>
+   
    
    <!--  ==================== Misc ======================== -->
 

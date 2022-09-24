@@ -196,6 +196,93 @@
       <choice value="1,15" name="15 clock cycle" enum="15_Clock" />
    </choiceOption>
    
+   <choiceOption key="ftm_channel_number"
+      hidden="true"
+      derived="true"
+      enumType="uint8_t"
+      valueFormat="%s"
+      enumStem="FtmChannelNum"
+      description="Channel Number"
+      toolTip="Select a channel">
+      <choice value="0"             name="Channel 0"      enum="0" />
+      <choice value="1"             name="Channel 1"      enum="1" />
+      <choice value="2"             name="Channel 2"      enum="2" />
+      <choice value="3"             name="Channel 3"      enum="3" />
+      <choice value="4"             name="Channel 4"      enum="4" />
+      <choice value="5"             name="Channel 5"      enum="5" />
+      <choice value="6"             name="Channel 6"      enum="6" />
+      <choice value="7"             name="Channel 7"      enum="7" />
+      <choice value="(uint8_t(-1))" name="No Channel"     enum="None" />      
+   </choiceOption>
+   
+   <for keys="ch" dim="NumChannels">
+      <stringOption name="FTM Channel %(ch)" key="FtmChannel%(ch)" derived="true" value="----- %(ch) -----"/>
+      
+      <choiceOption key="ftm_cnsc_mode[%(ch)]" condition="ftm_cnsc_ms_present&amp;&amp;ftm_cnsc_els_present"
+         valueFormat="(FTM_COMBINE_DECAPEN0(%s)&lt;&lt;8),(FTM_COMBINE_COMBINE0(%s)&lt;&lt;8),FTM_CnSC_MS(%s),FTM_CnSC_ELS(%s)"
+         enumType="uint16_t"
+         enumStem="FtmChannelMode"
+         description="Channel Mode"
+         toolTip="Determines channel operation (PWM/Input capture/Output compare)">
+          <choice value="0,0,0,0" name="Disabled"                                   enum="Disabled"                               />                              
+          <choice value="0,0,0,1" name="Input Capture Rising-edge"                  enum="InputCaptureRisingEdge"                 />
+          <choice value="0,0,0,2" name="Input Capture Falling-edge"                 enum="InputCaptureFallingEdge"                />
+          <choice value="0,0,0,3" name="Input Capture Either-edge"                  enum="InputCaptureEitherEdge"                 />
+          <choice value="0,0,1,0" name="Output Compare No action"                   enum="OutputCompare"                          />
+          <choice value="0,0,1,1" name="Output Compare Toggle"                      enum="OutputCompareToggle"                    />
+          <choice value="0,0,1,2" name="Output Compare Clear"                       enum="OutputCompareClear"                     />
+          <choice value="0,0,1,3" name="Output Compare Set"                         enum="OutputCompareSet"                       />
+          <choice value="0,0,2,2" name="Pwm High-true Pulses"                       enum="PwmHighTruePulses"                      />
+          <choice value="0,0,2,1" name="Pwm Low-true Pulses"                        enum="PwmLowTruePulses"                       />
+          <choice value="1,0,0,1" name="Dual-edge Capture One-Shot Rising-edge"     enum="DualEdgeCaptureOneShotRisingEdge"       />
+          <choice value="1,0,1,1" name="Dual-edge Capture Continuous Rising-edge"   enum="DualEdgeCaptureContinuousRisingEdge"    />
+          <choice value="1,0,0,2" name="Dual-edge Capture One-Shot Falling-edge"    enum="DualEdgeCaptureOneShotFallingEdge"      />
+          <choice value="1,0,1,2" name="Dual-edge Capture Continuous Falling-edge"  enum="DualEdgeCaptureContinuousFallingEdge"   />
+          <choice value="0,1,0,2" name="Combined Positive-pulse"                    enum="CombinePositivePulse"                   />
+          <choice value="0,1,0,1" name="Combine Negative-pulse"                     enum="CombineNegativePulse"                   />
+      </choiceOption>
+   
+      <choiceOption key="ftm_cnsc_action[%(ch)]" condition="ftm_cnsc_chie_present&amp;&amp;ftm_cnsc_dma_present"
+         valueFormat="FTM_CnSC_CHIE(%s),FTM_CnSC_DMA(%s)"
+         enumType="uint8_t"
+         enumStem="FtmChannelAction"
+         description="Action on Channel Event"
+         toolTip="Enable Timer interrupt or DMA">
+          <choice value="0,0" name="No action"          enum="None"  />                              
+          <choice value="1,0" name="Interrupt Request"  enum="Irq"   />                              
+          <choice value="1,1" name="DMA request"        enum="Dma"   />                              
+      </choiceOption>
+   
+      <binaryOption key="ftm_cnsc_icrst[%(ch)]" condition="ftm_cnsc_icrst_present"
+         valueFormat="FTM_CnSC_ICRST(%s)"
+         enumStem="FtmChannelReset"
+         enumType="uint8_t"
+         description="Reset counter on channel IC event"
+         toolTip="Enables the channel IC event to reset the shared counter">
+         <choice value="0" name="Disabled" enum="Disabled" />
+         <choice value="1" name="Enabled"  enum="Enabled"  />
+      </binaryOption>
+      
+      <intOption key="ftm_cnv[%(ch)]"
+         valueFormat="%s_ticks" 
+         typeName="Ticks"
+         description="Output Compare Event time in ticks"
+         toolTip="This value is compared against the main FTM counter in output compare modes"
+         value="0" min="0" max="65535" />
+      
+      <floatOption key="ftm_cnvEventTime[%(ch)]"
+         enabledBy="((ftm_cnsc_mode[%(ch)]&gt;=4)&amp;&amp;(ftm_cnsc_mode[%(ch)]&lt;=7))||(ftm_cnsc_mode[%(ch)]&gt;=14)"
+         ref="ftm_cnv[%(ch)]*clockPeriod"
+         valueFormat="%s_s" 
+         typeName="Seconds"
+         derived="true"
+         units="s"
+         description="Output Compare Event time in seconds"
+         toolTip="This value is compared against the main FTM counter in output compare modes"
+         value="0" min="0" max="65535" />
+      
+   </for>
+      
    <initialValueTemplate variables="minimumResolution"     
    ><![CDATA[
       \t/// %description
@@ -443,7 +530,7 @@
       \t * @code
       \t * static const Ftm$(_instance)::Init ftmInit {
       \t *
-      \t *    // Omitted parameters are take to be zero unless an base value is given
+      \t *    // Omitted parameters are taken to be zero unless a base value is given
       \t *    FtmMode_Freerunning,           // Alignment and whether interval or free-running mode
       \t *    FtmOverflowInterrupt_Disabled, // Overflow Interrupt
       \t *    NvicPriority_Normal,           // IRQ level for this peripheral
@@ -744,7 +831,243 @@ $(init_description)
       \t};\n\n
    ]]></initialValueTemplate>
 
-<!--  ========== FTM Init class =============================== -->
+<!--  ========== FTM CHANNEL Init class =============================== -->
+
+   <template key="channel_init_description" namespace="all"><![CDATA[
+      \t/**
+      \t * Class used to do initialisation of Ftm$(_instance)Channel
+      \t *
+      \t * This class has a templated constructor that accepts various values:
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const Ftm$(_instance)::ChannelInit channelInit {
+      \t *
+      \t *    // Omitted parameters are taken to be zero unless a base value is given
+      \t *    FtmChannelNum_3,            // Channel to initialise
+      \t *    FtmChannelMode_Disabled ,   // Channel Mode - Disabled
+      \t *    FtmChannelAction_None ,     // Action on Channel Event - No action
+      \t *    FtmChannelReset_Disabled ,  // Reset counter on channel IC event - Disabled
+      \t *    0_ticks,                    // Output Compare Event time
+      \t * 
+      \t *    // Optional base value to start with (must be last parameter)
+      \t *    $(_class)::DefaultChannelInitValues[FtmChannelNum_3]
+      \t * };
+      \t *
+      \t * // Initialise FTM from values specified above
+      \t * Ftm$(_instance)::configureChannel(channelInit)
+      \t * @endcode
+      \t */
+   ]]></template>
+
+   <template namespace="usbdm"><![CDATA[
+$(channel_init_description)
+      \tclass ChannelInit {
+      \t
+      \tpublic:
+      \t   /**                               
+      \t    * Copy Constructor                  
+      \t    */                             
+      \t   constexpr ChannelInit(const ChannelInit &other) = default;
+      \t   
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr ChannelInit() = default;
+      \t\n
+   ]]></template>
+   
+<!--  Member variables -->
+  
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)" 
+      variables="irqHandlingMethod" 
+    ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></setTemplate>
+   
+   <initialValueTemplate namespace="usbdm"  
+      variables="ftm_cnv"
+   ><![CDATA[
+      \t   /// %description
+      \t   uint16_t %registerName = 0_ticks;\n\n
+   ]]></initialValueTemplate>
+     
+   <initialValueTemplate namespace="usbdm"  
+      variables="ftm_cnsc_mode"
+   ><![CDATA[
+      \t   /// Channel Status And Control Register
+      \t   uint16_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"  
+      variables="ftm_channel_number"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = FtmChannelNum_None;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)"
+      variables="/PCR/nvic_irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+   ]]></initialValueTemplate>
+
+<!--  Configure method -->
+   
+   <template discardRepeats="true" key="/FTM/ChannelInitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure Channel from values specified in channelInit
+      \t
+      \t * @param channelInit Class containing initialisation values
+      \t */
+      \tstatic ErrorCode configure(const typename Info::ChannelInit &channelInit) {
+      \t
+      \t   // Enable peripheral clock
+      \t   Info::enableClock();
+      \t
+      \t   // Configure timer combin mode
+      \t   if ((channelInit.channel&0b1) == 0) {
+      \t      // Even channel value controls paired channels n,n+1
+      \t      const unsigned offset = 4*channelInit.channel;
+      \t      const uint32_t mask = 0xFF<<offset;
+      \t      ftm->COMBINE = (ftm->COMBINE & ~mask) | (((channelInit.cnsc>>8)<<offset)&mask);
+      \t   }
+      \t   // Configure timer channel
+      \t   ftm->CONTROLS[channelInit.channel].CnV  = channelInit.cnv;
+      \t   ftm->CONTROLS[channelInit.channel].CnSC = channelInit.cnsc;
+      \t
+      \t   return E_NO_ERROR;
+      \t}\n\n
+   ]]></template>
+
+<!--  Constructors -->
+  
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)" 
+      variables="irqHandlingMethod" 
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
+      \t
+      \t      this->%enumParam0 = %paramExpression;
+      \t   }\n\n
+   ]]></setTemplate>
+   
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)" 
+      variables="/PCR/nvic_irqLevel" 
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
+      \t
+      #if $(irqHandlingMethod)
+      \t      %registerName = %paramExpression;
+      #else
+      \t      (void)%paramExpression;
+      #endif
+      \t   }\n\n
+   ]]></setTemplate>
+   
+   <for keys="r" values="
+      ftm_cnsc_mode;
+      ftm_cnsc_action;
+      ftm_cnsc_icrst">
+      <setTemplate  namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx" 
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
+         \t   
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]></setTemplate>
+   </for>
+   
+   <for keys="r" values="
+      ftm_channel_number;
+      ftm_cnv">
+      <setTemplate  namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx" 
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
+         \t   
+         \t      %registerName = %paramExpression;
+         \t   }
+         \t\n
+      ]]></setTemplate>
+   </for>   
+   <template namespace="usbdm"><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+<!--  Default Initialisation value -->
+
+  <template><![CDATA[
+      $(channel_init_description)
+      \ttypedef $(_class)BasicInfo::ChannelInit ChannelInit;
+      \t
+      \t/**
+      \t * Default initialisation value for Ftm$(_instance)ChannelInit
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr ChannelInit DefaultChannelInitValues[] = {\n
+  ]]></template>
+   <for keys="ch" dim="NumChannels">
+      <initialValueTemplate
+         separator=","
+         terminator=","     
+         variables="
+            ftm_cnsc_mode[%(ch)],
+            ftm_cnsc_action[%(ch)],
+            ftm_cnsc_icrst[%(ch)],
+            ftm_cnv[%(ch)]"     
+      ><![CDATA[
+         \t{
+         \t   FtmChannelNum_%(ch),
+         %initExpression\n\t},\n
+      ]]></initialValueTemplate>
+   </for>
+  <template><![CDATA[
+      \n\t};\n\n
+  ]]></template>
+   
+<!--  ========== FTM QUAD Init class =============================== -->
 
    <template key="quad_init_description" namespace="all" condition="ftm_qdctrl_quadmode_present" ><![CDATA[
       \t/**
@@ -758,7 +1081,7 @@ $(init_description)
       \t * @code
       \t * static const FtmQuadDecoder$(_instance)::QuadInit quadInit {
       \t *
-      \t *    // Omitted parameters are take to be zero unless an base value is given
+      \t *    // Omitted parameters are taken to be zero unless a base value is given
       \t *    FtmQuadratureMode_Phase_AB_Mode , // Quadrature decoding mode
       \t *    FtmPhaseAPolarity_ActiveHigh ,    // Polarity of Phase A input
       \t *    FtmPhaseBPolarity_ActiveHigh ,    // Polarity of Phase B input
