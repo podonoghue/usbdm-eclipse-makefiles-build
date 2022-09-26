@@ -50,7 +50,7 @@
       <xi:include href="peripherals/FMC_MK10F12.svd.xml"/>
       <xi:include href="peripherals/FTFE_FEPROT_FDPROT.svd.xml"/>
       <xi:include href="peripherals/FTM0_8CH.svd.xml"/>
-      <xi:include href="peripherals/FTM1_2CH.svd.xml"/>
+      <xi:include href="peripherals/FTM1_2CH_QUAD.svd.xml"/>
       <peripheral derivedFrom="FTM1"><name>FTM2</name><baseAddress>0x400B8000</baseAddress></peripheral>
       <peripheral derivedFrom="FTM0"><name>FTM3</name><baseAddress>0x400B9000</baseAddress></peripheral>
       <xi:include href="peripherals/GPIOA_0x400FF000.svd.xml"/>

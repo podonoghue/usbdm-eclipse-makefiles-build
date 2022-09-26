@@ -38,7 +38,7 @@
       <xi:include href="peripherals/FPB.svd.xml"/>
       <xi:include href="peripherals/FTFL.svd.xml"/>
       <xi:include href="peripherals/FTM0_8CH.svd.xml"/>
-      <xi:include href="peripherals/FTM1_2CH.svd.xml"/>
+      <xi:include href="peripherals/FTM1_2CH_QUAD.svd.xml"/>
       <xi:include href="peripherals/GPIOA_0x400FF000.svd.xml"/>
       <peripheral derivedFrom="GPIOA"><name>GPIOB</name><baseAddress>0x400FF040</baseAddress></peripheral>
       <peripheral derivedFrom="GPIOA"><name>GPIOC</name><baseAddress>0x400FF080</baseAddress></peripheral>
