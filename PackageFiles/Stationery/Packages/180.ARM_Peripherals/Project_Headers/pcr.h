@@ -107,10 +107,10 @@ public:
    constexpr Seconds()                       = default;
    constexpr Seconds(const Seconds& other)   = default;
 
-   constexpr Seconds(int value)              : value((float)value) {}
-   constexpr Seconds(unsigned value)         : value((float)value) {}
-   constexpr Seconds(long value)             : value((float)value) {}
-   constexpr Seconds(unsigned long value)    : value((float)value) {}
+//   constexpr Seconds(int value)              : value((float)value) {}
+//   constexpr Seconds(unsigned value)         : value((float)value) {}
+//   constexpr Seconds(long value)             : value((float)value) {}
+//   constexpr Seconds(unsigned long value)    : value((float)value) {}
    constexpr Seconds(double value)           : value((float)value) {}
    Seconds(const volatile Seconds& other)    : value(other.getValue()) {}
 
@@ -181,11 +181,11 @@ public:
    constexpr Hertz()                      = default;
    constexpr Hertz(const Hertz& other)    = default;
 
-   constexpr Hertz(int value)             : value((float)value) {}
-   constexpr Hertz(unsigned value)        : value((float)value) {}
-   constexpr Hertz(long value)            : value((float)value) {}
-   constexpr Hertz(unsigned long value)   : value((float)value) {}
-   constexpr Hertz(float value)           : value((float)value) {}
+//   constexpr Hertz(int value)             : value((float)value) {}
+//   constexpr Hertz(unsigned value)        : value((float)value) {}
+//   constexpr Hertz(long value)            : value((float)value) {}
+//   constexpr Hertz(unsigned long value)   : value((float)value) {}
+//   constexpr Hertz(float value)           : value((float)value) {}
    constexpr Hertz(double value)          : value((float)value) {}
    Hertz(const volatile Hertz& other)     : value(other.value) {}
 

@@ -17,7 +17,8 @@
          description="COP Watchdog Timeout"
          enumStem="SimCopDuration"
          valueFormat="SIM_COPC_COPCLKS(%s),SIM_COPC_COPT(%s)"
-         toolTip="This write-once field selects the Computer Operating Properly Timeout" >
+         toolTip="Selects the Computer Operating Properly Timeout\n
+                  This is a write-once field" >
          <choice value="0,0" enum="Disabled"          name="Disabled" />
          <choice value="0,1" enum="32_cycles"         name="Timeout after 2^5 clock cycles" />
          <choice value="0,2" enum="256_cycles"        name="Timeout after 2^8 clock cycles" />
@@ -27,10 +28,12 @@
          <choice value="1,3" enum="262144_cycles"     name="Timeout after 2^18 clock cycles" />
       </choiceOption>
 
-      <choiceOption key="sim_copc_copclksel" 
+      <choiceOption key="sim_copc_copclksel"
+         enabledBy="sim_copc_copt>0" 
          enumStem="SimCopClkSrc"
          description="COP Clock Select"
-         toolTip="This write-once field selects the clock source of the COP watchdog">
+         toolTip="Selects the clock source of the COP watchdog\n
+                  This is a write-once field">
          <choice value="0" enum="LpoClk"   name="LPO clock (1 kHz)" isDefault="true" />
          <choice value="1" enum="McgirClk" name="MCGIRCLK" />
          <choice value="2" enum="OscerClk" name="OSCERCLK" />
@@ -38,26 +41,32 @@
       </choiceOption>
 
       <binaryOption key="sim_copc_copdbgen" 
+         enabledBy="sim_copc_copt>0" 
          enumStem="SimCopDebugMode"
          description="COP Debug Enable"
-         toolTip="Controls whether COP is enabled in debug mode">
+         toolTip="Controls whether COP is enabled in debug mode\n
+                  This is a write-once field">
          <choice value="0" enum="HeldReset" name="COP is disabled and the counter is reset" isDefault="true" />
          <choice value="1" enum="Enabled"   name="COP is enabled" />
       </binaryOption>
       
-      <binaryOption key="sim_copc_copstpen" 
+      <binaryOption key="sim_copc_copstpen"
+         enabledBy="sim_copc_copt>0" 
          enumStem="SimCopStopMode"
          description="COP Stop Enable"
-         toolTip="Controls whether COP is enabled in stop mode">
+         toolTip="Controls whether COP is enabled in stop mode\n
+                  This is a write-once field">
          <choice value="0"  enum="HeldReset" name="COP is disabled and the counter is reset" isDefault="true" />
          <choice value="1"  enum="Enabled"   name="COP is enabled" />
       </binaryOption>
       
       <binaryOption key="sim_copc_copw" 
+         enabledBy="sim_copc_copt&gt;3" 
          enumStem="SimCopMode"
          description="COP Windowed Mode"
          toolTip="Windowed mode is only supported when COP is using longer periods\n
-                  The COP window is opened three quarters through the timeout period">
+                  The COP window is opened three quarters through the timeout period\n
+                  This is a write-once field">
          <choice value="0"  enum="Normal"     name="Normal Mode" isDefault="true" />
          <choice value="1"  enum="WindowMode" name="Windowed Mode" />
       </binaryOption>

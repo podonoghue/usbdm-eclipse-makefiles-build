@@ -33,28 +33,6 @@ namespace USBDM {
  */
 
 /**
- * Controls basic operation of PWM/Input capture/Output compare
- */
-enum FtmChMode {
-   FtmChMode_Disabled                              = FTM_CnSC_MS(0)|FTM_CnSC_ELS(0), ///< Channel disabled
-   FtmChMode_InputCaptureRisingEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), ///< Capture rising edge
-   FtmChMode_InputCaptureFallingEdge               = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), ///< Capture falling edge
-   FtmChMode_InputCaptureEitherEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(3), ///< Capture both rising and falling edges
-   FtmChMode_OutputCompare                         = FTM_CnSC_MS(1),                 ///< Output compare operation without pin action
-   FtmChMode_OutputCompareToggle                   = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1), ///< Toggle pin on output compare
-   FtmChMode_OutputCompareClear                    = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2), ///< Clear pin on output compare
-   FtmChMode_OutputCompareSet                      = FTM_CnSC_MS(1)|FTM_CnSC_ELS(3), ///< Set pin on output compare
-   FtmChMode_PwmHighTruePulses                     = FTM_CnSC_MS(2)|FTM_CnSC_ELS(2), ///< PWM with high-true pulses
-   FtmChMode_PwmLowTruePulses                      = FTM_CnSC_MS(2)|FTM_CnSC_ELS(1), ///< PWM with low-true pulses
-   FtmChMode_DualEdgeCaptureOneShotRisingEdge      = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), ///< Dual edge input capture one shot - CHn configuration
-   FtmChMode_DualEdgeCaptureContinuousRisingEdge   = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1), ///< Dual edge input capture continuous - CHn configuration
-   FtmChMode_DualEdgeCaptureOneShotFallingEdge     = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), ///< Dual edge input capture one shot - CHn configuration
-   FtmChMode_DualEdgeCaptureContinuousFallingEdge  = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2), ///< Dual edge input capture continuous - CHn configuration
-   FtmChMode_CombinePositivePulse                  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), ///< Combine mode - CHn configuration
-   FtmChMode_CombineNegativePulse                  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), ///< Combine mode - CHn configuration
-};
-
-/**
  * Enables External trigger on a channel comparison or initialisation event
  */
 enum FtmExternalTrigger {
@@ -66,15 +44,6 @@ enum FtmExternalTrigger {
    FtmExternalTrigger_ch5   = FTM_EXTTRIG_CH5TRIG_MASK,    ///< External trigger on channel 5 event
    FtmExternalTrigger_init  = FTM_EXTTRIG_INITTRIGEN_MASK, ///< External trigger on initialisation
    FtmExternalTrigger_all   = 0x7F,                        ///< All triggers
-};
-
-/*
- * Enabled Timer interrupt or DMA
- */
-enum FtmChannelAction {
-   FtmChannelAction_None   = FTM_CnSC_CHIE(0)|FTM_CnSC_DMA(0), ///< No action on event
-   FtmChannelAction_Irq    = FTM_CnSC_CHIE(1)|FTM_CnSC_DMA(0), ///< Interrupt on event
-   FtmChannelAction_Dma    = FTM_CnSC_CHIE(1)|FTM_CnSC_DMA(1), ///< DMA on event
 };
 
 /**
@@ -869,24 +838,24 @@ public:
     * Configure channel.
     * Doesn't affect shared settings of owning Timer
     *
-    * @param[in] ftmChMode         Mode of operation for channel
+    * @param[in] ftmChannelMode         Mode of operation for channel
     * @param[in] ftmChannelAction  Whether to enable the interrupt or DMA function on this channel
     *
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
    void configure(
-         FtmChMode         ftmChMode,
+         FtmChannelMode    ftmChannelMode,
          FtmChannelAction  ftmChannelAction = FtmChannelAction_None) const {
 
-      ftm->CONTROLS[CHANNEL].CnSC = ftmChMode|ftmChannelAction;
+      ftm->CONTROLS[CHANNEL].CnSC = ftmChannelMode|ftmChannelAction;
    }
 
    /**
     * Disables timer channel (sets mode to FtmChMode_Disabled)
     */
    void disable() const {
-      setMode(FtmChMode_Disabled);
+      setMode(FtmChannelMode_Disabled);
    }
 
    /**
@@ -894,23 +863,23 @@ public:
     *
     * @return Current mode of operation for the channel
     */
-   FtmChMode getMode() const {
-      return (FtmChMode)(ftm->CONTROLS[CHANNEL].CnSC &
+   FtmChannelMode getMode() const {
+      return (FtmChannelMode)(ftm->CONTROLS[CHANNEL].CnSC &
             (FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK));
    }
 
    /**
     * Set channel mode
     *
-    * @param[in] ftmChMode      Mode of operation for channel
+    * @param[in] ftmChannelMode      Mode of operation for channel
     *
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
-   void setMode(FtmChMode ftmChMode) const {
+   void setMode(FtmChannelMode ftmChannelMode) const {
       ftm->CONTROLS[CHANNEL].CnSC =
             (ftm->CONTROLS[CHANNEL].CnSC & ~(FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK))|
-            ftmChMode;
+            ftmChannelMode;
    }
 
    /**
@@ -1135,7 +1104,7 @@ protected:
     * @return Timer frequency in Hz
     */
    virtual float getInputClockFrequencyVirtual() const override {
-      return Info::getInputClockFrequency((FtmClockSource)ftm->SC);
+      return Info::getInputClockFrequency((FtmClockSource)(ftm->SC&FTM_SC_CLKS_MASK));
    }
 
 public:
@@ -1180,17 +1149,19 @@ public:
          ftm->FMS = ftm->FMS & ~FTM_FMS_FAULTF_MASK;
          sCallback();
       }
-      if ((ftm->SC&(FTM_SC_TOF_MASK|FTM_SC_TOIE_MASK)) == (FTM_SC_TOF_MASK|FTM_SC_TOIE_MASK)) {
+      else if ((ftm->SC&(FTM_SC_TOF_MASK|FTM_SC_TOIE_MASK)) == (FTM_SC_TOF_MASK|FTM_SC_TOIE_MASK)) {
          // Clear TOI flag
          ftm->SC = ftm->SC & ~FTM_SC_TOF_MASK;
          sCallback();
       }
-      // Get status for channels
-      uint32_t status = ftm->STATUS;
-      if (status) {
-         // Clear flags for channel events being handled (w0c register if read first)
-         ftm->STATUS = ~status;
-         sChannelCallbacks[0](status);
+      else {
+         // Get status for channels
+         uint32_t status = ftm->STATUS;
+         if (status) {
+            // Clear flags for channel events being handled (w0c register if read first)
+            ftm->STATUS = ~status;
+            sChannelCallbacks[0](status);
+         }
       }
    }
 
@@ -1356,6 +1327,7 @@ public:
 public:
 $(/FTM/classInfo: // No class Info found)
 $(/FTM/InitMethod:// /FTM/InitMethod not found)
+$(/FTM/ChannelInitMethod: // /FTM/ChannelInitMethod not found)
 
    /**
     * Enables clock to peripheral and configures all pins.
@@ -1396,6 +1368,7 @@ $(/FTM/static_functions:  // /FTM/static_functions not found)
     * @return E_TOO_LARGE      Requested period is too large
     *
     * @note Prescaler is not affected.
+    * @note Assumes prescale has been set to an appropriate value.
     * @note Only rudimentary range checking.
     * @note This function will affect all channels of the timer.
     * @note This value is write-buffered and updated by MOD synchronisation
@@ -1515,7 +1488,7 @@ $(/FTM/static_functions:  // /FTM/static_functions not found)
     */
    static ErrorCode setPeriod(Seconds period) {
 
-      uint16_t       modValue;
+      uint16_t modValue = 0;
 
       uint8_t sc = ftm->SC;
 
@@ -2228,7 +2201,7 @@ public:
     * Tmr::setPeriod(500);
     *
     * // Configure channel as PWM
-    * Tmr0_ch6::configure(FtmChMode_PwmHighTruePulses);
+    * Tmr0_ch6::configure(FtmChannelMode_PwmHighTruePulses);
     *
     * // Change duty cycle (in percent)
     * Tmr0_ch6.setDutyCycle(45);
@@ -2315,31 +2288,31 @@ public:
        */
       static void defaultConfigure() {
 
-         OwningFtm::ftm->CONTROLS[channel].CnSC = FtmChMode_PwmHighTruePulses|FtmChannelAction_None;
+         OwningFtm::ftm->CONTROLS[channel].CnSC = FtmChannelMode_PwmHighTruePulses|FtmChannelAction_None;
       }
 
       /**
        * Configure channel.
        * Doesn't affect shared settings of owning Timer
        *
-       * @param[in] ftmChMode         Mode of operation for channel
+       * @param[in] ftmChannelMode         Mode of operation for channel
        * @param[in] ftmChannelAction  Whether to enable the interrupt or DMA function on this channel
        *
        * @note This method has the side-effect of clearing the register update synchronisation i.e.
        *       pending CnV register updates are discarded.
        */
       static void configure(
-            FtmChMode         ftmChMode,
+            FtmChannelMode    ftmChannelMode,
             FtmChannelAction  ftmChannelAction = FtmChannelAction_None) {
 
-         OwningFtm::ftm->CONTROLS[channel].CnSC = ftmChMode|ftmChannelAction;
+         OwningFtm::ftm->CONTROLS[channel].CnSC = ftmChannelMode|ftmChannelAction;
       }
 
       /**
-       * Disables timer channel (sets mode to FtmChMode_Disabled)
+       * Disables timer channel (sets mode to FtmChannelMode_Disabled)
        */
       static void disable() {
-         setMode(FtmChMode_Disabled);
+         setMode(FtmChannelMode_Disabled);
       }
 
       /**
@@ -2347,22 +2320,22 @@ public:
        *
        * @return Current mode of operation for the channel
        */
-      static FtmChMode getMode() {
-         return static_cast<FtmChMode>(OwningFtm::ftm->CONTROLS[channel].CnSC &
+      static FtmChannelMode getMode() {
+         return static_cast<FtmChannelMode>(OwningFtm::ftm->CONTROLS[channel].CnSC &
                (FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK));
       }
 
       /**
        * Set channel mode
        *
-       * @param[in] ftmChMode      Mode of operation for channel
+       * @param[in] ftmChannelMode      Mode of operation for channel
        *
        * @note This method has the side-effect of clearing the register update synchronisation i.e.
        *       pending CnV register updates are discarded.
        */
-      static void setMode(FtmChMode ftmChMode) {
+      static void setMode(FtmChannelMode ftmChannelMode) {
          OwningFtm::ftm->CONTROLS[channel].CnSC =
-               (OwningFtm::ftm->CONTROLS[channel].CnSC & ~(FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK))|ftmChMode;
+               (OwningFtm::ftm->CONTROLS[channel].CnSC & ~(FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK))|ftmChannelMode;
       }
 
       /**

@@ -33,34 +33,6 @@ namespace USBDM {
  */
 
 /**
- * Controls basic operation of PWM/Input capture/Output compare
- */
-enum TpmChMode {
-   TpmChMode_Disabled                = TPM_CnSC_MS(0)|TPM_CnSC_ELS(0), //!< Channel disabled
-   TpmChMode_InputCaptureRisingEdge  = TPM_CnSC_MS(0)|TPM_CnSC_ELS(1), //!< Capture rising edge
-   TpmChMode_InputCaptureFallingEdge = TPM_CnSC_MS(0)|TPM_CnSC_ELS(2), //!< Capture falling edge
-   TpmChMode_InputCaptureEitherEdge  = TPM_CnSC_MS(0)|TPM_CnSC_ELS(3), //!< Capture both rising and falling edges
-   TpmChMode_OutputCompare           = TPM_CnSC_MS(1),                 //!< Output compare operation without pin action
-   TpmChMode_OutputCompareToggle     = TPM_CnSC_MS(1)|TPM_CnSC_ELS(1), //!< Toggle pin on output compare
-   TpmChMode_OutputCompareClear      = TPM_CnSC_MS(1)|TPM_CnSC_ELS(2), //!< Clear pin on output compare
-   TpmChMode_OutputCompareSet        = TPM_CnSC_MS(1)|TPM_CnSC_ELS(3), //!< Set pin on output compare
-   TpmChMode_PwmHighTruePulses       = TPM_CnSC_MS(2)|TPM_CnSC_ELS(2), //!< PWM with high-true pulses
-   TpmChMode_PwmLowTruePulses        = TPM_CnSC_MS(2)|TPM_CnSC_ELS(1), //!< PWM with low-true pulses
-};
-
-/*
- * Enabled Timer interrupt or DMA
- */
-enum TpmChannelAction {
-   TpmChannelAction_None   = TPM_CnSC_CHIE(0), //!< No action on event
-   TpmChannelAction_Irq    = TPM_CnSC_CHIE(1), //!< Interrupt on event
-#ifdef TPM_CnSC_DMA
-   TpmChannelAction_Dma    = TPM_CnSC_CHIE(1)|TPM_CnSC_DMA(1), //!< DMA on event
-#endif
-};
-
-
-/**
  * Type definition for timer overflow interrupt call back
  */
 typedef void (*TpmCallbackFunction)();
@@ -723,24 +695,24 @@ public:
     * Configure channel.
     * Doesn't affect shared settings of owning Timer
     *
-    * @param[in] tpmChMode         Mode of operation for channel
+    * @param[in] tpmChannelMode    Mode of operation for channel
     * @param[in] tpmChannelAction  Whether to enable the interrupt or DMA function on this channel
     *
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
    void configure(
-         TpmChMode         tpmChMode,
+         TpmChannelMode    tpmChannelMode,
          TpmChannelAction  tpmChannelAction = TpmChannelAction_None) const {
 
-      tpm->CONTROLS[CHANNEL].CnSC = tpmChMode|tpmChannelAction;
+      tpm->CONTROLS[CHANNEL].CnSC = tpmChannelMode|tpmChannelAction;
    }
 
    /**
-    * Disables timer channel (sets mode to TpmChMode_Disabled)
+    * Disables timer channel (sets mode to TpmChannelMode_Disabled)
     */
    void disable() const {
-      setMode(TpmChMode_Disabled);
+      setMode(TpmChannelMode_Disabled);
    }
 
    /**
@@ -748,23 +720,23 @@ public:
     *
     * @return Current mode of operation for the channel
     */
-   TpmChMode getMode() const {
-      return (TpmChMode)(tpm->CONTROLS[CHANNEL].CnSC &
+   TpmChannelMode getMode() const {
+      return (TpmChannelMode)(tpm->CONTROLS[CHANNEL].CnSC &
             (TPM_CnSC_MSA_MASK|TPM_CnSC_ELS_MASK));
    }
 
    /**
     * Set channel mode
     *
-    * @param[in] tpmChMode      Mode of operation for channel
+    * @param[in] tpmChannelMode Mode of operation for channel
     *
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
-   void setMode(TpmChMode tpmChMode) const {
+   void setMode(TpmChannelMode tpmChannelMode) const {
       tpm->CONTROLS[CHANNEL].CnSC =
             (tpm->CONTROLS[CHANNEL].CnSC & ~(TPM_CnSC_MSA_MASK|TPM_CnSC_ELS_MASK))|
-            tpmChMode;
+            tpmChannelMode;
    }
 
    /**
@@ -974,7 +946,7 @@ protected:
     * @return Timer frequency in Hz
     */
    virtual float getInputClockFrequencyVirtual() const override {
-      return Info::getInputClockFrequency();
+      return Info::getInputClockFrequency((TpmClockSource)(tpm->SC&TPM_SC_CMOD_MASK));
    }
 
 public:
@@ -1114,8 +1086,8 @@ public:
     * @param[in] theCallback Callback function to execute when timer overflows. \n
     *                        nullptr to indicate none
     */
-   static void setTimerOverflowCallback(TpmCallbackFunction theCallback) {
-      static_assert(Info::irqLevel>=0, "TPM not configured for interrupts - Modify Configure.usbdmF");
+   static void setCallback(typename Info::CallbackFunction theCallback) {
+      static_assert(Info::irqHandlerInstalled, "TPM not configured for interrupts - Modify Configure.usbdm");
       if (theCallback == nullptr) {
          sToiCallback = unhandledCallback;
          return;
@@ -1125,35 +1097,19 @@ public:
 
 public:
  $(/TPM/classInfo: // No class Info found)
-
-   /**
-    * Configure with settings from Configure.usbdmProject.
-    * Includes configuring all pins
-    */
-   static void defaultConfigure() {
-      enable();
-
-      // Disable so immediate effect
-      tpm->SC = 0;
-      (void)tpm->SC;
-      // Common registers
-      tpm->CNT     = 0;
-      tpm->MOD     = Info::modulo;
-      tpm->SC      = Info::sc;
-
-      enableNvicInterrupts(Info::irqLevel);
-   }
+$(/TPM/InitMethod:// /TPM/InitMethod not found)
+$(/TPM/ChannelInitMethod: // /TPM/ChannelInitMethod not found)
 
    /**
     * Enables clock to peripheral and configures all pins.
     * Configures main operating settings for timer.
     *
-    * @param[in] tpmAlignment   Alignment.
+    * @param[in] tpmMode        Counting operation
     * @param[in] tpmClockSource Clock source for timer.
     * @param[in] tpmPrescale    Clock prescaler. Used to divide input clock.
     */
    static void configure(
-         TpmAlignment   tpmAlignment,
+         TpmMode        tpmMode,
          TpmClockSource tpmClockSource = TpmClockSource_SystemTpmClock,
          TpmPrescale    tpmPrescale    = TpmPrescale_DivBy128) {
 
@@ -1169,7 +1125,7 @@ public:
       // Disable so immediate effect
       tpm->SC = 0;
       (void)tpm->SC;
-      tpm->SC = tpmAlignment|tpmClockSource|tpmPrescale;
+      tpm->SC = tpmMode|tpmClockSource|tpmPrescale;
    }
 
 $(/TPM/static_functions:  // /TPM/static_functions not found)
@@ -1193,27 +1149,21 @@ $(/TPM/static_functions:  // /TPM/static_functions not found)
 
       // Check if CPWMS is set (affects period)
       bool centreAlign = (tpm->SC&TPM_SC_CPWMS_MASK);
+      uint32_t modValue;
 
       if (centreAlign) {
-         // Centre-aligned period is 2*MOD value but MOD is
-         // limited to 0x7FFF for sensible PWM operation
-
+         // Centre-aligned period is 2*MOD value
          // Halve with rounding
-         period = (period+1_ticks)/2U;
-         if ((unsigned)period > 0x7FFFUL) {
-            // Attempt to set too long a period
-            usbdm_assert(false, "Interval is too long");
-            return setErrorCode(E_TOO_LARGE);
-         }
+         modValue = (period+1_ticks)/2U;
       }
       else {
          // Left-aligned period is MOD+1 value
-         period = period-1_ticks;
-         if ((unsigned)period > 0xFFFF) {
-            // Attempt to set too long a period
-            usbdm_assert(false, "Interval is too long");
-            return setErrorCode(E_TOO_LARGE);
-         }
+         modValue = period-1_ticks;
+      }
+      if (modValue > TPM_MOD_MOD_MASK) {
+         // Attempt to set too long a period
+         usbdm_assert(false, "Interval is too long");
+         return setErrorCode(E_TOO_LARGE);
       }
       uint32_t sc;
       if (suspend) {
@@ -1221,7 +1171,7 @@ $(/TPM/static_functions:  // /TPM/static_functions not found)
          tpm->SC = 0;
       }
       // Change modulo
-      tpm->MOD = (unsigned)period;
+      tpm->MOD = (unsigned)modValue;
 
       if (suspend) {
          // Restart timer
@@ -1234,40 +1184,46 @@ $(/TPM/static_functions:  // /TPM/static_functions not found)
    /**
     * Calculate TPM timing parameters to achieve a given period
     *
-    * @param period           Period in seconds
-    * @param pPrescalerValue  Calculated prescaler value (for SC register)
-    * @param pPeriodInTicks   Calculated period in ticks.
+    * @param[in]    period  Period in seconds
+    * @param[inout] sc      Proposed TPM.SC value (must include CMOD, CPWMS fields)
+    *                       PS field is updated
+    * @param[out]   mod     Calculated TPM.MOD values
     *
-    * @return E_NO_ERROR   Success.
-    * @return E_TOO_SMALL  Requested period is too small for resolution (required resolution check to be enabled).
-    * @return E_TOO_LARGE  Requested period is too large.
+    * @return E_NO_ERROR   Success
+    * @return E_TOO_SMALL  Requested period is too small for resolution (required resolution check to be enabled)
+    * @return E_TOO_LARGE  Requested period is too large
     */
-   static ErrorCode calculateTimingParameters(Seconds period, unsigned &pPrescalerValue, Ticks &pPeriodInTicks) {
-      float inputClock = Info::getInputClockFrequency();
+   static ErrorCode calculateTimingParameters(Seconds period, uint8_t &sc, uint16_t &mod) {
+
+      float inputClock = Info::getInputClockFrequency((TpmClockSource)(sc&TPM_SC_CMOD_MASK));
       unsigned prescaleFactor=1;
       unsigned prescalerValue=0;
 
-      // Maximum period value in ticks
-      uint32_t maxPeriodInTicks = (unsigned)TpmBase_T::MaximumPeriodInTicks;
-
       // Check if CPWMS is set (affects period calculation)
-      if (tpm->SC&TPM_SC_CPWMS_MASK) {
-         // Centre-aligned period is ~double the MOD value but MOD is
-         // limited to 0x7FFF for sensible PWM operation so
-         // period in ticks is limited to 2*0x7FFF
-         maxPeriodInTicks = 65534;
-      }
+      bool centreAligned = (sc&TPM_SC_CPWMS_MASK);
+
+      constexpr uint32_t maxModValue = TPM_MOD_MOD_MASK;
+
       while (prescalerValue<=7) {
-         float    clock = inputClock/prescaleFactor;
-         unsigned periodInTicks   = round((float)period*clock);
-         if (periodInTicks < Info::minimumResolution) {
+         float clock    = inputClock/prescaleFactor;
+         float modValueF = period*clock;
+         if (centreAligned) {
+            // PeriodInTicks = 2*MOD
+            modValueF = modValueF/2;
+         }
+         else {
+            // PeriodInTicks = MOD+1
+            modValueF = modValueF - 1;
+         }
+         unsigned modValue = round(modValueF);
+         if (modValue < Info::minimumResolution) {
             usbdm_assert(false, "Interval is too short");
             // Too short a period for minimum resolution
             return setErrorCode(E_TOO_SMALL);
          }
-         if (periodInTicks <= maxPeriodInTicks) {
-            pPrescalerValue = prescalerValue;
-            pPeriodInTicks  = periodInTicks;
+         if (modValue <= maxModValue) {
+            sc   = (sc&~TPM_SC_PS_MASK)|TPM_SC_PS(prescalerValue);
+            mod  = modValue;
             return E_NO_ERROR;
          }
          prescalerValue++;
@@ -1295,24 +1251,26 @@ $(/TPM/static_functions:  // /TPM/static_functions not found)
     */
    static ErrorCode setPeriod(Seconds period) {
 
-      unsigned prescalerValue = 0;
-      Ticks    periodInTicks  = 0U;
+      uint16_t modValue = 0;
 
-      ErrorCode rc = calculateTimingParameters(period, prescalerValue, periodInTicks);
+      uint8_t sc = tpm->SC;
+
+      ErrorCode rc = calculateTimingParameters(period, sc, modValue);
 
       if (rc != E_NO_ERROR) {
          return rc;
       }
       // Disable timer to change prescaler and period
-      uint32_t sc = tpm->SC;
       tpm->SC = 0;
-      (void)tpm->SC;
-      setPeriod(periodInTicks, false);
+
+      // Configure for modulo operation
+      tpm->MOD   = modValue;
 
       // Restart counter
       tpm->CNT   = 0;
 
-      tpm->SC  = (sc&~TPM_SC_PS_MASK)|TPM_SC_PS(prescalerValue);
+      // Set prescale and enable timer
+      tpm->SC  = sc;
 
       return E_NO_ERROR;
    }
@@ -1336,27 +1294,27 @@ $(/TPM/static_functions:  // /TPM/static_functions not found)
     */
    static ErrorCode setMaximumInterval(Seconds interval) {
 
-      unsigned prescalerValue = 0;
-      Ticks    periodInTicks;
+      uint16_t       modValue;
 
-      ErrorCode rc = calculateTimingParameters(interval, prescalerValue, periodInTicks);
+      uint8_t sc = tpm->SC;
 
+      ErrorCode rc = calculateTimingParameters(interval, sc, modValue);
       if (rc != E_NO_ERROR) {
          return rc;
       }
+
       // Disable timer to change prescaler and period
-      uint32_t sc = tpm->SC;
       tpm->SC = 0;
-      (void)tpm->SC;
 
       // Configure for free-running mode
       // This is the usual value for IC or OC set-up
-      tpm->MOD = 0;
+      tpm->MOD   = 0_ticks;
 
-      // Restart counter
+      // Clear counter
       tpm->CNT   = 0;
 
-      tpm->SC  = (sc&~TPM_SC_PS_MASK)|TPM_SC_PS(prescalerValue);
+      // Set prescale and enable timer
+      tpm->SC  = sc;
 
       return E_NO_ERROR;
    }
@@ -1371,7 +1329,7 @@ $(/TPM/static_functions:  // /TPM/static_functions not found)
       // Calculate timer prescale factor
       int prescaleFactor = 1<<((tpm->SC&TPM_SC_PS_MASK)>>TPM_SC_PS_SHIFT);
 
-      return static_cast<float>(Info::getInputClockFrequency())/prescaleFactor;
+      return static_cast<float>(Info::getInputClockFrequency((TpmClockSource)tpm->SC))/prescaleFactor;
    }
 
    /**
@@ -1782,7 +1740,7 @@ public:
     * Tmr::setPeriod(500);
     *
     * // Configure channel as PWM
-    * Tmr0_ch6::configure(TpmChMode_PwmHighTruePulses);
+    * Tmr0_ch6::configure(TpmChannelMode_PwmHighTruePulses);
     *
     * // Change duty cycle (in percent)
     * Tmr0_ch6.setDutyCycle(45);
@@ -1869,31 +1827,31 @@ public:
        */
       static void defaultConfigure() {
 
-         OwningTpm::tpm->CONTROLS[channel].CnSC = TpmChMode_PwmHighTruePulses|TpmChannelAction_None;
+         OwningTpm::tpm->CONTROLS[channel].CnSC = TpmChannelMode_PwmHighTruePulses|TpmChannelAction_None;
       }
 
       /**
        * Configure channel.
        * Doesn't affect shared settings of owning Timer
        *
-       * @param[in] tpmChMode         Mode of operation for channel
+       * @param[in] tpmChannelMode    Mode of operation for channel
        * @param[in] tpmChannelAction  Whether to enable the interrupt or DMA function on this channel
        *
        * @note This method has the side-effect of clearing the register update synchronisation i.e.
        *       pending CnV register updates are discarded.
        */
       static void configure(
-            TpmChMode         tpmChMode,
+            TpmChannelMode    tpmChannelMode,
             TpmChannelAction  tpmChannelAction = TpmChannelAction_None) {
 
-         OwningTpm::tpm->CONTROLS[channel].CnSC = tpmChMode|tpmChannelAction;
+         OwningTpm::tpm->CONTROLS[channel].CnSC = tpmChannelMode|tpmChannelAction;
       }
 
       /**
-       * Disables timer channel (sets mode to TpmChMode_Disabled)
+       * Disables timer channel (sets mode to TpmChannelMode_Disabled)
        */
       static void disable() {
-         setMode(TpmChMode_Disabled);
+         setMode(TpmChannelMode_Disabled);
       }
 
       /**
@@ -1901,22 +1859,22 @@ public:
        *
        * @return Current mode of operation for the channel
        */
-      static TpmChMode getMode() {
-         return static_cast<TpmChMode>(OwningTpm::tpm->CONTROLS[channel].CnSC &
+      static TpmChannelMode getMode() {
+         return static_cast<TpmChannelMode>(OwningTpm::tpm->CONTROLS[channel].CnSC &
                (TPM_CnSC_MS_MASK|TPM_CnSC_ELS_MASK));
       }
 
       /**
        * Set channel mode
        *
-       * @param[in] tpmChMode      Mode of operation for channel
+       * @param[in] tpmChannelMode  Mode of operation for channel
        *
        * @note This method has the side-effect of clearing the register update synchronisation i.e.
        *       pending CnV register updates are discarded.
        */
-      static void setMode(TpmChMode tpmChMode) {
+      static void setMode(TpmChannelMode tpmChannelMode) {
          OwningTpm::tpm->CONTROLS[channel].CnSC =
-               (OwningTpm::tpm->CONTROLS[channel].CnSC & ~(TPM_CnSC_MS_MASK|TPM_CnSC_ELS_MASK))|tpmChMode;
+               (OwningTpm::tpm->CONTROLS[channel].CnSC & ~(TPM_CnSC_MS_MASK|TPM_CnSC_ELS_MASK))|tpmChannelMode;
       }
 
       /**
@@ -2204,6 +2162,18 @@ public:
 
    };
 
+   /**
+    * Configure with settings from Configure.usbdmProject.
+    * Includes configuring all pins
+    */
+   static void defaultConfigure() {
+
+     configure(Info::DefaultInitValue);
+
+
+     NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+   }
+
 };
 
 template<class Info> TpmCallbackFunction         TpmBase_T<Info>::sToiCallback        = TpmBase_T<Info>::unhandledCallback;
@@ -2449,8 +2419,8 @@ public:
 };
 #endif // defined(TPM_QDCTRL_QUADEN_MASK)
 
-$(/TPM/declarations: // No declarations found)
-$(/TPM/quadDeclarations: // No declarations found)
+$(/TPM/declarations: // No FTM declarations found)
+$(/TPM/quadDeclarations: // No QUAD declarations found)
 /**
  * End TPM_Group
  * @}

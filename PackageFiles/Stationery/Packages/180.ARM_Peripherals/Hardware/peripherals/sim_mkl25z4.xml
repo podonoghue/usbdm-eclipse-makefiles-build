@@ -17,7 +17,8 @@
          description="COP Watchdog Timeout"
          enumStem="SimCopDuration"
          valueFormat="SIM_COPC_COPCLKS(%s),SIM_COPC_COPT(%s)"
-         toolTip="This write-once field selects the Computer Operating Properly Timeout" >
+         toolTip="Selects the Computer Operating Properly Timeout\n
+                  This is a write-once field" >
          <choice value="0,0" enum="Disabled"          name="Disabled" />
          <choice value="0,1" enum="32_ms"             name="Timeout after 2^5 LPO (1kHz) cycles" />
          <choice value="0,2" enum="256_ms"            name="Timeout after 2^8 LPO (1kHz) cycles" />
@@ -28,10 +29,12 @@
       </choiceOption>
 
       <binaryOption key="sim_copc_copw" 
+         enabledBy="sim_copc_copt&gt;3" 
          enumStem="SimCopMode"
          description="COP Windowed Mode"
          toolTip="Windowed mode is only supported when COP is using bus clock\n
-                  The COP window is opened three quarters through the timeout period">
+                  The COP window is opened three quarters through the timeout period\n
+                  This is a write-once field">
          <choice value="0"  enum="Normal"     name="Normal Mode" isDefault="true" />
          <choice value="1"  enum="WindowMode" name="Windowed Mode" />
       </binaryOption>

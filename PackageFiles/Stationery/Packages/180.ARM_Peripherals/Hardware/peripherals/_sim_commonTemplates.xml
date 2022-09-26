@@ -691,14 +691,14 @@
          sim_sopt2_usbsrc[],    
          sim_sopt2_ptd7pad,     
          sim_sopt2_lpuartsrc,
-         sim_sopt2_lpuart0src;
-         sim_sopt2_uart0src;
-         sim_sopt2_lpuart1src;
-         sim_sopt2_uart1src;
-         sim_sopt2_lpuart2src;
-         sim_sopt2_uart2src;
-         sim_sopt2_lpuart3src;
-         sim_sopt2_uart3src;
+         sim_sopt2_lpuart0src,
+         sim_sopt2_uart0src,
+         sim_sopt2_lpuart1src,
+         sim_sopt2_uart1src,
+         sim_sopt2_lpuart2src,
+         sim_sopt2_uart2src,
+         sim_sopt2_lpuart3src,
+         sim_sopt2_uart3src,
          sim_sopt2_tpmsrc,      
          sim_sopt2_traceclksel, 
          sim_sopt2_rtcclkoutsel,
@@ -981,7 +981,10 @@
 <!-- ========== SOPT5 =============================== -->
 
    <for keys="n" values="0;1;2;3;4;5">
-      <for keys="name:Name" values="uart%(n):Uart%(n);lpuart%(n):Lpuart%(n)" >
+      <for keys   = "name       : Name" 
+           values = "uart%(n)   : Uart%(n);
+                     lpuart%(n) : Lpuart%(n)" >
+         
          <setTemplate 
             variables="sim_sopt5_%(name)ode,sim_sopt5_%(name)txsrc,sim_sopt5_%(name)rxsrc"
             linePadding="xxx"
@@ -1023,14 +1026,39 @@
             \t   constexpr %(Name)Init(
             %params) {
             \t
-            \t      %registerName |= %paramExpression;
+            \t      %registerName = (%registerName & ~%mask) |
+            \t                       %paramExpression;
             \t   }
             \t   /**
             \t    * Configure %(Name) signals from values specified in constructor.
             \t    */
             \t   void configure() const {\n
             \t      %register = (%register&~%mask) | %registerName;
-            \t   }
+            \t   }\n
+         ]]></setTemplate>
+         <for keys="v" values="sim_sopt5_%(name)ode;sim_sopt5_%(name)txsrc;sim_sopt5_%(name)rxsrc">
+            <setTemplate 
+               variables="%(v)"
+               linePadding="xxx"
+            ><![CDATA[
+            \t/**
+            \t * Set %description
+            \t *
+            \t * @tparam   Types
+            \t * @param    rest
+            \t *
+            \t * @param %enumParam %tooltip
+            \t */
+            \t   template <typename... Types>
+            \t   constexpr %(Name)Init(%enumClass %enumParam, Types... rest) : Init(rest...) {
+            \t      %registerName = (%registerName & ~%mask) | %paramExpression;
+            \t}\n\n
+            ]]></setTemplate>
+         </for>
+         <setTemplate 
+            variables="sim_sopt5_%(name)ode,sim_sopt5_%(name)txsrc,sim_sopt5_%(name)rxsrc"
+            linePadding="xxx"
+         ><![CDATA[
             \t};\n\n
          ]]></setTemplate>
    
@@ -1041,7 +1069,7 @@
             \t *
             %paramDescription
             \t */
-            \tstatic void configureLpUart%(n)(
+            \tstatic void configure%(Name)(
             %params) {
             \t   %defaultFieldExpression
             \t}\n\n
@@ -1378,6 +1406,7 @@
       \t * This class has a templated constructor that accepts various values:
       \t *
       \t * @note This constructor may be used to create a const instance in ROM
+      \t * @note Actual parameters available vary with device - see Sim::DefaultInitValue for custom example
       \t *
       \t * Example:
       \t * @code

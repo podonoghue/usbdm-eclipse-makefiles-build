@@ -239,14 +239,6 @@
          <param name="ftm_pwmload_ch6sel_present" key="/FTM0/ftm_pwmload_ch6sel_present" value="true" />
          <param name="ftm_pwmload_ch7sel_present" key="/FTM0/ftm_pwmload_ch7sel_present" value="true" />
          <param name="ftm_pwmload_ldok_present" key="/FTM0/ftm_pwmload_ldok_present" value="true" />
-         <param name="ftm_qdctrl_phafltren_present" key="/FTM0/ftm_qdctrl_phafltren_present" value="true" />
-         <param name="ftm_qdctrl_phapol_present" key="/FTM0/ftm_qdctrl_phapol_present" value="true" />
-         <param name="ftm_qdctrl_phbfltren_present" key="/FTM0/ftm_qdctrl_phbfltren_present" value="true" />
-         <param name="ftm_qdctrl_phbpol_present" key="/FTM0/ftm_qdctrl_phbpol_present" value="true" />
-         <param name="ftm_qdctrl_quaden_present" key="/FTM0/ftm_qdctrl_quaden_present" value="true" />
-         <param name="ftm_qdctrl_quadir_present" key="/FTM0/ftm_qdctrl_quadir_present" value="true" />
-         <param name="ftm_qdctrl_quadmode_present" key="/FTM0/ftm_qdctrl_quadmode_present" value="true" />
-         <param name="ftm_qdctrl_tofdir_present" key="/FTM0/ftm_qdctrl_tofdir_present" value="true" />
          <param name="ftm_sc_clks_present" key="/FTM0/ftm_sc_clks_present" value="true" />
          <param name="ftm_sc_cpwms_present" key="/FTM0/ftm_sc_cpwms_present" value="true" />
          <param name="ftm_sc_ps_present" key="/FTM0/ftm_sc_ps_present" value="true" />
@@ -300,7 +292,7 @@
          <param name="ftm_synconf_swwrbuf_present" key="/FTM0/ftm_synconf_swwrbuf_present" value="true" />
          <param name="ftm_synconf_syncmode_present" key="/FTM0/ftm_synconf_syncmode_present" value="true" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="1"        version="ftm1_2ch_icrst">
+      <peripheral baseName="FTM"      instance="1"        version="ftm1_2ch_quad_icrst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTM1_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTM1_MASK;" />
          <param name="$present"     key="/FTM1/$present" value="true" />
@@ -417,7 +409,7 @@
          <param name="ftm_synconf_swwrbuf_present" key="/FTM1/ftm_synconf_swwrbuf_present" value="true" />
          <param name="ftm_synconf_syncmode_present" key="/FTM1/ftm_synconf_syncmode_present" value="true" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="2"        version="ftm1_2ch_icrst">
+      <peripheral baseName="FTM"      instance="2"        version="ftm1_2ch_quad_icrst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTM2_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTM2_MASK;" />
          <param name="$present"     key="/FTM2/$present" value="true" />
@@ -662,14 +654,6 @@
          <param name="ftm_pwmload_ch6sel_present" key="/FTM3/ftm_pwmload_ch6sel_present" value="true" />
          <param name="ftm_pwmload_ch7sel_present" key="/FTM3/ftm_pwmload_ch7sel_present" value="true" />
          <param name="ftm_pwmload_ldok_present" key="/FTM3/ftm_pwmload_ldok_present" value="true" />
-         <param name="ftm_qdctrl_phafltren_present" key="/FTM3/ftm_qdctrl_phafltren_present" value="true" />
-         <param name="ftm_qdctrl_phapol_present" key="/FTM3/ftm_qdctrl_phapol_present" value="true" />
-         <param name="ftm_qdctrl_phbfltren_present" key="/FTM3/ftm_qdctrl_phbfltren_present" value="true" />
-         <param name="ftm_qdctrl_phbpol_present" key="/FTM3/ftm_qdctrl_phbpol_present" value="true" />
-         <param name="ftm_qdctrl_quaden_present" key="/FTM3/ftm_qdctrl_quaden_present" value="true" />
-         <param name="ftm_qdctrl_quadir_present" key="/FTM3/ftm_qdctrl_quadir_present" value="true" />
-         <param name="ftm_qdctrl_quadmode_present" key="/FTM3/ftm_qdctrl_quadmode_present" value="true" />
-         <param name="ftm_qdctrl_tofdir_present" key="/FTM3/ftm_qdctrl_tofdir_present" value="true" />
          <param name="ftm_sc_clks_present" key="/FTM3/ftm_sc_clks_present" value="true" />
          <param name="ftm_sc_cpwms_present" key="/FTM3/ftm_sc_cpwms_present" value="true" />
          <param name="ftm_sc_ps_present" key="/FTM3/ftm_sc_ps_present" value="true" />

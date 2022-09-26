@@ -214,7 +214,7 @@
       <peripheral baseName="FTM"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="0"        version="ftm0_8ch_icrst_noquad">
+      <peripheral baseName="FTM"      instance="0"        version="ftm0_8ch_icrst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTM0_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTM0_MASK;" />
          <irq num="FTM0_IRQn" />
@@ -396,7 +396,7 @@
          <param name="ftm_synconf_swwrbuf_present" key="/FTM0/ftm_synconf_swwrbuf_present" value="true" />
          <param name="ftm_synconf_syncmode_present" key="/FTM0/ftm_synconf_syncmode_present" value="true" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="1"        version="ftm1_2ch_icrst">
+      <peripheral baseName="FTM"      instance="1"        version="ftm1_2ch_quad_icrst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTM1_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTM1_MASK;" />
          <irq num="FTM1_IRQn" />
@@ -514,7 +514,7 @@
          <param name="ftm_synconf_swwrbuf_present" key="/FTM1/ftm_synconf_swwrbuf_present" value="true" />
          <param name="ftm_synconf_syncmode_present" key="/FTM1/ftm_synconf_syncmode_present" value="true" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="2"        version="ftm1_2ch_icrst">
+      <peripheral baseName="FTM"      instance="2"        version="ftm1_2ch_quad_icrst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTM2_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTM2_MASK;" />
          <irq num="FTM2_IRQn" />
@@ -632,7 +632,7 @@
          <param name="ftm_synconf_swwrbuf_present" key="/FTM2/ftm_synconf_swwrbuf_present" value="true" />
          <param name="ftm_synconf_syncmode_present" key="/FTM2/ftm_synconf_syncmode_present" value="true" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="3"        version="ftm0_8ch_icrst_noquad">
+      <peripheral baseName="FTM"      instance="3"        version="ftm0_8ch_icrst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTM3_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTM3_MASK;" />
          <irq num="FTM3_IRQn" />

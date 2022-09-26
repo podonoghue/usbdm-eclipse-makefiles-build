@@ -54,14 +54,14 @@
       enumStem="FtmPrescale"
       target="clockFrequency"
       toolTip="Selects the prescaler for the module">
-      <choice value="0" name="Divide by 1"   ref="inputClockFrequency"          enum="DivBy1"  isDefault="true" />
-      <choice value="1" name="Divide by 2"   ref="inputClockFrequency;((inputClockFrequency)/2.)"   enum="DivBy2" />
-      <choice value="2" name="Divide by 4"   ref="inputClockFrequency;((inputClockFrequency)/4.)"   enum="DivBy4" />
-      <choice value="3" name="Divide by 8"   ref="inputClockFrequency;((inputClockFrequency)/8.)"   enum="DivBy8" />
-      <choice value="4" name="Divide by 16"  ref="inputClockFrequency;((inputClockFrequency)/16.)"  enum="DivBy16" />
-      <choice value="5" name="Divide by 32"  ref="inputClockFrequency;((inputClockFrequency)/32.)"  enum="DivBy32" />
-      <choice value="6" name="Divide by 64"  ref="inputClockFrequency;((inputClockFrequency)/64.)"  enum="DivBy64" />
-      <choice value="7" name="Divide by 128" ref="inputClockFrequency;((inputClockFrequency)/128.)" enum="DivBy128" />
+      <choice value="0" name="Divide by 1"   ref="inputClockFrequency"      enum="DivBy1"  isDefault="true" />
+      <choice value="1" name="Divide by 2"   ref="(inputClockFrequency)/2."   enum="DivBy2" />
+      <choice value="2" name="Divide by 4"   ref="(inputClockFrequency)/4."   enum="DivBy4" />
+      <choice value="3" name="Divide by 8"   ref="(inputClockFrequency)/8."   enum="DivBy8" />
+      <choice value="4" name="Divide by 16"  ref="(inputClockFrequency)/16."  enum="DivBy16" />
+      <choice value="5" name="Divide by 32"  ref="(inputClockFrequency)/32."  enum="DivBy32" />
+      <choice value="6" name="Divide by 64"  ref="(inputClockFrequency)/64."  enum="DivBy64" />
+      <choice value="7" name="Divide by 128" ref="(inputClockFrequency)/128." enum="DivBy128" />
    </choiceOption>
       
    <intOption key="clockFrequency" 
@@ -85,38 +85,38 @@
       description="Alignment and whether interval or free-running mode"
       toolTip="Left-aligned   (cntin...mod) or\n
                Centre-aligned (cntin...mod...cntin) or\n
-               Free-running   (0...maximum_value) mode   ">
-      <choice value="0,0" name="Left-aligned (count up)"         enum="Left"    />
-      <choice value="0,1" name="Centre-aligned (count up-down)"  enum="Centre"  />
+               Free-running   (0...maximum_value)">
+      <choice value="0,0" name="Left-aligned (count up)"         enum="LeftAligned"    />
+      <choice value="0,1" name="Centre-aligned (count up-down)"  enum="CentreAligned"  />
       <choice value="1,0" name="Free-running (count up)"         enum="FreeRunning"  isDefault="true" />
    </choiceOption>
    
    <intOption key="ftm_cntin" description="Start value for counter"
       enabledBy="ftm_sc_mode!=2"
       toolTip="The timer counts from this value to ftm_mod"
-      typeName="Ticks"
+      typeName="Ticks &amp;"
       valueFormat="%s_ticks"
       value="0" min="0" max="65535" />
            
    <intOption key="ftm_mod" description="End value for counter"
       enabledBy="ftm_sc_mode!=2"
       toolTip="The timer counts from ftm_cntin to this value"
-      typeName="Ticks"
+      typeName="Ticks &amp;"
       valueFormat="%s_ticks"
-      value="0" min="0" max="65535" />
+      value="65535" min="0" max="65535" />
            
    <floatOption key="ftm_modPeriod"
       ref="clockPeriod*((ftm_sc_mode==2)?(65536):((ftm_sc_mode==1)?(2*(ftm_mod-ftm_cntin)):(ftm_mod-ftm_cntin+1)))" 
-      typeName="Seconds"     
+      typeName="Seconds &amp;"     
       valueFormat="%s_s"
       description="Period or minimum interval of timer"
       toolTip="In left-aligned or centre-aligned this is the period of the timer\n
                In free-running mode it is the minimum interval"
-      origin="Clock period * ftm_mod"
       derived="true"
       min="0" units="s"/>
       
    <binaryOption key="ftm_sc_toie"
+      enabledBy="irqHandlingMethod"
       enumStem="FtmOverflowInterrupt"
       description="Overflow Interrupt"
       toolTip="Enables FTM overflow interrupts">
@@ -218,7 +218,7 @@
    <for keys="ch" dim="NumChannels">
       <stringOption name="FTM Channel %(ch)" key="FtmChannel%(ch)" derived="true" value="----- %(ch) -----"/>
       
-      <choiceOption key="ftm_cnsc_mode[%(ch)]" condition="ftm_cnsc_ms_present&amp;&amp;ftm_cnsc_els_present"
+      <choiceOption key="ftm_cnsc_mode[%(ch)]" condition="ftm_combine_decap0_present&amp;&amp;ftm_cnsc_ms_present&amp;&amp;ftm_cnsc_els_present"
          valueFormat="(FTM_COMBINE_DECAPEN0(%s)&lt;&lt;8),(FTM_COMBINE_COMBINE0(%s)&lt;&lt;8),FTM_CnSC_MS(%s),FTM_CnSC_ELS(%s)"
          enumType="uint16_t"
          enumStem="FtmChannelMode"
@@ -234,12 +234,30 @@
           <choice value="0,0,1,3" name="Output Compare Set"                         enum="OutputCompareSet"                       />
           <choice value="0,0,2,2" name="Pwm High-true Pulses"                       enum="PwmHighTruePulses"                      />
           <choice value="0,0,2,1" name="Pwm Low-true Pulses"                        enum="PwmLowTruePulses"                       />
-          <choice value="1,0,0,1" name="Dual-edge Capture One-Shot Rising-edge"     enum="DualEdgeCaptureOneShotRisingEdge"       />
-          <choice value="1,0,1,1" name="Dual-edge Capture Continuous Rising-edge"   enum="DualEdgeCaptureContinuousRisingEdge"    />
-          <choice value="1,0,0,2" name="Dual-edge Capture One-Shot Falling-edge"    enum="DualEdgeCaptureOneShotFallingEdge"      />
-          <choice value="1,0,1,2" name="Dual-edge Capture Continuous Falling-edge"  enum="DualEdgeCaptureContinuousFallingEdge"   />
-          <choice value="0,1,0,2" name="Combined Positive-pulse"                    enum="CombinePositivePulse"                   />
-          <choice value="0,1,0,1" name="Combine Negative-pulse"                     enum="CombineNegativePulse"                   />
+          <choice value="1,0,0,1" name="Dual-edge Capture One-Shot Rising-edge"     enum="DualEdgeCaptureOneShotRisingEdge"       condition="(%(ch)&amp;1)==0" />
+          <choice value="1,0,1,1" name="Dual-edge Capture Continuous Rising-edge"   enum="DualEdgeCaptureContinuousRisingEdge"    condition="(%(ch)&amp;1)==0" />
+          <choice value="1,0,0,2" name="Dual-edge Capture One-Shot Falling-edge"    enum="DualEdgeCaptureOneShotFallingEdge"      condition="(%(ch)&amp;1)==0" />
+          <choice value="1,0,1,2" name="Dual-edge Capture Continuous Falling-edge"  enum="DualEdgeCaptureContinuousFallingEdge"   condition="(%(ch)&amp;1)==0" />
+          <choice value="0,1,0,2" name="Combined Positive-pulse"                    enum="CombinePositivePulse"                   condition="(%(ch)&amp;1)==0" />
+          <choice value="0,1,0,1" name="Combine Negative-pulse"                     enum="CombineNegativePulse"                   condition="(%(ch)&amp;1)==0" />
+      </choiceOption>
+   
+      <choiceOption key="ftm_cnsc_mode[%(ch)]" condition="!ftm_combine_decap0_present&amp;&amp;ftm_cnsc_ms_present&amp;&amp;ftm_cnsc_els_present"
+         valueFormat="FTM_CnSC_MS(%s),FTM_CnSC_ELS(%s)"
+         enumType="uint16_t"
+         enumStem="FtmChannelMode"
+         description="Channel Mode"
+         toolTip="Determines channel operation (PWM/Input capture/Output compare)">
+          <choice value="0,0" name="Disabled"                                   enum="Disabled"                               />                              
+          <choice value="0,1" name="Input Capture Rising-edge"                  enum="InputCaptureRisingEdge"                 />
+          <choice value="0,2" name="Input Capture Falling-edge"                 enum="InputCaptureFallingEdge"                />
+          <choice value="0,3" name="Input Capture Either-edge"                  enum="InputCaptureEitherEdge"                 />
+          <choice value="1,0" name="Output Compare No action"                   enum="OutputCompare"                          />
+          <choice value="1,1" name="Output Compare Toggle"                      enum="OutputCompareToggle"                    />
+          <choice value="1,2" name="Output Compare Clear"                       enum="OutputCompareClear"                     />
+          <choice value="1,3" name="Output Compare Set"                         enum="OutputCompareSet"                       />
+          <choice value="2,2" name="Pwm High-true Pulses"                       enum="PwmHighTruePulses"                      />
+          <choice value="2,1" name="Pwm Low-true Pulses"                        enum="PwmLowTruePulses"                       />
       </choiceOption>
    
       <choiceOption key="ftm_cnsc_action[%(ch)]" condition="ftm_cnsc_chie_present&amp;&amp;ftm_cnsc_dma_present"
@@ -265,20 +283,20 @@
       
       <intOption key="ftm_cnv[%(ch)]"
          valueFormat="%s_ticks" 
-         typeName="Ticks"
+         typeName="Ticks &amp;"
          description="Output Compare Event time in ticks"
-         toolTip="This value is compared against the main FTM counter in output compare modes"
+         toolTip="This value is compared against the main counter in output compare modes"
          value="0" min="0" max="65535" />
       
       <floatOption key="ftm_cnvEventTime[%(ch)]"
          enabledBy="((ftm_cnsc_mode[%(ch)]&gt;=4)&amp;&amp;(ftm_cnsc_mode[%(ch)]&lt;=7))||(ftm_cnsc_mode[%(ch)]&gt;=14)"
          ref="ftm_cnv[%(ch)]*clockPeriod"
          valueFormat="%s_s" 
-         typeName="Seconds"
+         typeName="Seconds &amp;"
          derived="true"
          units="s"
          description="Output Compare Event time in seconds"
-         toolTip="This value is compared against the main FTM counter in output compare modes"
+         toolTip="This value is compared against the main counter in output compare modes"
          value="0" min="0" max="65535" />
       
    </for>
@@ -665,7 +683,7 @@ $(init_description)
       \t   if (init.sc&FtmMode_FreeRunning) {
       \t      // Make free-running
       \t      cntin = 0;
-      \t      mod   = 0;
+      \t      mod   = FTM_MOD_MOD_MASK;
       \t   }
       \t   // Disable timer to change clock (unable to switch directly between clock sources)
       \t   ftm->SC  = 0;
@@ -688,7 +706,7 @@ $(init_description)
 
 <!--  Constructors -->
   
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod" 
       linePadding="xxx"
     ><![CDATA[
@@ -697,6 +715,7 @@ $(init_description)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
+      \t    *
       %paramDescription
       \t    */
       \t   template <typename... Types>
@@ -704,9 +723,9 @@ $(init_description)
       \t
       \t      this->%enumParam0 = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></constructorTemplate>
    
-   <setTemplate namespace="usbdm"
+   <constructorTemplate namespace="usbdm"
       variables="/PCR/nvic_irqLevel" 
       linePadding="xxx"
     ><![CDATA[
@@ -715,6 +734,7 @@ $(init_description)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
+      \t    *
       %paramDescription
       \t    */
       \t   template <typename... Types>
@@ -726,10 +746,10 @@ $(init_description)
       \t      (void)%paramExpression;
       #endif
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></constructorTemplate>
    
    <for keys="r" values="ftm_sc_toie;ftm_sc_cpwms;ftm_sc_mode;ftm_sc_clks">
-      <setTemplate  namespace="usbdm" 
+      <constructorTemplate  namespace="usbdm" 
          variables="%(r)"
          linePadding="xxx" 
       ><![CDATA[
@@ -738,7 +758,8 @@ $(init_description)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
-         %comments
+         \t    *
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
@@ -746,35 +767,35 @@ $(init_description)
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
-      ]]></setTemplate>
+      ]]></constructorTemplate>
    </for>
    
-   <setTemplate namespace="usbdm" 
-      variables="ftm_sc_ps, ftm_cntin, ftm_mod"
+   <constructorTemplate namespace="usbdm" 
+      variables="ftm_sc_ps, ftm_mod, ftm_cntin"
+      params=",mod_ticks,cntin_ticks"
       linePadding="xxx" 
       nonDefaultParams="2"
       ><![CDATA[
          \t   /**
          \t    * Constructor for %description0, %description1 and %description2
          \t    *
-         \t    * @param %enumParam0 %tooltip0
-         \t    * @param %enumParam1_cntin %tooltip1
-         \t    * @param %enumParam2_mod   %tooltip2
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(
-         \t      %enumClass0 %enumParam0,
-         \t      %enumClass1 %enumParam1_cntin,
-         \t      %enumClass2 %enumParam2_mod, Types... rest) : Init(rest...) {
+         %params, Types... rest) : Init(rest...) {
          \t   
-         \t      %registerName0 = (%registerName0&%mask0) | %enumParam0;
-         \t      %registerName1 = %enumParam1_cntin;
-         \t      %registerName2 = %enumParam2_mod;
+         \t      %registerName0    = (%registerName0&%mask0) | %enumParam0;
+         \t      %registerName1   = %enumParam1;
+         \t      %registerName2 = %enumParam2;
          \t   }
          \t\n
-   ]]></setTemplate>
+   ]]></constructorTemplate>
    
-   <setTemplate namespace="usbdm" 
+   <constructorTemplate namespace="usbdm" 
       nonDefaultParams="2"
       variables="ftm_modPeriod"
       linePadding="xxx" 
@@ -784,18 +805,18 @@ $(init_description)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
-         %comments
+         \t    *
+         %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr Init(
-         %params, Types... rest) : Init(rest...) {
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t   
          \t      cntin = 0;
          \t      mod   = 0;
          \t      %registerName = %paramExpression;
          \t   }
          \t\n
-   ]]></setTemplate>
+   ]]></constructorTemplate>
    
    <template namespace="usbdm" ><![CDATA[
       \t};\n\n
@@ -928,14 +949,18 @@ $(channel_init_description)
       \t
       \t   // Enable peripheral clock
       \t   Info::enableClock();
-      \t
-      \t   // Configure timer combin mode
+      \t\n
+   ]]></template>
+   <template discardRepeats="true" key="/FTM/ChannelInitMethod" namespace="all" condition="ftm_combine_combine0_present" ><![CDATA[
+      \t   // Configure timer combine mode
       \t   if ((channelInit.channel&0b1) == 0) {
       \t      // Even channel value controls paired channels n,n+1
       \t      const unsigned offset = 4*channelInit.channel;
       \t      const uint32_t mask = 0xFF<<offset;
       \t      ftm->COMBINE = (ftm->COMBINE & ~mask) | (((channelInit.cnsc>>8)<<offset)&mask);
-      \t   }
+      \t   }\n
+   ]]></template>
+   <template discardRepeats="true" key="/FTM/ChannelInitMethod" namespace="all" ><![CDATA[
       \t   // Configure timer channel
       \t   ftm->CONTROLS[channelInit.channel].CnV  = channelInit.cnv;
       \t   ftm->CONTROLS[channelInit.channel].CnSC = channelInit.cnsc;
@@ -946,7 +971,7 @@ $(channel_init_description)
 
 <!--  Constructors -->
   
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)" 
+   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)" 
       variables="irqHandlingMethod" 
       linePadding="xxx"
     ><![CDATA[
@@ -962,9 +987,9 @@ $(channel_init_description)
       \t
       \t      this->%enumParam0 = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></constructorTemplate>
    
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)" 
+   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)" 
       variables="/PCR/nvic_irqLevel" 
       linePadding="xxx"
     ><![CDATA[
@@ -984,13 +1009,13 @@ $(channel_init_description)
       \t      (void)%paramExpression;
       #endif
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></constructorTemplate>
    
    <for keys="r" values="
       ftm_cnsc_mode;
       ftm_cnsc_action;
       ftm_cnsc_icrst">
-      <setTemplate  namespace="usbdm"
+      <constructorTemplate  namespace="usbdm"
          variables="%(r)"
          linePadding="xxx" 
       ><![CDATA[
@@ -1007,13 +1032,13 @@ $(channel_init_description)
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
-      ]]></setTemplate>
+      ]]></constructorTemplate>
    </for>
    
    <for keys="r" values="
       ftm_channel_number;
       ftm_cnv">
-      <setTemplate  namespace="usbdm"
+      <constructorTemplate  namespace="usbdm"
          variables="%(r)"
          linePadding="xxx" 
       ><![CDATA[
@@ -1030,7 +1055,7 @@ $(channel_init_description)
          \t      %registerName = %paramExpression;
          \t   }
          \t\n
-      ]]></setTemplate>
+      ]]></constructorTemplate>
    </for>   
    <template namespace="usbdm"><![CDATA[
       \t};\n\n
@@ -1204,7 +1229,7 @@ $(quad_init_description)
 
 <!--  Constructors -->
   
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"  condition="ftm_qdctrl_quadmode_present"
+   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"  condition="ftm_qdctrl_quadmode_present"
       variables="irqHandlingMethod" 
       linePadding="xxx"
     ><![CDATA[
@@ -1220,9 +1245,9 @@ $(quad_init_description)
       \t
       \t      this->%enumParam0 = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></constructorTemplate>
    
-   <setTemplate namespace="usbdm"  condition="ftm_qdctrl_quadmode_present"
+   <constructorTemplate namespace="usbdm"  condition="ftm_qdctrl_quadmode_present"
       variables="/PCR/nvic_irqLevel" 
       linePadding="xxx"
     ><![CDATA[
@@ -1242,7 +1267,7 @@ $(quad_init_description)
       \t      (void)%paramExpression;
       #endif
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></constructorTemplate>
    
    <for keys="r" values="
       ftm_sc_toie;
@@ -1250,7 +1275,7 @@ $(quad_init_description)
       ftm_qdctrl_quadmode;
       ftm_qdctrl_phapol;
       ftm_qdctrl_phbpol">
-      <setTemplate  namespace="usbdm"  condition="ftm_qdctrl_quadmode_present"
+      <constructorTemplate  namespace="usbdm"  condition="ftm_qdctrl_quadmode_present"
          variables="%(r)"
          linePadding="xxx" 
       ><![CDATA[
@@ -1267,10 +1292,10 @@ $(quad_init_description)
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
-      ]]></setTemplate>
+      ]]></constructorTemplate>
    </for>
    
-   <setTemplate  namespace="usbdm" 
+   <constructorTemplate  namespace="usbdm" 
       variables="ftm_qdfilter_a"
       linePadding="xxx" 
    ><![CDATA[
@@ -1288,9 +1313,9 @@ $(quad_init_description)
       \t      qdfilter = (qdfilter&~FTM_FILTER_CH0FVAL_MASK) | (%paramExpression&FTM_FILTER_CH0FVAL_MASK);
       \t   }
       \t\n
-   ]]></setTemplate>
+   ]]></constructorTemplate>
    
-   <setTemplate  namespace="usbdm" 
+   <constructorTemplate  namespace="usbdm" 
       variables="ftm_qdfilter_b"
       linePadding="xxx" 
    ><![CDATA[
@@ -1308,7 +1333,7 @@ $(quad_init_description)
       \t      qdfilter = (qdfilter&~FTM_FILTER_CH1FVAL_MASK) | (%paramExpression&FTM_FILTER_CH1FVAL_MASK);
       \t   }
       \t\n
-   ]]></setTemplate>
+   ]]></constructorTemplate>
    
    <template namespace="usbdm"  condition="ftm_qdctrl_quadmode_present"><![CDATA[
       \t};\n\n

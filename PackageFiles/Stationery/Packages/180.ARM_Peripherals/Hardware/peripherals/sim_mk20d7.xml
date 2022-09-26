@@ -49,10 +49,10 @@
       <aliasOption key="/OSC0/oscer_clock" optional="true" />
       <aliasOption key="/MCG/system_mcgirclk_clock[0]" optional="true" />
       
-      <for keys="n: name:              code:            ref"
-         values="0: System core clock: SystemCoreClock: system_core_clock;
-                 1: System core clock: SystemCoreClock: system_core_clock;
-                 2: System bus clock:  SystemBusClock:  system_bus_clock" >
+      <for keys="n : name              : code            : ref"
+         values="0 : System core clock : SystemCoreClock : system_core_clock;
+                 1 : System core clock : SystemCoreClock : system_core_clock;
+                 2 : System bus clock  : SystemBusClock  : system_bus_clock" >
 
          <choiceOption key="system_uart%(n)_fixedclocksource" 
             target="system_uart%(n)_clock"
@@ -68,7 +68,8 @@
             derived="true"
             units="Hz"
             description="UART%(n) Clock frequency"
-            toolTip="Frequency of clock to UART" />
+            toolTip="Frequency of clock to UART"
+            value="0" />
       </for>
       
       <binaryOption key="sim_sopt2_ptd7pad"
@@ -123,7 +124,7 @@
    
    <category name="SOPT4" description="FTM signals">
       
-      <binaryOption key="sim_sopt4_ftm0trg0src" 
+      <binaryOption key="sim_sopt4_ftm0trg0src" condition="sim_sopt4_ftm0trg0src_present"  
          enumStem="SimFtm0Trg0Src"
          description="FTM0 Hardware Trigger 0 Source"
          toolTip="Source of FTM hardware trigger 0" >
@@ -131,7 +132,7 @@
          <choice value="1"  name="FTM1 channel match" enum="Ftm1" />
       </binaryOption>
       
-      <binaryOption key="sim_sopt4_ftm0trg1src" 
+      <binaryOption key="sim_sopt4_ftm0trg1src" condition="sim_sopt4_ftm0trg1src_present" 
          enumStem="SimFtm0Trg1Src"
          description="FTM0 Hardware Trigger 1 Source"
          toolTip="Source of FTM hardware trigger 1" >
@@ -140,7 +141,7 @@
       </binaryOption>
       
       <for keys="p" values="0;1;2">
-         <binaryOption key="sim_sopt4_ftm%(p)clksel" 
+         <binaryOption key="sim_sopt4_ftm%(p)clksel" condition="sim_sopt4_ftm%(p)clksel_present"  
             enumStem="SimFtm%(p)ClkSel"
             description="FTM%(p) External Clock Pin"
             toolTip="External pin used to drive the clock to the FTM module">
@@ -149,7 +150,7 @@
          </binaryOption>
       </for>
    
-      <choiceOption key="sim_sopt4_ftm1ch0src" 
+      <choiceOption key="sim_sopt4_ftm1ch0src" condition="sim_sopt4_ftm1ch0src_present"   
          enumStem="SimFtm1Ch0Src"
          description="FTM 1 channel 0 input capture source"
          toolTip="Source for FTM channel 0 input capture\n
@@ -160,7 +161,7 @@
          <choice value="3" name="USB start of frame pulse" enum="UsbSof"   />
       </choiceOption>
       
-      <choiceOption key="sim_sopt4_ftm2ch0src" 
+      <choiceOption key="sim_sopt4_ftm2ch0src" condition="sim_sopt4_ftm2ch0src_present"   
          enumStem="SimFtm2Ch0Src"
          description="FTM2 channel 0 input capture source"
          toolTip="Source for FTM channel 0 input capture\n
@@ -171,7 +172,7 @@
       </choiceOption>
       
       <for keys="ftmNum" values="0;1;2">
-         <binaryOption key="sim_sopt4_ftm%(ftmNum)flt0" 
+         <binaryOption key="sim_sopt4_ftm%(ftmNum)flt0" condition="sim_sopt4_ftm%(ftmNum)flt0_present"    
             enumStem="SimFtm%(ftmNum)Flt0"
             description="FTM%(ftmNum) Fault 0 Select"
             toolTip="Source of FTM fault input 0" >
@@ -181,7 +182,7 @@
       </for>
       
       <for keys="ftmNum" values="0">
-         <binaryOption key="sim_sopt4_ftm%(ftmNum)flt1" 
+         <binaryOption key="sim_sopt4_ftm%(ftmNum)flt1" condition="sim_sopt4_ftm%(ftmNum)flt1_present"    
             enumStem="SimFtm%(ftmNum)Flt1"
             description="FTM%(ftmNum) Fault 1 Select"
             toolTip="Source of FTM fault input 1" >
@@ -191,7 +192,7 @@
       </for>
       
       <for keys="ftmNum" values="0">
-         <binaryOption key="sim_sopt4_ftm%(ftmNum)flt2" 
+         <binaryOption key="sim_sopt4_ftm%(ftmNum)flt2" condition="sim_sopt4_ftm%(ftmNum)flt2_present"     
             enumStem="SimFtm%(ftmNum)Flt2"
             description="FlexTimer 0 Fault 2 Select"
             toolTip="Source of FTM fault input 2" >
@@ -204,7 +205,9 @@
    <category name="SOPT5" description="UART signals">
       
       <for keys="n" values="0;1">
-         <for keys="name:Name:NAME" values="uart%(n):Uart%(n):UART%(n);lpuart%(n):Lpuart%(n):LPUART%(n)" >
+         <for keys   = "name:Name:NAME"
+              values = "uart%(n)   : Uart%(n)   : UART%(n);
+                        lpuart%(n) : Lpuart%(n) : LPUART%(n)" >
             <choiceOption key="sim_sopt5_%(name)rxsrc" condition="sim_sopt5_%(name)rxsrc_present"
                enumStem="Sim%(Name)RxSrc"
                description="%(NAME) receive data source"
@@ -294,22 +297,22 @@
             description="USB clock divider (SIM_CLKDIV2)" 
             toolTip="Sets the clock divider when using an internal clock\n
                      as the USB clock source">
-            <choice value="1"  name="Multiply by 2 (div=0, frac=1)"  enum="Mult2 " ref="system_peripheral_clock[%(n)];(system_peripheral_clock[%(n)]*2/1)" code="SIM_CLKDIV2_USBDIV(0)|SIM_CLKDIV2_USBFRAC(1)" />
-            <choice value="0"  name="Multiply by 1 (div=0, frac=0)"  enum="Mult1 " ref="system_peripheral_clock[%(n)];(system_peripheral_clock[%(n)]*1/1)" code="SIM_CLKDIV2_USBDIV(0)|SIM_CLKDIV2_USBFRAC(0)" isDefault="true" />
-            <choice value="3"  name="Multiply by 1 (div=1, frac=1)"  enum="Mult1b" ref="system_peripheral_clock[%(n)];(system_peripheral_clock[%(n)]*2/2)" code="SIM_CLKDIV2_USBDIV(1)|SIM_CLKDIV2_USBFRAC(1)" />
-            <choice value="5"  name="Divide by 1.5 (div=2, frac=1)"  enum="Div1_5" ref="system_peripheral_clock[%(n)];(system_peripheral_clock[%(n)]*2/3)" code="SIM_CLKDIV2_USBDIV(2)|SIM_CLKDIV2_USBFRAC(1)" />
-            <choice value="2"  name="Divide by 2 (div=1, frac=0)"    enum="Div2  " ref="system_peripheral_clock[%(n)];(system_peripheral_clock[%(n)]*1/2)" code="SIM_CLKDIV2_USBDIV(1)|SIM_CLKDIV2_USBFRAC(0)" />
-            <choice value="7"  name="Divide by 2 (div=3, frac=1)"    enum="Div2b " ref="system_peripheral_clock[%(n)];(system_peripheral_clock[%(n)]*2/4)" code="SIM_CLKDIV2_USBDIV(2)|SIM_CLKDIV2_USBFRAC(1)" />
-            <choice value="9"  name="Divide by 2.5 (div=4, frac=1)"  enum="Div2_5" ref="system_peripheral_clock[%(n)];(system_peripheral_clock[%(n)]*2/5)" code="SIM_CLKDIV2_USBDIV(4)|SIM_CLKDIV2_USBFRAC(1)" />
-            <choice value="4"  name="Divide by 3 (div=2, frac=0)"    enum="Div3  " ref="system_peripheral_clock[%(n)];(system_peripheral_clock[%(n)]*1/3)" code="SIM_CLKDIV2_USBDIV(5)|SIM_CLKDIV2_USBFRAC(0)" />
-            <choice value="11" name="Divide by 3 (div=5, frac=1)"    enum="Div3b " ref="system_peripheral_clock[%(n)];(system_peripheral_clock[%(n)]*2/6)" code="SIM_CLKDIV2_USBDIV(5)|SIM_CLKDIV2_USBFRAC(1)" />
-            <choice value="13" name="Divide by 3.5 (div=6, frac=1)"  enum="Div3_5" ref="system_peripheral_clock[%(n)];(system_peripheral_clock[%(n)]*2/7)" code="SIM_CLKDIV2_USBDIV(6)|SIM_CLKDIV2_USBFRAC(1)" />
-            <choice value="6"  name="Divide by 4 (div=3, frac=0)"    enum="Div4  " ref="system_peripheral_clock[%(n)];(system_peripheral_clock[%(n)]*1/4)" code="SIM_CLKDIV2_USBDIV(3)|SIM_CLKDIV2_USBFRAC(0)" />
-            <choice value="15" name="Divide by 4 (div=7, frac=1)"    enum="Div4b " ref="system_peripheral_clock[%(n)];(system_peripheral_clock[%(n)]*2/8)" code="SIM_CLKDIV2_USBDIV(7)|SIM_CLKDIV2_USBFRAC(1)" />
-            <choice value="8"  name="Divide by 5 (div=4, frac=0)"    enum="Div5  " ref="system_peripheral_clock[%(n)];(system_peripheral_clock[%(n)]*1/5)" code="SIM_CLKDIV2_USBDIV(4)|SIM_CLKDIV2_USBFRAC(0)" />
-            <choice value="10" name="Divide by 6 (div=5, frac=0)"    enum="Div6  " ref="system_peripheral_clock[%(n)];(system_peripheral_clock[%(n)]*1/6)" code="SIM_CLKDIV2_USBDIV(5)|SIM_CLKDIV2_USBFRAC(0)" />
-            <choice value="12" name="Divide by 7 (div=6, frac=0)"    enum="Div7  " ref="system_peripheral_clock[%(n)];(system_peripheral_clock[%(n)]*1/7)" code="SIM_CLKDIV2_USBDIV(6)|SIM_CLKDIV2_USBFRAC(0)" />
-            <choice value="14" name="Divide by 8 (div=7, frac=0)"    enum="Div8  " ref="system_peripheral_clock[%(n)];(system_peripheral_clock[%(n)]*1/8)" code="SIM_CLKDIV2_USBDIV(7)|SIM_CLKDIV2_USBFRAC(0)" />
+            <choice value="1"  name="Multiply by 2 (div=0, frac=1)"  enum="Mult2 " ref="(system_peripheral_clock[%(n)]*2/1)" code="SIM_CLKDIV2_USBDIV(0)|SIM_CLKDIV2_USBFRAC(1)" />
+            <choice value="0"  name="Multiply by 1 (div=0, frac=0)"  enum="Mult1 " ref="(system_peripheral_clock[%(n)]*1/1)" code="SIM_CLKDIV2_USBDIV(0)|SIM_CLKDIV2_USBFRAC(0)" isDefault="true" />
+            <choice value="3"  name="Multiply by 1 (div=1, frac=1)"  enum="Mult1b" ref="(system_peripheral_clock[%(n)]*2/2)" code="SIM_CLKDIV2_USBDIV(1)|SIM_CLKDIV2_USBFRAC(1)" />
+            <choice value="5"  name="Divide by 1.5 (div=2, frac=1)"  enum="Div1_5" ref="(system_peripheral_clock[%(n)]*2/3)" code="SIM_CLKDIV2_USBDIV(2)|SIM_CLKDIV2_USBFRAC(1)" />
+            <choice value="2"  name="Divide by 2 (div=1, frac=0)"    enum="Div2  " ref="(system_peripheral_clock[%(n)]*1/2)" code="SIM_CLKDIV2_USBDIV(1)|SIM_CLKDIV2_USBFRAC(0)" />
+            <choice value="7"  name="Divide by 2 (div=3, frac=1)"    enum="Div2b " ref="(system_peripheral_clock[%(n)]*2/4)" code="SIM_CLKDIV2_USBDIV(2)|SIM_CLKDIV2_USBFRAC(1)" />
+            <choice value="9"  name="Divide by 2.5 (div=4, frac=1)"  enum="Div2_5" ref="(system_peripheral_clock[%(n)]*2/5)" code="SIM_CLKDIV2_USBDIV(4)|SIM_CLKDIV2_USBFRAC(1)" />
+            <choice value="4"  name="Divide by 3 (div=2, frac=0)"    enum="Div3  " ref="(system_peripheral_clock[%(n)]*1/3)" code="SIM_CLKDIV2_USBDIV(5)|SIM_CLKDIV2_USBFRAC(0)" />
+            <choice value="11" name="Divide by 3 (div=5, frac=1)"    enum="Div3b " ref="(system_peripheral_clock[%(n)]*2/6)" code="SIM_CLKDIV2_USBDIV(5)|SIM_CLKDIV2_USBFRAC(1)" />
+            <choice value="13" name="Divide by 3.5 (div=6, frac=1)"  enum="Div3_5" ref="(system_peripheral_clock[%(n)]*2/7)" code="SIM_CLKDIV2_USBDIV(6)|SIM_CLKDIV2_USBFRAC(1)" />
+            <choice value="6"  name="Divide by 4 (div=3, frac=0)"    enum="Div4  " ref="(system_peripheral_clock[%(n)]*1/4)" code="SIM_CLKDIV2_USBDIV(3)|SIM_CLKDIV2_USBFRAC(0)" />
+            <choice value="15" name="Divide by 4 (div=7, frac=1)"    enum="Div4b " ref="(system_peripheral_clock[%(n)]*2/8)" code="SIM_CLKDIV2_USBDIV(7)|SIM_CLKDIV2_USBFRAC(1)" />
+            <choice value="8"  name="Divide by 5 (div=4, frac=0)"    enum="Div5  " ref="(system_peripheral_clock[%(n)]*1/5)" code="SIM_CLKDIV2_USBDIV(4)|SIM_CLKDIV2_USBFRAC(0)" />
+            <choice value="10" name="Divide by 6 (div=5, frac=0)"    enum="Div6  " ref="(system_peripheral_clock[%(n)]*1/6)" code="SIM_CLKDIV2_USBDIV(5)|SIM_CLKDIV2_USBFRAC(0)" />
+            <choice value="12" name="Divide by 7 (div=6, frac=0)"    enum="Div7  " ref="(system_peripheral_clock[%(n)]*1/7)" code="SIM_CLKDIV2_USBDIV(6)|SIM_CLKDIV2_USBFRAC(0)" />
+            <choice value="14" name="Divide by 8 (div=7, frac=0)"    enum="Div8  " ref="(system_peripheral_clock[%(n)]*1/8)" code="SIM_CLKDIV2_USBDIV(7)|SIM_CLKDIV2_USBFRAC(0)" />
          </choiceOption>
    
          <intOption key="clkdiv2_clock[%(n)]"  condition="sim_clkdiv2_usbdiv_present"

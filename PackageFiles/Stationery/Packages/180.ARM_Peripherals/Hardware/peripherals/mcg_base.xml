@@ -882,7 +882,7 @@
    </template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="/SIM/sim_sopt2_pllfllsel"     
+      condition="(/SIM/sim_sopt2_pllfllsel)||(/SIM/sim_sopt2_tpmsrc)"
    ><![CDATA[
       \t   /// SIM SOPT2 - Clock selectors for various peripherals
       \t   const uint32_t sopt2;\n\n ]]>

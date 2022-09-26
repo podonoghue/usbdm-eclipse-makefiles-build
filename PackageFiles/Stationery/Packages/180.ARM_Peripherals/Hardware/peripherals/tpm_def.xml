@@ -6,6 +6,8 @@
 
    <xi:include href="_default_instance.xml"/>
 
+   <xi:include href="_irqOption.xml"/>
+   
    <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false"  optional="true" /> 
    <aliasOption key="/SIM/sim_sopt2_tpmsrc"    constant="false"  optional="true" />
    <aliasOption key="/SIM/system_tpm_clock"    optional="true"                   />
@@ -47,7 +49,6 @@
    <intOption key="inputClockFrequency" 
       constant="true"
       description="Frequency of input clock to timer"
-      toolTip="Determined from timer clock source (tpm_sc_cmod)"
       derived="true"
       units="Hz"/>
       
@@ -56,14 +57,14 @@
       enumStem="TpmPrescale"
       target="clockFrequency"
       toolTip="Selects the prescaler for the module">
-      <choice value="0" name="Divide by 1"   ref="inputClockFrequency"       enum="DivBy1"  isDefault="true" />
-      <choice value="1" name="Divide by 2"   ref="(inputClockFrequency)/2"   enum="DivBy2" />
-      <choice value="2" name="Divide by 4"   ref="(inputClockFrequency)/4"   enum="DivBy4" />
-      <choice value="3" name="Divide by 8"   ref="(inputClockFrequency)/8"   enum="DivBy8" />
-      <choice value="4" name="Divide by 16"  ref="(inputClockFrequency)/16"  enum="DivBy16" />
-      <choice value="5" name="Divide by 32"  ref="(inputClockFrequency)/32"  enum="DivBy32" />
-      <choice value="6" name="Divide by 64"  ref="(inputClockFrequency)/64"  enum="DivBy64" />
-      <choice value="7" name="Divide by 128" ref="(inputClockFrequency)/128" enum="DivBy128" />
+      <choice value="0" name="Divide by 1"   ref="inputClockFrequency"      enum="DivBy1"  isDefault="true" />
+      <choice value="1" name="Divide by 2"   ref="(inputClockFrequency)/2."   enum="DivBy2" />
+      <choice value="2" name="Divide by 4"   ref="(inputClockFrequency)/4."   enum="DivBy4" />
+      <choice value="3" name="Divide by 8"   ref="(inputClockFrequency)/8."   enum="DivBy8" />
+      <choice value="4" name="Divide by 16"  ref="(inputClockFrequency)/16."  enum="DivBy16" />
+      <choice value="5" name="Divide by 32"  ref="(inputClockFrequency)/32."  enum="DivBy32" />
+      <choice value="6" name="Divide by 64"  ref="(inputClockFrequency)/64."  enum="DivBy64" />
+      <choice value="7" name="Divide by 128" ref="(inputClockFrequency)/128." enum="DivBy128" />
    </choiceOption>
       
    <intOption key="clockFrequency" 
@@ -81,56 +82,184 @@
       derived="true"
       units="s"/>
       
+   <choiceOption key="tpm_sc_mode"
+      valueFormat="TPM_SC_TOF(%s),TPM_SC_CPWMS(%s)"
+      enumStem="TpmMode"
+      description="Alignment and whether interval or free-running mode"
+      toolTip="Left-aligned   (0...mod) or\n
+               Centre-aligned (0...mod...0) or\n
+               Free-running   (0...maximum_value)">
+      <choice value="0,0" name="Left-aligned (count up)"         enum="LeftAligned"    />
+      <choice value="0,1" name="Centre-aligned (count up-down)"  enum="CentreAligned"  />
+      <choice value="1,0" name="Free-running (count up)"         enum="FreeRunning"  isDefault="true" />
+   </choiceOption>
+   
    <intOption key="tpm_mod" description="End value for counter"
+      enabledBy="tpm_sc_mode!=2"
       toolTip="The timer counts from 0 to this value"
-      typeName="Ticks"
-      value="10000" min="0" max="65535" />
+      typeName="Ticks &amp;"
+      valueFormat="%s_ticks"
+      value="65535" min="0" max="65535" />
            
-   <floatOption key="tpm_mod_period" 
-      description="Period of timer"
-      toolTip="Period of the timer"
-      origin="Clock period * tpm_mod"
+   <floatOption key="tpm_modPeriod" 
+      ref="clockPeriod*((tpm_sc_mode==2)?(65536):((tpm_sc_mode==1)?(2*(tpm_mod)):(tpm_mod+1)))" 
+      typeName="Seconds &amp;"     
+      valueFormat="%s_s"
+      description="Period or minimum interval of timer"
+      toolTip="In left-aligned or centre-aligned this is the period of the timer\n
+               In free-running mode it is the minimum interval"
       derived="true"
       min="0" units="s"/>
       
-   <binaryOption key="tpm_sc_cpwms" 
-      enumStem="TpmAlignment"
-      description="PWM Alignment"
-      toolTip="Alignment of PWM outputs relative to counter roll-over\n
-         This configures the counter to operate in Up or Up-Down Counting modes">
-      <choice value="0" name="Left-aligned (count up)"        enum="Left"    />
-      <choice value="1" name="Centre-aligned (count up-down)" enum="Centre"  />
-   </binaryOption>
-   
    <binaryOption key="tpm_sc_toie" 
+      enabledBy="irqHandlingMethod"
       enumStem="TpmOverflowInterrupt"
       description="Overflow Interrupt"
       toolTip="Enables TPM overflow interrupts">
       <choice value="0" name="Interrupt Disabled" enum="Disabled" />
       <choice value="1" name="Interrupt Enabled"  enum="Enabled"  />
    </binaryOption>
+
+   <choiceOption key="tpm_channel_number"
+      hidden="true"
+      derived="true"
+      enumType="uint8_t"
+      valueFormat="%s"
+      enumStem="TpmChannelNum"
+      description="Channel Number"
+      toolTip="Select a channel">
+      <choice value="0"             name="Channel 0"      enum="0" />
+      <choice value="1"             name="Channel 1"      enum="1" />
+      <choice value="2"             name="Channel 2"      enum="2" />
+      <choice value="3"             name="Channel 3"      enum="3" />
+      <choice value="4"             name="Channel 4"      enum="4" />
+      <choice value="5"             name="Channel 5"      enum="5" />
+      <choice value="6"             name="Channel 6"      enum="6" />
+      <choice value="7"             name="Channel 7"      enum="7" />
+      <choice value="(uint8_t(-1))" name="No Channel"     enum="None" />      
+   </choiceOption>
    
-   <template><![CDATA[
-      \t/** Minimum resolution for PWM interval */
-      \tstatic constexpr uint32_t minimumResolution=$(?check_minimums:$(minimumResolution):0);
+   <for keys="ch" dim="NumChannels">
+      <stringOption name="TPM Channel %(ch)" key="TpmChannel%(ch)" derived="true" value="----- %(ch) -----"/>
       
-      \t/** Minimum usable interval in ticks */      
-      \tstatic constexpr uint32_t minimumInterval=$(?check_minimums:$(minimumInterval):0);
+      <choiceOption key="tpm_cnsc_mode[%(ch)]" condition="tpm_combine_decap0_present&amp;&amp;tpm_cnsc_ms_present&amp;&amp;tpm_cnsc_els_present"
+         valueFormat="(TPM_COMBINE_DECAPEN0(%s)&lt;&lt;8),(TPM_COMBINE_COMBINE0(%s)&lt;&lt;8),TPM_CnSC_MS(%s),TPM_CnSC_ELS(%s)"
+         enumType="uint16_t"
+         enumStem="TpmChannelMode"
+         description="Channel Mode"
+         toolTip="Determines channel operation (PWM/Input capture/Output compare)">
+          <choice value="0,0,0,0" name="Disabled"                                   enum="Disabled"                               />                              
+          <choice value="0,0,0,1" name="Input Capture Rising-edge"                  enum="InputCaptureRisingEdge"                 />
+          <choice value="0,0,0,2" name="Input Capture Falling-edge"                 enum="InputCaptureFallingEdge"                />
+          <choice value="0,0,0,3" name="Input Capture Either-edge"                  enum="InputCaptureEitherEdge"                 />
+          <choice value="0,0,1,0" name="Output Compare No action"                   enum="OutputCompare"                          />
+          <choice value="0,0,1,1" name="Output Compare Toggle"                      enum="OutputCompareToggle"                    />
+          <choice value="0,0,1,2" name="Output Compare Clear"                       enum="OutputCompareClear"                     />
+          <choice value="0,0,1,3" name="Output Compare Set"                         enum="OutputCompareSet"                       />
+          <choice value="0,0,2,2" name="Pwm High-true Pulses"                       enum="PwmHighTruePulses"                      />
+          <choice value="0,0,2,1" name="Pwm Low-true Pulses"                        enum="PwmLowTruePulses"                       />
+          <choice value="1,0,0,1" name="Dual-edge Capture One-Shot Rising-edge"     enum="DualEdgeCaptureOneShotRisingEdge"       condition="(%(ch)&amp;1)==0" />
+          <choice value="1,0,1,1" name="Dual-edge Capture Continuous Rising-edge"   enum="DualEdgeCaptureContinuousRisingEdge"    condition="(%(ch)&amp;1)==0" />
+          <choice value="1,0,0,2" name="Dual-edge Capture One-Shot Falling-edge"    enum="DualEdgeCaptureOneShotFallingEdge"      condition="(%(ch)&amp;1)==0" />
+          <choice value="1,0,1,2" name="Dual-edge Capture Continuous Falling-edge"  enum="DualEdgeCaptureContinuousFallingEdge"   condition="(%(ch)&amp;1)==0" />
+          <choice value="0,1,0,2" name="Combined Positive-pulse"                    enum="CombinePositivePulse"                   condition="(%(ch)&amp;1)==0" />
+          <choice value="0,1,0,1" name="Combine Negative-pulse"                     enum="CombineNegativePulse"                   condition="(%(ch)&amp;1)==0" />
+      </choiceOption>
+   
+      <choiceOption key="tpm_cnsc_mode[%(ch)]" condition="!tpm_combine_decap0_present&amp;&amp;tpm_cnsc_ms_present&amp;&amp;tpm_cnsc_els_present"
+         valueFormat="TPM_CnSC_MS(%s),TPM_CnSC_ELS(%s)"
+         enumType="uint16_t"
+         enumStem="TpmChannelMode"
+         description="Channel Mode"
+         toolTip="Determines channel operation (PWM/Input capture/Output compare)">
+          <choice value="0,0" name="Disabled"                                   enum="Disabled"                               />                              
+          <choice value="0,1" name="Input Capture Rising-edge"                  enum="InputCaptureRisingEdge"                 />
+          <choice value="0,2" name="Input Capture Falling-edge"                 enum="InputCaptureFallingEdge"                />
+          <choice value="0,3" name="Input Capture Either-edge"                  enum="InputCaptureEitherEdge"                 />
+          <choice value="1,0" name="Output Compare No action"                   enum="OutputCompare"                          />
+          <choice value="1,1" name="Output Compare Toggle"                      enum="OutputCompareToggle"                    />
+          <choice value="1,2" name="Output Compare Clear"                       enum="OutputCompareClear"                     />
+          <choice value="1,3" name="Output Compare Set"                         enum="OutputCompareSet"                       />
+          <choice value="2,2" name="Pwm High-true Pulses"                       enum="PwmHighTruePulses"                      />
+          <choice value="2,1" name="Pwm Low-true Pulses"                        enum="PwmLowTruePulses"                       />
+      </choiceOption>
+   
+      <choiceOption key="tpm_cnsc_action[%(ch)]" condition="tpm_cnsc_chie_present&amp;&amp;tpm_cnsc_dma_present"
+         valueFormat="TPM_CnSC_CHIE(%s),TPM_CnSC_DMA(%s)"
+         enumType="uint8_t"
+         enumStem="TpmChannelAction"
+         description="Action on Channel Event"
+         toolTip="Enable Timer interrupt or DMA">
+          <choice value="0,0" name="No action"          enum="None"  />                              
+          <choice value="1,0" name="Interrupt Request"  enum="Irq"   />                              
+          <choice value="1,1" name="DMA request"        enum="Dma"   />                              
+      </choiceOption>
+   
+      <choiceOption key="tpm_cnsc_action[%(ch)]" condition="tpm_cnsc_chie_present&amp;&amp;!tpm_cnsc_dma_present"
+         valueFormat="TPM_CnSC_CHIE(%s)"
+         enumType="uint8_t"
+         enumStem="TpmChannelAction"
+         description="Action on Channel Event"
+         toolTip="Enable Timer interrupt or DMA">
+          <choice value="0" name="No action"          enum="None"  />                              
+          <choice value="1" name="Interrupt Request"  enum="Irq"   />                              
+      </choiceOption>
+   
+      <binaryOption key="tpm_cnsc_icrst[%(ch)]" condition="tpm_cnsc_icrst_present"
+         valueFormat="TPM_CnSC_ICRST(%s)"
+         enumStem="TpmChannelReset"
+         enumType="uint8_t"
+         description="Reset counter on channel IC event"
+         toolTip="Enables the channel IC event to reset the shared counter">
+         <choice value="0" name="Disabled" enum="Disabled" />
+         <choice value="1" name="Enabled"  enum="Enabled"  />
+      </binaryOption>
       
-      \t//! Timer external input frequency
+      <intOption key="tpm_cnv[%(ch)]"
+         valueFormat="%s_ticks" 
+         typeName="Ticks &amp;"
+         description="Output Compare Event time in ticks"
+         toolTip="This value is compared against the main counter in output compare modes"
+         value="0" min="0" max="65535" />
+      
+      <floatOption key="tpm_cnvEventTime[%(ch)]"
+         enabledBy="((tpm_cnsc_mode[%(ch)]&gt;=4)&amp;&amp;(tpm_cnsc_mode[%(ch)]&lt;=7))||(tpm_cnsc_mode[%(ch)]&gt;=14)"
+         ref="tpm_cnv[%(ch)]*clockPeriod"
+         valueFormat="%s_s" 
+         typeName="Seconds &amp;"
+         derived="true"
+         units="s"
+         description="Output Compare Event time in seconds"
+         toolTip="This value is compared against the main counter in output compare modes"
+         value="0" min="0" max="65535" />
+      
+   </for>
+      
+   <initialValueTemplate variables="minimumResolution"     
+   ><![CDATA[
+      \t/// %description
+      \tstatic constexpr uint32_t minimumResolution  = $(?check_minimums:$(minimumResolution):0);\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate variables="minimumInterval"     
+   ><![CDATA[
+      \t/// %description
+      \tstatic constexpr uint32_t minimumInterval  = $(?check_minimums:$(minimumInterval):0);\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate variables="tpmExternalClock"     
+   ><![CDATA[
+      \t/// %description
       \tstatic constexpr uint32_t tpmExternalClock =  $(tpmExternalClock);
-      
-      \t//! Default Timer Modulo
-      \tstatic constexpr uint32_t modulo =TPM_MOD_MOD($(tpm_mod));
+   ]]></initialValueTemplate>
 
-      \t//! Default value for SC register
-      \tstatic constexpr uint32_t sc  = 
-      \t    TPM_SC_CPWMS($(tpm_sc_cpwms))|  // Centre-Aligned PWM Select
-      \t    TPM_SC_CMOD($(tpm_sc_cmod)) |  // Clock Mode Selection
-      \t    TPM_SC_TOIE($(tpm_sc_toie))|   // Timer Overflow Interrupt Enable
-      \t    TPM_SC_PS($(tpm_sc_ps));     // Prescale Factor Selection \n\n
-   ]]></template>
 
+   <category name="Advanced" description="Advanced options">
+      <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)clksel" optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)ch0src" optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt9_tpm$(_instance)clksel" optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt9_tpm$(_instance)ch0src" optional="true" constant="false" />
+   </category>
 
 <!-- ========== Methods =============================== -->
    <for  keys  =" k                    : static    : const" 
@@ -177,9 +306,9 @@
       ]]></setTemplate>
             
       <for keys="  f           :  n" 
-         values=" tpm_sc_cmod : setClockSource;
-                  tpm_sc_ps   : setPrescaler;
-                  tpm_sc_cpwms : setAlignment">
+         values=" tpm_sc_cmod  : setClockSource;
+                  tpm_sc_ps    : setPrescaler;
+                  tpm_sc_mode  : setMode">
          <setTemplate key="/TPM/%(k)" namespace="all"
             discardRepeats="true"
             variables="%(f)"
@@ -256,21 +385,24 @@
       \t/**
       \t * Get %description
       \t *
+      %paramDescription
+      \t *
       \t * @return Clock frequency in Hz
       \t */
-      \tstatic uint32_t getInputClockFrequency() {
+      \tstatic uint32_t getInputClockFrequency(%params) {
       \t   
-      \t   switch(%defaultMaskingExpression) {
+      \t   switch(%paramExpression) {
       \t      default: return 0;
       %body
       \t   }
       \t}\n\n
    ]]></clockCodeTemplate>
 
-<!-- ========== TPM Init class =============================== -->
-   <template><![CDATA[
+<!--  ========== TPM Init class =============================== -->
+
+   <template key="init_description" namespace="all" ><![CDATA[
       \t/**
-      \t * Class used to do initialisation of an TPM
+      \t * Class used to do initialisation of $(_class)
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
@@ -278,17 +410,47 @@
       \t *
       \t * Example:
       \t * @code
-      \t * static const Ftm::Init tpmInit {
-      \t *    FtmAlignment_Left,
-      \t *    FtmClockSource_SystemClock,
-      \t *    FtmPrescale_DivBy16,
-      \t *    FtmOverflowInterrupt_Disabled,
+      \t * static const Tpm$(_instance)::Init tpmInit {
+      \t *
+      \t *    // Omitted parameters are taken to be zero unless a base value is given
+      \t *    TpmMode_Freerunning,           // Alignment and whether interval or free-running mode
+      \t *    TpmOverflowInterrupt_Disabled, // Overflow Interrupt
+      \t *    NvicPriority_Normal,           // IRQ level for this peripheral
+      \t *    TpmClockSource_SystemClock,    // Clock Source
+      \t *
+      \t *    // Either 
+      \t *    TpmPrescale_DivBy16,           // Clock prescaler
+      \t *    10_ticks, 3000_ticks,          // Counter start (cntin) and end (mod) values
+      \t *    // OR
+      \t *    100_ms,                        // Timer period or minimum interval in seconds
+      \t *
+      \t *    // Optional base value to start with (must be last parameter)
+      \t *    $(_class)::DefaultValue
       \t * };
       \t *
       \t * // Initialise TPM from values specified above
-      \t * tpmInit.configure()
+      \t * Tpm$(_instance)::configure(tpmInit)
       \t * @endcode
       \t */
+   ]]></template>
+
+   <template namespace="usbdm" ><![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:\n\n
+   ]]></template>
+
+   <setTemplate namespace="usbdm"
+       variables="irqHandlingMethod">
+   <![CDATA[
+      \t/**
+      \t * Type definition for $(_class) %description call back.
+      \t */
+      \ttypedef void (*%enumClass)();\n\n
+   ]]></setTemplate>
+
+   <template namespace="usbdm"><![CDATA[
+$(init_description)
       \tclass Init {
       \t
       \tpublic:
@@ -304,159 +466,491 @@
       \t\n
    ]]></template>
    
-   <initialValueTemplate 
-      variables="tpm_sc_toie,tpm_sc_cpwms,tpm_sc_cmod,tpm_sc_ps"
+<!--  Member variables -->
+  
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod" 
+      variables="irqHandlingMethod" 
+    ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></setTemplate>
+   
+   <initialValueTemplate namespace="usbdm"  
+      variables="tpm_sc_toie,tpm_sc_cpwms,tpm_sc_cmod,tpm_sc_ps,tpm_sc_mode"
    ><![CDATA[
       \t   /// Status And Control Register
-      \t   uint32_t %registerName = 0;\n\n
+      \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
-   <initialValueTemplate 
+   
+   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod" 
+      variables="/PCR/nvic_irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"  
+      variables="tpm_cntin"
+   ><![CDATA[
+      \t   /// %description
+      \t   uint16_t %registerName = 0_ticks;\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate namespace="usbdm"  
       variables="tpm_mod"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = 0_ticks;\n\n
+      \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
    
-   <setTemplate variables="tpm_sc_cmod" ><![CDATA[
-      \t   /**
-      \t    * Configure TPM from values specified in constructor.
-      \t    */
-      \t   void configure() const {
+   <initialValueTemplate namespace="usbdm"  
+      variables= "tpm_modPeriod"
+    ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = 0_s;\n\n
+   ]]></initialValueTemplate >
+
+<!--  Configure method -->
+  
+   <setTemplate variables="tpm_sc_cmod" discardRepeats="true" key="/TPM/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure TPM from values specified in init
       \t
-      \t      // Disable timer to change clock (unable to switch directly between clock sources)
-      \t      %register=0;
-      \t            
-      \t      // Make sure write has completed (disabled)
-      \t      (void)(%register);\n
-   ]]></setTemplate>
-   <setTemplate variables="tpm_mod" ><![CDATA[
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic ErrorCode configure(const typename Info::Init &init) {
       \t
-      \t      // %description
-      \t      %register = %registerName;\n
-   ]]></setTemplate>
-   <setTemplate variables="tpm_sc_cmod" ><![CDATA[
+      \t   // Enable peripheral clock and map pins
+      \t   enable();
+      \t
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-back if feature enabled and non-null
+      \t      if (init.callbackFunction != nullptr) {
+      \t         setCallback(init.callbackFunction);
+      \t      }
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
+      \t   uint8_t  sc    = init.sc;
+      \t   uint16_t mod   = init.mod;
+      \t
+      \t   if (init.modperiod != 0) {
+      \t
+      \t      // Calculate sc.ps, mod (assumes cntin=0)
+      \t      ErrorCode rc = calculateTimingParameters(init.modperiod, sc, mod);
+      \t      if (rc != E_NO_ERROR) {
+      \t         return rc;
+      \t      }
+      \t   }
+      \t   if (init.sc&TpmMode_FreeRunning) {
+      \t      // Make free-running
+      \t      mod   = TPM_MOD_MOD_MASK;
+      \t   }
+      \t   // Disable timer to change clock (unable to switch directly between clock sources)
+      \t   tpm->SC  = 0;
       \t   
-      \t      // Write new value
-      \t      %register = %registerName;\n
+      \t   // End value for counter
+      \t   tpm->MOD = mod;
+      \t   
+      \t   // Restart counter
+      \t   tpm->CNT = 0;
+      \t
+      \t   // Configure timer
+      \t   tpm->SC  = sc;
+      \t
+      \t   return E_NO_ERROR;
+      \t}\n\n
    ]]></setTemplate>
-   <template><![CDATA[
+
+<!--  Constructors -->
+  
+   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="irqHandlingMethod" 
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%enumParam0 = %paramExpression;
       \t   }\n\n
-   ]]></template>
+   ]]></constructorTemplate>
    
-   <for keys="r" values="tpm_sc_toie;tpm_sc_cpwms;tpm_sc_cmod;tpm_sc_ps">
-      <setTemplate variables="%(r)"
+   <constructorTemplate namespace="usbdm"
+      variables="/PCR/nvic_irqLevel" 
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      #if $(irqHandlingMethod)
+      \t      %registerName = %paramExpression;
+      #else
+      \t      (void)%paramExpression;
+      #endif
+      \t   }\n\n
+   ]]></constructorTemplate>
+   
+   <for keys="r" values="tpm_sc_toie;tpm_sc_cpwms;tpm_sc_mode;tpm_sc_cmod">
+      <constructorTemplate  namespace="usbdm" 
+         variables="%(r)"
          linePadding="xxx" 
       ><![CDATA[
          \t   /**
          \t    * Constructor for %description
          \t    *
          \t    * @tparam   Types
-         %comments
+         \t    * @param    rest
+         \t    *
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t   
-         \t      %registerName |= %paramExpression;
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
-      ]]></setTemplate>
+      ]]></constructorTemplate>
    </for>
    
-   <setTemplate variables="tpm_mod"
+   <constructorTemplate namespace="usbdm" 
+      variables="tpm_sc_ps, tpm_mod"
+      linePadding="xxx" 
+      nonDefaultParams="2"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description0 and %description1
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(
+         %params, Types... rest) : Init(rest...) {
+         \t   
+         \t      %registerName0 = (%registerName0&%mask0) | %enumParam0;
+         \t      %registerName1 = %enumParam1;
+         \t   }
+         \t\n
+   ]]></constructorTemplate>
+   
+   <constructorTemplate namespace="usbdm" 
+      nonDefaultParams="2"
+      variables="tpm_modPeriod"
       linePadding="xxx" 
       ><![CDATA[
          \t   /**
          \t    * Constructor for %description
          \t    *
          \t    * @tparam   Types
-         %comments
+         \t    * @param    rest
+         \t    *
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t   
+         \t      mod   = 0;
          \t      %registerName = %paramExpression;
          \t   }
          \t\n
-   ]]></setTemplate>
+   ]]></constructorTemplate>
    
-   <template ><![CDATA[
+   <template namespace="usbdm" ><![CDATA[
       \t};\n\n
    ]]></template>
 
+<!--  Default Initialisation value -->
+  
+   <initialValueTemplate
+      separator=","
+      terminator=","     
+      variables="
+         tpm_sc_mode,
+         tpm_sc_toie,
+         irqLevel,
+         tpm_sc_cmod,     
+         tpm_sc_ps,
+         tpm_cntin,     
+         tpm_mod"     
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * $(_class) interrupt call back
+      \t */
+      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \t
+      \t/**
+      \t * Default initialisation value for Tpm$(_instance)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
 
-   <binaryOption key="tpm_combine_comswap0" condition="tpm_combine_comswap0_present"
-      description="Combine Channel 0 and 1 Swap"
-      toolTip="When set in combine mode,\n
-         the even channel is used for the input capture and 1st compare,\n
-         the odd channel is used for the 2nd compare" >
-      <choice value="0" name="Even channel is used for input capture and 1st compare" isDefault="true" />
-      <choice value="1" name="Odd channel is used for input capture and 1st compare" />
-   </binaryOption>
-   
-   <binaryOption key="tpm_combine_combine0" condition="tpm_combine_combine0_present"
-      description="Combine Channels 0 and 1"
-      toolTip="Enables the combine feature for channels 0 and 1.\n
-         In input capture mode, the combined channels use the even channel input. \n
-         In software compare modes, the even channel match asserts the output trigger and \n
-         the odd channel match negates the output trigger.\n
-         In PWM modes, the even channel match is used for the 1st compare and odd channel match for the 2nd compare" >
-      <choice value="0" name="Channels 0 and 1 are independent" isDefault="true" />
-      <choice value="1" name="Channels 0 and 1 are combined" />
-   </binaryOption>
-   
-   <template><![CDATA[
-      \t//! Default value for COMBINE register
-      \tstatic constexpr uint32_t combine  = 
-      \t    TPM_COMBINE_COMSWAP0($(tpm_combine_comswap0)) | // Combine Channel 0 and 1 Swap
-      \t    TPM_COMBINE_COMBINE0($(tpm_combine_combine0));  // Combine Channels 0 and 1\n\n
+<!--  ========== TPM CHANNEL Init class =============================== -->
+
+   <template key="channel_init_description" namespace="all"><![CDATA[
+      \t/**
+      \t * Class used to do initialisation of Tpm$(_instance)Channel
+      \t *
+      \t * This class has a templated constructor that accepts various values:
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const Tpm$(_instance)::ChannelInit channelInit {
+      \t *
+      \t *    // Omitted parameters are taken to be zero unless a base value is given
+      \t *    TpmChannelNum_3,            // Channel to initialise
+      \t *    TpmChannelMode_Disabled ,   // Channel Mode - Disabled
+      \t *    TpmChannelAction_None ,     // Action on Channel Event - No action
+      \t *    TpmChannelReset_Disabled ,  // Reset counter on channel IC event - Disabled
+      \t *    0_ticks,                    // Output Compare Event time
+      \t * 
+      \t *    // Optional base value to start with (must be last parameter)
+      \t *    $(_class)::DefaultChannelInitValues[TpmChannelNum_3]
+      \t * };
+      \t *
+      \t * // Initialise TPM from values specified above
+      \t * Tpm$(_instance)::configureChannel(channelInit)
+      \t * @endcode
+      \t */
    ]]></template>
 
-   <binaryOption key="tpm_pol_pol0"  condition="tpm_pol_pol0_present"
-      description="Channel 0 Polarity" >
-      <choice value="0" name="The channel polarity is active high" isDefault="true" />
-      <choice value="1" name="The channel polarity is active low" />
-   </binaryOption>
+   <template namespace="usbdm"><![CDATA[
+$(channel_init_description)
+      \tclass ChannelInit {
+      \t
+      \tpublic:
+      \t   /**                               
+      \t    * Copy Constructor                  
+      \t    */                             
+      \t   constexpr ChannelInit(const ChannelInit &other) = default;
+      \t   
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr ChannelInit() = default;
+      \t\n
+   ]]></template>
    
-   <binaryOption key="tpm_pol_pol1"  condition="tpm_pol_pol1_present"
-      description="Channel 1 Polarity" >
-      <choice value="0" name="The channel polarity is active high" isDefault="true" />
-      <choice value="1" name="The channel polarity is active low" />
-   </binaryOption>
+<!--  Member variables -->
+  
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)" 
+      variables="irqHandlingMethod" 
+    ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></setTemplate>
    
-   <template><![CDATA[
-      \t//! Default value for POL register
-      \tstatic constexpr uint32_t polarity  = 
-      \t    TPM_POL_POL1($(tpm_pol_pol1)) | // Channel 1 Polarity
-      \t    TPM_POL_POL0($(tpm_pol_pol0));  // Channel 0 Polarity\n\n
+   <initialValueTemplate namespace="usbdm"  
+      variables="tpm_cnv"
+   ><![CDATA[
+      \t   /// %description
+      \t   uint16_t %registerName = 0_ticks;\n\n
+   ]]></initialValueTemplate>
+     
+   <initialValueTemplate namespace="usbdm"  
+      variables="tpm_cnsc_mode"
+   ><![CDATA[
+      \t   /// Channel Status And Control Register
+      \t   uint16_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"  
+      variables="tpm_channel_number"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = TpmChannelNum_None;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)"
+      variables="/PCR/nvic_irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+   ]]></initialValueTemplate>
+
+<!-- Configure method -->
+   
+   <template discardRepeats="true" key="/TPM/ChannelInitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure Channel from values specified in channelInit
+      \t
+      \t * @param channelInit Class containing initialisation values
+      \t */
+      \tstatic ErrorCode configure(const typename Info::ChannelInit &channelInit) {
+      \t
+      \t   // Enable peripheral clock
+      \t   Info::enableClock();
+      \t\n
+   ]]></template>
+   <template discardRepeats="true" key="/TPM/ChannelInitMethod" namespace="all" condition="tpm_combine_combine0_present" ><![CDATA[
+      \t   // Configure timer combine mode
+      \t   if ((channelInit.channel&0b1) == 0) {
+      \t      // Even channel value controls paired channels n,n+1
+      \t      const unsigned offset = 4*channelInit.channel;
+      \t      const uint32_t mask = 0xFF<<offset;
+      \t      tpm->COMBINE = (tpm->COMBINE & ~mask) | (((channelInit.cnsc>>8)<<offset)&mask);
+      \t   }\n
+   ]]></template>
+   <template discardRepeats="true" key="/TPM/ChannelInitMethod" namespace="all" ><![CDATA[
+      \t   // Configure timer channel
+      \t   tpm->CONTROLS[channelInit.channel].CnV  = channelInit.cnv;
+      \t   tpm->CONTROLS[channelInit.channel].CnSC = channelInit.cnsc;
+      \t
+      \t   return E_NO_ERROR;
+      \t}\n\n
    ]]></template>
 
-   <intOption key="tpm_filter_ch0fval" condition="tpm_filter_ch0fval_present"
-      description="Channel 0 Filter Value" 
-      toolTip="Filter/delay is (4 * CHxFVAL) clock cycles, 0 disables"
-      min="0" max="15" value="0" />
-      
-   <intOption key="tpm_filter_ch1fval" condition="tpm_filter_ch1fval_present"
-      description="Channel 1 Filter Value" 
-      toolTip="Filter/delay is (4 * CHxFVAL) clock cycles, 0 disables"
-      min="0" max="15" value="0" />
-      
-   <template><![CDATA[
-      \t//! Default value for FILTER register
-      \tstatic constexpr uint32_t filter  = 
-      \t    TPM_FILTER_CH1FVAL($(tpm_filter_ch1fval)) | // Channel 1 Filter Value
-      \t    TPM_FILTER_CH0FVAL($(tpm_filter_ch0fval));  // Channel 0 Filter Value\n\n
+<!--  Constructors -->
+  
+   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)" 
+      variables="irqHandlingMethod" 
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
+      \t
+      \t      this->%enumParam0 = %paramExpression;
+      \t   }\n\n
+   ]]></constructorTemplate>
+   
+   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)" 
+      variables="/PCR/nvic_irqLevel" 
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
+      \t
+      #if $(irqHandlingMethod)
+      \t      %registerName = %paramExpression;
+      #else
+      \t      (void)%paramExpression;
+      #endif
+      \t   }\n\n
+   ]]></constructorTemplate>
+   
+   <for keys="r" values="
+      tpm_cnsc_mode;
+      tpm_cnsc_action;
+      tpm_cnsc_icrst">
+      <constructorTemplate  namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx" 
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
+         \t   
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]></constructorTemplate>
+   </for>
+   
+   <for keys="r" values="
+      tpm_channel_number;
+      tpm_cnv">
+      <constructorTemplate  namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx" 
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
+         \t   
+         \t      %registerName = %paramExpression;
+         \t   }
+         \t\n
+      ]]></constructorTemplate>
+   </for>   
+   <template namespace="usbdm"><![CDATA[
+      \t};\n\n
    ]]></template>
 
-   <category name="Advanced" description="Advanced options">
-      <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)clksel" optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)ch0src" optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt9_tpm$(_instance)clksel" optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt9_tpm$(_instance)ch0src" optional="true" constant="false" />
-   </category>
+<!--  Default Initialisation value -->
 
-<!-- ========== Misc =============================== -->
+  <template><![CDATA[
+      $(channel_init_description)
+      \ttypedef $(_class)BasicInfo::ChannelInit ChannelInit;
+      \t
+      \t/**
+      \t * Default initialisation value for Tpm$(_instance)ChannelInit
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr ChannelInit DefaultChannelInitValues[] = {\n
+  ]]></template>
+   <for keys="ch" dim="NumChannels">
+      <initialValueTemplate
+         separator=","
+         terminator=","     
+         variables="
+            tpm_cnsc_mode[%(ch)],
+            tpm_cnsc_action[%(ch)],
+            tpm_cnsc_icrst[%(ch)],
+            tpm_cnv[%(ch)]"     
+      ><![CDATA[
+         \t{
+         \t   TpmChannelNum_%(ch),
+         %initExpression\n\t},\n
+      ]]></initialValueTemplate>
+   </for>
+  <template><![CDATA[
+      \n\t};\n\n
+  ]]></template>
+   
+   <template namespace="usbdm" ><![CDATA[
+      };\n\n
+   ]]></template>
 
-   <xi:include href="_irqOption.xml"/>
+<!--  ========== Misc =============================== -->
    
    <xi:include href="_clockOption.xml"/>
 
@@ -471,11 +965,12 @@
       <copy source="Snippets/tpm-oc-example.cpp"   target="Snippets/tpm-oc-example.cpp"    overwrite="true" derived="true"/>
    </projectActionList>
          
-   <template key="/TPM/declarations" namespace="all"  ><![CDATA[
-   \t/**
-   \t * Class representing $(_name)
-   \t */
-   \ttypedef $(_base_class)Base_T<$(_class)Info> $(_class);\n
+   <template key="/TPM/declarations" namespace="all"  
+   ><![CDATA[
+   /**
+    * Class representing $(_name)
+    */
+   class $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n\n
    ]]></template>
 
    <template key="/TPM/quadDeclarations" namespace="all"  ><![CDATA[

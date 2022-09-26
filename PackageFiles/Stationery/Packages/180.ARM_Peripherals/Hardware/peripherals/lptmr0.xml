@@ -44,7 +44,7 @@
 
    <intOption key="lptmr_cmr_compare" 
       description="Timer Compare Register"
-      typeName="Ticks"
+      typeName="Ticks &amp;"
       valueFormat="%s_ticks"
       toolTip="Comparison value\n
       The timer comparison flag is set when the counter reaches this value and increments. \n
@@ -119,7 +119,7 @@
     
    <floatOption key="lptmr_cmrPeriod"
       ref="counterFrequency;(lptmr_cmr_compare+1)/counterFrequency" 
-      typeName="Seconds"     
+      typeName="Seconds &amp;"     
       valueFormat="%s_s"
       description="Timer Compare Interval"
       toolTip="Comparison value\n
@@ -186,7 +186,7 @@
       <choice value="1" name="Active-low source,  falling-edge increments lptmr_cnr" enum="Falling" />
    </binaryOption>
 
-<!--  ========== Methods =============================== -->
+<!--   ========== Methods =============================== -->
 
    <setTemplate variables="lptmr_cmr_compare"
    ><![CDATA[
@@ -492,7 +492,7 @@
       \ttypedef void (*%enumClass)();\n\n
    ]]></setTemplate>
 
-<!--  ========== LPTMR Init class =============================== -->
+<!--   ========== LPTMR Init class =============================== -->
 
    <template><![CDATA[
       \t/**
@@ -572,7 +572,7 @@
       \t};\n\n
    ]]></template >
    
-<!--  ========== LPTMR TimeIntervalModeInit class =============================== -->  
+<!--   ========== LPTMR TimeIntervalModeInit class =============================== -->  
 
    <template><![CDATA[
       \t/**
@@ -612,9 +612,9 @@
       \t\n
    ]]></template >
 
-<!-- Constructors -->
+<!--  Constructors -->
   
-   <setTemplate 
+   <constructorTemplate 
       variables="irqHandlingMethod" 
       linePadding="xxx"
     ><![CDATA[
@@ -633,12 +633,12 @@
       \t      this->%enumParam0 = %paramExpression;
       \t   }
       #endif\n\n
-   ]]></setTemplate>
+   ]]></constructorTemplate>
    
    <for keys="v"
       values="
          /PCR/nvic_irqLevel">
-      <setTemplate 
+      <constructorTemplate 
          variables="%(v)" 
          linePadding="xxx"><![CDATA[
          \t   /**
@@ -654,7 +654,7 @@
          \t   
          \t      %registerName = %paramExpression;
          \t   }\n\n
-      ]]></setTemplate>
+      ]]></constructorTemplate>
    </for>
 
    <for keys="v"
@@ -663,7 +663,7 @@
          lptmr_csr_tfc;
          lptmr_psr_prescaler;
          lptmr_psr_pcs">
-      <setTemplate 
+      <constructorTemplate 
          variables="%(v)" 
          linePadding="xxx"><![CDATA[
          \t   /**
@@ -679,14 +679,14 @@
          \t   
          \t      %registerName = (%registerName & ~%mask) | %paramExpression;
          \t   }\n\n
-      ]]></setTemplate>
+      ]]></constructorTemplate>
    </for>
    
    <for keys="v"
       values="
          lptmr_cmr_compare;
          lptmr_cmrPeriod">
-      <setTemplate 
+      <constructorTemplate 
          variables="%(v)" 
          linePadding="xxx"><![CDATA[
          \t   /**
@@ -698,14 +698,14 @@
          \t   
          \t      %registerName = %paramExpression;
          \t   }\n\n
-      ]]></setTemplate>
+      ]]></constructorTemplate>
    </for>
    
    <template><![CDATA[
       \t};\n\n
    ]]></template>
 
-<!--  ========== LPTMR PulseCountingModeInit class =============================== -->
+<!--   ========== LPTMR PulseCountingModeInit class =============================== -->
 
    <template><![CDATA[
       \t/**
@@ -749,7 +749,7 @@
 
 <!-- Constructors -->
   
-   <setTemplate 
+   <constructorTemplate 
       variables="irqHandlingMethod" 
       linePadding="xxx"
     ><![CDATA[
@@ -768,12 +768,12 @@
       \t      this->%enumParam0 = %enumParam0;
       \t   }
       #endif\n\n
-   ]]></setTemplate>
+   ]]></constructorTemplate>
 
    <for keys="v"
       values="
          /PCR/nvic_irqLevel">
-      <setTemplate 
+      <constructorTemplate 
          variables="%(v)" 
          linePadding="xxx"><![CDATA[
          \t   /**
@@ -789,7 +789,7 @@
          \t   
          \t      %registerName = %paramExpression;
          \t   }\n\n
-      ]]></setTemplate>
+      ]]></constructorTemplate>
    </for>
 
    <for keys="v"
@@ -800,7 +800,7 @@
          lptmr_csr_tfc;
          lptmr_psr_pcs;
          lptmr_psr_glitchFilter;">
-      <setTemplate variables="%(v)" 
+      <constructorTemplate variables="%(v)" 
          linePadding="xxx" ><![CDATA[
          \t   /**
          \t    * Constructor for %description
@@ -815,13 +815,13 @@
          \t   
          \t      %registerName = (%registerName & ~%mask) | %paramExpression;
          \t   }\n\n
-      ]]></setTemplate>
+      ]]></constructorTemplate>
    </for>
    
    <for keys="v"
       values="
          lptmr_cmr_compare">
-      <setTemplate 
+      <constructorTemplate 
          variables="%(v)" 
          linePadding="xxx"><![CDATA[
          \t   /**
@@ -833,14 +833,14 @@
          \t   
          \t      %registerName = %paramExpression;
          \t   }\n\n
-      ]]></setTemplate>
+      ]]></constructorTemplate>
    </for>
 
    <template><![CDATA[
       \t};\n\n
    ]]></template>
 
-<!-- Default Values -->
+<!--  Default Values -->
   
    <template key="/LPTMR/declarations" namespace="all"  ><![CDATA[
       \t/**
@@ -947,7 +947,7 @@
       \t};\n\n
    ]]></template>
 
- <!-- ========== Common =============================== -->
+ <!--  ========== Common =============================== -->
       
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.LptmrValidate">

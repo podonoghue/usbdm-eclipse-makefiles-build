@@ -44,7 +44,7 @@
    </binaryOption>
 
    <for keys="ch" dim="numChannels">
-      <stringOption name="PIT Channel %(ch)" derived="true" value="----- %(ch) -----"/>
+      <stringOption key="PIT Channel %(ch)" derived="true" value="----- %(ch) -----"/>
       
       <binaryOption key="pit_tctrl_ten[%(ch)]"  condition="pit_tctrl_tie_present"
          enumStem="PitChannelEnable" 
@@ -55,14 +55,16 @@
       </binaryOption>
 
       <intOption key="pit_ldval_tsv[%(ch)]" condition="pit_ldval_tsv_present"
-         typeName="Ticks"
+         enabledBy="pit_tctrl_ten[%(ch)]"
+         typeName="Ticks &amp;"
          valueFormat="%s_ticks"
          description="Reload value channel %(ch)"
          toolTip="Value loaded in timer register on roll-over"
          min="0" max="0xFFFFFFFF" />
 
       <floatOption key="pit_period[%(ch)]" condition="pit_ldval_tsv_present"
-         typeName="Seconds"
+         enabledBy="pit_tctrl_ten[%(ch)]"
+         typeName="Seconds &amp;"
          valueFormat="%s_s"
          description="Default period of timer"
          toolTip="Used to calculate the timer load value"
@@ -70,6 +72,7 @@
          value="1m" min="0" units="s" />
    
       <floatOption key="pit_frequency[%(ch)]" condition="pit_ldval_tsv_present"
+         enabledBy="pit_tctrl_ten[%(ch)]"
          typeName="Hertz"
          valueFormat="%s_Hz"
          description="Default frequency of timer"
@@ -77,7 +80,8 @@
          derived="true"
          value="1k" min="0" units="Hz" />
    
-      <binaryOption key="pit_tctrl_chn[%(ch)]"  condition="pit_tctrl_chn_present"
+      <binaryOption key="pit_tctrl_chn[%(ch)]"  condition="pit_tctrl_chn_present &amp;&amp; (%(ch)>0)"
+         enabledBy="pit_tctrl_ten[%(ch)]"
          enumStem="PitChannelChain" 
          description="Chain with previous channel"
          toolTip="Controls whether the timer channels are chained to creater a larger counter">
@@ -86,6 +90,7 @@
       </binaryOption>
 
       <binaryOption key="pit_tctrl_tie[%(ch)]"  condition="pit_tctrl_tie_present"
+         enabledBy="pit_tctrl_ten[%(ch)] &amp;&amp;irqHandlingMethod"
          enumStem="PitChannelIrq" 
          description="Timer Interrupt Enable"
          toolTip="Allows interrupts from this channel">
@@ -233,7 +238,7 @@
 
 <!--  Constructors -->
   
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -242,6 +247,7 @@
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
+      \t    *
       %paramDescription
       \t    */
       \t   template <typename... Types>
@@ -249,11 +255,11 @@
       \t
       \t      this->%enumParam0 = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></constructorTemplate>
    
    
    <for keys="r" values="pit_channelNumber;pit_ldval_tsv[];pit_period[];/PCR/nvic_irqLevel">
-      <setTemplate namespace="usbdm" 
+      <constructorTemplate namespace="usbdm" 
          variables="%(r)" 
          linePadding="xxx"
        ><![CDATA[
@@ -262,6 +268,7 @@
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
+         \t    *
          %paramDescription
          \t    */
          \t   template <typename... Types>
@@ -269,11 +276,11 @@
          \t
          \t      %registerName = %paramExpression;
          \t   }\n\n
-      ]]></setTemplate>
+      ]]></constructorTemplate>
    </for>
    
-   <for keys="r" values="pit_tctrl_ten[];pit_tctrl_chn[];pit_tctrl_tie[]">
-      <setTemplate namespace="usbdm" 
+   <for keys="r" values="pit_tctrl_ten[];pit_tctrl_chn[1];pit_tctrl_tie[]">
+      <constructorTemplate namespace="usbdm" 
          variables="%(r)"
          linePadding="xxx" 
       ><![CDATA[
@@ -282,6 +289,7 @@
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
+         \t    *
          %comments
          \t    */
          \t   template <typename... Types>
@@ -289,7 +297,7 @@
          \t   
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }\n\n
-      ]]></setTemplate>
+      ]]></constructorTemplate>
    </for>
    
    <template namespace="usbdm" ><![CDATA[

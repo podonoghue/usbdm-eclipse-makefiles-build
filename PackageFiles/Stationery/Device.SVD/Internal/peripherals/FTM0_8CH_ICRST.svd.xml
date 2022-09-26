@@ -17,7 +17,7 @@ Devices using this peripheral:
          <name>FTM0</name>
          <description>FlexTimer Module (8 channels)</description>
          <groupName>FTM</groupName>
-         <headerStructName>FTMQUAD</headerStructName>
+         <headerStructName>FTM</headerStructName>
          <baseAddress>0x40038000</baseAddress>
          <size>32</size>
          <access>read-write</access>
@@ -28,7 +28,12 @@ Devices using this peripheral:
          </parameters>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0x9C</size>
+            <size>0x80</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x84</offset>
+            <size>0x18</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -1108,130 +1113,6 @@ Controls whether channels are the some or complement</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-               </fields>
-            </register>
-            <register>
-               <name>QDCTRL</name>
-               <description>Quadrature Decoder Control and Status</description>
-               <addressOffset>0x80</addressOffset>
-               <fields>
-                  <field>
-                     <name>QUADEN</name>
-                     <description>Quadrature Decoder Mode Enable</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TOFDIR</name>
-                     <description>Timer Overflow Direction in Quadrature Decoder Mode\n
-Indicates if the TOF bit was set on the top or the bottom of counting</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <access>read-only</access>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Bottom of counting.\tThere was an FTM counter decrement and FTM counter changes from its minimum value (CNTIN register) to its maximum value (MOD register)</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Top of counting.\tThere was an FTM counter increment and FTM counter changes from its maximum value (MOD register) to its minimum value (CNTIN register)</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>QUADIR</name>
-                     <description>FTM Counter Direction in Quadrature Decoder Mode\n
-Indicates the counting direction and it is updated according to selected encoding mode</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <access>read-only</access>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Decreasing</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Increasing</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>QUADMODE</name>
-                     <description>Quadrature Decoder Mode\n
-Selects the encoding mode used in the quadrature decoder mode</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Phase A/B mode</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Count/direction mode</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PHBPOL</name>
-                     <description>Phase B Input Polarity</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Normal polarity\tPhase B input signal is not inverted before identifying the rising and falling edges of this signal</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Inverted polarity\tPhase B input signal is inverted before identifying the rising and falling edges of this signal</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PHAPOL</name>
-                     <description>Phase A Input Polarity</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Normal polarity\tPhase A input signal is not inverted before identifying the rising and falling edges of this signal</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Inverted polarity\tPhase A input signal is inverted before identifying the rising and falling edges of this signal</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field derivedFrom="QUADEN" > <name>PHBFLTREN</name> <description>Phase B Input Filter Enable\n
-Enables the filter for the quadrature decoder phase B input</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="QUADEN" > <name>PHAFLTREN</name> <description>Phase A Input Filter Enable\n
-Enables the filter for the quadrature decoder phase A input</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>

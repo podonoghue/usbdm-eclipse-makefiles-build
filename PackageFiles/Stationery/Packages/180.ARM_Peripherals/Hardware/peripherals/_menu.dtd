@@ -307,7 +307,7 @@
    class Appears as classInfo variable with peripheral path e.g. /ADC/classInfo 
 -->
 <!ELEMENT template (#PCDATA)* >
-   <!ATTLIST template namespace                 (info|usbdm|class|all)  "info" >
+   <!ATTLIST template namespace                 (info|usbdm|class|all)  #IMPLIED >
    <!ATTLIST template key                       CDATA                   #IMPLIED >
    <!ATTLIST template condition                 CDATA                   #IMPLIED>
    <!ATTLIST template codeGenCondition          CDATA                   #IMPLIED>
@@ -318,7 +318,7 @@
    <!ATTLIST template linePadding               CDATA                   #IMPLIED>
 
 <!ELEMENT setTemplate (#PCDATA)* >
-   <!ATTLIST setTemplate namespace                 (info|usbdm|class|all)  "info" >
+   <!ATTLIST setTemplate namespace                 (info|usbdm|class|all)  #IMPLIED >
    <!ATTLIST setTemplate key                       CDATA                   #IMPLIED >
    <!ATTLIST setTemplate condition                 CDATA                   #IMPLIED>
    <!ATTLIST setTemplate codeGenCondition          CDATA                   #IMPLIED>
@@ -333,8 +333,24 @@
    <!ATTLIST setTemplate linePadding               CDATA                   #IMPLIED>
    <!ATTLIST setTemplate params                    CDATA                   #IMPLIED>
 
+<!ELEMENT constructorTemplate (#PCDATA)* >
+   <!ATTLIST constructorTemplate namespace                 (info|usbdm|class|all)  #IMPLIED >
+   <!ATTLIST constructorTemplate key                       CDATA                   #IMPLIED >
+   <!ATTLIST constructorTemplate condition                 CDATA                   #IMPLIED>
+   <!ATTLIST constructorTemplate codeGenCondition          CDATA                   #IMPLIED>
+   <!ATTLIST constructorTemplate variables                 CDATA                   #REQUIRED>
+   <!ATTLIST constructorTemplate discardRepeats            (true)                  #IMPLIED>
+   <!ATTLIST constructorTemplate terminator                CDATA                   #IMPLIED> <!-- Terminator for initExpression -->
+   <!ATTLIST constructorTemplate separator                 CDATA                   #IMPLIED> <!-- Separator for initExpression -->
+   <!ATTLIST constructorTemplate initExpressionOnSameLine  (true)                  #IMPLIED>
+   <!ATTLIST constructorTemplate nonDefaultParams          CDATA                   #IMPLIED>
+   <!ATTLIST constructorTemplate defaultParamValue         CDATA                   #IMPLIED>
+   <!ATTLIST constructorTemplate paramPadding              CDATA                   #IMPLIED>
+   <!ATTLIST constructorTemplate linePadding               CDATA                   #IMPLIED>
+   <!ATTLIST constructorTemplate params                    CDATA                   #IMPLIED>
+
 <!ELEMENT initialValueTemplate (#PCDATA|variable|for)* >
-   <!ATTLIST initialValueTemplate namespace                 (info|usbdm|class|all) "info" >
+   <!ATTLIST initialValueTemplate namespace                 (info|usbdm|class|all)  #IMPLIED >
    <!ATTLIST initialValueTemplate key                       CDATA                   #IMPLIED >
    <!ATTLIST initialValueTemplate condition                 CDATA                   #IMPLIED>
    <!ATTLIST initialValueTemplate codeGenCondition          CDATA                   #IMPLIED>
@@ -347,7 +363,7 @@
    <!ATTLIST initialValueTemplate linePadding               CDATA                   #IMPLIED>
 
 <!ELEMENT enumTemplate (#PCDATA)* >
-   <!ATTLIST enumTemplate namespace       (info|usbdm|class|all)  "info" >
+   <!ATTLIST enumTemplate namespace       (info|usbdm|class|all)  #IMPLIED >
    <!ATTLIST enumTemplate key             CDATA                   #IMPLIED >
    <!ATTLIST enumTemplate condition       CDATA                   #IMPLIED>
    <!ATTLIST enumTemplate variable        CDATA                   #REQUIRED>
@@ -355,7 +371,7 @@
    <!ATTLIST enumTemplate template        CDATA                   #IMPLIED>
 
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
-   <!ATTLIST clockCodeTemplate namespace                 (info|usbdm|class|all)  "info" >
+   <!ATTLIST clockCodeTemplate namespace                 (info|usbdm|class|all)  #IMPLIED >
    <!ATTLIST clockCodeTemplate key                       CDATA                   #IMPLIED >
    <!ATTLIST clockCodeTemplate condition                 CDATA                   #IMPLIED>
    <!ATTLIST clockCodeTemplate variable                  CDATA                   #REQUIRED>
