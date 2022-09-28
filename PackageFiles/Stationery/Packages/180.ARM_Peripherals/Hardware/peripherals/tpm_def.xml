@@ -39,6 +39,7 @@
    <choiceOption key="tpm_sc_cmod" 
       description="Clock Source"
       enumStem="TpmClockSource"
+      enumType="uint16_t"
       target="inputClockFrequency"
       toolTip="Selects the clock source for the module">
       <choice value="0" name="Disabled"         ref="disabled"              code="0"                      enum="Disabled"        />
@@ -55,6 +56,7 @@
    <choiceOption key="tpm_sc_ps" 
       description="Clock prescaler"
       enumStem="TpmPrescale"
+      enumType="uint16_t"
       target="clockFrequency"
       toolTip="Selects the prescaler for the module">
       <choice value="0" name="Divide by 1"   ref="inputClockFrequency"      enum="DivBy1"  isDefault="true" />
@@ -85,6 +87,7 @@
    <choiceOption key="tpm_sc_mode"
       valueFormat="TPM_SC_TOF(%s),TPM_SC_CPWMS(%s)"
       enumStem="TpmMode"
+      enumType="uint16_t"
       description="Alignment and whether interval or free-running mode"
       toolTip="Left-aligned   (0...mod) or\n
                Centre-aligned (0...mod...0) or\n
@@ -111,13 +114,28 @@
       derived="true"
       min="0" units="s"/>
       
-   <binaryOption key="tpm_sc_toie" 
+   <choiceOption key="tpm_sc_action" condition="tpm_sc_toie_present&amp;&amp;tpm_sc_dma_present"
       enabledBy="irqHandlingMethod"
-      enumStem="TpmOverflowInterrupt"
-      description="Overflow Interrupt"
-      toolTip="Enables TPM overflow interrupts">
-      <choice value="0" name="Interrupt Disabled" enum="Disabled" />
-      <choice value="1" name="Interrupt Enabled"  enum="Enabled"  />
+      valueFormat="TPM_SC_TOIE(%s),TPM_SC_DMA(%s)"
+      enumType="uint16_t"
+      enumStem="TpmOverflowAction"
+      description="Action on Counter overflow"
+      toolTip="Enable interrupt and/or DMA on counter overflow">
+       <choice value="0,0" name="No action"                    enum="None"             />                              
+       <choice value="0,1" name="DMA request"                  enum="Dma"              />                              
+       <choice value="1,0" name="Interrupt request"            enum="Interrupt"        />                              
+       <choice value="1,1" name="Interrupt and DMA request"    enum="InterruptAndDma"  />                              
+   </choiceOption>
+   
+   <binaryOption key="tpm_sc_action" condition="tpm_sc_toie_present&amp;&amp;!tpm_sc_dma_present"
+      enabledBy="irqHandlingMethod"
+      valueFormat="TPM_SC_TOIE(%s)"
+      enumType="uint16_t"
+      enumStem="TpmOverflowAction"
+      description="Action on Counter overflow"
+      toolTip="Enable interrupt on counter overflow">
+      <choice value="0" name="No action"          enum="None"       />
+      <choice value="1" name="Overflow Interrupt" enum="Interrupt"  />
    </binaryOption>
 
    <choiceOption key="tpm_channel_number"
@@ -138,6 +156,8 @@
       <choice value="7"             name="Channel 7"      enum="7" />
       <choice value="(uint8_t(-1))" name="No Channel"     enum="None" />      
    </choiceOption>
+   
+   <!--  **************** Channels **************** -->
    
    <for keys="ch" dim="NumChannels">
       <stringOption name="TPM Channel %(ch)" key="TpmChannel%(ch)" derived="true" value="----- %(ch) -----"/>
@@ -189,21 +209,22 @@
          enumType="uint8_t"
          enumStem="TpmChannelAction"
          description="Action on Channel Event"
-         toolTip="Enable Timer interrupt or DMA">
-          <choice value="0,0" name="No action"          enum="None"  />                              
-          <choice value="1,0" name="Interrupt Request"  enum="Irq"   />                              
-          <choice value="1,1" name="DMA request"        enum="Dma"   />                              
+         toolTip="Enable interrupt and/or DMA on channel event">
+          <choice value="0,0" name="No action"                    enum="None"             />                              
+          <choice value="0,1" name="DMA request"                  enum="Dma"              />                              
+          <choice value="1,0" name="Interrupt request"            enum="Interrupt"        />                              
+          <choice value="1,1" name="Interrupt and DMA request"    enum="InterruptAndDma"  />                              
       </choiceOption>
    
-      <choiceOption key="tpm_cnsc_action[%(ch)]" condition="tpm_cnsc_chie_present&amp;&amp;!tpm_cnsc_dma_present"
+      <binaryOption key="tpm_cnsc_action[%(ch)]" condition="tpm_cnsc_chie_present&amp;&amp;!tpm_cnsc_dma_present"
          valueFormat="TPM_CnSC_CHIE(%s)"
          enumType="uint8_t"
          enumStem="TpmChannelAction"
          description="Action on Channel Event"
-         toolTip="Enable Timer interrupt or DMA">
-          <choice value="0" name="No action"          enum="None"  />                              
-          <choice value="1" name="Interrupt Request"  enum="Irq"   />                              
-      </choiceOption>
+         toolTip="Enable interrupt on channel event">
+          <choice value="0" name="No action"              enum="None"             />                              
+          <choice value="1" name="Interrupt request"      enum="Interrupt"        />                              
+      </binaryOption>
    
       <binaryOption key="tpm_cnsc_icrst[%(ch)]" condition="tpm_cnsc_icrst_present"
          valueFormat="TPM_CnSC_ICRST(%s)"
@@ -476,7 +497,7 @@ $(init_description)
    ]]></setTemplate>
    
    <initialValueTemplate namespace="usbdm"  
-      variables="tpm_sc_toie,tpm_sc_cpwms,tpm_sc_cmod,tpm_sc_ps,tpm_sc_mode"
+      variables="tpm_sc_action,tpm_sc_cpwms,tpm_sc_cmod,tpm_sc_ps,tpm_sc_mode"
    ><![CDATA[
       \t   /// Status And Control Register
       \t   uint8_t %registerName = 0;\n\n
@@ -605,7 +626,7 @@ $(init_description)
       \t   }\n\n
    ]]></constructorTemplate>
    
-   <for keys="r" values="tpm_sc_toie;tpm_sc_cpwms;tpm_sc_mode;tpm_sc_cmod">
+   <for keys="r" values="tpm_sc_action;tpm_sc_cpwms;tpm_sc_mode;tpm_sc_cmod">
       <constructorTemplate  namespace="usbdm" 
          variables="%(r)"
          linePadding="xxx" 
@@ -683,7 +704,7 @@ $(init_description)
       terminator=","     
       variables="
          tpm_sc_mode,
-         tpm_sc_toie,
+         tpm_sc_action,
          irqLevel,
          tpm_sc_cmod,     
          tpm_sc_ps,
@@ -799,7 +820,7 @@ $(channel_init_description)
       \t
       \t * @param channelInit Class containing initialisation values
       \t */
-      \tstatic ErrorCode configure(const typename Info::ChannelInit &channelInit) {
+      \tstatic ErrorCode configureChannel(const typename Info::ChannelInit &channelInit) {
       \t
       \t   // Enable peripheral clock
       \t   Info::enableClock();
@@ -951,6 +972,47 @@ $(channel_init_description)
    ]]></template>
 
 <!--  ========== Misc =============================== -->
+   
+   <template namespace="all" key="/HARDWARE/StaticObjects" discardRepeats="true" ><![CDATA[
+   \t/**
+   \t * Callback to catch unhandled channel interrupt
+   \t *
+   \t * @param mask Mask identifying channel
+   \t */
+   \tvoid tpmUnhandledChannelCallback(uint8_t mask) {
+   \t   (void)mask;
+   \t   setAndCheckErrorCode(E_NO_HANDLER);
+   \t}\n\n
+   ]]></template>
+   
+   <template><![CDATA[
+   \t/**
+   \t * Type definition for channel interrupt call back
+   \t *
+   \t * @param[in] status Flags indicating interrupt source channel(s)
+   \t */
+   \ttypedef void (*ChannelCallbackFunction)(uint8_t status);
+   \t
+   \t/**
+   \t * Callback table for programmatically set handlers
+   \t */
+   \tstatic ChannelCallbackFunction sChannelCallbacks[$(NumChannelVectors)];\n\n
+   ]]></template>
+
+   <template namespace="all" key="/HARDWARE/StaticObjects" ><![CDATA[
+      \t/**
+      \t * Callback table for programmatically set handlers for $(_class)
+      \t */
+      \t$(_class)Info::ChannelCallbackFunction $(_class)Info::sChannelCallbacks[] = {\n\n
+   ]]></template>
+      <for keys="ch" dim="NumChannelVectors">
+         <template namespace="all" key="/HARDWARE/StaticObjects" ><![CDATA[
+            \t   tpmUnhandledChannelCallback,\n
+         ]]></template>
+      </for>
+   <template namespace="all" key="/HARDWARE/StaticObjects" ><![CDATA[
+      \t};\n\n
+   ]]></template>
    
    <xi:include href="_clockOption.xml"/>
 

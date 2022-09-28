@@ -357,6 +357,22 @@
    
    
    <!--  ==================== Misc ======================== -->
+   
+   <template discardRepeats="true" key="CallBackDefinition" namespace="all" ><![CDATA[
+      /**
+       * Callback table for programmatically set handlers
+       */
+      template<class Info>
+      typename Info::CallbackFunction PitBase_T<Info>::sCallbacks[] = {\n
+   ]]></template>
+   <for keys="ch" dim="numChannels">
+      <template discardRepeats="true" key="/PIT/CallBackDefinition" namespace="all" ><![CDATA[
+         \tPitBase_T<Info>::unhandledCallback,\n
+      ]]></template>
+   </for>
+   <template discardRepeats="true" key="/PIT/CallBackDefinition" namespace="all" ><![CDATA[
+      };\n\n
+   ]]></template>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PitValidate">
@@ -413,11 +429,14 @@
    \t *    // Clear interrupt flag
    \t *    pit->CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
    \t * }
-   \t */
-   #define PIT$(_instance)_CHANNEL0_HANDLER() template<>template<> void Pit$(_instance)::Channel<0>::irqHandler()
-   #define PIT$(_instance)_CHANNEL1_HANDLER() template<>template<> void Pit$(_instance)::Channel<1>::irqHandler()
-   #define PIT$(_instance)_CHANNEL2_HANDLER() template<>template<> void Pit$(_instance)::Channel<2>::irqHandler()
-   #define PIT$(_instance)_CHANNEL3_HANDLER() template<>template<> void Pit$(_instance)::Channel<3>::irqHandler()
+   \t */\n
+   ]]></template>
+   <for keys="ch" dim="numChannels">
+      <template key="/PIT/declarations" namespace="all"  ><![CDATA[
+         #define PIT$(_instance)_CHANNEL%(ch)_HANDLER() template<>template<> void Pit$(_instance)::Channel<%(ch)>::irqHandler()\n
+      ]]></template>
+   </for>
+   <template key="/PIT/declarations" namespace="all"  ><![CDATA[
 
    \t/**
    \t * @brief class representing a PIT channel
