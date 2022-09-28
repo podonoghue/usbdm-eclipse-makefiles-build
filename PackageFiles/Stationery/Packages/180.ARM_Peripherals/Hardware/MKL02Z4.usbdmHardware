@@ -80,6 +80,37 @@
       <peripheral baseName="MCG"      instance=""         version="mcg_nopll_mkl02z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
          <irq num="MCG_IRQn" />
+         <param name="$present"     key="/MCG/$present" value="true" />
+         <param name="mcg_atcvh_atcvh_present" key="/MCG/mcg_atcvh_atcvh_present" value="true" />
+         <param name="mcg_atcvl_atcvl_present" key="/MCG/mcg_atcvl_atcvl_present" value="true" />
+         <param name="mcg_c1_clks_present" key="/MCG/mcg_c1_clks_present" value="true" />
+         <param name="mcg_c1_frdiv_present" key="/MCG/mcg_c1_frdiv_present" value="true" />
+         <param name="mcg_c1_irclken_present" key="/MCG/mcg_c1_irclken_present" value="true" />
+         <param name="mcg_c1_irefs_present" key="/MCG/mcg_c1_irefs_present" value="true" />
+         <param name="mcg_c1_irefsten_present" key="/MCG/mcg_c1_irefsten_present" value="true" />
+         <param name="mcg_c2_erefs0_present" key="/MCG/mcg_c2_erefs0_present" value="true" />
+         <param name="mcg_c2_fcftrim_present" key="/MCG/mcg_c2_fcftrim_present" value="true" />
+         <param name="mcg_c2_hgo0_present" key="/MCG/mcg_c2_hgo0_present" value="true" />
+         <param name="mcg_c2_ircs_present" key="/MCG/mcg_c2_ircs_present" value="true" />
+         <param name="mcg_c2_locre0_present" key="/MCG/mcg_c2_locre0_present" value="true" />
+         <param name="mcg_c2_lp_present" key="/MCG/mcg_c2_lp_present" value="true" />
+         <param name="mcg_c2_range0_present" key="/MCG/mcg_c2_range0_present" value="true" />
+         <param name="mcg_c3_sctrim_present" key="/MCG/mcg_c3_sctrim_present" value="true" />
+         <param name="mcg_c4_dmx32_present" key="/MCG/mcg_c4_dmx32_present" value="true" />
+         <param name="mcg_c4_drst_drs_present" key="/MCG/mcg_c4_drst_drs_present" value="true" />
+         <param name="mcg_c4_fctrim_present" key="/MCG/mcg_c4_fctrim_present" value="true" />
+         <param name="mcg_c4_scftrim_present" key="/MCG/mcg_c4_scftrim_present" value="true" />
+         <param name="mcg_c6_cme0_present" key="/MCG/mcg_c6_cme0_present" value="true" />
+         <param name="mcg_s_clkst_present" key="/MCG/mcg_s_clkst_present" value="true" />
+         <param name="mcg_s_ircst_present" key="/MCG/mcg_s_ircst_present" value="true" />
+         <param name="mcg_s_irefst_present" key="/MCG/mcg_s_irefst_present" value="true" />
+         <param name="mcg_s_oscinit0_present" key="/MCG/mcg_s_oscinit0_present" value="true" />
+         <param name="mcg_sc_atme_present" key="/MCG/mcg_sc_atme_present" value="true" />
+         <param name="mcg_sc_atmf_present" key="/MCG/mcg_sc_atmf_present" value="true" />
+         <param name="mcg_sc_atms_present" key="/MCG/mcg_sc_atms_present" value="true" />
+         <param name="mcg_sc_fcrdiv_present" key="/MCG/mcg_sc_fcrdiv_present" value="true" />
+         <param name="mcg_sc_fltprsrv_present" key="/MCG/mcg_sc_fltprsrv_present" value="true" />
+         <param name="mcg_sc_locs0_present" key="/MCG/mcg_sc_locs0_present" value="true" />
       </peripheral>
       <peripheral baseName="OSC"      instance="0"        version="osc0_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
@@ -163,14 +194,13 @@
       <peripheral baseName="TPM"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
       </peripheral>
-      <peripheral baseName="TPM"      instance="0"        version="tpm0_2ch">
+      <peripheral baseName="TPM"      instance="0"        version="tpm0_2ch_no_dma">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_TPM0_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_TPM0_MASK;" />
          <irq num="TPM0_IRQn" />
          <param name="$present"     key="/TPM0/$present" value="true" />
          <param name="tpm_cnsc_chf_present" key="/TPM0/tpm_cnsc_chf_present" value="true" />
          <param name="tpm_cnsc_chie_present" key="/TPM0/tpm_cnsc_chie_present" value="true" />
-         <param name="tpm_cnsc_dma_present" key="/TPM0/tpm_cnsc_dma_present" value="true" />
          <param name="tpm_cnsc_els_present" key="/TPM0/tpm_cnsc_els_present" value="true" />
          <param name="tpm_cnsc_elsa_present" key="/TPM0/tpm_cnsc_elsa_present" value="true" />
          <param name="tpm_cnsc_elsb_present" key="/TPM0/tpm_cnsc_elsb_present" value="true" />
@@ -189,7 +219,6 @@
          <param name="tpm_mod_mod_present" key="/TPM0/tpm_mod_mod_present" value="true" />
          <param name="tpm_sc_cmod_present" key="/TPM0/tpm_sc_cmod_present" value="true" />
          <param name="tpm_sc_cpwms_present" key="/TPM0/tpm_sc_cpwms_present" value="true" />
-         <param name="tpm_sc_dma_present" key="/TPM0/tpm_sc_dma_present" value="true" />
          <param name="tpm_sc_ps_present" key="/TPM0/tpm_sc_ps_present" value="true" />
          <param name="tpm_sc_tof_present" key="/TPM0/tpm_sc_tof_present" value="true" />
          <param name="tpm_sc_toie_present" key="/TPM0/tpm_sc_toie_present" value="true" />
@@ -197,14 +226,13 @@
          <param name="tpm_status_ch1f_present" key="/TPM0/tpm_status_ch1f_present" value="true" />
          <param name="tpm_status_tof_present" key="/TPM0/tpm_status_tof_present" value="true" />
       </peripheral>
-      <peripheral baseName="TPM"      instance="1"        version="tpm0_2ch">
+      <peripheral baseName="TPM"      instance="1"        version="tpm0_2ch_no_dma">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_TPM1_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_TPM1_MASK;" />
          <irq num="TPM1_IRQn" />
          <param name="$present"     key="/TPM1/$present" value="true" />
          <param name="tpm_cnsc_chf_present" key="/TPM1/tpm_cnsc_chf_present" value="true" />
          <param name="tpm_cnsc_chie_present" key="/TPM1/tpm_cnsc_chie_present" value="true" />
-         <param name="tpm_cnsc_dma_present" key="/TPM1/tpm_cnsc_dma_present" value="true" />
          <param name="tpm_cnsc_els_present" key="/TPM1/tpm_cnsc_els_present" value="true" />
          <param name="tpm_cnsc_elsa_present" key="/TPM1/tpm_cnsc_elsa_present" value="true" />
          <param name="tpm_cnsc_elsb_present" key="/TPM1/tpm_cnsc_elsb_present" value="true" />
@@ -223,7 +251,6 @@
          <param name="tpm_mod_mod_present" key="/TPM1/tpm_mod_mod_present" value="true" />
          <param name="tpm_sc_cmod_present" key="/TPM1/tpm_sc_cmod_present" value="true" />
          <param name="tpm_sc_cpwms_present" key="/TPM1/tpm_sc_cpwms_present" value="true" />
-         <param name="tpm_sc_dma_present" key="/TPM1/tpm_sc_dma_present" value="true" />
          <param name="tpm_sc_ps_present" key="/TPM1/tpm_sc_ps_present" value="true" />
          <param name="tpm_sc_tof_present" key="/TPM1/tpm_sc_tof_present" value="true" />
          <param name="tpm_sc_toie_present" key="/TPM1/tpm_sc_toie_present" value="true" />

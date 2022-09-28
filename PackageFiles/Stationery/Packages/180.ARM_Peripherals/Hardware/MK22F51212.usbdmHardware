@@ -1008,6 +1008,51 @@
       <peripheral baseName="MCG"      instance=""         version="mcg_mk_ics48m">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
          <irq num="MCG_IRQn" />
+         <param name="$present"     key="/MCG/$present" value="true" />
+         <param name="mcg_atcvh_atcvh_present" key="/MCG/mcg_atcvh_atcvh_present" value="true" />
+         <param name="mcg_atcvl_atcvl_present" key="/MCG/mcg_atcvl_atcvl_present" value="true" />
+         <param name="mcg_c1_clks_present" key="/MCG/mcg_c1_clks_present" value="true" />
+         <param name="mcg_c1_frdiv_present" key="/MCG/mcg_c1_frdiv_present" value="true" />
+         <param name="mcg_c1_irclken_present" key="/MCG/mcg_c1_irclken_present" value="true" />
+         <param name="mcg_c1_irefs_present" key="/MCG/mcg_c1_irefs_present" value="true" />
+         <param name="mcg_c1_irefsten_present" key="/MCG/mcg_c1_irefsten_present" value="true" />
+         <param name="mcg_c2_erefs0_present" key="/MCG/mcg_c2_erefs0_present" value="true" />
+         <param name="mcg_c2_fcftrim_present" key="/MCG/mcg_c2_fcftrim_present" value="true" />
+         <param name="mcg_c2_hgo0_present" key="/MCG/mcg_c2_hgo0_present" value="true" />
+         <param name="mcg_c2_ircs_present" key="/MCG/mcg_c2_ircs_present" value="true" />
+         <param name="mcg_c2_locre0_present" key="/MCG/mcg_c2_locre0_present" value="true" />
+         <param name="mcg_c2_lp_present" key="/MCG/mcg_c2_lp_present" value="true" />
+         <param name="mcg_c2_range0_present" key="/MCG/mcg_c2_range0_present" value="true" />
+         <param name="mcg_c3_sctrim_present" key="/MCG/mcg_c3_sctrim_present" value="true" />
+         <param name="mcg_c4_dmx32_present" key="/MCG/mcg_c4_dmx32_present" value="true" />
+         <param name="mcg_c4_drst_drs_present" key="/MCG/mcg_c4_drst_drs_present" value="true" />
+         <param name="mcg_c4_fctrim_present" key="/MCG/mcg_c4_fctrim_present" value="true" />
+         <param name="mcg_c4_scftrim_present" key="/MCG/mcg_c4_scftrim_present" value="true" />
+         <param name="mcg_c5_pllclken0_present" key="/MCG/mcg_c5_pllclken0_present" value="true" />
+         <param name="mcg_c5_pllsten0_present" key="/MCG/mcg_c5_pllsten0_present" value="true" />
+         <param name="mcg_c5_prdiv0_present" key="/MCG/mcg_c5_prdiv0_present" value="true" />
+         <param name="mcg_c6_cme0_present" key="/MCG/mcg_c6_cme0_present" value="true" />
+         <param name="mcg_c6_lolie0_present" key="/MCG/mcg_c6_lolie0_present" value="true" />
+         <param name="mcg_c6_plls_present" key="/MCG/mcg_c6_plls_present" value="true" />
+         <param name="mcg_c6_vdiv0_present" key="/MCG/mcg_c6_vdiv0_present" value="true" />
+         <param name="mcg_c7_oscsel_present" key="/MCG/mcg_c7_oscsel_present" value="true" />
+         <param name="mcg_c8_cme1_present" key="/MCG/mcg_c8_cme1_present" value="true" />
+         <param name="mcg_c8_locre1_present" key="/MCG/mcg_c8_locre1_present" value="true" />
+         <param name="mcg_c8_locs1_present" key="/MCG/mcg_c8_locs1_present" value="true" />
+         <param name="mcg_c8_lolre_present" key="/MCG/mcg_c8_lolre_present" value="true" />
+         <param name="mcg_s_clkst_present" key="/MCG/mcg_s_clkst_present" value="true" />
+         <param name="mcg_s_ircst_present" key="/MCG/mcg_s_ircst_present" value="true" />
+         <param name="mcg_s_irefst_present" key="/MCG/mcg_s_irefst_present" value="true" />
+         <param name="mcg_s_lock0_present" key="/MCG/mcg_s_lock0_present" value="true" />
+         <param name="mcg_s_lols0_present" key="/MCG/mcg_s_lols0_present" value="true" />
+         <param name="mcg_s_oscinit0_present" key="/MCG/mcg_s_oscinit0_present" value="true" />
+         <param name="mcg_s_pllst_present" key="/MCG/mcg_s_pllst_present" value="true" />
+         <param name="mcg_sc_atme_present" key="/MCG/mcg_sc_atme_present" value="true" />
+         <param name="mcg_sc_atmf_present" key="/MCG/mcg_sc_atmf_present" value="true" />
+         <param name="mcg_sc_atms_present" key="/MCG/mcg_sc_atms_present" value="true" />
+         <param name="mcg_sc_fcrdiv_present" key="/MCG/mcg_sc_fcrdiv_present" value="true" />
+         <param name="mcg_sc_fltprsrv_present" key="/MCG/mcg_sc_fltprsrv_present" value="true" />
+         <param name="mcg_sc_locs0_present" key="/MCG/mcg_sc_locs0_present" value="true" />
       </peripheral>
       <peripheral baseName="MCM"      instance=""         version="mcm_mk22f51212">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcm" />

@@ -357,6 +357,26 @@
       </peripheral>
       <peripheral baseName="MCG"      instance=""         version="mcg_lite">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
+         <param name="$present"     key="/MCG/$present" value="true" />
+         <param name="mcg_c1_clks_present" key="/MCG/mcg_c1_clks_present" value="true" />
+         <param name="mcg_c1_irclken_present" key="/MCG/mcg_c1_irclken_present" value="true" />
+         <param name="mcg_c1_irefsten_present" key="/MCG/mcg_c1_irefsten_present" value="true" />
+         <param name="mcg_c2_erefs0_present" key="/MCG/mcg_c2_erefs0_present" value="true" />
+         <param name="mcg_c2_hgo0_present" key="/MCG/mcg_c2_hgo0_present" value="true" />
+         <param name="mcg_c2_ircs_present" key="/MCG/mcg_c2_ircs_present" value="true" />
+         <param name="mcg_c2_range0_present" key="/MCG/mcg_c2_range0_present" value="true" />
+         <param name="mcg_hctrim_coarse_trim_present" key="/MCG/mcg_hctrim_coarse_trim_present" value="true" />
+         <param name="mcg_hftrim_fine_trim_present" key="/MCG/mcg_hftrim_fine_trim_present" value="true" />
+         <param name="mcg_httrim_tempco_trim_present" key="/MCG/mcg_httrim_tempco_trim_present" value="true" />
+         <param name="mcg_lftrim_lirc_ftrim_present" key="/MCG/mcg_lftrim_lirc_ftrim_present" value="true" />
+         <param name="mcg_lstrim_lirc_strim_present" key="/MCG/mcg_lstrim_lirc_strim_present" value="true" />
+         <param name="mcg_ltrimrng_ftrimrng_present" key="/MCG/mcg_ltrimrng_ftrimrng_present" value="true" />
+         <param name="mcg_ltrimrng_strimrng_present" key="/MCG/mcg_ltrimrng_strimrng_present" value="true" />
+         <param name="mcg_mc_hircen_present" key="/MCG/mcg_mc_hircen_present" value="true" />
+         <param name="mcg_mc_lirc_div2_present" key="/MCG/mcg_mc_lirc_div2_present" value="true" />
+         <param name="mcg_s_clkst_present" key="/MCG/mcg_s_clkst_present" value="true" />
+         <param name="mcg_s_oscinit0_present" key="/MCG/mcg_s_oscinit0_present" value="true" />
+         <param name="mcg_sc_fcrdiv_present" key="/MCG/mcg_sc_fcrdiv_present" value="true" />
       </peripheral>
       <peripheral baseName="OSC"      instance="0"        version="osc0_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
