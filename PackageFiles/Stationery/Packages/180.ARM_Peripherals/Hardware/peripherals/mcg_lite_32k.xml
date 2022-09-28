@@ -3,5 +3,5 @@
 <!-- mcg_lite_32k.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="mcg_lite.xml"/>
+<xi:include href="mcg_base_lite.xml"/>
 </fragment>

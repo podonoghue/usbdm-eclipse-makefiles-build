@@ -4,13 +4,6 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Multipurpose Clock Generator">
 
-   <constant key="mcg_c2_erefs0_present"  />
-   <constant key="mcg_c2_hgo0_present"    />
-   <constant key="mcg_c7_oscsel_present"  />
-   <constant key="mcg_c8_cme1_present"    />
-   <constant key="mcg_c8_locre1_present"  />
-   <constant key="mcg_c8_lolre_present"   />
-
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG" dim="/SIM/numberOfClockSettings" >
       <param type="long" value="3"         />    <!-- mcg_c4_drst_drs max -->
@@ -26,22 +19,5 @@
    </validate>
    
    <xi:include href="mcg_base.xml"/>
-
-   <category name="Hardware bugs" description="">
-      <binaryOption key="ERRATA_E2448" 
-         description="Flash prefetch could result in incorrect read data"
-         toolTip="Issue: Flash prefetch could result in incorrect read data when CLKDIV1 changed\n
-         Workaround: Use code in RAM that disables/restores prefetch around changing CLKDIV1" >
-         <choice value="0" name="No special handling" />
-         <choice value="1" name="Special handing" isDefault="true" />
-      </binaryOption>
-      <binaryOption key="ERRATA_E7993" 
-         description="FLL frequency may be incorrect"
-         toolTip="Issue: FLL frequency may be incorrect after changing the FLL reference clock\n
-         Workaround: Invert MCG_C4[DMX32] before clock source changes and restore afterwards">
-         <choice value="0" name="No special handling" />
-         <choice value="1" name="Special handing" isDefault="true" />
-      </binaryOption>
-   </category>
 
 </peripheralPage>

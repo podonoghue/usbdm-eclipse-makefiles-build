@@ -965,5 +965,22 @@
    <template key="ClockInfoType" namespace="all" ><![CDATA[
       \t};\n\n
    ]]></template>
+
+   <category name="Hardware bugs" description="">
+      <binaryOption key="ERRATA_E2448" 
+         description="Flash prefetch could result in incorrect read data"
+         toolTip="Issue: Flash prefetch could result in incorrect read data when CLKDIV1 changed\n
+         Workaround: Use code in RAM that disables/restores prefetch around changing CLKDIV1" >
+         <choice value="0" name="No special handling" />
+         <choice value="1" name="Special handing" isDefault="true" />
+      </binaryOption>
+      <binaryOption key="ERRATA_E7993" 
+         description="FLL frequency may be incorrect"
+         toolTip="Issue: FLL frequency may be incorrect after changing the FLL reference clock\n
+         Workaround: Invert MCG_C4[DMX32] before clock source changes and restore afterwards">
+         <choice value="0" name="No special handling" />
+         <choice value="1" name="Special handing" isDefault="true" />
+      </binaryOption>
+   </category>
          
 </fragment>
