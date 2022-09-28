@@ -2804,7 +2804,7 @@ typedef struct SYST_Type {
 /** @{ */
 
 /* ================================================================================ */
-/* ================           TPM0 (file:TPM0_2CH)                 ================ */
+/* ================           TPM0 (file:TPM0_2CH_NO_DMA)          ================ */
 /* ================================================================================ */
 
 /**
@@ -2855,9 +2855,6 @@ typedef struct TPM_Type {
 #define TPM_SC_TOF_MASK                          (0x80U)                                             /**< TPM0_SC.TOF Mask                        */
 #define TPM_SC_TOF_SHIFT                         (7U)                                                /**< TPM0_SC.TOF Position                    */
 #define TPM_SC_TOF(x)                            (((uint32_t)(((uint32_t)(x))<<TPM_SC_TOF_SHIFT))&TPM_SC_TOF_MASK) /**< TPM0_SC.TOF Field                       */
-#define TPM_SC_DMA_MASK                          (0x100U)                                            /**< TPM0_SC.DMA Mask                        */
-#define TPM_SC_DMA_SHIFT                         (8U)                                                /**< TPM0_SC.DMA Position                    */
-#define TPM_SC_DMA(x)                            (((uint32_t)(((uint32_t)(x))<<TPM_SC_DMA_SHIFT))&TPM_SC_DMA_MASK) /**< TPM0_SC.DMA Field                       */
 /** @} */
 
 /** @name CNT - Counter */ /** @{ */
@@ -2873,9 +2870,6 @@ typedef struct TPM_Type {
 /** @} */
 
 /** @name CnSC - Channel %s Status and Control */ /** @{ */
-#define TPM_CnSC_DMA_MASK                        (0x1U)                                              /**< TPM0_CnSC.DMA Mask                      */
-#define TPM_CnSC_DMA_SHIFT                       (0U)                                                /**< TPM0_CnSC.DMA Position                  */
-#define TPM_CnSC_DMA(x)                          (((uint32_t)(((uint32_t)(x))<<TPM_CnSC_DMA_SHIFT))&TPM_CnSC_DMA_MASK) /**< TPM0_CnSC.DMA Field                     */
 #define TPM_CnSC_ELS_MASK                        (0xCU)                                              /**< TPM0_CnSC.ELS Mask                      */
 #define TPM_CnSC_ELS_SHIFT                       (2U)                                                /**< TPM0_CnSC.ELS Position                  */
 #define TPM_CnSC_ELS(x)                          (((uint32_t)(((uint32_t)(x))<<TPM_CnSC_ELS_SHIFT))&TPM_CnSC_ELS_MASK) /**< TPM0_CnSC.ELS Field                     */

@@ -1,9 +1,10 @@
 <!--
 Devices using this peripheral: 
       MKL02Z4
+      MKL03Z4
 -->
       <peripheral>
-         <?sourceFile "TPM0_2CH" ?>
+         <?sourceFile "TPM0_2CH_NO_DMA" ?>
          <name>TPM0</name>
          <description>Timer/PWM Module (2 channels)</description>
          <groupName>TPM</groupName>
@@ -169,24 +170,6 @@ An interrupt is generated when TOF equals one</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>DMA</name>
-                     <description>DMA Enable</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disables DMA transfers</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enables DMA transfers</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
                </fields>
             </register>
             <register>
@@ -226,24 +209,6 @@ An interrupt is generated when TOF equals one</description>
                   <description>Channel %s Status and Control</description>
                   <addressOffset>0x0</addressOffset>
                   <fields>
-                     <field>
-                        <name>DMA</name>
-                        <description>DMA Enable</description>
-                        <bitOffset>0</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>Disable DMA transfers</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>Enable DMA transfers</description>
-                              <value>0b1</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
                      <field>
                         <name>ELS</name>
                         <?ignoreOverlap?>

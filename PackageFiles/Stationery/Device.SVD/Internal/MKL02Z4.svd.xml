@@ -51,7 +51,7 @@
       <xi:include href="peripherals/SMC_MKL02Z4.svd.xml"/>
       <xi:include href="peripherals/SPI0_MKE_8Bit.svd.xml"/>
       <xi:include href="peripherals/SYST.svd.xml"/>
-      <xi:include href="peripherals/TPM0_2CH.svd.xml"/>
+      <xi:include href="peripherals/TPM0_2CH_NO_DMA.svd.xml"/>
       <peripheral derivedFrom="TPM0"><name>TPM1</name><baseAddress>0x40039000</baseAddress></peripheral>
       <xi:include href="peripherals/UART0_MKL02Z4.svd.xml"/>
    </peripherals>
