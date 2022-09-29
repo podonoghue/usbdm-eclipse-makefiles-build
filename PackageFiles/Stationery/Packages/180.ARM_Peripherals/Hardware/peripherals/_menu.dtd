@@ -2,7 +2,7 @@
 
 <!ENTITY % gui_items        "(xi:include|addDependency|deleteOption|category|categoryOption|addChoices|aliasCategoryOption|if|for|aliasCategory|constant|floatOption|intOption|bitmaskOption|choiceOption|binaryOption|irqOption|stringOption|numericListOption|pinListOption|aliasOption|signals)" >
 <!ENTITY % structure_items  "(xi:include|section|list)" >
-<!ENTITY % control_items    "(xi:include|template|setTemplate|enumTemplate|initialValueTemplate|clockCodeTemplate|validate|projectActionList)" >
+<!ENTITY % control_items    "(xi:include|template|setTemplate|constructorTemplate|enumTemplate|initialValueTemplate|clockCodeTemplate|validate|projectActionList)" >
 
 <!-- Include another file -->
 <!ELEMENT xi:include EMPTY>

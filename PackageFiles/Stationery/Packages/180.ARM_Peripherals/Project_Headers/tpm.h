@@ -33,15 +33,16 @@ namespace USBDM {
  */
 
 /**
+ * Callback to catch unhandled channel interrupt
+ *
+ * @param mask Mask identifying channel
+ */
+void timerUnhandledChannelCallback(uint8_t);
+
+/**
  * Type definition for timer overflow interrupt call back
  */
 typedef void (*TpmCallbackFunction)();
-/**
- * Type definition for channel interrupt call back
- *
- * @param[in] status Flags indicating interrupt source channel(s)
- */
-typedef void (*TpmChannelCallbackFunction)(uint8_t status);
 
 /**
  * Provides shared methods.
@@ -134,15 +135,6 @@ protected:
       return index;
    }
 
-   /**
-    * Callback to catch unhandled interrupt
-    *
-    * @param mask Mask identifying channel
-    */
-   static void unhandledChannelCallback(uint8_t mask) {
-      (void)mask;
-      setAndCheckErrorCode(E_NO_HANDLER);
-   }
    /**
     * Callback to catch unhandled interrupt
     */
@@ -899,6 +891,8 @@ private:
    TpmBase_T(const TpmBase_T&) = delete;
    TpmBase_T(TpmBase_T&&) = delete;
 
+   typedef typename Info::ChannelCallbackFunction ChannelCallbackFunction;
+
 public:
 
    // Empty constructor
@@ -933,9 +927,6 @@ private:
    /** Callback function for Channel Fault */
    static TpmCallbackFunction sFaultCallback;
 
-   /** Callback function for Channel ISR */
-   static TpmChannelCallbackFunction sChannelCallbacks[Info::NumChannelVectors];
-
    /** Number of channels mapped to a channel event vector */
    static constexpr unsigned ChannelVectorRatio = Info::NumChannels/Info::NumChannelVectors;
 
@@ -954,6 +945,7 @@ public:
     * IRQ handler
     */
    static void irqHandler() {
+      // Check of TOF set and enabled
       if ((tpm->SC&(TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) == (TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) {
          // Clear TOI flag (w1c)
          tpm->SC = tpm->SC | TPM_SC_TOF_MASK;
@@ -964,7 +956,7 @@ public:
       if (status) {
          // Clear flags for channel events being handled (w1c register if read)
          tpm->STATUS = status;
-         sChannelCallbacks[0](status);
+         Info::channelCallbacks[0](status);
       }
    }
 
@@ -984,7 +976,7 @@ public:
     *    int y;
     *
     *    // Member function used as callback
-    *    // This function must match TpmChannelCallbackFunction
+    *    // This function must match ChannelCallbackFunction
     *    void callback(uint8_t status) {
     *       ...;
     *    }
@@ -1000,8 +992,8 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(uint8_t), T &object>
-   static TpmChannelCallbackFunction wrapCallback() {
-      static TpmChannelCallbackFunction fn = [](uint8_t status) {
+   static ChannelCallbackFunction wrapCallback() {
+      static ChannelCallbackFunction fn = [](uint8_t status) {
          (object.*callback)(status);
       };
       return fn;
@@ -1023,7 +1015,7 @@ public:
     *    int y;
     *
     *    // Member function used as callback
-    *    // This function must match TpmChannelCallbackFunction
+    *    // This function must match ChannelCallbackFunction
     *    void callback(uint8_t status) {
     *       ...;
     *    }
@@ -1039,49 +1031,16 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(uint8_t)>
-   static TpmChannelCallbackFunction wrapCallback(T &object) {
+   static ChannelCallbackFunction wrapCallback(T &object) {
       static T &obj = object;
-      static TpmChannelCallbackFunction fn = [](uint8_t status) {
+      static ChannelCallbackFunction fn = [](uint8_t status) {
          (obj.*callback)(status);
       };
       return fn;
    }
 
    /**
-    * Set channel Callback function\n
-    * Note that one callback is shared by all channels of the timer
-    *
-    * @param[in] callback Callback function to execute on channel interrupt.\n
-    *                     Use nullptr to remove callback.
-    *
-    * @return E_NO_ERROR            No error
-    * @return E_HANDLER_ALREADY_SET Handler already set
-    *
-    * @note Channel callbacks may be shared by multiple channels of the timer.
-    *       It is necessary to identify the originating channel in the callback
-    */
-   static ErrorCode setChannelCallback(TpmChannelCallbackFunction callback) {
-      static_assert(Info::irqLevel>=0, "TPM not configured for interrupts - Modify Configure.usbdm");
-      static_assert(Info::NumChannelVectors == 1, "This function should only be used when all timer channels share a single callback");
-      if (callback == nullptr) {
-         sChannelCallbacks[0] = unhandledChannelCallback;
-         return E_NO_ERROR;
-      }
-#ifdef DEBUG_BUILD
-      // Callback is shared across multiple channels. Check if callback already assigned
-      if ((sChannelCallbacks[0] != unhandledChannelCallback) &&
-          (sChannelCallbacks[0] != nullptr) &&
-          (sChannelCallbacks[0] != callback)) {
-         return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
-      }
-#endif
-      sChannelCallbacks[0] = callback;
-      return E_NO_ERROR;
-   }
-
-   /**
-    * Set TOI Callback function\n
-    * Note that one callback is shared by all channels of the timer
+    * Set common fault and Timer Overflow Callback function\n
     *
     * @param[in] theCallback Callback function to execute when timer overflows. \n
     *                        nullptr to indicate none
@@ -1096,7 +1055,7 @@ public:
    }
 
 public:
- $(/TPM/classInfo: // No class Info found)
+$(/TPM/classInfo: // No class Info found)
 $(/TPM/InitMethod:// /TPM/InitMethod not found)
 $(/TPM/ChannelInitMethod: // /TPM/ChannelInitMethod not found)
 
@@ -1114,13 +1073,6 @@ $(/TPM/ChannelInitMethod: // /TPM/ChannelInitMethod not found)
          TpmPrescale    tpmPrescale    = TpmPrescale_DivBy128) {
 
       enable();
-
-      // Map NULL callback to unhandledChannelCallback
-      for (unsigned channel=0; channel<Info::NumChannelVectors; channel++) {
-         if (sChannelCallbacks[channel] == nullptr) {
-            sChannelCallbacks[channel] = unhandledChannelCallback;
-         }
-      }
 
       // Disable so immediate effect
       tpm->SC = 0;
@@ -1762,6 +1714,7 @@ public:
       Channel(Channel&&) = delete;
 
    public:
+      typedef typename Info::ChannelInit ChannelInit;
 
       constexpr Channel() : TpmChannel(Info::baseAddress, channel) {}
       virtual ~Channel() = default;
@@ -1826,8 +1779,17 @@ public:
        *       pending CnV register updates are discarded.
        */
       static void defaultConfigure() {
+         OwningTpm::configureChannel(OwningTpm::DefaultChannelInitValues[channel]);
+      }
 
-         OwningTpm::tpm->CONTROLS[channel].CnSC = TpmChannelMode_PwmHighTruePulses|TpmChannelAction_None;
+      /**
+       * Configure channel
+       *
+       * @note This method has the side-effect of clearing the register update synchronisation i.e.
+       *       pending CnV register updates are discarded.
+       */
+      static void configure(ChannelInit channelInit) {
+         OwningTpm::configureChannel(channelInit);
       }
 
       /**
@@ -2177,7 +2139,6 @@ public:
 };
 
 template<class Info> TpmCallbackFunction         TpmBase_T<Info>::sToiCallback        = TpmBase_T<Info>::unhandledCallback;
-template<class Info> TpmChannelCallbackFunction  TpmBase_T<Info>::sChannelCallbacks[] = {nullptr};
 
 #ifdef TPM_QDCTRL_QUADEN_MASK
 /**

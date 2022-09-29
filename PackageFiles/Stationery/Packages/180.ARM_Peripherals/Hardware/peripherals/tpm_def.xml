@@ -287,7 +287,7 @@
          values=" non_static_functions : ''        : ' const';
                   static_functions     : 'static ' : ''     
    ">
-      <setTemplate key="/TPM/%(k)" namespace="all"
+      <setTemplate key="/$(_basename)/%(k)" namespace="all"
          discardRepeats="true"
          variables="tpm_sc_cmod,tpm_sc_ps"
          nonDefaultParams="2" 
@@ -330,7 +330,7 @@
          values=" tpm_sc_cmod  : setClockSource;
                   tpm_sc_ps    : setPrescaler;
                   tpm_sc_mode  : setMode">
-         <setTemplate key="/TPM/%(k)" namespace="all"
+         <setTemplate key="/$(_basename)/%(k)" namespace="all"
             discardRepeats="true"
             variables="%(f)"
             nonDefaultParams="2" 
@@ -360,7 +360,7 @@
          ]]></setTemplate>
       </for>
             
-      <setTemplate key="/TPM/%(k)" namespace="all"
+      <setTemplate key="/$(_basename)/%(k)" namespace="all"
          discardRepeats="true"
          variables="tpm_mod,tpm_sc_ps"
       ><![CDATA[
@@ -533,7 +533,7 @@ $(init_description)
 
 <!--  Configure method -->
   
-   <setTemplate variables="tpm_sc_cmod" discardRepeats="true" key="/TPM/InitMethod" namespace="all" ><![CDATA[
+   <setTemplate variables="tpm_sc_cmod" discardRepeats="true" key="/$(_basename)/InitMethod" namespace="all" ><![CDATA[
       \t/**
       \t * Configure TPM from values specified in init
       \t
@@ -665,8 +665,8 @@ $(init_description)
          \t   constexpr Init(
          %params, Types... rest) : Init(rest...) {
          \t   
-         \t      %registerName0 = (%registerName0&%mask0) | %enumParam0;
-         \t      %registerName1 = %enumParam1;
+         \t      %registerName0    = (%registerName0&%mask0) | %enumParam0;
+         \t      %registerName1   = %enumParam1;
          \t   }
          \t\n
    ]]></constructorTemplate>
@@ -814,7 +814,7 @@ $(channel_init_description)
 
 <!-- Configure method -->
    
-   <template discardRepeats="true" key="/TPM/ChannelInitMethod" namespace="all" ><![CDATA[
+   <template discardRepeats="true" key="/$(_basename)/ChannelInitMethod" namespace="all" ><![CDATA[
       \t/**
       \t * Configure Channel from values specified in channelInit
       \t
@@ -826,7 +826,7 @@ $(channel_init_description)
       \t   Info::enableClock();
       \t\n
    ]]></template>
-   <template discardRepeats="true" key="/TPM/ChannelInitMethod" namespace="all" condition="tpm_combine_combine0_present" ><![CDATA[
+   <template discardRepeats="true" key="/$(_basename)/ChannelInitMethod" namespace="all" condition="tpm_combine_combine0_present" ><![CDATA[
       \t   // Configure timer combine mode
       \t   if ((channelInit.channel&0b1) == 0) {
       \t      // Even channel value controls paired channels n,n+1
@@ -835,7 +835,7 @@ $(channel_init_description)
       \t      tpm->COMBINE = (tpm->COMBINE & ~mask) | (((channelInit.cnsc>>8)<<offset)&mask);
       \t   }\n
    ]]></template>
-   <template discardRepeats="true" key="/TPM/ChannelInitMethod" namespace="all" ><![CDATA[
+   <template discardRepeats="true" key="/$(_basename)/ChannelInitMethod" namespace="all" ><![CDATA[
       \t   // Configure timer channel
       \t   tpm->CONTROLS[channelInit.channel].CnV  = channelInit.cnv;
       \t   tpm->CONTROLS[channelInit.channel].CnSC = channelInit.cnsc;
@@ -973,13 +973,14 @@ $(channel_init_description)
 
 <!--  ========== Misc =============================== -->
    
-   <template namespace="all" key="/HARDWARE/StaticObjects" discardRepeats="true" ><![CDATA[
+   <template namespace="all" key="/HARDWARE/StaticObjects.timerHandler" discardRepeats="true" 
+   ><![CDATA[
    \t/**
    \t * Callback to catch unhandled channel interrupt
    \t *
    \t * @param mask Mask identifying channel
    \t */
-   \tvoid tpmUnhandledChannelCallback(uint8_t mask) {
+   \tvoid timerUnhandledChannelCallback(uint8_t mask) {
    \t   (void)mask;
    \t   setAndCheckErrorCode(E_NO_HANDLER);
    \t}\n\n
@@ -996,21 +997,63 @@ $(channel_init_description)
    \t/**
    \t * Callback table for programmatically set handlers
    \t */
-   \tstatic ChannelCallbackFunction sChannelCallbacks[$(NumChannelVectors)];\n\n
+   \tstatic ChannelCallbackFunction channelCallbacks[$(NumChannelVectors)];\n\n
+   ]]></template>
+   
+   <template namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors==1)"
+   ><![CDATA[
+      extern void timerUnhandledChannelCallback(uint8_t);\n\n
+   ]]></template>
+   
+   <template codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors==1)" ><![CDATA[
+   \t/**
+   \t * Set channel Callback function\n
+   \t * Note that one callback is shared by all channels of the timer
+   \t *
+   \t * @param[in] callback Callback function to execute on channel interrupt.\n
+   \t *                     Use nullptr to remove callback.
+   \t *
+   \t * @return E_NO_ERROR            No error
+   \t * @return E_HANDLER_ALREADY_SET Handler already set
+   \t *
+   \t * @note Channel callbacks may be shared by multiple channels of the timer.
+   \t *       It is necessary to identify the originating channel in the callback
+   \t */
+   \tstatic ErrorCode setChannelCallback(ChannelCallbackFunction callback) {
+   \t   if (callback == nullptr) {
+   \t      channelCallbacks[0] = timerUnhandledChannelCallback;
+   \t      return E_NO_ERROR;
+   \t   }
+#ifdef DEBUG_BUILD
+   \t   // Callback is shared across multiple channels. Check if callback already assigned
+   \t   if ((channelCallbacks[0] != timerUnhandledChannelCallback) &&
+   \t       (channelCallbacks[0] != callback)) {
+   \t      return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
+   \t   }
+#endif
+   \t   channelCallbacks[0] = callback;
+   \t   return E_NO_ERROR;
+   \t}\n\n
    ]]></template>
 
-   <template namespace="all" key="/HARDWARE/StaticObjects" ><![CDATA[
+   <template namespace="all" key="/HARDWARE/StaticObjects" 
+      codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors==1)"
+    ><![CDATA[
       \t/**
       \t * Callback table for programmatically set handlers for $(_class)
       \t */
-      \t$(_class)Info::ChannelCallbackFunction $(_class)Info::sChannelCallbacks[] = {\n\n
+      \t$(_class)Info::ChannelCallbackFunction $(_class)Info::channelCallbacks[] = {\n\n
    ]]></template>
       <for keys="ch" dim="NumChannelVectors">
-         <template namespace="all" key="/HARDWARE/StaticObjects" ><![CDATA[
-            \t   tpmUnhandledChannelCallback,\n
+         <template namespace="all" key="/HARDWARE/StaticObjects" 
+            codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors==1)"
+         ><![CDATA[
+            \t   timerUnhandledChannelCallback,\n
          ]]></template>
       </for>
-   <template namespace="all" key="/HARDWARE/StaticObjects" ><![CDATA[
+   <template namespace="all" key="/HARDWARE/StaticObjects" 
+      codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors==1)"
+   ><![CDATA[
       \t};\n\n
    ]]></template>
    
@@ -1027,7 +1070,7 @@ $(channel_init_description)
       <copy source="Snippets/tpm-oc-example.cpp"   target="Snippets/tpm-oc-example.cpp"    overwrite="true" derived="true"/>
    </projectActionList>
          
-   <template key="/TPM/declarations" namespace="all"  
+   <template key="/$(_basename)/declarations" namespace="all"  
    ><![CDATA[
    /**
     * Class representing $(_name)
@@ -1035,7 +1078,7 @@ $(channel_init_description)
    class $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n\n
    ]]></template>
 
-   <template key="/TPM/quadDeclarations" namespace="all"  ><![CDATA[
+   <template key="/$(_basename)/quadDeclarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_class) as Quadrature decoder
    \t */

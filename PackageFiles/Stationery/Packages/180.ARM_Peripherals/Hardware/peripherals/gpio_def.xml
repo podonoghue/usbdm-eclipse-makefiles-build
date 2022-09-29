@@ -494,6 +494,7 @@
       PinMux_Gpio);\n\n
    ]]></template>
 
+   <if condition="true">
    <template 
       namespace="all" 
       key="/PCR/set_pcr"  
@@ -511,6 +512,60 @@
       \t      enablePortClocks(clockInfo);
       \t      
       \t      uint32_t pcr  = static_cast<uint32_t>(pcrValue);
+      \t\n
+   ]]></template>
+   <template 
+      condition="/PCR/dfer_register_present"
+      namespace="all" 
+      key="/PCR/set_pcr"  
+      discardRepeats="true" ><![CDATA[
+      \t      if (pcr&PORT_PCR_DIGITALFILTER_MASK) {
+      \t         Pcr_T::port->DFER = Pcr_T::port->DFER | BITMASK;
+      \t      }
+      \t      else {
+      \t         Pcr_T::port->DFER = Pcr_T::port->DFER & ~BITMASK;
+      \t      }
+      \t      // Make sure MUX value is correct and clear PinFilter_Digital
+      \t      pcr = (pcr & ~(PORT_PCR_MUX_MASK|PORT_PCR_DIGITALFILTER_MASK)) | defaultPcrValue.pinMux();\n
+      \t\n
+   ]]></template>
+   <template 
+      condition="!/PCR/dfer_register_present"
+      namespace="all" 
+      key="/PCR/set_pcr"  
+      discardRepeats="true" ><![CDATA[
+      \t      // Make sure MUX value is correct
+      \t      pcr = (pcr & ~(PORT_PCR_MUX_MASK)) | defaultPcrValue.pinMux();
+      \t\n
+   ]]></template>
+   <template 
+      namespace="all" 
+      key="/PCR/set_pcr"  
+      discardRepeats="true" ><![CDATA[
+      \t      // Set PCR register for pin
+      \t      *PCR = pcr;
+      \t   }
+      \t}\n\n
+   ]]></template>
+   </if>
+   
+   <template 
+      namespace="all" 
+      key="/PCR/set_pcr"  
+      discardRepeats="true" ><![CDATA[
+      \t/**
+      \t * Set Pin Control Register Attributes
+      \t * Mux value is set appropriately for the pin function being used
+      \t * The clock to the port will be enabled before changing the PCR
+      \t * 
+      \t * @param[in] pcrInit PCR value excluding MUX value. Defaults to template value.
+      \t */
+      \tstatic void setPCR(const PcrInit &pcrInit)  {
+      \t
+      \t   if constexpr (portAddress != 0) {
+      \t      enablePortClocks(clockInfo);
+      \t      
+      \t      uint32_t pcr  = static_cast<uint32_t>(pcrInit.value);
       \t\n
    ]]></template>
    <template 

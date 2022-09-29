@@ -66,13 +66,6 @@ enum FtmChannelForce {    // Enable|Value
 };
 
 /**
- * Type definition for channel interrupt call back
- *
- * @param[in] status Flags indicating interrupt source channel(s)
- */
-typedef void (*FtmChannelCallbackFunction)(uint8_t status);
-
-/**
  * Provides shared methods.
  */
 class FtmBase {
@@ -163,15 +156,6 @@ protected:
       return index;
    }
 
-   /**
-    * Callback to catch unhandled interrupt
-    *
-    * @param mask Mask identifying channel
-    */
-   static void unhandledChannelCallback(uint8_t mask) {
-      (void)mask;
-      setAndCheckErrorCode(E_NO_HANDLER);
-   }
    /**
     * Callback to catch unhandled interrupt
     */
@@ -1063,6 +1047,8 @@ private:
    FtmBase_T(const FtmBase_T&) = delete;
    FtmBase_T(FtmBase_T&&) = delete;
 
+   typedef typename Info::ChannelCallbackFunction ChannelCallbackFunction;
+
 public:
 
    // Empty constructor
@@ -1091,9 +1077,6 @@ private:
    /** Callback function for Channel Fault and timer overflow */
    static typename Info::CallbackFunction sCallback;
 
-   /** Callback function for Channel ISR */
-   static FtmChannelCallbackFunction sChannelCallbacks[Info::NumChannelVectors];
-
    /** Number of channels mapped to a channel event vector */
    static constexpr unsigned ChannelVectorRatio = Info::NumChannels/Info::NumChannelVectors;
 
@@ -1120,7 +1103,7 @@ public:
       if (status) {
          // Clear flags for channel events being handled (w0c register if read first)
          ftm->STATUS = ~status;
-         sChannelCallbacks[instance/ChannelVectorRatio](status);
+         Info::channelCallbacks[instance/ChannelVectorRatio](status);
       }
    }
 
@@ -1160,7 +1143,7 @@ public:
          if (status) {
             // Clear flags for channel events being handled (w0c register if read first)
             ftm->STATUS = ~status;
-            sChannelCallbacks[0](status);
+            Info::channelCallbacks[0](status);
          }
       }
    }
@@ -1181,7 +1164,7 @@ public:
     *    int y;
     *
     *    // Member function used as callback
-    *    // This function must match FtmChannelCallbackFunction
+    *    // This function must match ChannelCallbackFunction
     *    void callback(uint8_t status) {
     *       ...;
     *    }
@@ -1197,8 +1180,8 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(uint8_t), T &object>
-   static FtmChannelCallbackFunction wrapCallback() {
-      static FtmChannelCallbackFunction fn = [](uint8_t status) {
+   static ChannelCallbackFunction wrapCallback() {
+      static ChannelCallbackFunction fn = [](uint8_t status) {
          (object.*callback)(status);
       };
       return fn;
@@ -1220,7 +1203,7 @@ public:
     *    int y;
     *
     *    // Member function used as callback
-    *    // This function must match FtmChannelCallbackFunction
+    *    // This function must match ChannelCallbackFunction
     *    void callback(uint8_t status) {
     *       ...;
     *    }
@@ -1236,9 +1219,9 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(uint8_t)>
-   static FtmChannelCallbackFunction wrapCallback(T &object) {
+   static ChannelCallbackFunction wrapCallback(T &object) {
       static T &obj = object;
-      static FtmChannelCallbackFunction fn = [](uint8_t status) {
+      static ChannelCallbackFunction fn = [](uint8_t status) {
          (obj.*callback)(status);
       };
       return fn;
@@ -1258,22 +1241,22 @@ public:
     * @note Channel callbacks may be shared by multiple channels of the timer.
     *       It is necessary to identify the originating channel in the callback
     */
-   static ErrorCode setChannelCallback(FtmChannelCallbackFunction callback, unsigned channel) {
+   static ErrorCode setChannelCallback(ChannelCallbackFunction callback, unsigned channel) {
       static_assert(Info::irqLevel>=0, "FTM not configured for interrupts - Modify Configure.usbdm");
       static_assert(Info::NumChannelVectors > 1, "This function should not be used when all timer channels share a single callback");
       if (callback == nullptr) {
-         sChannelCallbacks[channel/ChannelVectorRatio] = unhandledChannelCallback;
+         Info::channelCallbacks[channel/ChannelVectorRatio] = timerUnhandledChannelCallback;
          return E_NO_ERROR;
       }
 #ifdef DEBUG_BUILD
       // Callback is shared across multiple channels. Check if callback already assigned
-      if ((sChannelCallbacks[channel/ChannelVectorRatio] != unhandledChannelCallback) &&
-          (sChannelCallbacks[channel/ChannelVectorRatio] != nullptr) &&
-          (sChannelCallbacks[channel/ChannelVectorRatio] != callback)) {
+      if ((Info::channelCallbacks[channel/ChannelVectorRatio] != timerUnhandledChannelCallback) &&
+          (Info::channelCallbacks[channel/ChannelVectorRatio] != nullptr) &&
+          (Info::channelCallbacks[channel/ChannelVectorRatio] != callback)) {
          return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
       }
 #endif
-      sChannelCallbacks[channel/ChannelVectorRatio] = callback;
+      Info::channelCallbacks[channel/ChannelVectorRatio] = callback;
       return E_NO_ERROR;
    }
 
@@ -1290,22 +1273,21 @@ public:
     * @note Channel callbacks may be shared by multiple channels of the timer.
     *       It is necessary to identify the originating channel in the callback
     */
-   static ErrorCode setChannelCallback(FtmChannelCallbackFunction callback) {
+   static ErrorCode setChannelCallback(ChannelCallbackFunction callback) {
       static_assert(Info::irqLevel>=0, "FTM not configured for interrupts - Modify Configure.usbdm");
       static_assert(Info::NumChannelVectors == 1, "This function should only be used when all timer channels share a single callback");
       if (callback == nullptr) {
-         sChannelCallbacks[0] = unhandledChannelCallback;
+         Info::channelCallbacks[0] = timerUnhandledChannelCallback;
          return E_NO_ERROR;
       }
 #ifdef DEBUG_BUILD
       // Callback is shared across multiple channels. Check if callback already assigned
-      if ((sChannelCallbacks[0] != unhandledChannelCallback) &&
-          (sChannelCallbacks[0] != nullptr) &&
-          (sChannelCallbacks[0] != callback)) {
+      if ((Info::channelCallbacks[0] != timerUnhandledChannelCallback) &&
+          (Info::channelCallbacks[0] != callback)) {
          return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
       }
 #endif
-      sChannelCallbacks[0] = callback;
+      Info::channelCallbacks[0] = callback;
       return E_NO_ERROR;
    }
 
@@ -1343,13 +1325,6 @@ $(/FTM/ChannelInitMethod: // /FTM/ChannelInitMethod not found)
          FtmPrescale    ftmPrescale    = FtmPrescale_DivBy128) {
 
       enable();
-
-      // Map NULL callback to unhandledChannelCallback
-      for (unsigned channel=0; channel<Info::NumChannelVectors; channel++) {
-         if (sChannelCallbacks[channel] == nullptr) {
-            sChannelCallbacks[channel] = unhandledChannelCallback;
-         }
-      }
 
       // Disable so immediate effect
       ftm->SC = 0;
@@ -2223,6 +2198,7 @@ public:
       Channel(Channel&&) = delete;
 
    public:
+      typedef typename Info::ChannelInit ChannelInit;
 
       constexpr Channel() : FtmChannel(Info::baseAddress, channel) {}
       virtual ~Channel() = default;
@@ -2287,15 +2263,24 @@ public:
        *       pending CnV register updates are discarded.
        */
       static void defaultConfigure() {
+         OwningFtm::configureChannel(OwningFtm::DefaultChannelInitValues[channel]);
+      }
 
-         OwningFtm::ftm->CONTROLS[channel].CnSC = FtmChannelMode_PwmHighTruePulses|FtmChannelAction_None;
+      /**
+       * Configure channel
+       *
+       * @note This method has the side-effect of clearing the register update synchronisation i.e.
+       *       pending CnV register updates are discarded.
+       */
+      static void configure(ChannelInit channelInit) {
+         OwningFtm::configureChannel(channelInit);
       }
 
       /**
        * Configure channel.
        * Doesn't affect shared settings of owning Timer
        *
-       * @param[in] ftmChannelMode         Mode of operation for channel
+       * @param[in] ftmChannelMode    Mode of operation for channel
        * @param[in] ftmChannelAction  Whether to enable the interrupt or DMA function on this channel
        *
        * @note This method has the side-effect of clearing the register update synchronisation i.e.
@@ -2513,7 +2498,7 @@ public:
        * @note Channel callbacks may be shared by multiple channels of the timer.\n
        *       It is necessary to identify the originating channel in the callback
        */
-      static ErrorCode setChannelCallback(FtmChannelCallbackFunction callback) {
+      static ErrorCode setChannelCallback(ChannelCallbackFunction callback) {
          if constexpr (Info::NumChannelVectors > 1) {
             return OwningFtm::setChannelCallback(callback, channel);
          }
@@ -2676,8 +2661,9 @@ public:
 
 };
 
+$(/FTM0/CallBackDefinition: // /FTM0/CallBackDefinition Not found)
+
 template<class Info> typename Info::CallbackFunction FtmBase_T<Info>::sCallback           = FtmBase_T<Info>::unhandledCallback;
-template<class Info> FtmChannelCallbackFunction      FtmBase_T<Info>::sChannelCallbacks[] = {nullptr};
 
 #ifdef FTM_QDCTRL_QUADEN_MASK
 

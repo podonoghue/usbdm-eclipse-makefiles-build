@@ -11,6 +11,10 @@
    <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
    <constant key="rtc_shared" value="true" />
  
+   <constant key="/SIM/llwu_device_list"
+      description="LLWU Wakeup sources" 
+      value="LPTMR0;CMP0;;;TSI;RTC_Alarm;;RTC_Seconds" />
+
    <category name="COPC" description="COP Control Register">
       
       <choiceOption key="sim_copc_copt" 

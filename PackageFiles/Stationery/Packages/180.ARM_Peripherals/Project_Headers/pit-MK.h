@@ -85,6 +85,7 @@ protected:
 
    /** Callback functions for ISRs */
    static CallbackFunction sCallbacks[Info::NumChannels];
+   
    /** Bitmask used to indicate a channel call-back is one-shot */
    static uint8_t clearOnEvent;
 
@@ -1209,18 +1210,7 @@ $(/PIT/InitMethod: // /PIT/InitMethod Not found)
 /** Bit-mask of allocated channels */
 template<class Info> uint32_t PitBase_T<Info>::allocatedChannels = -1;
 
-/**
- * Callback table for programmatically set handlers
- */
-template<class Info>
-
-typename PitBase_T<Info>::CallbackFunction PitBase_T<Info>::sCallbacks[] = {
-      PitBase_T<Info>::unhandledCallback,
-      PitBase_T<Info>::unhandledCallback,
-      PitBase_T<Info>::unhandledCallback,
-      PitBase_T<Info>::unhandledCallback,
-};
-
+$(/PIT/CallBackDefinition: // /PIT/CallBackDefinition Not found)
 template<class Info>
 uint8_t PitBase_T<Info>::clearOnEvent = 0;
 

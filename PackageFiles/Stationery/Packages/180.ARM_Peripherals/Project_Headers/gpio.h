@@ -431,6 +431,26 @@ public:
       setInactive();
       Pcr::setPCR(defaultPcrValue.value);
    }
+
+//   /**
+//    * Set pin as digital I/O.
+//    * Pin is initially set as an input.
+//    * Use SetIn() and SetOut() to change direction.
+//    *
+//    * @note Resets the Pin Control Register value (PCR value).
+//    * @note Resets the pin output value to the inactive state
+//    *
+//    * @param[in] pcrValue PCR value to use in configuring pin (excluding MUX value). See pcrValue()
+//    */
+//   static void setInOut(PcrValue pcrValue) {
+//      // Make input initially
+//      setIn();
+//      // Set inactive pin state (if later made output)
+//      setInactive();
+//      // Configure PCR
+//      Pcr::setPCR(pcrValue);
+//   }
+
    /**
     * Set pin as digital I/O.
     * Pin is initially set as an input.
@@ -439,15 +459,15 @@ public:
     * @note Resets the Pin Control Register value (PCR value).
     * @note Resets the pin output value to the inactive state
     *
-    * @param[in] pcrValue PCR value to use in configuring pin (excluding MUX value). See pcrValue()
+    * @param[in] pcrInit PCR value to use in configuring pin (excluding MUX value). See pcrValue()
     */
-   static void setInOut(PcrValue pcrValue) {
+   static void setInOut(const PcrInit &pcrInit) {
       // Make input initially
       setIn();
       // Set inactive pin state (if later made output)
       setInactive();
       // Configure PCR
-      Pcr::setPCR(pcrValue);
+      Pcr::setPCR(pcrInit.value);
    }
 
 $(/GPIO/set_in_out: // /GPIO/set_in_out not found)   
@@ -483,6 +503,25 @@ $(/GPIO/set_in_out: // /GPIO/set_in_out not found)
       Pcr::setPCR(defaultPcrValue.value);
    }
 
+//   /**
+//    * Enable pin as digital output with initial inactive level.\n
+//    * Configures all Pin Control Register (PCR) values
+//    *
+//    * @note Resets the Pin Control Register value (PCR value).
+//    * @note Resets the pin value to the inactive state
+//    * @note Use setOut() for a lightweight change of direction without affecting other pin settings.
+//    *
+//    * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value). See pcrValue()
+//    */
+//   static void setOutput(PcrValue pcrValue) {
+//      // Set initial level before enabling pin drive
+//      setInactive();
+//      // Make pin an output
+//      setOut();
+//      // Configure pin
+//      Pcr::setPCR(pcrValue);
+//   }
+
    /**
     * Enable pin as digital output with initial inactive level.\n
     * Configures all Pin Control Register (PCR) values
@@ -491,16 +530,18 @@ $(/GPIO/set_in_out: // /GPIO/set_in_out not found)
     * @note Resets the pin value to the inactive state
     * @note Use setOut() for a lightweight change of direction without affecting other pin settings.
     *
-    * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value). See pcrValue()
+    * @param[in] pcrInit PCR value to use in configuring port (excluding MUX value). See pcrValue()
     */
-   static void setOutput(PcrValue pcrValue) {
+   static void setOutput(const PcrInit &pcrInit) {
       // Set initial level before enabling pin drive
       setInactive();
       // Make pin an output
       setOut();
       // Configure pin
-      Pcr::setPCR(pcrValue);
+      Pcr::setPCR(pcrInit.value);
    }
+
+
 
 $(/GPIO/set_output: // /GPIO/set_output not found)   
    /**
@@ -532,6 +573,23 @@ $(/GPIO/set_output: // /GPIO/set_output not found)
       Pcr::setPCR(defaultPcrValue.value);
    }
 
+//   /**
+//    * @brief
+//    * Enable pin as digital input.\n
+//    * Configures all Pin Control Register (PCR) values
+//    *
+//    * @note Resets the Pin Control Register value (PCR value).
+//    * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
+//    *
+//    * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value)
+//    */
+//   static void setInput(PcrValue pcrValue) {
+//      // Make pin an input
+//      setIn();
+//      // Configure pin
+//      Pcr::setPCR(pcrValue);
+//   }
+
    /**
     * @brief
     * Enable pin as digital input.\n
@@ -540,13 +598,13 @@ $(/GPIO/set_output: // /GPIO/set_output not found)
     * @note Resets the Pin Control Register value (PCR value).
     * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
     *
-    * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value)
+    * @param[in] pcrInit PCR value to use in configuring port (excluding MUX value)
     */
-   static void setInput(PcrValue pcrValue) {
+   static void setInput(const PcrInit &pcrInit) {
       // Make pin an input
       setIn();
       // Configure pin
-      Pcr::setPCR(pcrValue);
+      Pcr::setPCR(pcrInit.value);
    }
 
 $(/GPIO/set_input: // /GPIO/set_input not found)   
