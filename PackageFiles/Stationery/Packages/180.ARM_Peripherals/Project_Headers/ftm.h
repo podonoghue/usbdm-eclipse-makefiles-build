@@ -1228,70 +1228,6 @@ public:
    }
 
    /**
-    * Set channel Callback function\n
-    * Note that one callback may be shared by multiple channels of the timer
-    *
-    * @param[in] callback Callback function to execute on channel interrupt.\n
-    *                     Use nullptr to remove callback.
-    * @param[in] channel  Channel to set callback for.
-    *
-    * @return E_NO_ERROR            No error
-    * @return E_HANDLER_ALREADY_SET Handler already set
-    *
-    * @note Channel callbacks may be shared by multiple channels of the timer.
-    *       It is necessary to identify the originating channel in the callback
-    */
-   static ErrorCode setChannelCallback(ChannelCallbackFunction callback, unsigned channel) {
-      static_assert(Info::irqLevel>=0, "FTM not configured for interrupts - Modify Configure.usbdm");
-      static_assert(Info::NumChannelVectors > 1, "This function should not be used when all timer channels share a single callback");
-      if (callback == nullptr) {
-         Info::channelCallbacks[channel/ChannelVectorRatio] = timerUnhandledChannelCallback;
-         return E_NO_ERROR;
-      }
-#ifdef DEBUG_BUILD
-      // Callback is shared across multiple channels. Check if callback already assigned
-      if ((Info::channelCallbacks[channel/ChannelVectorRatio] != timerUnhandledChannelCallback) &&
-          (Info::channelCallbacks[channel/ChannelVectorRatio] != nullptr) &&
-          (Info::channelCallbacks[channel/ChannelVectorRatio] != callback)) {
-         return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
-      }
-#endif
-      Info::channelCallbacks[channel/ChannelVectorRatio] = callback;
-      return E_NO_ERROR;
-   }
-
-   /**
-    * Set channel Callback function\n
-    * Note that one callback is shared by all channels of the timer
-    *
-    * @param[in] callback Callback function to execute on channel interrupt.\n
-    *                     Use nullptr to remove callback.
-    *
-    * @return E_NO_ERROR            No error
-    * @return E_HANDLER_ALREADY_SET Handler already set
-    *
-    * @note Channel callbacks may be shared by multiple channels of the timer.
-    *       It is necessary to identify the originating channel in the callback
-    */
-   static ErrorCode setChannelCallback(ChannelCallbackFunction callback) {
-      static_assert(Info::irqLevel>=0, "FTM not configured for interrupts - Modify Configure.usbdm");
-      static_assert(Info::NumChannelVectors == 1, "This function should only be used when all timer channels share a single callback");
-      if (callback == nullptr) {
-         Info::channelCallbacks[0] = timerUnhandledChannelCallback;
-         return E_NO_ERROR;
-      }
-#ifdef DEBUG_BUILD
-      // Callback is shared across multiple channels. Check if callback already assigned
-      if ((Info::channelCallbacks[0] != timerUnhandledChannelCallback) &&
-          (Info::channelCallbacks[0] != callback)) {
-         return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
-      }
-#endif
-      Info::channelCallbacks[0] = callback;
-      return E_NO_ERROR;
-   }
-
-   /**
     * Set common fault and Timer Overflow Callback function\n
     *
     * @param[in] theCallback Callback function to execute when timer overflows. \n
@@ -2660,8 +2596,6 @@ public:
    }
 
 };
-
-$(/FTM0/CallBackDefinition: // /FTM0/CallBackDefinition Not found)
 
 template<class Info> typename Info::CallbackFunction FtmBase_T<Info>::sCallback           = FtmBase_T<Info>::unhandledCallback;
 

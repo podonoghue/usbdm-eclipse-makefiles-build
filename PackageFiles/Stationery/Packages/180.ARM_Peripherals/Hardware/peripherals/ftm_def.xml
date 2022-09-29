@@ -1454,34 +1454,66 @@ $(quad_init_description)
    ]]></template>
    
    <template  codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors==1)" ><![CDATA[
-   \t/**
-   \t * Set channel Callback function\n
-   \t * Note that one callback is shared by all channels of the timer
-   \t *
-   \t * @param[in] callback Callback function to execute on channel interrupt.\n
-   \t *                     Use nullptr to remove callback.
-   \t *
-   \t * @return E_NO_ERROR            No error
-   \t * @return E_HANDLER_ALREADY_SET Handler already set
-   \t *
-   \t * @note Channel callbacks may be shared by multiple channels of the timer.
-   \t *       It is necessary to identify the originating channel in the callback
-   \t */
-   \tstatic ErrorCode setChannelCallback(ChannelCallbackFunction callback) {
-   \t   if (callback == nullptr) {
-   \t      channelCallbacks[0] = timerUnhandledChannelCallback;
-   \t      return E_NO_ERROR;
-   \t   }
-#ifdef DEBUG_BUILD
-   \t   // Callback is shared across multiple channels. Check if callback already assigned
-   \t   if ((channelCallbacks[0] != timerUnhandledChannelCallback) &&
-   \t       (channelCallbacks[0] != callback)) {
-   \t      return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
-   \t   }
-#endif
-   \t   channelCallbacks[0] = callback;
-   \t   return E_NO_ERROR;
-   \t}\n\n
+      \t/**
+      \t * Set channel Callback function\n
+      \t * Note that one callback is shared by all channels of the timer
+      \t *
+      \t * @param[in] callback Callback function to execute on channel interrupt.\n
+      \t *                     Use nullptr to remove callback.
+      \t *
+      \t * @return E_NO_ERROR            No error
+      \t * @return E_HANDLER_ALREADY_SET Handler already set
+      \t *
+      \t * @note Channel callbacks may be shared by multiple channels of the timer.
+      \t *       It is necessary to identify the originating channel in the callback
+      \t */
+      \tstatic ErrorCode setChannelCallback(ChannelCallbackFunction callback) {
+      \t   if (callback == nullptr) {
+      \t      channelCallbacks[0] = timerUnhandledChannelCallback;
+      \t      return E_NO_ERROR;
+      \t   }
+      #ifdef DEBUG_BUILD
+      \t   // Callback is shared across multiple channels. Check if callback already assigned
+      \t   if ((channelCallbacks[0] != timerUnhandledChannelCallback) &&
+      \t       (channelCallbacks[0] != callback)) {
+      \t      return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
+      \t   }
+      #endif
+      \t   channelCallbacks[0] = callback;
+      \t   return E_NO_ERROR;
+      \t}\n\n
+   ]]></template>
+
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)" ><![CDATA[
+      \t/**
+      \t * Set channel Callback function\n
+      \t * Note that one callback is shared by all channels of the timer
+      \t *
+      \t * @param[in] callback Callback function to execute on channel interrupt.\n
+      \t *                     Use nullptr to remove callback.
+      \t * @param[in] channel  Channel to set callback for.
+      \t *
+      \t * @return E_NO_ERROR            No error
+      \t * @return E_HANDLER_ALREADY_SET Handler already set
+      \t *
+      \t * @note Channel callbacks may be shared by multiple channels of the timer.
+      \t *       It is necessary to identify the originating channel in the callback
+      \t */
+      \tstatic ErrorCode setChannelCallback(ChannelCallbackFunction callback, unsigned channel) {
+      \t   if (callback == nullptr) {
+      \t      channelCallbacks[channel/ChannelVectorRatio] = timerUnhandledChannelCallback;
+      \t      return E_NO_ERROR;
+      \t   }
+      #ifdef DEBUG_BUILD
+      \t   // Callback is shared across multiple channels. Check if callback already assigned
+      \t   if ((channelCallbacks[channel/ChannelVectorRatio] != timerUnhandledChannelCallback) &&
+      \t       (channelCallbacks[channel/ChannelVectorRatio] != callback)) {
+      \t      return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
+      \t   }
+      #endif
+      \t   channelCallbacks[channel/ChannelVectorRatio] = callback;
+      \t   return E_NO_ERROR;
+      \t}\n\n
    ]]></template>
 
    <template namespace="all" key="/HARDWARE/StaticObjects" 
