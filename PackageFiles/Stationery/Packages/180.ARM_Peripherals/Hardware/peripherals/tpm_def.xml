@@ -282,10 +282,38 @@
       <aliasOption key="/SIM/sim_sopt9_tpm$(_instance)ch0src" optional="true" constant="false" />
    </category>
 
-<!-- ========== Methods =============================== -->
-   <for  keys  =" k                    : static    : const" 
-         values=" non_static_functions : ''        : ' const';
-                  static_functions     : 'static ' : ''     
+   <setTemplate key="/$(_basename)/static_functions" namespace="all"
+      discardRepeats="true"
+      variables="tpm_sc_mode,tpm_sc_cmod,tpm_sc_ps"
+      nonDefaultParams="2" 
+   ><![CDATA[
+      \t/**
+      \t * Enables clock to peripheral and configures all pins.
+      \t * Configures main operating settings for timer.
+      \t *
+      %comments
+      \t */
+      \tstatic void configure(
+      %params) {
+      \t
+      \t   // Enable clock to peripheral
+      \t   enable();
+      \t
+      \t   // Disable timer to change settings
+      \t   %register=0;
+      \t
+      \t   // Make sure write has completed (disabled)
+      \t   (void)(%register);
+      \t
+      \t   // Write new value
+      \t   tpm->SC = %paramExpression;
+      \t}\n\n
+   ]]></setTemplate>
+
+<!--  ========== Static/Non-Static Methods =============================== -->
+   <for  keys  =" k                    : static    : const    : getInputClockFrequency         : channel : Tpm       : isStatic" 
+         values=" non_static_functions : ''        : ' const' : getInputClockFrequencyVirtual  : CHANNEL : TpmBase   : false ;
+                  static_functions     : 'static ' : ''       : 'Info::getInputClockFrequency' : channel : OwningTpm : true     
    ">
       <setTemplate key="/$(_basename)/%(k)" namespace="all"
          discardRepeats="true"
@@ -314,22 +342,22 @@
          \t
          \t   // Calculate new SC value
          \t   uint32_t %registerName = (%register&~%mask)|(%paramExpression);
-         
+         \t
          \t   // Disable timer to change clock (unable to switch directly between clock sources)
          \t   %register=0;
-         
+         \t
          \t   // Make sure write has completed (disabled)
          \t   (void)(%register);
-         
+         \t
          \t   // Write new value
          \t   %register = %registerName;
          \t}\n\n
       ]]></setTemplate>
             
       <for keys="  f           :  n" 
-         values=" tpm_sc_cmod  : setClockSource;
-                  tpm_sc_ps    : setPrescaler;
-                  tpm_sc_mode  : setMode">
+         values=" tpm_sc_mode  : Mode;
+                  tpm_sc_cmod  : ClockSource;
+                  tpm_sc_ps    : Prescaler">
          <setTemplate key="/$(_basename)/%(k)" namespace="all"
             discardRepeats="true"
             variables="%(f)"
@@ -343,7 +371,7 @@
             \t * @note This function will affect all channels of the timer.
             \t * @note The timer will be disabled while making changes.
             \t */
-            \t%(static)void %(n)(%params)%(const) {
+            \t%(static)void set%(n)(%params)%(const) {
             \t
             \t   // Calculate new SC value
             \t   uint32_t %registerName = (%register&~%mask)|(%paramExpression);
@@ -356,48 +384,768 @@
             
             \t   // Write new value
             \t   %register = %registerName;
+            \t}
+            \t
+            \t/**
+            \t * Get %description
+            \t *
+            %comments
+            \t */
+            \t%(static)%enumClass get%(n)()%(const) {
+            \t
+            \t   return (%enumClass)(%register&~%mask);
             \t}\n\n
          ]]></setTemplate>
       </for>
             
-      <setTemplate key="/$(_basename)/%(k)" namespace="all"
-         discardRepeats="true"
-         variables="tpm_mod,tpm_sc_ps"
-      ><![CDATA[
+      <for keys="  f           :  n" 
+         values=" tpm_mod      : CounterMaximumValue">
+         <setTemplate key="/$(_basename)/%(k)" namespace="all"
+            discardRepeats="true"
+            variables="%(f)"
+            nonDefaultParams="2" 
+         ><![CDATA[
+            \t/**
+            \t * Set %description
+            \t * This value is write-buffered and updated by MOD synchronisation
+            \t *
+            %comments
+            \t *
+            \t * @note This function will affect all channels of the timer.
+            \t */
+            \t%(static)void set%(n)(%params)%(const) {
+            \t
+            \t   // Write new value
+            \t   %register = %paramExpression;
+            \t}
+            \t
+            \t/**
+            \t * Get %description
+            \t *
+            %comments
+            \t */
+            \t%(static)%enumClass get%(n)()%(const) {
+            \t
+            \t   return (%enumClass)%register;
+            \t}\n\n
+         ]]></setTemplate>
+      </for>
+            
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
          \t/**
-         \t * Set maximum value of timer counter.
+         \t * Calculate TPM timing parameters to achieve a given period
          \t *
-         \t * @param[in] endValue Modulo value in ticks (<65535), 0 = 65536.
-         \t * @param[in] suspend  Whether to suspend timer during change.
+         \t * @param[in]    period  Period in seconds
+         \t * @param[inout] sc      Proposed TPM.SC value (must include CLKS, CPWMS fields)
+         \t *                       PS field is updated
+         \t * @param[out]   mod     Calculated TPM.MOD values
+         \t *
+         \t * @return E_NO_ERROR   Success!!
+         \t * @return E_TOO_SMALL  Requested period is too small for resolution (required resolution check to be enabled)
+         \t * @return E_TOO_LARGE  Requested period is too large
+         \t */
+         \t%(static)ErrorCode calculateTimingParameters(Seconds period, uint8_t &sc, uint16_t &mod)%(const) {
+         \t
+         \t   float inputClock = %(getInputClockFrequency)((TpmClockSource)(sc&TPM_SC_CMOD_MASK));
+         \t   unsigned prescaleFactor=1;
+         \t   unsigned prescalerValue=0;
+         \t
+         \t   // Check if CPWMS is set (affects period calculation)
+         \t   bool centreAligned = (sc&TPM_SC_CPWMS_MASK);
+         \t
+         \t   constexpr uint32_t maxModValue = TPM_MOD_MOD_MASK;
+         \t
+         \t   while (prescalerValue<=7) {
+         \t      float clock    = inputClock/prescaleFactor;
+         \t      float modValueF = period*clock;
+         \t      if (centreAligned) {
+         \t         // PeriodInTicks = 2*MOD
+         \t         modValueF = modValueF/2;
+         \t      }
+         \t      else {
+         \t         // PeriodInTicks = MOD+1
+         \t         modValueF = modValueF - 1;
+         \t      }
+         \t      unsigned modValue = round(modValueF);\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
+         \t      if (modValue < Info::minimumResolution) {
+         \t         usbdm_assert(false, "Interval is too short");
+         \t         // Too short a period for minimum resolution
+         \t         return setErrorCode(E_TOO_SMALL);
+         \t      }\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
+         \t      if (modValue <= maxModValue) {
+         \t         sc   = (sc&~TPM_SC_PS_MASK)|TPM_SC_PS(prescalerValue);
+         \t         mod  = modValue;
+         \t         return E_NO_ERROR;
+         \t      }
+         \t      prescalerValue++;
+         \t      prescaleFactor <<= 1;
+         \t   }
+         \t   // Too long a period
+         \t   usbdm_assert(false, "Interval is too long");
+         \t   return setErrorCode(E_TOO_LARGE);
+         \t}
+         \t
+         \t/**
+         \t * Set period
+         \t *
+         \t * @param[in] period   Period in seconds as a float
+         \t *
+         \t * @return E_NO_ERROR  => success
+         \t * @return E_TOO_SMALL  Requested period is too small for resolution (required resolution check to be enabled).
+         \t * @return E_TOO_LARGE  Requested period is too large.
          \t *
          \t * @note This function will affect all channels of the timer.
-         \t * @note The timer may be disabled while making changes.
-         \t * @note This value is write-buffered and updated by MOD synchronisation
-         \t *       unless suspend is true.
+         \t * @note Adjusts Timer pre-scaler to appropriate value.
+         \t * @note The counter load value (CNTIN) is cleared
+         \t * @note The counter modulo value (MOD) is modified to obtain the requested period
+         \t * @note The Timer is stopped while being modified.
+         \t * @note The Timer counter is restarted from zero
          \t */
-         \t%(static)void setCounterMaximumValue(Ticks endValue, bool suspend=false)%(const) {
-         \t   uint32_t %registerName1;
-         \t   if (suspend) {
-         \t      // Disable timer so register changes are immediate
-         \t      sc = %register1;
-         \t      %register1 = 0;
-         \t      (void)(%register1);
+         \t%(static)ErrorCode setPeriod(Seconds period)%(const) {
+         \t
+         \t   uint16_t modValue = 0;
+         \t
+         \t   uint8_t sc = tpm->SC;
+         \t
+         \t   ErrorCode rc = calculateTimingParameters(period, sc, modValue);
+         \t
+         \t   if (rc != E_NO_ERROR) {
+         \t      return rc;
          \t   }
-         \t   %register0 = (unsigned)endValue;
-         \t   if (suspend) {
-         \t      %register1 = sc;
+         \t   // Disable timer to change prescaler and period
+         \t   tpm->SC = 0;
+         \t
+         \t   // Configure for modulo operation
+         \t   tpm->MOD   = modValue;
+         \t
+         \t   // Clear counter
+         \t   tpm->CNT   = 0;
+         \t
+         \t   // Set prescale and enable timer
+         \t   tpm->SC  = sc;
+         \t
+         \t   return E_NO_ERROR;
+         \t}
+         \t
+         \t/**
+         \t * Set maximum interval for input-capture or output compare.
+         \t * Input Capture and Output Compare will be able to operate over
+         \t * at least this period without overflow.
+         \t *
+         \t * @param[in] interval Interval in seconds as a float
+         \t *
+         \t * @return E_NO_ERROR  => success
+         \t * @return E_TOO_SMALL  Requested period is too small for resolution (required resolution check to be enabled).
+         \t * @return E_TOO_LARGE  Requested period is too large.
+         \t *
+         \t * @note This function will affect all channels of the timer.
+         \t * @note Adjusts Timer pre-scaler to appropriate value.
+         \t * @note TPM counter is configured for free-running mode i.e. 0-65535
+         \t * @note The Timer is stopped while being modified.
+         \t * @note The Timer counter is restarted from zero
+         \t */
+         \t%(static)ErrorCode setMaximumInterval(Seconds interval)%(const) {
+         \t
+         \t   uint16_t       modValue;
+         \t
+         \t   uint8_t sc = tpm->SC;
+         \t
+         \t   ErrorCode rc = calculateTimingParameters(interval, sc, modValue);
+         \t   if (rc != E_NO_ERROR) {
+         \t      return rc;
          \t   }
+         \t
+         \t   // Disable timer to change prescaler and period
+         \t   tpm->SC = 0;
+         \t
+         \t   // Configure for free-running mode
+         \t   // This is the usual value for IC or OC set-up
+         \t   tpm->MOD   = 0_ticks;
+         \t
+         \t   // Clear counter
+         \t   tpm->CNT   = 0;
+         \t
+         \t   // Set prescale and enable timer
+         \t   tpm->SC  = sc;
+         \t
+         \t   return E_NO_ERROR;
          \t}
          \t/**
-         \t * Get maximum value of timer counter.
+         \t * Get frequency of timer tick
          \t *
-         \t * @return Counter modulo value in ticks (<65535), 0 = 65536.
+         \t * @return Timer frequency in Hz
          \t */
-         \t%(static)Ticks getCounterMaximumValue()%(const) {
-         \t   return Ticks((unsigned)(tpm->MOD));
-         \t}\n\n
-      ]]></setTemplate>
-   
+         \t%(static)float getTickFrequencyAsFloat()%(const) {
+         \t
+         \t   // Calculate timer prescale factor
+         \t   float prescaleFactor = 1<<((tpm->SC&TPM_SC_PS_MASK)>>TPM_SC_PS_SHIFT);
+         \t
+         \t   return %(getInputClockFrequency)((TpmClockSource)(tpm->SC&TPM_SC_CMOD_MASK))/prescaleFactor;
+         \t}
+         \t
+         \t/**
+         \t * Get clock frequency
+         \t *
+         \t * @return Frequency as a uint32_t in Hz (may underflow)
+         \t */
+         \t%(static)uint32_t getTickFrequencyAsInt()%(const) {
+         \t
+         \t   // Calculate timer prescale factor
+         \t   int prescaleFactor = 1<<((tpm->SC&TPM_SC_PS_MASK)>>TPM_SC_PS_SHIFT);
+         \t
+         \t   return %(getInputClockFrequency)((TpmClockSource)(tpm->SC&TPM_SC_CMOD_MASK))/prescaleFactor;
+         \t}
+         \t
+         \t/**
+         \t * Convert time in microseconds to time in ticks
+         \t *
+         \t * @param[in] time Time in microseconds
+         \t *
+         \t * @return Time in ticks
+         \t *
+         \t * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
+         \t * @note Will set error code if calculated value is less the Timer minimum resolution
+         \t */
+         \t%(static)Ticks convertMicrosecondsToTicks(int time)%(const) {
+         \t
+         \t   // Calculate period
+         \t   uint32_t tickRate = getTickFrequencyAsInt();
+         \t   uint64_t rv       = (static_cast<uint64_t>(time)*tickRate)/1000000;
+         \t   usbdm_assert(rv <= 0xFFFFUL, "Interval is too long");
+         \t   if (rv > 0xFFFFUL) {
+         \t      // Attempt to set too long a period
+         \t      setErrorCode(E_TOO_LARGE);
+         \t   }\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
+         \t   if (rv < Info::minimumInterval) {
+         \t      // Attempt to set too short a period
+         \t      setErrorCode(E_TOO_SMALL);
+         \t   }\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+         \t   return (unsigned)rv;
+         \t}
+         \t
+         \t/**
+         \t * Converts time in seconds to time in ticks
+         \t *
+         \t * @param[in] seconds Time interval in seconds
+         \t *
+         \t * @return Time in ticks
+         \t *
+         \t * @note Assumes prescale has been chosen as a appropriate value (see setMaximumInterval()). \n
+         \t * @note Will set error code if calculated value is less the minimum resolution
+         \t */
+         \t%(static)Ticks convertSecondsToTicks(Seconds seconds)%(const) {
+         \t
+         \t   // Calculate period
+         \t   float    tickRate = getTickFrequencyAsFloat();
+         \t   uint64_t rv       = rintf((float)seconds*tickRate);
+         \t   usbdm_assert(rv <= 0xFFFFUL, "Interval is too long");
+         \t   if (rv > 0xFFFFUL) {
+         \t      // Attempt to set too long a period
+         \t      setErrorCode(E_TOO_LARGE);
+         \t   }\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
+         \t   if (rv < Info::minimumInterval) {
+         \t      // Attempt to set too short a period
+         \t      setErrorCode(E_TOO_SMALL);
+         \t   }\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+         \t   return (unsigned)rv;
+         \t}
+         \t
+         \t/**
+         \t * Convert time in ticks to time in microseconds
+         \t *
+         \t * @param[in] timeInTicks Time in ticks
+         \t *
+         \t * @return Time in microseconds
+         \t *
+         \t * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
+         \t */
+         \t%(static)uint32_t convertTicksToMicroseconds(Ticks timeInTicks)%(const) {
+         \t
+         \t   // Calculate period
+         \t   uint64_t rv = (static_cast<uint64_t>((unsigned)timeInTicks)*1000000)/getTickFrequencyAsInt();
+         #ifdef DEBUG_BUILD
+         \t   if (rv > 0xFFFFUL) {
+         \t      // Attempt to set too long a period
+         \t      setErrorCode(E_TOO_LARGE);
+         \t   }
+         \t   if (rv == 0) {
+         \t      // Attempt to set too short a period
+         \t      setErrorCode(E_TOO_SMALL);
+         \t   }
+         #endif
+         \t   return rv;
+         \t}
+         \t
+         \t/**
+         \t * Convert time in ticks to time in milliseconds
+         \t *
+         \t * @param[in] timeInTicks Time in ticks
+         \t *
+         \t * @return Time in milliseconds
+         \t *
+         \t * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
+         \t */
+         \t%(static)uint32_t convertTicksToMilliseconds(Ticks timeInTicks)%(const) {
+         \t
+         \t   // Calculate period
+         \t   uint64_t rv = (static_cast<uint64_t>((unsigned)timeInTicks)*1000)/getTickFrequencyAsInt();
+         #ifdef DEBUG_BUILD
+         \t   if (rv > 0xFFFFUL) {
+         \t      // Attempt to set too long a period
+         \t      setErrorCode(E_TOO_LARGE);
+         \t   }
+         \t   if (rv == 0) {
+         \t      // Attempt to set too short a period
+         \t      setErrorCode(E_TOO_SMALL);
+         \t   }
+         #endif
+         \t   return rv;
+         \t}
+         \t
+         \t/**
+         \t * Convert time in ticks to time in seconds
+         \t *
+         \t * @param[in] timeInTicks Time in ticks
+         \t *
+         \t * @return Time in seconds
+         \t */
+         \t%(static)Seconds convertTicksToSeconds(Ticks timeInTicks)%(const) {
+         \t   return static_cast<float>((unsigned)timeInTicks)/getTickFrequencyAsFloat();
+         \t}
+         \t/**
+         \t * Get Timer count
+         \t *
+         \t * @return Timer count value
+         \t */
+         \t%(static)uint16_t getTime()%(const) {
+         \t   return tpm->CNT;
+         \t}
+         \t
+         \t/**
+         \t * Reset counter to initial value
+         \t */
+         \t%(static)void resetTime()%(const) {
+         \t   // Note: writing ANY value loads CNT from CNTIN
+         \t   tpm->CNT = 0;
+         \t}
+         \t
+         \t/**
+         \t * Get timer event flags
+         \t *
+         \t * @return Flags indicating if an event has occurred on a channel
+         \t *         There is one bit for each channel
+         \t */
+         \t%(static)unsigned getInterruptFlags()%(const) {
+         \t   return tpm->STATUS;
+         \t}
+         \t
+         \t/**
+         \t * Clear selected timer event flags
+         \t *
+         \t * @param channelMask Mask indicating which channel flags to clear
+         \t *                    There is one bit for each channel
+         \t *
+         \t * @note Flags will not be cleared if the channel is configured for DMA
+         \t */
+         \t%(static)void clearSelectedInterruptFlags(uint32_t channelMask)%(const) {
+         \t   (void)tpm->STATUS;
+         \t   tpm->STATUS = ~channelMask;
+         \t}
+         \t
+         \t/**
+         \t * Get and clear timer event flags
+         \t *
+         \t * @return Flags indicating if an event has occurred on a channel
+         \t *         There is one bit for each channel
+         \t *
+         \t * @note Only flags captured in the return value are cleared
+         \t * @note Flags will not be cleared if the channel is configured for DMA
+         \t */
+         \t%(static)unsigned getAndClearInterruptFlags()%(const) {
+         \t   // Note - w1c flags
+         \t   // so only flags captured in status are cleared
+         \t   unsigned status = tpm->STATUS;
+         \t   tpm->STATUS = status;
+         \t   return status;
+         \t}
+         \t/**
+         \t * Enable/disable Timer Overflow interrupts
+         \t */
+         \t%(static)void enableTimerOverflowInterrupts()%(const) {
+         \t   tpm->SC = tpm->SC | TPM_SC_TOIE_MASK;
+         \t}
+         \t
+         \t/**
+         \t * Disable Timer Overflow interrupts
+         \t */
+         \t%(static)void disableTimerOverflowInterrupts()%(const) {
+         \t   tpm->SC = tpm->SC & ~TPM_SC_TOIE_MASK;
+         \t}
+         \t
+         \t/**
+         \t * Set polarity of all channels
+         \t *
+         \t * @param channelMask   Bit mask 0 => active-high, 1 => active-low
+         \t */
+         \t%(static) void setPolarity(uint32_t channelMask)%(const) {
+         \t   tpm->POL = channelMask;
+         \t}
+         \t
+         \t/**
+         \t * Set polarity of selected channels
+         \t *
+         \t * @param polarity      Polarity to set
+         \t * @param channelMask   Bit mask indicating channels to affect
+         \t */
+         \t%(static)void setPolarity(Polarity polarity, uint32_t channelMask)%(const) {
+         \t   if (polarity) {
+         \t      tpm->POL = tpm->POL & ~channelMask;
+         \t   }
+         \t   else {
+         \t      tpm->POL = tpm->POL | channelMask;
+         \t   }
+         \t}
+         \t/*
+         \t * *****************************************************************
+         \t *          Channel functions
+         \t * *****************************************************************
+         \t */
+         \t/**
+         \t * Set PWM duty cycle.
+         \t * Higher precision float version
+         \t *
+         \t * @param[in] dutyCycle  Duty-cycle as percentage (float)
+         \t * @param[in] channel    Timer channel
+         \t *
+         \t * @note The actual CnV register update may be delayed by the register synchronisation mechanism
+         \t */
+         \t%(static)void setDutyCycle(float dutyCycle, int channel)%(const) {
+         \t   if (tpm->SC&TPM_SC_CPWMS_MASK) {
+         \t      tpm->CONTROLS[channel].CnV  = round((dutyCycle*tpm->MOD)/100.0f);
+         \t   }
+         \t   else {
+         \t      tpm->CONTROLS[channel].CnV  = round((dutyCycle*(tpm->MOD+1))/100.0f);
+         \t   }
+         \t}
+         \t      
+         \t/**
+         \t * Set PWM duty cycle
+         \t *
+         \t * @param[in] dutyCycle  Duty-cycle as percentage
+         \t * @param[in] channel    Timer channel
+         \t *
+         \t * @note The actual CnV register update may be delayed by the register synchronisation mechanism
+         \t */
+         \t%(static)void setDutyCycle(int dutyCycle, int channel)%(const) {
+         \t   if (tpm->SC&TPM_SC_CPWMS_MASK) {
+         \t      tpm->CONTROLS[channel].CnV  = (dutyCycle*tpm->MOD)/100;
+         \t   }
+         \t   else {
+         \t      tpm->CONTROLS[channel].CnV  = (dutyCycle*(tpm->MOD+1))/100;
+         \t   }
+         \t}
+         \t
+         \t/**
+         \t * Set PWM high time in ticks
+         \t * Assumes value is less than period
+         \t *
+         \t * @param[in] highTime   PWM high time in ticks
+         \t * @param[in] channel    Timer channel
+         \t *
+         \t * @return E_NO_ERROR on success
+         \t * @return E_TOO_LARGE on success
+         \t *
+         \t * @note The actual CnV register update may be delayed by the register synchronisation mechanism
+         \t */
+         \t%(static)ErrorCode setHighTime(Ticks highTime, int channel)%(const) {
+         \t
+         \t   if (tpm->SC&TPM_SC_CPWMS_MASK) {
+         \t      // In CPWM the pulse width is doubled
+         \t      highTime = (highTime+1_ticks)/2U;
+         \t   }
+         #ifdef DEBUG_BUILD
+         \t   if ((unsigned)highTime > tpm->MOD) {
+         \t      return setErrorCode(E_TOO_LARGE);
+         \t   }
+         #endif
+         \t   tpm->CONTROLS[channel].CnV  = (unsigned)highTime;
+         \t   return E_NO_ERROR;
+         \t}
+         \t
+         \t/**
+         \t * Get Timer event time
+         \t *
+         \t * @param[in] channel    Timer channel
+         \t *
+         \t * @return Absolute time of last event in ticks i.e. value from timer event register
+         \t */
+         \t%(static)Ticks getEventTime(int channel)%(const) {
+         \t   return (unsigned)(tpm->CONTROLS[channel].CnV);
+         \t}
+         \t
+         \t/**
+         \t * Set Timer event time
+         \t *
+         \t * This value is write-buffered and updated by Cnv synchronisation.
+         \t *
+         \t * @param[in] eventTime  Absolute event time in ticks i.e. value to use as timer comparison value
+         \t * @param[in] channel    Timer channel
+         \t */
+         \t%(static)void setEventTime(Ticks eventTime, int channel)%(const) {
+         \t   tpm->CONTROLS[channel].CnV = (unsigned)eventTime;
+         \t}
+         \t
+         \t/**
+         \t * Set Timer event time relative to current event time
+         \t *
+         \t * @param[in] offset     Event time in ticks relative to current event time (i.e. Timer channel CnV value)
+         \t * @param[in] channel    Timer channel
+         \t *
+         \t * @note This value is write-buffered and updated by CnV synchronisation.
+         \t */
+         \t%(static)void setDeltaEventTime(Ticks offset, int channel)%(const) {
+         \t   tpm->CONTROLS[channel].CnV = tpm->CONTROLS[channel].CnV + (unsigned)offset;
+         \t}
+         \t
+         \t/**
+         \t * Set Timer event time relative to current timer count value
+         \t *
+         \t * @param[in] offset     Event time in ticks relative to current time (i.e. Timer CNT value)
+         \t * @param[in] channel    Timer channel
+         \t *
+         \t * @note This value is write-buffered and updated by CnV synchronisation.
+         \t */
+         \t%(static)void setRelativeEventTime(Ticks offset, int channel)%(const) {
+         \t   tpm->CONTROLS[channel].CnV = tpm->CNT + (unsigned)offset;
+         \t}
+         \t
+         \t/**
+         \t * Set PWM high time in seconds
+         \t *
+         \t * @param[in] highTime   PWM high time in seconds
+         \t * @param[in] channel    Timer channel
+         \t *
+         \t * @return E_NO_ERROR on success
+         \t *
+         \t * @note The actual CnV register update may be delayed by the TPM register synchronisation mechanism
+         \t */
+         \t%(static)ErrorCode setHighTime(Seconds highTime, int channel)%(const) {
+         \t   return setHighTime(convertSecondsToTicks(highTime), channel);
+         \t}
+         \t
+      ]]></template>
+      
+<!-- Channel Functions -->
+             
+   <template key="/$(_basename)_CHANNEL/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+      \t   /**
+      \t    * Configure channel.
+      \t    * No affect on shared settings of owning Timer
+      \t    *
+      \t    * @param[in] tpmChannelMode    Mode of operation for channel
+      \t    * @param[in] tpmChannelAction  Whether to enable the interrupt or DMA function on this channel
+      \t    *
+      \t    * @note This method has the side-effect of clearing the register update synchronisation i.e.
+      \t    *       pending CnV register updates are discarded.
+      \t    */
+      \t   %(static) void configure(
+      \t         TpmChannelMode    tpmChannelMode,
+      \t         TpmChannelAction  tpmChannelAction = TpmChannelAction_None)%(const) {
+      \t   
+      \t      tpm->CONTROLS[%(channel)].CnSC = tpmChannelMode|tpmChannelAction;
+      \t   }
+      \t   
+      \t   /**
+      \t    * Disables timer channel (sets mode to TpmChannelMode_Disabled)
+      \t    */
+      \t   %(static) void disable()%(const) {
+      \t      setMode(TpmChannelMode_Disabled);
+      \t   }
+      \t   
+      \t   /**
+      \t    * Get channel mode.
+      \t    *
+      \t    * @return Current mode of operation for the channel
+      \t    */
+      \t   %(static) TpmChannelMode getMode()%(const) {
+      \t      return static_cast<TpmChannelMode>(tpm->CONTROLS[%(channel)].CnSC &
+      \t            (TPM_CnSC_MS_MASK|TPM_CnSC_ELS_MASK));
+      \t   }
+      \t   
+      \t   /**
+      \t    * Set channel mode
+      \t    *
+      \t    * @param[in] tpmChannelMode      Mode of operation for channel
+      \t    *
+      \t    * @note This method has the side-effect of clearing the register update synchronisation i.e.
+      \t    *       pending CnV register updates are discarded.
+      \t    */
+      \t   %(static) void setMode(TpmChannelMode tpmChannelMode)%(const) {
+      \t      tpm->CONTROLS[%(channel)].CnSC =
+      \t            (tpm->CONTROLS[%(channel)].CnSC & ~(TPM_CnSC_MS_MASK|TPM_CnSC_ELS_MASK))|tpmChannelMode;
+      \t   }
+      \t   
+      \t   /**
+      \t    * Set channel action on event.
+      \t    *
+      \t    * @param[in] tpmChannelAction      Action to take on channel event (DMA or Interrupt)
+      \t    *
+      \t    * @note This method has the side-effect of clearing the register update synchronisation i.e.
+      \t    *       pending CnV register updates are discarded.
+      \t    */
+      \t   %(static) void setAction(TpmChannelAction tpmChannelAction)%(const) {
+      \t      tpm->CONTROLS[%(channel)].CnSC =
+      \t            (tpm->CONTROLS[%(channel)].CnSC & ~(TPM_CnSC_CHIE_MASK|TPM_CnSC_DMA_MASK))|
+      \t            tpmChannelAction;
+      \t   }
+      \t   
+      \t   /**
+      \t    * Set PWM high time in ticks.
+      \t    * Assumes value is less than period
+      \t    *
+      \t    * @param[in] highTime   PWM high time in ticks
+      \t    *
+      \t    * @return E_NO_ERROR on success
+      \t    *
+      \t    * @note The actual CnV register update will be delayed by the register synchronisation mechanism
+      \t    */
+      \t   %(static) ErrorCode setHighTime(Ticks highTime)%(const) {
+      \t      return %(Tpm)::setHighTime(highTime, %(channel));
+      \t   }
+      \t   
+      \t   /**
+      \t    * Set PWM high time in seconds.
+      \t    * Higher precision float version
+      \t    *
+      \t    * @param[in] highTime   PWM high time in seconds
+      \t    *
+      \t    * @return E_NO_ERROR on success
+      \t    *
+      \t    * @note The actual CnV register update will be delayed by the register synchronisation mechanism
+      \t    */
+      \t   %(static) ErrorCode setHighTime(Seconds highTime)%(const) {
+      \t      return %(Tpm)::setHighTime(highTime, %(channel));
+      \t   }
+      \t   /**
+      \t    * Set PWM duty cycle.
+      \t    *
+      \t    * @param[in] dutyCycle  Duty-cycle as percentage
+      \t    *
+      \t    * @note The actual CnV register update will be delayed by the register synchronisation mechanism
+      \t    */
+      \t   %(static) void setDutyCycle(int dutyCycle)%(const) {
+      \t      %(Tpm)::setDutyCycle(dutyCycle, %(channel));
+      \t   }
+      \t   
+      \t   /**
+      \t    * Set PWM duty cycle
+      \t    *
+      \t    * @param[in] dutyCycle  Duty-cycle as percentage
+      \t    *
+      \t    * @note The actual CnV register update will be delayed by the register synchronisation mechanism
+      \t    */
+      \t   %(static) void setDutyCycle(float dutyCycle)%(const) {
+      \t      %(Tpm)::setDutyCycle(dutyCycle, %(channel));
+      \t   }
+      \t   
+      \t   /**
+      \t    * Set Timer event time.
+      \t    *
+      \t    * @param[in] offset  Event time in ticks relative to current event time (i.e. Timer channel CnV value)
+      \t    *
+      \t    * @note The actual CnV register update will be delayed by the register synchronisation mechanism
+      \t    */
+      \t   %(static) void setDeltaEventTime(Ticks offset)%(const) {
+      \t      %(Tpm)::setDeltaEventTime(offset, %(channel));
+      \t   }
+      \t   
+      \t   /**
+      \t    * Set Timer event time relative to current timer count value.
+      \t    *
+      \t    * @param[in] offset  Event time in ticks relative to current time (i.e. Timer CNT value)
+      \t    *
+      \t    * @note The actual CnV register update will be delayed by the register synchronisation mechanism
+      \t    */
+      \t   %(static) void setRelativeEventTime(Ticks offset)%(const) {
+      \t      %(Tpm)::setRelativeEventTime(offset, %(channel));
+      \t   }
+      \t   
+      \t   /**
+      \t    * Set Absolute Timer event time.
+      \t    *
+      \t    * @param[in] eventTime  Absolute event time in ticks i.e. value to use as timer comparison value
+      \t    *
+      \t    * @note The actual CnV register update will be delayed by the register synchronisation mechanism
+      \t    */
+      \t   %(static) void setEventTime(Ticks eventTime)%(const) {
+      \t      %(Tpm)::setEventTime(eventTime, %(channel));
+      \t   }
+      \t   
+      \t   /**
+      \t    * Get Absolute Timer event time.
+      \t    *
+      \t    * @return Absolute time of last event in ticks i.e. value from timer event register
+      \t    */
+      \t   %(static) Ticks getEventTime()%(const) {
+      \t      return %(Tpm)::getEventTime(%(channel));
+      \t   }
+      \t   
+      \t   /**
+      \t    * Get Timer interrupt/event flag.
+      \t    *
+      \t    * @return true  Indicates an event has occurred on a channel
+      \t    * @return false Indicates no event has occurred on a channel since last polled
+      \t    */
+      \t   %(static) bool getInterruptFlag()%(const) {
+      \t      return (tpm->STATUS&CHANNEL_MASK) != 0;
+      \t   }
+      \t   
+      \t   /**
+      \t    * Get and Clear Timer channel interrupt flag.
+      \t    *
+      \t    * @return true  Indicates an event has occurred on a channel
+      \t    * @return false Indicates no event has occurred on a channel since last polled
+      \t    *
+      \t    * @note Only flags captured in the return value are cleared
+      \t    */
+      \t   %(static) bool getAndClearInterruptFlag()%(const) {
+      \t      // Note - w1c flags
+      \t      // so only flags captured in status are cleared
+      \t      bool status = (tpm->STATUS&CHANNEL_MASK) != 0;
+      \t      tpm->STATUS = CHANNEL_MASK;
+      \t      return status;
+      \t   }
+      \t   
+      \t   /**
+      \t    * Clear interrupt flag on channel.
+      \t    */
+      \t   %(static) void clearInterruptFlag()%(const) {
+      \t      // Note - w1c flags
+      \t      tpm->CONTROLS[CHANNEL].CnSC = TPM_CnSC_CHF_MASK;
+      \t   }
+      \t   
+      \t   
+      \t   /**
+      \t    * Set polarity of channels.
+      \t    *
+      \t    * @param polarity Polarity to set
+      \t    */
+      \t   %(static) void setPolarity(Polarity polarity)%(const) {
+      \t      %(Tpm)::setPolarity(polarity, CHANNEL_MASK);
+      \t   }\n\n
+      ]]></template>
    </for>
 
    <clockCodeTemplate variable="tpm_sc_cmod"
@@ -510,13 +1258,6 @@ $(init_description)
       \t   %enumClass %registerName = %enumClass_Normal;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"  
-      variables="tpm_cntin"
-   ><![CDATA[
-      \t   /// %description
-      \t   uint16_t %registerName = 0_ticks;\n\n
-   ]]></initialValueTemplate>
-   
    <initialValueTemplate namespace="usbdm"  
       variables="tpm_mod"
    ><![CDATA[
@@ -650,6 +1391,7 @@ $(init_description)
    
    <constructorTemplate namespace="usbdm" 
       variables="tpm_sc_ps, tpm_mod"
+      params=",mod_ticks"
       linePadding="xxx" 
       nonDefaultParams="2"
       ><![CDATA[
@@ -976,6 +1718,13 @@ $(channel_init_description)
    <template namespace="all" key="/HARDWARE/StaticObjects.timerHandler" discardRepeats="true" 
    ><![CDATA[
    \t/**
+   \t * Callback to catch unhandled interrupt
+   \t */
+   \tvoid unhandledCallback() {
+   \t   setAndCheckErrorCode(E_NO_HANDLER);
+   \t}
+   \t
+   \t/**
    \t * Callback to catch unhandled channel interrupt
    \t *
    \t * @param mask Mask identifying channel
@@ -1002,38 +1751,39 @@ $(channel_init_description)
    
    <template namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors==1)"
    ><![CDATA[
+      extern void unhandledCallback(uint8_t);
       extern void timerUnhandledChannelCallback(uint8_t);\n\n
    ]]></template>
    
-   <template codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors==1)" ><![CDATA[
-   \t/**
-   \t * Set channel Callback function\n
-   \t * Note that one callback is shared by all channels of the timer
-   \t *
-   \t * @param[in] callback Callback function to execute on channel interrupt.\n
-   \t *                     Use nullptr to remove callback.
-   \t *
-   \t * @return E_NO_ERROR            No error
-   \t * @return E_HANDLER_ALREADY_SET Handler already set
-   \t *
-   \t * @note Channel callbacks may be shared by multiple channels of the timer.
-   \t *       It is necessary to identify the originating channel in the callback
-   \t */
-   \tstatic ErrorCode setChannelCallback(ChannelCallbackFunction callback) {
-   \t   if (callback == nullptr) {
-   \t      channelCallbacks[0] = timerUnhandledChannelCallback;
-   \t      return E_NO_ERROR;
-   \t   }
-#ifdef DEBUG_BUILD
-   \t   // Callback is shared across multiple channels. Check if callback already assigned
-   \t   if ((channelCallbacks[0] != timerUnhandledChannelCallback) &&
-   \t       (channelCallbacks[0] != callback)) {
-   \t      return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
-   \t   }
-#endif
-   \t   channelCallbacks[0] = callback;
-   \t   return E_NO_ERROR;
-   \t}\n\n
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors==1)" ><![CDATA[
+      \t/**
+      \t * Set channel Callback function\n
+      \t * Note that one callback is shared by all channels of the timer
+      \t *
+      \t * @param[in] callback Callback function to execute on channel interrupt.\n
+      \t *                     Use nullptr to remove callback.
+      \t *
+      \t * @return E_NO_ERROR            No error
+      \t * @return E_HANDLER_ALREADY_SET Handler already set
+      \t *
+      \t * @note Channel callbacks may be shared by multiple channels of the timer.
+      \t *       It is necessary to identify the originating channel in the callback
+      \t */
+      \tstatic ErrorCode setChannelCallback(ChannelCallbackFunction callback) {
+      \t   if (callback == nullptr) {
+      \t      channelCallbacks[0] = timerUnhandledChannelCallback;
+      \t      return E_NO_ERROR;
+      \t   }
+      #ifdef DEBUG_BUILD
+      \t   // Callback is shared across multiple channels. Check if callback already assigned
+      \t   if ((channelCallbacks[0] != timerUnhandledChannelCallback) &&
+      \t       (channelCallbacks[0] != callback)) {
+      \t      return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
+      \t   }
+      #endif
+      \t   channelCallbacks[0] = callback;
+      \t   return E_NO_ERROR;
+      \t}\n\n
    ]]></template>
 
    <template namespace="all" key="/HARDWARE/StaticObjects" 
