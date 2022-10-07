@@ -232,30 +232,30 @@ power consumption during the stop mode selected by the STOPM field</description>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>LLSM</name>
-                     <description>LLS or VLLS Mode Control
-This field controls which LLS or VLLS sub-mode to enter if STOPM = LLSx or VLLSx</description>
+                     <name>VLLSM</name>
+                     <description>VLLS Mode Control
+This field controls which VLLS sub-mode to enter if STOPM=VLLSx</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>VLLS0/LLSx reserved</description>
+                           <description>VLLS0</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b001</name>
-                           <description>VLLS1/LLSx reserved</description>
+                           <description>VLLS1</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>VLLS2/LLS2(if available)</description>
+                           <description>VLLS2</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>VLLS3/LLS3(if available)</description>
+                           <description>VLLS3</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -280,7 +280,6 @@ This field controls which LLS or VLLS sub-mode to enter if STOPM = LLSx or VLLSx
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="LLSM" > <name>VLLSM</name> <bitOffset>0</bitOffset> <?ignoreOverlap?> <?hide?> </field>
                   <field>
                      <name>RAM2PO</name>
                      <description>RAM2 Power Option\n
@@ -290,12 +289,12 @@ Controls powering of RAM partition 2 in VLLS2 mode</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>RAM2 not powered in LLS2/VLLS2</description>
+                           <description>RAM2 not powered in VLLS2</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>RAM2 powered in LLS2/VLLS2</description>
+                           <description>RAM2 powered in VLLS2</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

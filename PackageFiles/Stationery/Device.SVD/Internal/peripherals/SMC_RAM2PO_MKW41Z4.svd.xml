@@ -212,8 +212,9 @@ power consumption during the stop mode selected by the STOPM field</description>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>LLSM</name>
-                     <description>LLS or VLLS Mode Control</description>
+                     <name>VLLSM</name>
+                     <description>VLLS Mode Control
+This field controls which VLLS sub-mode to enter if STOPM=VLLSx</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
@@ -259,6 +260,7 @@ power consumption during the stop mode selected by the STOPM field</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
+                  <field derivedFrom="VLLSM" > <name>LLSM</name> <bitOffset>0</bitOffset> <?ignoreOverlap?> <?hide?> </field>
                   <field>
                      <name>RAM2PO</name>
                      <description>RAM2 Power Option</description>

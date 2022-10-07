@@ -236,7 +236,7 @@ power consumption during the stop mode selected by the STOPM field</description>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>LLSM</name>
+                     <name>VLLSM</name>
                      <description>VLLS Mode Control
 This field controls which VLLS sub-mode to enter if STOPM=VLLSx</description>
                      <bitOffset>0</bitOffset>
@@ -259,7 +259,7 @@ This field controls which VLLS sub-mode to enter if STOPM=VLLSx</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>VLLS3(if available)</description>
+                           <description>VLLS3</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -284,7 +284,6 @@ This field controls which VLLS sub-mode to enter if STOPM=VLLSx</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="LLSM" > <name>VLLSM</name> <bitOffset>0</bitOffset> <?ignoreOverlap?> <?hide?> </field>
                   <field>
                      <name>PORPO</name>
                      <description>POR Power Option\n

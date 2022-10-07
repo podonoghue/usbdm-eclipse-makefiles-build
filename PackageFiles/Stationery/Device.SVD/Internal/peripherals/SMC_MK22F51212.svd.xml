@@ -220,7 +220,7 @@ This field is cleared by hardware on any exit to normal RUN mode</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>High Speed Run mode (HSRUN)(if available)</description>
+                           <description>High Speed Run mode (HSRUN)</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -238,7 +238,7 @@ power consumption during the stop mode selected by the STOPM field</description>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>LLSM</name>
+                     <name>VLLSM</name>
                      <description>LLS or VLLS Mode Control
 This field controls which LLS or VLLS sub-mode to enter if STOPM = LLSx or VLLSx</description>
                      <bitOffset>0</bitOffset>
@@ -256,12 +256,12 @@ This field controls which LLS or VLLS sub-mode to enter if STOPM = LLSx or VLLSx
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>VLLS2/LLS2(if available)</description>
+                           <description>VLLS2/LLS2</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>VLLS3/LLS3(if available)</description>
+                           <description>VLLS3/LLS3</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -286,6 +286,7 @@ This field controls which LLS or VLLS sub-mode to enter if STOPM = LLSx or VLLSx
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
+                  <field derivedFrom="VLLSM" > <name>LLSM</name> <bitOffset>0</bitOffset> <?ignoreOverlap?> <?hide?> </field>
                   <field>
                      <name>PORPO</name>
                      <description>POR Power Option\n

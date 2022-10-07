@@ -172,11 +172,6 @@ This field is cleared by hardware on any exit to normal RUN mode</description>
                            <description>Very-Low-Power Run mode (VLPR)</description>
                            <value>0b10</value>
                         </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11</name>
-                           <description>High Speed Run mode (HSRUN)(if available)</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
                      </enumeratedValues>
                   </field>
                </fields>
@@ -192,7 +187,7 @@ power consumption during the stop mode selected by the STOPM field</description>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>LLSM</name>
+                     <name>VLLSM</name>
                      <description>VLLS Mode Control
 This field controls which VLLS sub-mode to enter if STOPM=VLLSx</description>
                      <bitOffset>0</bitOffset>
@@ -240,7 +235,6 @@ This field controls which VLLS sub-mode to enter if STOPM=VLLSx</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="LLSM" > <name>VLLSM</name> <bitOffset>0</bitOffset> <?ignoreOverlap?> <?hide?> </field>
                   <field>
                      <name>LPOPO</name>
                      <description>LPO Power Option\n
@@ -310,10 +304,9 @@ These bits control whether a Partial Stop mode is entered when STOPM=STOP</descr
                   </field>
                </fields>
             </register>
-            <register derivedFrom="STOPCTRL"> <name>VLLSCTRL</name><?hide?> <?doDerivedMacros?> <description>VLLS Control Register
+            <register derivedFrom="STOPCTRL"> <name>VLLSCTRL</name><?hide?> <?doDerivedMacros?> <description>VLLS Control Register (old name)
 Provides various control bits allowing the user to fine tune
-power consumption during the stop mode selected by the STOPM field
-(Freescale old name)</description> <addressOffset>0x2</addressOffset> </register>
+power consumption during the stop mode selected by the STOPM field</description> <addressOffset>0x2</addressOffset> </register>
             <register>
                <name>PMSTAT</name>
                <description>Power Mode Status Register</description>

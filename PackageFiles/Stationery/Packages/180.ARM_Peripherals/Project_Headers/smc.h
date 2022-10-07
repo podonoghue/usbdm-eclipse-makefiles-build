@@ -118,14 +118,6 @@ public:
    }
 
    /**
-    * Configure with settings from <b>Configure.usbdmProject</b>.
-    */
-   static void defaultConfigure() {
-      smc->PMPROT   = Info::pmprot;
-      smc->STOPCTRL = Info::stopctrl;
-   }
-
-   /**
     * Enter Stop Mode (STOP, VLPS, LLSx, VLLSx)
     * (ARM core DEEPSLEEP mode)
     *
