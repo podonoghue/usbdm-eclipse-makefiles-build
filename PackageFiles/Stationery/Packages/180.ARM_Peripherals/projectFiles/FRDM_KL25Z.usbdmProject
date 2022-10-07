@@ -181,12 +181,10 @@
    <item key="/LLWU/llwu_filt1_filtsel"                    value="5" />
    <item key="/LLWU/llwu_filt2_filtsel"                    value="5" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
-   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_48MHz" />
-   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
-   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_FEE_40MHz" />
-   <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_FEI_42MHz" />
-   <item key="/MCG/enableClockConfiguration[1]"            value="true" />
-   <item key="/MCG/enableClockConfiguration[2]"            value="true" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_RUN_PEE_48MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_VLPR_BLPE_4MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_RUN_FEE_40MHz" />
+   <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_RUN_FEI_42MHz" />
    <item key="/MCG/fllOutputFrequency[3]"                  value="41943040" />
    <item key="/MCG/mcgClockMode[0]"                        value="7" />
    <item key="/MCG/mcgClockMode[1]"                        value="5" />
@@ -195,14 +193,12 @@
    <item key="/MCG/pll0OutputFrequency[1]"                 value="96000000" />
    <item key="/PIT/pit_ldval"                              value="10000" />
    <item key="/RTC/configure_rtc"                          value="false" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[0]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[1]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[2]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[3]"                 value="2" />
    <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
    <item key="/SIM/sim_sopt2_pllfllsel[1]"                 value="1" />
-   <item key="/SIM/system_bus_clock[1]"                    value="800000" />
-   <item key="/SIM/system_bus_clock[2]"                    value="20000000" />
-   <item key="/SIM/system_bus_clock[3]"                    value="20971520" />
-   <item key="/SIM/system_core_clock[1]"                   value="4000000" />
-   <item key="/SIM/system_core_clock[2]"                   value="40000000" />
-   <item key="/SIM/system_core_clock[3]"                   value="41943040" />
    <item key="/SMC/smc_pmctrl_runm[1]"                     value="2" />
    <item key="/SMC/smc_stopctrl_pstopo"                    value="2" />
 </section>

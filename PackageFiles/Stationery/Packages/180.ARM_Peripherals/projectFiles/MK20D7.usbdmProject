@@ -5,24 +5,80 @@
 -->
 
 <section name="USBDM">
+   <item key="$$DeviceInfo_Device_Variant"                 value="MK20DX128VLH7" />
    <item key="$$DeviceInfo_SubFamily"                      value="MK20D7" />
    <item key="$$Hardware_Source_Filename"                  value="MK20D7.usbdmHardware" />
-   <item key="/FTFL/peripheral_file"                       value="ftfl_32k_flexrom" />
-   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_60MHz" />
-   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
-   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_PEE_72MHz" />
-   <item key="/MCG/clock_mode[0]"                          value="ClockMode_PEE" />
-   <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
-   <item key="/MCG/clock_mode[2]"                          value="ClockMode_PEE" />
+   <item key="$peripheral$ADC0_codeIdentifier"             value="myAdc" />
+   <item key="$peripheral$ADC1_codeIdentifier"             value="myOtherAdc" />
+   <item key="$peripheral$FTM0_codeIdentifier"             value="myFtm" />
+   <item key="$peripheral$FTM0_createInstance"             value="true" />
+   <item key="$peripheral$I2C0_codeIdentifier"             value="myI2c" />
+   <item key="$peripheral$I2C0_createInstance"             value="true" />
+   <item key="$pin$PTA0_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTA18_pcrSetting_0"                     value="0" />
+   <item key="$pin$PTA19_pcrSetting_0"                     value="0" />
+   <item key="$pin$PTA1_pcrSetting_2"                      value="200" />
+   <item key="$pin$PTA2_pcrSetting_2"                      value="200" />
+   <item key="$pin$PTA3_pcrSetting_3"                      value="300" />
+   <item key="$pin$PTB0_pcrSetting_2"                      value="220" />
+   <item key="$pin$PTB1_pcrSetting_2"                      value="220" />
+   <item key="$signal$ADC0_DM0_codeIdentifier"             value="myAdc_diff" />
+   <item key="$signal$ADC0_DM0_createInstance"             value="true" />
+   <item key="$signal$ADC0_DM0_descriptionSetting"         value="ADC0 +ve differential input" />
+   <item key="$signal$ADC0_DP0_codeIdentifier"             value="myAdc_diff" />
+   <item key="$signal$ADC0_DP0_createInstance"             value="true" />
+   <item key="$signal$ADC0_DP0_descriptionSetting"         value="ADC0 -ve differential input" />
+   <item key="$signal$ADC0_SE0_codeIdentifier"             value="myAdc_se0" />
+   <item key="$signal$ADC0_SE0_createInstance"             value="true" />
+   <item key="$signal$ADC0_SE0_descriptionSetting"         value="ADC0 SE0 input" />
+   <item key="$signal$ADC0_SE3_codeIdentifier"             value="myAdc_se1" />
+   <item key="$signal$ADC0_SE3_createInstance"             value="true" />
+   <item key="$signal$ADC0_SE3_descriptionSetting"         value="ADC0 SE1 input" />
+   <item key="$signal$ADC1_DM0_codeIdentifier"             value="myOtherAdc_diff" />
+   <item key="$signal$ADC1_DP0_codeIdentifier"             value="myOtherAdc_diff" />
+   <item key="$signal$ADC1_SE0_codeIdentifier"             value="myOtherAdc_se0" />
+   <item key="$signal$ADC1_SE3_codeIdentifier"             value="myOtherAdc_se3" />
+   <item key="$signal$CMP0_IN0_codeIdentifier"             value="cmp0In0" />
+   <item key="$signal$FTM0_CH0_codeIdentifier"             value="ftm0Ch0" />
+   <item key="$signal$FTM0_CH0_createInstance"             value="true" />
+   <item key="$signal$GPIOA_0_codeIdentifier"              value="gpioA0" />
+   <item key="$signal$PGA0_DM_codeIdentifier"              value="myAdc_pgaDiff" />
+   <item key="$signal$PGA0_DM_createInstance"              value="true" />
+   <item key="$signal$PGA0_DM_descriptionSetting"          value="ADC0 PGA -ve differential input" />
+   <item key="$signal$PGA0_DP_codeIdentifier"              value="myAdc_pgaDiff" />
+   <item key="$signal$PGA0_DP_createInstance"              value="true" />
+   <item key="$signal$PGA0_DP_descriptionSetting"          value="ADC0 PGA +ve differential input" />
+   <item key="$signal$PGA0_codeIdentifier"                 value="myAdc_pga" />
+   <item key="$signal$PGA0_createInstance"                 value="true" />
+   <item key="$signal$PGA0_descriptionSetting"             value="ADC0 PGA input" />
+   <item key="$signal$PGA1_DM_codeIdentifier"              value="myOtherAdc_diffPga" />
+   <item key="$signal$PGA1_DM_createInstance"              value="true" />
+   <item key="$signal$PGA1_DP_codeIdentifier"              value="myOtherAdc_diffPga" />
+   <item key="$signal$PGA1_DP_createInstance"              value="true" />
+   <item key="$signal$PGA1_createInstance"                 value="true" />
+   <item key="$signal$PIT_CH0_codeIdentifier"              value="pitCh0" />
+   <item key="$signal$PIT_CH0_createInstance"              value="true" />
+   <item key="/LINKER/heapSize"                            value="8192" />
+   <item key="/LINKER/stackSize"                           value="8192" />
+   <item key="/LLWU/llwu_filt1_filtsel"                    value="0" />
+   <item key="/LLWU/llwu_filt2_filtsel"                    value="0" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_RUN_PEE_60MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_VLPR_BLPE_4MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_RUN_PEE_72MHz" />
+   <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_RUN_FEI_42MHz" />
+   <item key="/MCG/fllOutputFrequency[3]"                  value="83886080" />
+   <item key="/MCG/mcgClockMode[0]"                        value="7" />
+   <item key="/MCG/mcgClockMode[1]"                        value="5" />
+   <item key="/MCG/mcgClockMode[2]"                        value="7" />
    <item key="/MCG/pll0OutputFrequency[2]"                 value="72000000" />
-   <item key="/SIM/sim_clkdiv2_usb"                        value="9" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[2]"                 value="1" />
+   <item key="/SIM/sim_clkdiv1_outdiv2[0]"                 value="4" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[0]"                 value="6" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[1]"                 value="8" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[2]"                 value="3" />
+   <item key="/SIM/sim_clkdiv2_usb[0]"                     value="9" />
+   <item key="/SIM/sim_clkdiv2_usb[2]"                     value="5" />
    <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
    <item key="/SIM/sim_sopt2_pllfllsel[2]"                 value="1" />
-   <item key="/SIM/system_bus_clock[0]"                    value="30000000" />
-   <item key="/SIM/system_bus_clock[1]"                    value="4000000" />
-   <item key="/SIM/system_core_clock[0]"                   value="60000000" />
-   <item key="/SIM/system_core_clock[1]"                   value="4000000" />
-   <item key="/SIM/system_flash_clock[0]"                  value="20000000" />
-   <item key="/SIM/system_flash_clock[1]"                  value="800000" />
-   <item key="/SIM/system_usbfs_clock"                     value="48000000" />
+   <item key="/SMC/smc_pmctrl_runm[1]"                     value="2" />
 </section>

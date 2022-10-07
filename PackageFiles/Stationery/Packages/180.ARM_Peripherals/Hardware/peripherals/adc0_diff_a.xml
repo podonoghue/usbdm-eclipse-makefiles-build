@@ -6,7 +6,6 @@
 
    <constant key="adc_cfg1_mode_diff_present" />
    <constant key="adc_cfg1_mode_16bit_present" />
-   <constant key="adc_sc2_dmaen_present" />
 
    <xi:include href="_adc_base.xml"/>
 

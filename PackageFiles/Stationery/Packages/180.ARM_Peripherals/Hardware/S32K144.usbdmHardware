@@ -18,11 +18,103 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForAdc" />
          <clock clockEnable="PCC->PCC_ADC0 = PCC->PCC_ADC0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_ADC0 = PCC->PCC_ADC0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="ADC0_IRQn" />
+         <param name="$present"     key="/ADC0/$present" value="true" />
+         <param name="adc_base_ofs_ba_ofs_present" key="/ADC0/adc_base_ofs_ba_ofs_present" value="true" />
+         <param name="adc_cfg1_adiclk_present" key="/ADC0/adc_cfg1_adiclk_present" value="true" />
+         <param name="adc_cfg1_adiv_present" key="/ADC0/adc_cfg1_adiv_present" value="true" />
+         <param name="adc_cfg1_clrltrg_present" key="/ADC0/adc_cfg1_clrltrg_present" value="true" />
+         <param name="adc_cfg1_mode_present" key="/ADC0/adc_cfg1_mode_present" value="true" />
+         <param name="adc_cfg2_smplts_present" key="/ADC0/adc_cfg2_smplts_present" value="true" />
+         <param name="adc_clp0_clp0_present" key="/ADC0/adc_clp0_clp0_present" value="true" />
+         <param name="adc_clp0_ofs_clp0_ofs_present" key="/ADC0/adc_clp0_ofs_clp0_ofs_present" value="true" />
+         <param name="adc_clp1_clp1_present" key="/ADC0/adc_clp1_clp1_present" value="true" />
+         <param name="adc_clp1_ofs_clp1_ofs_present" key="/ADC0/adc_clp1_ofs_clp1_ofs_present" value="true" />
+         <param name="adc_clp2_clp2_present" key="/ADC0/adc_clp2_clp2_present" value="true" />
+         <param name="adc_clp2_ofs_clp2_ofs_present" key="/ADC0/adc_clp2_ofs_clp2_ofs_present" value="true" />
+         <param name="adc_clp3_clp3_present" key="/ADC0/adc_clp3_clp3_present" value="true" />
+         <param name="adc_clp3_ofs_clp3_ofs_present" key="/ADC0/adc_clp3_ofs_clp3_ofs_present" value="true" />
+         <param name="adc_clp9_clp9_present" key="/ADC0/adc_clp9_clp9_present" value="true" />
+         <param name="adc_clp9_ofs_clp9_ofs_present" key="/ADC0/adc_clp9_ofs_clp9_ofs_present" value="true" />
+         <param name="adc_clps_clps_present" key="/ADC0/adc_clps_clps_present" value="true" />
+         <param name="adc_clps_ofs_clps_ofs_present" key="/ADC0/adc_clps_ofs_clps_ofs_present" value="true" />
+         <param name="adc_clpx_clpx_present" key="/ADC0/adc_clpx_clpx_present" value="true" />
+         <param name="adc_clpx_ofs_clpx_ofs_present" key="/ADC0/adc_clpx_ofs_clpx_ofs_present" value="true" />
+         <param name="adc_cv%s_cv_present" key="/ADC0/adc_cv%s_cv_present" value="true" />
+         <param name="adc_g_g_present" key="/ADC0/adc_g_g_present" value="true" />
+         <param name="adc_ofs_ofs_present" key="/ADC0/adc_ofs_ofs_present" value="true" />
+         <param name="adc_r%s_d_present" key="/ADC0/adc_r%s_d_present" value="true" />
+         <param name="adc_sc1%s_adch_present" key="/ADC0/adc_sc1%s_adch_present" value="true" />
+         <param name="adc_sc1%s_aien_present" key="/ADC0/adc_sc1%s_aien_present" value="true" />
+         <param name="adc_sc1%s_coco_present" key="/ADC0/adc_sc1%s_coco_present" value="true" />
+         <param name="adc_sc2_acfe_present" key="/ADC0/adc_sc2_acfe_present" value="true" />
+         <param name="adc_sc2_acfgt_present" key="/ADC0/adc_sc2_acfgt_present" value="true" />
+         <param name="adc_sc2_acren_present" key="/ADC0/adc_sc2_acren_present" value="true" />
+         <param name="adc_sc2_adact_present" key="/ADC0/adc_sc2_adact_present" value="true" />
+         <param name="adc_sc2_adtrg_present" key="/ADC0/adc_sc2_adtrg_present" value="true" />
+         <param name="adc_sc2_dmaen_present" key="/ADC0/adc_sc2_dmaen_present" value="true" />
+         <param name="adc_sc2_refsel_present" key="/ADC0/adc_sc2_refsel_present" value="true" />
+         <param name="adc_sc2_trgprnum_present" key="/ADC0/adc_sc2_trgprnum_present" value="true" />
+         <param name="adc_sc2_trgsterr_present" key="/ADC0/adc_sc2_trgsterr_present" value="true" />
+         <param name="adc_sc2_trgstlat_present" key="/ADC0/adc_sc2_trgstlat_present" value="true" />
+         <param name="adc_sc3_adco_present" key="/ADC0/adc_sc3_adco_present" value="true" />
+         <param name="adc_sc3_avge_present" key="/ADC0/adc_sc3_avge_present" value="true" />
+         <param name="adc_sc3_avgs_present" key="/ADC0/adc_sc3_avgs_present" value="true" />
+         <param name="adc_sc3_cal_present" key="/ADC0/adc_sc3_cal_present" value="true" />
+         <param name="adc_ug_ug_present" key="/ADC0/adc_ug_ug_present" value="true" />
+         <param name="adc_usr_ofs_usr_ofs_present" key="/ADC0/adc_usr_ofs_usr_ofs_present" value="true" />
+         <param name="adc_xofs_xofs_present" key="/ADC0/adc_xofs_xofs_present" value="true" />
+         <param name="adc_yofs_yofs_present" key="/ADC0/adc_yofs_yofs_present" value="true" />
       </peripheral>
       <peripheral baseName="ADC"      instance="1"        version="adc0_s32k142">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForAdc" />
          <clock clockEnable="PCC->PCC_ADC1 = PCC->PCC_ADC1 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_ADC1 = PCC->PCC_ADC1 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="ADC1_IRQn" />
+         <param name="$present"     key="/ADC1/$present" value="true" />
+         <param name="adc_base_ofs_ba_ofs_present" key="/ADC1/adc_base_ofs_ba_ofs_present" value="true" />
+         <param name="adc_cfg1_adiclk_present" key="/ADC1/adc_cfg1_adiclk_present" value="true" />
+         <param name="adc_cfg1_adiv_present" key="/ADC1/adc_cfg1_adiv_present" value="true" />
+         <param name="adc_cfg1_clrltrg_present" key="/ADC1/adc_cfg1_clrltrg_present" value="true" />
+         <param name="adc_cfg1_mode_present" key="/ADC1/adc_cfg1_mode_present" value="true" />
+         <param name="adc_cfg2_smplts_present" key="/ADC1/adc_cfg2_smplts_present" value="true" />
+         <param name="adc_clp0_clp0_present" key="/ADC1/adc_clp0_clp0_present" value="true" />
+         <param name="adc_clp0_ofs_clp0_ofs_present" key="/ADC1/adc_clp0_ofs_clp0_ofs_present" value="true" />
+         <param name="adc_clp1_clp1_present" key="/ADC1/adc_clp1_clp1_present" value="true" />
+         <param name="adc_clp1_ofs_clp1_ofs_present" key="/ADC1/adc_clp1_ofs_clp1_ofs_present" value="true" />
+         <param name="adc_clp2_clp2_present" key="/ADC1/adc_clp2_clp2_present" value="true" />
+         <param name="adc_clp2_ofs_clp2_ofs_present" key="/ADC1/adc_clp2_ofs_clp2_ofs_present" value="true" />
+         <param name="adc_clp3_clp3_present" key="/ADC1/adc_clp3_clp3_present" value="true" />
+         <param name="adc_clp3_ofs_clp3_ofs_present" key="/ADC1/adc_clp3_ofs_clp3_ofs_present" value="true" />
+         <param name="adc_clp9_clp9_present" key="/ADC1/adc_clp9_clp9_present" value="true" />
+         <param name="adc_clp9_ofs_clp9_ofs_present" key="/ADC1/adc_clp9_ofs_clp9_ofs_present" value="true" />
+         <param name="adc_clps_clps_present" key="/ADC1/adc_clps_clps_present" value="true" />
+         <param name="adc_clps_ofs_clps_ofs_present" key="/ADC1/adc_clps_ofs_clps_ofs_present" value="true" />
+         <param name="adc_clpx_clpx_present" key="/ADC1/adc_clpx_clpx_present" value="true" />
+         <param name="adc_clpx_ofs_clpx_ofs_present" key="/ADC1/adc_clpx_ofs_clpx_ofs_present" value="true" />
+         <param name="adc_cv%s_cv_present" key="/ADC1/adc_cv%s_cv_present" value="true" />
+         <param name="adc_g_g_present" key="/ADC1/adc_g_g_present" value="true" />
+         <param name="adc_ofs_ofs_present" key="/ADC1/adc_ofs_ofs_present" value="true" />
+         <param name="adc_r%s_d_present" key="/ADC1/adc_r%s_d_present" value="true" />
+         <param name="adc_sc1%s_adch_present" key="/ADC1/adc_sc1%s_adch_present" value="true" />
+         <param name="adc_sc1%s_aien_present" key="/ADC1/adc_sc1%s_aien_present" value="true" />
+         <param name="adc_sc1%s_coco_present" key="/ADC1/adc_sc1%s_coco_present" value="true" />
+         <param name="adc_sc2_acfe_present" key="/ADC1/adc_sc2_acfe_present" value="true" />
+         <param name="adc_sc2_acfgt_present" key="/ADC1/adc_sc2_acfgt_present" value="true" />
+         <param name="adc_sc2_acren_present" key="/ADC1/adc_sc2_acren_present" value="true" />
+         <param name="adc_sc2_adact_present" key="/ADC1/adc_sc2_adact_present" value="true" />
+         <param name="adc_sc2_adtrg_present" key="/ADC1/adc_sc2_adtrg_present" value="true" />
+         <param name="adc_sc2_dmaen_present" key="/ADC1/adc_sc2_dmaen_present" value="true" />
+         <param name="adc_sc2_refsel_present" key="/ADC1/adc_sc2_refsel_present" value="true" />
+         <param name="adc_sc2_trgprnum_present" key="/ADC1/adc_sc2_trgprnum_present" value="true" />
+         <param name="adc_sc2_trgsterr_present" key="/ADC1/adc_sc2_trgsterr_present" value="true" />
+         <param name="adc_sc2_trgstlat_present" key="/ADC1/adc_sc2_trgstlat_present" value="true" />
+         <param name="adc_sc3_adco_present" key="/ADC1/adc_sc3_adco_present" value="true" />
+         <param name="adc_sc3_avge_present" key="/ADC1/adc_sc3_avge_present" value="true" />
+         <param name="adc_sc3_avgs_present" key="/ADC1/adc_sc3_avgs_present" value="true" />
+         <param name="adc_sc3_cal_present" key="/ADC1/adc_sc3_cal_present" value="true" />
+         <param name="adc_ug_ug_present" key="/ADC1/adc_ug_ug_present" value="true" />
+         <param name="adc_usr_ofs_usr_ofs_present" key="/ADC1/adc_usr_ofs_usr_ofs_present" value="true" />
+         <param name="adc_xofs_xofs_present" key="/ADC1/adc_xofs_xofs_present" value="true" />
+         <param name="adc_yofs_yofs_present" key="/ADC1/adc_yofs_yofs_present" value="true" />
       </peripheral>
       <peripheral baseName="CAN"      instance="0"        version="can0_flex_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />

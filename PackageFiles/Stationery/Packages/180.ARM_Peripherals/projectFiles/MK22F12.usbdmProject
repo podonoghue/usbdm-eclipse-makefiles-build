@@ -17,19 +17,17 @@
    <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
    <item key="/MCG/clock_mode[2]"                          value="ClockMode_FEE" />
    <item key="/MCG/system_mcgfllclk_clock[2]"              value="80000000" />
-   <item key="/SIM/sim_clkdiv2_usb"                        value="9" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[0]"                 value="1" />
+   <item key="/SIM/sim_clkdiv1_outdiv3[0]"                 value="3" />
+   <item key="/SIM/sim_clkdiv1_outdiv3[1]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv3[2]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv3[3]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[0]"                 value="5" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[1]"                 value="10" />
+   <item key="/SIM/sim_clkdiv2_usb[0]"                     value="9" />
    <item key="/SIM/sim_sopt2_clkoutsel"                    value="0" />
    <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
-   <item key="/SIM/system_bus_clock[1]"                    value="4000000" />
-   <item key="/SIM/system_bus_clock[2]"                    value="40000000" />
-   <item key="/SIM/system_core_clock[1]"                   value="4000000" />
-   <item key="/SIM/system_core_clock[2]"                   value="80000000" />
-   <item key="/SIM/system_flash_clock[1]"                  value="4000000" />
-   <item key="/SIM/system_flash_clock[2]"                  value="20000000" />
-   <item key="/SIM/system_flexbus_clock[0]"                value="40000000" />
-   <item key="/SIM/system_flexbus_clock[1]"                value="4000000" />
-   <item key="/SIM/system_flexbus_clock[2]"                value="40000000" />
-   <item key="/SIM/system_usbfs_clock"                     value="48000000" />
+   <item key="/SMC/smc_pmctrl_runm[1]"                     value="2" />
    <item key="/SPI0/speed"                                 value="100000" />
    <item key="/SPI0/spi_mode"                              value="1" />
 </section>

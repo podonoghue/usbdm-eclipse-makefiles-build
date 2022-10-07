@@ -15,7 +15,7 @@
    <xi:include href="_irqOption.xml"/>
 
 <!-- ========== PGA features =============================== -->
-   <choiceOption key="adc_pga_pgaen" condition="adc_pga_present"
+   <choiceOption key="adc_pga_pgaen" condition="adc_pga_pgaen_present"
       description="PGA Enable and mode"
       valueFormat="(%s)"
       enumStem="AdcPgaMode"
@@ -25,7 +25,7 @@
       <choice value="ADC_PGA_PGAEN(1)|ADC_PGA_PGALPb(1)" name="PGA is in normal mode"    enum="NormalPower"   />
    </choiceOption>
 
-   <choiceOption key="adc_pga_pgag" condition="adc_pga_present" 
+   <choiceOption key="adc_pga_pgag" condition="adc_pga_pgag_present" 
       description="PGA Gain Setting"
       enumStem="AdcPgaGain"
       toolTip="Sets gain of PGA amplifier">
@@ -38,7 +38,7 @@
       <choice value="6" name="Gain = x64" enum="x64"  />
    </choiceOption>
 
-   <binaryOption key="adc_pga_pgachp" condition="adc_pga_present" 
+   <binaryOption key="adc_pga_pgachp" condition="adc_pga_pgachp_present" 
       description="PGA chopping"
       valueFormat="ADC_PGA_PGACHPb(%s)"
       enumStem="AdcPgaChop"
@@ -328,7 +328,8 @@
       \t * Example:
       \t * @code
       \t * // Initialisation values for $(_class)
-      \t * static const Adc$(_instance)::Init adcInit {
+      \t * // Options available vary with device - See $(_class)::DefaultInitValue for example
+      \t * static const $(_class)::Init adcInit {
       \t *
       \t *    // Omitted parameters are take to be zero unless an base value is given
       \t *    AdcClockSource_Asynch ,  // ADC Clock Source
@@ -358,8 +359,8 @@
       \t * };
       \t *
       \t * // Initialise ADC from values specified above
-      \t * Adc$(_instance)::configure(adcInit);
-      \t * Adc$(_instance)::calibrate();
+      \t * $(_class)::configure(adcInit);
+      \t * $(_class)::calibrate();
       \t * @endcode
       \t */
    ]]></template>

@@ -1008,8 +1008,10 @@
          \t   ftm->FLTCTRL = ftm->FLTCTRL | (1<<inputNum);
          \t   // Enable fault mode (All channels, manual)
          \t   ftm->MODE    = ftm->MODE | FTM_MODE_FAULTM(2);
-         \t}
-         \t
+         \t}\n\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true" 
+         variables="ftm_pol_pol0_present" ><![CDATA[
          \t/**
          \t * Set polarity of all channels
          \t *
@@ -1032,7 +1034,9 @@
          \t   else {
          \t      ftm->POL = ftm->POL | channelMask;
          \t   }
-         \t}
+         \t}\n\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
          \t/*
          \t * *****************************************************************
          \t *          Channel functions
@@ -1450,16 +1454,6 @@
       \t      ftm->CONTROLS[CHANNEL].CnSC = ftm->CONTROLS[CHANNEL].CnSC & ~FTM_CnSC_CHF_MASK;
       \t   }
       \t   
-      \t   
-      \t   /**
-      \t    * Set polarity of channels.
-      \t    *
-      \t    * @param polarity Polarity to set
-      \t    */
-      \t   %(static) void setPolarity(Polarity polarity)%(const) {
-      \t      %(Ftm)::setPolarity(polarity, CHANNEL_MASK);
-      \t   }
-      \t   
       \t   /**
       \t    * Force channel output.
       \t    *
@@ -1473,9 +1467,20 @@
       \t      static const uint32_t MASK = ((1<<%(channel))|(1<<(%(channel)+8)));
       \t      ftm->SWOCTRL = ((ftm->SWOCTRL & ~MASK)) | (ftmChannelForce & MASK);
       \t   }\n\n
+   ]]></template>
+   <template key="/$(_basename)_CHANNEL/%(k)" namespace="all" discardRepeats="true"
+      variables="ftm_pol_pol0_present" ><![CDATA[
+      \t   /**
+      \t    * Set polarity of channels.
+      \t    *
+      \t    * @param polarity Polarity to set
+      \t    */
+      \t   %(static) void setPolarity(Polarity polarity)%(const) {
+      \t      %(Ftm)::setPolarity(polarity, CHANNEL_MASK);
+      \t   }\n\n
       ]]></template>
    </for>
-   
+
    <clockCodeTemplate variable="ftm_sc_clks"
       returnFormat="%s"
    ><![CDATA[

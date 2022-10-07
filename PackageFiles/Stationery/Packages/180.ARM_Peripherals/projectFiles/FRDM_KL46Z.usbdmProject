@@ -29,6 +29,7 @@
    <item key="$pin$PTB3_pcrSetting_1"                      value="100" />
    <item key="$pin$PTC1_pcrSetting_1"                      value="100" />
    <item key="$pin$PTC2_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTC5_pcrSetting_3"                      value="300" />
    <item key="$pin$PTC8_pcrSetting_1"                      value="100" />
    <item key="$pin$PTC9_pcrSetting_1"                      value="100" />
    <item key="$pin$PTD1_pcrSetting_0"                      value="0" />
@@ -126,11 +127,10 @@
    <item key="/LCD/lcd_gcr_clock"                          value="LCD_GCR_SOURCE(1)|LCD_GCR_ALTSOURCE(0)" />
    <item key="/LLWU/llwu_filt1_filtsel"                    value="5" />
    <item key="/LLWU/llwu_filt2_filtsel"                    value="5" />
-   <item key="/LPTMR0/lptmr_cmr"                           value="0" />
-   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_48MHz" />
-   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
-   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_FEE_40MHz" />
-   <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_FEI_48MHz" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_RUN_PEE_48MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_VLPR_BLPE_4MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_RUN_FEE_40MHz" />
+   <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_RUN_FEI_48MHz" />
    <item key="/MCG/fllOutputFrequency[3]"                  value="47972352" />
    <item key="/MCG/mcgClockMode[0]"                        value="7" />
    <item key="/MCG/mcgClockMode[1]"                        value="5" />
@@ -138,14 +138,13 @@
    <item key="/MCG/mcg_c4_dmx32[3]"                        value="true" />
    <item key="/MCG/pll0OutputFrequency[0]"                 value="96000000" />
    <item key="/OSC0/osc_cr_scp"                            value="4" />
-   <item key="/PIT/pit_ldval"                              value="10000" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[0]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[1]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[0]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[2]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[3]"                 value="2" />
    <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
-   <item key="/SIM/system_bus_clock[1]"                    value="800000" />
-   <item key="/SIM/system_bus_clock[2]"                    value="20000000" />
-   <item key="/SIM/system_bus_clock[3]"                    value="23986176" />
-   <item key="/SIM/system_core_clock[1]"                   value="4000000" />
-   <item key="/SIM/system_core_clock[2]"                   value="40000000" />
-   <item key="/SIM/system_core_clock[3]"                   value="47972352" />
+   <item key="/SIM/sim_sopt2_pllfllsel[2]"                 value="1" />
    <item key="/SMC/smc_pmctrl_runm[1]"                     value="2" />
    <item key="/SMC/smc_stopctrl_porpo"                     value="true" />
    <item key="/SMC/smc_stopctrl_pstopo"                    value="2" />

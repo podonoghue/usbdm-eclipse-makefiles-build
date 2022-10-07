@@ -4,8 +4,6 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analogue to Digital Converter">
 
-   <constant key="adc_sc2_dmaen_present" />
-
    <xi:include href="_adc_base.xml"/>
 
 </peripheralPage>

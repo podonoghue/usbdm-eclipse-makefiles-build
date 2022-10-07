@@ -487,8 +487,9 @@
          \t   // Too long a period
          \t   usbdm_assert(false, "Interval is too long");
          \t   return setErrorCode(E_TOO_LARGE);
-         \t}
-         \t
+         \t}\n\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
          \t/**
          \t * Set period
          \t *
@@ -573,7 +574,9 @@
          \t   tpm->SC  = sc;
          \t
          \t   return E_NO_ERROR;
-         \t}
+         \t}\n\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
          \t/**
          \t * Get frequency of timer tick
          \t *
@@ -598,8 +601,9 @@
          \t   int prescaleFactor = 1<<((tpm->SC&TPM_SC_PS_MASK)>>TPM_SC_PS_SHIFT);
          \t
          \t   return %(getInputClockFrequency)((TpmClockSource)(tpm->SC&TPM_SC_CMOD_MASK))/prescaleFactor;
-         \t}
-         \t
+         \t}\n\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
          \t/**
          \t * Convert time in microseconds to time in ticks
          \t *
@@ -731,8 +735,9 @@
          \t */
          \t%(static)uint16_t getTime()%(const) {
          \t   return tpm->CNT;
-         \t}
-         \t
+         \t}\n\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
          \t/**
          \t * Reset counter to initial value
          \t */
@@ -792,8 +797,10 @@
          \t */
          \t%(static)void disableTimerOverflowInterrupts()%(const) {
          \t   tpm->SC = tpm->SC & ~TPM_SC_TOIE_MASK;
-         \t}
-         \t
+         \t}\n\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true" 
+         variables="tpm_pol_pol0_present" ><![CDATA[
          \t/**
          \t * Set polarity of all channels
          \t *
@@ -816,7 +823,9 @@
          \t   else {
          \t      tpm->POL = tpm->POL | channelMask;
          \t   }
-         \t}
+         \t}\n\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
          \t/*
          \t * *****************************************************************
          \t *          Channel functions
@@ -949,6 +958,24 @@
       
 <!-- Channel Functions -->
              
+   <template key="/$(_basename)_CHANNEL/%(k)" namespace="all" discardRepeats="true" 
+      variables="tpm_cnsc_action"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   
+      \t   /**
+      \t    * Set %description
+      \t    *
+      %paramDescription
+      \t    *
+      \t    * @note This method has the side-effect of clearing the register update synchronisation i.e.
+      \t    *       pending CnV register updates are discarded.
+      \t    */
+      \t   %(static) void setAction(%params)%(const) {
+      \t      tpm->CONTROLS[%(channel)].CnSC = (tpm->CONTROLS[%(channel)].CnSC & ~%mask) | %paramExpression;
+      \t   }\n\n
+   ]]></template>
+
    <template key="/$(_basename)_CHANNEL/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
       \t   /**
       \t    * Configure channel.
@@ -995,20 +1022,6 @@
       \t   %(static) void setMode(TpmChannelMode tpmChannelMode)%(const) {
       \t      tpm->CONTROLS[%(channel)].CnSC =
       \t            (tpm->CONTROLS[%(channel)].CnSC & ~(TPM_CnSC_MS_MASK|TPM_CnSC_ELS_MASK))|tpmChannelMode;
-      \t   }
-      \t   
-      \t   /**
-      \t    * Set channel action on event.
-      \t    *
-      \t    * @param[in] tpmChannelAction      Action to take on channel event (DMA or Interrupt)
-      \t    *
-      \t    * @note This method has the side-effect of clearing the register update synchronisation i.e.
-      \t    *       pending CnV register updates are discarded.
-      \t    */
-      \t   %(static) void setAction(TpmChannelAction tpmChannelAction)%(const) {
-      \t      tpm->CONTROLS[%(channel)].CnSC =
-      \t            (tpm->CONTROLS[%(channel)].CnSC & ~(TPM_CnSC_CHIE_MASK|TPM_CnSC_DMA_MASK))|
-      \t            tpmChannelAction;
       \t   }
       \t   
       \t   /**
@@ -1134,9 +1147,10 @@
       \t   %(static) void clearInterruptFlag()%(const) {
       \t      // Note - w1c flags
       \t      tpm->CONTROLS[CHANNEL].CnSC = TPM_CnSC_CHF_MASK;
-      \t   }
-      \t   
-      \t   
+      \t   }\n\n
+   ]]></template>
+   <template key="/$(_basename)_CHANNEL/%(k)" namespace="all" discardRepeats="true"
+      variables="tpm_pol_pol0_present" ><![CDATA[
       \t   /**
       \t    * Set polarity of channels.
       \t    *

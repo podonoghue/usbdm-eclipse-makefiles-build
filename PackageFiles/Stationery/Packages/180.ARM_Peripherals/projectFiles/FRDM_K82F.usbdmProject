@@ -15,6 +15,8 @@
    <item key="$peripheral$QSPI0_userDescription"           value="MX25U3235FZNI-10G x 2" />
    <item key="$peripheral$SDRAMC_userDescription"          value="IS42SM16800H-6BLI SDRAM" />
    <item key="$pin$PTA0_pcrSetting_7"                      value="700" />
+   <item key="$pin$PTA12_pcrSetting_6"                     value="600" />
+   <item key="$pin$PTA13_pcrSetting_6"                     value="600" />
    <item key="$pin$PTA18_pcrSetting_0"                     value="0" />
    <item key="$pin$PTA19_pcrSetting_0"                     value="0" />
    <item key="$pin$PTA1_pcrSetting_4"                      value="420" />
@@ -25,6 +27,7 @@
    <item key="$pin$PTB10_pcrSetting_7"                     value="700" />
    <item key="$pin$PTB11_pcrSetting_7"                     value="700" />
    <item key="$pin$PTB16_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTB16_pcrSetting_7"                     value="700" />
    <item key="$pin$PTB17_pcrSetting_1"                     value="100" />
    <item key="$pin$PTB18_pcrSetting_0"                     value="0" />
    <item key="$pin$PTB18_pcrSetting_7"                     value="700" />
@@ -37,6 +40,7 @@
    <item key="$pin$PTB2_pcrSetting_0"                      value="0" />
    <item key="$pin$PTB3_pcrSetting_0"                      value="0" />
    <item key="$pin$PTC10_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTC10_pcrSetting_3"                     value="300" />
    <item key="$pin$PTC11_pcrSetting_1"                     value="100" />
    <item key="$pin$PTC12_pcrSetting_1"                     value="100" />
    <item key="$pin$PTC13_pcrSetting_1"                     value="100" />
@@ -47,9 +51,12 @@
    <item key="$pin$PTC2_pcrSetting_0"                      value="0" />
    <item key="$pin$PTC3_pcrSetting_1"                      value="100" />
    <item key="$pin$PTC5_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTC5_pcrSetting_3"                      value="300" />
    <item key="$pin$PTC6_pcrSetting_1"                      value="100" />
    <item key="$pin$PTC8_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTC8_pcrSetting_3"                      value="300" />
    <item key="$pin$PTC9_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTC9_pcrSetting_3"                      value="300" />
    <item key="$pin$PTD0_pcrSetting_1"                      value="103" />
    <item key="$pin$PTD1_pcrSetting_1"                      value="100" />
    <item key="$pin$PTD2_pcrSetting_1"                      value="100" />
@@ -67,17 +74,17 @@
    <item key="$pin$PTE7_pcrSetting_5"                      value="500" />
    <item key="$pin$PTE8_pcrSetting_5"                      value="500" />
    <item key="$pin$PTE9_pcrSetting_5"                      value="500" />
-   <item key="$signal$ADC0_DM1_codeIdentifier"             value="Adc_Diff" />
-   <item key="$signal$ADC0_DP1_codeIdentifier"             value="Adc_Diff" />
-   <item key="$signal$ADC0_SE10_codeIdentifier"            value="Adc_A0" />
-   <item key="$signal$ADC0_SE11_codeIdentifier"            value="Adc_A1" />
-   <item key="$signal$ADC0_SE12_codeIdentifier"            value="Adc_A5" />
-   <item key="$signal$ADC0_SE13_codeIdentifier"            value="Adc_A4" />
-   <item key="$signal$ADC0_SE15_codeIdentifier"            value="Adc_A2" />
+   <item key="$signal$ADC0_DM1_codeIdentifier"             value="Analogue_Diff" />
+   <item key="$signal$ADC0_DP1_codeIdentifier"             value="Analogue_Diff" />
+   <item key="$signal$ADC0_SE10_codeIdentifier"            value="Analogue_A0" />
+   <item key="$signal$ADC0_SE11_codeIdentifier"            value="Analogue_A1" />
+   <item key="$signal$ADC0_SE12_codeIdentifier"            value="Analogue_A5" />
+   <item key="$signal$ADC0_SE13_codeIdentifier"            value="Analogue_A4" />
+   <item key="$signal$ADC0_SE15_codeIdentifier"            value="Analogue_A2" />
    <item key="$signal$ADC0_SE16_codeIdentifier"            value="LightSensor" />
    <item key="$signal$ADC0_SE16_descriptionSetting"        value="Light Sensor" />
-   <item key="$signal$ADC0_SE18_codeIdentifier"            value="Adc_SE18" />
-   <item key="$signal$ADC0_SE1_codeIdentifier"             value="Adc_SE1" />
+   <item key="$signal$ADC0_SE18_codeIdentifier"            value="Analogue_SE18" />
+   <item key="$signal$ADC0_SE1_codeIdentifier"             value="Analogue_SE1" />
    <item key="$signal$ADC0_SE22_codeIdentifier"            value="VrefOut" />
    <item key="$signal$ADC0_SE22_descriptionSetting"        value="Vref out" />
    <item key="$signal$ADC0_SE23_codeIdentifier"            value="DacOut" />
@@ -86,21 +93,18 @@
    <item key="$signal$ADC0_SE26_descriptionSetting"        value="Internal temperature sensor" />
    <item key="$signal$ADC0_SE27_codeIdentifier"            value="Bandgap" />
    <item key="$signal$ADC0_SE27_descriptionSetting"        value="Internal band-gap reference" />
-   <item key="$signal$ADC0_SE4b_codeIdentifier"            value="Adc_A3" />
-   <item key="$signal$ADC0_SE8_codeIdentifier"             value="Adc_A0" />
-   <item key="$signal$ADC0_SE9_codeIdentifier"             value="Adc_A1" />
+   <item key="$signal$ADC0_SE4b_codeIdentifier"            value="Analogue_A3" />
+   <item key="$signal$ADC0_SE8_codeIdentifier"             value="Analogue_A0" />
+   <item key="$signal$ADC0_SE9_codeIdentifier"             value="Analogue_A1" />
    <item key="$signal$CLKOUT_codeIdentifier"               value="ClkOut" />
    <item key="$signal$CLKOUT_descriptionSetting"           value="Clkout" />
    <item key="$signal$EXTAL0_descriptionSetting"           value="12MHz Crystal" />
    <item key="$signal$EXTAL32_descriptionSetting"          value="32kHz Crystal" />
    <item key="$signal$FB_BE23_16_BLS15_8_b_descriptionSetting" value="SDRAM_LDQM" />
    <item key="$signal$FB_BE31_24_BLS7_0_b_descriptionSetting" value="SDRAM_UDQM" />
-   <item key="$signal$FTM3_CH1_codeIdentifier"             value="redLedPwm" />
-   <item key="$signal$FTM3_CH1_descriptionSetting"         value="Red LED PWM" />
-   <item key="$signal$FTM3_CH2_codeIdentifier"             value="greenLedPwm" />
-   <item key="$signal$FTM3_CH2_descriptionSetting"         value="Green LED PWM" />
-   <item key="$signal$FTM3_CH3_codeIdentifier"             value="blueLedPwm" />
-   <item key="$signal$FTM3_CH3_descriptionSetting"         value="Blue LED PWM" />
+   <item key="$signal$FTM3_CH4_codeIdentifier"             value="RGB_Red_Pwm" />
+   <item key="$signal$FTM3_CH5_codeIdentifier"             value="RGB_Green_Pwm" />
+   <item key="$signal$FTM3_CH6_codeIdentifier"             value="RGB_Blue_Pwm" />
    <item key="$signal$FXIO0_D11_descriptionSetting"        value="FlexioD11" />
    <item key="$signal$FXIO0_D12_descriptionSetting"        value="FlexioD12" />
    <item key="$signal$FXIO0_D15_descriptionSetting"        value="FlexioD15" />
@@ -124,63 +128,63 @@
    <item key="$signal$FXIO0_D7_descriptionSetting"         value="FlexioD7" />
    <item key="$signal$FXIO0_D8_descriptionSetting"         value="FlexioD8" />
    <item key="$signal$FXIO0_D9_descriptionSetting"         value="FlexioD9" />
-   <item key="$signal$GPIOA_12_codeIdentifier"             value="Gpio_D18" />
-   <item key="$signal$GPIOA_13_codeIdentifier"             value="Gpio_D17" />
-   <item key="$signal$GPIOA_14_codeIdentifier"             value="Gpio_D20" />
-   <item key="$signal$GPIOA_15_codeIdentifier"             value="Gpio_D23" />
-   <item key="$signal$GPIOA_16_codeIdentifier"             value="Gpio_D22" />
-   <item key="$signal$GPIOA_17_codeIdentifier"             value="Gpio_D19" />
-   <item key="$signal$GPIOA_1_codeIdentifier"              value="Gpio_D14" />
-   <item key="$signal$GPIOA_24_codeIdentifier"             value="Gpio_D1" />
-   <item key="$signal$GPIOA_25_codeIdentifier"             value="Gpio_D0" />
-   <item key="$signal$GPIOA_2_codeIdentifier"              value="Gpio_D15" />
+   <item key="$signal$GPIOA_12_codeIdentifier"             value="Digital_D18" />
+   <item key="$signal$GPIOA_13_codeIdentifier"             value="Digital_D17" />
+   <item key="$signal$GPIOA_14_codeIdentifier"             value="Digital_D20" />
+   <item key="$signal$GPIOA_15_codeIdentifier"             value="Digital_D23" />
+   <item key="$signal$GPIOA_16_codeIdentifier"             value="Digital_D22" />
+   <item key="$signal$GPIOA_17_codeIdentifier"             value="Digital_D19" />
+   <item key="$signal$GPIOA_1_codeIdentifier"              value="Digital_D14" />
+   <item key="$signal$GPIOA_24_codeIdentifier"             value="Digital_D1" />
+   <item key="$signal$GPIOA_25_codeIdentifier"             value="Digital_D0" />
+   <item key="$signal$GPIOA_2_codeIdentifier"              value="Digital_D15" />
    <item key="$signal$GPIOA_4_codeIdentifier"              value="Switch2" />
    <item key="$signal$GPIOA_4_descriptionSetting"          value="Switch 2" />
-   <item key="$signal$GPIOA_5_codeIdentifier"              value="Gpio_D16" />
-   <item key="$signal$GPIOA_7_codeIdentifier"              value="Gpio_A0" />
-   <item key="$signal$GPIOA_8_codeIdentifier"              value="Gpio_A1" />
-   <item key="$signal$GPIOB_16_codeIdentifier"             value="Gpio_D0" />
-   <item key="$signal$GPIOB_17_codeIdentifier"             value="Gpio_D1" />
-   <item key="$signal$GPIOB_1_codeIdentifier"              value="Gpio_A1" />
-   <item key="$signal$GPIOB_20_codeIdentifier"             value="Gpio_D24" />
-   <item key="$signal$GPIOB_21_codeIdentifier"             value="Gpio_D21" />
-   <item key="$signal$GPIOB_22_codeIdentifier"             value="Gpio_D22" />
-   <item key="$signal$GPIOB_23_codeIdentifier"             value="Gpio_D23" />
-   <item key="$signal$GPIOB_2_codeIdentifier"              value="Gpio_A5" />
-   <item key="$signal$GPIOB_3_codeIdentifier"              value="Gpio_A4" />
-   <item key="$signal$GPIOB_4_codeIdentifier"              value="Gpio_D2" />
+   <item key="$signal$GPIOA_5_codeIdentifier"              value="Digital_D16" />
+   <item key="$signal$GPIOA_7_codeIdentifier"              value="Digital_A0" />
+   <item key="$signal$GPIOA_8_codeIdentifier"              value="Digital_A1" />
+   <item key="$signal$GPIOB_16_codeIdentifier"             value="Digital_D0" />
+   <item key="$signal$GPIOB_17_codeIdentifier"             value="Digital_D1" />
+   <item key="$signal$GPIOB_1_codeIdentifier"              value="Digital_A1" />
+   <item key="$signal$GPIOB_20_codeIdentifier"             value="Digital_D24" />
+   <item key="$signal$GPIOB_21_codeIdentifier"             value="Digital_D21" />
+   <item key="$signal$GPIOB_22_codeIdentifier"             value="Digital_D22" />
+   <item key="$signal$GPIOB_23_codeIdentifier"             value="Digital_D23" />
+   <item key="$signal$GPIOB_2_codeIdentifier"              value="Digital_A5" />
+   <item key="$signal$GPIOB_3_codeIdentifier"              value="Digital_A4" />
+   <item key="$signal$GPIOB_4_codeIdentifier"              value="Digital_D2" />
    <item key="$signal$GPIOB_5_codeIdentifier"              value="sdhcCardDetect" />
    <item key="$signal$GPIOB_5_descriptionSetting"          value="SDHC0_CARD_DETECT" />
-   <item key="$signal$GPIOC_0_codeIdentifier"              value="Gpio_D24" />
-   <item key="$signal$GPIOC_10_codeIdentifier"             value="Gpio_D5/BlueLed/Leds" />
+   <item key="$signal$GPIOC_0_codeIdentifier"              value="Digital_D24" />
+   <item key="$signal$GPIOC_10_codeIdentifier"             value="Digital_D5/RGB_Blue/Leds" />
    <item key="$signal$GPIOC_10_descriptionSetting"         value="Blue LED" />
-   <item key="$signal$GPIOC_11_codeIdentifier"             value="Gpio_D4" />
-   <item key="$signal$GPIOC_12_codeIdentifier"             value="Gpio_D2" />
+   <item key="$signal$GPIOC_11_codeIdentifier"             value="Digital_D4" />
+   <item key="$signal$GPIOC_12_codeIdentifier"             value="Digital_D2" />
    <item key="$signal$GPIOC_13_codeIdentifier"             value="AccelIrq" />
    <item key="$signal$GPIOC_17_codeIdentifier"             value="UsbPwrFlag" />
-   <item key="$signal$GPIOC_18_codeIdentifier"             value="Gpio_D7" />
-   <item key="$signal$GPIOC_19_codeIdentifier"             value="Gpio_D8" />
-   <item key="$signal$GPIOC_1_codeIdentifier"              value="Gpio_A2" />
-   <item key="$signal$GPIOC_2_codeIdentifier"              value="Gpio_A3" />
-   <item key="$signal$GPIOC_3_codeIdentifier"              value="Gpio_D8" />
-   <item key="$signal$GPIOC_5_codeIdentifier"              value="Gpio_D9" />
+   <item key="$signal$GPIOC_18_codeIdentifier"             value="Digital_D7" />
+   <item key="$signal$GPIOC_19_codeIdentifier"             value="Digital_D8" />
+   <item key="$signal$GPIOC_1_codeIdentifier"              value="Digital_A2" />
+   <item key="$signal$GPIOC_2_codeIdentifier"              value="Digital_A3" />
+   <item key="$signal$GPIOC_3_codeIdentifier"              value="Digital_D8" />
+   <item key="$signal$GPIOC_5_codeIdentifier"              value="Digital_D9" />
    <item key="$signal$GPIOC_6_codeIdentifier"              value="Switch3" />
-   <item key="$signal$GPIOC_7_codeIdentifier"              value="Gpio_D21" />
-   <item key="$signal$GPIOC_8_codeIdentifier"              value="Gpio_D6/RedLed/Leds" />
+   <item key="$signal$GPIOC_7_codeIdentifier"              value="Digital_D21" />
+   <item key="$signal$GPIOC_8_codeIdentifier"              value="Digital_D6/RGB_Red/Leds" />
    <item key="$signal$GPIOC_8_descriptionSetting"          value="Red LED" />
-   <item key="$signal$GPIOC_9_codeIdentifier"              value="Gpio_D7/GreenLed/Leds" />
+   <item key="$signal$GPIOC_9_codeIdentifier"              value="Digital_D7/RGB_Green/Leds" />
    <item key="$signal$GPIOC_9_descriptionSetting"          value="Green LED" />
-   <item key="$signal$GPIOD_0_codeIdentifier"              value="Gpio_D3" />
+   <item key="$signal$GPIOD_0_codeIdentifier"              value="Digital_D3" />
    <item key="$signal$GPIOD_0_descriptionSetting"          value="Switch 3" />
-   <item key="$signal$GPIOD_12_codeIdentifier"             value="Gpio_D13" />
-   <item key="$signal$GPIOD_13_codeIdentifier"             value="Gpio_D11" />
-   <item key="$signal$GPIOD_14_codeIdentifier"             value="Gpio_D12" />
-   <item key="$signal$GPIOD_15_codeIdentifier"             value="Gpio_D10" />
-   <item key="$signal$GPIOD_1_codeIdentifier"              value="Gpio_D13" />
-   <item key="$signal$GPIOD_2_codeIdentifier"              value="Gpio_D11" />
-   <item key="$signal$GPIOD_3_codeIdentifier"              value="Gpio_D12" />
-   <item key="$signal$GPIOD_4_codeIdentifier"              value="Gpio_D10" />
-   <item key="$signal$GPIOD_6_codeIdentifier"              value="Gpio_A3" />
+   <item key="$signal$GPIOD_12_codeIdentifier"             value="Digital_D13" />
+   <item key="$signal$GPIOD_13_codeIdentifier"             value="Digital_D11" />
+   <item key="$signal$GPIOD_14_codeIdentifier"             value="Digital_D12" />
+   <item key="$signal$GPIOD_15_codeIdentifier"             value="Digital_D10" />
+   <item key="$signal$GPIOD_1_codeIdentifier"              value="Digital_D13" />
+   <item key="$signal$GPIOD_2_codeIdentifier"              value="Digital_D11" />
+   <item key="$signal$GPIOD_3_codeIdentifier"              value="Digital_D12" />
+   <item key="$signal$GPIOD_4_codeIdentifier"              value="Digital_D10" />
+   <item key="$signal$GPIOD_6_codeIdentifier"              value="Digital_A3" />
    <item key="$signal$GPIOE_6_descriptionSetting"          value="Red LED on-off/LEDs on-off" />
    <item key="$signal$GPIOE_7_descriptionSetting"          value="Green LED on-off" />
    <item key="$signal$GPIOE_8_descriptionSetting"          value="Green LED on-off" />
@@ -188,6 +192,7 @@
    <item key="$signal$I2C3_SDA_descriptionSetting"         value="Accelerometer SDA" />
    <item key="$signal$LLWU_P12_codeIdentifier"             value="Switch3Wakeup" />
    <item key="$signal$LLWU_P3_codeIdentifier"              value="Switch2Wakeup" />
+   <item key="$signal$LPTMR0_ALT2_codeIdentifier"          value="LptmrInput2" />
    <item key="$signal$LPUART0_RX_descriptionSetting"       value="Console Rx" />
    <item key="$signal$LPUART0_TX_descriptionSetting"       value="Console Tx" />
    <item key="$signal$QSPI0A_DATA0_descriptionSetting"     value="QSPIA0 Flash DATA0" />
@@ -248,6 +253,8 @@
    <item key="$signal$SDRAM_RAS_b_descriptionSetting"      value="SDRAM_RASn" />
    <item key="$signal$SWD_CLK_descriptionSetting"          value="SWD_CLK" />
    <item key="$signal$SWD_DIO_descriptionSetting"          value="SWD_DIO" />
+   <item key="$signal$TPM1_CH0_codeIdentifier"             value="Tpm_D18" />
+   <item key="$signal$TPM_CLKIN0_codeIdentifier"           value="TpmClkin" />
    <item key="$signal$TSI0_CH11_descriptionSetting"        value="Touch 1" />
    <item key="$signal$TSI0_CH12_descriptionSetting"        value="Touch 2" />
    <item key="$signal$USB0_DM_descriptionSetting"          value="USB_DM" />
@@ -257,43 +264,56 @@
    <item key="$signal$XTAL32_descriptionSetting"           value="32kHz Crystal" />
    <item key="/Console/consoleDevice"                      value="USBDM::Lpuart4" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />
+   <item key="/HARDWARE/Analogue0"                         value="Analogue_A0" />
+   <item key="/HARDWARE/Analogue1"                         value="Analogue_A1" />
+   <item key="/HARDWARE/Digital0"                          value="Digital_D0" />
+   <item key="/HARDWARE/Digital1"                          value="Digital_D0" />
+   <item key="/HARDWARE/Ftm1"                              value="RGB_Red_Pwm" />
+   <item key="/HARDWARE/Ftm2"                              value="RGB_Green_Pwm" />
+   <item key="/HARDWARE/Led1"                              value="RGB_Red" />
+   <item key="/HARDWARE/Led2"                              value="RGB_Green" />
+   <item key="/HARDWARE/Led3"                              value="RGB_Blue" />
+   <item key="/HARDWARE/Switch1"                           value="Switch2" />
    <item key="/HARDWARE/mapAllPins"                        value="true" />
    <item key="/HARDWARE/warnMultipleSignalsOnPin"          value="false" />
    <item key="/LLWU/device_list"                           value="LPTMR0/LPTMR1;CMP0;CMP1;;;RTC_Alarm;;RTC_Seconds" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
-   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_120MHz" />
-   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
-   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_PEE_150MHz" />
-   <item key="/MCG/clock_mode[0]"                          value="ClockMode_PEE" />
-   <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
-   <item key="/MCG/clock_mode[2]"                          value="ClockMode_PEE" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_RUN_PEE_120MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_VLPR_BLPE_4MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_HSRUN_PEE_150MHz" />
+   <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_RUN_FEI_96M" />
+   <item key="/MCG/fllOutputFrequency[3]"                  value="95944704" />
+   <item key="/MCG/mcgClockMode[0]"                        value="7" />
+   <item key="/MCG/mcgClockMode[1]"                        value="5" />
+   <item key="/MCG/mcgClockMode[2]"                        value="7" />
+   <item key="/MCG/mcg_c4_dmx32[3]"                        value="true" />
    <item key="/MCG/pll0OutputFrequency[2]"                 value="150000000" />
    <item key="/OSC0/osc_cr_scp"                            value="4" />
    <item key="/OSC0/osc_input_freq"                        value="12000000" />
    <item key="/OSC0/oscer_undiv_clock"                     value="12000000" />
-   <item key="/SIM/ClockConfig[0]"                         value="" />
-   <item key="/SIM/ClockConfig[1]"                         value="" />
-   <item key="/SIM/ClockConfig[2]"                         value="" />
-   <item key="/SIM/busFreq"                                value="75MHz" />
-   <item key="/SIM/coreFreq"                               value="150MHz" />
-   <item key="/SIM/flashFreq"                              value="25MHz" />
-   <item key="/SIM/flexFreq"                               value="75MHz" />
-   <item key="/SIM/sim_clkdiv2_usb"                        value="9" />
+   <item key="/PIT/irqHandlingMethod"                      value="$ClassMethod" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[1]"                 value="3" />
+   <item key="/SIM/sim_clkdiv1_outdiv2[0]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv2[1]"                 value="3" />
+   <item key="/SIM/sim_clkdiv1_outdiv2[2]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv2[3]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv3[0]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv3[1]"                 value="3" />
+   <item key="/SIM/sim_clkdiv1_outdiv3[2]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv3[3]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[0]"                 value="5" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[1]"                 value="15" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[2]"                 value="6" />
+   <item key="/SIM/sim_clkdiv2_usb[0]"                     value="9" />
    <item key="/SIM/sim_clkdiv3_pllfll[0]"                  value="7" />
    <item key="/SIM/sim_clkdiv3_pllfll[1]"                  value="9" />
    <item key="/SIM/sim_clkdiv3_pllfll[2]"                  value="7" />
+   <item key="/SIM/sim_clkdiv3_pllfll[3]"                  value="5" />
    <item key="/SIM/sim_sopt2_clkoutsel"                    value="6" />
    <item key="/SIM/sim_sopt2_lpuartsrc"                    value="1" />
    <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
-   <item key="/SIM/sim_sopt2_pllfllsel[2]"                 value="1" />
+   <item key="/SIM/sim_sopt2_pllfllsel[2]"                 value="3" />
    <item key="/SIM/sim_sopt2_tpmsrc"                       value="1" />
-   <item key="/SIM/system_bus_clock[0]"                    value="60000000" />
-   <item key="/SIM/system_bus_clock[1]"                    value="4000000" />
-   <item key="/SIM/system_core_clock[0]"                   value="120000000" />
-   <item key="/SIM/system_core_clock[1]"                   value="4000000" />
-   <item key="/SIM/system_flash_clock[0]"                  value="24000000" />
-   <item key="/SIM/system_flash_clock[1]"                  value="800000" />
-   <item key="/SIM/system_flexbus_clock[0]"                value="60000000" />
-   <item key="/SIM/system_flexbus_clock[1]"                value="4000000" />
-   <item key="/SIM/system_tpm_clock"                       value="60000000" />
+   <item key="/SMC/smc_pmctrl_runm[1]"                     value="2" />
+   <item key="/SMC/smc_pmctrl_runm[2]"                     value="3" />
 </section>

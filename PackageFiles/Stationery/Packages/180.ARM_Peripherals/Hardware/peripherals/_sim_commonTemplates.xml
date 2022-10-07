@@ -1504,7 +1504,7 @@
       \t      sim->SOPT1 = sopt1;\n
    ]]></template>
    <template><![CDATA[
-      \t      sim->SOPT2 = sopt2;   // SOPT2.PLLFLLSEL may also be altered by MCG clock code
+      \t      sim->SOPT2 = sopt2;   // SOPT2 may also be altered by MCG clock code
       \t      sim->SOPT4 = sopt4;
       \t      sim->SOPT5 = sopt5;
       \t      sim->SOPT7 = sopt7;\n

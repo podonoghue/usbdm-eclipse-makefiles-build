@@ -111,7 +111,7 @@
             value="0" />
       </for>
             
-      <choiceOption key="sim_sopt2_flexiosrc" condition="sim_sopt2_flexiosrc_present" 
+      <choiceOption key="sim_sopt2_flexiosrc" condition="sim_sopt2_flexiosrc_present"
          enumStem="SimFlexioClockSource"
          target="system_flexio_clock"
          description="FLEXIO Clock source"
@@ -443,8 +443,7 @@
       <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" constant="true" >
       
          <aliasOption key="/MCG/enableClockConfiguration[%(n)]" constant="false" />
-         
-         <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" constant="false" />
+         <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]"          constant="false" />
 
          <intOption key="usb1pfdclk_Clock[%(n)]"
             derived="true"
@@ -550,7 +549,7 @@
             <choice value="12"  name="Divide by 7 (div=6, frac=0)"    enum="Div7  " ref="(system_peripheral_clock[%(n)]*1)/7" code="SIM_CLKDIV3_PLLFLLDIV(6)|SIM_CLKDIV3_PLLFLLFRAC(0)"  />
             <choice value="14"  name="Divide by 8 (div=7, frac=0)"    enum="Div8  " ref="(system_peripheral_clock[%(n)]*1)/8" code="SIM_CLKDIV3_PLLFLLDIV(7)|SIM_CLKDIV3_PLLFLLFRAC(0)"  />
          </choiceOption>
-      
+
          <intOption key="system_peripheral_postdivider_clock[%(n)]" condition="sim_clkdiv3_pllflldiv_present"
             derived="true"
             constant="true"
@@ -559,45 +558,54 @@
             toolTip="Frequency of Peripheral Clock available to various peripherals"  
             max="75 MHz" />
     
-         <intOption key="system_core_clock[%(n)]" 
+         <aliasOption key="/MCG/system_mcgoutclk_clock[%(n)]" />
+
+         <intOption key="system_core_clock[%(n)]" condition="sim_clkdiv1_outdiv1_present"
+            ref="(/MCG/system_mcgoutclk_clock[%(n)])/(sim_clkdiv1_outdiv1[%(n)])"
+            derived="true"
             units="Hz"
             description="System Core Clock"
             toolTip="Clocks the ARM Cortex-M4 core and bus masters"
             value="120 MHz" />
       
-         <intOption key="system_bus_clock[%(n)]" 
+         <intOption key="system_bus_clock[%(n)]" condition="sim_clkdiv1_outdiv2_present" 
+            ref="(/MCG/system_mcgoutclk_clock[%(n)])/(sim_clkdiv1_outdiv2[%(n)])"
+            derived="true"
             units="Hz"
             description="System Bus Clock"
             toolTip="Clocks the bus slaves and peripherals\n
                      Must be &lt;= Core Clock frequency and an integer divisor"
             value="60 MHz" />
    
-         <intOption key="system_flexbus_clock[%(n)]" 
+         <intOption key="system_flexbus_clock[%(n)]" condition="sim_clkdiv1_outdiv3_present" 
+            ref="(/MCG/system_mcgoutclk_clock[%(n)])/(sim_clkdiv1_outdiv3[%(n)])"
+            derived="true"
             units="Hz"
             description="System Flexbus Clock"
             toolTip="Clocks the flexbus interface\n
                      Must be &lt;= Bus Clock frequency"
             value="60 MHz" />
       
-         <intOption key="system_flash_clock[%(n)]" 
+         <intOption key="system_flash_clock[%(n)]" condition="sim_clkdiv1_outdiv4_present" 
+            ref="(/MCG/system_mcgoutclk_clock[%(n)])/(sim_clkdiv1_outdiv4[%(n)])"
+            derived="true"
             units="Hz"
             description="System Flash Clock"
             toolTip="Clocks the flash memory\n
                      Must be an integer divisor of the Core Clock.\n
-                     Must be &lt;= Bus Clock frequency[%(n)]"
+                     Must be &lt;= Bus Clock frequency[%(n)]\n
+                     Must be &gt;= Core clock / 8"
             value="24 MHz" />
       
          <category name="CLKDIV1" description="System Clock Dividers">
-            <intOption key="sim_clkdiv1_outdiv1[%(n)]" 
-               derived="true"
+            <intOption key="sim_clkdiv1_outdiv1[%(n)]"  condition="sim_clkdiv1_outdiv1_present"
                constant="true"
                description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
                toolTip="Clocks the ARM Cortex-M4 core and bus masters [SIM_CLKDIV1_OUTDIV1]\n
                         Divides MCGOUT Clock to generate system_core_clock"
                value="1" offset="-1" min="1" max="16" />
          
-            <intOption key="sim_clkdiv1_outdiv2[%(n)]" 
-               derived="true"
+            <intOption key="sim_clkdiv1_outdiv2[%(n)]"  condition="sim_clkdiv1_outdiv2_present"
                constant="true"
                description="Bus Clock Divider (OUTDIV2) - Divide by [1-16]"
                toolTip="Clocks the bus slaves and peripheral [SIM_CLKDIV1_OUTDIV2]\n
@@ -605,8 +613,7 @@
                   MCGOUTCLK clock is source. Default /2"
                value="1" offset="-1" min="1" max="16" />
       
-            <intOption key="sim_clkdiv1_outdiv3[%(n)]" 
-               derived="true"
+            <intOption key="sim_clkdiv1_outdiv3[%(n)]" condition="sim_clkdiv1_outdiv3_present"
                constant="true"
                description="Flexbus Clock Divider (OUTDIV3) - Divide by [1-16]"
                toolTip="Clocks the flexbus interface [SIM_CLKDIV1_OUTDIV3]\n
@@ -614,8 +621,7 @@
                         MCGOUTCLK clock is source. Default /2"
                value="1" offset="-1" min="1" max="16" />
          
-            <intOption key="sim_clkdiv1_outdiv4[%(n)]" 
-               derived="true"
+            <intOption key="sim_clkdiv1_outdiv4[%(n)]"  condition="sim_clkdiv1_outdiv4_present"
                constant="true"
                description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"
                toolTip="Clocks the flash memory [SIM_CLKDIV1_OUTDIV4]\n

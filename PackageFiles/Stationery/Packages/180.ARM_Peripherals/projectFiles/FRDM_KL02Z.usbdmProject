@@ -85,6 +85,7 @@
    <item key="$signal$GPIOB_7_codeIdentifier"              value="Digital_D7/RGB_Green" />
    <item key="$signal$GPIOB_8_codeIdentifier"              value="Digital_A0" />
    <item key="$signal$GPIOB_9_codeIdentifier"              value="Digital_A1" />
+   <item key="$signal$LPTMR0_ALT2_codeIdentifier"          value="LptmrInput2" />
    <item key="$signal$RESET_b_descriptionSetting"          value="Reset" />
    <item key="$signal$SWD_CLK_descriptionSetting"          value="SWD_CLK" />
    <item key="$signal$SWD_DIO_descriptionSetting"          value="SWD_IO" />
@@ -95,29 +96,27 @@
    <item key="$signal$UART0_RX_descriptionSetting"         value="Console_Rx" />
    <item key="$signal$UART0_TX_descriptionSetting"         value="Console_Tx" />
    <item key="$signal$XTAL0_descriptionSetting"            value="XTAL0" />
-   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_FEE_48MHz" />
-   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPI_4MHz" />
-   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_BLPE_32kHz" />
-   <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_FEI_48MHz" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_RUN_FEE_48MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_VLPR_BLPI_4MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_VLPR_BLPE_32kHz" />
+   <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_RUN_FEI_48MHz" />
    <item key="/MCG/enableClockConfiguration[1]"            value="true" />
    <item key="/MCG/fllOutputFrequency[0]"                  value="47967960" />
    <item key="/MCG/fllOutputFrequency[1]"                  value="47972352" />
    <item key="/MCG/fllOutputFrequency[2]"                  value="47967960" />
    <item key="/MCG/fllOutputFrequency[3]"                  value="47972352" />
    <item key="/MCG/mcgClockMode[0]"                        value="1" />
+   <item key="/MCG/mcgClockMode[1]"                        value="3" />
    <item key="/MCG/mcgClockMode[2]"                        value="5" />
    <item key="/MCG/mcg_c4_dmx32[0]"                        value="true" />
    <item key="/MCG/mcg_c4_dmx32[1]"                        value="true" />
    <item key="/MCG/mcg_c4_dmx32[2]"                        value="true" />
    <item key="/MCG/mcg_c4_dmx32[3]"                        value="true" />
    <item key="/OSC0/osc_input_freq"                        value="32765" />
-   <item key="/SIM/system_bus_clock[0]"                    value="23983980" />
-   <item key="/SIM/system_bus_clock[1]"                    value="799539" />
-   <item key="/SIM/system_bus_clock[2]"                    value="32765" />
-   <item key="/SIM/system_bus_clock[3]"                    value="23986176" />
-   <item key="/SIM/system_core_clock[0]"                   value="47967960" />
-   <item key="/SIM/system_core_clock[1]"                   value="3997696" />
-   <item key="/SIM/system_core_clock[2]"                   value="32765" />
-   <item key="/SIM/system_core_clock[3]"                   value="47972352" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[0]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[1]"                 value="5" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[2]"                 value="1" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[3]"                 value="2" />
    <item key="/SMC/smc_pmctrl_runm[1]"                     value="2" />
+   <item key="/SMC/smc_pmctrl_runm[2]"                     value="2" />
 </section>
