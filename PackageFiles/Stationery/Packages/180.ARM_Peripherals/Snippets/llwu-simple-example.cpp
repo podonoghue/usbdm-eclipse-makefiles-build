@@ -54,7 +54,7 @@ int main(void) {
    // LLWU sources
    static constexpr Llwu::Init llwuInit {
       LlwuPeripheral_Lptmr0,
-      // Only enable one of the following:
+      // Only enable one of the following lines:
 //      LlwuPin_Switch2_llwu, LlwuPinMode_FallingEdge,
       LlwuFilterNum_1, LlwuPin_Switch2_llwu, LlwuFilterPinMode_FallingEdge
    };
@@ -64,13 +64,12 @@ int main(void) {
 
    // The following are not necessary if using LLWU
    Switch2_llwu::setPinCallback(pinCallback);
-   Switch2_llwu::enablePinNvicInterrupts(NvicPriority_Normal);
+   Switch2_llwu::enableNvicPinInterrupts(NvicPriority_Normal);
 
    Llwu::setCallback(llwuCallback);
 
    Lptmr0::setCallback(lptmrCallback);
-   Lptmr0::configureTimeCountingMode(LptmrResetOn_Compare, LptmrInterrupt_Enabled);
-   Lptmr0::setPeriod(10_s);
+   Lptmr0::configureTimeIntervalMode(LptmrResetOnCompare_Enabled, LptmrInterrupt_Enabled, 10_s, LptmrClockSel_Lpoclk);
    Lptmr0::enableNvicInterrupts(NvicPriority_Normal);
 
    Smc::enableAllPowerModes();

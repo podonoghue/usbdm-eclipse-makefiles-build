@@ -21,7 +21,7 @@
  *
  * It may also be necessary to adjust DMA_SLOT for the console UART.
  *    DmaSlot_UART0_Transmit => DmaSlot_UART?_Transmit
- * 
+ *
  * If the console uses a LPUART then other changes are necessary:
  *    DmaSlot_UART0_Transmit => DmaSlot_LPUART?_Transmit
  *    UartDma_TxHoldingEmpty => LpuartDma_TxHoldingEmpty
@@ -39,8 +39,8 @@ using namespace USBDM;
 static constexpr DmaSlot DMA_SLOT = Dma0Slot_UART0_Tx;
 
 // MCG clocks for various run modes
-static constexpr ClockConfig VLPR_MODE  = ClockConfig_BLPE_4MHz;
-static constexpr ClockConfig RUN_MODE   = ClockConfig_PEE_48MHz;
+static constexpr ClockConfig VLPR_MODE  = ClockConfig_VLPR_BLPE_4MHz;
+static constexpr ClockConfig RUN_MODE   = ClockConfig_RUN_PEE_48MHz;
 
 // Used to indicate complete transfer
 static volatile bool complete;
@@ -209,8 +209,7 @@ void changeRunMode(SmcRunMode smcRunMode) {
    }
    if (smcStatus == SmcStatus_VLPR) {
       // Do VLPR->RUN mode
-      Smc::enterRunMode(SmcRunMode_Normal);
-      Mcg::configure(RUN_MODE);
+      Smc::enterRunMode(RUN_MODE);
       console.setBaudRate(defaultBaudRate);
       console.write("Changed to RUN mode, ").flushOutput();
    }
@@ -223,8 +222,7 @@ void changeRunMode(SmcRunMode smcRunMode) {
 
       case SmcRunMode_VeryLowPower:
          // RUN->VLPR
-         Mcg::configure(VLPR_MODE);
-         Smc::enterRunMode(SmcRunMode_VeryLowPower);
+         Smc::enterRunMode(VLPR_MODE);
          console.setBaudRate(defaultBaudRate);
          console.write("Changed to VLPR mode, ").flushOutput();
          break;
@@ -238,10 +236,7 @@ int main() {
    console.writeln("\nStarting\n").flushOutput();
 
    // Allow entry to other RUN modes
-   Smc::enablePowerModes(
-         SmcVeryLowPower_Enabled,
-         SmcLowLeakageStop_Enabled,
-         SmcVeryLowLeakageStop_Enabled);
+   Smc::enableAllPowerModes();
 
    // DMA channel number to use (determines which PIT channel used)
    static const DmaChannelNum dmaChannel = Dma0::allocatePeriodicChannel();
@@ -293,8 +288,8 @@ int main() {
    waitMS(500);
 
    Smc::setStopOptions(
-         SmcLowLeakageStopMode_VLLS3,    // Retains RAM
-         SmcPowerOnReset_Enabled);       // Brown-out detection
+         SmcLowLeakageStopMode_VLLS3,     // Retains RAM
+         SmcPowerOnResetInVlls0_Enabled); // Brown-out detection
 
    console.writeln("\nDoing DMA while sleeping....").flushOutput();
 

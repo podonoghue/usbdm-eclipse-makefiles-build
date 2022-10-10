@@ -34,15 +34,14 @@ int main() {
       SimInfo::setClkout(simClkoutSel);
       console.write((char)ch).write(" : clkout = ");
       switch(simClkoutSel) {
-         case SimClkoutSel_FlexBus   : console.write("FlexBus  \r"); break;
-         case SimClkoutSel_Reserved1 : console.write("Reserved1\r"); break;
-         case SimClkoutSel_Flash     : console.write("Flash    \r"); break;
-         case SimClkoutSel_Lpo       : console.write("Lpo 1kHz \r"); break;
-         case SimClkoutSel_McgirClk  : console.write("McgirClk \r"); break;
-         case SimClkoutSel_RTC       : console.write("RTC      \r"); break;
-         case SimClkoutSel_OscerClk0 : console.write("OscerClk0\r"); break;
+         case SimClkoutSel_FlexBusClk   : console.write("FlexBus  \r"); break;
+         case SimClkoutSel_FlashClk     : console.write("Flash    \r"); break;
+         case SimClkoutSel_LpoClk       : console.write("Lpo 1kHz \r"); break;
+         case SimClkoutSel_McgIrClk     : console.write("McgirClk \r"); break;
+         case SimClkoutSel_RtcClk       : console.write("RTC      \r"); break;
+         case SimClkoutSel_OscerClk0    : console.write("OscerClk0\r"); break;
 #ifdef USB_CLK_RECOVER_IRC_EN_REG_EN_MASK
-         case SimClkoutSel_Irc48MHz  : console.write("IRC 48MHz\r"); break;
+         case SimClkoutSel_Irc48MClk    : console.write("IRC 48MHz\r"); break;
 #endif
          default: break;
       }

@@ -30,7 +30,7 @@ using namespace USBDM;
 
 // Sine period = NUM_SAMPLES * PIT_PERIOD = 100 * 10_us = 1_ms, f=1_kHz
 static constexpr unsigned NUM_SAMPLES = 100;
-static constexpr float    PIT_PERIOD  = 10_us;
+static constexpr Seconds  PIT_PERIOD  = 10_us;
 
 // Table of values for a sine wave
 static uint16_t sineTable[NUM_SAMPLES];

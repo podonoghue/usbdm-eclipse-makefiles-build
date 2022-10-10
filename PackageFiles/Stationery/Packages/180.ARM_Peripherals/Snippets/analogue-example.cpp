@@ -55,7 +55,7 @@ int main(void) {
    MyAdcChannel::setInput();
 
    // Enable band-gap voltage reference buffer in PMC
-   Pmc::configureBandgapOperation(PmcBandgapBuffer_On, PmcBandgapLowPowerEnable_Off);
+   Pmc::configureBandgapOperation(PmcBandgapBuffer_Enabled, PmcBandgapOperationInLowPower_Disabled);
 
    console.setFloatFormat(6, Padding_LeadingSpaces, 2);
 
