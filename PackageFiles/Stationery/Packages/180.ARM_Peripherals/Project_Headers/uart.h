@@ -35,30 +35,6 @@ namespace USBDM {
  */
 
 /**
- * Enumeration selecting interrupt sources
- */
-enum UartInterrupt {
-   UartInterrupt_TxHoldingEmpty  = UART_C2_TIE(1),   //!< Interrupt request on Transmit holding register empty
-   UartInterrupt_TxComplete      = UART_C2_TCIE(1),  //!< Interrupt request on Transmit complete
-   UartInterrupt_RxFull          = UART_C2_RIE(1),   //!< Interrupt request on Receive holding full
-   UartInterrupt_IdleDetect      = UART_C2_ILIE(1),  //!< Interrupt request on Idle detection
-};
-
-/**
- * Enumeration selecting direct memory access sources
- */
-enum UartDma {
-#ifdef UART_C5_TDMAS
-   UartDma_TxHoldingEmpty  = UART_C5_TDMAS(1),   //!< DMA request on Transmit holding register empty
-   UartDma_RxFull          = UART_C5_RDMAS(1),   //!< DMA request on Receive holding full
-#endif
-#ifdef UART_C5_TDMAE
-   UartDma_TxHoldingEmpty  = UART_C5_TDMAE(1),   //!< DMA request on Transmit holding register empty
-   UartDma_RxFull          = UART_C5_RDMAE(1),   //!< DMA request on Receive holding full
-#endif
-};
-
-/**
  * @brief Virtual Base class for UART interface
  */
 class Uart : public FormattedIO {
@@ -271,51 +247,7 @@ public:
     * Clear UART error status
     */
    virtual void clearError() = 0;
-
-   /**
-    * Enable/disable an interrupt source
-    *
-    * @param[in] uartInterrupt Interrupt source to modify
-    * @param[in] enable        True to enable, false to disable
-    *
-    * @note Changing the enabled interrupt functions may also affect the DMA settings
-    */
-   void enableInterrupt(UartInterrupt uartInterrupt, bool enable=true) {
-      if (enable) {
-#ifdef UART_C5_TDMAS
-         uart->C5 = uart->C5 & ~uartInterrupt; // DMA must be off to enable interrupts
-#endif
-         uart->C2 = uart->C2 | uartInterrupt;
-      }
-      else {
-         uart->C2 = uart->C2 & ~uartInterrupt; // May also disable DMA
-      }
-   }
-
-   /**
-    * Enable/disable a DMA source
-    *
-    * @param[in] uartDma  DMA source to modify
-    * @param[in] enable   True to enable, false to disable
-    *
-    * @note Changing the enabled DMA functions may also affect the interrupt settings
-    */
-   void enableDma(UartDma uartDma, bool enable=true) {
-      // Flags are in same positions in the C2 and C5
-      if (enable) {
-         uart->C5 = uart->C5 | uartDma;
-#ifdef UART_C5_TDMAS
-         uart->C2 = uart->C2 | uartDma; // Interrupts must be enable for DMA
-#endif
-      }
-      else {
-#ifdef UART_C5_TDMAS
-         uart->C2 = uart->C2 & ~uartDma; // Switching DMA off shouldn't enable interrupts!
-#endif
-         uart->C5 = uart->C5 & ~uartDma;
-      }
-   }
-
+$(/UART/commonMethods: // /UART/commonMethods found)
    /**
     *  Flush output data
     */
@@ -357,7 +289,7 @@ typedef void (*UARTCallbackFunction)(uint8_t status);
  *
  * @tparam Info   Class describing UART hardware
  */
-template<class Info> class Uart_T : public Uart {
+template<class Info> class Uart_T : public Uart, Info {
 
 private:
    Uart_T(const Uart_T&) = delete;
@@ -753,13 +685,13 @@ public:
    using Uart_T<Info>::uart;
 
    UartBuffered_T() : Uart_T<Info>() {
-      Uart::enableInterrupt(UartInterrupt_RxFull);
+      Uart::setReceiveFullAction(UartTxEmptyAction_Interrupt);
       Uart_T<Info>::enableNvicInterrupts(Info::irqLevel);
    }
 
    virtual ~UartBuffered_T() {
-      Uart::enableInterrupt(UartInterrupt_RxFull,         false);
-      Uart::enableInterrupt(UartInterrupt_TxHoldingEmpty, false);
+      Uart::setReceiveFullAction(UartTxEmptyAction_None);
+      Uart::setTransmitEmptyAction(UartTxEmptyAction_None);
    }
 
 protected:

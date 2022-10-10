@@ -273,6 +273,7 @@ union Seconds_Ticks {
    ///  Time in ticks
    Ticks ticks;
 
+   constexpr Seconds_Ticks() : ticks(0) {}
    constexpr Seconds_Ticks(const Seconds_Ticks &other) : ticks(other.ticks) {};
    constexpr Seconds_Ticks(Ticks   ticks)   : ticks(ticks) {}
    constexpr Seconds_Ticks(Seconds seconds) : seconds(seconds) {}
@@ -864,7 +865,7 @@ public:
    /**
     * Enable Pin interrupts in NVIC.
     */
-   static void enablePinNvicInterrupts() {
+   static void enableNvicPinInterrupts() {
       static_assert(irqNum>=0, "Pin does not support interrupts");
       NVIC_EnableIRQ(irqNum);
    }
@@ -875,7 +876,7 @@ public:
     *
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enablePinNvicInterrupts(NvicPriority nvicPriority) {
+   static void enableNvicPinInterrupts(NvicPriority nvicPriority) {
       static_assert(irqNum>=0, "Pin does not support interrupts");
       enableNvicInterrupt(irqNum, nvicPriority);
    }
@@ -883,7 +884,7 @@ public:
    /**
     * Disable Pin interrupts in NVIC.
     */
-   static void disablePinNvicInterrupts() {
+   static void disableNvicPinInterrupts() {
       static_assert(irqNum>=0, "Pin does not support interrupts");
       NVIC_DisableIRQ(irqNum);
    }

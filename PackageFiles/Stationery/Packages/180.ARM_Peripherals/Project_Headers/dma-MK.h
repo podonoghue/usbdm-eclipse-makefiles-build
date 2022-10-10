@@ -21,8 +21,6 @@
  */
 namespace USBDM {
 
-enum PitChannelNum : unsigned;
-
 /**
  * @addtogroup DMA_Group DMA, Direct Memory Access (DMA)
  * @brief Support for DMA operations
@@ -975,7 +973,7 @@ public:
       return (DmaChannelNum) pitChannelNum;
    }
 
-#ifdef USBDM_LPIT0_IS_DEFINED
+#if $(/LPIT/$present:false)
    /**
     * Allocate Periodic DMA channel.
     * This is a channel that may be throttled by an associated PIT channel.
@@ -995,7 +993,7 @@ public:
    }
 #endif
 
-#ifdef USBDM_PIT_IS_DEFINED
+#if $(/PIT/$present:false)
    /**
     * Allocate Periodic DMA channel.
     * This is a channel that may be throttled by an associated PIT channel.

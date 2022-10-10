@@ -35,12 +35,14 @@
    <item key="$pin$PTA5_pcrSetting_1"                      value="100" />
    <item key="$pin$PTB0_pcrSetting_0"                      value="0" />
    <item key="$pin$PTB0_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTB0_pcrSetting_6"                      value="600" />
    <item key="$pin$PTB16_pcrSetting_1"                     value="100" />
    <item key="$pin$PTB17_pcrSetting_1"                     value="100" />
    <item key="$pin$PTB18_pcrSetting_1"                     value="100" />
    <item key="$pin$PTB19_pcrSetting_1"                     value="100" />
    <item key="$pin$PTB1_pcrSetting_0"                      value="0" />
    <item key="$pin$PTB1_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTB1_pcrSetting_6"                      value="600" />
    <item key="$pin$PTB2_pcrSetting_0"                      value="0" />
    <item key="$pin$PTB2_pcrSetting_1"                      value="100" />
    <item key="$pin$PTB2_pcrSetting_2"                      value="220" />
@@ -95,8 +97,11 @@
    <item key="$signal$ADC0_SE8_codeIdentifier"             value="Analogue_A0" />
    <item key="$signal$ADC0_SE9_codeIdentifier"             value="Analogue_A1" />
    <item key="$signal$ADC1_SE7b_descriptionSetting"        value="RF_ce" />
+   <item key="$signal$CLKOUT_codeIdentifier"               value="clkout" />
    <item key="$signal$EXTAL0_descriptionSetting"           value="8MHz Crystal" />
    <item key="$signal$EXTAL32_descriptionSetting"          value="32kHz Crystal" />
+   <item key="$signal$FTM0_CH0_codeIdentifier"             value="Ftm_A2" />
+   <item key="$signal$FTM0_CH1_codeIdentifier"             value="Ftm_A3" />
    <item key="$signal$FTM0_CH5_codeIdentifier"             value="RGB_Blue_Pwm" />
    <item key="$signal$FTM0_CH6_codeIdentifier"             value="RGB_Red_Pwm" />
    <item key="$signal$FTM0_CH7_codeIdentifier"             value="RGB_Green_Pwm" />
@@ -139,6 +144,7 @@
    <item key="$signal$I2C1_SDA_descriptionSetting"         value="I2C_SDA (D14)" />
    <item key="$signal$LLWU_P3_codeIdentifier"              value="Digital_D4_llwu" />
    <item key="$signal$LLWU_P6_codeIdentifier"              value="Switch2_llwu" />
+   <item key="$signal$LPTMR0_ALT2_codeIdentifier"          value="lptmrInput2" />
    <item key="$signal$RESET_b_descriptionSetting"          value="Reset" />
    <item key="$signal$SPI1_SCK_descriptionSetting"         value="SPI1_SCK" />
    <item key="$signal$SPI1_SIN_descriptionSetting"         value="SPI1_SIN" />
@@ -179,10 +185,15 @@
    <item key="/MCG/mcgClockMode[3]"                        value="1" />
    <item key="/MCG/pll0OutputFrequency[0]"                 value="80000000" />
    <item key="/RTC/rtc_cr_osce"                            value="true" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[1]"                 value="2" />
    <item key="/SIM/sim_clkdiv1_outdiv2[0]"                 value="2" />
    <item key="/SIM/sim_clkdiv1_outdiv2[1]"                 value="2" />
    <item key="/SIM/sim_clkdiv1_outdiv2[2]"                 value="2" />
    <item key="/SIM/sim_clkdiv1_outdiv2[3]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv3[0]"                 value="3" />
+   <item key="/SIM/sim_clkdiv1_outdiv3[1]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv3[2]"                 value="4" />
+   <item key="/SIM/sim_clkdiv1_outdiv3[3]"                 value="3" />
    <item key="/SIM/sim_clkdiv1_outdiv4[0]"                 value="3" />
    <item key="/SIM/sim_clkdiv1_outdiv4[1]"                 value="10" />
    <item key="/SIM/sim_clkdiv1_outdiv4[2]"                 value="5" />

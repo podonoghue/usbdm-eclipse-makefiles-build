@@ -180,7 +180,7 @@ typedef void (*DacCallbackFunction)(DacStatus);
  * @endcode
  */
 template<class Info>
-class Dac_T {
+class DacBase_T {
 
 protected:
 
@@ -602,7 +602,7 @@ $(/DAC/classInfo: // No class Info found)
 /**
  * Callback table for programmatically set handlers
  */
-template<class Info> DacCallbackFunction Dac_T<Info>::sCallback =  Dac_T<Info>::unhandledCallback;
+template<class Info> DacCallbackFunction DacBase_T<Info>::sCallback =  DacBase_T<Info>::unhandledCallback;
 
 $(/DAC/declarations: // No declarations found)
 /**
