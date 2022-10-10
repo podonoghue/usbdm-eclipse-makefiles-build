@@ -143,6 +143,56 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
          <clock clockEnable="PCC->PCC_CMP0 = PCC->PCC_CMP0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_CMP0 = PCC->PCC_CMP0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="CMP0_IRQn" />
+         <param name="$present"     key="/CMP0/$present" value="true" />
+         <param name="cmp_c0_cff_present" key="/CMP0/cmp_c0_cff_present" value="true" />
+         <param name="cmp_c0_cfr_present" key="/CMP0/cmp_c0_cfr_present" value="true" />
+         <param name="cmp_c0_cos_present" key="/CMP0/cmp_c0_cos_present" value="true" />
+         <param name="cmp_c0_cout_present" key="/CMP0/cmp_c0_cout_present" value="true" />
+         <param name="cmp_c0_dmaen_present" key="/CMP0/cmp_c0_dmaen_present" value="true" />
+         <param name="cmp_c0_en_present" key="/CMP0/cmp_c0_en_present" value="true" />
+         <param name="cmp_c0_filter_cnt_present" key="/CMP0/cmp_c0_filter_cnt_present" value="true" />
+         <param name="cmp_c0_fpr_present" key="/CMP0/cmp_c0_fpr_present" value="true" />
+         <param name="cmp_c0_hystctr_present" key="/CMP0/cmp_c0_hystctr_present" value="true" />
+         <param name="cmp_c0_ief_present" key="/CMP0/cmp_c0_ief_present" value="true" />
+         <param name="cmp_c0_ier_present" key="/CMP0/cmp_c0_ier_present" value="true" />
+         <param name="cmp_c0_invt_present" key="/CMP0/cmp_c0_invt_present" value="true" />
+         <param name="cmp_c0_offset_present" key="/CMP0/cmp_c0_offset_present" value="true" />
+         <param name="cmp_c0_ope_present" key="/CMP0/cmp_c0_ope_present" value="true" />
+         <param name="cmp_c0_pmode_present" key="/CMP0/cmp_c0_pmode_present" value="true" />
+         <param name="cmp_c0_se_present" key="/CMP0/cmp_c0_se_present" value="true" />
+         <param name="cmp_c0_we_present" key="/CMP0/cmp_c0_we_present" value="true" />
+         <param name="cmp_c1_chn0_present" key="/CMP0/cmp_c1_chn0_present" value="true" />
+         <param name="cmp_c1_chn1_present" key="/CMP0/cmp_c1_chn1_present" value="true" />
+         <param name="cmp_c1_chn2_present" key="/CMP0/cmp_c1_chn2_present" value="true" />
+         <param name="cmp_c1_chn3_present" key="/CMP0/cmp_c1_chn3_present" value="true" />
+         <param name="cmp_c1_chn4_present" key="/CMP0/cmp_c1_chn4_present" value="true" />
+         <param name="cmp_c1_chn5_present" key="/CMP0/cmp_c1_chn5_present" value="true" />
+         <param name="cmp_c1_chn6_present" key="/CMP0/cmp_c1_chn6_present" value="true" />
+         <param name="cmp_c1_chn7_present" key="/CMP0/cmp_c1_chn7_present" value="true" />
+         <param name="cmp_c1_chn_present" key="/CMP0/cmp_c1_chn_present" value="true" />
+         <param name="cmp_c1_dacen_present" key="/CMP0/cmp_c1_dacen_present" value="true" />
+         <param name="cmp_c1_innsel_present" key="/CMP0/cmp_c1_innsel_present" value="true" />
+         <param name="cmp_c1_inpsel_present" key="/CMP0/cmp_c1_inpsel_present" value="true" />
+         <param name="cmp_c1_msel_present" key="/CMP0/cmp_c1_msel_present" value="true" />
+         <param name="cmp_c1_psel_present" key="/CMP0/cmp_c1_psel_present" value="true" />
+         <param name="cmp_c1_vosel_present" key="/CMP0/cmp_c1_vosel_present" value="true" />
+         <param name="cmp_c1_vrsel_present" key="/CMP0/cmp_c1_vrsel_present" value="true" />
+         <param name="cmp_c2_acon_present" key="/CMP0/cmp_c2_acon_present" value="true" />
+         <param name="cmp_c2_ch0f_present" key="/CMP0/cmp_c2_ch0f_present" value="true" />
+         <param name="cmp_c2_ch1f_present" key="/CMP0/cmp_c2_ch1f_present" value="true" />
+         <param name="cmp_c2_ch2f_present" key="/CMP0/cmp_c2_ch2f_present" value="true" />
+         <param name="cmp_c2_ch3f_present" key="/CMP0/cmp_c2_ch3f_present" value="true" />
+         <param name="cmp_c2_ch4f_present" key="/CMP0/cmp_c2_ch4f_present" value="true" />
+         <param name="cmp_c2_ch5f_present" key="/CMP0/cmp_c2_ch5f_present" value="true" />
+         <param name="cmp_c2_ch6f_present" key="/CMP0/cmp_c2_ch6f_present" value="true" />
+         <param name="cmp_c2_ch7f_present" key="/CMP0/cmp_c2_ch7f_present" value="true" />
+         <param name="cmp_c2_chf_present" key="/CMP0/cmp_c2_chf_present" value="true" />
+         <param name="cmp_c2_fxmp_present" key="/CMP0/cmp_c2_fxmp_present" value="true" />
+         <param name="cmp_c2_fxmxch_present" key="/CMP0/cmp_c2_fxmxch_present" value="true" />
+         <param name="cmp_c2_initmod_present" key="/CMP0/cmp_c2_initmod_present" value="true" />
+         <param name="cmp_c2_nsam_present" key="/CMP0/cmp_c2_nsam_present" value="true" />
+         <param name="cmp_c2_rre_present" key="/CMP0/cmp_c2_rre_present" value="true" />
+         <param name="cmp_c2_rrie_present" key="/CMP0/cmp_c2_rrie_present" value="true" />
       </peripheral>
       <peripheral baseName="CONTROL"  instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForControl" />
@@ -1309,6 +1359,20 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
          <clock clockEnable="PCC->PCC_LPTMR0 = PCC->PCC_LPTMR0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPTMR0 = PCC->PCC_LPTMR0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPTMR0_IRQn" />
+         <param name="$present"     key="/LPTMR0/$present" value="true" />
+         <param name="lptmr_cmr_compare_present" key="/LPTMR0/lptmr_cmr_compare_present" value="true" />
+         <param name="lptmr_cnr_counter_present" key="/LPTMR0/lptmr_cnr_counter_present" value="true" />
+         <param name="lptmr_csr_tcf_present" key="/LPTMR0/lptmr_csr_tcf_present" value="true" />
+         <param name="lptmr_csr_tdre_present" key="/LPTMR0/lptmr_csr_tdre_present" value="true" />
+         <param name="lptmr_csr_ten_present" key="/LPTMR0/lptmr_csr_ten_present" value="true" />
+         <param name="lptmr_csr_tfc_present" key="/LPTMR0/lptmr_csr_tfc_present" value="true" />
+         <param name="lptmr_csr_tie_present" key="/LPTMR0/lptmr_csr_tie_present" value="true" />
+         <param name="lptmr_csr_tms_present" key="/LPTMR0/lptmr_csr_tms_present" value="true" />
+         <param name="lptmr_csr_tpp_present" key="/LPTMR0/lptmr_csr_tpp_present" value="true" />
+         <param name="lptmr_csr_tps_present" key="/LPTMR0/lptmr_csr_tps_present" value="true" />
+         <param name="lptmr_psr_pbyp_present" key="/LPTMR0/lptmr_psr_pbyp_present" value="true" />
+         <param name="lptmr_psr_pcs_present" key="/LPTMR0/lptmr_psr_pcs_present" value="true" />
+         <param name="lptmr_psr_prescale_present" key="/LPTMR0/lptmr_psr_prescale_present" value="true" />
       </peripheral>
       <peripheral baseName="LPUART"   instance="0"        version="lpuart0_mke_fifo">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
@@ -1638,11 +1702,61 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPdb" />
          <clock clockEnable="PCC->PCC_PDB0 = PCC->PCC_PDB0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_PDB0 = PCC->PCC_PDB0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PDB0_IRQn" />
+         <param name="$present"     key="/PDB0/$present" value="true" />
+         <param name="pdb_c1_bb_present" key="/PDB0/pdb_c1_bb_present" value="true" />
+         <param name="pdb_c1_en_present" key="/PDB0/pdb_c1_en_present" value="true" />
+         <param name="pdb_c1_tos_present" key="/PDB0/pdb_c1_tos_present" value="true" />
+         <param name="pdb_cnt_cnt_present" key="/PDB0/pdb_cnt_cnt_present" value="true" />
+         <param name="pdb_dly%s_dly_present" key="/PDB0/pdb_dly%s_dly_present" value="true" />
+         <param name="pdb_idly_idly_present" key="/PDB0/pdb_idly_idly_present" value="true" />
+         <param name="pdb_mod_mod_present" key="/PDB0/pdb_mod_mod_present" value="true" />
+         <param name="pdb_podly_dly1_present" key="/PDB0/pdb_podly_dly1_present" value="true" />
+         <param name="pdb_podly_dly2_present" key="/PDB0/pdb_podly_dly2_present" value="true" />
+         <param name="pdb_poen_poen_present" key="/PDB0/pdb_poen_poen_present" value="true" />
+         <param name="pdb_s_cf_present" key="/PDB0/pdb_s_cf_present" value="true" />
+         <param name="pdb_s_err_present" key="/PDB0/pdb_s_err_present" value="true" />
+         <param name="pdb_sc_cont_present" key="/PDB0/pdb_sc_cont_present" value="true" />
+         <param name="pdb_sc_dmaen_present" key="/PDB0/pdb_sc_dmaen_present" value="true" />
+         <param name="pdb_sc_ldmod_present" key="/PDB0/pdb_sc_ldmod_present" value="true" />
+         <param name="pdb_sc_ldok_present" key="/PDB0/pdb_sc_ldok_present" value="true" />
+         <param name="pdb_sc_mult_present" key="/PDB0/pdb_sc_mult_present" value="true" />
+         <param name="pdb_sc_pdbeie_present" key="/PDB0/pdb_sc_pdbeie_present" value="true" />
+         <param name="pdb_sc_pdben_present" key="/PDB0/pdb_sc_pdben_present" value="true" />
+         <param name="pdb_sc_pdbie_present" key="/PDB0/pdb_sc_pdbie_present" value="true" />
+         <param name="pdb_sc_pdbif_present" key="/PDB0/pdb_sc_pdbif_present" value="true" />
+         <param name="pdb_sc_prescaler_present" key="/PDB0/pdb_sc_prescaler_present" value="true" />
+         <param name="pdb_sc_swtrig_present" key="/PDB0/pdb_sc_swtrig_present" value="true" />
+         <param name="pdb_sc_trgsel_present" key="/PDB0/pdb_sc_trgsel_present" value="true" />
       </peripheral>
       <peripheral baseName="PDB"      instance="1"        version="pdb0_2ch_8pt_0dac_1po">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPdb" />
          <clock clockEnable="PCC->PCC_PDB1 = PCC->PCC_PDB1 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_PDB1 = PCC->PCC_PDB1 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PDB1_IRQn" />
+         <param name="$present"     key="/PDB1/$present" value="true" />
+         <param name="pdb_c1_bb_present" key="/PDB1/pdb_c1_bb_present" value="true" />
+         <param name="pdb_c1_en_present" key="/PDB1/pdb_c1_en_present" value="true" />
+         <param name="pdb_c1_tos_present" key="/PDB1/pdb_c1_tos_present" value="true" />
+         <param name="pdb_cnt_cnt_present" key="/PDB1/pdb_cnt_cnt_present" value="true" />
+         <param name="pdb_dly%s_dly_present" key="/PDB1/pdb_dly%s_dly_present" value="true" />
+         <param name="pdb_idly_idly_present" key="/PDB1/pdb_idly_idly_present" value="true" />
+         <param name="pdb_mod_mod_present" key="/PDB1/pdb_mod_mod_present" value="true" />
+         <param name="pdb_podly_dly1_present" key="/PDB1/pdb_podly_dly1_present" value="true" />
+         <param name="pdb_podly_dly2_present" key="/PDB1/pdb_podly_dly2_present" value="true" />
+         <param name="pdb_poen_poen_present" key="/PDB1/pdb_poen_poen_present" value="true" />
+         <param name="pdb_s_cf_present" key="/PDB1/pdb_s_cf_present" value="true" />
+         <param name="pdb_s_err_present" key="/PDB1/pdb_s_err_present" value="true" />
+         <param name="pdb_sc_cont_present" key="/PDB1/pdb_sc_cont_present" value="true" />
+         <param name="pdb_sc_dmaen_present" key="/PDB1/pdb_sc_dmaen_present" value="true" />
+         <param name="pdb_sc_ldmod_present" key="/PDB1/pdb_sc_ldmod_present" value="true" />
+         <param name="pdb_sc_ldok_present" key="/PDB1/pdb_sc_ldok_present" value="true" />
+         <param name="pdb_sc_mult_present" key="/PDB1/pdb_sc_mult_present" value="true" />
+         <param name="pdb_sc_pdbeie_present" key="/PDB1/pdb_sc_pdbeie_present" value="true" />
+         <param name="pdb_sc_pdben_present" key="/PDB1/pdb_sc_pdben_present" value="true" />
+         <param name="pdb_sc_pdbie_present" key="/PDB1/pdb_sc_pdbie_present" value="true" />
+         <param name="pdb_sc_pdbif_present" key="/PDB1/pdb_sc_pdbif_present" value="true" />
+         <param name="pdb_sc_prescaler_present" key="/PDB1/pdb_sc_prescaler_present" value="true" />
+         <param name="pdb_sc_swtrig_present" key="/PDB1/pdb_sc_swtrig_present" value="true" />
+         <param name="pdb_sc_trgsel_present" key="/PDB1/pdb_sc_trgsel_present" value="true" />
       </peripheral>
       <peripheral baseName="PMC"      instance=""         version="pmc_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPmc" />
@@ -1656,6 +1770,33 @@
          <clock clockEnable="PCC->PCC_RTC |= PCC_PCCn_CGC_MASK = PCC->PCC_RTC |= PCC_PCCn_CGC_MASK | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_RTC |= PCC_PCCn_CGC_MASK = PCC->PCC_RTC |= PCC_PCCn_CGC_MASK &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="RTC_IRQn" />
          <irq num="RTC_Seconds_IRQn" />
+         <param name="$present"     key="/RTC/$present" value="true" />
+         <param name="rtc_cr_cpe_present" key="/RTC/rtc_cr_cpe_present" value="true" />
+         <param name="rtc_cr_cps_present" key="/RTC/rtc_cr_cps_present" value="true" />
+         <param name="rtc_cr_lpos_present" key="/RTC/rtc_cr_lpos_present" value="true" />
+         <param name="rtc_cr_sup_present" key="/RTC/rtc_cr_sup_present" value="true" />
+         <param name="rtc_cr_swr_present" key="/RTC/rtc_cr_swr_present" value="true" />
+         <param name="rtc_cr_um_present" key="/RTC/rtc_cr_um_present" value="true" />
+         <param name="rtc_ier_taie_present" key="/RTC/rtc_ier_taie_present" value="true" />
+         <param name="rtc_ier_tiie_present" key="/RTC/rtc_ier_tiie_present" value="true" />
+         <param name="rtc_ier_toie_present" key="/RTC/rtc_ier_toie_present" value="true" />
+         <param name="rtc_ier_tsic_present" key="/RTC/rtc_ier_tsic_present" value="true" />
+         <param name="rtc_ier_tsie_present" key="/RTC/rtc_ier_tsie_present" value="true" />
+         <param name="rtc_lr_crl_present" key="/RTC/rtc_lr_crl_present" value="true" />
+         <param name="rtc_lr_lrl_present" key="/RTC/rtc_lr_lrl_present" value="true" />
+         <param name="rtc_lr_srl_present" key="/RTC/rtc_lr_srl_present" value="true" />
+         <param name="rtc_lr_tcl_present" key="/RTC/rtc_lr_tcl_present" value="true" />
+         <param name="rtc_sr_taf_present" key="/RTC/rtc_sr_taf_present" value="true" />
+         <param name="rtc_sr_tce_present" key="/RTC/rtc_sr_tce_present" value="true" />
+         <param name="rtc_sr_tif_present" key="/RTC/rtc_sr_tif_present" value="true" />
+         <param name="rtc_sr_tof_present" key="/RTC/rtc_sr_tof_present" value="true" />
+         <param name="rtc_tar_tar_present" key="/RTC/rtc_tar_tar_present" value="true" />
+         <param name="rtc_tcr_cic_present" key="/RTC/rtc_tcr_cic_present" value="true" />
+         <param name="rtc_tcr_cir_present" key="/RTC/rtc_tcr_cir_present" value="true" />
+         <param name="rtc_tcr_tcr_present" key="/RTC/rtc_tcr_tcr_present" value="true" />
+         <param name="rtc_tcr_tcv_present" key="/RTC/rtc_tcr_tcv_present" value="true" />
+         <param name="rtc_tpr_tpr_present" key="/RTC/rtc_tpr_tpr_present" value="true" />
+         <param name="rtc_tsr_tsr_present" key="/RTC/rtc_tsr_tsr_present" value="true" />
       </peripheral>
       <peripheral baseName="SCG"      instance=""         version="scg_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForScg" />

@@ -65,6 +65,30 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_CMP_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_CMP_MASK;" />
          <irq num="CMP0_IRQn" />
+         <param name="$present"     key="/CMP0/$present" value="true" />
+         <param name="cmp_cr0_filter_cnt_present" key="/CMP0/cmp_cr0_filter_cnt_present" value="true" />
+         <param name="cmp_cr0_hystctr_present" key="/CMP0/cmp_cr0_hystctr_present" value="true" />
+         <param name="cmp_cr1_cos_present" key="/CMP0/cmp_cr1_cos_present" value="true" />
+         <param name="cmp_cr1_en_present" key="/CMP0/cmp_cr1_en_present" value="true" />
+         <param name="cmp_cr1_inv_present" key="/CMP0/cmp_cr1_inv_present" value="true" />
+         <param name="cmp_cr1_ope_present" key="/CMP0/cmp_cr1_ope_present" value="true" />
+         <param name="cmp_cr1_pmode_present" key="/CMP0/cmp_cr1_pmode_present" value="true" />
+         <param name="cmp_cr1_se_present" key="/CMP0/cmp_cr1_se_present" value="true" />
+         <param name="cmp_cr1_trigm_present" key="/CMP0/cmp_cr1_trigm_present" value="true" />
+         <param name="cmp_cr1_we_present" key="/CMP0/cmp_cr1_we_present" value="true" />
+         <param name="cmp_daccr_dacen_present" key="/CMP0/cmp_daccr_dacen_present" value="true" />
+         <param name="cmp_daccr_vosel_present" key="/CMP0/cmp_daccr_vosel_present" value="true" />
+         <param name="cmp_daccr_vrsel_present" key="/CMP0/cmp_daccr_vrsel_present" value="true" />
+         <param name="cmp_fpr_filt_per_present" key="/CMP0/cmp_fpr_filt_per_present" value="true" />
+         <param name="cmp_muxcr_msel_present" key="/CMP0/cmp_muxcr_msel_present" value="true" />
+         <param name="cmp_muxcr_psel_present" key="/CMP0/cmp_muxcr_psel_present" value="true" />
+         <param name="cmp_muxcr_pstm_present" key="/CMP0/cmp_muxcr_pstm_present" value="true" />
+         <param name="cmp_scr_cff_present" key="/CMP0/cmp_scr_cff_present" value="true" />
+         <param name="cmp_scr_cfr_present" key="/CMP0/cmp_scr_cfr_present" value="true" />
+         <param name="cmp_scr_cout_present" key="/CMP0/cmp_scr_cout_present" value="true" />
+         <param name="cmp_scr_dmaen_present" key="/CMP0/cmp_scr_dmaen_present" value="true" />
+         <param name="cmp_scr_ief_present" key="/CMP0/cmp_scr_ief_present" value="true" />
+         <param name="cmp_scr_ier_present" key="/CMP0/cmp_scr_ier_present" value="true" />
       </peripheral>
       <peripheral baseName="CONTROL"  instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForControl" />
@@ -221,6 +245,19 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
          <clock clockEnable="SIM->SCGC5 = SIM->SCGC5 | SIM_SCGC5_LPTMR_MASK;" clockDisable="SIM->SCGC5 = SIM->SCGC5 &amp; ~SIM_SCGC5_LPTMR_MASK;" />
          <irq num="LPTMR0_IRQn" />
+         <param name="$present"     key="/LPTMR0/$present" value="true" />
+         <param name="lptmr_cmr_compare_present" key="/LPTMR0/lptmr_cmr_compare_present" value="true" />
+         <param name="lptmr_cnr_counter_present" key="/LPTMR0/lptmr_cnr_counter_present" value="true" />
+         <param name="lptmr_csr_tcf_present" key="/LPTMR0/lptmr_csr_tcf_present" value="true" />
+         <param name="lptmr_csr_ten_present" key="/LPTMR0/lptmr_csr_ten_present" value="true" />
+         <param name="lptmr_csr_tfc_present" key="/LPTMR0/lptmr_csr_tfc_present" value="true" />
+         <param name="lptmr_csr_tie_present" key="/LPTMR0/lptmr_csr_tie_present" value="true" />
+         <param name="lptmr_csr_tms_present" key="/LPTMR0/lptmr_csr_tms_present" value="true" />
+         <param name="lptmr_csr_tpp_present" key="/LPTMR0/lptmr_csr_tpp_present" value="true" />
+         <param name="lptmr_csr_tps_present" key="/LPTMR0/lptmr_csr_tps_present" value="true" />
+         <param name="lptmr_psr_pbyp_present" key="/LPTMR0/lptmr_psr_pbyp_present" value="true" />
+         <param name="lptmr_psr_pcs_present" key="/LPTMR0/lptmr_psr_pcs_present" value="true" />
+         <param name="lptmr_psr_prescale_present" key="/LPTMR0/lptmr_psr_prescale_present" value="true" />
       </peripheral>
       <peripheral baseName="MCG"      instance=""         version="mcg_nopll_mkl04z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
@@ -290,6 +327,38 @@
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_RTC_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_RTC_MASK;" />
          <irq num="RTC_Alarm_IRQn" />
          <irq num="RTC_Seconds_IRQn" />
+         <param name="$present"     key="/RTC/$present" value="true" />
+         <param name="rtc_cr_clko_present" key="/RTC/rtc_cr_clko_present" value="true" />
+         <param name="rtc_cr_osce_present" key="/RTC/rtc_cr_osce_present" value="true" />
+         <param name="rtc_cr_sc16p_present" key="/RTC/rtc_cr_sc16p_present" value="true" />
+         <param name="rtc_cr_sc2p_present" key="/RTC/rtc_cr_sc2p_present" value="true" />
+         <param name="rtc_cr_sc4p_present" key="/RTC/rtc_cr_sc4p_present" value="true" />
+         <param name="rtc_cr_sc8p_present" key="/RTC/rtc_cr_sc8p_present" value="true" />
+         <param name="rtc_cr_scp_present" key="/RTC/rtc_cr_scp_present" value="true" />
+         <param name="rtc_cr_sup_present" key="/RTC/rtc_cr_sup_present" value="true" />
+         <param name="rtc_cr_swr_present" key="/RTC/rtc_cr_swr_present" value="true" />
+         <param name="rtc_cr_um_present" key="/RTC/rtc_cr_um_present" value="true" />
+         <param name="rtc_cr_wpe_present" key="/RTC/rtc_cr_wpe_present" value="true" />
+         <param name="rtc_ier_taie_present" key="/RTC/rtc_ier_taie_present" value="true" />
+         <param name="rtc_ier_tiie_present" key="/RTC/rtc_ier_tiie_present" value="true" />
+         <param name="rtc_ier_toie_present" key="/RTC/rtc_ier_toie_present" value="true" />
+         <param name="rtc_ier_tsie_present" key="/RTC/rtc_ier_tsie_present" value="true" />
+         <param name="rtc_ier_wpon_present" key="/RTC/rtc_ier_wpon_present" value="true" />
+         <param name="rtc_lr_crl_present" key="/RTC/rtc_lr_crl_present" value="true" />
+         <param name="rtc_lr_lrl_present" key="/RTC/rtc_lr_lrl_present" value="true" />
+         <param name="rtc_lr_srl_present" key="/RTC/rtc_lr_srl_present" value="true" />
+         <param name="rtc_lr_tcl_present" key="/RTC/rtc_lr_tcl_present" value="true" />
+         <param name="rtc_sr_taf_present" key="/RTC/rtc_sr_taf_present" value="true" />
+         <param name="rtc_sr_tce_present" key="/RTC/rtc_sr_tce_present" value="true" />
+         <param name="rtc_sr_tif_present" key="/RTC/rtc_sr_tif_present" value="true" />
+         <param name="rtc_sr_tof_present" key="/RTC/rtc_sr_tof_present" value="true" />
+         <param name="rtc_tar_tar_present" key="/RTC/rtc_tar_tar_present" value="true" />
+         <param name="rtc_tcr_cic_present" key="/RTC/rtc_tcr_cic_present" value="true" />
+         <param name="rtc_tcr_cir_present" key="/RTC/rtc_tcr_cir_present" value="true" />
+         <param name="rtc_tcr_tcr_present" key="/RTC/rtc_tcr_tcr_present" value="true" />
+         <param name="rtc_tcr_tcv_present" key="/RTC/rtc_tcr_tcv_present" value="true" />
+         <param name="rtc_tpr_tpr_present" key="/RTC/rtc_tpr_tpr_present" value="true" />
+         <param name="rtc_tsr_tsr_present" key="/RTC/rtc_tsr_tsr_present" value="true" />
       </peripheral>
       <peripheral baseName="SIM"      instance=""         version="sim_mkl04z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
