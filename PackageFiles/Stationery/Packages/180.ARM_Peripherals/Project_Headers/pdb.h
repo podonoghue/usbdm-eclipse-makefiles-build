@@ -32,118 +32,6 @@ namespace USBDM {
 typedef void (*PdbCallbackFunction)();
 
 /**
- * Select the PDB clock pre-scale which affects counter speed
- */
-enum PdbPrescale {
-   PdbPrescale_1      = PDB_SC_PRESCALER(0),   //!< Divide by 1
-   PdbPrescale_2      = PDB_SC_PRESCALER(1),   //!< Divide by 2
-   PdbPrescale_4      = PDB_SC_PRESCALER(2),   //!< Divide by 4
-   PdbPrescale_8      = PDB_SC_PRESCALER(3),   //!< Divide by 8
-   PdbPrescale_16     = PDB_SC_PRESCALER(4),   //!< Divide by 16
-   PdbPrescale_32     = PDB_SC_PRESCALER(5),   //!< Divide by 32
-   PdbPrescale_64     = PDB_SC_PRESCALER(6),   //!< Divide by 64
-   PdbPrescale_128    = PDB_SC_PRESCALER(7),   //!< Divide by 128
-};
-
-/**
- * Select the PDB clock pre-scale multiplier
- */
-enum PdbMultiplier {
-   PdbMultiplier_1      = PDB_SC_MULT(0),   //!< Prescaler multiplied by 1
-   PdbMultiplier_10     = PDB_SC_MULT(1),   //!< Prescaler multiplied by 10
-   PdbMultiplier_20     = PDB_SC_MULT(2),   //!< Prescaler multiplied by 20
-   PdbMultiplier_40     = PDB_SC_MULT(3),   //!< Prescaler multiplied by 40
-};
-
-/**
- * Selects the PDB Trigger source
- */
-enum PdbTrigger {
-   PdbTrigger_External     = PDB_SC_TRGSEL(0),   //!< External Trigger Source PDBx_EXTRG
-   PdbTrigger_Cmp0         = PDB_SC_TRGSEL(1),   //!< Comparator 0
-   PdbTrigger_Cmp1         = PDB_SC_TRGSEL(2),   //!< Comparator 1
-   PdbTrigger_3            = PDB_SC_TRGSEL(3),   //!< Reserved
-   PdbTrigger_PitCh0       = PDB_SC_TRGSEL(4),   //!< PIT Channel 0
-   PdbTrigger_PitCh1       = PDB_SC_TRGSEL(5),   //!< PIT Channel 1
-   PdbTrigger_PitCh2       = PDB_SC_TRGSEL(6),   //!< PIT Channel 2
-   PdbTrigger_PitCh3       = PDB_SC_TRGSEL(7),   //!< PIT Channel 3
-   PdbTrigger_Ftm0         = PDB_SC_TRGSEL(8),   //!< FTM0 Init and Ext Trigger Outputs
-   PdbTrigger_Ftm1         = PDB_SC_TRGSEL(9),   //!< FTM1 Init and Ext Trigger Outputs
-   PdbTrigger_10           = PDB_SC_TRGSEL(10),  //!< Reserved
-   PdbTrigger_11           = PDB_SC_TRGSEL(11),  //!< Reserved
-   PdbTrigger_RtcAlarm     = PDB_SC_TRGSEL(12),  //!< RTC Alarm
-   PdbTrigger_RtcSeconds   = PDB_SC_TRGSEL(13),  //!< RTC Seconds
-   PdbTrigger_Lptrm        = PDB_SC_TRGSEL(14),  //!< LPTMR
-   PdbTrigger_Software     = PDB_SC_TRGSEL(15),  //!< Software Trigger
-};
-
-/**
- * Controls the loading of MOD, IDLY, CHnDLYm, DACINTx,and POyDLY register from holding registers
- */
-enum PdbLoadMode {
-   PdbLoadMode_Immediate = PDB_SC_LDMOD(0), //!< Loaded immediately after LD_OK is set
-   PdbLoadMode_Modulo    = PDB_SC_LDMOD(1), //!< Loaded on counter roll-over after LD_OK is set
-   PdbLoadMode_Event     = PDB_SC_LDMOD(2), //!< Loaded on trigger event after LD_OK is set
-   PdbLoadMode_Both      = PDB_SC_LDMOD(3), //!< Loaded on counter roll-over or trigger event after LD_OK is set
-};
-
-/**
- * Controls whether the PDB operates in one-shot or continuous mode
- */
-enum PdbMode {
-   PdbMode_OneShot    = PDB_SC_CONT(0),  //!< Sequence runs once only
-   PdbMode_Continuous = PDB_SC_CONT(1),  //!< Sequence runs continuously once triggered
-};
-
-/**
- * Action done on event (PDBIF set)
- */
-enum PdbAction {
-   PdbAction_None       = PDB_SC_DMAEN(0)|PDB_SC_PDBIE(0), //!< No action on PDBIF set
-   PdbAction_Interrupt  = PDB_SC_DMAEN(0)|PDB_SC_PDBIE(1), //!< Interrupt on PDBIF set
-   PdbAction_Dma        = PDB_SC_DMAEN(1)|PDB_SC_PDBIE(1), //!< DMA on PDBIF set
-};
-
-/**
- * Controls whether the PDB error interrupt is enabled
- */
-enum PdbErrorInterrupt {
-   PdbErrorInterrupt_Disabled = PDB_SC_PDBEIE(0),   //!< Sequence error disabled
-   PdbErrorInterrupt_Enabled  = PDB_SC_PDBEIE(1),   //!< Sequence error enabled
-};
-
-/**
- * Pretrigger control
- */
-enum PdbPretrigger {
-   PdbPretrigger_Disabled    = PDB_C1_EN(0),                //!< Pretrigger disabled
-   PdbPretrigger_Bypassed    = PDB_C1_EN(1)|PDB_C1_TOS(0),  //!< Pretrigger asserts 1 clock after trigger
-   PdbPretrigger_Delayed     = PDB_C1_EN(1)|PDB_C1_TOS(1),  //!< Pretrigger asserts 1 clock + delay after trigger
-   PdbPretrigger_BackToBack  = PDB_C1_EN(1)|PDB_C1_BB(1),   //!< Back-to-back, pretrigger asserts 2 clocks after previous acknowledge
-};
-
-#if PDB_DAC_COUNT>0
-/**
- * DAC Trigger Control
- *
- * _Disabled
- *    No DAC trigger is generated
- *
- * _Delayed
- *    DAC interval counter is reset and counting starts when a rising edge is detected on
- *    selected trigger input source or software trigger is selected and SWTRIG is written with 1.
- *
- * _External
- *    DAC interval counter is bypassed and DAC external trigger input triggers the DAC interval trigger.
- */
-enum PdbDacTriggerMode {
-   PdbDacTriggerMode_Disabled = PDB_INTC_TOE(0)|PDB_INTC_EXT(0), //!< No DAC trigger
-   PdbDacTriggerMode_Delayed  = PDB_INTC_TOE(1)|PDB_INTC_EXT(0), //!< DAC trigger delayed by DAC interval counter
-   PdbDacTriggerMode_External = PDB_INTC_TOE(1)|PDB_INTC_EXT(1), //!< DAC trigger is connected directly to external trigger
-};
-#endif
-
-/**
  * Notes on the PDB.
  *
  * Components:\n
@@ -187,7 +75,7 @@ enum PdbDacTriggerMode {
  * @endcode
  */
 template <class Info>
-class PdbBase_T {
+class PdbBase_T : public Info {
 
 protected:
    /** Callback function for ISR */
@@ -384,6 +272,8 @@ public:
       enableNvicInterrupts(Info::irqLevel);
    }
 
+$(/PDB/InitMethod: // /PDB/InitMethod Not found)
+
    /**
     * Configures the PDB
     *
@@ -429,11 +319,11 @@ public:
     */
    static void setActions(
          PdbAction            pdbAction,
-         PdbErrorInterrupt    pdbErrorInterrupt = PdbErrorInterrupt_Disabled) {
+         PdbErrorAction       pdbErrorAction = PdbErrorAction_None) {
 
       pdb->SC =
             (pdb->SC&~(PDB_SC_PDBIE_MASK|PDB_SC_PDBEIE_MASK|PDB_SC_DMAEN_MASK))|
-            pdbAction|pdbErrorInterrupt|PDB_SC_PDBIF_MASK;
+            pdbAction|pdbErrorAction|PDB_SC_PDBIF_MASK;
    }
 
    /**
@@ -704,7 +594,7 @@ public:
    static void configureAdcPretrigger (
          unsigned       adcNum,
          unsigned       pretriggerNum,
-         PdbPretrigger  pdbPretrigger,
+         PdbPretrigger0  pdbPretrigger,
          Ticks          delay) {
 
       usbdm_assert(adcNum<(sizeof(pdb->CH)/sizeof(pdb->CH[0])),                      "Illegal ADC number");
@@ -734,7 +624,7 @@ public:
    static void configureAdcPretrigger (
          unsigned       adcNum,
          unsigned       pretriggerNum,
-         PdbPretrigger  pdbPretrigger,
+         PdbPretrigger0  pdbPretrigger,
          Seconds        delay) {
 
       configureAdcPretrigger(adcNum, pretriggerNum, pdbPretrigger, convertSecondsToTicks(delay));
@@ -758,7 +648,7 @@ public:
    static void configureAdcPretrigger (
          unsigned       adcNum,
          unsigned       pretriggerNum,
-         PdbPretrigger  pdbPretrigger) {
+         PdbPretrigger0  pdbPretrigger) {
 
       configureAdcPretrigger(adcNum, pretriggerNum, pdbPretrigger, 0_ticks);
    }
@@ -840,7 +730,7 @@ public:
        */
       static void configure (
             unsigned       pretriggerNum,
-            PdbPretrigger  pdbPretrigger,
+            PdbPretrigger0  pdbPretrigger,
             Ticks          delay          = 0_ticks) {
 
          PdbBase_T::configureAdcPretrigger(adcNum, pretriggerNum, pdbPretrigger, delay);
@@ -863,7 +753,7 @@ public:
        */
       static void configure (
             unsigned       pretriggerNum,
-            PdbPretrigger  pdbPretrigger,
+            PdbPretrigger0  pdbPretrigger,
             Seconds        delay          = 0.0_s) {
 
          PdbBase_T::configureAdcPretrigger(adcNum, pretriggerNum, pdbPretrigger, convertSecondsToTicks(delay));

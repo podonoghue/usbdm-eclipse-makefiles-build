@@ -337,13 +337,17 @@ Devices using this peripheral:
       \t * static const Pdb::Init pdbInit {
       \t *    PdbPrescale_DivBy_4 ,    // Clock Prescaler Divider Select - Divide by 4
       \t *    PdbMultiplier_DivBy_20 , // Clock Divider Select - Divide by 20
+      \t * 
+      \t *    // Following 2 must be in this order if both are present
+      \t *    1000_ticks ,             // Counter modulus
+      \t *    900_ticks ,              // Interrupt delay (optional) 
+      \t * 
       \t *    PdbTrigger_External ,    // Trigger Input Source Select - External Trigger (PDB0_EXTRG)
       \t *    PdbAction_None ,         // Action done on event - No action on event
       \t *    PdbErrorAction_None ,    // Sequence Error Interrupt Enable - No interrupt on error
       \t *    PdbMode_OneShot ,        // PDB operation mode - Sequence runs once only
       \t *    PdbLoadMode_Immediate ,  // Register Load Select - Registers loaded immediately on LDOK=1
-      \t *    1000_ticks ,             // Counter modulus
-      \t *    900_ticks ,              // Interrupt delay
+      \t *
       \t *    NvicPriority_VeryHigh,   // IRQ level for this peripheral - VeryHigh
       \t *    pdbCallback,             // Call-back function
       \t *
