@@ -15,24 +15,116 @@ Devices using this peripheral:
    <aliasOption key="/SIM/system_uart$(_instance)_clock" optional="true" />
 
    <choiceOption key="defaultBaudRate" 
+      valueFormat="%s"
+      enumStem="UartBaudRate"
       description="UART default baud rate"
       toolTip="Used by default UART setup for stdio">
-      <choice value="110"     name="110" />
-      <choice value="300"     name="300" />
-      <choice value="600"     name="600" />
-      <choice value="1200"    name="1200" />
-      <choice value="2400"    name="2400" />
-      <choice value="4800"    name="4800" />
-      <choice value="9600"    name="9600" />
-      <choice value="14400"   name="14400" />
-      <choice value="19200"   name="19200" />
-      <choice value="28800"   name="28800" />
-      <choice value="38400"   name="38400" />
-      <choice value="56000"   name="56000" />
-      <choice value="57600"   name="57600" />
-      <choice value="115200"  name="115200" isDefault="true" />
+      <choice value="110"     name="110"     enum="110"    />
+      <choice value="300"     name="300"     enum="300"    />
+      <choice value="600"     name="600"     enum="600"    />
+      <choice value="1200"    name="1200"    enum="1200"   />
+      <choice value="2400"    name="2400"    enum="2400"   />
+      <choice value="4800"    name="4800"    enum="4800"   />
+      <choice value="9600"    name="9600"    enum="9600"   />
+      <choice value="14400"   name="14400"   enum="14400"  />
+      <choice value="19200"   name="19200"   enum="19200"  />
+      <choice value="28800"   name="28800"   enum="28800"  />
+      <choice value="38400"   name="38400"   enum="38400"  />
+      <choice value="56000"   name="56000"   enum="56000"  />
+      <choice value="57600"   name="57600"   enum="57600"  />
+      <choice value="115200"  name="115200"  enum="115200" isDefault="true" />
    </choiceOption>
 
+   <choiceOption key="uart_c2_tcie" condition="uart_c2_tcie_present"
+      hidden="true"
+      enumStem="UartTxCompleteAction"
+      description="Transmit complete action"
+      toolTip="Enable interrupt on transmission complete">
+      <choice value="0"   name="None"      enum="None"      />
+      <choice value="1"   name="Interrupt" enum="Interrupt" />
+   </choiceOption>
+   
+   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true" 
+      variables="uart_c2_tcie" ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      %paramDescription
+      \t */
+      \tvoid setTransmitCompleteAction(%params) const {
+      \t   %register = (%register & ~%mask) | %paramExpression;
+      \t}\n\n
+   ]]></setTemplate>
+   
+   <choiceOption key="uart_c2_ilie" condition="uart_c2_ilie_present"
+      hidden="true"
+      enumStem="UartIdleLineDetectAction"
+      description="Idle line detect sction"
+      toolTip="Enable interrupt on tidele line detect">
+      <choice value="0"   name="None"      enum="None"      />
+      <choice value="1"   name="Interrupt" enum="Interrupt" />
+   </choiceOption>
+   
+   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true" 
+      variables="uart_c2_ilie" ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      %paramDescription
+      \t */
+      \tvoid setIdleLineDetectAction(%params) const {
+      \t   %register = (%register & ~%mask) | %paramExpression;
+      \t}\n\n
+   ]]></setTemplate>
+   
+   <choiceOption key="uartTxEmptyAction" condition="uart_c5_tdmas_present&amp;&amp;uart_c2_tie_present"
+      hidden="true"
+      valueFormat="(UART_C5_TDMAS(%s)&lt;&lt;8),UART_C2_TIE(%s)"
+      enumStem="UartTxEmptyAction"
+      description="Transmit empty DMA/Interrupt action"
+      toolTip="Enable transmit holding register empty DMA/Interrupt action">
+      <choice value="0,0"   name="None"      enum="None"      />
+      <choice value="0,1"   name="Interrupt" enum="Interrupt" />
+      <choice value="1,1"   name="DMA"       enum="Dma"       />
+   </choiceOption>
+   
+   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true" 
+       variables="uartTxEmptyAction" ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      %paramDescription
+      \t */
+      \tvoid setTransmitEmptyAction(%params) const {
+      \t   uart->C2 = (uart->C2 & ~UART_C2_TIE_MASK)   | %paramExpression;
+      \t   uart->C5 = (uart->C5 & ~UART_C5_TDMAS_MASK) | %paramExpression>>8;
+      \t}\n\n
+   ]]></setTemplate>
+   
+   <choiceOption key="uartRxFullAction" condition="uart_c5_rdmas_present&amp;&amp;uart_c2_rie_present"
+      hidden="true"
+      valueFormat="(UART_C5_RDMAS(%s)&lt;&lt;8),UART_C2_RIE(%s)"
+      enumStem="UartRxFullAction"
+      description="Receive full DMA/interrupt action"
+      toolTip="Enable receive buffer full DMA/interrupt action">
+      <choice value="0,0"   name="None"      enum="None"      />
+      <choice value="0,1"   name="Interrupt" enum="Interrupt" />
+      <choice value="1,1"   name="DMA"       enum="Dma"       />
+   </choiceOption>
+   
+   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true" 
+       variables="uartTxEmptyAction" ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      %paramDescription
+      \t */
+      \tvoid setReceiveFullAction(%params) const {
+      \t   uart->C2 = (uart->C2 & ~UART_C2_RIE_MASK)   | %paramExpression;
+      \t   uart->C5 = (uart->C5 & ~UART_C5_RDMAS_MASK) | %paramExpression>>8;
+      \t}\n\n
+   ]]></setTemplate>
+   
    <binaryOption key="uartClass" 
       description="Input buffering"
       toolTip="This option determines whether an interrupt-driven driver\n 

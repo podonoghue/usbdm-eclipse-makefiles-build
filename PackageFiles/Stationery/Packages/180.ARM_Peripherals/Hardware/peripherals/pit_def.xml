@@ -112,6 +112,7 @@
       \t * Example:
       \t * @code
       \t * // Initialisation values for $(_class) channel
+      \t * // Parameters available may vary with device - see $(_class)::DefaultChannelInitValues[] for relevant example 
       \t * static const Pit::Init pitInit {
       \t *       PitChannelNum_0,
       \t *
