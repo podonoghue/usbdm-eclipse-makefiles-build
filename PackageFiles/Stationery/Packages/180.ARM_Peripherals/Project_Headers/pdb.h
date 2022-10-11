@@ -799,13 +799,13 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     */
    static void configureDacTrigger (
          unsigned          dacNum,
-         PdbDacTriggerMode pdbDacTriggerMode,
+         PdbDac0TriggerMode pdbDacTriggerMode,
          Ticks             period) {
 
       usbdm_assert(dacNum<(sizeof(pdb->DAC)/sizeof(pdb->DAC[0])), "Illegal DAC number");
 
       usbdm_assert(
-            (pdbDacTriggerMode != PdbDacTriggerMode_External) || ((unsigned)period == 0),
+            (pdbDacTriggerMode != PdbDac0TriggerMode_External) || ((unsigned)period == 0),
             "DAC period may not be used with external trigger");
 
       pdb->DAC[dacNum].INTC = pdbDacTriggerMode;
@@ -824,7 +824,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     */
    static void configureDacTrigger(
          unsigned          dacNum,
-         PdbDacTriggerMode pdbDacTriggerMode,
+         PdbDac0TriggerMode pdbDacTriggerMode,
          Seconds           period) {
 
       configureDacTrigger(dacNum, pdbDacTriggerMode, convertSecondsToTicks(period));
@@ -841,7 +841,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     */
    static void configureDacTrigger(
          unsigned          dacNum,
-         PdbDacTriggerMode pdbDacTriggerMode) {
+         PdbDac0TriggerMode pdbDacTriggerMode) {
 
       configureDacTrigger(dacNum, pdbDacTriggerMode, 0_ticks);
    }
@@ -879,7 +879,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
        * @param period            Reload value for DAC interval counter
        */
       static void configure (
-            PdbDacTriggerMode pdbDacTriggerMode,
+            PdbDac0TriggerMode pdbDacTriggerMode,
             Ticks             period = 0) {
 
          PdbBase_T::configureDacTrigger(dacNum, pdbDacTriggerMode, period);
@@ -895,7 +895,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
        * @param period           Interval used to calculate the reload value for DAC interval counter
        */
       static void configure(
-            PdbDacTriggerMode pdbDacTriggerMode,
+            PdbDac0TriggerMode pdbDacTriggerMode,
             Seconds           period) {
 
          PdbBase_T::configureDacTrigger(dacNum, pdbDacTriggerMode, period);
