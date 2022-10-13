@@ -25,8 +25,8 @@
       description="Enable use of Seconds for time"
       toolTip="Use of floating point is necessary to support specifing watchdog timeouts in seconds in runtime code.\n
                This is seldom needed and the overhead can be avoided by disabling this option">
-      <choice value="false" enum="Disabled" name="Seconds disabled" isDefault="true" />
-      <choice value="true"  enum="Enabled"  name="Seconds enabled" />
+      <choice value="false" enum="Disabled" name="Seconds support disabled" isDefault="true" />
+      <choice value="true"  enum="Enabled"  name="Seconds support enabled" />
    </binaryOption>  
 
    <!-- ************* WDOG_STCTRLH ****************** -->
@@ -200,7 +200,7 @@
       description="Watchdog Timeout"
       toolTip="The watchdog must be refreshed before this interval expires"
       valueFormat="%s_s"
-      typeName="Seconds"
+      typeName="const Seconds &amp;"
       units="s"
       value="1"/>
    
@@ -223,7 +223,7 @@
                Refresh must occur within [window...timeout] if window mode is enabled.\n
                A refresh outside of this range resets the system"
       valueFormat="%s_s"
-      typeName="Seconds"
+      typeName="const Seconds &amp;"
       derived="true"
       units="s"
       value="0"/>
@@ -398,7 +398,7 @@
          wdog_timeout"
    ><![CDATA[
       \t   ///  %description
-      \t   Seconds_Ticks %registerName = {0_ticks};\n\n
+      \t   Seconds_Ticks %registerName;\n\n
    ]]></initialValueTemplate>
    
    <initialValueTemplate namespace="usbdm"  
@@ -406,7 +406,7 @@
          wdog_window"
    ><![CDATA[
       \t   ///  %description
-      \t   Seconds_Ticks %registerName = {0_ticks};\n\n
+      \t   Seconds_Ticks %registerName;\n\n
    ]]></initialValueTemplate>
    
    <initialValueTemplate namespace="usbdm"  
@@ -519,10 +519,10 @@
       \t   // Configure watchdog
       \t   wdog->STCTRLH  = init.stctrlh;
       \t   wdog->PRESC    = presc;
-      \t   wdog->WINH     = window.ticks>>16;
-      \t   wdog->WINL     = window.ticks;
-      \t   wdog->TOVALH   = timeout.ticks>>16;
-      \t   wdog->TOVALL   = timeout.ticks;
+      \t   wdog->WINH     = window.toTicks()>>16;
+      \t   wdog->WINL     = window.toTicks();
+      \t   wdog->TOVALH   = timeout.toTicks()>>16;
+      \t   wdog->TOVALL   = timeout.toTicks();
       \t   
       \t   // For some reason this must be done after above
       \t   if constexpr (Info::irqHandlerInstalled) {
@@ -623,20 +623,20 @@
       \t   constexpr Init(
       %params, Types... rest) : Init(rest...) {
       \t
-      \t      this->%registerName1.ticks = %enumParam1;
-      \t      this->%registerName2.ticks = %enumParam2;
+      \t      this->%registerName1.fromTicks(%enumParam1);
+      \t      this->%registerName2.fromTicks(%enumParam2);
       \t      this->%registerName0 = %enumParam0;
       \t   }
       \t\n
    ]]></setTemplate>
    
    <setTemplate namespace="usbdm" variables="wdog_timeoutPeriod,wdog_windowPeriod"
+      codeGenCondition="secondsSupport" 
       linePadding="xxx"
       params="timeout,window"
    ><![CDATA[
-      #if $(secondsSupport)
       \t   /**
-      \t    * Constructor for %description0, %description1 & %description2
+      \t    * Constructor for %description0 and %description1
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -647,11 +647,10 @@
       \t   constexpr Init(
       %params, Types... rest) : Init(rest...) {
       \t
-      \t      this->%enumParam0.seconds = %enumParam0;
-      \t      this->%enumParam1.seconds = %enumParam1;
+      \t      this->%enumParam0.fromSeconds(%enumParam0);
+      \t      this->%enumParam1.fromSeconds(%enumParam1);
       \t      this->presc = ((uint16_t)-1);
-      \t   }
-      #endif\n
+      \t   }\n
    ]]></setTemplate>
    
    <template namespace="usbdm" ><![CDATA[

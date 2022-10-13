@@ -259,8 +259,8 @@
       enumStem="AdcPretrigger"
       valueFormat="(%s)"
       toolTip="Selects which SC1[x]/R[x] register pair to use">
-      <choice value="0" enum="A"  name="Use pretrigger A = SC1[0]/R[0]" isDefault="true" />
-      <choice value="1" enum="B"  name="Use pretrigger B = SC1[1]/R[1]" />
+      <choice value="0" enum="0"  name="Use pretrigger 0 = SC1[0]/R[0]" isDefault="true" />
+      <choice value="1" enum="1"  name="Use pretrigger 1 = SC1[1]/R[1]" />
    </binaryOption>
 
    <binaryOption key="adc_cfg2_muxsel" description="Selects between A/B multiplexor inputs on some ADC channels"

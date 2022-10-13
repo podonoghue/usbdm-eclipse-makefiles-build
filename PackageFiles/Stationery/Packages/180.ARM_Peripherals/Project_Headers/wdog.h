@@ -128,7 +128,7 @@ protected:
 
       float constexpr maxCount = ~1UL;
 
-      if ((int)window.ticks>(int)timeout.ticks) {
+      if ((int)window.toTicks()>(int)timeout.toTicks()) {
          return E_ILLEGAL_PARAM;
       }
       uint32_t clockFrequency = WdogInfo::getInputClockFrequency((WdogClock)(stctrlh & WDOG_STCTRLH_CLKSRC_MASK));
@@ -137,9 +137,9 @@ protected:
       for(int prescale=1; prescale<=8; prescale++) {
          float counterFrequency = clockFrequency/(float)prescale;
          maxTime = maxCount/clockFrequency;
-         if (maxTime > timeout.seconds) {
-            timeout.ticks = roundf(timeout.seconds*counterFrequency);
-            window.ticks  = roundf(window.seconds*counterFrequency);
+         if (maxTime > timeout.toSeconds()) {
+            timeout.fromTicks(roundf(timeout.toSeconds()*counterFrequency));
+            window.fromTicks(roundf(window.toSeconds()*counterFrequency));
             presc = WDOG_PRESC_PRESCVAL(prescale-1);
             return E_NO_ERROR;
          }

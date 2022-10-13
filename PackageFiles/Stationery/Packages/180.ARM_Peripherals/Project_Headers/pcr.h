@@ -62,7 +62,7 @@ public:
    constexpr Ticks(unsigned value)     : value(value) {}
    constexpr Ticks(long value)         : value((unsigned)value) {}
    constexpr Ticks(unsigned long value): value((unsigned)value) {}
-   constexpr Ticks(float    value)     : value(round(value)) {}
+   constexpr Ticks(float    value)     : value(roundf(value)) {}
    constexpr Ticks(double    value)    : value(roundf(value)) {}
    Ticks(const volatile Ticks& other)  : value(other.value) {}
 
@@ -248,6 +248,8 @@ constexpr auto operator *(int left,       Seconds right)  { return Seconds(left*
 constexpr auto operator *(float left,     Hertz right)    { return Hertz(left*right.getValue()); }
 constexpr auto operator *(unsigned left,  Hertz right)    { return Hertz(left*right.getValue()); }
 constexpr auto operator *(int left,       Hertz right)    { return Hertz(left*right.getValue()); }
+constexpr auto operator *(Ticks left,     Hertz right)    { return Hertz(left*right.getValue()); }
+constexpr auto operator *(Seconds left,   Hertz right)    { return Ticks(left.getValue()*right.getValue()); }
 
 constexpr auto operator /(float left,     Seconds right) { return Hertz(left/right.getValue()); }
 constexpr auto operator /(unsigned left,  Seconds right) { return Hertz(left/right.getValue()); }
@@ -256,6 +258,7 @@ constexpr auto operator /(int left,       Seconds right) { return Hertz(left/rig
 constexpr auto operator /(float left,     Hertz right)   { return Seconds(left/right.getValue()); }
 constexpr auto operator /(unsigned left,  Hertz right)   { return Seconds(left/right.getValue()); }
 constexpr auto operator /(int left,       Hertz right)   { return Seconds(left/right.getValue()); }
+constexpr auto operator /(Ticks left,     Hertz right)   { return Seconds(left.getValue()/right.getValue()); }
 
 #else
    using Ticks    = unsigned;
@@ -267,16 +270,17 @@ constexpr auto operator /(int left,       Hertz right)   { return Seconds(left/r
  * Convenience class for sharing storage of time measurements in ticks and seconds
  */
 union Seconds_Ticks {
-   ///  Time in seconds
-   Seconds seconds;
+   ///  Time in seconds or Ticks
+   uint32_t value;
 
-   ///  Time in ticks
-   Ticks ticks;
+   constexpr Seconds_Ticks() : value(0) {}
 
-   constexpr Seconds_Ticks() : ticks(0) {}
-   constexpr Seconds_Ticks(const Seconds_Ticks &other) : ticks(other.ticks) {};
-   constexpr Seconds_Ticks(Ticks   ticks)   : ticks(ticks) {}
-   constexpr Seconds_Ticks(Seconds seconds) : seconds(seconds) {}
+   constexpr Seconds toSeconds() const { return __builtin_bit_cast(float, value); }
+   constexpr Ticks   toTicks()   const { return value; }
+
+   constexpr void fromSeconds(Seconds seconds) { value = __builtin_bit_cast(unsigned, seconds.getValue()); }
+   constexpr void fromTicks(Ticks ticks)       { value = ticks.getValue(); }
+
 };
 
    /*

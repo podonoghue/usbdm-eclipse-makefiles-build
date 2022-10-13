@@ -220,60 +220,7 @@ protected:
    static constexpr HardwarePtr<PDB_Type> pdb = Info::baseAddress;
 
 public:
-   $(/PDB/classInfo: // No class Info found)
-   /**
-    * Enables PDB and sets to default configuration.
-    *
-    * Includes enabling clock and any pins used.\n
-    * Sets PDB to default configuration.
-    */
-   static void defaultConfigure() {
-
-      enable();
-
-      pdb->MOD  = Info::pdb_mod;
-      pdb->IDLY = Info::pdb_idly;
-      pdb->CH[0].C1     = Info::pdb_ch[0].c1;
-      pdb->CH[0].DLY[0] = Info::pdb_ch[0].dly0;
-      pdb->CH[0].DLY[1] = Info::pdb_ch[0].dly1;
-      if (Info::numChannels>1) {
-         pdb->CH[1].C1     = Info::pdb_ch[1].c1;
-         pdb->CH[1].DLY[0] = Info::pdb_ch[1].dly0;
-         pdb->CH[1].DLY[1] = Info::pdb_ch[1].dly1;
-      }
-#if PDB_DAC_COUNT>0
-      if (Info::numDacs>0) {
-         pdb->DAC[0].INTC = Info::pdb_dac[0].dacintc;
-         pdb->DAC[0].INT  = Info::pdb_dac[0].dacint;
-      }
-      if (Info::numDacs>1) {
-         pdb->DAC[1].INTC = Info::pdb_dac[1].dacintc;
-         pdb->DAC[1].INT  = Info::pdb_dac[1].dacint;
-      }
-#endif
-#ifdef PDB_POEN_POEN
-      pdb->POEN = Info::pdb_poen;
-      if (Info::numPulseOutputs>0) {
-         pdb->POnDLY[0].PODLY     = Info::pdb_podly[0];
-      }
-      if (Info::numPulseOutputs>1) {
-         pdb->POnDLY[1].PODLY     = Info::pdb_podly[1];
-      }
-      if (Info::numPulseOutputs>2) {
-         pdb->POnDLY[2].PODLY     = Info::pdb_podly[2];
-      }
-      if (Info::numPulseOutputs>3) {
-         pdb->POnDLY[3].PODLY     = Info::pdb_podly[3];
-      }
-#endif
-      // Configure and trigger register load
-      pdb->SC = Info::pdb_sc|PDB_SC_PDBEN_MASK|PDB_SC_LDOK_MASK;
-
-      enableNvicInterrupts(Info::irqLevel);
-   }
-
-$(/PDB/InitMethod: // /PDB/InitMethod Not found)
-
+$(/PDB/classInfo: // No class Info found)
    /**
     * Configures the PDB
     *
@@ -311,6 +258,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
 #endif
    }
 
+$(/PDB/InitMethod: // /PDB/InitMethod Not found)
    /**
     * Set Interrupts and DMA actions
     *
@@ -366,6 +314,68 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
    }
 
    /**
+    * Get PDB tick frequency
+    *
+    * @param[in] scValue PDB SC register value for clock divider
+    *
+    * @return Tick frequency in Hertz
+    */
+   static Hertz getTickFrequency(uint32_t scValue) {
+
+      float clockFrequency = Info::getInputClockFrequency();
+      int multValue        = (scValue&PDB_SC_MULT_MASK)>>PDB_SC_MULT_SHIFT;
+      int prescaleValue    = (scValue&PDB_SC_PRESCALER_MASK)>>PDB_SC_PRESCALER_SHIFT;
+
+      // Multiplier factors for prescale divider
+      static const int multFactors[] = {1,10,20,40};
+
+      return clockFrequency/(multFactors[multValue]*(1<<prescaleValue));
+   }
+
+   /**
+    * Converts time in seconds to time in ticks
+    *
+    * @param[in] seconds Time interval in seconds
+    * @param[in] scValue PDB SC register value for clock divider
+    *
+    * @return Time in ticks
+    */
+   static Seconds convertTicksToSeconds(const Ticks &ticks, uint32_t scValue) {
+
+      return ticks/getTickFrequency(scValue);
+   }
+
+   /**
+    * Converts time in seconds to time in ticks
+    *
+    * @param[in] seconds Time interval in seconds
+    * @param[in] scValue PDB SC register value for clock divider
+    *
+    * @return Time in ticks
+    *
+    * @note This uses the current PDB clock settings (pdb_sc_mult, pdb_sc_prescaler)
+    */
+   static Seconds convertTicksToSeconds(const Ticks &ticks) {
+
+      return ticks/getTickFrequency(pdb->SC);
+   }
+
+   /**
+    * Converts time in seconds to time in ticks
+    *
+    * @param[in] seconds Time interval in seconds
+    * @param[in] scValue PDB SC register value for clock divider
+    *
+    * @return Time in ticks
+    *
+    * @note This uses the current PDB clock settings (pdb_sc_mult, pdb_sc_prescaler)
+    */
+   static Ticks convertSecondsToTicks(const Seconds &seconds, uint32_t scValue) {
+
+      return seconds*getTickFrequency(scValue);
+   }
+
+   /**
     * Converts time in seconds to time in ticks
     *
     * @param[in] seconds Time interval in seconds
@@ -376,14 +386,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     */
    static Ticks convertSecondsToTicks(Seconds seconds) {
 
-      float clockFrequency = Info::getInputClockFrequency();
-      int multValue        = (pdb->SC&PDB_SC_MULT_MASK)>>PDB_SC_MULT_SHIFT;
-      int prescaleValue    = (pdb->SC&PDB_SC_PRESCALER_MASK)>>PDB_SC_PRESCALER_SHIFT;
-
-      // Multiplier factors for prescale divider
-      static const int multFactors[] = {1,10,20,40};
-      float clock = clockFrequency/(multFactors[multValue]*(1<<prescaleValue));
-      return ((float)seconds*clock);
+      return convertSecondsToTicks(seconds, pdb->SC);
    }
 
    /**
@@ -395,24 +398,27 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     * For example, carefully chosen prescaler may result in less rounding for the needed intermediate
     * points for pulse outputs etc.
     *
-    * @param[in]  period          Period in seconds as a float
-    * @param[out] multValue       Determined pdb_sc_mult value
-    * @param[out] prescaleValue   Determined pdb_sc_prescaler value
+    * @param[in]  period          Desired period in seconds
+    * @param[out] scValue         Calculated pdb_sc value
+    * @param[out] modValue        Calculated pdb_mod value
     *
     * @return E_NO_ERROR  => success
     * @return E_ERROR     => failed to find suitable values
     */
-   static ErrorCode getDividers(float period, uint32_t &multValue, int &prescaleValue) {
+   static ErrorCode calculateCounterParameters(const Seconds &period, uint32_t &scValue, uint16_t &modValue) {
 
       // Multiplier factors for prescale divider
       static const int   multFactors[] = {1,10,20,40};
 
       float inputClock = Info::getInputClockFrequency();
 
+      unsigned prescaleValue;
+      unsigned multValue;
+
       // No MOD value found so far
       uint32_t mod = 0;
 
-      // Try each divider multiplier
+      // Try each divider multiplier from small to large
       for (unsigned trialMultValue=0; trialMultValue<(sizeof(multFactors)/sizeof(multFactors[0])); trialMultValue++) {
          int multfactor = multFactors[trialMultValue];
 
@@ -421,13 +427,13 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
          int prescaleFactor=1;
          for (unsigned trialPrescaleValue=0; trialPrescaleValue<=7; trialPrescaleValue++) {
             float clock = inputClock/(multfactor*prescaleFactor);
-            uint32_t trialMod = round(period*clock)-1;
+            uint32_t trialMod = roundf(period*clock)-1;
 //            console.
 //               write("multfactor = ").write(multfactor).
 //               write(", prescaleFactor = ").write(prescaleFactor).
 //               write(", mod = ").write(trialMod).
 //               write(", period = ").writeln(period);
-            if (trialMod <= 0) {
+            if (trialMod <= Info::MinimumResolution) {
                // Too short a period stop looking at this prescaler
                break;
             }
@@ -443,7 +449,12 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
             prescaleFactor <<= 1;
          }
       }
-      return setErrorCode((mod==0)?E_ERROR:E_NO_ERROR);
+      if (mod==0) {
+         return setErrorCode(E_ILLEGAL_PARAM);
+      }
+      modValue = mod;
+      scValue = PDB_SC_MULT(multValue)|PDB_SC_PRESCALER(prescaleValue);
+      return E_NO_ERROR;
    }
 
    /**
@@ -466,18 +477,17 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     */
    static ErrorCode setPeriod(Seconds period) {
 
-      uint32_t mult     = 0;
-      int      prescale = 0;
+      uint32_t scValue;
+      uint16_t modValue;
 
-      ErrorCode rc = getDividers(period, mult, prescale);
+      ErrorCode rc = calculateCounterParameters(period, scValue, modValue);
       if (rc != E_NO_ERROR) {
          return rc;
       }
-      pdb->SC  = (pdb->SC&~(PDB_SC_MULT_MASK|PDB_SC_PRESCALER_MASK))|
-            PDB_SC_MULT(mult)|PDB_SC_PRESCALER(prescale)|PDB_SC_PDBIF_MASK;
+      pdb->SC  = (pdb->SC&~(PDB_SC_MULT_MASK|PDB_SC_PRESCALER_MASK))|scValue|PDB_SC_PDBIF_MASK;
 
       // Calculate MOD using new MULT and PRESCALER convertSecondsToTicks()
-      pdb->MOD = convertSecondsToTicks(period) - 1U;
+      pdb->MOD = modValue;
 
       return E_NO_ERROR;
    }
@@ -488,9 +498,9 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     * @param[in]  pdbPrescale    Clock pre-scale (pdb_sc_mult)
     * @param[in]  pdbMultiplier  Clock pre-scale multiplier (pdb_sc_prescaler)
     */
-   static void setClockDividers(PdbPrescale pdbPrescale, PdbMultiplier pdbMultiplier) {
+   static void setClockDividers(PdbPrescale pdbPrescale) {
 
-      pdb->SC  = (pdb->SC&~(PDB_SC_MULT_MASK|PDB_SC_PRESCALER_MASK))|pdbPrescale|pdbMultiplier|PDB_SC_PDBIF_MASK;
+      pdb->SC  = (pdb->SC&~(PDB_SC_MULT_MASK|PDB_SC_PRESCALER_MASK))|pdbPrescale|PDB_SC_PDBIF_MASK;
    }
 
    /**
@@ -576,7 +586,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
 
 #if PDB_CH_COUNT>0
    /**
-    * Configures the pretriggers associated with an ADC.
+    * Configures pretrigger 0 associated with an ADC.
     *
     * Each pretrigger corresponds to an ADC SC1[n] R[n] register pair used in hardware triggered mode i.e.
     * Channel X, Pretrigger Y => adcX_sc1[Y], adc0_r[Y].
@@ -592,21 +602,43 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     * @param delay            Delay in ticks - only needed for PdbPretrigger_Delayed
     */
    static void configureAdcPretrigger (
-         unsigned       adcNum,
-         unsigned       pretriggerNum,
+         PdbChannel      pdbChannel,
          PdbPretrigger0  pdbPretrigger,
-         Ticks          delay) {
+         Ticks           delay) {
 
-      usbdm_assert(adcNum<(sizeof(pdb->CH)/sizeof(pdb->CH[0])),                      "Illegal ADC number");
-      usbdm_assert(pretriggerNum<(sizeof(pdb->CH[0].DLY)/sizeof(pdb->CH[0].DLY[0])), "Illegal Pretrigger number");
-
-      uint32_t mask      = (PDB_C1_EN(1)|PDB_C1_BB(1)|PDB_C1_TOS(1))<<pretriggerNum;
-      pdb->CH[adcNum].C1                 = (pdb->CH[adcNum].C1&~mask)|(pdbPretrigger<<pretriggerNum);
-      pdb->CH[adcNum].DLY[pretriggerNum] = (unsigned)delay - 1;
+      constexpr uint32_t MASK    = PDB_C1_EN(1)|PDB_C1_BB(1)|PDB_C1_TOS(1);
+      pdb->CH[pdbChannel].C1     = (pdb->CH[pdbChannel].C1&~MASK)|pdbPretrigger;
+      pdb->CH[pdbChannel].DLY[0] = (unsigned)delay - 1;
    }
 
    /**
-    * Configures the pretriggers associated with an ADC.
+    * Configures pretrigger 1 associated with an ADC.
+    *
+    * Each pretrigger corresponds to an ADC SC1[n] R[n] register pair used in hardware triggered mode i.e.
+    * Channel X, Pretrigger Y => adcX_sc1[Y], adc0_r[Y].
+    * For example:
+    *   Channel 0, Pretrigger 0 => adc0_sc1[0], adc0_r[0]
+    *   Channel 0, Pretrigger 1 => adc0_sc1[1], adc0_r[1] etc.
+    *
+    * This allows multiple different ADC channels to be converted in a sequence.
+    *
+    * @param adcNum           ADC associated with the pre-trigger (channel)
+    * @param pretriggerNum    Pretrigger being modified
+    * @param pdbPretrigger    Pretrigger settings
+    * @param delay            Delay in ticks - only needed for PdbPretrigger_Delayed
+    */
+   static void configureAdcPretrigger (
+         PdbChannel      pdbChannel,
+         PdbPretrigger1  pdbPretrigger,
+         Ticks           delay) {
+
+      constexpr uint32_t MASK    = PDB_C1_EN(2)|PDB_C1_BB(2)|PDB_C1_TOS(2);
+      pdb->CH[pdbChannel].C1     = (pdb->CH[pdbChannel].C1&~MASK)|pdbPretrigger;
+      pdb->CH[pdbChannel].DLY[1] = (unsigned)delay - 1;
+   }
+
+   /**
+    * Configures pretrigger 0 associated with an ADC0.
     *
     * Each pretrigger corresponds to an ADC SC1[n] R[n] register pair used in hardware triggered mode i.e.
     * Channel X, Pretrigger Y => adcX_sc1[Y], adc0_r[Y].
@@ -622,16 +654,15 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     * @param delay            Delay - only needed for PdbPretrigger_Delayed
     */
    static void configureAdcPretrigger (
-         unsigned       adcNum,
-         unsigned       pretriggerNum,
+         PdbChannel      pdbChannel,
          PdbPretrigger0  pdbPretrigger,
-         Seconds        delay) {
+         Seconds         delay) {
 
-      configureAdcPretrigger(adcNum, pretriggerNum, pdbPretrigger, convertSecondsToTicks(delay));
+      configureAdcPretrigger(pdbChannel, pdbPretrigger, convertSecondsToTicks(delay));
    }
 
    /**
-    * Configures the pretriggers associated with an ADC.
+    * Configures pretrigger 1 associated with an ADC0.
     *
     * Each pretrigger corresponds to an ADC SC1[n] R[n] register pair used in hardware triggered mode i.e.
     * Channel X, Pretrigger Y => adcX_sc1[Y], adc0_r[Y].
@@ -644,13 +675,14 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     * @param adcNum           ADC associated with the pre-trigger (channel)
     * @param pretriggerNum    Pretrigger being modified
     * @param pdbPretrigger    Pretrigger settings
+    * @param delay            Delay - only needed for PdbPretrigger_Delayed
     */
    static void configureAdcPretrigger (
-         unsigned       adcNum,
-         unsigned       pretriggerNum,
-         PdbPretrigger0  pdbPretrigger) {
+         PdbChannel      pdbChannel,
+         PdbPretrigger1  pdbPretrigger,
+         Seconds         delay) {
 
-      configureAdcPretrigger(adcNum, pretriggerNum, pdbPretrigger, 0_ticks);
+      configureAdcPretrigger(pdbChannel, pdbPretrigger, convertSecondsToTicks(delay));
    }
 
    /**
@@ -729,11 +761,34 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
        * @param delay            Delay in ticks - only needed for PdbPretrigger_Delayed
        */
       static void configure (
-            unsigned       pretriggerNum,
+            PdbChannel      pdbChannel,
             PdbPretrigger0  pdbPretrigger,
-            Ticks          delay          = 0_ticks) {
+            Ticks           delay          = 0_ticks) {
 
-         PdbBase_T::configureAdcPretrigger(adcNum, pretriggerNum, pdbPretrigger, delay);
+         PdbBase_T::configureAdcPretrigger(pdbChannel, pdbPretrigger, delay);
+      }
+
+      /**
+       * Configures the pretriggers associated with an ADC.
+       *
+       * Each pretrigger corresponds to an ADC SC1[n] R[n] register pair used in hardware triggered mode i.e.
+       * Channel X, Pretrigger Y => adcX_sc1[Y], adc0_r[Y].
+       * For example:
+       *   Channel 0, Pretrigger 0 => adc0_sc1[0], adc0_r[0]
+       *   Channel 0, Pretrigger 1 => adc0_sc1[1], adc0_r[1] etc.
+       *
+       * This allows multiple different ADC channels to be converted in a sequence.
+       *
+       * @param pretriggerNum    Pretrigger being modified
+       * @param pdbPretrigger    Pretrigger settings
+       * @param delay            Delay in ticks - only needed for PdbPretrigger_Delayed
+       */
+      static void configure (
+            PdbChannel      pdbChannel,
+            PdbPretrigger1  pdbPretrigger,
+            Ticks           delay          = 0_ticks) {
+
+         PdbBase_T::configureAdcPretrigger(pdbChannel, pdbPretrigger, delay);
       }
 
       /**
@@ -752,11 +807,34 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
        * @param delay            Delay - only needed for PdbPretrigger_Delayed
        */
       static void configure (
-            unsigned       pretriggerNum,
+            PdbChannel      pdbChannel,
             PdbPretrigger0  pdbPretrigger,
-            Seconds        delay          = 0.0_s) {
+            Seconds         delay          = 0.0_s) {
 
-         PdbBase_T::configureAdcPretrigger(adcNum, pretriggerNum, pdbPretrigger, convertSecondsToTicks(delay));
+         PdbBase_T::configureAdcPretrigger(pdbChannel, pdbPretrigger, convertSecondsToTicks(delay));
+      }
+
+      /**
+       * Configures the pretriggers associated with an ADC.
+       *
+       * Each pretrigger corresponds to an ADC SC1[n] R[n] register pair used in hardware triggered mode i.e.
+       * Channel X, Pretrigger Y => adcX_sc1[Y], adc0_r[Y].
+       * For example:
+       *   Channel 0, Pretrigger 0 => adc0_sc1[0], adc0_r[0]
+       *   Channel 0, Pretrigger 1 => adc0_sc1[1], adc0_r[1] etc.
+       *
+       * This allows multiple different ADC channels to be converted in a sequence.
+       *
+       * @param pretriggerNum    Pretrigger being modified
+       * @param pdbPretrigger    Pretrigger settings
+       * @param delay            Delay - only needed for PdbPretrigger_Delayed
+       */
+      static void configure (
+            PdbChannel      pdbChannel,
+            PdbPretrigger1  pdbPretrigger,
+            Seconds         delay          = 0.0_s) {
+
+         PdbBase_T::configureAdcPretrigger(pdbChannel, pdbPretrigger, convertSecondsToTicks(delay));
       }
 
       /**
