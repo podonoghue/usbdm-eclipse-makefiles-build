@@ -30,7 +30,7 @@ using MyAdcChannel  = $(/HARDWARE/Analogue0:Adc0\:\:Channel<10>);
 using MyAdc         = MyAdcChannel::OwningAdc;
 
 // Length of PDB sequence
-static constexpr Seconds SEQ_LENGTH    = 10_ms;
+static constexpr Seconds SEQ_LENGTH    = 100_ms;
 
 // When to take ADC sample
 static constexpr Seconds TRIGGER_TIME  =  9_ms;
@@ -50,11 +50,35 @@ static void pdbErrorCallback() {
 
 static void configurePdb() {
 
-   // Note: Can work in timer ticks and avoid floating point if desired
-   //   Pdb::setClock(PdbPrescale_128, PdbMultiplier_10);
-   //   Pdb::setModulo(1000);
-   //   Pdb::setInterruptDelayInTicks(900_ticks);
-   //   Pdb::setPretriggersInTicks(0, PdbPretrigger0_Delayed, 800_ticks);
+#if 1
+   Pdb0::Init pdbInit {
+
+      PdbTrigger_Software ,      // Trigger Input Source Select - Software trigger is selected
+
+      PdbLoadMode_Event ,        // Register Load Select - Registers loaded on event (software trigger)
+
+      PdbPrescale_Auto_Select,   // Prescale selected automatically from modulo
+      SEQ_LENGTH ,               // Counter modulo
+
+      PdbAction_Interrupt ,      // Event action - Interrupt
+      SEQ_LENGTH ,               // Interrupt delay
+      pdbCallback,               // Interrupt handler
+
+      PdbErrorAction_Interrupt , // Sequence Error Interrupt Enable - Interrupt on error
+      pdbErrorCallback,          // Call-back to use
+
+      PdbMode_Continuous ,       // PDB operation mode - Sequence runs continuously once triggered
+
+      NvicPriority_Normal,       // IRQ level for this peripheral - Normal
+
+      PdbChannel_0,              // Channel 0 set up
+      PdbPretrigger0_Delayed ,   // Channel Pretrigger control (usually ADC0.SC1[0]) - Pretrigger delayed
+      TRIGGER_TIME,              // Delay
+   };
+
+   Pdb0::configure(pdbInit);
+
+#else
 
    Pdb::enable();
 
@@ -66,7 +90,7 @@ static void configurePdb() {
    Pdb::setCallback(pdbCallback);
 
    // Interrupts during sequence or error
-   Pdb::setActions(PdbAction_Interrupt, PdbErrorInterrupt_Enabled);
+   Pdb::setActions(PdbAction_Interrupt, PdbErrorAction_Interrupt);
 
    // Set period of sequence
    Pdb::setPeriod(SEQ_LENGTH);
@@ -75,7 +99,7 @@ static void configurePdb() {
    Pdb::setInterruptDelay(SEQ_LENGTH);
 
    // Take single ADC sample at TRIGGER_TIME
-   Pdb::configureAdcPretrigger(0, 0, PdbPretrigger_Delayed, TRIGGER_TIME);
+   Pdb::configureAdcPretrigger(PdbChannel_0, PdbPretrigger0_Delayed, TRIGGER_TIME);
 
    // Update registers
    Pdb::configureRegisterLoad(PdbLoadMode_Immediate);
@@ -83,6 +107,7 @@ static void configurePdb() {
       __asm__("nop");
    }
    Pdb::enableNvicInterrupts(NvicPriority_Normal);
+#endif
 }
 
 static void adcCallback(uint32_t value, int) {
@@ -100,7 +125,7 @@ static void configureAdc() {
    MyAdc::setCallback(adcCallback);
    MyAdc::enableNvicInterrupts(NvicPriority_Normal);
 
-   MyAdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_Enabled);
+   MyAdcChannel::enableHardwareConversion(AdcPretrigger_A, AdcInterrupt_Enabled);
 }
 
 int main() {

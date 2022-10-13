@@ -24,13 +24,51 @@ using Dac   = Dac0;
  * Configure PDB to trigger DAC
  */
 static void configurePdb() {
-    // Configure PDB.
+
+#if 0
+   // PDB configuration using structure in Flash (Ticks)
+   static constexpr Pdb0::Init pdbInitValue = {
+
+      PdbTrigger_Software ,   // Trigger Input Source Select - Software trigger is selected
+      PdbPrescale_DivBy_40 ,  // Clock Prescaler Divider Select - Divide by 1 (obtained from Configure.usbdmProject)
+      9999_ticks ,            // Counter modulus (obtained from Configure.usbdmProject)
+      PdbMode_Continuous ,    // PDB operation mode - Sequence runs continuously once triggered
+      PdbLoadMode_Event ,     // Register Load Select - Registers loaded on trigger input event
+
+      PdbDac0TriggerMode_Delayed , // DAC trigger control - DAC trigger delayed by DAC interval counter
+      99_ticks,                    // DAC interval (obtained from Configure.usbdmProject)
+   };
+   Pdb0::configure(pdbInitValue);
+
+   // Start timer and load values
+   Pdb0::softwareTrigger();
+
+#elif 1
+   // PDB configuration using structure in Flash (Seconds)
+   static constexpr Pdb0::Init pdbInitValue = {
+
+      PdbTrigger_Software ,         // Trigger Input Source Select - Software trigger is selected
+      PdbPrescale_Auto_Select ,     // Clock Prescaler Divider Select - Auto select divider according to period
+      10_ms ,                       // Counter modulus
+      PdbMode_Continuous ,          // PDB operation mode - Sequence runs continuously once triggered
+      PdbLoadMode_Event ,           // Register Load Select - Registers loaded on trigger input event
+
+      PdbDac0TriggerMode_Delayed ,  // DAC trigger control - DAC trigger delayed by DAC interval counter
+      100_us,                       // DAC interval
+   };
+   Pdb0::configure(pdbInitValue);
+
+   // Start timer and load values
+   Pdb0::softwareTrigger();
+
+#else
+   // PDB configuration using method calls
    Pdb0::configure(
          PdbMode_Continuous,
          PdbTrigger_Software);
 
    Pdb0::setPeriod(1_ms);
-   Pdb0::configureDacTrigger(0, PdbDacTriggerMode_Delayed, 20_us);
+   Pdb0::configureDacTrigger(0, PdbDac0TriggerMode_Delayed, 20_us);
 
    // Any phase will do (<PDB_PERIOD)
    Pdb0::setInterruptDelay(0_ticks);
@@ -40,6 +78,7 @@ static void configurePdb() {
 
    // Start timer and load values
    Pdb0::softwareTrigger();
+#endif
 }
 
 /**
@@ -71,7 +110,7 @@ static void configureDac() {
 
 int main() {
    console.writeln("Starting");
-   
+
    configureDac();
    configurePdb();
 

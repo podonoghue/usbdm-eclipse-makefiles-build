@@ -62,7 +62,7 @@ static void configureAdc() {
    MyAdcChannel::setInput();
 
    // Connect ADC trigger 0 to PIT
-   SimInfo::setAdc0Triggers(SimAdc0TriggerMode_Alt_PreTrigger_0, SimAdc0Trigger_PitCh0);
+   SimInfo::setAdc0Triggers(SimAdc0TriggerMode_Alt_PreTrigger_0, SimAdc0TriggerSrc_PitCh0);
 
    // Check for errors so far
    checkError();
@@ -214,11 +214,11 @@ void configurePit() {
  * use as measurement input for the ADC.
  */
 void createWaveform() {
-   Pwm::Ftm::enable();
-   Pwm::Ftm::configure(FtmMode_LeftAlign);
-   Pwm::Ftm::setPeriod(10.0_ms);
+   Pwm::OwningFtm::enable();
+   Pwm::OwningFtm::configure(FtmMode_LeftAligned);
+   Pwm::OwningFtm::setPeriod(10.0_ms);
 
-   Pwm::configure(FtmChMode_PwmHighTruePulses);
+   Pwm::configure(FtmChannelMode_PwmHighTruePulses);
    Pwm::setDutyCycle(50);
    Pwm::setOutput();
 }

@@ -55,8 +55,8 @@ int main() {
    Led::setOutput();
 
    // Enable LPTMR in time counting mode
-   Lptmr::configureTimeCountingMode(
-         LptmrResetOn_Compare,
+   Lptmr::configureTimeIntervalMode(
+         LptmrResetOnCompare_Enabled,
          LptmrInterrupt_Enabled,
          LptmrClockSel_Lpoclk);
 

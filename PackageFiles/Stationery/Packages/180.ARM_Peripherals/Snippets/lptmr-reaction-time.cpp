@@ -35,11 +35,11 @@ int main() {
          PinFilter_None);
 
    // 8MHz / 4096 => ~500 ns resolution
-   Timer::configureTimeCountingMode(
-         LptmrResetOn_Overflow,
+   Timer::configureTimeIntervalMode(
+         LptmrResetOnCompare_Enabled,
          LptmrInterrupt_Disabled,
          LptmrClockSel_Oscerclk,
-         LptmrPrescale_4096);
+         LptmrPrescale_DivBy_4096);
 
    for(;;) {
       Led::off();
