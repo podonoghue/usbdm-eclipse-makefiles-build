@@ -95,7 +95,23 @@
 
    <stringOption key="Clocking" value="------- Clocking -------" constant="true" description="Clocking" />
    
-   <aliasOption key="/SIM/system_bus_clock" name="Input clock" />
+   <choiceOption key="pdbClockConfig"
+      target="input_clock"
+      description="Clock configuration"
+      toolTip="Selects the clock configuration used for ticks and time calculations" >
+      <choice value="0" name="@/MCG/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
+      <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
+      <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
+      <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
+   </choiceOption>   
+
+   <intOption key="input_clock"  
+      ref="/SIM/system_bus_clock[]"
+      constant="true"
+      derived="true" 
+      units="Hz"
+      description="Frequency of PDB input Clock" />
+   
 
    <for keys="numCh" dim="NumChannels,NumChannels+&quot;+1&quot;" >
       <choiceOption key="pdb_channel" 
@@ -122,32 +138,33 @@
       enumStem="PdbPrescale"
       description="Clock Prescaler Divider Select"
       toolTip="The PDB input clock is divided by this factor">
-      <choice value="0,0"   name="Divide by 1"      enum="DivBy_1"      ref="(/SIM/system_bus_clock)/1"    />
-      <choice value="0,1"   name="Divide by 2"      enum="DivBy_2"      ref="(/SIM/system_bus_clock)/2"    />
-      <choice value="0,2"   name="Divide by 4"      enum="DivBy_4"      ref="(/SIM/system_bus_clock)/4"    />
-      <choice value="0,3"   name="Divide by 8"      enum="DivBy_8"      ref="(/SIM/system_bus_clock)/8"    />
-      <choice value="1,0"   name="Divide by 10"     enum="DivBy_10"     ref="(/SIM/system_bus_clock)/10"   />
-      <choice value="0,4"   name="Divide by 16"     enum="DivBy_16"     ref="(/SIM/system_bus_clock)/16"   />
-      <choice value="1,1"   name="Divide by 20"     enum="DivBy_20"     ref="(/SIM/system_bus_clock)/20"   />
-      <choice value="0,5"   name="Divide by 32"     enum="DivBy_32"     ref="(/SIM/system_bus_clock)/32"   />
-      <choice value="1,2"   name="Divide by 40"     enum="DivBy_40"     ref="(/SIM/system_bus_clock)/40"   />
-      <choice value="0,6"   name="Divide by 64"     enum="DivBy_64"     ref="(/SIM/system_bus_clock)/64"   />
-      <choice value="1,3"   name="Divide by 80"     enum="DivBy_80"     ref="(/SIM/system_bus_clock)/80"   />
-      <choice value="0,7"   name="Divide by 128"    enum="DivBy_128"    ref="(/SIM/system_bus_clock)/128"  />
-      <choice value="1,4"   name="Divide by 160"    enum="DivBy_160"    ref="(/SIM/system_bus_clock)/160"  />
-      <choice value="1,5"   name="Divide by 320"    enum="DivBy_320"    ref="(/SIM/system_bus_clock)/320"  />
-      <choice value="1,6"   name="Divide by 640"    enum="DivBy_640"    ref="(/SIM/system_bus_clock)/640"  />
-      <choice value="1,7"   name="Divide by 1280"   enum="DivBy_1280"   ref="(/SIM/system_bus_clock)/1280" />
-      <choice value="2,7"   name="Divide by 2560"   enum="DivBy_2560"   ref="(/SIM/system_bus_clock)/2560" />
-      <choice value="3,7"   name="Divide by 5120"   enum="DivBy_5120"   ref="(/SIM/system_bus_clock)/5120" />
+      <choice value="0,0"   name="Divide by 1"      enum="DivBy_1"      ref="(input_clock)/1"    />
+      <choice value="0,1"   name="Divide by 2"      enum="DivBy_2"      ref="(input_clock)/2"    />
+      <choice value="0,2"   name="Divide by 4"      enum="DivBy_4"      ref="(input_clock)/4"    />
+      <choice value="0,3"   name="Divide by 8"      enum="DivBy_8"      ref="(input_clock)/8"    />
+      <choice value="1,0"   name="Divide by 10"     enum="DivBy_10"     ref="(input_clock)/10"   />
+      <choice value="0,4"   name="Divide by 16"     enum="DivBy_16"     ref="(input_clock)/16"   />
+      <choice value="1,1"   name="Divide by 20"     enum="DivBy_20"     ref="(input_clock)/20"   />
+      <choice value="0,5"   name="Divide by 32"     enum="DivBy_32"     ref="(input_clock)/32"   />
+      <choice value="1,2"   name="Divide by 40"     enum="DivBy_40"     ref="(input_clock)/40"   />
+      <choice value="0,6"   name="Divide by 64"     enum="DivBy_64"     ref="(input_clock)/64"   />
+      <choice value="1,3"   name="Divide by 80"     enum="DivBy_80"     ref="(input_clock)/80"   />
+      <choice value="0,7"   name="Divide by 128"    enum="DivBy_128"    ref="(input_clock)/128"  />
+      <choice value="1,4"   name="Divide by 160"    enum="DivBy_160"    ref="(input_clock)/160"  />
+      <choice value="1,5"   name="Divide by 320"    enum="DivBy_320"    ref="(input_clock)/320"  />
+      <choice value="1,6"   name="Divide by 640"    enum="DivBy_640"    ref="(input_clock)/640"  />
+      <choice value="1,7"   name="Divide by 1280"   enum="DivBy_1280"   ref="(input_clock)/1280" />
+      <choice value="2,7"   name="Divide by 2560"   enum="DivBy_2560"   ref="(input_clock)/2560" />
+      <choice value="3,7"   name="Divide by 5120"   enum="DivBy_5120"   ref="(input_clock)/5120" />
    </choiceOption>
 
    <choiceOption key="pdb_sc_auto_divider" 
       valueFormat="PDB_SC_MULT(%s),PDB_SC_PRESCALER(%s)"
       enumStem="PdbPrescale_Auto"
+      hidden="true"
       description="Auto select divider from period in seconds"
       toolTip="Auto select divider from period in seconds">
-      <choice value="3,0"   name="Auto select divider"      enum="Select"         ref="0" />
+      <choice value="3,0"   name="Auto select divider"      enum="Select" />
    </choiceOption>
 
    <floatOption key="pdb_clock_frequency" 
@@ -187,6 +204,7 @@
       ref="(pdb_mod+1)*pdb_clock_period" 
       typeName="const Seconds &amp;"
       description="Counter period in seconds"
+      derivedFrom="pdb_mod"
       derived="true"
       min="0" units="s" />
 
@@ -218,6 +236,7 @@
       typeName="const Seconds &amp;"
       description="Interrupt delay in seconds"
       derived="true"
+      derivedFrom="pdb_idly"
       value="0" min="0" units="s" />
 
 <!--  ============== PDB Channels ============== -->
@@ -253,6 +272,7 @@
             typeName="const Seconds &amp;"
             enabledBy="pdb_ch%(n)_c1_pt%(m) == 2"
             description="Delay in seconds" 
+            derivedFrom="pdb_ch%(n)_dly%(m)"
             derived="true"
             min="0" units="s" />
       </for>         
@@ -297,6 +317,7 @@
          typeName="const Seconds &amp;"
          enabledBy="pdb_intc%(x)_triggerMode==1"
          description="DAC interval in seconds" 
+         derivedFrom="pdb_int%(x)"
          derived="true"
          min="0" units="s" />
    </for>
@@ -322,7 +343,7 @@
          valueFormat="%s_ticks"
          typeName="const Ticks &amp;"
          description="Pulse-Output Delay 1 - rising edge" 
-         toolTip="This specify the delay 1 value for the Pulse-Out\n
+         toolTip="This specifies the delay 1 value for the Pulse-Out\n
             Pulse-Output goes high when the counter is equal to the dly1"
          value="0" min="0" max="65535" />
    
@@ -332,6 +353,7 @@
          typeName="const Seconds &amp;"
          description="Pulse-Output Delay 1 - rising edge in seconds" 
          derived="true"
+         derivedFrom="pdb_po%(y)_dly1"
          value="1" min="0" units="s" />
    
       <intOption key="pdb_po%(y)_dly2" 
@@ -349,6 +371,7 @@
          typeName="const Seconds &amp;"
          description="Pulse-Output Delay 2 - falling edge in seconds" 
          derived="true"
+         derivedFrom="pdb_po%(y)_dly2"
          value="1" min="0" units="s" />
    </for>
    
@@ -358,37 +381,40 @@
       \t/**
       \t * Class used to do main initialisation of a $(_class)
       \t *
-      \t * This class has a templated constructor that accepts various values:
+      \t * This class has a templated constructor that accepts various values.  <br>
+      \t * Parameters available may vary with device - see $(_class)::DefaultInitValue for relevant example.  <br>
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.  <br>
       \t *
       \t * @note This constructor may be used to create a const instance in ROM
       \t *
       \t * Example:
       \t * @code
       \t * // Example initialisation values for $(_class)
-      \t * // Parameters available may vary with device - see $(_class)::DefaultInitValue for relevant example 
-      \t * static const Pdb::Init pdbInit {
-      \t *    PdbPrescale_DivBy_4 ,    // Clock Prescaler Divider Select - Divide by 4
-      \t *    PdbMultiplier_DivBy_20 , // Clock Divider Select - Divide by 20
-      \t * 
-      \t *    // Following 2 must be in this order if both are present
-      \t *    1000_ticks ,             // Counter modulus
-      \t *    900_ticks ,              // Interrupt delay (optional) 
-      \t * 
-      \t *    PdbTrigger_Software ,    // Trigger Input Source Select - Software trigger is selected
-      \t *    PdbAction_None ,         // Action done on event - No action on event
-      \t *    PdbErrorAction_None ,    // Sequence Error Interrupt Enable - No interrupt on error
-      \t *    PdbMode_OneShot ,        // PDB operation mode - Sequence runs once only
-      \t *    PdbLoadMode_Immediate ,  // Register Load Select - Registers loaded immediately on LDOK=1
       \t *
-      \t *    NvicPriority_VeryHigh,   // IRQ level for this peripheral - VeryHigh
-      \t *    pdbCallback,             // Call-back function
+      \t * // This example uses 'ticks' 
+      \t * static const Pdb::Init pdbInit_ticks {
       \t *
+      \t *    PdbTrigger_Software ,      // Trigger Input Source Select - Software trigger is selected
+      \t *    PdbMode_OneShot ,          // PDB operation mode - Sequence runs once only
+      \t *    PdbLoadMode_Immediate ,    // Register Load Select - Register loaded immediately
+      \t *    
+      \t *    PdbPrescale_DivBy_4 ,      // Clock Prescaler Divider Select - Divide by 4
+      \t *    0x1000_ticks ,             // Counter modulus
+      \t *    
+      \t *    NvicPriority_VeryHigh,     // IRQ level for this peripheral - VeryHigh
+      \t *    
+      \t *    PdbAction_Interrupt ,      // Action done on event - Interrupt req on event
+      \t *    0x900_ticks ,              // Interrupt delay
+      \t *    pdbCallback,               // Action call-back
+      \t *    
+      \t *    PdbErrorAction_None ,      // Sequence Error Interrupt Enable - No interrupt on error
+      \t *    
       \t *    // ADC Pretriggers
-      \t *    PdbChannel_0, PdbPretrigger0_Delayed, 100_ticks, // Channel 0 Pretrigger 0
-      \t *    PdbChannel_0, PdbPretrigger1_Bypassed,           // Channel 0 Pretrigger 1
-      \t *    PdbChannel_1, PdbPretrigger0_Delayed, 100_ticks, // Channel 1 Pretrigger 0
-      \t *    PdbChannel_1, PdbPretrigger1_Bypassed,           // Channel 1 Pretrigger 1
-      \t *     
+      \t *    PdbChannel_0, PdbPretrigger0_Delayed, 0x111_ticks, // Channel 0 Pretrigger 0
+      \t *    PdbChannel_0, PdbPretrigger1_Disabled,             // Channel 0 Pretrigger 1
+      \t *    PdbChannel_1, PdbPretrigger0_Delayed, 0x222_ticks, // Channel 1 Pretrigger 0
+      \t *    PdbChannel_1, PdbPretrigger1_Bypassed,             // Channel 1 Pretrigger 1
+      \t *    
       \t *    // DAC triggers
       \t *    PdbDac0TriggerMode_Delayed, 0x333_ticks, // DAC0 Trigger
       \t *    PdbDac1TriggerMode_External,             // DAC1 Trigger
@@ -396,10 +422,49 @@
       \t *    // Pulse outputs
       \t *    PdbPulseOutput0_Enabled, 0x444_ticks, 0x555_ticks,  // Pulse output 0 (CMP0)
       \t *    PdbPulseOutput1_Enabled, 0x666_ticks, 0x777_ticks,  // Pulse output 0 (CMP1)
+      \t *    
+      \t *    Pdb0::DefaultInitValue,  // Optional initial value.  Above parameters modify this
       \t * };
       \t *
       \t * // Initialise PDB channel from values specified above
-      \t * Pdb::configure(pdbInit)
+      \t * Pdb::configure(pdbInit_ticks)
+      \t *
+      \t * // Example initialisation values for $(_class)
+      \t * // This example uses 'seconds' 
+      \t * static const Pdb::Init pdbInit_seconds {
+      \t *
+      \t *    PdbTrigger_Software ,      // Trigger Input Source Select - Software trigger is selected
+      \t *    PdbMode_OneShot ,          // PDB operation mode - Sequence runs once only
+      \t *    PdbLoadMode_Immediate ,    // Register Load Select - Register loaded immediately
+      \t *    
+      \t *    PdbPrescale_Auto_Select ,  // Clock Prescaler auto-selected by PDB period
+      \t *    200_ms ,                   // Counter period
+      \t *    
+      \t *    NvicPriority_VeryHigh,     // IRQ level for this peripheral - VeryHigh
+      \t *    
+      \t *    PdbAction_None ,           // Action done on event - No action on event
+      \t *    190_ms ,                   // Interrupt delay
+      \t *    
+      \t *    PdbErrorAction_Interrupt , // Sequence Error Interrupt Enable - Interrupt on error
+      \t *    pdbCallback,               // Error action call-back
+      \t *    
+      \t *    // ADC Pretriggers
+      \t *    PdbChannel_0, PdbPretrigger0_Delayed, 100_ms, // Channel 0 Pretrigger 0 @ 100 ms
+      \t *    PdbChannel_0, PdbPretrigger1_Disabled,        // Channel 0 Pretrigger 1 disabled
+      \t *    PdbChannel_1, PdbPretrigger0_Delayed, 150_ms, // Channel 1 Pretrigger 0 @ 150 ms
+      \t *    PdbChannel_1, PdbPretrigger1_Bypassed,        // Channel 1 Pretrigger 1 disabled
+      \t *    
+      \t *    // DAC triggers
+      \t *    PdbDac0TriggerMode_Delayed, 50_ms, // DAC0 Trigger @ 50 ms
+      \t *    PdbDac1TriggerMode_External,       // DAC1 Trigger directly triggered by external input
+      \t *    
+      \t *    // Pulse outputs
+      \t *    PdbPulseOutput0_Enabled, 120_ms, 130_ms,  // Pulse output 0 (CMP0 window) @ 120-130 ms
+      \t *    PdbPulseOutput1_Enabled, 220_ms, 230_ms,  // Pulse output 0 (CMP1 window) @ 220-230 ms
+      \t * };
+      \t *
+      \t * // Initialise PDB channel from values specified above
+      \t * Pdb::configure(pdbInit_seconds)
       \t * @endcode
       \t */
    ]]></template>
@@ -443,7 +508,7 @@
       \t   /**                               
       \t    * Copy Constructor                  
       \t    */                             
-      \t   constexpr Init(const Init &other) = delete;
+      \t   constexpr Init(const Init &other) = default;
       \t   
       \t   /**
       \t    * Default Constructor
@@ -457,7 +522,13 @@
    <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod" 
     ><![CDATA[
       \t   /// %description
-      \t   %params = nullptr;\n\n
+      \t   CallbackFunction callback = nullptr;\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod" 
+    ><![CDATA[
+      \t   /// %description
+      \t   CallbackFunction errorCallback = nullptr;\n\n
    ]]></initialValueTemplate>
    
    <initialValueTemplate namespace="usbdm"
@@ -610,10 +681,9 @@
       \t   }
       \t   
       \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      // Only set call-back if feature enabled and non-null
-      \t      if (init.callbackFunction != nullptr) {
-      \t         setCallback(init.callbackFunction);
-      \t      }
+      \t      // Only set call-backs if feature enabled
+      \t      setCallback(init.callback);
+      \t      setErrorCallback(init.errorCallback);
       \t      enableNvicInterrupts(init.irqlevel);
       \t   }
       \t   
@@ -637,28 +707,8 @@
 
 <!--   Constructors -->
   
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
-      variables="irqHandlingMethod"
-      linePadding="xxx"
-    ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      this->%enumParam0 = %paramExpression;
-      \t   }\n\n
-   ]]></constructorTemplate>
-
    <for keys="r" values="
          pdb_sc_trgsel; 
-         pdb_sc_pdbeie; 
          pdb_sc_cont; 
          pdb_sc_ldmod">
       <constructorTemplate namespace="usbdm" 
@@ -681,6 +731,158 @@
       ]]></constructorTemplate>
    </for>
    
+   <constructorTemplate namespace="usbdm" 
+      variables="/PCR/nvic_irqLevel" 
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName = %paramExpression;
+      \t   }\n\n
+   ]]></constructorTemplate>
+
+   <constructorTemplate namespace="usbdm"
+      variables="pdb_sc_action, pdb_idly"
+      nonDefaultParams="2"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description and %description1
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(
+      %params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName0 = (%registerName0 & ~%mask0) | %enumParam0;
+      \t      %registerName1.fromTicks(%enumParam1);
+      \t   }\n\n
+   ]]></constructorTemplate>
+   
+   <constructorTemplate namespace="usbdm"  codeGenCondition="secondsSupport"
+      variables="pdb_sc_action, pdb_idly_delay"
+      nonDefaultParams="2"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description and %description1
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(
+      %params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName0 = (%registerName0 & ~%mask0) | %enumParam0;
+      \t      %registerName1.fromSeconds(%enumParam1);
+      \t   }\n\n
+   ]]></constructorTemplate>
+   
+   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"  
+      variables="pdb_sc_action, pdb_idly, irqHandlingMethod"
+      nonDefaultParams="3"
+      defaultParamValue=",,nullptr"      
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description and %description1
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(
+      %params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName0 = (%registerName0 & ~%mask0) | %enumParam0;
+      \t      %registerName1.fromTicks(%enumParam1);
+      \t      callback = %enumParam2;
+      \t   }\n\n
+   ]]></constructorTemplate>
+   
+   <constructorTemplate namespace="usbdm" codeGenCondition="secondsSupport &amp;&amp; irqHandlingMethod" 
+      variables="pdb_sc_action, pdb_idly_delay, irqHandlingMethod"
+      nonDefaultParams="3"
+      defaultParamValue=",,nullptr"      
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description and %description1
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(
+      %params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName0 = (%registerName0 & ~%mask0) | %enumParam0;
+      \t      %registerName1.fromSeconds(%enumParam1);
+      \t      callback = %enumParam2;
+      \t   }\n\n
+   ]]></constructorTemplate>
+   
+   <constructorTemplate namespace="usbdm"
+      variables="pdb_sc_pdbeie" 
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName0 = (%registerName0 & ~%mask0) | %enumParam0;
+      \t   }\n\n
+   ]]></constructorTemplate>
+
+   <constructorTemplate namespace="usbdm"  codeGenCondition="irqHandlingMethod" 
+      variables="pdb_sc_pdbeie, irqHandlingMethod" 
+      nonDefaultParams="2" 
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(
+      %params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName0 = (%registerName0 & ~%mask0) | %enumParam0;
+      \t      errorCallback = %enumParam1;
+      \t   }\n\n
+   ]]></constructorTemplate>
+
    <constructorTemplate namespace="usbdm" 
       variables="pdb_sc_divider, pdb_mod"
       nonDefaultParams="2" 
@@ -726,70 +928,6 @@
       \t   }\n\n
    ]]></constructorTemplate>
    
-   <constructorTemplate namespace="usbdm" 
-      variables="pdb_sc_action, pdb_idly"
-      nonDefaultParams="2"
-      linePadding="xxx"
-    ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description and %description1
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName0 = (%registerName0 & ~%mask0) | %enumParam0;
-      \t      %registerName1.fromTicks(%enumParam1);
-      \t   }\n\n
-   ]]></constructorTemplate>
-   
-   <constructorTemplate namespace="usbdm" 
-      codeGenCondition="secondsSupport" 
-      variables="pdb_sc_action, pdb_idly_delay"
-      nonDefaultParams="2"
-      linePadding="xxx"
-    ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description and %description1
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName0 = (%registerName0 & ~%mask0) | %enumParam0;
-      \t      %registerName1.fromSeconds(%enumParam1);
-      \t   }\n\n
-   ]]></constructorTemplate>
-   
-   <constructorTemplate namespace="usbdm" 
-      variables="/PCR/nvic_irqLevel" 
-      linePadding="xxx"
-    ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName = %paramExpression;
-      \t   }\n\n
-   ]]></constructorTemplate>
-
    <for keys="m" dim="NumPreTriggers">
       <constructorTemplate namespace="usbdm" 
          variables="pdb_channel, pdb_ch0_c1_pt%(m), pdb_ch0_dly%(m)" 
@@ -1007,12 +1145,12 @@
 
    <initialValueTemplate variables="
          pdb_sc_trgsel, 
-         pdb_sc_divider, pdb_mod,
-         pdb_sc_action, pdb_idly,
-         pdb_sc_pdbeie, 
          pdb_sc_cont, 
          pdb_sc_ldmod,
-         irqLevel"
+         pdb_sc_divider, pdb_mod, 
+         irqLevel,
+         pdb_sc_action, pdb_idly,
+         pdb_sc_pdbeie"
       separator=","
       terminator=","
     ><![CDATA[
@@ -1021,7 +1159,8 @@
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {
-         %initExpression\n
+         %initExpression
+         \t
    ]]></initialValueTemplate>
    
    <for keys="n" dim="NumChannels">
@@ -1031,7 +1170,9 @@
             terminator=","
           ><![CDATA[
                \t
-               \t   PdbChannel_%(n), %initExpression \n
+               \t   // Pre-trigger %(n) configuration
+               \t   PdbChannel_%(n), %initExpression
+               \t
          ]]></initialValueTemplate>
       </for>
    </for>
@@ -1043,7 +1184,9 @@
          initExpressionOnSameLine="true"
        ><![CDATA[
          \t
-         \t\t%initExpression \n
+         \t   // DAC %(x) trigger configuration
+         \t\t%initExpression
+         \t
       ]]></initialValueTemplate>
    </for>
    
@@ -1054,6 +1197,7 @@
          initExpressionOnSameLine="true"
        ><![CDATA[
          \t
+         \t   // Pulse output %(y) (CMP%(y)) configuration
          \t\t%initExpression \n
       ]]></initialValueTemplate>
    </for>

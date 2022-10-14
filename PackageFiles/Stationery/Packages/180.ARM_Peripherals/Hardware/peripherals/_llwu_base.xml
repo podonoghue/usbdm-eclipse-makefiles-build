@@ -184,8 +184,7 @@
          <choiceOption key="llwu_filt%(n)_filte"   condition="llwu_filt%(n)_filte_present" derivedFrom="llwu_filt_filte"   />
          <choiceOption key="llwu_filt%(n)_filtsel" condition="llwu_filt%(n)_filte_present"
             description="Filter %(n) Pin Select" 
-            toolTip="Selects 1 of the external signals to be muxed into the filter"
-            disabledValue="Disabled" >
+            toolTip="Selects 1 of the external signals to be muxed into the filter" >
             <choice name="" value="" enum="dummy" />
          </choiceOption>   
       </for>

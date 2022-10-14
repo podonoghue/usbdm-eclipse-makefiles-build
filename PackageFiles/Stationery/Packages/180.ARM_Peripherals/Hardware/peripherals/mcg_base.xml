@@ -72,7 +72,7 @@
          description="Enable this clock settings"
          toolTip="If disabled this clock setting will be removed from the generated code" >
          <choice value="false" name="Disabled" isDefault="true" />
-         <choice value="true" name="Enabled" />
+         <choice value="true"  name="Enabled" />
       </binaryOption>
    </for>
 

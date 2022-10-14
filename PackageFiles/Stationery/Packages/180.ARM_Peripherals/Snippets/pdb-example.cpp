@@ -125,7 +125,7 @@ static void configureAdc() {
    MyAdc::setCallback(adcCallback);
    MyAdc::enableNvicInterrupts(NvicPriority_Normal);
 
-   MyAdcChannel::enableHardwareConversion(AdcPretrigger_A, AdcInterrupt_Enabled);
+   MyAdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_Enabled);
 }
 
 int main() {

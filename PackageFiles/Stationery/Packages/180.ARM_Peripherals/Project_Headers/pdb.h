@@ -78,16 +78,20 @@ template <class Info>
 class PdbBase_T : public Info {
 
 protected:
+
+   typedef typename Info::CallbackFunction CallbackFunction;
+
    /** Callback function for ISR */
-   static PdbCallbackFunction sCallback;
+   static CallbackFunction sCallback;
 
    /** Callback function for error ISR */
-   static PdbCallbackFunction sErrorCallback;
+   static CallbackFunction sErrorCallback;
 
    /** Handler for unexpected interrupts */
    static void unhandledCallback() {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
+
 public:
    /**
     * IRQ handler
@@ -121,7 +125,7 @@ public:
     *    int y;
     *
     *    // Member function used as callback
-    *    // This function must match PdbCallbackFunction
+    *    // This function must match CallbackFunction
     *    void callback() {
     *       ...;
     *    }
@@ -137,8 +141,8 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(), T &object>
-   static PdbCallbackFunction wrapCallback() {
-      static PdbCallbackFunction fn = []() {
+   static CallbackFunction wrapCallback() {
+      static CallbackFunction fn = []() {
          (object.*callback)();
       };
       return fn;
@@ -160,7 +164,7 @@ public:
     *    int y;
     *
     *    // Member function used as callback
-    *    // This function must match PdbCallbackFunction
+    *    // This function must match CallbackFunction
     *    void callback() {
     *       ...;
     *    }
@@ -176,9 +180,9 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)()>
-   static PdbCallbackFunction wrapCallback(T &object) {
+   static CallbackFunction wrapCallback(T &object) {
       static T &obj = object;
-      static PdbCallbackFunction fn = []() {
+      static CallbackFunction fn = []() {
          (obj.*callback)();
       };
       return fn;
@@ -190,7 +194,7 @@ public:
     *   @param[in]  callback Callback function to be executed on interrupt\n
     *                        Use nullptr to remove callback.
     */
-   static void setCallback(PdbCallbackFunction callback) {
+   static void setCallback(CallbackFunction callback) {
 
       static_assert(Info::irqHandlerInstalled, "PDB not configure for interrupts");
       if (callback == nullptr) {
@@ -205,7 +209,7 @@ public:
     *   @param[in]  callback Callback function to be executed on error interrupt\n
     *                        Use nullptr to remove callback.
     */
-   static void setErrorCallback(PdbCallbackFunction callback) {
+   static void setErrorCallback(CallbackFunction callback) {
 
       static_assert(Info::irqHandlerInstalled, "PDB not configure for interrupts");
       if (callback == nullptr) {
@@ -262,8 +266,8 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
    /**
     * Set Interrupts and DMA actions
     *
-    * @param[in] pdbAction          Controls action done on event (counter value is equal to the IDLY register)
-    * @param[in] pdbErrorInterrupt  Controls sequence error interrupt requests (on any ADC sequence errors)
+    * @param[in] pdbAction       Controls action done on event (counter value is equal to the IDLY register)
+    * @param[in] pdbErrorAction  Controls sequence error interrupt requests (on any ADC sequence errors)
     */
    static void setActions(
          PdbAction            pdbAction,
@@ -335,7 +339,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
    /**
     * Converts time in seconds to time in ticks
     *
-    * @param[in] seconds Time interval in seconds
+    * @param[in] ticks   Time interval in ticks
     * @param[in] scValue PDB SC register value for clock divider
     *
     * @return Time in ticks
@@ -348,8 +352,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
    /**
     * Converts time in seconds to time in ticks
     *
-    * @param[in] seconds Time interval in seconds
-    * @param[in] scValue PDB SC register value for clock divider
+    * @param[in] ticks Time interval in ticks
     *
     * @return Time in ticks
     *
@@ -496,7 +499,6 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     * Set clock dividers
     *
     * @param[in]  pdbPrescale    Clock pre-scale (pdb_sc_mult)
-    * @param[in]  pdbMultiplier  Clock pre-scale multiplier (pdb_sc_prescaler)
     */
    static void setClockDividers(PdbPrescale pdbPrescale) {
 
@@ -596,8 +598,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     *
     * This allows multiple different ADC channels to be converted in a sequence.
     *
-    * @param adcNum           ADC associated with the pre-trigger (channel)
-    * @param pretriggerNum    Pretrigger being modified
+    * @param pdbChannel       ADC associated with the pre-trigger (channel)
     * @param pdbPretrigger    Pretrigger settings
     * @param delay            Delay in ticks - only needed for PdbPretrigger_Delayed
     */
@@ -622,8 +623,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     *
     * This allows multiple different ADC channels to be converted in a sequence.
     *
-    * @param adcNum           ADC associated with the pre-trigger (channel)
-    * @param pretriggerNum    Pretrigger being modified
+    * @param pdbChannel       ADC associated with the pre-trigger (channel)
     * @param pdbPretrigger    Pretrigger settings
     * @param delay            Delay in ticks - only needed for PdbPretrigger_Delayed
     */
@@ -648,8 +648,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     *
     * This allows multiple different ADC channels to be converted in a sequence.
     *
-    * @param adcNum           ADC associated with the pre-trigger (channel)
-    * @param pretriggerNum    Pretrigger being modified
+    * @param pdbChannel       ADC associated with the pre-trigger (channel)
     * @param pdbPretrigger    Pretrigger settings
     * @param delay            Delay - only needed for PdbPretrigger_Delayed
     */
@@ -672,8 +671,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     *
     * This allows multiple different ADC channels to be converted in a sequence.
     *
-    * @param adcNum           ADC associated with the pre-trigger (channel)
-    * @param pretriggerNum    Pretrigger being modified
+    * @param pdbChannel       ADC associated with the pre-trigger (channel)
     * @param pdbPretrigger    Pretrigger settings
     * @param delay            Delay - only needed for PdbPretrigger_Delayed
     */
@@ -756,7 +754,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
        *
        * This allows multiple different ADC channels to be converted in a sequence.
        *
-       * @param pretriggerNum    Pretrigger being modified
+       * @param pdbChannel       Pretrigger being modified
        * @param pdbPretrigger    Pretrigger settings
        * @param delay            Delay in ticks - only needed for PdbPretrigger_Delayed
        */
@@ -779,7 +777,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
        *
        * This allows multiple different ADC channels to be converted in a sequence.
        *
-       * @param pretriggerNum    Pretrigger being modified
+       * @param pdbChannel       Pretrigger being modified
        * @param pdbPretrigger    Pretrigger settings
        * @param delay            Delay in ticks - only needed for PdbPretrigger_Delayed
        */
@@ -802,7 +800,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
        *
        * This allows multiple different ADC channels to be converted in a sequence.
        *
-       * @param pretriggerNum    Pretrigger being modified
+       * @param pdbChannel       Pretrigger being modified
        * @param pdbPretrigger    Pretrigger settings
        * @param delay            Delay - only needed for PdbPretrigger_Delayed
        */
@@ -825,7 +823,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
        *
        * This allows multiple different ADC channels to be converted in a sequence.
        *
-       * @param pretriggerNum    Pretrigger being modified
+       * @param pdbChannel       Pretrigger being modified
        * @param pdbPretrigger    Pretrigger settings
        * @param delay            Delay - only needed for PdbPretrigger_Delayed
        */
@@ -1089,8 +1087,8 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
 #endif
 };
 
-template<class Info> PdbCallbackFunction PdbBase_T<Info>::sCallback      = PdbBase_T<Info>::unhandledCallback;
-template<class Info> PdbCallbackFunction PdbBase_T<Info>::sErrorCallback = PdbBase_T<Info>::unhandledCallback;
+template<class Info> typename Info::CallbackFunction PdbBase_T<Info>::sCallback      = PdbBase_T<Info>::unhandledCallback;
+template<class Info> typename Info::CallbackFunction PdbBase_T<Info>::sErrorCallback = PdbBase_T<Info>::unhandledCallback;
 
 $(/PDB/declarations: // No declarations found)
 /**

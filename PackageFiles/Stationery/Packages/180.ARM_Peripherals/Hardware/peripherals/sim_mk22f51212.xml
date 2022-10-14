@@ -560,6 +560,7 @@
          <intOption key="system_core_clock[%(n)]" condition="sim_clkdiv1_outdiv1_present"
             ref="(/MCG/system_mcgoutclk_clock[%(n)])/(sim_clkdiv1_outdiv1[%(n)])"
             derived="true"
+            isNamedClock="true"
             units="Hz"
             description="System Core Clock"
             toolTip="Clocks the ARM Cortex-M4 core and bus masters"
@@ -568,6 +569,7 @@
          <intOption key="system_bus_clock[%(n)]" condition="sim_clkdiv1_outdiv2_present" 
             ref="(/MCG/system_mcgoutclk_clock[%(n)])/(sim_clkdiv1_outdiv2[%(n)])"
             derived="true"
+            isNamedClock="true"
             units="Hz"
             description="System Bus Clock"
             toolTip="Clocks the bus slaves and peripherals\n
@@ -577,6 +579,7 @@
          <intOption key="system_flexbus_clock[%(n)]" condition="sim_clkdiv1_outdiv3_present" 
             ref="(/MCG/system_mcgoutclk_clock[%(n)])/(sim_clkdiv1_outdiv3[%(n)])"
             derived="true"
+            isNamedClock="true"
             units="Hz"
             description="System Flexbus Clock"
             toolTip="Clocks the flexbus interface\n
@@ -586,6 +589,7 @@
          <intOption key="system_flash_clock[%(n)]" condition="sim_clkdiv1_outdiv4_present" 
             ref="(/MCG/system_mcgoutclk_clock[%(n)])/(sim_clkdiv1_outdiv4[%(n)])"
             derived="true"
+            isNamedClock="true"
             units="Hz"
             description="System Flash Clock"
             toolTip="Clocks the flash memory\n
