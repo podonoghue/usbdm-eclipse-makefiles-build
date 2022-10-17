@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2022/09
+ * @date     2022/10
  *
  */
 
@@ -800,12 +800,13 @@ typedef struct CRC_Type {
 /** @{ */
 
 /* ================================================================================ */
-/* ================           DAC0 (file:DAC0_2CH_MKV)             ================ */
+/* ================           DAC0 (file:DAC0_2DAT_MKV)            ================ */
 /* ================================================================================ */
 
 /**
  * @brief 12-Bit Digital-to-Analog Converter
  */
+#define DAC_DAT_COUNT        2          /**< Number of Data registers                           */
 /**
  * @struct DAC_Type
  * @brief  C Struct allowing access to DAC registers
@@ -815,8 +816,8 @@ typedef struct DAC_Type {
       struct {
          __IO uint8_t   DATL;                   /**< 0000: Data Low Register                                            */
          __IO uint8_t   DATH;                   /**< 0001: Data High Register                                           */
-      } DAT[2];                                 /**< 0000: (cluster: size=0x0004, 4)                                    */
-      __IO uint16_t  DATA[2];                   /**< 0000: Data Register                                                */
+      } DAT[DAC_DAT_COUNT];                     /**< 0000: (cluster: size=0x0004, 4)                                    */
+      __IO uint16_t  DATA[DAC_DAT_COUNT];       /**< 0000: Data Register                                                */
    };
         uint8_t   RESERVED_1[28];               /**< 0004: 0x1C bytes                                                   */
    __IO uint8_t   SR;                           /**< 0020: Status Register                                              */
@@ -4289,8 +4290,8 @@ typedef struct PDB_Type {
    } CH[PDB_CH_COUNT];                          /**< 0010: (cluster: size=0x0050, 80)                                   */
         uint8_t   RESERVED_1[240];              /**< 0060: 0xF0 bytes                                                   */
    struct {
-      __IO uint32_t  INTC;                      /**< 0150: DAC Interval Trigger n Control Register                      */
-      __IO uint32_t  INT;                       /**< 0154: DAC Interval n Register                                      */
+      __IO uint32_t  INTC;                      /**< 0150: DAC Trigger Control Register                                 */
+      __IO uint32_t  INT;                       /**< 0154: DAC Trigger Interval Register                                */
    } DAC[PDB_DAC_COUNT];                        /**< 0150: (cluster: size=0x0010, 16)                                   */
         uint8_t   RESERVED_3[48];               /**< 0160: 0x30 bytes                                                   */
    __IO uint32_t  POEN;                         /**< 0190: Pulse-Out Enable Register                                    */
@@ -4399,7 +4400,7 @@ typedef struct PDB_Type {
 #define PDB_DLY_DLY(x)                           (((uint32_t)(((uint32_t)(x))<<PDB_DLY_DLY_SHIFT))&PDB_DLY_DLY_MASK) /**< PDB0_DLY.DLY Field                      */
 /** @} */
 
-/** @name INTC - DAC Interval Trigger n Control Register */ /** @{ */
+/** @name INTC - DAC Trigger Control Register */ /** @{ */
 #define PDB_INTC_TOE_MASK                        (0x1U)                                              /**< PDB0_INTC.TOE Mask                      */
 #define PDB_INTC_TOE_SHIFT                       (0U)                                                /**< PDB0_INTC.TOE Position                  */
 #define PDB_INTC_TOE(x)                          (((uint32_t)(((uint32_t)(x))<<PDB_INTC_TOE_SHIFT))&PDB_INTC_TOE_MASK) /**< PDB0_INTC.TOE Field                     */
@@ -4408,7 +4409,7 @@ typedef struct PDB_Type {
 #define PDB_INTC_EXT(x)                          (((uint32_t)(((uint32_t)(x))<<PDB_INTC_EXT_SHIFT))&PDB_INTC_EXT_MASK) /**< PDB0_INTC.EXT Field                     */
 /** @} */
 
-/** @name INT - DAC Interval n Register */ /** @{ */
+/** @name INT - DAC Trigger Interval Register */ /** @{ */
 #define PDB_INT_INT_MASK                         (0xFFFFU)                                           /**< PDB0_INT.INT Mask                       */
 #define PDB_INT_INT_SHIFT                        (0U)                                                /**< PDB0_INT.INT Position                   */
 #define PDB_INT_INT(x)                           (((uint32_t)(((uint32_t)(x))<<PDB_INT_INT_SHIFT))&PDB_INT_INT_MASK) /**< PDB0_INT.INT Field                      */

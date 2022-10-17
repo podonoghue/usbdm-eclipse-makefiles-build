@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2022/09
+ * @date     2022/10
  *
  */
 
@@ -1950,12 +1950,13 @@ typedef struct CRC_Type {
 /** @{ */
 
 /* ================================================================================ */
-/* ================           DAC0 (file:DAC0_16CH_FIFO16_0x400CC000)       ================ */
+/* ================           DAC0 (file:DAC0_16DAT_FIFO16_0x400CC000)       ================ */
 /* ================================================================================ */
 
 /**
  * @brief 12-Bit Digital-to-Analog Converter
  */
+#define DAC_DAT_COUNT        16         /**< Number of Data registers                           */
 /**
  * @struct DAC_Type
  * @brief  C Struct allowing access to DAC registers
@@ -1965,8 +1966,8 @@ typedef struct DAC_Type {
       struct {
          __IO uint8_t   DATL;                   /**< 0000: Data Low Register                                            */
          __IO uint8_t   DATH;                   /**< 0001: Data High Register                                           */
-      } DAT[16];                                /**< 0000: (cluster: size=0x0020, 32)                                   */
-      __IO uint16_t  DATA[16];                  /**< 0000: Data Register                                                */
+      } DAT[DAC_DAT_COUNT];                     /**< 0000: (cluster: size=0x0020, 32)                                   */
+      __IO uint16_t  DATA[DAC_DAT_COUNT];       /**< 0000: Data Register                                                */
    };
    __IO uint8_t   SR;                           /**< 0020: Status Register                                              */
    __IO uint8_t   C0;                           /**< 0021: Control Register 0                                           */
@@ -10061,7 +10062,7 @@ typedef struct SIM_Type {
 /** @{ */
 
 /* ================================================================================ */
-/* ================           SMC (file:SMC_MK21F12)               ================ */
+/* ================           SMC (file:SMC_MK11D5)                ================ */
 /* ================================================================================ */
 
 /**
@@ -10119,15 +10120,9 @@ typedef struct SMC_Type {
 /** @} */
 
 /** @name STOPCTRL - Stop Control Register */ /** @{ */
-#define SMC_STOPCTRL_LLSM_MASK                   (0x7U)                                              /**< SMC_STOPCTRL.LLSM Mask                  */
-#define SMC_STOPCTRL_LLSM_SHIFT                  (0U)                                                /**< SMC_STOPCTRL.LLSM Position              */
-#define SMC_STOPCTRL_LLSM(x)                     (((uint8_t)(((uint8_t)(x))<<SMC_STOPCTRL_LLSM_SHIFT))&SMC_STOPCTRL_LLSM_MASK) /**< SMC_STOPCTRL.LLSM Field                 */
 #define SMC_STOPCTRL_VLLSM_MASK                  (0x7U)                                              /**< SMC_STOPCTRL.VLLSM Mask                 */
 #define SMC_STOPCTRL_VLLSM_SHIFT                 (0U)                                                /**< SMC_STOPCTRL.VLLSM Position             */
 #define SMC_STOPCTRL_VLLSM(x)                    (((uint8_t)(((uint8_t)(x))<<SMC_STOPCTRL_VLLSM_SHIFT))&SMC_STOPCTRL_VLLSM_MASK) /**< SMC_STOPCTRL.VLLSM Field                */
-#define SMC_STOPCTRL_LPOPO_MASK                  (0x8U)                                              /**< SMC_STOPCTRL.LPOPO Mask                 */
-#define SMC_STOPCTRL_LPOPO_SHIFT                 (3U)                                                /**< SMC_STOPCTRL.LPOPO Position             */
-#define SMC_STOPCTRL_LPOPO(x)                    (((uint8_t)(((uint8_t)(x))<<SMC_STOPCTRL_LPOPO_SHIFT))&SMC_STOPCTRL_LPOPO_MASK) /**< SMC_STOPCTRL.LPOPO Field                */
 #define SMC_STOPCTRL_RAM2PO_MASK                 (0x10U)                                             /**< SMC_STOPCTRL.RAM2PO Mask                */
 #define SMC_STOPCTRL_RAM2PO_SHIFT                (4U)                                                /**< SMC_STOPCTRL.RAM2PO Position            */
 #define SMC_STOPCTRL_RAM2PO(x)                   (((uint8_t)(((uint8_t)(x))<<SMC_STOPCTRL_RAM2PO_SHIFT))&SMC_STOPCTRL_RAM2PO_MASK) /**< SMC_STOPCTRL.RAM2PO Field               */
@@ -10137,15 +10132,9 @@ typedef struct SMC_Type {
 /** @} */
 
 /** @name VLLSCTRL - VLLS Control Register (old name) */ /** @{ */
-#define SMC_VLLSCTRL_LLSM_MASK                   (0x7U)                                              /**< SMC_VLLSCTRL.LLSM Mask                  */
-#define SMC_VLLSCTRL_LLSM_SHIFT                  (0U)                                                /**< SMC_VLLSCTRL.LLSM Position              */
-#define SMC_VLLSCTRL_LLSM(x)                     (((uint8_t)(((uint8_t)(x))<<SMC_VLLSCTRL_LLSM_SHIFT))&SMC_VLLSCTRL_LLSM_MASK) /**< SMC_VLLSCTRL.LLSM Field                 */
 #define SMC_VLLSCTRL_VLLSM_MASK                  (0x7U)                                              /**< SMC_VLLSCTRL.VLLSM Mask                 */
 #define SMC_VLLSCTRL_VLLSM_SHIFT                 (0U)                                                /**< SMC_VLLSCTRL.VLLSM Position             */
 #define SMC_VLLSCTRL_VLLSM(x)                    (((uint8_t)(((uint8_t)(x))<<SMC_VLLSCTRL_VLLSM_SHIFT))&SMC_VLLSCTRL_VLLSM_MASK) /**< SMC_VLLSCTRL.VLLSM Field                */
-#define SMC_VLLSCTRL_LPOPO_MASK                  (0x8U)                                              /**< SMC_VLLSCTRL.LPOPO Mask                 */
-#define SMC_VLLSCTRL_LPOPO_SHIFT                 (3U)                                                /**< SMC_VLLSCTRL.LPOPO Position             */
-#define SMC_VLLSCTRL_LPOPO(x)                    (((uint8_t)(((uint8_t)(x))<<SMC_VLLSCTRL_LPOPO_SHIFT))&SMC_VLLSCTRL_LPOPO_MASK) /**< SMC_VLLSCTRL.LPOPO Field                */
 #define SMC_VLLSCTRL_RAM2PO_MASK                 (0x10U)                                             /**< SMC_VLLSCTRL.RAM2PO Mask                */
 #define SMC_VLLSCTRL_RAM2PO_SHIFT                (4U)                                                /**< SMC_VLLSCTRL.RAM2PO Position            */
 #define SMC_VLLSCTRL_RAM2PO(x)                   (((uint8_t)(((uint8_t)(x))<<SMC_VLLSCTRL_RAM2PO_SHIFT))&SMC_VLLSCTRL_RAM2PO_MASK) /**< SMC_VLLSCTRL.RAM2PO Field               */

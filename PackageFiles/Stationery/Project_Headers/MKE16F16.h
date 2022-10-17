@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2022/09
+ * @date     2022/10
  *
  */
 
@@ -2077,18 +2077,19 @@ typedef struct CRC_Type {
 /** @{ */
 
 /* ================================================================================ */
-/* ================           DAC0 (file:DAC0_8CH_MKE16F16)        ================ */
+/* ================           DAC0 (file:DAC0_8DAT_MKE16F16)       ================ */
 /* ================================================================================ */
 
 /**
  * @brief 12-Bit Digital-to-Analog Converter
  */
+#define DAC_DAT_COUNT        8          /**< Number of Data registers                           */
 /**
  * @struct DAC_Type
  * @brief  C Struct allowing access to DAC registers
  */
 typedef struct DAC_Type {
-   __IO uint32_t  DAT[8];                       /**< 0000: Data Register                                                */
+   __IO uint32_t  DAT[DAC_DAT_COUNT];           /**< 0000: Data Register                                                */
    __IO uint32_t  STATCTRL;                     /**< 0020: Status and Control Register                                  */
 } DAC_Type;
 
