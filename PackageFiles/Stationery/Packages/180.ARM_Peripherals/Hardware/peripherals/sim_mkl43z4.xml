@@ -192,7 +192,7 @@
          toolTip="Frequency of clock to TPM"
          value="0" />
       
-      <choiceOption key="sim_sopt2_flexiosrc"
+      <choiceOption key="sim_sopt2_flexiosrc" condition="sim_sopt2_flexiosrc_present"
          target="system_flexio_clock"
          enumStem="SimFlexioClockSource"
          description="FLEXIO Clock select"
@@ -203,14 +203,14 @@
          <choice value="3"  name="MCGIRCLK clock"              ref="/MCG/system_mcgirclk_clock"  enum="McgIrClk"        code="McgInfo::getMcgIrClock()"  />
       </choiceOption>
       
-      <intOption key="system_flexio_clock" 
+      <intOption key="system_flexio_clock" condition="sim_sopt2_flexiosrc_present" 
          constant="true"
          units="Hz"
          description="FLEXIO Clock frequency"
          toolTip="Frequency of clock to FLEXIO"
          value="0" />
       
-      <choiceOption key="sim_sopt2_clkoutsel" 
+      <choiceOption key="sim_sopt2_clkoutsel" condition="sim_sopt2_clkoutsel_present"   
          enumStem="SimClkoutSel"
          description="CLKOUT pin clock"
          toolTip="Clock to output on the CLKOUT pin" >
@@ -224,7 +224,7 @@
    
    <category name="SOPT4" description="TPM signals">
       <for keys="p" values="0;1;2">
-         <binaryOption key="sim_sopt4_tpm%(p)clksel" 
+         <binaryOption key="sim_sopt4_tpm%(p)clksel" condition="sim_sopt4_tpm%(p)clksel_present"  
             enumStem="SimTpm%(p)ClkSel"
             description="TPM %(p) External Clock Pin "
             toolTip="External pin used to drive the clock to the TPM module">
@@ -233,7 +233,7 @@
          </binaryOption>
       </for>
    
-      <choiceOption key="sim_sopt4_tpm1ch0src" 
+      <choiceOption key="sim_sopt4_tpm1ch0src" condition="sim_sopt4_tpm1ch0src_present"  
          enumStem="SimTpm1Ch0Src"
          description="TPM 1 channel 0 input capture source"
          toolTip="Source for TPM channel input capture\n
@@ -243,7 +243,7 @@
          <choice value="3" name="USB start of frame pulse"  enum="UsbSof" />
       </choiceOption>   
       
-      <binaryOption key="sim_sopt4_tpm2ch0src" 
+      <binaryOption key="sim_sopt4_tpm2ch0src" condition="sim_sopt4_tpm2ch0src_present"  
          enumStem="SimTpm2Ch0Src"
          description="TPM 2 channel 0 input capture source"
          toolTip="Source for TPM channel 0 input capture\n
@@ -315,15 +315,17 @@
             description="ADC%(adc) trigger"
             toolTip="ADC Trigger source in STOP and VLPS modes, or when ADC Alternative Trigger is active">
             <choice value="0"  name="External trigger pin input (EXTRG_IN)"   enum="External" isDefault="true" />
-            <choice value="1"  name="CMP 0 output"                            enum="Cmp0"        />
-            <choice value="4"  name="PIT trigger 0"                           enum="PitCh0"      />
-            <choice value="5"  name="PIT trigger 1"                           enum="PitCh1"      />
-            <choice value="8"  name="TPM0 trigger"                            enum="Tpm0"        />
-            <choice value="9"  name="TPM1 trigger"                            enum="Tpm1"        />
-            <choice value="10" name="TPM2 trigger"                            enum="Tpm2"        />
-            <choice value="12" name="RTC alarm"                               enum="RtcAlarm"    />
-            <choice value="13" name="RTC seconds"                             enum="RtcSeconds"  />
-            <choice value="14" name="LPTMR trigger"                           enum="Lptmr"       />
+            <choice value="1"  name="CMP 0 output"                            enum="Cmp0"        condition="/CMP0/$present"   />
+            <choice value="2"  name="CMP 1 output"                            enum="Cmp1"        condition="/CMP1/$present"   />
+            <choice value="3"  name="CMP 2 output"                            enum="Cmp2"        condition="/CMP1/$present"   />
+            <choice value="4"  name="PIT trigger 0"                           enum="PitCh0"      condition="/PIT/$present"    />
+            <choice value="5"  name="PIT trigger 1"                           enum="PitCh1"      condition="/PIT/$present"    />
+            <choice value="8"  name="TPM0 trigger"                            enum="Tpm0"        condition="/TPM0/$present"   />
+            <choice value="9"  name="TPM1 trigger"                            enum="Tpm1"        condition="/TPM1/$present"   />
+            <choice value="10" name="TPM2 trigger"                            enum="Tpm2"        condition="/TPM2/$present"   />
+            <choice value="12" name="RTC alarm"                               enum="RtcAlarm"    condition="/RTC/$present"    />
+            <choice value="13" name="RTC seconds"                             enum="RtcSeconds"  condition="/RTC/$present"    />
+            <choice value="14" name="LPTMR trigger"                           enum="Lptmr"       condition="/LPTMR0/$present" />
          </choiceOption>
       </for>      
    </category>
@@ -382,6 +384,7 @@
          <intOption key="system_core_clock[%(n)]" condition="sim_clkdiv1_outdiv1_present"
             ref="(/MCG/system_mcgoutclk_clock[%(n)])/(sim_clkdiv1_outdiv1[%(n)])"
             derived="true"
+            isNamedClock="true"
             units="Hz"
             description="System Core Clock"
             toolTip="Clocks the ARM Cortex-M4 core and bus masters"
@@ -390,6 +393,7 @@
          <intOption key="system_bus_clock[%(n)]" condition="sim_clkdiv1_outdiv4_present" 
             ref="(system_core_clock[%(n)])/(sim_clkdiv1_outdiv4[%(n)])"
             derived="true"
+            isNamedClock="true"
             units="Hz"
             description="System Bus Clock"
             toolTip="Clocks the bus slaves and peripherals\n

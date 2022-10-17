@@ -251,15 +251,17 @@
             description="ADC%(adc) trigger"
             toolTip="ADC Trigger source in STOP and VLPS modes, or when ADC Alternative Trigger is active">
             <choice value="0"  name="External trigger pin input (EXTRG_IN)"   enum="External" isDefault="true" />
-            <choice value="1"  name="CMP 0 output"                            enum="Cmp0"        />
-            <choice value="4"  name="PIT trigger 0"                           enum="PitCh0"      />
-            <choice value="5"  name="PIT trigger 1"                           enum="PitCh1"      />
-            <choice value="8"  name="TPM0 trigger"                            enum="Tpm0"        />
-            <choice value="9"  name="TPM1 trigger"                            enum="Tpm1"        />
-            <choice value="10" name="TPM2 trigger"                            enum="Tpm2"        />
-            <choice value="12" name="RTC alarm"                               enum="RtcAlarm"    />
-            <choice value="13" name="RTC seconds"                             enum="RtcSeconds"  />
-            <choice value="14" name="LPTMR trigger"                           enum="Lptmr"       />
+            <choice value="1"  name="CMP 0 output"                            enum="Cmp0"        condition="/CMP0/$present"   />
+            <choice value="2"  name="CMP 1 output"                            enum="Cmp1"        condition="/CMP1/$present"   />
+            <choice value="3"  name="CMP 2 output"                            enum="Cmp2"        condition="/CMP1/$present"   />
+            <choice value="4"  name="PIT trigger 0"                           enum="PitCh0"      condition="/PIT/$present"    />
+            <choice value="5"  name="PIT trigger 1"                           enum="PitCh1"      condition="/PIT/$present"    />
+            <choice value="8"  name="TPM0 trigger"                            enum="Tpm0"        condition="/TPM0/$present"   />
+            <choice value="9"  name="TPM1 trigger"                            enum="Tpm1"        condition="/TPM1/$present"   />
+            <choice value="10" name="TPM2 trigger"                            enum="Tpm2"        condition="/TPM2/$present"   />
+            <choice value="12" name="RTC alarm"                               enum="RtcAlarm"    condition="/RTC/$present"    />
+            <choice value="13" name="RTC seconds"                             enum="RtcSeconds"  condition="/RTC/$present"    />
+            <choice value="14" name="LPTMR trigger"                           enum="Lptmr"       condition="/LPTMR0/$present" />
          </choiceOption>
       </for>      
    </category>
@@ -289,6 +291,7 @@
          <intOption key="system_core_clock[%(n)]" condition="sim_clkdiv1_outdiv1_present"
             ref="(/MCG/system_mcgoutclk_clock[%(n)])/(sim_clkdiv1_outdiv1[%(n)])"
             derived="true"
+            isNamedClock="true"
             units="Hz"
             description="System Core Clock"
             toolTip="Clocks the ARM Cortex-M4 core and bus masters"
@@ -297,6 +300,7 @@
          <intOption key="system_bus_clock[%(n)]" condition="sim_clkdiv1_outdiv4_present" 
             ref="(system_core_clock[%(n)])/(sim_clkdiv1_outdiv4[%(n)])"
             derived="true"
+            isNamedClock="true"
             units="Hz"
             description="System Bus Clock"
             toolTip="Clocks the bus slaves and peripherals\n

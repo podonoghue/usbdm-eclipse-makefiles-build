@@ -418,22 +418,23 @@
       
          <choiceOption key="sim_sopt7_adc%(adc)trgsel" condition="sim_sopt7_adc%(adc)pretrgsel_present"
             enumStem="SimAdc%(adc)TriggerSrc"
-            description="ADC%(adc) trigger"
+            description="ADC%(adc) trigger source"
             toolTip="ADC Trigger source in STOP and VLPS modes, or when ADC Alternative Trigger is active">
             <choice value="0"  name="External trigger pin input (PDB0_EXTRG)" enum="External" isDefault="true" />
-            <choice value="1"  name="CMP 0 output"                            enum="Cmp0"        />
-            <choice value="2"  name="CMP 1 output"                            enum="Cmp1"        />
-            <choice value="4"  name="PIT trigger 0"                           enum="PitCh0"      />
-            <choice value="5"  name="PIT trigger 1"                           enum="PitCh1"      />
-            <choice value="6"  name="PIT trigger 2"                           enum="PitCh2"      />
-            <choice value="7"  name="PIT trigger 3"                           enum="PitCh3"      />
-            <choice value="8"  name="FTM0 trigger"                            enum="Ftm0"        />
-            <choice value="9"  name="FTM1 trigger"                            enum="Ftm1"        />
-            <choice value="10" name="FTM2 trigger"                            enum="Ftm2"        />
-            <choice value="11" name="FTM3 trigger"                            enum="Ftm3"        />
-            <choice value="12" name="RTC alarm"                               enum="RtcAlarm"    />
-            <choice value="13" name="RTC seconds"                             enum="RtcSeconds"  />
-            <choice value="14" name="LPTMR trigger"                           enum="Lptmr"       />
+            <choice value="1"  name="CMP 0 output"                            enum="Cmp0"        condition="/CMP0/$present"   />
+            <choice value="2"  name="CMP 1 output"                            enum="Cmp1"        condition="/CMP1/$present"   />
+            <choice value="3"  name="CMP 2 output"                            enum="Cmp2"        condition="/CMP1/$present"   />
+            <choice value="4"  name="PIT trigger 0"                           enum="PitCh0"      condition="/PIT/$present"    />
+            <choice value="5"  name="PIT trigger 1"                           enum="PitCh1"      condition="/PIT/$present"    />
+            <choice value="6"  name="PIT trigger 2"                           enum="PitCh2"      condition="/PIT/$present"    />
+            <choice value="7"  name="PIT trigger 3"                           enum="PitCh3"      condition="/PIT/$present"    />
+            <choice value="8"  name="FTM0 trigger"                            enum="Ftm0"        condition="/FTM0/$present"   />
+            <choice value="9"  name="FTM1 trigger"                            enum="Ftm1"        condition="/FTM1/$present"   />
+            <choice value="10" name="FTM2 trigger"                            enum="Ftm2"        condition="/FTM2/$present"   />
+            <choice value="11" name="FTM3 trigger"                            enum="Ftm3"        condition="/FTM3/$present"   />
+            <choice value="12" name="RTC alarm"                               enum="RtcAlarm"    condition="/RTC/$present"    />
+            <choice value="13" name="RTC seconds"                             enum="RtcSeconds"  condition="/RTC/$present"    />
+            <choice value="14" name="LPTMR trigger"                           enum="Lptmr"       condition="/LPTMR0/$present" />
             <choice value="15" name="TPM1 channel 0/1 (A/B pretrigger)"       enum="Tmp1Triggers" />
          </choiceOption>
       </for>      
@@ -563,6 +564,7 @@
          <intOption key="system_core_clock[%(n)]" condition="sim_clkdiv1_outdiv1_present"
             ref="(/MCG/system_mcgoutclk_clock[%(n)])/(sim_clkdiv1_outdiv1[%(n)])"
             derived="true"
+            isNamedClock="true"
             units="Hz"
             description="System Core Clock"
             toolTip="Clocks the ARM Cortex-M4 core and bus masters"
@@ -571,6 +573,7 @@
          <intOption key="system_bus_clock[%(n)]" condition="sim_clkdiv1_outdiv2_present" 
             ref="(/MCG/system_mcgoutclk_clock[%(n)])/(sim_clkdiv1_outdiv2[%(n)])"
             derived="true"
+            isNamedClock="true"
             units="Hz"
             description="System Bus Clock"
             toolTip="Clocks the bus slaves and peripherals\n
@@ -580,6 +583,7 @@
          <intOption key="system_flexbus_clock[%(n)]" condition="sim_clkdiv1_outdiv3_present" 
             ref="(/MCG/system_mcgoutclk_clock[%(n)])/(sim_clkdiv1_outdiv3[%(n)])"
             derived="true"
+            isNamedClock="true"
             units="Hz"
             description="System Flexbus Clock"
             toolTip="Clocks the flexbus interface\n
@@ -589,6 +593,7 @@
          <intOption key="system_flash_clock[%(n)]" condition="sim_clkdiv1_outdiv4_present" 
             ref="(/MCG/system_mcgoutclk_clock[%(n)])/(sim_clkdiv1_outdiv4[%(n)])"
             derived="true"
+            isNamedClock="true"
             units="Hz"
             description="System Flash Clock"
             toolTip="Clocks the flash memory\n
