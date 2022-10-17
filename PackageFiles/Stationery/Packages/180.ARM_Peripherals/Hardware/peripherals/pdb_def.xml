@@ -113,23 +113,21 @@
       description="Frequency of PDB input Clock" />
    
 
-   <for keys="numCh" dim="NumChannels,NumChannels+&quot;+1&quot;" >
-      <choiceOption key="pdb_channel" 
-         enumStem="PdbChannel"
-         valueFormat="%s"
-         hidden="true"
-         description="PDB Channel select"
-         toolTip="Selects a PDB channel">
-         <choice value="0" name="Channel 0"   enum="0" condition="%(numCh)>0"/>
-         <choice value="1" name="Channel 1"   enum="1" condition="%(numCh)>1"/>
-         <choice value="2" name="Channel 2"   enum="2" condition="%(numCh)>2"/>
-         <choice value="3" name="Channel 3"   enum="3" condition="%(numCh)>3"/>
-         <choice value="4" name="Channel 4"   enum="4" condition="%(numCh)>4"/>
-         <choice value="5" name="Channel 5"   enum="5" condition="%(numCh)>5"/>
-         <choice value="6" name="Channel 6"   enum="6" condition="%(numCh)>6"/>
-         <choice value="7" name="Channel 7"   enum="7" condition="%(numCh)>7"/>
-      </choiceOption>
-   </for>
+   <choiceOption key="pdb_channel" 
+      enumStem="PdbChannel"
+      valueFormat="%s"
+      hidden="true"
+      description="PDB Channel select"
+      toolTip="Selects a PDB channel">
+      <choice value="0" name="Channel 0"   enum="0" condition="@NumChannels>0"/>
+      <choice value="1" name="Channel 1"   enum="1" condition="@NumChannels>1"/>
+      <choice value="2" name="Channel 2"   enum="2" condition="@NumChannels>2"/>
+      <choice value="3" name="Channel 3"   enum="3" condition="@NumChannels>3"/>
+      <choice value="4" name="Channel 4"   enum="4" condition="@NumChannels>4"/>
+      <choice value="5" name="Channel 5"   enum="5" condition="@NumChannels>5"/>
+      <choice value="6" name="Channel 6"   enum="6" condition="@NumChannels>6"/>
+      <choice value="7" name="Channel 7"   enum="7" condition="@NumChannels>7"/>
+   </choiceOption>
 
    <choiceOption key="pdb_sc_divider" 
       target="pdb_clock_frequency" 
@@ -243,7 +241,9 @@
 
    <for keys="n" dim="NumChannels" >
       <stringOption key="Channel %(n)" value="------- Channel %(n) -------" constant="true" 
-         description="PDB Channel %(n)"
+         description="PDB Channel %(n) (usually associated with ADC%(n))"
+         toolTip="Each channel has a number of pre-trigger outputs that are usually associated with an ADC\n
+                  Each pre-trigger is asserted once during a PDB cycle."
       />
       <for keys="m" dim="NumPreTriggers" >
       
@@ -281,7 +281,12 @@
 <!--  ============== DAC Triggers ============== -->
 
    <for keys="x" dim="NumDacIntervalTriggers" >
-      <stringOption key="DAC %(x)" value="------- DAC %(x) -------" constant="true" description="Trigger to DAC%(x)" /> 
+      <stringOption key="DAC %(x)" value="------- DAC %(x) -------" constant="true" 
+         description="Trigger to DAC%(x)" 
+         toolTip="Each DAC trigger is associated with a DAC\n
+                  Each DAC trigger has an independent counter so may be asserted multiple times within a PDB cycle\n
+                  This may, for example, be used with the DAC FIFO to produce multiple levels synchronized to the PDB cycle."
+      /> 
 
       <choiceOption key="pdb_intc%(x)_triggerMode" condition="pdb_intc_toe_present&amp;&amp;pdb_intc_ext_present"
          valueFormat="PDB_INTC_TOE(%s),PDB_INTC_EXT(%s)"
@@ -290,13 +295,13 @@
          description="DAC trigger control"
          toolTip="_Disabled\n
                No DAC trigger is generated\n
-           _Delayed\n
+           _Periodic\n
                DAC interval counter is reset and counting starts when a rising edge is detected on\n
                selected trigger input source or software trigger is selected and SWTRIG is written with 1\n
            _External\n
                DAC interval counter is bypassed and DAC external trigger input triggers the DAC interval trigger" >
          <choice value="0,0" name="No DAC trigger"                               enum="Disabled"   />
-         <choice value="1,0" name="DAC trigger delayed by DAC interval counter"  enum="Delayed"    />
+         <choice value="1,0" name="DAC periodic trigger using interval counter"  enum="Periodic"    />
          <choice value="1,1" name="DAC trigger is connected to external trigger" enum="External"   />
       </choiceOption>
       
@@ -305,7 +310,7 @@
          valueFormat="%s_ticks"
          typeName="const Ticks &amp;"
          description="DAC interval" 
-         toolTip="Specifies the interval value for DAC interval trigger.\n
+         toolTip="Specifies the interval value for DAC interval counter.\n
                   When the DAC interval counter is equal to this value, the DAC is triggered and\n
                   the interval counter is reset and may continue counting.\n
                   Note that the DAC interval counter is separate to the PDB counter.\n
@@ -327,6 +332,8 @@
    <for keys="y" dim="NumPulseOutputs" >
       <stringOption key="Pulse Output %(y)" value="------- PULSE %(y) -------" constant="true" 
          description="Pulse output %(y) to CMP%(y)"
+         toolTip="The pulse output is usually used to control the sample window for an associated CMP.\n
+                  The pulse is generated once per PDB cycle and has adjustable start and end times."
       /> 
       <binaryOption key="pdb_poen_en%(y)"
          enumStem="PdbPulseOutput%(y)"
@@ -416,8 +423,8 @@
       \t *    PdbChannel_1, PdbPretrigger1_Bypassed,             // Channel 1 Pretrigger 1
       \t *    
       \t *    // DAC triggers
-      \t *    PdbDac0TriggerMode_Delayed, 0x333_ticks, // DAC0 Trigger
-      \t *    PdbDac1TriggerMode_External,             // DAC1 Trigger
+      \t *    PdbDac0TriggerMode_Periodic, 0x333_ticks, // DAC0 Trigger
+      \t *    PdbDac1TriggerMode_External,              // DAC1 Trigger
       \t *    
       \t *    // Pulse outputs
       \t *    PdbPulseOutput0_Enabled, 0x444_ticks, 0x555_ticks,  // Pulse output 0 (CMP0)
@@ -455,8 +462,8 @@
       \t *    PdbChannel_1, PdbPretrigger1_Bypassed,        // Channel 1 Pretrigger 1 disabled
       \t *    
       \t *    // DAC triggers
-      \t *    PdbDac0TriggerMode_Delayed, 50_ms, // DAC0 Trigger @ 50 ms
-      \t *    PdbDac1TriggerMode_External,       // DAC1 Trigger directly triggered by external input
+      \t *    PdbDac0TriggerMode_Periodic, 50_ms, // DAC0 Trigger @ 50 ms
+      \t *    PdbDac1TriggerMode_External,        // DAC1 Trigger directly triggered by external input
       \t *    
       \t *    // Pulse outputs
       \t *    PdbPulseOutput0_Enabled, 120_ms, 130_ms,  // Pulse output 0 (CMP0 window) @ 120-130 ms
@@ -476,9 +483,9 @@
       \t/**
       \t * Type definition for $(_class) interrupt call back.
       \t */
-      \ttypedef void (*CallbackFunction)();\n\n
+      \ttypedef void (*CallbackFunction)();
+      \t\n
    ]]></template>
-
 
    <template namespace="usbdm"><![CDATA[
       $(init_description)
@@ -666,13 +673,17 @@
       \t         pdb->CH[n].DLY[m] = convertIfNeeded(init.dly[n][m]);
       \t      }
       \t   }
-      \t   
+      \t\n   
+   ]]></setTemplate>
+   <setTemplate variables="pdb_intc0_triggerMode" discardRepeats="true" key="/PDB/InitMethod" namespace="all" ><![CDATA[
       \t   // Configure DAC triggers
       \t   for (size_t x=0; x<Pdb0Info::numDacIntervalTriggers; x++) {
       \t      pdb->DAC[x].INTC = init.intc[x];
       \t      pdb->DAC[x].INT  = convertIfNeeded(init.interval[x]);
       \t   }
-      \t   
+      \t\n
+   ]]></setTemplate>
+   <setTemplate variables="pdb_sc_divider" discardRepeats="true" key="/PDB/InitMethod" namespace="all" ><![CDATA[
       \t   // Configure Pulse outputs (to CMPs)
       \t   pdb->POEN = init.poen;
       \t   for (size_t x=0; x<Info::numPulseOutputs; x++) {
@@ -794,7 +805,7 @@
       \t   }\n\n
    ]]></constructorTemplate>
    
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"  
+   <constructorTemplate namespace="usbdm"  codeGenCondition="irqHandlingMethod"  
       variables="pdb_sc_action, pdb_idly, irqHandlingMethod"
       nonDefaultParams="3"
       defaultParamValue=",,nullptr"      
@@ -818,7 +829,7 @@
       \t   }\n\n
    ]]></constructorTemplate>
    
-   <constructorTemplate namespace="usbdm" codeGenCondition="secondsSupport &amp;&amp; irqHandlingMethod" 
+   <constructorTemplate namespace="usbdm"  codeGenCondition="secondsSupport &amp;&amp; irqHandlingMethod" 
       variables="pdb_sc_action, pdb_idly_delay, irqHandlingMethod"
       nonDefaultParams="3"
       defaultParamValue=",,nullptr"      
@@ -928,6 +939,7 @@
       \t   }\n\n
    ]]></constructorTemplate>
    
+   <!--  Pre-triggers -->
    <for keys="m" dim="NumPreTriggers">
       <constructorTemplate namespace="usbdm" 
          variables="pdb_channel, pdb_ch0_c1_pt%(m), pdb_ch0_dly%(m)" 
@@ -995,6 +1007,7 @@
       ]]></constructorTemplate>
    </for>   
    
+   <!--   DAC triggers -->
    <for keys="x" dim="NumDacIntervalTriggers">
       <constructorTemplate namespace="usbdm" 
          variables="pdb_intc%(x)_triggerMode, pdb_int%(x)" 
@@ -1061,6 +1074,7 @@
       ]]></constructorTemplate>
    </for>   
    
+   <!--  Pulse outputs -->
    <for keys="y" dim="NumPulseOutputs">
       <constructorTemplate namespace="usbdm" 
          variables="pdb_poen_en%(y), pdb_po%(y)_dly1, pdb_po%(y)_dly2" 
@@ -1248,8 +1262,8 @@
    </validate>
 
    <projectActionList id = "pdb_files">
-      <copy source="Project_Headers/pdb.h"       target="Project_Headers/pdb.h"        overwrite="true"  derived="true" />
-      <copy source="Snippets/pdb-example.cpp"    target="Snippets/pdb-example.cpp"     overwrite="true"  derived="true" />
+      <copy source="Project_Headers/pdb.h"         target="Project_Headers/pdb.h"        overwrite="true"  derived="true" />
+      <copy source="Snippets/pdb-adc-example.cpp"  target="Snippets/pdb-adc-example.cpp" overwrite="true"  derived="true" />
    </projectActionList>
          
    <signals/>

@@ -32,7 +32,7 @@ using MyAdc         = MyAdcChannel::OwningAdc;
 // Length of PDB sequence
 static constexpr Seconds SEQ_LENGTH    = 100_ms;
 
-// When to take ADC sample
+// When to take ADC sample within sequence
 static constexpr Seconds TRIGGER_TIME  =  9_ms;
 
 static uint32_t result;
@@ -40,7 +40,7 @@ static bool     complete=false;
 
 static void pdbCallback() {
    complete = true;
-   Led::clear();
+   Led::toggle();
 }
 
 static void pdbErrorCallback() {
@@ -51,11 +51,13 @@ static void pdbErrorCallback() {
 static void configurePdb() {
 
 #if 1
-   Pdb0::Init pdbInit {
+   static const Pdb0::Init pdbInit {
 
       PdbTrigger_Software ,      // Trigger Input Source Select - Software trigger is selected
 
       PdbLoadMode_Event ,        // Register Load Select - Registers loaded on event (software trigger)
+
+      PdbMode_Continuous,        // Sequence repeats
 
       PdbPrescale_Auto_Select,   // Prescale selected automatically from modulo
       SEQ_LENGTH ,               // Counter modulo
@@ -112,7 +114,6 @@ static void configurePdb() {
 
 static void adcCallback(uint32_t value, int) {
    result = value;
-   Led::set();
 }
 
 static void configureAdc() {
@@ -136,12 +137,13 @@ int main() {
    configureAdc();
    configurePdb();
 
+   complete = false;
+   Pdb::softwareTrigger();
    for(;;) {
-      complete = false;
-      Pdb::softwareTrigger();
       while (!complete) {
          __WFI();
       }
+      complete = false;
       console.write("ch1 = ").writeln(result);
    }
    for(;;) {

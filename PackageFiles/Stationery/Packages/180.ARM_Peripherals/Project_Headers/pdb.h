@@ -266,16 +266,11 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
    /**
     * Set Interrupts and DMA actions
     *
-    * @param[in] pdbAction       Controls action done on event (counter value is equal to the IDLY register)
     * @param[in] pdbErrorAction  Controls sequence error interrupt requests (on any ADC sequence errors)
     */
-   static void setActions(
-         PdbAction            pdbAction,
-         PdbErrorAction       pdbErrorAction = PdbErrorAction_None) {
+   static void setErrorAction(PdbErrorAction pdbErrorAction) {
 
-      pdb->SC =
-            (pdb->SC&~(PDB_SC_PDBIE_MASK|PDB_SC_PDBEIE_MASK|PDB_SC_DMAEN_MASK))|
-            pdbAction|pdbErrorAction|PDB_SC_PDBIF_MASK;
+      pdb->SC = (pdb->SC&~PDB_SC_PDBEIE_MASK)|pdbErrorAction|PDB_SC_PDBIF_MASK;
    }
 
    /**
@@ -402,7 +397,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     * points for pulse outputs etc.
     *
     * @param[in]  period          Desired period in seconds
-    * @param[out] scValue         Calculated pdb_sc value
+    * @param[out] scValue         Calculated pdb_sc value containing PRESCALER and DIVIDER only
     * @param[out] modValue        Calculated pdb_mod value
     *
     * @return E_NO_ERROR  => success
@@ -410,54 +405,44 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     */
    static ErrorCode calculateCounterParameters(const Seconds &period, uint32_t &scValue, uint16_t &modValue) {
 
-      // Multiplier factors for prescale divider
-      static const int   multFactors[] = {1,10,20,40};
+      static const uint16_t divisors[] = {
+            1, 2, 4, 8, 10, 16, 20, 32, 40, 64, 80,
+            128, 160, 320, 640, 1280, 2560, 5120,
+      };
+
+      static const uint16_t scValueLow[] = {
+            PDB_SC_MULT(0)|PDB_SC_PRESCALER(0), PDB_SC_MULT(0)|PDB_SC_PRESCALER(1),
+            PDB_SC_MULT(0)|PDB_SC_PRESCALER(2), PDB_SC_MULT(0)|PDB_SC_PRESCALER(3),
+            PDB_SC_MULT(1)|PDB_SC_PRESCALER(0), PDB_SC_MULT(0)|PDB_SC_PRESCALER(4),
+            PDB_SC_MULT(1)|PDB_SC_PRESCALER(1), PDB_SC_MULT(0)|PDB_SC_PRESCALER(5),
+            PDB_SC_MULT(1)|PDB_SC_PRESCALER(2), PDB_SC_MULT(0)|PDB_SC_PRESCALER(6),
+            PDB_SC_MULT(1)|PDB_SC_PRESCALER(3), PDB_SC_MULT(0)|PDB_SC_PRESCALER(7),
+            PDB_SC_MULT(1)|PDB_SC_PRESCALER(4), PDB_SC_MULT(1)|PDB_SC_PRESCALER(5),
+            PDB_SC_MULT(1)|PDB_SC_PRESCALER(6), PDB_SC_MULT(1)|PDB_SC_PRESCALER(7),
+            PDB_SC_MULT(2)|PDB_SC_PRESCALER(7), PDB_SC_MULT(3)|PDB_SC_PRESCALER(7),
+      };
 
       float inputClock = Info::getInputClockFrequency();
 
-      unsigned prescaleValue;
-      unsigned multValue;
+      // Try each from divisor small to large
+      for (size_t index=0; index<sizeofArray(divisors); index++) {
 
-      // No MOD value found so far
-      uint32_t mod = 0;
+         // Calculate modulo required to get desired period using this divisor
+         float trialMod = roundf(period*inputClock/divisors[index]);
+//       console.writeln("trialMod = ", trialMod);
 
-      // Try each divider multiplier from small to large
-      for (unsigned trialMultValue=0; trialMultValue<(sizeof(multFactors)/sizeof(multFactors[0])); trialMultValue++) {
-         int multfactor = multFactors[trialMultValue];
-
-         // Try prescalers from smallest to largest
-         // Find first prescaler for which a suitable modulo exists
-         int prescaleFactor=1;
-         for (unsigned trialPrescaleValue=0; trialPrescaleValue<=7; trialPrescaleValue++) {
-            float clock = inputClock/(multfactor*prescaleFactor);
-            uint32_t trialMod = roundf(period*clock)-1;
-//            console.
-//               write("multfactor = ").write(multfactor).
-//               write(", prescaleFactor = ").write(prescaleFactor).
-//               write(", mod = ").write(trialMod).
-//               write(", period = ").writeln(period);
-            if (trialMod <= Info::MinimumResolution) {
-               // Too short a period stop looking at this prescaler
-               break;
-            }
-            if (trialMod <= 65535) {
-               if (trialMod>mod) {
-                  // Better value - save
-                  prescaleValue = trialPrescaleValue;
-                  multValue     = trialMultValue;
-                  mod           = trialMod;
-               }
-               break;
-            }
-            prescaleFactor <<= 1;
+         if (trialMod <= Info::MinimumResolution) {
+            // Too short a MOD value - stop looking
+            break;
+         }
+         if (trialMod <= 65536) {
+            // Acceptable modulo value - save
+            scValue   = scValueLow[index];
+            modValue  = trialMod-1;
+            return E_NO_ERROR;
          }
       }
-      if (mod==0) {
-         return setErrorCode(E_ILLEGAL_PARAM);
-      }
-      modValue = mod;
-      scValue = PDB_SC_MULT(multValue)|PDB_SC_PRESCALER(prescaleValue);
-      return E_NO_ERROR;
+      return setErrorCode(E_ILLEGAL_PARAM);
    }
 
    /**
@@ -480,8 +465,8 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     */
    static ErrorCode setPeriod(Seconds period) {
 
-      uint32_t scValue;
-      uint16_t modValue;
+      uint32_t scValue  = 0;
+      uint16_t modValue = 0;
 
       ErrorCode rc = calculateCounterParameters(period, scValue, modValue);
       if (rc != E_NO_ERROR) {
@@ -489,49 +474,51 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
       }
       pdb->SC  = (pdb->SC&~(PDB_SC_MULT_MASK|PDB_SC_PRESCALER_MASK))|scValue|PDB_SC_PDBIF_MASK;
 
-      // Calculate MOD using new MULT and PRESCALER convertSecondsToTicks()
+      // Set MOD
       pdb->MOD = modValue;
 
       return E_NO_ERROR;
    }
 
    /**
-    * Set clock dividers
+    * Set period using clock dividers and ticks
     *
-    * @param[in]  pdbPrescale    Clock pre-scale (pdb_sc_mult)
+    * @param[in] pdbPrescale    Clock pre-scale (pdb_sc_mult)
+    * @param[in] modulo         Modulo value for the counter (pdb_mod)
     */
-   static void setClockDividers(PdbPrescale pdbPrescale) {
+   static void setPeriod(PdbPrescale pdbPrescale, Ticks modulo) {
 
       pdb->SC  = (pdb->SC&~(PDB_SC_MULT_MASK|PDB_SC_PRESCALER_MASK))|pdbPrescale|PDB_SC_PDBIF_MASK;
-   }
-
-   /**
-    * Set modulo of the PDB counter (in ticks)
-    *
-    * @param[in] modulo Modulo value for the counter (pdb_mod)
-    */
-   static void setModulo(Ticks modulo) {
-
       pdb->MOD = (unsigned)modulo;
    }
 
    /**
-    * Set interrupt delay (in ticks)
+    * Set Event action and delay in ticks
     *
-    * @param[in] delay Delay value (pdb_idly)
+    * @param[in] pdbAction Controls action done on event (counter value is equal to the IDLY register)
+    * @param[in] delay     Delay value for the interrupt
     */
-   static void setInterruptDelay(Ticks delay) {
+   static void setEventAction(
+         PdbAction   pdbAction,
+         Ticks       delay = 0
+         ) {
 
-      pdb->IDLY = (unsigned)delay;
+      pdb->SC = (pdb->SC&~(PDB_SC_PDBIE_MASK|PDB_SC_DMAEN_MASK))|pdbAction|PDB_SC_PDBIF_MASK;
+      pdb->IDLY = (unsigned)delay-1;
    }
 
    /**
-    * Set interrupt delay (in seconds)
+    * Set Interrupts action and delay in seconds
     *
-    * @param[in] delay Delay value for the interrupt (pdb_idly)
+    * @param[in] pdbAction Controls action done on event (counter value is equal to the IDLY register)
+    * @param[in] delay     Delay value for the interrupt
     */
-   static void setInterruptDelay(Seconds delay) {
-      setInterruptDelay(convertSecondsToTicks(delay));
+   static void setEventAction(
+         PdbAction   pdbAction,
+         Seconds     delay
+         ) {
+
+      setEventAction(pdbAction, convertSecondsToTicks(delay));
    }
 
    /**
@@ -1005,8 +992,8 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
       usbdm_assert(outputNum < (sizeof(pdb->POnDLY)/sizeof(pdb->POnDLY[0])), "Illegal pulse output");
 
       pdb->POEN = pdb->POEN | (1<<outputNum);
-      pdb->POnDLY[outputNum].DLY1 = (unsigned)pulseHighDelay;
-      pdb->POnDLY[outputNum].DLY2 = (unsigned)pulseLowDelay;
+      pdb->POnDLY[outputNum].DLY1 = (unsigned)pulseHighDelay-1;
+      pdb->POnDLY[outputNum].DLY2 = (unsigned)pulseLowDelay-1;
    }
 
    /**
