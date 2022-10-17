@@ -22,126 +22,6 @@
 namespace USBDM {
 
 /**
- * DAC Reference voltage Select
- */
-enum DacReferenceSelect {
-   DacReferenceSelect_Vrefh   = DAC_C0_DACRFS(0), //!< DACREF_0 Usually Vrefh or VrefOut if present.
-   DacReferenceSelect_VrefOut = DAC_C0_DACRFS(0), //!< DACREF_0 Usually Vrefh or VrefOut if present.
-   DacReferenceSelect_Vdda    = DAC_C0_DACRFS(1), //!< DACREF_1 Usually Vdda as the reference voltage.
-   DacReferenceSelect_0       = DAC_C0_DACRFS(0), //!< Selects DACREF_0 as the reference voltage.
-   DacReferenceSelect_1       = DAC_C0_DACRFS(1), //!< Selects DACREF_1 as the reference voltage.
-};
-
-/**
- * DAC Trigger Select
- */
-enum DacTriggerSelect {
-   DacTriggerSelect_Hardware = DAC_C0_DACTRGSEL(0), //!< The DAC hardware trigger is selected.
-   DacTriggerSelect_Software = DAC_C0_DACTRGSEL(1), //!< The DAC software trigger is selected.
-};
-
-/**
- * DAC Power control
- */
-enum DacPower {
-   DacPower_High = DAC_C0_LPEN(0), //!< Low-Power mode
-   DacPower_Low  = DAC_C0_LPEN(1), //!< High-Power mode
-};
-
-#ifdef DAC_C0_DACBWIEN
-/**
- * DAC Buffer Watermark Interrupt Enable.
- * Control whether an interrupt is generated when SR.DACBFWMF is set i.e.
- * when the DAC buffer read pointer has reached the watermark level.
- */
-enum DacWatermarkIrq {
-   DacWatermarkIrq_Disabled = DAC_C0_DACBWIEN(0), //!< The DAC buffer watermark interrupt is disabled.
-   DacWatermarkIrq_Enabled  = DAC_C0_DACBWIEN(1), //!< The DAC buffer watermark interrupt is enabled.
-};
-#endif
-
-/**
- * DAC Buffer Read Pointer Top Flag Interrupt Enable.
- * Control whether an interrupt is generated when SR.DACBFRPTF is set i.e.
- * when the DAC buffer read pointer is zero.
- */
-enum DacTopFlagIrq {
-   DacTopFlagIrq_Disabled = DAC_C0_DACBTIEN(0), //!< The DAC buffer read pointer top flag interrupt is disabled.
-   DacTopFlagIrq_Enabled  = DAC_C0_DACBTIEN(1), //!< The DAC buffer read pointer top flag interrupt is enabled.
-};
-
-/**
- * DAC Buffer Read Pointer Bottom Flag Interrupt Enable.
- * Control whether an interrupt is generated when SR.DACBFRPBF is set.
- * when the DAC buffer read pointer is equal to buffer upper limit (C2.DACBFUP).
- */
-enum DacBottomFlagIrq {
-   DacBottomFlagIrq_Disabled = DAC_C0_DACBBIEN(0), //!< The DAC buffer read pointer bottom flag interrupt is disabled.
-   DacBottomFlagIrq_Enabled  = DAC_C0_DACBBIEN(1), //!< The DAC buffer read pointer bottom flag interrupt is enabled.
-};
-
-/**
- * DAC DMA control
- */
-enum DacDma {
-   DacDma_Disabled = DAC_C1_DMAEN(0),  //!< Disable DMA
-   DacDma_Enabled  = DAC_C1_DMAEN(1),  //!< Enable DMA
-};
-
-#if DAC_C1_DACBFMD_MASK == 0x6
-/**
- * If disabled then the first word of the buffer is used to control the DAC output level.\n
- * If enabled then the word that the read pointer points to is used.\n
- * The read pointer may be changed by hardware (Trigger = PIT0 usually) or software and advances
- * in normal or scan modes.
- * In FIFO mode the buffer as a FIFO with write pointer.
- */
-enum DacBufferMode {
-   DacBufferMode_Disabled  = DAC_C1_DACBFEN(0),                   //!< Read pointer disabled. The first word of the buffer is used.
-   DacBufferMode_Normal    = DAC_C1_DACBFEN(1)|DAC_C1_DACBFMD(0), //!< Read pointer enabled. Read pointer points advances as circular buffer.
-   DacBufferMode_Swing     = DAC_C1_DACBFEN(1)|DAC_C1_DACBFMD(1), //!< Read pointer enabled. Read pointer points advances and retreats.
-   DacBufferMode_Scan      = DAC_C1_DACBFEN(1)|DAC_C1_DACBFMD(2), //!< Read pointer enabled. Read pointer points advances once only.
-   DacBufferMode_Fifo      = DAC_C1_DACBFEN(1)|DAC_C1_DACBFMD(3), //!< Buffer acts as a FIFO. (If supported)
-};
-#else
-/**
- * If disabled then the first word of the buffer is used to control the DAC output level.\n
- * If enabled then the word that the read pointer points to is used.\n
- * The read pointer may be changed by hardware (Trigger = PIT0 usually) or software and advances
- * in normal or scan modes.
- */
-enum DacBufferMode {
-   DacBufferMode_Disabled  = DAC_C1_DACBFEN(0),                   //!< Read pointer disabled. The first word of the buffer is used.
-   DacBufferMode_Normal    = DAC_C1_DACBFEN(1)|DAC_C1_DACBFMD(0), //!< Read pointer enabled. Read pointer points advances as circular buffer.
-   DacBufferMode_Scan      = DAC_C1_DACBFEN(1)|DAC_C1_DACBFMD(1), //!< Read pointer enabled. Read pointer points advances once only.
-};
-#endif
-
-#ifdef DAC_C1_DACBFWM
-/**
- * DAC Buffer Watermark Select.
- * Controls when SR[DACBFWMF] is set.
- *
- * Normal Mode:
- *   SR[DACBFWMF] will be set when the DAC buffer read pointer reaches this many words away
- *   from the upper limit (DACBUP). This allows user configuration of the watermark interrupt.
- *
- * FIFO mode:
- *   SR[DACBFWMF] will be set when there is a threshold number of entries left in the FIFO.
- */
-enum DacWaterMark {
-   DacWaterMark_Normal1       = DAC_C1_DACBFWM(0),  //!< Normal mode: Read pointer 1 entry away from upper limit
-   DacWaterMark_Normal2       = DAC_C1_DACBFWM(0),  //!< Normal mode: Read pointer 2 entries away from upper limit
-   DacWaterMark_Normal3       = DAC_C1_DACBFWM(0),  //!< Normal mode: Read pointer 3 entries away from upper limit
-   DacWaterMark_Normal4       = DAC_C1_DACBFWM(0),  //!< Normal mode: Read pointer 4 entries away from upper limit
-   DacWaterMark_Fifo2         = DAC_C1_DACBFWM(0),  //!< FIFO mode: Threshold <= 2 remaining FIFO entries
-   DacWaterMark_FifoMaxDiv4   = DAC_C1_DACBFWM(0),  //!< FIFO mode: Threshold <= Max/4 remaining FIFO entries
-   DacWaterMark_FifoMaxDiv2   = DAC_C1_DACBFWM(0),  //!< FIFO mode: Threshold <= Max/2 remaining FIFO entries
-   DacWaterMark_FifoMaxMinus2 = DAC_C1_DACBFWM(0),  //!< FIFO mode: Threshold <= Max-2 remaining FIFO entries
-};
-#endif // DAC_C1_DACBFWM
-
-/**
  * DAC status value as individual flags
  */
 union DacStatus {
@@ -365,7 +245,7 @@ $(/DAC/classInfo: // No class Info found)
     */
    static void configureBuffer(
          DacBufferMode dacBufferMode  = DacBufferMode_Disabled,
-         DacWaterMark  dacWaterMark   = DacWaterMark_Normal1
+         DacWaterMark  dacWaterMark   = DacWaterMark_Normal_1
           ) {
       dac->C1 =
             (dac->C1&~(DAC_C1_DACBFEN_MASK|DAC_C1_DACBFMD_MASK|DAC_C1_DACBFWM_MASK))|

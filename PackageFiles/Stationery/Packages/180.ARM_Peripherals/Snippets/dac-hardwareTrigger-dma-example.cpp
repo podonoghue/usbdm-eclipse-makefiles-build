@@ -172,7 +172,7 @@ static void configurePdb() {
    Pdb0::setPeriod(PDB_PERIOD);
 
    // In free-running mode this is actually the period of the DACINT
-   Pdb0::configureDacTrigger(0, PdbDacTriggerMode_Delayed, PDB_PERIOD);
+   Pdb0::configureDacTrigger(0, PdbDac0TriggerMode_Periodic, PDB_PERIOD);
 
    // Registers load on next event
    Pdb0::configureRegisterLoad(PdbLoadMode_Event);

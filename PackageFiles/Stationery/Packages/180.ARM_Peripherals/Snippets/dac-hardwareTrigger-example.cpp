@@ -35,8 +35,8 @@ static void configurePdb() {
       PdbMode_Continuous ,    // PDB operation mode - Sequence runs continuously once triggered
       PdbLoadMode_Event ,     // Register Load Select - Registers loaded on trigger input event
 
-      PdbDac0TriggerMode_Delayed , // DAC trigger control - DAC trigger delayed by DAC interval counter
-      99_ticks,                    // DAC interval (obtained from Configure.usbdmProject)
+      PdbDac0TriggerMode_Periodic , // DAC trigger control - DAC trigger delayed by DAC interval counter
+      99_ticks,                     // DAC interval (obtained from Configure.usbdmProject)
    };
    Pdb0::configure(pdbInitValue);
 
@@ -53,8 +53,8 @@ static void configurePdb() {
       PdbMode_Continuous ,          // PDB operation mode - Sequence runs continuously once triggered
       PdbLoadMode_Event ,           // Register Load Select - Registers loaded on trigger input event
 
-      PdbDac0TriggerMode_Delayed ,  // DAC trigger control - DAC trigger delayed by DAC interval counter
-      100_us,                       // DAC interval
+      PdbDac0TriggerMode_Periodic ,  // DAC trigger control - DAC trigger delayed by DAC interval counter
+      100_us,                        // DAC interval
    };
    Pdb0::configure(pdbInitValue);
 
@@ -68,7 +68,7 @@ static void configurePdb() {
          PdbTrigger_Software);
 
    Pdb0::setPeriod(1_ms);
-   Pdb0::configureDacTrigger(0, PdbDac0TriggerMode_Delayed, 20_us);
+   Pdb0::configureDacTrigger(0, PdbDac0TriggerMode_Periodic, 20_us);
 
    // Any phase will do (<PDB_PERIOD)
    Pdb0::setInterruptDelay(0_ticks);

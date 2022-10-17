@@ -27,9 +27,9 @@
 
 using namespace USBDM;
 
-// Sine period = NUM_SAMPLES * PDB_PERIOD = 100 * 500_ns = 50_us, f=20_kHz
+// Sine period = NUM_SAMPLES * PDB_PERIOD = 100 * 100 us = 10 ms, f=100 Hz
 static constexpr unsigned NUM_SAMPLES = 100;
-static constexpr float    PDB_PERIOD  = 500_ns;
+static constexpr Seconds  PDB_PERIOD  = 100_us;
 
 // Table of values for a sine wave
 static uint16_t sineTable[NUM_SAMPLES];
@@ -159,19 +159,15 @@ static void configurePdb() {
          PdbTrigger_Software, // Start when triggered by software
          PdbAction_Dma);      // Generate DMA requests instead of interrupts
 
-   /*
-    * Period of main timer
-    * The main PDB timer is not actually used in this example so the modulo value is irrelevant.
-    * However, this method has the side-effect of setting the prescaler and multiplier which are also
-    * used for the DAC counters.
-    */
+   // Period of main timer - This controls the DMA rate
    Pdb0::setPeriod(PDB_PERIOD);
 
+   // When to do DMA request
    // Any phase will do (<PDB_PERIOD)
-   Pdb0::setInterruptDelay(0_ticks);
+   Pdb0::setEventAction(PdbAction_Dma, PDB_PERIOD/2);
 
    // Registers load on next event
-   Pdb0::configureRegisterLoad(PdbLoadMode_Both);
+   Pdb0::configureRegisterLoad(PdbLoadMode_Event);
 
    // Start timer and load values
    Pdb0::softwareTrigger();

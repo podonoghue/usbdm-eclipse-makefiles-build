@@ -1,115 +1,451 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- Dac_def.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Comparitor">
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
    <xi:include href="_default_instance.xml"/>
+      
+   <xi:include href="_irqOption.xml"/>         
 
    <template><![CDATA[
       \t//! Pin number in Info table for DAC output if mapped to a pin
       \tstatic constexpr int outputPin  = 0;\n\n
    ]]></template>
    
-   <constant key="disable_peripheral"      derived = "true" value = "dac->C0 = DAC_C0_DACEN(0);"  />
+   <constant key="disable_peripheral" value = "dac->C0 = DAC_C0_DACEN(0);"  />
+   
    <xi:include href="_mapPinsOption.xml"/>   
 
-   <binaryOption key="dac_c0_dacrfs" description="DAC Reference Select"
-      toolTip="Selects the DAC reference voltage">
-      <choice value="0" name="VrefOut(1.2V)" />
-      <choice value="1" name="VddA" isDefault="true" />
+<!--  C0 -->
+   <binaryOption key="dac_c0_dacrfs"
+      enumStem="DacReferenceSelect"
+      description="DAC Reference Select"
+      toolTip="Selects the DAC reference voltage. \n 
+               The output range is [0..Vselected]">
+      <choice value="0" name="Vrefh or VrefOut(1.2V)" enum="VrefOut" />
+      <choice value="1" name="VddA"                   enum="Vdda"    isDefault="true" />
    </binaryOption>
-   <binaryOption key="dac_c0_dactrgsel" description="DAC Trigger Select"
+   
+   <binaryOption key="dac_c0_dactrgsel" 
+      description="DAC Trigger Select"
+      enumStem="DacTriggerSelect"
       toolTip="Selects the DAC Trigger">
-      <choice value="0" name="Hardware trigger" />
-      <choice value="1" name="Software trigger" isDefault="true" />
+      <choice value="0" name="Hardware trigger" enum="Hardware" />
+      <choice value="1" name="Software trigger" enum="Software" isDefault="true" />
    </binaryOption>
-   <binaryOption key="dac_c0_lpen" description="DAC Low Power Control"
-      toolTip="Affects power consumption of DAC">
-      <choice value="0" name="High-Power mode" isDefault="true" />
-      <choice value="1" name="Low-Power mode" />
+   
+   <binaryOption key="dac_c0_lpen" 
+      description="DAC Low Power Control"
+      enumStem="DacPower"
+      toolTip="Controls power consumption of DAC">
+      <choice value="0" name="High-Power mode" enum="High" isDefault="true" />
+      <choice value="1" name="Low-Power mode"  enum="Low"  />
    </binaryOption>
-   <binaryOption key="dac_c0_dacbwien" description="DAC Buffer Watermark Interrupt Enable"
-      toolTip="">
-      <choice value="0" name="Interrupt is disabled" isDefault="true" />
-      <choice value="1" name="Interrupt is enabled" />
+   
+   <binaryOption key="dac_c0_dacbwien" 
+      description="DAC Buffer Watermark Interrupt Enable"
+      enumStem="DacWatermarkIrq"
+      toolTip="Control whether an interrupt is generated when SR.DACBFWMF is set i.e.\n
+               when the DAC buffer read pointer has reached the watermark level.">
+      <choice value="0" name="Interrupt is disabled" enum="Disabled" isDefault="true" />
+      <choice value="1" name="Interrupt is enabled"  enum="Enabled"  />
    </binaryOption>
-   <binaryOption key="dac_c0_dacbtien" description="DAC Buffer Read Pointer Top Flag Interrupt Enable"
-      toolTip="">
-      <choice value="0" name="Interrupt is disabled" isDefault="true" />
-      <choice value="1" name="Interrupt is enabled" />
+   
+   <binaryOption key="dac_c0_dacbtien" 
+      description="DAC Buffer Read Pointer Top Flag Interrupt Enable"
+      enumStem="DacReadPtrTopIrq"
+      toolTip="Control whether an interrupt is generated when SR.DACBFRPTF is set i.e.\n
+               when the DAC buffer read pointer is zero.">
+      <choice value="0" name="Interrupt is disabled" enum="Disabled" isDefault="true" />
+      <choice value="1" name="Interrupt is enabled"  enum="Enabled"  />
    </binaryOption>
-   <binaryOption key="dac_c0_dacbbien" description="DAC Buffer Read Pointer Bottom Flag Interrupt Enable"
-      toolTip="">
-      <choice value="0" name="Interrupt is disabled" isDefault="true" />
-      <choice value="1" name="Interrupt is enabled" />
+   
+   <binaryOption key="dac_c0_dacbbien" 
+      description="DAC Buffer Read Pointer Bottom Flag Interrupt Enable"
+      enumStem="DacReadPtrBottomIrq"
+      toolTip="Control whether an interrupt is generated when SR.DACBFRPBF is set i.e. \n
+               when the DAC buffer read pointer is equal to buffer upper limit (C2.DACBFUP)">
+      <choice value="0" name="Interrupt is disabled" enum="Disabled" isDefault="true" />
+      <choice value="1" name="Interrupt is enabled"  enum="Enabled" />
    </binaryOption>
-   <template><![CDATA[
-      \t//! DAC Control Register 0
-      \tstatic constexpr uint32_t c0 =
-      \t   DAC_C0_DACRFS($(dac_c0_dacrfs))        | // Reference Select
-      \t   DAC_C0_DACTRGSEL($(dac_c0_dactrgsel))     | // Trigger Select
-      \t   DAC_C0_LPEN($(dac_c0_lpen))          | // Low Power Control
-      \t#if defined(DAC_C0_DACBWIEN)
-      \t   DAC_C0_DACBWIEN($(dac_c0_dacbwien))      | // Buffer Watermark Interrupt Enable
-      \t#endif
-      \t   DAC_C0_DACBTIEN($(dac_c0_dacbtien))      | // Buffer Read Pointer Top Flag Interrupt Enable
-      \t   DAC_C0_DACBBIEN($(dac_c0_dacbbien));       // Buffer Read Pointer Bottom Flag Interrupt Enable\n\n
-   ]]></template>
-      
-   <binaryOption key="dac_c1_dmaen" description="DMA Enable Select"
-      toolTip="When DMA is enabled, the DMA request will be generated by original interrupts.\n
-      The interrupts will not be presented on this module at the same time" >
-      <choice value="0" name="DMA is disabled" isDefault="true" />
-      <choice value="1" name="DMA is enabled" />
+    
+   <setTemplate  key="/DAC/InitMethod" namespace="all"  discardRepeats="true"
+      variables="dac_c0_dacbwien, dac_c0_dacbtien, dac_c0_dacbbien"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      %comments
+      \t */
+      \tvoid setActions(
+      %params) {
+      \t
+      \t   %register = (%register&~%mask) | 
+      \t               %paramExpression;
+      \t}
+      \t\n
+   ]]></setTemplate>
+   
+<!--  C1 -->
+   <binaryOption key="dac_c1_dmaen"
+      enumStem="DacDma"
+      description="Generate DMA request"
+      toolTip="When DMA is enabled, DMA requests are generated instead of interrupt requests. \n 
+               The DMA Done signal clears the DMA request. \n 
+               The status register flags are still set and are cleared automatically when the DMA completes." >
+      <choice value="0" name="DMA is disabled" enum="Enabled" isDefault="true" />
+      <choice value="1" name="DMA is enabled"  enum="Disabled" />
    </binaryOption>
 
-   <choiceOption key="dac_c1_dacbfwm" description="DAC Buffer Watermark Select"
+   <choiceOption key="dac_c1_buffer_mode" condition="dac_c1_dacbfen_present &amp;&amp; dac_c1_dacbfmd_present"
+      valueFormat="DAC_C1_DACBFEN(%s),DAC_C1_DACBFMD(%s)" 
+      enumStem="DacBufferMode"
+      description="Buffer operation mode"
+      toolTip="Modes:\n
+               Disabled: The first word of the buffer is used to control the DAC output level.\n
+               Normal:   Pointer moves [0..max] and wraps \n
+               Swing:    Pointer moves [0..max..0] and repeats \n
+               Scan:     Pointer moves [0..max] and stops \n
+               Fifo:     DAT array acts as a FIFO \n
+               Not all modes are available in all devices.">
+      <choice value="0,0" name="Disabled"           enum="Disabled"  isDefault="true" />
+      <choice value="1,0" name="Normal"             enum="Normal"    />
+      <choice value="1,1" name="One-Time Scan mode" enum="Scan"      condition="!dac_c1_dacbfmd_swing_present &amp;&amp; !dac_c1_dacbfmd_fifo_present" />
+      <choice value="1,1" name="Swing mode"         enum="Swing"     condition="dac_c1_dacbfmd_swing_present" />
+      <choice value="1,2" name="One-Time Scan mode" enum="Scan"      condition="dac_c1_dacbfmd_swing_present || dac_c1_dacbfmd_fifo_present" />
+      <choice value="1,3" name="FIFO mode"          enum="Fifo"      condition="dac_c1_dacbfmd_fifo_present"  />
+   </choiceOption>
+
+   <choiceOption key="dac_c1_dacbfwm" condition="dac_c1_dacbfwm_present" 
+      enumStem="DacWaterMark"
+      description="Buffer Watermark Select"
       toolTip="Controls when SR[DACBFWMF] is set.\n
-         When the DAC buffer read pointer reaches the word defined by this field, SR[DACBFWMF] will be set">
-      <choice value="0" name="1 word" isDefault="true" />
-      <choice value="1" name="2 words" />
-      <choice value="2" name="3 words" />
-      <choice value="3" name="4 words" />
+               Normal Mode: \n
+                 SR[DACBFWMF] will be set when the DAC buffer read pointer reaches this many words away \n
+                 from the upper limit (DACBUP). This allows user configuration of the watermark interrupt. \n
+               FIFO mode: \n
+                 SR[DACBFWMF] will be set when there is a threshold number of entries left in the FIFO.">
+      <choice value="0" name="Normal mode: 1 free entry"                enum="Normal_1"      isDefault="true" />
+      <choice value="1" name="Normal mode: 2 free entries"              enum="Normal_2"      condition="@num_dat>1" />
+      <choice value="2" name="Normal mode: 3 free entries"              enum="Normal_3"      condition="@num_dat>2" />
+      <choice value="3" name="Normal mode: 4 free entries"              enum="Normal_4"      condition="@num_dat>3" />
+      <choice value="0" name="FIFO threshold: &lt;= 2 full entries"     enum="Fifo2"         condition="dac_c1_dacbfmd_fifo_present" />
+      <choice value="1" name="FIFO threshold: &lt;= Max/4 full entries" enum="FifoMaxDiv4"   condition="dac_c1_dacbfmd_fifo_present" />
+      <choice value="2" name="FIFO threshold: &lt;= Max/2 full entries" enum="FifoMaxDiv2"   condition="dac_c1_dacbfmd_fifo_present" />
+      <choice value="3" name="FIFO threshold: &lt;= Max-2 full entries" enum="FifoMaxMinus2" condition="dac_c1_dacbfmd_fifo_present" />
    </choiceOption>
 
-   <choiceOption key="dac_c1_dacbfmd" description="DAC Buffer Work Mode Select"
-      toolTip="Modes\n
-      Normal:   Increments from 0 to max and wraps\n
-      Swing:    Increments from 0 to max, decrements downto 0\n
-      One-Time: Increments from 0 to max and stops">
-      <choice value="0" name="Normal mode" isDefault="true" />
-      <choice value="1" name="Swing mode" />
-      <choice value="2" name="One-Time Scan mode" />
-      <choice value="3" name="Reserved" />
+<!--  C2 -->
+   <choiceOption key="dac_c2_dacbfup" condition="dac_c2_dacbfup_present" 
+      enumStem="DacBufferUpperLimit"
+      description="DAC Buffer Upper Limit"
+      toolTip="Normal mode\n
+               - Selects the upper limit of the DAC buffer. The buffer read pointer cannot exceed it\n
+               FIFO mode\n
+               - This register becomes the Write_Pointer and its value is initially set to equal READ_POINTER automatically and \n
+                 the FIFO status is empty. \n 
+                 It is writable and the user can configure it to the same address to reset FIFO as empty." 
+      >
+      <choice value="0"  name="0  entries"  enum="0"                           />
+      <choice value="1"  name="1  entry"    enum="1"   condition="@num_dat>2"  />
+      <choice value="2"  name="2  entries"  enum="2"   condition="@num_dat>3"  />
+      <choice value="3"  name="3  entries"  enum="3"   condition="@num_dat>4"  />
+      <choice value="4"  name="4  entries"  enum="4"   condition="@num_dat>5"  />
+      <choice value="5"  name="5  entries"  enum="5"   condition="@num_dat>6"  />
+      <choice value="6"  name="6  entries"  enum="6"   condition="@num_dat>7"  />
+      <choice value="7"  name="7  entries"  enum="7"   condition="@num_dat>8"  />
+      <choice value="8"  name="8  entries"  enum="8"   condition="@num_dat>9"  />
+      <choice value="9"  name="9  entries"  enum="9"   condition="@num_dat>10" />
+      <choice value="10" name="10 entries"  enum="10"  condition="@num_dat>11" />
+      <choice value="11" name="11 entries"  enum="11"  condition="@num_dat>12" />
+      <choice value="12" name="12 entries"  enum="12"  condition="@num_dat>13" />
+      <choice value="13" name="13 entries"  enum="13"  condition="@num_dat>14" />
+      <choice value="14" name="14 entries"  enum="14"  condition="@num_dat>15" />
+      <choice value="15" name="max entries" enum="Max" isDefault="true" /> 
    </choiceOption>
 
-   <binaryOption key="dac_c1_dacbfen" description="DAC Buffer Enable"
-      toolTip="If enabled the converted data is the word that the read pointer points to is used.\n
-      This means converted data can be from any word of the buffer">
-      <choice value="0" name="Buffer read pointer disabled. Converted data is first buffer word" isDefault="true" />
-      <choice value="1" name="Buffer read pointer enabled" />
+<!-- SR -->
+   <binaryOption key="dac_sr_dacbfwmf" condition="dac_sr_dacbfwmf_present"
+      description="DAC Buffer Watermark Flag"
+      hidden="true"
+      enumStem="DacWatermarkFlag"
+      toolTip="This bit is set if the remaining FIFO data is less than the watermark setting.\n
+               It is cleared automatically by writing data into FIFO by DMA or CPU. \n
+               Write to this bit is ignored in FIFO mode." >
+      <choice value="0" name="NotReached"  enum="NotReached" isDefault="true" />
+      <choice value="1" name="Reached"     enum="Reached" />
    </binaryOption>
-   <template><![CDATA[
-      \t//! DAC Control Register 1
-      \tstatic constexpr uint32_t c1 =
-      \t   DAC_C1_DMAEN($(dac_c1_dmaen))       | // DMA Enable Select
-      \t   DAC_C1_DACBFWM($(dac_c1_dacbfwm))     | // Buffer Watermark Select
-      \t   DAC_C1_DACBFMD($(dac_c1_dacbfmd))     | // Buffer Work Mode Select
-      \t   DAC_C1_DACBFEN($(dac_c1_dacbfen));      // Buffer Enable\n\n
+
+   <binaryOption key="dac_sr_dacbfrptf" condition="dac_sr_dacbfrptf_present"
+      description="DAC Buffer Read Pointer Top Position Flag"
+      hidden="true"
+      enumStem="DacReadPtrTopFlag"
+      toolTip="In FIFO mode, it is FIFO nearly empty flag. \n
+               It is set when only one data remains in FIFO. \n
+               Any DAC trigger does not increase the Read Pointer if this bit is set to \n
+               avoid any possible glitch or abrupt change at DAC output. \n
+               It is cleared automatically if FIFO is not empty." >
+      <choice value="0" name="NotReached"  enum="NotReached" isDefault="true" />
+      <choice value="1" name="Reached"     enum="Reached" />
+   </binaryOption>
+
+   <binaryOption key="dac_sr_dacbfrpbf" condition="dac_sr_dacbfrpbf_present"
+      description="DAC Buffer Read Pointer Bottom Position Flag"
+      hidden="true"
+      enumStem="DacReadPtrBottomFlag"
+      toolTip="In FIFO mode, it is FIFO FULL status bit. \n
+      It means FIFO read pointer equals Write Pointer because of Write Pointer increase. \n
+      If this bit is set, any write to FIFO from either DMA or CPU is ignored by DAC. \n
+      It is cleared if there is any DAC trigger making the DAC read pointer increase. \n
+      Write to this bit is ignored in FIFO mode." >
+      <choice value="0" name="NotReached"  enum="NotReached" isDefault="true" />
+      <choice value="1" name="Reached"     enum="Reached" />
+   </binaryOption>
+
+<!--   ========== DAC Init class =============================== -->
+
+   <template key="init_description" namespace="all" ><![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the DAC
+      \t *
+      \t * This class has a templated constructor that accepts various values.  <br>
+      \t * Parameters available may vary with device - see $(_class)::DefaultInitValue for relevant example.  <br>
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.  <br>
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const Dac$(_instance)::Init dacInit {
+      \t *    DacReferenceSelect_Vdda ,       // DAC Reference Select - VddA
+      \t *    DacTriggerSelect_Software ,     // DAC Trigger Select - Software trigger
+      \t *    DacPower_High ,                 // DAC Low Power Control - High-Power mode
+      \t *    DacWatermarkIrq_Enabled,        // DAC Buffer Watermark Interrupt Enable - Interrupt is disabled
+      \t *    DacReadPtrTopIrq_Disabled ,     // DAC Buffer Read Pointer Top Flag Interrupt Enable - Interrupt is disabled
+      \t *    DacReadPtrBottomIrq_Disabled ,  // DAC Buffer Read Pointer Bottom Flag Interrupt Enable - Interrupt is disabled
+      \t *    DacDma_Enabled ,                // DMA Enable Select - DMA is disabled
+      \t *    DacWaterMark_Normal_1 ,         // Buffer Watermark Select - Normal mode: 1 free entry
+      \t *    DacBufferMode_Normal ,          // Buffer operation mode - Normal
+      \t *    DacBufferUpperLimit_Max,        // DAC Buffer Upper Limit - max entries
+      \t *    dacCallback,                    // Interrupt call-back
+      \t * };
+      \t *
+      \t * // Initialise DAC from values specified above
+      \t * Dac$(_instance)::configure(dacInit)
+      \t * @endcode
+      \t */
    ]]></template>
-      
-   <intOption key="dac_c2_dacbfup" description="DAC Buffer Upper Limit"
-      toolTip="Selects the upper limit of the DAC buffer. The buffer read pointer cannot exceed it" 
-      value="1"
-      min="0" />
-      
-   <template><![CDATA[
-      \t//! DAC Control Register 2
-      \tstatic constexpr uint32_t c2 =
-      \t   DAC_C2_DACBFUP($(dac_c2_dacbfup));   // DAC Buffer Upper Limit\n\n
+
+   <template namespace="usbdm" ><![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t/**
+      \t * Type definition for $(_class) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)(uint8_t status);
+      \t\n
+   ]]></template>
+
+   <template namespace="usbdm"><![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**                               
+      \t    * Copy Constructor                  
+      \t    */                             
+      \t   constexpr Init(const Init &other) = default;
+      \t   
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
    ]]></template>
    
+<!--   Member variables -->
+  
+   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod" 
+    ><![CDATA[
+      \t   /// %description
+      \t   CallbackFunction callback = nullptr;\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate namespace="usbdm"
+      variables="/PCR/nvic_irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" 
+      variables="dac_c0_dacrfs, dac_c0_dactrgsel, dac_c0_lpen, dac_c0_dacbwien, dac_c0_dacbtien, dac_c0_dacbbien"
+   ><![CDATA[
+      \t   ///  DAC Control Register 0
+      \t   uint8_t %registerName = DAC_C0_DACEN_MASK;\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate namespace="usbdm" 
+      variables="dac_c1_dmaen, dac_c1_dacbfwm, dac_c1_dacbfmd, dac_c1_buffer_mode"
+   ><![CDATA[
+      \t   ///  DAC Control Register 1
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+   
+   <initialValueTemplate namespace="usbdm" 
+      variables="dac_c2_dacbfup"
+   ><![CDATA[
+      \t   ///  DAC Control Register 2
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+   
+<!--   Configure method -->
+  
+   <setTemplate  key="/DAC/InitMethod" namespace="all"  discardRepeats="true"
+      variables="dac_c0_dacrfs,dac_c1_buffer_mode,dac_c2_dacbfup" 
+   ><![CDATA[
+      \t/**
+      \t * Configure DAC from values specified in init
+      \t
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t   
+      \t   enable();
+      \t
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-back if feature enabled
+      \t      setCallback(init.callback);
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
+      \t   
+      \t   %register0 = init.%registerName0;
+      \t   %register1 = init.%registerName1;
+      \t   %register2 = init.%registerName2;
+      \t}
+      \t
+      \t/**
+      \t * Configure DAC with default settings
+      \t */
+      \tstatic void defaultConfigure() {
+      \t   
+      \t   configure(Info::DefaultInitValue);
+      \t}\n\n
+   ]]></setTemplate>
+
+<!--   Constructors -->
+
+   <for keys="r" values="
+         dac_c0_dacrfs; dac_c0_dactrgsel; dac_c0_lpen; dac_c0_dacbwien; dac_c0_dacbtien; dac_c0_dacbbien;
+         dac_c1_dmaen; dac_c1_dacbfwm; dac_c1_dacbfmd; dac_c1_buffer_mode;
+         dac_c2_dacbfup" >
+         
+      <setTemplate  namespace="usbdm" variables="%(r)"
+         linePadding="xxx" 
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t   
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]></setTemplate>
+   </for>
+      
+   <constructorTemplate namespace="usbdm" 
+      variables="/PCR/nvic_irqLevel" 
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName = %paramExpression;
+      \t   }\n\n
+   ]]></constructorTemplate>
+
+   <constructorTemplate namespace="usbdm"  codeGenCondition="irqHandlingMethod" 
+      variables="irqHandlingMethod" 
+      nonDefaultParams="2" 
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      callback = %enumParam;
+      \t   }\n\n
+   ]]></constructorTemplate>
+
+   <template namespace="usbdm" ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+   <template namespace="usbdm" ><![CDATA[
+      };\n\n
+   ]]></template>
+
+<!--   Default Initialisation value -->
+  
+   <template><![CDATA[
+      \t/**
+      \t * $(_class) interrupt call back
+      \t */
+      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \t\n
+   ]]></template>
+   
+   <initialValueTemplate
+      separator=","
+      terminator=","     
+      variables="
+         dac_c0_dacrfs, dac_c0_dactrgsel, dac_c0_lpen, dac_c0_dacbwien, dac_c0_dacbtien, dac_c0_dacbbien,
+         dac_c1_dmaen, dac_c1_dacbfwm, dac_c1_dacbfmd, dac_c1_buffer_mode,
+         dac_c2_dacbfup"     
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for Dac$(_instance)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+<!--  ======================== Misc ======================== -->      
+
+   <template><![CDATA[
+      \t/// Number of Data output registers
+      \tstatic constexpr size_t NumDataRegisters = $(num_dat);
+      \t\n
+   ]]></template>
+  
    <template key="/DAC/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
@@ -118,8 +454,6 @@
    ]]></template>
       
    <xi:include href="_clockOption.xml"/>
-      
-   <xi:include href="_irqOption.xml"/>         
    
    <projectActionList id = "dac_files" >
       <copy source="Project_Headers/dac.h"                         target="Project_Headers/dac.h"                         overwrite="true" derived="true" />
@@ -133,4 +467,4 @@
    
    <signals/>
    
-</peripheralPage>
+</fragment>

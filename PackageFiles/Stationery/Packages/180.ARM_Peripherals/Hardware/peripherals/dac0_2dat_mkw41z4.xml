@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- dac0_2dat_mkw41z4.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Digital to Analogue Converter">
+
+   <intOption key="num_dat"                      value="2" hidden="true" /> <!-- Number of DAT registers   -->
+
+   <xi:include href="dac_def.xml"/>
+</peripheralPage>
