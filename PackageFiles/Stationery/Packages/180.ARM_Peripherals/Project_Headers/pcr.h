@@ -18,6 +18,9 @@
 #include <stddef.h>
 #include <math.h>
 #include <algorithm>
+#if __cplusplus >= 202002L
+#include <bit>
+#endif
 #include "derivative.h"
 #include "error.h"
 
@@ -47,8 +50,7 @@ namespace USBDM {
 #pragma GCC push_options
 #pragma GCC optimize ("Os")
 
-#define USE_DIMENSION_CHECK $(/HARDWARE/useTypeSystemForTimers)
-#if (USE_DIMENSION_CHECK)
+#if ($(/HARDWARE/useTypeSystemForTimers))
 class Ticks {
 
 private:
@@ -273,13 +275,30 @@ union Seconds_Ticks {
    ///  Time in seconds or Ticks
    uint32_t value;
 
+#if $(/HARDWARE/useTypeSystemForTimers)
    constexpr Seconds_Ticks() : value(0) {}
-
+#if __cplusplus >= 202002L
+   constexpr Seconds toSeconds() const         { return std::bit_cast<float, unsigned>(value); }
+   constexpr void fromSeconds(Seconds seconds) { value = std::bit_cast<unsigned, float>(seconds.getValue()); }
+#else
    constexpr Seconds toSeconds() const { return __builtin_bit_cast(float, value); }
-   constexpr Ticks   toTicks()   const { return value; }
-
    constexpr void fromSeconds(Seconds seconds) { value = __builtin_bit_cast(unsigned, seconds.getValue()); }
+#endif
+
+   constexpr Ticks   toTicks()   const { return value; }
    constexpr void fromTicks(Ticks ticks)       { value = ticks.getValue(); }
+#else
+#if __cplusplus >= 202002L
+   constexpr Seconds toSeconds() const         { return std::bit_cast<float, unsigned>(value); }
+   constexpr void fromSeconds(Seconds seconds) { value = std::bit_cast<unsigned, float>(seconds); }
+#else
+   constexpr Seconds toSeconds() const { return __builtin_bit_cast(float, value); }
+   constexpr void fromSeconds(Seconds seconds) { value = __builtin_bit_cast(unsigned, seconds); }
+#endif
+
+   constexpr Ticks   toTicks()   const { return value; }
+   constexpr void fromTicks(Ticks ticks)       { value = ticks; }
+#endif
 
 };
 
