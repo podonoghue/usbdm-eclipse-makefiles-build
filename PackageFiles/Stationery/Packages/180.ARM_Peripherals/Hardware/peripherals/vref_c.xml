@@ -264,7 +264,7 @@ Devices using this peripheral:
       variables="vref_sc_regen"
       linePadding="xxx" 
    ><![CDATA[      
-      \t      %registerName = (%registerName&%mask) | %paramExpression;
+      \t      %registerName = (%registerName&~%mask) | %paramExpression;
       \t   }
       \t\n
    ]]></setTemplate>
@@ -288,7 +288,7 @@ Devices using this peripheral:
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t   
-         \t      %registerName = (%registerName&%mask) | %paramExpression;
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
       ]]></setTemplate>
