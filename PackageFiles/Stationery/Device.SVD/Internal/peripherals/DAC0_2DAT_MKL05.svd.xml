@@ -1,13 +1,16 @@
 <!--
 Devices using this peripheral: 
-      MKL17Z4
-      MKL27Z4
-      MKL33Z4
-      MKL34Z4
-      MKL43Z4
+      MKL05Z4
+      MKL15Z4
+      MKL16Z4
+      MKL25Z4
+      MKL26Z4
+      MKL36Z4
+      MKL46Z4
+      MKW01Z4
 -->
       <peripheral>
-         <?sourceFile "DAC0_2CH_FIFO_MKL17" ?>
+         <?sourceFile "DAC0_2DAT_MKL05" ?>
          <name>DAC0</name>
          <description>12-Bit Digital-to-Analog Converter</description>
          <groupName>DAC</groupName>
@@ -17,6 +20,9 @@ Devices using this peripheral:
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>2</value> <name>DAT_COUNT</name> <description>Number of Data registers</description></parameter>
+         </parameters>
          <addressBlock>
             <?width "16" ?>
             <offset>0x0</offset>
@@ -31,9 +37,8 @@ Devices using this peripheral:
          </addressBlock>
          <registers>
             <cluster>
-               <dim>2</dim>
+               <dim>$(DAT_COUNT)</dim>
                <dimIncrement>2</dimIncrement>
-               <dimIndex>0,1</dimIndex>
                <name>DAT,@p@f@i</name>
                <?hide?>
                <addressOffset>0x0</addressOffset>
@@ -66,9 +71,8 @@ Devices using this peripheral:
                </register>
             </cluster>
             <register>
-               <dim>2</dim>
+               <dim>$(DAT_COUNT)</dim>
                <dimIncrement>2</dimIncrement>
-               <dimIndex>0,1</dimIndex>
                <name>DATA</name>
                <description>Data Register\n
 When the DAC Buffer is not enabled DATA controls the output voltage based on the following formula:
@@ -159,7 +163,6 @@ Indicates that the DAC buffer read pointer not zero</description>
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="DACBBIEN" > <name>DACBTIEN</name> <description>Buffer Read Pointer Top Flag Interrupt Enable</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="DACBBIEN" > <name>DACBWIEN</name> <description>Buffer Watermark Interrupt Enable</description> <bitOffset>2</bitOffset> </field>
                   <field>
                      <name>LPEN</name>
                      <description>Low Power Control</description>
@@ -281,23 +284,18 @@ Indicates that the DAC buffer read pointer not zero</description>
                   <field>
                      <name>DACBFMD</name>
                      <description>Buffer Work Mode Select</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>2</bitWidth>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b00</name>
+                           <name>0b0</name>
                            <description>Normal mode</description>
-                           <value>0b00</value>
+                           <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b10</name>
+                           <name>0b1</name>
                            <description>One-Time Scan mode</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11</name>
-                           <description>FIFO mode</description>
-                           <value>0b11</value>
+                           <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>

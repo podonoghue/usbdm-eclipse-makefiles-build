@@ -26,7 +26,7 @@
       <xi:include href="peripherals/BTLE_RF_MKW41Z4.svd.xml"/>
       <xi:include href="peripherals/CMP0_PSTM_TRIGM.svd.xml"/>
       <xi:include href="peripherals/CMT_0.svd.xml"/>
-      <xi:include href="peripherals/DAC0_2CH_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/DAC0_2DAT_MKW41Z4.svd.xml"/>
       <xi:include href="peripherals/DCDC_MKW41Z4.svd.xml"/>
       <xi:include href="peripherals/DMA0_4CH_EARS_ACTIVE.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_4CH_TRIG_MKW41Z4.svd.xml"/>

@@ -23,7 +23,7 @@
    <peripherals>
       <xi:include href="peripherals/ADC0_DIFF_A.svd.xml"/>
       <xi:include href="peripherals/CMP0_PSTM_TRIGM.svd.xml"/>
-      <xi:include href="peripherals/DAC0_2CH_MKL05.svd.xml"/>
+      <xi:include href="peripherals/DAC0_2DAT_MKL05.svd.xml"/>
       <xi:include href="peripherals/DMA0_MKL.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_4CH_TRIG.svd.xml"/>
       <xi:include href="peripherals/FGPIOA_0xF8000000.svd.xml"/>

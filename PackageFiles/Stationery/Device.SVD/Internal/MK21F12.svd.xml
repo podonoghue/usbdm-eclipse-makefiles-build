@@ -32,7 +32,7 @@
       <xi:include href="peripherals/CMT_0.svd.xml"/>
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/CoreDebug.svd.xml"/>
-      <xi:include href="peripherals/DAC0_16CH_FIFO16_0x400CC000.svd.xml"/>
+      <xi:include href="peripherals/DAC0_16DAT_FIFO16_0x400CC000.svd.xml"/>
       <peripheral derivedFrom="DAC0"><name>DAC1</name><baseAddress>0x400CD000</baseAddress></peripheral>
       <xi:include href="peripherals/DMA0_16CH_EARS4.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_16CH_TRIG_MK22FA12.svd.xml"/>
@@ -84,7 +84,7 @@
       <xi:include href="peripherals/SCB_CM4_CPACR.svd.xml"/>
       <xi:include href="peripherals/SDHC0_MK21F12.svd.xml"/>
       <xi:include href="peripherals/SIM_MK21F12.svd.xml"/>
-      <xi:include href="peripherals/SMC_MK21F12.svd.xml"/>
+      <xi:include href="peripherals/SMC_MK11D5.svd.xml"/>
       <xi:include href="peripherals/SPI0_MK_PCSIS6_PCSSE.svd.xml"/>
       <peripheral derivedFrom="SPI0"><name>SPI1</name><baseAddress>0x4002D000</baseAddress></peripheral>
       <peripheral derivedFrom="SPI0"><name>SPI2</name><baseAddress>0x400AC000</baseAddress></peripheral>
