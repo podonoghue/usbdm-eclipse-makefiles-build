@@ -181,15 +181,57 @@
       <peripheral baseName="Console"  instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
       </peripheral>
-      <peripheral baseName="DAC"      instance="0"        version="dac0_16ch_fifo16">
+      <peripheral baseName="DAC"      instance="0"        version="dac0_16dat_fifo16">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_DAC0_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_DAC0_MASK;" />
          <irq num="DAC0_IRQn" />
+         <param name="$present"     key="/DAC0/$present" value="true" />
+         <param name="dac_c0_dacbbien_present" key="/DAC0/dac_c0_dacbbien_present" value="true" />
+         <param name="dac_c0_dacbtien_present" key="/DAC0/dac_c0_dacbtien_present" value="true" />
+         <param name="dac_c0_dacbwien_present" key="/DAC0/dac_c0_dacbwien_present" value="true" />
+         <param name="dac_c0_dacen_present" key="/DAC0/dac_c0_dacen_present" value="true" />
+         <param name="dac_c0_dacrfs_present" key="/DAC0/dac_c0_dacrfs_present" value="true" />
+         <param name="dac_c0_dacswtrg_present" key="/DAC0/dac_c0_dacswtrg_present" value="true" />
+         <param name="dac_c0_dactrgsel_present" key="/DAC0/dac_c0_dactrgsel_present" value="true" />
+         <param name="dac_c0_lpen_present" key="/DAC0/dac_c0_lpen_present" value="true" />
+         <param name="dac_c1_dacbfen_present" key="/DAC0/dac_c1_dacbfen_present" value="true" />
+         <param name="dac_c1_dacbfmd_present" key="/DAC0/dac_c1_dacbfmd_present" value="true" />
+         <param name="dac_c1_dacbfwm_present" key="/DAC0/dac_c1_dacbfwm_present" value="true" />
+         <param name="dac_c1_dmaen_present" key="/DAC0/dac_c1_dmaen_present" value="true" />
+         <param name="dac_c2_dacbfrp_present" key="/DAC0/dac_c2_dacbfrp_present" value="true" />
+         <param name="dac_c2_dacbfup_present" key="/DAC0/dac_c2_dacbfup_present" value="true" />
+         <param name="dac_data_data_present" key="/DAC0/dac_data_data_present" value="true" />
+         <param name="dac_dath_data_present" key="/DAC0/dac_dath_data_present" value="true" />
+         <param name="dac_datl_data_present" key="/DAC0/dac_datl_data_present" value="true" />
+         <param name="dac_sr_dacbfrpbf_present" key="/DAC0/dac_sr_dacbfrpbf_present" value="true" />
+         <param name="dac_sr_dacbfrptf_present" key="/DAC0/dac_sr_dacbfrptf_present" value="true" />
+         <param name="dac_sr_dacbfwmf_present" key="/DAC0/dac_sr_dacbfwmf_present" value="true" />
       </peripheral>
-      <peripheral baseName="DAC"      instance="1"        version="dac0_16ch_fifo16">
+      <peripheral baseName="DAC"      instance="1"        version="dac0_16dat_fifo16">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_DAC1_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_DAC1_MASK;" />
          <irq num="DAC1_IRQn" />
+         <param name="$present"     key="/DAC1/$present" value="true" />
+         <param name="dac_c0_dacbbien_present" key="/DAC1/dac_c0_dacbbien_present" value="true" />
+         <param name="dac_c0_dacbtien_present" key="/DAC1/dac_c0_dacbtien_present" value="true" />
+         <param name="dac_c0_dacbwien_present" key="/DAC1/dac_c0_dacbwien_present" value="true" />
+         <param name="dac_c0_dacen_present" key="/DAC1/dac_c0_dacen_present" value="true" />
+         <param name="dac_c0_dacrfs_present" key="/DAC1/dac_c0_dacrfs_present" value="true" />
+         <param name="dac_c0_dacswtrg_present" key="/DAC1/dac_c0_dacswtrg_present" value="true" />
+         <param name="dac_c0_dactrgsel_present" key="/DAC1/dac_c0_dactrgsel_present" value="true" />
+         <param name="dac_c0_lpen_present" key="/DAC1/dac_c0_lpen_present" value="true" />
+         <param name="dac_c1_dacbfen_present" key="/DAC1/dac_c1_dacbfen_present" value="true" />
+         <param name="dac_c1_dacbfmd_present" key="/DAC1/dac_c1_dacbfmd_present" value="true" />
+         <param name="dac_c1_dacbfwm_present" key="/DAC1/dac_c1_dacbfwm_present" value="true" />
+         <param name="dac_c1_dmaen_present" key="/DAC1/dac_c1_dmaen_present" value="true" />
+         <param name="dac_c2_dacbfrp_present" key="/DAC1/dac_c2_dacbfrp_present" value="true" />
+         <param name="dac_c2_dacbfup_present" key="/DAC1/dac_c2_dacbfup_present" value="true" />
+         <param name="dac_data_data_present" key="/DAC1/dac_data_data_present" value="true" />
+         <param name="dac_dath_data_present" key="/DAC1/dac_dath_data_present" value="true" />
+         <param name="dac_datl_data_present" key="/DAC1/dac_datl_data_present" value="true" />
+         <param name="dac_sr_dacbfrpbf_present" key="/DAC1/dac_sr_dacbfrpbf_present" value="true" />
+         <param name="dac_sr_dacbfrptf_present" key="/DAC1/dac_sr_dacbfrptf_present" value="true" />
+         <param name="dac_sr_dacbfwmf_present" key="/DAC1/dac_sr_dacbfwmf_present" value="true" />
       </peripheral>
       <peripheral baseName="DMA"      instance="0"        version="dma0_16ch_ears16">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
