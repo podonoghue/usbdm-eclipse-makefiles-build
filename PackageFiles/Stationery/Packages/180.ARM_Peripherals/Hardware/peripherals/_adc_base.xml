@@ -258,6 +258,7 @@
    <binaryOption key="adc_pretrigger" description="Selects the pretrigger"
       enumStem="AdcPretrigger"
       valueFormat="(%s)"
+      hidden="true"
       toolTip="Selects which SC1[x]/R[x] register pair to use">
       <choice value="0" enum="0"  name="Use pretrigger 0 = SC1[0]/R[0]" isDefault="true" />
       <choice value="1" enum="1"  name="Use pretrigger 1 = SC1[1]/R[1]" />
@@ -479,10 +480,8 @@
       \tstatic void configure(const typename Info::Init &init) {
       \t   
       \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      // Only set call-back if feature enabled and non-null
-      \t      if (init.callbackFunction != nullptr) {
-      \t         setCallback(init.callbackFunction);
-      \t      }
+      \t      // Only set call-back if feature enabled
+      \t      setCallback(init.callbackFunction);
       \t      enableNvicInterrupts(init.irqlevel);
       \t   }
       \t   enable();
@@ -492,7 +491,9 @@
       \t   adc->SC2     = init.sc2;
       \t   adc->SC3     = init.sc3;
       \t   adc->CV1     = init.cv1;
-      \t   adc->CV1     = init.cv2;
+      \t   adc->CV2     = init.cv2;
+      \t
+      \t   calibrate();
       \t}
       \t
       \t/**
@@ -556,7 +557,6 @@
          adc_cfg2_adhsc;
          adc_cfg2_adacken;
          adc_cfg2_muxsel;
-         adc_sc2_compare;
          adc_sc2_refsel;
          adc_sc2_dmaen;
          adc_sc2_adtrg;
@@ -583,7 +583,8 @@
    </for>
    
    <setTemplate namespace="usbdm" variables="adc_sc2_compare,adc_cv1,adc_cv2"
-      linePadding="xxx" 
+      linePadding="xxx"
+      nonDefaultParams="3" 
    ><![CDATA[
       \t   /**
       \t    * Configure %description0, %description1 and %description2
@@ -645,7 +646,6 @@
          adc_sc2_refsel,
          adc_sc2_dmaen,
          adc_cfg2_muxsel,
-         adc_sc2_dmaen,
          adc_sc2_adtrg,
          adc_sc3_avg,
          adc_sc3_adco,

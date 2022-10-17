@@ -170,7 +170,7 @@
    <item key="/HARDWARE/Switch1"                           value="Switch3" />
    <item key="/LLWU/llwu_filt1_filtsel"                    value="0" />
    <item key="/LLWU/llwu_filt2_filtsel"                    value="0" />
-   <item key="/LPTMR0/lptmr_cmr"                           value="0" />
+   <item key="/LPTMR0/lptmr_cmr_compare"                   value="1" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_RUN_PEE_80MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_VLPR_BLPE_4MHz" />
    <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_HSRUN_PEE_120MHz" />

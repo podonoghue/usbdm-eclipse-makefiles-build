@@ -21,6 +21,7 @@
 #include "ftm.h"
 #include "mcg.h"
 #include "vref.h"
+#include "pdb.h"
 
 // Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;
@@ -392,7 +393,7 @@ void testGPIO() {
 
    Switch::setInput(PinPull_Up, PinAction_IrqFalling, PinFilter_Passive);
    Switch::setPinCallback(pinCallback);
-   Switch::enablePinNvicInterrupts(NvicPriority_Normal);
+   Switch::enableNvicPinInterrupts(NvicPriority_Normal);
 }
 
 void reportLlwu(const Llwu::Init &llwuInit) {
@@ -626,6 +627,120 @@ void testOSC() {
 
    Osc0Info::enableExternalReference(OscErClkEn_Disabled);
    Osc0Info::enableExternalReference(OscErClkEn_Enabled);
+}
+
+void pdbCallback(void) {
+
+}
+
+void testPDB() {
+
+   Seconds period{200_ms};
+   uint32_t scValue;
+   uint16_t modValue;
+
+   Seconds test[] = {
+         5_s, 1_s, 500_ms, 200_ms, 10_ms, 5_ms, 1_ms, 500_ns, 200_ns, 100_ns, 10_ns,
+   };
+   for (unsigned index=0; index<sizeofArray(test); index++) {
+      period = test[index];
+      if (Pdb0::calculateCounterParameters(period, scValue, modValue) != E_NO_ERROR) {
+         console.writeln(period, " -> Failed" );
+      }
+      else {
+         console.writeln(period, " -> ", Pdb0::convertTicksToSeconds((modValue+1), scValue));
+      }
+   }
+
+   Seconds_Ticks st1, st2;
+
+   st1.fromSeconds(10_s);
+   st2.fromTicks(100_ticks);
+
+   console.writeln("10_s      = ", st1.toSeconds());
+   console.writeln("100_ticks = ", st2.toTicks());
+
+   Pdb0::configure(Pdb0::DefaultInitValue);
+   Pdb0::softwareTrigger();
+   while(!Pdb0::isRegisterLoadComplete()) {
+      __asm__("nop");
+   }
+   static constexpr Pdb0::Init init1 {
+
+      PdbTrigger_Software ,      // Trigger Input Source Select - Software trigger is selected
+      PdbMode_OneShot ,          // PDB operation mode - Sequence runs once only
+      PdbLoadMode_Immediate ,    // Register Load Select - Register loaded immediately
+
+      PdbPrescale_DivBy_4 ,      // Clock Prescaler Divider Select - Divide by 4
+      0x1000_ticks ,             // Counter modulus
+
+      NvicPriority_VeryHigh,     // IRQ level for this peripheral - VeryHigh
+
+      PdbAction_None ,           // Action done on event - No action on event
+      0x900_ticks ,              // Interrupt delay
+      pdbCallback,               // Action call-back
+
+      PdbErrorAction_Interrupt ,      // Sequence Error Interrupt Enable - Interrupt on error
+      pdbCallback,               // Error action call-back
+
+      // ADC Pretriggers
+      PdbChannel_0, PdbPretrigger0_Delayed, 0x111_ticks, // Channel 0 Pretrigger 0
+      PdbChannel_0, PdbPretrigger1_Disabled,             // Channel 0 Pretrigger 1
+      PdbChannel_1, PdbPretrigger0_Delayed, 0x222_ticks, // Channel 1 Pretrigger 0
+      PdbChannel_1, PdbPretrigger1_Bypassed,             // Channel 1 Pretrigger 1
+
+      // DAC triggers
+      PdbDac0TriggerMode_Delayed, 0x333_ticks, // DAC0 Trigger
+      PdbDac1TriggerMode_External,             // DAC1 Trigger
+
+      // Pulse outputs
+      PdbPulseOutput0_Enabled, 0x444_ticks, 0x555_ticks,  // Pulse output 0 (CMP0)
+      PdbPulseOutput1_Enabled, 0x666_ticks, 0x777_ticks,  // Pulse output 0 (CMP1)
+
+      Pdb0::DefaultInitValue,
+   };
+   Pdb0::configure(init1);
+   while(!Pdb0::isRegisterLoadComplete()) {
+      __asm__("nop");
+   }
+
+   static constexpr Pdb0::Init init2 {
+
+      PdbTrigger_Software ,      // Trigger Input Source Select - Software trigger is selected
+      PdbMode_OneShot ,          // PDB operation mode - Sequence runs once only
+      PdbLoadMode_Immediate ,    // Register Load Select - Register loaded immediately
+
+      PdbPrescale_Auto_Select ,  // Clock Prescaler Auto selected by PDB period
+      200_ms ,                   // Counter period
+
+      NvicPriority_VeryHigh,     // IRQ level for this peripheral - VeryHigh
+
+      PdbAction_None ,           // Action done on event - No action on event
+      190_ms ,                   // Interrupt delay
+      pdbCallback,               // Action call-back
+
+      PdbErrorAction_None ,      // Sequence Error Interrupt Enable - No interrupt on error
+      pdbCallback,               // Error action call-back
+
+      // ADC Pretriggers
+      PdbChannel_0, PdbPretrigger0_Delayed, 100_ms, // Channel 0 Pretrigger 0 @ 100 ms
+      PdbChannel_0, PdbPretrigger1_Disabled,        // Channel 0 Pretrigger 1 disabled
+      PdbChannel_1, PdbPretrigger0_Delayed, 150_ms, // Channel 1 Pretrigger 0 @ 150 ms
+      PdbChannel_1, PdbPretrigger1_Bypassed,        // Channel 1 Pretrigger 1 disabled
+
+      // DAC triggers
+      PdbDac0TriggerMode_Delayed, 50_ms, // DAC0 Trigger @ 50 ms
+      PdbDac1TriggerMode_External,       // DAC1 Trigger directly triggered by external input
+
+      // Pulse outputs
+      PdbPulseOutput0_Enabled, 120_ms, 130_ms,  // Pulse output 0 (CMP0 window) @ 120-130 ms
+      PdbPulseOutput1_Enabled, 220_ms, 230_ms,  // Pulse output 0 (CMP1 window) @ 220-230 ms
+   };
+   Pdb0::configure(init2);
+
+   while(!Pdb0::isRegisterLoadComplete()) {
+      __asm__("nop");
+   }
 }
 
 void testPIT() {
@@ -1119,7 +1234,28 @@ void testWDOG() {
    Wdog::defaultConfigure();
    Wdog::configure(Wdog::DefaultInitValue);
 
-   static const Wdog::Init wdogInit {
+//   static const Wdog::Init wdogInit {
+//      WdogEnable_Enabled,          // Enabled
+//      WdogTestMode_Disabled ,       // Test mode disable
+//      WdogEnableInWait_Disabled ,   // Enable watchdog in WAIT mode
+//      WdogEnableInStop_Disabled ,   // Enable watchdog in STOP mode
+//      WdogEnableInDebug_Disabled ,  // Enable watchdog in DEBUG mode
+//      WdogAllowUpdate_Enabled ,     // Allow watchdog update
+//      WdogWindow_Disabled ,         // Enable watchdog windowing mode
+//      WdogIntBeforeReset_Enabled ,  // Enable interrupt before reset
+//      WdogClock_LpoClk ,            // Watchdog clock source
+//      WdogEnable_Disabled ,         // Watchdog enable
+//      NvicPriority_Normal,          // IRQ level for this peripheral
+////      wdogCallback,                 // Call-back
+//      // Using ticks
+//      WdogPrescale_Direct,
+//      1000_ticks, 0_ticks,
+//      // Using seconds
+////      1_s , 0_s ,                   // Watchdog Timeout and Window values
+//      Wdog::DefaultInitValue,
+//   };
+
+   static constexpr Wdog::Init wdogInit {
       WdogEnable_Enabled,          // Enabled
       WdogTestMode_Disabled ,       // Test mode disable
       WdogEnableInWait_Disabled ,   // Enable watchdog in WAIT mode
@@ -1133,10 +1269,10 @@ void testWDOG() {
       NvicPriority_Normal,          // IRQ level for this peripheral
 //      wdogCallback,                 // Call-back
       // Using ticks
-      WdogPrescale_Direct,
-      1000_ticks, 0_ticks,
+//      WdogPrescale_Direct,
+//      1000_ticks, 0_ticks,
       // Using seconds
-//      1_s , 0_s ,                   // Watchdog Timeout and Window values
+      2_s , 1_s ,                   // Watchdog Timeout and Window values
       Wdog::DefaultInitValue,
    };
 
@@ -1173,7 +1309,10 @@ void runTests() {
  */
 int main() {
    console.writeln("SystemBusClock - ", SystemBusClock);
-   runTests();
+
+   testPDB();
+
+   //   runTests();
 
 //   testADC();
 //   testVREF();
@@ -1185,7 +1324,7 @@ int main() {
 
 //   testPIT();
 //   testLPTMR();
-   testFTM();
+//   testFTM();
 
 //   testMCG();
 

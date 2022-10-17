@@ -767,6 +767,7 @@
             \t    *
             \t    * @tparam   Types
             \t    * @param    rest
+            \t    *
             %paramDescription
             \t    */
             \t   template <typename... Types>
@@ -804,6 +805,7 @@
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
+         \t    *
          %paramDescription
          \t    */
          \t   template <typename... Types>
@@ -1114,62 +1116,159 @@
    </for>
 
 <!-- ========== SOPT7 =============================== -->
+   <setTemplate 
+      variables="
+         sim_sopt7_adc0trigger,sim_sopt7_adc0trgsel,
+         sim_sopt7_adc1trigger,sim_sopt7_adc1trgsel"
+      linePadding="xxx"
+   ><![CDATA[
+      \t/**
+      \t * Class used to do initialisation of Adc trigger sources
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const AdcInit adcInit {
+      \t * };
+      \t *
+      \t * // Initialise Adc signals from values specified above
+      \t * adcInit.configure()
+      \t * @endcode
+      \t */
+      \tclass AdcInit {
+      \t
+      \tpublic:
+      \t   /// Adc signals
+      \t   uint32_t %registerName = 0;
+      \t
+      \t   /**                               
+      \t    * Copy Constructor                  
+      \t    */                             
+      \t   constexpr AdcInit(const AdcInit &other) = default;
+      \t   
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr AdcInit() = default;
+      \t\n
+   ]]></setTemplate>
+
+   <for keys="p" values=";0;1">
+      <setTemplate 
+         variables="sim_sopt7_adc%(p)trigger"
+         linePadding="xxx"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr AdcInit(%params, Types... rest) : AdcInit(rest...) {
+         \t
+         \t      %registerName = (%registerName & ~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]></setTemplate>
+      <setTemplate 
+         variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel"
+         linePadding="xxx"
+         nonDefaultParams="2"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description0 and %description1
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr AdcInit(
+         %params, Types... rest) : AdcInit(rest...) {
+         \t
+         \t      %registerName = (%registerName & ~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]></setTemplate>
+   </for>
+
+   <setTemplate 
+      variables="
+         sim_sopt7_adc0trigger,sim_sopt7_adc0trgsel,
+         sim_sopt7_adc1trigger,sim_sopt7_adc1trgsel"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Configure ADC trigger sources from values specified in constructor.
+      \t    */
+      \t   void configure() const {\n
+      \t      %register = (%register&~%mask) |
+      \t                   %registerName;
+      \t   }
+      \t};\n\n
+   ]]></setTemplate>
+
    <for keys="p" values=";0;1">
       <setTemplate 
          variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel"
             linePadding="xxx"
-         ><![CDATA[
-            \t/**
-            \t * Class used to do initialisation of Adc%(p) signals
-            \t *
-            \t * @note This constructor may be used to create a const instance in ROM
-            \t *
-            \t * Example:
-            \t * @code
-            \t * static const Adc%(p)Init adc%(p)Init {
-            \t * };
-            \t *
-            \t * // Initialise Adc signals from values specified above
-            \t * adc%(p)Init.configure()
-            \t * @endcode
-            \t */
-            \tclass Adc%(p)Init {
-            \t
-            \tpublic:
-            \t   /// Adc signals
-            \t   uint32_t %registerName = 0;
-            \t
-            \t   /**                               
-            \t    * Copy Constructor                  
-            \t    */                             
-            \t   constexpr Adc%(p)Init(const Adc%(p)Init &other) = default;
-            \t   
-            \t   /**
-            \t    * Default Constructor
-            \t    */
-            \t   constexpr Adc%(p)Init() = default;
-            \t
-            \t   /**
-            \t    * Constructor 
-            %paramDescription
-            \t    */
-            \t   constexpr Adc%(p)Init(
-            %params) {
-            \t
-            \t      %registerName = %paramExpression;
-            \t   }
-            \t   /**
-            \t    * Configure Adc signals from values specified in constructor.
-            \t    */
-            \t   void configure() const {\n
-            \t      %register = (%register&~%mask) | %registerName;
-            \t   }
-            \t};\n\n
-         ]]></setTemplate>
+      ><![CDATA[
+         \t/**
+         \t * Class used to do initialisation of Adc%(p) trigger sources
+         \t *
+         \t * @note This constructor may be used to create a const instance in ROM
+         \t *
+         \t * Example:
+         \t * @code
+         \t * static const Adc%(p)Init adc%(p)Init {
+         \t * };
+         \t *
+         \t * // Initialise Adc signals from values specified above
+         \t * adc%(p)Init.configure()
+         \t * @endcode
+         \t */
+         \tclass Adc%(p)Init {
+         \t
+         \tpublic:
+         \t   /// Adc signals
+         \t   uint32_t %registerName = 0;
+         \t
+         \t   /**                               
+         \t    * Copy Constructor                  
+         \t    */                             
+         \t   constexpr Adc%(p)Init(const Adc%(p)Init &other) = default;
+         \t   
+         \t   /**
+         \t    * Default Constructor
+         \t    */
+         \t   constexpr Adc%(p)Init() = default;
+         \t
+         \t   /**
+         \t    * Constructor 
+         %paramDescription
+         \t    */
+         \t   constexpr Adc%(p)Init(
+         %params) {
+         \t
+         \t      %registerName = %paramExpression;
+         \t   }
+         \t   /**
+         \t    * Configure Adc signals from values specified in constructor.
+         \t    */
+         \t   void configure() const {\n
+         \t      %register = (%register&~%mask) | %registerName;
+         \t   }
+         \t};\n\n
+      ]]></setTemplate>
    
       <setTemplate variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel" ><![CDATA[
          \t/**
-         \t * Set %description
+         \t * Set %description0 and %description2
          \t *
          %paramDescription
          \t *
@@ -1623,6 +1722,7 @@
             \t    *
             \t    * @tparam   Types
             \t    * @param    rest
+            \t    *
             %paramDescription
             \t    */
             \t   template <typename... Types>
@@ -1663,6 +1763,7 @@
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
+         \t    *
          %paramDescription
          \t    */
          \t   template <typename... Types>
@@ -1689,7 +1790,7 @@
                \t    *
                \t    * @tparam   Types
                \t    * @param    rest
-               \t    * @tparam   Types
+               \t    *
                %paramDescription
                \t    */
                \t   template <typename... Types>
@@ -1713,6 +1814,7 @@
             \t    *
             \t    * @tparam   Types
             \t    * @param    rest
+            \t    *
             %paramDescription
             \t    */
             \t   template <typename... Types>
@@ -1741,7 +1843,7 @@
             \t    *
             \t    * @tparam   Types
             \t    * @param    rest
-            \t    * @tparam   Types
+            \t    *
             %paramDescription
             \t    */
             \t   template <typename... Types>
@@ -1762,6 +1864,7 @@
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
+      \t    *
       %paramDescription
       \t    */
       \t   template <typename... Types>
@@ -1786,7 +1889,7 @@
             \t    *
             \t    * @tparam   Types
             \t    * @param    rest
-            \t    * @tparam   Types
+            \t    *
             %paramDescription
             \t    */
             \t   template <typename... Types>
@@ -1808,6 +1911,7 @@
             \t    *
             \t    * @tparam   Types
             \t    * @param    rest
+            \t    *
             %paramDescription
             \t    */
             \t   template <typename... Types>

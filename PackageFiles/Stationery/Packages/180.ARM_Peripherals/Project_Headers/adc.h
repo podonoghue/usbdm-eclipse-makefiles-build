@@ -337,6 +337,33 @@ $(/ADC/get_maximums: // /ADC/get_maximums not found)
    };
 
    /**
+    * Gets result of hardware initiated conversion
+    *
+    * @param pretrigger Pretrigger to use (identifies which SC1 register to access)
+    *
+    * @return The result of the conversion as an integer converted from 16-bit ADC value\n
+    *         For single-ended conversions this will be zero extended\n
+    *         For differential conversions this will be sign-extended
+    *
+    * @note Result is signed but will always be positive for single-ended conversions.
+    * @note This will also clear the conversion flag if set
+    */
+   int getHardwareConversionResult(AdcPretrigger preTrigger) const {
+
+      // This is a 32-bit value with leading zeroes i.e unsigned
+      int value = ADC_R_D_MASK & (adc->R[preTrigger]);
+
+#if defined(ADC_SC1_DIFF_MASK)
+      if (adc->SC1[preTrigger] & ADC_SC1_DIFF_MASK) {
+         // Differential conversion - convert to signed
+         return static_cast<int16_t>(value);
+      }
+#endif
+
+      return value;
+   };
+
+   /**
     * Check if ADC is current doing a conversion
     *
     * @return true   => ADC is busy doing a conversion
@@ -870,8 +897,12 @@ $(/ADC/InitMethod: // /ADC/InitMethod not found)
     */
    static ErrorCode calibrate() {
 
-      // Save current SC3 as modified
+      // Save modified registers
+      uint8_t sc2 = adc->SC2;
       uint8_t sc3 = adc->SC3;
+
+      // Disable hardware trigger
+      adc->SC2 = sc2 & ~(ADC_SC2_ADTRG_MASK|ADC_SC2_ACFE_MASK|ADC_SC2_DMAEN_MASK);
 
       // Start calibration
       setAveraging(AdcAveraging_Cal);
@@ -887,7 +918,8 @@ $(/ADC/InitMethod: // /ADC/InitMethod not found)
       // Check if calibration failed
       bool failed = adc->SC3 & ADC_SC3_CALF_MASK;
 
-      // Restore original SC3 value
+      // Restore original register values
+      adc->SC2 = sc2;
       adc->SC3 = sc3;
 
       // Check calibration outcome
@@ -1023,6 +1055,7 @@ protected:
       adc->SC1[0] = sc1Value;
    };
 
+public:
    /**
     * Gets result of last software initiated conversion
     *
@@ -1047,6 +1080,33 @@ protected:
       return value;
    };
 
+   /**
+    * Gets result of hardware initiated conversion
+    *
+    * @param pretrigger Pretrigger to use (identifies which SC1 register to access)
+    *
+    * @return The result of the conversion as an integer converted from 16-bit ADC value\n
+    *         For single-ended conversions this will be zero extended\n
+    *         For differential conversions this will be sign-extended
+    *
+    * @note Result is signed but will always be positive for single-ended channels.
+    * @note This will also clear the conversion flag if set
+    */
+   static int getHardwareConversionResult(AdcPretrigger pretrigger) {
+
+      // This is a 32-bit value with leading zeroes i.e unsigned
+      int value = ADC_R_D_MASK & (adc->R[pretrigger]);
+
+#if defined(ADC_SC1_DIFF_MASK)
+      if (adc->SC1[pretrigger] & ADC_SC1_DIFF_MASK) {
+         // Differential conversion - convert to signed
+         return static_cast<int16_t>(value);
+      }
+#endif
+      return value;
+   };
+
+protected:
    /**
     * Initiates a conversion and waits for it to complete.
     *

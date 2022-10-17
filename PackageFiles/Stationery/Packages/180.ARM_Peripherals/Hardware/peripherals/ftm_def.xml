@@ -2177,7 +2177,7 @@ $(quad_init_description)
       \t/**
       \t * Configure QuadDecoder from values specified in init
       \t
-      \t * @param init Class containing initialisation values
+      \t * @param quadInit Class containing initialisation values
       \t */
       \tstatic ErrorCode configure(const typename Info::QuadInit &quadInit) {
       \t
