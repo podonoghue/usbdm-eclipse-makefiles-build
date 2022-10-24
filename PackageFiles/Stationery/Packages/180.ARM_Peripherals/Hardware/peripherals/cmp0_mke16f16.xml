@@ -3,41 +3,47 @@
 <!-- cmp0_mke16f16.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Comparitor">
- 
-   <xi:include href="cmp32_base.xml"/>
- 
-   <choiceOption key="cmp_c1_psel" 
+
+   <xi:include href="_irqOption.xml"/>
+
+   <choiceOption key="cmp_muxcr_psel$(_instance)"
+      hidden="true"
+      valueFormat="CMP_MUXCR_PSEL(%s)"
+      enumStem="Cmp$(_instance)InputPlus"
       description="Plus Input Mux Control"
       toolTip="Determines which input is selected for the plus input of the comparator" >
-      <choice value="CMP_C1_PSEL(0)|CMP_C1_INPSEL(1)" name="CMP_IN0" />
-      <choice value="CMP_C1_PSEL(1)|CMP_C1_INPSEL(1)" name="CMP_IN1" />
-      <choice value="CMP_C1_PSEL(2)|CMP_C1_INPSEL(1)" name="CMP_IN2" />
-      <choice value="CMP_C1_PSEL(3)|CMP_C1_INPSEL(1)" name="CMP_IN3" />
-      <choice value="CMP_C1_PSEL(4)|CMP_C1_INPSEL(1)" name="CMP_IN4" />
-      <choice value="CMP_C1_PSEL(5)|CMP_C1_INPSEL(1)" name="CMP_IN5" />
-      <choice value="CMP_C1_PSEL(6)|CMP_C1_INPSEL(1)" name="CMP_IN6" />
-      <choice value="CMP_C1_PSEL(7)|CMP_C1_INPSEL(1)" name="CMP_IN7" />
-      <choice value="CMP_C1_PSEL(0)|CMP_C1_INPSEL(1)" name="DAC" />
+      <choice value="CMP_C1_PSEL(0)|CMP_C1_INPSEL(1)" enum="0" name="CMP_IN0" />
+      <choice value="CMP_C1_PSEL(1)|CMP_C1_INPSEL(1)" enum="1" name="CMP_IN1" />
+      <choice value="CMP_C1_PSEL(2)|CMP_C1_INPSEL(1)" enum="2" name="CMP_IN2" />
+      <choice value="CMP_C1_PSEL(3)|CMP_C1_INPSEL(1)" enum="3" name="CMP_IN3" />
+      <choice value="CMP_C1_PSEL(4)|CMP_C1_INPSEL(1)" enum="4" name="CMP_IN4" />
+      <choice value="CMP_C1_PSEL(5)|CMP_C1_INPSEL(1)" enum="5" name="CMP_IN5" />
+      <choice value="CMP_C1_PSEL(6)|CMP_C1_INPSEL(1)" enum="6" name="CMP_IN6" />
+      <choice value="CMP_C1_PSEL(7)|CMP_C1_INPSEL(1)" enum="7" name="CMP_IN7" />
+      <choice value="CMP_C1_PSEL(0)|CMP_C1_INPSEL(1)" enum="8" name="DAC" />
    </choiceOption>
 
-   <choiceOption key="cmp_c1_msel" 
+   <choiceOption key="cmp_muxcr_msel$(_instance)"
+      hidden="true"
+      valueFormat="CMP_MUXCR_MSEL(%s)"
+      enumStem="Cmp$(_instance)InputMinus"
       description="Minus Input Mux Control"
       toolTip="Determines which input is selected for the minus input of the comparator" >
-      <choice value="CMP_C1_MSEL(0)|CMP_C1_INNSEL(1)" name="CMP_IN0" />
-      <choice value="CMP_C1_MSEL(1)|CMP_C1_INNSEL(1)" name="CMP_IN1" />
-      <choice value="CMP_C1_MSEL(2)|CMP_C1_INNSEL(1)" name="CMP_IN2" />
-      <choice value="CMP_C1_MSEL(3)|CMP_C1_INNSEL(1)" name="CMP_IN3" />
-      <choice value="CMP_C1_MSEL(4)|CMP_C1_INNSEL(1)" name="CMP_IN4" />
-      <choice value="CMP_C1_MSEL(5)|CMP_C1_INNSEL(1)" name="CMP_IN5" />
-      <choice value="CMP_C1_MSEL(6)|CMP_C1_INNSEL(1)" name="CMP_IN6" />
-      <choice value="CMP_C1_MSEL(7)|CMP_C1_INNSEL(1)" name="CMP_IN7" />
-      <choice value="CMP_C1_MSEL(0)|CMP_C1_INNSEL(1)" name="DAC" />
+      <choice value="CMP_C1_MSEL(0)|CMP_C1_INNSEL(1)" enum="0" name="CMP_IN0" />
+      <choice value="CMP_C1_MSEL(1)|CMP_C1_INNSEL(1)" enum="1" name="CMP_IN1" />
+      <choice value="CMP_C1_MSEL(2)|CMP_C1_INNSEL(1)" enum="2" name="CMP_IN2" />
+      <choice value="CMP_C1_MSEL(3)|CMP_C1_INNSEL(1)" enum="3" name="CMP_IN3" />
+      <choice value="CMP_C1_MSEL(4)|CMP_C1_INNSEL(1)" enum="4" name="CMP_IN4" />
+      <choice value="CMP_C1_MSEL(5)|CMP_C1_INNSEL(1)" enum="5" name="CMP_IN5" />
+      <choice value="CMP_C1_MSEL(6)|CMP_C1_INNSEL(1)" enum="6" name="CMP_IN6" />
+      <choice value="CMP_C1_MSEL(7)|CMP_C1_INNSEL(1)" enum="7" name="CMP_IN7" />
+      <choice value="CMP_C1_MSEL(0)|CMP_C1_INNSEL(1)" enum="8" name="DAC" />
    </choiceOption>
+
+   <xi:include href="cmp_base.xml"/>
 
    <xi:include href="_clockOption.xml"/>
 
-   <xi:include href="_irqOption.xml"/>         
-
    <signals/>
-   
+
 </peripheralPage>

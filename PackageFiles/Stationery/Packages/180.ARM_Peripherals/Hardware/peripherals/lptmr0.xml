@@ -5,59 +5,59 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Power Timer">
 
    <xi:include href="_default_instance.xml"/>
-   
+
    <xi:include href="_mapPinsOption.xml"/>
 
    <stringOption key="irq_pattern"        constant="true" value="^.*%b%i.*$"       hidden="true" />
    <stringOption key="irq_classHandler"   constant="true" value="%c%i::irqHandler" hidden="true" />
    <xi:include href="_irqOptionSubstituted.xml"/>
 
-   <binaryOption key="lptmr_csr_tie" 
+   <binaryOption key="lptmr_csr_tie"
       enumStem="LptmrInterrupt"
       description="Timer interrupt enable"
       toolTip="Enables LPTMR interrupts">
       <choice value="0" name="Interrupt disabled" enum="Disabled" />
       <choice value="1" name="Interrupt enabled"  enum="Enabled"  />
    </binaryOption>
-   
-   <binaryOption key="lptmr_csr_tfc" 
+
+   <binaryOption key="lptmr_csr_tfc"
       enumStem="LptmrResetOnCompare"
       description="Counter Action on Compare Event"
       toolTip="Counter action when lptmr_csr_tcf is set">
       <choice value="0" name="lptmr_cnr is reset whenever lptmr_csr_tcf is set" enum="Enabled"  />
       <choice value="1" name="lptmr_cnr is reset on overflow only"              enum="Disabled" />
    </binaryOption>
-   
+
    <binaryOption key="lptmr_csr_tms" description="Timer Mode Select"
       enumStem="LptmrMode"
       toolTip="Configures the mode of the LPTMR">
       <choice value="0" name="Time Interval mode" enum="TimeInterval"  />
       <choice value="1" name="Pulse Counter mode" enum="PulseCounting" />
    </binaryOption>
-   
-   <intOption key="minimumResolution" 
+
+   <intOption key="minimumResolution"
       description="Minimum resolution for time interval setting"
       toolTip="This value is used as a minimum value check when setting the time interval.\n
                This is to prevent setting intervals with low resolution"
-      value="100" min="1" 
+      value="100" min="1"
    />
 
-   <intOption key="lptmr_cmr_compare" 
+   <intOption key="lptmr_cmr_compare"
       description="Timer Compare Register"
       typeName="Ticks &amp;"
       valueFormat="%s_ticks"
       toolTip="Comparison value\n
       The timer comparison flag is set when the counter reaches this value and increments. \n
       The hardware trigger will assert until the next time the counter increments. \n
-      This value determines the period in TimeInterval mode or the event time in Pulse Counting mode" 
+      This value determines the period in TimeInterval mode or the event time in Pulse Counting mode"
       value="65535" min="1" max="65535" />
-      
+
    <template><![CDATA[
       \t
       \t/// Minimum resolution for time interval setting
       \tstatic constexpr uint32_t minimumResolution = $(minimumResolution);\n\n
    ]]></template>
-   
+
    <choiceOption key="lptmr_psr_pcs" description="Clock Source"
       target="inputClockFrequency"
       enumStem="LptmrClockSel"
@@ -69,16 +69,16 @@
    </choiceOption>
 
    <intOption key="inputClockFrequency"
-      description="Frequency of input clock to timer" 
-      units="Hz" 
-      derived="true" 
+      description="Frequency of input clock to timer"
+      units="Hz"
+      derived="true"
       constant="true" />
-   
+
    <stringOption key="-- Time Interval --" description="" value="-- Time Interval --" constant="true" />
-   
-   <choiceOption key="lptmr_psr_prescaler" 
+
+   <choiceOption key="lptmr_psr_prescaler"
       target="counterFrequency"
-      description="Prescaler Value" 
+      description="Prescaler Value"
       valueFormat="LPTMR_PSR_PBYP(%s),LPTMR_PSR_PRESCALE(%s)"
       enumStem="LptmrPrescale"
       toolTip="Configures the size of the Prescaler in Time Interval mode" >
@@ -100,47 +100,47 @@
       <choice value="0,14" name="Prescaler = 32768"  ref="(inputClockFrequency)/32768." enum="DivBy_32768"  />
       <choice value="0,15" name="Prescaler = 65536"  ref="(inputClockFrequency)/65536." enum="DivBy_65536"  />
    </choiceOption>
-   
-   <floatOption key="counterFrequency" 
+
+   <floatOption key="counterFrequency"
       constant="true"
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
       units="Hz"/>
-      
+
    <floatOption key="maximumPeriod"
-      ref="counterFrequency;65536/(counterFrequency)" 
+      ref="65536/(counterFrequency)"
       typeName="Seconds"
       constant="true"
       description="Maximum period of timer"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
       units="s"/>
-    
+
    <floatOption key="lptmr_cmrPeriod"
-      ref="counterFrequency;(lptmr_cmr_compare+1)/counterFrequency" 
-      typeName="Seconds &amp;"     
+      ref="counterFrequency;(lptmr_cmr_compare+1)/counterFrequency"
+      typeName="Seconds &amp;"
       valueFormat="%s_s"
       description="Timer Compare Interval"
       toolTip="Comparison value\n
                The timer comparison flag is set when the counter reaches this value and increments. \n
                The hardware trigger will assert until the next time the counter increments. \n
-               This value determines the period in TimeInterval mode or the event time in Pulse Counting mode" 
+               This value determines the period in TimeInterval mode or the event time in Pulse Counting mode"
       derived="true"
       min="0" units="s"/>
-    
+
    <floatOption key="lptmr_cmrFrequency"  description="Timer Compare Frequency"
-      ref="(counterFrequency)/(lptmr_cmr_compare+1)" 
+      ref="(counterFrequency)/(lptmr_cmr_compare+1)"
       toolTip="This is determined from lptmr_cmr register and clock frequency.\n
                When lptmr_csr_tfc=0 this is the lptmr_cnr roll-over frequency"
       derived="true"
       min="0" units="Hz"/>
-  
+
    <stringOption key="-- Pulse Counting --" description="" value="-- Pulse Counting --" constant="true" />
-   
-   <choiceOption key="lptmr_psr_glitchFilter" 
+
+   <choiceOption key="lptmr_psr_glitchFilter"
       target="filterDuration"
-      description="Filter Value" 
+      description="Filter Value"
       valueFormat="LPTMR_PSR_PBYP(%s),LPTMR_PSR_PRESCALE(%s)"
       enumStem="LptmrGlitchFilter"
       toolTip="Configures the size of the glitch filter in Pulse Counting mode" >
@@ -161,25 +161,25 @@
       <choice value="0,14" name="16384 clock cycle glitch filter"  ref="16384./inputClockFrequency" enum="16384_clocks" />
       <choice value="0,15" name="32768 clock cycle glitch filter"  ref="32768./inputClockFrequency" enum="32768_clocks" />
    </choiceOption>
-   
-   <floatOption key="filterDuration" 
+
+   <floatOption key="filterDuration"
       constant="true"
       description="Input filter duration"
       toolTip="Determined from timer clock source and glitch filter selection"
       derived="true"
       units="s" />
-      
+
    <choiceOption key="lptmr_csr_tps"
-      enumStem="LptmrPinSel" 
+      enumStem="LptmrPinSel"
       description="Input Pin"
       toolTip="Input source to be used in Pulse Counter mode">
       <choice value="0" name="CMP0 output"    enum="Cmp0" />
       <choice value="1" name="LPTMR_ALT1 pin" enum="AltPin1" />
       <choice value="2" name="LPTMR_ALT2 pin" enum="AltPin2" />
    </choiceOption>
-   
+
    <binaryOption key="lptmr_csr_tpp"
-      enumStem="LptmrPulseEdge" 
+      enumStem="LptmrPulseEdge"
       description="Pin Polarity"
       toolTip="Polarity of the input source in Pulse Counter mode">
       <choice value="0" name="Active-high source, rising-edge increments lptmr_cnr"  enum="Rising"  />
@@ -199,7 +199,7 @@
       \t   %register = %paramExpression;
       \t}\n\n
    ]]></setTemplate>
-      
+
    <setTemplate variables="lptmr_csr_tfc"
    ><![CDATA[
       \t/**
@@ -211,7 +211,7 @@
       \t   %defaultFieldExpression
       \t}\n\n
    ]]></setTemplate>
-      
+
    <setTemplate variables="lptmr_csr_tps, lptmr_csr_tpp"
    ><![CDATA[
       \t/**
@@ -224,7 +224,7 @@
       \t   %defaultFieldExpression
       \t}\n\n
    ]]></setTemplate>
-      
+
    <setTemplate variables="lptmr_csr_tie"
    ><![CDATA[
       \t/**
@@ -249,7 +249,7 @@
       \t   %register = %register | LPTMR_CSR_TCF_MASK;
       \t}\n\n
    ]]></setTemplate>
-      
+
    <setTemplate variables="lptmr_psr_pcs,lptmr_psr_prescaler"
    ><![CDATA[
       \t/**
@@ -269,7 +269,7 @@
       \t   lptmr->CSR   = csr;
       \t}\n\n
    ]]></setTemplate>
-      
+
    <setTemplate variables="lptmr_psr_pcs,lptmr_psr_glitchFilter"
    ><![CDATA[
       \t/**
@@ -289,7 +289,7 @@
       \t   lptmr->CSR   = csr;
       \t}\n\n
    ]]></setTemplate>
-      
+
    <clockCodeTemplate variable="lptmr_psr_pcs"
       returnFormat="%s"
    ><![CDATA[
@@ -310,7 +310,7 @@
       \t * @return Clock frequency in Hz
       \t */
       \tstatic uint32_t getInputClockFrequency(%params) {
-      \t   
+      \t
       \t   switch(%paramExpression) {
       \t      default:
       %body
@@ -323,7 +323,7 @@
       \t * @return Clock frequency in Hz
       \t */
       \tstatic uint32_t getInputClockFrequency() {
-      \t   
+      \t
       \t   return getInputClockFrequency((LptmrClockSel)(%defaultMaskingExpression));
       \t}
       \t
@@ -356,15 +356,15 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
-   <setTemplate key="/LPTMR/StaticMethods" namespace="all" 
+   <setTemplate key="/LPTMR/StaticMethods" namespace="all"
       nonDefaultParams="3"
       discardRepeats="true"
       variables="
-         lptmr_csr_tfc, 
+         lptmr_csr_tfc,
          lptmr_csr_tie,
          lptmr_psr_pcs,
-         lptmr_cmr_compare, 
-         lptmr_psr_prescaler" 
+         lptmr_cmr_compare,
+         lptmr_psr_prescaler"
    ><![CDATA[
       \t/**
       \t * Configure LPTMR in time counting mode.
@@ -389,15 +389,15 @@
       \t   %register0 = %enumParam0|%enumParam1|LptmrMode_TimeInterval|LPTMR_CSR_TCF_MASK|LPTMR_CSR_TEN_MASK;
       \t}\n\n
    ]]></setTemplate>
-      
-   <setTemplate key="/LPTMR/StaticMethods" namespace="all" 
+
+   <setTemplate key="/LPTMR/StaticMethods" namespace="all"
       nonDefaultParams="3"
       discardRepeats="true"
       variables="
-         lptmr_csr_tfc, 
-         lptmr_csr_tie, 
+         lptmr_csr_tfc,
+         lptmr_csr_tie,
          lptmr_cmrPeriod,
-         lptmr_psr_pcs" 
+         lptmr_psr_pcs"
    ><![CDATA[
       \t/**
       \t * Configure LPTMR in time counting mode.
@@ -433,16 +433,16 @@
       \t   return E_NO_ERROR;
       \t}\n\n
    ]]></setTemplate>
-      
-   <setTemplate key="/LPTMR/StaticMethods" namespace="all" 
+
+   <setTemplate key="/LPTMR/StaticMethods" namespace="all"
       nonDefaultParams="2"
       discardRepeats="true"
       variables="
-         lptmr_csr_tps, 
-         lptmr_csr_tpp, 
-         lptmr_psr_pcs, 
-         lptmr_psr_glitchFilter, 
-         lptmr_csr_tfc, 
+         lptmr_csr_tps,
+         lptmr_csr_tpp,
+         lptmr_psr_pcs,
+         lptmr_psr_glitchFilter,
+         lptmr_csr_tfc,
          lptmr_csr_tie,
          lptmr_cmr_compare"
    ><![CDATA[
@@ -471,7 +471,7 @@
       \t   %register0 = %enumParam0|%enumParam1|%enumParam4|%enumParam5|LptmrMode_PulseCounting|LPTMR_CSR_TCF_MASK|LPTMR_CSR_TEN_MASK;
       \t}\n\n
    ]]></setTemplate>
-      
+
    <template key="/LPTMR/declarations" namespace="all"  ><![CDATA[
       \t/**
       \t * MACRO defining the start of a interrupt handler for a LPTMR
@@ -486,7 +486,7 @@
       \t */
       \t#define LPTMR$(_instance)_HANDLER() template<> void $(_class)::irqHandler()\n\n
    ]]></template>
-   
+
    <setTemplate variables="irqHandlingMethod"><![CDATA[
       \t/// Type for %description
       \ttypedef void (*%enumClass)();\n\n
@@ -501,27 +501,27 @@
       \tclass Init {
       \t
       \tprotected:
-      \t   /**                               
-      \t    * No Copy Constructor                  
-      \t    */                             
+      \t   /**
+      \t    * No Copy Constructor
+      \t    */
       \t   constexpr Init(const Init &other) = delete;
-      \t   
+      \t
       \t   /**
       \t    * No Default Constructor
       \t    */
       \t   constexpr Init() = delete;
-      \t   
+      \t
       \t   /**
       \t    * Usual Constructor
       \t    */
       \t   constexpr Init(LptmrMode lptmrMode) : csr(lptmrMode|LPTMR_CSR_TEN_MASK) {
       \t   }\n
-      \t   
+      \t
       \tpublic:
    ]]></template >
 
 <!-- Member variables -->
-  
+
    <setTemplate variables="irqHandlingMethod"
     ><![CDATA[
       \t
@@ -530,20 +530,20 @@
       \t   %params = nullptr;
       #endif\n\n
    ]]></setTemplate>
-   
+
    <setTemplate variables="lptmr_cmrPeriod"
     ><![CDATA[
       \t   /// %description
       \t   %enumClass %registerName = 0_s;\n\n
    ]]></setTemplate >
-   
+
    <setTemplate variables="lptmr_cmr_compare"
     ><![CDATA[
       \t   /// %description
       \t   %enumClass %registerName = 0_ticks;\n\n
    ]]></setTemplate >
-   
-   <setTemplate 
+
+   <setTemplate
       variables=
          "lptmr_psr_prescaler,
           lptmr_psr_pcs"
@@ -551,7 +551,7 @@
       \t   /// Prescale Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></setTemplate >
-   
+
    <initialValueTemplate
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
@@ -559,7 +559,7 @@
       \t   %enumClass %registerName = %enumClass_Normal;\n\n
    ]]></initialValueTemplate>
 
-   <setTemplate 
+   <setTemplate
       variables=
          "lptmr_csr_tie,
           lptmr_csr_tfc"
@@ -567,12 +567,12 @@
       \t   /// Control and Status Register
       \t   uint8_t %registerName;\n\n
    ]]></setTemplate >
-   
+
    <template><![CDATA[
       \t};\n\n
    ]]></template >
-   
-<!--   ========== LPTMR TimeIntervalModeInit class =============================== -->  
+
+<!--   ========== LPTMR TimeIntervalModeInit class =============================== -->
 
    <template><![CDATA[
       \t/**
@@ -599,11 +599,11 @@
       \tclass TimeIntervalModeInit : public Init {
       \t
       \tpublic:
-      \t   /**                               
-      \t    * Copy Constructor                  
-      \t    */                             
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
       \t   constexpr TimeIntervalModeInit(const TimeIntervalModeInit &other) = delete;
-      \t   
+      \t
       \t   /**
       \t    * Default Constructor
       \t    */
@@ -613,9 +613,9 @@
    ]]></template >
 
 <!--  Constructors -->
-  
-   <constructorTemplate 
-      variables="irqHandlingMethod" 
+
+   <constructorTemplate
+      variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
       #if $(irqHandlingMethod)
@@ -634,12 +634,12 @@
       \t   }
       #endif\n\n
    ]]></constructorTemplate>
-   
+
    <for keys="v"
       values="
          /PCR/nvic_irqLevel">
-      <constructorTemplate 
-         variables="%(v)" 
+      <constructorTemplate
+         variables="%(v)"
          linePadding="xxx"><![CDATA[
          \t   /**
          \t    * Constructor for %description
@@ -651,7 +651,7 @@
          \t    */
          \t   template <typename... Types>
          \t   constexpr TimeIntervalModeInit(%params, Types... rest) : TimeIntervalModeInit(rest...) {
-         \t   
+         \t
          \t      %registerName = %paramExpression;
          \t   }\n\n
       ]]></constructorTemplate>
@@ -663,8 +663,8 @@
          lptmr_csr_tfc;
          lptmr_psr_prescaler;
          lptmr_psr_pcs">
-      <constructorTemplate 
-         variables="%(v)" 
+      <constructorTemplate
+         variables="%(v)"
          linePadding="xxx"><![CDATA[
          \t   /**
          \t    * Constructor for %description
@@ -676,18 +676,18 @@
          \t    */
          \t   template <typename... Types>
          \t   constexpr TimeIntervalModeInit(%params, Types... rest) : TimeIntervalModeInit(rest...) {
-         \t   
+         \t
          \t      %registerName = (%registerName & ~%mask) | %paramExpression;
          \t   }\n\n
       ]]></constructorTemplate>
    </for>
-   
+
    <for keys="v"
       values="
          lptmr_cmr_compare;
          lptmr_cmrPeriod">
-      <constructorTemplate 
-         variables="%(v)" 
+      <constructorTemplate
+         variables="%(v)"
          linePadding="xxx"><![CDATA[
          \t   /**
          \t    * Constructor for %description
@@ -695,12 +695,12 @@
          %paramDescription
          \t    */
          \t   constexpr TimeIntervalModeInit(%params) : Init(LptmrMode_TimeInterval) {
-         \t   
+         \t
          \t      %registerName = %paramExpression;
          \t   }\n\n
       ]]></constructorTemplate>
    </for>
-   
+
    <template><![CDATA[
       \t};\n\n
    ]]></template>
@@ -734,11 +734,11 @@
       \tclass PulseCountingModeInit : public Init {
       \t
       \tpublic:
-      \t   /**                               
-      \t    * Copy Constructor                  
-      \t    */                             
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
       \t   constexpr PulseCountingModeInit(const PulseCountingModeInit &other) = delete;
-      \t   
+      \t
       \t   /**
       \t    * Default Constructor
       \t    */
@@ -748,9 +748,9 @@
    ]]></template>
 
 <!-- Constructors -->
-  
-   <constructorTemplate 
-      variables="irqHandlingMethod" 
+
+   <constructorTemplate
+      variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
       #if $(irqHandlingMethod)
@@ -773,8 +773,8 @@
    <for keys="v"
       values="
          /PCR/nvic_irqLevel">
-      <constructorTemplate 
-         variables="%(v)" 
+      <constructorTemplate
+         variables="%(v)"
          linePadding="xxx"><![CDATA[
          \t   /**
          \t    * Constructor for %description
@@ -786,7 +786,7 @@
          \t    */
          \t   template <typename... Types>
          \t   constexpr PulseCountingModeInit(%params, Types... rest) : PulseCountingModeInit(rest...) {
-         \t   
+         \t
          \t      %registerName = %paramExpression;
          \t   }\n\n
       ]]></constructorTemplate>
@@ -796,11 +796,11 @@
       values="
          lptmr_csr_tie;
          lptmr_csr_tps;
-         lptmr_csr_tpp;     
+         lptmr_csr_tpp;
          lptmr_csr_tfc;
          lptmr_psr_pcs;
          lptmr_psr_glitchFilter;">
-      <constructorTemplate variables="%(v)" 
+      <constructorTemplate variables="%(v)"
          linePadding="xxx" ><![CDATA[
          \t   /**
          \t    * Constructor for %description
@@ -812,17 +812,17 @@
          \t    */
          \t   template <typename... Types>
          \t   constexpr PulseCountingModeInit(%params, Types... rest) : PulseCountingModeInit(rest...) {
-         \t   
+         \t
          \t      %registerName = (%registerName & ~%mask) | %paramExpression;
          \t   }\n\n
       ]]></constructorTemplate>
    </for>
-   
+
    <for keys="v"
       values="
          lptmr_cmr_compare">
-      <constructorTemplate 
-         variables="%(v)" 
+      <constructorTemplate
+         variables="%(v)"
          linePadding="xxx"><![CDATA[
          \t   /**
          \t    * Constructor for %description
@@ -830,7 +830,7 @@
          %paramDescription
          \t    */
          \t   constexpr PulseCountingModeInit(%params) : Init(LptmrMode_PulseCounting) {
-         \t   
+         \t
          \t      %registerName = %paramExpression;
          \t   }\n\n
       ]]></constructorTemplate>
@@ -841,7 +841,7 @@
    ]]></template>
 
 <!--  Default Values -->
-  
+
    <template key="/LPTMR/declarations" namespace="all"  ><![CDATA[
       \t/**
       \t * Class representing LPTMR$(_instance)
@@ -927,7 +927,7 @@
    ]]></template>
 
 <!-- Configure method -->
-  
+
    <template key="/LPTMR/declarations" namespace="all" ><![CDATA[
       \t   /**
       \t    * Enable LPTMR with default configuration.
@@ -936,7 +936,7 @@
       \t    * Sets LPTMR to default configuration
       \t    */
       \t   static void defaultConfigure() {
-      \t   
+      \t
       \t      if constexpr ($(lptmr_csr_tms)) {
       \t         configure(DefaultPulseCountingModeInitValue);
       \t      }
@@ -948,7 +948,7 @@
    ]]></template>
 
  <!--  ========== Common =============================== -->
-      
+
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.LptmrValidate">
    </validate>
@@ -959,9 +959,9 @@
       <copy source="Snippets/lptmr-reaction-time.cpp"          target="Snippets/lptmr-reaction-time.cpp"             overwrite="true" derived="true" />
       <copy source="Snippets/timer-inline-handler-example.cpp" target="Snippets/timer-inline-handler-example.cpp"    overwrite="true" derived="true" />
    </projectActionList>
-      
+
    <xi:include href="_clockOption.xml"/>
 
    <signals/>
-   
+
 </peripheralPage>

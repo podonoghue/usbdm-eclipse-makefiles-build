@@ -63,7 +63,8 @@
    <aliasOption key="/SIM/numberOfClockSettings" />     
 
    <binaryOption key="enableClockConfiguration[0]" constant="true" hidden="true" >
-      <choice value="true" name="Enabled"  isDefault="true"/>
+      <choice value="false" name="Disabled" />
+      <choice value="true"  name="Enabled"  isDefault="true"/>
    </binaryOption>
    
    <for keys="n" dim="1,/SIM/numberOfClockSettings">

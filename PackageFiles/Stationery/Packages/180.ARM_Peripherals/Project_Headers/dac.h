@@ -22,30 +22,10 @@
 namespace USBDM {
 
 /**
- * DAC status value as individual flags
- */
-union DacStatus {
-   uint8_t raw;
-   struct {
-      bool     readPointerBottomFlag:1;
-      bool     readPointerTopFlag:1;
-#ifdef DAC_C0_DACBWIEN
-      bool     watermarkFlag:1;
-#endif
-   };
-   constexpr DacStatus(uint8_t value) : raw(value) {
-   }
-};
-
-/**
  * @addtogroup DAC_Group DAC, Digital-to-Analogue Converter
  * @brief Pins used for Digital-to-Analogue Converter
  * @{
  */
-/**
- * Type definition for DAC interrupt call back
- */
-typedef void (*DacCallbackFunction)(DacStatus);
 
 /**
  * Template class representing a Digital to Analogue Converter
@@ -60,7 +40,7 @@ typedef void (*DacCallbackFunction)(DacStatus);
  * @endcode
  */
 template<class Info>
-class DacBase_T {
+class DacBase_T : public Info {
 
 protected:
 
@@ -77,15 +57,22 @@ protected:
       static constexpr void check() {}
    };
 
+public:
+   /**
+    * Type definition for DAC interrupt call back
+    */
+   typedef typename Info::CallbackFunction CallbackFunction;
+
+protected:
    /**
     * Callback to catch unhandled interrupt
     */
-   static void unhandledCallback(DacStatus) {
+   static void unhandledCallback(uint8_t) {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 
    /** Callback function for ISR */
-   static DacCallbackFunction sCallback;
+   static CallbackFunction sCallback;
 
 public:
    /**
@@ -129,7 +116,7 @@ $(/DAC/classInfo: // No class Info found)
     *    int y;
     *
     *    // Member function used as callback
-    *    // This function must match DacCallbackFunction
+    *    // This function must match CallbackFunction
     *    void callback() {
     *       ...;
     *    }
@@ -144,9 +131,9 @@ $(/DAC/classInfo: // No class Info found)
     * Dac::setCallback(fn);
     * @endcode
     */
-   template<class T, void(T::*callback)(DacStatus), T &object>
-   static DacCallbackFunction wrapCallback() {
-      static DacCallbackFunction fn = [](DacStatus status) {
+   template<class T, void(T::*callback)(uint8_t), T &object>
+   static CallbackFunction wrapCallback() {
+      static CallbackFunction fn = [](uint8_t status) {
          (object.*callback)(status);
       };
       return fn;
@@ -168,7 +155,7 @@ $(/DAC/classInfo: // No class Info found)
     *    int y;
     *
     *    // Member function used as callback
-    *    // This function must match DacCallbackFunction
+    *    // This function must match CallbackFunction
     *    void callback() {
     *       ...;
     *    }
@@ -183,10 +170,10 @@ $(/DAC/classInfo: // No class Info found)
     * Dac::setCallback(fn);
     * @endcode
     */
-   template<class T, void(T::*callback)(DacStatus)>
-   static DacCallbackFunction wrapCallback(T &object) {
+   template<class T, void(T::*callback)(uint8_t)>
+   static CallbackFunction wrapCallback(T &object) {
       static T &obj = object;
-      static DacCallbackFunction fn = [](DacStatus status) {
+      static CallbackFunction fn = [](uint8_t status) {
          (obj.*callback)(status);
       };
       return fn;
@@ -198,7 +185,7 @@ $(/DAC/classInfo: // No class Info found)
     * @param[in] callback Callback function to execute on interrupt.\n
     *                     Use nullptr to remove callback.
     */
-   static void setCallback(DacCallbackFunction callback) {
+   static void setCallback(CallbackFunction callback) {
       static_assert(Info::irqHandlerInstalled, "DAC not configured for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
@@ -206,18 +193,7 @@ $(/DAC/classInfo: // No class Info found)
       sCallback = callback;
    }
 
-   /**
-    * Enable with default settings\n
-    * Includes configuring all pins
-    */
-   static void defaultConfigure() {
-      enable();
-
-      // Initialise hardware
-      dac->C0 = Info::c0|DAC_C0_DACEN_MASK;
-      dac->C1 = Info::c1;
-      dac->C2 = Info::c2;
-   }
+$(/DAC/InitMethod: // /DAC/InitMethod not found)
 
    /**
     * Configure DAC.
@@ -281,7 +257,7 @@ $(/DAC/classInfo: // No class Info found)
     * @return size in entries
     */
    static constexpr unsigned getBufferSize() {
-      return sizeof(dac->DATA)/sizeof(dac->DATA[0]);
+      return sizeofArray(dac->DATA);
    }
 
    /**
@@ -346,48 +322,6 @@ $(/DAC/classInfo: // No class Info found)
       dac->C0 = dac->C0 | DAC_C0_DACSWTRG_MASK;
    }
 
-#ifdef DAC_C0_DACBWIEN_MASK
-   /**
-    * Enable or disable interrupts.
-    * The flags are cleared first.
-    *
-    * @param dacTopFlagIrq       Interrupt Enable for buffer read pointer is zero.
-    * @param dacBottomFlagIrq    Interrupt Enable for buffer read pointer is equal to buffer limit C2.DACBFUP.
-    * @param dacWatermarkIrq     Interrupt Enable for buffer read pointer has reached the watermark level.
-    */
-   static void enableInterrupts(
-         DacTopFlagIrq      dacTopFlagIrq,
-         DacBottomFlagIrq   dacBottomFlagIrq,
-         DacWatermarkIrq    dacWatermarkIrq   = DacWatermarkIrq_Disabled) {
-
-      // Clear flags
-      dac->SR = DAC_SR_DACBFRPBF_MASK|DAC_SR_DACBFRPTF_MASK|DAC_SR_DACBFWMF_MASK;
-
-      // Enable/disable flags
-      dac->C0 = (dac->C0&~(DAC_C0_DACBWIEN_MASK|DAC_C0_DACBTIEN_MASK|DAC_C0_DACBBIEN_MASK)) |
-            dacTopFlagIrq|dacBottomFlagIrq|dacWatermarkIrq;
-   }
-#else
-   /**
-    * Enable or disable interrupts.
-    * The flags are cleared first.
-    *
-    * @param dacTopFlagIrq       Buffer Read Pointer Top Flag Interrupt Enable
-    * @param dacBottomFlagIrq    Buffer Read Pointer Bottom Flag Interrupt Enable
-    */
-   static void enableInterrupts(
-         DacTopFlagIrq      dacTopFlagIrq,
-         DacBottomFlagIrq   dacBottomFlagIrq) {
-
-      // Clear flags
-      dac->SR = 0;
-
-      // Enable/disable flags
-      dac->C0 = (dac->C0&~(DAC_C0_DACBTIEN_MASK|DAC_C0_DACBBIEN_MASK)) |
-            dacTopFlagIrq|dacBottomFlagIrq;
-   }
-#endif
-
    /**
     * Enable interrupts in NVIC
     */
@@ -431,8 +365,8 @@ $(/DAC/classInfo: // No class Info found)
     *
     * @return DAC status value see DacStatus
     */
-   static DacStatus getStatus() {
-      return (DacStatus)dac->SR;
+   static uint8_t getStatus() {
+      return dac->SR;
    }
 
    /**
@@ -440,13 +374,13 @@ $(/DAC/classInfo: // No class Info found)
     *
     * @return DAC status value see DacStatus
     */
-   static DacStatus getAndClearStatus() {
+   static uint8_t getAndClearStatus() {
       // Get status
       uint8_t status = dac->SR;
       // Clear set flags
       dac->SR = ~status;
       // return original status
-      return (DacStatus)status;
+      return status;
    }
    /**
     *   Disable the DAC
@@ -482,7 +416,7 @@ $(/DAC/classInfo: // No class Info found)
 /**
  * Callback table for programmatically set handlers
  */
-template<class Info> DacCallbackFunction DacBase_T<Info>::sCallback =  DacBase_T<Info>::unhandledCallback;
+template<class Info> typename Info::CallbackFunction DacBase_T<Info>::sCallback =  DacBase_T<Info>::unhandledCallback;
 
 $(/DAC/declarations: // No declarations found)
 /**

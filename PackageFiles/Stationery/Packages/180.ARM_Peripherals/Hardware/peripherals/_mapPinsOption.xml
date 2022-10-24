@@ -51,6 +51,13 @@
            
  -->
  
+   <stringOption 
+      key="Pin Mapping" 
+      value="------- Pin Mapping -------" 
+      description="Pin Mapping" 
+      constant="true" 
+      />
+
    <binaryOption key="mapPinsOnEnable" 
       description="Map pins when peripheral is configured"
       toolTip="Map all allocated pins on a peripheral when the\n

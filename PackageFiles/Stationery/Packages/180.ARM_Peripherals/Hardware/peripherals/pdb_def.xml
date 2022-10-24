@@ -6,17 +6,17 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <xi:include href="_mapPinsOption.xml"/>  
-   
+   <xi:include href="_mapPinsOption.xml"/>
+
    <xi:include href="_irqOption.xml"/>
-   
+
    <xi:include href="_clockOption.xml"/>
 
 <!--  ============== PDB_SC Trigger ============== -->
 
    <stringOption key="Triggers and Sequence" value="------- Triggers -------" constant="true" description="Triggers and sequence" />
 
-   <choiceOption key="pdb_sc_trgsel" 
+   <choiceOption key="pdb_sc_trgsel"
       enumStem="PdbTrigger"
       valueFormat="PDB_SC_PDBEN(%s),PDB_SC_TRGSEL(%s)"
       description="Trigger Input Source Select"
@@ -42,27 +42,27 @@
       <choice value="1,15" name="Software trigger is selected"      enum="Software"   />
    </choiceOption>
 
-   <binaryOption key="secondsSupport" 
-      enabledBy="pdb_sc_trgsel>0" 
+   <binaryOption key="secondsSupport"
+      enabledBy="pdb_sc_trgsel>0"
       description="Enable use of Seconds for time"
       toolTip="Use of floating point is necessary to support specifing PDB times in seconds in runtime code.\n
                If not needed, the overhead can be avoided by disabling this option">
       <choice value="false" enum="Disabled" name="Seconds support disabled" isDefault="true" />
       <choice value="true"  enum="Enabled"  name="Seconds support enabled" />
-   </binaryOption>  
+   </binaryOption>
 
-   <intOption key="Minimum_resolution" 
-      enabledBy="secondsSupport" 
+   <intOption key="Minimum_resolution"
+      enabledBy="secondsSupport"
       valueFormat="%s_ticks"
       typeName="const Ticks &amp;"
-      description="Minumum value for counter modulus" 
+      description="Minumum value for counter modulus"
       toolTip="This can be used to ensure that a reasonable resolution is available when using Seconds\n
                Attempting to set too small a modulo will result in an error"
       value="1000" min="0" max="65535"/>
 
-   <binaryOption key="pdb_sc_pdbeie" condition="pdb_sc_pdbeie_present" 
+   <binaryOption key="pdb_sc_pdbeie" condition="pdb_sc_pdbeie_present"
       enumStem="PdbErrorAction"
-      enabledBy="pdb_sc_trgsel>0" 
+      enabledBy="pdb_sc_trgsel>0"
       description="Sequence Error Interrupt Enable"
       toolTip="This bit enables the sequence error interrupt\n
          When this bit is set, any of the channel sequence error flags generates a sequence error interrupt" >
@@ -70,18 +70,18 @@
       <choice value="1" name="Interrupt on error"     enum="Interrupt" />
    </binaryOption>
 
-   <binaryOption key="pdb_sc_cont" condition="pdb_sc_cont_present"  
+   <binaryOption key="pdb_sc_cont" condition="pdb_sc_cont_present"
       enumStem="PdbMode"
-      enabledBy="pdb_sc_trgsel>0" 
+      enabledBy="pdb_sc_trgsel>0"
       description="PDB operation mode"
       toolTip="Select continuous or one-shot mode" >
       <choice value="0" name="Sequence runs once only"                    enum="OneShot"      />
       <choice value="1" name="Sequence runs continuously once triggered"  enum="Continuous" />
    </binaryOption>
 
-   <choiceOption key="pdb_sc_ldmod" condition="pdb_sc_ldmod_present"   
+   <choiceOption key="pdb_sc_ldmod" condition="pdb_sc_ldmod_present"
       enumStem="PdbLoadMode"
-      enabledBy="pdb_sc_trgsel>0" 
+      enabledBy="pdb_sc_trgsel>0"
       description="Register Load Select"
       toolTip="Selects when to load the MOD, IDLY, CHnDLYm, INTx, and POyDLY registers,\n
          after 1 is written to LDOK">
@@ -94,7 +94,7 @@
 <!--  ============== PDB_SC related ============== -->
 
    <stringOption key="Clocking" value="------- Clocking -------" constant="true" description="Clocking" />
-   
+
    <choiceOption key="pdbClockConfig"
       target="input_clock"
       description="Clock configuration"
@@ -103,17 +103,16 @@
       <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
       <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
       <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
-   </choiceOption>   
+   </choiceOption>
 
-   <intOption key="input_clock"  
+   <intOption key="input_clock"
       ref="/SIM/system_bus_clock[]"
       constant="true"
-      derived="true" 
+      derived="true"
       units="Hz"
       description="Frequency of PDB input Clock" />
-   
 
-   <choiceOption key="pdb_channel" 
+   <choiceOption key="pdb_channel"
       enumStem="PdbChannel"
       valueFormat="%s"
       hidden="true"
@@ -129,10 +128,10 @@
       <choice value="7" name="Channel 7"   enum="7" condition="@NumChannels>7"/>
    </choiceOption>
 
-   <choiceOption key="pdb_sc_divider" 
-      target="pdb_clock_frequency" 
+   <choiceOption key="pdb_sc_divider"
+      target="pdb_clock_frequency"
       valueFormat="PDB_SC_MULT(%s),PDB_SC_PRESCALER(%s)"
-      enabledBy="pdb_sc_trgsel>0" 
+      enabledBy="pdb_sc_trgsel>0"
       enumStem="PdbPrescale"
       description="Clock Prescaler Divider Select"
       toolTip="The PDB input clock is divided by this factor">
@@ -156,7 +155,7 @@
       <choice value="3,7"   name="Divide by 5120"   enum="DivBy_5120"   ref="(input_clock)/5120" />
    </choiceOption>
 
-   <choiceOption key="pdb_sc_auto_divider" 
+   <choiceOption key="pdb_sc_auto_divider"
       valueFormat="PDB_SC_MULT(%s),PDB_SC_PRESCALER(%s)"
       enumStem="PdbPrescale_Auto"
       hidden="true"
@@ -165,32 +164,32 @@
       <choice value="3,0"   name="Auto select divider"      enum="Select" />
    </choiceOption>
 
-   <floatOption key="pdb_clock_frequency" 
-      enabledBy="pdb_sc_trgsel>0" 
+   <floatOption key="pdb_clock_frequency"
+      enabledBy="pdb_sc_trgsel>0"
       description="Frequency of PDB clock"
       toolTip="PDB clock frequency (Tick rate of PDB)"
       derived="true"
-      constant="true" 
+      constant="true"
       min="0" units="Hz" />
 
    <floatOption key="pdb_clock_period"
-      enabledBy="pdb_sc_trgsel>0" 
-      ref="1.0/pdb_clock_frequency" 
+      enabledBy="pdb_sc_trgsel>0"
+      ref="1.0/pdb_clock_frequency"
       description="Period of PDB clock"
       toolTip="PDB clock period (Tick period of PDB)"
       derived="true"
-      constant="true" 
+      constant="true"
       value="1k" min="0" units="s" />
 
 <!--  ============== PDB_MOD ============== -->
 
    <stringOption key="MainCounter" value="------- Counter -------" constant="true" description="Main counter" />
-   
-   <intOption key="pdb_mod" condition="pdb_mod_mod_present" 
+
+   <intOption key="pdb_mod" condition="pdb_mod_mod_present"
       valueFormat="%s_ticks"
       typeName="const Ticks &amp;"
-      enabledBy="pdb_sc_trgsel>0" 
-      description="Counter mod register value" 
+      enabledBy="pdb_sc_trgsel>0"
+      description="Counter mod register value"
       toolTip="Controls the period of the main PDB counter [0..mod]\n
          When the counter reaches this value, it will be reset back to zero.\n
          If the PDB is in Continuous mode, the count begins anew\n
@@ -198,8 +197,8 @@
       value="65535" min="0" max="65535"/>
 
    <floatOption key="pdb_mod_period" condition="pdb_mod_mod_present"
-      enabledBy="pdb_sc_trgsel>0" 
-      ref="(pdb_mod+1)*pdb_clock_period" 
+      enabledBy="pdb_sc_trgsel>0"
+      ref="(pdb_mod+1)*pdb_clock_period"
       typeName="const Seconds &amp;"
       description="Counter period in seconds"
       derivedFrom="pdb_mod"
@@ -208,8 +207,8 @@
 
 <!--  ============== PDB_IDLY ============== -->
 
-   <choiceOption key="pdb_sc_action" condition="pdb_sc_dmaen_present&amp;&amp;pdb_sc_pdbie_present" 
-      enabledBy="pdb_sc_trgsel>0" 
+   <choiceOption key="pdb_sc_action" condition="pdb_sc_dmaen_present&amp;&amp;pdb_sc_pdbie_present"
+      enabledBy="pdb_sc_trgsel>0"
       enumStem="PdbAction"
       valueFormat="PDB_SC_DMAEN(%s),PDB_SC_PDBIE(%s)"
       description="Interrupt action"
@@ -219,17 +218,17 @@
       <choice value="1,1" name="DMA request on event" enum="Dma"       />
    </choiceOption>
 
-   <intOption key="pdb_idly" condition="pdb_idly_idly_present" 
-      enabledBy="pdb_sc_trgsel>0" 
+   <intOption key="pdb_idly" condition="pdb_idly_idly_present"
+      enabledBy="pdb_sc_trgsel>0"
       valueFormat="%s_ticks"
       typeName="const Ticks &amp;"
-      description="Interrupt delay" 
+      description="Interrupt delay"
       toolTip="Specifies the delay value to schedule the PDB event.\n
          It can be used to schedule an independent interrupt or DMA at some point in the PDB cycle"
       value="0" min="0" max="65535" />
 
    <floatOption key="pdb_idly_delay" condition="pdb_idly_idly_present"
-      enabledBy="pdb_sc_trgsel>0" 
+      enabledBy="pdb_sc_trgsel>0"
       ref="(pdb_idly+1)*pdb_clock_period"
       typeName="const Seconds &amp;"
       description="Interrupt delay in seconds"
@@ -240,16 +239,16 @@
 <!--  ============== PDB Channels ============== -->
 
    <for keys="n" dim="NumChannels" >
-      <stringOption key="Channel %(n)" value="------- Channel %(n) -------" constant="true" 
+      <stringOption key="Channel %(n)" value="------- Channel %(n) -------" constant="true"
          description="PDB Channel %(n) (usually associated with ADC%(n))"
          toolTip="Each channel has a number of pre-trigger outputs that are usually associated with an ADC\n
                   Each pre-trigger is asserted once during a PDB cycle."
       />
       <for keys="m" dim="NumPreTriggers" >
-      
+
          <choiceOption key="pdb_ch%(n)_c1_pt%(m)" condition="pdb_c1_en_present&amp;&amp;pdb_c1_tos_present&amp;&amp;pdb_c1_bb_present"
             valueFormat="PDB_C1_EN(%s&lt;&lt;%(m)),PDB_C1_TOS(%s&lt;&lt;%(m)),PDB_C1_BB(%s&lt;&lt;%(m))"
-            enabledBy="pdb_sc_trgsel>0" 
+            enabledBy="pdb_sc_trgsel>0"
             enumStem="PdbPretrigger%(m)"
             description="Channel Pretrigger control (usually ADC%(n).SC1[%(m)])"
             toolTip="Select pre-trigger mode" >
@@ -258,40 +257,40 @@
             <choice value="1,1,0" name="Pretrigger asserts 1 clock + delay after trigger"                     enum="Delayed"    />
             <choice value="1,0,1" name="Back-to-back, pretrigger asserts 2 clocks after previous acknowledge" enum="BackToBack" />
          </choiceOption>
-         
+
          <intOption key="pdb_ch%(n)_dly%(m)"
             valueFormat="%s_ticks"
             typeName="const Ticks &amp;"
             enabledBy="pdb_ch%(n)_c1_pt%(m) == 2"
-            description="Delay" 
+            description="Delay"
             toolTip="Specifies the delay value for the pre-trigger of corresponding channel"
             min="0" max="65535" />
-            
-         <floatOption key="pdb_ch%(n)_dly%(m)_delay" 
+
+         <floatOption key="pdb_ch%(n)_dly%(m)_delay"
             ref="(pdb_ch%(n)_dly%(m)+1)*pdb_clock_period"
             typeName="const Seconds &amp;"
             enabledBy="pdb_ch%(n)_c1_pt%(m) == 2"
-            description="Delay in seconds" 
+            description="Delay in seconds"
             derivedFrom="pdb_ch%(n)_dly%(m)"
             derived="true"
             min="0" units="s" />
-      </for>         
-   </for> 
-   
+      </for>
+   </for>
+
 <!--  ============== DAC Triggers ============== -->
 
    <for keys="x" dim="NumDacIntervalTriggers" >
-      <stringOption key="DAC %(x)" value="------- DAC %(x) -------" constant="true" 
-         description="Trigger to DAC%(x)" 
+      <stringOption key="DAC %(x)" value="------- DAC %(x) -------" constant="true"
+         description="Trigger to DAC%(x)"
          toolTip="Each DAC trigger is associated with a DAC\n
                   Each DAC trigger has an independent counter so may be asserted multiple times within a PDB cycle\n
                   This may, for example, be used with the DAC FIFO to produce multiple levels synchronized to the PDB cycle."
-      /> 
+      />
 
       <choiceOption key="pdb_intc%(x)_triggerMode" condition="pdb_intc_toe_present&amp;&amp;pdb_intc_ext_present"
          valueFormat="PDB_INTC_TOE(%s),PDB_INTC_EXT(%s)"
          enumStem="PdbDac%(x)TriggerMode"
-         enabledBy="pdb_sc_trgsel>0" 
+         enabledBy="pdb_sc_trgsel>0"
          description="DAC trigger control"
          toolTip="_Disabled\n
                No DAC trigger is generated\n
@@ -304,84 +303,84 @@
          <choice value="1,0" name="DAC periodic trigger using interval counter"  enum="Periodic"    />
          <choice value="1,1" name="DAC trigger is connected to external trigger" enum="External"   />
       </choiceOption>
-      
-      <intOption key="pdb_int%(x)" 
+
+      <intOption key="pdb_int%(x)"
          enabledBy="pdb_intc%(x)_triggerMode==1"
          valueFormat="%s_ticks"
          typeName="const Ticks &amp;"
-         description="DAC interval" 
+         description="DAC interval"
          toolTip="Specifies the interval value for DAC interval counter.\n
                   When the DAC interval counter is equal to this value, the DAC is triggered and\n
                   the interval counter is reset and may continue counting.\n
                   Note that the DAC interval counter is separate to the PDB counter.\n
                   This allows multiple DAC events in a PDB cycle."
          value="0" min="0" max="65535" />
-         
-      <floatOption key="pdb_int%(x)_delay" 
+
+      <floatOption key="pdb_int%(x)_delay"
          ref="(pdb_int%(x)+1)*pdb_clock_period"
          typeName="const Seconds &amp;"
          enabledBy="pdb_intc%(x)_triggerMode==1"
-         description="DAC interval in seconds" 
+         description="DAC interval in seconds"
          derivedFrom="pdb_int%(x)"
          derived="true"
          min="0" units="s" />
    </for>
 
-<!--  ============== Pulse Outputs ============== -->   
-  
+<!--  ============== Pulse Outputs ============== -->
+
    <for keys="y" dim="NumPulseOutputs" >
-      <stringOption key="Pulse Output %(y)" value="------- PULSE %(y) -------" constant="true" 
+      <stringOption key="Pulse Output %(y)" value="------- PULSE %(y) -------" constant="true"
          description="Pulse output %(y) to CMP%(y)"
          toolTip="The pulse output is usually used to control the sample window for an associated CMP.\n
                   The pulse is generated once per PDB cycle and has adjustable start and end times."
-      /> 
+      />
       <binaryOption key="pdb_poen_en%(y)"
          enumStem="PdbPulseOutput%(y)"
          valueFormat="PDB_POEN_POEN(%s&lt;&lt;%(y))"
-         enabledBy="pdb_sc_trgsel>0" 
+         enabledBy="pdb_sc_trgsel>0"
          description="Pulse output trigger enable"
          toolTip="Enable the trigger to DAC %(y)" >
          <choice value="0" name="Pulse output disabled"        enum="Disabled" />
          <choice value="1" name="Pulse output %(y) is enabled" enum="Enabled"  />
       </binaryOption>
 
-      <intOption key="pdb_po%(y)_dly1" 
+      <intOption key="pdb_po%(y)_dly1"
          enabledBy="pdb_poen_en%(y)"
          valueFormat="%s_ticks"
          typeName="const Ticks &amp;"
-         description="Pulse-Output Delay 1 - rising edge" 
+         description="Pulse-Output Delay 1 - rising edge"
          toolTip="This specifies the delay 1 value for the Pulse-Out\n
             Pulse-Output goes high when the counter is equal to the dly1"
          value="0" min="0" max="65535" />
-   
-      <floatOption key="pdb_po%(y)_dly1_delay" 
+
+      <floatOption key="pdb_po%(y)_dly1_delay"
          enabledBy="pdb_poen_en%(y)"
          ref="(pdb_po%(y)_dly1+1)*pdb_clock_period"
          typeName="const Seconds &amp;"
-         description="Pulse-Output Delay 1 - rising edge in seconds" 
+         description="Pulse-Output Delay 1 - rising edge in seconds"
          derived="true"
          derivedFrom="pdb_po%(y)_dly1"
          value="1" min="0" units="s" />
-   
-      <intOption key="pdb_po%(y)_dly2" 
+
+      <intOption key="pdb_po%(y)_dly2"
          enabledBy="pdb_poen_en%(y)"
          valueFormat="%s_ticks"
          typeName="const Ticks &amp;"
-         description="Pulse-Output Delay 2 - falling edge" 
+         description="Pulse-Output Delay 2 - falling edge"
          toolTip="These bits specify the delay 2 value for the Pulse-Out\n
             Pulse-Output goes low when the counter is equal to the dly2"
          value="0" min="0" max="65535" />
-      
-      <floatOption key="pdb_po%(y)_dly2_delay" 
+
+      <floatOption key="pdb_po%(y)_dly2_delay"
          enabledBy="pdb_poen_en%(y)"
          ref="(pdb_po%(y)_dly2+1)*pdb_clock_period"
          typeName="const Seconds &amp;"
-         description="Pulse-Output Delay 2 - falling edge in seconds" 
+         description="Pulse-Output Delay 2 - falling edge in seconds"
          derived="true"
          derivedFrom="pdb_po%(y)_dly2"
          value="1" min="0" units="s" />
    </for>
-   
+
    <!--   ========== PDB Init class =============================== -->
 
    <template key="init_description" namespace="all" ><![CDATA[
@@ -398,38 +397,38 @@
       \t * @code
       \t * // Example initialisation values for $(_class)
       \t *
-      \t * // This example uses 'ticks' 
+      \t * // This example uses 'ticks'
       \t * static const Pdb::Init pdbInit_ticks {
       \t *
       \t *    PdbTrigger_Software ,      // Trigger Input Source Select - Software trigger is selected
       \t *    PdbMode_OneShot ,          // PDB operation mode - Sequence runs once only
       \t *    PdbLoadMode_Immediate ,    // Register Load Select - Register loaded immediately
-      \t *    
+      \t *
       \t *    PdbPrescale_DivBy_4 ,      // Clock Prescaler Divider Select - Divide by 4
       \t *    0x1000_ticks ,             // Counter modulus
-      \t *    
+      \t *
       \t *    NvicPriority_VeryHigh,     // IRQ level for this peripheral - VeryHigh
-      \t *    
+      \t *
       \t *    PdbAction_Interrupt ,      // Action done on event - Interrupt req on event
       \t *    0x900_ticks ,              // Interrupt delay
       \t *    pdbCallback,               // Action call-back
-      \t *    
+      \t *
       \t *    PdbErrorAction_None ,      // Sequence Error Interrupt Enable - No interrupt on error
-      \t *    
+      \t *
       \t *    // ADC Pretriggers
       \t *    PdbChannel_0, PdbPretrigger0_Delayed, 0x111_ticks, // Channel 0 Pretrigger 0
       \t *    PdbChannel_0, PdbPretrigger1_Disabled,             // Channel 0 Pretrigger 1
       \t *    PdbChannel_1, PdbPretrigger0_Delayed, 0x222_ticks, // Channel 1 Pretrigger 0
       \t *    PdbChannel_1, PdbPretrigger1_Bypassed,             // Channel 1 Pretrigger 1
-      \t *    
+      \t *
       \t *    // DAC triggers
       \t *    PdbDac0TriggerMode_Periodic, 0x333_ticks, // DAC0 Trigger
       \t *    PdbDac1TriggerMode_External,              // DAC1 Trigger
-      \t *    
+      \t *
       \t *    // Pulse outputs
       \t *    PdbPulseOutput0_Enabled, 0x444_ticks, 0x555_ticks,  // Pulse output 0 (CMP0)
       \t *    PdbPulseOutput1_Enabled, 0x666_ticks, 0x777_ticks,  // Pulse output 0 (CMP1)
-      \t *    
+      \t *
       \t *    Pdb0::DefaultInitValue,  // Optional initial value.  Above parameters modify this
       \t * };
       \t *
@@ -437,34 +436,34 @@
       \t * Pdb::configure(pdbInit_ticks)
       \t *
       \t * // Example initialisation values for $(_class)
-      \t * // This example uses 'seconds' 
+      \t * // This example uses 'seconds'
       \t * static const Pdb::Init pdbInit_seconds {
       \t *
       \t *    PdbTrigger_Software ,      // Trigger Input Source Select - Software trigger is selected
       \t *    PdbMode_OneShot ,          // PDB operation mode - Sequence runs once only
       \t *    PdbLoadMode_Immediate ,    // Register Load Select - Register loaded immediately
-      \t *    
+      \t *
       \t *    PdbPrescale_Auto_Select ,  // Clock Prescaler auto-selected by PDB period
       \t *    200_ms ,                   // Counter period
-      \t *    
+      \t *
       \t *    NvicPriority_VeryHigh,     // IRQ level for this peripheral - VeryHigh
-      \t *    
+      \t *
       \t *    PdbAction_None ,           // Action done on event - No action on event
       \t *    190_ms ,                   // Interrupt delay
-      \t *    
+      \t *
       \t *    PdbErrorAction_Interrupt , // Sequence Error Interrupt Enable - Interrupt on error
       \t *    pdbCallback,               // Error action call-back
-      \t *    
+      \t *
       \t *    // ADC Pretriggers
       \t *    PdbChannel_0, PdbPretrigger0_Delayed, 100_ms, // Channel 0 Pretrigger 0 @ 100 ms
       \t *    PdbChannel_0, PdbPretrigger1_Disabled,        // Channel 0 Pretrigger 1 disabled
       \t *    PdbChannel_1, PdbPretrigger0_Delayed, 150_ms, // Channel 1 Pretrigger 0 @ 150 ms
       \t *    PdbChannel_1, PdbPretrigger1_Bypassed,        // Channel 1 Pretrigger 1 disabled
-      \t *    
+      \t *
       \t *    // DAC triggers
       \t *    PdbDac0TriggerMode_Periodic, 50_ms, // DAC0 Trigger @ 50 ms
       \t *    PdbDac1TriggerMode_External,        // DAC1 Trigger directly triggered by external input
-      \t *    
+      \t *
       \t *    // Pulse outputs
       \t *    PdbPulseOutput0_Enabled, 120_ms, 130_ms,  // Pulse output 0 (CMP0 window) @ 120-130 ms
       \t *    PdbPulseOutput1_Enabled, 220_ms, 230_ms,  // Pulse output 0 (CMP1 window) @ 220-230 ms
@@ -494,29 +493,33 @@
       \tpublic:
       \t\n
    ]]></template>
-   
+
    <template namespace="usbdm" codeGenCondition="!secondsSupport" ><![CDATA[
       \t   // Shadow larger definition to save space when not using float
       \t   struct Seconds_Ticks {
-      \t   
+      \t
       \t      ///  Time in Ticks
       \t      uint32_t value;
-      \t   
+      \t
       \t      constexpr Seconds_Ticks() : value(0) {}
-      \t   
+      \t
       \t      constexpr Ticks   toTicks()   const { return value; }
-      \t   
+      \t
+#if ($(/HARDWARE/useTypeSystemForTimers))
       \t      constexpr void fromTicks(Ticks ticks)       { value = ticks.getValue(); }
+#else
+      \t      constexpr void fromTicks(Ticks ticks)       { value = ticks; }
+#endif
       \t   };
       \t\n
    ]]></template>
-   
+
    <template namespace="usbdm"><![CDATA[
-      \t   /**                               
-      \t    * Copy Constructor                  
-      \t    */                             
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
       \t   constexpr Init(const Init &other) = default;
-      \t   
+      \t
       \t   /**
       \t    * Default Constructor
       \t    */
@@ -525,19 +528,19 @@
    ]]></template>
 
 <!--  Member variables -->
-  
-   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod" 
+
+   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   CallbackFunction callback = nullptr;\n\n
    ]]></initialValueTemplate>
-   
-   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod" 
+
+   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   CallbackFunction errorCallback = nullptr;\n\n
    ]]></initialValueTemplate>
-   
+
    <initialValueTemplate namespace="usbdm"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
@@ -586,7 +589,7 @@
       \t   /// Status and Control register
       \t   uint32_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
-   
+
    <for keys="r" values="pdb_mod;pdb_idly">
       <initialValueTemplate namespace="usbdm"
          variables="%(r)"
@@ -595,7 +598,7 @@
          \t   Seconds_Ticks %registerName;\n\n
       ]]></initialValueTemplate>
    </for>
-   
+
    <initialValueTemplate namespace="usbdm"
       variables="pdb_ch0_c1_pt0"
    ><![CDATA[
@@ -621,7 +624,7 @@
       \t * @return E_NO_ERROR
       \t */
       \tstatic ErrorCode configure(const typename Info::Init &init) {
-      \t   
+      \t
       \t   // Enable peripheral clock and map pins
       \t   enable();
       \t
@@ -630,11 +633,11 @@
       \t   uint16_t modValue = init.mod.toTicks();
       \t\n
    ]]></setTemplate>
-   <setTemplate variables="pdb_sc_divider" discardRepeats="true" key="/PDB/InitMethod" namespace="all" 
-        codeGenCondition="secondsSupport" 
+   <setTemplate variables="pdb_sc_divider" discardRepeats="true" key="/PDB/InitMethod" namespace="all"
+        codeGenCondition="secondsSupport"
    ><![CDATA[
       \t   const bool useSeconds = ((init.sc&(PDB_SC_MULT_MASK|PDB_SC_PRESCALER_MASK)) == PdbPrescale_Auto_Select);
-      \t   
+      \t
       \t   if (useSeconds) {
       \t      // Calculate new SC and modulo value
       \t      ErrorCode rc = calculateCounterParameters(init.mod.toSeconds(), scValue, modValue);
@@ -643,7 +646,7 @@
       \t      }
       \t      scValue |= (init.sc & ~(PDB_SC_MULT_MASK|PDB_SC_PRESCALER_MASK));
       \t   }
-      \t   
+      \t
       \t   const auto convertIfNeeded = [useSeconds, scValue](const Seconds_Ticks &value) {
       \t      uint16_t temp = value.toTicks();
       \t      if (useSeconds) {
@@ -654,8 +657,8 @@
       \t   };
       \t\n
    ]]></setTemplate>
-   <setTemplate variables="pdb_sc_divider" discardRepeats="true" key="/PDB/InitMethod" namespace="all" 
-        codeGenCondition="!secondsSupport" 
+   <setTemplate variables="pdb_sc_divider" discardRepeats="true" key="/PDB/InitMethod" namespace="all"
+        codeGenCondition="!secondsSupport"
    ><![CDATA[
       \t   const auto convertIfNeeded = [](const typename Info::Seconds_Ticks &value) {
       \t      return value.toTicks();
@@ -665,7 +668,7 @@
    <setTemplate variables="pdb_sc_divider" discardRepeats="true" key="/PDB/InitMethod" namespace="all" ><![CDATA[
       \t   pdb->MOD  = modValue;
       \t   pdb->IDLY = convertIfNeeded(init.idly);
-      \t   
+      \t
       \t   // Configure pre-triggers (to ADCs usually)
       \t   for (size_t n=0; n<Info::numChannels; n++) {
       \t      pdb->CH[n].C1 = init.c1[n];
@@ -673,7 +676,7 @@
       \t         pdb->CH[n].DLY[m] = convertIfNeeded(init.dly[n][m]);
       \t      }
       \t   }
-      \t\n   
+      \t\n
    ]]></setTemplate>
    <setTemplate variables="pdb_intc0_triggerMode" discardRepeats="true" key="/PDB/InitMethod" namespace="all" ><![CDATA[
       \t   // Configure DAC triggers
@@ -690,14 +693,14 @@
       \t      pdb->POnDLY[x].DLY1 = convertIfNeeded(init.dly1[x]);
       \t      pdb->POnDLY[x].DLY2 = convertIfNeeded(init.dly2[x]);
       \t   }
-      \t   
+      \t
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      // Only set call-backs if feature enabled
       \t      setCallback(init.callback);
       \t      setErrorCallback(init.errorCallback);
       \t      enableNvicInterrupts(init.irqlevel);
       \t   }
-      \t   
+      \t
       \t   // Final setting and enable load registers
       \t   pdb->SC = scValue|PDB_SC_LDOK_MASK;
       \t
@@ -717,13 +720,13 @@
    ]]></setTemplate>
 
 <!--   Constructors -->
-  
+
    <for keys="r" values="
-         pdb_sc_trgsel; 
-         pdb_sc_cont; 
+         pdb_sc_trgsel;
+         pdb_sc_cont;
          pdb_sc_ldmod">
-      <constructorTemplate namespace="usbdm" 
-         variables="%(r)" 
+      <constructorTemplate namespace="usbdm"
+         variables="%(r)"
          linePadding="xxx"
        ><![CDATA[
          \t   /**
@@ -741,9 +744,9 @@
          \t   }\n\n
       ]]></constructorTemplate>
    </for>
-   
-   <constructorTemplate namespace="usbdm" 
-      variables="/PCR/nvic_irqLevel" 
+
+   <constructorTemplate namespace="usbdm"
+      variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
       \t   /**
@@ -782,7 +785,7 @@
       \t      %registerName1.fromTicks(%enumParam1);
       \t   }\n\n
    ]]></constructorTemplate>
-   
+
    <constructorTemplate namespace="usbdm"  codeGenCondition="secondsSupport"
       variables="pdb_sc_action, pdb_idly_delay"
       nonDefaultParams="2"
@@ -804,11 +807,11 @@
       \t      %registerName1.fromSeconds(%enumParam1);
       \t   }\n\n
    ]]></constructorTemplate>
-   
-   <constructorTemplate namespace="usbdm"  codeGenCondition="irqHandlingMethod"  
+
+   <constructorTemplate namespace="usbdm"  codeGenCondition="irqHandlingMethod"
       variables="pdb_sc_action, pdb_idly, irqHandlingMethod"
       nonDefaultParams="3"
-      defaultParamValue=",,nullptr"      
+      defaultParamValue=",,nullptr"
       linePadding="xxx"
     ><![CDATA[
       \t   /**
@@ -828,11 +831,11 @@
       \t      callback = %enumParam2;
       \t   }\n\n
    ]]></constructorTemplate>
-   
-   <constructorTemplate namespace="usbdm"  codeGenCondition="secondsSupport &amp;&amp; irqHandlingMethod" 
+
+   <constructorTemplate namespace="usbdm"  codeGenCondition="secondsSupport &amp;&amp; irqHandlingMethod"
       variables="pdb_sc_action, pdb_idly_delay, irqHandlingMethod"
       nonDefaultParams="3"
-      defaultParamValue=",,nullptr"      
+      defaultParamValue=",,nullptr"
       linePadding="xxx"
     ><![CDATA[
       \t   /**
@@ -852,9 +855,9 @@
       \t      callback = %enumParam2;
       \t   }\n\n
    ]]></constructorTemplate>
-   
+
    <constructorTemplate namespace="usbdm"
-      variables="pdb_sc_pdbeie" 
+      variables="pdb_sc_pdbeie"
       linePadding="xxx"
     ><![CDATA[
       \t   /**
@@ -872,9 +875,9 @@
       \t   }\n\n
    ]]></constructorTemplate>
 
-   <constructorTemplate namespace="usbdm"  codeGenCondition="irqHandlingMethod" 
-      variables="pdb_sc_pdbeie, irqHandlingMethod" 
-      nonDefaultParams="2" 
+   <constructorTemplate namespace="usbdm"  codeGenCondition="irqHandlingMethod"
+      variables="pdb_sc_pdbeie, irqHandlingMethod"
+      nonDefaultParams="2"
       linePadding="xxx"
     ><![CDATA[
       \t   /**
@@ -894,9 +897,9 @@
       \t   }\n\n
    ]]></constructorTemplate>
 
-   <constructorTemplate namespace="usbdm" 
+   <constructorTemplate namespace="usbdm"
       variables="pdb_sc_divider, pdb_mod"
-      nonDefaultParams="2" 
+      nonDefaultParams="2"
       linePadding="xxx"
     ><![CDATA[
       \t   /**
@@ -915,11 +918,11 @@
       \t      %registerName1.fromTicks(%enumParam1);
       \t   }\n\n
    ]]></constructorTemplate>
-   
-   <constructorTemplate namespace="usbdm" 
-      codeGenCondition="secondsSupport" 
+
+   <constructorTemplate namespace="usbdm"
+      codeGenCondition="secondsSupport"
       variables="pdb_sc_auto_divider, pdb_mod_period"
-      nonDefaultParams="2" 
+      nonDefaultParams="2"
       linePadding="xxx"
     ><![CDATA[
       \t   /**
@@ -938,11 +941,11 @@
       \t      %registerName1.fromSeconds(%enumParam1);
       \t   }\n\n
    ]]></constructorTemplate>
-   
+
    <!--  Pre-triggers -->
    <for keys="m" dim="NumPreTriggers">
-      <constructorTemplate namespace="usbdm" 
-         variables="pdb_channel, pdb_ch0_c1_pt%(m), pdb_ch0_dly%(m)" 
+      <constructorTemplate namespace="usbdm"
+         variables="pdb_channel, pdb_ch0_c1_pt%(m), pdb_ch0_dly%(m)"
          nonDefaultParams="3"
          linePadding="xxx"
        ><![CDATA[
@@ -962,9 +965,9 @@
          \t      dly[%enumParam0][%(m)].fromTicks(%enumParam2);
          \t   }\n\n
       ]]></constructorTemplate>
-      <constructorTemplate namespace="usbdm" 
-         codeGenCondition="secondsSupport" 
-         variables="pdb_channel, pdb_ch0_c1_pt%(m), pdb_ch0_dly%(m)_delay" 
+      <constructorTemplate namespace="usbdm"
+         codeGenCondition="secondsSupport"
+         variables="pdb_channel, pdb_ch0_c1_pt%(m), pdb_ch0_dly%(m)_delay"
          nonDefaultParams="3"
          linePadding="xxx"
        ><![CDATA[
@@ -984,8 +987,8 @@
          \t      dly[%enumParam0][%(m)].fromSeconds(%enumParam2);
          \t   }\n\n
       ]]></constructorTemplate>
-      <constructorTemplate namespace="usbdm" 
-         variables="pdb_channel, pdb_ch0_c1_pt%(m)" 
+      <constructorTemplate namespace="usbdm"
+         variables="pdb_channel, pdb_ch0_c1_pt%(m)"
          nonDefaultParams="3"
          linePadding="xxx"
        ><![CDATA[
@@ -1005,12 +1008,12 @@
          \t      dly[%enumParam0][%(m)].fromTicks(0_ticks);
          \t   }\n\n
       ]]></constructorTemplate>
-   </for>   
-   
+   </for>
+
    <!--   DAC triggers -->
    <for keys="x" dim="NumDacIntervalTriggers">
-      <constructorTemplate namespace="usbdm" 
-         variables="pdb_intc%(x)_triggerMode, pdb_int%(x)" 
+      <constructorTemplate namespace="usbdm"
+         variables="pdb_intc%(x)_triggerMode, pdb_int%(x)"
          nonDefaultParams="2"
          linePadding="xxx"
        ><![CDATA[
@@ -1030,9 +1033,9 @@
          \t      interval[%(x)].fromTicks(%enumParam1);
          \t   }\n\n
       ]]></constructorTemplate>
-      <constructorTemplate namespace="usbdm" 
-         codeGenCondition="secondsSupport" 
-         variables="pdb_intc%(x)_triggerMode, pdb_int%(x)_delay" 
+      <constructorTemplate namespace="usbdm"
+         codeGenCondition="secondsSupport"
+         variables="pdb_intc%(x)_triggerMode, pdb_int%(x)_delay"
          nonDefaultParams="2"
          linePadding="xxx"
        ><![CDATA[
@@ -1052,8 +1055,8 @@
          \t      interval[%(x)].fromSeconds(%enumParam1);
          \t   }\n\n
       ]]></constructorTemplate>
-      <constructorTemplate namespace="usbdm" 
-         variables="pdb_intc%(x)_triggerMode" 
+      <constructorTemplate namespace="usbdm"
+         variables="pdb_intc%(x)_triggerMode"
          nonDefaultParams="2"
          linePadding="xxx"
        ><![CDATA[
@@ -1072,12 +1075,12 @@
          \t      interval[%(x)].fromTicks(0_ticks);
          \t   }\n\n
       ]]></constructorTemplate>
-   </for>   
-   
+   </for>
+
    <!--  Pulse outputs -->
    <for keys="y" dim="NumPulseOutputs">
-      <constructorTemplate namespace="usbdm" 
-         variables="pdb_poen_en%(y), pdb_po%(y)_dly1, pdb_po%(y)_dly2" 
+      <constructorTemplate namespace="usbdm"
+         variables="pdb_poen_en%(y), pdb_po%(y)_dly1, pdb_po%(y)_dly2"
          nonDefaultParams="3"
          params=", rising, falling"
          linePadding="xxx"
@@ -1101,9 +1104,9 @@
          \t      dly2[%(y)].fromTicks(%enumParam2);
          \t   }\n\n
       ]]></constructorTemplate>
-      <constructorTemplate namespace="usbdm" 
-         codeGenCondition="secondsSupport" 
-         variables="pdb_poen_en%(y), pdb_po%(y)_dly1_delay, pdb_po%(y)_dly2_delay" 
+      <constructorTemplate namespace="usbdm"
+         codeGenCondition="secondsSupport"
+         variables="pdb_poen_en%(y), pdb_po%(y)_dly1_delay, pdb_po%(y)_dly2_delay"
          nonDefaultParams="3"
          params=", rising, falling"
          linePadding="xxx"
@@ -1127,8 +1130,8 @@
          \t      dly2[%(y)].fromSeconds(%enumParam2);
          \t   }\n\n
       ]]></constructorTemplate>
-   </for>   
-   
+   </for>
+
    <template namespace="usbdm" ><![CDATA[
       \t};\n\n
    ]]></template>
@@ -1136,9 +1139,9 @@
    <template namespace="usbdm" ><![CDATA[
       };\n\n
    ]]></template>
-   
+
 <!--   Default Values -->
-  
+
    <template><![CDATA[
       $(init_description)
       \ttypedef $(_class)BasicInfo::Init Init;
@@ -1146,9 +1149,10 @@
       \t/**
       \t * $(_class) interrupt call back
       \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;\n\n
+      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \t\n
    ]]></template>
-   
+
    <template codeGenCondition="!secondsSupport" ><![CDATA[
       \t
       \t/**
@@ -1158,10 +1162,10 @@
    ]]></template>
 
    <initialValueTemplate variables="
-         pdb_sc_trgsel, 
-         pdb_sc_cont, 
+         pdb_sc_trgsel,
+         pdb_sc_cont,
          pdb_sc_ldmod,
-         pdb_sc_divider, pdb_mod, 
+         pdb_sc_divider, pdb_mod,
          irqLevel,
          pdb_sc_action, pdb_idly,
          pdb_sc_pdbeie"
@@ -1173,10 +1177,10 @@
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {
-         %initExpression
-         \t
+       %initExpression
+       \t
    ]]></initialValueTemplate>
-   
+
    <for keys="n" dim="NumChannels">
       <for keys="m" dim="NumPreTriggers">
          <initialValueTemplate variables="pdb_ch%(n)_c1_pt%(m), pdb_ch%(n)_dly%(m)"
@@ -1190,7 +1194,7 @@
          ]]></initialValueTemplate>
       </for>
    </for>
-   
+
    <for keys="x" dim="NumDacIntervalTriggers">
       <initialValueTemplate variables="pdb_intc%(x)_triggerMode, pdb_int%(x)"
          separator=","
@@ -1203,7 +1207,7 @@
          \t
       ]]></initialValueTemplate>
    </for>
-   
+
    <for keys="y" dim="NumPulseOutputs">
       <initialValueTemplate variables="pdb_poen_en%(y), pdb_po%(y)_dly1, pdb_po%(y)_dly2"
          separator=","
@@ -1215,12 +1219,12 @@
          \t\t%initExpression \n
       ]]></initialValueTemplate>
    </for>
-   
+
    <template><![CDATA[
       \t};\n\n
    ]]></template>
-   
-<!--  ============== Templates ============== --> 
+
+<!--  ============== Templates ============== -->
 
    <template><![CDATA[
       \t// Number of PDB channels
@@ -1256,7 +1260,7 @@
       \t */
       \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
    ]]></template>
-      
+
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PdbValidate">
    </validate>
@@ -1265,6 +1269,6 @@
       <copy source="Project_Headers/pdb.h"         target="Project_Headers/pdb.h"        overwrite="true"  derived="true" />
       <copy source="Snippets/pdb-adc-example.cpp"  target="Snippets/pdb-adc-example.cpp" overwrite="true"  derived="true" />
    </projectActionList>
-         
+
    <signals/>
 </fragment>

@@ -89,6 +89,7 @@
    <!ATTLIST intOption ref           CDATA        #IMPLIED> <!-- Variable this variable depends on -->
    <!ATTLIST intOption valueFormat   CDATA        #IMPLIED> <!-- How to format value e.g. %s_ticks-->
    <!ATTLIST intOption enabledBy     CDATA        #IMPLIED> <!-- Enabled by an expression -->
+   <!ATTLIST intOption isNamedClock  (true)       #IMPLIED>
   
 <!ELEMENT bitmaskOption EMPTY >
    <!ATTLIST bitmaskOption condition      CDATA        #IMPLIED>

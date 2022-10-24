@@ -6,274 +6,814 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <template><![CDATA[
-      \t//! Pin number in Info table for comparator output if mapped to a pin
-      \tstatic constexpr int outputPin  = 8;\n\n
-   ]]></template>
-   
-   <constant key="disable_peripheral" value = "cmp->CR1 = CMP_CR1_EN(0);"  />
-   <xi:include href="_mapPinsOption.xml"/>
-   
-   <choiceOption key="cmp_cr0_filter_cnt"
-      enumStem="CmpFilterSamples" 
-      description="Filter Sample Count"
-      toolTip="Represents the number of consecutive samples that must agree prior \n
-      to the comparator ouput filter accepting a new output state">
-      <choice value="1" name="1 sample must agree" enum="1" />
-      <choice value="2" name="2 sample must agree" enum="2" />
-      <choice value="3" name="3 sample must agree" enum="3" />
-      <choice value="4" name="4 sample must agree" enum="4" />
-      <choice value="5" name="5 sample must agree" enum="5" />
-      <choice value="6" name="6 sample must agree" enum="6" />
-      <choice value="7" name="7 sample must agree" enum="7" />
+   <template>
+      <![CDATA[
+         \t//! Pin number in Info table for comparator output if mapped to a pin
+         \tstatic constexpr int outputPin  = 8;\n\n
+      ]]>
+   </template>
+
+   <constant key="disable_peripheral"
+      value="cmp->CR1 = CMP_CR1_EN(0);"/>
+
+   <!-- Interrupts and DMA -->
+   <choiceOption key="cmp_scr_interrupt" condition="cmp_scr_ier_present || cmp_scr_ief_present"
+      enabledBy="irqHandlingMethod"
+      enumStem="CmpEvent"
+      valueFormat="CMP_SCR_IER(%s),CMP_SCR_IEF(%s)"
+      description="Action on transition"
+      toolTip="Enables interrupt request on comparator transition">
+      <choice value="0,0" name="Disabled"     enum="Disabled"  />
+      <choice value="1,1" name="Rising edge"  enum="OnRising"  />
+      <choice value="1,0" name="Falling edge" enum="OnFalling" />
+      <choice value="1,0" name="Either edge"  enum="OnEither"  />
    </choiceOption>
 
-   <choiceOption key="cmp_cr0_hystctr" 
-      enumStem="CmpHysteresis" 
+   <binaryOption key="cmp_scr_dmaen" condition="cmp_scr_dmaen_present"
+      enumStem="CmpDma"
+      description="DMA Enable Control"
+      toolTip="Enables the DMA transfer triggered from the CMP module (If DMA supported by device)\n
+               When this field is set, a DMA request is asserted when CFR or CFF is set">
+      <choice value="0" name="Disabled" enum="Disabled" />
+      <choice value="1" name="Enabled"  enum="Enabled"  />
+   </binaryOption>
+
+   <xi:include href="_mapPinsOption.xml"/>
+
+   <!--  Configuration -->
+   <stringOption key="Clocking" value="------- Clocking -------" constant="true" description="Clocking" />
+
+   <choiceOption key="cmpClockConfig"
+      target="input_clock"
+      description="Clock configuration"
+      toolTip="Selects the clock configuration used for ticks and time calculations" >
+      <choice value="0" name="@/MCG/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
+      <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
+      <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
+      <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
+   </choiceOption>
+
+   <intOption key="input_clock"
+      ref="/SIM/system_bus_clock[]"
+      constant="true"
+      derived="true"
+      units="Hz"
+      description="Frequency of PDB input Clock" />
+
+   <stringOption key="Configuration"
+      value="------- Configuration -------"
+      description="Configuration"
+      constant="true"/>
+
+   <choiceOption key="cmp_cr0_hystctr" condition="cmp_cr0_hystctr_present"
+      enumStem="CmpHysteresis"
       description="Comparator hard block hysteresis control"
       toolTip="Defines the programmable hysteresis level.\n
-      The hysteresis values associated with each level are device specific">
+               The hysteresis values associated with each level are device specific">
       <choice value="0" name="Level 0" enum="Level_0" />
       <choice value="1" name="Level 1" enum="Level_1" />
       <choice value="2" name="Level 2" enum="Level_2" />
       <choice value="3" name="Level 3" enum="Level_3" />
    </choiceOption>
 
-   <initialValueTemplate
-      separator="|"
-      terminator=";"     
-      variables="cmp_cr0_filter_cnt, cmp_cr0_hystctr"     
-   ><![CDATA[
-      \t//! CMP Control Register 0
-      \tstatic constexpr uint32_t cr0 = %initExpression
-      \t\n
-   ]]></initialValueTemplate>
-
-<!--  CR1 -->   
-
-   <choiceOption key="cmp_cr1_mode" 
-      enumStem="CmpMode" 
-      valueFormat="CMP_CR1_SE(%s),CMP_CR1_WE(%s)"
-      description="Operating mode"
-      toolTip="Selects operation in sampling or windowed mode" >
-      <choice value="0,0" name="Disabled"       enum="Disabled" />
-      <choice value="1,0" name="Sampling mode"  enum="Sampling" />
-      <choice value="0,1" name="Windowing mode" enum="Windowed" />
-   </choiceOption>
-
-   <binaryOption key="cmp_cr1_trigm" 
-      enumStem="CmpTrigger" 
-      description="Trigger Mode Enable"
-      toolTip="CMP and DAC are configured to CMP Trigger mode when CMP_CR1[TRIGM] is set to 1.  \n
-               In addition, the CMP should be enabled.  \n
-               If the DAC is to be used as a reference to the CMP, it should also be enabled. \n
-               CMP Trigger mode depends on an external timer resource to periodically enable  \n
-               the CMP and 6-bit DAC in order to generate a triggered compare. \n
-               Upon setting TRIGM, the CMP and DAC are placed in a standby state until an \n
-               external timer resource trigger is received.">
-      <choice value="0" name="Trigger mode is disabled" enum="Disabled" />
-      <choice value="1" name="Trigger mode is enabled"  enum="Enabled"  />
-   </binaryOption>
-
-   <binaryOption key="cmp_cr1_pmode" 
-      enumStem="CmpPower" 
+   <binaryOption key="cmp_cr1_pmode" condition="cmp_cr1_pmode_present"
+      enumStem="CmpPower"
       description="Power Mode Select"
       toolTip="Selects trade-off between speed and power consumption">
-      <choice value="0" name="Low-Speed (LS) Comparison mode"  enum="LowSpeed" />
-      <choice value="1" name="High-Speed (HS) Comparison mode" enum="HighSpeed" />
+      <choice value="0" name="Low-Speed Comparison mode"  enum="LowSpeed"  />
+      <choice value="1" name="High-Speed Comparison mode" enum="HighSpeed" />
    </binaryOption>
 
-   <binaryOption key="cmp_cr1_inv" 
-      enumStem="CmpPolarity" 
+   <binaryOption key="cmp_cr1_inv" condition="cmp_cr1_inv_present"
+      enumStem="CmpPolarity"
       description="Comparator Invert"
       toolTip="Allows selection of the polarity of the analog comparator function">
       <choice value="0" name="Not inverted" enum="Normal"   />
       <choice value="1" name="Inverted"     enum="Inverted" />
    </binaryOption>
 
-   <choiceOption key="cmp_cr1_output" 
-      enumStem="CmpOutput" 
+   <binaryOption key="cmp_cr1_trigm" condition="cmp_cr1_trigm_present"
+      enumStem="CmpTrigger"
+      description="Trigger Mode Enable"
+      toolTip="CMP and DAC are configured to CMP Trigger mode.  \n
+              CMP Trigger mode depends on an external timer resource to periodically enable \n
+              Upon setting TRIGM, the CMP and DAC are placed in a standby state until an \n
+              external timer resource trigger is received.">
+      <choice value="0" name="Trigger mode is disabled" enum="Disabled" />
+      <choice value="1" name="Trigger mode is enabled"  enum="Enabled"  />
+   </binaryOption>
+
+   <choiceOption key="cmp_cr1_output" condition="cmp_cr1_ope_present || cmp_cr1_cos_present"
+      enumStem="CmpOutput"
       valueFormat="CMP_CR1_OPE(%s),CMP_CR1_COS(%s)"
-      description="Comparator output select"
-      toolTip="Selects operation in sampling or windowed mode" >
-      <choice value="0,0" name="Disabled"             enum="Disabled" />
+      description="Comparator output pin source"
+      toolTip="Selects whether the output pin is driven by the filtered or unfiltered comparator output">
+      <choice value="0,0" name="Disabled" enum="Disabled"/>
       <choice value="1,1" name="Direct (unfiltered)"  enum="Direct"   />
       <choice value="1,0" name="Filtered"             enum="Filtered" />
    </choiceOption>
 
-   <binaryOption key="cmp_cr1_en" 
-      enumStem="CmpEnable" 
-      description="Comparator Enable"
-      toolTip="">
-      <choice value="0" name="Comparator is disabled" enum="Disabled" />
-      <choice value="1" name="Comparator is enabled"  enum="Enabled"  />
-   </binaryOption>
+   <aliasOption key="cmp_muxcr_psel$(_instance)"
+      constant="false"/>
 
-   <initialValueTemplate
-      separator="|"
-      terminator=";"     
-      variables="
-         cmp_cr1_en, 
-         cmp_cr1_mode,
-         cmp_cr1_trigm, 
-         cmp_cr1_pmode, 
-         cmp_cr1_inv, 
-         cmp_cr1_output"     
-   ><![CDATA[
-      \t//! CMP Control Register 1
-      \tstatic constexpr uint32_t cr1 = %initExpression
-      \t\n
-   ]]></initialValueTemplate>
-      
-<!--  FPR -->   
+   <aliasOption key="cmp_muxcr_msel$(_instance)"
+      constant="false"/>
 
-   <intOption key="cmp_fpr_filt_per"
-      description="Filter Sample Period"
-      toolTip="Specifies the sampling period, in bus clock cycles, of the comparator output filter"
-      value="0" min="0" max="255" />
-           
-   <initialValueTemplate
-      separator="|"
-      terminator=";"     
-      variables="cmp_fpr_filt_per"     
-   ><![CDATA[
-      \t//! CMP Filter Period Register
-      \tstatic constexpr uint32_t fpr = %initExpression
-      \t\n
-   ]]></initialValueTemplate>
-      
-<!--  SCR -->   
+   <!-- DAC Configuration -->
+   <stringOption key="DAC Configuration"
+      value="------- Internal DAC Configuration -------"
+      description="DAC Configuration"
+      constant="true"/>
 
-   <binaryOption key="cmp_scr_dmaen" 
-      enumStem="CmpDma" 
-      description="DMA Enable Control"
-      toolTip="Enables the DMA transfer triggered from the CMP module\n(If DMA supported by device)\n
-         When this field is set, a DMA request is asserted when CFR or CFF is set">
+   <binaryOption key="cmp_daccr_dacen" condition="cmp_daccr_dacen_present"
+      enumStem="CmpDacEnable"
+      description="DAC Enable"
+      toolTip="Enables the internal DAC">
       <choice value="0" name="Disabled" enum="Disabled" />
       <choice value="1" name="Enabled"  enum="Enabled"  />
    </binaryOption>
 
-   <choiceOption key="cmp_scr_interrupt" 
-      enumStem="CmpInterrupt" 
-      valueFormat="CMP_SCR_IER(%s),CMP_SCR_IEF(%s)"
-      description="Action on transition"
-      toolTip="Enables interrupt request on comparator transition" >
-      <choice value="0,0" name="Disabled"       enum="Disabled" />
-      <choice value="1,1" name="Rising edge"    enum="OnRising"   />
-      <choice value="1,0" name="Falling edge"   enum="OnFalling" />
-      <choice value="1,0" name="Either edge"    enum="OnEither" />
-   </choiceOption>
-
-   <initialValueTemplate
-      separator="|"
-      terminator=";"     
-      variables="cmp_scr_dmaen,cmp_scr_interrupt"     
-   ><![CDATA[
-      \t//! CMP Status and Control Register
-      \tstatic constexpr uint32_t scr = %initExpression
-      \t\n
-   ]]></initialValueTemplate>
-      
-<!--  DACCR -->   
-
-   <binaryOption key="cmp_daccr_vrsel" 
-      enumStem="CmpDacrefSel" 
+   <binaryOption key="cmp_daccr_vrsel" condition="cmp_daccr_vrsel_present"
+      enabledBy="cmp_daccr_dacen"
+      enumStem="CmpDacrefSel"
       description="DAC Reference Voltage Select"
       toolTip="Supply Voltage Reference Source Select">
-      <choice value="0" name="Vin1 (Vref_OUT)" enum="VrefOut" />
-      <choice value="1" name="Vin2 (Vdd)"      enum="Vdd" />
+      <choice value="0" name="Vin1 (Vref_OUT)"  enum="VrefOut" />
+      <choice value="1" name="Vin2 (Vdd)"       enum="Vdd"     isDefault="true"/>
    </binaryOption>
 
-   <initialValueTemplate
-      separator="|"
-      terminator=";"     
-      variables="CmpDacrefSel"     
-   ><![CDATA[
-      \t//! DAC Control Register
-      \tstatic constexpr uint32_t daccr = %initExpression
-      \t\n
-   ]]></initialValueTemplate>
-      
-<!--  MUXCR -->   
+   <intOption key="cmp_daccr_vosel" condition="cmp_daccr_vosel_present"
+      typeName="uint8_t"
+      enabledBy="cmp_daccr_dacen"
+      description="DAC level"
+      toolTip="Specifies the output level of the internal DAC"
+      value="31" min="0" max="63"/>
 
-   <template key="/CMP/declarations" namespace="all"  ><![CDATA[
-   \t/**
-   \t * Class representing $(_name)
-   \t */
-   \tclass Cmp$(_instance) : public CmpBase_T<Cmp$(_instance)Info> {
-   \t
-   \tpublic:
-   \t   /**
-   \t    * Select CMP$(_instance) inputs
-   \t    */
-   \t   enum Input {
-   \t      // Mapped inputs
-   \t      Input_0          = 0, //!< CMP$(_instance) input 0
-   \t      Input_1          = 1, //!< CMP$(_instance) input 1
-   \t      Input_2          = 2, //!< CMP$(_instance) input 2
-   \t      Input_3          = 3, //!< CMP$(_instance) input 3
-   \t      Input_4          = 4, //!< CMP$(_instance) input 4
-   \t      Input_5          = 5, //!< CMP$(_instance) input 5
-   \t      Input_6          = 6, //!< CMP$(_instance) input 6
-   \t      Input_7          = 7, //!< CMP$(_instance) input 7
-   \t   
-           $(/CMP$(_instance)/InputMapping:   // None Found)
-   \t   };
-   \t
-   \t   /**
-   \t    * Configure Comparator input sources
-   \t    *
-   \t    * @param[in]  positiveInput (0..7) (7 => DAC)
-   \t    * @param[in]  negativeInput (0..7) (7 => DAC)
-   \t    */
-   \t   static __attribute__((always_inline)) void selectInputs(Input positiveInput, Input negativeInput) {
-   \t      CmpBase_T::selectInputs((unsigned)positiveInput, (unsigned)negativeInput);
-   \t   }
-   \t
-   \t   template <class T>
-   \t   static __attribute__((always_inline)) void selectInputs(Input input, T &) {
-   \t      CmpBase_T::selectInputs((unsigned)input, (unsigned)T::pinNum);
-   \t   }
-   \t
-   \t   template <class T>
-   \t   static __attribute__((always_inline)) void selectInputs(T &, Input input) {
-   \t      CmpBase_T::selectInputs((unsigned)T::pinNum, (unsigned)input);
-   \t   }
-   \t
-   \t   template <class T1, class T2>
-   \t   static __attribute__((always_inline)) void selectInputs(T1 &, T2&) {
-   \t      CmpBase_T::selectInputs((unsigned)T1::pinNum, (unsigned)T2::pinNum);
-   \t   }
-   \t
-   \t   /**
-   \t    * Class representing a Comparator pin
-   \t    *
-   \t    * @tparam cmpInput Number of comparator input (0-7) for associated pin.
-   \t    */
-   \t   template<int cmpInput>
-   \t   class Pin {
-   \t      using Pcr = PcrTable_T<Cmp$(_instance)Info, (Input)cmpInput>;
-   \t   public:
-   \t      static constexpr Input pinNum = (Input)cmpInput;
-   \t
-   \t      constexpr Pin() {}
-   \t      static void setInput() {
-   \t         Pcr::setPCR();
-   \t      }
-   \t   };
-   \t};
-   \t
+   <!--  Filtering and Sampling -->
+   <stringOption key="Sampling"
+      value="------- Sampling Configuration -------"
+      description="Sampling"
+      constant="true"/>
+
+   <binaryOption key="secondsSupport"
+      description="Enable use of Seconds for time"
+      toolTip="Use of floating point is necessary to support specifing CMP filter times in seconds in runtime code.\n
+               If not needed, the overhead can be avoided by disabling this option">
+      <choice value="false" enum="Disabled" name="Seconds support disabled" isDefault="true" />
+      <choice value="true"  enum="Enabled"  name="Seconds support enabled" />
+   </binaryOption>
+
+   <choiceOption key="cmp_filter"
+      target="cmp_cr1_en;cmp_cr1_we;cmp_cr1_se;cmp_cr0_filter;cmp_fpr_filt_per"
+      valueFormat="%s"
+      enumStem="CmpFilterMode"
+      description="Comparator Filtering Mode"
+      toolTip="Mode 2a/b \n
+               CMPO is not subject to external sampling or filtering. \n
+               Both window control and filter blocks are completely bypassed.  \n
+               SCR[COUT] is updated continuously.  \n
+               The path from comparator input pins is operating in combinational unclocked mode. \n
+               \n
+               Mode 3a/b \n
+               CMPO is not subject to external sampling or filtering.  \n
+               Window control is bypassed. The filter block operates as a simple Sample &amp; Hold \n
+               3a/b selects between clock sources for the Sample &amp; Hold \n
+               In 3b FILT_PER act a prescaler for the internal Sample &amp; Hold clock \n
+               \n
+               Mode 4a/b \n
+               As for 3a/b but the filter is enabled rather than acting as a S&amp;H\n
+               \n
+               Mode 5a/b \n
+               The comparator output is qualified by an external window signal. \n
+               The window control operates to hold values when not enabled. \n
+               \n
+               Mode 5a/b \n
+               The comparator output is qualified by an external window signal. \n
+               When enabled, the comparator output is clocked by the bus clock and held when not enabled. \n
+               \n
+               Mode 6 \n
+               The comparator output is qualified by an external window signal. \n
+               When enabled, the comparator output is clocked by the bus clock and then resampled at a \n
+               rate determined by the FILT_PER to generate COUT. \n
+               \n
+               Mode 7 \n
+               The comparator output is qualified by an external window signal. \n
+               When enabled, the comparator output is clocked by the bus clock and then filtered at a \n
+               rate determined by the FILT_PER to generate COUT.">
+      <!--                                                                                            cr1_en; cr1_we; cr1_se;filter_cnt;fpr_filt_per  -->
+      <choice value="0" name="1    Disabled"                         enum="Disabled"             ref="false ; false ; false ;     0    ;     0      "  />
+      <choice value="1" name="2a/b Continuous"                       enum="Continuous"           ref="true  ; false ; false ;     0    ;     0      "  />
+      <choice value="2" name="3a   Externally sampled, Non-Filtered" enum="External_NonFiltered" ref="true  ; false ; true  ;     1    ;     0      "  />
+      <choice value="3" name="3b   Internally sampled, Non-Filtered" enum="Internal_NonFiltered" ref="true  ; false ; false ;     1    ;            "  />
+      <choice value="4" name="4a   Externally sampled, Filtered"     enum="External_Filtered"    ref="true  ; false ; true  ;          ;     0      "  />
+      <choice value="5" name="4b   Internally sampled, Filtered"     enum="Internal_Filtered"    ref="true  ; false ; false ;          ;            "  />
+      <choice value="6" name="5a/b Windowed"                         enum="Windowed"             ref="true  ; true  ; false ;     0    ;     0      "  />
+      <choice value="7" name="6    Windowed, Re-sampled"             enum="Windowed_Resampled"   ref="true  ; true  ; false ;     1    ;            "  />
+      <choice value="8" name="7    Windowed, Filtered"               enum="Windowed_Filtered"    ref="true  ; true  ; false ;          ;            "  />
+   </choiceOption>
+
+   <binaryOption key="cmp_cr1_en"
+      enabledBy="cmp_filter>0"
+      enumStem="CmpEnable"
+      description="Comparator Enable"
+      toolTip="Enable comparator"
+      disabledValue="false"
+      constant="true"
+      derived="true">
+      <choice value="0" name="Comparator is disabled" enum="Disabled"  />
+      <choice value="1" name="Comparator is enabled"  enum="Enabled"   isDefault="true" />
+   </binaryOption>
+
+   <binaryOption key="cmp_cr1_we"
+      enabledBy="cmp_filter>0"
+      enumStem="CmpWindowEnable"
+      description="Windowing Enable"
+      toolTip="Enable the use of an external signal to qualify the comparator output (before filtering).\n
+               The comparator output is held when the external signal is inactive and\n
+               clocked directly by the bus clock when enabled.\n
+               Usually a PDB output is available for this purpose."
+      disabledValue="false"
+      constant="true"
+      derived="true">
+      <choice value="0" name="Disabled" enum="Disabled" />
+      <choice value="1" name="Enabled"  enum="Enabled"  isDefault="true" />
+   </binaryOption>
+
+   <binaryOption key="cmp_cr1_se"
+      enabledBy="cmp_filter>0"
+      enumStem="CmpSampleEnable"
+      description="Sample Enable"
+      toolTip="Select between the divided bus clock and an external clock for the filter block"
+      disabledValue="false"
+      constant="true"
+      derived="true">
+      <choice value="0" name="Internal clock" enum="Internal"  />
+      <choice value="1" name="External clock" enum="External" isDefault="true" />
+   </binaryOption>
+
+   <intOption key="cmp_cr0_filter_cnt"
+      unlockedBy="(cmp_filter==4)||(cmp_filter==5)||(cmp_filter==8)"
+      enabledBy="((cmp_filter>=2)&amp;&amp;(cmp_filter&lt;=5))||(cmp_filter&gt;=7)"
+      disabledValue="0"
+      description="Filter Sample Count"
+      toolTip="Represents the number of consecutive samples that must agree prior \n
+               to the comparator output filter accepting a new output state"
+      value="2" min="1" max="7"/>
+
+   <choiceOption key="cmp_cr0_filter"
+      ref="cmp_cr0_filter_cnt"
+      valueFormat="CMP_CR0_FILTER_CNT(%s)"
+      enumStem="CmpFilterSamples"
+      description="Filter Sample Count"
+      derived="true"
+      constant="true"
+      toolTip="Represents the number of consecutive samples that must agree prior \n
+               to the comparator output filter accepting a new output state">
+      <choice value="0" name="Disabled"             enum="Bypassed"       />
+      <choice value="1" name="Simple sampling"      enum="SimpleSampling" />
+      <choice value="2" name="2 samples must agree" enum="2"              />
+      <choice value="3" name="3 samples must agree" enum="3"              />
+      <choice value="4" name="4 samples must agree" enum="4"              />
+      <choice value="5" name="5 samples must agree" enum="5"              />
+      <choice value="6" name="6 samples must agree" enum="6"              />
+      <choice value="7" name="7 samples must agree" enum="7"              />
+   </choiceOption>
+
+   <intOption key="cmp_fpr_filt_per"
+      valueFormat="%s_ticks"
+      enabledBy="(cmp_filter==3)||(cmp_filter==5)||(cmp_filter>=7)"
+      description="Filter Sample Period in ticks"
+      toolTip="Specifies the sampling period, in clock cycles, of the comparator output filter \n
+               This has no effect if SE=1. In that case, the external SAMPLE signal is used to \n
+               determine the sampling period."
+      typeName="const Ticks &amp;"
+      disabledValue="0"
+      value="1" min="1" max="255"/>
+
+   <floatOption key="cmp_fpr_filt_period"
+      enabledBy="cmp_filter>0"
+      ref="input_clock#(1.0*cmp_fpr_filt_per)/input_clock"
+      valueFormat="%s_seconds"
+      typeName="const Seconds &amp;"
+      description="Filter Sample Period in seconds"
+      toolTip="Specifies the sampling period of the comparator output filter \n
+               This has no effect if SE=1. In that case, the external SAMPLE signal is used to \n
+               determine the sampling period."
+      derived="true"
+      constant="true"
+      value="1k" min="0" units="s" />
+
+   <choiceOption key="cmp_cr1_mode"
+      hidden="true"
+      enumStem="CmpMode"
+      valueFormat="CMP_CR1_SE(%s),CMP_CR1_WE(%s)"
+      description="Operating mode"
+      toolTip="Selects operation in sampling or windowed mode">
+      <choice value="0,0" name="Direct"         enum="Direct"   />
+      <choice value="1,0" name="Sampling mode"  enum="Sampling" />
+      <choice value="0,1" name="Windowing mode" enum="Windowed" />
+   </choiceOption>
+
+   <!--   ========== Init class =============================== -->
+
+   <template key="init_description" namespace="all">
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_class)::Init init {
+      \t *
+      \t *   CmpEnable_Enabled ,          // Comparator Enable - Comparator is enabled
+      \t *   CmpMode_Direct ,             // Operating mode - Direct
+      \t *   CmpTrigger_Enabled ,         // Trigger Mode Enable - Trigger mode is enabled
+      \t *   CmpPower_HighSpeed ,         // Power Mode Select - High-Speed Comparison mode
+      \t *   CmpPolarity_Inverted ,       // Comparator Invert - Inverted
+      \t *   CmpOutput_Direct ,           // Comparator output pin source - Direct (unfiltered)
+      \t *   CmpHysteresis_Level_2 ,      // Comparator hard block hysteresis control - Level 2
+      \t *   CmpDma_Disabled ,            // DMA Enable Control - Disabled
+      \t *   CmpEvent_OnFalling ,         // Action on transition - Falling edge
+      \t *   cmpCallback,                 // Call-back to execute on event (if interrupts are enabled)
+      \t *
+      \t *   // Filter settings - must be in this order
+      \t *   CmpFilterSamples_4 ,         // Filter Sample Count - 4 sample must agree
+      \t *   100_ticks ,                  // Filter Sample Period in ticks or seconds (if support is enabled)
+      \t *
+      \t *   // DAC Settings - must be in this order
+      \t *   CmpDacEnable_Enabled ,       // DAC Enable - Enabled
+      \t *   CmpDacrefSel_Vdd ,           // DAC Reference Voltage Select - Vin2 (Vdd)
+      \t *   31 ,                         // DAC level
+      \t *
+      \t *   // Inputs
+      \t *   cmp0Input_D7.plusPin ,     // Plus Input Mux Control - D7
+      \t *   Cmp0Input_D21::minusPin,   // Minus Input Mux Control - D21
+      \t * };
+      \t *
+      \t * // Initialise $(_class) from values specified above
+      \t * $(_class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm" discardRepeats="true" >
+   <![CDATA[
+      \t/**
+      \t * Comparator event identification
+      \t */
+      \tenum CmpEventId : uint8_t {
+      \t   CmpEventId_None    = CMP_SCR_CFR(0)|CMP_SCR_CFF(0),  //!< Neither edge
+      \t   CmpEventId_Rising  = CMP_SCR_CFR(1)|CMP_SCR_CFF(0),  //!< Rising edge
+      \t   CmpEventId_Falling = CMP_SCR_CFR(0)|CMP_SCR_CFF(1),  //!< Falling edge
+      \t   CmpEventId_Both    = CMP_SCR_CFR(1)|CMP_SCR_CFF(1),  //!< Rising or falling edge
+      \t};
+      \t
+      \t/**
+      \t * Used to represent the comparator status for interrupt handler
+      \t */
+      \tstruct CmpStatus {
+      \t   CmpEventId event:8;   //!< Event triggering handler
+      \t   bool       state:8;   //!< State of CMPO at event
+      \t
+      \t   constexpr CmpStatus(CmpEventId event, uint8_t  state) : event(event), state(state) {}
+      \t};
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t
+      \t
+      \t/**
+      \t * Type definition for $(_class) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)(const CmpStatus &);
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+   <!--   Member variables -->
+
+   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+    ><![CDATA[
+      \t   /// %description
+      \t   CallbackFunction callback = nullptr;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="/PCR/nvic_irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="cmp_daccr_dacen, cmp_daccr_vrsel, cmp_daccr_vosel">
+   <![CDATA[
+      \t   ///  DAC Control Register
+      \t   uint8_t %registerName = 0;\n\n
+   ]]>
+   </initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="cmp_cr0_filter, cmp_cr0_hystctr">
+   <![CDATA[
+      \t   ///  CMP Control Register 0
+      \t   uint8_t %registerName = 0;\n\n
+   ]]>
+   </initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="cmp_cr1_en,cmp_cr1_mode,cmp_cr1_trigm,cmp_cr1_pmode,cmp_cr1_inv,cmp_cr1_output">
+   <![CDATA[
+      \t   ///  CMP Control Register 1
+      \t   uint8_t %registerName = 0;\n\n
+   ]]>
+   </initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="cmp_scr_dmaen,cmp_scr_interrupt">
+   <![CDATA[
+      \t   ///  CMP Status and Control Register
+      \t   uint8_t %registerName = 0;\n\n
+   ]]>
+   </initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="cmp_fpr_filt_per">
+   <![CDATA[
+      \t   ///  CMP Filter Period Register
+      \t   uint8_t %registerName = 0;\n\n
+   ]]>
+   </initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="secondsSupport"
+      variables="cmp_fpr_filt_period">
+   <![CDATA[
+      \t   ///  CMP Filter Period Register
+      \t   Seconds period = 0_s;\n\n
+   ]]>
+   </initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="cmp_muxcr_psel$(_instance), cmp_muxcr_msel$(_instance)">
+   <![CDATA[
+      \t   ///  CMP MUX Control Register
+      \t   uint8_t %registerName = 0;\n\n
+   ]]>
+   </initialValueTemplate>
+
+   <!--   Configure methods -->
+
+   <setTemplate key="/CMP/InitMethod"
+      namespace="all"
+      discardRepeats="true"
+      variables="cmp_cr1_en,cmp_fpr_filt_per">
+   <![CDATA[
+      \t/**
+      \t * Configure CMP from values specified in init
+      \t
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t
+      \t   enable();
+      \t
+      \t   %register1 = 0;
+      \t
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-backs if feature enabled
+      \t      setCallback(init.callback);
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
+      \t
+      \t   uint8_t %registerName1 = init.%registerName1;
+      \t\n
+   ]]>
+   </setTemplate>
+   <setTemplate key="/CMP/InitMethod" codeGenCondition="secondsSupport"
+      namespace="all"
+      discardRepeats="true"
+      variables="cmp_fpr_filt_per">
+   <![CDATA[
+      \t   if (init.period != 0) {
+      \t      %registerName = convertSecondsToTicks(init.period);
+      \t   }
+      \t\n
+   ]]>
+   </setTemplate>
+   <setTemplate key="/CMP/InitMethod"
+      namespace="all"
+      discardRepeats="true"
+      variables="
+         cmp_daccr_dacen,
+         cmp_muxcr_psel$(_instance),
+         cmp_cr0_filter,
+         cmp_scr_dmaen,
+         cmp_fpr_filt_per,
+         cmp_cr1_en">
+   <![CDATA[
+      \t   %register0 = init.%registerName0;
+      \t   %register1 = init.%registerName1;
+      \t   %register2 = init.%registerName2;
+      \t   %register3 = init.%registerName3;
+      \t   %register4 = %registerName4;
+      \t   %register5 = init.%registerName5;
+      \t}
+      \t
+      \t/**
+      \t * Configure CMP from default values as specified in Configure.usbdmProject
+      \t */
+      \tstatic void defaultConfigure() {
+      \t
+      \t   configure(Info::DefaultInitValue);
+      \t}\n\n
+   ]]>
+   </setTemplate>
+
+   <!--   Constructors -->
+
+   <constructorTemplate namespace="usbdm"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName = %paramExpression;
+      \t   }\n\n
+   ]]></constructorTemplate>
+
+   <constructorTemplate namespace="usbdm"  codeGenCondition="irqHandlingMethod"
+      variables="cmp_scr_interrupt, irqHandlingMethod"
+      nonDefaultParams="2"
+      defaultParamValue=",,nullptr"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description and %description1
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(
+      %params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName0 = (%registerName0 & ~%mask0) | %paramName0;
+      \t      callback = %paramName1;
+      \t   }\n\n
+   ]]></constructorTemplate>
+
+   <for keys="r"
+      values="
+            cmp_cr1_en;cmp_cr1_mode;cmp_cr1_trigm;cmp_cr1_pmode;cmp_cr1_inv;cmp_cr1_output;
+            cmp_cr0_hystctr;
+            cmp_scr_dmaen;cmp_scr_interrupt;
+            cmp_muxcr_psel$(_instance);cmp_muxcr_msel$(_instance)
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+   <setTemplate namespace="usbdm"
+      variables="cmp_cr0_filter,cmp_fpr_filt_per"
+      nonDefaultParams="2"
+      linePadding="xxx">
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %comments
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(
+      %params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName0 = (%registerName0&~%mask0) | %paramName;
+      \t      %registerName1 = %paramName1;
+      \t   }
+      \t\n
+   ]]>
+   </setTemplate>
+
+   <setTemplate namespace="usbdm" codeGenCondition="secondsSupport"
+      variables="cmp_cr0_filter,cmp_fpr_filt_period"
+      nonDefaultParams="2"
+      linePadding="xxx">
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %comments
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(
+      %params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName0 = (%registerName0&~%mask0) | %paramName;
+      \t      period   = %paramName1;
+      \t   }
+      \t\n
+   ]]>
+   </setTemplate>
+
+   <setTemplate namespace="usbdm"
+      variables="cmp_daccr_dacen,cmp_daccr_vrsel,cmp_daccr_vosel"
+      nonDefaultParams="3"
+      linePadding="xxx">
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %comments
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(
+      %params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName0 = (%registerName0&~(%mask0|%mask1)) | %paramName0 | %paramName1;
+      \t      %registerName2 = (%registerName2&~%mask2) | %macro2(%paramName2);
+      \t   }
+      \t\n
+   ]]>
+   </setTemplate>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      \t};\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      };\n\n
+   ]]>
+   </template>
+
+   <!--   Default Initialisation value -->
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+         cmp_cr1_en,cmp_cr1_mode,cmp_cr1_trigm,cmp_cr1_pmode,cmp_cr1_inv,cmp_cr1_output,
+         cmp_cr0_hystctr,
+         cmp_scr_dmaen,cmp_scr_interrupt,
+         cmp_cr0_filter, cmp_fpr_filt_per,
+         cmp_daccr_dacen, cmp_daccr_vrsel, cmp_daccr_vosel,
+         cmp_muxcr_psel$(_instance), cmp_muxcr_msel$(_instance)">
+   <![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * $(_class) interrupt call back
+      \t */
+      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \t
+      \t/**
+      \t * Default initialisation value for Dac$(_instance)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]>
+   </initialValueTemplate>
+
+   <!-- Templates -->
+   <template><![CDATA[
+      \t/**
+      \t * Get clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic __attribute__((always_inline)) uint32_t getClockFrequency() {
+      \t   return SystemBusClock;
+      \t}\n\n
    ]]></template>
 
-<!--  ================ MISC ================ -->
+   <setTemplate
+      variables="cmp_muxcr_psel$(_instance),cmp_muxcr_msel$(_instance)"
+      nonDefaultParams="2"
+   ><![CDATA[
+      \t/**
+      \t * Configure Comparator input sources
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void selectInputs(
+      %params) {
+      \t
+      \t   //! MUX Control Register
+      \t   %register = %paramExpression;
+      \t}
+      \t
+      \t   /**
+      \t    * Class representing a Comparator pin
+      \t    *
+      \t    * @tparam cmpInput Number of comparator input (0-7) for associated pin.
+      \t    */
+      \t   template<Cmp$(_instance)InputMinus cmpInput>
+      \t   class Pin {
+      \t      using Pcr = PcrTable_T<Cmp$(_instance)Info,cmpInput>;
+      \t
+      \t   public:
+      \t      static constexpr Cmp$(_instance)InputPlus  plusPin  = (Cmp$(_instance)InputPlus)CMP_MUXCR_PSEL(cmpInput);
+      \t      static constexpr Cmp$(_instance)InputMinus minusPin = cmpInput;
+      \t
+      \t      constexpr operator Cmp$(_instance)InputPlus()  const { return plusPin;  }
+      \t      constexpr operator Cmp$(_instance)InputMinus() const { return minusPin; }
+      \t
+      \t      constexpr Pin() {}
+      \t
+      \t      static void setInput() {
+      \t         Pcr::setPCR();
+      \t      }
+      \t   };
+      \t\n
+   ]]>
+   </setTemplate>
 
-   <projectActionList id = "cmp_files" >
-      <copy source="Project_Headers/cmp.h"     target="Project_Headers/cmp.h"     overwrite="true"  derived="true" />
-      <copy source="Snippets/cmp-example.cpp"  target="Snippets/cmp-example.cpp"  overwrite="true"  derived="true" />
+   <template key="/CMP/declarations" namespace="all">
+   <![CDATA[
+      /**
+       * Class representing $(_name)
+       */
+      class Cmp$(_instance) : public CmpBase_T<Cmp$(_instance)Info> {};
+      \n
+   ]]>
+   </template>
+
+   <!--  ================ MISC ================ -->
+
+   <projectActionList id="cmp_files">
+      <copy source="Project_Headers/cmp.h"    target="Project_Headers/cmp.h"    overwrite="true" derived="true"/>
+      <copy source="Snippets/cmp-example.cpp" target="Snippets/cmp-example.cpp" overwrite="true" derived="true"/>
    </projectActionList>
-   
-   <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
-   </validate>
-
+   <validate class="net.sourceforge.usbdm.deviceEditor.validators.CmpValidate"/>
 </fragment>

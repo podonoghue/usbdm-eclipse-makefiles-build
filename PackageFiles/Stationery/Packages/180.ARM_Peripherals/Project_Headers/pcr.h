@@ -275,8 +275,9 @@ union Seconds_Ticks {
    ///  Time in seconds or Ticks
    uint32_t value;
 
-#if $(/HARDWARE/useTypeSystemForTimers)
    constexpr Seconds_Ticks() : value(0) {}
+
+#if $(/HARDWARE/useTypeSystemForTimers)
 #if __cplusplus >= 202002L
    constexpr Seconds toSeconds() const         { return std::bit_cast<float, unsigned>(value); }
    constexpr void fromSeconds(Seconds seconds) { value = std::bit_cast<unsigned, float>(seconds.getValue()); }

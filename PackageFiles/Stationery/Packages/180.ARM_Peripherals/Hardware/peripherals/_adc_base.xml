@@ -10,8 +10,6 @@
    
    <xi:include href="_mapPinsOption.xml"/>
    
-   <aliasOption key="/MCG/currentClockConfig" constant ="false"/>
-   
    <xi:include href="_irqOption.xml"/>
 
 <!-- ========== PGA features =============================== -->
@@ -49,6 +47,24 @@
 
 <!-- ========== ADC clock sources =============================== -->
 
+   <stringOption key="Clocking" value="------- Clocking -------" constant="true" description="Clocking" />
+   
+   <choiceOption key="adcClockConfig"
+      target="input_bus_clock"
+      description="Clock configuration"
+      toolTip="Selects the clock configuration used if bus clock is chosen as clock source" >
+      <choice value="0" name="@/MCG/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
+      <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
+      <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
+      <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
+   </choiceOption>   
+
+   <intOption key="input_bus_clock"  
+      constant="true"
+      derived="true" 
+      units="Hz"
+      description="Frequency of PDB input Clock" />
+   
    <intOption key="adcInternalClock" 
       derived="true"
       constant="true"
@@ -63,7 +79,7 @@
       enumStem="AdcClockSource"
       target="adcInputClock"
       toolTip="Clock source for the ADC module" >
-      <choice value="0" name="Bus clock"                   ref="/SIM/system_bus_clock[]"                              enum="Bus"       code="SystemBusClock"            />
+      <choice value="0" name="Bus clock"                   ref="input_bus_clock"                                      enum="Bus"       code="SystemBusClock"            />
       <choice value="1" name="Irc48M clock"                ref="/SIM/system_irc48m_clock"                             enum="Irc48mClk" code="SimInfo::irc48mClock"      condition="/SIM/system_irc48m_clock"  />
       <choice value="1" name="Bus clock/2"                 ref="/SIM/system_bus_clock[];(/SIM/system_bus_clock[])/2"  enum="Busdiv2"   code="SystemBusClock/2"          condition="!/SIM/system_irc48m_clock" />
       <choice value="2" name="Alternate clock (OSCERCLK)"  ref="/OSC0/oscer_clock"                                    enum="OscerClk"  code="Osc0Info::getOscerClock()" />

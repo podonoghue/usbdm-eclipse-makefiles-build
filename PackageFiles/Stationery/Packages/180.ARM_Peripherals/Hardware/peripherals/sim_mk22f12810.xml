@@ -263,7 +263,7 @@
             <choice value="0"  name="External trigger pin input (PDB0_EXTRG)" enum="External" isDefault="true" />
             <choice value="1"  name="CMP 0 output"                            enum="Cmp0"        condition="/CMP0/$present"   />
             <choice value="2"  name="CMP 1 output"                            enum="Cmp1"        condition="/CMP1/$present"   />
-            <choice value="3"  name="CMP 2 output"                            enum="Cmp2"        condition="/CMP1/$present"   />
+            <choice value="3"  name="CMP 2 output"                            enum="Cmp2"        condition="/CMP2/$present"   />
             <choice value="4"  name="PIT trigger 0"                           enum="PitCh0"      condition="/PIT/$present"    />
             <choice value="5"  name="PIT trigger 1"                           enum="PitCh1"      condition="/PIT/$present"    />
             <choice value="6"  name="PIT trigger 2"                           enum="PitCh2"      condition="/PIT/$present"    />

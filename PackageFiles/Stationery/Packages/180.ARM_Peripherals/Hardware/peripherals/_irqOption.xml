@@ -4,6 +4,13 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
    
+   <stringOption 
+      key="Interrupts" 
+      value="------- Interrupts -------" 
+      description="Interrupts" 
+      constant="true" 
+      />
+
    <!--
    Patterns for pattern and classHandler 
      -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
@@ -23,6 +30,7 @@
       classHandler="%c%i::irqHandler" />
       
    <choiceOption key="irqLevel"
+      enabledBy="irqHandlingMethod"
       description="IRQ level for this peripheral"
       toolTip="Priority level used to configure the NVIC"
       valueFormat="%s"  

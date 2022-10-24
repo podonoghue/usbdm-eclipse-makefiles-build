@@ -4,45 +4,44 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Comparitor">
 
-   <xi:include href="_irqOption.xml"/>         
- 
-   <xi:include href="cmp_base.xml"/>
- 
-   <choiceOption key="cmp_muxcr_psel" 
+   <xi:include href="_irqOption.xml"/>
+
+   <choiceOption key="cmp_muxcr_psel$(_instance)"
+      hidden="true"
+      valueFormat="CMP_MUXCR_PSEL(%s)"
+      enumStem="Cmp$(_instance)InputPlus"
       description="Plus Input Mux Control"
       toolTip="Determines which input is selected for the plus input of the comparator" >
-      <choice value="0" name="CMP_IN0" />
-      <choice value="1" name="CMP_IN1" />
-      <choice value="2" name="CMP_IN2" />
-      <choice value="3" name="CMP_IN3" />
-      <choice value="4" name="CMP_IN4/12-bit DAC1" />
-      <choice value="5" name="CMP_IN5/VREF_OUT" />
-      <choice value="6" name="Bandgap" />
-      <choice value="7" name="6-bit DAC" />
+      <choice value="0" enum="0" name="CMP_IN0"             />
+      <choice value="1" enum="1" name="CMP_IN1"             />
+      <choice value="2" enum="2" name="CMP_IN2"             />
+      <choice value="3" enum="3" name="CMP_IN3"             />
+      <choice value="4" enum="4" name="CMP_IN4/12-bit DAC1" />
+      <choice value="5" enum="5" name="CMP_IN5/VREF_OUT"    />
+      <choice value="6" enum="6" name="Bandgap"             />
+      <choice value="7" enum="7" name="6-bit DAC reference" />
    </choiceOption>
 
-   <choiceOption key="cmp_muxcr_msel" 
+   <choiceOption key="cmp_muxcr_msel$(_instance)"
+      hidden="true"
+      valueFormat="CMP_MUXCR_MSEL(%s)"
+      enumStem="Cmp$(_instance)InputMinus"
       description="Minus Input Mux Control"
       toolTip="Determines which input is selected for the minus input of the comparator" >
-      <choice value="0" name="CMP_IN0" />
-      <choice value="1" name="CMP_IN1" />
-      <choice value="2" name="CMP_IN2" />
-      <choice value="3" name="CMP_IN3" />
-      <choice value="4" name="CMP_IN4/12-bit DAC1" />
-      <choice value="5" name="CMP_IN5/VREF_OUT" />
-      <choice value="6" name="Bandgap" />
-      <choice value="7" name="6-bit DAC" />
+      <choice value="0" enum="0" name="CMP_IN0"             />
+      <choice value="1" enum="1" name="CMP_IN1"             />
+      <choice value="2" enum="2" name="CMP_IN2"             />
+      <choice value="3" enum="3" name="CMP_IN3"             />
+      <choice value="4" enum="4" name="CMP_IN4/12-bit DAC1" />
+      <choice value="5" enum="5" name="CMP_IN5/VREF_OUT"    />
+      <choice value="6" enum="6" name="Bandgap"             />
+      <choice value="7" enum="7" name="6-bit DAC reference" />
    </choiceOption>
 
-   <template><![CDATA[
-      \t//! MUX Control Register
-      \tstatic constexpr uint32_t muxcr =
-      \t   CMP_MUXCR_PSEL($(cmp_muxcr_psel))| // Plus Input Mux Control
-      \t   CMP_MUXCR_MSEL($(cmp_muxcr_msel)); // Minus Input Mux Control\n\n
-   ]]></template>
+   <xi:include href="cmp_base.xml"/>
 
    <xi:include href="_clockOption.xml"/>
 
    <signals/>
-   
+
 </peripheralPage>

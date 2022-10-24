@@ -21,7 +21,7 @@ static const char *messages[] {
       "Too small",
       "Too large",
       "Illegal parameter",
-      "Call-back not installed",
+      "Interrupt without call-back installed",
       "Flash initialisation failed",
       "ADC Calibration failed",
       "Illegal processor power-mode transition",

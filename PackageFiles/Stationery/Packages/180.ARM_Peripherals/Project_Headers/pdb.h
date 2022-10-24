@@ -26,10 +26,6 @@ namespace USBDM {
  * @brief Peripheral information for Programmable Delay Block
  * @{
  */
-/**
- * Type definition for PDB interrupt call back
- */
-typedef void (*PdbCallbackFunction)();
 
 /**
  * Notes on the PDB.

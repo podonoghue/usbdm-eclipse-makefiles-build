@@ -303,7 +303,7 @@
    
 <!--   Configure method -->
   
-   <setTemplate  key="/DAC/InitMethod" namespace="all"  discardRepeats="true"
+   <setTemplate key="/DAC/InitMethod" namespace="all"  discardRepeats="true"
       variables="dac_c0_dacrfs,dac_c1_buffer_mode,dac_c2_dacbfup" 
    ><![CDATA[
       \t/**
