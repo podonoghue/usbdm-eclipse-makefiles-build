@@ -579,7 +579,7 @@ public:
        * @note This method has the side-effect of clearing the register update synchronisation i.e.
        *       pending CnV register updates are discarded.
        */
-      static void configure(ChannelInit channelInit) {
+      static void configure(const ChannelInit &channelInit) {
          OwningFtm::configureChannel(channelInit);
       }
       

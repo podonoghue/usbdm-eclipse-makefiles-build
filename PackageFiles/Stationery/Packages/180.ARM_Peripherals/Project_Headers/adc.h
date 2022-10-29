@@ -18,31 +18,6 @@
 #include <climits>
 #include <cstddef>
 #include "pin_mapping.h"
-/*
- * Default port information
- */
-#ifndef FIXED_PORT_CLOCK_REG
-#define FIXED_PORT_CLOCK_REG SCGC5
-#endif
-
-#ifndef ADC0_CLOCK_MASK
-#ifdef SIM_SCGC6_ADC0_MASK
-#define ADC0_CLOCK_MASK SIM_SCGC6_ADC0_MASK
-#define ADC0_CLOCK_REG  SCGC6
-#endif
-#ifdef SIM_SCGC3_ADC1_MASK
-#define ADC1_CLOCK_MASK SIM_SCGC3_ADC1_MASK
-#define ADC1_CLOCK_REG  SCGC3
-#endif
-#ifdef SIM_SCGC6_ADC1_MASK
-#define ADC1_CLOCK_MASK SIM_SCGC6_ADC1_MASK
-#define ADC1_CLOCK_REG  SCGC6
-#endif
-#ifdef SIM_SCGC6_ADC2_MASK
-#define ADC2_CLOCK_MASK SIM_SCGC6_ADC2_MASK
-#define ADC2_CLOCK_REG  SCGC6
-#endif
-#endif
 
 namespace USBDM {
 
@@ -126,37 +101,6 @@ protected:
    }
 
    /**
-    * Enables hardware trigger mode of operation and configures the channel.
-    *
-    * @param[in] sc1Value        SC1 register value including the ADC channel, Differential mode and interrupt enable
-    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
-    *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
-    */
-   void enableHardwareConversion(int sc1Value, AdcPretrigger adcPretrigger) const {
-      // Set hardware triggers
-      adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1);
-      // Configure channel for hardware trigger input
-      adc->SC1[adcPretrigger] = sc1Value;
-   }
-
-#if defined(ADC_SC2_DMAEN)
-   /**
-    * Enables hardware trigger mode of operation and configures the channel.
-    *
-    * @param[in] sc1Value        SC1 register value including the ADC channel, Differential mode and interrupt enable
-    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel.\n
-    *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
-    * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
-    */
-   void enableHardwareConversion(int sc1Value, AdcPretrigger adcPretrigger, AdcDma adcDma) const {
-      // Set hardware triggers
-      adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1)|adcDma;
-      // Configure channel for hardware trigger input
-      adc->SC1[adcPretrigger] = sc1Value;
-   }
-#endif
-
-   /**
     * Initiates a conversion but does not wait for it to complete.
     * Intended for use with interrupts or DMA.
     *
@@ -211,7 +155,7 @@ protected:
 
 public:
 
-$(/ADC/get_maximums: // /ADC/get_maximums not found)
+$(/ADC/methods:// /ADC/methods not found)
    /**
     * Set resolution
     *
@@ -293,24 +237,7 @@ $(/ADC/get_maximums: // /ADC/get_maximums not found)
          adc->SC3 = adc->SC3 & ~ADC_SC3_ADCO_MASK;
       }
    }
-
-#if defined(ADC_SC2_DMAEN_MASK)
-   /**
-    * Enable/disable DMA.
-    *
-    * @param[in] adcDma  Controls DMA operation.
-    */
-   void enableDma(AdcDma adcDma = AdcDma_Enabled) const {
-      // Set up DMA
-      if (adcDma) {
-         adc->SC2 = adc->SC2 | ADC_SC2_DMAEN_MASK;
-      }
-      else {
-         adc->SC2 = adc->SC2 & ~ADC_SC2_DMAEN_MASK;
-      }
-   }
-#endif
-
+   
    /**
     * Gets result of last software initiated conversion
     *

@@ -37,7 +37,7 @@
    <!ATTLIST aliasCategoryOption  derived      (false|true) #IMPLIED>
    <!ATTLIST aliasCategoryOption  constant     (false|true) "true">
 
-<!ELEMENT category ((%gui_items;|template)*) >
+<!ELEMENT category ((%gui_items;|%control_items;|template)*) >
    <!ATTLIST category  constant     (false|true) #IMPLIED>
    <!ATTLIST category  xmlns:xi     CDATA        #IMPLIED>
    <!ATTLIST category  name         CDATA        #IMPLIED>
@@ -89,6 +89,7 @@
    <!ATTLIST intOption ref           CDATA        #IMPLIED> <!-- Variable this variable depends on -->
    <!ATTLIST intOption valueFormat   CDATA        #IMPLIED> <!-- How to format value e.g. %s_ticks-->
    <!ATTLIST intOption enabledBy     CDATA        #IMPLIED> <!-- Enabled by an expression -->
+   <!ATTLIST intOption unlockedBy    CDATA        #IMPLIED> <!-- Unlocked by an expression -->
    <!ATTLIST intOption isNamedClock  (true)       #IMPLIED>
   
 <!ELEMENT bitmaskOption EMPTY >
@@ -129,6 +130,7 @@
    <!ATTLIST floatOption ref           CDATA        #IMPLIED> <!-- Variable this variable depends on -->
    <!ATTLIST floatOption valueFormat   CDATA        #IMPLIED> <!-- How to format value e.g. %s_Hz-->
    <!ATTLIST floatOption enabledBy     CDATA        #IMPLIED> <!-- Enabled by an expression -->
+   <!ATTLIST floatOption unlockedBy    CDATA        #IMPLIED> <!-- Unlocked by an expression -->
 
 <!ELEMENT aliasOption EMPTY >
    <!-- alias Option 
@@ -244,7 +246,9 @@
    <!ATTLIST choiceOption valueFormat         CDATA        #IMPLIED> <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
    <!ATTLIST choiceOption enumText            CDATA        #IMPLIED> <!-- Text to add to enum generated from choices -->
    <!ATTLIST choiceOption disabledValue       CDATA        #IMPLIED>
-   <!ATTLIST choiceOption enabledBy     CDATA        #IMPLIED> <!-- Enabled by an expression -->
+   <!ATTLIST choiceOption enabledBy           CDATA        #IMPLIED> <!-- Enabled by an expression -->
+   <!ATTLIST choiceOption unlockedBy          CDATA        #IMPLIED> <!-- Unlocked by an expression -->
+   <!ATTLIST choiceOption ref                 CDATA        #IMPLIED> <!-- Variable this variable depends on -->
 
 <!ELEMENT addChoices ((choice)*) >
    <!ATTLIST addChoices key                 CDATA        #REQUIRED>
@@ -282,6 +286,7 @@
    <!ATTLIST binaryOption target        CDATA        #IMPLIED>
    <!ATTLIST binaryOption enumText      CDATA        #IMPLIED> <!-- Text to add to enum generated from choices -->
    <!ATTLIST binaryOption enabledBy     CDATA        #IMPLIED> <!-- Enabled by an expression -->
+   <!ATTLIST binaryOption unlockedBy    CDATA        #IMPLIED> <!-- Unlocked by an expression -->
 
 <!ELEMENT irqOption EMPTY >
    <!ATTLIST irqOption condition     CDATA        #IMPLIED>

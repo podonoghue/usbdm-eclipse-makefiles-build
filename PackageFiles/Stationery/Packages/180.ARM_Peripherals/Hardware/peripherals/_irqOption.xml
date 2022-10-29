@@ -3,46 +3,46 @@
 <!-- _irqOption.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-   
-   <stringOption 
-      key="Interrupts" 
-      value="------- Interrupts -------" 
-      description="Interrupts" 
-      constant="true" 
+
+   <stringOption
+      key="Interrupts"
+      value="------- Interrupts -------"
+      description="Interrupts"
+      constant="true"
       />
 
    <!--
-   Patterns for pattern and classHandler 
+   Patterns for pattern and classHandler
      -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
      -  %b replaced with peripheral base name e.g. FTM1 => FTM
      -  %c replaced with peripheral C++ base class name e.g. FTM1 => Ftm
      -  _IRQHandler is appended to the pattern (only)
    Multiple patterns and classsHandlers may be used separated by ';'
    -->
-   <irqOption key="irqHandlingMethod"  
+   <irqOption key="irqHandlingMethod"
       typeName="CallbackFunction"
       description="Peripheral interrupt handling"
       toolTip="If enabled, the handler may be set using the setCallback() function or\n
-         by overriding the interrupt handler method in the peripheral class\n
-         If not enabled, then interrupt handlers may be installed by naming them \n
-         (see weak names used in vector table)."
-      pattern="^%b%i$" 
+               by overriding the interrupt handler method in the peripheral class\n
+               If not enabled, then interrupt handlers may be installed by naming them \n
+               (see weak names used in vector table)."
+      pattern="^%b%i$"
       classHandler="%c%i::irqHandler" />
-      
+
    <choiceOption key="irqLevel"
       enabledBy="irqHandlingMethod"
       description="IRQ level for this peripheral"
       toolTip="Priority level used to configure the NVIC"
-      valueFormat="%s"  
+      valueFormat="%s"
       derivedFrom="/PCR/nvic_irqLevel" >
    </choiceOption>
 
    <setTemplate variables="irqHandlingMethod" ><![CDATA[
       \t/* Template_irqOption.xml */
-      
+
       \t//! IRQ numbers for hardware
       \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;
-   
+
       \t//! Number of IRQs for hardware
       \tstatic constexpr uint32_t irqCount  = sizeofArray(irqNums);
 
@@ -50,9 +50,9 @@
        \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);
 
        \t//! Default IRQ level
-       \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel.enum[]):NvicPriority_NotInstalled);\n\n
+       \tstatic constexpr NvicPriority irqLevel =  $(irqLevel.enum[]);\n\n
    ]]></setTemplate>
-      
+
    <constant key="enable_interrupts_code"  value="enableNvicInterrupts();"  />
    <constant key="disable_interrupts_code" value="disableNvicInterrupts();"  />
 

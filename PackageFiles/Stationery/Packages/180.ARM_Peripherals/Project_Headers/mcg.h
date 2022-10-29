@@ -50,15 +50,23 @@ $(/MCG/ClockInfoType:#error ClockInfoType not found)
 
 class ClockChangeCallback {
 
-public:
+friend class Mcg;
+
+private:
       // Pointer to next in chain
       ClockChangeCallback *next = nullptr;
 
+public:
       virtual ~ClockChangeCallback() = default;
 
-      // This method is overridden to obtain notification before clock change
+      /**
+       * This method is overridden to obtain notification before clock change
+       */
       virtual void beforeClockChange(){}
-      // This method is overridden to obtain notification after clock change
+
+      /**
+       * This method is overridden to obtain notification after clock change
+       */
       virtual void afterClockChange(){};
 };
 

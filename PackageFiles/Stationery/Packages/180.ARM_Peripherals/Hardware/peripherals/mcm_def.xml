@@ -6,14 +6,14 @@
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
    <xi:include href="_default_instance.xml"/>
-   
+
    <if condition="irqOption_present" >
       <xi:include href="_irqOption.xml"/>
-   </if>   
-   
-   <!-- 
-      ******************** Flash Controller  ******************** 
-   -->   
+   </if>
+
+   <!--
+      ******************** Flash Controller  ********************
+   -->
    <binaryOption key="mcm_placr_esfc" condition="mcm_placr_esfc_present"
       enumStem="McmStallFlashController"
       description="Enable Stalling Flash Controller"
@@ -29,8 +29,8 @@
       <choice name="Disabled" value="0" enum="Disabled" isDefault="true" />
       <choice name="Enabled"  value="1" enum="Enabled"  />
    </binaryOption>
-   
-   <setTemplate  
+
+   <setTemplate
       variables="mcm_placr_esfc"
    > <![CDATA[
       \t/**
@@ -39,11 +39,11 @@
       %comments
       \t */
       \tstatic void setStallFlashController(%params) {
-      
+
       \t   %register = (%register&~(%mask)) | %paramExpression;
       \t}\n\n
    ]]></setTemplate>
-         
+
    <choiceOption key="mcm_placr_flash_speculation" condition="mcm_placr_dfcs_present||mcm_placr_efds_present"
       enumStem="McmFlashSpeculation"
       valueFormat="MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)"
@@ -54,8 +54,8 @@
       <choice value="0,1" name="Instructions and Data" enum="InstructionsAndData"    />
       <choice value="1,0" name="Disabled"              enum="Disabled"               />
    </choiceOption>
-   
-   <setTemplate  
+
+   <setTemplate
       variables="mcm_placr_flash_speculation"
    > <![CDATA[
       \t/**
@@ -64,10 +64,10 @@
       %comments
       \t */
       \tstatic void setFlashControllerSpeculation(%params) {
-      
+
       \t   %register = (%register&~%mask)|%paramExpression;
       \t}\n\n
-   ]]></setTemplate>      
+   ]]></setTemplate>
 
    <choiceOption key="mcm_placr_flash_cache" condition="mcm_placr_dfcc_present||mcm_placr_dfcic_present||mcm_placr_dfcda_present"
       enumStem="McmFlashCache"
@@ -80,8 +80,8 @@
       <choice value="0,1,0" name="Data Only"              enum="DataOnly"            />
       <choice value="1,0,0" name="Disabled"               enum="Disabled"            />
    </choiceOption>
-   
-   <setTemplate  
+
+   <setTemplate
       variables="mcm_placr_flash_cache"
    > <![CDATA[
       \t/**
@@ -90,11 +90,11 @@
       %comments
       \t */
       \tstatic void setFlashControllerCache(%params) {
-      
+
       \t   %register = (%register&~%mask) | %paramExpression;
       \t}\n\n
    ]]></setTemplate>
-         
+
    <binaryOption key="mcm_placr_cfcc" condition="mcm_placr_cfcc_present"
       enumStem="McmFlashControllerCache"
       description="Clear Flash Controller Cache"
@@ -102,8 +102,8 @@
       >
       <choice name="Clear" value="1" enum="Clear" isDefault="true" />
    </binaryOption>
-   
-   <setTemplate  
+
+   <setTemplate
       variables="mcm_placr_cfcc"
    > <![CDATA[
       \t/**
@@ -114,11 +114,11 @@
       \t
       \t   %register = %register | %mask;
       \t}\n\n
-   ]]></setTemplate>   
-   
-   <setTemplate  
+   ]]></setTemplate>
+
+   <setTemplate
       variables="mcm_placr_flash_speculation,mcm_placr_flash_cache"
-      nonDefaultParams="2" 
+      nonDefaultParams="2"
    > <![CDATA[
       \t/**
       \t * Configure Flash Controller
@@ -127,12 +127,12 @@
       \t */
       \tstatic void configureFlashController(
       %params) {
-      
+
       \t   %register = (%register&~%mask)|
       \t                %paramExpression;
       \t}\n\n
    ]]></setTemplate>
-         
+
    <template namespace="all" key="/SMC/preEnterStopMode" variables="mcm_placr_flash_speculation, mcm_placr_flash_cache" ><![CDATA[
    \t   // Save current Flash settings
    \t   McmInfo::FlashInit savedFlashSettings;
@@ -145,8 +145,8 @@
    \t   // Restore flash settings
    \t   savedFlashSettings.configure();\n
    ]]></template>
-   
-   <setTemplate variables="mcm_placr_flash_cache,mcm_placr_flash_speculation" > 
+
+   <setTemplate variables="mcm_placr_flash_cache,mcm_placr_flash_speculation" >
       ><![CDATA[
       \t/**
       \t **
@@ -161,7 +161,7 @@
       \t * @code
       \t * const Mcm::FlashInit flashInit {
       \t *    // List of options
-      \t *    McmFlashCache_Disabled, 
+      \t *    McmFlashCache_Disabled,
       \t *    McmFlashSpeculation_InstructionsAndData,
       \t * };
       \t *
@@ -182,19 +182,19 @@
       \t      %register = (%register & ~%mask)|
       \t                   %registerName;
       \t   }
-      \t  
+      \t
       \t   /**
-      \t    * Read the current Flash settings from hardware registers 
+      \t    * Read the current Flash settings from hardware registers
       \t    */
       \t   void readConfig() {
       \t      %registerName = %register & %mask;
       \t   }
-      \t  
-      \t   /**                               
-      \t    * Copy Constructor                  
-      \t    */                             
+      \t
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
       \t   constexpr FlashInit(const FlashInit &other) = default;
-      \t   
+      \t
       \t   /**
       \t    * Default Constructor
       \t    */
@@ -202,8 +202,8 @@
       \t\n
    ]]></setTemplate>
 
-   <for keys="n" values="mcm_placr_flash_cache;mcm_placr_flash_speculation" >      
-      <setTemplate 
+   <for keys="n" values="mcm_placr_flash_cache;mcm_placr_flash_speculation" >
+      <setTemplate
          variables="%(n)"
       ><![CDATA[
          \t   /**
@@ -215,17 +215,17 @@
          \t    */
          \t   template <typename... Types>
          \t   constexpr FlashInit(%enumClass %enumParam, Types... rest) : FlashInit(rest...)  {
-         \t   
+         \t
          \t      %registerName = (%registerName&~%mask) | %enumParam;
          \t   }\n\n
       ]]></setTemplate>
    </for>
-   
-   <template condition="mcm_placr_flash_cache||mcm_placr_flash_speculation" > 
+
+   <template condition="mcm_placr_flash_cache||mcm_placr_flash_speculation" >
       ><![CDATA[
       \t};\n\n
    ]]></template>
-   
+
 
    <setTemplate key="/MCM/DefaultFlashInitValue" namespace="all"
       variables="mcm_placr_flash_speculation, mcm_placr_flash_cache"
@@ -250,9 +250,9 @@
       \t   flashInit.configure();
       \t}\n
    ]]></setTemplate>
-   <!-- 
-      ******************** Bus arbitration ******************** 
-   -->   
+   <!--
+      ******************** Bus arbitration ********************
+   -->
    <binaryOption key="mcm_placr_arb" condition="mcm_placr_arb_present"
       enumStem="McmArbitration"
       description="Arbitration select for the crossbar masters"
@@ -261,8 +261,8 @@
       <choice name="Fixed-priority" value="0" enum="FixedPriority" isDefault="true" />
       <choice name="Round-robin"    value="1" enum="RoundRobin"    />
    </binaryOption>
-   
-   <setTemplate 
+
+   <setTemplate
       variables="mcm_placr_arb"
    ><![CDATA[
       \t/**
@@ -275,10 +275,10 @@
       \t   %defaultClockExpression
       \t}\n\n
    ]]></setTemplate>
-   
-   <!-- 
-      ******************** Compute Mode ******************** 
-   -->   
+
+   <!--
+      ******************** Compute Mode ********************
+   -->
    <choiceOption key="mcm_cpo_request" condition="mcm_cpo_cporeq_present||mcm_cpo_cpowoi_present"
       enumStem="McmComputeOnlyMode"
       valueFormat="MCM_CPO_CPOREQ(%s),MCM_CPO_CPOWOI(%s)"
@@ -289,8 +289,8 @@
       <choice value="1,0" name="Request"                        enum="Enable"                    />
       <choice value="1,1" name="Request with wake-on-interrupt" enum="EnableWithWakeOnInterrupt" />
    </choiceOption>
-   
-   <setTemplate  
+
+   <setTemplate
       variables="mcm_cpo_request"
    > <![CDATA[
       \t/**
@@ -298,7 +298,7 @@
       \t *
       \t */
       \tstatic void exitComputeMode() {
-      \t     
+      \t
       \t   %register = McmComputeOnlyMode_Disable;
       \t   while ((%register & MCM_CPO_CPOACK_MASK) != 0) {
       \t      __asm__("nop");
@@ -310,13 +310,13 @@
       %comments
       \t */
       \tstatic void enterComputeMode(%params) {
-      \t     
+      \t
       \t   %register = %paramExpression;
       \t   while ((%register & MCM_CPO_CPOACK_MASK) == 0) {
       \t      __asm__("nop");
       \t   }
       \t}\n\n
-   ]]></setTemplate>      
+   ]]></setTemplate>
 
    <binaryOption key="mcm_cpo_cpoack" condition="mcm_cpo_cpoack_present"
       enumStem="McmCpoAcknowledge"
@@ -325,10 +325,10 @@
       >
       <choice name="Ack" value="1" enum="Ack" isDefault="true" />
    </binaryOption>
-   
-   <!-- 
-      ******************** Floating point exceptions ******************** 
-   -->   
+
+   <!--
+      ******************** Floating point exceptions ********************
+   -->
    <binaryOption key="mcm_iscr_fidce" condition="mcm_iscr_fidce_present"
       enumStem="McmFpuDenormalIrq"
       description="FPU input de-normalized interrupt"
@@ -337,7 +337,7 @@
       <choice name="Disabled" value="0" enum="Unselect" isDefault="true" />
       <choice name="Enabled"  value="1" enum="Select" />
    </binaryOption>
-   
+
    <binaryOption key="mcm_iscr_fixce" condition="mcm_iscr_fixce_present"
       enumStem="McmFpuInexactIrq"
       description="FPU inexact interrupt"
@@ -346,7 +346,7 @@
       <choice name="Disabled" value="0" enum="Unselect" isDefault="true" />
       <choice name="Enabled"  value="1" enum="Select" />
    </binaryOption>
-   
+
    <binaryOption key="mcm_iscr_fufce" condition="mcm_iscr_fufc_present"
       enumStem="McmFpuUnderflowIrq"
       description="FPU underflow interrupt"
@@ -355,7 +355,7 @@
       <choice name="Disabled" value="0" enum="Unselect" isDefault="true" />
       <choice name="Enabled"  value="1" enum="Select" />
    </binaryOption>
-   
+
    <binaryOption key="mcm_iscr_fofce" condition="mcm_iscr_fofc_present"
       enumStem="McmFpuOverflowIrq"
       description="FPU overflow interrupt"
@@ -364,7 +364,7 @@
       <choice name="Disabled" value="0" enum="Unselect" isDefault="true" />
       <choice name="Enabled"  value="1" enum="Select" />
    </binaryOption>
-   
+
    <binaryOption key="mcm_iscr_fdzce" condition="mcm_iscr_fdzce_present"
       enumStem="McmFpuDivideByZeroIrq"
       description="FPU divide-by-zero interrupt"
@@ -373,7 +373,7 @@
       <choice name="Disabled" value="0" enum="Unselect" isDefault="true" />
       <choice name="Enabled"  value="1" enum="Select" />
    </binaryOption>
-   
+
    <binaryOption key="mcm_iscr_fioce" condition="mcm_iscr_fioce_present"
       enumStem="McmFpuInvalidOperationIrq"
       description="FPU invalid-operation interrupt"
@@ -382,7 +382,7 @@
       <choice name="Disabled" value="0" enum="Unselect" isDefault="true" />
       <choice name="Enabled"  value="1" enum="Select" />
    </binaryOption>
-   
+
    <for keys="v" values="mcm_iscr_fidce;mcm_iscr_fixce;mcm_iscr_fufce;mcm_iscr_fofce;mcm_iscr_fdzce;mcm_iscr_fioce" >
    <setTemplate variables="%(v)"
       terminator=","
@@ -399,17 +399,17 @@
       \t
       \t/**
       \t * Disable %description
-      \t * 
+      \t *
       %comments
       \t */
       \tstatic void disable%enumClass() {
       \t   %register = %register&~$(%variable.enum[1]);
       \t}\n
    ]]></setTemplate>
-   
+
    </for>
-   
-   <setTemplate variables="mcm_iscr_fidce,mcm_iscr_fixce,mcm_iscr_fufce,mcm_iscr_fofce,mcm_iscr_fdzce,mcm_iscr_fioce" > 
+
+   <setTemplate variables="mcm_iscr_fidce,mcm_iscr_fixce,mcm_iscr_fufce,mcm_iscr_fofce,mcm_iscr_fdzce,mcm_iscr_fioce" >
       ><![CDATA[
       \t/**
       \t **
@@ -425,28 +425,28 @@
       \t * @code
       \t * const Mcm::FloatingPointIrqInit fpIrqInit {
       \t *    // List of interrupts to modify
-      \t *    McmFpuDenormalIrq_Select, 
+      \t *    McmFpuDenormalIrq_Select,
       \t *    McmFpuDivideByZeroIrq_Select,
       \t * };
       \t *
-      \t * fpIrqInit.configure();            // Configure Select interrupts and disable Unselect or absent interrupts 
+      \t * fpIrqInit.configure();            // Configure Select interrupts and disable Unselect or absent interrupts
       \t * fpIrqInit.enableInterrupts();     // Enable Select interrupts (others are unaffected)
       \t * fpIrqInit.disableInterrupts();    // Disable Select interrupts (others are unaffected)
       \t * @endcode
       \t *
-      \t * Example2: Inline example using a base value + modifications 
+      \t * Example2: Inline example using a base value + modifications
       \t * @code
       \t * Mcm::FloatingPointIrqInit{
       \t *    // List of interrupts to modify
-      \t *    McmFpuDenormalIrq_Select,          // This interrupt is enabled 
+      \t *    McmFpuDenormalIrq_Select,          // This interrupt is enabled
       \t *    McmFpuDivideByZeroIrq_Unselect,    // This interrupt is disabled
       \t *    Mcm::DefaultFloatingPointIrqInitValue  // Other interrupts are determined by this value (determined by configure.usbdmProject)
       \t * }.configure();
-      \t * 
-      \t * // The above is equivalent to: 
-      \t * Mcm::DefaultFloatingPointIrqInitValue.configure(); 
-      \t * Mcm::FloatingPointIrqInit {McmFpuDenormalIrq_Select}.enableInterrupts(); 
-      \t * Mcm::FloatingPointIrqInit {McmFpuDivideByZeroIrq_Select}.disableInterrupts(); 
+      \t *
+      \t * // The above is equivalent to:
+      \t * Mcm::DefaultFloatingPointIrqInitValue.configure();
+      \t * Mcm::FloatingPointIrqInit {McmFpuDenormalIrq_Select}.enableInterrupts();
+      \t * Mcm::FloatingPointIrqInit {McmFpuDivideByZeroIrq_Select}.disableInterrupts();
       \t * @endcode
       \t */
       \tclass FloatingPointIrqInit {
@@ -464,7 +464,7 @@
       \t   inline void configure() const {
       \t      %register = %registerName;
       \t   }
-      \t   
+      \t
       \t   /**
       \t    * Enable Floating Point interrupts as specified in the constructor
       \t    * ..._Unselect values are ignored
@@ -473,7 +473,7 @@
       \t   inline void enableInterrupts() const {
       \t      %register = %register|%registerName;
       \t   }
-      \t   
+      \t
       \t   /**
       \t    * Disable Floating Point interrupts as specified in the constructor
       \t    * ..._Unselect or absent values are ignored
@@ -483,19 +483,19 @@
       \t   inline void disableInterrupts() const {
       \t      %register = %register&~%registerName;
       \t   }
-      \t   
+      \t
       \t   /**
-      \t    * Read the current Floating Point interrupt settings from hardware registers 
+      \t    * Read the current Floating Point interrupt settings from hardware registers
       \t    */
       \t   void readConfig() {
       \t      %registerName = %register & %mask;
       \t   }
-      \t  
-      \t   /**                               
-      \t    * Copy Constructor                  
-      \t    */                             
+      \t
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
       \t   constexpr FloatingPointIrqInit(const FloatingPointIrqInit &other) = default;
-      \t  
+      \t
       \t   /**
       \t    * Constructor
       \t    */
@@ -504,8 +504,8 @@
       \t\n
    ]]></setTemplate>
 
-   <for keys="n" values="mcm_iscr_fidce;mcm_iscr_fixce;mcm_iscr_fufce;mcm_iscr_fofce;mcm_iscr_fdzce;mcm_iscr_fioce" >      
-      <setTemplate 
+   <for keys="n" values="mcm_iscr_fidce;mcm_iscr_fixce;mcm_iscr_fufce;mcm_iscr_fofce;mcm_iscr_fdzce;mcm_iscr_fioce" >
+      <setTemplate
          variables="%(n)"
       ><![CDATA[
          \t   /**
@@ -517,17 +517,17 @@
          \t    */
          \t   template <typename... Types>
          \t   constexpr FloatingPointIrqInit(%enumClass %enumParam, Types... rest) : FloatingPointIrqInit(rest...)  {
-         \t   
+         \t
          \t      %registerName = (%registerName&~%mask) | %enumParam;
          \t   }\n\n
       ]]></setTemplate>
    </for>
-   
-   <template variables="mcm_iscr_fidce,mcm_iscr_fixce,mcm_iscr_fufce,mcm_iscr_fofce,mcm_iscr_fdzce,mcm_iscr_fioce" > 
+
+   <template variables="mcm_iscr_fidce,mcm_iscr_fixce,mcm_iscr_fufce,mcm_iscr_fofce,mcm_iscr_fdzce,mcm_iscr_fioce" >
       ><![CDATA[
       \t};\n\n
    ]]></template>
-   
+
    <setTemplate key="/MCM/DefaultFloatingPointIrqInitValue" namespace="all"
       variables="mcm_iscr_fidce,mcm_iscr_fixce,mcm_iscr_fufce,mcm_iscr_fofce,mcm_iscr_fdzce,mcm_iscr_fioce"
       terminator=","
@@ -540,11 +540,11 @@
       \tstatic constexpr McmInfo::FloatingPointIrqInit DefaultFloatingPointIrqInitValue {%initExpression
       \t};\n
    ]]></setTemplate>
-         
-   <!-- 
-      ******************** MCM_CR ******************** 
+
+   <!--
+      ******************** MCM_CR ********************
    -->
-   
+
    <binaryOption key="mcm_cr_sramlwp" condition="mcm_cr_sramlwp_present"
       enumStem="McmSramLowerAccess"
       description="SRAM Lower access control (write protect)"
@@ -553,7 +553,7 @@
       <choice name="Read and Write" value="0" enum="ReadWrite"  isDefault="true"/>
       <choice name="Read Only"      value="1" enum="ReadOnly" />
    </binaryOption>
-   
+
    <choiceOption key="mcm_cr_sramlap" condition="mcm_cr_sramlap_present"
       enumStem="McmSramLowerArbitration"
       description="SRAM Lower arbitration priority"
@@ -564,8 +564,8 @@
       <choice value="0b10" name="Fixed (processor highest, backdoor lowest)"  enum="ProcessorHighBackdoorLow" />
       <choice value="0b11" name="Fixed (backdoor highest, processor lowest)"  enum="BackDoorHighProcessorLow" />
    </choiceOption>
-   
-   
+
+
    <binaryOption key="mcm_cr_sramuwp" condition="mcm_cr_sramuwp_present"
       enumStem="McmSramUpperAccess"
       description="SRAM Upper access control (write protect)"
@@ -574,7 +574,7 @@
       <choice name="Read and Write" value="0" enum="ReadWrite"  isDefault="true"/>
       <choice name="Read Only"      value="1" enum="ReadOnly" />
    </binaryOption>
-   
+
    <choiceOption key="mcm_cr_sramuap" condition="mcm_cr_sramuap_present"
       enumStem="McmSramUpperArbitration"
       description="SRAM Upper arbitration priority"
@@ -586,7 +586,7 @@
       <choice value="0b11" name="Fixed (backdoor highest, processor lowest)"  enum="BackDoorHighProcessorLow" />
    </choiceOption>
 
-   <setTemplate variables="mcm_cr_sramlwp,mcm_cr_sramlap,mcm_cr_sramuwp,mcm_cr_sramuap" > 
+   <setTemplate variables="mcm_cr_sramlwp,mcm_cr_sramlap,mcm_cr_sramuwp,mcm_cr_sramuap" >
       ><![CDATA[
       \t/**
       \t **
@@ -604,13 +604,13 @@
       \t * // Omitted values are taken to be zero unless a default value is given
       \t * const Mcm::SramAccessInit sramInit {
       \t *    // List of options
-      \t *    McmSramLowerAccess_ReadWrite, 
-      \t *    McmSramLowerArbitration_SpecialRoundRobin, 
-      \t *    McmSramUpperAccess_ReadOnly, 
+      \t *    McmSramLowerAccess_ReadWrite,
+      \t *    McmSramLowerArbitration_SpecialRoundRobin,
+      \t *    McmSramUpperAccess_ReadOnly,
       \t *    McmSramUpperArbitration_BackDoorHighProcessorLow,
       \t *    // Optional value to build upon - must be last in parameter list
-      \t *    // The value below is generated from Configure.usbdmProject 
-      \t *    Mcm::DefaultFloatingPointIrqInitValue 
+      \t *    // The value below is generated from Configure.usbdmProject
+      \t *    Mcm::DefaultFloatingPointIrqInitValue
       \t * };
       \t *
       \t * sramInit.configure();  // Enable listed interrupts and disable others
@@ -620,8 +620,8 @@
       \t * @code
       \t * Mcm::SramAccessInit{
       \t *    // List of options
-      \t *    McmSramLowerAccess_ReadWrite, 
-      \t *    McmSramUpperAccess_ReadOnly, 
+      \t *    McmSramLowerAccess_ReadWrite,
+      \t *    McmSramUpperAccess_ReadOnly,
       \t *    // The value below is generated from Configure.usbdmProject
       \t *    Mcm::DefaultFloatingPointIrqInitValue}.configure();
       \t * @endcode
@@ -639,22 +639,22 @@
       \t   inline void configure() const {
       \t      %register = %registerName;
       \t   }
-      \t   
+      \t
       \t   /**
       \t    * Constructor
       \t    */
       \t   constexpr SramAccessInit()  {
       \t   }
-      \t  
-      \t   /**                               
-      \t    * Copy Constructor                  
-      \t    */                             
+      \t
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
       \t   constexpr SramAccessInit(const SramAccessInit &other) = default;
       \t\n
    ]]></setTemplate>
 
-   <for keys="n" values="mcm_cr_sramlwp;mcm_cr_sramlap;mcm_cr_sramuwp;mcm_cr_sramuap" >      
-      <setTemplate 
+   <for keys="n" values="mcm_cr_sramlwp;mcm_cr_sramlap;mcm_cr_sramuwp;mcm_cr_sramuap" >
+      <setTemplate
          variables="%(n)"
       ><![CDATA[
          \t   /**
@@ -666,17 +666,17 @@
          \t    */
          \t   template <typename... Types>
          \t   constexpr SramAccessInit(%enumClass %enumParam, Types... rest) : SramAccessInit(rest...)  {
-         \t   
+         \t
          \t      %registerName = (%registerName&~%mask) | %enumParam;
          \t   }\n\n
       ]]></setTemplate>
    </for>
-   
-   <template condition="mcm_cr_sramlwp||mcm_cr_sramlap||mcm_cr_sramuwp||mcm_cr_sramuap" > 
+
+   <template condition="mcm_cr_sramlwp||mcm_cr_sramlap||mcm_cr_sramuwp||mcm_cr_sramuap" >
       ><![CDATA[
       \t};\n\n
    ]]></template>
-   
+
    <setTemplate key="/MCM/DefaultSramAccessInitValue" namespace="all"
       variables="mcm_cr_sramlwp,mcm_cr_sramlap,mcm_cr_sramuwp,mcm_cr_sramuap"
       terminator=","
@@ -689,9 +689,9 @@
       \tstatic constexpr McmInfo::SramAccessInit DefaultSramAccessInitValue {%initExpression
       \t};
    ]]></setTemplate>
-         
-   <!-- 
-      ******************** misc ******************** 
+
+   <!--
+      ******************** misc ********************
    -->
    <template key="/MCM/declarations" namespace="all" ><![CDATA[
       \t/**
@@ -704,9 +704,11 @@
    <template key="/MCM/declarations" namespace="all" condition="!irqOption_present" ><![CDATA[
       \tclass $(_class) : public $(_base_class)Base {};\n
    ]]></template>
-   
+
    <projectActionList id = "mcm_files" >
       <copy source="Project_Headers/mcm.h"         target="Project_Headers/mcm.h"          overwrite="true" derived="true" />
    </projectActionList>
+
+   <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" />
 
 </fragment>

@@ -90,6 +90,12 @@ protected:
 
 public:
 
+   static void Command_irqHandler() {
+   }
+   
+   static void ReadCollision_irqHandler() {
+   }
+   
    /**
     * Hardware instance pointer
     *

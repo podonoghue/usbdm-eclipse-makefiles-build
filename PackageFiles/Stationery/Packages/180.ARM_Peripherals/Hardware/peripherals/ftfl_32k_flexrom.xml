@@ -22,8 +22,8 @@
    <stringOption key="dflash_phrase_size" constant="true" derived="true" modify="true"
       description="Phrase size for data flash (minimum program element)"
       toolTip="Only for device with FlexNVM" />
-      
-   <choiceOption key="EepromSize" 
+
+   <choiceOption key="EepromSize"
       description="FlexNVM - EEPROM size"
       toolTip="Selects emulated EEPROM size">
       <choice value="EepromSel_32Bytes"  name="32 bytes" />
@@ -34,8 +34,8 @@
       <choice value="EepromSel_1KBytes"  name="1 KiB" />
       <choice value="EepromSel_2KBytes"  name="2 KiB" isDefault="true"/>
    </choiceOption>
-   
-   <choiceOption key="FlashPartition" 
+
+   <choiceOption key="FlashPartition"
       description="FlexNVM - Flash EEPROM partition"
       toolTip="Selects division of FlexNVM between flash and EEPROM backing storage\n
                The larger the EEPROM backing the better the wear characteristic">
@@ -45,7 +45,7 @@
       <choice value="PartitionSel_flash8K_eeprom24K"  name="flash=8KiB eeprom backing=24KiB" />
       <choice value="PartitionSel_flash0K_eeprom32K"  name="flash=0B eeprom backing=32KiB" isDefault="true"/>
    </choiceOption>
-   
+
    <projectActionList id = "flash_files" >
       <copy source="Project_Headers/flash.h"                 target="Project_Headers/flash.h"                 overwrite="true"  derived="true" />
       <copy source="Project_Headers/ftfl.h"                  target="Project_Headers/ftfl.h"                  overwrite="true"  derived="true" />
@@ -57,17 +57,17 @@
    <template key="FlashConfig" namespace="all"> <![CDATA[
       \t// Sector size for program flash (minimum erase element)
       \tstatic constexpr unsigned programFlashSectorSize = $(pflash_sector_size);
-   
+
       \t// Phrase size for program flash (minimum programming element)
       \tstatic constexpr unsigned programFlashPhraseSize = $(pflash_phrase_size);
-      
+
       \t// Sector size for data flash (minimum erase element)
       \tstatic constexpr unsigned dataFlashSectorSize = $(dflash_sector_size);
-   
+
       \t// Phrase size for data flash (minimum programming element)
       \tstatic constexpr unsigned dataFlashPhraseSize = $(dflash_phrase_size);\n\n
    ]]></template>
-   
+
    <template><![CDATA[
       \tstruct EepromSizes {
       \t   const uint16_t size;    // EEPROM size
@@ -112,7 +112,7 @@
       \t   EepromSel_1KBytes,
       \t   EepromSel_2KBytes,
       \t};
-      
+
       \t/** Selects division of FlexNVM between flash and EEPROM backing storage */
       \tenum PartitionSel {
       \t   PartitionSel_flash32K_eeprom0K,
@@ -124,7 +124,7 @@
       \t   // All EEPROM
       \t   PartitionSel_flash0K_eeprom_all = PartitionSel_flash0K_eeprom32K,
       \t};
-      
+
       \t/**
       \t * Selects division of the EEPROM
       \t * Not supported on this device
@@ -133,7 +133,7 @@
       \t   // Not supported
       \t   SplitSel_disabled=0x30,
       \t};
-   
+
       \t//! FlexNVM - EEPROM size
       \tstatic constexpr EepromSel eepromSel = $(EepromSize);
 
@@ -143,9 +143,11 @@
       \t//! FlexNVM - EEPROM partition - not available
       \tstatic constexpr SplitSel partitionSplit = SplitSel_disabled;\n\n
    ]]></template>
-   
+
    <xi:include href="_irqOption.xml"/>
-   
+
    <xi:include href="_clockOption.xml"/>
+
+   <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator"/>
 
 </peripheralPage>

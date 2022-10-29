@@ -118,7 +118,7 @@
       units="s"/>
 
    <floatOption key="lptmr_cmrPeriod"
-      ref="counterFrequency;(lptmr_cmr_compare+1)/counterFrequency"
+      ref="counterFrequency#(lptmr_cmr_compare+1)/counterFrequency"
       typeName="Seconds &amp;"
       valueFormat="%s_s"
       description="Timer Compare Interval"

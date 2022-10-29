@@ -3,7 +3,7 @@
 <!-- mgc_lite.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator">
-   
+
    <xi:include href="_default_instance.xml"/>
    <xi:include href="_currentClockSelection.xml"/>
 
@@ -23,26 +23,26 @@
          toolTip="Dependent on device and clock Trim. [Typically ~8MHz]"
          value="8MHz" />
    </category>
-   
+
    <category name="HIRC" description="High Speed Internal Clock Sources"
       toolTip="IRCLK48MCLK, USB_CLKIN, LPO" >
 
-      <intOption key="system_usb_clkin_clock"  
+      <intOption key="system_usb_clkin_clock"
          origin="USB Clock In pin"
          units="Hz"
          description="Frequency of External USB Clock"
-         toolTip="Externally provided clock for USB on USB_CLKIN" 
+         toolTip="Externally provided clock for USB on USB_CLKIN"
          value="0" />
 
-      <intOption key="system_irc48m_clock" 
-         constant="true" 
+      <intOption key="system_irc48m_clock"
+         constant="true"
          units="Hz"
          description="Frequency of Internal 48MHz Clock"
          toolTip="48 MHz Internal Oscillator [Trimmed against USB bus]"
          origin="48MHz clock from IRC48MCLK"
          value="48MHz" />
    </category>
-   
+
    <category name="LPO" description="Low Power Clock Sources" >
       <aliasOption key="/PMC/system_low_power_clock"/>
    </category>
@@ -50,13 +50,13 @@
    <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
       <aliasOption key="/OSC0/osc_input_freq" constant="false" />
       <binaryOption key="mcg_c2_erefs0"
-         description="External Reference Select" 
+         description="External Reference Select"
          toolTip="Determines whether a clock or crystal is used for the external reference clock" >
          <choice value="0" name="External clock" />
          <choice value="1" name="Oscillator" isDefault="true" />
       </binaryOption>
       <binaryOption key="mcg_c2_hgo0"
-         description="Oscillator Gain" 
+         description="Oscillator Gain"
          toolTip="Controls the crystal oscillator mode of operation">
          <choice value="0" name="Low power" isDefault="true"/>
          <choice value="1" name="High gain" />
@@ -72,7 +72,7 @@
             <choice value="0" name="Unused" />
       </choiceOption>
       <aliasOption key="/OSC0/osc_clock" />
-      
+
    </category>
 
    <category name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
@@ -80,15 +80,15 @@
       <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
    </category>
 
-   <aliasOption key="/SIM/numberOfClockSettings" />     
+   <aliasOption key="/SIM/numberOfClockSettings" />
 
    <for keys="n" dim="/SIM/numberOfClockSettings">
       <categoryOption key="ClockConfig[%(n)]"
-         description="Clock configuration" 
+         description="Clock configuration"
          toolTip="Clock configurations for different run modes"
-         value="ClockConfig_%(n)" 
+         value="ClockConfig_%(n)"
          disabledValue="Disabled" >
-         
+
          <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" constant="false" />
 
          <binaryOption key="enableClockConfiguration[%(n)]"
@@ -98,7 +98,7 @@
             <choice value="1" name="Enabled"  isDefault="true" />
          </binaryOption>
 
-      <binaryOption key="mcg_mc_hircen[%(n)]" 
+      <binaryOption key="mcg_mc_hircen[%(n)]"
          description="High-frequency IRC Clock Enable [MCGPCLK]"
          toolTip="Enables the HIRC, even when MCG_Lite is not working at HIRC mode[%(n)]">
          <choice value="0" name="Enabled as required by MCG mode" />
@@ -106,7 +106,7 @@
       </binaryOption>
 
       <binaryOption key="mcg_c2_ircs[%(n)]"
-         description="Internal Reference [MCGIRCLK] Clock Source" 
+         description="Internal Reference [MCGIRCLK] Clock Source"
          toolTip="Clock Source for MCGIRCLK" >
          <choice value="0" name="Slow internal reference clock" isDefault="true"/>
          <choice value="1" name="Fast internal reference clock" />
@@ -120,7 +120,7 @@
       </binaryOption>
 
       <binaryOption key="mcg_c1_irefsten[%(n)]"
-         description="Internal Reference Stop Enable [MCGIRCLK]" 
+         description="Internal Reference Stop Enable [MCGIRCLK]"
          toolTip="Determines if the LIRC is enabled in Stop mode">
          <choice value="0" name="IR disabled in STOP" />
          <choice value="1" name="IR enabled in STOP" />
@@ -140,15 +140,15 @@
          <choice value="7" name="Divide by 128" />
       </choiceOption>
 
-      <intOption key="system_lirc_clock[%(n)]"  
-         constant="true" 
+      <intOption key="system_lirc_clock[%(n)]"
+         constant="true"
          units="Hz"
          description="Frequency of Low Speed Internal Reference [LIRC_CLK] "
          toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock"
          value="2000000"/>
 
          <choiceOption key="mcgClockMode[%(n)]"
-            enumStem="McgClockMode" 
+            enumStem="McgClockMode"
             valueFormat="%s"
             description="MCG Clock Mode"
             toolTip="Clock Modes\n
@@ -161,9 +161,9 @@
             <choice name="48 MHz IRC (HIRC_48MHz)"          enum="HIRC_48MHz" code="McgClockMode_HIRC_48MHz" value="2"  />
             <choice name="External (EXT)"                   enum="EXT"        code="McgClockMode_EXT"        value="3"  />
          </choiceOption>
-  
-      <intOption key="system_lirc_div1_clock[%(n)]" 
-         constant="true" 
+
+      <intOption key="system_lirc_div1_clock[%(n)]"
+         constant="true"
          units="Hz"
          description="Frequency of Low Speed Internal Reference [LIRC_DIV1_CLK] "
          toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock/lirc_div1"
@@ -182,7 +182,7 @@
          <choice value="7" name="Divide by 128" />
       </choiceOption>
 
-      <intOption key="system_mcgirclk_clock[%(n)]"  
+      <intOption key="system_mcgirclk_clock[%(n)]"
          derived="true"
          constant="true"
          units="Hz"
@@ -191,33 +191,33 @@
          value="2000000" />
 
       <intOption key="system_mcgpclk_clock[%(n)]"
-         derived="true" 
+         derived="true"
          constant="true"
          units="Hz"
          description="MCGPCLK Output clock frequency"
          toolTip="Output of HIRC_48MHz available as peripheral clock"
          value="48000000" />
-         
+
       <aliasOption key="/OSC0/osc_undiv_clock" optional="true" />
       <aliasOption key="/OSC0/osc_clock" constant="true" />
       <aliasOption key="/SIM/system_erclk32k_clock" constant="true" />
       <aliasOption key="/PMC/system_low_power_clock" constant="true" />
-   
+
       <stringOption key="system_mcgoutclk_clock_source[%(n)]"
-         derived="true" 
+         derived="true"
          constant="true"
-         description="System MCG Output Clock source [MCGOUTCLK]" 
+         description="System MCG Output Clock source [MCGOUTCLK]"
          toolTip="Source of MCG Output Clock\n
                   Determined by current clock mode" />
-      
-      <intOption key="system_mcgoutclk_clock[%(n)]" 
-         derived="true" 
+
+      <intOption key="system_mcgoutclk_clock[%(n)]"
+         derived="true"
          constant="true"
          units="Hz"
          description="System MCG Output Clock [MCGOUTCLK]"
          toolTip="MCG Main clock output\n
                   Derived from HIRC_48MHz, LIRC-8M/2M, EXT" />
-   
+
       <aliasOption key="/SIM/system_core_clock[%(n)]"    constant="false" />
       <aliasOption key="/SIM/system_bus_clock[%(n)]"     constant="false" />
 
@@ -237,26 +237,26 @@
             <aliasOption key="mcg_c1_irclken[%(n)]" />
             <aliasOption key="mcg_c1_irefsten[%(n)]" />
          </category>
-         
+
          <category name="MCG_C2" description="MCG Control Register 2">
             <aliasOption key="mcg_c2_range0" />
             <aliasOption key="mcg_c2_hgo0" />
             <aliasOption key="mcg_c2_erefs0" />
             <aliasOption key="mcg_c2_ircs[%(n)]" />
          </category>
-         
+
          <category name="MCG_SC" description="MCG Status and Control Register" >
             <aliasOption key="mcg_sc_fcrdiv[%(n)]" />
          </category>
 
          <category name="MCG_MC" description="MCG Miscellaneous Control Register" >
-            <aliasOption key="mcg_mc_hircen[%(n)]" />         
-            <aliasOption key="mcg_mc_lirc_div2[%(n)]" />         
+            <aliasOption key="mcg_mc_hircen[%(n)]" />
+            <aliasOption key="mcg_mc_lirc_div2[%(n)]" />
          </category>
       </category>
       </categoryOption>
    </for>
-   
+
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_Lite" dim="/SIM/numberOfClockSettings">
    </validate>
@@ -270,11 +270,11 @@
       <deleteResource target="Project_Headers/clock_configure.h" />
       <deleteResource target="Startup_Code/clock.c" />
    </projectActionList>
-         
+
    <template><![CDATA[
       \t//! Frequency of Slow Internal Reference Clock [~2MHz]
       \tstatic constexpr uint32_t system_slow_lirc_clock = $(system_slow_irc_clock)UL;
-      
+
       \t//! Frequency of Fast Internal Reference Clock [~8MHz]
       \tstatic constexpr uint32_t system_fast_lirc_clock = $(system_fast_irc_clock)UL;
 
@@ -295,7 +295,7 @@
       \t      return 0;
       \t   }
       \t}
-      
+
       \t/**
       \t * Get LIRC_CLK
       \t *
@@ -314,7 +314,7 @@
       \t      return 0;
       \t   }
       \t}
-      
+
       \t/**
       \t * Get LIRC_DIV1_CLK
       \t *
@@ -352,22 +352,22 @@
       \t   }
       \t}\n\n
    ]]></template>
-   
+
    <template key="ClockInfoType" namespace="all" ><![CDATA[
       \t//! Structure for clock configurations
       \tstruct ClockInfo {
       \t   //! System Clock Divider Register 1
       \t   const uint32_t clkdiv1;
-      
+
       \t   //! SIM SOPT2 - Clock selectors for various peripherals
       \t   const uint32_t sopt2;
 
       \t   //! Clock Mode
       \t   const McgClockMode clockMode;
-       
+
       \t   //! Run Mode
       \t   const SmcRunMode runMode;
-      
+
       \t   //! Control Register 1 - IRCLKEN, IREFSTEN, (-CLKS)
       \t   const uint8_t c1;
       \t   //! Control Register 2 - RANGE0, HGO0, EREFS0, IRCS
@@ -380,37 +380,34 @@
    ]]></template>
 
    <for keys="n" dim="/SIM/numberOfClockSettings">
-      <template key="ClockConfig" namespace="all" ><![CDATA[
-         #if $(enableClockConfiguration[%(n)])
-         \t$(ClockConfig[%(n)]://-- missing name for configuration --),
-         #endif\n
+      <template key="ClockConfig" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
+         \t$(ClockConfig[%(n)]://-- missing name for configuration --)\n
       ]]></template>
    </for>
-   
+
    <for keys="n" dim="/SIM/numberOfClockSettings">
-      <template key="McgClockInfoEntries" namespace="all" ><![CDATA[
-         \t#if $(enableClockConfiguration[%(n)])
-         \t{  // $(ClockConfig[%(n)]) ($(mcgClockMode[%(n)].enum[]))
-         \t\n
+      <template key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      ><![CDATA[
+         \t{  // $(ClockConfig[%(n)]) ($(mcgClockMode[%(n)].enum[]))\n
       ]]></template>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
-         terminator="," 
+      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+         terminator=","
          variables="
-            /SIM/sim_clkdiv1_outdiv4[%(n)],     
+            /SIM/sim_clkdiv1_outdiv4[%(n)],
             /SIM/sim_clkdiv1_outdiv3[%(n)],
-            /SIM/sim_clkdiv1_outdiv2[%(n)],  
-            /SIM/sim_clkdiv1_outdiv1[%(n)]"     
+            /SIM/sim_clkdiv1_outdiv2[%(n)],
+            /SIM/sim_clkdiv1_outdiv1[%(n)]"
       ><![CDATA[\t   /// SIM CLKDIV1 System Clock Divider Register 1 %initExpression\n\n ]]></initialValueTemplate>
-              
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
-         terminator="," 
+
+      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+         terminator=","
          variables=
-            "/SIM/sim_clkdiv3_pllfll[%(n)]"     
+            "/SIM/sim_clkdiv3_pllfll[%(n)]"
       ><![CDATA[\t   /// SIM CLKDIV3 System Clock Divider Register 3 %initExpression\n\n ]]></initialValueTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
-         terminator="," 
+      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+         terminator=","
          variables="
             /SIM/sim_sopt2_traceclksel,
             /SIM/sim_sopt2_timesrc,
@@ -426,53 +423,52 @@
             /SIM/sim_sopt2_usbsrc,
             /SIM/sim_sopt2_fbsl,
             /SIM/sim_sopt2_rtcclkoutsel,
-            /SIM/sim_sopt2_clkoutsel"     
+            /SIM/sim_sopt2_clkoutsel"
       ><![CDATA[\t   /// SIM SOPT2 System Options Register 2 %initExpression\n\n ]]></initialValueTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
-         terminator="," 
+      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+         terminator=","
          variables="
-            mcgClockMode[%(n)]"     
+            mcgClockMode[%(n)]"
       ><![CDATA[\t   /// Clock Mode %initExpression\n\n ]]></initialValueTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
-         terminator="," 
+      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+         terminator=","
          variables=
-            "/SMC/smc_pmctrl_runm[%(n)]"     
+            "/SMC/smc_pmctrl_runm[%(n)]"
       ><![CDATA[\t   /// Run Mode %initExpression\n\n ]]></initialValueTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
-         terminator="," 
+      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+         terminator=","
          variables="
             mcg_c1_irclken[%(n)],
-            mcg_c1_irefsten[%(n)]"     
+            mcg_c1_irefsten[%(n)]"
       ><![CDATA[\t   /// Control Register 1 - Excluding CLKS %initExpression\n\n ]]></initialValueTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
-         terminator="," 
+      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+         terminator=","
          variables="
              mcg_c2_range0,
              mcg_c2_hgo0,
              mcg_c2_erefs0,
-             mcg_c2_ircs[%(n)]"     
+             mcg_c2_ircs[%(n)]"
       ><![CDATA[\t   /// Control Register 2 - %initExpression\n\n ]]></initialValueTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
-         terminator="," 
+      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+         terminator=","
          variables=
-            "mcg_sc_fcrdiv[%(n)]"     
+            "mcg_sc_fcrdiv[%(n)]"
       ><![CDATA[\t   /// Status and Control Register %initExpression\n\n ]]></initialValueTemplate>
-              
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all"
-         terminator="," 
+
+      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+         terminator=","
          variables="
             mcg_mc_hircen[%(n)],
-            mcg_mc_lirc_div2[%(n)]"     
+            mcg_mc_lirc_div2[%(n)]"
       ><![CDATA[\t   /// Miscellaneous Control Register - Excluding HIRCLPEN %initExpression\n\n ]]></initialValueTemplate>
-              
-      <template key="McgClockInfoEntries" namespace="all" ><![CDATA[
-         \t},
-         \t#endif\n
+
+      <template key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
+         \t},\n
       ]]></template>
    </for>
 </peripheralPage>

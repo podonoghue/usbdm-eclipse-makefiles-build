@@ -8,7 +8,7 @@
    <xi:include href="_mapPinsOption_on.xml"/>
 
    <aliasOption key="/SIM/system_usb_clkin_clock"     constant="false" optional="true"/>
-   
+
    <for keys="n" dim="/SIM/numberOfClockSettings" >
       <aliasCategoryOption key="/MCG/ClockConfig[%(n)]"           constant="true" >
          <aliasOption key="/SIM/system_peripheral_clock[%(n)]"    constant="true" optional="true"/>
@@ -17,8 +17,8 @@
          <aliasOption key="/SIM/system_usbfs_clock[%(n)]"         optional="true"/>
       </aliasCategoryOption>
    </for>
-   
-   <choiceOption key="usb_clk_enable" 
+
+   <choiceOption key="usb_clk_enable"
       enumStem="UsbIrc48mClockEnable"
       valueFormat="(%s)"
       description="IRC48M enable"
@@ -26,14 +26,17 @@
       <choice value="USB_CLK_RECOVER_IRC_EN_IRC_EN(0)"  enum="Peripheral"       name="Not available"  isDefault="true"  />
       <choice value="USB_CLK_RECOVER_IRC_EN_IRC_EN(1)"  enum="PeripheralAndUsb" name="Available as USB clock"  />
    </choiceOption>
-      
+
    <xi:include href="_usb_base_clkrcv.xml"/>
 
    <xi:include href="_irqOption.xml"/>
-   
+
    <xi:include href="_clockOption.xml"/>
-   
+
    <xi:include href="_usb_base_files.xml"/>
 
    <signals/>
+
+   <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" />
+
 </peripheralPage>

@@ -5,14 +5,14 @@
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
    <xi:include href="_default_instance.xml"/>
-   
+
    <constant key="disable_peripheral" value = "adc->SC1[0] = ADC_SC1_ADCH(-1);"  />
-   
+
    <xi:include href="_mapPinsOption.xml"/>
-   
+
    <xi:include href="_irqOption.xml"/>
 
-<!-- ========== PGA features =============================== -->
+<!-- ==========  PGA features =============================== -->
    <choiceOption key="adc_pga_pgaen" condition="adc_pga_pgaen_present"
       description="PGA Enable and mode"
       valueFormat="(%s)"
@@ -23,7 +23,7 @@
       <choice value="ADC_PGA_PGAEN(1)|ADC_PGA_PGALPb(1)" name="PGA is in normal mode"    enum="NormalPower"   />
    </choiceOption>
 
-   <choiceOption key="adc_pga_pgag" condition="adc_pga_pgag_present" 
+   <choiceOption key="adc_pga_pgag" condition="adc_pga_pgag_present"
       description="PGA Gain Setting"
       enumStem="AdcPgaGain"
       toolTip="Sets gain of PGA amplifier">
@@ -36,7 +36,7 @@
       <choice value="6" name="Gain = x64" enum="x64"  />
    </choiceOption>
 
-   <binaryOption key="adc_pga_pgachp" condition="adc_pga_pgachp_present" 
+   <binaryOption key="adc_pga_pgachp" condition="adc_pga_pgachp_present"
       description="PGA chopping"
       valueFormat="ADC_PGA_PGACHPb(%s)"
       enumStem="AdcPgaChop"
@@ -45,10 +45,10 @@
       <choice value="1" enum="Enabled"  name="Chopping enabled"   />
    </binaryOption>
 
-<!-- ========== ADC clock sources =============================== -->
+<!-- ==========  ADC clock sources =============================== -->
 
    <stringOption key="Clocking" value="------- Clocking -------" constant="true" description="Clocking" />
-   
+
    <choiceOption key="adcClockConfig"
       target="input_bus_clock"
       description="Clock configuration"
@@ -57,15 +57,15 @@
       <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
       <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
       <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
-   </choiceOption>   
+   </choiceOption>
 
-   <intOption key="input_bus_clock"  
+   <intOption key="input_bus_clock"
       constant="true"
-      derived="true" 
+      derived="true"
       units="Hz"
       description="Frequency of PDB input Clock" />
-   
-   <intOption key="adcInternalClock" 
+
+   <intOption key="adcInternalClock"
       derived="true"
       constant="true"
       description="Frequency of Internal ADC clock"
@@ -74,24 +74,24 @@
       origin="Internal ADC clock"
       units="Hz"/>
 
-   <choiceOption key="adc_cfg1_adiclk" 
+   <choiceOption key="adc_cfg1_adiclk"
       description="ADC Clock Source"
       enumStem="AdcClockSource"
       target="adcInputClock"
       toolTip="Clock source for the ADC module" >
-      <choice value="0" name="Bus clock"                   ref="input_bus_clock"                                      enum="Bus"       code="SystemBusClock"            />
-      <choice value="1" name="Irc48M clock"                ref="/SIM/system_irc48m_clock"                             enum="Irc48mClk" code="SimInfo::irc48mClock"      condition="/SIM/system_irc48m_clock"  />
-      <choice value="1" name="Bus clock/2"                 ref="/SIM/system_bus_clock[];(/SIM/system_bus_clock[])/2"  enum="Busdiv2"   code="SystemBusClock/2"          condition="!/SIM/system_irc48m_clock" />
-      <choice value="2" name="Alternate clock (OSCERCLK)"  ref="/OSC0/oscer_clock"                                    enum="OscerClk"  code="Osc0Info::getOscerClock()" />
-      <choice value="3" name="Asynchronous clock (ADACK)"  ref="/ADC0/adcInternalClock"                               enum="Asynch"    code="$(adcInternalClock)"       isDefault="true" />
+      <choice value="0" name="Bus clock"                   ref="input_bus_clock"              enum="Bus"       code="SystemBusClock"            />
+      <choice value="1" name="Irc48M clock"                ref="/SIM/system_irc48m_clock"     enum="Irc48mClk" code="SimInfo::irc48mClock"      condition="/SIM/system_irc48m_clock"  />
+      <choice value="1" name="Bus clock/2"                 ref="(/SIM/system_bus_clock[])/2"  enum="Busdiv2"   code="SystemBusClock/2"          condition="!/SIM/system_irc48m_clock" />
+      <choice value="2" name="Alternate clock (OSCERCLK)"  ref="/OSC0/oscer_clock"            enum="OscerClk"  code="Osc0Info::getOscerClock()" />
+      <choice value="3" name="Asynchronous clock (ADACK)"  ref="/ADC0/adcInternalClock"       enum="Asynch"    code="$(adcInternalClock)"       isDefault="true" />
    </choiceOption>
-   
-   <intOption key="adcInputClock"  
+
+   <intOption key="adcInputClock"
       constant="true"
-      derived="true" 
+      derived="true"
       units="Hz"
       description="Frequency of ADC Clock" />
-   
+
    <clockCodeTemplate variable="adc_cfg1_adiclk"
       returnFormat="%s"
    ><![CDATA[
@@ -103,15 +103,15 @@
       \t * @return Clock frequency in Hz
       \t */
       \tstatic uint32_t getAdcClock(%enumClass %enumParam) {
-      \t   
+      \t
       \t   switch(%enumParam) {
       \t      default: return 0;
       %body
       \t   }
       \t}\n\n
    ]]></clockCodeTemplate>
-   
-   <choiceOption key="adc_cfg1_adiv" 
+
+   <choiceOption key="adc_cfg1_adiv"
       description="Clock Divide Select"
       enumStem="AdcClockDivider"
       target="adcClockFrequency"
@@ -122,14 +122,14 @@
       <choice value="3" name="Divide by 8" ref="(adcInputClock)/8" enum="8" />
    </choiceOption>
 
-   <intOption key="adcClockFrequency" 
+   <intOption key="adcClockFrequency"
       constant="true"
       description="Frequency of ADC clock"
       toolTip="Determined from clock source and prescaler"
       derived="true"
       units="Hz"/>
 
-<!-- ========== ADC =============================== -->
+<!--  ========== ADC =============================== -->
 
    <choiceOption key="adc_cfg1_mode" description="ADC Resolution"
       enumStem="AdcResolution"
@@ -146,7 +146,7 @@
    </choiceOption>
 
    <if condition="adc_cfg1_mode" >
-      <template  discardRepeats="true" namespace="all" key="/ADC/get_maximums" ><![CDATA[
+      <template  discardRepeats="true" namespace="all" key="/ADC/methods" ><![CDATA[
          \t/**
          \t * Get ADC maximum conversion value for an single-ended range
          \t *
@@ -160,18 +160,18 @@
          \t      case AdcResolution_10bit_se: return (1<<10)-1;
          \t      case AdcResolution_12bit_se: return (1<<12)-1;\n
       ]]></template>
-      <template discardRepeats="true" namespace="all" key="/ADC/get_maximums" condition="adc_cfg1_mode_16bit_present"  ><![CDATA[
+      <template discardRepeats="true" namespace="all" key="/ADC/methods" condition="adc_cfg1_mode_16bit_present"  ><![CDATA[
          \t      case AdcResolution_16bit_se: return (1<<16)-1;\n
       ]]></template>
-      <template discardRepeats="true" namespace="all" key="/ADC/get_maximums" ><![CDATA[
+      <template discardRepeats="true" namespace="all" key="/ADC/methods" ><![CDATA[
          \t      default:                     return 0;
          \t   }
          \t}\n\n
       ]]></template>
    </if>
-   
+
    <if condition="adc_cfg1_mode&amp;&amp;adc_cfg1_mode_diff_present">
-      <template discardRepeats="true" namespace="all" key="/ADC/get_maximums" ><![CDATA[
+      <template discardRepeats="true" namespace="all" key="/ADC/methods" ><![CDATA[
       \t/**
       \t * Get ADC maximum conversion value for an differential range
       \t *
@@ -185,16 +185,16 @@
       \t      case AdcResolution_11bit_diff:  return (1<<10)-1;
       \t      case AdcResolution_13bit_diff:  return (1<<12)-1;\n
       ]]></template>
-      <template  discardRepeats="true" namespace="all" key="/ADC/get_maximums" condition="adc_cfg1_mode_16bit_present" ><![CDATA[
+      <template  discardRepeats="true" namespace="all" key="/ADC/methods" condition="adc_cfg1_mode_16bit_present" ><![CDATA[
       \t      case AdcResolution_16bit_diff:  return (1<<15)-1;\n
       ]]></template>
-      <template discardRepeats="true" namespace="all" key="/ADC/get_maximums" ><![CDATA[
+      <template discardRepeats="true" namespace="all" key="/ADC/methods" ><![CDATA[
       \t      default:                        return 0;
       \t   }
       \t}\n
       ]]></template>
    </if>
-   
+
    <binaryOption key="adc_cfg1_adlpc" description="Low-Power Configuration"
       enumStem="AdcPower"
       toolTip="Adjust power consumption">
@@ -204,7 +204,7 @@
 
    <choiceOption key="adc_sample" description="Long Sample Time Select"
       enumStem="AdcSample"
-      valueFormat="(%s)"     
+      valueFormat="(%s)"
       toolTip="Selects sample times \n
                Longer times allow higher impedance inputs to be accurately sampled or\n
                shorter times maximize conversion speed for lower impedance inputs\n
@@ -218,7 +218,7 @@
 
    <choiceOption key="adc_sc3_avg" description="Hardware Average Select"
       enumStem="AdcAveraging"
-      valueFormat="ADC_SC3_CAL(%s),ADC_SC3_CALF(%s),ADC_SC3_AVGE(%s),ADC_SC3_AVGS(%s)"     
+      valueFormat="ADC_SC3_CAL(%s),ADC_SC3_CALF(%s),ADC_SC3_AVGE(%s),ADC_SC3_AVGS(%s)"
       toolTip="Determines how many ADC conversions will be averaged\n
                by the hardware to create the ADC result">
       <choice value="0,0,0,0" enum="off"  name="1 sample"     isDefault="true" />
@@ -307,32 +307,32 @@
       <choice value="1,1,1,(0&lt;&lt;8)" enum="InsideRangeInclusive"  name="(low &lt;= ADC value &lt;= high)"                />
    </choiceOption>
 
-   <intOption key="adc_cv1" description="ADC CV low value" 
+   <intOption key="adc_cv1" description="ADC CV low value"
       valueFormat="%s"
       toolTip="CV Low threshold value\n
-         This value will be used for CV1 or CV2 as needed"  
+         This value will be used for CV1 or CV2 as needed"
       derived="true" />
-      
-   <intOption key="adc_cv2" description="ADC CV high value" 
+
+   <intOption key="adc_cv2" description="ADC CV high value"
       valueFormat="%s"
       toolTip="CV High threshold value\n
-         This value will be used for CV1 or CV2 as needed"  
+         This value will be used for CV1 or CV2 as needed"
       derived="true" />
-   
+
    <binaryOption key="adc_sc2_adtrg" description="Conversion Trigger Select"
       enumStem="AdcTrigger"
       toolTip="Selects the type of trigger used for initiating a conversion">
       <choice value="0" enum="Software" name="Software trigger (write to SC1A)" isDefault="true" />
       <choice value="1" enum="Hardware" name="Hardware trigger (ADHWT source)" />
    </binaryOption>
-   
+
    <category name="Advanced" description="Advanced Options" >
       <aliasOption key="/SIM/sim_sopt7_adc$(_instance)alttrgen"  constant="false" optional="true" />
       <aliasOption key="/SIM/sim_sopt7_adc$(_instance)pretrgsel" constant="false" optional="true"/>
       <aliasOption key="/SIM/sim_sopt7_adc$(_instance)trgsel"    constant="false" optional="true"/>
    </category>
 
-<!--  ========== ADC Init class =============================== -->
+<!--   ========== ADC Init class =============================== -->
 
    <template key="init_description" namespace="all" ><![CDATA[
       \t/**
@@ -400,43 +400,43 @@
       \tclass Init {
       \t
       \tpublic:
-      \t   /**                               
-      \t    * Copy Constructor                  
-      \t    */                             
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
       \t   constexpr Init(const Init &other) = default;
-      \t   
+      \t
       \t   /**
       \t    * Default Constructor
       \t    */
       \t   constexpr Init() = default;
       \t\n
    ]]></template>
-   
-<!--  Member variables -->
-  
-   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod" 
+
+<!--   Member variables -->
+
+   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></setTemplate>
-   
-   <initialValueTemplate namespace="usbdm" 
+
+   <initialValueTemplate namespace="usbdm"
       variables="
          adc_cv1"
    ><![CDATA[
       \t   ///  %description
       \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
-   
-   <initialValueTemplate namespace="usbdm" 
+
+   <initialValueTemplate namespace="usbdm"
       variables="
          adc_cv2"
    ><![CDATA[
       \t   ///  %description
       \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
-   
-   <initialValueTemplate namespace="usbdm" 
+
+   <initialValueTemplate namespace="usbdm"
       variables="
          adc_cfg1_adiclk,
          adc_cfg1_adiv,
@@ -446,8 +446,8 @@
       \t   ///  ADC Configuration Register 1
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
-   
-   <initialValueTemplate namespace="usbdm" 
+
+   <initialValueTemplate namespace="usbdm"
       variables="
          adc_cfg2_adhsc,
          adc_cfg2_adacken,
@@ -459,8 +459,8 @@
       \t   ///  ADC Configuration Register 2
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
-   
-   <initialValueTemplate namespace="usbdm" 
+
+   <initialValueTemplate namespace="usbdm"
       variables="
          adc_sc2_dmaen,
          adc_sc2_adtrg"
@@ -468,8 +468,8 @@
       \t   ///  ADC Status and Control Registers 2
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
-   
-   <initialValueTemplate namespace="usbdm" 
+
+   <initialValueTemplate namespace="usbdm"
       variables="
          adc_sc3_avg,
          adc_sc3_adco"
@@ -477,15 +477,15 @@
       \t   ///  ADC Status and Control Registers 3
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
-   
+
    <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
-      variables="/PCR/nvic_irqLevel" 
+      variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %enumClass %registerName = %enumClass_Normal;\n\n
    ]]></initialValueTemplate>
 
-<!--  Configure methods -->
+<!--   Configure methods -->
 
    <template discardRepeats="true" key="/ADC/InitMethod" namespace="all" ><![CDATA[
       \t/**
@@ -494,7 +494,7 @@
       \t * @param init Class containing initialisation values
       \t */
       \tstatic void configure(const typename Info::Init &init) {
-      \t   
+      \t
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      // Only set call-back if feature enabled
       \t      setCallback(init.callbackFunction);
@@ -522,9 +522,9 @@
       \t   configure(Info::DefaultInitValue);
       \t}\n
    ]]></template>
-  
-<!--  Constructors -->
-  
+
+<!--   Constructors -->
+
    <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
@@ -542,9 +542,9 @@
       \t      this->%enumParam0 = %paramExpression;
       \t   }\n\n
    ]]></setTemplate>
-   
-   <setTemplate namespace="usbdm" 
-      variables="/PCR/nvic_irqLevel" 
+
+   <setTemplate namespace="usbdm"
+      variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
       \t   /**
@@ -564,7 +564,7 @@
       #endif
       \t   }\n\n
    ]]></setTemplate>
-   
+
    <for keys="r" values="
          adc_cfg1_adiclk;
          adc_cfg1_adiv;
@@ -579,7 +579,7 @@
          adc_sc3_avg;
          adc_sc3_adco">
       <setTemplate namespace="usbdm" variables="%(r)"
-         linePadding="xxx" 
+         linePadding="xxx"
       ><![CDATA[
          \t   /**
          \t    * Constructor for %description
@@ -591,16 +591,16 @@
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-         \t   
+         \t
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
       ]]></setTemplate>
    </for>
-   
+
    <setTemplate namespace="usbdm" variables="adc_sc2_compare,adc_cv1,adc_cv2"
       linePadding="xxx"
-      nonDefaultParams="3" 
+      nonDefaultParams="3"
    ><![CDATA[
       \t   /**
       \t    * Configure %description0, %description1 and %description2
@@ -614,7 +614,7 @@
       \t    */
       \t   template <typename... Types>
       \t   constexpr Init(%enumClass0 %enumParam0, int low, int high=0, Types... rest) : Init(rest...) {
-      \t   
+      \t
       \t      // Juggle CV1, CV2 values to satisfy comparison rules
       \t      switch (adcCompare) {
       \t         case AdcCompare_Disabled:
@@ -647,11 +647,11 @@
       };\n\n
    ]]></template>
 
-<!--  Default Initialisation value -->
-  
+<!--   Default Initialisation value -->
+
    <initialValueTemplate
       separator=","
-      terminator=","     
+      terminator=","
       variables="
          adc_cfg1_adiclk,
          adc_cfg1_adiv,
@@ -669,7 +669,7 @@
          adc_sc2_compare,
          adc_cv1,
          adc_cv2,
-         "     
+         "
    ><![CDATA[
       $(init_description)
       \ttypedef $(_class)BasicInfo::Init Init;
@@ -687,19 +687,71 @@
       \t};\n\n
    ]]></initialValueTemplate>
 
-<!-- ==========  ADC MISC =============================== -->
-   
+<!--  ==========  ADC MISC =============================== -->
+
+   <template  discardRepeats="true" namespace="all" key="/ADC/methods" condition="adc_pretrigger" ><![CDATA[
+   \t/**
+   \t * Enables hardware trigger mode of operation and configures the channel.
+   \t *
+   \t * @param[in] sc1Value        SC1 register value including the ADC channel, Differential mode and interrupt enable
+   \t * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
+   \t *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
+   \t */
+   \tvoid enableHardwareConversion(int sc1Value, AdcPretrigger adcPretrigger) const {
+   \t   // Set hardware triggers
+   \t   adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1);
+   \t   // Configure channel for hardware trigger input
+   \t   adc->SC1[adcPretrigger] = sc1Value;
+   \t}
+   \t\n
+   ]]></template>
+
+   <template  discardRepeats="true" namespace="all" key="/ADC/methods" condition="adc_pretrigger &amp;&amp; adc_sc2_dmaen" ><![CDATA[
+   \t/**
+   \t * Enables hardware trigger mode of operation and configures the channel.
+   \t *
+   \t * @param[in] sc1Value        SC1 register value including the ADC channel, Differential mode and interrupt enable
+   \t * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel.\n
+   \t *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
+   \t * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
+   \t */
+   \tvoid enableHardwareConversion(int sc1Value, AdcPretrigger adcPretrigger, AdcDma adcDma) const {
+   \t   // Set hardware triggers
+   \t   adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1)|adcDma;
+   \t   // Configure channel for hardware trigger input
+   \t   adc->SC1[adcPretrigger] = sc1Value;
+   \t}
+   \t\n
+   ]]></template>
+
+   <template  discardRepeats="true" namespace="all" key="/ADC/methods" condition="adc_sc2_dmaen" ><![CDATA[
+   \t/**
+   \t * Enable/disable DMA.
+   \t *
+   \t * @param[in] adcDma  Controls DMA operation.
+   \t */
+   \tvoid enableDma(AdcDma adcDma = AdcDma_Enabled) const {
+   \t   // Set up DMA
+   \t   if (adcDma) {
+   \t      adc->SC2 = adc->SC2 | ADC_SC2_DMAEN_MASK;
+   \t   }
+   \t   else {
+   \t      adc->SC2 = adc->SC2 & ~ADC_SC2_DMAEN_MASK;
+   \t   }
+   \t}\t\n
+   ]]></template>
+
    <template key="/ADC/declarations" namespace="all"  ><![CDATA[
       /**
        * Class representing $(_name)
        */
       class $(_class) : public AdcBase_T<$(_class)Info> {};\n
    ]]></template>
-      
+
    <signals/>
-   
+
    <xi:include href="_clockOption.xml"/>
-      
+
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.AdcValidate">
    </validate>
@@ -712,5 +764,5 @@
       <copy source="Snippets/analogue-interrupt-example.cpp"  target="Snippets/analogue-interrupt-example.cpp"  overwrite="true"  derived="true" />
       <copy source="Snippets/analogue-joystick-example.cpp"   target="Snippets/analogue-joystick-example.cpp"   overwrite="true"  derived="true" />
    </projectActionList>
-   
+
 </fragment>

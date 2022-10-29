@@ -9,31 +9,27 @@
    <template><![CDATA[
       \t//! Pin number in Info table for SCL if mapped to a pin
       \tstatic constexpr int sclPin  = 0;
-      
+
       \t//! Pin number in Info table for SDA if mapped to a pin
       \tstatic constexpr int sdaPin  = 1;\n\n
    ]]></template>
-   
+
    <xi:include href="_mapPinsOption_on.xml"/>
 
-   <stringOption key="clockSource" 
+   <stringOption key="clockSource"
       description="I2C Clock Select"
-      constant="true" 
+      constant="true"
       value="SystemBusClock"
       />
-   
+
    <aliasOption key="/SIM/system_bus_clock" />
-   
+
    <xi:include href="_irqOption.xml"/>
-   
-   <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.I2cValidate">
-   </validate>
 
    <projectActionList id = "i2c_files" >
       <copy source="Project_Headers/i2c.h"            target="Project_Headers/i2c.h"            overwrite="true"  derived="true" />
       <copy source="Sources/i2c.cpp"                  target="Sources/i2c.cpp"                  overwrite="true"  derived="true" />
-      
+
       <copy source="Snippets/i2c-example.cpp"         target="Snippets/i2c-example.cpp"         overwrite="true"  derived="true" />
 
       <copy source="Snippets/fxos8700cq.h"            target="Snippets/fxos8700cq.h"            overwrite="true"  derived="true" />
@@ -65,7 +61,7 @@
       <copy source="Snippets/pca9685.cpp"             target="Snippets/pca9685.cpp"             overwrite="true"  derived="true" />
       <copy source="Snippets/pca9685-example.cpp"     target="Snippets/pca9685-example.cpp"     overwrite="true"  derived="true" />
    </projectActionList>
-    
+
    <template><![CDATA[
       \t/**
       \t * Get input clock frequency
@@ -76,16 +72,18 @@
       \t   return $(clockSource:SystemBusClock);
       \t}\n\n
    ]]></template>
-   
+
    <template key="/I2C/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */
    \tusing $(_class) = $(_base_class)Base_T<$(_class)Info>;\n
    ]]></template>
-      
+
    <xi:include href="_clockOption.xml"/>
-   
+
    <signals/>
+
+   <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" />
 
 </peripheralPage>
