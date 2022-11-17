@@ -18,9 +18,7 @@
 #include <stddef.h>
 #include <math.h>
 #include <algorithm>
-#if __cplusplus >= 202002L
-#include <bit>
-#endif
+#include <climits>
 #include "derivative.h"
 #include "error.h"
 
@@ -71,9 +69,18 @@ public:
    Ticks &operator =(const Ticks &other) = default;
 
    auto &operator =(float other)                  {value = other;       return *this; }
-   auto &operator =(const volatile Ticks &other)  {value = other.value; return *this; }
+   auto &operator =(const volatile Ticks &other)  {
+      if (this != &other) {
+         value = other.value;
+      }
+      return *this;
+   }
 
-   void  operator =(const Ticks &other) volatile  {value = other.value; }
+   void  operator =(const Ticks &other) volatile  {
+      if (this != &other) {
+         value = other.value;
+      }
+   }
 
    constexpr auto getValue() const { return value; }
    unsigned getValue() const volatile { return value; }
@@ -268,6 +275,21 @@ constexpr auto operator /(Ticks left,     Hertz right)   { return Seconds(left.g
    using Hertz    = float;
 #endif
 
+   /**
+    * Create a value of type `To` from the bits of `from`.
+    *
+    * @tparam To       To type
+    * @tparam From     From type
+    * @param  from     Object to convert
+    *
+    * @return  object converted to target type
+    */
+   template<typename To, typename From>
+   [[nodiscard]]
+    constexpr To bit_cast(const From& from) noexcept {
+      return __builtin_bit_cast(To, from);
+   }
+
 /**
  * Convenience class for sharing storage of time measurements in ticks and seconds
  */
@@ -277,27 +299,14 @@ union Seconds_Ticks {
 
    constexpr Seconds_Ticks() : value(0) {}
 
-#if $(/HARDWARE/useTypeSystemForTimers)
-#if __cplusplus >= 202002L
-   constexpr Seconds toSeconds() const         { return std::bit_cast<float, unsigned>(value); }
-   constexpr void fromSeconds(Seconds seconds) { value = std::bit_cast<unsigned, float>(seconds.getValue()); }
-#else
-   constexpr Seconds toSeconds() const { return __builtin_bit_cast(float, value); }
-   constexpr void fromSeconds(Seconds seconds) { value = __builtin_bit_cast(unsigned, seconds.getValue()); }
-#endif
-
+   constexpr Seconds toSeconds() const { return bit_cast<float, unsigned>(value); }
    constexpr Ticks   toTicks()   const { return value; }
+
+#if $(/HARDWARE/useTypeSystemForTimers)
+   constexpr void fromSeconds(Seconds seconds) { value = bit_cast<unsigned, float>(seconds.getValue()); }
    constexpr void fromTicks(Ticks ticks)       { value = ticks.getValue(); }
 #else
-#if __cplusplus >= 202002L
-   constexpr Seconds toSeconds() const         { return std::bit_cast<float, unsigned>(value); }
-   constexpr void fromSeconds(Seconds seconds) { value = std::bit_cast<unsigned, float>(seconds); }
-#else
-   constexpr Seconds toSeconds() const { return __builtin_bit_cast(float, value); }
-   constexpr void fromSeconds(Seconds seconds) { value = __builtin_bit_cast(unsigned, seconds); }
-#endif
-
-   constexpr Ticks   toTicks()   const { return value; }
+   constexpr void fromSeconds(Seconds seconds) { value = bit_cast<unsigned, float>(seconds); }
    constexpr void fromTicks(Ticks ticks)       { value = ticks; }
 #endif
 
@@ -684,8 +693,8 @@ public:
       if (bitNum<0) {
          return 0;
       }
-      if (bitNum>(31)) {
-         return 31;
+      if (bitNum>(int)(sizeof(uint32_t)*CHAR_BIT)) {
+         return (int)(sizeof(uint32_t)*CHAR_BIT);
       }
       return bitNum;
    }

@@ -170,7 +170,7 @@ public:
     *                        Use nullptr to remove callback.
     */
    static void setCallback(LlwuCallbackFunction callback) {
-      static_assert(Info::irqLevel>=0, "LLWU not configured for interrupts");
+      static_assert(Info::irqHandlerInstalled, "LLWU not configured for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }

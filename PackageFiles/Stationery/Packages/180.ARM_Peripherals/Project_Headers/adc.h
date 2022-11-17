@@ -828,8 +828,14 @@ $(/ADC/InitMethod: // /ADC/InitMethod not found)
       uint8_t sc2 = adc->SC2;
       uint8_t sc3 = adc->SC3;
 
+#ifndef ADC_SC2_DMAEN_MASK
+      static constexpr uint32_t mask = ADC_SC2_ADTRG_MASK|ADC_SC2_ACFE_MASK;
+#else
+      static constexpr uint32_t mask = ADC_SC2_ADTRG_MASK|ADC_SC2_ACFE_MASK|ADC_SC2_DMAEN_MASK;
+#endif
+
       // Disable hardware trigger
-      adc->SC2 = sc2 & ~(ADC_SC2_ADTRG_MASK|ADC_SC2_ACFE_MASK|ADC_SC2_DMAEN_MASK);
+      adc->SC2 = sc2 & ~mask;
 
       // Start calibration
       setAveraging(AdcAveraging_Cal);

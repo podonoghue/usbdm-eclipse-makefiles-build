@@ -350,17 +350,77 @@
 
 <!-- ========== SOPT2 =============================== -->
 
-   <clockCodeTemplate variable="sim_sopt2_ptd7pad"
-   ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      \t * @param %enumParam %tooltip
-      \t */
-      \tstatic void setPortDPad(%enumClass %enumParam) {
-      \t   %defaultFieldExpression
-      \t}\n\n
-   ]]></clockCodeTemplate>
+<!-- SOPT2 general settings -->
+
+   <for keys="  var                     : name"
+        values="sim_sopt2_fbsl          : FlexbusSecurity;
+                sim_sopt2_clkoutsel     : Clkout;
+                sim_sopt2_traceclksel   : TraceClockout;
+                sim_sopt2_usbregen      : UsbPhyRegulator;
+                sim_sopt2_ptd7pad       : PortDPad;
+                sim_sopt2_rmiisrc       : Rmiiclock
+        ">
+      <clockCodeTemplate variable="%(var)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         \t * @param %enumParam %tooltip
+         \t */
+         \tstatic void set%(name)(%enumClass %enumParam) {
+         \t   %defaultFieldExpression
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic uint32_t get%(name)() {
+         \t
+         \t   return %defaultMaskingExpression;
+         \t}\n\n
+      ]]></clockCodeTemplate>
+   </for>
+
+<!-- SOPT2 clock settings -->
+
+   <for keys="  var                     : name"
+        values="sim_sopt2_pllfllsel     : PeripheralClock;
+                sim_sopt2_sdhcsrc       : SdhcClock;
+                sim_sopt2_tpmsrc        : TpmClock;
+                sim_sopt2_flexiosrc     : FlexioClock;
+                sim_sopt2_emvsimsrc     : EmvsimClock;
+                sim_sopt2_timesrc       : TimestampClock;
+                sim_sopt2_usbslsrc      : UsbSlowClock
+                ">
+      <clockCodeTemplate variable="%(var)"
+      returnFormat="%s"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         \t * @param %enumParam %tooltip
+         \t */
+         \tstatic void set%(name)(%enumClass %enumParam) {
+         \t   %defaultFieldExpression
+         \t}
+
+         \t/**
+         \t * Get %description
+         \t *  %tooltip
+         \t *
+         \t * @return Clock frequency in Hz
+         \t */
+         \tstatic uint32_t get%(name)() {
+         \t
+         \t   switch(%defaultMaskingExpression) {
+         \t      default: return 0;
+         %body
+         \t   }
+         \t}\n\n
+      ]]></clockCodeTemplate>
+   </for>
 
    <for keys="n" values=";0;1;2;3;4">
       <clockCodeTemplate variable="sim_sopt2_lpuart%(n)src"
@@ -431,296 +491,38 @@
       ]]></template>
    </for>
 
-   <clockCodeTemplate variable="sim_sopt2_tpmsrc"
-      returnFormat="%s"
-   ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      \t * @param %enumParam %tooltip
-      \t */
-      \tstatic void setTpmClock(%enumClass %enumParam) {
-      \t   %defaultFieldExpression
-      \t}
-
-      \t/**
-      \t * Get %description
-      \t *
-      \t * @return Clock frequency in Hz
-      \t */
-      \tstatic uint32_t getTpmClock() {
-      \t
-      \t   switch(%defaultMaskingExpression) {
-      \t      default:
-      %body
-      \t   }
-      \t}\n\n
-   ]]></clockCodeTemplate>
-
-   <clockCodeTemplate variable="sim_sopt2_traceclksel"
-   ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      \t * @param %enumParam %tooltip
-      \t */
-      \tstatic void setTraceClockout(%enumClass %enumParam) {
-      \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_TRACECLKSEL_MASK) | %enumParam;
-      \t}\n\n
-   ]]></clockCodeTemplate>
-
-   <clockCodeTemplate variable="sim_sopt2_clkoutsel"
-   ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      \t * @param %enumParam %tooltip
-      \t */
-      \tstatic void setClkout(%enumClass %enumParam) {
-      \t   %defaultFieldExpression
-      \t}\n\n
-   ]]></clockCodeTemplate>
-
-   <clockCodeTemplate variable="sim_sopt2_pllfllsel"
-      returnFormat="%s"
-   ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      \t * @param %enumParam %tooltip
-      \t */
-      \tstatic void setPeripheralClock(%enumClass %enumParam) {
-      \t   %defaultFieldExpression
-      \t}
-
-      \t/**
-      \t * Get %description
-      \t *
-      \t * @return Clock frequency in Hz
-      \t *
-      \t * @note If there is a peripheral clock divider then this is the
-      \t *       frequency of the undivided peripheral clock
-      \t */
-      \tstatic uint32_t getPeripheralClock() {
-      \t
-      \t   switch(%defaultMaskingExpression) {
-      \t      default: return 0;
-      %body
-      \t   }
-      \t}\n\n
-   ]]></clockCodeTemplate>
-
-   <clockCodeTemplate variable="sim_sopt2_emvsimsrc"
-      returnFormat="%s"
-   ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      \t * @param %enumParam %tooltip
-      \t */
-      \tstatic void setEmvsimClock(%enumClass %enumParam) {
-      \t   %defaultFieldExpression
-      \t}
-
-      \t/**
-      \t * Get %description
-      \t *
-      \t * @return Clock frequency in Hz
-      \t */
-      \tstatic uint32_t getEmvsimClock() {
-      \t
-      \t   switch(%defaultMaskingExpression) {
-      \t      default: return 0;
-      %body
-      \t   }
-      \t}\n\n
-   ]]></clockCodeTemplate>
-
-   <clockCodeTemplate variable="sim_sopt2_sdhcsrc"
-      returnFormat="%s"
-   ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      \t * @param %enumParam %tooltip
-      \t */
-      \tstatic void setSdhcClock(%enumClass %enumParam) {
-      \t   %defaultFieldExpression
-      \t}
-
-      \t/**
-      \t * Get %description
-      \t *
-      \t * @return Clock frequency in Hz
-      \t */
-      \tstatic uint32_t getSdhcClock() {
-      \t
-      \t   switch(%defaultMaskingExpression) {
-      \t      default: return 0;
-      %body
-      \t   }
-      \t}\n\n
-   ]]></clockCodeTemplate>
-
-   <clockCodeTemplate variable="sim_sopt2_fbsl"
-   ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      \t * @param %enumParam %tooltip
-      \t */
-      \tstatic void setFlexbusSecurity(%enumClass %enumParam) {
-      \t   %defaultFieldExpression
-      \t}
-
-      \t/**
-      \t * Get %description
-      \t *
-      \t * @return Security level
-      \t */
-      \tstatic uint32_t getFlexbusSecurity() {
-      \t
-      \t   return %defaultMaskingExpression;
-      \t}\n\n
-   ]]></clockCodeTemplate>
-
-   <clockCodeTemplate variable="sim_sopt2_flexiosrc"
-      returnFormat="%s"
-   ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      \t * @param %enumParam %tooltip
-      \t */
-      \tstatic void setFlexioClock(%enumClass %enumParam) {
-      \t   %defaultFieldExpression
-      \t}
-
-      \t/**
-      \t * Get %description
-      \t *
-      \t * @return Clock frequency in Hz
-      \t */
-      \tstatic uint32_t getFlexioClock() {
-      \t
-      \t   switch(%defaultMaskingExpression) {
-      \t      default: return 0;
-      %body
-      \t   }
-      \t}\n\n
-   ]]></clockCodeTemplate>
-
-   <clockCodeTemplate variable="sim_sopt2_timesrc"
-      returnFormat="%s"
-   ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      \t * @param %enumParam %tooltip
-      \t */
-      \tstatic void setTimestampClock(%enumClass %enumParam) {
-      \t   %defaultFieldExpression
-      \t}
-
-      \t/**
-      \t * Get %description
-      \t *
-      \t * @return Clock frequency in Hz
-      \t */
-      \tstatic uint32_t getTimestampClock() {
-      \t
-      \t   switch(%defaultMaskingExpression) {
-      \t      default: return 0;
-      %body
-      \t   }
-      \t}\n\n
-   ]]></clockCodeTemplate>
-
-   <clockCodeTemplate variable="sim_sopt2_usbregen"
-   ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      \t * @param %enumParam %tooltip
-      \t */
-      \tstatic void enableUsbPhyRegulator(%enumClass %enumParam) {
-      \t   %defaultFieldExpression;
-      \t}\n\n
-   ]]></clockCodeTemplate>
-
-   <clockCodeTemplate variable="sim_sopt2_usbslsrc"
-   ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      \t * @param %enumParam %tooltip
-      \t */
-      \tstatic void setUsbSlowClock(%enumClass %enumParam) {
-      \t   %defaultFieldExpression;
-      \t}\n\n
-   ]]></clockCodeTemplate>
-
-   <initialValueTemplate
-      variables="
-         sim_sopt2_pllfllsel[],
-         sim_sopt2_ptd7pad,
-         sim_sopt2_lpuartsrc,
-         sim_sopt2_lpuart0src,
-         sim_sopt2_lpuart1src,
-         sim_sopt2_uart0src,
-         sim_sopt2_tpmsrc,
-         sim_sopt2_usbsrc[],
-         sim_sopt2_traceclksel,
-         sim_sopt2_rtcclkoutsel,
-         sim_sopt2_clkoutsel,
-         sim_sopt2_emvsimsrc,
-         sim_sopt2_sdhcsrc,
-         sim_sopt2_fbsl,
-         sim_sopt2_flexiosrc,
-         sim_sopt2_timesrc,
-         sim_sopt2_rmiisrc"
-   ><![CDATA[
-      \t/// System Options Register 2
-      \tstatic constexpr uint32_t sopt2 = %initExpression\n\n
-   ]]></initialValueTemplate>
-
 <!-- ========== SOPT2 ClockInit class =============================== -->
    <initialValueTemplate
       variables="
          sim_sopt2_pllfllsel[],
          sim_sopt2_usbsrc[],
-         sim_sopt2_ptd7pad,
-         sim_sopt2_lpuartsrc,
-         sim_sopt2_lpuart0src,
-         sim_sopt2_uart0src,
-         sim_sopt2_lpuart1src,
-         sim_sopt2_uart1src,
-         sim_sopt2_lpuart2src,
-         sim_sopt2_uart2src,
-         sim_sopt2_lpuart3src,
-         sim_sopt2_uart3src,
-         sim_sopt2_tpmsrc,
-         sim_sopt2_traceclksel,
-         sim_sopt2_rtcclkoutsel,
+
          sim_sopt2_clkoutsel,
-         sim_sopt2_lpuartsrc,
-         sim_sopt2_emvsimsrc,
-         sim_sopt2_sdhcsrc,
-         sim_sopt2_fbsl,
-         sim_sopt2_flexiosrc,
-         sim_sopt2_timesrc,
-         sim_sopt2_rmiisrc"
+         sim_sopt2_rtcclkoutsel,
+         sim_sopt2_traceclksel,
+         sim_sopt2_usbregen,
+         sim_sopt2_ptd7pad"
    ><![CDATA[
       \t/**
-      \t * Class used to do initialisation of SIM Clock control
+      \t * Class used to do initialisation of SIM Clock control (SOPT2)
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
       \t * @note This constructor may be used to create a const instance in ROM
       \t *
-      \t * Example:
+      \t * Generic Example: (see Sim::DefaultSopt2Values for device specific example)
       \t * @code
       \t * static const ClockInit clockInit {
+      \t *    SimUsbFullSpeedClockSource_McgPClk, // USB Clock - Peripheral clock (MCGPCLK)
+      \t *    SimTpmClockSource_McgPClk,          // TPM Clock source - MCGPCLK (HIRC=IRC48M) Clock
+      \t *    SimFlexioClockSource_McgPClk,       // FLEXIO Clock select - MCGPCLK (HIRC=IRC48M) Clock
+      \t *    SimClkoutSel_LpoClk,                // CLKOUT pin clock - LPO clock (1 kHz)
+      \t *    SimRtcClkoutSel_32kHz,              // RTC clock out source - OSC32KCLK clock (from OSC0)
+      \t *    SimLpuart0ClockSource_McgPClk,      // LPUART0 Clock - MCGPCLK (HIRC=IRC48M) Clock
+      \t *    SimLpuart1ClockSource_McgPClk,      // LPUART1 Clock - MCGPCLK (HIRC=IRC48M) Clock
+      \t *
+      \t *    // Base value modified by above
+      \t *    Sim::DefaultSopt2Values[McgClockMode_HIRC_48MHz]
       \t * };
       \t *
       \t * // Initialise SIM Clock control from values specified above
@@ -731,11 +533,8 @@
       \t
       \tpublic:
       \t
-      \t   /// System Options Register 1
+      \t   /// System Options Register 2
       \t   uint32_t sopt2 = 0;
-      \t
-      \t   static constexpr uint32_t MASK =
-      \t        %mask;
       \t
       \t   /**
       \t    * Copy Constructor
@@ -754,48 +553,25 @@
       \t      %register = %registerName;
       \t   }\n\n
    ]]></initialValueTemplate>
-   <for keys="n" values=";0;1;2;3;4">
-      <for keys="v"
-         values="
-             sim_sopt2_lpuart%(n)src;
-             sim_sopt2_uart%(n)src">
-         <setTemplate variables="%(v)"
-            linePadding="xxx"
-         ><![CDATA[
-            \t   /**
-            \t    * Constructor for %description
-            \t    *
-            \t    * @tparam   Types
-            \t    * @param    rest
-            \t    *
-            %paramDescription
-            \t    */
-            \t   template <typename... Types>
-            \t   constexpr ClockInit(%params, Types... rest) : ClockInit(rest...) {
-            \t
-            \t      %registerName |= %paramExpression;
-            \t   }
-            \t\n
-         ]]></setTemplate>
-      </for>
-   </for>
    <for keys="v"
       values="
-         sim_sopt2_pllfllsel;
-         sim_sopt2_usbsrc;
-         sim_sopt2_ptd7pad;
-         sim_sopt2_tpmsrc;
-         sim_sopt2_traceclksel;
-         sim_sopt2_rtcclkoutsel;
-         sim_sopt2_clkoutsel;
-         sim_sopt2_emvsimsrc;
-         sim_sopt2_sdhcsrc;
-         sim_sopt2_fbsl;
-         sim_sopt2_flexiosrc;
-         sim_sopt2_timesrc;
+         sim_sopt2_pllfllsel[];
+         sim_sopt2_usbsrc[];
+
+         sim_sopt2_sdhcsrc[];
+         sim_sopt2_tpmsrc[];
+         sim_sopt2_flexiosrc[];
+         sim_sopt2_emvsimsrc[];
+         sim_sopt2_timesrc[];
+
          sim_sopt2_rmiisrc;
+         sim_sopt2_usbslsrc;
+         sim_sopt2_fbsl;
+         sim_sopt2_clkoutsel;
+         sim_sopt2_rtcclkoutsel;
+         sim_sopt2_traceclksel;
          sim_sopt2_usbregen;
-         sim_sopt2_usbslsrc
+         sim_sopt2_ptd7pad
          ">
       <setTemplate variables="%(v)"
             linePadding="xxx"
@@ -815,6 +591,31 @@
          \t   }
          \t\n
       ]]></setTemplate>
+   </for>
+   <for keys="m" values="'';0;1;2;3;4">
+      <for keys="v"
+         values="
+             sim_sopt2_lpuart%(m)src[];
+             sim_sopt2_uart%(m)src[]">
+         <setTemplate variables="%(v)"
+            linePadding="xxx"
+         ><![CDATA[
+            \t   /**
+            \t    * Constructor for %description
+            \t    *
+            \t    * @tparam   Types
+            \t    * @param    rest
+            \t    *
+            %paramDescription
+            \t    */
+            \t   template <typename... Types>
+            \t   constexpr ClockInit(%params, Types... rest) : ClockInit(rest...) {
+            \t
+            \t      %registerName |= %paramExpression;
+            \t   }
+            \t\n
+         ]]></setTemplate>
+      </for>
    </for>
    <template ><![CDATA[
       \t};\n\n
@@ -836,32 +637,31 @@
          variables="
             sim_sopt2_pllfllsel[%(n)],
             sim_sopt2_usbsrc[%(n)],
-            sim_sopt2_lpuartsrc,
-            sim_sopt2_sdhcsrc,
-            sim_sopt2_tpmsrc,
-            sim_sopt2_flexiosrc,
-            sim_sopt2_traceclksel,
+
+            sim_sopt2_sdhcsrc[%(n)],
+            sim_sopt2_tpmsrc[%(n)],
+            sim_sopt2_flexiosrc[%(n)],
+            sim_sopt2_emvsimsrc[%(n)],
+            sim_sopt2_timesrc[%(n)],
+
+            sim_sopt2_rmiisrc,
+            sim_sopt2_usbslsrc,
             sim_sopt2_fbsl,
             sim_sopt2_clkoutsel,
             sim_sopt2_rtcclkoutsel,
-
-            sim_sopt2_ptd7pad,
-            sim_sopt2_emvsimsrc,
-            sim_sopt2_timesrc,
-            sim_sopt2_rmiisrc,
-
+            sim_sopt2_traceclksel,
             sim_sopt2_usbregen,
-            sim_sopt2_usbslsrc"
+            sim_sopt2_ptd7pad"
          terminator=","
          separator=","
       ><![CDATA[
          %initExpression\n
       ]]></setTemplate>
-      <for keys="n" values="'';0;1;2;3;4">
+      <for keys="m" values="'';0;1;2;3;4">
          <for keys="v"
             values="
-                sim_sopt2_lpuart%(n)src;
-                sim_sopt2_uart%(n)src"
+                sim_sopt2_lpuart%(m)src[%(n)];
+                sim_sopt2_uart%(m)src[%(n)]"
                 >
             <setTemplate key="DefaultInitValue" namespace="all"  codeGenCondition="/MCG/enableClockConfiguration[%(n)]"
                terminator=","

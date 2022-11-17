@@ -24,7 +24,7 @@
       <choice value="0" name="Disabled" enum="Disabled"  />
       <choice value="1" name="Enabled"  enum="Enabled"   isDefault="true" />
    </binaryOption>
-   
+
    <intOption key="osc_clock"
       constant="true"
       derived="true"
@@ -46,8 +46,8 @@
       <choice value="0" name="Unconstrained by Oscillator" />
    </choiceOption>
 
-   <aliasOption key="/MCG/mcg_c2_hgo0" constant="false" />
-   
+   <aliasOption key="/MCG/mcg_c2_hgo0" constant="false" optional="true"/>
+
    <choiceOption key="osc_cr_scp"
       description="Oscillator load capacitance"
       toolTip="Configures the oscillator load capacitance" >
@@ -75,11 +75,11 @@
       <choice value="0" name="Disabled in Stop mode" />
       <choice value="1" name="Enabled in Stop mode" />
    </binaryOption>
-   
+
    <aliasOption key="oscer_undiv_clock"  optional="true" />
 
    <aliasOption key="osc_div_erps"  optional="true" constant="false" />
- 
+
    <intOption key="oscer_clock"
          derived="true"
          units="Hz"
@@ -87,7 +87,7 @@
          toolTip="Clock available to some peripherals"
          origin="OSC0 gated by ERCLKEN"
          value="8000000"
-         disabledValue="0"  
+         disabledValue="0"
          constant="true" />
 
    <intOption key="osc32k_clock"
@@ -97,7 +97,7 @@
          toolTip="Generated from OSCCLK in low frequency mode only"
          origin="OSC0 in low frequency mode"
          value="8000000"
-         disabledValue="0"  
+         disabledValue="0"
          constant="true" />
 
    <validate
@@ -107,14 +107,14 @@
    <projectActionList id = "osc_files" >
       <copy source="Project_Headers/osc.h"  target="Project_Headers/osc.h"  overwrite="true"  derived="true" />
    </projectActionList>
-         
+
    <template><![CDATA[
       \t//! Frequency of OSC Clock or Crystal
       \tstatic constexpr uint32_t osc_clock = $(osc_clock)UL;
-      
+
       \t//! Frequency of 32K OSC Clock or Crystal (if applicable)
       \tstatic constexpr uint32_t osc32k_clock = $(osc32k_clock)UL;
-      
+
       \t//! Oscillator control register
       \tstatic constexpr uint32_t cr =
       \t   OSC_CR_ERCLKEN($(osc_cr_erclken))  | // External Reference Enable
@@ -127,7 +127,7 @@
       \tstatic constexpr uint32_t div =
       \t   OSC_DIV_ERPS($(osc_div_erps));   // ERCLK prescaler\n\n
    ]]></template>
-      
+
    <template><![CDATA[
       \t/**
       \t * Get OSC clock (internal, assumed available)
@@ -138,7 +138,7 @@
       \t   return osc_clock;
       \t}\n\n
    ]]></template>
-      
+
    <if condition="osc_div_erps">
       <template><![CDATA[
          \t/**
@@ -164,20 +164,20 @@
          \t}\n\n
       ]]></template>
    </if>
-      
+
    <template><![CDATA[
       \t/**
       \t * Get OSC32KCLK clock
       \t *
       \t * @return Clock frequency as uint32_t in Hz
       \t
-      \t * @note This clock is only available if a 32kHz crystal or external clock is used 
+      \t * @note This clock is only available if a 32kHz crystal or external clock is used
       \t */
       \tstatic uint32_t getOsc32kClock() {
       \t   return osc32k_clock;
       \t}\n\n
    ]]></template>
-   
+
    <clockCodeTemplate variable="osc_cr_erclken"
    ><![CDATA[
       \t/**
@@ -188,8 +188,8 @@
       \tstatic void enableExternalReference(%enumClass %enumParam) {
       \t   %defaultClockExpression
       \t}\n\n
-   ]]></clockCodeTemplate>  
-   
+   ]]></clockCodeTemplate>
+
    <clockCodeTemplate variable="osc_div_erps"
    ><![CDATA[
       \t/**
@@ -200,7 +200,7 @@
       \tstatic void setErcDivider(%enumClass %enumParam) {
       \t   %defaultClockExpression
       \t}\n\n
-   ]]></clockCodeTemplate>  
+   ]]></clockCodeTemplate>
 
    <template key="/OSC/declarations" namespace="all"  ><![CDATA[
    \t/**
@@ -212,10 +212,10 @@
    <template key="/MCG/Includes" namespace="all"  ><![CDATA[
    #include "osc.h"\n
    ]]></template>
-      
+
    <template key="/MCG/Initialisation" namespace="all"  ><![CDATA[
    \tUSBDM::$(_class)::initialise();\n
    ]]></template>
-      
+
    <signals />
 </fragment>

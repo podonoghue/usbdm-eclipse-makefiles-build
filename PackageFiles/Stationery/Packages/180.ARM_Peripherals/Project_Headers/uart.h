@@ -289,7 +289,7 @@ typedef void (*UARTCallbackFunction)(uint8_t status);
  *
  * @tparam Info   Class describing UART hardware
  */
-template<class Info> class Uart_T : public Uart, Info {
+template<class Info> class Uart_T : public Uart, public Info {
 
 private:
    Uart_T(const Uart_T&) = delete;
@@ -576,7 +576,7 @@ private:
    Uart_osr_T(Uart_osr_T&&) = delete;
 
 public:
-   using Uart_T<Info>::uart;
+   using Info::uart;
 
    /**
     * Construct UART interface
@@ -682,15 +682,15 @@ private:
    UartBuffered_T(UartBuffered_T&&) = delete;
 
 public:
-   using Uart_T<Info>::uart;
+   using Info::uart;
 
    UartBuffered_T() : Uart_T<Info>() {
-      Uart::setReceiveFullAction(UartTxEmptyAction_Interrupt);
+      Uart::setReceiveFullAction(UartRxFullAction_Interrupt);
       Uart_T<Info>::enableNvicInterrupts(Info::irqLevel);
    }
 
    virtual ~UartBuffered_T() {
-      Uart::setReceiveFullAction(UartTxEmptyAction_None);
+      Uart::setReceiveFullAction(UartRxFullAction_None);
       Uart::setTransmitEmptyAction(UartTxEmptyAction_None);
    }
 

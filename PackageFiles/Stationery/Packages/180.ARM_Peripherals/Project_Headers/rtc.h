@@ -28,11 +28,19 @@ namespace USBDM {
 
 /**
  * Type definition for RTC interrupt callback.
- * This is used for seconds and alarm callbacks.
+ * This is used for seconds callbacks.
  *
  *  @param[in]  timeSinceEpoch - Time since the epoch in seconds
  */
-typedef void (*RtcCallbackFunction)(uint32_t timeSinceEpoch);
+typedef void (*RtcSecondsCallbackFunction)(uint32_t timeSinceEpoch);
+
+/**
+ * Type definition for RTC interrupt callback.
+ * This is used for alarm callbacks.
+ *
+ *  @param[in]  timeSinceEpoch - Alarm time as time since the epoch in seconds
+ */
+typedef void (*RtcAlarmCallbackFunction)(uint32_t timeSinceEpoch);
 
 /**
  * Template class providing interface to Real Time Clock
@@ -57,10 +65,10 @@ public:
 
 protected:
    /** Callback function for alarm ISR */
-   static RtcCallbackFunction sAlarmCallback;
+   static RtcAlarmCallbackFunction sAlarmCallback;
 
    /** Callback function for seconds ISR */
-   static RtcCallbackFunction sSecondsCallback;
+   static RtcSecondsCallbackFunction sSecondsCallback;
 
 public:
    /**
@@ -68,16 +76,18 @@ public:
     */
    static void irqAlarmHandler(void) {
       // Clear alarm
+      uint32_t t = RtcBase_T<Info>::rtc->TAR;
       RtcBase_T<Info>::rtc->TAR   = 0;
-      // Call handler
-      sAlarmCallback(RtcBase_T<Info>::rtc->TSR);
+
+      // Call handler with previous alarm time
+      sAlarmCallback(t);
    }
 
    /**
     * Alarm IRQ handler
     */
    static void irqSecondsHandler(void) {
-      // Call handler
+      // Call handler with current time
       sSecondsCallback(RtcBase_T<Info>::rtc->TSR);
    }
 
@@ -140,8 +150,8 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(uint32_t), T &object>
-   static RtcCallbackFunction wrapCallback() {
-      static RtcCallbackFunction fn = [](uint32_t timeSinceEpoch) {
+   static RtcAlarmCallbackFunction wrapCallback() {
+      static RtcAlarmCallbackFunction fn = [](uint32_t timeSinceEpoch) {
          (object.*callback)(timeSinceEpoch);
       };
       return fn;
@@ -179,9 +189,9 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(uint32_t)>
-   static RtcCallbackFunction wrapCallback(T &object) {
+   static RtcAlarmCallbackFunction wrapCallback(T &object) {
       static T &obj = object;
-      static RtcCallbackFunction fn = [](uint32_t timeSinceEpoch) {
+      static RtcAlarmCallbackFunction fn = [](uint32_t timeSinceEpoch) {
          (obj.*callback)(timeSinceEpoch);
       };
       return fn;
@@ -193,7 +203,7 @@ public:
     *  @param[in]  callback  Callback function to be executed on alarm interrupt.\n
     *                        Use nullptr to remove callback.
     */
-   static void setAlarmCallback(RtcCallbackFunction callback) {
+   static void setAlarmCallback(RtcAlarmCallbackFunction callback) {
       static_assert(Info::irqHandlerInstalled, "RTC not configure for alarm interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
@@ -207,7 +217,7 @@ public:
     *  @param[in]  callback  Callback function to be executed on seconds interrupt.\n
     *                        Use nullptr to remove callback.
     */
-   static void setSecondsCallback(RtcCallbackFunction callback) {
+   static void setSecondsCallback(RtcSecondsCallbackFunction callback) {
       static_assert(Info::irqHandlerInstalled, "RTC not configure for seconds interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
@@ -374,8 +384,8 @@ public:
 
 };
 
-template<class Info> RtcCallbackFunction RtcBase_T<Info>::sAlarmCallback   = unhandledCallback;
-template<class Info> RtcCallbackFunction RtcBase_T<Info>::sSecondsCallback = unhandledCallback;
+template<class Info> RtcAlarmCallbackFunction RtcBase_T<Info>::sAlarmCallback   = unhandledCallback;
+template<class Info> RtcSecondsCallbackFunction RtcBase_T<Info>::sSecondsCallback = unhandledCallback;
 
 $(/RTC/declarations: // No declarations found)
 /**

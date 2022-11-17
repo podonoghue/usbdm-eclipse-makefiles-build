@@ -30,21 +30,25 @@ void reportTime(const char *msg, time_t rawtime) {
    char buffer[80];
    struct tm * timeinfo;
    timeinfo = localtime(&rawtime);
-   strftime(buffer, sizeof(buffer), "%d-%m-%Y %I:%M:%S : ", timeinfo);
+   strftime(buffer, sizeof(buffer), "%F %r : ", timeinfo);
    console.write(buffer).writeln(msg).flushOutput();
 }
 
 /**
  * Callback alarm handler from RTC Alarm
+ *
+ *  @param[in]  timeSinceEpoch - Alarm time as time since the epoch in seconds
  */
 void alarmHandler(uint32_t timeSinceEpoch) {
-   // Set repeat callback for 5 seconds from now
-   Rtc::setAlarmTime(timeSinceEpoch+4);
+   // Set repeat callback for 5 seconds from last alarm
+   Rtc::setAlarmTime(timeSinceEpoch+5);
    reportTime("Alarm !!!!!!", timeSinceEpoch);
 }
 
 /**
  * Callback seconds handler from RTC Alarm
+ *
+ *  @param[in]  timeSinceEpoch - Time since the epoch in seconds
  */
 void secondsHandler(uint32_t timeSinceEpoch) {
    Led::toggle();
@@ -66,12 +70,12 @@ int main() {
    Rtc::enableAlarmInterrupts();
    Rtc::enableNvicInterrupts(NvicPriority_Normal);
 
+   Smc::enableAllPowerModes();
+
    Led::setOutput();
    for(;;) {
       // Sleep between events
-      Smc::enterWaitMode();
-//      Smc::enterStopMode(SmcStopMode_NormalStop);
-
+      Smc::enterPowerMode(SmcPowerMode_NormalSTOP);
       time_t rawtime;
       time (&rawtime);
       reportTime("Woke", rawtime);

@@ -1,6 +1,6 @@
 /**alse,
  * @file     qspi.h (180.ARM_Peripherals/Project_Headers/qspi.h)
- * @brief    Flexible I/O
+ * @brief    Quad Serial Peripheral Interface
  *
  * @version  V4.12.1.240
  * @date     14 November 2021
@@ -2212,10 +2212,10 @@ public:
     *
     * This value is used for data learning in DDR and DQS mode.
     * If programmer wants to do data learn for more than 32 bit than the same value
-    * is is repeated. Say if 64 bit data learning is requested by any flash and the
-    * value set isaa55_3443 then the 64 bit value will be aa55_3443_aa55_3443.
+    * is repeated. Say if 64 bit data learning is requested by any flash and the
+    * value set is aa55_3443 then the 64 bit value will be aa55_3443_aa55_3443.
     * If 8 bit data learning was enabled by programming in seq_operand fields of
-    * DATA_LEARN instruction to 1 , the bits [7:0] are used as data_learning pattern.
+    * DATA_LEARN instruction to 1, the bits [7:0] are used as data_learning pattern.
     *
     * @param pattern Data Learning Pattern Value
     */
@@ -2228,14 +2228,14 @@ public:
     *
     * This value is used for data learning in DDR and DQS mode.
     * If programmer wants to do data learn for more than 32 bit than the same value
-    * is is repeated. Say if 64 bit data learning is requested by any flash and the
-    * value set isaa55_3443 then the 64 bit value will be aa55_3443_aa55_3443.
+    * is repeated. Say if 64 bit data learning is requested by any flash and the
+    * value set is aa55_3443 then the 64 bit value will be aa55_3443_aa55_3443.
     * If 8 bit data learning was enabled by programming in seq_operand fields of
-    * DATA_LEARN instruction to 1 , the bits [7:0] are used as data_learning pattern.
+    * DATA_LEARN instruction to 1, the bits [7:0] are used as data_learning pattern.
     *
     * @return Data Learning Pattern Value
     */
-   static uint32_t setDataLearningPattern() {
+   static uint32_t getDataLearningPattern() {
       return qspi->DLPR;
    }
 

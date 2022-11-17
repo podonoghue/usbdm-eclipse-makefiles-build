@@ -743,7 +743,8 @@
    </for>
 
    <for keys="n" dim="/SIM/numberOfClockSettings">
-      <template key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
+      <template key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      ><![CDATA[
          \t{  // $(ClockConfig[%(n)]) ($(mcgClockMode[%(n)].enum[]))
          \t\n
       ]]></template>

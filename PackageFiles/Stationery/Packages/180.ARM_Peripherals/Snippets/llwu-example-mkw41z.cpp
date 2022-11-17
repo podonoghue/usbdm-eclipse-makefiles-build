@@ -45,7 +45,7 @@ using BlueLed   = RGB_Blue;
 using WakeupTimer = Lptmr0;
 
 // LLWU Pin Filter to use
-static constexpr LlwuFilterNum FILTER_NUM = LlwuFilterNum_0;
+static constexpr LlwuFilterNum FILTER_NUM = LlwuFilterNum_1;
 
 // LLWU Pin to use for wake-up
 using WakeupPin = Llwu::Pin<LlwuPin_Button3_llwu>;
@@ -91,7 +91,7 @@ void disableWakeupInterruptSources() {
    Llwu::disableNvicInterrupts();
 
    // Disable wake-up pin
-   WakeupPin::disableNvicInterrupts();
+   WakeupPin::disableNvicPinInterrupts();
 }
 
 /**
@@ -101,7 +101,7 @@ static void wakeupTimerCallback() {
    // We could also put code here that would execute on LPTMR event
    preservedData.timerHandlerRan = true;
    WakeupTimer::clearInterruptFlag();
-   WakeupTimer::enableInterrupts(false);
+   WakeupTimer::enableInterrupts(LptmrInterrupt_Disabled);
    __asm__("nop");
 }
 
@@ -126,7 +126,7 @@ static void llwuCallback() {
    if (Llwu::isPeripheralWakeupSource(LlwuPeripheral_Lptmr0)) {
       // Wake-up from LPTMR
       WakeupTimer::clearInterruptFlag();
-      WakeupTimer::enableInterrupts(false);
+      WakeupTimer::enableInterrupts(LptmrInterrupt_Disabled);
    }
    if (Llwu::isPinWakeupSource(WakeupPin::pin)) {
       // Wake-up from pin
@@ -162,7 +162,7 @@ static void testStopMode(
    }
 
    // Set STOP mode to enter
-   Smc::setStopOptions(SmcPartialStopMode_Normal, smcLowLeakageStopMode, SmcPowerOnReset_Enabled, SmcLowLeakageRam2_Enabled);
+   Smc::setStopOptions(SmcPartialStopMode_Normal, smcLowLeakageStopMode, SmcPowerOnResetInVlls0_Enabled, SmcLowLeakageRam2_Enabled);
 
    /*
     * Go to sleep - LPTMR or PIN wake-up
@@ -238,7 +238,7 @@ static void enablePin(const PreservedData preservedData) {
          LlwuPinMode_Disabled);
 
    // Disable wake-up pin interrupts
-   WakeupPin::disableNvicInterrupts();
+   WakeupPin::disableNvicPinInterrupts();
    WakeupPin::setInput(
          PinPull_Up,
          PinAction_None,
@@ -283,12 +283,12 @@ static void enablePin(const PreservedData preservedData) {
 
          WakeupPin::clearPinInterruptFlag();
          WakeupPin::setPinCallback(pinCallback);
-         WakeupPin::enableNvicInterrupts(NvicPriority_Normal);
+         WakeupPin::enableNvicPinInterrupts(NvicPriority_Normal);
       }
    }
    else {
       // Disable pin
-      WakeupPin::disableNvicInterrupts();
+      WakeupPin::disableNvicPinInterrupts();
       WakeupPin::setPinCallback(pinCallback);
       WakeupPin::disablePin();
    }
@@ -307,8 +307,8 @@ static void enableTimer(const PreservedData preservedData) {
 
       console.writeln("Configuring timer interrupt").flushOutput();
 
-      WakeupTimer::configureTimeCountingMode(
-            LptmrResetOn_Compare,
+      WakeupTimer::configureTimeIntervalMode(
+            LptmrResetOnCompare_Enabled,
             LptmrInterrupt_Enabled,
             LptmrClockSel_Lpoclk);
       WakeupTimer::setPeriod(preservedData.timerDelay*1_s);
@@ -321,7 +321,7 @@ static void enableTimer(const PreservedData preservedData) {
          Llwu::clearAllFlags();
 
          console.writeln("Configuring timer LLWU wake-up").flushOutput();
-         Llwu::configurePeripheralSource(LlwuPeripheral_Lptmr0);
+         Llwu::configurePeripheralSource(LlwuPeripheral_Lptmr0, LlwuPeripheralWakeup_Enabled);
       }
    }
    else {
@@ -505,10 +505,7 @@ int main() {
    BlueLed::disablePin();
 
    // Enable all power modes
-   Smc::enablePowerModes(
-         SmcVeryLowPower_Enabled,
-         SmcLowLeakageStop_Enabled,
-         SmcVeryLowLeakageStop_Enabled);
+   Smc::enableAllPowerModes();
 
    //Errata e4481 STOP mode recovery unstable
    Pmc::configureBandgapOperation(PmcBandgapBuffer_Disabled, PmcBandgapOperationInLowPower_Enabled);

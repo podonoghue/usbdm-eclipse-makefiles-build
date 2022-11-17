@@ -39,14 +39,6 @@ namespace USBDM {
 
 ClockChangeCallback *Mcg::clockChangeCallbackQueue = nullptr;
 
-#ifndef MCG_C2_RANGE0
-#define MCG_C2_RANGE0(x) (0)
-#endif
-
-#ifndef MCG_C2_HGO0
-#define MCG_C2_HGO0(x) (0)
-#endif
-
 /**
  * Table of clock settings
  */
@@ -236,7 +228,7 @@ ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
 
    // Notify of clock changes (after)
    notifyAfterClockChange();
-   
+
    return E_NO_ERROR;
 }
 

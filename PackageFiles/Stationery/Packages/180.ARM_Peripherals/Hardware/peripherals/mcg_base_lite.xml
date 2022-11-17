@@ -5,6 +5,7 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator">
 
    <xi:include href="_default_instance.xml"/>
+
    <xi:include href="_currentClockSelection.xml"/>
 
    <category name="LIRC" description="Low Speed Internal Reference Clock Sources [LIRC]"
@@ -49,19 +50,20 @@
 
    <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
       <aliasOption key="/OSC0/osc_input_freq" constant="false" />
-      <binaryOption key="mcg_c2_erefs0"
+      <binaryOption key="mcg_c2_erefs0" condition="mcg_c2_erefs0_present"
          description="External Reference Select"
-         toolTip="Determines whether a clock or crystal is used for the external reference clock" >
+         toolTip="Determines whether a clock or crystal is used for the external reference clock"
+         disabledValue="1">
          <choice value="0" name="External clock" />
          <choice value="1" name="Oscillator" isDefault="true" />
       </binaryOption>
-      <binaryOption key="mcg_c2_hgo0"
+      <binaryOption key="mcg_c2_hgo0" condition="mcg_c2_hgo0_present"
          description="Oscillator Gain"
          toolTip="Controls the crystal oscillator mode of operation">
          <choice value="0" name="Low power" isDefault="true"/>
          <choice value="1" name="High gain" />
       </binaryOption>
-      <choiceOption key="mcg_c2_range0"
+      <choiceOption key="mcg_c2_range0" condition="mcg_c2_range0_present"
          derived="true"
          constant="true"
          description="Frequency Range Select"
@@ -82,6 +84,21 @@
 
    <aliasOption key="/SIM/numberOfClockSettings" />
 
+   <binaryOption key="enableClockConfiguration[0]" constant="true" hidden="true" >
+      <choice value="false" name="Disabled" />
+      <choice value="true"  name="Enabled"  isDefault="true"/>
+   </binaryOption>
+
+   <for keys="n" dim="1,/SIM/numberOfClockSettings">
+      <binaryOption key="enableClockConfiguration[%(n)]"
+         hidden="true"
+         description="Enable this clock settings"
+         toolTip="If disabled this clock setting will be removed from the generated code" >
+         <choice value="false" name="Disabled" isDefault="true" />
+         <choice value="true"  name="Enabled" />
+      </binaryOption>
+   </for>
+
    <for keys="n" dim="/SIM/numberOfClockSettings">
       <categoryOption key="ClockConfig[%(n)]"
          description="Clock configuration"
@@ -89,20 +106,23 @@
          value="ClockConfig_%(n)"
          disabledValue="Disabled" >
 
+         <aliasOption key="enableClockConfiguration[%(n)]" constant="false" />
+
          <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" constant="false" />
 
-         <binaryOption key="enableClockConfiguration[%(n)]"
-            description="Enable this clock settings"
-            toolTip="If disabled this clock setting will be removed from the generated code" >
-            <choice value="0" name="Disabled" />
-            <choice value="1" name="Enabled"  isDefault="true" />
-         </binaryOption>
-
-      <binaryOption key="mcg_mc_hircen[%(n)]"
+      <binaryOption key="mcg_mc_hircen[%(n)]" condition="mcg_mc_hircen_present"
+         enabledBy="/SMC/smc_pmctrl_runm[%(n)] == 0"
          description="High-frequency IRC Clock Enable [MCGPCLK]"
-         toolTip="Enables the HIRC, even when MCG_Lite is not working at HIRC mode[%(n)]">
+         toolTip="Enables the HIRC even when MCG_Lite is not working at HIRC mode">
          <choice value="0" name="Enabled as required by MCG mode" />
          <choice value="1" name="Always enabled" />
+      </binaryOption>
+
+      <binaryOption key="mcg_mc_hirclpen[%(n)]" condition="mcg_mc_hirclpen_present"
+         description="High-frequency IRC Low-power Mode Enable [MCGPCLK]"
+         toolTip="Enables the HIRC in Low-power modes such as Stop/VLPR/VLPW/VLPS mode">
+         <choice value="0" name="Disabled in low power modes" />
+         <choice value="1" name="Enabled in low power modes"  />
       </binaryOption>
 
       <binaryOption key="mcg_c2_ircs[%(n)]"
@@ -239,8 +259,8 @@
          </category>
 
          <category name="MCG_C2" description="MCG Control Register 2">
-            <aliasOption key="mcg_c2_range0" />
-            <aliasOption key="mcg_c2_hgo0" />
+            <aliasOption key="mcg_c2_range0" optional="true" />
+            <aliasOption key="mcg_c2_hgo0" optional="true" />
             <aliasOption key="mcg_c2_erefs0" />
             <aliasOption key="mcg_c2_ircs[%(n)]" />
          </category>
@@ -381,14 +401,15 @@
 
    <for keys="n" dim="/SIM/numberOfClockSettings">
       <template key="ClockConfig" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
-         \t$(ClockConfig[%(n)]://-- missing name for configuration --)\n
+         \t$(ClockConfig[%(n)]://-- missing name for configuration --),\n
       ]]></template>
    </for>
 
    <for keys="n" dim="/SIM/numberOfClockSettings">
       <template key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
       ><![CDATA[
-         \t{  // $(ClockConfig[%(n)]) ($(mcgClockMode[%(n)].enum[]))\n
+         \t{  // $(ClockConfig[%(n)]) ($(mcgClockMode[%(n)].enum[]))
+         \t\n
       ]]></template>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
@@ -406,25 +427,9 @@
             "/SIM/sim_clkdiv3_pllfll[%(n)]"
       ><![CDATA[\t   /// SIM CLKDIV3 System Clock Divider Register 3 %initExpression\n\n ]]></initialValueTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
-         terminator=","
-         variables="
-            /SIM/sim_sopt2_traceclksel,
-            /SIM/sim_sopt2_timesrc,
-            /SIM/sim_sopt2_rmiisrc,
-            /SIM/sim_sopt2_sdhcsrc,
-            /SIM/sim_sopt2_uart0src,
-            /SIM/sim_sopt2_flexiosrc,
-            /SIM/sim_sopt2_lpuartsrc,
-            /SIM/sim_sopt2_lpuart0src,
-            /SIM/sim_sopt2_lpuart1src,
-            /SIM/sim_sopt2_ptd7pad,
-            /SIM/sim_sopt2_tpmsrc,
-            /SIM/sim_sopt2_usbsrc,
-            /SIM/sim_sopt2_fbsl,
-            /SIM/sim_sopt2_rtcclkoutsel,
-            /SIM/sim_sopt2_clkoutsel"
-      ><![CDATA[\t   /// SIM SOPT2 System Options Register 2 %initExpression\n\n ]]></initialValueTemplate>
+      <template key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
+         \t   Sim::DefaultSopt2Values[$(ClockConfig[%(n)])].sopt2,\n\n
+      ]]></template>
 
       <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","

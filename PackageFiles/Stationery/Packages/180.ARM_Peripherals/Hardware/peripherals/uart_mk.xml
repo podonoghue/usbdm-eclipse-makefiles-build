@@ -2,7 +2,7 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- uart_mk.xml -->
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART">
 
@@ -14,7 +14,19 @@ Devices using this peripheral:
    <aliasOption key="/SIM/system_uart$(_instance)_fixedclocksource" optional="true"/>
    <aliasOption key="/SIM/system_uart$(_instance)_clock" optional="true" />
 
-   <choiceOption key="defaultBaudRate" 
+   <intOption key="oversampleRatio"  condition="uart_c4_osr_present"
+      description="Number of samples per bit"
+      toolTip="This value determines the number of times an Rx bit is sampled.\n
+               This also affects the clock divider and hence the range of baud rates available"
+       value="8" min="4" max="32"
+      />
+
+   <template  condition="uart_c4_osr_present"><![CDATA[
+   \t//! Number of samples per bit
+   \tstatic constexpr uint32_t oversampleRatio = $(oversampleRatio);\n\n
+   ]]></template>
+
+   <choiceOption key="defaultBaudRate"
       valueFormat="%s"
       enumStem="UartBaudRate"
       description="UART default baud rate"
@@ -43,8 +55,8 @@ Devices using this peripheral:
       <choice value="0"   name="None"      enum="None"      />
       <choice value="1"   name="Interrupt" enum="Interrupt" />
    </choiceOption>
-   
-   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true" 
+
+   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
       variables="uart_c2_tcie" ><![CDATA[
       \t/**
       \t * Set %description
@@ -55,7 +67,7 @@ Devices using this peripheral:
       \t   %register = (%register & ~%mask) | %paramExpression;
       \t}\n\n
    ]]></setTemplate>
-   
+
    <choiceOption key="uart_c2_ilie" condition="uart_c2_ilie_present"
       hidden="true"
       enumStem="UartIdleLineDetectAction"
@@ -64,8 +76,8 @@ Devices using this peripheral:
       <choice value="0"   name="None"      enum="None"      />
       <choice value="1"   name="Interrupt" enum="Interrupt" />
    </choiceOption>
-   
-   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true" 
+
+   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
       variables="uart_c2_ilie" ><![CDATA[
       \t/**
       \t * Set %description
@@ -76,7 +88,17 @@ Devices using this peripheral:
       \t   %register = (%register & ~%mask) | %paramExpression;
       \t}\n\n
    ]]></setTemplate>
-   
+
+   <choiceOption key="uartTxEmptyAction" condition="!uart_c5_tdmas_present&amp;&amp;uart_c2_tie_present"
+      hidden="true"
+      valueFormat="UART_C2_TIE(%s)"
+      enumStem="UartTxEmptyAction"
+      description="Transmit empty DMA/Interrupt action"
+      toolTip="Enable transmit holding register empty DMA/Interrupt action">
+      <choice value="0"   name="None"      enum="None"      />
+      <choice value="1"   name="Interrupt" enum="Interrupt" />
+   </choiceOption>
+
    <choiceOption key="uartTxEmptyAction" condition="uart_c5_tdmas_present&amp;&amp;uart_c2_tie_present"
       hidden="true"
       valueFormat="(UART_C5_TDMAS(%s)&lt;&lt;8),UART_C2_TIE(%s)"
@@ -87,8 +109,8 @@ Devices using this peripheral:
       <choice value="0,1"   name="Interrupt" enum="Interrupt" />
       <choice value="1,1"   name="DMA"       enum="Dma"       />
    </choiceOption>
-   
-   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true" 
+
+   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
        variables="uartTxEmptyAction" ><![CDATA[
       \t/**
       \t * Set %description
@@ -96,11 +118,28 @@ Devices using this peripheral:
       %paramDescription
       \t */
       \tvoid setTransmitEmptyAction(%params) const {
-      \t   uart->C2 = (uart->C2 & ~UART_C2_TIE_MASK)   | %paramExpression;
-      \t   uart->C5 = (uart->C5 & ~UART_C5_TDMAS_MASK) | %paramExpression>>8;
+      \t   uart->C2 = (uart->C2 & ~UART_C2_TIE_MASK)   | %paramExpression; \n
+   ]]></setTemplate>
+   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+      variables="uartTxEmptyAction"
+      condition="uart_c5_tdmas_present" ><![CDATA[
+      \t   uart->C5 = (uart->C5 & ~UART_C5_TDMAS_MASK) | %paramExpression>>8; \n
+   ]]></setTemplate>
+   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+       variables="uartTxEmptyAction" ><![CDATA[
       \t}\n\n
    ]]></setTemplate>
-   
+
+   <choiceOption key="uartRxFullAction" condition="!uart_c5_rdmas_present&amp;&amp;uart_c2_rie_present"
+      hidden="true"
+      valueFormat="UART_C2_RIE(%s)"
+      enumStem="UartRxFullAction"
+      description="Receive full interrupt action"
+      toolTip="Enable receive buffer full interrupt action">
+      <choice value="0"   name="None"      enum="None"      />
+      <choice value="1"   name="Interrupt" enum="Interrupt" />
+   </choiceOption>
+
    <choiceOption key="uartRxFullAction" condition="uart_c5_rdmas_present&amp;&amp;uart_c2_rie_present"
       hidden="true"
       valueFormat="(UART_C5_RDMAS(%s)&lt;&lt;8),UART_C2_RIE(%s)"
@@ -111,35 +150,50 @@ Devices using this peripheral:
       <choice value="0,1"   name="Interrupt" enum="Interrupt" />
       <choice value="1,1"   name="DMA"       enum="Dma"       />
    </choiceOption>
-   
-   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true" 
-       variables="uartTxEmptyAction" ><![CDATA[
+
+   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+      variables="uartRxFullAction" ><![CDATA[
       \t/**
       \t * Set %description
       \t *
       %paramDescription
       \t */
       \tvoid setReceiveFullAction(%params) const {
-      \t   uart->C2 = (uart->C2 & ~UART_C2_RIE_MASK)   | %paramExpression;
-      \t   uart->C5 = (uart->C5 & ~UART_C5_RDMAS_MASK) | %paramExpression>>8;
+      \t   uart->C2 = (uart->C2 & ~UART_C2_RIE_MASK)   | %paramExpression;\n
+   ]]></setTemplate>
+   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+      variables="uartRxFullAction"
+      condition="uart_c5_rdmas_present" ><![CDATA[
+      \t   uart->C5 = (uart->C5 & ~UART_C5_RDMAS_MASK) | %paramExpression>>8;\n
+   ]]></setTemplate>
+   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+      variables="uartRxFullAction" ><![CDATA[
       \t}\n\n
    ]]></setTemplate>
-   
-   <binaryOption key="uartClass" 
+
+   <binaryOption key="uartClass" condition="!uart_c4_osr_present"
       description="Input buffering"
-      toolTip="This option determines whether an interrupt-driven driver\n 
+      toolTip="This option determines whether an interrupt-driven driver\n
                incorporating a queue is used to buffer input data" >
       <choice name="Unbuffered" value="Uart_brfa_T" />
       <choice name="Buffered"   value="UartBuffered_brfa_T" />
    </binaryOption>
-   
-   <intOption key="receiveBufferSize" description="Size of input buffer" 
+
+   <binaryOption key="uartClass" condition="uart_c4_osr_present"
+      description="Input buffering"
+      toolTip="This option determines whether an interrupt-driven driver\n
+               incorporating a queue is used to buffer input data" >
+      <choice name="Unbuffered" value="Uart_osr_T" />
+      <choice name="Buffered"   value="UartBuffered_osr_T" />
+   </binaryOption>
+
+   <intOption key="receiveBufferSize" description="Size of input buffer"
       toolTip="This value determines the size of the receive buffer\n
                for the interrupt driven driver version  "
        value="50" min="1" max="1000"
       />
 
-   <intOption key="transmitBufferSize" description="Size of output buffer" 
+   <intOption key="transmitBufferSize" description="Size of output buffer"
       toolTip="This value determines the size of the transmit buffer\n
                for the interrupt driven driver version  "
        value="50" min="1" max="1000"
@@ -150,13 +204,13 @@ Devices using this peripheral:
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)txsrc" optional="true" constant="false" />
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" optional="true" constant="false" />
    </category>
-   
+
    <stringOption key="irq_pattern"        constant="true" value="^UART%i_?((RxTx|Error|Lon)|.*)?$" hidden="true" />
    <stringOption key="irq_classHandler"   constant="true" value="%c%i::irq$2Handler" hidden="true" />
    <xi:include href="_irqOptionSubstituted.xml"/>
-   
+
    <xi:include href="_clockOption.xml"/>
-      
+
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.UartValidate">
    </validate>
@@ -166,17 +220,17 @@ Devices using this peripheral:
       <copy source="Project_Headers/uart.h"        target="Project_Headers/uart.h"     overwrite="true"  derived="true" macroReplace="true" />
       <copy source="Project_Headers/uart_queue.h"  target="Project_Headers/uart_queue.h"    overwrite="true"  derived="true" />
    </projectActionList>
-         
+
    <template><![CDATA[
    \t//! Indicates whether the UART needs a write to clear status errors
    \tstatic constexpr bool statusNeedsWrite = false;
-
+   \t
    \t//! Default Baud rate used if not explicitly given
    \tstatic constexpr uint32_t defaultBaudRate = $(defaultBaudRate);
-   
+   \t
    \t//! Default buffer size for receive queue when interrupt driven
    \tstatic constexpr unsigned receiveBufferSize = $(receiveBufferSize);
-
+   \t
    \t//! Default buffer size for transmit queue when interrupt driven
    \tstatic constexpr unsigned transmitBufferSize = $(transmitBufferSize);
 
@@ -189,7 +243,7 @@ Devices using this peripheral:
    \t   return SimInfo::getUart$(_instance)Clock();
    \t}\n\n
    ]]></template>
-   
+
    <template key="/UART/Present" namespace="all"  ><![CDATA[\ ||\ 1]]></template>
 
    <template key="/UART/declarations" namespace="all"  ><![CDATA[

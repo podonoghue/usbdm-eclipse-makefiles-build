@@ -158,7 +158,7 @@ private:
          /* Seq0: Quad Read */
          /* CMD:        0xEB - Quad Read, Single pad */
          /* ADDR:       0x18 - 24bit address, Quad pads */
-         /* DUMMY:      0x06 - 10 clock cyles, Quad pads */
+         /* DUMMY:      0x06 - 10 clock cycles, Quad pads */
          /* READ:       0x80 - Read 128 bytes, Quad pads */
          /* JUMP_ON_CS: 0 */
          // {04EB, 0A18, 0E0A, 1E80, 2400}
@@ -235,7 +235,7 @@ private:
          /* Seq9: Fast Single read */
          /* CMD:        0x0B - Fast Read, Single Pad */
          /* ADDR:       0x18 - 24bit address, Single Pad */
-         /* DUMMY:      0x08 - 8 clock cyles, Single Pad */
+         /* DUMMY:      0x08 - 8 clock cycles, Single Pad */
          /* READ:       0x80 - Read 128 bytes, Single Pad */
          /* JUMP_ON_CS: 0 */
          // {040B, 0818, 0C08, 1C80, 2400}
@@ -249,7 +249,7 @@ private:
          /* Seq10: Fast Dual read */
          /* CMD:        0x3B - Dual Read, Single Pad */
          /* ADDR:       0x18 - 24bit address, Single Pad */
-         /* DUMMY:      0x08 - 8 clock cyles, Single Pad */
+         /* DUMMY:      0x08 - 8 clock cycles, Single Pad */
          /* READ:       0x80 - Read 128 bytes, Dual pads */
          /* JUMP_ON_CS: 0 */
          // {043B, 0818, 0C08, 1D80, 2400}
@@ -276,7 +276,7 @@ private:
          /* Seq0: Quad Read */
          /* CMD:        0xEC - Quad Read, Single pad, 4-byte address*/
          /* ADDR:       0x20 - 32bit address, Quad pads */
-         /* DUMMY:      0x06 - 10 clock cyles, Quad pads */
+         /* DUMMY:      0x06 - 10 clock cycles, Quad pads */
          /* READ:       0x80 - Read 128 bytes, Quad pads */
          /* JUMP_ON_CS: 0 */
          // {04EC, 0A20, 0E0A, 1E80, 2400}
@@ -353,7 +353,7 @@ private:
          /* Seq9: Fast Single read */
          /* CMD:        0x0B - Fast Read, Single Pad */
          /* ADDR:       0x18 - 24bit address, Single Pad */
-         /* DUMMY:      0x08 - 8 clock cyles, Single Pad */
+         /* DUMMY:      0x08 - 8 clock cycles, Single Pad */
          /* READ:       0x80 - Read 128 bytes, Single Pad */
          /* JUMP_ON_CS: 0 */
          // {040B, 0818, 0C08, 1C80, 2400}
@@ -367,7 +367,7 @@ private:
          /* Seq10: Fast Dual read */
          /* CMD:        0x3B - Dual Read, Single Pad */
          /* ADDR:       0x18 - 24bit address, Single Pad */
-         /* DUMMY:      0x08 - 8 clock cyles, Single Pad */
+         /* DUMMY:      0x08 - 8 clock cycles, Single Pad */
          /* READ:       0x80 - Read 128 bytes, Dual pads */
          /* JUMP_ON_CS: 0 */
          // {043B, 0818, 0C08, 1D80, 2400}

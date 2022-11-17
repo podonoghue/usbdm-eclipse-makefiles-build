@@ -17,8 +17,8 @@
 
    <xi:include href="_mapPinsOption.xml"/>
 
-<!--  C0 -->
-   <binaryOption key="dac_c0_dacrfs"
+<!-- C0 -->
+   <binaryOption key="dac_c0_dacrfs" condition="dac_c0_dacrfs_present"
       enumStem="DacReferenceSelect"
       description="DAC Reference Select"
       toolTip="Selects the DAC reference voltage. \n
@@ -27,7 +27,7 @@
       <choice value="1" name="VddA"                   enum="Vdda"    isDefault="true" />
    </binaryOption>
 
-   <binaryOption key="dac_c0_dactrgsel"
+   <binaryOption key="dac_c0_dactrgsel" condition="dac_c0_dactrgsel_present"
       description="DAC Trigger Select"
       enumStem="DacTriggerSelect"
       toolTip="Selects the DAC Trigger">
@@ -35,7 +35,7 @@
       <choice value="1" name="Software trigger" enum="Software" isDefault="true" />
    </binaryOption>
 
-   <binaryOption key="dac_c0_lpen"
+   <binaryOption key="dac_c0_lpen" condition="dac_c0_lpen_present"
       description="DAC Low Power Control"
       enumStem="DacPower"
       toolTip="Controls power consumption of DAC">
@@ -43,7 +43,7 @@
       <choice value="1" name="Low-Power mode"  enum="Low"  />
    </binaryOption>
 
-   <binaryOption key="dac_c0_dacbwien"
+   <binaryOption key="dac_c0_dacbwien" condition="dac_c0_dacbwien_present"
       description="DAC Buffer Watermark Interrupt Enable"
       enumStem="DacWatermarkIrq"
       toolTip="Control whether an interrupt is generated when SR.DACBFWMF is set i.e.\n
@@ -52,7 +52,7 @@
       <choice value="1" name="Interrupt is enabled"  enum="Enabled"  />
    </binaryOption>
 
-   <binaryOption key="dac_c0_dacbtien"
+   <binaryOption key="dac_c0_dacbtien" condition="dac_c0_dacbtien_present"
       description="DAC Buffer Read Pointer Top Flag Interrupt Enable"
       enumStem="DacReadPtrTopIrq"
       toolTip="Control whether an interrupt is generated when SR.DACBFRPTF is set i.e.\n
@@ -61,7 +61,7 @@
       <choice value="1" name="Interrupt is enabled"  enum="Enabled"  />
    </binaryOption>
 
-   <binaryOption key="dac_c0_dacbbien"
+   <binaryOption key="dac_c0_dacbbien" condition="dac_c0_dacbbien_present"
       description="DAC Buffer Read Pointer Bottom Flag Interrupt Enable"
       enumStem="DacReadPtrBottomIrq"
       toolTip="Control whether an interrupt is generated when SR.DACBFRPBF is set i.e. \n
@@ -88,7 +88,7 @@
    ]]></setTemplate>
 
 <!--  C1 -->
-   <binaryOption key="dac_c1_dmaen"
+   <binaryOption key="dac_c1_dmaen" condition="dac_c1_dmaen_present"
       enumStem="DacDma"
       description="Generate DMA request"
       toolTip="When DMA is enabled, DMA requests are generated instead of interrupt requests. \n

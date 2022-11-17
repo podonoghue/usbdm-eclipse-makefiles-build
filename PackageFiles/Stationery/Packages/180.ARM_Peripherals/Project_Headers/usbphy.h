@@ -154,7 +154,7 @@ public:
       McgInfo::enableMcgIrClock(McgIrClkEn_Enabled);
 
       // Power PHY
-      SimInfo::enableUsbPhyRegulator(SimUsbPhyRegEn_Enabled);
+      SimInfo::setUsbPhyRegulator(SimUsbPhyRegEn_Enabled);
 
       // Enable PHY clock
       Info::enableClock();

@@ -3,7 +3,7 @@
 <!-- sim_mk22f12810.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
-    
+
    <xi:include href="_default_instance.xml"/>
 
    <xi:include href="_simCommon.xml"/>
@@ -11,8 +11,8 @@
    <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) does not share XTAL/EXTAL pins -->
    <constant key="rtc_independent" />
 
-   <intOption key="system_irc48m_clock" 
-      constant="true"  
+   <intOption key="system_irc48m_clock"
+      constant="true"
       hidden="true"
       units="Hz"
       description="Frequency of Internal 48MHz Clock [IRC48MCLK]"
@@ -20,37 +20,50 @@
       origin="48MHz clock from IRC48MCLK"
       value="48000000"/>
 
-   <intOption key="system_usb_clkin_clock"  
-      constant="true" 
+   <intOption key="system_usb_clkin_clock"
       hidden="true"
+      constant="true"
       origin="USB Clock In pin"
       units="Hz"
       description="Frequency of External USB Clock"
-      toolTip="Externally provided clock for USB on USB_CLKIN" 
+      toolTip="Externally provided clock for USB on USB_CLKIN"
       value="0" />
 
    <category name="SOPT1" description="RTC clocks" >
 
       <constant key="sim_sopt1_ramsize" />
-      
+
       <aliasOption key="sim_sopt1_osc32ksel" constant="false" />
       <aliasOption key="system_erclk32k_clock" />
-      
-      <choiceOption key="sim_sopt1_osc32kout" 
+
+      <choiceOption key="sim_sopt1_usbpower" condition="sim_sopt1_usbregen_present &amp;&amp; sim_sopt1_usbsstby_present &amp;&amp; sim_sopt1_usbvstby_present"
+         valueFormat="SIM_SOPT1_USBREGEN(%s),SIM_SOPT1_USBSSTBY(%s),SIM_SOPT1_USBVSTBY(%s)"
+         enumStem="SimUsbPower"
+         description="USB voltage regulator power control"
+         toolTip="Controls when the USB voltage regulator is enabled in\n
+        (RUN), (STOP, VLPS, LLS and VLLS) or (VLPR and VLPW) modes">
+         <choice value="0,0,0"  name="Disabled in all modes"         enum="Disabled"               />
+         <choice value="1,0,0"  name="Enabled in all modes"          enum="EnabledInAll"           isDefault="true" />
+         <choice value="1,1,0"  name="Enabled in run and low power"  enum="EnabledInRun_LowPower"  />
+         <choice value="1,0,1"  name="Enabled in run and stop"       enum="EnabledInRun_Stop"      />
+         <choice value="1,1,1"  name="Enabled in run only"           enum="EnabledInRun"           />
+      </choiceOption>
+
+      <choiceOption key="sim_sopt1_osc32kout"
          enumStem="SimErc32kClkoutPinSelect"
          description="ERCLK32K Clock Output"
          toolTip="Outputs the ERCLK32K on the selected pin in all modes of operation">
          <choice value="0"  name="ERCLK32K is not output"      enum="None"  isDefault="true" />
-         <choice value="1"  name="ERCLK32K is output on PTE0"  enum="PTE0" />
+         <choice value="1"  name="ERCLK32K is output on PTE0"  enum="PTE0"  />
          <choice value="2"  name="ERCLK32K is output on PTE26" enum="PTE26" />
       </choiceOption>
    </category>
 
    <category name="SOPT2" description="Clock Gating">
-   
+
       <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" constant="false"/>
       <aliasOption key="/SIM/rtc_clkout" />
-      
+
       <aliasOption key="/SIM/sim_sopt2_pllfllsel[]" constant="false" />
       <aliasOption key="/SIM/system_peripheral_clock[]" optional="true" />
 
@@ -59,33 +72,13 @@
 
       <aliasOption key="/OSC0/oscer_clock" optional="true" />
       <aliasOption key="/MCG/system_mcgirclk_clock[0]" optional="true" />
-      
-      <choiceOption key="sim_sopt2_lpuartsrc" 
-         enumStem="SimLpuartClockSource"
-         target="system_lpuart_clock"
-         description="LPUART Clock select"
-         toolTip="Selects the clock source for the transmit and receive clock\n
-	     This is selection is shared by all LPUARTs">
-         <choice value="0"  name="Disabled"          ref="disabled"                   enum="Disabled"        code="0"                           />
-         <choice value="1"  name="Peripheral Clock"  ref="system_peripheral_clock"    enum="PeripheralClk"   code="getPeripheralClock()" />
-         <choice value="2"  name="OSCERCLK clock"    ref="/OSC0/oscer_clock"          enum="OscerClk"        code="Osc0Info::getOscerClock()"   />
-         <choice value="3"  name="MCGIRCLK clock"    ref="/MCG/system_mcgirclk_clock" enum="McgIrClk"        code="McgInfo::getMcgIrClock()"    />
-      </choiceOption>
-   
-      <intOption key="system_lpuart_clock" 
-         derived="true" 
-         constant="true"
-         units="Hz"
-         description="LPUART Clock frequency"
-         toolTip="Frequency of clock to LPUART"
-         value="0" />
-      
+
       <for keys="n : name              : code            : ref"
          values="0 : System core clock : SystemCoreClock : system_core_clock;
                  1 : System core clock : SystemCoreClock : system_core_clock;
                  2 : System bus clock  : SystemBusClock  : system_bus_clock" >
 
-         <choiceOption key="system_uart%(n)_fixedclocksource" 
+         <choiceOption key="system_uart%(n)_fixedclocksource"
             target="system_uart%(n)_clock"
             constant="true"
             derived="true"
@@ -93,8 +86,8 @@
             toolTip="Fixed clock source for UART" >
             <choice value="0"  name="%(name)" ref="%(ref)" code="%(code)" />
          </choiceOption>
-         
-         <intOption key="system_uart%(n)_clock" 
+
+         <intOption key="system_uart%(n)_clock"
             constant="true"
             derived="true"
             units="Hz"
@@ -102,19 +95,54 @@
             toolTip="Frequency of clock to UART"
             value="0" />
       </for>
-      
-      <choiceOption key="sim_sopt2_clkoutsel" 
+
+      <choiceOption key="sim_sopt2_fbsl" condition="sim_sopt2_fbsl_present"
+         enumStem="SimFlexbusSecurity"
+         description="FlexBus off-chip access security level"
+         toolTip="Permitted CPU accesses off-chip via the FlexBus interface" >
+         <choice value="0"  name="None - All accesses are disallowed"                enum="None"     />
+         <choice value="2"  name="Data - Data only accesses allowed"                 enum="DataOnly" />
+         <choice value="3"  name="All - Data and instruction accesses are allowed"   enum="All"      />
+      </choiceOption>
+
+      <intOption key="system_sdhc_clockin" condition="sim_sopt2_sdhcsrc_present"
+         origin="SDHC Clock In pin"
+         units="Hz"
+         description="Frequency of External SDHC Clock"
+         toolTip="Externally provided clock for SDHC"
+         value="0" />
+
+      <choiceOption key="sim_sopt2_clkoutsel" condition="sim_sopt2_clkoutsel_present"
          enumStem="SimClkoutSel"
          description="CLKOUT pin clock"
          toolTip="Clock to output on the CLKOUT pin" >
-         <choice value="2"  name="Flash clock"         enum="FlashClk" isDefault="true" />
+         <choice value="0"  name="FlexBus CLKOUT"      enum="FlexBusClk"  condition="sim_sopt2_fbsl_present" />
+         <choice value="2"  name="Flash clock"         enum="FlashClk"    isDefault="true" />
          <choice value="3"  name="LPO clock (1 kHz)"   enum="LpoClk"       />
          <choice value="4"  name="MCGIRCLK"            enum="McgIrClk"     />
          <choice value="5"  name="RTC 32.768kHz clock" enum="RtcClk"       />
          <choice value="6"  name="OSCERCLK0"           enum="OscerClk0"    />
-         <choice value="7"  name="IRC 48 MHz clock"    enum="Irc48MClk" condition="system_irc48m_clock" />
+         <choice value="7"  name="IRC 48 MHz clock"    enum="Irc48MClk"   condition="system_irc48m_clock" />
       </choiceOption>
-      
+
+      <binaryOption key="sim_sopt2_rmiisrc"  condition="sim_sopt2_rmiisrc_present"
+         enumStem="SimRmiiClkSrc"
+         description="RMII clock source select"
+         toolTip="Selects the clock source for the Ethernet RMII interface">
+         <choice value="0"  name="EXTAL clock"                              enum="Extal"     isDefault="true" />
+         <choice value="1"  name="External bypass clock (ENET_1588_CLKIN)"  enum="External"  />
+      </binaryOption>
+
+      <choiceOption key="sim_sopt2_timesrc"  condition="sim_sopt2_timesrc_present"
+         enumStem="SimTimeStampClkSrc"
+         description="IEEE 1588 timestamp clock source select"
+         toolTip="Selects the clock source for the Ethernet RMII interface">
+         <choice value="0"  name="Core/system clock"           ref="system_core_clock"       enum="CoreClk"         code="SystemCoreClock"            isDefault="true" />
+         <choice value="1"  name="Peripheral Clock"            ref="system_peripheral_clock" enum="PeripheralClk"   code="getPeripheralClock()" />
+         <choice value="2"  name="OSCERCLK clock"              ref="/OSC0/oscer_clock"       enum="OscerClk"        code="Osc0Info::getOscerClock()" />
+         <choice value="3"  name="External clock (ENET_CLKIN)" ref="system_enet_clockin"     enum="External"        code="sdhcExternalClock" />
+      </choiceOption>
+
       <binaryOption key="sim_sopt2_traceclksel" condition="sim_sopt2_traceclksel_present"
          enumStem="SimTraceClockoutSel"
          description="Debug trace clock select"
@@ -122,11 +150,29 @@
              as the trace clock source" >
          <choice value="0"  name="MCGOUTCLK"          enum="McgOutClk"  isDefault="true" />
          <choice value="1"  name="Core/system clock"  enum="CoreClk"    />
-      </binaryOption>   
+      </binaryOption>
+
+      <binaryOption key="sim_sopt2_usbregen" condition="sim_sopt2_usbregen_present"
+         enumStem="SimUsbPhyRegEn"
+         description="USB PHY PLL Regulator Enable"
+         toolTip="Enables the PLL regulator in the USB PHY.\n
+                  The regulator must be enabled before enabling the PLL in the USB HS PHY" >
+         <choice value="0"  name="Disabled"   enum="Enabled"     isDefault="true" />
+         <choice value="1"  name="Enabled"    enum="Disabled"    />
+      </binaryOption>
+
+      <binaryOption key="sim_sopt2_usbslsrc" condition="sim_sopt2_usbslsrc_present"
+         enumStem="SimUsbSlowClock"
+         description="USB Slow Clock Source"
+         toolTip="Configures the clock source for the USB PHY and HS Controller slow clock,\n
+                  used to detect wakeup and resume events" >
+         <choice value="0"  name="MCGIRCLK Clock"   enum="McgIrClk" code="McgInfo::getMcgIrClock()" isDefault="true" />
+         <choice value="1"  name="RTC Clock"        enum="RtcClk"   code="RtcInfo::osc_input_freq" />
+      </binaryOption>
    </category>
-   
+
    <category name="SOPT4" description="FTM signals">
-      
+
       <binaryOption key="sim_sopt4_ftm0trg0src" condition="sim_sopt4_ftm0trg0src_present"
          enumStem="SimFtm0Trg0Src"
          description="FTM0 Hardware Trigger 0 Source"
@@ -134,17 +180,33 @@
          <choice value="0"  name="CMP0 output"        enum="Cmp0" isDefault="true" />
          <choice value="1"  name="FTM1 channel match" enum="Ftm1" />
       </binaryOption>
-      
-      <binaryOption key="sim_sopt4_ftm0trg1src" condition="sim_sopt4_ftm0trg1src_present" 
+
+      <binaryOption key="sim_sopt4_ftm0trg1src" condition="sim_sopt4_ftm0trg1src_present"
          enumStem="SimFtm0Trg1Src"
          description="FTM0 Hardware Trigger 1 Source"
          toolTip="Source of FTM hardware trigger 1" >
          <choice value="0"  name="PDB output trigger 1" enum="PdbTrigger1" isDefault="true" />
          <choice value="1"  name="FTM2 channel match"   enum="Ftm2" />
       </binaryOption>
-      
+
+      <choiceOption key="sim_sopt4_ftm3trg0src" condition="sim_sopt4_ftm3trg0src_present"
+         enumStem="SimFtm3Trg0Src"
+         description="FTM3 Hardware Trigger 0 Source"
+         toolTip="Source of FTM hardware trigger 0"
+         constant="true" >
+         <choice value="1"  name="FTM1 channel match" enum="Ftm1" isDefault="true" />
+      </choiceOption>
+
+      <choiceOption key="sim_sopt4_ftm3trg1src" condition="sim_sopt4_ftm3trg1src_present"
+         enumStem="SimFtm3Trg1Src"
+         description="FTM3 Hardware Trigger 1 Source"
+         toolTip="Source of FTM hardware trigger 1"
+         constant="true" >
+         <choice value="1"  name="FTM2 channel match" enum="Ftm2" isDefault="true" />
+      </choiceOption>
+
       <for keys="p" values="0;1;2;3">
-         <binaryOption key="sim_sopt4_ftm%(p)clksel" condition="sim_sopt4_ftm%(p)clksel_present" 
+         <binaryOption key="sim_sopt4_ftm%(p)clksel" condition="sim_sopt4_ftm%(p)clksel_present"
             enumStem="SimFtm%(p)ClkSel"
             description="FTM%(p) External Clock Pin"
             toolTip="External pin used to drive the clock to the FTM module">
@@ -152,8 +214,8 @@
             <choice value="1"  name="FTM_CLKIN1 pin" enum="FtmClkin1" />
          </binaryOption>
       </for>
-   
-      <choiceOption key="sim_sopt4_ftm1ch0src" condition="sim_sopt4_ftm1ch0src_present" 
+
+      <choiceOption key="sim_sopt4_ftm1ch0src" condition="sim_sopt4_ftm1ch0src_present"
          enumStem="SimFtm1Ch0Src"
          description="FTM 1 channel 0 input capture source"
          toolTip="Source for FTM channel 0 input capture\n
@@ -163,8 +225,8 @@
          <choice value="2" name="CMP1 output"              enum="Cmp1"     />
          <choice value="3" name="USB start of frame pulse" enum="UsbSof"   />
       </choiceOption>
-      
-      <choiceOption key="sim_sopt4_ftm2ch0src" condition="sim_sopt4_ftm2ch0src_present" 
+
+      <choiceOption key="sim_sopt4_ftm2ch0src" condition="sim_sopt4_ftm2ch0src_present"
          enumStem="SimFtm2Ch0Src"
          description="FTM2 channel 0 input capture source"
          toolTip="Source for FTM channel 0 input capture\n
@@ -173,8 +235,8 @@
          <choice value="1" name="CMP0 output"      enum="Cmp0" />
          <choice value="2" name="CMP1 output"      enum="Cmp1" />
       </choiceOption>
-      
-      <binaryOption key="sim_sopt4_ftm2ch1src" condition="sim_sopt4_ftm2ch1src_present" 
+
+      <binaryOption key="sim_sopt4_ftm2ch1src" condition="sim_sopt4_ftm2ch1src_present"
          enumStem="SimFtm2Ch1Src"
          description="FTM2 channel 1 input capture source"
          toolTip="Source for FTM channel 1 input capture\n
@@ -182,9 +244,9 @@
          <choice value="0" name="FTM2_CH1 signal"                    enum="IcPin" isDefault="true"/>
          <choice value="2" name="FTM2_CH1 xor FTM2_CH0 xor FTM1_CH1" enum="Ftm2Ch1_Ftm2Ch2_Ftm1Ch1" />
       </binaryOption>
-   
+
       <for keys="ftmNum" values="0;1;2;3">
-         <binaryOption key="sim_sopt4_ftm%(ftmNum)flt0" condition="sim_sopt4_ftm%(ftmNum)flt0_present" 
+         <binaryOption key="sim_sopt4_ftm%(ftmNum)flt0" condition="sim_sopt4_ftm%(ftmNum)flt0_present"
             enumStem="SimFtm%(ftmNum)Flt0"
             description="FTM%(ftmNum) Fault 0 Select"
             toolTip="Source of FTM fault input 0" >
@@ -192,9 +254,9 @@
             <choice value="1"  name="CMP0 output"           enum="Cmp0" />
          </binaryOption>
       </for>
-      
+
       <for keys="ftmNum" values="0">
-         <binaryOption key="sim_sopt4_ftm%(ftmNum)flt1" condition="sim_sopt4_ftm%(ftmNum)flt1_present" 
+         <binaryOption key="sim_sopt4_ftm%(ftmNum)flt1" condition="sim_sopt4_ftm%(ftmNum)flt1_present"
             enumStem="SimFtm%(ftmNum)Flt1"
             description="FTM%(ftmNum) Fault 1 Select"
             toolTip="Source of FTM fault input 1" >
@@ -202,20 +264,30 @@
             <choice value="1"  name="CMP1 output"           enum="Cmp1" />
          </binaryOption>
       </for>
-   
+
       <for keys="ftmNum" values="0">
-         <binaryOption key="sim_sopt4_ftm%(ftmNum)flt2" condition="sim_sopt4_ftm%(ftmNum)flt2_present"     
+         <binaryOption key="sim_sopt4_ftm%(ftmNum)flt2" condition="sim_sopt4_ftm%(ftmNum)flt2_present"
             enumStem="SimFtm%(ftmNum)Flt2"
-            description="FlexTimer 0 Fault 2 Select"
+            description="FTM%(ftmNum) Fault 2 Select"
             toolTip="Source of FTM fault input 2" >
             <choice value="0"  name="FTM%(ftmNum)_FLT2 pin" enum="Ftm%(ftmNum)Fault2" isDefault="true" />
             <choice value="1"  name="CMP2 output"           enum="Cmp2" />
          </binaryOption>
       </for>
+
+      <for keys="ftmNum" values="0">
+         <binaryOption key="sim_sopt4_ftm%(ftmNum)flt3" condition="sim_sopt4_ftm%(ftmNum)flt3_present"
+            enumStem="SimFtm%(ftmNum)Flt3"
+            description="FTM%(ftmNum) Fault 3 Select"
+            toolTip="Source of FTM fault input 3" >
+            <choice value="0"  name="FTM%(ftmNum)_FLT3 pin" enum="Ftm%(ftmNum)Fault3" isDefault="true" />
+            <choice value="1"  name="CMP3 output"           enum="Cmp3" />
+         </binaryOption>
+      </for>
    </category>
-   
+
    <category name="SOPT5" description="UART signals">
-      
+
       <for keys="n" values="0;1">
          <for keys   = "name:Name:NAME"
               values = "uart%(n)   : Uart%(n)   : UART%(n);
@@ -228,12 +300,12 @@
                <choice value="1" name="CMP0 output"   enum="Cmp0" />
                <choice value="2" name="CMP1 output"   enum="Cmp1" />
             </choiceOption>
-      
-            <choiceOption key="sim_sopt5_%(name)txsrc" condition="sim_sopt5_%(name)txsrc_present" 
+
+            <choiceOption key="sim_sopt5_%(name)txsrc" condition="sim_sopt5_%(name)txsrc_present"
                enumStem="Sim%(Name)TxSrc"
                description="%(NAME) transmit data source"
                toolTip="Source for the %(NAME) transmit data">
-               <choice value="0" name="Tx pin"     isDefault="true"         enum="Direct" />
+               <choice value="0" name="Tx pin" isDefault="true"             enum="Direct" />
                <choice value="1" name="Tx pin modulated by FTM1 channel 0"  enum="ModulatedByFtm1Ch0" />
                <choice value="2" name="Tx pin modulated by FTM2 channel 0"  enum="ModulatedByFtm2Ch0"  />
             </choiceOption>
@@ -242,12 +314,12 @@
    </category>
 
    <category name="SOPT7" description="ADC signals">
-      <for keys="adc" values="0;1"> 
+      <for keys="adc" values="0;1">
          <choiceOption key="sim_sopt7_adc%(adc)trigger" condition="sim_sopt7_adc%(adc)alttrgen_present"
             enumStem="SimAdc%(adc)TriggerMode"
             valueFormat="SIM_SOPT7_ADC%(adc)ALTTRGEN(%s),SIM_SOPT7_ADC%(adc)PRETRGSEL(%s)"
             description="ADC%(adc) trigger mode"
-            toolTip="Alternative conversion triggers for ADC\n 
+            toolTip="Alternative conversion triggers for ADC\n
                _Pdb              - ADC is triggered by PDB\n
                _Alt_PreTrigger_0 - ADC is triggered by SimAdc%(adc)Trigger selection and uses pretrigger 0 = A (SC1[0]/R[0])\n
                _Alt_PreTrigger_1 - ADC is triggered by SimAdc%(adc)Trigger selection and uses pretrigger 1 = B (SC1[1]/R[1])" >
@@ -255,41 +327,42 @@
             <choice value="1,0"   name="Pre-trigger 0 = A (SC1[0])"   enum="Alt_PreTrigger_0" />
             <choice value="1,1"   name="Pre-trigger 1 = B (SC1[1])"   enum="Alt_PreTrigger_1" />
          </choiceOption>
-      
+
          <choiceOption key="sim_sopt7_adc%(adc)trgsel" condition="sim_sopt7_adc%(adc)pretrgsel_present"
             enumStem="SimAdc%(adc)TriggerSrc"
             description="ADC%(adc) trigger source"
             toolTip="ADC Trigger source in STOP and VLPS modes, or when ADC Alternative Trigger is active">
-            <choice value="0"  name="External trigger pin input (PDB0_EXTRG)" enum="External" isDefault="true" />
-            <choice value="1"  name="CMP 0 output"                            enum="Cmp0"        condition="/CMP0/$present"   />
-            <choice value="2"  name="CMP 1 output"                            enum="Cmp1"        condition="/CMP1/$present"   />
-            <choice value="3"  name="CMP 2 output"                            enum="Cmp2"        condition="/CMP2/$present"   />
-            <choice value="4"  name="PIT trigger 0"                           enum="PitCh0"      condition="/PIT/$present"    />
-            <choice value="5"  name="PIT trigger 1"                           enum="PitCh1"      condition="/PIT/$present"    />
-            <choice value="6"  name="PIT trigger 2"                           enum="PitCh2"      condition="/PIT/$present"    />
-            <choice value="7"  name="PIT trigger 3"                           enum="PitCh3"      condition="/PIT/$present"    />
-            <choice value="8"  name="FTM0 trigger"                            enum="Ftm0"        condition="/FTM0/$present"   />
-            <choice value="9"  name="FTM1 trigger"                            enum="Ftm1"        condition="/FTM1/$present"   />
-            <choice value="10" name="FTM2 trigger"                            enum="Ftm2"        condition="/FTM2/$present"   />
-            <choice value="11" name="FTM3 trigger"                            enum="Ftm3"        condition="/FTM3/$present"   />
-            <choice value="12" name="RTC alarm"                               enum="RtcAlarm"    condition="/RTC/$present"    />
-            <choice value="13" name="RTC seconds"                             enum="RtcSeconds"  condition="/RTC/$present"    />
-            <choice value="14" name="LPTMR trigger"                           enum="Lptmr"       condition="/LPTMR0/$present" />
+            <choice value="0"  name="External trigger pin input (PDB0_EXTRG)" enum="External"     isDefault="true" />
+            <choice value="1"  name="CMP 0 output"                            enum="Cmp0"         condition="/CMP0/$present"   />
+            <choice value="2"  name="CMP 1 output"                            enum="Cmp1"         condition="/CMP1/$present"   />
+            <choice value="3"  name="CMP 2 output"                            enum="Cmp2"         condition="/CMP2/$present"   />
+            <choice value="4"  name="PIT trigger 0"                           enum="PitCh0"       condition="/PIT/$present"    />
+            <choice value="5"  name="PIT trigger 1"                           enum="PitCh1"       condition="/PIT/$present"    />
+            <choice value="6"  name="PIT trigger 2"                           enum="PitCh2"       condition="/PIT/$present"    />
+            <choice value="7"  name="PIT trigger 3"                           enum="PitCh3"       condition="/PIT/$present"    />
+            <choice value="8"  name="FTM0 trigger"                            enum="Ftm0"         condition="/FTM0/$present"   />
+            <choice value="9"  name="FTM1 trigger"                            enum="Ftm1"         condition="/FTM1/$present"   />
+            <choice value="10" name="FTM2 trigger"                            enum="Ftm2"         condition="/FTM2/$present"   />
+            <choice value="11" name="FTM3 trigger"                            enum="Ftm3"         condition="/FTM3/$present"   />
+            <choice value="12" name="RTC alarm"                               enum="RtcAlarm"     condition="/RTC/$present"    />
+            <choice value="13" name="RTC seconds"                             enum="RtcSeconds"   condition="/RTC/$present"    />
+            <choice value="14" name="LPTMR trigger"                           enum="Lptmr"        condition="/LPTMR0/$present" />
+            <choice value="15" name="TPM1 channel 0/1 (A/B pretrigger)"       enum="Tmp1Triggers" condition="/TPM1/$present"/>
          </choiceOption>
-      </for>      
+      </for>
    </category>
-    
+
    <category name="SOPT8" description="FTM signals">
       <for keys="ch" values="0;1;2;3;4;5;6;7">
-         <binaryOption key="sim_sopt8_ftm0och%(ch)src" 
+         <binaryOption key="sim_sopt8_ftm0och%(ch)src"
             enumStem="SimFtm0Ch%(ch)OutputSrc"
-            description="FTM0 channel %(ch) output source" 
+            description="FTM0 channel %(ch) output source"
             toolTip="Allows modulation of FTM output">
             <choice value="0" name="FTM0 ch %(ch) direct"                 enum="Direct"             isDefault="true" />
             <choice value="1" name="FTM0 ch %(ch) modulated by FTM1 ch 1" enum="ModulatedByFtm1Ch1" />
          </binaryOption>
       </for>
-         <choiceOption key="sim_sopt8_ftm_syncbits" 
+         <choiceOption key="sim_sopt8_ftm_syncbits"
             enumStem="FtmSync"
             valueFormat="%s"
             hidden="true"
@@ -306,81 +379,229 @@
 
    <for keys="n" dim="/SIM/numberOfClockSettings" >
       <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" constant="true" >
-      
+
          <aliasOption key="/MCG/enableClockConfiguration[%(n)]" constant="false" />
          <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]"          constant="false" />
 
-         <choiceOption key="sim_sopt2_pllfllsel[%(n)]"
-            enumStem="SimPeripheralClockSource"
-            target="system_peripheral_clock[%(n)]"
-            description="Peripheral Clock"
-            toolTip="Clock for various peripherals (LPUART, TPM etc.)">
-            <choice value="0"  name="MCGFLLCLK clock"   ref="/MCG/system_mcgfllclk_clock[%(n)]"    enum="McgFllClk"  code="SystemMcgFllClock"   isDefault="true" />
-            <choice value="1"  name="MCGPLLCLK clock"   ref="/MCG/system_mcgpllclk_clock[%(n)]"    enum="McgPllClk"  code="SystemMcgPllClock"   />
-            <choice value="3"  name="IRC48 MHz clock"   ref="/SIM/system_irc48m_clock"             enum="Irc48mClk"  code="irc48mClock"         condition="system_irc48m_clock" />
-         </choiceOption>
-   
-         <intOption key="system_peripheral_clock[%(n)]"
-            derived="true"
-            constant="true"
-            units="Hz"
-            description="Peripheral Clock frequency"
-            toolTip="Frequency of Peripheral Clock available to various peripherals"  />
-	 
-         <choiceOption key="sim_clkdiv2_usb[%(n)]" condition="sim_clkdiv2_usbdiv_present"
-            valueFormat="(%s)"
-            target="clkdiv2_clock[%(n)]"
-            enumStem="SimUsbClockDivider"
-            description="USB clock divider (SIM_CLKDIV2)" 
-            toolTip="Sets the clock divider when using an internal clock\n
-                     as the USB clock source">
-            <choice value="1"  name="Multiply by 2 (div=0, frac=1)"  enum="Mult2 " ref="(system_peripheral_clock[%(n)]*2/1)" code="SIM_CLKDIV2_USBDIV(0)|SIM_CLKDIV2_USBFRAC(1)" />
-            <choice value="0"  name="Multiply by 1 (div=0, frac=0)"  enum="Mult1 " ref="(system_peripheral_clock[%(n)]*1/1)" code="SIM_CLKDIV2_USBDIV(0)|SIM_CLKDIV2_USBFRAC(0)" isDefault="true" />
-            <choice value="3"  name="Multiply by 1 (div=1, frac=1)"  enum="Mult1b" ref="(system_peripheral_clock[%(n)]*2/2)" code="SIM_CLKDIV2_USBDIV(1)|SIM_CLKDIV2_USBFRAC(1)" />
-            <choice value="5"  name="Divide by 1.5 (div=2, frac=1)"  enum="Div1_5" ref="(system_peripheral_clock[%(n)]*2/3)" code="SIM_CLKDIV2_USBDIV(2)|SIM_CLKDIV2_USBFRAC(1)" />
-            <choice value="2"  name="Divide by 2 (div=1, frac=0)"    enum="Div2  " ref="(system_peripheral_clock[%(n)]*1/2)" code="SIM_CLKDIV2_USBDIV(1)|SIM_CLKDIV2_USBFRAC(0)" />
-            <choice value="7"  name="Divide by 2 (div=3, frac=1)"    enum="Div2b " ref="(system_peripheral_clock[%(n)]*2/4)" code="SIM_CLKDIV2_USBDIV(2)|SIM_CLKDIV2_USBFRAC(1)" />
-            <choice value="9"  name="Divide by 2.5 (div=4, frac=1)"  enum="Div2_5" ref="(system_peripheral_clock[%(n)]*2/5)" code="SIM_CLKDIV2_USBDIV(4)|SIM_CLKDIV2_USBFRAC(1)" />
-            <choice value="4"  name="Divide by 3 (div=2, frac=0)"    enum="Div3  " ref="(system_peripheral_clock[%(n)]*1/3)" code="SIM_CLKDIV2_USBDIV(5)|SIM_CLKDIV2_USBFRAC(0)" />
-            <choice value="11" name="Divide by 3 (div=5, frac=1)"    enum="Div3b " ref="(system_peripheral_clock[%(n)]*2/6)" code="SIM_CLKDIV2_USBDIV(5)|SIM_CLKDIV2_USBFRAC(1)" />
-            <choice value="13" name="Divide by 3.5 (div=6, frac=1)"  enum="Div3_5" ref="(system_peripheral_clock[%(n)]*2/7)" code="SIM_CLKDIV2_USBDIV(6)|SIM_CLKDIV2_USBFRAC(1)" />
-            <choice value="6"  name="Divide by 4 (div=3, frac=0)"    enum="Div4  " ref="(system_peripheral_clock[%(n)]*1/4)" code="SIM_CLKDIV2_USBDIV(3)|SIM_CLKDIV2_USBFRAC(0)" />
-            <choice value="15" name="Divide by 4 (div=7, frac=1)"    enum="Div4b " ref="(system_peripheral_clock[%(n)]*2/8)" code="SIM_CLKDIV2_USBDIV(7)|SIM_CLKDIV2_USBFRAC(1)" />
-            <choice value="8"  name="Divide by 5 (div=4, frac=0)"    enum="Div5  " ref="(system_peripheral_clock[%(n)]*1/5)" code="SIM_CLKDIV2_USBDIV(4)|SIM_CLKDIV2_USBFRAC(0)" />
-            <choice value="10" name="Divide by 6 (div=5, frac=0)"    enum="Div6  " ref="(system_peripheral_clock[%(n)]*1/6)" code="SIM_CLKDIV2_USBDIV(5)|SIM_CLKDIV2_USBFRAC(0)" />
-            <choice value="12" name="Divide by 7 (div=6, frac=0)"    enum="Div7  " ref="(system_peripheral_clock[%(n)]*1/7)" code="SIM_CLKDIV2_USBDIV(6)|SIM_CLKDIV2_USBFRAC(0)" />
-            <choice value="14" name="Divide by 8 (div=7, frac=0)"    enum="Div8  " ref="(system_peripheral_clock[%(n)]*1/8)" code="SIM_CLKDIV2_USBDIV(7)|SIM_CLKDIV2_USBFRAC(0)" />
-         </choiceOption>
-   
-         <intOption key="clkdiv2_clock[%(n)]"  condition="sim_clkdiv2_usbdiv_present"
-            hidden="true"
-            derived="true"
-            constant="true"
-            units="Hz"
-            description="USB Full Speed Clock"
-            toolTip="Frequency of clock to USB full speed controller"
-            value="0" />
-    
-         <choiceOption key="sim_sopt2_usbsrc[%(n)]" condition="sim_sopt2_usbsrc_present"
-            target="system_usbfs_clock[%(n)]"
-            enumStem="SimUsbFullSpeedClockSource"
-            description="USB Clock"
-            toolTip="Source for the USB clock">
-            <choice value="0"  name="External bypass clock (USB_CLKIN)" enum="External"      ref="system_usb_clkin_clock" />
-            <choice value="1"  name="Peripheral Clock/SIM_CLKDIV2"      enum="PeripheralClk" ref="clkdiv2_clock[%(n)]"    isDefault="true" />
-         </choiceOption>
-      
-         <aliasOption key="system_usb_clkin_clock" constant="false" />
-         
-         <intOption key="system_usbfs_clock[%(n)]"  condition="sim_sopt2_usbsrc_present"
-            errorPropagate="error"
-            derived="true"
-            constant="true"
-            units="Hz"
-            description="USB Full Speed Clock"
-            toolTip="Frequency of clock to USB full speed controller"
-            value="48 MHz" min="48 MHz" max="48 MHz" />
-    
+         <category name="Peripheral Clocks" description="Peripheral Clock Selection">
+            <intOption key="usb1pfdclk_Clock[%(n)]" condition="/USBPHY1/$present"
+               derived="true"
+               constant="true"
+               units="Hz"
+               description="USB1 PHY clock"
+               toolTip="USB1PFD Clock available as peripheral clock"
+               max="120MHz" />
+
+            <choiceOption key="sim_sopt2_pllfllsel[%(n)]"
+               enumStem="SimPeripheralClockSource"
+               target="system_peripheral_clock[%(n)]"
+               description="Peripheral Clock"
+               toolTip="Clock for various peripherals (LPUART, TPM etc.)\n
+                        If there is a peripheral clock divider then this is the\n
+                        Frequency of the undivided peripheral clock">
+               <choice value="0"  name="MCGFLLCLK clock"   ref="/MCG/system_mcgfllclk_clock[%(n)]"     enum="McgFllClk"  code="SystemMcgFllClock"   isDefault="true" />
+               <choice value="1"  name="MCGPLLCLK clock"   ref="/MCG/system_mcgpllclk_clock[%(n)]"     enum="McgPllClk"  code="SystemMcgPllClock"   />
+               <choice value="2"  name="USB1 PFD clock"    ref="usb1pfdclk_Clock[%(n)]"                enum="Usb1PfdClk" code="0"                   condition="/USBPHY1/$present"   />
+               <choice value="3"  name="IRC48 MHz clock"   ref="/SIM/system_irc48m_clock"              enum="Irc48mClk"  code="irc48mClock"         condition="system_irc48m_clock" />
+            </choiceOption>
+
+            <intOption key="system_peripheral_clock[%(n)]"
+               derived="true"
+               constant="true"
+               units="Hz"
+               description="Peripheral Clock frequency"
+               toolTip="Frequency of Peripheral Clock available to various peripherals"  />
+
+            <choiceOption key="sim_clkdiv2_usb[%(n)]" condition="sim_clkdiv2_usbdiv_present"
+               valueFormat="(%s)"
+               target="clkdiv2_clock[%(n)]"
+               enumStem="SimUsbClockDivider"
+               description="USB clock divider (SIM_CLKDIV2)"
+               toolTip="Sets the clock divider when using an internal clock\n
+                        as the USB clock source">
+               <choice value="1"  name="Multiply by 2 (div=0, frac=1)"  enum="Mult2 " ref="(system_peripheral_clock[%(n)]*2/1)" code="SIM_CLKDIV2_USBDIV(0)|SIM_CLKDIV2_USBFRAC(1)" />
+               <choice value="0"  name="Multiply by 1 (div=0, frac=0)"  enum="Mult1 " ref="(system_peripheral_clock[%(n)]*1/1)" code="SIM_CLKDIV2_USBDIV(0)|SIM_CLKDIV2_USBFRAC(0)" isDefault="true" />
+               <choice value="3"  name="Multiply by 1 (div=1, frac=1)"  enum="Mult1b" ref="(system_peripheral_clock[%(n)]*2/2)" code="SIM_CLKDIV2_USBDIV(1)|SIM_CLKDIV2_USBFRAC(1)" />
+               <choice value="5"  name="Divide by 1.5 (div=2, frac=1)"  enum="Div1_5" ref="(system_peripheral_clock[%(n)]*2/3)" code="SIM_CLKDIV2_USBDIV(2)|SIM_CLKDIV2_USBFRAC(1)" />
+               <choice value="2"  name="Divide by 2 (div=1, frac=0)"    enum="Div2  " ref="(system_peripheral_clock[%(n)]*1/2)" code="SIM_CLKDIV2_USBDIV(1)|SIM_CLKDIV2_USBFRAC(0)" />
+               <choice value="7"  name="Divide by 2 (div=3, frac=1)"    enum="Div2b " ref="(system_peripheral_clock[%(n)]*2/4)" code="SIM_CLKDIV2_USBDIV(2)|SIM_CLKDIV2_USBFRAC(1)" />
+               <choice value="9"  name="Divide by 2.5 (div=4, frac=1)"  enum="Div2_5" ref="(system_peripheral_clock[%(n)]*2/5)" code="SIM_CLKDIV2_USBDIV(4)|SIM_CLKDIV2_USBFRAC(1)" />
+               <choice value="4"  name="Divide by 3 (div=2, frac=0)"    enum="Div3  " ref="(system_peripheral_clock[%(n)]*1/3)" code="SIM_CLKDIV2_USBDIV(5)|SIM_CLKDIV2_USBFRAC(0)" />
+               <choice value="11" name="Divide by 3 (div=5, frac=1)"    enum="Div3b " ref="(system_peripheral_clock[%(n)]*2/6)" code="SIM_CLKDIV2_USBDIV(5)|SIM_CLKDIV2_USBFRAC(1)" />
+               <choice value="13" name="Divide by 3.5 (div=6, frac=1)"  enum="Div3_5" ref="(system_peripheral_clock[%(n)]*2/7)" code="SIM_CLKDIV2_USBDIV(6)|SIM_CLKDIV2_USBFRAC(1)" />
+               <choice value="6"  name="Divide by 4 (div=3, frac=0)"    enum="Div4  " ref="(system_peripheral_clock[%(n)]*1/4)" code="SIM_CLKDIV2_USBDIV(3)|SIM_CLKDIV2_USBFRAC(0)" />
+               <choice value="15" name="Divide by 4 (div=7, frac=1)"    enum="Div4b " ref="(system_peripheral_clock[%(n)]*2/8)" code="SIM_CLKDIV2_USBDIV(7)|SIM_CLKDIV2_USBFRAC(1)" />
+               <choice value="8"  name="Divide by 5 (div=4, frac=0)"    enum="Div5  " ref="(system_peripheral_clock[%(n)]*1/5)" code="SIM_CLKDIV2_USBDIV(4)|SIM_CLKDIV2_USBFRAC(0)" />
+               <choice value="10" name="Divide by 6 (div=5, frac=0)"    enum="Div6  " ref="(system_peripheral_clock[%(n)]*1/6)" code="SIM_CLKDIV2_USBDIV(5)|SIM_CLKDIV2_USBFRAC(0)" />
+               <choice value="12" name="Divide by 7 (div=6, frac=0)"    enum="Div7  " ref="(system_peripheral_clock[%(n)]*1/7)" code="SIM_CLKDIV2_USBDIV(6)|SIM_CLKDIV2_USBFRAC(0)" />
+               <choice value="14" name="Divide by 8 (div=7, frac=0)"    enum="Div8  " ref="(system_peripheral_clock[%(n)]*1/8)" code="SIM_CLKDIV2_USBDIV(7)|SIM_CLKDIV2_USBFRAC(0)" />
+            </choiceOption>
+
+            <intOption key="clkdiv2_clock[%(n)]"  condition="sim_clkdiv2_usbdiv_present"
+               hidden="true"
+               derived="true"
+               constant="true"
+               units="Hz"
+               description="USB Full Speed Clock"
+               toolTip="Frequency of clock to USB full speed controller"
+               value="0" />
+
+            <choiceOption key="sim_sopt2_usbsrc[%(n)]" condition="sim_sopt2_usbsrc_present"
+               target="system_usbfs_clock[%(n)]"
+               enumStem="SimUsbFullSpeedClockSource"
+               description="USB Clock"
+               toolTip="Source for the USB clock">
+               <choice value="0"  name="External bypass clock (USB_CLKIN)" enum="External"      ref="system_usb_clkin_clock" />
+               <choice value="1"  name="Peripheral Clock/SIM_CLKDIV2"      enum="PeripheralClk" ref="clkdiv2_clock[%(n)]"    isDefault="true" />
+            </choiceOption>
+
+            <aliasOption key="system_usb_clkin_clock" constant="false" optional="true" />
+
+            <intOption key="system_usbfs_clock[%(n)]"  condition="sim_sopt2_usbsrc_present"
+               errorPropagate="error"
+               derived="true"
+               constant="true"
+               units="Hz"
+               description="USB Full Speed Clock"
+               toolTip="Frequency of clock to USB full speed controller"
+               value="48 MHz" min="48 MHz" max="48 MHz" />
+
+            <choiceOption key="sim_clkdiv3_pllfll[%(n)]" condition="sim_clkdiv3_pllflldiv_present"
+               enumStem="SimPeripheralClockDivider"
+               valueFormat="(%s)"
+               target="system_peripheral_postdivider_clock[%(n)]"
+               description="Peripheral Clock post-divider (SIM_CLKDIV3)"
+               toolTip="Selects the post PLL/FLL clock divider for various peripherals\n
+                        (LPUART, TPM, FlexIO)">
+               <choice value="1"   name="Multiply by 2 (div=0, frac=1)"  enum="Mult2 " ref="(system_peripheral_clock[%(n)]*2)/1" code="SIM_CLKDIV3_PLLFLLDIV(0)|SIM_CLKDIV3_PLLFLLFRAC(1)"  />
+               <choice value="0"   name="Multiply by 1 (div=0, frac=0)"  enum="Mult1 " ref="(system_peripheral_clock[%(n)]*1)/1" code="SIM_CLKDIV3_PLLFLLDIV(0)|SIM_CLKDIV3_PLLFLLFRAC(0)"  isDefault="true" />
+               <choice value="3"   name="Multiply by 1 (div=1, frac=1)"  enum="Mult1b" ref="(system_peripheral_clock[%(n)]*2)/2" code="SIM_CLKDIV3_PLLFLLDIV(1)|SIM_CLKDIV3_PLLFLLFRAC(1)"  />
+               <choice value="5"   name="Divide by 1.5 (div=2, frac=1)"  enum="Div1_5" ref="(system_peripheral_clock[%(n)]*2)/3" code="SIM_CLKDIV3_PLLFLLDIV(2)|SIM_CLKDIV3_PLLFLLFRAC(1)"  />
+               <choice value="2"   name="Divide by 2 (div=1, frac=0)"    enum="Div2  " ref="(system_peripheral_clock[%(n)]*1)/2" code="SIM_CLKDIV3_PLLFLLDIV(1)|SIM_CLKDIV3_PLLFLLFRAC(0)"  />
+               <choice value="7"   name="Divide by 2 (div=3, frac=1)"    enum="Div2b " ref="(system_peripheral_clock[%(n)]*2)/4" code="SIM_CLKDIV3_PLLFLLDIV(3)|SIM_CLKDIV3_PLLFLLFRAC(1)"  />
+               <choice value="9"   name="Divide by 2.5 (div=4, frac=1)"  enum="Div2_5" ref="(system_peripheral_clock[%(n)]*2)/5" code="SIM_CLKDIV3_PLLFLLDIV(4)|SIM_CLKDIV3_PLLFLLFRAC(1)"  />
+               <choice value="4"   name="Divide by 3 (div=2, frac=0)"    enum="Div3  " ref="(system_peripheral_clock[%(n)]*1)/3" code="SIM_CLKDIV3_PLLFLLDIV(2)|SIM_CLKDIV3_PLLFLLFRAC(0)"  />
+               <choice value="11"  name="Divide by 3 (div=5, frac=1)"    enum="Div3b " ref="(system_peripheral_clock[%(n)]*2)/6" code="SIM_CLKDIV3_PLLFLLDIV(5)|SIM_CLKDIV3_PLLFLLFRAC(1)"  />
+               <choice value="13"  name="Divide by 3.5 (div=6, frac=1)"  enum="Div3_5" ref="(system_peripheral_clock[%(n)]*2)/7" code="SIM_CLKDIV3_PLLFLLDIV(6)|SIM_CLKDIV3_PLLFLLFRAC(1)"  />
+               <choice value="6"   name="Divide by 4 (div=3, frac=0)"    enum="Div4  " ref="(system_peripheral_clock[%(n)]*1)/4" code="SIM_CLKDIV3_PLLFLLDIV(3)|SIM_CLKDIV3_PLLFLLFRAC(0)"  />
+               <choice value="15"  name="Divide by 4 (div=7, frac=1)"    enum="Div4b " ref="(system_peripheral_clock[%(n)]*2)/8" code="SIM_CLKDIV3_PLLFLLDIV(7)|SIM_CLKDIV3_PLLFLLFRAC(1)"  />
+               <choice value="8"   name="Divide by 5 (div=4, frac=0)"    enum="Div5  " ref="(system_peripheral_clock[%(n)]*1)/5" code="SIM_CLKDIV3_PLLFLLDIV(4)|SIM_CLKDIV3_PLLFLLFRAC(0)"  />
+               <choice value="10"  name="Divide by 6 (div=5, frac=0)"    enum="Div6  " ref="(system_peripheral_clock[%(n)]*1)/6" code="SIM_CLKDIV3_PLLFLLDIV(5)|SIM_CLKDIV3_PLLFLLFRAC(0)"  />
+               <choice value="12"  name="Divide by 7 (div=6, frac=0)"    enum="Div7  " ref="(system_peripheral_clock[%(n)]*1)/7" code="SIM_CLKDIV3_PLLFLLDIV(6)|SIM_CLKDIV3_PLLFLLFRAC(0)"  />
+               <choice value="14"  name="Divide by 8 (div=7, frac=0)"    enum="Div8  " ref="(system_peripheral_clock[%(n)]*1)/8" code="SIM_CLKDIV3_PLLFLLDIV(7)|SIM_CLKDIV3_PLLFLLFRAC(0)"  />
+            </choiceOption>
+
+            <intOption key="system_peripheral_postdivider_clock[%(n)]" condition="sim_clkdiv3_pllflldiv_present"
+               derived="true"
+               constant="true"
+               units="Hz"
+               description="Peripheral Post-divider Clock frequency/"
+               toolTip="Frequency of Peripheral Clock available to various peripherals"
+               max="75 MHz" />
+
+            <choiceOption key="sim_sopt2_lpuartsrc[%(n)]" condition="sim_sopt2_lpuartsrc_present"
+               enumStem="SimLpuartClockSource"
+               target="system_lpuart_clock[%(n)]"
+               description="LPUART Clock select"
+               toolTip="Selects the clock source for the transmit and receive clock\n
+      	               This is selection is shared by all LPUARTs">
+               <choice value="0"  name="Disabled"                     ref="disabled"                                  enum="Disabled"        code="0"                           />
+               <choice value="1"  name="Peripheral Clock/SIM_CLKDIV3" ref="system_peripheral_postdivider_clock[%(n)]" enum="PeripheralClk"   code="getDividedPeripheralClock()" condition="sim_clkdiv3_pllflldiv_present"  isDefault="true" />
+               <choice value="1"  name="Peripheral Clock"             ref="system_peripheral_clock[%(n)]"             enum="PeripheralClk"   code="getPeripheralClock()"        condition="!sim_clkdiv3_pllflldiv_present" isDefault="true"  />
+               <choice value="2"  name="OSCERCLK clock"               ref="/OSC0/oscer_clock"                         enum="OscerClk"        code="Osc0Info::getOscerClock()"   />
+               <choice value="3"  name="MCGIRCLK clock"               ref="/MCG/system_mcgirclk_clock[%(n)]"          enum="McgIrClk"        code="McgInfo::getMcgIrClock()"    />
+            </choiceOption>
+
+            <intOption key="system_lpuart_clock[%(n)]" condition="sim_sopt2_lpuartsrc_present"
+               derived="true"
+               constant="true"
+               units="Hz"
+               description="LPUART Clock frequency"
+               toolTip="Frequency of clock to LPUART"
+               value="0"
+               max="75MHz"/>
+
+            <choiceOption key="sim_sopt2_flexiosrc[%(n)]" condition="sim_sopt2_flexiosrc_present"
+               enumStem="SimFlexioClockSource"
+               target="system_flexio_clock[%(n)]"
+               description="FLEXIO Clock source"
+               toolTip="Selects the clock source for the Flexio">
+               <choice value="0"  name="System core clock"            ref="system_core_clock[%(n)]"                   enum="SystemCoreClk"   code="SystemCoreClock"             />
+               <choice value="1"  name="Peripheral Clock/SIM_CLKDIV3" ref="system_peripheral_postdivider_clock[%(n)]" enum="PeripheralClk"   code="getDividedPeripheralClock()" />
+               <choice value="2"  name="OSCERCLK clock"               ref="/OSC0/oscer_clock"                         enum="OscerClk"        code="Osc0Info::getOscerClock()"   />
+               <choice value="3"  name="MCGIRCLK clock"               ref="/MCG/system_mcgirclk_clock[%(n)]"          enum="McgIrClk"        code="McgInfo::getMcgIrClock()"    />
+            </choiceOption>
+
+            <intOption key="system_flexio_clock[%(n)]" condition="sim_sopt2_flexiosrc_present"
+               derived="true"
+               constant="true"
+               units="Hz"
+               description="FLEXIO Clock frequency"
+               toolTip="Frequency of clock to FLEXIO"
+               value="0"
+               max="120MHz" />
+
+            <choiceOption key="sim_sopt2_tpmsrc[%(n)]" condition="sim_sopt2_tpmsrc_present"
+               enumStem="SimTpmClockSource"
+               target="system_tpm_clock[%(n)]"
+               description="TPM Clock source"
+               toolTip="Clock source for the TPM counter clock">
+               <choice value="0"  name="Disabled"                     ref="disabled"                                  enum="Disabled"        code="0"                           />
+               <choice value="1"  name="Peripheral Clock/SIM_CLKDIV3" ref="system_peripheral_postdivider_clock[%(n)]" enum="PeripheralClk"   code="getDividedPeripheralClock()" isDefault="true" />
+               <choice value="2"  name="OSCERCLK clock"               ref="/OSC0/oscer_clock"                         enum="OscerClk"        code="Osc0Info::getOscerClock()"   />
+               <choice value="3"  name="MCGIRCLK clock"               ref="/MCG/system_mcgirclk_clock[%(n)]"          enum="McgIrClk"        code="McgInfo::getMcgIrClock()"    />
+            </choiceOption>
+
+            <intOption key="system_tpm_clock[%(n)]" condition="sim_sopt2_tpmsrc_present"
+               derived="true"
+               constant="true"
+               units="Hz"
+               description="TPM Clock frequency"
+               toolTip="Frequency of clock to TPM"
+               value="0" max="75MHz" />
+
+            <aliasOption key="system_sdhc_clockin" constant="false" optional="true" />
+
+            <choiceOption key="sim_sopt2_sdhcsrc[%(n)]" condition="sim_sopt2_sdhcsrc_present"
+               target="system_sdhc_clock[%(n)]"
+               enumStem="SimSdhcClockSource"
+               description="SDHC Clock select"
+               toolTip="Selects the clock source for the SDHC clock" >
+               <choice value="0"  name="Core/system clock"            ref="system_core_clock[%(n)]"       enum="CoreClk"         code="SystemCoreClock"          isDefault="true" />
+               <choice value="1"  name="Peripheral Clock"             ref="system_peripheral_clock[%(n)]" enum="PeripheralClk"   code="getPeripheralClock()" />
+               <choice value="2"  name="OSCERCLK clock"               ref="/OSC0/oscer_clock"             enum="OscerClk"        code="Osc0Info::getOscerClock()" />
+               <choice value="3"  name="External clock (SDHC0_CLKIN)" ref="system_sdhc_clockin"           enum="External"        code="sdhcExternalClock" />
+            </choiceOption>
+
+            <intOption key="system_sdhc_clock[%(n)]" condition="sim_sopt2_sdhcsrc_present"
+               constant="true"
+               derived="true"
+               units="Hz"
+               description="SDHC Clock frequency (not implemented)"
+               toolTip="Frequency of clock to SDHC"
+               value="0" max="120MHz" />
+
+            <choiceOption key="sim_sopt2_emvsimsrc[%(n)]"  condition="sim_sopt2_emvsimsrc_present"
+               enumStem="SimEmvsimClockSource"
+               target="system_emvsim_clock[%(n)]"
+               description="EMVSIM Clock source"
+               toolTip="Selects the clock source for the EMVSIM">
+               <choice value="0"  name="Disabled"                     ref="disabled"                                  enum="Disabled"        code="0"                           />
+               <choice value="1"  name="Peripheral Clock/SIM_CLKDIV3" ref="system_peripheral_postdivider_clock[%(n)]" enum="PeripheralClk"   code="getDividedPeripheralClock()" />
+               <choice value="2"  name="OSCERCLK clock"               ref="/OSC0/oscer_clock"                         enum="OscerClk"        code="Osc0Info::getOscerClock()"   />
+               <choice value="3"  name="MCGIRCLK clock"               ref="/MCG/system_mcgirclk_clock[%(n)]"          enum="McgIrClk"        code="McgInfo::getMcgIrClock()"    />
+            </choiceOption>
+
+            <intOption key="system_emvsim_clock[%(n)]" condition="sim_sopt2_emvsimsrc_present"
+               derived="true"
+               constant="true"
+               units="Hz"
+               description="EMV Clock frequency"
+               toolTip="Frequency of clock to EMV"
+               value="0" />
+
+         </category>
+
          <aliasOption key="/MCG/system_mcgoutclk_clock[%(n)]" />
 
          <intOption key="system_core_clock[%(n)]" condition="sim_clkdiv1_outdiv1_present"
@@ -391,8 +612,8 @@
             description="System Core Clock"
             toolTip="Clocks the ARM Cortex-M4 core and bus masters"
             value="80 MHz" />
-      
-         <intOption key="system_bus_clock[%(n)]" condition="sim_clkdiv1_outdiv2_present" 
+
+         <intOption key="system_bus_clock[%(n)]" condition="sim_clkdiv1_outdiv2_present"
             ref="(/MCG/system_mcgoutclk_clock[%(n)])/(sim_clkdiv1_outdiv2[%(n)])"
             derived="true"
             isNamedClock="true"
@@ -401,8 +622,8 @@
             toolTip="Clocks the bus slaves and peripherals\n
                      Must be &lt;= Core Clock frequency and an integer divisor"
             value="40 MHz" />
-   
-         <intOption key="system_flexbus_clock[%(n)]" condition="sim_clkdiv1_outdiv3_present" 
+
+         <intOption key="system_flexbus_clock[%(n)]" condition="sim_clkdiv1_outdiv3_present"
             ref="(/MCG/system_mcgoutclk_clock[%(n)])/(sim_clkdiv1_outdiv3[%(n)])"
             derived="true"
             isNamedClock="true"
@@ -411,8 +632,8 @@
             toolTip="Clocks the flexbus interface\n
                      Must be &lt;= Bus Clock frequency"
             value="50 MHz" />
-      
-         <intOption key="system_flash_clock[%(n)]" condition="sim_clkdiv1_outdiv4_present" 
+
+         <intOption key="system_flash_clock[%(n)]" condition="sim_clkdiv1_outdiv4_present"
             ref="(/MCG/system_mcgoutclk_clock[%(n)])/(sim_clkdiv1_outdiv4[%(n)])"
             derived="true"
             isNamedClock="true"
@@ -423,7 +644,7 @@
                      Must be &lt;= Bus Clock frequency[%(n)]\n
                      Must be &gt;= Core clock / 8"
             value="26666666" />
-      
+
          <category name="CLKDIV1" description="System Clock Dividers">
             <intOption key="sim_clkdiv1_outdiv1[%(n)]"  condition="sim_clkdiv1_outdiv1_present"
                constant="true"
@@ -431,7 +652,7 @@
                toolTip="Clocks the ARM Cortex-M4 core and bus masters [SIM_CLKDIV1_OUTDIV1]\n
                         Divides MCGOUT Clock to generate system_core_clock"
                value="1" offset="-1" min="1" max="16" />
-         
+
             <intOption key="sim_clkdiv1_outdiv2[%(n)]"  condition="sim_clkdiv1_outdiv2_present"
                constant="true"
                description="Bus Clock Divider (OUTDIV2) - Divide by [1-16]"
@@ -439,7 +660,7 @@
                   Divides MCGOUT Clock to generate system_bus_clock\n
                   MCGOUTCLK clock is source. Default /2"
                value="1" offset="-1" min="1" max="16" />
-      
+
             <intOption key="sim_clkdiv1_outdiv3[%(n)]" condition="sim_clkdiv1_outdiv3_present"
                constant="true"
                description="Flexbus Clock Divider (OUTDIV3) - Divide by [1-16]"
@@ -447,7 +668,7 @@
                         Divides MCGOUT Clock to generate system_flexbus_clock\n
                         MCGOUTCLK clock is source. Default /2"
                value="1" offset="-1" min="1" max="16" />
-         
+
             <intOption key="sim_clkdiv1_outdiv4[%(n)]"  condition="sim_clkdiv1_outdiv4_present"
                constant="true"
                description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"
@@ -458,7 +679,7 @@
          </category>
       </aliasCategoryOption>
    </for>
-   
+
    <template><![CDATA[
       \t/**
       \t * Update system clock values
@@ -486,13 +707,13 @@
       <param type="long" value="50MHz"  />     <!-- RUN Bus           -->
       <param type="long" value="27MHz"  />     <!-- RUN FlexBus       -->
       <param type="long" value="0MHz"   />     <!-- RUN Flash         -->
-      
+
       <param type="long" value="4MHz"   />     <!-- VLPR Core         -->
       <param type="long" value="4MHz"   />     <!-- VLPR Bus          -->
       <param type="long" value="4MHz"   />     <!-- VLPR FlexBus      -->
       <param type="long" value="1MHz"   />     <!-- VLPR Flash        -->
    </validate>
-   
+
    <xi:include href="_simFiles-MK.xml"/>
-   
+
 </peripheralPage>
