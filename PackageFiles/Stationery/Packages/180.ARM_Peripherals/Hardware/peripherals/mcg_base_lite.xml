@@ -219,9 +219,9 @@
          value="48000000" />
 
       <aliasOption key="/OSC0/osc_undiv_clock" optional="true" />
-      <aliasOption key="/OSC0/osc_clock" constant="true" />
-      <aliasOption key="/SIM/system_erclk32k_clock" constant="true" />
-      <aliasOption key="/PMC/system_low_power_clock" constant="true" />
+      <aliasOption key="/OSC0/osc_clock" />
+      <aliasOption key="/SIM/system_erclk32k_clock" />
+      <aliasOption key="/PMC/system_low_power_clock" />
 
       <stringOption key="system_mcgoutclk_clock_source[%(n)]"
          derived="true"

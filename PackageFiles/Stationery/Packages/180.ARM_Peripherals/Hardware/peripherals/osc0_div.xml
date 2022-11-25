@@ -9,8 +9,8 @@
       units="Hz"
       description="Oscillator clock to some peripherals [OSCERCLK_UNDIV]"
       toolTip="Generated from OSCCLK without division"
-      value="8000000"  
-      constant="true" 
+      value="8000000"
+      constant="true"
       disabledValue="0" />
 
    <choiceOption key="osc_div_erps"
@@ -18,10 +18,10 @@
       hidden="true"
       description="External clock output [OSCERCLK] prescaler"
       toolTip="Division for the External Clock [OSCERCLK] output" >
-      <choice value="0"  name="Divide by 1" enum="By1"  isDefault="true" />
-      <choice value="1"  name="Divide by 2" enum="By2" />
-      <choice value="2"  name="Divide by 4" enum="By4" />
-      <choice value="3"  name="Divide by 8" enum="By8" />
+      <choice value="0"  name="/1" enum="By1"  isDefault="true" />
+      <choice value="1"  name="/2" enum="By2" />
+      <choice value="2"  name="/4" enum="By4" />
+      <choice value="3"  name="/8" enum="By8" />
    </choiceOption>
 
    <xi:include href="_osc0_common.xml"/>

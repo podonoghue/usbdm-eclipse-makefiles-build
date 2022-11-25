@@ -153,7 +153,7 @@
                toolTip="Source for the %(NAME) transmit data">
                <choice value="0" name="Tx pin" isDefault="true"             enum="Direct" />
                <choice value="1" name="Tx pin modulated by TPM1 channel 0"  enum="ModulatedByTpm1Ch0" />
-               <choice value="2" name="Tx pin modulated by TPM2 channel 0"  enum="ModulatedByTpm2Ch0" conditon="/TPM2/$present" />
+               <choice value="2" name="Tx pin modulated by TPM2 channel 0"  enum="ModulatedByTpm2Ch0" condition="/TPM2/$present" />
             </choiceOption>
          </for>
       </for>

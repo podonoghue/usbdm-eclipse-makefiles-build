@@ -349,7 +349,7 @@
          
          <aliasOption key="scg_sosccfg_erefs" constant="false" />
          <aliasOption key="scg_sosccfg_hgo"   constant="false" />
-         <aliasOption key="scg_sosccfg_range" constant="true" />
+         <aliasOption key="scg_sosccfg_range" />
 
          <binaryOption key="scg_sosccsr_sosccmre[]"
             description="System Oscillator Clock Monitor Reset Enable" 
@@ -858,11 +858,11 @@
       </template>
    </for>
       
-   <template key="ClockConfig" dim="3" namespace="all" ><![CDATA[
+   <template key="ClockConfig" namespace="all" ><![CDATA[
       \t$(ClockConfig.:/* -- missing name for configuration -- */),
    ]]></template>
    
-   <template key="ScgClockInfoEntries" dim="3" namespace="all" ><![CDATA[
+   <template key="ScgClockInfoEntries" namespace="all" ><![CDATA[
       \t{
       \t   /* clockMode - Clock Mode                          */  ScgInfo::$(clock_transition_mode.),                                            
          

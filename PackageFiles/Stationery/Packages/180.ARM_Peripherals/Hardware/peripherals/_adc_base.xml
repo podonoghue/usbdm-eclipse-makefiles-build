@@ -52,7 +52,7 @@
    <choiceOption key="adcClockConfig"
       target="input_bus_clock"
       description="Clock configuration"
-      toolTip="Selects the clock configuration used if bus clock is chosen as clock source" >
+      toolTip="Selects the clock configuration used for calculations if bus clock is chosen as clock source" >
       <choice value="0" name="@/MCG/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
       <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
       <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />

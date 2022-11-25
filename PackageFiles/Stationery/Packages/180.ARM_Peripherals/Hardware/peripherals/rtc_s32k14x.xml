@@ -21,7 +21,7 @@
 
    <aliasOption key="/SIM/system_rtcclkin_frequency" constant="false" optional="true"/>
    <aliasOption key="/SIM/lpoclks_rtcclksel"         constant="false" optional="true"/>
-   <aliasOption key="/PCC/pcc_rtc"                   constant="false" optional="false" />
+   <aliasOption key="/PCC/pcc_rtc"                   constant="false" />
 
    <intOption key="rtcclk_gated_clock"
       derived="true"

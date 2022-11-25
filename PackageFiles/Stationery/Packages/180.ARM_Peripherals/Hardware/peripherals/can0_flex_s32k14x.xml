@@ -5,12 +5,12 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="FlexCAN">
 
    <xi:include href="_default_instance.xml"/>
-   
-   <constant key="disable_peripheral" derived = "true" value = "can->MCR = CAN_MCR_MDIS(1);"  />
+
+   <constant key="disable_peripheral" value = "can->MCR = CAN_MCR_MDIS(1);"  />
    <xi:include href="_mapPinsOption.xml"/>
-   
+
    <!-- Note: second entry gets the tick irrespective of true/false value -->
-   <binaryOption key="EnableFifo" 
+   <binaryOption key="EnableFifo"
       description="Enable Receive FIFO"
       toolTip="This option enables use of the receive FIFO in addition to the individual mailboxes.\n
                The maximum number of individual mailboxes is reduced">
@@ -18,28 +18,28 @@
       <choice value="1" name="Enabled"  isDefault="true" />
    </binaryOption>
 
-   <intOption key="MaxNumberOfMessageBuffers" 
+   <intOption key="MaxNumberOfMessageBuffers"
       description="Maximum number of message buffers available"
       toolTip="This is the maximum value determined by the hardware.\n
                The CAN memory is shared between the FIFO filters and message buffers so\n
-               the actual number available will be reduced by use of the FIFO and FIFO filters"  
-      constant="true" 
+               the actual number available will be reduced by use of the FIFO and FIFO filters"
+      constant="true"
       value="32" />
 
-   <intOption key="MaxNumberOfFifoMessageFilters" 
+   <intOption key="MaxNumberOfFifoMessageFilters"
       description="Maximum number of FIFO message filters available"
       toolTip="This is the maximum value determined by the hardware.\n
                The CAN memory is shared between the FIFO filters and message buffers\n
-	       so a usable number will be less than this"  
-      constant="true" 
+	       so a usable number will be less than this"
+      constant="true"
       value="104" />
 
-   <intOption key="NumberOfFifoMessageFilters" 
+   <intOption key="NumberOfFifoMessageFilters"
       description="Number of filters for FIFO"
       toolTip="Used to configure number of FIFO filters"
       value="16" step="8" min="0" max="104" />
 
-   <intOption key="NumberOfIndividualMailboxes" 
+   <intOption key="NumberOfIndividualMailboxes"
       description="Number of individual Rx/Tx mailboxes"
       toolTip="Used to configure number individually allocated mailboxes"
       value="16" min="0" max="32" />
@@ -47,16 +47,16 @@
    <template><![CDATA[
        \t//! Whether FIFO is enable
        \tstatic constexpr bool EnableFifo     =  $(EnableFifo);
-       
+
        \t//! Maximum number of Message Buffers
        \tstatic constexpr unsigned MaxNumberOfMessageBuffers     =  $(MaxNumberOfMessageBuffers);
-       
+
        \t//! Maximum number of Message Filters
        \tstatic constexpr unsigned MaxNumberOfFifoMessageFilters =  $(EnableFifo)?$(MaxNumberOfFifoMessageFilters):0;
-       
+
        \t//! Number of Mailbox Buffers
        \tstatic constexpr unsigned NumberOfIndividualMailboxes   =  $(NumberOfIndividualMailboxes);
-       
+
        \t//! Number of FIFO Message Filters
        \tstatic constexpr unsigned NumberOfFifoMessageFilters    =  $(EnableFifo)?$(NumberOfFifoMessageFilters):0;\n\n
    ]]></template>
@@ -64,69 +64,69 @@
    <template><![CDATA[
       \t//! IRQ numbers for hardware
       \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;
-   
+
       \t//! Number of IRQs for hardware
       \tstatic constexpr uint32_t irqCount  = sizeofArray(irqNums);\n\n
    ]]></template>
 
    <!--
-   Patterns for pattern and classHandler 
+   Patterns for pattern and classHandler
      -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
      -  %b replaced with peripheral base name e.g. FTM1 => = FTM
      -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
      -  _IRQHandler is appended to the pattern (only)
    Multiple patterns and classsHandlers may be used separated by ';'
    -->
-   <irqOption key="miscellaneousIrqHandlingMethod"  
+   <irqOption key="miscellaneousIrqHandlingMethod"
       description="Miscellaneous Interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods\n
                Handles: Bus Off, Bus Off Done, Transmit and Receive Warning, Transmit and Receive Error count transition"
-      pattern="^%b%i_ORed$" 
+      pattern="^%b%i_ORed$"
       classHandler="%c%i::irqHandler" />
 
-   <irqOption key="errorIrqHandlingMethod"  
+   <irqOption key="errorIrqHandlingMethod"
       description="Error Interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods\n
                Handles: Bus Error and Bus Error for Fast FD message"
-      pattern="^%b%i_Error$" 
+      pattern="^%b%i_Error$"
       classHandler="%c%i::errorIrqHandler" />
 
-   <irqOption key="wakeupIrqHandlingMethod"  
+   <irqOption key="wakeupIrqHandlingMethod"
       description="Wakeup Interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods\n
                Handles: Wakeup (pretend networking) and Sleep (pretend networking)"
-      pattern="^%b%i_WakeUp$" 
+      pattern="^%b%i_WakeUp$"
       classHandler="%c%i::wakeupIrqHandler" />
 
-   <irqOption key="messagebufferIrqHandlingMethod"  
+   <irqOption key="messagebufferIrqHandlingMethod"
       description="Message Buffer Interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods\n
                Handles: Message buffer events (FIFO and Mailboxes)"
-      pattern="^%b%i_MessageBuffer.*$" 
+      pattern="^%b%i_MessageBuffer.*$"
       classHandler="%c%i::messageBufferIrqHandler" />
 
    <signals/>
-   
-   
+
+
    <!-- Template is added to class within pin_mapping.h -->
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table
        \tstatic constexpr bool irqHandlerInstalled = $(messagebufferIrqHandlingMethod);
-       
+
        \tstatic constexpr int Miscellaneous_IrqNumIndex       = 0;
        \tstatic constexpr int Error_IrqNumIndex               = 1;
        \tstatic constexpr int Wakeup_IrqNumIndex              = 2;
        \tstatic constexpr int MessageBuffer_0_15_IrqNumIndex  = 3;
        \tstatic constexpr int MessageBuffer_16_32_IrqNumIndex = 4;\n\n
    ]]></template>
-       
-   <intOption key="irqLevel" 
+
+   <intOption key="irqLevel"
       description="IRQ Level in NVIC [0-15]"
       toolTip="Sets the priority level used to configure the NVIC\n
                Lower numbers represent higher priorities"
-      value="8" min="0" max="15" 
+      value="8" min="0" max="15"
    />
-   
+
       <template namespace="usbdm"><![CDATA[
       #ifndef USBDM_CAN1_IS_DEFINED
          \t/**
@@ -141,7 +141,7 @@
          \t};
       #endif\n\n
       ]]></template>
-      
+
    <template><![CDATA[
       \t/**
       \t * Get Controller Host Interface input clock frequency
@@ -169,7 +169,7 @@
       \t      return ScgInfo::getSoscDiv2Frequency();
       \t   }
       \t}
-      
+
       \t/**
       \t * Get Protocol Engine input clock frequency
       \t *
@@ -192,7 +192,7 @@
       \tstatic void enableMiscellaneousNvicInterrupts() {
       \t   NVIC_EnableIRQ(Info::irqNums[Info::Miscellaneous_IrqNumIndex]);
       \t}
-      
+
       \t/**
       \t * Enable and set priority of Miscellaneous interrupts in NVIC
       \t * Any pending NVIC interrupts are first cleared.
@@ -202,14 +202,14 @@
       \tstatic void enableMiscellaneousNvicInterrupts(uint32_t nvicPriority) {
       \t   enableNvicInterrupt(Info::irqNums[Info::Miscellaneous_IrqNumIndex], nvicPriority);
       \t}
-      
+
       \t/**
       \t * Disable Miscellaneous interrupts in NVIC
       \t */
       \tstatic void disableMiscellaneousNvicInterrupts() {
       \t   NVIC_DisableIRQ(Info::irqNums[Info::Miscellaneous_IrqNumIndex]);
       \t}
-      
+
       \t/**
       \t * Enable Message Buffer interrupts in NVIC
       \t */
@@ -219,7 +219,7 @@
       \t      NVIC_EnableIRQ(Info::irqNums[Info::MessageBuffer_16_32_IrqNumIndex]);
       \t   }
       \t}
-      
+
       \t/**
       \t * Enable and set priority of Message Buffer interrupts in NVIC
       \t * Any pending NVIC interrupts are first cleared.
@@ -232,7 +232,7 @@
       \t       enableNvicInterrupt(Info::irqNums[Info::MessageBuffer_16_32_IrqNumIndex], nvicPriority);
       \t   }
       \t}
-      
+
       \t/**
       \t * Disable Message Buffer interrupts in NVIC
       \t */
@@ -245,12 +245,12 @@
    ]]></template>
 
    <xi:include href="_clockOption.xml"/>
-      
+
    <projectActionList id = "can_files" >
       <copy source="Project_Headers/can.h"                    target="Project_Headers/can.h"                    overwrite="true"  derived="true" />
       <copy source="Snippets/can-mailbox-example.cpp"         target="Snippets/can-mailbox-example.cpp"         overwrite="true"  derived="true" />
       <copy source="Snippets/can-sw-led-example.cpp"          target="Snippets/can-sw-led-example.cpp"          overwrite="true"  derived="true" />
       <copy source="Snippets/can-fifo-example.cpp"            target="Snippets/can-fifo-example.cpp"            overwrite="true"  derived="true" />
    </projectActionList>
-   
+
 </peripheralPage>

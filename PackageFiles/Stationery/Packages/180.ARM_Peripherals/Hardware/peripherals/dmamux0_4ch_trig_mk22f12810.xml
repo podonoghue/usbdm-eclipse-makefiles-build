@@ -7,7 +7,7 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <aliasOption key="/DMA0/NumChannels" name="NumChannels" constant="true" />
+   <aliasOption key="/DMA0/NumChannels" name="NumChannels" />
 
    <choiceOption key="dma_chcfg0"
       description="Mapping of DMA source (slot) to DMA channel" >

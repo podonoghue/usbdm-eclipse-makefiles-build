@@ -11,6 +11,7 @@
    <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
       <aliasOption key="/OSC0/osc_input_freq" constant="false" />
       <aliasOption key="/OSC0/osc_clock" optional="true" />
+      <aliasOption key="/OSC0/osc_div_erps" optional="true" constant="false" />
       <aliasOption key="/OSC0/oscer_clock" />
       <binaryOption key="mcg_c2_erefs0" condition="mcg_c2_erefs0_present"
          description="External Reference Select"
@@ -37,19 +38,19 @@
    <category name="Clocks" description="Clock Sources"
       toolTip="SLOW_IRC, FAST_IRC, USB_CLKIN, LPO" >
 
-      <intOption key="system_slow_irc_clock"
-         origin="Slow IRC"
-         units="Hz"
-         description="Frequency of Slow Internal Reference [SIRC] Clock"
-         toolTip="Dependent on device and clock Trim. [Typically ~32kHz]"
-         value="32768" />
-
       <intOption key="system_fast_irc_clock"
          origin="Fast IRC"
          units="Hz"
          description="Frequency of Fast Internal Reference [FIRC] Clock"
          toolTip="Dependent on device and clock Trim. [Typically ~4MHz]"
          value="4000000" />
+
+      <intOption key="system_slow_irc_clock"
+         origin="Slow IRC"
+         units="Hz"
+         description="Frequency of Slow Internal Reference [SIRC] Clock"
+         toolTip="Dependent on device and clock Trim. [Typically ~32kHz]"
+         value="32768" />
 
       <aliasOption key="/PMC/system_low_power_clock" />
 
@@ -87,6 +88,134 @@
          <aliasOption key="enableClockConfiguration[%(n)]" constant="false" />
 
          <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" constant="false" />
+
+         <graphic key="MCG graphic[%(n)]"
+            description="MCG clock selection[%(n)]"
+            toolTip="Opens a dialogue to alter MCG configuration" >
+            <graphicItem id="MCG"       key=""                               type="box"         params="5,2, 500,2, 500,330, 5,330, 5,2"  />
+            <graphicItem id="SIM"       key=""                               type="box"         params="520,2, 850,2, 850,740, 300,740, 300,350, 520,350, 520,2"  />
+            <graphicItem id="OSC"       key=""                               type="box"         params="5,350, 280,350, 280,515, 5,515, 5,350"  />
+            <graphicItem id="RTC"       key=""                               type="box"         params="5,535, 280,535, 280,650, 5,650, 5,535"  />
+
+            <graphicItem id="MODE"      key="mcgClockMode[%(n)]"             type="variableBox" params="140,  300,  250, large"       />
+            <graphicItem id="FAST IRC"  key="system_fast_irc_clock"          type="variableBox" params="60,  45,  80, large"       />
+            <graphicItem id=""          key=""                               type="connector"   params="FAST IRC,0, FCRDIV,0"      />
+            <graphicItem id="FCRDIV"    key="mcg_sc_fcrdiv[%(n)]"            type="choice"      params="200, 45, 100, small"       />
+
+            <graphicItem id="SLOW IRC"  key="system_slow_irc_clock"          type="variableBox" params="60,  95,  80, large"       />
+
+            <graphicItem id=""          key=""                               type="connector"   params="FCRDIV,0,IRCS,1"           />
+            <graphicItem id=""          key=""                               type="connector"   params="SLOW IRC,0, IRCS,0"   />
+            <graphicItem id="IRCS"      key="mcg_c2_ircs[%(n)]"              type="mux"         params="340, 55, 2, mirror"        />
+
+            <graphicItem id=""          key=""                               type="connector"   params="IRCS,0, MCGIRCLKx,0"  />
+            <graphicItem id="MCGIRCLKx,h"  key="system_mcgirclk_clock[%(n)]"    type="node"        params="500, 55"  />
+
+            <graphicItem id="FRDIV"     key="mcg_c1_frdiv[%(n)]"             type="choice"      params="70, 155, 70, large"  />
+            <graphicItem id=""          key=""                               type="connector"   params="SLOW IRC,0, IREFS,0, x20,d,y,x"  />
+            <graphicItem id=""          key=""                               type="connector"   params="FRDIV,0, IREFS,1"  />
+            <graphicItem id="IREFS"     key="mcg_c1_irefs[%(n)]"             type="mux"         params="150, 145, 2" />
+            <graphicItem id=""          key=""                               type="connector"   params="IREFS,0, MCGFFCLKx,0, x40,d,y,x"  />
+            <graphicItem id="MCGFFCLKx,h"  key="system_mcgffclk_clock[%(n)]"    type="node"        params="500, 105"  />
+
+            <graphicItem id=""          key=""                               type="connector"   params="IREFS,0, FLL,0, x40,y,x"  />
+            <graphicItem id="FLL"       key="system_mcgfllclk_clock[%(n)]"   type="variableBox" params="260, 145, 80, large" />
+
+            <graphicItem id="PLL"       key="system_mcgpllclk_clock[%(n)]"   type="variableBox" params="260, 195, 80, large" />
+
+            <graphicItem id=""          key=""                               type="connector"   params="FLL,0,    PLLS,0, x30,y,x"  />
+            <graphicItem id=""          key=""                               type="connector"   params="PLL,0,    PLLS,1, x20,y,x"  />
+            <graphicItem id="PLLS"      key="mcg_c6_plls[%(n)]"              type="mux"         params="360, 155, 2" />
+
+            <graphicItem id=""          key=""                               type="connector"   params="IRCS,0, CLKS,1, x0.8,d,y,x"  />
+            <graphicItem id=""          key=""                               type="connector"   params="PLLS,0, CLKS,0"  />
+            <graphicItem id="CLKS"      key="mcg_c1_clks[%(n)]"              type="mux"         params="440, 155, 3" />
+            <graphicItem id=""          key=""                               type="connector"   params="CLKS,0, MCGOUTCLK,0"  />
+            <graphicItem id="MCGOUTCLK" key="system_mcgoutclk_clock[%(n)]"   type="node"        params="500, 155"  />
+
+            <graphicItem id=""          key=""                               type="connector"   params="FLL,0,    MCGFLLCLK,0, x30,d,y,x"  />
+            <graphicItem id="MCGFLLCLK" key="system_mcgfllclk_clock[%(n)]"   type="node"        params="500, 205"  />
+            <graphicItem id=""          key=""                               type="connector"   params="PLL,0,    MCGPLLCLK,0, x20,d,y,x"  />
+            <graphicItem id="MCGPLLCLK" key="system_mcgpllclk_clock[%(n)]"   type="node"        params="500, 245"  />
+
+            <graphicItem id="OSCSEL"    key="mcg_c7_oscsel[%(n)]"            type="mux"         params="400, 300, 3, rot270" />
+            <graphicItem id=""          key=""                               type="connector"   params="OSCSEL,0, PLL,0,   y-20,d,x,x-20,d,y,x"  />
+            <graphicItem id=""          key=""                               type="connector"   params="OSCSEL,0, FRDIV,0, y-20,x,x-20,y,x"  />
+            <graphicItem id=""          key=""                               type="connector"   params="OSCSEL,0, CLKS,2,  y-20,y,x"  />
+
+
+            <graphicItem id="OSC0"          key="/OSC0/osc_clock"                type="variableBox" params="60,  395,  80, large, oe,os"     />
+            <graphicItem id="ERCLKEN,h"     key="/OSC0/osc_cr_erclken"           type="node"        params="120, 425, in,oe"  />
+
+            <graphicItem id=""              key=""                               type="connector"   params="OSC0,0,   OSCCLK,0"  />
+            <graphicItem id=""              key=""                               type="connector"   params="OSC0,0,   ERCLKEN,0, x,d,y"  />
+            <graphicItem id=""              key=""                               type="connector"   params="ERCLKEN,0,   OSCCLK_UNDIVx,0"  />
+
+            <graphicItem id="OSCCLK"        key="/OSC0/osc_clock"                type="node"        params="280, 395"  />
+            <graphicItem id="OSCCLK_UNDIVx,h"  key="/OSC0/oscer_undiv_clock"        type="node"        params="280, 425"  />
+            <graphicItem id=""              key=""                           type="connector"   params="OSCCLK_UNDIVx,0,  OSCCLK_UNDIV,0, x0.3,y,y"  />
+            <graphicItem id="OSCCLK_UNDIV"  key="/OSC0/oscer_clock"          type="node"        params="850, 405"  />
+            <graphicItem id=""              key=""                               type="connector"   params="ERCLKEN,0,   OSC_DIV,0, x10,d,y,x"  />
+            <graphicItem id="OSC_DIV"       key="/OSC0/osc_div_erps"             type="variableBox" params="200, 455,  90, small"       />
+            <graphicItem id=""              key=""                               type="connector"   params="OSC_DIV,0,   OSCERCLKx,0,     x"  />
+            <graphicItem id="OSCERCLKx,h"   key="/OSC0/oscer_clock"              type="node"        params="280, 455"  />
+            <graphicItem id=""              key=""                           type="connector"   params="OSCERCLKx,0,  OSCERCLK,0, x"  />
+            <graphicItem id="OSCERCLK"      key="/OSC0/oscer_undiv_clock"    type="node"        params="850, 455"  />
+            <graphicItem id=""              key="/OSC0/osc32k_clock"             type="connector"   params="OSC0,1,   OSC32KCLK,0, y, x"  />
+            <graphicItem id="OSC32KCLK"     key="/OSC0/osc32k_clock"             type="node"        params="280, 495"  />
+
+            <graphicItem id=""              key=""                           type="connector"   params="OSCCLK,0,  OSCSEL,0, x"  />
+
+
+            <graphicItem id="IRC48M"    key="/SIM/system_irc48m_clock"       type="variableBox" params="60,  700,  80, large"       />
+            <graphicItem id="IRC48M_C1" key=""                               type="connector"   params="IRC48M,0, OSCSEL,2, x"  />
+
+            <graphicItem id=""          key=""                               type="connector"   params="MCGFLLCLK,0,    PLLFLLSEL,0, x120,y"  />
+            <graphicItem id=""          key=""                               type="connector"   params="MCGPLLCLK,0,    PLLFLLSEL,1, x100,y"  />
+            <graphicItem id=""          key=""                               type="connector"   params="IRC48M_C1,3,    PLLFLLSEL,2, y,d,x"  />
+            <graphicItem id="PLLFLLSEL" key="/SIM/sim_sopt2_pllfllsel[%(n)]" type="mux"         params="680, 350, 3" />
+            <graphicItem id=""          key="/SIM/system_peripheral_clock[%(n)]"    type="connector"   params="PLLFLLSEL,0, PER_CLK,0"  />
+            <graphicItem id="PER_CLK"   key="/SIM/system_peripheral_clock[%(n)]"    type="node"      params="850, 350"  />
+
+            <graphicItem id=""          key=""                               type="connector"   params="MCGOUTCLK,0, OUTDIV1,0, x0.75,y"  />
+            <graphicItem id=""          key=""                               type="connector"   params="MCGOUTCLK,0, OUTDIV2,0, x0.75,d,y,d"  />
+            <graphicItem id=""          key=""                               type="connector"   params="MCGOUTCLK,0, OUTDIV3,0, x0.75,y,d"  />
+            <graphicItem id=""          key=""                               type="connector"   params="MCGOUTCLK,0, OUTDIV4,0, x0.75,y"  />
+
+            <graphicItem id="OUTDIV1"    key="/SIM/sim_clkdiv1_outdiv1[%(n)]"     type="choice"      params="750, 155, 100, small"       />
+            <graphicItem id="OUTDIV2"    key="/SIM/sim_clkdiv1_outdiv2[%(n)]"     type="choice"      params="750, 195, 100, small"       />
+            <graphicItem id="OUTDIV3"    key="/SIM/sim_clkdiv1_outdiv3[%(n)]"     type="choice"      params="750, 235, 100, small"       />
+            <graphicItem id="OUTDIV4"    key="/SIM/sim_clkdiv1_outdiv4[%(n)]"     type="choice"      params="750, 275, 100, small"       />
+
+            <graphicItem id=""          key=""                               type="connector"   params="OUTDIV1,0, CORE_CLK,0"  />
+            <graphicItem id=""          key=""                               type="connector"   params="OUTDIV2,0, BUS_CLK,0"  />
+            <graphicItem id=""          key=""                               type="connector"   params="OUTDIV3,0, FLEXBUS_CLK,0"  />
+            <graphicItem id=""          key=""                               type="connector"   params="OUTDIV4,0, FLASH_CLK,0"  />
+
+            <graphicItem id=""          key=""                               type="connector"   params="MCGIRCLKx,0, MCGIRCLK,0"  />
+            <graphicItem id=""          key=""                               type="connector"   params="MCGFFCLKx,0, MCGFFCLK,0"  />
+            <graphicItem id="MCGIRCLK"  key="system_mcgirclk_clock[%(n)]"    type="node"        params="850, 55"  />
+            <graphicItem id="MCGFFCLK"  key="system_mcgffclk_clock[%(n)]"    type="node"        params="850, 105"  />
+
+            <graphicItem id="CORE_CLK"  key="/SIM/system_core_clock[%(n)]"       type="node"      params="850, 155"  />
+            <graphicItem id="BUS_CLK"   key="/SIM/system_bus_clock[%(n)]"        type="node"      params="850, 195"  />
+            <graphicItem id="FLEXBUS_CLK"  key="/SIM/system_flexbus_clock[%(n)]" type="node"      params="850, 235"  />
+            <graphicItem id="FLASH_CLK" key="/SIM/system_flash_clock[%(n)]"      type="node"      params="850, 275"  />
+
+            <graphicItem id="RTC_OSC"   key="/RTC/osc_clock"                 type="variableBox" params="60,  580,  80, large"       />
+            <graphicItem id=""          key=""                               type="connector"   params="RTC_OSC,0,    RTC32K,0, x"  />
+            <graphicItem id="RTC32K"    key="/RTC/rtcclk_gated_clock"        type="node"        params="280, 580"  />
+            <graphicItem id=""          key=""                               type="connector"   params="RTC32K,0,    OSCSEL,1, x"  />
+            <graphicItem id="/32768"    key=""                               type="label"       params="180, 620,  70, small"       />
+            <graphicItem id=""          key=""                               type="connector"   params="RTC_OSC,0,    /32768,0, x20,d,y"  />
+            <graphicItem id=""          key=""                               type="connector"   params="/32768,0,    RTC1Hz,0, x"  />
+            <graphicItem id="RTC1Hz"    key="/RTC/rtc_1hz_clock"             type="node"        params="280, 620"  />
+
+            <graphicItem id="OSC32KSEL"    key="/SIM/sim_sopt1_osc32ksel"    type="mux"         params="700, 550, 3" />
+            <graphicItem id="RTCCLKOUTSEL" key="/SIM/sim_sopt2_rtcclkoutsel" type="mux"         params="700, 640, 2" />
+
+
+         </graphic>
 
          <choiceOption key="mcgClockMode[%(n)]"
             enumStem="McgClockMode"
@@ -217,14 +346,14 @@
                description="Fast Internal Clock [FIRC] Reference Divider"
                toolTip="Selects the amount to divide down the fast internal reference clock\n
                   The FIR clock is available for use as MCGIRCLK or MCGOUTCLK">
-               <choice value="0" ref="system_fast_irc_clock"      name="Divide by 1" isDefault="true" />
-               <choice value="1" ref="(system_fast_irc_clock)/2"   name="Divide by 2" />
-               <choice value="2" ref="(system_fast_irc_clock)/4"   name="Divide by 4" />
-               <choice value="3" ref="(system_fast_irc_clock)/8"   name="Divide by 8" />
-               <choice value="4" ref="(system_fast_irc_clock)/16"  name="Divide by 16" />
-               <choice value="5" ref="(system_fast_irc_clock)/32"  name="Divide by 32" />
-               <choice value="6" ref="(system_fast_irc_clock)/64"  name="Divide by 64" />
-               <choice value="7" ref="(system_fast_irc_clock)/128" name="Divide by 128" />
+               <choice value="0" ref="system_fast_irc_clock"       name="/1" isDefault="true" />
+               <choice value="1" ref="(system_fast_irc_clock)/2"   name="/2" />
+               <choice value="2" ref="(system_fast_irc_clock)/4"   name="/4" />
+               <choice value="3" ref="(system_fast_irc_clock)/8"   name="/8" />
+               <choice value="4" ref="(system_fast_irc_clock)/16"  name="/16" />
+               <choice value="5" ref="(system_fast_irc_clock)/32"  name="/32" />
+               <choice value="6" ref="(system_fast_irc_clock)/64"  name="/64" />
+               <choice value="7" ref="(system_fast_irc_clock)/128" name="/128" />
             </choiceOption>
 
             <intOption key="firc_divided_clock[%(n)]" units="Hz" constant="true" derived="true" />
@@ -320,14 +449,23 @@
                         The resulting frequency must be in the range 31.25 kHz to 39.0625 kHz\n
                         Division factor depends on Clock Range [MGC_C2_RANGE0]\n
                         This option is determined by the Clock Mode and FLL input clock">
-               <choice value="0" name="if RANGE0 = low, divide by 1, else 32" />
-               <choice value="1" name="if RANGE0 = low, divide by 2, else 64" />
-               <choice value="2" name="if RANGE0 = low, divide by 4, else 128" />
-               <choice value="3" name="if RANGE0 = low, divide by 8, else 256" />
-               <choice value="4" name="if RANGE0 = low, divide by 16, else 512" />
-               <choice value="5" name="if RANGE0 = low, divide by 32, else 1024" />
-               <choice value="6" name="if RANGE0 = low, divide by 64, else 1280" />
-               <choice value="7" name="if RANGE0 = low, divide by 128, else 1536" />
+               <choice value="0" name="/1"    enabledBy="mcg_c2_range0[%(n)] == 0" />
+               <choice value="1" name="/2"    enabledBy="mcg_c2_range0[%(n)] == 0" />
+               <choice value="2" name="/4"    enabledBy="mcg_c2_range0[%(n)] == 0" />
+               <choice value="3" name="/8"    enabledBy="mcg_c2_range0[%(n)] == 0" />
+               <choice value="4" name="/16"   enabledBy="mcg_c2_range0[%(n)] == 0" />
+               <choice value="5" name="/32"   enabledBy="mcg_c2_range0[%(n)] == 0" />
+               <choice value="6" name="/64"   enabledBy="mcg_c2_range0[%(n)] == 0" />
+               <choice value="7" name="/128"  enabledBy="mcg_c2_range0[%(n)] == 0" />
+
+               <choice value="0" name="/32"   enabledBy="mcg_c2_range0[%(n)] != 0" />
+               <choice value="1" name="/64"   enabledBy="mcg_c2_range0[%(n)] != 0" />
+               <choice value="2" name="/128"  enabledBy="mcg_c2_range0[%(n)] != 0" />
+               <choice value="3" name="/256"  enabledBy="mcg_c2_range0[%(n)] != 0" />
+               <choice value="4" name="/512"  enabledBy="mcg_c2_range0[%(n)] != 0" />
+               <choice value="5" name="/1024" enabledBy="mcg_c2_range0[%(n)] != 0" />
+               <choice value="6" name="/1280" enabledBy="mcg_c2_range0[%(n)] != 0" />
+               <choice value="7" name="/1536" enabledBy="mcg_c2_range0[%(n)] != 0" />
             </choiceOption>
 
             <intOption key="fllInputFrequency[%(n)]"

@@ -4,6 +4,14 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
 
+   <constant key="MCGOUTCLK_max" value="150MHz, 120MHz,     4MHz"   type="int"    hidden="false"/>
+   <constant key="I2S_max"       value=" 75MHz,  60MHz,  12.5MHz"   type="int"    hidden="false"/>
+   <constant key="SDHC_max"      value="150MHz, 120MHz,     4MHz"   type="int"    hidden="false"/>
+   <constant key="LPUART_max"    value=" 75MHz,  75MHz,    16MHz"   type="int"    hidden="false"/>
+   <constant key="FLEXIO_max"    value="150MHz,  75MHz,    16MHz"   type="int"    hidden="false"/>
+   <constant key="TPM_max"       value=" 75MHz,  75MHz,    16MHz"   type="int"    hidden="false"/>
+   <constant key="QSPI_max"      value="100MHz, 100MHz,     4MHz"   type="int"    hidden="false"/>
+
    <xi:include href="_default_instance.xml"/>
 
    <xi:include href="_simCommon.xml"/>
@@ -276,7 +284,7 @@
                toolTip="Source for the %(NAME) transmit data">
                <choice value="0" name="Tx pin" isDefault="true"             enum="Direct" />
                <choice value="1" name="Tx pin modulated by TPM1 channel 0"  enum="ModulatedByTpm1Ch0" />
-               <choice value="2" name="Tx pin modulated by TPM2 channel 0"  enum="ModulatedByTpm2Ch0" conditon="/TPM2/$present" />
+               <choice value="2" name="Tx pin modulated by TPM2 channel 0"  enum="ModulatedByTpm2Ch0" condition="/TPM2/$present" />
             </choiceOption>
          </for>
       </for>

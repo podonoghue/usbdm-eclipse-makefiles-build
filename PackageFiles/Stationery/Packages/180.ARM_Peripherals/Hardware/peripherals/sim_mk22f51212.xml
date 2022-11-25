@@ -4,7 +4,15 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
 
+   <constant key="MCGOUTCLK_max" value="150MHz, 120MHz,     4MHz"   type="int"    hidden="false"/>
+   <constant key="I2S_max"       value=" 25MHz,  25MHz,  12.5MHz"   type="int"    hidden="false"/>
+   <constant key="LPUART_max"    value="100MHz, 100MHz,    16MHz"   type="int"    hidden="false"/>
+
    <xi:include href="_default_instance.xml"/>
+
+   <constant key="/SIM/llwu_device_list"
+      description="LLWU Wakeup sources"
+      value="LPTMR0;CMP0;CMP1;;;RTC_Alarm;;RTC_Seconds" />
 
    <xi:include href="_simCommon.xml"/>
 
@@ -494,7 +502,7 @@
                description="LPUART Clock frequency"
                toolTip="Frequency of clock to LPUART"
                value="0"
-               max="75MHz"/>
+               max="=LPUART_max[0]"/>
 
             <choiceOption key="sim_sopt2_flexiosrc[%(n)]" condition="sim_sopt2_flexiosrc_present"
                enumStem="SimFlexioClockSource"

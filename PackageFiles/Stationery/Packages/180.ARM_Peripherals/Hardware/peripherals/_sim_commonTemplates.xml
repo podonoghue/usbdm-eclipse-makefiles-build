@@ -13,12 +13,12 @@
    <choiceOption key="/PCR/nvic_irqLevel"
       templateKey="/PCR/nvicPriority"
       enumStem="NvicPriority"
-      enumType="uint8_t"
+      enumType="int8_t"
       valueFormat="%s"
       description="IRQ priority levels"
       toolTip="Priority level used to configure the NVIC\n
                Subset of available levels">
-      <choice name="Not Installed"  value="(uint8_t)255"                  enum="NotInstalled" />
+      <choice name="Not Installed"  value="(int8_t)255"                  enum="NotInstalled" />
       <choice name="VeryLow"        value="(1&lt;&lt;__NVIC_PRIO_BITS)-1" enum="VeryLow"      />
       <choice name="Low"            value="(NvicPriority_VeryLow*5/6)"    enum="Low"          />
       <choice name="Midlow"         value="(NvicPriority_VeryLow*4/6)"    enum="Midlow"       />

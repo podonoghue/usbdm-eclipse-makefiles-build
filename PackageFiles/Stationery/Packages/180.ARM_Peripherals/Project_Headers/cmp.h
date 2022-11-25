@@ -42,7 +42,7 @@ namespace USBDM {
  * using CmpPositiveInput = Cmp::Pin<4>;
  *
  * // Callback to handle comparator
- * void cmpCallback(CmpStatus status) {
+ * void cmpCallback(const CmpStatus &status) {
  *    switch (status.event) {
  *       case CmpEvent_Rising  : console.write("Cmp rising, state = ",  status.state); break;
  *       case CmpEvent_Falling : console.write("Cmp falling, state = ", status.state); break;
@@ -276,29 +276,7 @@ $(/CMP/InitMethod: // /CMP/InitMethod not found)
       configureAllPins();
    }
 
-   /**
-    * Enable comparator output pin as output.\n
-    * Pin control parameters default to values usually appropriate for the function being used.\n
-    * The clock to the port will be enabled before changing the PCR.
-    *
-    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
-    * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
-    * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
-    */
-   static void setOutput(
-         PinDriveStrength  pinDriveStrength  = OutputPin::defaultPcrValue,
-         PinDriveMode      pinDriveMode      = OutputPin::defaultPcrValue,
-         PinSlewRate       pinSlewRate       = OutputPin::defaultPcrValue
-         ) {
-
-      CheckOutputIsMapped<Info::outputPin>::check();
-
-      // Enable CMP_OUT
-      cmp->CR1 = cmp->CR1 | CMP_CR1_OPE_MASK;
-
-      // Map CMP_OUT to pin
-      OutputPin::setPCR(pinDriveStrength|pinDriveMode|pinSlewRate);
-   }
+$(/CMP/set_output: // /CMP/set_output not found)
 
    /*                                                             CmpFilterSamples cmpFilterSamplePeriod
     *                                        CR1.EN CR1.WE CR1.SE CR0.FILTER_CNT   FPR.FILT_PER

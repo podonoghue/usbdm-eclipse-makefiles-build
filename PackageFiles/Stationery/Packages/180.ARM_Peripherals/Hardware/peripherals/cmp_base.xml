@@ -151,8 +151,8 @@
 
    <!--  Filtering and Sampling -->
    <stringOption key="Sampling"
-      value="------- Sampling Configuration -------"
-      description="Sampling"
+      value="------- Filtering and Sampling -------"
+      description="Filtering and Sampling"
       constant="true"/>
 
    <binaryOption key="secondsSupport"
@@ -168,38 +168,41 @@
       valueFormat="%s"
       enumStem="CmpFilterMode"
       description="Comparator Filtering Mode"
-      toolTip="Mode 2a/b \n
-               CMPO is not subject to external sampling or filtering. \n
+      toolTip="Disabled\n
+               Comparator is non-functional and consumes no power.\n
+               CMPO is 0 in this mode.\n
+               \n
+               Mode 2a/b - Continuous mode\n
+               CMPO is not subject to sampling or filtering. \n
                Both window control and filter blocks are completely bypassed.  \n
                SCR[COUT] is updated continuously.  \n
                The path from comparator input pins is operating in combinational unclocked mode. \n
                \n
-               Mode 3a/b \n
-               CMPO is not subject to external sampling or filtering.  \n
+               Mode 3a/b - Sampled, Non-Filtered mode\n
+               CMPO is not subject to sampling or filtering.  \n
                Window control is bypassed. The filter block operates as a simple Sample &amp; Hold \n
                3a/b selects between clock sources for the Sample &amp; Hold \n
-               In 3b FILT_PER act a prescaler for the internal Sample &amp; Hold clock \n
+               In 3a the external window/sample input is used to clock the Sample &amp; Hold clock \n
+               In 3b FILT_PER acts as a prescaler for bus clock driving the Sample &amp; Hold clock \n
                \n
-               Mode 4a/b \n
-               As for 3a/b but the filter is enabled rather than acting as a S&amp;H\n
+               Mode 4a/b - Sampled, Filtered mode\n
+               As for 3a/b but the filter is enabled (FILTER_CNT>1) rather than acting as a simple S&amp;H\n
                \n
-               Mode 5a/b \n
-               The comparator output is qualified by an external window signal. \n
-               The window control operates to hold values when not enabled. \n
-               \n
-               Mode 5a/b \n
+               Mode 5a/b - Windowed mode\n
                The comparator output is qualified by an external window signal. \n
                When enabled, the comparator output is clocked by the bus clock and held when not enabled. \n
+               This introduces up to 1 clock delay.\n
                \n
-               Mode 6 \n
+               Mode 6 - Windowed/Resampled mode\n
                The comparator output is qualified by an external window signal. \n
                When enabled, the comparator output is clocked by the bus clock and then resampled at a \n
                rate determined by the FILT_PER to generate COUT. \n
                \n
-               Mode 7 \n
+               Mode 7 - Windowed/Filtered mode\n
                The comparator output is qualified by an external window signal. \n
                When enabled, the comparator output is clocked by the bus clock and then filtered at a \n
-               rate determined by the FILT_PER to generate COUT.">
+               sample rate determined by the FILT_PER to generate COUT.\n
+               FILTER_CNT determines the filter sample count (width)">
       <!--                                                                                            cr1_en; cr1_we; cr1_se;filter_cnt;fpr_filt_per  -->
       <choice value="0" name="1    Disabled"                         enum="Disabled"             ref="false ; false ; false ;     0    ;     0      "  />
       <choice value="1" name="2a/b Continuous"                       enum="Continuous"           ref="true  ; false ; false ;     0    ;     0      "  />
@@ -251,6 +254,30 @@
       <choice value="1" name="External clock" enum="External" isDefault="true" />
    </binaryOption>
 
+   <intOption key="cmp_fpr_filt_per"
+      valueFormat="%s_ticks"
+      enabledBy="(cmp_filter==3)||(cmp_filter==5)||(cmp_filter>=7)"
+      description="Filter Sample Period in ticks"
+      toolTip="Specifies the sampling period, in clock cycles, of the comparator output filter \n
+               This has no effect if SE=1. In that case, the external SAMPLE signal is used to \n
+               determine the sampling period."
+      typeName="const Ticks &amp;"
+      disabledValue="0"
+      value="1" min="1" max="255"/>
+
+   <floatOption key="cmp_fpr_filt_period"
+      enabledBy="cmp_filter>0"
+      ref="input_clock#(1.0*cmp_fpr_filt_per)/input_clock"
+      valueFormat="%s_seconds"
+      typeName="const Seconds &amp;"
+      description="Filter Sample Period in seconds"
+      toolTip="The calculated sampling period of the comparator output filter \n
+               This has no effect if SE=1. In that case, the external SAMPLE signal is used to \n
+               determine the sampling period."
+      derived="true"
+      constant="true"
+      value="1k" min="0" units="s" />
+
    <intOption key="cmp_cr0_filter_cnt"
       unlockedBy="(cmp_filter==4)||(cmp_filter==5)||(cmp_filter==8)"
       enabledBy="((cmp_filter>=2)&amp;&amp;(cmp_filter&lt;=5))||(cmp_filter&gt;=7)"
@@ -279,29 +306,16 @@
       <choice value="7" name="7 samples must agree" enum="7"              />
    </choiceOption>
 
-   <intOption key="cmp_fpr_filt_per"
-      valueFormat="%s_ticks"
-      enabledBy="(cmp_filter==3)||(cmp_filter==5)||(cmp_filter>=7)"
-      description="Filter Sample Period in ticks"
-      toolTip="Specifies the sampling period, in clock cycles, of the comparator output filter \n
-               This has no effect if SE=1. In that case, the external SAMPLE signal is used to \n
-               determine the sampling period."
-      typeName="const Ticks &amp;"
-      disabledValue="0"
-      value="1" min="1" max="255"/>
-
-   <floatOption key="cmp_fpr_filt_period"
+   <floatOption key="cmp_fpr_filt_interval"
       enabledBy="cmp_filter>0"
-      ref="input_clock#(1.0*cmp_fpr_filt_per)/input_clock"
+      ref="cmp_fpr_filt_period*cmp_cr0_filter_cnt"
       valueFormat="%s_seconds"
       typeName="const Seconds &amp;"
-      description="Filter Sample Period in seconds"
-      toolTip="Specifies the sampling period of the comparator output filter \n
-               This has no effect if SE=1. In that case, the external SAMPLE signal is used to \n
-               determine the sampling period."
+      description="Filter Sample Interval in seconds"
+      toolTip="The calculated interval of the comparator output filter (sample period*number of samples)."
       derived="true"
       constant="true"
-      value="1k" min="0" units="s" />
+      units="s" />
 
    <choiceOption key="cmp_cr1_mode"
       hidden="true"
@@ -313,6 +327,60 @@
       <choice value="1,0" name="Sampling mode"  enum="Sampling" />
       <choice value="0,1" name="Windowing mode" enum="Windowed" />
    </choiceOption>
+
+   <!--   ========== Init class =============================== -->
+
+   <setTemplate
+      variables="/GPIOA/port_pcr_dse,/GPIOA/port_pcr_ode,/GPIOA/port_pcr_sre"
+      defaultParamValue="OutputPin::defaultPcrValue"
+      namespace="all"
+      key="/CMP/set_output"
+      discardRepeats="true" ><![CDATA[
+      \t/**
+      \t * @brief
+      \t * Enable comparator output pin as output.
+      \t * Mux value is set appropriately for the pin function being used.
+      \t * The clock to the port will be enabled before changing the PCR.
+      \t *
+      \t * @param pcrValue PCR value to use
+      \t *
+      \t */
+      \tstatic void setOutput(PcrValue pcrValue) {
+      \t   CheckOutputIsMapped<Info::outputPin>::check();
+      \t
+      \t   // Enable CMP_OUT
+      \t   cmp->CR1 = cmp->CR1 | CMP_CR1_OPE_MASK;
+      \t
+      \t   // Map CMP_OUT to pin
+      \t   OutputPin::setPCR(pcrValue);
+      \t}
+      \t
+      \t/**
+      \t * @brief
+      \t * Enable comparator output pin as output.\n
+      \t * The Pin Control Register Attributes are set to the default values determined by Configure.usbdmProject.
+      \t * The clock to the port will be enabled before changing the PCR.
+      \t */
+      \tstatic void setOutput() {
+      \t   setOutput(OutputPin::defaultPcrValue.value);
+      \t}
+      \t
+      \t/**
+      \t * @brief
+      \t * Set subset of Pin Control Register Attributes associated with output direction
+      \t *
+      \t * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
+      \t * The clock to the port will be enabled before changing the PCR.
+      \t *
+         %comments
+      \t */
+      \tstatic void setOutput(
+            %params)  {
+      \t
+      \t   setOutput(%paramExpression);
+      \t}\n
+   ]]></setTemplate>
+
 
    <!--   ========== Init class =============================== -->
 
@@ -329,6 +397,7 @@
       \t * @code
       \t * static const $(_class)::Init init {
       \t *
+      \t *   // General setup
       \t *   CmpEnable_Enabled ,          // Comparator Enable - Comparator is enabled
       \t *   CmpMode_Direct ,             // Operating mode - Direct
       \t *   CmpTrigger_Enabled ,         // Trigger Mode Enable - Trigger mode is enabled
@@ -337,6 +406,8 @@
       \t *   CmpOutput_Direct ,           // Comparator output pin source - Direct (unfiltered)
       \t *   CmpHysteresis_Level_2 ,      // Comparator hard block hysteresis control - Level 2
       \t *   CmpDma_Disabled ,            // DMA Enable Control - Disabled
+      \t *
+      \t *   // Interrupt handling - must be in this order
       \t *   CmpEvent_OnFalling ,         // Action on transition - Falling edge
       \t *   cmpCallback,                 // Call-back to execute on event (if interrupts are enabled)
       \t *
@@ -350,8 +421,8 @@
       \t *   31 ,                         // DAC level
       \t *
       \t *   // Inputs
-      \t *   cmp0Input_D7.plusPin ,     // Plus Input Mux Control - D7
-      \t *   Cmp0Input_D21::minusPin,   // Minus Input Mux Control - D21
+      \t *   cmp0Input_D7.plusPin ,       // Plus Input Mux Control - D7
+      \t *   Cmp0Input_D21::minusPin,     // Minus Input Mux Control - D21
       \t * };
       \t *
       \t * // Initialise $(_class) from values specified above

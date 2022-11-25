@@ -9,15 +9,15 @@ Devices using this peripheral:
    <xi:include href="_default_instance.xml"/>
 
    <!-- Indicates RTC/OSC0 share XTAL/EXTAL pins -->
-   <constant key="rtcSharesPins" value="true"  derived="true"/>
+   <constant key="rtcSharesPins" value="true" />
    
    <!-- Oscillator used for OSC0 -->
-   <constant key="osc0_peripheral"   value="/OSC0"    derived="true"/>
+   <constant key="osc0_peripheral"   value="/OSC0"   />
    
    <!-- No OSC1, RTC uses external pin or OSC0 in low range (OSC32KCLK) -->
    
    <!-- RTC clock in (EXTAL32K) -->
-   <constant key="rtc_clkin"         value="/RTC/rtcclkin_clock" derived="true"/>
+   <constant key="rtc_clkin"         value="/RTC/rtcclkin_clock"/>
    
    <category name="SOPT1" description="RTC signals">
       <choiceOption key="sim_sopt1_osc32ksel" 
@@ -806,8 +806,7 @@ Devices using this peripheral:
         description="Clock configurations" 
         toolTip="Clock configurations for different run modes" >
       
-      <aliasOption key="/MCG/ClockConfig[]"
-        constant="true"/>
+      <aliasOption key="/MCG/ClockConfig[]" />
       
       <choiceOption key="sim_sopt2_pllfllsel[]"
          description="Peripheral Clock select"
