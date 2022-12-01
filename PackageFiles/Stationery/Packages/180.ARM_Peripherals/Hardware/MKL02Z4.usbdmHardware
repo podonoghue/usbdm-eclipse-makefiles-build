@@ -184,6 +184,14 @@
       </peripheral>
       <peripheral baseName="OSC"      instance="0"        version="osc0_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
+         <param name="$present"     key="/OSC0/$present" value="true" />
+         <param name="osc_cr_erclken_present" key="/OSC0/osc_cr_erclken_present" value="true" />
+         <param name="osc_cr_erefsten_present" key="/OSC0/osc_cr_erefsten_present" value="true" />
+         <param name="osc_cr_sc16p_present" key="/OSC0/osc_cr_sc16p_present" value="true" />
+         <param name="osc_cr_sc2p_present" key="/OSC0/osc_cr_sc2p_present" value="true" />
+         <param name="osc_cr_sc4p_present" key="/OSC0/osc_cr_sc4p_present" value="true" />
+         <param name="osc_cr_sc8p_present" key="/OSC0/osc_cr_sc8p_present" value="true" />
+         <param name="osc_cr_scp_present" key="/OSC0/osc_cr_scp_present" value="true" />
       </peripheral>
       <peripheral baseName="PMC"      instance=""         version="pmc_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPmc" />

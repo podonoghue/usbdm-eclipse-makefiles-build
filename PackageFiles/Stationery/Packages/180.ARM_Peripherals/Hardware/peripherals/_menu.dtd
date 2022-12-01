@@ -59,14 +59,16 @@
 
 <!ELEMENT graphic ((graphicItem)*) >
    <!ATTLIST graphic  key             CDATA        #REQUIRED>
+   <!ATTLIST graphic  var             CDATA        #IMPLIED>
    <!ATTLIST graphic  description     CDATA        #IMPLIED>
    <!ATTLIST graphic  toolTip         CDATA        #IMPLIED>
 
 <!ELEMENT graphicItem EMPTY >
-   <!ATTLIST graphicItem  key             CDATA        #REQUIRED>
-   <!ATTLIST graphicItem  params          CDATA        #REQUIRED>
-   <!ATTLIST graphicItem  id              CDATA        #REQUIRED>
    <!ATTLIST graphicItem  type            CDATA        #REQUIRED>
+   <!ATTLIST graphicItem  params          CDATA        #REQUIRED>
+   <!ATTLIST graphicItem  var             CDATA        #IMPLIED>
+   <!ATTLIST graphicItem  id              CDATA        #IMPLIED>
+   <!ATTLIST graphicItem  edit            CDATA        #IMPLIED>
 
 
 <!ELEMENT categoryOption ((%gui_items;|template)*) >
@@ -301,6 +303,7 @@
    <!ATTLIST choiceOption valueFormat         CDATA        #IMPLIED> <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
    <!ATTLIST choiceOption enumText            CDATA        #IMPLIED> <!-- Text to add to enum generated from choices -->
    <!ATTLIST choiceOption disabledValue       CDATA        #IMPLIED>
+   <!ATTLIST choiceOption errorIf             CDATA        #IMPLIED> <!-- Set as error based on expression -->
    <!ATTLIST choiceOption enabledBy           CDATA        #IMPLIED> <!-- Enabled by an expression -->
    <!ATTLIST choiceOption unlockedBy          CDATA        #IMPLIED> <!-- Unlocked by an expression -->
    <!ATTLIST choiceOption ref                 CDATA        #IMPLIED> <!-- Variable this variable depends on -->

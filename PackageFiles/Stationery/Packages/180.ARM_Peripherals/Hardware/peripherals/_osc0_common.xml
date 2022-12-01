@@ -14,16 +14,7 @@
       toolTip="Frequency of external crystal or clock on XTAL/EXTAL"
       value="8000000" />
 
-   <aliasOption key="/MCG/mcg_c2_erefs0" constant="false" />
-
-   <binaryOption key="osc_cr_erclken"
-      enumStem="OscErClkEn"
-      description="External Reference Enable"
-      toolTip="Enables the OSC clock [OSCERCLK] for use by peripherals\n
-               The oscillator will also be enabled if used by MCG">
-      <choice value="0" name="Disabled" enum="Disabled"  />
-      <choice value="1" name="Enabled"  enum="Enabled"   isDefault="true" />
-   </binaryOption>
+   <aliasOption key="/MCG/oscMode" constant="false" />
 
    <intOption key="osc_clock"
       constant="true"
@@ -33,6 +24,15 @@
       toolTip="Frequency of oscillator or external clock"
       value="8000000"
       disabledValue="0" />
+
+   <binaryOption key="osc_cr_erclken"
+      enumStem="OscErClkEn"
+      description="External Reference Enable"
+      toolTip="Enables the OSC clock [OSCERCLK] for use by peripherals\n
+               The oscillator will also be enabled if used by MCG">
+      <choice value="0" name="Disabled" enum="Disabled"  />
+      <choice value="1" name="Enabled"  enum="Enabled"   isDefault="true" />
+   </binaryOption>
 
    <choiceOption key="oscillatorRange"
       derived="true"
@@ -70,17 +70,39 @@
    </choiceOption>
 
    <binaryOption key="osc_cr_erefsten"
+      enabledBy="osc_cr_erclken"
       description="External Reference Stop Enable"
       toolTip="Determines if external reference clock is enabled in Stop mode" >
       <choice value="0" name="Disabled in Stop mode" />
       <choice value="1" name="Enabled in Stop mode" />
    </binaryOption>
 
-   <aliasOption key="oscer_undiv_clock"  optional="true" />
+   <if  condition="osc_div_erps_present">
+      <intOption key="oscer_undiv_clock"
+         enabledBy="osc_cr_erclken"
+         ref="osc_clock"
+         derived="true"
+         units="Hz"
+         description="Oscillator clock to some peripherals [OSCERCLK_UNDIV]"
+         toolTip="Generated from OSCCLK without division"
+         value="8000000"
+         constant="true"
+         disabledValue="0" />
 
-   <aliasOption key="osc_div_erps"  optional="true" constant="false" />
+      <choiceOption key="osc_div_erps"
+         enabledBy="osc_cr_erclken"
+         enumStem="OscErClkDiv"
+         description="External clock output [OSCERCLK] prescaler"
+         toolTip="Division for the External Clock [OSCERCLK] output" >
+         <choice value="0"  name="/1" enum="By1"  isDefault="true" />
+         <choice value="1"  name="/2" enum="By2" />
+         <choice value="2"  name="/4" enum="By4" />
+         <choice value="3"  name="/8" enum="By8" />
+      </choiceOption>
 
-   <intOption key="oscer_clock"
+      <intOption key="oscer_clock"
+         enabledBy="osc_cr_erclken"
+         ref="(osc_clock)/(1&lt;&lt;osc_div_erps)"
          derived="true"
          units="Hz"
          description="Oscillator clock [OSCERCLK]"
@@ -89,8 +111,23 @@
          value="8000000"
          disabledValue="0"
          constant="true" />
+   <else />
+      <intOption key="oscer_clock" condition="!osc_div_erps_present"
+         enabledBy="osc_cr_erclken"
+         ref="osc_clock"
+         derived="true"
+         units="Hz"
+         description="Oscillator clock [OSCERCLK]"
+         toolTip="Clock available to some peripherals"
+         origin="OSC0 gated by ERCLKEN"
+         value="8000000"
+         disabledValue="0"
+         constant="true" />
+   </if>
 
    <intOption key="osc32k_clock"
+         enabledBy="(osc_input_freq&gt;=32000)&amp;&amp;(osc_input_freq&lt;=40000), XTAL frequency unsuitable"
+         ref="osc_clock"
          derived="true"
          units="Hz"
          description="Oscillator low range 32K clock [OSC32KCLK]"

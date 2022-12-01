@@ -243,9 +243,9 @@
    \tstatic constexpr uint32_t sdhcExternalClock=$(system_sdhc_clockin);\n\n
    ]]></template>
 
-   <template variables="system_irc48m_clock" ><![CDATA[
+   <template variables="system_irc48m_clock[]" ><![CDATA[
    \t/// %description
-   \tstatic constexpr uint32_t irc48mClock=$(system_irc48m_clock);\n\n
+   \tstatic constexpr uint32_t irc48mClock=$(system_irc48m_clock[]);\n\n
    ]]></template>
 
 <!-- ========== SOPT1 =============================== -->
