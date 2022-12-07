@@ -69,6 +69,7 @@
    <!ATTLIST graphicItem  var             CDATA        #IMPLIED>
    <!ATTLIST graphicItem  id              CDATA        #IMPLIED>
    <!ATTLIST graphicItem  edit            CDATA        #IMPLIED>
+   <!ATTLIST graphicItem  condition       CDATA        #IMPLIED>
 
 
 <!ELEMENT categoryOption ((%gui_items;|template)*) >

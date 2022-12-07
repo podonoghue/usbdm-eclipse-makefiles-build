@@ -37,13 +37,12 @@
    <choiceOption key="oscillatorRange"
       derived="true"
       constant="true"
-      description="Frequency Range Select"
-      toolTip="This range value is determined from the Oscillator frequency.\n
-               It some cases it will be unused and a range value suited to the FLL is used instead">
+      description="Oscillator Frequency Range Select"
+      toolTip="This range value is determined from the Crystal frequency">
       <choice value="0" name="Low range" />
       <choice value="1" name="High range" />
       <choice value="2" name="Very High range" />
-      <choice value="0" name="Unconstrained by Oscillator" />
+      <choice value="3" name="Unconstrained by Oscillator" isDefault="true" />
    </choiceOption>
 
    <aliasOption key="/MCG/mcg_c2_hgo0" constant="false" optional="true"/>

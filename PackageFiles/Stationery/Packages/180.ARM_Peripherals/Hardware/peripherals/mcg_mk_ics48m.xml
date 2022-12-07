@@ -5,8 +5,16 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Multipurpose Clock Generator">
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG" dim="/SIM/numberOfClockSettings" >
+      class="net.sourceforge.usbdm.deviceEditor.validators.FrdivValidator" dim="/SIM/numberOfClockSettings" >
+   </validate>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.FllValidator" dim="/SIM/numberOfClockSettings" >
       <param type="long" value="3"         />    <!-- mcg_c4_drst_drs max -->
+   </validate>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PllValidator" dim="/SIM/numberOfClockSettings" >
       <param type="long" value="2000000"   />    <!-- pllInMin     -->
       <param type="long" value="4000000"   />    <!-- pllInMax     -->
       <param type="long" value="48000000"  />    <!-- pllOutMin    -->
@@ -17,7 +25,11 @@
       <param type="long" value="55"        />    <!-- vDivMax      -->
       <param type="long" value="1"         />    <!-- pllPostDiv   available as pll_post_divider -->
    </validate>
-   
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG" dim="/SIM/numberOfClockSettings" >
+   </validate>
+
    <xi:include href="mcg_base.xml"/>
 
 </peripheralPage>

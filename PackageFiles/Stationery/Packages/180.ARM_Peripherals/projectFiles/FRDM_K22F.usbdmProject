@@ -91,11 +91,14 @@
    <item key="$signal$ADC0_SE19_codeIdentifier"            value="Analogue_A7" />
    <item key="$signal$ADC0_SE23_codeIdentifier"            value="Analogue_A11" />
    <item key="$signal$ADC0_SE26_codeIdentifier"            value="TempSensor" />
+   <item key="$signal$ADC0_SE26_descriptionSetting"        value="Temperature Sensor" />
    <item key="$signal$ADC0_SE27_codeIdentifier"            value="Bandgap" />
-   <item key="$signal$ADC0_SE3_codeIdentifier"             value="Analogue_A8/LightSensor" />
+   <item key="$signal$ADC0_SE3_codeIdentifier"             value="Analogue_A8/LightSensor/LightSensor_ADC0" />
+   <item key="$signal$ADC0_SE3_descriptionSetting"         value="Light Sensor" />
    <item key="$signal$ADC0_SE4b_codeIdentifier"            value="Analogue_A3" />
    <item key="$signal$ADC0_SE8_codeIdentifier"             value="Analogue_A0" />
    <item key="$signal$ADC0_SE9_codeIdentifier"             value="Analogue_A1" />
+   <item key="$signal$ADC1_SE0_codeIdentifier"             value="LightSensor_ADC1" />
    <item key="$signal$ADC1_SE7b_descriptionSetting"        value="RF_ce" />
    <item key="$signal$CLKOUT_codeIdentifier"               value="clkout" />
    <item key="$signal$EXTAL0_descriptionSetting"           value="8MHz Crystal" />
@@ -107,10 +110,10 @@
    <item key="$signal$FTM0_CH7_codeIdentifier"             value="RGB_Green_Pwm" />
    <item key="$signal$GPIOA_12_codeIdentifier"             value="Digital_D18" />
    <item key="$signal$GPIOA_13_codeIdentifier"             value="Digital_D17" />
-   <item key="$signal$GPIOA_1_codeIdentifier"              value="RGB_Red" />
-   <item key="$signal$GPIOA_1_descriptionSetting"          value="Red LED" />
-   <item key="$signal$GPIOA_2_codeIdentifier"              value="RGB_Green" />
-   <item key="$signal$GPIOA_2_descriptionSetting"          value="Green LED" />
+   <item key="$signal$GPIOA_1_codeIdentifier"              value="RGB_Red/Digital_D9" />
+   <item key="$signal$GPIOA_1_descriptionSetting"          value="Red LED on D9" />
+   <item key="$signal$GPIOA_2_codeIdentifier"              value="RGB_Green/Digital_D3" />
+   <item key="$signal$GPIOA_2_descriptionSetting"          value="Green LED on D3" />
    <item key="$signal$GPIOA_4_codeIdentifier"              value="Digital_D4" />
    <item key="$signal$GPIOA_5_codeIdentifier"              value="Digital_D16" />
    <item key="$signal$GPIOB_0_codeIdentifier"              value="Digital_A0" />
@@ -137,7 +140,7 @@
    <item key="$signal$GPIOD_3_codeIdentifier"              value="Digital_D1" />
    <item key="$signal$GPIOD_4_codeIdentifier"              value="Digital_D10" />
    <item key="$signal$GPIOD_5_codeIdentifier"              value="RGB_Blue" />
-   <item key="$signal$GPIOD_5_descriptionSetting"          value="Blue LED" />
+   <item key="$signal$GPIOD_5_descriptionSetting"          value="Blue LED on D13" />
    <item key="$signal$GPIOD_6_codeIdentifier"              value="Digital_D11" />
    <item key="$signal$GPIOD_7_codeIdentifier"              value="Digital_D12" />
    <item key="$signal$I2C1_SCL_descriptionSetting"         value="I2C_SCL (D15)" />
@@ -172,38 +175,49 @@
    <item key="/LLWU/llwu_filt2_filtsel"                    value="0" />
    <item key="/LPTMR0/lptmr_cmr_compare"                   value="1" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_RUN_PEE_80MHz" />
-   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_VLPR_BLPE_4MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_VLPR_BLPI_4MHz" />
    <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_HSRUN_PEE_120MHz" />
    <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_RUN_FEE_80MHz" />
-   <item key="/MCG/fllOutputFrequency[0]"                  value="80000000" />
-   <item key="/MCG/fllOutputFrequency[1]"                  value="80000000" />
-   <item key="/MCG/fllOutputFrequency[2]"                  value="80000000" />
-   <item key="/MCG/fllOutputFrequency[3]"                  value="80000000" />
    <item key="/MCG/mcgClockMode[0]"                        value="7" />
-   <item key="/MCG/mcgClockMode[1]"                        value="5" />
+   <item key="/MCG/mcgClockMode[1]"                        value="3" />
    <item key="/MCG/mcgClockMode[2]"                        value="7" />
    <item key="/MCG/mcgClockMode[3]"                        value="1" />
+   <item key="/MCG/mcg_c1_frdiv[3]"                        value="3" />
+   <item key="/MCG/mcg_c2_range0[0]"                       value="1" />
+   <item key="/MCG/mcg_c2_range0[1]"                       value="1" />
+   <item key="/MCG/mcg_c2_range0[2]"                       value="1" />
+   <item key="/MCG/mcg_c2_range0[3]"                       value="1" />
    <item key="/MCG/pll0OutputFrequency[0]"                 value="80000000" />
+   <item key="/MCG/system_mcgfllclk_clock[0]"              value="0" />
+   <item key="/MCG/system_mcgfllclk_clock[1]"              value="0" />
+   <item key="/MCG/system_mcgfllclk_clock[2]"              value="0" />
+   <item key="/MCG/system_mcgfllclk_clock[3]"              value="80000000" />
+   <item key="/OSC0/osc_cr_erefsten"                       value="true" />
    <item key="/RTC/rtc_cr_osce"                            value="true" />
-   <item key="/SIM/sim_clkdiv1_outdiv1[1]"                 value="2" />
-   <item key="/SIM/sim_clkdiv1_outdiv2[0]"                 value="2" />
-   <item key="/SIM/sim_clkdiv1_outdiv2[1]"                 value="2" />
-   <item key="/SIM/sim_clkdiv1_outdiv2[2]"                 value="2" />
-   <item key="/SIM/sim_clkdiv1_outdiv2[3]"                 value="2" />
-   <item key="/SIM/sim_clkdiv1_outdiv3[0]"                 value="3" />
-   <item key="/SIM/sim_clkdiv1_outdiv3[1]"                 value="2" />
-   <item key="/SIM/sim_clkdiv1_outdiv3[2]"                 value="4" />
-   <item key="/SIM/sim_clkdiv1_outdiv3[3]"                 value="3" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[0]"                 value="3" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[1]"                 value="10" />
+   <item key="/RTC/rtc_timezone"                           value="11" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[0]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[1]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[2]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[3]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv2[1]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv3[0]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv3[1]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv3[2]"                 value="3" />
+   <item key="/SIM/sim_clkdiv1_outdiv3[3]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[0]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[1]"                 value="4" />
    <item key="/SIM/sim_clkdiv1_outdiv4[2]"                 value="5" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[3]"                 value="3" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[3]"                 value="2" />
    <item key="/SIM/sim_clkdiv2_usb[2]"                     value="9" />
-   <item key="/SIM/sim_sopt2_clkoutsel"                    value="6" />
-   <item key="/SIM/sim_sopt2_lpuartsrc"                    value="1" />
+   <item key="/SIM/sim_clkdiv2_usb[3]"                     value="9" />
+   <item key="/SIM/sim_sopt2_clkoutsel[0]"                 value="3" />
+   <item key="/SIM/sim_sopt2_clkoutsel[1]"                 value="7" />
+   <item key="/SIM/sim_sopt2_lpuartsrc[1]"                 value="2" />
+   <item key="/SIM/sim_sopt2_lpuartsrc[2]"                 value="2" />
    <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="3" />
    <item key="/SIM/sim_sopt2_pllfllsel[1]"                 value="3" />
    <item key="/SIM/sim_sopt2_pllfllsel[2]"                 value="1" />
+   <item key="/SIM/sim_sopt2_usbsrc[3]"                    value="0" />
    <item key="/SMC/smc_pmctrl_runm[1]"                     value="2" />
    <item key="/SMC/smc_pmctrl_runm[2]"                     value="3" />
 </section>

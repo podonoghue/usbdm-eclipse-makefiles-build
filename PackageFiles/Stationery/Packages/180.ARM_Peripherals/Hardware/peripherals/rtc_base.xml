@@ -22,14 +22,6 @@
       <aliasOption key="/SIM/system_erclk32k_clock"   optional="true" />
    </category>
 
-   <intOption key="osc_input_freq"
-      units="Hz"
-      description="32kHz clock"
-      toolTip="Frequency of RTC Crystal on XTAL32/EXTAL32"
-      value="32768"
-      disabledValue="0"
-      min="32000" max="40000" />
-
    <binaryOption key="rtc_cr_osce"
       description="Enable RTC oscillator"
       toolTip="Enable 32kHz RTC oscillator">
@@ -37,7 +29,18 @@
       <choice value="1" name="Enabled" />
    </binaryOption>
 
+   <intOption key="osc_input_freq"
+      enabledBy="rtc_cr_osce"
+      units="Hz"
+      description="32kHz clock"
+      origin="RTC Clock"
+      toolTip="Frequency of RTC Crystal on XTAL32/EXTAL32"
+      value="32768"
+      disabledValue="0"
+      min="32000" max="40000" />
+
    <choiceOption key="rtc_cr_scp"
+      enabledBy="rtc_cr_osce"
       description="Oscillator load capacitance"
       toolTip="Configures the oscillator load capacitance" >
       <choice value="0"  name="0 pF" />
@@ -59,6 +62,8 @@
    </choiceOption>
 
    <intOption key="osc_clock"
+      enabledBy="rtc_cr_osce"
+      ref="osc_input_freq"
       description="RTC oscillator clock"
       toolTip="Output of RTC oscillator and input to RTC counters"
       derived="true"
@@ -69,6 +74,7 @@
    <stringOption key="Note" constant="true" derived="true" />
 
    <binaryOption key="rtc_cr_clko"
+      enabledBy="rtc_cr_osce"
       description="Enable RTC 32kHz Clock Output"
       toolTip="Determines if RTC 32kHz Clock is available to peripherals" >
       <choice value="1" name="Clock not output to peripherals" />
@@ -76,12 +82,22 @@
    </binaryOption>
 
    <intOption key="rtcclk_gated_clock"
+      enabledBy="rtc_cr_clko, Disabled by rtc_cr_clko"
+      ref="osc_clock"
       derived="true"
       constant="true"
       units="Hz"
       description="Frequency of RTC Peripheral Clock"
       toolTip="RTC clock available to peripherals"
       value="0" />
+
+   <intOption key="rtc_1hz_clock"
+      ref="(osc_clock)/32768.0"
+      constant="true"
+      derived="true"
+      description="1Hz output from RTC"
+      origin="RTC 1Hz output"
+      units="Hz"/>
 
    <binaryOption key="rtc_cr_um"
       description="Update Mode"
@@ -106,13 +122,6 @@
       <choice value="0" name="Wakeup pin is disabled" />
       <choice value="1" name="Wakeup pin is enabled" />
    </binaryOption>
-
-   <intOption key="rtc_1hz_clock"
-      constant="true"
-      derived="true"
-      description="1Hz output from RTC"
-      origin="RTC 1Hz output"
-      units="Hz"/>
 
    <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" optional="true" constant="false" />
    <aliasOption key="/SIM/rtc_clkout"             optional="true" />
