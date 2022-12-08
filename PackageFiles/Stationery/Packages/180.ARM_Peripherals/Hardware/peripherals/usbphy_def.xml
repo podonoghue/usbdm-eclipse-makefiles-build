@@ -39,17 +39,23 @@
    </binaryOption>
 
    <choiceOption key="usbphy_pll_sic_pll_div_sel"
+      ref="(/OSC0/osc_clock==12_MHz)?0:((/OSC0/osc_clock==16_MHz)?1:2)"
+      enabledBy="(/OSC0/osc_cr_erclken)&amp;&amp;((/OSC0/osc_clock==12_MHz)||(/OSC0/osc_clock==16_MHz)||(/OSC0/osc_clock==24_MHz)),Disabled by unsuitable input clock (OSCERCLK)"
       register="pll_sic"
+      constant="true"
+      derived="true"
       enumStem="UsbPllInputClkFrq"
       description="USB PLL feedback loop divider"
-      toolTip="The USB PLL produces a 480MHz clock from several possible clock frequencies\n
-               This field sets the PLL feedback divider appropriately">
-      <choice value="0b10" name="12MHz input clock" enum="12MHz"  />
-      <choice value="0b01" name="16MHz input clock" enum="16MHz"  />
-      <choice value="0b00" name="24MHz input clock" enum="24MHz" isDefault="true" />
+      toolTip="The USB PLL produces a 480MHz clock from the input clock.\n
+               This field sets the PLL feedback divider appropriately.\n
+               It is chosen to match the input clock frequency (OSCCLK)">
+      <choice value="0b10" name="12MHz input" enum="12MHz"  isDefault="true" />
+      <choice value="0b01" name="16MHz input" enum="16MHz"  />
+      <choice value="0b00" name="24MHz input" enum="24MHz"  />
    </choiceOption>
 
    <intOption key="pfd_pll_frequency"
+      enabledBy="(/OSC0/osc_clock==12_MHz)||(/OSC0/osc_clock==16_MHz)||(/OSC0/osc_clock==24_MHz),Disabled by unsuitable input clock (OSCCLK)"
       description="Fixed frequency output of the USBPLL"
       toolTip="This fixed frequency clock is produced by the USBPLL from the input clock (12/16/24MHz)"
       value="400000000"
@@ -59,7 +65,24 @@
    <for keys="n" dim="/SIM/numberOfClockSettings" >
       <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" constant="true" >
 
+         <aliasOption key="/OSC0/osc_cr_erclken" constant="false" />
+         <aliasOption key="/MCG/mcg_c1_irclken[%(n)]" />
+         <aliasOption key="/OSC0/osc_clock" />
+
+         <binaryOption key="usbpllPreconditionsMet[%(n)]"
+            ref="(/SMC/smc_pmctrl_runm[%(n)]!=1)&amp;&amp;(/OSC0/osc_cr_erclken)&amp;&amp;(/MCG/mcg_c1_irclken[%(n)])&amp;&amp;((/OSC0/osc_clock==12_MHz)||(/OSC0/osc_clock==16_MHz)||(/OSC0/osc_clock==24_MHz))"
+            constant="true"
+            description="USB PLL preconditions"
+            toolTip="Indicates if preconditions for USB PLL operation are satisfied\n
+                     - In RUN or HSRUN mode
+                     - 32kHz IRC is available (MCG_C1.IRCLKEN=1)\n
+                     - OSC0 is available (OSC_CR.ERCLKEN=1) and of correct frequency (12,16 or 24MHz)\n">
+            <choice value="0" name="Pll not available"  isDefault="true" />
+            <choice value="1" name="PLL available"      />
+         </binaryOption>
+
          <binaryOption key="usbphy_pll_sic_pll_enable[%(n)]"
+            enabledBy="usbpllPreconditionsMet[%(n)], Preconditions not met"
             enumStem="UsbPllClock"
             description="Enable clock output"
             toolTip="Enables the clock output from the USB PLL[%(n)]">
@@ -68,6 +91,7 @@
          </binaryOption>
 
          <binaryOption key="usbphy_pll_sic_pll_en_usb_clks[%(n)]"
+            enabledBy="usbpllPreconditionsMet[%(n)], Preconditions not met"
             enumStem="UsbPllUsbClock"
             description="Enable USB clock output"
             toolTip="Enables the USB clock output from the USB PHY PLL[%(n)]">
@@ -76,46 +100,50 @@
          </binaryOption>
 
          <choiceOption key="usbphy_anactrl_pfd_frac[%(n)]"
+            enabledBy="usbpllPreconditionsMet[%(n)], Preconditions not met"
             target="internal_pfd_clock_frequency[%(n)]"
             enumStem="UsbPfdClkFreq"
             description="PFD clock [USBPFDCLK] divider"
             toolTip="USBPFD (Phase Fractional Divider) input/output ratio">
-            <choice value="18"  name="Internal PFD Freq 400.00 MHz" enum="F400000000" ref="pfd_pll_frequency" />
-            <choice value="19"  name="Internal PFD Freq 378.95 MHz" enum="F378947368" ref="(pfd_pll_frequency*18)/19"/>
-            <choice value="20"  name="Internal PFD Freq 360.00 MHz" enum="F360000000" ref="(pfd_pll_frequency*18)/20"/>
-            <choice value="21"  name="Internal PFD Freq 342.86 MHz" enum="F342857143" ref="(pfd_pll_frequency*18)/21"/>
-            <choice value="22"  name="Internal PFD Freq 327.27 MHz" enum="F327272727" ref="(pfd_pll_frequency*18)/22"/>
-            <choice value="23"  name="Internal PFD Freq 313.04 MHz" enum="F313043478" ref="(pfd_pll_frequency*18)/23"/>
-            <choice value="24"  name="Internal PFD Freq 300.00 MHz" enum="F300000000" ref="(pfd_pll_frequency*18)/24"/>
-            <choice value="25"  name="Internal PFD Freq 288.00 MHz" enum="F288000000" ref="(pfd_pll_frequency*18)/25"/>
-            <choice value="26"  name="Internal PFD Freq 276.92 MHz" enum="F276923077" ref="(pfd_pll_frequency*18)/26"/>
-            <choice value="27"  name="Internal PFD Freq 266.67 MHz" enum="F266666667" ref="(pfd_pll_frequency*18)/27"/>
-            <choice value="28"  name="Internal PFD Freq 257.15 MHz" enum="F257142857" ref="(pfd_pll_frequency*18)/28"/>
-            <choice value="29"  name="Internal PFD Freq 248.28 MHz" enum="F248275862" ref="(pfd_pll_frequency*18)/29"/>
-            <choice value="30"  name="Internal PFD Freq 240.00 MHz" enum="F240000000" ref="(pfd_pll_frequency*18)/30"/>
-            <choice value="31"  name="Internal PFD Freq 232.25 MHz" enum="F232258065" ref="(pfd_pll_frequency*18)/31"/>
-            <choice value="32"  name="Internal PFD Freq 225.00 MHz" enum="F225000000" ref="(pfd_pll_frequency*18)/32"/>
-            <choice value="33"  name="Internal PFD Freq 218.18 MHz" enum="F218181818" ref="(pfd_pll_frequency*18)/33"/>
-            <choice value="34"  name="Internal PFD Freq 211.76 MHz" enum="F211764706" ref="(pfd_pll_frequency*18)/34"/>
-            <choice value="35"  name="Internal PFD Freq 205.71 MHz" enum="F205714286" ref="(pfd_pll_frequency*18)/35"/>
+            <choice value="18"  name="/18 = 400.00 MHz" enum="F400000000" ref="pfd_pll_frequency" />
+            <choice value="19"  name="/19 = 378.95 MHz" enum="F378947368" ref="(pfd_pll_frequency*18)/19"/>
+            <choice value="20"  name="/20 = 360.00 MHz" enum="F360000000" ref="(pfd_pll_frequency*18)/20"/>
+            <choice value="21"  name="/21 = 342.86 MHz" enum="F342857143" ref="(pfd_pll_frequency*18)/21"/>
+            <choice value="22"  name="/22 = 327.27 MHz" enum="F327272727" ref="(pfd_pll_frequency*18)/22"/>
+            <choice value="23"  name="/23 = 313.04 MHz" enum="F313043478" ref="(pfd_pll_frequency*18)/23"/>
+            <choice value="24"  name="/24 = 300.00 MHz" enum="F300000000" ref="(pfd_pll_frequency*18)/24"/>
+            <choice value="25"  name="/25 = 288.00 MHz" enum="F288000000" ref="(pfd_pll_frequency*18)/25"/>
+            <choice value="26"  name="/26 = 276.92 MHz" enum="F276923077" ref="(pfd_pll_frequency*18)/26"/>
+            <choice value="27"  name="/27 = 266.67 MHz" enum="F266666667" ref="(pfd_pll_frequency*18)/27"/>
+            <choice value="28"  name="/28 = 257.15 MHz" enum="F257142857" ref="(pfd_pll_frequency*18)/28"/>
+            <choice value="29"  name="/29 = 248.28 MHz" enum="F248275862" ref="(pfd_pll_frequency*18)/29"/>
+            <choice value="30"  name="/30 = 240.00 MHz" enum="F240000000" ref="(pfd_pll_frequency*18)/30" isDefault="true" />
+            <choice value="31"  name="/31 = 232.25 MHz" enum="F232258065" ref="(pfd_pll_frequency*18)/31"/>
+            <choice value="32"  name="/32 = 225.00 MHz" enum="F225000000" ref="(pfd_pll_frequency*18)/32"/>
+            <choice value="33"  name="/33 = 218.18 MHz" enum="F218181818" ref="(pfd_pll_frequency*18)/33"/>
+            <choice value="34"  name="/34 = 211.76 MHz" enum="F211764706" ref="(pfd_pll_frequency*18)/34"/>
+            <choice value="35"  name="/35 = 205.71 MHz" enum="F205714286" ref="(pfd_pll_frequency*18)/35"/>
          </choiceOption>
 
          <intOption key="internal_pfd_clock_frequency[%(n)]"
+            enabledBy="usbpllPreconditionsMet[%(n)], Preconditions not met"
             description="Internal PFD clock (after PLL)"
             toolTip="Clock available from the USBPFD"
             derived="true"
             units="Hz"
-            constant="true" />
+            constant="true"
+            disabledValue="0" />
 
          <choiceOption key="usbphy_anactrl_pfd_clk_sel[%(n)]"
+            enabledBy="usbpllPreconditionsMet[%(n)], Preconditions not met"
             target="/SIM/usb1pfdclk_Clock[%(n)]"
             enumStem="UsbPfdClkSrc"
             description="PFD clock [USBPFDCLK] output selection"
             toolTip="Clock to output as PFD output clock [USBPFDCLK]">
-            <choice value="0b00" name="XTAL input clock" enum="Xtal"     ref="/OSC0/oscer_clock"   isDefault="true" />
-            <choice value="0b11" name="pfd_clk"          enum="Pfd"      ref="internal_pfd_clock_frequency[%(n)]" />
-            <choice value="0b10" name="pfd_clk/2"        enum="PfdDiv2"  ref="(internal_pfd_clock_frequency[%(n)])/2" />
-            <choice value="0b01" name="pfd_clk/4"        enum="PfdDiv4"  ref="(internal_pfd_clock_frequency[%(n)])/4" />
+            <choice value="0b00" name="Input clock"  enum="Xtal"     ref="/OSC0/oscer_clock"                      />
+            <choice value="0b11" name="pfd_clk"      enum="Pfd"      ref="internal_pfd_clock_frequency[%(n)]"     />
+            <choice value="0b10" name="pfd_clk/2"    enum="PfdDiv2"  ref="(internal_pfd_clock_frequency[%(n)])/2" isDefault="true"/>
+            <choice value="0b01" name="pfd_clk/4"    enum="PfdDiv4"  ref="(internal_pfd_clock_frequency[%(n)])/4" />
          </choiceOption>
 
          <aliasOption key="/SIM/usb1pfdclk_Clock[%(n)]" />

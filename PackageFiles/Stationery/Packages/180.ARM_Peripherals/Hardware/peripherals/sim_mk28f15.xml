@@ -358,12 +358,13 @@
                toolTip="Clock available on CLKOUT pin" />
 
             <intOption key="usb1pfdclk_Clock[%(n)]" condition="/USBPHY1/$present"
+               enabledBy="/SMC/smc_pmctrl_runm[%(n)]!=1"
                derived="true"
                constant="true"
                units="Hz"
                description="USB1 PHY clock"
                toolTip="USB1PFD Clock available as peripheral clock"
-               max="120MHz" />
+               max="150MHz" />
 
             <choiceOption key="sim_sopt2_pllfllsel[%(n)]"
                enumStem="SimPeripheralClockSource"
