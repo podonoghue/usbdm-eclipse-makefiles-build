@@ -239,7 +239,7 @@
                <graphicItem id=""                          var=""                                            type="connector"   params="USB_PHY.0,0,    USB_PHY.1,0"   />
             </graphicBox>
 
-            <graphicBox    id="SIM" x="310" y="70" params="290,0, x310, y1420, x-600, y-1040, x" >
+            <graphicBox    id="SIM" x="310" y="70" params="290,0, x310, y1540, x-600, y-1160, x" >
 
                <!-- MGCIRCLK -->
                <graphicItem id="MCGIRCLK"                  var="system_mcgirclk_clock[%(n)]"        type="node"        params="600, 55"                                        />
@@ -417,6 +417,23 @@
                   <graphicItem id="SDHCSRC"                   var="/SIM/sim_sopt2_sdhcsrc[%(n)]"       type="mux"         params="500, 10, 4"                         />
                   <graphicItem id=""                          var=""                                   type="connector"   params="SDHCSRC,0, SDHC_CLK,0"              />
                   <graphicItem id="SDHC_CLK"                  var="/SIM/system_sdhc_clock[%(n)]"       type="node"        params="600, 10"                            />
+               </graphicGroup>
+
+               <!-- SDHCSRC -->
+               <graphicGroup x="0" y="1480" condition="/SIM/sim_sopt2_sdhcsrc_present" >
+                  <graphicItem id="CORE_CLK.9"                  var="/SIM/system_core_clock[%(n)]"       type="reference"   params="370,-20, 180"                       />
+                  <graphicItem id="PER_CLK.9"                   var="/SIM/system_peripheral_clock[%(n)]" type="reference"   params="370,  0, 180"                       />
+                  <graphicItem id="OSCERCLK.9"                  var="/OSC0/oscer_clock"                  type="reference"   params="370, 20, 180"                       />
+                  <graphicItem id="ENET_IN"                     var="/SIM/system_time_clockin"           type="variableBox" params="-120,40, 160, small"                />
+                  <graphicItem id=""                            var=""                                   type="connector"   params="ENET_IN,0,  ENET_IN.1,0"            />
+                  <graphicItem id="ENET_IN.1,NONAME,NOVALUE"    var="/SIM/system_time_clockin"           type="node"        params="0, 40"                              />
+                  <graphicItem id=""                            var=""                                   type="connector"   params="CORE_CLK.9,0, TIMESRC,0"            />
+                  <graphicItem id=""                            var=""                                   type="connector"   params="PER_CLK.9,0,  TIMESRC,1"            />
+                  <graphicItem id=""                            var=""                                   type="connector"   params="OSCERCLK.9,0, TIMESRC,2"            />
+                  <graphicItem id=""                            var=""                                   type="connector"   params="ENET_IN.1,0,  TIMESRC,3"            />
+                  <graphicItem id="TIMESRC"                     var="/SIM/sim_sopt2_timesrc[%(n)]"       type="mux"         params="500, 10, 4"                         />
+                  <graphicItem id=""                            var=""                                   type="connector"   params="TIMESRC,0, ENET_TIME_CLK,0"         />
+                  <graphicItem id="ENET_TIME_CLK"               var="/SIM/system_time_clock[%(n)]"       type="node"        params="600, 10"                            />
                </graphicGroup>
 
             </graphicBox>
