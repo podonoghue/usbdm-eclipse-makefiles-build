@@ -55,10 +55,10 @@
 
          <aliasOption key="enableClockConfiguration[%(n)]" constant="false" />
 
-         <graphic key="MCG graphic[%(n)]"
+         <graphic key="Clock configuration GUI[%(n)]"
             var="ClockConfig[%(n)]"
-            description="MCG clock selection[%(n)]"
-            toolTip="Opens a dialogue to alter MCG configuration" >
+            description="Clock configuration[%(n)]"
+            toolTip="Opens a dialogue to alter this clock configuration" >
 
             <graphicBox id="" x="10" y="10" params="0,0, x430, y50, x" >
                <graphicItem id="RUN MODE"                  var="/SMC/smc_pmctrl_runm[%(n)]"         type="variableBox" params="80,  25,  140, large"                          />
@@ -188,7 +188,7 @@
 
             <graphicBox    id="RTC" x="10" y="680" params="0,0, x280, y100,  x" >
                <graphicItem id="RTC_OSC"                   var="/RTC/osc_input_freq"                type="variableBox" params="50,   30,  90, large"                          />
-               <graphicItem id="RTC_OSC_EN,NOVALUE|NONAME" var="/RTC/rtc_cr_osce"                   type="node"        params="90,  20"                                      />
+               <graphicItem id="RTC_OSC_EN,NOVALUE|NONAME" var="/RTC/rtc_cr_osce"                   type="node"        params="85,   20"                                      />
                <graphicItem id="RTC_SCP,NONAME"            var="/RTC/rtc_cr_scp"                    type="annotation"  params="10,   55, 50, 16"                              />
 
                <graphicItem id="RTC_CLKO,NOVALUE|NONAME"   var="/RTC/rtc_cr_clko"                   type="node"        params="180,  30"                                      />
@@ -239,7 +239,7 @@
                <graphicItem id=""                          var=""                                            type="connector"   params="USB_PHY.0,0,    USB_PHY.1,0"   />
             </graphicBox>
 
-            <graphicBox    id="SIM" x="310" y="70" params="290,0, x310, y1320, x-600, y-940, x" >
+            <graphicBox    id="SIM" x="310" y="70" params="290,0, x310, y1420, x-600, y-1040, x" >
 
                <!-- MGCIRCLK -->
                <graphicItem id="MCGIRCLK"                  var="system_mcgirclk_clock[%(n)]"        type="node"        params="600, 55"                                        />
@@ -352,8 +352,8 @@
 
                <!-- USBFS_CLK -->
                <graphicGroup x="0" y="1020" condition="/SIM/sim_sopt2_usbsrc_present" >
-                  <graphicItem id="PER_CLK.5"                 var="/SIM/system_peripheral_clock[%(n)]" type="reference"   params="130, 0, 150"                                 />
-                  <graphicItem id=""                          var=""                                   type="connector"   params="PER_CLK.5,0, CLKDIV2,0"                         />
+                  <graphicItem id="PER_CLK.4"                 var="/SIM/system_peripheral_clock[%(n)]" type="reference"   params="130, 0, 150"                                 />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="PER_CLK.4,0, CLKDIV2,0"                         />
                   <graphicItem id="CLKDIV2"                   var="/SIM/sim_clkdiv2_usb[%(n)]"         type="variableBox" params="330, 0, 180, large"                          />
                   <graphicItem id=""                          var=""                                   type="connector"   params="CLKDIV2,0, USBSRC,1"                            />
 
@@ -368,12 +368,12 @@
                </graphicGroup>
 
                <graphicGroup x="0" y="1120" condition="/SIM/sim_clkdiv3_pllflldiv_present" >
-                  <graphicItem id="PER_CLK.8"                 var="/SIM/system_peripheral_clock[%(n)]"             type="reference"   params="150, 50, 180, ow"                                  />
-                  <graphicItem id=""                          var="/SIM/system_peripheral_postdivider_clock[%(n)]" type="connector"   params="PER_CLK.8,0, CLKDIV3,0, (x-20),y,x"    condition="/SIM/sim_sopt2_lpuartsrc_present" />
+                  <graphicItem id="PER_CLK.5"                 var="/SIM/system_peripheral_clock[%(n)]"             type="reference"   params="150, 50, 180, ow"                                  />
+                  <graphicItem id=""                          var="/SIM/system_peripheral_clock[%(n)]"             type="connector"   params="PER_CLK.5,0, CLKDIV3,0, (x-20),y,x"    condition="/SIM/sim_sopt2_lpuartsrc_present" />
                   <graphicItem id="CLKDIV3"                   var="/SIM/sim_clkdiv3_pllfll[%(n)]"                  type="variableBox" params="150,  0, 180, large, iw,oe"       />
                   <graphicItem id=""                          var="/SIM/system_peripheral_postdivider_clock[%(n)]" type="annotation"  params="270, -20, 40, 18"                               />
                   <graphicItem id=""                          var="/SIM/system_peripheral_postdivider_clock[%(n)]" type="connector"   params="CLKDIV3,0, LPUARTSRC,1, x20,y,x"    condition="/SIM/sim_sopt2_lpuartsrc_present" />
-                  <graphicItem id=""                          var="/SIM/system_peripheral_postdivider_clock[%(n)]" type="connector"   params="CLKDIV3,0, TPMSRC,1,    x20,d,y,x"  condition="/SIM/sim_sopt2_lpuartsrc_present" />
+                  <graphicItem id=""                          var="/SIM/system_peripheral_postdivider_clock[%(n)]" type="connector"   params="CLKDIV3,0, TPMSRC,1,    x20,d,y,x"  condition="/SIM/sim_sopt2_tpmsrc_present" />
                </graphicGroup>
 
                <!-- LPUARTSRC -->
@@ -400,6 +400,23 @@
                   <graphicItem id="TPMSRC"                    var="/SIM/sim_sopt2_tpmsrc[%(n)]"        type="mux"         params="500, 10, 4"                                    />
                   <graphicItem id=""                          var=""                                   type="connector"   params="TPMSRC,0, TPM_CLK,0"                      />
                   <graphicItem id="TPM_CLK"                   var="/SIM/system_tpm_clock[%(n)]"        type="node"        params="600, 10"                                       />
+               </graphicGroup>
+
+               <!-- SDHCSRC -->
+               <graphicGroup x="0" y="1360" condition="/SIM/sim_sopt2_sdhcsrc_present" >
+                  <graphicItem id="CORE_CLK.8"                var="/SIM/system_core_clock[%(n)]"       type="reference"   params="370,-20, 180"                       />
+                  <graphicItem id="PER_CLK.8"                 var="/SIM/system_peripheral_clock[%(n)]" type="reference"   params="370,  0, 180"                       />
+                  <graphicItem id="OSCERCLK.8"                var="/OSC0/oscer_clock"                  type="reference"   params="370, 20, 180"                       />
+                  <graphicItem id="SDHC_IN"                   var="/SIM/system_sdhc_clockin"           type="variableBox" params="-120,40, 160, small"                />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="SDHC_IN,0,  SDHC_IN.1,0"            />
+                  <graphicItem id="SDHC_IN.1,NONAME,NOVALUE"  var="/SIM/system_sdhc_clockin"           type="node"        params="0, 40"                              />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="CORE_CLK.8,0, SDHCSRC,0"            />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="PER_CLK.8,0,  SDHCSRC,1"            />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="OSCERCLK.8,0, SDHCSRC,2"            />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="SDHC_IN.1,0,  SDHCSRC,3"            />
+                  <graphicItem id="SDHCSRC"                   var="/SIM/sim_sopt2_sdhcsrc[%(n)]"       type="mux"         params="500, 10, 4"                         />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="SDHCSRC,0, SDHC_CLK,0"              />
+                  <graphicItem id="SDHC_CLK"                  var="/SIM/system_sdhc_clock[%(n)]"       type="node"        params="600, 10"                            />
                </graphicGroup>
 
             </graphicBox>
@@ -759,6 +776,7 @@
                disabledValue="0" />
 
             <intOption key="system_mcgfllclk_clock[%(n)]"
+               max="/SIM/MCGFLLCLK_max[/SMC/smc_pmctrl_runm[%(n)]]"
                units="Hz"
                description="FLL Output clock frequency"
                toolTip="Output of FLL.\n
@@ -868,6 +886,7 @@
             target="system_mcgpllclk_clock[%(n)]" />
 
          <intOption key="system_mcgpllclk_clock[%(n)]"
+            max="/SIM/MCGPLLCLK_max[/SMC/smc_pmctrl_runm[%(n)]]"
             toolTip="Output of PLL"
             derived="true"
             constant="true"
