@@ -17,6 +17,7 @@
    <aliasOption key="/MCG/oscMode" constant="false" />
 
    <intOption key="osc_clock"
+      ref="osc_input_freq"
       constant="true"
       derived="true"
       units="Hz"
@@ -38,14 +39,15 @@
       derived="true"
       constant="true"
       description="Oscillator Frequency Range Select"
-      toolTip="This range value is determined from the Crystal frequency">
+      toolTip="This range value is determined from the crystal frequency.\n
+               It some cases it may be unused and a range value suited to the FLL is used instead">
       <choice value="0" name="Low range" />
       <choice value="1" name="High range" />
       <choice value="2" name="Very High range" />
       <choice value="3" name="Unconstrained by Oscillator" isDefault="true" />
    </choiceOption>
 
-   <aliasOption key="/MCG/mcg_c2_hgo0" constant="false" optional="true"/>
+   <aliasOption key="/MCG/oscMode" constant="false" />
 
    <choiceOption key="osc_cr_scp"
       description="Oscillator load capacitance"
@@ -125,7 +127,7 @@
    </if>
 
    <intOption key="osc32k_clock"
-         enabledBy="(osc_input_freq&gt;=32000)&amp;&amp;(osc_input_freq&lt;=40000), XTAL frequency unsuitable"
+         enabledBy="(osc_input_freq&gt;=32000)&amp;&amp;(osc_input_freq&lt;=40000), Disable as XTAL frequency unsuitable"
          ref="osc_clock"
          derived="true"
          units="Hz"

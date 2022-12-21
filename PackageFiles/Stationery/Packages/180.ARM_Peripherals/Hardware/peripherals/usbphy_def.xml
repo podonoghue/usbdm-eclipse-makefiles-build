@@ -280,6 +280,31 @@
       \t}\n\n
    ]]></setTemplate>
 
+   <template > <![CDATA[
+      \t/**
+      \t * Get USB1PFDCLK frequency
+      \t *
+      \t * @return USB1PFDCLK frequency in Hz
+      \t */
+      \tstatic unsigned getClockFrequency() {
+      \t
+      \t   if ((usbphy->ANACTRL & USBPHY_ANACTRL_PFD_CLKGATE_MASK) != 0) {
+      \t      // Gated (disabled)
+      \t      return 0;
+      \t   }
+      \t   unsigned frac = (usbphy->ANACTRL & USBPHY_ANACTRL_PFD_FRAC_MASK)>>USBPHY_ANACTRL_CLR_PFD_FRAC_SHIFT;
+      \t   unsigned pfdClock = (480000000UL*18)/frac;
+      \t
+      \t   switch(usbphy->ANACTRL & USBPHY_ANACTRL_PFD_CLK_SEL_MASK) {
+      \t      default:
+      \t      case UsbPfdClkSrc_Xtal    : return Osc0Info::getOscerClock();
+      \t      case UsbPfdClkSrc_Pfd     : return pfdClock;
+      \t      case UsbPfdClkSrc_PfdDiv2 : return pfdClock/2;
+      \t      case UsbPfdClkSrc_PfdDiv4 : return pfdClock/4;
+      \t   }
+      \t}\n\n
+   ]]></template>
+
    <template key="/USBPHY/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)

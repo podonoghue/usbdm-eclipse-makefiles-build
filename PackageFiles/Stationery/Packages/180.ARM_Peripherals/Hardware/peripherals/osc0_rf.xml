@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 
-<!-- 
+<!--
       Predefined symbols generated for current peripheral
       _base_class FTM0 => Ftm
       _instance   FTM0 => 0
@@ -22,17 +22,18 @@
         by an internal SoC clock mode, by an External Pin request, or by this field">
          <choice value="0b0000"  name="RF Ref Osc will be controlled by the SoC, external pin, or a link layer" />
          <choice value="0b0001"  name="RF Ref Osc on in Run/Wait" isDefault="true"/>
-         <choice value="0b0011"  name="RF Ref Osc on in Stop" />
-         <choice value="0b0111"  name="RF Ref Osc on in VLPR/VLPW" />
-         <choice value="0b1111"  name="RF Ref Osc on in VLPS" />
+         <choice value="0b0011"  name="RF Ref Osc on in Run/Wait/Stop" />
+         <choice value="0b0111"  name="RF Ref Osc on in Run/Wait/Stop/VLPR/VLPW" />
+         <choice value="0b1111"  name="RF Ref Osc on in Run/Wait/Stop/VLPR/VLPW/VLPS" />
       </choiceOption>
 
    <choiceOption key="osc_input_freq"
+      target="osc_clock"
       units="Hz"
       description="Frequency of External Crystal"
       toolTip="Frequency of external crystal on RF_XTAL/RF_EXTAL pins">
-         <choice value="26000000"  name="26 MHz" />
-         <choice value="32000000"  name="32 MHz" isDefault="true" />
+         <choice value="26000000"  ref="26_MHz" name="26 MHz" />
+         <choice value="32000000"  ref="32_MHz" name="32 MHz" isDefault="true" />
       </choiceOption>
 
    <intOption key="osc_clock"
@@ -46,16 +47,17 @@
    <choiceOption key="oscillatorRange"
       derived="true"
       constant="true"
-      description="Frequency Range Select"
-      toolTip="This range value is determined from the Oscillator frequency.\n
-      It some cases it will be unused and a range value suited to the FLL is used instead">
+      description="Oscillator Frequency Range Select"
+      toolTip="This range value is determined from the crystal frequency.\n
+               It some cases it may be unused and a range value suited to the FLL is used instead">
       <choice value="0" name="Low range" />
       <choice value="1" name="High range" />
-      <choice value="2" name="Very High range" />
+      <choice value="2" name="Very High range" isDefault="true" />
       <choice value="0" name="Unconstrained by Oscillator" />
    </choiceOption>
 
    <intOption key="oscer_clock"
+         ref="osc_clock"
          derived="true"
          units="Hz"
          description="Oscillator clock [OSCERCLK]"
@@ -69,14 +71,14 @@
    <projectActionList id = "osc_files" >
       <copy source="Project_Headers/osc_rf.h"  target="Project_Headers/osc.h"  overwrite="true"  derived="true" />
    </projectActionList>
-         
+
    <template><![CDATA[
       \t//! RF Reference Oscillator Enable Select
       \tstatic constexpr uint32_t rf_osc_en = $(rf_osc_en)UL;
-      
+
       \t//! Frequency of OSC Clock or Crystal
       \tstatic constexpr uint32_t osc_clock = $(osc_clock)UL;
-      
+
       \t/**
       \t * Get OSC clock (internal, assumed available)
       \t *
@@ -85,7 +87,7 @@
       \tstatic constexpr uint32_t getOscClock() {
       \t   return osc_clock;
       \t}
-      
+
       \t/**
       \t * Get OSC clock (external)
       \t *
@@ -106,10 +108,10 @@
    <template key="/MCG/Includes" namespace="all"  ><![CDATA[
    #include "osc.h"\n
    ]]></template>
-      
+
    <template key="/MCG/Initialisation" namespace="all"  ><![CDATA[
    \tUSBDM::$(_class)::initialise();\n
    ]]></template>
-      
+
    <signals />
 </peripheralPage>

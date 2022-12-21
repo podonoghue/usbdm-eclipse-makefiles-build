@@ -14,10 +14,13 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <xi:include href="_simCommon.xml"/>
+
+   <constant key="clock_divider_type" type="Integer" value="1" />
 
    <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) does not share XTAL/EXTAL pins -->
-   <constant key="rtc_independent" />
+   <constant key="rtc_independent"  type="Boolean" value="true" />
+
+   <xi:include href="_simCommon.xml"/>
 
    <intOption key="system_usb_clkin_clock"
       hidden="true"
@@ -47,7 +50,6 @@
          <choice value="1,0,1"  name="Enabled in run and stop"       enum="EnabledInRun_Stop"      />
          <choice value="1,1,1"  name="Enabled in run only"           enum="EnabledInRun"           />
       </choiceOption>
-
    </category>
 
    <category name="SOPT2" description="Clock Gating">
@@ -63,31 +65,6 @@
 
       <aliasOption key="/OSC0/oscer_clock" optional="true" />
       <aliasOption key="/MCG/system_mcgirclk_clock[]" optional="true" />
-
-      <for keys="n : name              : code            : ref"
-         values="0 : System core clock : SystemCoreClock : system_core_clock;
-                 1 : System core clock : SystemCoreClock : system_core_clock;
-                 2 : System bus clock  : SystemBusClock  : system_bus_clock;
-                 3 : System bus clock  : SystemBusClock  : system_bus_clock;
-                 4 : System bus clock  : SystemBusClock  : system_bus_clock;" >
-
-         <choiceOption key="system_uart%(n)_fixedclocksource"
-            target="system_uart%(n)_clock"
-            constant="true"
-            derived="true"
-            description="UART%(n) Clock source"
-            toolTip="Fixed clock source for UART" >
-            <choice value="0"  name="%(name)" ref="%(ref)" code="%(code)" />
-         </choiceOption>
-
-         <intOption key="system_uart%(n)_clock"
-            constant="true"
-            derived="true"
-            units="Hz"
-            description="UART%(n) Clock frequency"
-            toolTip="Frequency of clock to UART"
-            value="0" />
-      </for>
 
       <choiceOption key="sim_sopt2_fbsl" condition="sim_sopt2_fbsl_present"
          enumStem="SimFlexbusSecurity"
@@ -283,7 +260,7 @@
                toolTip="Source for the %(NAME) receive data">
                <choice value="0" name="Rx pin"        enum="RxPin"  isDefault="true" />
                <choice value="1" name="CMP0 output"   enum="Cmp0" />
-               <choice value="2" name="CMP1 output"   enum="Cmp1" />
+               <choice value="2" name="CMP1 output"   enum="Cmp1" condition="/CMP1/$present" />
             </choiceOption>
 
             <choiceOption key="sim_sopt5_%(name)txsrc" condition="sim_sopt5_%(name)txsrc_present"
@@ -347,6 +324,7 @@
             <intOption key="system_irc48m_clock[%(n)]"
                enabledBy="/SMC/smc_pmctrl_runm[%(n)]!=1,IRC48M Disabled in VLPR"
                constant="true"
+               derived="true"
                units="Hz"
                description="Frequency of Internal 48MHz Clock [IRC48MCLK]"
                toolTip="48 MHz Internal Oscillator [May be trimmed against USB bus]"
@@ -461,7 +439,7 @@
                units="Hz"
                description="USB Full Speed Clock"
                toolTip="Frequency of clock to USB full speed controller"
-               value="48_MHz" min="48_MHz" max="48_MHz" />
+               value="48_MHz" min="48_MHz" max="48_MHz" disabledValue="0" />
 
             <choiceOption key="sim_clkdiv3_pllfll[%(n)]" condition="sim_clkdiv3_pllflldiv_present"
                enumStem="SimPeripheralClockDivider"
@@ -495,6 +473,31 @@
                description="Peripheral Post-divider Clock frequency/"
                toolTip="Frequency of Peripheral Clock available to various peripherals"
                max="75_MHz" />
+
+            <for keys="u : name              : code            : ref"
+               values="0 : System core clock : SystemCoreClock : system_core_clock[%(n)];
+                       1 : System core clock : SystemCoreClock : system_core_clock[%(n)];
+                       2 : System bus clock  : SystemBusClock  : system_bus_clock[%(n)];
+                       3 : System bus clock  : SystemBusClock  : system_bus_clock[%(n)];
+                       4 : System bus clock  : SystemBusClock  : system_bus_clock[%(n)];" >
+
+               <choiceOption key="system_uart%(u)_fixedclocksource[%(n)]"
+                  target="system_uart%(u)_clock[%(n)]"
+                  constant="true"
+                  derived="true"
+                  description="UART%(u) Clock source"
+                  toolTip="Fixed clock source for UART (%(code))" >
+                  <choice value="0"  name="%(name)" ref="%(ref)" code="%(code)" />
+               </choiceOption>
+
+               <intOption key="system_uart%(u)_clock[%(n)]"
+                  constant="true"
+                  derived="true"
+                  units="Hz"
+                  description="UART%(u) Clock frequency"
+                  toolTip="Frequency of clock to UART%(u)"
+                  value="0" />
+            </for>
 
             <choiceOption key="sim_sopt2_lpuartsrc[%(n)]" condition="sim_sopt2_lpuartsrc_present"
                enumStem="SimLpuartClockSource"

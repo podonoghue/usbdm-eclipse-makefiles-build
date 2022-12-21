@@ -115,6 +115,10 @@ constexpr McgClockMode clockTransitionTable[][8] = {
    /* BLPE, */ { McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE,  McgClockMode_FBE,   },
 };
 
+constexpr bool initialwrite[] =
+   /* initial => FEI,   FEE,   FBI,   BLPI,  FBE,   BLPE, */
+   /* */       { false, false, true,  false, true,  false, };
+
 /**
  * Get name for clock mode
  *
@@ -214,6 +218,10 @@ ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
    mcg->C8 = 0;
 #endif
    int transitionCount = 0;
+   if (initialwrite[currentClockMode]) {
+      // Initial update of registers in bypassed modes
+      writeMainRegs(clockInfo, 0);
+   }
    do {
       McgClockMode next = clockTransitionTable[currentClockMode][finalMode];
 
@@ -351,8 +359,20 @@ ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
 
    // Notify of clock changes (after)
    notifyAfterClockChange();
-   
+
    return E_NO_ERROR;
+}
+
+/**
+ * Get Slow IRC clock frequency
+ */
+unsigned getSlowIrcFrequency() {
+
+   if ((SMC->PMCTRL&SMC_PMCTRL_RUNM_MASK) == SmcRunMode_VeryLowPower) {
+      // Disabled in VLPR
+      return 0;
+   }
+   return McgInfo::system_slow_irc_clock;
 }
 
 /**
@@ -387,19 +407,22 @@ void Mcg::SystemCoreClockUpdate(void) {
    }
    else {
       // Slow internal reference clock is selected
-      SystemMcgffClock = McgInfo::system_slow_irc_clock;
+      SystemMcgffClock = getSlowIrcFrequency();
    }
 
-   // Calculate FLL base clock
-   uint32_t systemFllClock = SystemMcgffClock *
-         /**/                ((mcg->C4&MCG_C4_DMX32_MASK)?732:640) *
-         /**/                (((mcg->C4&MCG_C4_DRST_DRS_MASK)>>MCG_C4_DRST_DRS_SHIFT)+1);
-
    SystemMcgFllClock = 0;
+   SystemMcgPllClock = 0; // PLL - not available
+
+   if ((mcg->C2&MCG_C2_LP_MASK) == 0) {
+      // Calculate FLL clock if active
+      SystemMcgFllClock = SystemMcgffClock *
+      /**/                ((mcg->C4&MCG_C4_DMX32_MASK)?732:640) *
+      /**/                (((mcg->C4&MCG_C4_DRST_DRS_MASK)>>MCG_C4_DRST_DRS_SHIFT)+1);
+
+   }
    switch (mcg->S&MCG_S_CLKST_MASK) {
       case MCG_S_CLKST(0) : // FLL
-         SystemMcgOutClock = systemFllClock;
-         SystemMcgFllClock = systemFllClock;
+         SystemMcgOutClock = SystemMcgFllClock;
          break;
       case MCG_S_CLKST(1) : // Internal Reference Clock
          SystemMcgOutClock = McgInfo::getInternalReferenceClock();
@@ -409,10 +432,8 @@ void Mcg::SystemCoreClockUpdate(void) {
          break;
       case MCG_S_CLKST(3) : // PLL - not available
          SystemMcgOutClock = 0;
-         SystemMcgPllClock = 0;
          break;
    }
-   SystemMcgPllClock = 0; // PLL - not available
 
    SimInfo::updateSystemClocks(SystemMcgOutClock);
 }

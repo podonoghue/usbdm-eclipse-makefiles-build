@@ -29,15 +29,82 @@
       <choice value="1" name="Enabled" />
    </binaryOption>
 
-   <intOption key="osc_input_freq"
-      enabledBy="rtc_cr_osce"
-      units="Hz"
-      description="32kHz clock"
-      origin="RTC Clock"
-      toolTip="Frequency of RTC Crystal on XTAL32/EXTAL32"
-      value="32768"
-      disabledValue="0"
-      min="32000" max="40000" />
+   <if condition="/SIM/rtc_independent" >
+      <intOption key="osc_input_freq"
+         enabledBy="rtc_cr_osce"
+         units="Hz"
+         description="32kHz clock"
+         origin="RTC Clock"
+         toolTip="Frequency of RTC Crystal on XTAL32/EXTAL32"
+         value="32768"
+         disabledValue="0"
+         min="32000" max="40000" />
+
+      <intOption key="osc_clock"
+         enabledBy="rtc_cr_osce"
+         ref="osc_input_freq"
+         description="RTC oscillator clock"
+         toolTip="Output of RTC oscillator and input to RTC counters"
+         derived="true"
+         constant="true"
+         units="Hz"
+         disabledValue="0" />
+
+      <binaryOption key="rtc_cr_clko"
+         enabledBy="rtc_cr_osce, Disabled by rtc_cr_osce"
+         description="Enable RTC 32kHz Clock Output"
+         toolTip="Determines if RTC 32kHz Clock is available to peripherals" >
+         <choice value="1" name="Clock not output to peripherals" />
+         <choice value="0" name="Clock is output to peripherals" isDefault="true" />
+      </binaryOption>
+
+      <intOption key="rtcclk_gated_clock"
+         enabledBy="rtc_cr_clko, Disabled by rtc_cr_clko"
+         ref="osc_clock"
+         derived="true"
+         constant="true"
+         units="Hz"
+         description="Frequency of RTC Peripheral Clock"
+         toolTip="RTC clock available to peripherals"
+         value="0" />
+
+      <floatOption key="rtc_1hz_clock"
+         ref="(osc_clock)/32768.0"
+         constant="true"
+         derived="true"
+         description="1Hz output from RTC"
+         origin="RTC 1Hz output"
+         units="Hz"/>
+
+   </if>
+   <if condition="/SIM/rtc_shared" >
+      <stringOption key="Note"
+         enabledBy="rtc_cr_osce"
+         constant="true"
+         derived="true"
+         toolTip="RTC OSC uses XTAL/EXTAL pins and disables OSC0 when enabled"
+         value="OSC0 is controlled by RTC OSC"
+         disabledValue="RTC OSC is disabled (OSC0 in use)" />
+
+      <aliasOption key="/OSC0/osc_input_freq" constant="false" />
+
+      <intOption key="rtc_input_clock"
+         ref="/SIM/system_erclk32k_clock"
+         description="RTC input clock"
+         toolTip="Input to RTC counters"
+         derived="true"
+         constant="true"
+         units="Hz"
+         disabledValue="0" />
+
+      <floatOption key="rtc_1hz_clock"
+         ref="(rtc_input_clock)/32768.0"
+         constant="true"
+         derived="true"
+         description="1Hz output from RTC"
+         origin="RTC 1Hz output"
+         units="Hz"/>
+   </if>
 
    <choiceOption key="rtc_cr_scp"
       enabledBy="rtc_cr_osce"
@@ -60,44 +127,6 @@
       <choice value="7"  name="28 pF" />
       <choice value="15" name="30 pF" />
    </choiceOption>
-
-   <intOption key="osc_clock"
-      enabledBy="rtc_cr_osce"
-      ref="osc_input_freq"
-      description="RTC oscillator clock"
-      toolTip="Output of RTC oscillator and input to RTC counters"
-      derived="true"
-      constant="true"
-      units="Hz"
-      disabledValue="0" />
-
-   <stringOption key="Note" constant="true" derived="true" />
-
-   <binaryOption key="rtc_cr_clko"
-      enabledBy="rtc_cr_osce"
-      description="Enable RTC 32kHz Clock Output"
-      toolTip="Determines if RTC 32kHz Clock is available to peripherals" >
-      <choice value="1" name="Clock not output to peripherals" />
-      <choice value="0" name="Clock is output to peripherals" isDefault="true" />
-   </binaryOption>
-
-   <intOption key="rtcclk_gated_clock"
-      enabledBy="rtc_cr_clko, Disabled by rtc_cr_clko"
-      ref="osc_clock"
-      derived="true"
-      constant="true"
-      units="Hz"
-      description="Frequency of RTC Peripheral Clock"
-      toolTip="RTC clock available to peripherals"
-      value="0" />
-
-   <intOption key="rtc_1hz_clock"
-      ref="(osc_clock)/32768.0"
-      constant="true"
-      derived="true"
-      description="1Hz output from RTC"
-      origin="RTC 1Hz output"
-      units="Hz"/>
 
    <binaryOption key="rtc_cr_um"
       description="Update Mode"
@@ -131,9 +160,6 @@
       \t//! If disabled then no RTC registers are accessed.
       \t//! This is useful if RTC is not powered as register access will trap.
       \tstatic constexpr bool configure_rtc = $(configure_rtc);
-      \t
-      \t//! Frequency of RTC External Clock or Crystal
-      \tstatic constexpr uint32_t osc_input_freq = $(osc_input_freq)UL;
       \t\n
    ]]></template>
 
@@ -401,7 +427,7 @@
    <category name="Device Registers (view only)" description="RTC Register values">
       <category name="RTC CR" description="RTC Control Register">
          <aliasOption key="rtc_cr_scp" />
-         <aliasOption key="rtc_cr_clko" />
+         <aliasOption key="rtc_cr_clko" optional="true" />
          <aliasOption key="rtc_cr_osce" />
          <aliasOption key="rtc_cr_um" />
          <aliasOption key="rtc_cr_sup" />
@@ -468,7 +494,11 @@
       <copy source="Snippets/rtc-example.cpp"    target="Snippets/rtc-example.cpp"   overwrite="true"  derived="true" />
    </projectActionList>
 
-   <template><![CDATA[
+   <template condition="/SIM/rtc_independent" ><![CDATA[
+      \t
+      \t//! Frequency of RTC External Clock or Crystal
+      \tstatic constexpr uint32_t osc_input_freq = $(osc_input_freq)UL;
+      \t
       \t/**
       \t * Get RTC clock frequency (internal, not masked by RTC_CR_CLKO)
       \t *

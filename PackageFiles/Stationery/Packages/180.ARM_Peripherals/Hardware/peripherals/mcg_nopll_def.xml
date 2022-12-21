@@ -5,10 +5,18 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Multipurpose Clock Generator">
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_no_pll" dim="/SIM/numberOfClockSettings" >
-      <param type="long" value="1"         />    <!-- mcg_c4_drst_drs max -->
+      class="net.sourceforge.usbdm.deviceEditor.validators.FrdivValidator" dim="/SIM/numberOfClockSettings" >
    </validate>
-   
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.FllValidator" dim="/SIM/numberOfClockSettings" >
+      <param type="long" value="1"         />    <!-- mcg_c4_drst_drs   -->
+   </validate>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_no_pll" dim="/SIM/numberOfClockSettings" >
+   </validate>
+
    <xi:include href="mcg_base_nopll.xml"/>
 
 </peripheralPage>

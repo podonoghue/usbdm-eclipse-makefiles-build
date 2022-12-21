@@ -17,10 +17,12 @@
       description="LLWU Wakeup sources"
       value="LPTMR0;CMP0;CMP1;;;RTC_Alarm;;RTC_Seconds" />
 
-   <xi:include href="_simCommon.xml"/>
+   <constant key="clock_divider_type" type="Integer" value="1" />
 
    <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) does not share XTAL/EXTAL pins -->
-   <constant key="rtc_independent" />
+   <constant key="rtc_independent"  type="Boolean" value="true" />
+
+   <xi:include href="_simCommon.xml"/>
 
    <intOption key="system_usb_clkin_clock"
       hidden="true"
@@ -269,7 +271,7 @@
                toolTip="Source for the %(NAME) receive data">
                <choice value="0" name="Rx pin"        enum="RxPin"  isDefault="true" />
                <choice value="1" name="CMP0 output"   enum="Cmp0" />
-               <choice value="2" name="CMP1 output"   enum="Cmp1" />
+               <choice value="2" name="CMP1 output"   enum="Cmp1" condition="/CMP1/$present" />
             </choiceOption>
 
             <choiceOption key="sim_sopt5_%(name)txsrc" condition="sim_sopt5_%(name)txsrc_present"
@@ -447,7 +449,7 @@
                units="Hz"
                description="USB Full Speed Clock"
                toolTip="Frequency of clock to USB full speed controller"
-               value="48_MHz" min="48_MHz" max="48_MHz" />
+               value="48_MHz" min="48_MHz" max="48_MHz" disabledValue="0" />
 
             <choiceOption key="sim_clkdiv3_pllfll[%(n)]" condition="sim_clkdiv3_pllflldiv_present"
                enumStem="SimPeripheralClockDivider"

@@ -702,7 +702,7 @@ $(/ADC/InitMethod: // /ADC/InitMethod not found)
             }
             clockFrequency /= 2;
          }
-#if !defined(USB_CLK_RECOVER_IRC_EN_REG_EN_MASK)
+#if $(adc_alt_clock_is_busDiv2:false)
          if ((adiv>3) && (adcClockSource == AdcClockSource_Bus)) {
             // Automatically switch from  AdcClockSource_Bus -> AdcClockSource_Busdiv2
             adcClockSource = AdcClockSource_Busdiv2;

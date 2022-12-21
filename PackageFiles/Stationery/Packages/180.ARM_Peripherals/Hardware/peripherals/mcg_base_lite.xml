@@ -4,82 +4,31 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator">
 
+   <!-- Clock mode as indicated by mcgClockMode[%(n)] choice index -->
+   <constant key="LIRC_2MHz"  value="0" type="Integer" />
+   <constant key="LIRC_8MHz"  value="1" type="Integer" />
+   <constant key="HIRC_48MHz"  value="2" type="Integer" />
+   <constant key="EXT"  value="3" type="Integer" />
+
+   <!-- Run mode as indicated by smc_pmctrl_runm[%(n)] choice index -->
+   <constant key="RUN"     value="0" type="Integer" />
+   <constant key="VLPR"    value="1" type="Integer" />
+   <constant key="HSRUN"   value="2" type="Integer" />
+
    <xi:include href="_default_instance.xml"/>
 
    <xi:include href="_currentClockSelection.xml"/>
 
-   <category name="LIRC" description="Low Speed Internal Reference Clock Sources [LIRC]"
-      toolTip="SLOW_IRC, FAST_IRC, MCGIRCLK" >
-      <intOption key="system_slow_irc_clock"
-         origin="SLOW IRC"
-         units="Hz"
-         description="Frequency of Slow Internal Reference [SIRC] Clock"
-         toolTip="Dependent on device and clock Trim. [Typically ~2MHz]"
-         value="2MHz" />
-
-      <intOption key="system_fast_irc_clock"
-         origin="FAST IRC"
-         units="Hz"
-         description="Frequency of Fast Internal Reference [FIRC] Clock"
-         toolTip="Dependent on device and clock Trim. [Typically ~8MHz]"
-         value="8MHz" />
-   </category>
-
    <category name="HIRC" description="High Speed Internal Clock Sources"
       toolTip="IRCLK48MCLK, USB_CLKIN, LPO" >
 
-      <intOption key="system_usb_clkin_clock"
-         origin="USB Clock In pin"
-         units="Hz"
-         description="Frequency of External USB Clock"
-         toolTip="Externally provided clock for USB on USB_CLKIN"
-         value="0" />
+      <aliasOption key="/SIM/system_usb_clkin_clock" optional="true" />
 
-      <intOption key="system_irc48m_clock"
-         constant="true"
-         units="Hz"
-         description="Frequency of Internal 48MHz Clock"
-         toolTip="48 MHz Internal Oscillator [Trimmed against USB bus]"
-         origin="48MHz clock from IRC48MCLK"
-         value="48MHz" />
+      <aliasOption key="/SIM/system_irc48m_clock" />
    </category>
 
    <category name="LPO" description="Low Power Clock Sources" >
       <aliasOption key="/PMC/system_low_power_clock"/>
-   </category>
-
-   <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
-      <aliasOption key="/OSC0/osc_input_freq" constant="false" />
-      <binaryOption key="mcg_c2_erefs0" condition="mcg_c2_erefs0_present"
-         description="External Reference Select"
-         toolTip="Determines whether a clock or crystal is used for the external reference clock"
-         disabledValue="1">
-         <choice value="0" name="External clock" />
-         <choice value="1" name="Oscillator" isDefault="true" />
-      </binaryOption>
-      <binaryOption key="mcg_c2_hgo0" condition="mcg_c2_hgo0_present"
-         description="Oscillator Gain"
-         toolTip="Controls the crystal oscillator mode of operation">
-         <choice value="0" name="Low power" isDefault="true"/>
-         <choice value="1" name="High gain" />
-      </binaryOption>
-      <choiceOption key="mcg_c2_range0" condition="mcg_c2_range0_present"
-         derived="true"
-         constant="true"
-         description="Frequency Range Select"
-         toolTip="Selects the frequency range for the crystal oscillator">
-         <choice value="0" name="Low range" />
-         <choice value="1" name="High range" />
-         <choice value="2" name="Very High range" />
-            <choice value="0" name="Unused" />
-      </choiceOption>
-      <aliasOption key="/OSC0/osc_clock" />
-
-   </category>
-
-   <category name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
-      <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
-      <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
    </category>
 
    <aliasOption key="/SIM/numberOfClockSettings" />
@@ -99,6 +48,50 @@
       </binaryOption>
    </for>
 
+   <!--  Run mode independent -->
+   <choiceOption key="oscMode"  condition="mcg_c2_erefs0_present&amp;&amp;mcg_c2_hgo0_present"
+      enumStem="OscMode"
+      hidden="true"
+      valueFormat="MCG_C2_EREFS0(%s),MCG_C2_HGO0(%s)"
+      description="OSC0 source control"
+      toolTip="Determines whether an external clock or crystal is used\n
+               and oscillator mode for OSC0">
+      <choice value="0,0" name="External clock"        enum="ExternalClock"        />
+      <choice value="1,0" name="Low Power Oscillator"  enum="LowPowerOscillator"   isDefault="true" />
+      <choice value="1,1" name="High Gain Oscillator"  enum="HighPowerOscillator"  />
+   </choiceOption>
+
+   <choiceOption key="oscMode"  condition="mcg_c2_erefs0_present&amp;&amp;!mcg_c2_hgo0_present"
+      enumStem="OscMode"
+      hidden="true"
+      valueFormat="MCG_C2_EREFS0(%s)"
+      description="OSC0 source control"
+      toolTip="Determines whether an external clock or crystal is used\n
+               and oscillator mode for OSC0">
+      <choice value="0" name="External clock"        enum="ExternalClock"        />
+      <choice value="1" name="Low Power Oscillator"  enum="LowPowerOscillator"   isDefault="true" />
+   </choiceOption>
+
+   <choiceOption key="mcg_c2_erefs0"  condition="mcg_c2_erefs0_present"
+      hidden="true"
+      ref="oscMode>=1"
+      derived="true"
+      description="External Reference Select"
+      toolTip="Determines whether an external clock or crystal is used">
+      <choice value="0" name="External clock"     />
+      <choice value="1" name="Oscillator"         isDefault="true" />
+   </choiceOption>
+
+   <choiceOption key="mcg_c2_hgo0"  condition="mcg_c2_hgo0_present"
+      hidden="true"
+      ref="oscMode==2"
+      derived="true"
+      description="Oscillator mode"
+      toolTip="Operation mdoe for oscillator">
+      <choice value="0" name="Low Power"  />
+      <choice value="1" name="High Gain"  />
+   </choiceOption>
+
    <for keys="n" dim="/SIM/numberOfClockSettings">
       <categoryOption key="ClockConfig[%(n)]"
          description="Clock configuration"
@@ -108,10 +101,482 @@
 
          <aliasOption key="enableClockConfiguration[%(n)]" constant="false" />
 
+         <graphic key="Clock configuration GUI[%(n)]"
+            var="ClockConfig[%(n)]"
+            description="Clock configuration[%(n)]"
+            toolTip="Opens a dialogue to alter this clock configuration" >
+
+            <graphicBox id="" x="10" y="10" params="0,0, x430, y50, x" >
+               <graphicItem id="RUN MODE"                  var="/SMC/smc_pmctrl_runm[%(n)]"         type="variableBox" params="80,  25,  140, large"                          />
+               <graphicItem id="MCG CLOCK MODE"            var="mcgClockMode[%(n)]"                 type="variableBox" params="290, 25,  240, large"                          />
+            </graphicBox>
+
+            <graphicBox id="MCG" x="10" y="70" params="0,0,   x570, y360,  x" >
+               <!-- MCGIRCLK -->
+               <graphicBox id="IRC" x="10" y="30" params="0,0,   x185, y170,  x" >
+                  <graphicItem id="SLOW IRC"                  var="system_slow_irc_clock[%(n)]"        type="variableBox" params="50,  40,  80, large"                            />
+                  <graphicItem id="FAST IRC"                  var="system_fast_irc_clock[%(n)]"        type="variableBox" params="50,  90,  80, large"                            />
+                  <graphicItem id="IRCLKEN,x40,y18"           var="mcg_c1_irclken[%(n)]"               type="node"        params="20,  130"                            />
+                  <graphicItem id="IREFSTEN,x40,y18"          var="mcg_c1_irefsten[%(n)]"              type="node"        params="20,  150"                            />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="SLOW IRC,0, IRCS,0"                           />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="FAST IRC,0, IRCS,1"                           />
+                  <graphicItem id="IRCS"                      var="mcg_c2_ircs[%(n)]"                  type="mux"         params="140, 65, 2"                             />
+                  <graphicItem id=""                          var="system_lirc_clock[%(n)]"            type="connector"   params="IRCS,0, LIRC_CLK.1,0, x50,d,y,x"                           />
+               </graphicBox>
+               <graphicItem id="LIRC_CLK.1"                var="system_lirc_clock[%(n)]"            type="node"        params="570,  30"                            />
+               <graphicItem id=""                          var="system_lirc_clock[%(n)]"            type="connector"   params="IRCS,0, LIRC DIV1,0, x50,y,x"                           />
+               <graphicItem id="LIRC DIV1"                 var="mcg_sc_fcrdiv[%(n)]"                type="choice"      params="290, 150, 100, small"                            />
+               <graphicItem id=""                          var=""                                   type="connector"   params="LIRC DIV1,0, LIRC_DIV1_CLK.1,0, x20,y,x "                           />
+               <graphicItem id="LIRC_DIV1_CLK.1"           var="system_lirc_div1_clock[%(n)]"       type="node"        params="570,  80"                            />
+               <graphicItem id=""                          var=""                                   type="connector"   params="LIRC DIV1,0, LIRC DIV2,0, x20,d,y,d,x"                           />
+               <graphicItem id="LIRC DIV2"                 var="mcg_mc_lirc_div2[%(n)]"             type="choice"      params="450, 130, 100, small"                            />
+               <graphicItem id=""                          var=""                                   type="connector"   params="LIRC DIV2,0, MCGIRCLK.1,0"                           />
+               <graphicItem id="MCGIRCLK.1"                var="system_mcgirclk_clock[%(n)]"        type="node"        params="570,  130"                            />
+
+               <graphicBox id="HIRC.1" x="10" y="220" params="0,0,   x150, y120,  x" >
+                  <graphicItem id="HIRC"                      var="/SIM/system_irc48m_clock[%(n)]"     type="variableBox" params="50,   40,  80, large"                            />
+                  <graphicItem id="HIRCEN,x40,y18"            var="mcg_mc_hircen[%(n)]"                type="node"        params="20,   80"                            />
+                  <graphicItem id="HIRCLPEN,x40,y18"          var="mcg_mc_hirclpen[%(n)]"              type="node"        params="20,  100"     condition="mcg_mc_hirclpen_present" />
+               </graphicBox>
+               <graphicItem id=""                          var=""                                   type="connector"   params="HIRC,0, MCGPCLK,0 "                           />
+               <graphicItem id="MCGPCLK"                   var="system_mcgpclk_clock[%(n)]"         type="node"        params="570,  260"                            />
+
+               <graphicItem id=""                          var=""                                   type="connector"   params="LIRC DIV1,0,        CLKS,1, x20,y,x"    />
+               <graphicItem id=""                          var=""                                   type="connector"   params="HIRC,0,             CLKS,0, (x-80),d,y,x"                   />
+               <graphicItem id="MCGERCLK_C_CLKS"           var=""                                   type="connector"   params="MCGERCLK_IN_IN0,0,  CLKS,2,      y,x"                 />
+               <graphicItem id="CLKS"                      var="mcg_c1_clks[%(n)]"                  type="mux"         params="480, 200, 3"                                    />
+               <graphicItem id=""                          var=""                                   type="connector"   params="CLKS,0,   MCGOUTCLK,0"                   />
+               <graphicItem id="MCGOUTCLK"                 var="system_mcgoutclk_clock[%(n)]"       type="node"        params="570,  200"                            />
+               <graphicItem id="MCGERCLK_IN_IN0,NONAME"      var=""                                   type="node"        params="430, 360, is,on"                                />
+
+               <!-- MCG OSC Inputs -->
+               <graphicItem id="OSCCLK_C_OSCSEL0"          var=""                                   type="connector"   params="OSCCLK,0,   MCGERCLK_IN_IN0,0, x"               condition="!mcg_c7_oscsel_present"  />
+            </graphicBox>
+
+            <equation key="y" value="450" />
+
+            <graphicBox    id="OSC0" x="10" y="y"  params="0,0, x280, y210,  x" >
+               <graphicItem id="XTAL"                      var="/OSC0/osc_input_freq"               type="variableBox" params="50,  30,  80, large, oe,os"                    />
+               <graphicItem id="ERCLKEN,x40,y17"           var="/OSC0/osc_cr_erclken"               type="node"        params="120, 55, in,os,os"                             />
+
+               <graphicItem id="SCP,NONAME"                var="/OSC0/osc_cr_scp"                   type="annotation"  params="10,  60,   50, 16"                               />
+               <graphicItem id="MODE,NONAME"               var="oscMode"                            type="annotation"  params="10,  145, 140, 16"                              />
+               <graphicItem id="RANGE,NONAME"              var="/OSC0/oscillatorRange"              type="annotation"  params="10,  165, 180, 16"                              />
+               <graphicItem id="EREFSTEN,NONAME"           var="/OSC0/osc_cr_erefsten"              type="annotation"  params="10,  185, 140, 20"                              />
+
+               <graphicItem id="OSC_DIV"                   var="/OSC0/osc_div_erps"                 type="variableBox" params="200, 110,  90, small"                           condition="/OSC0/osc_div_erps_present" />
+
+               <!-- Outputs -->
+               <graphicItem id="OSCCLK"                    var="/OSC0/osc_clock"                    type="node"        params="280, 30"                                       />
+               <graphicItem id="OSCERCLK_UNDIV.1"          var="/OSC0/oscer_undiv_clock"            type="node"        params="280, 70"                                       condition="/OSC0/osc_div_erps_present" />
+               <graphicItem id="OSCERCLK.1"                var="/OSC0/oscer_clock"                  type="node"        params="280, 110"                                       />
+               <graphicItem id="OSC32KCLK"                 var="/OSC0/osc32k_clock"                 type="node"        params="280, 150"                                       />
+
+               <graphicItem id=""                          var=""                                   type="connector"   params="XTAL,0,   OSCCLK,0"                             />
+               <graphicItem id=""                          var=""                                   type="connector"   params="XTAL,0,   ERCLKEN,0, x,d,y"                     />
+               <graphicItem id=""                          var="/OSC0/oscer_undiv_clock"            type="connector"   params="ERCLKEN,0,   OSCERCLK_UNDIV.1,0, y,d,x"         condition="/OSC0/osc_div_erps_present" />
+               <graphicItem id=""                          var="/OSC0/oscer_clock"                  type="connector"   params="ERCLKEN,1,   OSCERCLK.1,0, y,x"                 condition="!/OSC0/osc_div_erps_present" />
+               <graphicItem id=""                          var="/OSC0/oscer_undiv_clock"            type="connector"   params="ERCLKEN,0,   OSC_DIV,0, y,x"                    condition="/OSC0/osc_div_erps_present" />
+               <graphicItem id=""                          var="/OSC0/oscer_undiv_clock"            type="connector"   params="OSC_DIV,0,   OSCERCLK.1,0,     x"               condition="/OSC0/osc_div_erps_present" />
+               <graphicItem id=""                          var="/OSC0/osc32k_clock"                 type="connector"   params="XTAL,1,   OSC32KCLK,0, (y-20),(x-80),y,x"            />
+
+               <equation key="y" value="y+230" />
+            </graphicBox>
+
+            <graphicGroup  x="10" y="y"  condition="/SIM/rtc_shared" >
+               <graphicItem id="RTC_CLKIN"                 var="/SIM/rtc_clkin_clock"                type="reference"   params="100,10, 150" />
+               <graphicItem id=""                          var="/SIM/rtc_clkin_clock"                type="connector"   params="RTC_CLKIN,0, RTC_CLKIN.1,0"               />
+               <graphicItem id="RTC_CLKIN.1"               var="/SIM/rtc_clkin_clock"                type="node"        params="300, 10"                                />
+               <equation key="y" value="y+40" />
+            </graphicGroup>
+
+            <graphicBox    id="RTC" x="10" y="y" params="0,0, x280, y120,  x" condition="/SIM/rtc_shared" >
+               <graphicItem id="RTC_OSC_EN,NOVALUE"        var="/RTC/rtc_cr_osce"                   type="node"        params="40,   40"                                      />
+               <graphicItem id="RTC_SCP,NONAME"            var="/RTC/rtc_cr_scp"                    type="annotation"  params="10,   55, 50, 16"                              />
+
+               <!-- Inputs -->
+               <graphicItem id="RTC_IN"                    var="/RTC/rtc_input_clock"               type="node"        params="280, 30, ie,ow"                                />
+               <graphicItem id=""                          var="/RTC/rtc_input_clock"               type="connector"   params="RTC_IN,0,   /32768,0, (x-20),y,x"               />
+
+               <graphicItem id="/32768"                    var="/RTC/rtc_1hz_clock"                 type="label"       params="190,  70, 70, small"                            />
+
+               <!-- Outputs -->
+               <graphicItem id=""                          var="/RTC/rtc_1hz_clock"                 type="connector"   params="/32768,0,    RTC1Hz,0, x"                       />
+               <graphicItem id="RTC1Hz"                    var="/RTC/rtc_1hz_clock"                 type="node"        params="280, 70"                                       />
+
+               <graphicItem id=""                          var="/RTC/Note"                          type="annotation"  params="40, 90, 100, 20, %v"                       />
+
+               <equation key="y" value="y+140" />
+            </graphicBox>
+
+            <graphicBox    id="RTC" x="10" y="y" params="0,0, x280, y100,  x" condition="/SIM/rtc_independent" >
+               <graphicItem id="XTAL32"                   var="/RTC/osc_input_freq"                type="variableBox" params="50,   30,  90, large"                          />
+               <graphicItem id="RTC_OSC_EN,NOVALUE|NONAME" var="/RTC/rtc_cr_osce"                   type="node"        params="85,   20"                                      />
+               <graphicItem id="RTC_SCP,NONAME"            var="/RTC/rtc_cr_scp"                    type="annotation"  params="10,   55, 50, 16"                              />
+
+               <graphicItem id="RTC_CLKO,NOVALUE"          var="/RTC/rtc_cr_clko"                   type="node"        params="200,  30"                                      />
+               <graphicItem id="/32768"                    var="/RTC/rtc_1hz_clock"                 type="label"       params="190,  70, 70, small"                            />
+
+               <!-- Outputs -->
+               <graphicItem id="RTC32K"                    var="/RTC/rtcclk_gated_clock"            type="node"        params="280, 30"                                       />
+               <graphicItem id="RTC1Hz"                    var="/RTC/rtc_1hz_clock"                 type="node"        params="280, 70"                                       />
+
+               <graphicItem id=""                          var="/RTC/osc_clock"                     type="connector"   params="XTAL32,0,  RTC_CLKO,0, x"                      />
+               <graphicItem id=""                          var="/RTC/rtcclk_gated_clock"            type="connector"   params="RTC_CLKO,0,  RTC32K,0, x"                       />
+               <graphicItem id=""                          var="/RTC/osc_clock"                     type="connector"   params="XTAL32,0,   /32768,0, x30,d,y,x"               />
+               <graphicItem id=""                          var="/RTC/rtc_1hz_clock"                 type="connector"   params="/32768,0,    RTC1Hz,0, x"                       />
+               <equation key="y" value="y+120" />
+            </graphicBox>
+
+            <graphicBox    id="PMC" x="10" y="y" params="0,0, x280, y60,  x" >
+               <graphicItem id="LPO_OSC"                   var="/PMC/system_low_power_clock"        type="variableBox" params="50,  30,  80, large"                           />
+               <graphicItem id=""                          var=""                                   type="connector"   params="LPO_OSC,0,    LPO.1,0"                          />
+
+               <!-- Outputs -->
+               <graphicItem id="LPO.1"                     var="/PMC/system_low_power_clock"        type="node"        params="280, 30"                                       />
+               <equation key="y" value="y+80" />
+            </graphicBox>
+
+            <graphicBox    id="SIM" x="310" y="70" params="290,0, x310, y1540, x-600, y-1160, x" >
+
+               <!--
+               <graphicItem id=""                          var=""                                   type="connector"   params="LIRC_CLK.1,0, LIRC_CLK,0"               />
+               <graphicItem id="LIRC_CLK"                  var="system_lirc_clock[%(n)]"            type="node"        params="600,  30"                            />
+               <graphicItem id=""                          var=""                                   type="connector"   params="LIRC_DIV1_CLK.1,0, LIRC_DIV1_CLK,0"               />
+               <graphicItem id="LIRC_DIV1_CLK"             var="system_lirc_div1_clock[%(n)]"       type="node"        params="600,  80"                            />
+               -->
+               <graphicItem id=""                          var=""                                   type="connector"   params="MCGIRCLK.1,0, MCGIRCLK,0"               />
+               <graphicItem id="MCGIRCLK"                  var="system_mcgirclk_clock[%(n)]"        type="node"        params="600,  130"                            />
+               <graphicGroup condition="@/SIM/clock_divider_type==2" >
+                  <graphicItem id=""                          var=""                                   type="connector"   params="MCGOUTCLK,0, OUTDIV1,0, (x-30),y"               />
+                  <graphicItem id="OUTDIV1"                   var="/SIM/sim_clkdiv1_outdiv1[%(n)]"     type="choice"      params="500, 200, 100, small"                           />
+                  <graphicItem id="CORE_CLK.C"                var="/SIM/system_core_clock[%(n)]"       type="connector"   params="OUTDIV1,0, CORE_CLK,0"                          />
+                  <graphicItem id="CORE_CLK"      edit="true" var="/SIM/system_core_clock[%(n)]"       type="node"        params="600, 200"                                       />
+
+                  <graphicItem id=""                          var=""                                   type="connector"   params="OUTDIV1,0,   OUTDIV4,0, x15,d,y30,(x-20),y,x"   />
+                  <graphicItem id="OUTDIV4"                   var="/SIM/sim_clkdiv1_outdiv4[%(n)]"     type="choice"      params="500, 275, 100, small"                           />
+                  <graphicItem id="BUS_CLK.C"                 var="/SIM/system_bus_clock[%(n)]"        type="connector"   params="OUTDIV4,0, BUS_CLK,0"                           />
+                  <graphicItem id="BUS_CLK"       edit="true" var="/SIM/system_bus_clock[%(n)]"        type="node"        params="600, 275"                                       />
+               </graphicGroup>
+
+               <!-- PER_CLK -->
+               <graphicItem id=""                            var="/SIM/system_peripheral_clock[%(n)]" type="connector"   params="MCGPCLK,0,   PER_CLK,0, x100,y,x"               condition="!/SIM/sim_sopt2_pllfllsel_present" />
+               <graphicItem id="PER_CLK"                     var="/SIM/system_peripheral_clock[%(n)]" type="node"        params="600, 360"                                       />
+
+               <equation key="y" value="490" />
+
+                  <!-- OSCERCLK -->
+               <graphicGroup x="0" y="y" >
+                  <graphicItem id=""                           var=""                                   type="connector"   params="OSCERCLK.1,0,  OSCERCLK,0"   />
+                  <graphicItem id="OSCERCLK"                   var="/OSC0/oscer_clock"                  type="node"        params="600, 0"                    />
+
+                  <equation key="y" value="y+20" />
+               </graphicGroup>
+
+               <!-- OSC32KSEL => ERCLK32K -->
+               <graphicGroup x="0" y="y" condition="/SIM/sim_sopt1_osc32ksel" >
+                  <graphicItem id=""                          var=""                                   type="connector"   params="OSC32KCLK,0,   OSC32KSEL,0, x80,y,x"             />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="RTC_CLKIN.1,0, OSC32KSEL,1, x165,y,x"            condition="/SIM/rtc_shared" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="RTC32K,0,      OSC32KSEL,1, x165,d,y,d,x"        condition="/SIM/rtc_independent" />
+                  <graphicItem id="LPO_CN"                    var=""                                   type="connector"   params="LPO.1,0,       OSC32KSEL,2, (x-40),y,x"            />
+                  <graphicItem id=""                          var="/SIM/system_erclk32k_clock"         type="connector"   params="OSC32KSEL,0,   ERCLK32K,0, x"                    />
+                  <graphicItem id="OSC32KSEL"                 var="/SIM/sim_sopt1_osc32ksel"           type="mux"         params="265, 40, 3"                                    />
+                  <graphicItem id=""                          var="/SIM/system_erclk32k_clock"         type="connector"   params="OSC32KSEL,0,   RTC_IN,0, x20,d,y,x"          condition="/SIM/rtc_shared" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="OSC32KCLK,0,   ERCLK32K,0"                   condition="!/SIM/sim_sopt1_osc32ksel" />
+
+                  <graphicItem id="ERCLK32K"                  var="/SIM/system_erclk32k_clock"         type="node"        params="600, 40"                                       />
+
+                  <equation key="y" value="y+100" />
+               </graphicGroup>
+
+               <!-- LPO -->
+               <graphicGroup x="0" y="y" >
+                  <graphicItem id=""                       var=""                                   type="connector"   params="LPO.1,0,    LPO,0       "      condition="!/SIM/sim_sopt1_osc32ksel" />
+                  <graphicItem id=""                       var=""                                   type="connector"   params="LPO_CN,0,   LPO,0,       x-40,y,d,x"      condition="/SIM/sim_sopt1_osc32ksel" />
+                  <graphicItem id="LPO"                    var="/PMC/system_low_power_clock"        type="node"        params="600, 0"                                       />
+
+                  <equation key="y" value="y+60" />
+               </graphicGroup>
+
+               <!-- RTCCLKOUTSEL => RTCCLKOUT -->
+               <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_rtcclkoutsel">
+                  <graphicItem id=""                          var=""                                   type="connector"   params="OSCERCLK.1,0, RTCCLKOUTSEL,1, x145,d,y,x"          condition="/SIM/rtc_shared" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="RTC32K,0,     RTCCLKOUTSEL,1, x165,y,x"          condition="/SIM/rtc_independent" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="RTC1Hz,0,     RTCCLKOUTSEL,0, x0.9,y,x"         />
+                  <graphicItem id="RTCCLKOUTSEL"              var="/SIM/sim_sopt2_rtcclkoutsel"        type="mux"         params="375, 0, 2, mirror"                            />
+                  <graphicItem id=""                          var="/SIM/rtc_clkout"                    type="connector"   params="RTCCLKOUTSEL,0,  RTCCLKOUT,0, x"                />
+                  <graphicItem id="RTCCLKOUT"                 var="/SIM/rtc_clkout"                    type="node"        params="600, 0"                                       />
+
+                  <equation key="y" value="y+60" />
+               </graphicGroup>
+
+               <!-- TRACECLKSEL => TRACE_CLK -->
+               <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_traceclksel_present">
+                  <graphicItem id="MCGOUTCLK.1"               var="system_mcgoutclk_clock[%(n)]"       type="reference"   params="330,  0, 180"                                  />
+                  <graphicItem id="CORE_CLK.1"                var="/SIM/system_core_clock[%(n)]"       type="reference"   params="330, 20, 180"                                  />
+                  <graphicItem id=""                          var="system_mcgoutclk_clock[%(n)]"       type="connector"   params="MCGOUTCLK.1,0, TRACECLKSEL,0"                   />
+                  <graphicItem id=""                          var="/SIM/system_core_clock[%(n)]"       type="connector"   params="CORE_CLK.1,0,  TRACECLKSEL,1"                   />
+                  <graphicItem id="TRACECLKSEL"               var="/SIM/sim_sopt2_traceclksel"         type="mux"         params="460, 10, 2"                                    />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="TRACECLKSEL,0, TRACE_CLK,0"                     />
+                  <graphicItem id="TRACE_CLK"                 var="/SIM/traceClock"                    type="node"        params="600, 10"                                       />
+                  <equation key="y" value="y+80" />
+               </graphicGroup>
+
+               <!-- CLKOUTSEL => CLK_OUT -->
+               <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_clkoutsel_present" >
+                  <graphicItem id="FLEXBUS_CLK.5"             var="/SIM/system_flexbus_clock[%(n)]"    type="reference"   params="330,   0, 180"                                  condition="/SIM/sim_clkdiv1_outdiv3_present" />
+                  <graphicItem id="BUS_CLK.5"                 var="/SIM/system_bus_clock[%(n)]"        type="reference"   params="330,  40, 180"                                  condition="!/SIM/system_flash_clock[]" />
+                  <graphicItem id="FLASH_CLK.5"               var="/SIM/system_flash_clock[%(n)]"      type="reference"   params="330,  40, 180"                                  condition="/SIM/system_flash_clock[]" />
+                  <graphicItem id="LPO.5"                     var="/PMC/system_low_power_clock"        type="reference"   params="330,  60, 180"                                  />
+                  <graphicItem id="LIRC_CLK.5"                var="/MCG/system_lirc_clock[%(n)]"       type="reference"   params="330,  80, 180"                                  condition="/MCG/mcg_mc_lirc_div2_present" />
+                  <graphicItem id="MCGIRCLK.5"                var="/MCG/system_mcgirclk_clock[%(n)]"   type="reference"   params="330,  80, 180"                                  condition="!/MCG/mcg_mc_lirc_div2_present" />
+                  <graphicItem id="RTC32K.5"                  var="/RTC/rtcclk_gated_clock"            type="reference"   params="330, 100, 180"                                  condition="/SIM/rtc_independent" />
+                  <graphicItem id="OSCERCLK.5"                var="/OSC0/oscer_clock"                  type="reference"   params="330, 120, 180"                                  />
+                  <graphicItem id="IRC48M.5"                  var="/SIM/system_irc48m_clock[%(n)]"     type="reference"   params="330, 140, 180"                                  condition="/SIM/system_irc48m_clock[]" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="FLEXBUS_CLK.5,0, CLKOUTSEL,0"                   condition="/SIM/sim_sopt2_fbsl_present" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="BUS_CLK.5,0,     CLKOUTSEL,2"                   condition="!/SIM/system_flash_clock[]" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="FLASH_CLK.5,0,   CLKOUTSEL,2"                   condition="/SIM/system_flash_clock[]" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="LPO.5,0,         CLKOUTSEL,3"                   />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="LIRC_CLK.5,0,    CLKOUTSEL,4"                   condition="/MCG/mcg_mc_lirc_div2_present" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="MCGIRCLK.5,0,    CLKOUTSEL,4"                   condition="!/MCG/mcg_mc_lirc_div2_present" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="RTC32K.5,0,      CLKOUTSEL,5"                   condition="/SIM/rtc_independent" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="OSCERCLK.5,0,    CLKOUTSEL,6"                   />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="IRC48M.5,0,      CLKOUTSEL,7"                   condition="/SIM/system_irc48m_clock[]" />
+                  <graphicItem id="CLKOUTSEL"                 var="/SIM/sim_sopt2_clkoutsel[%(n)]"     type="mux"         params="460, 70, 8"                                     />
+                  <graphicItem id=""                          var="/SIM/clockOut[%(n)]"                type="connector"   params="CLKOUTSEL,0, CLK_OUT,0"                         />
+                  <graphicItem id="CLK_OUT"                   var="/SIM/clockOut[%(n)]"                type="node"        params="600, 70"                                        />
+                  <equation key="y" value="y+220" />
+               </graphicGroup>
+
+               <!-- UART0SRC => UART0_CLK -->
+               <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_uart0src_present" >
+                  <graphicItem id="PER_CLK.6"                 var="/SIM/system_peripheral_clock[%(n)]" type="reference"   params="370,  0, 180"              condition="!/SIM/sim_clkdiv3_pllflldiv_present" />
+                  <graphicItem id="OSCERCLK.6"                var="/OSC0/oscer_clock"                  type="reference"   params="370, 20, 180"                                  />
+                  <graphicItem id="MCGIRCLK.6"                var="/MCG/system_mcgirclk_clock[%(n)]"   type="reference"   params="370, 40, 180"                                  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="PER_CLK.6,0,  UART0SRC,1" condition="!/SIM/sim_clkdiv3_pllflldiv_present" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="OSCERCLK.6,0, UART0SRC,2"                      />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="MCGIRCLK.6,0, UART0SRC,3"                      />
+                  <graphicItem id="UART0SRC"                  var="/SIM/sim_sopt2_uart0src[%(n)]"      type="mux"         params="500, 10, 4"                                    />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="UART0SRC,0, UART0_CLK,0"                      />
+                  <graphicItem id="UART0_CLK"                 var="/SIM/system_uart0_clock[%(n)]"      type="node"        params="600, 10"                                       />
+                  <equation key="y" value="y+100" />
+               </graphicGroup>
+
+               <!-- UART0_FIXED_SRC -->
+               <graphicGroup x="0" y="y" condition="/SIM/system_uart0_fixedclocksource[%(n)]" >
+                  <graphicItem id="UART0_CLKSRC"            var="/SIM/system_uart0_fixedclocksource[%(n)]" type="reference"   params="370,  -10, 180"  />
+                  <graphicItem id=""                        var=""                                         type="connector"   params="UART0_CLKSRC,0,  UART0_CLK,0" />
+                  <graphicItem id="UART0_CLK"               var="/SIM/system_uart0_clock[%(n)]"            type="node"        params="600,  -10"       />
+                  <equation key="y" value="y+40" />
+               </graphicGroup>
+
+               <!-- UART1_FIXED_SRC -->
+               <graphicGroup x="0" y="y" condition="/SIM/system_uart1_fixedclocksource[%(n)]" >
+                  <graphicItem id="UART1_CLKSRC"            var="/SIM/system_uart1_fixedclocksource[%(n)]" type="reference"   params="370,  -10, 180"  />
+                  <graphicItem id=""                        var=""                                         type="connector"   params="UART1_CLKSRC,0,  UART1_CLK,0" />
+                  <graphicItem id="UART1_CLK"               var="/SIM/system_uart1_clock[%(n)]"            type="node"        params="600,  -10"       />
+                  <equation key="y" value="y+40" />
+               </graphicGroup>
+
+               <!-- UART2_FIXED_SRC -->
+               <graphicGroup x="0" y="y" condition="/SIM/system_uart2_fixedclocksource[%(n)]" >
+                  <graphicItem id="UART2_CLKSRC"            var="/SIM/system_uart2_fixedclocksource[%(n)]" type="reference"   params="370,  -10, 180"  />
+                  <graphicItem id=""                        var=""                                         type="connector"   params="UART2_CLKSRC,0,  UART2_CLK,0" />
+                  <graphicItem id="UART2_CLK"               var="/SIM/system_uart2_clock[%(n)]"            type="node"        params="600,  -10"       />
+                  <equation key="y" value="y+40" />
+               </graphicGroup>
+
+               <!-- UART3_FIXED_SRC -->
+               <graphicGroup x="0" y="y" condition="/SIM/system_uart3_fixedclocksource[%(n)]" >
+                  <graphicItem id="UART3_CLKSRC"            var="/SIM/system_uart3_fixedclocksource[%(n)]" type="reference"   params="370,  -10, 180"  />
+                  <graphicItem id=""                        var=""                                         type="connector"   params="UART3_CLKSRC,0,  UART3_CLK,0" />
+                  <graphicItem id="UART3_CLK"               var="/SIM/system_uart3_clock[%(n)]"            type="node"        params="600,  -10"       />
+                  <equation key="y" value="y+40" />
+               </graphicGroup>
+
+               <!-- UART4_FIXED_SRC -->
+               <graphicGroup x="0" y="y" condition="/SIM/system_uart4_fixedclocksource[%(n)]" >
+                  <graphicItem id="UART4_CLKSRC"            var="/SIM/system_uart4_fixedclocksource[%(n)]" type="reference"   params="370,  -10, 180"  />
+                  <graphicItem id=""                        var=""                                         type="connector"   params="UART4_CLKSRC,0,  UART4_CLK,0" />
+                  <graphicItem id="UART4_CLK"               var="/SIM/system_uart4_clock[%(n)]"            type="node"        params="600,  -10"       />
+                  <equation key="y" value="y+40" />
+               </graphicGroup>
+
+               <!-- CLKDIV3 -->
+               <graphicGroup x="0" y="y" condition="/SIM/sim_clkdiv3_pllflldiv_present" >
+                  <graphicItem id="PER_CLK.5"                 var="/SIM/system_peripheral_clock[%(n)]"             type="reference"   params="150, 70, 180, ow"                                  />
+                  <graphicItem id=""                          var="/SIM/system_peripheral_clock[%(n)]"             type="connector"   params="PER_CLK.5,0, CLKDIV3,0, (x-20),y,x"    condition="/SIM/sim_sopt2_lpuartsrc_present" />
+                  <graphicItem id="CLKDIV3"                   var="/SIM/sim_clkdiv3_pllfll[%(n)]"                  type="variableBox" params="150,  20, 180, large, iw,oe"       />
+                  <graphicItem id=""                          var="/SIM/system_peripheral_postdivider_clock[%(n)]" type="annotation"  params="270, -20, 40, 18"                               />
+                  <graphicItem id=""                          var="/SIM/system_peripheral_postdivider_clock[%(n)]" type="connector"   params="CLKDIV3,0, LPUARTSRC,1, x20,y,x"    condition="/SIM/sim_sopt2_lpuartsrc_present" />
+                  <graphicItem id=""                          var="/SIM/system_peripheral_postdivider_clock[%(n)]" type="connector"   params="CLKDIV3,0, TPMSRC,1,    x20,d,y,x"  condition="/SIM/sim_sopt2_tpmsrc_present" />
+               </graphicGroup>
+
+               <!-- TPMSRC -->
+               <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_tpmsrc_present" >
+                  <graphicItem id="PER_CLK.7"                 var="/SIM/system_peripheral_clock[%(n)]" type="reference"   params="370, 20, 180"            condition="!/SIM/sim_clkdiv3_pllflldiv_present" />
+                  <graphicItem id="OSCERCLK.7"                var="/OSC0/oscer_clock"                  type="reference"   params="370, 40, 180"                                  />
+                  <graphicItem id="MCGIRCLK.7"                var="/MCG/system_mcgirclk_clock[%(n)]"   type="reference"   params="370, 60, 180"                                  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="PER_CLK.7,0,  TPMSRC,1"  condition="!/SIM/sim_clkdiv3_pllflldiv_present" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="OSCERCLK.7,0, TPMSRC,2"                      />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="MCGIRCLK.7,0, TPMSRC,3"                      />
+                  <graphicItem id="TPMSRC"                    var="/SIM/sim_sopt2_tpmsrc[%(n)]"        type="mux"         params="500, 30, 4"                                    />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="TPMSRC,0, TPM_CLK,0"                      />
+                  <graphicItem id="TPM_CLK"                   var="/SIM/system_tpm_clock[%(n)]"        type="node"        params="600, 30"                                       />
+                  <equation key="y" value="y+120" />
+               </graphicGroup>
+
+               <!-- LPUARTSRC -->
+               <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_lpuartsrc_present" >
+                  <graphicItem id="PER_CLK.6"                 var="/SIM/system_peripheral_clock[%(n)]" type="reference"   params="370, 20, 180"              condition="!/SIM/sim_clkdiv3_pllflldiv_present" />
+                  <graphicItem id="OSCERCLK.6"                var="/OSC0/oscer_clock"                  type="reference"   params="370, 40, 180"                                  />
+                  <graphicItem id="MCGIRCLK.6"                var="/MCG/system_mcgirclk_clock[%(n)]"   type="reference"   params="370, 60, 180"                                  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="PER_CLK.6,0,  LPUARTSRC,1" condition="!/SIM/sim_clkdiv3_pllflldiv_present" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="OSCERCLK.6,0, LPUARTSRC,2"                      />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="MCGIRCLK.6,0, LPUARTSRC,3"                      />
+                  <graphicItem id="LPUARTSRC"                 var="/SIM/sim_sopt2_lpuartsrc[%(n)]"     type="mux"         params="500, 30, 4"                                    />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="LPUARTSRC,0, LPUART_CLK,0"                      />
+                  <graphicItem id="LPUART_CLK"                var="/SIM/system_lpuart_clock[%(n)]"     type="node"        params="600, 30"                                       />
+                  <equation key="y" value="y+120" />
+               </graphicGroup>
+
+               <!-- LPUART0SRC -->
+               <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_lpuart0src_present" >
+                  <graphicItem id="PER_CLK.6"                 var="/SIM/system_peripheral_clock[%(n)]" type="reference"   params="370, 20, 180"              condition="!/SIM/sim_clkdiv3_pllflldiv_present" />
+                  <graphicItem id="OSCERCLK.6"                var="/OSC0/oscer_clock"                  type="reference"   params="370, 40, 180"                                  />
+                  <graphicItem id="MCGIRCLK.6"                var="/MCG/system_mcgirclk_clock[%(n)]"   type="reference"   params="370, 60, 180"                                  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="PER_CLK.6,0,  LPUART0SRC,1" condition="!/SIM/sim_clkdiv3_pllflldiv_present" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="OSCERCLK.6,0, LPUART0SRC,2"                      />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="MCGIRCLK.6,0, LPUART0SRC,3"                      />
+                  <graphicItem id="LPUART0SRC"                var="/SIM/sim_sopt2_lpuart0src[%(n)]"    type="mux"         params="500, 30, 4"                                    />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="LPUART0SRC,0, LPUART0_CLK,0"                      />
+                  <graphicItem id="LPUART0_CLK"               var="/SIM/system_lpuart0_clock[%(n)]"    type="node"        params="600, 30"                                       />
+                  <equation key="y" value="y+120" />
+               </graphicGroup>
+
+               <!-- LPUART1SRC -->
+               <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_lpuart1src_present" >
+                  <graphicItem id="PER_CLK.6b"                var="/SIM/system_peripheral_clock[%(n)]" type="reference"   params="370, 20, 180"              condition="!/SIM/sim_clkdiv3_pllflldiv_present" />
+                  <graphicItem id="OSCERCLK.6b"               var="/OSC0/oscer_clock"                  type="reference"   params="370, 40, 180"                                  />
+                  <graphicItem id="MCGIRCLK.6b"               var="/MCG/system_mcgirclk_clock[%(n)]"   type="reference"   params="370, 60, 180"                                  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="PER_CLK.6b,0,  LPUART1SRC,1" condition="!/SIM/sim_clkdiv3_pllflldiv_present" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="OSCERCLK.6b,0, LPUART1SRC,2"                      />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="MCGIRCLK.6b,0, LPUART1SRC,3"                      />
+                  <graphicItem id="LPUART1SRC"                var="/SIM/sim_sopt2_lpuart1src[%(n)]"    type="mux"         params="500, 30, 4"                                    />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="LPUART1SRC,0, LPUART1_CLK,0"                      />
+                  <graphicItem id="LPUART1_CLK"               var="/SIM/system_lpuart1_clock[%(n)]"    type="node"        params="600, 30"                                       />
+                  <equation key="y" value="y+120" />
+               </graphicGroup>
+
+               <!-- USBFS_CLK -->
+               <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_usbsrc_present" >
+                  <graphicItem id="PER_CLK.4"                 var="/SIM/system_peripheral_clock[%(n)]" type="reference"   params="130, 0, 150"                                 />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="PER_CLK.4,0, USBSRC,1"             condition="!/SIM/sim_clkdiv2_usb[]" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="PER_CLK.4,0, CLKDIV2,0"             condition="/SIM/sim_clkdiv2_usb[]" />
+                  <graphicItem id="CLKDIV2"                   var="/SIM/sim_clkdiv2_usb[%(n)]"         type="variableBox" params="330, 0, 180, large"                 condition="/SIM/sim_clkdiv2_usb[]" />
+                  <graphicItem id=""                          var="/SIM/system_peripheral_clock[%(n)]" type="connector"   params="CLKDIV2,0, USBSRC,1"                condition="/SIM/sim_clkdiv2_usb[]" />
+
+                  <graphicItem id="USBCLKIN"                  var="/SIM/system_usb_clkin_clock"        type="variableBox" params="-120,40, 160, small"                          />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="USBCLKIN,0, USBCLKIN.1,0"                       />
+                  <graphicItem id="USBCLKIN.1,NOVALUE|NONAME" var="/SIM/system_usb_clkin_clock"        type="node"        params="0, 40"                                      />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="USBCLKIN.1,0, USBSRC,0, (x-20),y,x"                         />
+
+                  <graphicItem id="USBSRC"                    var="/SIM/sim_sopt2_usbsrc[%(n)]"        type="mux"         params="460, 10, 2, mirror"                                   />
+                  <graphicItem id=""                          var="/SIM/system_usbfs_clock[%(n)]"      type="connector"   params="USBSRC,0, USBFS_CLK,0"                          />
+                  <graphicItem id="USBFS_CLK"                 var="/SIM/system_usbfs_clock[%(n)]"      type="node"        params="600, 10"                                      />
+                  <equation key="y" value="y+100" />
+               </graphicGroup>
+
+               <!-- SDHCSRC -->
+               <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_sdhcsrc_present" >
+                  <graphicItem id="CORE_CLK.8"                var="/SIM/system_core_clock[%(n)]"       type="reference"   params="370,-20, 180"                       />
+                  <graphicItem id="PER_CLK.8"                 var="/SIM/system_peripheral_clock[%(n)]" type="reference"   params="370,  0, 180"                       />
+                  <graphicItem id="OSCERCLK.8"                var="/OSC0/oscer_clock"                  type="reference"   params="370, 20, 180"                       />
+                  <graphicItem id="SDHC_IN"                   var="/SIM/system_sdhc_clockin"           type="variableBox" params="-120,40, 160, small"                />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="SDHC_IN,0,  SDHC_IN.1,0"            />
+                  <graphicItem id="SDHC_IN.1,NONAME,NOVALUE"  var="/SIM/system_sdhc_clockin"           type="node"        params="0, 40"                              />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="CORE_CLK.8,0, SDHCSRC,0"            />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="PER_CLK.8,0,  SDHCSRC,1"            />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="OSCERCLK.8,0, SDHCSRC,2"            />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="SDHC_IN.1,0,  SDHCSRC,3"            />
+                  <graphicItem id="SDHCSRC"                   var="/SIM/sim_sopt2_sdhcsrc[%(n)]"       type="mux"         params="500, 10, 4"                         />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="SDHCSRC,0, SDHC_CLK,0"              />
+                  <graphicItem id="SDHC_CLK"                  var="/SIM/system_sdhc_clock[%(n)]"       type="node"        params="600, 10"                            />
+                  <equation key="y" value="y+120" />
+               </graphicGroup>
+
+               <!-- TIMESRC -->
+               <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_timesrc_present" >
+                  <graphicItem id="CORE_CLK.9"                  var="/SIM/system_core_clock[%(n)]"       type="reference"   params="370,-20, 180"                       />
+                  <graphicItem id="PER_CLK.9"                   var="/SIM/system_peripheral_clock[%(n)]" type="reference"   params="370,  0, 180"                       />
+                  <graphicItem id="OSCERCLK.9"                  var="/OSC0/oscer_clock"                  type="reference"   params="370, 20, 180"                       />
+                  <graphicItem id="ENET_IN"                     var="/SIM/system_time_clockin"           type="variableBox" params="-120,40, 160, small"                />
+                  <graphicItem id=""                            var=""                                   type="connector"   params="ENET_IN,0,  ENET_IN.1,0"            />
+                  <graphicItem id="ENET_IN.1,NONAME,NOVALUE"    var="/SIM/system_time_clockin"           type="node"        params="0, 40"                              />
+                  <graphicItem id=""                            var=""                                   type="connector"   params="CORE_CLK.9,0, TIMESRC,0"            />
+                  <graphicItem id=""                            var=""                                   type="connector"   params="PER_CLK.9,0,  TIMESRC,1"            />
+                  <graphicItem id=""                            var=""                                   type="connector"   params="OSCERCLK.9,0, TIMESRC,2"            />
+                  <graphicItem id=""                            var=""                                   type="connector"   params="ENET_IN.1,0,  TIMESRC,3"            />
+                  <graphicItem id="TIMESRC"                     var="/SIM/sim_sopt2_timesrc[%(n)]"       type="mux"         params="500, 10, 4"                         />
+                  <graphicItem id=""                            var=""                                   type="connector"   params="TIMESRC,0, ENET_TIME_CLK,0"         />
+                  <graphicItem id="ENET_TIME_CLK"               var="/SIM/system_time_clock[%(n)]"       type="node"        params="600, 10"                            />
+                  <equation key="y" value="y+120" />
+               </graphicGroup>
+
+            </graphicBox>
+
+         </graphic>
+
          <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" constant="false" />
 
-      <binaryOption key="mcg_mc_hircen[%(n)]" condition="mcg_mc_hircen_present"
-         enabledBy="/SMC/smc_pmctrl_runm[%(n)] == 0"
+         <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
+            <aliasOption key="/OSC0/osc_input_freq"   constant="false" />
+            <aliasOption key="/OSC0/osc_clock"        optional="true" />
+            <aliasOption key="/OSC0/osc_div_erps"     optional="true" constant="false" />
+            <aliasOption key="/OSC0/oscer_clock"               />
+            <aliasOption key="oscMode"                constant="false"  />
+         </category>
+
+         <category name="OSC1 (Real Time Clock)" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
+            <aliasOption key="/RTC/osc_input_freq"        optional="true" constant="false"  />
+            <aliasOption key="/RTC/rtc_cr_osce"           optional="true" constant="false"/>
+            <aliasOption key="/RTC/osc_clock"             optional="true"/>
+            <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
+            <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
+         </category>
+
+         <category name="LIRC" description="Low Speed Internal Reference Clock Sources [LIRC]"
+            toolTip="SLOW_IRC, FAST_IRC, MCGIRCLK" >
+            <intOption key="system_slow_irc_clock[%(n)]"
+               enabledBy="(/MCG/mcgClockMode[%(n)]==0)||((!/MCG/mcg_c2_ircs[%(n)])&amp;&amp;(/MCG/mcg_c1_irclken[%(n)])), Disabled as IRC not in use by MCG"
+               constant="true"
+               derived="true"
+               origin="SLOW IRC"
+               units="Hz"
+               description="Frequency of Slow Internal Reference [SIRC] Clock"
+               toolTip="Dependent on device and clock Trim. [Nominally 2MHz]"
+               value="2MHz" />
+
+            <intOption key="system_fast_irc_clock[%(n)]"
+               enabledBy="(/MCG/mcgClockMode[%(n)]==1)||((/MCG/mcg_c2_ircs[%(n)])&amp;&amp;(/MCG/mcg_c1_irclken[%(n)])), Disabled as IRC not in use by MCG"
+               constant="true"
+               derived="true"
+               origin="FAST IRC"
+               units="Hz"
+               description="Frequency of Fast Internal Reference [FIRC] Clock"
+               toolTip="Dependent on device and clock Trim. [Nominally 8MHz]"
+               value="8MHz" />
+         </category>
+
+      <binaryOption key="mcg_mc_hircen[%(n)]" condition="mcg_mc_hircen_present&amp;&amp;!mcg_mc_hirclpen_present"
+         enabledBy="/SMC/smc_pmctrl_runm[%(n)] != 1"
+         description="High-frequency IRC Clock Enable [MCGPCLK]"
+         toolTip="Enables the HIRC even when MCG_Lite is not working at HIRC mode">
+         <choice value="0" name="Enabled as required by MCG mode" />
+         <choice value="1" name="Always enabled" />
+      </binaryOption>
+
+      <binaryOption key="mcg_mc_hircen[%(n)]" condition="mcg_mc_hircen_present&amp;&amp;mcg_mc_hirclpen_present"
          description="High-frequency IRC Clock Enable [MCGPCLK]"
          toolTip="Enables the HIRC even when MCG_Lite is not working at HIRC mode">
          <choice value="0" name="Enabled as required by MCG mode" />
@@ -119,6 +584,7 @@
       </binaryOption>
 
       <binaryOption key="mcg_mc_hirclpen[%(n)]" condition="mcg_mc_hirclpen_present"
+         enabledBy="mcg_mc_hircen[%(n)]"
          description="High-frequency IRC Low-power Mode Enable [MCGPCLK]"
          toolTip="Enables the HIRC in Low-power modes such as Stop/VLPR/VLPW/VLPS mode">
          <choice value="0" name="Disabled in low power modes" />
@@ -126,80 +592,74 @@
       </binaryOption>
 
       <binaryOption key="mcg_c2_ircs[%(n)]"
+         enabledBy="(system_slow_irc_clock[%(n)]!=0)||(system_fast_irc_clock[%(n)]!=0)"
+         target="system_lirc_clock[%(n)]"
          description="Internal Reference [MCGIRCLK] Clock Source"
          toolTip="Clock Source for MCGIRCLK" >
-         <choice value="0" name="Slow internal reference clock" isDefault="true"/>
-         <choice value="1" name="Fast internal reference clock" />
+         <choice value="0" name="Slow internal reference clock" ref="system_slow_irc_clock[%(n)]" isDefault="true"/>
+         <choice value="1" name="Fast internal reference clock" ref="system_fast_irc_clock[%(n)]"  />
       </binaryOption>
-
-      <binaryOption key="mcg_c1_irclken[%(n)]"
-         description="Internal Reference Clock Enable [MCGIRCLK]"
-         toolTip="Enables the LIRC, even when MCG_Lite is not working at LIRC modes[%(n)]">
-         <choice value="0" name="Enabled as required by MCG mode" />
-         <choice value="1" name="Always enabled" isDefault="true" />
-      </binaryOption>
-
-      <binaryOption key="mcg_c1_irefsten[%(n)]"
-         description="Internal Reference Stop Enable [MCGIRCLK]"
-         toolTip="Determines if the LIRC is enabled in Stop mode">
-         <choice value="0" name="IR disabled in STOP" />
-         <choice value="1" name="IR enabled in STOP" />
-      </binaryOption>
-
-      <choiceOption key="mcg_sc_fcrdiv[%(n)]"
-         description="Internal Clock Reference Divider[LIRC_DIV1]"
-         toolTip="Selects the amount to divide down the selected internal reference clock\n
-            The FIR clock is available for use as MCGOUTCLK and after further division as MCGIRCLK">
-         <choice value="0" name="Divide by 1" isDefault="true" />
-         <choice value="1" name="Divide by 2" />
-         <choice value="2" name="Divide by 4" />
-         <choice value="3" name="Divide by 8" />
-         <choice value="4" name="Divide by 16" />
-         <choice value="5" name="Divide by 32" />
-         <choice value="6" name="Divide by 64" />
-         <choice value="7" name="Divide by 128" />
-      </choiceOption>
 
       <intOption key="system_lirc_clock[%(n)]"
          constant="true"
          units="Hz"
          description="Frequency of Low Speed Internal Reference [LIRC_CLK] "
          toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock"
-         value="2000000"/>
+         value="2000000"
+         disabledValue="0" />
 
-         <choiceOption key="mcgClockMode[%(n)]"
-            enumStem="McgClockMode"
-            valueFormat="%s"
-            description="MCG Clock Mode"
-            toolTip="Clock Modes\n
-               LIRC_8MHz  -  8 MHz low power internal reference clock\n
-               LIRC_2MHz  -  2 MHz low power internal reference clock\n
-               HIRC_48MHz -  48 MHz high speed internal reference clock\n
-               EXT        -  External reference clock (OSCCLK)" >
-            <choice name="2 MHz low power IRC (LIRC_2MHz)"  enum="LIRC_2MHz"  code="McgClockMode_LIRC_2M"    value="0"  />
-            <choice name="8 MHz low power IRC (LIRC_8MHz)"  enum="LIRC_8MHz"  code="McgClockMode_LIRC_8M"    value="1"  />
-            <choice name="48 MHz IRC (HIRC_48MHz)"          enum="HIRC_48MHz" code="McgClockMode_HIRC_48MHz" value="2"  />
-            <choice name="External (EXT)"                   enum="EXT"        code="McgClockMode_EXT"        value="3"  />
-         </choiceOption>
+      <binaryOption key="mcg_c1_irclken[%(n)]"
+         description="Internal Reference Clock Enable [MCGIRCLK]"
+         toolTip="Enables the LIRC, even when MCG not using LIRC">
+         <choice value="0" name="Enabled as required by MCG mode" />
+         <choice value="1" name="Always enabled" isDefault="true" />
+      </binaryOption>
+
+      <binaryOption key="mcg_c1_irefsten[%(n)]"
+         enabledBy="mcg_c1_irclken[%(n)]"
+         description="Internal Reference Stop Enable [MCGIRCLK]"
+         toolTip="Enables the LIRC in Stop mode (also requires IRCLKEN=1)">
+         <choice value="0" name="IR disabled in STOP" />
+         <choice value="1" name="IR enabled in STOP" />
+      </binaryOption>
+
+      <choiceOption key="mcg_sc_fcrdiv[%(n)]"
+         enabledBy="system_lirc_clock[%(n)]!=0"
+         target="system_lirc_div1_clock[%(n)]"
+         description="Internal Clock Reference Divider[LIRC_DIV1]"
+         toolTip="Selects the amount to divide down the selected internal reference clock\n
+            The FIR clock is available for use as MCGOUTCLK and after further division as MCGIRCLK">
+         <choice value="0" name="/1"   ref="(system_lirc_clock[%(n)])"     isDefault="true" />
+         <choice value="1" name="/2"   ref="(system_lirc_clock[%(n)])/2"   />
+         <choice value="2" name="/4"   ref="(system_lirc_clock[%(n)])/4"   />
+         <choice value="3" name="/8"   ref="(system_lirc_clock[%(n)])/8"   />
+         <choice value="4" name="/16"  ref="(system_lirc_clock[%(n)])/16"  />
+         <choice value="5" name="/32"  ref="(system_lirc_clock[%(n)])/32"  />
+         <choice value="6" name="/64"  ref="(system_lirc_clock[%(n)])/64"  />
+         <choice value="7" name="/128" ref="(system_lirc_clock[%(n)])/128" />
+      </choiceOption>
 
       <intOption key="system_lirc_div1_clock[%(n)]"
          constant="true"
          units="Hz"
          description="Frequency of Low Speed Internal Reference [LIRC_DIV1_CLK] "
          toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock/lirc_div1"
-         value="2000000" />
+         value="2000000"
+         disabledValue="0" />
 
       <choiceOption key="mcg_mc_lirc_div2[%(n)]"
+         enabledBy="system_lirc_div1_clock[%(n)]!=0"
+         target="system_mcgirclk_clock[%(n)]"
          description="Second Low-frequency Internal Reference Clock Divider"
          toolTip="Selects the factor value to further divide the LIRC source">
-         <choice value="0" name="Divide by 1" isDefault="true" />
-         <choice value="1" name="Divide by 2" />
-         <choice value="2" name="Divide by 4" />
-         <choice value="3" name="Divide by 8" />
-         <choice value="4" name="Divide by 16" />
-         <choice value="5" name="Divide by 32" />
-         <choice value="6" name="Divide by 64" />
-         <choice value="7" name="Divide by 128" />
+         <choice value="0" name="/1"   ref="system_lirc_div1_clock[%(n)]"     isDefault="true" />
+         <choice value="1" name="/2"   ref="system_lirc_div1_clock[%(n)]/2"   />
+         <choice value="2" name="/4"   ref="system_lirc_div1_clock[%(n)]/4"   />
+         <choice value="3" name="/8"   ref="system_lirc_div1_clock[%(n)]/8"   />
+         <choice value="4" name="/16"  ref="system_lirc_div1_clock[%(n)]/16"  />
+         <choice value="5" name="/32"  ref="system_lirc_div1_clock[%(n)]/32"  />
+         <choice value="6" name="/64"  ref="system_lirc_div1_clock[%(n)]/64"  />
+         <choice value="7" name="/128" ref="system_lirc_div1_clock[%(n)]/128" />
       </choiceOption>
 
       <intOption key="system_mcgirclk_clock[%(n)]"
@@ -210,13 +670,53 @@
          toolTip="Derived from Slow IRC or Fast IRC/lirc_div1/lirc_div2"
          value="2000000" />
 
+      <choiceOption key="mcg_c1_clks[%(n)]"
+         target="system_mcgoutclk_clock[%(n)]"
+         derived="true"
+         constant="true"
+         description="MCGOUTCLK Clock Source Select"
+         toolTip="Selects the clock source for MCGOUTCLK\n
+                  This option is determined by the Clock Mode selection\n" >
+         <choice value="0" name="HIRC clock [HIRC mode]"             ref="/SIM/system_irc48m_clock[%(n)]" />
+         <choice value="1" name="LIRC clock [LIRC2M or LIRC8M mode]" ref="system_lirc_div1_clock[%(n)]" />
+         <choice value="2" name="External clock (OSCCLK)[EXT mode]"  ref="/OSC0/osc_clock" />
+      </choiceOption>
+
+      <choiceOption key="mcgClockMode[%(n)]"
+         enumStem="McgClockMode"
+         valueFormat="%s"
+         description="MCG Clock Mode"
+         toolTip="Clock Modes\n
+            LIRC_8MHz  -  8 MHz low power internal reference clock\n
+            LIRC_2MHz  -  2 MHz low power internal reference clock\n
+            HIRC_48MHz -  48 MHz high speed internal reference clock\n
+            EXT        -  External reference clock (OSCCLK)" >
+         <choice name="2 MHz low power IRC (LIRC_2MHz)"  enum="LIRC_2MHz"  code="McgClockMode_LIRC_2M"    value="0"  />
+         <choice name="8 MHz low power IRC (LIRC_8MHz)"  enum="LIRC_8MHz"  code="McgClockMode_LIRC_8M"    value="1"  />
+         <choice name="48 MHz IRC (HIRC_48MHz)"          enum="HIRC_48MHz" code="McgClockMode_HIRC_48MHz" value="2"  />
+         <choice name="External (EXT)"                   enum="EXT"        code="McgClockMode_EXT"        value="3"  />
+      </choiceOption>
+
+      <choiceOption key="mcg_c2_range0[%(n)]" condition="mcg_c2_range0_present"
+         derived="true"
+         constant="true"
+         description="Frequency Range Select"
+         toolTip="Selects the frequency range for the crystal oscillator">
+         <choice value="0" name="Low range" />
+         <choice value="1" name="High range" />
+         <choice value="2" name="Very High range" />
+      </choiceOption>
+
       <intOption key="system_mcgpclk_clock[%(n)]"
+         ref="/SIM/system_irc48m_clock[%(n)]"
          derived="true"
          constant="true"
          units="Hz"
          description="MCGPCLK Output clock frequency"
          toolTip="Output of HIRC_48MHz available as peripheral clock"
          value="48000000" />
+
+      <aliasOption key="/SIM/system_peripheral_clock[%(n)]"/>
 
       <aliasOption key="/OSC0/osc_undiv_clock" optional="true" />
       <aliasOption key="/OSC0/osc_clock" />
@@ -231,6 +731,8 @@
                   Determined by current clock mode" />
 
       <intOption key="system_mcgoutclk_clock[%(n)]"
+         max="/SIM/MCGOUTCLK_max[/SMC/smc_pmctrl_runm[%(n)]]"
+         min="1"
          derived="true"
          constant="true"
          units="Hz"
@@ -243,17 +745,7 @@
 
       <category name="Device Parameters" description="Register values">
          <category name="MCG_C1" description="MCG Control Register 1">
-            <choiceOption key="mcg_c1_clks[%(n)]"
-               derived="true"
-               constant="true"
-               description="MCGOUTCLK Clock Source Select"
-               toolTip="Selects the clock source for MCGOUTCLK\n
-                        This option is determined by the Clock Mode selection\n" >
-               <choice value="0" name="HIRC clock [HIRC mode]" />
-               <choice value="1" name="LIRC clock [LIRC2M or LIRC8M mode]" />
-               <choice value="2" name="External clock (OSCCLK)[EXT mode]" />
-               <choice value="3" name="Reserved" />
-            </choiceOption>
+            <aliasOption key="mcg_c1_clks[%(n)]" />
             <aliasOption key="mcg_c1_irclken[%(n)]" />
             <aliasOption key="mcg_c1_irefsten[%(n)]" />
          </category>
@@ -278,7 +770,7 @@
    </for>
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_Lite" dim="/SIM/numberOfClockSettings">
+      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_Lite" dim="/SIM/numberOfClockSettings" >
    </validate>
 
    <projectActionList id = "mcg_files" >
@@ -293,13 +785,13 @@
 
    <template><![CDATA[
       \t//! Frequency of Slow Internal Reference Clock [~2MHz]
-      \tstatic constexpr uint32_t system_slow_lirc_clock = $(system_slow_irc_clock)UL;
+      \tstatic constexpr uint32_t system_slow_lirc_clock = $(system_slow_irc_clock[])UL;
 
       \t//! Frequency of Fast Internal Reference Clock [~8MHz]
-      \tstatic constexpr uint32_t system_fast_lirc_clock = $(system_fast_irc_clock)UL;
+      \tstatic constexpr uint32_t system_fast_lirc_clock = $(system_fast_irc_clock[])UL;
 
-      \t//! Frequency of High Speed Internal Reference Clock [~48MHz]
-      \tstatic constexpr uint32_t system_hirc_clock      = $(system_irc48m_clock)UL;
+      \t//! Frequency of HIRC [~48MHz]
+      \tstatic constexpr uint32_t system_irc48m_clock = $(/SIM/system_irc48m_clock[])UL;
 
       \t/**
       \t * Get HIRC_CLK
@@ -309,7 +801,7 @@
       \tstatic uint32_t getMcgPClk() {
       \t   // Directly enabled or required by current MCG clock mode
       \t   if ((mcg->MC&MCG_MC_HIRCEN_MASK) || ((mcg->S&MCG_S_CLKST_MASK) == MCG_S_CLKST(0))) {
-      \t      return system_hirc_clock;
+      \t      return system_irc48m_clock;
       \t   }
       \t   else {
       \t      return 0;
