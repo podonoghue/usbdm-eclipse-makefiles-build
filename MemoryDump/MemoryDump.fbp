@@ -456,7 +456,7 @@
                                         <property name="size">450,350</property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Enter one or more memory ranges</property>
+                                        <property name="tooltip">Enter one or more memory ranges.&#x0A;For paged addresses use PPAAAA where&#x0A;PP = page adress&#x0A;AAAA = page access address (within paged window)&#x0A;Values in hex</property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>

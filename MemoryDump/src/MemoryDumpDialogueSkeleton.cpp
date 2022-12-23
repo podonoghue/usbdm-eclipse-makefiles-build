@@ -82,7 +82,7 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 
 	// Cell Defaults
 	memoryRangesGrid->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-	memoryRangesGrid->SetToolTip( wxT("Enter one or more memory ranges") );
+	memoryRangesGrid->SetToolTip( wxT("Enter one or more memory ranges.\nFor paged addresses use PPAAAA where\nPP = page adress\nAAAA = page access address (within paged window)\nValues in hex") );
 
 	bSizer5->Add( memoryRangesGrid, 1, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
