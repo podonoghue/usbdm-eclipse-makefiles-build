@@ -26,17 +26,6 @@ namespace USBDM {
  */
 
 /**
- * Controls the modes in which the oscillator will operate
- */
-enum OscRunMode {
-   OscRunMode_Soc                             = RSIM_CONTROL_RF_OSC_EN(0b0000), //!< Oscillator will be controlled by the SoC, pin or link layer
-   OscRunMode_Run_Wait                        = RSIM_CONTROL_RF_OSC_EN(0b0001), //!< Oscillator enabled in Run/Wait
-   OscRunMode_Run_Wait_Stop                   = RSIM_CONTROL_RF_OSC_EN(0b0011), //!< Oscillator enabled in Run/Wait/Stop
-   OscRunMode_Run_Wait_Stop_Vlp_Run_Wait      = RSIM_CONTROL_RF_OSC_EN(0b0111), //!< Oscillator enabled in Run/Wait/Stop/VLPR/VLPW
-   OscRunMode_Run_Wait_Stop_Vlp_Run_Wait_Stop = RSIM_CONTROL_RF_OSC_EN(0b1111), //!< Oscillator enabled in Run/Wait/Stop/VLPR/VLPW/VLPS
-};
-
-/**
  * Template class providing interface to OscRfillator
  *
  * @tparam info      Information class for OSC
@@ -49,7 +38,7 @@ enum OscRunMode {
  * @endcode
  */
 template <class Info>
-class OscBase_T {
+class OscBase_T : public Info {
 
 private:
    /** Class to static check OSC signal is mapped to a pin - Assumes existence */
@@ -76,30 +65,10 @@ public:
    $(/OSC/classInfo: // No class Info found)
 
    /**
-    * Initialise OSC to default settings.
-    * Configures all OSC pins
-    */
-   static void defaultConfigure() {
-      if (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
-      // Configure RF OSC
-      RSIM->CONTROL = (RSIM->CONTROL&~RSIM_CONTROL_RF_OSC_EN_MASK)|RSIM_CONTROL_RF_OSC_EN(Osc0Info::rf_osc_en);
-   }
-
-   /**
     * Set up the OSC out of reset.
     */
    static void initialise() {
-      defaultConfigure();
-   }
-
-   /**
-    *
-    * @param oscRunMode Modes in which the oscillator will operate
-    */
-   static void setOscillatorRunModes(OscRunMode oscRunMode) {
-      RSIM->CONTROL = (RSIM->CONTROL&~RSIM_CONTROL_RF_OSC_EN_MASK)|oscRunMode;
+      Info::defaultConfigure();
    }
 };
 

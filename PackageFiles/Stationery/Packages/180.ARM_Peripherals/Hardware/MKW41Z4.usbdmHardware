@@ -391,9 +391,7 @@
          <param name="mcg_c1_irclken_present" key="/MCG/mcg_c1_irclken_present" value="true" />
          <param name="mcg_c1_irefs_present" key="/MCG/mcg_c1_irefs_present" value="true" />
          <param name="mcg_c1_irefsten_present" key="/MCG/mcg_c1_irefsten_present" value="true" />
-         <param name="mcg_c2_erefs0_present" key="/MCG/mcg_c2_erefs0_present" value="true" />
          <param name="mcg_c2_fcftrim_present" key="/MCG/mcg_c2_fcftrim_present" value="true" />
-         <param name="mcg_c2_hgo0_present" key="/MCG/mcg_c2_hgo0_present" value="true" />
          <param name="mcg_c2_ircs_present" key="/MCG/mcg_c2_ircs_present" value="true" />
          <param name="mcg_c2_locre0_present" key="/MCG/mcg_c2_locre0_present" value="true" />
          <param name="mcg_c2_lp_present" key="/MCG/mcg_c2_lp_present" value="true" />

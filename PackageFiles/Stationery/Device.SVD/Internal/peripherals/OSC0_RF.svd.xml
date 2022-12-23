@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKW41Z4
 -->
       <peripheral>
@@ -8,25 +8,191 @@ Devices using this peripheral:
          <description>System Oscillator</description>
          <groupName>OSC</groupName>
          <headerStructName>OSC</headerStructName>
-         <baseAddress>0x00000000</baseAddress>
-         <size>8</size>
+         <baseAddress>0x40059000</baseAddress>
+         <size>32</size>
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
-            <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x1</size>
+            <size>0x4</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
             <register>
-               <name>Dummy</name>
-               <description>Dummy Register</description>
+               <name>CONTROL</name>
+               <description>Radio System Control</description>
                <addressOffset>0x0</addressOffset>
-               <size>8</size>
-               <access>read-write</access>
-               <resetMask>0xFF</resetMask>
+               <resetValue>0xC00002</resetValue>
+               <fields>
+                  <field>
+                     <name>BLE_RF_OSC_REQ_EN</name>
+                     <description>BLE Ref Osc (Sysclk) Request Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BLE_RF_OSC_REQ_STAT</name>
+                     <description>BLE Ref Osc (Sysclk) Request Status</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>BLE_RF_OSC_REQ_INT_EN</name>
+                     <description>BLE Ref Osc (Sysclk) Request Interrupt Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BLE_RF_OSC_REQ_INT</name>
+                     <description>BLE Ref Osc (Sysclk) Request Interrupt Flag</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RF_OSC_EN</name>
+                     <description>RF Ref Osc Enable Select</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0000</name>
+                           <description>RF Ref Osc will be controlled by the SoC, external pin, or a link layer</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0001</name>
+                           <description>RF Ref Osc on in Run/Wait</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0011</name>
+                           <description>RF Ref Osc on in Run/Wait/Stop</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0111</name>
+                           <description>RF Ref Osc on in Run/Wait/Stop/VLPR/VLPW</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1111</name>
+                           <description>RF Ref Osc on in Run/Wait/Stop/VLPR/VLPW/VLPS</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RADIO_GASKET_BYPASS_OVRD_EN</name>
+                     <description>Radio Gasket Bypass Override Enable</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RADIO_GASKET_BYPASS_OVRD</name>
+                     <description>Radio Gasket Bypass Override</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IPP_OBE_3V_BLE_ACTIVE_1</name>
+                     <description>IPP_OBE_3V_BLE_ACTIVE_1</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IPP_OBE_3V_BLE_ACTIVE_2</name>
+                     <description>IPP_OBE_3V_BLE_ACTIVE_2</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RADIO_RAM_ACCESS_OVRD_EN</name>
+                     <description>Radio RAM Access Override Enable</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RADIO_RAM_ACCESS_OVRD</name>
+                     <description>Radio RAM Access Override</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSIM_DSM_EXIT</name>
+                     <description>BLE Force Deep Sleep Mode Exit</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSIM_STOP_ACK_OVRD_EN</name>
+                     <description>Stop Acknowledge Override Enable</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSIM_STOP_ACK_OVRD</name>
+                     <description>Stop Acknowledge Override</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RF_OSC_READY</name>
+                     <description>RF Ref Osc Ready</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Not Ready</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Ready</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RF_OSC_READY_OVRD_EN</name>
+                     <description>RF Ref Osc Ready Override Enable</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RF_OSC_READY_OVRD</name>
+                     <description>RF Ref Osc Ready Override</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BLOCK_SOC_RESETS</name>
+                     <description>Block SoC Resets of the Radio</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BLOCK_RADIO_OUTPUTS</name>
+                     <description>Block Radio Outputs</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ALLOW_DFT_RESETS</name>
+                     <description>Allow the DFT Reset Pin to Reset the Radio</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RADIO_RESET_BIT</name>
+                     <description>Software Reset for the Radio</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
             </register>
          </registers>
       </peripheral>

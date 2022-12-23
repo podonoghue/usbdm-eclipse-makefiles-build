@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKW41Z4
 -->
       <peripheral>
@@ -230,43 +230,6 @@ In any other MCG mode, LP bit has no affect</description>
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>Disabled in bypass</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>EREFS0</name>
-                     <description>External Reference Select\n
-Selects the source for the external reference clock</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>External reference clock</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Oscillator</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>HGO0</name>
-                     <description>High Gain Oscillator Select\nControls the crystal oscillator mode of operation</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Low-power operation</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>High-gain operation</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

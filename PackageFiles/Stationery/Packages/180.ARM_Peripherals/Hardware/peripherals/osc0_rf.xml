@@ -16,18 +16,22 @@
 
    <xi:include href="_mapPinsOption_on.xml"/>
 
-   <choiceOption key="rf_osc_en"
+   <choiceOption key="rsim_control_rf_osc_en"
+      enumStem="OscRunMode"
+      valueFormat="RSIM_CONTROL_RF_OSC_EN(%s)"
+      register="control"
       description="RF Reference Oscillator Enable Select"
       toolTip="The oscillator can be enabled by a Radio link layer,\n
-        by an internal SoC clock mode, by an External Pin request, or by this field">
-         <choice value="0b0000"  name="RF Ref Osc will be controlled by the SoC, external pin, or a link layer" />
-         <choice value="0b0001"  name="RF Ref Osc on in Run/Wait" isDefault="true"/>
-         <choice value="0b0011"  name="RF Ref Osc on in Run/Wait/Stop" />
-         <choice value="0b0111"  name="RF Ref Osc on in Run/Wait/Stop/VLPR/VLPW" />
-         <choice value="0b1111"  name="RF Ref Osc on in Run/Wait/Stop/VLPR/VLPW/VLPS" />
+        by an internal SoC clock mode (MCG), by an External Pin request, or by this field">
+         <choice value="0b0000"  enum="Soc"                             name="Osc controlled by SoC, PIN or link layer" />
+         <choice value="0b0001"  enum="Run_Wait"                        name="Osc - Run/Wait" isDefault="true"/>
+         <choice value="0b0011"  enum="Run_Wait_Stop"                   name="Osc - Run/Wait/Stop" />
+         <choice value="0b0111"  enum="Run_Wait_Stop_Vlp_Run_Wait"      name="Osc - Run/Wait/Stop/VLPR/VLPW" />
+         <choice value="0b1111"  enum="Run_Wait_Stop_Vlp_Run_Wait_Stop" name="Osc - Run/Wait/Stop/VLPR/VLPW/VLPS" />
       </choiceOption>
 
    <choiceOption key="osc_input_freq"
+      enabledBy="rsim_control_rf_osc_en>0"
       target="osc_clock"
       units="Hz"
       description="Frequency of External Crystal"
@@ -37,12 +41,14 @@
       </choiceOption>
 
    <intOption key="osc_clock"
+      enabledBy="rsim_control_rf_osc_en>0"
       constant="true"
       derived="true"
       units="Hz"
       description="Frequency of RF oscillator"
       toolTip="Frequency of RF oscillator"
-      value="32000000" />
+      value="32000000"
+      defaultValue="0" />
 
    <choiceOption key="oscillatorRange"
       derived="true"
@@ -72,10 +78,47 @@
       <copy source="Project_Headers/osc_rf.h"  target="Project_Headers/osc.h"  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <template><![CDATA[
+   <clockCodeTemplate variable="rsim_control_rf_osc_en"
+   ><![CDATA[
       \t//! RF Reference Oscillator Enable Select
-      \tstatic constexpr uint32_t rf_osc_en = $(rf_osc_en)UL;
+      \tstatic constexpr %enumClass %registerName = %initExpression;
+      \t
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t *
+      \t * @return true => OSC enable by %enumParam value - Wait for OSC stabilise may be needed
+      \t */
+      \tstatic bool setOscillatorRunModes(%enumClass %enumParam) {
+      \t   RSIM->CONTROL = (RSIM->CONTROL&~%mask)|%enumParam;
+      \t   return %enumParam!=0;
+      \t}
+      \t
+      \t/**
+      \t * Initialise OSC to default settings.
+      \t */
+      \tstatic void defaultConfigure() {
+      \t
+      \t   // Configure pins if selected and not already locked
+      \t   if constexpr (mapPinsOnEnable && !(MapAllPinsOnStartup || ForceLockedPins)) {
+      \t      initPCRs();
+      \t   }
+      \t
+      \t   /* Prevent XTAL_OUT_EN pin use as GPIO from generating XTAL_OUT request */
+      \t   RSIM->RF_OSC_CTRL = RSIM->RF_OSC_CTRL | RSIM_RF_OSC_CTRL_RADIO_EXT_OSC_OVRD_EN_MASK;
+      \t
+      \t   if (!setOscillatorRunModes(%registerName)) {
+      \t      return;
+      \t   }
+      \t
+      \t   while((RSIM->CONTROL & RSIM_CONTROL_RF_OSC_READY_MASK) == 0) {
+      \t      /* Wait for RF_OSC_READY */
+      \t   }
+      \t}\n\n
+   ]]></clockCodeTemplate>
 
+   <template><![CDATA[
       \t//! Frequency of OSC Clock or Crystal
       \tstatic constexpr uint32_t osc_clock = $(osc_clock)UL;
 

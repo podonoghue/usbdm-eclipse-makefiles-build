@@ -159,19 +159,20 @@
                </graphicGroup>
 
                <!-- MCG OSCSEL Inputs -->
-               <graphicItem id="OSCCLK_C_OSCSEL0"          var=""                                   type="connector"   params="OSCCLK,0,   OSCSEL_IN0,0, x,d,y"                    condition="mcg_c7_oscsel_present"   />
+               <graphicItem id="OSCCLK_C_OSCSEL0"          var=""                                   type="connector"   params="OSCCLK,0,   OSCSEL_IN0,0, x,d,y"                condition="mcg_c7_oscsel_present"   />
                <graphicItem id=""                          var=""                                   type="connector"   params="RTC32K,0,   OSCSEL_IN1,0, x,y"                  condition="/SIM/rtc_independent" />
             </graphicBox>
 
             <equation key="y" value="410" />
 
-            <graphicBox    id="OSC0" x="10" y="y"  params="0,0, x280, y60,  x" >
+            <graphicBox    id="OSC0" x="10" y="y"  params="0,0, x280, y80,  x" >
                <graphicItem id="XTAL"                      var="/OSC0/osc_input_freq"               type="variableBox" params="50,  30,  80, large, oe,os"                    />
+               <graphicItem id="OSC0_MODE,NONAME"          var="/OSC0/rsim_control_rf_osc_en"       type="annotation"  params="10,  60, 250, 16"                              />
 
-               <graphicItem id=""                          var=""                                   type="connector"   params="XTAL,0,   OSCCLK,0"                             />
+               <graphicItem id=""                          var=""                                   type="connector"   params="XTAL,0,   OSCCLK,0"                            />
                <graphicItem id="OSCCLK"                    var="/OSC0/osc_clock"                    type="node"        params="280, 30"                                       />
 
-               <equation key="y" value="y+80" />
+               <equation key="y" value="y+100" />
             </graphicBox>
 
             <graphicBox    id="RTC" x="10" y="y" params="0,0, x280, y170,  x" condition="/SIM/rtc_independent" >
@@ -246,7 +247,7 @@
 
                <graphicGroup x="0" y="y" >
                   <!-- OSCERCLK -->
-                  <graphicItem id=""                            var=""                                   type="connector"   params="OSCCLK,0, OSCERCLK,0, x0.7,y,x"               condition="!/SIM/sim_sopt2_pllfllsel_present" />
+                  <graphicItem id=""                           var=""                                   type="connector"   params="OSCCLK,0, OSCERCLK,0, x0.7,y,x"               condition="!/SIM/sim_sopt2_pllfllsel_present" />
                   <graphicItem id="OSCERCLK"                   var="/OSC0/oscer_clock"                  type="node"        params="600, 0"                    />
 
                   <equation key="y" value="y+20" />

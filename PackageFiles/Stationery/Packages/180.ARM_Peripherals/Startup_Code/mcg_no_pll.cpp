@@ -410,19 +410,24 @@ void Mcg::SystemCoreClockUpdate(void) {
       SystemMcgffClock = getSlowIrcFrequency();
    }
 
-   SystemMcgFllClock = 0;
-   SystemMcgPllClock = 0; // PLL - not available
+   uint32_t mcgFllClock = 0;
 
    if ((mcg->C2&MCG_C2_LP_MASK) == 0) {
       // Calculate FLL clock if active
-      SystemMcgFllClock = SystemMcgffClock *
+      mcgFllClock = SystemMcgffClock *
       /**/                ((mcg->C4&MCG_C4_DMX32_MASK)?732:640) *
       /**/                (((mcg->C4&MCG_C4_DRST_DRS_MASK)>>MCG_C4_DRST_DRS_SHIFT)+1);
 
+      // PLL - not available
    }
+   
+   SystemMcgFllClock = 0;
+   SystemMcgPllClock = 0; // Not available
+   
    switch (mcg->S&MCG_S_CLKST_MASK) {
       case MCG_S_CLKST(0) : // FLL
-         SystemMcgOutClock = SystemMcgFllClock;
+         SystemMcgOutClock = mcgFllClock;
+         SystemMcgFllClock = mcgFllClock;
          break;
       case MCG_S_CLKST(1) : // Internal Reference Clock
          SystemMcgOutClock = McgInfo::getInternalReferenceClock();

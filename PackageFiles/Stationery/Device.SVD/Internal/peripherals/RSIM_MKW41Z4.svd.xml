@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKW41Z4
 -->
       <peripheral>
@@ -73,17 +73,17 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0011</name>
-                           <description>RF Ref Osc on in Stop</description>
+                           <description>RF Ref Osc on in Run/Wait/Stop</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0111</name>
-                           <description>RF Ref Osc on in VLPR/VLPW</description>
+                           <description>RF Ref Osc on in Run/Wait/Stop/VLPR/VLPW</description>
                            <value>0b0111</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1111</name>
-                           <description>RF Ref Osc on in VLPS</description>
+                           <description>RF Ref Osc on in Run/Wait/Stop/VLPR/VLPW/VLPS</description>
                            <value>0b1111</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -148,6 +148,18 @@ Devices using this peripheral:
                      <bitOffset>24</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Not Ready</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Ready</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>RF_OSC_READY_OVRD_EN</name>
