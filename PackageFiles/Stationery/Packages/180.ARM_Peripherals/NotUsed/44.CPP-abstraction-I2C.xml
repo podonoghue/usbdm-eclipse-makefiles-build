@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE root SYSTEM "../package.dtd">
+<!DOCTYPE root SYSTEM "package.dtd">
 
 <root version="1.0" >
    <projectActionList id="CPP-abstraction-I2C" >

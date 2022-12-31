@@ -120,22 +120,22 @@
                <graphicItem id=""                          var="system_mcgirclk_clock[%(n)]"        type="connector"   params="MCGIRCLKEN,0, MCGIRCLK.1,0"                     />
                <graphicItem id="MCGIRCLK.1,NONAME"         var="system_mcgirclk_clock[%(n)]"        type="node"        params="570, 55"                                        />
 
-               <graphicItem id="FRDIV"                     var="mcg_c1_frdiv[%(n)]"                 type="choice"      params="60, 155, 85, large"                             />
-               <graphicItem id="RANGE,NONAME"              var="mcg_c2_range0[%(n)]"                type="annotation"  params="20, 180, 100, 20"                               />
+               <graphicItem id="FRDIV"                     var="mcg_c1_frdiv[%(n)]"                 type="choice"      params="65, 155, 85, large"                             />
+               <graphicItem id="RANGE,NONAME"              var="mcg_c2_range0[%(n)]"                type="annotation"  params="25, 180, 100, 20"                               />
                <graphicItem id=""                          var="mcg_erc_clock_divided[%(n)]"        type="connector"   params="FRDIV,0,    IREFS,0"                            />
-               <graphicItem id="FRDIV_OUT,NONAME"          var="mcg_erc_clock_divided[%(n)]"        type="annotation"  params="105, 157, 70, 20"                               />
+               <graphicItem id="FRDIV_OUT,NONAME"          var="mcg_erc_clock_divided[%(n)]"        type="annotation"  params="110, 157, 70, 20"                               />
                <graphicItem id=""                          var=""                                   type="connector"   params="SLOW IRC,0, IREFS,1, (x-20),d,y,x"              />
 
                <!-- IREFS => FLL/MCGFFCLK -->
-               <graphicItem id="IREFS"                     var="mcg_c1_irefs[%(n)]"                 type="mux"         params="190, 145, 2, mirror"                            />
-               <graphicItem id=""                          var="system_mcgffclk_clock[%(n)]"        type="connector"   params="IREFS,0, MCGFFCLK.1,0, x40,d,y,x"               />
+               <graphicItem id="IREFS"                     var="mcg_c1_irefs[%(n)]"                 type="mux"         params="195, 145, 2, mirror"                            />
+               <graphicItem id=""                          var="system_mcgffclk_clock[%(n)]"        type="connector"   params="IREFS,0, MCGFFCLK.1,0, x45,d,y,x"               />
                <graphicItem id="MCGFFCLK_A1,NONAME"        var="system_mcgffclk_clock[%(n)]"        type="annotation"  params="340, 85, 70, 20"                                />
                <graphicItem id="MCGFFCLK.1,NONAME"         var="system_mcgffclk_clock[%(n)]"        type="node"        params="570, 105"                                       />
                <graphicItem id=""                          var="system_mcgffclk_clock[%(n)]"        type="connector"   params="IREFS,0, FLL,0"                                 />
-               <graphicItem id="FLLINPUT,NONAME"           var="fllInputFrequency[%(n)]"            type="annotation"  params="200, 150,70, 20"                                />
-               <graphicItem id="FLL"                       var="system_mcgfllclk_clock[%(n)]"       type="variableBox" params="310, 145, 80, large"                            />
-               <graphicItem id="DMX32,NONAME"              var="mcg_c4_dmx32[%(n)]"                 type="annotation"  params="290, 165, 40, 18"                               />
-               <graphicItem id=""                          var=""                                   type="connector"   params="FLL,0,  MCGFLLCLK,0, x30,d,y,x"           />
+               <graphicItem id="FLLINPUT,NONAME"           var="fllInputFrequency[%(n)]"            type="annotation"  params="205, 150,70, 20"                                />
+               <graphicItem id="FLL"                       var="system_mcgfllclk_clock[%(n)]"       type="variableBox" params="315, 145, 80, large"                            />
+               <graphicItem id="DMX32,NONAME"              var="mcg_c4_dmx32[%(n)]"                 type="annotation"  params="285, 165, 40, 18"                               />
+               <graphicItem id=""                          var=""                                   type="connector"   params="FLL,0,  MCGFLLCLK,0, x25,d,y,x"           />
                <graphicItem id="MCGFLLCLK"                 var="system_mcgfllclk_clock[%(n)]"       type="node"        params="570, 205"                                       />
 
                <!-- FLL/IRCS => CLKS => MCGOUTCLK -->
@@ -177,7 +177,7 @@
                   <graphicItem id="MCGERCLK_IN_IN0,NONAME"      var=""                                   type="node"        params="430, 360, is,on"                                />
 
                   <graphicItem id="MCGERCLK_C_CLKS"             var="mcg_erc_clock[%(n)]"                type="connector"   params="MCGERCLK_IN_IN0,0,     CLKS,2,      y,x"                 />
-                  <graphicItem id="MCGERCLK_C_FRDIV"            var="mcg_erc_clock[%(n)]"                type="connector"   params="MCGERCLK_IN_IN0,0,     FRDIV,0,     y-20,d,(x-20),y,x"   />
+                  <graphicItem id="MCGERCLK_C_FRDIV"            var="mcg_erc_clock[%(n)]"                type="connector"   params="MCGERCLK_IN_IN0,0,     FRDIV,0,     y-20,d,(x-15),y,x"   />
                   <graphicItem id="MCGERCLK_C_PLL"              var="mcg_erc_clock[%(n)]"                type="connector"   params="MCGERCLK_IN_IN0,0,     PLL,0,       y-20,d,(x-20),d,y,x" condition="mcg_c5_prdiv0_present&amp;&amp;!/USBPHY1/$present" />
                   <graphicItem id="MCGERCLK"                    var="mcg_erc_clock[%(n)]"                type="annotation"  params="280, 315, 70, 20"                               />
                </graphicGroup>
@@ -204,7 +204,7 @@
 
                   <!-- OSCSEL output connections-->
                   <graphicItem id="OSCSEL_C_CLKS"             var="mcg_erc_clock[%(n)]"                type="connector"   params="OSCSEL,0,     CLKS,2,      y,x"                 />
-                  <graphicItem id="OSCSEL_C_FRDIV"            var="mcg_erc_clock[%(n)]"                type="connector"   params="OSCSEL,0,     FRDIV,0,     y-20,d,(x-20),y,x"   />
+                  <graphicItem id="OSCSEL_C_FRDIV"            var="mcg_erc_clock[%(n)]"                type="connector"   params="OSCSEL,0,     FRDIV,0,     y-20,d,(x-15),y,x"   />
                   <graphicItem id="OSCSEL_C_PLL"              var="mcg_erc_clock[%(n)]"                type="connector"   params="OSCSEL,0,     PLL,0,       y-20,d,(x-20),d,y,x" condition="!/USBPHY1/$present" />
 
                   <graphicItem id="MCGERCLK,NONAME"           var="mcg_erc_clock[%(n)]"                type="annotation"  params="340, 255, 70, 20"                               />

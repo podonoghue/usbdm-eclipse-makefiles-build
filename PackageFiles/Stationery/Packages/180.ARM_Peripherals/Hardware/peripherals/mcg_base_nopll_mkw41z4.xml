@@ -96,6 +96,7 @@
          <graphic key="Clock configuration GUI[%(n)]"
             var="ClockConfig[%(n)]"
             description="Clock configuration[%(n)]"
+            clockConfigIndex="%(n)"
             toolTip="Opens a dialogue to alter this clock configuration" >
 
             <graphicBox id="" x="10" y="10" params="0,0, x430, y50, x" >
@@ -507,7 +508,7 @@
             <aliasOption key="/OSC0/osc_clock"        optional="true" />
             <aliasOption key="/OSC0/osc_div_erps"     optional="true" constant="false" />
             <aliasOption key="/OSC0/oscer_clock"               />
-            <aliasOption key="oscMode"                constant="false"  />
+            <aliasOption key="oscMode"                optional="true" constant="false"  />
          </category>
 
          <category name="OSC1 (Real Time Clock)" description="RTC External Reference Clock/Oscillator [ERCLK32K]">

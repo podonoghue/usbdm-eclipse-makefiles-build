@@ -152,6 +152,7 @@
       ]]></template>
 
       <intOption key="rtc_clkout"
+         ref="/RTC/rtc_1hz_clock"
          hidden="true"
          constant="true"
          derived="true"

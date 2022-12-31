@@ -315,12 +315,22 @@ ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
             mcg->C2 = mcg->C2|MCG_C2_LP(1);
             break;
       }
+#ifdef RSIM_CONTROL_RF_OSC_READY_MASK
+      // Wait for RF oscillator stable (if used)
+      if ((mcg->C7&MCG_C7_OSCSEL_MASK) == McgErcSelect_OscClk) {
+         while((RSIM->CONTROL & RSIM_CONTROL_RF_OSC_READY_MASK) == 0) {
+            /* Wait for RF_OSC_READY */
+         }
+      }
+#endif
+#ifdef MCG_C2_EREFS0_MASK
       // Wait for oscillator stable (if used)
       if (clockInfo.c2&MCG_C2_EREFS0_MASK) {
          do {
             __asm__("nop");
          } while ((mcg->S & MCG_S_OSCINIT0_MASK) == 0);
       }
+#endif
       currentClockMode = next;
 
       // Maximum number of transitions is 3
