@@ -17,8 +17,16 @@
 
    <constant key="clock_divider_type" type="Integer" value="2" />
 
-   <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
-   <constant key="rtc_shared" type="Boolean" value="true" />
+   <!-- Indicates OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
+   <binaryOption key="RtcForcing"
+      constant="true"
+      derived="true"
+      ref="/RTC/rtc_cr_osce"
+      description="RTC control of OSC0"
+      toolTip="Indicates if OSC0 is being controlled by RTC which shares XTAL/EXTAL pins">
+      <choice value="0" name="OSC0 is independent"        isDefault="true" />
+      <choice value="1" name="OSC0 is controlled by RTC"                   />
+   </binaryOption>
 
    <xi:include href="_simCommon.xml"/>
 

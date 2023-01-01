@@ -7,12 +7,13 @@
    <xi:include href="_mapPinsOption_on.xml"/>
    <xi:include href="_default_instance.xml"/>
 
-   <binaryOption key="configure_rtc"
+   <binaryOption key="EnableRtc"
       description="Configure RTC"
-      toolTip="Enables configuration of RTC during startup  \n
-               If disabled no RTC registers are accessed">
-      <choice value="0" name="Disabled" />
-      <choice value="1" name="Enabled" isDefault="true" />
+      toolTip="Enables configuration of RTC.  \n
+               If disabled no RTC registers are accessed during startup.\n
+               This is necessary if the RTC is not powered.">
+      <choice value="0" name="Disabled" isDefault="true" />
+      <choice value="1" name="Enabled"  />
    </binaryOption>
 
    <category name="ERCLK32K Selection" description="Control source of ERCLK32K clock (nominally 32kHz)">
@@ -22,9 +23,18 @@
       <aliasOption key="/SIM/system_erclk32k_clock"   optional="true" />
    </category>
 
-   <binaryOption key="rtc_cr_osce"
+   <binaryOption key="rtc_cr_osce" condition="!/SIM/RtcForcing"
+      enabledBy="EnableRtc"
       description="Enable RTC oscillator"
       toolTip="Enable 32kHz RTC oscillator">
+      <choice value="0" name="Disabled" />
+      <choice value="1" name="Enabled" isDefault="true" />
+   </binaryOption>
+
+   <binaryOption key="rtc_cr_osce" condition="/SIM/RtcForcing"
+      enabledBy="EnableRtc"
+      description="Enable RTC oscillator"
+      toolTip="Enable OSC0 as 32kHz RTC oscillator">
       <choice value="0" name="Disabled" isDefault="true" />
       <choice value="1" name="Enabled" />
    </binaryOption>
@@ -51,7 +61,7 @@
          disabledValue="0" />
 
       <binaryOption key="rtc_cr_clko"
-         enabledBy="rtc_cr_osce, Disabled by rtc_cr_osce"
+         enabledBy="rtc_cr_osce"
          description="Enable RTC 32kHz Clock Output"
          toolTip="Determines if RTC 32kHz Clock is available to peripherals" >
          <choice value="1" name="Clock not output to peripherals" />
@@ -59,7 +69,7 @@
       </binaryOption>
 
       <intOption key="rtcclk_gated_clock"
-         enabledBy="rtc_cr_clko, Disabled by rtc_cr_clko"
+         enabledBy="rtc_cr_clko"
          ref="osc_clock"
          derived="true"
          constant="true"
@@ -77,14 +87,9 @@
          units="Hz"/>
 
    </if>
-   <if condition="/SIM/rtc_shared" >
-      <stringOption key="Note"
-         enabledBy="rtc_cr_osce"
-         constant="true"
-         derived="true"
-         toolTip="RTC OSC uses XTAL/EXTAL pins and disables OSC0 when enabled"
-         value="OSC0 is controlled by RTC OSC"
-         disabledValue="RTC OSC is disabled (OSC0 in use)" />
+
+   <if condition="/SIM/RtcForcing" >
+      <aliasOption key="/SIM/RtcForcing" />
 
       <aliasOption key="/OSC0/osc_input_freq" constant="false" />
 
@@ -159,7 +164,7 @@
       \t//! Whether to configure RTC
       \t//! If disabled then no RTC registers are accessed.
       \t//! This is useful if RTC is not powered as register access will trap.
-      \tstatic constexpr bool configure_rtc = $(configure_rtc);
+      \tstatic constexpr bool EnableRtc = $(EnableRtc);
       \t\n
    ]]></template>
 

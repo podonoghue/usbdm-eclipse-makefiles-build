@@ -8,13 +8,13 @@
 <root version="1.3.0">
    <family name="MKL03Z4">
       <device variant="FRDM_KL03Z" manual="KL03P24M48SF0RM" package="FRDM_KL03Z" deviceName="" />
-      <device variant="MKL03Z16VFG4" manual="KL03P24M48SF0RM" package="QFN_16"    deviceName="" />
-      <device variant="MKL03Z16VFK4" manual="KL03P24M48SF0RM" package="QFN_24"    deviceName="" />
-      <device variant="MKL03Z32CAF4" manual="KL03P24M48SF0RM" package="WLCP_20"   deviceName="" />
-      <device variant="MKL03Z32VFG4" manual="KL03P24M48SF0RM" package="QFN_16"    deviceName="" />
-      <device variant="MKL03Z32VFK4" manual="KL03P24M48SF0RM" package="QFN_24"    deviceName="" />
-      <device variant="MKL03Z8VFG4" manual="KL03P24M48SF0RM" package="QFN_16"    deviceName="" />
-      <device variant="MKL03Z8VFK4" manual="KL03P24M48SF0RM" package="QFN_24"    deviceName="" />
+      <device variant="MKL03Z16VFG4" manual="KL03P24M48SF0RM" package="QFN_16_MKL03" deviceName="" />
+      <device variant="MKL03Z16VFK4" manual="KL03P24M48SF0RM" package="QFN_24_MKL03" deviceName="" />
+      <device variant="MKL03Z32CAF4" manual="KL03P24M48SF0RM" package="WLCP_20_MKL03" deviceName="" />
+      <device variant="MKL03Z32VFG4" manual="KL03P24M48SF0RM" package="QFN_16_MKL03" deviceName="" />
+      <device variant="MKL03Z32VFK4" manual="KL03P24M48SF0RM" package="QFN_24_MKL03" deviceName="" />
+      <device variant="MKL03Z8VFG4" manual="KL03P24M48SF0RM" package="QFN_16_MKL03" deviceName="" />
+      <device variant="MKL03Z8VFK4" manual="KL03P24M48SF0RM" package="QFN_24_MKL03" deviceName="" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_mkl">
@@ -672,7 +672,7 @@
          <placement pin="VDD"           location="VDD" />
          <placement pin="VSS"           location="VSS" />
       </package>
-      <package name="QFN_16">
+      <package name="QFN_16_MKL03">
          <placement pin="PTA0"          location="p14" />
          <placement pin="PTA1"          location="p15" />
          <placement pin="PTA2"          location="p16" />
@@ -690,7 +690,7 @@
          <placement pin="VDD"           location="p1" />
          <placement pin="VSS"           location="p2" />
       </package>
-      <package name="QFN_24">
+      <package name="QFN_24_MKL03">
          <placement pin="PTA0"          location="p22" />
          <placement pin="PTA1"          location="p23" />
          <placement pin="PTA12"         location="p20" />
@@ -716,7 +716,7 @@
          <placement pin="VDD"           location="p3" />
          <placement pin="VSS"           location="p4" />
       </package>
-      <package name="WLCP_20">
+      <package name="WLCP_20_MKL03">
          <placement pin="PTA0"          location="pA4" />
          <placement pin="PTA1"          location="pB4" />
          <placement pin="PTA12"         location="pB3" />

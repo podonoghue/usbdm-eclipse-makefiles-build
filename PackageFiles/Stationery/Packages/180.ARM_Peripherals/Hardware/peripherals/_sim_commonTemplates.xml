@@ -141,8 +141,8 @@
          ]]></clockCodeTemplate>
       </if>
 
-   <else_if condition="rtc_shared" />
-      <!-- *********************** rtc_shared *********************** -->
+   <else_if condition="RtcForcing" />
+      <!-- *********************** RtcForcing *********************** -->
 
       <!-- Uses RTC_CLKIN pin -->
       <intOption key="rtc_clkin_clock"
@@ -199,7 +199,7 @@
       </if>
 
    <else />
-      <!-- *********************** !rtc_independent && !rtc_shared = rtc_none *********************** -->
+      <!-- *********************** !rtc_independent && !RtcForcing = rtc_none *********************** -->
 
       <!-- ERCCLK32K Sources -->
       <choiceOption key="sim_sopt1_osc32ksel_Fixed" condition="!sim_sopt1_osc32ksel"

@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- mgc_mk.xml -->
@@ -704,6 +705,7 @@
          <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" constant="false" />
 
          <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
+            <aliasOption key="/OSC0/enable"           constant="false" />
             <aliasOption key="/OSC0/osc_input_freq"   constant="false" />
             <aliasOption key="/OSC0/osc_clock"        optional="true" />
             <aliasOption key="/OSC0/osc_div_erps"     optional="true" constant="false" />

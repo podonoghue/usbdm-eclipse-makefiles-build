@@ -8,11 +8,32 @@
 
    <xi:include href="_mapPinsOption_on.xml"/>
 
+   <aliasOption key="/SIM/RtcForcing" optional="true" />
+
+   <binaryOption key="OscEnable" condition="!/SIM/RtcForcing"
+      description="Enable OSC system"
+      toolTip="Enables use of the OSC or external clock"
+      disabledValue="1" >
+      <choice value="0" name="Disabled" enum="Disabled"  isDefault="true" />
+      <choice value="1" name="Enabled"  enum="Enabled"   />
+   </binaryOption>
+
+   <binaryOption key="OscEnable" condition="/SIM/RtcForcing"
+      enabledBy="!/SIM/RtcForcing, Forced enabled by RTC"
+      description="Enable OSC system"
+      toolTip="Enables use of the OSC or external clock"
+      disabledValue="1" >
+      <choice value="0" name="Disabled" enum="Disabled"  isDefault="true" />
+      <choice value="1" name="Enabled"  enum="Enabled"   />
+   </binaryOption>
+
    <intOption key="osc_input_freq"
+      enabledBy="OscEnable"
       units="Hz"
       description="OSC frequency"
       toolTip="Frequency of external crystal or clock on XTAL/EXTAL"
-      value="8000000" />
+      value="8000000"
+      disabledValue="0" />
 
    <aliasOption key="/MCG/oscMode" constant="false" />
 
@@ -24,9 +45,11 @@
       description="Frequency of OSC Clock or Crystal [OSCCLK]"
       toolTip="Frequency of oscillator or external clock"
       value="8000000"
-      disabledValue="0" />
+      disabledValue="0"
+      min="1" />
 
    <binaryOption key="osc_cr_erclken"
+      enabledBy="OscEnable,Configuration disabled"
       enumStem="OscErClkEn"
       description="External Reference Enable"
       toolTip="Enables the OSC clock [OSCERCLK] for use by peripherals\n
@@ -102,8 +125,8 @@
       </choiceOption>
 
       <intOption key="oscer_clock"
-         enabledBy="osc_cr_erclken"
          ref="(osc_clock)/(1&lt;&lt;osc_div_erps)"
+         enabledBy="osc_cr_erclken"
          derived="true"
          units="Hz"
          description="Oscillator clock [OSCERCLK]"
@@ -111,11 +134,12 @@
          origin="OSC0 gated by ERCLKEN"
          value="8000000"
          disabledValue="0"
-         constant="true" />
+         constant="true"
+         min="1" />
    <else />
       <intOption key="oscer_clock" condition="!osc_div_erps_present"
-         enabledBy="osc_cr_erclken"
          ref="osc_clock"
+         enabledBy="osc_cr_erclken"
          derived="true"
          units="Hz"
          description="Oscillator clock [OSCERCLK]"
@@ -123,11 +147,12 @@
          origin="OSC0 gated by ERCLKEN"
          value="8000000"
          disabledValue="0"
-         constant="true" />
+         constant="true"
+         min="1" />
    </if>
 
    <intOption key="osc32k_clock"
-         enabledBy="(osc_input_freq&gt;=32000)&amp;&amp;(osc_input_freq&lt;=40000), Disable as XTAL frequency unsuitable"
+         enabledBy="OscEnable&amp;&amp;(osc_input_freq&gt;=32000)&amp;&amp;(osc_input_freq&lt;=40000), Disable as XTAL frequency unsuitable"
          ref="osc_clock"
          derived="true"
          units="Hz"
