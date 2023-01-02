@@ -72,6 +72,7 @@
          <binaryOption key="usbpllPreconditionsMet[%(n)]"
             ref="(/SMC/smc_pmctrl_runm[%(n)]!=1)&amp;&amp;(/OSC0/osc_cr_erclken)&amp;&amp;(/MCG/mcg_c1_irclken[%(n)])&amp;&amp;((/OSC0/osc_clock==12_MHz)||(/OSC0/osc_clock==16_MHz)||(/OSC0/osc_clock==24_MHz))"
             constant="true"
+            derived="true"
             description="USB PLL preconditions"
             toolTip="Indicates if preconditions for USB PLL operation are satisfied\n
                      - In RUN or HSRUN mode

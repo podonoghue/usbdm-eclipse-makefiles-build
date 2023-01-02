@@ -10,7 +10,7 @@
 
    <aliasOption key="/SIM/RtcForcing" optional="true" />
 
-   <binaryOption key="OscEnable" condition="!/SIM/RtcForcing"
+   <binaryOption key="EnableOsc" condition="!/SIM/RtcForcing"
       description="Enable OSC system"
       toolTip="Enables use of the OSC or external clock"
       disabledValue="1" >
@@ -18,7 +18,7 @@
       <choice value="1" name="Enabled"  enum="Enabled"   />
    </binaryOption>
 
-   <binaryOption key="OscEnable" condition="/SIM/RtcForcing"
+   <binaryOption key="EnableOsc" condition="/SIM/RtcForcing"
       enabledBy="!/SIM/RtcForcing, Forced enabled by RTC"
       description="Enable OSC system"
       toolTip="Enables use of the OSC or external clock"
@@ -28,7 +28,7 @@
    </binaryOption>
 
    <intOption key="osc_input_freq"
-      enabledBy="OscEnable"
+      enabledBy="EnableOsc"
       units="Hz"
       description="OSC frequency"
       toolTip="Frequency of external crystal or clock on XTAL/EXTAL"
@@ -49,7 +49,7 @@
       min="1" />
 
    <binaryOption key="osc_cr_erclken"
-      enabledBy="OscEnable,Configuration disabled"
+      enabledBy="EnableOsc,Configuration disabled"
       enumStem="OscErClkEn"
       description="External Reference Enable"
       toolTip="Enables the OSC clock [OSCERCLK] for use by peripherals\n
@@ -152,7 +152,7 @@
    </if>
 
    <intOption key="osc32k_clock"
-         enabledBy="OscEnable&amp;&amp;(osc_input_freq&gt;=32000)&amp;&amp;(osc_input_freq&lt;=40000), Disable as XTAL frequency unsuitable"
+         enabledBy="EnableOsc&amp;&amp;(osc_input_freq&gt;=32000)&amp;&amp;(osc_input_freq&lt;=40000), Disable as XTAL frequency unsuitable"
          ref="osc_clock"
          derived="true"
          units="Hz"
