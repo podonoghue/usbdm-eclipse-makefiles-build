@@ -144,7 +144,6 @@
          units="Hz"
          description="Oscillator clock [OSCERCLK]"
          toolTip="Clock available to some peripherals"
-         origin="OSC0 gated by ERCLKEN"
          value="8000000"
          disabledValue="0"
          constant="true"

@@ -4,16 +4,30 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
 
+   <!--                                   RUN        VLPR     -->
+   <constant key="MCGOUTCLK_max"  value="100MHz,     4MHz"   type="int"    hidden="false"/>
+
    <xi:include href="_default_instance.xml"/>
-
-   <xi:include href="_simCommon.xml"/>
-
-   <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
-   <constant key="rtc_shared" value="true" />
 
    <constant key="/SIM/llwu_device_list"
       description="LLWU Wakeup sources"
-      value="LPTMR0;CMP0;;;TSI;RTC_Alarm;;RTC_Seconds" />
+      value="LPTMR0;CMP0;;;TSI0;RTC_Alarm;;RTC_Seconds" />
+
+   <!-- Indicates ADC ALT clock source is Busclock/2-->
+   <constant key="adc_alt_clock_is_busDiv2" type="Boolean" value="true" />
+
+   <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
+   <binaryOption key="RtcForcing"
+      constant="true"
+      derived="true"
+      ref="/RTC/rtc_cr_osce"
+      description="RTC control of OSC0"
+      toolTip="Indicates if OSC0 is being controlled by RTC which shares XTAL/EXTAL pins">
+      <choice value="0" name="OSC0 is independent"        isDefault="true" />
+      <choice value="1" name="OSC0 is controlled by RTC"                   />
+   </binaryOption>
+
+   <xi:include href="_simCommon.xml"/>
 
    <category name="COPC" description="COP Control Register">
 
@@ -57,7 +71,7 @@
          enumStem="SimUsbPower"
          description="USB voltage regulator power control"
          toolTip="Controls when the USB voltage regulator is enabled in\n
-        (RUN), (STOP, VLPS, LLS and VLLS) or (VLPR and VLPW) modes">
+                  (RUN), (STOP, VLPS, LLS and VLLS) or (VLPR and VLPW) modes">
          <choice value="0,0,0"  name="Disabled in all modes"         enum="Disabled"               />
          <choice value="1,0,0"  name="Enabled in all modes"          enum="EnabledInAll"           isDefault="true" />
          <choice value="1,1,0"  name="Enabled in run and low power"  enum="EnabledInRun_LowPower"  />
@@ -233,7 +247,7 @@
                units="Hz"
                description="USB Full Speed Clock"
                toolTip="Frequency of clock to USB full speed controller"
-               value="48 MHz" min="48 MHz" max="48 MHz" />
+               value="48_MHz" min="48_MHz" max="48_MHz" disabledValue="0" />
 
             <for keys="p" values="0;1">
                <for keys   = "name:Name:NAME"
@@ -251,8 +265,8 @@
                   </choiceOption>
 
                   <intOption key="system_%(name)_clock[%(n)]" condition="sim_sopt2_%(name)src_present"
-                     constant="true"
                      derived="true"
+                     constant="true"
                      units="Hz"
                      description="%(NAME) Clock frequency"
                      toolTip="Frequency of clock to %(NAME)"
@@ -303,39 +317,56 @@
          <aliasOption key="/MCG/system_mcgoutclk_clock[%(n)]" />
 
          <intOption key="system_core_clock[%(n)]" condition="sim_clkdiv1_outdiv1_present"
-            ref="(/MCG/system_mcgoutclk_clock[%(n)])/(sim_clkdiv1_outdiv1[%(n)])"
+            ref="(/MCG/system_mcgoutclk_clock[%(n)])/((sim_clkdiv1_outdiv1[%(n)])+1)"
             derived="true"
             isNamedClock="true"
             units="Hz"
             description="System Core Clock"
             toolTip="Clocks the ARM Cortex-M4 core and bus masters"
-            value="48 MHz" />
+            value="48_MHz"
+            disabledValue="0" />
 
          <intOption key="system_bus_clock[%(n)]" condition="sim_clkdiv1_outdiv4_present"
-            ref="(system_core_clock[%(n)])/(sim_clkdiv1_outdiv4[%(n)])"
+            ref="(system_core_clock[%(n)])/(sim_clkdiv1_outdiv4[%(n)]+1)"
             derived="true"
             isNamedClock="true"
             units="Hz"
             description="System Bus Clock"
             toolTip="Clocks the bus slaves and peripherals\n
                      Must be &lt;= Core Clock frequency"
-            value="24 MHz" />
+            value="24_MHz"
+            disabledValue="0" />
 
          <category name="CLKDIV1" description="System Clock Dividers">
-            <intOption key="sim_clkdiv1_outdiv1[%(n)]"  condition="sim_clkdiv1_outdiv1_present"
+            <choiceOption key="sim_clkdiv1_outdiv1[%(n)]"  condition="sim_clkdiv1_outdiv1_present"
                constant="true"
                description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
-               toolTip="Clocks the ARM Cortex-M4 core and bus masters [SIM_CLKDIV1_OUTDIV1]\n
-                        Divides MCGOUT Clock to generate system_core_clock"
-               value="1" offset="-1" min="1" max="16" />
+               toolTip="Clocks the ARM Cortex-M4 core and bus masters\n
+                        Divides MCGOUTCLK Clock to generate system_core_clock.">
+               <choice value="0"   name="/1" />
+               <choice value="1"   name="/2" isDefault="true" />
+               <choice value="2"   name="/3" />
+               <choice value="3"   name="/4" />
+               <choice value="4"   name="/5" />
+               <choice value="5"   name="/6" />
+               <choice value="6"   name="/7" />
+               <choice value="7"   name="/8" />
+               <choice value="8"   name="/9" />
+               <choice value="9"   name="/10" />
+               <choice value="10"  name="/11" />
+               <choice value="11"  name="/12" />
+               <choice value="12"  name="/13" />
+               <choice value="13"  name="/14" />
+               <choice value="14"  name="/15" />
+               <choice value="15"  name="/16" />
+            </choiceOption>
 
-            <intOption key="sim_clkdiv1_outdiv4[%(n)]"  condition="sim_clkdiv1_outdiv4_present"
+            <choiceOption key="sim_clkdiv1_outdiv4[%(n)]"  condition="sim_clkdiv1_outdiv4_present"
                constant="true"
+               derivedFrom="sim_clkdiv1_outdiv1[%(n)]"
                description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"
-               toolTip="Clocks the flash memory [SIM_CLKDIV1_OUTDIV4]\n
-                        Divides MCGOUT Clock to generate system_flash_clock\n
-                        MCGOUTCLK clock is source. Default /4"
-               value="4" offset="-1" min="1" max="16" />
+               toolTip="Clocks the flash memory\n
+                        Divides Core Clock to generate system_flash_clock." />
          </category>
       </aliasCategoryOption>
    </for>

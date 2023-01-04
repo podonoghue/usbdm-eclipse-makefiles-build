@@ -11,14 +11,15 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <constant key="/SIM/llwu_device_list"
+   <constant key="llwu_device_list"
       description="LLWU Wakeup sources"
       value="LPTMR0;CMP0;Radio;DCDC;TSI0;RTC_Alarm;;RTC_Seconds" />
 
+   <!-- Clock divider -->
    <constant key="clock_divider_type" type="Integer" value="2" />
 
    <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) do not share XTAL/EXTAL pins -->
-   <constant key="rtc_independent" type="Boolean" value="true"  />
+   <constant key="rtc_mkw41z4" type="Boolean" value="true"  />
 
    <xi:include href="_simCommon.xml"/>
 
@@ -29,8 +30,8 @@
       description="ERCLK32K clock source"
       toolTip="Clock source of External 32k Reference Clock [ERCLK32K]\n
                RTC OSC is independent of OSC0 (32MHz rf_osc)">
-      <choice value="0" name="OSC1 (RTC) 32kHz OSC32KCLK"  ref="/RTC/osc_clock"              enum="Osc32kClk"  code="RtcInfo::getExternalClock()" />
-      <choice value="2" name="RTC clock in (EXTAL32)"      ref="/RTC/osc_input_freq"         enum="RtcClkin"   code="RtcInfo::osc_input_freq"     />
+      <choice value="0" name="OSC1 (RTC) 32kHz OSC32KCLK"  ref="/RTC/rtcclk_gated_clock"     enum="Osc32kClk"  code="RtcInfo::getExternalClock()" />
+      <choice value="2" name="RTC clock in (EXTAL32)"      ref="rtc_clkin_clock"             enum="RtcClkin"   code="rtc_clkin_clock"             />
       <choice value="3" name="LPO 1kHz clock"              ref="/PMC/system_low_power_clock" enum="LpoClk"     code="1000"                        isDefault="true"/>
    </choiceOption>
 
@@ -160,7 +161,7 @@
          description="RTC clock out frequency"
          toolTip="Clock frequency on the RTC_CLKOUT pin"  />
 
-      <aliasOption key="/SIM/system_peripheral_clock[]" optional="true" />
+      <aliasOption key="system_peripheral_clock[]" optional="true" />
       <aliasOption key="/OSC0/oscer_clock"               optional="true" />
       <aliasOption key="/MCG/system_mcgirclk_clock[]"    optional="true" />
    </category>
@@ -262,7 +263,7 @@
    <intOption key="OSCERCLK0_DIV8" derived="true" ref="(/OSC0/oscer_clock)/8" value="0" />
 
 
-   <for keys="n" dim="/SIM/numberOfClockSettings" >
+   <for keys="n" dim="numberOfClockSettings" >
       <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" constant="true" >
 
          <aliasOption key="/MCG/enableClockConfiguration[%(n)]" constant="false" />
@@ -276,7 +277,7 @@
                toolTip="Clock to output on the CLKOUT pin" >
                <choice value="0"  name="OSCERCLK0/2"         ref="(/OSC0/oscer_clock)/2"            enum="OscerClk0Div2" />
                <choice value="1"  name="OSCERCLK0/4"         ref="(/OSC0/oscer_clock)/4"            enum="OscerClk0Div4" />
-               <choice value="2"  name="Bus clock"           ref="/SIM/system_bus_clock[%(n)]"      enum="BusClk"       isDefault="true" />
+               <choice value="2"  name="Bus clock"           ref="system_bus_clock[%(n)]"      enum="BusClk"       isDefault="true" />
                <choice value="3"  name="LPO clock (1 kHz)"   ref="/PMC/system_low_power_clock"      enum="LpoClk"        />
                <choice value="4"  name="MCGIRCLK"            ref="/MCG/system_mcgirclk_clock[%(n)]" enum="McgIrClk"      />
                <choice value="5"  name="OSCERCLK0/8"         ref="(/OSC0/oscer_clock)/8"            enum="OscerClk0Div8" />
@@ -457,7 +458,7 @@
    <xi:include href="_sim_commonTemplates.xml" />
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL" dim="/SIM/numberOfClockSettings">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL" dim="numberOfClockSettings">
       <param type="long" value="48MHz"  />     <!-- RUN Core          -->
       <param type="long" value="24MHz"  />     <!-- RUN Bus           -->
 

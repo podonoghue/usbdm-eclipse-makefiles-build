@@ -94,7 +94,7 @@
 
    <for keys="n" dim="/SIM/numberOfClockSettings">
       <categoryOption key="ClockConfig[%(n)]"
-         description="Clock configuration"
+         description="Clock configuration[%(n)]"
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_%(n)"
          disabledValue="Disabled" >
@@ -147,7 +147,7 @@
                <graphicItem id="CLKS"                      var="mcg_c1_clks[%(n)]"                  type="mux"         params="480, 200, 3"                                    />
                <graphicItem id=""                          var=""                                   type="connector"   params="CLKS,0,   MCGOUTCLK,0"                   />
                <graphicItem id="MCGOUTCLK"                 var="system_mcgoutclk_clock[%(n)]"       type="node"        params="570,  200"                            />
-               <graphicItem id="MCGERCLK_IN_IN0,NONAME"      var=""                                   type="node"        params="430, 360, is,on"                                />
+               <graphicItem id="MCGERCLK_IN_IN0,NONAME,NOVALUE"      var="mcg_erc_clock[%(n)]"              type="node"        params="430, 360, is,on"                                />
 
                <!-- MCG OSC Inputs -->
                <graphicItem id="OSCCLK_C_OSCSEL0"          var=""                                   type="connector"   params="OSCCLK,0,   MCGERCLK_IN_IN0,0, x"               condition="!mcg_c7_oscsel_present"  />
@@ -157,6 +157,7 @@
 
             <graphicBox    id="OSC0" x="10" y="y"  params="0,0, x280, y210,  x" >
                <graphicItem id="XTAL"                      var="/OSC0/osc_input_freq"               type="variableBox" params="50,  30,  80, large, oe,os"                    />
+               <graphicItem id="Enable,NONAME"             var="/OSC0/EnableOsc"                    type="node"        params="80,  20"                                       />
                <graphicItem id="ERCLKEN,x40,y17"           var="/OSC0/osc_cr_erclken"               type="node"        params="120, 55, in,os,os"                             />
 
                <graphicItem id="SCP,NONAME"                var="/OSC0/osc_cr_scp"                   type="annotation"  params="10,  60,   50, 16"                               />
@@ -183,48 +184,50 @@
                <equation key="y" value="y+230" />
             </graphicBox>
 
-            <graphicGroup  x="10" y="y"  condition="/SIM/rtc_shared" >
+            <graphicGroup  x="10" y="y"  condition="/SIM/RtcForcing" >
                <graphicItem id="RTC_CLKIN"                 var="/SIM/rtc_clkin_clock"                type="reference"   params="100,10, 150" />
                <graphicItem id=""                          var="/SIM/rtc_clkin_clock"                type="connector"   params="RTC_CLKIN,0, RTC_CLKIN.1,0"               />
                <graphicItem id="RTC_CLKIN.1"               var="/SIM/rtc_clkin_clock"                type="node"        params="300, 10"                                />
                <equation key="y" value="y+40" />
             </graphicGroup>
 
-            <graphicBox    id="RTC" x="10" y="y" params="0,0, x280, y120,  x" condition="/SIM/rtc_shared" >
-               <graphicItem id="RTC_OSC_EN,NOVALUE"        var="/RTC/rtc_cr_osce"                   type="node"        params="40,   40"                                      />
-               <graphicItem id="RTC_SCP,NONAME"            var="/RTC/rtc_cr_scp"                    type="annotation"  params="10,   55, 50, 16"                              />
+            <graphicBox    id="RTC" x="10" y="y" params="0,0, x280, y120,  x" condition="/SIM/RtcForcing" >
+               <graphicItem id="ENABLE RTC,NOVALUE,x40,y17" var="/RTC/EnableRtc"                     type="node"        params="20,   30"                                      />
+               <graphicItem id="RTC_OSC_EN,NOVALUE,x40,y17" var="/RTC/rtc_cr_osce"                   type="node"        params="20,   45"                                      />
+               <graphicItem id="RTC_SCP,NONAME"             var="/RTC/rtc_cr_scp"                    type="annotation"  params="10,   60, 50, 16, Cap=%v"                      />
 
                <!-- Inputs -->
-               <graphicItem id="RTC_IN"                    var="/RTC/rtc_input_clock"               type="node"        params="280, 30, ie,ow"                                />
-               <graphicItem id=""                          var="/RTC/rtc_input_clock"               type="connector"   params="RTC_IN,0,   /32768,0, (x-20),y,x"               />
+               <graphicItem id="RTC_IN"                     var="/RTC/rtc_input_clock"               type="node"        params="280, 30, ie,ow"                                />
+               <graphicItem id=""                           var="/RTC/rtc_input_clock"               type="connector"   params="RTC_IN,0,   /32768,0, (x-20),y,x"               />
 
-               <graphicItem id="/32768"                    var="/RTC/rtc_1hz_clock"                 type="label"       params="190,  70, 70, small"                            />
+               <graphicItem id="/32768"                     var="/RTC/rtc_1hz_clock"                 type="label"       params="190,  70, 70, small"                            />
 
                <!-- Outputs -->
-               <graphicItem id=""                          var="/RTC/rtc_1hz_clock"                 type="connector"   params="/32768,0,    RTC1Hz,0, x"                       />
-               <graphicItem id="RTC1Hz"                    var="/RTC/rtc_1hz_clock"                 type="node"        params="280, 70"                                       />
+               <graphicItem id=""                           var="/RTC/rtc_1hz_clock"                 type="connector"   params="/32768,0,    RTC1Hz,0, x"                       />
+               <graphicItem id="RTC1Hz"                     var="/RTC/rtc_1hz_clock"                 type="node"        params="280, 70"                                       />
 
-               <graphicItem id=""                          var="/RTC/Note"                          type="annotation"  params="40, 90, 100, 20, %v"                       />
+               <graphicItem id=""                           var="/SIM/RtcForcing"                    type="annotation"  params="10, 90, 100, 20, %v"                       />
 
                <equation key="y" value="y+140" />
             </graphicBox>
 
             <graphicBox    id="RTC" x="10" y="y" params="0,0, x280, y100,  x" condition="/SIM/rtc_independent" >
-               <graphicItem id="XTAL32"                   var="/RTC/osc_input_freq"                type="variableBox" params="50,   30,  90, large"                          />
-               <graphicItem id="RTC_OSC_EN,NOVALUE|NONAME" var="/RTC/rtc_cr_osce"                   type="node"        params="85,   20"                                      />
-               <graphicItem id="RTC_SCP,NONAME"            var="/RTC/rtc_cr_scp"                    type="annotation"  params="10,   55, 50, 16"                              />
+               <graphicItem id="XTAL32"                        var="/RTC/osc_input_freq"                type="variableBox" params="50,   30,  90, large"                          />
+               <graphicItem id="RTC_OSC_EN,NOVALUE|NONAME"     var="/RTC/rtc_cr_osce"                   type="node"        params="85,   20"                                      />
+               <graphicItem id="RTC_SCP,NONAME"                var="/RTC/rtc_cr_scp"                    type="annotation"  params="10,   55, 50, 16"                              />
+               <graphicItem id="CONFIGURE RTC,NOVALUE,x40,y17" var="/RTC/EnableRtc"                     type="node"        params="20,   85"                                      />
 
-               <graphicItem id="RTC_CLKO,NOVALUE"          var="/RTC/rtc_cr_clko"                   type="node"        params="200,  30"                                      />
-               <graphicItem id="/32768"                    var="/RTC/rtc_1hz_clock"                 type="label"       params="190,  70, 70, small"                            />
+               <graphicItem id="RTC_CLKO,NOVALUE"           var="/RTC/rtc_cr_clko"                   type="node"        params="200,  30"                                      />
+               <graphicItem id="/32768"                     var="/RTC/rtc_1hz_clock"                 type="label"       params="190,  70, 70, small"                            />
 
                <!-- Outputs -->
-               <graphicItem id="RTC32K"                    var="/RTC/rtcclk_gated_clock"            type="node"        params="280, 30"                                       />
-               <graphicItem id="RTC1Hz"                    var="/RTC/rtc_1hz_clock"                 type="node"        params="280, 70"                                       />
+               <graphicItem id="RTC32K"                     var="/RTC/rtcclk_gated_clock"            type="node"        params="280, 30"                                       />
+               <graphicItem id="RTC1Hz"                     var="/RTC/rtc_1hz_clock"                 type="node"        params="280, 70"                                       />
 
-               <graphicItem id=""                          var="/RTC/osc_clock"                     type="connector"   params="XTAL32,0,  RTC_CLKO,0, x"                      />
-               <graphicItem id=""                          var="/RTC/rtcclk_gated_clock"            type="connector"   params="RTC_CLKO,0,  RTC32K,0, x"                       />
-               <graphicItem id=""                          var="/RTC/osc_clock"                     type="connector"   params="XTAL32,0,   /32768,0, x30,d,y,x"               />
-               <graphicItem id=""                          var="/RTC/rtc_1hz_clock"                 type="connector"   params="/32768,0,    RTC1Hz,0, x"                       />
+               <graphicItem id=""                           var="/RTC/osc_clock"                     type="connector"   params="XTAL32,0,  RTC_CLKO,0, x"                      />
+               <graphicItem id=""                           var="/RTC/rtcclk_gated_clock"            type="connector"   params="RTC_CLKO,0,  RTC32K,0, x"                       />
+               <graphicItem id=""                           var="/RTC/osc_clock"                     type="connector"   params="XTAL32,0,   /32768,0, x30,d,y,x"               />
+               <graphicItem id=""                           var="/RTC/rtc_1hz_clock"                 type="connector"   params="/32768,0,    RTC1Hz,0, x"                       />
                <equation key="y" value="y+120" />
             </graphicBox>
 
@@ -276,12 +279,12 @@
                <!-- OSC32KSEL => ERCLK32K -->
                <graphicGroup x="0" y="y" condition="/SIM/sim_sopt1_osc32ksel" >
                   <graphicItem id=""                          var=""                                   type="connector"   params="OSC32KCLK,0,   OSC32KSEL,0, x80,y,x"             />
-                  <graphicItem id=""                          var=""                                   type="connector"   params="RTC_CLKIN.1,0, OSC32KSEL,1, x165,y,x"            condition="/SIM/rtc_shared" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="RTC_CLKIN.1,0, OSC32KSEL,1, x165,y,x"            condition="/SIM/RtcForcing" />
                   <graphicItem id=""                          var=""                                   type="connector"   params="RTC32K,0,      OSC32KSEL,1, x165,d,y,d,x"        condition="/SIM/rtc_independent" />
                   <graphicItem id="LPO_CN"                    var=""                                   type="connector"   params="LPO.1,0,       OSC32KSEL,2, (x-40),y,x"            />
                   <graphicItem id=""                          var="/SIM/system_erclk32k_clock"         type="connector"   params="OSC32KSEL,0,   ERCLK32K,0, x"                    />
                   <graphicItem id="OSC32KSEL"                 var="/SIM/sim_sopt1_osc32ksel"           type="mux"         params="265, 40, 3"                                    />
-                  <graphicItem id=""                          var="/SIM/system_erclk32k_clock"         type="connector"   params="OSC32KSEL,0,   RTC_IN,0, x20,d,y,x"          condition="/SIM/rtc_shared" />
+                  <graphicItem id=""                          var="/SIM/system_erclk32k_clock"         type="connector"   params="OSC32KSEL,0,   RTC_IN,0, x20,d,y,x"          condition="/SIM/RtcForcing" />
                   <graphicItem id=""                          var=""                                   type="connector"   params="OSC32KCLK,0,   ERCLK32K,0"                   condition="!/SIM/sim_sopt1_osc32ksel" />
 
                   <graphicItem id="ERCLK32K"                  var="/SIM/system_erclk32k_clock"         type="node"        params="600, 40"                                       />
@@ -300,7 +303,7 @@
 
                <!-- RTCCLKOUTSEL => RTCCLKOUT -->
                <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_rtcclkoutsel">
-                  <graphicItem id=""                          var=""                                   type="connector"   params="OSCERCLK.1,0, RTCCLKOUTSEL,1, x145,d,y,x"          condition="/SIM/rtc_shared" />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="OSCERCLK.1,0, RTCCLKOUTSEL,1, x145,d,y,x"          condition="/SIM/RtcForcing" />
                   <graphicItem id=""                          var=""                                   type="connector"   params="RTC32K,0,     RTCCLKOUTSEL,1, x165,y,x"          condition="/SIM/rtc_independent" />
                   <graphicItem id=""                          var=""                                   type="connector"   params="RTC1Hz,0,     RTCCLKOUTSEL,0, x0.9,y,x"         />
                   <graphicItem id="RTCCLKOUTSEL"              var="/SIM/sim_sopt2_rtcclkoutsel"        type="mux"         params="375, 0, 2, mirror"                            />
@@ -670,6 +673,15 @@
          toolTip="Derived from Slow IRC or Fast IRC/lirc_div1/lirc_div2"
          value="2000000" />
 
+         <intOption key="mcg_erc_clock[%(n)]"
+            ref="/OSC0/osc_clock"
+            constant="true"
+            units="Hz"
+            derived="true"
+            description="Frequency of MCG External reference"
+            toolTip="External reference clock used by MCG"
+            value="0" />
+
       <choiceOption key="mcg_c1_clks[%(n)]"
          target="system_mcgoutclk_clock[%(n)]"
          derived="true"
@@ -679,7 +691,7 @@
                   This option is determined by the Clock Mode selection\n" >
          <choice value="0" name="HIRC clock [HIRC mode]"             ref="/SIM/system_irc48m_clock[%(n)]" />
          <choice value="1" name="LIRC clock [LIRC2M or LIRC8M mode]" ref="system_lirc_div1_clock[%(n)]" />
-         <choice value="2" name="External clock (OSCCLK)[EXT mode]"  ref="/OSC0/osc_clock" />
+         <choice value="2" name="External clock (OSCCLK)[EXT mode]"  ref="mcg_erc_clock[%(n)]" />
       </choiceOption>
 
       <choiceOption key="mcgClockMode[%(n)]"

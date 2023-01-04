@@ -39,7 +39,7 @@
       <choice value="1" name="Enabled" />
    </binaryOption>
 
-   <if condition="/SIM/rtc_independent" >
+   <if condition="/SIM/rtc_independent || /SIM/rtc_mkw41z4" >
       <intOption key="osc_input_freq"
          enabledBy="rtc_cr_osce"
          units="Hz"
@@ -78,6 +78,9 @@
          toolTip="RTC clock available to peripherals"
          value="0" />
 
+   </if>
+
+   <if condition="/SIM/rtc_independent" >
       <floatOption key="rtc_1hz_clock"
          ref="(osc_clock)/32768.0"
          constant="true"
@@ -88,8 +91,8 @@
 
    </if>
 
-   <if condition="/SIM/RtcForcing" >
-      <aliasOption key="/SIM/RtcForcing" />
+   <if condition="/SIM/RtcForcing || /SIM/rtc_mkw41z4" >
+      <aliasOption key="/SIM/RtcForcing" optional="true" />
 
       <aliasOption key="/OSC0/osc_input_freq" constant="false" />
 
@@ -499,7 +502,7 @@
       <copy source="Snippets/rtc-example.cpp"    target="Snippets/rtc-example.cpp"   overwrite="true"  derived="true" />
    </projectActionList>
 
-   <template condition="/SIM/rtc_independent" ><![CDATA[
+   <template condition="/SIM/rtc_independent || /SIM/rtc_mkw41z4" ><![CDATA[
       \t
       \t//! Frequency of RTC External Clock or Crystal
       \tstatic constexpr uint32_t osc_input_freq = $(osc_input_freq)UL;
