@@ -13,7 +13,7 @@
       \tstatic constexpr int outputPin  = 0;\n\n
    ]]></template>
 
-   <constant key="disable_peripheral" value = "dac->C0 = DAC_C0_DACEN(0);"  />
+   <constant key="disable_peripheral" value = "&quot;dac->C0 = DAC_C0_DACEN(0);&quot;"  />
 
    <xi:include href="_mapPinsOption.xml"/>
 

@@ -20,6 +20,7 @@
    <item key="/MCG/mcgClockMode[2]"                        value="1" />
    <item key="/MCG/pll0OutputFrequency[0]"                 value="96000000" />
    <item key="/MCG/pll0OutputFrequency[3]"                 value="96000000" />
+   <item key="/OSC0/OscEnable"                             value="true" />
    <item key="/RTC/rtc_cr_osce"                            value="true" />
    <item key="/SIM/sim_clkdiv1_outdiv1[2]"                 value="1" />
    <item key="/SIM/sim_clkdiv1_outdiv2[2]"                 value="1" />

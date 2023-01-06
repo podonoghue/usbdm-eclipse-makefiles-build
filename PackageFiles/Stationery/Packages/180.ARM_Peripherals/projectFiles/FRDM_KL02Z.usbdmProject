@@ -101,10 +101,6 @@
    <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_VLPR_BLPE_32kHz" />
    <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_RUN_FEI_48MHz" />
    <item key="/MCG/enableClockConfiguration[1]"            value="true" />
-   <item key="/MCG/fllOutputFrequency[0]"                  value="47967960" />
-   <item key="/MCG/fllOutputFrequency[1]"                  value="47972352" />
-   <item key="/MCG/fllOutputFrequency[2]"                  value="47967960" />
-   <item key="/MCG/fllOutputFrequency[3]"                  value="47972352" />
    <item key="/MCG/mcgClockMode[0]"                        value="1" />
    <item key="/MCG/mcgClockMode[1]"                        value="3" />
    <item key="/MCG/mcgClockMode[2]"                        value="5" />
@@ -112,11 +108,20 @@
    <item key="/MCG/mcg_c4_dmx32[1]"                        value="true" />
    <item key="/MCG/mcg_c4_dmx32[2]"                        value="true" />
    <item key="/MCG/mcg_c4_dmx32[3]"                        value="true" />
+   <item key="/MCG/system_mcgfllclk_clock[0]"              value="47967960" />
+   <item key="/MCG/system_mcgfllclk_clock[3]"              value="47972352" />
+   <item key="/OSC0/EnableOsc"                             value="true" />
    <item key="/OSC0/osc_input_freq"                        value="32765" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[0]"                 value="2" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[1]"                 value="5" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[2]"                 value="1" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[3]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[0]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[1]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[2]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[3]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[1]"                 value="3" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[2]"                 value="0" />
+   <item key="/SIM/sim_sopt2_tpmsrc[1]"                    value="3" />
+   <item key="/SIM/sim_sopt2_tpmsrc[2]"                    value="3" />
+   <item key="/SIM/sim_sopt2_uart0src[1]"                  value="3" />
+   <item key="/SIM/sim_sopt2_uart0src[2]"                  value="3" />
    <item key="/SMC/smc_pmctrl_runm[1]"                     value="2" />
    <item key="/SMC/smc_pmctrl_runm[2]"                     value="2" />
 </section>

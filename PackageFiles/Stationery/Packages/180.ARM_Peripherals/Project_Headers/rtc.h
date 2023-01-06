@@ -306,7 +306,7 @@ public:
     * Set up the RTC out of reset.
     */
    static void initialise() {
-      if (RtcInfo::configure_rtc) {
+      if (Info::ConfigureRtc) {
          defaultConfigure();
       }
    }

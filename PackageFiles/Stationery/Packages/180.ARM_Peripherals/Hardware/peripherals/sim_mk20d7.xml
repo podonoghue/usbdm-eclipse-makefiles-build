@@ -12,10 +12,12 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <constant key="/SIM/llwu_device_list"
+   <constant key="llwu_device_list"
       description="LLWU Wakeup sources"
-      value="LPTMR0;CMP0;CMP1;CMP2;TSI;RTC_Alarm;;RTC_Seconds" />
+      type="String"
+      value="&quot;LPTMR0;CMP0;CMP1;CMP2;TSI;RTC_Alarm;;RTC_Seconds&quot;" />
 
+   <!-- Clock divider -->
    <constant key="clock_divider_type" type="Integer" value="1" />
 
    <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) does not share XTAL/EXTAL pins -->
@@ -24,8 +26,8 @@
    <xi:include href="_simCommon.xml"/>
 
    <intOption key="system_usb_clkin_clock"
-      constant="true"
       hidden="true"
+      constant="true"
       origin="USB Clock In pin"
       units="Hz"
       description="Frequency of External USB Clock"
@@ -55,14 +57,14 @@
 
    <category name="SOPT2" description="Clock Gating">
 
-      <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" constant="false"/>
-      <aliasOption key="/SIM/rtc_clkout" />
+      <aliasOption key="sim_sopt2_rtcclkoutsel" constant="false"/>
+      <aliasOption key="rtc_clkout" />
 
-      <aliasOption key="/SIM/sim_sopt2_pllfllsel[]" constant="false" />
-      <aliasOption key="/SIM/system_peripheral_clock[]" optional="true" />
+      <aliasOption key="sim_sopt2_pllfllsel[]" constant="false" />
+      <aliasOption key="system_peripheral_clock[]" optional="true" />
 
-      <aliasOption key="/SIM/sim_sopt2_usbsrc[]" constant="false" />
-      <aliasOption key="/SIM/system_usbfs_clock[]" />
+      <aliasOption key="sim_sopt2_usbsrc[]" constant="false" />
+      <aliasOption key="system_usbfs_clock[]" />
 
       <aliasOption key="/OSC0/oscer_clock" optional="true" />
       <aliasOption key="/MCG/system_mcgirclk_clock[]" optional="true" />
@@ -137,7 +139,7 @@
          toolTip="Selects the core/system clock or MCG output clock (MCGOUTCLK)\n
              as the trace clock source" >
          <choice value="0"  name="MCGOUTCLK"          ref="/MCG/system_mcgoutclk_clock[]" enum="McgOutClk"  isDefault="true" />
-         <choice value="1"  name="Core/system clock"  ref="/SIM/system_core_clock[]"      enum="CoreClk"    />
+         <choice value="1"  name="Core/system clock"  ref="system_core_clock[]"      enum="CoreClk"    />
       </binaryOption>
 
       <intOption key="traceClock" condition="sim_sopt2_traceclksel_present"
@@ -347,7 +349,7 @@
       </for>
    </category>
 
-   <for keys="n" dim="/SIM/numberOfClockSettings" >
+   <for keys="n" dim="numberOfClockSettings" >
       <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" constant="true" >
 
          <aliasOption key="/MCG/enableClockConfiguration[%(n)]" constant="false" />
@@ -359,15 +361,15 @@
                enumStem="SimClkoutSel"
                description="CLKOUT pin clock"
                toolTip="Clock to output on the CLKOUT pin" >
-               <choice value="0"  name="FlexBus CLKOUT"      ref="/SIM/system_flexbus_clock[%(n)]"  enum="FlexBusClk"  condition="sim_sopt2_fbsl_present"  />
+               <choice value="0"  name="FlexBus CLKOUT"      ref="system_flexbus_clock[%(n)]"  enum="FlexBusClk"  condition="sim_sopt2_fbsl_present"  />
                <choice value="0"  name="Disabled0"           ref="disabled"                         enum="Unused0"     condition="!sim_sopt2_fbsl_present" />
                <choice value="1"  name="Disabled1"           ref="disabled"                         enum="Unused1"      />
-               <choice value="2"  name="Flash clock"         ref="/SIM/system_flash_clock[%(n)]"    enum="FlashClk"    isDefault="true" />
+               <choice value="2"  name="Flash clock"         ref="system_flash_clock[%(n)]"    enum="FlashClk"    isDefault="true" />
                <choice value="3"  name="LPO clock (1 kHz)"   ref="/PMC/system_low_power_clock"      enum="LpoClk"       />
                <choice value="4"  name="MCGIRCLK"            ref="/MCG/system_mcgirclk_clock[%(n)]" enum="McgIrClk"     />
                <choice value="5"  name="RTC 32.768kHz clock" ref="/RTC/rtcclk_gated_clock"          enum="RtcClk"       />
                <choice value="6"  name="OSCERCLK0"           ref="/OSC0/oscer_clock"                enum="OscerClk0"    />
-               <choice value="7"  name="IRC 48 MHz clock"    ref="/SIM/system_irc48m_clock[%(n)]"   enum="Irc48MClk"   condition="system_irc48m_clock[%(n)]"  />
+               <choice value="7"  name="IRC 48 MHz clock"    ref="system_irc48m_clock[%(n)]"   enum="Irc48MClk"   condition="system_irc48m_clock[%(n)]"  />
                <choice value="7"  name="Disabled7"           ref="disabled"                         enum="Unused7"     condition="!system_irc48m_clock[%(n)]" />
             </choiceOption>
 
@@ -379,7 +381,7 @@
                toolTip="Clock available on CLKOUT pin" />
 
             <intOption key="usb1pfdclk_Clock[%(n)]" condition="/USBPHY1/$present"
-               max="/SIM/USB1PFDCLK_max[/SMC/smc_pmctrl_runm[%(n)]]"
+               max="USB1PFDCLK_max[/SMC/smc_pmctrl_runm[%(n)]]"
                enabledBy="/SMC/smc_pmctrl_runm[%(n)]!=1"
                derived="true"
                constant="true"
@@ -398,7 +400,7 @@
                <choice value="1"  name="MCGPLLCLK clock"   ref="/MCG/system_mcgpllclk_clock[%(n)]"     enum="McgPllClk"  code="SystemMcgPllClock"   />
                <choice value="2"  name="USB1 PFD clock"    ref="usb1pfdclk_Clock[%(n)]"                enum="Usb1PfdClk" code="0"                   condition="/USBPHY1/$present"   />
                <choice value="2"  name="Disabled"          ref="disabled"                              enum="Disabled2"  code="0"                   condition="!/USBPHY1/$present&amp;&amp;system_irc48m_clock[%(n)]"   />
-               <choice value="3"  name="IRC48 MHz clock"   ref="/SIM/system_irc48m_clock[%(n)]"        enum="Irc48mClk"  code="irc48mClock"         condition="system_irc48m_clock[%(n)]" />
+               <choice value="3"  name="IRC48 MHz clock"   ref="system_irc48m_clock[%(n)]"        enum="Irc48mClk"  code="irc48mClock"         condition="system_irc48m_clock[%(n)]" />
                <choice value="3"  name="Disabled"          ref="disabled"                              enum="Disabled3"  code="0"                   condition="/USBPHY1/$present&amp;&amp;!system_irc48m_clock[%(n)]" />
             </choiceOption>
 
@@ -737,7 +739,7 @@
    <xi:include href="_sim_commonTemplates.xml" />
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="/SIM/numberOfClockSettings">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="numberOfClockSettings">
       <param type="long" value="72MHz"  />     <!-- RUN Core          -->
       <param type="long" value="50MHz"  />     <!-- RUN Bus           -->
       <param type="long" value="50MHz"  />     <!-- RUN FlexBus       -->

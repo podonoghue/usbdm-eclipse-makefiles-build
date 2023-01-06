@@ -4,14 +4,14 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
 
-   <!--                                   RUN       VLPR     -->
+   <!--                                   RUN        VLPR     -->
    <constant key="MCGOUTCLK_max"  value="100MHz,     4MHz"   type="int"    hidden="false"/>
 
    <xi:include href="_default_instance.xml"/>
 
    <constant key="llwu_device_list"
       description="LLWU Wakeup sources"
-      value="LPTMR0;CMP0;;;;RTC_Alarm;;RTC_Seconds" />
+      value="&quot;LPTMR0;CMP0;;;;RTC_Alarm;;RTC_Seconds&quot;" />
 
    <!-- Clock divider -->
    <constant key="clock_divider_type" type="Integer" value="2" />

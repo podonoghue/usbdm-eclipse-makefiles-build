@@ -95,56 +95,56 @@
    <item key="/HARDWARE/Switch1"                           value="Switch2" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_RUN_PEE_120MHz" />
-   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_VLPR_BLPE_4MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_VLPR_BLPI_4MHz" />
    <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_HSRUN_PEE_180MHz" />
-   <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_RUN_FEI" />
+   <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_RUN_FEI_96MHz" />
    <item key="/MCG/enableClockConfiguration[1]"            value="true" />
    <item key="/MCG/enableClockConfiguration[2]"            value="true" />
    <item key="/MCG/enableClockConfiguration[3]"            value="true" />
-   <item key="/MCG/fllOutputFrequency[3]"                  value="95944704" />
    <item key="/MCG/mcgClockMode[0]"                        value="7" />
-   <item key="/MCG/mcgClockMode[1]"                        value="5" />
+   <item key="/MCG/mcgClockMode[1]"                        value="3" />
    <item key="/MCG/mcgClockMode[2]"                        value="7" />
+   <item key="/MCG/mcg_c2_range0[0]"                       value="2" />
+   <item key="/MCG/mcg_c2_range0[1]"                       value="2" />
+   <item key="/MCG/mcg_c2_range0[2]"                       value="2" />
+   <item key="/MCG/mcg_c2_range0[3]"                       value="2" />
    <item key="/MCG/mcg_c4_dmx32[3]"                        value="true" />
    <item key="/MCG/pll0OutputFrequency[2]"                 value="180000000" />
-   <item key="/OSC0/osc_cr_scp"                            value="4" />
+   <item key="/MCG/system_mcgfllclk_clock[3]"              value="95944704" />
+   <item key="/OSC0/EnableOsc"                             value="true" />
    <item key="/OSC0/osc_input_freq"                        value="12000000" />
-   <item key="/OSC0/oscer_undiv_clock"                     value="12000000" />
    <item key="/PIT/irqHandlingMethod"                      value="$ClassMethod" />
-   <item key="/RTC/rtc_cr_osce"                            value="true" />
+   <item key="/RTC/EnableRtc"                              value="true" />
    <item key="/RTC/rtc_cr_scp"                             value="0" />
-   <item key="/SIM/sim_clkdiv1_outdiv1[1]"                 value="3" />
-   <item key="/SIM/sim_clkdiv1_outdiv2[0]"                 value="2" />
-   <item key="/SIM/sim_clkdiv1_outdiv2[1]"                 value="3" />
-   <item key="/SIM/sim_clkdiv1_outdiv2[2]"                 value="3" />
-   <item key="/SIM/sim_clkdiv1_outdiv2[3]"                 value="2" />
-   <item key="/SIM/sim_clkdiv1_outdiv3[0]"                 value="2" />
-   <item key="/SIM/sim_clkdiv1_outdiv3[1]"                 value="3" />
-   <item key="/SIM/sim_clkdiv1_outdiv3[2]"                 value="3" />
-   <item key="/SIM/sim_clkdiv1_outdiv3[3]"                 value="2" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[0]"                 value="5" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[1]"                 value="15" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[2]"                 value="7" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[0]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[1]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[2]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[3]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv2[1]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv2[2]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv3[1]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv3[2]"                 value="2" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[0]"                 value="4" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[1]"                 value="4" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[2]"                 value="6" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[3]"                 value="3" />
+   <item key="/SIM/sim_clkdiv2_usb[0]"                     value="9" />
+   <item key="/SIM/sim_clkdiv2_usb[2]"                     value="9" />
    <item key="/SIM/sim_clkdiv3_pllfll[0]"                  value="2" />
    <item key="/SIM/sim_clkdiv3_pllfll[2]"                  value="9" />
    <item key="/SIM/sim_clkdiv3_pllfll[3]"                  value="5" />
-   <item key="/SIM/sim_sopt2_clkoutsel"                    value="0" />
-   <item key="/SIM/sim_sopt2_lpuartsrc"                    value="1" />
-   <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="3" />
+   <item key="/SIM/sim_sopt2_lpuartsrc[1]"                 value="2" />
+   <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
    <item key="/SIM/sim_sopt2_pllfllsel[1]"                 value="3" />
-   <item key="/SIM/sim_sopt2_pllfllsel[2]"                 value="3" />
-   <item key="/SIM/sim_sopt2_tpmsrc"                       value="1" />
+   <item key="/SIM/sim_sopt2_pllfllsel[2]"                 value="2" />
+   <item key="/SIM/sim_sopt2_sdhcsrc[0]"                   value="1" />
+   <item key="/SIM/sim_sopt2_sdhcsrc[2]"                   value="1" />
    <item key="/SMC/smc_pmctrl_runm[1]"                     value="2" />
    <item key="/SMC/smc_pmctrl_runm[2]"                     value="3" />
    <item key="/SPI0/speed"                                 value="100000" />
    <item key="/SPI1/speed"                                 value="100000" />
    <item key="/SPI2/speed"                                 value="100000" />
-   <item key="/USBPHY1/usbphy_anactrl_pfd_clk_sel[0]"      value="0b10" />
+   <item key="/USBPHY1/usbphy_anactrl_pfd_clk_sel[0]"      value="0b01" />
    <item key="/USBPHY1/usbphy_anactrl_pfd_clk_sel[1]"      value="0b01" />
-   <item key="/USBPHY1/usbphy_anactrl_pfd_clk_sel[2]"      value="0b10" />
-   <item key="/USBPHY1/usbphy_anactrl_pfd_clk_sel[3]"      value="0b10" />
    <item key="/USBPHY1/usbphy_anactrl_pfd_frac[0]"         value="20" />
-   <item key="/USBPHY1/usbphy_anactrl_pfd_frac[2]"         value="30" />
-   <item key="/USBPHY1/usbphy_anactrl_pfd_frac[3]"         value="20" />
-   <item key="/USBPHY1/usbphy_pll_sic_pll_div_sel"         value="0b10" />
 </section>

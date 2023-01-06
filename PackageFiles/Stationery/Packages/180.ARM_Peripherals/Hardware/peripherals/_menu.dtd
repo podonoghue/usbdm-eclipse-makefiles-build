@@ -57,19 +57,23 @@
    <!ATTLIST category  derived      (false|true) #IMPLIED>
    <!ATTLIST category  hidden       (false|true) #IMPLIED>
 
-<!ELEMENT graphic ((graphicBox)*) >
+<!ELEMENT graphic ((graphicBox|equation|graphicGroup)*) >
    <!ATTLIST graphic  key             CDATA        #REQUIRED>
    <!ATTLIST graphic  var             CDATA        #IMPLIED>
    <!ATTLIST graphic  description     CDATA        #IMPLIED>
    <!ATTLIST graphic  toolTip         CDATA        #IMPLIED>
-   <!ATTLIST graphic  condition        CDATA        #IMPLIED>
+   <!ATTLIST graphic  condition       CDATA        #IMPLIED>
 
-<!ELEMENT graphicGroup ((graphicItem|graphicBox|graphicGroup)*)>
-   <!ATTLIST graphicGroup  x                CDATA        #REQUIRED>
-   <!ATTLIST graphicGroup  y                CDATA        #REQUIRED>
+<!ELEMENT equation EMPTY >
+   <!ATTLIST equation  key             CDATA        #REQUIRED>
+   <!ATTLIST equation  value           CDATA        #REQUIRED>
+
+<!ELEMENT graphicGroup ((graphicItem|graphicBox|graphicGroup|equation)*)>
+   <!ATTLIST graphicGroup  x                CDATA        #IMPLIED>
+   <!ATTLIST graphicGroup  y                CDATA        #IMPLIED>
    <!ATTLIST graphicGroup  condition        CDATA        #IMPLIED>
 
-<!ELEMENT graphicBox ((graphicItem|graphicBox|graphicGroup)*)>
+<!ELEMENT graphicBox ((graphicItem|graphicBox|graphicGroup|equation)*)>
    <!ATTLIST graphicBox  id               CDATA        #IMPLIED>
    <!ATTLIST graphicBox  x                CDATA        #REQUIRED>
    <!ATTLIST graphicBox  y                CDATA        #REQUIRED>
@@ -541,7 +545,7 @@
    <!ATTLIST constant key          CDATA                       #REQUIRED>
    <!ATTLIST constant value        CDATA                       #IMPLIED>
    <!ATTLIST constant description  CDATA                       #IMPLIED>
-   <!ATTLIST constant type         (boolean|int|float|string)  "string" >
+   <!ATTLIST constant type         (Boolean|Integer|Float|String)  "string" >
    <!ATTLIST constant weak         (true|false)                #IMPLIED>
    <!ATTLIST constant replace      (true|false)                #IMPLIED>
    <!ATTLIST constant derived      (false)                     #IMPLIED>

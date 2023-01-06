@@ -6,7 +6,7 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <constant key="disable_peripheral" value = "adc->SC1[0] = ADC_SC1_ADCH(-1);"  />
+   <constant key="disable_peripheral" value = "&quot;adc->SC1[0] = ADC_SC1_ADCH(-1);&quot;"  />
 
    <xi:include href="_mapPinsOption.xml"/>
 
@@ -63,7 +63,8 @@
       constant="true"
       derived="true"
       units="Hz"
-      description="Frequency of PDB input Clock" />
+      description="Frequency of ADC input Clock\n
+                   Based on current clock configuration" />
 
    <intOption key="adcInternalClock"
       derived="true"

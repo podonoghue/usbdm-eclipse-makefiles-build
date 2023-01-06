@@ -7,13 +7,13 @@
    <xi:include href="_mapPinsOption_on.xml"/>
    <xi:include href="_default_instance.xml"/>
 
-   <binaryOption key="EnableRtc"
+   <binaryOption key="ConfigureRtc"
       description="Configure RTC"
       toolTip="Enables configuration of RTC.  \n
                If disabled no RTC registers are accessed during startup.\n
                This is necessary if the RTC is not powered.">
-      <choice value="0" name="Disabled" isDefault="true" />
-      <choice value="1" name="Enabled"  />
+      <choice value="false" name="Disabled" isDefault="true" />
+      <choice value="true"  name="Enabled"  />
    </binaryOption>
 
    <category name="ERCLK32K Selection" description="Control source of ERCLK32K clock (nominally 32kHz)">
@@ -24,19 +24,25 @@
    </category>
 
    <binaryOption key="rtc_cr_osce" condition="!/SIM/RtcForcing"
-      enabledBy="EnableRtc"
+      enumStem="RtcOscEnable"
+      enabledBy="ConfigureRtc"
       description="Enable RTC oscillator"
       toolTip="Enable 32kHz RTC oscillator">
-      <choice value="0" name="Disabled" />
-      <choice value="1" name="Enabled" isDefault="true" />
+      <choice value="0" enum="Disabled" name="Disabled" />
+      <choice value="1" enum="Enabled"  name="Enabled" isDefault="true" />
    </binaryOption>
 
+   <!-- Controlled by OSC0 mode -->
    <binaryOption key="rtc_cr_osce" condition="/SIM/RtcForcing"
-      enabledBy="EnableRtc"
+      ref="(/MCG/oscMode == /OscMode_RTC_Controlled)?1:0"
+      enumStem="RtcOscEnable"
+      constant="true"
+      derived="true"
+      hidden="true"
       description="Enable RTC oscillator"
       toolTip="Enable OSC0 as 32kHz RTC oscillator">
-      <choice value="0" name="Disabled" isDefault="true" />
-      <choice value="1" name="Enabled" />
+      <choice value="0" enum="Disabled" name="Disabled" />
+      <choice value="1" enum="Enabled"  name="Enabled"  />
    </binaryOption>
 
    <if condition="/SIM/rtc_independent || /SIM/rtc_mkw41z4" >
@@ -54,7 +60,7 @@
          enabledBy="rtc_cr_osce"
          ref="osc_input_freq"
          description="RTC oscillator clock"
-         toolTip="Output of RTC oscillator and input to RTC counters"
+         toolTip="Output of RTC oscillator"
          derived="true"
          constant="true"
          units="Hz"
@@ -115,49 +121,53 @@
    </if>
 
    <choiceOption key="rtc_cr_scp"
+      enumStem="RtcCap"
       enabledBy="rtc_cr_osce"
       description="Oscillator load capacitance"
       toolTip="Configures the oscillator load capacitance" >
-      <choice value="0"  name="0 pF" />
-      <choice value="8"  name="2 pF" />
-      <choice value="4"  name="4 pF" />
-      <choice value="12" name="6 pF" />
-      <choice value="2"  name="8 pF" isDefault="true" />
-      <choice value="10" name="10 pF" />
-      <choice value="6"  name="12 pF" />
-      <choice value="14" name="14 pF" />
-      <choice value="1"  name="16 pF" />
-      <choice value="9"  name="18 pF" />
-      <choice value="5"  name="20 pF" />
-      <choice value="13" name="22 pF" />
-      <choice value="3"  name="24 pF" />
-      <choice value="11" name="26 pF" />
-      <choice value="7"  name="28 pF" />
-      <choice value="15" name="30 pF" />
+      <choice value="0"  enum="None" name="0 pF" />
+      <choice value="8"  enum="2pf"  name="2 pF" />
+      <choice value="4"  enum="4pf"  name="4 pF" />
+      <choice value="12" enum="6pf"  name="6 pF" />
+      <choice value="2"  enum="8pf"  name="8 pF" isDefault="true" />
+      <choice value="10" enum="10pf" name="10 pF" />
+      <choice value="6"  enum="12pf" name="12 pF" />
+      <choice value="14" enum="14pf" name="14 pF" />
+      <choice value="1"  enum="16pf" name="16 pF" />
+      <choice value="9"  enum="18pf" name="18 pF" />
+      <choice value="5"  enum="20pf" name="20 pF" />
+      <choice value="13" enum="22pf" name="22 pF" />
+      <choice value="3"  enum="24pf" name="24 pF" />
+      <choice value="11" enum="26pf" name="26 pF" />
+      <choice value="7"  enum="28pf" name="28 pF" />
+      <choice value="15" enum="30pf" name="30 pF" />
    </choiceOption>
 
    <binaryOption key="rtc_cr_um"
+      enumStem="RtcTceUpdate"
       description="Update Mode"
       toolTip="Allows the SR[TCE] to be written even when the Status Register is locked.\n
                When set, the SR[TCE] can always be written if the SR[TIF] or SR[TOF] are set or if the SR[TCE] is clear" >
-      <choice value="0" name="SR[TCE] cannot be written when locked" />
-      <choice value="1" name="SR[TCE] can be written when locked under limited conditions" />
+      <choice value="0" enum="Prevented" name="SR[TCE] cannot be written when locked" />
+      <choice value="1" enum="Allowed"   name="SR[TCE] can be written when locked under limited conditions" />
    </binaryOption>
 
    <binaryOption key="rtc_cr_sup"
+      enumStem="RtcUserWriteAccess"
       description="Supervisor access"
       toolTip="Determines if the RTC register access is available in non-supervisor mode \n
                Non supported write accesses generate a bus error" >
-      <choice value="0" name="Non-supervisor write accesses not supported" />
-      <choice value="1" name="Non-supervisor write accesses supported" />
+      <choice value="0" enum="Prevented" name="Non-supervisor write accesses not supported" />
+      <choice value="1" enum="Allowed"   name="Non-supervisor write accesses supported" />
    </binaryOption>
 
    <binaryOption key="rtc_cr_wpe"
+      enumStem="RtcWakeupPin"
       description="Wakeup Pin Enable"
       toolTip="Determines if the wakeup pin is asserted on RTC interrupt when powered down \n
                The wakeup pin is optional and not available on all devices" >
-      <choice value="0" name="Wakeup pin is disabled" />
-      <choice value="1" name="Wakeup pin is enabled" />
+      <choice value="0" enum="Disabled" name="Wakeup pin is disabled" />
+      <choice value="1" enum="Enabled"  name="Wakeup pin is enabled" />
    </binaryOption>
 
    <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" optional="true" constant="false" />
@@ -167,7 +177,7 @@
       \t//! Whether to configure RTC
       \t//! If disabled then no RTC registers are accessed.
       \t//! This is useful if RTC is not powered as register access will trap.
-      \tstatic constexpr bool EnableRtc = $(EnableRtc);
+      \tstatic constexpr bool ConfigureRtc = $(ConfigureRtc);
       \t\n
    ]]></template>
 
@@ -216,31 +226,35 @@
 
    <category name="Register Locks" description="Locks RTC Registers">
 	   <binaryOption key="rtc_lr_lrl"
+         enumStem="RtcLockReg"
 	      description="Lock Register Lock"
 	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
-	      <choice value="0" name="Locked" />
-	      <choice value="1" name="Unlocked"  isDefault="true" />
+	      <choice value="0" enum="Locked"   name="Locked" />
+	      <choice value="1" enum="Unlocked" name="Unlocked"  isDefault="true" />
 	   </binaryOption>
 
 	   <binaryOption key="rtc_lr_srl"
+         enumStem="RtcStatusReg"
 	      description="Status Register Lock"
 	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
-	      <choice value="0" name="Locked" />
-	      <choice value="1" name="Unlocked"  isDefault="true" />
+	      <choice value="0" enum="Locked"   name="Locked" />
+	      <choice value="1" enum="Unlocked" name="Unlocked"  isDefault="true" />
 	   </binaryOption>
 
 	   <binaryOption key="rtc_lr_crl"
+         enumStem="RtcControlReg"
 	      description="Control Register Lock"
 	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
-	      <choice value="0" name="Locked" />
-	      <choice value="1" name="Unlocked"  isDefault="true" />
+	      <choice value="0" enum="Locked"   name="Locked" />
+	      <choice value="1" enum="Unlocked" name="Unlocked"  isDefault="true" />
 	   </binaryOption>
 
 	   <binaryOption key="rtc_lr_tcl"
+         enumStem="RtcTimeCompensation"
 	      description="Time Compensation Lock"
 	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
-	      <choice value="0" name="Locked" />
-	      <choice value="1" name="Unlocked"  isDefault="true" />
+	      <choice value="0" enum="Locked"   name="Locked" />
+	      <choice value="1" enum="Unlocked" name="Unlocked"  isDefault="true" />
 	   </binaryOption>
    </category>
 

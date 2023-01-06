@@ -11,7 +11,7 @@
 
    <constant key="llwu_device_list"
       description="LLWU Wakeup sources"
-      value="LPTMR0;CMP0;;;;RTC_Alarm;;RTC_Seconds" />
+      value="&quot;LPTMR0;CMP0;;;;RTC_Alarm;;RTC_Seconds&quot;" />
 
    <!-- Clock divider -->
    <constant key="clock_divider_type" type="Integer" value="2" />
@@ -102,7 +102,7 @@
 
    <category name="SOPT1" description="RTC clocks" >
 
-      <aliasOption key="rtc_clkin_clock" constant="false" />
+      <aliasOption key="rtc_clkin_clock" optional="true" constant="false" />
 
       <aliasOption key="sim_sopt1_osc32ksel" constant="false" />
       <aliasOption key="system_erclk32k_clock" />

@@ -122,13 +122,26 @@
    <item key="/MCG/system_lirc_div1_clock[2]"              value="8000000" />
    <item key="/OSC0/osc_input_freq"                        value="32768" />
    <item key="/RTC/rtc_cr_osce"                            value="true" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[0]"                 value="2" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[1]"                 value="2" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[2]"                 value="1" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[3]"                 value="1" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[0]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[1]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[2]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[3]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[2]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[3]"                 value="0" />
    <item key="/SIM/sim_sopt1_osc32ksel"                    value="0" />
-   <item key="/SIM/sim_sopt2_clkoutsel"                    value="3" />
-   <item key="/SIM/system_flexio_clock"                    value="48000000" />
+   <item key="/SIM/sim_sopt2_clkoutsel[0]"                 value="7" />
+   <item key="/SIM/sim_sopt2_flexiosrc[1]"                 value="3" />
+   <item key="/SIM/sim_sopt2_flexiosrc[2]"                 value="3" />
+   <item key="/SIM/sim_sopt2_flexiosrc[3]"                 value="3" />
+   <item key="/SIM/sim_sopt2_lpuart0src[1]"                value="3" />
+   <item key="/SIM/sim_sopt2_lpuart0src[2]"                value="3" />
+   <item key="/SIM/sim_sopt2_lpuart0src[3]"                value="3" />
+   <item key="/SIM/sim_sopt2_lpuart1src[1]"                value="3" />
+   <item key="/SIM/sim_sopt2_lpuart1src[2]"                value="3" />
+   <item key="/SIM/sim_sopt2_lpuart1src[3]"                value="3" />
+   <item key="/SIM/sim_sopt2_tpmsrc[1]"                    value="3" />
+   <item key="/SIM/sim_sopt2_tpmsrc[2]"                    value="3" />
+   <item key="/SIM/sim_sopt2_tpmsrc[3]"                    value="3" />
    <item key="/SMC/smc_pmctrl_runm[1]"                     value="2" />
    <item key="/SMC/smc_pmctrl_runm[3]"                     value="2" />
    <item key="/USB0/usb_clk_enable"                        value="USB_CLK_RECOVER_IRC_EN_IRC_EN(1)" />

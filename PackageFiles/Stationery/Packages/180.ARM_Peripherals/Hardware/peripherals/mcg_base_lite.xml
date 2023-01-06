@@ -17,7 +17,16 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <xi:include href="_currentClockSelection.xml"/>
+   <clockSelectionOption key="currentClockConfig"
+      derived="true"
+      description="Active clock selection"
+      target=""
+      toolTip="Selects the clock configuration used for general peripheral timing calculations" >
+      <choice value="0" name="ClockConfig[0]" ref="&quot;0: &quot;+ClockConfig[0]" isDefault="true" />
+      <choice value="1" name="ClockConfig[1]" ref="&quot;1: &quot;+ClockConfig[1]" />
+      <choice value="2" name="ClockConfig[2]" ref="&quot;2: &quot;+ClockConfig[2]" />
+      <choice value="3" name="ClockConfig[3]" ref="&quot;3: &quot;+ClockConfig[3]" />
+   </clockSelectionOption>
 
    <category name="HIRC" description="High Speed Internal Clock Sources"
       toolTip="IRCLK48MCLK, USB_CLKIN, LPO" >
@@ -35,7 +44,7 @@
 
    <binaryOption key="enableClockConfiguration[0]" constant="true" hidden="true" >
       <choice value="false" name="Disabled" />
-      <choice value="true"  name="Enabled"  isDefault="true"/>
+      <choice value="true"  name="Enabled"  isDefault="true" />
    </binaryOption>
 
    <for keys="n" dim="1,/SIM/numberOfClockSettings">
@@ -49,32 +58,27 @@
    </for>
 
    <!--  Run mode independent -->
-   <choiceOption key="oscMode"  condition="mcg_c2_erefs0_present&amp;&amp;mcg_c2_hgo0_present"
+   <choiceOption key="oscMode"
       enumStem="OscMode"
+      valueFormat="%s"
       hidden="true"
-      valueFormat="MCG_C2_EREFS0(%s),MCG_C2_HGO0(%s)"
-      description="OSC0 source control"
-      toolTip="Determines whether an external clock or crystal is used\n
-               and oscillator mode for OSC0">
-      <choice value="0,0" name="External clock"        enum="ExternalClock"        />
-      <choice value="1,0" name="Low Power Oscillator"  enum="LowPowerOscillator"   isDefault="true" />
-      <choice value="1,1" name="High Gain Oscillator"  enum="HighPowerOscillator"  />
+      description="OSC0 mode"
+      toolTip="Determines oscillator power mode and\n
+               whether an external clock or crystal is used.">
+      <choice value="0"                               name="OSC0 Not configured"            enum="NotConfigured"        />
+      <choice value="MCG_C2_EREFS0(0)"                name="External clock"                 enum="ExternalClock"        />
+      <choice value="MCG_C2_EREFS0(1)"                name="Low Power Oscillator"           enum="LowPowerOscillator"   isDefault="true"                />
+      <choice value="MCG_C2_EREFS0(1)|MCG_C2_HGO0(1)" name="High Gain Oscillator"           enum="HighPowerOscillator"  condition="mcg_c2_hgo0_present" />
+      <choice value="1-1"                             name="32kHz Oscillator driven by RTC" enum="RTC_Controlled"       condition="/SIM/RtcForcing"     enabledBy="/RTC/ConfigureRtc"  />
    </choiceOption>
 
-   <choiceOption key="oscMode"  condition="mcg_c2_erefs0_present&amp;&amp;!mcg_c2_hgo0_present"
-      enumStem="OscMode"
-      hidden="true"
-      valueFormat="MCG_C2_EREFS0(%s)"
-      description="OSC0 source control"
-      toolTip="Determines whether an external clock or crystal is used\n
-               and oscillator mode for OSC0">
-      <choice value="0" name="External clock"        enum="ExternalClock"        />
-      <choice value="1" name="Low Power Oscillator"  enum="LowPowerOscillator"   isDefault="true" />
-   </choiceOption>
+   <constant key="/OscMode_NotConfigured"  type="Integer" value="0" />
+   <constant key="/OscMode_ExternalClock"  type="Integer" value="1" />
+   <constant key="/OscMode_RTC_Controlled" type="Integer" value="mcg_c2_hgo0_present?4:3" />
 
    <choiceOption key="mcg_c2_erefs0"  condition="mcg_c2_erefs0_present"
       hidden="true"
-      ref="oscMode>=1"
+      ref="oscMode>=2"
       derived="true"
       description="External Reference Select"
       toolTip="Determines whether an external clock or crystal is used">
@@ -84,7 +88,7 @@
 
    <choiceOption key="mcg_c2_hgo0"  condition="mcg_c2_hgo0_present"
       hidden="true"
-      ref="oscMode==2"
+      ref="oscMode==3"
       derived="true"
       description="Oscillator mode"
       toolTip="Operation mdoe for oscillator">
@@ -104,6 +108,7 @@
          <graphic key="Clock configuration GUI[%(n)]"
             var="ClockConfig[%(n)]"
             description="Clock configuration[%(n)]"
+            clockConfigIndex="%(n)"
             toolTip="Opens a dialogue to alter this clock configuration" >
 
             <graphicBox id="" x="10" y="10" params="0,0, x430, y50, x" >
@@ -156,12 +161,12 @@
             <equation key="y" value="450" />
 
             <graphicBox    id="OSC0" x="10" y="y"  params="0,0, x280, y210,  x" >
-               <graphicItem id="XTAL"                      var="/OSC0/osc_input_freq"               type="variableBox" params="50,  30,  80, large, oe,os"                    />
-               <graphicItem id="Enable,NONAME"             var="/OSC0/EnableOsc"                    type="node"        params="80,  20"                                       />
+               <graphicItem id="XTAL"                      var="/OSC0/osc_input_freq"               type="variableBox" params="50,  30,  80, large, oe,os+30"                 />
                <graphicItem id="ERCLKEN,x40,y17"           var="/OSC0/osc_cr_erclken"               type="node"        params="120, 55, in,os,os"                             />
 
-               <graphicItem id="SCP,NONAME"                var="/OSC0/osc_cr_scp"                   type="annotation"  params="10,  60,   50, 16"                               />
-               <graphicItem id="MODE,NONAME"               var="oscMode"                            type="annotation"  params="10,  145, 140, 16"                              />
+               <graphicItem id="SCP,NONAME"                var="/OSC0/osc_cr_scp"                   type="annotation"  params="10,  60,  100, 16, Cap=%v"                     />
+               <graphicItem id="RTC_SCP,NONAME"            var="/RTC/rtc_cr_scp"                    type="annotation"  params="10,  75,  100, 16, Cap=%v"                     condition="/SIM/RtcForcing"               />
+               <graphicItem id="MODE,NONAME"               var="oscMode"                            type="annotation"  params="10,  145, 180, 16"                              />
                <graphicItem id="RANGE,NONAME"              var="/OSC0/oscillatorRange"              type="annotation"  params="10,  165, 180, 16"                              />
                <graphicItem id="EREFSTEN,NONAME"           var="/OSC0/osc_cr_erefsten"              type="annotation"  params="10,  185, 140, 20"                              />
 
@@ -179,7 +184,7 @@
                <graphicItem id=""                          var="/OSC0/oscer_clock"                  type="connector"   params="ERCLKEN,1,   OSCERCLK.1,0, y,x"                 condition="!/OSC0/osc_div_erps_present" />
                <graphicItem id=""                          var="/OSC0/oscer_undiv_clock"            type="connector"   params="ERCLKEN,0,   OSC_DIV,0, y,x"                    condition="/OSC0/osc_div_erps_present" />
                <graphicItem id=""                          var="/OSC0/oscer_undiv_clock"            type="connector"   params="OSC_DIV,0,   OSCERCLK.1,0,     x"               condition="/OSC0/osc_div_erps_present" />
-               <graphicItem id=""                          var="/OSC0/osc32k_clock"                 type="connector"   params="XTAL,1,   OSC32KCLK,0, (y-20),(x-80),y,x"            />
+               <graphicItem id=""                          var="/OSC0/osc32k_clock"                 type="connector"   params="XTAL,1,   OSC32KCLK,0, (y-20),(x-60),y,x"            />
 
                <equation key="y" value="y+230" />
             </graphicBox>
@@ -192,9 +197,7 @@
             </graphicGroup>
 
             <graphicBox    id="RTC" x="10" y="y" params="0,0, x280, y120,  x" condition="/SIM/RtcForcing" >
-               <graphicItem id="ENABLE RTC,NOVALUE,x40,y17" var="/RTC/EnableRtc"                     type="node"        params="20,   30"                                      />
-               <graphicItem id="RTC_OSC_EN,NOVALUE,x40,y17" var="/RTC/rtc_cr_osce"                   type="node"        params="20,   45"                                      />
-               <graphicItem id="RTC_SCP,NONAME"             var="/RTC/rtc_cr_scp"                    type="annotation"  params="10,   60, 50, 16, Cap=%v"                      />
+               <graphicItem id="CONFIG RTC,NOVALUE,x40,y17" var="/RTC/ConfigureRtc"                  type="node"        params="20,   30"                                      />
 
                <!-- Inputs -->
                <graphicItem id="RTC_IN"                     var="/RTC/rtc_input_clock"               type="node"        params="280, 30, ie,ow"                                />
@@ -211,11 +214,11 @@
                <equation key="y" value="y+140" />
             </graphicBox>
 
-            <graphicBox    id="RTC" x="10" y="y" params="0,0, x280, y100,  x" condition="/SIM/rtc_independent" >
+            <graphicBox    id="RTC" x="10" y="y" params="0,0, x280, y100,  x" condition="/SIM/rtc_independent || /SIM/rtc_mkw41z4" >
                <graphicItem id="XTAL32"                        var="/RTC/osc_input_freq"                type="variableBox" params="50,   30,  90, large"                          />
                <graphicItem id="RTC_OSC_EN,NOVALUE|NONAME"     var="/RTC/rtc_cr_osce"                   type="node"        params="85,   20"                                      />
                <graphicItem id="RTC_SCP,NONAME"                var="/RTC/rtc_cr_scp"                    type="annotation"  params="10,   55, 50, 16"                              />
-               <graphicItem id="CONFIGURE RTC,NOVALUE,x40,y17" var="/RTC/EnableRtc"                     type="node"        params="20,   85"                                      />
+               <graphicItem id="CONFIG RTC,NOVALUE,x40,y17"    var="/RTC/ConfigureRtc"                  type="node"        params="20,   85"                                      />
 
                <graphicItem id="RTC_CLKO,NOVALUE"           var="/RTC/rtc_cr_clko"                   type="node"        params="200,  30"                                      />
                <graphicItem id="/32768"                     var="/RTC/rtc_1hz_clock"                 type="label"       params="190,  70, 70, small"                            />
@@ -290,6 +293,14 @@
                   <graphicItem id="ERCLK32K"                  var="/SIM/system_erclk32k_clock"         type="node"        params="600, 40"                                       />
 
                   <equation key="y" value="y+100" />
+               </graphicGroup>
+
+               <!-- OSC32KSEL => ERCLK32K -->
+               <graphicGroup x="0" y="y" condition="!/SIM/sim_sopt1_osc32ksel" >
+                  <graphicItem id=""                          var=""                                   type="connector"   params="OSC32KCLK,0,   ERCLK32K,0, x80,y,x"             />
+                  <graphicItem id="ERCLK32K"                  var="/SIM/system_erclk32k_clock"         type="node"        params="600, 40"                                       />
+
+                  <equation key="y" value="y+50" />
                </graphicGroup>
 
                <!-- LPO -->
@@ -533,11 +544,11 @@
          <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" constant="false" />
 
          <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
-            <aliasOption key="/OSC0/osc_input_freq"   constant="false" />
-            <aliasOption key="/OSC0/osc_clock"        optional="true" />
-            <aliasOption key="/OSC0/osc_div_erps"     optional="true" constant="false" />
-            <aliasOption key="/OSC0/oscer_clock"               />
             <aliasOption key="oscMode"                constant="false"  />
+            <aliasOption key="/OSC0/osc_input_freq"   constant="false"  />
+            <aliasOption key="/OSC0/osc_clock"        optional="true"   />
+            <aliasOption key="/OSC0/osc_div_erps"     optional="true" constant="false" />
+            <aliasOption key="/OSC0/oscer_clock"      />
          </category>
 
          <category name="OSC1 (Real Time Clock)" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
@@ -550,40 +561,45 @@
 
          <category name="LIRC" description="Low Speed Internal Reference Clock Sources [LIRC]"
             toolTip="SLOW_IRC, FAST_IRC, MCGIRCLK" >
+
             <intOption key="system_slow_irc_clock[%(n)]"
-               enabledBy="(/MCG/mcgClockMode[%(n)]==0)||((!/MCG/mcg_c2_ircs[%(n)])&amp;&amp;(/MCG/mcg_c1_irclken[%(n)])), Disabled as IRC not in use by MCG"
+               enabledBy="(/MCG/mcgClockMode[%(n)]==LIRC_2MHz)||((!/MCG/mcg_c2_ircs[%(n)])&amp;&amp;(/MCG/mcg_c1_irclken[%(n)])), Disabled as IRC not in use by MCG"
                constant="true"
                derived="true"
-               origin="SLOW IRC"
+               origin="Slow IRC"
                units="Hz"
                description="Frequency of Slow Internal Reference [SIRC] Clock"
                toolTip="Dependent on device and clock Trim. [Nominally 2MHz]"
-               value="2MHz" />
+               value="2MHz"
+               disabledValue="0" />
 
             <intOption key="system_fast_irc_clock[%(n)]"
-               enabledBy="(/MCG/mcgClockMode[%(n)]==1)||((/MCG/mcg_c2_ircs[%(n)])&amp;&amp;(/MCG/mcg_c1_irclken[%(n)])), Disabled as IRC not in use by MCG"
+               enabledBy="(/MCG/mcgClockMode[%(n)]==LIRC_8MHz)||((/MCG/mcg_c2_ircs[%(n)])&amp;&amp;(/MCG/mcg_c1_irclken[%(n)])), Disabled as IRC not in use by MCG"
                constant="true"
                derived="true"
-               origin="FAST IRC"
+               origin="Fast IRC"
                units="Hz"
                description="Frequency of Fast Internal Reference [FIRC] Clock"
                toolTip="Dependent on device and clock Trim. [Nominally 8MHz]"
-               value="8MHz" />
+               value="8MHz"
+               disabledValue="0" />
          </category>
 
       <binaryOption key="mcg_mc_hircen[%(n)]" condition="mcg_mc_hircen_present&amp;&amp;!mcg_mc_hirclpen_present"
+         enumStem="McgHircEnable"
          enabledBy="/SMC/smc_pmctrl_runm[%(n)] != 1"
          description="High-frequency IRC Clock Enable [MCGPCLK]"
          toolTip="Enables the HIRC even when MCG_Lite is not working at HIRC mode">
-         <choice value="0" name="Enabled as required by MCG mode" />
-         <choice value="1" name="Always enabled" />
+         <choice value="0" enum="AsNeeded" name="Enabled as required by MCG mode" />
+         <choice value="1" enum="Always"   name="Always enabled" />
       </binaryOption>
 
       <binaryOption key="mcg_mc_hircen[%(n)]" condition="mcg_mc_hircen_present&amp;&amp;mcg_mc_hirclpen_present"
+         enumStem="McgHircEnable"
          description="High-frequency IRC Clock Enable [MCGPCLK]"
          toolTip="Enables the HIRC even when MCG_Lite is not working at HIRC mode">
-         <choice value="0" name="Enabled as required by MCG mode" />
-         <choice value="1" name="Always enabled" />
+         <choice value="0" enum="AsNeeded" name="Enabled as required by MCG mode" />
+         <choice value="1" enum="Always"   name="Always enabled" />
       </binaryOption>
 
       <binaryOption key="mcg_mc_hirclpen[%(n)]" condition="mcg_mc_hirclpen_present"
@@ -595,12 +611,13 @@
       </binaryOption>
 
       <binaryOption key="mcg_c2_ircs[%(n)]"
-         enabledBy="(system_slow_irc_clock[%(n)]!=0)||(system_fast_irc_clock[%(n)]!=0)"
+         enumStem="McgIrClkSrc"
+         enabledBy="(/MCG/mcgClockMode[%(n)]==LIRC_2MHz)||(/MCG/mcgClockMode[%(n)]==LIRC_8MHz)||(/MCG/mcg_c1_irclken[%(n)]), Disabled as IRC not available"
          target="system_lirc_clock[%(n)]"
          description="Internal Reference [MCGIRCLK] Clock Source"
          toolTip="Clock Source for MCGIRCLK" >
-         <choice value="0" name="Slow internal reference clock" ref="system_slow_irc_clock[%(n)]" isDefault="true"/>
-         <choice value="1" name="Fast internal reference clock" ref="system_fast_irc_clock[%(n)]"  />
+         <choice value="0" enum="Slow" name="Slow internal reference clock" ref="system_slow_irc_clock[%(n)]" isDefault="true"/>
+         <choice value="1" enum="Fast" name="Fast internal reference clock" ref="system_fast_irc_clock[%(n)]"  />
       </binaryOption>
 
       <intOption key="system_lirc_clock[%(n)]"
@@ -612,34 +629,37 @@
          disabledValue="0" />
 
       <binaryOption key="mcg_c1_irclken[%(n)]"
+         enumStem="McgIrClkEn"
          description="Internal Reference Clock Enable [MCGIRCLK]"
          toolTip="Enables the LIRC, even when MCG not using LIRC">
-         <choice value="0" name="Enabled as required by MCG mode" />
-         <choice value="1" name="Always enabled" isDefault="true" />
+         <choice value="0" enum="Disabled" name="Disabled when not used by MCG" />
+         <choice value="1" enum="Enabled"  name="Always Enabled" isDefault="true" />
       </binaryOption>
 
       <binaryOption key="mcg_c1_irefsten[%(n)]"
+         enumStem="McgIrefs"
          enabledBy="mcg_c1_irclken[%(n)]"
          description="Internal Reference Stop Enable [MCGIRCLK]"
          toolTip="Enables the LIRC in Stop mode (also requires IRCLKEN=1)">
-         <choice value="0" name="IR disabled in STOP" />
-         <choice value="1" name="IR enabled in STOP" />
+         <choice value="0" enum="DisabledInStop" name="IR disabled in STOP" />
+         <choice value="1" enum="EnabledInStop"  name="IR enabled in STOP" />
       </binaryOption>
 
       <choiceOption key="mcg_sc_fcrdiv[%(n)]"
+         enumStem="McgLowFequencyInternalClockDivider1"
          enabledBy="system_lirc_clock[%(n)]!=0"
          target="system_lirc_div1_clock[%(n)]"
          description="Internal Clock Reference Divider[LIRC_DIV1]"
          toolTip="Selects the amount to divide down the selected internal reference clock\n
             The FIR clock is available for use as MCGOUTCLK and after further division as MCGIRCLK">
-         <choice value="0" name="/1"   ref="(system_lirc_clock[%(n)])"     isDefault="true" />
-         <choice value="1" name="/2"   ref="(system_lirc_clock[%(n)])/2"   />
-         <choice value="2" name="/4"   ref="(system_lirc_clock[%(n)])/4"   />
-         <choice value="3" name="/8"   ref="(system_lirc_clock[%(n)])/8"   />
-         <choice value="4" name="/16"  ref="(system_lirc_clock[%(n)])/16"  />
-         <choice value="5" name="/32"  ref="(system_lirc_clock[%(n)])/32"  />
-         <choice value="6" name="/64"  ref="(system_lirc_clock[%(n)])/64"  />
-         <choice value="7" name="/128" ref="(system_lirc_clock[%(n)])/128" />
+         <choice value="0" enum="DivBy1"    name="/1"   ref="(system_lirc_clock[%(n)])"     isDefault="true" />
+         <choice value="1" enum="DivBy2"    name="/2"   ref="(system_lirc_clock[%(n)])/2"   />
+         <choice value="2" enum="DivBy4"    name="/4"   ref="(system_lirc_clock[%(n)])/4"   />
+         <choice value="3" enum="DivBy8"    name="/8"   ref="(system_lirc_clock[%(n)])/8"   />
+         <choice value="4" enum="DivBy16"   name="/16"  ref="(system_lirc_clock[%(n)])/16"  />
+         <choice value="5" enum="DivBy32"   name="/32"  ref="(system_lirc_clock[%(n)])/32"  />
+         <choice value="6" enum="DivBy64"   name="/64"  ref="(system_lirc_clock[%(n)])/64"  />
+         <choice value="7" enum="DivBy128"  name="/128" ref="(system_lirc_clock[%(n)])/128" />
       </choiceOption>
 
       <intOption key="system_lirc_div1_clock[%(n)]"
@@ -651,18 +671,19 @@
          disabledValue="0" />
 
       <choiceOption key="mcg_mc_lirc_div2[%(n)]"
+         enumStem="McgLowFequencyInternalClockDivider2"
          enabledBy="system_lirc_div1_clock[%(n)]!=0"
          target="system_mcgirclk_clock[%(n)]"
          description="Second Low-frequency Internal Reference Clock Divider"
          toolTip="Selects the factor value to further divide the LIRC source">
-         <choice value="0" name="/1"   ref="system_lirc_div1_clock[%(n)]"     isDefault="true" />
-         <choice value="1" name="/2"   ref="system_lirc_div1_clock[%(n)]/2"   />
-         <choice value="2" name="/4"   ref="system_lirc_div1_clock[%(n)]/4"   />
-         <choice value="3" name="/8"   ref="system_lirc_div1_clock[%(n)]/8"   />
-         <choice value="4" name="/16"  ref="system_lirc_div1_clock[%(n)]/16"  />
-         <choice value="5" name="/32"  ref="system_lirc_div1_clock[%(n)]/32"  />
-         <choice value="6" name="/64"  ref="system_lirc_div1_clock[%(n)]/64"  />
-         <choice value="7" name="/128" ref="system_lirc_div1_clock[%(n)]/128" />
+         <choice value="0" enum="DivBy1"    name="/1"   ref="system_lirc_div1_clock[%(n)]"     isDefault="true" />
+         <choice value="1" enum="DivBy2"    name="/2"   ref="system_lirc_div1_clock[%(n)]/2"   />
+         <choice value="2" enum="DivBy4"    name="/4"   ref="system_lirc_div1_clock[%(n)]/4"   />
+         <choice value="3" enum="DivBy8"    name="/8"   ref="system_lirc_div1_clock[%(n)]/8"   />
+         <choice value="4" enum="DivBy16"   name="/16"  ref="system_lirc_div1_clock[%(n)]/16"  />
+         <choice value="5" enum="DivBy32"   name="/32"  ref="system_lirc_div1_clock[%(n)]/32"  />
+         <choice value="6" enum="DivBy64"   name="/64"  ref="system_lirc_div1_clock[%(n)]/64"  />
+         <choice value="7" enum="DivBy128"  name="/128" ref="system_lirc_div1_clock[%(n)]/128" />
       </choiceOption>
 
       <intOption key="system_mcgirclk_clock[%(n)]"
@@ -710,13 +731,15 @@
       </choiceOption>
 
       <choiceOption key="mcg_c2_range0[%(n)]" condition="mcg_c2_range0_present"
+         enumStem="McgRange0"
          derived="true"
          constant="true"
          description="Frequency Range Select"
-         toolTip="Selects the frequency range for the crystal oscillator">
-         <choice value="0" name="Low range" />
-         <choice value="1" name="High range" />
-         <choice value="2" name="Very High range" />
+         toolTip="Selects the frequency range for the crystal oscillator if used.\n
+                  It may determine the divider for FLL input clock">
+         <choice value="0" enum="Low"      name="Low range" />
+         <choice value="1" enum="High"     name="High range" />
+         <choice value="2" enum="VeryHigh" name="Very High range" />
       </choiceOption>
 
       <intOption key="system_mcgpclk_clock[%(n)]"
@@ -958,8 +981,7 @@
          terminator=","
          variables="
              mcg_c2_range0,
-             mcg_c2_hgo0,
-             mcg_c2_erefs0,
+             oscMode,
              mcg_c2_ircs[%(n)]"
       ><![CDATA[\t   /// Control Register 2 - %initExpression\n\n ]]></initialValueTemplate>
 

@@ -6,16 +6,16 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <constant key = "irq_pattern"      value = "^%b(\d+)$"  />
-   <constant key = "irq_classHandler" value = "%c%i::Channel&lt;$1&gt;::irqHandler"  />
+   <constant key = "irq_pattern"      value = "&quot;^%b(\d+)$&quot;"  />
+   <constant key = "irq_classHandler" value = "&quot;%c%i::Channel&lt;$1&gt;::irqHandler&quot;"  />
    <xi:include href="_irqOptionSubstituted.xml"/>
- 
+
    <template><![CDATA[
       \t/// Number of PIT channels
       \tstatic constexpr uint32_t NumChannels  = $(numChannels);\n\n
    ]]></template>
 
-   <choiceOption key="pit_channelNumber" 
+   <choiceOption key="pit_channelNumber"
       hidden="true"
       description="Pit Channel Number"
       enumStem="PitChannelNum"
@@ -28,15 +28,15 @@
       <choice value="3"          name="Channel 3"     enum="3" />
       <choice value="0b10000000" name="Channel Not Allocated"  enum="None" />
    </choiceOption>
-   
+
    <intOption key="pitInputClock" constant="true" derived="true"
       ref="/SIM/system_bus_clock"
-      description="PIT input clock"  
+      description="PIT input clock"
       units="Hz"
       />
 
    <binaryOption key="pit_mcr_frz" condition="pit_mcr_frz_present"
-      enumStem="PitDebugMode" 
+      enumStem="PitDebugMode"
       description="Freeze in debug mode"
       toolTip="Controls whether the timer continues to run in debug mode">
       <choice value="0" name="Timers continue to run in debug mode" enum="Run"  />
@@ -45,9 +45,9 @@
 
    <for keys="ch" dim="numChannels">
       <stringOption key="PIT Channel %(ch)" derived="true" value="----- %(ch) -----"/>
-      
+
       <binaryOption key="pit_tctrl_ten[%(ch)]"  condition="pit_tctrl_tie_present"
-         enumStem="PitChannelEnable" 
+         enumStem="PitChannelEnable"
          description="Timer Channel Enable"
          toolTip="Allows operation of this channel">
          <choice value="0" name="Channel disabled" enum="Disabled" isDefault="true"/>
@@ -70,7 +70,7 @@
          toolTip="Used to calculate the timer load value"
          derived="true"
          value="1m" min="0" units="s" />
-   
+
       <floatOption key="pit_frequency[%(ch)]" condition="pit_ldval_tsv_present"
          enabledBy="pit_tctrl_ten[%(ch)]"
          typeName="Hertz"
@@ -79,10 +79,10 @@
          toolTip="Used to calculate the timer load value"
          derived="true"
          value="1k" min="0" units="Hz" />
-   
+
       <binaryOption key="pit_tctrl_chn[%(ch)]"  condition="pit_tctrl_chn_present &amp;&amp; (%(ch)>0)"
          enabledBy="pit_tctrl_ten[%(ch)]"
-         enumStem="PitChannelChain" 
+         enumStem="PitChannelChain"
          description="Chain with previous channel"
          toolTip="Controls whether the timer channels are chained to creater a larger counter">
          <choice value="0" name="Timers are not chained" enum="Disabled" isDefault="true"/>
@@ -91,7 +91,7 @@
 
       <binaryOption key="pit_tctrl_tie[%(ch)]"  condition="pit_tctrl_tie_present"
          enabledBy="pit_tctrl_ten[%(ch)] &amp;&amp;irqHandlingMethod"
-         enumStem="PitChannelIrq" 
+         enumStem="PitChannelIrq"
          description="Timer Interrupt Enable"
          toolTip="Allows interrupts from this channel">
          <choice value="0" name="Interrupts are disabled" enum="Disabled" isDefault="true"/>
@@ -112,7 +112,7 @@
       \t * Example:
       \t * @code
       \t * // Initialisation values for $(_class) channel
-      \t * // Parameters available may vary with device - see $(_class)::DefaultChannelInitValues[] for relevant example 
+      \t * // Parameters available may vary with device - see $(_class)::DefaultChannelInitValues[] for relevant example
       \t * static const Pit::Init pitInit {
       \t *       PitChannelNum_0,
       \t *
@@ -145,11 +145,11 @@
       \tclass Init {
       \t
       \tpublic:
-      \t   /**                               
-      \t    * Copy Constructor                  
-      \t    */                             
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
       \t   constexpr Init(const Init &other) = delete;
-      \t   
+      \t
       \t   /**
       \t    * Default Constructor
       \t    */
@@ -158,13 +158,13 @@
    ]]></template>
 
 <!-- Member variables -->
-  
-   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod" 
+
+   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></setTemplate>
-   
+
    <initialValueTemplate namespace="usbdm"
       variables="pit_ldval_tsv[]"
    ><![CDATA[
@@ -201,7 +201,7 @@
    ]]></initialValueTemplate>
 
 <!--  Configure method -->
-  
+
    <setTemplate variables="pit_tctrl_ten[]" discardRepeats="true" key="/PIT/InitMethod" namespace="all" ><![CDATA[
    \t/**
    \t * Configure a PIT channel from values specified in init
@@ -209,7 +209,7 @@
    \t * @param init Class containing initialisation values
    \t */
    \tstatic void configure(const typename Info::Init &init) {
-   \t   
+   \t
    \t   // Enable peripheral clock and map pins
    \t   enable();
    \t
@@ -238,7 +238,7 @@
    ]]></setTemplate>
 
 <!--  Constructors -->
-  
+
    <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
@@ -257,11 +257,11 @@
       \t      this->%enumParam0 = %paramExpression;
       \t   }\n\n
    ]]></constructorTemplate>
-   
-   
+
+
    <for keys="r" values="pit_channelNumber;pit_ldval_tsv[];pit_period[];/PCR/nvic_irqLevel">
-      <constructorTemplate namespace="usbdm" 
-         variables="%(r)" 
+      <constructorTemplate namespace="usbdm"
+         variables="%(r)"
          linePadding="xxx"
        ><![CDATA[
          \t   /**
@@ -279,11 +279,11 @@
          \t   }\n\n
       ]]></constructorTemplate>
    </for>
-   
+
    <for keys="r" values="pit_tctrl_ten[];pit_tctrl_chn[1];pit_tctrl_tie[]">
-      <constructorTemplate namespace="usbdm" 
+      <constructorTemplate namespace="usbdm"
          variables="%(r)"
-         linePadding="xxx" 
+         linePadding="xxx"
       ><![CDATA[
          \t   /**
          \t    * Constructor for %description
@@ -295,12 +295,12 @@
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-         \t   
+         \t
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }\n\n
       ]]></constructorTemplate>
    </for>
-   
+
    <template namespace="usbdm" ><![CDATA[
       \t};\n\n
    ]]></template>
@@ -310,14 +310,14 @@
    ]]></template>
 
 <!--  Default Values -->
-  
-   <setTemplate 
-      variables="pit_mcr_frz"   
+
+   <setTemplate
+      variables="pit_mcr_frz"
    ><![CDATA[
       \t/// %description
       \tstatic constexpr uint32_t %registerName = %initExpression; \n\n
    ]]></setTemplate>
-  
+
    <template><![CDATA[
       $(init_description)
       \ttypedef $(_class)BasicInfo::Init Init;
@@ -333,7 +333,7 @@
       \t */
       \tstatic constexpr Init DefaultChannelInitValues[] = {\n
    ]]></template>
-   
+
    <for keys="ch" dim="numChannels">
       <setTemplate
          separator=","
@@ -355,10 +355,10 @@
    <template><![CDATA[
          \t};\n\n
    ]]></template>
-   
-   
+
+
    <!--  ==================== Misc ======================== -->
-   
+
    <template discardRepeats="true" key="CallBackDefinition" namespace="all" ><![CDATA[
       /**
        * Callback table for programmatically set handlers
@@ -386,7 +386,7 @@
       <copy source="Project_Headers/pit-MK.h"        target="Project_Headers/pit.h"     overwrite="true" derived="true" />
       <copy source="Snippets/timer-inline-handler-example.cpp" target="Snippets/timer-inline-handler-example.cpp"   overwrite="true" derived="true" />
    </projectActionList>
-         
+
    <!-- condition="pit_ltmr64l_lth"  -->
    <template condition="pit_ltmr64h_lth_present" ><![CDATA[
       \t/**
@@ -411,7 +411,7 @@
       \t   return SystemBusClock;
       \t}\n\n
    ]]></template>
-   
+
    <template key="/PIT/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
@@ -444,7 +444,7 @@
    \t */
    \tusing $(_class)Channel = $(_class)::PitChannel;
    ]]></template>
-      
+
    <xi:include href="_clockOption.xml"/>
 
    <signals/>

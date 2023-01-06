@@ -53,7 +53,7 @@
        \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel.enum[]):NvicPriority_NotInstalled);\n\n
    ]]></setTemplate>
 
-   <constant key="enable_interrupts_code"  value="enableNvicInterrupts();"  />
-   <constant key="disable_interrupts_code" value="disableNvicInterrupts();"  />
+   <constant key="enable_interrupts_code"  value="&quot;enableNvicInterrupts();&quot;"  />
+   <constant key="disable_interrupts_code" value="&quot;disableNvicInterrupts();&quot;"  />
 
 </fragment>

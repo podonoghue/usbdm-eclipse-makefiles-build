@@ -90,8 +90,8 @@
    <if condition="!osc0_peripheral" >
       <!-- Oscillator peripheral used for OSC0 input to MCG = OSC0 -->
       <!-- This peripheral is tied closely to the MCG              -->
-      <constant key="osc0_peripheral"  value="/OSC0" />
-      <constant key="osc0_description" value="OSC0 - Main System Oscillator (OSCCLK0)" />
+      <constant key="osc0_peripheral"  value="&quot;/OSC0&quot;" />
+      <constant key="osc0_description" value="&quot;OSC0 - Main System Oscillator (OSCCLK0)&quot;" />
    </if>
 
    <if condition="rtc_independent" >

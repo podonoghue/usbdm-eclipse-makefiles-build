@@ -13,7 +13,7 @@
 
    <constant key="llwu_device_list"
       description="LLWU Wakeup sources"
-      value="LPTMR0;CMP0;;;TSI0;RTC_Alarm;;RTC_Seconds" />
+      value="&quot;LPTMR0;CMP0;;;TSI0;RTC_Alarm;;RTC_Seconds&quot;" />
 
    <!-- Clock divider -->
    <constant key="clock_divider_type" type="Integer" value="2" />

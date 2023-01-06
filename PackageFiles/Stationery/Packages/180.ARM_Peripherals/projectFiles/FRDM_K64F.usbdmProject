@@ -89,9 +89,11 @@
    <item key="/MCG/mcg_c2_erefs0"                          value="false" />
    <item key="/OSC0/osc_input_freq"                        value="50000000" />
    <item key="/RTC/rtc_cr_scp"                             value="4" />
+   <item key="/OSC0/EnableOsc"                             value="true" />
    <item key="/SIM/busFreq"                                value="60MHz" />
    <item key="/SIM/coreFreq"                               value="120MHz" />
    <item key="/SIM/flashFreq"                              value="25MHz" />
+   <item key="/RTC/EnableRtc"                              value="true" />
    <item key="/SIM/flexFreq"                               value="50MHz" />
    <item key="/SIM/sim_clkdiv2_usb"                        value="2" />
    <item key="/SIM/sim_sopt2_clkoutsel"                    value="0" />

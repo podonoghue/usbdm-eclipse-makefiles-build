@@ -3,17 +3,17 @@
 <!-- _clockOption.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-         
-<!-- 
+
+<!--
       Predefined symbols generated for current peripheral
       _base_class FTM0 => Ftm
       _instance   FTM0 => 0
       _class      FTM0 => Ftm0
       _name       FTM0 => FTM0
  -->
- 
+
    <template><![CDATA[
-      \t/** 
+      \t/**
       \t *  Enable clock to $(_class)
       \t */
       \tstatic void enableClock() {
@@ -24,7 +24,7 @@
       #endif
       \t}
 
-      \t/** 
+      \t/**
       \t *  Disable clock to $(_class)
       \t */
       \tstatic void disableClock() {
@@ -35,8 +35,8 @@
       #endif
       \t}\n\n
    ]]></template>
-      
-   <constant key = "enable_clock"   value = "Info\:\:enableClock();"  />
-   <constant key = "disable_clock"  value = "Info\:\:disableClock();"  />
+
+   <constant key = "enable_clock"   value = "&quot;Info\:\:enableClock();&quot;"  />
+   <constant key = "disable_clock"  value = "&quot;Info\:\:disableClock();&quot;"  />
 
 </fragment>

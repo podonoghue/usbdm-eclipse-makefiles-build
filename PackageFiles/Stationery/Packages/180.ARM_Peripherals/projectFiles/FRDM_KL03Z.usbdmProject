@@ -98,20 +98,26 @@
    <item key="/MCG/mcg_mc_hircen[0]"                       value="true" />
    <item key="/MCG/mcg_mc_hircen[1]"                       value="true" />
    <item key="/MCG/mcg_mc_hircen[2]"                       value="true" />
-   <item key="/MCG/mcg_mc_hircen[3]"                       value="true" />
    <item key="/MCG/system_lirc_clock[0]"                   value="8000000" />
    <item key="/MCG/system_lirc_clock[2]"                   value="8000000" />
    <item key="/MCG/system_lirc_div1_clock[0]"              value="8000000" />
    <item key="/MCG/system_lirc_div1_clock[2]"              value="8000000" />
    <item key="/OSC0/osc_input_freq"                        value="32768" />
+   <item key="/RTC/EnableRtc"                              value="true" />
    <item key="/RTC/rtc_cr_osce"                            value="true" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[0]"                 value="2" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[1]"                 value="2" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[2]"                 value="1" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[3]"                 value="1" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[0]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[1]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[2]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv1[3]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[2]"                 value="0" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[3]"                 value="0" />
    <item key="/SIM/sim_copc_copdbgen"                      value="true" />
    <item key="/SIM/sim_copc_copstpen"                      value="true" />
    <item key="/SIM/sim_sopt1_osc32ksel"                    value="0" />
+   <item key="/SIM/sim_sopt2_lpuart0src[1]"                value="3" />
+   <item key="/SIM/sim_sopt2_lpuart0src[3]"                value="3" />
+   <item key="/SIM/sim_sopt2_tpmsrc[1]"                    value="3" />
+   <item key="/SIM/sim_sopt2_tpmsrc[3]"                    value="3" />
    <item key="/SMC/smc_pmctrl_runm[1]"                     value="2" />
    <item key="/SMC/smc_pmctrl_runm[3]"                     value="2" />
 </section>

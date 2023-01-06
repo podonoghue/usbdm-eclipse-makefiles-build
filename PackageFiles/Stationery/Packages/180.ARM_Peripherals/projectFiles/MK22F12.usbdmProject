@@ -17,6 +17,7 @@
    <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
    <item key="/MCG/clock_mode[2]"                          value="ClockMode_FEE" />
    <item key="/MCG/system_mcgfllclk_clock[2]"              value="80000000" />
+   <item key="/OSC0/OscEnable"                             value="true" />
    <item key="/SIM/sim_clkdiv1_outdiv1[0]"                 value="1" />
    <item key="/SIM/sim_clkdiv1_outdiv3[0]"                 value="3" />
    <item key="/SIM/sim_clkdiv1_outdiv3[1]"                 value="2" />

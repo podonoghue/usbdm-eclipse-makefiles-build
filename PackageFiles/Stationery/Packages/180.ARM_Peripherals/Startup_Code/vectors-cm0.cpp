@@ -75,6 +75,7 @@ typedef struct {
  */
 __attribute__((__naked__, __weak__, __interrupt__))
 void HardFault_Handler(void) {
+#if defined(DEBUG_BUILD)
    /*
     * Determines the active stack pointer and loads it into r0
     * This is used as the 1st argument to _HardFault_Handler(volatile ExceptionFrame *exceptionFrame)
@@ -95,6 +96,13 @@ void HardFault_Handler(void) {
    __asm__ volatile ("       bx r2                                         \n");
    __asm__ volatile ("      .align 4                                       \n");
    __asm__ volatile ("       handler_addr_const: .word _HardFault_Handler  \n");
+
+#else
+   while (1) {
+      // Stop here for debugger
+      __asm__("bkpt");
+   }
+#endif
 }
 #pragma GCC diagnostic pop
 

@@ -8,34 +8,15 @@
 
    <xi:include href="_mapPinsOption_on.xml"/>
 
-   <aliasOption key="/SIM/RtcForcing" optional="true" />
-
-   <binaryOption key="EnableOsc" condition="!/SIM/RtcForcing"
-      description="Enable OSC system"
-      toolTip="Enables use of the OSC or external clock"
-      disabledValue="1" >
-      <choice value="0" name="Disabled" enum="Disabled"  isDefault="true" />
-      <choice value="1" name="Enabled"  enum="Enabled"   />
-   </binaryOption>
-
-   <binaryOption key="EnableOsc" condition="/SIM/RtcForcing"
-      enabledBy="!/SIM/RtcForcing, Forced enabled by RTC"
-      description="Enable OSC system"
-      toolTip="Enables use of the OSC or external clock"
-      disabledValue="1" >
-      <choice value="0" name="Disabled" enum="Disabled"  isDefault="true" />
-      <choice value="1" name="Enabled"  enum="Enabled"   />
-   </binaryOption>
+   <aliasOption key="/MCG/oscMode" constant="false" />
 
    <intOption key="osc_input_freq"
-      enabledBy="EnableOsc"
+      enabledBy="/MCG/oscMode!=/OscMode_NotConfigured"
       units="Hz"
       description="OSC frequency"
       toolTip="Frequency of external crystal or clock on XTAL/EXTAL"
       value="8000000"
       disabledValue="0" />
-
-   <aliasOption key="/MCG/oscMode" constant="false" />
 
    <intOption key="osc_clock"
       ref="osc_input_freq"
@@ -49,7 +30,7 @@
       min="1" />
 
    <binaryOption key="osc_cr_erclken"
-      enabledBy="EnableOsc,Configuration disabled"
+      enabledBy="/MCG/oscMode!=/OscMode_NotConfigured"
       enumStem="OscErClkEn"
       description="External Reference Enable"
       toolTip="Enables the OSC clock [OSCERCLK] for use by peripherals\n
@@ -70,27 +51,27 @@
       <choice value="3" name="Unconstrained by Oscillator" isDefault="true" />
    </choiceOption>
 
-   <aliasOption key="/MCG/oscMode" constant="false" />
-
    <choiceOption key="osc_cr_scp"
+      enumStem="OscCap"
+      enabledBy="(/MCG/oscMode>/OscMode_ExternalClock)&amp;&amp;(/MCG/oscMode!=/OscMode_RTC_Controlled)"
       description="Oscillator load capacitance"
-      toolTip="Configures the oscillator load capacitance" >
-      <choice value="0"  name="0 pF" />
-      <choice value="8"  name="2 pF" />
-      <choice value="4"  name="4 pF" />
-      <choice value="12" name="6 pF" />
-      <choice value="2"  name="8 pF" isDefault="true" />
-      <choice value="10" name="10 pF" />
-      <choice value="6"  name="12 pF" />
-      <choice value="14" name="14 pF" />
-      <choice value="1"  name="16 pF" />
-      <choice value="9"  name="18 pF" />
-      <choice value="5"  name="20 pF" />
-      <choice value="13" name="22 pF" />
-      <choice value="3"  name="24 pF" />
-      <choice value="11" name="26 pF" />
-      <choice value="7"  name="28 pF" />
-      <choice value="15" name="30 pF" />
+      toolTip="Configures the oscillator load capacitance">
+      <choice value="0"  enum="None" name="0 pF" />
+      <choice value="8"  enum="2pf"  name="2 pF" />
+      <choice value="4"  enum="4pf"  name="4 pF" />
+      <choice value="12" enum="6pf"  name="6 pF" />
+      <choice value="2"  enum="8pf"  name="8 pF" isDefault="true" />
+      <choice value="10" enum="10pf" name="10 pF" />
+      <choice value="6"  enum="12pf" name="12 pF" />
+      <choice value="14" enum="14pf" name="14 pF" />
+      <choice value="1"  enum="16pf" name="16 pF" />
+      <choice value="9"  enum="18pf" name="18 pF" />
+      <choice value="5"  enum="20pf" name="20 pF" />
+      <choice value="13" enum="22pf" name="22 pF" />
+      <choice value="3"  enum="24pf" name="24 pF" />
+      <choice value="11" enum="26pf" name="26 pF" />
+      <choice value="7"  enum="28pf" name="28 pF" />
+      <choice value="15" enum="30pf" name="30 pF" />
    </choiceOption>
 
    <binaryOption key="osc_cr_erefsten"
@@ -151,7 +132,7 @@
    </if>
 
    <intOption key="osc32k_clock"
-         enabledBy="EnableOsc&amp;&amp;(osc_input_freq&gt;=32000)&amp;&amp;(osc_input_freq&lt;=40000), Disable as XTAL frequency unsuitable"
+         enabledBy="(/MCG/oscMode!=/OscMode_NotConfigured)&amp;&amp;(osc_input_freq&gt;=32000)&amp;&amp;(osc_input_freq&lt;=40000), Disable as XTAL frequency unsuitable"
          ref="osc_clock"
          derived="true"
          units="Hz"
