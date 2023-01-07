@@ -69,7 +69,7 @@
       <aliasOption key="/OSC0/oscer_clock" optional="true" />
       <aliasOption key="/MCG/system_mcgirclk_clock[]" optional="true" />
 
-      <binaryOption key="sim_sopt2_ptd7pad"
+      <binaryOption key="sim_sopt2_ptd7pad" condition="sim_sopt2_ptd7pad_present"
          enumStem="SimPortDPad"
          description="PTD7 pad drive strength"
          toolTip="Controls the output drive strength of the PTD7 pin\n

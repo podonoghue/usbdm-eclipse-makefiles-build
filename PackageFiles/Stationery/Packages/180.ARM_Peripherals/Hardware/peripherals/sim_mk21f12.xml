@@ -64,30 +64,7 @@
       <aliasOption key="/OSC0/oscer_clock" optional="true" />
       <aliasOption key="/MCG/system_mcgirclk_clock[]" optional="true" />
 
-      <for keys="n : name              : code            : ref"
-         values="0 : System core clock : SystemCoreClock : system_core_clock[];
-                 1 : System core clock : SystemCoreClock : system_core_clock[];
-                 2 : System bus clock  : SystemBusClock  : system_bus_clock[]" >
-
-         <choiceOption key="system_uart%(n)_fixedclocksource"
-            target="system_uart%(n)_clock"
-            constant="true"
-            derived="true"
-            description="UART%(n) Clock source"
-            toolTip="Fixed clock source for UART" >
-            <choice value="0"  name="%(name)" ref="%(ref)" code="%(code)" />
-         </choiceOption>
-
-         <intOption key="system_uart%(n)_clock"
-            constant="true"
-            derived="true"
-            units="Hz"
-            description="UART%(n) Clock frequency"
-            toolTip="Frequency of clock to UART"
-            value="0" />
-      </for>
-
-      <binaryOption key="sim_sopt2_ptd7pad"
+      <binaryOption key="sim_sopt2_ptd7pad" condition="sim_sopt2_ptd7pad_present"
          enumStem="SimPortDPad"
          description="PTD7 pad drive strength"
          toolTip="Controls the output drive strength of the PTD7 pin\n
@@ -517,6 +494,29 @@
                description="Peripheral Post-divider Clock frequency/"
                toolTip="Frequency of Peripheral Clock available to various peripherals"
                max="75_MHz" />
+
+            <for keys="u : name              : code            : ref"
+               values="0 : System core clock : SystemCoreClock : system_core_clock[%(n)];
+                       1 : System core clock : SystemCoreClock : system_core_clock[%(n)];
+                       2 : System bus clock  : SystemBusClock  : system_bus_clock[%(n)]" >
+
+               <choiceOption key="system_uart%(u)_fixedclocksource[%(n)]"
+                  target="system_uart%(u)_clock[%(n)]"
+                  constant="true"
+                  derived="true"
+                  description="UART%(u) Clock source"
+                  toolTip="Fixed clock source for UART (%(code))" >
+                  <choice value="0"  name="%(name)" ref="%(ref)" code="%(code)" />
+               </choiceOption>
+
+               <intOption key="system_uart%(u)_clock[%(n)]"
+                  constant="true"
+                  derived="true"
+                  units="Hz"
+                  description="UART%(u) Clock frequency"
+                  toolTip="Frequency of clock to UART%(u)"
+                  value="0" />
+            </for>
 
             <choiceOption key="sim_sopt2_lpuartsrc[%(n)]" condition="sim_sopt2_lpuartsrc_present"
                enumStem="SimLpuartClockSource"

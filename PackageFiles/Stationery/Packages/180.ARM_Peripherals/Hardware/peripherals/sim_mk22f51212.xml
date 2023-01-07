@@ -15,6 +15,7 @@
 
    <constant key="llwu_device_list"
       description="LLWU Wakeup sources"
+      type="String"
       value="&quot;LPTMR0;CMP0;CMP1;;;RTC_Alarm;;RTC_Seconds&quot;" />
 
    <!-- Clock divider -->
@@ -77,6 +78,15 @@
 
       <aliasOption key="/OSC0/oscer_clock" optional="true" />
       <aliasOption key="/MCG/system_mcgirclk_clock[]" optional="true" />
+
+      <binaryOption key="sim_sopt2_ptd7pad" condition="sim_sopt2_ptd7pad_present"
+         enumStem="SimPortDPad"
+         description="PTD7 pad drive strength"
+         toolTip="Controls the output drive strength of the PTD7 pin\n
+                  by selecting either one or two pads to drive it" >
+         <choice value="0"  name="Single-pad drive strength" enum="Single" isDefault="true" />
+         <choice value="1"  name="Double-pad drive strength" enum="Double" />
+      </binaryOption>
 
       <choiceOption key="sim_sopt2_fbsl" condition="sim_sopt2_fbsl_present"
          enumStem="SimFlexbusSecurity"

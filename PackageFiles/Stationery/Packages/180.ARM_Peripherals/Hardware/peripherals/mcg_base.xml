@@ -286,7 +286,7 @@
             <graphicBox    id="RTC" x="10" y="y" params="0,0, x280, y100,  x" condition="/SIM/rtc_independent || /SIM/rtc_mkw41z4" >
                <graphicItem id="XTAL32"                        var="/RTC/osc_input_freq"                type="variableBox" params="50,   30,  90, large"                          />
                <graphicItem id="RTC_OSC_EN,NOVALUE|NONAME"     var="/RTC/rtc_cr_osce"                   type="node"        params="85,   20"                                      />
-               <graphicItem id="RTC_SCP,NONAME"                var="/RTC/rtc_cr_scp"                    type="annotation"  params="10,   55, 50, 16"                              />
+               <graphicItem id="RTC_SCP,NONAME"                var="/RTC/rtc_cr_scp"                    type="annotation"  params="10,   55, 50, 16, Cap=%v"                      />
                <graphicItem id="CONFIG RTC,NOVALUE,x40,y17"    var="/RTC/ConfigureRtc"                  type="node"        params="20,   85"                                      />
 
                <graphicItem id="RTC_CLKO,NOVALUE"           var="/RTC/rtc_cr_clko"                   type="node"        params="200,  30"                                      />
