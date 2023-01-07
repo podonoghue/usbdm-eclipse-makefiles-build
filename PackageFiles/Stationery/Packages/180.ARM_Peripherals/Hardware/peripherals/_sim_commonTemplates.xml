@@ -105,7 +105,7 @@
          description="ERCLK32K clock source"
          toolTip="Clock source for External 32k Reference Clock [ERCLK32K]">
          <choice value="0" name="OSC0 in low range (OSC32KCLK)"  ref="/OSC0/osc32k_clock"          enum="Osc32kClk" code="Osc0Info::getOsc32kClock()"  />
-         <choice value="2" name="RTC 32kHz clock"                ref="/RTC/osc_clock"              enum="Rtc32kClk" code="RtcInfo::getExternalClock()" />
+         <choice value="2" name="RTC 32kHz clock"                ref="/RTC/rtcclk_gated_clock"     enum="Rtc32kClk" code="RtcInfo::getExternalClock()" />
          <choice value="3" name="LPO 1kHz clock"                 ref="/PMC/system_low_power_clock" enum="LpoClk"    code="PmcInfo::getLpoClock()"     isDefault="true"/>
       </choiceOption>
 

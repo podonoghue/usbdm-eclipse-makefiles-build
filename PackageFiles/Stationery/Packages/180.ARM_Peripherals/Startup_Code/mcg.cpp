@@ -47,7 +47,7 @@ $(/MCG/McgClockInfoEntries:!!!!!!!Not found!!!!!!!)
 };
 
 /** MCGFFCLK - Fixed frequency clock (input to FLL) */
-volatile uint32_t SystemMcgffClock;
+volatile uint32_t SystemMcgFFClock;
 
 /** MCGOUTCLK - Primary output from MCG, various sources */
 volatile uint32_t SystemMcgOutClock;
@@ -418,7 +418,7 @@ void Mcg::SystemCoreClockUpdate(void) {
    // MCG external reference clock
    uint32_t mcg_erc_clock = McgInfo::getExternalReferenceClock();
 
-   // Calculate SystemMcgffClock
+   // Calculate SystemMcgFFClock
    if ((mcg->C1&MCG_C1_IREFS_MASK) == 0) {
       // External reference clock is selected with FRDIV divider
       unsigned divisor = 1;
@@ -430,11 +430,11 @@ void Mcg::SystemCoreClockUpdate(void) {
          }
       }
       divisor *= (1<<((mcg->C1&MCG_C1_FRDIV_MASK)>>MCG_C1_FRDIV_SHIFT));
-      SystemMcgffClock = mcg_erc_clock / divisor;
+      SystemMcgFFClock = mcg_erc_clock / divisor;
    }
    else {
       // Slow internal reference clock is selected
-      SystemMcgffClock = getSlowIrcFrequency();
+      SystemMcgFFClock = getSlowIrcFrequency();
    }
 
    uint32_t mcgFllClock = 0;
@@ -442,7 +442,7 @@ void Mcg::SystemCoreClockUpdate(void) {
 
    if ((mcg->C2&MCG_C2_LP_MASK) == 0) {
       // Calculate FLL clock if active
-      mcgFllClock = SystemMcgffClock *
+      mcgFllClock = SystemMcgFFClock *
       /**/                ((mcg->C4&MCG_C4_DMX32_MASK)?732:640) *
       /**/                (((mcg->C4&MCG_C4_DRST_DRS_MASK)>>MCG_C4_DRST_DRS_SHIFT)+1);
 

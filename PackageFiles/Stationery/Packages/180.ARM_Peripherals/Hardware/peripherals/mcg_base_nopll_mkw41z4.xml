@@ -110,28 +110,29 @@
 
             <graphicBox id="MCG" x="10" y="70" params="0,0,   x570, y320,  x" >
                <!-- MCGIRCLK -->
-               <graphicItem id="FAST IRC"                  var="system_fast_irc_clock"              type="variableBox" params="50,  45,  80, large"                            />
+               <graphicItem id="FAST IRC"                  var="system_fast_irc_clock[%(n)]"        type="variableBox" params="50,  45,  80, large"                            />
                <graphicItem id=""                          var=""                                   type="connector"   params="FAST IRC,0, FCRDIV,0"                           />
+               <graphicItem id="FIRC_DIVIDED,NONAME"       var="firc_divided_clock[%(n)]"           type="annotation"  params="150, 15, 100, 18, fout=%v"                      />
                <graphicItem id="FCRDIV"                    var="mcg_sc_fcrdiv[%(n)]"                type="choice"      params="200, 45, 100, small"                            />
                <graphicItem id="SLOW IRC"                  var="system_slow_irc_clock[%(n)]"        type="variableBox" params="50,  95,  80, large"                            />
                <graphicItem id=""                          var=""                                   type="connector"   params="FCRDIV,0,IRCS,1"                                />
                <graphicItem id=""                          var=""                                   type="connector"   params="SLOW IRC,0, IRCS,0"                             />
                <graphicItem id="IRCS"                      var="mcg_c2_ircs[%(n)]"                  type="mux"         params="300, 55, 2, mirror"                             />
                <graphicItem id="MCGIRCLK_UNGATED,NONAME"   var="system_mcgirclk_ungated[%(n)]"      type="annotation"  params="360, 35, 70, 20"                                />
-               <graphicItem id=""                          var=""                                   type="connector"   params="IRCS,0, MCGIRCLKEN,0"                           />
+               <graphicItem id=""                          var="system_mcgirclk_ungated[%(n)]"      type="connector"   params="IRCS,0, MCGIRCLKEN,0"                           />
                <graphicItem id="MCGIRCLKEN,x-20"           var="mcg_c1_irclken[%(n)]"               type="node"        params="495, 55"                                        />
                <graphicItem id=""                          var="system_mcgirclk_clock[%(n)]"        type="connector"   params="MCGIRCLKEN,0, MCGIRCLK.1,0"                     />
                <graphicItem id="MCGIRCLK.1,NONAME"         var="system_mcgirclk_clock[%(n)]"        type="node"        params="570, 55"                                        />
 
-               <graphicItem id="FRDIV"                     var="mcg_c1_frdiv[%(n)]"                 type="choice"      params="65, 155, 85, large"                             />
-               <graphicItem id="RANGE,NONAME"              var="mcg_c2_range0[%(n)]"                type="annotation"  params="25, 180, 100, 20"                               />
+               <graphicItem id="FRDIV"                     var="mcg_c1_frdiv[%(n)]"                 type="choice"      params="75, 155, 85, large"                             />
+               <graphicItem id="RANGE,NONAME"              var="mcg_c2_range0[%(n)]"                type="annotation"  params="30, 180, 100, 20"                               />
+               <graphicItem id="FRDIV_OUT,NONAME"          var="mcg_erc_clock_divided[%(n)]"        type="annotation"  params="30, 200, 100, 20, fout=%v"                               />
                <graphicItem id=""                          var="mcg_erc_clock_divided[%(n)]"        type="connector"   params="FRDIV,0,    IREFS,0"                            />
-               <graphicItem id="FRDIV_OUT,NONAME"          var="mcg_erc_clock_divided[%(n)]"        type="annotation"  params="110, 157, 70, 20"                               />
                <graphicItem id=""                          var=""                                   type="connector"   params="SLOW IRC,0, IREFS,1, (x-20),d,y,x"              />
 
                <!-- IREFS => FLL/MCGFFCLK -->
-               <graphicItem id="IREFS"                     var="mcg_c1_irefs[%(n)]"                 type="mux"         params="195, 145, 2, mirror"                            />
-               <graphicItem id=""                          var="system_mcgffclk_clock[%(n)]"        type="connector"   params="IREFS,0, MCGFFCLK.1,0, x40,d,y,x"               />
+               <graphicItem id="IREFS"                     var="mcg_c1_irefs[%(n)]"                 type="mux"         params="185, 145, 2, mirror"                            />
+               <graphicItem id=""                          var="system_mcgffclk_clock[%(n)]"        type="connector"   params="IREFS,0, MCGFFCLK.1,0, x45,d,y,x"               />
                <graphicItem id="MCGFFCLK_A1,NONAME"        var="system_mcgffclk_clock[%(n)]"        type="annotation"  params="340, 85, 70, 20"                                />
                <graphicItem id="MCGFFCLK.1,NONAME"         var="system_mcgffclk_clock[%(n)]"        type="node"        params="570, 105"                                       />
                <graphicItem id=""                          var="system_mcgffclk_clock[%(n)]"        type="connector"   params="IREFS,0, FLL,0"                                 />
@@ -143,7 +144,7 @@
 
                <!-- FLL/IRCS => CLKS => MCGOUTCLK -->
                <graphicItem id=""                          var="system_mcgfllclk_clock[%(n)]"       type="connector"   params="FLL,0,  CLKS,0, (x-50),y,x"    condition="!mcg_c6_plls_present" />
-               <graphicItem id=""                          var=""                                   type="connector"   params="IRCS,0, CLKS,1, (x-50),d,y,x"                   />
+               <graphicItem id=""                          var="system_mcgirclk_ungated[%(n)]"      type="connector"   params="IRCS,0, CLKS,1, (x-50),d,y,x"                   />
                <graphicItem id="CLKS"                      var="mcg_c1_clks[%(n)]"                  type="mux"         params="500, 165, 3"                                    />
                <graphicItem id=""                          var="system_mcgoutclk_clock[%(n)]"       type="connector"   params="CLKS,0, MCGOUTCLK,0"                            />
                <graphicItem id="MCGOUTCLK"                 var="system_mcgoutclk_clock[%(n)]"       type="node"        params="570, 165"                                       />
@@ -174,6 +175,7 @@
                </graphicGroup>
 
                <!-- MCG OSCSEL Inputs -->
+               <graphicItem id="OSCCLK_C_OSCSEL0"          var=""                                   type="connector"   params="OSCCLK,0,   MCGERCLK_IN_IN0,0, x"               condition="!mcg_c7_oscsel_present"  />
                <graphicItem id="OSCCLK_C_OSCSEL0"          var=""                                   type="connector"   params="OSCCLK,0,   OSCSEL_IN0,0, x,d,y"                condition="mcg_c7_oscsel_present"   />
                <graphicItem id=""                          var=""                                   type="connector"   params="RTC32K,0,   OSCSEL_IN1,0, x,y"                  condition="/SIM/rtc_independent || /SIM/rtc_mkw41z4" />
             </graphicBox>
@@ -197,8 +199,8 @@
 
                <graphicItem id="XTAL32"                    var="/RTC/osc_input_freq"                type="variableBox" params="50,   70,  90, large"                          />
                <graphicItem id="RTC_OSC_EN,NOVALUE|NONAME" var="/RTC/rtc_cr_osce"                   type="node"        params="85,   60"                                      />
-               <graphicItem id="RTC_SCP,NONAME"            var="/RTC/rtc_cr_scp"                    type="annotation"  params="10,   95, 50, 16"                              />
-               <graphicItem id="CONFIG RTC,NOVALUE,x40,y17" var="/RTC/ConfigureRtc"                 type="node"        params="10,   125"                                      />
+               <graphicItem id="RTC_SCP,NONAME"            var="/RTC/rtc_cr_scp"                    type="annotation"  params="10,   95, 50, 16, Cap=%v"                              />
+               <graphicItem id="CONFIG RTC,NOVALUE,x40,y17" var="/RTC/ConfigureRtc"                 type="node"        params="20,   125"                                      />
                <graphicItem id=""                          var="/RTC/osc_clock"                     type="connector"   params="XTAL32,0,  RTC_CLKO,0, x"                      />
                <graphicItem id="RTC_CLKO,NOVALUE"          var="/RTC/rtc_cr_clko"                   type="node"        params="200,  70"                                      />
                <graphicItem id=""                          var="/RTC/rtcclk_gated_clock"            type="connector"   params="RTC_CLKO,0,  RTC32K,0, x"                       />

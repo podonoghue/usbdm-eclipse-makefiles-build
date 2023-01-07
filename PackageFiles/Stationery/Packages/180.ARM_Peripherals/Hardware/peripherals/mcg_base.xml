@@ -52,7 +52,7 @@
    </for>
 
    <!--  Run mode independent -->
-   <choiceOption key="oscMode"
+   <choiceOption key="oscMode" condition="mcg_c2_erefs0_present"
       enumStem="OscMode"
       valueFormat="%s"
       hidden="true"
@@ -66,9 +66,9 @@
       <choice value="1-1"                             name="32kHz Oscillator driven by RTC" enum="RTC_Controlled"       condition="/SIM/RtcForcing"     enabledBy="/RTC/ConfigureRtc"  />
    </choiceOption>
 
-   <constant key="/OscMode_NotConfigured"  type="Integer" value="0" />
-   <constant key="/OscMode_ExternalClock"  type="Integer" value="1" />
-   <constant key="/OscMode_RTC_Controlled" type="Integer" value="mcg_c2_hgo0_present?4:3" />
+   <constant key="/OscMode_NotConfigured"  type="Integer" value="0"                        condition="mcg_c2_erefs0_present"/>
+   <constant key="/OscMode_ExternalClock"  type="Integer" value="1"                        condition="mcg_c2_erefs0_present"/>
+   <constant key="/OscMode_RTC_Controlled" type="Integer" value="mcg_c2_hgo0_present?4:3"  condition="mcg_c2_erefs0_present"/>
 
    <choiceOption key="mcg_c2_erefs0"  condition="mcg_c2_erefs0_present"
       hidden="true"
@@ -112,27 +112,28 @@
 
             <graphicBox id="MCG" x="10" y="70" params="0,0,   x570, y360,  x" >
                <!-- MCGIRCLK -->
-               <graphicItem id="FAST IRC"                  var="system_fast_irc_clock"              type="variableBox" params="50,  45,  80, large"                            />
+               <graphicItem id="FAST IRC"                  var="system_fast_irc_clock[%(n)]"        type="variableBox" params="50,  45,  80, large"                            />
                <graphicItem id=""                          var=""                                   type="connector"   params="FAST IRC,0, FCRDIV,0"                           />
+               <graphicItem id="FIRC_DIVIDED,NONAME"       var="firc_divided_clock[%(n)]"           type="annotation"  params="150, 15, 100, 18, fout=%v"                      />
                <graphicItem id="FCRDIV"                    var="mcg_sc_fcrdiv[%(n)]"                type="choice"      params="200, 45, 100, small"                            />
                <graphicItem id="SLOW IRC"                  var="system_slow_irc_clock[%(n)]"        type="variableBox" params="50,  95,  80, large"                            />
                <graphicItem id=""                          var=""                                   type="connector"   params="FCRDIV,0,IRCS,1"                                />
                <graphicItem id=""                          var=""                                   type="connector"   params="SLOW IRC,0, IRCS,0"                             />
                <graphicItem id="IRCS"                      var="mcg_c2_ircs[%(n)]"                  type="mux"         params="300, 55, 2, mirror"                             />
                <graphicItem id="MCGIRCLK_UNGATED,NONAME"   var="system_mcgirclk_ungated[%(n)]"      type="annotation"  params="360, 35, 70, 20"                                />
-               <graphicItem id=""                          var=""                                   type="connector"   params="IRCS,0, MCGIRCLKEN,0"                           />
+               <graphicItem id=""                          var="system_mcgirclk_ungated[%(n)]"      type="connector"   params="IRCS,0, MCGIRCLKEN,0"                           />
                <graphicItem id="MCGIRCLKEN,x-20"           var="mcg_c1_irclken[%(n)]"               type="node"        params="495, 55"                                        />
                <graphicItem id=""                          var="system_mcgirclk_clock[%(n)]"        type="connector"   params="MCGIRCLKEN,0, MCGIRCLK.1,0"                     />
                <graphicItem id="MCGIRCLK.1,NONAME"         var="system_mcgirclk_clock[%(n)]"        type="node"        params="570, 55"                                        />
 
-               <graphicItem id="FRDIV"                     var="mcg_c1_frdiv[%(n)]"                 type="choice"      params="65, 155, 85, large"                             />
-               <graphicItem id="RANGE,NONAME"              var="mcg_c2_range0[%(n)]"                type="annotation"  params="25, 180, 100, 20"                               />
+               <graphicItem id="FRDIV"                     var="mcg_c1_frdiv[%(n)]"                 type="choice"      params="75, 155, 85, large"                             />
+               <graphicItem id="RANGE,NONAME"              var="mcg_c2_range0[%(n)]"                type="annotation"  params="30, 180, 100, 20"                               />
+               <graphicItem id="FRDIV_OUT,NONAME"          var="mcg_erc_clock_divided[%(n)]"        type="annotation"  params="30, 200, 100, 20, fout=%v"                               />
                <graphicItem id=""                          var="mcg_erc_clock_divided[%(n)]"        type="connector"   params="FRDIV,0,    IREFS,0"                            />
-               <graphicItem id="FRDIV_OUT,NONAME"          var="mcg_erc_clock_divided[%(n)]"        type="annotation"  params="110, 157, 70, 20"                               />
                <graphicItem id=""                          var=""                                   type="connector"   params="SLOW IRC,0, IREFS,1, (x-20),d,y,x"              />
 
                <!-- IREFS => FLL/MCGFFCLK -->
-               <graphicItem id="IREFS"                     var="mcg_c1_irefs[%(n)]"                 type="mux"         params="195, 145, 2, mirror"                            />
+               <graphicItem id="IREFS"                     var="mcg_c1_irefs[%(n)]"                 type="mux"         params="185, 145, 2, mirror"                            />
                <graphicItem id=""                          var="system_mcgffclk_clock[%(n)]"        type="connector"   params="IREFS,0, MCGFFCLK.1,0, x45,d,y,x"               />
                <graphicItem id="MCGFFCLK_A1,NONAME"        var="system_mcgffclk_clock[%(n)]"        type="annotation"  params="340, 85, 70, 20"                                />
                <graphicItem id="MCGFFCLK.1,NONAME"         var="system_mcgffclk_clock[%(n)]"        type="node"        params="570, 105"                                       />
@@ -145,7 +146,7 @@
 
                <!-- FLL/IRCS => CLKS => MCGOUTCLK -->
                <graphicItem id=""                          var="system_mcgfllclk_clock[%(n)]"       type="connector"   params="FLL,0,  CLKS,0, (x-50),y,x"    condition="!mcg_c6_plls_present" />
-               <graphicItem id=""                          var=""                                   type="connector"   params="IRCS,0, CLKS,1, (x-20),d,y,x"                   />
+               <graphicItem id=""                          var="system_mcgirclk_ungated[%(n)]"      type="connector"   params="IRCS,0, CLKS,1, (x-20),d,y,x"                   />
                <graphicItem id="CLKS"                      var="mcg_c1_clks[%(n)]"                  type="mux"         params="500, 155, 3"                                    />
                <graphicItem id=""                          var="system_mcgoutclk_clock[%(n)]"       type="connector"   params="CLKS,0, MCGOUTCLK,0"                            />
                <graphicItem id="MCGOUTCLK"                 var="system_mcgoutclk_clock[%(n)]"       type="node"        params="570, 155"                                       />
@@ -160,14 +161,14 @@
                   <graphicItem id="VDIV"                      var="mcg_c6_vdiv0[%(n)]"                 type="annotation"  params="190, 230, 40, 18, *%v"                          />
                   <graphicItem id=""                          var=""                                   type="connector"   params="PLL,0,       PLLCS,0"                           condition="/USBPHY1/$present" />
                   <graphicItem id="PLLCS_IN_C_PLLCS"          var="/SIM/usb1pfdclk_Clock[%(n)]"        type="connector"   params="PLLCS_IN1,0, PLLCS,1,      y-40,(x-20),y,x"     condition="/USBPHY1/$present"  />
-                  <graphicItem id="PLLCS"                     var="mcg_c11_pllcs[%(n)]"                type="mux"         params="300, 220, 2"                                    condition="/USBPHY1/$present" />
+                  <graphicItem id="PLLCS"                     var="mcg_c11_pllcs[%(n)]"                type="mux"         params="300, 235, 2"                                    condition="/USBPHY1/$present" />
                   <graphicItem id=""                          var=""                                   type="connector"   params="FLL,0,        PLLS,0"                           />
                   <graphicItem id=""                          var="system_mcgpllclk_clock[%(n)]"       type="connector"   params="PLLS_IN1_J,0, PLLS,1,      y,x"                 />
                   <graphicItem id="PLLS"                      var="mcg_c6_plls[%(n)]"                  type="mux"         params="410, 155, 2"                                    />
                   <graphicItem id=""                          var=""                                   type="connector"   params="PLL,0,    PLLS_IN1_J,0"                         condition="!/USBPHY1/$present" />
-                  <graphicItem id="PLLCS_C_PLLS"              var="system_mcgpllclk_clock"             type="connector"   params="PLLCS,0,     PLLS_IN1_J,0, x,y"                 condition="/USBPHY1/$present"  />
+                  <graphicItem id="PLLCS_C_PLLS"              var="system_mcgpllclk_clock[%(n)]"       type="connector"   params="PLLCS,0,  PLLS_IN1_J,0, x,y"                    condition="/USBPHY1/$present"  />
                   <graphicItem id="PLLS_IN1_J,NONAME,NOVALUE" var="system_mcgpllclk_clock[%(n)]"       type="junction"    params="370, 210"                                       condition="!/USBPHY1/$present" />
-                  <graphicItem id="PLLS_IN1_J,NONAME,NOVALUE" var="system_mcgpllclk_clock[%(n)]"       type="junction"    params="370, 220"                                       condition="/USBPHY1/$present" />
+                  <graphicItem id="PLLS_IN1_J,NONAME,NOVALUE" var="system_mcgpllclk_clock[%(n)]"       type="junction"    params="370, 235"                                       condition="/USBPHY1/$present" />
 
                   <graphicItem id=""                          var="pllsOutputFrequency[%(n)]"          type="connector"   params="PLLS,0, CLKS,0, (x-30),y,x"                     />
 
@@ -744,7 +745,8 @@
             toolTip="SLOW_IRC, FAST_IRC, USB_CLKIN, LPO" >
 
             <intOption key="system_slow_irc_clock[%(n)]"
-               enabledBy="(/SMC/smc_pmctrl_runm[%(n)]!=VLPR)&amp;&amp;(mcg_c1_irclken[%(n)]||mcg_c1_irefs[%(n)]), Disabled in VLPR and when not in use"
+               enabledBy="(/SMC/smc_pmctrl_runm[%(n)]!=VLPR) &amp;&amp;
+                          (mcg_c1_irclken[%(n)]||mcg_c1_irefs[%(n)]), Disabled in VLPR or when not in use"
                constant="true"
                derived="true"
                origin="Slow IRC"
@@ -913,14 +915,14 @@
                description="Fast Internal Clock [FIRC] Reference Divider"
                toolTip="Selects the amount to divide down the fast internal reference clock\n
                   The FIR clock is available for use as MCGIRCLK or MCGOUTCLK">
-               <choice value="0" enum="DivBy1"   ref="system_fast_irc_clock"       name="/1" isDefault="true" />
-               <choice value="1" enum="DivBy2"   ref="(system_fast_irc_clock)/2"   name="/2"   />
-               <choice value="2" enum="DivBy4"   ref="(system_fast_irc_clock)/4"   name="/4"   />
-               <choice value="3" enum="DivBy8"   ref="(system_fast_irc_clock)/8"   name="/8"   />
-               <choice value="4" enum="DivBy16"  ref="(system_fast_irc_clock)/16"  name="/16"  />
-               <choice value="5" enum="DivBy32"  ref="(system_fast_irc_clock)/32"  name="/32"  />
-               <choice value="6" enum="DivBy64"  ref="(system_fast_irc_clock)/64"  name="/64"  />
-               <choice value="7" enum="DivBy128" ref="(system_fast_irc_clock)/128" name="/128" />
+               <choice value="0" enum="DivBy1"   ref="system_fast_irc_clock[%(n)]"       name="/1" isDefault="true" />
+               <choice value="1" enum="DivBy2"   ref="(system_fast_irc_clock[%(n)])/2"   name="/2"   />
+               <choice value="2" enum="DivBy4"   ref="(system_fast_irc_clock[%(n)])/4"   name="/4"   />
+               <choice value="3" enum="DivBy8"   ref="(system_fast_irc_clock[%(n)])/8"   name="/8"   />
+               <choice value="4" enum="DivBy16"  ref="(system_fast_irc_clock[%(n)])/16"  name="/16"  />
+               <choice value="5" enum="DivBy32"  ref="(system_fast_irc_clock[%(n)])/32"  name="/32"  />
+               <choice value="6" enum="DivBy64"  ref="(system_fast_irc_clock[%(n)])/64"  name="/64"  />
+               <choice value="7" enum="DivBy128" ref="(system_fast_irc_clock[%(n)])/128" name="/128" />
             </choiceOption>
 
             <intOption key="firc_divided_clock[%(n)]" units="Hz" constant="true" derived="true" />

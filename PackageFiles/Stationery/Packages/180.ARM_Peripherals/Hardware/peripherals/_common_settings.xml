@@ -28,16 +28,16 @@
    <choice value="true"  name="Force unbonded pins to analogue function" />
 </binaryOption>
 
-<binaryOption name="Warn if multiple signals mapped to pin" key="/HARDWARE/warnMultipleSignalsOnPin" 
+<binaryOption name="Warn if multiple signals mapped to pin" key="/HARDWARE/warnMultipleSignalsOnPin"
    description="Generate warnings about conflicting signal mappings"
-   toolTip="It is allowable to have multiple signals mapped to a single pin on the understanding\n 
+   toolTip="It is allowable to have multiple signals mapped to a single pin on the understanding\n
             that they will be dynamically mapped during execution to avoid conflict.\n
             Multiply mapped pins cannot be assigned by mapAllPins()">
    <choice value="false" name="Don't produce warning during compilation" isDefault="true" />
    <choice value="true"  name="Produce warning during compilation" />
 </binaryOption>
 
-<binaryOption name="Use extended type system for timers" key="/HARDWARE/useTypeSystemForTimers" 
+<binaryOption name="Use extended type system for timers" key="/HARDWARE/useTypeSystemForTimers"
    description="Use a dimensioned type system for time and frequency"
    toolTip="Types 'Seconds', 'Hertz' and 'Ticks' are always defined but are simple aliases\n
    rather than a enforced type system using classes">
@@ -76,9 +76,9 @@
                \t    uint32_t variable_bits[8*sizeof(variable)];\n
                See bme.h and bitband.h for more information"
       value="0x0" />
-      
-   <binaryOption name="Enable USBDM Bootloader" key="/LINKER/enableBootloader"   value="false"    
-      description="Enable custom USBDM bootloader"  
+
+   <binaryOption name="Enable USBDM Bootloader" key="/LINKER/enableBootloader"   value="false"
+      description="Enable custom USBDM bootloader"
       toolTip="This relocates the program image to allow space for a bootloader at the beginning of the flash region" >
       <choice value="0" name="Disabled" isDefault="true" />
       <choice value="1" name="Enabled" />
@@ -92,14 +92,14 @@
    <intOption name="Lower SRAM size"    key="/LINKER/ramLowerSize"    constant="true" description="Lower RAM available in target"    />
    <intOption name="Flex RAM size"      key="/LINKER/flexRamSize"     constant="true" description="Flex RAM available in target"     />
    <intOption name="Flex NVM size"      key="/LINKER/flexNvmSize"     constant="true" description="Flex Flash available in target"   />
-   
+
    <constant name="Linker Extra Regions" key="/LINKER/extraRegions" />
    <constant name="Linker Information"   key="/LINKER/information"  />
-   
+
    <stringOption name="Linker script"        key="/LINKER/scriptFilename"   constant="true" description="File used as linker script"       />
    <stringOption name="Linker memory map"    key="/LINKER/mapFilename"      constant="true" description="File used for target memory map"  />
    <stringOption name="Linker vector table"  key="/LINKER/vectorsFilename"  constant="true" description="File used for target vector table"  />
-   
+
    <category name="Section placement in Flash" description="How regions are mapped to available Flash"
      toolTip=
       "Cortex-M4 Kinetis devices may have additional Flash that can be used as backing storage \n
@@ -108,12 +108,12 @@
        These settings control which region (regular flash or FlexNVM) is used for various linker sections"
    >
 
-      <choiceOption name="Startup code" key="/LINKER/startup_rom" description="Segment allocation" 
+      <choiceOption name="Startup code" key="/LINKER/startup_rom" description="Segment allocation"
          toolTip="Fixed placement for vector table and reset code" constant="true"  >
          <choice value="flash"       name="Main Flash"  isDefault="true"/>
          <choice value="flexNVM"     name="Flex NVM Flash" />
       </choiceOption>
-      
+
       <choiceOption name="Code (apart from startup)"  key="/LINKER/text_rom"   derivedFrom="/LINKER/startup_rom" toolTip="Text (code), vtables etc" />
       <choiceOption name="Read-only data"             key="/LINKER/rodata_rom" derivedFrom="/LINKER/startup_rom" toolTip="const data" />
    </category>
@@ -152,19 +152,19 @@
 
 <template namespace="usbdm" condition="(/PCR/lk_present)" ><![CDATA[
    /* Template:_common_settings.xml */
-   
+
    \t/**
-   \t *  Enables mapping of all allocated pins during startup using mapAllPins() 
+   \t *  Enables mapping of all allocated pins during startup using mapAllPins()
    \t */
    \tstatic constexpr bool MapAllPinsOnStartup = $(/HARDWARE/mapAllPins);
 
    \t/**
-   \t * Controls forcing all pins to be locked in mapAllPins() 
+   \t * Controls forcing all pins to be locked in mapAllPins()
    \t */
    \tstatic constexpr PinLock ForceLockedPins = $(/HARDWARE/lockMappedPins);
-   
+
    \t/**
-   \t *  Enables forcing unbonded pins to analogue function in mapAllPins() 
+   \t *  Enables forcing unbonded pins to analogue function in mapAllPins()
    \t */
    \tstatic constexpr bool ForceLockoutUnbondedPins = $(/HARDWARE/lockoutUnbondedPins);
    \t\n
@@ -172,22 +172,22 @@
 
 <template namespace="usbdm" condition="!(/PCR/lk_present)" ><![CDATA[
    /* Template:_common_settings.xml */
-   
+
    \t/**
-   \t * Enables mapping of all allocated pins during startup using mapAllPins() 
+   \t * Enables mapping of all allocated pins during startup using mapAllPins()
    \t * Not available on this MCU
    \t */
    \tstatic constexpr bool MapAllPinsOnStartup = false;
 
    \t/**
-   \t * Controls forcing all pins to be locked in mapAllPins() 
+   \t * Controls forcing all pins to be locked in mapAllPins()
    \t * Not available on this MCU
    \t */
    \tstatic constexpr uint32_t ForceLockedPins = 0;
    \tstatic constexpr uint32_t PinLock_Locked  = 0;
-   
+
    \t/**
-   \t * Enables forcing unbonded pins to analogue function in mapAllPins() 
+   \t * Enables forcing unbonded pins to analogue function in mapAllPins()
    \t * Not available on this MCU
    \t */
    \tstatic constexpr bool ForceLockoutUnbondedPins = false;
@@ -208,9 +208,9 @@
    #else
    #define NOINLINE_DEBUG
    #endif
-   
+
    \t/* MCGFFCLK - Fixed frequency clock (input to FLL) */
-   \textern volatile uint32_t SystemMcgffClock;
+   \textern volatile uint32_t SystemMcgFFClock;
 
    \t/* MCGOUTCLK - Primary output from MCG, various sources */
    \textern volatile uint32_t SystemMcgOutClock;
@@ -254,7 +254,7 @@
    \t *
    \t * @return Smaller of a or b
    \t */
-   \ttemplate<class T> 
+   \ttemplate<class T>
    \tconstexpr T min(const T a, const T b) {
    \t   return (b < a) ? b : a;
    \t}
@@ -266,13 +266,13 @@
    \t *
    \t * @return Larger of a or b
    \t */
-   \ttemplate<class T> 
+   \ttemplate<class T>
    \tconstexpr T max(const T a, const T b) {
    \t   return (b > a) ? b : a;
    \t}
 
    \tconstexpr IRQn_Type IRQn_None = static_cast<IRQn_Type>(-20);
-   
+
    \t/** Dummy port information for pins without an associated PCR */
    \tconstexpr PortInfo  __attribute__((unused)) NoPortInfo {0, 0, IRQn_None, 0, NvicPriority_NotInstalled};
 

@@ -30,7 +30,7 @@ namespace USBDM {
  */
 
 /** MCGFFCLK - Fixed frequency clock (input to FLL) */
-extern volatile uint32_t SystemMcgffClock;
+extern volatile uint32_t SystemMcgFFClock;
 /** MCGOUTCLK - Primary output from MCG, various sources */
 extern volatile uint32_t SystemMcgOutClock;
 /** MCGFLLCLK - Output of FLL */

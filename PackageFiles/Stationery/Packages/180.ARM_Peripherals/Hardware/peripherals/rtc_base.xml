@@ -67,11 +67,12 @@
          disabledValue="0" />
 
       <binaryOption key="rtc_cr_clko"
+         enumStem="RtcClockOut"
          enabledBy="rtc_cr_osce"
          description="Enable RTC 32kHz Clock Output"
          toolTip="Determines if RTC 32kHz Clock is available to peripherals" >
-         <choice value="1" name="Clock not output to peripherals" />
-         <choice value="0" name="Clock is output to peripherals" isDefault="true" />
+         <choice value="1" enum="Disabled" name="Clock not output to peripherals" />
+         <choice value="0" enum="Enabled"  name="Clock is output to peripherals" isDefault="true" />
       </binaryOption>
 
       <intOption key="rtcclk_gated_clock"

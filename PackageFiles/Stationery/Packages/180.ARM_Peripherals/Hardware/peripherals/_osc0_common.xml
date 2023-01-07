@@ -20,6 +20,7 @@
 
    <intOption key="osc_clock"
       ref="osc_input_freq"
+      valueFormat="%s"
       constant="true"
       derived="true"
       units="Hz"
@@ -75,17 +76,19 @@
    </choiceOption>
 
    <binaryOption key="osc_cr_erefsten"
+      enumStem="OscExternalRef"
       enabledBy="osc_cr_erclken"
       description="External Reference Stop Enable"
       toolTip="Determines if external reference clock is enabled in Stop mode" >
-      <choice value="0" name="Disabled in Stop mode" />
-      <choice value="1" name="Enabled in Stop mode" />
+      <choice value="0" enum="DisabledInStop" name="Disabled in Stop mode" />
+      <choice value="1" enum="EnabledInStop"  name="Enabled in Stop mode" />
    </binaryOption>
 
    <if  condition="osc_div_erps_present">
       <intOption key="oscer_undiv_clock"
          enabledBy="osc_cr_erclken"
          ref="osc_clock"
+         valueFormat="%s"
          derived="true"
          units="Hz"
          description="Oscillator clock to some peripherals [OSCERCLK_UNDIV]"
@@ -106,8 +109,9 @@
       </choiceOption>
 
       <intOption key="oscer_clock"
-         ref="(osc_clock)/(1&lt;&lt;osc_div_erps)"
          enabledBy="osc_cr_erclken"
+         ref="(osc_clock)/(1&lt;&lt;osc_div_erps)"
+         valueFormat="%s"
          derived="true"
          units="Hz"
          description="Oscillator clock [OSCERCLK]"
@@ -118,9 +122,10 @@
          constant="true"
          min="1" />
    <else />
-      <intOption key="oscer_clock" condition="!osc_div_erps_present"
-         ref="osc_clock"
+      <intOption key="oscer_clock"
          enabledBy="osc_cr_erclken"
+         ref="osc_clock"
+         valueFormat="%s"
          derived="true"
          units="Hz"
          description="Oscillator clock [OSCERCLK]"
@@ -134,6 +139,7 @@
    <intOption key="osc32k_clock"
          enabledBy="(/MCG/oscMode!=/OscMode_NotConfigured)&amp;&amp;(osc_input_freq&gt;=32000)&amp;&amp;(osc_input_freq&lt;=40000), Disable as XTAL frequency unsuitable"
          ref="osc_clock"
+         valueFormat="%s"
          derived="true"
          units="Hz"
          description="Oscillator low range 32K clock [OSC32KCLK]"
@@ -151,25 +157,44 @@
       <copy source="Project_Headers/osc.h"  target="Project_Headers/osc.h"  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <template><![CDATA[
+   <initialValueTemplate
+      variables="osc_clock"
+   ><![CDATA[
       \t//! Frequency of OSC Clock or Crystal
-      \tstatic constexpr uint32_t osc_clock = $(osc_clock)UL;
+      \tstatic constexpr uint32_t osc_clock = %initExpression
+      \t\n
+   ]]></initialValueTemplate>
 
+   <initialValueTemplate
+      variables="osc32k_clock"
+   ><![CDATA[
       \t//! Frequency of 32K OSC Clock or Crystal (if applicable)
-      \tstatic constexpr uint32_t osc32k_clock = $(osc32k_clock)UL;
+      \tstatic constexpr uint32_t osc32k_clock = %initExpression
+      \t\n
+   ]]></initialValueTemplate>
 
+   <initialValueTemplate
+      separator="|"
+      terminator=";"
+      variables="
+            osc_cr_erclken,
+            osc_cr_erefsten,
+            osc_cr_scp"
+   ><![CDATA[
       \t//! Oscillator control register
-      \tstatic constexpr uint32_t cr =
-      \t   OSC_CR_ERCLKEN($(osc_cr_erclken))  | // External Reference Enable
-      \t   OSC_CR_EREFSTEN($(osc_cr_erefsten)) | // External Reference Stop Enable
-      \t   OSC_CR_SCP($(osc_cr_scp));       // Oscillator load capacitance\n\n
-   ]]></template>
+      \tstatic constexpr uint32_t cr = %initExpression
+      \t\n
+   ]]></initialValueTemplate>
 
-   <template variables="osc_div_erps" ><![CDATA[
+   <initialValueTemplate
+      separator="|"
+      terminator=";"
+      variables="osc_div_erps"
+   ><![CDATA[
       \t//! OSC Clock divider register
-      \tstatic constexpr uint32_t div =
-      \t   OSC_DIV_ERPS($(osc_div_erps));   // ERCLK prescaler\n\n
-   ]]></template>
+      \tstatic constexpr uint32_t div = %initExpression
+      \t\n
+   ]]></initialValueTemplate>
 
    <template><![CDATA[
       \t/**

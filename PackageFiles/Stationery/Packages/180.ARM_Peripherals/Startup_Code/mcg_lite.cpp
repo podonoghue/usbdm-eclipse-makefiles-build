@@ -47,7 +47,7 @@ $(/MCG/McgClockInfoEntries:!!!!!!!Not found!!!!!!!)
 };
 
 /** MCGFFCLK - Fixed frequency clock (input to FLL) */
-volatile uint32_t SystemMcgffClock;
+volatile uint32_t SystemMcgFFClock;
 
 /** MCGOUTCLK - Primary output from MCG, various sources */
 volatile uint32_t SystemMcgOutClock;
