@@ -6,7 +6,7 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <constant key="disable_peripheral" value = "can->MCR = CAN_MCR_MDIS(1);"  />
+   <constant key="disable_peripheral" value = "&quot;can->MCR = CAN_MCR_MDIS(1);&quot;"  />
    <xi:include href="_mapPinsOption.xml"/>
 
    <!-- Note: second entry gets the tick irrespective of true/false value -->

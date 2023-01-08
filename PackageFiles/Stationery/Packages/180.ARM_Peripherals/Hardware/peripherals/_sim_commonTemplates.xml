@@ -343,13 +343,13 @@
 
 <!-- SOPT2 general settings -->
 
-   <for keys="  var                     : name"
-        values="sim_sopt2_fbsl          : FlexbusSecurity;
-                sim_sopt2_clkoutsel     : Clkout;
-                sim_sopt2_traceclksel   : TraceClockout;
-                sim_sopt2_usbregen      : UsbPhyRegulator;
-                sim_sopt2_ptd7pad       : PortDPad;
-                sim_sopt2_rmiisrc       : Rmiiclock
+   <for keys="  var                       : name"
+        values="sim_sopt2_clkoutsel[]     : Clkout;
+                sim_sopt2_fbsl            : FlexbusSecurity;
+                sim_sopt2_traceclksel     : TraceClockout;
+                sim_sopt2_usbregen        : UsbPhyRegulator;
+                sim_sopt2_ptd7pad         : PortDPad;
+                sim_sopt2_rmiisrc         : Rmiiclock
         ">
       <clockCodeTemplate variable="%(var)"
       ><![CDATA[
@@ -376,14 +376,14 @@
 
 <!-- SOPT2 clock settings -->
 
-   <for keys="  var                     : name"
-        values="sim_sopt2_pllfllsel     : PeripheralClock;
-                sim_sopt2_sdhcsrc       : SdhcClock;
-                sim_sopt2_tpmsrc        : TpmClock;
-                sim_sopt2_flexiosrc     : FlexioClock;
-                sim_sopt2_emvsimsrc     : EmvsimClock;
-                sim_sopt2_timesrc       : TimestampClock;
-                sim_sopt2_usbslsrc      : UsbSlowClock
+   <for keys="  var                       : name"
+        values="sim_sopt2_pllfllsel[]     : PeripheralClock;
+                sim_sopt2_sdhcsrc[]       : SdhcClock;
+                sim_sopt2_tpmsrc[]        : TpmClock;
+                sim_sopt2_flexiosrc[]     : FlexioClock;
+                sim_sopt2_emvsimsrc[]     : EmvsimClock;
+                sim_sopt2_timesrc[]       : TimestampClock;
+                sim_sopt2_usbslsrc        : UsbSlowClock
                 ">
       <clockCodeTemplate variable="%(var)"
       returnFormat="%s"
@@ -414,7 +414,7 @@
    </for>
 
    <for keys="n" values=";0;1;2;3;4">
-      <clockCodeTemplate variable="sim_sopt2_lpuart%(n)src"
+      <clockCodeTemplate variable="sim_sopt2_lpuart%(n)src[]"
          returnFormat="%s"
       ><![CDATA[
          \t/**
@@ -488,9 +488,9 @@
          sim_sopt2_pllfllsel[],
          sim_sopt2_usbsrc[],
 
-         sim_sopt2_uart0src,
-         sim_sopt2_tpmsrc,
-         sim_sopt2_clkoutsel,
+         sim_sopt2_uart0src[],
+         sim_sopt2_tpmsrc[],
+         sim_sopt2_clkoutsel[],
          sim_sopt2_rtcclkoutsel,
          sim_sopt2_traceclksel,
          sim_sopt2_usbregen,
@@ -550,17 +550,16 @@
       values="
          sim_sopt2_pllfllsel[];
          sim_sopt2_usbsrc[];
-
          sim_sopt2_sdhcsrc[];
          sim_sopt2_tpmsrc[];
          sim_sopt2_flexiosrc[];
          sim_sopt2_emvsimsrc[];
          sim_sopt2_timesrc[];
+         sim_sopt2_clkoutsel[];
 
          sim_sopt2_rmiisrc;
          sim_sopt2_usbslsrc;
          sim_sopt2_fbsl;
-         sim_sopt2_clkoutsel;
          sim_sopt2_rtcclkoutsel;
          sim_sopt2_traceclksel;
          sim_sopt2_usbregen;
@@ -636,11 +635,11 @@
             sim_sopt2_flexiosrc[%(n)],
             sim_sopt2_emvsimsrc[%(n)],
             sim_sopt2_timesrc[%(n)],
+            sim_sopt2_clkoutsel[%(n)],
 
             sim_sopt2_rmiisrc,
             sim_sopt2_usbslsrc,
             sim_sopt2_fbsl,
-            sim_sopt2_clkoutsel,
             sim_sopt2_rtcclkoutsel,
             sim_sopt2_traceclksel,
             sim_sopt2_usbregen,
@@ -1148,7 +1147,7 @@
    </for>
 
 <!-- ========== CLKDIV2 =============================== -->
-   <clockCodeTemplate variable="sim_sopt2_usbsrc"
+   <clockCodeTemplate variable="sim_sopt2_usbsrc[]"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -1186,7 +1185,7 @@
       \t   }
       \t   rc = setErrorCode(rc);\n\n
    ]]></template>
-   <template variables="sim_sopt2_usbsrc" ><![CDATA[
+   <template variables="sim_sopt2_usbsrc[]" ><![CDATA[
       \t   // Restore USB clock
       \t   sim->SCGC4 = sim->SCGC4 | SIM_SCGC4_USBOTG_MASK;
       \t   return rc;
@@ -1208,15 +1207,15 @@
       \t            (((sim->CLKDIV2&SIM_CLKDIV2_USBFRAC_MASK)>>SIM_CLKDIV2_USBFRAC_SHIFT)+1))/
       \t            (((sim->CLKDIV2&SIM_CLKDIV2_USBDIV_MASK)>>SIM_CLKDIV2_USBDIV_SHIFT)+1);\n
    ]]></template>
-   <template condition="!sim_clkdiv2_usb[]&amp;&amp;sim_sopt2_usbsrc" ><![CDATA[
+   <template condition="!sim_clkdiv2_usb[]&amp;&amp;sim_sopt2_usbsrc[]" ><![CDATA[
       \t      case $(sim_sopt2_usbsrc[].enum[1]) : return getPeripheralClock();\n
    ]]></template>
-   <template variables="sim_sopt2_usbsrc" ><![CDATA[
+   <template variables="sim_sopt2_usbsrc[]" ><![CDATA[
       \t   }
       \t}\n\n
    ]]></template>
 
-   <template variables="sim_clkdiv2_usb"><![CDATA[
+   <template variables="sim_clkdiv2_usb[]"><![CDATA[
       \t/**
       \t * Set USB clock divisors to suitable value and enable clock
       \t */
@@ -1227,7 +1226,7 @@
    ]]></template>
 
 <!-- ========== CLKDIV3 =============================== -->
-   <clockCodeTemplate variable="sim_clkdiv3_pllfll"
+   <clockCodeTemplate variable="sim_clkdiv3_pllfll[]"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -1407,7 +1406,7 @@
    <template variables="sim_sopt9_tpm1clksel" ><![CDATA[
       \t      sim->SOPT9 = sopt9;\n
    ]]></template>
-   <template variables="sim_clkdiv2_usb" ><![CDATA[
+   <template variables="sim_clkdiv2_usb[]" ><![CDATA[
       \t
       \t      updateUsbClockDivider();\n
    ]]></template>
@@ -1426,21 +1425,21 @@
    <initialValueTemplate
       variables="
          sim_sopt2_pllfllsel[],
-         sim_sopt2_ptd7pad,
-         sim_sopt2_lpuartsrc,
-         sim_sopt2_lpuart0src,
-         sim_sopt2_lpuart1src,
-         sim_sopt2_uart0src,
-         sim_sopt2_tpmsrc,
+         sim_sopt2_lpuartsrc[],
+         sim_sopt2_lpuart0src[],
+         sim_sopt2_lpuart1src[],
+         sim_sopt2_uart0src[],
+         sim_sopt2_tpmsrc[],
          sim_sopt2_usbsrc[],
+         sim_sopt2_clkoutsel[],
+         sim_sopt2_emvsimsrc[],
+         sim_sopt2_sdhcsrc[],
+         sim_sopt2_flexiosrc[],
+         sim_sopt2_timesrc[],
+         sim_sopt2_ptd7pad,
          sim_sopt2_traceclksel,
          sim_sopt2_rtcclkoutsel,
-         sim_sopt2_clkoutsel,
-         sim_sopt2_emvsimsrc,
-         sim_sopt2_sdhcsrc,
          sim_sopt2_fbsl,
-         sim_sopt2_flexiosrc,
-         sim_sopt2_timesrc,
          sim_sopt2_rmiisrc"
    ><![CDATA[
       \t   /// System Options Register 2
@@ -1505,8 +1504,8 @@
    <for keys="n" values=";0;1;2;3;4">
       <for keys="v"
          values="
-             sim_sopt2_lpuart%(n)src;
-             sim_sopt2_uart%(n)src">
+             sim_sopt2_lpuart%(n)src[];
+             sim_sopt2_uart%(n)src[]">
          <setTemplate variables="%(v)"
             linePadding="xxx"
          ><![CDATA[
@@ -1529,21 +1528,21 @@
    </for>
    <for keys="v"
       values="
-         sim_sopt2_pllfllsel;
+         sim_sopt2_pllfllsel[];
+         sim_sopt2_tpmsrc[];
+         sim_sopt2_usbsrc[];
+         sim_sopt2_clkoutsel[];
+         sim_sopt2_emvsimsrc[];
+         sim_sopt2_sdhcsrc[];
+         sim_sopt2_flexiosrc[];
+         sim_sopt2_timesrc[];
          sim_sopt1_osc32kout;
          sim_sopt1_osc32ksel;
          sim_sopt1_usbpower;
          sim_sopt2_ptd7pad;
-         sim_sopt2_tpmsrc;
-         sim_sopt2_usbsrc;
          sim_sopt2_traceclksel;
          sim_sopt2_rtcclkoutsel;
-         sim_sopt2_clkoutsel;
-         sim_sopt2_emvsimsrc;
-         sim_sopt2_sdhcsrc;
          sim_sopt2_fbsl;
-         sim_sopt2_flexiosrc;
-         sim_sopt2_timesrc;
          sim_sopt2_rmiisrc;
          sim_sopt2_usbregen;
          sim_sopt2_usbslsrc
@@ -1731,24 +1730,23 @@
    ]]></template>
    <setTemplate key="DefaultInitValue" namespace="all"
       variables="
-         sim_sopt2_pllfllsel,
+         sim_sopt2_pllfllsel[],
+         sim_sopt2_sdhcsrc[],
+         sim_sopt2_tpmsrc[],
+         sim_sopt2_flexiosrc[],
+         sim_sopt2_usbsrc[],
+         sim_sopt2_clkoutsel[],
+         sim_sopt2_emvsimsrc[],
+         sim_sopt2_timesrc[],
+
+         sim_sopt2_rtcclkoutsel,
+         sim_sopt2_traceclksel,
+         sim_sopt2_fbsl,
          sim_sopt1_osc32kout,
          sim_sopt1_osc32ksel,
          sim_sopt1_usbpower,
-         sim_sopt2_sdhcsrc,
-         sim_sopt2_tpmsrc,
-         sim_sopt2_flexiosrc,
-         sim_sopt2_usbsrc,
-         sim_sopt2_traceclksel,
-         sim_sopt2_fbsl,
-         sim_sopt2_clkoutsel,
-         sim_sopt2_rtcclkoutsel,
-
          sim_sopt2_ptd7pad,
-         sim_sopt2_emvsimsrc,
-         sim_sopt2_timesrc,
          sim_sopt2_rmiisrc,
-
          sim_sopt2_usbregen,
          sim_sopt2_usbslsrc"
       terminator=","
@@ -1759,8 +1757,8 @@
    <for keys="n" values=";0;1;2;3;4">
       <for keys="v"
          values="
-             sim_sopt2_lpuart%(n)src;
-             sim_sopt2_uart%(n)src"
+             sim_sopt2_lpuart%(n)src[];
+             sim_sopt2_uart%(n)src[]"
              >
          <setTemplate key="DefaultInitValue" namespace="all"
             terminator=","

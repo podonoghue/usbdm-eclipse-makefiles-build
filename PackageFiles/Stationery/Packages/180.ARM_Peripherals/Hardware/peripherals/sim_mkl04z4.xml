@@ -9,18 +9,16 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <constant key="/SIM/llwu_device_list"
+   <constant key="llwu_device_list"
       description="LLWU Wakeup sources"
-      value="LPTMR0;CMP0;;;TSI0;RTC_Alarm;;RTC_Seconds" />
-
-   <!-- Indicates ADC ALT clock source is Busclock/2-->
-   <constant key="adc_alt_clock_is_busDiv2" type="Boolean" value="true" />
+      type="String"
+      value="&quot;LPTMR0;CMP0;;;TSI0;RTC_Alarm;;RTC_Seconds&quot;" />
 
    <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
    <binaryOption key="RtcForcing"
       constant="true"
       derived="true"
-      ref="/RTC/rtc_cr_osce"
+      ref="(/MCG/oscMode==/OscMode_RTC_Controlled)?1:0"
       description="RTC control of OSC0"
       toolTip="Indicates if OSC0 is being controlled by RTC which shares XTAL/EXTAL pins">
       <choice value="0" name="OSC0 is independent"        isDefault="true" />
@@ -61,7 +59,7 @@
 
    <category name="SOPT1" description="RTC clocks" >
 
-      <aliasOption key="rtc_clkin_clock" constant="false" />
+      <aliasOption key="rtc_clkin_clock" optional="true" constant="false" />
 
       <aliasOption key="sim_sopt1_osc32ksel" constant="false" />
       <aliasOption key="system_erclk32k_clock" />
@@ -98,10 +96,10 @@
          \t}\n\n
       ]]></template>
 
-      <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" constant="false"/>
-      <aliasOption key="/SIM/rtc_clkout" />
+      <aliasOption key="sim_sopt2_rtcclkoutsel" constant="false"/>
+      <aliasOption key="rtc_clkout" />
 
-      <aliasOption key="/SIM/system_peripheral_clock[]" optional="true" />
+      <aliasOption key="system_peripheral_clock[]" optional="true" />
       <aliasOption key="/OSC0/oscer_clock" optional="true" />
       <aliasOption key="/MCG/system_mcgirclk_clock[]" optional="true" />
 
@@ -208,7 +206,7 @@
       </for>
    </category>
 
-   <for keys="n" dim="/SIM/numberOfClockSettings" >
+   <for keys="n" dim="numberOfClockSettings" >
       <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" constant="true" >
 
          <aliasOption key="/MCG/enableClockConfiguration[%(n)]" constant="false" />
@@ -387,7 +385,7 @@
    <xi:include href="_sim_commonTemplates.xml" />
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL" dim="/SIM/numberOfClockSettings">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL" dim="numberOfClockSettings">
       <param type="long" value="48MHz"  />     <!-- RUN Core          -->
       <param type="long" value="24MHz"  />     <!-- RUN Bus           -->
 

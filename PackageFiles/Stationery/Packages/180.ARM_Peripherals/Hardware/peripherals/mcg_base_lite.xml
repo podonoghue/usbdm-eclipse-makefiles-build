@@ -33,7 +33,7 @@
 
       <aliasOption key="/SIM/system_usb_clkin_clock" optional="true" />
 
-      <aliasOption key="/SIM/system_irc48m_clock" />
+      <aliasOption key="/SIM/system_irc48m_clock[]" />
    </category>
 
    <category name="LPO" description="Low Power Clock Sources" >
@@ -786,9 +786,9 @@
          </category>
 
          <category name="MCG_C2" description="MCG Control Register 2">
-            <aliasOption key="mcg_c2_range0" optional="true" />
-            <aliasOption key="mcg_c2_hgo0" optional="true" />
-            <aliasOption key="mcg_c2_erefs0" />
+            <aliasOption key="mcg_c2_range0[%(n)]" optional="true" />
+            <aliasOption key="mcg_c2_hgo0"         optional="true" />
+            <aliasOption key="mcg_c2_erefs0"     />
             <aliasOption key="mcg_c2_ircs[%(n)]" />
          </category>
 
@@ -980,7 +980,7 @@
       <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables="
-             mcg_c2_range0,
+             mcg_c2_range0[%(n)],
              oscMode,
              mcg_c2_ircs[%(n)]"
       ><![CDATA[\t   /// Control Register 2 - %initExpression\n\n ]]></initialValueTemplate>

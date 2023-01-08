@@ -121,7 +121,7 @@
       description="Watchdog clock source"
       toolTip="Clock source for WDOG">
       <choice value="0" enum="LpoClk"       code="PmcInfo::getLpoClock()"  ref="/PMC/system_low_power_clock" name="LPO oscillator"   isDefault="true" />
-      <choice value="1" enum="SystemBusClk" code="SystemBusClock"          ref="/SIM/system_bus_clock"       name="System bus clock" />
+      <choice value="1" enum="SystemBusClk" code="SystemBusClock"          ref="/SIM/system_bus_clock[]"     name="System bus clock" />
    </binaryOption>
 
    <clockCodeTemplate variable="wdog_stctrlh_clksrc"

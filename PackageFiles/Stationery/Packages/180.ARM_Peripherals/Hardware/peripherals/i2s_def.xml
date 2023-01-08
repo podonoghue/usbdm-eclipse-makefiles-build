@@ -8,7 +8,7 @@
 
    <xi:include href="_mapPinsOption_on.xml"/>
 
-   <aliasOption key="/SIM/system_bus_clock" />
+   <aliasOption key="/SIM/system_bus_clock[]" />
 
    <stringOption key="irq_pattern"        constant="true" value="^I2S%i_?(Rx|Tx)?$" hidden="true" />
    <stringOption key="irq_classHandler"   constant="true" value="%c%i::irqHandler" hidden="true" />

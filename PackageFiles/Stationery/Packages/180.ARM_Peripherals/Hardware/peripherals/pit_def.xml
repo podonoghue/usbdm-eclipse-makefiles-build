@@ -11,7 +11,7 @@
    <xi:include href="_irqOptionSubstituted.xml"/>
 
    <template><![CDATA[
-      \t/// Number of PIT channels
+      \t//! Number of PIT channels
       \tstatic constexpr uint32_t NumChannels  = $(numChannels);\n\n
    ]]></template>
 
@@ -21,7 +21,7 @@
       enumStem="PitChannelNum"
       valueFormat="%s"
       enumType="uint8_t"
-      toolTip="Select a PIT channel">
+      toolTip="Selected PIT channel">
       <choice value="0"          name="Channel 0"     enum="0" />
       <choice value="1"          name="Channel 1"     enum="1" />
       <choice value="2"          name="Channel 2"     enum="2" />
@@ -29,9 +29,24 @@
       <choice value="0b10000000" name="Channel Not Allocated"  enum="None" />
    </choiceOption>
 
-   <intOption key="pitInputClock" constant="true" derived="true"
-      ref="/SIM/system_bus_clock"
+   <stringOption key="Clocking" value="------- Clocking -------" constant="true" description="Clocking" />
+
+   <choiceOption key="pitClockConfig"
+      target="pitInputClock"
+      description="Clock configuration"
+      toolTip="Selects the clock configuration used for calculations involving the bus clock" >
+      <choice value="0" name="@/MCG/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
+      <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
+      <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
+      <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
+   </choiceOption>
+
+   <intOption key="pitInputClock"
+      constant="true"
+      derived="true"
       description="PIT input clock"
+      toolTip="The PIT uses the bus clock for timing\n
+               The frequency used is based on the current clock configuration      "
       units="Hz"
       />
 

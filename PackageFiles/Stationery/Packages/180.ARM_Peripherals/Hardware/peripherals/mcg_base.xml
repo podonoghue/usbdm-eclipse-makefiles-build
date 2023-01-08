@@ -393,9 +393,9 @@
 
                <!-- MCGPLLCLK => [/2] => PER_CLK -->
                <graphicGroup x="0" y="y" condition="/SIM/plldivider" >
-                  <graphicItem id=""                          var="system_mcgpllclk_clock"             type="connector"   params="MCGPLLCLK,0,        /2,0, x,y"     />
-                  <graphicItem id="/2"                        var="system_mcgpllclk_clock"             type="label"       params="360,  0, 23, small, in,os"       />
-                  <graphicItem id=""                          var="system_mcgpllclk_clock"             type="connector"   params="/2,0,        PLLFLLSEL,1, y,x"     />
+                  <graphicItem id=""                          var="system_mcgpllclk_clock[%(n)]"        type="connector"   params="MCGPLLCLK,0,        /2,0, x,y"     />
+                  <graphicItem id="/2"                        var="system_mcgpllclk_clock[%(n)]"        type="label"       params="360,  0, 23, small, in,os"       />
+                  <graphicItem id=""                          var="system_mcgpllclk_clock[%(n)]"        type="connector"   params="/2,0,        PLLFLLSEL,1, y,x"     />
 
                   <equation key="y" value="y+40" />
                </graphicGroup>
@@ -898,7 +898,7 @@
             </binaryOption>
 
             <binaryOption key="mcg_c9_pll_locre[%(n)]" condition="mcg_c9_pll_locre_present"
-               enabledBy="mcg_c9_pll_cme"
+               enabledBy="mcg_c9_pll_cme[%(n)]"
                description="MCG External PLL Loss of Clock Reset Enable"
                toolTip="Determines wheather an interrupt or a reset request is made following a loss of the\n
                         MCG External PLL clock when the MCG is running in PEE mode">
@@ -1403,7 +1403,7 @@
       </categoryOption>
    </for>
 
-   <clockCodeTemplate variable="mcg_c7_oscsel"
+   <clockCodeTemplate variable="mcg_c7_oscsel[]"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -1420,7 +1420,7 @@
       \t}\n\n
       ]]></clockCodeTemplate>
 
-   <template variables="mcg_c7_oscsel_fixed"
+   <template variables="mcg_c7_oscsel_fixed[]"
    ><![CDATA[
       \t/**
       \t * Get %description
@@ -1433,7 +1433,7 @@
       \t}\n\n
       ]]></template>
 
-   <template condition="mcg_sc_fcrdiv"
+   <template condition="mcg_sc_fcrdiv[]"
    ><![CDATA[
       \t/**
       \t * Get Fast Internal Reference Clock (undivided)
@@ -1446,7 +1446,7 @@
       \t}\n\n
       ]]></template>
 
-   <clockCodeTemplate variable="mcg_c2_ircs"
+   <clockCodeTemplate variable="mcg_c2_ircs[]"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -1472,7 +1472,7 @@
       \t}\n\n
       ]]></clockCodeTemplate>
 
-   <clockCodeTemplate variable="mcg_c1_irclken"
+   <clockCodeTemplate variable="mcg_c1_irclken[]"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -1666,21 +1666,21 @@
    ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="/SIM/sim_clkdiv1_outdiv4||/SIM/sim_clkdiv1_outdiv3||/SIM/sim_clkdiv1_outdiv2||/SIM/sim_clkdiv1_outdiv1"
+      condition="/SIM/sim_clkdiv1_outdiv4[]||/SIM/sim_clkdiv1_outdiv3[]||/SIM/sim_clkdiv1_outdiv2[]||/SIM/sim_clkdiv1_outdiv1[]"
    ><![CDATA[
       \t   /// SIM CLKDIV1 - System Clock Divider Register 1
       \t   const uint32_t clkdiv1;\n\n ]]>
    </template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="/SIM/sim_clkdiv3_pllfll"
+      condition="/SIM/sim_clkdiv3_pllfll[]"
    ><![CDATA[
       \t   /// SIM CLKDIV3 - PLLFLL clock divider divisor & fraction
       \t   const uint32_t clkdiv3;\n\n ]]>
    </template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="(/SIM/sim_sopt2_pllfllsel)||(/SIM/sim_sopt2_tpmsrc)"
+      condition="(/SIM/sim_sopt2_pllfllsel[])||(/SIM/sim_sopt2_tpmsrc[])"
    ><![CDATA[
       \t   /// SIM SOPT2 - Clock selectors for various peripherals
       \t   const uint32_t sopt2;\n\n ]]>
@@ -1688,74 +1688,74 @@
 
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcgClockMode"
+      condition="mcgClockMode[]"
    ><![CDATA[
       \t   /// Clock Mode
       \t   const McgClockMode clockMode;\n\n
    ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="/SMC/smc_pmctrl_runm"
+      condition="/SMC/smc_pmctrl_runm[]"
    ><![CDATA[
       \t   /// Run Mode
       \t   const SmcRunMode runMode; \n\n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c1_frdiv||mcg_c1_irclken||mcg_c1_irefsten"
+      condition="mcg_c1_frdiv[]||mcg_c1_irclken[]||mcg_c1_irefsten[]"
    ><![CDATA[
       \t   /// Control Register 1 - FRDIV, IRCLKEN, IREFSTEN, (-CLKS, -IREFS)
       \t   const uint8_t c1; \n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c2_locre0||mcg_c2_range0||oscMode||mcg_c2_ircs"
+      condition="mcg_c2_locre0[]||mcg_c2_range0[]||oscMode||mcg_c2_ircs[]"
    ><![CDATA[
       \t   /// Control Register 2 - LOCRE0, RANGE0, HGO0, EREFS0, IRCS, (-LP, -FCTRIM)
       \t   const uint8_t c2;\n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c4_dmx32||mcg_c4_drst_drs"
+      condition="mcg_c4_dmx32[]||mcg_c4_drst_drs[]"
    ><![CDATA[
       \t   /// Control Register 4 - DMX32, DRST_DRS, (-FCTRIM, -SCFTRIM)
       \t   const uint8_t c4;\n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c5_pllclken0||mcg_c5_pllsten0||mcg_c5_prdiv0"
+      condition="mcg_c5_pllclken0[]||mcg_c5_pllsten0[]||mcg_c5_prdiv0[]"
    ><![CDATA[
       \t   /// Control Register 5 - PLLCLKEN0, PLLSTEN0, PRDIV0
       \t   const uint8_t c5;\n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c6_lolie0||mcg_c6_cme0||mcg_c6_vdiv0"
+      condition="mcg_c6_lolie0[]||mcg_c6_cme0[]||mcg_c6_vdiv0[]"
    ><![CDATA[
       \t   /// Control Register 6 - LOLIE0, CME0, VDIV0, (-PLLS)
       \t   const uint8_t c6;\n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_sc_fcrdiv"
+      condition="mcg_sc_fcrdiv[]"
    ><![CDATA[
       \t   /// Status and Control Register - FCRDIV
       \t   const uint8_t sc;\n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c7_oscsel"
+      condition="mcg_c7_oscsel[]"
    ><![CDATA[
       \t   /// Control Register 7 - OSCSEL
       \t   const uint8_t c7;\n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c8_locre1||mcg_c8_cme1||mcg_c8_lolre"
+      condition="mcg_c8_locre1[]||mcg_c8_cme1[]||mcg_c8_lolre[]"
    ><![CDATA[
       \t   /// Control Register 8 - LOCRE1, CME1, LOLRE
       \t   const uint8_t c8;\n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c9_pll_cme||mcg_c9_pll_locre"
+      condition="mcg_c9_pll_cme[]||mcg_c9_pll_locre[]"
    ><![CDATA[
       \t   /// Control Register 9 - PLL_CME
       \t   const uint8_t c9;\n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c11_pllcs"
+      condition="mcg_c11_pllcs[]"
    ><![CDATA[
       \t   /// Control Register 11 - PLLCS
       \t   const uint8_t c11;\n ]]></template>

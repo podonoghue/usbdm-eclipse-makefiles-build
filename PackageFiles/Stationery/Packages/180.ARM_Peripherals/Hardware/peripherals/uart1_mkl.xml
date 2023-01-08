@@ -2,7 +2,7 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- uart1_mkl.xml -->
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART">
 
@@ -10,11 +10,11 @@ Devices using this peripheral:
 
    <xi:include href="_mapPinsOption_on.xml"/>
 
-   <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src"            optional="true" constant="false" />
-   <aliasOption key="/SIM/system_uart$(_instance)_fixedclocksource" optional="true"/>
-   <aliasOption key="/SIM/system_uart$(_instance)_clock" optional="true" />
+   <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src[]"            optional="true" constant="false" />
+   <aliasOption key="/SIM/system_uart$(_instance)_fixedclocksource[]" optional="true"/>
+   <aliasOption key="/SIM/system_uart$(_instance)_clock[]"            optional="true" />
 
-   <choiceOption key="defaultBaudRate" 
+   <choiceOption key="defaultBaudRate"
       description="UART default baud rate"
       toolTip="Used by default UART setup for stdio">
       <choice value="110"     name="110" />
@@ -33,21 +33,21 @@ Devices using this peripheral:
       <choice value="115200"  name="115200" isDefault="true" />
    </choiceOption>
 
-   <binaryOption key="uartClass" 
+   <binaryOption key="uartClass"
       description="Input buffering"
-      toolTip="This option determines whether an interrupt-driven driver\n 
+      toolTip="This option determines whether an interrupt-driven driver\n
                incorporating a queue is used to buffer input data" >
       <choice name="Unbuffered" value="Uart_basic_T" />
       <choice name="Buffered"   value="UartBuffered_basic_T" />
    </binaryOption>
-   
-   <intOption key="receiveBufferSize" description="Size of input buffer" 
+
+   <intOption key="receiveBufferSize" description="Size of input buffer"
       toolTip="This value determines the size of the receive buffer\n
                for the interrupt driven driver version  "
        value="50" min="1" max="1000"
       />
 
-   <intOption key="transmitBufferSize" description="Size of output buffer" 
+   <intOption key="transmitBufferSize" description="Size of output buffer"
       toolTip="This value determines the size of the transmit buffer\n
                for the interrupt driven driver version  "
        value="50" min="1" max="1000"
@@ -58,13 +58,13 @@ Devices using this peripheral:
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)txsrc" optional="true" constant="false" />
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" optional="true" constant="false" />
    </category>
-   
+
    <stringOption key="irq_pattern"        constant="true" value="^UART%i_?(RxTx|Error|Lon)?$" hidden="true" />
    <stringOption key="irq_classHandler"   constant="true" value="%c%i::irq$1Handler" hidden="true" />
    <xi:include href="_irqOptionSubstituted.xml"/>
-   
+
    <xi:include href="_clockOption.xml"/>
-      
+
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.UartValidate">
    </validate>
@@ -73,14 +73,14 @@ Devices using this peripheral:
       <copy source="Snippets/uart-example.cpp"     target="Snippets/uart-example.cpp"  overwrite="true"  derived="true" />
       <copy source="Project_Headers/uart.h"        target="Project_Headers/uart.h"     overwrite="true"  derived="true" macroReplace="true" />
    </projectActionList>
-         
+
    <template><![CDATA[
    \t//! Indicates whether the UART needs a write to clear status errors
    \tstatic constexpr bool statusNeedsWrite = false;
 
    \t//! Default Baud rate used if not explicitly given
    \tstatic constexpr uint32_t defaultBaudRate = $(defaultBaudRate);
-   
+
    \t//! Default buffer size for receive queue when interrupt driven
    \tstatic constexpr unsigned receiveBufferSize = $(receiveBufferSize);
 
@@ -96,7 +96,7 @@ Devices using this peripheral:
    \t   return SimInfo::getUart$(_instance)Clock();
    \t}\n\n
    ]]></template>
-   
+
    <template key="/UART/Present" namespace="all"  ><![CDATA[\ ||\ 1]]></template>
 
    <template key="/UART/declarations" namespace="all"  ><![CDATA[

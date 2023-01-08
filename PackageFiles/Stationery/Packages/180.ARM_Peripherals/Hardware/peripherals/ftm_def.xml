@@ -1900,14 +1900,14 @@ $(channel_init_description)
    ]]></setTemplate>
 
    <initialValueTemplate namespace="usbdm"
-      variables="ftm_cnv"
+      variables="ftm_cnv[]"
    ><![CDATA[
       \t   /// %description
       \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm"
-      variables="ftm_cnsc_mode"
+      variables="ftm_cnsc_mode[]"
    ><![CDATA[
       \t   /// Channel Status And Control Register
       \t   uint16_t %registerName = 0;\n\n
@@ -2002,9 +2002,9 @@ $(channel_init_description)
    ]]></constructorTemplate>
 
    <for keys="r" values="
-      ftm_cnsc_mode;
-      ftm_cnsc_action;
-      ftm_cnsc_icrst">
+      ftm_cnsc_mode[];
+      ftm_cnsc_action[];
+      ftm_cnsc_icrst[]">
       <constructorTemplate  namespace="usbdm"
          variables="%(r)"
          linePadding="xxx"
@@ -2027,7 +2027,7 @@ $(channel_init_description)
 
    <for keys="r" values="
       ftm_channel_number;
-      ftm_cnv">
+      ftm_cnv[]">
       <constructorTemplate  namespace="usbdm"
          variables="%(r)"
          linePadding="xxx"

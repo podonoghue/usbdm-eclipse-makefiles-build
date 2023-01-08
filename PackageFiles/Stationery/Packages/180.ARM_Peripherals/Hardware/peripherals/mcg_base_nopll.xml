@@ -600,7 +600,7 @@
          <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" constant="false" />
 
          <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
-            <aliasOption key="oscMode"                constant="false"  />
+            <aliasOption key="oscMode"                constant="false"  optional="true" />
             <aliasOption key="/OSC0/osc_input_freq"   constant="false"  />
             <aliasOption key="/OSC0/osc_clock"        optional="true"   />
             <aliasOption key="/OSC0/osc_div_erps"     optional="true" constant="false" />
@@ -618,20 +618,9 @@
          <category name="Clocks" description="Clock Sources"
             toolTip="SLOW_IRC, FAST_IRC, USB_CLKIN, LPO" >
 
-            <intOption key="system_fast_irc_clock[%(n)]"
-               enabledBy="mcg_c1_irclken[%(n)]||mcg_c1_irefs[%(n)], Disabled as not in use"
-               constant="true"
-               derived="true"
-               hidden="true"
-               origin="Fast IRC"
-               units="Hz"
-               description="Frequency of Fast Internal Reference [FIRC] Clock"
-               toolTip="Dependent on device and clock Trim. [Nominally 4MHz]"
-               value="4_MHz"
-               disabledValue="0" />
-
             <intOption key="system_slow_irc_clock[%(n)]"
-               enabledBy="(/SMC/smc_pmctrl_runm[%(n)]!=VLPR)&amp;&amp;(mcg_c1_irclken[%(n)]||mcg_c1_irefs[%(n)]), Disabled in VLPR and when not in use"
+               enabledBy="(/SMC/smc_pmctrl_runm[%(n)]!=VLPR) &amp;&amp;
+                          (mcg_c1_irclken[%(n)]||mcg_c1_irefs[%(n)]), Disabled in VLPR or when not in use"
                constant="true"
                derived="true"
                origin="Slow IRC"
@@ -639,6 +628,17 @@
                description="Frequency of Slow Internal Reference [SIRC] Clock"
                toolTip="Dependent on device and clock Trim. [Nominally 32kHz]"
                value="32768"
+               disabledValue="0" />
+
+            <intOption key="system_fast_irc_clock[%(n)]"
+               enabledBy="mcg_c1_irclken[%(n)]||mcg_c1_irefs[%(n)], Disabled as not in use"
+               constant="true"
+               derived="true"
+               origin="Fast IRC"
+               units="Hz"
+               description="Frequency of Fast Internal Reference [FIRC] Clock"
+               toolTip="Dependent on device and clock Trim. [Nominally 4MHz]"
+               value="4_MHz"
                disabledValue="0" />
 
             <aliasOption key="/PMC/system_low_power_clock" />
@@ -741,14 +741,14 @@
                description="Fast Internal Clock [FIRC] Reference Divider"
                toolTip="Selects the amount to divide down the fast internal reference clock\n
                   The FIR clock is available for use as MCGIRCLK or MCGOUTCLK">
-               <choice value="0" enum="DivBy1"   ref="system_fast_irc_clock"       name="/1" isDefault="true" />
-               <choice value="1" enum="DivBy2"   ref="(system_fast_irc_clock)/2"   name="/2"   />
-               <choice value="2" enum="DivBy4"   ref="(system_fast_irc_clock)/4"   name="/4"   />
-               <choice value="3" enum="DivBy8"   ref="(system_fast_irc_clock)/8"   name="/8"   />
-               <choice value="4" enum="DivBy16"  ref="(system_fast_irc_clock)/16"  name="/16"  />
-               <choice value="5" enum="DivBy32"  ref="(system_fast_irc_clock)/32"  name="/32"  />
-               <choice value="6" enum="DivBy64"  ref="(system_fast_irc_clock)/64"  name="/64"  />
-               <choice value="7" enum="DivBy128" ref="(system_fast_irc_clock)/128" name="/128" />
+               <choice value="0" enum="DivBy1"   ref="system_fast_irc_clock[%(n)]"       name="/1" isDefault="true" />
+               <choice value="1" enum="DivBy2"   ref="(system_fast_irc_clock[%(n)])/2"   name="/2"   />
+               <choice value="2" enum="DivBy4"   ref="(system_fast_irc_clock[%(n)])/4"   name="/4"   />
+               <choice value="3" enum="DivBy8"   ref="(system_fast_irc_clock[%(n)])/8"   name="/8"   />
+               <choice value="4" enum="DivBy16"  ref="(system_fast_irc_clock[%(n)])/16"  name="/16"  />
+               <choice value="5" enum="DivBy32"  ref="(system_fast_irc_clock[%(n)])/32"  name="/32"  />
+               <choice value="6" enum="DivBy64"  ref="(system_fast_irc_clock[%(n)])/64"  name="/64"  />
+               <choice value="7" enum="DivBy128" ref="(system_fast_irc_clock[%(n)])/128" name="/128" />
             </choiceOption>
 
             <intOption key="firc_divided_clock[%(n)]" units="Hz" constant="true" derived="true" />
@@ -1090,7 +1090,7 @@
       </categoryOption>
    </for>
 
-   <clockCodeTemplate variable="mcg_c7_oscsel"
+   <clockCodeTemplate variable="mcg_c7_oscsel[]"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -1107,7 +1107,7 @@
       \t}\n\n
       ]]></clockCodeTemplate>
 
-   <template variables="mcg_c7_oscsel_fixed"
+   <template variables="mcg_c7_oscsel_fixed[]"
    ><![CDATA[
       \t/**
       \t * Get %description
@@ -1120,7 +1120,7 @@
       \t}\n\n
       ]]></template>
 
-   <template condition="mcg_sc_fcrdiv"
+   <template condition="mcg_sc_fcrdiv[]"
    ><![CDATA[
       \t/**
       \t * Get Fast Internal Reference Clock (undivided)
@@ -1133,7 +1133,7 @@
       \t}\n\n
       ]]></template>
 
-   <clockCodeTemplate variable="mcg_c2_ircs"
+   <clockCodeTemplate variable="mcg_c2_ircs[]"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -1159,7 +1159,7 @@
       \t}\n\n
       ]]></clockCodeTemplate>
 
-   <clockCodeTemplate variable="mcg_c1_irclken"
+   <clockCodeTemplate variable="mcg_c1_irclken[]"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -1345,21 +1345,21 @@
    ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="/SIM/sim_clkdiv1_outdiv4||/SIM/sim_clkdiv1_outdiv3||/SIM/sim_clkdiv1_outdiv2||/SIM/sim_clkdiv1_outdiv1"
+      condition="/SIM/sim_clkdiv1_outdiv4[]||/SIM/sim_clkdiv1_outdiv3[]||/SIM/sim_clkdiv1_outdiv2[]||/SIM/sim_clkdiv1_outdiv1[]"
    ><![CDATA[
       \t   /// SIM CLKDIV1 - System Clock Divider Register 1
       \t   const uint32_t clkdiv1;\n\n ]]>
    </template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="/SIM/sim_clkdiv3_pllfll"
+      condition="/SIM/sim_clkdiv3_pllfll[]"
    ><![CDATA[
       \t   /// SIM CLKDIV3 - PLLFLL clock divider divisor & fraction
       \t   const uint32_t clkdiv3;\n\n ]]>
    </template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="(/SIM/sim_sopt2_pllfllsel)||(/SIM/sim_sopt2_tpmsrc)"
+      condition="(/SIM/sim_sopt2_pllfllsel[])||(/SIM/sim_sopt2_tpmsrc[])"
    ><![CDATA[
       \t   /// SIM SOPT2 - Clock selectors for various peripherals
       \t   const uint32_t sopt2;\n\n ]]>
@@ -1367,74 +1367,74 @@
 
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcgClockMode"
+      condition="mcgClockMode[]"
    ><![CDATA[
       \t   /// Clock Mode
       \t   const McgClockMode clockMode;\n\n
    ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="/SMC/smc_pmctrl_runm"
+      condition="/SMC/smc_pmctrl_runm[]"
    ><![CDATA[
       \t   /// Run Mode
       \t   const SmcRunMode runMode; \n\n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c1_frdiv||mcg_c1_irclken||mcg_c1_irefsten"
+      condition="mcg_c1_frdiv[]||mcg_c1_irclken[]||mcg_c1_irefsten[]"
    ><![CDATA[
       \t   /// Control Register 1 - FRDIV, IRCLKEN, IREFSTEN, (-CLKS, -IREFS)
       \t   const uint8_t c1; \n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c2_locre0||mcg_c2_range0||oscMode||mcg_c2_ircs"
+      condition="mcg_c2_locre0[]||mcg_c2_range0[]||oscMode||mcg_c2_ircs[]"
    ><![CDATA[
       \t   /// Control Register 2 - LOCRE0, RANGE0, HGO0, EREFS0, IRCS, (-LP, -FCTRIM)
       \t   const uint8_t c2;\n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c4_dmx32||mcg_c4_drst_drs"
+      condition="mcg_c4_dmx32[]||mcg_c4_drst_drs[]"
    ><![CDATA[
       \t   /// Control Register 4 - DMX32, DRST_DRS, (-FCTRIM, -SCFTRIM)
       \t   const uint8_t c4;\n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c5_pllclken0||mcg_c5_pllsten0||mcg_c5_prdiv0"
+      condition="mcg_c5_pllclken0[]||mcg_c5_pllsten0[]||mcg_c5_prdiv0[]"
    ><![CDATA[
       \t   /// Control Register 5 - PLLCLKEN0, PLLSTEN0, PRDIV0
       \t   const uint8_t c5;\n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c6_lolie0||mcg_c6_cme0||mcg_c6_vdiv0"
+      condition="mcg_c6_lolie0[]||mcg_c6_cme0[]||mcg_c6_vdiv0[]"
    ><![CDATA[
       \t   /// Control Register 6 - LOLIE0, CME0, VDIV0, (-PLLS)
       \t   const uint8_t c6;\n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_sc_fcrdiv"
+      condition="mcg_sc_fcrdiv[]"
    ><![CDATA[
       \t   /// Status and Control Register - FCRDIV
       \t   const uint8_t sc;\n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c7_oscsel"
+      condition="mcg_c7_oscsel[]"
    ><![CDATA[
       \t   /// Control Register 7 - OSCSEL
       \t   const uint8_t c7;\n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c8_locre1||mcg_c8_cme1||mcg_c8_lolre"
+      condition="mcg_c8_locre1[]||mcg_c8_cme1[]||mcg_c8_lolre[]"
    ><![CDATA[
       \t   /// Control Register 8 - LOCRE1, CME1, LOLRE
       \t   const uint8_t c8;\n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c9_pll_cme||mcg_c9_pll_locre"
+      condition="mcg_c9_pll_cme[]||mcg_c9_pll_locre[]"
    ><![CDATA[
       \t   /// Control Register 9 - PLL_CME
       \t   const uint8_t c9;\n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c11_pllcs"
+      condition="mcg_c11_pllcs[]"
    ><![CDATA[
       \t   /// Control Register 11 - PLLCS
       \t   const uint8_t c11;\n ]]></template>

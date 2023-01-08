@@ -8,9 +8,9 @@
 
    <xi:include href="_irqOption.xml"/>
 
-   <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false"  optional="true" />
-   <aliasOption key="/SIM/sim_sopt2_tpmsrc"    constant="false"  optional="true" />
-   <aliasOption key="/SIM/system_tpm_clock"    optional="true"                   />
+   <aliasOption key="/SIM/sim_sopt2_pllfllsel[]" constant="false"  optional="true" />
+   <aliasOption key="/SIM/sim_sopt2_tpmsrc[]"    constant="false"  optional="true" />
+   <aliasOption key="/SIM/system_tpm_clock[]"    optional="true"                   />
 
    <binaryOption key="check_minimums"
       description="Check minimum interval and minimum resolution"
@@ -31,6 +31,26 @@
          so that a reasonable resolution is available for PWM duty-cycle"
       value="100" min="0" max="65535" />
 
+   <stringOption key="Clocking" value="------- Clocking -------" constant="true" description="Clocking" />
+
+   <choiceOption key="tpmClockConfig"
+      target="system_tpm_clock"
+      description="Clock configuration"
+      toolTip="Selects the clock configuration used for calculations if System TPM Clock is chosen as clock source" >
+      <choice value="0" name="@/MCG/ClockConfig[0]" ref="/SIM/system_tpm_clock[0]"  isDefault="true" />
+      <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_tpm_clock[1]"  />
+      <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_tpm_clock[2]"  />
+      <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_tpm_clock[3]"  />
+   </choiceOption>
+
+   <intOption key="system_tpm_clock"
+      constant="true"
+      derived="true"
+      description="System TPM Clock\n
+                   Based on current clock configuration"
+      units="Hz"
+      />
+
    <intOption key="tpmExternalClock"
       description="TPM External clock "
       toolTip="Clock frequency of external clock supplied to TPM_CLKIN pin"
@@ -42,9 +62,9 @@
       enumType="uint16_t"
       target="inputClockFrequency"
       toolTip="Selects the clock source for the module">
-      <choice value="0" name="Disabled"         ref="disabled"              code="0"                      enum="Disabled"        />
-      <choice value="1" name="System TPM Clock" ref="/SIM/system_tpm_clock" code="SimInfo::getTpmClock()" enum="SystemTpmClock"  isDefault="true"  />
-      <choice value="2" name="External clock"   ref="tpmExternalClock"      code="tpmExternalClock"       enum="ExternalClock"   />
+      <choice value="0" name="Disabled"         ref="disabled"                code="0"                      enum="Disabled"        />
+      <choice value="1" name="System TPM Clock" ref="system_tpm_clock"        code="SimInfo::getTpmClock()" enum="SystemTpmClock"  isDefault="true"  />
+      <choice value="2" name="External clock"   ref="tpmExternalClock"        code="tpmExternalClock"       enum="ExternalClock"   />
    </choiceOption>
 
    <intOption key="inputClockFrequency"
@@ -959,7 +979,7 @@
 <!-- Channel Functions -->
 
    <template key="/$(_basename)_CHANNEL/%(k)" namespace="all" discardRepeats="true"
-      variables="tpm_cnsc_action"
+      variables="tpm_cnsc_action[]"
       linePadding="xxx"
    ><![CDATA[
       \t
@@ -1541,14 +1561,14 @@ $(channel_init_description)
    ]]></setTemplate>
 
    <initialValueTemplate namespace="usbdm"
-      variables="tpm_cnv"
+      variables="tpm_cnv[]"
    ><![CDATA[
       \t   /// %description
       \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm"
-      variables="tpm_cnsc_mode"
+      variables="tpm_cnsc_mode[]"
    ><![CDATA[
       \t   /// Channel Status And Control Register
       \t   uint16_t %registerName = 0;\n\n
@@ -1643,9 +1663,9 @@ $(channel_init_description)
    ]]></constructorTemplate>
 
    <for keys="r" values="
-      tpm_cnsc_mode;
-      tpm_cnsc_action;
-      tpm_cnsc_icrst">
+      tpm_cnsc_mode[];
+      tpm_cnsc_action[];
+      tpm_cnsc_icrst[]">
       <constructorTemplate  namespace="usbdm"
          variables="%(r)"
          linePadding="xxx"
@@ -1668,7 +1688,7 @@ $(channel_init_description)
 
    <for keys="r" values="
       tpm_channel_number;
-      tpm_cnv">
+      tpm_cnv[]">
       <constructorTemplate  namespace="usbdm"
          variables="%(r)"
          linePadding="xxx"

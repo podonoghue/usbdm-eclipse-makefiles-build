@@ -22,7 +22,7 @@
       value="SystemBusClock"
       />
 
-   <aliasOption key="/SIM/system_bus_clock" />
+   <aliasOption key="/SIM/system_bus_clock[]" />
 
    <xi:include href="_irqOption.xml"/>
 

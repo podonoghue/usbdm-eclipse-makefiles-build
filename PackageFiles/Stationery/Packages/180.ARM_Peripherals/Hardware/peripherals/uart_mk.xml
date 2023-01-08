@@ -10,9 +10,9 @@ Devices using this peripheral:
 
    <xi:include href="_mapPinsOption_on.xml"/>
 
-   <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src"            optional="true" constant="false" />
-   <aliasOption key="/SIM/system_uart$(_instance)_fixedclocksource" optional="true"/>
-   <aliasOption key="/SIM/system_uart$(_instance)_clock" optional="true" />
+   <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src[]"            optional="true" constant="false" />
+   <aliasOption key="/SIM/system_uart$(_instance)_fixedclocksource[]" optional="true"/>
+   <aliasOption key="/SIM/system_uart$(_instance)_clock[]"            optional="true" />
 
    <intOption key="oversampleRatio"  condition="uart_c4_osr_present"
       description="Number of samples per bit"

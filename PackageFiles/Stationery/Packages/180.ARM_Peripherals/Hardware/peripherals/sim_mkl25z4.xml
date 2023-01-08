@@ -19,9 +19,6 @@
    <!-- Clock divider -->
    <constant key="clock_divider_type" type="Integer" value="2" />
 
-   <!-- Indicates ADC ALT clock source is Busclock/2-->
-   <constant key="adc_alt_clock_is_busDiv2" type="Boolean" value="true" />
-
    <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
    <binaryOption key="RtcForcing"
       constant="true"

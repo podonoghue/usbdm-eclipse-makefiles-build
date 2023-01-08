@@ -267,7 +267,7 @@
       \t static constexpr %enumClass %enumParam_default = %symbolicValueExpression; // %shortDescription\n\n
    ]]></clockCodeTemplate>
 
-   <setTemplate variables="usbphy_anactrl_pfd_clk_sel,usbphy_anactrl_pfd_frac"
+   <setTemplate variables="usbphy_anactrl_pfd_clk_sel[],usbphy_anactrl_pfd_frac[]"
    ><![CDATA[
       \t/**
       \t * %description0

@@ -2,7 +2,7 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- lpuart_def.xml -->
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART">
 
@@ -10,18 +10,18 @@ Devices using this peripheral:
 
    <xi:include href="_mapPinsOption_on.xml"/>
 
-   <aliasOption key="/PCC/pcc_lpuart$(_instance)"          optional="true" constant="false"/> 
+   <aliasOption key="/PCC/pcc_lpuart$(_instance)"             optional="true" constant="false"/>
 
-   <aliasOption key="/MCG/system_mcgfllclk_clock"          optional="true" /> 
-   <aliasOption key="/OSC0/oscer_clock"                    optional="true" /> 
-   <aliasOption key="/MCG/system_mcgirclk_clock"           optional="true" /> 
-   <aliasOption key="/SIM/sim_sopt2_pllfllsel"             optional="true" constant="false" /> 
-   <aliasOption key="/SIM/sim_sopt2_lpuartsrc"             optional="true" constant="false" />
-   <aliasOption key="/SIM/system_lpuart_clock" 	           optional="true" constant="false" />
-   <aliasOption key="/SIM/sim_sopt2_lpuart$(_instance)src" optional="true" constant="false" />
-   <aliasOption key="/SIM/sim_clkdiv3_pllfll"              optional="true"/>
-   
-   <intOption key="oversampleRatio" description="Number of samples per bit" 
+   <aliasOption key="/MCG/system_mcgfllclk_clock[]"           optional="true" />
+   <aliasOption key="/OSC0/oscer_clock"                       optional="true" />
+   <aliasOption key="/MCG/system_mcgirclk_clock[]"            optional="true" />
+   <aliasOption key="/SIM/sim_sopt2_pllfllsel[]"              optional="true" constant="false" />
+   <aliasOption key="/SIM/sim_sopt2_lpuartsrc[]"              optional="true" constant="false" />
+   <aliasOption key="/SIM/system_lpuart_clock[]" 	           optional="true" constant="false" />
+   <aliasOption key="/SIM/sim_sopt2_lpuart$(_instance)src[]"  optional="true" constant="false" />
+   <aliasOption key="/SIM/sim_clkdiv3_pllfll[]"               optional="true"/>
+
+   <intOption key="oversampleRatio" description="Number of samples per bit"
       toolTip="This value determines the number of times an Rx bit is sampled.\n
                This also affects the clock divider and hence the range of baud rates available"
        value="8" min="4" max="32"
@@ -32,7 +32,7 @@ Devices using this peripheral:
    \tstatic constexpr uint32_t oversampleRatio = $(oversampleRatio);\n\n
    ]]></template>
 
-   <choiceOption key="defaultBaudRate" 
+   <choiceOption key="defaultBaudRate"
       description="UART default baud rate"
       toolTip="Used by default UART setup for stdio">
       <choice value="110"     name="110" />
@@ -51,21 +51,21 @@ Devices using this peripheral:
       <choice value="115200"  name="115200" isDefault="true" />
    </choiceOption>
 
-   <binaryOption key="lpuartClass" 
+   <binaryOption key="lpuartClass"
       description="Input buffering"
-      toolTip="This option determines whether an interrupt-driven driver\n 
+      toolTip="This option determines whether an interrupt-driven driver\n
                incorporating a queue is used to buffer input data" >
       <choice name="Unbuffered" value="Lpuart_T" />
       <choice name="Buffered"   value="LpuartBuffered_T" />
    </binaryOption>
-   
-   <intOption key="receiveBufferSize" description="Size of input buffer" 
+
+   <intOption key="receiveBufferSize" description="Size of input buffer"
       toolTip="This value determines the size of the receive buffer\n
                for the interrupt driven driver version  "
        value="50" min="1" max="1000"
       />
 
-   <intOption key="transmitBufferSize" description="Size of output buffer" 
+   <intOption key="transmitBufferSize" description="Size of output buffer"
       toolTip="This value determines the size of the transmit buffer\n
                for the interrupt driven driver version  "
        value="50" min="1" max="1000"
@@ -75,13 +75,13 @@ Devices using this peripheral:
       <aliasOption key="/SIM/sim_sopt5_lpuart$(_instance)txsrc"  constant="false" optional="true" />
       <aliasOption key="/SIM/sim_sopt5_lpuart$(_instance)rxsrc"  constant="false" optional="true" />
    </category>
-   
+
    <stringOption key="irq_pattern"        constant="true" value="^LPUART%i_?(RxTx)?$" hidden="true" />
    <stringOption key="irq_classHandler"   constant="true" value="%c%i::irqHandler" hidden="true" />
    <xi:include href="_irqOptionSubstituted.xml"/>
-   
+
    <xi:include href="_clockOption.xml"/>
-      
+
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.LpuartValidate">
    </validate>
@@ -90,11 +90,11 @@ Devices using this peripheral:
       <copy source="Project_Headers/lpuart.h"      target="Project_Headers/lpuart.h"        overwrite="true"  derived="true" macroReplace="true" />
       <copy source="Project_Headers/uart_queue.h"  target="Project_Headers/uart_queue.h"    overwrite="true"  derived="true" />
    </projectActionList>
-         
+
    <template><![CDATA[
       \t//! Default Baud rate used if not explicitly given
       \tstatic constexpr uint32_t defaultBaudRate = $(defaultBaudRate);
-   
+
       \t//! Default buffer size for receive queue when interrupt driven
       \tstatic constexpr unsigned receiveBufferSize = $(receiveBufferSize);
 
@@ -104,21 +104,21 @@ Devices using this peripheral:
       #if defined(PCC_PCC_LPUART$(_instance)_CGC_MASK)
       \t//! Default clock source
       \tstatic constexpr PccDiv2Clock defaultClockSource = PccDiv2Clock_Firc;
-   
+
       \t/**
       \t * Set LPUART$(_instance) input clock source.
       \t *
       \t * @param pccDiv2Clock Clock source selection
       \t *
-      \t * @note This peripheral uses the DIV2 peripheral clocks e.g. SOSCDIV2_CLK 
-      \t * @note The peripheral bus clock will be disabled before changing the 
+      \t * @note This peripheral uses the DIV2 peripheral clocks e.g. SOSCDIV2_CLK
+      \t * @note The peripheral bus clock will be disabled before changing the
       \t         clock and is left disabled.
       \t */
       \tstatic void setClockSource(PccDiv2Clock pccDiv2Clock) {
       \t   PccInfo::setLpuart$(_instance)ClockSource(pccDiv2Clock);
       \t}
       #endif
-   
+
       \t/**
       \t * Get input clock frequency
       \t *
@@ -134,7 +134,7 @@ Devices using this peripheral:
       #endif
       \t}\n\n
    ]]></template>
-   
+
    <template key="/LPUART/Present" namespace="all"  ><![CDATA[\ ||\ 1]]></template>
 
    <template key="/LPUART/declarations" namespace="all"  ><![CDATA[

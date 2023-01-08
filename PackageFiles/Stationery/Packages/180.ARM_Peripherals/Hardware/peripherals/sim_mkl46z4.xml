@@ -13,6 +13,7 @@
 
    <constant key="llwu_device_list"
       description="LLWU Wakeup sources"
+      type="String"
       value="&quot;LPTMR0;CMP0;;;TSI0;RTC_Alarm;;RTC_Seconds&quot;" />
 
    <!-- Clock divider -->
@@ -22,7 +23,7 @@
    <binaryOption key="RtcForcing"
       constant="true"
       derived="true"
-      ref="/RTC/rtc_cr_osce"
+      ref="(/MCG/oscMode==/OscMode_RTC_Controlled)?1:0"
       description="RTC control of OSC0"
       toolTip="Indicates if OSC0 is being controlled by RTC which shares XTAL/EXTAL pins">
       <choice value="0" name="OSC0 is independent"        isDefault="true" />
