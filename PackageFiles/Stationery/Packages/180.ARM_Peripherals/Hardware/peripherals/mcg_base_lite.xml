@@ -544,10 +544,11 @@
          <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" constant="false" />
 
          <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
-            <aliasOption key="oscMode"                constant="false"  />
-            <aliasOption key="/OSC0/osc_input_freq"   constant="false"  />
-            <aliasOption key="/OSC0/osc_clock"        optional="true"   />
-            <aliasOption key="/OSC0/osc_div_erps"     optional="true" constant="false" />
+            <aliasOption key="oscMode"                       constant="false"  optional="true" />
+            <aliasOption key="/OSC0/rsim_control_rf_osc_en"  constant="false"  optional="true" />
+            <aliasOption key="/OSC0/osc_input_freq"          constant="false"  />
+            <aliasOption key="/OSC0/osc_clock"               optional="true"   />
+            <aliasOption key="/OSC0/osc_div_erps"            optional="true" constant="false" />
             <aliasOption key="/OSC0/oscer_clock"      />
          </category>
 
@@ -757,13 +758,6 @@
       <aliasOption key="/OSC0/osc_clock" />
       <aliasOption key="/SIM/system_erclk32k_clock" />
       <aliasOption key="/PMC/system_low_power_clock" />
-
-      <stringOption key="system_mcgoutclk_clock_source[%(n)]"
-         derived="true"
-         constant="true"
-         description="System MCG Output Clock source [MCGOUTCLK]"
-         toolTip="Source of MCG Output Clock\n
-                  Determined by current clock mode" />
 
       <intOption key="system_mcgoutclk_clock[%(n)]"
          max="/SIM/MCGOUTCLK_max[/SMC/smc_pmctrl_runm[%(n)]]"

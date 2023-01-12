@@ -112,7 +112,7 @@
                <!-- MCGIRCLK -->
                <graphicItem id="FAST IRC"                  var="system_fast_irc_clock[%(n)]"        type="variableBox" params="50,  45,  80, large"                            />
                <graphicItem id=""                          var=""                                   type="connector"   params="FAST IRC,0, FCRDIV,0"                           />
-               <graphicItem id="FIRC_DIVIDED,NONAME"       var="firc_divided_clock[%(n)]"           type="annotation"  params="150, 15, 100, 18, fout=%v"                      />
+               <graphicItem id="FIRC_DIVIDED,NONAME"       var="firc_divided_clock[%(n)]"           type="annotation"  params="150, 15, 100, 18, Fout=%v"                      />
                <graphicItem id="FCRDIV"                    var="mcg_sc_fcrdiv[%(n)]"                type="choice"      params="200, 45, 100, small"                            />
                <graphicItem id="SLOW IRC"                  var="system_slow_irc_clock[%(n)]"        type="variableBox" params="50,  95,  80, large"                            />
                <graphicItem id=""                          var=""                                   type="connector"   params="FCRDIV,0,IRCS,1"                                />
@@ -125,8 +125,8 @@
                <graphicItem id="MCGIRCLK.1,NONAME"         var="system_mcgirclk_clock[%(n)]"        type="node"        params="570, 55"                                        />
 
                <graphicItem id="FRDIV"                     var="mcg_c1_frdiv[%(n)]"                 type="choice"      params="75, 155, 85, large"                             />
-               <graphicItem id="RANGE,NONAME"              var="mcg_c2_range0[%(n)]"                type="annotation"  params="30, 180, 100, 20"                               />
-               <graphicItem id="FRDIV_OUT,NONAME"          var="mcg_erc_clock_divided[%(n)]"        type="annotation"  params="30, 200, 100, 20, fout=%v"                               />
+               <graphicItem id="RANGE,NONAME"              var="mcg_c2_range0[%(n)]"                type="annotation"  params="30, 175, 100, 20"                               />
+               <graphicItem id="FRDIV_OUT,NONAME"          var="mcg_erc_clock_divided[%(n)]"        type="annotation"  params="30, 190, 100, 20, Fout=%v"                               />
                <graphicItem id=""                          var="mcg_erc_clock_divided[%(n)]"        type="connector"   params="FRDIV,0,    IREFS,0"                            />
                <graphicItem id=""                          var=""                                   type="connector"   params="SLOW IRC,0, IREFS,1, (x-20),d,y,x"              />
 
@@ -327,7 +327,7 @@
 
                <equation key="y" value="370" />
 
-                  <!-- OSCERCLK -->
+               <!-- OSCERCLK -->
                <graphicGroup x="0" y="y" >
                   <graphicItem id=""                           var=""                                   type="connector"   params="OSCERCLK.1,0,  OSCERCLK,0, x.3,y,x"   />
                   <graphicItem id="OSCERCLK"                   var="/OSC0/oscer_clock"                  type="node"        params="600, 0"                    />
@@ -600,10 +600,11 @@
          <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" constant="false" />
 
          <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
-            <aliasOption key="oscMode"                constant="false"  optional="true" />
-            <aliasOption key="/OSC0/osc_input_freq"   constant="false"  />
-            <aliasOption key="/OSC0/osc_clock"        optional="true"   />
-            <aliasOption key="/OSC0/osc_div_erps"     optional="true" constant="false" />
+            <aliasOption key="oscMode"                       constant="false"  optional="true" />
+            <aliasOption key="/OSC0/rsim_control_rf_osc_en"  constant="false"  optional="true" />
+            <aliasOption key="/OSC0/osc_input_freq"          constant="false"  />
+            <aliasOption key="/OSC0/osc_clock"               optional="true"   />
+            <aliasOption key="/OSC0/osc_div_erps"            optional="true" constant="false" />
             <aliasOption key="/OSC0/oscer_clock"      />
          </category>
 
@@ -907,7 +908,7 @@
                disabledValue="0" />
 
             <binaryOption key="mcg_c1_irefs[%(n)]"
-               target="system_mcgffclk_clock[%(n)]"
+               target="irefs_clock[%(n)]"
                derived="true"
                constant="true"
                description="Internal Reference Select"
@@ -917,8 +918,14 @@
                <choice value="1" name="Slow Internal Clock"      ref="system_slow_irc_clock[%(n)]" />
             </binaryOption>
 
+            <intOption key="irefs_clock[%(n)]"
+               hidden="true"
+               derived="true"
+               enabledBy="(mcgClockMode[%(n)]!=6),Unavailable in BLPI" />
+
             <intOption key="system_mcgffclk_clock[%(n)]"
-               enabledBy="mcgClockMode[%(n)]!=6,Disabled in BLPI"
+               ref="irefs_clock[%(n)]"
+               enabledBy="(irefs_clock[%(n)]&lt;=(system_mcgoutclk_clock[%(n)]/8)),Disabled as limited to (MCGOUTCLK/8)"
                hidden="true"
                units="Hz"
                derived="true"
@@ -987,13 +994,6 @@
          <aliasOption key="/OSC0/oscer_clock" />
          <aliasOption key="/SIM/system_erclk32k_clock" />
          <aliasOption key="/PMC/system_low_power_clock" />
-
-         <stringOption key="system_mcgoutclk_clock_source[%(n)]"
-            derived="true"
-            constant="true"
-            description="System MCG Output Clock source [MCGOUTCLK]"
-            toolTip="Source of MCG Output Clock\n
-                     Determined by current clock mode" />
 
          <intOption key="system_mcgoutclk_clock[%(n)]"
             max="/SIM/MCGOUTCLK_max[/SMC/smc_pmctrl_runm[%(n)]]"

@@ -6,6 +6,8 @@
 
    <!--                                   RUN       VLPR     -->
    <constant key="MCGOUTCLK_max"  value="100MHz,     4MHz"   type="int"    hidden="false"/>
+   <constant key="LPUART_max"     value=" 48MHz,     4MHz"   type="int"    hidden="false"/>
+   <constant key="TPM_max"        value=" 48MHz,     4MHz"   type="int"    hidden="false"/>
 
    <xi:include href="_default_instance.xml"/>
 
@@ -247,6 +249,7 @@
 
          <category name="Peripheral Clocks" description="Peripheral Clock Selection">
             <intOption key="system_irc48m_clock[%(n)]"
+               enabledBy="/SMC/smc_pmctrl_runm[%(n)]!=1,IRC48M Disabled in VLPR"
                constant="true"
                units="Hz"
                description="Frequency of Internal 48MHz Clock [IRC48MCLK]"
@@ -344,21 +347,22 @@
             </for>
 
             <for keys="p" values="0;1">
-               <for keys   = "name:Name:NAME"
-                    values = "uart%(p)   : Uart%(p)   : UART%(p);
-                              lpuart%(p) : Lpuart%(p) : LPUART%(p)" >
+               <for keys   = "name       : Name       : NAME       : bNAME"
+                    values = "uart%(p)   : Uart%(p)   : UART%(p)   : UART  ;
+                              lpuart%(p) : Lpuart%(p) : LPUART%(p) : LPUART" >
                   <choiceOption key="sim_sopt2_%(name)src[%(n)]" condition="sim_sopt2_%(name)src_present"
                      enumStem="Sim%(Name)ClockSource"
                      target="system_%(name)_clock[%(n)]"
                      description="%(NAME) Clock"
                      toolTip="Clock source for the transmit and receive clock" >
-                     <choice value="0"  name="Disabled"                    ref="disabled"                          enum="Disabled"        code="0"                         />
-                     <choice value="1"  name="Peripheral Clock (MCGPCLK)"  ref="system_peripheral_clock[%(n)]"     enum="PeripheralClk"   code="getPeripheralClock()"       isDefault="true"/>
-                     <choice value="2"  name="OSCERCLK clock"              ref="/OSC0/oscer_clock"                 enum="OscerClk"        code="Osc0Info::getOscerClock()" />
-                     <choice value="3"  name="MCGIRCLK clock"              ref="/MCG/system_mcgirclk_clock[%(n)]"  enum="McgIrClk"        code="McgInfo::getMcgIrClock()"  />
+                     <choice value="0"  name="Disabled"                      ref="disabled"                          enum="Disabled"        code="0"                         />
+                     <choice value="1"  name="Peripheral Clock (MCGPCLK)"    ref="system_peripheral_clock[%(n)]"     enum="PeripheralClk"   code="getPeripheralClock()"       isDefault="true"/>
+                     <choice value="2"  name="OSCERCLK clock"                ref="/OSC0/oscer_clock"                 enum="OscerClk"        code="Osc0Info::getOscerClock()" />
+                     <choice value="3"  name="MCGIRCLK clock"                ref="/MCG/system_mcgirclk_clock[%(n)]"  enum="McgIrClk"        code="McgInfo::getMcgIrClock()"  />
                   </choiceOption>
 
                   <intOption key="system_%(name)_clock[%(n)]" condition="sim_sopt2_%(name)src_present"
+                     max="%(bNAME)_max[/SMC/smc_pmctrl_runm[%(n)]]"
                      derived="true"
                      constant="true"
                      units="Hz"
@@ -373,29 +377,29 @@
                target="system_tpm_clock[%(n)]"
                description="TPM Clock source"
                toolTip="Clock source for the TPM counter clock">
-               <choice value="0"  name="Disabled"                    ref="disabled"                          enum="Disabled"        code="0"                         />
-               <choice value="1"  name="Peripheral Clock (MCGPCLK)"  ref="system_peripheral_clock[%(n)]"     enum="PeripheralClk"   code="getPeripheralClock()"      isDefault="true" />
-               <choice value="2"  name="OSCERCLK clock"              ref="/OSC0/oscer_clock"                 enum="OscerClk"        code="Osc0Info::getOscerClock()" />
-               <choice value="3"  name="MCGIRCLK clock"              ref="/MCG/system_mcgirclk_clock[%(n)]"  enum="McgIrClk"        code="McgInfo::getMcgIrClock()"  />
+               <choice value="0"  name="Disabled"                      ref="disabled"                          enum="Disabled"        code="0"                         />
+               <choice value="1"  name="Peripheral Clock (MCGPCLK)"    ref="system_peripheral_clock[%(n)]"     enum="PeripheralClk"   code="getPeripheralClock()"      isDefault="true" />
+               <choice value="2"  name="OSCERCLK clock"                ref="/OSC0/oscer_clock"                 enum="OscerClk"        code="Osc0Info::getOscerClock()" />
+               <choice value="3"  name="MCGIRCLK clock"                ref="/MCG/system_mcgirclk_clock[%(n)]"  enum="McgIrClk"        code="McgInfo::getMcgIrClock()"  />
             </choiceOption>
 
             <intOption key="system_tpm_clock[%(n)]" condition="sim_sopt2_tpmsrc_present"
+               max="TPM_max[/SMC/smc_pmctrl_runm[%(n)]]"
                derived="true"
                constant="true"
                units="Hz"
                description="TPM Clock frequency"
-               toolTip="Frequency of clock to TPM"
-               value="0" max="75MHz" />
+               toolTip="Frequency of clock to TPM" />
 
             <choiceOption key="sim_sopt2_flexiosrc[%(n)]" condition="sim_sopt2_flexiosrc_present"
                target="system_flexio_clock[%(n)]"
                enumStem="SimFlexioClockSource"
                description="FLEXIO Clock select"
                toolTip="Selects the clock source for the FlexIO transmit and receive clock">
-               <choice value="0"  name="Disabled"                    ref="disabled"                          enum="Disabled"        code="0"                         />
-               <choice value="1"  name="Peripheral Clock (MCGPCLK)"  ref="system_peripheral_clock[%(n)]"     enum="PeripheralClk"   code="getPeripheralClock()"      isDefault="true" />
-               <choice value="2"  name="OSCERCLK clock"              ref="/OSC0/oscer_clock"                 enum="OscerClk"        code="Osc0Info::getOscerClock()" />
-               <choice value="3"  name="MCGIRCLK clock"              ref="/MCG/system_mcgirclk_clock[%(n)]"  enum="McgIrClk"        code="McgInfo::getMcgIrClock()"  />
+               <choice value="0"  name="Disabled"                      ref="disabled"                          enum="Disabled"        code="0"                         />
+               <choice value="1"  name="Peripheral Clock (MCGPCLK)"    ref="system_peripheral_clock[%(n)]"     enum="PeripheralClk"   code="getPeripheralClock()"      isDefault="true" />
+               <choice value="2"  name="OSCERCLK clock"                ref="/OSC0/oscer_clock"                 enum="OscerClk"        code="Osc0Info::getOscerClock()" />
+               <choice value="3"  name="MCGIRCLK clock"                ref="/MCG/system_mcgirclk_clock[%(n)]"  enum="McgIrClk"        code="McgInfo::getMcgIrClock()"  />
             </choiceOption>
 
             <intOption key="system_flexio_clock[%(n)]" condition="sim_sopt2_flexiosrc_present"

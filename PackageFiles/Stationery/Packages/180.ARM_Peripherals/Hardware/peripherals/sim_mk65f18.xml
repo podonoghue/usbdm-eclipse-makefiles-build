@@ -9,8 +9,9 @@
    <constant key="MCGFLLCLK_max"  value="100MHz,     0MHz,  100MHz"   type="int"    hidden="false"/>
    <constant key="MCGPLLCLK_max"  value="120MHz,     0MHz,  180MHz"   type="int"    hidden="false"/>
    <constant key="USB1PFDCLK_max" value="180MHz,     0MHz,  180MHz"   type="int"    hidden="false"/>
-   <constant key="I2S_max"       value=" 25MHz,   12.5MHz,   25MHz"   type="int"    hidden="false"/>
-   <constant key="LPUART_max"    value="100MHz,     16MHz,  100MHz"   type="int"    hidden="false"/>
+   <constant key="I2S_max"        value=" 25MHz,  12.5MHz,   25MHz"   type="int"    hidden="false"/>
+   <constant key="LPUART_max"     value="100MHz,    16MHz,  100MHz"   type="int"    hidden="false"/>
+   <constant key="TPM_max"        value=" 75MHz,    16MHz,   75MHz"   type="int"    hidden="false"/>
 
    <xi:include href="_default_instance.xml"/>
 
@@ -523,13 +524,13 @@
             </choiceOption>
 
             <intOption key="system_lpuart_clock[%(n)]" condition="sim_sopt2_lpuartsrc_present"
+               max="LPUART_max[/SMC/smc_pmctrl_runm[%(n)]]"
                derived="true"
                constant="true"
                units="Hz"
                description="LPUART Clock frequency"
                toolTip="Frequency of clock to LPUART"
-               value="0"
-               max="LPUART_max[/SMC/smc_pmctrl_runm[%(n)]]"/>
+               value="0"/>
 
             <choiceOption key="sim_sopt2_flexiosrc[%(n)]" condition="sim_sopt2_flexiosrc_present"
                enumStem="SimFlexioClockSource"
@@ -563,12 +564,12 @@
             </choiceOption>
 
             <intOption key="system_tpm_clock[%(n)]" condition="sim_sopt2_tpmsrc_present"
+               max="TPM_max[/SMC/smc_pmctrl_runm[%(n)]]"
                derived="true"
                constant="true"
                units="Hz"
                description="TPM Clock frequency"
-               toolTip="Frequency of clock to TPM"
-               value="0" max="75MHz" />
+               toolTip="Frequency of clock to TPM" />
 
             <aliasOption key="system_time_clockin" constant="false" optional="true" />
 
