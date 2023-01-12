@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MK02F12810
       MK10D5
       MK10D7
@@ -65,6 +65,9 @@ Devices using this peripheral:
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>4</value> <name>FIFO_SIZE</name> <description>Size of Tx/Rx FIFOs</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
             <size>0x4</size>
@@ -1107,14 +1110,44 @@ Enables TCF flag in the SR to generate an interrupt request</description> <bitOf
                      <bitWidth>6</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0b000000</name>
                            <description>Negate PCSx</description>
-                           <value>0b0</value>
+                           <value>0b000000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Assert PCSx</description>
-                           <value>0b1</value>
+                           <name>0b000001</name>
+                           <description>Assert PCS0</description>
+                           <value>0b000001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b000010</name>
+                           <description>Assert PCS1</description>
+                           <value>0b000010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b000100</name>
+                           <description>Assert PCS2</description>
+                           <value>0b000100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001000</name>
+                           <description>Assert PCS3</description>
+                           <value>0b001000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010000</name>
+                           <description>Assert PCS4</description>
+                           <value>0b010000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100000</name>
+                           <description>Assert PCS5</description>
+                           <value>0b100000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0bxxxxxx</name>
+                           <description>Assert multiple PCSx</description>
+                           <value>0b100000</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -1234,6 +1267,177 @@ Determines if PCS remains asserted between transfers</description>
                </fields>
             </register>
             <register>
+               <name>PUSHR_DATA</name>
+               <description>PUSH TX FIFO Data Only Register In Master Mode, (Some devices only)</description>
+               <addressOffset>0x34</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>TXDATA</name>
+                     <description>Transmit Data</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PUSHR_COMMAND</name>
+               <description>PUSH TX FIFO Command Register In Master Mode, (Some devices only)</description>
+               <addressOffset>0x36</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PCS</name>
+                     <description>Select which PCS signals are to be asserted for the transfer</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000000</name>
+                           <description>Negate PCSx</description>
+                           <value>0b000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b000001</name>
+                           <description>Assert PCS0</description>
+                           <value>0b000001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b000010</name>
+                           <description>Assert PCS1</description>
+                           <value>0b000010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b000100</name>
+                           <description>Assert PCS2</description>
+                           <value>0b000100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001000</name>
+                           <description>Assert PCS3</description>
+                           <value>0b001000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010000</name>
+                           <description>Assert PCS4</description>
+                           <value>0b010000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100000</name>
+                           <description>Assert PCS5</description>
+                           <value>0b100000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0bxxxxxx</name>
+                           <description>Assert multiple PCSx</description>
+                           <value>0b100000</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CTCNT</name>
+                     <description>Clear Transfer Counter</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Write 1 to clear TCNT</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EOQ</name>
+                     <description>End Of Queue\n
+Indicates if this data is the last in this transmission</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not last</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Is last</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CTAS</name>
+                     <description>Clock and Transfer Attributes Select</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>CTAR0</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>CTAR1</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Reserved</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Reserved</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Reserved</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Reserved</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Reserved</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Reserved</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CONT</name>
+                     <description>Continuous Peripheral Chip Select Enable\n
+Determines if PCS remains asserted between transfers</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>PCSx returns to inactive\tbetween transfers</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>PCSx stays asserted\tbetween transfers</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
                <name>POPR</name>
                <description>POP RX FIFO Register</description>
                <addressOffset>0x38</addressOffset>
@@ -1247,9 +1451,8 @@ Determines if PCS remains asserted between transfers</description>
                </fields>
             </register>
             <register>
-               <dim>4</dim>
+               <dim>$(FIFO_SIZE)</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
                <name>TXFR%s</name>
                <description>Transmit FIFO</description>
                <addressOffset>0x3C</addressOffset>
@@ -1271,9 +1474,8 @@ Determines if PCS remains asserted between transfers</description>
                </fields>
             </register>
             <register>
-               <dim>4</dim>
+               <dim>$(FIFO_SIZE)</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
                <name>RXFR%s</name>
                <description>Receive FIFO</description>
                <addressOffset>0x7C</addressOffset>

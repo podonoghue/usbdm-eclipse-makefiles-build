@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MK22F51212
       MK24F12
       MK24F25612
@@ -17,6 +17,9 @@ Devices using this peripheral:
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>1</value> <name>FIFO_SIZE</name> <description>Size of Tx/Rx FIFOs</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
             <size>0x4</size>
@@ -191,6 +194,24 @@ Controls whether the Rx FIFO discards new data when overflowing</description>
                      </enumeratedValues>
                   </field>
                   <field>
+                     <name>PCSSE</name>
+                     <description>Peripheral Chip Select Strobe Enable</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>PCS5/PCSS is used as Chip Select signal</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>PCS5/PCSS is used as active-low PCS Strobe signal</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
                      <name>MTFE</name>
                      <description>Modified Timing Format Enable</description>
                      <bitOffset>26</bitOffset>
@@ -321,25 +342,181 @@ Control whether the module is disabled in Debug mode</description>
                      <description>Baud Rate Scaler</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Divide by 2</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Divide by 4</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Divide by 6</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>Divide by 8</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>Divide by 16</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>Divide by 32</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Divide by 64</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Divide by 128</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Divide by 256</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>Divide by 512</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>Divide by 1024</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1011</name>
+                           <description>Divide by 2048</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>Divide by 4096</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>Divide by 8192</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>Divide by 16384</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Divide by 32768</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>DT</name>
-                     <description>Delay After Transfer Scaler</description>
+                     <description>Delay after Transfer Scaler\n
+Selects the scaler for the delay between the negation of the PCS signal at the end of a frame\n
+and the assertion of PCS at the beginning of the next frame</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Divide by 2</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Divide by 4</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Divide by 8</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>Divide by 16</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>Divide by 32</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>Divide by 64</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Divide by 128</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Divide by 256</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Divide by 512</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>Divide by 1024</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>Divide by 2048</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1011</name>
+                           <description>Divide by 4096</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>Divide by 8192</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>Divide by 16384</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>Divide by 32768</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Divide by 32768</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
-                  <field>
-                     <name>ASC</name>
-                     <description>After SCK Delay Scaler</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>4</bitWidth>
-                  </field>
-                  <field>
-                     <name>CSSCK</name>
-                     <description>PCS to SCK Delay Scaler</description>
-                     <bitOffset>12</bitOffset>
-                     <bitWidth>4</bitWidth>
-                  </field>
+                  <field derivedFrom="DT" > <name>ASC</name> <description>After SCK Delay Scaler</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="DT" > <name>CSSCK</name> <description>PCS to SCK Delay Scaler</description> <bitOffset>12</bitOffset> </field>
                   <field>
                      <name>PBR</name>
                      <description>Baud Rate Prescaler</description>
@@ -903,14 +1080,44 @@ Enables TCF flag in the SR to generate an interrupt request</description> <bitOf
                      <bitWidth>6</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0b000000</name>
                            <description>Negate PCSx</description>
-                           <value>0b0</value>
+                           <value>0b000000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Assert PCSx</description>
-                           <value>0b1</value>
+                           <name>0b000001</name>
+                           <description>Assert PCS0</description>
+                           <value>0b000001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b000010</name>
+                           <description>Assert PCS1</description>
+                           <value>0b000010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b000100</name>
+                           <description>Assert PCS2</description>
+                           <value>0b000100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001000</name>
+                           <description>Assert PCS3</description>
+                           <value>0b001000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010000</name>
+                           <description>Assert PCS4</description>
+                           <value>0b010000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100000</name>
+                           <description>Assert PCS5</description>
+                           <value>0b100000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0bxxxxxx</name>
+                           <description>Assert multiple PCSx</description>
+                           <value>0b100000</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -1017,6 +1224,7 @@ Determines if PCS remains asserted between transfers</description>
             </register>
             <register>
                <name>PUSHR_SLAVE</name>
+               <?hide?>
                <description>PUSH TX FIFO Register In Slave Mode</description>
                <addressOffset>0x34</addressOffset>
                <fields>
@@ -1025,6 +1233,177 @@ Determines if PCS remains asserted between transfers</description>
                      <description>Transmit Data</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PUSHR_DATA</name>
+               <description>PUSH TX FIFO Data Only Register In Master Mode, (Some devices only)</description>
+               <addressOffset>0x34</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>TXDATA</name>
+                     <description>Transmit Data</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PUSHR_COMMAND</name>
+               <description>PUSH TX FIFO Command Register In Master Mode, (Some devices only)</description>
+               <addressOffset>0x36</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>PCS</name>
+                     <description>Select which PCS signals are to be asserted for the transfer</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000000</name>
+                           <description>Negate PCSx</description>
+                           <value>0b000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b000001</name>
+                           <description>Assert PCS0</description>
+                           <value>0b000001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b000010</name>
+                           <description>Assert PCS1</description>
+                           <value>0b000010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b000100</name>
+                           <description>Assert PCS2</description>
+                           <value>0b000100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001000</name>
+                           <description>Assert PCS3</description>
+                           <value>0b001000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010000</name>
+                           <description>Assert PCS4</description>
+                           <value>0b010000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100000</name>
+                           <description>Assert PCS5</description>
+                           <value>0b100000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0bxxxxxx</name>
+                           <description>Assert multiple PCSx</description>
+                           <value>0b100000</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CTCNT</name>
+                     <description>Clear Transfer Counter</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Write 1 to clear TCNT</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EOQ</name>
+                     <description>End Of Queue\n
+Indicates if this data is the last in this transmission</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not last</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Is last</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CTAS</name>
+                     <description>Clock and Transfer Attributes Select</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>CTAR0</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>CTAR1</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Reserved</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Reserved</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Reserved</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Reserved</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Reserved</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Reserved</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CONT</name>
+                     <description>Continuous Peripheral Chip Select Enable\n
+Determines if PCS remains asserted between transfers</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>PCSx returns to inactive\tbetween transfers</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>PCSx stays asserted\tbetween transfers</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -1042,13 +1421,13 @@ Determines if PCS remains asserted between transfers</description>
                </fields>
             </register>
             <register>
-               <dim>1</dim>
+               <dim>$(FIFO_SIZE)</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0</dimIndex>
                <name>TXFR%s</name>
                <description>Transmit FIFO</description>
                <addressOffset>0x3C</addressOffset>
                <access>read-only</access>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>TXDATA</name>
@@ -1065,13 +1444,13 @@ Determines if PCS remains asserted between transfers</description>
                </fields>
             </register>
             <register>
-               <dim>1</dim>
+               <dim>$(FIFO_SIZE)</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0</dimIndex>
                <name>RXFR%s</name>
                <description>Receive FIFO</description>
                <addressOffset>0x7C</addressOffset>
                <access>read-only</access>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>RXDATA</name>

@@ -3,8 +3,8 @@
 <!-- _mapPinsOption.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-         
-<!-- 
+
+<!--
       Predefined symbols generated for current peripheral
       $(_instance)   FTM0 => 0
       $(_base_class) FTM0 => Ftm
@@ -13,52 +13,49 @@
       $(_name)       FTM0 => FTM0
 
       Template Rules based on attributes  info|usbdm|class|all)  "info"
-      
+
       - namespace=info (default if blank)
         Placed in Info class in pin_mapping.h
 
       - namespace="usbdm"
-        Placed before Info class in pin_mapping.h 
+        Placed before Info class in pin_mapping.h
 
-      - namespace="class"
-        Really useless, just get converted to a Class variable e.g. /FTM/infoClass
-        
-      - namespace="all" name="key"
-        Substituted anywhere for $(key)
-        key is 
+      - namespace="all" key="keyValue"
+        Substituted anywhere for $(keyValue)
+        key is
 
       - dim="expr"
         Allow subscripted template
 
       Constants that affect this inclusion
-      
+
       - Code to disable interrupts (has default of 'disableNvicInterrupts();')
            <constant name = "disable_interrupts_code" derived = "true" value = "XXXXXX"  />
-      
+
       - Code to disable peripheral (has default of ' ')
            <constant name = "disable_peripheral"      derived = "true" value = "YYYYYY"  />
-           
+
       - Code to enable clock (has default of 'Info::enableClock();')
            <constant name = "enable_clock"            derived = "true" value = "YYYYYY"  />
-           
+
       - Code to disable clock (has default of 'Info::disableClock();')
            <constant name = "disable_clock"           derived = "true" value = "YYYYYY"  />
-           
+
    <constant name = "disable_interrupts_code" derived = "true" value = "XXXXXX"  />
    <constant name = "disable_peripheral"      derived = "true" value = "YYYYYY"  />
    <constant name = "enable_clock"            derived = "true" value = "YYYYYY"  />
    <constant name = "disable_clock"           derived = "true" value = "YYYYYY"  />
-           
+
  -->
- 
-   <stringOption 
-      key="Pin Mapping" 
-      value="------- Pin Mapping -------" 
-      description="Pin Mapping" 
-      constant="true" 
+
+   <stringOption
+      key="Pin Mapping"
+      value="------- Pin Mapping -------"
+      description="Pin Mapping"
+      constant="true"
       />
 
-   <binaryOption key="mapPinsOnEnable" 
+   <binaryOption key="mapPinsOnEnable"
       description="Map pins when peripheral is configured"
       toolTip="Map all allocated pins on a peripheral when the\n
                peripheral is enabled by configure() method etc">
@@ -73,8 +70,8 @@
    ]]></template>
 
    <!-- Template is added to peripheral classes -->
-   <template namespace="class"><![CDATA[
-      // Template _mapPinsOption_on.xml
+   <template discardRepeats="true" namespace="all" key="/$(_basename)/classInfo" ><![CDATA[
+      // Template _mapPinsOption_on.xml (/$(_basename)/classInfo)
 
       \t/**
       \t * Configures all mapped pins associated with $(_base_name)
@@ -124,5 +121,5 @@
       \t}
       // End Template _mapPinsOption_on.xml\n
    ]]></template>
-      
+
 </fragment>
