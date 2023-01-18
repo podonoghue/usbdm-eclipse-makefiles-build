@@ -5,15 +5,15 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
 
    <!--                                   RUN       VLPR    HSRUN       -->
-   <constant key="MCGOUTCLK_max"  value="120MHz,     4MHz,  150MHz"   type="int"    hidden="false"/>
-   <constant key="MCGFLLCLK_max"  value="100MHz,     0MHz,  100MHz"   type="int"    hidden="false"/>
-   <constant key="MCGPLLCLK_max"  value="150MHz,     0MHz,  150MHz"   type="int"    hidden="false"/>
-   <constant key="I2S_max"        value=" 60MHz,  12.5MHz,   75MHz"   type="int"    hidden="false"/>
-   <constant key="SDHC_max"       value="120MHz,     4MHz,  150MHz"   type="int"    hidden="false"/>
-   <constant key="LPUART_max"     value=" 75MHz,    16MHz,   75MHz"   type="int"    hidden="false"/>
-   <constant key="FLEXIO_max"     value=" 75MHz,    16MHz,  150MHz"   type="int"    hidden="false"/>
-   <constant key="TPM_max"        value=" 75MHz,    16MHz,   75MHz"   type="int"    hidden="false"/>
-   <constant key="QSPI_max"       value="100MHz,     4MHz,  100MHz"   type="int"    hidden="false"/>
+   <constant key="MCGOUTCLK_max"  value="120MHz,     4MHz,  150MHz"   type="Integer"    hidden="false"/>
+   <constant key="MCGFLLCLK_max"  value="100MHz,     0MHz,  100MHz"   type="Integer"    hidden="false"/>
+   <constant key="MCGPLLCLK_max"  value="150MHz,     0MHz,  150MHz"   type="Integer"    hidden="false"/>
+   <constant key="I2S_max"        value=" 60MHz,  12.5MHz,   75MHz"   type="Integer"    hidden="false"/>
+   <constant key="SDHC_max"       value="120MHz,     4MHz,  150MHz"   type="Integer"    hidden="false"/>
+   <constant key="LPUART_max"     value=" 75MHz,    16MHz,   75MHz"   type="Integer"    hidden="false"/>
+   <constant key="FLEXIO_max"     value=" 75MHz,    16MHz,  150MHz"   type="Integer"    hidden="false"/>
+   <constant key="TPM_max"        value=" 75MHz,    16MHz,   75MHz"   type="Integer"    hidden="false"/>
+   <constant key="QSPI_max"       value="100MHz,     4MHz,  100MHz"   type="Integer"    hidden="false"/>
 
    <xi:include href="_default_instance.xml"/>
 

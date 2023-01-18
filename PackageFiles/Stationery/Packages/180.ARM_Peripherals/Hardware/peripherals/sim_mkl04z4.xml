@@ -5,9 +5,9 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
 
    <!--                                   RUN        VLPR     -->
-   <constant key="MCGOUTCLK_max"  value="100MHz,     4MHz"   type="int"    hidden="false"/>
-   <constant key="UART_max"       value=" 48MHz,     4MHz"   type="int"    hidden="false"/>
-   <constant key="TPM_max"        value=" 48MHz,     4MHz"   type="int"    hidden="false"/>
+   <constant key="MCGOUTCLK_max"  value="100MHz,     4MHz"   type="Integer"    hidden="false"/>
+   <constant key="UART_max"       value=" 48MHz,     4MHz"   type="Integer"    hidden="false"/>
+   <constant key="TPM_max"        value=" 48MHz,     4MHz"   type="Integer"    hidden="false"/>
 
    <xi:include href="_default_instance.xml"/>
 

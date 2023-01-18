@@ -5,12 +5,12 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
 
    <!--                                   RUN       VLPR     -->
-   <constant key="MCGOUTCLK_max"  value="100MHz,     4MHz"   type="int"    hidden="false"/>
-   <constant key="MCGFLLCLK_max"  value="100MHz,     0MHz"   type="int"    hidden="false"/>
-   <constant key="MCGPLLCLK_max"  value="120MHz,     0MHz"   type="int"    hidden="false"/>
-   <constant key="I2S_max"        value="25MHz,   12.5MHz"   type="int"    hidden="false"/>
-   <constant key="LPUART_max"     value=" 48MHz,     4MHz"   type="int"    hidden="false"/>
-   <constant key="TPM_max"        value=" 48MHz,     4MHz"   type="int"    hidden="false"/>
+   <constant key="MCGOUTCLK_max"  value="100MHz,     4MHz"   type="Integer"    hidden="false"/>
+   <constant key="MCGFLLCLK_max"  value="100MHz,     0MHz"   type="Integer"    hidden="false"/>
+   <constant key="MCGPLLCLK_max"  value="120MHz,     0MHz"   type="Integer"    hidden="false"/>
+   <constant key="I2S_max"        value="25MHz,   12.5MHz"   type="Integer"    hidden="false"/>
+   <constant key="LPUART_max"     value=" 48MHz,     4MHz"   type="Integer"    hidden="false"/>
+   <constant key="TPM_max"        value=" 48MHz,     4MHz"   type="Integer"    hidden="false"/>
 
    <xi:include href="_default_instance.xml"/>
 
