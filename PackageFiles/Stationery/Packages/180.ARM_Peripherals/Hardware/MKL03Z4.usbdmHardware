@@ -393,6 +393,29 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_SPI0_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_SPI0_MASK;" />
          <irq num="SPI0_IRQn" />
+         <param name="$present"     key="/SPI0/$present" value="true" />
+         <param name="spi_br_sppr_present" key="/SPI0/spi_br_sppr_present" value="true" />
+         <param name="spi_br_spr_present" key="/SPI0/spi_br_spr_present" value="true" />
+         <param name="spi_c1_cpha_present" key="/SPI0/spi_c1_cpha_present" value="true" />
+         <param name="spi_c1_cpol_present" key="/SPI0/spi_c1_cpol_present" value="true" />
+         <param name="spi_c1_lsbfe_present" key="/SPI0/spi_c1_lsbfe_present" value="true" />
+         <param name="spi_c1_mode_present" key="/SPI0/spi_c1_mode_present" value="true" />
+         <param name="spi_c1_mstr_present" key="/SPI0/spi_c1_mstr_present" value="true" />
+         <param name="spi_c1_spe_present" key="/SPI0/spi_c1_spe_present" value="true" />
+         <param name="spi_c1_spie_present" key="/SPI0/spi_c1_spie_present" value="true" />
+         <param name="spi_c1_sptie_present" key="/SPI0/spi_c1_sptie_present" value="true" />
+         <param name="spi_c1_ssoe_present" key="/SPI0/spi_c1_ssoe_present" value="true" />
+         <param name="spi_c2_bidiroe_present" key="/SPI0/spi_c2_bidiroe_present" value="true" />
+         <param name="spi_c2_modfen_present" key="/SPI0/spi_c2_modfen_present" value="true" />
+         <param name="spi_c2_spc0_present" key="/SPI0/spi_c2_spc0_present" value="true" />
+         <param name="spi_c2_spiswai_present" key="/SPI0/spi_c2_spiswai_present" value="true" />
+         <param name="spi_c2_spmie_present" key="/SPI0/spi_c2_spmie_present" value="true" />
+         <param name="spi_d_bits_present" key="/SPI0/spi_d_bits_present" value="true" />
+         <param name="spi_m_bits_present" key="/SPI0/spi_m_bits_present" value="true" />
+         <param name="spi_s_modf_present" key="/SPI0/spi_s_modf_present" value="true" />
+         <param name="spi_s_spmf_present" key="/SPI0/spi_s_spmf_present" value="true" />
+         <param name="spi_s_sprf_present" key="/SPI0/spi_s_sprf_present" value="true" />
+         <param name="spi_s_sptef_present" key="/SPI0/spi_s_sptef_present" value="true" />
       </peripheral>
       <peripheral baseName="TPM"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />

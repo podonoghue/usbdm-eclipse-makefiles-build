@@ -113,6 +113,36 @@
          <irq num="DMA1_IRQn" />
          <irq num="DMA2_IRQn" />
          <irq num="DMA3_IRQn" />
+         <param name="$present"     key="/DMA0/$present" value="true" />
+         <param name="dma_dcr_aa_present" key="/DMA0/dma_dcr_aa_present" value="true" />
+         <param name="dma_dcr_cs_present" key="/DMA0/dma_dcr_cs_present" value="true" />
+         <param name="dma_dcr_d_req_present" key="/DMA0/dma_dcr_d_req_present" value="true" />
+         <param name="dma_dcr_dinc_present" key="/DMA0/dma_dcr_dinc_present" value="true" />
+         <param name="dma_dcr_dmod_present" key="/DMA0/dma_dcr_dmod_present" value="true" />
+         <param name="dma_dcr_dsize_present" key="/DMA0/dma_dcr_dsize_present" value="true" />
+         <param name="dma_dcr_eadreq_present" key="/DMA0/dma_dcr_eadreq_present" value="true" />
+         <param name="dma_dcr_eint_present" key="/DMA0/dma_dcr_eint_present" value="true" />
+         <param name="dma_dcr_erq_present" key="/DMA0/dma_dcr_erq_present" value="true" />
+         <param name="dma_dcr_lch1_present" key="/DMA0/dma_dcr_lch1_present" value="true" />
+         <param name="dma_dcr_lch2_present" key="/DMA0/dma_dcr_lch2_present" value="true" />
+         <param name="dma_dcr_linkcc_present" key="/DMA0/dma_dcr_linkcc_present" value="true" />
+         <param name="dma_dcr_sinc_present" key="/DMA0/dma_dcr_sinc_present" value="true" />
+         <param name="dma_dcr_smod_present" key="/DMA0/dma_dcr_smod_present" value="true" />
+         <param name="dma_dcr_ssize_present" key="/DMA0/dma_dcr_ssize_present" value="true" />
+         <param name="dma_dcr_start_present" key="/DMA0/dma_dcr_start_present" value="true" />
+         <param name="dma_dsr_bcr_bcr_present" key="/DMA0/dma_dsr_bcr_bcr_present" value="true" />
+         <param name="dma_dsr_bcr_bed_present" key="/DMA0/dma_dsr_bcr_bed_present" value="true" />
+         <param name="dma_dsr_bcr_bes_present" key="/DMA0/dma_dsr_bcr_bes_present" value="true" />
+         <param name="dma_dsr_bcr_bsy_present" key="/DMA0/dma_dsr_bcr_bsy_present" value="true" />
+         <param name="dma_dsr_bcr_ce_present" key="/DMA0/dma_dsr_bcr_ce_present" value="true" />
+         <param name="dma_dsr_bcr_done_present" key="/DMA0/dma_dsr_bcr_done_present" value="true" />
+         <param name="dma_dsr_bcr_req_present" key="/DMA0/dma_dsr_bcr_req_present" value="true" />
+         <param name="dma_dsr_bed_present" key="/DMA0/dma_dsr_bed_present" value="true" />
+         <param name="dma_dsr_bes_present" key="/DMA0/dma_dsr_bes_present" value="true" />
+         <param name="dma_dsr_bsy_present" key="/DMA0/dma_dsr_bsy_present" value="true" />
+         <param name="dma_dsr_ce_present" key="/DMA0/dma_dsr_ce_present" value="true" />
+         <param name="dma_dsr_done_present" key="/DMA0/dma_dsr_done_present" value="true" />
+         <param name="dma_dsr_req_present" key="/DMA0/dma_dsr_req_present" value="true" />
       </peripheral>
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_4ch_trig_mkl27z644">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
@@ -630,11 +660,103 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_SPI0_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_SPI0_MASK;" />
          <irq num="SPI0_IRQn" />
+         <param name="$present"     key="/SPI0/$present" value="true" />
+         <param name="spi_br_sppr_present" key="/SPI0/spi_br_sppr_present" value="true" />
+         <param name="spi_br_spr_present" key="/SPI0/spi_br_spr_present" value="true" />
+         <param name="spi_c1_cpha_present" key="/SPI0/spi_c1_cpha_present" value="true" />
+         <param name="spi_c1_cpol_present" key="/SPI0/spi_c1_cpol_present" value="true" />
+         <param name="spi_c1_lsbfe_present" key="/SPI0/spi_c1_lsbfe_present" value="true" />
+         <param name="spi_c1_mode_present" key="/SPI0/spi_c1_mode_present" value="true" />
+         <param name="spi_c1_mstr_present" key="/SPI0/spi_c1_mstr_present" value="true" />
+         <param name="spi_c1_spe_present" key="/SPI0/spi_c1_spe_present" value="true" />
+         <param name="spi_c1_spie_present" key="/SPI0/spi_c1_spie_present" value="true" />
+         <param name="spi_c1_sptie_present" key="/SPI0/spi_c1_sptie_present" value="true" />
+         <param name="spi_c1_ssoe_present" key="/SPI0/spi_c1_ssoe_present" value="true" />
+         <param name="spi_c2_bidiroe_present" key="/SPI0/spi_c2_bidiroe_present" value="true" />
+         <param name="spi_c2_modfen_present" key="/SPI0/spi_c2_modfen_present" value="true" />
+         <param name="spi_c2_rxdmae_present" key="/SPI0/spi_c2_rxdmae_present" value="true" />
+         <param name="spi_c2_spc0_present" key="/SPI0/spi_c2_spc0_present" value="true" />
+         <param name="spi_c2_spimode_present" key="/SPI0/spi_c2_spimode_present" value="true" />
+         <param name="spi_c2_spiswai_present" key="/SPI0/spi_c2_spiswai_present" value="true" />
+         <param name="spi_c2_spmie_present" key="/SPI0/spi_c2_spmie_present" value="true" />
+         <param name="spi_c2_txdmae_present" key="/SPI0/spi_c2_txdmae_present" value="true" />
+         <param name="spi_c3_fifomode_present" key="/SPI0/spi_c3_fifomode_present" value="true" />
+         <param name="spi_c3_intclr_present" key="/SPI0/spi_c3_intclr_present" value="true" />
+         <param name="spi_c3_rnfullf_mark_present" key="/SPI0/spi_c3_rnfullf_mark_present" value="true" />
+         <param name="spi_c3_rnfullien_present" key="/SPI0/spi_c3_rnfullien_present" value="true" />
+         <param name="spi_c3_tnearef_mark_present" key="/SPI0/spi_c3_tnearef_mark_present" value="true" />
+         <param name="spi_c3_tnearien_present" key="/SPI0/spi_c3_tnearien_present" value="true" />
+         <param name="spi_ci_rnfullfci_present" key="/SPI0/spi_ci_rnfullfci_present" value="true" />
+         <param name="spi_ci_rxferr_present" key="/SPI0/spi_ci_rxferr_present" value="true" />
+         <param name="spi_ci_rxfof_present" key="/SPI0/spi_ci_rxfof_present" value="true" />
+         <param name="spi_ci_sprfci_present" key="/SPI0/spi_ci_sprfci_present" value="true" />
+         <param name="spi_ci_sptefci_present" key="/SPI0/spi_ci_sptefci_present" value="true" />
+         <param name="spi_ci_tnearefci_present" key="/SPI0/spi_ci_tnearefci_present" value="true" />
+         <param name="spi_ci_txferr_present" key="/SPI0/spi_ci_txferr_present" value="true" />
+         <param name="spi_ci_txfof_present" key="/SPI0/spi_ci_txfof_present" value="true" />
+         <param name="spi_dh_bits_present" key="/SPI0/spi_dh_bits_present" value="true" />
+         <param name="spi_dl_bits_present" key="/SPI0/spi_dl_bits_present" value="true" />
+         <param name="spi_mh_bits_present" key="/SPI0/spi_mh_bits_present" value="true" />
+         <param name="spi_ml_bits_present" key="/SPI0/spi_ml_bits_present" value="true" />
+         <param name="spi_s_modf_present" key="/SPI0/spi_s_modf_present" value="true" />
+         <param name="spi_s_rfifoef_present" key="/SPI0/spi_s_rfifoef_present" value="true" />
+         <param name="spi_s_rnfullf_present" key="/SPI0/spi_s_rnfullf_present" value="true" />
+         <param name="spi_s_spmf_present" key="/SPI0/spi_s_spmf_present" value="true" />
+         <param name="spi_s_sprf_present" key="/SPI0/spi_s_sprf_present" value="true" />
+         <param name="spi_s_sptef_present" key="/SPI0/spi_s_sptef_present" value="true" />
+         <param name="spi_s_tnearef_present" key="/SPI0/spi_s_tnearef_present" value="true" />
+         <param name="spi_s_txfullf_present" key="/SPI0/spi_s_txfullf_present" value="true" />
       </peripheral>
       <peripheral baseName="SPI"      instance="1"        version="spi0_16bit_mkl">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_SPI1_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_SPI1_MASK;" />
          <irq num="SPI1_IRQn" />
+         <param name="$present"     key="/SPI1/$present" value="true" />
+         <param name="spi_br_sppr_present" key="/SPI1/spi_br_sppr_present" value="true" />
+         <param name="spi_br_spr_present" key="/SPI1/spi_br_spr_present" value="true" />
+         <param name="spi_c1_cpha_present" key="/SPI1/spi_c1_cpha_present" value="true" />
+         <param name="spi_c1_cpol_present" key="/SPI1/spi_c1_cpol_present" value="true" />
+         <param name="spi_c1_lsbfe_present" key="/SPI1/spi_c1_lsbfe_present" value="true" />
+         <param name="spi_c1_mode_present" key="/SPI1/spi_c1_mode_present" value="true" />
+         <param name="spi_c1_mstr_present" key="/SPI1/spi_c1_mstr_present" value="true" />
+         <param name="spi_c1_spe_present" key="/SPI1/spi_c1_spe_present" value="true" />
+         <param name="spi_c1_spie_present" key="/SPI1/spi_c1_spie_present" value="true" />
+         <param name="spi_c1_sptie_present" key="/SPI1/spi_c1_sptie_present" value="true" />
+         <param name="spi_c1_ssoe_present" key="/SPI1/spi_c1_ssoe_present" value="true" />
+         <param name="spi_c2_bidiroe_present" key="/SPI1/spi_c2_bidiroe_present" value="true" />
+         <param name="spi_c2_modfen_present" key="/SPI1/spi_c2_modfen_present" value="true" />
+         <param name="spi_c2_rxdmae_present" key="/SPI1/spi_c2_rxdmae_present" value="true" />
+         <param name="spi_c2_spc0_present" key="/SPI1/spi_c2_spc0_present" value="true" />
+         <param name="spi_c2_spimode_present" key="/SPI1/spi_c2_spimode_present" value="true" />
+         <param name="spi_c2_spiswai_present" key="/SPI1/spi_c2_spiswai_present" value="true" />
+         <param name="spi_c2_spmie_present" key="/SPI1/spi_c2_spmie_present" value="true" />
+         <param name="spi_c2_txdmae_present" key="/SPI1/spi_c2_txdmae_present" value="true" />
+         <param name="spi_c3_fifomode_present" key="/SPI1/spi_c3_fifomode_present" value="true" />
+         <param name="spi_c3_intclr_present" key="/SPI1/spi_c3_intclr_present" value="true" />
+         <param name="spi_c3_rnfullf_mark_present" key="/SPI1/spi_c3_rnfullf_mark_present" value="true" />
+         <param name="spi_c3_rnfullien_present" key="/SPI1/spi_c3_rnfullien_present" value="true" />
+         <param name="spi_c3_tnearef_mark_present" key="/SPI1/spi_c3_tnearef_mark_present" value="true" />
+         <param name="spi_c3_tnearien_present" key="/SPI1/spi_c3_tnearien_present" value="true" />
+         <param name="spi_ci_rnfullfci_present" key="/SPI1/spi_ci_rnfullfci_present" value="true" />
+         <param name="spi_ci_rxferr_present" key="/SPI1/spi_ci_rxferr_present" value="true" />
+         <param name="spi_ci_rxfof_present" key="/SPI1/spi_ci_rxfof_present" value="true" />
+         <param name="spi_ci_sprfci_present" key="/SPI1/spi_ci_sprfci_present" value="true" />
+         <param name="spi_ci_sptefci_present" key="/SPI1/spi_ci_sptefci_present" value="true" />
+         <param name="spi_ci_tnearefci_present" key="/SPI1/spi_ci_tnearefci_present" value="true" />
+         <param name="spi_ci_txferr_present" key="/SPI1/spi_ci_txferr_present" value="true" />
+         <param name="spi_ci_txfof_present" key="/SPI1/spi_ci_txfof_present" value="true" />
+         <param name="spi_dh_bits_present" key="/SPI1/spi_dh_bits_present" value="true" />
+         <param name="spi_dl_bits_present" key="/SPI1/spi_dl_bits_present" value="true" />
+         <param name="spi_mh_bits_present" key="/SPI1/spi_mh_bits_present" value="true" />
+         <param name="spi_ml_bits_present" key="/SPI1/spi_ml_bits_present" value="true" />
+         <param name="spi_s_modf_present" key="/SPI1/spi_s_modf_present" value="true" />
+         <param name="spi_s_rfifoef_present" key="/SPI1/spi_s_rfifoef_present" value="true" />
+         <param name="spi_s_rnfullf_present" key="/SPI1/spi_s_rnfullf_present" value="true" />
+         <param name="spi_s_spmf_present" key="/SPI1/spi_s_spmf_present" value="true" />
+         <param name="spi_s_sprf_present" key="/SPI1/spi_s_sprf_present" value="true" />
+         <param name="spi_s_sptef_present" key="/SPI1/spi_s_sptef_present" value="true" />
+         <param name="spi_s_tnearef_present" key="/SPI1/spi_s_tnearef_present" value="true" />
+         <param name="spi_s_txfullf_present" key="/SPI1/spi_s_txfullf_present" value="true" />
       </peripheral>
       <peripheral baseName="TPM"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />

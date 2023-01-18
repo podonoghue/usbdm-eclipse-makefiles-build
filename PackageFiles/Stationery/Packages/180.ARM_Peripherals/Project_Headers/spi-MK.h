@@ -19,6 +19,8 @@
  */
 #include "pin_mapping.h"
 
+#include "dma.h"
+
 #ifdef __CMSIS_RTOS
 #include "cmsis.h"
 #endif
@@ -30,122 +32,6 @@ namespace USBDM {
  * @brief C++ Class allowing access to SPI interface
  * @{
  */
-
-/**
- * Type definition for interrupt call back
- * @param status Interrupt status value from SPI->SR
- */
-typedef void (*SpiCallbackFunction)(uint32_t status);
-
-/**
- * SPI mode
- *
- * Controls clock polarity and the timing relationship between clock and data
- */
-enum SpiMode {
-   /// Active-high clock (idles low), Data is captured on leading edge of SCK and changes on the following edge.
-   SpiMode_0 = SPI_CTAR_CPOL(0)|SPI_CTAR_CPHA(0),
-
-   /// Active-high clock (idles low), Data is changes on leading edge of SCK and captured on the following edge.
-   SpiMode_1 = SPI_CTAR_CPOL(0)|SPI_CTAR_CPHA(1),
-
-   /// Active-low clock (idles high), Data is captured on leading edge of SCK and changes on the following edge.
-   SpiMode_2 = SPI_CTAR_CPOL(1)|SPI_CTAR_CPHA(0),
-
-   /// Active-low clock (idles high), Data is changes on leading edge of SCK and captured on the following edge.
-   SpiMode_3 = SPI_CTAR_CPOL(1)|SPI_CTAR_CPHA(1),
-};
-
-/**
- *  Clock polarity
- *
- *  Selects the inactive state of the Serial Communications Clock (SCK).
- */
-enum SpiPolarity {
-   SpiPolarity_InactiveLow   = SPI_CTAR_CPOL(0),/**< The inactive state value of SCK is low.  */
-   SpiPolarity_InactiveHigh  = SPI_CTAR_CPOL(1),/**< The inactive state value of SCK is high. */
-};
-
-/**
- *  Clock Phase
- *
- *  Selects which edge of SCK causes data to change and which edge causes data to be captured
- */
-enum SpiPhase {
-   SpiPhase_LeadingCapture = SPI_CTAR_CPHA(0),/**< Data is captured on the leading edge of SCK and changed on the following edge. */
-   SpiPhase_LeadingChange  = SPI_CTAR_CPHA(1),/**< Data is changed on the leading edge of SCK and captured on the following edge */
-};
-
-/**
- * Bit transmission order (LSB/MSB first)
- */
-enum SpiOrder {
-   SpiOrder_MsbFirst = SPI_CTAR_LSBFE(0), /**< Transmit data LSB first */
-   SpiOrder_LsbFirst = SPI_CTAR_LSBFE(1), /**< Transmit data MSB first */
-};
-
-/**
- * Transmit FIFO Fill Request interrupt/DMA enable (TFFF flag)
- */
-enum SpiFifoTxRequest {
-   SpiFifoTxRequest_Disabled  = SPI_RSER_TFFF_DIRS(0)|SPI_RSER_TFFF_RE(0),  // Requests disabled
-   SpiFifoTxRequest_Interrupt = SPI_RSER_TFFF_DIRS(0)|SPI_RSER_TFFF_RE(1),  // Generate FIFO Fill Interrupt requests (TFFF flag)
-   SpiFifoTxRequest_Dma       = SPI_RSER_TFFF_DIRS(1)|SPI_RSER_TFFF_RE(1),  // Generate FIFO Fill DMA requests (TFFF flag)
-};
-
-/**
- * Receive FIFO Drain Request interrupt/DMA enable (RFDF flag)
- */
-enum SpiFifoRxRequest {
-   SpiFifoRxRequest_Disabled  = SPI_RSER_RFDF_DIRS(0)|SPI_RSER_RFDF_RE(0),  // Requests disabled
-   SpiFifoRxRequest_Interrupt = SPI_RSER_RFDF_DIRS(0)|SPI_RSER_RFDF_RE(1),  // Generate FIFO Drain Interrupt requests (RSER flag)
-   SpiFifoRxRequest_Dma       = SPI_RSER_RFDF_DIRS(1)|SPI_RSER_RFDF_RE(1),  // Generate FIFO Drain DMA requests (RSER flag)
-};
-
-/**
- * Controls Transmit FIFO Underflow interrupts (TFUF flag)
- */
-enum SpiFifoUnderflowInterrupt {
-   SpiFifoUnderflowInterrupt_Disabled  = SPI_RSER_TFUF_RE(0),   // Transmit FIFO Underflow interrupts disabled
-   SpiFifoUnderflowInterrupt_Enabled   = SPI_RSER_TFUF_RE(1),   // Transmit FIFO Underflow interrupts enabled (TFUF flag)
-};
-
-/**
- * Controls Receive FIFO Overflow interrupts (RFOF flag)
- */
-enum SpiFifoOverflowInterrupt {
-   SpiFifoOverflowInterrupt_Disabled  = SPI_RSER_RFOF_RE(0),   // Receive FIFO Overflow interrupts disabled
-   SpiFifoOverflowInterrupt_Enabled   = SPI_RSER_RFOF_RE(1),   // Receive FIFO Overflow interrupts enabled (RFOF flag)
-};
-
-/**
- * Controls Transmit complete interrupts (TCF Flag)
- */
-enum SpiTxCompleteInterrupt {
-   SpiTxCompleteInterrupt_Disabled = SPI_RSER_TCF_RE(0),    // Transmission Complete Request Enable (TCF Flag)
-   SpiTxCompleteInterrupt_Enabled  = SPI_RSER_TCF_RE(1),    // Transmission Complete Request Enable (TCF Flag)
-};
-/**
- * Controls DSPI Finished interrupts (EOQF flag)
- */
-enum SpiEndOfQueueInterrupt {
-   SpiEndOfQueueInterrupt_Disabled   = SPI_RSER_EOQF_RE(0),   // DSPI Finished Request Disabled
-   SpiEndOfQueueInterrupt_Enabled    = SPI_RSER_EOQF_RE(1),   // DSPI Finished Request Enable (EOQF flag)
-};
-/**
- * Mask to select which Peripheral Chip Select Line (PCS) to assert during transaction
- */
-enum SpiPeripheralSelect {
-   SpiPeripheralSelect_None = SPI_PUSHR_PCS(0),   //!< Select peripheral using programmatic GPIO
-   SpiPeripheralSelect_0    = SPI_PUSHR_PCS(1<<0),//!< Select peripheral using SPI_PCS0 signal
-   SpiPeripheralSelect_1    = SPI_PUSHR_PCS(1<<1),//!< Select peripheral using SPI_PCS1 signal
-   SpiPeripheralSelect_2    = SPI_PUSHR_PCS(1<<2),//!< Select peripheral using SPI_PCS2 signal
-   SpiPeripheralSelect_3    = SPI_PUSHR_PCS(1<<3),//!< Select peripheral using SPI_PCS3 signal
-   SpiPeripheralSelect_4    = SPI_PUSHR_PCS(1<<4),//!< Select peripheral using SPI_PCS4 signal
-   SpiPeripheralSelect_5    = SPI_PUSHR_PCS(1<<5),//!< Select peripheral using SPI_PCS4 signal
-   SpiPeripheralSelect_6    = SPI_PUSHR_PCS(1<<6),//!< Select peripheral using SPI_PCS4 signal
-   SpiPeripheralSelect_7    = SPI_PUSHR_PCS(1<<7),//!< Select peripheral using SPI_PCS4 signal
-};
 
 /**
  * Or operation on SpiPeripheralSelect masks
@@ -160,157 +46,21 @@ static constexpr SpiPeripheralSelect operator| (SpiPeripheralSelect left, SpiPer
 }
 
 /**
- * Select which CTAR to use for transaction
- */
-enum SpiCtarSelect {
-   SpiCtarSelect_0 = (0), //!< Configuration 0
-   SpiCtarSelect_1 = (1), //!< Configuration 1
-};
-
-/**
- * Select whether Peripheral Select is returned to idle between transfers to the same peripheral
- */
-enum SpiSelectMode {
-   SpiSelectMode_Idle          = SPI_PUSHR_CONT(0), //!< Peripheral Select returns to idle between transfers
-   SpiSelectMode_Continuous    = SPI_PUSHR_CONT(1), //!< Peripheral Select remains asserted between transfers
-};
-
-/**
- * SPI Frame sizes
- */
-enum SpiFrameSize {
-   SpiFrameSize_4  = SPI_CTAR_FMSZ( 4-1), /**< 4  bits - seems to work but not guaranteed */
-   SpiFrameSize_5  = SPI_CTAR_FMSZ( 5-1), /**< 5  bits */
-   SpiFrameSize_6  = SPI_CTAR_FMSZ( 6-1), /**< 6  bits */
-   SpiFrameSize_7  = SPI_CTAR_FMSZ( 7-1), /**< 7  bits */
-   SpiFrameSize_8  = SPI_CTAR_FMSZ( 8-1), /**< 8  bits */
-   SpiFrameSize_9  = SPI_CTAR_FMSZ( 9-1), /**< 9  bits */
-   SpiFrameSize_10 = SPI_CTAR_FMSZ(10-1), /**< 10 bits */
-   SpiFrameSize_11 = SPI_CTAR_FMSZ(11-1), /**< 11 bits */
-   SpiFrameSize_12 = SPI_CTAR_FMSZ(12-1), /**< 12 bits */
-   SpiFrameSize_13 = SPI_CTAR_FMSZ(13-1), /**< 13 bits */
-   SpiFrameSize_14 = SPI_CTAR_FMSZ(14-1), /**< 14 bits */
-   SpiFrameSize_15 = SPI_CTAR_FMSZ(15-1), /**< 15 bits */
-   SpiFrameSize_16 = SPI_CTAR_FMSZ(16-1), /**< 16 bits */
-};
-
-/**
- * Clear Rx or TX FIFOs
- */
-enum SpiClearFifo {
-   SpiClearFifo_None = SPI_MCR_CLR_TXF(0)|SPI_MCR_CLR_RXF(0),  /**< No action             */
-   SpiClearFifo_Rx   = SPI_MCR_CLR_TXF(0)|SPI_MCR_CLR_RXF(1),  /**< Clear Rx FIFO         */
-   SpiClearFifo_Tx   = SPI_MCR_CLR_TXF(1)|SPI_MCR_CLR_RXF(0),  /**< Clear Tx FIFO         */
-   SpiClearFifo_Both = SPI_MCR_CLR_TXF(1)|SPI_MCR_CLR_RXF(1),  /**< Clear Rx and Tx FIFOs */
-};
-
-/**
- * Sample Point
- *
- * Controls when the module master samples SIN in Modified Transfer Format.
- * This field is valid only when CPHA bit 0.
- */
-enum SpiSampleDelay {
-   SpiSampleDelay_0_Clocks = SPI_MCR_SMPL_PT(0b00), /**< 0 protocol clocks from SCK edge to SIN sample */
-   SpiSampleDelay_1_Clocks = SPI_MCR_SMPL_PT(0b01), /**< 1 protocol clocks from SCK edge to SIN sample */
-   SpiSampleDelay_2_Clocks = SPI_MCR_SMPL_PT(0b10), /**< 2 protocol clocks from SCK edge to SIN sample */
-};
-
-/**
- * Continuous SCK Enable
- *
- * Enables the Serial Communication Clock (SCK) to run continuously.
- */
-enum SpiContinuousClock {
-   SpiContinuousClock_Disable = SPI_MCR_CONT_SCKE(0),/**< Continuous SCK disabled */
-   SpiContinuousClock_Enable  = SPI_MCR_CONT_SCKE(1),/**< Continuous SCK enabled  */
-};
-
-/**
  * Used to hold a calculated configuration that may be reused to avoid calculation overhead
  */
 struct SpiCalculatedConfiguration {
-   uint32_t pushr; //!<  PUSHR register value e.g. Target, selection mode etc
-   uint32_t ctar;  //!<  CTAR register value e.g. Baud, number of bits, timing
-};
-
-/**
- * This struct contains settings for a CTAR
- *
- */
-struct SpiConfiguration {
-   uint32_t       frequency;
-   uint32_t       ctar;
-
-   /**
-    * Constructor
-    *
-    * @param frequency     Frequency for communication
-    * @param spiMode       SPI mode
-    * @param spiOrder      Bit order
-    * @param spiFrameSize  Frame size
-    */
-   constexpr SpiConfiguration (
-         uint32_t frequency,
-         SpiMode spiMode=SpiMode_0, SpiOrder spiOrder=SpiOrder_MsbFirst, SpiFrameSize spiFrameSize=SpiFrameSize_8) :
-      frequency(frequency), ctar(spiMode|spiOrder|spiFrameSize) {
-   }
-
-   /**
-    * Default Constructor
-    */
-   constexpr SpiConfiguration () : frequency(0), ctar(0) {
-   }
-};
-
-/**
- * This struct contains settings for a SPI
- * Example:
- * @code
- *    static const SpiConfigurations settings {
- *       //  Speed      Mode           Order            Frame Size
- *       { 1'000'000, SpiMode_0, SpiOrder_MsbFirst, SpiFrameSize_8},  // Configuration 0 (CTAR0)
- *       {10'000'000, SpiMode_0, SpiOrder_MsbFirst, SpiFrameSize_12}, // Configuration 1 (CTAR1)
- *       0b000000, // All PCSs idle low                               // PCS idle levels
- *    };
- * @endcode
- */
-struct SpiConfigurations {
-   SpiConfiguration     ctar0;
-   SpiConfiguration     ctar1;
-   SpiPeripheralSelect  pcsPolarity;
-
-   /**
-    * Constructor
-    *
-    * @param ctar0         CTAR 0 value
-    * @param ctar1         CTAR 1 value
-    * @param pcsPolarity   Polarity of PCS signals (bit-mask made up of SpiPeripheralSelect values)
-    */
-   constexpr SpiConfigurations (
-         SpiConfiguration     ctar0,
-         SpiConfiguration     ctar1,
-         SpiPeripheralSelect  pcsPolarity) :
-               ctar0(ctar0), ctar1(ctar1), pcsPolarity(pcsPolarity) {
-   }
-
-   /**
-    * Constructor for a single configuration
-    *
-    * @param ctar0         CTAR 0 value
-    * @param pcsPolarity   Polarity of PCS signals (bit-mask made up of SpiPeripheralSelect values)
-    */
-   constexpr SpiConfigurations (
-         SpiConfiguration     ctar0,
-         SpiPeripheralSelect  pcsPolarity) :
-               ctar0(ctar0), ctar1(), pcsPolarity(pcsPolarity) {
-   }
+   uint16_t pushrCommand;      //!<  PUSHR.COMMAND register value for most transfer
+   uint16_t pushrFinalCommand; //!<  PUSHR.COMMAND register value for final transfer
+   uint32_t ctar;              //!<  CTAR register value e.g. Baud, number of bits, timing
 };
 
 /**
  * @brief Base class for representing an SPI interface
  */
-class Spi {
+class Spi : public SpiBasicInfo {
+
+   template<unsigned itemCount>
+   friend class SpiDmaHandlerBase;
 
 protected:
 
@@ -319,9 +69,15 @@ protected:
 
    /**
     * Value to combine with transmit data
-    * Controls which device (PCS) and which configuration (CTAR)
+    * Controls which device (PCS), configuration (CTAR) and PCS assertion between transfers (CONT)
     */
    uint32_t  pushrMask;
+
+   /**
+    * Value to combine with transmit data
+    * Controls which device (PCS), configuration (CTAR) and PCS assertion between transactions (CONT)
+    */
+   uint32_t  pushrMaskFinal;
 
    /**
     * Constructor
@@ -329,7 +85,7 @@ protected:
     * @param[in]  baseAddress    Base address of SPI
     */
    Spi(uint32_t baseAddress) :
-      spi(baseAddress), pushrMask(0) {
+      spi(baseAddress), pushrMask(0), pushrMaskFinal(0) {
    }
 
    /**
@@ -378,7 +134,7 @@ protected:
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     */
-   static uint32_t calculateDividers(uint32_t clockFrequency, uint32_t frequency);
+   static uint32_t calculateDividers(uint32_t clockFrequency, Hertz frequency);
 
    /**
     * Calculate CTAR timing related values
@@ -417,7 +173,125 @@ protected:
     */
    virtual uint32_t getSpiInputClockFrequency() = 0;
 
-public:
+   /**
+    * Set SPI.CTAR0 value
+    *
+    * @param[in]  ctar 32-bit CTAR value
+    */
+   void setCtar0Value(uint32_t ctar) {
+      spi->CTAR[0] = ctar;
+   }
+
+   /**
+    * Set SPI.CTAR1 value
+    *
+    * @param[in]  ctar 32-bit CTAR value
+    */
+   void setCtar1Value(uint32_t ctar) {
+      spi->CTAR[1] = ctar;
+   }
+
+   /**
+    * Get SPI.CTAR0 value
+    *
+    * @return ctar 32-bit CTAR value
+    */
+   uint32_t getCtar0Value() {
+      return spi->CTAR[0];
+   }
+
+   /**
+    * Get SPI.CTAR1 value
+    *
+    * @return ctar 32-bit CTAR value
+    */
+   uint32_t getCtar1Value() {
+      return spi->CTAR[1];
+   }
+
+   /**
+    * Set the SPI Selection mode for the next transaction
+    *
+    *  @param[in]  spiSelectMode        Whether SPI_PCSx signal is returned to idle between transfers/transactions
+    *
+    *  @note This alters existing pushrMask/pushrMaskFinal values
+    */
+   void setPeripheralSelectMode(SpiPeripheralSelectMode spiPeripheralSelectMode) {
+
+      uint32_t pushrTemp = (pushrMask&~SPI_PUSHR_CONT_MASK);
+
+#if 0
+      // Value used for each transfer i.e. controls PCS assertion between transfers
+      pushrMask      = pushrTemp|((spiSelectMode>=1)?SpiSelectMode_Continuous:SpiSelectMode_Idle);
+
+      // Value used for last transfer in each transaction i.e. controls PCS assertion between transactions
+      pushrMaskFinal = pushrTemp|((spiSelectMode>=2)?SpiSelectMode_Continuous:SpiSelectMode_Idle);
+#else
+      //                                        Transfer          : Transaction             : Continuous, ;
+      static const SpiSelectMode val[]      = {SpiSelectMode_Idle, SpiSelectMode_Continuous, SpiSelectMode_Continuous};
+      static const SpiSelectMode valFinal[] = {SpiSelectMode_Idle, SpiSelectMode_Idle,       SpiSelectMode_Continuous};
+
+      // Value used for each transfer i.e. controls PCS assertion between transfers
+      pushrMask      = pushrTemp|val[spiPeripheralSelectMode];
+
+      // Value used for last transfer in each transaction i.e. controls PCS assertion between transactions
+      pushrMaskFinal = pushrTemp|valFinal[spiPeripheralSelectMode];
+#endif
+   }
+
+   /**
+    * Sets Communication mode for SPI
+    *
+    * @param[in] spiMode       Controls clock polarity and the timing relationship between clock and data
+    * @param[in] spiBitOrder   Bit transmission order (LSB/MSB first)
+    * @param[in] spiCtarSelect Configuration to modify
+    */
+   void setMode(SpiMode spiMode=SpiMode_0, SpiBitOrder spiBitOrder=SpiBitOrder_MsbFirst, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) {
+      // Sets the default CTAR value with 8 bits
+      spi->CTAR[spiCtarSelect] =
+         (spiMode|spiBitOrder)|
+         (spi->CTAR[spiCtarSelect]&~(SPI_CTAR_MODE_MASK|SPI_CTAR_LSBFE_MASK));
+   }
+
+   /**
+    * Sets Communication mode for SPI
+    *
+    * @param[in]  spiFrameSize  Number of bits in each transfer
+    * @param[in]  spiCtarSelect Configuration to modify
+    */
+   void setFrameSize(SpiFrameSize spiFrameSize, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) {
+      // Sets the frame size in CTAR
+      spi->CTAR[spiCtarSelect] = (spi->CTAR[spiCtarSelect]&~(SPI_CTAR_FMSZ_MASK)) | spiFrameSize;
+   }
+
+   /**
+    * Sets up hardware peripheral select (SPI_PCSx) for transfer.
+    * Also controls which CTAR is used for the transaction.
+    *
+    * @param[in]  spiPeripheralSelect  Which peripheral to select using SPI_PCSx signal
+    * @param[in]  spiSelectMode        Whether SPI_PCSx signal is returned to idle between transfers/transactions
+    * @param[in]  spiCtarSelect        Which configuration to use for transaction
+    */
+   void setPeripheralSelect(
+         SpiPeripheralSelect     spiPeripheralSelect,
+         SpiPeripheralSelectMode spiPeripheralSelectMode  = SpiPeripheralSelectMode_Transaction,
+         SpiCtarSelect           spiCtarSelect            = SpiCtarSelect_0) {
+
+      pushrMask = spiPeripheralSelect|SPI_PUSHR_CTAS(spiCtarSelect);
+
+      setPeripheralSelectMode(spiPeripheralSelectMode);
+   }
+
+   /**
+    * Basic enable of SPI
+    * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected in configuration
+    */
+   virtual void enable() = 0;
+
+   /**
+    * Disables the clock to SPI and disable all mappable pins
+    */
+   virtual void disable() = 0;
 
    /**
     * Calculate communication speed from SPI clock frequency and speed factors
@@ -438,7 +312,7 @@ public:
     *
     * @return Combined masks for CTAR (BR, PBR, PCSSCK, CSSCK, PDT, DT, PCSSCK and CSSCK)
     */
-   static uint32_t calculateCtarTiming(uint32_t clockFrequency, uint32_t frequency) {
+   static uint32_t calculateCtarTiming(uint32_t clockFrequency, Hertz frequency) {
 
       int bestPrescale, bestDivider;
       uint32_t ctarValue;
@@ -483,7 +357,11 @@ public:
    uint32_t getSpeed(SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) {
       return calculateSpeed(getSpiInputClockFrequency(), spiCtarSelect);
    }
+   
+$(/SPI/methods: #error "/SPI/methods not found")
 
+public:
+$(/SPI/InitMethod: #error "/SPI/InitMethod not found")
 #ifdef __CMSIS_RTOS
    /**
     * Obtain SPI mutex and set SPI configuration
@@ -528,7 +406,7 @@ public:
    virtual osStatus endTransaction() = 0;
 #else
    /**
-    * Obtain SPI - dummy routine (non RTOS)
+    * Obtain SPI (non RTOS)
     */
    int startTransaction(int =0) {
       spi->MCR = spi->MCR & ~SPI_MCR_HALT_MASK;
@@ -539,22 +417,12 @@ public:
     * Obtain SPI and set SPI configuration
     *
     * @param[in] configuration The configuration values to set for the transaction.
+    *
+    * @note Uses CTAR[0]
     */
    int startTransaction(SpiCalculatedConfiguration &configuration, int =0) {
       spi->MCR = spi->MCR & ~SPI_MCR_HALT_MASK;
       setConfiguration(configuration);
-      return 0;
-   }
-
-   /**
-    * Obtain SPI and set SPI configuration
-    *
-    * @param spiPeripheralSelect    Which device to select
-    * @param spiCtarSelect          Which configuration to use
-    */
-   int startTransaction(SpiPeripheralSelect spiPeripheralSelect, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) {
-      spi->MCR = spi->MCR & ~SPI_MCR_HALT_MASK;
-      setActiveConfiguration(spiPeripheralSelect, spiCtarSelect);
       return 0;
    }
 
@@ -568,151 +436,113 @@ public:
 #endif
 
    /**
-    * Set active configuration for following transactions
+    * Select pre-loaded communication parameters
     *
-    * This determines both the active configuration (see @ref SpiConfiguration) and
-    * the particular device to communicate with (through PCS used)
-    * This means multiple device may share a configuration.
+    * @param spiCtarSelect             Indicates which pre-loaded settings to use (which CTAR)
+    * @param spiPeripheralSelect       Which peripheral is to be accessed (via PCSx)
+    * @param spiPeripheralSelectMode   Selects how PCS is controlled
     *
-    * @param spiPeripheralSelect    Which device to select
-    * @param spiCtarSelect          Which configuration to use
-    *
-    * @note The configurations should have been initialised beforehand using:
-    *      - @ref setConfigurations()  Configure all configurations and CS idle levels
-    *      - @ref setConfiguration()   Configure individual configuration
-    *      - @ref setPcsIdleLevels()   Configure PCS idle levels
+    * @note Typically used with pre-loaded values in CTARs:
+    *     constructor(...) or configure(...);   // Load multiple configurations
+    *     OR
+    *     constructor() or defaultConfigure();  // Load multiple configurations determined by Configure.usbdmProject settings
+    *     ...
+    *     setConfiguration(...);    // Choose pre-loaded settings to use
     */
-   void setActiveConfiguration(
-         SpiPeripheralSelect  spiPeripheralSelect,
-         SpiCtarSelect        spiCtarSelect=SpiCtarSelect_0 ) {
+   void selectConfiguration(
+         SpiCtarSelect             spiCtarSelect,
+         SpiPeripheralSelect       spiPeripheralSelect,
+         SpiPeripheralSelectMode   spiPeripheralSelectMode) {
 
+      // Select pre-loade CTAR and PCS
       pushrMask = spiPeripheralSelect|SPI_PUSHR_CTAS(spiCtarSelect);
-   }
 
-   /**
-    * Initialise
-    *
-    * @param settings Settings to use
-    */
-   void setConfigurations(const SpiConfigurations &settings) {
-
-      const uint32_t spiFrequency = getSpiInputClockFrequency();
-
-      enable();
-
-      spi->MCR =
-            SPI_MCR_HALT(1)|           // Halt transfers initially
-            SpiClearFifo_Both|         // Clear FIFOs
-            SPI_MCR_ROOE(1)|           // Receive FIFO Overflow Overwrite
-            SPI_MCR_MSTR(1)|           // Master mode
-            SPI_MCR_DCONF(0)|          // Must be zero
-            SpiSampleDelay_0_Clocks|   // 0 system clocks between SCK edge and SIN sample
-            SPI_MCR_PCSIS(settings.pcsPolarity);
-
-      // CTAR 0
-      spi->CTAR[0] = settings.ctar0.ctar|calculateCtarTiming(spiFrequency, settings.ctar0.frequency);
-
-      // CTAR 1
-      spi->CTAR[1] = settings.ctar1.ctar|calculateCtarTiming(spiFrequency, settings.ctar1.frequency);
+      // Select PCS behaviour
+      setPeripheralSelectMode(spiPeripheralSelectMode);
    }
 
    /**
     * Set communication parameters
     *
+    * @param spiCtarSettings           Settings to use
+    * @param spiPeripheralSelectMode   Controls how PCS is controlled
+    *
+    * @note Typically use:
+    *     setConfiguration(...);             // This is a time-consuming operation
+    *     auto config = getConfiguration();  // Save configuration calculated above
+    *     ...
+    *     setConfiguration(config);          // Re-use pre-calculated settings
+    *
+    * @note Uses CTAR[0]
+    */
+   void setConfiguration(
+         const SpiBasicInfo::SerialInit &spiCtarSettings,
+         SpiPeripheralSelect             spiPeripheralSelect,
+         SpiPeripheralSelectMode         spiPeripheralSelectMode) {
+
+      // Set up CTAR0
+      const uint32_t spiFrequency = getSpiInputClockFrequency();
+      spi->CTAR[0] = spiCtarSettings.ctar|calculateCtarTiming(spiFrequency, spiCtarSettings.speed);
+
+      // Select CTAR0 and PCS
+      pushrMask = spiPeripheralSelect|SPI_PUSHR_CTAS(SpiCtarSelect_0);
+
+      // Select PCS behaviour
+      setPeripheralSelectMode(spiPeripheralSelectMode);
+   }
+
+   /**
+    *  Get calculated SPI configuration\n
+    *  This includes timing settings, word length and transmit order\n
+    *  This value may be reused by @ref setConfiguration()
+    *
+    * @return Configuration value
+    *
+    * @note Typically use:
+    *     setConfiguration(...);             // This is a time-consuming operation
+    *     auto config = getConfiguration();  // Save configuration calculated above
+    *     ...
+    *     setConfiguration(config);          // Re-use pre-calculated settings
+    *
+    * @note Uses CTAR[0]
+    */
+   SpiCalculatedConfiguration getConfiguration() {
+      return SpiCalculatedConfiguration{(uint16_t)(pushrMask>>16), (uint16_t)(pushrMaskFinal>>16), spi->CTAR[0]};
+   }
+
+   /**
+    *  Set configuration for the next transaction using pre-calculated settings\n
+    *  This includes timing settings, word length and transmit order etc.\n
+    *  Assumes the interface is already acquired through startTransaction
+    *
+    * @param[in]  configuration Configuration value
+    *
+    * @note Typically use:
+    *     setConfiguration(...);             // This is a time-consuming operation
+    *     auto config = getConfiguration();  // Save configuration calculated above
+    *     ...
+    *     setConfiguration(config);          // Re-use pre-calculated settings
+    *
+    * @note Uses CTAR[0]
+    */
+   void setConfiguration(const SpiCalculatedConfiguration &configuration) {
+      spi->CTAR[0]   = configuration.ctar;
+      pushrMask      = configuration.pushrCommand<<16;
+      pushrMaskFinal = configuration.pushrFinalCommand<<16;
+   }
+
+   /**
+    * Set communication parameters (CTAR value)
+    *
     * @param spiCtarSettings  Settings to use
     * @param spiCtarSelect    Configuration to modify
     */
-   void setConfiguration(const SpiConfiguration &spiCtarSettings, SpiCtarSelect spiCtarSelect = SpiCtarSelect_0) {
+   void setConfiguration(
+         const SpiBasicInfo::SerialInit &spiCtarSettings,
+         SpiCtarSelect                   spiCtarSelect = SpiCtarSelect_0) {
+
       const uint32_t spiFrequency = getSpiInputClockFrequency();
-      spi->CTAR[spiCtarSelect] = spiCtarSettings.ctar|calculateCtarTiming(spiFrequency, spiCtarSettings.frequency);
-   }
-
-   /**
-    * Set inactive (idle) level for PCS signals
-    *
-    * @param mask Mask for levels 0=> idles low, 1 =>idle high
-    */
-   void setPcsIdleLevels(uint8_t mask) {
-      spi->MCR = (spi->MCR & ~SPI_MCR_PCSIS_MASK) | SPI_MCR_PCSIS(mask);
-   }
-
-   /**
-    * Basic enable of SPI
-    * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected in configuration
-    */
-   virtual void enable() = 0;
-
-   /**
-    * Disables the clock to SPI and disable all mappable pins
-    */
-   virtual void disable() = 0;
-
-   /**
-    * Sets Communication mode for SPI
-    *
-    * @param[in] spiMode       Controls clock polarity and the timing relationship between clock and data
-    * @param[in] spiOrder      Bit transmission order (LSB/MSB first)
-    * @param[in] spiCtarSelect Configuration to modify
-    */
-   void setMode(SpiMode spiMode=SpiMode_0, SpiOrder spiOrder=SpiOrder_MsbFirst, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) {
-      // Sets the default CTAR value with 8 bits
-      spi->CTAR[spiCtarSelect] =
-         (spiMode|spiOrder)|
-         (spi->CTAR[spiCtarSelect]&~(SPI_CTAR_MODE_MASK|SPI_CTAR_LSBFE_MASK));
-   }
-
-   /**
-    * Sets Communication mode for SPI
-    *
-    * @param[in]  spiFrameSize  Number of bits in each transfer
-    * @param[in]  spiCtarSelect Configuration to modify
-    */
-   void setFrameSize(SpiFrameSize spiFrameSize, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) {
-      // Sets the frame size in CTAR
-      spi->CTAR[spiCtarSelect] = (spi->CTAR[spiCtarSelect]&~(SPI_CTAR_FMSZ_MASK)) | spiFrameSize;
-   }
-
-   /**
-    * Sets up hardware peripheral select (SPI_PCSx) for transfer.
-    * Also controls which CTAR is used for the transaction.
-    *
-    * @param[in]  spiPeripheralSelect  Which peripheral to select using SPI_PCSx signal
-    * @param[in]  polarity             Polarity of SPI_PCSx, ActiveHigh or ActiveLow to select device
-    * @param[in]  spiSelectMode        Whether SPI_PCSx signal is returned to idle between transfers
-    * @param[in]  spiCtarSelect        Which configuration to use for transaction
-    */
-   void setPeripheralSelect(
-         SpiPeripheralSelect spiPeripheralSelect,
-         Polarity            polarity,
-         SpiSelectMode       spiSelectMode       = SpiSelectMode_Idle,
-         SpiCtarSelect       spiCtarSelect       = SpiCtarSelect_0) {
-
-      pushrMask = spiPeripheralSelect|spiSelectMode|SPI_PUSHR_CTAS(spiCtarSelect);
-
-      if (polarity == ActiveHigh) {
-         // ActiveHigh (inactive level is low)
-         spi->MCR = spi->MCR & ~spiPeripheralSelect;
-      }
-      else {
-         // ActiveLow (inactive level is high)
-         spi->MCR = spi->MCR | spiPeripheralSelect;
-      }
-   }
-
-   /**
-    * Set the current SPI Selection mode.
-    * This is used to change from the mode set by setPeripheralSelect() or startTransaction().
-    *
-    * Common usage:
-    * - Configure the overall transaction to use SpiSelectMode_Continuous using setPeripheralSelect() or startTransaction().
-    * - Do multiple txRx() operations.  The CS will remain selected _between_ operations.
-    * - Change the mode to SpiSelectMode_Idle before the final operation using setPeripheralSelectMode().
-    *   This will cause the active peripheral select to return to idle after the final operation.
-    *
-    *  @param[in]  spiSelectMode        Whether SPI_PCSx signal is returned to idle between transfers
-    */
-   void setPeripheralSelectMode(SpiSelectMode spiSelectMode) {
-      pushrMask = (pushrMask&~SPI_PUSHR_CONT_MASK)|spiSelectMode;
+      spi->CTAR[spiCtarSelect] = spiCtarSettings.ctar|calculateCtarTiming(spiFrequency, spiCtarSettings.speed);
    }
 
    /**
@@ -728,7 +558,70 @@ public:
     *  @note: Size of txData and rxData should be appropriate for transmission size.
     */
    template<typename T>
-   void txRx(uint32_t dataSize, const T *txData, T *rxData=nullptr);
+   void __attribute__((noinline)) txRx(const uint32_t dataSize, const T *txData, T *rxData) {
+
+      static_assert (((sizeof(T) == 1)||(sizeof(T) == 2)), "Size of data type T must be 8 or 16-bits");
+
+      // Clear FIFOs just in case they are corrupted
+      clearFifos(SpiClearFifo_Both);
+
+      uint32_t rxDataSize = dataSize;
+      uint32_t txDataSize = dataSize;
+      do {
+         // Keep Tx FIFO full while monitoring Rx FIFO
+
+         // Clear Tx FIFO fill flag (it will remain set if Tx FIFO still has space available)
+         spi->SR = SPI_SR_TFFF_MASK;
+
+         while ((txDataSize>0) && ((spi->SR&SPI_SR_TFFF_MASK)!=0)) {
+
+            // Send data value (may be dummy)
+            uint32_t sendData = 0xFFFF;
+            if (txData != nullptr) {
+               sendData = (uint16_t)*txData++;
+            }
+
+            txDataSize--;
+
+            // Push to Tx FIFO
+            if (dataSize == 0) {
+               // Mark last data
+               spi->PUSHR = sendData|pushrMaskFinal;
+            }
+            else {
+               // Keep SPI_PCS control
+               spi->PUSHR = sendData|pushrMask;
+            }
+
+            // Clear Rx FIFO drain flag (it will remain set if Rx FIFO still not empty)
+            spi->SR = SPI_SR_RFDF_MASK|SPI_SR_TFFF_MASK;
+
+            // Check Rx FIFO
+            if ((spi->SR&SPI_SR_RFDF_MASK)!=0) {
+
+               // Get Rx data (may be discarded)
+               uint32_t receiveData = spi->POPR;
+               if (rxData != nullptr) {
+                  *rxData++ = receiveData;
+               }
+               rxDataSize--;
+            }
+         }
+         // Drain Rx FIFO of remaining data
+
+         // Clear Rx FIFO drain flag (it will remain set if there is still data)
+         spi->SR = SPI_SR_RFDF_MASK;
+         if ((spi->SR&SPI_SR_RFDF_MASK)!=0) {
+
+            // Get Rx data (may be discarded)
+            uint32_t receiveData = spi->POPR;
+            if (rxData != nullptr) {
+               *rxData++ = receiveData;
+            }
+            rxDataSize--;
+         }
+      } while(rxDataSize>0);
+   }
 
    /**
     *  Transmit and receive a series of values
@@ -841,7 +734,8 @@ public:
    uint32_t txRxRaw(uint32_t data);
 
    /**
-    * Transmit and receive a value over SPI
+    * Transmit and receive a value over SPI\n
+    * This routine is intended for start or middle bytes of a transfer
     *
     * @param[in] data - Data to send (4-16 bits)
     *
@@ -849,6 +743,18 @@ public:
     */
    uint16_t txRx(uint16_t data) {
       return txRxRaw(data|pushrMask);
+   }
+
+   /**
+    * Transmit and receive a value over SPI\n
+    * This routine is intended for the last byte of a transfer
+    *
+    * @param[in] data - Data to send (4-16 bits)
+    *
+    * @return Data received
+    */
+   uint16_t txRxFinal(uint16_t data) {
+      return txRxRaw(data|pushrMaskFinal);
    }
 
    /**
@@ -861,64 +767,32 @@ public:
    }
 
    /**
-    *  Set calculated configuration\n
-    *  This includes timing settings, word length and transmit order\n
-    *  Assumes the interface is already acquired through startTransaction
     *
-    * @param[in]  configuration Configuration value
+    * @param[in] spiTxFifoRequest   Transmit FIFO Fill Request interrupt/DMA enable (TFFF flag)
+    * @param[in] spiRxFifoRequest   Receive FIFO Drain Request interrupt/DMA enable (RFDF flag)
     */
-   void setConfiguration(const SpiCalculatedConfiguration &configuration) {
-      spi->CTAR[0] = configuration.ctar;
-      pushrMask    = configuration.pushr;
-   }
+   void configureFifoRequests(
+         SpiTxFifoRequest spiTxFifoRequest,
+         SpiRxFifoRequest spiRxFifoRequest) {
 
-   /**
-    *  Get calculated SPI configuration\n
-    *  This includes timing settings, word length and transmit order\n
-    *  This value may be reused by @ref setConfiguration()
-    *
-    * @return Configuration value
-    *
-    * @note Typically used with startTransaction()
-    */
-   SpiCalculatedConfiguration getConfiguration() {
-      return SpiCalculatedConfiguration{pushrMask, spi->CTAR[0]};
+      spi->RSER = (spi->RSER&~(SPI_RSER_TFFF_DIRS(1)|SPI_RSER_TFFF_RE(1)|SPI_RSER_RFDF_DIRS(1)|SPI_RSER_RFDF_RE(1)))|spiTxFifoRequest|spiRxFifoRequest;
    }
-
    /**
-    * Set SPI.CTAR0 value
     *
-    * @param[in]  ctar 32-bit CTAR value
+    * @param[in] spiTxCompleteInterrupt        Controls Transmit complete interrupts (TCF Flag)
+    * @param[in] spiEndOfQueueInterrupt        Controls DSPI Finished interrupts (EOQF flag)
+    * @param[in] spiTxFifoUnderflowInterrupt   Controls Transmit FIFO Underflow interrupts (TFUF flag)
+    * @param[in] spiRxFifoOverflowInterrupt    Controls Transmit FIFO Overflow interrupts (TFUF flag)
     */
-   void setCtar0Value(uint32_t ctar) {
-      spi->CTAR[0] = ctar;
-   }
+   void configureInterrupts(
+         SpiTxCompleteInterrupt       spiTxCompleteInterrupt       = SpiTxCompleteInterrupt_Disabled,
+         SpiEndOfQueueInterrupt       spiEndOfQueueInterrupt       = SpiEndOfQueueInterrupt_Disabled,
+         SpiTxFifoUnderflowInterrupt  spiTxFifoUnderflowInterrupt  = SpiTxFifoUnderflowInterrupt_Disabled,
+         SpiRxFifoOverflowInterrupt   spiRxFifoOverflowInterrupt   = SpiRxFifoOverflowInterrupt_Disabled
+         ) {
 
-   /**
-    * Set SPI.CTAR1 value
-    *
-    * @param[in]  ctar 32-bit CTAR value
-    */
-   void setCtar1Value(uint32_t ctar) {
-      spi->CTAR[1] = ctar;
-   }
-
-   /**
-    * Get SPI.CTAR0 value
-    *
-    * @return ctar 32-bit CTAR value
-    */
-   uint32_t getCtar0Value() {
-      return spi->CTAR[0];
-   }
-
-   /**
-    * Get SPI.CTAR1 value
-    *
-    * @return ctar 32-bit CTAR value
-    */
-   uint32_t getCtar1Value() {
-      return spi->CTAR[1];
+      spi->RSER = (spi->RSER&~(SPI_RSER_TFUF_RE(1)|SPI_RSER_RFOF_RE(1)|SPI_RSER_TCF_RE(1)|SPI_RSER_EOQF_RE(1)))|
+            spiTxFifoUnderflowInterrupt|spiRxFifoOverflowInterrupt|spiTxCompleteInterrupt|spiEndOfQueueInterrupt;
    }
 
    /**
@@ -934,35 +808,477 @@ public:
          spi->MCR = spi->MCR | SPI_MCR_HALT_MASK;
       }
    }
-   /**
-    *
-    * @param[in] spiFifoTxRequest   Transmit FIFO Fill Request interrupt/DMA enable (TFFF flag)
-    * @param[in] spiFifoRxRequest   Receive FIFO Drain Request interrupt/DMA enable (RFDF flag)
-    */
-   void configureFifoRequests(
-         SpiFifoTxRequest spiFifoTxRequest,
-         SpiFifoRxRequest spiFifoRxRequest) {
 
-      spi->RSER = (spi->RSER&~(SPI_RSER_TFFF_DIRS(1)|SPI_RSER_TFFF_RE(1)|SPI_RSER_RFDF_DIRS(1)|SPI_RSER_RFDF_RE(1)))|spiFifoTxRequest|spiFifoRxRequest;
+   /**
+    * Gets and clears status flags.
+    *
+    * @return Status value (SPI->SR)
+    */
+   uint32_t getStatus() {
+      // Capture interrupt status
+      uint32_t status = spi->SR;
+
+      // Clear captured flags
+      spi->SR = status;
+
+      // Return status
+      return status;
    }
-   /**
-    *
-    * @param[in] spiTxCompleteInterrupt      Controls Transmit complete interrupts (TCF Flag)
-    * @param[in] spiEndOfQueueInterrupt      Controls DSPI Finished interrupts (EOQF flag)
-    * @param[in] spiFifoUnderflowInterrupt   Controls Transmit FIFO Underflow interrupts (TFUF flag)
-    * @param[in] spiFifoOverflowInterrupt    Controls Transmit FIFO Overflow interrupts (TFUF flag)
-    */
-   void configureInterrupts(
-         SpiTxCompleteInterrupt     spiTxCompleteInterrupt     = SpiTxCompleteInterrupt_Disabled,
-         SpiEndOfQueueInterrupt     spiEndOfQueueInterrupt     = SpiEndOfQueueInterrupt_Disabled,
-         SpiFifoUnderflowInterrupt  spiFifoUnderflowInterrupt  = SpiFifoUnderflowInterrupt_Disabled,
-         SpiFifoOverflowInterrupt   spiFifoOverflowInterrupt   = SpiFifoOverflowInterrupt_Disabled
-         ) {
 
-      spi->RSER = (spi->RSER&~(SPI_RSER_TFUF_RE(1)|SPI_RSER_RFOF_RE(1)|SPI_RSER_TCF_RE(1)|SPI_RSER_EOQF_RE(1)))|
-            spiFifoUnderflowInterrupt|spiFifoOverflowInterrupt|spiTxCompleteInterrupt|spiEndOfQueueInterrupt;
+};
+
+/**
+ * Class to handle SPI DMA operations
+ * It will create the required buffer to format data for the DMA transfer.
+ * This is necessary because of the really stupid SPI transfers that require 32-bit writes to include COMMAND+DATA
+ * for each item transferred. Note that some later devices may not require this.
+ * This means that to transfer a buffer of data (8/16 bit items) requires copying it to a RAM Buffer up to 4-times its size
+ * and add in the command values for each entry.
+ *
+ * @tparam itemCount Maximum size of buffer that can be expanded (in items)
+ */
+template<unsigned itemCount>
+class SpiDmaHandlerBase {
+
+protected:
+   // Maximum number of items in buffer
+   static constexpr unsigned MaxItemCount = itemCount;
+
+   // Size of items (always 4 irrespective of actual data size)
+   static constexpr unsigned SizeofItems = 4;
+
+   // Expanded buffer with added command values
+#pragma pack(push, n)
+   union {
+      uint32_t bits;
+      struct {
+         uint16_t data;
+         uint16_t command;
+      };
+   } expandedBuffer[itemCount];
+#pragma pack(pop)
+
+   // Associated SPI
+   Spi &spi;
+
+   // Allocated DMA channels - released after transfer completes
+   DmaChannelNum dmaTransmitChannel = DmaChannelNum_None;
+   DmaChannelNum dmaReceiveChannel  = DmaChannelNum_None;
+
+   /**
+    * Constructor
+    *
+    * @param spi  Associated SPI
+    */
+   SpiDmaHandlerBase(Spi &spi) : spi(spi) {
+   }
+
+public:
+   /**
+    * Copy-expand data into internal DMA buffer
+    *
+    * @tparam T      Type for data (deduced)
+    * @tparam N      Size of data array in items (deduced)
+    *
+    * @param dataIn  Data array to expand
+    *
+    * @note It is necessary to set the transfer configuration in the SPI before using this
+    *       routine as it will make use of information from the SPI to format data.
+    */
+   template<typename T, unsigned N>
+   void loadTxData(const T (&dataIn)[N]) {
+
+      static_assert((sizeof(T) == 1) || (sizeof(T) == 2) , "T must be of size 1 or 2 bytes");
+      static_assert(N<=itemCount, "dataIn is too large for buffer allocated");
+
+      // Copy-expand data
+      for (unsigned count=0; count<(N-1); count++) {
+         expandedBuffer[count].bits = dataIn[count]|spi.pushrMask;
+      }
+      expandedBuffer[N-1].bits  = dataIn[N-1]|spi.pushrMaskFinal|SPI_PUSHR_EOQ_MASK;
+   }
+
+
+   /**
+    * Write data to the internal DMA transmit buffer
+    *
+    * @param index   Index in transfer
+    * @param data    Data to write
+    *
+    * @note It is necessary to set the transfer configuration in the SPI before using this
+    *       routine as it will make use of information from the SPI to format data.
+    */
+   void writeDataToBuffer(unsigned index, uint16_t data) {
+
+      usbdm_assert(index<MaxItemCount, "Array index error");
+
+      expandedBuffer[index].bits = data | spi.pushrMask;
+   }
+
+   /**
+    * Mark data item in DMA transmit buffer as end of transfer.
+    * This should always be applied to the last item in the buffer.
+    * This allows the correct handling of PCSx at end of transaction/transfer.
+    *
+    * It may also be applied to intermediate items to divide a single DMA transfer
+    * into multiple SPI transfers.
+    *
+    * @param index   Index in transfer
+    * @param data    Data to write
+    *
+    * @note It is necessary to set the transfer configuration in the SPI before using this
+    *       routine as it will make use of information from the SPI to format data.
+    *
+    * @note This is only effective if the SPI options have been set to SpiPeripheralSelectMode_Transaction
+    */
+   void markDataAsEndOfTransfer(unsigned index) {
+
+      usbdm_assert(index<MaxItemCount, "Array index error");
+
+      expandedBuffer[index].command = spi.pushrMaskFinal>>16;
+   }
+
+   /**
+    * Mark data item in DMA transmit buffer to clear transmit counter.
+    *
+    * The transmit counter will be cleared before transmission of the associated data.
+    * This would usually be set on the first item in the buffer.
+    *
+    * @param index   Index in transfer
+    * @param data    Data to write
+    *
+    * @note It is necessary to set the transfer configuration in the SPI before using this
+    *       routine as it will make use of information from the SPI to format data.
+    */
+   void markDataToClearCounter(unsigned index=0) {
+
+      usbdm_assert(index<MaxItemCount, "Array index error");
+
+      expandedBuffer[index].bits |= SPI_PUSHR_COMMAND_CTCNT_MASK;
+   }
+
+   /**
+    * Mark data item in DMA transmit buffer as end-of-queue.
+    *
+    * Indicates the associated data value is End of Queue, the transmit and
+    * receive operations will be disabled after this item completes transmission
+    * This should only be set on the last item in the buffer.
+    *
+    * @param index   Index in transfer
+    * @param data    Data to write
+    *
+    * @note It is necessary to set the transfer configuration in the SPI before using this
+    *       routine as it will make use of information from the SPI to format data.
+    */
+   void markDataAsEoq(unsigned index) {
+
+      usbdm_assert(index<MaxItemCount, "Array index error");
+
+      expandedBuffer[index].bits |= SPI_PUSHR_EOQ_MASK;
+   }
+
+   /**
+    * Set up for DMA operation
+    * - Allocates DMA channels
+    * - Configure DMA Mux for Tx and Rx channels
+    * - Configures DMA channels for Tx and Rx
+    * No transfers are actually started
+    *
+    * @param rxBuffer     Buffer for received data
+    * @param rxDataSize   Size of elements in rxBuffer (either 1 or 2 bytes)
+    * @param numElements  Number of elements in rxBuffer
+    *
+    * @note This method may be called before the SPI configuration has been set.
+    *
+    * @return E_NOERROR on success
+    * @return E_NO_RESOURCE if failed to allocate required DMA channels
+    */
+   ErrorCode initialiseDma(void *rxBuffer, unsigned rxDataSize, unsigned numElements) {
+
+      // Allocate DMA channel to use for transmission
+      dmaTransmitChannel = Dma0::allocatePeriodicChannel();
+      if (dmaTransmitChannel == DmaChannelNum_None) {
+         return setErrorCode(E_NO_RESOURCE);
+      }
+
+      // Allocate DMA channel to use for reception
+      dmaReceiveChannel = Dma0::allocatePeriodicChannel();
+      if (dmaReceiveChannel == DmaChannelNum_None) {
+         // Release successfully allocated channel as we can't use it now
+         Dma0::freeChannel(dmaTransmitChannel);
+         return setErrorCode(E_NO_RESOURCE);
+      }
+
+      // Size for rx data DMA transfers
+      DmaSize rxDmaSize = (rxDataSize==1)?DmaSize_8bit:DmaSize_16bit;
+
+      /**
+       * Structure to define the Transmit DMA transfer
+       *
+       * Note: This uses a 32-bit transfer even though the transmit data may only be 8 or 16-bit
+       */
+      DmaTcd txTcd = DmaTcd (
+         /* Source */
+         /* Address                  */ (uint32_t)(expandedBuffer),                  // Source array
+         /* Offset                   */ SizeofItems,                                 // Source address advances 1 element (4-bytes) per request
+         /* Size                     */ DmaSize_32bit,                               // 32-bit read from source address
+         /* Modulo                   */ DmaModulo_Disabled,                          // No modulo
+         /* Last address adjustment  */ -SizeofItems*numElements,                      // Reset Source address to start of array on completion
+
+         /* Destination */
+         /* Address                  */ (uint32_t)spi.spi+offsetof(SPI_Type, PUSHR), // Destination is SPI.PUSHR data register
+         /* Offset                   */ 0,                                           // Destination address doesn't change
+         /* Size                     */ DmaSize_32bit,                               // 32-bit write to destination address
+         /* Modulo                   */ DmaModulo_Disabled,                          // Disabled
+         /* Last address adjustment  */ 0,                                           // Destination address doesn't change
+
+         /* Minor loop byte count    */ dmaNBytes(SizeofItems),                      // Total transfer in one minor-loop
+         /* Major loop count         */ dmaCiter(numElements),                         // Transfer entire buffer
+
+         /* Start channel            */ false,                                       // Don't start (triggered by hardware)
+         /* Disable Req. on complete */ true,                                        // Clear hardware request when major loop completed
+         /* IRQ on major complete    */ true,                                        // No interrupt
+         /* IRQ on half complete     */ false,                                       // No interrupt
+         /* Bandwidth control        */ DmaSpeed_NoStalls                            // Full speed
+      );
+
+      /**
+       * Structure to define the Receive DMA transfer
+       *
+       * Note: The transfer size used here is 8-bits only
+       */
+      DmaTcd rxTcd (
+         /* Source */
+         /* Address                  */ (uint32_t)spi.spi+offsetof(SPI_Type, POPR), // Source is SPI.POPR data register
+         /* Offset                   */ 0,                                          // Source address doesn't change
+         /* Size                     */ rxDmaSize,                                  // Read from source address depends on data size
+         /* Modulo                   */ DmaModulo_Disabled,                         // No modulo
+         /* Last address adjustment  */ 0,                                          // Source address doesn't change
+
+         /* Destination */
+         /* Address                  */ (uint32_t)(rxBuffer),                       // Destination array
+         /* Offset                   */ rxDataSize,                                 // Destination address advances 1 element for each request
+         /* Size                     */ rxDmaSize,                                  // Size of write to Destination address
+         /* Modulo                   */ DmaModulo_Disabled,                         // No modulo
+         /* Last address adjustment  */ -rxDataSize*numElements,                    // Reset destination address to start of array on completion
+
+         /* Minor loop byte count    */ dmaNBytes(rxDataSize),                      // Total transfer in one minor-loop
+         /* Major loop count         */ dmaCiter(numElements),                      // Transfer entire buffer
+
+         /* Start channel            */ false,                                      // Don't start (triggered by hardware)
+         /* Disable Req. on complete */ true,                                       // Clear hardware request when major loop completed
+         /* IRQ on major complete    */ true,                                       // Generate interrupt on completion of major-loop
+         /* IRQ on half complete     */ false,                                      // No interrupt
+         /* Bandwidth control        */ DmaSpeed_NoStalls                           // Full speed
+      );
+
+      // Connect DMA channel to SPI Tx
+      DmaMux0::configure(dmaTransmitChannel, Dma0Slot_SPI0_Tx, DmaMuxEnable_Continuous);
+
+      // Connect DMA channel to SPI Rx
+      DmaMux0::configure(dmaReceiveChannel, Dma0Slot_SPI0_Rx, DmaMuxEnable_Continuous);
+
+      // Configure the Tx transfer
+      Dma0::configureTransfer(dmaTransmitChannel, txTcd);
+
+      // Configure the Rx transfer
+      Dma0::configureTransfer(dmaReceiveChannel, rxTcd);
+
+      return E_NO_ERROR;
+   }
+
+   /**
+    * Set up for DMA operation
+    * - Allocates DMA channels
+    * - Configure DMA Mux for Tx and Rx channels
+    * - Configures DMA channels for Tx and Rx
+    * No transfers are actually started
+    *
+    * @tparam T  Type of elements in rxBuffer (deduced)
+    * @tparam N  Number of elements in rxBuffer (deduced)
+    *
+    * @param rxBuffer Buffer for received data
+    *
+    * @note This method may be called before the SPI configuration has been set.
+    *
+    * @return E_NOERROR on success
+    * @return E_NO_RESOURCE if failed to allocate required DMA channels
+    */
+   template<typename T, unsigned N>
+   ErrorCode initialiseDma(const T (&rxBuffer)[N]) {
+
+      static_assert((sizeof(T) == 1) || (sizeof(T) == 2) , "T must be of size 1 or 2 bytes");
+
+      return initialiseDma((void*)rxBuffer, sizeof(T), N);
+   }
+
+   /**
+    * Set up for DMA operation
+    * - Copies Tx data to internal buffer (with expansion)
+    * - Allocates DMA channels
+    * - Configure DMA Mux for Tx and Rx channels
+    * - Configures DMA channels for Tx and Rx
+    * No transfers are actually started
+    *
+    * @tparam T         Type for data (deduced)
+    * @tparam N         Number of data items in transfer
+    * @param dataIn     Data to send to SPI
+    * @param rxBuffer   Buffer for received data
+    *
+    * @return E_NOERROR on success
+    */
+   template<typename T, unsigned N>
+   ErrorCode initialiseTransfer(const T (&dataIn)[N], T (&rxBuffer)[N]) {
+
+      // Set up transmit buffer
+      loadTxData(dataIn);
+
+      // Set up DMA
+      return initialiseDma(rxBuffer);
+   }
+
+   /**
+    * Start DMA transfers To/From SPI
+    */
+   void startTransfer() {
+
+      spi.configureInterrupts(
+            SpiTxCompleteInterrupt_Enabled,
+            SpiEndOfQueueInterrupt_Enabled,
+            SpiTxFifoUnderflowInterrupt_Enabled,
+            SpiRxFifoOverflowInterrupt_Enabled);
+
+      spi.clearFifos(SpiClearFifo_Both);
+
+      spi.configureFifoRequests(SpiTxFifoRequest_Dma, SpiRxFifoRequest_Dma);
+
+      // Clear SPI Status
+      spi.getStatus();
+
+      spi.enableTransfer();
+
+      // Enable Rx hardware requests
+      Dma0::enableRequests(dmaReceiveChannel);
+
+      // Enable Tx hardware requests
+      Dma0::enableRequests(dmaTransmitChannel);
+   }
+
+protected:
+   static void cleanUp(DmaChannelNum channel) {
+
+      // Clear request and release DMA channel
+      DmaMux0::disable(channel);
+      Dma0::setCallback(channel, nullptr);
+      Dma0::freeChannel(channel);
+   }
+
+public:
+   void cleanUp() {
+      cleanUp(dmaTransmitChannel);
+      cleanUp(dmaReceiveChannel);
    }
 };
+
+/**
+ * Class to handle SPI DMA operations
+ * It will create the required buffer to format data for the DMA transfer.
+ * This is necessary because of the really stupid SPI transfers that require 32-bit writes to include COMMAND+DATA
+ * for each item transferred. Note that some later devices may not require this.
+ * This means that to transfer a buffer of data (8/16 bit items) requires copying it to a RAM Buffer up to 4-times its size
+ * and add in the command values for each entry.
+ *
+ * @tparam itemCount Maximum size of buffer that can be expanded (in items)
+ * @tparam  Spi      Associated SPI type
+ */
+template<unsigned itemCount, class Spi>
+class SpiDmaHandler_T : public SpiDmaHandlerBase<itemCount> {
+
+private:
+   using Super = SpiDmaHandlerBase<itemCount>;
+
+   static unsigned complete;
+   static bool     keepDmaConfiguration;
+
+   /**
+    * DMA complete callback
+    *
+    * Sets flag to indicate sequence complete.
+    */
+   static void dmaCallback(DmaChannelNum channel) {
+
+      Dma0::clearInterruptRequest(channel);
+      Dma0::enableRequests(channel, false);
+
+      if (!keepDmaConfiguration) {
+         // Clear request and release DMA channel
+         Super::cleanUp(channel);
+      }
+      if (complete>0) {
+         complete--;
+      }
+   }
+
+   /**
+    * SPI callback
+    *
+    * Used for debug timing checks.
+    * LED toggles on each SPI event
+    *
+    * @param status Interrupt status value from SPI->SR
+    */
+   static void spiCallback(uint32_t status) {
+      (void)status;
+   }
+
+public:
+   SpiDmaHandler_T(Spi &spi) : Super(spi) {
+      Spi::setCallback(spiCallback);
+   }
+
+   /**
+    * Start transfer
+    */
+   void startTransfer() {
+
+      complete = 2;
+
+      // Set up DMA IRQ handlers
+      Dma0::setCallback(Super::dmaTransmitChannel, dmaCallback);
+      Dma0::setCallback(Super::dmaReceiveChannel,  dmaCallback);
+
+      Dma0::enableNvicInterrupts(Super::dmaTransmitChannel, NvicPriority_Normal);
+      Dma0::enableNvicInterrupts(Super::dmaReceiveChannel, NvicPriority_Normal);
+
+      Super::startTransfer();
+   }
+
+   static bool isBusy() {
+      return complete != 0;
+   }
+
+   /**
+    * If set:
+    *    - The DMA configuration (including allocated DMA channels) set up by initialiseDma() are
+    *      retained for re-use.
+    *    - Resources must be manually released by calling cleanUp().
+    *
+    * If not set:
+    *    - Allocated resources are released when the DMA transfer completes successfully
+    *
+    * @param keepConfiguration  true to keep configuration and resources
+    */
+   static void setKeepDmaConfiguration(bool keepConfiguration) {
+      keepDmaConfiguration = keepConfiguration;
+   }
+
+};
+
+template<unsigned itemCount, class Spi>
+unsigned SpiDmaHandler_T<itemCount, Spi>::complete = false;
+
+template<unsigned itemCount, class Spi>
+bool SpiDmaHandler_T<itemCount, Spi>::keepDmaConfiguration = false;
 
 /**
  * @brief Template class representing a SPI interface
@@ -970,7 +1286,7 @@ public:
  * @tparam  Info           Class describing Spi hardware
  */
 template<class Info>
-class SpiBase_T : public Spi {
+class SpiBase_T : public Spi, public Info {
 
 public:
    /** Pointer to SPI hardware as struct */
@@ -993,9 +1309,23 @@ public:
 
 protected:
    /** Callback function for ISR */
-   static SpiCallbackFunction sCallback;
+   static CallbackFunction sCallback;
 
 public:
+   /**
+    * Gets and clears status flags.
+    *
+    * @return Status value (SPI->SR)
+    */
+   static uint32_t __attribute__((always_inline)) getStatus() {
+      // Capture interrupt status
+      uint32_t status = Info::spi->SR;
+      // Clear captured flags
+      Info::spi->SR = status;
+      // Return status
+      return status;
+   }
+
    /**
     * IRQ handler
     */
@@ -1009,7 +1339,7 @@ public:
     *  @param[in]  callback  Callback function to be executed on interrupt.\n
     *                        Use nullptr to remove callback.
     */
-   static __attribute__((always_inline)) void setCallback(SpiCallbackFunction callback) {
+   static __attribute__((always_inline)) void setCallback(CallbackFunction callback) {
       usbdm_assert(Info::irqHandlerInstalled, "SPI not configure for interrupts");
       if (callback == nullptr) {
          callback = Spi::unhandledCallback;
@@ -1189,11 +1519,15 @@ public:
       return Info::getClockFrequency();
    }
 
-   static constexpr SpiConfigurations defaultSettings {
-      /* CTAR 0         */ {Info::speed, (SpiMode)Info::mode, (SpiOrder)Info::lsbfe, SpiFrameSize_8},
-      /* CTAR 1         */ {Info::speed, (SpiMode)Info::mode, (SpiOrder)Info::lsbfe, SpiFrameSize_8},
-      /* PCS idle level */ SpiPeripheralSelect_None,
-   };
+   /**
+    * Configure with default settings.
+    * Configuration determined from Configure.usbdmProject
+    */
+   inline void defaultConfigure() {
+
+      // Update settings
+      configure(Info::DefaultInitValue);
+   }
 
    /**
     * Constructor
@@ -1205,7 +1539,20 @@ public:
       static_assert(Info::info[Info::sinPin].gpioBit != UNMAPPED_PCR, "SPIx_SIN has not been assigned to a pin - Modify Configure.usbdm");
       static_assert(Info::info[Info::soutPin].gpioBit != UNMAPPED_PCR, "SPIx_SOUT has not been assigned to a pin - Modify Configure.usbdm");
 
-      setConfigurations(defaultSettings);
+      configure(Info::DefaultInitValue);
+   }
+
+   /**
+    * Constructor
+    */
+   SpiBase_T(const typename SpiBasicInfo::Init &init) : Spi(Info::baseAddress) {
+
+      // Check pin assignments
+      static_assert(Info::info[Info::sckPin].gpioBit != UNMAPPED_PCR, "SPIx_SCK has not been assigned to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[Info::sinPin].gpioBit != UNMAPPED_PCR, "SPIx_SIN has not been assigned to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[Info::soutPin].gpioBit != UNMAPPED_PCR, "SPIx_SOUT has not been assigned to a pin - Modify Configure.usbdm");
+
+      configure(init);
    }
 
    /**
@@ -1214,68 +1561,10 @@ public:
    ~SpiBase_T() override {
    }
 
-   /**
-    * Gets and clears status flags.
-    *
-    * @return Status value (SPI->SR)
-    */
-   static uint32_t __attribute__((always_inline)) getStatus() {
-      // Capture interrupt status
-      uint32_t status = Info::spi->SR;
-      // Clear captured flags
-      Info::spi->SR = status;
-      // Return status
-      return status;
-   }
-
 };
 
-/**
- *  Transmit and receive a series of values
- *
- *  @tparam T Type for data transfer (may be inferred from parameters)
- *
- *  @param[in]  dataSize  Number of values to transfer
- *  @param[in]  txData    Transmit bytes (may be nullptr for Receive only)
- *  @param[out] rxData    Receive byte buffer (may be nullptr for Transmit only)
- *
- *  @note: rxData may use same buffer as txData
- *  @note: Size of txData and rxData should be appropriate for transmission size.
- */
-template<typename T>
-void __attribute__((noinline)) Spi::txRx(uint32_t dataSize, const T *txData, T *rxData) {
 
-   static_assert (((sizeof(T) == 1)||(sizeof(T) == 2)), "Size of data type T must be 8 or 16-bits");
-
-   while(dataSize-->0) {
-      uint32_t sendData = 0xFFFF;
-      if (txData != nullptr) {
-         sendData = (uint16_t)*txData++;
-      }
-      if (dataSize == 0) {
-         // Mark last data
-         sendData |= SPI_PUSHR_EOQ_MASK;
-      }
-      else {
-         // Keep SPI_PCS asserted between data values
-         sendData |= SPI_PUSHR_CONT_MASK;
-      }
-      spi->PUSHR = sendData|pushrMask;
-      while ((spi->SR & SPI_SR_TCF_MASK)==0) {
-      }
-      spi->SR = SPI_SR_TCF_MASK|SPI_SR_EOQF_MASK;
-      uint32_t receiveData = spi->POPR;
-      if (rxData != nullptr) {
-         *rxData++ = receiveData;
-      }
-   }
-   // Wait until tx/rx complete
-   while ((spi->SR&SPI_SR_TXRXS_MASK) == 0) {
-      __asm__("nop");
-   }
-}
-
-template<class Info> SpiCallbackFunction SpiBase_T<Info>::sCallback = Spi::unhandledCallback;
+template<class Info> typename SpiBase_T<Info>::CallbackFunction SpiBase_T<Info>::sCallback = Spi::unhandledCallback;
 
 $(/SPI/declarations: // No declarations found)
 /**

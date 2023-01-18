@@ -1,5 +1,5 @@
 /*
- ==============================================================================
+ ================================================================================
  * @file    spi-2-config-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   C++ demo using SPI interface
  *
@@ -8,9 +8,9 @@
  *   - Two configurations (assuming 2 SPI CTARs)
  *   - These configurations may be used with multiple devices (limited by PCSs)
  *
- *  Created on: 10/12/2021
+ *  Created on: 10/1/2023
  *      Author: podonoghue
- ==============================================================================
+ =================================================================================
  */
 /*
  * This example requires a loop-back between SPI_MOSI and SPI_MISO.
@@ -29,18 +29,22 @@
 
 using namespace USBDM;
 
-static const SpiConfigurations configurations {
+static const Spi0::Init configuration {
+   {  /* Shared settings            */
+      SpiPeripheralSelectPolarity_All_ActiveHigh, // All PCSs active-high
+   },
    //                              Speed      Mode        Bit Order           Frame Size
-   /* Configuration 0 (CTAR0) */ { 1'000'000, SpiMode_0, SpiOrder_MsbFirst, SpiFrameSize_8},
-   /* Configuration 1 (CTAR1) */ {10'000'000, SpiMode_0, SpiOrder_MsbFirst, SpiFrameSize_12},
-   /* PCS idle levels         */ SpiPeripheralSelect_None, // All PCSs idle low
+   /* Configuration 0 (CTAR0) */ { 1_MHz, SpiMode_0, SpiBitOrder_MsbFirst, SpiFrameSize_8_bits},
+   /* Configuration 1 (CTAR1) */ {10_MHz, SpiMode_0, SpiBitOrder_MsbFirst, SpiFrameSize_12_bits},
 };
 
 int main() {
-   Spi0 spi{};
+   // Create SPI with above configuration
+   Spi0 spi(configuration);
 
    // Configure two configurations (CTARs) and the idle levels for PCSs
-   spi.setConfigurations(configurations);
+   // Can also change configurations loaded
+   //   spi.configure(configuration);
 
    for(;;) {
       {
@@ -56,11 +60,18 @@ int main() {
          uint8_t rxData3 = 0;
          uint8_t rxData4 = 0;
 
-         spi.startTransaction(SpiPeripheralSelect_0, SpiCtarSelect_0);
-         spi.txRx(txDataA, rxData1); // 5 bytes tx-rx
-         spi.txRx(txDataA, rxData2); // 5 bytes tx-rx
-         rxData3 = spi.txRx(txDataA[0]); // 1 byte tx-rx
-         rxData4 = spi.txRx(txDataA[1]); // 1 byte tx-rx
+         // Select configuration to use (CTAR & PCS options)
+         spi.selectConfiguration(
+               SpiCtarSelect_0,                       // Use CTAR0
+               SpiPeripheralSelect_0,                 // PCS0 is asserted during transfer
+               SpiPeripheralSelectMode_Transaction    // PCSx goes low between transactions
+         );
+
+         spi.startTransaction();
+         spi.txRx(txDataA, rxData1);          // 5 x 8-bits tx-rx
+         spi.txRx(txDataA, rxData2);          // 5 x 8-bits tx-rx
+         rxData3 = spi.txRx(txDataA[0]);      // 8-bits tx-rx
+         rxData4 = spi.txRxFinal(txDataA[1]); // 8-bits tx-rx + PCSx released
          spi.endTransaction();
 
          if ((memcmp(txDataA, rxData1, sizeof(txDataA)/sizeof(txDataA[0])) != 0) ||
@@ -84,11 +95,18 @@ int main() {
          uint16_t rxData3 = 0;;
          uint16_t rxData4 = 0;
 
-         spi.startTransaction(SpiPeripheralSelect_1, SpiCtarSelect_1);
-         spi.txRx(txDataB, rxData1); // 5 bytes tx-rx
-         spi.txRx(txDataB, rxData2); // 5 bytes tx-rx
-         rxData3 = spi.txRx(txDataB[0]); // 1 byte tx-rx
-         rxData4 = spi.txRx(txDataB[1]); // 1 byte tx-rx
+         // Select configuration to use (CTAR & PCS options)
+         spi.selectConfiguration(
+               SpiCtarSelect_1,                       // Use CTAR1
+               SpiPeripheralSelect_1,                 // PCS1 is asserted during transfer
+               SpiPeripheralSelectMode_Transfer       // PCSx goes low between transfer
+         );
+
+         spi.startTransaction();
+         spi.txRx(txDataB, rxData1);          // 5 x 12-bits tx-rx
+         spi.txRx(txDataB, rxData2);          // 5 x 12-bits tx-rx
+         rxData3 = spi.txRx(txDataB[0]);      // 12-bits tx-rx
+         rxData4 = spi.txRxFinal(txDataB[1]); // 12-bits tx-rx + PCSx released
          spi.endTransaction();
 
          if ((memcmp(txDataB, rxData1, sizeof(txDataB)/sizeof(txDataB[0])) != 0) ||

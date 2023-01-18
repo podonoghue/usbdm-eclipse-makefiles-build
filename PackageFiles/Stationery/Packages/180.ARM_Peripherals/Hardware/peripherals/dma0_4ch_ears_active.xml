@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"
 ?>
-<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- dma0_4ch_ears_active.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="dma0_4ch.xml"/>
-</fragment>
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="DMA Module">
+
+   <constant key="NumChannels" type="Integer" value="4" />
+   <constant key="NumVectors"  type="Integer" value="4" />
+
+   <xi:include href="dma0_base.xml"/>
+
+</peripheralPage>

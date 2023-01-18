@@ -15,12 +15,6 @@
    <!ATTLIST peripheralPage description  CDATA        #REQUIRED>
    <!ATTLIST peripheralPage toolTip      CDATA        #IMPLIED>
 
-<!ELEMENT frament ((%structure_items;|%gui_items;|%control_items;)*) >
-   <!ATTLIST frament xmlns:xi     CDATA        #IMPLIED>
-   <!ATTLIST frament name         CDATA        #REQUIRED>
-   <!ATTLIST frament description  CDATA        #REQUIRED>
-   <!ATTLIST frament toolTip      CDATA        #IMPLIED>
-
 <!ELEMENT fragment ANY >
    <!ATTLIST fragment xmlns:xi CDATA #IMPLIED>
 
@@ -249,26 +243,47 @@
    <!ATTLIST pinListOption derivedFrom        CDATA        #IMPLIED>
 
 <!ELEMENT clockSelectionOption ((choice)*) >
+   <!-- Condition evaluated during parsing that controls procsing of this variable -->
    <!ATTLIST clockSelectionOption condition           CDATA        #IMPLIED>
+   <!-- Locks varibale against change by user in GUI -->
    <!ATTLIST clockSelectionOption constant            (false|true) #IMPLIED>
+   <!-- Variable is not visible in GUI -->
    <!ATTLIST clockSelectionOption hidden              (false|true) #IMPLIED>
+   <!-- DIsplay name for variable (derived from key if not provided -->
    <!ATTLIST clockSelectionOption name                CDATA        #IMPLIED>
+   <!-- Unique key used to identify variable -->
    <!ATTLIST clockSelectionOption key                 CDATA        #REQUIRED>
+   <!-- Key used for template -->
    <!ATTLIST clockSelectionOption templateKey         CDATA        #IMPLIED>
+   <!-- Origin displayed as part of tool-tip -->
    <!ATTLIST clockSelectionOption origin              CDATA        #IMPLIED>
+   <!-- Description  of variable -->
    <!ATTLIST clockSelectionOption description         CDATA        #IMPLIED>
+   <!-- Tool-tip to display in GUI and used for documentation in C++ code -->
    <!ATTLIST clockSelectionOption toolTip             CDATA        #IMPLIED>
+   <!-- Unit to use for numeric value -->
    <!ATTLIST clockSelectionOption units               (None|Hz|s)  #IMPLIED>
+   <!-- Value is derived and should not be saved -->
    <!ATTLIST clockSelectionOption derived             (true)       #IMPLIED>
+   <!-- Variable defined earlier to inherit values from -->
    <!ATTLIST clockSelectionOption derivedFrom         CDATA        #IMPLIED>
-   <!ATTLIST clockSelectionOption enumStem            CDATA        #IMPLIED> <!-- Type for enum and first part of enum name -->
-   <!ATTLIST clockSelectionOption typeName            CDATA        #IMPLIED> <!-- as for enumStem -->
-   <!ATTLIST clockSelectionOption enumType            CDATA        #IMPLIED> <!-- Type to use for enums e.g.uint8_t -->
+   <!-- Type for enum and first part of enum name -->
+   <!ATTLIST clockSelectionOption enumStem            CDATA        #IMPLIED> 
+   <!-- As for enumStem = Type for enum and first part of enum name-->
+   <!ATTLIST clockSelectionOption typeName            CDATA        #IMPLIED>
+   <!-- Type to use for enums e.g.uint8_t -->
+   <!ATTLIST clockSelectionOption enumType            CDATA        #IMPLIED>
+   <!-- Text to add to enum body generated from choices -->
+   <!ATTLIST clockSelectionOption enumText            CDATA        #IMPLIED> 
+   <!-- Target variable for control-->
    <!ATTLIST clockSelectionOption target              CDATA        #IMPLIED>
+   <!-- Name of register -->
    <!ATTLIST clockSelectionOption register            CDATA        #IMPLIED>
+   <!-- Replace existing variable quietly -->
    <!ATTLIST clockSelectionOption replace             CDATA        #IMPLIED>
-   <!ATTLIST clockSelectionOption valueFormat         CDATA        #IMPLIED> <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
-   <!ATTLIST clockSelectionOption enumText            CDATA        #IMPLIED> <!-- Text to add to enum generated from choices -->
+   <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
+   <!ATTLIST clockSelectionOption valueFormat         CDATA        #IMPLIED>
+   <!-- Value to take when disabled --> 
    <!ATTLIST clockSelectionOption disabledValue       CDATA        #IMPLIED>
    
 <!ELEMENT clockMultiplexorOption ((choice)*) >
@@ -284,7 +299,7 @@
    <!ATTLIST clockMultiplexorOption units               (None|Hz|s)  #IMPLIED>
    <!ATTLIST clockMultiplexorOption derived             (true)       #IMPLIED>
    <!ATTLIST clockMultiplexorOption derivedFrom         CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption namespace           (info|usbdm|class|all)  #IMPLIED >
+   <!ATTLIST clockMultiplexorOption namespace           (info|usbdm|all)  #IMPLIED >
    <!ATTLIST clockMultiplexorOption enumStem            CDATA        #IMPLIED> <!-- Type for enum and first part of enum name -->
    <!ATTLIST clockMultiplexorOption typeName            CDATA        #IMPLIED> <!-- as for enumStem -->
    <!ATTLIST clockMultiplexorOption enumType            CDATA        #IMPLIED> <!-- Type to use for enums e.g.uint8_t -->
@@ -292,39 +307,72 @@
    <!ATTLIST clockMultiplexorOption register            CDATA        #IMPLIED>
    <!ATTLIST clockMultiplexorOption replace             CDATA        #IMPLIED>
    <!ATTLIST clockMultiplexorOption valueFormat         CDATA        #IMPLIED> <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
-   <!ATTLIST clockMultiplexorOption enumText            CDATA        #IMPLIED> <!-- Text to add to enum generated from choices -->
+   <!-- Text to add to enum body generated from choices -->
+   <!ATTLIST clockMultiplexorOption enumText            CDATA        #IMPLIED>
    <!ATTLIST clockMultiplexorOption disabledValue       CDATA        #IMPLIED>
    <!ATTLIST clockMultiplexorOption enabledBy           CDATA        #IMPLIED> <!-- Enabled by an expression -->
    <!ATTLIST clockMultiplexorOption unlockedBy          CDATA        #IMPLIED> <!-- Unlocked by an expression -->
    <!ATTLIST clockMultiplexorOption ref                 CDATA        #IMPLIED> <!-- Equation that controls this variable -->
 
 <!ELEMENT choiceOption ((choice)*) >
+   <!-- Condition evaluated during parsing that controls procsing of this variable -->
    <!ATTLIST choiceOption condition           CDATA        #IMPLIED>
+   <!-- Locks variable against change by user in GUI -->
    <!ATTLIST choiceOption constant            (false|true) #IMPLIED>
+   <!-- Variable is not visible in GUI -->
    <!ATTLIST choiceOption hidden              (false|true) #IMPLIED>
+   <!-- Display name for variable (derived from key if not provided -->
    <!ATTLIST choiceOption name                CDATA        #IMPLIED>
+   <!-- Unique key used to identify variable. Prepended with peripheral name if not absolute -->
    <!ATTLIST choiceOption key                 CDATA        #REQUIRED>
+   <!--Used with enum generation to give explicit template name to enum template -->
    <!ATTLIST choiceOption templateKey         CDATA        #IMPLIED>
+   <!-- Origin displayed as part of tool-tip -->
    <!ATTLIST choiceOption origin              CDATA        #IMPLIED>
+   <!-- Description  of variable -->
    <!ATTLIST choiceOption description         CDATA        #IMPLIED>
+   <!-- Tool-tip to display in GUI and used for documentation in C++ code -->
    <!ATTLIST choiceOption toolTip             CDATA        #IMPLIED>
+   <!-- Unit to use for numeric value -->
    <!ATTLIST choiceOption units               (None|Hz|s)  #IMPLIED>
+   <!-- Value is derived and should not be saved -->
    <!ATTLIST choiceOption derived             (true)       #IMPLIED>
+   <!-- Variable defined earlier to inherit values from -->
    <!ATTLIST choiceOption derivedFrom         CDATA        #IMPLIED>
-   <!ATTLIST choiceOption namespace           (info|usbdm|class|all)  #IMPLIED >
-   <!ATTLIST choiceOption enumStem            CDATA        #IMPLIED> <!-- Type for enum and first part of enum name -->
-   <!ATTLIST choiceOption typeName            CDATA        #IMPLIED> <!-- as for enumStem -->
-   <!ATTLIST choiceOption enumType            CDATA        #IMPLIED> <!-- Type to use for enums e.g.uint8_t -->
-   <!ATTLIST choiceOption target              CDATA        #IMPLIED>
+   <!-- 
+   Where to place generated code
+      info  - Within peripheral info class in pinmapping.h (default if not provided)
+      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)
+      all   - Explicitly available anywhere controlled by key substitution
+   -->
+   <!ATTLIST choiceOption namespace           (info|usbdm|all)  #IMPLIED >
+   <!-- Type for enum and first part of enum name -->
+   <!ATTLIST choiceOption enumStem            CDATA        #IMPLIED>
+   <!-- As for enumStem = Type for enum and first part of enum name-->
+   <!ATTLIST choiceOption typeName            CDATA        #IMPLIED>
+   <!-- Type to use for enums e.g.uint8_t -->
+   <!ATTLIST choiceOption enumType            CDATA        #IMPLIED>
+   <!-- Name of register. If not provided it is derived from variable -->
    <!ATTLIST choiceOption register            CDATA        #IMPLIED>
+   <!-- Replace existing variable quietly -->
    <!ATTLIST choiceOption replace             CDATA        #IMPLIED>
-   <!ATTLIST choiceOption valueFormat         CDATA        #IMPLIED> <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
-   <!ATTLIST choiceOption enumText            CDATA        #IMPLIED> <!-- Text to add to enum generated from choices -->
+   <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
+   <!ATTLIST choiceOption valueFormat         CDATA        #IMPLIED>
+   <!-- Text to add to enum body generated from choices -->
+   <!ATTLIST choiceOption enumText            CDATA        #IMPLIED>
+   <!-- Value to take when disabled --> 
    <!ATTLIST choiceOption disabledValue       CDATA        #IMPLIED>
-   <!ATTLIST choiceOption errorIf             CDATA        #IMPLIED> <!-- Set as error based on expression -->
-   <!ATTLIST choiceOption enabledBy           CDATA        #IMPLIED> <!-- Enabled by an expression -->
-   <!ATTLIST choiceOption unlockedBy          CDATA        #IMPLIED> <!-- Unlocked by an expression -->
-   <!ATTLIST choiceOption ref                 CDATA        #IMPLIED> <!-- Equation that controls this variable -->
+   <!-- Set as error based on expression -->
+   <!ATTLIST choiceOption errorIf             CDATA        #IMPLIED>
+   <!-- Enabled by an expression -->
+   <!ATTLIST choiceOption enabledBy           CDATA        #IMPLIED>
+   <!-- Unlocked by an expression -->
+   <!ATTLIST choiceOption unlockedBy          CDATA        #IMPLIED>
+    <!-- Equation that controls this variable -->
+   <!ATTLIST choiceOption ref                 CDATA        #IMPLIED>
+   <!-- Target variable dependent on this variable -->
+   <!ATTLIST choiceOption target              CDATA        #IMPLIED>
+
 
 <!ELEMENT addChoices ((choice)*) >
    <!ATTLIST addChoices key                 CDATA        #REQUIRED>
@@ -334,7 +382,7 @@
    <!ATTLIST choice name                      CDATA        #REQUIRED>
    <!ATTLIST choice requiredPeripherals       CDATA        #IMPLIED>
    <!ATTLIST choice condition                 CDATA        #IMPLIED>
-   <!ATTLIST choice isDefault                 (false|true) #IMPLIED>
+   <!ATTLIST choice isDefault                 (true)       #IMPLIED>
    <!ATTLIST choice ref                       CDATA        #IMPLIED>
    <!ATTLIST choice enum                      CDATA        #IMPLIED>
    <!ATTLIST choice code                      CDATA        #IMPLIED>
@@ -342,31 +390,68 @@
    <!ATTLIST choice enabledBy                 CDATA        #IMPLIED>
 
 <!ELEMENT binaryOption (choice?, choice?) >
-   <!ATTLIST binaryOption condition     CDATA        #IMPLIED>
-   <!ATTLIST binaryOption key           CDATA        #REQUIRED>
-   <!ATTLIST binaryOption name          CDATA        #IMPLIED>
-   <!ATTLIST binaryOption templateKey   CDATA        #IMPLIED>
-   <!ATTLIST binaryOption value         CDATA        #IMPLIED>
-   <!ATTLIST binaryOption constant      (false|true) #IMPLIED>
-   <!ATTLIST binaryOption hidden        (false|true) #IMPLIED>
+   <!-- Condition evaluated during parsing that controls procsing of this variable -->
+   <!ATTLIST binaryOption condition           CDATA        #IMPLIED>
+   <!-- Locks variable against change by user in GUI -->
+   <!ATTLIST binaryOption constant            (false|true) #IMPLIED>
+   <!-- Variable is not visible in GUI -->
+   <!ATTLIST binaryOption hidden              (false|true) #IMPLIED>
+   <!-- Display name for variable (derived from key if not provided -->
+   <!ATTLIST binaryOption name                CDATA        #IMPLIED>
+   <!-- Unique key used to identify variable. Prepended with peripheral name if not absolute -->
+   <!ATTLIST binaryOption key                 CDATA        #REQUIRED>
+   <!--Used with enum generation to give explicit template name to enum template -->
+   <!ATTLIST binaryOption templateKey         CDATA        #IMPLIED>
+   <!-- Origin displayed as part of tool-tip -->
+   <!ATTLIST binaryOption origin              CDATA        #IMPLIED>
+   <!-- Description  of variable -->
+   <!ATTLIST binaryOption description         CDATA        #IMPLIED>
+   <!-- Tool-tip to display in GUI and used for documentation in C++ code -->
+   <!ATTLIST binaryOption toolTip             CDATA        #IMPLIED>
+   <!-- Unit to use for numeric value -->
+   <!ATTLIST binaryOption units               (None|Hz|s)  #IMPLIED>
+   <!-- Value is derived and should not be saved -->
+   <!ATTLIST binaryOption derived             (true)       #IMPLIED>
+   <!-- Variable defined earlier to inherit values from -->
+   <!ATTLIST binaryOption derivedFrom         CDATA        #IMPLIED>
+   <!-- 
+   Where to place generated code
+      info  - Within peripheral info class in pinmapping.h (default if not provided)
+      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)
+      all   - Explicitly available anywhere controlled by key substitution
+   -->
+   <!ATTLIST binaryOption namespace           (info|usbdm|all)  #IMPLIED >
+   <!-- Type for enum and first part of enum name -->
+   <!ATTLIST binaryOption enumStem            CDATA        #IMPLIED>
+   <!-- As for enumStem = Type for enum and first part of enum name-->
+   <!ATTLIST binaryOption typeName            CDATA        #IMPLIED>
+   <!-- Type to use for enums e.g.uint8_t -->
+   <!ATTLIST binaryOption enumType            CDATA        #IMPLIED>
+   <!-- Text to add to enum body generated from choices -->
+   <!ATTLIST binaryOption enumText            CDATA        #IMPLIED>
+   <!-- Name of register. If not provided it is derived from variable -->
+   <!ATTLIST binaryOption register            CDATA        #IMPLIED>
+   <!-- Replace existing variable quietly -->
+   <!ATTLIST binaryOption replace             CDATA        #IMPLIED>
+   <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
+   <!ATTLIST binaryOption valueFormat         CDATA        #IMPLIED>
+   <!-- Value to take when disabled --> 
+   <!ATTLIST binaryOption disabledValue       CDATA        #IMPLIED>
+   <!-- Set as error based on expression -->
+   <!ATTLIST binaryOption errorIf             CDATA        #IMPLIED>
+   <!-- Enabled by an expression -->
+   <!ATTLIST binaryOption enabledBy           CDATA        #IMPLIED>
+   <!-- Unlocked by an expression -->
+   <!ATTLIST binaryOption unlockedBy          CDATA        #IMPLIED>
+    <!-- Equation that controls this variable -->
+   <!ATTLIST binaryOption ref                 CDATA        #IMPLIED>
+   <!-- Target variable dependent on this variable -->
+   <!ATTLIST binaryOption target              CDATA        #IMPLIED>
+
+
+
+
    <!ATTLIST binaryOption modify        CDATA        #IMPLIED>
-   <!ATTLIST binaryOption replace       CDATA        #IMPLIED>
-   <!ATTLIST binaryOption disabledValue CDATA        #IMPLIED>
-   <!ATTLIST binaryOption origin        CDATA        #IMPLIED>
-   <!ATTLIST binaryOption description   CDATA        #IMPLIED>
-   <!ATTLIST binaryOption toolTip       CDATA        #IMPLIED>
-   <!ATTLIST binaryOption derived       (true)       #IMPLIED>
-   <!ATTLIST binaryOption derivedFrom   CDATA        #IMPLIED>
-   <!ATTLIST binaryOption ref           CDATA        #IMPLIED> <!-- Equation that controls this variable -->
-   <!ATTLIST binaryOption enumStem      CDATA        #IMPLIED> <!-- Type for enum and first part of enum name -->
-   <!ATTLIST binaryOption typeName      CDATA        #IMPLIED> <!-- as for enumStem -->
-   <!ATTLIST binaryOption enumType      CDATA        #IMPLIED> <!-- Type to use for enums e.g.uint8_t -->
-   <!ATTLIST binaryOption register      CDATA        #IMPLIED>
-   <!ATTLIST binaryOption valueFormat   CDATA        #IMPLIED>
-   <!ATTLIST binaryOption target        CDATA        #IMPLIED>
-   <!ATTLIST binaryOption enumText      CDATA        #IMPLIED> <!-- Text to add to enum generated from choices -->
-   <!ATTLIST binaryOption enabledBy     CDATA        #IMPLIED> <!-- Enabled by an expression -->
-   <!ATTLIST binaryOption unlockedBy    CDATA        #IMPLIED> <!-- Unlocked by an expression -->
 
 <!ELEMENT irqOption EMPTY >
    <!ATTLIST irqOption condition     CDATA        #IMPLIED>
@@ -393,7 +478,7 @@
    class Appears as classInfo variable with peripheral path e.g. /ADC/classInfo 
 -->
 <!ELEMENT template (#PCDATA)* >
-   <!ATTLIST template namespace                 (info|usbdm|class|all)  #IMPLIED >
+   <!ATTLIST template namespace                 (info|usbdm|all)  #IMPLIED >
    <!ATTLIST template key                       CDATA                   #IMPLIED >
    <!ATTLIST template condition                 CDATA                   #IMPLIED>
    <!ATTLIST template codeGenCondition          CDATA                   #IMPLIED>
@@ -404,7 +489,7 @@
    <!ATTLIST template linePadding               CDATA                   #IMPLIED>
 
 <!ELEMENT setTemplate (#PCDATA)* >
-   <!ATTLIST setTemplate namespace                 (info|usbdm|class|all)  #IMPLIED >
+   <!ATTLIST setTemplate namespace                 (info|usbdm|all)  #IMPLIED >
    <!ATTLIST setTemplate key                       CDATA                   #IMPLIED >
    <!ATTLIST setTemplate condition                 CDATA                   #IMPLIED>
    <!ATTLIST setTemplate codeGenCondition          CDATA                   #IMPLIED>
@@ -420,7 +505,7 @@
    <!ATTLIST setTemplate params                    CDATA                   #IMPLIED>
 
 <!ELEMENT constructorTemplate (#PCDATA)* >
-   <!ATTLIST constructorTemplate namespace                 (info|usbdm|class|all)  #IMPLIED >
+   <!ATTLIST constructorTemplate namespace                 (info|usbdm|all)  #IMPLIED >
    <!ATTLIST constructorTemplate key                       CDATA                   #IMPLIED >
    <!ATTLIST constructorTemplate condition                 CDATA                   #IMPLIED>
    <!ATTLIST constructorTemplate codeGenCondition          CDATA                   #IMPLIED>
@@ -436,7 +521,7 @@
    <!ATTLIST constructorTemplate params                    CDATA                   #IMPLIED>
 
 <!ELEMENT initialValueTemplate (#PCDATA|for)* >
-   <!ATTLIST initialValueTemplate namespace                 (info|usbdm|class|all)  #IMPLIED >
+   <!ATTLIST initialValueTemplate namespace                 (info|usbdm|all)  #IMPLIED >
    <!ATTLIST initialValueTemplate key                       CDATA                   #IMPLIED >
    <!ATTLIST initialValueTemplate condition                 CDATA                   #IMPLIED>
    <!ATTLIST initialValueTemplate codeGenCondition          CDATA                   #IMPLIED>
@@ -449,7 +534,7 @@
    <!ATTLIST initialValueTemplate linePadding               CDATA                   #IMPLIED>
 
 <!ELEMENT enumTemplate (#PCDATA)* >
-   <!ATTLIST enumTemplate namespace       (info|usbdm|class|all)  #IMPLIED >
+   <!ATTLIST enumTemplate namespace       (info|usbdm|all)  #IMPLIED >
    <!ATTLIST enumTemplate key             CDATA                   #IMPLIED >
    <!ATTLIST enumTemplate condition       CDATA                   #IMPLIED>
    <!ATTLIST enumTemplate variable        CDATA                   #REQUIRED>
@@ -457,7 +542,7 @@
    <!ATTLIST enumTemplate template        CDATA                   #IMPLIED>
 
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
-   <!ATTLIST clockCodeTemplate namespace                 (info|usbdm|class|all)  #IMPLIED >
+   <!ATTLIST clockCodeTemplate namespace                 (info|usbdm|all)  #IMPLIED >
    <!ATTLIST clockCodeTemplate key                       CDATA                   #IMPLIED >
    <!ATTLIST clockCodeTemplate condition                 CDATA                   #IMPLIED>
    <!ATTLIST clockCodeTemplate variable                  CDATA                   #REQUIRED>

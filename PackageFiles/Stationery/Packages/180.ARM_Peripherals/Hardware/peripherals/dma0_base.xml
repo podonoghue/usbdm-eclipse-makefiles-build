@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- dma0_base.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <choiceOption key="DmaChannelNum"
+      valueFormat="%s"
+      enumStem="DmaChannelNum"
+      description="DMA channel numbers"
+      toolTip="Identifies DMA channel">
+
+      <choice value="(1&lt;&lt;6)"  name="All DMA channels" enum="All"  />
+      <choice value="(1&lt;&lt;7)"  name="No DMA channel"   enum="None" />
+
+      <choice value="0"  name="Channel 0"   enum="0"   condition="@NumChannels>0"  />
+      <choice value="1"  name="Channel 1"   enum="1"   condition="@NumChannels>1"  />
+      <choice value="2"  name="Channel 2"   enum="2"   condition="@NumChannels>2"  />
+      <choice value="3"  name="Channel 3"   enum="3"   condition="@NumChannels>3"  />
+      <choice value="4"  name="Channel 4"   enum="4"   condition="@NumChannels>4"  />
+      <choice value="5"  name="Channel 5"   enum="5"   condition="@NumChannels>5"  />
+      <choice value="6"  name="Channel 6"   enum="6"   condition="@NumChannels>6"  />
+      <choice value="7"  name="Channel 7"   enum="7"   condition="@NumChannels>7"  />
+      <choice value="8"  name="Channel 8"   enum="8"   condition="@NumChannels>8"  />
+      <choice value="9"  name="Channel 9"   enum="9"   condition="@NumChannels>9"  />
+      <choice value="10" name="Channel 10"  enum="10"  condition="@NumChannels>10" />
+      <choice value="11" name="Channel 11"  enum="11"  condition="@NumChannels>11" />
+      <choice value="12" name="Channel 12"  enum="12"  condition="@NumChannels>12" />
+      <choice value="13" name="Channel 13"  enum="13"  condition="@NumChannels>13" />
+      <choice value="14" name="Channel 14"  enum="14"  condition="@NumChannels>14" />
+      <choice value="15" name="Channel 15"  enum="15"  condition="@NumChannels>15" />
+      <choice value="16" name="Channel 15"  enum="16"  condition="@NumChannels>16" />
+      <choice value="17" name="Channel 15"  enum="17"  condition="@NumChannels>17" />
+      <choice value="18" name="Channel 15"  enum="18"  condition="@NumChannels>18" />
+      <choice value="19" name="Channel 15"  enum="19"  condition="@NumChannels>19" />
+      <choice value="20" name="Channel 15"  enum="20"  condition="@NumChannels>20" />
+      <choice value="21" name="Channel 15"  enum="21"  condition="@NumChannels>21" />
+      <choice value="22" name="Channel 15"  enum="22"  condition="@NumChannels>22" />
+      <choice value="23" name="Channel 15"  enum="23"  condition="@NumChannels>23" />
+      <choice value="24" name="Channel 15"  enum="24"  condition="@NumChannels>24" />
+      <choice value="25" name="Channel 15"  enum="25"  condition="@NumChannels>25" />
+      <choice value="26" name="Channel 15"  enum="26"  condition="@NumChannels>26" />
+      <choice value="27" name="Channel 15"  enum="27"  condition="@NumChannels>27" />
+      <choice value="28" name="Channel 15"  enum="28"  condition="@NumChannels>28" />
+      <choice value="29" name="Channel 15"  enum="29"  condition="@NumChannels>29" />
+      <choice value="30" name="Channel 15"  enum="30"  condition="@NumChannels>30" />
+      <choice value="31" name="Channel 15"  enum="31"  condition="@NumChannels>31" />
+   </choiceOption>
+
+   <choiceOption key="dma_csr_bwc"
+      enumStem="DmaSpeed"
+      description="Bandwidth Control"
+      toolTip="Throttles the amount of bus bandwidth consumed by the eDMA. \n
+               Generally, as the eDMA processes the minor loop, it continuously generates \n
+               read/write sequences until the minor count is exhausted. This field \n
+               forces the eDMA to stall after the completion of each read/write access \n
+               to control the bus request bandwidth seen by the crossbar switch." >
+      <choice value="0" name="No eDMA engine stalls"                           enum="NoStalls"  />
+      <choice value="2" name="eDMA engine stalls for 4 cycles after each R/W." enum="4_Stalls"  />
+      <choice value="3" name="eDMA engine stalls for 8 cycles after each R/W." enum="8_Stalls"  />
+   </choiceOption>
+
+   <choiceOption key="dma_csr_majorelink"
+      valueFormat="DMA_CSR_MAJORELINK(%s),DMA_CSR_MAJORLINKCH(%s)"
+      enumStem="DmaMajorLink"
+      description="Enable channel-to-channel linking on major loop complete"
+      toolTip="As the channel completes the major loop, this option enables the linking to another channel. \n
+               The link target channel initiates a channel service request via an internal mechanism that sets the \n
+               TCDn_CSR[START] bit of the specified channel. \n
+               NOTE: To support the dynamic linking coherency model, this field is forced to zero when \n
+               written to while the TCDn_CSR[DONE] bit is set.">
+      <choice value="0,0"  name="Channel-to-channel linking is disabled" enum="Disabled" />
+      <choice value="1,0"  name="Link to channel 0"   enum="Channel_0"   condition="@NumChannels>0"  />
+      <choice value="1,1"  name="Link to channel 1"   enum="Channel_1"   condition="@NumChannels>1"  />
+      <choice value="1,2"  name="Link to channel 2"   enum="Channel_2"   condition="@NumChannels>2"  />
+      <choice value="1,3"  name="Link to channel 3"   enum="Channel_3"   condition="@NumChannels>3"  />
+      <choice value="1,4"  name="Link to channel 4"   enum="Channel_4"   condition="@NumChannels>4"  />
+      <choice value="1,5"  name="Link to channel 5"   enum="Channel_5"   condition="@NumChannels>5"  />
+      <choice value="1,6"  name="Link to channel 6"   enum="Channel_6"   condition="@NumChannels>6"  />
+      <choice value="1,7"  name="Link to channel 7"   enum="Channel_7"   condition="@NumChannels>7"  />
+      <choice value="1,8"  name="Link to channel 8"   enum="Channel_8"   condition="@NumChannels>8"  />
+      <choice value="1,9"  name="Link to channel 9"   enum="Channel_9"   condition="@NumChannels>9"  />
+      <choice value="1,10" name="Link to channel 10"  enum="Channel_10"  condition="@NumChannels>10" />
+      <choice value="1,11" name="Link to channel 11"  enum="Channel_11"  condition="@NumChannels>11" />
+      <choice value="1,12" name="Link to channel 12"  enum="Channel_12"  condition="@NumChannels>12" />
+      <choice value="1,13" name="Link to channel 13"  enum="Channel_13"  condition="@NumChannels>13" />
+      <choice value="1,14" name="Link to channel 14"  enum="Channel_14"  condition="@NumChannels>14" />
+      <choice value="1,15" name="Link to channel 15"  enum="Channel_15"  condition="@NumChannels>15" />
+      <choice value="1,16" name="Link to channel 16"  enum="Channel_16"  condition="@NumChannels>16" />
+      <choice value="1,17" name="Link to channel 17"  enum="Channel_17"  condition="@NumChannels>17" />
+      <choice value="1,18" name="Link to channel 18"  enum="Channel_18"  condition="@NumChannels>18" />
+      <choice value="1,19" name="Link to channel 19"  enum="Channel_19"  condition="@NumChannels>19" />
+      <choice value="1,20" name="Link to channel 20"  enum="Channel_20"  condition="@NumChannels>20" />
+      <choice value="1,21" name="Link to channel 21"  enum="Channel_21"  condition="@NumChannels>21" />
+      <choice value="1,22" name="Link to channel 22"  enum="Channel_22"  condition="@NumChannels>22" />
+      <choice value="1,23" name="Link to channel 23"  enum="Channel_23"  condition="@NumChannels>23" />
+      <choice value="1,24" name="Link to channel 24"  enum="Channel_24"  condition="@NumChannels>24" />
+      <choice value="1,25" name="Link to channel 25"  enum="Channel_25"  condition="@NumChannels>25" />
+      <choice value="1,26" name="Link to channel 26"  enum="Channel_26"  condition="@NumChannels>26" />
+      <choice value="1,27" name="Link to channel 27"  enum="Channel_27"  condition="@NumChannels>27" />
+      <choice value="1,28" name="Link to channel 28"  enum="Channel_28"  condition="@NumChannels>28" />
+      <choice value="1,29" name="Link to channel 29"  enum="Channel_29"  condition="@NumChannels>29" />
+      <choice value="1,30" name="Link to channel 30"  enum="Channel_30"  condition="@NumChannels>30" />
+      <choice value="1,31" name="Link to channel 31"  enum="Channel_31"  condition="@NumChannels>31" />
+   </choiceOption>
+
+   <binaryOption key="dma_csr_esg"
+      enumStem="DmaScatterGather"
+      description="Enable Scatter/Gather Processing"
+      toolTip="As the channel completes the major loop, this flag enables scatter/gather processing in the current channel. \n
+               If enabled, the eDMA engine uses DLASTSGA as a memory pointer to a 0-modulo-32 address containing a 32-byte \n
+               data structure loaded as the transfer control descriptor into the local memory. \n
+               NOTE: To support the dynamic scatter/gather coherency model, this field is forced to zero when written \n
+               to while the TCDn_CSR[DONE] bit is set.">
+      <choice value="0" name="TCD is normal format." enum="Disabled" />
+      <choice value="1" name="TCD specifies a scatter gather format.
+                              The DLASTSGA field provides a memory pointer to the next TCD to be
+                              loaded into this channel after the major loop completes its execution." enum="Enabled"  />
+   </binaryOption>
+
+   <binaryOption key="dma_csr_dreq"
+      enumStem="DmaStopOnComplete"
+      description="Disable request on complete"
+      toolTip="If this flag is set, the eDMA hardware automatically clears the corresponding ERQ bit when \n
+               the current major iteration count reaches zero.">
+      <choice value="0" name="ERQ bit is not affected"        enum="Disabled" />
+      <choice value="1" name="ERQ bit is cleared on complete" enum="Enabled"  />
+   </binaryOption>
+
+   <binaryOption key="dma_csr_inthalf"
+      enumStem="DmaIntHalf"
+      description="Enable an interrupt when major counter is half complete."
+      toolTip="If this flag is set, the channel generates an interrupt request by setting the appropriate bit in the INT \n
+               register when the current major iteration count reaches the halfway point. Specifically, the comparison \n
+               performed by the eDMA engine is (CITER == (BITER >> 1)). This halfway point interrupt request is \n
+               provided to support double-buffered, also known as ping-pong, schemes or other types of data movement \n
+               where the processor needs an early indication of the transfer’s progress. \n
+               NOTE: If BITER = 1, do not use INTHALF. Use INTMAJOR instead.">
+      <choice value="0" name="The half-point interrupt is disabled." enum="Disabled" />
+      <choice value="1" name="The half-point interrupt is enabled."  enum="Enabled"  />
+   </binaryOption>
+
+   <binaryOption key="dma_csr_intmajor"
+      enumStem="DmaIntMajor"
+      description="Enable an interrupt when major iteration count completes."
+      toolTip="If this flag is set, the channel generates an interrupt request by setting the appropriate bit in \n
+               the INT when the current major iteration count reaches zero.">
+      <choice value="0" name="The end-of-major loop interrupt is disabled." enum="Disabled" />
+      <choice value="1" name="The end-of-major loop interrupt is enabled."  enum="Enabled"  />
+   </binaryOption>
+
+   <binaryOption key="dma_csr_start"
+      enumStem="DmaStart"
+      description="Channel Start"
+      toolTip="If this flag is set, the channel is requesting service. \n
+               The eDMA hardware automatically clears this flag after the channel begins execution.">
+      <choice value="0" name="The channel is not explicitly started."                                      enum="Disabled" />
+      <choice value="1" name="The channel is explicitly started via a software initiated service request." enum="Enabled"  />
+   </binaryOption>
+
+<!--  ========== DMA DmaTcdCsr class - start =============================== -->
+
+   <template key="/DMA/dma_csr_description" namespace="all" ><![CDATA[
+      \t/**
+      \t * Union used to do initialisation of a TCD CSR in $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values:
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * @code
+      \t * // Creating value
+      \t * static const $(_class)::DmaTcdCsr txCsr {
+      \t *    DmaSpeed_NoStalls ,           // Bandwidth Control - No eDMA engine stalls
+      \t *    DmaMajorLink_Disabled ,       // Enable channel-to-channel linking on major loop complete - Channel-to-channel linking is disabled
+      \t *    DmaScatterGather_Disabled ,   // Enable Scatter/Gather Processing - TCD is normal format.
+      \t *    DmaStopOnComplete_Disabled ,  // Disable request on complete - ERQ bit is not affected
+      \t *    DmaIntHalf_Disabled ,         // Enable an interrupt when major counter is half complete. - The half-point interrupt is disabled.
+      \t *    DmaIntMajor_Disabled ,        // Enable an interrupt when major iteration count completes. - The end-of-major loop interrupt is disabled.
+      \t *    DmaStart_Disabled             // Channel Start - The channel is not explicitly started.;
+      \t * };
+      \t * @endcode
+      \t */
+   ]]></template>
+
+   <template namespace="usbdm"><![CDATA[
+      $(/DMA/dma_csr_description)
+      \tunion __attribute__((__packed__)) DmaTcdCsr {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr DmaTcdCsr(const DmaTcdCsr &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr DmaTcdCsr() : csr(0) {}
+      \t
+      \t   /**
+      \t    * CSR value as uint16_t
+      \t    */
+      \t   operator uint16_t() const { return csr; }
+      \t\n
+   ]]></template>
+
+<!-- DmaTcdCsr Member variables -->
+
+   <initialValueTemplate namespace="usbdm"
+      variables="
+         dma_csr_bwc,
+         dma_csr_majorelink,
+         dma_csr_esg,
+         dma_csr_dreq,
+         dma_csr_inthalf,
+         dma_csr_intmajor,
+         dma_csr_start"
+   ><![CDATA[
+      \tprivate:
+      \t   ///  DMA TCD Control and Status
+      \t   uint16_t %registerName;
+      \t   struct {
+      \t      bool          START:1;       //!< Channel Start
+      \t      bool          INTMAJOR:1;    //!< Interrupt on major complete
+      \t      bool          INTHALF:1;     //!< Interrupt on major half complete
+      \t      bool          DREQ:1;        //!< Disable Request
+      \t      bool          ESG:1;         //!< Enable Scatter/Gather
+      \t      bool          MAJORELINK:1;  //!< Enable channel linking
+      \t      bool          ACTIVE:1;      //!< Channel Active
+      \t      bool          DONE:1;        //!< Channel Done
+      \t      unsigned      MAJORLINKCH:4; //!< Link Channel Number
+      \t      unsigned      :2;
+      \t      unsigned      BWC:2;         //!< Bandwidth Control
+      \t   };
+      \t
+      \tpublic:
+      \t\n
+   ]]></initialValueTemplate>
+
+<!--   DmaTcdCsr Constructors -->
+
+   <for keys="r" values="
+         dma_csr_bwc;
+         dma_csr_majorelink;
+         dma_csr_esg;
+         dma_csr_dreq;
+         dma_csr_inthalf;
+         dma_csr_intmajor;
+         dma_csr_start">
+      <constructorTemplate namespace="usbdm" variables="%(r)"
+         linePadding="xxx"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr DmaTcdCsr(%params, Types... rest) : DmaTcdCsr(rest...) {
+         \t
+         \t      %registerName |= %paramExpression;
+         \t   }
+         \t\n
+      ]]></constructorTemplate>
+   </for>
+
+<!--  ========== DmaTcdCsr class - end =============================== -->
+
+   <template namespace="usbdm" ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+
+   <template><![CDATA[
+      \t/**
+      \t *  Enable clock to $(_class)
+      \t */
+      \tstatic void enableClock() {
+      #ifdef PCC
+      \t   // DMA is always clocked
+      #else
+      \t   $(clockEnable)
+      #endif
+      \t}
+
+      \t/**
+      \t *  Disable clock to $(_class)
+      \t */
+      \tstatic void disableClock() {
+      #ifdef PCC
+      \t   // DMA is always clocked
+      #else
+      \t   $(clockDisable)
+      #endif
+      \t}\n\n
+   ]]></template>
+
+   <stringOption key="irq_pattern"        constant="true" value="^%b_?(\d+)(_DMA.*)?$;^%b_Error.*$" hidden="true" />
+   <stringOption key="irq_classHandler"   constant="true" value="%c%i::irqHandler&lt;$1&gt;;%c%i::errorIrqHandler" hidden="true" />
+   <xi:include href="_irqOptionSubstituted.xml"/>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
+   </validate>
+
+   <template key="/DMA/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing DMAMUX$(_instance)
+   \t */
+   \ttypedef $(_base_class)Mux_T<Dmamux$(_instance)Info, Dma$(_instance)Info::NumChannels> DmaMux$(_instance);
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \ttypedef $(_base_class)Base_T<$(_class)Info> $(_class);\n
+   ]]></template>
+
+   <template><![CDATA[
+      \t//! Number of DMA channels implemented
+      \tstatic constexpr unsigned NumChannels = $(NumChannels);
+
+      \t//! Number of DMA vectors implemented
+      \tstatic constexpr unsigned NumVectors = $(NumVectors);\n\n
+   ]]></template>
+
+   <projectActionList id = "dma_files" >
+      <copy source="Project_Headers/dma-MK.h"                   target="Project_Headers/dma.h"                      overwrite="true"  derived="true" />
+      <copy source="Snippets/dma-memory-example.cpp"            target="Snippets/dma-memory-example.cpp"            overwrite="true"  derived="true" />
+      <copy source="Snippets/dma-memory-template-example.cpp"   target="Snippets/dma-memory-template-example.cpp"   overwrite="true"  derived="true" />
+      <copy source="Snippets/dma-uart-example-mk20.cpp"         target="Snippets/dma-uart-example-mk20.cpp"         overwrite="true"  derived="true" />
+      <copy source="Snippets/dma-uart-example-mk22f.cpp"        target="Snippets/dma-uart-example-mk22f.cpp"        overwrite="true"  derived="true" />
+      <copy source="Snippets/dma-uart-example-mk28f.cpp"        target="Snippets/dma-uart-example-mk28f.cpp"        overwrite="true"  derived="true" />
+      <copy source="Snippets/dma-spi-example.cpp"               target="Snippets/dma-spi-example.cpp"               overwrite="true"  derived="true" />
+      <copy source="Snippets/pit-adc-dma-example.cpp"           target="Snippets/pit-adc-dma-example.cpp"           overwrite="true"  derived="true" />
+   </projectActionList>
+
+</fragment>

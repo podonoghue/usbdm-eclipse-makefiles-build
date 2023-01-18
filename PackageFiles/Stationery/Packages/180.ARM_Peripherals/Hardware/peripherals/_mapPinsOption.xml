@@ -71,7 +71,7 @@
 
    <!-- Template is added to peripheral classes -->
    <template discardRepeats="true" namespace="all" key="/$(_basename)/classInfo" ><![CDATA[
-      // Template _mapPinsOption.xml (/$(_basename)/classInfo)
+      // Template _mapPinsOption.xml (/$(_name)/classInfo)
 
       \t/**
       \t * Configures all mapped pins associated with $(_base_name)

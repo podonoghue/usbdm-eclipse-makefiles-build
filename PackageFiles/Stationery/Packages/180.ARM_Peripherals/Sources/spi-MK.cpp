@@ -84,9 +84,9 @@ void Spi::calculateDelay(float clockFrequency, float delay, int &bestPrescale, i
  *
  * Note: Chooses the highest speed that is not greater than frequency.
  */
-uint32_t Spi::calculateDividers(uint32_t clockFrequency, uint32_t frequency) {
+uint32_t Spi::calculateDividers(uint32_t clockFrequency, Hertz frequency) {
 
-   if (clockFrequency <= (2*frequency)) {
+   if (clockFrequency <= (2*(unsigned)frequency)) {
       // Use highest possible rate
       return SPI_CTAR_DBR_MASK;
    }
@@ -96,7 +96,7 @@ uint32_t Spi::calculateDividers(uint32_t clockFrequency, uint32_t frequency) {
    for (int pbr = 3; pbr >= 0; pbr--) {
       for (int br = 15; br >= 0; br--) {
          uint32_t calculatedFrequency = clockFrequency/(pbrFactors[pbr]*brFactors[br]);
-         int32_t difference = frequency-calculatedFrequency;
+         int32_t difference = (unsigned)frequency-calculatedFrequency;
          if (difference < 0) {
             // Too high stop looking here
             break;
@@ -110,7 +110,7 @@ uint32_t Spi::calculateDividers(uint32_t clockFrequency, uint32_t frequency) {
       }
    }
    uint32_t clockFactors = SPI_CTAR_BR(bestBR)|SPI_CTAR_PBR(bestPBR);
-   if ((clockFactors == 0) && (clockFrequency<=(2*frequency))) {
+   if ((clockFactors == 0) && (clockFrequency<=(2*(unsigned)frequency))) {
       // Use highest possible rate - but only when prescalers are zero.
       // This still results in 50% duty cycle
       clockFactors = SPI_CTAR_DBR_MASK;
