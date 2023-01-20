@@ -3,8 +3,8 @@
 <!-- _default_instance.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-         
-<!-- 
+
+<!--
       Predefined symbols generated for current peripheral
       _base_class FTM0 => Ftm
       _instance   FTM0 => 0, PTA => A
@@ -12,15 +12,22 @@
       _name       FTM0 => FTM0
       _basename   FTM0 => FTM, PTA => PT
  -->
- 
-<template><![CDATA[
-      \t//! Hardware base address as uint32_t 
-      \tstatic constexpr uint32_t baseAddress = $(_name)_BasePtr;
 
+<template><![CDATA[
+      \t//! Hardware base address as uint32_t
+      \tstatic constexpr uint32_t baseAddress = $(_name)_BasePtr;
+      \t
       \t//! Hardware base pointer
-      \tstatic constexpr HardwarePtr<$(_base_class::toupper)_Type> $(_base_class::tolower) = baseAddress;\n\n
+      \tstatic constexpr HardwarePtr<$(_base_class::toupper)_Type> $(_base_class::tolower) = baseAddress;
+      \t\n
 ]]></template>
 
-   <constant key="class_present" value = "true"  />
+<template condition="&quot;$(_instance)&quot; != &quot;&quot;" ><![CDATA[
+      \t//! Peripheral instance number
+      \tstatic constexpr unsigned instance = $(_instance);
+      \t\n
+]]></template>
+
+   <constant key="class_present" type="Boolean"  value = "true"   />
 
 </fragment>

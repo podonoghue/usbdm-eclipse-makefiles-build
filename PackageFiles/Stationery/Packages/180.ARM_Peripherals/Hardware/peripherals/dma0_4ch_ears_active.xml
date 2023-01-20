@@ -5,8 +5,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="DMA Module">
 
-   <constant key="NumChannels" type="Integer" value="4" />
-   <constant key="NumVectors"  type="Integer" value="4" />
+   <intOption key="NumChannels" value="4" constant="true" description="Number of DMA channels"/>
+   <intOption key="NumVectors"  value="4" constant="true" description="Number of individual interrupt vectors"/>
 
    <xi:include href="dma0_base.xml"/>
 

@@ -101,8 +101,8 @@
 
 <!ELEMENT intOption EMPTY >
    <!ATTLIST intOption condition     CDATA        #IMPLIED>
-   <!ATTLIST intOption constant     (false|true)  #IMPLIED>
-   <!ATTLIST intOption hidden       (false|true)  #IMPLIED>
+   <!ATTLIST intOption constant      (true)       #IMPLIED>
+   <!ATTLIST intOption hidden        (true)       #IMPLIED>
    <!ATTLIST intOption graphic       CDATA        #IMPLIED>
    <!ATTLIST intOption modify        CDATA        #IMPLIED>
    <!ATTLIST intOption replace       CDATA        #IMPLIED>
@@ -114,7 +114,7 @@
    <!ATTLIST intOption typeName      CDATA        #IMPLIED>
    <!ATTLIST intOption disabledValue CDATA        #IMPLIED>
    <!ATTLIST intOption value         CDATA        #IMPLIED>
-   <!ATTLIST intOption units         (None|Hz|s)  #IMPLIED>
+   <!ATTLIST intOption units         (Hz|s)       #IMPLIED>
    <!ATTLIST intOption step          CDATA        "1">
    <!ATTLIST intOption errorPropagate (ok|info|warning|error)  #IMPLIED>
    <!-- Minimum value (displayed value) -->
@@ -175,16 +175,20 @@
    <!ATTLIST floatOption unlockedBy    CDATA        #IMPLIED> <!-- Unlocked by an expression -->
 
 <!ELEMENT aliasOption EMPTY >
-   <!-- alias Option 
-   key  		Allows reference to an option (possibly) in another file
-   name     Allows the name of the model (visible in the GUI) to differ from the aliased option's name
-   -->
+   <!-- Allows reference to an option (possibly) in another file -->
    <!ATTLIST aliasOption key               CDATA        #REQUIRED>
+   <!-- Optional name in GUI otherwise derived from key -->
    <!ATTLIST aliasOption name              CDATA        #IMPLIED>
+   <!-- Description for GUI and code generation -->
    <!ATTLIST aliasOption description       CDATA        #IMPLIED>
+   <!-- Tooltip for GUI and code generation -->
    <!ATTLIST aliasOption toolTip           CDATA        #IMPLIED>
+   <!-- Allows constant to be altered by user (default is true) -->
    <!ATTLIST aliasOption constant          (false)      #IMPLIED>
+   <!-- Indicates key may refer to non-existant variable -->
    <!ATTLIST aliasOption optional          (true)       #IMPLIED>
+   <!-- Inidicates it should be visible in GUI -->
+   <!ATTLIST aliasOption hidden            (true)      #IMPLIED>
 
 <!ELEMENT stringOption EMPTY >
    <!ATTLIST stringOption condition        CDATA        #IMPLIED>
@@ -619,22 +623,34 @@
    <!ATTLIST copy derived              (true|false) #IMPLIED>
    
 <!ELEMENT constant EMPTY >
-   <!-- constant 
-   key       Key for variable
-   name      Used as visible name in GUI (model)
-   weak	    If true indicates the constant may already exist and this constant is discarded
-   replace   Replaces any existing constant of the same key
-   derived   By default constants are derived/  Used to disable this.
-   -->
-   <!ATTLIST constant name         CDATA                       #IMPLIED>
-   <!ATTLIST constant key          CDATA                       #REQUIRED>
-   <!ATTLIST constant value        CDATA                       #IMPLIED>
-   <!ATTLIST constant description  CDATA                       #IMPLIED>
-   <!ATTLIST constant type         (Boolean|Integer|Float|String)  "string" >
-   <!ATTLIST constant weak         (true|false)                #IMPLIED>
-   <!ATTLIST constant replace      (true|false)                #IMPLIED>
-   <!ATTLIST constant derived      (false)                     #IMPLIED>
-   <!ATTLIST constant hidden       (false)                     #IMPLIED>
+   <!-- Used as visible name in GUI (model) -->
+   <!ATTLIST constant name         CDATA                          #IMPLIED>
+   <!-- Key for variable -->
+   <!ATTLIST constant key          CDATA                          #REQUIRED>
+   <!-- Equation giving value -->
+   <!ATTLIST constant value        CDATA                          #IMPLIED>
+   <!-- Description of variable -->
+   <!ATTLIST constant description  CDATA                          #IMPLIED>
+   <!-- Type of variable -->
+   <!ATTLIST constant type         (String|Boolean|Integer|Float) "string">
+   <!-- If true indicates the constant may already exist and this constant is discarded -->
+   <!ATTLIST constant weak         (true)                         #IMPLIED>
+   <!-- Replaces any existing constant of the same key -->
+   <!ATTLIST constant replace      (true)                         #IMPLIED>
+   <!-- By default constants are derived - Used to disable this -->
+   <!ATTLIST constant derived      (false)                        #IMPLIED>
+   <!-- Make visible - doesn't have any visible effect as no model is created -->
+   <!ATTLIST constant hidden       (false)                        #IMPLIED>
    
+<!ELEMENT rtcTimeOption (#PCDATA)>
+   <!-- Key for variable -->
+   <!ATTLIST rtcTimeOption key          CDATA       #REQUIRED>
+   <!-- Equation giving value -->
+   <!ATTLIST rtcTimeOption value        CDATA       #REQUIRED>
+   <!-- Description of variable -->
+   <!ATTLIST rtcTimeOption description  CDATA       #IMPLIED>
+   <!-- Tooltip for GUI and code generation -->
+   <!ATTLIST rtcTimeOption toolTip      CDATA       #IMPLIED>
+      
 <!ELEMENT divider EMPTY >
    

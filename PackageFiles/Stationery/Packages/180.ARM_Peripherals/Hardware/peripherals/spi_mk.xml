@@ -1032,13 +1032,15 @@
    $(/$(_name)/InputMapping:   // No user mappings found)
    \t   $(_class)() : SpiBase_T<$(_class)Info>() {}
    \t   $(_class)(const typename SpiBasicInfo::Init &init) : SpiBase_T<$(_class)Info>(init) {}
-   \t
+   \t\n
+   ]]></template>
+   <template key="/SPI/declarations" namespace="all"  codeGenCondition="irqHandlingMethod" ><![CDATA[
    \t   /**
    \t    * Creates a DMA buffer and associated code for DMA transfers to/from the SPI
    \t    *
    \t    * Examples use:
    \t    * @code
-   \t    *    Spi0 spi;
+   \t    *    $(_class) spi;
    \t    *
    \t    *    // Configure SPI
    \t    *
@@ -1072,13 +1074,32 @@
    \t    *
    \t    * @tparam itemCount Number of items in internal DMA buffer buffer
    \t    *
-   \t    * @return
+   \t    * @return Instance of SpiDmaHandler customised for buffer size
    \t    */
    \t   template<unsigned itemCount>
-   \t   SpiDmaHandler_T<itemCount, $(_class)> createDmaHandler() {
-   \t      return SpiDmaHandler_T<itemCount, $(_class)>(*this);
+   \t   SpiDmaHandler_T<itemCount> createDmaHandler() {
+   \t      return SpiDmaHandler_T<itemCount>(*this);
    \t   }
-   \t};\n
+   \t\n
+   ]]></template>
+   <template key="/SPI/declarations" namespace="all"  codeGenCondition="!irqHandlingMethod" ><![CDATA[
+   \t   /**
+   \t    * Dummy routine for error check
+   \t    *
+   \t    * @tparam itemCount Number of items in internal DMA buffer buffer
+   \t    *
+   \t    * @return Instance of SpiDmaHandler customised for buffer size
+   \t    */
+   \t   template<unsigned itemCount>
+   \t   void createDmaHandler() {
+   \t      constexpr bool $(_class)IrqAvailable = false&&itemCount;
+   \t      static_assert($(_class)IrqAvailable, "$(_class) not configured for interrupts");
+   \t   }
+   \t\n
+   ]]></template>
+   <template key="/SPI/declarations" namespace="all" ><![CDATA[
+   \t};
+   \t\n
    ]]></template>
 
    <setTemplate variables="spi_mcr_cont_scke" key="/SPI/methods" discardRepeats="true"
@@ -1132,6 +1153,10 @@
    <xi:include href="_irqOption.xml"/>
 
    <xi:include href="_clockOption.xml"/>
+
+   <template key="/SPI/handlerSlot"><![CDATA[
+      \t{nullptr}, // $(_name)\n
+   ]]></template>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SpiValidate">

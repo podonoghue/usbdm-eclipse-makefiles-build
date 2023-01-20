@@ -93,8 +93,8 @@
    <intOption name="Flex RAM size"      key="/LINKER/flexRamSize"     constant="true" description="Flex RAM available in target"     />
    <intOption name="Flex NVM size"      key="/LINKER/flexNvmSize"     constant="true" description="Flex Flash available in target"   />
 
-   <constant name="Linker Extra Regions" key="/LINKER/extraRegions" />
-   <constant name="Linker Information"   key="/LINKER/information"  />
+   <constant name="Linker Extra Regions" key="/LINKER/extraRegions" type="String" />
+   <constant name="Linker Information"   key="/LINKER/information"  type="String" />
 
    <stringOption name="Linker script"        key="/LINKER/scriptFilename"   constant="true" description="File used as linker script"       />
    <stringOption name="Linker memory map"    key="/LINKER/mapFilename"      constant="true" description="File used for target memory map"  />

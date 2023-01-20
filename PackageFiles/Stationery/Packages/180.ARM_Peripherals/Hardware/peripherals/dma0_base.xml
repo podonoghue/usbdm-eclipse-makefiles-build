@@ -6,7 +6,63 @@
 
    <xi:include href="_default_instance.xml"/>
 
+   <!-- DMA->CR -->
+
+   <binaryOption key="dma_cr_hoe"
+      enumStem="DmaActionOnError"
+      description="DMA halt on error"
+      toolTip="Whether to halt transfer when a DMA error occurs">
+      <choice value="0" name="Transfer continues on any error" enum="Continue" />
+      <choice value="1" name="Transfer halts on any error"     enum="Halt"     isDefault="true"/>
+   </binaryOption>
+
+   <binaryOption key="dma_cr_clm"
+      enumStem="DmaContinuousLink"
+      description="Continuous Link mode"
+      toolTip="Whether to enable continuous link mode \n
+               If enabled, on minor loop completion, the channel activates again if that \n
+               channel has a minor loop channel link enabled and the link channel is itself. \n
+               This effectively applies the minor loop offsets and restarts the next minor loop">
+      <choice value="0" name="Continuous Link disabled" enum="Disabled" />
+      <choice value="1" name="Continuous Link enabled"  enum="Enabled"  />
+   </binaryOption>
+
+   <binaryOption key="dma_cr_emlm"
+      enumStem="DmaMinorLoopMapping"
+      description="Minor loop mapping"
+      toolTip="Whether to enable minor loop mapping">
+      <choice value="0" name="Mapping disabled" enum="Disabled" />
+      <choice value="1" name="Mapping enabled"  enum="Enabled"  />
+   </binaryOption>
+
+   <binaryOption key="dma_cr_erca"
+      enumStem="DmaArbitration"
+      description="Channel Arbitration"
+      toolTip="How to arbitrate between requests from different channels">
+      <choice value="0" name="Fixed (within group)"       enum="Fixed" />
+      <choice value="1" name="Round Robin (within group)" enum="RoundRobin"  />
+   </binaryOption>
+
+   <choiceOption key="dma_cr_GroupArb" condition="dma_cr_erga_present"
+      valueFormat="DMA_CR_ERGA(%s),DMA_CR_GRP1PRI(%s),DMA_CR_GRP0PRI(%s)"
+      enumStem="DmaGroupArbitration"
+      description="Group Arbitration"
+      toolTip="Controls priority of DMA groups">
+      <choice value="1,0,1" name="Round Robin" enum="RoundRobin"  />
+      <choice value="0,0,1" name="Group 0 > Group 1"  enum="01"   />
+      <choice value="0,1,0" name="Group 1 > Group 0"  enum="10"   />
+   </choiceOption>
+
+   <binaryOption key="dma_cr_edbg"
+      enumStem="DmaInDebug"
+      description="Operation in Debug mode"
+      toolTip="Control DMA operation in debug mode">
+      <choice value="0" name="Continue in debug" enum="Continue"                  />
+      <choice value="1" name="Halt in debug"     enum="Halt"     isDefault="true" />
+   </binaryOption>
+
    <choiceOption key="DmaChannelNum"
+      hidden="true"
       valueFormat="%s"
       enumStem="DmaChannelNum"
       description="DMA channel numbers"
@@ -49,28 +105,31 @@
       <choice value="31" name="Channel 15"  enum="31"  condition="@NumChannels>31" />
    </choiceOption>
 
+   <!-- DMA->TCD[CSR] -->
    <choiceOption key="dma_csr_bwc"
+      hidden="true"
       enumStem="DmaSpeed"
       description="Bandwidth Control"
       toolTip="Throttles the amount of bus bandwidth consumed by the eDMA. \n
                Generally, as the eDMA processes the minor loop, it continuously generates \n
                read/write sequences until the minor count is exhausted. This field \n
                forces the eDMA to stall after the completion of each read/write access \n
-               to control the bus request bandwidth seen by the crossbar switch." >
+               to control the bus request bandwidth seen by the crossbar switch" >
       <choice value="0" name="No eDMA engine stalls"                           enum="NoStalls"  />
-      <choice value="2" name="eDMA engine stalls for 4 cycles after each R/W." enum="4_Stalls"  />
-      <choice value="3" name="eDMA engine stalls for 8 cycles after each R/W." enum="8_Stalls"  />
+      <choice value="2" name="eDMA engine stalls for 4 cycles after each R/W" enum="4_Stalls"  />
+      <choice value="3" name="eDMA engine stalls for 8 cycles after each R/W" enum="8_Stalls"  />
    </choiceOption>
 
    <choiceOption key="dma_csr_majorelink"
+      hidden="true"
       valueFormat="DMA_CSR_MAJORELINK(%s),DMA_CSR_MAJORLINKCH(%s)"
       enumStem="DmaMajorLink"
-      description="Enable channel-to-channel linking on major loop complete"
+      description="Channel linking on major loop complete"
       toolTip="As the channel completes the major loop, this option enables the linking to another channel. \n
                The link target channel initiates a channel service request via an internal mechanism that sets the \n
                TCDn_CSR[START] bit of the specified channel. \n
                NOTE: To support the dynamic linking coherency model, this field is forced to zero when \n
-               written to while the TCDn_CSR[DONE] bit is set.">
+               written to while the TCDn_CSR[DONE] bit is set">
       <choice value="0,0"  name="Channel-to-channel linking is disabled" enum="Disabled" />
       <choice value="1,0"  name="Link to channel 0"   enum="Channel_0"   condition="@NumChannels>0"  />
       <choice value="1,1"  name="Link to channel 1"   enum="Channel_1"   condition="@NumChannels>1"  />
@@ -107,60 +166,82 @@
    </choiceOption>
 
    <binaryOption key="dma_csr_esg"
+      hidden="true"
       enumStem="DmaScatterGather"
-      description="Enable Scatter/Gather Processing"
-      toolTip="As the channel completes the major loop, this flag enables scatter/gather processing in the current channel. \n
-               If enabled, the eDMA engine uses DLASTSGA as a memory pointer to a 0-modulo-32 address containing a 32-byte \n
+      description="Scatter/Gather Processing"
+      toolTip="If selected, scatter/gather processing occurs when the channel completes the major loop. \n
+               The eDMA engine uses DLASTSGA as a memory pointer to a 0-modulo-32 address containing a 32-byte \n
                data structure loaded as the transfer control descriptor into the local memory. \n
                NOTE: To support the dynamic scatter/gather coherency model, this field is forced to zero when written \n
-               to while the TCDn_CSR[DONE] bit is set.">
-      <choice value="0" name="TCD is normal format." enum="Disabled" />
-      <choice value="1" name="TCD specifies a scatter gather format.
-                              The DLASTSGA field provides a memory pointer to the next TCD to be
-                              loaded into this channel after the major loop completes its execution." enum="Enabled"  />
+               to while the TCDn_CSR[DONE] bit is set">
+      <choice value="0" name="TCD is normal format"                  enum="Disabled" />
+      <choice value="1" name="TCD specifies a scatter gather format" enum="Enabled"  />
    </binaryOption>
 
    <binaryOption key="dma_csr_dreq"
+      hidden="true"
       enumStem="DmaStopOnComplete"
-      description="Disable request on complete"
-      toolTip="If this flag is set, the eDMA hardware automatically clears the corresponding ERQ bit when \n
-               the current major iteration count reaches zero.">
+      description="Clear request on complete"
+      toolTip="If selected, the eDMA hardware automatically clears the ERQ bit when \n
+               the current major iteration count reaches zero">
       <choice value="0" name="ERQ bit is not affected"        enum="Disabled" />
       <choice value="1" name="ERQ bit is cleared on complete" enum="Enabled"  />
    </binaryOption>
 
    <binaryOption key="dma_csr_inthalf"
+      hidden="true"
       enumStem="DmaIntHalf"
-      description="Enable an interrupt when major counter is half complete."
-      toolTip="If this flag is set, the channel generates an interrupt request by setting the appropriate bit in the INT \n
+      description="Interrupt when major counter is half complete"
+      toolTip="If selected, the channel generates an interrupt request by setting the appropriate bit in the INT \n
                register when the current major iteration count reaches the halfway point. Specifically, the comparison \n
                performed by the eDMA engine is (CITER == (BITER >> 1)). This halfway point interrupt request is \n
                provided to support double-buffered, also known as ping-pong, schemes or other types of data movement \n
                where the processor needs an early indication of the transfer’s progress. \n
-               NOTE: If BITER = 1, do not use INTHALF. Use INTMAJOR instead.">
-      <choice value="0" name="The half-point interrupt is disabled." enum="Disabled" />
-      <choice value="1" name="The half-point interrupt is enabled."  enum="Enabled"  />
+               NOTE: If BITER = 1, do not use INTHALF. Use INTMAJOR instead">
+      <choice value="0" name="The half-point interrupt is disabled" enum="Disabled" />
+      <choice value="1" name="The half-point interrupt is enabled"  enum="Enabled"  />
    </binaryOption>
 
    <binaryOption key="dma_csr_intmajor"
+      hidden="true"
       enumStem="DmaIntMajor"
-      description="Enable an interrupt when major iteration count completes."
-      toolTip="If this flag is set, the channel generates an interrupt request by setting the appropriate bit in \n
-               the INT when the current major iteration count reaches zero.">
-      <choice value="0" name="The end-of-major loop interrupt is disabled." enum="Disabled" />
-      <choice value="1" name="The end-of-major loop interrupt is enabled."  enum="Enabled"  />
+      description="Interrupt when major counter completes"
+      toolTip="If selected, the channel generates an interrupt request by setting the appropriate bit in \n
+               the INT when the current major iteration count reaches zero">
+      <choice value="0" name="The end-of-major loop interrupt is disabled" enum="Disabled" />
+      <choice value="1" name="The end-of-major loop interrupt is enabled"  enum="Enabled"  />
    </binaryOption>
 
    <binaryOption key="dma_csr_start"
+      hidden="true"
       enumStem="DmaStart"
       description="Channel Start"
-      toolTip="If this flag is set, the channel is requesting service. \n
-               The eDMA hardware automatically clears this flag after the channel begins execution.">
-      <choice value="0" name="The channel is not explicitly started."                                      enum="Disabled" />
-      <choice value="1" name="The channel is explicitly started via a software initiated service request." enum="Enabled"  />
+      toolTip="If selected, the channel immediately requests service, \n
+               otherwise start is triggered later by a hardware request. \n
+               The eDMA hardware automatically clears this flag after the channel begins execution">
+      <choice value="0" name="Channel started by hardware request"  enum="Hardware" />
+      <choice value="1" name="Channel is immediately started"       enum="Immediate"  />
    </binaryOption>
 
-<!--  ========== DMA DmaTcdCsr class - start =============================== -->
+<!--   ========== DmaBasicInfo class - start =============================== -->
+
+<if condition="!/DMA/DmaBasicInfo_generated" >
+   <constant key="/DMA/DmaBasicInfo_generated" type="Boolean" value="true" />
+
+   <template namespace="usbdm" ><![CDATA[
+      class DmaBasicInfo {
+      \t
+      public:
+      \t/**
+      \t * Type definition for $(_class) interrupt call back.
+      \t *
+      \t * @param status Interrupt status value from SPI->SR
+      \t */
+      \ttypedef void (*CallbackFunction)(DmaChannelNum channel, uint32_t status);
+      \t\n
+   ]]></template>
+
+<!--   ========== DMA DmaTcdCsr class - start =============================== -->
 
    <template key="/DMA/dma_csr_description" namespace="all" ><![CDATA[
       \t/**
@@ -175,12 +256,12 @@
       \t * // Creating value
       \t * static const $(_class)::DmaTcdCsr txCsr {
       \t *    DmaSpeed_NoStalls ,           // Bandwidth Control - No eDMA engine stalls
-      \t *    DmaMajorLink_Disabled ,       // Enable channel-to-channel linking on major loop complete - Channel-to-channel linking is disabled
-      \t *    DmaScatterGather_Disabled ,   // Enable Scatter/Gather Processing - TCD is normal format.
-      \t *    DmaStopOnComplete_Disabled ,  // Disable request on complete - ERQ bit is not affected
-      \t *    DmaIntHalf_Disabled ,         // Enable an interrupt when major counter is half complete. - The half-point interrupt is disabled.
-      \t *    DmaIntMajor_Disabled ,        // Enable an interrupt when major iteration count completes. - The end-of-major loop interrupt is disabled.
-      \t *    DmaStart_Disabled             // Channel Start - The channel is not explicitly started.;
+      \t *    DmaMajorLink_Disabled ,       // Channel linking on major loop complete - Channel-to-channel linking is disabled
+      \t *    DmaScatterGather_Disabled ,   // Scatter/Gather Processing - TCD is normal format
+      \t *    DmaStopOnComplete_Disabled ,  // Clear request on complete - ERQ bit is not affected
+      \t *    DmaIntHalf_Disabled ,         // Interrupt when major counter is half complete - The half-point interrupt is disabled
+      \t *    DmaIntMajor_Disabled ,        // Interrupt when major counter completes - The end-of-major loop interrupt is disabled
+      \t *    DmaStart_Hardware,            // Channel Start - Channel started by hardware request
       \t * };
       \t * @endcode
       \t */
@@ -277,6 +358,177 @@
       \t};\n\n
    ]]></template>
 
+<!--   ========== DMA DmaConfig class - start =============================== -->
+
+   <template key="/DMA/dma_config_description" namespace="all" ><![CDATA[
+      \t/**
+      \t * Class used to do initialisation of $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values:
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * @code
+      \t * // Creating value
+      \t * static const $(_class)::DmaConfig config {
+      \t *    DmaActionOnError_Continue ,    // DMA halt on error - Transfer continues on any error
+      \t *    DmaContinuousLink_Disabled ,   // Link mode - Link mode disabled
+      \t *    DmaMinorLoopMapping_Disabled , // Minor loop mapping - Mapping disabled
+      \t *    DmaArbitration_Fixed ,         // Channel Arbitration - Fixed (within group)
+      \t *    DmaInDebug_Halt,               // Operation in Debug mode - Halt in debug
+      \t * };
+      \t *
+      \t * // Enable DMAC with settings from above
+      \t * Dma0::configure(config);
+      \t * @endcode
+      \t */
+   ]]></template>
+
+   <template namespace="usbdm"><![CDATA[
+      $(/DMA/dma_config_description)
+      \tunion __attribute__((__packed__)) DmaConfig {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr DmaConfig(const DmaConfig &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr DmaConfig() : cr(0) {}
+      \t
+      \t   /**
+      \t    * CSR value as uint16_t
+      \t    */
+      \t   operator uint16_t() const { return cr; }
+      \t\n
+   ]]></template>
+
+<!-- DmaConfig Member variables -->
+
+   <initialValueTemplate namespace="usbdm"
+      variables="
+         dma_cr_hoe,
+         dma_cr_clm,
+         dma_cr_emlm,
+         dma_cr_GroupArb,
+         dma_cr_erca,
+         dma_cr_edbg"
+   ><![CDATA[
+      \t   ///  DMA TCD Control and Status
+      \t   uint32_t %registerName;
+      \t\n
+   ]]></initialValueTemplate>
+
+<!--   DmaConfig Constructors -->
+
+   <for keys="r" values="
+         dma_cr_hoe;
+         dma_cr_clm;
+         dma_cr_emlm;
+         dma_cr_GroupArb;
+         dma_cr_erca;
+         dma_cr_edbg">
+      <constructorTemplate namespace="usbdm" variables="%(r)"
+         linePadding="xxx"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr DmaConfig(%params, Types... rest) : DmaConfig(rest...) {
+         \t
+         \t      %registerName |= %paramExpression;
+         \t   }
+         \t\n
+      ]]></constructorTemplate>
+   </for>
+
+<!--    DmaConfig Setters -->
+
+   <for keys=  "var                         : name"
+        values="dma_cr_hoe                  : SetActionOnError;
+                dma_cr_clm                  : SetLinkMode;
+                dma_cr_emlm                 : SetMinorLoopMapping;
+                dma_cr_erca,dma_cr_GroupArb : SetArbitration;
+                dma_cr_edbg                 : SetActionInDebug">
+      <setTemplate namespace="usbdm" variables="%(var)" key="/DMA/Setters"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %comments
+         \t */
+         \tvoid %(name)(%params) {
+         \t
+         \t   %register = (%register & ~%mask)|%paramExpression;
+         \t}
+         \t\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== DmaTcdCsr class - end =============================== -->
+
+   <template namespace="usbdm" ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+<!--   ========== BasicInfo class - end =============================== -->
+
+   <template namespace="usbdm" ><![CDATA[
+      };\n\n
+   ]]></template>
+
+</if>
+
+<!--    Default Initialisation values -->
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+         dma_csr_bwc,
+         dma_csr_majorelink,
+         dma_csr_esg,
+         dma_csr_dreq,
+         dma_csr_inthalf,
+         dma_csr_intmajor,
+         dma_csr_start"
+   ><![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr DmaBasicInfo::DmaTcdCsr DefaultDmaTcdCsrValue = {%initExpression\n\t};
+      \t\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+         dma_cr_hoe,
+         dma_cr_clm,
+         dma_cr_emlm,
+         dma_cr_GroupArb,
+         dma_cr_erca,
+         dma_cr_edbg"
+   ><![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr DmaBasicInfo::DmaConfig DefaultDmaConfigValue = {%initExpression\n\t};
+      \t\n
+   ]]></initialValueTemplate>
 
    <template><![CDATA[
       \t/**

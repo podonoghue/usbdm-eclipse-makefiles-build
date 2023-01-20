@@ -38,7 +38,7 @@
 
    <category name="SOPT1" description="RTC clocks" >
 
-      <constant key="sim_sopt1_ramsize" />
+      <constant key="sim_sopt1_ramsize" type="String" />
 
       <aliasOption key="sim_sopt1_osc32ksel" constant="false" />
       <aliasOption key="system_erclk32k_clock" />

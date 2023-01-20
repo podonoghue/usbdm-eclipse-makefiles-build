@@ -61,6 +61,8 @@ class Spi : public SpiBasicInfo {
 
    template<unsigned itemCount>
    friend class SpiDmaHandlerBase;
+   template<class Info>
+   friend class SpiBase_T;
 
 protected:
 
@@ -80,12 +82,38 @@ protected:
    uint32_t  pushrMaskFinal;
 
    /**
+    * Callback function type
+    */
+   CallbackFunction callback = unhandledCallback;
+
+#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
+   /**
+    * Callback function (trampoline)
+    */
+   void irqHandler(uint32_t status) {
+      callback(status);
+   }
+
+   struct IrqInformation {
+      Spi *This;
+   };
+
+   // Table used to obtain SPI class instance from static interrupt handler
+   static IrqInformation irqInformation[];
+#endif
+
+   /**
     * Constructor
     *
     * @param[in]  baseAddress    Base address of SPI
     */
-   Spi(uint32_t baseAddress) :
+   Spi(unsigned instanceNum, uint32_t baseAddress) :
       spi(baseAddress), pushrMask(0), pushrMaskFinal(0) {
+#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
+      irqInformation[instanceNum].This = this;
+#else
+      (void)instanceNum;
+#endif
    }
 
    /**
@@ -825,8 +853,24 @@ $(/SPI/InitMethod: #error "/SPI/InitMethod not found")
       return status;
    }
 
+#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
+   /**
+    * Set Callback function\n
+    *
+    *  @param[in]  callback  Callback function to be executed on interrupt.\n
+    *                        Use nullptr to remove callback.
+    */
+   void setCallback(CallbackFunction callback) {
+//      usbdm_assert(Info::irqHandlerInstalled, "SPI not configure for interrupts");
+      if (callback == nullptr) {
+         callback = Spi::unhandledCallback;
+      }
+      this->callback = callback;
+   }
+#endif
 };
 
+#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
 /**
  * Class to handle SPI DMA operations
  * It will create the required buffer to format data for the DMA transfer.
@@ -841,6 +885,7 @@ template<unsigned itemCount>
 class SpiDmaHandlerBase {
 
 protected:
+
    // Maximum number of items in buffer
    static constexpr unsigned MaxItemCount = itemCount;
 
@@ -848,15 +893,19 @@ protected:
    static constexpr unsigned SizeofItems = 4;
 
    // Expanded buffer with added command values
-#pragma pack(push, n)
    union {
       uint32_t bits;
       struct {
          uint16_t data;
          uint16_t command;
       };
-   } expandedBuffer[itemCount];
-#pragma pack(pop)
+   } __attribute__((packed)) expandedBuffer[itemCount];
+
+   // The final Tx value is sent individually to allow different PUSHR value
+   uint32_t finalTxValue   = 0;
+
+   // Dummy location for discarding Rx data
+   uint32_t discardRxBuffer = 0;
 
    // Associated SPI
    Spi &spi;
@@ -876,6 +925,7 @@ protected:
 public:
    /**
     * Copy-expand data into internal DMA buffer
+    * The final value is placed in finalTxValue
     *
     * @tparam T      Type for data (deduced)
     * @tparam N      Size of data array in items (deduced)
@@ -892,50 +942,10 @@ public:
       static_assert(N<=itemCount, "dataIn is too large for buffer allocated");
 
       // Copy-expand data
-      for (unsigned count=0; count<(N-1); count++) {
+      for (unsigned count=0; count<N; count++) {
          expandedBuffer[count].bits = dataIn[count]|spi.pushrMask;
       }
-      expandedBuffer[N-1].bits  = dataIn[N-1]|spi.pushrMaskFinal|SPI_PUSHR_EOQ_MASK;
-   }
-
-
-   /**
-    * Write data to the internal DMA transmit buffer
-    *
-    * @param index   Index in transfer
-    * @param data    Data to write
-    *
-    * @note It is necessary to set the transfer configuration in the SPI before using this
-    *       routine as it will make use of information from the SPI to format data.
-    */
-   void writeDataToBuffer(unsigned index, uint16_t data) {
-
-      usbdm_assert(index<MaxItemCount, "Array index error");
-
-      expandedBuffer[index].bits = data | spi.pushrMask;
-   }
-
-   /**
-    * Mark data item in DMA transmit buffer as end of transfer.
-    * This should always be applied to the last item in the buffer.
-    * This allows the correct handling of PCSx at end of transaction/transfer.
-    *
-    * It may also be applied to intermediate items to divide a single DMA transfer
-    * into multiple SPI transfers.
-    *
-    * @param index   Index in transfer
-    * @param data    Data to write
-    *
-    * @note It is necessary to set the transfer configuration in the SPI before using this
-    *       routine as it will make use of information from the SPI to format data.
-    *
-    * @note This is only effective if the SPI options have been set to SpiPeripheralSelectMode_Transaction
-    */
-   void markDataAsEndOfTransfer(unsigned index) {
-
-      usbdm_assert(index<MaxItemCount, "Array index error");
-
-      expandedBuffer[index].command = spi.pushrMaskFinal>>16;
+      finalTxValue = dataIn[N-1]|spi.pushrMaskFinal|SPI_PUSHR_EOQ_MASK;
    }
 
    /**
@@ -977,14 +987,122 @@ public:
       expandedBuffer[index].bits |= SPI_PUSHR_EOQ_MASK;
    }
 
+   ErrorCode allocateDmaChannels() {
+
+      // deallocate any channels in use
+      cleanUp();
+
+      // Allocate DMA channel to use for transmission
+      dmaTransmitChannel = Dma0::allocateChannel();
+      if (dmaTransmitChannel == DmaChannelNum_None) {
+         return setErrorCode(E_NO_RESOURCE);
+      }
+
+      // Allocate DMA channel to use for reception
+      dmaReceiveChannel = Dma0::allocateChannel();
+      if (dmaReceiveChannel == DmaChannelNum_None) {
+         // Release successfully allocated channel as we can't use it now
+         Dma0::freeChannel(dmaTransmitChannel);
+         return setErrorCode(E_NO_RESOURCE);
+      }
+      return E_NO_ERROR;
+   }
+
+   /**
+    * This TCD is chained from the main Tx TCD and
+    * allows the last value transferred to have a individual PUSHR value
+    */
+   DmaTcd __attribute__((aligned(32)))  finalTcd = DmaTcd (
+      {  /* Source */
+         /* Address                  */ 0,                                           // Source address (filled in)
+         /* Offset                   */ 0,                                           // Source address doesn't change
+         /* Size                     */ DmaSize_32bit,                               // 32-bit read from source address
+      },
+      {  /* Destination */
+         /* Address                  */ 0,                                           // Destination address (filled in)
+         /* Offset                   */ 0,                                           // Destination address doesn't change
+         /* Size                     */ DmaSize_32bit,                               // 32-bit write to destination address
+      },
+      /* Minor loop byte count    */ sizeof(uint32_t),                               // Total transfer in one minor-loop
+      /* Major loop count         */ 1,                                              // Transfer single item
+
+      {  // CSR
+         /* Disable Req. on complete */ DmaStopOnComplete_Enabled,                   // Clear hardware request when major loop completed
+         /* IRQ on major complete    */ DmaIntMajor_Enabled,                         // Interrupt
+      }
+   );
+
+   /*
+    * Initialises the final Tx transfer to SPI.
+    * This sets up a TCD that is chained from the main Tx TCD
+    * and allows the last value transferred to have a individual PUSHR
+    */
+   ErrorCode initialiseFinalTransfer() {
+      finalTcd.SADDR = (uint32_t)&finalTxValue;
+      finalTcd.DADDR = (uint32_t)spi.spi+offsetof(SPI_Type, PUSHR);
+
+      return E_NO_ERROR;
+   }
+
    /**
     * Set up for DMA operation
-    * - Allocates DMA channels
-    * - Configure DMA Mux for Tx and Rx channels
-    * - Configures DMA channels for Tx and Rx
+    * - Configure DMA Mux for Tx channel
+    * - Configures DMA TCD for Tx
     * No transfers are actually started
     *
-    * @param rxBuffer     Buffer for received data
+    * @param numElements         Number of elements to transfer
+    * @param advanceReadAddress  Whether to advance DMA read pointer during transfer
+    *
+    * @note This method may be called before the SPI configuration has been set.
+    *
+    * @return E_NOERROR on success
+    * @return E_NO_RESOURCE if failed to allocate required DMA channels
+    */
+   ErrorCode initialiseTxDma(unsigned numElements, bool advanceReadAddress) {
+
+      int32_t   offset          = advanceReadAddress?0:SizeofItems;
+      uint32_t  spiPushrAddress = spi.spi+offsetof(SPI_Type, PUSHR);
+      /**
+       * Structure to define the Transmit DMA transfer
+       *
+       * Note: This uses a 32-bit transfer even though the transmit data may only be 8 or 16-bit
+       */
+      DmaTcd txTcd = DmaTcd (
+         {  /* Source */
+            /* Address                  */ (uint32_t)(expandedBuffer),  // Source is array
+            /* Offset                   */ offset,                      // Source address advances 0/1 element per request
+            /* Size                     */ DmaSize_32bit,               // 32-bit read from source address
+         },
+         {  /* Destination */
+            /* Address                  */ spiPushrAddress,             // Destination is SPI.PUSHR data register
+            /* Offset                   */ 0,                           // Destination address doesn't change
+            /* Size                     */ DmaSize_32bit,               // 32-bit write to destination address
+            /* ScatterGather address    */ (int32_t) &finalTcd,         // Chain to finalTcd
+         },
+         /* Minor loop byte count       */ dmaNBytes(SizeofItems),      // Total transfer in one minor-loop
+         /* Major loop count            */ dmaCiter(numElements-1),     // Transfer entire buffer
+
+         {  // CSR
+           /* Scatter/Gather enable     */ DmaScatterGather_Enabled     // Chain to finalTcd
+         }
+      );
+
+      // Connect DMA channel to SPI Tx
+      DmaMux0::configure(dmaTransmitChannel, Dma0Slot_SPI0_Tx, DmaMuxEnable_Continuous);
+
+      // Configure the Tx transfer
+      Dma0::configureTransfer(dmaTransmitChannel, txTcd);
+
+      return E_NO_ERROR;
+   }
+
+   /**
+    * Set up for DMA operation
+    * - Configure DMA Mux for Rx channels
+    * - Configures DMA TCD for Rx
+    * No transfers are actually started
+    *
+    * @param rxBuffer     Buffer for received data (may be null)
     * @param rxDataSize   Size of elements in rxBuffer (either 1 or 2 bytes)
     * @param numElements  Number of elements in rxBuffer
     *
@@ -993,93 +1111,47 @@ public:
     * @return E_NOERROR on success
     * @return E_NO_RESOURCE if failed to allocate required DMA channels
     */
-   ErrorCode initialiseDma(void *rxBuffer, unsigned rxDataSize, unsigned numElements) {
+   ErrorCode initialiseRxDma(void *rxBuffer, unsigned rxDataSize, unsigned numElements) {
 
-      // Allocate DMA channel to use for transmission
-      dmaTransmitChannel = Dma0::allocatePeriodicChannel();
-      if (dmaTransmitChannel == DmaChannelNum_None) {
-         return setErrorCode(E_NO_RESOURCE);
+      // Size for Rx data DMA transfers
+      DmaSize   rxDmaSize      = (rxDataSize==1)?DmaSize_8bit:DmaSize_16bit;
+      uint32_t  spiPoprAddress = spi.spi+offsetof(SPI_Type, POPR);
+
+      int32_t writeOffset = rxDataSize;
+      if (rxBuffer==nullptr) {
+         writeOffset = 0;
+         rxBuffer = &discardRxBuffer;
       }
-
-      // Allocate DMA channel to use for reception
-      dmaReceiveChannel = Dma0::allocatePeriodicChannel();
-      if (dmaReceiveChannel == DmaChannelNum_None) {
-         // Release successfully allocated channel as we can't use it now
-         Dma0::freeChannel(dmaTransmitChannel);
-         return setErrorCode(E_NO_RESOURCE);
-      }
-
-      // Size for rx data DMA transfers
-      DmaSize rxDmaSize = (rxDataSize==1)?DmaSize_8bit:DmaSize_16bit;
-
-      /**
-       * Structure to define the Transmit DMA transfer
-       *
-       * Note: This uses a 32-bit transfer even though the transmit data may only be 8 or 16-bit
-       */
-      DmaTcd txTcd = DmaTcd (
-         /* Source */
-         /* Address                  */ (uint32_t)(expandedBuffer),                  // Source array
-         /* Offset                   */ SizeofItems,                                 // Source address advances 1 element (4-bytes) per request
-         /* Size                     */ DmaSize_32bit,                               // 32-bit read from source address
-         /* Modulo                   */ DmaModulo_Disabled,                          // No modulo
-         /* Last address adjustment  */ -SizeofItems*numElements,                      // Reset Source address to start of array on completion
-
-         /* Destination */
-         /* Address                  */ (uint32_t)spi.spi+offsetof(SPI_Type, PUSHR), // Destination is SPI.PUSHR data register
-         /* Offset                   */ 0,                                           // Destination address doesn't change
-         /* Size                     */ DmaSize_32bit,                               // 32-bit write to destination address
-         /* Modulo                   */ DmaModulo_Disabled,                          // Disabled
-         /* Last address adjustment  */ 0,                                           // Destination address doesn't change
-
-         /* Minor loop byte count    */ dmaNBytes(SizeofItems),                      // Total transfer in one minor-loop
-         /* Major loop count         */ dmaCiter(numElements),                         // Transfer entire buffer
-
-         /* Start channel            */ false,                                       // Don't start (triggered by hardware)
-         /* Disable Req. on complete */ true,                                        // Clear hardware request when major loop completed
-         /* IRQ on major complete    */ true,                                        // No interrupt
-         /* IRQ on half complete     */ false,                                       // No interrupt
-         /* Bandwidth control        */ DmaSpeed_NoStalls                            // Full speed
-      );
 
       /**
        * Structure to define the Receive DMA transfer
        *
-       * Note: The transfer size used here is 8-bits only
+       * Note: The transfer size used here is 8 or 16-bits only
        */
       DmaTcd rxTcd (
-         /* Source */
-         /* Address                  */ (uint32_t)spi.spi+offsetof(SPI_Type, POPR), // Source is SPI.POPR data register
-         /* Offset                   */ 0,                                          // Source address doesn't change
-         /* Size                     */ rxDmaSize,                                  // Read from source address depends on data size
-         /* Modulo                   */ DmaModulo_Disabled,                         // No modulo
-         /* Last address adjustment  */ 0,                                          // Source address doesn't change
+         {  /* Source */
+            /* Address                  */ spiPoprAddress,            // Source is SPI.POPR data register
+            /* Offset                   */ 0,                         // Source address doesn't change
+            /* Size                     */ rxDmaSize,                 // Read from source address depends on data size
+            /* Last address adjustment  */ 0,                         // Source address doesn't change
+         },
+         {  /* Destination */
+            /* Address                  */ (uint32_t)(rxBuffer),      // Destination array
+            /* Offset                   */ writeOffset,               // Destination address advances 1 element for each request
+            /* Size                     */ rxDmaSize,                 // Write to destination address depends on data size
+            /* Last address adjustment  */ 0,                         // Don't adjust destination address
+         },
+         /* Minor loop byte count       */ dmaNBytes(rxDataSize),     // Total transfer in one minor-loop
+         /* Major loop count            */ dmaCiter(numElements),     // Transfer entire buffer
 
-         /* Destination */
-         /* Address                  */ (uint32_t)(rxBuffer),                       // Destination array
-         /* Offset                   */ rxDataSize,                                 // Destination address advances 1 element for each request
-         /* Size                     */ rxDmaSize,                                  // Size of write to Destination address
-         /* Modulo                   */ DmaModulo_Disabled,                         // No modulo
-         /* Last address adjustment  */ -rxDataSize*numElements,                    // Reset destination address to start of array on completion
-
-         /* Minor loop byte count    */ dmaNBytes(rxDataSize),                      // Total transfer in one minor-loop
-         /* Major loop count         */ dmaCiter(numElements),                      // Transfer entire buffer
-
-         /* Start channel            */ false,                                      // Don't start (triggered by hardware)
-         /* Disable Req. on complete */ true,                                       // Clear hardware request when major loop completed
-         /* IRQ on major complete    */ true,                                       // Generate interrupt on completion of major-loop
-         /* IRQ on half complete     */ false,                                      // No interrupt
-         /* Bandwidth control        */ DmaSpeed_NoStalls                           // Full speed
+         {  // CSR
+            /* Disable Req. on complete */ DmaStopOnComplete_Enabled, // Clear hardware request when major loop completed
+            /* IRQ on major complete    */ DmaIntMajor_Enabled,       // Generate interrupt on completion of major-loop
+         }
       );
-
-      // Connect DMA channel to SPI Tx
-      DmaMux0::configure(dmaTransmitChannel, Dma0Slot_SPI0_Tx, DmaMuxEnable_Continuous);
 
       // Connect DMA channel to SPI Rx
       DmaMux0::configure(dmaReceiveChannel, Dma0Slot_SPI0_Rx, DmaMuxEnable_Continuous);
-
-      // Configure the Tx transfer
-      Dma0::configureTransfer(dmaTransmitChannel, txTcd);
 
       // Configure the Rx transfer
       Dma0::configureTransfer(dmaReceiveChannel, rxTcd);
@@ -1096,6 +1168,7 @@ public:
     *
     * @tparam T  Type of elements in rxBuffer (deduced)
     * @tparam N  Number of elements in rxBuffer (deduced)
+    *            This becomes the number of elements to Tx and Rx
     *
     * @param rxBuffer Buffer for received data
     *
@@ -1108,8 +1181,26 @@ public:
    ErrorCode initialiseDma(const T (&rxBuffer)[N]) {
 
       static_assert((sizeof(T) == 1) || (sizeof(T) == 2) , "T must be of size 1 or 2 bytes");
-
-      return initialiseDma((void*)rxBuffer, sizeof(T), N);
+      ErrorCode rc;
+      do {
+         rc = allocateDmaChannels();
+         if (rc != E_NO_ERROR) {
+            break;
+         }
+         rc = initialiseTxDma(N, false);
+         if (rc != E_NO_ERROR) {
+            break;
+         }
+         rc = initialiseFinalTransfer();
+         if (rc != E_NO_ERROR) {
+            break;
+         }
+         rc = initialiseRxDma((void*)rxBuffer, sizeof(T), N);
+         if (rc != E_NO_ERROR) {
+            break;
+         }
+      } while(false);
+      return rc;
    }
 
    /**
@@ -1128,7 +1219,7 @@ public:
     * @return E_NOERROR on success
     */
    template<typename T, unsigned N>
-   ErrorCode initialiseTransfer(const T (&dataIn)[N], T (&rxBuffer)[N]) {
+   ErrorCode initialiseTxRx(const T (&dataIn)[N], T (&rxBuffer)[N]) {
 
       // Set up transmit buffer
       loadTxData(dataIn);
@@ -1142,6 +1233,9 @@ public:
     */
    void startTransfer() {
 
+      // Clear SPI Status
+      spi.getStatus();
+
       spi.configureInterrupts(
             SpiTxCompleteInterrupt_Enabled,
             SpiEndOfQueueInterrupt_Enabled,
@@ -1152,10 +1246,9 @@ public:
 
       spi.configureFifoRequests(SpiTxFifoRequest_Dma, SpiRxFifoRequest_Dma);
 
-      // Clear SPI Status
-      spi.getStatus();
-
       spi.enableTransfer();
+
+      Dma0::enableMultipleErrorInterrupts((1<<dmaTransmitChannel)|(1<<dmaReceiveChannel), true);
 
       // Enable Rx hardware requests
       Dma0::enableRequests(dmaReceiveChannel);
@@ -1165,12 +1258,17 @@ public:
    }
 
 protected:
-   static void cleanUp(DmaChannelNum channel) {
+   static void cleanUp(DmaChannelNum &channel) {
 
+      if (channel == DmaChannelNum_None) {
+         return;
+      }
       // Clear request and release DMA channel
+      Dma0::enableRequests(channel, false);
       DmaMux0::disable(channel);
       Dma0::setCallback(channel, nullptr);
       Dma0::freeChannel(channel);
+      channel = DmaChannelNum_None;
    }
 
 public:
@@ -1191,7 +1289,7 @@ public:
  * @tparam itemCount Maximum size of buffer that can be expanded (in items)
  * @tparam  Spi      Associated SPI type
  */
-template<unsigned itemCount, class Spi>
+template<unsigned itemCount>
 class SpiDmaHandler_T : public SpiDmaHandlerBase<itemCount> {
 
 private:
@@ -1199,23 +1297,24 @@ private:
 
    static unsigned complete;
    static bool     keepDmaConfiguration;
+   static uint32_t dmaErrorCode;
 
    /**
     * DMA complete callback
     *
     * Sets flag to indicate sequence complete.
     */
-   static void dmaCallback(DmaChannelNum channel) {
+   static void dmaCallback(DmaChannelNum channel, uint32_t errorStatus) {
 
       Dma0::clearInterruptRequest(channel);
       Dma0::enableRequests(channel, false);
-
-      if (!keepDmaConfiguration) {
-         // Clear request and release DMA channel
-         Super::cleanUp(channel);
-      }
       if (complete>0) {
          complete--;
+      }
+      if (errorStatus&DMA_ES_VLD_MASK) {
+         // Error callback
+         dmaErrorCode = errorStatus;
+         complete = 0;
       }
    }
 
@@ -1233,7 +1332,7 @@ private:
 
 public:
    SpiDmaHandler_T(Spi &spi) : Super(spi) {
-      Spi::setCallback(spiCallback);
+      spi.setCallback(spiCallback);
    }
 
    /**
@@ -1248,12 +1347,20 @@ public:
       Dma0::setCallback(Super::dmaReceiveChannel,  dmaCallback);
 
       Dma0::enableNvicInterrupts(Super::dmaTransmitChannel, NvicPriority_Normal);
-      Dma0::enableNvicInterrupts(Super::dmaReceiveChannel, NvicPriority_Normal);
-
+      Dma0::enableNvicInterrupts(Super::dmaReceiveChannel,  NvicPriority_Normal);
+      Dma0::enableNvicErrorInterrupt(NvicPriority_MidHigh);
       Super::startTransfer();
    }
 
-   static bool isBusy() {
+   bool isBusy() {
+      if (errorCode != 0) {
+         // Release resources on error
+         Super::cleanUp();
+      }
+      if ((complete == 0) && !keepDmaConfiguration) {
+         // Release DMA channels
+         Super::cleanUp();
+      }
       return complete != 0;
    }
 
@@ -1274,11 +1381,16 @@ public:
 
 };
 
-template<unsigned itemCount, class Spi>
-unsigned SpiDmaHandler_T<itemCount, Spi>::complete = false;
+template<unsigned itemCount>
+unsigned SpiDmaHandler_T<itemCount>::complete = false;
 
-template<unsigned itemCount, class Spi>
-bool SpiDmaHandler_T<itemCount, Spi>::keepDmaConfiguration = false;
+template<unsigned itemCount>
+bool SpiDmaHandler_T<itemCount>::keepDmaConfiguration = false;
+
+template<unsigned itemCount>
+uint32_t SpiDmaHandler_T<itemCount>::dmaErrorCode = 0;
+
+#endif // $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
 
 /**
  * @brief Template class representing a SPI interface
@@ -1308,8 +1420,6 @@ public:
    static constexpr uint32_t spiPOPR   = Info::baseAddress + offsetof(SPI_Type, POPR);
 
 protected:
-   /** Callback function for ISR */
-   static CallbackFunction sCallback;
 
 public:
    /**
@@ -1326,26 +1436,14 @@ public:
       return status;
    }
 
+#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
    /**
     * IRQ handler
     */
    static void irqHandler() {
-      sCallback(SpiBase_T<Info>::getStatus());
+      irqInformation[Info::instance].This->callback(SpiBase_T<Info>::getStatus());
    }
-
-   /**
-    * Set Callback function\n
-    *
-    *  @param[in]  callback  Callback function to be executed on interrupt.\n
-    *                        Use nullptr to remove callback.
-    */
-   static __attribute__((always_inline)) void setCallback(CallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "SPI not configure for interrupts");
-      if (callback == nullptr) {
-         callback = Spi::unhandledCallback;
-      }
-      sCallback = callback;
-   }
+#endif
 
    /**
     * Enable interrupts in NVIC
@@ -1532,7 +1630,7 @@ public:
    /**
     * Constructor
     */
-   SpiBase_T() : Spi(Info::baseAddress) {
+   SpiBase_T() : Spi(Info::instance, Info::baseAddress) {
 
       // Check pin assignments
       static_assert(Info::info[Info::sckPin].gpioBit != UNMAPPED_PCR, "SPIx_SCK has not been assigned to a pin - Modify Configure.usbdm");
@@ -1545,7 +1643,7 @@ public:
    /**
     * Constructor
     */
-   SpiBase_T(const typename SpiBasicInfo::Init &init) : Spi(Info::baseAddress) {
+   SpiBase_T(const typename SpiBasicInfo::Init &init) : Spi(Info::instance, Info::baseAddress) {
 
       // Check pin assignments
       static_assert(Info::info[Info::sckPin].gpioBit != UNMAPPED_PCR, "SPIx_SCK has not been assigned to a pin - Modify Configure.usbdm");
@@ -1563,8 +1661,6 @@ public:
 
 };
 
-
-template<class Info> typename SpiBase_T<Info>::CallbackFunction SpiBase_T<Info>::sCallback = Spi::unhandledCallback;
 
 $(/SPI/declarations: // No declarations found)
 /**
