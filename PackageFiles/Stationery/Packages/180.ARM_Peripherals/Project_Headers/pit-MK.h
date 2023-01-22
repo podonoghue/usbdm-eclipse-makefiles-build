@@ -24,8 +24,6 @@
 
 namespace USBDM {
 
-enum DmaChannelNum : unsigned;
-
 /**
  * @addtogroup PIT_Group PIT, Programmable Interrupt Timer
  * @brief Abstraction for Programmable Interrupt Timer

@@ -30,7 +30,11 @@
    <binaryOption key="dma_cr_emlm"
       enumStem="DmaMinorLoopMapping"
       description="Minor loop mapping"
-      toolTip="Whether to enable minor loop mapping">
+      toolTip="Whether to enable minor loop mapping\n
+               When enabled, TCDn.word2 is redefined to include individual enable fields, an offset field \n
+               and the NBYTES field. The individual enable fields allow the minor loop offset to be \n
+               applied to the source address, the destination address, or both.  \n
+               The NBYTES field is reduced when either offset is enabled.">
       <choice value="0" name="Mapping disabled" enum="Disabled" />
       <choice value="1" name="Mapping enabled"  enum="Enabled"  />
    </binaryOption>
