@@ -216,10 +216,11 @@ public:
    }
 
    AppSettings & operator=(const AppSettings &other) {
-      fMap           = other.fMap;
-      fFilePath      = other.fFilePath;
-      fDescription   = other.fDescription;
-
+      if (other != *this) {
+         fMap           = other.fMap;
+         fFilePath      = other.fFilePath;
+         fDescription   = other.fDescription;
+      }
       return *this;
    }
 };
