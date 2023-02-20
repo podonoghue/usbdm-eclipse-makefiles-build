@@ -195,7 +195,7 @@ private:
 
 protected:
    // Empty constructor
-   constexpr FtmChannel(uint32_t baseAddress, unsigned channelNum) :
+   constexpr FtmChannel(uint32_t baseAddress, FtmChannelNum channelNum) :
    FtmBase(baseAddress),
    channelRegs((uint32_t)(ftm->CONTROLS+channelNum)),
    CHANNEL(channelNum),
@@ -208,7 +208,7 @@ public:
    const HardwarePtr<FtmBase::FtmChannelRegs> channelRegs;
 
    /** Timer channel number */
-   const unsigned CHANNEL;
+   const FtmChannelNum CHANNEL;
 
    /** Mask for Timer channel */
    const uint32_t CHANNEL_MASK;
@@ -262,9 +262,6 @@ public:
    static constexpr uint32_t ftmCnV(int index) { return ftmBase() + offsetof(FTM_Type, CONTROLS) + index*sizeof(FTM_Type::CONTROLS[0])+sizeof(uint32_t); }
 
 private:
-   /** Callback function for Channel Fault and timer overflow */
-   static typename Info::CallbackFunction sCallback;
-
    /** Number of channels mapped to a channel event vector */
    static constexpr unsigned ChannelVectorRatio = Info::NumChannels/Info::NumChannelVectors;
 
@@ -280,27 +277,11 @@ protected:
 
 public:
    /**
-    * Channel IRQ handler
-    *
-    * @tparam instance Indicates a pair of channels e.g. 2 => channel 2 & 3.
-    */
-   template<int instance>
-   static void chIrqHandler() {
-      // Get status for pair of channels
-      uint32_t status = ftm->STATUS & (0x3<<(instance));
-      if (status) {
-         // Clear flags for channel events being handled (w0c register if read first)
-         ftm->STATUS = ~status;
-         Info::channelCallbacks[instance/ChannelVectorRatio](status);
-      }
-   }
-
-   /**
     * Fault IRQ handler (if individually available)
     */
    static void faultIrqHandler() {
       ftm->FMS = ftm->FMS & ~FTM_FMS_FAULTF_MASK;
-      sCallback();
+      Info::callback();
    }
 
    /**
@@ -309,7 +290,7 @@ public:
    static void overflowIrqHandler() {
       // Clear TOI flag
       ftm->SC = ftm->SC & ~FTM_SC_TOF_MASK;
-      sCallback();
+      Info::callback();
    }
 
    /**
@@ -318,20 +299,39 @@ public:
    static void irqHandler() {
       if ((ftm->MODE&FTM_MODE_FAULTIE_MASK) && (ftm->FMS&FTM_FMS_FAULTF_MASK)) {
          ftm->FMS = ftm->FMS & ~FTM_FMS_FAULTF_MASK;
-         sCallback();
+         Info::callback();
       }
       else if ((ftm->SC&(FTM_SC_TOF_MASK|FTM_SC_TOIE_MASK)) == (FTM_SC_TOF_MASK|FTM_SC_TOIE_MASK)) {
          // Clear TOI flag
          ftm->SC = ftm->SC & ~FTM_SC_TOF_MASK;
-         sCallback();
+         Info::callback();
       }
       else {
          // Get status for channels
          uint32_t status = ftm->STATUS;
          if (status) {
+            if constexpr (Info::IndividualCallbacks) {
+               do {
+                  auto channelNum = __builtin_ffs(status);
+                  if (channelNum == 0) {
+                     break;
+                  }
+                  channelNum--;
+                  uint32_t flag = (1<<channelNum);
+
+                  // Clear flag for channel event being handled
+                  status &= ~flag;
+
+                  // Call individual handler
+                  Info::channelCallbacks[channelNum](flag);
+               } while(true);
+            }
+            else {
+               // Call shared handler
+               Info::channelCallbacks[0](status);
+            }
             // Clear flags for channel events being handled (w0c register if read first)
             ftm->STATUS = ~status;
-            Info::channelCallbacks[0](status);
          }
       }
    }
@@ -413,21 +413,6 @@ public:
          (obj.*callback)(status);
       };
       return fn;
-   }
-
-   /**
-    * Set common fault and Timer Overflow Callback function\n
-    *
-    * @param[in] theCallback Callback function to execute when timer overflows. \n
-    *                        nullptr to indicate none
-    */
-   static void setCallback(typename Info::CallbackFunction theCallback) {
-      static_assert(Info::irqHandlerInstalled, "FTM not configured for interrupts - Modify Configure.usbdm");
-      if (theCallback == nullptr) {
-         sCallback = unhandledCallback;
-         return;
-      }
-      sCallback = theCallback;
    }
 
 public:
@@ -558,7 +543,7 @@ public:
       }
 
       /** Timer channel number */
-      static constexpr unsigned CHANNEL      = channel;
+      static constexpr FtmChannelNum CHANNEL = (FtmChannelNum) channel;
 
       /** Mask for Timer channel */
       static constexpr uint32_t CHANNEL_MASK = 1<<channel;
@@ -597,8 +582,8 @@ $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
     *       It is necessary to identify the originating channel in the callback
     */
    static ErrorCode setChannelCallback(ChannelCallbackFunction callback) {
-      if constexpr (Info::NumChannelVectors > 1) {
-         return OwningFtm::setChannelCallback(callback, channel);
+      if constexpr (Info::IndividualCallbacks) {
+         return OwningFtm::setChannelCallback(channel, callback);
       }
       else {
          return OwningFtm::setChannelCallback(callback);
@@ -758,8 +743,6 @@ $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
    }
 
 };
-
-template<class Info> typename Info::CallbackFunction FtmBase_T<Info>::sCallback           = FtmBase_T<Info>::unhandledCallback;
 
 #ifdef FTM_QDCTRL_QUADEN_MASK
 

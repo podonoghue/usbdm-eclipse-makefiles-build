@@ -174,7 +174,7 @@ private:
 
 protected:
    // Empty constructor
-   constexpr TpmChannel(uint32_t baseAddress, unsigned channelNum) :
+   constexpr TpmChannel(uint32_t baseAddress, TpmChannelNum channelNum) :
    TpmBase(baseAddress),
    channelRegs((uint32_t)(tpm->CONTROLS+channelNum)),
    CHANNEL(channelNum),
@@ -187,13 +187,12 @@ public:
    const HardwarePtr<TpmBase::TpmChannelRegs> channelRegs;
 
    /** Timer channel number */
-   const unsigned CHANNEL;
+   const TpmChannelNum CHANNEL;
 
    /** Mask for Timer channel */
    const uint32_t CHANNEL_MASK;
 
 $(/TPM_CHANNEL/non_static_functions:  // /TPM_CHANNEL/non_static_functions not found)
-
 };
 
 /**
@@ -242,9 +241,6 @@ public:
    static constexpr uint32_t tpmCnV(int index) { return tpmBase() + offsetof(TPM_Type, CONTROLS) + index*sizeof(TPM_Type::CONTROLS[0])+sizeof(uint32_t); }
 
 private:
-   /** Callback function for Channel Fault and timer overflow */
-   static typename Info::CallbackFunction sCallback;
-
    /** Number of channels mapped to a channel event vector */
    static constexpr unsigned ChannelVectorRatio = Info::NumChannels/Info::NumChannelVectors;
 
@@ -267,15 +263,34 @@ public:
       if ((tpm->SC&(TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) == (TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) {
          // Clear TOI flag (w1c)
          tpm->SC = tpm->SC | TPM_SC_TOF_MASK;
-         sCallback();
+         Info::callback();
       }
       else {
          // Get status for channels
          uint32_t status = tpm->STATUS;
          if (status) {
+            if constexpr (Info::IndividualCallbacks) {
+               do {
+                  auto channelNum = __builtin_ffs(status);
+                  if (channelNum == 0) {
+                     break;
+                  }
+                  channelNum--;
+                  uint32_t flag = (1<<channelNum);
+
+                  // Clear flag for channel event being handled
+                  status &= ~flag;
+
+                  // Call individual handler
+                  Info::channelCallbacks[channelNum](flag);
+               } while(true);
+            }
+            else {
+               // Call shared handler
+               Info::channelCallbacks[0](status);
+            }
             // Clear flags for channel events being handled (w1c register if read)
             tpm->STATUS = status;
-            Info::channelCallbacks[0](status);
          }
       }
    }
@@ -357,21 +372,6 @@ public:
          (obj.*callback)(status);
       };
       return fn;
-   }
-
-   /**
-    * Set common fault and Timer Overflow Callback function\n
-    *
-    * @param[in] theCallback Callback function to execute when timer overflows. \n
-    *                        nullptr to indicate none
-    */
-   static void setCallback(typename Info::CallbackFunction theCallback) {
-      static_assert(Info::irqHandlerInstalled, "TPM not configured for interrupts - Modify Configure.usbdm");
-      if (theCallback == nullptr) {
-         sCallback = unhandledCallback;
-         return;
-      }
-      sCallback = theCallback;
    }
 
 public:
@@ -502,7 +502,7 @@ public:
       }
 
       /** Timer channel number */
-      static constexpr unsigned CHANNEL      = channel;
+      static constexpr TpmChannelNum CHANNEL      = (TpmChannelNum)channel;
 
       /** Mask for Timer channel */
       static constexpr uint32_t CHANNEL_MASK = 1<<channel;
@@ -528,6 +528,27 @@ public:
       }
       
 $(/TPM_CHANNEL/static_functions:  // /TPM_CHANNEL/static_functions not found)
+   /**
+    * Set channel event callback function
+    *
+    * @param[in] callback Callback function to execute on channel event interrupt.
+    *                     Use nullptr to remove callback.
+    *
+    * @return E_NO_ERROR            No error
+    * @return E_HANDLER_ALREADY_SET Handler already set
+    *
+    * @note Channel callbacks may be shared by multiple channels of the timer.\n
+    *       It is necessary to identify the originating channel in the callback
+    */
+   static ErrorCode setChannelCallback(ChannelCallbackFunction callback) {
+      if constexpr (Info::IndividualCallbacks) {
+         return OwningTpm::setChannelCallback(channel, callback);
+      }
+      else {
+         return OwningTpm::setChannelCallback(callback);
+      }
+   }
+
       /*******************************
        *  PIN Functions
        *******************************/
@@ -678,8 +699,6 @@ $(/TPM_CHANNEL/static_functions:  // /TPM_CHANNEL/static_functions not found)
    }
 
 };
-
-template<class Info> typename Info::CallbackFunction TpmBase_T<Info>::sCallback           = unhandledCallback;
 
 #ifdef TPM_QDCTRL_QUADEN_MASK
 /**

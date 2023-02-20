@@ -11,6 +11,18 @@
    <aliasOption key="/SIM/sim_sopt2_pllfllsel[]" constant="false"  optional="true" />
    <aliasOption key="/SIM/sim_sopt2_tpmsrc[]"    constant="false"  optional="true" />
    <aliasOption key="/SIM/system_tpm_clock[]"    optional="true"                   />
+   <binaryOption key="individual_channel_call_backs"
+      enabledBy="irqHandlingMethod"
+      description="Use individual channel call-backs"
+      toolTip="The different FTM channels use a common hardware interrupt handler. \n
+               If this option is enabled, then the hardware handler examines the interrupt source \n
+               and dispatches to individual channel call-backs. \n
+               This is more convenient but will increase the interrupt latency.
+               If disabled, then a common call-back is used for all channels which leads to lower latency. \n
+               The common call-back will then have to determine the interrupt source if needed." >
+      <choice value="false"  name="Shared call-back"      isDefault="true" />
+      <choice value="true"   name="Individual call-backs" />
+   </binaryOption>
 
    <binaryOption key="check_minimums"
       description="Check minimum interval and minimum resolution"
@@ -785,8 +797,16 @@
          \t * @note Flags will not be cleared if the channel is configured for DMA
          \t */
          \t%(static)void clearSelectedInterruptFlags(uint32_t channelMask)%(const) {
-         \t   (void)tpm->STATUS;
-         \t   tpm->STATUS = ~channelMask;
+         \t   // Clear flags (w1c)
+         \t   tpm->STATUS = channelMask;
+         \t}
+         \t
+         \t/**
+         \t * Clear timer overflow event flag
+         \t */
+         \t%(static)void clearOverflowInterruptFlag() {
+         \t   // Clear TOI flag (w1c)
+         \t   tpm->STATUS = TPM_STATUS_TOF_MASK;
          \t}
          \t
          \t/**
@@ -992,7 +1012,8 @@
       \t    *       pending CnV register updates are discarded.
       \t    */
       \t   %(static) void setAction(%params)%(const) {
-      \t      tpm->CONTROLS[%(channel)].CnSC = (tpm->CONTROLS[%(channel)].CnSC & ~%mask) | %paramExpression;
+      \t      tpm->CONTROLS[%(channel)].CnSC =
+      \t           (tpm->CONTROLS[%(channel)].CnSC & ~%mask) | %paramExpression;
       \t   }\n\n
    ]]></template>
 
@@ -1247,9 +1268,16 @@
        variables="irqHandlingMethod">
    <![CDATA[
       \t/**
-      \t * Type definition for $(_class) %description call back.
+      \t * Type definition for $(_class) channel interrupt call-back
+      \t *
+      \t * @param[in] status Flags indicating interrupt source channel(s)
       \t */
-      \ttypedef void (*%enumClass)();\n\n
+      \ttypedef void (*ChannelCallbackFunction)(uint8_t status);
+      \t
+      \t/**
+      \t * Type definition for $(_class) overflow and fault call-back.
+      \t */
+      \ttypedef void (*CallbackFunction)();\n\n
    ]]></setTemplate>
 
    <template namespace="usbdm"><![CDATA[
@@ -1271,11 +1299,18 @@ $(init_description)
 
 <!--  Member variables -->
 
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs"
+      variables="irqHandlingMethod"
+    ><![CDATA[
+      \t   /// Shared channel interrupt call-back
+      \t   ChannelCallbackFunction channelCallbackFunction = nullptr;\n\n
+   ]]></setTemplate>
+
    <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
     ><![CDATA[
-      \t   /// %description
-      \t   %params = nullptr;\n\n
+      \t   /// Shared overflow or fault interrupt call-back
+      \t   CallbackFunction callbackFunction = nullptr;\n\n
    ]]></setTemplate>
 
    <initialValueTemplate namespace="usbdm"
@@ -1320,12 +1355,9 @@ $(init_description)
       \t   enable();
       \t
       \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      // Only set call-back if feature enabled and non-null
-      \t      if (init.callbackFunction != nullptr) {
-      \t         setCallback(init.callbackFunction);
-      \t      }
-      \t      enableNvicInterrupts(init.irqlevel);
+      \t      Info::setCallbacks(init);
       \t   }
+      \t
       \t   uint8_t  sc    = init.sc;
       \t   uint16_t mod   = init.mod;
       \t
@@ -1359,22 +1391,41 @@ $(init_description)
 
 <!--  Constructors -->
 
+   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for shared channel interrupt call-back
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      \t    * @param callback Shared channel interrupt call-back to set
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(ChannelCallbackFunction %paramExpression, Types... rest) : Init(rest...) {
+      \t
+      \t      this->channelCallbackFunction = %paramExpression;
+      \t   }\n\n
+   ]]></constructorTemplate>
+
    <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
       \t   /**
-      \t    * Constructor for %description
+      \t    * Constructor for overflow and fault interrupt call-back
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
       \t    *
-      %paramDescription
+      \t    * @param callback Overflow and fault interrupt call-back to set
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(CallbackFunction %paramExpression, Types... rest) : Init(rest...) {
       \t
-      \t      this->%enumParam0 = %paramExpression;
+      \t      this->callbackFunction = %paramExpression;
       \t   }\n\n
    ]]></constructorTemplate>
 
@@ -1475,6 +1526,53 @@ $(init_description)
 
 <!--  Default Initialisation value -->
 
+   <template><![CDATA[
+   \t/**
+   \t * Type definition for $(_class) overflow and fault call-back.
+   \t */
+   \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+   \t
+   \t/**
+   \t * Type definition for $(_class) channel interrupt call-back
+   \t */
+   \ttypedef $(_class)BasicInfo::ChannelCallbackFunction ChannelCallbackFunction;
+   \t\n
+   ]]></template>
+
+   <template codeGenCondition="irqHandlingMethod"><![CDATA[
+   \t/**
+   \t * Callback function for Channel Fault and timer overflow
+   \t */
+   \tstatic CallbackFunction callback;
+   \t\n
+   ]]></template>
+
+   <template><![CDATA[
+   \t/**
+   \t * Indicates if individual call-backs can be set for each channel
+   \t */
+   \tstatic constexpr bool IndividualCallbacks = $(individual_channel_call_backs);
+   \t\n
+   ]]></template>
+
+   <template codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs"><![CDATA[
+   \t/**
+   \t * Callback table for programmatically set channel call-backs
+   \t * One entry for hardware interrupt vector (all hardware interrupt vectors are mapped to a single channel call-back by software)
+   \t */
+   \tstatic ChannelCallbackFunction channelCallbacks[1];
+   \t\n
+   ]]></template>
+
+   <template codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs"><![CDATA[
+   \t/**
+   \t * Callback table for programmatically set channel call-backs
+   \t * One entry for each channel (one hardware interrupt vector is mapped to multiple channel call-backs by software)
+   \t */
+   \tstatic ChannelCallbackFunction channelCallbacks[NumChannels];
+   \t\n
+   ]]></template>
+
    <initialValueTemplate
       separator=","
       terminator=","
@@ -1491,16 +1589,12 @@ $(init_description)
       \ttypedef $(_class)BasicInfo::Init Init;
       \t
       \t/**
-      \t * $(_class) interrupt call back
-      \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
-      \t
-      \t/**
-      \t * Default initialisation value for Tpm$(_instance)
+      \t * Default initialisation value for Ftm$(_instance)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
-      \t};\n\n
+      \t};
+      \t\n
    ]]></initialValueTemplate>
 
 <!--  ========== TPM CHANNEL Init class =============================== -->
@@ -1553,11 +1647,11 @@ $(channel_init_description)
 
 <!--  Member variables -->
 
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)"
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs"
       variables="irqHandlingMethod"
     ><![CDATA[
-      \t   /// %description
-      \t   %params = nullptr;\n\n
+      \t   /// $(_class) channel interrupt call-back
+      \t   ChannelCallbackFunction callbackFunction = nullptr;\n\n
    ]]></setTemplate>
 
    <initialValueTemplate namespace="usbdm"
@@ -1600,6 +1694,10 @@ $(channel_init_description)
       \t
       \t   // Enable peripheral clock
       \t   Info::enableClock();
+      \t
+      \t   if constexpr (Info::irqHandlerInstalled && Info::IndividualCallbacks) {
+      \t      Info::setChannelCallback(channelInit);
+      \t   }
       \t\n
    ]]></template>
    <template discardRepeats="true" key="/$(_basename)/ChannelInitMethod" namespace="all" condition="tpm_combine_combine0_present" ><![CDATA[
@@ -1613,8 +1711,8 @@ $(channel_init_description)
    ]]></template>
    <template discardRepeats="true" key="/$(_basename)/ChannelInitMethod" namespace="all" ><![CDATA[
       \t   // Configure timer channel
-      \t   tpm->CONTROLS[channelInit.channel].CnV  = channelInit.cnv;
       \t   tpm->CONTROLS[channelInit.channel].CnSC = channelInit.cnsc;
+      \t   tpm->CONTROLS[channelInit.channel].CnV  = channelInit.cnv;
       \t
       \t   return E_NO_ERROR;
       \t}\n\n
@@ -1622,7 +1720,7 @@ $(channel_init_description)
 
 <!--  Constructors -->
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)"
+   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -1631,34 +1729,13 @@ $(channel_init_description)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
-      %paramDescription
+      \t    *
+      \t    * @param    callback Channel interrupt call-back to set
       \t    */
       \t   template <typename... Types>
-      \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
+      \t   constexpr ChannelInit(ChannelCallbackFunction callbackFunction, Types... rest) : ChannelInit(rest...) {
       \t
       \t      this->%enumParam0 = %paramExpression;
-      \t   }\n\n
-   ]]></constructorTemplate>
-
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)"
-      variables="/PCR/nvic_irqLevel"
-      linePadding="xxx"
-    ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
-      \t
-      #if $(irqHandlingMethod)
-      \t      %registerName = %paramExpression;
-      #else
-      \t      (void)%paramExpression;
-      #endif
       \t   }\n\n
    ]]></constructorTemplate>
 
@@ -1769,38 +1846,61 @@ $(channel_init_description)
    \t}\n\n
    ]]></template>
 
-   <template><![CDATA[
-   \t/**
-   \t * Type definition for channel interrupt call back
-   \t *
-   \t * @param[in] status Flags indicating interrupt source channel(s)
-   \t */
-   \ttypedef void (*ChannelCallbackFunction)(uint8_t status);
-   \t
-   \t/**
-   \t * Callback table for programmatically set handlers
-   \t */
-   \tstatic ChannelCallbackFunction channelCallbacks[$(NumChannelVectors)];\n\n
-   ]]></template>
-
-   <template namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors==1)"
+   <template namespace="usbdm" codeGenCondition="irqHandlingMethod"
    ><![CDATA[
-      extern void unhandledCallback(uint8_t);
-      extern void timerUnhandledChannelCallback(uint8_t);\n\n
+      extern void unhandledCallback();
+      extern void timerUnhandledChannelCallback(uint8_t);
+      \t\n
    ]]></template>
 
-   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors==1)" ><![CDATA[
+   <template  codeGenCondition="irqHandlingMethod" ><![CDATA[
       \t/**
-      \t * Set channel Callback function\n
-      \t * Note that one callback is shared by all channels of the timer
+      \t * Set overflow and fault interrupt call-back
       \t *
-      \t * @param[in] callback Callback function to execute on channel interrupt.\n
+      \t * @param[in] newCallback Callback function to execute on interrupt.
+      \t *                        Use nullptr to remove callback.
+      \t *
+      \t * @return E_NO_ERROR            No error
+      \t * @return E_HANDLER_ALREADY_SET Handler already set
+      \t */
+      \tstatic ErrorCode setCallback(CallbackFunction newCallback) {
+      \t   if (newCallback == nullptr) {
+      \t      callback = unhandledCallback;
+      \t      return E_NO_ERROR;
+      \t   }
+      \t   callback = newCallback;
+      \t   return E_NO_ERROR;
+      \t}
+      \t\n
+   ]]></template>
+
+   <template  codeGenCondition="!irqHandlingMethod" ><![CDATA[
+      \t/**
+      \t * Set callbacks and IRQ priority from Init structure
+      \t */
+      \tstatic void setCallbacks(const Init &) {
+      \t}
+      \t
+      \t/**
+      \t * Set channel callbacks from ChannelInit structure
+      \t */
+      \tstatic void setChannelCallback(const ChannelInit &) {
+      \t}
+      \t\n
+   ]]></template>
+
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs" ><![CDATA[
+      \t/**
+      \t * Set channel call-back function
+      \t * Configured for shared channel call-backs i.e. all channels use same call-back
+      \t *
+      \t * @param[in] callback Callback function to execute on channel interrupt.
       \t *                     Use nullptr to remove callback.
       \t *
       \t * @return E_NO_ERROR            No error
       \t * @return E_HANDLER_ALREADY_SET Handler already set
       \t *
-      \t * @note Channel callbacks may be shared by multiple channels of the timer.
+      \t * @note The channel callback is shared by all channels of the timer.
       \t *       It is necessary to identify the originating channel in the callback
       \t */
       \tstatic ErrorCode setChannelCallback(ChannelCallbackFunction callback) {
@@ -1809,7 +1909,7 @@ $(channel_init_description)
       \t      return E_NO_ERROR;
       \t   }
       #ifdef DEBUG_BUILD
-      \t   // Callback is shared across multiple channels. Check if callback already assigned
+      \t   // Callback is shared across all channels. Check if callback already assigned
       \t   if ((channelCallbacks[0] != timerUnhandledChannelCallback) &&
       \t       (channelCallbacks[0] != callback)) {
       \t      return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
@@ -1817,27 +1917,105 @@ $(channel_init_description)
       #endif
       \t   channelCallbacks[0] = callback;
       \t   return E_NO_ERROR;
-      \t}\n\n
+      \t}
+      \t
+      \t/**
+      \t * Set callbacks and IRQ priority from Init structure
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void setCallbacks(const Init &init) {
+      \t   if (init.callbackFunction != nullptr) {
+      \t      setCallback(init.callbackFunction);
+      \t   }
+      \t   if (init.channelCallbackFunction != nullptr) {
+      \t      setChannelCallback(init.channelCallbackFunction);
+      \t   }
+      \t   enableNvicInterrupt(irqNums[0], init.irqlevel);
+      \t}
+      \t
+      \t/**
+      \t * Set channel callbacks from ChannelInit structure
+      \t */
+      \tstatic void setChannelCallback(const ChannelInit &) {
+      \t}
+      \t\n
    ]]></template>
 
-   <template namespace="all" key="/HARDWARE/StaticObjects"
-      codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors==1)"
-    ><![CDATA[
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs" ><![CDATA[
+      \t/**
+      \t * Set channel call-back function
+      \t * Configured for individual channel call-backs
+      \t *
+      \t * @param[in] channelNum Channel to set call-back for
+      \t * @param[in] callback   Callback function to execute on channel interrupt.
+      \t *                       Use nullptr to remove callback.
+      \t *
+      \t * @return E_NO_ERROR            No error
+      \t * @return E_HANDLER_ALREADY_SET Handler already set
+      \t *
+      \t * @note The channel callback is shared by all channels of the timer.
+      \t *       It is necessary to identify the originating channel in the callback
+      \t */
+      \tstatic ErrorCode setChannelCallback(unsigned channelNum, ChannelCallbackFunction callback) {
+      \t
+      \t   if (channelNum>=NumChannels) {
+      \t      return setErrorCode(ErrorCode::E_ILLEGAL_PARAM);
+      \t   }
+      \t   if (callback == nullptr) {
+      \t      channelCallbacks[channelNum] = timerUnhandledChannelCallback;
+      \t      return ErrorCode::E_NO_ERROR;
+      \t   }
+      \t   channelCallbacks[channelNum] = callback;
+      \t   return ErrorCode::E_NO_ERROR;
+      \t}
+      \t
+      \t/**
+      \t * Set callbacks and IRQ priority from Init structure
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \t static void setCallbacks(const Init &init) {
+      \t    if (init.callbackFunction != nullptr) {
+      \t       setCallback(init.callbackFunction);
+      \t    }
+      \t   enableNvicInterrupt(irqNums[0], init.irqlevel);
+      \t}
+      \t
+      \t/**
+      \t * Set channel callbacks from ChannelInit structure
+      \t */
+      \tstatic void setChannelCallback(const ChannelInit &init) {
+      \t   if (init.callbackFunction != nullptr) {
+      \t      setChannelCallback(init.channel, init.callbackFunction);
+      \t   }
+      \t}
+      \t\n
+   ]]></template>
+
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+      \t/**
+      \t * Callback function for Channel Fault and timer overflow for $(_class)
+      \t */
+      \t$(_class)Info::CallbackFunction $(_class)Info::callback = unhandledCallback;
+      \t\n
+   ]]></template>
+
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
       \t/**
       \t * Callback table for programmatically set handlers for $(_class)
       \t */
       \t$(_class)Info::ChannelCallbackFunction $(_class)Info::channelCallbacks[] = {\n\n
    ]]></template>
-      <for keys="ch" dim="NumChannelVectors">
-         <template namespace="all" key="/HARDWARE/StaticObjects"
-            codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors==1)"
-         ><![CDATA[
-            \t   timerUnhandledChannelCallback,\n
-         ]]></template>
-      </for>
-   <template namespace="all" key="/HARDWARE/StaticObjects"
-      codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors==1)"
-   ><![CDATA[
+   <for keys="ch" dim="NumChannels">
+      <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs" ><![CDATA[
+         \t   timerUnhandledChannelCallback,\n
+      ]]></template>
+   </for>
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs" ><![CDATA[
+      \t   timerUnhandledChannelCallback,\n
+   ]]></template>
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
       \t};\n\n
    ]]></template>
 
@@ -1848,10 +2026,11 @@ $(channel_init_description)
    </validate>
 
    <projectActionList id = "tpm_files" >
-      <copy source="Project_Headers/tpm.h"         target="Project_Headers/tpm.h"          overwrite="true" derived="true" />
-      <copy source="Snippets/tpm-pwm-example.cpp"  target="Snippets/tpm-pwm-example.cpp"   overwrite="true" derived="true"/>
-      <copy source="Snippets/tpm-ic-example.cpp"   target="Snippets/tpm-ic-example.cpp"    overwrite="true" derived="true"/>
-      <copy source="Snippets/tpm-oc-example.cpp"   target="Snippets/tpm-oc-example.cpp"    overwrite="true" derived="true"/>
+      <copy source="Project_Headers/tpm.h"            target="Project_Headers/tpm.h"            overwrite="true" derived="true" />
+      <copy source="Snippets/tpm-pwm-example.cpp"     target="Snippets/tpm-pwm-example.cpp"     overwrite="true" derived="true"/>
+      <copy source="Snippets/tpm-ic-example.cpp"      target="Snippets/tpm-ic-example.cpp"      overwrite="true" derived="true"/>
+      <copy source="Snippets/tpm-oc-example.cpp"      target="Snippets/tpm-oc-example.cpp"      overwrite="true" derived="true"/>
+      <copy source="Snippets/tpm-oc-init-example.cpp" target="Snippets/tpm-oc-init-example.cpp" overwrite="true" derived="true"/>
    </projectActionList>
 
    <template key="/$(_basename)/declarations" namespace="all"

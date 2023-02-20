@@ -4,7 +4,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
 
-   <constant key="disable_peripheral"      value = "&quot;tpm->SC = TPM_SC_CMOD(0);&quot;"  />
+   <constant key="disable_peripheral"      value = "&quot;tpm->SC = TPM_SC_CMOD(0);&quot;"  type="String" />
    <xi:include href="_mapPinsOption.xml"/>
 
    <intOption key="NumChannels" constant="true" derived="true"
