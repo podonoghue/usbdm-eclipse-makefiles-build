@@ -6,7 +6,7 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <constant key="disable_peripheral" value = "&quot;adc->SC1[0] = ADC_SC1_ADCH(-1);&quot;"  />
+   <constant key="disable_peripheral" value = "&quot;adc->SC1[0] = ADC_SC1_ADCH(-1);&quot;"  type="String" />
 
    <xi:include href="_mapPinsOption.xml"/>
 

@@ -53,6 +53,8 @@ static constexpr SpiFrameSize frameSize = SpiFrameSize_8_bits; // 4-8
 static const Spi0::Init configuration {
    {  /* Shared settings            */
       SpiPeripheralSelectPolarity_All_ActiveHigh, // All PCSs active-high
+      SpiFreeze_Enabled,                          // Freeze in debug
+      SpiDoze_Enabled,                            // Doze in sleep
 
       // These are initial transfer settings. Can be changed using selectConfiguration().
       SpiCtarSelect_0,                       // Use CTAR0
@@ -69,11 +71,11 @@ int main() {
 
    // Select configuration to use (CTAR & PCS options)
    // This can be used to change the defaults set up in the above configuration
-   spi.selectConfiguration(
-         SpiCtarSelect_0,                       // Use CTAR0
-         SpiPeripheralSelect_0,                 // PCS0 is asserted during transfer
-         SpiPeripheralSelectMode_Transaction    // PCSx goes low between transactions
-   );
+//   spi.selectConfiguration(
+//         SpiCtarSelect_0,                       // Use CTAR0
+//         SpiPeripheralSelect_0,                 // PCS0 is asserted during transfer
+//         SpiPeripheralSelectMode_Transaction    // PCSx goes low between transactions
+//   );
 
    //   auto cconfig = spi.getConfiguration();
    //   spi.setConfiguration(cconfig);
@@ -82,11 +84,11 @@ int main() {
       /*
        * Transmission
        *
-       * Transmit with configuration 0
-       * 8-bit transfers @ 1 MHz using PCS0
+       * Transmit with configuration
+       * Transfers @ 1 MHz using PCS0
        */
-      DataSize rxData1[sizeof(txDataA)/sizeof(txDataA[0])] = {0};
-      DataSize rxData2[sizeof(txDataA)/sizeof(txDataA[0])] = {0};
+      DataSize rxData1[sizeofArray(txDataA)] = {0};
+      DataSize rxData2[sizeofArray(txDataA)] = {0};
       DataSize rxData3 = 0;
       DataSize rxData4 = 0;
 
@@ -103,8 +105,8 @@ int main() {
 #endif
 
       spi.startTransaction();
-      spi.txRx(txDataA, rxData1);          // 5 items tx-rx
-      spi.txRx(txDataA, rxData2);          // 5 items tx-rx
+      spi.txRx(txDataA, rxData1);          // N items tx-rx
+      spi.txRx(txDataA, rxData2);          // N items tx-rx
       rxData3 = spi.txRx(txDataA[0]);      // 1 item tx-rx
       rxData4 = spi.txRxFinal(txDataA[1]); // 1 item tx-rx
       spi.endTransaction();

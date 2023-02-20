@@ -4,8 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analogue to Digital Converter">
 
-   <constant key="adc_cfg1_mode_diff_present" />
-   <constant key="adc_cfg1_mode_16bit_present" />
+   <constant key="adc_cfg1_mode_diff_present"  type="String" />
+   <constant key="adc_cfg1_mode_16bit_present" type="String" />
 
    <xi:include href="_adc_base.xml"/>
 

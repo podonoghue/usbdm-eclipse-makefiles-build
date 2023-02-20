@@ -9,7 +9,7 @@
       $(_instance)   FTM0 => 0
       $(_base_class) FTM0 => Ftm
       $(_class)      FTM0 => Ftm0
-      $(_base_name)  FTM0 => FTM
+      $(_basename)   FTM0 => FTM
       $(_name)       FTM0 => FTM0
 
       Template Rules based on attributes  info|usbdm|class|all)  "info"
@@ -71,23 +71,23 @@
 
    <!-- Template is added to peripheral classes -->
    <template discardRepeats="true" namespace="all" key="/$(_basename)/classInfo" ><![CDATA[
-      // Template _mapPinsOption_on.xml (/$(_name)/classInfo)
+      // Template _mapPinsOption_on.xml
 
       \t/**
-      \t * Configures all mapped pins associated with $(_base_name)
+      \t * Configures all mapped pins associated with $(_basename)
       \t *
       \t * @note Locked pins will be unaffected
       \t */
       \tstatic void configureAllPins() {
       \t
       \t   // Configure pins if selected and not already locked
-      \t   if constexpr (Info::mapPinsOnEnable && !(MapAllPinsOnStartup || ForceLockedPins)) {
+      \t   if constexpr (Info::mapPinsOnEnable) {
       \t      Info::initPCRs();
       \t   }
       \t}
 
       \t/**
-      \t * Disabled all mapped pins associated with $(_base_name)
+      \t * Disabled all mapped pins associated with $(_basename)
       \t *
       \t * @note Only the lower 16-bits of the PCR registers are modified
       \t *
@@ -96,13 +96,13 @@
       \tstatic void disableAllPins() {
       \t
       \t   // Disable pins if selected and not already locked
-      \t   if constexpr (Info::mapPinsOnEnable && !(MapAllPinsOnStartup || ForceLockedPins)) {
+      \t   if constexpr (Info::mapPinsOnEnable) {
       \t      Info::clearPCRs();
       \t   }
       \t}
 
       \t/**
-      \t * Basic enable of $(_base_name)
+      \t * Basic enable of $(_basename)
       \t * Includes enabling clock and configuring all mapped pins if mapPinsOnEnable is selected in configuration
       \t */
       \tstatic void enable() {
@@ -111,7 +111,7 @@
       \t}
 
       \t/**
-      \t * Disables the clock to $(_base_name) and all mapped pins
+      \t * Disables the clock to $(_basename) and all mapped pins
       \t */
       \tstatic void disable() {
       \t   $(disable_interrupts_code: )

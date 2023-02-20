@@ -744,7 +744,9 @@ public:
 
       dma->ERQ  = 0;
       dma->EEI  = 0;
+#ifdef DMA_EARS_EDREQ_0_MASK
       dma->EARS = 0;
+#endif
       dma->INT  = (uint32_t)-1;
       dma->ERR  = (uint32_t)-1;
 
@@ -787,7 +789,7 @@ $(/DMA/Setters:#error "/DMA/Setters not found" )
    /**
     * Set error handling
     *
-    * @param[in] dmaOnError Whether to halt when a DMA error occurs
+    * @param[in] dmaActionOnError Whether to halt when a DMA error occurs
     */
    void setErrorHandling(DmaActionOnError dmaActionOnError) {
       dma->CR = (dma->CR&~(DMA_CR_HOE(1)))|dmaActionOnError;

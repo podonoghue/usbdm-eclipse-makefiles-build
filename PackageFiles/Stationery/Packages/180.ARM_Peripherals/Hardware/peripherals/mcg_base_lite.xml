@@ -15,6 +15,9 @@
    <constant key="VLPR"    value="1" type="Integer" />
    <constant key="HSRUN"   value="2" type="Integer" />
 
+   <constant key="system_slow_irc_clock_base"     value="2MHz" type="Integer" />
+   <constant key="system_fast_irc_clock_base"     value="8MHz" type="Integer" />
+
    <xi:include href="_default_instance.xml"/>
 
    <clockSelectionOption key="currentClockConfig"
@@ -814,10 +817,10 @@
 
    <template><![CDATA[
       \t//! Frequency of Slow Internal Reference Clock [~2MHz]
-      \tstatic constexpr uint32_t system_slow_lirc_clock = $(system_slow_irc_clock[])UL;
+      \tstatic constexpr uint32_t system_slow_lirc_clock = $(system_slow_irc_clock_base)UL;
 
       \t//! Frequency of Fast Internal Reference Clock [~8MHz]
-      \tstatic constexpr uint32_t system_fast_lirc_clock = $(system_fast_irc_clock[])UL;
+      \tstatic constexpr uint32_t system_fast_lirc_clock = $(system_fast_irc_clock_base)UL;
 
       \t//! Frequency of HIRC [~48MHz]
       \tstatic constexpr uint32_t system_irc48m_clock = $(/SIM/system_irc48m_clock[])UL;

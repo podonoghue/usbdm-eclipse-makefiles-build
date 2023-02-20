@@ -13,7 +13,7 @@
       ]]>
    </template>
 
-   <constant key="disable_peripheral" value="&quot;cmp->CR1 = CMP_CR1_EN(0);&quot;"/>
+   <constant key="disable_peripheral" value="&quot;cmp->CR1 = CMP_CR1_EN(0);&quot;" type="String" />
 
    <!-- Interrupts and DMA -->
    <choiceOption key="cmp_scr_interrupt" condition="cmp_scr_ier_present || cmp_scr_ief_present"

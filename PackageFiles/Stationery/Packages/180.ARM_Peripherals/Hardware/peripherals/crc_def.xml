@@ -10,21 +10,21 @@
       description="CRC Polynomial register"
       toolTip="Polynomial used for the CRC calculation"
       value="0x000000"
-      constant="false" />
+      />
 
    <template><![CDATA[
       \tstatic constexpr uint32_t gpoly =  $(crc_gpoly);\n\n
    ]]></template>
-   
+
    <template key="/CRC/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */
    \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
    ]]></template>
-      
+
    <xi:include href="_clockOption.xml"/>
-      
+
    <projectActionList id = "crc_files" >
       <copy source="Project_Headers/crc.h"         target="Project_Headers/crc.h"          overwrite="true" derived="true" />
       <copy source="Snippets/crc-example.cpp"      target="Snippets/crc-example.cpp"       overwrite="true" derived="true" />

@@ -4,7 +4,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Programmable Interrupt Timer">
 
-   <constant key="numChannels" value="4" />
+   <constant key="numChannels" value="4" type="Integer" />
    
    <xi:include href="pit_def.xml"/>
    

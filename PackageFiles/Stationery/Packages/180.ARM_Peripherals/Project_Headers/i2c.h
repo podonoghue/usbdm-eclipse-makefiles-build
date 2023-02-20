@@ -665,7 +665,7 @@ public:
       delay();
 
       // Restore pin mapping
-      configureAllPins();
+      Info::initPCRs();
    }
 
    static void irqHandler() {

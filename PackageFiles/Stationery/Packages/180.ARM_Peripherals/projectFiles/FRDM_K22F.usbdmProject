@@ -194,7 +194,7 @@
    <item key="/MCG/system_mcgfllclk_clock[3]"              value="80000000" />
    <item key="/OSC0/EnableOsc"                             value="true" />
    <item key="/OSC0/osc_cr_erefsten"                       value="true" />
-   <item key="/RTC/EnableRtc"                              value="true" />
+   <item key="/RTC/ConfigureRtc"                           value="true" />
    <item key="/RTC/rtc_timezone"                           value="11" />
    <item key="/SIM/sim_clkdiv1_outdiv1[0]"                 value="0" />
    <item key="/SIM/sim_clkdiv1_outdiv1[1]"                 value="0" />

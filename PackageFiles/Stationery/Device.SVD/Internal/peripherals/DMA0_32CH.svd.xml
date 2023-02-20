@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MK10F12
       MK20F12
       MK60F12
@@ -1554,12 +1554,12 @@ The DLASTSGA field provides a memory pointer to the next TCD to be loaded into t
                         <enumeratedValues>
                            <enumeratedValue>
                               <name>0b0</name>
-                              <description>Disabled</description>
+                              <description>Scatter/Gather Disabled</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
                               <name>0b1</name>
-                              <description>Enabled</description>
+                              <description>Scatter/Gather Enabled</description>
                               <value>0b1</value>
                            </enumeratedValue>
                         </enumeratedValues>

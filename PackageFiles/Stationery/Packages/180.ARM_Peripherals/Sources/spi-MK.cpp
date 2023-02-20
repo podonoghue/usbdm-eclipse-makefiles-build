@@ -132,11 +132,14 @@ uint32_t Spi::calculateDividers(uint32_t clockFrequency, Hertz frequency) {
  * @return Data received
  */
 uint32_t Spi::txRxRaw(uint32_t data) {
+
+   spi->SR = SPI_SR_TCF_MASK;
    spi->PUSHR = data;
    while ((spi->SR & SPI_SR_TCF_MASK)==0) {
    }
+   uint32_t value = spi->POPR;
    spi->SR = SPI_SR_TCF_MASK|SPI_SR_EOQF_MASK;
-   return spi->POPR;  // Return read data
+   return value;  // Return read data
 }
 
 } // End namespace USBDM

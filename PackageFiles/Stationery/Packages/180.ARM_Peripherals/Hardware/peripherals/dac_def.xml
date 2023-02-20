@@ -13,7 +13,7 @@
       \tstatic constexpr int outputPin  = 0;\n\n
    ]]></template>
 
-   <constant key="disable_peripheral" value = "&quot;dac->C0 = DAC_C0_DACEN(0);&quot;"  />
+   <constant key="disable_peripheral" value = "&quot;dac->C0 = DAC_C0_DACEN(0);&quot;" type="String" />
 
    <xi:include href="_mapPinsOption.xml"/>
 
@@ -87,7 +87,7 @@
       \t\n
    ]]></setTemplate>
 
-<!--  C1 -->
+<!-- C1 -->
    <binaryOption key="dac_c1_dmaen" condition="dac_c1_dmaen_present"
       enumStem="DacDma"
       description="Generate DMA request"
@@ -136,7 +136,7 @@
       <choice value="3" name="FIFO threshold: &lt;= Max-2 full entries" enum="FifoMaxMinus2" condition="dac_c1_dacbfmd_fifo_present" />
    </choiceOption>
 
-<!--  C2 -->
+<!-- C2 -->
    <choiceOption key="dac_c2_dacbfup" condition="dac_c2_dacbfup_present"
       enumStem="DacBufferUpperLimit"
       description="DAC Buffer Upper Limit"
@@ -203,7 +203,7 @@
       <choice value="1" name="Reached"     enum="Reached" />
    </binaryOption>
 
-<!--   ========== DAC Init class =============================== -->
+<!--  ========== DAC Init class =============================== -->
 
    <template key="init_description" namespace="all" ><![CDATA[
       \t/**
@@ -265,7 +265,7 @@
       \t\n
    ]]></template>
 
-<!--   Member variables -->
+<!--  Member variables -->
 
    <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
@@ -301,7 +301,7 @@
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-<!--   Configure method -->
+<!--  Configure method -->
 
    <setTemplate key="/DAC/InitMethod" namespace="all"  discardRepeats="true"
       variables="dac_c0_dacrfs,dac_c1_buffer_mode,dac_c2_dacbfup"
@@ -335,7 +335,7 @@
       \t}\n\n
    ]]></setTemplate>
 
-<!--   Constructors -->
+<!--  Constructors -->
 
    <for keys="r" values="
          dac_c0_dacrfs; dac_c0_dactrgsel; dac_c0_lpen; dac_c0_dacbwien; dac_c0_dacbtien; dac_c0_dacbbien;
@@ -409,7 +409,7 @@
       };\n\n
    ]]></template>
 
-<!--   Default Initialisation value -->
+<!--  Default Initialisation value -->
 
    <template><![CDATA[
       \t/**
@@ -438,7 +438,7 @@
       \t};\n\n
    ]]></initialValueTemplate>
 
-<!--  ======================== Misc ======================== -->
+<!-- ======================== Misc ======================== -->
 
    <template><![CDATA[
       \t/// Number of Data output registers

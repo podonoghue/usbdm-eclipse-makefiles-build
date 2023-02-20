@@ -192,6 +192,8 @@
 
 <!ELEMENT stringOption EMPTY >
    <!ATTLIST stringOption condition        CDATA        #IMPLIED>
+   <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
+   <!ATTLIST stringOption valueFormat      CDATA        #IMPLIED>
    <!ATTLIST stringOption constant         (false|true) #IMPLIED>
    <!ATTLIST stringOption hidden           (false|true) #IMPLIED>
    <!ATTLIST stringOption name             CDATA        #IMPLIED>
@@ -641,6 +643,8 @@
    <!ATTLIST constant derived      (false)                        #IMPLIED>
    <!-- Make visible - doesn't have any visible effect as no model is created -->
    <!ATTLIST constant hidden       (false)                        #IMPLIED>
+   <!-- Condition to include this constant -->
+   <!ATTLIST constant condition    CDATA                          #IMPLIED>
    
 <!ELEMENT rtcTimeOption (#PCDATA)>
    <!-- Key for variable -->

@@ -13,7 +13,7 @@ Devices using this peripheral:
       \tstatic constexpr int outputPin  = 0;\n\n
    ]]></template>
 
-   <constant key="disable_peripheral"  value = "&quot;vref->SC = 0;&quot;"  />
+   <constant key="disable_peripheral"  value = "&quot;vref->SC = 0;&quot;" type="String"  />
    <xi:include href="_mapPinsOption.xml"/>
 
    <binaryOption key="vref_sc_vrefen" condition="vref_sc_vrefen_present"

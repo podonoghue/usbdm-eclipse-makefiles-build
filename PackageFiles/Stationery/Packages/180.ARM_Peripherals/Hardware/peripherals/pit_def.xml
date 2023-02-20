@@ -6,8 +6,8 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <constant key = "irq_pattern"      value = "&quot;^%b(\d+)$&quot;"  />
-   <constant key = "irq_classHandler" value = "&quot;%c%i::Channel&lt;$1&gt;::irqHandler&quot;"  />
+   <constant key = "irq_pattern"      value = "&quot;^%b(\d+)$&quot;"                            type="String" />
+   <constant key = "irq_classHandler" value = "&quot;%c%i::Channel&lt;$1&gt;::irqHandler&quot;"  type="String" />
    <xi:include href="_irqOptionSubstituted.xml"/>
 
    <template><![CDATA[

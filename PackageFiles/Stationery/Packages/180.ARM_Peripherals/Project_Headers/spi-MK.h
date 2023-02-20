@@ -105,6 +105,7 @@ protected:
    /**
     * Constructor
     *
+    * @param[in]  instanceNum    SPI Instance number (for IRQ index)
     * @param[in]  baseAddress    Base address of SPI
     */
    Spi(unsigned instanceNum, uint32_t baseAddress) :
@@ -240,7 +241,7 @@ protected:
    /**
     * Set the SPI Selection mode for the next transaction
     *
-    *  @param[in]  spiSelectMode        Whether SPI_PCSx signal is returned to idle between transfers/transactions
+    *  @param[in]  spiPeripheralSelectMode  Whether SPI_PCSx signal is returned to idle between transfers/transactions
     *
     *  @note This alters existing pushrMask/pushrMaskFinal values
     */
@@ -296,9 +297,9 @@ protected:
     * Sets up hardware peripheral select (SPI_PCSx) for transfer.
     * Also controls which CTAR is used for the transaction.
     *
-    * @param[in]  spiPeripheralSelect  Which peripheral to select using SPI_PCSx signal
-    * @param[in]  spiSelectMode        Whether SPI_PCSx signal is returned to idle between transfers/transactions
-    * @param[in]  spiCtarSelect        Which configuration to use for transaction
+    * @param[in]  spiPeripheralSelect     Which peripheral to select using SPI_PCSx signal
+    * @param[in]  spiPeripheralSelectMode Whether SPI_PCSx signal is returned to idle between transfers/transactions
+    * @param[in]  spiCtarSelect           Which configuration to use for transaction
     */
    void setPeripheralSelect(
          SpiPeripheralSelect     spiPeripheralSelect,
@@ -493,6 +494,7 @@ $(/SPI/InitMethod: #error "/SPI/InitMethod not found")
     * Set communication parameters
     *
     * @param spiCtarSettings           Settings to use
+    * @param spiPeripheralSelect       Peripheral to select (PCS to assert)
     * @param spiPeripheralSelectMode   Controls how PCS is controlled
     *
     * @note Typically use:
@@ -612,7 +614,7 @@ $(/SPI/InitMethod: #error "/SPI/InitMethod not found")
             txDataSize--;
 
             // Push to Tx FIFO
-            if (dataSize == 0) {
+            if (txDataSize == 0) {
                // Mark last data
                spi->PUSHR = sendData|pushrMaskFinal;
             }
@@ -1278,7 +1280,7 @@ public:
    }
 };
 
-#endif // $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
+#endif
 
 /**
  * @brief Template class representing a SPI interface
@@ -1547,6 +1549,8 @@ public:
    ~SpiBase_T() override {
    }
 
+#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
+
    static unsigned dmaComplete;
    static uint32_t dmaErrorCode;
    static bool     keepDmaConfiguration;
@@ -1694,9 +1698,11 @@ public:
    SpiDmaHandler_T<itemCount> createDmaHandler() {
       return SpiDmaHandler_T<itemCount>(*this);
    }
+#endif
 
 };
 
+#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
 template<class Info>
 unsigned SpiBase_T<Info>::dmaComplete = false;
 
@@ -1705,7 +1711,7 @@ bool SpiBase_T<Info>::keepDmaConfiguration = false;
 
 template<class Info>
 uint32_t SpiBase_T<Info>::dmaErrorCode = 0;
-
+#endif
 
 $(/SPI/declarations: // No declarations found)
 /**

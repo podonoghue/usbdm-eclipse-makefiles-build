@@ -642,18 +642,25 @@
    ><![CDATA[
       \t   /**
       \t    * Constructor for Active-low PCSx
-      \t    * By default PCSx signals are active-high i.e. they idle low between transfers/transactions
-      \t    * This constructor changes the given PCSx to active-low i.e. PCSx will idle high
+      \t    * By default PCSx signals are active-high i.e. they high to indicate a transfers/transactions
+      \t    * This constructor changes the given PCSx to active-low i.e. PCSx will go low for transfer
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
       \t    *
-      \t    * @param %params Active-low PCS signal
+      \t    * @param %paramExpression PCS signal to be made Active-low
+      \t    *                SpiPeripheralSelectPolarity_All_ActiveHigh clears all selections
+      \t    *                SpiPeripheralSelectPolarity_XXX_ActiveHigh values are cumulative
       \t    */
       \t   template <typename... Types>
       \t   constexpr Config(%params, Types... rest) : Config(rest...) {
       \t
-      \t      %registerName |= %paramExpression;
+      \t      if (%paramExpression == SpiPeripheralSelectPolarity_All_ActiveHigh) {
+      \t         %registerName &= ~%mask;
+      \t      }
+      \t      else {
+      \t         %registerName |= %paramExpression;
+      \t      }
       \t   }
       \t\n
    ]]></setTemplate>
@@ -667,13 +674,21 @@
       \t    * @tparam   Types
       \t    * @param    rest
       \t    *
-      \t    * @param %params PCS signal to assert during transfers
+      \t    * @param %paramExpression PCS signal to assert during transfers
+      \t    *                SpiPeripheralSelect_None clears all selections
+      \t    *                SpiPeripheralSelect_XXXX values are cumulative
       \t    */
       \t   template <typename... Types>
       \t   constexpr Config(%params, Types... rest) : Config(rest...) {
       \t
-      \t      pushr      |= %paramExpression;
-      \t      pushrFinal |= %paramExpression;
+      \t      if (%paramExpression == SpiPeripheralSelect_None) {
+      \t         pushr      &= ~%mask;
+      \t         pushrFinal &= ~%mask;
+      \t      }
+      \t      else {
+      \t         pushr      |= %paramExpression;
+      \t         pushrFinal |= %paramExpression;
+      \t      }
       \t   }
       \t\n
    ]]></setTemplate>
@@ -687,7 +702,7 @@
       \t    * @tparam   Types
       \t    * @param    rest
       \t    *
-      \t    * @param %params CTAR to use during transfers
+      \t    * @param %paramExpression CTAR to use during transfers
       \t    */
       \t   template <typename... Types>
       \t   constexpr Config(%params, Types... rest) : Config(rest...) {
@@ -707,7 +722,7 @@
       \t    * @tparam   Types
       \t    * @param    rest
       \t    *
-      \t    * @param %params PCS timing
+      \t    * @param %paramExpression PCS timing
       \t    */
       \t   template <typename... Types>
       \t   constexpr Config(%params, Types... rest) : Config(rest...) {

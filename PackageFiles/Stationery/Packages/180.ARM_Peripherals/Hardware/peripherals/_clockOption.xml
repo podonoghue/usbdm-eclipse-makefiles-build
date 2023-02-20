@@ -36,7 +36,7 @@
       \t}\n\n
    ]]></template>
 
-   <constant key = "enable_clock"   value = "&quot;Info\:\:enableClock();&quot;"  />
-   <constant key = "disable_clock"  value = "&quot;Info\:\:disableClock();&quot;"  />
+   <constant key = "enable_clock"   value = "&quot;Info\:\:enableClock();&quot;"   type="String" />
+   <constant key = "disable_clock"  value = "&quot;Info\:\:disableClock();&quot;"  type="String" />
 
 </fragment>
