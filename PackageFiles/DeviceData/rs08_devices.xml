@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd" >
 
-<!-- 
+<!--
       V4.10.4 - Changed how security information is expressed
  -->
 <root xmlns:xi="http://www.w3.org/2001/XInclude" version="4.12.1.180">
    <description>RS08 Device characteristics v4.8.0 5/12/2011</description>
    <sharedInformation>
-   
+
       <tclScript id="RS08-default-Scripts">
          <xi:include href="RS08/RS08-default-flash-scripts.tcl" parse="text"/>
       </tclScript>
-   
-      <!-- 
-            Security Values for Flash 
+
+      <!--
+            Security Values for Flash
       -->
-      <securityEntry id="HCS12-default-security">
+      <securityEntry id="RS08-default-security">
          <securityDescription id="RS08-default-security-description">
             NVOPT = [RES=%7b, SECD=%1b]
          </securityDescription>
@@ -28,12 +28,12 @@
             FE
          </securityInfo>
       </securityEntry>
-      
+
       <resetMethods id="rs08ResetMethods" >
          <resetMethod method="hardware" />
          <resetMethod method="software" isDefault="true" />
       </resetMethods>
-      
+
       <eraseMethods id="rs08EraseMethods" >
          <eraseMethod method="Mass" isDefault="true"  />
          <eraseMethod method="All" />
@@ -43,7 +43,7 @@
 
    <deviceList>
 <!-- ===================================================================================== -->
-<!-- 
+<!--
    RS08 Defaults
 -->
       <device name="rs08DefaultDevice"  family="RS08" isDefault="true" >
@@ -54,7 +54,7 @@
             <memoryRange end="0x004F" start="0x0020" />
          </memory>
          <memory registerAddress="0x210" type="flash" securityAddress="0x3FFC">
-            <securityEntryRef ref="HCS12-default-security" />
+            <securityEntryRef ref="RS08-default-security" />
             <memoryRange end="0x3FFF" start="0x3C00" />
          </memory>
          <sdidAddress value="0x206" />
@@ -71,7 +71,7 @@
             <memoryRange end="0x004F" start="0x0020" />
          </memory>
          <memory registerAddress="0x210" type="flash" securityAddress="0x3FFC">
-            <securityEntryRef ref="HCS12-default-security" />
+            <securityEntryRef ref="RS08-default-security" />
             <memoryRange end="0x3FFF" start="0x3C00" />
          </memory>
          <soptAddress value="0x201" />
@@ -87,7 +87,7 @@
             <memoryRange end="0x004F" start="0x0020" />
          </memory>
          <memory registerAddress="0x210" type="flash" securityAddress="0x3FFC">
-            <securityEntryRef ref="HCS12-default-security" />
+            <securityEntryRef ref="RS08-default-security" />
             <memoryRange end="0x3FFF" start="0x3800" />
          </memory>
          <soptAddress value="0x201" />
@@ -104,7 +104,7 @@
             <memoryRange end="0x009F" start="0x0030" />
          </memory>
          <memory registerAddress="0x210" type="flash" securityAddress="0x3FFC">
-            <securityEntryRef ref="HCS12-default-security" />
+            <securityEntryRef ref="RS08-default-security" />
             <memoryRange end="0x3FFF" start="0x3000" />
          </memory>
          <soptAddress value="0x201" />
@@ -121,7 +121,7 @@
             <memoryRange end="0x00BF" start="0x0030" />
          </memory>
          <memory registerAddress="0x210" type="flash" securityAddress="0x3FFC">
-            <securityEntryRef ref="HCS12-default-security" />
+            <securityEntryRef ref="RS08-default-security" />
             <memoryRange end="0x3FFF" start="0x2000" />
          </memory>
          <soptAddress value="0x201" />
@@ -137,7 +137,7 @@
             <memoryRange end="0x00BF" start="0x0050" />
          </memory>
          <memory registerAddress="0x208" type="flash" securityAddress="0x3FFC">
-            <securityEntryRef ref="HCS12-default-security" />
+            <securityEntryRef ref="RS08-default-security" />
             <memoryRange end="0x3FFF" start="0x3800" />
          </memory>
          <soptAddress value="0x211" />
@@ -154,7 +154,7 @@
             <memoryRange end="0x00BF" start="0x0050" />
          </memory>
          <memory registerAddress="0x208" type="flash" securityAddress="0x3FFC">
-            <securityEntryRef ref="HCS12-default-security" />
+            <securityEntryRef ref="RS08-default-security" />
             <memoryRange end="0x3FFF" start="0x3000" />
          </memory>
          <soptAddress value="0x211" />
@@ -171,7 +171,7 @@
             <memoryRange end="0x00BF" start="0x0050" />
          </memory>
          <memory registerAddress="0x208" type="flash" securityAddress="0x3FFC">
-            <securityEntryRef ref="HCS12-default-security" />
+            <securityEntryRef ref="RS08-default-security" />
             <memoryRange end="0x3FFF" start="0x2000" />
          </memory>
          <soptAddress value="0x211" />
@@ -188,7 +188,7 @@
             <memoryRange end="0x00BF" start="0x0050" />
          </memory>
          <memory registerAddress="0x208" type="flash" securityAddress="0x3FFC">
-            <securityEntryRef ref="HCS12-default-security" />
+            <securityEntryRef ref="RS08-default-security" />
             <memoryRange end="0x3FFF" start="0x1000" />
          </memory>
          <soptAddress value="0x211" />
@@ -205,7 +205,7 @@
             <memoryRange end="0x00BF" start="0x0050" />
          </memory>
          <memory registerAddress="0x250" type="flash" securityAddress="0x3FFC">
-            <securityEntryRef ref="HCS12-default-security" />
+            <securityEntryRef ref="RS08-default-security" />
             <memoryRange end="0x3FFF" start="0x2000" />
          </memory>
          <soptAddress value="0x019" />
@@ -221,7 +221,7 @@
             <memoryRange end="0x00BF" start="0x0050" />
          </memory>
          <memory registerAddress="0x23C" type="flash" securityAddress="0x3FFC">
-            <securityEntryRef ref="HCS12-default-security" />
+            <securityEntryRef ref="RS08-default-security" />
             <memoryRange end="0x3FFF" start="0x3000" />
          </memory>
          <soptAddress value="0x019" />
