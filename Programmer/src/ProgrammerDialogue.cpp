@@ -11,10 +11,11 @@
 
 ProgrammerDialogue::ProgrammerDialogue(
       wxWindow            *parent,
+      const char          *title,
       BdmInterfacePtr      bdmInterface,
       DeviceInterfacePtr   deviceInterface,
       AppSettings          &appsettings) :
-   UsbdmDialogue(parent, _("Flash Programmer"), bdmInterface, deviceInterface, appsettings) {
+   UsbdmDialogue(parent, title, bdmInterface, deviceInterface, appsettings) {
 }
 
 ProgrammerDialogue::~ProgrammerDialogue() {

@@ -165,7 +165,7 @@ const char *getICPErrorName(unsigned char error) {
  *
  *  @return pointer to static string describing the target
  */
-char const *getTargetTypeName( unsigned int type ) {
+char const *getTargetTypeName( TargetType_t type ) {
    static const char *names[] = {
       "HCS12","HCS08","RS08","CFV1","CFVx","JTAG",
       "EZFlash","MC56F80xx","ARM-JTAG","ARM-SWD","ARM","S12Z"

@@ -40,6 +40,7 @@
 
 #include "ProgrammerDialogue.h"
 
+#include "Names.h"
 #include "UsbdmSystem.h"
 #include "Common.h"
 #include "DeviceData.h"
@@ -244,8 +245,14 @@ int FlashProgrammerApp::OnRun(void) {
       // Load interactive settings
       appSettings.load();
 
+      wxString title(getTargetTypeName(targetType));
+      title.Append(" Flash Programmer");
+
       // Create the main application window
-      ProgrammerDialogue *dialogue = new ProgrammerDialogue(NULL, bdmInterface, deviceInterface, appSettings);
+      ProgrammerDialogue *dialogue = new ProgrammerDialogue(
+            NULL,
+            title.c_str(),
+            bdmInterface, deviceInterface, appSettings);
 
 //      SetTopWindow((wxWindow*)dialogue);
       USBDM_ErrorCode rc =  dialogue->execute(hexFileName);

@@ -110,7 +110,7 @@ static inline char const *getOnceStatusName(int status)                         
 char const *getTargetModeName(TargetMode_t type);
 char const *getHardwareDescription(unsigned int hardwareVersion);
 char const *getBriefHardwareDescription(unsigned int hardwareVersion);
-char const *getTargetTypeName( unsigned int type );
+char const *getTargetTypeName(TargetType_t type );
 char const *getBDMStatusName(USBDMStatus_t *USBDMStatus);
 char const *getICPErrorName(unsigned char error);
 char const *getConnectionStateName(SpeedMode_t level);

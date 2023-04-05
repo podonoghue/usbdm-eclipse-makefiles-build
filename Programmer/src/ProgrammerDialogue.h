@@ -18,6 +18,7 @@ protected:
 public:
    ProgrammerDialogue(
          wxWindow            *parent,
+         const char          *title,
          BdmInterfacePtr      bdmInterface,
          DeviceInterfacePtr   deviceInterface,
          AppSettings         &appSettings);
