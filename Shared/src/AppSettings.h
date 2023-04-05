@@ -216,7 +216,7 @@ public:
    }
 
    AppSettings & operator=(const AppSettings &other) {
-      if (other != *this) {
+      if (&other != this) {
          fMap           = other.fMap;
          fFilePath      = other.fFilePath;
          fDescription   = other.fDescription;
