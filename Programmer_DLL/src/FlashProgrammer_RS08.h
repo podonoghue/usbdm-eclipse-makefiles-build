@@ -59,8 +59,6 @@ protected:
 
    USBDM_ErrorCode initialiseTargetFlash();
    USBDM_ErrorCode initialiseTarget();
-   USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage, MemoryRegionConstPtr flashRegion);
-   USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage);
    USBDM_ErrorCode blankCheckTarget();
    USBDM_ErrorCode blindUnsecure();
    USBDM_ErrorCode doFlashCommand(uint8_t command);

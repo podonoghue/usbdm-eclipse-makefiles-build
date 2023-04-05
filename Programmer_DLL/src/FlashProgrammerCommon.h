@@ -30,7 +30,59 @@ public:
    virtual USBDM_ErrorCode    massEraseTarget()  override { return massEraseTarget(true); };
    virtual uint16_t           getCalculatedTrimValue()  override { return calculatedClockTrimValue; };
 
+private:
+
+   /**
+    * Modifies the Security locations in the flash image according to required security options of flashRegion
+    *
+    * @param flashImage    Flash contents to be programmed.
+    * @param flashRegion   The memory region involved (to determine security area if any)
+    */
+   USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage, MemoryRegionConstPtr flashRegion);
+
+   /**
+    * Modifies the Security locations in the flash image according to required security options
+    *
+    * @param flashImage  Flash image to be modified
+    *
+    * @return error code see \ref USBDM_ErrorCode.
+    *
+    * @note: This MUST be done after mass erase (if used) as target memory is checked!
+    */
+   USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage);
+
 protected:
+
+   /**
+    * Restores the contents of the security areas to their saved values
+    * All records are cleared
+    *
+    * @param flashImage    Flash contents to be programmed.
+    */
+   void restoreSecurityAreas(FlashImagePtr flashImage);
+
+   /**
+    * Class to modify and restore flash image in constructor/destructor
+    */
+   class SecurityModifier {
+   private:
+      FlashProgrammerCommon &programmer;
+      FlashImagePtr         flashImage;
+      USBDM_ErrorCode rc = PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
+
+   public:
+      SecurityModifier(FlashProgrammerCommon &programmer, FlashImagePtr flashImage) :
+         programmer(programmer), flashImage(flashImage) {
+         rc = programmer.setFlashSecurity(flashImage);
+      }
+
+      ~SecurityModifier() {
+         programmer.restoreSecurityAreas(flashImage);
+      }
+
+      USBDM_ErrorCode getRc() { return rc; }
+   };
+
    static const int MaxSecurityAreaSize = 100;  //<! Maximum size of a security area that may be saved
 
    /**
@@ -118,6 +170,7 @@ protected:
     * @return error code if security areas are present
     */
    USBDM_ErrorCode checkNoSecurityAreas(void);
+
    /**
     * Record the original contents of a security area for later restoration
     *
@@ -128,14 +181,6 @@ protected:
     * @return error code see \ref USBDM_ErrorCode.
     */
    USBDM_ErrorCode recordSecurityArea(FlashImagePtr flashImage, const uint32_t address, const uint32_t size);
-   /**
-    * Restores the contents of the security areas to their saved values
-    * All records are cleared
-    *
-    * @param flashImage    Flash contents to be programmed.
-    */
-   void            restoreSecurityAreas(FlashImagePtr flashImage);
-
    bool                       flashReady;               //!< Safety check - only TRUE when flash is ready for programming
    DeviceDataConstPtr         device;                   //!< Parameters describing the current device
    UsbdmTclInterperPtr        tclInterpreter;           //!< TCL interpreter
@@ -151,6 +196,8 @@ protected:
 
    uint32_t                ramStart; //!< Start of RAM region for programming
    uint32_t                ramEnd;   //!< End of RAM region for programming
+
+   bool                    securityNeedsSelectiveErase;  //!< Indicates security area needs to be selectively erased
 
    static const char *getFlashOperationName(FlashOperation flashOperation);
 

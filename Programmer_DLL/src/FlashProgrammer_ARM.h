@@ -98,12 +98,9 @@ protected:
    FlashOperation          currentFlashOperation;        //!< Current operation loaded
    uint32_t                currentFlashAlignment;        //!< Alignment applicable to flash operation
    bool                    doRamWrites;                  //!< Write RAM region of image to target (after programming)
-   bool                    securityNeedsSelectiveErase;  //!< Indicates security area needs to be selectively erased
 
    USBDM_ErrorCode initialiseTargetFlash();
    USBDM_ErrorCode initialiseTarget();
-   USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage, MemoryRegionConstPtr flashRegion);
-   USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage);
    USBDM_ErrorCode setFlashChecksum(FlashImagePtr flashImage, MemoryRegionConstPtr flashRegion);
    USBDM_ErrorCode setFlashChecksum(FlashImagePtr flashImage);
    USBDM_ErrorCode trimTargetClock(uint32_t trimAddress, unsigned long  targetBusFrequency, uint16_t *returnTrimValue,

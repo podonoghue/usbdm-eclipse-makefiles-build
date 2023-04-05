@@ -91,8 +91,6 @@ protected:
 
    USBDM_ErrorCode initialiseTargetFlash();
    USBDM_ErrorCode initialiseTarget();
-   USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage, MemoryRegionConstPtr flashRegion);
-   USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage);
    USBDM_ErrorCode trimTargetClock(uint32_t trimAddress,unsigned long targetBusFrequency, uint16_t *returnTrimValue, unsigned long *measuredBusFrequency, int do9BitTrim);
    USBDM_ErrorCode configureExternal_Clock(unsigned long  *busFrequency);
    USBDM_ErrorCode dummyTrimLocations(FlashImagePtr flashImage);

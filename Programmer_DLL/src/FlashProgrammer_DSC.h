@@ -21,7 +21,51 @@ public:
 
    virtual ModuleInfo      &getModuleInfo() const override { return moduleInfo; }
 
+private:
+
+   /**
+    * Modifies the Security locations in the flash image according to required security options of flashRegion
+    *
+    * @param flashImage    Flash contents to be programmed.
+    * @param flashRegion   The memory region involved (to determine security area if any)
+    */
+   USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage, MemoryRegionConstPtr flashRegion);
+
+   /**
+    * Modifies the Security locations in the flash image according to required security options
+    *
+    * @param flashImage  Flash image to be modified
+    *
+    * @return error code see \ref USBDM_ErrorCode.
+    *
+    * @note: This MUST be done after mass erase (if used) as target memory is checked!
+    */
+   USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage);
+
 protected:
+
+   /**
+    * Class to modify and restore flash image in constructor/destructor
+    */
+   class SecurityModifier {
+
+   private:
+      FlashProgrammer_DSC   &programmer;
+      FlashImagePtr         flashImage;
+      USBDM_ErrorCode rc = PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
+
+   public:
+      SecurityModifier(FlashProgrammer_DSC &programmer, FlashImagePtr flashImage) :
+         programmer(programmer), flashImage(flashImage) {
+         rc = programmer.setFlashSecurity(flashImage);
+      }
+
+      ~SecurityModifier() {
+         programmer.restoreSecurityAreas(flashImage);
+      }
+
+      USBDM_ErrorCode getRc() { return rc; }
+   };
 
    static ModuleInfo moduleInfo;
 
@@ -90,8 +134,6 @@ protected:
 
    USBDM_ErrorCode initialiseTargetFlash();
    USBDM_ErrorCode initialiseTarget();
-   USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage, MemoryRegionConstPtr flashRegion);
-   USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage);
    USBDM_ErrorCode trimTargetClock(uint32_t trimAddress, unsigned long  targetBusFrequency, uint16_t *returnTrimValue,
                                    unsigned long *measuredBusFrequency, int do9BitTrim);
    USBDM_ErrorCode setFlashTrimValues(FlashImagePtr flashImage);

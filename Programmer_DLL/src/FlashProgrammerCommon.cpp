@@ -54,7 +54,8 @@ FlashProgrammerCommon::FlashProgrammerCommon(DeviceData::EraseMethod defaultEras
    defaultEraseMethod(defaultEraseMethod),
    defaultResetMethod(defaultResetMethod),
    ramStart(0),
-   ramEnd(0) {
+   ramEnd(0),
+   securityNeedsSelectiveErase(false) {
    LOGGING_E;
 
    log.print("defaultResetMethod = %s\n", DeviceData::getResetMethodName(defaultResetMethod));
@@ -94,7 +95,7 @@ USBDM_ErrorCode FlashProgrammerCommon::setTCLInterpreter(UsbdmTclInterperPtr ti)
    tclInterpreter = ti;
 
    if (tclInterpreter == nullptr) {
-      log.error("No TCL interpreter\n");
+      log.error("Error: No TCL interpreter\n");
       return PROGRAMMING_RC_ERROR_TCL_SCRIPT;
    }
    return PROGRAMMING_RC_OK;
@@ -140,20 +141,20 @@ USBDM_ErrorCode FlashProgrammerCommon::releaseTCL(void) {
 //USBDM_ErrorCode FlashProgrammerCommon::runTCLScript(TclScriptConstPtr script) {
 //   LOGGING;
 //   if (tclInterpreter == NULL) {
-//      log.error("No TCL Interpreter\n");
+//      log.error("Error: No TCL Interpreter\n");
 //      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
 //   }
 //   int rc = tclInterpreter->evalTclScript(script->getScript().c_str());
 //   const char *result = tclInterpreter->getTclResult();
 //   if ((result != NULL) && (*result != '\0')) {
 //      // Error return
-//      log.error("Result = \'%s\'\n", result);
+//      log.error("Error: Result = \'%s\'\n", result);
 //      return PROGRAMMING_RC_ERROR_TCL_SCRIPT;
 //   }
 //   if (rc != 0) {
 //      // Unexpected failure!
-//      log.error("Failed\n");
-//      log.error("%s", script->toString().c_str());
+//      log.error("Error: Failed\n");
+//      log.error("Error: %s", script->toString().c_str());
 //      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
 //   }
 //   return PROGRAMMING_RC_OK;
@@ -168,12 +169,12 @@ USBDM_ErrorCode FlashProgrammerCommon::runTCLCommand(const char *command) {
    log.print("Command = '%s'\n", command);
 //   log.print("tclInterpreter = %p\n", tclInterpreter.get());
    if (tclInterpreter == NULL) {
-      log.error("No TCL Interpreter\n");
+      log.error("Error: No TCL Interpreter\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    USBDM_ErrorCode rc = tclInterpreter->evalTclScript(command);
    if (rc != BDM_RC_OK) {
-      log.error("Failed - rc = %d (%s)\n", rc, bdmInterface->getErrorString(rc));
+      log.error("Error: Failed - rc = %d (%s)\n", rc, bdmInterface->getErrorString(rc));
    }
    return rc;
 }
@@ -1285,7 +1286,7 @@ USBDM_ErrorCode FlashProgrammerCommon::probeMemory(MemorySpace_t memorySpace, ui
       }
       if ((memcmp(probe1, probeResult1, memorySpace&MS_SIZE) != 0) ||
           (memcmp(probe2, probeResult2, memorySpace&MS_SIZE) != 0)) {
-         log.error("Memory probe failed\n");
+         log.error("Error: Memory probe failed\n");
          rc = PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
          break;
       }
@@ -1296,7 +1297,7 @@ USBDM_ErrorCode FlashProgrammerCommon::probeMemory(MemorySpace_t memorySpace, ui
    }
 
    if (rc != BDM_RC_OK) {
-      log.error("RAM memory probe failed @%s:0x%08X, rc = %d (%s)\n", getMemSpaceName(memorySpace), address, rc, bdmInterface->getErrorString(rc));
+      log.error("Error: RAM memory probe failed @%s:0x%08X, rc = %d (%s)\n", getMemSpaceName(memorySpace), address, rc, bdmInterface->getErrorString(rc));
       return rc;
    }
    return PROGRAMMING_RC_OK;
@@ -1310,10 +1311,187 @@ USBDM_ErrorCode FlashProgrammerCommon::probeMemory(MemorySpace_t memorySpace, ui
 USBDM_ErrorCode FlashProgrammerCommon::checkNoSecurityAreas(void) {
    LOGGING;
    if (securityAreaCount > 0) {
-      log.error("Security areas not empty\n");
+      log.error("Error: Security areas not empty!\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    return BDM_RC_OK;
+}
+
+//===========================================================================================================
+//! Modifies the Security locations in the flash image according to required security options of flashRegion
+//!
+//! @param flashImage    Flash contents to be programmed.
+//! @param flashRegion   The memory region involved (to determine security area if any)
+//!
+USBDM_ErrorCode FlashProgrammerCommon::setFlashSecurity(FlashImagePtr flashImage, MemoryRegionConstPtr flashRegion) {
+   LOGGING;
+   uint32_t securityRegionAddress = flashRegion->getSecurityAddress();
+   if (securityRegionAddress == 0) {
+      log.print("No security area, not modifying flash image\n");
+      return PROGRAMMING_RC_OK;
+   }
+   auto memoryRange       = flashRegion->getMemoryRangeFor(securityRegionAddress);
+
+   // Get security information and size
+   SecurityInfoConstPtr securityInfo;
+   SecurityOptions_t securityOption = device->getSecurity();
+   switch (securityOption) {
+      case SEC_SECURED:
+         log.print("Setting image as secured for [0x%08X..0x%08X]\n", memoryRange->start, memoryRange->end);
+         securityInfo = flashRegion->getSecureInfo();
+         break;
+      case SEC_UNSECURED:
+         log.print("Setting image as unsecured for [0x%08X..0x%08X]\n", memoryRange->start, memoryRange->end);
+         securityInfo = flashRegion->getUnsecureInfo();
+         break;
+      case SEC_CUSTOM:
+         log.print("Setting image security to custom value for [0x%08X..0x%08X]\n", memoryRange->start, memoryRange->end);
+         securityInfo = flashRegion->getCustomSecureInfo();
+         break;
+      case SEC_INTELLIGENT:
+         log.print("Setting image as intelligently unsecured for [0x%08X..0x%08X]\n", memoryRange->start, memoryRange->end);
+         securityInfo = flashRegion->getUnsecureInfo();
+         break;
+      case SEC_DEFAULT:
+         log.print("Setting image as security unchanged for [0x%08X..0x%08X]\n", memoryRange->start, memoryRange->end);
+         securityInfo = flashRegion->getUnsecureInfo();
+         break;
+      default:
+         log.error("Unexpected securityInfo value");
+         return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
+   }
+   if (securityInfo == NULL) {
+      log.error("Error - No settings for security area!\n");
+      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
+   }
+
+   int securityRegionSize = securityInfo->getSize();
+
+   // SEC_INTELLIGENT becomes SEC_UNSECURED or SEC_DEFAULT
+   if (securityOption == SEC_INTELLIGENT) {
+      // Default to unsecured info
+      securityOption = SEC_UNSECURED;
+
+      // Check for security information within flash image
+      for(int index=0; index<securityRegionSize; index++) {
+         if (flashImage->isValid(securityRegionAddress+index)) {
+            // Use flash info instead
+            securityOption = SEC_DEFAULT;
+            break;
+         }
+      }
+   }
+
+   // Create security area contents
+   uint8_t securityData[securityRegionSize];
+   switch (securityOption) {
+      case SEC_SECURED:
+      case SEC_UNSECURED:
+      case SEC_CUSTOM:
+         memcpy(securityData, securityInfo->getData(), securityRegionSize);
+         break;
+      case SEC_DEFAULT:
+      default:
+         // Copy security information from flash
+         for(int index=0; index<securityRegionSize; index++) {
+            securityData[index] = flashImage->getValue(securityRegionAddress+index);
+         }
+         break;
+   }
+
+   // Save contents of current security area within Flash image
+   recordSecurityArea(flashImage, securityRegionAddress, securityRegionSize);
+
+   // Update flash with new security info
+   flashImage->loadDataBytes(securityRegionSize, securityRegionAddress, securityData, FlashImage::Overwrite);
+
+#ifdef LOG
+   log.print("Flash security region: "
+         "              mem[0x%06lX-0x%06lX] = \n", (unsigned long)securityRegionAddress, (unsigned long)(securityRegionAddress+securityRegionSize/sizeof(uint8_t)-1));
+   flashImage->dumpRange(securityRegionAddress, securityRegionAddress+securityRegionSize-1);
+#endif
+
+   if ((getEraseMethod() == DeviceData::eraseMass) || (getEraseMethod() == DeviceData::eraseNone)) {
+      // No further erasing of target memory expected
+      // Try to preserve existing security area if suitable
+
+      // Read current security area from target (after mass-erase or unchanged)
+      uint8_t memory[securityRegionSize];
+      bdmInterface->readMemory(MS_Byte, securityRegionSize, securityRegionAddress, memory);
+
+      // Check if security area in target is blank
+      bool securityAreaInTargetIsNonBlank = false;
+      for(int index=0; index<securityRegionSize; index++) {
+         if (memory[index] != 0xFF) {
+            securityAreaInTargetIsNonBlank = true;
+            break;
+         }
+      }
+      log.print("Security area in target is %s\n", securityAreaInTargetIsNonBlank?"non-blank":"blank");
+
+      if (memcmp(securityData, memory, securityRegionSize) == 0) {
+         // Security area in target memory agrees with desired security
+         // Clear security area in image to prevent attempted re-programming of already valid data
+         log.print("Removing security area from programming image as equal to current target memory contents and not being erased\n");
+         for(int index=0; index<securityRegionSize; index++) {
+            flashImage->remove(securityRegionAddress+index);
+         }
+      }
+      else if (securityAreaInTargetIsNonBlank) {
+         // Security area conflicts with image
+         if (getEraseMethod() == DeviceData::eraseNone) {
+            // Can't change security without erase
+            return PROGRAMMING_RC_ERROR_NOT_BLANK;
+         }
+         else {
+            // Mass erase left security area non-blank and conflicting
+            // Force erase of security area in target before programming
+            log.print("Security area in target needs erasing\n");
+            securityNeedsSelectiveErase = true;
+         }
+      }
+      // else it is blank and doesn't need erasing in any case
+   }
+   return PROGRAMMING_RC_OK;
+}
+
+//===============================================================================================
+//! Modifies the Security locations in the flash image according to required security options
+//!
+//! @param flashImage  -  Flash image to be modified
+//!
+//! @return error code see \ref USBDM_ErrorCode.
+//!
+//! @note: This MUST be done after mass erase (if used) as target memory is checked!
+//!
+USBDM_ErrorCode FlashProgrammerCommon::setFlashSecurity(FlashImagePtr flashImage) {
+   LOGGING;
+
+   // Process each flash region
+   USBDM_ErrorCode rc = BDM_RC_OK;
+
+   // Assume security areas not present, or already erased, or will be erased in any case (e.g. eraseSelective)
+   securityNeedsSelectiveErase = false;
+
+   // All security areas in image should have been restored before this!
+   rc = checkNoSecurityAreas();
+   if (rc != BDM_RC_OK) {
+      return rc;
+   }
+
+   for (int index=0; ; index++) {
+      MemoryRegionConstPtr memoryRegionPtr = device->getMemoryRegion(index);
+      if (memoryRegionPtr == NULL) {
+         break;
+      }
+      rc = setFlashSecurity(flashImage, memoryRegionPtr);
+      if (rc != BDM_RC_OK) {
+         log.print("Failed to set security @0x%08X for %s, rc = %s\n",
+               memoryRegionPtr->getSecurityAddress(), memoryRegionPtr->getMemoryTypeName(), bdmInterface->getErrorString(rc));
+         break;
+      }
+   }
+   return rc;
 }
 
 /**
@@ -1329,11 +1507,11 @@ USBDM_ErrorCode FlashProgrammerCommon::recordSecurityArea(FlashImagePtr flashIma
    LOGGING_Q;
    log.print("[0x%08X...0x%08X] : ", startAddress, startAddress+size-1);
    if (securityAreaCount >= sizeof(securityData)/sizeof(securityData[0])) {
-      log.error("Invalid securityAreaCount size");
+      log.error("Error: Invalid securityAreaCount size");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    if (size > MaxSecurityAreaSize) {
-      log.error("Invalid security size\n");
+      log.error("Error: Invalid security size\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
   securityData[securityAreaCount].address = startAddress;
@@ -1362,7 +1540,7 @@ USBDM_ErrorCode FlashProgrammerCommon::recordSecurityArea(FlashImagePtr flashIma
 void FlashProgrammerCommon::restoreSecurityAreas(FlashImagePtr flashImage) {
    LOGGING_Q;
    for (unsigned index=0; index<securityAreaCount; index++) {
-      log.print("Restoring security area in image [0x%06X...0x%06X] : ",
+      log.print("Restoring security area in image [0x%06X...0x%06X] : \n",
             securityData[index].address, securityData[index].address+securityData[index].size-1);
       for (uint32_t count=0; count<securityData[index].size; count++) {
          if (securityData[index].data[count] == SecurityDataCache::BLANK) {

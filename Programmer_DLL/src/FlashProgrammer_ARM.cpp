@@ -269,8 +269,7 @@ FlashProgrammer_ARM::FlashProgrammer_ARM() :
       initTargetDone(false),
       currentFlashOperation(OpNone),
       currentFlashAlignment(0),
-      doRamWrites(false),
-      securityNeedsSelectiveErase(false) {
+      doRamWrites(false) {
    LOGGING_E;
 }
 
@@ -1730,6 +1729,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::checkTargetUnSecured() {
    return PROGRAMMING_RC_OK;
 }
 
+#if 0
 //===========================================================================================================
 //! Modifies the Security locations in the flash image according to required security options of flashRegion
 //!
@@ -1869,6 +1869,46 @@ USBDM_ErrorCode FlashProgrammer_ARM::setFlashSecurity(FlashImagePtr flashImage, 
 }
 
 //===============================================================================================
+//! Modifies the Security locations in the flash image according to required security options
+//!
+//! @param flashImage  -  Flash image to be modified
+//!
+//! @return error code see \ref USBDM_ErrorCode.
+//!
+//! @note: This MUST be done after mass erase (if used) as target memory is checked!
+//!
+USBDM_ErrorCode FlashProgrammer_ARM::setFlashSecurity(FlashImagePtr flashImage) {
+   LOGGING;
+
+   // Process each flash region
+   USBDM_ErrorCode rc = BDM_RC_OK;
+
+   // Assume security areas not present, or already erased, or will be erased in any case (e.g. eraseSelective)
+   securityNeedsSelectiveErase = false;
+
+   // All security areas in image should have been restored before this!
+   rc = checkNoSecurityAreas();
+   if (rc != BDM_RC_OK) {
+      return rc;
+   }
+
+   for (int index=0; ; index++) {
+      MemoryRegionConstPtr memoryRegionPtr = device->getMemoryRegion(index);
+      if (memoryRegionPtr == NULL) {
+         break;
+      }
+      rc = setFlashSecurity(flashImage, memoryRegionPtr);
+      if (rc != BDM_RC_OK) {
+         log.print("Failed to set security @0x%08X for %s, rc = %s\n",
+               memoryRegionPtr->getSecurityAddress(), memoryRegionPtr->getMemoryTypeName(), bdmInterface->getErrorString(rc));
+         break;
+      }
+   }
+   return rc;
+}
+#endif
+
+//===============================================================================================
 //! Modifies the Checksum locations in the flash image as required
 //!
 //! @param flashImage  -  Flash image to be modified
@@ -1909,45 +1949,6 @@ USBDM_ErrorCode FlashProgrammer_ARM::setFlashChecksum(FlashImagePtr flashImage, 
    }
    log.print("Modifying flash image\n");
    return checksumInfo->updateChecksum(flashImage);
-}
-
-//===============================================================================================
-//! Modifies the Security locations in the flash image according to required security options
-//!
-//! @param flashImage  -  Flash image to be modified
-//!
-//! @return error code see \ref USBDM_ErrorCode.
-//!
-//! @note: This MUST be done after mass erase (if used) as target memory is checked!
-//!
-USBDM_ErrorCode FlashProgrammer_ARM::setFlashSecurity(FlashImagePtr flashImage) {
-   LOGGING;
-
-   // Process each flash region
-   USBDM_ErrorCode rc = BDM_RC_OK;
-
-   // Assume security areas not present, or already erased, or will be erased in any case (e.g. eraseSelective)
-   securityNeedsSelectiveErase = false;
-
-   // All security areas in image should have been restored before this!
-   rc = checkNoSecurityAreas();
-   if (rc != BDM_RC_OK) {
-      return rc;
-   }
-
-   for (int index=0; ; index++) {
-      MemoryRegionConstPtr memoryRegionPtr = device->getMemoryRegion(index);
-      if (memoryRegionPtr == NULL) {
-         break;
-      }
-      rc = setFlashSecurity(flashImage, memoryRegionPtr);
-      if (rc != BDM_RC_OK) {
-         log.print("Failed to set security @0x%08X for %s, rc = %s\n",
-               memoryRegionPtr->getSecurityAddress(), memoryRegionPtr->getMemoryTypeName(), bdmInterface->getErrorString(rc));
-         break;
-      }
-   }
-   return rc;
 }
 
 //==================================================================================
@@ -2745,7 +2746,8 @@ USBDM_ErrorCode FlashProgrammer_ARM::verifyFlash(FlashImagePtr flashImage,
       if (rc != PROGRAMMING_RC_OK) {
          break;
       }
-      rc = setFlashSecurity(flashImage);
+      SecurityModifier modifier(*this, flashImage);
+      rc = modifier.getRc();
       if (rc != PROGRAMMING_RC_OK) {
          break;
       }
@@ -2763,7 +2765,6 @@ USBDM_ErrorCode FlashProgrammer_ARM::verifyFlash(FlashImagePtr flashImage,
       }
       rc = doVerify(flashImage);
    } while (false);
-   restoreSecurityAreas(flashImage);
 
    log.print("Verifying Time = %3.2f s, rc = %d\n", progressTimer->elapsedTime(), rc);
 
@@ -2918,7 +2919,8 @@ USBDM_ErrorCode FlashProgrammer_ARM::programFlash(FlashImagePtr flashImage,
       }
       // Modify flash image according to security options
       // Note: This MUST be done after mass erase if used!
-      rc = setFlashSecurity(flashImage);
+      SecurityModifier modifier(*this, flashImage);
+      rc = modifier.getRc();
       if (rc != PROGRAMMING_RC_OK) {
          break;
       }
@@ -2996,7 +2998,6 @@ USBDM_ErrorCode FlashProgrammer_ARM::programFlash(FlashImagePtr flashImage,
          }
       }
    } while (false);
-   restoreSecurityAreas(flashImage);
 
    double programTime = progressTimer->totalTime() - eraseTime;
    if (programTime <= 0.0) {
