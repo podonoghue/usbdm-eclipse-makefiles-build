@@ -15,12 +15,6 @@ There are no driver needed if using the deb installer
 # History
 
 *******  
-**USBDM_V4_12_1_305** (Mar 2023)  
-
-- Minor fixes for RS08
-- Tested with Codewarrior V10.1 RS08,HCS08 (Windows): Note This eclipse plugin is no longer being developed
-
-*******  
 **USBDM_V4_12_1_295** (June 2022)  
 
 - Added missing 32-bit Windows files in installer (Affects Codewarrior V6.1 and 10.1)
