@@ -4,7 +4,7 @@
 MAJOR=4
 MINOR=12
 MICRO=1
-NANO=290
+NANO=300
 DEBIAN_VERSION=1
 VERSION=${MAJOR}.${MINOR}.${MICRO}.${NANO}
 
@@ -123,14 +123,17 @@ makeDebFile() {
    ${CP} "${SOURCE_DIRECTORY}/PackageFiles"/Miscellaneous/*.xlkr               ${USBDM_SHARED_DIR}
    ${CP} "${SOURCE_DIRECTORY}/PackageFiles"/Miscellaneous/error.wav            ${USBDM_SHARED_DIR}
    ${CP} "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/TryProgrammer   ${USBDM_SHARED_DIR}	
-   chmod -f 755 ${USBDM_SHARED_DIR}/TryProgrammer
    ${CP} "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/usbdm.rules     ${USBDM_SHARED_DIR}
    ${CP} "${SOURCE_DIRECTORY}/PackageFiles"/Scripts/*.tcl                      ${USBDM_SHARED_DIR}
+
+   find ${USBDM_SHARED_DIR} -type d -exec chmod 755 {} \;
+   find ${USBDM_SHARED_DIR} -type f -exec chmod 644 {} \;
+   chmod -f 755 ${USBDM_SHARED_DIR}/TryProgrammer
 
    ${MKDIR} ${USBDM_LIBDIR}
    ${CP} -r -P "${USBDM_SOURCE_LIBDIR}"/*      ${USBDM_LIBDIR}
    #${RM} ${USBDM_LIBDIR}/*-debug*
-   chmod 644  ${USBDM_LIBDIR}/*
+   chmod 644 ${USBDM_LIBDIR}/*
 
    if [[ (${BITNESS} == "64") && -e ${USBDM_SOURCE_LIBDIR32} ]]; then
       # Include i386 version for Codewarrior
