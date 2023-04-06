@@ -60,7 +60,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	wxString targetVddControlChoices[] = { wxT("Off"), wxT("3.3V   "), wxT("5V") };
 	int targetVddControlNChoices = sizeof( targetVddControlChoices ) / sizeof( wxString );
 	targetVddControl = new wxRadioBox( sbSizer5->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, targetVddControlNChoices, targetVddControlChoices, 1, wxRA_SPECIFY_ROWS );
-	targetVddControl->SetSelection( 1 );
+	targetVddControl->SetSelection( 0 );
 	targetVddControl->SetToolTip( wxT("Off\t- Target Vdd is externally supplied\n3.3V\t- BDM supplies target Vdd @3.3V\n5V\t- BDM supplies target Vdd @5V") );
 
 	sbSizer5->Add( targetVddControl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -185,7 +185,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	fInterfacePanel->SetSizer( bSizer3 );
 	fInterfacePanel->Layout();
 	bSizer3->Fit( fInterfacePanel );
-	fNotebook->AddPage( fInterfacePanel, wxT("Interface"), true );
+	fNotebook->AddPage( fInterfacePanel, wxT("Interface"), false );
 	fTargetPanel = new wxPanel( fNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
@@ -238,7 +238,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	deviceTypeChoiceControl->SetSelection( 0 );
 	deviceTypeChoiceControl->SetToolTip( wxT("Type of target device") );
 
-	bSizer13->Add( deviceTypeChoiceControl, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	bSizer13->Add( deviceTypeChoiceControl, 1, wxLEFT|wxRIGHT|wxEXPAND, 5 );
 
 	detectChipButtonControl = new wxButton( sbSizer12->GetStaticBox(), wxID_ANY, wxT("Detect Chip"), wxDefaultPosition, wxDefaultSize, 0 );
 	detectChipButtonControl->SetToolTip( wxT("Query target chip ID\n(More than a single device may be associated with a given ID)") );
@@ -451,7 +451,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	fTargetPanel->SetSizer( bSizer4 );
 	fTargetPanel->Layout();
 	bSizer4->Fit( fTargetPanel );
-	fNotebook->AddPage( fTargetPanel, wxT("Target"), false );
+	fNotebook->AddPage( fTargetPanel, wxT("Target"), true );
 	fAdvancedPanel = new wxPanel( fNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
@@ -613,7 +613,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	securityValuesTextControl = new SecurityTextEditCtrl( sbSizer41->GetStaticBox(), wxID_ANY, wxT("12345678901234567890123456789012"), wxDefaultPosition, wxDefaultSize, 0 );
 	securityValuesTextControl->SetToolTip( wxT("Security value used for device") );
 
-	sbSizer41->Add( securityValuesTextControl, 0, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
+	sbSizer41->Add( securityValuesTextControl, 0, wxALL|wxEXPAND, 5 );
 
 	securityDescriptionStaticText = new wxStaticText( sbSizer41->GetStaticBox(), wxID_ANY, wxT("hello there\nbye bye"), wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE );
 	securityDescriptionStaticText->Wrap( -1 );
