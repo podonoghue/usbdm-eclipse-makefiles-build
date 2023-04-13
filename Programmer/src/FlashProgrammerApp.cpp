@@ -129,7 +129,7 @@ FlashProgrammerApp::FlashProgrammerApp() :
    verify         = false;
    program        = false;
 //   dialogue       = 0;
-   commandLineRC  = BDM_RC_OK;
+   commandLineRC  = BDM_RC_ILLEGAL_PARAMS;
 }
 
 USBDM_ErrorCode programmerCallBack(USBDM_ErrorCode status, int percent, const char *message) {
@@ -222,7 +222,7 @@ bool FlashProgrammerApp::OnInit() {
    // Call for default command parsing behaviour
    if (!wxApp::OnInit()) {
       log.error("Failed OnInit()\n");
-      return true; // Return true here as we want OnRun() to execute
+      return false;
    }
 
 #if TARGET == MC56F80xx
@@ -285,6 +285,7 @@ FlashProgrammerApp::~FlashProgrammerApp() {
 }
 
 static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
+      { wxCMD_LINE_SWITCH, _("help"),          NULL, _("Help") },
       { wxCMD_LINE_PARAM,    NULL,             NULL, _("Name of the S19 Hex file to load"),                               wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
       { wxCMD_LINE_OPTION, _("bdm"),           NULL, _("Serial number of preferred BDM to use"),                          wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("requiredBdm"),   NULL, _("Serial number of required BDM to use"),                           wxCMD_LINE_VAL_STRING },
@@ -385,8 +386,8 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
 /**
  * Process command line arguments
  *
- * @return  true  success
- *          false command line parse failure
+ * @return  BDM_RC_OK  success
+ *          Otherwise  command line parse failure
  *
  * @note commandLineRC is set to error code on failure
  */
@@ -398,8 +399,12 @@ USBDM_ErrorCode FlashProgrammerApp::parseCommandLine(wxCmdLineParser& parser) {
    verbose            = false;
    USBDM_ErrorCode rc = BDM_RC_OK;
 
+   if (parser.Found(_("help"))) {
+      return BDM_RC_ILLEGAL_PARAMS;
+   }
+
    if (parser.GetParamCount() > 0) {
-      // File to load may always be given as only param
+      // File to load may always be given as only parameter
       hexFileName = parser.GetParam(0);
    }
 

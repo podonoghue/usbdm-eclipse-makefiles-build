@@ -22,8 +22,8 @@
 							<tool id="cdt.managedbuild.tool.gnu.archiver.base.836595391" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.849323066" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.include.paths.588989275" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${WXWIN}/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_dll/mswu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WX_LIBPATH1}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WX_LIBPATH2}&quot;"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.preprocessor.def.138851005" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="TARGET=ARM"/>
@@ -37,8 +37,8 @@
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.8582833" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.compiler.option.include.paths.1739647320" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${WXWIN}/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_dll/mswu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WX_LIBPATH1}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WX_LIBPATH2}&quot;"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.compiler.option.preprocessor.def.symbols.641633073" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="TARGET=ARM"/>
@@ -59,8 +59,8 @@
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.base.1140666283" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base">
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.both.asm.option.include.paths.1294597443" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${WXWIN}/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_dll/mswu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WX_LIBPATH1}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WX_LIBPATH2}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1351010874" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
