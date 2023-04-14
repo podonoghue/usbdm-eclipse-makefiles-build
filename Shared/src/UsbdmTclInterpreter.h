@@ -61,7 +61,8 @@ public:
    /**
     * Destructor
     */
-   virtual ~UsbdmTclInterpreter() {};
+   virtual ~UsbdmTclInterpreter() {
+   };
    /**
     * TCL mainline for stand-alone interpreter
     *

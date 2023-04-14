@@ -125,11 +125,7 @@ USBDM_ErrorCode FlashProgrammerCommon::initTCL() {
  */
 USBDM_ErrorCode FlashProgrammerCommon::releaseTCL(void) {
    LOGGING_E;
-   if (tclInterpreter != nullptr) {
-      // Release BDM interface
-      tclInterpreter->setBdmInterface(nullptr, false);
-      tclInterpreter.reset();
-   }
+   tclInterpreter.reset();
    return PROGRAMMING_RC_OK;
 }
 

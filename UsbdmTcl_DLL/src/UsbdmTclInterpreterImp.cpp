@@ -129,7 +129,7 @@ static std::vector<BdmInformation> bdmList;
 static void checkRC(USBDM_ErrorCode rc) {
    static char buff[40];
    if (rc != BDM_RC_OK) {
-      if (bdmInterface == 0) {
+      if (bdmInterface == nullptr) {
          snprintf(buff, sizeof(buff), "Error #%d", rc);
          throw MyException(buff);
       }
@@ -278,7 +278,7 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::setBdmInterface(BdmInterfacePtr bdmInter
    ::bdmInterface = bdmInterface;
    log.print("::bdmInterface = bdmInterface, complete\n");
    if (bdmInterface == nullptr) {
-      log.error("createTclInterpreter() bdmInterface == 0x%p\n", bdmInterface.get() );
+      log.print("Released bdmInterface\n");
       return BDM_RC_OK;
    }
 
@@ -334,9 +334,9 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::setDeviceParameters(DeviceDataConstPtr d
  */
 UsbdmTclInterpreterImp::~UsbdmTclInterpreterImp() {
    LOGGING_E;
-   wxPlugin.reset();
-   bdmInterface.reset();
-   deviceInterface.reset();
+//   wxPlugin.reset();
+//   bdmInterface.reset();
+//   deviceInterface.reset();
 
    // Following crashes on unload???
    Tcl_SetStdChannel(0, TCL_STDOUT);
@@ -2757,7 +2757,7 @@ static int cmd_setDevice(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
       return TCL_ERROR;
    }
 
-   if (bdmInterface == 0) {
+   if ((bdmInterface == nullptr) || (bdmInterface->getBdmOptions().targetType == T_NONE)) {
       PRINT("Set interface first\n");
       return TCL_ERROR;
    }
@@ -2806,7 +2806,7 @@ static int cmd_loadFile(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
       Tcl_WrongNumArgs(interp, 1, argv, "<fileName>");
       return TCL_ERROR;
    }
-   if (bdmInterface == 0) {
+   if (bdmInterface == nullptr) {
       PRINT("Set interface first\n");
       return TCL_ERROR;
    }
@@ -2838,15 +2838,20 @@ static int cmd_program(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
       Tcl_WrongNumArgs(interp, 1, argv, "");
       return TCL_ERROR;
    }
-   if (bdmInterface == 0) {
+   if ((bdmInterface == nullptr) || (bdmInterface->getBdmOptions().targetType == T_OFF)) {
       PRINT("Set interface first\n");
       return TCL_ERROR;
    }
-   if (flashImage == 0) {
+   if (flashImage == nullptr) {
       PRINT("Load file first\n");
       return TCL_ERROR;
    }
+   if (deviceInterface == nullptr) {
+      PRINT("Set device first\n");
+      return TCL_ERROR;
+   }
    UsbdmTclInterperPtr ti = UsbdmTclInterpreterImp::getInteractiveInterpreter();
+   log.print("target type = %s\n", getTargetTypeName(bdmInterface->getBdmOptions().targetType));
    log.print("interp = %p\n", interp);
    log.print("getInteractiveUsbdmTclInterpreter = %p\n", UsbdmTclInterpreterImp::getInteractiveInterpreter().get());
 
@@ -2887,11 +2892,15 @@ static int cmd_verify(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
       Tcl_WrongNumArgs(interp, 1, argv, "");
       return TCL_ERROR;
    }
-   if (bdmInterface == 0) {
+   if ((bdmInterface == nullptr) || (bdmInterface->getBdmOptions().targetType == T_NONE)) {
       PRINT("Set interface first\n");
       return TCL_ERROR;
    }
-   if (flashImage == 0) {
+   if (deviceInterface == nullptr) {
+      PRINT("Set device first\n");
+      return TCL_ERROR;
+   }
+   if (flashImage == nullptr) {
       PRINT("Load file first\n");
       return TCL_ERROR;
    }
@@ -3878,7 +3887,7 @@ static int cmd_dialogue(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
    }
 #endif
 
-   if (wxPlugin == 0) {
+   if (wxPlugin == nullptr) {
       wxPlugin = WxPluginFactory::createWxPlugin();
    }
 

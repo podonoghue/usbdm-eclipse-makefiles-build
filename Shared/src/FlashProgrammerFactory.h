@@ -54,7 +54,9 @@ public:
          case T_MC56F80xx : fp = createPlugin(DLL_NAME("usbdm-programmer-dsc"));   break;
          case T_RS08      : fp = createPlugin(DLL_NAME("usbdm-programmer-rs08"));  break;
          case T_S12Z      : fp = createPlugin(DLL_NAME("usbdm-programmer-s12z"));  break;
-         default: throw MyException("Target not supported");
+         default:
+            log.error("Illegal target\n");
+            throw MyException("Target not supported");
       }
       fp->setTargetInterface(bdmInterface);
       return fp;
