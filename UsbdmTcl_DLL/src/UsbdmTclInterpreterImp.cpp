@@ -277,6 +277,10 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::setBdmInterface(BdmInterfacePtr bdmInter
    log.print("::bdmInterface.reset(), complete\n");
    ::bdmInterface = bdmInterface;
    log.print("::bdmInterface = bdmInterface, complete\n");
+
+   log.print("::bdmInterface.use_count() = %ld, bdmInterface.use_count() = %ld\n", ::bdmInterface.use_count(), bdmInterface.use_count());
+   log.print("::bdmInterface.get() = %p,        bdmInterface.get() = %p\n",        ::bdmInterface.get(), bdmInterface.get());
+
    if (bdmInterface == nullptr) {
       log.print("Released bdmInterface\n");
       return BDM_RC_OK;
@@ -2758,7 +2762,7 @@ static int cmd_setDevice(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    }
 
    if ((bdmInterface == nullptr) || (bdmInterface->getBdmOptions().targetType == T_NONE)) {
-      PRINT("Set interface first\n");
+      PRINT("Set target first\n");
       return TCL_ERROR;
    }
 
@@ -2807,7 +2811,7 @@ static int cmd_loadFile(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
       return TCL_ERROR;
    }
    if (bdmInterface == nullptr) {
-      PRINT("Set interface first\n");
+      PRINT("Set target first\n");
       return TCL_ERROR;
    }
    try {
@@ -2839,7 +2843,7 @@ static int cmd_program(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
       return TCL_ERROR;
    }
    if ((bdmInterface == nullptr) || (bdmInterface->getBdmOptions().targetType == T_OFF)) {
-      PRINT("Set interface first\n");
+      PRINT("Set target first\n");
       return TCL_ERROR;
    }
    if (flashImage == nullptr) {
@@ -2893,7 +2897,7 @@ static int cmd_verify(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
       return TCL_ERROR;
    }
    if ((bdmInterface == nullptr) || (bdmInterface->getBdmOptions().targetType == T_NONE)) {
-      PRINT("Set interface first\n");
+      PRINT("Set target first\n");
       return TCL_ERROR;
    }
    if (deviceInterface == nullptr) {

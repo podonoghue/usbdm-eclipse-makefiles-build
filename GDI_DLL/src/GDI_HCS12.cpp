@@ -147,7 +147,7 @@ DiReturnT DiRegisterWrite ( DiUInt32T        dnRegNumber,
    USBDM_ErrorCode rc = BDM_RC_OK;
    unsigned long hxValue= 0;
 
-   log.print("DiRegisterWrite(0x%X(%d) <= 0x%08X)\n", dnRegNumber, dnRegNumber, (uint32_t)value);
+   log.print("%s (%d) <= 0x%08X\n", getRegName(T_HCS12, dnRegNumber), dnRegNumber, (uint32_t)value);
 
    CHECK_ERROR_STATE();
 
@@ -199,10 +199,10 @@ DiReturnT DiRegisterRead ( DiUInt32T         dnRegNumber,
    unsigned long dataValue = 0xDEADBEEF;
    USBDM_ErrorCode rc = BDM_RC_OK;
    LOGGING;
-   log.print("0x%X(%d)\n", dnRegNumber, dnRegNumber);
+   log.print("%s (%d)\n", getRegName(T_HCS12, dnRegNumber), dnRegNumber);
 
    if (forceMassErase) {
-      // HCS08 doesn't allow register reads of secured device
+      // Device doesn't allow register reads of secured device
       // Dummy register reads until device is unsecured
       *drvValue = (U32c)dataValue;
       return setErrorState(DI_OK);
@@ -227,7 +227,7 @@ DiReturnT DiRegisterRead ( DiUInt32T         dnRegNumber,
       return setErrorState(DI_ERR_NONFATAL, rc);
    }
    *drvValue = (U32c)dataValue;
-   log.print("0x%lX(%ld) => 0x%08lX\n", (unsigned long)dnRegNumber, (unsigned long)dnRegNumber, (unsigned long)dataValue);
+   log.print("%s (%d) => 0x%08lX\n", getRegName(T_HCS12, dnRegNumber), dnRegNumber, (unsigned long)dataValue);
    return setErrorState(DI_OK);
 }
 
@@ -243,6 +243,7 @@ USBDM_GDI_DECLSPEC
 DiReturnT DiBreakpointSet ( DiBpResultT *pdnBreakpointId,
                              DiBpT        dbBreakpoint ) {
    LOGGING_E;
+
    unsigned long bdmscrValue;
    U32c bkptAddress;
    unsigned long breakpointModifier = HC08_BDCSCR_FTS;
@@ -287,8 +288,7 @@ DiReturnT DiBreakpointSet ( DiBpResultT *pdnBreakpointId,
 USBDM_GDI_DECLSPEC
 DiReturnT DiBreakpointClear ( DiUInt32T dnBreakpointId ) {
    LOGGING_E;
-
-unsigned long bdmscrValue;
+   unsigned long bdmscrValue;
 
    CHECK_ERROR_STATE();
 
@@ -338,6 +338,7 @@ DiReturnT DiExecSingleStep ( DiUInt32T dnNrInstructions ) {
    const int stopOpcode = 0x8E;
 
    CHECK_ERROR_STATE();
+
 #if (TARGET == MC56F80xx)
    BDMrc = DSC_TargetStepN(dnNrInstructions);
 #else
@@ -511,3 +512,4 @@ DiReturnT DiExecGetStatus ( pDiExitStatusT pdesExitStatus ) {
    lastStatus = pdesExitStatus->dscCause;
    return setErrorState(DI_OK);
 }
+

@@ -181,7 +181,7 @@ bool BdmInterfaceCommon::getBdmMatchRequired() {
 USBDM_ErrorCode BdmInterfaceCommon::initBdm(void) {
    LOGGING;
 
-   log.print("SerialNumber = \'%s\'\n", getBdmSerialNumber().c_str());
+   log.print("SerialNumber = \'%s\', this = %p\n", getBdmSerialNumber().c_str(), this);
    printBdmOptions(&bdmOptions);
 
    USBDM_ErrorCode rc = BDM_RC_OK;
@@ -278,7 +278,7 @@ const string usePSTSignalsKey(           settingsKey ".usePSTSignals");
 BdmInterfaceCommon::BdmInterfaceCommon(TargetType_t targetType) {
    LOGGING_Q;
 
-   log.print("Target Type = %s\n", getTargetTypeName(targetType));
+   log.print("Target Type = %s, this =%p\n", getTargetTypeName(targetType), this);
 
    // Set options to default
    connectionTimeout           = 10;
@@ -307,6 +307,7 @@ BdmInterfaceCommon::BdmInterfaceCommon(TargetType_t targetType) {
 
 BdmInterfaceCommon::~BdmInterfaceCommon() {
    LOGGING_E;
+   log.print("this = %p\n", this);
    closeBdm();
    wxPlugin.reset();
 }
@@ -553,7 +554,7 @@ USBDM_ErrorCode BdmInterfaceCommon::targetConnectWithRetry(BdmInterfaceCommon::R
 //!
 USBDM_ErrorCode BdmInterfaceCommon::targetConnectWithRetry(USBDMStatus_t *usbdmStatus, RetryMode retryMode) {
    LOGGING_X;
-   log.print("%s\n", getConnectionRetryName(retryMode));
+   log.print("%s", getConnectionRetryName(retryMode));
 
    USBDM_ErrorCode rc;
 
@@ -563,7 +564,7 @@ USBDM_ErrorCode BdmInterfaceCommon::targetConnectWithRetry(USBDMStatus_t *usbdmS
       *usbdmStatus = status;
    }
    if (rc != BDM_RC_OK) {
-      log.error("getBDMStatus() failed\n");
+      log.errorq(", getBDMStatus() failed\n");
       return rc; // Fatal error
    }
    //=========================================================
@@ -573,6 +574,7 @@ USBDM_ErrorCode BdmInterfaceCommon::targetConnectWithRetry(USBDMStatus_t *usbdmS
       if (!extendedRetry)
          log.print("Enabling Extended Retry\n");
       extendedRetry = true;
+      log.errorq(", targetConnectWithDelayedConfirmation() success\n");
       return rc;
    }
    // Quietly retry once
@@ -581,6 +583,7 @@ USBDM_ErrorCode BdmInterfaceCommon::targetConnectWithRetry(USBDMStatus_t *usbdmS
       if (!extendedRetry)
          log.print("Enabling Extended Retry\n");
       extendedRetry = true;
+      log.errorq(", targetConnectWithDelayedConfirmation() success\n");
       return rc;
    }
    //===============================================
@@ -588,7 +591,7 @@ USBDM_ErrorCode BdmInterfaceCommon::targetConnectWithRetry(USBDMStatus_t *usbdmS
 
    // Don't retry at all - silently fail
    if ((retryMode&retryMask) == retryNever) {
-      log.error("Failed - No retries, rc = %s\n", USBDM_GetErrorString(rc));
+      log.errorq("Failed - No retries, rc = %s\n", USBDM_GetErrorString(rc));
       return rc;
    }
 
@@ -603,6 +606,7 @@ USBDM_ErrorCode BdmInterfaceCommon::targetConnectWithRetry(USBDMStatus_t *usbdmS
       USBDM_ControlPins(PIN_RELEASE); // Release BKPT
       rc = USBDM_Connect();
       if (rc == BDM_RC_OK) {
+         log.errorq(", USBDM_Connect() eventual success\n");
          return rc;
       }
    }
@@ -615,14 +619,14 @@ USBDM_ErrorCode BdmInterfaceCommon::targetConnectWithRetry(USBDMStatus_t *usbdmS
          USBDM_TargetReset((TargetMode_t)(RESET_DEFAULT|RESET_SPECIAL));
          rc = targetConnectWithDelayedConfirmation(retryMode);
          if (rc == BDM_RC_OK) {
-            log.error("Success - After multiple resets\n");
+            log.errorq(", Success - After multiple resets\n");
             return rc;
          }
          USBDM_TargetReset((TargetMode_t)(RESET_DEFAULT|RESET_SPECIAL));
          USBDM_TargetReset((TargetMode_t)(RESET_DEFAULT|RESET_SPECIAL));
          rc = targetConnectWithDelayedConfirmation(retryMode);
          if (rc == BDM_RC_OK) {
-            log.error("Success - After multiple resets\n");
+            log.errorq(", Success - After multiple resets\n");
             return rc;
          }
       }
@@ -632,13 +636,15 @@ USBDM_ErrorCode BdmInterfaceCommon::targetConnectWithRetry(USBDMStatus_t *usbdmS
       switch (rc) {
       case BDM_RC_BDM_EN_FAILED:
       case BDM_RC_SECURED:
-         log.error("Failed - No retry for special cases, rc = %s\n", USBDM_GetErrorString(rc));
+         log.errorq(", Failed - No retry for special cases, rc = %s\n", USBDM_GetErrorString(rc));
          return rc;
       default:
          break;
       }
    }
    // retryAlways or not a special case
+
+   log.errorq("\n");
 
    // Inform user of error and prompt for retry
    if (extendedRetry) {
@@ -649,7 +655,7 @@ USBDM_ErrorCode BdmInterfaceCommon::targetConnectWithRetry(USBDMStatus_t *usbdmS
       do {
          string message;
          long style = (long)(YES_NO|YES_DEFAULT|ICON_QUESTION);
-         log.error("Retry, reason = %s\n", USBDM_GetErrorString(rc));
+         log.errorq("Retry, reason = %s\n", USBDM_GetErrorString(rc));
          if (bdmOptions.targetType == T_CFVx) {
             USBDM_ControlPins(PIN_BKPT_LOW|PIN_RESET_LOW); // Set BKPT & RESET low
          }

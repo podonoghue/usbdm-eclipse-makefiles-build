@@ -1,12 +1,13 @@
 @echo off
 cls
+
+set HOME_DIR=%~dp0
+
 rem ***  Paths to various things
 set VERSION_NUMBER=4
 set VERSION_MINOR_NUMBER=12
 set VERSION_SUFFIX=_V%VERSION_NUMBER%
 set VERSION_MINOR_SUFFIX=_V%VERSION_NUMBER%_%VERSION_MINOR_NUMBER%
-
-set HOME_DIR=%~dp0
 
 set USBDM_ROOT=%HOME_DIR%\..
 
@@ -136,6 +137,10 @@ echo ***  ****************************************
 if exist "%ECLIPSE_UPDATE_SITE%"\                           del /q /s "%ECLIPSE_UPDATE_SITE%"\*.*
 echo xcopy /E /I /Y /Q "%ECLIPSE_PLUGIN_ROOT%"\UpdateSite             "%ECLIPSE_UPDATE_SITE%"
 xcopy /E /I /Y /Q "%ECLIPSE_PLUGIN_ROOT%"\UpdateSite                  "%ECLIPSE_UPDATE_SITE%"
+
+echo "*** ====================================="
+echo "    Cleanup unneeded files "
+echo "*** ====================================="
 
 set PLUGIN_CLEANUP=logs.zip MakeCopy.cmd SignIt.cmd .gitignore CertificateChain.pem .project Provider.cfg
 for %%f in (%PLUGIN_CLEANUP%) do del /q "%CODEWARRIOR_UPDATE_SITE%"\%%f

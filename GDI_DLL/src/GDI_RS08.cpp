@@ -200,6 +200,22 @@ DiReturnT DiDirectCommand ( DiConstStringT  pszCommand,
 #define arm_RegCONTROL 22
 #endif
 
+/**
+ * Get register name based on Codewarrior GDI register id
+ *
+ * @param dnRegNumber
+ * @return
+ */
+const char *getRegName(DiUInt32T dnRegNumber) {
+   switch (dnRegNumber) {
+      case   0 : /* PC  */ return "PC";
+      case   1 : /* A   */ return "A";
+      case   3 : /* SPC */ return "SPC";
+      case   5 : /* CCR */ return "CCR";
+      default  : /*   ? */ return "Unknown";
+   }
+}
+
 //! 2.2.6.1 Write Value to Register
 //!
 //! @param dnRegNumber
@@ -213,7 +229,7 @@ DiReturnT DiRegisterWrite ( DiUInt32T        dnRegNumber,
    USBDM_ErrorCode rc = BDM_RC_OK;
    unsigned long ccr_pcValue= 0;
 
-   log.print("DiRegisterWrite(0x%X(%d) <= 0x%08X)\n", dnRegNumber, dnRegNumber, (uint32_t)value);
+   log.print("%s (%d) <= 0x%08X\n", getRegName(dnRegNumber), dnRegNumber, (uint32_t)value);
 
    CHECK_ERROR_STATE();
 
@@ -238,8 +254,8 @@ DiReturnT DiRegisterWrite ( DiUInt32T        dnRegNumber,
       default  : /*   ? */ return setErrorState(DI_ERR_PARAM, ("Illegal register identifier"));
    }
    if (rc != BDM_RC_OK) {
-//      log.print("DiRegisterWrite(0x%X,%s) Failed, reason= %s\n",
-//            dnRegNumber, DSC_GetRegisterName(regNum), bdmInterface->getErrorString(rc));
+      log.print("(0x%X,%s) Failed, reason= %s\n",
+            dnRegNumber, getRegName(dnRegNumber), bdmInterface->getErrorString(rc));
       return setErrorState(DI_ERR_NONFATAL, rc);
    }
    return setErrorState(DI_OK);
@@ -256,10 +272,11 @@ DiReturnT DiRegisterRead ( DiUInt32T         dnRegNumber,
    unsigned long dataValue = 0xDEADBEEF;
    USBDM_ErrorCode rc = BDM_RC_OK;
    LOGGING;
-   log.print("0x%X(%d)\n", dnRegNumber, dnRegNumber);
+   log.print("%s (%d)\n", getRegName(dnRegNumber), dnRegNumber);
 
    if (forceMassErase) {
-      // Dummy register reads until device in unsecured
+      // Device doesn't allow register reads of secured device
+      // Dummy register reads until device is unsecured
       *drvValue = (U32c)dataValue;
       return setErrorState(DI_OK);
    }
@@ -281,7 +298,7 @@ DiReturnT DiRegisterRead ( DiUInt32T         dnRegNumber,
       return setErrorState(DI_ERR_NONFATAL, rc);
    }
    *drvValue = (U32c)dataValue;
-   log.print("0x%lX(%ld) => 0x%08lX\n", (unsigned long)dnRegNumber, (unsigned long)dnRegNumber, (unsigned long)dataValue);
+   log.print("%s (%d) => 0x%08lX\n", getRegName(dnRegNumber), dnRegNumber, (unsigned long)dataValue);
    return setErrorState(DI_OK);
 }
 
@@ -376,7 +393,7 @@ USBDM_GDI_DECLSPEC
 DiReturnT DiExecSingleStep ( DiUInt32T dnNrInstructions ) {
 USBDM_ErrorCode BDMrc;
    LOGGING_Q;
-   log.print("DiExecSingleStep(%d)\n", dnNrInstructions);
+   log.print("(%d)\n", dnNrInstructions);
 
    CHECK_ERROR_STATE();
 
@@ -405,7 +422,7 @@ USBDM_ErrorCode BDMrc;
 //!
 USBDM_GDI_DECLSPEC
 DiReturnT DiExecGetStatus ( pDiExitStatusT pdesExitStatus ) {
-   LOGGING;
+   LOGGING_Q;
    USBDM_ErrorCode BDMrc;
    static DiExitCauseT lastStatus = DI_WAIT_USER;
 

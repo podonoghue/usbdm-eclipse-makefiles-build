@@ -63,7 +63,7 @@ echo "--- ====================================="
 echo "    Complete Folders "
 echo "--- ====================================="
 
-directories="DeviceData Examples FlashImages Stationery LaunchConfig Licenses WinDrivers Wix WizardPatches"
+directories="DeviceData FlashImages Stationery LaunchConfig Licenses WinDrivers Wix WizardPatches"
 for dir in ${directories}; do
 echo  "--- Filling ${INSTALLATION_DIR}/${dir}"
 cp -r  "${PACKAGE_FILEs}/${dir}"                  "${INSTALLATION_DIR}"
@@ -110,6 +110,7 @@ echo "--- ====================================="
 echo "--- Filling ${ECLIPSE_UPDATE_SITE}"
 mkdir -p "${ECLIPSE_UPDATE_SITE}"
 cp -r "${ECLIPSE_PLUGIN_ROOT}/UpdateSite/"*          "${ECLIPSE_UPDATE_SITE}"
+sleep 10
 
 echo "--- ====================================="
 echo "    Cleanup unneeded files "

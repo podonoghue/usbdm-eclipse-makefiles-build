@@ -147,7 +147,7 @@ DiReturnT DiRegisterWrite ( DiUInt32T        dnRegNumber,
    U32c            value(drvValue);
    USBDM_ErrorCode rc  = BDM_RC_OK;
 
-   log.print("(0x%X(%d) <= 0x%08X)\n", dnRegNumber, dnRegNumber, (uint32_t)value);
+   log.print("%s (%d) <= 0x%08X\n", getRegName(T_ARM, dnRegNumber), dnRegNumber, (uint32_t)value);
 
    CHECK_ERROR_STATE();
    ARM_Registers_t regNum = (ARM_Registers_t)dnRegNumber;
@@ -203,14 +203,15 @@ USBDM_GDI_DECLSPEC
 DiReturnT DiRegisterRead ( DiUInt32T         dnRegNumber,
                            pDiRegisterValueT drvValue ) {
    LOGGING;
-   log.print("0x%X(%d)\n", dnRegNumber, dnRegNumber);
 
    unsigned long     dataValue = 0xDEADBEEF;
    USBDM_ErrorCode   rc        = BDM_RC_OK;
    ARM_Registers_t   regNum    = (ARM_Registers_t)dnRegNumber;
+   log.print("%s (%d)\n", getRegName(T_ARM, dnRegNumber), dnRegNumber);
 
    if (forceMassErase) {
-      // Dummy register reads until device in unsecured
+      // Device doesn't allow register reads of secured device
+      // Dummy register reads until device is unsecured
       *drvValue = (U32c)dataValue;
       return setErrorState(DI_OK);
    }
@@ -266,7 +267,6 @@ DiReturnT DiBreakpointSet ( DiBpResultT *pdnBreakpointId,
 //!
 USBDM_GDI_DECLSPEC
 DiReturnT DiBreakpointClear ( DiUInt32T dnBreakpointId ) {
-
    LOGGING_Q;
    log.print("- not implemented\n");
    return setErrorState(DI_ERR_NOTSUPPORTED);
@@ -276,7 +276,6 @@ DiReturnT DiBreakpointClear ( DiUInt32T dnBreakpointId ) {
 //!
 USBDM_GDI_DECLSPEC
 DiReturnT DiBreakpointClearAll ( void ) {
-
    LOGGING_Q;
    log.print("- not implemented\n");
    return setErrorState(DI_ERR_NOTSUPPORTED);
