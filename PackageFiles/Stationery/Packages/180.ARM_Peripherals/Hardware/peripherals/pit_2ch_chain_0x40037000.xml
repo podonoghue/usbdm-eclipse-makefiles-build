@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- pit_2ch_chain_0x40037000.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Periodic Interrupt Timer (2 channels)">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <xi:include href="_mapPinsOption.xml"/>
+
+   <xi:include href="_irqOption.xml"/>
+
+   <binaryOption key="pit_mcr_mdis" condition="pit_mcr_mdis_present"
+      enumStem="PitMcrMdis"
+      toolTip="Disabled PIT module clock"
+      description="Module Disable" >
+      <choice name="Clock enabled"   value="0" enum="ClockEnabled"/>
+      <choice name="Clock disabled"  value="1" enum="ClockDisabled"/>
+   </binaryOption>
+
+   <binaryOption key="pit_mcr_frz" condition="pit_mcr_frz_present"
+      enumStem="PitMcrFrz"
+      toolTip="Determines if timers are stopped in Debug mode"
+      description="Freeze" >
+      <choice name="Timers run in Debug"   value="0" enum="TimersRunInDebug"/>
+      <choice name="Timers stop in Debug"  value="1" enum="TimersStopInDebug"/>
+   </binaryOption>
+
+<!-- Grahic here -->  
+
+   <for keys="field:name"
+        values="
+      pit_mcr_mdis:McrMdis;
+      pit_mcr_frz:McrFrz">
+      <setTemplate variables="%(field)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void configure%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}\n\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== PIT Init class =============================== -->
+
+   <template key="init_description" namespace="all">
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_class)::Init init {
+      \t *
+      \t *   // Setup values
+      \t *   PitMcrMdis_ClockEnabled                   // Module Disable,
+      \t *   PitMcrFrz_TimersRunInDebug                // Freeze,
+      \t * };
+      \t *
+      \t * // Initialise $(_class) from values specified above
+      \t * $(_class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t
+      \t/**
+      \t * Type definition for $(_class) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)(const uint32_t &);
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+    ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></setTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="pit_mcr_mdis,pit_mcr_frz"
+   ><![CDATA[
+      \t   /// Module Control Register
+      \t   uint32_t mcr = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="/PCR/nvic_irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+   ]]></initialValueTemplate>
+
+<!--   Configure methods -->
+
+   <template discardRepeats="true" key="/PIT/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure PIT from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-back if feature enabled
+      \t      setCallback(init.callbackFunction);
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
+      \t   enable();
+      \t
+      \t   pit->MCR    = init.mcr;
+      \t
+      \t   calibrate();
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n
+   ]]></template>
+
+<!--   Constructors -->
+
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%enumParam0 = %paramExpression;
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <setTemplate namespace="usbdm"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      #if $(irqHandlingMethod)
+      \t      %registerName = %paramExpression;
+      #else
+      \t      (void)%paramExpression;
+      #endif
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <for keys="r"
+      values="
+            pit_mcr_mdis;
+            pit_mcr_frz
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+            pit_mcr_mdis,
+            pit_mcr_frz,
+            irqLevel
+         "
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      \t}; // $(_class)::BasicInfo::Init\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      }; // $(_class)::BasicInfo\n\n
+   ]]>
+   </template>
+
+<signals />
+
+</peripheralPage>

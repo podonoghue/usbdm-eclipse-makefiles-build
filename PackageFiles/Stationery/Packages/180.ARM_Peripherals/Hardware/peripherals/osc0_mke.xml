@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- osc0_mke.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Oscillator">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <xi:include href="_mapPinsOption.xml"/>
+
+   <binaryOption key="osc_cr_oscen" condition="osc_cr_oscen_present"
+      enumStem="OscCrOscen"
+      toolTip="Enables the OSC module. The OSC module can also be enabled by the ICS module"
+      description="OSC Enable" >
+      <choice name="OSC disabled"  value="0" enum="OscDisabled"/>
+      <choice name="OSC enabled"   value="1" enum="OscEnabled"/>
+   </binaryOption>
+
+   <binaryOption key="osc_cr_oscsten" condition="osc_cr_oscsten_present"
+      enumStem="OscCrOscsten"
+      toolTip="Controls whether or not the OSC clock remains enabled when MCU enters Stop mode and OSCEN is set.\n
+               OSCSTEN has no effect if ICS requests OSC enable"
+      description="OSC Enable in Stop mode" >
+      <choice name="Disabled in Stop mode"  value="0" enum="DisabledInStopMode"/>
+      <choice name="Enabled in Stop mode"   value="1" enum="EnabledInStopMode"/>
+   </binaryOption>
+
+   <binaryOption key="osc_cr_oscos" condition="osc_cr_oscos_present"
+      enumStem="OscCrOscos"
+      toolTip="Selects the output clock of the OSC module"
+      description="OSC Output Select" >
+      <choice name="External clock source"    value="0" enum="ExternalClockSource"/>
+      <choice name="Oscillator clock source"  value="1" enum="OscillatorClockSource"/>
+   </binaryOption>
+
+   <binaryOption key="osc_cr_range" condition="osc_cr_range_present"
+      enumStem="OscCrRange"
+      toolTip="Selects the frequency range for the OSC module"
+      description="Frequency Range Select" >
+      <choice name="Low range of 32 kHz"     value="0" enum="LowRangeOf32Khz"/>
+      <choice name="High range of 4-20 MHz"  value="1" enum="HighRangeOf420Mhz"/>
+   </binaryOption>
+
+   <binaryOption key="osc_cr_hgo" condition="osc_cr_hgo_present"
+      enumStem="OscCrHgo"
+      toolTip="Controls the OSC mode of operation"
+      description="High Gain Oscillator Select" >
+      <choice name="Low-power mode"  value="0" enum="LowPowerMode"/>
+      <choice name="High-gain mode"  value="1" enum="HighGainMode"/>
+   </binaryOption>
+
+<!-- Grahic here -->  
+
+   <for keys="field:name"
+        values="
+      osc_cr_oscen:CrOscen;
+      osc_cr_oscsten:CrOscsten;
+      osc_cr_oscos:CrOscos;
+      osc_cr_range:CrRange;
+      osc_cr_hgo:CrHgo">
+      <setTemplate variables="%(field)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void configure%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}\n\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== OSC Init class =============================== -->
+
+   <template key="init_description" namespace="all">
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_class)::Init init {
+      \t *
+      \t *   // Setup values
+      \t *   OscCrOscen_OscDisabled                    // OSC Enable,
+      \t *   OscCrOscsten_DisabledInStopMode           // OSC Enable in Stop mode,
+      \t *   OscCrOscos_ExternalClockSource            // OSC Output Select,
+      \t *   OscCrRange_LowRangeOf32Khz                // Frequency Range Select,
+      \t *   OscCrHgo_LowPowerMode                     // High Gain Oscillator Select,
+      \t * };
+      \t *
+      \t * // Initialise $(_class) from values specified above
+      \t * $(_class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <initialValueTemplate namespace="usbdm"
+      variables="osc_cr_oscen,osc_cr_oscsten,osc_cr_oscos,osc_cr_range,osc_cr_hgo"
+   ><![CDATA[
+      \t   /// Control Register
+      \t   uint8_t cr = 0;\n\n
+   ]]></initialValueTemplate>
+
+<!--   Configure methods -->
+
+   <template discardRepeats="true" key="/OSC/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure OSC from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t   enable();
+      \t
+      \t   osc->CR    = init.cr;
+      \t
+      \t   calibrate();
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n
+   ]]></template>
+
+<!--   Constructors -->
+
+   <for keys="r"
+      values="
+            osc_cr_oscen;
+            osc_cr_oscsten;
+            osc_cr_oscos;
+            osc_cr_range;
+            osc_cr_hgo
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+            osc_cr_oscen,
+            osc_cr_oscsten,
+            osc_cr_oscos,
+            osc_cr_range,
+            osc_cr_hgo
+         "
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      \t}; // $(_class)::BasicInfo::Init\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      }; // $(_class)::BasicInfo\n\n
+   ]]>
+   </template>
+
+<signals />
+
+</peripheralPage>

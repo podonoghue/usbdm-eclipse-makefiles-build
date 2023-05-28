@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- irq_mke.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Interrupt">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <xi:include href="_mapPinsOption.xml"/>
+
+   <xi:include href="_irqOption.xml"/>
+
+   <binaryOption key="irq_sc_irqpdd" condition="irq_sc_irqpdd_present"
+      enumStem="IrqScIrqpdd"
+      toolTip="This only has effect when IRQPE = 1"
+      description="Interrupt Request (IRQ) Pull Device Disable" >
+      <choice name="Enabled"     value="0" enum="Enabled"/>
+      <choice name="Disabled"    value="1" enum="Disabled"/>
+   </binaryOption>
+
+   <binaryOption key="irq_sc_irqedg" condition="irq_sc_irqedg_present"
+      enumStem="IrqScIrqedg"
+      description="Interrupt Request (IRQ) Edge Select" >
+      <choice name="Falling-edge/low-level"  value="0" enum="FallingEdgeLowLevel"/>
+      <choice name="Rising-edge/high-level"  value="1" enum="RisingEdgeHighLevel"/>
+   </binaryOption>
+
+   <binaryOption key="irq_sc_irqpe" condition="irq_sc_irqpe_present"
+      enumStem="IrqScIrqpe"
+      description="IRQ Pin Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <choiceOption key="irq_sc_irqack" condition="irq_sc_irqack_present"
+      enumStem="IrqScIrqack"
+      toolTip="This write-only field is used to acknowledge interrupt request events (write 1 to clear IRQF).\n
+               Writing 0 has no meaning or effect. Reads always return 0. If edge-and-level detection is selected (IRQMOD = 1),\n
+               IRQF cannot be cleared while the IRQ pin remains at its asserted level"
+      description="IRQ Acknowledge" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <binaryOption key="irq_sc_irqie" condition="irq_sc_irqie_present"
+      enumStem="IrqScIrqie"
+      toolTip="This read/write control field determines whether IRQ events (IRQF=1) generate an interrupt request"
+      description="IRQ Interrupt Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="irq_sc_irqmod" condition="irq_sc_irqmod_present"
+      enumStem="IrqScIrqmod"
+      toolTip="This read/write control field selects either edge-only detection or edge-and-level detection"
+      description="IRQ Detection Mode" >
+      <choice name="Edge only"       value="0" enum="EdgeOnly"/>
+      <choice name="Edge and level"  value="1" enum="EdgeAndLevel"/>
+   </binaryOption>
+
+<!-- Grahic here -->  
+
+   <for keys="field:name"
+        values="
+      irq_sc_irqpdd:ScIrqpdd;
+      irq_sc_irqedg:ScIrqedg;
+      irq_sc_irqpe:ScIrqpe;
+      irq_sc_irqack:ScIrqack;
+      irq_sc_irqie:ScIrqie;
+      irq_sc_irqmod:ScIrqmod">
+      <setTemplate variables="%(field)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void configure%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}\n\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== IRQ Init class =============================== -->
+
+   <template key="init_description" namespace="all">
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_class)::Init init {
+      \t *
+      \t *   // Setup values
+      \t *   IrqScIrqpdd_Enabled                       // Interrupt Request (IRQ) Pull Device Disable,
+      \t *   IrqScIrqedg_FallingEdgeLowLevel           // Interrupt Request (IRQ) Edge Select,
+      \t *   IrqScIrqpe_Disabled                       // IRQ Pin Enable,
+      \t *   IrqScIrqack_Write1ToClear                 // IRQ Acknowledge,
+      \t *   IrqScIrqie_Disabled                       // IRQ Interrupt Enable,
+      \t *   IrqScIrqmod_EdgeOnly                      // IRQ Detection Mode,
+      \t * };
+      \t *
+      \t * // Initialise $(_class) from values specified above
+      \t * $(_class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t
+      \t/**
+      \t * Type definition for $(_class) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)(const uint32_t &);
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+    ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></setTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="irq_sc_irqpdd,irq_sc_irqedg,irq_sc_irqpe,irq_sc_irqack,irq_sc_irqie,irq_sc_irqmod"
+   ><![CDATA[
+      \t   /// Interrupt Pin Request Status and Control Register
+      \t   uint8_t sc = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="/PCR/nvic_irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+   ]]></initialValueTemplate>
+
+<!--   Configure methods -->
+
+   <template discardRepeats="true" key="/IRQ/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure IRQ from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-back if feature enabled
+      \t      setCallback(init.callbackFunction);
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
+      \t   enable();
+      \t
+      \t   irq->SC    = init.sc;
+      \t
+      \t   calibrate();
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n
+   ]]></template>
+
+<!--   Constructors -->
+
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%enumParam0 = %paramExpression;
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <setTemplate namespace="usbdm"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      #if $(irqHandlingMethod)
+      \t      %registerName = %paramExpression;
+      #else
+      \t      (void)%paramExpression;
+      #endif
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <for keys="r"
+      values="
+            irq_sc_irqpdd;
+            irq_sc_irqedg;
+            irq_sc_irqpe;
+            irq_sc_irqack;
+            irq_sc_irqie;
+            irq_sc_irqmod
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+            irq_sc_irqpdd,
+            irq_sc_irqedg,
+            irq_sc_irqpe,
+            irq_sc_irqack,
+            irq_sc_irqie,
+            irq_sc_irqmod,
+            irqLevel
+         "
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      \t}; // $(_class)::BasicInfo::Init\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      }; // $(_class)::BasicInfo\n\n
+   ]]>
+   </template>
+
+<signals />
+
+</peripheralPage>

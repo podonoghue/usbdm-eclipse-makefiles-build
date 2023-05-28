@@ -1,5 +1,5 @@
 <!--
-Devices using this vector table: 
+Devices using this vector table:
    MKE04Z4
    SKEAZN84
 -->
@@ -22,6 +22,7 @@ Devices using this vector table:
       <name>IRQ</name>
       <description>External Interrupt</description>
       <value>7</value>
+      <peripheral>IRQ</peripheral>
    </interrupt>
    <interrupt>
       <name>I2C0</name>
@@ -93,11 +94,13 @@ Devices using this vector table:
       <name>KBI0</name>
       <description>Keyboard Interrupt</description>
       <value>24</value>
+      <peripheral>KBI0</peripheral>
    </interrupt>
    <interrupt>
       <name>KBI1</name>
       <description>Keyboard Interrupt</description>
       <value>25</value>
+      <peripheral>KBI1</peripheral>
    </interrupt>
    <interrupt>
       <name>ICS</name>

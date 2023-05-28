@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKL02Z4
 -->
       <peripheral>
@@ -508,7 +508,7 @@ writing 1 to it</description>
                   </field>
                   <field>
                      <name>SSIE</name>
-                     <description>II2C Bus Stop or Start Interrupt Enable\n
+                     <description>Bus Stop or Start Interrupt Enable
 This bit enables the interrupt for I2C bus stop or start detection.\n
 NOTE: To clear the detection interrupt: In the interrupt service routine, first clear the STOPF or STARTF bit by writing 1 to it,
  and then clear the IICIF bit in the status register. If this sequence is reversed, the IICIF bit is asserted again</description>
@@ -529,7 +529,7 @@ NOTE: To clear the detection interrupt: In the interrupt service routine, first 
                   </field>
                   <field>
                      <name>STOPF</name>
-                     <description>Bus Stop Detect Flag: 
+                     <description>Bus Stop Detect Flag:
 Hardware sets this bit when the I2C bus&apos;s stop status is detected. The STOPF bit must be cleared by
 writing 1 to it</description>
                      <bitOffset>6</bitOffset>

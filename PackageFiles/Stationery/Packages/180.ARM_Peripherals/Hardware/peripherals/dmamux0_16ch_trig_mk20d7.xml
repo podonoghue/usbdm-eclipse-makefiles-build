@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"
-?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- dmamux0_16ch_trig_mk20d7.xml -->
 
@@ -82,13 +81,13 @@
    <choiceOption key="dma_chcfg13" derivedFrom="dma_chcfg0"/>
    <choiceOption key="dma_chcfg14" derivedFrom="dma_chcfg0"/>
    <choiceOption key="dma_chcfg15" derivedFrom="dma_chcfg0"/>
-   
+
    <xi:include href="_clockOption.xml"/>
-   
+
    <template><![CDATA[
       \t// Number of DMA channels implemented
       \tstatic constexpr unsigned NumChannels = $(/DMA0/NumChannels);
-      
+
       \tstatic constexpr uint8_t chcfg0_source  = DMAMUX_CHCFG_SOURCE($(dma_chcfg0));
       \tstatic constexpr uint8_t chcfg1_source  = DMAMUX_CHCFG_SOURCE($(dma_chcfg1));
       \tstatic constexpr uint8_t chcfg2_source  = DMAMUX_CHCFG_SOURCE($(dma_chcfg2));

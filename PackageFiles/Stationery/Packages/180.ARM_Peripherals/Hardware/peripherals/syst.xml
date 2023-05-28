@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- syst.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System timer">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <xi:include href="_mapPinsOption.xml"/>
+
+   <binaryOption key="syst_csr_countflag" condition="syst_csr_countflag_present"
+      enumStem="SystCsrCountflag"
+      toolTip="Clears on read by application of any part of the SysTick Control and Status Register"
+      description="Timer counted to 0 flag" >
+      <choice name="Counter has not reached 0"  value="0" enum="CounterHasNotReached0"/>
+      <choice name="Counter reached 0"          value="1" enum="CounterReached0"/>
+   </binaryOption>
+
+   <binaryOption key="syst_csr_clksource" condition="syst_csr_clksource_present"
+      enumStem="SystCsrClksource"
+      description="Clock source" >
+      <choice name="External clock"   value="0" enum="ExternalClock"/>
+      <choice name="Processor clock"  value="1" enum="ProcessorClock"/>
+   </binaryOption>
+
+   <binaryOption key="syst_csr_tickint" condition="syst_csr_tickint_present"
+      enumStem="SystCsrTickint"
+      toolTip="Enables SysTick exception request when counting down to 0"
+      description="Enable SysTick handler to be pend" >
+      <choice name="Exception masked"    value="0" enum="ExceptionMasked"/>
+      <choice name="Exception unmasked"  value="1" enum="ExceptionUnmasked"/>
+   </binaryOption>
+
+   <binaryOption key="syst_csr_enable" condition="syst_csr_enable_present"
+      enumStem="SystCsrEnable"
+      description="Enable SysTick counter" >
+      <choice name="Counter disabled"  value="0" enum="CounterDisabled"/>
+      <choice name="Counter enabled"   value="1" enum="CounterEnabled"/>
+   </binaryOption>
+
+   <intOption key="syst_rvr_reload" condition="syst_rvr_reload_present"
+      description="Reload value for counter"
+      toolTip="Value to load into the SysTick Current Value Register when the counter reaches 0"
+   />
+
+   <intOption key="syst_cvr_current" condition="syst_cvr_current_present"
+      description="Counter value"
+      toolTip="Current value at the time the register is accessed"
+   />
+
+<!-- Grahic here -->  
+
+   <for keys="field:name"
+        values="
+      syst_csr_countflag:CsrCountflag;
+      syst_csr_clksource:CsrClksource;
+      syst_csr_tickint:CsrTickint;
+      syst_csr_enable:CsrEnable">
+      <setTemplate variables="%(field)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void configure%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}\n\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== SYST Init class =============================== -->
+
+   <template key="init_description" namespace="all">
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_class)::Init init {
+      \t *
+      \t *   // Setup values
+      \t *   SystCsrCountflag_CounterHasNotReached0    // Timer counted to 0 flag,
+      \t *   SystCsrClksource_ExternalClock            // Clock source,
+      \t *   SystCsrTickint_ExceptionMasked            // Enable SysTick handler to be pend,
+      \t *   SystCsrEnable_CounterDisabled             // Enable SysTick counter,
+      \t *   0,                                        // Reload value for counter,
+      \t *   0,                                        // Counter value,
+      \t * };
+      \t *
+      \t * // Initialise $(_class) from values specified above
+      \t * $(_class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <initialValueTemplate namespace="usbdm"
+      variables="syst_csr_countflag,syst_csr_clksource,syst_csr_tickint,syst_csr_enable"
+   ><![CDATA[
+      \t   /// Control and Status Register
+      \t   uint32_t csr = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="syst_rvr_reload"
+   ><![CDATA[
+      \t   /// Reload Value Register
+      \t   uint32_t rvr = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="syst_cvr_current"
+   ><![CDATA[
+      \t   /// Current Value Register
+      \t   uint32_t cvr = 0;\n\n
+   ]]></initialValueTemplate>
+
+<!--   Configure methods -->
+
+   <template discardRepeats="true" key="/SYST/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure SYST from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t   enable();
+      \t
+      \t   syst->CSR    = init.csr;
+      \t   syst->RVR    = init.rvr;
+      \t   syst->CVR    = init.cvr;
+      \t
+      \t   calibrate();
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n
+   ]]></template>
+
+<!--   Constructors -->
+
+   <for keys="r"
+      values="
+            syst_csr_countflag;
+            syst_csr_clksource;
+            syst_csr_tickint;
+            syst_csr_enable
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Constructors -->
+
+   <for keys="r"
+      values="
+            syst_rvr_reload;
+            syst_cvr_current
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         \t    * @param value %description
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(unsigned value, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | value;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+            syst_csr_countflag,
+            syst_csr_clksource,
+            syst_csr_tickint,
+            syst_csr_enable
+         "
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      \t}; // $(_class)::BasicInfo::Init\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      }; // $(_class)::BasicInfo\n\n
+   ]]>
+   </template>
+
+<signals />
+
+</peripheralPage>

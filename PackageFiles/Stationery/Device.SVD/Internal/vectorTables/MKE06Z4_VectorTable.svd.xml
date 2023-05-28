@@ -1,5 +1,5 @@
 <!--
-Devices using this vector table: 
+Devices using this vector table:
    MKE06Z4
    SKEAZ1284
 -->
@@ -22,6 +22,7 @@ Devices using this vector table:
       <name>IRQ</name>
       <description>External Interrupt</description>
       <value>7</value>
+      <peripheral>IRQ</peripheral>
    </interrupt>
    <interrupt>
       <name>I2C0</name>
@@ -75,11 +76,13 @@ Devices using this vector table:
       <name>ACMP0</name>
       <description>Analogue comparator</description>
       <value>16</value>
+      <peripheral>ACMP0</peripheral>
    </interrupt>
    <interrupt>
       <name>FTM0</name>
       <description>FlexTimer Module</description>
       <value>17</value>
+      <peripheral>FTM0</peripheral>
    </interrupt>
    <interrupt>
       <name>FTM1</name>
@@ -121,11 +124,13 @@ Devices using this vector table:
       <name>KBI0</name>
       <description>Keyboard Interrupt</description>
       <value>24</value>
+      <peripheral>KBI0</peripheral>
    </interrupt>
    <interrupt>
       <name>KBI1</name>
       <description>Keyboard Interrupt</description>
       <value>25</value>
+      <peripheral>KBI1</peripheral>
    </interrupt>
    <interrupt>
       <name>ICS</name>

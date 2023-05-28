@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- pmc_mke.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Power Management Controller">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <xi:include href="_mapPinsOption.xml"/>
+
+   <xi:include href="_irqOption.xml"/>
+
+   <choiceOption key="pmc_spmsc1_lvwack" condition="pmc_spmsc1_lvwack_present"
+      enumStem="PmcSpmsc1Lvwack"
+      toolTip="This write-only bit is used to acknowledge low voltage warning errors.\n
+               Write 1 to clear LVWF"
+      description="Low-Voltage Warning Acknowledge" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <binaryOption key="pmc_spmsc1_lvwie" condition="pmc_spmsc1_lvwie_present"
+      enumStem="PmcSpmsc1Lvwie"
+      toolTip="Enables hardware interrupt requests for LVWF"
+      description="Low-Voltage Warning Interrupt Enable" >
+      <choice name="Interrupt disabled"  value="0" enum="InterruptDisabled"/>
+      <choice name="Interrupt enabled"   value="1" enum="InterruptEnabled"/>
+   </binaryOption>
+
+   <binaryOption key="pmc_spmsc1_lvdre" condition="pmc_spmsc1_lvdre_present"
+      enumStem="PmcSpmsc1Lvdre"
+      description="Low-Voltage Detect Reset Enable" >
+      <choice name="LVD events do not generate hardware resets"                          value="0" enum="LvdEventsDoNotGenerateHardwareResets"/>
+      <choice name="Force an MCU reset when an enabled low-voltage detect event occurs"  value="1" enum="ForceAnMcuResetWhenAnEnabledLowVoltageDetectEventOccurs"/>
+   </binaryOption>
+
+   <binaryOption key="pmc_spmsc1_lvdse" condition="pmc_spmsc1_lvdse_present"
+      enumStem="PmcSpmsc1Lvdse"
+      description="Low-Voltage Detect Stop Enable" >
+      <choice name="Low-voltage detect disabled during stop mode"  value="0" enum="LowVoltageDetectDisabledDuringStopMode"/>
+      <choice name="Low-voltage detect enabled during stop mode"   value="1" enum="LowVoltageDetectEnabledDuringStopMode"/>
+   </binaryOption>
+
+   <binaryOption key="pmc_spmsc1_lvde" condition="pmc_spmsc1_lvde_present"
+      enumStem="PmcSpmsc1Lvde"
+      description="Low-Voltage Detect Enable" >
+      <choice name="LVD logic disabled"  value="0" enum="LvdLogicDisabled"/>
+      <choice name="LVD logic enabled"   value="1" enum="LvdLogicEnabled"/>
+   </binaryOption>
+
+   <binaryOption key="pmc_spmsc1_bgbe" condition="pmc_spmsc1_bgbe_present"
+      enumStem="PmcSpmsc1Bgbe"
+      description="Bandgap Buffer Enable" >
+      <choice name="Bandgap buffer is disabled"  value="0" enum="BandgapBufferIsDisabled"/>
+      <choice name="Bandgap buffer is enabled"   value="1" enum="BandgapBufferIsEnabled"/>
+   </binaryOption>
+
+   <binaryOption key="pmc_spmsc2_lvdv" condition="pmc_spmsc2_lvdv_present"
+      enumStem="PmcSpmsc2Lvdv"
+      description="Low-Voltage Detect Voltage Select - Write-once bit" >
+      <choice name="Low trip point is selected (VLVD = VLVDL)"   value="0" enum="LowTripPointIsSelectedVlvdVlvdl"/>
+      <choice name="High trip point is selected (VLVD = VLVDH)"  value="1" enum="HighTripPointIsSelectedVlvdVlvdh"/>
+   </binaryOption>
+
+   <choiceOption key="pmc_spmsc2_lvwv" condition="pmc_spmsc2_lvwv_present"
+      enumStem="PmcSpmsc2Lvwv"
+      description="Low-Voltage Warning Voltage Select" >
+      <choice name="Low trip point selected (VLVW = VLVW1)"    value="0" enum="LowTripPointSelectedVlvwVlvw1"/>
+      <choice name="Mid 1 trip point selected (VLVW = VLVW2)"  value="1" enum="Mid1TripPointSelectedVlvwVlvw2"/>
+      <choice name="Mid 2 trip point selected (VLVW = VLVW3)"  value="2" enum="Mid2TripPointSelectedVlvwVlvw3"/>
+      <choice name="High trip point selected (VLVW = VLVW4)"   value="3" enum="HighTripPointSelectedVlvwVlvw4"/>
+   </choiceOption>
+
+<!-- Grahic here -->  
+
+   <for keys="field:name"
+        values="
+      pmc_spmsc1_lvwack:Spmsc1Lvwack;
+      pmc_spmsc1_lvwie:Spmsc1Lvwie;
+      pmc_spmsc1_lvdre:Spmsc1Lvdre;
+      pmc_spmsc1_lvdse:Spmsc1Lvdse;
+      pmc_spmsc1_lvde:Spmsc1Lvde;
+      pmc_spmsc1_bgbe:Spmsc1Bgbe;
+      pmc_spmsc2_lvdv:Spmsc2Lvdv;
+      pmc_spmsc2_lvwv:Spmsc2Lvwv">
+      <setTemplate variables="%(field)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void configure%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}\n\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== PMC Init class =============================== -->
+
+   <template key="init_description" namespace="all">
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_class)::Init init {
+      \t *
+      \t *   // Setup values
+      \t *   PmcSpmsc1Lvwack_Write1ToClear             // Low-Voltage Warning Acknowledge,
+      \t *   PmcSpmsc1Lvwie_InterruptDisabled          // Low-Voltage Warning Interrupt Enable,
+      \t *   PmcSpmsc1Lvdre_LvdEventsDoNotGenerateHardwareResets    // Low-Voltage Detect Reset Enable,
+      \t *   PmcSpmsc1Lvdse_LowVoltageDetectDisabledDuringStopMode    // Low-Voltage Detect Stop Enable,
+      \t *   PmcSpmsc1Lvde_LvdLogicDisabled            // Low-Voltage Detect Enable,
+      \t *   PmcSpmsc1Bgbe_BandgapBufferIsDisabled     // Bandgap Buffer Enable,
+      \t *   PmcSpmsc2Lvdv_LowTripPointIsSelectedVlvdVlvdl    // Low-Voltage Detect Voltage Select - Write-once bit,
+      \t *   PmcSpmsc2Lvwv_LowTripPointSelectedVlvwVlvw1    // Low-Voltage Warning Voltage Select,
+      \t * };
+      \t *
+      \t * // Initialise $(_class) from values specified above
+      \t * $(_class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t
+      \t/**
+      \t * Type definition for $(_class) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)(const uint32_t &);
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+    ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></setTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="pmc_spmsc1_lvwack,pmc_spmsc1_lvwie,pmc_spmsc1_lvdre,pmc_spmsc1_lvdse,pmc_spmsc1_lvde,pmc_spmsc1_bgbe"
+   ><![CDATA[
+      \t   /// System Power Management Status and Control 1 Register
+      \t   uint8_t spmsc1 = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="pmc_spmsc2_lvdv,pmc_spmsc2_lvwv"
+   ><![CDATA[
+      \t   /// System Power Management Status and Control 2 Register
+      \t   uint8_t spmsc2 = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="/PCR/nvic_irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+   ]]></initialValueTemplate>
+
+<!--   Configure methods -->
+
+   <template discardRepeats="true" key="/PMC/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure PMC from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-back if feature enabled
+      \t      setCallback(init.callbackFunction);
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
+      \t   enable();
+      \t
+      \t   pmc->SPMSC1    = init.spmsc1;
+      \t   pmc->SPMSC2    = init.spmsc2;
+      \t
+      \t   calibrate();
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n
+   ]]></template>
+
+<!--   Constructors -->
+
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%enumParam0 = %paramExpression;
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <setTemplate namespace="usbdm"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      #if $(irqHandlingMethod)
+      \t      %registerName = %paramExpression;
+      #else
+      \t      (void)%paramExpression;
+      #endif
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <for keys="r"
+      values="
+            pmc_spmsc1_lvwack;
+            pmc_spmsc1_lvwie;
+            pmc_spmsc1_lvdre;
+            pmc_spmsc1_lvdse;
+            pmc_spmsc1_lvde;
+            pmc_spmsc1_bgbe;
+            pmc_spmsc2_lvdv;
+            pmc_spmsc2_lvwv
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+            pmc_spmsc1_lvwack,
+            pmc_spmsc1_lvwie,
+            pmc_spmsc1_lvdre,
+            pmc_spmsc1_lvdse,
+            pmc_spmsc1_lvde,
+            pmc_spmsc1_bgbe,
+            pmc_spmsc2_lvdv,
+            pmc_spmsc2_lvwv,
+            irqLevel
+         "
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      \t}; // $(_class)::BasicInfo::Init\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      }; // $(_class)::BasicInfo\n\n
+   ]]>
+   </template>
+
+<signals />
+
+</peripheralPage>

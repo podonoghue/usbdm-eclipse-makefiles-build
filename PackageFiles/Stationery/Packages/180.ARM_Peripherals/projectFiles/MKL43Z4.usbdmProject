@@ -124,7 +124,6 @@
    <item key="/RTC/rtc_cr_osce"                            value="true" />
    <item key="/SIM/sim_sopt2_lpuart0src"                   value="1" />
    <item key="/SIM/sim_sopt2_lpuart1src"                   value="1" />
-   <item key="/SIM/sim_sopt2_rtcclkoutsel"                 value="false" />
    <item key="/SIM/sim_sopt2_tpmsrc"                       value="1" />
    <item key="/SIM/system_bus_clock[1]"                    value="2000000" />
    <item key="/SIM/system_bus_clock[2]"                    value="8000000" />

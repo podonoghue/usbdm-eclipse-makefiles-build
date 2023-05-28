@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE02Z2
       MKE02Z4
       MKE04Z4
@@ -36,28 +36,29 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>ACMOD</name>
-                     <description>Determines the sensitivity modes of the interrupt trigger</description>
+                     <description>InterruptEdge\n
+Determines the sensitivity modes of the interrupt trigger</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Output falling edge</description>
+                           <description>Falling edge</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Output rising edge</description>
+                           <description>Rising edge</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Output falling edge</description>
+                           <description>Falling edge alt</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Output falling or rising edge</description>
+                           <description>Both edges</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -122,7 +123,7 @@ Allows the ACMP output to be placed onto external pin</description>
                      <name>ACF</name>
                      <description>ACMP Interrupt Flag Bit\n
 Synchronously set by hardware when ACMP output has a valid edge defined by ACMOD.\n
-Cleared by writing a 0 to this bit. Writing a 1 to this bit has no effect
+Cleared by writing a 0 to this bit. Writing a 1 to this bit has no effect.\n
 The setting of this bit lags the ACMPO to bus clocks</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -147,12 +148,12 @@ The setting of this bit lags the ACMPO to bus clocks</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>20 mV hysteresis</description>
+                           <description>20 mV</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>30 mV hysteresis</description>
+                           <description>30 mV</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -165,12 +166,12 @@ The setting of this bit lags the ACMPO to bus clocks</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The ACMP is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The ACMP is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -192,22 +193,22 @@ The setting of this bit lags the ACMPO to bus clocks</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>External reference 0</description>
+                           <description>External ref 0</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>External reference 1</description>
+                           <description>External ref 1</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>External reference 2</description>
+                           <description>External ref 2</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>DAC output</description>
+                           <description>DAC</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -239,12 +240,12 @@ The Voutput range is from Vin/64 to Vin, the step is Vin/64</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Bandgap reference</description>
+                           <description>Bandgap</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>VDDA reference</description>
+                           <description>VDDA</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -257,12 +258,12 @@ The Voutput range is from Vin/64 to Vin, the step is Vin/64</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The DAC is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The DAC is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -285,12 +286,12 @@ This field controls if the corresponding ACMP external pin can be driven by an a
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Input disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Input enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

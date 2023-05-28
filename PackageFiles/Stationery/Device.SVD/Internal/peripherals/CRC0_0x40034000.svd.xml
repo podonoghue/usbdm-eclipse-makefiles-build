@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKM14Z5
       MKM33Z5
       MKM34Z5
@@ -157,13 +157,13 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>LOW</name>
-                     <description>Low Polynominal Half-word</description>
+                     <description>Low Polynomial Half-word</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>16</bitWidth>
                   </field>
                   <field>
                      <name>HIGH</name>
-                     <description>High Polynominal Half-word</description>
+                     <description>High Polynomial Half-word</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>16</bitWidth>
                   </field>

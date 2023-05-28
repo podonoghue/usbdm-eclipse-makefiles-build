@@ -24,7 +24,6 @@
    <item key="/RTC/rtc_hour"                               value="20" />
    <item key="/RTC/rtc_minute"                             value="5" />
    <item key="/RTC/rtc_month"                              value="335" />
-   <item key="/SIM/sim_sopt2_rtcclkoutsel"                 value="false" />
    <item key="/SIM/sim_sopt2_uart0src"                     value="3" />
    <item key="/SIM/system_bus_clock[0]"                    value="20971520" />
    <item key="/SIM/system_bus_clock[1]"                    value="32768" />

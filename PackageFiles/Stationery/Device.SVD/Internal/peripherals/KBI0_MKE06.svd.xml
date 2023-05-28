@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE04Z1284
       MKE06Z4
       SKEAZ1284
@@ -35,12 +35,12 @@ Each of the KBIPEn bits enable the corresponding KBI interrupt pin</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Detection disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Detection enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -88,12 +88,12 @@ KBI_SC contains the status flag and control bits, which are used to configure th
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Keyboard detects edges only</description>
+                           <description>Edges only</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Keyboard detects both edges and levels</description>
+                           <description>Edges or levels</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -106,12 +106,12 @@ KBI_SC contains the status flag and control bits, which are used to configure th
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>KBI interrupt not enabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>KBI interrupt enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -130,12 +130,12 @@ KBI_SC contains the status flag and control bits, which are used to configure th
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>KBI interrupt request not detected</description>
+                           <description>Not detected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>KBI interrupt request detected</description>
+                           <description>Detected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -148,12 +148,12 @@ KBI_SC contains the status flag and control bits, which are used to configure th
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The real time value of Keyboard source pin to be read</description>
+                           <description>Current value</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The latched value in KBxSP register while interrupt flag occur to be read</description>
+                           <description>Latched value</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

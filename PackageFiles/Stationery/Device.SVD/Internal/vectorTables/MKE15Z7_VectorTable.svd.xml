@@ -1,5 +1,5 @@
 <!--
-Devices using this vector table: 
+Devices using this vector table:
    MKE15Z7
 -->
 <interrupts>
@@ -9,161 +9,198 @@ Devices using this vector table:
       <name>DMA0_04</name>
       <description>Enhanced direct memory access controller</description>
       <value>0</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA0_15</name>
       <description>Enhanced direct memory access controller</description>
       <value>1</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA0_26</name>
       <description>Enhanced direct memory access controller</description>
       <value>2</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA0_37</name>
       <description>Enhanced direct memory access controller</description>
       <value>3</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA_Error</name>
       <description>Enhanced direct memory access controller</description>
       <value>4</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>FTFE</name>
       <description>Flash Memory Interface</description>
       <value>5</value>
+      <peripheral>FTFE</peripheral>
    </interrupt>
    <interrupt>
       <name>LVD_LVW</name>
       <description>PMC</description>
       <value>6</value>
+      <peripheral>PMC</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTAE</name>
       <description>General Purpose Input/Output</description>
       <value>7</value>
+      <peripheral>PORTA</peripheral>
+      <peripheral>PORTE</peripheral>
    </interrupt>
    <interrupt>
       <name>LPI2C0</name>
       <description>Low power I2C</description>
       <value>8</value>
+      <peripheral>LPI2C0</peripheral>
    </interrupt>
    <interrupt>
       <name>LPI2C1</name>
       <description>Low power I2C</description>
       <value>9</value>
+      <peripheral>LPI2C1</peripheral>
    </interrupt>
    <interrupt>
       <name>LPSPI0</name>
       <description>Low power SPI</description>
       <value>10</value>
+      <peripheral>LPSPI0</peripheral>
    </interrupt>
    <interrupt>
       <name>LPSPI1</name>
       <description>Low power SPI</description>
       <value>11</value>
+      <peripheral>LPSPI1</peripheral>
    </interrupt>
    <interrupt>
       <name>LPUART0</name>
       <description>Low Power Universal Asynchronous Receiver/Transmitter</description>
       <value>12</value>
+      <peripheral>LPUART0</peripheral>
    </interrupt>
    <interrupt>
       <name>LPUART1</name>
       <description>Low Power Universal Asynchronous Receiver/Transmitter</description>
       <value>13</value>
+      <peripheral>LPUART1</peripheral>
    </interrupt>
    <interrupt>
       <name>LPUART2</name>
       <description>Low Power Universal Asynchronous Receiver/Transmitter</description>
       <value>14</value>
+      <peripheral>LPUART2</peripheral>
    </interrupt>
    <interrupt>
       <name>ADC0</name>
       <description>Analog-to-Digital Converter</description>
       <value>15</value>
+      <peripheral>ADC0</peripheral>
    </interrupt>
    <interrupt>
       <name>CMP0</name>
       <description>Comparator</description>
       <value>16</value>
+      <peripheral>CMP0</peripheral>
    </interrupt>
    <interrupt>
       <name>FTM0</name>
       <description>FlexTimer Module</description>
       <value>17</value>
+      <peripheral>FTM0</peripheral>
    </interrupt>
    <interrupt>
       <name>FTM1</name>
       <description>FlexTimer Module</description>
       <value>18</value>
+      <peripheral>FTM1</peripheral>
    </interrupt>
    <interrupt>
       <name>FTM2</name>
       <description>FlexTimer Module</description>
       <value>19</value>
+      <peripheral>FTM2</peripheral>
    </interrupt>
    <interrupt>
       <name>RTC</name>
       <description>Secure Real Time Clock</description>
       <value>20</value>
+      <peripheral>RTC</peripheral>
    </interrupt>
    <interrupt>
       <name>CMP1</name>
       <description>Comparator</description>
       <value>21</value>
+      <peripheral>CMP1</peripheral>
    </interrupt>
    <interrupt>
       <name>LPIT0</name>
       <description>Low Power Periodic Interrupt Timer</description>
       <value>22</value>
+      <peripheral>LPIT0</peripheral>
    </interrupt>
    <interrupt>
       <name>FLEXIO</name>
       <description>Flexible I/O - universal I/O module for communication (UART, SPI, I2C, I2S) and PWM purposes</description>
       <value>23</value>
+      <peripheral>FLEXIO</peripheral>
    </interrupt>
    <interrupt>
       <name>TSI</name>
       <description>Touch sense input</description>
       <value>24</value>
+      <peripheral>TSI</peripheral>
    </interrupt>
    <interrupt>
       <name>PDB0</name>
       <description>Programmable Delay Block</description>
       <value>25</value>
+      <peripheral>PDB0</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTBCD</name>
       <description>General Purpose Input/Output</description>
       <value>26</value>
+      <peripheral>PORTB</peripheral>
+      <peripheral>PORTC</peripheral>
+      <peripheral>PORTD</peripheral>
    </interrupt>
    <interrupt>
       <name>SCG</name>
       <description>System Clock Generator</description>
       <value>27</value>
+      <peripheral>SCG</peripheral>
    </interrupt>
    <interrupt>
       <name>WDOG_EWM</name>
       <description>External Watchdog Monitor</description>
       <value>28</value>
+      <peripheral>WDOG</peripheral>
+      <peripheral>EWM</peripheral>
    </interrupt>
    <interrupt>
       <name>PWT_LPTMR0</name>
       <description>Low Power Timer</description>
       <value>29</value>
+      <peripheral>PWT</peripheral>
+      <peripheral>LPTMR0</peripheral>
    </interrupt>
    <interrupt>
       <name>ADC1</name>
       <description>Analog-to-Digital Converter</description>
       <value>30</value>
+      <peripheral>ADC1</peripheral>
    </interrupt>
    <interrupt>
       <name>RCM</name>
       <description>Reset Control Module</description>
       <value>31</value>
+      <peripheral>RCM</peripheral>
    </interrupt>
 </interrupts>
 

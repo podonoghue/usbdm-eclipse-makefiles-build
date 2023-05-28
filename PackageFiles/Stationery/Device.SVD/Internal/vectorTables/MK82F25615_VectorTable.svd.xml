@@ -1,5 +1,5 @@
 <!--
-Devices using this vector table: 
+Devices using this vector table:
    MK82F25615
 -->
 <interrupts>
@@ -220,11 +220,13 @@ Devices using this vector table:
       <name>EMVSIM0</name>
       <description>EMVSIM</description>
       <value>37</value>
+      <peripheral>EMVSIM0</peripheral>
    </interrupt>
    <interrupt>
       <name>EMVSIM1</name>
       <description>EMVSIM</description>
       <value>38</value>
+      <peripheral>EMVSIM1</peripheral>
    </interrupt>
    <interrupt>
       <name>ADC0</name>
@@ -440,6 +442,7 @@ Devices using this vector table:
       <name>LTC0</name>
       <description>LTC</description>
       <value>104</value>
+      <peripheral>LTC0</peripheral>
    </interrupt>
 </interrupts>
 

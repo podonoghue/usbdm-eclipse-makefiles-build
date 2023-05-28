@@ -1,0 +1,1668 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- nvic_cm0.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Nested Vectored Interrupt Controller">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <xi:include href="_mapPinsOption.xml"/>
+
+   <binaryOption key="nvic_iser_setena31" condition="nvic_iser_setena31_present"
+      enumStem="NvicIserSetena31"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena30" condition="nvic_iser_setena30_present"
+      enumStem="NvicIserSetena30"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena29" condition="nvic_iser_setena29_present"
+      enumStem="NvicIserSetena29"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena28" condition="nvic_iser_setena28_present"
+      enumStem="NvicIserSetena28"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena27" condition="nvic_iser_setena27_present"
+      enumStem="NvicIserSetena27"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena26" condition="nvic_iser_setena26_present"
+      enumStem="NvicIserSetena26"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena25" condition="nvic_iser_setena25_present"
+      enumStem="NvicIserSetena25"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena24" condition="nvic_iser_setena24_present"
+      enumStem="NvicIserSetena24"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena23" condition="nvic_iser_setena23_present"
+      enumStem="NvicIserSetena23"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena22" condition="nvic_iser_setena22_present"
+      enumStem="NvicIserSetena22"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena21" condition="nvic_iser_setena21_present"
+      enumStem="NvicIserSetena21"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena20" condition="nvic_iser_setena20_present"
+      enumStem="NvicIserSetena20"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena19" condition="nvic_iser_setena19_present"
+      enumStem="NvicIserSetena19"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena18" condition="nvic_iser_setena18_present"
+      enumStem="NvicIserSetena18"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena17" condition="nvic_iser_setena17_present"
+      enumStem="NvicIserSetena17"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena16" condition="nvic_iser_setena16_present"
+      enumStem="NvicIserSetena16"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena15" condition="nvic_iser_setena15_present"
+      enumStem="NvicIserSetena15"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena14" condition="nvic_iser_setena14_present"
+      enumStem="NvicIserSetena14"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena13" condition="nvic_iser_setena13_present"
+      enumStem="NvicIserSetena13"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena12" condition="nvic_iser_setena12_present"
+      enumStem="NvicIserSetena12"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena11" condition="nvic_iser_setena11_present"
+      enumStem="NvicIserSetena11"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena10" condition="nvic_iser_setena10_present"
+      enumStem="NvicIserSetena10"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena9" condition="nvic_iser_setena9_present"
+      enumStem="NvicIserSetena9"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena8" condition="nvic_iser_setena8_present"
+      enumStem="NvicIserSetena8"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena7" condition="nvic_iser_setena7_present"
+      enumStem="NvicIserSetena7"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena6" condition="nvic_iser_setena6_present"
+      enumStem="NvicIserSetena6"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena5" condition="nvic_iser_setena5_present"
+      enumStem="NvicIserSetena5"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena4" condition="nvic_iser_setena4_present"
+      enumStem="NvicIserSetena4"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena3" condition="nvic_iser_setena3_present"
+      enumStem="NvicIserSetena3"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena2" condition="nvic_iser_setena2_present"
+      enumStem="NvicIserSetena2"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena1" condition="nvic_iser_setena1_present"
+      enumStem="NvicIserSetena1"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_iser_setena0" condition="nvic_iser_setena0_present"
+      enumStem="NvicIserSetena0"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to enable"   value="1" enum="EnabledWrite1ToEnable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren31" condition="nvic_icer_clren31_present"
+      enumStem="NvicIcerClren31"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren30" condition="nvic_icer_clren30_present"
+      enumStem="NvicIcerClren30"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren29" condition="nvic_icer_clren29_present"
+      enumStem="NvicIcerClren29"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren28" condition="nvic_icer_clren28_present"
+      enumStem="NvicIcerClren28"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren27" condition="nvic_icer_clren27_present"
+      enumStem="NvicIcerClren27"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren26" condition="nvic_icer_clren26_present"
+      enumStem="NvicIcerClren26"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren25" condition="nvic_icer_clren25_present"
+      enumStem="NvicIcerClren25"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren24" condition="nvic_icer_clren24_present"
+      enumStem="NvicIcerClren24"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren23" condition="nvic_icer_clren23_present"
+      enumStem="NvicIcerClren23"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren22" condition="nvic_icer_clren22_present"
+      enumStem="NvicIcerClren22"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren21" condition="nvic_icer_clren21_present"
+      enumStem="NvicIcerClren21"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren20" condition="nvic_icer_clren20_present"
+      enumStem="NvicIcerClren20"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren19" condition="nvic_icer_clren19_present"
+      enumStem="NvicIcerClren19"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren18" condition="nvic_icer_clren18_present"
+      enumStem="NvicIcerClren18"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren17" condition="nvic_icer_clren17_present"
+      enumStem="NvicIcerClren17"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren16" condition="nvic_icer_clren16_present"
+      enumStem="NvicIcerClren16"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren15" condition="nvic_icer_clren15_present"
+      enumStem="NvicIcerClren15"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren14" condition="nvic_icer_clren14_present"
+      enumStem="NvicIcerClren14"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren13" condition="nvic_icer_clren13_present"
+      enumStem="NvicIcerClren13"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren12" condition="nvic_icer_clren12_present"
+      enumStem="NvicIcerClren12"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren11" condition="nvic_icer_clren11_present"
+      enumStem="NvicIcerClren11"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren10" condition="nvic_icer_clren10_present"
+      enumStem="NvicIcerClren10"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren9" condition="nvic_icer_clren9_present"
+      enumStem="NvicIcerClren9"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren8" condition="nvic_icer_clren8_present"
+      enumStem="NvicIcerClren8"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren7" condition="nvic_icer_clren7_present"
+      enumStem="NvicIcerClren7"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren6" condition="nvic_icer_clren6_present"
+      enumStem="NvicIcerClren6"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren5" condition="nvic_icer_clren5_present"
+      enumStem="NvicIcerClren5"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren4" condition="nvic_icer_clren4_present"
+      enumStem="NvicIcerClren4"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren3" condition="nvic_icer_clren3_present"
+      enumStem="NvicIcerClren3"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren2" condition="nvic_icer_clren2_present"
+      enumStem="NvicIcerClren2"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren1" condition="nvic_icer_clren1_present"
+      enumStem="NvicIcerClren1"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icer_clren0" condition="nvic_icer_clren0_present"
+      enumStem="NvicIcerClren0"
+      description="Interrupt set enable bits" >
+      <choice name="Disabled; Write 0 no effect"  value="0" enum="DisabledWrite0NoEffect"/>
+      <choice name="Enabled; Write 1 to disable"  value="1" enum="EnabledWrite1ToDisable"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend31" condition="nvic_ispr_setpend31_present"
+      enumStem="NvicIsprSetpend31"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend30" condition="nvic_ispr_setpend30_present"
+      enumStem="NvicIsprSetpend30"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend29" condition="nvic_ispr_setpend29_present"
+      enumStem="NvicIsprSetpend29"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend28" condition="nvic_ispr_setpend28_present"
+      enumStem="NvicIsprSetpend28"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend27" condition="nvic_ispr_setpend27_present"
+      enumStem="NvicIsprSetpend27"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend26" condition="nvic_ispr_setpend26_present"
+      enumStem="NvicIsprSetpend26"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend25" condition="nvic_ispr_setpend25_present"
+      enumStem="NvicIsprSetpend25"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend24" condition="nvic_ispr_setpend24_present"
+      enumStem="NvicIsprSetpend24"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend23" condition="nvic_ispr_setpend23_present"
+      enumStem="NvicIsprSetpend23"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend22" condition="nvic_ispr_setpend22_present"
+      enumStem="NvicIsprSetpend22"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend21" condition="nvic_ispr_setpend21_present"
+      enumStem="NvicIsprSetpend21"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend20" condition="nvic_ispr_setpend20_present"
+      enumStem="NvicIsprSetpend20"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend19" condition="nvic_ispr_setpend19_present"
+      enumStem="NvicIsprSetpend19"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend18" condition="nvic_ispr_setpend18_present"
+      enumStem="NvicIsprSetpend18"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend17" condition="nvic_ispr_setpend17_present"
+      enumStem="NvicIsprSetpend17"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend16" condition="nvic_ispr_setpend16_present"
+      enumStem="NvicIsprSetpend16"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend15" condition="nvic_ispr_setpend15_present"
+      enumStem="NvicIsprSetpend15"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend14" condition="nvic_ispr_setpend14_present"
+      enumStem="NvicIsprSetpend14"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend13" condition="nvic_ispr_setpend13_present"
+      enumStem="NvicIsprSetpend13"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend12" condition="nvic_ispr_setpend12_present"
+      enumStem="NvicIsprSetpend12"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend11" condition="nvic_ispr_setpend11_present"
+      enumStem="NvicIsprSetpend11"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend10" condition="nvic_ispr_setpend10_present"
+      enumStem="NvicIsprSetpend10"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend9" condition="nvic_ispr_setpend9_present"
+      enumStem="NvicIsprSetpend9"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend8" condition="nvic_ispr_setpend8_present"
+      enumStem="NvicIsprSetpend8"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend7" condition="nvic_ispr_setpend7_present"
+      enumStem="NvicIsprSetpend7"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend6" condition="nvic_ispr_setpend6_present"
+      enumStem="NvicIsprSetpend6"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend5" condition="nvic_ispr_setpend5_present"
+      enumStem="NvicIsprSetpend5"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend4" condition="nvic_ispr_setpend4_present"
+      enumStem="NvicIsprSetpend4"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend3" condition="nvic_ispr_setpend3_present"
+      enumStem="NvicIsprSetpend3"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend2" condition="nvic_ispr_setpend2_present"
+      enumStem="NvicIsprSetpend2"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend1" condition="nvic_ispr_setpend1_present"
+      enumStem="NvicIsprSetpend1"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_ispr_setpend0" condition="nvic_ispr_setpend0_present"
+      enumStem="NvicIsprSetpend0"
+      description="Interrupt set pending bits" >
+      <choice name="Not pending; Write 0 no effect"   value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to set pending"  value="1" enum="PendingWrite1ToSetPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend31" condition="nvic_icpr_clrpend31_present"
+      enumStem="NvicIcprClrpend31"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend30" condition="nvic_icpr_clrpend30_present"
+      enumStem="NvicIcprClrpend30"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend29" condition="nvic_icpr_clrpend29_present"
+      enumStem="NvicIcprClrpend29"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend28" condition="nvic_icpr_clrpend28_present"
+      enumStem="NvicIcprClrpend28"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend27" condition="nvic_icpr_clrpend27_present"
+      enumStem="NvicIcprClrpend27"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend26" condition="nvic_icpr_clrpend26_present"
+      enumStem="NvicIcprClrpend26"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend25" condition="nvic_icpr_clrpend25_present"
+      enumStem="NvicIcprClrpend25"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend24" condition="nvic_icpr_clrpend24_present"
+      enumStem="NvicIcprClrpend24"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend23" condition="nvic_icpr_clrpend23_present"
+      enumStem="NvicIcprClrpend23"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend22" condition="nvic_icpr_clrpend22_present"
+      enumStem="NvicIcprClrpend22"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend21" condition="nvic_icpr_clrpend21_present"
+      enumStem="NvicIcprClrpend21"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend20" condition="nvic_icpr_clrpend20_present"
+      enumStem="NvicIcprClrpend20"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend19" condition="nvic_icpr_clrpend19_present"
+      enumStem="NvicIcprClrpend19"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend18" condition="nvic_icpr_clrpend18_present"
+      enumStem="NvicIcprClrpend18"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend17" condition="nvic_icpr_clrpend17_present"
+      enumStem="NvicIcprClrpend17"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend16" condition="nvic_icpr_clrpend16_present"
+      enumStem="NvicIcprClrpend16"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend15" condition="nvic_icpr_clrpend15_present"
+      enumStem="NvicIcprClrpend15"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend14" condition="nvic_icpr_clrpend14_present"
+      enumStem="NvicIcprClrpend14"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend13" condition="nvic_icpr_clrpend13_present"
+      enumStem="NvicIcprClrpend13"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend12" condition="nvic_icpr_clrpend12_present"
+      enumStem="NvicIcprClrpend12"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend11" condition="nvic_icpr_clrpend11_present"
+      enumStem="NvicIcprClrpend11"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend10" condition="nvic_icpr_clrpend10_present"
+      enumStem="NvicIcprClrpend10"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend9" condition="nvic_icpr_clrpend9_present"
+      enumStem="NvicIcprClrpend9"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend8" condition="nvic_icpr_clrpend8_present"
+      enumStem="NvicIcprClrpend8"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend7" condition="nvic_icpr_clrpend7_present"
+      enumStem="NvicIcprClrpend7"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend6" condition="nvic_icpr_clrpend6_present"
+      enumStem="NvicIcprClrpend6"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend5" condition="nvic_icpr_clrpend5_present"
+      enumStem="NvicIcprClrpend5"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend4" condition="nvic_icpr_clrpend4_present"
+      enumStem="NvicIcprClrpend4"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend3" condition="nvic_icpr_clrpend3_present"
+      enumStem="NvicIcprClrpend3"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend2" condition="nvic_icpr_clrpend2_present"
+      enumStem="NvicIcprClrpend2"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend1" condition="nvic_icpr_clrpend1_present"
+      enumStem="NvicIcprClrpend1"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <binaryOption key="nvic_icpr_clrpend0" condition="nvic_icpr_clrpend0_present"
+      enumStem="NvicIcprClrpend0"
+      description="Interrupt clear pending bits" >
+      <choice name="Not pending; Write 0 no effect"     value="0" enum="NotPendingWrite0NoEffect"/>
+      <choice name="Pending; Write 1 to clear pending"  value="1" enum="PendingWrite1ToClearPending"/>
+   </binaryOption>
+
+   <intOption key="nvic_ipr_pri_nplus3" condition="nvic_ipr_pri_nplus3_present"
+      description="Priority of interrupt n+3"
+   />
+
+   <intOption key="nvic_ipr_pri_nplus2" condition="nvic_ipr_pri_nplus2_present"
+      description="Priority of interrupt n+2"
+   />
+
+   <intOption key="nvic_ipr_pri_nplus1" condition="nvic_ipr_pri_nplus1_present"
+      description="Priority of interrupt n+1"
+   />
+
+   <intOption key="nvic_ipr_pri_nplus0" condition="nvic_ipr_pri_nplus0_present"
+      description="Priority of interrupt n+0"
+   />
+
+<!-- Grahic here -->  
+
+   <for keys="field:name"
+        values="
+      nvic_iser_setena31:IserSetena31;
+      nvic_iser_setena30:IserSetena30;
+      nvic_iser_setena29:IserSetena29;
+      nvic_iser_setena28:IserSetena28;
+      nvic_iser_setena27:IserSetena27;
+      nvic_iser_setena26:IserSetena26;
+      nvic_iser_setena25:IserSetena25;
+      nvic_iser_setena24:IserSetena24;
+      nvic_iser_setena23:IserSetena23;
+      nvic_iser_setena22:IserSetena22;
+      nvic_iser_setena21:IserSetena21;
+      nvic_iser_setena20:IserSetena20;
+      nvic_iser_setena19:IserSetena19;
+      nvic_iser_setena18:IserSetena18;
+      nvic_iser_setena17:IserSetena17;
+      nvic_iser_setena16:IserSetena16;
+      nvic_iser_setena15:IserSetena15;
+      nvic_iser_setena14:IserSetena14;
+      nvic_iser_setena13:IserSetena13;
+      nvic_iser_setena12:IserSetena12;
+      nvic_iser_setena11:IserSetena11;
+      nvic_iser_setena10:IserSetena10;
+      nvic_iser_setena9:IserSetena9;
+      nvic_iser_setena8:IserSetena8;
+      nvic_iser_setena7:IserSetena7;
+      nvic_iser_setena6:IserSetena6;
+      nvic_iser_setena5:IserSetena5;
+      nvic_iser_setena4:IserSetena4;
+      nvic_iser_setena3:IserSetena3;
+      nvic_iser_setena2:IserSetena2;
+      nvic_iser_setena1:IserSetena1;
+      nvic_iser_setena0:IserSetena0;
+      nvic_icer_clren31:IcerClren31;
+      nvic_icer_clren30:IcerClren30;
+      nvic_icer_clren29:IcerClren29;
+      nvic_icer_clren28:IcerClren28;
+      nvic_icer_clren27:IcerClren27;
+      nvic_icer_clren26:IcerClren26;
+      nvic_icer_clren25:IcerClren25;
+      nvic_icer_clren24:IcerClren24;
+      nvic_icer_clren23:IcerClren23;
+      nvic_icer_clren22:IcerClren22;
+      nvic_icer_clren21:IcerClren21;
+      nvic_icer_clren20:IcerClren20;
+      nvic_icer_clren19:IcerClren19;
+      nvic_icer_clren18:IcerClren18;
+      nvic_icer_clren17:IcerClren17;
+      nvic_icer_clren16:IcerClren16;
+      nvic_icer_clren15:IcerClren15;
+      nvic_icer_clren14:IcerClren14;
+      nvic_icer_clren13:IcerClren13;
+      nvic_icer_clren12:IcerClren12;
+      nvic_icer_clren11:IcerClren11;
+      nvic_icer_clren10:IcerClren10;
+      nvic_icer_clren9:IcerClren9;
+      nvic_icer_clren8:IcerClren8;
+      nvic_icer_clren7:IcerClren7;
+      nvic_icer_clren6:IcerClren6;
+      nvic_icer_clren5:IcerClren5;
+      nvic_icer_clren4:IcerClren4;
+      nvic_icer_clren3:IcerClren3;
+      nvic_icer_clren2:IcerClren2;
+      nvic_icer_clren1:IcerClren1;
+      nvic_icer_clren0:IcerClren0;
+      nvic_ispr_setpend31:IsprSetpend31;
+      nvic_ispr_setpend30:IsprSetpend30;
+      nvic_ispr_setpend29:IsprSetpend29;
+      nvic_ispr_setpend28:IsprSetpend28;
+      nvic_ispr_setpend27:IsprSetpend27;
+      nvic_ispr_setpend26:IsprSetpend26;
+      nvic_ispr_setpend25:IsprSetpend25;
+      nvic_ispr_setpend24:IsprSetpend24;
+      nvic_ispr_setpend23:IsprSetpend23;
+      nvic_ispr_setpend22:IsprSetpend22;
+      nvic_ispr_setpend21:IsprSetpend21;
+      nvic_ispr_setpend20:IsprSetpend20;
+      nvic_ispr_setpend19:IsprSetpend19;
+      nvic_ispr_setpend18:IsprSetpend18;
+      nvic_ispr_setpend17:IsprSetpend17;
+      nvic_ispr_setpend16:IsprSetpend16;
+      nvic_ispr_setpend15:IsprSetpend15;
+      nvic_ispr_setpend14:IsprSetpend14;
+      nvic_ispr_setpend13:IsprSetpend13;
+      nvic_ispr_setpend12:IsprSetpend12;
+      nvic_ispr_setpend11:IsprSetpend11;
+      nvic_ispr_setpend10:IsprSetpend10;
+      nvic_ispr_setpend9:IsprSetpend9;
+      nvic_ispr_setpend8:IsprSetpend8;
+      nvic_ispr_setpend7:IsprSetpend7;
+      nvic_ispr_setpend6:IsprSetpend6;
+      nvic_ispr_setpend5:IsprSetpend5;
+      nvic_ispr_setpend4:IsprSetpend4;
+      nvic_ispr_setpend3:IsprSetpend3;
+      nvic_ispr_setpend2:IsprSetpend2;
+      nvic_ispr_setpend1:IsprSetpend1;
+      nvic_ispr_setpend0:IsprSetpend0;
+      nvic_icpr_clrpend31:IcprClrpend31;
+      nvic_icpr_clrpend30:IcprClrpend30;
+      nvic_icpr_clrpend29:IcprClrpend29;
+      nvic_icpr_clrpend28:IcprClrpend28;
+      nvic_icpr_clrpend27:IcprClrpend27;
+      nvic_icpr_clrpend26:IcprClrpend26;
+      nvic_icpr_clrpend25:IcprClrpend25;
+      nvic_icpr_clrpend24:IcprClrpend24;
+      nvic_icpr_clrpend23:IcprClrpend23;
+      nvic_icpr_clrpend22:IcprClrpend22;
+      nvic_icpr_clrpend21:IcprClrpend21;
+      nvic_icpr_clrpend20:IcprClrpend20;
+      nvic_icpr_clrpend19:IcprClrpend19;
+      nvic_icpr_clrpend18:IcprClrpend18;
+      nvic_icpr_clrpend17:IcprClrpend17;
+      nvic_icpr_clrpend16:IcprClrpend16;
+      nvic_icpr_clrpend15:IcprClrpend15;
+      nvic_icpr_clrpend14:IcprClrpend14;
+      nvic_icpr_clrpend13:IcprClrpend13;
+      nvic_icpr_clrpend12:IcprClrpend12;
+      nvic_icpr_clrpend11:IcprClrpend11;
+      nvic_icpr_clrpend10:IcprClrpend10;
+      nvic_icpr_clrpend9:IcprClrpend9;
+      nvic_icpr_clrpend8:IcprClrpend8;
+      nvic_icpr_clrpend7:IcprClrpend7;
+      nvic_icpr_clrpend6:IcprClrpend6;
+      nvic_icpr_clrpend5:IcprClrpend5;
+      nvic_icpr_clrpend4:IcprClrpend4;
+      nvic_icpr_clrpend3:IcprClrpend3;
+      nvic_icpr_clrpend2:IcprClrpend2;
+      nvic_icpr_clrpend1:IcprClrpend1;
+      nvic_icpr_clrpend0:IcprClrpend0">
+      <setTemplate variables="%(field)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void configure%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}\n\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== NVIC Init class =============================== -->
+
+   <template key="init_description" namespace="all">
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_class)::Init init {
+      \t *
+      \t *   // Setup values
+      \t *   NvicIserSetena31_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena30_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena29_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena28_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena27_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena26_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena25_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena24_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena23_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena22_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena21_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena20_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena19_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena18_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena17_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena16_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena15_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena14_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena13_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena12_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena11_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena10_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena9_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena8_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena7_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena6_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena5_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena4_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena3_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena2_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena1_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIserSetena0_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren31_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren30_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren29_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren28_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren27_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren26_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren25_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren24_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren23_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren22_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren21_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren20_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren19_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren18_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren17_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren16_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren15_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren14_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren13_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren12_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren11_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren10_DisabledWrite0NoEffect    // Interrupt set enable bits,
+      \t *   NvicIcerClren9_DisabledWrite0NoEffect     // Interrupt set enable bits,
+      \t *   NvicIcerClren8_DisabledWrite0NoEffect     // Interrupt set enable bits,
+      \t *   NvicIcerClren7_DisabledWrite0NoEffect     // Interrupt set enable bits,
+      \t *   NvicIcerClren6_DisabledWrite0NoEffect     // Interrupt set enable bits,
+      \t *   NvicIcerClren5_DisabledWrite0NoEffect     // Interrupt set enable bits,
+      \t *   NvicIcerClren4_DisabledWrite0NoEffect     // Interrupt set enable bits,
+      \t *   NvicIcerClren3_DisabledWrite0NoEffect     // Interrupt set enable bits,
+      \t *   NvicIcerClren2_DisabledWrite0NoEffect     // Interrupt set enable bits,
+      \t *   NvicIcerClren1_DisabledWrite0NoEffect     // Interrupt set enable bits,
+      \t *   NvicIcerClren0_DisabledWrite0NoEffect     // Interrupt set enable bits,
+      \t *   NvicIsprSetpend31_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend30_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend29_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend28_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend27_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend26_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend25_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend24_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend23_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend22_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend21_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend20_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend19_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend18_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend17_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend16_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend15_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend14_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend13_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend12_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend11_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend10_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend9_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend8_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend7_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend6_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend5_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend4_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend3_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend2_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend1_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIsprSetpend0_NotPendingWrite0NoEffect    // Interrupt set pending bits,
+      \t *   NvicIcprClrpend31_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend30_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend29_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend28_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend27_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend26_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend25_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend24_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend23_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend22_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend21_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend20_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend19_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend18_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend17_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend16_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend15_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend14_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend13_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend12_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend11_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend10_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend9_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend8_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend7_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend6_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend5_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend4_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend3_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend2_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend1_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   NvicIcprClrpend0_NotPendingWrite0NoEffect    // Interrupt clear pending bits,
+      \t *   0,                                        // Priority of interrupt n+3,
+      \t *   0,                                        // Priority of interrupt n+2,
+      \t *   0,                                        // Priority of interrupt n+1,
+      \t *   0,                                        // Priority of interrupt n+0,
+      \t * };
+      \t *
+      \t * // Initialise $(_class) from values specified above
+      \t * $(_class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <initialValueTemplate namespace="usbdm"
+      variables="nvic_iser_setena31,nvic_iser_setena30,nvic_iser_setena29,nvic_iser_setena28,nvic_iser_setena27,nvic_iser_setena26,nvic_iser_setena25,nvic_iser_setena24,nvic_iser_setena23,nvic_iser_setena22,nvic_iser_setena21,nvic_iser_setena20,nvic_iser_setena19,nvic_iser_setena18,nvic_iser_setena17,nvic_iser_setena16,nvic_iser_setena15,nvic_iser_setena14,nvic_iser_setena13,nvic_iser_setena12,nvic_iser_setena11,nvic_iser_setena10,nvic_iser_setena9,nvic_iser_setena8,nvic_iser_setena7,nvic_iser_setena6,nvic_iser_setena5,nvic_iser_setena4,nvic_iser_setena3,nvic_iser_setena2,nvic_iser_setena1,nvic_iser_setena0"
+   ><![CDATA[
+      \t   /// Interrupt Set Enable Register
+      \t   uint32_t iser = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="nvic_icer_clren31,nvic_icer_clren30,nvic_icer_clren29,nvic_icer_clren28,nvic_icer_clren27,nvic_icer_clren26,nvic_icer_clren25,nvic_icer_clren24,nvic_icer_clren23,nvic_icer_clren22,nvic_icer_clren21,nvic_icer_clren20,nvic_icer_clren19,nvic_icer_clren18,nvic_icer_clren17,nvic_icer_clren16,nvic_icer_clren15,nvic_icer_clren14,nvic_icer_clren13,nvic_icer_clren12,nvic_icer_clren11,nvic_icer_clren10,nvic_icer_clren9,nvic_icer_clren8,nvic_icer_clren7,nvic_icer_clren6,nvic_icer_clren5,nvic_icer_clren4,nvic_icer_clren3,nvic_icer_clren2,nvic_icer_clren1,nvic_icer_clren0"
+   ><![CDATA[
+      \t   /// Interrupt Clear Enable Register
+      \t   uint32_t icer = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="nvic_ispr_setpend31,nvic_ispr_setpend30,nvic_ispr_setpend29,nvic_ispr_setpend28,nvic_ispr_setpend27,nvic_ispr_setpend26,nvic_ispr_setpend25,nvic_ispr_setpend24,nvic_ispr_setpend23,nvic_ispr_setpend22,nvic_ispr_setpend21,nvic_ispr_setpend20,nvic_ispr_setpend19,nvic_ispr_setpend18,nvic_ispr_setpend17,nvic_ispr_setpend16,nvic_ispr_setpend15,nvic_ispr_setpend14,nvic_ispr_setpend13,nvic_ispr_setpend12,nvic_ispr_setpend11,nvic_ispr_setpend10,nvic_ispr_setpend9,nvic_ispr_setpend8,nvic_ispr_setpend7,nvic_ispr_setpend6,nvic_ispr_setpend5,nvic_ispr_setpend4,nvic_ispr_setpend3,nvic_ispr_setpend2,nvic_ispr_setpend1,nvic_ispr_setpend0"
+   ><![CDATA[
+      \t   /// Interrupt Set Pending Register
+      \t   uint32_t ispr = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="nvic_icpr_clrpend31,nvic_icpr_clrpend30,nvic_icpr_clrpend29,nvic_icpr_clrpend28,nvic_icpr_clrpend27,nvic_icpr_clrpend26,nvic_icpr_clrpend25,nvic_icpr_clrpend24,nvic_icpr_clrpend23,nvic_icpr_clrpend22,nvic_icpr_clrpend21,nvic_icpr_clrpend20,nvic_icpr_clrpend19,nvic_icpr_clrpend18,nvic_icpr_clrpend17,nvic_icpr_clrpend16,nvic_icpr_clrpend15,nvic_icpr_clrpend14,nvic_icpr_clrpend13,nvic_icpr_clrpend12,nvic_icpr_clrpend11,nvic_icpr_clrpend10,nvic_icpr_clrpend9,nvic_icpr_clrpend8,nvic_icpr_clrpend7,nvic_icpr_clrpend6,nvic_icpr_clrpend5,nvic_icpr_clrpend4,nvic_icpr_clrpend3,nvic_icpr_clrpend2,nvic_icpr_clrpend1,nvic_icpr_clrpend0"
+   ><![CDATA[
+      \t   /// Interrupt Clear Pending Register
+      \t   uint32_t icpr = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="nvic_ipr_pri_nplus3,nvic_ipr_pri_nplus2,nvic_ipr_pri_nplus1,nvic_ipr_pri_nplus0"
+   ><![CDATA[
+      \t   /// Interrupt Priority Register n
+      \t   uint32_t ipr = 0;\n\n
+   ]]></initialValueTemplate>
+
+<!--   Configure methods -->
+
+   <template discardRepeats="true" key="/NVIC/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure NVIC from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t   enable();
+      \t
+      \t   nvic->ISER    = init.iser;
+      \t   nvic->ICER    = init.icer;
+      \t   nvic->ISPR    = init.ispr;
+      \t   nvic->ICPR    = init.icpr;
+      \t   nvic->IPR    = init.ipr;
+      \t
+      \t   calibrate();
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n
+   ]]></template>
+
+<!--   Constructors -->
+
+   <for keys="r"
+      values="
+            nvic_iser_setena31;
+            nvic_iser_setena30;
+            nvic_iser_setena29;
+            nvic_iser_setena28;
+            nvic_iser_setena27;
+            nvic_iser_setena26;
+            nvic_iser_setena25;
+            nvic_iser_setena24;
+            nvic_iser_setena23;
+            nvic_iser_setena22;
+            nvic_iser_setena21;
+            nvic_iser_setena20;
+            nvic_iser_setena19;
+            nvic_iser_setena18;
+            nvic_iser_setena17;
+            nvic_iser_setena16;
+            nvic_iser_setena15;
+            nvic_iser_setena14;
+            nvic_iser_setena13;
+            nvic_iser_setena12;
+            nvic_iser_setena11;
+            nvic_iser_setena10;
+            nvic_iser_setena9;
+            nvic_iser_setena8;
+            nvic_iser_setena7;
+            nvic_iser_setena6;
+            nvic_iser_setena5;
+            nvic_iser_setena4;
+            nvic_iser_setena3;
+            nvic_iser_setena2;
+            nvic_iser_setena1;
+            nvic_iser_setena0;
+            nvic_icer_clren31;
+            nvic_icer_clren30;
+            nvic_icer_clren29;
+            nvic_icer_clren28;
+            nvic_icer_clren27;
+            nvic_icer_clren26;
+            nvic_icer_clren25;
+            nvic_icer_clren24;
+            nvic_icer_clren23;
+            nvic_icer_clren22;
+            nvic_icer_clren21;
+            nvic_icer_clren20;
+            nvic_icer_clren19;
+            nvic_icer_clren18;
+            nvic_icer_clren17;
+            nvic_icer_clren16;
+            nvic_icer_clren15;
+            nvic_icer_clren14;
+            nvic_icer_clren13;
+            nvic_icer_clren12;
+            nvic_icer_clren11;
+            nvic_icer_clren10;
+            nvic_icer_clren9;
+            nvic_icer_clren8;
+            nvic_icer_clren7;
+            nvic_icer_clren6;
+            nvic_icer_clren5;
+            nvic_icer_clren4;
+            nvic_icer_clren3;
+            nvic_icer_clren2;
+            nvic_icer_clren1;
+            nvic_icer_clren0;
+            nvic_ispr_setpend31;
+            nvic_ispr_setpend30;
+            nvic_ispr_setpend29;
+            nvic_ispr_setpend28;
+            nvic_ispr_setpend27;
+            nvic_ispr_setpend26;
+            nvic_ispr_setpend25;
+            nvic_ispr_setpend24;
+            nvic_ispr_setpend23;
+            nvic_ispr_setpend22;
+            nvic_ispr_setpend21;
+            nvic_ispr_setpend20;
+            nvic_ispr_setpend19;
+            nvic_ispr_setpend18;
+            nvic_ispr_setpend17;
+            nvic_ispr_setpend16;
+            nvic_ispr_setpend15;
+            nvic_ispr_setpend14;
+            nvic_ispr_setpend13;
+            nvic_ispr_setpend12;
+            nvic_ispr_setpend11;
+            nvic_ispr_setpend10;
+            nvic_ispr_setpend9;
+            nvic_ispr_setpend8;
+            nvic_ispr_setpend7;
+            nvic_ispr_setpend6;
+            nvic_ispr_setpend5;
+            nvic_ispr_setpend4;
+            nvic_ispr_setpend3;
+            nvic_ispr_setpend2;
+            nvic_ispr_setpend1;
+            nvic_ispr_setpend0;
+            nvic_icpr_clrpend31;
+            nvic_icpr_clrpend30;
+            nvic_icpr_clrpend29;
+            nvic_icpr_clrpend28;
+            nvic_icpr_clrpend27;
+            nvic_icpr_clrpend26;
+            nvic_icpr_clrpend25;
+            nvic_icpr_clrpend24;
+            nvic_icpr_clrpend23;
+            nvic_icpr_clrpend22;
+            nvic_icpr_clrpend21;
+            nvic_icpr_clrpend20;
+            nvic_icpr_clrpend19;
+            nvic_icpr_clrpend18;
+            nvic_icpr_clrpend17;
+            nvic_icpr_clrpend16;
+            nvic_icpr_clrpend15;
+            nvic_icpr_clrpend14;
+            nvic_icpr_clrpend13;
+            nvic_icpr_clrpend12;
+            nvic_icpr_clrpend11;
+            nvic_icpr_clrpend10;
+            nvic_icpr_clrpend9;
+            nvic_icpr_clrpend8;
+            nvic_icpr_clrpend7;
+            nvic_icpr_clrpend6;
+            nvic_icpr_clrpend5;
+            nvic_icpr_clrpend4;
+            nvic_icpr_clrpend3;
+            nvic_icpr_clrpend2;
+            nvic_icpr_clrpend1;
+            nvic_icpr_clrpend0
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Constructors -->
+
+   <for keys="r"
+      values="
+            nvic_ipr%s_pri_nplus3;
+            nvic_ipr%s_pri_nplus2;
+            nvic_ipr%s_pri_nplus1;
+            nvic_ipr%s_pri_nplus0
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         \t    * @param value %description
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(unsigned value, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | value;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+            nvic_iser_setena31,
+            nvic_iser_setena30,
+            nvic_iser_setena29,
+            nvic_iser_setena28,
+            nvic_iser_setena27,
+            nvic_iser_setena26,
+            nvic_iser_setena25,
+            nvic_iser_setena24,
+            nvic_iser_setena23,
+            nvic_iser_setena22,
+            nvic_iser_setena21,
+            nvic_iser_setena20,
+            nvic_iser_setena19,
+            nvic_iser_setena18,
+            nvic_iser_setena17,
+            nvic_iser_setena16,
+            nvic_iser_setena15,
+            nvic_iser_setena14,
+            nvic_iser_setena13,
+            nvic_iser_setena12,
+            nvic_iser_setena11,
+            nvic_iser_setena10,
+            nvic_iser_setena9,
+            nvic_iser_setena8,
+            nvic_iser_setena7,
+            nvic_iser_setena6,
+            nvic_iser_setena5,
+            nvic_iser_setena4,
+            nvic_iser_setena3,
+            nvic_iser_setena2,
+            nvic_iser_setena1,
+            nvic_iser_setena0,
+            nvic_icer_clren31,
+            nvic_icer_clren30,
+            nvic_icer_clren29,
+            nvic_icer_clren28,
+            nvic_icer_clren27,
+            nvic_icer_clren26,
+            nvic_icer_clren25,
+            nvic_icer_clren24,
+            nvic_icer_clren23,
+            nvic_icer_clren22,
+            nvic_icer_clren21,
+            nvic_icer_clren20,
+            nvic_icer_clren19,
+            nvic_icer_clren18,
+            nvic_icer_clren17,
+            nvic_icer_clren16,
+            nvic_icer_clren15,
+            nvic_icer_clren14,
+            nvic_icer_clren13,
+            nvic_icer_clren12,
+            nvic_icer_clren11,
+            nvic_icer_clren10,
+            nvic_icer_clren9,
+            nvic_icer_clren8,
+            nvic_icer_clren7,
+            nvic_icer_clren6,
+            nvic_icer_clren5,
+            nvic_icer_clren4,
+            nvic_icer_clren3,
+            nvic_icer_clren2,
+            nvic_icer_clren1,
+            nvic_icer_clren0,
+            nvic_ispr_setpend31,
+            nvic_ispr_setpend30,
+            nvic_ispr_setpend29,
+            nvic_ispr_setpend28,
+            nvic_ispr_setpend27,
+            nvic_ispr_setpend26,
+            nvic_ispr_setpend25,
+            nvic_ispr_setpend24,
+            nvic_ispr_setpend23,
+            nvic_ispr_setpend22,
+            nvic_ispr_setpend21,
+            nvic_ispr_setpend20,
+            nvic_ispr_setpend19,
+            nvic_ispr_setpend18,
+            nvic_ispr_setpend17,
+            nvic_ispr_setpend16,
+            nvic_ispr_setpend15,
+            nvic_ispr_setpend14,
+            nvic_ispr_setpend13,
+            nvic_ispr_setpend12,
+            nvic_ispr_setpend11,
+            nvic_ispr_setpend10,
+            nvic_ispr_setpend9,
+            nvic_ispr_setpend8,
+            nvic_ispr_setpend7,
+            nvic_ispr_setpend6,
+            nvic_ispr_setpend5,
+            nvic_ispr_setpend4,
+            nvic_ispr_setpend3,
+            nvic_ispr_setpend2,
+            nvic_ispr_setpend1,
+            nvic_ispr_setpend0,
+            nvic_icpr_clrpend31,
+            nvic_icpr_clrpend30,
+            nvic_icpr_clrpend29,
+            nvic_icpr_clrpend28,
+            nvic_icpr_clrpend27,
+            nvic_icpr_clrpend26,
+            nvic_icpr_clrpend25,
+            nvic_icpr_clrpend24,
+            nvic_icpr_clrpend23,
+            nvic_icpr_clrpend22,
+            nvic_icpr_clrpend21,
+            nvic_icpr_clrpend20,
+            nvic_icpr_clrpend19,
+            nvic_icpr_clrpend18,
+            nvic_icpr_clrpend17,
+            nvic_icpr_clrpend16,
+            nvic_icpr_clrpend15,
+            nvic_icpr_clrpend14,
+            nvic_icpr_clrpend13,
+            nvic_icpr_clrpend12,
+            nvic_icpr_clrpend11,
+            nvic_icpr_clrpend10,
+            nvic_icpr_clrpend9,
+            nvic_icpr_clrpend8,
+            nvic_icpr_clrpend7,
+            nvic_icpr_clrpend6,
+            nvic_icpr_clrpend5,
+            nvic_icpr_clrpend4,
+            nvic_icpr_clrpend3,
+            nvic_icpr_clrpend2,
+            nvic_icpr_clrpend1,
+            nvic_icpr_clrpend0
+         "
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      \t}; // $(_class)::BasicInfo::Init\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      }; // $(_class)::BasicInfo\n\n
+   ]]>
+   </template>
+
+<signals />
+
+</peripheralPage>

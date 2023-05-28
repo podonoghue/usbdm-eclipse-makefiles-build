@@ -236,7 +236,7 @@
    \t
    \t   Ticks ldval = init.ldval;
    \t   if (init.period != 0) {
-   \t      ldval = convertSecondsToTicks(init.period);
+   \t      ldval = convertSecondsToTicks(init.period)-1;
    \t   }
    \t   pit->CHANNEL[init.channelnumber].LDVAL = ldval;
    \t

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- mcm_mke02z2.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Core Platform Miscellaneous Control Module">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <xi:include href="_mapPinsOption.xml"/>
+
+   <binaryOption key="mcm_placr_esfc" condition="mcm_placr_esfc_present"
+      enumStem="McmPlacrEsfc"
+      description="Enable Stalling Flash Controller" >
+      <choice name="Disable stalling flash controller when flash is busy"  value="0" enum="DisableStallingFlashControllerWhenFlashIsBusy"/>
+      <choice name="Enable stalling flash controller when flash is busy"   value="1" enum="EnableStallingFlashControllerWhenFlashIsBusy"/>
+   </binaryOption>
+
+   <binaryOption key="mcm_placr_dfcs" condition="mcm_placr_dfcs_present"
+      enumStem="McmPlacrDfcs"
+      description="Disable Flash Controller Speculation" >
+      <choice name="Enable flash controller speculation"   value="0" enum="EnableFlashControllerSpeculation"/>
+      <choice name="Disable flash controller speculation"  value="1" enum="DisableFlashControllerSpeculation"/>
+   </binaryOption>
+
+   <binaryOption key="mcm_placr_efds" condition="mcm_placr_efds_present"
+      enumStem="McmPlacrEfds"
+      description="Enable Flash Data Speculation" >
+      <choice name="Disable flash data speculation"  value="0" enum="DisableFlashDataSpeculation"/>
+      <choice name="Enable flash data speculation"   value="1" enum="EnableFlashDataSpeculation"/>
+   </binaryOption>
+
+   <binaryOption key="mcm_placr_dfcc" condition="mcm_placr_dfcc_present"
+      enumStem="McmPlacrDfcc"
+      description="Disable Flash Controller Cache" >
+      <choice name="Enable flash controller cache"   value="0" enum="EnableFlashControllerCache"/>
+      <choice name="Disable flash controller cache"  value="1" enum="DisableFlashControllerCache"/>
+   </binaryOption>
+
+   <binaryOption key="mcm_placr_dfcic" condition="mcm_placr_dfcic_present"
+      enumStem="McmPlacrDfcic"
+      description="Disable Flash Controller Instruction Caching" >
+      <choice name="Enable flash controller instruction caching"   value="0" enum="EnableFlashControllerInstructionCaching"/>
+      <choice name="Disable flash controller instruction caching"  value="1" enum="DisableFlashControllerInstructionCaching"/>
+   </binaryOption>
+
+   <binaryOption key="mcm_placr_dfcda" condition="mcm_placr_dfcda_present"
+      enumStem="McmPlacrDfcda"
+      description="Disable Flash Controller Data Caching" >
+      <choice name="Enable flash controller data caching"   value="0" enum="EnableFlashControllerDataCaching"/>
+      <choice name="Disable flash controller data caching"  value="1" enum="DisableFlashControllerDataCaching"/>
+   </binaryOption>
+
+   <intOption key="mcm_placr_cfcc" condition="mcm_placr_cfcc_present"
+      description="Clear Flash Controller Cache"
+   />
+
+<!-- Grahic here -->  
+
+   <for keys="field:name"
+        values="
+      mcm_placr_esfc:PlacrEsfc;
+      mcm_placr_dfcs:PlacrDfcs;
+      mcm_placr_efds:PlacrEfds;
+      mcm_placr_dfcc:PlacrDfcc;
+      mcm_placr_dfcic:PlacrDfcic;
+      mcm_placr_dfcda:PlacrDfcda">
+      <setTemplate variables="%(field)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void configure%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}\n\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== MCM Init class =============================== -->
+
+   <template key="init_description" namespace="all">
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_class)::Init init {
+      \t *
+      \t *   // Setup values
+      \t *   McmPlacrEsfc_DisableStallingFlashControllerWhenFlashIsBusy    // Enable Stalling Flash Controller,
+      \t *   McmPlacrDfcs_EnableFlashControllerSpeculation    // Disable Flash Controller Speculation,
+      \t *   McmPlacrEfds_DisableFlashDataSpeculation    // Enable Flash Data Speculation,
+      \t *   McmPlacrDfcc_EnableFlashControllerCache    // Disable Flash Controller Cache,
+      \t *   McmPlacrDfcic_EnableFlashControllerInstructionCaching    // Disable Flash Controller Instruction Caching,
+      \t *   McmPlacrDfcda_EnableFlashControllerDataCaching    // Disable Flash Controller Data Caching,
+      \t *   0,                                        // Clear Flash Controller Cache,
+      \t * };
+      \t *
+      \t * // Initialise $(_class) from values specified above
+      \t * $(_class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <initialValueTemplate namespace="usbdm"
+      variables="mcm_placr_esfc,mcm_placr_dfcs,mcm_placr_efds,mcm_placr_dfcc,mcm_placr_dfcic,mcm_placr_dfcda,mcm_placr_cfcc"
+   ><![CDATA[
+      \t   /// Platform Control Register
+      \t   uint32_t placr = 0;\n\n
+   ]]></initialValueTemplate>
+
+<!--   Configure methods -->
+
+   <template discardRepeats="true" key="/MCM/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure MCM from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t   enable();
+      \t
+      \t   mcm->PLACR    = init.placr;
+      \t
+      \t   calibrate();
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n
+   ]]></template>
+
+<!--   Constructors -->
+
+   <for keys="r"
+      values="
+            mcm_placr_esfc;
+            mcm_placr_dfcs;
+            mcm_placr_efds;
+            mcm_placr_dfcc;
+            mcm_placr_dfcic;
+            mcm_placr_dfcda
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Constructors -->
+
+   <for keys="r"
+      values="
+            mcm_placr_cfcc
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         \t    * @param value %description
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(unsigned value, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | value;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+            mcm_placr_esfc,
+            mcm_placr_dfcs,
+            mcm_placr_efds,
+            mcm_placr_dfcc,
+            mcm_placr_dfcic,
+            mcm_placr_dfcda
+         "
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      \t}; // $(_class)::BasicInfo::Init\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      }; // $(_class)::BasicInfo\n\n
+   ]]>
+   </template>
+
+<signals />
+
+</peripheralPage>

@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE02Z2
       MKE02Z4
       MKE04Z4
@@ -43,12 +43,12 @@ This read/write control field selects either edge-only detection or edge-and-lev
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Falling/rising edges</description>
+                           <description>Edge only</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Falling/rising edges and low/high levels</description>
+                           <description>Edge and level</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -62,12 +62,12 @@ This read/write control field determines whether IRQ events (IRQF=1) generate an
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupt disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Interrupt enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -98,12 +98,12 @@ IRQF cannot be cleared while the IRQ pin remains at its asserted level</descript
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No IRQ request</description>
+                           <description>No request</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>IRQ event is detected</description>
+                           <description>Pending</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -116,12 +116,12 @@ IRQF cannot be cleared while the IRQ pin remains at its asserted level</descript
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>IRQ pin function is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>IRQ pin function is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -134,30 +134,31 @@ IRQF cannot be cleared while the IRQ pin remains at its asserted level</descript
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>IRQ is falling-edge (and low-level) sensitive</description>
+                           <description>Falling-edge/low-level</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>IRQ is rising-edge (and high-level) sensitive</description>
+                           <description>Rising-edge/high-level</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>IRQPDD</name>
-                     <description>Interrupt Request (IRQ) Pull Device Disable</description>
+                     <description>Interrupt Request (IRQ) Pull Device Disable\n
+This only has effect when IRQPE = 1</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>IRQ pull device enabled if IRQPE = 1</description>
+                           <description>Enabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>IRQ pull device disabled if IRQPE = 1</description>
+                           <description>Disabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

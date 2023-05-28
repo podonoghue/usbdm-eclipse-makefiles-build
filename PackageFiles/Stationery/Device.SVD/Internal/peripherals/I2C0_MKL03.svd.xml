@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKL03Z4
 -->
       <peripheral>
@@ -511,7 +511,7 @@ NOTE: To clear the detection interrupt: In the interrupt service routine, first 
                   </field>
                   <field>
                      <name>STOPF</name>
-                     <description>Bus Stop Detect Flag: 
+                     <description>Bus Stop Detect Flag:
 Hardware sets this bit when the I2C bus&apos;s stop status is detected. The STOPF bit must be cleared by
 writing 1 to it</description>
                      <bitOffset>6</bitOffset>
@@ -574,7 +574,8 @@ Set this bit to hold off entry to stop mode when any data transmission or recept
                <fields>
                   <field>
                      <name>SHTF2IE</name>
-                     <description>SHTF2 Interrupt Enable\nEnables SCL high and SDA low timeout interrupt</description>
+                     <description>SHTF2 Interrupt Enable\n
+Enables SCL high and SDA low timeout interrupt</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -655,7 +656,8 @@ Selects the clock source of the timeout counter</description>
                   </field>
                   <field>
                      <name>SIICAEN</name>
-                     <description>Second I2C Address Enable\nEnables or disables SMBus device default address</description>
+                     <description>Second I2C Address Enable\n
+Enables or disables SMBus device default address</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -673,7 +675,8 @@ Selects the clock source of the timeout counter</description>
                   </field>
                   <field>
                      <name>ALERTEN</name>
-                     <description>SMBus Alert Response Address Enable\nEnables or disables SMBus alert response address matching</description>
+                     <description>SMBus Alert Response Address Enable\n
+Enables or disables SMBus alert response address matching</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>

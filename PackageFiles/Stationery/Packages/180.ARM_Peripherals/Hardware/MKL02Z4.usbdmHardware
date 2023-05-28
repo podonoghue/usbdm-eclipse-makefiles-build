@@ -38,13 +38,13 @@
          <param name="adc_clp4_clp4_present" key="/ADC0/adc_clp4_clp4_present" value="true" />
          <param name="adc_clpd_clpd_present" key="/ADC0/adc_clpd_clpd_present" value="true" />
          <param name="adc_clps_clps_present" key="/ADC0/adc_clps_clps_present" value="true" />
-         <param name="adc_cv%s_cv_present" key="/ADC0/adc_cv%s_cv_present" value="true" />
+         <param name="adc_cv_cv_present" key="/ADC0/adc_cv_cv_present" value="true" />
          <param name="adc_ofs_ofs_present" key="/ADC0/adc_ofs_ofs_present" value="true" />
          <param name="adc_pg_pg_present" key="/ADC0/adc_pg_pg_present" value="true" />
-         <param name="adc_r%s_d_present" key="/ADC0/adc_r%s_d_present" value="true" />
-         <param name="adc_sc1%s_adch_present" key="/ADC0/adc_sc1%s_adch_present" value="true" />
-         <param name="adc_sc1%s_aien_present" key="/ADC0/adc_sc1%s_aien_present" value="true" />
-         <param name="adc_sc1%s_coco_present" key="/ADC0/adc_sc1%s_coco_present" value="true" />
+         <param name="adc_r_d_present" key="/ADC0/adc_r_d_present" value="true" />
+         <param name="adc_sc1_adch_present" key="/ADC0/adc_sc1_adch_present" value="true" />
+         <param name="adc_sc1_aien_present" key="/ADC0/adc_sc1_aien_present" value="true" />
+         <param name="adc_sc1_coco_present" key="/ADC0/adc_sc1_coco_present" value="true" />
          <param name="adc_sc2_acfe_present" key="/ADC0/adc_sc2_acfe_present" value="true" />
          <param name="adc_sc2_acfgt_present" key="/ADC0/adc_sc2_acfgt_present" value="true" />
          <param name="adc_sc2_acren_present" key="/ADC0/adc_sc2_acren_present" value="true" />
@@ -123,11 +123,75 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_I2C0_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_I2C0_MASK;" />
          <irq num="I2C0_IRQn" />
+         <param name="$present"     key="/I2C0/$present" value="true" />
+         <param name="i2c_a1_ad_present" key="/I2C0/i2c_a1_ad_present" value="true" />
+         <param name="i2c_c1_iicen_present" key="/I2C0/i2c_c1_iicen_present" value="true" />
+         <param name="i2c_c1_iicie_present" key="/I2C0/i2c_c1_iicie_present" value="true" />
+         <param name="i2c_c1_mst_present" key="/I2C0/i2c_c1_mst_present" value="true" />
+         <param name="i2c_c1_rsta_present" key="/I2C0/i2c_c1_rsta_present" value="true" />
+         <param name="i2c_c1_tx_present" key="/I2C0/i2c_c1_tx_present" value="true" />
+         <param name="i2c_c1_txak_present" key="/I2C0/i2c_c1_txak_present" value="true" />
+         <param name="i2c_c1_wuen_present" key="/I2C0/i2c_c1_wuen_present" value="true" />
+         <param name="i2c_c2_ad_present" key="/I2C0/i2c_c2_ad_present" value="true" />
+         <param name="i2c_c2_adext_present" key="/I2C0/i2c_c2_adext_present" value="true" />
+         <param name="i2c_c2_gcaen_present" key="/I2C0/i2c_c2_gcaen_present" value="true" />
+         <param name="i2c_c2_hdrs_present" key="/I2C0/i2c_c2_hdrs_present" value="true" />
+         <param name="i2c_c2_rmen_present" key="/I2C0/i2c_c2_rmen_present" value="true" />
+         <param name="i2c_c2_sbrc_present" key="/I2C0/i2c_c2_sbrc_present" value="true" />
+         <param name="i2c_d_data_present" key="/I2C0/i2c_d_data_present" value="true" />
+         <param name="i2c_f_icr_present" key="/I2C0/i2c_f_icr_present" value="true" />
+         <param name="i2c_f_mult_present" key="/I2C0/i2c_f_mult_present" value="true" />
+         <param name="i2c_flt_flt_present" key="/I2C0/i2c_flt_flt_present" value="true" />
+         <param name="i2c_flt_shen_present" key="/I2C0/i2c_flt_shen_present" value="true" />
+         <param name="i2c_flt_ssie_present" key="/I2C0/i2c_flt_ssie_present" value="true" />
+         <param name="i2c_flt_startf_present" key="/I2C0/i2c_flt_startf_present" value="true" />
+         <param name="i2c_flt_stopf_present" key="/I2C0/i2c_flt_stopf_present" value="true" />
+         <param name="i2c_ra_rad_present" key="/I2C0/i2c_ra_rad_present" value="true" />
+         <param name="i2c_s_arbl_present" key="/I2C0/i2c_s_arbl_present" value="true" />
+         <param name="i2c_s_busy_present" key="/I2C0/i2c_s_busy_present" value="true" />
+         <param name="i2c_s_iaas_present" key="/I2C0/i2c_s_iaas_present" value="true" />
+         <param name="i2c_s_iicif_present" key="/I2C0/i2c_s_iicif_present" value="true" />
+         <param name="i2c_s_ram_present" key="/I2C0/i2c_s_ram_present" value="true" />
+         <param name="i2c_s_rxak_present" key="/I2C0/i2c_s_rxak_present" value="true" />
+         <param name="i2c_s_srw_present" key="/I2C0/i2c_s_srw_present" value="true" />
+         <param name="i2c_s_tcf_present" key="/I2C0/i2c_s_tcf_present" value="true" />
       </peripheral>
       <peripheral baseName="I2C"      instance="1"        version="i2c0_mkl">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_I2C1_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_I2C1_MASK;" />
          <irq num="I2C1_IRQn" />
+         <param name="$present"     key="/I2C1/$present" value="true" />
+         <param name="i2c_a1_ad_present" key="/I2C1/i2c_a1_ad_present" value="true" />
+         <param name="i2c_c1_iicen_present" key="/I2C1/i2c_c1_iicen_present" value="true" />
+         <param name="i2c_c1_iicie_present" key="/I2C1/i2c_c1_iicie_present" value="true" />
+         <param name="i2c_c1_mst_present" key="/I2C1/i2c_c1_mst_present" value="true" />
+         <param name="i2c_c1_rsta_present" key="/I2C1/i2c_c1_rsta_present" value="true" />
+         <param name="i2c_c1_tx_present" key="/I2C1/i2c_c1_tx_present" value="true" />
+         <param name="i2c_c1_txak_present" key="/I2C1/i2c_c1_txak_present" value="true" />
+         <param name="i2c_c1_wuen_present" key="/I2C1/i2c_c1_wuen_present" value="true" />
+         <param name="i2c_c2_ad_present" key="/I2C1/i2c_c2_ad_present" value="true" />
+         <param name="i2c_c2_adext_present" key="/I2C1/i2c_c2_adext_present" value="true" />
+         <param name="i2c_c2_gcaen_present" key="/I2C1/i2c_c2_gcaen_present" value="true" />
+         <param name="i2c_c2_hdrs_present" key="/I2C1/i2c_c2_hdrs_present" value="true" />
+         <param name="i2c_c2_rmen_present" key="/I2C1/i2c_c2_rmen_present" value="true" />
+         <param name="i2c_c2_sbrc_present" key="/I2C1/i2c_c2_sbrc_present" value="true" />
+         <param name="i2c_d_data_present" key="/I2C1/i2c_d_data_present" value="true" />
+         <param name="i2c_f_icr_present" key="/I2C1/i2c_f_icr_present" value="true" />
+         <param name="i2c_f_mult_present" key="/I2C1/i2c_f_mult_present" value="true" />
+         <param name="i2c_flt_flt_present" key="/I2C1/i2c_flt_flt_present" value="true" />
+         <param name="i2c_flt_shen_present" key="/I2C1/i2c_flt_shen_present" value="true" />
+         <param name="i2c_flt_ssie_present" key="/I2C1/i2c_flt_ssie_present" value="true" />
+         <param name="i2c_flt_startf_present" key="/I2C1/i2c_flt_startf_present" value="true" />
+         <param name="i2c_flt_stopf_present" key="/I2C1/i2c_flt_stopf_present" value="true" />
+         <param name="i2c_ra_rad_present" key="/I2C1/i2c_ra_rad_present" value="true" />
+         <param name="i2c_s_arbl_present" key="/I2C1/i2c_s_arbl_present" value="true" />
+         <param name="i2c_s_busy_present" key="/I2C1/i2c_s_busy_present" value="true" />
+         <param name="i2c_s_iaas_present" key="/I2C1/i2c_s_iaas_present" value="true" />
+         <param name="i2c_s_iicif_present" key="/I2C1/i2c_s_iicif_present" value="true" />
+         <param name="i2c_s_ram_present" key="/I2C1/i2c_s_ram_present" value="true" />
+         <param name="i2c_s_rxak_present" key="/I2C1/i2c_s_rxak_present" value="true" />
+         <param name="i2c_s_srw_present" key="/I2C1/i2c_s_srw_present" value="true" />
+         <param name="i2c_s_tcf_present" key="/I2C1/i2c_s_tcf_present" value="true" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
@@ -399,7 +463,7 @@
          <param name="uart_c5_bothedge_present" key="/UART0/uart_c5_bothedge_present" value="true" />
          <param name="uart_c5_resyncdis_present" key="/UART0/uart_c5_resyncdis_present" value="true" />
          <param name="uart_d_rt_present" key="/UART0/uart_d_rt_present" value="true" />
-         <param name="uart_ma%s_ma_present" key="/UART0/uart_ma%s_ma_present" value="true" />
+         <param name="uart_ma_ma_present" key="/UART0/uart_ma_ma_present" value="true" />
          <param name="uart_s1_fe_present" key="/UART0/uart_s1_fe_present" value="true" />
          <param name="uart_s1_idle_present" key="/UART0/uart_s1_idle_present" value="true" />
          <param name="uart_s1_nf_present" key="/UART0/uart_s1_nf_present" value="true" />

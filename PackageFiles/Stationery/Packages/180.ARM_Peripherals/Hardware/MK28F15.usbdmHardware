@@ -40,15 +40,15 @@
          <param name="adc_clp4_clp4_present" key="/ADC0/adc_clp4_clp4_present" value="true" />
          <param name="adc_clpd_clpd_present" key="/ADC0/adc_clpd_clpd_present" value="true" />
          <param name="adc_clps_clps_present" key="/ADC0/adc_clps_clps_present" value="true" />
-         <param name="adc_cv%s_cv_present" key="/ADC0/adc_cv%s_cv_present" value="true" />
+         <param name="adc_cv_cv_present" key="/ADC0/adc_cv_cv_present" value="true" />
          <param name="adc_mg_mg_present" key="/ADC0/adc_mg_mg_present" value="true" />
          <param name="adc_ofs_ofs_present" key="/ADC0/adc_ofs_ofs_present" value="true" />
          <param name="adc_pg_pg_present" key="/ADC0/adc_pg_pg_present" value="true" />
-         <param name="adc_r%s_d_present" key="/ADC0/adc_r%s_d_present" value="true" />
-         <param name="adc_sc1%s_adch_present" key="/ADC0/adc_sc1%s_adch_present" value="true" />
-         <param name="adc_sc1%s_aien_present" key="/ADC0/adc_sc1%s_aien_present" value="true" />
-         <param name="adc_sc1%s_coco_present" key="/ADC0/adc_sc1%s_coco_present" value="true" />
-         <param name="adc_sc1%s_diff_present" key="/ADC0/adc_sc1%s_diff_present" value="true" />
+         <param name="adc_r_d_present" key="/ADC0/adc_r_d_present" value="true" />
+         <param name="adc_sc1_adch_present" key="/ADC0/adc_sc1_adch_present" value="true" />
+         <param name="adc_sc1_aien_present" key="/ADC0/adc_sc1_aien_present" value="true" />
+         <param name="adc_sc1_coco_present" key="/ADC0/adc_sc1_coco_present" value="true" />
+         <param name="adc_sc1_diff_present" key="/ADC0/adc_sc1_diff_present" value="true" />
          <param name="adc_sc2_acfe_present" key="/ADC0/adc_sc2_acfe_present" value="true" />
          <param name="adc_sc2_acfgt_present" key="/ADC0/adc_sc2_acfgt_present" value="true" />
          <param name="adc_sc2_acren_present" key="/ADC0/adc_sc2_acren_present" value="true" />
@@ -129,6 +129,18 @@
       <peripheral baseName="CRC"      instance="0"        version="crc0_0x40032000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCrc" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_CRC_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_CRC_MASK;" />
+         <param name="$present"     key="/CRC0/$present" value="true" />
+         <param name="crc_ctrl_fxor_present" key="/CRC0/crc_ctrl_fxor_present" value="true" />
+         <param name="crc_ctrl_tcrc_present" key="/CRC0/crc_ctrl_tcrc_present" value="true" />
+         <param name="crc_ctrl_tot_present" key="/CRC0/crc_ctrl_tot_present" value="true" />
+         <param name="crc_ctrl_totr_present" key="/CRC0/crc_ctrl_totr_present" value="true" />
+         <param name="crc_ctrl_was_present" key="/CRC0/crc_ctrl_was_present" value="true" />
+         <param name="crc_data_hl_present" key="/CRC0/crc_data_hl_present" value="true" />
+         <param name="crc_data_hu_present" key="/CRC0/crc_data_hu_present" value="true" />
+         <param name="crc_data_ll_present" key="/CRC0/crc_data_ll_present" value="true" />
+         <param name="crc_data_lu_present" key="/CRC0/crc_data_lu_present" value="true" />
+         <param name="crc_gpoly_high_present" key="/CRC0/crc_gpoly_high_present" value="true" />
+         <param name="crc_gpoly_low_present" key="/CRC0/crc_gpoly_low_present" value="true" />
       </peripheral>
       <peripheral baseName="Console"  instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
@@ -604,8 +616,6 @@
          <param name="fmc_pfb23cr_b1mw_present" key="/FMC/fmc_pfb23cr_b1mw_present" value="true" />
          <param name="fmc_pfb23cr_b1rwsc_present" key="/FMC/fmc_pfb23cr_b1rwsc_present" value="true" />
          <param name="fmc_pfb23cr_rfu_present" key="/FMC/fmc_pfb23cr_rfu_present" value="true" />
-         <param name="fmc_s%s_tag_present" key="/FMC/fmc_s%s_tag_present" value="true" />
-         <param name="fmc_s%s_valid_present" key="/FMC/fmc_s%s_valid_present" value="true" />
          <param name="fmc_s0lm_data_present" key="/FMC/fmc_s0lm_data_present" value="true" />
          <param name="fmc_s0ml_data_present" key="/FMC/fmc_s0ml_data_present" value="true" />
          <param name="fmc_s0mu_data_present" key="/FMC/fmc_s0mu_data_present" value="true" />
@@ -622,6 +632,8 @@
          <param name="fmc_s3ml_data_present" key="/FMC/fmc_s3ml_data_present" value="true" />
          <param name="fmc_s3mu_data_present" key="/FMC/fmc_s3mu_data_present" value="true" />
          <param name="fmc_s3um_data_present" key="/FMC/fmc_s3um_data_present" value="true" />
+         <param name="fmc_s_tag_present" key="/FMC/fmc_s_tag_present" value="true" />
+         <param name="fmc_s_valid_present" key="/FMC/fmc_s_valid_present" value="true" />
       </peripheral>
       <peripheral baseName="FTFE"     instance=""         version="ftfe_128k_flexrom_xacch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
@@ -1278,21 +1290,205 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_I2C0_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_I2C0_MASK;" />
          <irq num="I2C0_IRQn" />
+         <param name="$present"     key="/I2C0/$present" value="true" />
+         <param name="i2c_a1_ad_present" key="/I2C0/i2c_a1_ad_present" value="true" />
+         <param name="i2c_a2_sad_present" key="/I2C0/i2c_a2_sad_present" value="true" />
+         <param name="i2c_c1_dmaen_present" key="/I2C0/i2c_c1_dmaen_present" value="true" />
+         <param name="i2c_c1_iicen_present" key="/I2C0/i2c_c1_iicen_present" value="true" />
+         <param name="i2c_c1_iicie_present" key="/I2C0/i2c_c1_iicie_present" value="true" />
+         <param name="i2c_c1_mst_present" key="/I2C0/i2c_c1_mst_present" value="true" />
+         <param name="i2c_c1_rsta_present" key="/I2C0/i2c_c1_rsta_present" value="true" />
+         <param name="i2c_c1_tx_present" key="/I2C0/i2c_c1_tx_present" value="true" />
+         <param name="i2c_c1_txak_present" key="/I2C0/i2c_c1_txak_present" value="true" />
+         <param name="i2c_c1_wuen_present" key="/I2C0/i2c_c1_wuen_present" value="true" />
+         <param name="i2c_c2_ad_present" key="/I2C0/i2c_c2_ad_present" value="true" />
+         <param name="i2c_c2_adext_present" key="/I2C0/i2c_c2_adext_present" value="true" />
+         <param name="i2c_c2_gcaen_present" key="/I2C0/i2c_c2_gcaen_present" value="true" />
+         <param name="i2c_c2_hdrs_present" key="/I2C0/i2c_c2_hdrs_present" value="true" />
+         <param name="i2c_c2_rmen_present" key="/I2C0/i2c_c2_rmen_present" value="true" />
+         <param name="i2c_c2_sbrc_present" key="/I2C0/i2c_c2_sbrc_present" value="true" />
+         <param name="i2c_d_data_present" key="/I2C0/i2c_d_data_present" value="true" />
+         <param name="i2c_f_icr_present" key="/I2C0/i2c_f_icr_present" value="true" />
+         <param name="i2c_f_mult_present" key="/I2C0/i2c_f_mult_present" value="true" />
+         <param name="i2c_flt_flt_present" key="/I2C0/i2c_flt_flt_present" value="true" />
+         <param name="i2c_flt_shen_present" key="/I2C0/i2c_flt_shen_present" value="true" />
+         <param name="i2c_flt_ssie_present" key="/I2C0/i2c_flt_ssie_present" value="true" />
+         <param name="i2c_flt_startf_present" key="/I2C0/i2c_flt_startf_present" value="true" />
+         <param name="i2c_flt_stopf_present" key="/I2C0/i2c_flt_stopf_present" value="true" />
+         <param name="i2c_ra_rad_present" key="/I2C0/i2c_ra_rad_present" value="true" />
+         <param name="i2c_s2_empty_present" key="/I2C0/i2c_s2_empty_present" value="true" />
+         <param name="i2c_s2_error_present" key="/I2C0/i2c_s2_error_present" value="true" />
+         <param name="i2c_s_arbl_present" key="/I2C0/i2c_s_arbl_present" value="true" />
+         <param name="i2c_s_busy_present" key="/I2C0/i2c_s_busy_present" value="true" />
+         <param name="i2c_s_iaas_present" key="/I2C0/i2c_s_iaas_present" value="true" />
+         <param name="i2c_s_iicif_present" key="/I2C0/i2c_s_iicif_present" value="true" />
+         <param name="i2c_s_ram_present" key="/I2C0/i2c_s_ram_present" value="true" />
+         <param name="i2c_s_rxak_present" key="/I2C0/i2c_s_rxak_present" value="true" />
+         <param name="i2c_s_srw_present" key="/I2C0/i2c_s_srw_present" value="true" />
+         <param name="i2c_s_tcf_present" key="/I2C0/i2c_s_tcf_present" value="true" />
+         <param name="i2c_slth_sslt_present" key="/I2C0/i2c_slth_sslt_present" value="true" />
+         <param name="i2c_sltl_sslt_present" key="/I2C0/i2c_sltl_sslt_present" value="true" />
+         <param name="i2c_smb_alerten_present" key="/I2C0/i2c_smb_alerten_present" value="true" />
+         <param name="i2c_smb_fack_present" key="/I2C0/i2c_smb_fack_present" value="true" />
+         <param name="i2c_smb_shtf1_present" key="/I2C0/i2c_smb_shtf1_present" value="true" />
+         <param name="i2c_smb_shtf2_present" key="/I2C0/i2c_smb_shtf2_present" value="true" />
+         <param name="i2c_smb_shtf2ie_present" key="/I2C0/i2c_smb_shtf2ie_present" value="true" />
+         <param name="i2c_smb_siicaen_present" key="/I2C0/i2c_smb_siicaen_present" value="true" />
+         <param name="i2c_smb_sltf_present" key="/I2C0/i2c_smb_sltf_present" value="true" />
+         <param name="i2c_smb_tcksel_present" key="/I2C0/i2c_smb_tcksel_present" value="true" />
       </peripheral>
       <peripheral baseName="I2C"      instance="1"        version="i2c0_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_I2C1_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_I2C1_MASK;" />
          <irq num="I2C1_IRQn" />
+         <param name="$present"     key="/I2C1/$present" value="true" />
+         <param name="i2c_a1_ad_present" key="/I2C1/i2c_a1_ad_present" value="true" />
+         <param name="i2c_a2_sad_present" key="/I2C1/i2c_a2_sad_present" value="true" />
+         <param name="i2c_c1_dmaen_present" key="/I2C1/i2c_c1_dmaen_present" value="true" />
+         <param name="i2c_c1_iicen_present" key="/I2C1/i2c_c1_iicen_present" value="true" />
+         <param name="i2c_c1_iicie_present" key="/I2C1/i2c_c1_iicie_present" value="true" />
+         <param name="i2c_c1_mst_present" key="/I2C1/i2c_c1_mst_present" value="true" />
+         <param name="i2c_c1_rsta_present" key="/I2C1/i2c_c1_rsta_present" value="true" />
+         <param name="i2c_c1_tx_present" key="/I2C1/i2c_c1_tx_present" value="true" />
+         <param name="i2c_c1_txak_present" key="/I2C1/i2c_c1_txak_present" value="true" />
+         <param name="i2c_c1_wuen_present" key="/I2C1/i2c_c1_wuen_present" value="true" />
+         <param name="i2c_c2_ad_present" key="/I2C1/i2c_c2_ad_present" value="true" />
+         <param name="i2c_c2_adext_present" key="/I2C1/i2c_c2_adext_present" value="true" />
+         <param name="i2c_c2_gcaen_present" key="/I2C1/i2c_c2_gcaen_present" value="true" />
+         <param name="i2c_c2_hdrs_present" key="/I2C1/i2c_c2_hdrs_present" value="true" />
+         <param name="i2c_c2_rmen_present" key="/I2C1/i2c_c2_rmen_present" value="true" />
+         <param name="i2c_c2_sbrc_present" key="/I2C1/i2c_c2_sbrc_present" value="true" />
+         <param name="i2c_d_data_present" key="/I2C1/i2c_d_data_present" value="true" />
+         <param name="i2c_f_icr_present" key="/I2C1/i2c_f_icr_present" value="true" />
+         <param name="i2c_f_mult_present" key="/I2C1/i2c_f_mult_present" value="true" />
+         <param name="i2c_flt_flt_present" key="/I2C1/i2c_flt_flt_present" value="true" />
+         <param name="i2c_flt_shen_present" key="/I2C1/i2c_flt_shen_present" value="true" />
+         <param name="i2c_flt_ssie_present" key="/I2C1/i2c_flt_ssie_present" value="true" />
+         <param name="i2c_flt_startf_present" key="/I2C1/i2c_flt_startf_present" value="true" />
+         <param name="i2c_flt_stopf_present" key="/I2C1/i2c_flt_stopf_present" value="true" />
+         <param name="i2c_ra_rad_present" key="/I2C1/i2c_ra_rad_present" value="true" />
+         <param name="i2c_s2_empty_present" key="/I2C1/i2c_s2_empty_present" value="true" />
+         <param name="i2c_s2_error_present" key="/I2C1/i2c_s2_error_present" value="true" />
+         <param name="i2c_s_arbl_present" key="/I2C1/i2c_s_arbl_present" value="true" />
+         <param name="i2c_s_busy_present" key="/I2C1/i2c_s_busy_present" value="true" />
+         <param name="i2c_s_iaas_present" key="/I2C1/i2c_s_iaas_present" value="true" />
+         <param name="i2c_s_iicif_present" key="/I2C1/i2c_s_iicif_present" value="true" />
+         <param name="i2c_s_ram_present" key="/I2C1/i2c_s_ram_present" value="true" />
+         <param name="i2c_s_rxak_present" key="/I2C1/i2c_s_rxak_present" value="true" />
+         <param name="i2c_s_srw_present" key="/I2C1/i2c_s_srw_present" value="true" />
+         <param name="i2c_s_tcf_present" key="/I2C1/i2c_s_tcf_present" value="true" />
+         <param name="i2c_slth_sslt_present" key="/I2C1/i2c_slth_sslt_present" value="true" />
+         <param name="i2c_sltl_sslt_present" key="/I2C1/i2c_sltl_sslt_present" value="true" />
+         <param name="i2c_smb_alerten_present" key="/I2C1/i2c_smb_alerten_present" value="true" />
+         <param name="i2c_smb_fack_present" key="/I2C1/i2c_smb_fack_present" value="true" />
+         <param name="i2c_smb_shtf1_present" key="/I2C1/i2c_smb_shtf1_present" value="true" />
+         <param name="i2c_smb_shtf2_present" key="/I2C1/i2c_smb_shtf2_present" value="true" />
+         <param name="i2c_smb_shtf2ie_present" key="/I2C1/i2c_smb_shtf2ie_present" value="true" />
+         <param name="i2c_smb_siicaen_present" key="/I2C1/i2c_smb_siicaen_present" value="true" />
+         <param name="i2c_smb_sltf_present" key="/I2C1/i2c_smb_sltf_present" value="true" />
+         <param name="i2c_smb_tcksel_present" key="/I2C1/i2c_smb_tcksel_present" value="true" />
       </peripheral>
       <peripheral baseName="I2C"      instance="2"        version="i2c0_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
          <clock clockEnable="SIM->SCGC1 = SIM->SCGC1 | SIM_SCGC1_I2C2_MASK;" clockDisable="SIM->SCGC1 = SIM->SCGC1 &amp; ~SIM_SCGC1_I2C2_MASK;" />
          <irq num="I2C2_IRQn" />
+         <param name="$present"     key="/I2C2/$present" value="true" />
+         <param name="i2c_a1_ad_present" key="/I2C2/i2c_a1_ad_present" value="true" />
+         <param name="i2c_a2_sad_present" key="/I2C2/i2c_a2_sad_present" value="true" />
+         <param name="i2c_c1_dmaen_present" key="/I2C2/i2c_c1_dmaen_present" value="true" />
+         <param name="i2c_c1_iicen_present" key="/I2C2/i2c_c1_iicen_present" value="true" />
+         <param name="i2c_c1_iicie_present" key="/I2C2/i2c_c1_iicie_present" value="true" />
+         <param name="i2c_c1_mst_present" key="/I2C2/i2c_c1_mst_present" value="true" />
+         <param name="i2c_c1_rsta_present" key="/I2C2/i2c_c1_rsta_present" value="true" />
+         <param name="i2c_c1_tx_present" key="/I2C2/i2c_c1_tx_present" value="true" />
+         <param name="i2c_c1_txak_present" key="/I2C2/i2c_c1_txak_present" value="true" />
+         <param name="i2c_c1_wuen_present" key="/I2C2/i2c_c1_wuen_present" value="true" />
+         <param name="i2c_c2_ad_present" key="/I2C2/i2c_c2_ad_present" value="true" />
+         <param name="i2c_c2_adext_present" key="/I2C2/i2c_c2_adext_present" value="true" />
+         <param name="i2c_c2_gcaen_present" key="/I2C2/i2c_c2_gcaen_present" value="true" />
+         <param name="i2c_c2_hdrs_present" key="/I2C2/i2c_c2_hdrs_present" value="true" />
+         <param name="i2c_c2_rmen_present" key="/I2C2/i2c_c2_rmen_present" value="true" />
+         <param name="i2c_c2_sbrc_present" key="/I2C2/i2c_c2_sbrc_present" value="true" />
+         <param name="i2c_d_data_present" key="/I2C2/i2c_d_data_present" value="true" />
+         <param name="i2c_f_icr_present" key="/I2C2/i2c_f_icr_present" value="true" />
+         <param name="i2c_f_mult_present" key="/I2C2/i2c_f_mult_present" value="true" />
+         <param name="i2c_flt_flt_present" key="/I2C2/i2c_flt_flt_present" value="true" />
+         <param name="i2c_flt_shen_present" key="/I2C2/i2c_flt_shen_present" value="true" />
+         <param name="i2c_flt_ssie_present" key="/I2C2/i2c_flt_ssie_present" value="true" />
+         <param name="i2c_flt_startf_present" key="/I2C2/i2c_flt_startf_present" value="true" />
+         <param name="i2c_flt_stopf_present" key="/I2C2/i2c_flt_stopf_present" value="true" />
+         <param name="i2c_ra_rad_present" key="/I2C2/i2c_ra_rad_present" value="true" />
+         <param name="i2c_s2_empty_present" key="/I2C2/i2c_s2_empty_present" value="true" />
+         <param name="i2c_s2_error_present" key="/I2C2/i2c_s2_error_present" value="true" />
+         <param name="i2c_s_arbl_present" key="/I2C2/i2c_s_arbl_present" value="true" />
+         <param name="i2c_s_busy_present" key="/I2C2/i2c_s_busy_present" value="true" />
+         <param name="i2c_s_iaas_present" key="/I2C2/i2c_s_iaas_present" value="true" />
+         <param name="i2c_s_iicif_present" key="/I2C2/i2c_s_iicif_present" value="true" />
+         <param name="i2c_s_ram_present" key="/I2C2/i2c_s_ram_present" value="true" />
+         <param name="i2c_s_rxak_present" key="/I2C2/i2c_s_rxak_present" value="true" />
+         <param name="i2c_s_srw_present" key="/I2C2/i2c_s_srw_present" value="true" />
+         <param name="i2c_s_tcf_present" key="/I2C2/i2c_s_tcf_present" value="true" />
+         <param name="i2c_slth_sslt_present" key="/I2C2/i2c_slth_sslt_present" value="true" />
+         <param name="i2c_sltl_sslt_present" key="/I2C2/i2c_sltl_sslt_present" value="true" />
+         <param name="i2c_smb_alerten_present" key="/I2C2/i2c_smb_alerten_present" value="true" />
+         <param name="i2c_smb_fack_present" key="/I2C2/i2c_smb_fack_present" value="true" />
+         <param name="i2c_smb_shtf1_present" key="/I2C2/i2c_smb_shtf1_present" value="true" />
+         <param name="i2c_smb_shtf2_present" key="/I2C2/i2c_smb_shtf2_present" value="true" />
+         <param name="i2c_smb_shtf2ie_present" key="/I2C2/i2c_smb_shtf2ie_present" value="true" />
+         <param name="i2c_smb_siicaen_present" key="/I2C2/i2c_smb_siicaen_present" value="true" />
+         <param name="i2c_smb_sltf_present" key="/I2C2/i2c_smb_sltf_present" value="true" />
+         <param name="i2c_smb_tcksel_present" key="/I2C2/i2c_smb_tcksel_present" value="true" />
       </peripheral>
       <peripheral baseName="I2C"      instance="3"        version="i2c0_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
          <clock clockEnable="SIM->SCGC1 = SIM->SCGC1 | SIM_SCGC1_I2C3_MASK;" clockDisable="SIM->SCGC1 = SIM->SCGC1 &amp; ~SIM_SCGC1_I2C3_MASK;" />
          <irq num="I2C3_IRQn" />
+         <param name="$present"     key="/I2C3/$present" value="true" />
+         <param name="i2c_a1_ad_present" key="/I2C3/i2c_a1_ad_present" value="true" />
+         <param name="i2c_a2_sad_present" key="/I2C3/i2c_a2_sad_present" value="true" />
+         <param name="i2c_c1_dmaen_present" key="/I2C3/i2c_c1_dmaen_present" value="true" />
+         <param name="i2c_c1_iicen_present" key="/I2C3/i2c_c1_iicen_present" value="true" />
+         <param name="i2c_c1_iicie_present" key="/I2C3/i2c_c1_iicie_present" value="true" />
+         <param name="i2c_c1_mst_present" key="/I2C3/i2c_c1_mst_present" value="true" />
+         <param name="i2c_c1_rsta_present" key="/I2C3/i2c_c1_rsta_present" value="true" />
+         <param name="i2c_c1_tx_present" key="/I2C3/i2c_c1_tx_present" value="true" />
+         <param name="i2c_c1_txak_present" key="/I2C3/i2c_c1_txak_present" value="true" />
+         <param name="i2c_c1_wuen_present" key="/I2C3/i2c_c1_wuen_present" value="true" />
+         <param name="i2c_c2_ad_present" key="/I2C3/i2c_c2_ad_present" value="true" />
+         <param name="i2c_c2_adext_present" key="/I2C3/i2c_c2_adext_present" value="true" />
+         <param name="i2c_c2_gcaen_present" key="/I2C3/i2c_c2_gcaen_present" value="true" />
+         <param name="i2c_c2_hdrs_present" key="/I2C3/i2c_c2_hdrs_present" value="true" />
+         <param name="i2c_c2_rmen_present" key="/I2C3/i2c_c2_rmen_present" value="true" />
+         <param name="i2c_c2_sbrc_present" key="/I2C3/i2c_c2_sbrc_present" value="true" />
+         <param name="i2c_d_data_present" key="/I2C3/i2c_d_data_present" value="true" />
+         <param name="i2c_f_icr_present" key="/I2C3/i2c_f_icr_present" value="true" />
+         <param name="i2c_f_mult_present" key="/I2C3/i2c_f_mult_present" value="true" />
+         <param name="i2c_flt_flt_present" key="/I2C3/i2c_flt_flt_present" value="true" />
+         <param name="i2c_flt_shen_present" key="/I2C3/i2c_flt_shen_present" value="true" />
+         <param name="i2c_flt_ssie_present" key="/I2C3/i2c_flt_ssie_present" value="true" />
+         <param name="i2c_flt_startf_present" key="/I2C3/i2c_flt_startf_present" value="true" />
+         <param name="i2c_flt_stopf_present" key="/I2C3/i2c_flt_stopf_present" value="true" />
+         <param name="i2c_ra_rad_present" key="/I2C3/i2c_ra_rad_present" value="true" />
+         <param name="i2c_s2_empty_present" key="/I2C3/i2c_s2_empty_present" value="true" />
+         <param name="i2c_s2_error_present" key="/I2C3/i2c_s2_error_present" value="true" />
+         <param name="i2c_s_arbl_present" key="/I2C3/i2c_s_arbl_present" value="true" />
+         <param name="i2c_s_busy_present" key="/I2C3/i2c_s_busy_present" value="true" />
+         <param name="i2c_s_iaas_present" key="/I2C3/i2c_s_iaas_present" value="true" />
+         <param name="i2c_s_iicif_present" key="/I2C3/i2c_s_iicif_present" value="true" />
+         <param name="i2c_s_ram_present" key="/I2C3/i2c_s_ram_present" value="true" />
+         <param name="i2c_s_rxak_present" key="/I2C3/i2c_s_rxak_present" value="true" />
+         <param name="i2c_s_srw_present" key="/I2C3/i2c_s_srw_present" value="true" />
+         <param name="i2c_s_tcf_present" key="/I2C3/i2c_s_tcf_present" value="true" />
+         <param name="i2c_slth_sslt_present" key="/I2C3/i2c_slth_sslt_present" value="true" />
+         <param name="i2c_sltl_sslt_present" key="/I2C3/i2c_sltl_sslt_present" value="true" />
+         <param name="i2c_smb_alerten_present" key="/I2C3/i2c_smb_alerten_present" value="true" />
+         <param name="i2c_smb_fack_present" key="/I2C3/i2c_smb_fack_present" value="true" />
+         <param name="i2c_smb_shtf1_present" key="/I2C3/i2c_smb_shtf1_present" value="true" />
+         <param name="i2c_smb_shtf2_present" key="/I2C3/i2c_smb_shtf2_present" value="true" />
+         <param name="i2c_smb_shtf2ie_present" key="/I2C3/i2c_smb_shtf2ie_present" value="true" />
+         <param name="i2c_smb_siicaen_present" key="/I2C3/i2c_smb_siicaen_present" value="true" />
+         <param name="i2c_smb_sltf_present" key="/I2C3/i2c_smb_sltf_present" value="true" />
+         <param name="i2c_smb_tcksel_present" key="/I2C3/i2c_smb_tcksel_present" value="true" />
       </peripheral>
       <peripheral baseName="I2S"      instance="0"        version="i2s0_2ch_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2s" />
@@ -2038,7 +2234,7 @@
          <param name="pdb_c1_en_present" key="/PDB0/pdb_c1_en_present" value="true" />
          <param name="pdb_c1_tos_present" key="/PDB0/pdb_c1_tos_present" value="true" />
          <param name="pdb_cnt_cnt_present" key="/PDB0/pdb_cnt_cnt_present" value="true" />
-         <param name="pdb_dly%s_dly_present" key="/PDB0/pdb_dly%s_dly_present" value="true" />
+         <param name="pdb_dly_dly_present" key="/PDB0/pdb_dly_dly_present" value="true" />
          <param name="pdb_idly_idly_present" key="/PDB0/pdb_idly_idly_present" value="true" />
          <param name="pdb_int_int_present" key="/PDB0/pdb_int_int_present" value="true" />
          <param name="pdb_intc_ext_present" key="/PDB0/pdb_intc_ext_present" value="true" />
@@ -2344,20 +2540,20 @@
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_SPI0_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_SPI0_MASK;" />
          <irq num="SPI0_IRQn" />
          <param name="$present"     key="/SPI0/$present" value="true" />
-         <param name="spi_ctar%s_asc_present" key="/SPI0/spi_ctar%s_asc_present" value="true" />
-         <param name="spi_ctar%s_br_present" key="/SPI0/spi_ctar%s_br_present" value="true" />
-         <param name="spi_ctar%s_cpha_present" key="/SPI0/spi_ctar%s_cpha_present" value="true" />
-         <param name="spi_ctar%s_cpol_present" key="/SPI0/spi_ctar%s_cpol_present" value="true" />
-         <param name="spi_ctar%s_cssck_present" key="/SPI0/spi_ctar%s_cssck_present" value="true" />
-         <param name="spi_ctar%s_dbr_present" key="/SPI0/spi_ctar%s_dbr_present" value="true" />
-         <param name="spi_ctar%s_dt_present" key="/SPI0/spi_ctar%s_dt_present" value="true" />
-         <param name="spi_ctar%s_fmsz_present" key="/SPI0/spi_ctar%s_fmsz_present" value="true" />
-         <param name="spi_ctar%s_lsbfe_present" key="/SPI0/spi_ctar%s_lsbfe_present" value="true" />
-         <param name="spi_ctar%s_mode_present" key="/SPI0/spi_ctar%s_mode_present" value="true" />
-         <param name="spi_ctar%s_pasc_present" key="/SPI0/spi_ctar%s_pasc_present" value="true" />
-         <param name="spi_ctar%s_pbr_present" key="/SPI0/spi_ctar%s_pbr_present" value="true" />
-         <param name="spi_ctar%s_pcssck_present" key="/SPI0/spi_ctar%s_pcssck_present" value="true" />
-         <param name="spi_ctar%s_pdt_present" key="/SPI0/spi_ctar%s_pdt_present" value="true" />
+         <param name="spi_ctar_asc_present" key="/SPI0/spi_ctar_asc_present" value="true" />
+         <param name="spi_ctar_br_present" key="/SPI0/spi_ctar_br_present" value="true" />
+         <param name="spi_ctar_cpha_present" key="/SPI0/spi_ctar_cpha_present" value="true" />
+         <param name="spi_ctar_cpol_present" key="/SPI0/spi_ctar_cpol_present" value="true" />
+         <param name="spi_ctar_cssck_present" key="/SPI0/spi_ctar_cssck_present" value="true" />
+         <param name="spi_ctar_dbr_present" key="/SPI0/spi_ctar_dbr_present" value="true" />
+         <param name="spi_ctar_dt_present" key="/SPI0/spi_ctar_dt_present" value="true" />
+         <param name="spi_ctar_fmsz_present" key="/SPI0/spi_ctar_fmsz_present" value="true" />
+         <param name="spi_ctar_lsbfe_present" key="/SPI0/spi_ctar_lsbfe_present" value="true" />
+         <param name="spi_ctar_mode_present" key="/SPI0/spi_ctar_mode_present" value="true" />
+         <param name="spi_ctar_pasc_present" key="/SPI0/spi_ctar_pasc_present" value="true" />
+         <param name="spi_ctar_pbr_present" key="/SPI0/spi_ctar_pbr_present" value="true" />
+         <param name="spi_ctar_pcssck_present" key="/SPI0/spi_ctar_pcssck_present" value="true" />
+         <param name="spi_ctar_pdt_present" key="/SPI0/spi_ctar_pdt_present" value="true" />
          <param name="spi_ctar_slave_cpha_present" key="/SPI0/spi_ctar_slave_cpha_present" value="true" />
          <param name="spi_ctar_slave_cpol_present" key="/SPI0/spi_ctar_slave_cpol_present" value="true" />
          <param name="spi_ctar_slave_fmsz_present" key="/SPI0/spi_ctar_slave_fmsz_present" value="true" />
@@ -2399,7 +2595,7 @@
          <param name="spi_rser_tfff_dirs_present" key="/SPI0/spi_rser_tfff_dirs_present" value="true" />
          <param name="spi_rser_tfff_re_present" key="/SPI0/spi_rser_tfff_re_present" value="true" />
          <param name="spi_rser_tfuf_re_present" key="/SPI0/spi_rser_tfuf_re_present" value="true" />
-         <param name="spi_rxfr%s_rxdata_present" key="/SPI0/spi_rxfr%s_rxdata_present" value="true" />
+         <param name="spi_rxfr_rxdata_present" key="/SPI0/spi_rxfr_rxdata_present" value="true" />
          <param name="spi_sr_eoqf_present" key="/SPI0/spi_sr_eoqf_present" value="true" />
          <param name="spi_sr_popnxtptr_present" key="/SPI0/spi_sr_popnxtptr_present" value="true" />
          <param name="spi_sr_rfdf_present" key="/SPI0/spi_sr_rfdf_present" value="true" />
@@ -2412,28 +2608,28 @@
          <param name="spi_sr_txnxtptr_present" key="/SPI0/spi_sr_txnxtptr_present" value="true" />
          <param name="spi_sr_txrxs_present" key="/SPI0/spi_sr_txrxs_present" value="true" />
          <param name="spi_tcr_spi_tcnt_present" key="/SPI0/spi_tcr_spi_tcnt_present" value="true" />
-         <param name="spi_txfr%s_txcmd_txdata_present" key="/SPI0/spi_txfr%s_txcmd_txdata_present" value="true" />
-         <param name="spi_txfr%s_txdata_present" key="/SPI0/spi_txfr%s_txdata_present" value="true" />
+         <param name="spi_txfr_txcmd_txdata_present" key="/SPI0/spi_txfr_txcmd_txdata_present" value="true" />
+         <param name="spi_txfr_txdata_present" key="/SPI0/spi_txfr_txdata_present" value="true" />
       </peripheral>
       <peripheral baseName="SPI"      instance="1"        version="spi0_mk_pcsis6_pcsse">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_SPI1_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_SPI1_MASK;" />
          <irq num="SPI1_IRQn" />
          <param name="$present"     key="/SPI1/$present" value="true" />
-         <param name="spi_ctar%s_asc_present" key="/SPI1/spi_ctar%s_asc_present" value="true" />
-         <param name="spi_ctar%s_br_present" key="/SPI1/spi_ctar%s_br_present" value="true" />
-         <param name="spi_ctar%s_cpha_present" key="/SPI1/spi_ctar%s_cpha_present" value="true" />
-         <param name="spi_ctar%s_cpol_present" key="/SPI1/spi_ctar%s_cpol_present" value="true" />
-         <param name="spi_ctar%s_cssck_present" key="/SPI1/spi_ctar%s_cssck_present" value="true" />
-         <param name="spi_ctar%s_dbr_present" key="/SPI1/spi_ctar%s_dbr_present" value="true" />
-         <param name="spi_ctar%s_dt_present" key="/SPI1/spi_ctar%s_dt_present" value="true" />
-         <param name="spi_ctar%s_fmsz_present" key="/SPI1/spi_ctar%s_fmsz_present" value="true" />
-         <param name="spi_ctar%s_lsbfe_present" key="/SPI1/spi_ctar%s_lsbfe_present" value="true" />
-         <param name="spi_ctar%s_mode_present" key="/SPI1/spi_ctar%s_mode_present" value="true" />
-         <param name="spi_ctar%s_pasc_present" key="/SPI1/spi_ctar%s_pasc_present" value="true" />
-         <param name="spi_ctar%s_pbr_present" key="/SPI1/spi_ctar%s_pbr_present" value="true" />
-         <param name="spi_ctar%s_pcssck_present" key="/SPI1/spi_ctar%s_pcssck_present" value="true" />
-         <param name="spi_ctar%s_pdt_present" key="/SPI1/spi_ctar%s_pdt_present" value="true" />
+         <param name="spi_ctar_asc_present" key="/SPI1/spi_ctar_asc_present" value="true" />
+         <param name="spi_ctar_br_present" key="/SPI1/spi_ctar_br_present" value="true" />
+         <param name="spi_ctar_cpha_present" key="/SPI1/spi_ctar_cpha_present" value="true" />
+         <param name="spi_ctar_cpol_present" key="/SPI1/spi_ctar_cpol_present" value="true" />
+         <param name="spi_ctar_cssck_present" key="/SPI1/spi_ctar_cssck_present" value="true" />
+         <param name="spi_ctar_dbr_present" key="/SPI1/spi_ctar_dbr_present" value="true" />
+         <param name="spi_ctar_dt_present" key="/SPI1/spi_ctar_dt_present" value="true" />
+         <param name="spi_ctar_fmsz_present" key="/SPI1/spi_ctar_fmsz_present" value="true" />
+         <param name="spi_ctar_lsbfe_present" key="/SPI1/spi_ctar_lsbfe_present" value="true" />
+         <param name="spi_ctar_mode_present" key="/SPI1/spi_ctar_mode_present" value="true" />
+         <param name="spi_ctar_pasc_present" key="/SPI1/spi_ctar_pasc_present" value="true" />
+         <param name="spi_ctar_pbr_present" key="/SPI1/spi_ctar_pbr_present" value="true" />
+         <param name="spi_ctar_pcssck_present" key="/SPI1/spi_ctar_pcssck_present" value="true" />
+         <param name="spi_ctar_pdt_present" key="/SPI1/spi_ctar_pdt_present" value="true" />
          <param name="spi_ctar_slave_cpha_present" key="/SPI1/spi_ctar_slave_cpha_present" value="true" />
          <param name="spi_ctar_slave_cpol_present" key="/SPI1/spi_ctar_slave_cpol_present" value="true" />
          <param name="spi_ctar_slave_fmsz_present" key="/SPI1/spi_ctar_slave_fmsz_present" value="true" />
@@ -2475,7 +2671,7 @@
          <param name="spi_rser_tfff_dirs_present" key="/SPI1/spi_rser_tfff_dirs_present" value="true" />
          <param name="spi_rser_tfff_re_present" key="/SPI1/spi_rser_tfff_re_present" value="true" />
          <param name="spi_rser_tfuf_re_present" key="/SPI1/spi_rser_tfuf_re_present" value="true" />
-         <param name="spi_rxfr%s_rxdata_present" key="/SPI1/spi_rxfr%s_rxdata_present" value="true" />
+         <param name="spi_rxfr_rxdata_present" key="/SPI1/spi_rxfr_rxdata_present" value="true" />
          <param name="spi_sr_eoqf_present" key="/SPI1/spi_sr_eoqf_present" value="true" />
          <param name="spi_sr_popnxtptr_present" key="/SPI1/spi_sr_popnxtptr_present" value="true" />
          <param name="spi_sr_rfdf_present" key="/SPI1/spi_sr_rfdf_present" value="true" />
@@ -2488,28 +2684,28 @@
          <param name="spi_sr_txnxtptr_present" key="/SPI1/spi_sr_txnxtptr_present" value="true" />
          <param name="spi_sr_txrxs_present" key="/SPI1/spi_sr_txrxs_present" value="true" />
          <param name="spi_tcr_spi_tcnt_present" key="/SPI1/spi_tcr_spi_tcnt_present" value="true" />
-         <param name="spi_txfr%s_txcmd_txdata_present" key="/SPI1/spi_txfr%s_txcmd_txdata_present" value="true" />
-         <param name="spi_txfr%s_txdata_present" key="/SPI1/spi_txfr%s_txdata_present" value="true" />
+         <param name="spi_txfr_txcmd_txdata_present" key="/SPI1/spi_txfr_txcmd_txdata_present" value="true" />
+         <param name="spi_txfr_txdata_present" key="/SPI1/spi_txfr_txdata_present" value="true" />
       </peripheral>
       <peripheral baseName="SPI"      instance="2"        version="spi0_mk_pcsis6_pcsse">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock clockEnable="SIM->SCGC3 = SIM->SCGC3 | SIM_SCGC3_SPI2_MASK;" clockDisable="SIM->SCGC3 = SIM->SCGC3 &amp; ~SIM_SCGC3_SPI2_MASK;" />
          <irq num="SPI2_IRQn" />
          <param name="$present"     key="/SPI2/$present" value="true" />
-         <param name="spi_ctar%s_asc_present" key="/SPI2/spi_ctar%s_asc_present" value="true" />
-         <param name="spi_ctar%s_br_present" key="/SPI2/spi_ctar%s_br_present" value="true" />
-         <param name="spi_ctar%s_cpha_present" key="/SPI2/spi_ctar%s_cpha_present" value="true" />
-         <param name="spi_ctar%s_cpol_present" key="/SPI2/spi_ctar%s_cpol_present" value="true" />
-         <param name="spi_ctar%s_cssck_present" key="/SPI2/spi_ctar%s_cssck_present" value="true" />
-         <param name="spi_ctar%s_dbr_present" key="/SPI2/spi_ctar%s_dbr_present" value="true" />
-         <param name="spi_ctar%s_dt_present" key="/SPI2/spi_ctar%s_dt_present" value="true" />
-         <param name="spi_ctar%s_fmsz_present" key="/SPI2/spi_ctar%s_fmsz_present" value="true" />
-         <param name="spi_ctar%s_lsbfe_present" key="/SPI2/spi_ctar%s_lsbfe_present" value="true" />
-         <param name="spi_ctar%s_mode_present" key="/SPI2/spi_ctar%s_mode_present" value="true" />
-         <param name="spi_ctar%s_pasc_present" key="/SPI2/spi_ctar%s_pasc_present" value="true" />
-         <param name="spi_ctar%s_pbr_present" key="/SPI2/spi_ctar%s_pbr_present" value="true" />
-         <param name="spi_ctar%s_pcssck_present" key="/SPI2/spi_ctar%s_pcssck_present" value="true" />
-         <param name="spi_ctar%s_pdt_present" key="/SPI2/spi_ctar%s_pdt_present" value="true" />
+         <param name="spi_ctar_asc_present" key="/SPI2/spi_ctar_asc_present" value="true" />
+         <param name="spi_ctar_br_present" key="/SPI2/spi_ctar_br_present" value="true" />
+         <param name="spi_ctar_cpha_present" key="/SPI2/spi_ctar_cpha_present" value="true" />
+         <param name="spi_ctar_cpol_present" key="/SPI2/spi_ctar_cpol_present" value="true" />
+         <param name="spi_ctar_cssck_present" key="/SPI2/spi_ctar_cssck_present" value="true" />
+         <param name="spi_ctar_dbr_present" key="/SPI2/spi_ctar_dbr_present" value="true" />
+         <param name="spi_ctar_dt_present" key="/SPI2/spi_ctar_dt_present" value="true" />
+         <param name="spi_ctar_fmsz_present" key="/SPI2/spi_ctar_fmsz_present" value="true" />
+         <param name="spi_ctar_lsbfe_present" key="/SPI2/spi_ctar_lsbfe_present" value="true" />
+         <param name="spi_ctar_mode_present" key="/SPI2/spi_ctar_mode_present" value="true" />
+         <param name="spi_ctar_pasc_present" key="/SPI2/spi_ctar_pasc_present" value="true" />
+         <param name="spi_ctar_pbr_present" key="/SPI2/spi_ctar_pbr_present" value="true" />
+         <param name="spi_ctar_pcssck_present" key="/SPI2/spi_ctar_pcssck_present" value="true" />
+         <param name="spi_ctar_pdt_present" key="/SPI2/spi_ctar_pdt_present" value="true" />
          <param name="spi_ctar_slave_cpha_present" key="/SPI2/spi_ctar_slave_cpha_present" value="true" />
          <param name="spi_ctar_slave_cpol_present" key="/SPI2/spi_ctar_slave_cpol_present" value="true" />
          <param name="spi_ctar_slave_fmsz_present" key="/SPI2/spi_ctar_slave_fmsz_present" value="true" />
@@ -2551,7 +2747,7 @@
          <param name="spi_rser_tfff_dirs_present" key="/SPI2/spi_rser_tfff_dirs_present" value="true" />
          <param name="spi_rser_tfff_re_present" key="/SPI2/spi_rser_tfff_re_present" value="true" />
          <param name="spi_rser_tfuf_re_present" key="/SPI2/spi_rser_tfuf_re_present" value="true" />
-         <param name="spi_rxfr%s_rxdata_present" key="/SPI2/spi_rxfr%s_rxdata_present" value="true" />
+         <param name="spi_rxfr_rxdata_present" key="/SPI2/spi_rxfr_rxdata_present" value="true" />
          <param name="spi_sr_eoqf_present" key="/SPI2/spi_sr_eoqf_present" value="true" />
          <param name="spi_sr_popnxtptr_present" key="/SPI2/spi_sr_popnxtptr_present" value="true" />
          <param name="spi_sr_rfdf_present" key="/SPI2/spi_sr_rfdf_present" value="true" />
@@ -2564,28 +2760,28 @@
          <param name="spi_sr_txnxtptr_present" key="/SPI2/spi_sr_txnxtptr_present" value="true" />
          <param name="spi_sr_txrxs_present" key="/SPI2/spi_sr_txrxs_present" value="true" />
          <param name="spi_tcr_spi_tcnt_present" key="/SPI2/spi_tcr_spi_tcnt_present" value="true" />
-         <param name="spi_txfr%s_txcmd_txdata_present" key="/SPI2/spi_txfr%s_txcmd_txdata_present" value="true" />
-         <param name="spi_txfr%s_txdata_present" key="/SPI2/spi_txfr%s_txdata_present" value="true" />
+         <param name="spi_txfr_txcmd_txdata_present" key="/SPI2/spi_txfr_txcmd_txdata_present" value="true" />
+         <param name="spi_txfr_txdata_present" key="/SPI2/spi_txfr_txdata_present" value="true" />
       </peripheral>
       <peripheral baseName="SPI"      instance="3"        version="spi0_mk_pcsis6_pcsse">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock clockEnable="SIM->SCGC3 = SIM->SCGC3 | SIM_SCGC3_SPI3_MASK;" clockDisable="SIM->SCGC3 = SIM->SCGC3 &amp; ~SIM_SCGC3_SPI3_MASK;" />
          <irq num="SPI3_IRQn" />
          <param name="$present"     key="/SPI3/$present" value="true" />
-         <param name="spi_ctar%s_asc_present" key="/SPI3/spi_ctar%s_asc_present" value="true" />
-         <param name="spi_ctar%s_br_present" key="/SPI3/spi_ctar%s_br_present" value="true" />
-         <param name="spi_ctar%s_cpha_present" key="/SPI3/spi_ctar%s_cpha_present" value="true" />
-         <param name="spi_ctar%s_cpol_present" key="/SPI3/spi_ctar%s_cpol_present" value="true" />
-         <param name="spi_ctar%s_cssck_present" key="/SPI3/spi_ctar%s_cssck_present" value="true" />
-         <param name="spi_ctar%s_dbr_present" key="/SPI3/spi_ctar%s_dbr_present" value="true" />
-         <param name="spi_ctar%s_dt_present" key="/SPI3/spi_ctar%s_dt_present" value="true" />
-         <param name="spi_ctar%s_fmsz_present" key="/SPI3/spi_ctar%s_fmsz_present" value="true" />
-         <param name="spi_ctar%s_lsbfe_present" key="/SPI3/spi_ctar%s_lsbfe_present" value="true" />
-         <param name="spi_ctar%s_mode_present" key="/SPI3/spi_ctar%s_mode_present" value="true" />
-         <param name="spi_ctar%s_pasc_present" key="/SPI3/spi_ctar%s_pasc_present" value="true" />
-         <param name="spi_ctar%s_pbr_present" key="/SPI3/spi_ctar%s_pbr_present" value="true" />
-         <param name="spi_ctar%s_pcssck_present" key="/SPI3/spi_ctar%s_pcssck_present" value="true" />
-         <param name="spi_ctar%s_pdt_present" key="/SPI3/spi_ctar%s_pdt_present" value="true" />
+         <param name="spi_ctar_asc_present" key="/SPI3/spi_ctar_asc_present" value="true" />
+         <param name="spi_ctar_br_present" key="/SPI3/spi_ctar_br_present" value="true" />
+         <param name="spi_ctar_cpha_present" key="/SPI3/spi_ctar_cpha_present" value="true" />
+         <param name="spi_ctar_cpol_present" key="/SPI3/spi_ctar_cpol_present" value="true" />
+         <param name="spi_ctar_cssck_present" key="/SPI3/spi_ctar_cssck_present" value="true" />
+         <param name="spi_ctar_dbr_present" key="/SPI3/spi_ctar_dbr_present" value="true" />
+         <param name="spi_ctar_dt_present" key="/SPI3/spi_ctar_dt_present" value="true" />
+         <param name="spi_ctar_fmsz_present" key="/SPI3/spi_ctar_fmsz_present" value="true" />
+         <param name="spi_ctar_lsbfe_present" key="/SPI3/spi_ctar_lsbfe_present" value="true" />
+         <param name="spi_ctar_mode_present" key="/SPI3/spi_ctar_mode_present" value="true" />
+         <param name="spi_ctar_pasc_present" key="/SPI3/spi_ctar_pasc_present" value="true" />
+         <param name="spi_ctar_pbr_present" key="/SPI3/spi_ctar_pbr_present" value="true" />
+         <param name="spi_ctar_pcssck_present" key="/SPI3/spi_ctar_pcssck_present" value="true" />
+         <param name="spi_ctar_pdt_present" key="/SPI3/spi_ctar_pdt_present" value="true" />
          <param name="spi_ctar_slave_cpha_present" key="/SPI3/spi_ctar_slave_cpha_present" value="true" />
          <param name="spi_ctar_slave_cpol_present" key="/SPI3/spi_ctar_slave_cpol_present" value="true" />
          <param name="spi_ctar_slave_fmsz_present" key="/SPI3/spi_ctar_slave_fmsz_present" value="true" />
@@ -2627,7 +2823,7 @@
          <param name="spi_rser_tfff_dirs_present" key="/SPI3/spi_rser_tfff_dirs_present" value="true" />
          <param name="spi_rser_tfff_re_present" key="/SPI3/spi_rser_tfff_re_present" value="true" />
          <param name="spi_rser_tfuf_re_present" key="/SPI3/spi_rser_tfuf_re_present" value="true" />
-         <param name="spi_rxfr%s_rxdata_present" key="/SPI3/spi_rxfr%s_rxdata_present" value="true" />
+         <param name="spi_rxfr_rxdata_present" key="/SPI3/spi_rxfr_rxdata_present" value="true" />
          <param name="spi_sr_eoqf_present" key="/SPI3/spi_sr_eoqf_present" value="true" />
          <param name="spi_sr_popnxtptr_present" key="/SPI3/spi_sr_popnxtptr_present" value="true" />
          <param name="spi_sr_rfdf_present" key="/SPI3/spi_sr_rfdf_present" value="true" />
@@ -2640,8 +2836,8 @@
          <param name="spi_sr_txnxtptr_present" key="/SPI3/spi_sr_txnxtptr_present" value="true" />
          <param name="spi_sr_txrxs_present" key="/SPI3/spi_sr_txrxs_present" value="true" />
          <param name="spi_tcr_spi_tcnt_present" key="/SPI3/spi_tcr_spi_tcnt_present" value="true" />
-         <param name="spi_txfr%s_txcmd_txdata_present" key="/SPI3/spi_txfr%s_txcmd_txdata_present" value="true" />
-         <param name="spi_txfr%s_txdata_present" key="/SPI3/spi_txfr%s_txdata_present" value="true" />
+         <param name="spi_txfr_txcmd_txdata_present" key="/SPI3/spi_txfr_txcmd_txdata_present" value="true" />
+         <param name="spi_txfr_txdata_present" key="/SPI3/spi_txfr_txdata_present" value="true" />
       </peripheral>
       <peripheral baseName="TPM"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />

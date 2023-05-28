@@ -6,7 +6,7 @@
 <!ENTITY DEVICE_FILE        "MKE06Z4-LQFP80">
 ]>
 
-<root 
+<root
    version="1.0"
    xmlns:xi="http://www.w3.org/2001/XInclude"
    >
@@ -20,43 +20,22 @@
 
       <!-- Affects later CPP peripheral options -->
       <constant id="cpp.peripheral.subfamily"       value="&DEVICE_SUB_FAMILY;" />
-      
-      <!-- These constants enable internal peripheral features -->
+
+      <!-- These constants enable peripheral features -->
       <!-- constant id="cpp.peripheral.internal.i2c"    value="true" / -->
       <!-- constant id="cpp.peripheral.internal.lptmr"  value="true" / -->
       <!-- constant id="cpp.peripheral.internal.pit"    value="true" / -->
       <!-- constant id="cpp.peripheral.internal.spi"    value="true" / -->
 
-      <variable id="projectOptionValue.CPP-abstraction" 
-         name="CPP Hardware abstraction" 
+      <variable id="projectOptionValue.CPP-abstraction"
+         name="CPP Hardware abstraction"
          description="Adds a CPP abstraction layer for hardware\n(GPIO, ADC, PWM) - &DEVICE_SUB_FAMILY;"
          checkGroup="group-additional-options" />
       <projectActionList>
          <applyWhen >
             <variableRef idRef="projectOptionValue.CPP-abstraction" />
          </applyWhen>
-
-<!--
-         <projectOption id="net.sourceforge.usbdm.cdt.toolchain.optimization.level" config="debug">
-            <value>net.sourceforge.usbdm.gnu.c.optimization.level.optimize</value>
-         </projectOption>
--->
-
-         <deleteResource target="Project_Headers/Board_LEDs.h" />
-         <deleteResource target="Project_Headers/leds.h" />
-         <deleteResource target="Sources/leds.cpp" />
-         <createFolder   target="Snippets" />
-         <copy source="Snippets/analogue-joystick-example.cpp"             target="Snippets/analogue-joystick-example.cpp"/>
-         <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
-         <copy source="Snippets/digital-example2.cpp"                      target="Snippets/digital-example2.cpp" />
-         <copy source="Snippets/pwm-example.cpp"                           target="Snippets/pwm-example.cpp" />
-         <copy source="Project_Headers/USBDM_Documentation.h"              target="Project_Headers/USBDM_Documentation.h" />
-         <copy source="Project_Headers/gpio.h"                             target="Project_Headers/gpio.h" />
-         <copy source="Project_Headers/gpio_defs-&DEVICE_FAMILY;.h"        target="Project_Headers/gpio_defs.h" />
-         <copy source="Project_Headers/pin_mapping-&DEVICE_FILE;.h"        target="Project_Headers/pin_mapping.h" />
-         <copy source="Sources/gpio-&DEVICE_FILE;.cpp"                     target="Sources/gpio.cpp" />
-         <copy source="Sources/main.cpp"                                   target="Sources/main.cpp" overwrite="true" />
-         <excludeSourceFolder target="Snippets" />
+         <copy source="projectFiles/&DEVICE_SUB_FAMILY;.usbdmProject"  target="Configure.usbdmProject" />
       </projectActionList>
       <xi:include href="shared/CPP-abstraction-Common-MK.xml"/>
    </projectActionList>

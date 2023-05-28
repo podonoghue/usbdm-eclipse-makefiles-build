@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKL82Z7
       MKW41Z4
 -->
@@ -92,12 +92,12 @@ This factor is used along with the SCL divider to generate the I2C baud rate</de
                      <description>DMA transfer enable\n
 If DMA transfer is enabled the following conditions trigger the DMA request:\n
 \t- While FACK = 0, a data byte is received, either address or data is transmitted. (ACK/NACK automatic)\n
-\t- While FACK = 0, the first byte received matches the A1 register or is general call address. 
-If any address matching occurs, IAAS and TCF are set. 
-If the direction of transfer is known from master to slave, then it is not required to check the SRW. 
-With this assumption, DMA can also be used in this case. 
+\t- While FACK = 0, the first byte received matches the A1 register or is general call address.
+If any address matching occurs, IAAS and TCF are set.
+If the direction of transfer is known from master to slave, then it is not required to check the SRW.
+With this assumption, DMA can also be used in this case.
 In other cases, if the master reads data from the slave, then it is required to rewrite the C1 register operation.
- With this assumption, DMA cannot be used. 
+ With this assumption, DMA cannot be used.
 \t- When FACK = 1, an address or a data byte is transmitted</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -557,7 +557,7 @@ NOTE: To clear the detection interrupt: In the interrupt service routine, first 
                   </field>
                   <field>
                      <name>STOPF</name>
-                     <description>Bus Stop Detect Flag: 
+                     <description>Bus Stop Detect Flag:
 Hardware sets this bit when the I2C bus&apos;s stop status is detected. The STOPF bit must be cleared by
 writing 1 to it</description>
                      <bitOffset>6</bitOffset>
@@ -620,7 +620,8 @@ Set this bit to hold off entry to stop mode when any data transmission or recept
                <fields>
                   <field>
                      <name>SHTF2IE</name>
-                     <description>SHTF2 Interrupt Enable\nEnables SCL high and SDA low timeout interrupt</description>
+                     <description>SHTF2 Interrupt Enable\n
+Enables SCL high and SDA low timeout interrupt</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -701,7 +702,8 @@ Selects the clock source of the timeout counter</description>
                   </field>
                   <field>
                      <name>SIICAEN</name>
-                     <description>Second I2C Address Enable\nEnables or disables SMBus device default address</description>
+                     <description>Second I2C Address Enable\n
+Enables or disables SMBus device default address</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -719,7 +721,8 @@ Selects the clock source of the timeout counter</description>
                   </field>
                   <field>
                      <name>ALERTEN</name>
-                     <description>SMBus Alert Response Address Enable\nEnables or disables SMBus alert response address matching</description>
+                     <description>SMBus Alert Response Address Enable\n
+Enables or disables SMBus alert response address matching</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>

@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- rtcntr_mke.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time counter">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <xi:include href="_mapPinsOption.xml"/>
+
+   <xi:include href="_irqOption.xml"/>
+
+   <choiceOption key="rtc_sc_rtclks" condition="rtc_sc_rtclks_present"
+      enumStem="RtcScRtclks"
+      toolTip="This read/write field selects the clock source input to the RTC prescaler.\n
+               Changing the clock source clears the prescaler and RTCCNT counters"
+      description="Real-Time Clock Source Select" >
+      <choice name="External clock"                       value="0" enum="ExternalClock"/>
+      <choice name="Low Power Oscillator (LPOCLK)"        value="1" enum="LowPowerOscillatorLpoclk"/>
+      <choice name="Internal reference clock (ICSIRCLK)"  value="2" enum="InternalReferenceClockIcsirclk"/>
+      <choice name="Bus clock"                            value="3" enum="BusClock"/>
+   </choiceOption>
+
+   <choiceOption key="rtc_sc_rtcps" condition="rtc_sc_rtcps_present"
+      enumStem="RtcScRtcps"
+      toolTip="Selects binary-based or decimal-based divide-by values for the clock source.\n
+               Changing the prescaler value clears the prescaler and RTCCNT counters\n
+               Division factor depends on clock chosen by RTCLKS[0]"
+      description="Real-Time Clock Prescaler Select" >
+      <choice name="Off"                   value="0" enum="Off"/>
+      <choice name="Divide by 1 or 128"    value="1" enum="DivideBy1Or128"/>
+      <choice name="Divide by 2 or 256"    value="2" enum="DivideBy2Or256"/>
+      <choice name="Divide by 4 or 512"    value="3" enum="DivideBy4Or512"/>
+      <choice name="Divide by 8 or 1024"   value="4" enum="DivideBy8Or1024"/>
+      <choice name="Divide by 16 or 2048"  value="5" enum="DivideBy16Or2048"/>
+      <choice name="Divide by 32 or 100"   value="6" enum="DivideBy32Or100"/>
+      <choice name="Divide by 64 or 1000"  value="7" enum="DivideBy64Or1000"/>
+   </choiceOption>
+
+   <binaryOption key="rtc_sc_rtif" condition="rtc_sc_rtif_present"
+      enumStem="RtcScRtif"
+      toolTip="Indicates the RTC counter register reached the value in the RTC modulo register. \n
+               Writing a 0 has no effect. Writing a 1 clears the bit and the real-time interrupt request"
+      description="Real-Time Interrupt Flag" >
+      <choice name="No event"        value="0" enum="NoEvent"/>
+      <choice name="Event detected"  value="1" enum="EventDetected"/>
+   </binaryOption>
+
+   <binaryOption key="rtc_sc_rtie" condition="rtc_sc_rtie_present"
+      enumStem="RtcScRtie"
+      toolTip="This bit enables real-time interrupts.\n
+               If RTIE is set, then an interrupt is generated when RTIF is set"
+      description="Real-Time Interrupt Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="rtc_sc_rtco" condition="rtc_sc_rtco_present"
+      enumStem="RtcScRtco"
+      toolTip="Enables the toggling of RTCO pin on overflow"
+      description="Real-Time Counter Output" >
+      <choice name="Output Disabled"  value="0" enum="OutputDisabled"/>
+      <choice name="Output Enabled"   value="1" enum="OutputEnabled"/>
+   </binaryOption>
+
+   <intOption key="rtc_mod_mod" condition="rtc_mod_mod_present"
+      description="Modulo"
+      toolTip="16-bit modulo value.\n
+               A value of 0x0000 sets SC[RTIF] on each rising-edge of the prescaler output"
+   />
+
+<!-- Grahic here -->  
+
+   <for keys="field:name"
+        values="
+      rtc_sc_rtclks:ScRtclks;
+      rtc_sc_rtcps:ScRtcps;
+      rtc_sc_rtif:ScRtif;
+      rtc_sc_rtie:ScRtie;
+      rtc_sc_rtco:ScRtco">
+      <setTemplate variables="%(field)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void configure%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}\n\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== RTC Init class =============================== -->
+
+   <template key="init_description" namespace="all">
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_class)::Init init {
+      \t *
+      \t *   // Setup values
+      \t *   RtcScRtclks_ExternalClock                 // Real-Time Clock Source Select,
+      \t *   RtcScRtcps_Off                            // Real-Time Clock Prescaler Select,
+      \t *   RtcScRtif_NoEvent                         // Real-Time Interrupt Flag,
+      \t *   RtcScRtie_Disabled                        // Real-Time Interrupt Enable,
+      \t *   RtcScRtco_OutputDisabled                  // Real-Time Counter Output,
+      \t *   0,                                        // Modulo,
+      \t * };
+      \t *
+      \t * // Initialise $(_class) from values specified above
+      \t * $(_class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t
+      \t/**
+      \t * Type definition for $(_class) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)(const uint32_t &);
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+    ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></setTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="rtc_sc_rtclks,rtc_sc_rtcps,rtc_sc_rtif,rtc_sc_rtie,rtc_sc_rtco"
+   ><![CDATA[
+      \t   /// Status and Control Register
+      \t   uint32_t sc = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="rtc_mod_mod"
+   ><![CDATA[
+      \t   /// Modulo Register
+      \t   uint32_t mod = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="/PCR/nvic_irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+   ]]></initialValueTemplate>
+
+<!--   Configure methods -->
+
+   <template discardRepeats="true" key="/RTC/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure RTC from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-back if feature enabled
+      \t      setCallback(init.callbackFunction);
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
+      \t   enable();
+      \t
+      \t   rtc->SC    = init.sc;
+      \t   rtc->MOD    = init.mod;
+      \t
+      \t   calibrate();
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n
+   ]]></template>
+
+<!--   Constructors -->
+
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%enumParam0 = %paramExpression;
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <setTemplate namespace="usbdm"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      #if $(irqHandlingMethod)
+      \t      %registerName = %paramExpression;
+      #else
+      \t      (void)%paramExpression;
+      #endif
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <for keys="r"
+      values="
+            rtc_sc_rtclks;
+            rtc_sc_rtcps;
+            rtc_sc_rtif;
+            rtc_sc_rtie;
+            rtc_sc_rtco
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+   <for keys="r"
+      values="
+            rtc_mod_mod
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         \t    * @param value %description
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(unsigned value, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | value;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+            rtc_sc_rtclks,
+            rtc_sc_rtcps,
+            rtc_sc_rtif,
+            rtc_sc_rtie,
+            rtc_sc_rtco,
+            irqLevel
+         "
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      \t}; // $(_class)::BasicInfo::Init\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      }; // $(_class)::BasicInfo\n\n
+   ]]>
+   </template>
+
+<signals />
+
+</peripheralPage>

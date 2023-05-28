@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- dwt_cm0plus.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Data Watchpoint and Trace Unit">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <xi:include href="_mapPinsOption.xml"/>
+
+   <intOption key="dwt_tbctrl_numcomp" condition="dwt_tbctrl_numcomp_present"
+      description="NUMCOMP bits."
+      toolTip="Number of comparators implemented.\n
+               A value of zero indicates no comparator support"
+   />
+
+   <binaryOption key="dwt_tbctrl_acomp1" condition="dwt_tbctrl_acomp1_present"
+      enumStem="DwtTbctrlAcomp1"
+      toolTip="When the MTBDWT_FCT1[MATCHED] is set, it indicates MTBDWT_COMP1 address compare has
+triggered and the trace buffer&apos;s recording state is changed"
+      description="Action based on Comparator 1 match" >
+      <choice name="Trigger TSTOP based on the assertion of MTBDWT_FCT1[MATCHED]"   value="0" enum="TriggerTstopBasedOnTheAssertionOfMtbdwt_fct1Matched"/>
+      <choice name="Trigger TSTART based on the assertion of MTBDWT_FCT1[MATCHED]"  value="1" enum="TriggerTstartBasedOnTheAssertionOfMtbdwt_fct1Matched"/>
+   </binaryOption>
+
+   <binaryOption key="dwt_tbctrl_acomp0" condition="dwt_tbctrl_acomp0_present"
+      enumStem="DwtTbctrlAcomp0"
+      toolTip="When the MTBDWT_FCT0[MATCHED] is set, it indicates MTBDWT_COMP0 address compare has
+triggered and the trace buffer&apos;s recording state is changed.\n
+               The assertion of MTBDWT_FCT0[MATCHED] is caused by the following conditions:\n
+               - Address match in MTBDWT_COMP0 when MTBDWT_FCT0[DATAVMATCH] = 0
+- Data match in MTBDWT_COMP0 when MTBDWT_FCT0[DATAVMATCH, DATAVADDR0] = {1,0}
+- Data match in MTBDWT_COMP0 and address match in MTBDWT_COMP1 when MTBDWT_FCT0[DATAVMATCH, DATAVADDR0] = {1,1}"
+      description="Action based on Comparator 0 match" >
+      <choice name="Trigger TSTOP based on the assertion of MTBDWT_FCT0[MATCHED]"   value="0" enum="TriggerTstopBasedOnTheAssertionOfMtbdwt_fct0Matched"/>
+      <choice name="Trigger TSTART based on the assertion of MTBDWT_FCT0[MATCHED]"  value="1" enum="TriggerTstartBasedOnTheAssertionOfMtbdwt_fct0Matched"/>
+   </binaryOption>
+
+<!-- Grahic here -->  
+
+   <for keys="field:name"
+        values="
+      dwt_tbctrl_acomp1:TbctrlAcomp1;
+      dwt_tbctrl_acomp0:TbctrlAcomp0">
+      <setTemplate variables="%(field)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void configure%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}\n\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== DWT Init class =============================== -->
+
+   <template key="init_description" namespace="all">
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_class)::Init init {
+      \t *
+      \t *   // Setup values
+      \t *   0,                                        // NUMCOMP bits.,
+      \t *   DwtTbctrlAcomp1_TriggerTstopBasedOnTheAssertionOfMtbdwt_fct1Matched    // Action based on Comparator 1 match,
+      \t *   DwtTbctrlAcomp0_TriggerTstopBasedOnTheAssertionOfMtbdwt_fct0Matched    // Action based on Comparator 0 match,
+      \t * };
+      \t *
+      \t * // Initialise $(_class) from values specified above
+      \t * $(_class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <initialValueTemplate namespace="usbdm"
+      variables="dwt_tbctrl_numcomp,dwt_tbctrl_acomp1,dwt_tbctrl_acomp0"
+   ><![CDATA[
+      \t   /// Trace Buffer Control Register
+      \t   uint32_t tbctrl = 0;\n\n
+   ]]></initialValueTemplate>
+
+<!--   Configure methods -->
+
+   <template discardRepeats="true" key="/DWT/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure DWT from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t   enable();
+      \t
+      \t   dwt->TBCTRL    = init.tbctrl;
+      \t
+      \t   calibrate();
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n
+   ]]></template>
+
+<!--   Constructors -->
+
+   <for keys="r"
+      values="
+            dwt_tbctrl_acomp1;
+            dwt_tbctrl_acomp0
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Constructors -->
+
+   <for keys="r"
+      values="
+            dwt_tbctrl_numcomp
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         \t    * @param value %description
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(unsigned value, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | value;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+            dwt_tbctrl_acomp1,
+            dwt_tbctrl_acomp0
+         "
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      \t}; // $(_class)::BasicInfo::Init\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      }; // $(_class)::BasicInfo\n\n
+   ]]>
+   </template>
+
+<signals />
+
+</peripheralPage>

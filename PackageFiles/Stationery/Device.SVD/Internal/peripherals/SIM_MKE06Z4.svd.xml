@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE04Z1284
       MKE06Z4
       SKEAZ1284
@@ -29,35 +29,31 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>LVD</name>
-                     <description>Low Voltage Detect:\n
-If PMC_SPMSC1[LVDRE] is set in Run mode or both PMC_SPMSC1[LVDRE] and PMC_SPMSC1[LVDSE] are set in Stop mode, 
-and the supply drops below the LVD trip voltage, an LVD reset will occur. This field is also set by POR.\n
-NOTE: This field is reset to 1 on POR and LVR, and reset to 0 on other reset</description>
+                     <description>Reset due to Low Voltage Detect or Power-on</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Reset is not caused by LVD trip or POR</description>
+                           <description>Not source</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Reset is caused by LVD trip or POR</description>
+                           <description>Reset due to LVD or POR</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>LOC</name>
-                     <description>Internal Clock Source Module Reset:\n
-Causes reset by an ICS module reset</description>
+                     <description>Reset due to Internal Clock Source Module</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Reset is not caused by the ICS module</description>
+                           <description>Not source</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -69,53 +65,49 @@ Causes reset by an ICS module reset</description>
                   </field>
                   <field>
                      <name>WDOG</name>
-                     <description>Watchdog (WDOG): \n
-Causes reset by the WDOG timer timing out. This reset source may be blocked by WDOG_CS1[EN] = 0</description>
+                     <description>Reset due to Watchdog (WDOG)</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Reset is not caused by WDOG timeout</description>
+                           <description>Not source</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Reset is caused by WDOG timeout</description>
+                           <description>Reset due to WDOG timeout</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>PIN</name>
-                     <description>External Reset Pin:\n
-Causes reset by an active low-level on the external reset pin</description>
+                     <description>Reset due to External Reset Pin</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Reset is not caused by external reset pin</description>
+                           <description>Not source</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Reset came from external reset pin</description>
+                           <description>Reset due to external reset pin</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>POR</name>
-                     <description>Power-On Reset:\n
-Causes reset by the power-on detection logic. When the internal supply voltage is ramping up, the low voltage reset (LVR) status field is also set at that time, to indicate that the reset has occurred while the internal supply was below the LVR threshold.\n
-NOTE: This bit POR to 1, LVR to uncertain value and reset to 0 at any other conditions</description>
+                     <description>Reset due to Power-On Reset</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Reset not caused by POR</description>
+                           <description>Not source</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -127,76 +119,73 @@ NOTE: This bit POR to 1, LVR to uncertain value and reset to 0 at any other cond
                   </field>
                   <field>
                      <name>LOCKUP</name>
-                     <description>Core Lockup: \n
-Indicates a reset has been caused by the ARM core indication of a LOCKUP event</description>
+                     <description>Reset due to Core Lockup</description>
                      <bitOffset>9</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Reset is not caused by core LOCKUP event</description>
+                           <description>Not source</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Reset is caused by core LOCKUP event</description>
+                           <description>Reset due to core LOCKUP event</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>SW</name>
-                     <description>Software:\n
-Indicates a reset has been caused by software setting of SYSRESETREQ bit in Application Interrupt and Reset Control Register in the ARM core</description>
+                     <description>Reset due to Software (SYSRESETREQ)</description>
                      <bitOffset>10</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Reset is not caused by software setting of SYSRESETREQ bit</description>
+                           <description>Not source</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Reset caused by software setting of SYSRESETREQ bit</description>
+                           <description>Reset due to SYSRESETREQ bit</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>MDMAP</name>
-                     <description>MDM-AP System Reset Request:\n
-Indicates a reset has been caused by the host debugger system setting of the System Reset Request field in the MDM-AP Control Register</description>
+                     <description>Reset due to MDM-AP System Reset Request</description>
                      <bitOffset>11</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Reset is not caused by host debugger system setting of the System Reset Request bit</description>
+                           <description>Not source</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Reset is caused by host debugger system setting of the System Reset Request bit</description>
+                           <description>Reset due to System Reset Request bit</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>SACKERR</name>
-                     <description>Stop Mode Acknowledge Error Reset: \n
-Indicates that after an attempt to enter Stop mode, a reset has been caused by the failure of one or more IICs to acknowledge within approximately one second to enter stop mode</description>
+                     <description>Reset due to Stop Mode Acknowledge Error\n
+While entering Stop mode, a reset has been caused by the failure of one or more IICs to acknowledge</description>
                      <bitOffset>13</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Reset is not caused by peripheral failure to acknowledge attempt to enter Stop mode</description>
+                           <description>Not source</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Reset is caused by peripheral failure to acknowledge attempt to enter Stop mode</description>
+                           <description>Reset due to failure to enter Stop mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -300,56 +289,57 @@ Indicates that after an attempt to enter Stop mode, a reset has been caused by t
                <fields>
                   <field>
                      <name>NMIE</name>
-                     <description>NMI Pin Enable: This field can only be written once after any reset</description>
+                     <description>NMI Pin Enable:\n
+This field can only be written once after any reset</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>PTB4/FTM2_CH4/SPI0_MISO/NMI/ACMP1_IN2 pin functions as PTB4, FTM2_CH4, SPI0_MISO, or ACMP1_IN2</description>
+                           <description>PTB4 as PTB4/FTM2_CH4/SPI0_MISO/ACMP1_IN2</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>PTB4/FTM2_CH4/SPI0_MISO/NMI/ACMP1_IN2 pin functions as NMI</description>
+                           <description>PTB4 as NMI</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>RSTPE</name>
-                     <description>RESET Pin Enable: This field can only be written once after any reset</description>
+                     <description>RESET Pin Enable:\n
+This field can only be written once after any reset</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>PTA5/IRQ/FTM0_CLK/RESET pin functions as PTA5, IRQ, or FTM0_CLK</description>
+                           <description>PTA5 as PTA5/IRQ/FTM0_CLK</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>PTA5/IRQ/FTM0_CLK/RESET pin functions as RESET</description>
+                           <description>PTA5 as RESET</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>SWDE</name>
-                     <description>Single Wire Debug Port Pin Enable</description>
+                     <description>Single Wire Debug Port Pin Enable\n
+Controls PTA4 as PTA4/ACMP0_OUT or SWD_DIO, PTC4 as PTC4/RTCO/FTM1_CH0/ACMP0_IN2 or SWD_CLK functions</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>PTA4/ACMP0_OUT/SWD_DIO as PTA4 or ACMP0_OUT function, \n
-PTC4/RTCO/FTM1_CH0/ACMP0_IN2/SWD_CLK as PTC4, RTCO, FTM1_CH0, or ACMP0_IN2 function</description>
+                           <description>PTA4, PTC4 used as GPIO pins </description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>PTA4/ACMP0_OUT/SWD_DIO as SWD_DIO function, \n
-PTC4/RTCO/FTM1CH0/ACMP0_IN2/SWD_CLK as SWD_CLK function</description>
+                           <description>PTA4, PTC4 used as SWD pins</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -357,7 +347,7 @@ PTC4/RTCO/FTM1CH0/ACMP0_IN2/SWD_CLK as SWD_CLK function</description>
                   <field>
                      <name>ACTRG</name>
                      <description>ACMP Trigger FTM2 selection\n
-Selects the two ACMP outputs as the trigger0 input of FTM2</description>
+Selects ACMP output used as the trigger0 input of FTM2</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -376,23 +366,24 @@ Selects the two ACMP outputs as the trigger0 input of FTM2</description>
                   <field>
                      <name>RXDFE</name>
                      <description>UART0_RX Filter Select: \n
-Enables the UART0_RX input to be filtered by ACMP. When this function is enabled, any signal tagged with ACMP inputs can be regarded UART0</description>
+Enables the UART0_RX input to be filtered by ACMP.\n
+When this function is enabled, any signal tagged with ACMP inputs can be regarded as UART0</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>RXD0 input signal is connected to UART0 module directly</description>
+                           <description>UART0 module directly</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>RXD0 input signal is filtered by ACMP0, then injected to UART0</description>
+                           <description>Filtered by ACMP0</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>RXD0 input signal is filtered by ACMP1, then injected to UART0</description>
+                           <description>Filtered by ACMP1</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -404,76 +395,76 @@ Enables the UART0_RX input to be filtered by ACMP. When this function is enabled
                   </field>
                   <field>
                      <name>RTCC</name>
-                     <description>Real-Time Counter Capture:\n
+                     <description>Real-Time Counter on FTM1 input channel 1:\n
 Allows the Real-time Counter (RTC) overflow to be captured by FTM1 channel 1</description>
                      <bitOffset>10</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>RTC overflow is not connected to FTM1 input channel 1</description>
+                           <description>RTC not connected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>RTC overflow is connected to FTM1 input channel 1</description>
+                           <description>RTC overflow used as input channel</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>ACIC</name>
-                     <description>Analog Comparator to Input Capture Enable:\n
+                     <description>Analog Comparator on FTM1 input channel 0:\n
 Connects the output of ACMP0 to FTM1 input channel 0</description>
                      <bitOffset>11</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>ACMP0_OUT is not connected to FTM1 input channel 0</description>
+                           <description>ACMP0_OUT is not connected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>ACMP0_OUT is connected to FTM1 input channel 0</description>
+                           <description>ACMP0_OUT is used as input channel</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>RXDCE</name>
-                     <description>UART0_RX Capture Select: \n
+                     <description>UART0_RX Capture on FTM0 channel 1: \n
 Enables the UART0_RX to be captured by FTM0 channel 1</description>
                      <bitOffset>12</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>UART0_RX input signal is connected to the UART0 module only</description>
+                           <description>Not connected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>UART0_RX input signal is connected to the UART0 module and FTM0 channel 1</description>
+                           <description>UART0_RX connected as FTM0 channel 1</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>FTMSYNC</name>
-                     <description>FTM2 Synchronization Select: \n
-Generates a PWM synchronization trigger to the FTM2 module if 1 is written to this field</description>
+                     <description>FTM2 Synchronisation Select: \n
+Generates a PWM synchronisation trigger to the FTM2 module</description>
                      <bitOffset>14</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No synchronization triggered</description>
+                           <description>No trigger</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Generates a PWM synchronization trigger to the FTM2 modules</description>
+                           <description>Generates a PWM synchronisation trigger</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -487,12 +478,12 @@ Enables the UART0_TX output modulated by FTM0 channel 0</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>UART0_TX output is connected to pinout directly</description>
+                           <description>UART0_TX directly connected to pin</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>UART0_TX output is modulated by FTM0 channel 0 before mapped to pinout</description>
+                           <description>UART0_TX modulated by FTM0 channel</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -500,66 +491,67 @@ Enables the UART0_TX output modulated by FTM0 channel 0</description>
                   <field>
                      <name>BUSREF</name>
                      <description>BUS Clock Output select: \n
-Enables bus clock output on PTH2 via an optional prescaler</description>
+Prescaler for bus clock output on PTH2</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>Bus</description>
+                           <description>Bus clock</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b001</name>
-                           <description>Bus divided by 2</description>
+                           <description>Bus clock divided by 2</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>Bus divided by 4</description>
+                           <description>Bus clock divided by 4</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>Bus divided by 8</description>
+                           <description>Bus clock divided by 8</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b100</name>
-                           <description>Bus divided by 16</description>
+                           <description>Bus clock divided by 16</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b101</name>
-                           <description>Bus divided by 32</description>
+                           <description>Bus clock divided by 32</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b110</name>
-                           <description>Bus divided by 64</description>
+                           <description>Bus clock divided by 64</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b111</name>
-                           <description>Bus divided by 128</description>
+                           <description>Bus clock divided by 128</description>
                            <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>CLKOE</name>
-                     <description>Bus Clock Output Enable: Enables bus clock output on PTH2</description>
+                     <description>Bus Clock Output Enable:\n
+Enables bus clock output on PTH2</description>
                      <bitOffset>19</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Bus clock output is disabled on PTH2</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Bus clock output is enabled on PTH2</description>
+                           <description>Bus clock on PTH2</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -573,42 +565,42 @@ Selects the ADC hardware trigger source. All trigger sources start ADC conversio
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>RTC overflow as the ADC hardware trigger</description>
+                           <description>RTC overflow</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b001</name>
-                           <description>FTM0 as the ADC hardware trigger</description>
+                           <description>FTM0</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>FTM2 init trigger with 8-bit programmable delay</description>
+                           <description>FTM2 init trigger with 8-bit delay</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>FTM2 match trigger with 8-bit programmable delay</description>
+                           <description>FTM2 match trigger with 8-bit delay</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b100</name>
-                           <description>PIT channel 0 overflow as the ADC hardware trigger</description>
+                           <description>PIT channel 0 overflow</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b101</name>
-                           <description>PIT channel 1 overflow as the ADC hardware trigger</description>
+                           <description>PIT channel 1 overflow</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b110</name>
-                           <description>ACMP0_OUT as the ADC hardware trigger</description>
+                           <description>ACMP0 OUT</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b111</name>
-                           <description>ACMP1_OUT as the ADC hardware trigger</description>
+                           <description>ACMP1 OUT</description>
                            <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -616,18 +608,21 @@ Selects the ADC hardware trigger source. All trigger sources start ADC conversio
                   <field>
                      <name>DLYACT</name>
                      <description>FTM2 Trigger Delay Active:\n
-This read-only field specifies the status if the FTM2 initial or match delay is active. This field is set when an FTM2 trigger arrives and the delay counter is ticking. Otherwise, this field will be clear</description>
+This read-only field specifies the status if the FTM2 initial or match delay is active. \n
+This field is set when an FTM2 trigger arrives and the delay counter is ticking. \n
+Otherwise, this field will be clear</description>
                      <bitOffset>23</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The delay is inactive</description>
+                           <description>No delay</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The delay is active</description>
+                           <description>Delay is active</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -635,7 +630,9 @@ This read-only field specifies the status if the FTM2 initial or match delay is 
                   <field>
                      <name>DELAY</name>
                      <description>FTM2 Trigger Delay:\n
-Specifies the delay from FTM2 initial or match trigger to ADC hardware trigger when 1 is written to ADHWT. The 8-bit modulo value allows the delay from 0 to 255 upon the BUSREF clock settings. This is a one-shot counter that starts ticking when the trigger arrives and stops ticking when the counter value reaches the modulo value that is defined</description>
+Specifies the delay from FTM2 initial or match trigger to ADC hardware trigger when 1 is written to ADHWT.\n
+The 8-bit modulo value allows the delay from 0 to 255 upon the BUSREF clock settings.\n
+This is a one-shot counter that starts ticking when the trigger arrives and stops ticking when the counter value reaches the modulo value that is defined</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>8</bitWidth>
                   </field>
@@ -668,20 +665,19 @@ NOTE: This field works only when SIM_PINSEL0[I2C0PS] is 0</description>
                   </field>
                   <field>
                      <name>I2C0OINV</name>
-                     <description>I2C0 Output Invert
-This field controls invertion of the I2C0 output.
-NOTE: This bit does not work when I2C0 4-wire interface is disabled (I2C04WEN = 0)</description>
+                     <description>I2C0 Output Invert in 4-wire mode
+This field controls inversion of the I2C0 SDA_OUT and SCL_OUT in 4-wire mode</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Under I2C0 4-wire interface configuration, SDA_OUT and SCL_OUT are not inverted before output</description>
+                           <description>Not inverted</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Under I2C0 4-wire interface configuration, SDA_OUT and SCL_OUT are inverted before output</description>
+                           <description>SDA_OUT and SCL_OUT are inverted</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -695,12 +691,12 @@ This field select PWTIN2 input signal</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>ACMP1_OUT is connectted to PWTIN2</description>
+                           <description>ACMP1_OUT is connected to PWTIN2</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>ACMP0_OUT is connectted to PWTIN2</description>
+                           <description>ACMP0_OUT is connected to PWTIN2</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -714,17 +710,17 @@ This field select PWTIN3 input signal</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>UART0 RX is connectted to PWTIN3</description>
+                           <description>UART0 RX is connected to PWTIN3</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>UART1 RX is connectted to PWTIN3</description>
+                           <description>UART1 RX is connected to PWTIN3</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>UART2 RX is connectted to PWTIN3</description>
+                           <description>UART2 RX is connected to PWTIN3</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -750,42 +746,42 @@ Selects the IRQ port pins</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>IRQ is mapped on PTA5</description>
+                           <description>PTA5</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b001</name>
-                           <description>IRQ is mapped on PTI0</description>
+                           <description>PTI0</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>IRQ is mapped on PTI1</description>
+                           <description>PTI1</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>IRQ is mapped on PTI2</description>
+                           <description>PTI2</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b100</name>
-                           <description>IRQ is mapped on PTI3</description>
+                           <description>PTI3</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b101</name>
-                           <description>IRQ is mapped on PTI4</description>
+                           <description>PTI4</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b110</name>
-                           <description>IRQ is mapped on PTI5</description>
+                           <description>PTI5</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b111</name>
-                           <description>IRQ is mapped on PTI6</description>
+                           <description>PTI6</description>
                            <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -799,12 +795,12 @@ Selects the RTCO port pins</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>RTCO is mapped on PTC4</description>
+                           <description>PTC4</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>RTCO is mapped on PTC5</description>
+                           <description>PTC5</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -817,31 +813,30 @@ Selects the RTCO port pins</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>I2C0_SCL and I2C0_SDA are mapped on PTA3 and PTA2, respectively</description>
+                           <description>PTA3 and PTA2 are mapped as I2C0 pins</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>I2C0_SCL and I2C0_SDA are mapped on PTB7 and PTB6, respectively</description>
+                           <description>PTB7 and PTB6 are mapped as I2C0 pins</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>SPI0PS</name>
-                     <description>SPI0 Pin Select\n
-Selects the SPI0 Pinouts</description>
+                     <description>SPI0 Pin Select</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>SPI0_SCK, SPI0_MOSI, SPI0_MISO, and SPI0_PCS0 are mapped on PTB2, PTB3, PTB4, and PTB5</description>
+                           <description>PTB2, PTB3, PTB4, and PTB5 are mapped as SPI0 pins</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>SPI0_SCK, SPI0_MOSI, SPI0_MISO, and SPI0_PCS0 are mapped on PTE0, PTE1, PTE2, and PTE3</description>
+                           <description>PTE0, PTE1, PTE2, and PTE3 are mapped as SPI0 pins</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -854,12 +849,12 @@ Selects the SPI0 Pinouts</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>UART0_RX and UART0_TX are mapped on PTB0 and PTB1</description>
+                           <description>PTB0 and PTB1 are mapped UART0 pins</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>UART0_RX and UART0_TX are mapped on PTA2 and PTA3</description>
+                           <description>PTA2 and PTA3 are mapped UART0 pins</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -872,12 +867,12 @@ Selects the SPI0 Pinouts</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Mapped on PTA0</description>
+                           <description>PTA0</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Mapped on PTB2</description>
+                           <description>PTB2</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -890,12 +885,12 @@ Selects the SPI0 Pinouts</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Mapped on PTA1</description>
+                           <description>PTA1</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Mapped on PTB3</description>
+                           <description>PTB3</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -908,12 +903,12 @@ Selects the SPI0 Pinouts</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Mapped on PTC4</description>
+                           <description>PTC4</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Mapped on PTH2</description>
+                           <description>PTH2</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -926,19 +921,19 @@ Selects the SPI0 Pinouts</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Mapped on PTC5</description>
+                           <description>PTC5</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Mapped on PTE7</description>
+                           <description>PTE7</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>FTM0CLKPS</name>
-                     <description>FTM0 TCLK Pin Select: Selects the TCLK pinout</description>
+                     <description>FTM0 TCLK Pin Select</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -966,7 +961,7 @@ Selects the SPI0 Pinouts</description>
                   </field>
                   <field>
                      <name>FTM1CLKPS</name>
-                     <description>FTM1 TCLK Pin Select: Selects the TCLK pinout</description>
+                     <description>FTM1 TCLK Pin Select</description>
                      <bitOffset>26</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -994,7 +989,7 @@ Selects the SPI0 Pinouts</description>
                   </field>
                   <field>
                      <name>FTM2CLKPS</name>
-                     <description>FTM2 TCLK Pin Select: Selects the TCLK pinout</description>
+                     <description>FTM2 TCLK Pin Select</description>
                      <bitOffset>28</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -1022,7 +1017,7 @@ Selects the SPI0 Pinouts</description>
                   </field>
                   <field>
                      <name>PWTCLKPS</name>
-                     <description>PWT TCLK Pin Select: Selects the TCLK pinout</description>
+                     <description>PWT TCLK Pin Select</description>
                      <bitOffset>30</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -1057,23 +1052,23 @@ Selects the SPI0 Pinouts</description>
                <fields>
                   <field>
                      <name>FTM2PS0</name>
-                     <description>FTM2 Channel 0 Pin Select: Selects the FTM2 Channel 0 pinout</description>
+                     <description>FTM2 Channel 0 Pin Select</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Mapped on PTC0</description>
+                           <description>PTC0</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Mapped on PTH0</description>
+                           <description>PTH0</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Mapped on PTF0</description>
+                           <description>PTF0</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1085,23 +1080,23 @@ Selects the SPI0 Pinouts</description>
                   </field>
                   <field>
                      <name>FTM2PS1</name>
-                     <description>FTM2 Channel 1 Pin Select: Selects the FTM2 Channel 1 pinout</description>
+                     <description>FTM2 Channel 1 Pin Select</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Mapped on PTC1</description>
+                           <description>PTC1</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Mapped on PTH1</description>
+                           <description>PTH1</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>FTM2 CH1 mapped on PTF1</description>
+                           <description>PTF1</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1113,23 +1108,23 @@ Selects the SPI0 Pinouts</description>
                   </field>
                   <field>
                      <name>FTM2PS2</name>
-                     <description>FTM2 Channel 2 Pin Select: Selects the FTM2 Channel 2 pinout</description>
+                     <description>FTM2 Channel 2 Pin Select</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Mapped on PTC2</description>
+                           <description>PTC2</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Mapped on PTD0</description>
+                           <description>PTD0</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Mapped on PTG4</description>
+                           <description>PTG4</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1141,23 +1136,23 @@ Selects the SPI0 Pinouts</description>
                   </field>
                   <field>
                      <name>FTM2PS3</name>
-                     <description>FTM2 Channel 3 Pin Select: Selects the FTM2 Channel 3 pinout</description>
+                     <description>FTM2 Channel 3 Pin Select</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Mapped on PTC3</description>
+                           <description>PTC3</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Mapped on PTD1</description>
+                           <description>PTD1</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Mapped on PTG5</description>
+                           <description>PTG5</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1169,43 +1164,43 @@ Selects the SPI0 Pinouts</description>
                   </field>
                   <field>
                      <name>FTM2PS4</name>
-                     <description>FTM2 Channel4 Pin Select: Selects the FTM2 Channel4 pinout</description>
+                     <description>FTM2 Channel 4 Pin Select</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>FTM2 CH4 mapped on PTB4</description>
+                           <description>PTB4</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>FTM2 CH4 mapped on PTG6</description>
+                           <description>PTG6</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>FTM2PS5</name>
-                     <description>FTM2 Channel 5 Pin Select: Selects the FTM2 Channel 5 pinout</description>
+                     <description>FTM2 Channel 5 Pin Select</description>
                      <bitOffset>9</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Mapped on PTB5</description>
+                           <description>PTB5</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Mapped on PTG7</description>
+                           <description>PTG7</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>I2C1PS</name>
-                     <description>I2C1 Pin Select: Selects the I2C1 pinout</description>
+                     <description>I2C1 Pin Select</description>
                      <bitOffset>10</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -1223,25 +1218,25 @@ Selects the SPI0 Pinouts</description>
                   </field>
                   <field>
                      <name>SPI1PS</name>
-                     <description>SPI1 Pin Select: Selects the SPI1 pinout</description>
+                     <description>SPI1 Pin Select</description>
                      <bitOffset>11</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>SPI1_SCK, SPI1_MOSI, SPI1_MISO, and SPI1_PCS are mapped on PTD0, PTD1, PTD2, and PTD3</description>
+                           <description>PTD0, PTD1, PTD2, and PTD3 mapped as SPI pins</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>SPI1_SCK, SPI1_MOSI, SPI1_MISO, and SPI1_PCS are mapped on PTG4, PTG5, PTG6, and PTG7</description>
+                           <description>PTG4, PTG5, PTG6, and PTG7 mapped as SPI pins</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>UART1PS</name>
-                     <description>UART1 Pin Select: Selects the UART1 pinout</description>
+                     <description>UART1 Pin Select</description>
                      <bitOffset>12</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -1259,7 +1254,7 @@ Selects the SPI0 Pinouts</description>
                   </field>
                   <field>
                      <name>UART2PS</name>
-                     <description>UART2 Pin Select: Selects the UART2 pinout</description>
+                     <description>UART2 Pin Select</description>
                      <bitOffset>13</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -1277,7 +1272,7 @@ Selects the SPI0 Pinouts</description>
                   </field>
                   <field>
                      <name>PWTIN0PS</name>
-                     <description>PWTIN0 Pin Select: Selects the PWTIN0 pinout</description>
+                     <description>PWTIN0 Pin Select</description>
                      <bitOffset>14</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -1295,7 +1290,7 @@ Selects the SPI0 Pinouts</description>
                   </field>
                   <field>
                      <name>PWTIN1PS</name>
-                     <description>PWTIN1 Pin Select: Selects the PWTIN1 pinout</description>
+                     <description>PWTIN1 Pin Select</description>
                      <bitOffset>15</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -1313,7 +1308,8 @@ Selects the SPI0 Pinouts</description>
                   </field>
                   <field>
                      <name>MSCANPS</name>
-                     <description>MSCAN Pin Select</description>
+                     <description>MSCAN Pin Select\n
+Selects the pins used by MSCAN</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -1363,24 +1359,7 @@ Selects the SPI0 Pinouts</description>
                   <field derivedFrom="RTC" > <name>CRC</name> <description>CRC Clock Gate Control</description> <bitOffset>10</bitOffset> </field>
                   <field derivedFrom="RTC" > <name>FLASH</name> <description>FLASH Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="RTC" > <name>SWD</name> <description>SWD Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
-                  <field>
-                     <name>MSCAN</name>
-                     <description>MSCAN Clock Gate Control</description>
-                     <bitOffset>15</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Bus clock to the MSCAN module is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Bus clock to the MSCAN module is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="RTC" > <name>MSCAN</name> <description>MSCAN Clock Gate Control</description> <bitOffset>15</bitOffset> </field>
                   <field derivedFrom="RTC" > <name>I2C0</name> <description>I2C0 Clock Gate Control</description> <bitOffset>16</bitOffset> </field>
                   <field derivedFrom="RTC" > <name>I2C1</name> <description>I2C1 Clock Gate Control</description> <bitOffset>17</bitOffset> </field>
                   <field derivedFrom="RTC" > <name>SPI0</name> <description>SPI0 Clock Gate Control</description> <bitOffset>18</bitOffset> </field>

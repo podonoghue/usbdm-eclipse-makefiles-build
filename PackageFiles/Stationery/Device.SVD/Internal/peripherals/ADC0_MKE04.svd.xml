@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE04Z4
       MKE04Z1284
       MKE06Z4
@@ -147,7 +147,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11111</name>
-                           <description>Module is disabled</description>
+                           <description>Module disabled</description>
                            <value>0b11111</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -164,12 +164,12 @@ When the FIFO function is enabled (AFDEP &gt; 0), a set of conversions are trigg
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Single conversion or set</description>
+                           <description>Single</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Continuous conversions</description>
+                           <description>Continuous</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -182,12 +182,12 @@ When the FIFO function is enabled (AFDEP &gt; 0), a set of conversions are trigg
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupt disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Interrupt enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -270,7 +270,7 @@ When the FIFO function is enabled (AFDEP &gt; 0), a set of conversions are trigg
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>FIFO has new data</description>
+                           <description>FIFO has data</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -306,12 +306,12 @@ When the FIFO function is enabled (AFDEP &gt; 0), a set of conversions are trigg
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Compare function disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Compare function enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -325,31 +325,32 @@ Controls whether conversions are triggered by writes to ADC_SC1 (software) or as
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Software trigger selected</description>
+                           <description>Software trigger</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Hardware trigger selected</description>
+                           <description>Hardware trigger</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>ADACT</name>
-                     <description>Conversion Active</description>
+                     <description>Conversion Active\n
+Indicates if the ADC is busy with a conversion</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Conversion not in progress</description>
+                           <description>Idle</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Conversion in progress</description>
+                           <description>Busy</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -420,12 +421,12 @@ Controls whether conversions are triggered by writes to ADC_SC1 (software) or as
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Short sample time</description>
+                           <description>Short sample</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Long sample time</description>
+                           <description>Long sample</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -467,12 +468,12 @@ Controls trade-off between speed and power consumption</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Normal power operation</description>
+                           <description>Normal</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Low-power operation\tThe power is reduced at the expense of maximum clock speed</description>
+                           <description>Low power</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -492,42 +493,42 @@ Controls trade-off between speed and power consumption</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>FIFO is disabled</description>
+                           <description>FIFO disabled</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b001</name>
-                           <description>2-level FIFO is enabled</description>
+                           <description>2-level FIFO</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>3-level FIFO is enabled</description>
+                           <description>3-level FIFO</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>4-level FIFO is enabled</description>
+                           <description>4-level FIFO</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b100</name>
-                           <description>5-level FIFO is enabled</description>
+                           <description>5-level FIFO</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b101</name>
-                           <description>6-level FIFO is enabled</description>
+                           <description>6-level FIFO</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b110</name>
-                           <description>7-level FIFO is enabled</description>
+                           <description>7-level FIFO</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b111</name>
-                           <description>8-level FIFO is enabled</description>
+                           <description>8-level FIFO</description>
                            <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -542,12 +543,12 @@ When this field is set, ADC will AND all of compare triggers and set COCO after 
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>OR all of compare trigger</description>
+                           <description>ORed triggers</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>AND all of compare trigger</description>
+                           <description>ANDed triggers</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -560,12 +561,12 @@ When this field is set, ADC will AND all of compare triggers and set COCO after 
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>FIFO scan mode disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>FIFO scan mode enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -573,18 +574,18 @@ When this field is set, ADC will AND all of compare triggers and set COCO after 
                   <field>
                      <name>HTRGME</name>
                      <description>Hardware Trigger Multiple Conversion Enable\n
-This field enables hardware trigger multiple conversion</description>
+This field enables hardware trigger multiple conversions in fifo mode</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Hardware triggers one conversion</description>
+                           <description>Single</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Hardware triggers multiple conversions in fifo mode</description>
+                           <description>Multiple</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -622,7 +623,8 @@ This field enables hardware trigger multiple conversion</description>
             </register>
             <register>
                <name>APCTL1</name>
-               <description>Pin Control 1 Register</description>
+               <description>Pin Control 1 Register\n
+The register disables the I/O port control of pins used as analog inputs</description>
                <addressOffset>0x18</addressOffset>
                <fields>
                   <field>
@@ -633,12 +635,12 @@ This field enables hardware trigger multiple conversion</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>ADx pin I/O control enabled</description>
+                           <description>GPIO control</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>ADx pin I/O control disabled</description>
+                           <description>ADx control</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -651,8 +653,39 @@ This field enables hardware trigger multiple conversion</description>
                <addressOffset>0x1C</addressOffset>
                <fields>
                   <field>
+                     <name>HTRIGGER</name>
+                     <?ignoreOverlap?>
+                     <description>Hardware Trigger Mode Select\n
+This field selects hardware trigger mode</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Enabled</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Masked by FIFO</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Disabled</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
                      <name>HTRGMASKSEL</name>
-                     <description>Hardware Trigger Mask Mode Select\n
+                     <?hide?>
+                     <description>Hardware Trigger Mask Mode Enable\n
 This field selects hardware trigger mask mode</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -671,6 +704,7 @@ This field selects hardware trigger mask mode</description>
                   </field>
                   <field>
                      <name>HTRGMASKE</name>
+                     <?hide?>
                      <description>Hardware Trigger Mask Enable\n
 This field enables hardware trigger mask when HTRGMASKSEL is low</description>
                      <bitOffset>1</bitOffset>

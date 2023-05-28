@@ -6,7 +6,7 @@
 <!ENTITY DEVICE_FILE        "MKL03Z4">
 ]>
 
-<root 
+<root
    version="1.0"
    xmlns:xi="http://www.w3.org/2001/XInclude"
    >
@@ -20,7 +20,7 @@
 
       <!-- Affects later CPP peripheral options -->
       <constant id="cpp.peripheral.subfamily"       value="&DEVICE_SUB_FAMILY;" />
-      
+
       <!-- These constants enable peripheral features -->
       <constant id="cpp.peripheral.internal.adc"    value="true" />
       <constant id="cpp.peripheral.internal.tpm"    value="true" />
@@ -29,8 +29,8 @@
       <constant id="cpp.peripheral.internal.pit"    value="true" />
       <constant id="cpp.peripheral.internal.spi"    value="true" />
 
-      <variable id="projectOptionValue.CPP-abstraction" 
-         name="CPP Hardware abstraction" 
+      <variable id="projectOptionValue.CPP-abstraction"
+         name="CPP Hardware abstraction"
          description="Adds a CPP abstraction layer for hardware\n(GPIO, ADC, PWM) - &DEVICE_SUB_FAMILY;"
          checkGroup="group-additional-options" />
       <projectActionList>

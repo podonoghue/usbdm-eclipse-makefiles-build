@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE06Z4
       SKEAZ1284
 -->
@@ -50,12 +50,12 @@ The module indicates entry to initialization mode by setting INITAK = 1</descrip
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Running - The MSCAN operates normally</description>
+                           <description>Normal mode</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Sleep mode request - The MSCAN enters sleep mode when CAN bus idle</description>
+                           <description>Initialisation mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -65,18 +65,18 @@ This bit requests the MSCAN to enter sleep mode</description> <bitOffset>1</bitO
                   <field>
                      <name>WUPE</name>
                      <description>WakeUp Enable\n
-This configuration bit allows the MSCAN to restart from sleep mode or from power down mode</description>
+Allows the MSCAN to restart from sleep mode or from power down mode when traffic detected on CAN</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Wakeup disabled - The MSCAN ignores traffic on CAN</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Wakeup enabled - The MSCAN is able to restart</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -84,24 +84,25 @@ This configuration bit allows the MSCAN to restart from sleep mode or from power
                   <field>
                      <name>TIME</name>
                      <description>Timer Enable\n
-This bit activates an internal 16-bit wide free running timer which is clocked by the bit clock rate</description>
+Enables an internal 16-bit wide free running timer which is clocked by the bit clock rate</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Disable internal MSCAN timer</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Enable internal MSCAN timer</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>SYNCH</name>
+                     <access>read-only</access>
                      <description>Synchronized Status\n
 This read-only flag indicates whether the MSCAN is synchronized to the CAN bus</description>
                      <bitOffset>4</bitOffset>
@@ -109,12 +110,12 @@ This read-only flag indicates whether the MSCAN is synchronized to the CAN bus</
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MSCAN is not synchronized to the CAN bus</description>
+                           <description>MSCAN not synchronized</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MSCAN is synchronized to the CAN bus</description>
+                           <description>MSCAN synchronized</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -122,37 +123,38 @@ This read-only flag indicates whether the MSCAN is synchronized to the CAN bus</
                   <field>
                      <name>CSWAI</name>
                      <description>CAN Stops in Wait Mode\n
-Enabling this bit allows for lower power consumption in wait mode</description>
+This bit allows for lower power consumption in wait mode</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The module is not affected during wait mode</description>
+                           <description>Ignore wait mode</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The module ceases to be clocked during wait mode</description>
+                           <description>Suspend in wait mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>RXACT</name>
+                     <access>read-only</access>
                      <description>Receiver Active Status\n
-This read-only flag indicates the MSCAN is receiving a message</description>
+This read-only flag indicates the MSCAN is receiving a message or has lost arbitration</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MSCAN is transmitting or idle</description>
+                           <description>Transmitting or idle</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MSCAN is receiving a message, including when arbitration is lost</description>
+                           <description>Receiving message</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -167,12 +169,12 @@ It is set when a receiver has received a valid message correctly,</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No valid message was received since last clearing this flag</description>
+                           <description>No new message</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>A valid message was received since last clearing of this flag</description>
+                           <description>New message available</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -187,29 +189,31 @@ It is set when a receiver has received a valid message correctly,</description>
                <fields>
                   <field>
                      <name>INITAK</name>
+                     <access>read-only</access>
                      <description>Initialization Mode Acknowledge\n
 This flag indicates whether the MSCAN module is in initialization mode.\n
 It is used as a handshake flag for the INITRQ initialization mode request.\n
 Initialization mode is active when INITRQ = 1 and INITAK = 1.\n
-The registers CANCTL1, CANBTR0, CANBTR1, CANIDAC, CANIDAR0-CANIDAR7, and CANIDMR0-CANIDMR7 can
+The registers CANCTL1, CANBTR0, CANBTR1, CANIDAC, CANIDAR0-CANIDAR7, and CANIDMR0-CANIDMR7 can\n
 be written only by the CPU when the MSCAN is in initialization mode</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Running - The MSCAN operates normally</description>
+                           <description>Running</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Initialization mode active - The MSCAN has entered initialization mode</description>
+                           <description>Initialization mode active</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>SLPAK</name>
+                     <access>read-only</access>
                      <description>Sleep Mode Acknowledge\n
 This flag indicates whether the MSCAN module has entered sleep mode</description>
                      <bitOffset>1</bitOffset>
@@ -217,12 +221,12 @@ This flag indicates whether the MSCAN module has entered sleep mode</description
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Running - The MSCAN operates normally</description>
+                           <description>Running</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Sleep mode active - The MSCAN has entered sleep</description>
+                           <description>Sleep mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -230,19 +234,20 @@ This flag indicates whether the MSCAN module has entered sleep mode</description
                   <field>
                      <name>WUPM</name>
                      <description>WakeUp Mode\n
-If WUPE in CANCTL0 is enabled, this bit defines whether the integrated low-pass filter is applied to protect
-the MSCAN from spurious wakeup</description>
+If WUPE in CANCTL0 is enabled, this bit defines whether the integrated low-pass filter is\n
+applied to protect the MSCAN from spurious wakeup\n
+If enabled, MSCAN wakes only on a dominant pulse on the CAN bus of length Twup</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MSCAN wakes on any dominant level on the CAN bus</description>
+                           <description>Wakup unfiltered</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MSCAN wakes only in case of a dominant pulse on the CAN bus that has a length of Twup</description>
+                           <description>Wakup filtered</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -250,18 +255,19 @@ the MSCAN from spurious wakeup</description>
                   <field>
                      <name>BORM</name>
                      <description>Bus-Off Recovery Mode\n
-This bit configures the bus-off state recovery mode of the MSCAN</description>
+This bit configures the bus-off state recovery mode of the MSCAN\n
+See Bosch CAN 2.0A/B protocol specification</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Automatic bus-off recovery (see Bosch CAN 2.0A/B protocol specification)</description>
+                           <description>Automatic</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Bus-off recovery upon user request</description>
+                           <description>User request</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -275,12 +281,12 @@ This bit configures the MSCAN as a CAN bus monitor</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Normal operation</description>
+                           <description>Normal</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Listen only mode activated</description>
+                           <description>Listen only mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -288,18 +294,18 @@ This bit configures the MSCAN as a CAN bus monitor</description>
                   <field>
                      <name>LOOPB</name>
                      <description>Loopback Self Test Mode\n
-When this bit is set, the MSCAN performs an internal loopback</description>
+Allows the MSCAN to perform an internal loopback test</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Loopback self test disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Loopback self test enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -313,30 +319,31 @@ This bit defines the clock source for the MSCAN module</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MSCAN clock source is the oscillator clock</description>
+                           <description>Oscillator clock</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MSCAN clock source is the bus clock</description>
+                           <description>Bus clock</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>CANE</name>
-                     <description>MSCAN Enable</description>
+                     <description>MSCAN Enable\n
+Module enable</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MSCAN module is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MSCAN module is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -359,8 +366,8 @@ Prescale = N+1</description>
                   </field>
                   <field>
                      <name>SJW</name>
-                     <description>Synchronization Jump Width
-The synchronization jump width defines the maximum number of time quanta (Tq) clock cycles a bit can
+                     <description>Synchronization Jump Width\n
+The synchronization jump width defines the maximum number of time quanta (Tq) clock cycles a bit can\n
 be shortened or lengthened to achieve resynchronization to data transitions on the CAN bus\n
 Width = N+1</description>
                      <bitOffset>6</bitOffset>
@@ -395,7 +402,8 @@ Time = N+1</description>
                   <field>
                      <name>SAMP</name>
                      <description>Sampling\n
-This bit determines the number of CAN bus samples taken per bit time</description>
+This bit determines the number of CAN bus samples taken per bit time,\n
+For 3 samples, PHASE_SEG1 must be at least 2 time quanta (Tq)</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -406,7 +414,7 @@ This bit determines the number of CAN bus samples taken per bit time</descriptio
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Three samples per bit. In this case, PHASE_SEG1 must be at least 2 time quanta (Tq)</description>
+                           <description>Three samples per bit</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -427,12 +435,12 @@ RXF is set by the MSCAN when a new message is shifted in the receiver FIFO</desc
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No new message available within the RxFG</description>
+                           <description>No new message</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The receiver FIFO is not empty. A new message is available in the RxFG</description>
+                           <description>Rx FIFO not empty</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -447,18 +455,19 @@ flag is set</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No data overrun condition</description>
+                           <description>No overrun</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>A data overrun detected</description>
+                           <description>Overrun detected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>TSTAT</name>
+                     <access>read-only</access>
                      <description>Transmitter Status\n
 The values of the error counters control the actual CAN bus status of the MSCAN</description>
                      <bitOffset>2</bitOffset>
@@ -488,6 +497,7 @@ The values of the error counters control the actual CAN bus status of the MSCAN<
                   </field>
                   <field>
                      <name>RSTAT</name>
+                     <access>read-only</access>
                      <description>Receiver Status\n
 The values of the error counters control the actual CAN bus status of the MSCAN</description>
                      <bitOffset>4</bitOffset>
@@ -510,7 +520,7 @@ The values of the error counters control the actual CAN bus status of the MSCAN<
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Bus-off: 256&lt;=transmit error counter\n
+                           <description>Bus-off: 256&lt;=transmit error counter
 (Redundant Information for the critical CAN bus-off status)</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -519,19 +529,19 @@ The values of the error counters control the actual CAN bus status of the MSCAN<
                   <field>
                      <name>CSCIF</name>
                      <description>CAN Status Change Interrupt Flag\n
-This flag is set when the MSCAN changes its current CAN bus status due to the actual value of the
+This flag is set when the MSCAN changes its current CAN bus status due to the actual value of the\n
 transmit error counter (TEC) and the receive error counter (REC)</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No change in CAN bus status occurred since last interrupt</description>
+                           <description>No status change</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MSCAN changed current CAN bus status</description>
+                           <description>Status changed</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -539,19 +549,19 @@ transmit error counter (TEC) and the receive error counter (REC)</description>
                   <field>
                      <name>WUPIF</name>
                      <description>Wake-Up Interrupt Flag\n
-If the MSCAN detects CAN bus activity while in sleep mode and CANTCTL0[WUPE] = 1, the module will
+If the MSCAN detects CAN bus activity while in sleep mode and CANTCTL0[WUPE] = 1, the module will\n
 set WUPIF. If not masked, a wake-up interrupt is pending while this flag is set</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No wakeup activity observed while in sleep mode</description>
+                           <description>No wakeup</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MSCAN detected activity on the CAN bus and requested wakeup</description>
+                           <description>Wakeup requested</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -561,7 +571,7 @@ set WUPIF. If not masked, a wake-up interrupt is pending while this flag is set<
             <register>
                <name>CANRIER</name>
                <description>Receiver Interrupt Enable Register\n
-This register contains the interrupt enable bits for the interrupt flags described in the
+This register contains the interrupt enable bits for the interrupt flags described in the\n
 CANRFLG register</description>
                <addressOffset>0x5</addressOffset>
                <fields>
@@ -573,12 +583,12 @@ CANRFLG register</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No interrupt request is generated from this event</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>A receive buffer full (successful message reception) event causes a receiver interrupt request</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -591,12 +601,12 @@ CANRFLG register</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No interrupt request is generated from this event</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>An overrun event causes an error interrupt request</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -611,24 +621,22 @@ CSCIF interrupts</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Do not generate any CSCIF interrupt caused by transmitter state changes</description>
+                           <description>Disabled</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Generate CSCIF interrupt only if the transmitter enters or leaves &quot;bus-off&quot; state. Discard other
-transmitter state changes for generating CSCIF interrupt</description>
+                           <description>Bus off only</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Generate CSCIF interrupt only if the transmitter enters or leaves &quot;TxErr&quot; or &quot;bus-off&quot; state. Discard
-other transmitter state changes for generating CSCIF interrupt</description>
+                           <description>Tx error only</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Generate CSCIF interrupt on all state changes</description>
+                           <description>All changes</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -643,24 +651,22 @@ interrupts</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Do not generate any CSCIF interrupt caused by receiver state changes</description>
+                           <description>Disabled</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Generate CSCIF interrupt only if the receiver enters or leaves &quot;bus-off&quot; state. Discard other receiver
-state changes for generating CSCIF interrupt</description>
+                           <description>Bus off only</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Generate CSCIF interrupt only if the receiver enters or leaves &quot;RxErr&quot; or &quot;bus-off&quot;1 state. Discard
-other receiver state changes for generating CSCIF interrupt</description>
+                           <description>Rx error only</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Generate CSCIF interrupt on all state changes</description>
+                           <description>All changes</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -673,12 +679,12 @@ other receiver state changes for generating CSCIF interrupt</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No interrupt request is generated from this event</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>A CAN Status Change event causes an error interrupt request</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -692,12 +698,12 @@ WUPIE and WUPE must both be enabled if the recovery mechanism from stop or wait 
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No interrupt request is generated from this event</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>A wake-up event causes a Wake-Up interrupt request</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -719,12 +725,12 @@ transmission</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The associated message buffer is full (loaded with a message due for transmission)</description>
+                           <description>Buffer full</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The associated message buffer is empty (not scheduled)</description>
+                           <description>Buffer empty</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -745,12 +751,12 @@ This register contains the interrupt enable bits for the transmit buffer empty i
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No interrupt request is generated from this event</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>A transmitter empty (transmit buffer available for transmission) event causes a transmitter empty interrupt request</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -772,12 +778,12 @@ The CPU sets the ABTRQx bit to request that a scheduled message buffer (TXEx = 0
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No abort request</description>
+                           <description>No request</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Abort request pending</description>
+                           <description>Request</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -792,6 +798,7 @@ The CANTAAK register indicates the successful abort of a queued message, if requ
                <fields>
                   <field>
                      <name>ABTAK</name>
+                     <access>read-only</access>
                      <description>Abort Acknowledge\n
 This flag acknowledges that a message was aborted due to a pending abort request from the CPU</description>
                      <bitOffset>0</bitOffset>
@@ -799,12 +806,12 @@ This flag acknowledges that a message was aborted due to a pending abort request
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The message was not aborted</description>
+                           <description>Nor Acknowledged</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The message was aborted</description>
+                           <description>Acknowledged</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -814,29 +821,17 @@ This flag acknowledges that a message was aborted due to a pending abort request
             <register>
                <name>CANTBSEL</name>
                <description>Transmit Buffer Selection Register\n
-The CANTBSEL register allows the selection of the actual transmit message buffer,
+The CANTBSEL register allows the selection of the actual transmit message buffer,\n
 which then will be accessible in the CANTXFG register space</description>
                <addressOffset>0xA</addressOffset>
                <fields>
                   <field>
                      <name>TX</name>
                      <description>Transmit Buffer Select\n
-The lowest numbered bit places the respective transmit buffer in the CANTXFG register space (e.g., TX1
-= 1 and TX0 = 1 selects transmit buffer TX0; TX1 = 1 and TX0 = 0 selects transmit buffer TX1)</description>
+The lowest numbered bit places the respective transmit buffer in the CANTXFG register space (e.g., TX1 = 1\n
+and TX0 = 1 selects transmit buffer TX0; TX1 = 1 and TX0 = 0 selects transmit buffer TX1)</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>3</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>The associated message buffer is deselected</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>The associated message buffer is selected, if lowest numbered bit</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -848,6 +843,7 @@ The CANIDAC register is used for identifier acceptance control</description>
                <fields>
                   <field>
                      <name>IDHIT</name>
+                     <access>read-only</access>
                      <description>Identifier Acceptance Hit Indicator\n
 The MSCAN sets these flags to indicate an identifier acceptance hit.\n
 The IDHIT indicators are always related to the message in the foreground buffer (RxFG).\n
@@ -858,24 +854,24 @@ When a message gets shifted into the foreground buffer of the receiver FIFO the 
                   <field>
                      <name>IDAM</name>
                      <description>Identifier Acceptance Mode\n
-The CPU sets these flags to define the identifier acceptance filter organization. In filter closed mode, no
+The CPU sets these flags to define the identifier acceptance filter organization. In filter closed mode, no\n
 message is accepted such that the foreground buffer is never reloaded</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Two 32-bit acceptance filters</description>
+                           <description>Two 32-bit filters</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Four 16-bit acceptance filters</description>
+                           <description>Four 16-bit filters</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Eight 8-bit acceptance filters</description>
+                           <description>Eight 8-bit filters</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -895,19 +891,19 @@ message is accepted such that the foreground buffer is never reloaded</descripti
                   <field>
                      <name>BOHOLD</name>
                      <description>Bus-off State Hold Until User Request\n
-If BORM is set in MSCAN Control Register 1 (CANCTL1), this bit indicates whether the module has
+If BORM is set in MSCAN Control Register 1 (CANCTL1), this bit indicates whether the module has\n
 entered the bus-off state. Clearing this bit requests the recovery from bus-off</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Module is not bus-off or recovery has been requested by user in bus-off state</description>
+                           <description>Not in bus-off state</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Module is bus-off and holds this state until user request</description>
+                           <description>In bus-off state</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -916,6 +912,7 @@ entered the bus-off state. Clearing this bit requests the recovery from bus-off<
             </register>
             <register>
                <name>CANRXERR</name>
+               <access>read-only</access>
                <description>Receive Error Counter\n
 This register reflects the status of the MSCAN receive error counter</description>
                <addressOffset>0xE</addressOffset>
@@ -925,6 +922,7 @@ This register reflects the status of the MSCAN receive error counter</descriptio
             </register>
             <register>
                <name>CANTXERR</name>
+               <access>read-only</access>
                <description>Transmit Error Counter\n
 This register reflects the status of the MSCAN transmit error counter</description>
                <addressOffset>0xF</addressOffset>
@@ -939,11 +937,11 @@ This register reflects the status of the MSCAN transmit error counter</descripti
                <name>CANIDAR%s</name>
                <description>Identifier Acceptance Register n of First Bank\n
 On reception, each message is written into the background receive buffer.\n
-The CPU is only signalled to read the message if it passes the criteria in the identifier acceptance and
-identifier mask registers (accepted); otherwise, the message is overwritten by the next
+The CPU is only signalled to read the message if it passes the criteria in the identifier acceptance and\n
+identifier mask registers (accepted); otherwise, the message is overwritten by the next\n
 message (dropped).\n
-The acceptance registers of the MSCAN are applied on the REIDR0-REIDR3 registers
-for the extendard identifiers and RSIDR0-RSIDR1 registers for the standard identifiers of
+The acceptance registers of the MSCAN are applied on the REIDR0-REIDR3 registers\n
+for the extendard identifiers and RSIDR0-RSIDR1 registers for the standard identifiers of\n
 incoming messages in a bit by bit manner</description>
                <addressOffset>0x10</addressOffset>
                <size>8</size>
@@ -956,11 +954,11 @@ incoming messages in a bit by bit manner</description>
                <dimIndex>0,1,2,3</dimIndex>
                <name>CANIDMR%s</name>
                <description>Identifier Mask Register n of First Bank\n
-The identifier mask register specifies which of the corresponding bits in the identifier
-acceptance register are relevant for acceptance filtering. To receive standard identifiers in
-32-bit filter mode, it is required to program the last three bits (AM[2:0]) in the mask
-registers CANIDMR1 and CANIDMR5 to &quot;don&apos;t care.&quot; To receive standard identifiers in
-16 bit filter mode, it is required to program the last three bits (AM[2:0]) in the mask
+The identifier mask register specifies which of the corresponding bits in the identifier\n
+acceptance register are relevant for acceptance filtering. To receive standard identifiers in\n
+32-bit filter mode, it is required to program the last three bits (AM[2:0]) in the mask\n
+registers CANIDMR1 and CANIDMR5 to &quot;don&apos;t care.&quot; To receive standard identifiers in\n
+16 bit filter mode, it is required to program the last three bits (AM[2:0]) in the mask\n
 registers CANIDMR1, CANIDMR3, CANIDMR5, and CANIDMR7 to &quot;don&apos;t care.&quot;</description>
                <addressOffset>0x14</addressOffset>
                <size>8</size>
@@ -974,11 +972,11 @@ registers CANIDMR1, CANIDMR3, CANIDMR5, and CANIDMR7 to &quot;don&apos;t care.&q
                <name>CANIDAR%s</name>
                <description>Identifier Acceptance Register n of Second Bank\n
 On reception, each message is written into the background receive buffer.\n
-The CPU is only signalled to read the message if it passes the criteria in the identifier acceptance and
-identifier mask registers (accepted); otherwise, the message is overwritten by the next
+The CPU is only signalled to read the message if it passes the criteria in the identifier acceptance and\n
+identifier mask registers (accepted); otherwise, the message is overwritten by the next\n
 message (dropped).\n
-The acceptance registers of the MSCAN are applied on the REIDR0-REIDR3 registers
-for the extendard identifiers and RSIDR0-RSIDR1 registers for the standard identifiers of
+The acceptance registers of the MSCAN are applied on the REIDR0-REIDR3 registers\n
+for the extendard identifiers and RSIDR0-RSIDR1 registers for the standard identifiers of\n
 incoming messages in a bit by bit manner</description>
                <addressOffset>0x18</addressOffset>
                <size>8</size>
@@ -991,11 +989,11 @@ incoming messages in a bit by bit manner</description>
                <dimIndex>4,5,6,7</dimIndex>
                <name>CANIDMR%s</name>
                <description>Identifier Mask Register n of Second Bank\n
-The identifier mask register specifies which of the corresponding bits in the identifier
-acceptance register are relevant for acceptance filtering. To receive standard identifiers in
-32-bit filter mode, it is required to program the last three bits (AM[2:0]) in the mask
-registers CANIDMR1 and CANIDMR5 to &quot;don&apos;t care.&quot; To receive standard identifiers in
-16 bit filter mode, it is required to program the last three bits (AM[2:0]) in the mask
+The identifier mask register specifies which of the corresponding bits in the identifier\n
+acceptance register are relevant for acceptance filtering. To receive standard identifiers in\n
+32-bit filter mode, it is required to program the last three bits (AM[2:0]) in the mask\n
+registers CANIDMR1 and CANIDMR5 to &quot;don&apos;t care.&quot; To receive standard identifiers in\n
+16 bit filter mode, it is required to program the last three bits (AM[2:0]) in the mask\n
 registers CANIDMR1, CANIDMR3, CANIDMR5, and CANIDMR7 to &quot;don&apos;t care.&quot;</description>
                <addressOffset>0x1C</addressOffset>
                <size>8</size>
@@ -1008,7 +1006,7 @@ registers CANIDMR1, CANIDMR3, CANIDMR5, and CANIDMR7 to &quot;don&apos;t care.&q
                <dimIndex>0,1,2,3</dimIndex>
                <name>REIDR%s</name>
                <description>Receive Extended Identifier Register %n\n
-The identifier registers for an extended format identifier consist of a total of 32 bits:
+The identifier registers for an extended format identifier consist of a total of 32 bits:\n
 REID[28:0], RSRR, REIDE, and RRTR</description>
                <addressOffset>0x20</addressOffset>
                <size>8</size>
@@ -1021,7 +1019,7 @@ REID[28:0], RSRR, REIDE, and RRTR</description>
                <dimIndex>0,1</dimIndex>
                <name>RSIDR%s</name>
                <description>Receive Standard Identifier Register %n\n
-The identifier registers for a standard format identifier consist of a total of 13 bits:
+The identifier registers for a standard format identifier consist of a total of 13 bits:\n
 RSID[10:0], RRTR, and REIDE</description>
                <addressOffset>0x20</addressOffset>
                <size>8</size>
@@ -1034,8 +1032,8 @@ RSID[10:0], RRTR, and REIDE</description>
                <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>REDSR%s</name>
                <description>Receive Extended Data Segment Register %n\n
-The eight data segment registers, each with bits RDB[7:0], contain the data to be
-received. The number of bytes to be received is determined by the data length code in the
+The eight data segment registers, each with bits RDB[7:0], contain the data to be\n
+received. The number of bytes to be received is determined by the data length code in the\n
 corresponding RDLR register</description>
                <addressOffset>0x24</addressOffset>
                <size>8</size>
@@ -1052,8 +1050,8 @@ This register keeps the data length field of the CAN frame</description>
                   <field>
                      <name>RDLC</name>
                      <description>Data Length Code Bits\n
-The data length code contains the number of bytes (data byte count) of the respective message. During
-the transmission of a remote frame, the data length code is transmitted as programmed while the number
+The data length code contains the number of bytes (data byte count) of the respective message. During\n
+the transmission of a remote frame, the data length code is transmitted as programmed while the number\n
 of transmitted data bytes is always 0. The data byte count ranges from 0 to 8 for a data frame</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>4</bitWidth>
@@ -1063,7 +1061,7 @@ of transmitted data bytes is always 0. The data byte count ranges from 0 to 8 fo
             <register>
                <name>RTSRH</name>
                <description>Receive Time Stamp Register High\n
-If the TIME bit is enabled, the MSCAN will write a time stamp to the respective registers
+If the TIME bit is enabled, the MSCAN will write a time stamp to the respective registers\n
 in the active receive buffer right after the EOF of a valid message on the CAN bus</description>
                <addressOffset>0x2E</addressOffset>
                <size>8</size>
@@ -1073,7 +1071,7 @@ in the active receive buffer right after the EOF of a valid message on the CAN b
             <register>
                <name>RTSRL</name>
                <description>Receive Time Stamp Register Low\n
-If the TIME bit is enabled, the MSCAN will write a time stamp to the respective registers
+If the TIME bit is enabled, the MSCAN will write a time stamp to the respective registers\n
 in the active receive buffer right after the EOF of a valid message on the CAN bus</description>
                <addressOffset>0x2F</addressOffset>
                <size>8</size>
@@ -1086,7 +1084,7 @@ in the active receive buffer right after the EOF of a valid message on the CAN b
                <dimIndex>0,1,2,3</dimIndex>
                <name>TEIDR%s</name>
                <description>Transmit Extended Identifier Register %n\n
-The identifier registers for an extended format identifier consist of a total of 32 bits:
+The identifier registers for an extended format identifier consist of a total of 32 bits:\n
 TEID[28:0], TSRR, TIDE, and TRTR</description>
                <addressOffset>0x30</addressOffset>
                <size>8</size>
@@ -1099,7 +1097,7 @@ TEID[28:0], TSRR, TIDE, and TRTR</description>
                <dimIndex>0,1</dimIndex>
                <name>TSIDR%s</name>
                <description>Transmit Standard Identifier Register %n\n
-The identifier registers for a standard format identifier consist of a total of 13 bits:
+The identifier registers for a standard format identifier consist of a total of 13 bits:\n
 TID[10:0], TRTR, and TSIDE</description>
                <addressOffset>0x30</addressOffset>
                <size>8</size>
@@ -1112,8 +1110,8 @@ TID[10:0], TRTR, and TSIDE</description>
                <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>TEDSR%s</name>
                <description>Transmit Extended Data Segment Register %n\n
-The eight data segment registers, each with bits TDB[7:0], contain the data to be
-transmitted. The number of bytes to be transmitted is determined by the data length code
+The eight data segment registers, each with bits TDB[7:0], contain the data to be\n
+transmitted. The number of bytes to be transmitted is determined by the data length code\n
 in the corresponding TDLR register</description>
                <addressOffset>0x34</addressOffset>
                <size>8</size>
@@ -1132,8 +1130,8 @@ This register keeps the data length field of the CAN frame</description>
             <register>
                <name>TBPR</name>
                <description>Transmit Buffer Priority Register\n
-This register defines the local priority of the associated message buffer. The local priority
-is used for the internal prioritization process of the MSCAN and is defined to be highest
+This register defines the local priority of the associated message buffer. The local priority\n
+is used for the internal prioritization process of the MSCAN and is defined to be highest\n
 for the smallest binary number</description>
                <addressOffset>0x3D</addressOffset>
                <size>8</size>
@@ -1143,9 +1141,9 @@ for the smallest binary number</description>
             <register>
                <name>TTSRH</name>
                <description>Transmit Time Stamp Register High\n
-If the TIME bit is enabled, the MSCAN will write a time stamp to the respective registers
-in the active transmit buffer right after the EOF of a valid message on the CAN bus. In
-case of a transmission, the CPU can only read the time stamp after the respective transmit
+If the TIME bit is enabled, the MSCAN will write a time stamp to the respective registers\n
+in the active transmit buffer right after the EOF of a valid message on the CAN bus. In\n
+case of a transmission, the CPU can only read the time stamp after the respective transmit\n
 buffer has been flagged empty</description>
                <addressOffset>0x3E</addressOffset>
                <size>8</size>
@@ -1155,9 +1153,9 @@ buffer has been flagged empty</description>
             <register>
                <name>TTSRL</name>
                <description>Transmit Time Stamp Register Low\n
-If the TIME bit is enabled, the MSCAN will write a time stamp to the respective registers
-in the active transmit buffer right after the EOF of a valid message on the CAN bus. In
-case of a transmission, the CPU can only read the time stamp after the respective transmit
+If the TIME bit is enabled, the MSCAN will write a time stamp to the respective registers\n
+in the active transmit buffer right after the EOF of a valid message on the CAN bus. In\n
+case of a transmission, the CPU can only read the time stamp after the respective transmit\n
 buffer has been flagged empty</description>
                <addressOffset>0x3F</addressOffset>
                <size>8</size>

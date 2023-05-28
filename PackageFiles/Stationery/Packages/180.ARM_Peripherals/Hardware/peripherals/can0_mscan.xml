@@ -1,0 +1,788 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- can0_mscan.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Scalable Controller Area Network">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <xi:include href="_mapPinsOption.xml"/>
+
+   <xi:include href="_irqOption.xml"/>
+
+   <binaryOption key="can_canctl0_rxfrm" condition="can_canctl0_rxfrm_present"
+      enumStem="CanCanctl0Rxfrm"
+      toolTip="This bit is read and clear only.\n
+               It is set when a receiver has received a valid message correctly,"
+      description="Received Frame Flag" >
+      <choice name="No new message"         value="0" enum="NoNewMessage"/>
+      <choice name="New message available"  value="1" enum="NewMessageAvailable"/>
+   </binaryOption>
+
+   <binaryOption key="can_canctl0_cswai" condition="can_canctl0_cswai_present"
+      enumStem="CanCanctl0Cswai"
+      toolTip="This bit allows for lower power consumption in wait mode"
+      description="CAN Stops in Wait Mode" >
+      <choice name="Ignore wait mode"      value="0" enum="IgnoreWaitMode"/>
+      <choice name="Suspend in wait mode"  value="1" enum="SuspendInWaitMode"/>
+   </binaryOption>
+
+   <binaryOption key="can_canctl0_time" condition="can_canctl0_time_present"
+      enumStem="CanCanctl0Time"
+      toolTip="Enables an internal 16-bit wide free running timer which is clocked by the bit clock rate"
+      description="Timer Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="can_canctl0_wupe" condition="can_canctl0_wupe_present"
+      enumStem="CanCanctl0Wupe"
+      toolTip="Allows the MSCAN to restart from sleep mode or from power down mode when traffic detected on CAN"
+      description="WakeUp Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="can_canctl0_slprq" condition="can_canctl0_slprq_present"
+      enumStem="CanCanctl0Slprq"
+      toolTip="This bit requests the MSCAN to enter sleep mode"
+      description="Sleep Mode Request" >
+      <choice name="Normal mode"          value="0" enum="NormalMode"/>
+      <choice name="Initialisation mode"  value="1" enum="InitialisationMode"/>
+   </binaryOption>
+
+   <binaryOption key="can_canctl0_initrq" condition="can_canctl0_initrq_present"
+      enumStem="CanCanctl0Initrq"
+      toolTip="When this bit is set by the CPU, the MSCAN skips to initialization mode.\n
+               Any ongoing transmission or reception is aborted and synchronization to the CAN bus is lost.\n
+               The module indicates entry to initialization mode by setting INITAK = 1"
+      description="Initialization Mode Request" >
+      <choice name="Normal mode"          value="0" enum="NormalMode"/>
+      <choice name="Initialisation mode"  value="1" enum="InitialisationMode"/>
+   </binaryOption>
+
+   <binaryOption key="can_canctl1_cane" condition="can_canctl1_cane_present"
+      enumStem="CanCanctl1Cane"
+      toolTip="Module enable"
+      description="MSCAN Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="can_canctl1_clksrc" condition="can_canctl1_clksrc_present"
+      enumStem="CanCanctl1Clksrc"
+      toolTip="This bit defines the clock source for the MSCAN module"
+      description="MSCAN Clock Source" >
+      <choice name="Oscillator clock"  value="0" enum="OscillatorClock"/>
+      <choice name="Bus clock"         value="1" enum="BusClock"/>
+   </binaryOption>
+
+   <binaryOption key="can_canctl1_loopb" condition="can_canctl1_loopb_present"
+      enumStem="CanCanctl1Loopb"
+      toolTip="Allows the MSCAN to perform an internal loopback test"
+      description="Loopback Self Test Mode" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="can_canctl1_listen" condition="can_canctl1_listen_present"
+      enumStem="CanCanctl1Listen"
+      toolTip="This bit configures the MSCAN as a CAN bus monitor"
+      description="Listen Only Mode" >
+      <choice name="Normal"            value="0" enum="Normal"/>
+      <choice name="Listen only mode"  value="1" enum="ListenOnlyMode"/>
+   </binaryOption>
+
+   <binaryOption key="can_canctl1_borm" condition="can_canctl1_borm_present"
+      enumStem="CanCanctl1Borm"
+      toolTip="This bit configures the bus-off state recovery mode of the MSCAN\n
+               See Bosch CAN 2.0A/B protocol specification"
+      description="Bus-Off Recovery Mode" >
+      <choice name="Automatic"     value="0" enum="Automatic"/>
+      <choice name="User request"  value="1" enum="UserRequest"/>
+   </binaryOption>
+
+   <binaryOption key="can_canctl1_wupm" condition="can_canctl1_wupm_present"
+      enumStem="CanCanctl1Wupm"
+      toolTip="If WUPE in CANCTL0 is enabled, this bit defines whether the integrated low-pass filter is\n
+               applied to protect the MSCAN from spurious wakeup\n
+               If enabled, MSCAN wakes only on a dominant pulse on the CAN bus of length Twup"
+      description="WakeUp Mode" >
+      <choice name="Wakup unfiltered"  value="0" enum="WakupUnfiltered"/>
+      <choice name="Wakup filtered"    value="1" enum="WakupFiltered"/>
+   </binaryOption>
+
+   <intOption key="can_canbtr0_sjw" condition="can_canbtr0_sjw_present"
+      description="Synchronization Jump Width"
+      toolTip="The synchronization jump width defines the maximum number of time quanta (Tq) clock cycles a bit can\n
+               be shortened or lengthened to achieve resynchronization to data transitions on the CAN bus\n
+               Width = N+1"
+   />
+
+   <intOption key="can_canbtr0_brp" condition="can_canbtr0_brp_present"
+      description="Baud Rate Prescaler"
+      toolTip="These bits determine the time quanta (Tq) clock which is used to build up the bit timing.\n
+               Prescale = N+1"
+   />
+
+   <binaryOption key="can_canbtr1_samp" condition="can_canbtr1_samp_present"
+      enumStem="CanCanbtr1Samp"
+      toolTip="This bit determines the number of CAN bus samples taken per bit time,\n
+               For 3 samples, PHASE_SEG1 must be at least 2 time quanta (Tq)"
+      description="Sampling" >
+      <choice name="One sample per bit"     value="0" enum="OneSamplePerBit"/>
+      <choice name="Three samples per bit"  value="1" enum="ThreeSamplesPerBit"/>
+   </binaryOption>
+
+   <intOption key="can_canbtr1_tseg2" condition="can_canbtr1_tseg2_present"
+      description="Time Segment 2"
+      toolTip="Time segments within the bit time fix the number of clock cycles per bit time and the location of the sample point.\n
+               Time = N+1"
+   />
+
+   <intOption key="can_canbtr1_tseg1" condition="can_canbtr1_tseg1_present"
+      description="Time Segment 1"
+      toolTip="Time segments within the bit time fix the number of clock cycles per bit time and the location of the sample point.\n
+               Time = N+1\n
+               The bit time is determined by the oscillator frequency, the baud rate prescaler, and the number of time quanta (Tq) clock cycles per bit.\n
+               Bit time = (1 + timesegment1 + timesegment2) * (Prescaler value)/ fCANCLK"
+   />
+
+   <binaryOption key="can_canrflg_wupif" condition="can_canrflg_wupif_present"
+      enumStem="CanCanrflgWupif"
+      toolTip="If the MSCAN detects CAN bus activity while in sleep mode and CANTCTL0[WUPE] = 1, the module will\n
+               set WUPIF. If not masked, a wake-up interrupt is pending while this flag is set"
+      description="Wake-Up Interrupt Flag" >
+      <choice name="No wakeup"         value="0" enum="NoWakeup"/>
+      <choice name="Wakeup requested"  value="1" enum="WakeupRequested"/>
+   </binaryOption>
+
+   <binaryOption key="can_canrflg_cscif" condition="can_canrflg_cscif_present"
+      enumStem="CanCanrflgCscif"
+      toolTip="This flag is set when the MSCAN changes its current CAN bus status due to the actual value of the\n
+               transmit error counter (TEC) and the receive error counter (REC)"
+      description="CAN Status Change Interrupt Flag" >
+      <choice name="No status change"  value="0" enum="NoStatusChange"/>
+      <choice name="Status changed"    value="1" enum="StatusChanged"/>
+   </binaryOption>
+
+   <binaryOption key="can_canrflg_ovrif" condition="can_canrflg_ovrif_present"
+      enumStem="CanCanrflgOvrif"
+      toolTip="This flag is set when a data overrun condition occurs. If not masked, an error interrupt is pending while this
+flag is set"
+      description="Overrun Interrupt Flag" >
+      <choice name="No overrun"        value="0" enum="NoOverrun"/>
+      <choice name="Overrun detected"  value="1" enum="OverrunDetected"/>
+   </binaryOption>
+
+   <binaryOption key="can_canrflg_rxf" condition="can_canrflg_rxf_present"
+      enumStem="CanCanrflgRxf"
+      toolTip="RXF is set by the MSCAN when a new message is shifted in the receiver FIFO"
+      description="Receive Buffer Full Flag" >
+      <choice name="No new message"     value="0" enum="NoNewMessage"/>
+      <choice name="Rx FIFO not empty"  value="1" enum="RxFifoNotEmpty"/>
+   </binaryOption>
+
+   <binaryOption key="can_canrier_wupie" condition="can_canrier_wupie_present"
+      enumStem="CanCanrierWupie"
+      toolTip="WUPIE and WUPE must both be enabled if the recovery mechanism from stop or wait is required"
+      description="WakeUp Interrupt Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="can_canrier_cscie" condition="can_canrier_cscie_present"
+      enumStem="CanCanrierCscie"
+      description="CAN Status Change Interrupt Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <choiceOption key="can_canrier_rstate" condition="can_canrier_rstate_present"
+      enumStem="CanCanrierRstate"
+      toolTip="These RSTAT enable bits control the sensitivity level in which receiver state changes are causing CSCIF
+interrupts"
+      description="Receiver Status Change Enable" >
+      <choice name="Disabled"       value="0" enum="Disabled"/>
+      <choice name="Bus off only"   value="1" enum="BusOffOnly"/>
+      <choice name="Rx error only"  value="2" enum="RxErrorOnly"/>
+      <choice name="All changes"    value="3" enum="AllChanges"/>
+   </choiceOption>
+
+   <choiceOption key="can_canrier_tstate" condition="can_canrier_tstate_present"
+      enumStem="CanCanrierTstate"
+      toolTip="These TSTAT enable bits control the sensitivity level in which transmitter state changes are causing
+CSCIF interrupts"
+      description="Transmitter Status Change Enable" >
+      <choice name="Disabled"       value="0" enum="Disabled"/>
+      <choice name="Bus off only"   value="1" enum="BusOffOnly"/>
+      <choice name="Tx error only"  value="2" enum="TxErrorOnly"/>
+      <choice name="All changes"    value="3" enum="AllChanges"/>
+   </choiceOption>
+
+   <binaryOption key="can_canrier_ovrie" condition="can_canrier_ovrie_present"
+      enumStem="CanCanrierOvrie"
+      description="Overrun Interrupt Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="can_canrier_rxfie" condition="can_canrier_rxfie_present"
+      enumStem="CanCanrierRxfie"
+      description="Receiver Full Interrupt Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="can_cantflg_txe" condition="can_cantflg_txe_present"
+      enumStem="CanCantflgTxe"
+      toolTip="These flags indicates that the associated transmit message buffer is empty, and thus not scheduled for
+transmission"
+      description="Transmitter Buffer Empty" >
+      <choice name="Buffer full"   value="0" enum="BufferFull"/>
+      <choice name="Buffer empty"  value="1" enum="BufferEmpty"/>
+   </binaryOption>
+
+   <binaryOption key="can_cantier_txeie" condition="can_cantier_txeie_present"
+      enumStem="CanCantierTxeie"
+      description="Transmitter Empty Interrupt Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="can_cantarq_abtrq" condition="can_cantarq_abtrq_present"
+      enumStem="CanCantarqAbtrq"
+      toolTip="The CPU sets the ABTRQx bit to request that a scheduled message buffer (TXEx = 0) be aborted"
+      description="Abort Request" >
+      <choice name="No request"  value="0" enum="NoRequest"/>
+      <choice name="Request"     value="1" enum="Request"/>
+   </binaryOption>
+
+   <intOption key="can_cantbsel_tx" condition="can_cantbsel_tx_present"
+      description="Transmit Buffer Select"
+      toolTip="The lowest numbered bit places the respective transmit buffer in the CANTXFG register space (e.g., TX1 = 1\n
+               and TX0 = 1 selects transmit buffer TX0; TX1 = 1 and TX0 = 0 selects transmit buffer TX1)"
+   />
+
+   <choiceOption key="can_canidac_idam" condition="can_canidac_idam_present"
+      enumStem="CanCanidacIdam"
+      toolTip="The CPU sets these flags to define the identifier acceptance filter organization. In filter closed mode, no\n
+               message is accepted such that the foreground buffer is never reloaded"
+      description="Identifier Acceptance Mode" >
+      <choice name="Two 32-bit filters"   value="0" enum="Two32BitFilters"/>
+      <choice name="Four 16-bit filters"  value="1" enum="Four16BitFilters"/>
+      <choice name="Eight 8-bit filters"  value="2" enum="Eight8BitFilters"/>
+      <choice name="Filter closed"        value="3" enum="FilterClosed"/>
+   </choiceOption>
+
+   <binaryOption key="can_canmisc_bohold" condition="can_canmisc_bohold_present"
+      enumStem="CanCanmiscBohold"
+      toolTip="If BORM is set in MSCAN Control Register 1 (CANCTL1), this bit indicates whether the module has\n
+               entered the bus-off state. Clearing this bit requests the recovery from bus-off"
+      description="Bus-off State Hold Until User Request" >
+      <choice name="Not in bus-off state"  value="0" enum="NotInBusOffState"/>
+      <choice name="In bus-off state"      value="1" enum="InBusOffState"/>
+   </binaryOption>
+
+   <intOption key="can_rdlr_rdlc" condition="can_rdlr_rdlc_present"
+      description="Data Length Code Bits"
+      toolTip="The data length code contains the number of bytes (data byte count) of the respective message. During\n
+               the transmission of a remote frame, the data length code is transmitted as programmed while the number\n
+               of transmitted data bytes is always 0. The data byte count ranges from 0 to 8 for a data frame"
+   />
+
+<!-- Grahic here -->  
+
+   <for keys="field:name"
+        values="
+      can_canctl0_rxfrm:Canctl0Rxfrm;
+      can_canctl0_cswai:Canctl0Cswai;
+      can_canctl0_time:Canctl0Time;
+      can_canctl0_wupe:Canctl0Wupe;
+      can_canctl0_slprq:Canctl0Slprq;
+      can_canctl0_initrq:Canctl0Initrq;
+      can_canctl1_cane:Canctl1Cane;
+      can_canctl1_clksrc:Canctl1Clksrc;
+      can_canctl1_loopb:Canctl1Loopb;
+      can_canctl1_listen:Canctl1Listen;
+      can_canctl1_borm:Canctl1Borm;
+      can_canctl1_wupm:Canctl1Wupm;
+      can_canbtr1_samp:Canbtr1Samp;
+      can_canrflg_wupif:CanrflgWupif;
+      can_canrflg_cscif:CanrflgCscif;
+      can_canrflg_ovrif:CanrflgOvrif;
+      can_canrflg_rxf:CanrflgRxf;
+      can_canrier_wupie:CanrierWupie;
+      can_canrier_cscie:CanrierCscie;
+      can_canrier_rstate:CanrierRstate;
+      can_canrier_tstate:CanrierTstate;
+      can_canrier_ovrie:CanrierOvrie;
+      can_canrier_rxfie:CanrierRxfie;
+      can_cantflg_txe:CantflgTxe;
+      can_cantier_txeie:CantierTxeie;
+      can_cantarq_abtrq:CantarqAbtrq;
+      can_canidac_idam:CanidacIdam;
+      can_canmisc_bohold:CanmiscBohold">
+      <setTemplate variables="%(field)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void configure%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}\n\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== CAN Init class =============================== -->
+
+   <template key="init_description" namespace="all">
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_class)::Init init {
+      \t *
+      \t *   // Setup values
+      \t *   CanCanctl0Rxfrm_NoNewMessage              // Received Frame Flag,
+      \t *   CanCanctl0Cswai_IgnoreWaitMode            // CAN Stops in Wait Mode,
+      \t *   CanCanctl0Time_Disabled                   // Timer Enable,
+      \t *   CanCanctl0Wupe_Disabled                   // WakeUp Enable,
+      \t *   CanCanctl0Slprq_NormalMode                // Sleep Mode Request,
+      \t *   CanCanctl0Initrq_NormalMode               // Initialization Mode Request,
+      \t *   CanCanctl1Cane_Disabled                   // MSCAN Enable,
+      \t *   CanCanctl1Clksrc_OscillatorClock          // MSCAN Clock Source,
+      \t *   CanCanctl1Loopb_Disabled                  // Loopback Self Test Mode,
+      \t *   CanCanctl1Listen_Normal                   // Listen Only Mode,
+      \t *   CanCanctl1Borm_Automatic                  // Bus-Off Recovery Mode,
+      \t *   CanCanctl1Wupm_WakupUnfiltered            // WakeUp Mode,
+      \t *   0,                                        // Synchronization Jump Width,
+      \t *   0,                                        // Baud Rate Prescaler,
+      \t *   CanCanbtr1Samp_OneSamplePerBit            // Sampling,
+      \t *   0,                                        // Time Segment 2,
+      \t *   0,                                        // Time Segment 1,
+      \t *   CanCanrflgWupif_NoWakeup                  // Wake-Up Interrupt Flag,
+      \t *   CanCanrflgCscif_NoStatusChange            // CAN Status Change Interrupt Flag,
+      \t *   CanCanrflgOvrif_NoOverrun                 // Overrun Interrupt Flag,
+      \t *   CanCanrflgRxf_NoNewMessage                // Receive Buffer Full Flag,
+      \t *   CanCanrierWupie_Disabled                  // WakeUp Interrupt Enable,
+      \t *   CanCanrierCscie_Disabled                  // CAN Status Change Interrupt Enable,
+      \t *   CanCanrierRstate_Disabled                 // Receiver Status Change Enable,
+      \t *   CanCanrierTstate_Disabled                 // Transmitter Status Change Enable,
+      \t *   CanCanrierOvrie_Disabled                  // Overrun Interrupt Enable,
+      \t *   CanCanrierRxfie_Disabled                  // Receiver Full Interrupt Enable,
+      \t *   CanCantflgTxe_BufferFull                  // Transmitter Buffer Empty,
+      \t *   CanCantierTxeie_Disabled                  // Transmitter Empty Interrupt Enable,
+      \t *   CanCantarqAbtrq_NoRequest                 // Abort Request,
+      \t *   0,                                        // Transmit Buffer Select,
+      \t *   CanCanidacIdam_Two32BitFilters            // Identifier Acceptance Mode,
+      \t *   CanCanmiscBohold_NotInBusOffState         // Bus-off State Hold Until User Request,
+      \t *   0,                                        // Data Length Code Bits,
+      \t * };
+      \t *
+      \t * // Initialise $(_class) from values specified above
+      \t * $(_class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t
+      \t/**
+      \t * Type definition for $(_class) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)(const uint32_t &);
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+    ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></setTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="can_canctl0_rxfrm,can_canctl0_cswai,can_canctl0_time,can_canctl0_wupe,can_canctl0_slprq,can_canctl0_initrq"
+   ><![CDATA[
+      \t   /// Control Register 0
+      \t   uint8_t canctl0 = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="can_canctl1_cane,can_canctl1_clksrc,can_canctl1_loopb,can_canctl1_listen,can_canctl1_borm,can_canctl1_wupm"
+   ><![CDATA[
+      \t   /// Control Register 1
+      \t   uint8_t canctl1 = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="can_canbtr0_sjw,can_canbtr0_brp"
+   ><![CDATA[
+      \t   /// Bus Timing Register 0
+      \t   uint8_t canbtr0 = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="can_canbtr1_samp,can_canbtr1_tseg2,can_canbtr1_tseg1"
+   ><![CDATA[
+      \t   /// Bus Timing Register 1
+      \t   uint8_t canbtr1 = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="can_canrflg_wupif,can_canrflg_cscif,can_canrflg_ovrif,can_canrflg_rxf"
+   ><![CDATA[
+      \t   /// Receiver Flag Register
+      \t   uint8_t canrflg = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="can_canrier_wupie,can_canrier_cscie,can_canrier_rstate,can_canrier_tstate,can_canrier_ovrie,can_canrier_rxfie"
+   ><![CDATA[
+      \t   /// Receiver Interrupt Enable Register
+      \t   uint8_t canrier = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="can_cantflg_txe"
+   ><![CDATA[
+      \t   /// Transmitter Flag Register
+      \t   uint8_t cantflg = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="can_cantier_txeie"
+   ><![CDATA[
+      \t   /// Transmitter Interrupt Enable Register
+      \t   uint8_t cantier = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="can_cantarq_abtrq"
+   ><![CDATA[
+      \t   /// Transmitter Message Abort Request Register
+      \t   uint8_t cantarq = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="can_cantbsel_tx"
+   ><![CDATA[
+      \t   /// Transmit Buffer Selection Register
+      \t   uint8_t cantbsel = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="can_canidac_idam"
+   ><![CDATA[
+      \t   /// Identifier Acceptance Control Register
+      \t   uint8_t canidac = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="can_canmisc_bohold"
+   ><![CDATA[
+      \t   /// Miscellaneous Register
+      \t   uint8_t canmisc = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="can_rdlr_rdlc"
+   ><![CDATA[
+      \t   /// Receive Data Length Register
+      \t   uint8_t rdlr = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="/PCR/nvic_irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+   ]]></initialValueTemplate>
+
+<!--   Configure methods -->
+
+   <template discardRepeats="true" key="/CAN/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure CAN from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-back if feature enabled
+      \t      setCallback(init.callbackFunction);
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
+      \t   enable();
+      \t
+      \t   can->CANCTL0    = init.canctl0;
+      \t   can->CANCTL1    = init.canctl1;
+      \t   can->CANBTR0    = init.canbtr0;
+      \t   can->CANBTR1    = init.canbtr1;
+      \t   can->CANRFLG    = init.canrflg;
+      \t   can->CANRIER    = init.canrier;
+      \t   can->CANTFLG    = init.cantflg;
+      \t   can->CANTIER    = init.cantier;
+      \t   can->CANTARQ    = init.cantarq;
+      \t   can->CANTBSEL    = init.cantbsel;
+      \t   can->CANIDAC    = init.canidac;
+      \t   can->CANMISC    = init.canmisc;
+      \t   can->CANRXERR    = init.canrxerr;
+      \t   can->CANTXERR    = init.cantxerr;
+      \t   can->CANIDAR    = init.canidar;
+      \t   can->CANIDMR    = init.canidmr;
+      \t   can->CANIDAR    = init.canidar;
+      \t   can->CANIDMR    = init.canidmr;
+      \t   can->REIDR    = init.reidr;
+      \t   can->RSIDR    = init.rsidr;
+      \t   can->REDSR    = init.redsr;
+      \t   can->RDLR    = init.rdlr;
+      \t   can->RTSRH    = init.rtsrh;
+      \t   can->RTSRL    = init.rtsrl;
+      \t   can->TEIDR    = init.teidr;
+      \t   can->TSIDR    = init.tsidr;
+      \t   can->TEDSR    = init.tedsr;
+      \t   can->TDLR    = init.tdlr;
+      \t   can->TBPR    = init.tbpr;
+      \t   can->TTSRH    = init.ttsrh;
+      \t   can->TTSRL    = init.ttsrl;
+      \t
+      \t   calibrate();
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n
+   ]]></template>
+
+<!--   Constructors -->
+
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%enumParam0 = %paramExpression;
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <setTemplate namespace="usbdm"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      #if $(irqHandlingMethod)
+      \t      %registerName = %paramExpression;
+      #else
+      \t      (void)%paramExpression;
+      #endif
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <for keys="r"
+      values="
+            can_canctl0_rxfrm;
+            can_canctl0_cswai;
+            can_canctl0_time;
+            can_canctl0_wupe;
+            can_canctl0_slprq;
+            can_canctl0_initrq;
+            can_canctl1_cane;
+            can_canctl1_clksrc;
+            can_canctl1_loopb;
+            can_canctl1_listen;
+            can_canctl1_borm;
+            can_canctl1_wupm;
+            can_canbtr1_samp;
+            can_canrflg_wupif;
+            can_canrflg_cscif;
+            can_canrflg_ovrif;
+            can_canrflg_rxf;
+            can_canrier_wupie;
+            can_canrier_cscie;
+            can_canrier_rstate;
+            can_canrier_tstate;
+            can_canrier_ovrie;
+            can_canrier_rxfie;
+            can_cantflg_txe;
+            can_cantier_txeie;
+            can_cantarq_abtrq;
+            can_canidac_idam;
+            can_canmisc_bohold
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+   <for keys="r"
+      values="
+            can_canbtr0_sjw;
+            can_canbtr0_brp;
+            can_canbtr1_tseg2;
+            can_canbtr1_tseg1;
+            can_cantbsel_tx;
+            can_rdlr_rdlc
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         \t    * @param value %description
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(unsigned value, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | value;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+            can_canctl0_rxfrm,
+            can_canctl0_cswai,
+            can_canctl0_time,
+            can_canctl0_wupe,
+            can_canctl0_slprq,
+            can_canctl0_initrq,
+            can_canctl1_cane,
+            can_canctl1_clksrc,
+            can_canctl1_loopb,
+            can_canctl1_listen,
+            can_canctl1_borm,
+            can_canctl1_wupm,
+            can_canbtr1_samp,
+            can_canrflg_wupif,
+            can_canrflg_cscif,
+            can_canrflg_ovrif,
+            can_canrflg_rxf,
+            can_canrier_wupie,
+            can_canrier_cscie,
+            can_canrier_rstate,
+            can_canrier_tstate,
+            can_canrier_ovrie,
+            can_canrier_rxfie,
+            can_cantflg_txe,
+            can_cantier_txeie,
+            can_cantarq_abtrq,
+            can_canidac_idam,
+            can_canmisc_bohold,
+            irqLevel
+         "
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      \t}; // $(_class)::BasicInfo::Init\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      }; // $(_class)::BasicInfo\n\n
+   ]]>
+   </template>
+
+<signals />
+
+</peripheralPage>

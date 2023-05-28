@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE02Z2
       MKE02Z4
       MKE04Z4
@@ -45,7 +45,8 @@ supply current. When BR is 1 - 8191, the UART baud rate equals BUSCLK/(16xBR)</d
                   </field>
                   <field>
                      <name>SBNS</name>
-                     <description>Stop Bit Number Select</description>
+                     <description>Stop Bit Number Select\n
+SBNS selects the number of stop bits present in a data frame</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -197,7 +198,8 @@ Determines if idle character bit count starts after start bit or stop bit</descr
                   </field>
                   <field>
                      <name>RSRC</name>
-                     <description>Receiver Source Select\nSelect between loop-back and single-wire mode</description>
+                     <description>Receiver Source Select\n
+Select between loop-back and single-wire mode</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -215,7 +217,8 @@ Determines if idle character bit count starts after start bit or stop bit</descr
                   </field>
                   <field>
                      <name>UARTSWAI</name>
-                     <description>Stops in Wait Mode\nControls action in Wait Mode</description>
+                     <description>Stops in Wait Mode\n
+Controls action in Wait Mode</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -280,7 +283,7 @@ Controls loop mode where transmitter output is internally connected to receiver 
                   <field>
                      <name>RWU</name>
                      <description>Receiver Wakeup Control\n
-Setting RWU enables the wakeup function and inhibits further receiver interrupt requests.\n 
+Setting RWU enables the wakeup function and inhibits further receiver interrupt requests.\n
 Normally, hardware wakes the receiver by automatically clearing RWU</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -319,9 +322,9 @@ Normally, hardware wakes the receiver by automatically clearing RWU</description
                   <field derivedFrom="RE" > <name>ILIE</name> <description>Idle Line Interrupt Enable\n
 		  Enables the idle line flag, S1[IDLE], to generate interrupt requests , based on the state of C5[ILDMAS]</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="RE" > <name>RIE</name> <description>Receiver Full Interrupt/DMA requests\n
-		  Allows interrupt or DMA requests triggered by RDRF</description> <bitOffset>5</bitOffset> </field>
+                  Allows interrupt or DMA requests triggered by RDRF</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="RE" > <name>TCIE</name> <description>Transmission Complete Interrupt/DMA requests\n
-		  Allows interrupt or DMA requests triggered by TDRE</description> <bitOffset>6</bitOffset> </field>
+                  Allows interrupt or DMA requests triggered by TDRE</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="RE" > <name>TIE</name> <description>Transmitter Interrupt/DMA Transfer Enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
@@ -480,7 +483,7 @@ RAF is cleared when the receiver detects an idle character</description>
                   <field>
                      <name>LBKDE</name>
                      <description>LIN Break Detection Enable\n
-Enables break character detection.\n
+Enables LIN break character detection.\n
 While LBKDE is set, S1[RDRF], S1[NF], S1[FE], and S1[PF] are prevented from setting</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -526,7 +529,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Idle detect doesn&apos;t set S1.IDLE</description>
+                           <description>Idle chars ignored</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>

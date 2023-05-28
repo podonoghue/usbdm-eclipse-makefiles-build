@@ -1,0 +1,706 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- uart0_mke.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Universal Asynchronous Receiver/Transmitter">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <xi:include href="_mapPinsOption.xml"/>
+
+   <xi:include href="_irqOption.xml"/>
+
+   <binaryOption key="uart_bdh_lbkdie" condition="uart_bdh_lbkdie_present"
+      enumStem="UartBdhLbkdie"
+      description="LIN Break Detect Interrupt Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="uart_bdh_rxedgie" condition="uart_bdh_rxedgie_present"
+      enumStem="UartBdhRxedgie"
+      description="RxD Input Active Edge Interrupt Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="uart_bdh_sbns" condition="uart_bdh_sbns_present"
+      enumStem="UartBdhSbns"
+      toolTip="SBNS selects the number of stop bits present in a data frame"
+      description="Stop Bit Number Select" >
+      <choice name="One stop bit"  value="0" enum="OneStopBit"/>
+      <choice name="Two stop bit"  value="1" enum="TwoStopBit"/>
+   </binaryOption>
+
+   <intOption key="uart_bdh_sbr" condition="uart_bdh_sbr_present"
+      description="Baud Rate Modulo Divisor"
+      toolTip="The 13 bits in SBR[12:0] are referred to collectively as BR. They set the modulo divide rate for the\n
+               UART baud rate generator. When BR is cleared, the UART baud rate generator is disabled to reduce\n
+               supply current. When BR is 1 - 8191, the UART baud rate equals BUSCLK/(16xBR)"
+   />
+
+   <intOption key="uart_bdl_sbr" condition="uart_bdl_sbr_present"
+      description="Baud Rate Bits"
+   />
+
+   <binaryOption key="uart_c1_loops" condition="uart_c1_loops_present"
+      enumStem="UartC1Loops"
+      toolTip="Controls loop mode where transmitter output is internally connected to receiver input. [See also RSRC]"
+      description="Loop Mode Select" >
+      <choice name="Normal operation"  value="0" enum="NormalOperation"/>
+      <choice name="Loop mode"         value="1" enum="LoopMode"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c1_uartswai" condition="uart_c1_uartswai_present"
+      enumStem="UartC1Uartswai"
+      toolTip="Controls action in Wait Mode"
+      description="Stops in Wait Mode" >
+      <choice name="Enable in Wait mode"  value="0" enum="EnableInWaitMode"/>
+      <choice name="Freeze in Wait mode"  value="1" enum="FreezeInWaitMode"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c1_rsrc" condition="uart_c1_rsrc_present"
+      enumStem="UartC1Rsrc"
+      toolTip="Select between loop-back and single-wire mode"
+      description="Receiver Source Select" >
+      <choice name="Internal loop back mode"  value="0" enum="InternalLoopBackMode"/>
+      <choice name="Single-wire mode"         value="1" enum="SingleWireMode"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c1_m" condition="uart_c1_m_present"
+      enumStem="UartC1M"
+      description="9-Bit or 8-Bit Mode Select" >
+      <choice name="8-bit"       value="0" enum="8Bit"/>
+      <choice name="9-bit"       value="1" enum="9Bit"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c1_wake" condition="uart_c1_wake_present"
+      enumStem="UartC1Wake"
+      description="Receiver Wakeup Method Select" >
+      <choice name="Idle-line wakeup"     value="0" enum="IdleLineWakeup"/>
+      <choice name="Address-mark wakeup"  value="1" enum="AddressMarkWakeup"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c1_ilt" condition="uart_c1_ilt_present"
+      enumStem="UartC1Ilt"
+      toolTip="Determines if idle character bit count starts after start bit or stop bit"
+      description="Idle Line Type Select" >
+      <choice name="After start bit"  value="0" enum="AfterStartBit"/>
+      <choice name="After stop bit"   value="1" enum="AfterStopBit"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c1_pe" condition="uart_c1_pe_present"
+      enumStem="UartC1Pe"
+      description="Parity Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c1_pt" condition="uart_c1_pt_present"
+      enumStem="UartC1Pt"
+      description="Parity Type" >
+      <choice name="Even parity"  value="0" enum="EvenParity"/>
+      <choice name="Odd parity"   value="1" enum="OddParity"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c2_tie" condition="uart_c2_tie_present"
+      enumStem="UartC2Tie"
+      description="Transmitter Interrupt/DMA Transfer Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c2_tcie" condition="uart_c2_tcie_present"
+      enumStem="UartC2Tcie"
+      toolTip="Allows interrupt or DMA requests triggered by TDRE"
+      description="Transmission Complete Interrupt/DMA requests" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c2_rie" condition="uart_c2_rie_present"
+      enumStem="UartC2Rie"
+      toolTip="Allows interrupt or DMA requests triggered by RDRF"
+      description="Receiver Full Interrupt/DMA requests" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c2_ilie" condition="uart_c2_ilie_present"
+      enumStem="UartC2Ilie"
+      toolTip="Enables the idle line flag, S1[IDLE], to generate interrupt requests , based on the state of C5[ILDMAS]"
+      description="Idle Line Interrupt Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c2_te" condition="uart_c2_te_present"
+      enumStem="UartC2Te"
+      description="Transmitter Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c2_re" condition="uart_c2_re_present"
+      enumStem="UartC2Re"
+      description="Receiver Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c2_rwu" condition="uart_c2_rwu_present"
+      enumStem="UartC2Rwu"
+      toolTip="Setting RWU enables the wakeup function and inhibits further receiver interrupt requests.\n
+               Normally, hardware wakes the receiver by automatically clearing RWU"
+      description="Receiver Wakeup Control" >
+      <choice name="Normal operation"         value="0" enum="NormalOperation"/>
+      <choice name="Wakeup function enabled"  value="1" enum="WakeupFunctionEnabled"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c2_sbk" condition="uart_c2_sbk_present"
+      enumStem="UartC2Sbk"
+      description="Send Break" >
+      <choice name="Normal operation"       value="0" enum="NormalOperation"/>
+      <choice name="Queue break character"  value="1" enum="QueueBreakCharacter"/>
+   </binaryOption>
+
+   <binaryOption key="uart_s2_lbkdif" condition="uart_s2_lbkdif_present"
+      enumStem="UartS2Lbkdif"
+      toolTip="LBKDIF is set when LBKDE is set and a LIN break character is detected on the receiver input.\n
+               LBKDIF is cleared by writing a 1 to it"
+      description="LIN Break Detect Interrupt Flag" >
+      <choice name="No interrupt"       value="0" enum="NoInterrupt"/>
+      <choice name="Interrupt pending"  value="1" enum="InterruptPending"/>
+   </binaryOption>
+
+   <binaryOption key="uart_s2_rxedgif" condition="uart_s2_rxedgif_present"
+      enumStem="UartS2Rxedgif"
+      toolTip="RXEDGIF is set when an active edge occurs on the RxD pin.\n
+               The active edge is falling if RXINV = 0, and rising if RXINV=1.\n
+               RXEDGIF is cleared by writing a 1 to it"
+      description="RxD Pin Active Edge Interrupt Flag" >
+      <choice name="No interrupt"       value="0" enum="NoInterrupt"/>
+      <choice name="Interrupt pending"  value="1" enum="InterruptPending"/>
+   </binaryOption>
+
+   <binaryOption key="uart_s2_rxinv" condition="uart_s2_rxinv_present"
+      enumStem="UartS2Rxinv"
+      toolTip="Setting this field reverses the polarity of the received data input"
+      description="Receive Data Inversion" >
+      <choice name="RxD not inverted"  value="0" enum="RxdNotInverted"/>
+      <choice name="RxD inverted"      value="1" enum="RxdInverted"/>
+   </binaryOption>
+
+   <binaryOption key="uart_s2_rwuid" condition="uart_s2_rwuid_present"
+      enumStem="UartS2Rwuid"
+      toolTip="When RWU is set and WAKE is cleared, this field controls whether the idle character that wakes the
+receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/enabled"
+      description="Receive Wakeup Idle Detect" >
+      <choice name="Idle chars ignored"        value="0" enum="IdleCharsIgnored"/>
+      <choice name="Idle detect sets S1.IDLE"  value="1" enum="IdleDetectSetsS1Idle"/>
+   </binaryOption>
+
+   <binaryOption key="uart_s2_brk13" condition="uart_s2_brk13_present"
+      enumStem="UartS2Brk13"
+      toolTip="Determines whether the transmit break character is 10, 11, or 12 bits long, or 13 or 14 bits long"
+      description="Break Transmit Character Length" >
+      <choice name="Short"       value="0" enum="Short"/>
+      <choice name="Long"        value="1" enum="Long"/>
+   </binaryOption>
+
+   <binaryOption key="uart_s2_lbkde" condition="uart_s2_lbkde_present"
+      enumStem="UartS2Lbkde"
+      toolTip="Enables LIN break character detection.\n
+               While LBKDE is set, S1[RDRF], S1[NF], S1[FE], and S1[PF] are prevented from setting"
+      description="LIN Break Detection Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <intOption key="uart_c3_t8" condition="uart_c3_t8_present"
+      description="Transmit Bit 8"
+   />
+
+   <binaryOption key="uart_c3_txdir" condition="uart_c3_txdir_present"
+      enumStem="UartC3Txdir"
+      description="Transmitter Pin Direction in Single-Wire mode" >
+      <choice name="TxD pin is input"   value="0" enum="TxdPinIsInput"/>
+      <choice name="TxD pin is output"  value="1" enum="TxdPinIsOutput"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c3_txinv" condition="uart_c3_txinv_present"
+      enumStem="UartC3Txinv"
+      description="Transmit Data Inversion" >
+      <choice name="TxD not inverted"  value="0" enum="TxdNotInverted"/>
+      <choice name="TxD inverted"      value="1" enum="TxdInverted"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c3_orie" condition="uart_c3_orie_present"
+      enumStem="UartC3Orie"
+      description="Overrun Error Interrupt Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c3_neie" condition="uart_c3_neie_present"
+      enumStem="UartC3Neie"
+      description="Noise Error Interrupt Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c3_feie" condition="uart_c3_feie_present"
+      enumStem="UartC3Feie"
+      description="Framing Error Interrupt Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="uart_c3_peie" condition="uart_c3_peie_present"
+      enumStem="UartC3Peie"
+      description="Parity Error Interrupt Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <intOption key="uart_d_rt" condition="uart_d_rt_present"
+      description="Read receive data or write transmit data"
+   />
+
+<!-- Grahic here -->  
+
+   <for keys="field:name"
+        values="
+      uart_bdh_lbkdie:BdhLbkdie;
+      uart_bdh_rxedgie:BdhRxedgie;
+      uart_bdh_sbns:BdhSbns;
+      uart_c1_loops:C1Loops;
+      uart_c1_uartswai:C1Uartswai;
+      uart_c1_rsrc:C1Rsrc;
+      uart_c1_m:C1M;
+      uart_c1_wake:C1Wake;
+      uart_c1_ilt:C1Ilt;
+      uart_c1_pe:C1Pe;
+      uart_c1_pt:C1Pt;
+      uart_c2_tie:C2Tie;
+      uart_c2_tcie:C2Tcie;
+      uart_c2_rie:C2Rie;
+      uart_c2_ilie:C2Ilie;
+      uart_c2_te:C2Te;
+      uart_c2_re:C2Re;
+      uart_c2_rwu:C2Rwu;
+      uart_c2_sbk:C2Sbk;
+      uart_s2_lbkdif:S2Lbkdif;
+      uart_s2_rxedgif:S2Rxedgif;
+      uart_s2_rxinv:S2Rxinv;
+      uart_s2_rwuid:S2Rwuid;
+      uart_s2_brk13:S2Brk13;
+      uart_s2_lbkde:S2Lbkde;
+      uart_c3_txdir:C3Txdir;
+      uart_c3_txinv:C3Txinv;
+      uart_c3_orie:C3Orie;
+      uart_c3_neie:C3Neie;
+      uart_c3_feie:C3Feie;
+      uart_c3_peie:C3Peie">
+      <setTemplate variables="%(field)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void configure%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}\n\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== UART Init class =============================== -->
+
+   <template key="init_description" namespace="all">
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_class)::Init init {
+      \t *
+      \t *   // Setup values
+      \t *   UartBdhLbkdie_Disabled                    // LIN Break Detect Interrupt Enable,
+      \t *   UartBdhRxedgie_Disabled                   // RxD Input Active Edge Interrupt Enable,
+      \t *   UartBdhSbns_OneStopBit                    // Stop Bit Number Select,
+      \t *   0,                                        // Baud Rate Modulo Divisor,
+      \t *   0,                                        // Baud Rate Bits,
+      \t *   UartC1Loops_NormalOperation               // Loop Mode Select,
+      \t *   UartC1Uartswai_EnableInWaitMode           // Stops in Wait Mode,
+      \t *   UartC1Rsrc_InternalLoopBackMode           // Receiver Source Select,
+      \t *   UartC1M_8Bit                              // 9-Bit or 8-Bit Mode Select,
+      \t *   UartC1Wake_IdleLineWakeup                 // Receiver Wakeup Method Select,
+      \t *   UartC1Ilt_AfterStartBit                   // Idle Line Type Select,
+      \t *   UartC1Pe_Disabled                         // Parity Enable,
+      \t *   UartC1Pt_EvenParity                       // Parity Type,
+      \t *   UartC2Tie_Disabled                        // Transmitter Interrupt/DMA Transfer Enable,
+      \t *   UartC2Tcie_Disabled                       // Transmission Complete Interrupt/DMA requests,
+      \t *   UartC2Rie_Disabled                        // Receiver Full Interrupt/DMA requests,
+      \t *   UartC2Ilie_Disabled                       // Idle Line Interrupt Enable,
+      \t *   UartC2Te_Disabled                         // Transmitter Enable,
+      \t *   UartC2Re_Disabled                         // Receiver Enable,
+      \t *   UartC2Rwu_NormalOperation                 // Receiver Wakeup Control,
+      \t *   UartC2Sbk_NormalOperation                 // Send Break,
+      \t *   UartS2Lbkdif_NoInterrupt                  // LIN Break Detect Interrupt Flag,
+      \t *   UartS2Rxedgif_NoInterrupt                 // RxD Pin Active Edge Interrupt Flag,
+      \t *   UartS2Rxinv_RxdNotInverted                // Receive Data Inversion,
+      \t *   UartS2Rwuid_IdleCharsIgnored              // Receive Wakeup Idle Detect,
+      \t *   UartS2Brk13_Short                         // Break Transmit Character Length,
+      \t *   UartS2Lbkde_Disabled                      // LIN Break Detection Enable,
+      \t *   0,                                        // Transmit Bit 8,
+      \t *   UartC3Txdir_TxdPinIsInput                 // Transmitter Pin Direction in Single-Wire mode,
+      \t *   UartC3Txinv_TxdNotInverted                // Transmit Data Inversion,
+      \t *   UartC3Orie_Disabled                       // Overrun Error Interrupt Enable,
+      \t *   UartC3Neie_Disabled                       // Noise Error Interrupt Enable,
+      \t *   UartC3Feie_Disabled                       // Framing Error Interrupt Enable,
+      \t *   UartC3Peie_Disabled                       // Parity Error Interrupt Enable,
+      \t *   0,                                        // Read receive data or write transmit data,
+      \t * };
+      \t *
+      \t * // Initialise $(_class) from values specified above
+      \t * $(_class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t
+      \t/**
+      \t * Type definition for $(_class) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)(const uint32_t &);
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+    ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></setTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="uart_bdh_lbkdie,uart_bdh_rxedgie,uart_bdh_sbns,uart_bdh_sbr"
+   ><![CDATA[
+      \t   /// Baud Rate Register: High
+      \t   uint8_t bdh = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="uart_bdl_sbr"
+   ><![CDATA[
+      \t   /// Baud Rate Register: Low
+      \t   uint8_t bdl = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="uart_c1_loops,uart_c1_uartswai,uart_c1_rsrc,uart_c1_m,uart_c1_wake,uart_c1_ilt,uart_c1_pe,uart_c1_pt"
+   ><![CDATA[
+      \t   /// Control Register 1
+      \t   uint8_t c1 = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="uart_c2_tie,uart_c2_tcie,uart_c2_rie,uart_c2_ilie,uart_c2_te,uart_c2_re,uart_c2_rwu,uart_c2_sbk"
+   ><![CDATA[
+      \t   /// Control Register 2
+      \t   uint8_t c2 = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="uart_s2_lbkdif,uart_s2_rxedgif,uart_s2_rxinv,uart_s2_rwuid,uart_s2_brk13,uart_s2_lbkde"
+   ><![CDATA[
+      \t   /// Status Register 2
+      \t   uint8_t s2 = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="uart_c3_t8,uart_c3_txdir,uart_c3_txinv,uart_c3_orie,uart_c3_neie,uart_c3_feie,uart_c3_peie"
+   ><![CDATA[
+      \t   /// Control Register 3
+      \t   uint8_t c3 = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="uart_d_rt"
+   ><![CDATA[
+      \t   /// Data Register
+      \t   uint8_t d = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="/PCR/nvic_irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+   ]]></initialValueTemplate>
+
+<!--   Configure methods -->
+
+   <template discardRepeats="true" key="/UART/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure UART from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-back if feature enabled
+      \t      setCallback(init.callbackFunction);
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
+      \t   enable();
+      \t
+      \t   uart->BDH    = init.bdh;
+      \t   uart->BDL    = init.bdl;
+      \t   uart->C1    = init.c1;
+      \t   uart->C2    = init.c2;
+      \t   uart->S2    = init.s2;
+      \t   uart->C3    = init.c3;
+      \t   uart->D    = init.d;
+      \t
+      \t   calibrate();
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n
+   ]]></template>
+
+<!--   Constructors -->
+
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%enumParam0 = %paramExpression;
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <setTemplate namespace="usbdm"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      #if $(irqHandlingMethod)
+      \t      %registerName = %paramExpression;
+      #else
+      \t      (void)%paramExpression;
+      #endif
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <for keys="r"
+      values="
+            uart_bdh_lbkdie;
+            uart_bdh_rxedgie;
+            uart_bdh_sbns;
+            uart_c1_loops;
+            uart_c1_uartswai;
+            uart_c1_rsrc;
+            uart_c1_m;
+            uart_c1_wake;
+            uart_c1_ilt;
+            uart_c1_pe;
+            uart_c1_pt;
+            uart_c2_tie;
+            uart_c2_tcie;
+            uart_c2_rie;
+            uart_c2_ilie;
+            uart_c2_te;
+            uart_c2_re;
+            uart_c2_rwu;
+            uart_c2_sbk;
+            uart_s2_lbkdif;
+            uart_s2_rxedgif;
+            uart_s2_rxinv;
+            uart_s2_rwuid;
+            uart_s2_brk13;
+            uart_s2_lbkde;
+            uart_c3_txdir;
+            uart_c3_txinv;
+            uart_c3_orie;
+            uart_c3_neie;
+            uart_c3_feie;
+            uart_c3_peie
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+   <for keys="r"
+      values="
+            uart_bdh_sbr;
+            uart_bdl_sbr;
+            uart_c3_t8;
+            uart_d_rt
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         \t    * @param value %description
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(unsigned value, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | value;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+            uart_bdh_lbkdie,
+            uart_bdh_rxedgie,
+            uart_bdh_sbns,
+            uart_c1_loops,
+            uart_c1_uartswai,
+            uart_c1_rsrc,
+            uart_c1_m,
+            uart_c1_wake,
+            uart_c1_ilt,
+            uart_c1_pe,
+            uart_c1_pt,
+            uart_c2_tie,
+            uart_c2_tcie,
+            uart_c2_rie,
+            uart_c2_ilie,
+            uart_c2_te,
+            uart_c2_re,
+            uart_c2_rwu,
+            uart_c2_sbk,
+            uart_s2_lbkdif,
+            uart_s2_rxedgif,
+            uart_s2_rxinv,
+            uart_s2_rwuid,
+            uart_s2_brk13,
+            uart_s2_lbkde,
+            uart_c3_txdir,
+            uart_c3_txinv,
+            uart_c3_orie,
+            uart_c3_neie,
+            uart_c3_feie,
+            uart_c3_peie,
+            irqLevel
+         "
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      \t}; // $(_class)::BasicInfo::Init\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      }; // $(_class)::BasicInfo\n\n
+   ]]>
+   </template>
+
+<signals />
+
+</peripheralPage>

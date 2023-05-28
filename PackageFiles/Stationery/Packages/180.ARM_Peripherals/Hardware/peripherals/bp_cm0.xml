@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- bp_cm0.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Breakpoint Unit">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <xi:include href="_mapPinsOption.xml"/>
+
+   <intOption key="bp_ctrl_key" condition="bp_ctrl_key_present"
+      description="KEY bit. On any write to FP_CTRL, the FPB unit ignores the write unless this bit is 1. This bit is RAZ"
+   />
+
+   <binaryOption key="bp_ctrl_enable" condition="bp_ctrl_enable_present"
+      enumStem="BpCtrlEnable"
+      toolTip="A Power-on reset clears this bit to 0"
+      description="Enable bit for the FPB." >
+      <choice name="FPB disabled"  value="0" enum="FpbDisabled"/>
+      <choice name="FPB enabled"   value="1" enum="FpbEnabled"/>
+   </binaryOption>
+
+   <choiceOption key="bp_comp_bp_match" condition="bp_comp_bp_match_present"
+      enumStem="BpCompBpMatch"
+      description="BP_MATCH defines the behavior when the COMP address is matched" >
+      <choice name="no breakpoint matching"                             value="0" enum="NoBreakpointMatching"/>
+      <choice name="breakpoint on lower halfword, upper is unaffected"  value="1" enum="BreakpointOnLowerHalfword_UpperIsUnaffected"/>
+      <choice name="breakpoint on upper halfword, lower is unaffected"  value="2" enum="BreakpointOnUpperHalfword_LowerIsUnaffected"/>
+      <choice name="breakpoint on both lower and upper halfwords"       value="3" enum="BreakpointOnBothLowerAndUpperHalfwords"/>
+   </choiceOption>
+
+   <intOption key="bp_comp_comp" condition="bp_comp_comp_present"
+      description="COMP bits. Bits [28:2] of the address to compare with addresses from the Code memory region. Bits [31:29] and [1:0] of the address for comparison are zero."
+      toolTip="If a match occurs:\n
+               - for an instruction address comparator, the REPLACE field defines the required action\n
+               - for a literal address comparator, the FPB remaps the access.\n
+               The reset value of this field is UNKNOWN"
+   />
+
+   <binaryOption key="bp_comp_enable" condition="bp_comp_enable_present"
+      enumStem="BpCompEnable"
+      toolTip="A Power-on reset clears this bit to 0"
+      description="Enable bit for this comparator." >
+      <choice name="Comparator disabled"  value="0" enum="ComparatorDisabled"/>
+      <choice name="Comparator enabled"   value="1" enum="ComparatorEnabled"/>
+   </binaryOption>
+
+<!-- Grahic here -->  
+
+   <for keys="field:name"
+        values="
+      bp_ctrl_enable:CtrlEnable;
+      bp_comp_bp_match:CompBpMatch;
+      bp_comp_enable:CompEnable">
+      <setTemplate variables="%(field)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void configure%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}\n\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== BP Init class =============================== -->
+
+   <template key="init_description" namespace="all">
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_class)::Init init {
+      \t *
+      \t *   // Setup values
+      \t *   0,                                        // KEY bit. On any write to FP_CTRL, the FPB unit ignores the write unless this bit is 1. This bit is RAZ,
+      \t *   BpCtrlEnable_FpbDisabled                  // Enable bit for the FPB.,
+      \t *   BpCompBpMatch_NoBreakpointMatching        // BP_MATCH defines the behavior when the COMP address is matched,
+      \t *   0,                                        // COMP bits. Bits [28:2] of the address to compare with addresses from the Code memory region. Bits [31:29] and [1:0] of the address for comparison are zero.,
+      \t *   BpCompEnable_ComparatorDisabled           // Enable bit for this comparator.,
+      \t * };
+      \t *
+      \t * // Initialise $(_class) from values specified above
+      \t * $(_class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <initialValueTemplate namespace="usbdm"
+      variables="bp_ctrl_key,bp_ctrl_enable"
+   ><![CDATA[
+      \t   /// FlashPatch Control Register
+      \t   uint32_t ctrl = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="bp_comp_bp_match,bp_comp_comp,bp_comp_enable"
+   ><![CDATA[
+      \t   /// FlashPatch Comparator Register %s
+      \t   uint32_t comp = 0;\n\n
+   ]]></initialValueTemplate>
+
+<!--   Configure methods -->
+
+   <template discardRepeats="true" key="/BP/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure BP from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t   enable();
+      \t
+      \t   bp->CTRL    = init.ctrl;
+      \t   bp->COMP    = init.comp;
+      \t
+      \t   calibrate();
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n
+   ]]></template>
+
+<!--   Constructors -->
+
+   <for keys="r"
+      values="
+            bp_ctrl_enable;
+            bp_comp_bp_match;
+            bp_comp_enable
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Constructors -->
+
+   <for keys="r"
+      values="
+            bp_ctrl_key;
+            bp_comp%s_comp
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         \t    * @param value %description
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(unsigned value, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | value;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+            bp_ctrl_enable,
+            bp_comp_bp_match,
+            bp_comp_enable
+         "
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      \t}; // $(_class)::BasicInfo::Init\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      }; // $(_class)::BasicInfo\n\n
+   ]]>
+   </template>
+
+<signals />
+
+</peripheralPage>

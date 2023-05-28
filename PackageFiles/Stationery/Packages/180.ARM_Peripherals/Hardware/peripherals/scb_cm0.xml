@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- scb_cm0.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Control Block">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <xi:include href="_mapPinsOption.xml"/>
+
+   <binaryOption key="scb_icsr_nmipendset" condition="scb_icsr_nmipendset_present"
+      enumStem="ScbIcsrNmipendset"
+      description="NMI set-pending bit" >
+      <choice name="write: no effect; read: NMI exception is not pending"                           value="0" enum="WriteNoEffectReadNmiExceptionIsNotPending"/>
+      <choice name="write: changes NMI exception state to pending; read: NMI exception is pending"  value="1" enum="WriteChangesNmiExceptionStateToPendingReadNmiExceptionIsPending"/>
+   </binaryOption>
+
+   <binaryOption key="scb_icsr_pendsvset" condition="scb_icsr_pendsvset_present"
+      enumStem="ScbIcsrPendsvset"
+      description="PendSV set-pending bit" >
+      <choice name="write: no effect; read: PendSV exception is not pending"                              value="0" enum="WriteNoEffectReadPendsvExceptionIsNotPending"/>
+      <choice name="write: changes PendSV exception state to pending; read: PendSV exception is pending"  value="1" enum="WriteChangesPendsvExceptionStateToPendingReadPendsvExceptionIsPending"/>
+   </binaryOption>
+
+   <binaryOption key="scb_icsr_pendsvclr" condition="scb_icsr_pendsvclr_present"
+      enumStem="ScbIcsrPendsvclr"
+      description="PendSV clear-pending bit" >
+      <choice name="no effect"                                            value="0" enum="NoEffect"/>
+      <choice name="removes the pending state from the PendSV exception"  value="1" enum="RemovesThePendingStateFromThePendsvException"/>
+   </binaryOption>
+
+   <binaryOption key="scb_icsr_pendstset" condition="scb_icsr_pendstset_present"
+      enumStem="ScbIcsrPendstset"
+      description="SysTick exception set-pending bit" >
+      <choice name="write: no effect; read: SysTick exception is not pending"                               value="0" enum="WriteNoEffectReadSystickExceptionIsNotPending"/>
+      <choice name="write: changes SysTick exception state to pending; read: SysTick exception is pending"  value="1" enum="WriteChangesSystickExceptionStateToPendingReadSystickExceptionIsPending"/>
+   </binaryOption>
+
+   <binaryOption key="scb_icsr_pendstclr" condition="scb_icsr_pendstclr_present"
+      enumStem="ScbIcsrPendstclr"
+      description="SysTick exception clear-pending bit" >
+      <choice name="no effect"                                             value="0" enum="NoEffect"/>
+      <choice name="removes the pending state from the SysTick exception"  value="1" enum="RemovesThePendingStateFromTheSystickException"/>
+   </binaryOption>
+
+   <intOption key="scb_vtor_tbloff" condition="scb_vtor_tbloff_present"
+      description="Vector table base offset"
+   />
+
+   <intOption key="scb_aircr_vectkey" condition="scb_aircr_vectkey_present"
+      description="Register key"
+   />
+
+   <binaryOption key="scb_aircr_sysresetreq" condition="scb_aircr_sysresetreq_present"
+      enumStem="ScbAircrSysresetreq"
+      description="System reset request" >
+      <choice name="no system reset request"                                     value="0" enum="NoSystemResetRequest"/>
+      <choice name="asserts a signal to the outer system that requests a reset"  value="1" enum="AssertsASignalToTheOuterSystemThatRequestsAReset"/>
+   </binaryOption>
+
+   <intOption key="scb_aircr_vectclractive" condition="scb_aircr_vectclractive_present"
+      description="Reserved for Debug use"
+   />
+
+   <binaryOption key="scb_scr_sevonpend" condition="scb_scr_sevonpend_present"
+      enumStem="ScbScrSevonpend"
+      description="Send Event on Pending bit" >
+      <choice name="Only enabled interrupts or events can wakeup the processor, disabled interrupts are excluded"  value="0" enum="OnlyEnabledInterruptsOrEventsCanWakeupTheProcessor_DisabledInterruptsAreExcluded"/>
+      <choice name="Enabled events and all interrupts, including disabled interrupts, can wakeup the processor"    value="1" enum="EnabledEventsAndAllInterrupts_IncludingDisabledInterrupts_CanWakeupTheProcessor"/>
+   </binaryOption>
+
+   <binaryOption key="scb_scr_sleepdeep" condition="scb_scr_sleepdeep_present"
+      enumStem="ScbScrSleepdeep"
+      description="Controls whether the processor uses sleep or deep sleep as its low power mode" >
+      <choice name="Sleep"       value="0" enum="Sleep"/>
+      <choice name="Deep-sleep"  value="1" enum="DeepSleep"/>
+   </binaryOption>
+
+   <binaryOption key="scb_scr_sleeponexit" condition="scb_scr_sleeponexit_present"
+      enumStem="ScbScrSleeponexit"
+      description="Indicates sleep-on-exit when returning from Handler mode to Thread mode" >
+      <choice name="Do not sleep when returning to Thread mode"         value="0" enum="DoNotSleepWhenReturningToThreadMode"/>
+      <choice name="Enter sleep, or deep sleep, on return from an ISR"  value="1" enum="EnterSleep_OrDeepSleep_OnReturnFromAnIsr"/>
+   </binaryOption>
+
+   <intOption key="scb_shpr2_pri_11" condition="scb_shpr2_pri_11_present"
+      description="Priority of system handler 11, SVCall"
+   />
+
+   <intOption key="scb_shpr3_pri_15" condition="scb_shpr3_pri_15_present"
+      description="Priority of system handler 15, SysTick exception"
+   />
+
+   <intOption key="scb_shpr3_pri_14" condition="scb_shpr3_pri_14_present"
+      description="Priority of system handler 14, PendSV"
+   />
+
+   <binaryOption key="scb_shcsr_svcallpended" condition="scb_shcsr_svcallpended_present"
+      enumStem="ScbShcsrSvcallpended"
+      description="SVCall pending bit" >
+      <choice name="exception is not pending"  value="0" enum="ExceptionIsNotPending"/>
+      <choice name="exception is pending"      value="1" enum="ExceptionIsPending"/>
+   </binaryOption>
+
+   <binaryOption key="scb_dfsr_external" condition="scb_dfsr_external_present"
+      enumStem="ScbDfsrExternal"
+      description="Debug event generated because of the assertion of EDBGRQ" >
+      <choice name="No EDBGRQ debug event"  value="0" enum="NoEdbgrqDebugEvent"/>
+      <choice name="EDBGRQ debug event"     value="1" enum="EdbgrqDebugEvent"/>
+   </binaryOption>
+
+   <binaryOption key="scb_dfsr_vcatch" condition="scb_dfsr_vcatch_present"
+      enumStem="ScbDfsrVcatch"
+      description="Indicates triggering of a Vector catch" >
+      <choice name="No Vector catch triggered"  value="0" enum="NoVectorCatchTriggered"/>
+      <choice name="Vector catch triggered"     value="1" enum="VectorCatchTriggered"/>
+   </binaryOption>
+
+   <binaryOption key="scb_dfsr_dwttrap" condition="scb_dfsr_dwttrap_present"
+      enumStem="ScbDfsrDwttrap"
+      description="Debug event generated by the DWT" >
+      <choice name="No current debug events generated by the DWT"           value="0" enum="NoCurrentDebugEventsGeneratedByTheDwt"/>
+      <choice name="At least one current debug event generated by the DWT"  value="1" enum="AtLeastOneCurrentDebugEventGeneratedByTheDwt"/>
+   </binaryOption>
+
+   <binaryOption key="scb_dfsr_bkpt" condition="scb_dfsr_bkpt_present"
+      enumStem="ScbDfsrBkpt"
+      description="Debug event generated by BKPT instruction execution or a breakpoint match in FPB" >
+      <choice name="No current breakpoint debug event"            value="0" enum="NoCurrentBreakpointDebugEvent"/>
+      <choice name="At least one current breakpoint debug event"  value="1" enum="AtLeastOneCurrentBreakpointDebugEvent"/>
+   </binaryOption>
+
+   <binaryOption key="scb_dfsr_halted" condition="scb_dfsr_halted_present"
+      enumStem="ScbDfsrHalted"
+      description="Indicates a debug event generated by either a C_HALT or C_STEP request, triggered by a write to the DHCSR or a step request triggered by setting DEMCR.MON_STEP to 1" >
+      <choice name="No active halt request debug event"  value="0" enum="NoActiveHaltRequestDebugEvent"/>
+      <choice name="Halt request debug event active"     value="1" enum="HaltRequestDebugEventActive"/>
+   </binaryOption>
+
+<!-- Grahic here -->  
+
+   <for keys="field:name"
+        values="
+      scb_icsr_nmipendset:IcsrNmipendset;
+      scb_icsr_pendsvset:IcsrPendsvset;
+      scb_icsr_pendsvclr:IcsrPendsvclr;
+      scb_icsr_pendstset:IcsrPendstset;
+      scb_icsr_pendstclr:IcsrPendstclr;
+      scb_aircr_sysresetreq:AircrSysresetreq;
+      scb_scr_sevonpend:ScrSevonpend;
+      scb_scr_sleepdeep:ScrSleepdeep;
+      scb_scr_sleeponexit:ScrSleeponexit;
+      scb_shcsr_svcallpended:ShcsrSvcallpended;
+      scb_dfsr_external:DfsrExternal;
+      scb_dfsr_vcatch:DfsrVcatch;
+      scb_dfsr_dwttrap:DfsrDwttrap;
+      scb_dfsr_bkpt:DfsrBkpt;
+      scb_dfsr_halted:DfsrHalted">
+      <setTemplate variables="%(field)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void configure%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}\n\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== SCB Init class =============================== -->
+
+   <template key="init_description" namespace="all">
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_class)::Init init {
+      \t *
+      \t *   // Setup values
+      \t *   ScbIcsrNmipendset_WriteNoEffectReadNmiExceptionIsNotPending    // NMI set-pending bit,
+      \t *   ScbIcsrPendsvset_WriteNoEffectReadPendsvExceptionIsNotPending    // PendSV set-pending bit,
+      \t *   ScbIcsrPendsvclr_NoEffect                 // PendSV clear-pending bit,
+      \t *   ScbIcsrPendstset_WriteNoEffectReadSystickExceptionIsNotPending    // SysTick exception set-pending bit,
+      \t *   ScbIcsrPendstclr_NoEffect                 // SysTick exception clear-pending bit,
+      \t *   0,                                        // Vector table base offset,
+      \t *   0,                                        // Register key,
+      \t *   ScbAircrSysresetreq_NoSystemResetRequest    // System reset request,
+      \t *   0,                                        // Reserved for Debug use,
+      \t *   ScbScrSevonpend_OnlyEnabledInterruptsOrEventsCanWakeupTheProcessor_DisabledInterruptsAreExcluded    // Send Event on Pending bit,
+      \t *   ScbScrSleepdeep_Sleep                     // Controls whether the processor uses sleep or deep sleep as its low power mode,
+      \t *   ScbScrSleeponexit_DoNotSleepWhenReturningToThreadMode    // Indicates sleep-on-exit when returning from Handler mode to Thread mode,
+      \t *   0,                                        // Priority of system handler 11, SVCall,
+      \t *   0,                                        // Priority of system handler 15, SysTick exception,
+      \t *   0,                                        // Priority of system handler 14, PendSV,
+      \t *   ScbShcsrSvcallpended_ExceptionIsNotPending    // SVCall pending bit,
+      \t *   ScbDfsrExternal_NoEdbgrqDebugEvent        // Debug event generated because of the assertion of EDBGRQ,
+      \t *   ScbDfsrVcatch_NoVectorCatchTriggered      // Indicates triggering of a Vector catch,
+      \t *   ScbDfsrDwttrap_NoCurrentDebugEventsGeneratedByTheDwt    // Debug event generated by the DWT,
+      \t *   ScbDfsrBkpt_NoCurrentBreakpointDebugEvent    // Debug event generated by BKPT instruction execution or a breakpoint match in FPB,
+      \t *   ScbDfsrHalted_NoActiveHaltRequestDebugEvent    // Indicates a debug event generated by either a C_HALT or C_STEP request, triggered by a write to the DHCSR or a step request triggered by setting DEMCR.MON_STEP to 1,
+      \t * };
+      \t *
+      \t * // Initialise $(_class) from values specified above
+      \t * $(_class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <initialValueTemplate namespace="usbdm"
+      variables="scb_icsr_nmipendset,scb_icsr_pendsvset,scb_icsr_pendsvclr,scb_icsr_pendstset,scb_icsr_pendstclr"
+   ><![CDATA[
+      \t   /// Interrupt Control and State Register
+      \t   uint32_t icsr = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="scb_vtor_tbloff"
+   ><![CDATA[
+      \t   /// Vector Table Offset Register
+      \t   uint32_t vtor = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="scb_aircr_vectkey,scb_aircr_sysresetreq,scb_aircr_vectclractive"
+   ><![CDATA[
+      \t   /// Application Interrupt and Reset Control Register
+      \t   uint32_t aircr = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="scb_scr_sevonpend,scb_scr_sleepdeep,scb_scr_sleeponexit"
+   ><![CDATA[
+      \t   /// System Control Register
+      \t   uint32_t scr = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="scb_shpr2_pri_11"
+   ><![CDATA[
+      \t   /// System Handler Priority Register 2
+      \t   uint32_t shpr2 = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="scb_shpr3_pri_15,scb_shpr3_pri_14"
+   ><![CDATA[
+      \t   /// System Handler Priority Register 3
+      \t   uint32_t shpr3 = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="scb_shcsr_svcallpended"
+   ><![CDATA[
+      \t   /// System Handler Control and State Register
+      \t   uint32_t shcsr = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="scb_dfsr_external,scb_dfsr_vcatch,scb_dfsr_dwttrap,scb_dfsr_bkpt,scb_dfsr_halted"
+   ><![CDATA[
+      \t   /// Debug Fault Status Register
+      \t   uint32_t dfsr = 0;\n\n
+   ]]></initialValueTemplate>
+
+<!--   Configure methods -->
+
+   <template discardRepeats="true" key="/SCB/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure SCB from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t   enable();
+      \t
+      \t   scb->ICSR    = init.icsr;
+      \t   scb->VTOR    = init.vtor;
+      \t   scb->AIRCR    = init.aircr;
+      \t   scb->SCR    = init.scr;
+      \t   scb->SHPR2    = init.shpr2;
+      \t   scb->SHPR3    = init.shpr3;
+      \t   scb->SHCSR    = init.shcsr;
+      \t   scb->DFSR    = init.dfsr;
+      \t
+      \t   calibrate();
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n
+   ]]></template>
+
+<!--   Constructors -->
+
+   <for keys="r"
+      values="
+            scb_icsr_nmipendset;
+            scb_icsr_pendsvset;
+            scb_icsr_pendsvclr;
+            scb_icsr_pendstset;
+            scb_icsr_pendstclr;
+            scb_aircr_sysresetreq;
+            scb_scr_sevonpend;
+            scb_scr_sleepdeep;
+            scb_scr_sleeponexit;
+            scb_shcsr_svcallpended;
+            scb_dfsr_external;
+            scb_dfsr_vcatch;
+            scb_dfsr_dwttrap;
+            scb_dfsr_bkpt;
+            scb_dfsr_halted
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Constructors -->
+
+   <for keys="r"
+      values="
+            scb_vtor_tbloff;
+            scb_aircr_vectkey;
+            scb_aircr_vectclractive;
+            scb_shpr2_pri_11;
+            scb_shpr3_pri_15;
+            scb_shpr3_pri_14
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         \t    * @param value %description
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(unsigned value, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | value;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+            scb_icsr_nmipendset,
+            scb_icsr_pendsvset,
+            scb_icsr_pendsvclr,
+            scb_icsr_pendstset,
+            scb_icsr_pendstclr,
+            scb_aircr_sysresetreq,
+            scb_scr_sevonpend,
+            scb_scr_sleepdeep,
+            scb_scr_sleeponexit,
+            scb_shcsr_svcallpended,
+            scb_dfsr_external,
+            scb_dfsr_vcatch,
+            scb_dfsr_dwttrap,
+            scb_dfsr_bkpt,
+            scb_dfsr_halted
+         "
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      \t}; // $(_class)::BasicInfo::Init\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      }; // $(_class)::BasicInfo\n\n
+   ]]>
+   </template>
+
+<signals />
+
+</peripheralPage>

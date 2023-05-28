@@ -14,7 +14,7 @@
       toolTip="The different FTM channels use a common hardware interrupt handler. \n
                If this option is enabled, then the hardware handler examines the interrupt source \n
                and dispatches to individual channel call-backs. \n
-               This is more convenient but will increase the interrupt latency.
+               This is more convenient but will increase the interrupt latency. \n
                If disabled, then a common call-back is used for all channels which leads to lower latency. \n
                The common call-back will then have to determine the interrupt source if needed." >
       <choice value="false"  name="Shared call-back"      isDefault="true" />

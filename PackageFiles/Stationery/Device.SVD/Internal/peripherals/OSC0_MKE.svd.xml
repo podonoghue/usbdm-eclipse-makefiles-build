@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE02Z2
       MKE02Z4
       MKE04Z4
@@ -36,7 +36,8 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>OSCINIT</name>
-                     <description>OSC Initialization\nThis field is set after the initialization cycles of oscillator are completed</description>
+                     <description>OSC Initialization\n
+This field is set after the initialization cycles of oscillator are completed</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
@@ -55,7 +56,8 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>HGO</name>
-                     <description>High Gain Oscillator Select\nControls the OSC mode of operation</description>
+                     <description>High Gain Oscillator Select\n
+Controls the OSC mode of operation</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -73,7 +75,8 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>RANGE</name>
-                     <description>Frequency Range Select\nSelects the frequency range for the OSC module</description>
+                     <description>Frequency Range Select\n
+Selects the frequency range for the OSC module</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -91,7 +94,8 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>OSCOS</name>
-                     <description>OSC Output Select\nSelects the output clock of the OSC module</description>
+                     <description>OSC Output Select\n
+Selects the output clock of the OSC module</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -109,7 +113,9 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>OSCSTEN</name>
-                     <description>OSC Enable in Stop mode\nControls whether or not the OSC clock remains enabled when MCU enters Stop mode and OSCEN is set. OSCSTEN has no effect if ICS requests OSC enable</description>
+                     <description>OSC Enable in Stop mode\n
+Controls whether or not the OSC clock remains enabled when MCU enters Stop mode and OSCEN is set.\n
+OSCSTEN has no effect if ICS requests OSC enable</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -127,7 +133,8 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>OSCEN</name>
-                     <description>OSC Enable\nEnables the OSC module. The OSC module can also be enabled by the ICS module</description>
+                     <description>OSC Enable\n
+Enables the OSC module. The OSC module can also be enabled by the ICS module</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>

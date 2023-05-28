@@ -39,5 +39,4 @@
    <item key="/SIM/sim_clkdiv1_outdiv1[1]"                 value="0" />
    <item key="/SIM/sim_clkdiv1_outdiv1[2]"                 value="0" />
    <item key="/SIM/sim_clkdiv1_outdiv4[2]"                 value="0" />
-   <item key="/SIM/sim_sopt2_rtcclkoutsel"                 value="0" />
 </section>

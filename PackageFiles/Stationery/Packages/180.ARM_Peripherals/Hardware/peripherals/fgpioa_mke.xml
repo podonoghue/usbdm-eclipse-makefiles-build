@@ -1,0 +1,2288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- fgpioa_mke.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="General Purpose Input/Output">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <xi:include href="_mapPinsOption.xml"/>
+
+   <binaryOption key="fgpioa_pdor_d7" condition="fgpioa_pdor_d7_present"
+      enumStem="FgpioaPdorD7"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_d6" condition="fgpioa_pdor_d6_present"
+      enumStem="FgpioaPdorD6"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_d5" condition="fgpioa_pdor_d5_present"
+      enumStem="FgpioaPdorD5"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_d4" condition="fgpioa_pdor_d4_present"
+      enumStem="FgpioaPdorD4"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_d3" condition="fgpioa_pdor_d3_present"
+      enumStem="FgpioaPdorD3"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_d2" condition="fgpioa_pdor_d2_present"
+      enumStem="FgpioaPdorD2"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_d1" condition="fgpioa_pdor_d1_present"
+      enumStem="FgpioaPdorD1"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_d0" condition="fgpioa_pdor_d0_present"
+      enumStem="FgpioaPdorD0"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_c7" condition="fgpioa_pdor_c7_present"
+      enumStem="FgpioaPdorC7"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_c6" condition="fgpioa_pdor_c6_present"
+      enumStem="FgpioaPdorC6"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_c5" condition="fgpioa_pdor_c5_present"
+      enumStem="FgpioaPdorC5"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_c4" condition="fgpioa_pdor_c4_present"
+      enumStem="FgpioaPdorC4"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_c3" condition="fgpioa_pdor_c3_present"
+      enumStem="FgpioaPdorC3"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_c2" condition="fgpioa_pdor_c2_present"
+      enumStem="FgpioaPdorC2"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_c1" condition="fgpioa_pdor_c1_present"
+      enumStem="FgpioaPdorC1"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_c0" condition="fgpioa_pdor_c0_present"
+      enumStem="FgpioaPdorC0"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_b7" condition="fgpioa_pdor_b7_present"
+      enumStem="FgpioaPdorB7"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_b6" condition="fgpioa_pdor_b6_present"
+      enumStem="FgpioaPdorB6"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_b5" condition="fgpioa_pdor_b5_present"
+      enumStem="FgpioaPdorB5"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_b4" condition="fgpioa_pdor_b4_present"
+      enumStem="FgpioaPdorB4"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_b3" condition="fgpioa_pdor_b3_present"
+      enumStem="FgpioaPdorB3"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_b2" condition="fgpioa_pdor_b2_present"
+      enumStem="FgpioaPdorB2"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_b1" condition="fgpioa_pdor_b1_present"
+      enumStem="FgpioaPdorB1"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_b0" condition="fgpioa_pdor_b0_present"
+      enumStem="FgpioaPdorB0"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_a7" condition="fgpioa_pdor_a7_present"
+      enumStem="FgpioaPdorA7"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_a6" condition="fgpioa_pdor_a6_present"
+      enumStem="FgpioaPdorA6"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_a5" condition="fgpioa_pdor_a5_present"
+      enumStem="FgpioaPdorA5"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_a4" condition="fgpioa_pdor_a4_present"
+      enumStem="FgpioaPdorA4"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_a3" condition="fgpioa_pdor_a3_present"
+      enumStem="FgpioaPdorA3"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_a2" condition="fgpioa_pdor_a2_present"
+      enumStem="FgpioaPdorA2"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_a1" condition="fgpioa_pdor_a1_present"
+      enumStem="FgpioaPdorA1"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pdor_a0" condition="fgpioa_pdor_a0_present"
+      enumStem="FgpioaPdorA0"
+      description="Port Data Output" >
+      <choice name="Low"         value="0" enum="Low"/>
+      <choice name="High"        value="1" enum="High"/>
+   </binaryOption>
+
+   <choiceOption key="fgpioa_psor_d7" condition="fgpioa_psor_d7_present"
+      enumStem="FgpioaPsorD7"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_d6" condition="fgpioa_psor_d6_present"
+      enumStem="FgpioaPsorD6"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_d5" condition="fgpioa_psor_d5_present"
+      enumStem="FgpioaPsorD5"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_d4" condition="fgpioa_psor_d4_present"
+      enumStem="FgpioaPsorD4"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_d3" condition="fgpioa_psor_d3_present"
+      enumStem="FgpioaPsorD3"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_d2" condition="fgpioa_psor_d2_present"
+      enumStem="FgpioaPsorD2"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_d1" condition="fgpioa_psor_d1_present"
+      enumStem="FgpioaPsorD1"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_d0" condition="fgpioa_psor_d0_present"
+      enumStem="FgpioaPsorD0"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_c7" condition="fgpioa_psor_c7_present"
+      enumStem="FgpioaPsorC7"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_c6" condition="fgpioa_psor_c6_present"
+      enumStem="FgpioaPsorC6"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_c5" condition="fgpioa_psor_c5_present"
+      enumStem="FgpioaPsorC5"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_c4" condition="fgpioa_psor_c4_present"
+      enumStem="FgpioaPsorC4"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_c3" condition="fgpioa_psor_c3_present"
+      enumStem="FgpioaPsorC3"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_c2" condition="fgpioa_psor_c2_present"
+      enumStem="FgpioaPsorC2"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_c1" condition="fgpioa_psor_c1_present"
+      enumStem="FgpioaPsorC1"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_c0" condition="fgpioa_psor_c0_present"
+      enumStem="FgpioaPsorC0"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_b7" condition="fgpioa_psor_b7_present"
+      enumStem="FgpioaPsorB7"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_b6" condition="fgpioa_psor_b6_present"
+      enumStem="FgpioaPsorB6"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_b5" condition="fgpioa_psor_b5_present"
+      enumStem="FgpioaPsorB5"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_b4" condition="fgpioa_psor_b4_present"
+      enumStem="FgpioaPsorB4"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_b3" condition="fgpioa_psor_b3_present"
+      enumStem="FgpioaPsorB3"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_b2" condition="fgpioa_psor_b2_present"
+      enumStem="FgpioaPsorB2"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_b1" condition="fgpioa_psor_b1_present"
+      enumStem="FgpioaPsorB1"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_b0" condition="fgpioa_psor_b0_present"
+      enumStem="FgpioaPsorB0"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_a7" condition="fgpioa_psor_a7_present"
+      enumStem="FgpioaPsorA7"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_a6" condition="fgpioa_psor_a6_present"
+      enumStem="FgpioaPsorA6"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_a5" condition="fgpioa_psor_a5_present"
+      enumStem="FgpioaPsorA5"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_a4" condition="fgpioa_psor_a4_present"
+      enumStem="FgpioaPsorA4"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_a3" condition="fgpioa_psor_a3_present"
+      enumStem="FgpioaPsorA3"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_a2" condition="fgpioa_psor_a2_present"
+      enumStem="FgpioaPsorA2"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_a1" condition="fgpioa_psor_a1_present"
+      enumStem="FgpioaPsorA1"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_psor_a0" condition="fgpioa_psor_a0_present"
+      enumStem="FgpioaPsorA0"
+      description="Port Set Output" >
+      <choice name="Write 1 to set"  value="0" enum="Write1ToSet"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_d7" condition="fgpioa_pcor_d7_present"
+      enumStem="FgpioaPcorD7"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_d6" condition="fgpioa_pcor_d6_present"
+      enumStem="FgpioaPcorD6"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_d5" condition="fgpioa_pcor_d5_present"
+      enumStem="FgpioaPcorD5"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_d4" condition="fgpioa_pcor_d4_present"
+      enumStem="FgpioaPcorD4"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_d3" condition="fgpioa_pcor_d3_present"
+      enumStem="FgpioaPcorD3"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_d2" condition="fgpioa_pcor_d2_present"
+      enumStem="FgpioaPcorD2"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_d1" condition="fgpioa_pcor_d1_present"
+      enumStem="FgpioaPcorD1"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_d0" condition="fgpioa_pcor_d0_present"
+      enumStem="FgpioaPcorD0"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_c7" condition="fgpioa_pcor_c7_present"
+      enumStem="FgpioaPcorC7"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_c6" condition="fgpioa_pcor_c6_present"
+      enumStem="FgpioaPcorC6"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_c5" condition="fgpioa_pcor_c5_present"
+      enumStem="FgpioaPcorC5"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_c4" condition="fgpioa_pcor_c4_present"
+      enumStem="FgpioaPcorC4"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_c3" condition="fgpioa_pcor_c3_present"
+      enumStem="FgpioaPcorC3"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_c2" condition="fgpioa_pcor_c2_present"
+      enumStem="FgpioaPcorC2"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_c1" condition="fgpioa_pcor_c1_present"
+      enumStem="FgpioaPcorC1"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_c0" condition="fgpioa_pcor_c0_present"
+      enumStem="FgpioaPcorC0"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_b7" condition="fgpioa_pcor_b7_present"
+      enumStem="FgpioaPcorB7"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_b6" condition="fgpioa_pcor_b6_present"
+      enumStem="FgpioaPcorB6"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_b5" condition="fgpioa_pcor_b5_present"
+      enumStem="FgpioaPcorB5"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_b4" condition="fgpioa_pcor_b4_present"
+      enumStem="FgpioaPcorB4"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_b3" condition="fgpioa_pcor_b3_present"
+      enumStem="FgpioaPcorB3"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_b2" condition="fgpioa_pcor_b2_present"
+      enumStem="FgpioaPcorB2"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_b1" condition="fgpioa_pcor_b1_present"
+      enumStem="FgpioaPcorB1"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_b0" condition="fgpioa_pcor_b0_present"
+      enumStem="FgpioaPcorB0"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_a7" condition="fgpioa_pcor_a7_present"
+      enumStem="FgpioaPcorA7"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_a6" condition="fgpioa_pcor_a6_present"
+      enumStem="FgpioaPcorA6"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_a5" condition="fgpioa_pcor_a5_present"
+      enumStem="FgpioaPcorA5"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_a4" condition="fgpioa_pcor_a4_present"
+      enumStem="FgpioaPcorA4"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_a3" condition="fgpioa_pcor_a3_present"
+      enumStem="FgpioaPcorA3"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_a2" condition="fgpioa_pcor_a2_present"
+      enumStem="FgpioaPcorA2"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_a1" condition="fgpioa_pcor_a1_present"
+      enumStem="FgpioaPcorA1"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_pcor_a0" condition="fgpioa_pcor_a0_present"
+      enumStem="FgpioaPcorA0"
+      description="Port Clear Output" >
+      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_d7" condition="fgpioa_ptor_d7_present"
+      enumStem="FgpioaPtorD7"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_d6" condition="fgpioa_ptor_d6_present"
+      enumStem="FgpioaPtorD6"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_d5" condition="fgpioa_ptor_d5_present"
+      enumStem="FgpioaPtorD5"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_d4" condition="fgpioa_ptor_d4_present"
+      enumStem="FgpioaPtorD4"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_d3" condition="fgpioa_ptor_d3_present"
+      enumStem="FgpioaPtorD3"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_d2" condition="fgpioa_ptor_d2_present"
+      enumStem="FgpioaPtorD2"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_d1" condition="fgpioa_ptor_d1_present"
+      enumStem="FgpioaPtorD1"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_d0" condition="fgpioa_ptor_d0_present"
+      enumStem="FgpioaPtorD0"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_c7" condition="fgpioa_ptor_c7_present"
+      enumStem="FgpioaPtorC7"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_c6" condition="fgpioa_ptor_c6_present"
+      enumStem="FgpioaPtorC6"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_c5" condition="fgpioa_ptor_c5_present"
+      enumStem="FgpioaPtorC5"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_c4" condition="fgpioa_ptor_c4_present"
+      enumStem="FgpioaPtorC4"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_c3" condition="fgpioa_ptor_c3_present"
+      enumStem="FgpioaPtorC3"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_c2" condition="fgpioa_ptor_c2_present"
+      enumStem="FgpioaPtorC2"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_c1" condition="fgpioa_ptor_c1_present"
+      enumStem="FgpioaPtorC1"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_c0" condition="fgpioa_ptor_c0_present"
+      enumStem="FgpioaPtorC0"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_b7" condition="fgpioa_ptor_b7_present"
+      enumStem="FgpioaPtorB7"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_b6" condition="fgpioa_ptor_b6_present"
+      enumStem="FgpioaPtorB6"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_b5" condition="fgpioa_ptor_b5_present"
+      enumStem="FgpioaPtorB5"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_b4" condition="fgpioa_ptor_b4_present"
+      enumStem="FgpioaPtorB4"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_b3" condition="fgpioa_ptor_b3_present"
+      enumStem="FgpioaPtorB3"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_b2" condition="fgpioa_ptor_b2_present"
+      enumStem="FgpioaPtorB2"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_b1" condition="fgpioa_ptor_b1_present"
+      enumStem="FgpioaPtorB1"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_b0" condition="fgpioa_ptor_b0_present"
+      enumStem="FgpioaPtorB0"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_a7" condition="fgpioa_ptor_a7_present"
+      enumStem="FgpioaPtorA7"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_a6" condition="fgpioa_ptor_a6_present"
+      enumStem="FgpioaPtorA6"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_a5" condition="fgpioa_ptor_a5_present"
+      enumStem="FgpioaPtorA5"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_a4" condition="fgpioa_ptor_a4_present"
+      enumStem="FgpioaPtorA4"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_a3" condition="fgpioa_ptor_a3_present"
+      enumStem="FgpioaPtorA3"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_a2" condition="fgpioa_ptor_a2_present"
+      enumStem="FgpioaPtorA2"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_a1" condition="fgpioa_ptor_a1_present"
+      enumStem="FgpioaPtorA1"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <choiceOption key="fgpioa_ptor_a0" condition="fgpioa_ptor_a0_present"
+      enumStem="FgpioaPtorA0"
+      description="Port Toggle Output" >
+      <choice name="Write 1 to toggle"  value="0" enum="Write1ToToggle"/>
+   </choiceOption>
+
+   <binaryOption key="fgpioa_pddr_d7" condition="fgpioa_pddr_d7_present"
+      enumStem="FgpioaPddrD7"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_d6" condition="fgpioa_pddr_d6_present"
+      enumStem="FgpioaPddrD6"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_d5" condition="fgpioa_pddr_d5_present"
+      enumStem="FgpioaPddrD5"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_d4" condition="fgpioa_pddr_d4_present"
+      enumStem="FgpioaPddrD4"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_d3" condition="fgpioa_pddr_d3_present"
+      enumStem="FgpioaPddrD3"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_d2" condition="fgpioa_pddr_d2_present"
+      enumStem="FgpioaPddrD2"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_d1" condition="fgpioa_pddr_d1_present"
+      enumStem="FgpioaPddrD1"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_d0" condition="fgpioa_pddr_d0_present"
+      enumStem="FgpioaPddrD0"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_c7" condition="fgpioa_pddr_c7_present"
+      enumStem="FgpioaPddrC7"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_c6" condition="fgpioa_pddr_c6_present"
+      enumStem="FgpioaPddrC6"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_c5" condition="fgpioa_pddr_c5_present"
+      enumStem="FgpioaPddrC5"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_c4" condition="fgpioa_pddr_c4_present"
+      enumStem="FgpioaPddrC4"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_c3" condition="fgpioa_pddr_c3_present"
+      enumStem="FgpioaPddrC3"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_c2" condition="fgpioa_pddr_c2_present"
+      enumStem="FgpioaPddrC2"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_c1" condition="fgpioa_pddr_c1_present"
+      enumStem="FgpioaPddrC1"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_c0" condition="fgpioa_pddr_c0_present"
+      enumStem="FgpioaPddrC0"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_b7" condition="fgpioa_pddr_b7_present"
+      enumStem="FgpioaPddrB7"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_b6" condition="fgpioa_pddr_b6_present"
+      enumStem="FgpioaPddrB6"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_b5" condition="fgpioa_pddr_b5_present"
+      enumStem="FgpioaPddrB5"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_b4" condition="fgpioa_pddr_b4_present"
+      enumStem="FgpioaPddrB4"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_b3" condition="fgpioa_pddr_b3_present"
+      enumStem="FgpioaPddrB3"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_b2" condition="fgpioa_pddr_b2_present"
+      enumStem="FgpioaPddrB2"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_b1" condition="fgpioa_pddr_b1_present"
+      enumStem="FgpioaPddrB1"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_b0" condition="fgpioa_pddr_b0_present"
+      enumStem="FgpioaPddrB0"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_a7" condition="fgpioa_pddr_a7_present"
+      enumStem="FgpioaPddrA7"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_a6" condition="fgpioa_pddr_a6_present"
+      enumStem="FgpioaPddrA6"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_a5" condition="fgpioa_pddr_a5_present"
+      enumStem="FgpioaPddrA5"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_a4" condition="fgpioa_pddr_a4_present"
+      enumStem="FgpioaPddrA4"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_a3" condition="fgpioa_pddr_a3_present"
+      enumStem="FgpioaPddrA3"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_a2" condition="fgpioa_pddr_a2_present"
+      enumStem="FgpioaPddrA2"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_a1" condition="fgpioa_pddr_a1_present"
+      enumStem="FgpioaPddrA1"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pddr_a0" condition="fgpioa_pddr_a0_present"
+      enumStem="FgpioaPddrA0"
+      description="Port Data Direction" >
+      <choice name="Input"       value="0" enum="Input"/>
+      <choice name="Output"      value="1" enum="Output"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_d7" condition="fgpioa_pidr_d7_present"
+      enumStem="FgpioaPidrD7"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_d6" condition="fgpioa_pidr_d6_present"
+      enumStem="FgpioaPidrD6"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_d5" condition="fgpioa_pidr_d5_present"
+      enumStem="FgpioaPidrD5"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_d4" condition="fgpioa_pidr_d4_present"
+      enumStem="FgpioaPidrD4"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_d3" condition="fgpioa_pidr_d3_present"
+      enumStem="FgpioaPidrD3"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_d2" condition="fgpioa_pidr_d2_present"
+      enumStem="FgpioaPidrD2"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_d1" condition="fgpioa_pidr_d1_present"
+      enumStem="FgpioaPidrD1"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_d0" condition="fgpioa_pidr_d0_present"
+      enumStem="FgpioaPidrD0"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_c7" condition="fgpioa_pidr_c7_present"
+      enumStem="FgpioaPidrC7"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_c6" condition="fgpioa_pidr_c6_present"
+      enumStem="FgpioaPidrC6"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_c5" condition="fgpioa_pidr_c5_present"
+      enumStem="FgpioaPidrC5"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_c4" condition="fgpioa_pidr_c4_present"
+      enumStem="FgpioaPidrC4"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_c3" condition="fgpioa_pidr_c3_present"
+      enumStem="FgpioaPidrC3"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_c2" condition="fgpioa_pidr_c2_present"
+      enumStem="FgpioaPidrC2"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_c1" condition="fgpioa_pidr_c1_present"
+      enumStem="FgpioaPidrC1"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_c0" condition="fgpioa_pidr_c0_present"
+      enumStem="FgpioaPidrC0"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_b7" condition="fgpioa_pidr_b7_present"
+      enumStem="FgpioaPidrB7"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_b6" condition="fgpioa_pidr_b6_present"
+      enumStem="FgpioaPidrB6"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_b5" condition="fgpioa_pidr_b5_present"
+      enumStem="FgpioaPidrB5"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_b4" condition="fgpioa_pidr_b4_present"
+      enumStem="FgpioaPidrB4"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_b3" condition="fgpioa_pidr_b3_present"
+      enumStem="FgpioaPidrB3"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_b2" condition="fgpioa_pidr_b2_present"
+      enumStem="FgpioaPidrB2"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_b1" condition="fgpioa_pidr_b1_present"
+      enumStem="FgpioaPidrB1"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_b0" condition="fgpioa_pidr_b0_present"
+      enumStem="FgpioaPidrB0"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_a7" condition="fgpioa_pidr_a7_present"
+      enumStem="FgpioaPidrA7"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_a6" condition="fgpioa_pidr_a6_present"
+      enumStem="FgpioaPidrA6"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_a5" condition="fgpioa_pidr_a5_present"
+      enumStem="FgpioaPidrA5"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_a4" condition="fgpioa_pidr_a4_present"
+      enumStem="FgpioaPidrA4"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_a3" condition="fgpioa_pidr_a3_present"
+      enumStem="FgpioaPidrA3"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_a2" condition="fgpioa_pidr_a2_present"
+      enumStem="FgpioaPidrA2"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_a1" condition="fgpioa_pidr_a1_present"
+      enumStem="FgpioaPidrA1"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+   <binaryOption key="fgpioa_pidr_a0" condition="fgpioa_pidr_a0_present"
+      enumStem="FgpioaPidrA0"
+      toolTip="Disables a pin as General Purpose Input. Corresponding Pin Data Input Register bit will read zero"
+      description="Port Input Disable" >
+      <choice name="Input available"   value="0" enum="InputAvailable"/>
+      <choice name="Input reads as 0"  value="1" enum="InputReadsAs0"/>
+   </binaryOption>
+
+<!-- Grahic here -->  
+
+   <for keys="field:name"
+        values="
+      fgpioa_pdor_d7:PdorD7;
+      fgpioa_pdor_d6:PdorD6;
+      fgpioa_pdor_d5:PdorD5;
+      fgpioa_pdor_d4:PdorD4;
+      fgpioa_pdor_d3:PdorD3;
+      fgpioa_pdor_d2:PdorD2;
+      fgpioa_pdor_d1:PdorD1;
+      fgpioa_pdor_d0:PdorD0;
+      fgpioa_pdor_c7:PdorC7;
+      fgpioa_pdor_c6:PdorC6;
+      fgpioa_pdor_c5:PdorC5;
+      fgpioa_pdor_c4:PdorC4;
+      fgpioa_pdor_c3:PdorC3;
+      fgpioa_pdor_c2:PdorC2;
+      fgpioa_pdor_c1:PdorC1;
+      fgpioa_pdor_c0:PdorC0;
+      fgpioa_pdor_b7:PdorB7;
+      fgpioa_pdor_b6:PdorB6;
+      fgpioa_pdor_b5:PdorB5;
+      fgpioa_pdor_b4:PdorB4;
+      fgpioa_pdor_b3:PdorB3;
+      fgpioa_pdor_b2:PdorB2;
+      fgpioa_pdor_b1:PdorB1;
+      fgpioa_pdor_b0:PdorB0;
+      fgpioa_pdor_a7:PdorA7;
+      fgpioa_pdor_a6:PdorA6;
+      fgpioa_pdor_a5:PdorA5;
+      fgpioa_pdor_a4:PdorA4;
+      fgpioa_pdor_a3:PdorA3;
+      fgpioa_pdor_a2:PdorA2;
+      fgpioa_pdor_a1:PdorA1;
+      fgpioa_pdor_a0:PdorA0;
+      fgpioa_psor_d7:PsorD7;
+      fgpioa_psor_d6:PsorD6;
+      fgpioa_psor_d5:PsorD5;
+      fgpioa_psor_d4:PsorD4;
+      fgpioa_psor_d3:PsorD3;
+      fgpioa_psor_d2:PsorD2;
+      fgpioa_psor_d1:PsorD1;
+      fgpioa_psor_d0:PsorD0;
+      fgpioa_psor_c7:PsorC7;
+      fgpioa_psor_c6:PsorC6;
+      fgpioa_psor_c5:PsorC5;
+      fgpioa_psor_c4:PsorC4;
+      fgpioa_psor_c3:PsorC3;
+      fgpioa_psor_c2:PsorC2;
+      fgpioa_psor_c1:PsorC1;
+      fgpioa_psor_c0:PsorC0;
+      fgpioa_psor_b7:PsorB7;
+      fgpioa_psor_b6:PsorB6;
+      fgpioa_psor_b5:PsorB5;
+      fgpioa_psor_b4:PsorB4;
+      fgpioa_psor_b3:PsorB3;
+      fgpioa_psor_b2:PsorB2;
+      fgpioa_psor_b1:PsorB1;
+      fgpioa_psor_b0:PsorB0;
+      fgpioa_psor_a7:PsorA7;
+      fgpioa_psor_a6:PsorA6;
+      fgpioa_psor_a5:PsorA5;
+      fgpioa_psor_a4:PsorA4;
+      fgpioa_psor_a3:PsorA3;
+      fgpioa_psor_a2:PsorA2;
+      fgpioa_psor_a1:PsorA1;
+      fgpioa_psor_a0:PsorA0;
+      fgpioa_pcor_d7:PcorD7;
+      fgpioa_pcor_d6:PcorD6;
+      fgpioa_pcor_d5:PcorD5;
+      fgpioa_pcor_d4:PcorD4;
+      fgpioa_pcor_d3:PcorD3;
+      fgpioa_pcor_d2:PcorD2;
+      fgpioa_pcor_d1:PcorD1;
+      fgpioa_pcor_d0:PcorD0;
+      fgpioa_pcor_c7:PcorC7;
+      fgpioa_pcor_c6:PcorC6;
+      fgpioa_pcor_c5:PcorC5;
+      fgpioa_pcor_c4:PcorC4;
+      fgpioa_pcor_c3:PcorC3;
+      fgpioa_pcor_c2:PcorC2;
+      fgpioa_pcor_c1:PcorC1;
+      fgpioa_pcor_c0:PcorC0;
+      fgpioa_pcor_b7:PcorB7;
+      fgpioa_pcor_b6:PcorB6;
+      fgpioa_pcor_b5:PcorB5;
+      fgpioa_pcor_b4:PcorB4;
+      fgpioa_pcor_b3:PcorB3;
+      fgpioa_pcor_b2:PcorB2;
+      fgpioa_pcor_b1:PcorB1;
+      fgpioa_pcor_b0:PcorB0;
+      fgpioa_pcor_a7:PcorA7;
+      fgpioa_pcor_a6:PcorA6;
+      fgpioa_pcor_a5:PcorA5;
+      fgpioa_pcor_a4:PcorA4;
+      fgpioa_pcor_a3:PcorA3;
+      fgpioa_pcor_a2:PcorA2;
+      fgpioa_pcor_a1:PcorA1;
+      fgpioa_pcor_a0:PcorA0;
+      fgpioa_ptor_d7:PtorD7;
+      fgpioa_ptor_d6:PtorD6;
+      fgpioa_ptor_d5:PtorD5;
+      fgpioa_ptor_d4:PtorD4;
+      fgpioa_ptor_d3:PtorD3;
+      fgpioa_ptor_d2:PtorD2;
+      fgpioa_ptor_d1:PtorD1;
+      fgpioa_ptor_d0:PtorD0;
+      fgpioa_ptor_c7:PtorC7;
+      fgpioa_ptor_c6:PtorC6;
+      fgpioa_ptor_c5:PtorC5;
+      fgpioa_ptor_c4:PtorC4;
+      fgpioa_ptor_c3:PtorC3;
+      fgpioa_ptor_c2:PtorC2;
+      fgpioa_ptor_c1:PtorC1;
+      fgpioa_ptor_c0:PtorC0;
+      fgpioa_ptor_b7:PtorB7;
+      fgpioa_ptor_b6:PtorB6;
+      fgpioa_ptor_b5:PtorB5;
+      fgpioa_ptor_b4:PtorB4;
+      fgpioa_ptor_b3:PtorB3;
+      fgpioa_ptor_b2:PtorB2;
+      fgpioa_ptor_b1:PtorB1;
+      fgpioa_ptor_b0:PtorB0;
+      fgpioa_ptor_a7:PtorA7;
+      fgpioa_ptor_a6:PtorA6;
+      fgpioa_ptor_a5:PtorA5;
+      fgpioa_ptor_a4:PtorA4;
+      fgpioa_ptor_a3:PtorA3;
+      fgpioa_ptor_a2:PtorA2;
+      fgpioa_ptor_a1:PtorA1;
+      fgpioa_ptor_a0:PtorA0;
+      fgpioa_pddr_d7:PddrD7;
+      fgpioa_pddr_d6:PddrD6;
+      fgpioa_pddr_d5:PddrD5;
+      fgpioa_pddr_d4:PddrD4;
+      fgpioa_pddr_d3:PddrD3;
+      fgpioa_pddr_d2:PddrD2;
+      fgpioa_pddr_d1:PddrD1;
+      fgpioa_pddr_d0:PddrD0;
+      fgpioa_pddr_c7:PddrC7;
+      fgpioa_pddr_c6:PddrC6;
+      fgpioa_pddr_c5:PddrC5;
+      fgpioa_pddr_c4:PddrC4;
+      fgpioa_pddr_c3:PddrC3;
+      fgpioa_pddr_c2:PddrC2;
+      fgpioa_pddr_c1:PddrC1;
+      fgpioa_pddr_c0:PddrC0;
+      fgpioa_pddr_b7:PddrB7;
+      fgpioa_pddr_b6:PddrB6;
+      fgpioa_pddr_b5:PddrB5;
+      fgpioa_pddr_b4:PddrB4;
+      fgpioa_pddr_b3:PddrB3;
+      fgpioa_pddr_b2:PddrB2;
+      fgpioa_pddr_b1:PddrB1;
+      fgpioa_pddr_b0:PddrB0;
+      fgpioa_pddr_a7:PddrA7;
+      fgpioa_pddr_a6:PddrA6;
+      fgpioa_pddr_a5:PddrA5;
+      fgpioa_pddr_a4:PddrA4;
+      fgpioa_pddr_a3:PddrA3;
+      fgpioa_pddr_a2:PddrA2;
+      fgpioa_pddr_a1:PddrA1;
+      fgpioa_pddr_a0:PddrA0;
+      fgpioa_pidr_d7:PidrD7;
+      fgpioa_pidr_d6:PidrD6;
+      fgpioa_pidr_d5:PidrD5;
+      fgpioa_pidr_d4:PidrD4;
+      fgpioa_pidr_d3:PidrD3;
+      fgpioa_pidr_d2:PidrD2;
+      fgpioa_pidr_d1:PidrD1;
+      fgpioa_pidr_d0:PidrD0;
+      fgpioa_pidr_c7:PidrC7;
+      fgpioa_pidr_c6:PidrC6;
+      fgpioa_pidr_c5:PidrC5;
+      fgpioa_pidr_c4:PidrC4;
+      fgpioa_pidr_c3:PidrC3;
+      fgpioa_pidr_c2:PidrC2;
+      fgpioa_pidr_c1:PidrC1;
+      fgpioa_pidr_c0:PidrC0;
+      fgpioa_pidr_b7:PidrB7;
+      fgpioa_pidr_b6:PidrB6;
+      fgpioa_pidr_b5:PidrB5;
+      fgpioa_pidr_b4:PidrB4;
+      fgpioa_pidr_b3:PidrB3;
+      fgpioa_pidr_b2:PidrB2;
+      fgpioa_pidr_b1:PidrB1;
+      fgpioa_pidr_b0:PidrB0;
+      fgpioa_pidr_a7:PidrA7;
+      fgpioa_pidr_a6:PidrA6;
+      fgpioa_pidr_a5:PidrA5;
+      fgpioa_pidr_a4:PidrA4;
+      fgpioa_pidr_a3:PidrA3;
+      fgpioa_pidr_a2:PidrA2;
+      fgpioa_pidr_a1:PidrA1;
+      fgpioa_pidr_a0:PidrA0">
+      <setTemplate variables="%(field)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void configure%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}\n\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== FGPIOA Init class =============================== -->
+
+   <template key="init_description" namespace="all">
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_class)::Init init {
+      \t *
+      \t *   // Setup values
+      \t *   FgpioaPdorD7_Low                          // Port Data Output,
+      \t *   FgpioaPdorD6_Low                          // Port Data Output,
+      \t *   FgpioaPdorD5_Low                          // Port Data Output,
+      \t *   FgpioaPdorD4_Low                          // Port Data Output,
+      \t *   FgpioaPdorD3_Low                          // Port Data Output,
+      \t *   FgpioaPdorD2_Low                          // Port Data Output,
+      \t *   FgpioaPdorD1_Low                          // Port Data Output,
+      \t *   FgpioaPdorD0_Low                          // Port Data Output,
+      \t *   FgpioaPdorC7_Low                          // Port Data Output,
+      \t *   FgpioaPdorC6_Low                          // Port Data Output,
+      \t *   FgpioaPdorC5_Low                          // Port Data Output,
+      \t *   FgpioaPdorC4_Low                          // Port Data Output,
+      \t *   FgpioaPdorC3_Low                          // Port Data Output,
+      \t *   FgpioaPdorC2_Low                          // Port Data Output,
+      \t *   FgpioaPdorC1_Low                          // Port Data Output,
+      \t *   FgpioaPdorC0_Low                          // Port Data Output,
+      \t *   FgpioaPdorB7_Low                          // Port Data Output,
+      \t *   FgpioaPdorB6_Low                          // Port Data Output,
+      \t *   FgpioaPdorB5_Low                          // Port Data Output,
+      \t *   FgpioaPdorB4_Low                          // Port Data Output,
+      \t *   FgpioaPdorB3_Low                          // Port Data Output,
+      \t *   FgpioaPdorB2_Low                          // Port Data Output,
+      \t *   FgpioaPdorB1_Low                          // Port Data Output,
+      \t *   FgpioaPdorB0_Low                          // Port Data Output,
+      \t *   FgpioaPdorA7_Low                          // Port Data Output,
+      \t *   FgpioaPdorA6_Low                          // Port Data Output,
+      \t *   FgpioaPdorA5_Low                          // Port Data Output,
+      \t *   FgpioaPdorA4_Low                          // Port Data Output,
+      \t *   FgpioaPdorA3_Low                          // Port Data Output,
+      \t *   FgpioaPdorA2_Low                          // Port Data Output,
+      \t *   FgpioaPdorA1_Low                          // Port Data Output,
+      \t *   FgpioaPdorA0_Low                          // Port Data Output,
+      \t *   FgpioaPsorD7_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorD6_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorD5_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorD4_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorD3_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorD2_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorD1_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorD0_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorC7_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorC6_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorC5_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorC4_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorC3_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorC2_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorC1_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorC0_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorB7_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorB6_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorB5_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorB4_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorB3_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorB2_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorB1_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorB0_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorA7_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorA6_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorA5_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorA4_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorA3_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorA2_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorA1_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPsorA0_Write1ToSet                  // Port Set Output,
+      \t *   FgpioaPcorD7_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorD6_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorD5_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorD4_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorD3_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorD2_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorD1_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorD0_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorC7_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorC6_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorC5_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorC4_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorC3_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorC2_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorC1_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorC0_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorB7_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorB6_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorB5_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorB4_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorB3_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorB2_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorB1_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorB0_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorA7_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorA6_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorA5_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorA4_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorA3_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorA2_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorA1_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPcorA0_Write1ToClear                // Port Clear Output,
+      \t *   FgpioaPtorD7_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorD6_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorD5_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorD4_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorD3_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorD2_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorD1_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorD0_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorC7_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorC6_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorC5_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorC4_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorC3_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorC2_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorC1_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorC0_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorB7_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorB6_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorB5_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorB4_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorB3_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorB2_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorB1_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorB0_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorA7_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorA6_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorA5_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorA4_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorA3_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorA2_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorA1_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPtorA0_Write1ToToggle               // Port Toggle Output,
+      \t *   FgpioaPddrD7_Input                        // Port Data Direction,
+      \t *   FgpioaPddrD6_Input                        // Port Data Direction,
+      \t *   FgpioaPddrD5_Input                        // Port Data Direction,
+      \t *   FgpioaPddrD4_Input                        // Port Data Direction,
+      \t *   FgpioaPddrD3_Input                        // Port Data Direction,
+      \t *   FgpioaPddrD2_Input                        // Port Data Direction,
+      \t *   FgpioaPddrD1_Input                        // Port Data Direction,
+      \t *   FgpioaPddrD0_Input                        // Port Data Direction,
+      \t *   FgpioaPddrC7_Input                        // Port Data Direction,
+      \t *   FgpioaPddrC6_Input                        // Port Data Direction,
+      \t *   FgpioaPddrC5_Input                        // Port Data Direction,
+      \t *   FgpioaPddrC4_Input                        // Port Data Direction,
+      \t *   FgpioaPddrC3_Input                        // Port Data Direction,
+      \t *   FgpioaPddrC2_Input                        // Port Data Direction,
+      \t *   FgpioaPddrC1_Input                        // Port Data Direction,
+      \t *   FgpioaPddrC0_Input                        // Port Data Direction,
+      \t *   FgpioaPddrB7_Input                        // Port Data Direction,
+      \t *   FgpioaPddrB6_Input                        // Port Data Direction,
+      \t *   FgpioaPddrB5_Input                        // Port Data Direction,
+      \t *   FgpioaPddrB4_Input                        // Port Data Direction,
+      \t *   FgpioaPddrB3_Input                        // Port Data Direction,
+      \t *   FgpioaPddrB2_Input                        // Port Data Direction,
+      \t *   FgpioaPddrB1_Input                        // Port Data Direction,
+      \t *   FgpioaPddrB0_Input                        // Port Data Direction,
+      \t *   FgpioaPddrA7_Input                        // Port Data Direction,
+      \t *   FgpioaPddrA6_Input                        // Port Data Direction,
+      \t *   FgpioaPddrA5_Input                        // Port Data Direction,
+      \t *   FgpioaPddrA4_Input                        // Port Data Direction,
+      \t *   FgpioaPddrA3_Input                        // Port Data Direction,
+      \t *   FgpioaPddrA2_Input                        // Port Data Direction,
+      \t *   FgpioaPddrA1_Input                        // Port Data Direction,
+      \t *   FgpioaPddrA0_Input                        // Port Data Direction,
+      \t *   FgpioaPidrD7_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrD6_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrD5_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrD4_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrD3_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrD2_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrD1_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrD0_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrC7_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrC6_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrC5_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrC4_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrC3_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrC2_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrC1_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrC0_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrB7_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrB6_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrB5_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrB4_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrB3_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrB2_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrB1_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrB0_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrA7_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrA6_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrA5_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrA4_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrA3_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrA2_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrA1_InputAvailable               // Port Input Disable,
+      \t *   FgpioaPidrA0_InputAvailable               // Port Input Disable,
+      \t * };
+      \t *
+      \t * // Initialise $(_class) from values specified above
+      \t * $(_class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <initialValueTemplate namespace="usbdm"
+      variables="fgpioa_pdor_d7,fgpioa_pdor_d6,fgpioa_pdor_d5,fgpioa_pdor_d4,fgpioa_pdor_d3,fgpioa_pdor_d2,fgpioa_pdor_d1,fgpioa_pdor_d0,fgpioa_pdor_c7,fgpioa_pdor_c6,fgpioa_pdor_c5,fgpioa_pdor_c4,fgpioa_pdor_c3,fgpioa_pdor_c2,fgpioa_pdor_c1,fgpioa_pdor_c0,fgpioa_pdor_b7,fgpioa_pdor_b6,fgpioa_pdor_b5,fgpioa_pdor_b4,fgpioa_pdor_b3,fgpioa_pdor_b2,fgpioa_pdor_b1,fgpioa_pdor_b0,fgpioa_pdor_a7,fgpioa_pdor_a6,fgpioa_pdor_a5,fgpioa_pdor_a4,fgpioa_pdor_a3,fgpioa_pdor_a2,fgpioa_pdor_a1,fgpioa_pdor_a0"
+   ><![CDATA[
+      \t   /// Port Data Output Register
+      \t   uint32_t pdor = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="fgpioa_psor_d7,fgpioa_psor_d6,fgpioa_psor_d5,fgpioa_psor_d4,fgpioa_psor_d3,fgpioa_psor_d2,fgpioa_psor_d1,fgpioa_psor_d0,fgpioa_psor_c7,fgpioa_psor_c6,fgpioa_psor_c5,fgpioa_psor_c4,fgpioa_psor_c3,fgpioa_psor_c2,fgpioa_psor_c1,fgpioa_psor_c0,fgpioa_psor_b7,fgpioa_psor_b6,fgpioa_psor_b5,fgpioa_psor_b4,fgpioa_psor_b3,fgpioa_psor_b2,fgpioa_psor_b1,fgpioa_psor_b0,fgpioa_psor_a7,fgpioa_psor_a6,fgpioa_psor_a5,fgpioa_psor_a4,fgpioa_psor_a3,fgpioa_psor_a2,fgpioa_psor_a1,fgpioa_psor_a0"
+   ><![CDATA[
+      \t   /// Port Set Output Register
+      \t   uint32_t psor = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="fgpioa_pcor_d7,fgpioa_pcor_d6,fgpioa_pcor_d5,fgpioa_pcor_d4,fgpioa_pcor_d3,fgpioa_pcor_d2,fgpioa_pcor_d1,fgpioa_pcor_d0,fgpioa_pcor_c7,fgpioa_pcor_c6,fgpioa_pcor_c5,fgpioa_pcor_c4,fgpioa_pcor_c3,fgpioa_pcor_c2,fgpioa_pcor_c1,fgpioa_pcor_c0,fgpioa_pcor_b7,fgpioa_pcor_b6,fgpioa_pcor_b5,fgpioa_pcor_b4,fgpioa_pcor_b3,fgpioa_pcor_b2,fgpioa_pcor_b1,fgpioa_pcor_b0,fgpioa_pcor_a7,fgpioa_pcor_a6,fgpioa_pcor_a5,fgpioa_pcor_a4,fgpioa_pcor_a3,fgpioa_pcor_a2,fgpioa_pcor_a1,fgpioa_pcor_a0"
+   ><![CDATA[
+      \t   /// Port Clear Output Register
+      \t   uint32_t pcor = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="fgpioa_ptor_d7,fgpioa_ptor_d6,fgpioa_ptor_d5,fgpioa_ptor_d4,fgpioa_ptor_d3,fgpioa_ptor_d2,fgpioa_ptor_d1,fgpioa_ptor_d0,fgpioa_ptor_c7,fgpioa_ptor_c6,fgpioa_ptor_c5,fgpioa_ptor_c4,fgpioa_ptor_c3,fgpioa_ptor_c2,fgpioa_ptor_c1,fgpioa_ptor_c0,fgpioa_ptor_b7,fgpioa_ptor_b6,fgpioa_ptor_b5,fgpioa_ptor_b4,fgpioa_ptor_b3,fgpioa_ptor_b2,fgpioa_ptor_b1,fgpioa_ptor_b0,fgpioa_ptor_a7,fgpioa_ptor_a6,fgpioa_ptor_a5,fgpioa_ptor_a4,fgpioa_ptor_a3,fgpioa_ptor_a2,fgpioa_ptor_a1,fgpioa_ptor_a0"
+   ><![CDATA[
+      \t   /// Port Toggle Output Register
+      \t   uint32_t ptor = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="fgpioa_pddr_d7,fgpioa_pddr_d6,fgpioa_pddr_d5,fgpioa_pddr_d4,fgpioa_pddr_d3,fgpioa_pddr_d2,fgpioa_pddr_d1,fgpioa_pddr_d0,fgpioa_pddr_c7,fgpioa_pddr_c6,fgpioa_pddr_c5,fgpioa_pddr_c4,fgpioa_pddr_c3,fgpioa_pddr_c2,fgpioa_pddr_c1,fgpioa_pddr_c0,fgpioa_pddr_b7,fgpioa_pddr_b6,fgpioa_pddr_b5,fgpioa_pddr_b4,fgpioa_pddr_b3,fgpioa_pddr_b2,fgpioa_pddr_b1,fgpioa_pddr_b0,fgpioa_pddr_a7,fgpioa_pddr_a6,fgpioa_pddr_a5,fgpioa_pddr_a4,fgpioa_pddr_a3,fgpioa_pddr_a2,fgpioa_pddr_a1,fgpioa_pddr_a0"
+   ><![CDATA[
+      \t   /// Port Data Direction Register
+      \t   uint32_t pddr = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="fgpioa_pidr_d7,fgpioa_pidr_d6,fgpioa_pidr_d5,fgpioa_pidr_d4,fgpioa_pidr_d3,fgpioa_pidr_d2,fgpioa_pidr_d1,fgpioa_pidr_d0,fgpioa_pidr_c7,fgpioa_pidr_c6,fgpioa_pidr_c5,fgpioa_pidr_c4,fgpioa_pidr_c3,fgpioa_pidr_c2,fgpioa_pidr_c1,fgpioa_pidr_c0,fgpioa_pidr_b7,fgpioa_pidr_b6,fgpioa_pidr_b5,fgpioa_pidr_b4,fgpioa_pidr_b3,fgpioa_pidr_b2,fgpioa_pidr_b1,fgpioa_pidr_b0,fgpioa_pidr_a7,fgpioa_pidr_a6,fgpioa_pidr_a5,fgpioa_pidr_a4,fgpioa_pidr_a3,fgpioa_pidr_a2,fgpioa_pidr_a1,fgpioa_pidr_a0"
+   ><![CDATA[
+      \t   /// Port Input Disable Register
+      \t   uint32_t pidr = 0;\n\n
+   ]]></initialValueTemplate>
+
+<!--   Configure methods -->
+
+   <template discardRepeats="true" key="/FGPIOA/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure FGPIOA from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t   enable();
+      \t
+      \t   fgpioa->PDOR    = init.pdor;
+      \t   fgpioa->PDORA    = init.pdora;
+      \t   fgpioa->PDORB    = init.pdorb;
+      \t   fgpioa->PDORC    = init.pdorc;
+      \t   fgpioa->PDORD    = init.pdord;
+      \t   fgpioa->PSOR    = init.psor;
+      \t   fgpioa->PSORA    = init.psora;
+      \t   fgpioa->PSORB    = init.psorb;
+      \t   fgpioa->PSORC    = init.psorc;
+      \t   fgpioa->PSORD    = init.psord;
+      \t   fgpioa->PCOR    = init.pcor;
+      \t   fgpioa->PCORA    = init.pcora;
+      \t   fgpioa->PCORB    = init.pcorb;
+      \t   fgpioa->PCORC    = init.pcorc;
+      \t   fgpioa->PCORD    = init.pcord;
+      \t   fgpioa->PTOR    = init.ptor;
+      \t   fgpioa->PTORA    = init.ptora;
+      \t   fgpioa->PTORB    = init.ptorb;
+      \t   fgpioa->PTORC    = init.ptorc;
+      \t   fgpioa->PTORD    = init.ptord;
+      \t   fgpioa->PDDR    = init.pddr;
+      \t   fgpioa->PDDRA    = init.pddra;
+      \t   fgpioa->PDDRB    = init.pddrb;
+      \t   fgpioa->PDDRC    = init.pddrc;
+      \t   fgpioa->PDDRD    = init.pddrd;
+      \t   fgpioa->PIDR    = init.pidr;
+      \t   fgpioa->PIDRA    = init.pidra;
+      \t   fgpioa->PIDRB    = init.pidrb;
+      \t   fgpioa->PIDRC    = init.pidrc;
+      \t   fgpioa->PIDRD    = init.pidrd;
+      \t
+      \t   calibrate();
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n
+   ]]></template>
+
+<!--   Constructors -->
+
+   <for keys="r"
+      values="
+            fgpioa_pdor_d7;
+            fgpioa_pdor_d6;
+            fgpioa_pdor_d5;
+            fgpioa_pdor_d4;
+            fgpioa_pdor_d3;
+            fgpioa_pdor_d2;
+            fgpioa_pdor_d1;
+            fgpioa_pdor_d0;
+            fgpioa_pdor_c7;
+            fgpioa_pdor_c6;
+            fgpioa_pdor_c5;
+            fgpioa_pdor_c4;
+            fgpioa_pdor_c3;
+            fgpioa_pdor_c2;
+            fgpioa_pdor_c1;
+            fgpioa_pdor_c0;
+            fgpioa_pdor_b7;
+            fgpioa_pdor_b6;
+            fgpioa_pdor_b5;
+            fgpioa_pdor_b4;
+            fgpioa_pdor_b3;
+            fgpioa_pdor_b2;
+            fgpioa_pdor_b1;
+            fgpioa_pdor_b0;
+            fgpioa_pdor_a7;
+            fgpioa_pdor_a6;
+            fgpioa_pdor_a5;
+            fgpioa_pdor_a4;
+            fgpioa_pdor_a3;
+            fgpioa_pdor_a2;
+            fgpioa_pdor_a1;
+            fgpioa_pdor_a0;
+            fgpioa_psor_d7;
+            fgpioa_psor_d6;
+            fgpioa_psor_d5;
+            fgpioa_psor_d4;
+            fgpioa_psor_d3;
+            fgpioa_psor_d2;
+            fgpioa_psor_d1;
+            fgpioa_psor_d0;
+            fgpioa_psor_c7;
+            fgpioa_psor_c6;
+            fgpioa_psor_c5;
+            fgpioa_psor_c4;
+            fgpioa_psor_c3;
+            fgpioa_psor_c2;
+            fgpioa_psor_c1;
+            fgpioa_psor_c0;
+            fgpioa_psor_b7;
+            fgpioa_psor_b6;
+            fgpioa_psor_b5;
+            fgpioa_psor_b4;
+            fgpioa_psor_b3;
+            fgpioa_psor_b2;
+            fgpioa_psor_b1;
+            fgpioa_psor_b0;
+            fgpioa_psor_a7;
+            fgpioa_psor_a6;
+            fgpioa_psor_a5;
+            fgpioa_psor_a4;
+            fgpioa_psor_a3;
+            fgpioa_psor_a2;
+            fgpioa_psor_a1;
+            fgpioa_psor_a0;
+            fgpioa_pcor_d7;
+            fgpioa_pcor_d6;
+            fgpioa_pcor_d5;
+            fgpioa_pcor_d4;
+            fgpioa_pcor_d3;
+            fgpioa_pcor_d2;
+            fgpioa_pcor_d1;
+            fgpioa_pcor_d0;
+            fgpioa_pcor_c7;
+            fgpioa_pcor_c6;
+            fgpioa_pcor_c5;
+            fgpioa_pcor_c4;
+            fgpioa_pcor_c3;
+            fgpioa_pcor_c2;
+            fgpioa_pcor_c1;
+            fgpioa_pcor_c0;
+            fgpioa_pcor_b7;
+            fgpioa_pcor_b6;
+            fgpioa_pcor_b5;
+            fgpioa_pcor_b4;
+            fgpioa_pcor_b3;
+            fgpioa_pcor_b2;
+            fgpioa_pcor_b1;
+            fgpioa_pcor_b0;
+            fgpioa_pcor_a7;
+            fgpioa_pcor_a6;
+            fgpioa_pcor_a5;
+            fgpioa_pcor_a4;
+            fgpioa_pcor_a3;
+            fgpioa_pcor_a2;
+            fgpioa_pcor_a1;
+            fgpioa_pcor_a0;
+            fgpioa_ptor_d7;
+            fgpioa_ptor_d6;
+            fgpioa_ptor_d5;
+            fgpioa_ptor_d4;
+            fgpioa_ptor_d3;
+            fgpioa_ptor_d2;
+            fgpioa_ptor_d1;
+            fgpioa_ptor_d0;
+            fgpioa_ptor_c7;
+            fgpioa_ptor_c6;
+            fgpioa_ptor_c5;
+            fgpioa_ptor_c4;
+            fgpioa_ptor_c3;
+            fgpioa_ptor_c2;
+            fgpioa_ptor_c1;
+            fgpioa_ptor_c0;
+            fgpioa_ptor_b7;
+            fgpioa_ptor_b6;
+            fgpioa_ptor_b5;
+            fgpioa_ptor_b4;
+            fgpioa_ptor_b3;
+            fgpioa_ptor_b2;
+            fgpioa_ptor_b1;
+            fgpioa_ptor_b0;
+            fgpioa_ptor_a7;
+            fgpioa_ptor_a6;
+            fgpioa_ptor_a5;
+            fgpioa_ptor_a4;
+            fgpioa_ptor_a3;
+            fgpioa_ptor_a2;
+            fgpioa_ptor_a1;
+            fgpioa_ptor_a0;
+            fgpioa_pddr_d7;
+            fgpioa_pddr_d6;
+            fgpioa_pddr_d5;
+            fgpioa_pddr_d4;
+            fgpioa_pddr_d3;
+            fgpioa_pddr_d2;
+            fgpioa_pddr_d1;
+            fgpioa_pddr_d0;
+            fgpioa_pddr_c7;
+            fgpioa_pddr_c6;
+            fgpioa_pddr_c5;
+            fgpioa_pddr_c4;
+            fgpioa_pddr_c3;
+            fgpioa_pddr_c2;
+            fgpioa_pddr_c1;
+            fgpioa_pddr_c0;
+            fgpioa_pddr_b7;
+            fgpioa_pddr_b6;
+            fgpioa_pddr_b5;
+            fgpioa_pddr_b4;
+            fgpioa_pddr_b3;
+            fgpioa_pddr_b2;
+            fgpioa_pddr_b1;
+            fgpioa_pddr_b0;
+            fgpioa_pddr_a7;
+            fgpioa_pddr_a6;
+            fgpioa_pddr_a5;
+            fgpioa_pddr_a4;
+            fgpioa_pddr_a3;
+            fgpioa_pddr_a2;
+            fgpioa_pddr_a1;
+            fgpioa_pddr_a0;
+            fgpioa_pidr_d7;
+            fgpioa_pidr_d6;
+            fgpioa_pidr_d5;
+            fgpioa_pidr_d4;
+            fgpioa_pidr_d3;
+            fgpioa_pidr_d2;
+            fgpioa_pidr_d1;
+            fgpioa_pidr_d0;
+            fgpioa_pidr_c7;
+            fgpioa_pidr_c6;
+            fgpioa_pidr_c5;
+            fgpioa_pidr_c4;
+            fgpioa_pidr_c3;
+            fgpioa_pidr_c2;
+            fgpioa_pidr_c1;
+            fgpioa_pidr_c0;
+            fgpioa_pidr_b7;
+            fgpioa_pidr_b6;
+            fgpioa_pidr_b5;
+            fgpioa_pidr_b4;
+            fgpioa_pidr_b3;
+            fgpioa_pidr_b2;
+            fgpioa_pidr_b1;
+            fgpioa_pidr_b0;
+            fgpioa_pidr_a7;
+            fgpioa_pidr_a6;
+            fgpioa_pidr_a5;
+            fgpioa_pidr_a4;
+            fgpioa_pidr_a3;
+            fgpioa_pidr_a2;
+            fgpioa_pidr_a1;
+            fgpioa_pidr_a0
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+            fgpioa_pdor_d7,
+            fgpioa_pdor_d6,
+            fgpioa_pdor_d5,
+            fgpioa_pdor_d4,
+            fgpioa_pdor_d3,
+            fgpioa_pdor_d2,
+            fgpioa_pdor_d1,
+            fgpioa_pdor_d0,
+            fgpioa_pdor_c7,
+            fgpioa_pdor_c6,
+            fgpioa_pdor_c5,
+            fgpioa_pdor_c4,
+            fgpioa_pdor_c3,
+            fgpioa_pdor_c2,
+            fgpioa_pdor_c1,
+            fgpioa_pdor_c0,
+            fgpioa_pdor_b7,
+            fgpioa_pdor_b6,
+            fgpioa_pdor_b5,
+            fgpioa_pdor_b4,
+            fgpioa_pdor_b3,
+            fgpioa_pdor_b2,
+            fgpioa_pdor_b1,
+            fgpioa_pdor_b0,
+            fgpioa_pdor_a7,
+            fgpioa_pdor_a6,
+            fgpioa_pdor_a5,
+            fgpioa_pdor_a4,
+            fgpioa_pdor_a3,
+            fgpioa_pdor_a2,
+            fgpioa_pdor_a1,
+            fgpioa_pdor_a0,
+            fgpioa_psor_d7,
+            fgpioa_psor_d6,
+            fgpioa_psor_d5,
+            fgpioa_psor_d4,
+            fgpioa_psor_d3,
+            fgpioa_psor_d2,
+            fgpioa_psor_d1,
+            fgpioa_psor_d0,
+            fgpioa_psor_c7,
+            fgpioa_psor_c6,
+            fgpioa_psor_c5,
+            fgpioa_psor_c4,
+            fgpioa_psor_c3,
+            fgpioa_psor_c2,
+            fgpioa_psor_c1,
+            fgpioa_psor_c0,
+            fgpioa_psor_b7,
+            fgpioa_psor_b6,
+            fgpioa_psor_b5,
+            fgpioa_psor_b4,
+            fgpioa_psor_b3,
+            fgpioa_psor_b2,
+            fgpioa_psor_b1,
+            fgpioa_psor_b0,
+            fgpioa_psor_a7,
+            fgpioa_psor_a6,
+            fgpioa_psor_a5,
+            fgpioa_psor_a4,
+            fgpioa_psor_a3,
+            fgpioa_psor_a2,
+            fgpioa_psor_a1,
+            fgpioa_psor_a0,
+            fgpioa_pcor_d7,
+            fgpioa_pcor_d6,
+            fgpioa_pcor_d5,
+            fgpioa_pcor_d4,
+            fgpioa_pcor_d3,
+            fgpioa_pcor_d2,
+            fgpioa_pcor_d1,
+            fgpioa_pcor_d0,
+            fgpioa_pcor_c7,
+            fgpioa_pcor_c6,
+            fgpioa_pcor_c5,
+            fgpioa_pcor_c4,
+            fgpioa_pcor_c3,
+            fgpioa_pcor_c2,
+            fgpioa_pcor_c1,
+            fgpioa_pcor_c0,
+            fgpioa_pcor_b7,
+            fgpioa_pcor_b6,
+            fgpioa_pcor_b5,
+            fgpioa_pcor_b4,
+            fgpioa_pcor_b3,
+            fgpioa_pcor_b2,
+            fgpioa_pcor_b1,
+            fgpioa_pcor_b0,
+            fgpioa_pcor_a7,
+            fgpioa_pcor_a6,
+            fgpioa_pcor_a5,
+            fgpioa_pcor_a4,
+            fgpioa_pcor_a3,
+            fgpioa_pcor_a2,
+            fgpioa_pcor_a1,
+            fgpioa_pcor_a0,
+            fgpioa_ptor_d7,
+            fgpioa_ptor_d6,
+            fgpioa_ptor_d5,
+            fgpioa_ptor_d4,
+            fgpioa_ptor_d3,
+            fgpioa_ptor_d2,
+            fgpioa_ptor_d1,
+            fgpioa_ptor_d0,
+            fgpioa_ptor_c7,
+            fgpioa_ptor_c6,
+            fgpioa_ptor_c5,
+            fgpioa_ptor_c4,
+            fgpioa_ptor_c3,
+            fgpioa_ptor_c2,
+            fgpioa_ptor_c1,
+            fgpioa_ptor_c0,
+            fgpioa_ptor_b7,
+            fgpioa_ptor_b6,
+            fgpioa_ptor_b5,
+            fgpioa_ptor_b4,
+            fgpioa_ptor_b3,
+            fgpioa_ptor_b2,
+            fgpioa_ptor_b1,
+            fgpioa_ptor_b0,
+            fgpioa_ptor_a7,
+            fgpioa_ptor_a6,
+            fgpioa_ptor_a5,
+            fgpioa_ptor_a4,
+            fgpioa_ptor_a3,
+            fgpioa_ptor_a2,
+            fgpioa_ptor_a1,
+            fgpioa_ptor_a0,
+            fgpioa_pddr_d7,
+            fgpioa_pddr_d6,
+            fgpioa_pddr_d5,
+            fgpioa_pddr_d4,
+            fgpioa_pddr_d3,
+            fgpioa_pddr_d2,
+            fgpioa_pddr_d1,
+            fgpioa_pddr_d0,
+            fgpioa_pddr_c7,
+            fgpioa_pddr_c6,
+            fgpioa_pddr_c5,
+            fgpioa_pddr_c4,
+            fgpioa_pddr_c3,
+            fgpioa_pddr_c2,
+            fgpioa_pddr_c1,
+            fgpioa_pddr_c0,
+            fgpioa_pddr_b7,
+            fgpioa_pddr_b6,
+            fgpioa_pddr_b5,
+            fgpioa_pddr_b4,
+            fgpioa_pddr_b3,
+            fgpioa_pddr_b2,
+            fgpioa_pddr_b1,
+            fgpioa_pddr_b0,
+            fgpioa_pddr_a7,
+            fgpioa_pddr_a6,
+            fgpioa_pddr_a5,
+            fgpioa_pddr_a4,
+            fgpioa_pddr_a3,
+            fgpioa_pddr_a2,
+            fgpioa_pddr_a1,
+            fgpioa_pddr_a0,
+            fgpioa_pidr_d7,
+            fgpioa_pidr_d6,
+            fgpioa_pidr_d5,
+            fgpioa_pidr_d4,
+            fgpioa_pidr_d3,
+            fgpioa_pidr_d2,
+            fgpioa_pidr_d1,
+            fgpioa_pidr_d0,
+            fgpioa_pidr_c7,
+            fgpioa_pidr_c6,
+            fgpioa_pidr_c5,
+            fgpioa_pidr_c4,
+            fgpioa_pidr_c3,
+            fgpioa_pidr_c2,
+            fgpioa_pidr_c1,
+            fgpioa_pidr_c0,
+            fgpioa_pidr_b7,
+            fgpioa_pidr_b6,
+            fgpioa_pidr_b5,
+            fgpioa_pidr_b4,
+            fgpioa_pidr_b3,
+            fgpioa_pidr_b2,
+            fgpioa_pidr_b1,
+            fgpioa_pidr_b0,
+            fgpioa_pidr_a7,
+            fgpioa_pidr_a6,
+            fgpioa_pidr_a5,
+            fgpioa_pidr_a4,
+            fgpioa_pidr_a3,
+            fgpioa_pidr_a2,
+            fgpioa_pidr_a1,
+            fgpioa_pidr_a0
+         "
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      \t}; // $(_class)::BasicInfo::Init\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      }; // $(_class)::BasicInfo\n\n
+   ]]>
+   </template>
+
+<signals />
+
+</peripheralPage>

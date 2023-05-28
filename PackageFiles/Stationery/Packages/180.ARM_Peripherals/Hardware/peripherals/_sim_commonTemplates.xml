@@ -11,6 +11,7 @@
    ]]></template>
 
    <choiceOption key="/PCR/nvic_irqLevel"
+      hidden="true"
       templateKey="/PCR/nvicPriority"
       enumStem="NvicPriority"
       enumType="int8_t"
@@ -609,9 +610,21 @@
          ]]></setTemplate>
       </for>
    </for>
-   <template ><![CDATA[
+   <initialValueTemplate
+      variables="
+         sim_sopt2_pllfllsel[],
+         sim_sopt2_usbsrc[],
+
+         sim_sopt2_uart0src[],
+         sim_sopt2_tpmsrc[],
+         sim_sopt2_clkoutsel[],
+         sim_sopt2_rtcclkoutsel,
+         sim_sopt2_traceclksel,
+         sim_sopt2_usbregen,
+         sim_sopt2_ptd7pad"
+   ><![CDATA[
       \t};\n\n
-   ]]></template>
+   ]]></initialValueTemplate>
 
    <template key="DefaultInitValue" namespace="all" ><![CDATA[
       \t/**

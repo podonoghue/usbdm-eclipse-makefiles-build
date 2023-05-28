@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- pwt_mke.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Pulse Width Timer">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <xi:include href="_mapPinsOption.xml"/>
+
+   <xi:include href="_irqOption.xml"/>
+
+   <intOption key="pwt_r1_ppw" condition="pwt_r1_ppw_present"
+      description="Positive Pulse Width"
+      toolTip="Captured positive pulse width value. It is suggested to use half-word (16-bit) or word (32-bit) to read out this value"
+   />
+
+   <binaryOption key="pwt_r1_pclks" condition="pwt_r1_pclks_present"
+      enumStem="PwtR1Pclks"
+      toolTip="Controls the selection of clock source for the PWT counter"
+      description="PWT Clock Source Selection" >
+      <choice name="Timer clock"        value="0" enum="TimerClock"/>
+      <choice name="Alternative clock"  value="1" enum="AlternativeClock"/>
+   </binaryOption>
+
+   <choiceOption key="pwt_r1_pinsel" condition="pwt_r1_pinsel_present"
+      enumStem="PwtR1Pinsel"
+      toolTip="Enables the corresponding PWT input port, if this PWT input comes from an external source"
+      description="PWT Pulse Inputs Selection" >
+      <choice name="PWTIN[0] enabled"  value="0" enum="Pwtin0Enabled"/>
+      <choice name="PWTIN[1] enabled"  value="1" enum="Pwtin1Enabled"/>
+      <choice name="PWTIN[2] enabled"  value="2" enum="Pwtin2Enabled"/>
+      <choice name="PWTIN[3] enabled"  value="3" enum="Pwtin3Enabled"/>
+   </choiceOption>
+
+   <choiceOption key="pwt_r1_edge" condition="pwt_r1_edge_present"
+      enumStem="PwtR1Edge"
+      toolTip="Selects which edge triggers the pulse width measurement and which edges trigger the capture.\n
+               If user needs to change the trigger and capture mode by changing the value of EDGE[1:0], a PWT software reset
+is required after changing the EDGE[1:0] value.\n
+               Clearing PWTEN and then setting it has the same effect"
+      description="PWT Input Edge Sensitivity" >
+      <choice name="Falling-edge start, falling edges captured"  value="0" enum="FallingEdgeStart_FallingEdgesCaptured"/>
+      <choice name="Rising edge start, both edges captured"      value="1" enum="RisingEdgeStart_BothEdgesCaptured"/>
+      <choice name="Falling edge start, both edges captured"     value="2" enum="FallingEdgeStart_BothEdgesCaptured"/>
+      <choice name="Rising edge start, rising edges captured"    value="3" enum="RisingEdgeStart_RisingEdgesCaptured"/>
+   </choiceOption>
+
+   <choiceOption key="pwt_r1_pre" condition="pwt_r1_pre_present"
+      enumStem="PwtR1Pre"
+      toolTip="Selects the value by which the clock is divided to clock the PWT counter"
+      description="PWT Clock Prescaler (CLKPRE) Setting" >
+      <choice name="Clock div 1"    value="0" enum="ClockDiv1"/>
+      <choice name="Clock div 2"    value="1" enum="ClockDiv2"/>
+      <choice name="Clock div 4"    value="2" enum="ClockDiv4"/>
+      <choice name="Clock div 8"    value="3" enum="ClockDiv8"/>
+      <choice name="Clock div 16"   value="4" enum="ClockDiv16"/>
+      <choice name="Clock div 32"   value="5" enum="ClockDiv32"/>
+      <choice name="Clock div 64"   value="6" enum="ClockDiv64"/>
+      <choice name="Clock div 128"  value="7" enum="ClockDiv128"/>
+   </choiceOption>
+
+   <binaryOption key="pwt_r1_pwten" condition="pwt_r1_pwten_present"
+      enumStem="PwtR1Pwten"
+      toolTip="Enables/disables the PWT module.\n
+               To avoid unexpected behavior, do not change any PWT configurations as long as PWTEN is set"
+      description="PWT Module Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption>
+
+   <binaryOption key="pwt_r1_pwtie" condition="pwt_r1_pwtie_present"
+      enumStem="PwtR1Pwtie"
+      toolTip="Enables the PWT module to generate an interrupt"
+      description="PWT Module Interrupt Enable" >
+      <choice name="Disable"     value="0" enum="Disable"/>
+      <choice name="Enable"      value="1" enum="Enable"/>
+   </binaryOption>
+
+   <binaryOption key="pwt_r1_prdyie" condition="pwt_r1_prdyie_present"
+      enumStem="PwtR1Prdyie"
+      toolTip="Enables/disables the PWT to generate an interrupt when PWTRDY is set as long as PWTIE is set"
+      description="PWT Pulse Width Data Ready Interrupt Enable" >
+      <choice name="Disable"     value="0" enum="Disable"/>
+      <choice name="Enable"      value="1" enum="Enable"/>
+   </binaryOption>
+
+   <binaryOption key="pwt_r1_povie" condition="pwt_r1_povie_present"
+      enumStem="PwtR1Povie"
+      toolTip="Enables/disables the PWT to generate an interrupt when PWTOV is set due to PWT counter overflow"
+      description="PWT Counter Overflow Interrupt Enable" >
+      <choice name="Disable"     value="0" enum="Disable"/>
+      <choice name="Enable"      value="1" enum="Enable"/>
+   </binaryOption>
+
+   <binaryOption key="pwt_r1_pwtsr" condition="pwt_r1_pwtsr_present"
+      enumStem="PwtR1Pwtsr"
+      toolTip="Performs a soft reset to the PWT. This field always reads as 0"
+      description="PWT Soft Reset" >
+      <choice name="No action"   value="0" enum="NoAction"/>
+      <choice name="Soft reset"  value="1" enum="SoftReset"/>
+   </binaryOption>
+
+   <binaryOption key="pwt_r1_pwtrdy" condition="pwt_r1_pwtrdy_present"
+      enumStem="PwtR1Pwtrdy"
+      toolTip="Indicates that the PWT Pulse Width register(s) has been updated and is ready to be read.\n
+               This field is cleared by reading PWTRDY and then writing 0 to PWTRDY bit when PWTRDY is set.\n
+               Writing 1 to this field has no effect. PWTRDY setting is associated with the EDGE[1:0] bits"
+      description="PWT Pulse Width Valid" >
+      <choice name="Not Updated"  value="0" enum="NotUpdated"/>
+      <choice name="Updated"      value="1" enum="Updated"/>
+   </binaryOption>
+
+   <binaryOption key="pwt_r1_pwtov" condition="pwt_r1_pwtov_present"
+      enumStem="PwtR1Pwtov"
+      toolTip="Indicates that the PWT counter has run from 0x0000_0xFFFF to 0x0000_0x0000.\n
+               This field is cleared by writing 0 to PWTOV when PWTOV is set.\n
+               Writing 1 to this field has no effect.\n
+               If another overflow occurs when this field is being cleared, the clearing fails"
+      description="PWT Counter Overflow" >
+      <choice name="No overflow"  value="0" enum="NoOverflow"/>
+      <choice name="Overflow"     value="1" enum="Overflow"/>
+   </binaryOption>
+
+<!-- Grahic here -->  
+
+   <for keys="field:name"
+        values="
+      pwt_r1_pclks:R1Pclks;
+      pwt_r1_pinsel:R1Pinsel;
+      pwt_r1_edge:R1Edge;
+      pwt_r1_pre:R1Pre;
+      pwt_r1_pwten:R1Pwten;
+      pwt_r1_pwtie:R1Pwtie;
+      pwt_r1_prdyie:R1Prdyie;
+      pwt_r1_povie:R1Povie;
+      pwt_r1_pwtsr:R1Pwtsr;
+      pwt_r1_pwtrdy:R1Pwtrdy;
+      pwt_r1_pwtov:R1Pwtov">
+      <setTemplate variables="%(field)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void configure%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}\n\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== PWT Init class =============================== -->
+
+   <template key="init_description" namespace="all">
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_class)::Init init {
+      \t *
+      \t *   // Setup values
+      \t *   0,                                        // Positive Pulse Width,
+      \t *   PwtR1Pclks_TimerClock                     // PWT Clock Source Selection,
+      \t *   PwtR1Pinsel_Pwtin0Enabled                 // PWT Pulse Inputs Selection,
+      \t *   PwtR1Edge_FallingEdgeStart_FallingEdgesCaptured    // PWT Input Edge Sensitivity,
+      \t *   PwtR1Pre_ClockDiv1                        // PWT Clock Prescaler (CLKPRE) Setting,
+      \t *   PwtR1Pwten_Disabled                       // PWT Module Enable,
+      \t *   PwtR1Pwtie_Disable                        // PWT Module Interrupt Enable,
+      \t *   PwtR1Prdyie_Disable                       // PWT Pulse Width Data Ready Interrupt Enable,
+      \t *   PwtR1Povie_Disable                        // PWT Counter Overflow Interrupt Enable,
+      \t *   PwtR1Pwtsr_NoAction                       // PWT Soft Reset,
+      \t *   PwtR1Pwtrdy_NotUpdated                    // PWT Pulse Width Valid,
+      \t *   PwtR1Pwtov_NoOverflow                     // PWT Counter Overflow,
+      \t * };
+      \t *
+      \t * // Initialise $(_class) from values specified above
+      \t * $(_class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t
+      \t/**
+      \t * Type definition for $(_class) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)(const uint32_t &);
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+    ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></setTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="pwt_r1_ppw,pwt_r1_pclks,pwt_r1_pinsel,pwt_r1_edge,pwt_r1_pre,pwt_r1_pwten,pwt_r1_pwtie,pwt_r1_prdyie,pwt_r1_povie,pwt_r1_pwtsr,pwt_r1_pwtrdy,pwt_r1_pwtov"
+   ><![CDATA[
+      \t   /// Pulse Width Timer Register 1
+      \t   uint32_t r1 = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="/PCR/nvic_irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+   ]]></initialValueTemplate>
+
+<!--   Configure methods -->
+
+   <template discardRepeats="true" key="/PWT/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure PWT from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-back if feature enabled
+      \t      setCallback(init.callbackFunction);
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
+      \t   enable();
+      \t
+      \t   pwt->R1    = init.r1;
+      \t
+      \t   calibrate();
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n
+   ]]></template>
+
+<!--   Constructors -->
+
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%enumParam0 = %paramExpression;
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <setTemplate namespace="usbdm"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      #if $(irqHandlingMethod)
+      \t      %registerName = %paramExpression;
+      #else
+      \t      (void)%paramExpression;
+      #endif
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <for keys="r"
+      values="
+            pwt_r1_pclks;
+            pwt_r1_pinsel;
+            pwt_r1_edge;
+            pwt_r1_pre;
+            pwt_r1_pwten;
+            pwt_r1_pwtie;
+            pwt_r1_prdyie;
+            pwt_r1_povie;
+            pwt_r1_pwtsr;
+            pwt_r1_pwtrdy;
+            pwt_r1_pwtov
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+   <for keys="r"
+      values="
+            pwt_r1_ppw
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         \t    * @param value %description
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(unsigned value, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | value;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+            pwt_r1_pclks,
+            pwt_r1_pinsel,
+            pwt_r1_edge,
+            pwt_r1_pre,
+            pwt_r1_pwten,
+            pwt_r1_pwtie,
+            pwt_r1_prdyie,
+            pwt_r1_povie,
+            pwt_r1_pwtsr,
+            pwt_r1_pwtrdy,
+            pwt_r1_pwtov,
+            irqLevel
+         "
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      \t}; // $(_class)::BasicInfo::Init\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      }; // $(_class)::BasicInfo\n\n
+   ]]>
+   </template>
+
+<signals />
+
+</peripheralPage>

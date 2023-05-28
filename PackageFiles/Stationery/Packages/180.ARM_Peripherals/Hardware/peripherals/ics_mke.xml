@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- ics_mke.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Internal clock source">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <xi:include href="_mapPinsOption.xml"/>
+
+   <xi:include href="_irqOption.xml"/>
+
+   <choiceOption key="ics_c1_clks" condition="ics_c1_clks_present"
+      enumStem="IcsC1Clks"
+      description="Clock Source Select" >
+      <choice name="FLL"                 value="0" enum="Fll"/>
+      <choice name="Internal reference"  value="1" enum="InternalReference"/>
+      <choice name="External reference"  value="2" enum="ExternalReference"/>
+      <choice name="Reserved"            value="3" enum="Reserved"/>
+   </choiceOption>
+
+   <choiceOption key="ics_c1_rdiv" condition="ics_c1_rdiv_present"
+      enumStem="IcsC1Rdiv"
+      toolTip="Selects the amount to divide down the external reference clock for the FLL\n
+               If (RANGE=0 or OSCSEL=1) 1st value is used; else 2nd value"
+      description="FLL External Reference Divider" >
+      <choice name="Either 1 or 32"      value="0" enum="Either1Or32"/>
+      <choice name="Either 2 or 64"      value="1" enum="Either2Or64"/>
+      <choice name="Either 4 or 128"     value="2" enum="Either4Or128"/>
+      <choice name="Either 8 or 256"     value="3" enum="Either8Or256"/>
+      <choice name="Either 16 or 512"    value="4" enum="Either16Or512"/>
+      <choice name="Either 32 or 1024"   value="5" enum="Either32Or1024"/>
+      <choice name="Either 64 or 1280"   value="6" enum="Either64Or1280"/>
+      <choice name="Either 128 or 1536"  value="7" enum="Either128Or1536"/>
+   </choiceOption>
+
+   <binaryOption key="ics_c1_irefs" condition="ics_c1_irefs_present"
+      enumStem="IcsC1Irefs"
+      toolTip="Selects the reference clock source for the FLL"
+      description="Internal Reference Select" >
+      <choice name="External clock"  value="0" enum="ExternalClock"/>
+      <choice name="Internal clock"  value="1" enum="InternalClock"/>
+   </binaryOption>
+
+   <binaryOption key="ics_c1_irclken" condition="ics_c1_irclken_present"
+      enumStem="IcsC1Irclken"
+      toolTip="Enables the internal reference clock for use as ICSIRCLK"
+      description="Internal Reference Clock Enable" >
+      <choice name="ICSIRCLK inactive"  value="0" enum="IcsirclkInactive"/>
+      <choice name="ICSIRCLK active"    value="1" enum="IcsirclkActive"/>
+   </binaryOption>
+
+   <binaryOption key="ics_c1_irefsten" condition="ics_c1_irefsten_present"
+      enumStem="IcsC1Irefsten"
+      toolTip="Controls whether or not the internal reference clock remains enabled when the ICS enters Stop mode.\n
+               (only if IRCLKEN is set or if ICS is in FEI, FBI, or FBILP modes before entering Stop mode)"
+      description="Internal Reference Stop Enable" >
+      <choice name="Disabled"         value="0" enum="Disabled"/>
+      <choice name="Enabled in STOP"  value="1" enum="EnabledInStop"/>
+   </binaryOption>
+
+   <choiceOption key="ics_c2_bdiv" condition="ics_c2_bdiv_present"
+      enumStem="IcsC2Bdiv"
+      toolTip="This value can not be written or readback in some devices"
+      description="Bus Frequency Divider" >
+      <choice name="Divide by 1"    value="0" enum="DivideBy1"/>
+      <choice name="Divide by 2"    value="1" enum="DivideBy2"/>
+      <choice name="Divide by 4"    value="2" enum="DivideBy4"/>
+      <choice name="Divide by 8"    value="3" enum="DivideBy8"/>
+      <choice name="Divide by 16"   value="4" enum="DivideBy16"/>
+      <choice name="Divide by 32"   value="5" enum="DivideBy32"/>
+      <choice name="Divide by 64"   value="6" enum="DivideBy64"/>
+      <choice name="Divide by 128"  value="7" enum="DivideBy128"/>
+   </choiceOption>
+
+   <binaryOption key="ics_c2_lp" condition="ics_c2_lp_present"
+      enumStem="IcsC2Lp"
+      toolTip="Controls whether the FLL is disabled in bypass modes"
+      description="Low Power Select" >
+      <choice name="FLL not disabled in bypass"  value="0" enum="FllNotDisabledInBypass"/>
+      <choice name="FLL disabled in bypass"      value="1" enum="FllDisabledInBypass"/>
+   </binaryOption>
+
+   <choiceOption key="ics_c3_sctrim" condition="ics_c3_sctrim_present"
+      enumStem="IcsC3Sctrim"
+      toolTip="Adjusts the slow internal reference clock frequency"
+      description="Slow Internal Reference Clock Trim Setting" >
+      <choice name="Slow IRC trim value"  value="0" enum="SlowIrcTrimValue"/>
+   </choiceOption>
+
+   <binaryOption key="ics_c4_lolie0" condition="ics_c4_lolie0_present"
+      enumStem="IcsC4Lolie0"
+      description="Loss of Lock Interrupt Enable" >
+      <choice name="Interrupt disabled"  value="0" enum="InterruptDisabled"/>
+      <choice name="Interrupt enabled"   value="1" enum="InterruptEnabled"/>
+   </binaryOption>
+
+   <binaryOption key="ics_c4_cme" condition="ics_c4_cme_present"
+      enumStem="IcsC4Cme"
+      toolTip="Enables generation of a reset on loss of external clock"
+      description="Clock Monitor Enable" >
+      <choice name="Monitor disabled"  value="0" enum="MonitorDisabled"/>
+      <choice name="Monitor enabled"   value="1" enum="MonitorEnabled"/>
+   </binaryOption>
+
+   <choiceOption key="ics_c4_scftrim" condition="ics_c4_scftrim_present"
+      enumStem="IcsC4Scftrim"
+      description="Slow Internal Reference Clock Fine Trim" >
+      <choice name="Slow IRC trim(lsb)"  value="0" enum="SlowIrcTrimLsb"/>
+   </choiceOption>
+
+<!-- Grahic here -->  
+
+   <for keys="field:name"
+        values="
+      ics_c1_clks:C1Clks;
+      ics_c1_rdiv:C1Rdiv;
+      ics_c1_irefs:C1Irefs;
+      ics_c1_irclken:C1Irclken;
+      ics_c1_irefsten:C1Irefsten;
+      ics_c2_bdiv:C2Bdiv;
+      ics_c2_lp:C2Lp;
+      ics_c3_sctrim:C3Sctrim;
+      ics_c4_lolie0:C4Lolie0;
+      ics_c4_cme:C4Cme;
+      ics_c4_scftrim:C4Scftrim">
+      <setTemplate variables="%(field)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void configure%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}\n\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== ICS Init class =============================== -->
+
+   <template key="init_description" namespace="all">
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_class)::Init init {
+      \t *
+      \t *   // Setup values
+      \t *   IcsC1Clks_Fll                             // Clock Source Select,
+      \t *   IcsC1Rdiv_Either1Or32                     // FLL External Reference Divider,
+      \t *   IcsC1Irefs_ExternalClock                  // Internal Reference Select,
+      \t *   IcsC1Irclken_IcsirclkInactive             // Internal Reference Clock Enable,
+      \t *   IcsC1Irefsten_Disabled                    // Internal Reference Stop Enable,
+      \t *   IcsC2Bdiv_DivideBy1                       // Bus Frequency Divider,
+      \t *   IcsC2Lp_FllNotDisabledInBypass            // Low Power Select,
+      \t *   IcsC3Sctrim_SlowIrcTrimValue              // Slow Internal Reference Clock Trim Setting,
+      \t *   IcsC4Lolie0_InterruptDisabled             // Loss of Lock Interrupt Enable,
+      \t *   IcsC4Cme_MonitorDisabled                  // Clock Monitor Enable,
+      \t *   IcsC4Scftrim_SlowIrcTrimLsb               // Slow Internal Reference Clock Fine Trim,
+      \t * };
+      \t *
+      \t * // Initialise $(_class) from values specified above
+      \t * $(_class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t
+      \t/**
+      \t * Type definition for $(_class) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)(const uint32_t &);
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+    ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></setTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="ics_c1_clks,ics_c1_rdiv,ics_c1_irefs,ics_c1_irclken,ics_c1_irefsten"
+   ><![CDATA[
+      \t   /// Control 1 Register
+      \t   uint8_t c1 = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="ics_c2_bdiv,ics_c2_lp"
+   ><![CDATA[
+      \t   /// Control 2 Register
+      \t   uint8_t c2 = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="ics_c3_sctrim"
+   ><![CDATA[
+      \t   /// Control 3 Register
+      \t   uint8_t c3 = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="ics_c4_lolie0,ics_c4_cme,ics_c4_scftrim"
+   ><![CDATA[
+      \t   /// Control 4 Register
+      \t   uint8_t c4 = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="/PCR/nvic_irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+   ]]></initialValueTemplate>
+
+<!--   Configure methods -->
+
+   <template discardRepeats="true" key="/ICS/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure ICS from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-back if feature enabled
+      \t      setCallback(init.callbackFunction);
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
+      \t   enable();
+      \t
+      \t   ics->C1    = init.c1;
+      \t   ics->C2    = init.c2;
+      \t   ics->C3    = init.c3;
+      \t   ics->C4    = init.c4;
+      \t
+      \t   calibrate();
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n
+   ]]></template>
+
+<!--   Constructors -->
+
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%enumParam0 = %paramExpression;
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <setTemplate namespace="usbdm"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      #if $(irqHandlingMethod)
+      \t      %registerName = %paramExpression;
+      #else
+      \t      (void)%paramExpression;
+      #endif
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <for keys="r"
+      values="
+            ics_c1_clks;
+            ics_c1_rdiv;
+            ics_c1_irefs;
+            ics_c1_irclken;
+            ics_c1_irefsten;
+            ics_c2_bdiv;
+            ics_c2_lp;
+            ics_c3_sctrim;
+            ics_c4_lolie0;
+            ics_c4_cme;
+            ics_c4_scftrim
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+            ics_c1_clks,
+            ics_c1_rdiv,
+            ics_c1_irefs,
+            ics_c1_irclken,
+            ics_c1_irefsten,
+            ics_c2_bdiv,
+            ics_c2_lp,
+            ics_c3_sctrim,
+            ics_c4_lolie0,
+            ics_c4_cme,
+            ics_c4_scftrim,
+            irqLevel
+         "
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      \t}; // $(_class)::BasicInfo::Init\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      }; // $(_class)::BasicInfo\n\n
+   ]]>
+   </template>
+
+<signals />
+
+</peripheralPage>

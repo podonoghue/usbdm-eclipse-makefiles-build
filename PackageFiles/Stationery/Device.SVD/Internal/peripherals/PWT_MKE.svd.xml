@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE04Z4
       MKE04Z1284
       MKE06Z4
@@ -40,12 +40,12 @@ If another overflow occurs when this field is being cleared, the clearing fails<
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>PWT counter no overflow</description>
+                           <description>No overflow</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>PWT counter runs from 0xFFFF to 0x0000</description>
+                           <description>Overflow</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -61,12 +61,12 @@ Writing 1 to this field has no effect. PWTRDY setting is associated with the EDG
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>PWT pulse width register(s) is not up-to-date</description>
+                           <description>Not Updated</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>PWT pulse width register(s) has been updated</description>
+                           <description>Updated</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -80,12 +80,12 @@ Performs a soft reset to the PWT. This field always reads as 0</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No action taken</description>
+                           <description>No action</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Writing 1 to this field will perform soft reset to PWT</description>
+                           <description>Soft reset</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -99,12 +99,12 @@ Enables/disables the PWT to generate an interrupt when PWTOV is set due to PWT c
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Disable PWT to generate interrupt when PWTOV is set</description>
+                           <description>Disable</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Enable PWT to generate interrupt when PWTOV is set</description>
+                           <description>Enable</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -118,12 +118,12 @@ Enables/disables the PWT to generate an interrupt when PWTRDY is set as long as 
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Disable PWT to generate interrupt when PWTRDY is set</description>
+                           <description>Disable</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Enable PWT to generate interrupt when PWTRDY is set</description>
+                           <description>Enable</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -137,12 +137,12 @@ Enables the PWT module to generate an interrupt</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Disables the PWT to generate interrupt</description>
+                           <description>Disable</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Enables the PWT to generate interrupt</description>
+                           <description>Enable</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -157,12 +157,12 @@ To avoid unexpected behavior, do not change any PWT configurations as long as PW
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The PWT is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The PWT is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -176,42 +176,42 @@ Selects the value by which the clock is divided to clock the PWT counter</descri
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>Clock divided by 1</description>
+                           <description>Clock div 1</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b001</name>
-                           <description>Clock divided by 2</description>
+                           <description>Clock div 2</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>Clock divided by 4</description>
+                           <description>Clock div 4</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>Clock divided by 8</description>
+                           <description>Clock div 8</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b100</name>
-                           <description>Clock divided by 16</description>
+                           <description>Clock div 16</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b101</name>
-                           <description>Clock divided by 32</description>
+                           <description>Clock div 32</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b110</name>
-                           <description>Clock divided by 64</description>
+                           <description>Clock div 64</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b111</name>
-                           <description>Clock divided by 128</description>
+                           <description>Clock div 128</description>
                            <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -228,26 +228,22 @@ Clearing PWTEN and then setting it has the same effect</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>The first falling-edge starts the pulse width measurement, and on all the subsequent falling edges,
-the pulse width is captured</description>
+                           <description>Falling-edge start, falling edges captured</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>The first rising edge starts the pulse width measurement, and on all the subsequent rising and falling
-edges, the pulse width is captured</description>
+                           <description>Rising edge start, both edges captured</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>The first falling edge starts the pulse width measurement, and on all the subsequent rising and falling
-edges, the pulse width is captured</description>
+                           <description>Falling edge start, both edges captured</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>The first-rising edge starts the pulse width measurement, and on all the subsequent rising edges, the
-pulse width is captured</description>
+                           <description>Rising edge start, rising edges captured</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -261,22 +257,22 @@ Enables the corresponding PWT input port, if this PWT input comes from an extern
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>PWTIN[0] is enabled</description>
+                           <description>PWTIN[0] enabled</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>PWTIN[1] is enabled</description>
+                           <description>PWTIN[1] enabled</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>PWTIN[2] is enabled</description>
+                           <description>PWTIN[2] enabled</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>PWTIN[3] is enabled</description>
+                           <description>PWTIN[3] enabled</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -290,12 +286,12 @@ Controls the selection of clock source for the PWT counter</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>TIMER_CLK is selected as the clock source of PWT counter</description>
+                           <description>Timer clock</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Alternative clock is selected as the clock source of PWT counter</description>
+                           <description>Alternative clock</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
