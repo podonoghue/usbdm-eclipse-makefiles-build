@@ -143,7 +143,7 @@
       </peripheral>
       <peripheral baseName="CRC"      instance="0"        version="crc0_0x40032000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCrc" />
-         <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_CRC0_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_CRC0_MASK;" />
+         <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_CRC_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_CRC_MASK;" />
          <param name="$present"     key="/CRC0/$present" value="true" />
          <param name="crc_ctrl_fxor_present" key="/CRC0/crc_ctrl_fxor_present" value="true" />
          <param name="crc_ctrl_tcrc_present" key="/CRC0/crc_ctrl_tcrc_present" value="true" />
@@ -156,6 +156,9 @@
          <param name="crc_data_lu_present" key="/CRC0/crc_data_lu_present" value="true" />
          <param name="crc_gpoly_high_present" key="/CRC0/crc_gpoly_high_present" value="true" />
          <param name="crc_gpoly_low_present" key="/CRC0/crc_gpoly_low_present" value="true" />
+      </peripheral>
+      <peripheral baseName="Console"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
       </peripheral>
       <peripheral baseName="FTM"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
@@ -724,6 +727,20 @@
          <param name="pit_tctrl_tie_present" key="/PIT/pit_tctrl_tie_present" value="true" />
          <param name="pit_tflg_tif_present" key="/PIT/pit_tflg_tif_present" value="true" />
       </peripheral>
+      <peripheral baseName="PMC"      instance=""         version="pmc_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPmc" />
+         <irq num="PMC_IRQn" />
+         <param name="$present"     key="/PMC/$present" value="true" />
+         <param name="pmc_spmsc1_bgbe_present" key="/PMC/pmc_spmsc1_bgbe_present" value="true" />
+         <param name="pmc_spmsc1_lvde_present" key="/PMC/pmc_spmsc1_lvde_present" value="true" />
+         <param name="pmc_spmsc1_lvdre_present" key="/PMC/pmc_spmsc1_lvdre_present" value="true" />
+         <param name="pmc_spmsc1_lvdse_present" key="/PMC/pmc_spmsc1_lvdse_present" value="true" />
+         <param name="pmc_spmsc1_lvwack_present" key="/PMC/pmc_spmsc1_lvwack_present" value="true" />
+         <param name="pmc_spmsc1_lvwf_present" key="/PMC/pmc_spmsc1_lvwf_present" value="true" />
+         <param name="pmc_spmsc1_lvwie_present" key="/PMC/pmc_spmsc1_lvwie_present" value="true" />
+         <param name="pmc_spmsc2_lvdv_present" key="/PMC/pmc_spmsc2_lvdv_present" value="true" />
+         <param name="pmc_spmsc2_lvwv_present" key="/PMC/pmc_spmsc2_lvwv_present" value="true" />
+      </peripheral>
       <peripheral baseName="PWT"      instance=""         version="pwt_mke">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPwt" />
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_PWT_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_PWT_MASK;" />
@@ -1053,6 +1070,25 @@
          <param name="uart_s2_rwuid_present" key="/UART2/uart_s2_rwuid_present" value="true" />
          <param name="uart_s2_rxedgif_present" key="/UART2/uart_s2_rxedgif_present" value="true" />
          <param name="uart_s2_rxinv_present" key="/UART2/uart_s2_rxinv_present" value="true" />
+      </peripheral>
+      <peripheral baseName="WDOG"     instance=""         version="wdog_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForWdog" />
+         <irq num="WDOG_IRQn" />
+         <param name="$present"     key="/WDOG/$present" value="true" />
+         <param name="wdog_cnt_count_present" key="/WDOG/wdog_cnt_count_present" value="true" />
+         <param name="wdog_cs1_dbg_present" key="/WDOG/wdog_cs1_dbg_present" value="true" />
+         <param name="wdog_cs1_en_present" key="/WDOG/wdog_cs1_en_present" value="true" />
+         <param name="wdog_cs1_int_present" key="/WDOG/wdog_cs1_int_present" value="true" />
+         <param name="wdog_cs1_stop_present" key="/WDOG/wdog_cs1_stop_present" value="true" />
+         <param name="wdog_cs1_tst_present" key="/WDOG/wdog_cs1_tst_present" value="true" />
+         <param name="wdog_cs1_update_present" key="/WDOG/wdog_cs1_update_present" value="true" />
+         <param name="wdog_cs1_wait_present" key="/WDOG/wdog_cs1_wait_present" value="true" />
+         <param name="wdog_cs2_clk_present" key="/WDOG/wdog_cs2_clk_present" value="true" />
+         <param name="wdog_cs2_flg_present" key="/WDOG/wdog_cs2_flg_present" value="true" />
+         <param name="wdog_cs2_pres_present" key="/WDOG/wdog_cs2_pres_present" value="true" />
+         <param name="wdog_cs2_win_present" key="/WDOG/wdog_cs2_win_present" value="true" />
+         <param name="wdog_toval_toval_present" key="/WDOG/wdog_toval_toval_present" value="true" />
+         <param name="wdog_win_win_present" key="/WDOG/wdog_win_win_present" value="true" />
       </peripheral>
    </peripherals>
    <pins>
@@ -1523,9 +1559,77 @@
    </pins>
    <packages>
       <package name="FRDM_KE06Z">
+         <placement pin="PTA0"          location="PTA0" />
+         <placement pin="PTA1"          location="PTA1" />
+         <placement pin="PTA2"          location="PTA2" />
+         <placement pin="PTA3"          location="PTA3" />
+         <placement pin="PTA4"          location="PTA4" />
+         <placement pin="PTA5"          location="PTA5" />
+         <placement pin="PTA6"          location="PTA6" />
+         <placement pin="PTA7"          location="PTA7" />
+         <placement pin="PTB0"          location="PTB0" />
+         <placement pin="PTB1"          location="PTB1" />
+         <placement pin="PTB2"          location="PTB2" />
+         <placement pin="PTB3"          location="PTB3" />
+         <placement pin="PTB4"          location="PTB4" />
+         <placement pin="PTB5"          location="PTB5" />
+         <placement pin="PTB6"          location="PTB6" />
+         <placement pin="PTB7"          location="PTB7" />
+         <placement pin="PTC0"          location="PTC0" />
+         <placement pin="PTC1"          location="PTC1" />
+         <placement pin="PTC2"          location="PTC2" />
+         <placement pin="PTC3"          location="PTC3" />
+         <placement pin="PTC4"          location="PTC4" />
+         <placement pin="PTC5"          location="PTC5" />
+         <placement pin="PTC6"          location="PTC6" />
+         <placement pin="PTC7"          location="PTC7" />
+         <placement pin="PTD0"          location="PTD0" />
+         <placement pin="PTD1"          location="PTD1" />
+         <placement pin="PTD2"          location="PTD2" />
+         <placement pin="PTD3"          location="PTD3" />
+         <placement pin="PTD4"          location="PTD4" />
+         <placement pin="PTD5"          location="PTD5" />
+         <placement pin="PTD6"          location="PTD6" />
+         <placement pin="PTD7"          location="PTD7" />
+         <placement pin="PTE0"          location="PTE0" />
+         <placement pin="PTE1"          location="PTE1" />
+         <placement pin="PTE2"          location="PTE2" />
+         <placement pin="PTE3"          location="PTE3" />
+         <placement pin="PTE4"          location="PTE4" />
+         <placement pin="PTE5"          location="PTE5" />
+         <placement pin="PTE6"          location="PTE6" />
+         <placement pin="PTE7"          location="PTE7" />
+         <placement pin="PTF0"          location="PTF0" />
+         <placement pin="PTF1"          location="PTF1" />
+         <placement pin="PTF2"          location="PTF2" />
+         <placement pin="PTF3"          location="PTF3" />
+         <placement pin="PTF4"          location="PTF4" />
+         <placement pin="PTF5"          location="PTF5" />
+         <placement pin="PTF6"          location="PTF6" />
+         <placement pin="PTF7"          location="PTF7" />
+         <placement pin="PTG0"          location="PTG0" />
+         <placement pin="PTG1"          location="PTG1" />
+         <placement pin="PTG2"          location="PTG2" />
+         <placement pin="PTG3"          location="PTG3" />
+         <placement pin="PTG4"          location="PTG4" />
          <placement pin="PTG5"          location="LED_RED" />
          <placement pin="PTG6"          location="LED_GREEN" />
          <placement pin="PTG7"          location="LED_BLUE" />
+         <placement pin="PTH0"          location="PTH0" />
+         <placement pin="PTH1"          location="PTH1" />
+         <placement pin="PTH2"          location="PTH2" />
+         <placement pin="PTH3"          location="PTH3" />
+         <placement pin="PTH4"          location="PTH4" />
+         <placement pin="PTH5"          location="PTH5" />
+         <placement pin="PTH6"          location="PTH6" />
+         <placement pin="PTH7"          location="PTH7" />
+         <placement pin="PTI0"          location="PTI0" />
+         <placement pin="PTI1"          location="PTI1" />
+         <placement pin="PTI2"          location="PTI2" />
+         <placement pin="PTI3"          location="PTI3" />
+         <placement pin="PTI4"          location="PTI4" />
+         <placement pin="PTI5"          location="PTI5" />
+         <placement pin="PTI6"          location="PTI6" />
       </package>
       <package name="KE06_LQFP_44">
          <placement pin="PTA0"          location="p35" />

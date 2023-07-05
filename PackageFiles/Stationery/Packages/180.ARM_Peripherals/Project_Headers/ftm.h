@@ -489,7 +489,7 @@ public:
    public:
       typedef typename Info::ChannelInit ChannelInit;
 
-      constexpr Channel() : FtmChannel(Info::baseAddress, channel) {}
+      constexpr Channel() : FtmChannel(Info::baseAddress, (FtmChannelNum)channel) {}
       virtual ~Channel() = default;
 
    protected:

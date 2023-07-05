@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- sim_mke04z4.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Integration Module">
+
+   <xi:include href="_default_instance.xml" />
+
+   <xi:include href="_simCommon.xml" />
+
+   <xi:include href="_mapPinsOption.xml" />
+
+   <!--                                   RUN        -->
+   <constant key="ICSOUTCLK_max"  value="50MHz"  type="Integer"    hidden="false" />
+   <constant key="ICSFLLCLK_max"  value="50MHz"  type="Integer"    hidden="false" />
+   <constant key="I2S_max"        value="25MHz"  type="Integer"    hidden="false" />
+   <constant key="LPUART_max"     value="48M"    type="Integer"    hidden="false" />
+   <constant key="TPM_max"        value="48MHz"  type="Integer"    hidden="false" />
+
+   <for keys="n" dim="numberOfClockSettings" >
+      <aliasCategoryOption key="/ICS/ClockConfig[%(n)]" derived="true" constant="true" >
+
+         <aliasOption key="/ICS/enableClockConfiguration[%(n)]" constant="false" />
+
+         <for keys="u : name              : code            : ref"
+            values="0 : System bus clock : SystemBusClock : system_bus_clock[%(n)]" >
+
+            <choiceOption key="system_uart%(u)_fixedclocksource[%(n)]"
+               hidden="true"
+               target="system_uart%(u)_clock[%(n)]"
+               constant="true"
+               derived="true"
+               description="UART%(u) Clock source"
+               toolTip="Fixed clock source for UART (%(code))" >
+               <choice value="0"  name="%(name)" ref="%(ref)" code="%(code)" />
+            </choiceOption>
+
+            <intOption key="system_uart%(u)_clock[%(n)]"
+               hidden="true"
+               constant="true"
+               derived="true"
+               units="Hz"
+               description="UART%(u) Clock frequency"
+               toolTip="Frequency of clock to UART%(u)"
+               value="0" />
+         </for>
+
+         <choiceOption key="sim_clkdiv_outdiv1[%(n)]" condition="sim_clkdiv_outdiv1_present"
+            enumStem="SimClkdivOutdiv1"
+            toolTip="This field sets the divide value for the core/system clock"
+            description="Clock 1 Output Divider value" >
+            <choice name="ICSOUTCLK direct"    value="0" enum="Direct" />
+            <choice name="ICSOUTCLK/2"         value="1" enum="DivBy2" />
+            <choice name="ICSOUTCLK/3"         value="2" enum="DivBy3" />
+            <choice name="ICSOUTCLK/4"         value="3" enum="DivBy4" />
+         </choiceOption>
+
+         <choiceOption key="sim_clkdiv_outdiv2[%(n)]" condition="sim_clkdiv_outdiv2_present"
+            enumStem="SimClkdivOutdiv2"
+            toolTip="This field sets the divide value for the bus/FLASH, follows OUTDIV1"
+            description="Clock 2 Output Divider value" >
+            <choice name="Core clock direct"    value="0" enum="Direct" />
+            <choice name="Core clock/2"         value="1" enum="DivBy2" />
+         </choiceOption>
+
+         <choiceOption key="sim_clkdiv_outdiv3[%(n)]" condition="sim_clkdiv_outdiv3_present"
+            enumStem="SimClkdivOutdiv3"
+            toolTip="This field sets the divide value for the timers(FTM0, FTM2,PWT)"
+            description="Clock 3 Output Divider value" >
+            <choice name="ICSOUTCLK direct "    value="0" enum="Direct" />
+            <choice name="ICSOUTCLK/2"          value="1" enum="DivBy2" />
+         </choiceOption>
+
+         <intOption key="system_core_clock[%(n)]"
+            ref="(/ICS/system_icsoutclk_clock[%(n)])/((sim_clkdiv_outdiv1[%(n)])+1)"
+            derived="true"
+            isNamedClock="true"
+            units="Hz"
+            description="System Core Clock"
+            toolTip="Clocks the ARM Cortex-M4 core and bus masters"
+            value="48 MHz"
+            disabledValue="0" />
+
+         <intOption key="system_bus_clock[%(n)]"
+            ref="(system_core_clock[%(n)])/((sim_clkdiv_outdiv2[%(n)])+1)"
+            derived="true"
+            isNamedClock="true"
+            units="Hz"
+            description="System Bus Clock"
+            toolTip="Clock for most peripherals (PIT, I2C, SPI, UART ...)"
+            value="8 MHz"
+            disabledValue="0" />
+
+         <intOption key="system_timer_clock[%(n)]"
+            ref="(/ICS/system_icsoutclk_clock[%(n)])/((sim_clkdiv_outdiv3[%(n)])+1)"
+            derived="true"
+            isNamedClock="true"
+            units="Hz"
+            description="System Timer Clock"
+            toolTip="Clock for timers (FTM, PWT)"
+            value="8 MHz"
+            disabledValue="0" />
+
+      </aliasCategoryOption>
+   </for>
+
+   <intOption key="sim_sopt_delay" condition="sim_sopt_delay_present"
+      description="FTM2 Trigger Delay"
+      toolTip="Specifies the delay from FTM2 initial or match trigger to ADC hardware trigger when 1 is written to ADHWT.\n
+               The 8-bit modulo value allows the delay from 0 to 255 upon the BUSREF clock settings.\n
+               This is a one-shot counter that starts ticking when the trigger arrives and stops ticking when the counter value reaches the modulo value that is defined"
+               value="0"
+   />
+
+   <choiceOption key="sim_sopt_adhwt" condition="sim_sopt_adhwt_present"
+      enumStem="SimSoptAdhwt"
+      toolTip="Selects the ADC hardware trigger source. All trigger sources start ADC conversion on rising-edge"
+      description="ADC Hardware Trigger Source" >
+      <choice name="RTC overflow"                         value="0" enum="RtcOverflow" />
+      <choice name="FTM0"                                 value="1" enum="Ftm0" />
+      <choice name="FTM2 init trigger with 8-bit delay"   value="2" enum="Ftm2InitTriggerWith8BitDelay" />
+      <choice name="FTM2 match trigger with 8-bit delay"  value="3" enum="Ftm2MatchTriggerWith8BitDelay" />
+      <choice name="PIT channel 0 overflow"               value="4" enum="PitChannel0Overflow" />
+      <choice name="PIT channel 1 overflow"               value="5" enum="PitChannel1Overflow" />
+      <choice name="ACMP0 OUT"                            value="6" enum="Acmp0Out" />
+      <choice name="ACMP1 OUT"                            value="7" enum="Acmp1Out" />
+   </choiceOption>
+
+   <category name="Control Signals" description="Mapping of control signals">
+      <choiceOption key="sim_sopt_clkout" condition="sim_sopt_busref_present"
+      valueFormat="SIM_SOPT_CLKOE(%s),SIM_SOPT_BUSREF(%s)"
+         enumStem="SimSoptClockOut"
+         toolTip="Enable bus clock output on PTC5 with prescaler"
+         description="BUS Clock Output select" >
+         <choice name="Disabled (PTH2 available)" value="0,0" enum="Disabled"             pinmap="-CLKOUT,PTH2" />
+         <choice name="Bus clock"                 value="1,0" enum="BusClock"             pinmap="CLKOUT,PTH2"  />
+         <choice name="Bus clock divided by 2"    value="1,1" enum="BusClockDividedBy2"   pinmap="CLKOUT,PTH2"  />
+         <choice name="Bus clock divided by 4"    value="1,2" enum="BusClockDividedBy4"   pinmap="CLKOUT,PTH2"  />
+         <choice name="Bus clock divided by 8"    value="1,3" enum="BusClockDividedBy8"   pinmap="CLKOUT,PTH2"  />
+         <choice name="Bus clock divided by 16"   value="1,4" enum="BusClockDividedBy16"  pinmap="CLKOUT,PTH2"  />
+         <choice name="Bus clock divided by 32"   value="1,5" enum="BusClockDividedBy32"  pinmap="CLKOUT,PTH2"  />
+         <choice name="Bus clock divided by 64"   value="1,6" enum="BusClockDividedBy64"  pinmap="CLKOUT,PTH2"  />
+         <choice name="Bus clock divided by 128"  value="1,7" enum="BusClockDividedBy128" pinmap="CLKOUT,PTH2"  />
+      </choiceOption>
+   </category>
+
+
+   <binaryOption key="sim_sopt_txdme" condition="sim_sopt_txdme_present"
+      enumStem="SimSoptTxdme"
+      toolTip="Enables the UART0_TX output modulated by FTM0 channel 0"
+      description="UART0_TX Modulation Select" >
+      <choice name="UART0_TX directly connected to pin"  value="0" enum="Uart0_txDirectlyConnectedToPin" />
+      <choice name="UART0_TX modulated by FTM0 channel"  value="1" enum="Uart0_txModulatedByFtm0Channel" />
+   </binaryOption>
+
+   <binaryOption key="sim_sopt_ftmsync" condition="sim_sopt_ftmsync_present"
+      enumStem="SimSoptFtmsync"
+      toolTip="Generates a PWM synchronisation trigger to the FTM2 module"
+      description="FTM2 Synchronisation Select" >
+      <choice name="No trigger"                               value="0" enum="NoTrigger" />
+      <choice name="Generates a PWM synchronisation trigger"  value="1" enum="GeneratesAPwmSynchronisationTrigger" />
+   </binaryOption>
+
+   <binaryOption key="sim_sopt_rxdce" condition="sim_sopt_rxdce_present"
+      enumStem="SimSoptRxdce"
+      toolTip="Enables the UART0_RX to be captured by FTM0 channel 1"
+      description="UART0_RX Capture on FTM0 channel 1" >
+      <choice name="Not connected"                         value="0" enum="NotConnected" />
+      <choice name="UART0_RX connected as FTM0 channel 1"  value="1" enum="Uart0_rxConnectedAsFtm0Channel1" />
+   </binaryOption>
+
+   <choiceOption key="sim_sopt_rxdfe" condition="sim_sopt_rxdfe_present"
+      enumStem="SimSoptRxdfe"
+      toolTip="Enables the UART0_RX input to be filtered by ACMP.\n
+               When this function is enabled, any signal tagged with ACMP inputs can be regarded as UART0"
+      description="UART0_RX Filter Select" >
+      <choice name="UART0 module directly"  value="0" enum="Uart0ModuleDirectly" />
+      <choice name="Filtered by ACMP0"      value="1" enum="FilteredByAcmp0" />
+      <choice name="Filtered by ACMP1"      value="2" enum="FilteredByAcmp1" />
+      <choice name="Reserved"               value="3" enum="Reserved" />
+   </choiceOption>
+
+   <choiceOption key="sim_sopt_ftmic" condition="sim_sopt_ftmic_present"
+      enumStem="SimSoptFtmic"
+      toolTip="Selects the sources for FTM0CH0 as capture input"
+      description="FTM0CH0 Input Capture Source" >
+      <choice name="FTM0_CH0 pin"  value="0" enum="Ftm0_ch0Pin" />
+      <choice name="ACMP0_OUT"     value="1" enum="Acmp0_out" />
+      <choice name="ACMP1_OUT"     value="2" enum="Acmp1_out" />
+      <choice name="RTC overflow"  value="3" enum="RtcOverflow" />
+   </choiceOption>
+
+   <binaryOption key="sim_sopt_actrg" condition="sim_sopt_actrg_present"
+      enumStem="SimSoptActrg"
+      toolTip="Selects ACMP output used as the trigger0 input of FTM2"
+      description="ACMP Trigger FTM2 selection" >
+      <choice name="ACMP0_OUT"   value="0" enum="Acmp0_out" />
+      <choice name="ACMP1_OUT"   value="1" enum="Acmp1_out" />
+   </binaryOption>
+
+   <binaryOption key="sim_sopt_swde" condition="sim_sopt_swde_present"
+      enumStem="SimSoptSwde"
+      toolTip="Controls: \n
+               PTA4 as PTA4/ACMP0_OUT or SWD_DIO, \n
+               PTA0 as PTA0/KBI0_P0/FTM0_CH0/RTC_CLKOUT/ACMP0_IN2/ADC0_SE0 or SWD_CLK functions"
+      description="Single Wire Debug Port Pin Enable" >
+      <choice name="PTA4, PTA0 used as peripheral pins"  value="0" enum="Pta4_Pta0UsedAsPeripheralPins" pinmap="-SWD_DIO,PTA4;-SWD_CLK,PTA0" />
+      <choice name="PTA4, PTA0 used as SWD pins"         value="1" enum="Pta4_Pta0UsedAsSwdPins"        pinmap="SWD_DIO,PTA4;SWD_CLK,PTA0" isDefault="true" />
+   </binaryOption>
+
+   <binaryOption key="sim_sopt_rstpe" condition="sim_sopt_rstpe_present"
+      enumStem="SimSoptRstpe"
+      toolTip="This field can only be written once after any reset"
+      description="RESET Pin Enable" >
+      <choice name="PTA5 as PTA5/IRQ/FTM0_CLK"  value="0" enum="Pta5AsPeripheralPins" pinmap="-RESETb,PTA5" />
+      <choice name="PTA5 as RESET"              value="1" enum="Pta5AsReset"          pinmap="RESETb,PTA5" isDefault="true" />
+   </binaryOption>
+
+   <binaryOption key="sim_sopt_nmie" condition="sim_sopt_nmie_present"
+      enumStem="SimSoptNmie"
+      toolTip="This field can only be written once after any reset"
+      description="NMI Pin Enable" >
+      <choice name="PTB4 as PTB4/KBI1_P6/FTM2_CH4/SPI0_MISO/ACMP1_IN2"  value="0" enum="Ptb4AsPeripheralPins" pinmap="-NMI_b,PTB4" />
+      <choice name="PTB4 as NMI"                                        value="1" enum="Ptb4AsNmi" isDefault="true" />
+   </binaryOption>
+
+   <binaryOption key="sim_pinsel_pwtclkps" condition="sim_pinsel_pwtclkps_present"
+      enumStem="SimPinselPwtclkps"
+      description="PWT TCLK Pin Select" >
+      <choice name="Selects TCLK1 for PWT module"  value="0" enum="SelectsTclk1ForPwtModule" />
+      <choice name="Selects TCLK2 for PWT module"  value="1" enum="SelectsTclk2ForPwtModule" />
+   </binaryOption>
+
+   <binaryOption key="sim_pinsel_ftm2clkps" condition="sim_pinsel_ftm2clkps_present"
+      enumStem="SimPinselFtm2clkps"
+      description="FTM2 TCLK Pin Select" >
+      <choice name="Selects TCLK1 for FTM2 module"  value="0" enum="SelectsTclk1ForFtm2Module" />
+      <choice name="Selects TCLK2 for FTM2 module"  value="1" enum="SelectsTclk2ForFtm2Module" />
+   </binaryOption>
+
+   <binaryOption key="sim_pinsel_ftm0clkps" condition="sim_pinsel_ftm0clkps_present"
+      enumStem="SimPinselFtm0clkps"
+      description="FTM0 TCLK Pin Select" >
+      <choice name="Selects TCLK1 for FTM0 module"  value="0" enum="SelectsTclk1ForFtm0Module" />
+      <choice name="Selects TCLK2 for FTM0 module"  value="1" enum="SelectsTclk2ForFtm0Module" />
+   </binaryOption>
+
+   <binaryOption key="sim_pinsel_ftm2ps3" condition="sim_pinsel_ftm2ps3_present"
+      enumStem="SimPinselFtm2ps3"
+      description="FTM2 channel 3 Port Pin Select" >
+      <choice name="Mapped on PTC3"  value="0" enum="Ptc3" />
+      <choice name="Mapped on PTC5"  value="1" enum="Ptc5" />
+   </binaryOption>
+
+   <binaryOption key="sim_pinsel_ftm2ps2" condition="sim_pinsel_ftm2ps2_present"
+      enumStem="SimPinselFtm2ps2"
+      description="FTM2 channel 2 Port Pin Select" >
+      <choice name="PTC2"  value="0" enum="Ptc2" />
+      <choice name="PTC4"  value="1" enum="Ptc4" />
+   </binaryOption>
+
+   <binaryOption key="sim_pinsel_ftm0ps1" condition="sim_pinsel_ftm0ps1_present"
+      enumStem="SimPinselFtm0ps1"
+      description="FTM0 channel 1 Port Pin Select" >
+      <choice name="PTA1"        value="0" enum="Pta1" />
+      <choice name="PTB3"        value="1" enum="Ptb3" />
+   </binaryOption>
+
+   <binaryOption key="sim_pinsel_ftm0ps0" condition="sim_pinsel_ftm0ps0_present"
+      enumStem="SimPinselFtm0ps0"
+      description="FTM0 channel 0 Port Pin Select" >
+      <choice name="PTA0"        value="0" enum="Pta0" />
+      <choice name="PTB2"        value="1" enum="Ptb2" />
+   </binaryOption>
+
+   <binaryOption key="sim_pinsel_uart0ps" condition="sim_pinsel_uart0ps_present"
+      enumStem="SimPinselUart0ps"
+      description="UART0 Pin Select" >
+      <choice name="PTB0 and PTB1 are mapped UART0 pins"  value="0" enum="Ptb0AndPtb1AreMappedUart0Pins" />
+      <choice name="PTA2 and PTA3 are mapped UART0 pins"  value="1" enum="Pta2AndPta3AreMappedUart0Pins" />
+   </binaryOption>
+
+   <binaryOption key="sim_pinsel_spi0ps" condition="sim_pinsel_spi0ps_present"
+      enumStem="SimPinselSpi0ps"
+      toolTip="Selects the SPI0 Pinouts"
+      description="SPI0 Pin Select" >
+      <choice name="PTB2, PTB3, PTB4, and PTB5 are mapped as SPI0 pins"  value="0" enum="Ptb2_Ptb3_Ptb4_AndPtb5AreMappedAsSpi0Pins" />
+      <choice name="PTA6, PTA7, PTB1, and PTB0 are mapped as SPI0 pins"  value="1" enum="Pta6_Pta7_Ptb1_AndPtb0AreMappedAsSpi0Pins" />
+   </binaryOption>
+
+   <binaryOption key="sim_pinsel_i2c0ps" condition="sim_pinsel_i2c0ps_present"
+      enumStem="SimPinselI2c0ps"
+      description="I2C0 Port Pin Select" >
+      <choice name="PTA3 and PTA2 are mapped as I2C0 pins"  value="0" enum="Pta3AndPta2AreMappedAsI2c0Pins" />
+      <choice name="PTB7 and PTB6 are mapped as I2C0 pins"  value="1" enum="Ptb7AndPtb6AreMappedAsI2c0Pins" />
+   </binaryOption>
+
+   <binaryOption key="sim_scgc_acmp1" condition="sim_scgc_acmp1_present"
+      enumStem="SimScgcAcmp1"
+      description="ACMP1 Clock Gate Control" >
+      <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+      <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+   </binaryOption>
+
+   <binaryOption key="sim_scgc_acmp0" condition="sim_scgc_acmp0_present"
+      enumStem="SimScgcAcmp0"
+      description="ACMP0 Clock Gate Control" >
+      <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+      <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+   </binaryOption>
+
+   <binaryOption key="sim_scgc_adc" condition="sim_scgc_adc_present"
+      enumStem="SimScgcAdc"
+      description="ADC Clock Gate Control" >
+      <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+      <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+   </binaryOption>
+
+   <binaryOption key="sim_scgc_irq" condition="sim_scgc_irq_present"
+      enumStem="SimScgcIrq"
+      description="IRQ Clock Gate Control" >
+      <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+      <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+   </binaryOption>
+
+   <binaryOption key="sim_scgc_kbi1" condition="sim_scgc_kbi1_present"
+      enumStem="SimScgcKbi1"
+      description="KBI1 Clock Gate Control" >
+      <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+      <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+   </binaryOption>
+
+   <binaryOption key="sim_scgc_kbi0" condition="sim_scgc_kbi0_present"
+      enumStem="SimScgcKbi0"
+      description="KBI0 Clock Gate Control" >
+      <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+      <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+   </binaryOption>
+
+   <binaryOption key="sim_scgc_uart0" condition="sim_scgc_uart0_present"
+      enumStem="SimScgcUart0"
+      description="UART0 Clock Gate Control" >
+      <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+      <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+   </binaryOption>
+
+   <binaryOption key="sim_scgc_spi0" condition="sim_scgc_spi0_present"
+      enumStem="SimScgcSpi0"
+      description="SPI0 Clock Gate Control" >
+      <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+      <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+   </binaryOption>
+
+   <binaryOption key="sim_scgc_i2c" condition="sim_scgc_i2c_present"
+      enumStem="SimScgcI2c"
+      description="I2C Clock Gate Control" >
+      <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+      <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+   </binaryOption>
+
+   <binaryOption key="sim_scgc_swd" condition="sim_scgc_swd_present"
+      enumStem="SimScgcSwd"
+      description="SWD Clock Gate Control" >
+      <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+      <choice name="Clock enabled"   value="1" enum="ClockEnabled" isDefault="true" />
+   </binaryOption>
+
+   <binaryOption key="sim_scgc_flash" condition="sim_scgc_flash_present"
+      enumStem="SimScgcFlash"
+      description="FLASH Clock Gate Control" >
+      <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+      <choice name="Clock enabled"   value="1" enum="ClockEnabled" isDefault="true" />
+   </binaryOption>
+
+   <binaryOption key="sim_scgc_crc" condition="sim_scgc_crc_present"
+      enumStem="SimScgcCrc"
+      description="CRC Clock Gate Control" >
+      <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+      <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+   </binaryOption>
+
+   <binaryOption key="sim_scgc_ftm2" condition="sim_scgc_ftm2_present"
+      enumStem="SimScgcFtm2"
+      description="FTM2 Clock Gate Control" >
+      <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+      <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+   </binaryOption>
+
+   <binaryOption key="sim_scgc_ftm0" condition="sim_scgc_ftm0_present"
+      enumStem="SimScgcFtm0"
+      description="FTM0 Clock Gate Control" >
+      <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+      <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+   </binaryOption>
+
+   <binaryOption key="sim_scgc_pwt" condition="sim_scgc_pwt_present"
+      enumStem="SimScgcPwt"
+      description="PWT Clock Gate Control" >
+      <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+      <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+   </binaryOption>
+
+   <binaryOption key="sim_scgc_pit" condition="sim_scgc_pit_present"
+      enumStem="SimScgcPit"
+      description="PIT Clock Gate Control" >
+      <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+      <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+   </binaryOption>
+
+   <binaryOption key="sim_scgc_rtc" condition="sim_scgc_rtc_present"
+      enumStem="SimScgcRtc"
+      description="RTC Clock Gate Control" >
+      <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+      <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+   </binaryOption>
+
+<!-- Grahic here -->
+
+   <for keys="field:name"
+        values="
+      sim_sopt_dlyact:SoptDlyact;
+      sim_sopt_adhwt:SoptAdhwt;
+      sim_sopt_clkout:SoptClkOut;
+      sim_sopt_txdme:SoptTxdme;
+      sim_sopt_ftmsync:SoptFtmsync;
+      sim_sopt_rxdce:SoptRxdce;
+      sim_sopt_rxdfe:SoptRxdfe;
+      sim_sopt_ftmic:SoptFtmic;
+      sim_sopt_actrg:SoptActrg;
+      sim_sopt_swde:SoptSwde;
+      sim_sopt_rstpe:SoptRstpe;
+      sim_sopt_nmie:SoptNmie;
+      sim_pinsel_pwtclkps:PinselPwtclkps;
+      sim_pinsel_ftm2clkps:PinselFtm2clkps;
+      sim_pinsel_ftm0clkps:PinselFtm0clkps;
+      sim_pinsel_ftm2ps3:PinselFtm2ps3;
+      sim_pinsel_ftm2ps2:PinselFtm2ps2;
+      sim_pinsel_ftm0ps1:PinselFtm0ps1;
+      sim_pinsel_ftm0ps0:PinselFtm0ps0;
+      sim_pinsel_uart0ps:PinselUart0ps;
+      sim_pinsel_spi0ps:PinselSpi0ps;
+      sim_pinsel_i2c0ps:PinselI2c0ps;
+      sim_scgc_acmp1:ScgcAcmp1;
+      sim_scgc_acmp0:ScgcAcmp0;
+      sim_scgc_adc:ScgcAdc;
+      sim_scgc_irq:ScgcIrq;
+      sim_scgc_kbi1:ScgcKbi1;
+      sim_scgc_kbi0:ScgcKbi0;
+      sim_scgc_uart0:ScgcUart0;
+      sim_scgc_spi0:ScgcSpi0;
+      sim_scgc_i2c:ScgcI2c;
+      sim_scgc_swd:ScgcSwd;
+      sim_scgc_flash:ScgcFlash;
+      sim_scgc_crc:ScgcCrc;
+      sim_scgc_ftm2:ScgcFtm2;
+      sim_scgc_ftm0:ScgcFtm0;
+      sim_scgc_pwt:ScgcPwt;
+      sim_scgc_pit:ScgcPit;
+      sim_scgc_rtc:ScgcRtc;
+      sim_clkdiv_outdiv1[]:ClkdivOutdiv1;
+      sim_clkdiv_outdiv2[]:ClkdivOutdiv2;
+      sim_clkdiv_outdiv3[]:ClkdivOutdiv3">
+      <setTemplate variables="%(field)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void configure%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}\n\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== SIM Init class =============================== -->
+
+   <template key="init_description" namespace="all">
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_class)::Init init {
+      \t *
+      \t *   // Setup values
+      \t *   SimSoptAdhwt_RtcOverflow , // ADC Hardware Trigger Source - RTC overflow
+      \t *   SimSoptClockOut_BusClockDividedBy4 , // BUS Clock Output select - Bus clock divided by 4
+      \t *   SimSoptTxdme_Uart0_txDirectlyConnectedToPin , // UART0_TX Modulation Select - UART0_TX directly connected to pin
+      \t *   SimSoptFtmsync_NoTrigger , // FTM2 Synchronisation Select - No trigger
+      \t *   SimSoptRxdce_NotConnected , // UART0_RX Capture on FTM0 channel 1 - Not connected
+      \t *   SimSoptRxdfe_Uart0ModuleDirectly , // UART0_RX Filter Select - UART0 module directly
+      \t *   SimSoptFtmic_Ftm0_ch0Pin , // FTM0CH0 Input Capture Source - FTM0_CH0 pin
+      \t *   SimSoptActrg_Acmp0_out , // ACMP Trigger FTM2 selection - ACMP0_OUT
+      \t *   SimSoptSwde_Pta4_Pta0UsedAsSwdPins , // Single Wire Debug Port Pin Enable - PTA4, PTA0 used as SWD pins
+      \t *   SimSoptRstpe_Pta5AsReset , // RESET Pin Enable - PTA5 as RESET
+      \t *   SimSoptNmie_Ptb4AsNmi , // NMI Pin Enable - PTB4 as NMI
+      \t *   SimPinselPwtclkps_SelectsTclk1ForPwtModule , // PWT TCLK Pin Select - Selects TCLK1 for PWT module
+      \t *   SimPinselFtm2clkps_SelectsTclk1ForFtm2Module , // FTM2 TCLK Pin Select - Selects TCLK1 for FTM2 module
+      \t *   SimPinselFtm0clkps_SelectsTclk1ForFtm0Module , // FTM0 TCLK Pin Select - Selects TCLK1 for FTM0 module
+      \t *   SimPinselFtm2ps3_Ptc3 , // FTM2 channel 3 Port Pin Select - Mapped on PTC3
+      \t *   SimPinselFtm2ps2_Ptc2 , // FTM2 channel 2 Port Pin Select - PTC2
+      \t *   SimPinselFtm0ps1_Pta1 , // FTM0 channel 1 Port Pin Select - PTA1
+      \t *   SimPinselFtm0ps0_Pta0 , // FTM0 channel 0 Port Pin Select - PTA0
+      \t *   SimPinselUart0ps_Ptb0AndPtb1AreMappedUart0Pins , // UART0 Pin Select - PTB0 and PTB1 are mapped UART0 pins
+      \t *   SimPinselSpi0ps_Ptb2_Ptb3_Ptb4_AndPtb5AreMappedAsSpi0Pins , // SPI0 Pin Select - PTB2, PTB3, PTB4, and PTB5 are mapped as SPI0 pins
+      \t *   SimPinselI2c0ps_Pta3AndPta2AreMappedAsI2c0Pins , // I2C0 Port Pin Select - PTA3 and PTA2 are mapped as I2C0 pins
+      \t *   SimScgcAcmp1_ClockDisabled , // ACMP1 Clock Gate Control - Clock disabled
+      \t *   SimScgcAcmp0_ClockDisabled , // ACMP0 Clock Gate Control - Clock disabled
+      \t *   SimScgcAdc_ClockDisabled , // ADC Clock Gate Control - Clock disabled
+      \t *   SimScgcIrq_ClockDisabled , // IRQ Clock Gate Control - Clock disabled
+      \t *   SimScgcKbi1_ClockDisabled , // KBI1 Clock Gate Control - Clock disabled
+      \t *   SimScgcKbi0_ClockDisabled , // KBI0 Clock Gate Control - Clock disabled
+      \t *   SimScgcUart0_ClockDisabled , // UART0 Clock Gate Control - Clock disabled
+      \t *   SimScgcSpi0_ClockDisabled , // SPI0 Clock Gate Control - Clock disabled
+      \t *   SimScgcI2c_ClockDisabled , // I2C Clock Gate Control - Clock disabled
+      \t *   SimScgcSwd_ClockEnabled , // SWD Clock Gate Control - Clock enabled
+      \t *   SimScgcFlash_ClockEnabled , // FLASH Clock Gate Control - Clock enabled
+      \t *   SimScgcCrc_ClockDisabled , // CRC Clock Gate Control - Clock disabled
+      \t *   SimScgcFtm2_ClockDisabled , // FTM2 Clock Gate Control - Clock disabled
+      \t *   SimScgcFtm0_ClockDisabled , // FTM0 Clock Gate Control - Clock disabled
+      \t *   SimScgcPwt_ClockDisabled , // PWT Clock Gate Control - Clock disabled
+      \t *   SimScgcPit_ClockDisabled , // PIT Clock Gate Control - Clock disabled
+      \t *   SimScgcRtc_ClockDisabled,  // RTC Clock Gate Control - Clock disabled
+      \t * };
+      \t *
+      \t * // Initialise $(_class) from values specified above
+      \t * $(_class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <initialValueTemplate namespace="usbdm"
+      variables="sim_sopt_delay,sim_sopt_dlyact,sim_sopt_adhwt,sim_sopt_clkout,sim_sopt_txdme,sim_sopt_ftmsync,sim_sopt_rxdce,sim_sopt_rxdfe,sim_sopt_ftmic,sim_sopt_actrg,sim_sopt_swde,sim_sopt_rstpe,sim_sopt_nmie"
+   ><![CDATA[
+      \t   /// System Options Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="sim_pinsel_pwtclkps,sim_pinsel_ftm2clkps,sim_pinsel_ftm0clkps,sim_pinsel_ftm2ps3,sim_pinsel_ftm2ps2,sim_pinsel_ftm0ps1,sim_pinsel_ftm0ps0,sim_pinsel_uart0ps,sim_pinsel_spi0ps,sim_pinsel_i2c0ps"
+   ><![CDATA[
+      \t   /// Pin Selection Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="sim_scgc_acmp1,sim_scgc_acmp0,sim_scgc_adc,sim_scgc_irq,sim_scgc_kbi1,sim_scgc_kbi0,sim_scgc_uart0,sim_scgc_spi0,sim_scgc_i2c,sim_scgc_swd,sim_scgc_flash,sim_scgc_crc,sim_scgc_ftm2,sim_scgc_ftm0,sim_scgc_pwt,sim_scgc_pit,sim_scgc_rtc"
+   ><![CDATA[
+      \t   /// System Clock Gating Control Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+
+<!--   Constructors -->
+
+   <for keys="r"
+      values="
+            sim_sopt_dlyact;
+            sim_sopt_adhwt;
+            sim_sopt_clkout;
+            sim_sopt_txdme;
+            sim_sopt_ftmsync;
+            sim_sopt_rxdce;
+            sim_sopt_rxdfe;
+            sim_sopt_ftmic;
+            sim_sopt_actrg;
+            sim_sopt_swde;
+            sim_sopt_rstpe;
+            sim_sopt_nmie;
+            sim_pinsel_pwtclkps;
+            sim_pinsel_ftm2clkps;
+            sim_pinsel_ftm0clkps;
+            sim_pinsel_ftm2ps3;
+            sim_pinsel_ftm2ps2;
+            sim_pinsel_ftm0ps1;
+            sim_pinsel_ftm0ps0;
+            sim_pinsel_uart0ps;
+            sim_pinsel_spi0ps;
+            sim_pinsel_i2c0ps;
+            sim_scgc_acmp1;
+            sim_scgc_acmp0;
+            sim_scgc_adc;
+            sim_scgc_irq;
+            sim_scgc_kbi1;
+            sim_scgc_kbi0;
+            sim_scgc_uart0;
+            sim_scgc_spi0;
+            sim_scgc_i2c;
+            sim_scgc_swd;
+            sim_scgc_flash;
+            sim_scgc_crc;
+            sim_scgc_ftm2;
+            sim_scgc_ftm0;
+            sim_scgc_pwt;
+            sim_scgc_pit;
+            sim_scgc_rtc
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Constructors -->
+
+   <for keys="r"
+      values="
+            sim_sopt_delay
+            ">
+      <setTemplate namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx">
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         \t    * @param value %description
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(unsigned value, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | value;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+            sim_sopt_dlyact,
+            sim_sopt_adhwt,
+            sim_sopt_clkout,
+            sim_sopt_txdme,
+            sim_sopt_ftmsync,
+            sim_sopt_rxdce,
+            sim_sopt_rxdfe,
+            sim_sopt_ftmic,
+            sim_sopt_actrg,
+            sim_sopt_swde,
+            sim_sopt_rstpe,
+            sim_sopt_nmie,
+            sim_pinsel_pwtclkps,
+            sim_pinsel_ftm2clkps,
+            sim_pinsel_ftm0clkps,
+            sim_pinsel_ftm2ps3,
+            sim_pinsel_ftm2ps2,
+            sim_pinsel_ftm0ps1,
+            sim_pinsel_ftm0ps0,
+            sim_pinsel_uart0ps,
+            sim_pinsel_spi0ps,
+            sim_pinsel_i2c0ps,
+            sim_scgc_acmp1,
+            sim_scgc_acmp0,
+            sim_scgc_adc,
+            sim_scgc_irq,
+            sim_scgc_kbi1,
+            sim_scgc_kbi0,
+            sim_scgc_uart0,
+            sim_scgc_spi0,
+            sim_scgc_i2c,
+            sim_scgc_swd,
+            sim_scgc_flash,
+            sim_scgc_crc,
+            sim_scgc_ftm2,
+            sim_scgc_ftm0,
+            sim_scgc_pwt,
+            sim_scgc_pit,
+            sim_scgc_rtc
+         "
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for $(_class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <template><![CDATA[
+      \t/**
+      \t * Update system clock values
+      \t *
+      \t * @param systemClock Frequency of clock provided to system clock dividers
+      \t */
+      \tstatic void updateSystemClocks(unsigned systemClock) {
+      \t
+      \t   SystemCoreClock    = systemClock/(((SIM->CLKDIV&SIM_CLKDIV_OUTDIV1_MASK)>>SIM_CLKDIV_OUTDIV1_SHIFT)+1);
+      \t   SystemBusClock     = SystemCoreClock/(((SIM->CLKDIV&SIM_CLKDIV_OUTDIV2_MASK)>>SIM_CLKDIV_OUTDIV2_SHIFT)+1);
+      \t   SystemTimerClock   = systemClock/(((SIM->CLKDIV&SIM_CLKDIV_OUTDIV3_MASK)>>SIM_CLKDIV_OUTDIV3_SHIFT)+1);
+      \t}\n\n
+   ]]></template>
+
+   <template>
+      <![CDATA[
+      \t/**
+      \t * Configure $(_basename)
+      \t *
+      \t * This only includes SOPT, PINSEL and SCGC
+      \t */
+      \tstatic void configure(const Init &configValue) {
+      \t   sim->SOPT            = configValue.sopt;
+      \t   sim->PINSEL          = configValue.pinsel;
+      \t   sim->SCGC            = configValue.scgc;
+      \t}
+      \t
+      \t/**
+      \t * Default initialisation for $(_basename)
+      \t */
+      \tstatic void defaultConfigure() {
+      \t   configure(DefaultInitValue);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      \t}; // $(_class)::BasicInfo::Init\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm">
+      <![CDATA[
+      }; // $(_class)::BasicInfo\n\n
+   ]]>
+   </template>
+
+ <!-- ========== Common =============================== -->
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
+   </validate>
+
+   <template key="DefaultInitValue" namespace="all" ><![CDATA[
+      \tstatic void initRegs() {
+      \t
+      \t   defaultConfigure();
+      \t};\n\n
+   ]]></template>
+
+   <xi:include href="_simFiles-MKE.xml" />
+
+   <for keys="n" values=";0;1;2;3;4;5;6">
+      <template variables="system_uart%(n)_fixedclocksource[%(n)]" ><![CDATA[
+         \t/**
+         \t * Get UART%(n) input clock frequency
+         \t *
+         \t * @return Clock frequency in Hz
+         \t */
+         \tstatic inline uint32_t getUart%(n)Clock() {
+         \t   return $(system_uart%(n)_fixedclocksource[%(n)].code[]);
+         \t}\n\n
+      ]]></template>
+   </for>
+<signals />
+
+</peripheralPage>

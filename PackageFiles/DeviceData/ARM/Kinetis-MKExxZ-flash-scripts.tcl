@@ -122,6 +122,9 @@ proc loadSymbols {} {
    set ::NV_FEPROT                       0x040E
    set ::NV_FDPROT                       0x040F
    
+   set ::SIM_SRSID                       0x40048000
+   set ::SIM_SRSID_WDOG_MASK             0b100000
+   
    set ::MCM_PLACR                       0xF000300C
 
    set ::FMC_PFAPR                       0x4001F000
@@ -248,13 +251,13 @@ proc massEraseTarget { } {
 
    # Cycle power if feature available   
    # Upsets things on MK devices
-   #if [expr ( [getcap] & $::BDM_CAP_VDDCONTROL) != 0] {
-   #   puts stderr "massEraseTarget{} - Cycling Vdd"
-   #   settargetvdd off
-   #   after 200
-   #   settargetvdd on
-   #   after 10
-   #}
+   if [expr ( [getcap] & $::BDM_CAP_VDDCONTROL) != 0] {
+      puts stderr "massEraseTarget{} - Cycling Vdd"
+      settargetvdd off
+      after 200
+      settargetvdd on
+      after 10
+   }
 
    # Connect with reset asserted, ignore errors as may be secured
    puts stderr "massEraseTarget{} - Connecting (Ignoring errors)"

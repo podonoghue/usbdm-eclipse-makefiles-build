@@ -6,75 +6,96 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <xi:include href="_mapPinsOption.xml"/>
+   <intOption key="system_low_power_clock"
+      constant="true"
+      derived="true"
+      origin="LPO Clock"
+      units="Hz"
+      description="Frequency of Internal Low Power Oscillator [LPO] Clock"
+      toolTip="Dependent on device. [Typically ~1kHz]"
+      value="1000"/>
 
-   <xi:include href="_irqOption.xml"/>
+   <template><![CDATA[
+      \t//! Frequency of Low Power Oscillator (LPO) Clock [~1kHz]
+      \tstatic constexpr uint32_t system_low_power_clock = $(system_low_power_clock)UL;
 
-   <choiceOption key="pmc_spmsc1_lvwack" condition="pmc_spmsc1_lvwack_present"
-      enumStem="PmcSpmsc1Lvwack"
-      toolTip="This write-only bit is used to acknowledge low voltage warning errors.\n
-               Write 1 to clear LVWF"
-      description="Low-Voltage Warning Acknowledge" >
-      <choice name="Write 1 to clear"  value="0" enum="Write1ToClear"/>
-   </choiceOption>
+      \t/**
+      \t * Get LPO clock
+      \t *
+      \t * @return frequency in Hz as uint32_t
+      \t */
+      \tstatic constexpr uint32_t getLpoClock() {
+      \t   return system_low_power_clock;
+      \t}\n\n
+   ]]></template>
+
+   <!-- ************* SPMSC1 & SPMSC2 ****************** -->
+   <binaryOption key="pmc_spmsc1_lvde" condition="pmc_spmsc1_lvde_present"
+      enumStem="PmcLowVoltageDetect"
+      description="Low-Voltage Detect Enable"
+      toolTip="This write-once bit enables low-voltage detect logic">
+      <choice name="LVD logic disabled"  value="0" enum="Disabled"/>
+      <choice name="LVD logic enabled"   value="1" enum="Enabled"/>
+   </binaryOption>
 
    <binaryOption key="pmc_spmsc1_lvwie" condition="pmc_spmsc1_lvwie_present"
-      enumStem="PmcSpmsc1Lvwie"
+      enabledBy="pmc_spmsc1_lvde"
+      enumStem="PmcLowVoltageWarningInterrupt"
       toolTip="Enables hardware interrupt requests for LVWF"
       description="Low-Voltage Warning Interrupt Enable" >
-      <choice name="Interrupt disabled"  value="0" enum="InterruptDisabled"/>
-      <choice name="Interrupt enabled"   value="1" enum="InterruptEnabled"/>
+      <choice name="Interrupt disabled"  value="0" enum="Disabled"/>
+      <choice name="Interrupt enabled"   value="1" enum="Enabled"/>
    </binaryOption>
 
    <binaryOption key="pmc_spmsc1_lvdre" condition="pmc_spmsc1_lvdre_present"
-      enumStem="PmcSpmsc1Lvdre"
+      enabledBy="pmc_spmsc1_lvde"
+      enumStem="PmcLowVoltageReset"
       description="Low-Voltage Detect Reset Enable" >
-      <choice name="LVD events do not generate hardware resets"                          value="0" enum="LvdEventsDoNotGenerateHardwareResets"/>
-      <choice name="Force an MCU reset when an enabled low-voltage detect event occurs"  value="1" enum="ForceAnMcuResetWhenAnEnabledLowVoltageDetectEventOccurs"/>
+      <choice name="LVD events do not generate hardware resets"                          value="0" enum="Disabled"/>
+      <choice name="Force an MCU reset when an enabled low-voltage detect event occurs"  value="1" enum="Enabled"/>
    </binaryOption>
 
    <binaryOption key="pmc_spmsc1_lvdse" condition="pmc_spmsc1_lvdse_present"
-      enumStem="PmcSpmsc1Lvdse"
+      enabledBy="pmc_spmsc1_lvde"
+      enumStem="PmcLowVoltageDetectInStop"
       description="Low-Voltage Detect Stop Enable" >
-      <choice name="Low-voltage detect disabled during stop mode"  value="0" enum="LowVoltageDetectDisabledDuringStopMode"/>
-      <choice name="Low-voltage detect enabled during stop mode"   value="1" enum="LowVoltageDetectEnabledDuringStopMode"/>
-   </binaryOption>
-
-   <binaryOption key="pmc_spmsc1_lvde" condition="pmc_spmsc1_lvde_present"
-      enumStem="PmcSpmsc1Lvde"
-      description="Low-Voltage Detect Enable" >
-      <choice name="LVD logic disabled"  value="0" enum="LvdLogicDisabled"/>
-      <choice name="LVD logic enabled"   value="1" enum="LvdLogicEnabled"/>
+      <choice name="LVD events disabled during stop mode"  value="0" enum="Disabled"/>
+      <choice name="LVD events enabled during stop mode"   value="1" enum="Enabled"/>
    </binaryOption>
 
    <binaryOption key="pmc_spmsc1_bgbe" condition="pmc_spmsc1_bgbe_present"
-      enumStem="PmcSpmsc1Bgbe"
-      description="Bandgap Buffer Enable" >
-      <choice name="Bandgap buffer is disabled"  value="0" enum="BandgapBufferIsDisabled"/>
-      <choice name="Bandgap buffer is enabled"   value="1" enum="BandgapBufferIsEnabled"/>
+      enabledBy="pmc_spmsc1_lvde"
+      enumStem="PmcBandgapBuffer"
+      description="Bandgap Buffer Enable"
+      toolTip="Enables an internal buffer for the bandgap voltage reference for use\n
+as a ADC internal channel or ACMP reference">
+      <choice name="Bandgap buffer is disabled"  value="0" enum="Disabled"/>
+      <choice name="Bandgap buffer is enabled"   value="1" enum="Enabled"/>
    </binaryOption>
 
    <binaryOption key="pmc_spmsc2_lvdv" condition="pmc_spmsc2_lvdv_present"
-      enumStem="PmcSpmsc2Lvdv"
-      description="Low-Voltage Detect Voltage Select - Write-once bit" >
-      <choice name="Low trip point is selected (VLVD = VLVDL)"   value="0" enum="LowTripPointIsSelectedVlvdVlvdl"/>
-      <choice name="High trip point is selected (VLVD = VLVDH)"  value="1" enum="HighTripPointIsSelectedVlvdVlvdh"/>
+      enabledBy="pmc_spmsc1_lvde"
+      enumStem="PmcLowVoltageDetectLevel"
+      description="Low-Voltage Detect Level Select"
+      toolTip="Write-once bit" >
+      <choice name="Low trip point (VLVD = VLVDL)"   value="0" enum="LowTripPoint"/>
+      <choice name="High trip point (VLVD = VLVDH)"  value="1" enum="HighTripPoint"/>
    </binaryOption>
 
    <choiceOption key="pmc_spmsc2_lvwv" condition="pmc_spmsc2_lvwv_present"
-      enumStem="PmcSpmsc2Lvwv"
-      description="Low-Voltage Warning Voltage Select" >
-      <choice name="Low trip point selected (VLVW = VLVW1)"    value="0" enum="LowTripPointSelectedVlvwVlvw1"/>
-      <choice name="Mid 1 trip point selected (VLVW = VLVW2)"  value="1" enum="Mid1TripPointSelectedVlvwVlvw2"/>
-      <choice name="Mid 2 trip point selected (VLVW = VLVW3)"  value="2" enum="Mid2TripPointSelectedVlvwVlvw3"/>
-      <choice name="High trip point selected (VLVW = VLVW4)"   value="3" enum="HighTripPointSelectedVlvwVlvw4"/>
+      enabledBy="pmc_spmsc1_lvde"
+      enumStem="PmcLowVoltageWarningLevel"
+      description="Low-Voltage Warning Level Select" >
+      <choice name="Low trip point (VLVW = VLVW1)"    value="0" enum="LowTripPoint"/>
+      <choice name="Mid 1 trip point (VLVW = VLVW2)"  value="1" enum="Mid1TripPoint"/>
+      <choice name="Mid 2 trip point (VLVW = VLVW3)"  value="2" enum="Mid2TripPoint"/>
+      <choice name="High trip point (VLVW = VLVW4)"   value="3" enum="HighTripPoint"/>
    </choiceOption>
 
-<!-- Grahic here -->  
+<!-- Grahic here -->
 
    <for keys="field:name"
         values="
-      pmc_spmsc1_lvwack:Spmsc1Lvwack;
       pmc_spmsc1_lvwie:Spmsc1Lvwie;
       pmc_spmsc1_lvdre:Spmsc1Lvdre;
       pmc_spmsc1_lvdse:Spmsc1Lvdse;
@@ -111,14 +132,13 @@
       \t * static const $(_class)::Init init {
       \t *
       \t *   // Setup values
-      \t *   PmcSpmsc1Lvwack_Write1ToClear             // Low-Voltage Warning Acknowledge,
-      \t *   PmcSpmsc1Lvwie_InterruptDisabled          // Low-Voltage Warning Interrupt Enable,
-      \t *   PmcSpmsc1Lvdre_LvdEventsDoNotGenerateHardwareResets    // Low-Voltage Detect Reset Enable,
-      \t *   PmcSpmsc1Lvdse_LowVoltageDetectDisabledDuringStopMode    // Low-Voltage Detect Stop Enable,
-      \t *   PmcSpmsc1Lvde_LvdLogicDisabled            // Low-Voltage Detect Enable,
-      \t *   PmcSpmsc1Bgbe_BandgapBufferIsDisabled     // Bandgap Buffer Enable,
-      \t *   PmcSpmsc2Lvdv_LowTripPointIsSelectedVlvdVlvdl    // Low-Voltage Detect Voltage Select - Write-once bit,
-      \t *   PmcSpmsc2Lvwv_LowTripPointSelectedVlvwVlvw1    // Low-Voltage Warning Voltage Select,
+      \t * PmcLowVoltageDetect_Enabled ,             // Low-Voltage Detect Enable - LVD logic enabled
+      \t * PmcLowVoltageWarningInterrupt_Disabled ,  // Low-Voltage Warning Interrupt Enable - Interrupt disabled
+      \t * PmcLowVoltageReset_Disabled ,             // Low-Voltage Detect Reset Enable - LVD events do not generate hardware resets
+      \t * PmcLowVoltageDetectInStop_Disabled ,      // Low-Voltage Detect Stop Enable - LVD events disabled during stop mode
+      \t * PmcBandgapBuffer_Disabled ,               // Bandgap Buffer Enable - Bandgap buffer is disabled
+      \t * PmcLowVoltageLevel_HighTripPoint ,        // Low-Voltage Detect Level Select - High trip point (VLVD = VLVDH)
+      \t * PmcLowVoltageWarningLevel_LowTripPoint,   // Low-Voltage Warning Level Select - Low trip point (VLVW = VLVW1)
       \t * };
       \t *
       \t * // Initialise $(_class) from values specified above
@@ -173,14 +193,14 @@
       variables="pmc_spmsc1_lvwack,pmc_spmsc1_lvwie,pmc_spmsc1_lvdre,pmc_spmsc1_lvdse,pmc_spmsc1_lvde,pmc_spmsc1_bgbe"
    ><![CDATA[
       \t   /// System Power Management Status and Control 1 Register
-      \t   uint8_t spmsc1 = 0;\n\n
+      \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm"
       variables="pmc_spmsc2_lvdv,pmc_spmsc2_lvwv"
    ><![CDATA[
       \t   /// System Power Management Status and Control 2 Register
-      \t   uint8_t spmsc2 = 0;\n\n
+      \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
@@ -209,8 +229,6 @@
       \t
       \t   pmc->SPMSC1    = init.spmsc1;
       \t   pmc->SPMSC2    = init.spmsc2;
-      \t
-      \t   calibrate();
       \t}
       \t
       \t/**
@@ -304,11 +322,11 @@
       separator=","
       terminator=","
       variables="
+            pmc_spmsc1_lvde,
             pmc_spmsc1_lvwack,
             pmc_spmsc1_lvwie,
             pmc_spmsc1_lvdre,
             pmc_spmsc1_lvdse,
-            pmc_spmsc1_lvde,
             pmc_spmsc1_bgbe,
             pmc_spmsc2_lvdv,
             pmc_spmsc2_lvwv,
@@ -337,6 +355,26 @@
       }; // $(_class)::BasicInfo\n\n
    ]]>
    </template>
+
+   <!-- ************* Common ****************** -->
+
+   <template key="/PMC/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   ]]></template>
+
+   <xi:include href="_irqOption.xml"/>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
+   </validate>
+
+   <projectActionList id = "pmc_files" >
+      <copy source="Project_Headers/pmc_mke.h"  target="Project_Headers/pmc.h"  overwrite="true"  derived="true" />
+   </projectActionList>
+
 
 <signals />
 

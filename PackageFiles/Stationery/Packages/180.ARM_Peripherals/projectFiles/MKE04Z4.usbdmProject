@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- MKE04Z4.usbdmProject -->
+<!-- 
+   Settings
+-->
+
+<section name="USBDM">
+   <item key="$$DeviceInfo_SubFamily"                      value="MKE04Z4" />
+   <item key="$$Hardware_Source_Filename"                  value="MKE04Z4.usbdmHardware" />
+</section>

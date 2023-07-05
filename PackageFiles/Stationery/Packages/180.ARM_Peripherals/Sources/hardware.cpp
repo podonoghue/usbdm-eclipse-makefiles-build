@@ -33,6 +33,7 @@ extern "C" void __attribute__((constructor)) cpp_initialise() {
    }
 }
 
+#ifdef PORT_PCR_MUX
 $(/HARDWARE_CPP/Definitions:   // No user object definitions found)
 
 /**
@@ -50,6 +51,7 @@ $(/HARDWARE_CPP/PortInitialisationsErrors:   // No initialisation errors or warn
 
 $(/HARDWARE_CPP/PortInitialisations:   // No initialisation found)
 }
+#endif 
 /**
  * End group USBDM_Group
  * @}

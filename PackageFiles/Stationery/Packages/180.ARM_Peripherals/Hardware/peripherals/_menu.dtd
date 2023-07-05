@@ -2,7 +2,7 @@
 
 <!ENTITY % gui_items        "(xi:include|addDependency|graphic|deleteOption|category|indexedCategory|categoryOption|addChoices|aliasCategoryOption|if|for|constant|floatOption|intOption|bitmaskOption|choiceOption|clockMultiplexorOption|binaryOption|irqOption|stringOption|numericListOption|pinListOption|aliasOption|signals)" >
 <!ENTITY % structure_items  "(xi:include|section|list)" >
-<!ENTITY % control_items    "(xi:include|template|setTemplate|constructorTemplate|enumTemplate|initialValueTemplate|clockCodeTemplate|validate|projectActionList)" >
+<!ENTITY % control_items    "(xi:include|clockSelectionOption|template|setTemplate|constructorTemplate|enumTemplate|initialValueTemplate|clockCodeTemplate|validate|projectActionList)" >
 
 <!-- Include another file -->
 <!ELEMENT xi:include EMPTY>
@@ -52,12 +52,13 @@
    <!ATTLIST category  hidden       (false|true) #IMPLIED>
 
 <!ELEMENT graphic ((graphicBox|equation|graphicGroup)*) >
-   <!ATTLIST graphic  key             CDATA        #REQUIRED>
-   <!ATTLIST graphic  var             CDATA        #IMPLIED>
-   <!ATTLIST graphic  description     CDATA        #IMPLIED>
-   <!ATTLIST graphic  toolTip         CDATA        #IMPLIED>
-   <!ATTLIST graphic  condition       CDATA        #IMPLIED>
-
+   <!ATTLIST graphic  key                CDATA        #REQUIRED>
+   <!ATTLIST graphic  var                CDATA        #IMPLIED>
+   <!ATTLIST graphic  description        CDATA        #IMPLIED>
+   <!ATTLIST graphic  toolTip            CDATA        #IMPLIED>
+   <!ATTLIST graphic  condition          CDATA        #IMPLIED>
+   <!ATTLIST graphic  clockConfigIndex   CDATA        #IMPLIED>
+   
 <!ELEMENT equation EMPTY >
    <!ATTLIST equation  key             CDATA        #REQUIRED>
    <!ATTLIST equation  value           CDATA        #REQUIRED>
@@ -76,6 +77,7 @@
 
 <!ELEMENT graphicItem EMPTY >
    <!ATTLIST graphicItem  id              CDATA        #IMPLIED>
+   <!ATTLIST graphicItem  name            CDATA        #IMPLIED>
    <!ATTLIST graphicItem  type            CDATA        #REQUIRED>
    <!ATTLIST graphicItem  params          CDATA        #REQUIRED>
    <!ATTLIST graphicItem  var             CDATA        #IMPLIED>
@@ -394,6 +396,7 @@
    <!ATTLIST choice code                      CDATA        #IMPLIED>
    <!ATTLIST choice hidden                    CDATA        #IMPLIED>
    <!ATTLIST choice enabledBy                 CDATA        #IMPLIED>
+   <!ATTLIST choice pinmap                    CDATA        #IMPLIED>
 
 <!ELEMENT binaryOption (choice?, choice?) >
    <!-- Condition evaluated during parsing that controls procsing of this variable -->

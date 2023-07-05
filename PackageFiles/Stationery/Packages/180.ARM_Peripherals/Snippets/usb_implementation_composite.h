@@ -82,7 +82,6 @@ static constexpr unsigned  CDC_NOTIFICATION_EP_MAXSIZE  = 16; //!< CDC notificat
 static constexpr unsigned  CDC_DATA_OUT_EP_MAXSIZE      = 16; //!< CDC data out
 static constexpr unsigned  CDC_DATA_IN_EP_MAXSIZE       = 16; //!< CDC data in
 
-#ifdef USBDM_USB0_IS_DEFINED
 /**
  * Class representing USB0
  */
@@ -210,11 +209,12 @@ public:
    static const Descriptors otherDescriptors;
 
    /**
-    * Handler for Token Complete USB interrupts for\n
+    * Handler for Token Complete USB interrupts for
     * end-points other than EP0
+    *
+    * @param usbStat USB Status value from USB hardware
     */
-   static void handleTokenComplete(UsbStat   usbStat);
-
+   static void handleTokenComplete(UsbStat usbStat);
    /**
     * Clear value reflecting selected hardware based ping-pong buffer.
     * This would normally only be called when resetting the USB hardware or using
@@ -231,26 +231,26 @@ public:
    /**
     * Initialises all end-points
     */
-   static void initialiseEndpoints(void) {
-      epBulkOut.initialise();
+   static void initialiseEndpoints(bool clearToggles) {
+      epBulkOut.initialise(clearToggles);
       addEndpoint(&epBulkOut);
       epBulkOut.setCallback(bulkOutTransactionCallback);
 
-      epBulkIn.initialise();
+      epBulkIn.initialise(clearToggles);
       addEndpoint(&epBulkIn);
       epBulkIn.setCallback(bulkInTransactionCallback);
 
-      epCdcNotification.initialise();
+      epCdcNotification.initialise(clearToggles);
       addEndpoint(&epCdcNotification);
 
-      epCdcDataOut.initialise();
+      epCdcDataOut.initialise(clearToggles);
       addEndpoint(&epCdcDataOut);
       epCdcDataOut.setCallback(cdcOutTransactionCallback);
 
       // Make sure epCdcDataOut is ready for polling (interrupt OUT)
       epCdcDataOut.startRxStage(EPDataOut, epCdcDataOut.getMaximumTransferSize());
 
-      epCdcDataIn.initialise();
+      epCdcDataIn.initialise(clearToggles);
       addEndpoint(&epCdcDataIn);
       epCdcDataIn.setCallback(cdcInTransactionCallback);
 
@@ -357,18 +357,18 @@ protected:
    /**
     * Call-back handling BULK-OUT transaction complete
     *
-    * @param[in] state Current end-point state
+    * @param[in] state Current end-point state (always EPDataOut)
     *
-    * @return The endpoint state to set after call-back (EPIdle)
+    * @return The endpoint state to set after call-back (EPDataOut)
     */
    static EndpointState bulkOutTransactionCallback(EndpointState state);
 
    /**
     * Call-back handling BULK-IN transaction complete
     *
-    * @param[in] state Current end-point state
+    * @param[in] state Current end-point state (always EPDataIn)
     *
-    * @return The endpoint state to set after call-back (EPIdle)
+    * @return The endpoint state to set after call-back (EPIdle/EPDataIn)
     */
    static EndpointState bulkInTransactionCallback(EndpointState state);
 
@@ -435,8 +435,6 @@ protected:
 };
 
 using UsbImplementation = Usb0;
-
-#endif // USBDM_USB0_IS_DEFINED
 
 } // End namespace USBDM
 

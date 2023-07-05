@@ -1082,6 +1082,7 @@
       <peripheral baseName="GPIO"     instance="A"        version="gpioa_0x400ff000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="SIM->SCGC5 = SIM->SCGC5 | SIM_SCGC5_PORTA_MASK;" clockDisable="SIM->SCGC5 = SIM->SCGC5 &amp; ~SIM_SCGC5_PORTA_MASK;" />
+         <param name="$present"     key="/PCR/$present" value="true" />
          <param name="dse_present"  key="/PCR/dse_present" value="true" />
          <param name="irqc_present" key="/PCR/irqc_present" value="true" />
          <param name="isf_present"  key="/PCR/isf_present" value="true" />

@@ -1323,6 +1323,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="SIM->SCGC5 = SIM->SCGC5 | SIM_SCGC5_PORTA_MASK;" clockDisable="SIM->SCGC5 = SIM->SCGC5 &amp; ~SIM_SCGC5_PORTA_MASK;" />
          <irq num="PORTA_IRQn" />
+         <param name="$present"     key="/PCR/$present" value="true" />
          <param name="dse_present"  key="/PCR/dse_present" value="true" />
          <param name="irqc_present" key="/PCR/irqc_present" value="true" />
          <param name="isf_present"  key="/PCR/isf_present" value="true" />
@@ -1729,6 +1730,20 @@
       <peripheral baseName="PMC"      instance=""         version="pmc_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPmc" />
          <irq num="PMC_IRQn" />
+         <param name="$present"     key="/PMC/$present" value="true" />
+         <param name="pmc_lvdsc1_lvdack_present" key="/PMC/pmc_lvdsc1_lvdack_present" value="true" />
+         <param name="pmc_lvdsc1_lvdf_present" key="/PMC/pmc_lvdsc1_lvdf_present" value="true" />
+         <param name="pmc_lvdsc1_lvdie_present" key="/PMC/pmc_lvdsc1_lvdie_present" value="true" />
+         <param name="pmc_lvdsc1_lvdre_present" key="/PMC/pmc_lvdsc1_lvdre_present" value="true" />
+         <param name="pmc_lvdsc1_lvdv_present" key="/PMC/pmc_lvdsc1_lvdv_present" value="true" />
+         <param name="pmc_lvdsc2_lvwack_present" key="/PMC/pmc_lvdsc2_lvwack_present" value="true" />
+         <param name="pmc_lvdsc2_lvwf_present" key="/PMC/pmc_lvdsc2_lvwf_present" value="true" />
+         <param name="pmc_lvdsc2_lvwie_present" key="/PMC/pmc_lvdsc2_lvwie_present" value="true" />
+         <param name="pmc_lvdsc2_lvwv_present" key="/PMC/pmc_lvdsc2_lvwv_present" value="true" />
+         <param name="pmc_regsc_ackiso_present" key="/PMC/pmc_regsc_ackiso_present" value="true" />
+         <param name="pmc_regsc_bgbe_present" key="/PMC/pmc_regsc_bgbe_present" value="true" />
+         <param name="pmc_regsc_bgen_present" key="/PMC/pmc_regsc_bgen_present" value="true" />
+         <param name="pmc_regsc_regons_present" key="/PMC/pmc_regsc_regons_present" value="true" />
       </peripheral>
       <peripheral baseName="POWER"    instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />

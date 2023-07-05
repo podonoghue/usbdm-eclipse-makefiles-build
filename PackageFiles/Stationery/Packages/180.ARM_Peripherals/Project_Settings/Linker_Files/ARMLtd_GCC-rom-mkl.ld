@@ -186,7 +186,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
    } > bdts_ram
   
    /* Initialised data in RAM copied from flash */
-   .data : AT (__etext)
+   .data : 
    {
       __data_start__ = .;
       __DATA_RAM = .;
@@ -198,11 +198,12 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       . = ALIGN(4);
       /* All data end */
       __data_end__ = .;
-   } > data_ram
+   } > data_ram AT> data_rom
    
   /* KDS defines __DATA_END as the end of DATA in Flash */
   __DATA_END = __DATA_ROM + SIZEOF(.data);
-
+  __data_image_start__ = LOADADDR(.data);
+  
    /* Start of not initialised region */
    .noinit :
    {

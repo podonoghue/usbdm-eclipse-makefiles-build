@@ -10,9 +10,9 @@ Devices using this peripheral:
 
    <xi:include href="_mapPinsOption_on.xml"/>
 
-   <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src[]"            optional="true" constant="false" />
-   <aliasOption key="/SIM/system_uart$(_instance)_fixedclocksource[]" optional="true"/>
-   <aliasOption key="/SIM/system_uart$(_instance)_clock[]"            optional="true" />
+   <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src[]"              optional="true" constant="false" />
+   <aliasOption key="/SIM/system_uart$(_instance)_fixedclocksource[]"   optional="true"/>
+   <aliasOption key="/SIM/system_uart$(_instance)_clock[]"              optional="true" />
 
    <intOption key="oversampleRatio"  condition="uart_c4_osr_present"
       description="Number of samples per bit"
@@ -171,22 +171,31 @@ Devices using this peripheral:
       \t}\n\n
    ]]></setTemplate>
 
-   <binaryOption key="uartClass" condition="!uart_c4_osr_present"
-      description="Input buffering"
-      toolTip="This option determines whether an interrupt-driven driver\n
-               incorporating a queue is used to buffer input data" >
-      <choice name="Unbuffered" value="Uart_brfa_T" />
-      <choice name="Buffered"   value="UartBuffered_brfa_T" />
-   </binaryOption>
-
-   <binaryOption key="uartClass" condition="uart_c4_osr_present"
-      description="Input buffering"
-      toolTip="This option determines whether an interrupt-driven driver\n
-               incorporating a queue is used to buffer input data" >
-      <choice name="Unbuffered" value="Uart_osr_T" />
-      <choice name="Buffered"   value="UartBuffered_osr_T" />
-   </binaryOption>
-
+   <if condition="uart_c4_brfa_present">
+      <binaryOption key="uartClass"
+         description="Input buffering"
+         toolTip="This option determines whether an interrupt-driven driver\n
+                  incorporating a queue is used to buffer input data" >
+         <choice name="Unbuffered" value="Uart_brfa_T" />
+         <choice name="Buffered"   value="UartBuffered_brfa_T" />
+      </binaryOption>
+   <else_if condition="uart_c4_osr_present" />
+      <binaryOption key="uartClass"
+         description="Input buffering"
+         toolTip="This option determines whether an interrupt-driven driver\n
+                  incorporating a queue is used to buffer input data" >
+         <choice name="Unbuffered" value="Uart_osr_T" />
+         <choice name="Buffered"   value="UartBuffered_osr_T" />
+      </binaryOption>
+   <else />
+      <binaryOption key="uartClass"
+         description="Input buffering"
+         toolTip="This option determines whether an interrupt-driven driver\n
+                  incorporating a queue is used to buffer input data" >
+         <choice name="Unbuffered" value="Uart_basic_T" />
+         <choice name="Buffered"   value="UartBuffered_basic_T" />
+      </binaryOption>
+   </if>
    <intOption key="receiveBufferSize" description="Size of input buffer"
       toolTip="This value determines the size of the receive buffer\n
                for the interrupt driven driver version  "

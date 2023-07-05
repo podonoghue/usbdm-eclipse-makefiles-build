@@ -154,8 +154,8 @@
       enumStem="I2cFltShen"
       toolTip="Set this bit to hold off entry to stop mode when any data transmission or reception is occurring"
       description="Stop Hold Enable" >
-      <choice name="Stop holdoff is disabled. The MCU&apos;s entry to stop mode is not gated"  value="0" enum="StopHoldoffIsDisabledTheMcuAposSEntryToStopModeIsNotGated"/>
-      <choice name="Stop holdoff is enabled"                                              value="1" enum="StopHoldoffIsEnabled"/>
+      <choice name="Stop holdoff is disabled. The MCUs entry to stop mode is not gated"  value="0" enum="StopHoldoffIsDisabledTheMcusEntryToStopModeIsNotGated"/>
+      <choice name="Stop holdoff is enabled"                                             value="1" enum="StopHoldoffIsEnabled"/>
    </binaryOption>
 
    <binaryOption key="i2c_flt_stopf" condition="i2c_flt_stopf_present"
@@ -270,7 +270,7 @@ Software clears this bit by writing a logic 1 to it"
       description="LSB of SCL low timeout value"
    />
 
-<!-- Grahic here -->  
+<!-- Grahic here -->
 
    <for keys="field:name"
         values="
@@ -351,7 +351,7 @@ Software clears this bit by writing a logic 1 to it"
       \t *   I2cC2Sbrc_SlaveRateFollowsMaster          // Slave Baud Rate Control,
       \t *   I2cC2Rmen_RangeModeDisabled               // Range Address Matching Enable,
       \t *   0,                                        // Slave Address,
-      \t *   I2cFltShen_StopHoldoffIsDisabledTheMcuAposSEntryToStopModeIsNotGated    // Stop Hold Enable,
+      \t *   I2cFltShen_StopHoldoffIsDisabledTheMcusEntryToStopModeIsNotGated    // Stop Hold Enable,
       \t *   I2cFltStopf_NoStopHappensOnI2cBus         // Bus Stop Detect Flag,
       \t *   I2cFltSsie_InterruptDisabled              // Bus Stop or Start Interrupt Enable,
       \t *   I2cFltStartf_NoStartHappensOnI2cBus       // Bus Start Detect Flag,

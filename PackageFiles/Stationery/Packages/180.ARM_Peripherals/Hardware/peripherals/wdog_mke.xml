@@ -2,127 +2,330 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- wdog_mke.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Watchdog timer">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Watchdog Monitor">
 
    <xi:include href="_default_instance.xml"/>
 
-   <xi:include href="_mapPinsOption.xml"/>
-
    <xi:include href="_irqOption.xml"/>
 
+   <projectActionList id = "wdog_files" >
+      <copy source="Project_Headers/wdog_mke.h"     target="Project_Headers/wdog.h"          overwrite="true" derived="true" />
+   </projectActionList>
+
+   <binaryOption key="wdogSystemEnable"
+      description="Enable Watchdog system"
+      toolTip="This can be used to disable the entire watchdog system">
+      <choice value="false" enum="Disabled" name="Watchdog system disabled" isDefault="true" />
+      <choice value="true"  enum="Enabled"  name="Watchdog system enabled" />
+   </binaryOption>
+
+   <binaryOption key="secondsSupport"
+      enabledBy="wdogSystemEnable"
+      description="Enable use of Seconds for time"
+      toolTip="Use of floating point is necessary to support specifing watchdog timeouts in seconds in runtime code.\n
+               This is seldom needed and the overhead can be avoided by disabling this option">
+      <choice value="false" enum="Disabled" name="Seconds support disabled" isDefault="true" />
+      <choice value="true"  enum="Enabled"  name="Seconds support enabled" />
+   </binaryOption>
+
+   <!-- ************* WDOG CS1 & CS2****************** -->
+
    <binaryOption key="wdog_cs1_en" condition="wdog_cs1_en_present"
-      enumStem="WdogCs1En"
-      description="Enable: This write-once bit enables the watchdog counter to start counting" >
-      <choice name="Disabled"    value="0" enum="Disabled"/>
-      <choice name="Enabled"     value="1" enum="Enabled"/>
-   </binaryOption>
-
-   <binaryOption key="wdog_cs1_int" condition="wdog_cs1_int_present"
-      enumStem="WdogCs1Int"
-      description="Interrupt: This write-once bit configures the watchdog to generate an interrupt request upon a reset-triggering event (timeout or illegal write to the watchdog), prior to forcing a reset. After the interrupt vector fetch, the reset occurs after a delay of 128 bus clocks" >
-      <choice name="Interrupts are disabled. Watchdog resets are not delayed"               value="0" enum="InterruptsAreDisabledWatchdogResetsAreNotDelayed"/>
-      <choice name="Interrupts are enabled. Watchdog resets are delayed by 128 bus clocks"  value="1" enum="InterruptsAreEnabledWatchdogResetsAreDelayedBy128BusClocks"/>
-   </binaryOption>
-
-   <binaryOption key="wdog_cs1_update" condition="wdog_cs1_update_present"
-      enumStem="WdogCs1Update"
-      description="Allow updates: This write-once bit allows software to reconfigure the watchdog without a reset" >
-      <choice name="Updates not allowed. After the initial configuration, the watchdog cannot be later modified without forcing a reset"                         value="0" enum="UpdatesNotAllowedAfterTheInitialConfiguration_TheWatchdogCannotBeLaterModifiedWithoutForcingAReset"/>
-      <choice name="Updates allowed. Software can modify the watchdog configuration registers within 128 bus clocks after performing the unlock write sequence"  value="1" enum="UpdatesAllowedSoftwareCanModifyTheWatchdogConfigurationRegistersWithin128BusClocksAfterPerformingTheUnlockWriteSequence"/>
+      enabledBy="wdogSystemEnable"
+      enumStem="WdogEnable"
+      enumType="uint16_t"
+      description="Watchdog enable"
+      toolTip="Main enable for WDOG">
+      <choice value="0" enum="Disabled" name="Watchdog disabled" isDefault="true" />
+      <choice value="1" enum="Enabled"  name="Watchdog enabled" />
    </binaryOption>
 
    <choiceOption key="wdog_cs1_tst" condition="wdog_cs1_tst_present"
-      enumStem="WdogCs1Tst"
-      description="Test: Enables the fast test mode. The test mode allows software to exercise all bits of the counter to demonstrate that the watchdog is functioning properly. This write-once field is cleared (0:0) on POR only. Any other reset does not affect the value of this field" >
-      <choice name="Test mode disabled"                                                                                                                                                                 value="0" enum="TestModeDisabled"/>
-      <choice name="User mode enabled. (Watchdog test mode disabled.) After testing the watchdog, software should use this setting to indicate that the watchdog is functioning normally in user mode"  value="1" enum="UserModeEnabledWatchdogTestModeDisabledAfterTestingTheWatchdog_SoftwareShouldUseThisSettingToIndicateThatTheWatchdogIsFunctioningNormallyInUserMode"/>
-      <choice name="Test mode enabled, only the low byte is used. CNTL is compared with TOVALL"                                                                                                         value="2" enum="TestModeEnabled_OnlyTheLowByteIsUsedCntlIsComparedWithTovall"/>
-      <choice name="Test mode enabled, only the high byte is used. CNTH is compared with TOVALH"                                                                                                        value="3" enum="TestModeEnabled_OnlyTheHighByteIsUsedCnthIsComparedWithTovalh"/>
+      enabledBy="wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      enumType="uint16_t"
+      enumStem="WdogTestMode"
+      description="Test Mode: Controls the fast test mode."
+      toolTip="Allows exercising all bits of the counter to confirm that the watchdog is functioning properly.\n
+This write-once field is cleared on POR only" >
+      <choice name="Disabled"                         value="0" enum="Disabled"/>
+      <choice name="DIsabled - User mode"             value="1" enum="UserMode"/>
+      <choice name="Enabled, Only CNTL, TOVALL used"  value="2" enum="TestModeLowByte"/>
+      <choice name="Enabled, Only CNTH, TOVALH used"  value="3" enum="TestModeHighByte"/>
    </choiceOption>
 
-   <binaryOption key="wdog_cs1_dbg" condition="wdog_cs1_dbg_present"
-      enumStem="WdogCs1Dbg"
-      description="Debug Enable: This write-once bit enables the watchdog to operate when the chip is in debug mode" >
-      <choice name="Disabled in chip debug mode"  value="0" enum="DisabledInChipDebugMode"/>
-      <choice name="Enabled in chip debug mode"   value="1" enum="EnabledInChipDebugMode"/>
-   </binaryOption>
-
    <binaryOption key="wdog_cs1_wait" condition="wdog_cs1_wait_present"
-      enumStem="WdogCs1Wait"
-      description="Wait Enable: This write-once bit enables the watchdog to operate when the chip is in wait mode" >
-      <choice name="Disabled in chip wait mode"  value="0" enum="DisabledInChipWaitMode"/>
-      <choice name="Enabled in chip wait mode"   value="1" enum="EnabledInChipWaitMode"/>
+      enabledBy="wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      enumType="uint16_t"
+      enumStem="WdogEnableInWait"
+      description="Enable watchdog in WAIT mode"
+      toolTip="This write-once bit enables the watchdog to operate when the chip is in wait mode" >
+      <choice name="Disabled in WAIT mode"  value="0" enum="Disabled" isDefault="true" />
+      <choice name="Enabled in WAIT mode"   value="1" enum="Enabled"/>
    </binaryOption>
 
    <binaryOption key="wdog_cs1_stop" condition="wdog_cs1_stop_present"
-      enumStem="WdogCs1Stop"
-      description="Stop Enable: This write-once bit enables the watchdog to operate when the chip is in stop mode" >
-      <choice name="Disabled in chip stop mode"  value="0" enum="DisabledInChipStopMode"/>
-      <choice name="Enabled in chip stop mode"   value="1" enum="EnabledInChipStopMode"/>
+      enabledBy="wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      enumType="uint16_t"
+      enumStem="WdogEnableInStop"
+      description="Enable watchdog in STOP mode"
+      toolTip="This write-once bit enables the watchdog to operate when the chip is in stop mode" >
+      <choice name="Disabled in STOP mode"  value="0" enum="Disabled" isDefault="true" />
+      <choice name="Enabled in STOP mode"   value="1" enum="Enabled" />
+   </binaryOption>
+
+   <binaryOption key="wdog_cs1_dbg" condition="wdog_cs1_dbg_present"
+      enabledBy="wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      enumType="uint16_t"
+      enumStem="WdogEnableInDebug"
+      description="Enable watchdog in DEBUG mode"
+      toolTip="This write-once bit enables the watchdog to operate when the chip is in debug mode" >
+      <choice name="Disabled in DEBUG mode"  value="0" enum="Disabled" isDefault="true" />
+      <choice name="Enabled in DEBUG mode"   value="1" enum="Enabled" />
+   </binaryOption>
+
+   <binaryOption key="wdog_cs1_update" condition="wdog_cs1_update_present"
+      enabledBy="wdogSystemEnable"
+      enumType="uint16_t"
+      enumStem="WdogAllowUpdate"
+      description="Allow watchdog update"
+      toolTip="Enables updates to watchdog write-once registers, after \n
+               the initial configuration.\n
+               This still requires the unlock sequence"
+      disabledValue="false" >
+      <choice name="Update Disabled" value="0" enum="Disabled" />
+      <choice name="Update Enabled"  value="1" enum="Enabled"  isDefault="true" />
    </binaryOption>
 
    <binaryOption key="wdog_cs2_win" condition="wdog_cs2_win_present"
-      enumStem="WdogCs2Win"
-      description="Window: This write-once bit enables window mode" >
-      <choice name="Window mode disabled"  value="0" enum="WindowModeDisabled"/>
-      <choice name="Window mode enabled"   value="1" enum="WindowModeEnabled"/>
+      enabledBy="wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      enumType="uint16_t"
+      enumStem="WdogWindow"
+      description="Enable watchdog windowing mode"
+      toolTip="Windowing mode only allows refresh during a restricted window">
+      <choice name="Windowing mode disabled" value="0" enum="Disabled" isDefault="true" />
+      <choice name="Windowing mode enabled"  value="1" enum="Enabled"  />
    </binaryOption>
 
-   <binaryOption key="wdog_cs2_flg" condition="wdog_cs2_flg_present"
-      enumStem="WdogCs2Flg"
-      description="Interrupt Flag: This bit is an interrupt indicator when INT is set in control and status register 1. Write 1 to clear it" >
-      <choice name="No interrupt occurred"  value="0" enum="NoInterruptOccurred"/>
-      <choice name="An interrupt occurred"  value="1" enum="AnInterruptOccurred"/>
-   </binaryOption>
-
-   <binaryOption key="wdog_cs2_pres" condition="wdog_cs2_pres_present"
-      enumStem="WdogCs2Pres"
-      description="Prescalar: This write-once bit enables a fixed 256 pre-scaling of watchdog counter reference clock. (The block diagram shows this clock divider option.)" >
-      <choice name="256 prescaler disabled"  value="0" enum="256PrescalerDisabled"/>
-      <choice name="256 prescaler enabled"   value="1" enum="256PrescalerEnabled"/>
+   <binaryOption key="wdog_cs1_int" condition="wdog_cs1_int_present"
+      enabledBy="wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      enumType="uint16_t"
+      enumStem="WdogAction"
+      description="Action on watchdog event"
+      toolTip="This write-once bit allows an interrupt handler to record state prior to forcing a reset.\n
+The reset occurs after a delay of 128 bus clocks following the interrupt vector fetch, " >
+      <choice name="Immediate Reset"             value="0" enum="ImmediateReset" isDefault="true" />
+      <choice name="Interrupt followed by reset" value="1" enum="ResetAfterInterrupt"   />
    </binaryOption>
 
    <choiceOption key="wdog_cs2_clk" condition="wdog_cs2_clk_present"
-      enumStem="WdogCs2Clk"
-      toolTip="This write-once field indicates the clock source that feeds the watchdog counter"
-      description="Clock" >
-      <choice name="Bus clock"                                     value="0" enum="BusClock"/>
-      <choice name="1 kHz internal low-power oscillator (LPOCLK)"  value="1" enum="1KhzInternalLowPowerOscillatorLpoclk"/>
-      <choice name="32 kHz internal oscillator (ICSIRCLK)"         value="2" enum="32KhzInternalOscillatorIcsirclk"/>
-      <choice name="External clock source"                         value="3" enum="ExternalClockSource"/>
+      enabledBy="wdogSystemEnable"
+      target="inputClockFrequency"
+      enumType="uint16_t"
+      enumStem="WdogClock"
+      description="Watchdog clock source"
+      toolTip="This write-once field indicates the clock source that feeds the watchdog counter"  >
+      <choice name="System Bus clock"                        value="0" enum="SystemBusClk" code="SystemBusClock"          ref="/SIM/system_bus_clock[]"     />
+      <choice name="1 kHz low-power oscillator (LPOCLK)"     value="1" enum="LpoClk"       code="PmcInfo::getLpoClock()"  ref="/PMC/system_low_power_clock"  isDefault="true" />
+      <choice name="ICS internal reference clock (ICSIRCLK)" value="2" enum="Icsirclk"     code="IcsInfo::getInternalReferenceClock()"           ref="/ICS/system_icsirclk_clock[]" />
+      <choice name="External clock source (OSCERCLK)"        value="3" enum="ExternalClk"  code="Osc0Info::getOscClock()"     ref="/OSC0/oscer_clock" />
    </choiceOption>
 
-<!-- Grahic here -->  
+   <clockCodeTemplate variable="wdog_cs2_clk"
+      returnFormat="%s"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %paramName %tooltip
+      \t */
+      \tstatic void setClockSource(%enumClass %paramName) {
+      \t   %defaultFieldExpression
+      \t}
 
-   <for keys="field:name"
-        values="
-      wdog_cs1_en:Cs1En;
-      wdog_cs1_int:Cs1Int;
-      wdog_cs1_update:Cs1Update;
-      wdog_cs1_tst:Cs1Tst;
-      wdog_cs1_dbg:Cs1Dbg;
-      wdog_cs1_wait:Cs1Wait;
-      wdog_cs1_stop:Cs1Stop;
-      wdog_cs2_win:Cs2Win;
-      wdog_cs2_flg:Cs2Flg;
-      wdog_cs2_pres:Cs2Pres;
-      wdog_cs2_clk:Cs2Clk">
-      <setTemplate variables="%(field)"
-      ><![CDATA[
-         \t/**
-         \t * Set %description
-         \t *
-         %paramDescription
-         \t */
-         \tstatic void configure%(name)(%params) {
-         \t   %defaultFieldExpression
-         \t}\n\n
-      ]]></setTemplate>
-   </for>
+      \t/**
+      \t * Get %description
+      \t *
+      %paramDescription
+      \t *
+      \t * @return Clock frequency in Hz
+      \t */
+      \tstatic inline uint32_t getInputClockFrequency(%params) {
+      \t
+      \t   switch(%paramName) {
+      \t      default:
+      %body
+      \t   }
+      \t}
+      \t
+      \t/**
+      \t * Get %description
+      \t *
+      \t * @return Clock frequency in Hz
+      \t */
+      \tstatic uint32_t getInputClockFrequency() {
+      \t
+      \t   return getInputClockFrequency((%enumClass)(%defaultMaskingExpression));
+      \t}\n\n
+   ]]></clockCodeTemplate>
+
+   <intOption key="inputClockFrequency"
+      enabledBy="wdogSystemEnable"
+      constant="true"
+      description="Watchdog Input clock frequency"
+      toolTip="Determined from timer clock source"
+      derived="true"
+      units="Hz"/>
+
+   <binaryOption key="wdog_cs2_pres" condition="wdog_cs2_pres_present"
+      enabledBy="wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      target="timerTickPeriod"
+      enumStem="WdogPrescale"
+      enumType="uint16_t"
+      description="Prescaler for the watchdog clock source"
+      toolTip="This write-once bit enables a fixed 256 pre-scaling of watchdog counter reference clock" >
+      <choice name="Prescale /1"    value="0" ref="1.0/inputClockFrequency"   enum="Direct" />
+      <choice name="Prescale /256"  value="1" ref="256.0/inputClockFrequency" enum="DivBy256" />
+   </binaryOption>
+
+   <floatOption key="timerTickPeriod"
+      enabledBy="wdogSystemEnable"
+      constant="true"
+      description="Period of watchdog counter"
+      toolTip="Determined from timer clock source and prescaler"
+      derived="true"
+      units="s"/>
+
+   <floatOption key="wdog_timeoutPeriod"
+      enabledBy="wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      description="Watchdog Timeout"
+      toolTip="The watchdog must be refreshed before this interval expires"
+      valueFormat="%s_s"
+      typeName="const Seconds &amp;"
+      units="s"
+      value="1"/>
+
+   <intOption key="wdog_timeout"
+      enabledBy="wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      ref="timerTickPeriod#(wdog_timeoutPeriod)/timerTickPeriod"
+      constant="true"
+      description="Watchdog Timeout in ticks"
+      toolTip="The watchdog must be refreshed before the counter reaches this value"
+      valueFormat="%s_ticks"
+      typeName="Ticks"
+      derived="true"
+      min="10" max="4294967295"
+      disabledValue="4294967295"
+   />
+
+   <floatOption key="wdog_windowPeriod"
+      enabledBy="wdog_cs2_win&amp;&amp;wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      description="Watchdog Window"
+      toolTip="Refresh of the watchdog may not be carried out before this interval has expired i.e.\n
+               Refresh must occur within [window...timeout] if window mode is enabled.\n
+               A refresh outside of this range resets the system"
+      valueFormat="%s_s"
+      typeName="const Seconds &amp;"
+      derived="true"
+      units="s"
+      value="0"/>
+
+   <intOption key="wdog_window"
+      enabledBy="wdog_cs2_win&amp;&amp;wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      ref="timerTickPeriod#(wdog_windowPeriod)/timerTickPeriod"
+      constant="true"
+      description="Watchdog Window in ticks"
+      toolTip="If windowed operation is enabled, then the watchdog can only be refreshed \n
+               if the timer reaches a value greater than or equal to this window length value.\n
+               A refresh outside of this window resets the system"
+      valueFormat="%s_ticks"
+      typeName="Ticks"
+      value="0" min="0" max="4294967295"
+      disabledValue="4294967295"
+   />
+
+   <template key="/SYSTEM/Includes" namespace="all" ><![CDATA[
+      #include "wdog.h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/WatchdogInitialise" namespace="all" ><![CDATA[
+      \t/*
+      \t * Initialise watchdog
+      \t */
+      \tUSBDM::Wdog::defaultConfigure();
+      \t
+   ]]></template>
+
+<!-- Grahic here -->
+
+   <setTemplate key="/WDOG/publicMethods" namespace="all"
+      variables="
+         wdog_cs1_en,
+         wdog_cs2_clk,
+         wdog_cs2_win,
+         wdog_cs1_int,
+         wdog_cs1_dbg,
+         wdog_cs1_stop,
+         wdog_cs1_wait"
+   ><![CDATA[
+      \t/**
+      \t * Configure watchdog
+      \t
+      \t * @note This is a protected operation which uses unlock
+      \t * @note Register changes after unlock is enabled
+      \t
+      %comments
+      \t */
+      \tstatic void configure(
+      %params) {
+      \t
+      \t   // Protect sequence from interrupts
+      \t   CriticalSection cs;
+      \t
+      \t   // Unlock before changing settings
+      \t   wdog->CNT = WdogUnlock_1;
+      \t   wdog->CNT = WdogUnlock_2;
+      \t
+      \t   // Read-back to delay until change effected
+      \t   (void)(wdog->CNT);
+      \t
+      \t   wdog->CS1 = wdogEnable|wdogAction|wdogEnableInDebug|wdogEnableInStop|wdogEnableInWait;
+      \t   wdog->CS2 = wdogClock|wdogWindow;
+      \t}
+   ]]></setTemplate>
+
+   <!-- ************* MISC ****************** -->
+   <choiceOption key="wdog_constants1"
+      hidden="true"
+      enumStem="WdogRefresh"
+      valueFormat="%s"
+      description="Values for refresh and update registers"
+      toolTip="Note values are transposed for direct write to CNT register"
+      >
+      <choice value="0x02A6" enum="1" name="1st refresh value"   />
+      <choice value="0x80B4" enum="2" name="2nd refresh value"   />
+   </choiceOption>
+
+   <choiceOption key="wdog_constants2"
+      hidden="true"
+      enumStem="WdogUnlock"
+      valueFormat="%s"
+      description="Values for refresh and update registers"
+      toolTip="Note values are transposed for direct write to CNT register"
+      >
+      <choice value="0x20C5" enum="1"  name="1st unlock value"  />
+      <choice value="0x28D9" enum="2"  name="2nd unlock value"  />
+   </choiceOption>
+
+   <template key="/WDOG/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   ]]></template>
 
 <!--   ========== WDOG Init class =============================== -->
 
-   <template key="init_description" namespace="all">
+   <template key="init_description" namespace="all" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_class)
@@ -133,39 +336,45 @@
       \t *
       \t * Example:
       \t * @code
-      \t * static const $(_class)::Init init {
+      \t * static const $(_class)::Init wdogInit {
       \t *
       \t *   // Setup values
-      \t *   WdogCs1En_Disabled                        // Enable: This write-once bit enables the watchdog counter to start counting,
-      \t *   WdogCs1Int_InterruptsAreDisabledWatchdogResetsAreNotDelayed    // Interrupt: This write-once bit configures the watchdog to generate an interrupt request upon a reset-triggering event (timeout or illegal write to the watchdog), prior to forcing a reset. After the interrupt vector fetch, the reset occurs after a delay of 128 bus clocks,
-      \t *   WdogCs1Update_UpdatesNotAllowedAfterTheInitialConfiguration_TheWatchdogCannotBeLaterModifiedWithoutForcingAReset    // Allow updates: This write-once bit allows software to reconfigure the watchdog without a reset,
-      \t *   WdogCs1Tst_TestModeDisabled               // Test: Enables the fast test mode. The test mode allows software to exercise all bits of the counter to demonstrate that the watchdog is functioning properly. This write-once field is cleared (0:0) on POR only. Any other reset does not affect the value of this field,
-      \t *   WdogCs1Dbg_DisabledInChipDebugMode        // Debug Enable: This write-once bit enables the watchdog to operate when the chip is in debug mode,
-      \t *   WdogCs1Wait_DisabledInChipWaitMode        // Wait Enable: This write-once bit enables the watchdog to operate when the chip is in wait mode,
-      \t *   WdogCs1Stop_DisabledInChipStopMode        // Stop Enable: This write-once bit enables the watchdog to operate when the chip is in stop mode,
-      \t *   WdogCs2Win_WindowModeDisabled             // Window: This write-once bit enables window mode,
-      \t *   WdogCs2Flg_NoInterruptOccurred            // Interrupt Flag: This bit is an interrupt indicator when INT is set in control and status register 1. Write 1 to clear it,
-      \t *   WdogCs2Pres_256PrescalerDisabled          // Prescalar: This write-once bit enables a fixed 256 pre-scaling of watchdog counter reference clock. (The block diagram shows this clock divider option.),
-      \t *   WdogCs2Clk_BusClock                       // Clock,
+      \t *   WdogEnable_Enabled ,          // Watchdog enable
+      \t *   WdogEnableInWait_Disabled ,   // Enable watchdog in WAIT mode
+      \t *   WdogEnableInStop_Disabled ,   // Enable watchdog in STOP mode
+      \t *   WdogEnableInDebug_Disabled ,  // Enable watchdog in DEBUG mode
+      \t *   WdogAllowUpdate_Enabled ,     // Allow watchdog update
+      \t *   WdogWindow_Disabled ,         // Enable watchdog windowing mode
+      \t *   WdogAction_ImmediateReset ,   // Action on watchdog event
+      \t *   WdogClock_SystemBusClk ,      // Watchdog clock source
+      \t *   NvicPriority_Normal,          // IRQ level for this peripheral
+      \t *   call-back,                    // Call-back
+      \t *   // Either
+      \t *   WdogPrescale_Direct ,         // Prescaler for the watchdog clock source (must be in this order)
+      \t *   2000_ticks, 1000_ticks,       // Timeout and Window values
+      \t *   // **** OR ****
+      \t *   20_seconds, 10_seconds,       // Timeout and Window values (must be in this order)
+      \t *   // Option
+      \t *   Wdog::DefaultInitValue,       // Take base values from DefaultInitValue
       \t * };
       \t *
       \t * // Initialise $(_class) from values specified above
-      \t * $(_class)::configure(init)
+      \t * $(_class)::configure(wdogInit)
       \t * @endcode
       \t */
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template namespace="usbdm" >
    <![CDATA[
       class $(_class)BasicInfo {
       \t
       public:
       \t
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_class) interrupt call back
       \t */
-      \ttypedef void (*CallbackFunction)(const uint32_t &);
+      \ttypedef void (*CallbackFunction)();
       \t\n
    ]]>
    </template>
@@ -198,17 +407,43 @@
    ]]></setTemplate>
 
    <initialValueTemplate namespace="usbdm"
+      variables="
+         wdog_timeout"
+   ><![CDATA[
+      \t   ///  %description or seconds
+      \t   Seconds_Ticks %registerName;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="
+         wdog_window"
+   ><![CDATA[
+      \t   ///  %description or seconds
+      \t   Seconds_Ticks %registerName;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
       variables="wdog_cs1_en,wdog_cs1_int,wdog_cs1_update,wdog_cs1_tst,wdog_cs1_dbg,wdog_cs1_wait,wdog_cs1_stop"
    ><![CDATA[
       \t   /// Control and Status Register 1
-      \t   uint8_t cs1 = 0;\n\n
+      \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm"
       variables="wdog_cs2_win,wdog_cs2_flg,wdog_cs2_pres,wdog_cs2_clk"
    ><![CDATA[
       \t   /// Control and Status Register 2
-      \t   uint8_t cs2 = 0;\n\n
+      \t   uint16_t %registerName = 0;
+      \t\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="wdog_cs2_pres"
+      codeGenCondition="secondsSupport"
+   ><![CDATA[
+      \t   /// Whether to calculate clock prescale value
+      \t   bool calculatePrescale = false;
+      \t\n
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
@@ -220,34 +455,10 @@
 
 <!--   Configure methods -->
 
-   <template discardRepeats="true" key="/WDOG/InitMethod" namespace="all" ><![CDATA[
-      \t/**
-      \t * Configure WDOG from values specified in init
-      \t *
-      \t * @param init Class containing initialisation values
-      \t */
-      \tstatic void configure(const typename Info::Init &init) {
-      \t
-      \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      // Only set call-back if feature enabled
-      \t      setCallback(init.callbackFunction);
-      \t      enableNvicInterrupts(init.irqlevel);
-      \t   }
-      \t   enable();
-      \t
-      \t   wdog->CS1    = init.cs1;
-      \t   wdog->CS2    = init.cs2;
-      \t   wdog->CNT    = init.cnt;
-      \t   wdog->TOVAL    = init.toval;
-      \t   wdog->TOVALH    = init.tovalh;
-      \t   wdog->TOVALL    = init.tovall;
-      \t   wdog->WIN    = init.win;
-      \t   wdog->WINH    = init.winh;
-      \t   wdog->WINL    = init.winl;
-      \t
-      \t   calibrate();
-      \t}
-      \t
+   <setTemplate key="/WDOG/InitMethod" namespace="all" discardRepeats="true"
+      variables="wdogSystemEnable"
+      codeGenCondition="wdogSystemEnable"
+      ><![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -256,10 +467,90 @@
       \t
       \t   // Update settings
       \t   configure(Info::DefaultInitValue);
-      \t}\n
-   ]]></template>
+      \t}\n\n
+   ]]></setTemplate>
 
-<!--   Constructors -->
+   <setTemplate key="/WDOG/InitMethod" namespace="all" discardRepeats="true"
+      variables="wdogSystemEnable"
+      codeGenCondition="!wdogSystemEnable"
+      ><![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Unlock before changing settings
+      \t   wdog->CNT  = WdogUnlock_1;
+      \t   wdog->CNT  = WdogUnlock_2;
+      \t
+      \t   // Read-back to delay until change effected
+      \t   (void)(wdog->CNT);
+      \t
+      \t   // Disable watchdog
+      \t   wdog->CS1   = WdogEnable_Disabled|WdogAllowUpdate_Disabled;
+      \t   wdog->CS2   = WdogClock_LpoClk;
+      \t   wdog->WIN   = 0xFFFF;
+      \t   wdog->TOVAL = 0xFFFF;
+      \t}\n\n
+   ]]></setTemplate>
+
+   <setTemplate variables="wdog_cs1_en" discardRepeats="true" key="/WDOG/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure WDOG from values specified in init
+      \t
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic ErrorCode configure(const typename Info::Init &init) {
+      \t
+      \t   Seconds_Ticks timeout = init.timeout;
+      \t   Seconds_Ticks window  = init.window;
+      \t   uint16_t      cs2     = init.cs2;
+      \t
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-back if feature enabled and non-null
+      \t      if (init.callbackFunction != nullptr) {
+      \t         setCallback(init.callbackFunction);
+      \t      }
+      \t   }\n
+   ]]></setTemplate>
+   <setTemplate variables="wdog_cs1_en" discardRepeats="true" key="/WDOG/InitMethod" namespace="all" codeGenCondition="secondsSupport" ><![CDATA[
+      \t   if (init.calculatePrescale) {
+      \t      // Calculate prescaler, timeout and window
+      \t      ErrorCode rc = calculateTimingParameters(cs2, timeout, window);
+      \t      if (rc != E_NO_ERROR) {
+      \t         return rc;
+      \t      }
+      \t   }\n
+   ]]></setTemplate>
+   <setTemplate variables="wdog_cs1_en" discardRepeats="true" key="/WDOG/InitMethod" namespace="all" ><![CDATA[
+      \t   // Protect sequence from interrupts
+      \t   CriticalSection cs;
+      \t
+      \t   // Unlock before changing settings
+      \t   wdog->CNT = WdogUnlock_1;
+      \t   wdog->CNT = WdogUnlock_2;
+      \t
+      \t   // Read-back to delay until change effected
+      \t   (void)(wdog->CNT);
+      \t
+      \t   // Configure watchdog
+      \t   wdog->CS1      = init.cs1;
+      \t   wdog->CS2      = cs2;
+      \t   wdog->WINH     = window.toTicks()>>16;
+      \t   wdog->WINL     = window.toTicks();
+      \t   wdog->TOVALH   = timeout.toTicks()>>16;
+      \t   wdog->TOVALL   = timeout.toTicks();
+      \t
+      \t   // For some reason this must be done after above
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
+      \t   return E_NO_ERROR;
+      \t}\n\n
+   ]]></setTemplate>
+
+<!--  Constructors -->
 
    <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
@@ -312,13 +603,12 @@
             wdog_cs1_stop;
             wdog_cs2_win;
             wdog_cs2_flg;
-            wdog_cs2_pres;
             wdog_cs2_clk
             ">
       <setTemplate namespace="usbdm"
          variables="%(r)"
-         linePadding="xxx">
-      <![CDATA[
+         linePadding="xxx"
+      ><![CDATA[
          \t   /**
          \t    * Constructor for %description
          \t    *
@@ -333,9 +623,59 @@
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
-      ]]>
-      </setTemplate>
+      ]]></setTemplate>
    </for>
+
+   <setTemplate namespace="usbdm" variables="wdog_cs2_pres,wdog_timeout,wdog_window"
+      linePadding="xxx"
+      nonDefaultParams="2"
+      params=",timeout,window"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description0, %description1 & %description2
+      \t    *
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(
+      %params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%registerName1.fromTicks(%enumParam1);
+      \t      this->%registerName2.fromTicks(%enumParam2);
+      \t      this->%registerName0 = (%registerName0&~%mask0) | %enumParam0;
+      \t   }
+      \t\n
+   ]]></setTemplate>
+
+   <setTemplate namespace="usbdm" variables="wdog_timeoutPeriod,wdog_windowPeriod,wdog_cs2_pres"
+      codeGenCondition="secondsSupport"
+      linePadding="xxx"
+      params="timeout,window"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description0 and %description1
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(
+      \t        %paramType0 %paramName0,
+      \t        %paramType1 %paramName1 = 0.0, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%enumParam0.fromSeconds(%paramName0);
+      \t      this->%enumParam1.fromSeconds(%paramName1);
+      \t      this->calculatePrescale = true;
+      \t      this->%registerName2 = (%registerName2&~%mask2);
+      \t   }\n
+   ]]></setTemplate>
+
 <!--   Default Initialisation value -->
 
    <initialValueTemplate
@@ -349,15 +689,20 @@
             wdog_cs1_dbg,
             wdog_cs1_wait,
             wdog_cs1_stop,
-            wdog_cs2_win,
-            wdog_cs2_flg,
-            wdog_cs2_pres,
             wdog_cs2_clk,
-            irqLevel
-         "
+            irqLevel,
+            wdog_cs2_pres,
+            wdog_timeout,
+            wdog_window,
+            "
    ><![CDATA[
       $(init_description)
       \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * $(_class) interrupt call back
+      \t */
+      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
       \t
       \t/**
       \t * Default initialisation value for $(_class)
@@ -366,6 +711,8 @@
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
    ]]></initialValueTemplate>
+
+   <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" />
 
    <template namespace="usbdm">
       <![CDATA[

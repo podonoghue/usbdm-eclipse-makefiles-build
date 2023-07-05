@@ -37,6 +37,14 @@
    <choice value="true"  name="Produce warning during compilation" />
 </binaryOption>
 
+<binaryOption name="Extended information on hard fault" key="/HARDWARE/extendedHardFaultInformation"
+   description="Add code to the hard fault handler to print register information"
+   toolTip="This will increase code size for the DEBUG build\n
+            Disabled in RELEASE builds.">
+   <choice value="false" name="No extended information" isDefault="true" />
+   <choice value="true"  name="Extended information provided" />
+</binaryOption>
+
 <binaryOption name="Use extended type system for timers" key="/HARDWARE/useTypeSystemForTimers"
    description="Use a dimensioned type system for time and frequency"
    toolTip="Types 'Seconds', 'Hertz' and 'Ticks' are always defined but are simple aliases\n
@@ -77,7 +85,7 @@
                See bme.h and bitband.h for more information"
       value="0x0" />
 
-   <binaryOption name="Enable USBDM Bootloader" key="/LINKER/enableBootloader"   value="false"
+   <binaryOption name="Enable USBDM Bootloader" key="/LINKER/enableBootloader"
       description="Enable custom USBDM bootloader"
       toolTip="This relocates the program image to allow space for a bootloader at the beginning of the flash region" >
       <choice value="0" name="Disabled" isDefault="true" />
@@ -114,8 +122,9 @@
          <choice value="flexNVM"     name="Flex NVM Flash" />
       </choiceOption>
 
-      <choiceOption name="Code (apart from startup)"  key="/LINKER/text_rom"   derivedFrom="/LINKER/startup_rom" toolTip="Text (code), vtables etc" />
-      <choiceOption name="Read-only data"             key="/LINKER/rodata_rom" derivedFrom="/LINKER/startup_rom" toolTip="const data" />
+      <choiceOption name="Code (apart from startup)"        key="/LINKER/text_rom"   derivedFrom="/LINKER/startup_rom" toolTip="Text (code), vtables etc in Flash" />
+      <choiceOption name="Read-only data"                   key="/LINKER/rodata_rom" derivedFrom="/LINKER/startup_rom" toolTip="const data in Flash" />
+      <choiceOption name="Flash image for initialised data" key="/LINKER/data_rom"   derivedFrom="/LINKER/startup_rom" toolTip="Initialised data in Flash which is copied to ram on startup" />
    </category>
 
    <category name="Section placement in RAM" description="How regions are mapped to available RAM"
@@ -195,6 +204,35 @@
 ]]></template>
 
 <!-- Template is added to pin_mapping.h -->
+<template namespace="usbdm" condition="/ICS/$present" ><![CDATA[
+   \t/** ICSFFCLK - Fixed frequency clock (input to FLL) */
+   \textern volatile uint32_t SystemIcsFFClock;
+   \t
+   \t/** ICSOUTCLK - Primary output from ICS, various sources */
+   \textern volatile uint32_t SystemIcsOutClock;
+   \t
+   \t/** ICSFLLCLK - Output of FLL */
+   \textern volatile uint32_t SystemIcsFllClock;
+   \t\n
+]]></template>
+
+<!-- Template is added to pin_mapping.h -->
+<template namespace="usbdm" condition="/MCG/$present" ><![CDATA[
+   \t/* MCGFFCLK - Fixed frequency clock (input to FLL) */
+   \textern volatile uint32_t SystemMcgFFClock;
+
+   \t/* MCGOUTCLK - Primary output from MCG, various sources */
+   \textern volatile uint32_t SystemMcgOutClock;
+
+   \t/* MCGFLLCLK - Output of FLL */
+   \textern volatile uint32_t SystemMcgFllClock;
+
+   \t/* MCGPLLCLK - Output of PLL */
+   \textern volatile uint32_t SystemMcgPllClock;
+   \t\n
+]]></template>
+
+<!-- Template is added to pin_mapping.h -->
 <template namespace="usbdm"><![CDATA[
    // Use when in-lining makes the release build smaller
    #ifdef DEBUG_BUILD
@@ -208,18 +246,6 @@
    #else
    #define NOINLINE_DEBUG
    #endif
-
-   \t/* MCGFFCLK - Fixed frequency clock (input to FLL) */
-   \textern volatile uint32_t SystemMcgFFClock;
-
-   \t/* MCGOUTCLK - Primary output from MCG, various sources */
-   \textern volatile uint32_t SystemMcgOutClock;
-
-   \t/* MCGFLLCLK - Output of FLL */
-   \textern volatile uint32_t SystemMcgFllClock;
-
-   \t/* MCGPLLCLK - Output of PLL */
-   \textern volatile uint32_t SystemMcgPllClock;
 
    \t/**
    \t * Calculate a Vector number using an offset from an existing number.
@@ -272,7 +298,11 @@
    \t}
 
    \tconstexpr IRQn_Type IRQn_None = static_cast<IRQn_Type>(-20);
+   \n
+]]></template>
 
+<!-- Template is added to pin_mapping.h -->
+<template namespace="usbdm" condition="/PCR/$present" ><![CDATA[
    \t/** Dummy port information for pins without an associated PCR */
    \tconstexpr PortInfo  __attribute__((unused)) NoPortInfo {0, 0, IRQn_None, 0, NvicPriority_NotInstalled};
 
@@ -291,7 +321,11 @@
    \t   static_assert(check3, "Signal doesn't exist in this device/package");
    \t   static_assert(check4, "Illegal signal");
    \t};
+   \t\n
+]]></template>
 
+<!-- Template is added to pin_mapping.h -->
+<template namespace="usbdm"><![CDATA[
    \t/**
    \t * Determine the number of elements in an array
    \t *

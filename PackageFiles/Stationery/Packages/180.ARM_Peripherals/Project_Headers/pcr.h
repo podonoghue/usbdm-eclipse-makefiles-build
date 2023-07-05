@@ -441,6 +441,8 @@ enum Polarity : uint32_t {
    ActiveHigh = 0x00000000U,  ///< Signal is active high i.e. Active => High level, Inactive => Low level
 };
 
+#ifdef PORT_PCR_MUX_MASK
+
 /** Pin number indicating the function has a fixed mapping to a pin */
 constexpr   int8_t FIXED_NO_PCR         = 0x00;
 
@@ -1171,6 +1173,8 @@ class PcrTable_T : public Pcr_T<Info::info[index].clockInfo, Info::info[index].p
  * @}
  ** PeripheralPinTables
  */
+
+#endif // PORT_PCR_MUX_MASK
 
 #if defined(RELEASE_BUILD)
 // MACRO to do OR operation

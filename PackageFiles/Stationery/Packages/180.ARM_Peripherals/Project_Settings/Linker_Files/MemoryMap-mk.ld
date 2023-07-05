@@ -64,10 +64,11 @@ $(/LINKER/information)
 */
 /*  <s1>  Text (main code apart from reset)  <constant> text_rom      */
 REGION_ALIAS("text_rom",         "$(/LINKER/text_rom)");
-/*  <s1>  Read-only data  <constant> data_rom      */
+/*  <s1>  Read-only data                     <constant> rodata_rom    */
 REGION_ALIAS("rodata_rom",       "$(/LINKER/rodata_rom)");
+/*  <s1>  Flash image for initialised data   <constant> data_rom      */
+REGION_ALIAS("data_rom",         "$(/LINKER/data_rom)");
 /* </h> */
-
 /*
   <h> Section placement in RAM
   <i> The RAM on Cortex-M4 Kinetis devices is divided into upper and lower memory regions.

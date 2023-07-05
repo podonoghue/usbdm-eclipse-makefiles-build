@@ -323,46 +323,6 @@ protected:
    virtual void disable() = 0;
 
    /**
-    * Calculate communication speed from SPI clock frequency and speed factors
-    *
-    * @param[in]  clockFrequency  Clock frequency of SPI in Hz
-    * @param[in]  spiCtarValue    Configuration providing SPI_CTAR_BR, SPI_CTAR_PBR fields
-    *
-    * @return Clock frequency of SPI in Hz for these factors
-    */
-   static uint32_t calculateSpeed(uint32_t clockFrequency, uint32_t spiCtarValue);
-
-   /**
-    * Calculate CTAR timing related values \n
-    * Uses default delays
-    *
-    * @param[in]  clockFrequency Clock frequency of SPI in Hz
-    * @param[in]  frequency      Communication frequency in Hz
-    *
-    * @return Combined masks for CTAR (BR, PBR, PCSSCK, CSSCK, PDT, DT, PCSSCK and CSSCK)
-    */
-   static uint32_t calculateCtarTiming(uint32_t clockFrequency, Hertz frequency) {
-
-      int bestPrescale, bestDivider;
-      uint32_t ctarValue;
-
-      float SPI_PADDING2 = 1/(5.0*clockFrequency);
-
-      ctarValue = calculateDividers(clockFrequency, frequency);
-
-      calculateDelay(clockFrequency, SPI_PADDING2, bestPrescale, bestDivider);
-      ctarValue |= SPI_CTAR_PCSSCK(bestPrescale)|SPI_CTAR_CSSCK(bestDivider);
-
-      calculateDelay(clockFrequency, SPI_PADDING2, bestPrescale, bestDivider);
-      ctarValue |= SPI_CTAR_PASC(bestPrescale)|SPI_CTAR_ASC(bestDivider);
-
-      calculateDelay(clockFrequency, SPI_PADDING2, bestPrescale, bestDivider);
-      ctarValue |= SPI_CTAR_PDT(bestPrescale)|SPI_CTAR_DT(bestDivider);
-
-      return ctarValue;
-   }
-
-   /**
     * Sets communication speed for SPI
     *
     * @param[in]  frequency      Communication frequency in Hz
@@ -390,6 +350,47 @@ protected:
 $(/SPI/methods: #error "/SPI/methods not found")
 
 public:
+   /**
+    * Calculate communication speed from SPI clock frequency and speed factors
+    *
+    * @param[in]  clockFrequency  Clock frequency of SPI in Hz
+    * @param[in]  spiCtarValue    Configuration providing SPI_CTAR_BR, SPI_CTAR_PBR fields
+    *
+    * @return Clock frequency of SPI in Hz for these factors
+    */
+    
+   static uint32_t calculateSpeed(uint32_t clockFrequency, uint32_t spiCtarValue);
+   /**
+    * Calculate CTAR timing related values \n
+    * Uses default delays
+    *
+    * @param[in]  clockFrequency Clock frequency of SPI in Hz
+    * @param[in]  frequency      Communication frequency in Hz
+    *
+    * @return Combined masks for CTAR (BR, PBR, PCSSCK, CSSCK, PDT, DT, PCSSCK and CSSCK)
+    */
+    
+   static uint32_t calculateCtarTiming(uint32_t clockFrequency, Hertz frequency) {
+
+      int bestPrescale, bestDivider;
+      uint32_t ctarValue;
+
+      float SPI_PADDING2 = 1/(5.0*clockFrequency);
+
+      ctarValue = calculateDividers(clockFrequency, frequency);
+
+      calculateDelay(clockFrequency, SPI_PADDING2, bestPrescale, bestDivider);
+      ctarValue |= SPI_CTAR_PCSSCK(bestPrescale)|SPI_CTAR_CSSCK(bestDivider);
+
+      calculateDelay(clockFrequency, SPI_PADDING2, bestPrescale, bestDivider);
+      ctarValue |= SPI_CTAR_PASC(bestPrescale)|SPI_CTAR_ASC(bestDivider);
+
+      calculateDelay(clockFrequency, SPI_PADDING2, bestPrescale, bestDivider);
+      ctarValue |= SPI_CTAR_PDT(bestPrescale)|SPI_CTAR_DT(bestDivider);
+
+      return ctarValue;
+   }
+
 $(/SPI/InitMethod: #error "/SPI/InitMethod not found")
 #ifdef __CMSIS_RTOS
    /**

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- FRDM_KE04Z.usbdmProject -->
+<!-- 
+   Settings
+-->
+
+<section name="USBDM">
+   <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KE04Z" />
+   <item key="$$DeviceInfo_SubFamily"                      value="MKE04Z4" />
+   <item key="$$Hardware_Source_Filename"                  value="MKE04Z4.usbdmHardware" />
+   <item key="/Console/consoleDevice"                      value="USBDM::Uart1" />
+   <item key="/ICS/ClockConfig[0]"                         value="ClockConfig_FEE_40MHz" />
+   <item key="/ICS/ClockConfig[1]"                         value="ClockConfig_FEI_48MHz" />
+   <item key="/ICS/ClockConfig[2]"                         value="ClockConfig_BILP_38kHz" />
+   <item key="/ICS/ClockConfig[3]"                         value="ClockConfig_FBELP_8MHz" />
+   <item key="/ICS/enableClockConfiguration[1]"            value="true" />
+   <item key="/ICS/enableClockConfiguration[2]"            value="true" />
+   <item key="/ICS/icsClockMode[0]"                        value="1" />
+   <item key="/ICS/icsClockMode[2]"                        value="3" />
+   <item key="/ICS/icsClockMode[3]"                        value="5" />
+   <item key="/ICS/ics_c1_irefsten[0]"                     value="true" />
+   <item key="/LINKER/heapSize"                            value="2048" />
+   <item key="/LINKER/stackSize"                           value="6144" />
+   <item key="/OSC0/osc_cr_oscen"                          value="true" />
+   <item key="/OSC0/osc_cr_oscsten"                        value="true" />
+   <item key="/SIM/sim_sopt0_busref"                       value="1,4" />
+   <item key="/WDOG/secondsSupport"                        value="true" />
+   <item key="/WDOG/wdog_cs1_en"                           value="true" />
+   <item key="/WDOG/wdog_cs1_update"                       value="false" />
+   <item key="/WDOG/wdog_cs2_pres"                         value="true" />
+   <item key="/WDOG/wdog_timeoutPeriod"                    value="10.0" />
+</section>

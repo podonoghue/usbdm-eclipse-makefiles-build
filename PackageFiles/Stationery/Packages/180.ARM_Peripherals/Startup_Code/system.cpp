@@ -28,6 +28,11 @@ __attribute__((__weak__))
 uint32_t SystemFlexbusClock = 20000000;
 #endif
 
+#ifdef SIM_CLKDIV_OUTDIV3_MASK
+__attribute__((__weak__))
+uint32_t SystemTimerClock = 20000000;
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

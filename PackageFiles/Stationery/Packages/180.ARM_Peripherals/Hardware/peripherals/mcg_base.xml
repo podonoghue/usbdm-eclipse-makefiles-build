@@ -1124,11 +1124,11 @@
             <intOption key="irefs_clock[%(n)]"
                hidden="true"
                derived="true"
-               enabledBy="(mcgClockMode[%(n)]!=6),Unavailable in BLPI" />
+               enabledBy="(mcgClockMode[%(n)]!=@BLPI),Unavailable in BLPI" />
 
             <intOption key="system_mcgffclk_clock[%(n)]"
                ref="irefs_clock[%(n)]"
-               enabledBy="(irefs_clock[%(n)]&lt;=(system_mcgoutclk_clock[%(n)]/8)),Disabled as limited to (MCGOUTCLK/8)"
+               enabledBy="(irefs_clock[%(n)]&lt;=(system_mcgoutclk_clock[%(n)]/8))&amp;&amp;(mcgClockMode[%(n)]!=@BLPI), Disabled in BLPI and limited to f &lt;= (MCGOUTCLK/8)"
                hidden="true"
                units="Hz"
                derived="true"

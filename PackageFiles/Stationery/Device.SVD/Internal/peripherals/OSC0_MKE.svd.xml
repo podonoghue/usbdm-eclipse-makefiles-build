@@ -12,7 +12,7 @@ Devices using this peripheral:
       <peripheral>
          <?sourceFile "OSC0_MKE" ?>
          <name>OSC0</name>
-         <description>Oscillator</description>
+         <description>System Oscillator</description>
          <groupName>OSC</groupName>
          <headerStructName>OSC</headerStructName>
          <baseAddress>0x40065000</baseAddress>

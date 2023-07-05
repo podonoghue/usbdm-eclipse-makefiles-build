@@ -1252,6 +1252,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="SIM->SCGC5 = SIM->SCGC5 | SIM_SCGC5_PORTA_MASK;" clockDisable="SIM->SCGC5 = SIM->SCGC5 &amp; ~SIM_SCGC5_PORTA_MASK;" />
          <irq num="PORTA_IRQn" />
+         <param name="$present"     key="/PCR/$present" value="true" />
          <param name="dse_present"  key="/PCR/dse_present" value="true" />
          <param name="irqc_present" key="/PCR/irqc_present" value="true" />
          <param name="isf_present"  key="/PCR/isf_present" value="true" />
@@ -2280,6 +2281,26 @@
       <peripheral baseName="PMC"      instance=""         version="pmc_hvd_sram">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPmc" />
          <irq num="PMC_IRQn" />
+         <param name="$present"     key="/PMC/$present" value="true" />
+         <param name="pmc_hvdsc1_hvdack_present" key="/PMC/pmc_hvdsc1_hvdack_present" value="true" />
+         <param name="pmc_hvdsc1_hvdf_present" key="/PMC/pmc_hvdsc1_hvdf_present" value="true" />
+         <param name="pmc_hvdsc1_hvdie_present" key="/PMC/pmc_hvdsc1_hvdie_present" value="true" />
+         <param name="pmc_hvdsc1_hvdre_present" key="/PMC/pmc_hvdsc1_hvdre_present" value="true" />
+         <param name="pmc_hvdsc1_hvdv_present" key="/PMC/pmc_hvdsc1_hvdv_present" value="true" />
+         <param name="pmc_lvdsc1_lvdack_present" key="/PMC/pmc_lvdsc1_lvdack_present" value="true" />
+         <param name="pmc_lvdsc1_lvdf_present" key="/PMC/pmc_lvdsc1_lvdf_present" value="true" />
+         <param name="pmc_lvdsc1_lvdie_present" key="/PMC/pmc_lvdsc1_lvdie_present" value="true" />
+         <param name="pmc_lvdsc1_lvdre_present" key="/PMC/pmc_lvdsc1_lvdre_present" value="true" />
+         <param name="pmc_lvdsc1_lvdv_present" key="/PMC/pmc_lvdsc1_lvdv_present" value="true" />
+         <param name="pmc_lvdsc2_lvwack_present" key="/PMC/pmc_lvdsc2_lvwack_present" value="true" />
+         <param name="pmc_lvdsc2_lvwf_present" key="/PMC/pmc_lvdsc2_lvwf_present" value="true" />
+         <param name="pmc_lvdsc2_lvwie_present" key="/PMC/pmc_lvdsc2_lvwie_present" value="true" />
+         <param name="pmc_lvdsc2_lvwv_present" key="/PMC/pmc_lvdsc2_lvwv_present" value="true" />
+         <param name="pmc_regsc_ackiso_present" key="/PMC/pmc_regsc_ackiso_present" value="true" />
+         <param name="pmc_regsc_bgbe_present" key="/PMC/pmc_regsc_bgbe_present" value="true" />
+         <param name="pmc_regsc_bgen_present" key="/PMC/pmc_regsc_bgen_present" value="true" />
+         <param name="pmc_regsc_regons_present" key="/PMC/pmc_regsc_regons_present" value="true" />
+         <param name="pmc_sramctl_vlls2pd_present" key="/PMC/pmc_sramctl_vlls2pd_present" value="true" />
       </peripheral>
       <peripheral baseName="POWER"    instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
@@ -3372,6 +3393,30 @@
       <peripheral baseName="WDOG"     instance=""         version="wdog_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForWdog" />
          <irq num="WDOG_IRQn" />
+         <param name="$present"     key="/WDOG/$present" value="true" />
+         <param name="wdog_presc_prescval_present" key="/WDOG/wdog_presc_prescval_present" value="true" />
+         <param name="wdog_refresh_wdogrefresh_present" key="/WDOG/wdog_refresh_wdogrefresh_present" value="true" />
+         <param name="wdog_rstcnt_rstcnt_present" key="/WDOG/wdog_rstcnt_rstcnt_present" value="true" />
+         <param name="wdog_stctrlh_allowupdate_present" key="/WDOG/wdog_stctrlh_allowupdate_present" value="true" />
+         <param name="wdog_stctrlh_bytesel_present" key="/WDOG/wdog_stctrlh_bytesel_present" value="true" />
+         <param name="wdog_stctrlh_clksrc_present" key="/WDOG/wdog_stctrlh_clksrc_present" value="true" />
+         <param name="wdog_stctrlh_dbgen_present" key="/WDOG/wdog_stctrlh_dbgen_present" value="true" />
+         <param name="wdog_stctrlh_distestwdog_present" key="/WDOG/wdog_stctrlh_distestwdog_present" value="true" />
+         <param name="wdog_stctrlh_irqrsten_present" key="/WDOG/wdog_stctrlh_irqrsten_present" value="true" />
+         <param name="wdog_stctrlh_stopen_present" key="/WDOG/wdog_stctrlh_stopen_present" value="true" />
+         <param name="wdog_stctrlh_testsel_present" key="/WDOG/wdog_stctrlh_testsel_present" value="true" />
+         <param name="wdog_stctrlh_testwdog_present" key="/WDOG/wdog_stctrlh_testwdog_present" value="true" />
+         <param name="wdog_stctrlh_waiten_present" key="/WDOG/wdog_stctrlh_waiten_present" value="true" />
+         <param name="wdog_stctrlh_wdogen_present" key="/WDOG/wdog_stctrlh_wdogen_present" value="true" />
+         <param name="wdog_stctrlh_winen_present" key="/WDOG/wdog_stctrlh_winen_present" value="true" />
+         <param name="wdog_stctrll_intflg_present" key="/WDOG/wdog_stctrll_intflg_present" value="true" />
+         <param name="wdog_tmrouth_timerouthigh_present" key="/WDOG/wdog_tmrouth_timerouthigh_present" value="true" />
+         <param name="wdog_tmroutl_timeroutlow_present" key="/WDOG/wdog_tmroutl_timeroutlow_present" value="true" />
+         <param name="wdog_tovalh_tovalhigh_present" key="/WDOG/wdog_tovalh_tovalhigh_present" value="true" />
+         <param name="wdog_tovall_tovallow_present" key="/WDOG/wdog_tovall_tovallow_present" value="true" />
+         <param name="wdog_unlock_wdogunlock_present" key="/WDOG/wdog_unlock_wdogunlock_present" value="true" />
+         <param name="wdog_winh_winhigh_present" key="/WDOG/wdog_winh_winhigh_present" value="true" />
+         <param name="wdog_winl_winlow_present" key="/WDOG/wdog_winl_winlow_present" value="true" />
       </peripheral>
    </peripherals>
    <pins>

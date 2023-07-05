@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MK10D5
       MK10D7
       MK10D10
@@ -199,7 +199,8 @@ Controls whether or not the external reference clock (OSCERCLK) remains enabled 
                   </field>
                   <field>
                      <name>ERCLKEN</name>
-                     <description>External Reference Enable\nEnables external reference clock (OSCERCLK)</description>
+                     <description>External Reference Enable\n
+Enables external reference clock (OSCERCLK)</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>

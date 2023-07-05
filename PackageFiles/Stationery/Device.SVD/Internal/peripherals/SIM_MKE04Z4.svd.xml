@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE04Z4
       SKEAZN84
 -->
@@ -29,7 +29,7 @@ Devices using this peripheral:
                   <field>
                      <name>LVD</name>
                      <description>Low Voltage Detect:\n
-If PMC_SPMSC1[LVDRE] is set in Run mode or both PMC_SPMSC1[LVDRE] and PMC_SPMSC1[LVDSE] are set in Stop mode, 
+If PMC_SPMSC1[LVDRE] is set in Run mode or both PMC_SPMSC1[LVDRE] and PMC_SPMSC1[LVDSE] are set in Stop mode,
 and the supply drops below the LVD trip voltage, an LVD reset will occur. This field is also set by POR.\n
 NOTE: This field is reset to 1 on POR and LVR, and reset to 0 on other reset</description>
                      <bitOffset>1</bitOffset>
@@ -538,18 +538,18 @@ Enables bus clock output on PTH2 via an optional prescaler</description>
                   </field>
                   <field>
                      <name>CLKOE</name>
-                     <description>Bus Clock Output Enable: Enables bus clock output on PTH2</description>
+                     <description>Bus Clock Output Enable: Enables bus clock output on PTC5</description>
                      <bitOffset>19</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Bus clock output is disabled on PTH2</description>
+                           <description>Bus clock output is disabled on PTC5</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Bus clock output is enabled on PTH2</description>
+                           <description>Bus clock output is enabled on PTC5</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

@@ -70,7 +70,7 @@
    ]]></template>
 
    <!-- Template is added to peripheral classes -->
-   <template discardRepeats="true" namespace="all" key="/$(_basename)/classInfo" ><![CDATA[
+   <template discardRepeats="true" namespace="all" key="/$(_basename)/classInfo" condition="/PCR/mux_present" ><![CDATA[
       // Template _mapPinsOption.xml
 
       \t/**
@@ -100,6 +100,45 @@
       \t      Info::clearPCRs();
       \t   }
       \t}
+      \t
+   ]]></template>
+
+   <!-- Template is added to peripheral classes -->
+   <template discardRepeats="true" namespace="all" key="/$(_basename)/classInfo" condition="!/PCR/mux_present" ><![CDATA[
+      // Template _mapPinsOption.xml
+
+      \t/**
+      \t * Configures all mapped pins associated with $(_basename)
+      \t *
+      \t * @note Locked pins will be unaffected
+      \t */
+      \tstatic void configureAllPins() {
+      \t
+      \t   // Configure pins if selected and not already locked
+      \t   if constexpr (Info::mapPinsOnEnable) {
+      \t   //   Info::initPCRs();
+      \t   }
+      \t}
+
+      \t/**
+      \t * Disabled all mapped pins associated with $(_basename)
+      \t *
+      \t * @note Only the lower 16-bits of the PCR registers are modified
+      \t *
+      \t * @note Locked pins will be unaffected
+      \t */
+      \tstatic void disableAllPins() {
+      \t
+      \t   // Disable pins if selected and not already locked
+      \t   if constexpr (Info::mapPinsOnEnable) {
+      \t   //   Info::clearPCRs();
+      \t   }
+      \t}
+      \t
+   ]]></template>
+
+   <!-- Template is added to peripheral classes -->
+   <template discardRepeats="true" namespace="all" key="/$(_basename)/classInfo" ><![CDATA[
 
       \t/**
       \t * Basic enable of $(_basename)

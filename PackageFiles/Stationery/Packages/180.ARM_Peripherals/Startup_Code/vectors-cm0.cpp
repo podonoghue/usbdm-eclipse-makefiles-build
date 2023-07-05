@@ -75,7 +75,7 @@ typedef struct {
  */
 __attribute__((__naked__, __weak__, __interrupt__))
 void HardFault_Handler(void) {
-#if defined(DEBUG_BUILD)
+#if defined(DEBUG_BUILD) && $(/HARDWARE/extendedHardFaultInformation:false)
    /*
     * Determines the active stack pointer and loads it into r0
     * This is used as the 1st argument to _HardFault_Handler(volatile ExceptionFrame *exceptionFrame)
@@ -106,6 +106,8 @@ void HardFault_Handler(void) {
 }
 #pragma GCC diagnostic pop
 
+extern "C" {
+#if defined(DEBUG_BUILD) && $(/HARDWARE/extendedHardFaultInformation:false)
 /******************************************************************************/
 /* Hard fault handler in C with stack frame location as input parameter
  *
@@ -119,13 +121,12 @@ void HardFault_Handler(void) {
  *   - Accessed unaligned memory - unlikely I guess
  *
  */
-extern "C" {
 __attribute__((__naked__))
 void _HardFault_Handler(
       volatile ExceptionFrame *exceptionFrame __attribute__((__unused__)),
       uint32_t execReturn                     __attribute__((__unused__)) ) {
 
-#if defined(DEBUG_BUILD) && USE_CONSOLE
+#if USE_CONSOLE
    using namespace USBDM;
 
    console.setPadding(Padding_LeadingZeroes);
@@ -148,6 +149,7 @@ void _HardFault_Handler(
       __asm__("bkpt");
    }
 }
+#endif
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wattributes"

@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE02Z2
       MKE02Z4
       MKE04Z4
@@ -212,7 +212,7 @@ This write-once field indicates the clock source that feeds the watchdog counter
                   </field>
                   <field>
                      <name>PRES</name>
-                     <description>Prescalar: This write-once bit enables a fixed 256 pre-scaling of watchdog counter reference clock. (The block diagram shows this clock divider option.)</description>
+                     <description>Prescaler: This write-once bit enables a fixed 256 pre-scaling of watchdog counter reference clock. (The block diagram shows this clock divider option.)</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -268,7 +268,7 @@ This write-once field indicates the clock source that feeds the watchdog counter
             </register>
             <register>
                <name>CNT</name>
-               <description>Counter Register: (Note: CNTL:CNTH)\n
+               <description>Counter Register: (Note: Transposed CNTL:CNTH)\n
 The watchdog counter registers CNTH:CNTL provide access to the value of the free-running watchdog counter. Software can read the counter registers at any time.\n
 Software cannot write directly to the watchdog counter; however, two write sequences to these registers have special functions:\n
 1. The refresh sequence resets the watchdog counter to 0x0000.\n
@@ -278,6 +278,14 @@ NOTE: All other writes to these registers are illegal and force a reset</descrip
                <size>16</size>
                <access>read-write</access>
                <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Counter value and refresh unlock control</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>CNTH</name>
@@ -297,7 +305,7 @@ NOTE: All other writes to these registers are illegal and force a reset</descrip
             </register>
             <register>
                <name>TOVAL</name>
-               <description>Timeout Value Register: (Note TOVALL:TOVALH)\n
+               <description>Timeout Value Register: (Note Transposed TOVALL:TOVALH)\n
 The watchdog timeout value registers TOVALH:TOVALL contains the 16-bit value used to set the timeout period of the watchdog. \n
 The watchdog counter (CNTH:CNTL) is continuously compared with the timeout value (TOVALH:TOVALL). If the counter reaches the timeout value, the watchdog forces a reset.\n
 NOTE: Writing 0 to the Watchdog Timeout Value Register generates an immediate reset</description>
@@ -305,6 +313,14 @@ NOTE: Writing 0 to the Watchdog Timeout Value Register generates an immediate re
                <size>16</size>
                <access>read-write</access>
                <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>TOVAL</name>
+                     <description>Timeout Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>TOVALH</name>
@@ -324,13 +340,21 @@ NOTE: Writing 0 to the Watchdog Timeout Value Register generates an immediate re
             </register>
             <register>
                <name>WIN</name>
-               <description>Window Register:(Note WINL:WINH)\n
+               <description>Window Register:(Note Transposed WINL:WINH)\n
 When window mode is enabled WINH:WINL determine the earliest time that a refresh sequence is considered valid.\n
 WINH:WINL must be less than TOVALH:TOVALL</description>
                <addressOffset>0x6</addressOffset>
                <size>16</size>
                <access>read-write</access>
                <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>WIN</name>
+                     <description>Window Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>WINH</name>

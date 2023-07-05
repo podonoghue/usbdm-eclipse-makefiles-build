@@ -333,9 +333,13 @@ public:
     * Initialise endpoint
     *  - Internal state
     *  - BDTs
+    *
+    * @param clearToggle  Clear data toggle on endpoint
     */
-   void initialise() {
-      fDataToggle       = DataToggle_0;
+   void initialise(bool clearToggle) {
+      if (clearToggle) {
+         fDataToggle       = DataToggle_0;
+      }
       fState            = EPIdle;
       fNeedZLP          = false;
       fDataPtr          = nullptr;
