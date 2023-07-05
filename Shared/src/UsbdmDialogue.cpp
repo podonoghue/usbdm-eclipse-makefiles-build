@@ -1359,8 +1359,7 @@ LOGGING;
       flashprogrammer = FlashProgrammerFactory::createFlashProgrammer(bdmInterface);
    }
    filterChipIds.clear();
-   log.print("BDM Options =>\n");
-   printBdmOptions(&bdmInterface->getBdmOptions());
+   log.print("BDM Options =>\n%s", printBdmOptions(&bdmInterface->getBdmOptions()));
 
    USBDM_ErrorCode flashRc = bdmInterface->initBdm();
    if (flashRc != BDM_RC_OK) {
@@ -1391,7 +1390,11 @@ LOGGING;
    }
 #endif
    else if (bdmInterface->getBdmOptions().targetType == T_ARM) {
-      flashRc = bdmInterface->targetConnectWithRetry((BdmInterface::RetryMode)(BdmInterface::retryByReset|BdmInterface::retryNotPartial));
+      BdmInterface::RetryMode retryMode = (BdmInterface::RetryMode)(BdmInterface::retryByReset|BdmInterface::retryNotPartial);
+      if (bdmInterface->getBdmOptions().cycleVddOnConnect) {
+         retryMode = (BdmInterface::RetryMode)(retryMode|BdmInterface::retryByPower);
+      }
+      flashRc = bdmInterface->targetConnectWithRetry(retryMode);
       if ((flashRc != BDM_RC_OK) && (flashRc != BDM_RC_SECURED)) {
          bdmInterface->closeBdm();
          return flashRc;

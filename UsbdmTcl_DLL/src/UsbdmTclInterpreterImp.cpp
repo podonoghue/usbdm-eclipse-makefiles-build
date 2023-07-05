@@ -137,6 +137,38 @@ static void checkRC(USBDM_ErrorCode rc) {
    }
 }
 
+static int getQuietReqArg(Tcl_Interp *interp, int argc, Tcl_Obj *const *argv, bool &quiet, int &regNo) {
+
+   const char *currentToken;
+
+   if (argc < 2) {
+      Tcl_WrongNumArgs(interp, argc-1, argv, "[-q] <address>");
+      return TCL_ERROR;
+   }
+   // Register # or "-q"
+   currentToken = Tcl_GetString(argv[1]);
+
+   if (argc > 3) {
+      Tcl_WrongNumArgs(interp, argc-1, argv, "[-q] <address>");
+      return TCL_ERROR;
+   }
+   // Register #
+   currentToken = Tcl_GetString(argv[1]);
+   if (argc == 3) {
+      if ((currentToken[0] != '-') || (toupper(currentToken[1]) != 'Q')) {
+         Tcl_WrongNumArgs(interp, argc-1, argv, "[-q] <address>");
+         return TCL_ERROR;
+      }
+      currentToken = Tcl_GetString(argv[2]);
+      quiet = true;
+   }
+   if (sscanf(currentToken,"%i",&regNo) != 1) {
+      Tcl_WrongNumArgs(interp, argc-1, argv, "[-q] <address>");
+      return TCL_ERROR;
+   }
+   return TCL_OK;
+}
+
 /**
  * Main function used for interactive TCL interpreter
  */
@@ -2281,26 +2313,24 @@ static int cmd_writeCReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
  */
 static int cmd_readReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    // rreg<addr> <data>
-   unsigned long data;
    int regNo;
-
-   if (argc != 2) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<regNo>");
-      return TCL_ERROR;
+   bool quiet;
+   int tclError = getQuietReqArg(interp, argc, argv, quiet, regNo);
+   if (tclError != TCL_OK) {
+      return tclError;
    }
-   // Register #
-   if (Tcl_GetIntFromObj(interp, argv[1], &regNo) != TCL_OK) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<regNo>");
-      return TCL_ERROR;
-   }
+   unsigned long data;
    if (checkUsbdmRC(interp,  bdmInterface->readReg(regNo, &data)) != 0) {
       PRINT(":rReg Failed\n");
       return TCL_ERROR;
    }
+   Tcl_SetObjResult(interp, Tcl_NewIntObj(data));
+   if (quiet) {
+      return TCL_OK;
+   }
    TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
    PRINT(":rReg r=0x%X(%s)->0x%08X\n",
          regNo, getRegName( targetType, regNo ), (int)data);
-   Tcl_SetObjResult(interp, Tcl_NewIntObj(data));
    return TCL_OK;
 }
 
@@ -2315,25 +2345,22 @@ static int cmd_readReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
  */
 static int cmd_readDReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    // rdreg <addr>
-   const char *currentToken;
-   unsigned long data;
-   int regNo;
 
-   if (argc != 2) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<address>");
-      return TCL_ERROR;
+   int regNo;
+   bool quiet;
+   int tclError = getQuietReqArg(interp, argc, argv, quiet, regNo);
+   if (tclError != TCL_OK) {
+      return tclError;
    }
-   // Register #
-   currentToken = Tcl_GetString(argv[1]);
-   if (sscanf(currentToken,"%i",&regNo) != 1) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<address>");
-      return TCL_ERROR;
-   }
+   unsigned long data;
    if (checkUsbdmRC(interp,  bdmInterface->readDReg(regNo, &data)) != 0) {
       PRINT(":rReg Failed\n");
       return TCL_ERROR;
    }
    Tcl_SetObjResult(interp, Tcl_NewIntObj(data));
+   if (quiet) {
+      return TCL_OK;
+   }
    TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
    switch (targetType) {
       case T_CFV1 :
@@ -2356,7 +2383,7 @@ static int cmd_readDReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
 }
 
 /**
- * rcreg <regNo>                - Read control register
+ * rcreg [-q] <regNo>                - Read control register
  *
  * @param
  * @param interp
@@ -2366,25 +2393,22 @@ static int cmd_readDReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
  */
 static int cmd_readCReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    // rcreg <addr>
-   const char *currentToken;
-   unsigned long data;
-   int regNo;
 
-   if (argc != 2) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<address>");
-      return TCL_ERROR;
+   int regNo;
+   bool quiet;
+   int tclError = getQuietReqArg(interp, argc, argv, quiet, regNo);
+   if (tclError != TCL_OK) {
+      return tclError;
    }
-   // Register #
-   currentToken = Tcl_GetString(argv[1]);
-   if (sscanf(currentToken,"%i",&regNo) != 1) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<address>");
-      return TCL_ERROR;
-   }
+   unsigned long data;
    if (checkUsbdmRC(interp,  bdmInterface->readCReg(regNo, &data)) != 0) {
       PRINT(":rReg Failed\n");
       return TCL_ERROR;
    }
    Tcl_SetObjResult(interp, Tcl_NewIntObj(data));
+   if (quiet) {
+      return TCL_OK;
+   }
    TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
    switch (targetType) {
       case T_CFV1 :

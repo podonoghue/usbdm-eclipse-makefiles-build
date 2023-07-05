@@ -19,13 +19,32 @@ BdmInterface_ARM::~BdmInterface_ARM() {
 USBDM_ErrorCode BdmInterface_ARM::targetConnectWithRetry(USBDMStatus_t *usbdmStatus, RetryMode retryMode) {
    LOGGING;
    USBDM_ErrorCode rc = connect();
+
    if (rc != BDM_RC_OK) {
       log.print("Failed rc=%s, Doing 1st retry\n", USBDM_GetErrorString(rc));
       rc = connect(); // retry
+      if (rc != BDM_RC_OK) {
+         log.print("Retry mode = %s\n", getConnectionRetryName(retryMode));
+      }
       if ((rc != BDM_RC_OK) && ((retryMode&BdmInterface::retryByReset) != 0)) {
          log.print("Failed rc=%s, Doing retry under reset\n", USBDM_GetErrorString(rc));
          controlPins(PIN_RESET_LOW);
          rc = connect(); // retry
+      }
+      if ((rc != BDM_RC_OK) && ((retryMode&BdmInterface::retryByPower) != 0)) {
+         log.print("Failed rc=%s, Doing retry after power-cycle", USBDM_GetErrorString(rc));
+         setTargetVdd(TargetVddSelect_t::BDM_TARGET_VDD_DISABLE);
+         if ((retryMode&BdmInterface::retryByReset) != 0) {
+            log.printq(" + under reset");
+            controlPins(PIN_RESET_LOW);
+         }
+         log.printq("\n");
+         UsbdmSystem::milliSleep(bdmOptions.powerOffDuration);
+         setTargetVdd(TargetVddSelect_t::BDM_TARGET_VDD_ENABLE);
+         UsbdmSystem::milliSleep(bdmOptions.powerOnRecoveryInterval);
+         rc = connect(); // retry
+         controlPins(PIN_RESET_3STATE);
+         UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
       }
    }
    return rc;

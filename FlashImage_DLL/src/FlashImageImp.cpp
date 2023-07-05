@@ -1797,6 +1797,7 @@ Elf32_Phdr *FlashImageImp::findRelatedProgramHeader(Elf32_Shdr *sectionHeader) {
  *  @return Corresponding load address (may be the same)
  */
 Elf32_Addr FlashImageImp::getLoadAddress(Elf32_Shdr *sectionHeader) {
+   LOGGING_Q;
    Elf32_Phdr *programHeader = findRelatedProgramHeader(sectionHeader);
    if (programHeader == nullptr) {
       throw new MyException(SFILE_RC_ELF_FORMAT_ERROR);

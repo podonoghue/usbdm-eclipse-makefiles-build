@@ -976,7 +976,7 @@ USBDM_ErrorCode USBDM_SetExtendedOptions(const USBDM_ExtendedOptions_t *newBdmOp
    if ((newBdmOptions->powerOffDuration<100) || (newBdmOptions->powerOffDuration>10000)) {
       rc =  BDM_RC_ILLEGAL_PARAMS;
    }
-   if ((newBdmOptions->powerOnRecoveryInterval<100) || (newBdmOptions->powerOnRecoveryInterval>10000)) {
+   if ((newBdmOptions->powerOnRecoveryInterval<10) || (newBdmOptions->powerOnRecoveryInterval>10000)) {
       rc =  BDM_RC_ILLEGAL_PARAMS;
    }
    if ((newBdmOptions->resetDuration<100) || (newBdmOptions->resetDuration>10000)) {
