@@ -2,7 +2,13 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- ics_mke.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Internal clock source">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Internal clock source" >
+
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="true" />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false" />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true" />
+   <xi:include href="_enablePeripheral.xml" />
+   <title description="------------------------------------------" />
 
    <!-- Clock mode as indicated by icsClockMode[%(n)] choice index -->
    <constant key="FEI"   value="0" type="Integer" />
@@ -25,33 +31,25 @@
       <choice value="3" name="ClockConfig[3]" ref="&quot;3: &quot;+ClockConfig[3]" />
    </clockSelectionOption>
 
-   <xi:include href="_irqOption.xml" />
-
    <aliasOption key="/SIM/numberOfClockSettings" />
 
-   <binaryOption key="configureClocks"
-      description="Enabled configuration of ICS"
-      toolTip="If not selected then ICS is left in the reset state">
-      <choice value="false" name="Disabled" isDefault="true" />
-      <choice value="true"  name="Enabled"  />
-   </binaryOption>
-
    <binaryOption key="enableClockChangeNotifications"
-      enabledBy="configureClocks"
-      description="Enables adding call-backs when the clock is modified">
+      enabledBy="enablePeripheralSupport"
+      description="Enables adding clock change call-backs"
+      toolTip="Call-backs provide notification before and after clock settings are changed" >
       <choice value="false" name="Disabled" isDefault="true" />
-      <choice value="true"  name="Enabled"  />
+      <choice value="true"  name="Call-backs may be installed"  />
    </binaryOption>
 
    <binaryOption key="enableClockConfiguration[0]" constant="true" hidden="true"
-      enabledBy="configureClocks" >
+      enabledBy="enablePeripheralSupport" >
       <choice value="false" name="Disabled" />
       <choice value="true"  name="Enabled"  isDefault="true" />
    </binaryOption>
 
-   <for keys="n" dim="1,/SIM/numberOfClockSettings">
+   <for keys="n" dim="1,/SIM/numberOfClockSettings" >
       <binaryOption key="enableClockConfiguration[%(n)]"
-         enabledBy="configureClocks"
+         enabledBy="enablePeripheralSupport"
          hidden="true"
          description="Enable this clock settings"
          toolTip="If disabled this clock setting will be removed from the generated code" >
@@ -62,7 +60,7 @@
 
    <intOption key="internalClockTrim"
       description="Clock trim value"
-      toolTip="This is 9-bit trim value that is written to ICS.C3[SCTRIM] and ICS.C4[SCFTRIM]"
+      toolTip="This 9-bit trim value is written to ICS.C3[SCTRIM] and ICS.C4[SCFTRIM] if non-zero"
       value="0"
    />
 
@@ -76,8 +74,8 @@
       toolTip="Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       value="37.5_kHz" />
 
-   <for keys="n" dim="/SIM/numberOfClockSettings">
-      <categoryOption key="ClockConfig[%(n)]"
+   <for keys="n" dim="/SIM/numberOfClockSettings" >
+      <categoryOption key="ClockConfig[%(n)]" enabledBy="enablePeripheralSupport"
          description="Clock configuration[%(n)]"
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_%(n)"
@@ -86,8 +84,8 @@
          <aliasOption key="enableClockConfiguration[%(n)]" constant="false" />
 
          <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
-            <aliasOption key="/OSC0/oscMode"                 />
-            <aliasOption key="/OSC0/oscer_clock"             />
+            <aliasOption key="/OSC0/osc_cr_oscMode"   />
+            <aliasOption key="/OSC0/oscer_clock"      />
          </category>
 
          <category name="Internal Clocks" description="Internal Clock Sources"
@@ -129,7 +127,7 @@
                      \n
                      FLL bypassed external low power (FBELP)\n
                      In FBELP mode, ICSOUT is derived from the external reference clock. The FLL is disabled\n
-                     ">
+                     " >
 
             <choice name="FLL Engaged Internal (FEI)"               enum="FEI"   code="IcsClockMode_FEI"   value="0" />
             <choice name="FLL Engaged External (FEE)"               enum="FEE"   code="IcsClockMode_FEE"   value="1" />
@@ -203,7 +201,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
          <choiceOption key="ics_oscsel_fixed[%(n)]"
             target="ics_erc_clock[%(n)]"
             description="IC External reference clock"
-            toolTip="Source for ICS External Reference Clock">
+            toolTip="Source for ICS External Reference Clock" >
             <choice value="0" ref="/OSC0/osc_clock"          enum="OscClk"   code="Osc0Info::getOscClock()"      name="OSC0 Clock" />
          </choiceOption>
 
@@ -215,7 +213,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
             toolTip="External reference clock used by ICS"
             value="0" />
 
-         <category name="FLL" description="FLL Settings">
+         <category name="FLL" description="FLL Settings" >
 
             <binaryOption key="fll_enabled[%(n)]"
                enabledBy="((irefs_clock[%(n)]&gt;=31.25_kHz)&amp;&amp;(irefs_clock[%(n)]&lt;=39.0625_kHz)), Disabled as FLL input clock out of range"
@@ -240,7 +238,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
                origin="Determined by FLL input frequency constraints and external reference clock frequency"
                toolTip="Selects the amount to divide down the external reference clock for the FLL.\n
                         The resulting frequency must be in [31.25 kHz to 39.0625 kHz] to be suitable for the FLL\n
-                        Division factors choices depends on clock Range [OSC_C2_RANGE]">
+                        Division factors choices depends on clock Range [OSC_C2_RANGE]" >
                <choice value="0" name="Disabled"     enum="Disabled"      enabledBy="true"                          ref="Disabled" />
 
                <choice value="0" name="/1 (low)"     enum="LowDivBy1"     enabledBy="(/OSC0/osc_cr_range == false)" ref="ics_erc_clock[%(n)]"      />
@@ -280,7 +278,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
                constant="true"
                description="Internal Reference Select"
                toolTip="Selects the reference clock source for the FLL\n
-                        This option is determined by the Clock Mode selection">
+                        This option is determined by the Clock Mode selection" >
                <choice value="0" name="External Reference Clock" enum="External" ref="ics_erc_clock_divided[%(n)]" />
                <choice value="1" name="Internal Reference Clock" enum="Internal" ref="system_icsirclk_clock[%(n)]" />
             </binaryOption>
@@ -380,8 +378,8 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
          <aliasOption key="/SIM/system_flexbus_clock[%(n)]" constant="false"  optional="true" />
          <aliasOption key="/SIM/system_flash_clock[%(n)]"   constant="false"  optional="true" />
 
-         <category name="Device Parameters" description="Register values">
-            <category name="OSC_CR" description="ICS Control Register 2">
+         <category name="Device Parameters" description="Register values" >
+            <category name="OSC_CR" description="ICS Control Register 2" >
                <aliasOption key="/OSC0/osc_cr_oscen"       optional="true" />
                <aliasOption key="/OSC0/osc_cr_oscsten"     optional="true" />
                <aliasOption key="/OSC0/osc_cr_oscos"       optional="true" />
@@ -389,7 +387,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
                <aliasOption key="/OSC0/osc_cr_hgo"         optional="true" />
             </category>
 
-            <category name="ICS_C1" description="ICS Control Register 1">
+            <category name="ICS_C1" description="ICS Control Register 1" >
                <aliasOption key="ics_c1_clks[%(n)]" />
                <aliasOption key="ics_c1_rdiv[%(n)]" />
                <aliasOption key="ics_c1_irefs[%(n)]" />
@@ -397,7 +395,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
                <aliasOption key="ics_c1_irefsten[%(n)]" />
             </category>
 
-            <category name="ICS_C2" description="ICS Control Register 2">
+            <category name="ICS_C2" description="ICS Control Register 2" >
                <aliasOption key="ics_c2_bdiv[%(n)]"              optional="true" />
 
                <binaryOption key="ics_c2_lp[%(n)]"
@@ -406,13 +404,13 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
                   constant="true"
                   description="Low Power Select"
                   toolTip="Whether FLL continues operation when bypassed\n
-                           This option is determined by the Clock Mode selection">
+                           This option is determined by the Clock Mode selection" >
                   <choice value="0" enum="Enabled"  name="FLL is enabled in bypass modes" />
                   <choice value="1" enum="Disabled" name="FLL is disabled in bypass modes" />
                </binaryOption>
             </category>
 
-            <category name="ICS_C4" description="ICS Control Register 4">
+            <category name="ICS_C4" description="ICS Control Register 4" >
                <aliasOption key="ics_c4_lolie0[%(n)]" />
                <aliasOption key="ics_c4_cme[%(n)]" />
             </category>
@@ -458,7 +456,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       \t */
       \tstatic uint32_t getUngatedInternalReferenceClock() {
       \t   return icsirclk;
-      \t}\n\n
+      \t}
 
       \t/**
       \t * Get %description
@@ -474,13 +472,13 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       \t}\n\n
       ]]></clockCodeTemplate>
 
-   <for keys="n" dim="/SIM/numberOfClockSettings">
+   <for keys="n" dim="/SIM/numberOfClockSettings" >
       <template key="ClockConfig" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
          \t$(ClockConfig[%(n)]://-- missing name for configuration --),\n
       ]]></template>
    </for>
 
-   <for keys="n" dim="/SIM/numberOfClockSettings">
+   <for keys="n" dim="/SIM/numberOfClockSettings" >
       <template key="IcsClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
       ><![CDATA[
          \t{  // $(ClockConfig[%(n)]) ($(icsClockMode[%(n)].enum[]))
@@ -586,7 +584,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       ics_c2_bdiv[]:C2Bdiv;
       ics_c2_lp[]:C2Lp;
       ics_c4_lolie0[]:C4Lolie0;
-      ics_c4_cme[]:C4Cme">
+      ics_c4_cme[]:C4Cme" >
       <setTemplate variables="%(field)"
       ><![CDATA[
          \t/**
@@ -602,7 +600,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
 
 <!--   ========== ICS Init class =============================== -->
 
-   <template key="init_description" namespace="all">
+   <template key="init_description" namespace="all" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_class)
@@ -635,241 +633,73 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template namespace="usbdm" >
    <![CDATA[
       class $(_class)BasicInfo {
       \t
-      public:
+      public:\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
       \t
       \t/**
       \t * Type definition for $(_class) interrupt call back.
       \t */
-      \ttypedef void (*CallbackFunction)(const uint32_t &);
+      \ttypedef void (*CallbackFunction)();
       \t\n
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template namespace="all" key="privateMethods" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      $(init_description)
-      \tclass Init {
       \t
-      \tpublic:
-      \t   /**
-      \t    * Copy Constructor
-      \t    */
-      \t   constexpr Init(const Init &other) = default;
+      \t/**
+      \t * Type definition for $(_class) interrupt call back.
+      \t */
+      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
       \t
-      \t   /**
-      \t    * Default Constructor
-      \t    */
-      \t   constexpr Init() = default;
+      \t/** Callback function for ISR */
+      \tstatic CallbackFunction callback;
       \t\n
    ]]>
    </template>
 
-<!--   Member variables -->
+   <template namespace="all" key="publicMethods" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t
+      \t/**
+      \t * Set callback for ISR
+      \t *
+      \t * @param[in]  callback The function to call from stub ISR
+      \t */
+      \tstatic void setCallback(CallbackFunction icsCallback) {
+      \t   $(_base_class)::callback = icsCallback;
+      \t}
+      \t
+      \t/**
+      \t * ICS interrupt handler -  Calls ICS callback
+      \t */
+      \tstatic void irqHandler() {
+      \t   if (callback != 0) {
+      \t      callback();
+      \t   }
+      \t}\n
+   ]]>
+   </template>
 
-   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
-    ><![CDATA[
-      \t   /// %description
-      \t   %params = nullptr;\n\n
-   ]]></setTemplate>
-
-   <initialValueTemplate namespace="usbdm"
-      variables="ics_c1_clks[],ics_c1_rdiv[],ics_c1_irefs[],ics_c1_irclken[],ics_c1_irefsten[]"
-   ><![CDATA[
-      \t   /// Control 1 Register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
-
-   <initialValueTemplate namespace="usbdm"
-      variables="ics_c2_bdiv[],ics_c2_lp[]"
-   ><![CDATA[
-      \t   /// Control 2 Register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
-
-   <initialValueTemplate namespace="usbdm"
-      variables="ics_c4_lolie0[],ics_c4_cme[]"
-   ><![CDATA[
-      \t   /// Control 4 Register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
-
-   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
-      variables="/PCR/nvic_irqLevel"
-   ><![CDATA[
-      \t   /// %description
-      \t   %enumClass %registerName = %enumClass_Normal;\n\n
-   ]]></initialValueTemplate>
+   <template namespace="all" key="staticDefinitions" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t
+      /** Callback for programmatically set handler */
+      Ics::CallbackFunction Ics::callback = {0};\n
+   ]]>
+   </template>
 
 <!--   Configure methods -->
 
-   <template discardRepeats="true" key="/ICS/InitMethod" namespace="all" ><![CDATA[
-      \t/**
-      \t * Configure ICS from values specified in init
-      \t *
-      \t * @param init Class containing initialisation values
-      \t */
-      \tstatic void configure(const typename Info::Init &init) {
-      \t
-      \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      // Only set call-back if feature enabled
-      \t      setCallback(init.callbackFunction);
-      \t      enableNvicInterrupts(init.irqlevel);
-      \t   }
-      \t   enable();
-      \t
-      \t   ics->C1    = init.c1;
-      \t   ics->C2    = init.c2;
-      \t   ics->C3    = init.c3;
-      \t   ics->C4    = init.c4;
-      \t}
-      \t
-      \t/**
-      \t * Configure with default settings.
-      \t * Configuration determined from Configure.usbdmProject
-      \t */
-      \tstatic inline void defaultConfigure() {
-      \t
-      \t   // Update settings
-      \t   configure(Info::DefaultInitValue);
-      \t}\n
-   ]]></template>
-
-<!--   Constructors -->
-
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
-      variables="irqHandlingMethod"
-      linePadding="xxx"
-    ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      this->%paramName0 = %paramExpression;
-      \t   }\n\n
-   ]]></setTemplate>
-
-   <setTemplate namespace="usbdm"
-      variables="/PCR/nvic_irqLevel"
-      linePadding="xxx"
-    ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      #if $(irqHandlingMethod)
-      \t      %registerName = %paramExpression;
-      #else
-      \t      (void)%paramExpression;
-      #endif
-      \t   }\n\n
-   ]]></setTemplate>
-
-   <for keys="r"
-      values="
-            ics_c1_clks[];
-            ics_c1_rdiv[];
-            ics_c1_irefs[];
-            ics_c1_irclken[];
-            ics_c1_irefsten[];
-            ics_c2_bdiv[];
-            ics_c2_lp[];
-            ics_c4_lolie0[];
-            ics_c4_cme[];
-            ">
-      <setTemplate namespace="usbdm"
-         variables="%(r)"
-         linePadding="xxx">
-      <![CDATA[
-         \t   /**
-         \t    * Constructor for %description
-         \t    *
-         \t    * @tparam   Types
-         \t    * @param    rest
-         \t    *
-         %comments
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-         \t
-         \t      %registerName = (%registerName&~%mask) | %paramExpression;
-         \t   }
-         \t\n
-      ]]>
-      </setTemplate>
-   </for>
-<!--   Default Initialisation value -->
-
-   <initialValueTemplate
-      separator=","
-      terminator=","
-      variables="
-            ics_c1_clks[],
-            ics_c1_rdiv[],
-            ics_c1_irefs[],
-            ics_c1_irclken[],
-            ics_c1_irefsten[],
-            ics_c2_bdiv[],
-            ics_c2_lp[],
-            ics_c4_lolie0[],
-            ics_c4_cme[],
-            irqLevel
-         "
-   ><![CDATA[
-      $(init_description)
-      \ttypedef $(_class)BasicInfo::Init Init;
-      \t
-      \t/**
-      \t * Default initialisation value for $(_class)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
-      \t};\n\n
-   ]]></initialValueTemplate>
-
-   <template>
-      <![CDATA[
-      \t/**
-      \t * Configure $(_basename)
-      \t */
-      \tstatic void configure(const Init &configValue) {
-      \t   ics->C1              = configValue.c1;
-      \t   ics->C2              = configValue.c2;
-      \t   ics->C4              = configValue.c4;
-      \t}
-      \t
-      \t/**
-      \t * Default initialisation for $(_basename)
-      \t */
-      \tstatic void defaultConfigure() {
-      \t   configure(DefaultInitValue);
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template namespace="usbdm">
-      <![CDATA[
-      \t}; // $(_class)::BasicInfo::Init\n\n
-   ]]>
-   </template>
-
-   <template namespace="usbdm">
+   <template namespace="usbdm" >
       <![CDATA[
       }; // $(_class)::BasicInfo\n\n
    ]]>
@@ -877,11 +707,12 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
 
    <!-- ************* Common ****************** -->
 
-   <template key="/ICS/declarations" namespace="all"  ><![CDATA[
-   \t/**
-   \t * Class representing $(_name)
-   \t */
-   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   <template key="/ICS/Includes" namespace="all"  ><![CDATA[
+   #include "osc.h"\n
+   ]]></template>
+
+   <template key="/$(_basename)/ClockStartup" namespace="all" ><![CDATA[
+   \tUSBDM::$(_class)::startupConfigure();\n
    ]]></template>
 
    <validate
@@ -895,7 +726,5 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       <deleteResource target="Project_Headers/clock_configure.h" />
       <deleteResource target="Startup_Code/clock.c" />
    </projectActionList>
-
-<signals />
 
 </peripheralPage>

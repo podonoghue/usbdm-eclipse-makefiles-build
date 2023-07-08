@@ -6,13 +6,14 @@
 
    <!-- Convenient location for common SIM Settings -->
 
-   <intOption key="numberOfClockSettings" 
+   <intOption key="numberOfClockSettings"
+      hidden="true"
       description="Number of clock settings"
       toolTip="This determines the number of clock settings provided"
       value="4"
       derived = "true"
       constant = "true" />
-            
+
    <choiceOption key="/PCR/nvic_irqLevel"
       hidden="true"
       templateKey="/PCR/nvicPriority"

@@ -21,6 +21,15 @@
 #include "system.h"
 #include "pin_mapping.h"
 
+/// Clock for CORE (cpu) and SYSTEM (NVIC, RAM ...)
+extern "C" uint32_t SystemCoreClock;
+
+/// Clock for Bus (PIT, SPI, UART ...)
+extern "C" uint32_t SystemBusClock;
+
+/// Clock for Timers (FTM, PWT ...)
+extern "C" uint32_t SystemTimerClock;
+
 namespace USBDM {
 
 /**
@@ -85,7 +94,7 @@ typedef void (*ICSCallbackFunction)(void);
 class Ics {
 
 private:
-#if $(/ICS/configureClocks:false)
+#if $(/ICS/enableClockChangeNotifications:false)
    static ClockChangeCallback *clockChangeCallbackQueue;
 
    static void notifyBeforeClockChange() {
@@ -104,7 +113,7 @@ private:
    }
 #endif
 
-#if $(/ICS/configureClocks:false)
+#if $(/ICS/enableClockChangeNotifications:false)
 public:
    /**
     * Add callback for clock configuration changes
@@ -118,18 +127,11 @@ public:
 #endif
 
 private:
-   /** Callback function for ISR */
-   static ICSCallbackFunction callback;
-
    /** Hardware instance */
    static constexpr HardwarePtr<ICS_Type> ics = IcsInfo::baseAddress;
-
 $(/ICS/privateMethods: // No private methods found)
-
 public:
-
 $(/ICS/publicMethods: // No public methods found)
-
    /**
     * Table of clock settings
     */
@@ -175,24 +177,6 @@ $(/ICS/publicMethods: // No public methods found)
    static void disableNvicInterrupts() {
       NVIC_DisableIRQ(IcsInfo::irqNums[0]);
    }
-   /**
-    * ICS interrupt handler -  Calls ICS callback
-    */
-   static void irqHandler() {
-      if (callback != 0) {
-         callback();
-      }
-   }
-
-   /**
-    * Set callback for ISR
-    *
-    * @param[in]  callback The function to call from stub ISR
-    */
-   static void setCallback(ICSCallbackFunction callback) {
-      Ics::callback = callback;
-   }
-
    /** Current clock mode (FEI out of reset) */
    static IcsClockMode currentClockMode;
 
@@ -224,7 +208,7 @@ $(/ICS/publicMethods: // No public methods found)
    /**
     *  Configure the ICS for given mode
     *
-    *  @param[in]  settingNumber CLock setting number
+    *  @param[in]  settingNumber Clock setting number
     */
    static void configure(ClockConfig settingNumber=ClockConfig_default) {
       clockTransition(clockInfo[settingNumber]);
@@ -238,18 +222,14 @@ $(/ICS/publicMethods: // No public methods found)
    }
 
    /**
-    * Initialise ICS to default settings.
+    * Initialise ICS as part of startup sequence
     */
-   static void defaultConfigure();
+   static void startupConfigure();
 
-   /**
-    * Set up the OSC out of reset.
-    */
-   static void initialise() {
-      defaultConfigure();
-   }
-
+$(/ICS/InitMethod: // No /ICS/InitMethod methods found)
 };
+
+$(/ICS/declarations: // /ICS/No declarations methods found)
 
 /**
  * @}

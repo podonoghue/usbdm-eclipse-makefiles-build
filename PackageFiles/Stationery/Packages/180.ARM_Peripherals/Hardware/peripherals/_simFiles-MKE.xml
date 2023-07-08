@@ -24,7 +24,6 @@
    </projectActionList>
 
    <projectActionList id = "sim_port_files_mk" >
-      <copy source="Project_Headers/sim.h"           target="Project_Headers/sim.h"    overwrite="true"  derived="true" />
       <copy source="Project_Headers/pcr.h"           target="Project_Headers/pcr.h"    overwrite="true"  derived="true" />
       <copy source="Project_Headers/gpio-MKE.h"      target="Project_Headers/gpio.h"   overwrite="true"  derived="true" />
    </projectActionList>

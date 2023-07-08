@@ -55,22 +55,11 @@ static constexpr uint16_t WdogUnlock2 = 0xD928;
 template<class Info>
 class WdogBase_T : public Info {
 
-   using CallbackFunction = typename Info::CallbackFunction;
-
 protected:
-   /**
-    * Callback to catch unhandled interrupt
-    */
-   static void unhandledCallback() {
-      setAndCheckErrorCode(E_NO_HANDLER);
-   }
-
-   /** Callback function for ISR */
-   static CallbackFunction callback;
-
-$(/WDOG/protectedMethods: // No private methods found)
+$(/WDOG/protectedMethods: // No protected methods found)
 
 public:
+$(/WDOG/publicMethods: // No public methods found)
    /**
     * Hardware instance pointer.
     *
@@ -101,16 +90,8 @@ public:
       wdog->CNT = wdogRefresh_2;
    }
 
-   /**
-    * IRQ handler
-    */
-   static void irqHandler() {
-      // Call handler
-      callback();
-   }
-
 protected:
-#if $(/WDOG/secondsSupport)
+#if $(/WDOG/secondsSupport:false)
    /**
     *
     * @param[in]     stctrlh   Used to obtain clock source (STCTRLH.CLKSRC)
@@ -150,9 +131,7 @@ protected:
 
 public:
 $(/WDOG/InitMethod: // /WDOG/InitMethod not found)
-   
-$(/WDOG/publicMethods: // No public methods found)
-
+#if $(/WDOG/irqHandlingMethod:false)
    /**
     * Wrapper to allow the use of a class member as a callback function
     * @note Only usable with static objects.
@@ -231,22 +210,7 @@ $(/WDOG/publicMethods: // No public methods found)
       };
       return fn;
    }
-
-   /**
-    * Set callback function.
-    *
-    * The callback may be executed prior to the WDOG reset.
-    * This allows the system to save important information or log the watchdog event.
-    *
-    * @param[in]  theCallback Callback function to execute on interrupt
-    */
-   static void setCallback(CallbackFunction theCallback) {
-      static_assert(Info::irqHandlerInstalled, "WDOG not configured for interrupts");
-      if (theCallback == nullptr) {
-         theCallback = unhandledCallback;
-      }
-      callback = theCallback;
-   }
+#endif
 
 public:
 
@@ -294,7 +258,7 @@ public:
       wdog->WINL   = (unsigned)window;
    }
 
-#if $(/WDOG/secondsSupport)
+#if $(/WDOG/secondsSupport:false)
    /**
     * Sets the watchdog time-out value in seconds.
     *
@@ -377,26 +341,9 @@ public:
       NVIC_DisableIRQ(Info::irqNums[0]);
    }
 
-   /**
-    * Enable/disable interrupts
-    *
-    * @param[in]  enable        True => enable, False => disable
-    *
-    * @note This is a protected operation which requires unlock
-    */
-   static void enableInterrupt(bool enable=true) {
-      // Protect sequence from interrupts
-      CriticalSection cs;
-      if (enable) {
-         wdog->CS1 = wdog->CS1 | WDOG_CS1_INT_MASK;
-      }
-      else {
-         wdog->CS1 = wdog->CS1 & ~WDOG_CS1_INT_MASK;
-      }
-   }
 };
 
-template<class Info> typename WdogBase_T<Info>::CallbackFunction WdogBase_T<Info>::callback = WdogBase_T<Info>::unhandledCallback;
+$(/WDOG/staticDefinitions: // No static declarations found)
 
 $(/WDOG/declarations: // No declarations found)
 /**

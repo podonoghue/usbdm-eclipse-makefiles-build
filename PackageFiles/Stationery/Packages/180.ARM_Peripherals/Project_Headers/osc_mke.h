@@ -45,12 +45,7 @@ protected:
    static constexpr HardwarePtr<OSC_Type> osc = Info::baseAddress;
 
 public:
-   /**
-    * Set up the OSC out of reset.
-    */
-   static void initialise() {
-      Info::defaultConfigure();
-   }
+$(/OSC/InitMethod: // No /OSC/InitMethod found)
 
 };
 

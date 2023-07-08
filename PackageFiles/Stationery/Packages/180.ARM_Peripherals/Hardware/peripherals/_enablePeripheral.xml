@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- _mapPinsOption.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<!--
+      Predefined symbols generated for current peripheral
+      $(_instance)   FTM0 => 0
+      $(_base_class) FTM0 => Ftm
+      $(_class)      FTM0 => Ftm0
+      $(_basename)   FTM0 => FTM
+      $(_name)       FTM0 => FTM0
+
+      Template Rules based on attributes  info|usbdm|class|all)  "info"
+
+      - namespace=info (default if blank)
+        Placed in Info class in pin_mapping.h
+
+      - namespace="usbdm"
+        Placed before Info class in pin_mapping.h
+
+      - namespace="all" key="keyValue"
+        Substituted anywhere for $(keyValue)
+        key is
+ -->
+
+   <title description="------- General Settings -------" toolTip="" />
+
+   <binaryOption key="enablePeripheralSupport" condition="!@isGeneratedByDefault"
+      description="Enable peripheral Support"
+      toolTip="Even if disabled, some code may still be generated but will \n
+               be removed by linker if not used">
+      <choice value="false" name="Minimal code generated"        isDefault="true" />
+      <choice value="true"  name="Generate code for peripheral"  />
+   </binaryOption>
+
+   <binaryOption key="enablePeripheralSupport" condition="@isGeneratedByDefault"
+      description="Enable peripheral Support"
+      toolTip="Even if disabled, some code may still be generated but will \n
+               be removed by linker if not used">
+      <choice value="false" name="Minimal code generated"        />
+      <choice value="true"  name="Generate code for peripheral"  isDefault="true"/>
+   </binaryOption>
+
+   <binaryOption key="configurePeripheralInStartUp" condition="@isSupportedinStartup"
+      enabledBy="enablePeripheralSupport"
+      description="Configure this peripheral"
+      toolTip="Configure this peripheral in startup code before main() is entered\n
+               Even if disabled, some minimal code may still be executed"
+      >
+      <choice value="false" name="Not Configured"              isDefault="true"/>
+      <choice value="true"  name="Configured in startup code"  />
+   </binaryOption>
+
+   <!-- Template is added to class within pin_mapping.h -->
+   <template><![CDATA[
+      \t//! Configure peripheral in start-up
+      \tstatic constexpr bool configurePeripheralInStartUp = $(configurePeripheralInStartUp);\n\n
+   ]]></template>
+
+   <if condition="@peripheralUsesInterrupts" >
+
+      <title description="------- Interrupts -------" toolTip="ccccc" />
+
+      <!--
+      Patterns for pattern and classHandler
+        -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
+        -  %b replaced with peripheral base name e.g. FTM1 => FTM
+        -  %c replaced with peripheral C++ base class name e.g. FTM1 => Ftm
+        -  _IRQHandler is appended to the pattern (only)
+      Multiple patterns and classsHandlers may be used separated by ';'
+      -->
+      <if condition="irqEnable">
+         <irqOption key="irqHandlingMethod" condition="!irq_classHandler"
+            enabledBy="enablePeripheralSupport&amp;&amp;(irqEnable != 0)"
+            typeName="CallbackFunction"
+            description="Peripheral interrupt handling"
+            toolTip="If enabled, the handler may be set using the setCallback() function or\n
+                     by overriding the interrupt handler method in the peripheral class\n
+                     If not enabled, then interrupt handlers may be installed by naming them \n
+                     (see weak names used in vector table)."
+            pattern="^%b%i$"
+            classHandler="%c%i::irqHandler" />
+         <irqOption key="irqHandlingMethod" condition="irq_classHandler"
+            enabledBy="enablePeripheralSupport&amp;&amp;(irqEnable != 0)"
+            typeName="CallbackFunction"
+            description="Peripheral interrupt handling"
+            toolTip="If enabled, the handler may be set using the setCallback() function or\n
+                     by overriding the interrupt handler method in the peripheral class\n
+                     If not enabled, then interrupt handlers may be installed by naming them \n
+                     (see weak names used in vector table)."
+            pattern="$(irq_pattern)"
+            classHandler="$(irq_classHandler)" />
+      <else/>
+         <irqOption key="irqHandlingMethod" condition="irq_classHandler"
+            enabledBy="enablePeripheralSupport"
+            typeName="CallbackFunction"
+            description="Peripheral interrupt handling"
+            toolTip="If enabled, the handler may be set using the setCallback() function or\n
+                     by overriding the interrupt handler method in the peripheral class\n
+                     If not enabled, then interrupt handlers may be installed by naming them \n
+                     (see weak names used in vector table)."
+            pattern="$(irq_pattern)"
+            classHandler="$(irq_classHandler)" />
+         <irqOption key="irqHandlingMethod" condition="!irq_classHandler"
+            enabledBy="enablePeripheralSupport"
+            typeName="CallbackFunction"
+            description="Peripheral interrupt handling"
+            toolTip="If enabled, the handler may be set using the setCallback() function or\n
+                     by overriding the interrupt handler method in the peripheral class\n
+                     If not enabled, then interrupt handlers may be installed by naming them \n
+                     (see weak names used in vector table)."
+            pattern="^%b%i$"
+            classHandler="%c%i::irqHandler" />
+      </if>
+
+      <choiceOption key="irqLevel"
+         enabledBy="irqHandlingMethod"
+         description="IRQ level for this peripheral"
+         toolTip="Priority level used to configure the NVIC"
+         valueFormat="%s"
+         derivedFrom="/PCR/nvic_irqLevel" >
+      </choiceOption>
+
+      <setTemplate variables="irqHandlingMethod" ><![CDATA[
+         \t/* Template_irqOption.xml */
+
+         \t//! IRQ numbers for hardware
+         \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;
+
+         \t//! Number of IRQs for hardware
+         \tstatic constexpr uint32_t irqCount  = sizeofArray(irqNums);
+
+          \t//! Class based callback handler has been installed in vector table
+          \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);
+
+          \t//! Default IRQ level
+          \tstatic constexpr NvicPriority irqLevel =  $(irqLevel.enum[]);\n\n
+      ]]></setTemplate>
+
+      <constant key="enable_interrupts_code"  value="&quot;enableNvicInterrupts();&quot;"   type="String"   />
+      <constant key="disable_interrupts_code" value="&quot;disableNvicInterrupts();&quot;"  type="String"   />
+
+   </if>
+
+
+</fragment>

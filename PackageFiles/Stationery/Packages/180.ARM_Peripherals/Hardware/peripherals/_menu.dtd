@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!ENTITY % gui_items        "(xi:include|addDependency|graphic|deleteOption|category|indexedCategory|categoryOption|addChoices|aliasCategoryOption|if|for|constant|floatOption|intOption|bitmaskOption|choiceOption|clockMultiplexorOption|binaryOption|irqOption|stringOption|numericListOption|pinListOption|aliasOption|signals)" >
+<!ENTITY % gui_items        "(xi:include|addDependency|graphic|deleteOption|category|indexedCategory|categoryOption|addChoices|aliasCategoryOption|if|for|constant|floatOption|intOption|bitmaskOption|choiceOption|clockMultiplexorOption|binaryOption|irqOption|stringOption|title|numericListOption|pinListOption|aliasOption|signals)" >
 <!ENTITY % structure_items  "(xi:include|section|list)" >
 <!ENTITY % control_items    "(xi:include|clockSelectionOption|template|setTemplate|constructorTemplate|enumTemplate|initialValueTemplate|clockCodeTemplate|validate|projectActionList)" >
 
@@ -95,6 +95,7 @@
    <!ATTLIST categoryOption  disabledValue   CDATA        #IMPLIED>
    <!ATTLIST categoryOption  toolTip         CDATA        #IMPLIED>
    <!ATTLIST categoryOption  hidden          (false|true) #IMPLIED>
+   <!ATTLIST categoryOption  enabledBy       CDATA        #IMPLIED>
 
 <!ELEMENT deleteOption EMPTY >
    <!ATTLIST deleteOption condition     CDATA         #IMPLIED>
@@ -133,6 +134,7 @@
    <!ATTLIST intOption enabledBy     CDATA        #IMPLIED> <!-- Enabled by an expression -->
    <!ATTLIST intOption unlockedBy    CDATA        #IMPLIED> <!-- Unlocked by an expression -->
    <!ATTLIST intOption isNamedClock  (true)       #IMPLIED>
+   <!ATTLIST intOption enabledBy     CDATA        #IMPLIED>
   
 <!ELEMENT bitmaskOption EMPTY >
    <!ATTLIST bitmaskOption condition      CDATA        #IMPLIED>
@@ -191,6 +193,12 @@
    <!ATTLIST aliasOption optional          (true)       #IMPLIED>
    <!-- Inidicates it should be visible in GUI -->
    <!ATTLIST aliasOption hidden            (true)      #IMPLIED>
+
+<!ELEMENT title EMPTY >
+   <!ATTLIST title condition              CDATA        #IMPLIED>
+   <!ATTLIST title name                   CDATA        #IMPLIED>
+   <!ATTLIST title toolTip                CDATA        #IMPLIED>
+   <!ATTLIST title description            CDATA        #IMPLIED>
 
 <!ELEMENT stringOption EMPTY >
    <!ATTLIST stringOption condition        CDATA        #IMPLIED>
@@ -457,10 +465,7 @@
    <!-- Target variable dependent on this variable -->
    <!ATTLIST binaryOption target              CDATA        #IMPLIED>
 
-
-
-
-   <!ATTLIST binaryOption modify        CDATA        #IMPLIED>
+   <!ATTLIST binaryOption modify              CDATA        #IMPLIED>
 
 <!ELEMENT irqOption EMPTY >
    <!ATTLIST irqOption condition     CDATA        #IMPLIED>
@@ -479,6 +484,7 @@
    <!ATTLIST irqOption derivedFrom   CDATA        #IMPLIED>
    <!ATTLIST irqOption typeName      CDATA        #IMPLIED> <!-- e.g. CallbackFunction -->
    <!ATTLIST irqOption valueFormat   CDATA        #IMPLIED> <!-- e.g. void (*%s)(void) -->
+   <!ATTLIST irqOption enabledBy     CDATA        #IMPLIED>
 
 <!-- 
    info  Appear within peripheral info class e.g. Osc0Info
@@ -512,6 +518,7 @@
    <!ATTLIST setTemplate paramPadding              CDATA                   #IMPLIED>
    <!ATTLIST setTemplate linePadding               CDATA                   #IMPLIED>
    <!ATTLIST setTemplate params                    CDATA                   #IMPLIED>
+   <!ATTLIST setTemplate codeGenCondition          CDATA                   #IMPLIED>
 
 <!ELEMENT constructorTemplate (#PCDATA)* >
    <!ATTLIST constructorTemplate namespace                 (info|usbdm|all)  #IMPLIED >
@@ -561,6 +568,7 @@
    <!ATTLIST clockCodeTemplate paramPadding              CDATA                   #IMPLIED> <!-- Padding applied to parameters if more than 1 parameter -->
    <!ATTLIST clockCodeTemplate linePadding               CDATA                   #IMPLIED> <!-- Padding applied to start of line -->
    <!ATTLIST clockCodeTemplate params                    CDATA                   #IMPLIED>
+   <!ATTLIST clockCodeTemplate codeGenCondition          CDATA                   #IMPLIED>
 
 <!ELEMENT for (%gui_items;|%structure_items;|%control_items;|template|break|continue)* >
    <!ATTLIST for keys                 CDATA        #REQUIRED>

@@ -2,28 +2,36 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- wdog_mke.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Watchdog Monitor">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Watchdog Monitor" >
 
    <xi:include href="_default_instance.xml"/>
 
-   <xi:include href="_irqOption.xml"/>
+   <intOption key="irqEnable" ref="fullCodeSupport" hidden="true" derived="true" constant="true" />
+
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="true" />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="true" />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true" />
+   <xi:include href="_enablePeripheral.xml" />
+   <title description="------------------------------------------" />
 
    <projectActionList id = "wdog_files" >
       <copy source="Project_Headers/wdog_mke.h"     target="Project_Headers/wdog.h"          overwrite="true" derived="true" />
    </projectActionList>
 
-   <binaryOption key="wdogSystemEnable"
+   <binaryOption key="fullCodeSupport"
+      enabledBy="enablePeripheralSupport"
       description="Enable Watchdog system"
-      toolTip="This can be used to disable the entire watchdog system">
-      <choice value="false" enum="Disabled" name="Watchdog system disabled" isDefault="true" />
-      <choice value="true"  enum="Enabled"  name="Watchdog system enabled" />
+      toolTip="This allows the generation of minimal code to disable the watchdog system\n
+               or provide full configuration support" >
+      <choice value="false" enum="Disbled" name="Generate watchdog disable code only" isDefault="true" />
+      <choice value="true"  enum="Enabled" name="Generate full watchdog code support" />
    </binaryOption>
 
    <binaryOption key="secondsSupport"
-      enabledBy="wdogSystemEnable"
+      enabledBy="fullCodeSupport"
       description="Enable use of Seconds for time"
       toolTip="Use of floating point is necessary to support specifing watchdog timeouts in seconds in runtime code.\n
-               This is seldom needed and the overhead can be avoided by disabling this option">
+               This is seldom needed and the overhead can be avoided by disabling this option" >
       <choice value="false" enum="Disabled" name="Seconds support disabled" isDefault="true" />
       <choice value="true"  enum="Enabled"  name="Seconds support enabled" />
    </binaryOption>
@@ -31,22 +39,22 @@
    <!-- ************* WDOG CS1 & CS2****************** -->
 
    <binaryOption key="wdog_cs1_en" condition="wdog_cs1_en_present"
-      enabledBy="wdogSystemEnable"
+      enabledBy="fullCodeSupport"
       enumStem="WdogEnable"
       enumType="uint16_t"
       description="Watchdog enable"
-      toolTip="Main enable for WDOG">
+      toolTip="Main enable for WDOG" >
       <choice value="0" enum="Disabled" name="Watchdog disabled" isDefault="true" />
       <choice value="1" enum="Enabled"  name="Watchdog enabled" />
    </binaryOption>
 
    <choiceOption key="wdog_cs1_tst" condition="wdog_cs1_tst_present"
-      enabledBy="wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       enumType="uint16_t"
       enumStem="WdogTestMode"
       description="Test Mode: Controls the fast test mode."
       toolTip="Allows exercising all bits of the counter to confirm that the watchdog is functioning properly.\n
-This write-once field is cleared on POR only" >
+               This write-once field is cleared on POR only" >
       <choice name="Disabled"                         value="0" enum="Disabled"/>
       <choice name="DIsabled - User mode"             value="1" enum="UserMode"/>
       <choice name="Enabled, Only CNTL, TOVALL used"  value="2" enum="TestModeLowByte"/>
@@ -54,7 +62,7 @@ This write-once field is cleared on POR only" >
    </choiceOption>
 
    <binaryOption key="wdog_cs1_wait" condition="wdog_cs1_wait_present"
-      enabledBy="wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       enumType="uint16_t"
       enumStem="WdogEnableInWait"
       description="Enable watchdog in WAIT mode"
@@ -64,7 +72,7 @@ This write-once field is cleared on POR only" >
    </binaryOption>
 
    <binaryOption key="wdog_cs1_stop" condition="wdog_cs1_stop_present"
-      enabledBy="wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       enumType="uint16_t"
       enumStem="WdogEnableInStop"
       description="Enable watchdog in STOP mode"
@@ -74,7 +82,7 @@ This write-once field is cleared on POR only" >
    </binaryOption>
 
    <binaryOption key="wdog_cs1_dbg" condition="wdog_cs1_dbg_present"
-      enabledBy="wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       enumType="uint16_t"
       enumStem="WdogEnableInDebug"
       description="Enable watchdog in DEBUG mode"
@@ -84,7 +92,7 @@ This write-once field is cleared on POR only" >
    </binaryOption>
 
    <binaryOption key="wdog_cs1_update" condition="wdog_cs1_update_present"
-      enabledBy="wdogSystemEnable"
+      enabledBy="fullCodeSupport"
       enumType="uint16_t"
       enumStem="WdogAllowUpdate"
       description="Allow watchdog update"
@@ -97,28 +105,28 @@ This write-once field is cleared on POR only" >
    </binaryOption>
 
    <binaryOption key="wdog_cs2_win" condition="wdog_cs2_win_present"
-      enabledBy="wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       enumType="uint16_t"
       enumStem="WdogWindow"
       description="Enable watchdog windowing mode"
-      toolTip="Windowing mode only allows refresh during a restricted window">
+      toolTip="Windowing mode only allows refresh during a restricted window" >
       <choice name="Windowing mode disabled" value="0" enum="Disabled" isDefault="true" />
       <choice name="Windowing mode enabled"  value="1" enum="Enabled"  />
    </binaryOption>
 
    <binaryOption key="wdog_cs1_int" condition="wdog_cs1_int_present"
-      enabledBy="wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       enumType="uint16_t"
       enumStem="WdogAction"
       description="Action on watchdog event"
       toolTip="This write-once bit allows an interrupt handler to record state prior to forcing a reset.\n
-The reset occurs after a delay of 128 bus clocks following the interrupt vector fetch, " >
+               The reset occurs after a delay of 128 bus clocks following the interrupt vector fetch, " >
       <choice name="Immediate Reset"             value="0" enum="ImmediateReset" isDefault="true" />
       <choice name="Interrupt followed by reset" value="1" enum="ResetAfterInterrupt"   />
    </binaryOption>
 
    <choiceOption key="wdog_cs2_clk" condition="wdog_cs2_clk_present"
-      enabledBy="wdogSystemEnable"
+      enabledBy="fullCodeSupport"
       target="inputClockFrequency"
       enumType="uint16_t"
       enumStem="WdogClock"
@@ -130,7 +138,7 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       <choice name="External clock source (OSCERCLK)"        value="3" enum="ExternalClk"  code="Osc0Info::getOscClock()"     ref="/OSC0/oscer_clock" />
    </choiceOption>
 
-   <clockCodeTemplate variable="wdog_cs2_clk"
+   <clockCodeTemplate variable="wdog_cs2_clk" codeGenCondition="fullCodeSupport"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -169,7 +177,7 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
    ]]></clockCodeTemplate>
 
    <intOption key="inputClockFrequency"
-      enabledBy="wdogSystemEnable"
+      enabledBy="fullCodeSupport"
       constant="true"
       description="Watchdog Input clock frequency"
       toolTip="Determined from timer clock source"
@@ -177,7 +185,7 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       units="Hz"/>
 
    <binaryOption key="wdog_cs2_pres" condition="wdog_cs2_pres_present"
-      enabledBy="wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       target="timerTickPeriod"
       enumStem="WdogPrescale"
       enumType="uint16_t"
@@ -188,7 +196,7 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
    </binaryOption>
 
    <floatOption key="timerTickPeriod"
-      enabledBy="wdogSystemEnable"
+      enabledBy="fullCodeSupport"
       constant="true"
       description="Period of watchdog counter"
       toolTip="Determined from timer clock source and prescaler"
@@ -196,7 +204,7 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       units="s"/>
 
    <floatOption key="wdog_timeoutPeriod"
-      enabledBy="wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       description="Watchdog Timeout"
       toolTip="The watchdog must be refreshed before this interval expires"
       valueFormat="%s_s"
@@ -205,7 +213,7 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       value="1"/>
 
    <intOption key="wdog_timeout"
-      enabledBy="wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       ref="timerTickPeriod#(wdog_timeoutPeriod)/timerTickPeriod"
       constant="true"
       description="Watchdog Timeout in ticks"
@@ -218,7 +226,7 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
    />
 
    <floatOption key="wdog_windowPeriod"
-      enabledBy="wdog_cs2_win&amp;&amp;wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      enabledBy="wdog_cs2_win&amp;&amp;wdog_cs1_en&amp;&amp;fullCodeSupport"
       description="Watchdog Window"
       toolTip="Refresh of the watchdog may not be carried out before this interval has expired i.e.\n
                Refresh must occur within [window...timeout] if window mode is enabled.\n
@@ -230,7 +238,7 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       value="0"/>
 
    <intOption key="wdog_window"
-      enabledBy="wdog_cs2_win&amp;&amp;wdog_cs1_en&amp;&amp;wdogSystemEnable"
+      enabledBy="wdog_cs2_win&amp;&amp;wdog_cs1_en&amp;&amp;fullCodeSupport"
       ref="timerTickPeriod#(wdog_windowPeriod)/timerTickPeriod"
       constant="true"
       description="Watchdog Window in ticks"
@@ -243,21 +251,29 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       disabledValue="4294967295"
    />
 
-   <template key="/SYSTEM/Includes" namespace="all" ><![CDATA[
+   <template key="/SYSTEM/Includes" namespace="all" codeGenCondition="configurePeripheralInStartUp" ><![CDATA[
       #include "wdog.h"\n
    ]]></template>
 
-   <template key="/SYSTEM/WatchdogInitialise" namespace="all" ><![CDATA[
+   <template key="/SYSTEM/WatchdogInitialise" namespace="all" codeGenCondition="configurePeripheralInStartUp&amp;&amp;!fullCodeSupport" ><![CDATA[
+      \t/*
+      \t * Initialise watchdog
+      \t */
+      \tUSBDM::Wdog::disableWdog();
+      \t
+   ]]></template>
+
+   <template key="/SYSTEM/WatchdogInitialise" namespace="all" codeGenCondition="configurePeripheralInStartUp&amp;&amp;fullCodeSupport" ><![CDATA[
       \t/*
       \t * Initialise watchdog
       \t */
       \tUSBDM::Wdog::defaultConfigure();
-      \t
+      \t\n
    ]]></template>
 
 <!-- Grahic here -->
 
-   <setTemplate key="/WDOG/publicMethods" namespace="all"
+   <setTemplate key="/$(_basename)/publicMethods" namespace="all" codeGenCondition="fullCodeSupport"
       variables="
          wdog_cs1_en,
          wdog_cs2_clk,
@@ -316,11 +332,11 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       <choice value="0x28D9" enum="2"  name="2nd unlock value"  />
    </choiceOption>
 
-   <template key="/WDOG/declarations" namespace="all"  ><![CDATA[
-   \t/**
-   \t * Class representing $(_name)
-   \t */
-   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   <template key="/$(_basename)/declarations" namespace="all"  ><![CDATA[
+      \t/**
+      \t * Class representing $(_name)
+      \t */
+      \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
    ]]></template>
 
 <!--   ========== WDOG Init class =============================== -->
@@ -336,7 +352,7 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       \t *
       \t * Example:
       \t * @code
-      \t * static const $(_class)::Init wdogInit {
+      \t * static const $(_class)::Init init {
       \t *
       \t *   // Setup values
       \t *   WdogEnable_Enabled ,          // Watchdog enable
@@ -359,27 +375,90 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       \t * };
       \t *
       \t * // Initialise $(_class) from values specified above
-      \t * $(_class)::configure(wdogInit)
+      \t * $(_class)::configure(init)
       \t * @endcode
       \t */
    ]]>
    </template>
 
-   <template namespace="usbdm" >
+   <template namespace="usbdm" codeGenCondition="fullCodeSupport" >
    <![CDATA[
       class $(_class)BasicInfo {
       \t
-      public:
+      public:\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
       \t
       \t/**
-      \t * Type definition for $(_class) interrupt call back
+      \t * Type definition for $(_class) interrupt call back.
       \t */
       \ttypedef void (*CallbackFunction)();
       \t\n
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template namespace="all" key="protectedMethods" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t
+      \t/**
+      \t * Type definition for $(_class) interrupt call back.
+      \t */
+      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \t
+      \t/** Callback function for ISR */
+      \tstatic CallbackFunction sCallback;
+      \t
+      \t/**
+      \t * Callback to catch unhandled interrupt
+      \t */
+      \tstatic void unhandledCallback() {
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="all" key="publicMethods" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t
+      \t/**
+      \t * Set interrupt callback function.
+      \t *
+      \t * The callback may be executed prior to the WDOG reset.
+      \t * This allows the system to save important information or log the watchdog event.
+      \t *
+      \t * @param[in]  wdogCallback Callback function to execute on interrupt
+      \t */
+      \tstatic void setCallback(CallbackFunction wdogCallback) {
+      \t   if (wdogCallback == nullptr) {
+      \t      wdogCallback = unhandledCallback;
+      \t   }
+      \t   sCallback = wdogCallback;
+      \t}
+      \t
+      \t/**
+      \t * $(_basename) interrupt handler -  Calls $(_basename) callback
+      \t */
+      \tstatic void irqHandler() {
+      \t
+      \t      sCallback();
+      \t}\n
+   ]]>
+   </template>
+
+   <template namespace="all" key="staticDefinitions" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t
+      \t/** Callback for programmatically set handler */
+      \ttemplate<class Info> typename $(_base_class)Base_T<Info>::CallbackFunction $(_base_class)Base_T<Info>::sCallback = $(_base_class)Base_T<Info>::unhandledCallback;
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm" codeGenCondition="fullCodeSupport" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -406,7 +485,7 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       \t   %params = nullptr;\n\n
    ]]></setTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="fullCodeSupport"
       variables="
          wdog_timeout"
    ><![CDATA[
@@ -414,7 +493,7 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       \t   Seconds_Ticks %registerName;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="fullCodeSupport"
       variables="
          wdog_window"
    ><![CDATA[
@@ -422,14 +501,14 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       \t   Seconds_Ticks %registerName;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="fullCodeSupport"
       variables="wdog_cs1_en,wdog_cs1_int,wdog_cs1_update,wdog_cs1_tst,wdog_cs1_dbg,wdog_cs1_wait,wdog_cs1_stop"
    ><![CDATA[
       \t   /// Control and Status Register 1
       \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="fullCodeSupport"
       variables="wdog_cs2_win,wdog_cs2_flg,wdog_cs2_pres,wdog_cs2_clk"
    ><![CDATA[
       \t   /// Control and Status Register 2
@@ -447,18 +526,17 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
-      variables="/PCR/nvic_irqLevel"
+      variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+      \t   %enumClass %registerName0 = %symbolicValueExpression1;
+      \t\n
    ]]></initialValueTemplate>
 
 <!--   Configure methods -->
 
-   <setTemplate key="/WDOG/InitMethod" namespace="all" discardRepeats="true"
-      variables="wdogSystemEnable"
-      codeGenCondition="wdogSystemEnable"
-      ><![CDATA[
+   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+      codeGenCondition="fullCodeSupport" ><![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -467,24 +545,23 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       \t
       \t   // Update settings
       \t   configure(Info::DefaultInitValue);
-      \t}\n\n
-   ]]></setTemplate>
+      \t}
+      \t\n
+   ]]></template>
 
-   <setTemplate key="/WDOG/InitMethod" namespace="all" discardRepeats="true"
-      variables="wdogSystemEnable"
-      codeGenCondition="!wdogSystemEnable"
+   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+      codeGenCondition="!fullCodeSupport"
       ><![CDATA[
       \t/**
-      \t * Configure with default settings.
-      \t * Configuration determined from Configure.usbdmProject
+      \t * Disable the watchdog
       \t */
-      \tstatic inline void defaultConfigure() {
+      \tstatic inline void disableWdog() {
       \t
       \t   // Unlock before changing settings
       \t   wdog->CNT  = WdogUnlock_1;
       \t   wdog->CNT  = WdogUnlock_2;
       \t
-      \t   // Read-back to delay until change effected
+      \t   // Read-back to delay until unlock effected
       \t   (void)(wdog->CNT);
       \t
       \t   // Disable watchdog
@@ -492,10 +569,12 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       \t   wdog->CS2   = WdogClock_LpoClk;
       \t   wdog->WIN   = 0xFFFF;
       \t   wdog->TOVAL = 0xFFFF;
-      \t}\n\n
-   ]]></setTemplate>
+      \t}
+      \t\n
+   ]]></template>
 
-   <setTemplate variables="wdog_cs1_en" discardRepeats="true" key="/WDOG/InitMethod" namespace="all" ><![CDATA[
+   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+             codeGenCondition="fullCodeSupport" ><![CDATA[
       \t/**
       \t * Configure WDOG from values specified in init
       \t
@@ -506,15 +585,15 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       \t   Seconds_Ticks timeout = init.timeout;
       \t   Seconds_Ticks window  = init.window;
       \t   uint16_t      cs2     = init.cs2;
-      \t
-      \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      // Only set call-back if feature enabled and non-null
-      \t      if (init.callbackFunction != nullptr) {
-      \t         setCallback(init.callbackFunction);
-      \t      }
-      \t   }\n
-   ]]></setTemplate>
-   <setTemplate variables="wdog_cs1_en" discardRepeats="true" key="/WDOG/InitMethod" namespace="all" codeGenCondition="secondsSupport" ><![CDATA[
+      \t\n
+   ]]></template>
+   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+             codeGenCondition="irqHandlingMethod" ><![CDATA[
+      \t   setCallback(init.callbackFunction);
+      \t   enableNvicInterrupts(init.irqlevel);
+      \t\n
+   ]]></template>
+   <setTemplate variables="wdog_cs1_en" discardRepeats="true" key="/$(_basename)/InitMethod" namespace="all" codeGenCondition="secondsSupport" ><![CDATA[
       \t   if (init.calculatePrescale) {
       \t      // Calculate prescaler, timeout and window
       \t      ErrorCode rc = calculateTimingParameters(cs2, timeout, window);
@@ -523,7 +602,7 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       \t      }
       \t   }\n
    ]]></setTemplate>
-   <setTemplate variables="wdog_cs1_en" discardRepeats="true" key="/WDOG/InitMethod" namespace="all" ><![CDATA[
+   <setTemplate variables="wdog_cs1_en" discardRepeats="true" key="/$(_basename)/InitMethod" namespace="all" codeGenCondition="fullCodeSupport" ><![CDATA[
       \t   // Protect sequence from interrupts
       \t   CriticalSection cs;
       \t
@@ -570,7 +649,7 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       \t   }\n\n
    ]]></setTemplate>
 
-   <setTemplate namespace="usbdm"
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -584,11 +663,7 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      #if $(irqHandlingMethod)
       \t      %registerName = %paramExpression;
-      #else
-      \t      (void)%paramExpression;
-      #endif
       \t   }\n\n
    ]]></setTemplate>
 
@@ -604,8 +679,8 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
             wdog_cs2_win;
             wdog_cs2_flg;
             wdog_cs2_clk
-            ">
-      <setTemplate namespace="usbdm"
+            " >
+      <setTemplate namespace="usbdm" codeGenCondition="fullCodeSupport"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -626,7 +701,7 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
       ]]></setTemplate>
    </for>
 
-   <setTemplate namespace="usbdm" variables="wdog_cs2_pres,wdog_timeout,wdog_window"
+   <setTemplate namespace="usbdm" variables="wdog_cs2_pres,wdog_timeout,wdog_window" codeGenCondition="fullCodeSupport"
       linePadding="xxx"
       nonDefaultParams="2"
       params=",timeout,window"
@@ -678,7 +753,7 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate
+   <initialValueTemplate codeGenCondition="fullCodeSupport"
       separator=","
       terminator=","
       variables="
@@ -690,7 +765,6 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
             wdog_cs1_wait,
             wdog_cs1_stop,
             wdog_cs2_clk,
-            irqLevel,
             wdog_cs2_pres,
             wdog_timeout,
             wdog_window,
@@ -698,11 +772,6 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
    ><![CDATA[
       $(init_description)
       \ttypedef $(_class)BasicInfo::Init Init;
-      \t
-      \t/**
-      \t * $(_class) interrupt call back
-      \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
       \t
       \t/**
       \t * Default initialisation value for $(_class)
@@ -714,18 +783,16 @@ The reset occurs after a delay of 128 bus clocks following the interrupt vector 
 
    <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" />
 
-   <template namespace="usbdm">
+   <template namespace="usbdm" codeGenCondition="fullCodeSupport" >
       <![CDATA[
       \t}; // $(_class)::BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template namespace="usbdm" codeGenCondition="fullCodeSupport" >
       <![CDATA[
       }; // $(_class)::BasicInfo\n\n
    ]]>
    </template>
-
-<signals />
 
 </peripheralPage>

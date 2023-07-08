@@ -4,26 +4,29 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Oscillator">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="_default_instance.xml" />
 
-   <xi:include href="_mapPinsOption_on.xml"/>
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="false" />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false" />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true" />
+   <xi:include href="_enablePeripheral.xml" />
+   <title description="------------------------------------------" />
 
-   <choiceOption key="oscMode" condition="osc_cr_oscos_present"
+   <choiceOption key="osc_cr_oscMode" condition="osc_cr_oscos_present"
+      valueFormat="OSC_CR_OSCOS(%s),OSC_CR_HGO(%s)"
+      enabledBy="enablePeripheralSupport"
       enumStem="OscMode"
-      valueFormat="%s"
       description="OSC0 mode"
       toolTip="Determines oscillator power mode and\n
-               whether an external clock or crystal is used.">
-      <choice value="0"                               name="OSC0 Not configured"     enum="NotConfigured"        />
-      <choice value="OSC_CR_OSCOS(0)"                 name="External clock"          enum="ExternalClock"        />
-      <choice value="OSC_CR_OSCOS(1)"                 name="Low Power Oscillator"    enum="LowPowerOscillator"   isDefault="true" />
-      <choice value="OSC_CR_OSCOS(1)|OSC_CR_HGO(1)"   name="High Gain Oscillator"    enum="HighPowerOscillator"  />
+               whether an external clock or crystal is used." >
+      <choice value="0,0" name="External clock"          enum="ExternalClock"        isDefault="true" />
+      <choice value="1,0" name="Low Power Oscillator"    enum="LowPowerOscillator"   />
+      <choice value="1,1" name="High Gain Oscillator"    enum="HighPowerOscillator"  />
    </choiceOption>
 
-   <constant key="/OscMode_NotConfigured"            type="Integer" value="0"  condition="osc_cr_oscos_present"/>
-   <constant key="/OscMode_ExternalClock"            type="Integer" value="1"  condition="osc_cr_oscos_present"/>
-   <constant key="/OscMode_LowGainOsc"               type="Integer" value="2"  condition="osc_cr_oscos_present"/>
-   <constant key="/OscMode_HighGainOsc"              type="Integer" value="3"  condition="osc_cr_oscos_present"/>
+   <constant key="/OscMode_ExternalClock"            type="Integer" value="0"  condition="osc_cr_oscos_present" />
+   <constant key="/OscMode_LowGainOsc"               type="Integer" value="1"  condition="osc_cr_oscos_present" />
+   <constant key="/OscMode_HighGainOsc"              type="Integer" value="2"  condition="osc_cr_oscos_present" />
 
    <intOption key="osc_input_freq"
       units="Hz"
@@ -33,71 +36,71 @@
       disabledValue="0" />
 
    <intOption key="osc_clock"
-      enabledBy="oscMode!=/OscMode_NotConfigured"
+      enabledBy="enablePeripheralSupport"
       ref="osc_input_freq"
       valueFormat="%s"
       constant="true"
       derived="true"
       units="Hz"
       description="Frequency of OSC Clock or Crystal [OSCCLK]"
-      toolTip="Frequency of oscillator or external clock"
+      toolTip="Frequency of oscillator or external clock if OSC is enabled"
       value="8000000"
       disabledValue="0"
       min="1" />
 
    <binaryOption key="osc_cr_oscen" condition="osc_cr_oscen_present"
-      enabledBy="oscMode!=/OscMode_NotConfigured"
+      enabledBy="enablePeripheralSupport"
       enumStem="OscEnable"
       toolTip="Enables the OSC module. The OSC module can also be enabled by the ICS module"
       description="OSC Enable" >
-      <choice name="OSC disabled"  value="0" enum="Disabled"/>
-      <choice name="OSC enabled"   value="1" enum="Enabled"/>
+      <choice name="OSC disabled"  value="0" enum="Disabled" isDefault="true" />
+      <choice name="OSC enabled"   value="1" enum="Enabled" />
    </binaryOption>
 
    <binaryOption key="osc_cr_oscsten" condition="osc_cr_oscsten_present"
-      enabledBy="oscMode!=/OscMode_NotConfigured"
+      enabledBy="enablePeripheralSupport&amp;&amp;osc_cr_oscen"
       enumStem="OscInStopMode"
-      toolTip="Controls whether or not the OSC clock remains enabled when MCU enters Stop mode and OSCEN is set.\n
+      toolTip="Controls whether or not the OSC clock remains enabled when MCU enters Stop mode when OSCEN is set.\n
                OSCSTEN has no effect if ICS requests OSC enable"
       description="OSC Enable in Stop mode" >
-      <choice name="Disabled in Stop mode"  value="0" enum="Disabled"/>
-      <choice name="Enabled in Stop mode"   value="1" enum="Enabled"/>
+      <choice name="Disabled in Stop mode"  value="0" enum="Disabled" isDefault="true" />
+      <choice name="Enabled in Stop mode"   value="1" enum="Enabled"  />
    </binaryOption>
 
    <binaryOption key="osc_cr_oscos" condition="osc_cr_oscos_present"
-      enabledBy="oscMode!=/OscMode_NotConfigured"
-      ref="oscMode&gt;=@/OscMode_LowGainOsc"
+      enabledBy="enablePeripheralSupport"
+      ref="osc_cr_oscMode&gt;=@/OscMode_LowGainOsc"
       derived="true"
       constant="true"
       enumStem="OscOutputSelect"
       toolTip="Selects the output clock of the OSC module"
       description="OSC Output Select" >
-      <choice name="External clock source"    value="0" enum="ExternalClock"/>
-      <choice name="Oscillator clock source"  value="1" enum="Oscillator"/>
+      <choice name="External clock source"    value="0" enum="ExternalClock" isDefault="true" />
+      <choice name="Oscillator clock source"  value="1" enum="Oscillator" />
    </binaryOption>
 
    <binaryOption key="osc_cr_range" condition="osc_cr_range_present"
-      enabledBy="oscMode!=/OscMode_NotConfigured"
+      enabledBy="enablePeripheralSupport"
       ref="osc_input_freq&gt;=4_MHz"
       derived="true"
       constant="true"
-      enumStem="OscCrRange"
+      enumStem="OscFrequencyRange"
       toolTip="Selects the frequency range for the OSC module"
       description="Frequency Range Select" >
-      <choice name="Low range of 32 kHz"     value="0" enum="LowRange"/>
-      <choice name="High range of 4-20 MHz"  value="1" enum="HighRange"/>
+      <choice name="Low range of 32 kHz"     value="0" enum="LowRange" isDefault="true" />
+      <choice name="High range of 4-20 MHz"  value="1" enum="HighRange" />
    </binaryOption>
 
    <binaryOption key="osc_cr_hgo" condition="osc_cr_hgo_present"
-      enabledBy="oscMode!=/OscMode_NotConfigured"
-      ref="oscMode&gt;=@/OscMode_HighGainOsc"
+      enabledBy="enablePeripheralSupport"
+      ref="osc_cr_oscMode&gt;=@/OscMode_HighGainOsc"
       derived="true"
       constant="true"
       enumStem="OscCrHgo"
       toolTip="Controls the OSC mode of operation"
       description="High Gain Oscillator Select" >
-      <choice name="Low-power mode"  value="0" enum="LowPowerMode"/>
-      <choice name="High-gain mode"  value="1" enum="HighGainMode"/>
+      <choice name="Low-power mode"  value="0" enum="LowPowerMode" isDefault="true" />
+      <choice name="High-gain mode"  value="1" enum="HighGainMode" />
    </binaryOption>
 
    <intOption key="oscer_clock"
@@ -106,7 +109,7 @@
       derived="true"
       constant="true"
       units="Hz"
-      description="OSC External refernce clock [OSCERCLK]"
+      description="OSC External reference clock [OSCERCLK]"
       toolTip="Frequency of clock available from OSC"
       value="8000000"
       disabledValue="0"
@@ -116,12 +119,11 @@
 
    <for keys="field:name"
         values="
-      osc_cr_oscen:CrOscen;
-      osc_cr_oscsten:CrOscsten;
-      osc_cr_oscos:CrOscos;
-      osc_cr_range:CrRange;
-      osc_cr_hgo:CrHgo">
-      <setTemplate variables="%(field)"
+      osc_cr_oscen:OscEnable;
+      osc_cr_oscsten:OscStopMode;
+      osc_cr_oscMode:OscMode;
+      osc_cr_range:OscFrequencyRange">
+      <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -136,7 +138,7 @@
 
 <!--   ========== OSC Init class =============================== -->
 
-   <template key="init_description" namespace="all">
+   <template key="init_description" namespace="all" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_class)
@@ -150,11 +152,10 @@
       \t * static const $(_class)::Init init {
       \t *
       \t *   // Setup values
-      \t *   OscCrOscen_OscDisabled                    // OSC Enable,
-      \t *   OscCrOscsten_DisabledInStopMode           // OSC Enable in Stop mode,
-      \t *   OscCrOscos_ExternalClockSource            // OSC Output Select,
-      \t *   OscCrRange_LowRangeOf32Khz                // Frequency Range Select,
-      \t *   OscCrHgo_LowPowerMode                     // High Gain Oscillator Select,
+      \t *   OscEnable_Enabled ,           // OSC Enable - OSC enabled
+      \t *   OscInStopMode_Enabled ,       // OSC Enable in Stop mode - Enabled in Stop mode
+      \t *   OscMode_LowPowerOscillator ,  // OSC0 mode - Low Power Oscillator
+      \t *   OscFrequencyRange_HighRange,  // Frequency Range Select - High range of 4-20 MHz
       \t * };
       \t *
       \t * // Initialise $(_class) from values specified above
@@ -164,7 +165,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport">
    <![CDATA[
       class $(_class)BasicInfo {
       \t
@@ -173,7 +174,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -194,39 +195,12 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="osc_cr_oscen,osc_cr_oscsten,osc_cr_oscos,osc_cr_range,osc_cr_hgo"
    ><![CDATA[
       \t   /// Control Register
       \t   uint8_t cr = 0;\n\n
    ]]></initialValueTemplate>
-
-<!--   Configure methods -->
-
-   <template discardRepeats="true" key="/OSC/InitMethod" namespace="all" ><![CDATA[
-      \t/**
-      \t * Configure OSC from values specified in init
-      \t *
-      \t * @param init Class containing initialisation values
-      \t */
-      \tstatic void configure(const typename Info::Init &init) {
-      \t   enable();
-      \t
-      \t   osc->CR    = init.cr;
-      \t
-      \t   calibrate();
-      \t}
-      \t
-      \t/**
-      \t * Configure with default settings.
-      \t * Configuration determined from Configure.usbdmProject
-      \t */
-      \tstatic inline void defaultConfigure() {
-      \t
-      \t   // Update settings
-      \t   configure(Info::DefaultInitValue);
-      \t}\n
-   ]]></template>
 
 <!--   Constructors -->
 
@@ -234,11 +208,10 @@
       values="
             osc_cr_oscen;
             osc_cr_oscsten;
-            osc_cr_oscos;
-            osc_cr_range;
-            osc_cr_hgo
+            osc_cr_oscMode;
+            osc_cr_range
             ">
-      <setTemplate namespace="usbdm"
+      <setTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx">
       <![CDATA[
@@ -259,17 +232,17 @@
       ]]>
       </setTemplate>
    </for>
+
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate
+   <initialValueTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
             osc_cr_oscen,
             osc_cr_oscsten,
-            osc_cr_oscos,
-            osc_cr_range,
-            osc_cr_hgo
+            osc_cr_oscMode,
+            osc_cr_range
          "
    ><![CDATA[
       $(init_description)
@@ -283,7 +256,9 @@
       \t};\n\n
    ]]></initialValueTemplate>
 
-   <template>
+<!--   Default Configure -->
+
+   <template codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
       \t/**
       \t * Configure $(_basename)
@@ -291,18 +266,27 @@
       \tstatic void configure(const Init &configValue) {
       \t   osc->CR              = configValue.cr;
       \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template discardRepeats="true" key="/$(_basename)/InitMethod" namespace="all" codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t
       \t/**
       \t * Default initialisation for $(_basename)
       \t */
       \tstatic void defaultConfigure() {
-      \t   configure(DefaultInitValue);
+      \t   Info::configure(Info::DefaultInitValue);
       \t}
       \t\n
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template key="/ICS/ClockStartupBefore" namespace="all" codeGenCondition="configurePeripheralInStartUp"  ><![CDATA[
+   \tUSBDM::$(_class)::defaultConfigure();\n
+   ]]></template>
+
+   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
       \t}; // $(_class)::BasicInfo::Init\n\n
    ]]>
@@ -343,22 +327,17 @@
    #include "osc.h"\n
    ]]></template>
 
-   <template namespace="usbdm">
+   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport">
       <![CDATA[
       }; // $(_class)::BasicInfo\n\n
    ]]>
    </template>
 
-   <template key="/ICS/Initialisation" namespace="all"  ><![CDATA[
-   \tUSBDM::$(_class)::initialise();\n
-   ]]></template>
-
    <projectActionList id = "osc0_files" >
       <copy source="Project_Headers/osc_mke.h"  target="Project_Headers/osc.h"  overwrite="true"  derived="true" />
    </projectActionList>
 
-
-<signals />
+   <signals />
 
    <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" />
 

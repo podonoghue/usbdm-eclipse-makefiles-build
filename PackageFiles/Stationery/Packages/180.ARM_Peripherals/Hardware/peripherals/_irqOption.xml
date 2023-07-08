@@ -19,7 +19,7 @@
      -  _IRQHandler is appended to the pattern (only)
    Multiple patterns and classsHandlers may be used separated by ';'
    -->
-   <irqOption key="irqHandlingMethod"
+   <irqOption key="irqHandlingMethod" condition="!irq_classHandler"
       typeName="CallbackFunction"
       description="Peripheral interrupt handling"
       toolTip="If enabled, the handler may be set using the setCallback() function or\n
@@ -28,6 +28,16 @@
                (see weak names used in vector table)."
       pattern="^%b%i$"
       classHandler="%c%i::irqHandler" />
+
+   <irqOption key="irqHandlingMethod" condition="irq_classHandler"
+      typeName="CallbackFunction"
+      description="Peripheral interrupt handling"
+      toolTip="If enabled, the handler may be set using the setCallback() function or\n
+               by overriding the interrupt handler method in the peripheral class\n
+               If not enabled, then interrupt handlers may be installed by naming them \n
+               (see weak names used in vector table)."
+      pattern="$(irq_pattern)"
+      classHandler="$(irq_classHandler)" />
 
    <choiceOption key="irqLevel"
       enabledBy="irqHandlingMethod"
@@ -50,10 +60,10 @@
        \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);
 
        \t//! Default IRQ level
-       \tstatic constexpr NvicPriority irqLevel =  $(irqLevel.enum[]);\n\n
+       \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel.enum[]):NvicPriority_NotInstalled);\n\n
    ]]></setTemplate>
 
-   <constant key="enable_interrupts_code"  value="&quot;enableNvicInterrupts();&quot;"   type="String"   />
-   <constant key="disable_interrupts_code" value="&quot;disableNvicInterrupts();&quot;"  type="String"   />
+   <constant key="enable_interrupts_code"  value="&quot;enableNvicInterrupts();&quot;"  type="String" />
+   <constant key="disable_interrupts_code" value="&quot;disableNvicInterrupts();&quot;" type="String" />
 
 </fragment>

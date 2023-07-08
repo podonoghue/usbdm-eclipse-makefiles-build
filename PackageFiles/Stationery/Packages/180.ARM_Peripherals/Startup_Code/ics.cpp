@@ -13,7 +13,6 @@
 #include "system.h"
 #include "stdbool.h"
 #include "pin_mapping.h"
-#include "sim.h"
 $(/ICS/Includes:// No extra includes found)
 #include "ics.h"
 /*
@@ -24,12 +23,19 @@ $(/ICS/Includes:// No extra includes found)
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-extern "C" uint32_t SystemCoreClock;
-extern "C" uint32_t SystemBusClock;
+
+/// Clock for CORE (cpu) and SYSTEM (NVIC, RAM ...)
+uint32_t SystemCoreClock;
+
+/// Clock for Bus (PIT, SPI, UART ...)
+uint32_t SystemBusClock;
+
+/// Clock for Timers (FTM, PWT ...)
+uint32_t SystemTimerClock;
 
 namespace USBDM {
 
-#if $(/ICS/enableClockChangeNotifications:false)
+#if $(/ICS/enableClockChangeNotifications:false) // /ICS/enableClockChangeNotifications
 ClockChangeCallback *Ics::clockChangeCallbackQueue = nullptr;
 #endif
 
@@ -37,6 +43,7 @@ ClockChangeCallback *Ics::clockChangeCallbackQueue = nullptr;
  * Table of clock settings
  */
 const ClockInfo Ics::clockInfo[] = {
+   // /ICS/IcsClockInfoEntries
 $(/ICS/IcsClockInfoEntries:!!!!!!!Not found!!!!!!!)
 };
 
@@ -49,11 +56,12 @@ volatile uint32_t SystemIcsOutClock;
 /** ICSFLLCLK - Output of FLL */
 volatile uint32_t SystemIcsFllClock;
 
-/** Callback for programmatically set handler */
-ICSCallbackFunction Ics::callback = {0};
-
 /** Current clock mode (FEI out of reset) */
 IcsClockMode Ics::currentClockMode = IcsClockMode_FEI;
+
+// /ICS/staticDefinitions
+$(/ICS/staticDefinitions: // No static declarations found) 
+#if $(/ICS/enablePeripheralSupport:false) // /ICS/enablePeripheralSupport
 
 constexpr IcsClockMode clockTransitionTable[][8] = {
    /* from to =>  FEI,               FEE,               FBI,               BLPI,               FBE,               FBELP, */
@@ -100,20 +108,12 @@ const char *Ics::getClockModeName(IcsClockMode clockMode) {
  */
 ErrorCode Ics::clockTransition(const ClockInfo &clockInfo) {
 
-#if $(/ICS/enableClockChangeNotifications:false)
+#if $(/ICS/enableClockChangeNotifications:false) // /ICS/enableClockChangeNotifications
    // Notify of clock changes (before)
    notifyBeforeClockChange();
 #endif
 
    IcsClockMode finalMode = clockInfo.clockMode;
-
-#ifdef USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK
-   if (clockInfo.c7&&ICS_C7_OSCSEL_MASK) {
-      // Note IRC48M Internal Oscillator automatically enable if ICS_C7_OSCSEL = 2
-      SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_USBOTG_MASK;
-      USB0->CLK_RECOVER_IRC_EN = USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK|USB_CLK_RECOVER_IRC_EN_REG_EN_MASK;
-   }
-#endif
 
    // Set conservative clock dividers
    SIM->CLKDIV = SIM_CLKDIV_OUTDIV1_MASK|SIM_CLKDIV_OUTDIV2_MASK|SIM_CLKDIV_OUTDIV3_MASK;
@@ -206,14 +206,13 @@ ErrorCode Ics::clockTransition(const ClockInfo &clockInfo) {
             break;
       }
 
-#ifdef OSC_CR_OSCEN_MASK
       // Wait for oscillator stable (if active)
       if (USBDM::Osc0Info::osc->CR&OSC_CR_OSCEN_MASK) {
          do {
             __asm__("nop");
          } while ((USBDM::Osc0Info::osc->CR&OSC_CR_OSCINIT_MASK) == 0);
       }
-#endif
+
       currentClockMode = next;
 
       // Maximum number of transitions is 3
@@ -233,13 +232,15 @@ ErrorCode Ics::clockTransition(const ClockInfo &clockInfo) {
    // Enable clock monitors
    ics->C4 = (ics->C4 & (ICS_C4_SCFTRIM_MASK))|clockInfo.c4; // Preserve SCFTRIM
 
-#if $(/ICS/enableClockChangeNotifications:false)
+#if $(/ICS/enableClockChangeNotifications:false) // /ICS/enableClockChangeNotifications
    // Notify of clock changes (after)
    notifyAfterClockChange();
 #endif
 
    return E_NO_ERROR;
 }
+
+#endif // /ICS/enablePeripheralSupport
 
 /**
  * Update SystemCoreClock variable
@@ -302,34 +303,30 @@ void Ics::SystemCoreClockUpdate(void) {
 }
 
 /**
- * Initialise ICS to default settings.
+ * Initialise ICS as part of startup sequence
  */
-void Ics::defaultConfigure() {
+void Ics::startupConfigure() {
 
-#if !defined(INITIAL_CLOCK_STATE)
-// Needed for use with a boot-loader that changes the clock
-#define INITIAL_CLOCK_STATE IcsClockMode_FEI;
-#endif
-
-static constexpr uint16_t CLOCK_TRIM = $(/ICS/internalClockTrim:0);
+static constexpr uint16_t CLOCK_TRIM = $(/ICS/internalClockTrim:0); // /ICS/internalClockTrim
 static constexpr uint8_t  SCTRIM  = CLOCK_TRIM>>1U;
 static constexpr uint8_t  SCFTRIM = CLOCK_TRIM&0b1;
 
 if constexpr (CLOCK_TRIM != 0) {
    ics->C3 = SCTRIM;
-   ics->C4 = (ics->C4&ICS_C4_SCFTRIM_MASK)|SCFTRIM;
+   ics->C4 = (ics->C4&~ICS_C4_SCFTRIM_MASK)|SCFTRIM;
 }
 
-#if $(/ICS/configureClocks:false)
-   currentClockMode = INITIAL_CLOCK_STATE;
+   // Device resets into this clock mode
+   currentClockMode = IcsClockMode_FEI;
 
+#if $(/ICS/configurePeripheralInStartUp:false) // /ICS/configurePeripheralInStartUp
    // Transition to desired clock mode
    clockTransition(clockInfo[ClockConfig_default]);
 #endif
 
-   Sim::initRegs();
-
+#if $(/ICS/irqHandlingMethod:false) // /ICS/irqHandlingMethod
    enableNvicInterrupts();
+#endif
 
    SystemCoreClockUpdate();
 }
@@ -342,7 +339,11 @@ if constexpr (CLOCK_TRIM != 0) {
 extern "C"
 void clock_initialise(void) {
 
-$(/ICS/Initialisation:// No Initialisation found)
-   USBDM::Ics::initialise();
+   // /ICS/ClockStartupBefore
+$(/ICS/ClockStartupBefore:// No /ISC/ClockStartupBefore found)
+   // /ICS/ClockStartup
+$(/ICS/ClockStartup:// No /ISC/ClockStartup found)
+   // /ICS/ClockStartupAfter
+$(/ICS/ClockStartupAfter:// No /ISC/ClockStartupAfter found)
 }
 

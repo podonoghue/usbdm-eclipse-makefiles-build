@@ -19,7 +19,17 @@
      -  _IRQHandler is appended to the pattern (only)
    Multiple patterns and classsHandlers may be used separated by ';'
    -->
-   <irqOption key="irqHandlingMethod"
+   <irqOption key="irqHandlingMethod" condition="!irq_classHandler"
+      typeName="CallbackFunction"
+      description="Peripheral interrupt handling"
+      toolTip="If enabled, the handler may be set using the setCallback() function or\n
+               by overriding the interrupt handler method in the peripheral class\n
+               If not enabled, then interrupt handlers may be installed by naming them \n
+               (see weak names used in vector table)."
+      pattern="^%b%i$"
+      classHandler="%c%i::irqHandler" />
+
+   <irqOption key="irqHandlingMethod" condition="irq_classHandler"
       typeName="CallbackFunction"
       description="Peripheral interrupt handling"
       toolTip="If enabled, the handler may be set using the setCallback() function or\n
@@ -38,7 +48,7 @@
    </choiceOption>
 
    <setTemplate variables="irqHandlingMethod" ><![CDATA[
-      \t/* Template_irqOptionSubstituted.xml */
+      \t/* Template_irqOption.xml */
 
       \t//! IRQ numbers for hardware
       \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;

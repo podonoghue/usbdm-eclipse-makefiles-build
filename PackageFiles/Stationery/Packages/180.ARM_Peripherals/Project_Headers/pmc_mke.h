@@ -27,21 +27,6 @@ namespace USBDM {
  */
 
 /**
- * Indicates reason for execution of call-back
- */
-enum PmcInterruptReason {
-   PmcInterruptReason_LowVoltageDetect,//!< Low Voltage Detect
-   PmcInterruptReason_LowVoltageWarning//!< Low Voltage Warning
-};
-
-/**
- * Type definition for PDB interrupt call back
- *
- * @param pmcInterruptReason Reason for interrupt leading to call-back
- */
-typedef void (*PmcCallbackFunction)(PmcInterruptReason pmcInterruptReason);
-
-/**
  * Template class providing interface to Power Management Controller
  *
  * @tparam info      Information class for PMC
@@ -54,28 +39,13 @@ typedef void (*PmcCallbackFunction)(PmcInterruptReason pmcInterruptReason);
  * @endcode
  */
 template <class Info>
-class PmcBase_T {
+class PmcBase_T : public Info {
 
 protected:
-   /** Callback function for ISR */
-   static PmcCallbackFunction sCallback;
+   $(/PMC/protectedMethods: // No protected methods found)
 
-   /** Handler for unexpected interrupts */
-   static void unhandledCallback(PmcInterruptReason) {
-      setAndCheckErrorCode(E_NO_HANDLER);
-   }
+#if $(/PMC/irqHandlingMethod)
 public:
-   /**
-    * IRQ handler
-    */
-   static void irqHandler(void) {
-
-      pmc->SPMSC1 = pmc->SPMSC1 | PMC_SPMSC1_LVWACK_MASK;
-
-      sCallback(PmcInterruptReason_LowVoltageWarning);
-      return;
-   }
-
    /**
     * Wrapper to allow the use of a class member as a callback function
     * @note Only usable with static objects.
@@ -154,55 +124,15 @@ public:
       };
       return fn;
    }
-
-   /**
-    * Set Callback function
-    *
-    *  @param[in]  callback  Callback function to be executed on interrupt.\n
-    *                        Use nullptr to remove callback.
-    */
-   static void setCallback(PmcCallbackFunction callback) {
-      static_assert(Info::irqHandlerInstalled, "PMC not configure for interrupts");
-      if (callback == nullptr) {
-         callback = unhandledCallback;
-      }
-      sCallback = callback;
-   }
-
+#endif
 
 protected:
    /** Hardware instance */
    static constexpr HardwarePtr<PMC_Type> pmc = Info::baseAddress;
 
 public:
-   /**
-    * Enable clock to the PMC
-    */
-   static void  __attribute__((always_inline)) enable() {
-   }
-
-   /**
-    * Configure PMC from configuration provided
-    *
-    * @param config Configuration to use
-    */
-   static void configure(const PmcInfo::Init &config) {
-      // ToDo add IRQ
-      pmc->SPMSC1 = config.spmsc1;
-      pmc->SPMSC2 = config.spmsc2;
-   }
-
-   /**
-    * Enables PMC and sets to default configuration.
-    *
-    * Includes enabling clock and any pins used.\n
-    * Sets PMC to default configuration.
-    */
-   static void defaultConfigure() {
-      enable();
-      configure(PmcInfo::DefaultInitValue);
-   }
-
+$(/PMC/publicMethods:// /PMC/publicMethods not found)
+$(/PMC/InitMethod:// /PMC/InitMethod not found)
    /**
     * Enable interrupts in NVIC
     */
@@ -227,20 +157,11 @@ public:
       NVIC_DisableIRQ(Info::irqNums[0]);
    }
 
-#ifdef PMC_SRAMCTL_VLLS2PD_MASK
-   /**
-    * Sets which SRAM blocks are powered during LLS2 mode and VLLS2 modes.
-    *
-    * @param blocks Bit mask for the 8 SRAM blocks, 1=> retain, 0=> not powered during LLS2 mode and VLLS2 modes.
-    */
-   static void setVlpRamRetention(uint8_t blocks) {
-      pmc->SRAMCTL = (uint8_t)~blocks;
-   }
-#endif
 };
 
-template<class Info> PmcCallbackFunction PmcBase_T<Info>::sCallback = PmcBase_T<Info>::unhandledCallback;
+//template<class Info> PmcCallbackFunction PmcBase_T<Info>::sCallback = PmcBase_T<Info>::unhandledCallback;
 
+$(/PMC/staticDefinitions: // No static declarations found)
 $(/PMC/declarations: // No declarations found)
 /**
  * End PMC_Group
