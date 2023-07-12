@@ -540,12 +540,15 @@
       </peripheral>
       <peripheral baseName="GPIO"     instance="A"        version="fgpioa_mke">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
+         <param name="$present"     key="/GPIOA/$present" value="true" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="B"        version="fgpiob_mke">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
+         <param name="$present"     key="/GPIOB/$present" value="true" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="C"        version="fgpioc_mke">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
+         <param name="$present"     key="/GPIOC/$present" value="true" />
       </peripheral>
       <peripheral baseName="I2C"      instance="0"        version="i2c0_mke">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
@@ -740,6 +743,49 @@
          <param name="pmc_spmsc1_lvwie_present" key="/PMC/pmc_spmsc1_lvwie_present" value="true" />
          <param name="pmc_spmsc2_lvdv_present" key="/PMC/pmc_spmsc2_lvdv_present" value="true" />
          <param name="pmc_spmsc2_lvwv_present" key="/PMC/pmc_spmsc2_lvwv_present" value="true" />
+      </peripheral>
+      <peripheral baseName="PORT"     instance=""         version="port_mke06">
+         <handler class="net.sourceforge.usbdm.deviceEditor.information.WriterForPort" />
+         <param name="$present"     key="/PORT/$present" value="true" />
+         <param name="port_hdrve_ptb4_present" key="/PORT/port_hdrve_ptb4_present" value="true" />
+         <param name="port_hdrve_ptb5_present" key="/PORT/port_hdrve_ptb5_present" value="true" />
+         <param name="port_hdrve_ptd0_present" key="/PORT/port_hdrve_ptd0_present" value="true" />
+         <param name="port_hdrve_ptd1_present" key="/PORT/port_hdrve_ptd1_present" value="true" />
+         <param name="port_hdrve_pte0_present" key="/PORT/port_hdrve_pte0_present" value="true" />
+         <param name="port_hdrve_pte1_present" key="/PORT/port_hdrve_pte1_present" value="true" />
+         <param name="port_hdrve_pth0_present" key="/PORT/port_hdrve_pth0_present" value="true" />
+         <param name="port_hdrve_pth1_present" key="/PORT/port_hdrve_pth1_present" value="true" />
+         <param name="port_ioflt0_flta_present" key="/PORT/port_ioflt0_flta_present" value="true" />
+         <param name="port_ioflt0_fltb_present" key="/PORT/port_ioflt0_fltb_present" value="true" />
+         <param name="port_ioflt0_fltc_present" key="/PORT/port_ioflt0_fltc_present" value="true" />
+         <param name="port_ioflt0_fltd_present" key="/PORT/port_ioflt0_fltd_present" value="true" />
+         <param name="port_ioflt0_fltdiv1_present" key="/PORT/port_ioflt0_fltdiv1_present" value="true" />
+         <param name="port_ioflt0_fltdiv2_present" key="/PORT/port_ioflt0_fltdiv2_present" value="true" />
+         <param name="port_ioflt0_fltdiv3_present" key="/PORT/port_ioflt0_fltdiv3_present" value="true" />
+         <param name="port_ioflt0_flte_present" key="/PORT/port_ioflt0_flte_present" value="true" />
+         <param name="port_ioflt0_fltf_present" key="/PORT/port_ioflt0_fltf_present" value="true" />
+         <param name="port_ioflt0_fltg_present" key="/PORT/port_ioflt0_fltg_present" value="true" />
+         <param name="port_ioflt0_flth_present" key="/PORT/port_ioflt0_flth_present" value="true" />
+         <param name="port_ioflt0_fltkbi0_present" key="/PORT/port_ioflt0_fltkbi0_present" value="true" />
+         <param name="port_ioflt0_fltkbi1_present" key="/PORT/port_ioflt0_fltkbi1_present" value="true" />
+         <param name="port_ioflt0_fltnmi_present" key="/PORT/port_ioflt0_fltnmi_present" value="true" />
+         <param name="port_ioflt0_fltrst_present" key="/PORT/port_ioflt0_fltrst_present" value="true" />
+         <param name="port_ioflt1_fltftm0_present" key="/PORT/port_ioflt1_fltftm0_present" value="true" />
+         <param name="port_ioflt1_fltftm1_present" key="/PORT/port_ioflt1_fltftm1_present" value="true" />
+         <param name="port_ioflt1_flti2c0_present" key="/PORT/port_ioflt1_flti2c0_present" value="true" />
+         <param name="port_ioflt1_flti2c1_present" key="/PORT/port_ioflt1_flti2c1_present" value="true" />
+         <param name="port_ioflt1_flti_present" key="/PORT/port_ioflt1_flti_present" value="true" />
+         <param name="port_ioflt1_fltirq_present" key="/PORT/port_ioflt1_fltirq_present" value="true" />
+         <param name="port_ioflt1_fltpwt_present" key="/PORT/port_ioflt1_fltpwt_present" value="true" />
+         <param name="port_pue0_ptape_present" key="/PORT/port_pue0_ptape_present" value="true" />
+         <param name="port_pue0_ptbpe_present" key="/PORT/port_pue0_ptbpe_present" value="true" />
+         <param name="port_pue0_ptcpe_present" key="/PORT/port_pue0_ptcpe_present" value="true" />
+         <param name="port_pue0_ptdpe_present" key="/PORT/port_pue0_ptdpe_present" value="true" />
+         <param name="port_pue1_ptepe_present" key="/PORT/port_pue1_ptepe_present" value="true" />
+         <param name="port_pue1_ptfpe_present" key="/PORT/port_pue1_ptfpe_present" value="true" />
+         <param name="port_pue1_ptgpe_present" key="/PORT/port_pue1_ptgpe_present" value="true" />
+         <param name="port_pue1_pthpe_present" key="/PORT/port_pue1_pthpe_present" value="true" />
+         <param name="port_pue2_ptipe_present" key="/PORT/port_pue2_ptipe_present" value="true" />
       </peripheral>
       <peripheral baseName="PWT"      instance=""         version="pwt_mke">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPwt" />

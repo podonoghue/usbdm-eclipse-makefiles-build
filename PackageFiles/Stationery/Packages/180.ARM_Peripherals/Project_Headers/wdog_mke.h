@@ -94,124 +94,45 @@ protected:
 #if $(/WDOG/secondsSupport:false)
    /**
     *
-    * @param[in]     stctrlh   Used to obtain clock source (STCTRLH.CLKSRC)
+    * @param[in,out] cs2       Used to obtain clock source (CS2.WDOG_CS2_CLK), updated with prescaler (CS.WDOG_CS2_PRES)
     * @param[in,out] timeout   .seconds Timeout value in seconds -> .ticks   Timeout value in ticks
     * @param[in,out] window    .seconds  Window value in seconds -> .ticks    Window value in ticks
-    * @param[out]    presc     Calculated prescale value (PRESC.PRESCVAL)
     *
     * @return Error code
     */
    static ErrorCode calculateTimingParameters(
-         uint16_t       cs2,
+         uint16_t      &cs2,
          Seconds_Ticks &timeout,
-         Seconds_Ticks &window,
-         uint16_t      &presc) {
+         Seconds_Ticks &window) {
 
-      float constexpr maxCount = ~1UL;
+      float constexpr maxCount = 0xFFFFUL;
 
       if ((int)window.toTicks()>(int)timeout.toTicks()) {
          return E_ILLEGAL_PARAM;
       }
-      uint32_t clockFrequency = WdogInfo::getInputClockFrequency((WdogClock)(cs2 & WDOG_CS2_PRES_MASK));
-      Seconds maxTime = maxCount/clockFrequency;
 
-      for(int prescale=1; prescale<=8; prescale++) {
-         float counterFrequency = clockFrequency/(float)prescale;
-         maxTime = maxCount/clockFrequency;
-         if (maxTime > timeout.toSeconds()) {
-            timeout.fromTicks(roundf(timeout.toSeconds()*counterFrequency));
-            window.fromTicks(roundf(window.toSeconds()*counterFrequency));
-            presc = WDOG_CS2_PRES(prescale-1);
-            return E_NO_ERROR;
-         }
+      // Try without prescaler
+      uint32_t counterFrequency = WdogInfo::getInputClockFrequency((WdogClock)(cs2 & WDOG_CS2_CLK_MASK));
+      Seconds maxTime = maxCount/counterFrequency;
+      cs2 &= ~WDOG_CS2_PRES_MASK;
+
+      if (timeout.toSeconds()>maxTime) {
+         // Try with prescaler
+         maxTime *= 256;
+         counterFrequency /=256;
+         cs2 |= WDOG_CS2_PRES_MASK;
       }
-      return setErrorCode(E_TOO_LARGE);
+      if (timeout.toSeconds()>maxTime) {
+         return setErrorCode(E_TOO_LARGE);
+      }
+      timeout.fromTicks(roundf(timeout.toSeconds()*counterFrequency));
+      window.fromTicks(roundf(window.toSeconds()*counterFrequency));
+      return E_NO_ERROR;
    }
 #endif
 
 public:
 $(/WDOG/InitMethod: // /WDOG/InitMethod not found)
-#if $(/WDOG/irqHandlingMethod:false)
-   /**
-    * Wrapper to allow the use of a class member as a callback function
-    * @note Only usable with static objects.
-    *
-    * @tparam T         Type of the object containing the callback member function
-    * @tparam callback  Member function pointer
-    * @tparam object    Object containing the member function
-    *
-    * @return  Pointer to a function suitable for the use as a callback
-    *
-    * @code
-    * class AClass {
-    * public:
-    *    int y;
-    *
-    *    // Member function used as callback
-    *    // This function must match CallbackFunction
-    *    void callback() {
-    *       ...;
-    *    }
-    * };
-    * ...
-    * // Instance of class containing callback member function
-    * static AClass aClass;
-    * ...
-    * // Wrap member function
-    * auto fn = Wdog::wrapCallback<AClass, &AClass::callback, aClass>();
-    * // Use as callback
-    * Wdog::setCallback(fn);
-    * @endcode
-    */
-   template<class T, void(T::*callback)(), T &object>
-   static CallbackFunction wrapCallback() {
-      static CallbackFunction fn = []() {
-         (object.*callback)();
-      };
-      return fn;
-   }
-
-   /**
-    * Wrapper to allow the use of a class member as a callback function
-    * @note There is a considerable space and time overhead to using this method
-    *
-    * @tparam T         Type of the object containing the callback member function
-    * @tparam callback  Member function pointer
-    * @tparam object    Object containing the member function
-    *
-    * @return  Pointer to a function suitable for the use as a callback
-    *
-    * @code
-    * class AClass {
-    * public:
-    *    int y;
-    *
-    *    // Member function used as callback
-    *    // This function must match CallbackFunction
-    *    void callback() {
-    *       ...;
-    *    }
-    * };
-    * ...
-    * // Instance of class containing callback member function
-    * AClass aClass;
-    * ...
-    * // Wrap member function
-    * auto fn = Wdog::wrapCallback<AClass, &AClass::callback>(aClass);
-    * // Use as callback
-    * Wdog::setCallback(fn);
-    * @endcode
-    */
-   template<class T, void(T::*callback)()>
-   static CallbackFunction wrapCallback(T &object) {
-      static T &obj = object;
-      static CallbackFunction fn = []() {
-         (obj.*callback)();
-      };
-      return fn;
-   }
-#endif
-
 public:
 
    /**

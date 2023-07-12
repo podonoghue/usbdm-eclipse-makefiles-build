@@ -2087,6 +2087,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="PCC->PCC_GPIOA = PCC->PCC_GPIOA | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOA = PCC->PCC_GPIOA &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTA_IRQn" />
+         <param name="$present"     key="/GPIOA/$present" value="true" />
          <param name="dfer_register_present" key="/GPIOA/dfer_register_present" value="true" />
          <param name="$present"     key="/PCR/$present" value="true" />
          <param name="dfer_register_present" key="/PCR/dfer_register_present" value="true" />
@@ -2104,24 +2105,28 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="PCC->PCC_GPIOB = PCC->PCC_GPIOB | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOB = PCC->PCC_GPIOB &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTB_IRQn" />
+         <param name="$present"     key="/GPIOB/$present" value="true" />
          <param name="dfer_register_present" key="/GPIOB/dfer_register_present" value="true" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="C"        version="gpioa_s32k">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="PCC->PCC_GPIOC = PCC->PCC_GPIOC | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOC = PCC->PCC_GPIOC &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTC_IRQn" />
+         <param name="$present"     key="/GPIOC/$present" value="true" />
          <param name="dfer_register_present" key="/GPIOC/dfer_register_present" value="true" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="D"        version="gpioa_s32k">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="PCC->PCC_GPIOD = PCC->PCC_GPIOD | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOD = PCC->PCC_GPIOD &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTD_IRQn" />
+         <param name="$present"     key="/GPIOD/$present" value="true" />
          <param name="dfer_register_present" key="/GPIOD/dfer_register_present" value="true" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="E"        version="gpioa_s32k">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="PCC->PCC_GPIOE = PCC->PCC_GPIOE | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOE = PCC->PCC_GPIOE &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTE_IRQn" />
+         <param name="$present"     key="/GPIOE/$present" value="true" />
          <param name="dfer_register_present" key="/GPIOE/dfer_register_present" value="true" />
       </peripheral>
       <peripheral baseName="LPI2C"    instance="0"        version="lpi2c0_s32k14x">

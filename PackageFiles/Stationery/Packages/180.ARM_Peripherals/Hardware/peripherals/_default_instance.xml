@@ -22,7 +22,7 @@
       \t\n
 ]]></template>
 
-<template condition="&quot;$(_instance)&quot; != &quot;&quot;" ><![CDATA[
+<template condition="(&quot;$(_instance)&quot; != &quot;&quot;)&amp;&amp;!suppressInstance" ><![CDATA[
       \t//! Peripheral instance number
       \tstatic constexpr unsigned instance = $(_instance);
       \t\n

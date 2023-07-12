@@ -100,36 +100,6 @@ void SystemInitLowLevel(void) {
    // Clear Boot ROM flag
    RCM->MR = RCM_MR_BOOTROM(3);
 #endif
-
-//#ifdef WDOG_CS_UPDATE
-//   /* Unlocking Watchdog word */
-//#define WDOG_UPDATE_KEY  (0xD928C520U)
-//
-//   // Disable watch-dog
-//   WDOG->CNT    = WDOG_UPDATE_KEY; // Write the unlock word
-//   WDOG->TOVAL  = -1;              // Setting time-out value
-//   WDOG->CS     =
-//#ifdef WDOG_CS_CMD32EN
-//         WDOG_CS_CMD32EN(1) |    // Enable 32 bit writes
-//#endif
-//         WDOG_CS_EN(0) |         // Disable watch-dog
-//         WDOG_CS_CLK(1) |        // Setting 1-kHz clock source
-//         WDOG_CS_UPDATE(1);      // Allow future update
-//#endif
-
-//#ifdef WDOG_CS1_UPDATE_MASK
-//   /* Unlocking Watchdog sequence words*/
-//#define WDOG_KEY1    (0x20C5)
-//#define WDOG_KEY2    (0x28D9)
-//
-//   /* Disable watch-dog */
-//   WDOG->CNT    = WDOG_KEY1;               // Write the 1st unlock word
-//   WDOG->CNT    = WDOG_KEY2;               // Write the 2nd unlock word
-//   WDOG->TOVAL  = -1;                      // Setting time-out value
-//   WDOG->CS2    = WDOG_CS2_CLK(1);         // Setting 1-kHz clock source
-//   WDOG->CS1    = WDOG_CS1_UPDATE(1);      // Disable watchdog and allow future changes
-//#endif
-
 $(/SYSTEM/WatchdogInitialise: #error Watchdog initialisation code not found)
 #if defined(KINETIS_BOOTLOADER_CHECK)
    /**
@@ -180,4 +150,5 @@ void SystemInit(void) {
          "  ISB                        \n"  // Reset pipeline now the FPU is enabled
    );
 #endif
+$(/SYSTEM/Startup:// No extra startups found)
 }

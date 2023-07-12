@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- port_mke06.xml -->
+<!-- port_mke04.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Port control" >
 
@@ -13,10 +13,10 @@
    <xi:include href="_enablePeripheral.xml" />
    <title description="------------------------------------------" />
 
-   <!-- ************* IOFLT0 and IOFLT1 ****************** -->
+   <!-- ************* IOFLT ****************** -->
    <category name="Filters" description="Filters for pins" >
 
-      <choiceOption key="port_ioflt0_fltdiv1" condition="port_ioflt0_fltdiv1_present"
+      <choiceOption key="port_ioflt_fltdiv1" condition="port_ioflt_fltdiv1_present"
          enumStem="PortFilterClock1"
          description="Filter Division Set 1"
          toolTip="Selects the clock speed for the filter" >
@@ -26,7 +26,7 @@
          <choice name="BUSCLK/16"   value="3" enum="Busclk16"/>
       </choiceOption >
 
-      <choiceOption key="port_ioflt0_fltdiv2" condition="port_ioflt0_fltdiv2_present"
+      <choiceOption key="port_ioflt_fltdiv2" condition="port_ioflt_fltdiv2_present"
          enumStem="PortFilterClock2"
          description="Filter Division Set 2"
          toolTip="Selects the clock speed for the filter" >
@@ -40,7 +40,7 @@
          <choice name="BUSCLK/4096"  value="7" enum="Busclk4096"/>
       </choiceOption >
 
-      <choiceOption key="port_ioflt0_fltdiv3" condition="port_ioflt0_fltdiv3_present"
+      <choiceOption key="port_ioflt_fltdiv3" condition="port_ioflt_fltdiv3_present"
          enumStem="PortFilterClock3"
          description="Filter Division Set 3"
          toolTip="Selects the clock speed for the filter" >
@@ -54,7 +54,7 @@
          <choice name="LPOCLK/128"  value="7" enum="Lpoclk128"/>
       </choiceOption >
 
-      <choiceOption key="port_ioflt0_fltnmi" condition="port_ioflt0_fltnmi_present"
+      <choiceOption key="port_ioflt_fltnmi" condition="port_ioflt_fltnmi_present"
          enumStem="PortNmiFilterSel"
          description="Filter Selection for Input from NMI" >
          <choice name="No filter"                                                               value="0" enum="NoFilter"/>
@@ -63,16 +63,7 @@
          <choice name="FLTDIV3"                                                                 value="3" enum="Fltdiv3" isDefault="true" />
       </choiceOption >
 
-      <choiceOption key="port_ioflt1_fltirq" condition="port_ioflt1_fltirq_present"
-         enumStem="PortIrqFilterSel"
-         description="Filter Selection for Input from IRQ" >
-         <choice name="No Filter"                                            value="0" enum="NoFilter"/>
-         <choice name="Selects FLTDIV1, (switches to FLTDIV3 in Stop mode)"  value="1" enum="SelectsFltdiv1_SwitchesToFltdiv3InStopMode"/>
-         <choice name="Selects FLTDIV2, (switches to FLTDIV3 in Stop mode)"  value="2" enum="SelectsFltdiv2_SwitchesToFltdiv3InStopMode"/>
-         <choice name="FLTDIV3"                                              value="3" enum="Fltdiv3"/>
-      </choiceOption >
-
-      <choiceOption key="port_ioflt0_fltrst" condition="port_ioflt0_fltrst_present"
+      <choiceOption key="port_ioflt_fltrst" condition="port_ioflt_fltrst_present"
          enumStem="PortResetFilterSel"
          description="Filter Selection for Input from RESET" >
          <choice name="No filter"                                                               value="0" enum="NoFilter"/>
@@ -81,7 +72,7 @@
          <choice name="FLTDIV3"                                                                 value="3" enum="Fltdiv3"/>
       </choiceOption >
 
-      <choiceOption key="port_ioflt0_fltkbi0" condition="port_ioflt0_fltkbi0_present"
+      <choiceOption key="port_ioflt_fltkbi0" condition="port_ioflt_fltkbi0_present"
          enumStem="PortKbi0FilterSel"
          description="Filter Selection for Input from KBI0" >
          <choice name="No filter"                                                               value="0" enum="NoFilter"/>
@@ -90,7 +81,7 @@
          <choice name="FLTDIV3"                                                                 value="3" enum="Fltdiv3"/>
       </choiceOption >
 
-      <choiceOption key="port_ioflt0_fltkbi1" condition="port_ioflt0_fltkbi1_present"
+      <choiceOption key="port_ioflt_fltkbi1" condition="port_ioflt_fltkbi1_present"
          enumStem="PortKbi1FilterSel"
          description="Filter Selection for Input from KBI1" >
          <choice name="No filter"                                                               value="0" enum="NoFilter"/>
@@ -99,25 +90,16 @@
          <choice name="FLTDIV3"                                                                 value="3" enum="Fltdiv3"/>
       </choiceOption >
 
-      <choiceOption key="port_ioflt1_flti2c0" condition="port_ioflt1_flti2c0_present"
+      <choiceOption key="port_ioflt_fltiic" condition="port_ioflt_fltiic_present"
          enumStem="PortI2c0FilterSel"
          description="Filter Selection for Input from SCL0/SDA0" >
          <choice name="No Filter"   value="0" enum="NoFilter"/>
          <choice name="FLTDIV1"     value="1" enum="Fltdiv1"/>
          <choice name="FLTDIV2"     value="2" enum="Fltdiv2"/>
-         <choice name="FLTDIV3"     value="3" enum="Fltdiv3"/>
+         <choice name="BUSCLK"      value="3" enum="Busclk"/>
       </choiceOption >
 
-      <choiceOption key="port_ioflt1_flti2c1" condition="port_ioflt1_flti2c1_present"
-         enumStem="PortI2c1FilterSel"
-         description="Filter Selection for Input from SCL1/SDA1" >
-         <choice name="No Filter"   value="0" enum="NoFilter"/>
-         <choice name="FLTDIV1"     value="1" enum="Fltdiv1"/>
-         <choice name="FLTDIV2"     value="2" enum="Fltdiv2"/>
-         <choice name="FLTDIV3"     value="3" enum="Fltdiv3"/>
-      </choiceOption >
-
-      <choiceOption key="port_ioflt1_fltpwt" condition="port_ioflt1_fltpwt_present"
+      <choiceOption key="port_ioflt_fltpwt" condition="port_ioflt_fltpwt_present"
          enumStem="PortPwtFilterSel"
          description="Filter Selection for Input from PWT_IN0/PWT_IN1" >
          <choice name="No Filter"   value="0" enum="NoFilter"/>
@@ -126,7 +108,7 @@
          <choice name="FLTDIV3"     value="3" enum="Fltdiv3"/>
       </choiceOption >
 
-      <choiceOption key="port_ioflt1_fltftm0" condition="port_ioflt1_fltftm0_present"
+      <choiceOption key="port_ioflt_fltftm0" condition="port_ioflt_fltftm0_present"
          enumStem="PortFtm0FilterSel"
          description="Filter Selection for Input from FTM0 Channels" >
          <choice name="No Filter"   value="0" enum="NoFilter"/>
@@ -135,16 +117,7 @@
          <choice name="FLTDIV3"     value="3" enum="Fltdiv3"/>
       </choiceOption >
 
-      <choiceOption key="port_ioflt1_fltftm1" condition="port_ioflt1_fltftm1_present"
-         enumStem="PortFtm1FilterSel"
-         description="Filter Selection for Input from FTM1 Channels" >
-         <choice name="No Filter"   value="0" enum="NoFilter"/>
-         <choice name="FLTDIV1"     value="1" enum="Fltdiv1"/>
-         <choice name="FLTDIV2"     value="2" enum="Fltdiv2"/>
-         <choice name="FLTDIV3"     value="3" enum="Fltdiv3"/>
-      </choiceOption >
-
-      <choiceOption key="port_ioflt0_flta" condition="port_ioflt0_flta_present"
+      <choiceOption key="port_ioflt_flta" condition="port_ioflt_flta_present"
          enumStem="PortPtaFilterSel"
          description="Filter Selection for Input from PTA" >
          <choice name="BUSCLK"      value="0" enum="Busclk"/>
@@ -153,7 +126,7 @@
          <choice name="FLTDIV3"     value="3" enum="Fltdiv3"/>
       </choiceOption >
 
-      <choiceOption key="port_ioflt0_fltb" condition="port_ioflt0_fltb_present"
+      <choiceOption key="port_ioflt_fltb" condition="port_ioflt_fltb_present"
          enumStem="PortPtbFilterSel"
          description="Filter Selection for Input from PTB" >
          <choice name="BUSCLK"      value="0" enum="Busclk"/>
@@ -162,7 +135,7 @@
          <choice name="FLTDIV3"     value="3" enum="Fltdiv3"/>
       </choiceOption >
 
-      <choiceOption key="port_ioflt0_fltc" condition="port_ioflt0_fltc_present"
+      <choiceOption key="port_ioflt_fltc" condition="port_ioflt_fltc_present"
          enumStem="PortPtcFilterSel"
          description="Filter Selection for Input from PTC" >
          <choice name="BUSCLK"      value="0" enum="Busclk"/>
@@ -170,75 +143,21 @@
          <choice name="FLTDIV2"     value="2" enum="Fltdiv2"/>
          <choice name="FLTDIV3"     value="3" enum="Fltdiv3"/>
       </choiceOption >
-
-      <choiceOption key="port_ioflt0_fltd" condition="port_ioflt0_fltd_present"
-         enumStem="PortPtdFilterSel"
-         description="Filter Selection for Input from PTD" >
-         <choice name="BUSCLK"      value="0" enum="Busclk"/>
-         <choice name="FLTDIV1"     value="1" enum="Fltdiv1"/>
-         <choice name="FLTDIV2"     value="2" enum="Fltdiv2"/>
-         <choice name="FLTDIV3"     value="3" enum="Fltdiv3"/>
-      </choiceOption >
-
-      <choiceOption key="port_ioflt0_flte" condition="port_ioflt0_flte_present"
-         enumStem="PortPteFilterSel"
-         description="Filter Selection for Input from PTE" >
-         <choice name="BUSCLK"      value="0" enum="Busclk"/>
-         <choice name="FLTDIV1"     value="1" enum="Fltdiv1"/>
-         <choice name="FLTDIV2"     value="2" enum="Fltdiv2"/>
-         <choice name="FLTDIV3"     value="3" enum="Fltdiv3"/>
-      </choiceOption >
-
-      <choiceOption key="port_ioflt0_fltf" condition="port_ioflt0_fltf_present"
-         enumStem="PortPtfFilterSel"
-         description="Filter Selection for Input from PTF" >
-         <choice name="BUSCLK"      value="0" enum="Busclk"/>
-         <choice name="FLTDIV1"     value="1" enum="Fltdiv1"/>
-         <choice name="FLTDIV2"     value="2" enum="Fltdiv2"/>
-         <choice name="FLTDIV3"     value="3" enum="Fltdiv3"/>
-      </choiceOption >
-
-      <choiceOption key="port_ioflt0_fltg" condition="port_ioflt0_fltg_present"
-         enumStem="PortPtgFilterSel"
-         description="Filter Selection for Input from PTG" >
-         <choice name="BUSCLK"      value="0" enum="Busclk"/>
-         <choice name="FLTDIV1"     value="1" enum="Fltdiv1"/>
-         <choice name="FLTDIV2"     value="2" enum="Fltdiv2"/>
-         <choice name="FLTDIV3"     value="3" enum="Fltdiv3"/>
-      </choiceOption >
-
-      <choiceOption key="port_ioflt0_flth" condition="port_ioflt0_flth_present"
-         enumStem="PortPthFilterSel"
-         description="Filter Selection for Input from PTH" >
-         <choice name="BUSCLK"      value="0" enum="Busclk"/>
-         <choice name="FLTDIV1"     value="1" enum="Fltdiv1"/>
-         <choice name="FLTDIV2"     value="2" enum="Fltdiv2"/>
-         <choice name="FLTDIV3"     value="3" enum="Fltdiv3"/>
-      </choiceOption >
-
-      <choiceOption key="port_ioflt1_flti" condition="port_ioflt1_flti_present"
-         enumStem="PortPtiFilterSel"
-         description="Filter Selection for Input from PTI" >
-         <choice name="BUSCLK"      value="0" enum="Busclk"/>
-         <choice name="FLTDIV1"     value="1" enum="Fltdiv1"/>
-         <choice name="FLTDIV2"     value="2" enum="Fltdiv2"/>
-         <choice name="FLTDIV3"     value="3" enum="Fltdiv3"/>
-      </choiceOption >
    </category>
 
-   <!-- ************* PUE0, PUE1 and PUE2  ****************** -->
+   <!-- ************* PUEL ****************** -->
 
    <category name="Pullups" description="Pull-up enables for Port pins" >
       <for keys=   "r:P:p:v"
-           values= "0:A:a:0b00000000;
-                    0:B:b:0b00000000;
-                    0:C:c:0b00010000;
-                    0:D:d:0b00000000;
-                    1:E:e:0b00000000;
-                    1:F:f:0b00000000;
-                    1:G:g:0b00000000;
-                    1:H:h:0b00000000;
-                    2:I:i:0b00000000"
+           values= "l:A:a:0b00000001;
+                    l:B:b:0b00000000;
+                    l:C:c:0b00000000;
+                    l:D:d:0b00000000;
+                    l:E:e:0b00000000;
+                    l:F:f:0b00000000;
+                    l:G:g:0b00000000;
+                    l:H:h:0b00000000;
+                    l:I:i:0b00000000"
          >
          <bitmaskOption key="port_pue%(r)_pt%(p)pe"  condition="port_pue%(r)_pt%(p)pe_present"
             description="Pull-up control for Port %(P)"
@@ -251,7 +170,7 @@
    <!-- ************* HDRVE ****************** -->
 
    <category name="High Drive" description="High-drive enables for Port pins" >
-      <for keys="P:p:n" values="B:b:4;B:b:5;D:d:0;D:d:1;E:e:0;E:e:1;H:h:0;H:h:1">
+      <for keys="P:p:n" values="B:b:5;C:c:1;C:c:5">
          <binaryOption key="port_hdrve_pt%(p)%(n)" condition="port_hdrve_pt%(p)%(n)_present"
             enumStem="PortHdrvePt%(p)%(n)"
             description="High drive enable for Port %(P) bit %(n)" >
@@ -265,28 +184,19 @@
 
    <for keys="field:name"
         values="
-      port_ioflt0_fltdiv3:Filter3Clock;
-      port_ioflt0_fltdiv2:Filter2Clock;
-      port_ioflt0_fltdiv1:Filter1Clock;
-      port_ioflt0_fltnmi:NmiFilter;
-      port_ioflt0_fltkbi1:Kbi1Filter;
-      port_ioflt0_fltkbi0:Kbi0Filter;
-      port_ioflt0_fltrst:ResetFilter;
-      port_ioflt0_flth:PthFilter;
-      port_ioflt0_fltg:PtgFilter;
-      port_ioflt0_fltf:PtfFilter;
-      port_ioflt0_flte:PteFilter;
-      port_ioflt0_fltd:PtdFilter;
-      port_ioflt0_fltc:PtcFilter;
-      port_ioflt0_fltb:PtbFilter;
-      port_ioflt0_flta:PtaFilter;
-      port_ioflt1_flti2c1:I2c1Filter;
-      port_ioflt1_flti2c0:I2c0Filter;
-      port_ioflt1_fltpwt:PwtFilter;
-      port_ioflt1_fltftm1:Ftm1Filter;
-      port_ioflt1_fltftm0:Ftm0Filter;
-      port_ioflt1_fltirq:IrqFilter;
-      port_ioflt1_flti:PtiFilter" >
+      port_ioflt_fltdiv3:Filter3Clock;
+      port_ioflt_fltdiv2:Filter2Clock;
+      port_ioflt_fltdiv1:Filter1Clock;
+      port_ioflt_fltnmi:NmiFilter;
+      port_ioflt_fltkbi1:Kbi1Filter;
+      port_ioflt_fltkbi0:Kbi0Filter;
+      port_ioflt_fltrst:ResetFilter;
+      port_ioflt_fltpwt:PwtFilter;
+      port_ioflt_fltftm0:Ftm0Filter;
+      port_ioflt_fltiic:I2c0Filter;
+      port_ioflt_fltc:PtcFilter;
+      port_ioflt_fltb:PtbFilter;
+      port_ioflt_flta:PtaFilter" >
       <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
@@ -316,28 +226,19 @@
       \t * static const $(_class)::Init init {
       \t *
       \t *   // Setup values
-      \t *   PortFilterClock1_Busclk2 ,     // Filter Division Set 1 - BUSCLK/2
-      \t *   PortFilterClock2_Busclk32 ,    // Filter Division Set 2 - BUSCLK/32
-      \t *   PortFilterClock3_Lpoclk ,      // Filter Division Set 3 - LPOCLK
-      \t *   PortResetFilterSel_NoFilter ,  // Filter Selection for Input from RESET - No filter
-      \t *   PortNmiFilterSel_Fltdiv3 ,     // Filter Selection for Input from NMI - FLTDIV3
-      \t *   PortIrqFilterSel_NoFilter ,    // Filter Selection for Input from IRQ - No Filter
-      \t *   PortKbi0FilterSel_NoFilter ,   // Filter Selection for Input from KBI0 - No filter
-      \t *   PortKbi1FilterSel_NoFilter ,   // Filter Selection for Input from KBI1 - No filter
-      \t *   PortI2c0FilterSel_NoFilter ,   // Filter Selection for Input from SCL0/SDA0 - No Filter
-      \t *   PortI2c1FilterSel_NoFilter ,   // Filter Selection for Input from SCL1/SDA1 - No Filter
-      \t *   PortPwtFilterSel_NoFilter ,    // Filter Selection for Input from PWT_IN0/PWT_IN1 - No Filter
-      \t *   PortFtm0FilterSel_NoFilter ,   // Filter Selection for Input from FTM0 Channels - No Filter
-      \t *   PortFtm1FilterSel_NoFilter ,   // Filter Selection for Input from FTM1 Channels - No Filter
-      \t *   PortPtaFilterSel_Busclk ,      // Filter Selection for Input from PTA - BUSCLK
-      \t *   PortPtbFilterSel_Busclk ,      // Filter Selection for Input from PTB - BUSCLK
-      \t *   PortPtcFilterSel_Busclk ,      // Filter Selection for Input from PTC - BUSCLK
-      \t *   PortPtdFilterSel_Busclk ,      // Filter Selection for Input from PTD - BUSCLK
-      \t *   PortPteFilterSel_Busclk ,      // Filter Selection for Input from PTE - BUSCLK
-      \t *   PortPtfFilterSel_Busclk ,      // Filter Selection for Input from PTF - BUSCLK
-      \t *   PortPtgFilterSel_Busclk ,      // Filter Selection for Input from PTG - BUSCLK
-      \t *   PortPthFilterSel_Busclk ,      // Filter Selection for Input from PTH - BUSCLK
-      \t *   PortPtiFilterSel_Busclk,       // Filter Selection for Input from PTI - BUSCLK
+      \t *   PortFilterClock1_Busclk2 ,    // Filter Division Set 1 - BUSCLK/2
+      \t *   PortFilterClock2_Busclk32 ,   // Filter Division Set 2 - BUSCLK/32
+      \t *   PortFilterClock3_Lpoclk ,     // Filter Division Set 3 - LPOCLK
+      \t *   PortResetFilterSel_NoFilter , // Filter Selection for Input from RESET - No filter
+      \t *   PortNmiFilterSel_Fltdiv3 ,    // Filter Selection for Input from NMI - FLTDIV3
+      \t *   PortPwtFilterSel_NoFilter ,   // Filter Selection for Input from PWT_IN0/PWT_IN1 - No Filter
+      \t *   PortKbi1FilterSel_NoFilter ,  // Filter Selection for Input from KBI1 - No filter
+      \t *   PortKbi0FilterSel_NoFilter ,  // Filter Selection for Input from KBI0 - No filter
+      \t *   PortFtm0FilterSel_NoFilter ,  // Filter Selection for Input from FTM0 Channels - No Filter
+      \t *   PortI2c0FilterSel_NoFilter ,  // Filter Selection for Input from SCL0/SDA0 - No Filter
+      \t *   PortPtaFilterSel_Busclk ,     // Filter Selection for Input from PTA - BUSCLK
+      \t *   PortPtbFilterSel_Busclk ,     // Filter Selection for Input from PTB - BUSCLK
+      \t *   PortPtcFilterSel_Busclk,      // Filter Selection for Input from PTC - BUSCLK
       \t * };
       \t *
       \t * // Initialise $(_class) from values specified above
@@ -377,16 +278,9 @@
 <!--   Member variables -->
 
    <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-      variables="port_ioflt0_fltdiv3,port_ioflt0_fltdiv2,port_ioflt0_fltdiv1,port_ioflt0_fltnmi,port_ioflt0_fltkbi1,port_ioflt0_fltkbi0,port_ioflt0_fltrst,port_ioflt0_flth,port_ioflt0_fltg,port_ioflt0_fltf,port_ioflt0_flte,port_ioflt0_fltd,port_ioflt0_fltc,port_ioflt0_fltb,port_ioflt0_flta"
+      variables="port_ioflt_fltdiv3,port_ioflt_fltdiv2,port_ioflt_fltdiv1,port_ioflt_fltnmi,port_ioflt_fltkbi1,port_ioflt_fltkbi0,port_ioflt_fltrst,port_ioflt_fltpwt,port_ioflt_fltftm0,port_ioflt_fltiic,port_ioflt_fltc,port_ioflt_fltb,port_ioflt_flta"
    ><![CDATA[
-      \t   /// Port Filter Register 0
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
-
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-      variables="port_ioflt1_flti2c1,port_ioflt1_flti2c0,port_ioflt1_fltpwt,port_ioflt1_fltftm1,port_ioflt1_fltftm0,port_ioflt1_fltirq,port_ioflt1_flti"
-   ><![CDATA[
-      \t   /// Port Filter Register 1
+      \t   /// Port Filter Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
@@ -404,23 +298,20 @@
       \t   // Update settings
       \t   configure(Info::DefaultInitValue);
       \t
-      \t   port->PUE0     = Info::pue0;
-      \t   port->PUE1     = Info::pue1;
-      \t   port->PUE2     = Info::pue2;
+      \t   port->PUEL     = Info::puel;
       \t   port->HDRVE    = Info::hdrve;
       \t}
       \t\n
    ]]></template>
 
    <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
-             codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Configure $(_basename) from values specified in init
       \t *
       \t * @param init Class containing initialisation values
       \t */
       \tstatic void configure(const typename Info::Init &init) {
-      \t   // ..........  Configure stuff ...........
       \t\n
    ]]></template>
    <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
@@ -433,9 +324,8 @@
 
    <template discardRepeats="true" key="/$(_basename)/InitMethod" namespace="all"
              codeGenCondition="enablePeripheralSupport" ><![CDATA[
-      \t   // ..........  Regs to init .......... ;
-      \t   port->IOFLT0    = init.ioflt0;
-      \t   port->IOFLT1    = init.ioflt1;
+      \t   // Initialise remaining registers
+      \t   port->IOFLT    = init.ioflt;
       \t}
       \t\n
    ]]></template>
@@ -444,28 +334,19 @@
 
    <for keys="r"
       values="
-            port_ioflt0_fltdiv3;
-            port_ioflt0_fltdiv2;
-            port_ioflt0_fltdiv1;
-            port_ioflt0_fltnmi;
-            port_ioflt0_fltkbi1;
-            port_ioflt0_fltkbi0;
-            port_ioflt0_fltrst;
-            port_ioflt0_flth;
-            port_ioflt0_fltg;
-            port_ioflt0_fltf;
-            port_ioflt0_flte;
-            port_ioflt0_fltd;
-            port_ioflt0_fltc;
-            port_ioflt0_fltb;
-            port_ioflt0_flta;
-            port_ioflt1_flti2c1;
-            port_ioflt1_flti2c0;
-            port_ioflt1_fltpwt;
-            port_ioflt1_fltftm1;
-            port_ioflt1_fltftm0;
-            port_ioflt1_fltirq;
-            port_ioflt1_flti
+            port_ioflt_fltdiv3;
+            port_ioflt_fltdiv2;
+            port_ioflt_fltdiv1;
+            port_ioflt_fltnmi;
+            port_ioflt_fltkbi1;
+            port_ioflt_fltkbi0;
+            port_ioflt_fltrst;
+            port_ioflt_fltpwt;
+            port_ioflt_fltftm0;
+            port_ioflt_fltiic;
+            port_ioflt_fltc;
+            port_ioflt_fltb;
+            port_ioflt_flta
             " >
       <setTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
@@ -493,11 +374,8 @@
 
    <for keys="r"
       values="
-            port_pue0_ptdpe,port_pue0_ptcpe,port_pue0_ptbpe,port_pue0_ptape;
-            port_pue1_pthpe,port_pue1_ptgpe,port_pue1_ptfpe,port_pue1_ptepe;
-            port_pue2_ptipe;
-            port_hdrve_pth1,port_hdrve_pth0,port_hdrve_pte1,port_hdrve_pte0,
-            port_hdrve_ptd1,port_hdrve_ptd0,port_hdrve_ptb5,port_hdrve_ptb4
+            port_puel_ptcpe,port_puel_ptbpe,port_puel_ptape;
+            port_hdrve_ptc5,port_hdrve_ptc1,port_hdrve_ptb5
             " >
       <initialValueTemplate codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
@@ -516,28 +394,19 @@
       separator=","
       terminator=","
       variables="
-            port_ioflt0_fltdiv1,
-            port_ioflt0_fltdiv2,
-            port_ioflt0_fltdiv3,
-            port_ioflt0_fltrst,
-            port_ioflt0_fltnmi,
-            port_ioflt1_fltirq,
-            port_ioflt0_fltkbi0,
-            port_ioflt0_fltkbi1,
-            port_ioflt1_flti2c0,
-            port_ioflt1_flti2c1,
-            port_ioflt1_fltpwt,
-            port_ioflt1_fltftm0,
-            port_ioflt1_fltftm1,
-            port_ioflt0_flta,
-            port_ioflt0_fltb,
-            port_ioflt0_fltc,
-            port_ioflt0_fltd,
-            port_ioflt0_flte,
-            port_ioflt0_fltf,
-            port_ioflt0_fltg,
-            port_ioflt0_flth,
-            port_ioflt1_flti
+            port_ioflt_fltdiv1,
+            port_ioflt_fltdiv2,
+            port_ioflt_fltdiv3,
+            port_ioflt_fltrst,
+            port_ioflt_fltnmi,
+            port_ioflt_fltpwt,
+            port_ioflt_fltkbi1,
+            port_ioflt_fltkbi0,
+            port_ioflt_fltftm0,
+            port_ioflt_fltiic,
+            port_ioflt_flta,
+            port_ioflt_fltb,
+            port_ioflt_fltc
          "
    ><![CDATA[
       $(init_description)
@@ -581,7 +450,7 @@
    ]]>
    </template>
 
-   <equation key="bitnum" value="0" />
+   <equation key="bitnum" value="1" />
 
    <for keys="r:R" values="a:A;b:B;c:C;d:D;e:E;f:F;g:G;h:H;i:I" >
       <template namespace="all" key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
@@ -645,7 +514,7 @@
       \t   return 1<<(bitNm%32);
       \t}
       \t
-      \tstatic constexpr HardwarePtr<uint32_t> pue   = PORT_BasePtr+offsetof(PORT_Type, PUE0)+4*(bitNum/32);
+      \tstatic constexpr HardwarePtr<uint32_t> pue   = PORT_BasePtr+offsetof(PORT_Type, PUEL)+4*(bitNum/32);
       \tstatic constexpr unsigned MASK               = calculatePueMask(bitNum);\n
    ]]>
    </template>
@@ -676,15 +545,10 @@
 
    <!-- for keys="field:Name:bitnum"
         values="
-      port_pue0_ptape:Pta:0;
-      port_pue0_ptbpe:Ptb:8;
-      port_pue0_ptcpe:Ptc:16;
-      port_pue0_ptdpe:Ptd:24;
-      port_pue1_ptepe:Pte:32;
-      port_pue1_ptfpe:Ptf:40;
-      port_pue1_ptgpe:Ptg:48;
-      port_pue1_pthpe:Pth:56;
-      port_pue2_ptipe:Pti:64" >
+      port_puel_ptape:Pta:0;
+      port_puel_ptbpe:Ptb:8;
+      port_puel_ptcpe:Ptc:16;
+      port_puel_ptdpe:Ptd:24" >
       <setTemplate key="/$(_basename)/declarations" namespace="all"
                    variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[

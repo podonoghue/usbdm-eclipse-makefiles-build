@@ -8,6 +8,8 @@
 
    <intOption key="irqEnable" ref="fullCodeSupport" hidden="true" derived="true" constant="true" />
 
+   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
    <constant key="peripheralUsesInterrupts" type="Boolean" value="true" />
    <constant key="isGeneratedByDefault"     type="Boolean" value="true" />
    <constant key="isSupportedinStartup"     type="Boolean" value="true" />
@@ -30,7 +32,7 @@
    <binaryOption key="secondsSupport"
       enabledBy="fullCodeSupport"
       description="Enable use of Seconds for time"
-      toolTip="Use of floating point is necessary to support specifing watchdog timeouts in seconds in runtime code.\n
+      toolTip="Use of floating point libraries is necessary to support routines using seconds in runtime code.\n
                This is seldom needed and the overhead can be avoided by disabling this option" >
       <choice value="false" enum="Disabled" name="Seconds support disabled" isDefault="true" />
       <choice value="true"  enum="Enabled"  name="Seconds support enabled" />
@@ -210,7 +212,7 @@
       valueFormat="%s_s"
       typeName="const Seconds &amp;"
       units="s"
-      value="1"/>
+      value="10"/>
 
    <intOption key="wdog_timeout"
       enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
@@ -221,8 +223,8 @@
       valueFormat="%s_ticks"
       typeName="Ticks"
       derived="true"
-      min="10" max="4294967295"
-      disabledValue="4294967295"
+      min="200" max="0xFFFF"
+      disabledValue="0xFFFF"
    />
 
    <floatOption key="wdog_windowPeriod"
@@ -247,8 +249,8 @@
                A refresh outside of this window resets the system"
       valueFormat="%s_ticks"
       typeName="Ticks"
-      value="0" min="0" max="4294967295"
-      disabledValue="4294967295"
+      value="0" min="0" max="0xFFFF"
+      disabledValue="0xFFFF"
    />
 
    <template key="/SYSTEM/Includes" namespace="all" codeGenCondition="configurePeripheralInStartUp" ><![CDATA[
@@ -395,7 +397,7 @@
       \t/**
       \t * Type definition for $(_class) interrupt call back.
       \t */
-      \ttypedef void (*CallbackFunction)();
+      \ttypedef void (*CallbackFunction)($(irq_parameters));
       \t\n
    ]]>
    </template>

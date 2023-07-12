@@ -240,6 +240,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="SIM->SCGC5 = SIM->SCGC5 | SIM_SCGC5_PORTA_MASK;" clockDisable="SIM->SCGC5 = SIM->SCGC5 &amp; ~SIM_SCGC5_PORTA_MASK;" />
          <irq num="PORTA_IRQn" />
+         <param name="$present"     key="/GPIOA/$present" value="true" />
          <param name="$present"     key="/PCR/$present" value="true" />
          <param name="dse_present"  key="/PCR/dse_present" value="true" />
          <param name="irqc_present" key="/PCR/irqc_present" value="true" />
@@ -255,6 +256,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="SIM->SCGC5 = SIM->SCGC5 | SIM_SCGC5_PORTB_MASK;" clockDisable="SIM->SCGC5 = SIM->SCGC5 &amp; ~SIM_SCGC5_PORTB_MASK;" />
          <irq num="PORTB_IRQn" />
+         <param name="$present"     key="/GPIOB/$present" value="true" />
       </peripheral>
       <peripheral baseName="I2C"      instance="0"        version="i2c0_mkl04z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />

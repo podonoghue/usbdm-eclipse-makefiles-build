@@ -42,89 +42,7 @@ template <class Info>
 class PmcBase_T : public Info {
 
 protected:
-   $(/PMC/protectedMethods: // No protected methods found)
-
-#if $(/PMC/irqHandlingMethod)
-public:
-   /**
-    * Wrapper to allow the use of a class member as a callback function
-    * @note Only usable with static objects.
-    *
-    * @tparam T         Type of the object containing the callback member function
-    * @tparam callback  Member function pointer
-    * @tparam object    Object containing the member function
-    *
-    * @return  Pointer to a function suitable for the use as a callback
-    *
-    * @code
-    * class AClass {
-    * public:
-    *    int y;
-    *
-    *    // Member function used as callback
-    *    // This function must match PmcCallbackFunction
-    *    void callback() {
-    *       ...;
-    *    }
-    * };
-    * ...
-    * // Instance of class containing callback member function
-    * static AClass aClass;
-    * ...
-    * // Wrap member function
-    * auto fn = Cmp0::wrapCallback<AClass, &AClass::callback, aClass>();
-    * // Use as callback
-    * Cmp0::setCallback(fn);
-    * @endcode
-    */
-   template<class T, void(T::*callback)(PmcInterruptReason reason), T &object>
-   static PmcCallbackFunction wrapCallback() {
-      static PmcCallbackFunction fn = [](PmcInterruptReason reason) {
-         (object.*callback)(reason);
-      };
-      return fn;
-   }
-
-   /**
-    * Wrapper to allow the use of a class member as a callback function
-    * @note There is a considerable space and time overhead to using this method
-    *
-    * @tparam T         Type of the object containing the callback member function
-    * @tparam callback  Member function pointer
-    * @tparam object    Object containing the member function
-    *
-    * @return  Pointer to a function suitable for the use as a callback
-    *
-    * @code
-    * class AClass {
-    * public:
-    *    int y;
-    *
-    *    // Member function used as callback
-    *    // This function must match PmcCallbackFunction
-    *    void callback() {
-    *       ...;
-    *    }
-    * };
-    * ...
-    * // Instance of class containing callback member function
-    * AClass aClass;
-    * ...
-    * // Wrap member function
-    * auto fn = Cmp0::wrapCallback<AClass, &AClass::callback>(aClass);
-    * // Use as callback
-    * Cmp0::setCallback(fn);
-    * @endcode
-    */
-   template<class T, void(T::*callback)(PmcInterruptReason reason)>
-   static PmcCallbackFunction wrapCallback(T &object) {
-      static T &obj = object;
-      static PmcCallbackFunction fn = [](PmcInterruptReason reason) {
-         (obj.*callback)(reason);
-      };
-      return fn;
-   }
-#endif
+$(/PMC/protectedMethods: // No protected methods found)
 
 protected:
    /** Hardware instance */
@@ -158,8 +76,6 @@ $(/PMC/InitMethod:// /PMC/InitMethod not found)
    }
 
 };
-
-//template<class Info> PmcCallbackFunction PmcBase_T<Info>::sCallback = PmcBase_T<Info>::unhandledCallback;
 
 $(/PMC/staticDefinitions: // No static declarations found)
 $(/PMC/declarations: // No declarations found)

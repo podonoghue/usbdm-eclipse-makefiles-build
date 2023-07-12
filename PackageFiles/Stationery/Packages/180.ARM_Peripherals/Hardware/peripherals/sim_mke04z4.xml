@@ -59,21 +59,21 @@
             <choice name="ICSOUTCLK/4"         value="3" enum="DivBy4" />
          </choiceOption>
 
-         <choiceOption key="sim_clkdiv_outdiv2[%(n)]" condition="sim_clkdiv_outdiv2_present"
+         <binaryOption key="sim_clkdiv_outdiv2[%(n)]" condition="sim_clkdiv_outdiv2_present"
             enumStem="SimBusClkDivider"
             toolTip="This field sets the divide value for the bus/FLASH, follows OUTDIV1"
             description="Bus/Flash Clock Divider value" >
             <choice name="Core clock direct"    value="0" enum="Direct" />
             <choice name="Core clock/2"         value="1" enum="DivBy2" />
-         </choiceOption>
+         </binaryOption >
 
-         <choiceOption key="sim_clkdiv_outdiv3[%(n)]" condition="sim_clkdiv_outdiv3_present"
+         <binaryOption key="sim_clkdiv_outdiv3[%(n)]" condition="sim_clkdiv_outdiv3_present"
             enumStem="SimTimerClkDivider"
             toolTip="This field sets the divide value for the timers(FTM0, FTM2,PWT)"
             description="Timer Clock Divider value" >
             <choice name="ICSOUTCLK direct "    value="0" enum="Direct" />
             <choice name="ICSOUTCLK/2"          value="1" enum="DivBy2" />
-         </choiceOption>
+         </binaryOption>
 
          <intOption key="system_core_clock[%(n)]"
             ref="(/ICS/system_icsoutclk_clock[%(n)])/((sim_clkdiv_outdiv1[%(n)])+1)"
@@ -86,7 +86,7 @@
             disabledValue="0" />
 
          <intOption key="system_bus_clock[%(n)]"
-            ref="(system_core_clock[%(n)])/((sim_clkdiv_outdiv2[%(n)])+1)"
+            ref="(system_core_clock[%(n)])/((sim_clkdiv_outdiv2[%(n)])?2:1)"
             derived="true"
             isNamedClock="true"
             units="Hz"
@@ -96,7 +96,7 @@
             disabledValue="0" />
 
          <intOption key="system_timer_clock[%(n)]"
-            ref="(/ICS/system_icsoutclk_clock[%(n)])/((sim_clkdiv_outdiv3[%(n)])+1)"
+            ref="(/ICS/system_icsoutclk_clock[%(n)])/((sim_clkdiv_outdiv3[%(n)])?2:1)"
             derived="true"
             isNamedClock="true"
             units="Hz"
@@ -111,9 +111,9 @@
    <title description="------------------------------------------" />
 
    <category name="Control Signals" description="Mapping of control signals" >
-      <choiceOption key="sim_sopt_clkout" condition="sim_sopt_busref_present"
+      <choiceOption key="sim_sopt_busref" condition="sim_sopt_busref_present"
       valueFormat="SIM_SOPT_CLKOE(%s),SIM_SOPT_BUSREF(%s)"
-         enumStem="SimSoptReferenceClockOutput"
+         enumStem="SimSoptRefClock"
          toolTip="Enable bus reference clock output on PTC5 with prescaler"
          description="BUS Clock Output select" >
          <choice name="Disabled (PTC5 available)" value="0,0" enum="Disabled"             pinmap="-CLKOUT,PTH2" />
@@ -328,7 +328,7 @@
 
    <category name="I2C" description="Peripheral clock enable and options" >
       <binaryOption key="sim_scgc_i2c" condition="sim_scgc_i2c_present"
-         enumStem="SimScgcI2c"
+         enumStem="SimScgcI2c0"
          description="I2C0 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -461,7 +461,7 @@
 
 <!-- Grahic here -->
 
-   <setTemplate variables="sim_sopt_ftmsync"
+   <setTemplate variables="sim_sopt_ftmsync" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t/**
       \t * %description
@@ -486,7 +486,7 @@
       sim_sopt_swde:SingleWireDebugPins;
       sim_sopt_rstpe:ResetPin;
       sim_sopt_nmie:NonMaskableInterruptPin" >
-      <setTemplate variables="%(field)"
+      <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -511,7 +511,7 @@
       sim_pinsel_uart0ps:Uart0ps;
       sim_pinsel_spi0ps:Spi0ps;
       sim_pinsel_i2c0ps:I2c0ps" >
-      <setTemplate variables="%(field)"
+      <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -543,7 +543,7 @@
       sim_scgc_pwt:Pwt;
       sim_scgc_pit:Pit;
       sim_scgc_rtc:Rtc" >
-      <setTemplate variables="%(field)"
+      <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -561,7 +561,7 @@
       sim_clkdiv_outdiv1[]:CoreClkDivider;
       sim_clkdiv_outdiv2[]:BusClockDivider;
       sim_clkdiv_outdiv3[]:TimerClockDivider" >
-      <setTemplate variables="%(field)"
+      <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -576,7 +576,7 @@
 
 <!--   ========== SIM Init class =============================== -->
 
-   <template key="init_description" namespace="all" >
+   <template key="init_description" namespace="all"  codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_class)
@@ -668,7 +668,7 @@
 <!--   Member variables -->
 
    <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-      variables="sim_sopt_delay,sim_sopt_dlyact,sim_sopt_adhwt,sim_sopt_clkout,sim_sopt_txdme,sim_sopt_ftmsync,sim_sopt_rxdce,sim_sopt_rxdfe,sim_sopt_ftmic,sim_sopt_actrg,sim_sopt_swde,sim_sopt_rstpe,sim_sopt_nmie"
+      variables="sim_sopt_delay,sim_sopt_dlyact,sim_sopt_adhwt,sim_sopt_busref,sim_sopt_txdme,sim_sopt_ftmsync,sim_sopt_rxdce,sim_sopt_rxdfe,sim_sopt_ftmic,sim_sopt_actrg,sim_sopt_swde,sim_sopt_rstpe,sim_sopt_nmie"
    ><![CDATA[
       \t   /// System Options Register
       \t   uint32_t %registerName = 0;\n\n
@@ -693,7 +693,7 @@
    <for keys="r"
       values="
             sim_sopt_adhwt;
-            sim_sopt_clkout;
+            sim_sopt_busref;
             sim_sopt_txdme;
             sim_sopt_ftmsync;
             sim_sopt_rxdce;
@@ -785,7 +785,7 @@
             sim_sopt_delay,
             sim_sopt_dlyact,
             sim_sopt_adhwt,
-            sim_sopt_clkout,
+            sim_sopt_busref,
             sim_sopt_txdme,
             sim_sopt_rxdce,
             sim_sopt_rxdfe,
@@ -848,7 +848,7 @@
       \t}\n\n
    ]]></template>
 
-   <template  codeGenCondition="enablePeripheralSupport">
+   <template  codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
       \t/**
       \t * Configure $(_basename)
@@ -883,13 +883,15 @@
    ]]>
    </template>
 
- <!-- ========== Common =============================== -->
+   <!-- ************* Common ****************** -->
+
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>
 
-   <template key="/ICS/ClockStartupAfter" namespace="all" codeGenCondition="configurePeripheralInStartUp"  ><![CDATA[
-   \tUSBDM::$(_class)Info::defaultConfigure();
+   <template key="/ICS/ClockStartupAfter" namespace="all" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \tUSBDM::$(_class)Info::defaultConfigure();
    ]]></template>
 
    <template key="DefaultInitValue" namespace="all" ><![CDATA[

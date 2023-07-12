@@ -54,10 +54,12 @@
    </binaryOption>
 
    <!-- Template is added to class within pin_mapping.h -->
-   <template><![CDATA[
+   <template ><![CDATA[
+      \t/* Template _enablePeripheral  */
+      \t
       \t//! Configure peripheral in start-up
-      \tstatic constexpr bool configurePeripheralInStartUp = $(configurePeripheralInStartUp);\n\n
-   ]]></template>
+      \tstatic constexpr bool configurePeripheralInStartUp = $(configurePeripheralInStartUp:false);\n\n
+   ]]></template >
 
    <if condition="@peripheralUsesInterrupts" >
 
@@ -144,5 +146,109 @@
 
    </if>
 
+   <template condition="clockEnable"  codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t/* Template _enablePeripheral  */
+      \t
+      \t/**
+      \t *  Enable clock to $(_class)
+      \t */
+      \tstatic void enableClock() {
+      \t   $(clockEnable)
+      \t}
 
+      \t/**
+      \t *  Disable clock to $(_class)
+      \t */
+      \tstatic void disableClock() {
+      \t   $(clockDisable)
+      \t}\n\n
+   ]]></template>
+
+   <template key="publicMethods" namespace="all" condition="irqHandlingMethod" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/* Template _enablePeripheral  */
+      \t
+      \t/**
+      \t * Wrapper to allow the use of a class member as a callback function
+      \t * @note Only usable with static objects.
+      \t *
+      \t * @tparam T         Type of the object containing the callback member function
+      \t * @tparam callback  Member function pointer
+      \t * @tparam object    Object containing the member function
+      \t *
+      \t * @return  Pointer to a function suitable for the use as a callback
+      \t *
+      \t * @code
+      \t * class $(_base_class)CallbackClass {
+      \t * public:
+      \t *    int y;
+      \t *
+      \t *    // Member function used as callback
+      \t *    // This function must match $(_base_class)::CallbackFunction
+      \t *    void callback($(irq_parameters)) {
+      \t *       ...;
+      \t *    }
+      \t * };
+      \t * ...
+      \t * // Instance of class containing callback member function
+      \t * static $(_base_class)CallbackClass $(_base_class)CallbackClassInstance;
+      \t * ...
+      \t * // Wrap member function
+      \t * auto $(_base_class)cbfn = $(_base_class)::wrapCallback<$(_base_class)CallbackClass, &$(_base_class)CallbackClass::callback, $(_base_class)CallbackClassInstance>();
+      \t *
+      \t * // Use as callback
+      \t * $(_base_class)::Channel<0>::setCallback($(_base_class)cbfn);
+      \t * @endcode
+      \t */
+      \ttemplate<class T, void(T::*callback)($(irq_parameters)), T &object>
+      \tstatic CallbackFunction wrapCallback() {
+      \t   static CallbackFunction fn = []($(irq_parameters)) {
+      \t      (object.*callback)($(irq_call));
+      \t   };
+      \t   return fn;
+      \t}
+      \t
+      \t/**
+      \t * Wrapper to allow the use of a class member as a callback function
+      \t * @note There is a considerable space and time overhead to using this method
+      \t *
+      \t * @tparam T         Type of the object containing the callback member function
+      \t * @tparam callback  Member function pointer
+      \t * @tparam object    Object containing the member function
+      \t *
+      \t * @return  Pointer to a function suitable for the use as a callback
+      \t *
+      \t * @code
+      \t * class $(_base_class)CallbackClass {
+      \t * public:
+      \t *    int y;
+      \t *
+      \t *    // Member function used as callback
+      \t *    // This function must match $(_base_class)::CallbackFunction
+      \t *    void callback($(irq_parameters)) {
+      \t *       ...;
+      \t *    }
+      \t * };
+      \t * ...
+      \t * // Instance of class containing callback member function
+      \t * $(_base_class)CallbackClass $(_base_class)CallbackClassInstance;
+      \t * ...
+      \t * // Wrap member function
+      \t * auto $(_base_class)cbfn = $(_base_class)::wrapCallback<$(_base_class)CallbackClass, &$(_base_class)CallbackClass::callback>($(_base_class)CallbackClassInstance);
+      \t *
+      \t * // Use as callback
+      \t * $(_base_class)::Channel<0>::setCallback($(_base_class)cbfn);
+      \t * @endcode
+      \t */
+      \ttemplate<class T, void(T::*callback)($(irq_parameters))>
+      \tstatic CallbackFunction wrapCallback(T &object) {
+      \t   static T &obj = object;
+      \t   static CallbackFunction fn = []($(irq_parameters)) {
+      \t      (obj.*callback)($(irq_call));
+      \t   };
+      \t   return fn;
+      \t}
+      \t\n
+   ]]>
+   </template>
 </fragment>

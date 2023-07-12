@@ -79,11 +79,6 @@ public:
 };
 
 /**
- * Type definition for ICS interrupt call back
- */
-typedef void (*ICSCallbackFunction)(void);
-
-/**
  * @brief Class representing the ICS
  *
  * <b>Example</b>
@@ -111,9 +106,7 @@ private:
          p = p->next;
       }
    }
-#endif
 
-#if $(/ICS/enableClockChangeNotifications:false)
 public:
    /**
     * Add callback for clock configuration changes
@@ -136,23 +129,6 @@ $(/ICS/publicMethods: // No public methods found)
     * Table of clock settings
     */
    static const ClockInfo clockInfo[];
-
-   /**
-    * Transition from current clock mode to mode given
-    *
-    * @param[in]  clockInfo Clock mode to transition to
-    *
-    * @return E_NO_ERROR          on success
-    * @return E_CLOCK_INIT_FAILED on failure
-    */
-   static ErrorCode clockTransition(const ClockInfo &clockInfo);
-
-   /**
-    * Update SystemCoreClock variable
-    *
-    * Updates the SystemCoreClock variable with current core Clock retrieved from CPU registers.
-    */
-   static void SystemCoreClockUpdate(void);
 
    /**
     * Enable interrupts in NVIC
@@ -179,6 +155,25 @@ $(/ICS/publicMethods: // No public methods found)
    }
    /** Current clock mode (FEI out of reset) */
    static IcsClockMode currentClockMode;
+
+   /**
+    * Update SystemCoreClock variable
+    *
+    * Updates the SystemCoreClock variable with current core Clock retrieved from CPU registers.
+    */
+   static void SystemCoreClockUpdate(void);
+
+#if $(/ICS/enablePeripheralSupport:false) // /ICS/enablePeripheralSupport
+
+   /**
+    * Transition from current clock mode to mode given
+    *
+    * @param[in]  clockInfo Clock mode to transition to
+    *
+    * @return E_NO_ERROR          on success
+    * @return E_CLOCK_INIT_FAILED on failure
+    */
+   static ErrorCode clockTransition(const ClockInfo &clockInfo);
 
    /**
     * Get current clock mode
@@ -220,6 +215,8 @@ $(/ICS/publicMethods: // No public methods found)
    static void finalise() {
       clockTransition(clockInfo[ClockConfig_default]);
    }
+   
+#endif
 
    /**
     * Initialise ICS as part of startup sequence

@@ -4,9 +4,11 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Internal clock source" >
 
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true" />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false" />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true" />
+   <constant key="irq_parameters"           type="String" value="&quot;&quot;"  />
+   <constant key="irq_call"                 type="String" value="&quot;&quot;"  />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"    />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"   />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"    />
    <xi:include href="_enablePeripheral.xml" />
    <title description="------------------------------------------" />
 
@@ -41,7 +43,9 @@
       <choice value="true"  name="Call-backs may be installed"  />
    </binaryOption>
 
-   <binaryOption key="enableClockConfiguration[0]" constant="true" hidden="true"
+   <binaryOption key="enableClockConfiguration[0]"
+      constant="true"
+      hidden="true"
       enabledBy="enablePeripheralSupport" >
       <choice value="false" name="Disabled" />
       <choice value="true"  name="Enabled"  isDefault="true" />
@@ -81,7 +85,11 @@
          value="ClockConfig_%(n)"
          disabledValue="Disabled" >
 
-         <aliasOption key="enableClockConfiguration[%(n)]" constant="false" />
+         <if condition="%(n)==0" >
+            <aliasOption key="enableClockConfiguration[%(n)]" />
+         <else/>
+            <aliasOption key="enableClockConfiguration[%(n)]" constant="false" />
+         </if>
 
          <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
             <aliasOption key="/OSC0/osc_cr_oscMode"   />
@@ -647,7 +655,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       \t/**
       \t * Type definition for $(_class) interrupt call back.
       \t */
-      \ttypedef void (*CallbackFunction)();
+      \ttypedef void (*CallbackFunction)($(irq_parameters));
       \t\n
    ]]>
    </template>
@@ -661,7 +669,14 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
       \t
       \t/** Callback function for ISR */
-      \tstatic CallbackFunction callback;
+      \tstatic CallbackFunction sCallback;
+      \t
+      \t/**
+      \t * Callback to catch unhandled interrupt
+      \t */
+      \tstatic void unhandledCallback() {
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}
       \t\n
    ]]>
    </template>
@@ -672,19 +687,17 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       \t/**
       \t * Set callback for ISR
       \t *
-      \t * @param[in]  callback The function to call from stub ISR
+      \t * @param[in] icsCallback The function to call from stub ISR
       \t */
       \tstatic void setCallback(CallbackFunction icsCallback) {
-      \t   $(_base_class)::callback = icsCallback;
+      \t   $(_base_class)::sCallback = icsCallback;
       \t}
       \t
       \t/**
       \t * ICS interrupt handler -  Calls ICS callback
       \t */
       \tstatic void irqHandler() {
-      \t   if (callback != 0) {
-      \t      callback();
-      \t   }
+      \t   sCallback();
       \t}\n
    ]]>
    </template>
@@ -693,7 +706,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
    <![CDATA[
       \t
       /** Callback for programmatically set handler */
-      Ics::CallbackFunction Ics::callback = {0};\n
+      Ics::CallbackFunction Ics::sCallback = unhandledCallback;\n
    ]]>
    </template>
 

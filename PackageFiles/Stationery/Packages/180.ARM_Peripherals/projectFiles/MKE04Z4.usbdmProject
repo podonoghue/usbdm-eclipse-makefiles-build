@@ -7,4 +7,11 @@
 <section name="USBDM">
    <item key="$$DeviceInfo_SubFamily"                      value="MKE04Z4" />
    <item key="$$Hardware_Source_Filename"                  value="MKE04Z4.usbdmHardware" />
+   <item key="/LINKER/bss_ram"                             value="ram_high" />
+   <item key="/LINKER/data_ram"                            value="ram_high" />
+   <item key="/LINKER/heapSize"                            value="0" />
+   <item key="/LINKER/noinit_ram"                          value="ram_high" />
+   <item key="/LINKER/stackSize"                           value="100" />
+   <item key="/LINKER/stack_ram"                           value="ram_low" />
+   <item key="/WDOG/configurePeripheralInStartUp"          value="true" />
 </section>

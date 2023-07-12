@@ -2,11 +2,13 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- pmc_mke.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Power Management Controller">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Power Management Controller" >
 
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true" />
+   <constant key="irq_parameters"           type="String"  value="&quot;PmcInterruptReason reason&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;reason&quot;"  />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false" />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true" />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"  />
    <xi:include href="_enablePeripheral.xml" />
    <title description="------------------------------------------" />
 
@@ -40,7 +42,7 @@
       enabledBy="enablePeripheralSupport"
       enumStem="PmcLowVoltageDetect"
       description="Low-Voltage Detect Enable"
-      toolTip="This write-once bit enables low-voltage detect logic">
+      toolTip="This write-once bit enables low-voltage detect logic" >
       <choice name="LVD logic disabled"  value="0" enum="Disabled"/>
       <choice name="LVD logic enabled"   value="1" enum="Enabled"/>
    </binaryOption>
@@ -75,7 +77,7 @@
       enumStem="PmcBandgapBuffer"
       description="Bandgap Buffer Enable"
       toolTip="Enables an internal buffer for the bandgap voltage reference for use\n
-               as a ADC internal channel or ACMP reference">
+               as a ADC internal channel or ACMP reference" >
       <choice name="Bandgap buffer is disabled"  value="0" enum="Disabled"/>
       <choice name="Bandgap buffer is enabled"   value="1" enum="Enabled"/>
    </binaryOption>
@@ -111,7 +113,7 @@
       \t\n
    ]]></template>
 
-<!-- Grahic here -->
+<!-- Graphic here -->
 
    <for keys="field:name"
         values="
@@ -121,7 +123,7 @@
       pmc_spmsc1_lvde:Spmsc1Lvde;
       pmc_spmsc1_bgbe:Spmsc1Bgbe;
       pmc_spmsc2_lvdv:Spmsc2Lvdv;
-      pmc_spmsc2_lvwv:Spmsc2Lvwv">
+      pmc_spmsc2_lvwv:Spmsc2Lvwv" >
       <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
@@ -254,12 +256,14 @@
    <![CDATA[
       \t
       \t/** Callback for programmatically set handler */
-      \ttemplate<class Info> typename $(_base_class)Base_T<Info>::CallbackFunction $(_base_class)Base_T<Info>::sCallback = $(_base_class)Base_T<Info>::unhandledCallback;
+      \ttemplate<class Info>
+      \ttypename $(_base_class)Base_T<Info>::CallbackFunction $(_base_class)Base_T<Info>::sCallback =
+      \t              $(_base_class)Base_T<Info>::unhandledCallback;
       \t\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport">
+   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -286,14 +290,14 @@
       \t   %params = nullptr;\n\n
    ]]></setTemplate>
 
-   <initialValueTemplate namespace="usbdm"  codeGenCondition="enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="pmc_spmsc1_lvwack,pmc_spmsc1_lvwie,pmc_spmsc1_lvdre,pmc_spmsc1_lvdse,pmc_spmsc1_lvde,pmc_spmsc1_bgbe"
    ><![CDATA[
       \t   /// System Power Management Status and Control 1 Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"  codeGenCondition="enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="pmc_spmsc2_lvdv,pmc_spmsc2_lvwv"
    ><![CDATA[
       \t   /// System Power Management Status and Control 2 Register
@@ -327,7 +331,7 @@
    <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
              codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
-      \t * Configure PMC from values specified in init
+      \t * Configure $(_basename) from values specified in init
       \t *
       \t * @param init Class containing initialisation values
       \t */
@@ -365,7 +369,7 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      this->%enumParam0 = %paramExpression;
+      \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
    ]]></setTemplate>
 
@@ -383,7 +387,7 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      %registerName = %paramExpression;
+      \t   %registerName = %paramExpression;
       \t   }\n\n
    ]]></setTemplate>
 
@@ -397,10 +401,10 @@
             pmc_spmsc1_bgbe;
             pmc_spmsc2_lvdv;
             pmc_spmsc2_lvwv
-            ">
+            " >
       <setTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
-         linePadding="xxx">
+         linePadding="xxx" >
       <![CDATA[
          \t   /**
          \t    * Constructor for %description
@@ -419,9 +423,10 @@
       ]]>
       </setTemplate>
    </for>
+
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate  codeGenCondition="enablePeripheralSupport"
+   <initialValueTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -452,7 +457,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport">
+   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
       }; // $(_class)::BasicInfo\n\n
    ]]>
@@ -460,7 +465,7 @@
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_basename)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport"  ><![CDATA[
+   <template key="/$(_basename)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */
@@ -468,13 +473,12 @@
    ]]></template>
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>
 
    <projectActionList id = "pmc_files" >
       <copy source="Project_Headers/pmc_mke.h"  target="Project_Headers/pmc.h"  overwrite="true"  derived="true" />
    </projectActionList>
 
-<signals />
 
 </peripheralPage>

@@ -2,7 +2,7 @@
 
 <!ENTITY % gui_items        "(xi:include|addDependency|graphic|deleteOption|category|indexedCategory|categoryOption|addChoices|aliasCategoryOption|if|for|constant|floatOption|intOption|bitmaskOption|choiceOption|clockMultiplexorOption|binaryOption|irqOption|stringOption|title|numericListOption|pinListOption|aliasOption|signals)" >
 <!ENTITY % structure_items  "(xi:include|section|list)" >
-<!ENTITY % control_items    "(xi:include|clockSelectionOption|template|setTemplate|constructorTemplate|enumTemplate|initialValueTemplate|clockCodeTemplate|validate|projectActionList)" >
+<!ENTITY % control_items    "(xi:include|clockSelectionOption|template|equation|setTemplate|constructorTemplate|enumTemplate|initialValueTemplate|clockCodeTemplate|validate|projectActionList)" >
 
 <!-- Include another file -->
 <!ELEMENT xi:include EMPTY>
@@ -606,6 +606,7 @@
    <!ATTLIST projectActionList id            ID            #REQUIRED>
    <!ATTLIST projectActionList root          CDATA         #IMPLIED>
    <!ATTLIST projectActionList doOnceOnly    (true|false)  "true">
+   <!ATTLIST projectActionList condition     CDATA         #IMPLIED>
       
 <!-- Exclude/include source file in Eclipse project -->
 <!ELEMENT excludeSourceFile EMPTY >
