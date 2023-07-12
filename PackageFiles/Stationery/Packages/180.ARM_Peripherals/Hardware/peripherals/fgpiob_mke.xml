@@ -4,11 +4,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="General Purpose Input/Output" >
 
-   <constant key="suppressInstance"         type="Boolean"  value="true"  />
-   <xi:include href="_default_instance.xml" />
-
-   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="suppressInstance"         type="Boolean"  value="true"         />
    <constant key="peripheralUsesInterrupts" type="Boolean" value="false" />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false" />
    <constant key="isSupportedinStartup"     type="Boolean" value="false" />

@@ -12,8 +12,6 @@
    <xi:include href="_enablePeripheral.xml" />
    <title description="------------------------------------------" />
 
-   <xi:include href="_default_instance.xml"/>
-
    <intOption key="system_low_power_clock"
       constant="true"
       derived="true"

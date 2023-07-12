@@ -10,8 +10,6 @@
    <xi:include href="_enablePeripheral.xml" />
    <title description="------------------------------------------" />
 
-   <xi:include href="_default_instance.xml" />
-
    <xi:include href="_simCommon.xml" />
 
    <!--                                   RUN        -->

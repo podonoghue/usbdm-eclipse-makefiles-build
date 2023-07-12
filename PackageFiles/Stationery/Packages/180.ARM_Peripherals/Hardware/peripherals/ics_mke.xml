@@ -20,8 +20,6 @@
    <constant key="FBILP" value="4" type="Integer" />
    <constant key="FBELP" value="5" type="Integer" />
 
-   <xi:include href="_default_instance.xml"/>
-
    <clockSelectionOption key="currentClockConfig"
       derived="true"
       description="Active clock selection"

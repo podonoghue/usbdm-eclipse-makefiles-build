@@ -14,8 +14,6 @@
    <xi:include href="_enablePeripheral.xml" />
    <title description="------------------------------------------" />
 
-   <xi:include href="_default_instance.xml" />
-
    <constant key="numChannels" value="2" type="Integer" />
 
    <template><![CDATA[

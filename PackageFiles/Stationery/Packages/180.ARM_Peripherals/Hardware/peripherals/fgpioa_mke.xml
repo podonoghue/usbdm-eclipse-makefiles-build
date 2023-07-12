@@ -4,46 +4,44 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="General Purpose Input/Output" >
 
-   <constant key="suppressInstance"         type="Boolean"  value="true"  />
-   <xi:include href="_default_instance.xml" />
-
-   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="suppressInstance"         type="Boolean"  value="true"         />
    <constant key="peripheralUsesInterrupts" type="Boolean" value="false" />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false" />
    <constant key="isSupportedinStartup"     type="Boolean" value="false" />
    <xi:include href="_enablePeripheral.xml" />
    <title description="------------------------------------------" />
 
-      <template key="/GPIO/getGpioAddress" namespace="all" codeGenCondition="enablePeripheralSupport" >
+   <instancePattern gpioPattern="Gpio%i&lt;%n,%p&gt;" gpioFieldPattern="GpioField%i&lt;%l,%r,%p&gt;" />
+
+   <template key="/GPIO/getGpioAddress" namespace="all" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Get GPIO base register address from bit index
+      \t *
+      \t * @param bitInd  Index of GPIO bit
+      \t *
+      \t * @return Base address of GPIO_Type hardware structure
+      \t */
+      \tstatic constexpr uint32_t getGpioAddress(unsigned bitInd) {
+      \t   constexpr uint32_t gpioAddresses[] = {\n
+   ]]></template>
+   <for keys=   " p : P : size"
+        values= " a : A :  32;
+                  b : B :  64;
+                  c : C :  72"
+      >
+      <template key="/GPIO/getGpioAddress" namespace="all" condition="/GPIO%(P)/$present" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
-         \t/**
-         \t * Get GPIO base register address from bit index
-         \t *
-         \t * @param bitInd  Index of GPIO bit
-         \t *
-         \t * @return Base address of GPIO_Type hardware structure
-         \t */
-         \tstatic constexpr uint32_t getGpioAddress(unsigned bitInd) {
-         \t   constexpr uint32_t gpioAddresses[] = {\n
+         \t         GPIO%(P)_BasePtr,\n
       ]]></template>
-      <for keys=   " p : P : size"
-           values= " a : A :  32;
-                     b : B :  64;
-                     c : C :  72"
-         >
-         <template key="/GPIO/getGpioAddress" namespace="all" condition="/GPIO%(P)/$present" codeGenCondition="enablePeripheralSupport" >
-         <![CDATA[
-            \t         GPIO%(P)_BasePtr,\n
-         ]]></template>
-         <constant key="/GPIO/MaxBitIndex" type="Integer" value="%(size)" replace="true"  condition="/GPIO%(P)/$present" />
-      </for>
-      <template key="/GPIO/getGpioAddress" namespace="all" codeGenCondition="enablePeripheralSupport" >
-      <![CDATA[
-         \t   };
-         \t   return gpioAddresses[bitInd / 32];
-         \t}\n
-      ]]></template>
+      <constant key="/GPIO/MaxBitIndex" type="Integer" value="%(size)" replace="true"  condition="/GPIO%(P)/$present" />
+   </for>
+   <template key="/GPIO/getGpioAddress" namespace="all" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t   };
+      \t   return gpioAddresses[bitInd / 32];
+      \t}\n
+   ]]></template>
 
 <!--   ========== static/member functions =============================== -->
 
@@ -296,6 +294,26 @@
 
    <for keys=   "    field             : Name : pinIndex"
         values= "
+                 /PORT/port_puel_ptape :  A  :   0;
+                 /PORT/port_pue0_ptape :  A  :   0;
+                 /PORT/port_pue1_ptepe :  B  :  32;
+                 /PORT/port_pue2_ptipe :  C  :  64" >
+      <template key="/GPIO/declarations" namespace="all" variables="%(field)_present" codeGenCondition="enablePeripheralSupport"
+      ><![CDATA[
+      \t/**
+      \t * Class representing a field within Port %(Name)
+      \t *
+      \t * @tparam leftPinIndex  Indicates left pin (inclusive) within the GPIO e.g. GPIO%(Name)[5..3] => %(Name)<5,...>
+      \t * @tparam rightPinIndex Indicates right pin (inclusive) within the GPIO e.g. GPIO%(Name)[5..3] => %(Name)<...,3>
+      \t * @tparam polarity      Polarity of field. Either ActiveHigh or ActiveLow
+      \t */
+      \ttemplate <unsigned leftPinIndex, unsigned rightPinIndex, Polarity polarity=ActiveHigh>
+      \tclass WideGpioField%(Name) : public GpioField_T<leftPinIndex+%(pinIndex), rightPinIndex+%(pinIndex), polarity> {};\n\n
+      ]]></template>
+   </for>
+
+   <for keys=   "    field             : Name : pinIndex"
+        values= "
                  /PORT/port_puel_ptape :  A   :   0;
                  /PORT/port_puel_ptbpe :  B   :   8;
                  /PORT/port_puel_ptcpe :  C   :  16;
@@ -323,8 +341,8 @@
       \t/**
       \t * Class representing a field within Port %(Name)
       \t *
-      \t * @tparam leftPinIndex  Indicates left pin (inclusive) within the port e.g. %(Name)[5..3] => %(Name)<5,...>
-      \t * @tparam rightPinIndex Indicates right pin (inclusive) within the port e.g. %(Name)[5..3] => %(Name)<...,3>
+      \t * @tparam leftPinIndex  Indicates left pin (inclusive) within the port e.g. PT%(Name)[5..3] => %(Name)<5,...>
+      \t * @tparam rightPinIndex Indicates right pin (inclusive) within the port e.g. PT%(Name)[5..3] => %(Name)<...,3>
       \t * @tparam polarity      Polarity of field. Either ActiveHigh or ActiveLow
       \t */
       \ttemplate <unsigned leftPinIndex, unsigned rightPinIndex, Polarity polarity=ActiveHigh>

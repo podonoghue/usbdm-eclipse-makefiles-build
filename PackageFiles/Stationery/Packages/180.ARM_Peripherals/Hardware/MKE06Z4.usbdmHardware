@@ -854,7 +854,7 @@
          <param name="sim_pinsel1_uart2ps_present" key="/SIM/sim_pinsel1_uart2ps_present" value="true" />
          <param name="sim_scgc_acmp0_present" key="/SIM/sim_scgc_acmp0_present" value="true" />
          <param name="sim_scgc_acmp1_present" key="/SIM/sim_scgc_acmp1_present" value="true" />
-         <param name="sim_scgc_adc_present" key="/SIM/sim_scgc_adc_present" value="true" />
+         <param name="sim_scgc_adc0_present" key="/SIM/sim_scgc_adc0_present" value="true" />
          <param name="sim_scgc_crc_present" key="/SIM/sim_scgc_crc_present" value="true" />
          <param name="sim_scgc_flash_present" key="/SIM/sim_scgc_flash_present" value="true" />
          <param name="sim_scgc_ftm0_present" key="/SIM/sim_scgc_ftm0_present" value="true" />
@@ -1605,70 +1605,70 @@
    </pins>
    <packages>
       <package name="FRDM_KE06Z">
-         <placement pin="PTA0"          location="PTA0" />
-         <placement pin="PTA1"          location="PTA1" />
-         <placement pin="PTA2"          location="PTA2" />
-         <placement pin="PTA3"          location="PTA3" />
+         <placement pin="PTA0"          location="D8" />
+         <placement pin="PTA1"          location="D4/IrRx" />
+         <placement pin="PTA2"          location="D14" />
+         <placement pin="PTA3"          location="D15" />
          <placement pin="PTA4"          location="PTA4" />
          <placement pin="PTA5"          location="PTA5" />
-         <placement pin="PTA6"          location="PTA6" />
-         <placement pin="PTA7"          location="PTA7" />
-         <placement pin="PTB0"          location="PTB0" />
-         <placement pin="PTB1"          location="PTB1" />
-         <placement pin="PTB2"          location="PTB2" />
-         <placement pin="PTB3"          location="PTB3" />
-         <placement pin="PTB4"          location="PTB4" />
-         <placement pin="PTB5"          location="PTB5" />
+         <placement pin="PTA6"          location="D30" />
+         <placement pin="PTA7"          location="D7/D31" />
+         <placement pin="PTB0"          location="D0" />
+         <placement pin="PTB1"          location="D1/IrTx" />
+         <placement pin="PTB2"          location="D13/D24" />
+         <placement pin="PTB3"          location="D11/D32" />
+         <placement pin="PTB4"          location="D12" />
+         <placement pin="PTB5"          location="D10" />
          <placement pin="PTB6"          location="PTB6" />
          <placement pin="PTB7"          location="PTB7" />
-         <placement pin="PTC0"          location="PTC0" />
-         <placement pin="PTC1"          location="PTC1" />
-         <placement pin="PTC2"          location="PTC2" />
-         <placement pin="PTC3"          location="PTC3" />
-         <placement pin="PTC4"          location="PTC4" />
-         <placement pin="PTC5"          location="PTC5" />
-         <placement pin="PTC6"          location="PTC6" />
-         <placement pin="PTC7"          location="PTC7" />
-         <placement pin="PTD0"          location="PTD0" />
-         <placement pin="PTD1"          location="PTD1" />
-         <placement pin="PTD2"          location="PTD2" />
+         <placement pin="PTC0"          location="A1" />
+         <placement pin="PTC1"          location="D25/A2/D25" />
+         <placement pin="PTC2"          location="A3" />
+         <placement pin="PTC3"          location="A4" />
+         <placement pin="PTC4"          location="A8" />
+         <placement pin="PTC5"          location="D21" />
+         <placement pin="PTC6"          location="D17" />
+         <placement pin="PTC7"          location="D16" />
+         <placement pin="PTD0"          location="D3" />
+         <placement pin="PTD1"          location="D5" />
+         <placement pin="PTD2"          location="A15" />
          <placement pin="PTD3"          location="PTD3" />
          <placement pin="PTD4"          location="PTD4" />
-         <placement pin="PTD5"          location="PTD5" />
-         <placement pin="PTD6"          location="PTD6" />
-         <placement pin="PTD7"          location="PTD7" />
-         <placement pin="PTE0"          location="PTE0" />
-         <placement pin="PTE1"          location="PTE1" />
-         <placement pin="PTE2"          location="PTE2" />
-         <placement pin="PTE3"          location="PTE3" />
-         <placement pin="PTE4"          location="PTE4" />
-         <placement pin="PTE5"          location="PTE5" />
-         <placement pin="PTE6"          location="PTE6" />
+         <placement pin="PTD5"          location="D2" />
+         <placement pin="PTD6"          location="D19" />
+         <placement pin="PTD7"          location="D18" />
+         <placement pin="PTE0"          location="A19" />
+         <placement pin="PTE1"          location="A18" />
+         <placement pin="PTE2"          location="A17" />
+         <placement pin="PTE3"          location="A16" />
+         <placement pin="PTE4"          location="D20" />
+         <placement pin="PTE5"          location="D23" />
+         <placement pin="PTE6"          location="D22" />
          <placement pin="PTE7"          location="PTE7" />
-         <placement pin="PTF0"          location="PTF0" />
-         <placement pin="PTF1"          location="PTF1" />
-         <placement pin="PTF2"          location="PTF2" />
-         <placement pin="PTF3"          location="PTF3" />
-         <placement pin="PTF4"          location="PTF4" />
-         <placement pin="PTF5"          location="PTF5" />
-         <placement pin="PTF6"          location="PTF6" />
-         <placement pin="PTF7"          location="PTF7" />
-         <placement pin="PTG0"          location="PTG0" />
-         <placement pin="PTG1"          location="PTG1" />
-         <placement pin="PTG2"          location="PTG2" />
-         <placement pin="PTG3"          location="PTG3" />
+         <placement pin="PTF0"          location="A13" />
+         <placement pin="PTF1"          location="A14" />
+         <placement pin="PTF2"          location="D27" />
+         <placement pin="PTF3"          location="D26" />
+         <placement pin="PTF4"          location="Thigh" />
+         <placement pin="PTF5"          location="Tlow" />
+         <placement pin="PTF6"          location="D29/A5/D29" />
+         <placement pin="PTF7"          location="D28/A0/D28" />
+         <placement pin="PTG0"          location="A9" />
+         <placement pin="PTG1"          location="A11" />
+         <placement pin="PTG2"          location="A10" />
+         <placement pin="PTG3"          location="A12" />
          <placement pin="PTG4"          location="PTG4" />
          <placement pin="PTG5"          location="LED_RED" />
          <placement pin="PTG6"          location="LED_GREEN" />
          <placement pin="PTG7"          location="LED_BLUE" />
-         <placement pin="PTH0"          location="PTH0" />
+         <placement pin="PTH0"          location="D9" />
          <placement pin="PTH1"          location="PTH1" />
          <placement pin="PTH2"          location="PTH2" />
-         <placement pin="PTH3"          location="PTH3" />
-         <placement pin="PTH4"          location="PTH4" />
+         <placement pin="PTH3"          location="Btn1" />
+         <placement pin="PTH4"          location="Btn2" />
          <placement pin="PTH5"          location="PTH5" />
-         <placement pin="PTH6"          location="PTH6" />
-         <placement pin="PTH7"          location="PTH7" />
+         <placement pin="PTH6"          location="A6" />
+         <placement pin="PTH7"          location="A7" />
          <placement pin="PTI0"          location="PTI0" />
          <placement pin="PTI1"          location="PTI1" />
          <placement pin="PTI2"          location="PTI2" />

@@ -856,7 +856,7 @@ Selects the SPI0 Pinouts</description>
                   <field derivedFrom="RTC" > <name>KBI0</name> <description>KBI0 Clock Gate Control</description> <bitOffset>24</bitOffset> </field>
                   <field derivedFrom="RTC" > <name>KBI1</name> <description>KBI1 Clock Gate Control</description> <bitOffset>25</bitOffset> </field>
                   <field derivedFrom="RTC" > <name>IRQ</name> <description>IRQ Clock Gate Control</description> <bitOffset>27</bitOffset> </field>
-                  <field derivedFrom="RTC" > <name>ADC</name> <description>ADC Clock Gate Control</description> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="RTC" > <name>ADC0</name> <description>ADC Clock Gate Control</description> <bitOffset>29</bitOffset> </field>
                   <field derivedFrom="RTC" > <name>ACMP0</name> <description>ACMP0 Clock Gate Control</description> <bitOffset>30</bitOffset> </field>
                   <field derivedFrom="RTC" > <name>ACMP1</name> <description>ACMP1 Clock Gate Control</description> <bitOffset>31</bitOffset> </field>
                </fields>
