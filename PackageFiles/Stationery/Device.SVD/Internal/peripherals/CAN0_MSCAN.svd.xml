@@ -102,11 +102,11 @@ Enables an internal 16-bit wide free running timer which is clocked by the bit c
                   </field>
                   <field>
                      <name>SYNCH</name>
-                     <access>read-only</access>
                      <description>Synchronized Status\n
 This read-only flag indicates whether the MSCAN is synchronized to the CAN bus</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -141,11 +141,11 @@ This bit allows for lower power consumption in wait mode</description>
                   </field>
                   <field>
                      <name>RXACT</name>
-                     <access>read-only</access>
                      <description>Receiver Active Status\n
 This read-only flag indicates the MSCAN is receiving a message or has lost arbitration</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -189,7 +189,6 @@ It is set when a receiver has received a valid message correctly,</description>
                <fields>
                   <field>
                      <name>INITAK</name>
-                     <access>read-only</access>
                      <description>Initialization Mode Acknowledge\n
 This flag indicates whether the MSCAN module is in initialization mode.\n
 It is used as a handshake flag for the INITRQ initialization mode request.\n
@@ -198,6 +197,7 @@ The registers CANCTL1, CANBTR0, CANBTR1, CANIDAC, CANIDAR0-CANIDAR7, and CANIDMR
 be written only by the CPU when the MSCAN is in initialization mode</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -213,11 +213,11 @@ be written only by the CPU when the MSCAN is in initialization mode</description
                   </field>
                   <field>
                      <name>SLPAK</name>
-                     <access>read-only</access>
                      <description>Sleep Mode Acknowledge\n
 This flag indicates whether the MSCAN module has entered sleep mode</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -467,11 +467,11 @@ flag is set</description>
                   </field>
                   <field>
                      <name>TSTAT</name>
-                     <access>read-only</access>
                      <description>Transmitter Status\n
 The values of the error counters control the actual CAN bus status of the MSCAN</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>2</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
@@ -497,11 +497,11 @@ The values of the error counters control the actual CAN bus status of the MSCAN<
                   </field>
                   <field>
                      <name>RSTAT</name>
-                     <access>read-only</access>
                      <description>Receiver Status\n
 The values of the error counters control the actual CAN bus status of the MSCAN</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>2</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
@@ -795,10 +795,10 @@ The CPU sets the ABTRQx bit to request that a scheduled message buffer (TXEx = 0
                <description>Transmitter Message Abort Acknowledge Register\n
 The CANTAAK register indicates the successful abort of a queued message, if requested by the appropriate bits in the CANTARQ register</description>
                <addressOffset>0x9</addressOffset>
+               <access>read-only</access>
                <fields>
                   <field>
                      <name>ABTAK</name>
-                     <access>read-only</access>
                      <description>Abort Acknowledge\n
 This flag acknowledges that a message was aborted due to a pending abort request from the CPU</description>
                      <bitOffset>0</bitOffset>
@@ -843,13 +843,13 @@ The CANIDAC register is used for identifier acceptance control</description>
                <fields>
                   <field>
                      <name>IDHIT</name>
-                     <access>read-only</access>
                      <description>Identifier Acceptance Hit Indicator\n
 The MSCAN sets these flags to indicate an identifier acceptance hit.\n
 The IDHIT indicators are always related to the message in the foreground buffer (RxFG).\n
 When a message gets shifted into the foreground buffer of the receiver FIFO the indicators are updated as well</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>3</bitWidth>
+                     <access>read-only</access>
                   </field>
                   <field>
                      <name>IDAM</name>

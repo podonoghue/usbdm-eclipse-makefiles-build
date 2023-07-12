@@ -276,7 +276,6 @@ Software cannot write directly to the watchdog counter; however, two write seque
 NOTE: All other writes to these registers are illegal and force a reset</description>
                <addressOffset>0x2</addressOffset>
                <size>16</size>
-               <access>read-write</access>
                <resetMask>0xFFFF</resetMask>
                <fields>
                   <field>
@@ -311,7 +310,6 @@ The watchdog counter (CNTH:CNTL) is continuously compared with the timeout value
 NOTE: Writing 0 to the Watchdog Timeout Value Register generates an immediate reset</description>
                <addressOffset>0x4</addressOffset>
                <size>16</size>
-               <access>read-write</access>
                <resetMask>0xFFFF</resetMask>
                <fields>
                   <field>
@@ -345,7 +343,6 @@ When window mode is enabled WINH:WINL determine the earliest time that a refresh
 WINH:WINL must be less than TOVALH:TOVALL</description>
                <addressOffset>0x6</addressOffset>
                <size>16</size>
-               <access>read-write</access>
                <resetMask>0xFFFF</resetMask>
                <fields>
                   <field>
