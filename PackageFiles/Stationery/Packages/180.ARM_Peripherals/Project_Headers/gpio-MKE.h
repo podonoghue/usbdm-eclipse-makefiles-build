@@ -81,6 +81,7 @@ protected:
    }
 
 public:
+#if $(/GPIOA/enablePeripheralSupport:false)
 $(/GPIO/memberFunctions: // /GPIO/memberFunctions not found)
 
    /**
@@ -129,6 +130,7 @@ $(/GPIO/memberFunctions: // /GPIO/memberFunctions not found)
    bool readState() const {
       return ((gpio->PDOR^flipMask) & bitMask) != 0;
    }
+#endif
 };
 
 /**
@@ -227,6 +229,7 @@ $(/GPIO/getGpioAddress: // /GPIO/getGpioAddress not found)
    /** Polarity of pin */
    static constexpr Polarity POLARITY = polarity;
 
+#if $(/GPIOA/enablePeripheralSupport:false)
 $(/GPIO/staticFunctions: // /GPIO/staticFunctions not found)
    /**
     * Set pin to active level (if configured as output)
@@ -291,6 +294,7 @@ $(/GPIO/staticFunctions: // /GPIO/staticFunctions not found)
          return t;
       }
    }
+#endif
 };
 
 /**
@@ -729,81 +733,7 @@ public:
    static void bitWrite(uint32_t value) {
       bmeInsert(gpio->PDOR, Right, Left-Right+1, value);
    }
-#if 0
-   /**
-    * Set callback for Pin interrupts
-    *
-    * @param[in] callback The function to call on Pin interrupt. \n
-    *                     nullptr to indicate none
-    *
-    * @return E_NO_ERROR            No error
-    * @return E_HANDLER_ALREADY_SET Handler already set
-    *
-    * @note There is a single callback function for all pins on the related port.
-    *       It is necessary to identify the originating pin in the callback
-    * @note This is a convenience function for Pcr::setPinCallback(callback)
-    */
-   static ErrorCode setPinCallback(PinCallbackFunction callback) {
-      static_assert(Port::HANDLER_INSTALLED, "Gpio containing GpioField not configured for interrupts - Modify Configure.usbdm");
-      return Port::setPinCallback(callback);
-   }
-
-   /**
-    * @brief Convenience template for Gpios associated with a bit of this field. See @ref Gpio_T
-    *
-    * <b>Usage</b>
-    * @code
-    * using namespace USBDM;
-    *
-    * // Instantiate a 4-bit field in GPIO C
-    * using Field = GpioCField<5, 2, ActiveHigh>;
-    *
-    * // Instantiate a GPIO within the field ( <=> GpioC<4, ActiveLow>)
-    * using Bit = Field::Bit<2, ActiveLow>;
-    *
-    * @endcode
-    *
-    * @tparam bitNum        Bit number within the <em>field</em>
-    * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
-    */
-   template<unsigned bitNum> class Bit :
-   public Gpio_T<clockInfo, portAddress, irqNum, gpioAddress, GPIO_DEFAULT_PCR, irqLevel, bitNum+RIGHT, (FLIP_MASK&(1UL<<bitNum))?ActiveLow:ActiveHigh> {
-      static_assert(bitNum<=(Left-Right), "Bit does not exist in field");
-   public:
-      // Allow access to owning field
-      using Owner = GpioField_T;
-   };
-#endif
 };
-#if 0
-/**
- * Creates a GpioField from an Info class and bit numbers
- *
- * @tparam Info
- * @tparam left
- * @tparam right
- * @tparam polarity
- */
-template<class Info, unsigned left, unsigned right, uint32_t polarity>
-class GpioFieldTable_T :
-      public GpioField_T<Info::info[right].portAddress, Info::info[right].clockInfo, Info::info[right].irqNum,
-                         Info::info[right].gpioAddress, Info::info[right].pcrValue, Info::info[right].irqLevel, left, right, polarity> {
-
-      static constexpr int bitNum = Info::info[right].gpioBit;
-
-      // Tests are chained so only a single assertion can fail so as to reduce noise
-      // Out of bounds value for field boundaries
-      static constexpr bool Test1 = ((Info::numSignals)>=left) && (left>=right);
-      // Function is not currently mapped to a pin
-      static constexpr bool Test2 = !Test1 || ((Info::info[left].gpioBit != UNMAPPED_PCR) && (Info::info[right].gpioBit != UNMAPPED_PCR));
-      // Non-existent function and catch-all. (should be INVALID_PCR)
-      static constexpr bool Test3 = !Test1 || !Test2 || ((Info::info[left].gpioBit >= 0) || (Info::info[right].gpioBit >= 0));
-
-      static_assert(Test1, "Illegal field boundaries");
-      static_assert(Test2, "GPIO bit in field is not mapped to a pin - Modify Configure.usbdm");
-      static_assert(Test3, "GPIO bit doesn't exist in this device/package - Check Configure.usbdm for available channels");
-};
-#endif
 
 $(/GPIO/declarations:  // No declarations found)
 /**

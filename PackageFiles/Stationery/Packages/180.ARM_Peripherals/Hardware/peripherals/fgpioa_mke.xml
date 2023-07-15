@@ -11,9 +11,14 @@
    <xi:include href="_enablePeripheral.xml" />
    <title description="------------------------------------------" />
 
-   <instancePattern gpioPattern="Gpio%i&lt;%n,%p&gt;" gpioFieldPattern="GpioField%i&lt;%l,%r,%p&gt;" />
+   <!-- PCRs not used -->
+   <constant key="/SYSTEM/$pcrPattern"          type="String"  value="&quot;&quot;"                                   />
+   <!-- Standard Gpio format -->
+   <constant key="/SYSTEM/$gpioPattern"         type="String"  value="&quot;Gpio%i&lt;%n,%p&gt;&quot;"                />
+   <!-- Specialised GpioField -->
+   <constant key="/SYSTEM/$gpioFieldPattern"    type="String"  value="&quot;WideGpioField%i&lt;%l,%r,%p&gt;&quot;"    />
 
-   <template key="/GPIO/getGpioAddress" namespace="all" codeGenCondition="enablePeripheralSupport" >
+   <template key="/GPIO/getGpioAddress" namespace="all" >
    <![CDATA[
       \t/**
       \t * Get GPIO base register address from bit index
@@ -30,13 +35,13 @@
                   b : B :  64;
                   c : C :  72"
       >
-      <template key="/GPIO/getGpioAddress" namespace="all" condition="/GPIO%(P)/$present" codeGenCondition="enablePeripheralSupport" >
+      <template key="/GPIO/getGpioAddress" namespace="all" condition="/GPIO%(P)/$present" >
       <![CDATA[
          \t         GPIO%(P)_BasePtr,\n
       ]]></template>
       <constant key="/GPIO/MaxBitIndex" type="Integer" value="%(size)" replace="true"  condition="/GPIO%(P)/$present" />
    </for>
-   <template key="/GPIO/getGpioAddress" namespace="all" codeGenCondition="enablePeripheralSupport" >
+   <template key="/GPIO/getGpioAddress" namespace="all" >
    <![CDATA[
       \t   };
       \t   return gpioAddresses[bitInd / 32];

@@ -13,6 +13,31 @@
    <xi:include href="_enablePeripheral.xml"  />
    <title description="------------------------------------------" />
 
+<!--
+    * Construct template substitutions
+    *
+    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
+    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
+    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
+    * %description[index]             Description from controlVar e.g. Compare Function Enable
+    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
+    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
+    * %params                         Formatted parameter list for function
+    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
+    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
+    * %enumClass[index]               As for %paramType
+    * %enumParam[index]               As for %paramName
+    * %valueExpression                Numeric variable value e.g. 0x3
+    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %variable[index]                Variable name from condition
+    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * %register[index]                Register associated with variable e.g. adc->APCTL1
+    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+-->
    <!-- ************* SC1 ****************** -->
 
    <intOption key="adiclk"
@@ -21,14 +46,14 @@
       constant="true"
       value="8_MHz"
    />
-   <binaryOption key="adc_sc1_aien[0]" condition="adc_sc1_aien_present"
+   <binaryOption key="adc_sc1_aien" condition="adc_sc1_aien_present"
       enumStem="AdcInterrupt"
       description="Conversion Complete Interrupt" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
       <choice name="Enabled"     value="1" enum="Enabled"/>
    </binaryOption >
 
-   <binaryOption key="adc_sc1_adco[0]" condition="adc_sc1_adco_present"
+   <binaryOption key="adc_sc1_adco" condition="adc_sc1_adco_present"
       enumStem="AdcContinuous"
       toolTip="Selects between single and multiple conversions.\n
                Conversions are triggered by a write to the ADC_SC1 when software triggered operation is selected,\n
@@ -39,8 +64,9 @@
       <choice name="Continuous"  value="1" enum="Enabled"/>
    </binaryOption >
 
-   <choiceOption key="adc_sc1_adch[0]" condition="adc_sc1_adch_present"
-      enumStem="AdcSc1Adch"
+   <choiceOption key="adc_sc1_adch" condition="adc_sc1_adch_present"
+      hidden="true"
+      enumStem="AdcChannelNum"
       description="Input Channel Select" >
       <choice name="AD0"                 value="0" enum="Ad0"/>
       <choice name="AD1"                 value="1" enum="Ad1"/>
@@ -59,12 +85,25 @@
       <choice name="AD14"               value="14" enum="Ad14"/>
       <choice name="AD15"               value="15" enum="Ad15"/>
       <choice name="Vss"                value="16" enum="Vss"/>
-      <choice name="Temperature Sensor" value="22" enum="TemperatureSensor"/>
+      <choice name="Temperature Sensor" value="22" enum="TempSensor"/>
       <choice name="Bandgap"            value="23" enum="Bandgap"/>
       <choice name="VRefH"              value="29" enum="Vrefh"/>
       <choice name="VRefL"              value="30" enum="Vrefl"/>
-      <choice name="Module disabled"    value="31" enum="ModuleDisabled"/>
+      <choice name="Module disabled"    value="31" enum="Disabled"/>
    </choiceOption >
+
+   <!-- ************* APCTL1 ****************** -->
+
+   <bitmaskOption key="adc_apctl1_adpc"  condition="adc_apctl1_adpc_present"
+      typeName="AdcChannelNum"
+      valueFormat="(AdcChannelNum)%s"
+      description="GPIO Pin Disable"
+      toolTip="Disables the GPIO function on the corresponding pin\n
+               This is only necessary for Channels 0-15"
+      value="0"
+      bitmask="=0b1111111111111111"
+      bitList="CH0,CH1,CH2,CH3,CH4,CH5,CH6,CH7,CH8,CH9,CH10,CH11,CH12,CH13,CH14,CH15"
+    />
 
    <!-- ************* SC2 ****************** -->
 
@@ -76,15 +115,6 @@
       <choice name="Hardware trigger"  value="1" enum="HardwareTrigger"/>
    </binaryOption >
 
-   <choiceOption key="adc_sc2_acfe" condition="adc_sc2_acfe_present&amp;&amp;adc_sc2_acfgt_present"
-      enumStem="AdcCompare"
-      valueFormat="ADC_SC2_ACFE(%s),ADC_SC2_ACFGT(%s)"
-      description="Compare Function Enable" >
-      <choice name="No comparison done"            value="0,0" enum="Disabled"/>
-      <choice name="ADC value &lt; compare value"  value="1,0" enum="LessThan"/>
-      <choice name="ADC value &gt;= compare value" value="1,1" enum="GreaterThanOrEqual"/>
-   </choiceOption >
-
    <choiceOption key="adc_sc2_refsel" condition="adc_sc2_refsel_present"
       enumStem="AdcRefSel"
       description="Voltage Reference Selection" >
@@ -92,6 +122,27 @@
       <choice name="VDDA and VSSA"    value="1" enum="VddaAndVssa"/>
       <choice name="Reserved"         value="2" enum="Reserved"/>
    </choiceOption >
+
+   <choiceOption key="adc_sc2_compare" condition="adc_sc2_acfe_present&amp;&amp;adc_sc2_acfgt_present"
+      enumStem="AdcCompare"
+      valueFormat="ADC_SC2_ACFE(%s),ADC_SC2_ACFGT(%s)"
+      description="Compare Function Control"
+      toolTip="Configures the ADC compare function">
+      <choice name="No comparison done"            value="0,0" enum="Disabled"/>
+      <choice name="ADC value &lt; compare value"  value="1,0" enum="LessThan"/>
+      <choice name="ADC value &gt;= compare value" value="1,1" enum="GreaterThanOrEqual"/>
+   </choiceOption >
+
+   <!-- ************* CV ****************** -->
+
+   <intOption key="adc_cv_cv" condition="adc_cv_cv_present" typeName="uint32_t"
+      enabledBy="adc_sc2_compare>0"
+      valueFormat="%s"
+      description="Compare Value"
+      toolTip="Value compared against ADC conversion result"
+      value="0"
+      defaultValue="0"
+   />
 
    <!-- ************* SC3 ****************** -->
 
@@ -154,10 +205,11 @@
    </binaryOption >
 
    <binaryOption key="adc_sc4_acfsel" condition="adc_sc4_acfsel_present"
+      enabledBy="adc_sc4_afdep>0"
       enumStem="AdcSc4Acfsel"
-      toolTip="When this field is cleared, ADC will OR all of compare triggers and set COCO after at least one of compare trigger occurs. \n
-               When this field is set, ADC will AND all of compare triggers and set COCO after all of compare triggers occur"
-      description="Compare function select OR/AND when the FIFO function is enabled (AFDEP &gt; 0)." >
+      toolTip="If cleared, ADC will OR all of the compare triggers and set COCO if at least one trigger occurs. \n
+               If set, ADC will AND all of compare triggers and set COCO only when all triggers have occurred"
+      description="Compare function OR/AND selection." >
       <choice name="ORed triggers"   value="0" enum="OredTriggers"/>
       <choice name="ANDed triggers"  value="1" enum="AndedTriggers"/>
    </binaryOption >
@@ -175,48 +227,17 @@
       <choice name="8-level FIFO"   value="7" enum="8LevelFifo"/>
    </choiceOption >
 
-   <!-- ************* CV ****************** -->
-
-   <intOption key="adc_cv_cv" condition="adc_cv_cv_present" typeName="uint32_t"
-      description="Compare Value"
-   />
-
-   <!-- ************* APCTL1 ****************** -->
-
-   <binaryOption key="adc_apctl1_adpc" condition="adc_apctl1_adpc_present"
-      enumStem="AdcApctl1Adpc"
-      description="Pin Control" >
-      <choice name="GPIO control"  value="0" enum="GpioControl"/>
-      <choice name="ADx control"   value="1" enum="AdxControl"/>
-   </binaryOption >
-
    <!-- ************* SC5 ****************** -->
 
-   <binaryOption key="adc_sc5_htrgmaske" condition="adc_sc5_htrgmaske_present"
-      enumStem="AdcSc5Htrgmaske"
-      toolTip="This field enables hardware trigger mask when HTRGMASKSEL is low"
-      description="Hardware Trigger Mask Enable" >
-      <choice name="Hardware trigger mask disable"                                                    value="0" enum="HardwareTriggerMaskDisable"/>
-      <choice name="Hardware trigger mask enable and hardware trigger cannot trigger ADC conversion"  value="1" enum="HardwareTriggerMaskEnableAndHardwareTriggerCannotTriggerAdcConversion"/>
-   </binaryOption >
-
-   <binaryOption key="adc_sc5_htrgmasksel" condition="adc_sc5_htrgmasksel_present"
-      enumStem="AdcSc5Htrgmasksel"
-      toolTip="This field selects hardware trigger mask mode"
-      description="Hardware Trigger Mask Mode Enable" >
-      <choice name="Hardware trigger mask with HTRGMASKE"                             value="0" enum="HardwareTriggerMaskWithHtrgmaske"/>
-      <choice name="Hardware trigger mask automatically when data fifo is not empty"  value="1" enum="HardwareTriggerMaskAutomaticallyWhenDataFifoIsNotEmpty"/>
-   </binaryOption >
-
-   <choiceOption key="adc_sc5_htrigger" condition="adc_sc5_htrigger_present"
-      enumStem="AdcSc5Htrigger"
-      toolTip="This field selects hardware trigger mode"
-      description="Hardware Trigger Mode Select" >
-      <choice name="Enabled"         value="0" enum="Enabled"/>
-      <choice name="Masked by FIFO"  value="1" enum="MaskedByFifo"/>
-      <choice name="Disabled"        value="2" enum="Disabled"/>
-      <choice name="Reserved"        value="3" enum="Reserved"/>
-   </choiceOption >
+   <choiceOption key="adc_sc5_hwtriggermask" condition="adc_sc5_htrgmaske_present"
+   valueFormat="ADC_SC5_HTRGMASKE(%s),ADC_SC5_HTRGMASKSEL(%s)"
+      enumStem="AdcHardwareTriggerMask"
+      toolTip="Control hardware trigger"
+      description="Hardware Trigger Mask" >
+      <choice name="Unmasked"                      value="0,0" enum="Unmasked"/>
+      <choice name="Masked"                        value="1,0" enum="Masked"/>
+      <choice name="Masked when FIFO is not empty" value="0,1" enum="MaskedByFifo"/>
+   </choiceOption>
 
 <!-- Graphic here -->
 
@@ -224,9 +245,38 @@
         values="
       adc_sc1_aien:Sc1Aien;
       adc_sc1_adco:Sc1Adco;
-      adc_sc1_adch:Sc1Adch;
+      adc_sc1_adch:Sc1Adch" >
+      <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void configure%(name)(%params) {
+         \t   %register[0] = (%register[0] & ~%mask)|%paramExpression;
+         \t}\n\n
+      ]]></setTemplate>
+   </for>
+
+   <setTemplate variables="adc_sc2_compare,adc_cv_cv" codeGenCondition="enablePeripheralSupport"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void configureCompare(
+      %params) {
+      \t
+      \t      %register0 =  (%register0 & ~%mask0)| %paramName0;
+      \t      %register1 =  %paramName1;
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <for keys="field:name"
+        values="
       adc_sc2_adtrg:Pretrigger;
-      adc_sc2_acfe:Compare;
       adc_sc2_refsel:RefSel;
       adc_sc3_adlpc:Power;
       adc_sc3_adiv:ClockDivider;
@@ -237,10 +287,7 @@
       adc_sc4_ascane:Sc4Ascane;
       adc_sc4_acfsel:Sc4Acfsel;
       adc_sc4_afdep:Sc4Afdep;
-      adc_apctl1_adpc:Apctl1Adpc;
-      adc_sc5_htrgmaske:Sc5Htrgmaske;
-      adc_sc5_htrgmasksel:Sc5Htrgmasksel;
-      adc_sc5_htrigger:Sc5Htrigger" >
+      adc_sc5_hwtriggermask:HardwareMask" >
       <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
@@ -253,6 +300,27 @@
          \t}\n\n
       ]]></setTemplate>
    </for>
+
+   <setTemplate variables="adc_sc1_adch, adc_apctl1_adpc" codeGenCondition="enablePeripheralSupport"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void setGpioPin(%paramType0 %paramName0) {
+      \t   %register1 = %register1 | (1<<%paramName0);
+      \t}
+      \t
+      \t/**
+      \t * Release %description
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void releaseGpioPin(%paramType0 %paramName0) {
+      \t   %register1 = %register1 & ~(1<<%paramName0);
+      \t}\n\n
+   ]]></setTemplate>
 
 <!--   ========== ADC Init class =============================== -->
 
@@ -270,27 +338,21 @@
       \t * static const $(_class)::Init init {
       \t *
       \t *   // Setup values
-      \t *   AdcSc1Aien_Disabled                       // Conversion Complete Interrupt,
-      \t *   AdcSc1Adco_Single                         // Continuous Conversion Enable,
-      \t *   AdcSc1Adch_Ad0                            // Input Channel Select,
-      \t *   AdcSc2Adtrg_SoftwareTrigger               // Conversion Trigger Select,
-      \t *   AdcSc2Acfe_Disabled                       // Compare Function Enable,
-      \t *   AdcSc2Acfgt_TriggerWhenInputLtLevel       // Compare Function Greater Than Enable,
-      \t *   AdcSc2Refsel_VrefhAndVrefl                // Voltage Reference Selection,
-      \t *   AdcSc3Adlpc_Normal                        // Low-Power Configuration,
-      \t *   AdcSc3Adiv_DivideBy1                      // Clock Divide Select,
-      \t *   AdcSc3Adlsmp_ShortSample                  // Sample Time Configuration,
-      \t *   AdcSc3Mode_8Bit                           // ADC resolution,
-      \t *   AdcSc3Adiclk_BusClock                     // Input Clock Select,
-      \t *   AdcSc4Htrgme_Single                       // Hardware Trigger Multiple Conversion Enable,
-      \t *   AdcSc4Ascane_Disabled                     // FIFO Scan Mode Enable,
-      \t *   AdcSc4Acfsel_OredTriggers                 // Compare function select OR/AND when the FIFO function is enabled (AFDEP &gt; 0).,
-      \t *   AdcSc4Afdep_FifoDisabled                  // FIFO Depth,
-      \t *   0,                                        // Compare Value,
-      \t *   AdcApctl1Adpc_GpioControl                 // Pin Control,
-      \t *   AdcSc5Htrgmaske_HardwareTriggerMaskDisable    // Hardware Trigger Mask Enable,
-      \t *   AdcSc5Htrgmasksel_HardwareTriggerMaskWithHtrgmaske    // Hardware Trigger Mask Mode Enable,
-      \t *   AdcSc5Htrigger_Enabled                    // Hardware Trigger Mode Select,
+      \t *   AdcResolution_8bit_se ,         // ADC resolution - 8-bit
+      \t *   AdcClockSource_BusClock ,       // Input Clock Select - Bus clock
+      \t *   AdcClockDivider_DivBy1 ,        // Clock Divide Select - Divide by 1
+      \t *   AdcRefSel_VrefhAndVrefl ,       // Voltage Reference Selection - VREFH and VREFL
+      \t *   AdcSample_Short ,               // Sample Time Configuration - Short sample
+      \t *   AdcPower_Normal ,               // Low-Power Configuration - Normal
+      \t *   AdcChannelNum_Ad10 ,            // GPIO Pin Disable
+      \t *   AdcChannelNum_Ad11 ,
+      \t *   AdcCompare_LessThan, 200,       // Compare Function Control - ADC value < 100
+      \t *   AdcPretrigger_SoftwareTrigger , // Conversion Trigger Select - Software trigger
+      \t *   AdcSc4Htrgme_Single ,           // Hardware Trigger Multiple Conversion Enable - Single
+      \t *   AdcSc4Ascane_Disabled ,         // FIFO Scan Mode Enable - Disabled
+      \t *   AdcSc4Acfsel_OredTriggers ,     // Compare function select OR/AND when the FIFO function is enabled - ORed triggers
+      \t *   AdcSc4Afdep_FifoDisabled ,      // FIFO Depth - FIFO disabled
+      \t *   AdcHardwareMask_Unmasked,       // Hardware Trigger Mask - Unmasked
       \t * };
       \t *
       \t * // Initialise $(_class) from values specified above
@@ -406,7 +468,7 @@
    ]]></setTemplate>
 
    <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-      variables="adc_sc2_adtrg,adc_sc2_acfe,adc_sc2_acfgt,adc_sc2_refsel"
+      variables="adc_sc2_adtrg,adc_sc2_compare,adc_sc2_refsel"
    ><![CDATA[
       \t   /// Status and Control Register 2
       \t   uint32_t %registerName = 0;\n\n
@@ -441,7 +503,7 @@
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-      variables="adc_sc5_htrgmaske,adc_sc5_htrgmasksel,adc_sc5_htrigger"
+      variables="adc_sc5_hwtriggermask"
    ><![CDATA[
       \t   /// Status and Control Register 5
       \t   uint32_t %registerName = 0;\n\n
@@ -479,7 +541,9 @@
       \t * @param init Class containing initialisation values
       \t */
       \tstatic void configure(const typename Info::Init &init) {
-      \t   // ..........  Configure stuff ...........
+      \t
+      \t   // Enable peripheral clock
+      \t   enable();
       \t\n
    ]]></template>
    <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
@@ -544,8 +608,6 @@
    <for keys="r"
       values="
             adc_sc2_adtrg;
-            adc_sc2_acfe;
-            adc_sc2_acfgt;
             adc_sc2_refsel;
             adc_sc3_adlpc;
             adc_sc3_adiv;
@@ -556,10 +618,7 @@
             adc_sc4_ascane;
             adc_sc4_acfsel;
             adc_sc4_afdep;
-            adc_apctl1_adpc;
-            adc_sc5_htrgmaske;
-            adc_sc5_htrgmasksel;
-            adc_sc5_htrigger
+            adc_sc5_hwtriggermask
             " >
       <setTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
@@ -583,9 +642,32 @@
       </setTemplate>
    </for>
 
+   <setTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      variables="adc_sc2_compare,adc_cv_cv"
+      linePadding="xxx" >
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for %description0, %description1
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(
+      %params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName0 =  (%registerName0 & ~%mask0)| %paramName0;
+      \t      %registerName1 =  %paramName1;
+      \t   }
+      \t\n
+   ]]>
+   </setTemplate>
+
    <for keys="r"
       values="
-            adc_cv_cv
+            adc_apctl1_adpc
             " >
       <setTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
@@ -600,9 +682,9 @@
          \t    * @param value %description
          \t    */
          \t   template <typename... Types>
-         \t   constexpr Init(%paramType0 value, Types... rest) : Init(rest...) {
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
-         \t      %registerName = (%registerName&~%mask0) | %macro0(value);
+         \t      %registerName |= %paramName0;
          \t   }
          \t\n
       ]]>
@@ -616,23 +698,21 @@
       separator=","
       terminator=","
       variables="
-            adc_sc2_adtrg,
-            adc_sc2_acfe,
-            adc_sc2_acfgt,
-            adc_sc2_refsel,
-            adc_sc3_adlpc,
-            adc_sc3_adiv,
-            adc_sc3_adlsmp,
             adc_sc3_mode,
             adc_sc3_adiclk,
+            adc_sc3_adiv,
+            adc_sc2_refsel,
+            adc_sc3_adlsmp,
+            adc_sc3_adlpc,
+            adc_apctl1_adpc,
+            adc_sc2_compare,adc_cv_cv ,
+            adc_sc2_adtrg,
+            adc_sc2_acfgt,
             adc_sc4_htrgme,
             adc_sc4_ascane,
             adc_sc4_acfsel,
             adc_sc4_afdep,
-            adc_apctl1_adpc,
-            adc_sc5_htrgmaske,
-            adc_sc5_htrgmasksel,
-            adc_sc5_htrigger
+            adc_sc5_hwtriggermask
          "
    ><![CDATA[
       $(init_description)

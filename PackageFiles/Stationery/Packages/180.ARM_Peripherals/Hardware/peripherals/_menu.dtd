@@ -135,6 +135,8 @@
    <!ATTLIST intOption unlockedBy    CDATA        #IMPLIED> <!-- Unlocked by an expression -->
    <!ATTLIST intOption isNamedClock  (true)       #IMPLIED>
    <!ATTLIST intOption enabledBy     CDATA        #IMPLIED>
+   <!ATTLIST intOption defaultValue  CDATA        #IMPLIED>
+   
   
 <!ELEMENT bitmaskOption EMPTY >
    <!ATTLIST bitmaskOption condition      CDATA        #IMPLIED>
@@ -147,11 +149,14 @@
    <!ATTLIST bitmaskOption toolTip        CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption value          CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption disabledValue  CDATA        #IMPLIED>
+   <!ATTLIST bitmaskOption valueFormat    CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption bitmask        CDATA        "0xFFFF">
    <!ATTLIST bitmaskOption bitList        CDATA        "">
    <!ATTLIST bitmaskOption derived        (true)       #IMPLIED>
    <!ATTLIST bitmaskOption derivedFrom    CDATA        #IMPLIED>
-  
+   <!ATTLIST bitmaskOption typeName       CDATA        #IMPLIED>
+   <!ATTLIST bitmaskOption defaultValue   CDATA        #IMPLIED>
+
 <!ELEMENT floatOption EMPTY >
    <!ATTLIST floatOption condition     CDATA        #IMPLIED>
    <!ATTLIST floatOption constant      (false|true) #IMPLIED>
