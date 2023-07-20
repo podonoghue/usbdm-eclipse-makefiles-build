@@ -9,7 +9,7 @@
 #include <stdint.h>
 #include "derivative.h"
 #include "pmc.h"
-$(/SYSTEM/Includes:// No extra includes found)
+$(/SYSTEM/Includes: )
 
 /* This definition is overridden if Clock initialisation is provided */
 __attribute__((__weak__))
@@ -150,5 +150,8 @@ void SystemInit(void) {
          "  ISB                        \n"  // Reset pipeline now the FPU is enabled
    );
 #endif
-$(/SYSTEM/Startup:// No extra startups found)
+/* System startup code for peripherals */
+$(/SYSTEM/StartupEarly: )
+$(/SYSTEM/Startup: )
+$(/SYSTEM/StartupLate: )
 }

@@ -1,0 +1,2666 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- ftm_def-mke.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+
+   <binaryOption key="individual_channel_call_backs" condition="@NumChannels>@NumChannelVectors"
+      enabledBy="irqHandlingMethod"
+      description="Use individual channel call-backs"
+      toolTip="The different FTM channels use a common hardware interrupt handler. \n
+               If this option is enabled, then the hardware handler examines the interrupt source \n
+               and dispatches to individual channel call-backs. \n
+               This is more convenient but will increase the interrupt latency. \n
+               If disabled, then a common call-back is used for all channels which leads to lower latency. \n
+               The common call-back will then have to determine the interrupt source if needed." >
+      <choice value="false"  name="Shared call-back"      isDefault="true" />
+      <choice value="true"   name="Individual call-backs" />
+   </binaryOption>
+
+   <binaryOption key="check_minimums"
+      description="Check minimum interval and minimum resolution"
+      toolTip="Enables boundary checks of minimum interval and minimum resolution when setting values" >
+      <choice value="0" name="No checks done" />
+      <choice value="1" name="Do checks"  isDefault="true" />
+   </binaryOption>
+
+   <intOption key="minimumInterval"
+      description="Minimum usable interval in ticks"
+      toolTip="This value is used as a minimum acceptable value for the timer interval in ticks\n
+               when using convertMicrosecondsToTicks() or convertSecondsToTicks()"
+      value="20" min="0" max="65535"/>
+
+   <intOption key="minimumResolution"
+      description="Minimum resolution for PWM interval"
+      toolTip="This value is used as a minimum value for the timer period in ticks \n
+         so that a reasonable resolution is available for PWM duty-cycle"
+      value="100" min="0" max="65535" />
+
+   <intOption key="ftmExternalClock"
+      description="FTM External clock"
+      toolTip="Clock frequency of external clock supplied to FTM_CLKIN pin"
+      value="0" min="0" units="Hz"/>
+
+   <choiceOption key="ftm_sc_clks"  condition="/MCG/$present"
+      description="Clock Source"
+      enumStem="FtmClockSource"
+      target="inputClockFrequency"
+      toolTip="Selects the clock source for the module">
+      <choice value="0" name="Disabled"              ref="disabled"                     code="0"                enum="Disabled"            />
+      <choice value="1" name="System clock"          ref="/SIM/system_bus_clock[]"      code="SystemBusClock"   enum="SystemClock"         isDefault="true" />
+      <choice value="2" name="Fixed frequency clock" ref="/MCG/system_mcgffclk_clock[]" code="SystemMcgFFClock" enum="FixedFrequencyClock" />
+      <choice value="3" name="External clock"        ref="ftmExternalClock"             code="ftmExternalClock" enum="ExternalClock"       />
+   </choiceOption>
+
+   <choiceOption key="ftm_sc_clks"  condition="/ICS/$present"
+      description="Clock Source"
+      enumStem="FtmClockSource"
+      target="inputClockFrequency"
+      toolTip="Selects the clock source for the module">
+      <choice value="0" name="Disabled"              ref="disabled"                     code="0"                enum="Disabled"            />
+      <choice value="1" name="System timer clock"    ref="/SIM/system_timer_clock[]"    code="SystemTimerClock" enum="SystemTimerClock"    isDefault="true" />
+      <choice value="2" name="Fixed frequency clock" ref="/ICS/system_icsffclk_clock[]" code="SystemIcsFFClock" enum="FixedFrequencyClock" />
+      <choice value="3" name="External clock"        ref="ftmExternalClock"             code="ftmExternalClock" enum="ExternalClock"       />
+   </choiceOption>
+
+   <intOption key="inputClockFrequency"
+      constant="true"
+      description="Frequency of input clock to timer"
+      derived="true"
+      units="Hz"/>
+
+   <choiceOption key="ftm_sc_ps"
+      description="Clock prescaler"
+      enumStem="FtmPrescale"
+      target="clockFrequency"
+      toolTip="Selects the prescaler for the module">
+      <choice value="0" name="Divide by 1"   ref="inputClockFrequency"      enum="DivBy1"  isDefault="true" />
+      <choice value="1" name="Divide by 2"   ref="(inputClockFrequency)/2."   enum="DivBy2" />
+      <choice value="2" name="Divide by 4"   ref="(inputClockFrequency)/4."   enum="DivBy4" />
+      <choice value="3" name="Divide by 8"   ref="(inputClockFrequency)/8."   enum="DivBy8" />
+      <choice value="4" name="Divide by 16"  ref="(inputClockFrequency)/16."  enum="DivBy16" />
+      <choice value="5" name="Divide by 32"  ref="(inputClockFrequency)/32."  enum="DivBy32" />
+      <choice value="6" name="Divide by 64"  ref="(inputClockFrequency)/64."  enum="DivBy64" />
+      <choice value="7" name="Divide by 128" ref="(inputClockFrequency)/128." enum="DivBy128" />
+   </choiceOption>
+
+   <intOption key="clockFrequency"
+      constant="true"
+      description="Frequency of timer clock"
+      toolTip="Determined from timer clock source and prescaler"
+      derived="true"
+      units="Hz"/>
+
+   <floatOption key="clockPeriod"
+      ref="(1.0/clockFrequency)"
+      constant="true"
+      description="Period of timer clock"
+      toolTip="Determined from timer clock source and prescaler"
+      derived="true"
+      units="s"/>
+
+   <choiceOption key="ftm_sc_mode"
+      valueFormat="FTM_SC_TOF(%s),FTM_SC_CPWMS(%s)"
+      enumStem="FtmMode"
+      description="Alignment and whether interval or free-running mode"
+      toolTip="Left-aligned   (cntin...mod) or\n
+               Centre-aligned (cntin...mod...cntin) or\n
+               Free-running   (0...maximum_value)">
+      <choice value="0,0" name="Left-aligned (count up)"         enum="LeftAligned"    />
+      <choice value="0,1" name="Centre-aligned (count up-down)"  enum="CentreAligned"  />
+      <choice value="1,0" name="Free-running (count up)"         enum="FreeRunning"  isDefault="true" />
+   </choiceOption>
+
+   <intOption key="ftm_cntin" description="Start value for counter"
+      enabledBy="ftm_sc_mode!=2"
+      toolTip="The timer counts from this value to ftm_mod"
+      typeName="Ticks &amp;"
+      valueFormat="%s_ticks"
+      value="0" min="0" max="65535" />
+
+   <intOption key="ftm_mod" description="End value for counter"
+      enabledBy="ftm_sc_mode!=2"
+      toolTip="The timer counts from ftm_cntin to this value"
+      typeName="Ticks &amp;"
+      valueFormat="%s_ticks"
+      value="65535" min="0" max="65535" />
+
+   <floatOption key="ftm_modPeriod"
+      ref="clockPeriod*((ftm_sc_mode==2)?(65536):((ftm_sc_mode==1)?(2*(ftm_mod-ftm_cntin)):(ftm_mod-ftm_cntin+1)))"
+      typeName="Seconds &amp;"
+      valueFormat="%s_s"
+      description="Period or minimum interval of timer"
+      toolTip="In left-aligned or centre-aligned this is the period of the timer\n
+               In free-running mode it is the minimum interval"
+      derived="true"
+      min="0" units="s"/>
+
+   <choiceOption key="ftm_sc_action" condition="ftm_sc_toie_present&amp;&amp;ftm_sc_dma_present"
+      enabledBy="irqHandlingMethod"
+      valueFormat="FTM_SC_TOIE(%s),FTM_SC_DMA(%s)"
+      enumType="uint8_t"
+      enumStem="FtmOverflowAction"
+      description="Action on Counter overflow"
+      toolTip="Enable interrupt and/or DMA on counter overflow">
+       <choice value="0,0" name="No action"                    enum="None"             />
+       <choice value="0,1" name="DMA request"                  enum="Dma"              />
+       <choice value="1,0" name="Interrupt request"            enum="Interrupt"        />
+       <choice value="1,1" name="Interrupt and DMA request"    enum="InterruptAndDma"  />
+   </choiceOption>
+
+   <binaryOption key="ftm_sc_action" condition="ftm_sc_toie_present&amp;&amp;!ftm_sc_dma_present"
+      enabledBy="irqHandlingMethod"
+      valueFormat="FTM_SC_TOIE(%s)"
+      enumStem="FtmOverflowAction"
+      description="Action on Counter overflow"
+      toolTip="Enable interrupt on counter overflow">
+      <choice value="0" name="No action"          enum="None"       />
+      <choice value="1" name="Overflow Interrupt" enum="Interrupt"  />
+   </binaryOption>
+
+   <binaryOption key="ftm_qdctrl_quadmode" condition="ftm_qdctrl_quadmode_present"
+      enumStem="FtmQuadratureMode"
+      description="Quadrature decoding mode"
+      toolTip="Determines how the inputs control the counting sequence">
+      <choice value="0" name="Phase-AB Mode"         enum="Phase_AB_Mode" />
+      <choice value="1" name="Count-Direction Mode"  enum="Count_Direction_Mode"  />
+   </binaryOption>
+
+   <binaryOption key="ftm_qdctrl_phapol" condition="ftm_qdctrl_phapol_present"
+      enumStem="FtmPhaseAPolarity"
+      description="Polarity of Phase A input"
+      toolTip="Polarity of Phase A input">
+      <choice value="0" name="Active High" enum="ActiveHigh" />
+      <choice value="1" name="Active Low"  enum="ActiveLow"  />
+   </binaryOption>
+
+   <binaryOption key="ftm_qdctrl_phbpol" condition="ftm_qdctrl_phbpol_present"
+      enumStem="FtmPhaseBPolarity"
+      description="Polarity of Phase B input"
+      toolTip="Polarity of Phase B input">
+      <choice value="0" name="Active High" enum="ActiveHigh" />
+      <choice value="1" name="Active Low"  enum="ActiveLow"  />
+   </binaryOption>
+
+   <choiceOption key="ftm_qdfilter_a" condition="ftm_qdctrl_phafltren_present"
+      valueFormat="(FTM_QDCTRL_PHAFLTREN(%s)&lt;&lt;8),FTM_FILTER_CH0FVAL(%s)"
+      enumType="uint16_t"
+      enumStem="FtmPhaseAFilter"
+      description="Filtering on Phase A input"
+      toolTip="Filtering on Phase A input">
+      <choice value="0,0"  name="No Filter"      enum="Disabled" />
+      <choice value="1,1"  name="1 clock cycle"  enum="1_Clock"  />
+      <choice value="1,2"  name="2 clock cycle"  enum="2_Clock"  />
+      <choice value="1,3"  name="3 clock cycle"  enum="3_Clock"  />
+      <choice value="1,4"  name="4 clock cycle"  enum="4_Clock"  />
+      <choice value="1,5"  name="5 clock cycle"  enum="5_Clock"  />
+      <choice value="1,6"  name="6 clock cycle"  enum="6_Clock"  />
+      <choice value="1,7"  name="7 clock cycle"  enum="7_Clock"  />
+      <choice value="1,8"  name="8 clock cycle"  enum="8_Clock"  />
+      <choice value="1,9"  name="9 clock cycle"  enum="9_Clock"  />
+      <choice value="1,10" name="10 clock cycle" enum="10_Clock" />
+      <choice value="1,11" name="11 clock cycle" enum="11_Clock" />
+      <choice value="1,12" name="12 clock cycle" enum="12_Clock" />
+      <choice value="1,13" name="13 clock cycle" enum="13_Clock" />
+      <choice value="1,14" name="14 clock cycle" enum="14_Clock" />
+      <choice value="1,15" name="15 clock cycle" enum="15_Clock" />
+   </choiceOption>
+
+   <choiceOption key="ftm_qdfilter_b" condition="ftm_qdctrl_phbfltren_present"
+      valueFormat="(FTM_QDCTRL_PHBFLTREN(%s)&lt;&lt;8),FTM_FILTER_CH1FVAL(%s)"
+      enumType="uint16_t"
+      enumStem="FtmPhaseBFilter"
+      description="Filtering on Phase B input"
+      toolTip="Filtering on Phase B input">
+      <choice value="0,0"  name="No Filter"      enum="Disabled" />
+      <choice value="1,1"  name="1 clock cycle"  enum="1_Clock"  />
+      <choice value="1,2"  name="2 clock cycle"  enum="2_Clock"  />
+      <choice value="1,3"  name="3 clock cycle"  enum="3_Clock"  />
+      <choice value="1,4"  name="4 clock cycle"  enum="4_Clock"  />
+      <choice value="1,5"  name="5 clock cycle"  enum="5_Clock"  />
+      <choice value="1,6"  name="6 clock cycle"  enum="6_Clock"  />
+      <choice value="1,7"  name="7 clock cycle"  enum="7_Clock"  />
+      <choice value="1,8"  name="8 clock cycle"  enum="8_Clock"  />
+      <choice value="1,9"  name="9 clock cycle"  enum="9_Clock"  />
+      <choice value="1,10" name="10 clock cycle" enum="10_Clock" />
+      <choice value="1,11" name="11 clock cycle" enum="11_Clock" />
+      <choice value="1,12" name="12 clock cycle" enum="12_Clock" />
+      <choice value="1,13" name="13 clock cycle" enum="13_Clock" />
+      <choice value="1,14" name="14 clock cycle" enum="14_Clock" />
+      <choice value="1,15" name="15 clock cycle" enum="15_Clock" />
+   </choiceOption>
+
+   <choiceOption key="ftm_channel_number"
+      hidden="true"
+      derived="true"
+      enumType="uint8_t"
+      valueFormat="%s"
+      enumStem="FtmChannelNum"
+      description="Channel Number"
+      toolTip="Select a channel">
+      <choice value="0"             name="Channel 0"      enum="0" />
+      <choice value="1"             name="Channel 1"      enum="1" />
+      <choice value="2"             name="Channel 2"      enum="2" />
+      <choice value="3"             name="Channel 3"      enum="3" />
+      <choice value="4"             name="Channel 4"      enum="4" />
+      <choice value="5"             name="Channel 5"      enum="5" />
+      <choice value="6"             name="Channel 6"      enum="6" />
+      <choice value="7"             name="Channel 7"      enum="7" />
+      <choice value="(uint8_t(-1))" name="No Channel"     enum="None" />
+   </choiceOption>
+
+   <!--  **************** Channels **************** -->
+
+   <for keys="ch" dim="NumChannels">
+      <title description="------- FTM Channel %(ch) -------" toolTip="" />
+
+      <choiceOption key="ftm_cnsc_mode[%(ch)]" condition="ftm_combine_decap0_present&amp;&amp;ftm_cnsc_ms_present&amp;&amp;ftm_cnsc_els_present"
+         valueFormat="(FTM_COMBINE_DECAPEN0(%s)&lt;&lt;8),(FTM_COMBINE_COMBINE0(%s)&lt;&lt;8),FTM_CnSC_MS(%s),FTM_CnSC_ELS(%s)"
+         enumType="uint16_t"
+         enumStem="FtmChannelMode"
+         description="Channel Mode"
+         toolTip="Determines channel operation (PWM/Input capture/Output compare)">
+          <choice value="0,0,0,0" name="Disabled"                                   enum="Disabled"                               />
+          <choice value="0,0,0,1" name="Input Capture Rising-edge"                  enum="InputCaptureRisingEdge"                 />
+          <choice value="0,0,0,2" name="Input Capture Falling-edge"                 enum="InputCaptureFallingEdge"                />
+          <choice value="0,0,0,3" name="Input Capture Either-edge"                  enum="InputCaptureEitherEdge"                 />
+          <choice value="0,0,1,0" name="Output Compare No action"                   enum="OutputCompare"                          />
+          <choice value="0,0,1,1" name="Output Compare Toggle"                      enum="OutputCompareToggle"                    />
+          <choice value="0,0,1,2" name="Output Compare Clear"                       enum="OutputCompareClear"                     />
+          <choice value="0,0,1,3" name="Output Compare Set"                         enum="OutputCompareSet"                       />
+          <choice value="0,0,2,2" name="Pwm High-true Pulses"                       enum="PwmHighTruePulses"                      />
+          <choice value="0,0,2,1" name="Pwm Low-true Pulses"                        enum="PwmLowTruePulses"                       />
+          <choice value="1,0,0,1" name="Dual-edge Capture One-Shot Rising-edge"     enum="DualEdgeCaptureOneShotRisingEdge"       condition="(%(ch)&amp;1)==0" />
+          <choice value="1,0,1,1" name="Dual-edge Capture Continuous Rising-edge"   enum="DualEdgeCaptureContinuousRisingEdge"    condition="(%(ch)&amp;1)==0" />
+          <choice value="1,0,0,2" name="Dual-edge Capture One-Shot Falling-edge"    enum="DualEdgeCaptureOneShotFallingEdge"      condition="(%(ch)&amp;1)==0" />
+          <choice value="1,0,1,2" name="Dual-edge Capture Continuous Falling-edge"  enum="DualEdgeCaptureContinuousFallingEdge"   condition="(%(ch)&amp;1)==0" />
+          <choice value="0,1,0,2" name="Combined Positive-pulse"                    enum="CombinePositivePulse"                   condition="(%(ch)&amp;1)==0" />
+          <choice value="0,1,0,1" name="Combine Negative-pulse"                     enum="CombineNegativePulse"                   condition="(%(ch)&amp;1)==0" />
+      </choiceOption>
+
+      <choiceOption key="ftm_cnsc_mode[%(ch)]" condition="!ftm_combine_decap0_present&amp;&amp;ftm_cnsc_ms_present&amp;&amp;ftm_cnsc_els_present"
+         valueFormat="FTM_CnSC_MS(%s),FTM_CnSC_ELS(%s)"
+         enumType="uint16_t"
+         enumStem="FtmChannelMode"
+         description="Channel Mode"
+         toolTip="Determines channel operation (PWM/Input capture/Output compare)">
+          <choice value="0,0" name="Disabled"                                   enum="Disabled"                               />
+          <choice value="0,1" name="Input Capture Rising-edge"                  enum="InputCaptureRisingEdge"                 />
+          <choice value="0,2" name="Input Capture Falling-edge"                 enum="InputCaptureFallingEdge"                />
+          <choice value="0,3" name="Input Capture Either-edge"                  enum="InputCaptureEitherEdge"                 />
+          <choice value="1,0" name="Output Compare No action"                   enum="OutputCompare"                          />
+          <choice value="1,1" name="Output Compare Toggle"                      enum="OutputCompareToggle"                    />
+          <choice value="1,2" name="Output Compare Clear"                       enum="OutputCompareClear"                     />
+          <choice value="1,3" name="Output Compare Set"                         enum="OutputCompareSet"                       />
+          <choice value="2,2" name="Pwm High-true Pulses"                       enum="PwmHighTruePulses"                      />
+          <choice value="2,1" name="Pwm Low-true Pulses"                        enum="PwmLowTruePulses"                       />
+      </choiceOption>
+
+      <choiceOption key="ftm_cnsc_action[%(ch)]" condition="ftm_cnsc_chie_present&amp;&amp;ftm_cnsc_dma_present"
+         valueFormat="FTM_CnSC_CHIE(%s),FTM_CnSC_DMA(%s)"
+         enumType="uint8_t"
+         enumStem="FtmChannelAction"
+         description="Action on Channel Event"
+         toolTip="Enable interrupt or DMA on channel event">
+          <choice value="0,0" name="No action"          enum="None"  />
+          <choice value="1,0" name="Interrupt Request"  enum="Interrupt"   />
+          <choice value="1,1" name="DMA request"        enum="Dma"   />
+      </choiceOption>
+
+      <binaryOption key="ftm_cnsc_action[%(ch)]" condition="ftm_cnsc_chie_present&amp;&amp;!ftm_cnsc_dma_present"
+         valueFormat="FTM_CnSC_CHIE(%s)"
+         enumType="uint8_t"
+         enumStem="FtmChannelAction"
+         description="Action on Channel Event"
+         toolTip="Enable interrupt on channel event">
+          <choice value="0" name="No action"              enum="None"             />
+          <choice value="1" name="Interrupt request"      enum="Interrupt"        />
+      </binaryOption>
+
+      <binaryOption key="ftm_cnsc_icrst[%(ch)]" condition="ftm_cnsc_icrst_present"
+         valueFormat="FTM_CnSC_ICRST(%s)"
+         enumStem="FtmChannelReset"
+         enumType="uint8_t"
+         description="Reset counter on channel IC event"
+         toolTip="Enables the channel IC event to reset the shared counter">
+         <choice value="0" name="Disabled" enum="Disabled" />
+         <choice value="1" name="Enabled"  enum="Enabled"  />
+      </binaryOption>
+
+      <intOption key="ftm_cnv[%(ch)]"
+         valueFormat="%s_ticks"
+         typeName="Ticks &amp;"
+         description="Output Compare Event time in ticks"
+         toolTip="This value is compared against the main counter in output compare modes"
+         value="0" min="0" max="65535" />
+
+      <floatOption key="ftm_cnvEventTime[%(ch)]"
+         enabledBy="((ftm_cnsc_mode[%(ch)]&gt;=4)&amp;&amp;(ftm_cnsc_mode[%(ch)]&lt;=7))||(ftm_cnsc_mode[%(ch)]&gt;=14)"
+         ref="ftm_cnv[%(ch)]*clockPeriod"
+         valueFormat="%s_s"
+         typeName="Seconds &amp;"
+         derived="true"
+         units="s"
+         description="Output Compare Event time in seconds"
+         toolTip="This value is compared against the main counter in output compare modes"
+         value="0" min="0" max="65535" />
+
+   </for>
+
+   <initialValueTemplate variables="minimumResolution"
+   ><![CDATA[
+      \t/// %description
+      \tstatic constexpr uint32_t minimumResolution  = $(?check_minimums:$(minimumResolution):0);\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate variables="minimumInterval"
+   ><![CDATA[
+      \t/// %description
+      \tstatic constexpr uint32_t minimumInterval  = $(?check_minimums:$(minimumInterval):0);\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate variables="ftmExternalClock"
+   ><![CDATA[
+      \t/// %description
+      \tstatic constexpr uint32_t ftmExternalClock  = $(ftmExternalClock);\n\n
+   ]]></initialValueTemplate>
+
+   <category name="External Triggers" description="External Triggers">
+      <bitmaskOption key="ftm_exttrig_trig"   description="External Trigger Enable"
+         toolTip="Enables the generation of the trigger when the FTM counter \n
+          is equal to the channel CnV register"
+         value="0"
+         bitmask="0x3F"
+         bitList="CH2TRIG,CH3TRIG,CH4TRIG,CH5TRIG,CH0TRIG,CH1TRIG,"
+         />
+      <binaryOption key="ftm_exttrig_inittrigen" description="Initialisation Trigger Enable"
+         toolTip="Enables the generation of the trigger when the FTM counter \n
+          is equal to the CNTIN register">
+         <choice value="0" name="Disabled" />
+         <choice value="1" name="Enabled" />
+      </binaryOption>
+   </category>
+   <template><![CDATA[
+      \t/// Default value for EXTTRIG) register
+      \tstatic constexpr uint32_t exttrig  =
+      \t    $(ftm_exttrig_trig)|                              // External Trigger Enable
+      \t    FTM_EXTTRIG_INITTRIGEN($(ftm_exttrig_inittrigen));    // Initialisation Trigger Enable \n\n
+   ]]></template>
+
+   <category name="Advanced" description="Advanced options">
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)clksel"  optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt0"    optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt1"    optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt2"    optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt3"    optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)trg0src" optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)trg1src" optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)ch0src"  optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)ch1src"  optional="true" constant="false" />
+
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och7src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och6src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och5src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och4src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och3src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och2src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och1src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och0src" optional="true" constant="false"/>
+   </category>
+
+   <setTemplate key="/$(_basename)/static_functions" namespace="all"
+      discardRepeats="true"
+      variables="ftm_sc_mode,ftm_sc_clks,ftm_sc_ps"
+      nonDefaultParams="2"
+   ><![CDATA[
+      \t/**
+      \t * Enables clock to peripheral and configures all pins.
+      \t * Configures main operating settings for timer.
+      \t *
+      %comments
+      \t */
+      \tstatic void configure(
+      %params) {
+      \t
+      \t   // Disable timer to change settings
+      \t   %register=0;
+      \t
+      \t   // Make sure write has completed (disabled)
+      \t   (void)(%register);
+      \t
+      \t   // Write new value
+      \t   ftm->SC = %paramExpression;
+      \t}\n\n
+   ]]></setTemplate>
+
+<!--  ========== Static/Non-Static Methods =============================== -->
+   <for  keys  =" k                    : static    : const    : getInputClockFrequency         : channel : Ftm       : isStatic"
+         values=" non_static_functions : ''        : ' const' : getInputClockFrequencyVirtual  : CHANNEL : FtmBase   : false ;
+                  static_functions     : 'static ' : ''       : 'Info::getInputClockFrequency' : channel : OwningFtm : true
+   ">
+      <setTemplate key="/$(_basename)/%(k)" namespace="all"
+         discardRepeats="true"
+         variables="ftm_sc_clks,ftm_sc_ps"
+         nonDefaultParams="2"
+      ><![CDATA[
+         \t/**
+         \t * Stop timer counter.
+         \t * This simply disables the counter clock source. \n
+         \t * To restart use setClockSource() or configure();
+         \t *
+         \t * @note This function will affect all channels of the timer.
+         \t * @note A illegal access trap will occur if the timer has not been enabled
+         \t */
+         \t%(static)void stopCounter()%(const) {
+         \t  %register = (%register&~%mask1);
+         \t}
+         \t
+         \t/**
+         \t * Set %description0 and %description1
+         \t *
+         %comments
+         \t */
+         \t%(static)void selectClock(
+         %params)%(const) {
+         \t
+         \t   // Calculate new SC value
+         \t   uint32_t %registerName = (%register&~%mask)|(%paramExpression);
+         \t
+         \t   // Disable timer to change clock (unable to switch directly between clock sources)
+         \t   %register=0;
+         \t
+         \t   // Make sure write has completed (disabled)
+         \t   (void)(%register);
+         \t
+         \t   // Write new value
+         \t   %register = %registerName;
+         \t}\n\n
+      ]]></setTemplate>
+
+      <for keys="  f           :  n"
+         values=" ftm_sc_mode  : Mode;
+                  ftm_sc_clks  : ClockSource;
+                  ftm_sc_ps    : Prescaler">
+         <setTemplate key="/$(_basename)/%(k)" namespace="all"
+            discardRepeats="true"
+            variables="%(f)"
+            nonDefaultParams="2"
+         ><![CDATA[
+            \t/**
+            \t * Set %description
+            \t *
+            %comments
+            \t *
+            \t * @note This function will affect all channels of the timer.
+            \t * @note The timer will be disabled while making changes.
+            \t */
+            \t%(static)void set%(n)(%params)%(const) {
+            \t
+            \t   // Calculate new SC value
+            \t   uint32_t %registerName = (%register&~%mask)|(%paramExpression);
+
+            \t   // Disable timer to change clock (unable to switch directly between clock sources)
+            \t   %register=0;
+
+            \t   // Make sure write has completed (disabled)
+            \t   (void)(%register);
+
+            \t   // Write new value
+            \t   %register = %registerName;
+            \t}
+            \t
+            \t/**
+            \t * Get %description
+            \t *
+            %comments
+            \t */
+            \t%(static)%enumClass get%(n)()%(const) {
+            \t
+            \t   return (%enumClass)(%register&~%mask);
+            \t}\n\n
+         ]]></setTemplate>
+      </for>
+
+      <for keys="  f           :  n"
+         values=" ftm_cntin    : CounterStartValue;
+                  ftm_mod      : CounterMaximumValue">
+         <setTemplate key="/$(_basename)/%(k)" namespace="all"
+            discardRepeats="true"
+            variables="%(f)"
+            nonDefaultParams="2"
+         ><![CDATA[
+            \t/**
+            \t * Set %description
+            \t * This value is write-buffered and updated by CNTIN synchronisation
+            \t *
+            %comments
+            \t *
+            \t * @note This function will affect all channels of the timer.
+            \t */
+            \t%(static)void set%(n)(%params)%(const) {
+            \t
+            \t   // Write new value
+            \t   %register = %paramExpression;
+            \t}
+            \t
+            \t/**
+            \t * Get %description
+            \t *
+            %comments
+            \t */
+            \t%(static)%enumClass get%(n)()%(const) {
+            \t
+            \t   return (%enumClass)%register;
+            \t}\n\n
+         ]]></setTemplate>
+      </for>
+
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
+         \t/**
+         \t * Calculate FTM timing parameters to achieve a given period
+         \t *
+         \t * @param[in]    period  Period in seconds
+         \t * @param[inout] sc      Proposed FTM.SC value (must include CLKS, CPWMS fields)
+         \t *                       PS field is updated
+         \t * @param[out]   mod     Calculated FTM.MOD values
+         \t *
+         \t * @return E_NO_ERROR   Success!!
+         \t * @return E_TOO_SMALL  Requested period is too small for resolution (required resolution check to be enabled)
+         \t * @return E_TOO_LARGE  Requested period is too large
+         \t */
+         \t%(static)ErrorCode calculateTimingParameters(Seconds period, uint8_t &sc, uint16_t &mod)%(const) {
+         \t
+         \t   float inputClock = %(getInputClockFrequency)((FtmClockSource)(sc&FTM_SC_CLKS_MASK));
+         \t   unsigned prescaleFactor=1;
+         \t   unsigned prescalerValue=0;
+         \t
+         \t   // Check if CPWMS is set (affects period calculation)
+         \t   bool centreAligned = (sc&FTM_SC_CPWMS_MASK);
+         \t
+         \t   constexpr uint32_t maxModValue = FTM_MOD_MOD_MASK;
+         \t
+         \t   while (prescalerValue<=7) {
+         \t      float clock    = inputClock/prescaleFactor;
+         \t      float modValueF = period*clock;
+         \t      if (centreAligned) {
+         \t         // PeriodInTicks = 2*MOD
+         \t         modValueF = modValueF/2;
+         \t      }
+         \t      else {
+         \t         // PeriodInTicks = MOD+1
+         \t         modValueF = modValueF - 1;
+         \t      }
+         \t      unsigned modValue = round(modValueF);\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
+         \t      if (modValue < Info::minimumResolution) {
+         \t         usbdm_assert(false, "Interval is too short");
+         \t         // Too short a period for minimum resolution
+         \t         return setErrorCode(E_TOO_SMALL);
+         \t      }\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
+         \t      if (modValue <= maxModValue) {
+         \t         sc   = (sc&~FTM_SC_PS_MASK)|FTM_SC_PS(prescalerValue);
+         \t         mod  = modValue;
+         \t         return E_NO_ERROR;
+         \t      }
+         \t      prescalerValue++;
+         \t      prescaleFactor <<= 1;
+         \t   }
+         \t   // Too long a period
+         \t   usbdm_assert(false, "Interval is too long");
+         \t   return setErrorCode(E_TOO_LARGE);
+         \t}\n\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
+         \t/**
+         \t * Set period
+         \t *
+         \t * @param[in] period   Period in seconds as a float
+         \t *
+         \t * @return E_NO_ERROR  => success
+         \t * @return E_TOO_SMALL  Requested period is too small for resolution (required resolution check to be enabled).
+         \t * @return E_TOO_LARGE  Requested period is too large.
+         \t *
+         \t * @note This function will affect all channels of the timer.
+         \t * @note Adjusts Timer pre-scaler to appropriate value.
+         \t * @note The counter load value (CNTIN) is cleared
+         \t * @note The counter modulo value (MOD) is modified to obtain the requested period
+         \t * @note The Timer is stopped while being modified.
+         \t * @note The Timer counter is restarted from zero
+         \t */
+         \t%(static)ErrorCode setPeriod(Seconds period)%(const) {
+         \t
+         \t   uint16_t modValue = 0;
+         \t
+         \t   uint8_t sc = ftm->SC;
+         \t
+         \t   ErrorCode rc = calculateTimingParameters(period, sc, modValue);
+         \t
+         \t   if (rc != E_NO_ERROR) {
+         \t      return rc;
+         \t   }
+         \t   // Disable timer to change prescaler and period
+         \t   ftm->SC = 0;
+         \t
+         \t   // Configure for modulo operation
+         \t   ftm->MOD   = modValue;
+         \t   ftm->CNTIN = 0_ticks;
+         \t
+         \t   // Clear counter
+         \t   ftm->CNT   = 0;
+         \t
+         \t   // Set prescale and enable timer
+         \t   ftm->SC  = sc;
+         \t
+         \t   return E_NO_ERROR;
+         \t}
+         \t
+         \t/**
+         \t * Set maximum interval for input-capture or output compare.
+         \t * Input Capture and Output Compare will be able to operate over
+         \t * at least this period without overflow.
+         \t *
+         \t * @param[in] interval Interval in seconds as a float
+         \t *
+         \t * @return E_NO_ERROR  => success
+         \t * @return E_TOO_SMALL  Requested period is too small for resolution (required resolution check to be enabled).
+         \t * @return E_TOO_LARGE  Requested period is too large.
+         \t *
+         \t * @note This function will affect all channels of the timer.
+         \t * @note Adjusts Timer pre-scaler to appropriate value.
+         \t * @note FTM counter is configured for free-running mode i.e. 0-65535
+         \t * @note The Timer is stopped while being modified.
+         \t * @note The Timer counter is restarted from zero
+         \t */
+         \t%(static)ErrorCode setMaximumInterval(Seconds interval)%(const) {
+         \t
+         \t   uint16_t       modValue;
+         \t
+         \t   uint8_t sc = ftm->SC;
+         \t
+         \t   ErrorCode rc = calculateTimingParameters(interval, sc, modValue);
+         \t   if (rc != E_NO_ERROR) {
+         \t      return rc;
+         \t   }
+         \t
+         \t   // Disable timer to change prescaler and period
+         \t   ftm->SC = 0;
+         \t
+         \t   // Configure for free-running mode
+         \t   // This is the usual value for IC or OC set-up
+         \t   ftm->MOD   = 0_ticks;
+         \t   ftm->CNTIN = 0_ticks;
+         \t
+         \t   // Clear counter
+         \t   ftm->CNT   = 0;
+         \t
+         \t   // Set prescale and enable timer
+         \t   ftm->SC  = sc;
+         \t
+         \t   return E_NO_ERROR;
+         \t}\n\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
+         \t/**
+         \t * Get frequency of timer tick
+         \t *
+         \t * @return Timer frequency in Hz
+         \t */
+         \t%(static)float getTickFrequencyAsFloat()%(const) {
+         \t
+         \t   // Calculate timer prescale factor
+         \t   float prescaleFactor = 1<<((ftm->SC&FTM_SC_PS_MASK)>>FTM_SC_PS_SHIFT);
+         \t
+         \t   return %(getInputClockFrequency)((FtmClockSource)(ftm->SC&FTM_SC_CLKS_MASK))/prescaleFactor;
+         \t}
+         \t
+         \t/**
+         \t * Get clock frequency
+         \t *
+         \t * @return Frequency as a uint32_t in Hz (may underflow)
+         \t */
+         \t%(static)uint32_t getTickFrequencyAsInt()%(const) {
+         \t
+         \t   // Calculate timer prescale factor
+         \t   int prescaleFactor = 1<<((ftm->SC&FTM_SC_PS_MASK)>>FTM_SC_PS_SHIFT);
+         \t
+         \t   return %(getInputClockFrequency)((FtmClockSource)(ftm->SC&FTM_SC_CLKS_MASK))/prescaleFactor;
+         \t}\n\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
+         \t/**
+         \t * Convert time in microseconds to time in ticks
+         \t *
+         \t * @param[in] time Time in microseconds
+         \t *
+         \t * @return Time in ticks
+         \t *
+         \t * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
+         \t * @note Will set error code if calculated value is less the Timer minimum resolution
+         \t */
+         \t%(static)Ticks convertMicrosecondsToTicks(int time)%(const) {
+         \t
+         \t   // Calculate period
+         \t   uint32_t tickRate = getTickFrequencyAsInt();
+         \t   uint64_t rv       = (static_cast<uint64_t>(time)*tickRate)/1000000;
+         \t   usbdm_assert(rv <= 0xFFFFUL, "Interval is too long");
+         \t   if (rv > 0xFFFFUL) {
+         \t      // Attempt to set too long a period
+         \t      setErrorCode(E_TOO_LARGE);
+         \t   }\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
+         \t   if (rv < Info::minimumInterval) {
+         \t      // Attempt to set too short a period
+         \t      setErrorCode(E_TOO_SMALL);
+         \t   }\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+         \t   return (unsigned)rv;
+         \t}
+         \t
+         \t/**
+         \t * Converts time in seconds to time in ticks
+         \t *
+         \t * @param[in] seconds Time interval in seconds
+         \t *
+         \t * @return Time in ticks
+         \t *
+         \t * @note Assumes prescale has been chosen as a appropriate value (see setMaximumInterval()). \n
+         \t * @note Will set error code if calculated value is less the minimum resolution
+         \t */
+         \t%(static)Ticks convertSecondsToTicks(Seconds seconds)%(const) {
+         \t
+         \t   // Calculate period
+         \t   float    tickRate = getTickFrequencyAsFloat();
+         \t   uint64_t rv       = rintf((float)seconds*tickRate);
+         \t   usbdm_assert(rv <= 0xFFFFUL, "Interval is too long");
+         \t   if (rv > 0xFFFFUL) {
+         \t      // Attempt to set too long a period
+         \t      setErrorCode(E_TOO_LARGE);
+         \t   }\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
+         \t   if (rv < Info::minimumInterval) {
+         \t      // Attempt to set too short a period
+         \t      setErrorCode(E_TOO_SMALL);
+         \t   }\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+         \t   return (unsigned)rv;
+         \t}
+         \t
+         \t/**
+         \t * Convert time in ticks to time in microseconds
+         \t *
+         \t * @param[in] timeInTicks Time in ticks
+         \t *
+         \t * @return Time in microseconds
+         \t *
+         \t * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
+         \t */
+         \t%(static)uint32_t convertTicksToMicroseconds(Ticks timeInTicks)%(const) {
+         \t
+         \t   // Calculate period
+         \t   uint64_t rv = (static_cast<uint64_t>((unsigned)timeInTicks)*1000000)/getTickFrequencyAsInt();
+         #ifdef DEBUG_BUILD
+         \t   if (rv > 0xFFFFUL) {
+         \t      // Attempt to set too long a period
+         \t      setErrorCode(E_TOO_LARGE);
+         \t   }
+         \t   if (rv == 0) {
+         \t      // Attempt to set too short a period
+         \t      setErrorCode(E_TOO_SMALL);
+         \t   }
+         #endif
+         \t   return rv;
+         \t}
+         \t
+         \t/**
+         \t * Convert time in ticks to time in milliseconds
+         \t *
+         \t * @param[in] timeInTicks Time in ticks
+         \t *
+         \t * @return Time in milliseconds
+         \t *
+         \t * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
+         \t */
+         \t%(static)uint32_t convertTicksToMilliseconds(Ticks timeInTicks)%(const) {
+         \t
+         \t   // Calculate period
+         \t   uint64_t rv = (static_cast<uint64_t>((unsigned)timeInTicks)*1000)/getTickFrequencyAsInt();
+         #ifdef DEBUG_BUILD
+         \t   if (rv > 0xFFFFUL) {
+         \t      // Attempt to set too long a period
+         \t      setErrorCode(E_TOO_LARGE);
+         \t   }
+         \t   if (rv == 0) {
+         \t      // Attempt to set too short a period
+         \t      setErrorCode(E_TOO_SMALL);
+         \t   }
+         #endif
+         \t   return rv;
+         \t}
+         \t
+         \t/**
+         \t * Convert time in ticks to time in seconds
+         \t *
+         \t * @param[in] timeInTicks Time in ticks
+         \t *
+         \t * @return Time in seconds
+         \t */
+         \t%(static)Seconds convertTicksToSeconds(Ticks timeInTicks)%(const) {
+         \t   return static_cast<float>((unsigned)timeInTicks)/getTickFrequencyAsFloat();
+         \t}
+         \t/**
+         \t * Get Timer count
+         \t *
+         \t * @return Timer count value
+         \t */
+         \t%(static)uint16_t getTime()%(const) {
+         \t   return ftm->CNT;
+         \t}
+         \t\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
+         \t/**
+         \t * Reset counter to initial value
+         \t */
+         \t%(static)void resetTime()%(const) {
+         \t   // Note: writing ANY value loads CNT from CNTIN
+         \t   ftm->CNT = 0;
+         \t}
+         \t
+         \t/**
+         \t * Get timer event flags
+         \t *
+         \t * @return Flags indicating if an event has occurred on a channel
+         \t *         There is one bit for each channel
+         \t */
+         \t%(static)unsigned getInterruptFlags()%(const) {
+         \t   return ftm->STATUS;
+         \t}
+         \t
+         \t/**
+         \t * Clear selected timer event flags
+         \t *
+         \t * @param channelMask Mask indicating which channel flags to clear
+         \t *                    There is one bit for each channel
+         \t *
+         \t * @note Flags will not be cleared if the channel is configured for DMA
+         \t */
+         \t%(static)void clearSelectedInterruptFlags(uint32_t channelMask)%(const) {
+         \t   (void)ftm->STATUS;
+         \t   ftm->STATUS = ~channelMask;
+         \t}
+         \t
+         \t/**
+         \t * Clear timer overflow event flag
+         \t */
+         \t%(static)void clearOverflowInterruptFlag() {
+         \t   // Clear TOI flag (w0c)
+         \t   ftm->SC = ftm->SC & ~FTM_SC_TOF_MASK;
+         \t}
+         \t
+         \t/**
+         \t * Get and clear timer event flags
+         \t *
+         \t * @return Flags indicating if an event has occurred on a channel
+         \t *         There is one bit for each channel
+         \t *
+         \t * @note Only flags captured in the return value are cleared
+         \t * @note Flags will not be cleared if the channel is configured for DMA
+         \t */
+         \t%(static)unsigned getAndClearInterruptFlags()%(const) {
+         \t   // Note requires read and write zero to clear flags
+         \t   // so only flags captured in status are cleared
+         \t   unsigned status = ftm->STATUS;
+         \t   ftm->STATUS = ~status;
+         \t   return status;
+         \t}
+         \t
+         \t/**
+         \t * Enables/disable the external trigger on a channel comparison or initialisation event
+         \t *
+         \t * @param[in] ftmExternalTrigger Indicates the event to cause the external trigger
+         \t * @param[in] enable             Whether to enable/disable the specified trigger
+         \t */
+         \t%(static)void enableExternalTrigger(FtmExternalTrigger ftmExternalTrigger, bool enable=true)%(const) {
+         \t   if (enable) {
+         \t      ftm->EXTTRIG = ftm->EXTTRIG | ftmExternalTrigger;
+         \t   }
+         \t   else {
+         \t      ftm->EXTTRIG = ftm->EXTTRIG & ~ftmExternalTrigger;
+         \t   }
+         \t}
+         \t
+         \t/**
+         \t * Enables multiple external triggers on a channel comparison or initialisation event
+         \t *
+         \t * @param[in] externalTriggers Indicates the events to cause the external trigger. \n
+         \t *                             Construct from ORed FtmExternalTrigger flags e.g. FtmExternalTrigger_ch0|FtmExternalTrigger_ch3
+         \t * @param[in] enable           Whether to enable/disable the specified triggers
+         \t */
+         \t%(static)void enableExternalTriggers(int externalTriggers, bool enable=true)%(const) {
+         \t   enableExternalTrigger((FtmExternalTrigger)externalTriggers, enable);
+         \t}
+         \t
+         \t/**
+         \t * Enable/disable Timer Overflow interrupts
+         \t */
+         \t%(static)void enableTimerOverflowInterrupts()%(const) {
+         \t   ftm->SC = ftm->SC | FTM_SC_TOIE_MASK;
+         \t}
+         \t
+         \t/**
+         \t * Disable Timer Overflow interrupts
+         \t */
+         \t%(static)void disableTimerOverflowInterrupts()%(const) {
+         \t   ftm->SC = ftm->SC & ~FTM_SC_TOIE_MASK;
+         \t}
+         \t
+         \t/**
+         \t * Enable fault interrupts
+         \t */
+         \t%(static)void enableFaultInterrupt()%(const) {
+         \t   ftm->MODE = ftm->MODE | FTM_MODE_FAULTIE_MASK;
+         \t}
+         \t
+         \t/**
+         \t * Disable fault interrupts
+         \t */
+         \t%(static)void disableFaultInterrupt()%(const) {
+         \t   ftm->MODE = ftm->MODE & ~FTM_MODE_FAULTIE_MASK;
+         \t}
+         \t
+         \t/**
+         \t *  Disables fault detection input
+         \t *
+         \t *  @tparam inputNum        Number of fault input to enable (0..3)
+         \t */
+         \ttemplate<int inputNum>
+         \t%(static)void disableFault()%(const) {
+         \t   static_assert(inputNum<=4, "Illegal fault channel");
+         \t
+         \t   // Enable fault on channel
+         \t   ftm->FLTCTRL = ftm->FLTCTRL & ~(1<<inputNum);
+         \t}
+         \t
+         \t/**
+         \t *  Enables fault detection input
+         \t *
+         \t *  @tparam inputNum           Number of fault input to enable (0..3)
+         \t *
+         \t *  @param[in]  polarity       Polarity of fault input
+         \t *  @param[in]  filterEnable   Whether to enable filtering on the fault input
+         \t *  @param[in]  filterDelay    Delay used by the filter (1..15) - Applies to all channels
+         \t *
+         \t *  NOTE - the filter delay is shared by all inputs
+         \t */
+         public:
+         \ttemplate<uint8_t inputNum>
+         \t%(static)void enableFault(
+         \t      Polarity polarity     = ActiveHigh,
+         \t      bool     filterEnable = false,
+         \t      uint32_t filterDelay  = FTM_FLTCTRL_FFVAL_MASK>>(FTM_FLTCTRL_FFVAL_SHIFT+1))%(const) {
+         \t\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
+         \t
+         \t   if (polarity) {
+         \t      // Set active high
+         \t      ftm->FLTPOL = ftm->FLTPOL & ~(1<<inputNum);
+         \t   }
+         \t   else {
+         \t      // Set active low
+         \t      ftm->FLTPOL = ftm->FLTPOL | (1<<inputNum);
+         \t   }
+         \t   if (filterEnable) {
+         \t      // Enable filter & set filter delay
+         \t      ftm->FLTCTRL = ((ftm->FLTCTRL) & ~(FTM_FLTCTRL_FFVAL_MASK)) | (1<<(inputNum+FTM_FLTCTRL_FFLTR0EN_SHIFT)) | FTM_FLTCTRL_FFVAL(filterDelay);
+         \t   }
+         \t   else {
+         \t      // Disable filter
+         \t      ftm->FLTCTRL = ftm->FLTCTRL & ~(1<<(inputNum+FTM_FLTCTRL_FFLTR0EN_SHIFT));
+         \t   }
+         \t   // Enable fault input
+         \t   ftm->FLTCTRL = ftm->FLTCTRL | (1<<inputNum);
+         \t   // Enable fault mode (All channels, manual)
+         \t   ftm->MODE    = ftm->MODE | FTM_MODE_FAULTM(2);
+         \t}\n\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"
+         variables="ftm_pol_pol0_present" ><![CDATA[
+         \t/**
+         \t * Set polarity of all channels
+         \t *
+         \t * @param channelMask   Bit mask 0 => active-high, 1 => active-low
+         \t */
+         \t%(static) void setPolarity(uint32_t channelMask)%(const) {
+         \t   ftm->POL = channelMask;
+         \t}
+         \t
+         \t/**
+         \t * Set polarity of selected channels
+         \t *
+         \t * @param polarity      Polarity to set
+         \t * @param channelMask   Bit mask indicating channels to affect
+         \t */
+         \t%(static)void setPolarity(Polarity polarity, uint32_t channelMask)%(const) {
+         \t   if (polarity) {
+         \t      ftm->POL = ftm->POL & ~channelMask;
+         \t   }
+         \t   else {
+         \t      ftm->POL = ftm->POL | channelMask;
+         \t   }
+         \t}\n\n
+      ]]></template>
+      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
+         \t/*
+         \t * *****************************************************************
+         \t *          Channel functions
+         \t * *****************************************************************
+         \t */
+         \t/**
+         \t * Set PWM duty cycle.
+         \t * Higher precision float version
+         \t *
+         \t * @param[in] dutyCycle  Duty-cycle as percentage (float)
+         \t * @param[in] channel    Timer channel
+         \t *
+         \t * @note The actual CnV register update may be delayed by the register synchronisation mechanism
+         \t */
+         \t%(static)void setDutyCycle(float dutyCycle, int channel)%(const) {
+         \t   if (ftm->SC&FTM_SC_CPWMS_MASK) {
+         \t      ftm->CONTROLS[channel].CnV  = round((dutyCycle*ftm->MOD)/100.0f);
+         \t   }
+         \t   else {
+         \t      ftm->CONTROLS[channel].CnV  = round((dutyCycle*(ftm->MOD+1))/100.0f);
+         \t   }
+         \t}
+         \t
+         \t/**
+         \t * Set PWM duty cycle
+         \t *
+         \t * @param[in] dutyCycle  Duty-cycle as percentage
+         \t * @param[in] channel    Timer channel
+         \t *
+         \t * @note The actual CnV register update may be delayed by the register synchronisation mechanism
+         \t */
+         \t%(static)void setDutyCycle(int dutyCycle, int channel)%(const) {
+         \t   if (ftm->SC&FTM_SC_CPWMS_MASK) {
+         \t      ftm->CONTROLS[channel].CnV  = (dutyCycle*ftm->MOD)/100;
+         \t   }
+         \t   else {
+         \t      ftm->CONTROLS[channel].CnV  = (dutyCycle*(ftm->MOD+1))/100;
+         \t   }
+         \t}
+         \t
+         \t/**
+         \t * Set PWM high time in ticks
+         \t * Assumes value is less than period
+         \t *
+         \t * @param[in] highTime   PWM high time in ticks
+         \t * @param[in] channel    Timer channel
+         \t *
+         \t * @return E_NO_ERROR on success
+         \t * @return E_TOO_LARGE on success
+         \t *
+         \t * @note The actual CnV register update may be delayed by the register synchronisation mechanism
+         \t */
+         \t%(static)ErrorCode setHighTime(Ticks highTime, int channel)%(const) {
+         \t
+         \t   if (ftm->SC&FTM_SC_CPWMS_MASK) {
+         \t      // In CPWM the pulse width is doubled
+         \t      highTime = (highTime+1_ticks)/2U;
+         \t   }
+         #ifdef DEBUG_BUILD
+         \t   if ((unsigned)highTime > ftm->MOD) {
+         \t      return setErrorCode(E_TOO_LARGE);
+         \t   }
+         #endif
+         \t   ftm->CONTROLS[channel].CnV  = (unsigned)highTime;
+         \t   return E_NO_ERROR;
+         \t}
+         \t
+         \t/**
+         \t * Get Timer event time
+         \t *
+         \t * @param[in] channel    Timer channel
+         \t *
+         \t * @return Absolute time of last event in ticks i.e. value from timer event register
+         \t */
+         \t%(static)Ticks getEventTime(int channel)%(const) {
+         \t   return (unsigned)(ftm->CONTROLS[channel].CnV);
+         \t}
+         \t
+         \t/**
+         \t * Set Timer event time
+         \t *
+         \t * This value is write-buffered and updated by Cnv synchronisation.
+         \t *
+         \t * @param[in] eventTime  Absolute event time in ticks i.e. value to use as timer comparison value
+         \t * @param[in] channel    Timer channel
+         \t */
+         \t%(static)void setEventTime(Ticks eventTime, int channel)%(const) {
+         \t   ftm->CONTROLS[channel].CnV = (unsigned)eventTime;
+         \t}
+         \t
+         \t/**
+         \t * Set Timer event time relative to current event time
+         \t *
+         \t * @param[in] offset     Event time in ticks relative to current event time (i.e. Timer channel CnV value)
+         \t * @param[in] channel    Timer channel
+         \t *
+         \t * @note This value is write-buffered and updated by CnV synchronisation.
+         \t */
+         \t%(static)void setDeltaEventTime(Ticks offset, int channel)%(const) {
+         \t   ftm->CONTROLS[channel].CnV = ftm->CONTROLS[channel].CnV + (unsigned)offset;
+         \t}
+         \t
+         \t/**
+         \t * Set Timer event time relative to current timer count value
+         \t *
+         \t * @param[in] offset     Event time in ticks relative to current time (i.e. Timer CNT value)
+         \t * @param[in] channel    Timer channel
+         \t *
+         \t * @note This value is write-buffered and updated by CnV synchronisation.
+         \t */
+         \t%(static)void setRelativeEventTime(Ticks offset, int channel)%(const) {
+         \t   ftm->CONTROLS[channel].CnV = ftm->CNT + (unsigned)offset;
+         \t}
+         \t
+         \t/**
+         \t * Set PWM high time in seconds
+         \t *
+         \t * @param[in] highTime   PWM high time in seconds
+         \t * @param[in] channel    Timer channel
+         \t *
+         \t * @return E_NO_ERROR on success
+         \t *
+         \t * @note The actual CnV register update may be delayed by the FTM register synchronisation mechanism
+         \t */
+         \t%(static)ErrorCode setHighTime(Seconds highTime, int channel)%(const) {
+         \t   return setHighTime(convertSecondsToTicks(highTime), channel);
+         \t}
+         \t
+         \t/**
+         \t * Set initial state for channels outputs
+         \t *
+         \t * @param initialValue  Bit mask value for channels
+         \t */
+         \t%(static)void setOutputInitialValue(uint32_t initialValue)%(const) {
+         \t   ftm->OUTINIT = initialValue;
+         \t}
+         \t
+         \t/**
+         \t * Set output mask for channels outputs
+         \t *
+         \t * The mask of a channel determines if its output responds, that is,
+         \t * it is masked or not, when a match occurs
+         \t * This value is write-buffered and updated by PWM synchronisation.
+         \t *
+         \t * @param maskValue  Bit mask value 0 => not masked, 1 => masked
+         \t */
+         \t%(static)void setOutputMaskValue(uint32_t maskValue)%(const) {
+         \t   ftm->OUTMASK = maskValue;
+         \t}
+         \t
+         \t/**
+         \t * Set inverting control
+         \t *
+         \t * This controls when the channel (n) and (n+1) outputs are exchanged.
+         \t * Each bit enables the inverting operation for the corresponding channels pair.
+         \t * This value is write-buffered and updated by INVCTRL synchronisation.
+         \t *
+         \t * @param enableMask  Bit mask for channels (combination of FtmChannelPair)
+         \t */
+         \t%(static)void setInvertedChannelPairs(uint32_t enableMask)%(const) {
+         \t   ftm->OUTINIT = enableMask;
+         \t}
+         \t
+         \t/**
+         \t * Force channel outputs
+         \t *
+         \t * This enables software control of channel output and
+         \t * defines the value forced to the channel output.
+         \t * This value is write-buffered and updated by SWOCTRL synchronisation.
+         \t *
+         \t * @param enableMask  Bit mask for channels to be forced: 1 => forced, 0 => released
+         \t * @param outputMask  Bit mask for values to be forced to selected channels
+         \t */
+         \t%(static)void forceChannelOutputs(uint32_t enableMask, uint32_t outputMask)%(const) {
+         \t   ftm->SWOCTRL = (enableMask&0xFF)|((outputMask<<8)&0xFF00);
+         \t}
+         \t
+         \t/**
+         \t * Force channel output
+         \t *
+         \t * This enables software control of channel output and
+         \t * defines the value forced to the channel output.
+         \t * This value is write-buffered and updated by SWOCTRL synchronisation.
+         \t *
+         \t * @param channel  Number of channel to be forced
+         \t * @param value    Value to be forced on that channel
+         \t */
+         \t%(static)void forceChannelOutput(uint32_t channel, bool value)%(const) {
+         \t   static constexpr unsigned FTM_SWOCTRL_CHxOC_SHIFT   = 0;
+         \t   static constexpr unsigned FTM_SWOCTRL_CHxOCV_SHIFT  = 8;
+         \t
+         \t   uint32_t channelMask = 1<<(channel+FTM_SWOCTRL_CHxOC_SHIFT);
+         \t   uint32_t valueMask   = 1<<(channel+FTM_SWOCTRL_CHxOCV_SHIFT);
+         \t
+         \t   // Set control bit + insert control value
+         \t   ftm->SWOCTRL = (ftm->SWOCTRL&~valueMask) | (channelMask | (value?valueMask:0));
+         \t}
+         \t
+         \t/**
+         \t * Release forced channel output
+         \t *
+         \t * This enables software control of channel output and
+         \t * defines the value forced to the channel output.
+         \t * This value is write-buffered and updated by SWOCTRL synchronisation.
+         \t *
+         \t * @param channel  Number of channel to be released
+         \t */
+         \t%(static)void releaseChannelOutput(uint32_t channel)%(const) {
+         \t   static constexpr unsigned FTM_SWOCTRL_CHxOC_SHIFT   = 0;
+         \t
+         \t   uint32_t channelMask = 1<<(channel+FTM_SWOCTRL_CHxOC_SHIFT);
+         \t
+         \t   // Release control bit
+         \t   ftm->SWOCTRL = ftm->SWOCTRL & ~channelMask;
+         \t}
+         \t
+         \t/**
+         \t * Set current value of channel outputs.\n
+         \t * This value is overwritten by the next channel action.
+         \t *
+         \t * @param channelValueMask Mask indicating desired channel outputs
+         \t */
+         \t%(static)void setChanelOutputs(uint32_t channelValueMask)%(const) {
+         \t   ftm->OUTINIT = channelValueMask;
+         \t   ftm->MODE    = ftm->MODE | FTM_MODE_INIT_MASK;
+         \t}\n\n
+      ]]></template>
+
+<!-- Channel Functions -->
+
+   <template key="/$(_basename)_CHANNEL/%(k)" namespace="all" discardRepeats="true"
+      variables="tpm_cnsc_action[]"
+      linePadding="xxx"
+   ><![CDATA[
+      \t
+      \t   /**
+      \t    * Set channel action on event.
+      \t    *
+      \t    * @param[in] ftmChannelAction      Action to take on channel event (DMA or Interrupt)
+      \t    *
+      \t    * @note This method has the side-effect of clearing the register update synchronisation i.e.
+      \t    *       pending CnV register updates are discarded.
+      \t    */
+      \t   %(static) void setAction(FtmChannelAction ftmChannelAction)%(const) {
+      \t      ftm->CONTROLS[%(channel)].CnSC =
+      \t            (ftm->CONTROLS[%(channel)].CnSC & ~(FTM_CnSC_CHIE_MASK|FTM_CnSC_DMA_MASK))|
+      \t            ftmChannelAction;
+      \t   }\n\n
+   ]]></template>
+
+   <template key="/$(_basename)_CHANNEL/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+      \t   /**
+      \t    * Configure channel.
+      \t    * No affect on shared settings of owning Timer
+      \t    *
+      \t    * @param[in] ftmChannelMode    Mode of operation for channel
+      \t    * @param[in] ftmChannelAction  Whether to enable the interrupt or DMA function on this channel
+      \t    *
+      \t    * @note This method has the side-effect of clearing the register update synchronisation i.e.
+      \t    *       pending CnV register updates are discarded.
+      \t    */
+      \t   %(static) void configure(
+      \t         FtmChannelMode    ftmChannelMode,
+      \t         FtmChannelAction  ftmChannelAction = FtmChannelAction_None)%(const) {
+      \t
+      \t      ftm->CONTROLS[%(channel)].CnSC = ftmChannelMode|ftmChannelAction;
+      \t   }
+      \t
+      \t   /**
+      \t    * Disables timer channel (sets mode to FtmChannelMode_Disabled)
+      \t    */
+      \t   %(static) void disable()%(const) {
+      \t      setMode(FtmChannelMode_Disabled);
+      \t   }
+      \t
+      \t   /**
+      \t    * Get channel mode.
+      \t    *
+      \t    * @return Current mode of operation for the channel
+      \t    */
+      \t   %(static) FtmChannelMode getMode()%(const) {
+      \t      return static_cast<FtmChannelMode>(ftm->CONTROLS[%(channel)].CnSC &
+      \t            (FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK));
+      \t   }
+      \t
+      \t   /**
+      \t    * Set channel mode
+      \t    *
+      \t    * @param[in] ftmChannelMode      Mode of operation for channel
+      \t    *
+      \t    * @note This method has the side-effect of clearing the register update synchronisation i.e.
+      \t    *       pending CnV register updates are discarded.
+      \t    */
+      \t   %(static) void setMode(FtmChannelMode ftmChannelMode)%(const) {
+      \t      ftm->CONTROLS[%(channel)].CnSC =
+      \t            (ftm->CONTROLS[%(channel)].CnSC & ~(FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK))|ftmChannelMode;
+      \t   }
+      \t   /**
+      \t    * Set PWM high time in ticks.
+      \t    * Assumes value is less than period
+      \t    *
+      \t    * @param[in] highTime   PWM high time in ticks
+      \t    *
+      \t    * @return E_NO_ERROR on success
+      \t    *
+      \t    * @note The actual CnV register update will be delayed by the register synchronisation mechanism
+      \t    */
+      \t   %(static) ErrorCode setHighTime(Ticks highTime)%(const) {
+      \t      return %(Ftm)::setHighTime(highTime, %(channel));
+      \t   }
+      \t
+      \t   /**
+      \t    * Set PWM high time in seconds.
+      \t    * Higher precision float version
+      \t    *
+      \t    * @param[in] highTime   PWM high time in seconds
+      \t    *
+      \t    * @return E_NO_ERROR on success
+      \t    *
+      \t    * @note The actual CnV register update will be delayed by the register synchronisation mechanism
+      \t    */
+      \t   %(static) ErrorCode setHighTime(Seconds highTime)%(const) {
+      \t      return %(Ftm)::setHighTime(highTime, %(channel));
+      \t   }
+      \t   /**
+      \t    * Set PWM duty cycle.
+      \t    *
+      \t    * @param[in] dutyCycle  Duty-cycle as percentage
+      \t    *
+      \t    * @note The actual CnV register update will be delayed by the register synchronisation mechanism
+      \t    */
+      \t   %(static) void setDutyCycle(int dutyCycle)%(const) {
+      \t      %(Ftm)::setDutyCycle(dutyCycle, %(channel));
+      \t   }
+      \t
+      \t   /**
+      \t    * Set PWM duty cycle
+      \t    *
+      \t    * @param[in] dutyCycle  Duty-cycle as percentage
+      \t    *
+      \t    * @note The actual CnV register update will be delayed by the register synchronisation mechanism
+      \t    */
+      \t   %(static) void setDutyCycle(float dutyCycle)%(const) {
+      \t      %(Ftm)::setDutyCycle(dutyCycle, %(channel));
+      \t   }
+      \t
+      \t   /**
+      \t    * Set Timer event time.
+      \t    *
+      \t    * @param[in] offset  Event time in ticks relative to current event time (i.e. Timer channel CnV value)
+      \t    *
+      \t    * @note The actual CnV register update will be delayed by the register synchronisation mechanism
+      \t    */
+      \t   %(static) void setDeltaEventTime(Ticks offset)%(const) {
+      \t      %(Ftm)::setDeltaEventTime(offset, %(channel));
+      \t   }
+      \t
+      \t   /**
+      \t    * Set Timer event time relative to current timer count value.
+      \t    *
+      \t    * @param[in] offset  Event time in ticks relative to current time (i.e. Timer CNT value)
+      \t    *
+      \t    * @note The actual CnV register update will be delayed by the register synchronisation mechanism
+      \t    */
+      \t   %(static) void setRelativeEventTime(Ticks offset)%(const) {
+      \t      %(Ftm)::setRelativeEventTime(offset, %(channel));
+      \t   }
+      \t
+      \t   /**
+      \t    * Set Absolute Timer event time.
+      \t    *
+      \t    * @param[in] eventTime  Absolute event time in ticks i.e. value to use as timer comparison value
+      \t    *
+      \t    * @note The actual CnV register update will be delayed by the register synchronisation mechanism
+      \t    */
+      \t   %(static) void setEventTime(Ticks eventTime)%(const) {
+      \t      %(Ftm)::setEventTime(eventTime, %(channel));
+      \t   }
+      \t
+      \t   /**
+      \t    * Get Absolute Timer event time.
+      \t    *
+      \t    * @return Absolute time of last event in ticks i.e. value from timer event register
+      \t    */
+      \t   %(static) Ticks getEventTime()%(const) {
+      \t      return %(Ftm)::getEventTime(%(channel));
+      \t   }
+      \t
+      \t   /**
+      \t    * Get Timer interrupt/event flag.
+      \t    *
+      \t    * @return true  Indicates an event has occurred on a channel
+      \t    * @return false Indicates no event has occurred on a channel since last polled
+      \t    */
+      \t   %(static) bool getInterruptFlag()%(const) {
+      \t      return (ftm->STATUS&CHANNEL_MASK) != 0;
+      \t   }
+      \t
+      \t   /**
+      \t    * Get and Clear Timer channel interrupt flag.
+      \t    *
+      \t    * @return true  Indicates an event has occurred on a channel
+      \t    * @return false Indicates no event has occurred on a channel since last polled
+      \t    *
+      \t    * @note Only flags captured in the return value are cleared
+      \t    */
+      \t   %(static) bool getAndClearInterruptFlag()%(const) {
+      \t      // Note - requires read and write zero to clear flags
+      \t      // so only flags captured in status are cleared
+      \t      bool status = (ftm->STATUS&CHANNEL_MASK) != 0;
+      \t      ftm->STATUS = ~CHANNEL_MASK;
+      \t      return status;
+      \t   }
+      \t
+      \t   /**
+      \t    * Clear interrupt flag on channel.
+      \t    */
+      \t   %(static) void clearInterruptFlag()%(const) {
+      \t      // Note - requires read and write zero to clear flag
+      \t      ftm->CONTROLS[CHANNEL].CnSC = ftm->CONTROLS[CHANNEL].CnSC & ~FTM_CnSC_CHF_MASK;
+      \t   }
+      \t
+      \t   /**
+      \t    * Force channel output.
+      \t    *
+      \t    * This enables software control of channel output and
+      \t    * defines the value forced to the channel output.
+      \t    * This value is write-buffered and updated by SWOCTRL synchronisation.
+      \t    *
+      \t    * @param ftmChannelForce  Select control of pin. One of FtmChannelForce_Low/High/Release
+      \t    */
+      \t   %(static) void forceChannelOutput(FtmChannelForce ftmChannelForce)%(const) {
+      \t      static const uint32_t MASK = ((1<<%(channel))|(1<<(%(channel)+8)));
+      \t      ftm->SWOCTRL = ((ftm->SWOCTRL & ~MASK)) | (ftmChannelForce & MASK);
+      \t   }\n\n
+   ]]></template>
+   <template key="/$(_basename)_CHANNEL/%(k)" namespace="all" discardRepeats="true"
+      variables="ftm_pol_pol0_present" ><![CDATA[
+      \t   /**
+      \t    * Set polarity of channels.
+      \t    *
+      \t    * @param polarity Polarity to set
+      \t    */
+      \t   %(static) void setPolarity(Polarity polarity)%(const) {
+      \t      %(Ftm)::setPolarity(polarity, CHANNEL_MASK);
+      \t   }\n\n
+      ]]></template>
+   </for>
+
+   <clockCodeTemplate variable="ftm_sc_clks"
+      returnFormat="%s"
+   ><![CDATA[
+      \t/**
+      \t * Get %description
+      \t *
+      %paramDescription
+      \t *
+      \t * @return Clock frequency in Hz
+      \t */
+      \tstatic uint32_t getInputClockFrequency(%params) {
+      \t
+      \t   switch(%paramExpression) {
+      \t      default: return 0;
+      %body
+      \t   }
+      \t}\n\n
+   ]]></clockCodeTemplate>
+
+<!--   ========== FTM Init class =============================== -->
+
+   <template key="init_description" namespace="all" ><![CDATA[
+      \t/**
+      \t * Class used to do initialisation of $(_class)
+      \t *
+      \t * This class has a templated constructor that accepts various values:
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const Ftm$(_instance)::Init ftmInit {
+      \t *
+      \t *    // Omitted parameters are taken to be zero unless a base value is given
+      \t *    FtmMode_Freerunning,           // Alignment and whether interval or free-running mode
+      \t *    FtmOverflowInterrupt_Disabled, // Overflow Interrupt
+      \t *    NvicPriority_Normal,           // IRQ level for this peripheral
+      \t *    FtmClockSource_SystemClock,    // Clock Source
+      \t *
+      \t *    // Either
+      \t *    FtmPrescale_DivBy16,           // Clock prescaler
+      \t *    10_ticks, 3000_ticks,          // Counter start (cntin) and end (mod) values
+      \t *    // OR
+      \t *    100_ms,                        // Timer period or minimum interval in seconds
+      \t *
+      \t *    // Optional base value to start with (must be last parameter)
+      \t *    $(_class)::DefaultValue
+      \t * };
+      \t *
+      \t * // Initialise FTM from values specified above
+      \t * Ftm$(_instance)::configure(ftmInit)
+      \t * @endcode
+      \t */
+   ]]></template>
+
+   <template namespace="usbdm" ><![CDATA[
+      class $(_class)BasicInfo {
+      \t
+      public:\n\n
+   ]]></template>
+
+   <setTemplate namespace="usbdm"
+       variables="irqHandlingMethod">
+   <![CDATA[
+      \t/**
+      \t * Type definition for $(_class) channel interrupt call-back
+      \t *
+      \t * @param[in] status Flags indicating interrupt source channel(s)
+      \t */
+      \ttypedef void (*ChannelCallbackFunction)(uint8_t status);
+      \t
+      \t/**
+      \t * Type definition for $(_class) overflow and fault call-back.
+      \t */
+      \ttypedef void (*CallbackFunction)();\n\n
+   ]]></setTemplate>
+
+   <template namespace="usbdm"><![CDATA[
+$(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]></template>
+
+<!--  Member variables -->
+
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs"
+      variables="irqHandlingMethod"
+    ><![CDATA[
+      \t   /// Shared channel interrupt call-back
+      \t   ChannelCallbackFunction channelCallbackFunction = nullptr;\n\n
+   ]]></setTemplate>
+
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="irqHandlingMethod"
+    ><![CDATA[
+      \t   /// Shared overflow or fault interrupt call-back
+      \t   CallbackFunction callbackFunction = nullptr;\n\n
+   ]]></setTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="ftm_sc_action,ftm_sc_cpwms,ftm_sc_clks,ftm_sc_ps,ftm_sc_mode"
+   ><![CDATA[
+      \t   /// Status And Control Register
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="/PCR/nvic_irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="ftm_cntin"
+   ><![CDATA[
+      \t   /// %description
+      \t   uint16_t %registerName = 0_ticks;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="ftm_mod"
+   ><![CDATA[
+      \t   /// %description
+      \t   uint16_t %registerName = 0_ticks;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables= "ftm_modPeriod"
+    ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = 0_s;\n\n
+   ]]></initialValueTemplate >
+
+<!--   Configure method -->
+
+   <setTemplate variables="ftm_sc_clks" discardRepeats="true" key="/$(_basename)/InitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure FTM from values specified in init
+      \t
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic ErrorCode configure(const typename Info::Init &init) {
+      \t
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      Info::setCallbacks(init);
+      \t   }
+      \t
+      \t   uint8_t  sc    = init.sc;
+      \t   uint16_t cntin = init.cntin;
+      \t   uint16_t mod   = init.mod;
+      \t
+      \t   if (init.modperiod != 0) {
+      \t
+      \t      // Calculate sc.ps, mod (assumes cntin=0)
+      \t      ErrorCode rc = calculateTimingParameters(init.modperiod, sc, mod);
+      \t      if (rc != E_NO_ERROR) {
+      \t         return rc;
+      \t      }
+      \t      // Configure for modulo operation
+      \t      cntin = 0;
+      \t   }
+      \t   if (init.sc&FtmMode_FreeRunning) {
+      \t      // Make free-running
+      \t      cntin = 0;
+      \t      mod   = FTM_MOD_MOD_MASK;
+      \t   }
+      \t   // Disable timer to change clock (unable to switch directly between clock sources)
+      \t   ftm->SC  = 0;
+      \t
+      \t   // Start value for counter
+      \t   ftm->CNTIN = cntin;
+      \t
+      \t   // End value for counter
+      \t   ftm->MOD = mod;
+      \t
+      \t   // Restart counter
+      \t   ftm->CNT = 0;
+      \t
+      \t   // Configure timer
+      \t   ftm->SC  = sc;
+      \t
+      \t   return E_NO_ERROR;
+      \t}\n\n
+   ]]></setTemplate>
+
+<!--   Constructors -->
+
+   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for shared channel interrupt call-back
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      \t    * @param callback Shared channel interrupt call-back to set
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(ChannelCallbackFunction %paramExpression, Types... rest) : Init(rest...) {
+      \t
+      \t      this->channelCallbackFunction = %paramExpression;
+      \t   }\n\n
+   ]]></constructorTemplate>
+
+   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for overflow and fault interrupt call-back
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      \t    * @param callback Overflow and fault interrupt call-back to set
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(CallbackFunction %paramExpression, Types... rest) : Init(rest...) {
+      \t
+      \t      this->callbackFunction = %paramExpression;
+      \t   }\n\n
+   ]]></constructorTemplate>
+
+   <constructorTemplate namespace="usbdm"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      #if $(irqHandlingMethod)
+      \t      %registerName = %paramExpression;
+      #else
+      \t      (void)%paramExpression;
+      #endif
+      \t   }\n\n
+   ]]></constructorTemplate>
+
+   <for keys="r" values="ftm_sc_action;ftm_sc_cpwms;ftm_sc_mode;ftm_sc_clks">
+      <constructorTemplate  namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]></constructorTemplate>
+   </for>
+
+   <constructorTemplate namespace="usbdm"
+      variables="ftm_sc_ps, ftm_cntin, ftm_mod"
+      params=",cntin_ticks,mod_ticks"
+      linePadding="xxx"
+      nonDefaultParams="3"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description0, %description1 and %description2
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(
+         %params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName0    = (%registerName0&~%mask0) | %enumParam0;
+         \t      %registerName1 = %enumParam1;
+         \t      %registerName2   = %enumParam2;
+         \t   }
+         \t\n
+   ]]></constructorTemplate>
+
+   <constructorTemplate namespace="usbdm"
+      variables="ftm_sc_ps, ftm_mod"
+      params=",mod_ticks"
+      linePadding="xxx"
+      nonDefaultParams="2"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description0 and %description1
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(
+         %params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName0    = (%registerName0&~%mask0) | %enumParam0;
+         \t      %registerName1   = %enumParam1;
+         \t   }
+         \t\n
+   ]]></constructorTemplate>
+
+   <constructorTemplate namespace="usbdm"
+      nonDefaultParams="2"
+      variables="ftm_modPeriod"
+      linePadding="xxx"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      cntin = 0;
+         \t      mod   = 0;
+         \t      %registerName = %paramExpression;
+         \t   }
+         \t\n
+   ]]></constructorTemplate>
+
+   <template namespace="usbdm" ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+<!--  Default Initialisation value -->
+
+   <template><![CDATA[
+   \t/**
+   \t * Type definition for $(_class) overflow and fault call-back.
+   \t */
+   \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+   \t
+   \t/**
+   \t * Type definition for $(_class) channel interrupt call-back
+   \t */
+   \ttypedef $(_class)BasicInfo::ChannelCallbackFunction ChannelCallbackFunction;
+   \t\n
+   ]]></template>
+
+   <template codeGenCondition="irqHandlingMethod"><![CDATA[
+   \t/**
+   \t * Callback function for Channel Fault and timer overflow
+   \t */
+   \tstatic CallbackFunction callback;
+   \t\n
+   ]]></template>
+
+   <template><![CDATA[
+   \t/**
+   \t * Indicates if individual call-backs can be set for each channel
+   \t */
+   \tstatic constexpr bool IndividualCallbacks = $(individual_channel_call_backs);
+   \t\n
+   ]]></template>
+
+   <template codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs"><![CDATA[
+   \t/**
+   \t * Callback table for programmatically set channel call-backs
+   \t * One entry for hardware interrupt vector (all hardware interrupt vectors are mapped to a single channel call-back by software)
+   \t */
+   \tstatic ChannelCallbackFunction channelCallbacks[1];
+   \t\n
+   ]]></template>
+
+   <template codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs"><![CDATA[
+   \t/**
+   \t * Callback table for programmatically set channel call-backs
+   \t * One entry for each channel (one hardware interrupt vector is mapped to multiple channel call-backs by software)
+   \t */
+   \tstatic ChannelCallbackFunction channelCallbacks[NumChannels];
+   \t\n
+   ]]></template>
+
+   <initialValueTemplate
+      separator=","
+      terminator=","
+      variables="
+         ftm_sc_mode,
+         ftm_sc_action,
+         irqLevel,
+         ftm_sc_clks,
+         ftm_sc_ps,
+         ftm_cntin,
+         ftm_mod"
+   ><![CDATA[
+      $(init_description)
+      \ttypedef $(_class)BasicInfo::Init Init;
+      \t
+      \t/**
+      \t * Default initialisation value for Ftm$(_instance)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};
+      \t\n
+   ]]></initialValueTemplate>
+
+<!--   ========== FTM CHANNEL Init class =============================== -->
+
+   <template key="channel_init_description" namespace="all"><![CDATA[
+      \t/**
+      \t * Class used to do initialisation of Ftm$(_instance)Channel
+      \t *
+      \t * This class has a templated constructor that accepts various values:
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const Ftm$(_instance)::ChannelInit channelInit {
+      \t *
+      \t *    // Omitted parameters are taken to be zero unless a base value is given
+      \t *    FtmChannelNum_3,            // Channel to initialise
+      \t *    FtmChannelMode_Disabled ,   // Channel Mode - Disabled
+      \t *    FtmChannelAction_None ,     // Action on Channel Event - No action
+      \t *    FtmChannelReset_Disabled ,  // Reset counter on channel IC event - Disabled
+      \t *    0_ticks,                    // Output Compare Event time
+      \t *
+      \t *    // Optional base value to start with (must be last parameter)
+      \t *    $(_class)::DefaultChannelInitValues[FtmChannelNum_3]
+      \t * };
+      \t *
+      \t * // Initialise FTM from values specified above
+      \t * Ftm$(_instance)::configureChannel(channelInit)
+      \t * @endcode
+      \t */
+   ]]></template>
+
+   <template namespace="usbdm"><![CDATA[
+$(channel_init_description)
+      \tclass ChannelInit {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr ChannelInit(const ChannelInit &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr ChannelInit() = default;
+      \t\n
+   ]]></template>
+
+<!--  Member variables -->
+
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs"
+      variables="irqHandlingMethod"
+    ><![CDATA[
+      \t   /// $(_class) channel interrupt call-back
+      \t   ChannelCallbackFunction callbackFunction = nullptr;\n\n
+   ]]></setTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="ftm_cnv[]"
+   ><![CDATA[
+      \t   /// %description
+      \t   uint16_t %registerName = 0_ticks;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="ftm_cnsc_mode[]"
+   ><![CDATA[
+      \t   /// Channel Status And Control Register
+      \t   uint16_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="ftm_channel_number"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = FtmChannelNum_None;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)"
+      variables="/PCR/nvic_irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+   ]]></initialValueTemplate>
+
+<!--  Configure method -->
+
+   <template discardRepeats="true" key="/$(_basename)/ChannelInitMethod" namespace="all" ><![CDATA[
+      \t/**
+      \t * Configure Channel from values specified in channelInit
+      \t
+      \t * @param channelInit Class containing initialisation values
+      \t */
+      \tstatic ErrorCode configureChannel(const typename Info::ChannelInit &channelInit) {
+      \t
+      \t   // Enable peripheral clock
+      \t   Info::enableClock();
+      \t
+      \t   if constexpr (Info::irqHandlerInstalled && Info::IndividualCallbacks) {
+      \t      Info::setChannelCallback(channelInit);
+      \t   }
+      \t\n
+   ]]></template>
+   <template discardRepeats="true" key="/$(_basename)/ChannelInitMethod" namespace="all" condition="ftm_combine_combine0_present" ><![CDATA[
+      \t   // Configure timer combine mode
+      \t   if ((channelInit.channel&0b1) == 0) {
+      \t      // Even channel value controls paired channels n,n+1
+      \t      const unsigned offset = 4*channelInit.channel;
+      \t      const uint32_t mask = 0xFF<<offset;
+      \t      ftm->COMBINE = (ftm->COMBINE & ~mask) | (((channelInit.cnsc>>8)<<offset)&mask);
+      \t   }\n
+   ]]></template>
+   <template discardRepeats="true" key="/$(_basename)/ChannelInitMethod" namespace="all" ><![CDATA[
+      \t   // Configure timer channel
+      \t   ftm->CONTROLS[channelInit.channel].CnSC = channelInit.cnsc;
+      \t   ftm->CONTROLS[channelInit.channel].CnV  = channelInit.cnv;
+      \t
+      \t   return E_NO_ERROR;
+      \t}\n\n
+   ]]></template>
+
+<!--  Constructors -->
+
+   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      \t    * @param    callback Channel interrupt call-back to set
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr ChannelInit(ChannelCallbackFunction callbackFunction, Types... rest) : ChannelInit(rest...) {
+      \t
+      \t      this->%enumParam0 = %paramExpression;
+      \t   }\n\n
+   ]]></constructorTemplate>
+
+   <for keys="r" values="
+      ftm_cnsc_mode[];
+      ftm_cnsc_action[];
+      ftm_cnsc_icrst[]">
+      <constructorTemplate  namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]></constructorTemplate>
+   </for>
+
+   <for keys="r" values="
+      ftm_channel_number;
+      ftm_cnv[]">
+      <constructorTemplate  namespace="usbdm"
+         variables="%(r)"
+         linePadding="xxx"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
+         \t
+         \t      %registerName = %paramExpression;
+         \t   }
+         \t\n
+      ]]></constructorTemplate>
+   </for>
+   <template namespace="usbdm"><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+<!--  Default Initialisation value -->
+
+  <template><![CDATA[
+      $(channel_init_description)
+      \ttypedef $(_class)BasicInfo::ChannelInit ChannelInit;
+      \t
+      \t/**
+      \t * Default initialisation value for Ftm$(_instance)ChannelInit
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr ChannelInit DefaultChannelInitValues[] = {\n
+  ]]></template>
+   <for keys="ch" dim="NumChannels">
+      <initialValueTemplate
+         separator=","
+         terminator=","
+         variables="
+            ftm_cnsc_mode[%(ch)],
+            ftm_cnsc_action[%(ch)],
+            ftm_cnsc_icrst[%(ch)],
+            ftm_cnv[%(ch)]"
+      ><![CDATA[
+         \t{
+         \t   FtmChannelNum_%(ch),
+         %initExpression\n\t},\n
+      ]]></initialValueTemplate>
+   </for>
+  <template><![CDATA[
+      \n\t};\n\n
+  ]]></template>
+
+<!--  ========== FTM QUAD Init class =============================== -->
+
+   <template key="quad_init_description" namespace="all" condition="ftm_qdctrl_quadmode_present" ><![CDATA[
+      \t/**
+      \t * Class used to do initialisation of FtmQuadDecoder$(_instance)
+      \t *
+      \t * This class has a templated constructor that accepts various values:
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const FtmQuadDecoder$(_instance)::QuadInit quadInit {
+      \t *
+      \t *    // Omitted parameters are taken to be zero unless a base value is given
+      \t *    FtmQuadratureMode_Phase_AB_Mode , // Quadrature decoding mode
+      \t *    FtmPhaseAPolarity_ActiveHigh ,    // Polarity of Phase A input
+      \t *    FtmPhaseBPolarity_ActiveHigh ,    // Polarity of Phase B input
+      \t *    FtmPhaseAFilter_Disabled ,        // Filtering on Phase A input
+      \t *    FtmPhaseBFilter_Disabled ,        // Filtering on Phase B input
+      \t *    FtmOverflowInterrupt_Enabled ,    // Overflow Interrupt
+      \t *    NvicPriority_Normal ,             // IRQ level for this peripheral
+      \t *    FtmPrescale_DivBy32,              // Clock prescaler
+      \t *    ftmCallbak,                       // Timer overflow call-back
+      \t *
+      \t *    // Optional base value to start with (must be last parameter)
+      \t *    $(_class)::DefaultQuadInitValue
+      \t * };
+      \t *
+      \t * // Initialise FTM from values specified above
+      \t * FtmQuadDecoder$(_instance)::configure(ftmInit)
+      \t * @endcode
+      \t */
+   ]]></template>
+
+   <template namespace="usbdm" condition="ftm_qdctrl_quadmode_present" ><![CDATA[
+$(quad_init_description)
+      \tclass QuadInit {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr QuadInit(const QuadInit &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr QuadInit() = default;
+      \t\n
+   ]]></template>
+
+<!--  Member variables -->
+
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"  condition="ftm_qdctrl_quadmode_present"
+      variables="irqHandlingMethod"
+    ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></setTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="ftm_qdfilter_a,ftm_qdfilter_b"
+   ><![CDATA[
+      \t   /// Quad input filter control
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm"
+      variables="ftm_qdctrl_quadmode"
+   ><![CDATA[
+      \t   /// Quadrature Decoder Control And Status Register
+      \t   uint8_t %registerName = FTM_QDCTRL_QUADEN_MASK;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" condition="ftm_qdctrl_quadmode_present"
+      variables="ftm_sc_action,ftm_sc_ps"
+   ><![CDATA[
+      \t   /// Status And Control Register
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod" condition="ftm_qdctrl_quadmode_present"
+      variables="/PCR/nvic_irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+   ]]></initialValueTemplate>
+
+<!--  Configure method -->
+
+   <template discardRepeats="true" key="/$(_basename)/QuadInitMethod" namespace="all" condition="ftm_qdctrl_quadmode_present" ><![CDATA[
+      \t/**
+      \t * Configure QuadDecoder from values specified in init
+      \t
+      \t * @param quadInit Class containing initialisation values
+      \t */
+      \tstatic ErrorCode configure(const typename Info::QuadInit &quadInit) {
+      \t
+      \t   // Assertions placed here so only checked if FtmQuadDecoder actually used
+      \t   static_assert(Info::InfoQUAD::info[0].gpioBit >= 0, "FtmQuadDecoder PHA is not mapped to a pin - Modify Configure.usbdm");
+      \t   static_assert(Info::InfoQUAD::info[1].gpioBit >= 0, "FtmQuadDecoder PHB is not mapped to a pin - Modify Configure.usbdm");
+      \t
+      \t   // Enable peripheral clock and map pins
+      \t   enable();
+      \t
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-back if feature enabled and non-null
+      \t      if (quadInit.callbackFunction != nullptr) {
+      \t         FtmBase_T<Info>::setCallback(quadInit.callbackFunction);
+      \t      }
+      \t      enableNvicInterrupts(quadInit.irqlevel);
+      \t   }
+      \t
+      \t   // Disable timer to change clock (unable to switch directly between clock sources)
+      \t   ftm->SC  = 0;
+      \t
+      \t   // Start value for counter
+      \t   ftm->CNTIN = 0;
+      \t
+      \t   // End value for counter
+      \t   ftm->MOD =0;
+      \t
+      \t   // Restart counter
+      \t   ftm->CNT = 0;
+      \t
+      \t   // Configure timer
+      \t   ftm->FILTER = quadInit.qdfilter;
+      \t   ftm->SC     = quadInit.sc;
+      \t   ftm->QDCTRL = quadInit.qdctrl;
+      \t
+      \t   return E_NO_ERROR;
+      \t}\n\n
+   ]]></template>
+
+<!--  Constructors -->
+
+   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"  condition="ftm_qdctrl_quadmode_present"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
+      \t
+      \t      this->%enumParam0 = %paramExpression;
+      \t   }\n\n
+   ]]></constructorTemplate>
+
+   <constructorTemplate namespace="usbdm"  condition="ftm_qdctrl_quadmode_present"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
+      \t
+      #if $(irqHandlingMethod)
+      \t      %registerName = %paramExpression;
+      #else
+      \t      (void)%paramExpression;
+      #endif
+      \t   }\n\n
+   ]]></constructorTemplate>
+
+   <for keys="r" values="
+      ftm_sc_action;
+      ftm_sc_ps;
+      ftm_qdctrl_quadmode;
+      ftm_qdctrl_phapol;
+      ftm_qdctrl_phbpol">
+      <constructorTemplate  namespace="usbdm"  condition="ftm_qdctrl_quadmode_present"
+         variables="%(r)"
+         linePadding="xxx"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         %comments
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]></constructorTemplate>
+   </for>
+
+   <constructorTemplate  namespace="usbdm"
+      variables="ftm_qdfilter_a"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %comments
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
+      \t
+      \t      qdctrl   = (qdctrl&~FTM_QDCTRL_PHAFLTREN_MASK) | ((%paramExpression>>8) & FTM_QDCTRL_PHAFLTREN_MASK);
+      \t      qdfilter = (qdfilter&~FTM_FILTER_CH0FVAL_MASK) | (%paramExpression&FTM_FILTER_CH0FVAL_MASK);
+      \t   }
+      \t\n
+   ]]></constructorTemplate>
+
+   <constructorTemplate  namespace="usbdm"
+      variables="ftm_qdfilter_b"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %comments
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
+      \t
+      \t      qdctrl   = (qdctrl&~FTM_QDCTRL_PHBFLTREN_MASK) | ((%paramExpression>>8) & FTM_QDCTRL_PHBFLTREN_MASK);
+      \t      qdfilter = (qdfilter&~FTM_FILTER_CH1FVAL_MASK) | (%paramExpression&FTM_FILTER_CH1FVAL_MASK);
+      \t   }
+      \t\n
+   ]]></constructorTemplate>
+
+   <template namespace="usbdm"  condition="ftm_qdctrl_quadmode_present"><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+   <template namespace="usbdm" ><![CDATA[
+      };\n\n
+   ]]></template>
+
+<!--  Default Initialisation value -->
+
+   <initialValueTemplate  condition="ftm_qdctrl_quadmode_present"
+      separator=","
+      terminator=","
+      variables="
+         ftm_qdctrl_quadmode,
+         ftm_qdctrl_phapol,
+         ftm_qdctrl_phbpol,
+         ftm_qdfilter_a,
+         ftm_qdfilter_b,
+         ftm_sc_action,
+         irqLevel,
+         ftm_sc_ps"
+   ><![CDATA[
+      $(quad_init_description)
+      \ttypedef $(_class)BasicInfo::QuadInit QuadInit;
+      \t
+      \t/**
+      \t * Default initialisation value for Ftm$(_instance)QuadDecoder
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr QuadInit DefaultQuadInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+<!--  ========== Misc =============================== -->
+
+   <template namespace="all" key="/HARDWARE/StaticObjects.timerHandler" discardRepeats="true"
+   ><![CDATA[
+   \t/**
+   \t * Callback to catch unhandled interrupt
+   \t */
+   \tvoid unhandledCallback() {
+   \t   setAndCheckErrorCode(E_NO_HANDLER);
+   \t}
+   \t
+   \t/**
+   \t * Callback to catch unhandled channel interrupt
+   \t *
+   \t * @param mask Mask identifying channel
+   \t */
+   \tvoid timerUnhandledChannelCallback(uint8_t mask) {
+   \t   (void)mask;
+   \t   setAndCheckErrorCode(E_NO_HANDLER);
+   \t}\n\n
+   ]]></template>
+
+   <template namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   ><![CDATA[
+      extern void unhandledCallback();
+      extern void timerUnhandledChannelCallback(uint8_t);
+      \t\n
+   ]]></template>
+
+   <template  codeGenCondition="irqHandlingMethod" ><![CDATA[
+      \t/**
+      \t * Set overflow and fault interrupt call-back
+      \t *
+      \t * @param[in] newCallback Callback function to execute on interrupt.
+      \t *                        Use nullptr to remove callback.
+      \t *
+      \t * @return E_NO_ERROR            No error
+      \t * @return E_HANDLER_ALREADY_SET Handler already set
+      \t */
+      \tstatic ErrorCode setCallback(CallbackFunction newCallback) {
+      \t   if (newCallback == nullptr) {
+      \t      callback = unhandledCallback;
+      \t      return E_NO_ERROR;
+      \t   }
+      \t   callback = newCallback;
+      \t   return E_NO_ERROR;
+      \t}
+      \t\n
+   ]]></template>
+
+   <template  codeGenCondition="!irqHandlingMethod" ><![CDATA[
+      \t/**
+      \t * Set callbacks and IRQ priority from Init structure
+      \t */
+      \tstatic void setCallbacks(const Init &) {
+      \t}
+      \t
+      \t/**
+      \t * Set channel callbacks from ChannelInit structure
+      \t */
+      \tstatic void setChannelCallback(const ChannelInit &) {
+      \t}
+      \t\n
+   ]]></template>
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs" ><![CDATA[
+      \t/**
+      \t * Set channel call-back function
+      \t * Configured for shared channel call-backs i.e. all channels use same call-back
+      \t *
+      \t * @param[in] callback Callback function to execute on channel interrupt.
+      \t *                     Use nullptr to remove callback.
+      \t *
+      \t * @return E_NO_ERROR            No error
+      \t * @return E_HANDLER_ALREADY_SET Handler already set
+      \t *
+      \t * @note The channel callback is shared by all channels of the timer.
+      \t *       It is necessary to identify the originating channel in the callback
+      \t */
+      \tstatic ErrorCode setChannelCallback(ChannelCallbackFunction callback) {
+      \t   if (callback == nullptr) {
+      \t      channelCallbacks[0] = timerUnhandledChannelCallback;
+      \t      return E_NO_ERROR;
+      \t   }
+      #ifdef DEBUG_BUILD
+      \t   // Callback is shared across all channels. Check if callback already assigned
+      \t   if ((channelCallbacks[0] != timerUnhandledChannelCallback) &&
+      \t       (channelCallbacks[0] != callback)) {
+      \t      return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
+      \t   }
+      #endif
+      \t   channelCallbacks[0] = callback;
+      \t   return E_NO_ERROR;
+      \t}
+      \t
+      \t/**
+      \t * Set callbacks and IRQ priority from Init structure
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void setCallbacks(const Init &init) {
+      \t   if (init.callbackFunction != nullptr) {
+      \t      setCallback(init.callbackFunction);
+      \t   }
+      \t   if (init.channelCallbackFunction != nullptr) {
+      \t      setChannelCallback(init.channelCallbackFunction);
+      \t   }
+      \t   enableNvicInterrupt(irqNums[0], init.irqlevel);
+      \t}
+      \t
+      \t/**
+      \t * Set channel callbacks from ChannelInit structure
+      \t */
+      \tstatic void setChannelCallback(const ChannelInit &) {
+      \t}
+      \t\n
+   ]]></template>
+
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs" ><![CDATA[
+      \t/**
+      \t * Set channel call-back function
+      \t * Configured for individual channel call-backs
+      \t *
+      \t * @param[in] channelNum Channel to set call-back for
+      \t * @param[in] callback   Callback function to execute on channel interrupt.
+      \t *                       Use nullptr to remove callback.
+      \t *
+      \t * @return E_NO_ERROR            No error
+      \t * @return E_HANDLER_ALREADY_SET Handler already set
+      \t *
+      \t * @note The channel callback is shared by all channels of the timer.
+      \t *       It is necessary to identify the originating channel in the callback
+      \t */
+      \tstatic ErrorCode setChannelCallback(unsigned channelNum, ChannelCallbackFunction callback) {
+      \t
+      \t   if (channelNum>=NumChannels) {
+      \t      return setErrorCode(ErrorCode::E_ILLEGAL_PARAM);
+      \t   }
+      \t   if (callback == nullptr) {
+      \t      channelCallbacks[channelNum] = timerUnhandledChannelCallback;
+      \t      return ErrorCode::E_NO_ERROR;
+      \t   }
+      \t   channelCallbacks[channelNum] = callback;
+      \t   return ErrorCode::E_NO_ERROR;
+      \t}
+      \t
+      \t/**
+      \t * Set callbacks and IRQ priority from Init structure
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \t static void setCallbacks(const Init &init) {
+      \t    if (init.callbackFunction != nullptr) {
+      \t       setCallback(init.callbackFunction);
+      \t    }
+      \t   enableNvicInterrupt(irqNums[0], init.irqlevel);
+      \t}
+      \t
+      \t/**
+      \t * Set channel callbacks from ChannelInit structure
+      \t */
+      \tstatic void setChannelCallback(const ChannelInit &init) {
+      \t   if (init.callbackFunction != nullptr) {
+      \t      setChannelCallback(init.channel, init.callbackFunction);
+      \t   }
+      \t}
+      \t\n
+   ]]></template>
+
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+      \t/**
+      \t * Callback function for Channel Fault and timer overflow for $(_class)
+      \t */
+      \t$(_class)Info::CallbackFunction $(_class)Info::callback = unhandledCallback;
+      \t\n
+   ]]></template>
+
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+      \t/**
+      \t * Callback table for programmatically set handlers for $(_class)
+      \t */
+      \t$(_class)Info::ChannelCallbackFunction $(_class)Info::channelCallbacks[] = {\n\n
+   ]]></template>
+   <for keys="ch" dim="NumChannels">
+      <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs" ><![CDATA[
+         \t   timerUnhandledChannelCallback,\n
+      ]]></template>
+   </for>
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs" ><![CDATA[
+      \t   timerUnhandledChannelCallback,\n
+   ]]></template>
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.FtmValidate">
+   </validate>
+
+   <projectActionList id = "ftm_common_files" >
+      <copy source="Snippets/ftm-pwm-example.cpp"         target="Snippets/ftm-pwm-example.cpp"         overwrite="true" derived="true" />
+      <copy source="Snippets/ftm-ic-example.cpp"          target="Snippets/ftm-ic-example.cpp"          overwrite="true" derived="true" />
+      <copy source="Snippets/ftm-oc-example.cpp"          target="Snippets/ftm-oc-example.cpp"          overwrite="true" derived="true" />
+      <copy source="Snippets/ftm-oc-init-example.cpp"     target="Snippets/ftm-oc-init-example.cpp"     overwrite="true" derived="true" />
+      <copy source="Snippets/ftm-servo-example.cpp"       target="Snippets/ftm-servo-example.cpp"       overwrite="true" derived="true" />
+      <copy source="Snippets/ftm-quadrature-example.cpp"  target="Snippets/ftm-quadrature-example.cpp"  overwrite="true" derived="true" />
+      <copy source="Snippets/neopixel-example.cpp"        target="Snippets/neopixel-example.cpp"        overwrite="true" derived="true" />
+   </projectActionList>
+
+   <template key="/$(_basename)/declarations" namespace="all"
+   ><![CDATA[
+   /**
+    * Class representing $(_name)
+    */
+   class $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n\n
+   ]]></template>
+
+   <template key="/$(_basename)/quadDeclarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_class) as Quadrature decoder
+   \t */
+   \ttypedef $(_base_class)QuadDecoder_T<$(_class)Info> $(_base_class)QuadDecoder$(_instance);\n
+   ]]></template>
+
+   <signals/>
+
+</fragment>

@@ -2,17 +2,53 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- osc0_mke.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Oscillator">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Oscillator" >
 
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="false" />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false" />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true" />
-   <xi:include href="_enablePeripheral.xml" />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"          />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="_enablePeripheral.xml"  />
    <title description="------------------------------------------" />
+
+<!--
+    * General substitutions
+    *  $(_name)         => e.g FTM2                    (fProvider.getName())
+    *  $(_base_class)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
+    *  $(_class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
+    *  $(_basename)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
+-->
+
+<!--
+    * Template substitutions
+    *
+    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
+    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
+    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
+    * %description[index]             Description from controlVar e.g. Compare Function Enable
+    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
+    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
+    * %params                         Formatted parameter list for function
+    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
+    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
+    * %enumClass[index]               As for %paramType
+    * %enumParam[index]               As for %paramName
+    * %valueExpression                Numeric variable value e.g. 0x3
+    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %variable[index]                Variable name from condition
+    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * %register[index]                Register associated with variable e.g. adc->APCTL1
+    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+-->
+   <!-- ************* CR ****************** -->
 
    <choiceOption key="osc_cr_oscMode" condition="osc_cr_oscos_present"
       valueFormat="OSC_CR_OSCOS(%s),OSC_CR_HGO(%s)"
-      enabledBy="enablePeripheralSupport"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
       enumStem="OscMode"
       description="OSC0 mode"
       toolTip="Determines oscillator power mode and\n
@@ -34,7 +70,7 @@
       disabledValue="0" />
 
    <intOption key="osc_clock"
-      enabledBy="enablePeripheralSupport"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
       ref="osc_input_freq"
       valueFormat="%s"
       constant="true"
@@ -47,7 +83,7 @@
       min="1" />
 
    <binaryOption key="osc_cr_oscen" condition="osc_cr_oscen_present"
-      enabledBy="enablePeripheralSupport"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
       enumStem="OscEnable"
       toolTip="Enables the OSC module. The OSC module can also be enabled by the ICS module"
       description="OSC Enable" >
@@ -56,7 +92,7 @@
    </binaryOption>
 
    <binaryOption key="osc_cr_oscsten" condition="osc_cr_oscsten_present"
-      enabledBy="enablePeripheralSupport&amp;&amp;osc_cr_oscen"
+      enabledBy="/$(_basename)/enablePeripheralSupport&amp;&amp;osc_cr_oscen"
       enumStem="OscInStopMode"
       toolTip="Controls whether or not the OSC clock remains enabled when MCU enters Stop mode when OSCEN is set.\n
                OSCSTEN has no effect if ICS requests OSC enable"
@@ -66,7 +102,7 @@
    </binaryOption>
 
    <binaryOption key="osc_cr_oscos" condition="osc_cr_oscos_present"
-      enabledBy="enablePeripheralSupport"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
       ref="osc_cr_oscMode&gt;=@/OscMode_LowGainOsc"
       derived="true"
       constant="true"
@@ -78,7 +114,7 @@
    </binaryOption>
 
    <binaryOption key="osc_cr_range" condition="osc_cr_range_present"
-      enabledBy="enablePeripheralSupport"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
       ref="osc_input_freq&gt;=4_MHz"
       derived="true"
       constant="true"
@@ -90,7 +126,7 @@
    </binaryOption>
 
    <binaryOption key="osc_cr_hgo" condition="osc_cr_hgo_present"
-      enabledBy="enablePeripheralSupport"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
       ref="osc_cr_oscMode&gt;=@/OscMode_HighGainOsc"
       derived="true"
       constant="true"
@@ -120,8 +156,8 @@
       osc_cr_oscen:OscEnable;
       osc_cr_oscsten:OscStopMode;
       osc_cr_oscMode:OscMode;
-      osc_cr_range:OscFrequencyRange">
-      <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
+      osc_cr_range:OscFrequencyRange" >
+      <setTemplate variables="%(field)" codeGenCondition="/$(_basename)/enablePeripheralSupport"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -136,7 +172,7 @@
 
 <!--   ========== OSC Init class =============================== -->
 
-   <template key="init_description" namespace="all" codeGenCondition="enablePeripheralSupport" >
+   <template key="init_description" namespace="all" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_class)
@@ -163,16 +199,15 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport">
+   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
    <![CDATA[
       class $(_class)BasicInfo {
       \t
-      public:
-      \t\n
+      public:\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -193,11 +228,11 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
       variables="osc_cr_oscen,osc_cr_oscsten,osc_cr_oscos,osc_cr_range,osc_cr_hgo"
    ><![CDATA[
       \t   /// Control Register
-      \t   uint8_t cr = 0;\n\n
+      \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
 <!--   Constructors -->
@@ -208,10 +243,10 @@
             osc_cr_oscsten;
             osc_cr_oscMode;
             osc_cr_range
-            ">
-      <setTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+            " >
+      <setTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
          variables="%(r)"
-         linePadding="xxx">
+         linePadding="xxx" >
       <![CDATA[
          \t   /**
          \t    * Constructor for %description
@@ -219,7 +254,7 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
@@ -233,7 +268,7 @@
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="enablePeripheralSupport"
+   <initialValueTemplate codeGenCondition="/$(_basename)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -256,7 +291,7 @@
 
 <!--   Default Configure -->
 
-   <template codeGenCondition="enablePeripheralSupport" >
+   <template codeGenCondition="/$(_basename)/enablePeripheralSupport" >
       <![CDATA[
       \t/**
       \t * Configure $(_basename)
@@ -268,7 +303,7 @@
    ]]>
    </template>
 
-   <template discardRepeats="true" key="/$(_basename)/InitMethod" namespace="all" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template discardRepeats="true" key="/$(_basename)/InitMethod" namespace="all" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
       \t
       \t/**
       \t * Default initialisation for $(_basename)
@@ -280,11 +315,7 @@
    ]]>
    </template>
 
-   <template key="/ICS/ClockStartupBefore" namespace="all" codeGenCondition="configurePeripheralInStartUp"  ><![CDATA[
-   \tUSBDM::$(_class)::defaultConfigure();\n
-   ]]></template>
-
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
       <![CDATA[
       \t}; // $(_class)::BasicInfo::Init\n\n
    ]]>
@@ -321,22 +352,34 @@
       \t}\n\n
    ]]></template>
 
-   <template key="/ICS/Includes" namespace="all"  ><![CDATA[
-   #include "osc.h"\n
-   ]]></template>
-
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport">
+   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
       <![CDATA[
-      }; // $(_class)::BasicInfo\n\n
+      }; // $(_class)BasicInfo\n\n
    ]]>
    </template>
 
+   <!-- ************* Common ****************** -->
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
+   </validate>
+
    <projectActionList id = "osc0_files" >
-      <copy source="Project_Headers/osc_mke.h"  target="Project_Headers/osc.h"  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/osc-MKE.h"  target="Project_Headers/osc.h"  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <signals />
+   <!-- ************* Startup ****************** -->
 
-   <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" />
+   <template key="/ICS/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_headername).h"\n
+   ]]></template>
+
+   <template key="/ICS/ClockStartupBefore" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_class) */
+      \tUSBDM::$(_class)::defaultConfigure();\n
+   ]]></template>
+
+   <signals />
 
 </peripheralPage>

@@ -156,6 +156,7 @@
    <!ATTLIST bitmaskOption derivedFrom    CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption typeName       CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption defaultValue   CDATA        #IMPLIED>
+   <!ATTLIST bitmaskOption enabledBy      CDATA        #IMPLIED>
 
 <!ELEMENT floatOption EMPTY >
    <!ATTLIST floatOption condition     CDATA        #IMPLIED>
@@ -403,7 +404,7 @@
    <!ATTLIST choice name                      CDATA        #REQUIRED>
    <!ATTLIST choice requiredPeripherals       CDATA        #IMPLIED>
    <!ATTLIST choice condition                 CDATA        #IMPLIED>
-   <!ATTLIST choice isDefault                 (true)       #IMPLIED>
+   <!ATTLIST choice isDefault                 CDATA        #IMPLIED>
    <!ATTLIST choice ref                       CDATA        #IMPLIED>
    <!ATTLIST choice enum                      CDATA        #IMPLIED>
    <!ATTLIST choice code                      CDATA        #IMPLIED>

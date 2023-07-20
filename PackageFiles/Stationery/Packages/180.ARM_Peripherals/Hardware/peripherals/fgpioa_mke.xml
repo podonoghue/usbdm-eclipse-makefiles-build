@@ -23,11 +23,11 @@
       \t/**
       \t * Get GPIO base register address from bit index
       \t *
-      \t * @param bitInd  Index of GPIO bit
+      \t * @param pinInd Index of GPIO bit
       \t *
       \t * @return Base address of GPIO_Type hardware structure
       \t */
-      \tstatic constexpr uint32_t getGpioAddress(unsigned bitInd) {
+      \tstatic constexpr uint32_t getGpioAddress(PinIndex pinInd) {
       \t   constexpr uint32_t gpioAddresses[] = {\n
    ]]></template>
    <for keys=   " p : P : size"
@@ -39,12 +39,12 @@
       <![CDATA[
          \t         GPIO%(P)_BasePtr,\n
       ]]></template>
-      <constant key="/GPIO/MaxBitIndex" type="Integer" value="%(size)" replace="true"  condition="/GPIO%(P)/$present" />
+      <constant key="/GPIO/MaxPinIndex" type="Integer" value="%(size)" replace="true"  condition="/GPIO%(P)/$present" />
    </for>
    <template key="/GPIO/getGpioAddress" namespace="all" >
    <![CDATA[
       \t   };
-      \t   return gpioAddresses[bitInd / 32];
+      \t   return gpioAddresses[pinInd / 32];
       \t}\n
    ]]></template>
 
@@ -308,12 +308,12 @@
       \t/**
       \t * Class representing a field within Port %(Name)
       \t *
-      \t * @tparam leftPinIndex  Indicates left pin (inclusive) within the GPIO e.g. GPIO%(Name)[5..3] => %(Name)<5,...>
-      \t * @tparam rightPinIndex Indicates right pin (inclusive) within the GPIO e.g. GPIO%(Name)[5..3] => %(Name)<...,3>
-      \t * @tparam polarity      Polarity of field. Either ActiveHigh or ActiveLow
+      \t * @tparam leftPinNum  Indicates left pin (inclusive) within the GPIO e.g. GPIO%(Name)[5..3] => %(Name)<5,...>
+      \t * @tparam rightPinNum Indicates right pin (inclusive) within the GPIO e.g. GPIO%(Name)[5..3] => %(Name)<...,3>
+      \t * @tparam polarity    Polarity of field. Either ActiveHigh or ActiveLow
       \t */
-      \ttemplate <unsigned leftPinIndex, unsigned rightPinIndex, Polarity polarity=ActiveHigh>
-      \tclass WideGpioField%(Name) : public GpioField_T<leftPinIndex+%(pinIndex), rightPinIndex+%(pinIndex), polarity> {};\n\n
+      \ttemplate <unsigned leftPinNum, unsigned rightPinNum, Polarity polarity=ActiveHigh>
+      \tclass WideGpioField%(Name) : public GpioField_T<leftPinNum+%(pinIndex), rightPinNum+%(pinIndex), polarity> {};\n\n
       ]]></template>
    </for>
 
@@ -337,21 +337,21 @@
       \t/**
       \t * Class representing individual pins in Port %(Name)
       \t *
-      \t * @tparam pinIndex Indicates pin within the port e.g. %(Name)3 = > %(Name)<3>
+      \t * @tparam pinNum Indicates pin within the port e.g. %(Name)3 = > %(Name)<3>
       \t * @tparam polarity Polarity of the pin. Either ActiveHigh or ActiveLow
       \t */
-      \ttemplate <unsigned pinIndex, Polarity polarity=ActiveHigh>
-      \t   class Gpio%(Name) : public Gpio_T<pinIndex+%(pinIndex), polarity> {};
+      \ttemplate <PinNum pinNum, Polarity polarity=ActiveHigh>
+      \t   class Gpio%(Name) : public Gpio_T<pinNum+%(pinIndex), polarity> {};
       \t
       \t/**
       \t * Class representing a field within Port %(Name)
       \t *
-      \t * @tparam leftPinIndex  Indicates left pin (inclusive) within the port e.g. PT%(Name)[5..3] => %(Name)<5,...>
-      \t * @tparam rightPinIndex Indicates right pin (inclusive) within the port e.g. PT%(Name)[5..3] => %(Name)<...,3>
-      \t * @tparam polarity      Polarity of field. Either ActiveHigh or ActiveLow
+      \t * @tparam leftPinNum  Indicates left pin (inclusive) within the port e.g. PT%(Name)[5..3] => %(Name)<5,...>
+      \t * @tparam rightPinNum Indicates right pin (inclusive) within the port e.g. PT%(Name)[5..3] => %(Name)<...,3>
+      \t * @tparam polarity    Polarity of field. Either ActiveHigh or ActiveLow
       \t */
-      \ttemplate <unsigned leftPinIndex, unsigned rightPinIndex, Polarity polarity=ActiveHigh>
-      \t    class GpioField%(Name) : public GpioField_T<leftPinIndex+%(pinIndex), rightPinIndex+%(pinIndex), polarity> {};\n\n
+      \ttemplate <PinNum leftPinNum, PinNum rightPinNum, Polarity polarity=ActiveHigh>
+      \t    class Gpio%(Name)Field : public GpioField_T<leftPinNum+%(pinIndex), rightPinNum+%(pinIndex), polarity> {};\n\n
       ]]></template>
    </for>
 

@@ -88,6 +88,8 @@ public:
  */
 class Ics {
 
+   using Info = IcsInfo;
+
 private:
 #if $(/ICS/enableClockChangeNotifications:false)
    static ClockChangeCallback *clockChangeCallbackQueue;

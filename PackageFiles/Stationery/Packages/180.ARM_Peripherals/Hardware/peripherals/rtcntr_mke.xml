@@ -2,83 +2,149 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- rtcntr_mke.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time counter">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time counter" >
 
-   <xi:include href="_default_instance.xml"/>
+   <constant key="suppressInstance"         type="Boolean" value="false"         />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
+   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="_enablePeripheral.xml"  />
+   <title description="------------------------------------------" />
 
-   <xi:include href="_mapPinsOption.xml"/>
+<!--
+    * General substitutions
+    *  $(_name)         => e.g FTM2                    (fProvider.getName())
+    *  $(_base_class)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
+    *  $(_class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
+    *  $(_basename)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
+-->
 
-   <xi:include href="_irqOption.xml"/>
-
-   <choiceOption key="rtc_sc_rtclks" condition="rtc_sc_rtclks_present"
-      enumStem="RtcScRtclks"
-      toolTip="This read/write field selects the clock source input to the RTC prescaler.\n
-               Changing the clock source clears the prescaler and RTCCNT counters"
-      description="Real-Time Clock Source Select" >
-      <choice name="External clock"                       value="0" enum="ExternalClock"/>
-      <choice name="Low Power Oscillator (LPOCLK)"        value="1" enum="LowPowerOscillatorLpoclk"/>
-      <choice name="Internal reference clock (ICSIRCLK)"  value="2" enum="InternalReferenceClockIcsirclk"/>
-      <choice name="Bus clock"                            value="3" enum="BusClock"/>
-   </choiceOption>
-
-   <choiceOption key="rtc_sc_rtcps" condition="rtc_sc_rtcps_present"
-      enumStem="RtcScRtcps"
-      toolTip="Selects binary-based or decimal-based divide-by values for the clock source.\n
-               Changing the prescaler value clears the prescaler and RTCCNT counters\n
-               Division factor depends on clock chosen by RTCLKS[0]"
-      description="Real-Time Clock Prescaler Select" >
-      <choice name="Off"                   value="0" enum="Off"/>
-      <choice name="Divide by 1 or 128"    value="1" enum="DivideBy1Or128"/>
-      <choice name="Divide by 2 or 256"    value="2" enum="DivideBy2Or256"/>
-      <choice name="Divide by 4 or 512"    value="3" enum="DivideBy4Or512"/>
-      <choice name="Divide by 8 or 1024"   value="4" enum="DivideBy8Or1024"/>
-      <choice name="Divide by 16 or 2048"  value="5" enum="DivideBy16Or2048"/>
-      <choice name="Divide by 32 or 100"   value="6" enum="DivideBy32Or100"/>
-      <choice name="Divide by 64 or 1000"  value="7" enum="DivideBy64Or1000"/>
-   </choiceOption>
-
-   <binaryOption key="rtc_sc_rtif" condition="rtc_sc_rtif_present"
-      enumStem="RtcScRtif"
-      toolTip="Indicates the RTC counter register reached the value in the RTC modulo register. \n
-               Writing a 0 has no effect. Writing a 1 clears the bit and the real-time interrupt request"
-      description="Real-Time Interrupt Flag" >
-      <choice name="No event"        value="0" enum="NoEvent"/>
-      <choice name="Event detected"  value="1" enum="EventDetected"/>
-   </binaryOption>
+<!--
+    * Template substitutions
+    *
+    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
+    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
+    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
+    * %description[index]             Description from controlVar e.g. Compare Function Enable
+    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
+    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
+    * %params                         Formatted parameter list for function
+    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
+    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
+    * %enumClass[index]               As for %paramType
+    * %enumParam[index]               As for %paramName
+    * %valueExpression                Numeric variable value e.g. 0x3
+    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %variable[index]                Variable name from condition
+    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * %register[index]                Register associated with variable e.g. adc->APCTL1
+    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+-->
+   <!-- ************* SC ****************** -->
 
    <binaryOption key="rtc_sc_rtie" condition="rtc_sc_rtie_present"
-      enumStem="RtcScRtie"
+      enabledBy="irqHandlingMethod"
+      enumStem="RtcInterrupt"
       toolTip="This bit enables real-time interrupts.\n
                If RTIE is set, then an interrupt is generated when RTIF is set"
       description="Real-Time Interrupt Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
       <choice name="Enabled"     value="1" enum="Enabled"/>
-   </binaryOption>
+   </binaryOption >
 
    <binaryOption key="rtc_sc_rtco" condition="rtc_sc_rtco_present"
-      enumStem="RtcScRtco"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enumStem="RtcOutput"
       toolTip="Enables the toggling of RTCO pin on overflow"
       description="Real-Time Counter Output" >
       <choice name="Output Disabled"  value="0" enum="OutputDisabled"/>
       <choice name="Output Enabled"   value="1" enum="OutputEnabled"/>
-   </binaryOption>
+   </binaryOption >
+
+   <choiceOption key="rtc_sc_rtclks" condition="rtc_sc_rtclks_present"
+      target="rtc_inputclock"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enumStem="RtcClockSource"
+      toolTip="This read/write field selects the clock source input to the RTC prescaler.\n
+               Changing the clock source clears the prescaler and RTCCNT counters"
+      description="Real-Time Clock Source Select" >
+      <choice name="External clock"                       value="0" enum="OscerClk" ref="/OSC0/oscer_clock"            code="Osc0Info::getOscClock()"  />
+      <choice name="Low Power Oscillator (LPOCLK)"        value="1" enum="Lpoclk"   ref="/PMC/system_low_power_clock"  code="PmcInfo::getLpoClock()"   isDefault="true" />
+      <choice name="Internal reference clock (ICSIRCLK)"  value="2" enum="Icsirclk" ref="/ICS/system_icsirclk_ungated" code="IcsInfo::getUngatedInternalReferenceClock()"  />
+      <choice name="Bus clock"                            value="3" enum="BusClock" ref="/SIM/system_bus_clock[]"      code="SystemBusClock"  />
+   </choiceOption >
+
+   <floatOption key="rtc_inputclock"
+      derived="true"
+      constant="true"
+      description="RTCCNTR input clock frequency"
+      toolTip="Input clock selected by rtc_sc_rtclks"
+      units="Hz"
+      />
+
+   <choiceOption key="rtc_sc_rtcps" condition="rtc_sc_rtcps_present"
+      target="rtc_clock"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enumStem="RtcPrescaler"
+      toolTip="Selects binary-based or decimal-based divide-by values for the clock source.\n
+               Changing the prescaler value clears the prescaler and RTCCNT counters\n
+               Division factor depends on clock chosen by RTCLKS[0]"
+      description="Real-Time Clock Prescaler Select" >
+      <choice name="Off"                   value="0" enum="Off"              ref="0" />
+      <choice name="Divide by 1 or 128"    value="1" enum="DivideBy1or128"   ref="(rtc_inputclock)/(((rtc_sc_rtclks&amp;0b1)==0)?1:128)" />
+      <choice name="Divide by 2 or 256"    value="2" enum="DivideBy2or256"   ref="(rtc_inputclock)/(((rtc_sc_rtclks&amp;0b1)==0)?2:256)" />
+      <choice name="Divide by 4 or 512"    value="3" enum="DivideBy4or512"   ref="(rtc_inputclock)/(((rtc_sc_rtclks&amp;0b1)==0)?4:512)" />
+      <choice name="Divide by 8 or 1024"   value="4" enum="DivideBy8or1024"  ref="(rtc_inputclock)/(((rtc_sc_rtclks&amp;0b1)==0)?8:1024)" />
+      <choice name="Divide by 16 or 2048"  value="5" enum="DivideBy16or2048" ref="(rtc_inputclock)/(((rtc_sc_rtclks&amp;0b1)==0)?16:2048)" />
+      <choice name="Divide by 32 or 100"   value="6" enum="DivideBy32or100"  ref="(rtc_inputclock)/(((rtc_sc_rtclks&amp;0b1)==0)?32:100)"  isDefault="true" />
+      <choice name="Divide by 64 or 1000"  value="7" enum="DivideBy64or1000" ref="(rtc_inputclock)/(((rtc_sc_rtclks&amp;0b1)==0)?64:1000)" />
+   </choiceOption >
+
+   <floatOption key="rtc_clock"
+      derived="true"
+      constant="true"
+      description="RTCCNTR input clock frequency"
+      toolTip="Input clock selected by rtc_sc_rtclks"
+      units="Hz"
+      />
+
+   <!-- ************* MOD ****************** -->
 
    <intOption key="rtc_mod_mod" condition="rtc_mod_mod_present"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
+      typeName="uint32_t"
       description="Modulo"
       toolTip="16-bit modulo value.\n
                A value of 0x0000 sets SC[RTIF] on each rising-edge of the prescaler output"
+               min="0" max="0xFFFF" value="9"
    />
 
-<!-- Grahic here -->  
+   <floatOption key="rtc_period"
+      derived="true"
+      constant="true"
+      ref="rtc_clock#(rtc_mod_mod+1)/rtc_clock"
+      description="RTCCNTR counter period"
+      toolTip="Input clock selected by rtc_sc_rtclks"
+      units="s"
+      />
+
+<!-- Graphic here -->
 
    <for keys="field:name"
         values="
-      rtc_sc_rtclks:ScRtclks;
-      rtc_sc_rtcps:ScRtcps;
-      rtc_sc_rtif:ScRtif;
-      rtc_sc_rtie:ScRtie;
-      rtc_sc_rtco:ScRtco">
-      <setTemplate variables="%(field)"
+      rtc_sc_rtclks:ClockSource;
+      rtc_sc_rtcps:ClockPrescaler;
+      rtc_sc_rtie:Interrupts;
+      rtc_sc_rtco:Output" >
+      <setTemplate variables="%(field)" codeGenCondition="/$(_basename)/enablePeripheralSupport"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -93,7 +159,7 @@
 
 <!--   ========== RTC Init class =============================== -->
 
-   <template key="init_description" namespace="all">
+   <template key="init_description" namespace="all" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_class)
@@ -122,21 +188,85 @@
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
    <![CDATA[
       class $(_class)BasicInfo {
       \t
-      public:
-      \t
+      public:\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
       \t/**
       \t * Type definition for $(_class) interrupt call back.
       \t */
-      \ttypedef void (*CallbackFunction)(const uint32_t &);
+      \ttypedef void (*CallbackFunction)($(irq_parameters));\n
+   ]]>
+   </template>
+
+   <template codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/**
+      \t * Type definition for $(_class) interrupt call back.
+      \t */
+      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \t
+      \t/** Callback function for ISR */
+      \tstatic CallbackFunction sCallback;
+      \t
+      \t/**
+      \t * Callback to catch unhandled interrupt
+      \t */
+      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}
       \t\n
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/**
+      \t * Set interrupt callback function.
+      \t *
+      \t * @param[in]  rtcCallback Callback function to execute on interrupt
+      \t */
+      \tstatic void setCallback(CallbackFunction rtcCallback) {
+      \t   if (rtcCallback == nullptr) {
+      \t      rtcCallback = unhandledCallback;
+      \t   }
+      \t   usbdm_assert(
+      \t         (sCallback == unhandledCallback) || (sCallback == rtcCallback),
+      \t         "Handler already set");
+      \t   sCallback = rtcCallback;
+      \t}
+      \t
+      \t/**
+      \t * $(_basename) interrupt handler -  Calls $(_basename) callback
+      \t */
+      \tstatic void irqHandler() {
+      \t
+      \t   //.....IRQ handler code here..........
+      \t
+      \t   // Execute call-back
+      \t   sCallback($(irq_call));
+      \t   return;
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t
+      \t/** Callback for programmatically set handler */
+      \t$(_class)Info::CallbackFunction $(_class)Info::sCallback = $(_class)Info::unhandledCallback;
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -163,50 +293,31 @@
       \t   %params = nullptr;\n\n
    ]]></setTemplate>
 
-   <initialValueTemplate namespace="usbdm"
-      variables="rtc_sc_rtclks,rtc_sc_rtcps,rtc_sc_rtif,rtc_sc_rtie,rtc_sc_rtco"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+      variables="rtc_sc_rtclks,rtc_sc_rtcps,rtc_sc_rtie,rtc_sc_rtco"
    ><![CDATA[
       \t   /// Status and Control Register
-      \t   uint32_t sc = 0;\n\n
+      \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
       variables="rtc_mod_mod"
    ><![CDATA[
       \t   /// Modulo Register
-      \t   uint32_t mod = 0;\n\n
+      \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
-      variables="/PCR/nvic_irqLevel"
+      variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+      \t   %enumClass %registerName0 = %symbolicValueExpression1;
+      \t\n
    ]]></initialValueTemplate>
 
 <!--   Configure methods -->
 
-   <template discardRepeats="true" key="/RTC/InitMethod" namespace="all" ><![CDATA[
-      \t/**
-      \t * Configure RTC from values specified in init
-      \t *
-      \t * @param init Class containing initialisation values
-      \t */
-      \tstatic void configure(const typename Info::Init &init) {
-      \t
-      \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      // Only set call-back if feature enabled
-      \t      setCallback(init.callbackFunction);
-      \t      enableNvicInterrupts(init.irqlevel);
-      \t   }
-      \t   enable();
-      \t
-      \t   rtc->SC    = init.sc;
-      \t   rtc->MOD    = init.mod;
-      \t
-      \t   calibrate();
-      \t}
-      \t
+   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -215,7 +326,38 @@
       \t
       \t   // Update settings
       \t   configure(Info::DefaultInitValue);
-      \t}\n
+      \t}
+      \t\n
+   ]]></template>
+
+   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+      \t/**
+      \t * Configure $(_basename) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t   // ..........  Configure ...........
+      \t
+      \t   // Enable peripheral clock
+      \t   Info::enableClock();
+      \t\n
+   ]]></template>
+   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+             condition="irqHandlingMethod" ><![CDATA[
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      Info::setCallback(init.callbackFunction);
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
+      \t\n
+   ]]></template>
+
+   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+      \t   // ..........  Regs to init .......... ;
+      \t   rtc->MOD   = init.mod;
+      \t   rtc->SC    = init.sc;
+      \t}
+      \t\n
    ]]></template>
 
 <!--   Constructors -->
@@ -234,11 +376,11 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      this->%enumParam0 = %paramExpression;
+      \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
    ]]></setTemplate>
 
-   <setTemplate namespace="usbdm"
+   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -252,11 +394,7 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      #if $(irqHandlingMethod)
-      \t      %registerName = %paramExpression;
-      #else
-      \t      (void)%paramExpression;
-      #endif
+      \t   %registerName = %paramExpression;
       \t   }\n\n
    ]]></setTemplate>
 
@@ -264,13 +402,12 @@
       values="
             rtc_sc_rtclks;
             rtc_sc_rtcps;
-            rtc_sc_rtif;
             rtc_sc_rtie;
             rtc_sc_rtco
-            ">
-      <setTemplate namespace="usbdm"
+            " >
+      <setTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
          variables="%(r)"
-         linePadding="xxx">
+         linePadding="xxx" >
       <![CDATA[
          \t   /**
          \t    * Constructor for %description
@@ -278,7 +415,7 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
@@ -293,10 +430,10 @@
    <for keys="r"
       values="
             rtc_mod_mod
-            ">
-      <setTemplate namespace="usbdm"
+            " >
+      <setTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
          variables="%(r)"
-         linePadding="xxx">
+         linePadding="xxx" >
       <![CDATA[
          \t   /**
          \t    * Constructor for %description
@@ -307,27 +444,27 @@
          \t    * @param value %description
          \t    */
          \t   template <typename... Types>
-         \t   constexpr Init(unsigned value, Types... rest) : Init(rest...) {
+         \t   constexpr Init(%paramType0 value, Types... rest) : Init(rest...) {
          \t
-         \t      %registerName = (%registerName&~%mask) | value;
+         \t      %registerName = (%registerName&~%mask0) | %macro0(value);
          \t   }
          \t\n
       ]]>
       </setTemplate>
    </for>
 
+
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate
+   <initialValueTemplate codeGenCondition="/$(_basename)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
             rtc_sc_rtclks,
             rtc_sc_rtcps,
-            rtc_sc_rtif,
             rtc_sc_rtie,
             rtc_sc_rtco,
-            irqLevel
+            rtc_mod_mod
          "
    ><![CDATA[
       $(init_description)
@@ -341,18 +478,47 @@
       \t};\n\n
    ]]></initialValueTemplate>
 
-   <template namespace="usbdm">
+   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
       <![CDATA[
-      \t}; // $(_class)::BasicInfo::Init\n\n
+      \t}; // $(_class)BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
       <![CDATA[
-      }; // $(_class)::BasicInfo\n\n
+      }; // $(_class)BasicInfo\n\n
    ]]>
    </template>
 
-<signals />
+   <!-- ************* Common ****************** -->
+
+   <template key="/$(_basename)/declarations" namespace="all" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   ]]></template>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
+   </validate>
+
+   <projectActionList id = "rtc_files" >
+      <copy source="Project_Headers/rtc-MKE.h"  target="Project_Headers/rtc.h"  overwrite="true"  derived="true" />
+   </projectActionList>
+
+   <!-- ************* Startup ****************** -->
+
+   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_headername).h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_class) */
+      \tUSBDM::$(_class)::defaultConfigure();\n
+   ]]></template>
+
+   <signals />
 
 </peripheralPage>

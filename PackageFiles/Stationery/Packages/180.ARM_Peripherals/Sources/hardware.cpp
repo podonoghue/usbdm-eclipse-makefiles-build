@@ -12,6 +12,7 @@
  */
 
 #include "hardware.h"
+$(/HARDWARE/Includes:  // /HARDWARE/Includes not found)
 
 /**
  * Namespace enclosing USBDM classes
@@ -34,7 +35,7 @@ extern "C" void __attribute__((constructor)) cpp_initialise() {
 }
 
 #ifdef PORT_PCR_MUX
-$(/HARDWARE_CPP/Definitions:   // No user object definitions found)
+$(/HARDWARE_CPP/Definitions:   // /HARDWARE_CPP/Definitions not found)
 
 /**
  * Map all configured pins to peripheral signals.

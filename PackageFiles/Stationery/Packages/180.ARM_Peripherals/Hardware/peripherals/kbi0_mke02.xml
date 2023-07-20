@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- irq_mke.xml -->
+<!-- kbi0_mke02.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Interrupt" >
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Keyboard interrupts" >
 
    <constant key="suppressInstance"         type="Boolean" value="false"         />
    <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
    <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
-   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
@@ -21,8 +20,8 @@
     *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
     *  $(_class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
     *  $(_basename)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
--->
 
+-->
 <!--
     * Template substitutions
     *
@@ -49,80 +48,62 @@
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
 
-   <!-- ************* SIM ****************** -->
-   <aliasOption key="/SIM/sim_pinsel0_irqps" constant="false" optional="true" />
+   <!-- ************* PE ****************** -->
+
+   <bitmaskOption key="kbi_pe_kbipe" condition="kbi_pe_kbipe_present"
+      typeName="uint32_t"
+      defaultValue="0"
+      description="KBI Pin Enables"
+      toolTip="Bitmask selecting enabled pins"
+      bitmask="0xFF"
+      value="0"
+   />
+
+   <!-- ************* ES ****************** -->
+
+   <bitmaskOption key="kbi_es_kbedg" condition="kbi_es_kbedg_present"
+      typeName="uint32_t"
+      defaultValue="0"
+      description="KBI Edge Selects"
+      toolTip="Bitmask selecting polarity : 0=>Falling edge/low level; 1=>Rising edge/high level"
+      bitmask="0xFF"
+      value="0"
+   />
 
    <!-- ************* SC ****************** -->
 
-   <binaryOption key="irq_sc_irqpe" condition="irq_sc_irqpe_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
-      enumStem="IrqPinEnable"
-      description="IRQ Pin Enable"
-      toolTip="Selectively enables the IRQ pin">
-      <choice name="Disabled"    value="0" enum="Disabled"/>
-      <choice name="Enabled"     value="1" enum="Enabled"/>
-   </binaryOption >
-
-   <binaryOption key="irq_sc_irqpdd" condition="irq_sc_irqpdd_present"
-      enabledBy="irq_sc_irqpe"
-      enumStem="IrqPullUp"
-      toolTip="Controls pull-up device on IRQ pin"
-      description="Interrupt Request (IRQ) Pull Device Disable" >
-      <choice name="Pull-up Enabled"     value="0" enum="Enabled"/>
-      <choice name="Pull-up Disabled"    value="1" enum="Disabled"/>
-   </binaryOption >
-
-   <choiceOption key="irq_sc_irqmod" condition="irq_sc_irqmod_present&amp;&amp;irq_sc_irqedg_present"
-      enabledBy="irq_sc_irqpe"
-      valueFormat="IRQ_SC_IRQMOD(%s),IRQ_SC_IRQEDG(%s)"
-      enumStem="IrqMode"
-      toolTip="Selects edge/level and polarity to trigger event"
-      description="IRQ Detection Mode" >
-      <choice name="Falling Edge only"          value="0,0" enum="FallingEdgeOnly"/>
-      <choice name="Falling Edge or Low level"  value="1,0" enum="FallingEdgeOrLowLevel"/>
-      <choice name="Rising Edge only"           value="0,1" enum="RisingEdgeOnly"/>
-      <choice name="Rising Edge or High level"  value="1,1" enum="RisingEdgeOrHighLevel"/>
-   </choiceOption >
-
-   <choiceOption key="irq_sc_irqack" condition="irq_sc_irqack_present"
+   <binaryOption key="kbi_sc_kback" condition="kbi_sc_kback_present"
       hidden="true"
-      enumStem="IrqAcknowledge"
-      toolTip="Acknowledges interrupt request events (write 1 to clear IRQF).\n
-               Writing 0 has no meaning or effect. Reads always return 0. \n
-               If edge-and-level detection is selected, then IRQF cannot be cleared \n
-               while the IRQ pin remains at its asserted level"
-      description="IRQ Acknowledge" >
-      <choice name="Write 1 to clear"  value="1" enum="Write1ToClear"/>
-   </choiceOption >
+      enumStem="KbiAck"
+      description="KBI Acknowledge"
+      toolTip="Writing a 1 to KBACK is part of the flag clearing mechanism" >
+      <choice name="Clear"      value="1" enum="Write1ToClear"/>
+   </binaryOption >
 
-   <binaryOption key="irq_sc_irqie" condition="irq_sc_irqie_present"
-      enabledBy="irq_sc_irqpe"
-      enumStem="IrqInterrupt"
-      toolTip="Determines whether IRQ events (IRQF=1) generate an interrupt request"
-      description="IRQ Interrupt Enable" >
-      <choice name="Interrupts Disabled"    value="0" enum="Disabled"/>
-      <choice name="Interrupts Enabled"     value="1" enum="Enabled"/>
+   <binaryOption key="kbi_sc_kbie" condition="kbi_sc_kbie_present"
+      enumStem="KbiInterrupt"
+      description="KBI Interrupt Enable" >
+      <choice name="Interrupt disabled"  value="0" enum="Disabled"/>
+      <choice name="Interrupt enabled"   value="1" enum="Enabled"/>
+   </binaryOption >
+
+   <binaryOption key="kbi_sc_kbmod" condition="kbi_sc_kbmod_present"
+      enumStem="KbiDetectionMode"
+      description="KBI Detection Mode" >
+      <choice name="Edges only"       value="0" enum="EdgesOnly"/>
+      <choice name="Edges or levels"  value="1" enum="EdgesOrLevels"/>
    </binaryOption >
 
 <!-- Graphic here -->
 
-   <setTemplate variables="irq_sc_irqack" codeGenCondition="/$(_basename)/enablePeripheralSupport"
-   ><![CDATA[
-      \t/**
-      \t * %description
-      \t */
-      \tstatic void achnowledge() {
-      \t   %register = %register | %mask;
-      \t}\n\n
-   ]]></setTemplate>
-
    <for keys="field:name"
         values="
-      irq_sc_irqpdd:Irq;
-      irq_sc_irqpe:PullUp;
-      irq_sc_irqie:IrqRequests;
-      irq_sc_irqmod:Mode" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+      kbi_pe_kbipe:PeKbipe;
+      kbi_es_kbedg:EsKbedg;
+
+      kbi_sc_kbie:ScKbie;
+      kbi_sc_kbmod:ScKbmod" >
+      <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -135,9 +116,9 @@
       ]]></setTemplate>
    </for>
 
-<!--   ========== IRQ Init class =============================== -->
+<!--   ========== KBI Init class =============================== -->
 
-   <template key="init_description" namespace="all" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template key="init_description" namespace="all" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_class)
@@ -147,24 +128,36 @@
       \t * @note This constructor may be used to create a const instance in Flash
       \t *
       \t * Example:
-      \t * @code
-      \t * static const $(_class)::Init init {
+      \t * ///
+      \t * /// KBI call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void kbiCallback(uint32_t status) {
+      \t *    (void) status;
+      \t * }
       \t *
-      \t *   // Setup values
-      \t *   IrqPinEnable_Enabled ,          // IRQ Pin Enable - Enabled
-      \t *   IrqMode_FallingEdgeOrLowLevel , // IRQ Detection Mode - Falling Edge or Low level
-      \t *   IrqPullUp_Disabled,             // Interrupt Request (IRQ) Pull Device Disable - Pull-up Disabled
-      \t *   IrqInterrupt_Disabled,          // IRQ Interrupt Enable - Interrupts Disabled
+      \t * @code
+      \t * static const $(_class)::Init kbiInit {
+      \t *
+      \t *    // Setup values
+      \t *    3, ActiveHigh,                   // Enabled pin and associated polarity - 3, Rising-edge/High-level
+      \t *    5, ActiveLow,                    // Enabled pin and associated polarity - 5, Falling-edge/Low-level
+      \t *    KbiInterrupt_Disabled ,          // KBI Interrupt Enable - Disabled
+      \t *    KbiDetectionMode_EdgesOnly,      // KBI Detection Mode - Edges only
+      \t *
+      \t *    kbiCallback,                     // Call-back to execute on event - call-back function name
+      \t *    NvicPriority_Low,                // Priority for interrupt - Low
       \t * };
       \t *
       \t * // Initialise $(_class) from values specified above
-      \t * $(_class)::configure(init)
+      \t * $(_class)::configure(kbiInit)
       \t * @endcode
       \t */
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       class $(_class)BasicInfo {
       \t
@@ -177,12 +170,15 @@
       \t/**
       \t * Type definition for $(_class) interrupt call back.
       \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));\n
+      \ttypedef void (*CallbackFunction)($(irq_parameters));
+      \t\n
    ]]>
    </template>
 
-   <template codeGenCondition="irqHandlingMethod" >
+   <template namespace="all" key="/$(_basename)/protectedMethods" codeGenCondition="irqHandlingMethod"
+      discardRepeats="true" >
    <![CDATA[
+      \t
       \t/**
       \t * Type definition for $(_class) interrupt call back.
       \t */
@@ -194,28 +190,27 @@
       \t/**
       \t * Callback to catch unhandled interrupt
       \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
+      \tstatic void unhandledCallback($(irq_parameters)) {
       \t   setAndCheckErrorCode(E_NO_HANDLER);
       \t}
       \t\n
    ]]>
    </template>
 
-   <template codeGenCondition="irqHandlingMethod" >
+   <template namespace="all" key="/$(_basename)/publicMethods" codeGenCondition="irqHandlingMethod"
+      discardRepeats="true" >
    <![CDATA[
+      \t
       \t/**
       \t * Set interrupt callback function.
       \t *
-      \t * @param[in]  irqCallback Callback function to execute on interrupt
+      \t * @param[in]  kbiCallback Callback function to execute on interrupt
       \t */
-      \tstatic void setCallback(CallbackFunction irqCallback) {
-      \t   if (irqCallback == nullptr) {
-      \t      irqCallback = unhandledCallback;
+      \tstatic void setCallback(CallbackFunction kbiCallback) {
+      \t   if (kbiCallback == nullptr) {
+      \t      kbiCallback = unhandledCallback;
       \t   }
-      \t   usbdm_assert(
-      \t         (sCallback == unhandledCallback) || (sCallback == irqCallback),
-      \t         "Handler already set");
-      \t   sCallback = irqCallback;
+      \t   sCallback = kbiCallback;
       \t}
       \t
       \t/**
@@ -223,27 +218,26 @@
       \t */
       \tstatic void irqHandler() {
       \t
-      \t   // Clear IRQ flag
-      \t   irq->SC = irq->SC|IRQ_SC_IRQACK_MASK;
-      \t
-      \t   // Execute call-back
+      \t   // Pass to call-back
       \t   sCallback($(irq_call));
       \t   return;
-      \t}
-      \t\n
+      \t}\n
    ]]>
    </template>
 
-   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <template namespace="all" key="/$(_basename)/staticDefinitions" codeGenCondition="irqHandlingMethod"
+      discardRepeats="true"  >
    <![CDATA[
       \t
       \t/** Callback for programmatically set handler */
-      \t$(_class)Info::CallbackFunction $(_class)Info::sCallback = $(_class)Info::unhandledCallback;
+      \ttemplate<class Info>
+      \ttypename $(_base_class)Base_T<Info>::CallbackFunction $(_base_class)Base_T<Info>::sCallback =
+      \t              $(_base_class)Base_T<Info>::unhandledCallback;
       \t\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -270,10 +264,24 @@
       \t   %params = nullptr;\n\n
    ]]></setTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
-      variables="irq_sc_irqpdd,irq_sc_irqpe,irq_sc_irqack,irq_sc_irqie,irq_sc_irqmod"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      variables="kbi_pe_kbipe"
    ><![CDATA[
-      \t   /// Interrupt Pin Request Status and Control Register
+      \t   /// KBI Pin Enables
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      variables="kbi_es_kbedg"
+   ><![CDATA[
+      \t   /// KBI Edge Selects
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      variables="kbi_sc_kback,kbi_sc_kbie,kbi_sc_kbmod"
+   ><![CDATA[
+      \t   /// KBI Status and Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
@@ -287,7 +295,8 @@
 
 <!--   Configure methods -->
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+      codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -300,38 +309,35 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+             codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Configure $(_basename) from values specified in init
       \t *
       \t * @param init Class containing initialisation values
       \t */
       \tstatic void configure(const typename Info::Init &init) {
-      \t   // ..........  Configure ...........
+      \t   // ..........  Configure stuff ...........
       \t
       \t   // Enable peripheral clock
       \t   Info::enableClock();
       \t\n
    ]]></template>
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport"
-             condition="irqHandlingMethod" ><![CDATA[
-      \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      Info::setCallback(init.callbackFunction);
-      \t      enableNvicInterrupts(init.irqlevel);
-      \t   }
+   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+             condition="irqHandlingMethod"
+             codeGenCondition="irqHandlingMethod" ><![CDATA[
+      \t   setCallback(init.callbackFunction);
+      \t   enableNvicInterrupts(init.irqlevel);
       \t\n
    ]]></template>
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
-      \t   // Initialise IRQ
-      \t   irq->SC    = init.sc|IRQ_SC_IRQACK_MASK;
-
-      \t   // Clear pending IRQ flag
-      \t   irq->SC    = init.sc|IRQ_SC_IRQACK_MASK;
-
-      \t    // Required delay to avoid interrupt
-      \t   (void) irq->SC;
-      \t   enableNvicInterrupts(init.irqlevel);
+   <template discardRepeats="true" key="/$(_basename)/InitMethod" namespace="all"
+             codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t   // ..........  Regs to init .......... ;
+      \t   kbi->SC    = KBI_SC_KBACK_MASK;
+      \t   kbi->PE    = init.pe;
+      \t   kbi->ES    = init.es;
+      \t   kbi->SC    = init.sc;
       \t}
       \t\n
    ]]></template>
@@ -374,14 +380,61 @@
       \t   }\n\n
    ]]></setTemplate>
 
+   <setTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      variables="kbi_pe_kbipe,kbi_es_kbedg"
+      params="enableMask,polarityMask"
+      nonDefaultParams="2"
+      linePadding="xxx" >
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for %description0, %description1
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(
+      %params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName0 = %paramName0;
+      \t      %registerName1 = %paramName1;
+      \t   }
+      \t\n
+   ]]>
+   </setTemplate>
+
+   <setTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      variables="kbi_pe_kbipe,kbi_es_kbedg"
+      params="enableMask,polarity"
+      linePadding="xxx" >
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for Input with polarity selection
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      \t    * @param    kbiInputNum Number of KBI input to enable
+      \t    * @param    polarity    Polarity of the input
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(PinNum kbiInputNum, Polarity polarity, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName0 |= (1<<kbiInputNum);
+      \t      %registerName1 |= (((polarity==ActiveHigh)?1:0)<<kbiInputNum);
+      \t   }
+      \t\n
+   ]]>
+   </setTemplate>
+
    <for keys="r"
       values="
-            irq_sc_irqpe;
-            irq_sc_irqmod;
-            irq_sc_irqpdd;
-            irq_sc_irqie
+            kbi_sc_kbie;
+            kbi_sc_kbmod
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+      <setTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -405,13 +458,14 @@
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <initialValueTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
-            irq_sc_irqpe,
-            irq_sc_irqmod,
-            irq_sc_irqpdd
+            kbi_pe_kbipe,
+            kbi_es_kbedg,
+            kbi_sc_kbie,
+            kbi_sc_kbmod
          "
    ><![CDATA[
       $(init_description)
@@ -425,13 +479,13 @@
       \t};\n\n
    ]]></initialValueTemplate>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
       \t}; // $(_class)BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
       }; // $(_class)BasicInfo\n\n
    ]]>
@@ -439,7 +493,7 @@
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_basename)/declarations" namespace="all" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_basename)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */
@@ -450,18 +504,18 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>
 
-   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" namespace="all" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_headername).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" namespace="all" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_class) */
       \tUSBDM::$(_class)::defaultConfigure();\n
    ]]></template>
 
-   <projectActionList id = "irq_files" >
-      <copy source="Project_Headers/irq-MKE.h"  target="Project_Headers/irq.h"  overwrite="true"  derived="true" />
+   <projectActionList id = "kbi_files" >
+      <copy source="Project_Headers/kbi-MKE.h"  target="Project_Headers/kbi.h"  overwrite="true"  derived="true" />
    </projectActionList>
 
    <signals />

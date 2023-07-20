@@ -48,6 +48,12 @@ namespace USBDM {
 #pragma GCC push_options
 #pragma GCC optimize ("Os")
 
+// Used for index for Port pins e.g. PTA = [0..7], PTB = [8..15] etc
+typedef unsigned PinIndex;
+
+// Pin number for port pin within individual port e.g. GPIOB[31..0]
+typedef uint8_t  PinNum;
+
 #if ($(/HARDWARE/useTypeSystemForTimers))
 class Ticks {
 

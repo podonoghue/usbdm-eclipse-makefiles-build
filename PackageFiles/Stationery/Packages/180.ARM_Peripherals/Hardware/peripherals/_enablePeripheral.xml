@@ -27,24 +27,17 @@
 
    <title description="------- General Settings -------" toolTip="" />
 
-   <binaryOption key="enablePeripheralSupport" condition="!@isGeneratedByDefault"
+   <binaryOption key="/$(_basename)/enablePeripheralSupport"
+      modify="true"
       description="Enable peripheral Support"
       toolTip="Even if disabled, some code may still be generated but will \n
                be removed by linker if not used">
-      <choice value="false" name="Minimal code generated"        isDefault="true" />
-      <choice value="true"  name="Generate code for peripheral"  />
-   </binaryOption>
-
-   <binaryOption key="enablePeripheralSupport" condition="@isGeneratedByDefault"
-      description="Enable peripheral Support"
-      toolTip="Even if disabled, some code may still be generated but will \n
-               be removed by linker if not used">
-      <choice value="false" name="Minimal code generated"        />
-      <choice value="true"  name="Generate code for peripheral"  isDefault="true"/>
+      <choice value="false" name="Minimal code generated"        isDefault="!@isGeneratedByDefault" />
+      <choice value="true"  name="Generate code for peripheral"  isDefault="@isGeneratedByDefault" />
    </binaryOption>
 
    <binaryOption key="configurePeripheralInStartUp" condition="@isSupportedinStartup"
-      enabledBy="enablePeripheralSupport"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
       description="Configure this peripheral"
       toolTip="Configure this peripheral in startup code before main() is entered\n
                Even if disabled, some minimal code may still be executed"
@@ -75,7 +68,7 @@
       -->
       <if condition="irqEnable">
          <irqOption key="irqHandlingMethod" condition="!irq_classHandler"
-            enabledBy="enablePeripheralSupport&amp;&amp;(irqEnable != 0)"
+            enabledBy="/$(_basename)/enablePeripheralSupport&amp;&amp;(irqEnable != 0)"
             typeName="CallbackFunction"
             description="Peripheral interrupt handling"
             toolTip="If enabled, the handler may be set using the setCallback() function or\n
@@ -85,7 +78,7 @@
             pattern="^%b%i$"
             classHandler="%c%i::irqHandler" />
          <irqOption key="irqHandlingMethod" condition="irq_classHandler"
-            enabledBy="enablePeripheralSupport&amp;&amp;(irqEnable != 0)"
+            enabledBy="/$(_basename)/enablePeripheralSupport&amp;&amp;(irqEnable != 0)"
             typeName="CallbackFunction"
             description="Peripheral interrupt handling"
             toolTip="If enabled, the handler may be set using the setCallback() function or\n
@@ -96,7 +89,7 @@
             classHandler="$(irq_classHandler)" />
       <else/>
          <irqOption key="irqHandlingMethod" condition="irq_classHandler"
-            enabledBy="enablePeripheralSupport"
+            enabledBy="/$(_basename)/enablePeripheralSupport"
             typeName="CallbackFunction"
             description="Peripheral interrupt handling"
             toolTip="If enabled, the handler may be set using the setCallback() function or\n
@@ -106,7 +99,7 @@
             pattern="$(irq_pattern)"
             classHandler="$(irq_classHandler)" />
          <irqOption key="irqHandlingMethod" condition="!irq_classHandler"
-            enabledBy="enablePeripheralSupport"
+            enabledBy="/$(_basename)/enablePeripheralSupport"
             typeName="CallbackFunction"
             description="Peripheral interrupt handling"
             toolTip="If enabled, the handler may be set using the setCallback() function or\n
@@ -146,7 +139,7 @@
 
    </if>
 
-   <template condition="clockEnable"  codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template condition="clockEnable"  codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
       \t/* Template _enablePeripheral  */
       \t
       \t/**

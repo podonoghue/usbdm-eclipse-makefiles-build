@@ -4,9 +4,9 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Port control" >
 
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="false" />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false" />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true" />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"         />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
    <xi:include href="_enablePeripheral.xml" />
    <title description="------------------------------------------" />
 
@@ -410,14 +410,13 @@
    ]]></template>
 
    <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
-             codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Configure $(_basename) from values specified in init
       \t *
       \t * @param init Class containing initialisation values
       \t */
       \tstatic void configure(const typename Info::Init &init) {
-      \t   // ..........  Configure stuff ...........
       \t\n
    ]]></template>
    <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
@@ -430,7 +429,7 @@
 
    <template discardRepeats="true" key="/$(_basename)/InitMethod" namespace="all"
              codeGenCondition="enablePeripheralSupport" ><![CDATA[
-      \t   // ..........  Regs to init .......... ;
+      \t   // Initialise remaining registers
       \t   port->IOFLT0    = init.ioflt0;
       \t   port->IOFLT1    = init.ioflt1;
       \t}
@@ -568,17 +567,17 @@
       \t/**
       \t * Determines the mask for the HDRVE register given port bit number
       \t *
-      \t * @param bitNm Bit number - This also indicates the actual port e.g. PTA = 0..7, PTB = 8..25 etc
+      \t * @param pinInd Bit number - This also indicates the actual port e.g. PTA = 0..7, PTB = 8..25 etc
       \t *
       \t * @return Mask value for use with the HDRVE register
       \t */
-      \tstatic constexpr auto calculateHdriveMask(unsigned bitNm) {
+      \tstatic constexpr auto calculateHdriveMask(PinIndex pinInd) {
       \t   constexpr int8_t highDriveIndex[] = {
       \t      /*             0       1       2       3       4       5       6       7 */\n
    ]]>
    </template>
 
-   <equation key="bitnum" value="0" />
+   <equation key="pinIndex" value="0" />
 
    <for keys="r:R" values="a:A;b:B;c:C;d:D;e:E;f:F;g:G;h:H;i:I" >
       <template namespace="all" key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
@@ -587,14 +586,14 @@
       ]]>
       </template>
       <for keys="n" dim="8" >
-         <for keys="bitnum" values="@bitnum">
+         <for keys="pinIndex" values="@pinIndex">
             <if condition="port_hdrve_pt%(r)%(n)">
                <template namespace="all" key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
                <![CDATA[
-                  \t   %(bitnum),
+                  \t   %(pinIndex),
                ]]>
                </template>
-               <equation key="bitnum" value="bitnum+1" />
+               <equation key="pinIndex" value="pinIndex+1" />
             <else />
                <template namespace="all" key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
                <![CDATA[
@@ -614,14 +613,14 @@
    <![CDATA[
       \t\n
       \t   };
-      \t   if (highDriveIndex[bitNm]<0) {
+      \t   if (highDriveIndex[pinInd]<0) {
       \t      return 0;
       \t   }
-      \t   return (1<<highDriveIndex[bitNm]);
+      \t   return (1<<highDriveIndex[pinInd]);
       \t}
       \t
       \tstatic constexpr HardwarePtr<uint32_t> hdrve = PORT_BasePtr+offsetof(PORT_Type, HDRVE);
-      \tstatic constexpr unsigned HDRIVE_MASK        = calculateHdriveMask(bitNum);\n
+      \tstatic constexpr unsigned HDRIVE_MASK        = calculateHdriveMask(pinIndex);\n
    ]]>
    </template>
 
@@ -630,20 +629,20 @@
       \t/**
       \t * Determines the mask for the PUE[] register given port bit number
       \t *
-      \t * @param bitNm Bit number - This also indicates the actual port e.g. PTA = 0..7, PTB = 8..25 etc
+      \t * @param pinInd Bit number - This also indicates the actual port e.g. PTA = 0..7, PTB = 8..25 etc
       \t *
       \t * @return Mask value for use with the PUE[] registers
       \t */
-      \tstatic constexpr auto calculatePueMask(unsigned bitNm) {
+      \tstatic constexpr auto calculatePueMask(PinIndex pinInd) {
       \t   constexpr unsigned MAX_BIT = 71; // Pti7
-      \t   if (bitNm > MAX_BIT) {
+      \t   if (pinInd > MAX_BIT) {
       \t      return 0;
       \t   }
-      \t   return 1<<(bitNm%32);
+      \t   return 1<<(pinInd%32);
       \t}
       \t
-      \tstatic constexpr HardwarePtr<uint32_t> pue   = PORT_BasePtr+offsetof(PORT_Type, PUE0)+4*(bitNum/32);
-      \tstatic constexpr unsigned MASK               = calculatePueMask(bitNum);\n
+      \tstatic constexpr HardwarePtr<uint32_t> pue   = PORT_BasePtr+offsetof(PORT_Type, PUE0)+4*(pinIndex/32);
+      \tstatic constexpr unsigned MASK               = calculatePueMask(pinIndex);\n
    ]]>
    </template>
 
@@ -671,29 +670,6 @@
    ]]>
    </template>
 
-   <!-- for keys="field:Name:bitnum"
-        values="
-      port_pue0_ptape:Pta:0;
-      port_pue0_ptbpe:Ptb:8;
-      port_pue0_ptcpe:Ptc:16;
-      port_pue0_ptdpe:Ptd:24;
-      port_pue1_ptepe:Pte:32;
-      port_pue1_ptfpe:Ptf:40;
-      port_pue1_ptgpe:Ptg:48;
-      port_pue1_pthpe:Pth:56;
-      port_pue2_ptipe:Pti:64" >
-      <setTemplate key="/$(_basename)/declarations" namespace="all"
-                   variables="%(field)" codeGenCondition="enablePeripheralSupport"
-      ><![CDATA[
-      \t/**
-      \t * Class representing all pins in %(Name)
-      \t *
-      \t * @tparam pinNum Indicates pin within the port e.g. %(Name)3 = > %(Name)<3>
-      \t */
-      \ttemplate <unsigned pinNum> class %(Name) : public Port_T<pinNum+%(bitnum)> {};\n\n
-      ]]></setTemplate>
-   </for -->
-
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>
@@ -705,9 +681,43 @@
 
    <template key="/SYSTEM/Startup" namespace="all" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
-      \t// Configure Ports (Filters, PUPs and HDRIVE)
+      \t/* Configure Ports (Filters, PUPs and HDRIVE) */
       \tUSBDM::$(_class)::defaultConfigure();
    ]]></template>
+
+   <for keys=   "    field             : Name : pinIndex"
+        values= "/PORT/port_pue0_ptape :  A   :   0;
+                 /PORT/port_pue0_ptbpe :  B   :   8;
+                 /PORT/port_pue0_ptcpe :  C   :  16;
+                 /PORT/port_pue0_ptdpe :  D   :  24;
+                 /PORT/port_pue1_ptepe :  E   :  32;
+                 /PORT/port_pue1_ptfpe :  F   :  40;
+                 /PORT/port_pue1_ptgpe :  G   :  48;
+                 /PORT/port_pue1_pthpe :  H   :  56;
+                 /PORT/port_pue2_ptipe :  I   :  64" >
+      <template key="/PORT/declarations" namespace="all" variables="%(field)_present" codeGenCondition="enablePeripheralSupport"
+      ><![CDATA[
+      \t/**
+      \t * Class representing individual pin options for pins in Port %(Name)
+      \t *
+      \t * @tparam pinNum Indicates pin within the port e.g. %(Name)3 = > %(Name)<3>
+      \t * @tparam polarity Polarity of the pin. Either ActiveHigh or ActiveLow
+      \t */
+      \ttemplate <PinNum pinNum>
+      \t   class Port%(Name) : public Port_T<pinNum+%(pinIndex)> {};
+      \t
+      \t/**
+      \t * Class representing pin options for a field within Port %(Name)
+      \t *
+      \t * @tparam leftPinNum  Indicates left pin (inclusive) within the port e.g. PT%(Name)[5..3] => %(Name)<5,...>
+      \t * @tparam rightPinNum Indicates right pin (inclusive) within the port e.g. PT%(Name)[5..3] => %(Name)<...,3>
+      \t * @tparam polarity    Polarity of field. Either ActiveHigh or ActiveLow
+      \t */
+      \ttemplate <PinNum leftPinNum, PinNum rightPinNum, Polarity polarity=ActiveHigh>
+      \t    class Port%(Name)Field : public PortField_T<leftPinNum+%(pinIndex), rightPinNum+%(pinIndex)> {};\n\n
+      ]]></template>
+   </for>
+
 
    <projectActionList id = "port_files" >
       <copy source="Project_Headers/port_MKE.h"  target="Project_Headers/port.h"  overwrite="true"  derived="true" />

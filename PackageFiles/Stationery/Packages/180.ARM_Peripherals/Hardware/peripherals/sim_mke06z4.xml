@@ -817,11 +817,10 @@
       ]]></setTemplate>
    </for>
 
-   <for keys="field:name"
-        values="
-      sim_clkdiv_outdiv1[]:CoreClkDivider;
-      sim_clkdiv_outdiv2[]:BusClockDivider;
-      sim_clkdiv_outdiv3[]:TimerClockDivider" >
+   <for keys="         field         :   name"
+        values="sim_clkdiv_outdiv1[] : CoreClkDivider;
+                sim_clkdiv_outdiv2[] : BusClockDivider;
+                sim_clkdiv_outdiv3[] : TimerClockDivider" >
       <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
@@ -1205,7 +1204,7 @@
       \t}\n\n
    ]]></template>
 
-   <template  codeGenCondition="enablePeripheralSupport">
+   <template  codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
       \t/**
       \t * Configure $(_basename)
@@ -1242,13 +1241,15 @@
    ]]>
    </template>
 
- <!-- ========== Common =============================== -->
+   <!-- ************* Common ****************** -->
+
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>
 
-   <template key="/ICS/ClockStartupAfter" namespace="all" codeGenCondition="configurePeripheralInStartUp"  ><![CDATA[
-   \tUSBDM::$(_class)Info::defaultConfigure();
+   <template key="/ICS/ClockStartupAfter" namespace="all" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \tUSBDM::$(_class)Info::defaultConfigure();
    ]]></template>
 
    <template key="DefaultInitValue" namespace="all" ><![CDATA[

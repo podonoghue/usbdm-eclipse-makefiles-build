@@ -31,7 +31,7 @@ Each of the KBIPEn bits enable the corresponding KBI interrupt pin</description>
                      <name>KBIPE</name>
                      <description>KBI Pin Enables</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
+                     <bitWidth>32</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -58,7 +58,7 @@ Each of the KBEDGn bits selects the falling edge/low-level or rising edge/high-l
                      <name>KBEDG</name>
                      <description>KBI Edge Selects</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
+                     <bitWidth>32</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>

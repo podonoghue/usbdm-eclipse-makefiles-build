@@ -4,13 +4,50 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Power Management Controller" >
 
+   <constant key="suppressInstance"         type="Boolean" value="false"         />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
    <constant key="irq_parameters"           type="String"  value="&quot;PmcInterruptReason reason&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;reason&quot;"  />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"  />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false" />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true"  />
-   <xi:include href="_enablePeripheral.xml" />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;PmcInterruptReason&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;PmcInterruptReason_LowVoltageWarning&quot;"  />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="_enablePeripheral.xml"  />
    <title description="------------------------------------------" />
+
+<!--
+    * General substitutions
+    *  $(_name)         => e.g FTM2                    (fProvider.getName())
+    *  $(_base_class)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
+    *  $(_class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
+    *  $(_basename)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
+-->
+
+<!--
+    * Template substitutions
+    *
+    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
+    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
+    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
+    * %description[index]             Description from controlVar e.g. Compare Function Enable
+    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
+    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
+    * %params                         Formatted parameter list for function
+    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
+    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
+    * %enumClass[index]               As for %paramType
+    * %enumParam[index]               As for %paramName
+    * %valueExpression                Numeric variable value e.g. 0x3
+    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %variable[index]                Variable name from condition
+    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * %register[index]                Register associated with variable e.g. adc->APCTL1
+    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+-->
 
    <intOption key="system_low_power_clock"
       constant="true"
@@ -37,7 +74,7 @@
 
    <!-- ************* SPMSC1 & SPMSC2 ****************** -->
    <binaryOption key="pmc_spmsc1_lvde" condition="pmc_spmsc1_lvde_present"
-      enabledBy="enablePeripheralSupport"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
       enumStem="PmcLowVoltageDetect"
       description="Low-Voltage Detect Enable"
       toolTip="This write-once bit enables low-voltage detect logic" >
@@ -46,7 +83,7 @@
    </binaryOption>
 
    <binaryOption key="pmc_spmsc1_lvwie" condition="pmc_spmsc1_lvwie_present"
-      enabledBy="pmc_spmsc1_lvde"
+      enabledBy="pmc_spmsc1_lvde&amp;&amp;irqHandlingMethod"
       enumStem="PmcLowVoltageWarningInterrupt"
       toolTip="Enables hardware interrupt requests for LVWF"
       description="Low-Voltage Warning Interrupt Enable" >
@@ -99,18 +136,6 @@
       <choice name="High trip point (VLVW = VLVW4)"   value="3" enum="HighTripPoint"/>
    </choiceOption>
 
-   <template key="/SYSTEM/Includes" namespace="all" codeGenCondition="configurePeripheralInStartUp" ><![CDATA[
-      #include "pmc.h"\n
-   ]]></template>
-
-   <template key="/SYSTEM/WatchdogInitialise" namespace="all" codeGenCondition="configurePeripheralInStartUp" ><![CDATA[
-      \t/*
-      \t * Initialise PMC
-      \t */
-      \tUSBDM::Pmc::configure(USBDM::Pmc::DefaultInitValue);
-      \t\n
-   ]]></template>
-
 <!-- Graphic here -->
 
    <for keys="field:name"
@@ -122,7 +147,7 @@
       pmc_spmsc1_bgbe:Spmsc1Bgbe;
       pmc_spmsc2_lvdv:Spmsc2Lvdv;
       pmc_spmsc2_lvwv:Spmsc2Lvwv" >
-      <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
+      <setTemplate variables="%(field)" codeGenCondition="/$(_basename)/enablePeripheralSupport"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -137,7 +162,7 @@
 
 <!--   ========== PMC Init class =============================== -->
 
-   <template key="init_description" namespace="all" codeGenCondition="enablePeripheralSupport" >
+   <template key="init_description" namespace="all" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_class)
@@ -180,7 +205,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
    <![CDATA[
       class $(_class)BasicInfo {
       \t
@@ -193,14 +218,12 @@
       \t/**
       \t * Type definition for $(_class) interrupt call back.
       \t */
-      \ttypedef void (*CallbackFunction)(PmcInterruptReason pmcInterruptReason);
-      \t\n
+      \ttypedef void (*CallbackFunction)($(irq_parameters));\n
    ]]>
    </template>
 
-   <template namespace="all" key="protectedMethods" codeGenCondition="irqHandlingMethod" >
+   <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t
       \t/**
       \t * Type definition for $(_class) interrupt call back.
       \t */
@@ -212,21 +235,17 @@
       \t/**
       \t * Callback to catch unhandled interrupt
       \t */
-      \tstatic void unhandledCallback(PmcInterruptReason) {
+      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
       \t   setAndCheckErrorCode(E_NO_HANDLER);
       \t}
       \t\n
    ]]>
    </template>
 
-   <template namespace="all" key="publicMethods" codeGenCondition="irqHandlingMethod" >
+   <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t
       \t/**
       \t * Set interrupt callback function.
-      \t *
-      \t * The callback may be executed prior to the WDOG reset.
-      \t * This allows the system to save important information or log the watchdog event.
       \t *
       \t * @param[in]  pmcCallback Callback function to execute on interrupt
       \t */
@@ -234,6 +253,9 @@
       \t   if (pmcCallback == nullptr) {
       \t      pmcCallback = unhandledCallback;
       \t   }
+      \t   usbdm_assert(
+      \t         (sCallback == unhandledCallback) || (sCallback == pmcCallback),
+      \t         "Handler already set");
       \t   sCallback = pmcCallback;
       \t}
       \t
@@ -244,24 +266,24 @@
       \t
       \t   pmc->SPMSC1 = pmc->SPMSC1 | PMC_SPMSC1_LVWACK_MASK;
       \t
-      \t   sCallback(PmcInterruptReason_LowVoltageWarning);
+      \t   // Execute call-back
+      \t   sCallback($(irq_call));
       \t   return;
-      \t}\n
-   ]]>
-   </template>
-
-   <template namespace="all" key="staticDefinitions" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t
-      \t/** Callback for programmatically set handler */
-      \ttemplate<class Info>
-      \ttypename $(_base_class)Base_T<Info>::CallbackFunction $(_base_class)Base_T<Info>::sCallback =
-      \t              $(_base_class)Base_T<Info>::unhandledCallback;
+      \t}
       \t\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t
+      \t/** Callback for programmatically set handler */
+      \t$(_class)Info::CallbackFunction $(_class)Info::sCallback = $(_class)Info::unhandledCallback;
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -288,14 +310,14 @@
       \t   %params = nullptr;\n\n
    ]]></setTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
       variables="pmc_spmsc1_lvwack,pmc_spmsc1_lvwie,pmc_spmsc1_lvdre,pmc_spmsc1_lvdse,pmc_spmsc1_lvde,pmc_spmsc1_bgbe"
    ><![CDATA[
       \t   /// System Power Management Status and Control 1 Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
       variables="pmc_spmsc2_lvdv,pmc_spmsc2_lvwv"
    ><![CDATA[
       \t   /// System Power Management Status and Control 2 Register
@@ -312,8 +334,7 @@
 
 <!--   Configure methods -->
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
-      codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -326,25 +347,28 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
-             codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Configure $(_basename) from values specified in init
       \t *
       \t * @param init Class containing initialisation values
       \t */
       \tstatic void configure(const typename Info::Init &init) {
+      \t   // ..........  Configure ...........
+      \t
       \t\n
    ]]></template>
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
-             codeGenCondition="irqHandlingMethod" ><![CDATA[
-      \t   setCallback(init.callbackFunction);
-      \t   enableNvicInterrupts(init.irqlevel);
+   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+             condition="irqHandlingMethod" ><![CDATA[
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      Info::setCallback(init.callbackFunction);
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
       \t\n
    ]]></template>
 
-   <template discardRepeats="true" key="/$(_basename)/InitMethod" namespace="all"
-             codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+      \t   // ..........  Regs to init .......... ;
       \t   pmc->SPMSC1    = init.spmsc1;
       \t   pmc->SPMSC2    = init.spmsc2;
       \t}
@@ -400,7 +424,7 @@
             pmc_spmsc2_lvdv;
             pmc_spmsc2_lvwv
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <setTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -410,7 +434,7 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
@@ -424,7 +448,7 @@
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="enablePeripheralSupport"
+   <initialValueTemplate codeGenCondition="/$(_basename)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -449,21 +473,21 @@
       \t};\n\n
    ]]></initialValueTemplate>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
       <![CDATA[
-      \t}; // $(_class)::BasicInfo::Init\n\n
+      \t}; // $(_class)BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
       <![CDATA[
-      }; // $(_class)::BasicInfo\n\n
+      }; // $(_class)BasicInfo\n\n
    ]]>
    </template>
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_basename)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_basename)/declarations" namespace="all" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */
@@ -475,8 +499,19 @@
    </validate>
 
    <projectActionList id = "pmc_files" >
-      <copy source="Project_Headers/pmc_mke.h"  target="Project_Headers/pmc.h"  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/pmc-MKE.h"  target="Project_Headers/pmc.h"  overwrite="true"  derived="true" />
    </projectActionList>
 
+   <!-- ************* Startup ****************** -->
+
+   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_headername).h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_class) */
+      \tUSBDM::$(_class)::defaultConfigure();\n
+   ]]></template>
 
 </peripheralPage>

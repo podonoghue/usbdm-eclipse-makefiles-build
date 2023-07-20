@@ -63,7 +63,7 @@ protected:
     * @param bitNo      Bit number within GPIO
     * @param polarity   Polarity of bit (ActiveHigh or ActiveLow)
     */
-   constexpr Gpio(uint32_t gpio, uint8_t bitNo, Polarity polarity) :
+   constexpr Gpio(uint32_t gpio, PinNum bitNo, Polarity polarity) :
       gpio(gpio), bitMask(1<<bitNo), flipMask(isActiveLow(polarity)?bitMask:0) {
    }
    /**
@@ -81,7 +81,7 @@ protected:
    }
 
 public:
-#if $(/GPIOA/enablePeripheralSupport:false)
+#if $(/GPIO/enablePeripheralSupport:false)
 $(/GPIO/memberFunctions: // /GPIO/memberFunctions not found)
 
    /**
@@ -174,22 +174,18 @@ $(/GPIO/memberFunctions: // /GPIO/memberFunctions not found)
  * @endcode
  *
  *
- * @tparam bitNum    Index into tables describing individual pins e.g. PTA = 0..7, PTB = 8..25 etc
+ * @tparam pinIndex  Index into tables describing individual pins e.g. PTA = 0..7, PTB = 8..25 etc
  * @tparam polarity  Polarity of pin. Either ActiveHigh or ActiveLow
  */
-template<int bitIndex, Polarity polarity>
-class Gpio_T : public Gpio, public Port_T<bitIndex> {
+template<PinIndex pinIndex, Polarity polarity>
+class Gpio_T : public Gpio, public Port_T<pinIndex> {
 
    // Restrict to available ports
-   static_assert((bitIndex>=0)&&(bitIndex<$(/GPIO/MaxBitIndex:0)),
+   static_assert((pinIndex>=0)&&(pinIndex<$(/GPIO/MaxPinIndex:0)),
       "Illegal bit number for left or right in GpioField");
 
 
 private:
-   constexpr uint32_t getRegAddress(unsigned baseAddress, unsigned bitnum) {
-      return baseAddress + (bitnum % 32);
-   }
-
    /**
     * This class is not intended to be instantiated
     */
@@ -197,16 +193,21 @@ private:
    Gpio_T(Gpio_T&&) = delete;
 
 protected:
-//   constexpr Gpio_T() : Gpio(gpioAddress, bitNum, polarity) {};
+//   constexpr Gpio_T() : Gpio(gpioAddress, PinNum, polarity) {};
 
 public:
 
 $(/GPIO/getGpioAddress: // /GPIO/getGpioAddress not found)
-   static constexpr uint32_t BITNUM  = (bitIndex%32);
+   // Pin index into tables describing individual pins e.g. PTA = 0..7, PTB = 8..25 etc
+   static constexpr PinIndex PININDEX = pinIndex;
 
+   // Bit number for port pin within individual port e.g. GPIOB[31..0]
+   static constexpr PinNum BITNUM   = (pinIndex%32);
+
+   // Bit mask for port pin within individual port e.g. GPIOB[31..0]
    static constexpr uint32_t BITMASK = (1<<BITNUM);
 
-   static constexpr uint32_t gpioAddress = getGpioAddress(bitIndex);
+   static constexpr uint32_t gpioAddress = getGpioAddress(pinIndex);
 
    /** Get base address of GPIO hardware as pointer to struct */
    static constexpr HardwarePtr<GPIO_Type> gpio = gpioAddress;
@@ -229,7 +230,7 @@ $(/GPIO/getGpioAddress: // /GPIO/getGpioAddress not found)
    /** Polarity of pin */
    static constexpr Polarity POLARITY = polarity;
 
-#if $(/GPIOA/enablePeripheralSupport:false)
+#if $(/GPIO/enablePeripheralSupport:false)
 $(/GPIO/staticFunctions: // /GPIO/staticFunctions not found)
    /**
     * Set pin to active level (if configured as output)
@@ -283,7 +284,7 @@ $(/GPIO/staticFunctions: // /GPIO/staticFunctions not found)
     */
    static bool readState() {
 #ifdef RELEASE_BUILD
-      uint32_t t = bmeExtract(gpio->PDOR, BITNUM, 1);
+      uint32_t t = bmeExtract(gpio->PDOR, PinNum, 1);
 #else
       uint32_t t = gpio->PDOR & BITMASK;
 #endif
@@ -313,7 +314,7 @@ public:
    const uint32_t                flipMask;
 
    /// Offset of bit field in GPIO hardware
-   const uint8_t                 right;
+   const PinNum                  right;
 
 protected:
    /**
@@ -324,7 +325,7 @@ protected:
     * @param right      Rightmost bit number in port
     * @param flipMask   Mask to flip bits in port (or use ActiveHigh/ActiveLow)
     */
-   constexpr GpioField(uint32_t gpio, uint32_t bitMask, unsigned right, uint32_t flipMask) :
+   constexpr GpioField(uint32_t gpio, uint32_t bitMask, PinNum right, uint32_t flipMask) :
       gpio(gpio), bitMask(bitMask), flipMask(flipMask), right(right) {
    }
 
@@ -470,16 +471,16 @@ public:
  * int x = Pta6_3::read();
  * @endcode
  *
- * @tparam BitIndexLeft         Bit number of leftmost bit in GPIO (inclusive)
- * @tparam BitIndexRight        Bit number of rightmost bit in GPIO (inclusive)
+ * @tparam bitIndexLeft         Bit number of leftmost bit in GPIO (inclusive)
+ * @tparam bitIndexRight        Bit number of rightmost bit in GPIO (inclusive)
  * @tparam FlipMask             Polarity of all bits in field. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
  */
-template<unsigned BitIndexLeft, unsigned BitIndexRight, uint32_t FlipMask=ActiveHigh>
-class GpioField_T : public GpioField {
+template<PinIndex bitIndexLeft, PinIndex bitIndexRight, uint32_t FlipMask=ActiveHigh>
+class GpioField_T : public GpioField, public PortField_T<bitIndexLeft, bitIndexRight> {
 
    // Restrict to same Port i.e. 8 bits wide
    // In practice it could extend across Ports A-B-C-D or E-F-G-H as they are accessed through the same GPIO register
-   static_assert((BitIndexLeft<$(/GPIO/MaxBitIndex:0))&&((BitIndexLeft&~0b111)==(BitIndexRight&~0b111))&&(BitIndexLeft>=BitIndexRight),
+   static_assert((bitIndexLeft<$(/GPIO/MaxPinIndex:0))&&((bitIndexLeft&~0b111)==(bitIndexRight&~0b111))&&(bitIndexLeft>=bitIndexRight),
       "Illegal bit number for left or right in GpioField");
 
 private:
@@ -495,13 +496,13 @@ private:
 public:
 $(/GPIO/getGpioAddress: // /GPIO/getGpioAddress not found)
    /// Base address of GPIO hardware
-   static constexpr uint32_t gpioAddress = getGpioAddress(BitIndexLeft);
+   static constexpr uint32_t gpioAddress = getGpioAddress(bitIndexLeft);
 
    /// Left bit within used GPIO registers
-   static constexpr unsigned Left  = BitIndexLeft%32;
+   static constexpr PinNum Left  = bitIndexLeft%32;
 
    /// Right bit within used GPIO registers
-   static constexpr unsigned Right = BitIndexRight%32;
+   static constexpr PinNum Right = bitIndexRight%32;
 
    constexpr GpioField_T() : GpioField(gpioAddress, BITMASK, Right, FLIP_MASK) {}
 
@@ -545,12 +546,12 @@ public:
    /**
     * Calculate Port bit-mask from field bit number
     *
-    * @param bitNum  Bit number within field (left-right,0]
+    * @param PinNum  Bit number within field (left-right,0]
     *
     * @return Mask for given bit within underlying port hardware
     */
-   static constexpr uint32_t mask(uint32_t bitNum) {
-      return 1<<(bitNum+Right);
+   static constexpr uint32_t mask(uint32_t PinNum) {
+      return 1<<(PinNum+Right);
    }
 
    /**

@@ -554,11 +554,10 @@
       ]]></setTemplate>
    </for>
 
-   <for keys="field:name"
-        values="
-      sim_clkdiv_outdiv1[]:CoreClkDivider;
-      sim_clkdiv_outdiv2[]:BusClockDivider;
-      sim_clkdiv_outdiv3[]:TimerClockDivider" >
+   <for keys="         field         :   name"
+        values="sim_clkdiv_outdiv1[] : CoreClkDivider;
+                sim_clkdiv_outdiv2[] : BusClockDivider;
+                sim_clkdiv_outdiv3[] : TimerClockDivider" >
       <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
@@ -574,7 +573,7 @@
 
 <!--   ========== SIM Init class =============================== -->
 
-   <template key="init_description" namespace="all"  codeGenCondition="enablePeripheralSupport" >
+   <template key="init_description" namespace="all"  codeGenCondition="enablePeripheralSupport">
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_class)
