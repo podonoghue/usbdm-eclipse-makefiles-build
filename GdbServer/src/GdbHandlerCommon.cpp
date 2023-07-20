@@ -1545,7 +1545,9 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
       else {
          log.print("Failed to set Breakpoint\n");
          reportGdbPrintf(M_ERROR, "Failed to set breakpoint @0x%X\n", address);
-         gdbInOut->sendErrorMessage(0x11);
+         // Don't send error as it seems to upset debugger
+//         gdbInOut->sendErrorMessage(0x11);
+         gdbInOut->sendGdbString("OK");
       }
       break;
    case 'z' : // 'z type,addr,kind' - insert/remove breakpoint
