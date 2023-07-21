@@ -50,6 +50,8 @@
 -->
    <!-- ************* SC ****************** -->
 
+   <aliasOption key="/SIM/sim_pinsel0_rtcps" constant="false" optional="true" />
+
    <binaryOption key="rtc_sc_rtie" condition="rtc_sc_rtie_present"
       enabledBy="irqHandlingMethod"
       enumStem="RtcInterrupt"

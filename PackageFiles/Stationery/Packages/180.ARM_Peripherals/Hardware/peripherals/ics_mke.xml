@@ -64,6 +64,7 @@
       description="Clock trim value"
       toolTip="This 9-bit trim value is written to ICS.C3[SCTRIM] and ICS.C4[SCFTRIM] if non-zero"
       value="0"
+      min="0" max="511"
    />
 
    <intOption key="system_icsirclk_ungated"

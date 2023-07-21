@@ -115,6 +115,7 @@
          description="IRQ level for this peripheral"
          toolTip="Priority level used to configure the NVIC"
          valueFormat="%s"
+         disabledValue="Not Installed"
          derivedFrom="/PCR/nvic_irqLevel" >
       </choiceOption>
 
@@ -157,7 +158,7 @@
       \t}\n\n
    ]]></template>
 
-   <template key="publicMethods" namespace="all" condition="irqHandlingMethod" codeGenCondition="irqHandlingMethod" >
+   <!-- template key="/$(_basename)/publicMethods" namespace="all" condition="irqHandlingMethod" codeGenCondition="irqHandlingMethod" discardRepeats="true" >
    <![CDATA[
       \t/* Template _enablePeripheral  */
       \t
@@ -243,8 +244,8 @@
       \t}
       \t\n
    ]]>
-   </template>
-   
+   </template -->
+
    <template><![CDATA[
          \t//! Hardware base address as uint32_t
          \tstatic constexpr uint32_t baseAddress = $(_name)_BasePtr;
@@ -253,7 +254,7 @@
          \tstatic constexpr HardwarePtr<$(_base_class::toupper)_Type> $(_base_class::tolower) = baseAddress;
          \t\n
    ]]></template>
-   
+
    <template condition="(&quot;$(_instance)&quot; != &quot;&quot;)&amp;&amp;!suppressInstance" ><![CDATA[
          \t//! Peripheral instance number
          \tstatic constexpr unsigned instance = $(_instance);
@@ -262,5 +263,5 @@
 
    <constant key="class_present" type="Boolean"  value = "true"   />
 
-   
+
 </fragment>

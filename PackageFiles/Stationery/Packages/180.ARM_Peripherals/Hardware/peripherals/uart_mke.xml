@@ -4,33 +4,88 @@
 <!--
 Devices using this peripheral:
 -->
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART" >
 
-   <xi:include href="_default_instance.xml"/>
+   <stringOption key="irq_pattern"        constant="true" value="^UART%i_?((RxTx|Error|Lon)|.*)?$" hidden="true" />
+   <stringOption key="irq_classHandler"   constant="true" value="%c%i::irq$2Handler" hidden="true" />
 
-   <xi:include href="_mapPinsOption_on.xml"/>
+   <constant key="suppressInstance"         type="Boolean" value="false"         />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
+   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="true"          />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="_enablePeripheral.xml"  />
+   <title description="------------------------------------------" />
+
+<!--
+    * General substitutions
+    *  $(_name)         => e.g FTM2                    (fProvider.getName())
+    *  $(_base_class)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
+    *  $(_class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
+    *  $(_basename)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
+-->
+
+<!--
+    * Template substitutions
+    *
+    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
+    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
+    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
+    * %description[index]             Description from controlVar e.g. Compare Function Enable
+    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
+    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
+    * %params                         Formatted parameter list for function
+    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
+    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
+    * %enumClass[index]               As for %paramType
+    * %enumParam[index]               As for %paramName
+    * %valueExpression                Numeric variable value e.g. 0x3
+    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %variable[index]                Variable name from condition
+    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * %register[index]                Register associated with variable e.g. adc->APCTL1
+    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+-->
 
    <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src[]"              optional="true" constant="false" />
    <aliasOption key="/SIM/system_uart$(_instance)_fixedclocksource[]"   optional="true"/>
    <aliasOption key="/SIM/system_uart$(_instance)_clock[]"              optional="true" />
 
    <intOption key="oversampleRatio"  condition="uart_c4_osr_present"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
       description="Number of samples per bit"
       toolTip="This value determines the number of times an Rx bit is sampled.\n
                This also affects the clock divider and hence the range of baud rates available"
        value="8" min="4" max="32"
       />
 
-   <template  condition="uart_c4_osr_present"><![CDATA[
+   <template  condition="uart_c4_osr_present" ><![CDATA[
    \t//! Number of samples per bit
    \tstatic constexpr uint32_t oversampleRatio = $(oversampleRatio);\n\n
    ]]></template>
 
+   <binaryOption key="Allocates as Console"
+      ref="/Console/consoleDevice.name==&quot;$(_base_class) $(_instance)&quot;"
+      constant="true"
+      derived="true"
+   >
+      <choice value="0" name="Not used as console" />
+      <choice value="1" name="Used as console" />
+   </binaryOption>
+
    <choiceOption key="defaultBaudRate"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
       valueFormat="%s"
       enumStem="UartBaudRate"
       description="UART default baud rate"
-      toolTip="Used by default UART setup for stdio">
+      toolTip="Used by default UART setup" >
       <choice value="110"     name="110"     enum="110"    />
       <choice value="300"     name="300"     enum="300"    />
       <choice value="600"     name="600"     enum="600"    />
@@ -48,10 +103,11 @@ Devices using this peripheral:
    </choiceOption>
 
    <choiceOption key="uart_c2_tcie" condition="uart_c2_tcie_present"
+      enabledBy="irqHandlingMethod"
       hidden="true"
       enumStem="UartTxCompleteAction"
       description="Transmit complete action"
-      toolTip="Enable interrupt on transmission complete">
+      toolTip="Enable interrupt on transmission complete" >
       <choice value="0"   name="None"      enum="None"      />
       <choice value="1"   name="Interrupt" enum="Interrupt" />
    </choiceOption>
@@ -69,10 +125,11 @@ Devices using this peripheral:
    ]]></setTemplate>
 
    <choiceOption key="uart_c2_ilie" condition="uart_c2_ilie_present"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
       hidden="true"
       enumStem="UartIdleLineDetectAction"
       description="Idle line detect sction"
-      toolTip="Enable interrupt on tidele line detect">
+      toolTip="Enable interrupt on tidele line detect" >
       <choice value="0"   name="None"      enum="None"      />
       <choice value="1"   name="Interrupt" enum="Interrupt" />
    </choiceOption>
@@ -90,21 +147,23 @@ Devices using this peripheral:
    ]]></setTemplate>
 
    <choiceOption key="uartTxEmptyAction" condition="!uart_c5_tdmas_present&amp;&amp;uart_c2_tie_present"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
       hidden="true"
       valueFormat="UART_C2_TIE(%s)"
       enumStem="UartTxEmptyAction"
       description="Transmit empty DMA/Interrupt action"
-      toolTip="Enable transmit holding register empty DMA/Interrupt action">
+      toolTip="Enable transmit holding register empty DMA/Interrupt action" >
       <choice value="0"   name="None"      enum="None"      />
       <choice value="1"   name="Interrupt" enum="Interrupt" />
    </choiceOption>
 
    <choiceOption key="uartTxEmptyAction" condition="uart_c5_tdmas_present&amp;&amp;uart_c2_tie_present"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
       hidden="true"
       valueFormat="(UART_C5_TDMAS(%s)&lt;&lt;8),UART_C2_TIE(%s)"
       enumStem="UartTxEmptyAction"
       description="Transmit empty DMA/Interrupt action"
-      toolTip="Enable transmit holding register empty DMA/Interrupt action">
+      toolTip="Enable transmit holding register empty DMA/Interrupt action" >
       <choice value="0,0"   name="None"      enum="None"      />
       <choice value="0,1"   name="Interrupt" enum="Interrupt" />
       <choice value="1,1"   name="DMA"       enum="Dma"       />
@@ -131,21 +190,23 @@ Devices using this peripheral:
    ]]></setTemplate>
 
    <choiceOption key="uartRxFullAction" condition="!uart_c5_rdmas_present&amp;&amp;uart_c2_rie_present"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
       hidden="true"
       valueFormat="UART_C2_RIE(%s)"
       enumStem="UartRxFullAction"
       description="Receive full interrupt action"
-      toolTip="Enable receive buffer full interrupt action">
+      toolTip="Enable receive buffer full interrupt action" >
       <choice value="0"   name="None"      enum="None"      />
       <choice value="1"   name="Interrupt" enum="Interrupt" />
    </choiceOption>
 
    <choiceOption key="uartRxFullAction" condition="uart_c5_rdmas_present&amp;&amp;uart_c2_rie_present"
+      enabledBy="/$(_basename)/enablePeripheralSupport"
       hidden="true"
       valueFormat="(UART_C5_RDMAS(%s)&lt;&lt;8),UART_C2_RIE(%s)"
       enumStem="UartRxFullAction"
       description="Receive full DMA/interrupt action"
-      toolTip="Enable receive buffer full DMA/interrupt action">
+      toolTip="Enable receive buffer full DMA/interrupt action" >
       <choice value="0,0"   name="None"      enum="None"      />
       <choice value="0,1"   name="Interrupt" enum="Interrupt" />
       <choice value="1,1"   name="DMA"       enum="Dma"       />
@@ -171,8 +232,9 @@ Devices using this peripheral:
       \t}\n\n
    ]]></setTemplate>
 
-   <if condition="uart_c4_brfa_present">
+   <if condition="uart_c4_brfa_present" >
       <binaryOption key="uartClass"
+         enabledBy="irqHandlingMethod"
          description="Input buffering"
          toolTip="This option determines whether an interrupt-driven driver\n
                   incorporating a queue is used to buffer input data" >
@@ -181,6 +243,7 @@ Devices using this peripheral:
       </binaryOption>
    <else_if condition="uart_c4_osr_present" />
       <binaryOption key="uartClass"
+         enabledBy="irqHandlingMethod"
          description="Input buffering"
          toolTip="This option determines whether an interrupt-driven driver\n
                   incorporating a queue is used to buffer input data" >
@@ -189,6 +252,7 @@ Devices using this peripheral:
       </binaryOption>
    <else />
       <binaryOption key="uartClass"
+         enabledBy="irqHandlingMethod"
          description="Input buffering"
          toolTip="This option determines whether an interrupt-driven driver\n
                   incorporating a queue is used to buffer input data" >
@@ -197,36 +261,32 @@ Devices using this peripheral:
       </binaryOption>
    </if>
    <intOption key="receiveBufferSize" description="Size of input buffer"
+      enabledBy="uartClass"
       toolTip="This value determines the size of the receive buffer\n
                for the interrupt driven driver version  "
-       value="50" min="1" max="1000"
-      />
+      value="50" min="1" max="1000"
+   />
 
    <intOption key="transmitBufferSize" description="Size of output buffer"
+      enabledBy="uartClass"
       toolTip="This value determines the size of the transmit buffer\n
                for the interrupt driven driver version  "
        value="50" min="1" max="1000"
-      />
+   />
 
-   <category name="Advanced" description="Advanced options">
+   <category name="Advanced" description="Advanced options" >
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)ode"   optional="true" constant="false" />
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)txsrc" optional="true" constant="false" />
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" optional="true" constant="false" />
    </category>
 
-   <stringOption key="irq_pattern"        constant="true" value="^UART%i_?((RxTx|Error|Lon)|.*)?$" hidden="true" />
-   <stringOption key="irq_classHandler"   constant="true" value="%c%i::irq$2Handler" hidden="true" />
-   <xi:include href="_irqOptionSubstituted.xml"/>
-
-   <xi:include href="_clockOption.xml"/>
-
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.UartValidate">
+      class="net.sourceforge.usbdm.deviceEditor.validators.UartValidate" >
    </validate>
 
-   <projectActionList id = "uart_files">
+   <projectActionList id="uart_files" >
       <copy source="Snippets/uart-example.cpp"     target="Snippets/uart-example.cpp"  overwrite="true"  derived="true" />
-      <copy source="Project_Headers/uart.h"        target="Project_Headers/uart.h"     overwrite="true"  derived="true" macroReplace="true" />
+      <copy source="Project_Headers/uart-MKE.h"    target="Project_Headers/uart.h"     overwrite="true"  derived="true" macroReplace="true" />
       <copy source="Project_Headers/uart_queue.h"  target="Project_Headers/uart_queue.h"    overwrite="true"  derived="true" />
    </projectActionList>
 

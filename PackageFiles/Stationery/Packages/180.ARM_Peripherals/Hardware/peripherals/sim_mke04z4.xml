@@ -587,6 +587,7 @@
       \t * static const $(_class)::Init init {
       \t *
       \t *   // Setup values
+      \t *
       \t *   0 , // FTM2 Trigger Delay
       \t *   SimSoptAdhwt_RtcOverflow , // ADC Hardware Trigger Source - RTC overflow
       \t *   SimSoptReferenceClockOutput_Disabled , // BUS Clock Output select - Disabled (PTC5 available)

@@ -4,7 +4,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Console routines">
 
-   <binaryOption key="consoleEnable" 
+   <binaryOption key="consoleEnable"
       description="Enable Console I/O"
       toolTip="Provides basic console I/O for the project\n
       This is also required for stdio support">
@@ -12,7 +12,8 @@
       <choice value="1" name="Enabled" isDefault="true" />
    </binaryOption>
 
-   <choiceOption key="consoleDevice" 
+   <choiceOption key="consoleDevice"
+      enabledBy="consoleEnable"
       description="UART to use for console"
       toolTip="Not all UARTs listed may be available on a particular device" >
       <choice name="Uart 0"   value="USBDM::Uart0"    condition="/UART0/$present" />
@@ -28,8 +29,9 @@
       <choice name="Lpuart 4" value="USBDM::Lpuart4"  condition="/LPUART4/$present" />
       <choice name="Lpuart 5" value="USBDM::Lpuart5"  condition="/LPUART5/$present" />
    </choiceOption>
-   
-   <choiceOption key="defaultBaudRate" 
+
+   <choiceOption key="defaultBaudRate"
+      enabledBy="consoleEnable"
       description="UART default baud rate"
       toolTip="Used by default UART setup for stdio">
       <choice value="110"     name="110" />
@@ -53,7 +55,7 @@
       <copy source="Project_Headers/console.h"    target="Project_Headers/console.h"    overwrite="true"  derived="true" />
       <copy source="Startup_Code/console.cpp"     target="Startup_Code/console.cpp"     overwrite="true"  derived="true" />
    </projectActionList>
-    
+
    <signals name="LPUART0" optional="true" />
    <signals name="LPUART1" optional="true" />
    <signals name="LPUART2" optional="true" />

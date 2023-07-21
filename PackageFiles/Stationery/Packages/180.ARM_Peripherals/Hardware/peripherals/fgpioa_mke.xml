@@ -53,7 +53,7 @@
    <for keys="static : const : bitMask : location"
       values="static :       : BITMASK : /GPIO/staticFunctions ;
                      : const : bitMask : /GPIO/memberFunctions" >
-      <template key="%(location)" namespace="all" codeGenCondition="enablePeripheralSupport" >
+      <template key="%(location)" namespace="all" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
       <![CDATA[
          \t/**
          \t * Set pin as digital I/O.
@@ -303,7 +303,7 @@
                  /PORT/port_pue0_ptape :  A  :   0;
                  /PORT/port_pue1_ptepe :  B  :  32;
                  /PORT/port_pue2_ptipe :  C  :  64" >
-      <template key="/GPIO/declarations" namespace="all" variables="%(field)_present" codeGenCondition="enablePeripheralSupport"
+      <template key="/GPIO/declarations" namespace="all" variables="%(field)_present" codeGenCondition="/$(_basename)/enablePeripheralSupport"
       ><![CDATA[
       \t/**
       \t * Class representing a field within Port %(Name)
@@ -332,7 +332,7 @@
                  /PORT/port_pue1_ptgpe :  G   :  48;
                  /PORT/port_pue1_pthpe :  H   :  56;
                  /PORT/port_pue2_ptipe :  I   :  64" >
-      <template key="/GPIO/declarations" namespace="all" variables="%(field)_present" codeGenCondition="enablePeripheralSupport"
+      <template key="/GPIO/declarations" namespace="all" variables="%(field)_present" codeGenCondition="/$(_basename)/enablePeripheralSupport"
       ><![CDATA[
       \t/**
       \t * Class representing individual pins in Port %(Name)
