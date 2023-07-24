@@ -1,5 +1,5 @@
 /**
- * @file     spi.h (180.ARM_Peripherals/Project_Headers/spi-MKL.h)
+ * @file     spi.h (180.ARM_Peripherals/Project_Headers/spi-MKE.h)
  * @brief    Serial Peripheral Interface
  *
  * @version  V4.12.1.210
@@ -318,11 +318,6 @@ public:
 #endif
 
    /**
-    * Enable pins used by SPI
-    */
-   virtual void enablePins(bool enable=true) = 0;
-
-   /**
     * Sets Communication speed for SPI
     *
     * @param[in]  frequency      => Communication frequency in Hz
@@ -573,15 +568,6 @@ protected:
    }
 
 public:
-   /** SPI SCK (clock) Pin */
-   using sckGpio  = GpioTable_T<Info, 0, ActiveHigh>;
-
-   /** SPI SIN (data in = usually MISO) Pin */
-   using sinGpio  = GpioTable_T<Info, 1, ActiveHigh>;
-
-   /** SPI SOUT (data out = usually MOSI) Pin */
-   using soutGpio = GpioTable_T<Info, 2, ActiveHigh>;
-
    /**
     * Configures all mapped pins associated with this peripheral
     */
@@ -591,39 +577,14 @@ public:
    }
 
    /**
-    * Map/Unmap pins for peripheral
-    *
-    * @param enable
-    */
-   virtual void enablePins(bool enable) override {
-      if (enable) {
-         // Configure pins
-         Info::initPCRs();
-      }
-      else {
-         // Configure SPI pins to mux=0
-         Info::clearPCRs();
-      }
-   }
-
-   /**
     * Constructor
     */
-   SpiBase_T() : Spi(reinterpret_cast<volatile SPI_Type*>(&Info::spi())) {
+   SpiBase_T() : Spi(Info::baseAddress) {
 
 #ifdef DEBUG_BUILD
-      // Check pin assignments
-      static_assert(Info::info[0].gpioBit != UNMAPPED_PCR, "SPIx_SCK has not been assigned to a pin - change in Configure.usbdmProject");
-      static_assert(Info::info[1].gpioBit != UNMAPPED_PCR, "SPIx_SIN has not been assigned to a pin - change in Configure.usbdmProject");
-      static_assert(Info::info[2].gpioBit != UNMAPPED_PCR, "SPIx_SOUT has not been assigned to a pin - change in Configure.usbdmProject");
-
       // Requires interrupt handler
       static_assert(Info::irqHandlerInstalled, "IRQ handler must be enabled for SPI - change in Configure.usbdmProject");
 #endif
-
-      if (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
 
       // Enable SPI module clock
       Info::enableClock();

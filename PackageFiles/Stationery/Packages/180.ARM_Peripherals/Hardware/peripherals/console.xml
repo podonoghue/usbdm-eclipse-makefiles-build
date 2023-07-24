@@ -50,6 +50,30 @@
       <choice value="115200"  name="115200" isDefault="true" />
    </choiceOption>
 
+   <template key="Initialise" namespace="all" >
+   <![CDATA[
+      \t/*
+      \t * Initialises the Console
+      \t */
+      \textern "C"
+      \tvoid console_initialise() {
+      \t   console.initialise();
+      \t   console.setBaudRate(defaultBaudRate);
+      \t   console.setEcho();\n
+   ]]>
+   </template>
+   <template key="Initialise" namespace="all" condition="/PCR/$present" >
+   <![CDATA[
+      \t   console.configureAllPins();\n
+   ]]>
+   </template>
+   <template key="Initialise" namespace="all" >
+   <![CDATA[
+      \t}
+      \t\n
+   ]]>
+   </template>
+
    <projectActionList id = "console_files" >
       <copy source="Snippets/console-example.cpp" target="Snippets/console-example.cpp" overwrite="true"  derived="true" />
       <copy source="Project_Headers/console.h"    target="Project_Headers/console.h"    overwrite="true"  derived="true" />

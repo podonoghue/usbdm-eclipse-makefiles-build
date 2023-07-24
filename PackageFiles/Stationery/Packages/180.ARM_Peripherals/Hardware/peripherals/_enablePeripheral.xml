@@ -56,7 +56,7 @@
 
    <if condition="@peripheralUsesInterrupts" >
 
-      <title description="------- Interrupts -------" toolTip="ccccc" />
+      <title description="------- Interrupts -------" />
 
       <!--
       Patterns for pattern and classHandler

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- spi_mkl.xml -->
+<!-- spi_mke.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Serial Peripheral Interface">
 
@@ -82,10 +82,10 @@
    </binaryOption>
 
    <projectActionList id = "spi_files" >
-      <copy source="Project_Headers/spi-MKL.h"           target="Project_Headers/spi.h"               overwrite="true"      derived="true" />
-      <copy source="Sources/spi-MKL.cpp"                 target="Sources/spi.cpp"                     overwrite="true"      derived="true" />
-      <copy source="Snippets/spi-example-MKL.cpp"        target="Snippets/spi-example-MKL.cpp"        overwrite="true"      derived="true" />
-      <copy source="Snippets/spi-example-cmsis-MKL.cpp"  target="Snippets/spi-example-cmsis-MKL.cpp"  overwrite="true"      derived="true" />
+      <copy source="Project_Headers/spi-MKE.h"           target="Project_Headers/spi.h"           overwrite="true"      derived="true" />
+      <copy source="Sources/spi-MKE.cpp"                 target="Sources/spi.cpp"                 overwrite="true"      derived="true" />
+      <copy source="Snippets/spi-example-MKL.cpp"        target="Snippets/spi-example.cpp"        overwrite="true"      derived="true" />
+      <copy source="Snippets/spi-example-cmsis-MKL.cpp"  target="Snippets/spi-example-cmsis.cpp"  overwrite="true"      derived="true" />
    </projectActionList>
 
    <template key="/SPI/declarations" namespace="all"  ><![CDATA[

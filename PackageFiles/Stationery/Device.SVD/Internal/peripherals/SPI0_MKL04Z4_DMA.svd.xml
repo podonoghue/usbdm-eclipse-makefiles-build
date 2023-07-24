@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKL04Z4
       MKL05Z4
       MKL14Z4
@@ -219,7 +219,8 @@ Defines inactive state of the CLK</description>
                <fields>
                   <field>
                      <name>SPC0</name>
-                     <description>Pin control 0\nThis bit enables bidirectional data pin configurations</description>
+                     <description>Pin control 0\n
+This bit enables bidirectional data pin configurations</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -273,7 +274,8 @@ Defines inactive state of the CLK</description>
                   </field>
                   <field>
                      <name>BIDIROE</name>
-                     <description>Bidirectional mode output enable\nControls output driver enable in bidirectional mode</description>
+                     <description>Bidirectional mode output enable\n
+Controls output driver enable in bidirectional mode</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -291,7 +293,8 @@ Defines inactive state of the CLK</description>
                   </field>
                   <field>
                      <name>MODFEN</name>
-                     <description>Master mode-fault function enable\nControls operation of SS pin as fault input</description>
+                     <description>Master mode-fault function enable\n
+Controls operation of SS pin as fault input</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -357,7 +360,8 @@ Used to set the prescaler and bit rate divisor for an SPI master</description>
                   <field>
                      <name>SPR</name>
                      <description>Baud rate divisor select\n
-Selects one of nine divisors for the SPI baud rate divider. The input to this divider comes from the SPI baud rate prescaler</description>
+Selects one of nine divisors for the SPI baud rate divider.\n
+The input to this divider comes from the SPI baud rate prescaler</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
@@ -411,7 +415,8 @@ Selects one of nine divisors for the SPI baud rate divider. The input to this di
                   <field>
                      <name>SPPR</name>
                      <description>Baud rate prescale divisor\n
-The input to this prescaler is the bus rate clock (BUSCLK). The output of this prescaler drives the input of the SPI baud rate divider</description>
+The input to this prescaler is the bus rate clock (BUSCLK).\n
+The output of this prescaler drives the input of the SPI baud rate divider</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
@@ -564,7 +569,8 @@ Input and output register for SPI data</description>
             <register>
                <name>M</name>
                <description>Match register:\n
-When the value received in the SPI receive data buffer equals this hardware compare value, the SPI Match Flag in the S register (S[SPMF]) sets</description>
+When the value received in the SPI receive data buffer equals this hardware compare value,\n
+the SPI Match Flag in the S register (S[SPMF]) sets</description>
                <addressOffset>0x7</addressOffset>
                <size>8</size>
                <resetMask>0xFF</resetMask>

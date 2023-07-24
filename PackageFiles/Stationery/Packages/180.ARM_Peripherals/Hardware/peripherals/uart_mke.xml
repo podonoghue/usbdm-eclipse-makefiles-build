@@ -71,7 +71,7 @@ Devices using this peripheral:
    \tstatic constexpr uint32_t oversampleRatio = $(oversampleRatio);\n\n
    ]]></template>
 
-   <binaryOption key="Allocates as Console"
+   <binaryOption key="Allocated as Console"
       ref="/Console/consoleDevice.name==&quot;$(_base_class) $(_instance)&quot;"
       constant="true"
       derived="true"

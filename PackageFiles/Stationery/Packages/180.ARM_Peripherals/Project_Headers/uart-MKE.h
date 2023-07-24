@@ -380,9 +380,6 @@ public:
       // Enable clock to UART interface
       Info::enableClock();
 
-      if constexpr (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
       uart->C2 = UART_C2_TE(1)|UART_C2_RE(1);
    }
 
@@ -444,7 +441,7 @@ public:
     *                        Use nullptr to remove callback.
     */
    static void setRxTxCallback(UARTCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "UART not configure for interrupts");
+      static_assert(Info::irqHandlerInstalled, "UART not configure for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }
@@ -458,7 +455,7 @@ public:
     *                        Use nullptr to remove callback.
     */
    static void setErrorCallback(UARTCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "UART not configure for interrupts");
+      static_assert(Info::irqHandlerInstalled, "UART not configure for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }
@@ -472,7 +469,7 @@ public:
     *                        Use nullptr to remove callback.
     */
    static void setLonCallback(UARTCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "UART not configure for interrupts");
+      static_assert(Info::irqHandlerInstalled, "UART not configure for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }

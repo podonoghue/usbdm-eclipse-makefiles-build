@@ -1138,6 +1138,30 @@
       </peripheral>
    </peripherals>
    <pins>
+      <pin name="BANDGAP"      isFixed="true">
+         <mux sel="fixed"         signal="ADC0_SE23" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PIT_CH0"      isFixed="true">
+         <mux sel="fixed"         signal="PIT_CH0" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PIT_CH1"      isFixed="true">
+         <mux sel="fixed"         signal="PIT_CH1" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PIT_CH2"      isFixed="true">
+         <mux sel="fixed"         signal="PIT_CH2" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PIT_CH3"      isFixed="true">
+         <mux sel="fixed"         signal="PIT_CH3" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="TEMP_SENSOR"  isFixed="true">
+         <mux sel="fixed"         signal="ADC0_SE22" />
+         <reset sel="fixed" />
+      </pin>
       <pin name="PTA0">
          <mux sel="mux0"          signal="GPIOA_0" />
          <mux sel="mux1"          signal="KBI0_P0" />
@@ -1605,6 +1629,11 @@
    </pins>
    <packages>
       <package name="FRDM_KE06Z">
+         <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="PIT_CH0"       location="Internal" />
+         <placement pin="PIT_CH1"       location="Internal" />
+         <placement pin="PIT_CH2"       location="Internal" />
+         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="D8" />
          <placement pin="PTA1"          location="D4/IrRx" />
          <placement pin="PTA2"          location="D14" />
@@ -1676,8 +1705,14 @@
          <placement pin="PTI4"          location="PTI4" />
          <placement pin="PTI5"          location="PTI5" />
          <placement pin="PTI6"          location="PTI6" />
+         <placement pin="TEMP_SENSOR"   location="Internal" />
       </package>
       <package name="KE06_LQFP_44">
+         <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="PIT_CH0"       location="Internal" />
+         <placement pin="PIT_CH1"       location="Internal" />
+         <placement pin="PIT_CH2"       location="Internal" />
+         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="p35" />
          <placement pin="PTA1"          location="p34" />
          <placement pin="PTA2"          location="p33" />
@@ -1716,8 +1751,14 @@
          <placement pin="PTE7"          location="p3" />
          <placement pin="PTH2"          location="p4" />
          <placement pin="PTI4"          location="p11" />
+         <placement pin="TEMP_SENSOR"   location="Internal" />
       </package>
       <package name="KE06_LQFP_64">
+         <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="PIT_CH0"       location="Internal" />
+         <placement pin="PIT_CH1"       location="Internal" />
+         <placement pin="PIT_CH2"       location="Internal" />
+         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="p50" />
          <placement pin="PTA1"          location="p49" />
          <placement pin="PTA2"          location="p48" />
@@ -1776,8 +1817,14 @@
          <placement pin="PTH6"          location="p4" />
          <placement pin="PTH7"          location="p3" />
          <placement pin="PTI4"          location="p13" />
+         <placement pin="TEMP_SENSOR"   location="Internal" />
       </package>
       <package name="KE06_LQFP_80">
+         <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="PIT_CH0"       location="Internal" />
+         <placement pin="PIT_CH1"       location="Internal" />
+         <placement pin="PIT_CH2"       location="Internal" />
+         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="p62" />
          <placement pin="PTA1"          location="p61" />
          <placement pin="PTA2"          location="p60" />
@@ -1849,6 +1896,7 @@
          <placement pin="PTI4"          location="p15" />
          <placement pin="PTI5"          location="p30" />
          <placement pin="PTI6"          location="p29" />
+         <placement pin="TEMP_SENSOR"   location="Internal" />
       </package>
    </packages>
 </root>

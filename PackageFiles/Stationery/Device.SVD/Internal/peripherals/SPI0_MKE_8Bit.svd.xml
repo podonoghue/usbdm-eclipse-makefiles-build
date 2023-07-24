@@ -527,7 +527,7 @@ Input and output register for SPI data</description>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>BITS</name>
+                     <name>Bits</name>
                      <description>Data (low byte)</description>
                      <bitOffset>0</bitOffset>
                   </field>
@@ -543,7 +543,7 @@ the SPI Match Flag in the S register (S[SPMF]) sets</description>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>BITS</name>
+                     <name>Bits</name>
                      <description>Hardware compare value</description>
                      <bitOffset>0</bitOffset>
                   </field>
