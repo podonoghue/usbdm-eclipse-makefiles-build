@@ -2,25 +2,28 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- spi_mkl.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Serial Peripheral Interface">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Serial Peripheral Interface" >
 
+   <constant key="irq_common"               type="Boolean" value="true"          />
    <constant key="suppressInstance"         type="Boolean" value="false"         />
    <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
-   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
-   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="irq_parameters"           type="String"  value="&quot;ErrorCode errorcode&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;ErrorCode&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;E_NO_ERROR&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <constant key="isSupportedinStartup"     type="Boolean" value="false"         />
    <xi:include href="_enablePeripheral.xml"  />
    <title description="------------------------------------------" />
 
 <!--
     * General substitutions
-    *  $(_name)         => e.g FTM2                    (fProvider.getName())
-    *  $(_base_class)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
-    *  $(_class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
-    *  $(_basename)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
 -->
 
 <!--
@@ -67,7 +70,7 @@
 
    <choiceOption key="spi_mode"
       description="Mode"
-      toolTip="Communication mode">
+      toolTip="Communication mode" >
       <choice value="0" name="Mode 0: CPOL=0, CPHA=0" isDefault="true" />
       <choice value="1" name="Mode 1: CPOL=0, CPHA=1" />
       <choice value="2" name="Mode 2: CPOL=1, CPHA=0" />
@@ -76,7 +79,7 @@
 
    <binaryOption key="spi_lsbfe"
       description="Transmission order"
-      toolTip="Transmission order">
+      toolTip="Transmission order" >
       <choice value="0" name="MSB first" />
       <choice value="1" name="LSB first" />
    </binaryOption>
@@ -90,24 +93,24 @@
 
    <template key="/SPI/declarations" namespace="all"  ><![CDATA[
    \t/**
-   \t * Class representing $(_name) interface
+   \t * Class representing $(_NAME) interface
    \t * <b>Example</b>
    \t * @code
-   \t * USBDM::Spi *spi = new USBDM::$(_class);
+   \t * USBDM::Spi *spi = new USBDM::$(_Class);
    \t *
    \t * uint8_t txData[] = {1,2,3};
    \t * uint8_t rxData[10];
    \t * spi->txRxBytes(sizeof(txData), txData, rxData);
    \t * @endcode
    \t */
-   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {
+   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {
    \tpublic:
-   \t$(/$(_name)/InputMapping:   // No user mappings found)
+   \t$(/$(_NAME)/InputMapping:   // No user mappings found)
    \t};\n
    ]]></template>
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SpiValidate">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SpiValidate" >
    </validate>
 
    <template><![CDATA[

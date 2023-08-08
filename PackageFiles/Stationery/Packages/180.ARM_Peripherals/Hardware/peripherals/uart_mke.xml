@@ -7,7 +7,7 @@ Devices using this peripheral:
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART" >
 
    <stringOption key="irq_pattern"        constant="true" value="^UART%i_?((RxTx|Error|Lon)|.*)?$" hidden="true" />
-   <stringOption key="irq_classHandler"   constant="true" value="%c%i::irq$2Handler" hidden="true" />
+   <stringOption key="irq_ClassHandler"   constant="true" value="%c%i::irq$2Handler" hidden="true" />
 
    <constant key="suppressInstance"         type="Boolean" value="false"         />
    <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
@@ -21,11 +21,11 @@ Devices using this peripheral:
 
 <!--
     * General substitutions
-    *  $(_name)         => e.g FTM2                    (fProvider.getName())
-    *  $(_base_class)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
+    *  $(_NAME)         => e.g FTM2                    (fProvider.getName())
+    *  $(_Baseclass)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
     *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
-    *  $(_class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
-    *  $(_basename)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
+    *  $(_Class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
 -->
 
 <!--
@@ -59,7 +59,7 @@ Devices using this peripheral:
    <aliasOption key="/SIM/system_uart$(_instance)_clock[]"              optional="true" />
 
    <intOption key="oversampleRatio"  condition="uart_c4_osr_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="Number of samples per bit"
       toolTip="This value determines the number of times an Rx bit is sampled.\n
                This also affects the clock divider and hence the range of baud rates available"
@@ -72,7 +72,7 @@ Devices using this peripheral:
    ]]></template>
 
    <binaryOption key="Allocated as Console"
-      ref="/Console/consoleDevice.name==&quot;$(_base_class) $(_instance)&quot;"
+      ref="/Console/consoleDevice.name==&quot;$(_Baseclass) $(_instance)&quot;"
       constant="true"
       derived="true"
    >
@@ -81,7 +81,7 @@ Devices using this peripheral:
    </binaryOption>
 
    <choiceOption key="defaultBaudRate"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       valueFormat="%s"
       enumStem="UartBaudRate"
       description="UART default baud rate"
@@ -125,7 +125,7 @@ Devices using this peripheral:
    ]]></setTemplate>
 
    <choiceOption key="uart_c2_ilie" condition="uart_c2_ilie_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       hidden="true"
       enumStem="UartIdleLineDetectAction"
       description="Idle line detect sction"
@@ -147,7 +147,7 @@ Devices using this peripheral:
    ]]></setTemplate>
 
    <choiceOption key="uartTxEmptyAction" condition="!uart_c5_tdmas_present&amp;&amp;uart_c2_tie_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       hidden="true"
       valueFormat="UART_C2_TIE(%s)"
       enumStem="UartTxEmptyAction"
@@ -158,7 +158,7 @@ Devices using this peripheral:
    </choiceOption>
 
    <choiceOption key="uartTxEmptyAction" condition="uart_c5_tdmas_present&amp;&amp;uart_c2_tie_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       hidden="true"
       valueFormat="(UART_C5_TDMAS(%s)&lt;&lt;8),UART_C2_TIE(%s)"
       enumStem="UartTxEmptyAction"
@@ -190,7 +190,7 @@ Devices using this peripheral:
    ]]></setTemplate>
 
    <choiceOption key="uartRxFullAction" condition="!uart_c5_rdmas_present&amp;&amp;uart_c2_rie_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       hidden="true"
       valueFormat="UART_C2_RIE(%s)"
       enumStem="UartRxFullAction"
@@ -201,7 +201,7 @@ Devices using this peripheral:
    </choiceOption>
 
    <choiceOption key="uartRxFullAction" condition="uart_c5_rdmas_present&amp;&amp;uart_c2_rie_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       hidden="true"
       valueFormat="(UART_C5_RDMAS(%s)&lt;&lt;8),UART_C2_RIE(%s)"
       enumStem="UartRxFullAction"
@@ -234,6 +234,7 @@ Devices using this peripheral:
 
    <if condition="uart_c4_brfa_present" >
       <binaryOption key="uartClass"
+         valueFormat="%s"
          enabledBy="irqHandlingMethod"
          description="Input buffering"
          toolTip="This option determines whether an interrupt-driven driver\n
@@ -243,6 +244,7 @@ Devices using this peripheral:
       </binaryOption>
    <else_if condition="uart_c4_osr_present" />
       <binaryOption key="uartClass"
+         valueFormat="%s"
          enabledBy="irqHandlingMethod"
          description="Input buffering"
          toolTip="This option determines whether an interrupt-driven driver\n
@@ -252,6 +254,7 @@ Devices using this peripheral:
       </binaryOption>
    <else />
       <binaryOption key="uartClass"
+         valueFormat="%s"
          enabledBy="irqHandlingMethod"
          description="Input buffering"
          toolTip="This option determines whether an interrupt-driven driver\n
@@ -317,20 +320,28 @@ Devices using this peripheral:
 
    <template key="/UART/declarations" namespace="all"  ><![CDATA[
       \t/**
-      \t * Class representing $(_name) interface
+      \t * Class representing $(_NAME) interface
       \t *
       \t * <b>Example</b>
       \t * @code
       \t *  // Instantiate interface
-      \t *  USBDM::$(_class) uart;
+      \t *  USBDM::$(_Class) uart;
       \t *
       \t *  for(int i=0; i++;) {
       \t *     uart.writeln("Hello world ", i);
       \t *  }
       \t *  @endcode
       \t */
-      \ttypedef  $(/$(_name)/uartClass:$(_base_class)_T)<$(_class)Info> $(_class);\n\n
+      \ttypedef  $(/$(_NAME)/uartClass.definition:$(_Baseclass)_T)<$(_Class)Info> $(_Class);\n\n
    ]]></template>
 
+   <!-- ************* Signal mapping ****************** -->
+   <category name="SIM" description="Pin mapping">
+      <aliasOption key="/SIM/sim_pinsel_$(_name)ps"  constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel0_$(_name)ps" constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" constant="false" optional="true" />
+   </category>
+
    <signals/>
+
 </peripheralPage>

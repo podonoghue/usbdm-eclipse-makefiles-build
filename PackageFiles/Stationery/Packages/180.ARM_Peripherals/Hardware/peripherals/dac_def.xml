@@ -210,7 +210,7 @@
       \t * Class used to do initialisation of the DAC
       \t *
       \t * This class has a templated constructor that accepts various values.  <br>
-      \t * Parameters available may vary with device - see $(_class)::DefaultInitValue for relevant example.  <br>
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.  <br>
       \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.  <br>
       \t *
       \t * @note This constructor may be used to create a const instance in ROM
@@ -238,11 +238,11 @@
    ]]></template>
 
    <template namespace="usbdm" ><![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t */
       \ttypedef void (*CallbackFunction)(uint8_t status);
       \t\n
@@ -413,9 +413,9 @@
 
    <template><![CDATA[
       \t/**
-      \t * $(_class) interrupt call back
+      \t * $(_Class) interrupt call back
       \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
       \t\n
    ]]></template>
 
@@ -428,7 +428,7 @@
          dac_c2_dacbfup"
    ><![CDATA[
       $(init_description)
-      \ttypedef $(_class)BasicInfo::Init Init;
+      \ttypedef $(_Class)BasicInfo::Init Init;
       \t
       \t/**
       \t * Default initialisation value for Dac$(_instance)
@@ -448,9 +448,9 @@
 
    <template key="/DAC/declarations" namespace="all"  ><![CDATA[
    \t/**
-   \t * Class representing $(_name)
+   \t * Class representing $(_NAME)
    \t */
-   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
    ]]></template>
 
    <xi:include href="_clockOption.xml"/>

@@ -467,7 +467,7 @@
 <!-- ========== SIM BasicInfo class - Start =============================== -->
 
    <template namespace="usbdm" ><![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:\n
    ]]></template>
@@ -1810,7 +1810,7 @@ $(Init_description)
 <!-- ========== SIM BasicInfo class - End =============================== -->
 
    <template namespace="usbdm" ><![CDATA[
-      }; // class $(_class)BasicInfo \n\n
+      }; // class $(_Class)BasicInfo \n\n
    ]]></template>
 
    </if>

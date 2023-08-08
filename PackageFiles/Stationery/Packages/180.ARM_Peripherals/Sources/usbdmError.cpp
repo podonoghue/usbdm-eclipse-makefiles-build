@@ -24,7 +24,7 @@ static const char *messages[] {
       "Interrupt without call-back installed",
       "Flash initialisation failed",
       "ADC Calibration failed",
-      "Illegal processor power-mode transition",
+      "Illegal power-mode transition",
       "Failed communication",
       "I2C No acknowledge",
       "I2C Lost arbitration for bus",
@@ -35,6 +35,7 @@ static const char *messages[] {
       "Timeout occurred during operation",
       "Interrupt occurred during operation",
       "Device is busy",
+      "Match event",
 };
 #endif
 

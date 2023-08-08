@@ -16,11 +16,11 @@
 
 <!--
     * General substitutions
-    *  $(_name)         => e.g FTM2                    (fProvider.getName())
-    *  $(_base_class)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
+    *  $(_NAME)         => e.g FTM2                    (fProvider.getName())
+    *  $(_Baseclass)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
     *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
-    *  $(_class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
-    *  $(_basename)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
+    *  $(_Class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
 -->
 
 <!--
@@ -51,7 +51,7 @@
    <!-- ************* BDH ****************** -->
 
    <binaryOption key="uart_bdh_lbkdie" condition="uart_bdh_lbkdie_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartBreakInterrupt"
       description="LIN Break Detect Interrupt Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -59,7 +59,7 @@
    </binaryOption >
 
    <binaryOption key="uart_bdh_rxedgie" condition="uart_bdh_rxedgie_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartRxdEdgeInterrupt"
       description="RxD Input Active Edge Interrupt Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -67,7 +67,7 @@
    </binaryOption >
 
    <binaryOption key="uart_bdh_sbns" condition="uart_bdh_sbns_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartStop"
       toolTip="SBNS selects the number of stop bits present in a data frame"
       description="Stop Bit Number Select" >
@@ -76,7 +76,7 @@
    </binaryOption >
 
    <intOption key="uart_baudrate" condition="uart_bdh_sbr_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       typeName="uint8_t"
       description="Baud Rate Divisor"
       toolTip="The 13 bits in SBR[12:0] are referred to collectively as BR. They set the modulo divide rate for the\n
@@ -87,7 +87,7 @@
    <!-- ************* C1 ****************** -->
 
    <choiceOption key="uart_c1_mode" condition="uart_c1_loops_present&amp;&amp;uart_c1_rsrc_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       valueFormat="UART_C1_LOOPS(%s),UART_C1_RSRC(%s)"
       enumStem="UartMode"
       toolTip="Controls UART loop mode (Transmitter output is internally connected to receiver input)"
@@ -98,7 +98,7 @@
    </choiceOption>
 
    <binaryOption key="uart_c1_uartswai" condition="uart_c1_uartswai_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartWaitAction"
       toolTip="Controls action in Wait Mode"
       description="Stops in Wait Mode" >
@@ -107,7 +107,7 @@
    </binaryOption >
 
    <binaryOption key="uart_c1_m" condition="uart_c1_m_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartNumBits"
       description="9-Bit or 8-Bit Mode Select" >
       <choice name="8-bit"       value="0" enum="8Bit"/>
@@ -115,7 +115,7 @@
    </binaryOption >
 
    <binaryOption key="uart_c1_wake" condition="uart_c1_wake_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartWakeOn"
       description="Receiver Wakeup Method Select" >
       <choice name="Idle-line wakeup"     value="0" enum="IdleLine"/>
@@ -123,7 +123,7 @@
    </binaryOption >
 
    <binaryOption key="uart_c1_ilt" condition="uart_c1_ilt_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartIdleStart"
       toolTip="Determines if idle character bit count starts after start bit or stop bit"
       description="Idle Line Type Select" >
@@ -133,7 +133,7 @@
 
    <choiceOption key="uart_c1_parity" condition="uart_c1_pe_present&amp;&amp;uart_c1_pt_present"
       valueFormat="UART_C1_PE(%s),UART_C1_PT(%s)"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartParity"
       description="Parity" >
       <choice value="0,0" name="No parity"   enum="None" />
@@ -144,7 +144,7 @@
    <!-- ************* C2 ****************** -->
 
    <binaryOption key="uart_c2_tie" condition="uart_c2_tie_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartC2Tie"
       description="Transmitter Interrupt/DMA Transfer Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -152,7 +152,7 @@
    </binaryOption >
 
    <binaryOption key="uart_c2_tcie" condition="uart_c2_tcie_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartC2Tcie"
       toolTip="Allows interrupt or DMA requests triggered by TDRE"
       description="Transmission Complete Interrupt/DMA requests" >
@@ -161,7 +161,7 @@
    </binaryOption >
 
    <binaryOption key="uart_c2_rie" condition="uart_c2_rie_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartC2Rie"
       toolTip="Allows interrupt or DMA requests triggered by RDRF"
       description="Receiver Full Interrupt/DMA requests" >
@@ -170,7 +170,7 @@
    </binaryOption >
 
    <binaryOption key="uart_c2_ilie" condition="uart_c2_ilie_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartIdleInterrupt"
       toolTip="Enables the idle line flag, S1[IDLE], to generate interrupt requests , based on the state of C5[ILDMAS]"
       description="Idle Line Interrupt Enable" >
@@ -179,7 +179,7 @@
    </binaryOption >
 
    <binaryOption key="uart_c2_te" condition="uart_c2_te_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartTransmitInterrupt"
       description="Transmitter Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -187,7 +187,7 @@
    </binaryOption >
 
    <binaryOption key="uart_c2_re" condition="uart_c2_re_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartReceive"
       description="Receiver Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -195,7 +195,7 @@
    </binaryOption >
 
    <binaryOption key="uart_c2_rwu" condition="uart_c2_rwu_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartWakeUp"
       toolTip="Setting RWU enables the wakeup function and inhibits further receiver interrupt requests.\n
                Normally, hardware wakes the receiver by automatically clearing RWU"
@@ -207,7 +207,7 @@
    <!-- ************* S2 ****************** -->
 
    <binaryOption key="uart_s2_rxinv" condition="uart_s2_rxinv_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartRxdInvert"
       toolTip="Setting this field reverses the polarity of the received data input"
       description="Receive Data Inversion" >
@@ -216,7 +216,7 @@
    </binaryOption >
 
    <binaryOption key="uart_s2_rwuid" condition="uart_s2_rwuid_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartWakeupRecord"
       toolTip="When RWU is set and WAKE is cleared, this field controls whether the idle character that wakes the
 receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/enabled"
@@ -226,7 +226,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
    </binaryOption >
 
    <binaryOption key="uart_s2_brk13" condition="uart_s2_brk13_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartBreakLength"
       toolTip="Determines whether the transmit break character is 10, 11, or 12 bits long, or 13 or 14 bits long"
       description="Break Transmit Character Length" >
@@ -235,7 +235,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
    </binaryOption >
 
    <binaryOption key="uart_s2_lbkde" condition="uart_s2_lbkde_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartBreakDetect"
       toolTip="Enables LIN break character detection.\n
                While LBKDE is set, S1[RDRF], S1[NF], S1[FE], and S1[PF] are prevented from setting"
@@ -247,7 +247,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
    <!-- ************* C3 ****************** -->
 
    <binaryOption key="uart_c3_txdir" condition="uart_c3_txdir_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartTxdDirection"
       description="Transmitter Pin Direction in Single-Wire mode" >
       <choice name="TxD pin is input"   value="0" enum="Input"/>
@@ -255,7 +255,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
    </binaryOption >
 
    <binaryOption key="uart_c3_txinv" condition="uart_c3_txinv_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartTxdInvert"
       description="Transmit Data Inversion" >
       <choice name="TxD not inverted"  value="0" enum="Normal"/>
@@ -263,7 +263,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
    </binaryOption >
 
    <binaryOption key="uart_c3_orie" condition="uart_c3_orie_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartOverrunErrorInterrupt"
       description="Overrun Error Interrupt Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -271,7 +271,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
    </binaryOption >
 
    <binaryOption key="uart_c3_neie" condition="uart_c3_neie_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartNoiseErrorInterrupt"
       description="Noise Error Interrupt Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -279,7 +279,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
    </binaryOption >
 
    <binaryOption key="uart_c3_feie" condition="uart_c3_feie_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartFrameErrorInterrupt"
       description="Framing Error Interrupt Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -287,7 +287,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
    </binaryOption >
 
    <binaryOption key="uart_c3_peie" condition="uart_c3_peie_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="UartParityErrorInterrupt"
       description="Parity Error Interrupt Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -328,7 +328,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
       uart_c3_neie:C3Neie;
       uart_c3_feie:C3Feie;
       uart_c3_peie:C3Peie" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -343,10 +343,10 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
 
 <!--   ========== UART Init class =============================== -->
 
-   <template key="init_description" namespace="all" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
       \t/**
-      \t * Class used to do initialisation of the $(_class)
+      \t * Class used to do initialisation of the $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values.
       \t *
@@ -354,7 +354,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
       \t *
       \t * Example:
       \t * @code
-      \t * static const $(_class)::Init init {
+      \t * static const $(_Class)::Init init {
       \t *
       \t *   // Setup values
       \t *   UartBdhLbkdie_Disabled                    // LIN Break Detect Interrupt Enable,
@@ -394,16 +394,16 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
       \t *   0,                                        // Read receive data or write transmit data,
       \t * };
       \t *
-      \t * // Initialise $(_class) from values specified above
-      \t * $(_class)::configure(init)
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure(init)
       \t * @endcode
       \t */
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:\n
    ]]>
@@ -412,7 +412,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
    <template namespace="usbdm" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t */
       \ttypedef void (*CallbackFunction)($(irq_parameters));\n
    ]]>
@@ -421,9 +421,9 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
       \t
       \t/** Callback function for ISR */
       \tstatic CallbackFunction sCallback;
@@ -456,7 +456,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
       \t}
       \t
       \t/**
-      \t * $(_basename) interrupt handler -  Calls $(_basename) callback
+      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
       \t */
       \tstatic void irqHandler() {
       \t
@@ -474,12 +474,12 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
    <![CDATA[
       \t
       \t/** Callback for programmatically set handler */
-      \t$(_class)Info::CallbackFunction $(_class)Info::sCallback = $(_class)Info::unhandledCallback;
+      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
       \t\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -506,49 +506,49 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
       \t   %params = nullptr;\n\n
    ]]></setTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="uart_bdh_lbkdie,uart_bdh_rxedgie,uart_bdh_sbns,uart_bdh_sbr"
    ><![CDATA[
       \t   /// Baud Rate Register: High
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="uart_bdl_sbr"
    ><![CDATA[
       \t   /// Baud Rate Register: Low
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="uart_c1_loops,uart_c1_uartswai,uart_c1_rsrc,uart_c1_m,uart_c1_wake,uart_c1_ilt,uart_c1_parity"
    ><![CDATA[
       \t   /// Control Register 1
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="uart_c2_tie,uart_c2_tcie,uart_c2_rie,uart_c2_ilie,uart_c2_te,uart_c2_re,uart_c2_rwu,uart_c2_sbk"
    ><![CDATA[
       \t   /// Control Register 2
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="uart_s2_lbkdif,uart_s2_rxedgif,uart_s2_rxinv,uart_s2_rwuid,uart_s2_brk13,uart_s2_lbkde"
    ><![CDATA[
       \t   /// Status Register 2
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="uart_c3_t8,uart_c3_txdir,uart_c3_txinv,uart_c3_orie,uart_c3_neie,uart_c3_feie,uart_c3_peie"
    ><![CDATA[
       \t   /// Control Register 3
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="uart_d_rt"
    ><![CDATA[
       \t   /// Data Register
@@ -565,7 +565,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
 
 <!--   Configure methods -->
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -578,9 +578,9 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
       \t\n
    ]]></template>
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t/**
-      \t * Configure $(_basename) from values specified in init
+      \t * Configure $(_BASENAME) from values specified in init
       \t *
       \t * @param init Class containing initialisation values
       \t */
@@ -591,7 +591,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
       \t   Info::enableClock();
       \t\n
    ]]></template>
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
              condition="irqHandlingMethod" ><![CDATA[
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      Info::setCallback(init.callbackFunction);
@@ -600,7 +600,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
       \t\n
    ]]></template>
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t   // ..........  Regs to init .......... ;
       \t   uart->BDH    = init.bdh;
       \t   uart->BDL    = init.bdl;
@@ -684,7 +684,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
             uart_c3_feie;
             uart_c3_peie
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -713,7 +713,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
             uart_c3_t8;
             uart_d_rt
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -738,7 +738,7 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -779,35 +779,35 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
          "
    ><![CDATA[
       $(init_description)
-      \ttypedef $(_class)BasicInfo::Init Init;
+      \ttypedef $(_Class)BasicInfo::Init Init;
       \t
       \t/**
-      \t * Default initialisation value for $(_class)
+      \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
    ]]></initialValueTemplate>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[
-      \t}; // $(_class)BasicInfo::Init\n\n
+      \t}; // $(_Class)BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[
-      }; // $(_class)BasicInfo\n\n
+      }; // $(_Class)BasicInfo\n\n
    ]]>
    </template>
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_basename)/declarations" namespace="all" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
    \t/**
-   \t * Class representing $(_name)
+   \t * Class representing $(_NAME)
    \t */
-   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
    ]]></template>
 
    <validate
@@ -817,13 +817,13 @@ receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/e
    <!-- ************* Startup ****************** -->
 
    <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_headername).h"\n
+      <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
-      \t/*  Initialise $(_class) */
-      \tUSBDM::$(_class)::defaultConfigure();\n
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
    <signals />

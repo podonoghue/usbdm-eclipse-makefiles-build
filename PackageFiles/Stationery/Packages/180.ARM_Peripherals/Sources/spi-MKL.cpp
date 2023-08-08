@@ -33,8 +33,8 @@ static const uint16_t sprFactors[]  = {2,4,8,16,32,64,128,256,512};
  */
 uint8_t Spi::calculateBr(uint32_t clockFrequency, uint32_t frequency) {
 
-   int bestSPPR = 0;
-   int bestSPR  = 0;
+   int bestSPPR = sizeofArray(spprFactors)-1;
+   int bestSPR  = sizeofArray(sprFactors)-1;
    int32_t bestDifference = 0x7FFFFFFF;
    for (int sppr = (sizeof(spprFactors)/sizeof(spprFactors[0]))-1; sppr >= 0; sppr--) {
       for (int spr = (sizeof(sprFactors)/sizeof(sprFactors[0]))-1; spr >= 0; spr--) {
@@ -52,7 +52,8 @@ uint8_t Spi::calculateBr(uint32_t clockFrequency, uint32_t frequency) {
          }
       }
    }
-   return SPI_BR_SPPR(bestSPPR)|SPI_BR_SPR(bestSPR);
+   uint8_t br = SPI_BR_SPPR(bestSPPR)|SPI_BR_SPR(bestSPR);
+   return br;
 }
 
 /**

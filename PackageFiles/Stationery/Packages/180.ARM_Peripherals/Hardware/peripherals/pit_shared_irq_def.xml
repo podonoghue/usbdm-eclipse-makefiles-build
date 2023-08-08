@@ -115,7 +115,7 @@
 
    <template key="init_description" namespace="all" ><![CDATA[
       \t/**
-      \t * Class used to do initialisation of a $(_class) channel
+      \t * Class used to do initialisation of a $(_Class) channel
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
@@ -123,8 +123,8 @@
       \t *
       \t * Example:
       \t * @code
-      \t * // Initialisation values for $(_class) channel
-      \t * // Parameters available may vary with device - see $(_class)::DefaultChannelInitValues[] for relevant example
+      \t * // Initialisation values for $(_Class) channel
+      \t * // Parameters available may vary with device - see $(_Class)::DefaultChannelInitValues[] for relevant example
       \t * static const Pit::Init pitInit {
       \t *       PitChannelNum_0,
       \t *
@@ -143,11 +143,11 @@
    ]]></template>
 
    <template namespace="usbdm" ><![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t */
       \ttypedef void (*CallbackFunction)();\n\n
    ]]></template>
@@ -332,12 +332,12 @@
 
    <template><![CDATA[
       $(init_description)
-      \ttypedef $(_class)BasicInfo::Init Init;
+      \ttypedef $(_Class)BasicInfo::Init Init;
       \t
       \t/**
-      \t * $(_class) interrupt call back
+      \t * $(_Class) interrupt call back
       \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
       \t
       \t/**
       \t * Default initialisation values for PIT channels
@@ -425,9 +425,9 @@
 
    <template key="/PIT/declarations" namespace="all"  ><![CDATA[
    \t/**
-   \t * Class representing $(_name)
+   \t * Class representing $(_NAME)
    \t */
-   \tusing $(_class) = $(_base_class)Base_T<$(_class)Info>;
+   \tusing $(_Class) = $(_Baseclass)Base_T<$(_Class)Info>;
 
    \t/**
    \t * MACRO defining the start of a interrupt handler for a PIT channel
@@ -453,7 +453,7 @@
    \t/**
    \t * @brief class representing a PIT channel
    \t */
-   \tusing $(_class)Channel = $(_class)::PitChannel;
+   \tusing $(_Class)Channel = $(_Class)::PitChannel;
    ]]></template>
 
    <xi:include href="_clockOption.xml"/>

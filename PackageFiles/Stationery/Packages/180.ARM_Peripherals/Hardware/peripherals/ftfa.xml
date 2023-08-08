@@ -32,7 +32,7 @@
 
 
    <stringOption key="irq_pattern"        constant="true" value="^FTF_(Command|ReadCollision)$" hidden="true" />
-   <stringOption key="irq_classHandler"   constant="true" value="Flash::$1_irqHandler" hidden="true" />
+   <stringOption key="irq_ClassHandler"   constant="true" value="Flash::$1_irqHandler" hidden="true" />
    <xi:include href="_irqOptionSubstituted.xml"/>
 
    <xi:include href="_clockOption.xml"/>

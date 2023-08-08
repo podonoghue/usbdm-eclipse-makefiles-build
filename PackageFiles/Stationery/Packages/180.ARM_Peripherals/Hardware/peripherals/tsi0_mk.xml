@@ -215,9 +215,9 @@
    
    <template key="/TSI/declarations" namespace="all"  ><![CDATA[
    \t/**
-   \t * Class representing $(_name)
+   \t * Class representing $(_NAME)
    \t */
-   \ttypedef $(_base_class)Base_T<$(_class)Info> $(_class);\n
+   \ttypedef $(_Baseclass)Base_T<$(_Class)Info> $(_Class);\n
    ]]></template>
 
    <projectActionList id="tsi_files">

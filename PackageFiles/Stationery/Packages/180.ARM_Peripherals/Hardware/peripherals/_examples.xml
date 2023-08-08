@@ -8,9 +8,9 @@ Symbols
      $(key:default:modifier)  toupper, tolower   
      
       _instance   -  FTM0 => 0
-      _name       -  FTM0 => FTM0
-      _class      -  FTM0 => Ftm0
-      _base_class -  FTM0 => Ftm
+      _NAME       -  FTM0 => FTM0
+      _Class      -  FTM0 => Ftm0
+      _Baseclass -  FTM0 => Ftm
 -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">

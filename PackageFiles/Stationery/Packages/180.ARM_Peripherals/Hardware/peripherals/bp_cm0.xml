@@ -70,7 +70,7 @@
    <template key="init_description" namespace="all">
    <![CDATA[
       \t/**
-      \t * Class used to do initialisation of the $(_class)
+      \t * Class used to do initialisation of the $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values.
       \t *
@@ -78,7 +78,7 @@
       \t *
       \t * Example:
       \t * @code
-      \t * static const $(_class)::Init init {
+      \t * static const $(_Class)::Init init {
       \t *
       \t *   // Setup values
       \t *   0,                                        // KEY bit. On any write to FP_CTRL, the FPB unit ignores the write unless this bit is 1. This bit is RAZ,
@@ -88,8 +88,8 @@
       \t *   BpCompEnable_ComparatorDisabled           // Enable bit for this comparator.,
       \t * };
       \t *
-      \t * // Initialise $(_class) from values specified above
-      \t * $(_class)::configure(init)
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure(init)
       \t * @endcode
       \t */
    ]]>
@@ -97,7 +97,7 @@
 
    <template namespace="usbdm">
    <![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:
       \t\n
@@ -238,10 +238,10 @@
          "
    ><![CDATA[
       $(init_description)
-      \ttypedef $(_class)BasicInfo::Init Init;
+      \ttypedef $(_Class)BasicInfo::Init Init;
       \t
       \t/**
-      \t * Default initialisation value for $(_class)
+      \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
@@ -250,13 +250,13 @@
 
    <template namespace="usbdm">
       <![CDATA[
-      \t}; // $(_class)::BasicInfo::Init\n\n
+      \t}; // $(_Class)::BasicInfo::Init\n\n
    ]]>
    </template>
 
    <template namespace="usbdm">
       <![CDATA[
-      }; // $(_class)::BasicInfo\n\n
+      }; // $(_Class)::BasicInfo\n\n
    ]]>
    </template>
 

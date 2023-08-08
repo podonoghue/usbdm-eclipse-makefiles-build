@@ -6,19 +6,19 @@
 
 <!--
       Predefined symbols generated for current peripheral
-      _base_class FTM0 => Ftm
+      _Baseclass FTM0 => Ftm
       _instance   FTM0 => 0, PTA => A
-      _class      FTM0 => Ftm0
-      _name       FTM0 => FTM0
-      _basename   FTM0 => FTM, PTA => PT
+      _Class      FTM0 => Ftm0
+      _NAME       FTM0 => FTM0
+      _BASENAME   FTM0 => FTM, PTA => PT
  -->
 
 <template><![CDATA[
       \t//! Hardware base address as uint32_t
-      \tstatic constexpr uint32_t baseAddress = $(_name)_BasePtr;
+      \tstatic constexpr uint32_t baseAddress = $(_NAME)_BasePtr;
       \t
       \t//! Hardware base pointer
-      \tstatic constexpr HardwarePtr<$(_base_class::toupper)_Type> $(_base_class::tolower) = baseAddress;
+      \tstatic constexpr HardwarePtr<$(_Baseclass::toupper)_Type> $(_Baseclass::tolower) = baseAddress;
       \t\n
 ]]></template>
 

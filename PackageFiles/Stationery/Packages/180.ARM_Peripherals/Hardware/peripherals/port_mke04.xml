@@ -212,7 +212,7 @@
    <template key="init_description" namespace="all" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
-      \t * Class used to do initialisation of the $(_class)
+      \t * Class used to do initialisation of the $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values.
       \t *
@@ -220,7 +220,7 @@
       \t *
       \t * Example:
       \t * @code
-      \t * static const $(_class)::Init init {
+      \t * static const $(_Class)::Init init {
       \t *
       \t *   // Setup values
       \t *   PortFilterClock1_Busclk2 ,    // Filter Division Set 1 - BUSCLK/2
@@ -238,8 +238,8 @@
       \t *   PortPtcFilterSel_Busclk,      // Filter Selection for Input from PTC - BUSCLK
       \t * };
       \t *
-      \t * // Initialise $(_class) from values specified above
-      \t * $(_class)::configure(init)
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure(init)
       \t * @endcode
       \t */
    ]]>
@@ -247,7 +247,7 @@
 
    <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:\n
    ]]>
@@ -283,9 +283,9 @@
 
 <!--   Configure methods -->
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
       codeGenCondition="enablePeripheralSupport" ><![CDATA[
-      \t/* template /$(_basename)/InitMethod */
+      \t/* template /$(_BASENAME)/InitMethod */
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -301,17 +301,17 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
       codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
-      \t * Configure $(_basename) from values specified in init
+      \t * Configure $(_BASENAME) from values specified in init
       \t *
       \t * @param init Class containing initialisation values
       \t */
       \tstatic void configure(const typename Info::Init &init) {
       \t\n
    ]]></template>
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
              condition="irqHandlingMethod"
              codeGenCondition="irqHandlingMethod" ><![CDATA[
       \t   setCallback(init.callbackFunction);
@@ -319,7 +319,7 @@
       \t\n
    ]]></template>
 
-   <template discardRepeats="true" key="/$(_basename)/InitMethod" namespace="all"
+   <template discardRepeats="true" key="/$(_BASENAME)/InitMethod" namespace="all"
              codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t   // Initialise remaining registers
       \t   port->IOFLT    = init.ioflt;
@@ -371,7 +371,22 @@
 
    <for keys="r"
       values="
-            port_puel_ptcpe,port_puel_ptbpe,port_puel_ptape;
+            port_puel_ptcpe,port_puel_ptbpe,port_puel_ptape
+            " >
+      <initialValueTemplate codeGenCondition="enablePeripheralSupport"
+         variables="%(r)"
+         linePadding="xxx"
+         useDefinitions="true" >
+      <![CDATA[
+         \t   /** Default value for %description */
+         \t   static constexpr uint32_t %registerName = %initExpression;
+         \t\n
+      ]]>
+      </initialValueTemplate>
+   </for>
+
+   <for keys="r"
+      values="
             port_hdrve_ptc5,port_hdrve_ptc1,port_hdrve_ptb5
             " >
       <initialValueTemplate codeGenCondition="enablePeripheralSupport"
@@ -407,10 +422,10 @@
          "
    ><![CDATA[
       $(init_description)
-      \ttypedef $(_class)BasicInfo::Init Init;
+      \ttypedef $(_Class)BasicInfo::Init Init;
       \t
       \t/**
-      \t * Default initialisation value for $(_class)
+      \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
@@ -419,13 +434,13 @@
 
    <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
-      \t}; // $(_class)BasicInfo::Init\n\n
+      \t}; // $(_Class)BasicInfo::Init\n\n
    ]]>
    </template>
 
    <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
-      }; // $(_class)BasicInfo\n\n
+      }; // $(_Class)BasicInfo\n\n
    ]]>
    </template>
 
@@ -552,7 +567,7 @@
    <template key="/SYSTEM/Startup" namespace="all" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/* Configure Ports (Filters, PUPs and HDRIVE) */
-      \tUSBDM::$(_class)::defaultConfigure();
+      \tUSBDM::$(_Class)::defaultConfigure();
    ]]></template>
 
    <for keys=   "    field             : Name : pinIndex"

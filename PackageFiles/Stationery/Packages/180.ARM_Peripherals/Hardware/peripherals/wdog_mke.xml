@@ -4,7 +4,10 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Watchdog Monitor" >
 
-   <intOption key="irqEnable" ref="fullCodeSupport" hidden="true" derived="true" constant="true" />
+   <binaryOption key="irqEnable" ref="fullCodeSupport" hidden="true" derived="true" constant="true" >
+      <choice value="false" name="false" />
+      <choice value="true"  name="true"  />
+   </binaryOption>
 
    <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
@@ -23,8 +26,8 @@
       description="Enable Watchdog system"
       toolTip="This allows the generation of minimal code to disable the watchdog system\n
                or provide full configuration support" >
-      <choice value="false" enum="Disbled" name="Generate watchdog disable code only" isDefault="true" />
-      <choice value="true"  enum="Enabled" name="Generate full watchdog code support" />
+      <choice value="false" enum="Disabled" name="Generate watchdog disable code only" isDefault="true" />
+      <choice value="true"  enum="Enabled"  name="Generate full watchdog code support" />
    </binaryOption>
 
    <binaryOption key="secondsSupport"
@@ -273,7 +276,7 @@
 
 <!-- Grahic here -->
 
-   <setTemplate key="/$(_basename)/publicMethods" namespace="all" codeGenCondition="fullCodeSupport"
+   <setTemplate key="/$(_BASENAME)/publicMethods" namespace="all" codeGenCondition="fullCodeSupport"
       variables="
          wdog_cs1_en,
          wdog_cs2_clk,
@@ -332,11 +335,11 @@
       <choice value="0x28D9" enum="2"  name="2nd unlock value"  />
    </choiceOption>
 
-   <template key="/$(_basename)/declarations" namespace="all"  ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" namespace="all"  ><![CDATA[
       \t/**
-      \t * Class representing $(_name)
+      \t * Class representing $(_NAME)
       \t */
-      \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
    ]]></template>
 
 <!--   ========== WDOG Init class =============================== -->
@@ -344,7 +347,7 @@
    <template key="init_description" namespace="all" >
    <![CDATA[
       \t/**
-      \t * Class used to do initialisation of the $(_class)
+      \t * Class used to do initialisation of the $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values.
       \t *
@@ -352,7 +355,7 @@
       \t *
       \t * Example:
       \t * @code
-      \t * static const $(_class)::Init init {
+      \t * static const $(_Class)::Init init {
       \t *
       \t *   // Setup values
       \t *   WdogEnable_Enabled ,          // Watchdog enable
@@ -374,8 +377,8 @@
       \t *   Wdog::DefaultInitValue,       // Take base values from DefaultInitValue
       \t * };
       \t *
-      \t * // Initialise $(_class) from values specified above
-      \t * $(_class)::configure(init)
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure(init)
       \t * @endcode
       \t */
    ]]>
@@ -383,7 +386,7 @@
 
    <template namespace="usbdm" codeGenCondition="fullCodeSupport" >
    <![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:\n
    ]]>
@@ -393,7 +396,7 @@
    <![CDATA[
       \t
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t */
       \ttypedef void (*CallbackFunction)($(irq_parameters));
       \t\n
@@ -404,9 +407,9 @@
    <![CDATA[
       \t
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
       \t
       \t/** Callback function for ISR */
       \tstatic CallbackFunction sCallback;
@@ -440,7 +443,7 @@
       \t}
       \t
       \t/**
-      \t * $(_basename) interrupt handler -  Calls $(_basename) callback
+      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
       \t */
       \tstatic void irqHandler() {
       \t
@@ -453,7 +456,7 @@
    <![CDATA[
       \t
       \t/** Callback for programmatically set handler */
-      \ttemplate<class Info> typename $(_base_class)Base_T<Info>::CallbackFunction $(_base_class)Base_T<Info>::sCallback = $(_base_class)Base_T<Info>::unhandledCallback;
+      \ttemplate<class Info> typename $(_Baseclass)Base_T<Info>::CallbackFunction $(_baseclase)Base_T<Info>::sCallback = $(_baseclase)Base_T<Info>::unhandledCallback;
       \t\n
    ]]>
    </template>
@@ -535,7 +538,7 @@
 
 <!--   Configure methods -->
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
       codeGenCondition="fullCodeSupport" ><![CDATA[
       \t/**
       \t * Configure with default settings.
@@ -549,7 +552,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
       codeGenCondition="!fullCodeSupport"
       ><![CDATA[
       \t/**
@@ -573,7 +576,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
              codeGenCondition="fullCodeSupport" ><![CDATA[
       \t/**
       \t * Configure WDOG from values specified in init
@@ -587,13 +590,13 @@
       \t   uint16_t      cs2     = init.cs2;
       \t\n
    ]]></template>
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
              codeGenCondition="irqHandlingMethod" ><![CDATA[
       \t   setCallback(init.callbackFunction);
       \t   enableNvicInterrupts(init.irqlevel);
       \t\n
    ]]></template>
-   <setTemplate variables="wdog_cs1_en" discardRepeats="true" key="/$(_basename)/InitMethod" namespace="all" codeGenCondition="secondsSupport" ><![CDATA[
+   <setTemplate variables="wdog_cs1_en" discardRepeats="true" key="/$(_BASENAME)/InitMethod" namespace="all" codeGenCondition="secondsSupport" ><![CDATA[
       \t   if (init.calculatePrescale) {
       \t      // Calculate prescaler, timeout and window
       \t      ErrorCode rc = calculateTimingParameters(cs2, timeout, window);
@@ -602,7 +605,7 @@
       \t      }
       \t   }\n
    ]]></setTemplate>
-   <setTemplate variables="wdog_cs1_en" discardRepeats="true" key="/$(_basename)/InitMethod" namespace="all" codeGenCondition="fullCodeSupport" ><![CDATA[
+   <setTemplate variables="wdog_cs1_en" discardRepeats="true" key="/$(_BASENAME)/InitMethod" namespace="all" codeGenCondition="fullCodeSupport" ><![CDATA[
       \t   // Protect sequence from interrupts
       \t   CriticalSection cs;
       \t
@@ -771,10 +774,10 @@
             "
    ><![CDATA[
       $(init_description)
-      \ttypedef $(_class)BasicInfo::Init Init;
+      \ttypedef $(_Class)BasicInfo::Init Init;
       \t
       \t/**
-      \t * Default initialisation value for $(_class)
+      \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
@@ -785,13 +788,13 @@
 
    <template namespace="usbdm" codeGenCondition="fullCodeSupport" >
       <![CDATA[
-      \t}; // $(_class)::BasicInfo::Init\n\n
+      \t}; // $(_Class)::BasicInfo::Init\n\n
    ]]>
    </template>
 
    <template namespace="usbdm" codeGenCondition="fullCodeSupport" >
       <![CDATA[
-      }; // $(_class)::BasicInfo\n\n
+      }; // $(_Class)::BasicInfo\n\n
    ]]>
    </template>
 

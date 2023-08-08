@@ -16,11 +16,11 @@
 
 <!--
     * General substitutions
-    *  $(_name)         => e.g FTM2                    (fProvider.getName())
-    *  $(_base_class)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
+    *  $(_NAME)         => e.g FTM2                    (fProvider.getName())
+    *  $(_Baseclass)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
     *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
-    *  $(_class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
-    *  $(_basename)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
+    *  $(_Class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
 -->
 
 <!--
@@ -51,14 +51,14 @@
    <!-- ************* R1 ****************** -->
 
    <intOption key="pwt_r1_ppw" condition="pwt_r1_ppw_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       typeName="uint32_t"
       description="Positive Pulse Width"
       toolTip="Captured positive pulse width value. It is suggested to use half-word (16-bit) or word (32-bit) to read out this value"
    />
 
    <binaryOption key="pwt_r1_pclks" condition="pwt_r1_pclks_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="PwtR1Pclks"
       toolTip="Controls the selection of clock source for the PWT counter"
       description="PWT Clock Source Selection" >
@@ -67,7 +67,7 @@
    </binaryOption >
 
    <choiceOption key="pwt_r1_pinsel" condition="pwt_r1_pinsel_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="PwtR1Pinsel"
       toolTip="Enables the corresponding PWT input port, if this PWT input comes from an external source"
       description="PWT Pulse Inputs Selection" >
@@ -78,7 +78,7 @@
    </choiceOption >
 
    <choiceOption key="pwt_r1_edge" condition="pwt_r1_edge_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="PwtR1Edge"
       toolTip="Selects which edge triggers the pulse width measurement and which edges trigger the capture.\n
                If user needs to change the trigger and capture mode by changing the value of EDGE[1:0], a PWT software reset
@@ -92,7 +92,7 @@ is required after changing the EDGE[1:0] value.\n
    </choiceOption >
 
    <choiceOption key="pwt_r1_pre" condition="pwt_r1_pre_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="PwtR1Pre"
       toolTip="Selects the value by which the clock is divided to clock the PWT counter"
       description="PWT Clock Prescaler (CLKPRE) Setting" >
@@ -107,7 +107,7 @@ is required after changing the EDGE[1:0] value.\n
    </choiceOption >
 
    <binaryOption key="pwt_r1_pwten" condition="pwt_r1_pwten_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="PwtR1Pwten"
       toolTip="Enables/disables the PWT module.\n
                To avoid unexpected behavior, do not change any PWT configurations as long as PWTEN is set"
@@ -117,7 +117,7 @@ is required after changing the EDGE[1:0] value.\n
    </binaryOption >
 
    <binaryOption key="pwt_r1_pwtie" condition="pwt_r1_pwtie_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="PwtR1Pwtie"
       toolTip="Enables the PWT module to generate an interrupt"
       description="PWT Module Interrupt Enable" >
@@ -126,7 +126,7 @@ is required after changing the EDGE[1:0] value.\n
    </binaryOption >
 
    <binaryOption key="pwt_r1_prdyie" condition="pwt_r1_prdyie_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="PwtR1Prdyie"
       toolTip="Enables/disables the PWT to generate an interrupt when PWTRDY is set as long as PWTIE is set"
       description="PWT Pulse Width Data Ready Interrupt Enable" >
@@ -135,7 +135,7 @@ is required after changing the EDGE[1:0] value.\n
    </binaryOption >
 
    <binaryOption key="pwt_r1_povie" condition="pwt_r1_povie_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="PwtR1Povie"
       toolTip="Enables/disables the PWT to generate an interrupt when PWTOV is set due to PWT counter overflow"
       description="PWT Counter Overflow Interrupt Enable" >
@@ -144,7 +144,7 @@ is required after changing the EDGE[1:0] value.\n
    </binaryOption >
 
    <binaryOption key="pwt_r1_pwtsr" condition="pwt_r1_pwtsr_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="PwtR1Pwtsr"
       toolTip="Performs a soft reset to the PWT. This field always reads as 0"
       description="PWT Soft Reset" >
@@ -153,7 +153,7 @@ is required after changing the EDGE[1:0] value.\n
    </binaryOption >
 
    <binaryOption key="pwt_r1_pwtrdy" condition="pwt_r1_pwtrdy_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="PwtR1Pwtrdy"
       toolTip="Indicates that the PWT Pulse Width register(s) has been updated and is ready to be read.\n
                This field is cleared by reading PWTRDY and then writing 0 to PWTRDY bit when PWTRDY is set.\n
@@ -164,7 +164,7 @@ is required after changing the EDGE[1:0] value.\n
    </binaryOption >
 
    <binaryOption key="pwt_r1_pwtov" condition="pwt_r1_pwtov_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="PwtR1Pwtov"
       toolTip="Indicates that the PWT counter has run from 0x0000_0xFFFF to 0x0000_0x0000.\n
                This field is cleared by writing 0 to PWTOV when PWTOV is set.\n
@@ -190,7 +190,7 @@ is required after changing the EDGE[1:0] value.\n
       pwt_r1_pwtsr:R1Pwtsr;
       pwt_r1_pwtrdy:R1Pwtrdy;
       pwt_r1_pwtov:R1Pwtov" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -205,10 +205,10 @@ is required after changing the EDGE[1:0] value.\n
 
 <!--   ========== PWT Init class =============================== -->
 
-   <template key="init_description" namespace="all" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
       \t/**
-      \t * Class used to do initialisation of the $(_class)
+      \t * Class used to do initialisation of the $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values.
       \t *
@@ -216,7 +216,7 @@ is required after changing the EDGE[1:0] value.\n
       \t *
       \t * Example:
       \t * @code
-      \t * static const $(_class)::Init init {
+      \t * static const $(_Class)::Init init {
       \t *
       \t *   // Setup values
       \t *   0,                                        // Positive Pulse Width,
@@ -233,16 +233,16 @@ is required after changing the EDGE[1:0] value.\n
       \t *   PwtR1Pwtov_NoOverflow                     // PWT Counter Overflow,
       \t * };
       \t *
-      \t * // Initialise $(_class) from values specified above
-      \t * $(_class)::configure(init)
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure(init)
       \t * @endcode
       \t */
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:\n
    ]]>
@@ -251,7 +251,7 @@ is required after changing the EDGE[1:0] value.\n
    <template namespace="usbdm" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t */
       \ttypedef void (*CallbackFunction)($(irq_parameters));\n
    ]]>
@@ -260,9 +260,9 @@ is required after changing the EDGE[1:0] value.\n
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
       \t
       \t/** Callback function for ISR */
       \tstatic CallbackFunction sCallback;
@@ -295,7 +295,7 @@ is required after changing the EDGE[1:0] value.\n
       \t}
       \t
       \t/**
-      \t * $(_basename) interrupt handler -  Calls $(_basename) callback
+      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
       \t */
       \tstatic void irqHandler() {
       \t
@@ -313,12 +313,12 @@ is required after changing the EDGE[1:0] value.\n
    <![CDATA[
       \t
       \t/** Callback for programmatically set handler */
-      \t$(_class)Info::CallbackFunction $(_class)Info::sCallback = $(_class)Info::unhandledCallback;
+      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
       \t\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -345,7 +345,7 @@ is required after changing the EDGE[1:0] value.\n
       \t   %params = nullptr;\n\n
    ]]></setTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="pwt_r1_ppw,pwt_r1_pclks,pwt_r1_pinsel,pwt_r1_edge,pwt_r1_pre,pwt_r1_pwten,pwt_r1_pwtie,pwt_r1_prdyie,pwt_r1_povie,pwt_r1_pwtsr,pwt_r1_pwtrdy,pwt_r1_pwtov"
    ><![CDATA[
       \t   /// Pulse Width Timer Register 1
@@ -362,7 +362,7 @@ is required after changing the EDGE[1:0] value.\n
 
 <!--   Configure methods -->
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -375,9 +375,9 @@ is required after changing the EDGE[1:0] value.\n
       \t\n
    ]]></template>
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t/**
-      \t * Configure $(_basename) from values specified in init
+      \t * Configure $(_BASENAME) from values specified in init
       \t *
       \t * @param init Class containing initialisation values
       \t */
@@ -388,7 +388,7 @@ is required after changing the EDGE[1:0] value.\n
       \t   Info::enableClock();
       \t\n
    ]]></template>
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
              condition="irqHandlingMethod" ><![CDATA[
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      Info::setCallback(init.callbackFunction);
@@ -397,7 +397,7 @@ is required after changing the EDGE[1:0] value.\n
       \t\n
    ]]></template>
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t   // ..........  Regs to init .......... ;
       \t   pwt->R1    = init.r1;
       \t}
@@ -456,7 +456,7 @@ is required after changing the EDGE[1:0] value.\n
             pwt_r1_pwtrdy;
             pwt_r1_pwtov
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -482,7 +482,7 @@ is required after changing the EDGE[1:0] value.\n
       values="
             pwt_r1_ppw
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -507,7 +507,7 @@ is required after changing the EDGE[1:0] value.\n
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -525,35 +525,35 @@ is required after changing the EDGE[1:0] value.\n
          "
    ><![CDATA[
       $(init_description)
-      \ttypedef $(_class)BasicInfo::Init Init;
+      \ttypedef $(_Class)BasicInfo::Init Init;
       \t
       \t/**
-      \t * Default initialisation value for $(_class)
+      \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
    ]]></initialValueTemplate>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[
-      \t}; // $(_class)BasicInfo::Init\n\n
+      \t}; // $(_Class)BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[
-      }; // $(_class)BasicInfo\n\n
+      }; // $(_Class)BasicInfo\n\n
    ]]>
    </template>
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_basename)/declarations" namespace="all" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
    \t/**
-   \t * Class representing $(_name)
+   \t * Class representing $(_NAME)
    \t */
-   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
    ]]></template>
 
    <validate
@@ -561,19 +561,28 @@ is required after changing the EDGE[1:0] value.\n
    </validate>
 
    <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_headername).h"\n
+      <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
-      \t/*  Initialise $(_class) */
-      \tUSBDM::$(_class)::defaultConfigure();\n
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
    <projectActionList id = "pwt_files" >
       <copy source="Project_Headers/pwt-MKE.h"  target="Project_Headers/pwt.h"  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <signals />
+   <!-- ************* Signal mapping ****************** -->
+   <category name="SIM" description="Pin mapping">
+      <for keys="ch" dim="4" >
+         <aliasOption key="/SIM/sim_pinsel_$(_name)in%(ch)ps"  constant="false" optional="true" />
+         <aliasOption key="/SIM/sim_pinsel0_$(_name)in%(ch)ps" constant="false" optional="true" />
+         <aliasOption key="/SIM/sim_pinsel1_$(_name)in%(ch)ps" constant="false" optional="true" />
+      </for>
+   </category>
+
+   <signals/>
 
 </peripheralPage>

@@ -153,7 +153,7 @@
       min="0" units="Hz"/>
   
    <stringOption key="irq_pattern"        constant="true" value="^.*%b%i.*$" hidden="true" />
-   <stringOption key="irq_classHandler"   constant="true" value="%c%i::irqHandler" hidden="true" />
+   <stringOption key="irq_ClassHandler"   constant="true" value="%c%i::irqHandler" hidden="true" />
    <xi:include href="_irqOptionSubstituted.xml"/>
 
    <!-- validate
@@ -228,19 +228,19 @@
       \t * ...
       \t *
       \t * // Configure LPTMR in time counting mode
-      \t * $(_class)::configureTimeCountingMode(
+      \t * $(_Class)::configureTimeCountingMode(
       \t *      LptmrResetOn_Compare,
       \t *      LptmrInterrupt_Enabled,
       \t *      LptmrClockSel_Lpoclk);
       \t *
       \t * // Set period of timer event
-      \t * $(_class)::setPeriod(5*seconds);
+      \t * $(_Class)::setPeriod(5*seconds);
       \t *
       \t * // Set call-back
-      \t * $(_class)::setCallback(flash);
+      \t * $(_Class)::setCallback(flash);
       \t * @endcode
       \t */
-      \tusing $(_class) = $(_base_class)Base_T<$(_class)Info>;
+      \tusing $(_Class) = $(_Baseclass)Base_T<$(_Class)Info>;
       
       \t/**
       \t * MACRO defining the start of a interrupt handler for a LPTMR
@@ -253,7 +253,7 @@
       \t *    lptmr->CSR = lptmr->CSR | LPTMR_CSR_TCF_MASK;
       \t * }
       \t */
-      \t#define LPTMR$(_instance)_HANDLER() template<> void $(_class)::irqHandler()\n\n
+      \t#define LPTMR$(_instance)_HANDLER() template<> void $(_Class)::irqHandler()\n\n
    ]]></template>
       
    <xi:include href="_clockOption.xml"/>

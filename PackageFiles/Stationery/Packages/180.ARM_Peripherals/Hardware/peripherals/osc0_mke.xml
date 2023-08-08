@@ -12,11 +12,11 @@
 
 <!--
     * General substitutions
-    *  $(_name)         => e.g FTM2                    (fProvider.getName())
-    *  $(_base_class)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
+    *  $(_NAME)         => e.g FTM2                    (fProvider.getName())
+    *  $(_Baseclass)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
     *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
-    *  $(_class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
-    *  $(_basename)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
+    *  $(_Class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
 -->
 
 <!--
@@ -48,7 +48,7 @@
 
    <choiceOption key="osc_cr_oscMode" condition="osc_cr_oscos_present"
       valueFormat="OSC_CR_OSCOS(%s),OSC_CR_HGO(%s)"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="OscMode"
       description="OSC0 mode"
       toolTip="Determines oscillator power mode and\n
@@ -70,7 +70,7 @@
       disabledValue="0" />
 
    <intOption key="osc_clock"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       ref="osc_input_freq"
       valueFormat="%s"
       constant="true"
@@ -83,7 +83,7 @@
       min="1" />
 
    <binaryOption key="osc_cr_oscen" condition="osc_cr_oscen_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="OscEnable"
       toolTip="Enables the OSC module. The OSC module can also be enabled by the ICS module"
       description="OSC Enable" >
@@ -92,7 +92,7 @@
    </binaryOption>
 
    <binaryOption key="osc_cr_oscsten" condition="osc_cr_oscsten_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport&amp;&amp;osc_cr_oscen"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;osc_cr_oscen"
       enumStem="OscInStopMode"
       toolTip="Controls whether or not the OSC clock remains enabled when MCU enters Stop mode when OSCEN is set.\n
                OSCSTEN has no effect if ICS requests OSC enable"
@@ -102,7 +102,7 @@
    </binaryOption>
 
    <binaryOption key="osc_cr_oscos" condition="osc_cr_oscos_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       ref="osc_cr_oscMode&gt;=@/OscMode_LowGainOsc"
       derived="true"
       constant="true"
@@ -114,7 +114,7 @@
    </binaryOption>
 
    <binaryOption key="osc_cr_range" condition="osc_cr_range_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       ref="osc_input_freq&gt;=4_MHz"
       derived="true"
       constant="true"
@@ -126,7 +126,7 @@
    </binaryOption>
 
    <binaryOption key="osc_cr_hgo" condition="osc_cr_hgo_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       ref="osc_cr_oscMode&gt;=@/OscMode_HighGainOsc"
       derived="true"
       constant="true"
@@ -157,7 +157,7 @@
       osc_cr_oscsten:OscStopMode;
       osc_cr_oscMode:OscMode;
       osc_cr_range:OscFrequencyRange" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -172,10 +172,10 @@
 
 <!--   ========== OSC Init class =============================== -->
 
-   <template key="init_description" namespace="all" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
       \t/**
-      \t * Class used to do initialisation of the $(_class)
+      \t * Class used to do initialisation of the $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values.
       \t *
@@ -183,7 +183,7 @@
       \t *
       \t * Example:
       \t * @code
-      \t * static const $(_class)::Init init {
+      \t * static const $(_Class)::Init init {
       \t *
       \t *   // Setup values
       \t *   OscEnable_Enabled ,           // OSC Enable - OSC enabled
@@ -192,22 +192,22 @@
       \t *   OscFrequencyRange_HighRange,  // Frequency Range Select - High range of 4-20 MHz
       \t * };
       \t *
-      \t * // Initialise $(_class) from values specified above
-      \t * $(_class)::configure(init)
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure(init)
       \t * @endcode
       \t */
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -228,7 +228,7 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="osc_cr_oscen,osc_cr_oscsten,osc_cr_oscos,osc_cr_range,osc_cr_hgo"
    ><![CDATA[
       \t   /// Control Register
@@ -244,7 +244,7 @@
             osc_cr_oscMode;
             osc_cr_range
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -268,7 +268,7 @@
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -279,10 +279,10 @@
          "
    ><![CDATA[
       $(init_description)
-      \ttypedef $(_class)BasicInfo::Init Init;
+      \ttypedef $(_Class)BasicInfo::Init Init;
       \t
       \t/**
-      \t * Default initialisation value for $(_class)
+      \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
@@ -291,10 +291,10 @@
 
 <!--   Default Configure -->
 
-   <template codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[
       \t/**
-      \t * Configure $(_basename)
+      \t * Configure $(_BASENAME)
       \t */
       \tstatic void configure(const Init &configValue) {
       \t   osc->CR              = configValue.cr;
@@ -303,10 +303,10 @@
    ]]>
    </template>
 
-   <template discardRepeats="true" key="/$(_basename)/InitMethod" namespace="all" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+   <template discardRepeats="true" key="/$(_BASENAME)/InitMethod" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t
       \t/**
-      \t * Default initialisation for $(_basename)
+      \t * Default initialisation for $(_BASENAME)
       \t */
       \tstatic void defaultConfigure() {
       \t   Info::configure(Info::DefaultInitValue);
@@ -315,9 +315,9 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[
-      \t}; // $(_class)::BasicInfo::Init\n\n
+      \t}; // $(_Class)::BasicInfo::Init\n\n
    ]]>
    </template>
 
@@ -352,9 +352,9 @@
       \t}\n\n
    ]]></template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[
-      }; // $(_class)BasicInfo\n\n
+      }; // $(_Class)BasicInfo\n\n
    ]]>
    </template>
 
@@ -371,13 +371,13 @@
    <!-- ************* Startup ****************** -->
 
    <template key="/ICS/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_headername).h"\n
+      <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
    <template key="/ICS/ClockStartupBefore" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
-      \t/*  Initialise $(_class) */
-      \tUSBDM::$(_class)::defaultConfigure();\n
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
    <signals />

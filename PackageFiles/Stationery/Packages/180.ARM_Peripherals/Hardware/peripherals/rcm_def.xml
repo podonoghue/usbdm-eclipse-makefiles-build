@@ -42,9 +42,9 @@
    
    <template key="/RCM/declarations" namespace="all"  ><![CDATA[
    \t/**
-   \t * Class representing $(_name)
+   \t * Class representing $(_NAME)
    \t */
-   \tusing $(_class) = $(_base_class)Base_T<$(_class)Info>;
+   \tusing $(_Class) = $(_Baseclass)Base_T<$(_Class)Info>;
    ]]></template>
       
    <projectActionList id = "rcm_files" >

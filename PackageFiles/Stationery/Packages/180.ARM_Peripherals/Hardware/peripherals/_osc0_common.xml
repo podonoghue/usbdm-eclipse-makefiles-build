@@ -272,9 +272,9 @@
 
    <template key="/OSC/declarations" namespace="all"  ><![CDATA[
    \t/**
-   \t * Class representing $(_name)
+   \t * Class representing $(_NAME)
    \t */
-   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
    ]]></template>
 
    <template key="/MCG/Includes" namespace="all"  ><![CDATA[
@@ -282,7 +282,7 @@
    ]]></template>
 
    <template key="/MCG/Initialisation" namespace="all"  ><![CDATA[
-   \tUSBDM::$(_class)::initialise();\n
+   \tUSBDM::$(_Class)::initialise();\n
    ]]></template>
 
    <signals />

@@ -6,30 +6,30 @@
 
 <!--
       Predefined symbols generated for current peripheral
-      _base_class FTM0 => Ftm
+      _Baseclass FTM0 => Ftm
       _instance   FTM0 => 0
-      _class      FTM0 => Ftm0
-      _name       FTM0 => FTM0
+      _Class      FTM0 => Ftm0
+      _NAME       FTM0 => FTM0
  -->
 
    <template><![CDATA[
       \t/**
-      \t *  Enable clock to $(_class)
+      \t *  Enable clock to $(_Class)
       \t */
       \tstatic void enableClock() {
       #ifdef PCC
-      \t   PccInfo::enable$(_class)Clock();
+      \t   PccInfo::enable$(_Class)Clock();
       #else
       \t   $(clockEnable)
       #endif
       \t}
 
       \t/**
-      \t *  Disable clock to $(_class)
+      \t *  Disable clock to $(_Class)
       \t */
       \tstatic void disableClock() {
       #ifdef PCC
-      \t   PccInfo::disable$(_class)Clock();
+      \t   PccInfo::disable$(_Class)Clock();
       #else
       \t   $(clockDisable)
       #endif

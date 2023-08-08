@@ -1,5 +1,5 @@
 /**
- * @file     uart.h (180.ARM_Peripherals/Project_Headers/uart.h)
+ * @file     uart.h (180.ARM_Peripherals/Project_Headers/uart-MKE.h)
  * @brief    Universal Asynchronous Receiver/Transmitter interface
  *
  * @version  V4.12.1.210

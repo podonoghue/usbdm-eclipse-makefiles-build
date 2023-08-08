@@ -7,7 +7,7 @@
    <constant key="irq_parameters "          type="String"  value="&quot;&quot;"                                    />
    <constant key="irq_call"                 type="String"  value="&quot;&quot;"                                    />
    <constant key="irq_pattern"              type="String"  value="&quot;^%b(\d+)$&quot;"                           />
-   <constant key="irq_classHandler"         type="String"  value="&quot;%c%i::Channel&lt;$1&gt;::irqHandler&quot;" />
+   <constant key="irq_ClassHandler"         type="String"  value="&quot;%c%i::Channel&lt;$1&gt;::irqHandler&quot;" />
    <constant key="peripheralUsesInterrupts" type="Boolean" value="true"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false" />
    <constant key="isSupportedinStartup"     type="Boolean" value="false" />
@@ -45,6 +45,7 @@
    </choiceOption>
 
    <choiceOption key="pitClockConfig" condition="/MCG/$present"
+      enabledBy="enablePeripheralSupport"
       target="pitInputClock"
       description="Clock configuration"
       toolTip="Selects the clock configuration used for calculations involving the bus clock" >
@@ -55,6 +56,7 @@
    </choiceOption>
 
    <choiceOption key="pitClockConfig" condition="/ICS/$present"
+      enabledBy="enablePeripheralSupport"
       target="pitInputClock"
       description="Clock configuration"
       toolTip="Selects the clock configuration used for calculations involving the bus clock" >
@@ -65,11 +67,12 @@
    </choiceOption>
 
    <intOption key="pitInputClock"
+      enabledBy="enablePeripheralSupport"
       constant="true"
       derived="true"
       description="PIT input clock"
       toolTip="The PIT uses the bus clock for timing.\n
-               The frequency shown is based on the current clock configuration.\n
+               The frequency shown is based on the selected clock configuration.\n
                This frequency is used as the basis for calculations on this page."
       units="Hz"
       />
@@ -407,7 +410,7 @@
    <template key="init_description" namespace="all" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
-      \t * Class used to do initialisation of the $(_class)
+      \t * Class used to do initialisation of the $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values.
       \t *
@@ -415,15 +418,15 @@
       \t *
       \t * Example:
       \t * @code
-      \t * static const $(_class)::Init init {
+      \t * static const $(_Class)::Init init {
       \t *
       \t *   // Setup values
       \t *   PitMcrMdis_ClockEnabled                   // Module Disable,
       \t *   PitMcrFrz_TimersRunInDebug                // Freeze,
       \t * };
       \t *
-      \t * // Initialise $(_class) from values specified above
-      \t * $(_class)::configure(init)
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure(init)
       \t * @endcode
       \t */
    ]]>
@@ -432,7 +435,7 @@
    <template key="pitchannelinit_description" namespace="all" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
-      \t * Class used to do initialisation of a $(_class) channel
+      \t * Class used to do initialisation of a $(_Class) channel
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
@@ -440,8 +443,8 @@
       \t *
       \t * Example:
       \t * @code
-      \t * // Initialisation values for $(_class) channel
-      \t * // Parameters available may vary with device - see $(_class)::DefaultChannelInitValues[] for relevant example
+      \t * // Initialisation values for $(_Class) channel
+      \t * // Parameters available may vary with device - see $(_Class)::DefaultChannelInitValues[] for relevant example
       \t * static const Pit::ChannelInit pitInit {
       \t *       PitChannelNum_0,
       \t *
@@ -465,7 +468,7 @@
 
    <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:\n
    ]]>
@@ -474,20 +477,38 @@
    <template namespace="usbdm" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t */
       \ttypedef void (*CallbackFunction)($(irq_parameters));
       \t\n
    ]]>
    </template>
 
+   <template namespace="all" key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t *  Enables and configures the PIT if not already done.
+      \t *  This also disables all channel interrupts and channel reservations if newly configured.
+      \t *
+      \t *  @param[in]  pitDebugMode  Determined whether the PIT halts when suspended during debug
+      \t */
+      \tstatic void configureIfNeeded(PitDebugMode pitDebugMode=PitDebugMode_Freeze) {
+      \t   enable();
+      \t   // Check if disabled and configure if so
+      \t   if ((pit->MCR & PIT_MCR_MDIS_MASK) != 0) {
+      \t      configure(pitDebugMode);
+      \t   }
+      \t}
+      \t\n
+   ]]>
+   </template>
+
    <template namespace="all" key="protectedMethods" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
       \t
       \t/** Callback functions for ISRs */
       \tstatic CallbackFunction sCallbacks[Info::NumChannels];
@@ -603,7 +624,7 @@
 
 <!--   Configure methods -->
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
       codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t *  Enables and configures the PIT.
@@ -633,10 +654,10 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
              codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
-      \t * Configure $(_basename) channel from values specified in init
+      \t * Configure $(_BASENAME) channel from values specified in init
       \t *
       \t * @param init Class containing initialisation values
       \t */
@@ -654,25 +675,25 @@
       \t   Ticks ldval = init.ldval;
       \t\n
    ]]></template>
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
              codeGenCondition="secondsSupport" ><![CDATA[
       \t   if (init.period != 0) {
       \t      ldval = convertSecondsToTicks(init.period)-1;
       \t   }\n
    ]]></template>
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
              codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t
       \t   pit->CHANNEL[init.channelnumber].LDVAL = ldval;
       \t\n
    ]]></template>
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
              codeGenCondition="irqHandlingMethod" ><![CDATA[
       \t   setCallback(init.channelnumber, init.callbackFunction);
       \t   enableNvicInterrupts(init.channelnumber, init.irqlevel);
       \t\n
    ]]></template>
-   <template discardRepeats="true" key="/$(_basename)/InitMethod" namespace="all"
+   <template discardRepeats="true" key="/$(_BASENAME)/InitMethod" namespace="all"
              codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t   // Configure channel
       \t   pit->CHANNEL[init.channelnumber].TCTRL = init.tctrl;
@@ -804,15 +825,15 @@
    <template  codeGenCondition="irqHandlingMethod"
    ><![CDATA[
       \t/**
-      \t * $(_class) interrupt call back
+      \t * $(_Class) interrupt call back
       \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
       \t
    ]]></template>
 
    <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       $(pitchannelinit_description)
-      \ttypedef $(_class)BasicInfo::ChannelInit ChannelInit;
+      \ttypedef $(_Class)BasicInfo::ChannelInit ChannelInit;
       \t
       \t/**
       \t * Default initialisation values for PIT channels
@@ -847,13 +868,13 @@
 
    <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
-      \t};// $(_class)BasicInfo::ChannelInit\n\n
+      \t};// $(_Class)BasicInfo::ChannelInit\n\n
    ]]>
    </template>
 
    <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
-      }; // $(_class)BasicInfo\n\n
+      }; // $(_Class)BasicInfo\n\n
    ]]>
    </template>
 
@@ -885,16 +906,16 @@
    <!-- ************* Common ****************** -->
 
 
-   <template key="/$(_basename)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" ><![CDATA[
 
    /**
-    * Class representing $(_name)
+    * Class representing $(_NAME)
     */
-   class $(_class) : public $(_base_class)Base_T<$(_class)Info> {};
+   class $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
    \n
    ]]></template>
 
-   <template key="/$(_basename)/declarations" namespace="all" codeGenCondition="irqHandlingMethod" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="irqHandlingMethod" ><![CDATA[
    /**
     * MACRO defining the start of a interrupt handler for a PIT channel
     * This will override the handler incorporated within the PIT class.
@@ -924,6 +945,6 @@
       <copy source="Project_Headers/pit-MKE.h"  target="Project_Headers/pit.h"  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <signals />
+   <signals enabledBy="enablePeripheralSupport" />
 
 </peripheralPage>

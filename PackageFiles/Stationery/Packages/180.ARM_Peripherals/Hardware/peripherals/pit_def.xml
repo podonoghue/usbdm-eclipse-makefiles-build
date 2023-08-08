@@ -5,7 +5,7 @@
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
    <constant key = "irq_pattern"      value = "&quot;^%b(\d+)$&quot;"                            type="String" />
-   <constant key = "irq_classHandler" value = "&quot;%c%i::Channel&lt;$1&gt;::irqHandler&quot;"  type="String" />
+   <constant key = "irq_ClassHandler" value = "&quot;%c%i::Channel&lt;$1&gt;::irqHandler&quot;"  type="String" />
    <xi:include href="_irqOptionSubstituted.xml"/>
 
    <xi:include href="_default_instance.xml"/>
@@ -129,7 +129,7 @@
    <template key="init_description" namespace="all" >
    <![CDATA[
       \t/**
-      \t * Class used to do initialisation of a $(_class) channel
+      \t * Class used to do initialisation of a $(_Class) channel
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
@@ -137,8 +137,8 @@
       \t *
       \t * Example:
       \t * @code
-      \t * // Initialisation values for $(_class) channel
-      \t * // Parameters available may vary with device - see $(_class)::DefaultChannelInitValues[] for relevant example
+      \t * // Initialisation values for $(_Class) channel
+      \t * // Parameters available may vary with device - see $(_Class)::DefaultChannelInitValues[] for relevant example
       \t * static const Pit::Init pitInit {
       \t *       PitChannelNum_0,
       \t *
@@ -159,7 +159,7 @@
 
    <template namespace="usbdm" >
    <![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:\n
    ]]>
@@ -168,7 +168,7 @@
    <template namespace="usbdm" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t */
       \ttypedef void (*CallbackFunction)();
       \t\n
@@ -179,9 +179,9 @@
    <![CDATA[
       \t
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
       \t
       \t/** Callback functions for ISRs */
       \tstatic CallbackFunction sCallbacks[Info::NumChannels];
@@ -281,10 +281,10 @@
 
 <!--  Configure method -->
 
-   <setTemplate key="/$(_basename)/InitMethod" codeGenCondition="enablePeripheralSupport"
+   <setTemplate key="/$(_BASENAME)/InitMethod" codeGenCondition="enablePeripheralSupport"
                 variables="pit_tctrl_ten[]" discardRepeats="true" namespace="all" ><![CDATA[
       \t/**
-      \t * Configure $(_basename) channel from values specified in init
+      \t * Configure $(_BASENAME) channel from values specified in init
       \t *
       \t * @param init Class containing initialisation values
       \t */
@@ -302,25 +302,25 @@
       \t   Ticks ldval = init.ldval;
       \t\n
    ]]></template>
-   <setTemplate key="/$(_basename)/InitMethod" codeGenCondition="supportFloat"
+   <setTemplate key="/$(_BASENAME)/InitMethod" codeGenCondition="supportFloat"
                 variables="pit_tctrl_ten[]" discardRepeats="true" namespace="all" ><![CDATA[
       \t   if (init.period != 0) {
       \t      ldval = convertSecondsToTicks(init.period)-1;
       \t   }\n
    ]]></template>
-   <setTemplate key="/$(_basename)/InitMethod" codeGenCondition="enablePeripheralSupport"
+   <setTemplate key="/$(_BASENAME)/InitMethod" codeGenCondition="enablePeripheralSupport"
                 variables="pit_tctrl_ten[]" discardRepeats="true" namespace="all" ><![CDATA[
       \t
       \t   pit->CHANNEL[init.channelnumber].LDVAL = ldval;
       \t
    ]]></template>
-   <template key="/$(_basename)/InitMethod" codeGenCondition="irqHandlingMethod"
+   <template key="/$(_BASENAME)/InitMethod" codeGenCondition="irqHandlingMethod"
                 variables="pit_tctrl_ten[]" discardRepeats="true" namespace="all" ><![CDATA[
       \t   setCallback(init.channelnumber, init.callbackFunction);
       \t   enableNvicInterrupts(init.channelnumber, init.irqlevel);
       \t\n
    ]]></template>
-   <setTemplate key="/$(_basename)/InitMethod" codeGenCondition="enablePeripheralSupport"
+   <setTemplate key="/$(_BASENAME)/InitMethod" codeGenCondition="enablePeripheralSupport"
                 variables="pit_tctrl_ten[]" discardRepeats="true" namespace="all" ><![CDATA[
       \t   // Configure channel
       \t   pit->CHANNEL[init.channelnumber].TCTRL = init.tctrl;
@@ -401,12 +401,12 @@
 
    <template><![CDATA[
       $(init_description)
-      \ttypedef $(_class)BasicInfo::Init Init;
+      \ttypedef $(_Class)BasicInfo::Init Init;
       \t
       \t/**
-      \t * $(_class) interrupt call back
+      \t * $(_Class) interrupt call back
       \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
       \t
       \t/**
       \t * Default initialisation values for PIT channels
@@ -436,18 +436,18 @@
 
    <template namespace="usbdm" >
    <![CDATA[
-      \t};// $(_class)BasicInfo::Init\n\n
+      \t};// $(_Class)BasicInfo::Init\n\n
    ]]>
    </template>
 
    <template namespace="usbdm" >
    <![CDATA[
-      }; // $(_class)BasicInfo\n\n
+      }; // $(_Class)BasicInfo\n\n
    ]]>
    </template>
 
    <template><![CDATA[
-         \t};// $(_class)Info\n\n
+         \t};// $(_Class)Info\n\n
    ]]></template>
 
    <!--  ==================== Common ======================== -->
@@ -505,11 +505,11 @@
       \t}\n\n
    ]]></template>
 
-   <template key="/$(_basename)/declarations" namespace="all"  ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" namespace="all"  ><![CDATA[
    \t/**
-   \t * Class representing $(_name)
+   \t * Class representing $(_NAME)
    \t */
-   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
    ]]></template>
 
    <template key="/PIT/declarations" namespace="all"  ><![CDATA[
@@ -517,10 +517,10 @@
    \t/**
    \t * @brief class representing a PIT channel
    \t */
-   \tusing $(_class)Channel = $(_class)::PitChannel;
+   \tusing $(_Class)Channel = $(_Class)::PitChannel;
    ]]></template>
 
-   <template key="/$(_basename)/declarations" namespace="all" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" namespace="all" ><![CDATA[
    \t/**
    \t * MACRO defining the start of a interrupt handler for a PIT channel
    \t * This will override the handler incorporated within the PIT class.

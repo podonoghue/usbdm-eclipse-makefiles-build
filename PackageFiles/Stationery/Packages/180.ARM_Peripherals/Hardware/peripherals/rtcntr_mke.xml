@@ -16,11 +16,11 @@
 
 <!--
     * General substitutions
-    *  $(_name)         => e.g FTM2                    (fProvider.getName())
-    *  $(_base_class)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
+    *  $(_NAME)         => e.g FTM2                    (fProvider.getName())
+    *  $(_Baseclass)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
     *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
-    *  $(_class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
-    *  $(_basename)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
+    *  $(_Class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
 -->
 
 <!--
@@ -63,7 +63,7 @@
    </binaryOption >
 
    <binaryOption key="rtc_sc_rtco" condition="rtc_sc_rtco_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="RtcOutput"
       toolTip="Enables the toggling of RTCO pin on overflow"
       description="Real-Time Counter Output" >
@@ -73,7 +73,7 @@
 
    <choiceOption key="rtc_sc_rtclks" condition="rtc_sc_rtclks_present"
       target="rtc_inputclock"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="RtcClockSource"
       toolTip="This read/write field selects the clock source input to the RTC prescaler.\n
                Changing the clock source clears the prescaler and RTCCNT counters"
@@ -94,7 +94,7 @@
 
    <choiceOption key="rtc_sc_rtcps" condition="rtc_sc_rtcps_present"
       target="rtc_clock"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="RtcPrescaler"
       toolTip="Selects binary-based or decimal-based divide-by values for the clock source.\n
                Changing the prescaler value clears the prescaler and RTCCNT counters\n
@@ -121,7 +121,7 @@
    <!-- ************* MOD ****************** -->
 
    <intOption key="rtc_mod_mod" condition="rtc_mod_mod_present"
-      enabledBy="/$(_basename)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       typeName="uint32_t"
       description="Modulo"
       toolTip="16-bit modulo value.\n
@@ -146,7 +146,7 @@
       rtc_sc_rtcps:ClockPrescaler;
       rtc_sc_rtie:Interrupts;
       rtc_sc_rtco:Output" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -161,10 +161,10 @@
 
 <!--   ========== RTC Init class =============================== -->
 
-   <template key="init_description" namespace="all" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
       \t/**
-      \t * Class used to do initialisation of the $(_class)
+      \t * Class used to do initialisation of the $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values.
       \t *
@@ -172,7 +172,7 @@
       \t *
       \t * Example:
       \t * @code
-      \t * static const $(_class)::Init init {
+      \t * static const $(_Class)::Init init {
       \t *
       \t *   // Setup values
       \t *   RtcScRtclks_ExternalClock                 // Real-Time Clock Source Select,
@@ -183,16 +183,16 @@
       \t *   0,                                        // Modulo,
       \t * };
       \t *
-      \t * // Initialise $(_class) from values specified above
-      \t * $(_class)::configure(init)
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure(init)
       \t * @endcode
       \t */
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:\n
    ]]>
@@ -201,7 +201,7 @@
    <template namespace="usbdm" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t */
       \ttypedef void (*CallbackFunction)($(irq_parameters));\n
    ]]>
@@ -210,9 +210,9 @@
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
       \t
       \t/** Callback function for ISR */
       \tstatic CallbackFunction sCallback;
@@ -245,7 +245,7 @@
       \t}
       \t
       \t/**
-      \t * $(_basename) interrupt handler -  Calls $(_basename) callback
+      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
       \t */
       \tstatic void irqHandler() {
       \t
@@ -263,12 +263,12 @@
    <![CDATA[
       \t
       \t/** Callback for programmatically set handler */
-      \t$(_class)Info::CallbackFunction $(_class)Info::sCallback = $(_class)Info::unhandledCallback;
+      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
       \t\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -295,14 +295,14 @@
       \t   %params = nullptr;\n\n
    ]]></setTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="rtc_sc_rtclks,rtc_sc_rtcps,rtc_sc_rtie,rtc_sc_rtco"
    ><![CDATA[
       \t   /// Status and Control Register
       \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="rtc_mod_mod"
    ><![CDATA[
       \t   /// Modulo Register
@@ -319,7 +319,7 @@
 
 <!--   Configure methods -->
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -332,9 +332,9 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t/**
-      \t * Configure $(_basename) from values specified in init
+      \t * Configure $(_BASENAME) from values specified in init
       \t *
       \t * @param init Class containing initialisation values
       \t */
@@ -345,7 +345,7 @@
       \t   Info::enableClock();
       \t\n
    ]]></template>
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
              condition="irqHandlingMethod" ><![CDATA[
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      Info::setCallback(init.callbackFunction);
@@ -354,7 +354,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_basename)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t   // ..........  Regs to init .......... ;
       \t   rtc->MOD   = init.mod;
       \t   rtc->SC    = init.sc;
@@ -407,7 +407,7 @@
             rtc_sc_rtie;
             rtc_sc_rtco
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -433,7 +433,7 @@
       values="
             rtc_mod_mod
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport"
+      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -458,7 +458,7 @@
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="/$(_basename)/enablePeripheralSupport"
+   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -470,35 +470,35 @@
          "
    ><![CDATA[
       $(init_description)
-      \ttypedef $(_class)BasicInfo::Init Init;
+      \ttypedef $(_Class)BasicInfo::Init Init;
       \t
       \t/**
-      \t * Default initialisation value for $(_class)
+      \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
    ]]></initialValueTemplate>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[
-      \t}; // $(_class)BasicInfo::Init\n\n
+      \t}; // $(_Class)BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_basename)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[
-      }; // $(_class)BasicInfo\n\n
+      }; // $(_Class)BasicInfo\n\n
    ]]>
    </template>
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_basename)/declarations" namespace="all" codeGenCondition="/$(_basename)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
    \t/**
-   \t * Class representing $(_name)
+   \t * Class representing $(_NAME)
    \t */
-   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
    ]]></template>
 
    <validate
@@ -512,14 +512,21 @@
    <!-- ************* Startup ****************** -->
 
    <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_headername).h"\n
+      <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
-      \t/*  Initialise $(_class) */
-      \tUSBDM::$(_class)::defaultConfigure();\n
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
+
+   <!-- ************* Signal mapping ****************** -->
+   <category name="SIM" description="Pin mapping">
+      <aliasOption key="/SIM/sim_pinsel_$(_name)ps"  constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel0_$(_name)ps" constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" constant="false" optional="true" />
+   </category>
 
    <signals />
 

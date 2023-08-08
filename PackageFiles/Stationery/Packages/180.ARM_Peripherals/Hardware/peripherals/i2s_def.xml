@@ -11,7 +11,7 @@
    <aliasOption key="/SIM/system_bus_clock[]" />
 
    <stringOption key="irq_pattern"        constant="true" value="^I2S%i_?(Rx|Tx)?$" hidden="true" />
-   <stringOption key="irq_classHandler"   constant="true" value="%c%i::irqHandler" hidden="true" />
+   <stringOption key="irq_ClassHandler"   constant="true" value="%c%i::irqHandler" hidden="true" />
    <xi:include href="_irqOptionSubstituted.xml"/>
    <projectActionList id = "i2s_files" >
       <copy source="Project_Headers/i2s.h"            target="Project_Headers/i2s.h"            overwrite="true"  derived="true" />
@@ -19,9 +19,9 @@
 
    <template key="/I2S/declarations" namespace="all"  ><![CDATA[
    \t/**
-   \t * Class representing $(_name)
+   \t * Class representing $(_NAME)
    \t */
-   \tusing $(_class) = $(_base_class)Base_T<$(_class)Info>;\n
+   \tusing $(_Class) = $(_Baseclass)Base_T<$(_Class)Info>;\n
    ]]></template>
 
    <xi:include href="_clockOption.xml"/>

@@ -18,6 +18,7 @@
    </binaryOption>
 
    <binaryOption key="check_minimums"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="Check minimum interval and minimum resolution"
       toolTip="Enables boundary checks of minimum interval and minimum resolution when setting values" >
       <choice value="0" name="No checks done" />
@@ -25,23 +26,27 @@
    </binaryOption>
 
    <intOption key="minimumInterval"
+      enabledBy="check_minimums"
       description="Minimum usable interval in ticks"
       toolTip="This value is used as a minimum acceptable value for the timer interval in ticks\n
                when using convertMicrosecondsToTicks() or convertSecondsToTicks()"
       value="20" min="0" max="65535"/>
 
    <intOption key="minimumResolution"
+      enabledBy="check_minimums"
       description="Minimum resolution for PWM interval"
       toolTip="This value is used as a minimum value for the timer period in ticks \n
          so that a reasonable resolution is available for PWM duty-cycle"
       value="100" min="0" max="65535" />
 
    <intOption key="ftmExternalClock"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="FTM External clock"
       toolTip="Clock frequency of external clock supplied to FTM_CLKIN pin"
       value="0" min="0" units="Hz"/>
 
    <choiceOption key="ftm_sc_clks"  condition="/MCG/$present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="Clock Source"
       enumStem="FtmClockSource"
       target="inputClockFrequency"
@@ -53,6 +58,7 @@
    </choiceOption>
 
    <choiceOption key="ftm_sc_clks"  condition="/ICS/$present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="Clock Source"
       enumStem="FtmClockSource"
       target="inputClockFrequency"
@@ -64,12 +70,14 @@
    </choiceOption>
 
    <intOption key="inputClockFrequency"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       constant="true"
       description="Frequency of input clock to timer"
       derived="true"
       units="Hz"/>
 
    <choiceOption key="ftm_sc_ps"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="Clock prescaler"
       enumStem="FtmPrescale"
       target="clockFrequency"
@@ -85,6 +93,7 @@
    </choiceOption>
 
    <intOption key="clockFrequency"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       constant="true"
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
@@ -92,6 +101,7 @@
       units="Hz"/>
 
    <floatOption key="clockPeriod"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       ref="(1.0/clockFrequency)"
       constant="true"
       description="Period of timer clock"
@@ -100,6 +110,7 @@
       units="s"/>
 
    <choiceOption key="ftm_sc_mode"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       valueFormat="FTM_SC_TOF(%s),FTM_SC_CPWMS(%s)"
       enumStem="FtmMode"
       description="Alignment and whether interval or free-running mode"
@@ -111,18 +122,20 @@
       <choice value="1,0" name="Free-running (count up)"         enum="FreeRunning"  isDefault="true" />
    </choiceOption>
 
-   <intOption key="ftm_cntin" description="Start value for counter"
+   <intOption key="ftm_cntin" 
+      description="Start value for counter"
       enabledBy="ftm_sc_mode!=2"
       toolTip="The timer counts from this value to ftm_mod"
       typeName="Ticks &amp;"
-      valueFormat="%s_ticks"
+      units="ticks"
       value="0" min="0" max="65535" />
 
-   <intOption key="ftm_mod" description="End value for counter"
+   <intOption key="ftm_mod" 
+      description="End value for counter"
       enabledBy="ftm_sc_mode!=2"
       toolTip="The timer counts from ftm_cntin to this value"
       typeName="Ticks &amp;"
-      valueFormat="%s_ticks"
+      units="ticks"
       value="65535" min="0" max="65535" />
 
    <floatOption key="ftm_modPeriod"
@@ -159,6 +172,7 @@
    </binaryOption>
 
    <binaryOption key="ftm_qdctrl_quadmode" condition="ftm_qdctrl_quadmode_present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="FtmQuadratureMode"
       description="Quadrature decoding mode"
       toolTip="Determines how the inputs control the counting sequence">
@@ -167,6 +181,7 @@
    </binaryOption>
 
    <binaryOption key="ftm_qdctrl_phapol" condition="ftm_qdctrl_phapol_present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="FtmPhaseAPolarity"
       description="Polarity of Phase A input"
       toolTip="Polarity of Phase A input">
@@ -175,6 +190,7 @@
    </binaryOption>
 
    <binaryOption key="ftm_qdctrl_phbpol" condition="ftm_qdctrl_phbpol_present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="FtmPhaseBPolarity"
       description="Polarity of Phase B input"
       toolTip="Polarity of Phase B input">
@@ -183,6 +199,7 @@
    </binaryOption>
 
    <choiceOption key="ftm_qdfilter_a" condition="ftm_qdctrl_phafltren_present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       valueFormat="(FTM_QDCTRL_PHAFLTREN(%s)&lt;&lt;8),FTM_FILTER_CH0FVAL(%s)"
       enumType="uint16_t"
       enumStem="FtmPhaseAFilter"
@@ -207,6 +224,7 @@
    </choiceOption>
 
    <choiceOption key="ftm_qdfilter_b" condition="ftm_qdctrl_phbfltren_present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       valueFormat="(FTM_QDCTRL_PHBFLTREN(%s)&lt;&lt;8),FTM_FILTER_CH1FVAL(%s)"
       enumType="uint16_t"
       enumStem="FtmPhaseBFilter"
@@ -255,6 +273,7 @@
       <title description="------- FTM Channel %(ch) -------" toolTip="" />
 
       <choiceOption key="ftm_cnsc_mode[%(ch)]" condition="ftm_combine_decap0_present&amp;&amp;ftm_cnsc_ms_present&amp;&amp;ftm_cnsc_els_present"
+         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          valueFormat="(FTM_COMBINE_DECAPEN0(%s)&lt;&lt;8),(FTM_COMBINE_COMBINE0(%s)&lt;&lt;8),FTM_CnSC_MS(%s),FTM_CnSC_ELS(%s)"
          enumType="uint16_t"
          enumStem="FtmChannelMode"
@@ -279,6 +298,7 @@
       </choiceOption>
 
       <choiceOption key="ftm_cnsc_mode[%(ch)]" condition="!ftm_combine_decap0_present&amp;&amp;ftm_cnsc_ms_present&amp;&amp;ftm_cnsc_els_present"
+         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          valueFormat="FTM_CnSC_MS(%s),FTM_CnSC_ELS(%s)"
          enumType="uint16_t"
          enumStem="FtmChannelMode"
@@ -297,6 +317,7 @@
       </choiceOption>
 
       <choiceOption key="ftm_cnsc_action[%(ch)]" condition="ftm_cnsc_chie_present&amp;&amp;ftm_cnsc_dma_present"
+         enabledBy="irqHandlingMethod&amp;&amp;(ftm_cnsc_mode[%(ch)]!=0)"
          valueFormat="FTM_CnSC_CHIE(%s),FTM_CnSC_DMA(%s)"
          enumType="uint8_t"
          enumStem="FtmChannelAction"
@@ -308,6 +329,7 @@
       </choiceOption>
 
       <binaryOption key="ftm_cnsc_action[%(ch)]" condition="ftm_cnsc_chie_present&amp;&amp;!ftm_cnsc_dma_present"
+         enabledBy="irqHandlingMethod&amp;&amp;(ftm_cnsc_mode[%(ch)]!=0)"
          valueFormat="FTM_CnSC_CHIE(%s)"
          enumType="uint8_t"
          enumStem="FtmChannelAction"
@@ -318,6 +340,7 @@
       </binaryOption>
 
       <binaryOption key="ftm_cnsc_icrst[%(ch)]" condition="ftm_cnsc_icrst_present"
+         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          valueFormat="FTM_CnSC_ICRST(%s)"
          enumStem="FtmChannelReset"
          enumType="uint8_t"
@@ -328,11 +351,13 @@
       </binaryOption>
 
       <intOption key="ftm_cnv[%(ch)]"
+         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          valueFormat="%s_ticks"
          typeName="Ticks &amp;"
          description="Output Compare Event time in ticks"
          toolTip="This value is compared against the main counter in output compare modes"
-         value="0" min="0" max="65535" />
+         units="ticks"
+         value="0" min="0" max="@ftm_mod" />
 
       <floatOption key="ftm_cnvEventTime[%(ch)]"
          enabledBy="((ftm_cnsc_mode[%(ch)]&gt;=4)&amp;&amp;(ftm_cnsc_mode[%(ch)]&lt;=7))||(ftm_cnsc_mode[%(ch)]&gt;=14)"
@@ -374,17 +399,18 @@
          bitList="CH2TRIG,CH3TRIG,CH4TRIG,CH5TRIG,CH0TRIG,CH1TRIG,"
          />
       <binaryOption key="ftm_exttrig_inittrigen" description="Initialisation Trigger Enable"
+         enumStem="FtmInitTrig"
          toolTip="Enables the generation of the trigger when the FTM counter \n
           is equal to the CNTIN register">
-         <choice value="0" name="Disabled" />
-         <choice value="1" name="Enabled" />
+         <choice value="0" name="Disabled" enum="Disabled" />
+         <choice value="1" name="Enabled"  enum="Enabled" />
       </binaryOption>
    </category>
    <template><![CDATA[
       \t/// Default value for EXTTRIG) register
       \tstatic constexpr uint32_t exttrig  =
-      \t    $(ftm_exttrig_trig)|                              // External Trigger Enable
-      \t    FTM_EXTTRIG_INITTRIGEN($(ftm_exttrig_inittrigen));    // Initialisation Trigger Enable \n\n
+      \t    $(ftm_exttrig_trig)|                  // External Trigger Enable
+      \t    $(ftm_exttrig_inittrigen.usageValue); // Initialisation Trigger Enable \n\n
    ]]></template>
 
    <category name="Advanced" description="Advanced options">
@@ -408,7 +434,7 @@
       <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och0src" optional="true" constant="false"/>
    </category>
 
-   <setTemplate key="/$(_basename)/static_functions" namespace="all"
+   <setTemplate key="/$(_BASENAME)/static_functions" namespace="all"
       discardRepeats="true"
       variables="ftm_sc_mode,ftm_sc_clks,ftm_sc_ps"
       nonDefaultParams="2"
@@ -438,7 +464,7 @@
          values=" non_static_functions : ''        : ' const' : getInputClockFrequencyVirtual  : CHANNEL : FtmBase   : false ;
                   static_functions     : 'static ' : ''       : 'Info::getInputClockFrequency' : channel : OwningFtm : true
    ">
-      <setTemplate key="/$(_basename)/%(k)" namespace="all"
+      <setTemplate key="/$(_BASENAME)/%(k)" namespace="all"
          discardRepeats="true"
          variables="ftm_sc_clks,ftm_sc_ps"
          nonDefaultParams="2"
@@ -481,7 +507,7 @@
          values=" ftm_sc_mode  : Mode;
                   ftm_sc_clks  : ClockSource;
                   ftm_sc_ps    : Prescaler">
-         <setTemplate key="/$(_basename)/%(k)" namespace="all"
+         <setTemplate key="/$(_BASENAME)/%(k)" namespace="all"
             discardRepeats="true"
             variables="%(f)"
             nonDefaultParams="2"
@@ -524,7 +550,7 @@
       <for keys="  f           :  n"
          values=" ftm_cntin    : CounterStartValue;
                   ftm_mod      : CounterMaximumValue">
-         <setTemplate key="/$(_basename)/%(k)" namespace="all"
+         <setTemplate key="/$(_BASENAME)/%(k)" namespace="all"
             discardRepeats="true"
             variables="%(f)"
             nonDefaultParams="2"
@@ -555,7 +581,7 @@
          ]]></setTemplate>
       </for>
 
-      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
          \t/**
          \t * Calculate FTM timing parameters to achieve a given period
          \t *
@@ -592,14 +618,14 @@
          \t      }
          \t      unsigned modValue = round(modValueF);\n
       ]]></template>
-      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
          \t      if (modValue < Info::minimumResolution) {
          \t         usbdm_assert(false, "Interval is too short");
          \t         // Too short a period for minimum resolution
          \t         return setErrorCode(E_TOO_SMALL);
          \t      }\n
       ]]></template>
-      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
          \t      if (modValue <= maxModValue) {
          \t         sc   = (sc&~FTM_SC_PS_MASK)|FTM_SC_PS(prescalerValue);
          \t         mod  = modValue;
@@ -613,7 +639,7 @@
          \t   return setErrorCode(E_TOO_LARGE);
          \t}\n\n
       ]]></template>
-      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
          \t/**
          \t * Set period
          \t *
@@ -702,7 +728,7 @@
          \t   return E_NO_ERROR;
          \t}\n\n
       ]]></template>
-      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
          \t/**
          \t * Get frequency of timer tick
          \t *
@@ -729,7 +755,7 @@
          \t   return %(getInputClockFrequency)((FtmClockSource)(ftm->SC&FTM_SC_CLKS_MASK))/prescaleFactor;
          \t}\n\n
       ]]></template>
-      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
          \t/**
          \t * Convert time in microseconds to time in ticks
          \t *
@@ -751,13 +777,13 @@
          \t      setErrorCode(E_TOO_LARGE);
          \t   }\n
       ]]></template>
-      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
          \t   if (rv < Info::minimumInterval) {
          \t      // Attempt to set too short a period
          \t      setErrorCode(E_TOO_SMALL);
          \t   }\n
       ]]></template>
-      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
          \t   return (unsigned)rv;
          \t}
          \t
@@ -782,13 +808,13 @@
          \t      setErrorCode(E_TOO_LARGE);
          \t   }\n
       ]]></template>
-      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
          \t   if (rv < Info::minimumInterval) {
          \t      // Attempt to set too short a period
          \t      setErrorCode(E_TOO_SMALL);
          \t   }\n
       ]]></template>
-      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
          \t   return (unsigned)rv;
          \t}
          \t
@@ -864,7 +890,7 @@
          \t}
          \t\n
       ]]></template>
-      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
          \t/**
          \t * Reset counter to initial value
          \t */
@@ -1007,7 +1033,7 @@
          \t      uint32_t filterDelay  = FTM_FLTCTRL_FFVAL_MASK>>(FTM_FLTCTRL_FFVAL_SHIFT+1))%(const) {
          \t\n
       ]]></template>
-      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
          \t
          \t   if (polarity) {
          \t      // Set active high
@@ -1031,7 +1057,7 @@
          \t   ftm->MODE    = ftm->MODE | FTM_MODE_FAULTM(2);
          \t}\n\n
       ]]></template>
-      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"
+      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true"
          variables="ftm_pol_pol0_present" ><![CDATA[
          \t/**
          \t * Set polarity of all channels
@@ -1057,7 +1083,7 @@
          \t   }
          \t}\n\n
       ]]></template>
-      <template key="/$(_basename)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
          \t/*
          \t * *****************************************************************
          \t *          Channel functions
@@ -1288,7 +1314,7 @@
 
 <!-- Channel Functions -->
 
-   <template key="/$(_basename)_CHANNEL/%(k)" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)_CHANNEL/%(k)" namespace="all" discardRepeats="true"
       variables="tpm_cnsc_action[]"
       linePadding="xxx"
    ><![CDATA[
@@ -1308,7 +1334,7 @@
       \t   }\n\n
    ]]></template>
 
-   <template key="/$(_basename)_CHANNEL/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+   <template key="/$(_BASENAME)_CHANNEL/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
       \t   /**
       \t    * Configure channel.
       \t    * No affect on shared settings of owning Timer
@@ -1494,7 +1520,7 @@
       \t      ftm->SWOCTRL = ((ftm->SWOCTRL & ~MASK)) | (ftmChannelForce & MASK);
       \t   }\n\n
    ]]></template>
-   <template key="/$(_basename)_CHANNEL/%(k)" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)_CHANNEL/%(k)" namespace="all" discardRepeats="true"
       variables="ftm_pol_pol0_present" ><![CDATA[
       \t   /**
       \t    * Set polarity of channels.
@@ -1530,7 +1556,7 @@
 
    <template key="init_description" namespace="all" ><![CDATA[
       \t/**
-      \t * Class used to do initialisation of $(_class)
+      \t * Class used to do initialisation of $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
@@ -1553,7 +1579,7 @@
       \t *    100_ms,                        // Timer period or minimum interval in seconds
       \t *
       \t *    // Optional base value to start with (must be last parameter)
-      \t *    $(_class)::DefaultValue
+      \t *    $(_Class)::DefaultValue
       \t * };
       \t *
       \t * // Initialise FTM from values specified above
@@ -1563,7 +1589,7 @@
    ]]></template>
 
    <template namespace="usbdm" ><![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:\n\n
    ]]></template>
@@ -1572,14 +1598,14 @@
        variables="irqHandlingMethod">
    <![CDATA[
       \t/**
-      \t * Type definition for $(_class) channel interrupt call-back
+      \t * Type definition for $(_Class) channel interrupt call-back
       \t *
       \t * @param[in] status Flags indicating interrupt source channel(s)
       \t */
       \ttypedef void (*ChannelCallbackFunction)(uint8_t status);
       \t
       \t/**
-      \t * Type definition for $(_class) overflow and fault call-back.
+      \t * Type definition for $(_Class) overflow and fault call-back.
       \t */
       \ttypedef void (*CallbackFunction)();\n\n
    ]]></setTemplate>
@@ -1654,7 +1680,7 @@ $(init_description)
 
 <!--   Configure method -->
 
-   <setTemplate variables="ftm_sc_clks" discardRepeats="true" key="/$(_basename)/InitMethod" namespace="all" ><![CDATA[
+   <setTemplate variables="ftm_sc_clks" discardRepeats="true" key="/$(_BASENAME)/InitMethod" namespace="all" ><![CDATA[
       \t/**
       \t * Configure FTM from values specified in init
       \t
@@ -1869,14 +1895,14 @@ $(init_description)
 
    <template><![CDATA[
    \t/**
-   \t * Type definition for $(_class) overflow and fault call-back.
+   \t * Type definition for $(_Class) overflow and fault call-back.
    \t */
-   \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+   \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
    \t
    \t/**
-   \t * Type definition for $(_class) channel interrupt call-back
+   \t * Type definition for $(_Class) channel interrupt call-back
    \t */
-   \ttypedef $(_class)BasicInfo::ChannelCallbackFunction ChannelCallbackFunction;
+   \ttypedef $(_Class)BasicInfo::ChannelCallbackFunction ChannelCallbackFunction;
    \t\n
    ]]></template>
 
@@ -1927,7 +1953,7 @@ $(init_description)
          ftm_mod"
    ><![CDATA[
       $(init_description)
-      \ttypedef $(_class)BasicInfo::Init Init;
+      \ttypedef $(_Class)BasicInfo::Init Init;
       \t
       \t/**
       \t * Default initialisation value for Ftm$(_instance)
@@ -1960,7 +1986,7 @@ $(init_description)
       \t *    0_ticks,                    // Output Compare Event time
       \t *
       \t *    // Optional base value to start with (must be last parameter)
-      \t *    $(_class)::DefaultChannelInitValues[FtmChannelNum_3]
+      \t *    $(_Class)::DefaultChannelInitValues[FtmChannelNum_3]
       \t * };
       \t *
       \t * // Initialise FTM from values specified above
@@ -1991,7 +2017,7 @@ $(channel_init_description)
    <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs"
       variables="irqHandlingMethod"
     ><![CDATA[
-      \t   /// $(_class) channel interrupt call-back
+      \t   /// $(_Class) channel interrupt call-back
       \t   ChannelCallbackFunction callbackFunction = nullptr;\n\n
    ]]></setTemplate>
 
@@ -2025,7 +2051,7 @@ $(channel_init_description)
 
 <!--  Configure method -->
 
-   <template discardRepeats="true" key="/$(_basename)/ChannelInitMethod" namespace="all" ><![CDATA[
+   <template discardRepeats="true" key="/$(_BASENAME)/ChannelInitMethod" namespace="all" ><![CDATA[
       \t/**
       \t * Configure Channel from values specified in channelInit
       \t
@@ -2041,7 +2067,7 @@ $(channel_init_description)
       \t   }
       \t\n
    ]]></template>
-   <template discardRepeats="true" key="/$(_basename)/ChannelInitMethod" namespace="all" condition="ftm_combine_combine0_present" ><![CDATA[
+   <template discardRepeats="true" key="/$(_BASENAME)/ChannelInitMethod" namespace="all" condition="ftm_combine_combine0_present" ><![CDATA[
       \t   // Configure timer combine mode
       \t   if ((channelInit.channel&0b1) == 0) {
       \t      // Even channel value controls paired channels n,n+1
@@ -2050,7 +2076,7 @@ $(channel_init_description)
       \t      ftm->COMBINE = (ftm->COMBINE & ~mask) | (((channelInit.cnsc>>8)<<offset)&mask);
       \t   }\n
    ]]></template>
-   <template discardRepeats="true" key="/$(_basename)/ChannelInitMethod" namespace="all" ><![CDATA[
+   <template discardRepeats="true" key="/$(_BASENAME)/ChannelInitMethod" namespace="all" ><![CDATA[
       \t   // Configure timer channel
       \t   ftm->CONTROLS[channelInit.channel].CnSC = channelInit.cnsc;
       \t   ftm->CONTROLS[channelInit.channel].CnV  = channelInit.cnv;
@@ -2134,7 +2160,7 @@ $(channel_init_description)
 
   <template><![CDATA[
       $(channel_init_description)
-      \ttypedef $(_class)BasicInfo::ChannelInit ChannelInit;
+      \ttypedef $(_Class)BasicInfo::ChannelInit ChannelInit;
       \t
       \t/**
       \t * Default initialisation value for Ftm$(_instance)ChannelInit
@@ -2187,7 +2213,7 @@ $(channel_init_description)
       \t *    ftmCallbak,                       // Timer overflow call-back
       \t *
       \t *    // Optional base value to start with (must be last parameter)
-      \t *    $(_class)::DefaultQuadInitValue
+      \t *    $(_Class)::DefaultQuadInitValue
       \t * };
       \t *
       \t * // Initialise FTM from values specified above
@@ -2252,7 +2278,7 @@ $(quad_init_description)
 
 <!--  Configure method -->
 
-   <template discardRepeats="true" key="/$(_basename)/QuadInitMethod" namespace="all" condition="ftm_qdctrl_quadmode_present" ><![CDATA[
+   <template discardRepeats="true" key="/$(_BASENAME)/QuadInitMethod" namespace="all" condition="ftm_qdctrl_quadmode_present" ><![CDATA[
       \t/**
       \t * Configure QuadDecoder from values specified in init
       \t
@@ -2428,7 +2454,7 @@ $(quad_init_description)
          ftm_sc_ps"
    ><![CDATA[
       $(quad_init_description)
-      \ttypedef $(_class)BasicInfo::QuadInit QuadInit;
+      \ttypedef $(_Class)BasicInfo::QuadInit QuadInit;
       \t
       \t/**
       \t * Default initialisation value for Ftm$(_instance)QuadDecoder
@@ -2608,17 +2634,17 @@ $(quad_init_description)
 
    <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
       \t/**
-      \t * Callback function for Channel Fault and timer overflow for $(_class)
+      \t * Callback function for Channel Fault and timer overflow for $(_Class)
       \t */
-      \t$(_class)Info::CallbackFunction $(_class)Info::callback = unhandledCallback;
+      \t$(_Class)Info::CallbackFunction $(_Class)Info::callback = unhandledCallback;
       \t\n
    ]]></template>
 
    <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
       \t/**
-      \t * Callback table for programmatically set handlers for $(_class)
+      \t * Callback table for programmatically set handlers for $(_Class)
       \t */
-      \t$(_class)Info::ChannelCallbackFunction $(_class)Info::channelCallbacks[] = {\n\n
+      \t$(_Class)Info::ChannelCallbackFunction $(_Class)Info::channelCallbacks[] = {\n\n
    ]]></template>
    <for keys="ch" dim="NumChannels">
       <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs" ><![CDATA[
@@ -2646,21 +2672,30 @@ $(quad_init_description)
       <copy source="Snippets/neopixel-example.cpp"        target="Snippets/neopixel-example.cpp"        overwrite="true" derived="true" />
    </projectActionList>
 
-   <template key="/$(_basename)/declarations" namespace="all"
+   <template key="/$(_BASENAME)/declarations" namespace="all"
    ><![CDATA[
    /**
-    * Class representing $(_name)
+    * Class representing $(_NAME)
     */
-   class $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n\n
+   class $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n\n
    ]]></template>
 
-   <template key="/$(_basename)/quadDeclarations" namespace="all"  ><![CDATA[
+   <template key="/$(_BASENAME)/quadDeclarations" namespace="all"  ><![CDATA[
    \t/**
-   \t * Class representing $(_class) as Quadrature decoder
+   \t * Class representing $(_Class) as Quadrature decoder
    \t */
-   \ttypedef $(_base_class)QuadDecoder_T<$(_class)Info> $(_base_class)QuadDecoder$(_instance);\n
+   \ttypedef $(_Baseclass)QuadDecoder_T<$(_Class)Info> $(_Baseclass)QuadDecoder$(_instance);\n
    ]]></template>
 
-   <signals/>
+   <!-- ************* Signal mapping ****************** -->
+   <category name="SIM" description="Pin mapping">
+      <for keys="ch" dim="8" >
+         <aliasOption key="/SIM/sim_pinsel_$(_name)ps%(ch)"  constant="false" optional="true" />
+         <aliasOption key="/SIM/sim_pinsel0_$(_name)ps%(ch)" constant="false" optional="true" />
+         <aliasOption key="/SIM/sim_pinsel1_$(_name)ps%(ch)" constant="false" optional="true" />
+      </for>
+   </category>
+
+   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
 
 </fragment>

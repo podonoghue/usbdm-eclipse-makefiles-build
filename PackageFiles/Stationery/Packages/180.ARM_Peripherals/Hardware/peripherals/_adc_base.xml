@@ -337,7 +337,7 @@
 
    <template key="init_description" namespace="all" ><![CDATA[
       \t/**
-      \t * Class used to do initialisation of $(_class)
+      \t * Class used to do initialisation of $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
@@ -345,9 +345,9 @@
       \t *
       \t * Example:
       \t * @code
-      \t * // Initialisation values for $(_class)
-      \t * // Options available vary with device - See $(_class)::DefaultInitValue for example
-      \t * static const $(_class)::Init adcInit {
+      \t * // Initialisation values for $(_Class)
+      \t * // Options available vary with device - See $(_Class)::DefaultInitValue for example
+      \t * static const $(_Class)::Init adcInit {
       \t *
       \t *    // Omitted parameters are take to be zero unless an base value is given
       \t *    AdcClockSource_Asynch ,  // ADC Clock Source
@@ -373,22 +373,22 @@
       \t *    6000 ,                   // ADC CV high value (May be omitted)
       \t
       \t *    // Optional base value to start with (must be last parameter)
-      \t *    $(_class)::DefaultValue
+      \t *    $(_Class)::DefaultValue
       \t * };
       \t *
       \t * // Initialise ADC from values specified above
-      \t * $(_class)::configure(adcInit);
-      \t * $(_class)::calibrate();
+      \t * $(_Class)::configure(adcInit);
+      \t * $(_Class)::calibrate();
       \t * @endcode
       \t */
    ]]></template>
 
    <template namespace="usbdm" ><![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t *
       \t * @param[in] result  Conversion result from channel
       \t * @param[in] channel Channel providing the result
@@ -673,15 +673,15 @@
          "
    ><![CDATA[
       $(init_description)
-      \ttypedef $(_class)BasicInfo::Init Init;
+      \ttypedef $(_Class)BasicInfo::Init Init;
       \t
       \t/**
-      \t * $(_class) interrupt call back
+      \t * $(_Class) interrupt call back
       \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
       \t
       \t/**
-      \t * Default initialisation value for $(_class)
+      \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
@@ -744,9 +744,9 @@
 
    <template key="/ADC/declarations" namespace="all"  ><![CDATA[
       /**
-       * Class representing $(_name)
+       * Class representing $(_NAME)
        */
-      class $(_class) : public AdcBase_T<$(_class)Info> {};\n
+      class $(_Class) : public AdcBase_T<$(_Class)Info> {};\n
    ]]></template>
 
    <signals/>

@@ -14,7 +14,7 @@
       
    <template><![CDATA[
       \t//! IRQ numbers for hardware
-      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;
+      \tstatic constexpr IRQn_Type irqNums[]  = $(_NAME)_IRQS;
    
       \t//! Number of IRQs for hardware
       \tstatic constexpr uint32_t irqCount  = sizeofArray(irqNums);\n\n

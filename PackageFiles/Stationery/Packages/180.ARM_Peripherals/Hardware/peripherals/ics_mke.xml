@@ -610,7 +610,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
    <template key="init_description" namespace="all" >
    <![CDATA[
       \t/**
-      \t * Class used to do initialisation of the $(_class)
+      \t * Class used to do initialisation of the $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values.
       \t *
@@ -618,7 +618,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       \t *
       \t * Example:
       \t * @code
-      \t * static const $(_class)::Init init {
+      \t * static const $(_Class)::Init init {
       \t *
       \t *   // Setup values
       \t *   IcsClkSrc_Fll ,                    // ICSOUTCLK Clock Source Select - Output of FLL
@@ -633,8 +633,8 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       \t *   NvicPriority_Normal,               // IRQ level for this peripheral - Normal
       \t * };
       \t *
-      \t * // Initialise $(_class) from values specified above
-      \t * $(_class)::configure(init)
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure(init)
       \t * @endcode
       \t */
    ]]>
@@ -642,7 +642,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
 
    <template namespace="usbdm" >
    <![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:\n
    ]]>
@@ -652,7 +652,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
    <![CDATA[
       \t
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t */
       \ttypedef void (*CallbackFunction)($(irq_parameters));
       \t\n
@@ -663,9 +663,9 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
    <![CDATA[
       \t
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
       \t
       \t/** Callback function for ISR */
       \tstatic CallbackFunction sCallback;
@@ -689,7 +689,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       \t * @param[in] icsCallback The function to call from stub ISR
       \t */
       \tstatic void setCallback(CallbackFunction icsCallback) {
-      \t   $(_base_class)::sCallback = icsCallback;
+      \t   $(_Baseclass)::sCallback = icsCallback;
       \t}
       \t
       \t/**
@@ -713,7 +713,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
 
    <template namespace="usbdm" >
       <![CDATA[
-      }; // $(_class)::BasicInfo\n\n
+      }; // $(_Class)::BasicInfo\n\n
    ]]>
    </template>
 
@@ -723,8 +723,8 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
    #include "osc.h"\n
    ]]></template>
 
-   <template key="/$(_basename)/ClockStartup" namespace="all" ><![CDATA[
-   \tUSBDM::$(_class)::startupConfigure();\n
+   <template key="/$(_BASENAME)/ClockStartup" namespace="all" ><![CDATA[
+   \tUSBDM::$(_Class)::startupConfigure();\n
    ]]></template>
 
    <validate

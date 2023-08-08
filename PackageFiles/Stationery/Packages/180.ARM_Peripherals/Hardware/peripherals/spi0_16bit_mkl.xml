@@ -37,19 +37,19 @@
    
    <template key="/SPI/declarations" namespace="all"  ><![CDATA[
    \t/**
-   \t * Class representing $(_name) interface
+   \t * Class representing $(_NAME) interface
    \t * <b>Example</b>
    \t * @code
-   \t * USBDM::Spi *spi = new USBDM::$(_class);
+   \t * USBDM::Spi *spi = new USBDM::$(_Class);
    \t *
    \t * uint8_t txData[] = {1,2,3};
    \t * uint8_t rxData[10];
    \t * spi->txRxBytes(sizeof(txData), txData, rxData);
    \t * @endcode
    \t */
-   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {
+   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {
    \tpublic:
-   \t$(/$(_name)/InputMapping:   // No user mappings found)
+   \t$(/$(_NAME)/InputMapping:   // No user mappings found)
    \t};\n
    ]]></template>
       

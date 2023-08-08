@@ -576,7 +576,7 @@
    <template key="init_description" namespace="all"  codeGenCondition="enablePeripheralSupport">
    <![CDATA[
       \t/**
-      \t * Class used to do initialisation of the $(_class)
+      \t * Class used to do initialisation of the $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values.
       \t *
@@ -584,7 +584,7 @@
       \t *
       \t * Example:
       \t * @code
-      \t * static const $(_class)::Init init {
+      \t * static const $(_Class)::Init init {
       \t *
       \t *   // Setup values
       \t *
@@ -628,8 +628,8 @@
       \t *   SimScgcRtc_ClockDisabled,  // RTC Clock Gate Control - Clock disabled
       \t * };
       \t *
-      \t * // Initialise $(_class) from values specified above
-      \t * $(_class)::configure(init)
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure(init)
       \t * @endcode
       \t */
    ]]>
@@ -637,7 +637,7 @@
 
    <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:
       \t\n
@@ -822,10 +822,10 @@
          "
    ><![CDATA[
       $(init_description)
-      \ttypedef $(_class)BasicInfo::Init Init;
+      \ttypedef $(_Class)BasicInfo::Init Init;
       \t
       \t/**
-      \t * Default initialisation value for $(_class)
+      \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
@@ -849,7 +849,7 @@
    <template  codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
       \t/**
-      \t * Configure $(_basename)
+      \t * Configure $(_BASENAME)
       \t *
       \t * This only includes SOPT, PINSEL and SCGC
       \t */
@@ -860,7 +860,7 @@
       \t}
       \t
       \t/**
-      \t * Default initialisation for $(_basename)
+      \t * Default initialisation for $(_BASENAME)
       \t */
       \tstatic void defaultConfigure() {
       \t   configure(DefaultInitValue);
@@ -871,13 +871,13 @@
 
    <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
-      \t}; // $(_class)::BasicInfo::Init\n\n
+      \t}; // $(_Class)::BasicInfo::Init\n\n
    ]]>
    </template>
 
    <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
-      }; // $(_class)::BasicInfo\n\n
+      }; // $(_Class)::BasicInfo\n\n
    ]]>
    </template>
 
@@ -889,7 +889,7 @@
 
    <template key="/ICS/ClockStartupAfter" namespace="all" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
-      \tUSBDM::$(_class)Info::defaultConfigure();
+      \tUSBDM::$(_Class)Info::defaultConfigure();
    ]]></template>
 
    <template key="DefaultInitValue" namespace="all" ><![CDATA[

@@ -386,7 +386,7 @@
    <template key="init_description" namespace="all">
    <![CDATA[
       \t/**
-      \t * Class used to do initialisation of the $(_class)
+      \t * Class used to do initialisation of the $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values.
       \t *
@@ -394,7 +394,7 @@
       \t *
       \t * Example:
       \t * @code
-      \t * static const $(_class)::Init init {
+      \t * static const $(_Class)::Init init {
       \t *
       \t *   // General setup
       \t *   CmpEnable_Enabled ,          // Comparator Enable - Comparator is enabled
@@ -424,8 +424,8 @@
       \t *   Cmp0Input_D21::minusPin,     // Minus Input Mux Control - D21
       \t * };
       \t *
-      \t * // Initialise $(_class) from values specified above
-      \t * $(_class)::configure(init)
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure(init)
       \t * @endcode
       \t */
    ]]>
@@ -458,13 +458,13 @@
 
    <template namespace="usbdm">
    <![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:
       \t
       \t
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t */
       \ttypedef void (*CallbackFunction)(const CmpStatus &);
       \t\n
@@ -799,12 +799,12 @@
          cmp_muxcr_psel$(_instance), cmp_muxcr_msel$(_instance)">
    <![CDATA[
       $(init_description)
-      \ttypedef $(_class)BasicInfo::Init Init;
+      \ttypedef $(_Class)BasicInfo::Init Init;
       \t
       \t/**
-      \t * $(_class) interrupt call back
+      \t * $(_Class) interrupt call back
       \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
       \t
       \t/**
       \t * Default initialisation value for Dac$(_instance)
@@ -872,7 +872,7 @@
    <template key="/CMP/declarations" namespace="all">
    <![CDATA[
       /**
-       * Class representing $(_name)
+       * Class representing $(_NAME)
        */
       class Cmp$(_instance) : public CmpBase_T<Cmp$(_instance)Info> {};
       \n

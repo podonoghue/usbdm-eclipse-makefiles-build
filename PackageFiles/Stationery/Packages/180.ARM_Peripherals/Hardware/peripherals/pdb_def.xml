@@ -385,17 +385,17 @@
 
    <template key="init_description" namespace="all" ><![CDATA[
       \t/**
-      \t * Class used to do main initialisation of a $(_class)
+      \t * Class used to do main initialisation of a $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values.  <br>
-      \t * Parameters available may vary with device - see $(_class)::DefaultInitValue for relevant example.  <br>
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.  <br>
       \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.  <br>
       \t *
       \t * @note This constructor may be used to create a const instance in ROM
       \t *
       \t * Example:
       \t * @code
-      \t * // Example initialisation values for $(_class)
+      \t * // Example initialisation values for $(_Class)
       \t *
       \t * // This example uses 'ticks'
       \t * static const Pdb::Init pdbInit_ticks {
@@ -435,7 +435,7 @@
       \t * // Initialise PDB channel from values specified above
       \t * Pdb::configure(pdbInit_ticks)
       \t *
-      \t * // Example initialisation values for $(_class)
+      \t * // Example initialisation values for $(_Class)
       \t * // This example uses 'seconds'
       \t * static const Pdb::Init pdbInit_seconds {
       \t *
@@ -476,11 +476,11 @@
    ]]></template>
 
    <template namespace="usbdm" ><![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t */
       \ttypedef void (*CallbackFunction)();
       \t\n
@@ -1144,12 +1144,12 @@
 
    <template><![CDATA[
       $(init_description)
-      \ttypedef $(_class)BasicInfo::Init Init;
+      \ttypedef $(_Class)BasicInfo::Init Init;
       \t
       \t/**
-      \t * $(_class) interrupt call back
+      \t * $(_Class) interrupt call back
       \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
       \t\n
    ]]></template>
 
@@ -1256,9 +1256,9 @@
 
    <template key="/PDB/declarations" namespace="all"  ><![CDATA[
       \t/**
-      \t * Class representing $(_name)
+      \t * Class representing $(_NAME)
       \t */
-      \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
    ]]></template>
 
    <validate

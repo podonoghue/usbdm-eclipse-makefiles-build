@@ -342,7 +342,7 @@
       \t
       public:
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t *
       \t * @param status Interrupt status value from SPI->SR
       \t */
@@ -355,7 +355,7 @@
 
    <template key="/SPI/serial_init_description" namespace="all" ><![CDATA[
       \t/**
-      \t * Class used to do initialisation of a CTAR in $(_class)
+      \t * Class used to do initialisation of a CTAR in $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
@@ -363,9 +363,9 @@
       \t *
       \t * Example:
       \t * @code
-      \t * // Initialisation values for $(_class)
-      \t * // Options available vary with device - See $(_class)::DefaultInitValue for example
-      \t * static const $(_class)::SerialInit serialInit {
+      \t * // Initialisation values for $(_Class)
+      \t * // Options available vary with device - See $(_Class)::DefaultInitValue for example
+      \t * static const $(_Class)::SerialInit serialInit {
       \t *
       \t *    // Omitted parameters are take to be zero unless a base value is given
       \t *
@@ -380,7 +380,7 @@
       \t * };
       \t *
       \t * // Initialise SPI from values specified above
-      \t * $(_class)::configure(serialInit); // TODO
+      \t * $(_Class)::configure(serialInit); // TODO
       \t * @endcode
       \t */
    ]]></template>
@@ -504,7 +504,7 @@
 
    <template key="/SPI/config_description" namespace="all" ><![CDATA[
       \t/**
-      \t * Class used to do initialisation of shared settings for $(_class)
+      \t * Class used to do initialisation of shared settings for $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
@@ -512,9 +512,9 @@
       \t *
       \t * Example:
       \t * @code
-      \t * // Initialisation values for $(_class)
-      \t * // Options available vary with device - See $(_class)::DefaultConfigValue for example
-      \t * static const $(_class)::Config spiConfig {
+      \t * // Initialisation values for $(_Class)
+      \t * // Options available vary with device - See $(_Class)::DefaultConfigValue for example
+      \t * static const $(_Class)::Config spiConfig {
       \t *
       \t *    // Omitted parameters are take to be zero unless a base value is given
       \t *
@@ -533,7 +533,7 @@
       \t *    SpiPeripheralSelectMode_Transaction     // Peripheral select mode
       \t *
       \t *    // Optional base value to start with (must be last parameter)
-      \t *    $(_class)::DefaultValue
+      \t *    $(_Class)::DefaultValue
       \t * };
       \t *
       \t * @endcode
@@ -743,7 +743,7 @@
 
    <template key="/SPI/init_description" namespace="all" ><![CDATA[
       \t/**
-      \t * Class used to do initialisation of $(_class)
+      \t * Class used to do initialisation of $(_Class)
       \t *
       \t * This class has multiple constructors that accepts various values:
       \t *
@@ -791,23 +791,23 @@
       \t *       Spi1::DefaultSerialInitValue,
       \t * };
       \t *
-      \t * // Initialisation values for $(_class)
-      \t * static const $(_class)::Init spiInit {
+      \t * // Initialisation values for $(_Class)
+      \t * static const $(_Class)::Init spiInit {
       \t *    SharedConfigValue,
       \t *    SerialInitValue0,
       \t *    SerialInitValue1
       \t * };
       \t *
       \t * // Initialise SPI from values specified above
-      \t * $(_class)::configure(spiInit);
+      \t * $(_Class)::configure(spiInit);
       \t * @endcode
       \t *
       \t * Example2:
       \t * This example shows an all-in-one intialisation
       \t * @code
-      \t * // Initialisation values for $(_class)
-      \t * // Options available vary with device - See $(_class)::DefaultInitValue for example
-      \t * static const $(_class)::Init spiInit {
+      \t * // Initialisation values for $(_Class)
+      \t * // Options available vary with device - See $(_Class)::DefaultInitValue for example
+      \t * static const $(_Class)::Init spiInit {
       \t *
       \t *    // Omitted parameters are take to be zero unless a base value is given
       \t *    {
@@ -841,11 +841,11 @@
       \t *    },
       \t *
       \t *    // Optional base value to start with (must be last parameter)
-      \t *    $(_class)::DefaultValue
+      \t *    $(_Class)::DefaultValue
       \t * };
       \t *
       \t * // Initialise SPI from values specified above
-      \t * $(_class)::configure(spiInit);
+      \t * $(_Class)::configure(spiInit);
       \t * @endcode
       \t */
    ]]></template>
@@ -990,7 +990,7 @@
 
    <template><![CDATA[
       \t/**
-      \t * Default initialisation value for $(_class)
+      \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr SpiBasicInfo::SerialInit DefaultSerialInitValue[] = {\n
@@ -1037,7 +1037,7 @@
          "
    ><![CDATA[
       \t/**
-      \t * Default initialisation value for $(_class)
+      \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr SpiBasicInfo::Config DefaultConfigValue = {%initExpression
@@ -1046,7 +1046,7 @@
 
    <template><![CDATA[
       \t/**
-      \t * Default initialisation value for $(_class)
+      \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr SpiBasicInfo::Init DefaultInitValue = {
@@ -1075,15 +1075,15 @@
    </projectActionList>
 
    <template key="/SPI/declarations" namespace="all"  ><![CDATA[
-   // $(_name) mappings
-   $(/$(_name)/InputMapping:   // No user mappings found for $(_name))
+   // $(_NAME) mappings
+   $(/$(_NAME)/InputMapping:   // No user mappings found for $(_NAME))
    \t/**
-   \t * Class representing $(_name) interface
+   \t * Class representing $(_NAME) interface
    \t *
    \t * <b>Example</b>
    \t * @code
    \t * // Initialisation values for Spi
-   \t * static const $(_class)::Init spiInit {
+   \t * static const $(_Class)::Init spiInit {
    \t *
    \t *    {
    \t *       // Shared configuration
@@ -1114,7 +1114,7 @@
    \t * ...
    \t * @endcode
    \t */
-   \tusing $(_class) = $(_base_class)Base_T<$(_class)Info>;
+   \tusing $(_Class) = $(_Baseclass)Base_T<$(_Class)Info>;
    \t\n
    ]]></template>
 
@@ -1171,7 +1171,7 @@
    <xi:include href="_clockOption.xml"/>
 
    <template key="/SPI/handlerSlot"><![CDATA[
-      \t{nullptr}, // $(_name)\n
+      \t{nullptr}, // $(_NAME)\n
    ]]></template>
 
    <validate

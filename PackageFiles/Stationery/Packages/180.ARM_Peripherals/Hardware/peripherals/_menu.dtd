@@ -117,7 +117,7 @@
    <!ATTLIST intOption typeName      CDATA        #IMPLIED>
    <!ATTLIST intOption disabledValue CDATA        #IMPLIED>
    <!ATTLIST intOption value         CDATA        #IMPLIED>
-   <!ATTLIST intOption units         (Hz|s)       #IMPLIED>
+   <!ATTLIST intOption units         (Hz|s|ticks) #IMPLIED>
    <!ATTLIST intOption step          CDATA        "1">
    <!ATTLIST intOption errorPropagate (ok|info|warning|error)  #IMPLIED>
    <!-- Minimum value (displayed value) -->
@@ -136,6 +136,7 @@
    <!ATTLIST intOption isNamedClock  (true)       #IMPLIED>
    <!ATTLIST intOption enabledBy     CDATA        #IMPLIED>
    <!ATTLIST intOption defaultValue  CDATA        #IMPLIED>
+   <!ATTLIST intOption enumType      CDATA        #IMPLIED>
    
   
 <!ELEMENT bitmaskOption EMPTY >
@@ -157,6 +158,7 @@
    <!ATTLIST bitmaskOption typeName       CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption defaultValue   CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption enabledBy      CDATA        #IMPLIED>
+   <!ATTLIST bitmaskOption enumType       CDATA        #IMPLIED>
 
 <!ELEMENT floatOption EMPTY >
    <!ATTLIST floatOption condition     CDATA        #IMPLIED>
@@ -193,7 +195,7 @@
    <!ATTLIST aliasOption description       CDATA        #IMPLIED>
    <!-- Tooltip for GUI and code generation -->
    <!ATTLIST aliasOption toolTip           CDATA        #IMPLIED>
-   <!-- Allows constant to be altered by user (default is true) -->
+   <!-- Allows aliased variable to be altered by user (unless locked) -->
    <!ATTLIST aliasOption constant          (false)      #IMPLIED>
    <!-- Indicates key may refer to non-existant variable -->
    <!ATTLIST aliasOption optional          (true)       #IMPLIED>
@@ -394,6 +396,10 @@
    <!ATTLIST choiceOption ref                 CDATA        #IMPLIED>
    <!-- Target variable dependent on this variable -->
    <!ATTLIST choiceOption target              CDATA        #IMPLIED>
+   <!-- Allow variable to be modified by later variable of same name -->
+   <!ATTLIST choiceOption modify              CDATA        #IMPLIED>
+   <!-- Allow variable to be replaced by later variable of same name -->
+   <!ATTLIST choiceOption replace             CDATA        #IMPLIED>
 
 
 <!ELEMENT addChoices ((choice)*) >
@@ -491,6 +497,10 @@
    <!ATTLIST irqOption typeName      CDATA        #IMPLIED> <!-- e.g. CallbackFunction -->
    <!ATTLIST irqOption valueFormat   CDATA        #IMPLIED> <!-- e.g. void (*%s)(void) -->
    <!ATTLIST irqOption enabledBy     CDATA        #IMPLIED>
+   <!-- Allow variable to be modified by later variable of same name -->
+   <!ATTLIST irqOption modify        CDATA        #IMPLIED>
+   <!-- Allow variable to be replaced by later variable of same name -->
+   <!ATTLIST irqOption replace        CDATA        #IMPLIED>
 
 <!-- 
    info  Appear within peripheral info class e.g. Osc0Info
@@ -508,6 +518,7 @@
    <!ATTLIST template initExpressionOnSameLine  (true)                  #IMPLIED>
    <!ATTLIST template paramPadding              CDATA                   #IMPLIED>
    <!ATTLIST template linePadding               CDATA                   #IMPLIED>
+   <!ATTLIST template useDefinitions            CDATA                   #IMPLIED>
 
 <!ELEMENT setTemplate (#PCDATA)* >
    <!ATTLIST setTemplate namespace                 (info|usbdm|all)  #IMPLIED >
@@ -525,6 +536,7 @@
    <!ATTLIST setTemplate linePadding               CDATA                   #IMPLIED>
    <!ATTLIST setTemplate params                    CDATA                   #IMPLIED>
    <!ATTLIST setTemplate codeGenCondition          CDATA                   #IMPLIED>
+   <!ATTLIST setTemplate useDefinitions            CDATA                   #IMPLIED>
 
 <!ELEMENT constructorTemplate (#PCDATA)* >
    <!ATTLIST constructorTemplate namespace                 (info|usbdm|all)  #IMPLIED >
@@ -541,6 +553,7 @@
    <!ATTLIST constructorTemplate paramPadding              CDATA                   #IMPLIED>
    <!ATTLIST constructorTemplate linePadding               CDATA                   #IMPLIED>
    <!ATTLIST constructorTemplate params                    CDATA                   #IMPLIED>
+   <!ATTLIST constructorTemplate useDefinitions            CDATA                   #IMPLIED>
 
 <!ELEMENT initialValueTemplate (#PCDATA|for)* >
    <!ATTLIST initialValueTemplate namespace                 (info|usbdm|all)  #IMPLIED >
@@ -554,6 +567,7 @@
    <!ATTLIST initialValueTemplate initExpressionOnSameLine  (true)                  #IMPLIED>
    <!ATTLIST initialValueTemplate paramPadding              CDATA                   #IMPLIED>
    <!ATTLIST initialValueTemplate linePadding               CDATA                   #IMPLIED>
+   <!ATTLIST initialValueTemplate useDefinitions            CDATA                   #IMPLIED>
 
 <!ELEMENT enumTemplate (#PCDATA)* >
    <!ATTLIST enumTemplate namespace       (info|usbdm|all)  #IMPLIED >
@@ -562,6 +576,7 @@
    <!ATTLIST enumTemplate variable        CDATA                   #REQUIRED>
    <!ATTLIST enumTemplate discardRepeats  (true)                  #IMPLIED>
    <!ATTLIST enumTemplate template        CDATA                   #IMPLIED>
+   <!ATTLIST enumTemplate useDefinitions            CDATA                   #IMPLIED>
 
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
    <!ATTLIST clockCodeTemplate namespace                 (info|usbdm|all)  #IMPLIED >
@@ -575,6 +590,7 @@
    <!ATTLIST clockCodeTemplate linePadding               CDATA                   #IMPLIED> <!-- Padding applied to start of line -->
    <!ATTLIST clockCodeTemplate params                    CDATA                   #IMPLIED>
    <!ATTLIST clockCodeTemplate codeGenCondition          CDATA                   #IMPLIED>
+   <!ATTLIST clockCodeTemplate useDefinitions            CDATA                   #IMPLIED>
 
 <!ELEMENT for (%gui_items;|%structure_items;|%control_items;|template|break|continue)* >
    <!ATTLIST for keys                 CDATA        #REQUIRED>
@@ -606,6 +622,7 @@
 <!ELEMENT signals EMPTY >
    <!ATTLIST signals name        CDATA          "" >
    <!ATTLIST signals optional    (false|true)   #IMPLIED>
+   <!ATTLIST signals enabledBy   CDATA          #IMPLIED>
 
 <!-- List of actions to be applied to a project -->
 <!ELEMENT projectActionList ((deleteResource|copy|constant|createFolder)*) >

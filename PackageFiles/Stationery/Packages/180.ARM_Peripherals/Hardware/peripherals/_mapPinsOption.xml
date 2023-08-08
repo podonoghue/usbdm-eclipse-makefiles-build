@@ -7,10 +7,10 @@
 <!--
       Predefined symbols generated for current peripheral
       $(_instance)   FTM0 => 0
-      $(_base_class) FTM0 => Ftm
-      $(_class)      FTM0 => Ftm0
-      $(_basename)   FTM0 => FTM
-      $(_name)       FTM0 => FTM0
+      $(_Baseclass) FTM0 => Ftm
+      $(_Class)      FTM0 => Ftm0
+      $(_BASENAME)   FTM0 => FTM
+      $(_NAME)       FTM0 => FTM0
 
       Template Rules based on attributes  info|usbdm|class|all)  "info"
 
@@ -70,11 +70,11 @@
    ]]></template>
 
    <!-- Template is added to peripheral classes -->
-   <template discardRepeats="true" namespace="all" key="/$(_basename)/classInfo" condition="/PCR/mux_present" ><![CDATA[
+   <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" condition="/PCR/mux_present" ><![CDATA[
       // Template _mapPinsOption.xml
 
       \t/**
-      \t * Configures all mapped pins associated with $(_basename)
+      \t * Configures all mapped pins associated with $(_BASENAME)
       \t *
       \t * @note Locked pins will be unaffected
       \t */
@@ -87,7 +87,7 @@
       \t}
 
       \t/**
-      \t * Disabled all mapped pins associated with $(_basename)
+      \t * Disabled all mapped pins associated with $(_BASENAME)
       \t *
       \t * @note Only the lower 16-bits of the PCR registers are modified
       \t *
@@ -104,11 +104,11 @@
    ]]></template>
 
    <!-- Template is added to peripheral classes -->
-   <template discardRepeats="true" namespace="all" key="/$(_basename)/classInfo" condition="!/PCR/mux_present" ><![CDATA[
+   <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" condition="!/PCR/mux_present" ><![CDATA[
       // Template _mapPinsOption.xml
 
       \t/**
-      \t * Configures all mapped pins associated with $(_basename)
+      \t * Configures all mapped pins associated with $(_BASENAME)
       \t *
       \t * @note Locked pins will be unaffected
       \t */
@@ -121,7 +121,7 @@
       \t}
 
       \t/**
-      \t * Disabled all mapped pins associated with $(_basename)
+      \t * Disabled all mapped pins associated with $(_BASENAME)
       \t *
       \t * @note Only the lower 16-bits of the PCR registers are modified
       \t *
@@ -138,10 +138,10 @@
    ]]></template>
 
    <!-- Template is added to peripheral classes -->
-   <template discardRepeats="true" namespace="all" key="/$(_basename)/classInfo" ><![CDATA[
+   <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" ><![CDATA[
 
       \t/**
-      \t * Basic enable of $(_basename)
+      \t * Basic enable of $(_BASENAME)
       \t * Includes enabling clock and configuring all mapped pins if mapPinsOnEnable is selected in configuration
       \t */
       \tstatic void enable() {
@@ -150,7 +150,7 @@
       \t}
 
       \t/**
-      \t * Disables the clock to $(_basename) and all mapped pins
+      \t * Disables the clock to $(_BASENAME) and all mapped pins
       \t */
       \tstatic void disable() {
       \t   $(disable_interrupts_code: )

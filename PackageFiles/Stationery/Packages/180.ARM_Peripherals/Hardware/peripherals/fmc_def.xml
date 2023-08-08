@@ -189,14 +189,14 @@
    -->
    <template key="/FMC/declarations" namespace="all" ><![CDATA[
       \t/**
-      \t * Class representing $(_name)
+      \t * Class representing $(_NAME)
       \t */\n
    ]]></template>
    <template key="/FMC/declarations" namespace="all" condition="irqOption_present" ><![CDATA[
-      \tclass $(_class) : public $(_base_class)Base, public $(_base_class)Interrupt_T<$(_class)Info> {};\n
+      \tclass $(_Class) : public $(_Baseclass)Base, public $(_Baseclass)Interrupt_T<$(_Class)Info> {};\n
    ]]></template>
    <template key="/FMC/declarations" namespace="all" condition="!irqOption_present" ><![CDATA[
-      \tclass $(_class) : public $(_base_class)Base {};\n
+      \tclass $(_Class) : public $(_Baseclass)Base {};\n
    ]]></template>
    
    <projectActionList id = "fmc_files" >

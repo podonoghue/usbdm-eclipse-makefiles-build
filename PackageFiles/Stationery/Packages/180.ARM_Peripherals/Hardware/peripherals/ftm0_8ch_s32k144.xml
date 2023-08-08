@@ -250,16 +250,16 @@
 
    <template key="/FTM/declarations" namespace="all"  ><![CDATA[
    \t/**
-   \t * Class representing $(_name)
+   \t * Class representing $(_NAME)
    \t */
-   \ttypedef FtmBase_T<$(_class)Info> $(_class);\n
+   \ttypedef FtmBase_T<$(_Class)Info> $(_Class);\n
    ]]></template>
 
    <template key="/FTM/quadDeclarations" namespace="all"  ><![CDATA[
    \t/**
-   \t * Class representing $(_class) as Quadrature decoder
+   \t * Class representing $(_Class) as Quadrature decoder
    \t */
-   \ttypedef FtmQuadDecoder_T<$(_class)Info> FtmQuadDecoder$(_instance);\n
+   \ttypedef FtmQuadDecoder_T<$(_Class)Info> FtmQuadDecoder$(_instance);\n
    ]]></template>
 
    <signals/>

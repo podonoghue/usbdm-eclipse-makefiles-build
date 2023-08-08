@@ -237,7 +237,7 @@
       \t
       public:
       \t/**
-      \t * Type definition for $(_class) interrupt call back.
+      \t * Type definition for $(_Class) interrupt call back.
       \t *
       \t * @param status Interrupt status value from SPI->SR
       \t */
@@ -249,7 +249,7 @@
 
    <template key="/DMA/dma_csr_description" namespace="all" ><![CDATA[
       \t/**
-      \t * Union used to do initialisation of a TCD CSR in $(_class)
+      \t * Union used to do initialisation of a TCD CSR in $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
@@ -258,7 +258,7 @@
       \t * Example:
       \t * @code
       \t * // Creating value
-      \t * static const $(_class)::DmaTcdCsr txCsr {
+      \t * static const $(_Class)::DmaTcdCsr txCsr {
       \t *    DmaSpeed_NoStalls ,           // Bandwidth Control - No eDMA engine stalls
       \t *    DmaMajorLink_Disabled ,       // Channel linking on major loop complete - Channel-to-channel linking is disabled
       \t *    DmaScatterGather_Disabled ,   // Scatter/Gather Processing - TCD is normal format
@@ -366,7 +366,7 @@
 
    <template key="/DMA/dma_config_description" namespace="all" ><![CDATA[
       \t/**
-      \t * Class used to do initialisation of $(_class)
+      \t * Class used to do initialisation of $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
@@ -375,7 +375,7 @@
       \t * Example:
       \t * @code
       \t * // Creating value
-      \t * static const $(_class)::DmaConfig config {
+      \t * static const $(_Class)::DmaConfig config {
       \t *    DmaActionOnError_Continue ,    // DMA halt on error - Transfer continues on any error
       \t *    DmaContinuousLink_Disabled ,   // Link mode - Link mode disabled
       \t *    DmaMinorLoopMapping_Disabled , // Minor loop mapping - Mapping disabled
@@ -508,7 +508,7 @@
          dma_csr_start"
    ><![CDATA[
       \t/**
-      \t * Default initialisation value for $(_class)
+      \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr DmaBasicInfo::DmaTcdCsr DefaultDmaTcdCsrValue = {%initExpression\n\t};
@@ -527,7 +527,7 @@
          dma_cr_edbg"
    ><![CDATA[
       \t/**
-      \t * Default initialisation value for $(_class)
+      \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr DmaBasicInfo::DmaConfig DefaultDmaConfigValue = {%initExpression\n\t};
@@ -536,7 +536,7 @@
 
    <template><![CDATA[
       \t/**
-      \t *  Enable clock to $(_class)
+      \t *  Enable clock to $(_Class)
       \t */
       \tstatic void enableClock() {
       #ifdef PCC
@@ -547,7 +547,7 @@
       \t}
 
       \t/**
-      \t *  Disable clock to $(_class)
+      \t *  Disable clock to $(_Class)
       \t */
       \tstatic void disableClock() {
       #ifdef PCC
@@ -559,7 +559,7 @@
    ]]></template>
 
    <stringOption key="irq_pattern"        constant="true" value="^%b_?(\d+)(_DMA.*)?$;^%b_Error.*$" hidden="true" />
-   <stringOption key="irq_classHandler"   constant="true" value="%c%i::irqHandler&lt;$1&gt;;%c%i::errorIrqHandler" hidden="true" />
+   <stringOption key="irq_ClassHandler"   constant="true" value="%c%i::irqHandler&lt;$1&gt;;%c%i::errorIrqHandler" hidden="true" />
    <xi:include href="_irqOptionSubstituted.xml"/>
 
    <validate
@@ -570,11 +570,11 @@
    \t/**
    \t * Class representing DMAMUX$(_instance)
    \t */
-   \ttypedef $(_base_class)Mux_T<Dmamux$(_instance)Info, Dma$(_instance)Info::NumChannels> DmaMux$(_instance);
+   \ttypedef $(_Baseclass)Mux_T<Dmamux$(_instance)Info, Dma$(_instance)Info::NumChannels> DmaMux$(_instance);
    \t/**
-   \t * Class representing $(_name)
+   \t * Class representing $(_NAME)
    \t */
-   \ttypedef $(_base_class)Base_T<$(_class)Info> $(_class);\n
+   \ttypedef $(_Baseclass)Base_T<$(_Class)Info> $(_Class);\n
    ]]></template>
 
    <template><![CDATA[

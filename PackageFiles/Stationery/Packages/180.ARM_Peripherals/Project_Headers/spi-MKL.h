@@ -193,6 +193,7 @@ protected:
             spi->D = *txDataPtr++;
          }
          else {
+            // Dummy byte
             spi->D = 0xFF;
          }
       }

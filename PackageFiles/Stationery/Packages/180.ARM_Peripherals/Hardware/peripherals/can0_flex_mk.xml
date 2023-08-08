@@ -63,7 +63,7 @@
 
    <template><![CDATA[
       \t//! IRQ numbers for hardware
-      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;
+      \tstatic constexpr IRQn_Type irqNums[]  = $(_NAME)_IRQS;
 
       \t//! Number of IRQs for hardware
       \tstatic constexpr uint32_t irqCount  = sizeofArray(irqNums);\n\n
@@ -262,11 +262,11 @@
       \t}\n
    ]]></template>
 
-   <template key="/$(_basename)/declarations" namespace="all"  ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" namespace="all"  ><![CDATA[
    \t/**
-   \t * Class representing $(_name)
+   \t * Class representing $(_NAME)
    \t */
-   \tusing $(_class) = $(_base_class)Handler_T<$(_class)Info>;\n
+   \tusing $(_Class) = $(_Baseclass)Handler_T<$(_Class)Info>;\n
    ]]></template>
 
 

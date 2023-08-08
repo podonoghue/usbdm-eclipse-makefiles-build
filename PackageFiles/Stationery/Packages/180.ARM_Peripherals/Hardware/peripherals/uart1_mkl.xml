@@ -60,7 +60,7 @@ Devices using this peripheral:
    </category>
 
    <stringOption key="irq_pattern"        constant="true" value="^UART%i_?(RxTx|Error|Lon)?$" hidden="true" />
-   <stringOption key="irq_classHandler"   constant="true" value="%c%i::irq$1Handler" hidden="true" />
+   <stringOption key="irq_ClassHandler"   constant="true" value="%c%i::irq$1Handler" hidden="true" />
    <xi:include href="_irqOptionSubstituted.xml"/>
 
    <xi:include href="_clockOption.xml"/>
@@ -101,19 +101,19 @@ Devices using this peripheral:
 
    <template key="/UART/declarations" namespace="all"  ><![CDATA[
       \t/**
-      \t * Class representing $(_name) interface
+      \t * Class representing $(_NAME) interface
       \t *
       \t * <b>Example</b>
       \t * @code
       \t *  // Instantiate interface
-      \t *  USBDM::$(_class) uart;
+      \t *  USBDM::$(_Class) uart;
       \t *
       \t *  for(int i=0; i++;) {
       \t *     uart.writeln("Hello world ", i);
       \t *  }
       \t *  @endcode
       \t */
-      \ttypedef  $(/$(_name)/uartClass:$(_base_class)_T)<$(_class)Info> $(_class);\n\n
+      \ttypedef  $(/$(_NAME)/uartClass:$(_Baseclass)_T)<$(_Class)Info> $(_Class);\n\n
    ]]></template>
 
    <signals/>

@@ -40,16 +40,6 @@ namespace USBDM {
 typedef void (*SpiCallbackFunction)(ErrorCode status);
 
 /**
- * SPI mode - Controls clock polarity and the timing relationship between clock and data
- */
-enum SpiMode {
-   SpiMode_0 = SPI_C1_CPOL(0)|SPI_C1_CPHA(0), //!< Active-high clock (idles low), Data is captured on leading edge of SCK and changes on the following edge.
-   SpiMode_1 = SPI_C1_CPOL(0)|SPI_C1_CPHA(1), //!< Active-high clock (idles low), Data is changes on leading edge of SCK and captured on the following edge.
-   SpiMode_2 = SPI_C1_CPOL(1)|SPI_C1_CPHA(0), //!< Active-low clock (idles high), Data is captured on leading edge of SCK and changes on the following edge.
-   SpiMode_3 = SPI_C1_CPOL(1)|SPI_C1_CPHA(1), //!< Active-low clock (idles high), Data is changes on leading edge of SCK and captured on the following edge.
-};
-
-/**
  * Bit transmission order (LSB/MSB first)
  */
 enum SpiOrder {
@@ -84,34 +74,22 @@ enum SpiLowPower {
 };
 
 /**
- * Used to hold SPI configuration that may commonly be modified for different target peripherals
- */
-struct SpiConfig {
-   SpiCallbackFunction callback; //!< Callback on error or completion
-   uint8_t             br;       //!< Baud rate dividers
-   uint8_t             c1;       //!< CPOL, CPHA, SSOE, LSBFE
-   uint8_t             c2;       //!< BIDIROE, SPC0
-};
-
-/**
  * @brief Base class for representing an SPI interface
  */
 class Spi {
 
 protected:
-   /** Pointer to hardware */
+   // Pointer to hardware
    const HardwarePtr<SPI_Type> spi;  //!< SPI hardware
 
-   /** Callback function for ISR */
-   SpiCallbackFunction callback;
-
+   // Number of bytes remaining in current transaction
    volatile uint32_t bytesRemaining;
-            uint8_t  *rxDataPtr;
-   const    uint8_t  *txDataPtr;
 
-   /** Callback for unhandled interrupt */
-   static void unhandledCallback(ErrorCode) {
-   }
+   // Receive buffer pointer
+   uint8_t  *rxDataPtr;
+
+   // Transmit buffer pointer
+   const    uint8_t  *txDataPtr;
 
    /**
     * Constructor
@@ -119,7 +97,7 @@ protected:
     * @param[in]  baseAddress    Base address of SPI
     */
    constexpr Spi(uint32_t baseAddress) :
-      spi(baseAddress), callback(unhandledCallback), bytesRemaining(0), rxDataPtr(nullptr), txDataPtr(nullptr) {
+      spi(baseAddress), bytesRemaining(0), rxDataPtr(nullptr), txDataPtr(nullptr) {
    }
 
    /**
@@ -193,6 +171,7 @@ protected:
             spi->D = *txDataPtr++;
          }
          else {
+            // Dummy byte
             spi->D = 0xFF;
          }
       }
@@ -202,47 +181,15 @@ protected:
     * Stop transmission
     */
    void stopTransaction() {
-      spi->C1 &= ~SPI_C1_SPIE(1);
+      spi->C1 = spi->C1 & ~SPI_C1_SPIE_MASK;
       rxDataPtr = nullptr;
       txDataPtr = nullptr;
    }
 
-   /**
-    * class private IRQ handler\n
-    * Handles receiving/transmitting a value
-    */
-   void _irqHandler() {
-      if (spi->S&SPI_S_MODF_MASK) {
-         stopTransaction();
-         callback(E_LOST_ARBITRATION);
-         return;
-      }
-      // Receive byte
-      if (rxDataPtr != nullptr) {
-         *rxDataPtr++ = spi->D;
-      }
-      else {
-         (void)spi->D;
-      }
-      bytesRemaining = bytesRemaining-1;
-      if (bytesRemaining>0) {
-         // Transmit byte
-         if (txDataPtr != nullptr) {
-            spi->D = *txDataPtr++;
-         }
-         else {
-            spi->D = 0xFF;
-         }
-      }
-      else {
-         stopTransaction();
-         callback(E_NO_ERROR);
-         return;
-      }
-   }
-
+$(/SPI/private: // /SPI/private not found)
 public:
 
+$(/SPI/public: // /SPI/public not found)
 #if defined(__CMSIS_RTOS)
    /**
     * Obtain SPI mutex and set SPI configuration
@@ -256,7 +203,7 @@ public:
     * @return osErrorParameter: The parameter mutex_id is incorrect.
     * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
     */
-   osStatus startTransaction(SpiConfig &configuration, int milliseconds=osWaitForever) {
+   osStatus startTransaction(SpiBasicInfo::Init &configuration, int milliseconds=osWaitForever) {
       // Obtain mutex
       osStatus status = getMutex(milliseconds);
       if (status == osOK) {
@@ -299,7 +246,7 @@ public:
     *
     * @param[in] configuration The configuration values to set for the transaction.
     */
-   int startTransaction(SpiConfig &configuration, int =0) {
+   int startTransaction(SpiBasicInfo::Init &configuration, int =0) {
       setConfiguration(configuration);
       return 0;
    }
@@ -360,8 +307,7 @@ public:
     *
     * @param[in]  configuration Configuration value
     */
-   void setConfiguration(const SpiConfig &configuration) {
-      callback = configuration.callback;
+   void setConfiguration(const SpiBasicInfo::Init &configuration) {
       spi->C1  = configuration.c1|SPI_C1_SPE_MASK;
       spi->C2  = configuration.c2;
       spi->BR  = configuration.br;
@@ -375,8 +321,8 @@ public:
     *
     * @note Typically used with startTransaction()
     */
-   SpiConfig getConfiguration() {
-      return SpiConfig{callback, spi->BR, spi->C1, spi->C2};
+   SpiBasicInfo::Init getConfiguration() {
+      return SpiBasicInfo::Init(spi->C1, spi->C2, spi->BR);
    }
 
    /**
@@ -421,21 +367,30 @@ public:
     *
     *  @note: rxData may use same buffer as txData
     *  @note: Size of txData and rxData should be appropriate for transmission size.
+    *
+    *  @return E_NO_ERROR Transaction initiated or completed without error
     */
-   void txRx(uint32_t dataSize, const uint8_t *txData, uint8_t *rxData=nullptr) {
+   ErrorCode txRx(uint32_t dataSize, const uint8_t *txData, uint8_t *rxData=nullptr) {
 //      assert((txData != nullptr)||(rxData != nullptr));
+      ErrorCode rc = E_NO_ERROR;
 
       bytesRemaining = dataSize;
       txDataPtr      = txData;
       rxDataPtr      = rxData;
-      spi->C1 |=  SPI_C1_SPE_MASK|SPI_C1_SPIE_MASK;
-      sendFirstByte();
-      if (callback == unhandledCallback) {
-         // If call-back not set then wait for completion
-         while (bytesRemaining != 0) {
-            __asm__("nop");
-         }
+      if constexpr (SpiBasicInfo::irqHandlerInstalled) {
+         spi->C1 = spi->C1 | SPI_C1_SPE_MASK | SPI_C1_SPIE_MASK;
       }
+      else {
+         spi->C1 = spi->C1 | SPI_C1_SPE_MASK;
+      }
+      sendFirstByte();
+      if (!SpiBasicInfo::irqHandlerInstalled) {
+         // If not using interrupts then wait for completion
+         do {
+            rc = poll();
+         } while (rc == E_BUSY);
+      }
+      return rc;
    }
 
    /**
@@ -444,10 +399,12 @@ public:
     *  @tparam N   Number of values to transfer
     *  @param[in]  txData    Transmit bytes
     *  @param[out] rxData    Receive byte buffer
+    *
+    *  @return E_NO_ERROR Transaction initiated or completed without error
     */
    template<unsigned N>
-   void txRx(uint8_t (&txData)[N], uint8_t (&rxData)[N]) {
-      txRx(N, txData, rxData);
+   __attribute__((always_inline))  ErrorCode txRx(uint8_t (&txData)[N], uint8_t (&rxData)[N]) {
+      return txRx(N, txData, rxData);
    }
 
    /**
@@ -455,10 +412,12 @@ public:
     *
     *  @tparam N   Number of values to transfer
     *  @param[in]  txData    Transmit bytes
+    *
+    *  @return E_NO_ERROR Transaction initiated or completed without error
     */
    template<unsigned N>
-   void transmit(uint8_t (&txData)[N]) {
-      txRx(N, txData, nullptr);
+   __attribute__((always_inline))  ErrorCode transmit(uint8_t (&txData)[N]) {
+      return txRx(N, txData, nullptr);
    }
 
    /**
@@ -466,10 +425,12 @@ public:
     *
     *  @tparam N   Number of values to transfer
     *  @param[out] rxData    Receive byte buffer
+    *
+    *  @return E_NO_ERROR Transaction initiated or completed without error
     */
    template<unsigned N>
-   void receive(uint8_t (&rxData)[N]) {
-      txRx(N, nullptr, rxData);
+   __attribute__((always_inline)) ErrorCode receive(uint8_t (&rxData)[N]) {
+      return txRx(N, nullptr, rxData);
    }
 
    /**
@@ -490,20 +451,6 @@ public:
       return spi->D; // Return read data
    }
 
-   /**
-    * Set Callback function\n
-    *
-    * @param[in] theCallback Callback function to execute on completion.\n
-    *                        nullptr to indicate none (SPI operations will be blocking)
-    */
-   __attribute__((always_inline)) void setCallback(SpiCallbackFunction theCallback) {
-      if (theCallback == nullptr) {
-         callback = unhandledCallback;
-         return;
-      }
-      callback = theCallback;
-   }
-
 };
 
 /**
@@ -512,10 +459,13 @@ public:
  * @tparam  Info  Class describing SPI hardware
  */
 template<class Info>
-class SpiBase_T : public Spi {
+class SpiBase_T : public Spi, public Info{
 
 private:
+   SpiBase_T() = delete;
+
    static SpiBase_T<Info> *thisPtr;
+
 #ifdef __CMSIS_RTOS
    static CMSIS::Mutex mutex;
 #endif
@@ -576,35 +526,17 @@ public:
       Info::initPCRs();
    }
 
-   /**
+$(/SPI/InitMethod: // /SPI/InitMethod not found)
+   /** 
     * Constructor
     */
-   SpiBase_T() : Spi(Info::baseAddress) {
-
-#ifdef DEBUG_BUILD
-      // Requires interrupt handler
-      static_assert(Info::irqHandlerInstalled, "IRQ handler must be enabled for SPI - change in Configure.usbdmProject");
-#endif
-
-      // Enable SPI module clock
-      Info::enableClock();
-      __DMB();
-
-      spi->C1 =
-            Info::modeValue| // Use default LSBFE, MODE
-            SPI_C1_MSTR(1)|
-            SPI_C1_SPIE(0)|
-            SPI_C1_SPE(0)|
-            SPI_C1_SPTIE(0)|
-            SPI_C1_SSOE(0);
-
-      setSpeed(Info::speed); // Use default speed
+   SpiBase_T(const typename Info::Init &init) : Spi(Info::baseAddress) {
 
       // Record this pointer for IRQ handler
       thisPtr = this;
 
-      // Enable and configure interrupts
-      enableNvicInterrupts(Info::irqLevel);
+      // Configure from supplied settings
+      configure(init);
    }
 
    /**

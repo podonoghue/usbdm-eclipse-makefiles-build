@@ -313,9 +313,9 @@
 
    <template key="/WDOG/declarations" namespace="all"  ><![CDATA[
    \t/**
-   \t * Class representing $(_name)
+   \t * Class representing $(_NAME)
    \t */
-   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
    ]]></template>
 
 <!--   ========== WDOG Init class =============================== -->
@@ -323,7 +323,7 @@
    <template key="init_description" namespace="all" >
    <![CDATA[
       \t/**
-      \t * Class used to do initialisation of the $(_class)
+      \t * Class used to do initialisation of the $(_Class)
       \t *
       \t * This class has a templated constructor that accepts various values.
       \t *
@@ -331,7 +331,7 @@
       \t *
       \t * Example:
       \t * @code
-      \t * static const $(_class)::Init wdogInit {
+      \t * static const $(_Class)::Init wdogInit {
       \t *
       \t *   // Setup values
       \t *   WdogEnable_Enabled ,          // Watchdog enable
@@ -353,8 +353,8 @@
       \t *   Wdog::DefaultInitValue,       // Take base values from DefaultInitValue
       \t * };
       \t *
-      \t * // Initialise $(_class) from values specified above
-      \t * $(_class)::configure(wdogInit)
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure(wdogInit)
       \t * @endcode
       \t */
    ]]>
@@ -362,12 +362,12 @@
 
    <template namespace="usbdm" >
    <![CDATA[
-      class $(_class)BasicInfo {
+      class $(_Class)BasicInfo {
       \t
       public:
       \t
       \t/**
-      \t * Type definition for $(_class) interrupt call back
+      \t * Type definition for $(_Class) interrupt call back
       \t */
       \ttypedef void (*CallbackFunction)();
       \t\n
@@ -687,15 +687,15 @@
             "
    ><![CDATA[
       $(init_description)
-      \ttypedef $(_class)BasicInfo::Init Init;
+      \ttypedef $(_Class)BasicInfo::Init Init;
       \t
       \t/**
-      \t * $(_class) interrupt call back
+      \t * $(_Class) interrupt call back
       \t */
-      \ttypedef $(_class)BasicInfo::CallbackFunction CallbackFunction;
+      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
       \t
       \t/**
-      \t * Default initialisation value for $(_class)
+      \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
