@@ -2,24 +2,63 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- wdog_mke.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Watchdog Monitor" >
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Watchdog Timer" >
 
    <binaryOption key="irqEnable" ref="fullCodeSupport" hidden="true" derived="true" constant="true" >
       <choice value="false" name="false" />
       <choice value="true"  name="true"  />
    </binaryOption>
 
+   <constant key="suppressInstance"         type="Boolean" value="false"         />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
    <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true" />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="true" />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true" />
-   <xi:include href="_enablePeripheral.xml" />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="true"          />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="_enablePeripheral.xml"  />
    <title description="------------------------------------------" />
 
-   <projectActionList id = "wdog_files" >
-      <copy source="Project_Headers/wdog_mke.h"     target="Project_Headers/wdog.h"          overwrite="true" derived="true" />
-   </projectActionList>
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
+
+<!--
+    * Template substitutions
+    *
+    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
+    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
+    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
+    * %description[index]             Description from controlVar e.g. Compare Function Enable
+    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
+    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
+    * %params                         Formatted parameter list for function
+    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
+    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
+    * %enumClass[index]               As for %paramType
+    * %enumParam[index]               As for %paramName
+    * %valueExpression                Numeric variable value e.g. 0x3
+    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %variable[index]                Variable name from condition
+    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * %register[index]                Register associated with variable e.g. adc->APCTL1
+    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+-->
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Class)BasicInfo&quot;" />
 
    <binaryOption key="fullCodeSupport"
       enabledBy="enablePeripheralSupport"
@@ -210,7 +249,6 @@
       enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       description="Watchdog Timeout"
       toolTip="The watchdog must be refreshed before this interval expires"
-      valueFormat="%s_s"
       typeName="const Seconds &amp;"
       units="s"
       value="10"/>
@@ -219,9 +257,9 @@
       enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       ref="timerTickPeriod#(wdog_timeoutPeriod)/timerTickPeriod"
       constant="true"
+      units="ticks"
       description="Watchdog Timeout in ticks"
       toolTip="The watchdog must be refreshed before the counter reaches this value"
-      valueFormat="%s_ticks"
       typeName="Ticks"
       derived="true"
       min="200" max="0xFFFF"
@@ -234,7 +272,6 @@
       toolTip="Refresh of the watchdog may not be carried out before this interval has expired i.e.\n
                Refresh must occur within [window...timeout] if window mode is enabled.\n
                A refresh outside of this range resets the system"
-      valueFormat="%s_s"
       typeName="const Seconds &amp;"
       derived="true"
       units="s"
@@ -244,11 +281,11 @@
       enabledBy="wdog_cs2_win&amp;&amp;wdog_cs1_en&amp;&amp;fullCodeSupport"
       ref="timerTickPeriod#(wdog_windowPeriod)/timerTickPeriod"
       constant="true"
+      units="ticks"
       description="Watchdog Window in ticks"
       toolTip="If windowed operation is enabled, then the watchdog can only be refreshed \n
                if the timer reaches a value greater than or equal to this window length value.\n
                A refresh outside of this window resets the system"
-      valueFormat="%s_ticks"
       typeName="Ticks"
       value="0" min="0" max="0xFFFF"
       disabledValue="0xFFFF"
@@ -354,8 +391,17 @@
       \t * @note This constructor may be used to create a const instance in Flash
       \t *
       \t * Example:
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(uint32_t status) {
+      \t *    (void) status;
+      \t * }
+      \t *
       \t * @code
-      \t * static const $(_Class)::Init init {
+      \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *   // Setup values
       \t *   WdogEnable_Enabled ,          // Watchdog enable
@@ -367,7 +413,7 @@
       \t *   WdogAction_ImmediateReset ,   // Action on watchdog event
       \t *   WdogClock_SystemBusClk ,      // Watchdog clock source
       \t *   NvicPriority_Normal,          // IRQ level for this peripheral
-      \t *   call-back,                    // Call-back
+      \t *   $(_name)Callback,                // Call-back to execute on event - call-back function name
       \t *   // Either
       \t *   WdogPrescale_Direct ,         // Prescaler for the watchdog clock source (must be in this order)
       \t *   2000_ticks, 1000_ticks,       // Timeout and Window values
@@ -378,13 +424,13 @@
       \t * };
       \t *
       \t * // Initialise $(_Class) from values specified above
-      \t * $(_Class)::configure(init)
+      \t * $(_Class)::configure($(_name)Init)
       \t * @endcode
       \t */
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="fullCodeSupport" >
+   <template namespace="usbdm" >
    <![CDATA[
       class $(_Class)BasicInfo {
       \t
@@ -394,30 +440,22 @@
 
    <template namespace="usbdm" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t
       \t/**
       \t * Type definition for $(_Class) interrupt call back.
       \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));
-      \t\n
+      \ttypedef void (*CallbackFunction)($(irq_parameters));\n
    ]]>
    </template>
 
    <template namespace="all" key="protectedMethods" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t
-      \t/**
-      \t * Type definition for $(_Class) interrupt call back.
-      \t */
-      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
-      \t
       \t/** Callback function for ISR */
       \tstatic CallbackFunction sCallback;
       \t
       \t/**
       \t * Callback to catch unhandled interrupt
       \t */
-      \tstatic void unhandledCallback() {
+      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
       \t   setAndCheckErrorCode(E_NO_HANDLER);
       \t}
       \t\n
@@ -439,6 +477,9 @@
       \t   if (wdogCallback == nullptr) {
       \t      wdogCallback = unhandledCallback;
       \t   }
+      \t   usbdm_assert(
+      \t         (sCallback == unhandledCallback) || (sCallback == wdogCallback),
+      \t         "Handler already set");
       \t   sCallback = wdogCallback;
       \t}
       \t
@@ -447,8 +488,13 @@
       \t */
       \tstatic void irqHandler() {
       \t
-      \t      sCallback();
-      \t}\n
+      \t   //.....IRQ handler code here..........
+      \t
+      \t   // Execute call-back
+      \t   sCallback($(irq_call));
+      \t   return;
+      \t}
+      \t\n
    ]]>
    </template>
 
@@ -456,7 +502,7 @@
    <![CDATA[
       \t
       \t/** Callback for programmatically set handler */
-      \ttemplate<class Info> typename $(_Baseclass)Base_T<Info>::CallbackFunction $(_baseclase)Base_T<Info>::sCallback = $(_baseclase)Base_T<Info>::unhandledCallback;
+      \ttemplate<class Info> typename $(_Baseclass)Base_T<Info>::CallbackFunction $(_Baseclass)Base_T<Info>::sCallback = $(_Baseclass)Base_T<Info>::unhandledCallback;
       \t\n
    ]]>
    </template>
@@ -482,11 +528,11 @@
 
 <!--   Member variables -->
 
-   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></setTemplate>
+   ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm" codeGenCondition="fullCodeSupport"
       variables="
@@ -648,7 +694,7 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      this->%enumParam0 = %paramExpression;
+      \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
    ]]></setTemplate>
 
@@ -693,7 +739,7 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
@@ -773,9 +819,6 @@
             wdog_window,
             "
    ><![CDATA[
-      $(init_description)
-      \ttypedef $(_Class)BasicInfo::Init Init;
-      \t
       \t/**
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
@@ -784,18 +827,26 @@
       \t};\n\n
    ]]></initialValueTemplate>
 
-   <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" />
-
    <template namespace="usbdm" codeGenCondition="fullCodeSupport" >
       <![CDATA[
-      \t}; // $(_Class)::BasicInfo::Init\n\n
+      \t}; // $(_Class)BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="fullCodeSupport" >
+   <template namespace="usbdm" >
       <![CDATA[
-      }; // $(_Class)::BasicInfo\n\n
+      }; // $(_Class)BasicInfo\n\n
    ]]>
    </template>
+
+   <!-- ************* Common ****************** -->
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
+   </validate>
+
+   <projectActionList id = "wdog_files" >
+      <copy source="Project_Headers/wdog-MKE.h"  target="Project_Headers/wdog.h"  overwrite="true"  derived="true" />
+   </projectActionList>
 
 </peripheralPage>

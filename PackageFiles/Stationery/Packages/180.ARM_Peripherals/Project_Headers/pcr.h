@@ -48,9 +48,7 @@ namespace USBDM {
 #pragma GCC push_options
 #pragma GCC optimize ("Os")
 
-// Used for index for Port pins e.g. PTA = [0..7], PTB = [8..15] etc
-typedef unsigned PinIndex;
-
+$(/PORT/PinIndex: // #error /PORT/PinIndex not found)
 // Pin number for port pin within individual port e.g. GPIOB[31..0]
 typedef uint8_t  PinNum;
 
@@ -184,8 +182,12 @@ public:
    constexpr auto operator >=(const unsigned other) const { return value>=other; }
    constexpr auto operator >=(int other)            const { return value>=other; }
 
-   constexpr operator float() const { return value; }
-   explicit operator float() const volatile { return value; }
+   constexpr operator float()    const { return value; }
+   explicit  operator float()    const volatile { return value; }
+   constexpr operator unsigned() const { return (unsigned)round(value); }
+   constexpr operator uint32_t() const { return (uint32_t)round(value); }
+   constexpr operator signed()   const { return (signed)round(value); }
+   constexpr operator int32_t()  const { return (int32_t)round(value); }
 };
 
 class Hertz {
@@ -253,7 +255,10 @@ public:
    constexpr auto operator >=(int other)            const { return value>=other; }
 
    constexpr operator float()    const { return value; }
-   constexpr operator unsigned() const { return (int)round(value); }
+   constexpr operator unsigned() const { return (unsigned)round(value); }
+   constexpr operator uint32_t() const { return (uint32_t)round(value); }
+   constexpr operator signed()   const { return (signed)round(value); }
+   constexpr operator int32_t()  const { return (int32_t)round(value); }
 };
 
 constexpr auto operator *(float left,     Seconds right)  { return Seconds(left*right.getValue()); }
@@ -276,7 +281,10 @@ constexpr auto operator /(int left,       Hertz right)   { return Seconds(left/r
 constexpr auto operator /(Ticks left,     Hertz right)   { return Seconds(left.getValue()/right.getValue()); }
 
 #else
-   using Ticks    = unsigned;
+enum Ticks : unsigned {
+
+};
+//   using Ticks    = unsigned;
    using Seconds  = float;
    using Hertz    = float;
 #endif
@@ -306,7 +314,7 @@ union Seconds_Ticks {
    constexpr Seconds_Ticks() : value(0) {}
 
    constexpr Seconds toSeconds() const { return bit_cast<float, unsigned>(value); }
-   constexpr Ticks   toTicks()   const { return value; }
+   constexpr Ticks   toTicks()   const { return (Ticks)value; }
 
 #if $(/HARDWARE/useTypeSystemForTimers)
    constexpr void fromSeconds(Seconds seconds) { value = bit_cast<unsigned, float>(seconds.getValue()); }

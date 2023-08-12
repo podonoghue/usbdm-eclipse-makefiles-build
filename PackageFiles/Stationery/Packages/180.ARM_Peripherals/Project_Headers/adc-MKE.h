@@ -19,6 +19,8 @@
 #include <cstddef>
 #include "pin_mapping.h"
 
+#if $(/ADC/enablePeripheralSupport) // /ADC/enablePeripheralSupport
+
 namespace USBDM {
 
 /**
@@ -886,6 +888,8 @@ class Adc0 : public AdcBase_T<Adc0Info> {};
  */
 
 } // End namespace USBDM
+
+#endif // /ADC/enablePeripheralSupport
 
 #endif /* HEADER_ADC_H */
 

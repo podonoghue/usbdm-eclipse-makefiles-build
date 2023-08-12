@@ -16,11 +16,13 @@
 
 <!--
     * General substitutions
-    *  $(_NAME)         => e.g FTM2                    (fProvider.getName())
-    *  $(_Baseclass)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
-    *  $(_Class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
 -->
 
 <!--
@@ -48,6 +50,10 @@
     * %register[index]                Register associated with variable e.g. adc->APCTL1
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
 
    <intOption key="system_low_power_clock"
       constant="true"
@@ -147,16 +153,26 @@
       pmc_spmsc1_bgbe:Spmsc1Bgbe;
       pmc_spmsc2_lvdv:Spmsc2Lvdv;
       pmc_spmsc2_lvwv:Spmsc2Lvwv" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
          \t *
          %paramDescription
          \t */
-         \tstatic void configure%(name)(%params) {
+         \tstatic void set%(name)(%params) {
          \t   %defaultFieldExpression
-         \t}\n\n
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register&%mask);
+         \t}
+         \t\n
       ]]></setTemplate>
    </for>
 
@@ -172,21 +188,33 @@
       \t * @note This constructor may be used to create a const instance in Flash
       \t *
       \t * Example:
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(uint32_t status) {
+      \t *    (void) status;
+      \t * }
+      \t *
       \t * @code
       \t * static const $(_Class)::Init init {
       \t *
       \t *   // Setup values
-      \t * PmcLowVoltageDetect_Enabled ,             // Low-Voltage Detect Enable - LVD logic enabled
-      \t * PmcLowVoltageWarningInterrupt_Disabled ,  // Low-Voltage Warning Interrupt Enable - Interrupt disabled
-      \t * PmcLowVoltageReset_Disabled ,             // Low-Voltage Detect Reset Enable - LVD events do not generate hardware resets
-      \t * PmcLowVoltageDetectInStop_Disabled ,      // Low-Voltage Detect Stop Enable - LVD events disabled during stop mode
-      \t * PmcBandgapBuffer_Disabled ,               // Bandgap Buffer Enable - Bandgap buffer is disabled
-      \t * PmcLowVoltageLevel_HighTripPoint ,        // Low-Voltage Detect Level Select - High trip point (VLVD = VLVDH)
-      \t * PmcLowVoltageWarningLevel_LowTripPoint,   // Low-Voltage Warning Level Select - Low trip point (VLVW = VLVW1)
+      \t *   PmcLowVoltageDetect_Enabled ,             // Low-Voltage Detect Enable - LVD logic enabled
+      \t *   PmcLowVoltageWarningInterrupt_Disabled ,  // Low-Voltage Warning Interrupt Enable - Interrupt disabled
+      \t *   PmcLowVoltageReset_Disabled ,             // Low-Voltage Detect Reset Enable - LVD events do not generate hardware resets
+      \t *   PmcLowVoltageDetectInStop_Disabled ,      // Low-Voltage Detect Stop Enable - LVD events disabled during stop mode
+      \t *   PmcBandgapBuffer_Disabled ,               // Bandgap Buffer Enable - Bandgap buffer is disabled
+      \t *   PmcLowVoltageLevel_HighTripPoint ,        // Low-Voltage Detect Level Select - High trip point (VLVD = VLVDH)
+      \t *   PmcLowVoltageWarningLevel_LowTripPoint,   // Low-Voltage Warning Level Select - Low trip point (VLVW = VLVW1)
+      \t *
+      \t *    $(_name)Callback,                // Call-back to execute on event - call-back function name
+      \t *    NvicPriority_Low,                // Priority for interrupt - Low
       \t * };
       \t *
       \t * // Initialise $(_Class) from values specified above
-      \t * $(_Class)::configure(init)
+      \t * $(_Class)::configure($(_name)Init)
       \t * @endcode
       \t */
    ]]>
@@ -205,9 +233,9 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" >
    <![CDATA[
-      class $(_Class)BasicInfo {
+      class $(_Baseclass)BasicInfo {
       \t
       public:\n
    ]]>
@@ -224,11 +252,6 @@
 
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t/**
-      \t * Type definition for $(_Class) interrupt call back.
-      \t */
-      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
-      \t
       \t/** Callback function for ISR */
       \tstatic CallbackFunction sCallback;
       \t
@@ -304,11 +327,11 @@
 
 <!--   Member variables -->
 
-   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></setTemplate>
+   ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="pmc_spmsc1_lvwack,pmc_spmsc1_lvwie,pmc_spmsc1_lvdre,pmc_spmsc1_lvdse,pmc_spmsc1_lvde,pmc_spmsc1_bgbe"
@@ -409,7 +432,7 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t   %registerName = %paramExpression;
+      \t      %registerName = %paramExpression;
       \t   }\n\n
    ]]></setTemplate>
 
@@ -462,9 +485,6 @@
             pmc_spmsc2_lvwv
          "
    ><![CDATA[
-      $(init_description)
-      \ttypedef $(_Class)BasicInfo::Init Init;
-      \t
       \t/**
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
@@ -475,13 +495,13 @@
 
    <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[
-      \t}; // $(_Class)BasicInfo::Init\n\n
+      \t}; // $(_Baseclass)BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" >
       <![CDATA[
-      }; // $(_Class)BasicInfo\n\n
+      }; // $(_Baseclass)BasicInfo\n\n
    ]]>
    </template>
 

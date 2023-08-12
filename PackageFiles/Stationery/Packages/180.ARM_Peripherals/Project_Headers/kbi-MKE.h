@@ -12,6 +12,8 @@
 
 #include "pin_mapping.h"
 
+#if $(/KBI/enablePeripheralSupport) // /KBI/enablePeripheralSupport
+
 namespace USBDM {
 
 template <class Info>
@@ -55,5 +57,7 @@ $(/KBI/staticDefinitions: )
 $(/KBI/declarations: )
 
 }; // namespace USBDM
+
+#endif // /KBI/enablePeripheralSupport
 
 #endif /* PROJECT_HEADERS_KBI_H_ */

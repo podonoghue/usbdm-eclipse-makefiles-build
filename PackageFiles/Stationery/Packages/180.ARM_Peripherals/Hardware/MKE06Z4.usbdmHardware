@@ -90,7 +90,7 @@
       </peripheral>
       <peripheral baseName="CAN"      instance="0"        version="can0_mscan">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
-         <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_CAN0_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_CAN0_MASK;" />
+         <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_MSCAN_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_MSCAN_MASK;" />
          <irq num="CAN_RX_IRQn" />
          <irq num="CAN_TX_IRQn" />
          <param name="$present"     key="/CAN0/$present" value="true" />

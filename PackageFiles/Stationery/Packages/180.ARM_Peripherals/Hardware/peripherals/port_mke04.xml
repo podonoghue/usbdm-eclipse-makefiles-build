@@ -570,11 +570,28 @@
       \tUSBDM::$(_Class)::defaultConfigure();
    ]]></template>
 
+   <template key="/PORT/PinIndex" namespace="all" >
+      <![CDATA[
+         /**
+          * Port pin index
+          *
+          * Global indices for port pins
+          */
+         enum PinIndex : uint8_t {
+            \tPinIndex_Illegal = 0xFFU, ///< Illegal\n
+   ]]></template>
    <for keys=   "    field             : Name : pinIndex"
         values= "/PORT/port_puel_ptape :  A   :   0;
                  /PORT/port_puel_ptbpe :  B   :   8;
                  /PORT/port_puel_ptcpe :  C   :  16;
                  /PORT/port_puel_ptdpe :  D   :  24" >
+
+      <for keys="i" dim="8">
+         <template key="/PORT/PinIndex" namespace="all" variables="%(field)_present" codeGenCondition="enablePeripheralSupport"
+         ><![CDATA[
+            \tPT%(Name)%(i) = %(pinIndex)+%(i),\n
+         ]]></template>
+      </for>
       <template key="/PORT/declarations" namespace="all" variables="%(field)_present" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
       \t/**
@@ -584,7 +601,7 @@
       \t * @tparam polarity Polarity of the pin. Either ActiveHigh or ActiveLow
       \t */
       \ttemplate <PinNum pinNum>
-      \t   class Port%(Name) : public Port_T<pinNum+%(pinIndex)> {};
+      \t   class Port%(Name) : public Port_T<PinIndex(pinNum+%(pinIndex))> {};
       \t
       \t/**
       \t * Class representing pin options for a field within Port %(Name)
@@ -594,9 +611,14 @@
       \t * @tparam polarity    Polarity of field. Either ActiveHigh or ActiveLow
       \t */
       \ttemplate <PinNum leftPinNum, PinNum rightPinNum, Polarity polarity=ActiveHigh>
-      \t    class Port%(Name)Field : public PortField_T<leftPinNum+%(pinIndex), rightPinNum+%(pinIndex)> {};\n\n
+      \t    class Port%(Name)Field : public PortField_T<PinIndex(leftPinNum+%(pinIndex)), PinIndex(rightPinNum+%(pinIndex))> {};\n\n
       ]]></template>
    </for>
+   <template key="/PORT/PinIndex" namespace="all" >
+      <![CDATA[
+         };
+         \t\n
+   ]]></template>
 
 
    <projectActionList id = "port_files" >

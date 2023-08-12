@@ -11,16 +11,18 @@
    <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="_enablePeripheral.xml" />
    <title description="------------------------------------------" />
 
 <!--
     * General substitutions
-    *  $(_NAME)         => e.g FTM2                    (fProvider.getName())
-    *  $(_Baseclass)    => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
-    *  $(_Class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
 -->
 
 <!--
@@ -48,6 +50,10 @@
     * %register[index]                Register associated with variable e.g. adc->APCTL1
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
 
    <!-- ************* SIM ****************** -->
    <aliasOption key="/SIM/sim_pinsel0_irqps" constant="false" optional="true" />
@@ -106,7 +112,7 @@
 
 <!-- Graphic here -->
 
-   <setTemplate variables="irq_sc_irqack" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <setTemplate variables="irq_sc_irqack" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
    ><![CDATA[
       \t/**
       \t * %description
@@ -118,20 +124,30 @@
 
    <for keys="field:name"
         values="
-      irq_sc_irqpdd:Irq;
-      irq_sc_irqpe:PullUp;
+      irq_sc_irqpdd:PullUp;
+      irq_sc_irqpe:Enable;
       irq_sc_irqie:IrqRequests;
       irq_sc_irqmod:Mode" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
          \t *
          %paramDescription
          \t */
-         \tstatic void configure%(name)(%params) {
+         \tstatic void set%(name)(%params) {
          \t   %defaultFieldExpression
-         \t}\n\n
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register&%mask);
+         \t}
+         \t\n
       ]]></setTemplate>
    </for>
 
@@ -164,9 +180,9 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" >
    <![CDATA[
-      class $(_Class)BasicInfo {
+      class $(_Baseclass)BasicInfo {
       \t
       public:\n
    ]]>
@@ -183,11 +199,6 @@
 
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t/**
-      \t * Type definition for $(_Class) interrupt call back.
-      \t */
-      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
-      \t
       \t/** Callback function for ISR */
       \tstatic CallbackFunction sCallback;
       \t
@@ -264,11 +275,11 @@
 
 <!--   Member variables -->
 
-   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></setTemplate>
+   ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="irq_sc_irqpdd,irq_sc_irqpe,irq_sc_irqack,irq_sc_irqie,irq_sc_irqmod"
@@ -369,7 +380,7 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t   %registerName = %paramExpression;
+      \t      %registerName = %paramExpression;
       \t   }\n\n
    ]]></setTemplate>
 
@@ -413,9 +424,6 @@
             irq_sc_irqpdd
          "
    ><![CDATA[
-      $(init_description)
-      \ttypedef $(_Class)BasicInfo::Init Init;
-      \t
       \t/**
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
@@ -430,9 +438,9 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" >
       <![CDATA[
-      }; // $(_Class)BasicInfo\n\n
+      }; // $(_Baseclass)BasicInfo\n\n
    ]]>
    </template>
 
@@ -449,6 +457,12 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>
 
+   <projectActionList id = "irq_files" >
+      <copy source="Project_Headers/irq-MKE.h"  target="Project_Headers/irq.h"  overwrite="true"  derived="true" />
+   </projectActionList>
+
+   <!-- ************* Startup ****************** -->
+
    <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
@@ -459,10 +473,6 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <projectActionList id = "irq_files" >
-      <copy source="Project_Headers/irq-MKE.h"  target="Project_Headers/irq.h"  overwrite="true"  derived="true" />
-   </projectActionList>
-
    <!-- ************* Signal mapping ****************** -->
    <category name="SIM" description="Pin mapping">
       <aliasOption key="/SIM/sim_pinsel_$(_name)ps"  constant="false" optional="true" />
@@ -470,6 +480,6 @@
       <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" constant="false" optional="true" />
    </category>
 
-   <signals/>
+   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
 
 </peripheralPage>

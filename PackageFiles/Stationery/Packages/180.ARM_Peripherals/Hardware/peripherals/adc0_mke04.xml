@@ -16,11 +16,13 @@
 
 <!--
     * General substitutions
-    *  $(_NAME)         => e.g FTM2                    (fProvider.getName())
-    *  $(_Baseclass)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
-    *  $(_Class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
 -->
 
 <!--
@@ -48,6 +50,11 @@
     * %register[index]                Register associated with variable e.g. adc->APCTL1
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Class)BasicInfo&quot;" />
+
    <!-- ************* SC1 ****************** -->
 
    <intOption key="adiclk"
@@ -79,7 +86,7 @@
    <choiceOption key="adc_sc1_adch" condition="adc_sc1_adch_present"
       hidden="true"
       enumStem="AdcChannelNum"
-      description="Input Channel Select"
+      description="Input Channel"
       toolTip="Channel to modify" >
       <choice name="AD0"                 value="0" enum="Ad0"/>
       <choice name="AD1"                 value="1" enum="Ad1"/>
@@ -156,8 +163,8 @@
 
    <intOption key="adc_cv_cv" condition="adc_cv_cv_present"
       typeName="uint16_t"
-      enabledBy="adc_sc2_compare>0"
       valueFormat="%s"
+      enabledBy="adc_sc2_compare>0"
       description="Compare Value"
       toolTip="Value compared against ADC conversion result"
       value="0"
@@ -272,23 +279,33 @@
 
    <for keys="field:name"
         values="
-      adc_sc1_aien:Sc1Aien;
-      adc_sc1_adco:Sc1Adco;
-      adc_sc1_adch:Sc1Adch" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      adc_sc1_aien:Interrupt;
+      adc_sc1_adco:Continuous;
+      adc_sc1_adch:Channel" >
+      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
          \t *
          %paramDescription
          \t */
-         \tstatic void configure%(name)(%params) {
+         \tstatic void set%(name)(%params) {
          \t   %register[0] = (%register[0] & ~%mask)|%paramExpression;
-         \t}\n\n
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register[0]&%mask);
+         \t}
+         \t\n
       ]]></setTemplate>
    </for>
 
-   <setTemplate variables="adc_sc2_compare,adc_cv_cv" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <setTemplate variables="adc_sc2_compare,adc_cv_cv" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -312,41 +329,53 @@
       adc_sc3_adlsmp:Sample;
       adc_sc3_mode:Resolution;
       adc_sc3_adiclk:ClockSource;
-      adc_sc4_htrgme:Sc4Htrgme;
-      adc_sc4_ascane:Sc4Ascane;
-      adc_sc4_acfsel:Sc4Acfsel;
-      adc_sc4_afdep:Sc4Afdep;
+      adc_sc4_htrgme:HardwareMultipleConversion;
+      adc_sc4_ascane:ScanMode;
+      adc_sc4_acfsel:CompareOperation;
+      adc_sc4_afdep:FifoDepth;
       adc_sc5_hwtriggermask:HardwareMask" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
          \t *
          %paramDescription
          \t */
-         \tstatic void configure%(name)(%params) {
+         \tstatic void set%(name)(%params) {
          \t   %defaultFieldExpression
-         \t}\n\n
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register&%mask);
+         \t}
+         \t\n
       ]]></setTemplate>
    </for>
 
    <setTemplate variables="adc_sc1_adch, adc_apctl1_adpc" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
    ><![CDATA[
       \t/**
-      \t * Set %description
+      \t * Allocate %description0
+      \t * The GPIO function on the associated pin is disabled
       \t *
       %paramDescription0
       \t */
-      \tstatic void setGpioPin(%paramType0 %paramName0) {
+      \tstatic void allocateAnaloguePin(%paramType0 %paramName0) {
       \t   %register1 = %register1 | (1<<%paramName0);
       \t}
       \t
       \t/**
-      \t * Release %description
+      \t * Release %description0
+      \t * The GPIO function on the associated pin is enabled
       \t *
       %paramDescription0
       \t */
-      \tstatic void releaseGpioPin(%paramType0 %paramName0) {
+      \tstatic void releaseAnaloguePin(%paramType0 %paramName0) {
       \t   %register1 = %register1 & ~(1<<%paramName0);
       \t}\n\n
    ]]></setTemplate>
@@ -363,8 +392,17 @@
       \t * @note This constructor may be used to create a const instance in Flash
       \t *
       \t * Example:
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(uint32_t status) {
+      \t *    (void) status;
+      \t * }
+      \t *
       \t * @code
-      \t * static const $(_Class)::Init init {
+      \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *   // Setup values
       \t *   AdcResolution_8bit_se ,         // ADC resolution - 8-bit
@@ -373,7 +411,7 @@
       \t *   AdcRefSel_VrefhAndVrefl ,       // Voltage Reference Selection - VREFH and VREFL
       \t *   AdcSample_Short ,               // Sample Time Configuration - Short sample
       \t *   AdcPower_Normal ,               // Low-Power Configuration - Normal
-      \t *   AdcChannelNum_Ad10 ,            // GPIO Pin Disable
+      \t *   AdcChannelNum_Ad10 ,            // GPIO pin disables (available for analogue function)
       \t *   AdcChannelNum_Ad11 ,
       \t *   AdcCompare_LessThan, 200,       // Compare Function Control - ADC value < 100
       \t *   AdcPretrigger_SoftwareTrigger , // Conversion Trigger Select - Software trigger
@@ -382,16 +420,19 @@
       \t *   AdcSc4Acfsel_OredTriggers ,     // Compare function select OR/AND when the FIFO function is enabled - ORed triggers
       \t *   AdcSc4Afdep_FifoDisabled ,      // FIFO Depth - FIFO disabled
       \t *   AdcHardwareMask_Unmasked,       // Hardware Trigger Mask - Unmasked
+      \t *
+      \t *    $(_name)Callback,                // Call-back to execute on event - call-back function name
+      \t *    NvicPriority_Low,                // Priority for interrupt - Low
       \t * };
       \t *
       \t * // Initialise $(_Class) from values specified above
-      \t * $(_Class)::configure(init)
+      \t * $(_Class)::configure($(_name)Init)
       \t * @endcode
       \t */
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" >
    <![CDATA[
       class $(_Class)BasicInfo {
       \t
@@ -410,11 +451,6 @@
 
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t/**
-      \t * Type definition for $(_Class) interrupt call back.
-      \t */
-      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
-      \t
       \t/** Callback function for ISR */
       \tstatic CallbackFunction sCallback;
       \t
@@ -490,11 +526,11 @@
 
 <!--   Member variables -->
 
-   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></setTemplate>
+   ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_sc2_adtrg,adc_sc2_compare,adc_sc2_refsel"
@@ -568,6 +604,7 @@
       \t * @param init Class containing initialisation values
       \t */
       \tstatic void configure(const typename Info::Init &init) {
+      \t   // ..........  Configure ...........
       \t
       \t   // Enable peripheral clock
       \t   Info::enableClock();
@@ -628,7 +665,7 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t   %registerName = %paramExpression;
+      \t      %registerName = %paramExpression;
       \t   }\n\n
    ]]></setTemplate>
 
@@ -757,9 +794,6 @@
             adc_sc5_hwtriggermask
          "
    ><![CDATA[
-      $(init_description)
-      \ttypedef $(_Class)BasicInfo::Init Init;
-      \t
       \t/**
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
@@ -811,7 +845,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" >
       <![CDATA[
       }; // $(_Class)BasicInfo\n\n
    ]]>
@@ -830,6 +864,12 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>
 
+   <projectActionList id = "adc_files" >
+      <copy source="Project_Headers/adc-MKE.h"  target="Project_Headers/adc.h"  overwrite="true"  derived="true" />
+   </projectActionList>
+
+   <!-- ************* Startup ****************** -->
+
    <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
@@ -840,9 +880,6 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <projectActionList id = "adc_files" >
-      <copy source="Project_Headers/adc-MKE.h"  target="Project_Headers/adc.h"  overwrite="true"  derived="true" />
-   </projectActionList>
 
    <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
 

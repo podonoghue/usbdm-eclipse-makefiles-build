@@ -53,7 +53,7 @@ static constexpr uint16_t WdogUnlock2 = 0xD928;
  * @tparam info      Information class for WDOG
  */
 template<class Info>
-class WdogBase_T : public Info {
+class WdogBase_T : public WdogInfo {
 
 protected:
 $(/WDOG/protectedMethods: // No protected methods found)

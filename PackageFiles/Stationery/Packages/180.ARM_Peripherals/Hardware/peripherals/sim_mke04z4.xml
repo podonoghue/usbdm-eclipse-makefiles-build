@@ -23,7 +23,9 @@
       <aliasCategoryOption key="/ICS/ClockConfig[%(n)]" derived="true" constant="true" >
 
          <aliasOption key="/ICS/enableClockConfiguration[%(n)]" constant="false" />
-
+         <if condition="%(n)==0">
+            <aliasOption key="/ICS/ics_c2_bdiv[%(n)]" constant="false" />
+         </if>
          <for keys="u : name              : code            : ref"
             values="0 : System bus clock : SystemBusClock : system_bus_clock[%(n)]" >
 
@@ -48,6 +50,7 @@
          </for>
 
          <choiceOption key="sim_clkdiv_outdiv1[%(n)]" condition="sim_clkdiv_outdiv1_present"
+            enabledBy="(%(n)==0)||/ICS/enableClockConfiguration[%(n)]"
             enumStem="SimCoreClkDivider"
             toolTip="This field sets the divide value for the core/system clock"
             description="Core/System Clock Divider value" >
@@ -58,6 +61,7 @@
          </choiceOption>
 
          <binaryOption key="sim_clkdiv_outdiv2[%(n)]" condition="sim_clkdiv_outdiv2_present"
+            enabledBy="(%(n)==0)||/ICS/enableClockConfiguration[%(n)]"
             enumStem="SimBusClkDivider"
             toolTip="This field sets the divide value for the bus/FLASH, follows OUTDIV1"
             description="Bus/Flash Clock Divider value" >
@@ -66,6 +70,7 @@
          </binaryOption >
 
          <binaryOption key="sim_clkdiv_outdiv3[%(n)]" condition="sim_clkdiv_outdiv3_present"
+            enabledBy="(%(n)==0)||/ICS/enableClockConfiguration[%(n)]"
             enumStem="SimTimerClkDivider"
             toolTip="This field sets the divide value for the timers(FTM0, FTM2,PWT)"
             description="Timer Clock Divider value" >
@@ -74,6 +79,8 @@
          </binaryOption>
 
          <intOption key="system_core_clock[%(n)]"
+            constant="true"
+            enabledBy="(%(n)==0)||/ICS/enableClockConfiguration[%(n)]"
             ref="(/ICS/system_icsoutclk_clock[%(n)])/((sim_clkdiv_outdiv1[%(n)])+1)"
             derived="true"
             isNamedClock="true"
@@ -84,6 +91,8 @@
             disabledValue="0" />
 
          <intOption key="system_bus_clock[%(n)]"
+            constant="true"
+            enabledBy="(%(n)==0)||/ICS/enableClockConfiguration[%(n)]"
             ref="(system_core_clock[%(n)])/((sim_clkdiv_outdiv2[%(n)])?2:1)"
             derived="true"
             isNamedClock="true"
@@ -94,6 +103,8 @@
             disabledValue="0" />
 
          <intOption key="system_timer_clock[%(n)]"
+            constant="true"
+            enabledBy="(%(n)==0)||/ICS/enableClockConfiguration[%(n)]"
             ref="(/ICS/system_icsoutclk_clock[%(n)])/((sim_clkdiv_outdiv3[%(n)])?2:1)"
             derived="true"
             isNamedClock="true"
@@ -182,7 +193,8 @@
       </choiceOption>
 
       <intOption key="sim_sopt_delay" condition="sim_sopt_delay_present"
-         typeName="uint8_t"
+         typeName="Ticks"
+         units="ticks"
          description="FTM2 Trigger Delay"
          toolTip="Specifies the delay from FTM2 initial or match trigger to ADC hardware trigger when 1 is written to ADHWT.\n
                   The 8-bit modulo value allows the delay from 0 to 255 upon the BUSREF clock settings.\n

@@ -11,6 +11,14 @@
    <xi:include href="_enablePeripheral.xml" />
    <title description="------------------------------------------" />
 
+   <intOption key="/PORT/pin_index"
+      description="Port pin index"
+      toolTip="Global index for port pins"
+      hidden="true"
+      valueFormat="%s"
+      derived="true"
+      typeName="PinIndex" />
+
    <!-- PCRs not used -->
    <constant key="/SYSTEM/$pcrPattern"          type="String"  value="&quot;&quot;"                                   />
    <!-- Standard Gpio format -->
@@ -313,7 +321,7 @@
       \t * @tparam polarity    Polarity of field. Either ActiveHigh or ActiveLow
       \t */
       \ttemplate <unsigned leftPinNum, unsigned rightPinNum, Polarity polarity=ActiveHigh>
-      \tclass WideGpioField%(Name) : public GpioField_T<leftPinNum+%(pinIndex), rightPinNum+%(pinIndex), polarity> {};\n\n
+      \tclass WideGpioField%(Name) : public GpioField_T<PinIndex(leftPinNum+%(pinIndex)), PinIndex(rightPinNum+%(pinIndex)), polarity> {};\n\n
       ]]></template>
    </for>
 
@@ -341,7 +349,7 @@
       \t * @tparam polarity Polarity of the pin. Either ActiveHigh or ActiveLow
       \t */
       \ttemplate <PinNum pinNum, Polarity polarity=ActiveHigh>
-      \t   class Gpio%(Name) : public Gpio_T<pinNum+%(pinIndex), polarity> {};
+      \t   class Gpio%(Name) : public Gpio_T<PinIndex(pinNum+%(pinIndex)), polarity> {};
       \t
       \t/**
       \t * Class representing a field within Port %(Name)
@@ -351,7 +359,7 @@
       \t * @tparam polarity    Polarity of field. Either ActiveHigh or ActiveLow
       \t */
       \ttemplate <PinNum leftPinNum, PinNum rightPinNum, Polarity polarity=ActiveHigh>
-      \t    class Gpio%(Name)Field : public GpioField_T<leftPinNum+%(pinIndex), rightPinNum+%(pinIndex), polarity> {};\n\n
+      \t    class Gpio%(Name)Field : public GpioField_T<PinIndex(leftPinNum+%(pinIndex)), PinIndex(rightPinNum+%(pinIndex)), polarity> {};\n\n
       ]]></template>
    </for>
 

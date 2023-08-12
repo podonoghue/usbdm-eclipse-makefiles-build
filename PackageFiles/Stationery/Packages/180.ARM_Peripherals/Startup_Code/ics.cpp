@@ -314,6 +314,11 @@ static constexpr uint8_t  SCFTRIM = CLOCK_TRIM&0b1;
 if constexpr (CLOCK_TRIM != 0) {
    ics->C3 = SCTRIM;
    ics->C4 = (ics->C4&~ICS_C4_SCFTRIM_MASK)|SCFTRIM;
+   
+#if !$(/ICS/enablePeripheralSupport:false) // !/ICS/enablePeripheralSupport
+   // Minimal configuration e.g. setting ICS_C2_BDIV if clock trimmed
+   ics->C2 = IcsInfo::ics_c2;
+#endif
 }
 
    // Device resets into this clock mode

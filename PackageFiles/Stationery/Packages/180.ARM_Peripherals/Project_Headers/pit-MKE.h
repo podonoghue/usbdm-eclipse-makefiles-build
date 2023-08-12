@@ -22,6 +22,8 @@
 #include "system.h"
 #include "pin_mapping.h"
 
+#if $(/PIT/enablePeripheralSupport) // /PIT/enablePeripheralSupport
+
 namespace USBDM {
 
 /**
@@ -70,8 +72,8 @@ protected:
 
    /** Bitmask used to indicate a channel call-back is one-shot */
    static uint8_t clearOnEvent;
-   $(/PIT/protectedMethods: // /PIT/protectedMethods not found)
-
+   
+$(/PIT/protectedMethods: // /PIT/protectedMethods not found)
 public:
    /// Defaulted constructor
    constexpr PitBase_T() = default;
@@ -181,20 +183,6 @@ public:
       // Enable clock
       Info::enableClock();
       __DMB();
-   }
-
-   /**
-    *  Enables and configures the PIT if not already done.
-    *  This also disables all channel interrupts and channel reservations if newly configured.
-    *
-    *  @param[in]  pitDebugMode  Determined whether the PIT halts when suspended during debug
-    */
-   static void configureIfNeeded(PitDebugMode pitDebugMode=PitDebugMode_Freeze) {
-      enable();
-      // Check if disabled and configure if so
-      if ((pit->MCR & PIT_MCR_MDIS_MASK) != 0) {
-         configure(pitDebugMode);
-      }
    }
 
    /**
@@ -673,5 +661,7 @@ $(/PIT/declarations:  // No declarations found)
  */
 
 } // End namespace USBDM
+
+#endif // /PIT/enablePeripheralSupport
 
 #endif /* INCLUDE_USBDM_PIT_H_ */

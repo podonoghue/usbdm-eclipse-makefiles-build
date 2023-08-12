@@ -5,12 +5,25 @@
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
 <!--
-      Predefined symbols generated for current peripheral
-      _Baseclass FTM0 => Ftm
-      _instance   FTM0 => 0, PTA => A
-      _Class      FTM0 => Ftm0
-      _NAME       FTM0 => FTM0
-      _BASENAME   FTM0 => FTM, PTA => PT
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+
+   Template Rules based on attributes  info|usbdm|class|all)  "info"
+
+   - namespace="info" (default if blank)
+     Placed in Info class in pin_mapping.h
+
+   - namespace="usbdm"
+     Placed before Info class in pin_mapping.h i.e. in USBDM namespace
+
+   - namespace="all" key="keyValue"
+     Substituted anywhere for $(keyValue)
  -->
 
 <template><![CDATA[
@@ -18,7 +31,7 @@
       \tstatic constexpr uint32_t baseAddress = $(_NAME)_BasePtr;
       \t
       \t//! Hardware base pointer
-      \tstatic constexpr HardwarePtr<$(_Baseclass::toupper)_Type> $(_Baseclass::tolower) = baseAddress;
+      \tstatic constexpr HardwarePtr<$(_BASENAME)_Type> $(_basename) = baseAddress;
       \t\n
 ]]></template>
 

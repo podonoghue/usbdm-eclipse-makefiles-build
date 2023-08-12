@@ -24,6 +24,8 @@
 #include "cmsis.h"
 #endif
 
+#if $(/SPI/enablePeripheralSupport) // /SPI/enablePeripheralSupport
+
 namespace USBDM {
 
 /**
@@ -38,14 +40,6 @@ namespace USBDM {
  * @param status E_NOERROR on success else error code
  */
 typedef void (*SpiCallbackFunction)(ErrorCode status);
-
-/**
- * Bit transmission order (LSB/MSB first)
- */
-enum SpiOrder {
-   SpiOrder_MsbFirst = SPI_C1_LSBFE(0), //!< MSB First
-   SpiOrder_LsbFirst = SPI_C1_LSBFE(1), //!< LSB First
-};
 
 /**
  * Note on MODFEN/SSOE use
@@ -76,7 +70,7 @@ enum SpiLowPower {
 /**
  * @brief Base class for representing an SPI interface
  */
-class Spi {
+class Spi : public SpiBasicInfo {
 
 protected:
    // Pointer to hardware
@@ -271,8 +265,19 @@ $(/SPI/public: // /SPI/public not found)
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     */
-   void setSpeed(uint32_t frequency) {
+   void setSpeed(int frequency) {
       spi->BR = calculateBr(getClockFrequency(), frequency);
+   }
+
+   /**
+    * Sets Communication speed for SPI
+    *
+    * @param[in]  frequency      => Communication frequency in Hz
+    *
+    * Note: Chooses the highest speed that is not greater than frequency.
+    */
+   void setSpeed(Hertz frequency) {
+      spi->BR = calculateBr(getClockFrequency(), uint32_t(frequency));
    }
 
    /**
@@ -285,22 +290,10 @@ $(/SPI/public: // /SPI/public not found)
    }
 
    /**
-    * Sets Communication mode for SPI
-    *
-    * @param[in] spiMode   Controls clock polarity and the timing relationship between clock and data
-    * @param[in] spiOrder  Bit transmission order (LSB/MSB first)
-    */
-   void setMode(SpiMode spiMode=SpiMode_0, SpiOrder spiOrder=SpiOrder_MsbFirst) {
-      // Note: always master mode
-      spi->C1 =
-         (spiMode|spiOrder)|
-         (spi->C1&~(SPI_C1_MODE_MASK|SPI_C1_LSBFE_MASK))|
-         SPI_C1_SSOE_MASK|SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK;
-   }
-
-   /**
     *  Set Configuration\n
-    *  This includes timing settings, word length and transmit order\n
+    *  This is a lightweight version that only does timing settings, \n
+    *  word length and transmit order.\n
+    *  It does not enable clock or calculate baud factors from speed.
     *  Assumes the interface is already acquired through startTransaction
     *
     *  @note The SPI is left disabled.
@@ -530,7 +523,7 @@ $(/SPI/InitMethod: // /SPI/InitMethod not found)
    /** 
     * Constructor
     */
-   SpiBase_T(const typename Info::Init &init) : Spi(Info::baseAddress) {
+   SpiBase_T(const SpiBasicInfo::Init &init) : Spi(Info::baseAddress) {
 
       // Record this pointer for IRQ handler
       thisPtr = this;
@@ -583,5 +576,7 @@ $(/SPI/declarations)
  */
 
 } // End namespace USBDM
+
+#endif // /SPI/enablePeripheralSupport
 
 #endif /* INCLUDE_USBDM_SPI_H_ */

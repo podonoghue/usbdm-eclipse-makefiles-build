@@ -78,11 +78,12 @@
       value="37.5_kHz" />
 
    <for keys="n" dim="/SIM/numberOfClockSettings" >
-      <categoryOption key="ClockConfig[%(n)]" enabledBy="enablePeripheralSupport"
+      <categoryOption key="ClockConfig[%(n)]" 
+         enabledBy="enablePeripheralSupport&amp;&amp;enableClockConfiguration[%(n)]"
          description="Clock configuration[%(n)]"
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_%(n)"
-         disabledValue="Disabled" >
+         disabledValue="=(%(n)==0)?&quot;Reset Configuration&quot;:&quot;Disabled&quot;" >
 
          <if condition="%(n)==0" >
             <aliasOption key="enableClockConfiguration[%(n)]" />
@@ -102,6 +103,7 @@
          </category>
 
          <choiceOption key="icsClockMode[%(n)]"
+            enabledBy="enableClockConfiguration[%(n)], Forced by enableClockConfiguration"
             enumStem="IcsClockMode"
             enumType="uint8_t"
             valueFormat="%s"
@@ -147,6 +149,7 @@
          <category name="Clock monitors"
             description="Clock monitors" >
             <binaryOption key="ics_c4_cme[%(n)]" condition="ics_c4_cme_present"
+               enabledBy="enableClockConfiguration[%(n)]"
                enumStem="IcsClockMonitor"
                description="Clock Monitor Enable"
                toolTip="Determines if a reset request is made following a loss of external clock indication.\n
@@ -156,10 +159,11 @@
             </binaryOption>
 
             <binaryOption key="ics_c4_lolie0[%(n)]" condition="ics_c4_lolie0_present"
+               enabledBy="enableClockConfiguration[%(n)]"
                enumStem="IcsLossOfLockInterrupt"
                description="Loss of Lock Interrupt Enable"
                toolTip="Determines if an interrupt request is made following a loss of lock.\n
-This is indicated by ICS_S[LOLS] being set." >
+                        This is indicated by ICS_S[LOLS] being set." >
                <choice name="Interrupt disabled"  value="0" enum="Disabled"/>
                <choice name="Interrupt enabled"   value="1" enum="Enabled"/>
             </binaryOption>
@@ -171,6 +175,7 @@ This is indicated by ICS_S[LOLS] being set." >
             <aliasOption key="system_icsirclk_ungated" />
 
             <binaryOption key="ics_c1_irclken[%(n)]" condition="ics_c1_irclken_present"
+               enabledBy="enableClockConfiguration[%(n)]"
                enumStem="IcsIrClkEn"
                target="system_icsirclk_clock[%(n)]"
                description="Internal Reference Clock [ICSIRCLK]"
@@ -181,8 +186,7 @@ This is indicated by ICS_S[LOLS] being set." >
 
             <binaryOption key="ics_c1_irefsten[%(n)]"
                enumStem="IcsIrefs"
-               enabledBy="ics_c1_irclken[%(n)]||(icsClockMode[%(n)]==@FEI)||(icsClockMode[%(n)]==@FBI)||(icsClockMode[%(n)]==@FBILP),
-                          Unavailable as IRCLKEN not set and ICSIRCLK unused by active clock mode"
+               enabledBy="ics_c1_irclken[%(n)]"
                description="Internal Reference [ICSIRCLK] Stop Enable"
                toolTip="Controls whether or not the internal reference clock remains enabled when the ICS enters Stop mode.\n
                (only if IRCLKEN is set or if ICS is in FEI, FBI, or FBILP modes before entering Stop mode)" >
@@ -192,16 +196,14 @@ This is indicated by ICS_S[LOLS] being set." >
 
             <intOption key="system_icsirclk_clock[%(n)]"
                ref="system_icsirclk_ungated"
-               enabledBy="ics_c1_irclken[%(n)]||
-                          (icsClockMode[%(n)]==@FEI)||(icsClockMode[%(n)]==@FBI)||(icsClockMode[%(n)]==@FBILP),
-                          Inactive as IRCLKEN not set and ICSIRCLK unused by active clock mode"
+               enabledBy="ics_c1_irclken[%(n)]"
                constant="true"
                derived="true"
                origin="ICS Internal Reference Clock"
                units="Hz"
                description="ICS Internal Reference Clock [ICSIRC]"
                toolTip="Available to some peripherals if IRCLKEN is set. \n
-Dependent on device and clock Trim. [Nominally 37.5 kHz]"
+                        Dependent on device and clock Trim. [Nominally 37.5 kHz]"
                disabledValue="0" />
          </category>
 
@@ -284,14 +286,14 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
                derived="true"
                constant="true"
                description="Internal Reference Select"
+               disabledValue="1"
                toolTip="Selects the reference clock source for the FLL\n
                         This option is determined by the Clock Mode selection" >
                <choice value="0" name="External Reference Clock" enum="External" ref="ics_erc_clock_divided[%(n)]" />
-               <choice value="1" name="Internal Reference Clock" enum="Internal" ref="system_icsirclk_clock[%(n)]" />
+               <choice value="1" name="Internal Reference Clock" enum="Internal" ref="system_icsirclk_ungated" isDefault="true" />
             </binaryOption>
 
             <intOption key="irefs_clock[%(n)]"
-               hidden="true"
                derived="true" />
 
             <intOption key="system_icsffclk_clock[%(n)]"
@@ -355,10 +357,12 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
             constant="true" />
 
          <choiceOption key="ics_c2_bdiv[%(n)]" condition="ics_c2_bdiv_present"
+            enabledBy="(%(n)==0)||enableClockConfiguration[%(n)], Forced by enableClockConfiguration"
             target="system_icsoutclk_clock[%(n)]"
             enumStem="IcsBusDivider"
-            toolTip="This value can not be written or read back in some devices"
-            description="Bus Frequency Divider" >
+            toolTip="Output divider for ICS"
+            description="Bus Frequency Divider" 
+            disabledValue="1" >
             <choice name="Divide by 1"    value="0" enum="DivideBy1"    ref="icsoutclk_undivided[%(n)]"     />
             <choice name="Divide by 2"    value="1" enum="DivideBy2"    ref="icsoutclk_undivided[%(n)]/2"   />
             <choice name="Divide by 4"    value="2" enum="DivideBy4"    ref="icsoutclk_undivided[%(n)]/4"   />
@@ -428,6 +432,17 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
 
 <!-- Grahic here -->
 
+<!--   ========== Methods =============================== -->
+
+   <initialValueTemplate codeGenCondition="!enablePeripheralSupport"
+      variables="ics_c2_bdiv[0],ics_c2_lp[0]"
+      terminator=";"
+   ><![CDATA[
+      \t/// ICS_C2 value used for ICS minimal configuration
+      \tstatic constexpr uint8_t ics_c2 = %initExpression;
+      \t\n  
+   ]]></initialValueTemplate>
+      
    <template variables="ics_oscsel_fixed[]"
    ><![CDATA[
       \t/**

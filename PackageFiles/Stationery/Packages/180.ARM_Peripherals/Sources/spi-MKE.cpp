@@ -16,6 +16,9 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
+
+#if $(/SPI/enablePeripheralSupport) // /SPI/enablePeripheralSupport
+
 namespace USBDM {
 
 static const uint16_t spprFactors[] = {1,2,3,4,5,6,7,8};
@@ -71,3 +74,5 @@ uint32_t Spi::calculateSpeed(uint32_t clockFrequency, uint32_t clockFactors) {
 }
 
 } // End namespace USBDM
+
+#endif // /SPI/enablePeripheralSupport

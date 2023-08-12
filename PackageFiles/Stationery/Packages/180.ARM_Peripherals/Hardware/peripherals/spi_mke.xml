@@ -51,6 +51,11 @@
     * %register[index]                Register associated with variable e.g. adc->APCTL1
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
+
    <template><![CDATA[
       \t//! Pin number in Info table for SCK if mapped to a pin
       \tstatic constexpr int sckPin  = 0;
@@ -167,7 +172,7 @@
       hidden="true"
       enumStem="SpiReceiveInterrupt"
       description="Interrupt enable: for SPRF and MODF"
-      toolTip="Controls interrupts for SPI receive buffer full (S.SPRF) and mode fault (S.MODF) events." 
+      toolTip="Controls interrupts for SPI receive buffer full (S.SPRF) and mode fault (S.MODF) events."
    >
       <choice name="Interrupts disabled"  value="0" enum="InterruptsDisabled" />
       <choice name="Interrupts enabled"   value="1" enum="InterruptsEnabled" />
@@ -177,7 +182,7 @@
       enabledBy="spi_c1_spe&amp;&amp;/$(_BASENAME)/irqHandlingMethod"
       hidden="true"
       enumStem="SpiTransmitInterrupt"
-      description="Transmit interrupt enable" 
+      description="Transmit interrupt enable"
       toolTip="Controls interrupts for SPI transmit buffer empty (S.SPTEF)"
       >
       <choice name="Interrupts disabled"  value="0" enum="InterruptsDisabled" />
@@ -187,7 +192,7 @@
    <binaryOption key="spi_c2_spmie" condition="spi_c2_spmie_present"
       enabledBy="spi_c1_spe&amp;&amp;/$(_BASENAME)/irqHandlingMethod"
       enumStem="SpiMatchInterrupt"
-      description="Match interrupt" 
+      description="Match interrupt"
       toolTip="Controls hardware match interrupt (S.SPMF)"
       >
       <choice name="Interrupts disabled"  value="0" enum="Disabled" />
@@ -196,7 +201,7 @@
 
    <intOption key="spi_m_bits" condition="spi_m_bits_present"
       enabledBy="spi_c1_spe"
-      typeName="uint8_t"
+      typeName="int"
       description="Hardware compare value"
       toolTip="This value is compared to incoming data\n
                S.SPMF  flag is set on match"
@@ -206,7 +211,7 @@
       enabledBy="spi_c1_spe"
       enumStem="SpiWaitMode"
       description="Stop in wait mode"
-      toolTip="Controls operation in Wait mode" 
+      toolTip="Controls operation in Wait mode"
    >
       <choice name="Operate normally"  value="0" enum="Operate" />
       <choice name="Clocks stopped"    value="1" enum="Stopped" />
@@ -271,7 +276,7 @@
 
 <!-- Graphic here -->
 
-   <setTemplate variables="spi_pinuse" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <setTemplate variables="spi_pinuse" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -285,7 +290,7 @@
       \t}\n\n
    ]]></setTemplate>
 
-   <setTemplate variables="spi_br_sppr,spi_br_spr" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <setTemplate variables="spi_br_sppr,spi_br_spr" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
       nonDefaultParams="2"
    ><![CDATA[
       \t/**
@@ -297,10 +302,11 @@
       %params) {
       \t
       \t   %defaultFieldExpression
-      \t}\n\n
+      \t}
+      \t\n
    ]]></setTemplate>
 
-   <setTemplate variables="spi_c2_spmie,spi_m_bits" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <setTemplate variables="spi_c2_spmie,spi_m_bits" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
       nonDefaultParams="2"
    ><![CDATA[
       \t/**
@@ -316,6 +322,21 @@
       \t}\n\n
    ]]></setTemplate>
 
+   <setTemplate variables="spi_c1_mode,spi_c1_lsbfe" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      nonDefaultParams="2"
+   ><![CDATA[
+      \t/**
+      \t * Set %description0, %description1
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void setMode(
+      %params) {
+      \t
+      \t      %register = (%register & ~%mask) | %paramExpression;
+      \t}\n\n
+   ]]></setTemplate>
+
    <for keys="field:name"
         values="
       spi_c1_spie:RxInterrupt;
@@ -326,16 +347,26 @@
       spi_c1_lsbfe:BitOrder;
       spi_c2_spiswai:WaitMode;
       spi_c2_bidirectional:PinUse" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
          \t *
          %paramDescription
          \t */
-         \tstatic void configure%(name)(%params) {
+         \tstatic void set%(name)(%params) {
          \t   %defaultFieldExpression
-         \t}\n\n
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register&%mask);
+         \t}
+         \t\n
       ]]></setTemplate>
    </for>
 
@@ -366,7 +397,7 @@
       \t *   SpiBrSpr_DivideBy2 ,             // Baud rate divisor select - Divide by 2
       \t *   spiCallback,                     // Call-back function
       \t *   SpiMatchInterrupt_Enabled, 0x12, // Match interrupt - Enabled, Hardware compare value
-      \t *   
+      \t *
       \t *   NvicPriority_Normal,             // IRQ level for this peripheral - Normal
       \t *   0,                               // Hardware compare value
       \t * };
@@ -378,7 +409,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true" >
+   <template namespace="usbdm" discardRepeats="true" >
    <![CDATA[
       class $(_Baseclass)BasicInfo {
       \t
@@ -808,7 +839,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(%paramType0 %paramName0, int %paramName1, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%paramType0 %paramName0, %paramType1 %paramName1, Types... rest) : Init(rest...) {
       \t
       \t      %registerName0 = (%registerName0&~%mask0) | %paramName0;
       \t      %registerName1 = %paramName1;
@@ -887,19 +918,13 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true" >
+   <template namespace="usbdm" discardRepeats="true" >
       <![CDATA[
       }; // $(_Baseclass)BasicInfo\n\n
    ]]>
    </template>
 
    <!-- ************* Common ****************** -->
-   <projectActionList id = "spi_files" >
-      <copy source="Project_Headers/spi-MKE.h"           target="Project_Headers/spi.h"           overwrite="true"      derived="true" />
-      <copy source="Sources/spi-MKE.cpp"                 target="Sources/spi.cpp"                 overwrite="true"      derived="true" />
-      <copy source="Snippets/spi-example-MKL.cpp"        target="Snippets/spi-example.cpp"        overwrite="true"      derived="true" />
-      <copy source="Snippets/spi-example-cmsis-MKL.cpp"  target="Snippets/spi-example-cmsis.cpp"  overwrite="true"      derived="true" />
-   </projectActionList>
 
    <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
    \t/**
@@ -925,6 +950,13 @@
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SpiValidate" >
    </validate>
+   <!-- ************* Common ****************** -->
+   <projectActionList id = "spi_files" >
+      <copy source="Project_Headers/spi-MKE.h"           target="Project_Headers/spi.h"           overwrite="true"      derived="true" />
+      <copy source="Sources/spi-MKE.cpp"                 target="Sources/spi.cpp"                 overwrite="true"      derived="true" />
+      <copy source="Snippets/spi-example-MKL.cpp"        target="Snippets/spi-example.cpp"        overwrite="true"      derived="true" />
+      <copy source="Snippets/spi-example-cmsis-MKL.cpp"  target="Snippets/spi-example-cmsis.cpp"  overwrite="true"      derived="true" />
+   </projectActionList>
 
    <!-- ************* Startup ****************** -->
 
@@ -939,7 +971,7 @@
    ]]></template>
 
    <!-- ************* Signal mapping ****************** -->
-   <category name="SIM" description="Pin mapping" >
+   <category name="SIM" description="Pin mapping">
       <aliasOption key="/SIM/sim_pinsel_$(_name)ps"  constant="false" optional="true" />
       <aliasOption key="/SIM/sim_pinsel0_$(_name)ps" constant="false" optional="true" />
       <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" constant="false" optional="true" />

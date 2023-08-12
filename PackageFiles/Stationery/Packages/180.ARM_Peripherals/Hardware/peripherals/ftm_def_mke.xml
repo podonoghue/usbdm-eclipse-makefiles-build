@@ -4,6 +4,10 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Class)BasicInfo&quot;" />
+
    <binaryOption key="individual_channel_call_backs" condition="@NumChannels>@NumChannelVectors"
       enabledBy="irqHandlingMethod"
       description="Use individual channel call-backs"
@@ -784,7 +788,7 @@
          \t   }\n
       ]]></template>
       <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
-         \t   return (unsigned)rv;
+         \t   return Ticks(uint32_t(rv));
          \t}
          \t
          \t/**
@@ -815,7 +819,7 @@
          \t   }\n
       ]]></template>
       <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
-         \t   return (unsigned)rv;
+         \t   return Ticks(uint32_t(rv));
          \t}
          \t
          \t/**
@@ -1140,7 +1144,7 @@
          \t
          \t   if (ftm->SC&FTM_SC_CPWMS_MASK) {
          \t      // In CPWM the pulse width is doubled
-         \t      highTime = (highTime+1_ticks)/2U;
+         \t      highTime = Ticks((highTime+1_ticks)/2U);
          \t   }
          #ifdef DEBUG_BUILD
          \t   if ((unsigned)highTime > ftm->MOD) {
@@ -1159,7 +1163,7 @@
          \t * @return Absolute time of last event in ticks i.e. value from timer event register
          \t */
          \t%(static)Ticks getEventTime(int channel)%(const) {
-         \t   return (unsigned)(ftm->CONTROLS[channel].CnV);
+         \t   return Ticks(ftm->CONTROLS[channel].CnV);
          \t}
          \t
          \t/**
@@ -1893,7 +1897,7 @@ $(init_description)
 
 <!--  Default Initialisation value -->
 
-   <template><![CDATA[
+   <!-- template><![CDATA[
    \t/**
    \t * Type definition for $(_Class) overflow and fault call-back.
    \t */
@@ -1904,7 +1908,7 @@ $(init_description)
    \t */
    \ttypedef $(_Class)BasicInfo::ChannelCallbackFunction ChannelCallbackFunction;
    \t\n
-   ]]></template>
+   ]]></template -->
 
    <template codeGenCondition="irqHandlingMethod"><![CDATA[
    \t/**
@@ -1952,9 +1956,6 @@ $(init_description)
          ftm_cntin,
          ftm_mod"
    ><![CDATA[
-      $(init_description)
-      \ttypedef $(_Class)BasicInfo::Init Init;
-      \t
       \t/**
       \t * Default initialisation value for Ftm$(_instance)
       \t * This value is created from Configure.usbdmProject settings
@@ -2159,9 +2160,6 @@ $(channel_init_description)
 <!--  Default Initialisation value -->
 
   <template><![CDATA[
-      $(channel_init_description)
-      \ttypedef $(_Class)BasicInfo::ChannelInit ChannelInit;
-      \t
       \t/**
       \t * Default initialisation value for Ftm$(_instance)ChannelInit
       \t * This value is created from Configure.usbdmProject settings
@@ -2453,9 +2451,6 @@ $(quad_init_description)
          irqLevel,
          ftm_sc_ps"
    ><![CDATA[
-      $(quad_init_description)
-      \ttypedef $(_Class)BasicInfo::QuadInit QuadInit;
-      \t
       \t/**
       \t * Default initialisation value for Ftm$(_instance)QuadDecoder
       \t * This value is created from Configure.usbdmProject settings

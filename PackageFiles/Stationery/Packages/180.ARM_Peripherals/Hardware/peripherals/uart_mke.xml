@@ -71,11 +71,12 @@ Devices using this peripheral:
    \tstatic constexpr uint32_t oversampleRatio = $(oversampleRatio);\n\n
    ]]></template>
 
-   <binaryOption key="Allocated as Console"
+   <binaryOption key="usedAsConsole"
+      description="usedAsConsole"
+      toolTip="Inidcates if this device is allocated as the Console for I/O"
       ref="/Console/consoleDevice.name==&quot;$(_Baseclass) $(_instance)&quot;"
       constant="true"
-      derived="true"
-   >
+      derived="true" >
       <choice value="0" name="Not used as console" />
       <choice value="1" name="Used as console" />
    </binaryOption>

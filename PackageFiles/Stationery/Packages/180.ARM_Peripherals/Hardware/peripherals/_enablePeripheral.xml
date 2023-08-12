@@ -38,7 +38,17 @@
       <choice value="true"  name="Generate code for peripheral"  isDefault="@isGeneratedByDefault" />
    </binaryOption>
 
-   <!-- Configure peripheral instance in startup -->
+   <!-- Enable for generation of getters and setters -->
+   <binaryOption key="/$(_BASENAME)/enableGettersAndSetters"
+      modify="true"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      description="Enable Getter and Setter methods"
+      toolTip="Even if disabled, some code may still be generated">
+      <choice value="false" name="Minimal Get and Set methods generated"        isDefault="true" />
+      <choice value="true"  name="All Get and Set methods generated"  />
+   </binaryOption>
+
+    <!-- Configure peripheral instance in startup -->
    <binaryOption key="configurePeripheralInStartUp" condition="@isSupportedinStartup"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="Configure this peripheral"
@@ -112,16 +122,14 @@
          <aliasOption key="/$(_BASENAME)/irqLevel"          constant="false" />
 
          <initialValueTemplate variables="/$(_BASENAME)/irqHandlingMethod,/$(_BASENAME)/irqLevel" ><![CDATA[
-            \t/* Template _enablePeripheral.xml */
-
             \t//! IRQ numbers for hardware
             \tstatic constexpr IRQn_Type irqNums[]  = $(_NAME)_IRQS;
-
+            \t
             \t//! Number of IRQs for hardware
             \tstatic constexpr uint32_t irqCount  = sizeofArray(irqNums);
-
-             \t//! Default IRQ level
-             \tstatic constexpr NvicPriority irqLevel =  %symbolicValueExpression1;\n\n
+            \t
+            \t//! Default IRQ level
+            \tstatic constexpr NvicPriority irqLevel =  %symbolicValueExpression1;\n\n
          ]]></initialValueTemplate>
       <else/>
          <!-- Default IRQ vector patterns if none specified -->
@@ -159,19 +167,17 @@
          <aliasOption key="irqLevel"          constant="false" />
 
          <initialValueTemplate variables="irqHandlingMethod,irqLevel" ><![CDATA[
-            \t/* Template_irqOption.xml */
-
             \t//! IRQ numbers for hardware
             \tstatic constexpr IRQn_Type irqNums[]  = $(_NAME)_IRQS;
-
+            \t
             \t//! Number of IRQs for hardware
             \tstatic constexpr uint32_t irqCount  = sizeofArray(irqNums);
-
-             \t//! Class based callback handler has been installed in vector table
-             \tstatic constexpr bool irqHandlerInstalled = %symbolicValueExpression0;
-
-             \t//! Default IRQ level
-             \tstatic constexpr NvicPriority irqLevel =  %symbolicValueExpression1;\n\n
+            \t
+            \t//! Class based callback handler has been installed in vector table
+            \tstatic constexpr bool irqHandlerInstalled = %symbolicValueExpression0;
+            \t
+            \t//! Default IRQ level
+            \tstatic constexpr NvicPriority irqLevel =  %symbolicValueExpression1;\n\n
          ]]></initialValueTemplate>
       </if>
 
@@ -181,15 +187,13 @@
    </if>
 
    <template condition="clockEnable"  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
-      \t/* Template _enablePeripheral  */
-      \t
       \t/**
       \t *  Enable clock to $(_Class)
       \t */
       \tstatic void enableClock() {
       \t   $(clockEnable)
       \t}
-
+      \t
       \t/**
       \t *  Disable clock to $(_Class)
       \t */
@@ -200,8 +204,6 @@
 
    <!-- template key="/$(_BASENAME)/publicMethods" namespace="all" condition="irqHandlingMethod" codeGenCondition="irqHandlingMethod" discardRepeats="true" >
    <![CDATA[
-      \t/* Template _enablePeripheral  */
-      \t
       \t/**
       \t * Wrapper to allow the use of a class member as a callback function
       \t * @note Only usable with static objects.
@@ -302,6 +304,5 @@
    ]]></template>
 
    <constant key="class_present" type="Boolean"  value = "true"   />
-
 
 </fragment>

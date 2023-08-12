@@ -16,11 +16,13 @@
 
 <!--
     * General substitutions
-    *  $(_NAME)         => e.g FTM2                    (fProvider.getName())
-    *  $(_Baseclass)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
-    *  $(_Class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
 -->
 
 <!--
@@ -48,6 +50,11 @@
     * %register[index]                Register associated with variable e.g. adc->APCTL1
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Class)BasicInfo&quot;" />
+
    <!-- ************* CS ****************** -->
 
    <binaryOption key="acmp_cs_ace" condition="acmp_cs_ace_present"
@@ -164,9 +171,9 @@
       enabledBy="acmp_cs_ace"
       typeName="AcmpInput"
       defaultValue="0"
-      valueFormat="(AcmpInput)ACMP_C2_ACIPE(%s)"
-      toolTip="This field controls if the corresponding ACMP external pin can be driven by an analogue input"
-      description="ACMP Input Pin Enable"
+      valueFormat="AcmpInput(ACMP_C2_ACIPE(%s))"
+      toolTip="Bitmask controlling which ACMP pins are available as analogue inputs"
+      description="ACMP Input Pin Enables"
       bitmask="0x7"
       bitList="Pin0, Pin1, Pin2"
       value="0"
@@ -175,10 +182,10 @@
    <choiceOption key="acmp_c2_inputenable"
       derived="true"
       hidden="true"
-      valueFormat="ACMP_C2_ACIPE(%s)"
-      toolTip="This field controls if the corresponding ACMP external pin can be driven by an analogue input"
-      description="ACMP Input Pin Enable"
       enumStem="AcmpInput"
+      valueFormat="ACMP_C2_ACIPE(%s)"
+      toolTip="Bitmask controlling analogue function on ACMP pin"
+      description="ACMP Input Pin Control"
    >
       <choice value="0b001" name="Input 0" enum="Input0" />
       <choice value="0b010" name="Input 1" enum="Input1" />
@@ -190,36 +197,58 @@
    <setTemplate variables="acmp_c2_inputenable" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
    ><![CDATA[
       \t/**
-      \t * Set %description
+      \t * Allocate %description
+      \t * The GPIO function on the associated pin is disabled
       \t *
       %paramDescription
       \t */
-      \tstatic void configureAnalogueInput(%params) {
+      \tstatic void allocateAnalogueInput(%params) {
       \t   %register = %register | %paramName0;
-      \t}\n\n
+      \t}
+      \t
+      \t/**
+      \t * Release %description
+      \t * The GPIO function on the associated pin is enabled
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void releaseAnalogueInput(%params) {
+      \t   %register = %register & ~%paramName0;
+      \t}
+      \t\n
    ]]></setTemplate>
 
    <for keys="field:name"
         values="
       acmp_cs_ace:Enable;
-      acmp_cs_hyst:CsHyst;
-      acmp_cs_acie:CsAcie;
-      acmp_cs_acope:CsAcope;
-      acmp_cs_acmod:CsAcmod;
-      acmp_c0_acpsel:C0Acpsel;
-      acmp_c0_acnsel:C0Acnsel;
-      acmp_c1_dacen:C1Dacen;
-      acmp_c1_dacref:C1Dacref" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      acmp_cs_hyst:Hysterisis;
+      acmp_cs_acie:Interrupt;
+      acmp_cs_acope:PinEnable;
+      acmp_cs_acmod:EdgeSensitivity;
+      acmp_c0_acpsel:PositiveInput;
+      acmp_c0_acnsel:NegativeInput;
+      acmp_c1_dacen:Dac;
+      acmp_c1_dacref:DacLevel" >
+      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
          \t *
          %paramDescription
          \t */
-         \tstatic void configure%(name)(%params) {
+         \tstatic void set%(name)(%params) {
          \t   %defaultFieldExpression
-         \t}\n\n
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register&%mask);
+         \t}
+         \t\n
       ]]></setTemplate>
    </for>
 
@@ -235,8 +264,17 @@
       \t * @note This constructor may be used to create a const instance in Flash
       \t *
       \t * Example:
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(uint32_t status) {
+      \t *    (void) status;
+      \t * }
+      \t *
       \t * @code
-      \t * static const $(_Class)::Init init {
+      \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *   // Setup values
       \t *   AcmpEnable_Enabled ,             // Analogue Comparator Enable - Enabled
@@ -249,20 +287,21 @@
       \t *   AcmpDacEnable_Disabled ,         // DAC Enable - Disabled
       \t *   AcmpDacReference_Bandgap ,       // DAC Reference Select - Bandgap
       \t *   100,                             // DAC Output Level Selection
-      \t *   (AcmpInput)(0x5),                // ACMP Input Pin Enable
+      \t *   AcmpInput_Input1,                // ACMP Input Pin Enables
+      \t *   AcmpInput_Input2,
       \t *
-      \t *   acmpCallback,                    // Interrupt handler
-      \t *   NvicPriority_Midlow,             // Interrupt priority level
+      \t *    $(_name)Callback,                // Call-back to execute on event - call-back function name
+      \t *    NvicPriority_Low,                // Priority for interrupt - Low
       \t * };
       \t *
       \t * // Initialise $(_Class) from values specified above
-      \t * $(_Class)::configure(init)
+      \t * $(_Class)::configure($(_name)Init)
       \t * @endcode
       \t */
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" >
    <![CDATA[
       class $(_Class)BasicInfo {
       \t
@@ -281,18 +320,13 @@
 
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t/**
-      \t * Type definition for $(_Class) interrupt call back.
-      \t */
-      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
-      \t
       \t/** Callback function for ISR */
       \tstatic CallbackFunction sCallback;
       \t
       \t/**
       \t * Callback to catch unhandled interrupt
       \t */
-      \tstatic void unhandledCallback($(irq_parameters)) {
+      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
       \t   setAndCheckErrorCode(E_NO_HANDLER);
       \t}
       \t\n
@@ -361,11 +395,11 @@
 
 <!--   Member variables -->
 
-   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></setTemplate>
+   ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="acmp_cs_hyst,acmp_cs_acie,acmp_cs_acope,acmp_cs_acmod"
@@ -484,7 +518,7 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t   %registerName = %paramExpression;
+      \t      %registerName = %paramExpression;
       \t   }\n\n
    ]]></setTemplate>
 
@@ -588,9 +622,6 @@
             acmp_c2_acipe
          "
    ><![CDATA[
-      $(init_description)
-      \ttypedef $(_Class)BasicInfo::Init Init;
-      \t
       \t/**
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
@@ -605,7 +636,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" >
       <![CDATA[
       }; // $(_Class)BasicInfo\n\n
    ]]>
@@ -624,6 +655,12 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>
 
+   <projectActionList id = "acmp_files" >
+      <copy source="Project_Headers/acmp-MKE.h"  target="Project_Headers/acmp.h"  overwrite="true"  derived="true" />
+   </projectActionList>
+
+   <!-- ************* Startup ****************** -->
+
    <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
@@ -634,9 +671,6 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <projectActionList id = "acmp_files" >
-      <copy source="Project_Headers/acmp-MKE.h"  target="Project_Headers/acmp.h"  overwrite="true"  derived="true" />
-   </projectActionList>
 
    <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
 
