@@ -23,7 +23,7 @@
 #include "cmsis.h"
 #endif
 
-#if $(/I2C/enablePeripheralSupport) // /SPI/enablePeripheralSupport
+#if $(/I2C/enablePeripheralSupport) // /I2C/enablePeripheralSupport
 
 namespace USBDM {
 
@@ -46,15 +46,15 @@ public:
    I2C_State           state;               //!< State of current transaction
 
 private:
-$(/I2C/private:// /SPI/private not found)
+$(/I2C/private:// /I2C/private not found)
 
 protected:
 
-$(/I2C/protected:// /SPI/protected not found)
+$(/I2C/protected:// /I2C/protected not found)
    static constexpr unsigned TIMEOUT_LIMIT = 100000;
 
    /// Mode of operation (Interrupt/Polled)
-   static constexpr I2cInterrupt i2cInterrupt = SpiBasicInfo::irqHandlerInstalled?I2cInterrupt_Enabled:I2cInterrupt_Disabled;
+   static constexpr I2cInterrupt i2cInterrupt = irqHandlerInstalled?I2cInterrupt_Enabled:I2cInterrupt_Disabled;
 
    const HardwarePtr<I2C_Type> i2c;                 //!< I2C hardware instance
    uint16_t                    rxBytesRemaining;    //!< Number of receive bytes remaining in current transaction
@@ -116,7 +116,7 @@ $(/I2C/protected:// /SPI/protected not found)
    }
 
 public:
-$(/I2C/public:// /SPI/public not found)
+$(/I2C/public:// /I2C/public not found)
 
 #ifdef __CMSIS_RTOS
    /**
@@ -552,7 +552,7 @@ public:
     */
    virtual ~I2cBase_T() {}
 
-$(/I2C/static:// /SPI/static not found)
+$(/I2C/static:// /I2C/static not found)
 $(/I2C/InitMethod: // /I2C/InitMethod not found)
    /**
     * Set speed for interface in bits-per-second

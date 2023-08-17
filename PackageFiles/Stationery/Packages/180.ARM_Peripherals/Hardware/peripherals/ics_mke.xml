@@ -23,12 +23,11 @@
    <clockSelectionOption key="currentClockConfig"
       derived="true"
       description="Active clock selection"
-      target=""
       toolTip="Selects the clock configuration used for general peripheral timing calculations" >
-      <choice value="0" name="ClockConfig[0]" ref="&quot;0: &quot;+ClockConfig[0]" isDefault="true" />
-      <choice value="1" name="ClockConfig[1]" ref="&quot;1: &quot;+ClockConfig[1]" />
-      <choice value="2" name="ClockConfig[2]" ref="&quot;2: &quot;+ClockConfig[2]" />
-      <choice value="3" name="ClockConfig[3]" ref="&quot;3: &quot;+ClockConfig[3]" />
+      <choice value="0" name="@ClockConfig[0]" ref="&quot;0: &quot;+ClockConfig[0]" isDefault="true" />
+      <choice value="1" name="@ClockConfig[1]" ref="&quot;1: &quot;+ClockConfig[1]" />
+      <choice value="2" name="@ClockConfig[2]" ref="&quot;2: &quot;+ClockConfig[2]" />
+      <choice value="3" name="@ClockConfig[3]" ref="&quot;3: &quot;+ClockConfig[3]" />
    </clockSelectionOption>
 
    <aliasOption key="/SIM/numberOfClockSettings" />
@@ -71,14 +70,13 @@
       constant="true"
       derived="true"
       hidden="true"
-      origin="ICS Internal Reference Clock"
       units="Hz"
-      description="Frequency of ICS Internal Reference Clock [ICSIRC]"
+      description="ICS Internal Reference Clock [ICSIRC]"
       toolTip="Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       value="37.5_kHz" />
 
    <for keys="n" dim="/SIM/numberOfClockSettings" >
-      <categoryOption key="ClockConfig[%(n)]" 
+      <categoryOption key="ClockConfig[%(n)]"
          enabledBy="enablePeripheralSupport&amp;&amp;enableClockConfiguration[%(n)]"
          description="Clock configuration[%(n)]"
          toolTip="Clock configurations for different run modes"
@@ -103,7 +101,7 @@
          </category>
 
          <choiceOption key="icsClockMode[%(n)]"
-            enabledBy="enableClockConfiguration[%(n)], Forced by enableClockConfiguration"
+            enabledBy="enableClockConfiguration[%(n)]"
             enumStem="IcsClockMode"
             enumType="uint8_t"
             valueFormat="%s"
@@ -114,7 +112,7 @@
                      \n
                      FLL Engaged External(FEE)\n
                      In FEE mode, ICSOUT is derived from the FLL clock (DCOCLK) that is controlled by the external reference clock. The FLL loop\n
-                     will lock the DCO frequency to the FLL factor (1280) times the external reference frequency, as specified by the C1[RDIV] and
+                     will lock the DCO frequency to the FLL factor (1280) times the external reference frequency, as specified by the C1[RDIV] and\n
                      OSC.C2[RANGE].\n
                      \n
                      FLL Bypassed Internal(FBI)\n
@@ -178,7 +176,7 @@
                enabledBy="enableClockConfiguration[%(n)]"
                enumStem="IcsIrClkEn"
                target="system_icsirclk_clock[%(n)]"
-               description="Internal Reference Clock [ICSIRCLK]"
+               description="Internal Reference Clock [ICSIRCLK] enable"
                toolTip="Enables the internal reference clock for use by peripherals" >
                <choice value="0" ref="Disabled"                enum="Disabled" name="Disabled" code="0"                           />
                <choice value="1" ref="system_icsirclk_ungated" enum="Enabled"  name="Enabled"  code="icsirclk"    isDefault="true"/>
@@ -199,7 +197,6 @@
                enabledBy="ics_c1_irclken[%(n)]"
                constant="true"
                derived="true"
-               origin="ICS Internal Reference Clock"
                units="Hz"
                description="ICS Internal Reference Clock [ICSIRC]"
                toolTip="Available to some peripherals if IRCLKEN is set. \n
@@ -209,9 +206,9 @@
 
          <choiceOption key="ics_oscsel_fixed[%(n)]"
             target="ics_erc_clock[%(n)]"
-            description="IC External reference clock"
+            description="ICS External reference clock"
             toolTip="Source for ICS External Reference Clock" >
-            <choice value="0" ref="/OSC0/osc_clock"          enum="OscClk"   code="Osc0Info::getOscClock()"      name="OSC0 Clock" />
+            <choice value="0" ref="/OSC0/osc_clock" enum="OscClk" code="Osc0Info::getOscClock()"  name="OSC0 Clock" />
          </choiceOption>
 
          <intOption key="ics_erc_clock[%(n)]"
@@ -225,7 +222,7 @@
          <category name="FLL" description="FLL Settings" >
 
             <binaryOption key="fll_enabled[%(n)]"
-               enabledBy="((irefs_clock[%(n)]&gt;=31.25_kHz)&amp;&amp;(irefs_clock[%(n)]&lt;=39.0625_kHz)), Disabled as FLL input clock out of range"
+               enabledBy="irefs_clock[%(n)]#((irefs_clock[%(n)]&gt;=31.25_kHz)&amp;&amp;(irefs_clock[%(n)]&lt;=39.0625_kHz))"
                ref="(icsClockMode[%(n)]!=@FBILP)&amp;&amp;(icsClockMode[%(n)]!=@FBELP)"
                derived="true"
                constant="true"
@@ -294,15 +291,18 @@
             </binaryOption>
 
             <intOption key="irefs_clock[%(n)]"
-               derived="true" />
+               derived="true"
+               hidden="true" />
 
             <intOption key="system_icsffclk_clock[%(n)]"
                ref="irefs_clock[%(n)]"
-               enabledBy="(irefs_clock[%(n)]&lt;=(system_icsoutclk_clock[%(n)]/8))&amp;&amp;(icsClockMode[%(n)]!=@FBILP), Disabled in FBILP or if F &gt; (ICSOUTCLK/8)"
+               enabledBy="(irefs_clock[%(n)]&lt;=(system_icsoutclk_clock[%(n)]/8))&amp;&amp;(icsClockMode[%(n)]!=@FBILP),
+                          Disabled when in FBILP mode or if F &gt; (ICSOUTCLK/8)"
                units="Hz"
                derived="true"
                constant="true"
                description="ICS Fixed Frequency Clock [ICSFFCLK]"
+               isNamedClock="true"
                toolTip="Used as input clock to FLL and available to some peripherals\n
                         Derived from External Reference Clock or Slow IRC"
                value="0"/>
@@ -319,13 +319,14 @@
 
             <intOption key="system_icsfllclk_clock[%(n)]"
                enabledBy="fll_enabled[%(n)]&amp;&amp;((irefs_clock[%(n)]&gt;=31.25_kHz)&amp;&amp;(irefs_clock[%(n)]&lt;=39.0625_kHz)),
-                          Disabled in LP clock modes or if FLL input clock out of range"
+                          Disable when in LP clock modes or if FLL input clock out of range"
                ref="fllInputFrequency[%(n)]*1280"
                derived="true"
                constant="true"
                max="50_MHz"
                units="Hz"
-               description="FLL Output clock frequency"
+               description="ICS FLL Output clock [ICSFLLCLK]"
+               isNamedClock="true"
                toolTip="Output of FLL.\n
                         Available as ICSFLLCLK and used for ICSOUTCLK in FEI or FEE clock modes"
                value="40000000"
@@ -337,13 +338,13 @@
          <aliasOption key="system_icsfllclk_clock[%(n)]" />
 
          <choiceOption key="ics_c1_clks[%(n)]" condition="ics_c1_clks_present"
-            ref="((icsClockMode[%(n)]==@FEI)||(icsClockMode[%(n)]==@FEE))?0b00:
+            ref="icsClockMode[%(n)]#((icsClockMode[%(n)]==@FEI)||(icsClockMode[%(n)]==@FEE))?0b00:
                  ((icsClockMode[%(n)]==@FBI)||(icsClockMode[%(n)]==@FBILP))?0b01:0b10"
             enumStem="IcsClkSrc"
             target="icsoutclk_undivided[%(n)]"
             derived="true"
             constant="true"
-            description="ICSOUTCLK Clock Source Select"
+            description="ICS Output Clock Source Select"
             toolTip="Selects the clock source for ICSOUTCLK\n
                      This option is determined by the Clock Mode selection" >
             <choice value="0" name="Output of FLL"            enum="Fll"   ref="system_icsfllclk_clock[%(n)]" />
@@ -357,11 +358,13 @@
             constant="true" />
 
          <choiceOption key="ics_c2_bdiv[%(n)]" condition="ics_c2_bdiv_present"
-            enabledBy="(%(n)==0)||enableClockConfiguration[%(n)], Forced by enableClockConfiguration"
+            enabledBy="enableClockConfiguration[%(n)]#((%(n)==0)&amp;&amp;(internalClockTrim!=0))||enableClockConfiguration[%(n)]"
             target="system_icsoutclk_clock[%(n)]"
             enumStem="IcsBusDivider"
-            toolTip="Output divider for ICS"
-            description="Bus Frequency Divider" 
+            description="Output divider for ICS"
+            toolTip="This divides the output of the ICS.\n
+                     If the ICS is not fully configured and the internal clock is not trimmed,\n
+                     then BDIV should be &gt;1 to prevent an excessive bus speed"
             disabledValue="1" >
             <choice name="Divide by 1"    value="0" enum="DivideBy1"    ref="icsoutclk_undivided[%(n)]"     />
             <choice name="Divide by 2"    value="1" enum="DivideBy2"    ref="icsoutclk_undivided[%(n)]/2"   />
@@ -379,7 +382,8 @@
             derived="true"
             constant="true"
             units="Hz"
-            description="System ICS Output Clock [ICSOUTCLK]"
+            description="ICS Output Clock [ICSOUTCLK]"
+            isNamedClock="true"
             toolTip="ICS Main clock output"
             value="120000000"
             disabledValue="0" />
@@ -440,9 +444,9 @@
    ><![CDATA[
       \t/// ICS_C2 value used for ICS minimal configuration
       \tstatic constexpr uint8_t ics_c2 = %initExpression;
-      \t\n  
+      \t\n
    ]]></initialValueTemplate>
-      
+
    <template variables="ics_oscsel_fixed[]"
    ><![CDATA[
       \t/**

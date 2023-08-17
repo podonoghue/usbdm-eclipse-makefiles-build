@@ -51,25 +51,25 @@
 
    <choiceOption key="ftm_sc_clks"  condition="/MCG/$present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      description="Clock Source"
+      description="FTM Clock Source"
       enumStem="FtmClockSource"
       target="inputClockFrequency"
       toolTip="Selects the clock source for the module">
       <choice value="0" name="Disabled"              ref="disabled"                     code="0"                enum="Disabled"            />
-      <choice value="1" name="System clock"          ref="/SIM/system_bus_clock[]"      code="SystemBusClock"   enum="SystemClock"         isDefault="true" />
-      <choice value="2" name="Fixed frequency clock" ref="/MCG/system_mcgffclk_clock[]" code="SystemMcgFFClock" enum="FixedFrequencyClock" />
+      <choice value="1" name="System clock"          ref="/SIM/system_bus_clock[0]"      code="SystemBusClock"   enum="SystemClock"         isDefault="true" />
+      <choice value="2" name="Fixed frequency clock" ref="/MCG/system_mcgffclk_clock[0]" code="SystemMcgFFClock" enum="FixedFrequencyClock" />
       <choice value="3" name="External clock"        ref="ftmExternalClock"             code="ftmExternalClock" enum="ExternalClock"       />
    </choiceOption>
 
    <choiceOption key="ftm_sc_clks"  condition="/ICS/$present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      description="Clock Source"
+      description="FTM Clock Source"
       enumStem="FtmClockSource"
       target="inputClockFrequency"
       toolTip="Selects the clock source for the module">
       <choice value="0" name="Disabled"              ref="disabled"                     code="0"                enum="Disabled"            />
-      <choice value="1" name="System timer clock"    ref="/SIM/system_timer_clock[]"    code="SystemTimerClock" enum="SystemTimerClock"    isDefault="true" />
-      <choice value="2" name="Fixed frequency clock" ref="/ICS/system_icsffclk_clock[]" code="SystemIcsFFClock" enum="FixedFrequencyClock" />
+      <choice value="1" name="System timer clock"    ref="/SIM/system_timer_clock[0]"    code="SystemTimerClock" enum="SystemTimerClock"    isDefault="true" />
+      <choice value="2" name="Fixed frequency clock" ref="/ICS/system_icsffclk_clock[0]" code="SystemIcsFFClock" enum="FixedFrequencyClock" />
       <choice value="3" name="External clock"        ref="ftmExternalClock"             code="ftmExternalClock" enum="ExternalClock"       />
    </choiceOption>
 
@@ -86,7 +86,7 @@
       enumStem="FtmPrescale"
       target="clockFrequency"
       toolTip="Selects the prescaler for the module">
-      <choice value="0" name="Divide by 1"   ref="inputClockFrequency"      enum="DivBy1"  isDefault="true" />
+      <choice value="0" name="Divide by 1"   ref="inputClockFrequency"        enum="DivBy1"  isDefault="true" />
       <choice value="1" name="Divide by 2"   ref="(inputClockFrequency)/2."   enum="DivBy2" />
       <choice value="2" name="Divide by 4"   ref="(inputClockFrequency)/4."   enum="DivBy4" />
       <choice value="3" name="Divide by 8"   ref="(inputClockFrequency)/8."   enum="DivBy8" />
@@ -126,7 +126,7 @@
       <choice value="1,0" name="Free-running (count up)"         enum="FreeRunning"  isDefault="true" />
    </choiceOption>
 
-   <intOption key="ftm_cntin" 
+   <intOption key="ftm_cntin"
       description="Start value for counter"
       enabledBy="ftm_sc_mode!=2"
       toolTip="The timer counts from this value to ftm_mod"
@@ -134,7 +134,7 @@
       units="ticks"
       value="0" min="0" max="65535" />
 
-   <intOption key="ftm_mod" 
+   <intOption key="ftm_mod"
       description="End value for counter"
       enabledBy="ftm_sc_mode!=2"
       toolTip="The timer counts from ftm_cntin to this value"

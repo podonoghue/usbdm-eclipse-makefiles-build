@@ -7,9 +7,9 @@
    <constant key="irq_common"               type="Boolean" value="true"          />
    <constant key="suppressInstance"         type="Boolean" value="false"         />
    <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
-   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
-   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="irq_parameters"           type="String"  value="&quot;ErrorCode errorCode&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;ErrorCode&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;errorCode&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="false"         />
    <xi:include href="_enablePeripheral.xml"  />
@@ -67,6 +67,39 @@
       <choice value="true"  enum="Enabled"  name="Speed may be specified in Hertz" />
    </binaryOption>
 
+   <choiceOption key="i2cClockConfig" condition="/MCG/$present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      target="i2cInputClock"
+      description="Clock configuration"
+      toolTip="Selects the clock configuration used for calculations involving the bus clock" >
+      <choice value="0" name="@/MCG/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
+      <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
+      <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
+      <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
+   </choiceOption>
+
+   <choiceOption key="i2cClockConfig" condition="/ICS/$present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      target="i2cInputClock"
+      description="Clock configuration"
+      toolTip="Selects the clock configuration used for calculations involving the bus clock" >
+      <choice value="0" name="@/ICS/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
+      <choice value="1" name="@/ICS/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
+      <choice value="2" name="@/ICS/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
+      <choice value="3" name="@/ICS/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
+   </choiceOption>
+
+   <intOption key="i2cInputClock"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      constant="true"
+      derived="true"
+      description="I2C input clock"
+      toolTip="The I2C uses the bus clock for timing.\n
+               The frequency shown is based on the selected clock configuration.\n
+               This frequency is used as the basis for calculations on this page."
+      units="Hz"
+      />
+
    <intOption key="i2c_speed"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="Speed of interface in Hz"
@@ -77,6 +110,8 @@
    <choiceOption key="i2c_f_mult" condition="i2c_f_mult_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="I2cFMult"
+      derived="true"
+      constant="true"
       toolTip="Prescale divider to generate the I2C baud rate"
       description="Baud rate prescaler" >
       <choice name="mul = 1"     value="0" enum="Mul1" />
@@ -90,6 +125,8 @@
       typeName="int"
       description="Baud rate divider"
       toolTip="Divider to generate the I2C baud rate"
+      derived="true"
+      constant="true"
    />
 
    <!-- ************* C1 ****************** -->
@@ -1067,7 +1104,7 @@
    ]]></template>
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
+      class="net.sourceforge.usbdm.deviceEditor.validators.I2cValidate_MKE" >
    </validate>
 
    <!-- ************* Startup ****************** -->

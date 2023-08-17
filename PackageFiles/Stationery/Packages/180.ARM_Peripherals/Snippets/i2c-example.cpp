@@ -14,13 +14,25 @@ using namespace USBDM;
 
 // Address (LSB = R/W bit)
 static const unsigned I2C_ADDRESS = 0x1D<<1;
-static const unsigned I2C_SPEED   = 400_kHz;
 
-   // Declare I2C interface
-   I2c0 i2c{I2C_SPEED, I2cMode_Polled};
+void i2cCallback(ErrorCode errorCode) {
+   __asm__("nop");
+   console.writeln("RC = ", getErrorMessage(errorCode));
+}
 
 int main() {
-#define SELECT 2
+#define SELECT 0
+
+   static constexpr I2c0::Init i2cInit = {
+      I2cAddressLength_7Bit, 0, // Address Extension - 7-bit address, Slave Address
+      400_kHz,                  // Speed
+      I2cBusRole_Controller ,   // Bus Role Select - Controller mode
+
+      i2cCallback,
+      NvicPriority_Normal,
+   };
+
+   I2c0 i2c{i2cInit};
 
    for(;;) {
 #if SELECT == 0

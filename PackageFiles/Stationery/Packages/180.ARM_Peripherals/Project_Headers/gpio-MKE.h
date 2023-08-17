@@ -284,7 +284,7 @@ $(/GPIO/staticFunctions: // /GPIO/staticFunctions not found)
     */
    static bool readState() {
 #ifdef RELEASE_BUILD
-      uint32_t t = bmeExtract(gpio->PDOR, PinNum, 1);
+      uint32_t t = bmeExtract(gpio->PDOR, BITNUM, 1);
 #else
       uint32_t t = gpio->PDOR & BITMASK;
 #endif
