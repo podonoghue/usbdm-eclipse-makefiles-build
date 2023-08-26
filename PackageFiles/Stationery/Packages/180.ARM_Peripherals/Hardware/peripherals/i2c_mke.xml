@@ -104,7 +104,7 @@
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="Speed of interface in Hz"
       toolTip="Speed of transmission"
-      value="10000000" units="Hz"
+      value="400_kHz" units="Hz"
       min="0" max="@/SIM/system_bus_clock[0]/2" />
 
    <choiceOption key="i2c_f_mult" condition="i2c_f_mult_present"
@@ -1121,9 +1121,13 @@
 
    <!-- ************* Signal mapping ****************** -->
    <category name="SIM" description="Pin mapping" >
+      <aliasOption key="/SIM/sim_scgc_$(_name)"      constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc_$(_basename)"  constant="false" optional="true" />
       <aliasOption key="/SIM/sim_pinsel_$(_name)ps"  constant="false" optional="true" />
       <aliasOption key="/SIM/sim_pinsel0_$(_name)ps" constant="false" optional="true" />
       <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt1_$(_name)oinv" constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt1_$(_name)4wen" constant="false" optional="true" />
    </category>
 
    <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />

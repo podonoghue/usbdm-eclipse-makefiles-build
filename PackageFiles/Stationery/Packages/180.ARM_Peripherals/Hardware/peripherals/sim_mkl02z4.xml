@@ -79,14 +79,63 @@
    </category>
 
    <category name="SOPT4" description="TPM signals">
+      <for keys="p" values="0;1">
+         <intOption key="TpmClkin%(p)"
+            description="TMP External clock input #%(p)"
+            toolTip="This input is available as a TPM external clock source"
+            value="0"
+            units="Hz"
+         />
+         <initialValueTemplate variables="TpmClkin%(p)"
+            initExpressionOnSameLine="true"
+         ><![CDATA[
+            \t/// %tooltip
+            \tstatic constexpr uint32_t tpmExternalClock%(p) =  %initExpression;
+            \t\n
+         ]]></initialValueTemplate>
+      </for>
+
       <for keys="p" values="0;1;2">
          <binaryOption key="sim_sopt4_tpm%(p)clksel" condition="sim_sopt4_tpm%(p)clksel_present"
+            target="Tpm%(p)ExternalClkin"
             enumStem="SimTpm%(p)ClkSel"
             description="TPM %(p) External Clock Pin "
-            toolTip="External pin used to drive the clock to the TPM module">
-            <choice value="0"  name="TPM_CLKIN0 pin" enum="0" isDefault="true" />
-            <choice value="1"  name="TPM_CLKIN1 pin" enum="1" />
+            toolTip="External pin used to drive the external clock to TPM%(p) module">
+            <choice value="0"  name="TPM_CLKIN0 pin" enum="0" ref="TpmClkin0" code="tpmExternalClock0" isDefault="true" />
+            <choice value="1"  name="TPM_CLKIN1 pin" enum="1" ref="TpmClkin1" code="tpmExternalClock1"  />
          </binaryOption>
+         <intOption key="Tpm%(p)ExternalClkin"
+            description="TMP%(p) External clock"
+            toolTip="This clock is available as the TPM%(p) external clock source"
+            constant="true"
+            derived="true"
+            units="Hz"
+         />
+         <clockCodeTemplate variable="sim_sopt4_tpm%(p)clksel"
+            returnFormat="%s" >
+         ><![CDATA[
+            \t/**
+            \t * Select %description
+            \t *
+            \t * @param %enumParam %tooltip
+            \t */
+            \tstatic void selectTpm%(p)ExternalClock(%enumClass %enumParam) {
+            \t   %defaultFieldExpression
+            \t}
+            \t
+            \t/**
+            \t * Get %description
+            \t *
+            \t * @return Clock frequency in Hz
+            \t */
+            \tstatic uint32_t getTpm%(p)ExternalClockFrequency() {
+            \t
+            \t   switch(%defaultMaskingExpression) {
+            %body
+            \t      default: return 0;
+            \t   }
+            \t}\n\n
+         ]]></clockCodeTemplate>
       </for>
 
       <for keys="p" values="1;2">
@@ -236,16 +285,18 @@
                toolTip="Frequency of clock to USB full speed controller"
                value="48_MHz" min="48_MHz" max="48_MHz" disabledValue="0" />
 
-            <for keys="p" values="0;1">
+            <for keys="p" values=";0;1">
                <for keys   = "name       : Name       : NAME       : bNAME"
                     values = "uart%(p)   : Uart%(p)   : UART%(p)   : UART  ;
-                              lpuart%(p) : Lpuart%(p) : LPUART%(p) : LPUART" >
+                              lpuart%(p) : Lpuart%(p) : LPUART%(p) : LPUART;
+                              tpm%(p)    : Tpm%(p)    : TPM%(p)    : TPM" >
+
                   <choiceOption key="sim_sopt2_%(name)src[%(n)]" condition="sim_sopt2_%(name)src_present"
                      enumStem="Sim%(Name)ClockSource"
                      target="system_%(name)_clock[%(n)]"
                      description="%(NAME) Clock"
-                     toolTip="Clock source for the transmit and receive clock" >
-                     <choice value="0"  name="Disabled"                      ref="disabled"                          enum="Disabled"        code="0"                         />
+                     toolTip="Clock source for the peripheral" >
+                     <choice value="0"  name="Clock disabled"                ref="disabled"                          enum="Disabled"        code="0"                         />
                      <choice value="1"  name="Peripheral Clock"              ref="system_peripheral_clock[%(n)]"     enum="PeripheralClk"   code="getPeripheralClock()"       isDefault="true"/>
                      <choice value="2"  name="OSCERCLK clock"                ref="/OSC0/oscer_clock"                 enum="OscerClk"        code="Osc0Info::getOscerClock()" />
                      <choice value="3"  name="MCGIRCLK clock"                ref="/MCG/system_mcgirclk_clock[%(n)]"  enum="McgIrClk"        code="McgInfo::getMcgIrClock()"  />
@@ -259,27 +310,9 @@
                      description="%(NAME) Clock frequency"
                      toolTip="Frequency of clock to %(NAME)"
                      value="0" />
+
                </for>
             </for>
-
-            <choiceOption key="sim_sopt2_tpmsrc[%(n)]" condition="sim_sopt2_tpmsrc_present"
-               enumStem="SimTpmClockSource"
-               target="system_tpm_clock[%(n)]"
-               description="TPM Clock source"
-               toolTip="Clock source for the TPM counter clock">
-               <choice value="0"  name="Disabled"                      ref="disabled"                          enum="Disabled"        code="0"                         />
-               <choice value="1"  name="Peripheral Clock"              ref="system_peripheral_clock[%(n)]"     enum="PeripheralClk"   code="getPeripheralClock()"      isDefault="true" />
-               <choice value="2"  name="OSCERCLK clock"                ref="/OSC0/oscer_clock"                 enum="OscerClk"        code="Osc0Info::getOscerClock()" />
-               <choice value="3"  name="MCGIRCLK clock"                ref="/MCG/system_mcgirclk_clock[%(n)]"  enum="McgIrClk"        code="McgInfo::getMcgIrClock()"  />
-            </choiceOption>
-
-            <intOption key="system_tpm_clock[%(n)]" condition="sim_sopt2_tpmsrc_present"
-               max="TPM_max[/SMC/smc_pmctrl_runm[%(n)]]"
-               derived="true"
-               constant="true"
-               units="Hz"
-               description="TPM Clock frequency"
-               toolTip="Frequency of clock to TPM" />
 
             <choiceOption key="sim_sopt2_flexiosrc[%(n)]" condition="sim_sopt2_flexiosrc_present"
                target="system_flexio_clock[%(n)]"
@@ -356,7 +389,57 @@
                toolTip="Clocks the flash memory\n
                         Divides Core Clock to generate system_flash_clock." />
          </category>
+
       </aliasCategoryOption>
+   </for>
+
+<!-- Grahic here -->
+
+   <template namespace="usbdm" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
+      \t/*
+      \t * Global clocks
+      \t */
+      \t\n
+   ]]></template>
+   <template namespace="usbdm" codeGenCondition="!/MCG/enablePeripheralSupport" ><![CDATA[
+      \t/*
+      \t * Global clocks constants
+      \t * These are provided when minimal clock generator code is used.
+      \t * They assume no clock changes are made after startup.
+      \t * Values provided are from USBDM configuration.
+      \t */
+      \t\n
+   ]]></template>
+
+   <for keys=" clock                  : name "
+      values=" system_core_clock[0]   : SystemCoreClock;
+               system_bus_clock[0]    : SystemBusClock;
+               system_timer_clock[0]  : SystemTimerClock
+         ">
+      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \textern "C" uint32_t %(name);
+         \t\n
+      ]]></setTemplate>
+      <setTemplate namespace="all" key="/SYSTEM/Clocks" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \tuint32_t %(name);
+         \t\n
+      ]]></setTemplate>
+      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/MCG/enablePeripheralSupport" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \tconstexpr uint32_t %(name) = %valueExpression;
+         \t\n
+      ]]></setTemplate>
    </for>
 
    <template><![CDATA[

@@ -69,27 +69,27 @@
       value="8000000"
       disabledValue="0" />
 
-   <intOption key="osc_clock"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      ref="osc_input_freq"
-      valueFormat="%s"
-      constant="true"
-      derived="true"
-      units="Hz"
-      description="Frequency of OSC Clock or Crystal [OSCCLK]"
-      toolTip="Frequency of oscillator or external clock if OSC is enabled"
-      value="8000000"
-      disabledValue="0"
-      min="1" />
-
    <binaryOption key="osc_cr_oscen" condition="osc_cr_oscen_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;(osc_cr_oscMode!=/OscMode_ExternalClock)"
       enumStem="OscEnable"
       toolTip="Enables the OSC module. The OSC module can also be enabled by the ICS module"
       description="OSC Enable" >
       <choice name="OSC disabled"  value="0" enum="Disabled" isDefault="true" />
       <choice name="OSC enabled"   value="1" enum="Enabled" />
    </binaryOption>
+
+   <intOption key="osc_clock"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      ref="osc_input_freq"
+      valueFormat="%s"
+      constant="true"
+      derived="true"
+      hidden="true"
+      units="Hz"
+      description="Frequency of OSC Clock or Crystal [OSCCLK]"
+      toolTip="Frequency of oscillator or external clock if OSC is enabled"
+      disabledValue="0"
+      min="1" />
 
    <binaryOption key="osc_cr_oscsten" condition="osc_cr_oscsten_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;osc_cr_oscen"
@@ -138,6 +138,7 @@
    </binaryOption>
 
    <intOption key="oscer_clock"
+      enabledBy="osc_cr_oscen||!osc_cr_oscos"
       ref="osc_clock"
       valueFormat="%s"
       derived="true"
@@ -146,8 +147,7 @@
       description="OSC External reference clock [OSCERCLK]"
       toolTip="Frequency of clock available from OSC"
       value="8000000"
-      disabledValue="0"
-      min="1" />
+      disabledValue="0" />
 
 <!-- Grahic here -->
 

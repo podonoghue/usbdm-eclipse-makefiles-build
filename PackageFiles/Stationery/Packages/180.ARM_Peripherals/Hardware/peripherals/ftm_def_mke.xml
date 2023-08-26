@@ -43,15 +43,17 @@
          so that a reasonable resolution is available for PWM duty-cycle"
       value="100" min="0" max="65535" />
 
+   <title description="------- Clocking -------" />
+
    <intOption key="ftmExternalClock"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="FTM External clock"
       toolTip="Clock frequency of external clock supplied to FTM_CLKIN pin"
       value="0" min="0" units="Hz"/>
 
-   <choiceOption key="ftm_sc_clks"  condition="/MCG/$present"
+   <choiceOption key="ftm_sc_clks" condition="/MCG/$present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      description="FTM Clock Source"
+      description="Clock Source"
       enumStem="FtmClockSource"
       target="inputClockFrequency"
       toolTip="Selects the clock source for the module">
@@ -155,7 +157,7 @@
    <choiceOption key="ftm_sc_action" condition="ftm_sc_toie_present&amp;&amp;ftm_sc_dma_present"
       enabledBy="irqHandlingMethod"
       valueFormat="FTM_SC_TOIE(%s),FTM_SC_DMA(%s)"
-      enumType="uint8_t"
+      enumType="uint16_t"
       enumStem="FtmOverflowAction"
       description="Action on Counter overflow"
       toolTip="Enable interrupt and/or DMA on counter overflow">
@@ -168,6 +170,7 @@
    <binaryOption key="ftm_sc_action" condition="ftm_sc_toie_present&amp;&amp;!ftm_sc_dma_present"
       enabledBy="irqHandlingMethod"
       valueFormat="FTM_SC_TOIE(%s)"
+      enumType="uint8_t"
       enumStem="FtmOverflowAction"
       description="Action on Counter overflow"
       toolTip="Enable interrupt on counter overflow">
@@ -355,23 +358,23 @@
       </binaryOption>
 
       <intOption key="ftm_cnv[%(ch)]"
-         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+         enabledBy="((ftm_cnsc_mode[%(ch)]&gt;=4)&amp;&amp;(ftm_cnsc_mode[%(ch)]&lt;=9))||(ftm_cnsc_mode[%(ch)]&gt;=14)"
          valueFormat="%s_ticks"
          typeName="Ticks &amp;"
-         description="Output Compare Event time in ticks"
-         toolTip="This value is compared against the main counter in output compare modes"
          units="ticks"
+         description="Output Compare Event time in ticks"
+         toolTip="This value is compared against the main counter"
          value="0" min="0" max="@ftm_mod" />
 
       <floatOption key="ftm_cnvEventTime[%(ch)]"
-         enabledBy="((ftm_cnsc_mode[%(ch)]&gt;=4)&amp;&amp;(ftm_cnsc_mode[%(ch)]&lt;=7))||(ftm_cnsc_mode[%(ch)]&gt;=14)"
+         enabledBy="((ftm_cnsc_mode[%(ch)]&gt;=4)&amp;&amp;(ftm_cnsc_mode[%(ch)]&lt;=9))||(ftm_cnsc_mode[%(ch)]&gt;=14)"
          ref="ftm_cnv[%(ch)]*clockPeriod"
          valueFormat="%s_s"
          typeName="Seconds &amp;"
          derived="true"
          units="s"
          description="Output Compare Event time in seconds"
-         toolTip="This value is compared against the main counter in output compare modes"
+         toolTip="This value, converted to ticks, is compared against the main counter"
          value="0" min="0" max="65535" />
 
    </for>
@@ -1324,9 +1327,9 @@
    ><![CDATA[
       \t
       \t   /**
-      \t    * Set channel action on event.
+      \t    * Set %description
       \t    *
-      \t    * @param[in] ftmChannelAction      Action to take on channel event (DMA or Interrupt)
+      %paramDescription
       \t    *
       \t    * @note This method has the side-effect of clearing the register update synchronisation i.e.
       \t    *       pending CnV register updates are discarded.
@@ -1862,6 +1865,7 @@ $(init_description)
          \t   constexpr Init(
          %params, Types... rest) : Init(rest...) {
          \t
+         \t      cntin = 0_ticks;
          \t      %registerName0    = (%registerName0&~%mask0) | %enumParam0;
          \t      %registerName1   = %enumParam1;
          \t   }
@@ -2500,8 +2504,7 @@ $(quad_init_description)
       \t */
       \tstatic ErrorCode setCallback(CallbackFunction newCallback) {
       \t   if (newCallback == nullptr) {
-      \t      callback = unhandledCallback;
-      \t      return E_NO_ERROR;
+      \t      newCallback = unhandledCallback;
       \t   }
       \t   callback = newCallback;
       \t   return E_NO_ERROR;
@@ -2523,6 +2526,7 @@ $(quad_init_description)
       \t}
       \t\n
    ]]></template>
+
    <template  codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs" ><![CDATA[
       \t/**
       \t * Set channel call-back function
@@ -2658,6 +2662,7 @@ $(quad_init_description)
    </validate>
 
    <projectActionList id = "ftm_common_files" >
+      <copy source="Project_Headers/ftm-MKE.h"            target="Project_Headers/ftm.h"                overwrite="true" derived="true" />
       <copy source="Snippets/ftm-pwm-example.cpp"         target="Snippets/ftm-pwm-example.cpp"         overwrite="true" derived="true" />
       <copy source="Snippets/ftm-ic-example.cpp"          target="Snippets/ftm-ic-example.cpp"          overwrite="true" derived="true" />
       <copy source="Snippets/ftm-oc-example.cpp"          target="Snippets/ftm-oc-example.cpp"          overwrite="true" derived="true" />
@@ -2683,7 +2688,10 @@ $(quad_init_description)
    ]]></template>
 
    <!-- ************* Signal mapping ****************** -->
-   <category name="SIM" description="Pin mapping">
+
+   <category name="SIM" description="Pin mapping and clock enables">
+      <aliasOption key="/SIM/sim_scgc_$(_name)"     constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc_$(_basename)" constant="false" optional="true" />
       <for keys="ch" dim="8" >
          <aliasOption key="/SIM/sim_pinsel_$(_name)ps%(ch)"  constant="false" optional="true" />
          <aliasOption key="/SIM/sim_pinsel0_$(_name)ps%(ch)" constant="false" optional="true" />

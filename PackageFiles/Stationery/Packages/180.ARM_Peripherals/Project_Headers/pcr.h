@@ -107,6 +107,9 @@ public:
    constexpr auto operator ==(const Ticks &other)   const { return value==other.value; }
    constexpr auto operator ==(const unsigned other) const { return value==other; }
 
+   constexpr auto operator !=(const Ticks &other)   const { return value!=other.value; }
+   constexpr auto operator !=(const unsigned other) const { return value!=other; }
+
    constexpr operator unsigned() const { return value; }
    explicit operator unsigned() const volatile { return value; }
 };
@@ -161,6 +164,11 @@ public:
    constexpr auto operator ==(const float other)    const { return value==other; }
    constexpr auto operator ==(const unsigned other) const { return value==other; }
    constexpr auto operator ==(int other)            const { return value==other; }
+
+   constexpr auto operator !=(const Seconds &other) const { return value!=other.value; }
+   constexpr auto operator !=(const float other)    const { return value!=other; }
+   constexpr auto operator !=(const unsigned other) const { return value!=other; }
+   constexpr auto operator !=(int other)            const { return value!=other; }
 
    constexpr auto operator <(const Seconds &other) const { return value<other.value; }
    constexpr auto operator <(const float other)    const { return value<other; }
@@ -233,6 +241,11 @@ public:
    constexpr auto operator ==(const float other)    const { return value==other; }
    constexpr auto operator ==(const unsigned other) const { return value==other; }
    constexpr auto operator ==(int other)            const { return value==other; }
+
+   constexpr auto operator !=(const Hertz &other)   const { return value!=other.value; }
+   constexpr auto operator !=(const float other)    const { return value!=other; }
+   constexpr auto operator !=(const unsigned other) const { return value!=other; }
+   constexpr auto operator !=(int other)            const { return value!=other; }
 
    constexpr auto operator <(const Hertz &other)   const { return value<other.value; }
    constexpr auto operator <(const float other)    const { return value<other; }

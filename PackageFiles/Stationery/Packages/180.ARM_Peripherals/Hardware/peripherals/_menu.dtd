@@ -159,6 +159,8 @@
    <!ATTLIST bitmaskOption defaultValue   CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption enabledBy      CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption enumType       CDATA        #IMPLIED>
+   <!ATTLIST bitmaskOption pinMap         CDATA        #IMPLIED>
+   <!ATTLIST bitmaskOption disabledPinMap CDATA        #IMPLIED>
 
 <!ELEMENT floatOption EMPTY >
    <!ATTLIST floatOption condition     CDATA        #IMPLIED>
@@ -400,6 +402,7 @@
    <!ATTLIST choiceOption modify              CDATA        #IMPLIED>
    <!-- Allow variable to be replaced by later variable of same name -->
    <!ATTLIST choiceOption replace             CDATA        #IMPLIED>
+   <!ATTLIST choiceOption disabledPinMap      CDATA        #IMPLIED>
 
 
 <!ELEMENT addChoices ((choice)*) >
@@ -416,7 +419,7 @@
    <!ATTLIST choice code                      CDATA        #IMPLIED>
    <!ATTLIST choice hidden                    CDATA        #IMPLIED>
    <!ATTLIST choice enabledBy                 CDATA        #IMPLIED>
-   <!ATTLIST choice pinmap                    CDATA        #IMPLIED>
+   <!ATTLIST choice pinMap                    CDATA        #IMPLIED>
 
 <!ELEMENT binaryOption (choice?, choice?) >
    <!-- Condition evaluated during parsing that controls procsing of this variable -->
@@ -478,6 +481,7 @@
    <!ATTLIST binaryOption target              CDATA        #IMPLIED>
 
    <!ATTLIST binaryOption modify              CDATA        #IMPLIED>
+   <!ATTLIST binaryOption disabledPinMap      CDATA        #IMPLIED>
 
 <!ELEMENT irqOption EMPTY >
    <!ATTLIST irqOption condition     CDATA        #IMPLIED>
@@ -516,7 +520,7 @@
    <!ATTLIST template variables                 CDATA                   #IMPLIED>
    <!ATTLIST template discardRepeats            (true)                  #IMPLIED>
    <!ATTLIST template initExpressionOnSameLine  (true)                  #IMPLIED>
-   <!ATTLIST template paramPadding              CDATA                   #IMPLIED>
+   <!ATTLIST template tooltipPadding            CDATA                   #IMPLIED>
    <!ATTLIST template linePadding               CDATA                   #IMPLIED>
    <!ATTLIST template useDefinitions            CDATA                   #IMPLIED>
 
@@ -532,7 +536,7 @@
    <!ATTLIST setTemplate initExpressionOnSameLine  (true)                  #IMPLIED>
    <!ATTLIST setTemplate nonDefaultParams          CDATA                   #IMPLIED>
    <!ATTLIST setTemplate defaultParamValue         CDATA                   #IMPLIED>
-   <!ATTLIST setTemplate paramPadding              CDATA                   #IMPLIED>
+   <!ATTLIST setTemplate tooltipPadding            CDATA                   #IMPLIED>
    <!ATTLIST setTemplate linePadding               CDATA                   #IMPLIED>
    <!ATTLIST setTemplate params                    CDATA                   #IMPLIED>
    <!ATTLIST setTemplate codeGenCondition          CDATA                   #IMPLIED>
@@ -550,7 +554,7 @@
    <!ATTLIST constructorTemplate initExpressionOnSameLine  (true)                  #IMPLIED>
    <!ATTLIST constructorTemplate nonDefaultParams          CDATA                   #IMPLIED>
    <!ATTLIST constructorTemplate defaultParamValue         CDATA                   #IMPLIED>
-   <!ATTLIST constructorTemplate paramPadding              CDATA                   #IMPLIED>
+   <!ATTLIST constructorTemplate tooltipPadding            CDATA                   #IMPLIED>
    <!ATTLIST constructorTemplate linePadding               CDATA                   #IMPLIED>
    <!ATTLIST constructorTemplate params                    CDATA                   #IMPLIED>
    <!ATTLIST constructorTemplate useDefinitions            CDATA                   #IMPLIED>
@@ -565,7 +569,7 @@
    <!ATTLIST initialValueTemplate terminator                CDATA                   #IMPLIED> <!-- Terminator for initExpression -->
    <!ATTLIST initialValueTemplate separator                 CDATA                   #IMPLIED> <!-- Separator for initExpression -->
    <!ATTLIST initialValueTemplate initExpressionOnSameLine  (true)                  #IMPLIED>
-   <!ATTLIST initialValueTemplate paramPadding              CDATA                   #IMPLIED>
+   <!ATTLIST initialValueTemplate tooltipPadding            CDATA                   #IMPLIED>
    <!ATTLIST initialValueTemplate linePadding               CDATA                   #IMPLIED>
    <!ATTLIST initialValueTemplate useDefinitions            CDATA                   #IMPLIED>
 
@@ -586,7 +590,7 @@
    <!ATTLIST clockCodeTemplate discardRepeats            (true)                  #IMPLIED>
    <!ATTLIST clockCodeTemplate returnFormat              CDATA                   #IMPLIED> <!-- Format for return value in generated case statement -->
    <!ATTLIST clockCodeTemplate initExpressionOnSameLine  (true)                  #IMPLIED> <!-- No newline before initExpression (suitable fora single initialisation value) -->
-   <!ATTLIST clockCodeTemplate paramPadding              CDATA                   #IMPLIED> <!-- Padding applied to parameters if more than 1 parameter -->
+   <!ATTLIST clockCodeTemplate tooltipPadding            CDATA                   #IMPLIED> <!-- Padding applied to tooltips (e.g. "x*xx") -->
    <!ATTLIST clockCodeTemplate linePadding               CDATA                   #IMPLIED> <!-- Padding applied to start of line -->
    <!ATTLIST clockCodeTemplate params                    CDATA                   #IMPLIED>
    <!ATTLIST clockCodeTemplate codeGenCondition          CDATA                   #IMPLIED>

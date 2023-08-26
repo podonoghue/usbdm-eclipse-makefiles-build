@@ -51,6 +51,8 @@
     * %register[index]                Register associated with variable e.g. adc->APCTL1
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
    <template><![CDATA[
       \t//! Pin number in Info table for SCK if mapped to a pin
       \tstatic constexpr int sckPin  = 0;
@@ -62,49 +64,877 @@
       \tstatic constexpr int soutPin  = 2;\n\n
    ]]></template>
 
-   <intOption key="speed"
-      description="Speed of interface"
-      toolTip="Speed of transmission"
-      value="10000000" units="Hz"
-      min="0" max="10000000" />
-
-   <choiceOption key="spi_mode"
-      description="Mode"
-      toolTip="Communication mode" >
-      <choice value="0" name="Mode 0: CPOL=0, CPHA=0" isDefault="true" />
-      <choice value="1" name="Mode 1: CPOL=0, CPHA=1" />
-      <choice value="2" name="Mode 2: CPOL=1, CPHA=0" />
-      <choice value="3" name="Mode 3: CPOL=1, CPHA=1" />
-   </choiceOption>
-
-   <binaryOption key="spi_lsbfe"
-      description="Transmission order"
-      toolTip="Transmission order" >
-      <choice value="0" name="MSB first" />
-      <choice value="1" name="LSB first" />
+   <binaryOption key="/$(_BASENAME)/baudSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      modify="true"
+      description="Enable specifying speed in Hertz"
+      toolTip="If not selected, the communication speed must be specified using the\n
+               prescale values (SPPR and SPP) in initialisation structures" >
+      <choice value="false" enum="Disabled" name="Prescale values must be used" isDefault="true" />
+      <choice value="true"  enum="Enabled"  name="Speed may be specified in Hertz" />
    </binaryOption>
 
-   <projectActionList id = "spi_files" >
-      <copy source="Project_Headers/spi-MKL.h"           target="Project_Headers/spi.h"               overwrite="true"      derived="true" />
-      <copy source="Sources/spi-MKL.cpp"                 target="Sources/spi.cpp"                     overwrite="true"      derived="true" />
-      <copy source="Snippets/spi-example-MKL.cpp"        target="Snippets/spi-example-MKL.cpp"        overwrite="true"      derived="true" />
-      <copy source="Snippets/spi-example-cmsis-MKL.cpp"  target="Snippets/spi-example-cmsis-MKL.cpp"  overwrite="true"      derived="true" />
-   </projectActionList>
+   <choiceOption key="spiClockConfig" condition="/MCG/$present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      target="spiInputClock"
+      description="Clock configuration"
+      toolTip="Selects the clock configuration used for calculations involving the bus clock" >
+      <choice value="0" name="@/MCG/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
+      <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
+      <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
+      <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
+   </choiceOption>
 
-   <template key="/SPI/declarations" namespace="all"  ><![CDATA[
+   <choiceOption key="spiClockConfig" condition="/ICS/$present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      target="spiInputClock"
+      description="Clock configuration"
+      toolTip="Selects the clock configuration used for calculations involving the bus clock" >
+      <choice value="0" name="@/ICS/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
+      <choice value="1" name="@/ICS/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
+      <choice value="2" name="@/ICS/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
+      <choice value="3" name="@/ICS/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
+   </choiceOption>
+
+   <intOption key="spiInputClock"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      constant="true"
+      derived="true"
+      description="SPI input clock"
+      toolTip="The SPI uses the bus clock for timing.\n
+               The frequency shown is based on the selected clock configuration.\n
+               This frequency is used as the basis for calculations on this page."
+      units="Hz"
+      />
+
+   <!-- ************* C1 and C2****************** -->
+
+   <binaryOption key="spi_c1_spe" condition="spi_c1_spe_present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enumStem="SpiEnable"
+      description="System enable" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled"  />
+   </binaryOption >
+
+   <choiceOption key="spi_c1_mode" condition="spi_c1_cpha_present&amp;&amp;spi_c1_cpol_present"
+      valueFormat="SPI_C1_CPOL(%s),SPI_C1_CPHA(%s)"
+      enabledBy="spi_c1_spe"
+      enumStem="SpiMode"
+      description="Communication Mode"
+      toolTip="Controls clock polarity and the timing relationship between clock and data\n
+               Mode 0: Active-high clock (idles low), Data is captured on leading edge of SCK and changes on the following edge\n
+               Mode 1: Active-high clock (idles low), Data is changes on leading edge of SCK and captured on the following edge\n
+               Mode 2: Active-low clock (idles high), Data is captured on leading edge of SCK and changes on the following edge\n
+               Mode 3: Active-low clock (idles high), Data is changes on leading edge of SCK and captured on the following edge">
+      <choice value="0,0" name="Mode 0" enum="0" />
+      <choice value="0,1" name="Mode 1" enum="1" />
+      <choice value="1,0" name="Mode 2" enum="2" />
+      <choice value="1,1" name="Mode 3" enum="3" />
+   </choiceOption>
+
+   <binaryOption key="spi_c1_mstr" condition="spi_c1_mstr_present"
+      constant="true"
+      enabledBy="spi_c1_spe"
+      enumStem="SpiRole"
+      description="Controller/Peripheral role select"
+      toolTip="Peripheral mode not supported"
+      disabledValue="true" >
+      <choice name="Peripheral role"  value="0" enum="Peripheral"  />
+      <choice name="Controller role"  value="1" enum="Controller" isDefault="true" />
+   </binaryOption >
+
+   <choiceOption key="spi_pinuse" condition="spi_c2_modfen_present&amp;&amp;spi_c1_ssoe_present"
+      valueFormat="SPI_C2_MODFEN(%s),SPI_C1_SSOE(%s)"
+      enabledBy="spi_c1_spe&amp;&amp;spi_c1_mstr"
+      enumStem="SpiPinUse"
+      description="Pin Use"
+      toolTip="Controls use of Peripheral select pin in Controller mode">
+      <choice value="0,0" name="GPIO (non-SPI)"           enum="Gpio"              />
+      <choice value="1,0" name="Fault input"              enum="FaultInput"        />
+      <choice value="1,1" name="Peripheral select output" enum="PeripheralSelectOutput" />
+   </choiceOption>
+   <binaryOption key="spi_c1_lsbfe" condition="spi_c1_lsbfe_present"
+      enabledBy="spi_c1_spe"
+      enumStem="SpiBitOrder"
+      toolTip="Controls whether serial data transfers start with most-significant or least-significant bit"
+      description="Transmission order" >
+      <choice name="MSB first"   value="0" enum="MsbFirst" />
+      <choice name="LSB first"   value="1" enum="LsbFirst" />
+   </binaryOption >
+   <binaryOption key="spi_c1_spie" condition="spi_c1_spie_present"
+      enabledBy="spi_c1_spe&amp;&amp;/$(_BASENAME)/irqHandlingMethod"
+      hidden="true"
+      enumStem="SpiReceiveInterrupt"
+      description="Interrupt enable: for SPRF and MODF"
+      toolTip="Controls interrupts for SPI receive buffer full (S.SPRF) and mode fault (S.MODF) events."
+   >
+      <choice name="Interrupts disabled"  value="0" enum="InterruptsDisabled" />
+      <choice name="Interrupts enabled"   value="1" enum="InterruptsEnabled" />
+   </binaryOption >
+
+   <binaryOption key="spi_c1_sptie" condition="spi_c1_sptie_present"
+      enabledBy="spi_c1_spe&amp;&amp;/$(_BASENAME)/irqHandlingMethod"
+      hidden="true"
+      enumStem="SpiTransmitInterrupt"
+      description="Transmit interrupt enable"
+      toolTip="Controls interrupts for SPI transmit buffer empty (S.SPTEF)"
+      >
+      <choice name="Interrupts disabled"  value="0" enum="InterruptsDisabled" />
+      <choice name="Interrupts enabled"   value="1" enum="InterruptsEnabled" />
+   </binaryOption >
+
+   <binaryOption key="spi_c2_spmie" condition="spi_c2_spmie_present"
+      enabledBy="spi_c1_spe&amp;&amp;/$(_BASENAME)/irqHandlingMethod"
+      enumStem="SpiMatchInterrupt"
+      description="Match interrupt"
+      toolTip="Controls hardware match interrupt (S.SPMF)"
+      >
+      <choice name="Interrupts disabled"  value="0" enum="Disabled" />
+      <choice name="Interrupts enabled"   value="1" enum="Enabled" />
+   </binaryOption >
+
+   <intOption key="spi_m_bits" condition="spi_m_bits_present"
+      enabledBy="spi_c1_spe"
+      typeName="int"
+      description="Hardware compare value"
+      toolTip="This value is compared to incoming data\n
+               S.SPMF  flag is set on match"
+   />
+
+   <binaryOption key="spi_c2_spiswai" condition="spi_c2_spiswai_present"
+      enabledBy="spi_c1_spe"
+      enumStem="SpiWaitMode"
+      description="Stop in wait mode"
+      toolTip="Controls operation in Wait mode"
+   >
+      <choice name="Operate normally"  value="0" enum="Operate" />
+      <choice name="Clocks stopped"    value="1" enum="Stopped" />
+   </binaryOption >
+
+   <choiceOption key="spi_c2_bidirectional" condition="spi_c2_spc0_present&amp;&amp;spi_c2_bidiroe_present"
+      valueFormat="SPI_C2_SPC0(%s),SPI_C2_BIDIROE(%s)"
+      enabledBy="spi_c1_spe"
+      enumStem="SpiBidirectional"
+      description="Bidirectional Mode"
+      toolTip="Selects bidirectional data pin configurations">
+      <choice value="0,0" name="Normal (non-bidirectional)" enum="Normal" />
+      <choice value="1,0" name="Input"                      enum="Input" />
+      <choice value="1,1" name="Output"                     enum="Output" />
+   </choiceOption>
+   <intOption key="spi_speed"
+      enabledBy="spi_c1_spe"
+      description="Speed of interface in Hz"
+      toolTip="Speed of transmission"
+      value="10000000" units="Hz"
+      min="0" max="@/SIM/system_bus_clock[0]/2" />
+
+   <choiceOption key="spi_br_sppr" condition="spi_br_sppr_present"
+      constant="true"
+      derived="true"
+      enabledBy="spi_c1_spe"
+      enumStem="SpiBrSppr"
+      toolTip="Selects prescaler for SPI baud clock.\n
+               The input to the prescaler is the bus clock"
+      description="Baud rate prescale divisor" >
+      <choice name="Divide by 1"  value="0" enum="DivideBy1" />
+      <choice name="Divide by 2"  value="1" enum="DivideBy2" />
+      <choice name="Divide by 3"  value="2" enum="DivideBy3" />
+      <choice name="Divide by 4"  value="3" enum="DivideBy4" />
+      <choice name="Divide by 5"  value="4" enum="DivideBy5" />
+      <choice name="Divide by 6"  value="5" enum="DivideBy6" />
+      <choice name="Divide by 7"  value="6" enum="DivideBy7" />
+      <choice name="Divide by 8"  value="7" enum="DivideBy8" />
+   </choiceOption >
+
+   <choiceOption key="spi_br_spr" condition="spi_br_spr_present"
+      constant="true"
+      derived="true"
+      enabledBy="spi_c1_spe"
+      enumStem="SpiBrSpr"
+      toolTip="Selects one of nine divisors for the SPI baud rate divider.\n
+               The input to this divider comes from the SPI baud rate prescaler"
+      description="Baud rate divisor select" >
+      <choice name="Divide by 2"    value="0" enum="DivideBy2" />
+      <choice name="Divide by 4"    value="1" enum="DivideBy4" />
+      <choice name="Divide by 8"    value="2" enum="DivideBy8" />
+      <choice name="Divide by 16"   value="3" enum="DivideBy16" />
+      <choice name="Divide by 32"   value="4" enum="DivideBy32" />
+      <choice name="Divide by 64"   value="5" enum="DivideBy64" />
+      <choice name="Divide by 128"  value="6" enum="DivideBy128" />
+      <choice name="Divide by 256"  value="7" enum="DivideBy256" />
+      <choice name="Divide by 512"  value="8" enum="DivideBy512" />
+   </choiceOption >
+
+<!-- Graphic here -->
+
+   <setTemplate variables="spi_pinuse" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void configurePinUse(%params) {
+      \t
+      \t   spi->C1 = (spi->C1&~SPI_C1_SSOE_MASK)   | (%paramExpression&SPI_C1_SSOE_MASK);
+      \t   spi->C2 = (spi->C2&~SPI_C2_MODFEN_MASK) | (%paramExpression&SPI_C2_MODFEN_MASK);
+      \t}\n\n
+   ]]></setTemplate>
+
+   <setTemplate variables="spi_br_sppr,spi_br_spr" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+      nonDefaultParams="2"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void configureSpeed(
+      %params) {
+      \t
+      \t   %defaultFieldExpression
+      \t}
+      \t\n
+   ]]></setTemplate>
+
+   <setTemplate variables="spi_c2_spmie,spi_m_bits" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+      nonDefaultParams="2"
+   ><![CDATA[
+      \t/**
+      \t * Set %description0 , %description1
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void configureMatch(
+      %params) {
+      \t
+      \t      %register0 = (%register0 & ~%mask0) | %paramName0;
+      \t      %register1 = %paramName1;
+      \t}\n\n
+   ]]></setTemplate>
+
+   <setTemplate variables="spi_c1_mode,spi_c1_lsbfe" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      nonDefaultParams="2"
+   ><![CDATA[
+      \t/**
+      \t * Set %description0, %description1
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void setMode(
+      %params) {
+      \t
+      \t      %register = (%register & ~%mask) | %paramExpression;
+      \t}\n\n
+   ]]></setTemplate>
+
+   <for keys="field:name"
+        values="
+      spi_c1_spie:RxInterrupt;
+      spi_c1_spe:Enable;
+      spi_c1_sptie:TxInterrupt;
+      spi_c1_mstr:Role;
+      spi_c1_mode:Mode;
+      spi_c1_lsbfe:BitOrder;
+      spi_c2_spiswai:WaitMode;
+      spi_c2_bidirectional:PinUse" >
+      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register&%mask);
+         \t}
+         \t\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== SPI Init class =============================== -->
+
+   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_BASENAME)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t *  void spiCallback(ErrorCode ec) {
+      \t *     ...
+      \t *  }
+      \t *
+      \t * static const $(_Class)::Init init {
+      \t *
+      \t *   // Setup values - Multiple values shown on a single line must appear together in order shown
+      \t *   SpiMode_0 ,                      // Communication Mode - Mode 0
+      \t *   SpiBitOrder_MsbFirst ,           // Transmission order - MSB first
+      \t *   SpiWaitMode_Operate ,            // Stop in wait mode - Operate normally
+      \t *   SpiBrSppr_DivideBy1 ,            // Baud rate prescale divisor - Divide by 1
+      \t *   SpiBrSpr_DivideBy2 ,             // Baud rate divisor select - Divide by 2
+      \t *   spiCallback,                     // Call-back function
+      \t *   SpiMatchInterrupt_Enabled, 0x12, // Match interrupt - Enabled, Hardware compare value
+      \t *
+      \t *   NvicPriority_Normal,             // IRQ level for this peripheral - Normal
+      \t *   0,                               // Hardware compare value
+      \t * };
+      \t *
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure(init)
+      \t * @endcode
+      \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm" discardRepeats="true" >
+   <![CDATA[
+      class $(_Baseclass)BasicInfo {
+      \t
+      public:\n
+   ]]>
+   </template>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      variables="/$(_BASENAME)/irqHandlingMethod"
+   ><![CDATA[
+       \t//! Class based callback handler has been installed in vector table
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicValueExpression;
+       \t\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
+   <![CDATA[
+      \t/**
+      \t * Type definition for $(_Baseclass) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)($(irq_parameters));
+      \t
+      \t/**
+      \t * Callback to catch unhandled interrupt
+      \t */
+      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="all" key="/$(_BASENAME)/private" codeGenCondition="!/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
+   <![CDATA[
+      \t/**
+      \t * Poll device
+      \t */
+      \tErrorCode poll() {
+      \t   if (spi->S&SPI_S_SPMF_MASK) {
+      \t      // Match event
+      \t      spi->S = spi->S | SPI_S_SPMF_MASK;
+      \t      return E_MATCH;
+      \t   }
+      \t   if (spi->S&SPI_S_MODF_MASK) {
+      \t      // Lost arbitration
+      \t      stopTransaction();
+      \t      return E_LOST_ARBITRATION;
+      \t   }
+      \t   if (spi->S&SPI_S_SPRF_MASK) {
+      \t      // Receive byte
+      \t      if (rxDataPtr != nullptr) {
+      \t         // Save data
+      \t         *rxDataPtr++ = spi->D;
+      \t      }
+      \t      else {
+      \t         // Discard data
+      \t         (void)spi->D;
+      \t      }
+      \t      bytesRemaining = bytesRemaining-1;
+      \t      if (bytesRemaining>0) {
+      \t         // Transmit byte
+      \t         if (txDataPtr != nullptr) {
+      \t            // Send data
+      \t            spi->D = *txDataPtr++;
+      \t         }
+      \t         else {
+      \t            // Send dummy byte
+      \t            spi->D = 0xFF;
+      \t         }
+      \t      }
+      \t      else {
+      \t         // Completed OK
+      \t         stopTransaction();
+      \t         return E_NO_ERROR;
+      \t      }
+      \t   }
+      \t   return E_BUSY;
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="all" key="/$(_BASENAME)/private" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
+   <![CDATA[
+      \t/**
+      \t * Poll device - dummy routine
+      \t */
+      \tErrorCode poll() {
+      \t   return E_NO_ERROR;
+      \t}
+      \t
+      \t/**
+      \t * Type definition for $(_Baseclass) interrupt call back.
+      \t */
+      \ttypedef $(_Baseclass)BasicInfo::CallbackFunction CallbackFunction;
+      \t
+      \t/**
+      \t * Callback function for status changes
+      \t */
+      \t CallbackFunction sCallback = $(_Baseclass)BasicInfo::unhandledCallback;
+      \t
+      \t/**
+      \t * Class-based interrupt handler
+      \t * Polls device
+      \t */
+      \tvoid _irqHandler() {
+      \t
+      \t   if ((spi->S&SPI_S_SPMF_MASK) && (spi->C2&SPI_C2_SPMIE_MASK)) {
+      \t      // Match event
+      \t      spi->S = spi->S | SPI_S_SPMF_MASK;
+      \t      sCallback(E_MATCH);
+      \t      return;
+      \t   }
+      \t   if (spi->S&SPI_S_MODF_MASK) {
+      \t      // Lost arbitration
+      \t      stopTransaction();
+      \t      sCallback(E_LOST_ARBITRATION);
+      \t      return;
+      \t   }
+      \t   if ((spi->S&SPI_S_SPRF_MASK) == 0) {
+      \t      // No event
+      \t      return;
+      \t   }
+      \t   // Receive byte
+      \t   if (rxDataPtr != nullptr) {
+      \t      *rxDataPtr++ = spi->D;
+      \t   }
+      \t   else {
+      \t      (void)spi->D;
+      \t   }
+      \t   bytesRemaining = bytesRemaining-1;
+      \t   if (bytesRemaining>0) {
+      \t      // Transmit byte
+      \t      if (txDataPtr != nullptr) {
+      \t         spi->D = *txDataPtr++;
+      \t      }
+      \t      else {
+      \t         spi->D = 0xFF;
+      \t      }
+      \t   }
+      \t   else {
+      \t      stopTransaction();
+      \t      sCallback(E_NO_ERROR);
+      \t      return;
+      \t   }
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="all" key="/$(_BASENAME)/public" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
+   <![CDATA[
+      \t/**
+      \t * Set interrupt callback function.
+      \t *
+      \t * @param[in] callback Callback function to execute.\n
+      \t *                     Use nullptr to remove callback.
+      \t */
+      \t void setCallback($(_Baseclass)BasicInfo::CallbackFunction spiCallback) {
+      \t   if (spiCallback == nullptr) {
+      \t      spiCallback = $(_Baseclass)BasicInfo::unhandledCallback;
+      \t   }
+      \t   usbdm_assert(
+      \t         (sCallback == $(_Baseclass)BasicInfo::unhandledCallback) || (sCallback == spiCallback),
+      \t         "Handler already set");
+      \t   sCallback = spiCallback;
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true" >
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t
+      \t   /**
+      \t    * Raw constructor
+      \t    *
+      \t    * @param c1  Control register 1 value
+      \t    * @param c2  Control register 2 value
+      \t    * @param br  Baud rate register value
+      \t    */
+      \t   constexpr Init(uint8_t c1, uint8_t c2, uint8_t br) : c1(c1), c2(c2), br(br) {
+      \t   }
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/baudSupport" discardRepeats="true"
+      variables="spi_speed"
+   ><![CDATA[
+      \t   ///  %description
+      \t   unsigned %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <setTemplate namespace="usbdm" variables="/$(_BASENAME)/irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
+    ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></setTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      variables="spi_c1_mstr,spi_c1_mode,spi_pinuse,spi_c1_lsbfe"
+   ><![CDATA[
+      \t   /// Control register 1
+      \t   uint8_t %registerName = %mask0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      variables="spi_c2_spmie,spi_pinuse,spi_c2_spiswai,spi_c2_bidirectional"
+   ><![CDATA[
+      \t   /// Control register 2
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      variables="spi_br_sppr,spi_br_spr"
+   ><![CDATA[
+      \t   /// Baud rate register
+      \t   uint8_t %registerName = 0xFFU;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      variables="spi_m_bits"
+   ><![CDATA[
+      \t   /// Match register:
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
+      variables="/PCR/nvic_irqLevel,/$(_BASENAME)/irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %enumClass %registerName0 = %symbolicValueExpression1;
+      \t\n
+   ]]></initialValueTemplate>
+
+<!--   Configure methods -->
+
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \t inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}
+      \t\n
+   ]]></template>
+
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \t void configure(const $(_Baseclass)BasicInfo::Init &init) {
+      \t   // ..........  Configure ...........
+      \t
+      \t   // Enable peripheral clock
+      \t   Info::enableClock();
+      \t\n
+   ]]></template>
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+             condition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
+      \t   setCallback(init.callbackFunction);
+      \t   enableNvicInterrupts(init.irqlevel);
+      \t\n
+   ]]></template>
+
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+      \t   uint8_t br = init.br;
+      \t\n
+   ]]></template>
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/baudSupport" ><![CDATA[
+      \t   if (br == 0xFFU) {
+      \t      // Calculate prescale values from speed
+      \t      br = calculateBr(getClockFrequency(), init.speed);
+      \t   }\n
+   ]]></template>
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+      \t   // ..........  Regs to init .......... ;
+      \t   spi->C1   = 0;
+      \t   spi->C2   = init.c2;
+      \t   spi->BR   = br;
+      \t   spi->M    = init.m;
+      \t   spi->C1   = init.c1;
+      \t}
+      \t\n
+   ]]></template>
+
+<!--   Constructors -->
+
+   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
+      variables="/$(_BASENAME)/irqHandlingMethod"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%paramName0 = %paramExpression;
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName = %paramExpression;
+      \t   }\n\n
+   ]]></setTemplate>
+
+   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      variables="spi_br_sppr,spi_br_spr"
+      linePadding="xxx"
+      nonDefaultParams="2"
+   >
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for %description0 and %description1
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(
+      %params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName = %paramExpression;
+      \t   }
+      \t\n
+   ]]>
+   </setTemplate>
+
+   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/baudSupport" discardRepeats="true"
+      variables="spi_br_sppr, spi_speed"
+      linePadding="xxx"
+   >
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for %description1
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      \t    * @param value %description1
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(Hertz value, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName0 = 0xFFU;
+      \t      %registerName1 = value;
+      \t   }
+      \t\n
+   ]]>
+   </setTemplate>
+
+   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      variables="spi_pinuse"
+      linePadding="xxx"
+   >
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      c1 = (c1&~SPI_C1_SSOE_MASK)   | (%paramExpression&SPI_C1_SSOE_MASK);
+      \t      c2 = (c2&~SPI_C2_MODFEN_MASK) | (%paramExpression&SPI_C2_MODFEN_MASK);
+      \t   }
+      \t\n
+   ]]>
+   </setTemplate>
+
+   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      variables="spi_c2_spmie,spi_m_bits"
+      nonDefaultParams="2"
+      linePadding="xxx" >
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%paramType0 %paramName0, %paramType1 %paramName1, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName0 = (%registerName0&~%mask0) | %paramName0;
+      \t      %registerName1 = %paramName1;
+      \t   }
+      \t\n
+   ]]>
+   </setTemplate>
+
+   <for keys="r"
+      values="
+            spi_c1_mstr;
+            spi_c1_mode;
+            spi_c1_ssoe;
+            spi_c1_lsbfe;
+            spi_c2_spiswai;
+            spi_c2_bidirectional
+            " >
+      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      separator=","
+      terminator=","
+      variables="
+            spi_c1_mstr,
+            spi_c1_mode,
+            spi_c1_ssoe,
+            spi_c1_lsbfe,
+            spi_c2_spmie,  spi_m_bits,
+            spi_c2_modfen,
+            spi_c2_spiswai,
+            spi_c2_bidirectional,
+            spi_br_sppr,
+            spi_br_spr
+         "
+   ><![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Baseclass)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr $(_Baseclass)BasicInfo::Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></initialValueTemplate>
+
+   <template><![CDATA[
+      \tstatic uint32_t getClockFrequency() {
+      \t   return SystemBusClock;
+      \t}
+      \t\n
+   ]]></template>
+
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true" >
+      <![CDATA[
+      \t}; // $(_Baseclass)BasicInfo::Init\n\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm" discardRepeats="true" >
+      <![CDATA[
+      }; // $(_Baseclass)BasicInfo\n\n
+   ]]>
+   </template>
+
+   <!-- ************* Common ****************** -->
+
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
    \t/**
    \t * Class representing $(_NAME) interface
    \t * <b>Example</b>
    \t * @code
    \t * USBDM::Spi *spi = new USBDM::$(_Class);
    \t *
-   \t * uint8_t txData[] = {1,2,3};
+   \t * uint8_t txData[10] = {1,2,3};
    \t * uint8_t rxData[10];
    \t * spi->txRxBytes(sizeof(txData), txData, rxData);
    \t * @endcode
    \t */
    \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {
    \tpublic:
+   \t
+   \t   $(_Class)(const $(_Baseclass)BasicInfo::Init &init = $(_Class)Info::DefaultInitValue) : $(_Baseclass)Base_T(init) {}
+   \t
    \t$(/$(_NAME)/InputMapping:   // No user mappings found)
    \t};\n
    ]]></template>
@@ -113,20 +943,25 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.SpiValidate" >
    </validate>
 
-   <template><![CDATA[
-      \t//! Default communication mode: order, clock phase and clock polarity
-      \tstatic constexpr uint8_t modeValue =
-      \t   SPI_C1_LSBFE($(spi_lsbfe))| // LSB or MSB first
-      \t   SPI_C1_MODE($(spi_mode));  // Mode (CPOL+CPHA)
+   <!-- ************* Common ****************** -->
+   <projectActionList id = "spi_files" >
+      <copy source="Project_Headers/spi-MKL.h"           target="Project_Headers/spi.h"               overwrite="true"      derived="true" />
+      <copy source="Sources/spi-MKL.cpp"                 target="Sources/spi.cpp"                     overwrite="true"      derived="true" />
+      <copy source="Snippets/spi-example-MKL.cpp"        target="Snippets/spi-example-MKL.cpp"        overwrite="true"      derived="true" />
+      <copy source="Snippets/spi-example-cmsis-MKL.cpp"  target="Snippets/spi-example-cmsis-MKL.cpp"  overwrite="true"      derived="true" />
+   </projectActionList>
 
-      \tstatic uint32_t getClockFrequency() {
-      \t   return SystemBusClock;
-      \t}
-
-      \t//! Default speed (Hz)
-      \tstatic constexpr uint32_t speed =
-      \t   $(speed);\n\n
+   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <signals/>
+   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
+
+
+   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
+
 </peripheralPage>

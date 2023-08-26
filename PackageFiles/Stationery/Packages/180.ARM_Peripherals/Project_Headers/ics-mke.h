@@ -21,15 +21,6 @@
 #include "system.h"
 #include "pin_mapping.h"
 
-/// Clock for CORE (cpu) and SYSTEM (NVIC, RAM ...)
-extern "C" uint32_t SystemCoreClock;
-
-/// Clock for Bus (PIT, SPI, UART ...)
-extern "C" uint32_t SystemBusClock;
-
-/// Clock for Timers (FTM, PWT ...)
-extern "C" uint32_t SystemTimerClock;
-
 namespace USBDM {
 
 /**
@@ -37,15 +28,6 @@ namespace USBDM {
  * @brief Abstraction for Multipurpose Clock Generator
  * @{
  */
-
-/** ICSFFCLK - Fixed frequency clock (input to FLL) */
-extern volatile uint32_t SystemIcsFFClock;
-
-/** ICSOUTCLK - Primary output from ICS, various sources */
-extern volatile uint32_t SystemIcsOutClock;
-
-/** ICSFLLCLK - Output of FLL */
-extern volatile uint32_t SystemIcsFllClock;
 
 /**
  * Clock configurations

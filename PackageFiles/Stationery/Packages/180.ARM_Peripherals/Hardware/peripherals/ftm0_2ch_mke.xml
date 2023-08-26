@@ -61,9 +61,4 @@
 
    <xi:include href="ftm_def_mke.xml"/>
 
-   <projectActionList id = "ftm_files" >
-      <copy source="Project_Headers/ftm-MKE.h"                target="Project_Headers/ftm.h"                overwrite="true" derived="true" />
-   </projectActionList>
-
-
 </peripheralPage>

@@ -159,6 +159,27 @@
 </category>
 
 
+<template namespace="usbdm" condition="/MCG/$present" ><![CDATA[
+   \t/* MCGFFCLK - Fixed frequency clock (input to FLL) */
+   \textern volatile uint32_t SystemMcgFFClock;
+
+   \t/* MCGOUTCLK - Primary output from MCG, various sources */
+   \textern volatile uint32_t SystemMcgOutClock;
+
+   \t/* MCGFLLCLK - Output of FLL */
+   \textern volatile uint32_t SystemMcgFllClock;
+
+   \t/* MCGPLLCLK - Output of PLL */
+   \textern volatile uint32_t SystemMcgPllClock;
+   \t
+   \t/** Clock for CORE (CPU) and SYSTEM (NVIC, RAM ...) */
+   \textern "C" uint32_t SystemCoreClock;
+   \t
+   \t/** Clock for Bus (PIT, SPI, UART ...) */
+   \textern "C" uint32_t SystemBusClock;
+   \t\n
+]]></template>
+
 <template namespace="usbdm" condition="(/PCR/lk_present)" ><![CDATA[
    /* Template:_common_settings.xml */
 
@@ -200,35 +221,6 @@
    \t * Not available on this MCU
    \t */
    \tstatic constexpr bool ForceLockoutUnbondedPins = false;
-   \t\n
-]]></template>
-
-<!-- Template is added to pin_mapping.h -->
-<template namespace="usbdm" condition="/ICS/$present" ><![CDATA[
-   \t/** ICSFFCLK - Fixed frequency clock (input to FLL) */
-   \textern volatile uint32_t SystemIcsFFClock;
-   \t
-   \t/** ICSOUTCLK - Primary output from ICS, various sources */
-   \textern volatile uint32_t SystemIcsOutClock;
-   \t
-   \t/** ICSFLLCLK - Output of FLL */
-   \textern volatile uint32_t SystemIcsFllClock;
-   \t\n
-]]></template>
-
-<!-- Template is added to pin_mapping.h -->
-<template namespace="usbdm" condition="/MCG/$present" ><![CDATA[
-   \t/* MCGFFCLK - Fixed frequency clock (input to FLL) */
-   \textern volatile uint32_t SystemMcgFFClock;
-
-   \t/* MCGOUTCLK - Primary output from MCG, various sources */
-   \textern volatile uint32_t SystemMcgOutClock;
-
-   \t/* MCGFLLCLK - Output of FLL */
-   \textern volatile uint32_t SystemMcgFllClock;
-
-   \t/* MCGPLLCLK - Output of PLL */
-   \textern volatile uint32_t SystemMcgPllClock;
    \t\n
 ]]></template>
 
@@ -436,10 +428,12 @@
 ]]></template>
 
 <projectActionList id = "common_files" >
-<copy source="Snippets/bitband-example.cpp"                             target="Snippets/bitband-example.cpp"                 overwrite="true"  derived="true" />
-<copy source="Startup_Code/$(/LINKER/vectorsFilename)"                  target="Startup_Code/vectors.cpp"                     overwrite="true"  derived="true" />
-<copy source="Project_Settings/Linker_Files/$(/LINKER/scriptFilename)"  target="Project_Settings/Linker_Files/Linker-rom.ld"  overwrite="true"  derived="true" />
-<copy source="Project_Settings/Linker_Files/$(/LINKER/mapFilename)"     target="Project_Settings/Linker_Files/MemoryMap.ld"   overwrite="true"  derived="true" />
+   <copy source="Sources/delay.cpp"                                        target="Sources/delay.cpp"                            overwrite="true"  derived="true" />
+   <copy source="Project_Headers/delay.h"                                  target="Project_Headers/delay.h"                      overwrite="true"  derived="true" />
+   <copy source="Snippets/bitband-example.cpp"                             target="Snippets/bitband-example.cpp"                 overwrite="true"  derived="true" />
+   <copy source="Startup_Code/$(/LINKER/vectorsFilename)"                  target="Startup_Code/vectors.cpp"                     overwrite="true"  derived="true" />
+   <copy source="Project_Settings/Linker_Files/$(/LINKER/scriptFilename)"  target="Project_Settings/Linker_Files/Linker-rom.ld"  overwrite="true"  derived="true" />
+   <copy source="Project_Settings/Linker_Files/$(/LINKER/mapFilename)"     target="Project_Settings/Linker_Files/MemoryMap.ld"   overwrite="true"  derived="true" />
 </projectActionList>
 
 </list>

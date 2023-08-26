@@ -1656,8 +1656,8 @@
          <placement pin="PTC3"          location="A4" />
          <placement pin="PTC4"          location="A8" />
          <placement pin="PTC5"          location="D21" />
-         <placement pin="PTC6"          location="D17" />
-         <placement pin="PTC7"          location="D16" />
+         <placement pin="PTC6"          location="D17/Debug_Rx" />
+         <placement pin="PTC7"          location="D16/Debug_Tx" />
          <placement pin="PTD0"          location="D3" />
          <placement pin="PTD1"          location="D5" />
          <placement pin="PTD2"          location="A15" />

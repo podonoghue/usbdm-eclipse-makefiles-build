@@ -868,6 +868,15 @@
       <copy source="Project_Headers/adc-MKE.h"  target="Project_Headers/adc.h"  overwrite="true"  derived="true" />
    </projectActionList>
 
+    <!-- ************* SIM controls ****************** -->
+   <category name="SIM" description="Pin mapping and clock enables">
+      <aliasOption key="/SIM/sim_scgc_$(_name)"  constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt0_adhwt"  constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt0_delay"  constant="false" optional="true" />
+   </category>
+
+   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
+
    <!-- ************* Startup ****************** -->
 
    <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
@@ -880,7 +889,5 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-
-   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
 
 </peripheralPage>

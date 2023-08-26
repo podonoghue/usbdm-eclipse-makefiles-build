@@ -12,6 +12,12 @@
       value="0x000000"
       />
 
+   <!-- ************* Signal mapping ****************** -->
+   <category name="SIM" description="Pin mapping and clock enables">
+      <aliasOption key="/SIM/sim_scgc_$(_name)"         constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc_$(_basename)"     constant="false" optional="true" />
+   </category>
+
    <template><![CDATA[
       \tstatic constexpr uint32_t gpoly =  $(crc_gpoly);\n\n
    ]]></template>

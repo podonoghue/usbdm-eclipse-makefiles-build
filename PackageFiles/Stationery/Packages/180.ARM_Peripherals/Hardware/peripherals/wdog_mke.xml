@@ -174,9 +174,9 @@
       enumStem="WdogClock"
       description="Watchdog clock source"
       toolTip="This write-once field indicates the clock source that feeds the watchdog counter"  >
-      <choice name="System Bus clock"                        value="0" enum="SystemBusClk" code="SystemBusClock"                       ref="/SIM/system_bus_clock[]"      />
+      <choice name="System Bus clock"                        value="0" enum="SystemBusClk" code="SystemBusClock"                       ref="/SIM/system_bus_clock[0]"     />
       <choice name="1 kHz low-power oscillator (LPOCLK)"     value="1" enum="LpoClk"       code="PmcInfo::getLpoClock()"               ref="/PMC/system_low_power_clock"  isDefault="true" />
-      <choice name="ICS internal reference clock (ICSIRCLK)" value="2" enum="Icsirclk"     code="IcsInfo::getInternalReferenceClock()" ref="/ICS/system_icsirclk_clock[]" />
+      <choice name="ICS internal reference clock (ICSIRCLK)" value="2" enum="Icsirclk"     code="IcsInfo::getInternalReferenceClock()" ref="/ICS/system_icsirclk_clock[0]" />
       <choice name="External clock source (OSCERCLK)"        value="3" enum="ExternalClk"  code="Osc0Info::getOscClock()"              ref="/OSC0/oscer_clock"            />
    </choiceOption>
 

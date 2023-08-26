@@ -57,7 +57,7 @@
 
    <!-- ************* PE ****************** -->
 
-   <bitmaskOption key="kbi_pe_kbipe" condition="kbi_pe_kbipe_present"
+   <bitmaskOption key="kbi_pe_kbipe" condition="kbi_pe_kbipe_present&amp;&amp;($(_instance)==0)"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       typeName="KbiEnableMask"
       enumType="uint32_t"
@@ -65,13 +65,30 @@
       defaultValue="0"
       description="KBI Pin Enables"
       toolTip="Bitmask selecting enabled pins"
-      bitmask="0xFFFF"
+      bitmask="0xFFFFFFFF"
+      bitList="PT(A-D)(0-7);"
+      pinMap="KBI$(_instance)_P%i,PT(A-D)(0-7);"
       value="0"
    />
 
+   <bitmaskOption key="kbi_pe_kbipe" condition="kbi_pe_kbipe_present&amp;&amp;($(_instance)==1)"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      typeName="KbiEnableMask"
+      enumType="uint32_t"
+      valueFormat="KbiEnableMask(%s)"
+      defaultValue="0"
+      description="KBI Pin Enables"
+      toolTip="Bitmask selecting enabled pins"
+      bitmask="0xFFFFFFFF"
+      bitList="PT(E-H)(0-7);"
+      pinMap="KBI$(_instance)_P%i,PT(E-H)(0-7);"
+      value="0"
+   />
+
+
    <!-- ************* ES ****************** -->
 
-   <bitmaskOption key="kbi_es_kbedg" condition="kbi_es_kbedg_present"
+   <bitmaskOption key="kbi_es_kbedg" condition="kbi_es_kbedg_present&amp;&amp;($(_instance)==0)"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       typeName="KbiPolarityMask"
       enumType="uint32_t"
@@ -79,7 +96,21 @@
       defaultValue="0"
       description="KBI Edge Selects"
       toolTip="Bitmask selecting polarity : 0=Falling edge/low level; 1=Rising edge/high level"
-      bitmask="0xFFFF"
+      bitmask="0xFFFFFFFF"
+      bitList="PT(A-D)(0-7);"
+      value="0"
+   />
+
+   <bitmaskOption key="kbi_es_kbedg" condition="kbi_es_kbedg_present&amp;&amp;($(_instance)==1)"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      typeName="KbiPolarityMask"
+      enumType="uint32_t"
+      valueFormat="KbiPolarityMask(%s)"
+      defaultValue="0"
+      description="KBI Edge Selects"
+      toolTip="Bitmask selecting polarity : 0=Falling edge/low level; 1=Rising edge/high level"
+      bitmask="0xFFFFFFFF"
+      bitList="PT(E-H)(0-7);"
       value="0"
    />
 
@@ -654,6 +685,13 @@
    ]]>
    </template>
 
+   <!-- ************* Signal mapping ****************** -->
+   <category name="SIM" description="Pin mapping">
+      <aliasOption key="/SIM/sim_scgc_$(_name)"     constant="false" optional="true" />
+   </category>
+
+   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
+
    <!-- ************* Common ****************** -->
 
    <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
@@ -682,7 +720,5 @@
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
-
-   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
 
 </peripheralPage>

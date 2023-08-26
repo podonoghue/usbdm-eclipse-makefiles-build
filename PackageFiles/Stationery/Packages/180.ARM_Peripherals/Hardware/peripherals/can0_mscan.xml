@@ -1110,10 +1110,16 @@ flag is set"
    ]]></template>
 
    <!-- ************* Signal mapping ****************** -->
-   <category name="SIM" description="Pin mapping">
+   <category name="SIM" description="Pin mapping and clock enables">
+      <aliasOption key="/SIM/sim_scgc_$(_name)"      constant="false" optional="true" />
       <aliasOption key="/SIM/sim_pinsel_$(_name)ps"  constant="false" optional="true" />
       <aliasOption key="/SIM/sim_pinsel0_$(_name)ps" constant="false" optional="true" />
       <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" constant="false" optional="true" />
+
+      <aliasOption key="/SIM/sim_scgc_mscan"      constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel_mscanps"  constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel0_mscanps" constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel1_mscanps" constant="false" optional="true" />
    </category>
 
    <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />

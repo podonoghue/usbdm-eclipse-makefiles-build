@@ -46,6 +46,7 @@
       description="Timer Compare Register"
       typeName="Ticks &amp;"
       valueFormat="%s_ticks"
+      units="ticks"
       toolTip="Comparison value\n
       The timer comparison flag is set when the counter reaches this value and increments. \n
       The hardware trigger will assert until the next time the counter increments. \n

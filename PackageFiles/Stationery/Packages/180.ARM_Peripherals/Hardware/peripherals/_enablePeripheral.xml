@@ -66,6 +66,86 @@
       \tstatic constexpr bool configurePeripheralInStartUp = $(configurePeripheralInStartUp:false);\n\n
    ]]></template >
 
+   <!-- Pin mapping and enables -->
+   <binaryOption key="mapPinsOnEnable" condition="/PCR/mux_present"
+      description="Map pins when peripheral is configured"
+      toolTip="Map all allocated pins on a peripheral when the\n
+               peripheral is enabled by configure() method etc">
+      <choice value="false" name="Don't map"  />
+      <choice value="true"  name="Map when configured"  isDefault="true"/>
+   </binaryOption>
+
+   <!-- Template is added to class within pin_mapping.h -->
+   <template  condition="/PCR/mux_present" ><![CDATA[
+      \t//! Map all allocated pins on a peripheral when enabled
+      \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
+   ]]></template>
+
+   <!-- Template is added to peripheral classes -->
+   <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" condition="/PCR/mux_present" ><![CDATA[
+      // Template _mapPinsOption_on.xml
+
+      \t/**
+      \t * Configures all mapped pins associated with $(_BASENAME)
+      \t *
+      \t * @note Locked pins will be unaffected
+      \t */
+      \tstatic void configureAllPins() {
+      \t
+      \t   // Configure pins if selected and not already locked
+      \t   if constexpr (Info::mapPinsOnEnable) {
+      \t      Info::initPCRs();
+      \t   }
+      \t}
+
+      \t/**
+      \t * Disabled all mapped pins associated with $(_BASENAME)
+      \t *
+      \t * @note Only the lower 16-bits of the PCR registers are modified
+      \t *
+      \t * @note Locked pins will be unaffected
+      \t */
+      \tstatic void disableAllPins() {
+      \t
+      \t   // Disable pins if selected and not already locked
+      \t   if constexpr (Info::mapPinsOnEnable) {
+      \t      Info::clearPCRs();
+      \t   }
+      \t}
+      \t\n
+   ]]></template>
+
+   <!-- Template is added to peripheral classes -->
+   <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" ><![CDATA[
+      \t/**
+      \t * Basic enable of $(_BASENAME)
+      \t * Includes enabling clock and configuring all mapped pins if mapPinsOnEnable is selected in configuration
+      \t */
+      \tstatic void enable() {
+      \t   Info::enableClock();\n
+   ]]></template>
+   <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" condition="/PCR/mux_present" ><![CDATA[
+      \t   configureAllPins();\n
+   ]]></template>
+   <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" ><![CDATA[
+      \t}
+
+      \t/**
+      \t * Disables the clock to $(_BASENAME) and all mapped pins
+      \t */
+      \tstatic void disable() {
+      \t   $(disable_interrupts_code: )
+      \t   $(disable_peripheral: )\n\n
+   ]]></template>
+   <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" condition="/PCR/mux_present" ><![CDATA[
+      \t   disableAllPins();\n\n
+   ]]></template>
+   <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" ><![CDATA[
+      \t   Info::disableClock();
+      \t}
+      // End Template _mapPinsOption_on.xml\n
+   ]]></template>
+
    <if condition="@peripheralUsesInterrupts" >
 
       <title description="------- Interrupts -------" />
@@ -289,20 +369,21 @@
    </template -->
 
    <template><![CDATA[
-         \t//! Hardware base address as uint32_t
-         \tstatic constexpr uint32_t baseAddress = $(_NAME)_BasePtr;
-         \t
-         \t//! Hardware base pointer
-         \tstatic constexpr HardwarePtr<$(_Baseclass::toupper)_Type> $(_Baseclass::tolower) = baseAddress;
-         \t\n
+      \t//! Hardware base address as uint32_t
+      \tstatic constexpr uint32_t baseAddress = $(_NAME)_BasePtr;
+      \t
+      \t//! Hardware base pointer
+      \tstatic constexpr HardwarePtr<$(_BASENAME)_Type> $(_basename) = baseAddress;
+      \t\n
    ]]></template>
 
    <template condition="(&quot;$(_instance)&quot; != &quot;&quot;)&amp;&amp;!suppressInstance" ><![CDATA[
-         \t//! Peripheral instance number
-         \tstatic constexpr unsigned instance = $(_instance);
-         \t\n
+      \t//! Peripheral instance number
+      \tstatic constexpr unsigned instance = $(_instance);
+      \t\n
    ]]></template>
 
    <constant key="class_present" type="Boolean"  value = "true"   />
+
 
 </fragment>

@@ -49,10 +49,10 @@
       enumStem="FtmClockSource"
       target="inputClockFrequency"
       toolTip="Selects the clock source for the module">
-      <choice value="0" name="Disabled"              ref="disabled"                     code="0"                enum="Disabled"            />
-      <choice value="1" name="System clock"          ref="/SIM/system_bus_clock[]"      code="SystemBusClock"   enum="SystemClock"         isDefault="true" />
-      <choice value="2" name="Fixed frequency clock" ref="/MCG/system_mcgffclk_clock[]" code="SystemMcgFFClock" enum="FixedFrequencyClock" />
-      <choice value="3" name="External clock"        ref="ftmExternalClock"             code="ftmExternalClock" enum="ExternalClock"       />
+      <choice value="0" name="Disabled"              ref="disabled"                      code="0"                enum="Disabled"            />
+      <choice value="1" name="System clock"          ref="/SIM/system_bus_clock[0]"      code="SystemBusClock"   enum="SystemClock"         isDefault="true" />
+      <choice value="2" name="Fixed frequency clock" ref="/MCG/system_mcgffclk_clock[0]" code="SystemMcgFFClock" enum="FixedFrequencyClock" />
+      <choice value="3" name="External clock"        ref="ftmExternalClock"              code="ftmExternalClock" enum="ExternalClock"       />
    </choiceOption>
 
    <intOption key="inputClockFrequency"

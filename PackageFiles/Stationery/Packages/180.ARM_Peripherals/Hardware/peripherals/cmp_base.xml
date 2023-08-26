@@ -53,11 +53,11 @@
    </choiceOption>
 
    <intOption key="input_clock"
-      ref="/SIM/system_bus_clock[]"
+      ref="/SIM/system_bus_clock[0]"
       constant="true"
       derived="true"
       units="Hz"
-      description="Frequency of PDB input Clock" />
+      description="Frequency of CMP input Clock" />
 
    <stringOption key="Configuration"
       value="------- Configuration -------"
@@ -261,6 +261,7 @@
                This has no effect if SE=1. In that case, the external SAMPLE signal is used to \n
                determine the sampling period."
       typeName="const Ticks &amp;"
+      units="ticks"
       disabledValue="0"
       value="1" min="1" max="255"/>
 

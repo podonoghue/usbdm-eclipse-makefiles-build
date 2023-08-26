@@ -55,7 +55,7 @@
       constant="true"
       />
 
-   <binaryOption key="mapPinsOnEnable"
+   <binaryOption key="mapPinsOnEnable" condition="/PCR/mux_present"
       description="Map pins when peripheral is configured"
       toolTip="Map all allocated pins on a peripheral when the\n
                peripheral is enabled by configure() method etc">
@@ -64,7 +64,7 @@
    </binaryOption>
 
    <!-- Template is added to class within pin_mapping.h -->
-   <template><![CDATA[
+   <template  condition="/PCR/mux_present" ><![CDATA[
       \t//! Map all allocated pins on a peripheral when enabled
       \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
    ]]></template>

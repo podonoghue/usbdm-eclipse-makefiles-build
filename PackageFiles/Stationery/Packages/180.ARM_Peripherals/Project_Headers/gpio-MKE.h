@@ -34,6 +34,17 @@ namespace USBDM {
 #pragma GCC push_options
 #pragma GCC optimize ("Os")
 
+// For experimentation only
+#if 1
+#define BITSET(dest,mask)    bmeOr((dest),   (mask));
+#define BITCLEAR(dest,mask)  bmeAnd((dest), ~(mask));
+#define BITTOGGLE(dest,mask) bmeXor((dest),  (mask));
+#else
+#define BITSET(dest,mask)    (dest) = (dest) |  (mask);
+#define BITCLEAR(dest,mask)  (dest) = (dest) & ~(mask);
+#define BITTOGGLE(dest,mask) (dest) = (dest) ^  (mask);
+#endif
+
 /**
  * Class representing GPIO functionality
  */
@@ -563,8 +574,13 @@ public:
     */
    static void disablePins() {
       // Enable clock to port
-      enablePortClocks();
-      gpio->PIDR = gpio->PIDR | BITMASK;
+      enablePortClocks(); 
+
+      // Disable pin input function
+      BITSET(gpio->PIDR, BITMASK);
+
+      // Disable pin output function
+      BITCLEAR(gpio->PDDR, BITMASK);
    }
 
    /**
@@ -572,17 +588,19 @@ public:
     * Pins are initially set as an input.
     * Use setIn(), setOut() and setDirection() to change pin directions.
     *
-    * @note Resets the Pin Control Register values (PCR value).
     * @note Resets the pin output value to the inactive state
-    *
-    * @param[in] pcrValue PCR value to use in configuring pin (excluding MUX value)
     */
    static void setInOut() {
       // Enable clock to port
       enablePortClocks();
 
       // Default to input
-      gpio->PDDR = gpio->PDDR & ~BITMASK;
+
+      // Enable pin input function
+      BITCLEAR(gpio->PIDR, BITMASK);
+
+      // Disable pin output function
+      BITCLEAR(gpio->PDDR, BITMASK);
 
       // Default to output inactive
       write(0);
@@ -594,35 +612,38 @@ public:
     * @note Does not affect other pin settings
     */
    static void setOut() {
-      bmeOr(gpio->PDDR, BITMASK);
+      BITSET(gpio->PDDR, BITMASK);
    }
+
    /**
     * Sets all pin as digital outputs.
-    * Configures all Pin Control Register (PCR) values
     *
-    * @note This will also reset the Pin Control Register value (PCR value).
     * @note Use setOut(), setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
-    * @note PCR value is taken from the value set in Configure.usbdmProject
     */
    static void setOutput() {
-      bmeOr(gpio->PDDR, BITMASK);
+      // Set initial level before enabling pin drive
+      write(0);
+
+      // Disable pin input function
+      BITSET(gpio->PIDR, BITMASK);
+
+      // Make pin an output
+      BITSET(gpio->PDDR, BITMASK);
    }
+
    /**
     * Set all pins as digital inputs.
     *
     * @note Does not affect other pin settings
     */
    static void setIn() {
-      bmeAnd(gpio->PDDR, ~BITMASK);
+      BITCLEAR(gpio->PDDR, BITMASK);
    }
+
    /**
     * Set all pins as digital inputs.
-    * Configures all Pin Control Register (PCR) values
     *
-    * @note This will also reset the Pin Control Register value (PCR value).
     * @note Use setOut(), setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
-    *
-    * @note PCR value is taken from the value set in Configure.usbdmProject
     */
    static void setInput() {
       setInOut();
@@ -745,6 +766,13 @@ $(/GPIO/declarations:  // No declarations found)
 #pragma GCC pop_options
 
 } // End namespace USBDM
+
+#undef BITSET
+#undef BITCLEAR
+#undef BITTOGGLE
+#undef BITSET
+#undef BITCLEAR
+#undef BITTOGGLE
 
 #endif /* HEADER_GPIO_H */
 

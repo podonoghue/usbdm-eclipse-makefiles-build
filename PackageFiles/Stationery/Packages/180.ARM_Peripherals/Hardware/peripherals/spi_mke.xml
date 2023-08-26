@@ -217,7 +217,7 @@
       <choice name="Clocks stopped"    value="1" enum="Stopped" />
    </binaryOption >
 
-   <choiceOption key="spi_c2_bidirectional" condition="spi_c2_bidirectional_present&amp;&amp;spi_c2_bidiroe_present"
+   <choiceOption key="spi_c2_bidirectional" condition="spi_c2_spc0_present&amp;&amp;spi_c2_bidiroe_present"
       valueFormat="SPI_C2_SPC0(%s),SPI_C2_BIDIROE(%s)"
       enabledBy="spi_c1_spe"
       enumStem="SpiBidirectional"
@@ -950,6 +950,7 @@
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SpiValidate" >
    </validate>
+
    <!-- ************* Common ****************** -->
    <projectActionList id = "spi_files" >
       <copy source="Project_Headers/spi-MKE.h"           target="Project_Headers/spi.h"           overwrite="true"      derived="true" />

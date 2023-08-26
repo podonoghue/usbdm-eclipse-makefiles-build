@@ -16,22 +16,7 @@ __attribute__((__weak__))
 void SystemCoreClockUpdate(void) {
 }
 
-/* These are overridden if actual clock code is provided */
-/* Based on Kinetis internal clock used after reset */
-__attribute__((__weak__))
-uint32_t SystemCoreClock = 20000000;
-__attribute__((__weak__))
-uint32_t SystemBusClock  = 20000000;
-
-#ifdef SIM_CLKDIV1_OUTDIV3_MASK
-__attribute__((__weak__))
-uint32_t SystemFlexbusClock = 20000000;
-#endif
-
-#ifdef SIM_CLKDIV_OUTDIV3_MASK
-__attribute__((__weak__))
-uint32_t SystemTimerClock = 20000000;
-#endif
+$(/SYSTEM/Clocks)
 
 #ifdef __cplusplus
 extern "C" {

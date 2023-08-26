@@ -22,9 +22,9 @@
    <!-- PCRs not used -->
    <constant key="/SYSTEM/$pcrPattern"          type="String"  value="&quot;&quot;"                                   />
    <!-- Standard Gpio format -->
-   <constant key="/SYSTEM/$gpioPattern"         type="String"  value="&quot;Gpio%i&lt;%n,%p&gt;&quot;"                />
+   <constant key="/SYSTEM/$gpioPattern"         type="String"  value="&quot;USBDM::Gpio%i&lt;%n,%p&gt;&quot;"                />
    <!-- Specialised GpioField -->
-   <constant key="/SYSTEM/$gpioFieldPattern"    type="String"  value="&quot;WideGpioField%i&lt;%l,%r,%p&gt;&quot;"    />
+   <constant key="/SYSTEM/$gpioFieldPattern"    type="String"  value="&quot;USBDM::WideGpioField%i&lt;%l,%r,%p&gt;&quot;"    />
 
    <template key="/GPIO/getGpioAddress" namespace="all" >
    <![CDATA[
@@ -81,7 +81,6 @@
          \t}
          \t/**
          \t * Enable pin as digital output with initial inactive level.\n
-         \t * Configures all Pin Control Register (PCR) values
          \t *
          \t * @note Modifies the Port Input Disable Register value (PIDR value).
          \t * @note Resets the pin value to the inactive state
@@ -98,7 +97,6 @@
          \t/**
          \t * @brief
          \t * Enable pin as digital input.\n
-         \t * Configures all Pin Control Register (PCR) values
          \t *
          \t * @note Modifies the Port Input Disable Register value (PIDR value).
          \t * @note Use SetIn() and SetOut() for a lightweight change of direction without affecting other pin settings.

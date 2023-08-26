@@ -16,7 +16,7 @@
    <constant key="ICSOUTCLK_max"  value="50MHz"  type="Integer"    hidden="false" />
    <constant key="ICSFLLCLK_max"  value="50MHz"  type="Integer"    hidden="false" />
    <constant key="I2S_max"        value="25MHz"  type="Integer"    hidden="false" />
-   <constant key="LPUART_max"     value="48M"    type="Integer"    hidden="false" />
+   <constant key="LPUART_max"     value="48MHz"  type="Integer"    hidden="false" />
    <constant key="TPM_max"        value="48MHz"  type="Integer"    hidden="false" />
 
    <for keys="n" dim="numberOfClockSettings" >
@@ -54,10 +54,10 @@
             enumStem="SimCoreClkDivider"
             toolTip="This field sets the divide value for the core/system clock"
             description="Core/System Clock Divider value" >
-            <choice name="ICSOUTCLK direct"    value="0" enum="Direct" />
-            <choice name="ICSOUTCLK/2"         value="1" enum="DivBy2" />
-            <choice name="ICSOUTCLK/3"         value="2" enum="DivBy3" />
-            <choice name="ICSOUTCLK/4"         value="3" enum="DivBy4" />
+            <choice name="ICSOUTCLK/1"    value="0" enum="Direct" />
+            <choice name="ICSOUTCLK/2"    value="1" enum="DivBy2" />
+            <choice name="ICSOUTCLK/3"    value="2" enum="DivBy3" />
+            <choice name="ICSOUTCLK/4"    value="3" enum="DivBy4" />
          </choiceOption>
 
          <binaryOption key="sim_clkdiv_outdiv2[%(n)]" condition="sim_clkdiv_outdiv2_present"
@@ -65,8 +65,8 @@
             enumStem="SimBusClkDivider"
             toolTip="This field sets the divide value for the bus/FLASH, follows OUTDIV1"
             description="Bus/Flash Clock Divider value" >
-            <choice name="Core clock direct"    value="0" enum="Direct" />
-            <choice name="Core clock/2"         value="1" enum="DivBy2" />
+            <choice name="Core clock/1"    value="0" enum="Direct" />
+            <choice name="Core clock/2"    value="1" enum="DivBy2" />
          </binaryOption >
 
          <binaryOption key="sim_clkdiv_outdiv3[%(n)]" condition="sim_clkdiv_outdiv3_present"
@@ -74,45 +74,48 @@
             enumStem="SimTimerClkDivider"
             toolTip="This field sets the divide value for the timers(FTM0, FTM2,PWT)"
             description="Timer Clock Divider value" >
-            <choice name="ICSOUTCLK direct "    value="0" enum="Direct" />
-            <choice name="ICSOUTCLK/2"          value="1" enum="DivBy2" />
+            <choice name="ICSOUTCLK/1"    value="0" enum="Direct" />
+            <choice name="ICSOUTCLK/2"    value="1" enum="DivBy2" />
          </binaryOption>
 
          <intOption key="system_core_clock[%(n)]"
             constant="true"
             enabledBy="(%(n)==0)||/ICS/enableClockConfiguration[%(n)]"
-            ref="(/ICS/system_icsoutclk_clock[%(n)])/((sim_clkdiv_outdiv1[%(n)])+1)"
+            ref="/ICS/system_icsoutclk_clock[%(n)]#(/ICS/system_icsoutclk_clock[%(n)])/((sim_clkdiv_outdiv1[%(n)])+1)"
             derived="true"
             isNamedClock="true"
             units="Hz"
             description="System Core Clock"
-            toolTip="Clocks the ARM Cortex-M4 core and bus masters"
+            toolTip="Clock for CORE (CPU) and SYSTEM (NVIC, RAM, ...)"
             value="48 MHz"
-            disabledValue="0" />
+            disabledValue="0"
+            min="1" />
 
          <intOption key="system_bus_clock[%(n)]"
             constant="true"
             enabledBy="(%(n)==0)||/ICS/enableClockConfiguration[%(n)]"
-            ref="(system_core_clock[%(n)])/((sim_clkdiv_outdiv2[%(n)])?2:1)"
+            ref="system_core_clock[%(n)]#(system_core_clock[%(n)])/((sim_clkdiv_outdiv2[%(n)])?2:1)"
             derived="true"
             isNamedClock="true"
             units="Hz"
             description="System Bus Clock"
-            toolTip="Clock for most peripherals (PIT, I2C, SPI, UART ...)"
+            toolTip="Clock for Bus (PIT, I2C, SPI, UART, ...)"
             value="8 MHz"
-            disabledValue="0" />
+            disabledValue="0"
+            min="1"/>
 
          <intOption key="system_timer_clock[%(n)]"
             constant="true"
             enabledBy="(%(n)==0)||/ICS/enableClockConfiguration[%(n)]"
-            ref="(/ICS/system_icsoutclk_clock[%(n)])/((sim_clkdiv_outdiv3[%(n)])?2:1)"
+            ref="/ICS/system_icsoutclk_clock[%(n)]#(/ICS/system_icsoutclk_clock[%(n)])/((sim_clkdiv_outdiv3[%(n)])?2:1)"
             derived="true"
             isNamedClock="true"
             units="Hz"
             description="System Timer Clock"
-            toolTip="Clock for timers (FTM, PWT)"
+            toolTip="Clock for timers (FTM, PWT, ...)"
             value="8 MHz"
-            disabledValue="0" />
+            disabledValue="0"
+            min="1"/>
 
       </aliasCategoryOption>
    </for>
@@ -120,23 +123,6 @@
    <title description="------------------------------------------" />
 
    <category name="Control Signals" description="Mapping of control signals" >
-      <choiceOption key="sim_sopt_busref" condition="sim_sopt_busref_present"
-         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         valueFormat="SIM_SOPT_CLKOE(%s),SIM_SOPT_BUSREF(%s)"
-         enumStem="SimSoptRefClock"
-         toolTip="Enable bus reference clock output on PTC5 with prescaler"
-         description="BUS Clock Output select" >
-         <choice name="Disabled (PTC5 available)" value="0,0" enum="Disabled"             pinmap="-CLKOUT,PTH2" />
-         <choice name="Bus clock"                 value="1,0" enum="BusClock"             pinmap="CLKOUT,PTH2"  />
-         <choice name="Bus clock divided by 2"    value="1,1" enum="BusClockDividedBy2"   pinmap="CLKOUT,PTH2"  />
-         <choice name="Bus clock divided by 4"    value="1,2" enum="BusClockDividedBy4"   pinmap="CLKOUT,PTH2"  />
-         <choice name="Bus clock divided by 8"    value="1,3" enum="BusClockDividedBy8"   pinmap="CLKOUT,PTH2"  />
-         <choice name="Bus clock divided by 16"   value="1,4" enum="BusClockDividedBy16"  pinmap="CLKOUT,PTH2"  />
-         <choice name="Bus clock divided by 32"   value="1,5" enum="BusClockDividedBy32"  pinmap="CLKOUT,PTH2"  />
-         <choice name="Bus clock divided by 64"   value="1,6" enum="BusClockDividedBy64"  pinmap="CLKOUT,PTH2"  />
-         <choice name="Bus clock divided by 128"  value="1,7" enum="BusClockDividedBy128" pinmap="CLKOUT,PTH2"  />
-      </choiceOption>
-
       <binaryOption key="sim_scgc_swd" condition="sim_scgc_swd_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          disabledValue="1"
@@ -147,15 +133,19 @@
       </binaryOption>
 
       <binaryOption key="sim_sopt_swde" condition="sim_sopt_swde_present"
+         ref="sim_scgc_swd"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+         constant="true"
+         derived="true"
          disabledValue="1"
          enumStem="SimSWDEnable"
+         disabledPinMap="SWD_DIO,PTA4;SWD_CLK,PTA0"
          toolTip="Controls: \n
                   PTA4 as PTA4/ACMP0_OUT or SWD_DIO, \n
                   PTA0 as PTA0/KBI0_P0/FTM0_CH0/RTC_CLKOUT/ACMP0_IN2/ADC0_SE0 or SWD_CLK functions"
          description="Single Wire Debug Port Pin Enable" >
-         <choice name="PTA4, PTA0 available for peripherals"  value="0" enum="Pta4Pta0AsPeripheralPins" pinmap="-SWD_DIO,PTA4;-SWD_CLK,PTA0" />
-         <choice name="PTA4, PTA0 mapped as SWD pins"         value="1" enum="Pta4Pta0AsSwdPins"        pinmap="SWD_DIO,PTA4;SWD_CLK,PTA0" isDefault="true" />
+         <choice name="PTA4, PTA0 available for peripherals"  value="0" enum="Pta4Pta0AsPeripheralPins" pinMap="SWD_DIO,;SWD_CLK," />
+         <choice name="PTA4, PTA0 mapped as SWD pins"         value="1" enum="Pta4Pta0AsSwdPins"        pinMap="SWD_DIO,PTA4;SWD_CLK,PTA0" isDefault="true" />
       </binaryOption>
 
       <binaryOption key="sim_sopt_rstpe" condition="sim_sopt_rstpe_present"
@@ -164,8 +154,8 @@
          enumStem="SimResetEnable"
          toolTip="This field can only be written once after any reset"
          description="RESET Pin Enable" >
-         <choice name="PTA5 available for peripherals"  value="0" enum="Pta5AsPeripheralPin" pinmap="-RESETb,PTA5" />
-         <choice name="PTA5 mapped as RESET"            value="1" enum="Pta5AsReset"         pinmap="RESETb,PTA5" isDefault="true" />
+         <choice name="PTA5 available for peripherals"  value="0" enum="Pta5AsPeripheralPin" pinMap="RESET_b," />
+         <choice name="PTA5 mapped as RESET"            value="1" enum="Pta5AsReset"         pinMap="RESET_b,PTA5" isDefault="true" />
       </binaryOption>
 
       <binaryOption key="sim_sopt_nmie" condition="sim_sopt_nmie_present"
@@ -174,9 +164,26 @@
          enumStem="SimNmiEnable"
          toolTip="This field can only be written once after any reset"
          description="NMI Pin Enable" >
-         <choice name="PTB4 available for peripherals" value="0" enum="Ptb4AsPeripheralPins" pinmap="-NMI_b,PTB4" />
-         <choice name="PTB4 mapped as NMI"             value="1" enum="Ptb4AsNmi"            pinmap="NMI_b,PTB4" isDefault="true" />
+         <choice name="PTB4 available for peripherals" value="0" enum="Ptb4AsPeripheralPins" pinMap="NMI_b," />
+         <choice name="PTB4 mapped as NMI"             value="1" enum="Ptb4AsNmi"            pinMap="NMI_b,PTB4" isDefault="true" />
       </binaryOption>
+
+      <choiceOption key="sim_sopt_busref" condition="sim_sopt_busref_present"
+         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+         valueFormat="SIM_SOPT_CLKOE(%s),SIM_SOPT_BUSREF(%s)"
+         enumStem="SimSoptRefClock"
+         toolTip="Enable bus reference clock output on PTC5 with prescaler"
+         description="BUS Clock Output select" >
+         <choice name="Disabled (PTC5 available)" value="0,0" enum="Disabled"             pinMap="CLKOUT," />
+         <choice name="Bus clock"                 value="1,0" enum="BusClock"             pinMap="CLKOUT,PTC5"  />
+         <choice name="Bus clock divided by 2"    value="1,1" enum="BusClockDividedBy2"   pinMap="CLKOUT,PTC5"  />
+         <choice name="Bus clock divided by 4"    value="1,2" enum="BusClockDividedBy4"   pinMap="CLKOUT,PTC5"  />
+         <choice name="Bus clock divided by 8"    value="1,3" enum="BusClockDividedBy8"   pinMap="CLKOUT,PTC5"  />
+         <choice name="Bus clock divided by 16"   value="1,4" enum="BusClockDividedBy16"  pinMap="CLKOUT,PTC5"  />
+         <choice name="Bus clock divided by 32"   value="1,5" enum="BusClockDividedBy32"  pinMap="CLKOUT,PTC5"  />
+         <choice name="Bus clock divided by 64"   value="1,6" enum="BusClockDividedBy64"  pinMap="CLKOUT,PTC5"  />
+         <choice name="Bus clock divided by 128"  value="1,7" enum="BusClockDividedBy128" pinMap="CLKOUT,PTC5"  />
+      </choiceOption>
    </category>
 
    <category name="ADC" description="Peripheral  options and clock enable" >
@@ -297,16 +304,16 @@
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          enumStem="SimPinselFtm0ps0"
          description="FTM0 channel 0 Pin Select" >
-         <choice name="PTA0"        value="0" enum="Pta0" pinmap="FTM0_CH0,PTA0" />
-         <choice name="PTB2"        value="1" enum="Ptb2" pinmap="FTM0_CH0,PTB2" />
+         <choice name="PTA0"        value="0" enum="Pta0" pinMap="FTM0_CH0,PTA0" />
+         <choice name="PTB2"        value="1" enum="Ptb2" pinMap="FTM0_CH0,PTB2" />
       </binaryOption>
 
       <binaryOption key="sim_pinsel_ftm0ps1" condition="sim_pinsel_ftm0ps1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          enumStem="SimPinselFtm0ps1"
          description="FTM0 channel 1 Pin Select" >
-         <choice name="PTA1"        value="0" enum="Pta1" pinmap="FTM0_CH1,PTA1" />
-         <choice name="PTB3"        value="1" enum="Ptb3" pinmap="FTM0_CH1,PTB3" />
+         <choice name="PTA1"        value="0" enum="Pta1" pinMap="FTM0_CH1,PTA1" />
+         <choice name="PTB3"        value="1" enum="Ptb3" pinMap="FTM0_CH1,PTB3" />
       </binaryOption>
 
       <choiceOption key="sim_sopt_ftmic" condition="sim_sopt_ftmic_present"
@@ -351,16 +358,16 @@
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          enumStem="SimPinselFtm2ps2"
          description="FTM2 Channel 2 Pin Select" >
-         <choice name="PTC2"        value="0" enum="Ptc2" pinmap="FTM2_CH2,PTC2" />
-         <choice name="PTC4"        value="1" enum="Ptc4" pinmap="FTM2_CH2,PTC4" />
+         <choice name="PTC2"        value="0" enum="Ptc2" pinMap="FTM2_CH2,PTC2" />
+         <choice name="PTC4"        value="1" enum="Ptc4" pinMap="FTM2_CH2,PTC4" />
       </binaryOption>
 
       <binaryOption key="sim_pinsel_ftm2ps3" condition="sim_pinsel_ftm2ps3_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          enumStem="SimPinselFtm2ps3"
          description="FTM2 Channel 3 Pin Select" >
-         <choice name="PTC3"  value="0" enum="Ptc3" pinmap="FTM2_CH3,PTC3" />
-         <choice name="PTC5"  value="1" enum="Ptc5" pinmap="FTM2_CH3,PTC5" />
+         <choice name="PTC3"  value="0" enum="Ptc3" pinMap="FTM2_CH3,PTC3" />
+         <choice name="PTC5"  value="1" enum="Ptc5" pinMap="FTM2_CH3,PTC5" />
       </binaryOption>
 
    </category>
@@ -378,8 +385,8 @@
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          enumStem="SimPinselI2c0ps"
          description="I2C0 Pin Select" >
-         <choice name="PTA3,PTA2 mapped to SCL,SDA"  value="0" enum="Pta3Pta2MappedToI2c0" pinmap="I2C0_SCL,PTA3;I2C0_SDA,PTA2" />
-         <choice name="PTB7,PTB6 mapped to SCL,SDA"  value="1" enum="Ptb7Ptb6MappedToI2c0" pinmap="I2C0_SCL,PTB7;I2C0_SDA,PTB6" />
+         <choice name="PTA3,PTA2 mapped to SCL,SDA"  value="0" enum="Pta3Pta2MappedToI2c0" pinMap="I2C0_SCL,PTA3;I2C0_SDA,PTA2" />
+         <choice name="PTB7,PTB6 mapped to SCL,SDA"  value="1" enum="Ptb7Ptb6MappedToI2c0" pinMap="I2C0_SCL,PTB7;I2C0_SDA,PTB6" />
       </binaryOption>
 
    </category>
@@ -466,8 +473,8 @@
          enumStem="SimPinselSpi0ps"
          toolTip="Selects the SPI0 Pinouts"
          description="SPI0 Pin Select" >
-         <choice name="PTB2,PTB3,PTB4,PTB5 mapped to SPI0 pins"  value="0" enum="Ptb2Ptb3Ptb4Ptb5MappedToSpi0" pinmap="SPI0_SCK,PTB2;SPI0_MOSI,PTB3;SPI0_MISO,PTB4;SPI0_PCS,PTB5" />
-         <choice name="PTA6,PTA7,PTB1,PTB0 mapped to SPI0 pins"  value="1" enum="Pta6Pta7Ptb1Ptb0MappedToSpi0" pinmap="SPI0_SCK,PTA6;SPI0_MOSI,PTA7;SPI0_MISO,PTB1;SPI0_PCS,PTB0" />
+         <choice name="PTB2,PTB3,PTB4,PTB5 mapped to SPI0 pins"  value="0" enum="Ptb2Ptb3Ptb4Ptb5MappedToSpi0" pinMap="SPI0_SCK,PTB2;SPI0_MOSI,PTB3;SPI0_MISO,PTB4;SPI0_PCS,PTB5" />
+         <choice name="PTA6,PTA7,PTB1,PTB0 mapped to SPI0 pins"  value="1" enum="Pta6Pta7Ptb1Ptb0MappedToSpi0" pinMap="SPI0_SCK,PTA6;SPI0_MOSI,PTA7;SPI0_MISO,PTB1;SPI0_PCS,PTB0" />
       </binaryOption>
 
    </category>
@@ -485,8 +492,8 @@
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          enumStem="SimPinselUart0ps"
          description="UART0 Pin Select" >
-         <choice name="PTB1,PTB0 mapped to Tx,Rx"  value="0" enum="MappedToPtb1Ptb0" pinmap="UART0_TX,PTB1;UART0_RX,PTB0" />
-         <choice name="PTA3,PTA2 mapped to Tx,Rx"  value="1" enum="MappedToPta3Pta2" pinmap="UART0_TX,PTA3;UART0_RX,PTA2" />
+         <choice name="PTB1,PTB0 mapped to Tx,Rx"  value="0" enum="MappedToPtb1Ptb0" pinMap="UART0_TX,PTB1;UART0_RX,PTB0" />
+         <choice name="PTA3,PTA2 mapped to Tx,Rx"  value="1" enum="MappedToPta3Pta2" pinMap="UART0_TX,PTA3;UART0_RX,PTA2" />
       </binaryOption>
 
       <binaryOption key="sim_sopt_txdme" condition="sim_sopt_txdme_present"
@@ -507,13 +514,59 @@
          <choice name="UART0 module directly"  value="0" enum="Uart0ModuleDirectly" />
          <choice name="Filtered by ACMP0"      value="1" enum="FilteredByAcmp0" />
          <choice name="Filtered by ACMP1"      value="2" enum="FilteredByAcmp1" />
-         <choice name="Reserved"               value="3" enum="Reserved" />
       </choiceOption>
 
    </category>
 
 
 <!-- Grahic here -->
+
+   <template namespace="usbdm" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+      \t/*
+      \t * Global clocks
+      \t */
+      \t\n
+   ]]></template>
+   <template namespace="usbdm" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
+      \t/*
+      \t * Global clocks constants
+      \t * These are provided when minimal clock generator code is used.
+      \t * They assume no clock changes are made after startup.
+      \t * Values provided are from USBDM configuration.
+      \t */
+      \t\n
+   ]]></template>
+
+   <for keys=" clock                  : name "
+      values=" system_core_clock[0]   : SystemCoreClock;
+               system_bus_clock[0]    : SystemBusClock;
+               system_timer_clock[0]  : SystemTimerClock
+         ">
+      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \textern "C" uint32_t %(name);
+         \t\n
+      ]]></setTemplate>
+      <setTemplate namespace="all" key="/SYSTEM/Clocks" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \tuint32_t %(name);
+         \t\n
+      ]]></setTemplate>
+      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \tconstexpr uint32_t %(name) = %valueExpression;
+         \t\n
+      ]]></setTemplate>
+   </for>
 
    <setTemplate variables="sim_sopt_ftmsync" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
@@ -888,7 +941,7 @@
       \t};\n\n
    ]]></initialValueTemplate>
 
-   <template><![CDATA[
+   <template codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Update system clock values
       \t *
@@ -956,6 +1009,12 @@
    ]]></template>
 
    <xi:include href="_simFiles-MKE.xml" />
+
+   <initialValueTemplate variables="sim_clkdiv_outdiv1[0],sim_clkdiv_outdiv2[0],sim_clkdiv_outdiv3[0],sim_clkdiv_outdiv4[0]"><![CDATA[
+      \t/** Reset clock divider value if clock not fully configured */
+      \tstatic constexpr uint32_t sim_clkdiv = %initExpression;
+      \t\n
+   ]]></initialValueTemplate>
 
    <for keys="n" values=";0;1;2;3;4;5;6" >
       <template variables="system_uart%(n)_fixedclocksource[%(n)]" ><![CDATA[

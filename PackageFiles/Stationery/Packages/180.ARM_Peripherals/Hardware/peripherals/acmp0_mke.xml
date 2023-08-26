@@ -642,6 +642,15 @@
    ]]>
    </template>
 
+    <!-- ************* SIM controls ****************** -->
+
+   <category name="SIM" description="Pin mapping and clock enables">
+      <aliasOption key="/SIM/sim_scgc_$(_name)"  constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt0_actrg"    constant="false" optional="true" />
+   </category>
+
+   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
+
    <!-- ************* Common ****************** -->
 
    <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
@@ -670,8 +679,5 @@
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
-
-
-   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
 
 </peripheralPage>

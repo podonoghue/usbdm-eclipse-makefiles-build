@@ -202,6 +202,7 @@
       description="Time Compensation Register"
       toolTip="Adjusts the number of 32.768 kHz clock cycles in each second.\n
                This value+32768 determines the number of clock cycles that makes up a second"
+      units="ticks"
       value="0" />
 
    <intOption key="rtc_tcr_cir" min="1" max="256" offset="-1"
@@ -211,7 +212,7 @@
          		is applied to alter the number of 32.768 kHz cycles in each second. \n
                This register is double buffered and writes do not take affect until the end of the current compensation interval"
       value="1"
-      units="s" />
+      units="ticks" />
 
    <initialValueTemplate
       separator="|"

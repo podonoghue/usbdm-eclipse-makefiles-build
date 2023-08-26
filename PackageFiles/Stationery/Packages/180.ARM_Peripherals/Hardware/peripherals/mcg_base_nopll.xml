@@ -4,6 +4,14 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   <constant key="irq_parameters"           type="String" value="&quot;&quot;"  />
+   <constant key="irq_call"                 type="String" value="&quot;&quot;"  />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"    />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"   />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"    />
+   <xi:include href="_enablePeripheral.xml" />
+   <title description="------------------------------------------" />
+
    <!-- Clock mode as indicated by mcgClockMode[%(n)] choice index -->
    <constant key="FEI"  value="0" type="Integer" />
    <constant key="FEE"  value="1" type="Integer" />
@@ -17,30 +25,37 @@
    <constant key="VLPR"    value="1" type="Integer" />
    <constant key="HSRUN"   value="2" type="Integer" />
 
-   <xi:include href="_default_instance.xml"/>
-
    <clockSelectionOption key="currentClockConfig"
       derived="true"
       description="Active clock selection"
-      target=""
       toolTip="Selects the clock configuration used for general peripheral timing calculations" >
-      <choice value="0" name="ClockConfig[0]" ref="&quot;0: &quot;+ClockConfig[0]" isDefault="true" />
-      <choice value="1" name="ClockConfig[1]" ref="&quot;1: &quot;+ClockConfig[1]" />
-      <choice value="2" name="ClockConfig[2]" ref="&quot;2: &quot;+ClockConfig[2]" />
-      <choice value="3" name="ClockConfig[3]" ref="&quot;3: &quot;+ClockConfig[3]" />
+      <choice value="0" name="@ClockConfig[0]" ref="&quot;0: &quot;+ClockConfig[0]" isDefault="true" />
+      <choice value="1" name="@ClockConfig[1]" ref="&quot;1: &quot;+ClockConfig[1]" />
+      <choice value="2" name="@ClockConfig[2]" ref="&quot;2: &quot;+ClockConfig[2]" />
+      <choice value="3" name="@ClockConfig[3]" ref="&quot;3: &quot;+ClockConfig[3]" />
    </clockSelectionOption>
-
-   <xi:include href="_irqOption.xml" />
 
    <aliasOption key="/SIM/numberOfClockSettings" />
 
-   <binaryOption key="enableClockConfiguration[0]" constant="true" hidden="true" >
+   <binaryOption key="enableClockChangeNotifications"
+      enabledBy="enablePeripheralSupport"
+      description="Enables adding clock change call-backs"
+      toolTip="Call-backs provide notification before and after clock settings are changed" >
+      <choice value="false" name="Disabled" isDefault="true" />
+      <choice value="true"  name="Call-backs may be installed"  />
+   </binaryOption>
+
+   <binaryOption key="enableClockConfiguration[0]"
+      constant="true"
+      hidden="true"
+      enabledBy="enablePeripheralSupport" >
       <choice value="false" name="Disabled" />
       <choice value="true"  name="Enabled"  isDefault="true" />
    </binaryOption>
 
-   <for keys="n" dim="1,/SIM/numberOfClockSettings">
+   <for keys="n" dim="1,/SIM/numberOfClockSettings" >
       <binaryOption key="enableClockConfiguration[%(n)]"
+         enabledBy="enablePeripheralSupport"
          hidden="true"
          description="Enable this clock settings"
          toolTip="If disabled this clock setting will be removed from the generated code" >
@@ -48,6 +63,20 @@
          <choice value="true"  name="Enabled" />
       </binaryOption>
    </for>
+
+   <intOption key="slowInternalClockTrim" condition="mcg_c4_scftrim_present"
+      description="Slow clock trim value"
+      toolTip="This 9-bit trim value is written to MCG.C3[SCTRIM] and MCG.C4[SCFTRIM] if non-zero"
+      value="0"
+      min="0" max="511"
+   />
+
+   <intOption key="fastInternalClockTrim"  condition="mcg_c4_fcftrim_present"
+      description="Fast clock trim value"
+      toolTip="This 4-bit trim value is written to MCG.C4[FCFTRIM] if non-zero"
+      value="0"
+      min="0" max="15"
+   />
 
    <!--  Run mode independent -->
    <choiceOption key="oscMode" condition="mcg_c2_erefs0_present"
@@ -90,12 +119,17 @@
 
    <for keys="n" dim="/SIM/numberOfClockSettings">
       <categoryOption key="ClockConfig[%(n)]"
+         enabledBy="enablePeripheralSupport&amp;&amp;enableClockConfiguration[%(n)]"
          description="Clock configuration[%(n)]"
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_%(n)"
-         disabledValue="Disabled" >
+         disabledValue="=(%(n)==0)?&quot;Reset Configuration&quot;:&quot;Disabled&quot;" >
 
-         <aliasOption key="enableClockConfiguration[%(n)]" constant="false" />
+         <if condition="%(n)==0" >
+            <aliasOption key="enableClockConfiguration[%(n)]" />
+         <else/>
+            <aliasOption key="enableClockConfiguration[%(n)]" constant="false" />
+         </if>
 
          <graphic key="Clock configuration GUI[%(n)]"
             var="ClockConfig[%(n)]"
@@ -650,11 +684,12 @@
          </category>
 
          <choiceOption key="mcgClockMode[%(n)]"
+            enabledBy="enableClockConfiguration[%(n)]"
             errorIf="(/SMC/smc_pmctrl_runm[%(n)]==VLPR)&amp;&amp;(mcgClockMode[%(n)]&lt;4),Illegal clock mode in VLPR"
             enumStem="McgClockMode"
             enumType="uint8_t"
             valueFormat="%s"
-            description="Default Clock Mode"
+            description="MCG Clock Mode"
             toolTip="FLL Engaged Internal(FEI)\n
                      In FEI mode, MCGOUT is derived from the FLL clock (DCOCLK) that is controlled by the 32 kHz Internal Reference Clock (IRC).\n
                      The FLL loop will lock the DCO frequency to the FLL factor, as selected by the C4[DRST_DRS] and C4[DMX32] bits, times the\n
@@ -696,6 +731,7 @@
          <category name="Clock monitors"
             description="Clock monitors" >
             <binaryOption key="mcg_c6_cme0[%(n)]" condition="mcg_c6_cme0_present"
+               enabledBy="enableClockConfiguration[%(n)]"
                enumStem="McgOsc0ClockMonitor"
                description="OSC0 Clock Monitor Enable"
                toolTip="Enables the loss of clock monitoring circuit for the OSC0 external reference.\n
@@ -819,11 +855,14 @@
             value="0" />
 
          <category name="FLL" description="FLL Settings">
+
             <binaryOption key="fll_enabled[%(n)]"
+               ref="(mcgClockMode[%(n)]!=@BLPI)&amp;&amp;(mcgClockMode[%(n)]!=@BLPE)"
                derived="true"
                constant="true"
                description="FLL State"
-               toolTip="Determined from clock mode selected" >
+               toolTip="Determined from clock mode selected"
+               disabledValue="0" >
                <choice value="0" name="FLL Inactive" />
                <choice value="1" name="FLL Active"   />
             </binaryOption>
@@ -844,11 +883,15 @@
                enabledBy="!mcg_c1_irefs[%(n)], Disabled by IREFS"
                target="mcg_erc_clock_divided[%(n)]"
                enumStem="McgFllPrescale"
+               derived="true"
                constant="true"
                description="FLL External Reference Divider"
+               origin="Determined by FLL input frequency constraints and external reference clock frequency"
                toolTip="Selects the amount to divide down the external reference clock for the FLL.\n
                         The resulting frequency must be in [31.25 kHz to 39.0625 kHz] to be suitable for the FLL\n
                         Division factors choices depends on clock Range [MGC_C2_RANGE0] and clock source [MCG_C6_OSCSEL]">
+               <choice value="0" name="Disabled"     enum="Disabled"      enabledBy="true"                          ref="Disabled" />
+
                <choice value="0" name="/1 (low)"    enum="LowDivBy1"     enabledBy="(mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1)" ref="mcg_erc_clock[%(n)]"      />
                <choice value="1" name="/2 (low)"    enum="LowDivBy2"     enabledBy="(mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1)" ref="mcg_erc_clock[%(n)]/2"    />
                <choice value="2" name="/4 (low)"    enum="LowDivBy3"     enabledBy="(mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1)" ref="mcg_erc_clock[%(n)]/4"    />
@@ -875,9 +918,12 @@
                enumStem="McgFllPrescale"
                constant="true"
                description="FLL External Reference Divider"
+               origin="Determined by FLL input frequency constraints and external reference clock frequency"
                toolTip="Selects the amount to divide down the external reference clock for the FLL.\n
                         The resulting frequency must be in [31.25 kHz to 39.0625 kHz] to be suitable for the FLL\n
                         Division factors choices depends on clock Range [MGC_C2_RANGE0] and clock source [MCG_C6_OSCSEL]">
+               <choice value="0" name="Disabled"     enum="Disabled"      enabledBy="true"                          ref="Disabled" />
+
                <choice value="0" name="/1 (low)"     enum="LowDivBy1"     enabledBy="(mcg_c2_range0[%(n)] == 0)" ref="mcg_erc_clock[%(n)]"      />
                <choice value="1" name="/2 (low)"     enum="LowDivBy2"     enabledBy="(mcg_c2_range0[%(n)] == 0)" ref="mcg_erc_clock[%(n)]/2"    />
                <choice value="2" name="/4 (low)"     enum="LowDivBy3"     enabledBy="(mcg_c2_range0[%(n)] == 0)" ref="mcg_erc_clock[%(n)]/4"    />
@@ -908,14 +954,17 @@
                disabledValue="0" />
 
             <binaryOption key="mcg_c1_irefs[%(n)]"
+               ref="(mcgClockMode[%(n)]==@FEI)||(mcgClockMode[%(n)]==@FBI)||(mcgClockMode[%(n)]==@BLPI)"
+               enumStem="IcsIref"
                target="irefs_clock[%(n)]"
                derived="true"
                constant="true"
                description="Internal Reference Select"
+               disabledValue="1"
                toolTip="Selects the reference clock source for the FLL\n
                         This option is determined by the Clock Mode selection">
-               <choice value="0" name="External Reference Clock" ref="mcg_erc_clock_divided[%(n)]" />
-               <choice value="1" name="Slow Internal Clock"      ref="system_slow_irc_clock[%(n)]" />
+               <choice value="0" name="External Reference Clock" enum="External" ref="mcg_erc_clock_divided[%(n)]" />
+               <choice value="1" name="Slow Internal Clock"      enum="Internal" ref="system_slow_irc_clock[%(n)]" />
             </binaryOption>
 
             <intOption key="irefs_clock[%(n)]"
@@ -941,7 +990,6 @@
                units="Hz"
                description="FLL Input clock frequency"
                toolTip="Frequency of input to FLL"
-               value="32000"
                disabledValue="0" />
 
             <intOption key="system_mcgfllclk_clock[%(n)]"
@@ -1184,14 +1232,6 @@
       \t   }
       \t}\n\n
       ]]></clockCodeTemplate>
-
-   <projectActionList id = "mcg_files" >
-      <copy source="Startup_Code/mcg_no_pll.cpp"          target="Startup_Code/mcg_no_pll.cpp"           overwrite="true"  derived="true" />
-      <copy source="Project_Headers/mcg.h"                target="Project_Headers/mcg.h"                 overwrite="true"  derived="true" />
-      <copy source="Snippets/mcg-test.cpp"                target="Snippets/mcg-test.cpp"                 overwrite="true"  derived="true" />
-      <deleteResource target="Project_Headers/clock_configure.h" />
-      <deleteResource target="Startup_Code/clock.c" />
-   </projectActionList>
 
    <template><![CDATA[
       \t/*
@@ -1442,5 +1482,25 @@
    <template key="ClockInfoType" namespace="all" ><![CDATA[
       \t};\n\n
    ]]></template>
+
+   <!-- ************* Common ****************** -->
+
+   <template key="/MCG/Includes" namespace="all"  ><![CDATA[
+   #include "osc.h"\n
+   ]]></template>
+
+   <template key="/$(_BASENAME)/ClockStartup" namespace="all" ><![CDATA[
+   \tUSBDM::$(_Class)::startupConfigure();\n
+   ]]></template>
+
+   <!-- Validator is in parent file -->
+
+   <projectActionList id = "mcg_files" >
+      <copy source="Project_Headers/mcg.h"                target="Project_Headers/mcg.h"                 overwrite="true"  derived="true" />
+      <copy source="Startup_Code/mcg_no_pll.cpp"          target="Startup_Code/mcg_no_pll.cpp"           overwrite="true"  derived="true" />
+      <copy source="Snippets/mcg-test.cpp"                target="Snippets/mcg-test.cpp"                 overwrite="true"  derived="true" />
+      <deleteResource target="Project_Headers/clock_configure.h" />
+      <deleteResource target="Startup_Code/clock.c" />
+   </projectActionList>
 
 </fragment>

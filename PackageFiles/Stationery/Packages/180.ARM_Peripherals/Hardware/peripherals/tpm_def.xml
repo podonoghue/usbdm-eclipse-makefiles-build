@@ -4,20 +4,17 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <xi:include href="_default_instance.xml"/>
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Class)BasicInfo&quot;" />
 
-   <xi:include href="_irqOption.xml"/>
-
-   <aliasOption key="/SIM/sim_sopt2_pllfllsel[]" constant="false"  optional="true" />
-   <aliasOption key="/SIM/sim_sopt2_tpmsrc[]"    constant="false"  optional="true" />
-   <aliasOption key="/SIM/system_tpm_clock[]"    optional="true"                   />
-   <binaryOption key="individual_channel_call_backs"
+   <binaryOption key="individual_channel_call_backs" condition="@NumChannels>@NumChannelVectors"
       enabledBy="irqHandlingMethod"
       description="Use individual channel call-backs"
       toolTip="The different FTM channels use a common hardware interrupt handler. \n
                If this option is enabled, then the hardware handler examines the interrupt source \n
                and dispatches to individual channel call-backs. \n
-               This is more convenient but will increase the interrupt latency.
+               This is more convenient but will increase the interrupt latency. \n
                If disabled, then a common call-back is used for all channels which leads to lower latency. \n
                The common call-back will then have to determine the interrupt source if needed." >
       <choice value="false"  name="Shared call-back"      isDefault="true" />
@@ -25,6 +22,7 @@
    </binaryOption>
 
    <binaryOption key="check_minimums"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="Check minimum interval and minimum resolution"
       toolTip="Enables boundary checks of minimum interval and minimum resolution when setting values" >
       <choice value="0" name="No checks done" />
@@ -32,18 +30,30 @@
    </binaryOption>
 
    <intOption key="minimumInterval"
+      enabledBy="check_minimums"
       description="Minimum usable interval in ticks"
       toolTip="This value is used as a minimum acceptable value for the timer interval in ticks\n
                when using convertMicrosecondsToTicks() or convertSecondsToTicks()"
       value="20" min="0" max="65535"/>
 
    <intOption key="minimumResolution"
+      enabledBy="check_minimums"
       description="Minimum resolution for PWM interval"
       toolTip="This value is used as a minimum value for the timer period in ticks \n
          so that a reasonable resolution is available for PWM duty-cycle"
       value="100" min="0" max="65535" />
 
-   <stringOption key="Clocking" value="------- Clocking -------" constant="true" description="Clocking" />
+   <title description="------- Clocking -------" />
+
+  <category name="Advanced" description="SIM controlled options">
+      <for keys="p" values="0;1">
+         <aliasOption key="/SIM/TpmClkin%(p)" constant="false"  optional="true" />
+      </for>
+      <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)clksel" constant="false" optional="true" />
+      <aliasOption key="/SIM/Tpm$(_instance)ExternalClkin"    constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)ch0src" constant="false" optional="true" />
+   </category>
+
 
    <choiceOption key="tpmClockConfig"
       target="system_tpm_clock"
@@ -58,40 +68,37 @@
    <intOption key="system_tpm_clock"
       constant="true"
       derived="true"
-      description="System TPM Clock\n
-                   Based on current clock configuration"
+      description="System TPM Clock"
+      toolTip="Based on current clock configuration"
       units="Hz"
       />
 
-   <intOption key="tpmExternalClock"
-      description="TPM External clock "
-      toolTip="Clock frequency of external clock supplied to TPM_CLKIN pin"
-      value="0" min="0" units="Hz"/>
-
    <choiceOption key="tpm_sc_cmod"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="Clock Source"
       enumStem="TpmClockSource"
-      enumType="uint16_t"
       target="inputClockFrequency"
       toolTip="Selects the clock source for the module">
-      <choice value="0" name="Disabled"         ref="disabled"                code="0"                      enum="Disabled"        />
-      <choice value="1" name="System TPM Clock" ref="system_tpm_clock"        code="SimInfo::getTpmClock()" enum="SystemTpmClock"  isDefault="true"  />
-      <choice value="2" name="External clock"   ref="tpmExternalClock"        code="tpmExternalClock"       enum="ExternalClock"   />
+      <choice value="0" name="Disabled"         ref="disabled"          code="0"                      enum="Disabled"        />
+      <choice value="1" name="System TPM Clock" ref="system_tpm_clock"  code="SimInfo::getTpmClock()" enum="SystemTpmClock"  isDefault="true"  />
+      <choice value="2" name="External clock"   ref="/SIM/Tpm$(_instance)ExternalClkin"  
+         code="SimInfo::getTpm$(_instance)ExternalClockFrequency()"       enum="ExternalClock"   />
    </choiceOption>
 
    <intOption key="inputClockFrequency"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       constant="true"
       description="Frequency of input clock to timer"
       derived="true"
       units="Hz"/>
 
    <choiceOption key="tpm_sc_ps"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="Clock prescaler"
       enumStem="TpmPrescale"
-      enumType="uint16_t"
       target="clockFrequency"
       toolTip="Selects the prescaler for the module">
-      <choice value="0" name="Divide by 1"   ref="inputClockFrequency"      enum="DivBy1"  isDefault="true" />
+      <choice value="0" name="Divide by 1"   ref="inputClockFrequency"        enum="DivBy1"  isDefault="true" />
       <choice value="1" name="Divide by 2"   ref="(inputClockFrequency)/2."   enum="DivBy2" />
       <choice value="2" name="Divide by 4"   ref="(inputClockFrequency)/4."   enum="DivBy4" />
       <choice value="3" name="Divide by 8"   ref="(inputClockFrequency)/8."   enum="DivBy8" />
@@ -102,6 +109,7 @@
    </choiceOption>
 
    <intOption key="clockFrequency"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       constant="true"
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
@@ -109,6 +117,7 @@
       units="Hz"/>
 
    <floatOption key="clockPeriod"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       ref="(1.0/clockFrequency)"
       constant="true"
       description="Period of timer clock"
@@ -117,9 +126,9 @@
       units="s"/>
 
    <choiceOption key="tpm_sc_mode"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       valueFormat="TPM_SC_TOF(%s),TPM_SC_CPWMS(%s)"
       enumStem="TpmMode"
-      enumType="uint16_t"
       description="Alignment and whether interval or free-running mode"
       toolTip="Left-aligned   (0...mod) or\n
                Centre-aligned (0...mod...0) or\n
@@ -129,11 +138,12 @@
       <choice value="1,0" name="Free-running (count up)"         enum="FreeRunning"  isDefault="true" />
    </choiceOption>
 
-   <intOption key="tpm_mod" description="End value for counter"
+   <intOption key="tpm_mod"
+      description="End value for counter"
       enabledBy="tpm_sc_mode!=2"
       toolTip="The timer counts from 0 to this value"
       typeName="Ticks &amp;"
-      valueFormat="%s_ticks"
+      units="ticks"
       value="65535" min="0" max="65535" />
 
    <floatOption key="tpm_modPeriod"
@@ -162,7 +172,7 @@
    <binaryOption key="tpm_sc_action" condition="tpm_sc_toie_present&amp;&amp;!tpm_sc_dma_present"
       enabledBy="irqHandlingMethod"
       valueFormat="TPM_SC_TOIE(%s)"
-      enumType="uint16_t"
+      enumType="uint8_t"
       enumStem="TpmOverflowAction"
       description="Action on Counter overflow"
       toolTip="Enable interrupt on counter overflow">
@@ -192,9 +202,10 @@
    <!--  **************** Channels **************** -->
 
    <for keys="ch" dim="NumChannels">
-      <stringOption name="TPM Channel %(ch)" key="TpmChannel%(ch)" derived="true" value="----- %(ch) -----"/>
+      <title description="------- TPM Channel %(ch) -------" toolTip="" />
 
       <choiceOption key="tpm_cnsc_mode[%(ch)]" condition="tpm_combine_decap0_present&amp;&amp;tpm_cnsc_ms_present&amp;&amp;tpm_cnsc_els_present"
+         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          valueFormat="(TPM_COMBINE_DECAPEN0(%s)&lt;&lt;8),(TPM_COMBINE_COMBINE0(%s)&lt;&lt;8),TPM_CnSC_MS(%s),TPM_CnSC_ELS(%s)"
          enumType="uint16_t"
          enumStem="TpmChannelMode"
@@ -219,6 +230,7 @@
       </choiceOption>
 
       <choiceOption key="tpm_cnsc_mode[%(ch)]" condition="!tpm_combine_decap0_present&amp;&amp;tpm_cnsc_ms_present&amp;&amp;tpm_cnsc_els_present"
+         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          valueFormat="TPM_CnSC_MS(%s),TPM_CnSC_ELS(%s)"
          enumType="uint16_t"
          enumStem="TpmChannelMode"
@@ -237,6 +249,7 @@
       </choiceOption>
 
       <choiceOption key="tpm_cnsc_action[%(ch)]" condition="tpm_cnsc_chie_present&amp;&amp;tpm_cnsc_dma_present"
+         enabledBy="irqHandlingMethod&amp;&amp;(tpm_cnsc_mode[%(ch)]!=0)"
          valueFormat="TPM_CnSC_CHIE(%s),TPM_CnSC_DMA(%s)"
          enumType="uint8_t"
          enumStem="TpmChannelAction"
@@ -249,6 +262,7 @@
       </choiceOption>
 
       <binaryOption key="tpm_cnsc_action[%(ch)]" condition="tpm_cnsc_chie_present&amp;&amp;!tpm_cnsc_dma_present"
+         enabledBy="irqHandlingMethod&amp;&amp;(tpm_cnsc_mode[%(ch)]!=0)"
          valueFormat="TPM_CnSC_CHIE(%s)"
          enumType="uint8_t"
          enumStem="TpmChannelAction"
@@ -259,6 +273,7 @@
       </binaryOption>
 
       <binaryOption key="tpm_cnsc_icrst[%(ch)]" condition="tpm_cnsc_icrst_present"
+         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          valueFormat="TPM_CnSC_ICRST(%s)"
          enumStem="TpmChannelReset"
          enumType="uint8_t"
@@ -269,21 +284,23 @@
       </binaryOption>
 
       <intOption key="tpm_cnv[%(ch)]"
+         enabledBy="(tpm_cnsc_mode[%(ch)]&gt;=4)"
          valueFormat="%s_ticks"
          typeName="Ticks &amp;"
+         units="ticks"
          description="Output Compare Event time in ticks"
-         toolTip="This value is compared against the main counter in output compare modes"
-         value="0" min="0" max="65535" />
+         toolTip="This value is compared against the main counter"
+         value="0" min="0" max="@tpm_mod" />
 
       <floatOption key="tpm_cnvEventTime[%(ch)]"
-         enabledBy="((tpm_cnsc_mode[%(ch)]&gt;=4)&amp;&amp;(tpm_cnsc_mode[%(ch)]&lt;=7))||(tpm_cnsc_mode[%(ch)]&gt;=14)"
+         enabledBy="(tpm_cnsc_mode[%(ch)]&gt;=4)"
          ref="tpm_cnv[%(ch)]*clockPeriod"
          valueFormat="%s_s"
          typeName="Seconds &amp;"
          derived="true"
          units="s"
          description="Output Compare Event time in seconds"
-         toolTip="This value is compared against the main counter in output compare modes"
+         toolTip="This value, converted to ticks, is compared against the main counter"
          value="0" min="0" max="65535" />
 
    </for>
@@ -299,20 +316,6 @@
       \t/// %description
       \tstatic constexpr uint32_t minimumInterval  = $(?check_minimums:$(minimumInterval):0);\n\n
    ]]></initialValueTemplate>
-
-   <initialValueTemplate variables="tpmExternalClock"
-   ><![CDATA[
-      \t/// %description
-      \tstatic constexpr uint32_t tpmExternalClock =  $(tpmExternalClock);
-   ]]></initialValueTemplate>
-
-
-   <category name="Advanced" description="Advanced options">
-      <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)clksel" optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)ch0src" optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt9_tpm$(_instance)clksel" optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt9_tpm$(_instance)ch0src" optional="true" constant="false" />
-   </category>
 
    <setTemplate key="/$(_BASENAME)/static_functions" namespace="all"
       discardRepeats="true"
@@ -664,7 +667,7 @@
          \t   }\n
       ]]></template>
       <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
-         \t   return (unsigned)rv;
+         \t   return Ticks(uint32_t(rv));
          \t}
          \t
          \t/**
@@ -695,7 +698,7 @@
          \t   }\n
       ]]></template>
       <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
-         \t   return (unsigned)rv;
+         \t   return Ticks(uint32_t(rv));
          \t}
          \t
          \t/**
@@ -767,7 +770,8 @@
          \t */
          \t%(static)uint16_t getTime()%(const) {
          \t   return tpm->CNT;
-         \t}\n\n
+         \t}
+         \t\n
       ]]></template>
       <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
          \t/**
@@ -825,6 +829,7 @@
          \t   tpm->STATUS = status;
          \t   return status;
          \t}
+         \t
          \t/**
          \t * Enable/disable Timer Overflow interrupts
          \t */
@@ -1526,19 +1531,6 @@ $(init_description)
 
 <!--  Default Initialisation value -->
 
-   <template><![CDATA[
-   \t/**
-   \t * Type definition for $(_Class) overflow and fault call-back.
-   \t */
-   \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
-   \t
-   \t/**
-   \t * Type definition for $(_Class) channel interrupt call-back
-   \t */
-   \ttypedef $(_Class)BasicInfo::ChannelCallbackFunction ChannelCallbackFunction;
-   \t\n
-   ]]></template>
-
    <template codeGenCondition="irqHandlingMethod"><![CDATA[
    \t/**
    \t * Callback function for Channel Fault and timer overflow
@@ -1585,9 +1577,6 @@ $(init_description)
          tpm_cntin,
          tpm_mod"
    ><![CDATA[
-      $(init_description)
-      \ttypedef $(_Class)BasicInfo::Init Init;
-      \t
       \t/**
       \t * Default initialisation value for Ftm$(_instance)
       \t * This value is created from Configure.usbdmProject settings
@@ -1792,9 +1781,6 @@ $(channel_init_description)
 <!--  Default Initialisation value -->
 
   <template><![CDATA[
-      $(channel_init_description)
-      \ttypedef $(_Class)BasicInfo::ChannelInit ChannelInit;
-      \t
       \t/**
       \t * Default initialisation value for Tpm$(_instance)ChannelInit
       \t * This value is created from Configure.usbdmProject settings
@@ -1865,8 +1851,7 @@ $(channel_init_description)
       \t */
       \tstatic ErrorCode setCallback(CallbackFunction newCallback) {
       \t   if (newCallback == nullptr) {
-      \t      callback = unhandledCallback;
-      \t      return E_NO_ERROR;
+      \t      newCallback = unhandledCallback;
       \t   }
       \t   callback = newCallback;
       \t   return E_NO_ERROR;
@@ -2019,8 +2004,6 @@ $(channel_init_description)
       \t};\n\n
    ]]></template>
 
-   <xi:include href="_clockOption.xml"/>
-
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.TpmValidate">
    </validate>
@@ -2048,6 +2031,8 @@ $(channel_init_description)
    \ttypedef $(_Baseclass)QuadDecoder_T<$(_Class)Info> $(_Baseclass)QuadDecoder$(_instance);\n
    ]]></template>
 
-   <signals/>
+   <!-- ************* Signal mapping ****************** -->
+
+   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
 
 </fragment>

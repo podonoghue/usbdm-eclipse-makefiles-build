@@ -448,7 +448,7 @@ public:
    public:
       typedef typename Info::ChannelInit ChannelInit;
 
-      constexpr Channel() : TpmChannel(Info::baseAddress, channel) {}
+      constexpr Channel() : TpmChannel(Info::baseAddress, (TpmChannelNum)channel) {}
       virtual ~Channel() = default;
 
    protected:
