@@ -568,7 +568,7 @@ Set this bit to hold off entry to stop mode when any data transmission or recept
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Stop holdoff is disabled. The MCU&apos;s entry to stop mode is not gated</description>
+                           <description>Stop holdoff is disabled. The MCUs entry to stop mode is not gated</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>

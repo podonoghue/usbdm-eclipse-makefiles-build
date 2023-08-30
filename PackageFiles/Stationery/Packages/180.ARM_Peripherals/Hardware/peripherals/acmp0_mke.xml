@@ -252,7 +252,7 @@
       ]]></setTemplate>
    </for>
 
-<!--   ========== ACMP Init class =============================== -->
+   <!--   ========== Init class =============================== -->
 
    <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
@@ -287,6 +287,8 @@
       \t *   AcmpDacEnable_Disabled ,         // DAC Enable - Disabled
       \t *   AcmpDacReference_Bandgap ,       // DAC Reference Select - Bandgap
       \t *   100,                             // DAC Output Level Selection
+      \t *
+      \t *   // Inputs
       \t *   AcmpInput_Input1,                // ACMP Input Pin Enables
       \t *   AcmpInput_Input2,
       \t *
@@ -299,6 +301,7 @@
       \t * @endcode
       \t */
    ]]>
+
    </template>
 
    <template namespace="usbdm" >
@@ -314,7 +317,8 @@
       \t/**
       \t * Type definition for $(_Class) interrupt call back.
       \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));\n
+      \ttypedef void (*CallbackFunction)($(irq_parameters));
+      \t\n
    ]]>
    </template>
 
@@ -340,14 +344,15 @@
       \t *
       \t * @param[in]  acmpCallback Callback function to execute on interrupt
       \t */
-      \tstatic void setCallback(CallbackFunction acmpCallback) {
-      \t   if (acmpCallback == nullptr) {
-      \t      acmpCallback = unhandledCallback;
+      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
+      \t   if ($(_basename)Callback == nullptr) {
+      \t      $(_basename)Callback = unhandledCallback;
       \t   }
+      \t   // Allow either no handler set yet or removing handler
       \t   usbdm_assert(
-      \t         (sCallback == unhandledCallback) || (sCallback == acmpCallback),
+      \t         (sCallback == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
       \t         "Handler already set");
-      \t   sCallback = acmpCallback;
+      \t   sCallback = $(_basename)Callback;
       \t}
       \t
       \t/**
@@ -355,11 +360,9 @@
       \t */
       \tstatic void irqHandler() {
       \t
-      \t   //.....IRQ handler code here..........
       \t
       \t   // Execute call-back
       \t   sCallback($(irq_call));
-      \t   return;
       \t}
       \t\n
    ]]>
@@ -393,7 +396,7 @@
    ]]>
    </template>
 
-<!--   Member variables -->
+   <!--   Member variables -->
 
    <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
@@ -437,9 +440,12 @@
       \t\n
    ]]></initialValueTemplate>
 
-<!--   Configure methods -->
+   <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      namespace="all"
+      discardRepeats="true" >
+ <![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -452,7 +458,10 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      namespace="all"
+      discardRepeats="true" >
+   <![CDATA[
       \t/**
       \t * Configure $(_BASENAME) from values specified in init
       \t *
@@ -468,13 +477,17 @@
    <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
              condition="irqHandlingMethod" ><![CDATA[
       \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-backs if feature enabled
       \t      Info::setCallback(init.callbackFunction);
       \t      enableNvicInterrupts(init.irqlevel);
       \t   }
       \t\n
-   ]]></template>
-
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   ]]>
+   </template>
+   <template key="/$(_BASENAME)/InitMethod" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   namespace="all"
+   discardRepeats="true" >
+   <![CDATA[
       \t   // ..........  Regs to init .......... ;
       \t   acmp->CS    = init.cs;
       \t   acmp->C0    = init.c0;
@@ -482,9 +495,10 @@
       \t   acmp->C2    = init.c2;
       \t}
       \t\n
-   ]]></template>
+   ]]>
+   </template>
 
-<!--   Constructors -->
+   <!--   Constructors -->
 
    <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
@@ -602,9 +616,7 @@
       </setTemplate>
    </for>
 
-
 <!--   Default Initialisation value -->
-
    <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       separator=","
       terminator=","
@@ -628,11 +640,13 @@
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
-   ]]></initialValueTemplate>
+   ]]>
+   </initialValueTemplate>
 
    <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[
-      \t}; // $(_Class)BasicInfo::Init\n\n
+      \t}; // class Init
+      \t\n
    ]]>
    </template>
 
@@ -644,7 +658,7 @@
 
     <!-- ************* SIM controls ****************** -->
 
-   <category name="SIM" description="Pin mapping and clock enables">
+   <category name="Advanced" description="Pin mapping and clock enables">
       <aliasOption key="/SIM/sim_scgc_$(_name)"  constant="false" optional="true" />
       <aliasOption key="/SIM/sim_sopt0_actrg"    constant="false" optional="true" />
    </category>
@@ -653,19 +667,22 @@
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
-   \t/**
-   \t * Class representing $(_NAME)
-   \t */
-   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <![CDATA[
+      /**
+       * Class representing $(_NAME)
+       */
+      class $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
+      \t\n
    ]]></template>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>
 
-   <projectActionList id = "acmp_files" >
+   <projectActionList id="acmp_files" >
       <copy source="Project_Headers/acmp-MKE.h"  target="Project_Headers/acmp.h"  overwrite="true"  derived="true" />
+      <copy source="Snippets/cmp-example.cpp" target="Snippets/cmp-example.cpp" overwrite="true" derived="true"/>
    </projectActionList>
 
    <!-- ************* Startup ****************** -->

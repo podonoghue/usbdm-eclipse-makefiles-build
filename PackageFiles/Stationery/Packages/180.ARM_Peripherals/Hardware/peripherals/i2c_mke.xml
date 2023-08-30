@@ -13,7 +13,6 @@
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="false"         />
    <xi:include href="_enablePeripheral.xml"  />
-   <title description="------------------------------------------" />
 
 <!--
     * General substitutions
@@ -51,11 +50,12 @@
     * %register[index]                Register associated with variable e.g. adc->APCTL1
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
-   <!-- ************* F ****************** -->
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
       value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
+
+   <title description="------- Clock Settings -------" />
 
    <binaryOption key="/$(_BASENAME)/baudSupport"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
@@ -68,7 +68,7 @@
    </binaryOption>
 
    <choiceOption key="i2cClockConfig" condition="/MCG/$present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       target="i2cInputClock"
       description="Clock configuration"
       toolTip="Selects the clock configuration used for calculations involving the bus clock" >
@@ -79,7 +79,7 @@
    </choiceOption>
 
    <choiceOption key="i2cClockConfig" condition="/ICS/$present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       target="i2cInputClock"
       description="Clock configuration"
       toolTip="Selects the clock configuration used for calculations involving the bus clock" >
@@ -90,7 +90,7 @@
    </choiceOption>
 
    <intOption key="i2cInputClock"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       constant="true"
       derived="true"
       description="I2C input clock"
@@ -101,14 +101,14 @@
       />
 
    <intOption key="i2c_speed"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       description="Speed of interface in Hz"
       toolTip="Speed of transmission"
       value="400_kHz" units="Hz"
       min="0" max="@/SIM/system_bus_clock[0]/2" />
 
    <choiceOption key="i2c_f_mult" condition="i2c_f_mult_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="I2cFMult"
       derived="true"
       constant="true"
@@ -121,7 +121,7 @@
    </choiceOption >
 
    <intOption key="i2c_f_icr" condition="i2c_f_icr_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       typeName="int"
       description="Baud rate divider"
       toolTip="Divider to generate the I2C baud rate"
@@ -133,7 +133,7 @@
 
    <binaryOption key="i2c_c1_iicie" condition="i2c_c1_iicie_present"
       hidden="true"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="I2cInterrupt"
       description="Interrupt Enable" >
       <choice name="Disabled"    value="0" enum="Disabled" />
@@ -142,7 +142,7 @@
 
    <binaryOption key="i2c_c1_mst" condition="i2c_c1_mst_present"
       constant="true"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="I2cBusRole"
       description="Bus Role Select"
       toolTip="Slave mode not supported">
@@ -151,7 +151,7 @@
    </binaryOption >
 
    <binaryOption key="i2c_c1_wuen" condition="i2c_c1_wuen_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="I2cWakeup"
       toolTip="Controls if an interrupt is generated when address matching in low power mode\n
                To have effect interrupts must be enabled in I2C"
@@ -163,7 +163,7 @@
    <!-- ************* C2 ****************** -->
 
    <binaryOption key="i2c_c2_gcaen" condition="i2c_c2_gcaen_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="I2cCallAddress"
       description="General Call Address"
       toolTip="Controls General call address" >
@@ -172,7 +172,7 @@
    </binaryOption >
 
    <binaryOption key="i2c_c2_sbrc" condition="i2c_c2_sbrc_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="I2cClockStretching"
       toolTip="Allows the slave baud rate to follows the master baud rate with clock stretching occurring"
       description="Slave Baud Rate Control" >
@@ -183,7 +183,7 @@
    <!-- ************* C2_ADEXT, C2_RMEM, A1, RA ****************** -->
 
    <binaryOption key="i2c_c2_adext" condition="i2c_c2_adext_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="I2cAddressLength"
       toolTip="Selects between 7-bit and 9-bit address schemes"
       description="Address Extension" >
@@ -193,7 +193,7 @@
 
    <intOption key="i2c_slaveaddress" condition="i2c_a1_ad_present"
       radix="16"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       typeName="int"
       description="Slave Address"
       toolTip="Primary slave address used by the I2C module when it is addressed as a slave\n
@@ -201,7 +201,7 @@
    />
 
    <binaryOption key="i2c_c2_rmen" condition="i2c_c2_rmen_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="I2cAddressRange"
       toolTip="Enables address matching for a range of slave addresses"
       description="Range Address Matching" >
@@ -211,11 +211,11 @@
 
    <intOption key="i2c_rangeaddress" condition="i2c_ra_rad_present"
       radix="16"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;i2c_c2_rmen,Disabled by i2c_c2_rmen"
+      enabledBy="enablePeripheralSupport&amp;&amp;i2c_c2_rmen,Disabled by i2c_c2_rmen"
       typeName="int"
-      description="Slave Address used in matching\n
-                   An slave address is matched in the range (i2c_slaveaddress,i2c_slaveaddress2]"
-      toolTip="Range slave address used by the I2C module when it is addressed as a slave\n
+      description="Slave Address used in matching"
+      toolTip="Range slave address used by the I2C module when it is addressed as a slave.\n
+               A slave address is matched in the range (i2c_slaveaddress,i2c_slaveaddress2].\n
                Note: This is a physical device address with the LSB=0 i.e. 7-bit or 10-bit value"
    />
 
@@ -224,7 +224,7 @@
       derived="true"
       constant="true"
       ref="(i2c_slaveaddress&lt;&lt;8)&amp;0xFF"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       typeName="uint8_t"
       description="Slave Address[10..8]"
    />
@@ -234,7 +234,7 @@
       derived="true"
       constant="true"
       ref="i2c_slaveaddress&amp;0xFF"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       typeName="uint8_t"
       description="Slave Address[7..0]"
    />
@@ -244,7 +244,7 @@
       derived="true"
       constant="true"
       ref="i2c_rangeaddress&amp;0xFF"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       typeName="int"
       description="Range Slave Address"
    />
@@ -252,7 +252,7 @@
    <!-- ************* FLT ****************** -->
 
    <binaryOption key="i2c_flt_shen" condition="i2c_flt_shen_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="I2cStopHoldOff"
       toolTip="Set this bit to hold off entry to stop mode when any data transmission or reception is occurring"
       description="Stop Hold-off" >
@@ -261,7 +261,7 @@
    </binaryOption >
 
    <binaryOption key="i2c_flt_ssie" condition="i2c_flt_ssie_present"
-      enabledBy="/$(_BASENAME)/irqHandlingMethod"
+      enabledBy="irqHandlingMethod"
       enumStem="I2cStartStopInterrupt"
       toolTip="This bit enables the interrupt for I2C bus stop or start detection.\n
                NOTE: To clear the detection interrupt: In the interrupt service routine, \n
@@ -274,7 +274,7 @@
    </binaryOption >
 
    <choiceOption key="i2c_flt_flt" condition="i2c_flt_flt_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="I2cFilter"
       toolTip="Controls the width of the glitch, in terms of I2C module clock cycles, that the filter must absorb.\n
                For any glitch whose size is less than or equal to this width setting, the filter does not allow the glitch to pass"
@@ -299,9 +299,11 @@
 
    <!-- ************* SMB ****************** -->
 
-   <title description="--------------- SMB ---------------------" />
+   <title description="--------------- SMB ---------------------"
+      condition="i2c_smb_fack_present" />
+
    <binaryOption key="i2c_smb_fack" condition="i2c_smb_fack_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="I2cSmbFastAck"
       toolTip="For SMBus packet error checking, the CPU must be able to issue an ACK or NACK according to the result of receiving data byte"
       description="Fast NACK/ACK" >
@@ -310,7 +312,7 @@
    </binaryOption >
 
    <binaryOption key="i2c_smb_alerten" condition="i2c_smb_alerten_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="I2cSmbAlert"
       toolTip="Enables or disables SMBus alert response address matching"
       description="SMBus Alert Response Address" >
@@ -319,7 +321,7 @@
    </binaryOption >
 
    <binaryOption key="i2c_smb_tcksel" condition="i2c_smb_tcksel_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="I2cSmbTimwoutClock"
       toolTip="Selects the clock source of the timeout counter"
       description="Timeout Counter Clock Select" >
@@ -344,7 +346,7 @@
    </binaryOption >
 
    <binaryOption key="i2c_smb_shtf2ie" condition="i2c_smb_shtf2ie_present"
-      enabledBy="/$(_BASENAME)/irqHandlingMethod"
+      enabledBy="irqHandlingMethod"
       enumStem="I2cSmbTimoutInterrupt"
       toolTip="Enables SCL high and SDA low timeout interrupt"
       description="SHTF2 Interrupt" >
@@ -355,7 +357,7 @@
    <!-- ************* SMB_SIICAEN, A2 ****************** -->
 
    <binaryOption key="i2c_smb_siicaen" condition="i2c_smb_siicaen_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="I2cSmbAddress"
       toolTip="Enables or disables SMBus device default address"
       description="Second I2C Address (SMB)" >
@@ -364,7 +366,7 @@
    </binaryOption >
 
    <intOption key="i2c_a2_sad" condition="i2c_a2_sad_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;i2c_smb_siicaen"
+      enabledBy="enablePeripheralSupport&amp;&amp;i2c_smb_siicaen"
       typeName="int"
       description="SMBus Address"
       toolTip="Contains the slave address used by the SMBus.\n
@@ -375,7 +377,7 @@
 
    <intOption key="i2c_slt_value" condition="i2c_slth_sslt_present"
       units="ticks"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       typeName="uint16_t"
       description="SCL low timeout value"
       toolTip="SCL low timeout"
@@ -386,7 +388,7 @@
       derived="true"
       constant="true"
       ref="(i2c_slt_value&gt;&gt;8)&amp;0xFF"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       typeName="uint8_t"
       description="MSB of SCL low timeout value"
    />
@@ -396,14 +398,14 @@
       derived="true"
       constant="true"
       ref="i2c_slt_value&amp;0xFF"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       typeName="uint8_t"
       description="LSB of SCL low timeout value"
    />
 
 <!-- Graphic here -->
 
-   <setTemplate variables="i2c_f_mult,i2c_f_icr" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+   <setTemplate variables="i2c_f_mult,i2c_f_icr" codeGenCondition="enableGettersAndSetters"
       nonDefaultParams="2"
    ><![CDATA[
       \t/**
@@ -426,7 +428,7 @@
       i2c_smb_sltf,i2c_smb_shtf2:Timeouts;
       i2c_s_arbl:ArbitrationFlag;
       i2c_s_iicif:InterruptFlag" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Clear %description
@@ -459,7 +461,7 @@
       i2c_smb_siicaen:SmbSecondIcAddress;
       i2c_smb_tcksel:SmbTimerSelect;
       i2c_smb_shtf2ie:SmbTimeout" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -484,7 +486,7 @@
 
 <!--   ========== I2C Init class =============================== -->
 
-   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template key="/$(_BASENAME)/init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_BASENAME)
@@ -515,7 +517,7 @@
       \t *   I2cStartStopInterrupt_Disabled ,   // Bus Stop or Start Interrupt - Interrupt disabled
       \t *   I2cFilter_NoFilterBypass ,         // Programmable Filter Factor - No filter
       \t *
-      \t *   // SMB
+      \t *   // SMB (if available)
       \t *   I2cSmbFastAck_Disabled ,           // Fast NACK/ACK - ACK/NAK on data byte
       \t *   I2cSmbAlert_Disabled ,             // SMBus Alert Response Address - Matching disabled
       \t *   I2cSmbTimwoutClock_BusClockDiv64 , // Timeout Counter Clock Select - Bus clock / 64
@@ -545,7 +547,7 @@
    <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
-       \t//! Class based callback handler has been installed in vector table
+       \t//! Common class based callback code has been generated for this class of peripheral
        \tstatic constexpr bool irqHandlerInstalled = %symbolicValueExpression;
        \t\n
    ]]></initialValueTemplate>
@@ -626,7 +628,7 @@
 
    <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true" >
    <![CDATA[
-      $(init_description)
+      $(/$(_BASENAME)/init_description)
       \tclass Init {
       \t
       \tpublic:
@@ -652,7 +654,7 @@
       \t   unsigned %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <setTemplate namespace="usbdm" variables="/$(_BASENAME)/irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
+   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
@@ -729,7 +731,7 @@
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
-      variables="/PCR/nvic_irqLevel,/$(_BASENAME)/irqLevel"
+      variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %enumClass %registerName0 = %symbolicValueExpression1;
@@ -764,10 +766,11 @@
       \t   Info::enableClock();
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
-             condition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
-      \t   setCallback(init.callbackFunction);
-      \t   enableNvicInterrupts(init.irqlevel);
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      setCallback(init.callbackFunction);
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
       \t\n
    ]]></template>
 
@@ -803,7 +806,7 @@
 <!--   Constructors -->
 
    <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
-      variables="/$(_BASENAME)/irqHandlingMethod"
+      variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
       \t   /**
@@ -1024,7 +1027,7 @@
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <initialValueTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -1061,9 +1064,14 @@
       \t\n
    ]]></initialValueTemplate>
 
-   <template><![CDATA[
+   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t/**
+      \t * Get input clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
       \tstatic uint32_t getClockFrequency() {
-      \t   return SystemBusClock;
+      \t   return $(clockSource:SystemBusClock);
       \t}
       \t\n
    ]]></template>
@@ -1089,18 +1097,19 @@
 
    </projectActionList>
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
-   \t/**
-   \t * Class representing $(_NAME) interface
-   \t */
-   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {
-   \tpublic:
-   \t
-   \t   $(_Class)(const $(_Baseclass)BasicInfo::Init &init = $(_Class)Info::DefaultInitValue) : $(_Baseclass)Base_T(init) {}
-   \t
-   \t$(/$(_NAME)/InputMapping:   // No user mappings found)
-   \t};
-   \t\n
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport"
+   ><![CDATA[
+      \t/**
+      \t * Class representing $(_NAME) interface
+      \t */
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {
+      \tpublic:
+      \t
+      \t   $(_Class)(const $(_Baseclass)BasicInfo::Init &init = $(_Class)Info::DefaultInitValue) : $(_Baseclass)Base_T(init) {}
+      \t
+      \t$(/$(_NAME)/InputMapping:   // No user mappings found)
+      \t};
+      \t\n
    ]]></template>
 
    <validate
@@ -1120,7 +1129,7 @@
    ]]></template>
 
    <!-- ************* Signal mapping ****************** -->
-   <category name="SIM" description="Pin mapping" >
+   <category name="Advanced" description="SIgnal routing" >
       <aliasOption key="/SIM/sim_scgc_$(_name)"      constant="false" optional="true" />
       <aliasOption key="/SIM/sim_scgc_$(_basename)"  constant="false" optional="true" />
       <aliasOption key="/SIM/sim_pinsel_$(_name)ps"  constant="false" optional="true" />
@@ -1130,6 +1139,6 @@
       <aliasOption key="/SIM/sim_sopt1_$(_name)4wen" constant="false" optional="true" />
    </category>
 
-   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
+   <signals enabledBy="enablePeripheralSupport" />
 
 </peripheralPage>

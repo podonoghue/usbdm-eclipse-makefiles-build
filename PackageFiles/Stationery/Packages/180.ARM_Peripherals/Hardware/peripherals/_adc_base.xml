@@ -4,16 +4,63 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <xi:include href="_default_instance.xml"/>
+   <constant key="suppressInstance"         type="Boolean" value="false"         />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
+   <constant key="irq_parameters"           type="String"  value="&quot;uint32_t result, int channel&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;uint32_t, int&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;adc->R[0], adc->SC1[0]&amp;ADC_SC1_ADCH_MASK&quot;"  />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="_enablePeripheral.xml"  />
+
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
+
+<!--
+    * Template substitutions
+    *
+    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
+    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
+    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
+    * %description[index]             Description from controlVar e.g. Compare Function Enable
+    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
+    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
+    * %params                         Formatted parameter list for function
+    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
+    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
+    * %enumClass[index]               As for %paramType
+    * %enumParam[index]               As for %paramName
+    * %valueExpression                Numeric variable value e.g. 0x3
+    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %variable[index]                Variable name from condition
+    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * %register[index]                Register associated with variable e.g. adc->APCTL1
+    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+-->
 
    <constant key="disable_peripheral" value = "&quot;adc->SC1[0] = ADC_SC1_ADCH(-1);&quot;"  type="String" />
 
-   <xi:include href="_mapPinsOption.xml"/>
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Class)BasicInfo&quot;" />
 
-   <xi:include href="_irqOption.xml"/>
 
 <!-- ==========  PGA features =============================== -->
+   <title description="------- Programmable Gain -------" condition="adc_pga_pgag_present" />
    <choiceOption key="adc_pga_pgaen" condition="adc_pga_pgaen_present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="PGA Enable and mode"
       valueFormat="(%s)"
       enumStem="AdcPgaMode"
@@ -24,6 +71,7 @@
    </choiceOption>
 
    <choiceOption key="adc_pga_pgag" condition="adc_pga_pgag_present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="PGA Gain Setting"
       enumStem="AdcPgaGain"
       toolTip="Sets gain of PGA amplifier">
@@ -37,6 +85,7 @@
    </choiceOption>
 
    <binaryOption key="adc_pga_pgachp" condition="adc_pga_pgachp_present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="PGA chopping"
       valueFormat="ADC_PGA_PGACHPb(%s)"
       enumStem="AdcPgaChop"
@@ -47,9 +96,10 @@
 
 <!-- ==========  ADC clock sources =============================== -->
 
-   <stringOption key="Clocking" value="------- Clocking -------" constant="true" description="Clocking" />
+   <title description="------- Clocking -------" />
 
    <choiceOption key="adcClockConfig"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       target="input_bus_clock"
       description="Clock configuration"
       toolTip="Selects the clock configuration used for calculations if bus clock is chosen as clock source" >
@@ -60,6 +110,7 @@
    </choiceOption>
 
    <intOption key="input_bus_clock"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       constant="true"
       derived="true"
       units="Hz"
@@ -67,6 +118,7 @@
                    Based on current clock configuration" />
 
    <intOption key="adcInternalClock"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       derived="true"
       constant="true"
       description="Frequency of Internal ADC clock"
@@ -76,6 +128,7 @@
       units="Hz"/>
 
    <choiceOption key="adc_cfg1_adiclk"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="ADC Clock Source"
       enumStem="AdcClockSource"
       target="adcInputClock"
@@ -88,12 +141,13 @@
    </choiceOption>
 
    <intOption key="adcInputClock"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       constant="true"
       derived="true"
       units="Hz"
       description="Frequency of ADC Clock" />
 
-   <clockCodeTemplate variable="adc_cfg1_adiclk"
+   <clockCodeTemplate variable="adc_cfg1_adiclk" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -113,6 +167,7 @@
    ]]></clockCodeTemplate>
 
    <choiceOption key="adc_cfg1_adiv"
+      enabledBy="adc_cfg1_adiclk!=3"
       description="Clock Divide Select"
       enumStem="AdcClockDivider"
       target="adcClockFrequency"
@@ -124,6 +179,7 @@
    </choiceOption>
 
    <intOption key="adcClockFrequency"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       constant="true"
       description="Frequency of ADC clock"
       toolTip="Determined from clock source and prescaler"
@@ -132,7 +188,10 @@
 
 <!--  ========== ADC =============================== -->
 
+   <title description="------------------------------------------" />
+
    <choiceOption key="adc_cfg1_mode" description="ADC Resolution"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="AdcResolution"
       toolTip="The resolutions available vary with single-ended/differential modes\n
                Note the equivalence between modes e.g. 8-bit-se = 9-bit-diff" >
@@ -147,7 +206,7 @@
    </choiceOption>
 
    <if condition="adc_cfg1_mode" >
-      <template  discardRepeats="true" namespace="all" key="/ADC/methods" ><![CDATA[
+      <template  discardRepeats="true" namespace="all" key="/ADC/methods" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
          \t/**
          \t * Get ADC maximum conversion value for an single-ended range
          \t *
@@ -161,10 +220,10 @@
          \t      case AdcResolution_10bit_se: return (1<<10)-1;
          \t      case AdcResolution_12bit_se: return (1<<12)-1;\n
       ]]></template>
-      <template discardRepeats="true" namespace="all" key="/ADC/methods" condition="adc_cfg1_mode_16bit_present"  ><![CDATA[
+      <template discardRepeats="true" namespace="all" key="/ADC/methods" condition="adc_cfg1_mode_16bit_present" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
          \t      case AdcResolution_16bit_se: return (1<<16)-1;\n
       ]]></template>
-      <template discardRepeats="true" namespace="all" key="/ADC/methods" ><![CDATA[
+      <template discardRepeats="true" namespace="all" key="/ADC/methods" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
          \t      default:                     return 0;
          \t   }
          \t}\n\n
@@ -172,7 +231,7 @@
    </if>
 
    <if condition="adc_cfg1_mode&amp;&amp;adc_cfg1_mode_diff_present">
-      <template discardRepeats="true" namespace="all" key="/ADC/methods" ><![CDATA[
+      <template discardRepeats="true" namespace="all" key="/ADC/methods" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Get ADC maximum conversion value for an differential range
       \t *
@@ -186,10 +245,10 @@
       \t      case AdcResolution_11bit_diff:  return (1<<10)-1;
       \t      case AdcResolution_13bit_diff:  return (1<<12)-1;\n
       ]]></template>
-      <template  discardRepeats="true" namespace="all" key="/ADC/methods" condition="adc_cfg1_mode_16bit_present" ><![CDATA[
+      <template  discardRepeats="true" namespace="all" key="/ADC/methods" condition="adc_cfg1_mode_16bit_present" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t      case AdcResolution_16bit_diff:  return (1<<15)-1;\n
       ]]></template>
-      <template discardRepeats="true" namespace="all" key="/ADC/methods" ><![CDATA[
+      <template discardRepeats="true" namespace="all" key="/ADC/methods" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t      default:                        return 0;
       \t   }
       \t}\n
@@ -197,6 +256,7 @@
    </if>
 
    <binaryOption key="adc_cfg1_adlpc" description="Low-Power Configuration"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="AdcPower"
       toolTip="Adjust power consumption">
       <choice value="0" enum="Normal" name="Normal power configuration" isDefault="true" />
@@ -204,6 +264,7 @@
    </binaryOption>
 
    <choiceOption key="adc_sample" description="Long Sample Time Select"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="AdcSample"
       valueFormat="(%s)"
       toolTip="Selects sample times \n
@@ -218,6 +279,7 @@
    </choiceOption>
 
    <choiceOption key="adc_sc3_avg" description="Hardware Average Select"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="AdcAveraging"
       valueFormat="ADC_SC3_CAL(%s),ADC_SC3_CALF(%s),ADC_SC3_AVGE(%s),ADC_SC3_AVGS(%s)"
       toolTip="Determines how many ADC conversions will be averaged\n
@@ -231,6 +293,7 @@
    </choiceOption>
 
    <binaryOption key="adc_cfg2_adhsc" description="High-Speed Configuration"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="AdcClockRange"
       toolTip="Configures the ADC for high-speed clock operation\n
                This actually extends the number of conversion clock cycles\n
@@ -240,6 +303,7 @@
    </binaryOption>
 
    <binaryOption key="adc_cfg2_adacken" description="Asynchronous Clock Output Enable"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="AdcAsyncClock"
       toolTip="Enables the ADC internal asynchronous clock source irrespective of ADC need.\n
          This reduces the initial delay at the start of a sequence of conversions.\n
@@ -249,6 +313,7 @@
    </binaryOption>
 
    <choiceOption key="adc_sc2_refsel" description="Voltage Reference Selection"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="AdcRefSel"
       toolTip="Selects the voltage reference source used for conversions">
       <choice value="0" enum="VrefHL"  name="VRefH and VRefl" isDefault="true" />
@@ -257,6 +322,7 @@
    </choiceOption>
 
    <binaryOption key="adc_sc2_dmaen" condition="adc_sc2_dmaen_present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="DMA Enable"
       enumStem="AdcDma"
       toolTip="Enables use of DMA with ADC">
@@ -265,6 +331,7 @@
    </binaryOption>
 
    <binaryOption key="adc_sc1_aien" description="Enables conversion interrupts"
+      enabledBy="irqHandlingMethod"
       enumStem="AdcInterrupt"
       hidden="true"
       toolTip="An interrupt is triggered at the end of each conversion">
@@ -273,6 +340,7 @@
    </binaryOption>
 
    <binaryOption key="adc_pretrigger" description="Selects the pretrigger"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="AdcPretrigger"
       valueFormat="(%s)"
       hidden="true"
@@ -282,6 +350,7 @@
    </binaryOption>
 
    <binaryOption key="adc_cfg2_muxsel" description="Selects between A/B multiplexor inputs on some ADC channels"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="AdcMuxsel"
       toolTip="Some ADC inputs may be multiplexed to two pins e.g. adcCh4a and adcCh4b">
       <choice value="0" enum="A"  name="The multiplexor selects A channels" />
@@ -289,6 +358,7 @@
    </binaryOption>
 
    <binaryOption key="adc_sc3_adco" description="Selects between single and continuous conversion"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="AdcContinuous"
       toolTip="When enabled, continuous conversion are triggered when the first conversion is initiated">
       <choice value="0" enum="Disabled" name="Single conversion on each trigger" isDefault="true" />
@@ -296,6 +366,7 @@
    </binaryOption>
 
    <choiceOption key="adc_sc2_compare" description="Compare function"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="AdcCompare"
       valueFormat="ADC_SC2_ACFE(%s),ADC_SC2_ACREN(%s),ADC_SC2_ACFGT(%s),(%s)"
       toolTip="Enables comparison of ADC result with CV1 and CV2" >
@@ -309,94 +380,173 @@
    </choiceOption>
 
    <intOption key="adc_cv1" description="ADC CV low value"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       valueFormat="%s"
       toolTip="CV Low threshold value\n
          This value will be used for CV1 or CV2 as needed"
       derived="true" />
 
    <intOption key="adc_cv2" description="ADC CV high value"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       valueFormat="%s"
       toolTip="CV High threshold value\n
          This value will be used for CV1 or CV2 as needed"
       derived="true" />
 
    <binaryOption key="adc_sc2_adtrg" description="Conversion Trigger Select"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="AdcTrigger"
       toolTip="Selects the type of trigger used for initiating a conversion">
       <choice value="0" enum="Software" name="Software trigger (write to SC1A)" isDefault="true" />
       <choice value="1" enum="Hardware" name="Hardware trigger (ADHWT source)" />
    </binaryOption>
 
-   <category name="Advanced" description="Advanced Options" >
-      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)alttrgen"  constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)pretrgsel" constant="false" optional="true"/>
-      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)trgsel"    constant="false" optional="true"/>
-   </category>
 
 <!--   ========== ADC Init class =============================== -->
 
-   <template key="init_description" namespace="all" ><![CDATA[
+   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <![CDATA[
       \t/**
-      \t * Class used to do initialisation of $(_Class)
+      \t * Class used to do initialisation of the $(_Class)
       \t *
-      \t * This class has a templated constructor that accepts various values:
+      \t * This class has a templated constructor that accepts various values.
       \t *
-      \t * @note This constructor may be used to create a const instance in ROM
+      \t * @note This constructor may be used to create a const instance in Flash
       \t *
       \t * Example:
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(uint32_t status) {
+      \t *    (void) status;
+      \t * }
+      \t *
       \t * @code
       \t * // Initialisation values for $(_Class)
       \t * // Options available vary with device - See $(_Class)::DefaultInitValue for example
-      \t * static const $(_Class)::Init adcInit {
+      \t * static const $(_Class)::Init $(_name)Init {
       \t *
-      \t *    // Omitted parameters are take to be zero unless an base value is given
-      \t *    AdcClockSource_Asynch ,  // ADC Clock Source
-      \t *    AdcClockDivider_1 ,      // Clock Divide Select
-      \t *    AdcResolution_8bit_se ,  // ADC Resolution
-      \t *    AdcPower_Normal ,        // Low-Power Configuration
-      \t *    AdcClockRange_Normal ,   // High-Speed Configuration
-      \t *    AdcAsyncClock_Disabled , // Asynchronous Clock Output Enable
-      \t *    AdcRefSel_VrefHL ,       // Voltage Reference Selection
-      \t *    AdcDma_Disabled ,        // DMA Enable
-      \t *    AdcMuxsel_B ,            // Selects between A/B multiplexor inputs on some ADC channels
-      \t *    AdcInterrupt_Disabled ,  // Enables conversion interrupts
-      \t *    AdcDma_Disabled ,        // DMA Enable
-      \t *    AdcTrigger_Software ,    // Conversion Trigger Select
-      \t *    AdcAveraging_off ,       // Hardware Average Select
-      \t *    AdcContinuous_Disabled , // Selects between single and continuous conversion
-      \t *    NvicPriority_Normal ,    // IRQ level for this peripheral
-      \t *    adcCallback,             // Call-back to execute on completion
+      \t *   // Setup values
+      \t *   // Omitted parameters are take to be zero unless a base value is given
+      \t *   AdcClockSource_Asynch ,  // ADC Clock Source
+      \t *   AdcClockDivider_1 ,      // Clock Divide Select
+      \t *   AdcResolution_8bit_se ,  // ADC Resolution
+      \t *   AdcPower_Normal ,        // Low-Power Configuration
+      \t *   AdcClockRange_Normal ,   // High-Speed Configuration
+      \t *   AdcAsyncClock_Disabled , // Asynchronous Clock Output Enable
+      \t *   AdcRefSel_VrefHL ,       // Voltage Reference Selection
+      \t *   AdcDma_Disabled ,        // DMA Enable
+      \t *   AdcMuxsel_B ,            // Selects between A/B multiplexor inputs on some ADC channels
+      \t *   AdcInterrupt_Disabled ,  // Enables conversion interrupts
+      \t *   AdcDma_Disabled ,        // DMA Enable
+      \t *   AdcTrigger_Software ,    // Conversion Trigger Select
+      \t *   AdcAveraging_off ,       // Hardware Average Select
+      \t *   AdcContinuous_Disabled , // Selects between single and continuous conversion
       \t *
-      \t *    // These 2/3 parameters must appear in this order
-      \t *    AdcCompare_LessThan ,    // Compare function
-      \t *    5000 ,                   // ADC CV low value
-      \t *    6000 ,                   // ADC CV high value (May be omitted)
+      \t *   // These 2/3 parameters must appear in this order
+      \t *   AdcCompare_LessThan ,    // Compare function
+      \t *   5000 ,                   // ADC CV low value
+      \t *   6000 ,                   // ADC CV high value (May be omitted)
       \t
+      \t *   $(_name)Callback,                // Call-back to execute on event - call-back function name
+      \t *   NvicPriority_Low,                // Priority for interrupt - Low
+
       \t *    // Optional base value to start with (must be last parameter)
       \t *    $(_Class)::DefaultValue
       \t * };
       \t *
-      \t * // Initialise ADC from values specified above
-      \t * $(_Class)::configure(adcInit);
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_name)Init)
       \t * $(_Class)::calibrate();
       \t * @endcode
       \t */
-   ]]></template>
+   ]]>
+   </template>
 
-   <template namespace="usbdm" ><![CDATA[
+   <template namespace="usbdm" >
+   <![CDATA[
       class $(_Class)BasicInfo {
       \t
-      public:
+      public:\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+   <![CDATA[
       \t/**
       \t * Type definition for $(_Class) interrupt call back.
-      \t *
-      \t * @param[in] result  Conversion result from channel
-      \t * @param[in] channel Channel providing the result
       \t */
-      \ttypedef void (*CallbackFunction)(uint32_t result, int channel);\n\n
-   ]]></template>
+      \ttypedef void (*CallbackFunction)($(irq_parameters));\n
+   ]]>
+   </template>
 
-   <template namespace="usbdm"><![CDATA[
+   <template codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+   <![CDATA[
+      \t/** Callback function for ISR */
+      \tstatic CallbackFunction sCallback;
+      \t
+      \t/**
+      \t * Callback to catch unhandled interrupt
+      \t */
+      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+   <![CDATA[
+      \t/**
+      \t * Set interrupt callback function.
+      \t *
+      \t * @param[in]  adcCallback Callback function to execute on interrupt
+      \t */
+      \tstatic void setCallback(CallbackFunction adcCallback) {
+      \t   if (adcCallback == nullptr) {
+      \t      adcCallback = unhandledCallback;
+      \t   }
+      \t   // Either no handler set yet or removing handler
+      \t   usbdm_assert(
+      \t         (sCallback == unhandledCallback) || (adcCallback == unhandledCallback),
+      \t         "Handler already set");
+      \t   sCallback = adcCallback;
+      \t}
+      \t
+      \t/**
+      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
+      \t */
+      \tstatic void irqHandler() {
+      \t
+      \t   //.....IRQ handler code here..........
+      \t
+      \t   if (adc->SC1[0] & ADC_SC1_COCO_MASK) {
+      \t   // Execute call-back
+      \t      sCallback(adc->R[0], adc->SC1[0]&ADC_SC1_ADCH_MASK);
+      \t   }
+      \t   if (adc->SC1[1] & ADC_SC1_COCO_MASK) {
+      \t   // Execute call-back
+      \t      sCallback(adc->R[1], adc->SC1[1]&ADC_SC1_ADCH_MASK);
+      \t   }
+      \t   return;
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+   <![CDATA[
+      \t
+      \t/** Callback for programmatically set handler */
+      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <![CDATA[
       $(init_description)
       \tclass Init {
       \t
@@ -411,17 +561,18 @@
       \t    */
       \t   constexpr Init() = default;
       \t\n
-   ]]></template>
+   ]]>
+   </template>
 
 <!--   Member variables -->
 
-   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></setTemplate>
+   ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="
          adc_cv1"
    ><![CDATA[
@@ -429,7 +580,7 @@
       \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="
          adc_cv2"
    ><![CDATA[
@@ -437,7 +588,7 @@
       \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="
          adc_cfg1_adiclk,
          adc_cfg1_adiv,
@@ -448,7 +599,7 @@
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="
          adc_cfg2_adhsc,
          adc_cfg2_adacken,
@@ -461,7 +612,7 @@
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="
          adc_sc2_dmaen,
          adc_sc2_adtrg"
@@ -470,7 +621,7 @@
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="
          adc_sc3_avg,
          adc_sc3_adco"
@@ -480,29 +631,51 @@
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
-      variables="/PCR/nvic_irqLevel"
+      variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+      \t   %enumClass %registerName0 = %symbolicValueExpression1;
+      \t\n
    ]]></initialValueTemplate>
 
 <!--   Configure methods -->
 
-   <template discardRepeats="true" key="/ADC/InitMethod" namespace="all" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t/**
-      \t * Configure ADC from values specified in init
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}
+      \t\n
+   ]]></template>
+
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
       \t *
       \t * @param init Class containing initialisation values
       \t */
       \tstatic void configure(const typename Info::Init &init) {
+      \t   // ..........  Configure ...........
       \t
+      \t   // Enable peripheral
+      \t   enable();
+      \t\n
+   ]]></template>
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      // Only set call-back if feature enabled
-      \t      setCallback(init.callbackFunction);
+      \t      Info::setCallback(init.callbackFunction);
       \t      enableNvicInterrupts(init.irqlevel);
       \t   }
-      \t   enable();
-      \t
+      \t\n
+   ]]></template>
+
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+      \t   // ..........  Regs to init .......... ;
       \t   adc->CFG1    = init.cfg1;
       \t   adc->CFG2    = init.cfg2;
       \t   adc->SC2     = init.sc2;
@@ -512,21 +685,12 @@
       \t
       \t   calibrate();
       \t}
-      \t
-      \t/**
-      \t * Configure with default settings.
-      \t * Configuration determined from Configure.usbdmProject
-      \t */
-      \tstatic inline void defaultConfigure() {
-      \t
-      \t   // Update settings
-      \t   configure(Info::DefaultInitValue);
-      \t}\n
+      \t\n
    ]]></template>
 
 <!--   Constructors -->
 
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -540,11 +704,11 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      this->%enumParam0 = %paramExpression;
+      \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
    ]]></setTemplate>
 
-   <setTemplate namespace="usbdm"
+   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -558,11 +722,7 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      #if $(irqHandlingMethod)
       \t      %registerName = %paramExpression;
-      #else
-      \t      (void)%paramExpression;
-      #endif
       \t   }\n\n
    ]]></setTemplate>
 
@@ -579,16 +739,17 @@
          adc_sc2_adtrg;
          adc_sc3_avg;
          adc_sc3_adco">
-      <setTemplate namespace="usbdm" variables="%(r)"
-         linePadding="xxx"
-      ><![CDATA[
+      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
          \t   /**
          \t    * Constructor for %description
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
@@ -596,13 +757,15 @@
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
-      ]]></setTemplate>
+      ]]>
+      </setTemplate>
    </for>
 
-   <setTemplate namespace="usbdm" variables="adc_sc2_compare,adc_cv1,adc_cv2"
+   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      variables="adc_sc2_compare,adc_cv1,adc_cv2"
       linePadding="xxx"
-      nonDefaultParams="3"
-   ><![CDATA[
+      nonDefaultParams="3" >
+   <![CDATA[
       \t   /**
       \t    * Configure %description0, %description1 and %description2
       \t    *
@@ -640,17 +803,19 @@
       \t\n
    ]]></setTemplate>
 
-   <template namespace="usbdm" ><![CDATA[
-      \t};\n
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+      \t}; // class Init
+      \t \n
    ]]></template>
 
    <template namespace="usbdm" ><![CDATA[
-      };\n\n
+      }; // class $(_Class)BasicInfo
+      \t\n
    ]]></template>
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate
+   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -672,14 +837,6 @@
          adc_cv2,
          "
    ><![CDATA[
-      $(init_description)
-      \ttypedef $(_Class)BasicInfo::Init Init;
-      \t
-      \t/**
-      \t * $(_Class) interrupt call back
-      \t */
-      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
-      \t
       \t/**
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
@@ -742,16 +899,14 @@
    \t}\t\n
    ]]></template>
 
-   <template key="/ADC/declarations" namespace="all"  ><![CDATA[
-      /**
-       * Class representing $(_NAME)
-       */
-      class $(_Class) : public AdcBase_T<$(_Class)Info> {};\n
+   <!-- ************* Common ****************** -->
+
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   \t/**
+   \t * Class representing $(_NAME)
+   \t */
+   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
    ]]></template>
-
-   <signals/>
-
-   <xi:include href="_clockOption.xml"/>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.AdcValidate">
@@ -765,5 +920,26 @@
       <copy source="Snippets/analogue-interrupt-example.cpp"  target="Snippets/analogue-interrupt-example.cpp"  overwrite="true"  derived="true" />
       <copy source="Snippets/analogue-joystick-example.cpp"   target="Snippets/analogue-joystick-example.cpp"   overwrite="true"  derived="true" />
    </projectActionList>
+
+    <!-- ************* SIM controls ****************** -->
+   <category name="Advanced" description="Advanced options">
+      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)alttrgen"  constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)pretrgsel" constant="false" optional="true"/>
+      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)trgsel"    constant="false" optional="true"/>
+   </category>
+
+   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
+
+   <!-- ************* Startup ****************** -->
+
+   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
 
 </fragment>

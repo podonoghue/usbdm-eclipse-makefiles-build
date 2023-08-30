@@ -4,8 +4,6 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Comparitor">
 
-   <xi:include href="_irqOption.xml"/>
-
    <choiceOption key="cmp_muxcr_psel$(_instance)"
       hidden="true"
       valueFormat="CMP_MUXCR_PSEL(%s)"
@@ -39,8 +37,6 @@
    </choiceOption>
 
    <xi:include href="cmp_base.xml"/>
-
-   <xi:include href="_clockOption.xml"/>
 
    <signals/>
 

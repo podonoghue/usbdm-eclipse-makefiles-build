@@ -48,12 +48,6 @@ private:
    Adc(Adc&&) = delete;
 
 protected:
-
-   /** Callback to catch unhandled interrupt */
-   static void unhandledCallback(uint32_t, int) {
-      setAndCheckErrorCode(E_NO_HANDLER);
-   }
-
    /**
     * Constructor
     *
@@ -194,10 +188,10 @@ public:
     */
    void enableContinuousConversions(AdcContinuous adcContinuous = AdcContinuous_Enabled) const {
       if (adcContinuous) {
-         adc->SC3 = adc->SC3 | ADC_SC1_ADCO_MASK;
+         adc->SC1[0] = adc->SC1[0] | ADC_SC1_ADCO_MASK;
       }
       else {
-         adc->SC3 = adc->SC3 & ~ADC_SC1_ADCO_MASK;
+         adc->SC1[0] = adc->SC1[0] & ~ADC_SC1_ADCO_MASK;
       }
    }
 
@@ -462,7 +456,7 @@ public:
 
 
 $(/ADC/publicMethods: // No /ADC/publicMethods found)
-$(/ADC/InitMethod: // No /ADC/InitMethod found)
+$(/ADC/InitMethod: // /ADC/InitMethod not found)
    /**
     * Configure the ADC
     *
@@ -877,11 +871,7 @@ public:
 
 }; // class AdcBase_T
 
-/**
- * Class representing ADC0
- */
-class Adc0 : public AdcBase_T<Adc0Info> {};
-
+$(/ADC/declarations:// #error "No declarations found")
 /**
  * End ADC_Group
  * @}

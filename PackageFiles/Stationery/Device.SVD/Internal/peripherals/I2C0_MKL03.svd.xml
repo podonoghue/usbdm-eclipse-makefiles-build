@@ -538,7 +538,7 @@ Set this bit to hold off entry to stop mode when any data transmission or recept
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Stop holdoff is disabled. The MCU&apos;s entry to stop mode is not gated</description>
+                           <description>Stop holdoff is disabled. The MCUs entry to stop mode is not gated</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -776,7 +776,7 @@ This field is used on the device default address or other related addresses</des
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Tx or Rx buffer is not empty and cannot be written to, that is new data cannot be loaded into the buffer</description>
+                           <description>Tx or Rx buffer is not empty and cannot be written to, that is, new data cannot be loaded into the buffer</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>

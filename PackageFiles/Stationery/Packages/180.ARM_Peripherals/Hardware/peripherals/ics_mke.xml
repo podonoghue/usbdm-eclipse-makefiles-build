@@ -146,7 +146,7 @@
                <graphicItem id="OSCCLK_C_OSCSEL0"     type="connector"   params="OSCERCLK.1 ,0,   ICSERCLK_IN_IN0,0, x,d,y"  />
             </graphicBox>
 
-            <equation key="y" value="450" />
+            <equation key="y" value="=450" />
 
             <graphicBox    id="OSC0" x="10" y="y"  params="0,0, x280, y140,  x" >
                <graphicItem id="FREQ"           var="/OSC0/osc_input_freq"   type="variableBox" params="50,  30,  80, large, oe,os+30"  />
@@ -161,7 +161,7 @@
 
                <graphicItem id=""               var="/OSC0/oscer_clock"      type="connector"   params="FREQ,0,   OSCERCLK.1 ,0"        />
 
-               <equation key="y" value="y+160" />
+               <equation key="y" value="=y+160" />
             </graphicBox>
 
             <graphicBox    id="RTC" x="10" y="y" params="0,0, x280, y175,  x" >
@@ -198,7 +198,7 @@
                <graphicItem id=""         var="/RTC/rtc_out"       type="connector"   params="Enable.1,0,   RTO.1,0, x0.5,y,x"         />
                <graphicItem id="RTO.1"    var="/RTC/rtc_out"       type="node"        params="280, 150"                           />
 
-               <equation key="y" value="y+195" />
+               <equation key="y" value="=y+195" />
             </graphicBox>
 
             <graphicBox    id="PMC" x="10" y="y" params="0,0, x280, y60,  x" >
@@ -207,7 +207,7 @@
 
                <!-- Outputs -->
                <graphicItem id="LPO.1"        var="/PMC/system_low_power_clock"        type="node"        params="280, 30"                    />
-               <equation key="y" value="y+80" />
+               <equation key="y" value="=y+80" />
             </graphicBox>
 
             <!-- TCLKn -->
@@ -216,7 +216,7 @@
                <graphicItem id="TCLK1.0,x-20,y+16"   type="node"        params="330, 30" />
                <graphicItem id="TCLK2.0,x-20,y+16"   type="node"        params="330, 50" condition="/SIM/sim_pinsel0_pwtclkps_present"  />
 
-               <equation key="y" value="y+10" />
+               <equation key="y" value="=y+10" />
             </graphicGroup>
 
             <graphicBox    id="SIM" x="290" y="70" params="290,0, x360, y1640, x-600, y-1280, x" >
@@ -250,14 +250,14 @@
                <graphicItem id="BUS_CLK"       edit="true" var="/SIM/system_bus_clock[%(n)]"        type="node"        params="650, 265"                />
                <graphicItem id="TIMER_CLK"     edit="true" var="/SIM/system_timer_clock[%(n)]"      type="node"        params="650, 325"                />
 
-               <equation key="y" value="410" />
+               <equation key="y" value="=410" />
 
                <!-- OSCERCLK -->
                <graphicGroup x="0" y="y" >
                   <graphicItem id=""                  var=""                   type="connector"   params="OSCERCLK.1,0,  OSCERCLK,0" />
                   <graphicItem id="OSCERCLK"          var="/OSC0/oscer_clock"  type="node"        params="650, 0"                    />
 
-                  <equation key="y" value="y+40" />
+                  <equation key="y" value="=y+40" />
                </graphicGroup>
 
                <!-- RTC -->
@@ -265,7 +265,7 @@
                   <graphicItem id=""                  var=""                   type="connector"   params="RTO.1,0,    RTC_OUT,0, x100,y,x"  />
                   <graphicItem id="RTC_OUT"           var="/RTC/rtc_out"       type="node"        params="650, 0"                           />
 
-                  <equation key="y" value="y+50" />
+                  <equation key="y" value="=y+50" />
                </graphicGroup>
 
                <!-- LPO -->
@@ -273,7 +273,7 @@
                   <graphicItem id=""                  var=""                             type="connector"   params="LPO.1,0,    LPO,0, x120,y,x"  />
                   <graphicItem id="LPO"               var="/PMC/system_low_power_clock"  type="node"        params="650, 0"                       />
 
-                  <equation key="y" value="y+50" />
+                  <equation key="y" value="=y+50" />
                </graphicGroup>
 
                <graphicGroup x="0" y="y" >
@@ -286,7 +286,7 @@
                   <graphicItem id="UART0_CLKSRC"            var="/SIM/system_uart0_fixedclocksource[%(n)]" type="reference"   params="370,  -10, 110"                />
                   <graphicItem id=""                        var=""                                         type="connector"   params="UART0_CLKSRC,0,  UART0_CLK,0"  />
                   <graphicItem id="UART0_CLK"               var="/SIM/system_uart0_clock[%(n)]"            type="node"        params="650,  -10"                     />
-                  <equation key="y" value="y+40" />
+                  <equation key="y" value="=y+40" />
                </graphicGroup>
 
                <!-- UART1_FIXED_SRC -->
@@ -294,7 +294,7 @@
                   <graphicItem id="UART1_CLKSRC"            var="/SIM/system_uart1_fixedclocksource[%(n)]" type="reference"   params="370,  -10, 110"                />
                   <graphicItem id=""                        var=""                                         type="connector"   params="UART1_CLKSRC,0,  UART1_CLK,0"  />
                   <graphicItem id="UART1_CLK"               var="/SIM/system_uart1_clock[%(n)]"            type="node"        params="650,  -10"                     />
-                  <equation key="y" value="y+40" />
+                  <equation key="y" value="=y+40" />
                </graphicGroup>
 
                <!-- UART2_FIXED_SRC -->
@@ -303,7 +303,7 @@
                   <graphicItem id=""                        var=""                                         type="connector"   params="UART2_CLKSRC,0,  UART2_CLK,0"  />
                   <graphicItem id="UART2_CLK"               var="/SIM/system_uart2_clock[%(n)]"            type="node"        params="650,  -10"                     />
 
-                  <equation key="y" value="y+40" />
+                  <equation key="y" value="=y+40" />
                </graphicGroup>
 
                <!-- TCLKn -->
@@ -315,7 +315,7 @@
                   <graphicItem id=""             type="connector"   params="FTM0CLKPS,0, FTM_CLK0,0"                                    />
                   <graphicItem id="FTM_CLK0"  type="node"        params="650, 30"                                                       />
 
-                  <equation key="y" value="y+100" />
+                  <equation key="y" value="=y+100" />
                </graphicGroup>
                <for keys="v" values="1;2;3;4" >
                   <graphicGroup x="0" y="y" condition="/SIM/sim_pinsel0_ftm%(v)clkps_present" >
@@ -326,7 +326,7 @@
                      <graphicItem id=""             type="connector"   params="FTM%(v)CLKPS,0, FTM_CLK%(v),0"                                   />
                      <graphicItem id="FTM_CLK%(v)"  type="node"        params="650, 30"                                                         />
 
-                     <equation key="y" value="y+100" />
+                     <equation key="y" value="=y+100" />
                   </graphicGroup>
                </for>
                <graphicGroup x="0" y="y" condition="/SIM/sim_pinsel0_pwtclkps_present" >
@@ -337,12 +337,12 @@
                   <graphicItem id=""             type="connector"   params="PWTCLKPS,0, PWT_CLK,0"                                 />
                   <graphicItem id="PWT_CLK"      type="node"        params="650, 30"                                               />
 
-                  <equation key="y" value="y+100" />
+                  <equation key="y" value="=y+100" />
                </graphicGroup>
 
                <!-- TCLKn -->
                <graphicGroup x="0" y="y" condition="/SIM/sim_pinsel_ftm0clkps_present" >
-                  <equation key="y" value="y+90" />
+                  <equation key="y" value="=y+90" />
                </graphicGroup>
                <for keys="v" dim="3" >
                   <graphicGroup x="0" y="y" condition="/SIM/sim_pinsel_ftm%(v)clkps_present" >
@@ -353,7 +353,7 @@
                      <graphicItem id=""             type="connector"   params="FTM%(v)CLKPS,0, FTM_CLK%(v),0"                                   />
                      <graphicItem id="FTM_CLK%(v)"  type="node"        params="650, 30"                                                         />
 
-                     <equation key="y" value="y+100" />
+                     <equation key="y" value="=y+100" />
                   </graphicGroup>
                </for>
                <graphicGroup x="0" y="y" condition="/SIM/sim_pinsel_pwtclkps_present" >
@@ -364,7 +364,7 @@
                   <graphicItem id=""             type="connector"   params="PWTCLKPS,0, PWT_CLK,0"                                 />
                   <graphicItem id="PWT_CLK"      type="node"        params="650, 30"                                               />
 
-                  <equation key="y" value="y+100" />
+                  <equation key="y" value="=y+100" />
                </graphicGroup>
             </graphicBox>
 

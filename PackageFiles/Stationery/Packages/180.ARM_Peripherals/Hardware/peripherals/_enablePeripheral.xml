@@ -26,22 +26,65 @@
      Substituted anywhere for $(keyValue)
  -->
 
+<!-- GENERAL SETTINGS -->
+
    <title description="------- General Settings -------" toolTip="" />
 
-   <!-- Enable for class of peripheral -->
-   <binaryOption key="/$(_BASENAME)/enablePeripheralSupport"
-      modify="true"
-      description="Enable peripheral Support"
-      toolTip="Even if disabled, some code may still be generated but will \n
-               be removed by linker if not used">
-      <choice value="false" name="Minimal code generated"        isDefault="!@isGeneratedByDefault" />
-      <choice value="true"  name="Generate code for peripheral"  isDefault="@isGeneratedByDefault" />
-   </binaryOption>
+   <if condition="&quot;$(_BASENAME)&quot;==&quot;$(_NAME)&quot;">
+      <!-- 
+         Since BASENAME=NAME, create shared/common option:
+             /$(_BASENAME)/enablePeripheralSupport == /$(_NAME)/enablePeripheralSupport == enablePeripheralSupport
+      -->
+      
+      <!-- Enable for all instances of peripheral -->
+      <binaryOption key="/$(_BASENAME)/enablePeripheralSupport"
+         modify="true"
+         description="Enable peripheral support (common)"
+         toolTip="Even if disabled, some code may still be generated but will \n
+                  be removed by linker if not used">
+         <choice value="false" name="Minimal code generated"        isDefault="!@isGeneratedByDefault" />
+         <choice value="true"  name="Generate code for peripheral"  isDefault="@isGeneratedByDefault" />
+      </binaryOption>
+   <else/>
+      <!-- 
+         Create shared option /$(_BASENAME)/enablePeripheralSupport along with
+         individual option    /$(_NAME)/enablePeripheralSupport == enablePeripheralSupport
+      -->
+      <equation key="enable" value="=&quot;false&quot;" />
+      <for keys="i" dim="=@_instanceCount" >
+         <equation  key="enable" value="=enable+&quot;||/$(_BASENAME)%(i)/enablePeripheralSupport&quot;"/>
+      </for >
+      
+      <!-- Enable for this instance of this peripheral -->
+      <binaryOption key="enablePeripheralSupport"
+         description="Enable peripheral support (individual)"
+         toolTip="Even if disabled, some code may still be generated but will \n
+                  be removed by linker if not used">
+         <choice value="false" name="Minimal code generated"        isDefault="!@isGeneratedByDefault" />
+         <choice value="true"  name="Generate code for peripheral"  isDefault="@isGeneratedByDefault" />
+      </binaryOption>
+      
+      <if condition="=&quot;$(_instance)&quot;==&quot;0&quot;"> <!-- Generate once only -->
+      
+         <!-- Enable for shared code needed by all instances of peripheral -->
+         <binaryOption key="/$(_BASENAME)/enablePeripheralSupport"
+            ref="=enable"
+            hidden="true"
+            constant="true"
+            derived="true"
+            description="Enable peripheral Support"
+            toolTip="Even if disabled, some code may still be generated but will \n
+                     be removed by linker if not used">
+            <choice value="false" name="Minimal code generated"        isDefault="!@isGeneratedByDefault" />
+            <choice value="true"  name="Generate code for peripheral"  isDefault="@isGeneratedByDefault" />
+         </binaryOption>
+      </if>
+      
+   </if>
 
    <!-- Enable for generation of getters and setters -->
-   <binaryOption key="/$(_BASENAME)/enableGettersAndSetters"
-      modify="true"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+   <binaryOption key="enableGettersAndSetters"
+      enabledBy="enablePeripheralSupport"
       description="Enable Getter and Setter methods"
       toolTip="Even if disabled, some code may still be generated">
       <choice value="false" name="Minimal Get and Set methods generated"        isDefault="true" />
@@ -50,7 +93,7 @@
 
     <!-- Configure peripheral instance in startup -->
    <binaryOption key="configurePeripheralInStartUp" condition="@isSupportedinStartup"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       description="Configure this peripheral"
       toolTip="Configure this peripheral in startup code before main() is entered\n
                Even if disabled, some minimal code may still be executed" >
@@ -68,6 +111,7 @@
 
    <!-- Pin mapping and enables -->
    <binaryOption key="mapPinsOnEnable" condition="/PCR/mux_present"
+      enabledBy="enablePeripheralSupport"
       description="Map pins when peripheral is configured"
       toolTip="Map all allocated pins on a peripheral when the\n
                peripheral is enabled by configure() method etc">
@@ -146,6 +190,8 @@
       // End Template _mapPinsOption_on.xml\n
    ]]></template>
 
+<!-- INTERRUPTS -->
+
    <if condition="@peripheralUsesInterrupts" >
 
       <title description="------- Interrupts -------" />
@@ -164,15 +210,22 @@
          <constant key="irqEnable"        type="Boolean" value="true"  />
       </if>
 
-      <if condition="irq_common">
-         <!-- Default IRQ vector patterns if none specified -->
-         <if condition="!irq_pattern">
-            <constant key="irq_pattern"      type="String"  value="&quot;^$(_BASENAME)(\d)$&quot;"           />
-         </if>
-         <if condition="!irq_ClassHandler">
-            <constant key="irq_ClassHandler" type="String"  value="&quot;$(_Baseclass)$1::irqHandler&quot;" />
-         </if>
+      <!-- Default IRQ vector patterns if none specified -->
+      <if condition="!irq_pattern">
+         <constant key="irq_pattern"      type="String"  value="&quot;^$(_NAME)$&quot;"           />
+      </if>
+      <if condition="!irq_ClassHandler">
+         <constant key="irq_ClassHandler" type="String"  value="&quot;$(_Class)::irqHandler&quot;" />
+      </if>
 
+      <if condition="&quot;$(_BASENAME)&quot;==&quot;$(_NAME)&quot;">
+         <!-- 
+            Since BASENAME=NAME, create shared option:
+                /$(_BASENAME)/irqHandlingMethod == /$(_NAME)/irqHandlingMethod == irqHandlingMethod
+         -->
+         
+         <!-- Enable for all instances of peripheral -->
+         <!-- Create only if needed -->
          <irqOption key="/$(_BASENAME)/irqHandlingMethod" condition="!/$(_BASENAME)/irqHandlingMethod"
             hidden="true"
             valueFormat="%s"
@@ -186,44 +239,25 @@
                      (see weak names used in vector table)."
             pattern="=irq_pattern"
             classHandler="=irq_ClassHandler" />
-
-         <choiceOption key="/$(_BASENAME)/irqLevel" condition="!/$(_BASENAME)/irqLevel"
-            hidden="true"
-            modify="true"
-            enabledBy="/$(_BASENAME)/irqHandlingMethod"
-            description="IRQ level for this peripheral"
-            toolTip="Priority level used to configure the NVIC"
-            valueFormat="%s"
-            disabledValue="Not Installed"
-            derivedFrom="/PCR/nvic_irqLevel" >
-         </choiceOption>
-
-         <aliasOption key="/$(_BASENAME)/irqHandlingMethod" constant="false" />
-         <aliasOption key="/$(_BASENAME)/irqLevel"          constant="false" />
-
-         <initialValueTemplate variables="/$(_BASENAME)/irqHandlingMethod,/$(_BASENAME)/irqLevel" ><![CDATA[
-            \t//! IRQ numbers for hardware
-            \tstatic constexpr IRQn_Type irqNums[]  = $(_NAME)_IRQS;
-            \t
-            \t//! Number of IRQs for hardware
-            \tstatic constexpr uint32_t irqCount  = sizeofArray(irqNums);
-            \t
-            \t//! Default IRQ level
-            \tstatic constexpr NvicPriority irqLevel =  %symbolicValueExpression1;\n\n
-         ]]></initialValueTemplate>
+   
       <else/>
-         <!-- Default IRQ vector patterns if none specified -->
-         <if condition="!irq_pattern">
-            <constant key="irq_pattern"      type="String"  value="&quot;^$(_NAME)$&quot;"           />
-         </if>
-         <if condition="!irq_ClassHandler">
-            <constant key="irq_ClassHandler" type="String"  value="&quot;$(_Class)::irqHandler&quot;" />
-         </if>
-
+         <!-- 
+            Create shared option /$(_BASENAME)/irqHandlingMethod along with
+            individual option    /$(_NAME)/irqHandlingMethod == irqHandlingMethod
+         -->
+         <equation key="IrqEnable" value="=&quot;false&quot;" />
+         <for keys="i" dim="=@_instanceCount" >
+            <equation  key="IrqEnable" value="=IrqEnable+&quot;||/$(_BASENAME)%(i)/irqHandlingMethod&quot;"/>
+         </for >
+         
+         <!-- stringOption key="debug" value="=IrqEnable" / -->
+         
+         <!-- Enable for this instance of this peripheral -->
+         <!-- Create only if needed -->
          <irqOption key="irqHandlingMethod" condition="!irqHandlingMethod"
             hidden="true"
             valueFormat="%s"
-            enabledBy="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;irqEnable"
+            enabledBy="enablePeripheralSupport"
             typeName="CallbackFunction"
             description="Peripheral interrupt handling"
             toolTip="If enabled, the handler may be set using the setCallback() function or\n
@@ -232,41 +266,68 @@
                      (see weak names used in vector table)."
             pattern="=irq_pattern"
             classHandler="=irq_ClassHandler" />
-
-         <choiceOption key="irqLevel" condition="!irqLevel"
-            hidden="true"
-            enabledBy="irqHandlingMethod"
-            description="IRQ level for this peripheral"
-            toolTip="Priority level used to configure the NVIC"
-            valueFormat="%s"
-            disabledValue="Not Installed"
-            derivedFrom="/PCR/nvic_irqLevel" >
-         </choiceOption>
-
-         <aliasOption key="irqHandlingMethod" constant="false" />
-         <aliasOption key="irqLevel"          constant="false" />
-
-         <initialValueTemplate variables="irqHandlingMethod,irqLevel" ><![CDATA[
-            \t//! IRQ numbers for hardware
-            \tstatic constexpr IRQn_Type irqNums[]  = $(_NAME)_IRQS;
-            \t
-            \t//! Number of IRQs for hardware
-            \tstatic constexpr uint32_t irqCount  = sizeofArray(irqNums);
-            \t
-            \t//! Class based callback handler has been installed in vector table
-            \tstatic constexpr bool irqHandlerInstalled = %symbolicValueExpression0;
-            \t
-            \t//! Default IRQ level
-            \tstatic constexpr NvicPriority irqLevel =  %symbolicValueExpression1;\n\n
-         ]]></initialValueTemplate>
+         
+         <if condition="=$(_instance)==0"> <!-- Generate once only -->
+         
+            <!-- Enable for shared code needed by all instances of peripheral -->
+            <binaryOption key="/$(_BASENAME)/irqHandlingMethod" condition="!/$(_BASENAME)/irqHandlingMethod"
+               ref="=IrqEnable"
+               hidden="true"
+               constant="true"
+               derived="true" >
+               <choice value="false" name="Disabled"  isDefault="true" />
+               <choice value="true"  name="Enabled"   />
+            </binaryOption>
+         </if>
+         
       </if>
+
+      <!-- Display here (wherever the original) -->
+      <aliasOption key="irqHandlingMethod" constant="false" />
+      
+      <!-- Debug -->
+      <!-- aliasOption key="/$(_BASENAME)/irqHandlingMethod" constant="false" / -->
+      
+      <!-- Create only if needed -->
+      <choiceOption key="irqLevel" condition="!irqLevel"
+         hidden="true"
+         modify="true"
+         enabledBy="irqHandlingMethod"
+         description="IRQ level for this peripheral"
+         toolTip="Priority level used to configure the NVIC"
+         valueFormat="%s"
+         disabledValue="Not Installed"
+         derivedFrom="/PCR/nvic_irqLevel" >
+      </choiceOption>
+      
+      <!-- Display here (wherever the original) -->
+      <aliasOption key="irqLevel"          constant="false" />
+
+      <initialValueTemplate variables="/$(_BASENAME)/irqHandlingMethod,irqLevel" ><![CDATA[
+         \t//! IRQ numbers for hardware
+         \tstatic constexpr IRQn_Type irqNums[]  = $(_NAME)_IRQS;
+         \t
+         \t//! Number of IRQs for hardware
+         \tstatic constexpr uint32_t irqCount  = sizeofArray(irqNums);
+         \t
+         \t//! Default IRQ level
+         \tstatic constexpr NvicPriority irqLevel =  %symbolicValueExpression1;\n\n
+      ]]></initialValueTemplate>
 
       <constant key="enable_interrupts_code"  value="&quot;enableNvicInterrupts();&quot;"   type="String"   />
       <constant key="disable_interrupts_code" value="&quot;disableNvicInterrupts();&quot;"  type="String"   />
 
+      <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+         variables="irqHandlingMethod"
+      ><![CDATA[
+          \t//! Class based callback handler has been installed in vector table for this instance
+          \tstatic constexpr bool irqHandlerInstalled = %symbolicValueExpression;
+          \t\n
+      ]]></initialValueTemplate>
+
    </if>
 
-   <template condition="clockEnable"  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template condition="clockEnable"  codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t *  Enable clock to $(_Class)
       \t */
@@ -279,10 +340,11 @@
       \t */
       \tstatic void disableClock() {
       \t   $(clockDisable)
-      \t}\n\n
+      \t}
+      \t\n
    ]]></template>
 
-   <!-- template key="/$(_BASENAME)/publicMethods" namespace="all" condition="irqHandlingMethod" codeGenCondition="irqHandlingMethod" discardRepeats="true" >
+   <!-- template key="/$(_BASENAME)/publicMethods" namespace="all" condition="/$(_BASENAME)/irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
    <![CDATA[
       \t/**
       \t * Wrapper to allow the use of a class member as a callback function
@@ -384,6 +446,5 @@
    ]]></template>
 
    <constant key="class_present" type="Boolean"  value = "true"   />
-
 
 </fragment>

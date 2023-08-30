@@ -69,7 +69,7 @@ static void setSysDividers(uint32_t simClkDiv1) {
 }
 
 /** Callback for programmatically set handler */
-MCGCallbackFunction Mcg::callback = {0};
+MCGCallbackFunction Mcg::callback = {unhandledCallback};
 
 /** Current clock mode (FEI out of reset) */
 McgClockMode Mcg::currentClockMode = McgClockMode_LIRC_2MHz;

@@ -19,6 +19,8 @@
 #include <cstddef>
 #include "pin_mapping.h"
 
+#if $(/ADC/enablePeripheralSupport) // /ADC/enablePeripheralSupport
+
 namespace USBDM {
 
 /**
@@ -86,11 +88,6 @@ protected:
       /** Dummy function to allow convenient in-line checking */
       static constexpr void check() {}
    };
-
-   /** Callback to catch unhandled interrupt */
-   static void unhandledCallback(uint32_t, int) {
-      setAndCheckErrorCode(E_NO_HANDLER);
-   }
 
    /**
     * Constructor
@@ -237,7 +234,7 @@ $(/ADC/methods:// /ADC/methods not found)
          adc->SC3 = adc->SC3 & ~ADC_SC3_ADCO_MASK;
       }
    }
-   
+
    /**
     * Gets result of last software initiated conversion
     *
@@ -442,27 +439,7 @@ public:
       Adc::startConversion(sc1Value|adcInterrupt);
    };
 
-};
-
-//#ifdef ADC_SC1_DIFF_MASK
-///**
-// * Class representing a minimal ADC differential channel
-// *
-// * This class is not intended to be instantiated directly.
-// */
-//   class AdcDiffChannel : public AdcChannel {
-//   private:
-//      /**
-//       * This class is not intended to be instantiated
-//       */
-//      AdcDiffChannel() = delete;
-//      AdcDiffChannel(const AdcDiffChannel&) = delete;
-//      AdcDiffChannel(AdcDiffChannel&&) = delete;
-//
-//   public:
-//      constexpr AdcDiffChannel(uint32_t adcAddress, uint8_t channel) : AdcChannel(adcAddress, channel|ADC_SC1_DIFF_MASK) {}
-//   };
-//#endif
+}; // class AdcChannel
 
 /**
  * Template class representing an ADC.
@@ -486,15 +463,9 @@ private:
    AdcBase_T(const AdcBase_T&) = delete;
    AdcBase_T(AdcBase_T&&) = delete;
 
-public:
-   /**
-    * Type definition for ADC interrupt call back.
-    */
-   using CallbackFunction = typename Info::CallbackFunction;
 
 protected:
-   /** Callback function for ISR */
-   static CallbackFunction sCallback;
+$(/ADC/protectedMethods: // No /ADC/protectedMethods found)
 
 public:
    /** Hardware instance pointer */
@@ -517,18 +488,6 @@ public:
 
    /** Allow convenient access to associate AdcInfo */
    using AdcInfo = Info;
-
-   /**
-    * IRQ handler
-    */
-   static void irqHandler() {
-      if (adc->SC1[0] & ADC_SC1_COCO_MASK) {
-         sCallback(adc->R[0], adc->SC1[0]&ADC_SC1_ADCH_MASK);
-      }
-      if (adc->SC1[1] & ADC_SC1_COCO_MASK) {
-         sCallback(adc->R[1], adc->SC1[1]&ADC_SC1_ADCH_MASK);
-      }
-   }
 
    /**
     * Wrapper to allow the use of a class member as a callback function
@@ -560,8 +519,8 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(uint32_t result, int channel), T &object>
-   static constexpr CallbackFunction wrapCallback() {
-      CallbackFunction fn = [](uint32_t result, int channel) {
+   static constexpr typename Info::CallbackFunction wrapCallback() {
+      typename Info::CallbackFunction fn = [](uint32_t result, int channel) {
          (object.*callback)(result, channel);
       };
       return fn;
@@ -597,39 +556,17 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(uint32_t result, int channel)>
-   static CallbackFunction wrapCallback(T &object) {
+   static typename Info::CallbackFunction wrapCallback(T &object) {
       static T &obj = object;
-      CallbackFunction fn = [](uint32_t result, int channel) {
+      typename Info::CallbackFunction fn = [](uint32_t result, int channel) {
          (obj.*callback)(result, channel);
       };
       return fn;
    }
 
-   /**
-    * Set callback for conversion complete interrupts
-    *
-    * @param[in] callback Callback function to execute on interrupt.\n
-    *                     Use nullptr to remove callback.
-    *
-    * @return E_NO_ERROR            No error
-    * @return E_HANDLER_ALREADY_SET Handler already set
-    *
-    * @note There is a single callback function for all channels of the ADC.\n
-    *       It is necessary to identify the originating channel in the callback.
-    * @note To change between handlers first use setCallback(nullptr).
-    */
-   static void setCallback(CallbackFunction callback) {
-      static_assert(Info::irqHandlerInstalled, "ADC not configured for interrupts. Modify Configure.usbdmProject");
-      if (callback == nullptr) {
-         sCallback = unhandledCallback;
-         return;
-      }
-      usbdm_assert(
-            (sCallback == unhandledCallback) || (sCallback == callback),
-            "Handler already set");
-      sCallback = callback;
-   }
 
+
+$(/ADC/publicMethods: // No /ADC/publicMethods found)
 $(/ADC/InitMethod: // /ADC/InitMethod not found)
    /**
     * Configure the ADC
@@ -1415,8 +1352,6 @@ public:
 
 };
 
-template<class Info> typename AdcBase_T<Info>::CallbackFunction AdcBase_T<Info>::sCallback = Adc::unhandledCallback;
-
 $(/ADC/declarations:// #error "No declarations found")
 /**
  * End ADC_Group
@@ -1424,6 +1359,8 @@ $(/ADC/declarations:// #error "No declarations found")
  */
 
 } // End namespace USBDM
+
+#endif // /ADC/enablePeripheralSupport
 
 #endif /* HEADER_ADC_H */
 

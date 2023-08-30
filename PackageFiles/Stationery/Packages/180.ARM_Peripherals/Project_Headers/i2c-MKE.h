@@ -624,8 +624,6 @@ $(/I2C/InitMethod: // /I2C/InitMethod not found)
    }
 };
 
-//template<class Info> CallbackFunction I2cBase_T<Info>::sCallback = I2c::unhandledCallback;
-
 /** Used by ISR to obtain handle of object */
 template<class Info> I2cBase_T<Info> *I2cBase_T<Info>::thisPtr = 0;
 

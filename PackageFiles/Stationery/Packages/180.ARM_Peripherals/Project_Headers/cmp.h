@@ -156,22 +156,6 @@ public:
    static constexpr HardwarePtr<CMP_Type> cmp = Info::baseAddress;
 
    /**
-    * IRQ handler
-    */
-   static void irqHandler() {
-      unsigned status = cmp->SCR&(CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK|CMP_SCR_COUT_MASK);
-
-      // Clear interrupt flags
-      cmp->SCR = cmp->SCR | status;
-
-      // Create status from snapshot
-      CmpStatus cmpStatus{(CmpEventId)(status&(CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK)),(bool)(status&CMP_SCR_COUT_MASK)};
-
-      // Call handler
-      sCallback(cmpStatus);
-   }
-
-   /**
     * Wrapper to allow the use of a class member as a callback function
     * @note Only usable with static objects.
     *

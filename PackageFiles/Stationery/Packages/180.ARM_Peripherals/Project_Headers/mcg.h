@@ -188,9 +188,7 @@ $(/MCG/publicMethods: // No public methods found)
     * MCG interrupt handler -  Calls MCG callback
     */
    static void irqHandler() {
-      if (callback != 0) {
-         callback();
-      }
+      callback();
    }
 
    /**
@@ -198,8 +196,15 @@ $(/MCG/publicMethods: // No public methods found)
     *
     * @param[in]  callback The function to call from stub ISR
     */
-   static void setCallback(MCGCallbackFunction callback) {
-      Mcg::callback = callback;
+   static void setCallback(MCGCallbackFunction mcgCallback)  {
+      if (mcgCallback == nullptr) {
+         mcgCallback = unhandledCallback;
+      }
+      // Either no handler set yet or removing handler
+      usbdm_assert(
+            (Mcg::callback == unhandledCallback) || (mcgCallback == unhandledCallback),
+            "Handler already set");
+      Mcg::callback = mcgCallback;
    }
 
    /** Current clock mode (FEI out of reset) */

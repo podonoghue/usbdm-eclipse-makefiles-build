@@ -376,7 +376,8 @@ public:
 template<uint32_t clockInfo, uint32_t portAddress, IRQn_Type irqNum, uint32_t gpioAddress, PcrValue defPcrValue, NvicPriority defaultNvicPriority, int bitNum, Polarity polarity>
 class Gpio_T : public Gpio, public Pcr_T<clockInfo, portAddress, irqNum, gpioPcrValue(defPcrValue), defaultNvicPriority, bitNum> {
 
-   static_assert((static_cast<unsigned>(bitNum)<=31), "Illegal bit number in Gpio");
+      PcrBase::CheckPinExistsAndIsMapped<bitNum> check;
+//   static_assert((static_cast<unsigned>(bitNum)<=31), "Illegal bit number in Gpio");
 
 private:
    /**
@@ -540,8 +541,6 @@ $(/GPIO/set_in_out: // /GPIO/set_in_out not found)
       // Configure pin
       Pcr::setPCR(pcrInit.value);
    }
-
-
 
 $(/GPIO/set_output: // /GPIO/set_output not found)   
    /**

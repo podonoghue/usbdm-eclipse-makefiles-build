@@ -1304,14 +1304,14 @@ $(init_description)
 
 <!--  Member variables -->
 
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs"
+   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;!individual_channel_call_backs"
       variables="irqHandlingMethod"
     ><![CDATA[
       \t   /// Shared channel interrupt call-back
       \t   ChannelCallbackFunction channelCallbackFunction = nullptr;\n\n
    ]]></setTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
     ><![CDATA[
       \t   /// Shared overflow or fault interrupt call-back
@@ -1325,7 +1325,7 @@ $(init_description)
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -1396,7 +1396,7 @@ $(init_description)
 
 <!--  Constructors -->
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs"
+   <constructorTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;!individual_channel_call_backs"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -1415,7 +1415,7 @@ $(init_description)
       \t   }\n\n
    ]]></constructorTemplate>
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <constructorTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -1434,7 +1434,7 @@ $(init_description)
       \t   }\n\n
    ]]></constructorTemplate>
 
-   <constructorTemplate namespace="usbdm"
+   <constructorTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -1449,11 +1449,7 @@ $(init_description)
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      #if $(irqHandlingMethod)
       \t      %registerName = %paramExpression;
-      #else
-      \t      (void)%paramExpression;
-      #endif
       \t   }\n\n
    ]]></constructorTemplate>
 
@@ -1531,7 +1527,7 @@ $(init_description)
 
 <!--  Default Initialisation value -->
 
-   <template codeGenCondition="irqHandlingMethod"><![CDATA[
+   <template codeGenCondition="/$(_BASENAME)/irqHandlingMethod"><![CDATA[
    \t/**
    \t * Callback function for Channel Fault and timer overflow
    \t */
@@ -1547,7 +1543,7 @@ $(init_description)
    \t\n
    ]]></template>
 
-   <template codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs"><![CDATA[
+   <template codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;!individual_channel_call_backs"><![CDATA[
    \t/**
    \t * Callback table for programmatically set channel call-backs
    \t * One entry for hardware interrupt vector (all hardware interrupt vectors are mapped to a single channel call-back by software)
@@ -1556,7 +1552,7 @@ $(init_description)
    \t\n
    ]]></template>
 
-   <template codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs"><![CDATA[
+   <template codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;individual_channel_call_backs"><![CDATA[
    \t/**
    \t * Callback table for programmatically set channel call-backs
    \t * One entry for each channel (one hardware interrupt vector is mapped to multiple channel call-backs by software)
@@ -1571,7 +1567,6 @@ $(init_description)
       variables="
          tpm_sc_mode,
          tpm_sc_action,
-         irqLevel,
          tpm_sc_cmod,
          tpm_sc_ps,
          tpm_cntin,
@@ -1636,8 +1631,8 @@ $(channel_init_description)
 
 <!--  Member variables -->
 
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs"
-      variables="irqHandlingMethod"
+   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;individual_channel_call_backs"
+      variables="/$(_BASENAME)/irqHandlingMethod"
     ><![CDATA[
       \t   /// $(_Class) channel interrupt call-back
       \t   ChannelCallbackFunction callbackFunction = nullptr;\n\n
@@ -1664,7 +1659,7 @@ $(channel_init_description)
       \t   %enumClass %registerName = TpmChannelNum_None;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)"
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;(NumChannelVectors>1)"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -1709,8 +1704,8 @@ $(channel_init_description)
 
 <!--  Constructors -->
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs"
-      variables="irqHandlingMethod"
+   <constructorTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;individual_channel_call_backs"
+      variables="/$(_BASENAME)/irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
       \t   /**
@@ -1832,14 +1827,14 @@ $(channel_init_description)
    \t}\n\n
    ]]></template>
 
-   <template namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
       extern void unhandledCallback();
       extern void timerUnhandledChannelCallback(uint8_t);
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="irqHandlingMethod" ><![CDATA[
+   <template  codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t/**
       \t * Set overflow and fault interrupt call-back
       \t *
@@ -1859,7 +1854,7 @@ $(channel_init_description)
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="!irqHandlingMethod" ><![CDATA[
+   <template  codeGenCondition="!/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t/**
       \t * Set callbacks and IRQ priority from Init structure
       \t */
@@ -1874,7 +1869,7 @@ $(channel_init_description)
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs" ><![CDATA[
+   <template  codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;!individual_channel_call_backs" ><![CDATA[
       \t/**
       \t * Set channel call-back function
       \t * Configured for shared channel call-backs i.e. all channels use same call-back
@@ -1927,7 +1922,7 @@ $(channel_init_description)
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs" ><![CDATA[
+   <template  codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;individual_channel_call_backs" ><![CDATA[
       \t/**
       \t * Set channel call-back function
       \t * Configured for individual channel call-backs
@@ -1978,7 +1973,7 @@ $(channel_init_description)
       \t\n
    ]]></template>
 
-   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t/**
       \t * Callback function for Channel Fault and timer overflow for $(_Class)
       \t */
@@ -1986,21 +1981,21 @@ $(channel_init_description)
       \t\n
    ]]></template>
 
-   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t/**
       \t * Callback table for programmatically set handlers for $(_Class)
       \t */
       \t$(_Class)Info::ChannelCallbackFunction $(_Class)Info::channelCallbacks[] = {\n\n
    ]]></template>
    <for keys="ch" dim="NumChannels">
-      <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs" ><![CDATA[
+      <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;individual_channel_call_backs" ><![CDATA[
          \t   timerUnhandledChannelCallback,\n
       ]]></template>
    </for>
-   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs" ><![CDATA[
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;!individual_channel_call_backs" ><![CDATA[
       \t   timerUnhandledChannelCallback,\n
    ]]></template>
-   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t};\n\n
    ]]></template>
 
@@ -2016,12 +2011,12 @@ $(channel_init_description)
       <copy source="Snippets/tpm-oc-init-example.cpp" target="Snippets/tpm-oc-init-example.cpp" overwrite="true" derived="true"/>
    </projectActionList>
 
-   <template key="/$(_BASENAME)/declarations" namespace="all"
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" 
    ><![CDATA[
-   /**
-    * Class representing $(_NAME)
-    */
-   class $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n\n
+      /**
+       * Class representing $(_NAME)
+       */
+      class $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n\n
    ]]></template>
 
    <template key="/$(_BASENAME)/quadDeclarations" namespace="all"  ><![CDATA[
@@ -2033,6 +2028,6 @@ $(channel_init_description)
 
    <!-- ************* Signal mapping ****************** -->
 
-   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
+   <signals enabledBy="enablePeripheralSupport" />
 
 </fragment>

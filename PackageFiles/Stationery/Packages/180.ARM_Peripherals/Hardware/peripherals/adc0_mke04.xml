@@ -6,7 +6,7 @@
 
    <constant key="suppressInstance"         type="Boolean" value="false"         />
    <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
-   <constant key="irq_parameters"           type="String"  value="&quot;uint32_t value, int channel&quot;"  />
+   <constant key="irq_parameters"           type="String"  value="&quot;uint32_t result, int channel&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;uint32_t, int&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;adc->R[0], adc->SC1[0]&amp;ADC_SC1_ADCH_MASK&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
@@ -50,6 +50,8 @@
     * %register[index]                Register associated with variable e.g. adc->APCTL1
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
+
+   <constant key="disable_peripheral" value = "&quot;adc->SC1[0] = ADC_SC1_ADCH(-1);&quot;"  type="String" />
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
@@ -402,9 +404,12 @@
       \t * }
       \t *
       \t * @code
+      \t * // Initialisation values for $(_Class)
+      \t * // Options available vary with device - See $(_Class)::DefaultInitValue for example
       \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *   // Setup values
+      \t *   // Omitted parameters are take to be zero unless a base value is given
       \t *   AdcResolution_8bit_se ,         // ADC resolution - 8-bit
       \t *   AdcClockSource_BusClock ,       // Input Clock Select - Bus clock
       \t *   AdcClockDivider_DivBy1 ,        // Clock Divide Select - Divide by 1
@@ -421,8 +426,11 @@
       \t *   AdcSc4Afdep_FifoDisabled ,      // FIFO Depth - FIFO disabled
       \t *   AdcHardwareMask_Unmasked,       // Hardware Trigger Mask - Unmasked
       \t *
-      \t *    $(_name)Callback,                // Call-back to execute on event - call-back function name
-      \t *    NvicPriority_Low,                // Priority for interrupt - Low
+      \t *   $(_name)Callback,                // Call-back to execute on event - call-back function name
+      \t *   NvicPriority_Low,                // Priority for interrupt - Low
+      \t *
+      \t *    // Optional base value to start with (must be last parameter)
+      \t *    $(_Class)::DefaultValue
       \t * };
       \t *
       \t * // Initialise $(_Class) from values specified above
@@ -475,8 +483,9 @@
       \t   if (adcCallback == nullptr) {
       \t      adcCallback = unhandledCallback;
       \t   }
+      \t   // Allow either no handler set yet or removing handler
       \t   usbdm_assert(
-      \t         (sCallback == unhandledCallback) || (sCallback == adcCallback),
+      \t         (sCallback == unhandledCallback) || (adcCallback == unhandledCallback),
       \t         "Handler already set");
       \t   sCallback = adcCallback;
       \t}
@@ -708,7 +717,8 @@
 
    <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_sc2_compare,adc_cv_cv"
-      linePadding="xxx" >
+      linePadding="xxx"
+      nonDefaultParams="3" >
    <![CDATA[
       \t   /**
       \t    * Constructor for %description0, %description1
@@ -865,11 +875,16 @@
    </validate>
 
    <projectActionList id = "adc_files" >
-      <copy source="Project_Headers/adc-MKE.h"  target="Project_Headers/adc.h"  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/adc-MKE.h"                target="Project_Headers/adc.h"                    overwrite="true"  derived="true" />
+      <copy source="Snippets/analogue-comparison-example.cpp" target="Snippets/analogue-comparison-example.cpp" overwrite="true"  derived="true" />
+      <copy source="Snippets/analogue-example.cpp"            target="Snippets/analogue-example.cpp"            overwrite="true"  derived="true" />
+      <copy source="Snippets/analogue-diff-example.cpp"       target="Snippets/analogue-diff-example.cpp"       overwrite="true"  derived="true" />
+      <copy source="Snippets/analogue-interrupt-example.cpp"  target="Snippets/analogue-interrupt-example.cpp"  overwrite="true"  derived="true" />
+      <copy source="Snippets/analogue-joystick-example.cpp"   target="Snippets/analogue-joystick-example.cpp"   overwrite="true"  derived="true" />
    </projectActionList>
 
     <!-- ************* SIM controls ****************** -->
-   <category name="SIM" description="Pin mapping and clock enables">
+   <category name="Advanced" description="Advanced options">
       <aliasOption key="/SIM/sim_scgc_$(_name)"  constant="false" optional="true" />
       <aliasOption key="/SIM/sim_sopt0_adhwt"  constant="false" optional="true" />
       <aliasOption key="/SIM/sim_sopt0_delay"  constant="false" optional="true" />
@@ -888,6 +903,5 @@
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
-
 
 </peripheralPage>

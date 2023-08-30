@@ -592,7 +592,7 @@
    ]]>
    </template>
 
-   <equation key="pinIndex" value="0" />
+   <equation key="pinIndex" value="=0" />
 
    <for keys="r:R" values="a:A;b:B;c:C;d:D;e:E;f:F;g:G;h:H;i:I" >
       <template namespace="all" key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
@@ -608,7 +608,7 @@
                   \t   %(pinIndex),
                ]]>
                </template>
-               <equation key="pinIndex" value="pinIndex+1" />
+               <equation key="pinIndex" value="=pinIndex+1" />
             <else />
                <template namespace="all" key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
                <![CDATA[

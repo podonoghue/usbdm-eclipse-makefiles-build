@@ -51,8 +51,11 @@
     * %register[index]                Register associated with variable e.g. adc->APCTL1
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
+
+   <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
       value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
+
    <template><![CDATA[
       \t//! Pin number in Info table for SCK if mapped to a pin
       \tstatic constexpr int sckPin  = 0;
@@ -154,6 +157,7 @@
       <choice value="1,0" name="Fault input"              enum="FaultInput"        />
       <choice value="1,1" name="Peripheral select output" enum="PeripheralSelectOutput" />
    </choiceOption>
+
    <binaryOption key="spi_c1_lsbfe" condition="spi_c1_lsbfe_present"
       enabledBy="spi_c1_spe"
       enumStem="SpiBitOrder"
@@ -162,8 +166,9 @@
       <choice name="MSB first"   value="0" enum="MsbFirst" />
       <choice name="LSB first"   value="1" enum="LsbFirst" />
    </binaryOption >
+
    <binaryOption key="spi_c1_spie" condition="spi_c1_spie_present"
-      enabledBy="spi_c1_spe&amp;&amp;/$(_BASENAME)/irqHandlingMethod"
+      enabledBy="spi_c1_spe&amp;&amp;irqHandlingMethod"
       hidden="true"
       enumStem="SpiReceiveInterrupt"
       description="Interrupt enable: for SPRF and MODF"
@@ -174,7 +179,7 @@
    </binaryOption >
 
    <binaryOption key="spi_c1_sptie" condition="spi_c1_sptie_present"
-      enabledBy="spi_c1_spe&amp;&amp;/$(_BASENAME)/irqHandlingMethod"
+      enabledBy="spi_c1_spe&amp;&amp;irqHandlingMethod"
       hidden="true"
       enumStem="SpiTransmitInterrupt"
       description="Transmit interrupt enable"
@@ -185,7 +190,7 @@
    </binaryOption >
 
    <binaryOption key="spi_c2_spmie" condition="spi_c2_spmie_present"
-      enabledBy="spi_c1_spe&amp;&amp;/$(_BASENAME)/irqHandlingMethod"
+      enabledBy="spi_c1_spe&amp;&amp;irqHandlingMethod"
       enumStem="SpiMatchInterrupt"
       description="Match interrupt"
       toolTip="Controls hardware match interrupt (S.SPMF)"
@@ -222,6 +227,9 @@
       <choice value="1,0" name="Input"                      enum="Input" />
       <choice value="1,1" name="Output"                     enum="Output" />
    </choiceOption>
+
+   <!-- ************* BR ****************** -->
+
    <intOption key="spi_speed"
       enabledBy="spi_c1_spe"
       description="Speed of interface in Hz"
@@ -268,7 +276,7 @@
 
 <!-- Graphic here -->
 
-   <setTemplate variables="spi_pinuse" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+   <setTemplate variables="spi_pinuse" codeGenCondition="enableGettersAndSetters"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -282,7 +290,7 @@
       \t}\n\n
    ]]></setTemplate>
 
-   <setTemplate variables="spi_br_sppr,spi_br_spr" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+   <setTemplate variables="spi_br_sppr,spi_br_spr" codeGenCondition="enableGettersAndSetters"
       nonDefaultParams="2"
    ><![CDATA[
       \t/**
@@ -298,7 +306,7 @@
       \t\n
    ]]></setTemplate>
 
-   <setTemplate variables="spi_c2_spmie,spi_m_bits" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+   <setTemplate variables="spi_c2_spmie,spi_m_bits" codeGenCondition="enableGettersAndSetters"
       nonDefaultParams="2"
    ><![CDATA[
       \t/**
@@ -339,7 +347,7 @@
       spi_c1_lsbfe:BitOrder;
       spi_c2_spiswai:WaitMode;
       spi_c2_bidirectional:PinUse" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -410,7 +418,7 @@
    </template>
 
    <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
-      variables="/$(_BASENAME)/irqHandlingMethod"
+      variables="irqHandlingMethod"
    ><![CDATA[
        \t//! Class based callback handler has been installed in vector table
        \tstatic constexpr bool irqHandlerInstalled = %symbolicValueExpression;
@@ -611,7 +619,7 @@
       \t   unsigned %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <setTemplate namespace="usbdm" variables="/$(_BASENAME)/irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
+   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
@@ -646,7 +654,7 @@
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
-      variables="/PCR/nvic_irqLevel,/$(_BASENAME)/irqLevel"
+      variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %enumClass %registerName0 = %symbolicValueExpression1;
@@ -681,10 +689,12 @@
       \t   Info::enableClock();
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
-             condition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
-      \t   setCallback(init.callbackFunction);
-      \t   enableNvicInterrupts(init.irqlevel);
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
+         codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      setCallback(init.callbackFunction);
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
       \t\n
    ]]></template>
 
@@ -712,7 +722,7 @@
 <!--   Constructors -->
 
    <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
-      variables="/$(_BASENAME)/irqHandlingMethod"
+      variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
       \t   /**
