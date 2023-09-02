@@ -484,7 +484,7 @@
       ]]></setTemplate>
    </for>
 
-<!--   ========== I2C Init class =============================== -->
+<!--   ========== Init class =============================== -->
 
    <template key="/$(_BASENAME)/init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true" >
    <![CDATA[
@@ -544,7 +544,7 @@
    ]]>
    </template>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
@@ -552,7 +552,7 @@
        \t\n
    ]]></initialValueTemplate>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
    <![CDATA[
       \t/**
       \t * Type definition for $(_Baseclass) interrupt call back.

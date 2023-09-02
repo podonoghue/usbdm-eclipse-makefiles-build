@@ -1,37 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!ENTITY % gui_items        "(xi:include|addDependency|graphic|deleteOption|category|indexedCategory|categoryOption|addChoices|aliasCategoryOption|if|for|constant|floatOption|intOption|bitmaskOption|choiceOption|clockMultiplexorOption|binaryOption|irqOption|stringOption|title|numericListOption|pinListOption|aliasOption|signals)" >
-<!ENTITY % structure_items  "(xi:include|section|list)" >
-<!ENTITY % control_items    "(xi:include|clockSelectionOption|template|equation|setTemplate|constructorTemplate|enumTemplate|initialValueTemplate|clockCodeTemplate|validate|projectActionList)" >
+<!-- Deleted stuff
 
-<!-- Include another file -->
-<!ELEMENT xi:include EMPTY>
-   <!ATTLIST xi:include href      CDATA        #REQUIRED>
+addDependency
+deleteOption
+clockMultiplexorOption
+numericListOption
+indexedCategory
+addChoices
 
-<!-- Root fileElement -->
-<!ELEMENT peripheralPage ((%structure_items;|%gui_items;|%control_items;)*) >
-   <!ATTLIST peripheralPage xmlns:xi     CDATA        #IMPLIED>
-   <!ATTLIST peripheralPage name         CDATA        #REQUIRED>
-   <!ATTLIST peripheralPage description  CDATA        #REQUIRED>
-   <!ATTLIST peripheralPage toolTip      CDATA        #IMPLIED>
+<!ELEMENT addChoices ((choice)*) >
+   <!ATTLIST addChoices key                 CDATA        #REQUIRED>
+   
+<!ELEMENT deleteOption EMPTY >
+   <!ATTLIST deleteOption condition     CDATA         #IMPLIED>
+   <!ATTLIST deleteOption key           CDATA         #REQUIRED>
+   <!ATTLIST deleteOption mustExist     (false|true)  #IMPLIED>
 
-<!ELEMENT fragment ANY >
-   <!ATTLIST fragment xmlns:xi CDATA #IMPLIED>
+<!ELEMENT clockMultiplexorOption ((choice)*) >
+   <!ATTLIST clockMultiplexorOption condition           CDATA        #IMPLIED>
+   <!ATTLIST clockMultiplexorOption constant            (false|true) #IMPLIED>
+   <!ATTLIST clockMultiplexorOption hidden              (false|true) #IMPLIED>
+   <!ATTLIST clockMultiplexorOption name                CDATA        #IMPLIED>
+   <!ATTLIST clockMultiplexorOption key                 CDATA        #REQUIRED>
+   <!ATTLIST clockMultiplexorOption templateKey         CDATA        #IMPLIED>
+   <!ATTLIST clockMultiplexorOption origin              CDATA        #IMPLIED>
+   <!ATTLIST clockMultiplexorOption description         CDATA        #IMPLIED>
+   <!ATTLIST clockMultiplexorOption toolTip             CDATA        #IMPLIED>
+   <!ATTLIST clockMultiplexorOption units               (None|Hz|s)  #IMPLIED>
+   <!ATTLIST clockMultiplexorOption derived             (true)       #IMPLIED>
+   <!ATTLIST clockMultiplexorOption derivedFrom         CDATA        #IMPLIED>
+   <!ATTLIST clockMultiplexorOption namespace           (info|usbdm|all)  #IMPLIED >
+   <!ATTLIST clockMultiplexorOption enumStem            CDATA        #IMPLIED> <!- Type for enum and first part of enum name - >
+   <!ATTLIST clockMultiplexorOption typeName            CDATA        #IMPLIED> <!- as for enumStem - >
+   <!ATTLIST clockMultiplexorOption enumType            CDATA        #IMPLIED> <!- Type to use for enums e.g.uint8_t - >
+   <!ATTLIST clockMultiplexorOption target              CDATA        #IMPLIED>
+   <!ATTLIST clockMultiplexorOption register            CDATA        #IMPLIED>
+   <!ATTLIST clockMultiplexorOption replace             CDATA        #IMPLIED>
+   <!ATTLIST clockMultiplexorOption valueFormat         CDATA        #IMPLIED> <!- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  - >
+   <!- Text to add to enum body generated from choices - >
+   <!ATTLIST clockMultiplexorOption enumText            CDATA        #IMPLIED>
+   <!ATTLIST clockMultiplexorOption disabledValue       CDATA        #IMPLIED>
+   <!ATTLIST clockMultiplexorOption enabledBy           CDATA        #IMPLIED> <!- Enabled by an expression - >
+   <!ATTLIST clockMultiplexorOption unlockedBy          CDATA        #IMPLIED> <!- Unlocked by an expression - >
+   <!ATTLIST clockMultiplexorOption ref                 CDATA        #IMPLIED> <!- Equation that controls this variable - >
 
-<!ELEMENT list (((%structure_items;),(%control_items;)*)|(%gui_items;|%control_items;)*) >
-   <!ATTLIST list name         CDATA        #IMPLIED>
-   <!ATTLIST list description  CDATA        #IMPLIED>
-
-<!ELEMENT section (((%structure_items;),(%control_items;)*)|(%gui_items;|%control_items;)*) >
-   <!ATTLIST section name         CDATA        #IMPLIED>
-
-<!ELEMENT aliasCategoryOption ((%gui_items;|template)*) >
-   <!ATTLIST aliasCategoryOption  name         CDATA        #IMPLIED>
-   <!ATTLIST aliasCategoryOption  key          CDATA        #REQUIRED>
-   <!ATTLIST aliasCategoryOption  derived      (false|true) #IMPLIED>
-   <!ATTLIST aliasCategoryOption  constant     (false|true) "true">
-
-<!ELEMENT indexedCategory ((%gui_items;|%control_items;|template)*) >
+<!ELEMENT indexedCategory ((%general_items;|%general_items;|template)*) >
    <!ATTLIST indexedCategory  constant     (false|true) #IMPLIED>
    <!ATTLIST indexedCategory  xmlns:xi     CDATA        #IMPLIED>
    <!ATTLIST indexedCategory  name         CDATA        #IMPLIED>
@@ -42,16 +56,70 @@
    <!ATTLIST indexedCategory  derived      (false|true) #IMPLIED>
    <!ATTLIST indexedCategory  hidden       (false|true) #IMPLIED>
 
-<!ELEMENT category ((%gui_items;|%control_items;|template)*) >
-   <!ATTLIST category  constant     (false|true) #IMPLIED>
-   <!ATTLIST category  xmlns:xi     CDATA        #IMPLIED>
-   <!ATTLIST category  name         CDATA        #IMPLIED>
-   <!ATTLIST category  description  CDATA        #IMPLIED>
-   <!ATTLIST category  toolTip      CDATA        #IMPLIED>
-   <!ATTLIST category  derived      (false|true) #IMPLIED>
-   <!ATTLIST category  hidden       (false|true) #IMPLIED>
+<!ELEMENT addDependency EMPTY >
+   <!ATTLIST addDependency key                CDATA        #REQUIRED>
 
-<!ELEMENT graphic ((graphicBox|equation|graphicGroup)*) >
+-->                          
+<!-- all templates -->    
+<!ENTITY % template_items   "template|setTemplate|constructorTemplate|initialValueTemplate|enumTemplate|clockCodeTemplate" >
+
+<!-- High level items-->
+<!ENTITY % structure_items  "xi:include|section|list" >
+
+<!-- Drawing elements with a Graphic -->
+<!ENTITY % graphic_items    "graphicGroup|graphicBox|graphicItem|equation|for|if" >
+
+<!-- Simple items that don't that don''t recurse -->
+<!ENTITY % simple_items     "xi:include|
+                              projectActionList|
+                              title|constant|signals|
+                              intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption|irqOption|pinListOption|aliasOption|
+                              clockSelectionOption|validate|equation|
+                              %template_items;" >
+                  
+<!ENTITY % general_items    "graphic|category|categoryOption|aliasCategoryOption|if|for|%simple_items;" >
+
+<!-- Include another file -->
+<!ELEMENT xi:include EMPTY>
+   <!ATTLIST xi:include href      CDATA        #REQUIRED>
+
+<!-- Root fileElement -->
+<!ELEMENT peripheralPage ((%structure_items;|%general_items;)*) >
+   <!ATTLIST peripheralPage xmlns:xi     CDATA        #IMPLIED>
+   <!ATTLIST peripheralPage name         CDATA        #REQUIRED>
+   <!ATTLIST peripheralPage description  CDATA        #REQUIRED>
+   <!ATTLIST peripheralPage toolTip      CDATA        #IMPLIED>
+
+<!ELEMENT fragment ((%structure_items;|%general_items;)*)  >
+   <!ATTLIST fragment xmlns:xi CDATA #IMPLIED>
+
+<!ELEMENT list ((%structure_items;|%general_items;)*) >
+   <!ATTLIST list name         CDATA        #IMPLIED>
+   <!ATTLIST list description  CDATA        #IMPLIED>
+
+<!ELEMENT section ((%structure_items;|%general_items;)*) >
+   <!ATTLIST section name         CDATA        #IMPLIED>
+
+<!ELEMENT for (%general_items;|%structure_items;|%general_items;|%graphic_items;|break|continue)* >
+   <!ATTLIST for keys                 CDATA        #REQUIRED>
+   <!ATTLIST for values               CDATA        #IMPLIED>
+   <!ATTLIST for dim                  CDATA        #IMPLIED>
+
+<!ELEMENT break EMPTY >
+
+<!ELEMENT continue EMPTY >
+
+<!ENTITY % if_clause_items "%general_items;|%structure_items;" >
+
+<!ELEMENT if ( (%if_clause_items;)+, (else_if, (%if_clause_items;)+)*, (else, (%if_clause_items;)+)?) >
+   <!ATTLIST if condition             CDATA        #REQUIRED>
+
+<!ELEMENT else EMPTY >
+
+<!ELEMENT else_if EMPTY >
+   <!ATTLIST else_if condition             CDATA        #REQUIRED>
+
+<!ELEMENT graphic ((%graphic_items;)*) >
    <!ATTLIST graphic  key                CDATA        #REQUIRED>
    <!ATTLIST graphic  var                CDATA        #IMPLIED>
    <!ATTLIST graphic  description        CDATA        #IMPLIED>
@@ -59,16 +127,12 @@
    <!ATTLIST graphic  condition          CDATA        #IMPLIED>
    <!ATTLIST graphic  clockConfigIndex   CDATA        #IMPLIED>
    
-<!ELEMENT equation EMPTY >
-   <!ATTLIST equation  key             CDATA        #REQUIRED>
-   <!ATTLIST equation  value           CDATA        #REQUIRED>
-
-<!ELEMENT graphicGroup ((graphicItem|graphicBox|graphicGroup|equation)*)>
+<!ELEMENT graphicGroup ((%graphic_items;)*) >
    <!ATTLIST graphicGroup  x                CDATA        #IMPLIED>
    <!ATTLIST graphicGroup  y                CDATA        #IMPLIED>
    <!ATTLIST graphicGroup  condition        CDATA        #IMPLIED>
 
-<!ELEMENT graphicBox ((graphicItem|graphicBox|graphicGroup|equation)*)>
+<!ELEMENT graphicBox ((%graphic_items;)*) >
    <!ATTLIST graphicBox  id               CDATA        #IMPLIED>
    <!ATTLIST graphicBox  x                CDATA        #REQUIRED>
    <!ATTLIST graphicBox  y                CDATA        #REQUIRED>
@@ -84,8 +148,24 @@
    <!ATTLIST graphicItem  edit            CDATA        #IMPLIED>
    <!ATTLIST graphicItem  condition       CDATA        #IMPLIED>
 
+<!ELEMENT aliasCategoryOption ((%general_items;)*) >
+   <!ATTLIST aliasCategoryOption  name         CDATA        #IMPLIED>
+   <!ATTLIST aliasCategoryOption  key          CDATA        #REQUIRED>
+   <!ATTLIST aliasCategoryOption  derived      (false|true) #IMPLIED>
+   <!ATTLIST aliasCategoryOption  constant     (false|true) "true">
 
-<!ELEMENT categoryOption ((%gui_items;|template)*) >
+<!-- Expandable grouping -->
+<!ELEMENT category ((%general_items;)*) >
+   <!ATTLIST category  constant     (false|true) #IMPLIED>
+   <!ATTLIST category  xmlns:xi     CDATA        #IMPLIED>
+   <!ATTLIST category  name         CDATA        #IMPLIED>
+   <!ATTLIST category  description  CDATA        #IMPLIED>
+   <!ATTLIST category  toolTip      CDATA        #IMPLIED>
+   <!ATTLIST category  derived      (false|true) #IMPLIED>
+   <!ATTLIST category  hidden       (false|true) #IMPLIED>
+
+<!-- Expandable grouping with associated variable -->
+<!ELEMENT categoryOption ((%general_items;)*) >
    <!ATTLIST categoryOption  constant        (false|true) #IMPLIED>
    <!ATTLIST categoryOption  xmlns:xi        CDATA        #IMPLIED>
    <!ATTLIST categoryOption  name            CDATA        #IMPLIED>
@@ -97,10 +177,15 @@
    <!ATTLIST categoryOption  hidden          (false|true) #IMPLIED>
    <!ATTLIST categoryOption  enabledBy       CDATA        #IMPLIED>
 
-<!ELEMENT deleteOption EMPTY >
-   <!ATTLIST deleteOption condition     CDATA         #IMPLIED>
-   <!ATTLIST deleteOption key           CDATA         #REQUIRED>
-   <!ATTLIST deleteOption mustExist     (false|true)  #IMPLIED>
+<!ELEMENT title EMPTY >
+   <!ATTLIST title condition              CDATA        #IMPLIED>
+   <!ATTLIST title name                   CDATA        #IMPLIED>
+   <!ATTLIST title toolTip                CDATA        #IMPLIED>
+   <!ATTLIST title description            CDATA        #IMPLIED>
+
+<!ELEMENT equation EMPTY >
+   <!ATTLIST equation  key             CDATA        #REQUIRED>
+   <!ATTLIST equation  value           CDATA        #REQUIRED>
 
 <!ELEMENT intOption EMPTY >
    <!ATTLIST intOption condition     CDATA        #IMPLIED>
@@ -204,12 +289,6 @@
    <!-- Inidicates it should be visible in GUI -->
    <!ATTLIST aliasOption hidden            (true)      #IMPLIED>
 
-<!ELEMENT title EMPTY >
-   <!ATTLIST title condition              CDATA        #IMPLIED>
-   <!ATTLIST title name                   CDATA        #IMPLIED>
-   <!ATTLIST title toolTip                CDATA        #IMPLIED>
-   <!ATTLIST title description            CDATA        #IMPLIED>
-
 <!ELEMENT stringOption EMPTY >
    <!ATTLIST stringOption condition        CDATA        #IMPLIED>
    <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
@@ -250,8 +329,6 @@
    <!ATTLIST numericListOption derivedFrom   CDATA        #IMPLIED>
   
 <!-- Signal to add a dependency -->
-<!ELEMENT addDependency EMPTY >
-   <!ATTLIST addDependency key                CDATA        #REQUIRED>
 
 <!ELEMENT pinListOption EMPTY >
    <!ATTLIST pinListOption condition          CDATA        #IMPLIED>
@@ -312,34 +389,6 @@
    <!-- Value to take when disabled --> 
    <!ATTLIST clockSelectionOption disabledValue       CDATA        #IMPLIED>
    
-<!ELEMENT clockMultiplexorOption ((choice)*) >
-   <!ATTLIST clockMultiplexorOption condition           CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption constant            (false|true) #IMPLIED>
-   <!ATTLIST clockMultiplexorOption hidden              (false|true) #IMPLIED>
-   <!ATTLIST clockMultiplexorOption name                CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption key                 CDATA        #REQUIRED>
-   <!ATTLIST clockMultiplexorOption templateKey         CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption origin              CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption description         CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption toolTip             CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption units               (None|Hz|s)  #IMPLIED>
-   <!ATTLIST clockMultiplexorOption derived             (true)       #IMPLIED>
-   <!ATTLIST clockMultiplexorOption derivedFrom         CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption namespace           (info|usbdm|all)  #IMPLIED >
-   <!ATTLIST clockMultiplexorOption enumStem            CDATA        #IMPLIED> <!-- Type for enum and first part of enum name -->
-   <!ATTLIST clockMultiplexorOption typeName            CDATA        #IMPLIED> <!-- as for enumStem -->
-   <!ATTLIST clockMultiplexorOption enumType            CDATA        #IMPLIED> <!-- Type to use for enums e.g.uint8_t -->
-   <!ATTLIST clockMultiplexorOption target              CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption register            CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption replace             CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption valueFormat         CDATA        #IMPLIED> <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
-   <!-- Text to add to enum body generated from choices -->
-   <!ATTLIST clockMultiplexorOption enumText            CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption disabledValue       CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption enabledBy           CDATA        #IMPLIED> <!-- Enabled by an expression -->
-   <!ATTLIST clockMultiplexorOption unlockedBy          CDATA        #IMPLIED> <!-- Unlocked by an expression -->
-   <!ATTLIST clockMultiplexorOption ref                 CDATA        #IMPLIED> <!-- Equation that controls this variable -->
-
 <!ELEMENT choiceOption ((choice)*) >
    <!-- Condition evaluated during parsing that controls procsing of this variable -->
    <!ATTLIST choiceOption condition           CDATA        #IMPLIED>
@@ -404,10 +453,6 @@
    <!ATTLIST choiceOption replace             CDATA        #IMPLIED>
    <!ATTLIST choiceOption disabledPinMap      CDATA        #IMPLIED>
 
-
-<!ELEMENT addChoices ((choice)*) >
-   <!ATTLIST addChoices key                 CDATA        #REQUIRED>
-  
 <!ELEMENT choice EMPTY >
    <!ATTLIST choice value                     CDATA        #REQUIRED> <!-- Values may be a list e.g. 1,0,3 for use with valueFormat -->
    <!ATTLIST choice name                      CDATA        #REQUIRED>
@@ -595,25 +640,6 @@
    <!ATTLIST clockCodeTemplate params                    CDATA                   #IMPLIED>
    <!ATTLIST clockCodeTemplate codeGenCondition          CDATA                   #IMPLIED>
    <!ATTLIST clockCodeTemplate useDefinitions            CDATA                   #IMPLIED>
-
-<!ELEMENT for (%gui_items;|%structure_items;|%control_items;|template|break|continue)* >
-   <!ATTLIST for keys                 CDATA        #REQUIRED>
-   <!ATTLIST for values               CDATA        #IMPLIED>
-   <!ATTLIST for dim                  CDATA        #IMPLIED>
-
-<!ELEMENT break EMPTY >
-
-<!ELEMENT continue EMPTY >
-
-
-<!ELEMENT if ( (%gui_items;|%structure_items;|%control_items;|template|else_if|break|continue)*, 
-               (else?, (%gui_items;|%structure_items;|%control_items;|template|break|continue)*))? >
-   <!ATTLIST if condition             CDATA        #REQUIRED>
-
-<!ELEMENT else EMPTY >
-
-<!ELEMENT else_if EMPTY >
-   <!ATTLIST else_if condition             CDATA        #REQUIRED>
 
 <!ELEMENT validate (param*) >
    <!ATTLIST validate class         CDATA        #REQUIRED>

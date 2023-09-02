@@ -55,7 +55,7 @@
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Class)BasicInfo&quot;" />
+      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
 
    <!-- ************* SC1 ****************** -->
 
@@ -284,7 +284,7 @@
       adc_sc1_aien:Interrupt;
       adc_sc1_adco:Continuous;
       adc_sc1_adch:Channel" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -307,7 +307,7 @@
       ]]></setTemplate>
    </for>
 
-   <setTemplate variables="adc_sc2_compare,adc_cv_cv" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+   <setTemplate variables="adc_sc2_compare,adc_cv_cv" codeGenCondition="enableGettersAndSetters"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -336,7 +336,7 @@
       adc_sc4_acfsel:CompareOperation;
       adc_sc4_afdep:FifoDepth;
       adc_sc5_hwtriggermask:HardwareMask" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -440,27 +440,28 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" >
+   <template namespace="usbdm" discardRepeats="true" >
    <![CDATA[
-      class $(_Class)BasicInfo {
+      class $(_Baseclass)BasicInfo {
       \t
       public:\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="irqHandlingMethod" >
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      variables="/$(_BASENAME)/irqHandlingMethod"
+   ><![CDATA[
+       \t//! Common class based callback code has been generated for this class of peripheral
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicValueExpression;
+       \t\n
+   ]]></initialValueTemplate>
+
+   <template codeGenCondition="/$(_BASENAME)/irqHandlingMethod" namespace="usbdm" discardRepeats="true" >
    <![CDATA[
       \t/**
       \t * Type definition for $(_Class) interrupt call back.
       \t */
       \ttypedef void (*CallbackFunction)($(irq_parameters));\n
-   ]]>
-   </template>
-
-   <template codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/** Callback function for ISR */
-      \tstatic CallbackFunction sCallback;
       \t
       \t/**
       \t * Callback to catch unhandled interrupt
@@ -474,6 +475,9 @@
 
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
+      \t/** Callback function for ISR */
+      \tstatic CallbackFunction sCallback;
+      \t
       \t/**
       \t * Set interrupt callback function.
       \t *
@@ -507,14 +511,13 @@
 
    <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t
       \t/** Callback for programmatically set handler */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
+      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Baseclass)BasicInfo::unhandledCallback;
       \t\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -535,55 +538,55 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_sc2_adtrg,adc_sc2_compare,adc_sc2_refsel"
    ><![CDATA[
       \t   /// Status and Control Register 2
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_sc3_adlpc,adc_sc3_adiv,adc_sc3_adlsmp,adc_sc3_mode,adc_sc3_adiclk"
    ><![CDATA[
       \t   /// Status and Control Register 3
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_sc4_htrgme,adc_sc4_ascane,adc_sc4_acfsel,adc_sc4_afdep"
    ><![CDATA[
       \t   /// Status and Control Register 4
       \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_cv_cv"
    ><![CDATA[
       \t   /// Compare Value Register
       \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_apctl1_adpc"
    ><![CDATA[
       \t   /// Pin Control 1 Register
       \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_sc5_hwtriggermask"
    ><![CDATA[
       \t   /// Status and Control Register 5
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -642,7 +645,7 @@
 
 <!--   Constructors -->
 
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -660,7 +663,7 @@
       \t   }\n\n
    ]]></setTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -693,7 +696,7 @@
             adc_sc4_afdep;
             adc_sc5_hwtriggermask
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -715,7 +718,7 @@
       </setTemplate>
    </for>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_sc2_compare,adc_cv_cv"
       linePadding="xxx"
       nonDefaultParams="3" >
@@ -739,7 +742,7 @@
    ]]>
    </setTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_apctl1_adpc"
       linePadding="xxx" >
    <![CDATA[
@@ -760,7 +763,7 @@
    ]]>
    </setTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_sc1_adch, adc_apctl1_adpc"
       linePadding="xxx" >
    <![CDATA[
@@ -849,15 +852,15 @@
       \t}; \n\n
    ]]></clockCodeTemplate>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[
-      \t}; // $(_Class)BasicInfo::Init\n\n
+      \t}; // $(_Baseclass)BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm" >
+   <template namespace="usbdm" discardRepeats="true" >
       <![CDATA[
-      }; // $(_Class)BasicInfo\n\n
+      }; // $(_Baseclass)BasicInfo\n\n
    ]]>
    </template>
 

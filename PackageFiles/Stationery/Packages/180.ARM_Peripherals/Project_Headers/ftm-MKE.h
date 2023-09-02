@@ -247,12 +247,12 @@ public:
    static void irqHandler() {
       if ((ftm->MODE&FTM_MODE_FAULTIE_MASK) && (ftm->FMS&FTM_FMS_FAULTF_MASK)) {
          ftm->FMS = ftm->FMS & ~FTM_FMS_FAULTF_MASK;
-         Info::callback();
+         Info::sCallback();
       }
       else if ((ftm->SC&(FTM_SC_TOF_MASK|FTM_SC_TOIE_MASK)) == (FTM_SC_TOF_MASK|FTM_SC_TOIE_MASK)) {
          // Clear TOI flag
          ftm->SC = ftm->SC & ~FTM_SC_TOF_MASK;
-         Info::callback();
+         Info::sCallback();
       }
       else {
          // Get status for channels

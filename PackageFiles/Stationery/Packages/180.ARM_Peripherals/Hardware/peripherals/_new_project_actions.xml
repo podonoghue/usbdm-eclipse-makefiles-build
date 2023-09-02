@@ -4,22 +4,21 @@
 
 <list name="NewProjectActions" >
 
-
-<if condition="/MCG/$present" >
-   <projectActionList id = "_new_project_files_mcg" >
-      <createFolder   target="Snippets" />
-      <copy source="Sources/main-mcg.cpp"  target="Sources/main.cpp"  overwrite="true" />
-   </projectActionList>
-<else_if condition="/ICS/$present" />
-   <projectActionList id = "_new_project_files_ics" >
-      <createFolder   target="Snippets" />
-      <copy source="Sources/main-ics.cpp"  target="Sources/main.cpp"  overwrite="true" />
-   </projectActionList>
-<else/>
-   <projectActionList id = "_new_project_files_common">
-      <createFolder   target="Snippets" />
-      <copy source="Sources/main.cpp"  target="Sources/main.cpp"  overwrite="true" />
-   </projectActionList>
-</if>
+   <if condition="/MCG/$present" >
+      <projectActionList id = "_new_project_files_mcg" >
+         <createFolder   target="Snippets" />
+         <copy source="Sources/main-mcg.cpp"  target="Sources/main.cpp"  overwrite="true" />
+      </projectActionList>
+   <else_if condition="/ICS/$present" />
+      <projectActionList id = "_new_project_files_ics" >
+         <createFolder   target="Snippets" />
+         <copy source="Sources/main-ics.cpp"  target="Sources/main.cpp"  overwrite="true" />
+      </projectActionList>
+   <else/>
+      <projectActionList id = "_new_project_files_common">
+         <createFolder   target="Snippets" />
+         <copy source="Sources/main.cpp"  target="Sources/main.cpp"  overwrite="true" />
+      </projectActionList>
+   </if>
 
 </list>

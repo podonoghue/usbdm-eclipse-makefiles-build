@@ -6,7 +6,7 @@
  * @version  V4.12.1.80
  * @date     13 April 2016
  */
-
+ 
 #ifndef INCLUDE_USBDM_ICS_H_
 #define INCLUDE_USBDM_ICS_H_
  /*
@@ -38,6 +38,7 @@ $(/ICS/ClockConfig: #error ClockConfig not found)
 };
 
 $(/ICS/ClockInfoType:#error ClockInfoType not found)
+
 class ClockChangeCallback {
 
 friend class Ics;
@@ -106,9 +107,13 @@ public:
 private:
    /** Hardware instance */
    static constexpr HardwarePtr<ICS_Type> ics = IcsInfo::baseAddress;
+
 $(/ICS/privateMethods: // No private methods found)
+
 public:
+
 $(/ICS/publicMethods: // No public methods found)
+
    /**
     * Table of clock settings
     */

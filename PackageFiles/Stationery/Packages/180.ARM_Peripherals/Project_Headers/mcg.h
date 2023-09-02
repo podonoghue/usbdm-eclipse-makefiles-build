@@ -6,7 +6,7 @@
  * @version  V4.12.1.80
  * @date     13 April 2016
  */
-
+ 
 #ifndef INCLUDE_USBDM_MCG_H_
 #define INCLUDE_USBDM_MCG_H_
  /*
@@ -28,15 +28,6 @@ namespace USBDM {
  * @brief Abstraction for Multipurpose Clock Generator
  * @{
  */
-
-/** MCGFFCLK - Fixed frequency clock (input to FLL) */
-extern volatile uint32_t SystemMcgFFClock;
-/** MCGOUTCLK - Primary output from MCG, various sources */
-extern volatile uint32_t SystemMcgOutClock;
-/** MCGFLLCLK - Output of FLL */
-extern volatile uint32_t SystemMcgFllClock;
-/** MCGPLLCLK - Output of PLL */
-extern volatile uint32_t SystemMcgPllClock;
 
 /**
  * Clock configurations
@@ -85,7 +76,10 @@ typedef void (*MCGCallbackFunction)(void);
  */
 class Mcg {
 
+   using Info = McgInfo;
+
 private:
+#if $(/MCG/enableClockChangeNotifications:false)
    static ClockChangeCallback *clockChangeCallbackQueue;
 
    static void notifyBeforeClockChange() {
@@ -102,6 +96,7 @@ private:
          p = p->next;
       }
    }
+
 public:
    /**
     * Add callback for clock configuration changes
@@ -112,6 +107,7 @@ public:
       callback.next = clockChangeCallbackQueue;
       clockChangeCallbackQueue = &callback;
    }
+#endif
 
 private:
    /** Callback function for ISR */
@@ -132,16 +128,6 @@ $(/MCG/publicMethods: // No public methods found)
    static const ClockInfo clockInfo[];
 
    /**
-    * Transition from current clock mode to mode given
-    *
-    * @param[in]  clockInfo Clock mode to transition to
-    *
-    * @return E_NO_ERROR          on success
-    * @return E_CLOCK_INIT_FAILED on failure
-    */
-   static ErrorCode clockTransition(const ClockInfo &clockInfo);
-
-   /**
     * Write main MCG registers from clockInfo
     * - Clock monitors are masked out
     * - PLL is not selected (C6.PLLS=0)
@@ -153,13 +139,6 @@ $(/MCG/publicMethods: // No public methods found)
     * @param bugFix     Mask to flip MCG.C4 value
     */
    static void writeMainRegs(const ClockInfo &clockInfo, uint8_t bugFix);
-
-   /**
-    * Update SystemCoreClock variable
-    *
-    * Updates the SystemCoreClock variable with current core Clock retrieved from CPU registers.
-    */
-   static void SystemCoreClockUpdate(void);
 
    /**
     * Enable interrupts in NVIC
@@ -211,6 +190,25 @@ $(/MCG/publicMethods: // No public methods found)
    static McgClockMode currentClockMode;
 
    /**
+    * Update SystemCoreClock variable
+    *
+    * Updates the SystemCoreClock variable with current core Clock retrieved from CPU registers.
+    */
+   static void SystemCoreClockUpdate(void);
+
+#if $(/MCG/enablePeripheralSupport:false) // /MCG/enablePeripheralSupport
+
+   /**
+    * Transition from current clock mode to mode given
+    *
+    * @param[in]  clockInfo Clock mode to transition to
+    *
+    * @return E_NO_ERROR          on success
+    * @return E_CLOCK_INIT_FAILED on failure
+    */
+   static ErrorCode clockTransition(const ClockInfo &clockInfo);
+
+   /**
     * Get current clock mode
     *
     * @return
@@ -250,20 +248,18 @@ $(/MCG/publicMethods: // No public methods found)
    static void finalise() {
       clockTransition(clockInfo[ClockConfig_default]);
    }
+   
+#endif
 
    /**
-    * Initialise MCG to default settings.
+    * Initialise MCG as part of startup sequence
     */
-   static void defaultConfigure();
+   static void startupConfigure();
 
-   /**
-    * Set up the OSC out of reset.
-    */
-   static void initialise() {
-      defaultConfigure();
-   }
-
+$(/MCG/InitMethod: // No /MCG/InitMethod methods found)
 };
+
+$(/MCG/declarations: // /MCG/No declarations methods found)
 
 /**
  * @}

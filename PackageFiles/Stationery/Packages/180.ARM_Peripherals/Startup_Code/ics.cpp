@@ -285,17 +285,17 @@ void Ics::SystemCoreClockUpdate(void) {
    SimInfo::updateSystemClocks(SystemIcsOutClock);
 }
 #endif
-
+ 
 /**
  * Initialise ICS as part of startup sequence
  */
 void Ics::startupConfigure() {
 
-static constexpr uint16_t CLOCK_TRIM = $(/ICS/slowInternalClockTrim:0); // /ICS/slowInternalClockTrim
-static constexpr uint8_t  SCTRIM  = CLOCK_TRIM>>1U;
-static constexpr uint8_t  SCFTRIM = CLOCK_TRIM&0b1;
+static constexpr uint16_t SLOW_CLOCK_TRIM = $(/ICS/slowInternalClockTrim:0); // /ICS/slowInternalClockTrim
+static constexpr uint8_t  SCTRIM  = SLOW_CLOCK_TRIM>>1U;
+static constexpr uint8_t  SCFTRIM = SLOW_CLOCK_TRIM&0b1;
 
-if constexpr (CLOCK_TRIM != 0) {
+if constexpr (SLOW_CLOCK_TRIM != 0) {
    ics->C3 = SCTRIM;
    ics->C4 = (ics->C4&~ICS_C4_SCFTRIM_MASK)|SCFTRIM;
    

@@ -347,7 +347,7 @@
    <!-- ************** General ************** -->
 
    <if condition="smc_pmprot_ahsrun" >
-      <template key="enterRunMode" namespace="all" ><![CDATA[
+      <template key="enterRunMode" namespace="all" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
          \t/**
          \t * Enter Run Mode.
          \t *
@@ -440,7 +440,7 @@
          \t}\n\n
       ]]></template>
    <else />
-      <template key="enterRunMode" namespace="all" ><![CDATA[
+      <template key="enterRunMode" namespace="all" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
          \t/**
          \t * Enter Run Mode.
          \t *

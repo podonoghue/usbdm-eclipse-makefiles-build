@@ -259,6 +259,7 @@
             </choiceOption>
 
             <intOption key="system_peripheral_clock[%(n)]"
+               enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
                derived="true"
                constant="true"
                units="Hz"
@@ -339,6 +340,7 @@
 
          <intOption key="system_core_clock[%(n)]" condition="sim_clkdiv1_outdiv1_present"
             ref="(/MCG/system_mcgoutclk_clock[%(n)])/((sim_clkdiv1_outdiv1[%(n)])+1)"
+            enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
             derived="true"
             isNamedClock="true"
             units="Hz"
@@ -348,6 +350,7 @@
             disabledValue="0" />
 
          <intOption key="system_bus_clock[%(n)]" condition="sim_clkdiv1_outdiv4_present"
+            enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
             ref="(system_core_clock[%(n)])/(sim_clkdiv1_outdiv4[%(n)]+1)"
             derived="true"
             isNamedClock="true"
@@ -360,31 +363,35 @@
 
          <category name="CLKDIV1" description="System Clock Dividers">
             <choiceOption key="sim_clkdiv1_outdiv1[%(n)]"  condition="sim_clkdiv1_outdiv1_present"
+               enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
+               enumStem="SimCoreClkDivider"
                constant="true"
                description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
                toolTip="Clocks the ARM Cortex-M4 core and bus masters\n
                         Divides MCGOUTCLK Clock to generate system_core_clock.">
-               <choice value="0"   name="/1" />
-               <choice value="1"   name="/2" isDefault="true" />
-               <choice value="2"   name="/3" />
-               <choice value="3"   name="/4" />
-               <choice value="4"   name="/5" />
-               <choice value="5"   name="/6" />
-               <choice value="6"   name="/7" />
-               <choice value="7"   name="/8" />
-               <choice value="8"   name="/9" />
-               <choice value="9"   name="/10" />
-               <choice value="10"  name="/11" />
-               <choice value="11"  name="/12" />
-               <choice value="12"  name="/13" />
-               <choice value="13"  name="/14" />
-               <choice value="14"  name="/15" />
-               <choice value="15"  name="/16" />
+               <choice value="0"   name="/1"  enum="Direct" />
+               <choice value="1"   name="/2"  enum="DivBy2" isDefault="true" />
+               <choice value="2"   name="/3"  enum="DivBy3"/>
+               <choice value="3"   name="/4"  enum="DivBy4"/>
+               <choice value="4"   name="/5"  enum="DivBy5"/>
+               <choice value="5"   name="/6"  enum="DivBy6"/>
+               <choice value="6"   name="/7"  enum="DivBy7"/>
+               <choice value="7"   name="/8"  enum="DivBy8"/>
+               <choice value="8"   name="/9"  enum="DivBy9"/>
+               <choice value="9"   name="/10" enum="DivBy10"/>
+               <choice value="10"  name="/11" enum="DivBy11"/>
+               <choice value="11"  name="/12" enum="DivBy12"/>
+               <choice value="12"  name="/13" enum="DivBy13"/>
+               <choice value="13"  name="/14" enum="DivBy14"/>
+               <choice value="14"  name="/15" enum="DivBy15"/>
+               <choice value="15"  name="/16" enum="DivBy16"/>
             </choiceOption>
 
             <choiceOption key="sim_clkdiv1_outdiv4[%(n)]"  condition="sim_clkdiv1_outdiv4_present"
+               enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
                constant="true"
                derivedFrom="sim_clkdiv1_outdiv1[%(n)]"
+               enumStem="SimFlashClkDivider"
                description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"
                toolTip="Clocks the flash memory\n
                         Divides Core Clock to generate system_flash_clock." />
@@ -442,7 +449,8 @@
       ]]></setTemplate>
    </for>
 
-   <template><![CDATA[
+
+   <template codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Update system clock values
       \t *
@@ -467,5 +475,11 @@
    </validate>
 
    <xi:include href="_simFiles-MKL.xml"/>
+
+   <initialValueTemplate variables="sim_clkdiv1_outdiv1[0],sim_clkdiv1_outdiv2[0],sim_clkdiv1_outdiv3[0],sim_clkdiv1_outdiv4[0]"><![CDATA[
+      \t/** Reset clock divider value if clock not fully configured */
+      \tstatic constexpr uint32_t sim_clkdiv1 = %initExpression;
+      \t\n
+   ]]></initialValueTemplate>
 
 </peripheralPage>

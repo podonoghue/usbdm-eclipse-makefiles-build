@@ -4,11 +4,33 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   <!-- 
+      Create shared option /$(_BASENAME)/irqHandlingMethod along with
+      individual option    /$(_NAME)/irqHandlingMethod == irqHandlingMethod
+   -->
+   <if condition="$(_instance)==0" >
+      <equation key="individualChannelCallbacksEnable" value="=&quot;false&quot;" />
+      <for keys="i" dim="=@_instanceCount" >
+         <equation  key="individualChannelCallbacksEnable" value="=individualChannelCallbacksEnable+&quot;||/$(_BASENAME)%(i)/individualChannelCallbacks&quot;"/>
+      </for >
+      <stringOption key="xxx" value="=individualChannelCallbacksEnable" />
+      
+      <!-- Enable for shared code needed by all instances of peripheral -->
+      <binaryOption key="/$(_BASENAME)/individualChannelCallbacks"
+         ref="=individualChannelCallbacksEnable"
+         constant="true"
+         derived="true" >
+         <choice value="false" name="Disabled"  isDefault="true" />
+         <choice value="true"  name="Enabled"   />
+      </binaryOption>
+      
+   </if>   
+
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Class)BasicInfo&quot;" />
+      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
 
-   <binaryOption key="individual_channel_call_backs" condition="@NumChannels>@NumChannelVectors"
+   <binaryOption key="individualChannelCallbacks" condition="@NumChannels>@NumChannelVectors"
       enabledBy="irqHandlingMethod"
       description="Use individual channel call-backs"
       toolTip="The different FTM channels use a common hardware interrupt handler. \n
@@ -421,24 +443,24 @@
    ]]></template>
 
    <category name="Advanced" description="Advanced options">
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)clksel"  optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt0"    optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt1"    optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt2"    optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt3"    optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)trg0src" optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)trg1src" optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)ch0src"  optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)ch1src"  optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_Class)clksel"  optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt0"    optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt1"    optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt2"    optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt3"    optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_Class)trg0src" optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_Class)trg1src" optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_Class)ch0src"  optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_Class)ch1src"  optional="true" constant="false" />
 
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och7src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och6src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och5src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och4src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och3src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och2src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och1src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och0src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_Class)och7src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_Class)och6src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_Class)och5src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_Class)och4src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_Class)och3src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_Class)och2src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_Class)och1src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_Class)och0src" optional="true" constant="false"/>
    </category>
 
    <setTemplate key="/$(_BASENAME)/static_functions" namespace="all"
@@ -626,10 +648,12 @@
          \t      unsigned modValue = round(modValueF);\n
       ]]></template>
       <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
-         \t      if (modValue < Info::minimumResolution) {
-         \t         usbdm_assert(false, "Interval is too short");
-         \t         // Too short a period for minimum resolution
-         \t         return setErrorCode(E_TOO_SMALL);
+         \t      if constexpr (Info::minimumResolution>0) {
+         \t         if (modValue < Info::minimumResolution) {
+         \t            usbdm_assert(false, "Interval is too short");
+         \t            // Too short a period for minimum resolution
+         \t            return setErrorCode(E_TOO_SMALL);
+         \t         }
          \t      }\n
       ]]></template>
       <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
@@ -785,9 +809,11 @@
          \t   }\n
       ]]></template>
       <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
-         \t   if (rv < Info::minimumInterval) {
-         \t      // Attempt to set too short a period
-         \t      setErrorCode(E_TOO_SMALL);
+         \t   if constexpr (Info::minimumInterval>0) {
+         \t      if (rv < Info::minimumInterval) {
+         \t         // Attempt to set too short a period
+         \t         setErrorCode(E_TOO_SMALL);
+         \t      }
          \t   }\n
       ]]></template>
       <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
@@ -1559,19 +1585,30 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
-<!--   ========== FTM Init class =============================== -->
+<!--   ========== Init class =============================== -->
 
-   <template key="init_description" namespace="all" ><![CDATA[
+   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <![CDATA[
       \t/**
-      \t * Class used to do initialisation of $(_Class)
+      \t * Class used to do initialisation of the $(_Baseclass)
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
       \t * @note This constructor may be used to create a const instance in ROM
       \t *
       \t * Example:
+      \t * Example:
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback() {
+      \t *    ...
+      \t * }
+      \t *
       \t * @code
-      \t * static const Ftm$(_instance)::Init ftmInit {
+      \t * static const $(_Class)::Init ftmInit {
       \t *
       \t *    // Omitted parameters are taken to be zero unless a base value is given
       \t *    FtmMode_Freerunning,           // Alignment and whether interval or free-running mode
@@ -1585,39 +1622,124 @@
       \t *    // OR
       \t *    100_ms,                        // Timer period or minimum interval in seconds
       \t *
+      \t *    $(_name)Callback,              // Call-back to execute on event - call-back function name
+      \t *    NvicPriority_Low,              // Priority for interrupt - Low
+      \t *
       \t *    // Optional base value to start with (must be last parameter)
       \t *    $(_Class)::DefaultValue
       \t * };
       \t *
       \t * // Initialise FTM from values specified above
-      \t * Ftm$(_instance)::configure(ftmInit)
+      \t * $(_Class)::configure(ftmInit)
       \t * @endcode
       \t */
    ]]></template>
 
-   <template namespace="usbdm" ><![CDATA[
-      class $(_Class)BasicInfo {
+   <template namespace="usbdm" discardRepeats="true"  ><![CDATA[
+      class $(_Baseclass)BasicInfo {
       \t
-      public:\n\n
+      public:\n
    ]]></template>
 
-   <setTemplate namespace="usbdm"
-       variables="irqHandlingMethod">
-   <![CDATA[
+   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      variables="/$(_BASENAME)/irqHandlingMethod"
+   ><![CDATA[
+       \t//! Common class based callback code has been generated for this class of peripheral
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicValueExpression;
+       \t\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+   ><![CDATA[
       \t/**
-      \t * Type definition for $(_Class) channel interrupt call-back
-      \t *
-      \t * @param[in] status Flags indicating interrupt source channel(s)
+      \t * Type definition for overflow and fault call-back.
       \t */
-      \ttypedef void (*ChannelCallbackFunction)(uint8_t status);
+      \ttypedef void (*CallbackFunction)();
       \t
       \t/**
-      \t * Type definition for $(_Class) overflow and fault call-back.
+      \t * Callback to catch unhandled overflow and fault call-back.
       \t */
-      \ttypedef void (*CallbackFunction)();\n\n
-   ]]></setTemplate>
+      \tstatic void unhandledCallback() {
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}
+      \t
+      \t/**
+      \t * Type definition for channel event call-back
+      \t *
+      \t * @param mask Mask identifying channel
+      \t */
+      \ttypedef void (*ChannelCallbackFunction)(uint8_t mask);
+      \t
+      \t/**
+      \t * Callback to catch unhandled channel event call-back
+      \t *
+      \t * @param mask Mask identifying channel
+      \t */
+      \tstatic void unhandledChannelCallback(uint8_t mask) {
+      \t   (void)mask;
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}\n\n
+   ]]></template>
 
-   <template namespace="usbdm"><![CDATA[
+   <template codeGenCondition="irqHandlingMethod">
+   <![CDATA[
+      \t/** Callback function for Channel Fault and timer overflow */
+      \tstatic CallbackFunction sCallback;
+      \t
+      \t/**
+      \t * Indicates if individual call-backs can be set for each channel
+      \t */
+      \tstatic constexpr bool IndividualCallbacks = $(individualChannelCallbacks);
+      \t\n
+   ]]></template>
+
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/** Callback for programmatically set handler */
+      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
+      \t\n
+   ]]>
+   </template>
+
+   <template codeGenCondition="irqHandlingMethod&amp;&amp;!individualChannelCallbacks" >
+   <![CDATA[
+      \t/**
+      \t * Callback table for programmatically set channel call-backs
+      \t * One entry - all hardware interrupt vectors are mapped to a single handler
+      \t */
+      \tstatic ChannelCallbackFunction channelCallbacks[1];
+      \t\n
+   ]]></template>
+
+   <template codeGenCondition="irqHandlingMethod&amp;&amp;individualChannelCallbacks" >
+   <![CDATA[
+      \t/**
+      \t * Callback table for programmatically set channel call-backs
+      \t * One entry for each channel (one hardware interrupt vector is mapped to multiple channel call-backs by software)
+      \t */
+      \tstatic ChannelCallbackFunction channelCallbacks[NumChannels];
+      \t\n
+   ]]></template>
+
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+      \t/**
+      \t * Callback table for programmatically set handlers for $(_Class)
+      \t */
+      \t$(_Class)Info::ChannelCallbackFunction $(_Class)Info::channelCallbacks[] = {\n\n
+   ]]></template>
+   <for keys="ch" dim="NumChannels">
+      <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod&amp;&amp;individualChannelCallbacks" ><![CDATA[
+         \t   $(_Class)Info::unhandledChannelCallback,\n
+      ]]></template>
+   </for>
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod&amp;&amp;!individualChannelCallbacks" ><![CDATA[
+      \t   $(_Class)Info::unhandledChannelCallback,\n
+   ]]></template>
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
 $(init_description)
       \tclass Init {
       \t
@@ -1636,49 +1758,48 @@ $(init_description)
 
 <!--  Member variables -->
 
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+    ><![CDATA[
+      \t   /// Shared overflow or fault interrupt call-back
+      \t   %params = nullptr;\n\n
+   ]]></initialValueTemplate>
+
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
     ><![CDATA[
       \t   /// Shared channel interrupt call-back
       \t   ChannelCallbackFunction channelCallbackFunction = nullptr;\n\n
-   ]]></setTemplate>
+   ]]></initialValueTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
-      variables="irqHandlingMethod"
-    ><![CDATA[
-      \t   /// Shared overflow or fault interrupt call-back
-      \t   CallbackFunction callbackFunction = nullptr;\n\n
-   ]]></setTemplate>
-
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" 
       variables="ftm_sc_action,ftm_sc_cpwms,ftm_sc_clks,ftm_sc_ps,ftm_sc_mode"
    ><![CDATA[
       \t   /// Status And Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %enumClass %registerName = %enumClass_Normal;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" 
       variables="ftm_cntin"
    ><![CDATA[
       \t   /// %description
       \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" 
       variables="ftm_mod"
    ><![CDATA[
       \t   /// %description
       \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" 
       variables= "ftm_modPeriod"
     ><![CDATA[
       \t   /// %description
@@ -1739,7 +1860,7 @@ $(init_description)
 
 <!--   Constructors -->
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs"
+   <constructorTemplate namespace="usbdm" discardRepeats="true"  codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -1758,7 +1879,7 @@ $(init_description)
       \t   }\n\n
    ]]></constructorTemplate>
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <constructorTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -1777,7 +1898,7 @@ $(init_description)
       \t   }\n\n
    ]]></constructorTemplate>
 
-   <constructorTemplate namespace="usbdm"
+   <constructorTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -1792,16 +1913,12 @@ $(init_description)
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      #if $(irqHandlingMethod)
-      \t      %registerName = %paramExpression;
-      #else
-      \t      (void)%paramExpression;
-      #endif
+      \t   %registerName = %paramExpression;
       \t   }\n\n
    ]]></constructorTemplate>
 
    <for keys="r" values="ftm_sc_action;ftm_sc_cpwms;ftm_sc_mode;ftm_sc_clks">
-      <constructorTemplate  namespace="usbdm"
+      <constructorTemplate  namespace="usbdm" discardRepeats="true" 
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -1822,7 +1939,7 @@ $(init_description)
       ]]></constructorTemplate>
    </for>
 
-   <constructorTemplate namespace="usbdm"
+   <constructorTemplate namespace="usbdm" discardRepeats="true" 
       variables="ftm_sc_ps, ftm_cntin, ftm_mod"
       params=",cntin_ticks,mod_ticks"
       linePadding="xxx"
@@ -1847,7 +1964,7 @@ $(init_description)
          \t\n
    ]]></constructorTemplate>
 
-   <constructorTemplate namespace="usbdm"
+   <constructorTemplate namespace="usbdm" discardRepeats="true" 
       variables="ftm_sc_ps, ftm_mod"
       params=",mod_ticks"
       linePadding="xxx"
@@ -1872,7 +1989,7 @@ $(init_description)
          \t\n
    ]]></constructorTemplate>
 
-   <constructorTemplate namespace="usbdm"
+   <constructorTemplate namespace="usbdm" discardRepeats="true" 
       nonDefaultParams="2"
       variables="ftm_modPeriod"
       linePadding="xxx"
@@ -1895,57 +2012,8 @@ $(init_description)
          \t\n
    ]]></constructorTemplate>
 
-   <template namespace="usbdm" ><![CDATA[
-      \t};\n\n
-   ]]></template>
-
-<!--  Default Initialisation value -->
-
-   <!-- template><![CDATA[
-   \t/**
-   \t * Type definition for $(_Class) overflow and fault call-back.
-   \t */
-   \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
-   \t
-   \t/**
-   \t * Type definition for $(_Class) channel interrupt call-back
-   \t */
-   \ttypedef $(_Class)BasicInfo::ChannelCallbackFunction ChannelCallbackFunction;
-   \t\n
-   ]]></template -->
-
-   <template codeGenCondition="irqHandlingMethod"><![CDATA[
-   \t/**
-   \t * Callback function for Channel Fault and timer overflow
-   \t */
-   \tstatic CallbackFunction callback;
-   \t\n
-   ]]></template>
-
-   <template><![CDATA[
-   \t/**
-   \t * Indicates if individual call-backs can be set for each channel
-   \t */
-   \tstatic constexpr bool IndividualCallbacks = $(individual_channel_call_backs);
-   \t\n
-   ]]></template>
-
-   <template codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs"><![CDATA[
-   \t/**
-   \t * Callback table for programmatically set channel call-backs
-   \t * One entry for hardware interrupt vector (all hardware interrupt vectors are mapped to a single channel call-back by software)
-   \t */
-   \tstatic ChannelCallbackFunction channelCallbacks[1];
-   \t\n
-   ]]></template>
-
-   <template codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs"><![CDATA[
-   \t/**
-   \t * Callback table for programmatically set channel call-backs
-   \t * One entry for each channel (one hardware interrupt vector is mapped to multiple channel call-backs by software)
-   \t */
-   \tstatic ChannelCallbackFunction channelCallbacks[NumChannels];
-   \t\n
+   <template namespace="usbdm" discardRepeats="true"  ><![CDATA[
+      \t}; // class $(_Baseclass)BasicInfo::Init\n\n
    ]]></template>
 
    <initialValueTemplate
@@ -1961,7 +2029,7 @@ $(init_description)
          ftm_mod"
    ><![CDATA[
       \t/**
-      \t * Default initialisation value for Ftm$(_instance)
+      \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
@@ -1973,7 +2041,7 @@ $(init_description)
 
    <template key="channel_init_description" namespace="all"><![CDATA[
       \t/**
-      \t * Class used to do initialisation of Ftm$(_instance)Channel
+      \t * Class used to do initialisation of $(_Class)Channel
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
@@ -1981,7 +2049,7 @@ $(init_description)
       \t *
       \t * Example:
       \t * @code
-      \t * static const Ftm$(_instance)::ChannelInit channelInit {
+      \t * static const $(_Class)::ChannelInit channelInit {
       \t *
       \t *    // Omitted parameters are taken to be zero unless a base value is given
       \t *    FtmChannelNum_3,            // Channel to initialise
@@ -1995,12 +2063,12 @@ $(init_description)
       \t * };
       \t *
       \t * // Initialise FTM from values specified above
-      \t * Ftm$(_instance)::configureChannel(channelInit)
+      \t * $(_Class)::configureChannel(channelInit)
       \t * @endcode
       \t */
    ]]></template>
 
-   <template namespace="usbdm"><![CDATA[
+   <template namespace="usbdm" discardRepeats="true" ><![CDATA[
 $(channel_init_description)
       \tclass ChannelInit {
       \t
@@ -2019,35 +2087,35 @@ $(channel_init_description)
 
 <!--  Member variables -->
 
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs"
+   <setTemplate namespace="usbdm" discardRepeats="true"  codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;/$(_BASENAME)/individualChannelCallbacks"
       variables="irqHandlingMethod"
     ><![CDATA[
       \t   /// $(_Class) channel interrupt call-back
       \t   ChannelCallbackFunction callbackFunction = nullptr;\n\n
    ]]></setTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" 
       variables="ftm_cnv[]"
    ><![CDATA[
       \t   /// %description
       \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" 
       variables="ftm_cnsc_mode[]"
    ><![CDATA[
       \t   /// Channel Status And Control Register
       \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" 
       variables="ftm_channel_number"
    ><![CDATA[
       \t   /// %description
       \t   %enumClass %registerName = FtmChannelNum_None;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true"  codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;(NumChannelVectors>1)"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -2092,7 +2160,7 @@ $(channel_init_description)
 
 <!--  Constructors -->
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs"
+   <constructorTemplate namespace="usbdm" discardRepeats="true"  codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;/$(_BASENAME)/individualChannelCallbacks"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -2115,7 +2183,7 @@ $(channel_init_description)
       ftm_cnsc_mode[];
       ftm_cnsc_action[];
       ftm_cnsc_icrst[]">
-      <constructorTemplate  namespace="usbdm"
+      <constructorTemplate  namespace="usbdm" discardRepeats="true" 
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -2138,7 +2206,7 @@ $(channel_init_description)
    <for keys="r" values="
       ftm_channel_number;
       ftm_cnv[]">
-      <constructorTemplate  namespace="usbdm"
+      <constructorTemplate  namespace="usbdm" discardRepeats="true" 
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -2157,15 +2225,15 @@ $(channel_init_description)
          \t\n
       ]]></constructorTemplate>
    </for>
-   <template namespace="usbdm"><![CDATA[
-      \t};\n\n
+   <template namespace="usbdm" discardRepeats="true" ><![CDATA[
+      \t}; // class  $(_Baseclass)BasicInfo::ChannelInit\n\n
    ]]></template>
 
 <!--  Default Initialisation value -->
 
   <template><![CDATA[
       \t/**
-      \t * Default initialisation value for Ftm$(_instance)ChannelInit
+      \t * Default initialisation value for $(_Class)ChannelInit
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr ChannelInit DefaultChannelInitValues[] = {\n
@@ -2224,7 +2292,7 @@ $(channel_init_description)
       \t */
    ]]></template>
 
-   <template namespace="usbdm" condition="ftm_qdctrl_quadmode_present" ><![CDATA[
+   <template namespace="usbdm" discardRepeats="true"  condition="ftm_qdctrl_quadmode_present" ><![CDATA[
 $(quad_init_description)
       \tclass QuadInit {
       \t
@@ -2243,35 +2311,35 @@ $(quad_init_description)
 
 <!--  Member variables -->
 
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"  condition="ftm_qdctrl_quadmode_present"
+   <setTemplate namespace="usbdm" discardRepeats="true"  codeGenCondition="/$(_BASENAME)/irqHandlingMethod"  condition="ftm_qdctrl_quadmode_present"
       variables="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></setTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" 
       variables="ftm_qdfilter_a,ftm_qdfilter_b"
    ><![CDATA[
       \t   /// Quad input filter control
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" 
       variables="ftm_qdctrl_quadmode"
    ><![CDATA[
       \t   /// Quadrature Decoder Control And Status Register
       \t   uint8_t %registerName = FTM_QDCTRL_QUADEN_MASK;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" condition="ftm_qdctrl_quadmode_present"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true"  condition="ftm_qdctrl_quadmode_present"
       variables="ftm_sc_action,ftm_sc_ps"
    ><![CDATA[
       \t   /// Status And Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod" condition="ftm_qdctrl_quadmode_present"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true"  codeGenCondition="/$(_BASENAME)/irqHandlingMethod" condition="ftm_qdctrl_quadmode_present"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -2326,7 +2394,7 @@ $(quad_init_description)
 
 <!--  Constructors -->
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"  condition="ftm_qdctrl_quadmode_present"
+   <constructorTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" condition="ftm_qdctrl_quadmode_present"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -2344,7 +2412,7 @@ $(quad_init_description)
       \t   }\n\n
    ]]></constructorTemplate>
 
-   <constructorTemplate namespace="usbdm"  condition="ftm_qdctrl_quadmode_present"
+   <constructorTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" condition="ftm_qdctrl_quadmode_present"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -2358,11 +2426,7 @@ $(quad_init_description)
       \t   template <typename... Types>
       \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
       \t
-      #if $(irqHandlingMethod)
       \t      %registerName = %paramExpression;
-      #else
-      \t      (void)%paramExpression;
-      #endif
       \t   }\n\n
    ]]></constructorTemplate>
 
@@ -2372,7 +2436,7 @@ $(quad_init_description)
       ftm_qdctrl_quadmode;
       ftm_qdctrl_phapol;
       ftm_qdctrl_phbpol">
-      <constructorTemplate  namespace="usbdm"  condition="ftm_qdctrl_quadmode_present"
+      <constructorTemplate  namespace="usbdm" discardRepeats="true"   condition="ftm_qdctrl_quadmode_present"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -2392,7 +2456,7 @@ $(quad_init_description)
       ]]></constructorTemplate>
    </for>
 
-   <constructorTemplate  namespace="usbdm"
+   <constructorTemplate  namespace="usbdm" discardRepeats="true" 
       variables="ftm_qdfilter_a"
       linePadding="xxx"
    ><![CDATA[
@@ -2412,7 +2476,7 @@ $(quad_init_description)
       \t\n
    ]]></constructorTemplate>
 
-   <constructorTemplate  namespace="usbdm"
+   <constructorTemplate  namespace="usbdm" discardRepeats="true" 
       variables="ftm_qdfilter_b"
       linePadding="xxx"
    ><![CDATA[
@@ -2432,12 +2496,12 @@ $(quad_init_description)
       \t\n
    ]]></constructorTemplate>
 
-   <template namespace="usbdm"  condition="ftm_qdctrl_quadmode_present"><![CDATA[
+   <template namespace="usbdm" discardRepeats="true"   condition="ftm_qdctrl_quadmode_present"><![CDATA[
       \t};\n\n
    ]]></template>
 
-   <template namespace="usbdm" ><![CDATA[
-      };\n\n
+   <template namespace="usbdm" discardRepeats="true"  ><![CDATA[
+      }; // class  $(_Baseclass)BasicInfo\n\n
    ]]></template>
 
 <!--  Default Initialisation value -->
@@ -2456,7 +2520,7 @@ $(quad_init_description)
          ftm_sc_ps"
    ><![CDATA[
       \t/**
-      \t * Default initialisation value for Ftm$(_instance)QuadDecoder
+      \t * Default initialisation value for $(_Class)QuadDecoder
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr QuadInit DefaultQuadInitValue = {%initExpression
@@ -2465,34 +2529,7 @@ $(quad_init_description)
 
 <!--  ========== Misc =============================== -->
 
-   <template namespace="all" key="/HARDWARE/StaticObjects.timerHandler" discardRepeats="true"
-   ><![CDATA[
-   \t/**
-   \t * Callback to catch unhandled interrupt
-   \t */
-   \tvoid unhandledCallback() {
-   \t   setAndCheckErrorCode(E_NO_HANDLER);
-   \t}
-   \t
-   \t/**
-   \t * Callback to catch unhandled channel interrupt
-   \t *
-   \t * @param mask Mask identifying channel
-   \t */
-   \tvoid timerUnhandledChannelCallback(uint8_t mask) {
-   \t   (void)mask;
-   \t   setAndCheckErrorCode(E_NO_HANDLER);
-   \t}\n\n
-   ]]></template>
-
-   <template namespace="usbdm" codeGenCondition="irqHandlingMethod"
-   ><![CDATA[
-      extern void unhandledCallback();
-      extern void timerUnhandledChannelCallback(uint8_t);
-      \t\n
-   ]]></template>
-
-   <template  codeGenCondition="irqHandlingMethod" ><![CDATA[
+   <template  codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t/**
       \t * Set overflow and fault interrupt call-back
       \t *
@@ -2506,13 +2543,13 @@ $(quad_init_description)
       \t   if (newCallback == nullptr) {
       \t      newCallback = unhandledCallback;
       \t   }
-      \t   callback = newCallback;
+      \t   sCallback = newCallback;
       \t   return E_NO_ERROR;
       \t}
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="!irqHandlingMethod" ><![CDATA[
+   <template  codeGenCondition="!/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t/**
       \t * Set callbacks and IRQ priority from Init structure
       \t */
@@ -2527,7 +2564,7 @@ $(quad_init_description)
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs" ><![CDATA[
+   <template  codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;!individualChannelCallbacks" ><![CDATA[
       \t/**
       \t * Set channel call-back function
       \t * Configured for shared channel call-backs i.e. all channels use same call-back
@@ -2543,12 +2580,12 @@ $(quad_init_description)
       \t */
       \tstatic ErrorCode setChannelCallback(ChannelCallbackFunction callback) {
       \t   if (callback == nullptr) {
-      \t      channelCallbacks[0] = timerUnhandledChannelCallback;
+      \t      channelCallbacks[0] = unhandledChannelCallback;
       \t      return E_NO_ERROR;
       \t   }
       #ifdef DEBUG_BUILD
       \t   // Callback is shared across all channels. Check if callback already assigned
-      \t   if ((channelCallbacks[0] != timerUnhandledChannelCallback) &&
+      \t   if ((channelCallbacks[0] != unhandledChannelCallback) &&
       \t       (channelCallbacks[0] != callback)) {
       \t      return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
       \t   }
@@ -2580,7 +2617,7 @@ $(quad_init_description)
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs" ><![CDATA[
+   <template  codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;individualChannelCallbacks" ><![CDATA[
       \t/**
       \t * Set channel call-back function
       \t * Configured for individual channel call-backs
@@ -2601,7 +2638,7 @@ $(quad_init_description)
       \t      return setErrorCode(ErrorCode::E_ILLEGAL_PARAM);
       \t   }
       \t   if (callback == nullptr) {
-      \t      channelCallbacks[channelNum] = timerUnhandledChannelCallback;
+      \t      channelCallbacks[channelNum] = unhandledChannelCallback;
       \t      return ErrorCode::E_NO_ERROR;
       \t   }
       \t   channelCallbacks[channelNum] = callback;
@@ -2629,32 +2666,6 @@ $(quad_init_description)
       \t   }
       \t}
       \t\n
-   ]]></template>
-
-   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
-      \t/**
-      \t * Callback function for Channel Fault and timer overflow for $(_Class)
-      \t */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::callback = unhandledCallback;
-      \t\n
-   ]]></template>
-
-   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
-      \t/**
-      \t * Callback table for programmatically set handlers for $(_Class)
-      \t */
-      \t$(_Class)Info::ChannelCallbackFunction $(_Class)Info::channelCallbacks[] = {\n\n
-   ]]></template>
-   <for keys="ch" dim="NumChannels">
-      <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod&amp;&amp;individual_channel_call_backs" ><![CDATA[
-         \t   timerUnhandledChannelCallback,\n
-      ]]></template>
-   </for>
-   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod&amp;&amp;!individual_channel_call_backs" ><![CDATA[
-      \t   timerUnhandledChannelCallback,\n
-   ]]></template>
-   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
-      \t};\n\n
    ]]></template>
 
    <validate

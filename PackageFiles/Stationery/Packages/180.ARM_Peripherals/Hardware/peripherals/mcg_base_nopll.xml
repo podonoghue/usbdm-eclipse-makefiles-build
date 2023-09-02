@@ -1044,6 +1044,7 @@
          <aliasOption key="/PMC/system_low_power_clock" />
 
          <intOption key="system_mcgoutclk_clock[%(n)]"
+            enabledBy="enablePeripheralSupport&amp;&amp;enableClockConfiguration[%(n)]"
             max="/SIM/MCGOUTCLK_max[/SMC/smc_pmctrl_runm[%(n)]]"
             min="1"
             derived="true"

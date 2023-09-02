@@ -175,7 +175,7 @@
         values="
       kbi_pe_kbipe:EnabledPins;
       kbi_es_kbedg:PinPolarity" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -198,7 +198,7 @@
       ]]></setTemplate>
    </for>
 
-   <setTemplate codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+   <setTemplate codeGenCondition="enableGettersAndSetters"
       variables="/PORT/pin_index,kbi_pe_kbipe,kbi_es_kbedg"
       params=",polarity" >
    <![CDATA[
@@ -238,7 +238,7 @@
    </setTemplate>
 
 
-   <setTemplate variables="kbi_sc_kback" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+   <setTemplate variables="kbi_sc_kback" codeGenCondition="enableGettersAndSetters"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -265,7 +265,7 @@
       kbi_sc_kbspen:Status;
       kbi_sc_kbie:EnabledInterrupts;
       kbi_sc_kbmod:DetectionMode" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -615,7 +615,7 @@
       \t   const uint32_t index = (%paramName0-(32*$(_instance)));
       \t   const uint32_t mask = 1<<index;
       \t
-      \t      // usbdm_assert(pinIndex<32, "Illegal pin index");
+      \t      usbdm_assert(index<32, "Illegal pin index");
       \t
       \t      %registerName1 |= mask;
       \t      %registerName2 |= mask&~%paramName1;

@@ -42,41 +42,47 @@
          description="Enable peripheral support (common)"
          toolTip="Even if disabled, some code may still be generated but will \n
                   be removed by linker if not used">
-         <choice value="false" name="Minimal code generated"        isDefault="!@isGeneratedByDefault" />
-         <choice value="true"  name="Generate code for peripheral"  isDefault="@isGeneratedByDefault" />
+         <choice value="false" name="Minimal code for $(_NAME)"   isDefault="!@isGeneratedByDefault" />
+         <choice value="true"  name="Generate code for $(_NAME)"  isDefault="@isGeneratedByDefault" />
       </binaryOption>
    <else/>
       <!-- 
          Create shared option /$(_BASENAME)/enablePeripheralSupport along with
          individual option    /$(_NAME)/enablePeripheralSupport == enablePeripheralSupport
       -->
-      <equation key="enable" value="=&quot;false&quot;" />
-      <for keys="i" dim="=@_instanceCount" >
-         <equation  key="enable" value="=enable+&quot;||/$(_BASENAME)%(i)/enablePeripheralSupport&quot;"/>
-      </for >
-      
       <!-- Enable for this instance of this peripheral -->
       <binaryOption key="enablePeripheralSupport"
          description="Enable peripheral support (individual)"
          toolTip="Even if disabled, some code may still be generated but will \n
                   be removed by linker if not used">
-         <choice value="false" name="Minimal code generated"        isDefault="!@isGeneratedByDefault" />
-         <choice value="true"  name="Generate code for peripheral"  isDefault="@isGeneratedByDefault" />
+         <choice value="false" name="Minimal code for $(_NAME)"   isDefault="!@isGeneratedByDefault" />
+         <choice value="true"  name="Generate code for $(_NAME)"  isDefault="@isGeneratedByDefault" />
       </binaryOption>
       
-      <if condition="=&quot;$(_instance)&quot;==&quot;0&quot;"> <!-- Generate once only -->
+      <if condition="=(&quot;$(_instance)&quot;==&quot;0&quot;)||(&quot;$(_instance)&quot;==&quot;A&quot;)">
+          <!-- Shared is generated once only -->
       
+         <!-- Equation to check if any instance is enabled -->
+         <equation key="_enable" value="=&quot;false&quot;" />
+         <if condition="&quot;$(_instance)&quot;==&quot;A&quot;" >
+            <for keys="i" dim="=@_instanceCount" >
+               <equation  key="_enable" 
+               value="=_enable+&quot;||/$(_BASENAME)&quot;+Character(%(i)+65)+&quot;/enablePeripheralSupport&quot;"/>
+            </for >
+         <else/>
+            <for keys="i" dim="=@_instanceCount" >
+               <equation  key="_enable" value="=_enable+&quot;||/$(_BASENAME)%(i)/enablePeripheralSupport&quot;"/>
+            </for >
+         </if>
+         
          <!-- Enable for shared code needed by all instances of peripheral -->
          <binaryOption key="/$(_BASENAME)/enablePeripheralSupport"
-            ref="=enable"
+            ref="=_enable"
             hidden="true"
             constant="true"
-            derived="true"
-            description="Enable peripheral Support"
-            toolTip="Even if disabled, some code may still be generated but will \n
-                     be removed by linker if not used">
-            <choice value="false" name="Minimal code generated"        isDefault="!@isGeneratedByDefault" />
-            <choice value="true"  name="Generate code for peripheral"  isDefault="@isGeneratedByDefault" />
+            derived="true">
+            <choice value="false" name="Minimal code"  />
+            <choice value="true"  name="All code"      />
          </binaryOption>
       </if>
       
@@ -245,12 +251,12 @@
             Create shared option /$(_BASENAME)/irqHandlingMethod along with
             individual option    /$(_NAME)/irqHandlingMethod == irqHandlingMethod
          -->
-         <equation key="IrqEnable" value="=&quot;false&quot;" />
+         <equation key="_irqEnable" value="=&quot;false&quot;" />
          <for keys="i" dim="=@_instanceCount" >
-            <equation  key="IrqEnable" value="=IrqEnable+&quot;||/$(_BASENAME)%(i)/irqHandlingMethod&quot;"/>
+            <equation  key="_irqEnable" value="=_irqEnable+&quot;||/$(_BASENAME)%(i)/irqHandlingMethod&quot;"/>
          </for >
          
-         <!-- stringOption key="debug" value="=IrqEnable" / -->
+         <!-- stringOption key="debug" value="=_irqEnable" / -->
          
          <!-- Enable for this instance of this peripheral -->
          <!-- Create only if needed -->
@@ -271,7 +277,7 @@
          
             <!-- Enable for shared code needed by all instances of peripheral -->
             <binaryOption key="/$(_BASENAME)/irqHandlingMethod" condition="!/$(_BASENAME)/irqHandlingMethod"
-               ref="=IrqEnable"
+               ref="=_irqEnable"
                hidden="true"
                constant="true"
                derived="true" >
@@ -446,5 +452,12 @@
    ]]></template>
 
    <constant key="class_present" type="Boolean"  value = "true"   />
+
+   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t//! Indicates $(_NAME) is available
+      \t#define USBDM_$(_NAME)_AVAILABLE
+      \t\n
+   ]]></template>
+
 
 </fragment>
