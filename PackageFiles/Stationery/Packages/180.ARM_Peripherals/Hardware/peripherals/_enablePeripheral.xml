@@ -31,12 +31,12 @@
    <title description="------- General Settings -------" toolTip="" />
 
    <if condition="&quot;$(_BASENAME)&quot;==&quot;$(_NAME)&quot;">
-      <!-- 
-         Since BASENAME=NAME, create shared/common option:
+      <!--
+         Since BASENAME=NAME, there is only a soingle instance so create shared/common option:
              /$(_BASENAME)/enablePeripheralSupport == /$(_NAME)/enablePeripheralSupport == enablePeripheralSupport
       -->
-      
-      <!-- Enable for all instances of peripheral -->
+
+      <!-- Enable for this and all instances of peripheral -->
       <binaryOption key="/$(_BASENAME)/enablePeripheralSupport"
          modify="true"
          description="Enable peripheral support (common)"
@@ -46,7 +46,7 @@
          <choice value="true"  name="Generate code for $(_NAME)"  isDefault="@isGeneratedByDefault" />
       </binaryOption>
    <else/>
-      <!-- 
+      <!--
          Create shared option /$(_BASENAME)/enablePeripheralSupport along with
          individual option    /$(_NAME)/enablePeripheralSupport == enablePeripheralSupport
       -->
@@ -58,23 +58,21 @@
          <choice value="false" name="Minimal code for $(_NAME)"   isDefault="!@isGeneratedByDefault" />
          <choice value="true"  name="Generate code for $(_NAME)"  isDefault="@isGeneratedByDefault" />
       </binaryOption>
-      
+
       <if condition="=(&quot;$(_instance)&quot;==&quot;0&quot;)||(&quot;$(_instance)&quot;==&quot;A&quot;)">
-          <!-- Shared is generated once only -->
-      
-         <!-- Equation to check if any instance is enabled -->
+         <!-- Generate once only -->
+
+         <!-- Construct equation to check if any instance is enabled -->
          <equation key="_enable" value="=&quot;false&quot;" />
-         <if condition="&quot;$(_instance)&quot;==&quot;A&quot;" >
-            <for keys="i" dim="=@_instanceCount" >
-               <equation  key="_enable" 
-               value="=_enable+&quot;||/$(_BASENAME)&quot;+Character(%(i)+65)+&quot;/enablePeripheralSupport&quot;"/>
-            </for >
-         <else/>
-            <for keys="i" dim="=@_instanceCount" >
-               <equation  key="_enable" value="=_enable+&quot;||/$(_BASENAME)%(i)/enablePeripheralSupport&quot;"/>
-            </for >
-         </if>
-         
+
+         <for keys="instance" values="=_instanceList">
+            <if condition="/%(instance)/_present">
+               <!-- stringOption key="$(BASENAME)/xxx_%(instance)" value="%(instance)" / -->
+               <equation  key="_enable" value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/enablePeripheralSupport&quot;"/>
+            </if>
+         </for>
+         <!-- stringOption key="$(BASENAME)/enable" value="=_enable" modify="true" / -->
+
          <!-- Enable for shared code needed by all instances of peripheral -->
          <binaryOption key="/$(_BASENAME)/enablePeripheralSupport"
             ref="=_enable"
@@ -84,8 +82,9 @@
             <choice value="false" name="Minimal code"  />
             <choice value="true"  name="All code"      />
          </binaryOption>
+
       </if>
-      
+
    </if>
 
    <!-- Enable for generation of getters and setters -->
@@ -225,11 +224,11 @@
       </if>
 
       <if condition="&quot;$(_BASENAME)&quot;==&quot;$(_NAME)&quot;">
-         <!-- 
-            Since BASENAME=NAME, create shared option:
+         <!--
+            Since BASENAME=NAME, there is only 1 instance so create single option:
                 /$(_BASENAME)/irqHandlingMethod == /$(_NAME)/irqHandlingMethod == irqHandlingMethod
          -->
-         
+
          <!-- Enable for all instances of peripheral -->
          <!-- Create only if needed -->
          <irqOption key="/$(_BASENAME)/irqHandlingMethod" condition="!/$(_BASENAME)/irqHandlingMethod"
@@ -245,21 +244,13 @@
                      (see weak names used in vector table)."
             pattern="=irq_pattern"
             classHandler="=irq_ClassHandler" />
-   
+
       <else/>
-         <!-- 
+         <!--
             Create shared option /$(_BASENAME)/irqHandlingMethod along with
             individual option    /$(_NAME)/irqHandlingMethod == irqHandlingMethod
          -->
-         <equation key="_irqEnable" value="=&quot;false&quot;" />
-         <for keys="i" dim="=@_instanceCount" >
-            <equation  key="_irqEnable" value="=_irqEnable+&quot;||/$(_BASENAME)%(i)/irqHandlingMethod&quot;"/>
-         </for >
-         
-         <!-- stringOption key="debug" value="=_irqEnable" / -->
-         
          <!-- Enable for this instance of this peripheral -->
-         <!-- Create only if needed -->
          <irqOption key="irqHandlingMethod" condition="!irqHandlingMethod"
             hidden="true"
             valueFormat="%s"
@@ -272,28 +263,39 @@
                      (see weak names used in vector table)."
             pattern="=irq_pattern"
             classHandler="=irq_ClassHandler" />
-         
-         <if condition="=$(_instance)==0"> <!-- Generate once only -->
-         
+
+         <if condition="=(&quot;$(_instance)&quot;==&quot;0&quot;)||(&quot;$(_instance)&quot;==&quot;A&quot;)">
+             <!-- Generate once only -->
+
+            <!-- Construct equation to check if any instance is enabled -->
+            <equation key="_irqEnable" value="=&quot;false&quot;" />
+
+            <for keys="instance" values="=_instanceList">
+               <if condition="/%(instance)/_present">
+                  <!-- stringOption key="$(BASENAME)/yyy_%(instance)" value="%(instance)" modify="true" / -->
+                  <equation key="_irqEnable" value="=_irqEnable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/irqHandlingMethod&quot;"/>
+               </if>
+            </for>
+            <!-- stringOption key="$(BASENAME)/_irqEnableX" value="=_irqEnable" modify="true" / -->
+
             <!-- Enable for shared code needed by all instances of peripheral -->
             <binaryOption key="/$(_BASENAME)/irqHandlingMethod" condition="!/$(_BASENAME)/irqHandlingMethod"
                ref="=_irqEnable"
                hidden="true"
-               constant="true"
                derived="true" >
                <choice value="false" name="Disabled"  isDefault="true" />
                <choice value="true"  name="Enabled"   />
             </binaryOption>
          </if>
-         
+
       </if>
 
       <!-- Display here (wherever the original) -->
       <aliasOption key="irqHandlingMethod" constant="false" />
-      
+
       <!-- Debug -->
       <!-- aliasOption key="/$(_BASENAME)/irqHandlingMethod" constant="false" / -->
-      
+
       <!-- Create only if needed -->
       <choiceOption key="irqLevel" condition="!irqLevel"
          hidden="true"
@@ -305,19 +307,23 @@
          disabledValue="Not Installed"
          derivedFrom="/PCR/nvic_irqLevel" >
       </choiceOption>
-      
+
       <!-- Display here (wherever the original) -->
       <aliasOption key="irqLevel"          constant="false" />
 
-      <initialValueTemplate variables="/$(_BASENAME)/irqHandlingMethod,irqLevel" ><![CDATA[
+      <initialValueTemplate variables="/$(_BASENAME)/irqHandlingMethod,irqLevel" condition="!suppressIrqArray" ><![CDATA[
          \t//! IRQ numbers for hardware
          \tstatic constexpr IRQn_Type irqNums[]  = $(_NAME)_IRQS;
          \t
          \t//! Number of IRQs for hardware
          \tstatic constexpr uint32_t irqCount  = sizeofArray(irqNums);
-         \t
+         \t\n
+      ]]></initialValueTemplate>
+
+      <initialValueTemplate variables="/$(_BASENAME)/irqHandlingMethod,irqLevel" ><![CDATA[
          \t//! Default IRQ level
-         \tstatic constexpr NvicPriority irqLevel =  %symbolicValueExpression1;\n\n
+         \tstatic constexpr NvicPriority irqLevel =  %symbolicValueExpression1;
+         \t\n
       ]]></initialValueTemplate>
 
       <constant key="enable_interrupts_code"  value="&quot;enableNvicInterrupts();&quot;"   type="String"   />
@@ -458,6 +464,5 @@
       \t#define USBDM_$(_NAME)_AVAILABLE
       \t\n
    ]]></template>
-
 
 </fragment>

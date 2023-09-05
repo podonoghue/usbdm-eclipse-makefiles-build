@@ -268,7 +268,7 @@
                toolTip="Source for the %(NAME) receive data">
                <choice value="0" name="Rx pin"        enum="RxPin"  isDefault="true" />
                <choice value="1" name="CMP0 output"   enum="Cmp0" />
-               <choice value="2" name="CMP1 output"   enum="Cmp1" condition="/CMP1/$present" />
+               <choice value="2" name="CMP1 output"   enum="Cmp1" condition="/CMP1/_present" />
             </choiceOption>
 
             <choiceOption key="sim_sopt5_%(name)txsrc" condition="sim_sopt5_%(name)txsrc_present"
@@ -303,21 +303,21 @@
             description="ADC%(adc) trigger source"
             toolTip="ADC Trigger source in STOP and VLPS modes, or when ADC Alternative Trigger is active">
             <choice value="0"  name="External trigger pin input (PDB0_EXTRG)" enum="External"     isDefault="true" />
-            <choice value="1"  name="CMP 0 output"                            enum="Cmp0"         condition="/CMP0/$present"   />
-            <choice value="2"  name="CMP 1 output"                            enum="Cmp1"         condition="/CMP1/$present"   />
-            <choice value="3"  name="CMP 2 output"                            enum="Cmp2"         condition="/CMP2/$present"   />
-            <choice value="4"  name="PIT trigger 0"                           enum="PitCh0"       condition="/PIT/$present"    />
-            <choice value="5"  name="PIT trigger 1"                           enum="PitCh1"       condition="/PIT/$present"    />
-            <choice value="6"  name="PIT trigger 2"                           enum="PitCh2"       condition="/PIT/$present"    />
-            <choice value="7"  name="PIT trigger 3"                           enum="PitCh3"       condition="/PIT/$present"    />
-            <choice value="8"  name="FTM0 trigger"                            enum="Ftm0"         condition="/FTM0/$present"   />
-            <choice value="9"  name="FTM1 trigger"                            enum="Ftm1"         condition="/FTM1/$present"   />
-            <choice value="10" name="FTM2 trigger"                            enum="Ftm2"         condition="/FTM2/$present"   />
-            <choice value="11" name="FTM3 trigger"                            enum="Ftm3"         condition="/FTM3/$present"   />
-            <choice value="12" name="RTC alarm"                               enum="RtcAlarm"     condition="/RTC/$present"    />
-            <choice value="13" name="RTC seconds"                             enum="RtcSeconds"   condition="/RTC/$present"    />
-            <choice value="14" name="LPTMR trigger"                           enum="Lptmr"        condition="/LPTMR0/$present" />
-            <choice value="15" name="TPM1 channel 0/1 (A/B pretrigger)"       enum="Tmp1Triggers" condition="/TPM1/$present"/>
+            <choice value="1"  name="CMP 0 output"                            enum="Cmp0"         condition="/CMP0/_present"   />
+            <choice value="2"  name="CMP 1 output"                            enum="Cmp1"         condition="/CMP1/_present"   />
+            <choice value="3"  name="CMP 2 output"                            enum="Cmp2"         condition="/CMP2/_present"   />
+            <choice value="4"  name="PIT trigger 0"                           enum="PitCh0"       condition="/PIT/_present"    />
+            <choice value="5"  name="PIT trigger 1"                           enum="PitCh1"       condition="/PIT/_present"    />
+            <choice value="6"  name="PIT trigger 2"                           enum="PitCh2"       condition="/PIT/_present"    />
+            <choice value="7"  name="PIT trigger 3"                           enum="PitCh3"       condition="/PIT/_present"    />
+            <choice value="8"  name="FTM0 trigger"                            enum="Ftm0"         condition="/FTM0/_present"   />
+            <choice value="9"  name="FTM1 trigger"                            enum="Ftm1"         condition="/FTM1/_present"   />
+            <choice value="10" name="FTM2 trigger"                            enum="Ftm2"         condition="/FTM2/_present"   />
+            <choice value="11" name="FTM3 trigger"                            enum="Ftm3"         condition="/FTM3/_present"   />
+            <choice value="12" name="RTC alarm"                               enum="RtcAlarm"     condition="/RTC/_present"    />
+            <choice value="13" name="RTC seconds"                             enum="RtcSeconds"   condition="/RTC/_present"    />
+            <choice value="14" name="LPTMR trigger"                           enum="Lptmr"        condition="/LPTMR0/_present" />
+            <choice value="15" name="TPM1 channel 0/1 (A/B pretrigger)"       enum="Tmp1Triggers" condition="/TPM1/_present"/>
          </choiceOption>
       </for>
    </category>
@@ -364,7 +364,7 @@
                description="Clock out"
                toolTip="Clock available on CLKOUT pin" />
 
-            <intOption key="usb1pfdclk_Clock[%(n)]" condition="/USBPHY1/$present"
+            <intOption key="usb1pfdclk_Clock[%(n)]" condition="/USBPHY1/_present"
                max="USB1PFDCLK_max[/SMC/smc_pmctrl_runm[%(n)]]"
                enabledBy="/SMC/smc_pmctrl_runm[%(n)]!=1"
                derived="true"
@@ -382,10 +382,10 @@
                         Frequency of the undivided peripheral clock">
                <choice value="0"  name="MCGFLLCLK clock"   ref="/MCG/system_mcgfllclk_clock[%(n)]"     enum="McgFllClk"  code="SystemMcgFllClock"   isDefault="true" />
                <choice value="1"  name="MCGPLLCLK clock"   ref="/MCG/system_mcgpllclk_clock[%(n)]"     enum="McgPllClk"  code="SystemMcgPllClock"   />
-               <choice value="2"  name="USB1 PFD clock"    ref="usb1pfdclk_Clock[%(n)]"                enum="Usb1PfdClk" code="0"                   condition="/USBPHY1/$present"   />
-               <choice value="2"  name="Disabled"          ref="disabled"                              enum="Disabled2"  code="0"                   condition="!/USBPHY1/$present&amp;&amp;system_irc48m_clock[%(n)]"   />
+               <choice value="2"  name="USB1 PFD clock"    ref="usb1pfdclk_Clock[%(n)]"                enum="Usb1PfdClk" code="0"                   condition="/USBPHY1/_present"   />
+               <choice value="2"  name="Disabled"          ref="disabled"                              enum="Disabled2"  code="0"                   condition="!/USBPHY1/_present&amp;&amp;system_irc48m_clock[%(n)]"   />
                <choice value="3"  name="IRC48 MHz clock"   ref="system_irc48m_clock[%(n)]"        enum="Irc48mClk"  code="irc48mClock"         condition="system_irc48m_clock[%(n)]" />
-               <choice value="3"  name="Disabled"          ref="disabled"                              enum="Disabled3"  code="0"                   condition="/USBPHY1/$present&amp;&amp;!system_irc48m_clock[%(n)]" />
+               <choice value="3"  name="Disabled"          ref="disabled"                              enum="Disabled3"  code="0"                   condition="/USBPHY1/_present&amp;&amp;!system_irc48m_clock[%(n)]" />
             </choiceOption>
 
             <intOption key="system_peripheral_clock[%(n)]"

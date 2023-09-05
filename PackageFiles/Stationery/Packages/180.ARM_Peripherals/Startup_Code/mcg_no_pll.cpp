@@ -36,7 +36,7 @@ namespace USBDM {
 #endif
 
 #if $(/MCG/enableClockChangeNotifications) // /MCG/enableClockChangeNotifications
-ClockChangeCallback *Ics::clockChangeCallbackQueue = nullptr;
+ClockChangeCallback *Mcg::clockChangeCallbackQueue = nullptr;
 #endif
 
 /**
@@ -186,8 +186,10 @@ void Mcg::writeMainRegs(const ClockInfo &clockInfo, uint8_t bugFix) {
  */
 ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
 
+#if $(/MCG/enableClockChangeNotifications:false) // /MCG/enableClockChangeNotifications
    // Notify of clock changes (before)
    notifyBeforeClockChange();
+#endif
 
    McgClockMode finalMode = clockInfo.clockMode;
 
@@ -225,7 +227,7 @@ ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
             // Note: C2, C4, C6 and C7 set up in FBI or default from reset
 
             mcg->C1 =
-                  MCG_C1_CLKS(0b00)   | // CLKS     = 0     -> MCGOUTCLK = Output of FLL/PLL (depends on mcg_c6.PLLS)
+                  MCG_C1_CLKS(0b00)   | // CLKS     = 0     -> MCGOUTCLK = Output of FLL (depends on mcg_c6.PLLS)
                   MCG_C1_IREFS(1)     | // IREFS    = 1     -> FLL source = Slow IRC
                   clockInfo.c1;         // FRDIV, IRCLKEN, IREFSTEN
 
@@ -241,7 +243,7 @@ ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
             // Note: C2, C4, C6 and C7 set up in FBE
 
             mcg->C1 =
-                  MCG_C1_CLKS(0b00)   | // CLKS     = 0     -> MCGOUTCLK = Output of FLL/PLL (depends on mcg_c6.PLLS)
+                  MCG_C1_CLKS(0b00)   | // CLKS     = 0     -> MCGOUTCLK = Output of FLL
                   MCG_C1_IREFS(0)     | // IREFS    = 0     -> FLL source = External reference clock
                   clockInfo.c1;         // FRDIV, IRCLKEN, IREFSTEN
 
@@ -360,8 +362,10 @@ ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
    mcg->C8 = clockInfo.c8;
 #endif
 
+#if $(/MCG/enableClockChangeNotifications:false) // /MCG/enableClockChangeNotifications
    // Notify of clock changes (after)
    notifyAfterClockChange();
+#endif
 
    return E_NO_ERROR;
 }
@@ -425,7 +429,6 @@ void Mcg::SystemCoreClockUpdate(void) {
    }
 
    SystemMcgFllClock = 0;
-   SystemMcgPllClock = 0; // Not available
 
    switch (mcg->S&MCG_S_CLKST_MASK) {
       case MCG_S_CLKST(0) : // FLL

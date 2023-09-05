@@ -448,7 +448,7 @@
    ]]>
    </template>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
@@ -456,7 +456,7 @@
        \t\n
    ]]></initialValueTemplate>
 
-   <template codeGenCondition="/$(_BASENAME)/irqHandlingMethod" namespace="usbdm" discardRepeats="true" >
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
    <![CDATA[
       \t/**
       \t * Type definition for $(_Class) interrupt call back.
@@ -815,6 +815,8 @@
       \t};\n\n
    ]]></initialValueTemplate>
 
+<!--  ==========  ADC MISC =============================== -->
+
    <clockCodeTemplate variable="adc_sc3_adiclk" returnFormat="%s" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
    ><![CDATA[
       \t/** Internal ADC clock */
@@ -853,14 +855,15 @@
    ]]></clockCodeTemplate>
 
    <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
-      <![CDATA[
+   <![CDATA[
       \t}; // $(_Baseclass)BasicInfo::Init\n\n
    ]]>
    </template>
 
    <template namespace="usbdm" discardRepeats="true" >
-      <![CDATA[
-      }; // $(_Baseclass)BasicInfo\n\n
+   <![CDATA[
+   }; // $(_Baseclass)BasicInfo
+   \t\n
    ]]>
    </template>
 

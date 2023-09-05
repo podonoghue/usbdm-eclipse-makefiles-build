@@ -725,7 +725,7 @@
    ]]></template>
    <template namespace="usbdm" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
       \t/*
-      \t * Global clocks constants
+      \t * Global clock constants
       \t * These are provided when minimal clock generator code is used.
       \t * They assume no clock changes are made after startup.
       \t * Values provided are from USBDM configuration.
@@ -744,7 +744,7 @@
          \t *  %description
          \t *  %tooltip
          \t */
-         \textern uint32_t %(name);
+         \textern volatile uint32_t %(name);
          \t\n
       ]]></setTemplate>
       <setTemplate namespace="all" key="/$(_BASENAME)/clocks" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport"
@@ -753,7 +753,7 @@
          \t *  %description
          \t *  %tooltip
          \t */
-         \tuint32_t %(name);
+         \tvolatile uint32_t %(name);
          \t\n
       ]]></setTemplate>
       <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport"

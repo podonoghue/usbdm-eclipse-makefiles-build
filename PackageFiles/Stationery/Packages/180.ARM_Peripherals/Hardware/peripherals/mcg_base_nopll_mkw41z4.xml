@@ -187,7 +187,7 @@
                   <!-- MCGERCLK => FRDIV/(PLL)/CLKS   (no OSCSEL) -->
                   <graphicItem id="MCGERCLK_C_CLKS"             var="mcg_erc_clock[%(n)]"                type="connector"   params="MCGERCLK_IN_IN0,0,     CLKS,2,      y,x"                 />
                   <graphicItem id="MCGERCLK_C_FRDIV"            var="mcg_erc_clock[%(n)]"                type="connector"   params="MCGERCLK_IN_IN0,0,     FRDIV,0,     y-20,d,(x-15),y,x"   />
-                  <graphicItem id="MCGERCLK_C_PLL"              var="mcg_erc_clock[%(n)]"                type="connector"   params="MCGERCLK_IN_IN0,0,     PLL,0,       y-20,d,(x-20),d,y,x" condition="mcg_c5_prdiv0_present&amp;&amp;!/USBPHY1/$present" />
+                  <graphicItem id="MCGERCLK_C_PLL"              var="mcg_erc_clock[%(n)]"                type="connector"   params="MCGERCLK_IN_IN0,0,     PLL,0,       y-20,d,(x-20),d,y,x" condition="mcg_c5_prdiv0_present&amp;&amp;!/USBPHY1/_present" />
                   <graphicItem id="MCGERCLK"                    var="mcg_erc_clock[%(n)]"                type="annotation"  params="280, 50, 70, 20"                               />
 
                   <graphicItem id="MCGERCLK_IN_IN0,NONAME"      var=""                                   type="node"        params="430, 100, is,on"                                />
@@ -876,7 +876,7 @@
 
             <binaryOption key="mcg_c1_irefs[%(n)]"
                ref="(mcgClockMode[%(n)]==@FEI)||(mcgClockMode[%(n)]==@FBI)||(mcgClockMode[%(n)]==@BLPI)"
-               enumStem="IcsIref"
+               enumStem="McgIref"
                target="irefs_clock[%(n)]"
                derived="true"
                constant="true"

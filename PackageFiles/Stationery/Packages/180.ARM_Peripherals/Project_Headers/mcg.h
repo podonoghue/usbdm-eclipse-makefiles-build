@@ -6,8 +6,8 @@
  * @version  V4.12.1.80
  * @date     13 April 2016
  */
- 
-#ifndef INCLUDE_USBDM_MCG_H_
+
+#ifndef INCLUDE_USBDM_MCG_H_ 
 #define INCLUDE_USBDM_MCG_H_
  /*
  * *****************************
@@ -74,9 +74,7 @@ typedef void (*MCGCallbackFunction)(void);
  *    Mcg::initialise();
  * @endcode
  */
-class Mcg {
-
-   using Info = McgInfo;
+class Mcg : public McgInfo {
 
 private:
 #if $(/MCG/enableClockChangeNotifications:false)
@@ -127,18 +125,8 @@ $(/MCG/publicMethods: // No public methods found)
     */
    static const ClockInfo clockInfo[];
 
-   /**
-    * Write main MCG registers from clockInfo
-    * - Clock monitors are masked out
-    * - PLL is not selected (C6.PLLS=0)
-    * - Not low power (C2.LP = 0 since clockInfo.C2 does not include LP)
-    * - TRIM bits are preserved (C2.FCFTRIM, C4.FCTRIM, C4.SCFTRIM)
-    * - Bugfix version: Errata e7993
-    *
-    * @param clockInfo  Clock settings information
-    * @param bugFix     Mask to flip MCG.C4 value
-    */
-   static void writeMainRegs(const ClockInfo &clockInfo, uint8_t bugFix);
+   /** Current clock mode (FEI out of reset) */
+   static McgClockMode currentClockMode;
 
    /**
     * Enable interrupts in NVIC
@@ -163,31 +151,6 @@ $(/MCG/publicMethods: // No public methods found)
    static void disableNvicInterrupts() {
       NVIC_DisableIRQ(McgInfo::irqNums[0]);
    }
-   /**
-    * MCG interrupt handler -  Calls MCG callback
-    */
-   static void irqHandler() {
-      callback();
-   }
-
-   /**
-    * Set callback for ISR
-    *
-    * @param[in]  callback The function to call from stub ISR
-    */
-   static void setCallback(MCGCallbackFunction mcgCallback)  {
-      if (mcgCallback == nullptr) {
-         mcgCallback = unhandledCallback;
-      }
-      // Either no handler set yet or removing handler
-      usbdm_assert(
-            (Mcg::callback == unhandledCallback) || (mcgCallback == unhandledCallback),
-            "Handler already set");
-      Mcg::callback = mcgCallback;
-   }
-
-   /** Current clock mode (FEI out of reset) */
-   static McgClockMode currentClockMode;
 
    /**
     * Update SystemCoreClock variable
@@ -197,6 +160,19 @@ $(/MCG/publicMethods: // No public methods found)
    static void SystemCoreClockUpdate(void);
 
 #if $(/MCG/enablePeripheralSupport:false) // /MCG/enablePeripheralSupport
+
+   /**
+    * Write main MCG registers from clockInfo
+    * - Clock monitors are masked out
+    * - PLL is not selected (C6.PLLS=0)
+    * - Not low power (C2.LP = 0 since clockInfo.C2 does not include LP)
+    * - TRIM bits are preserved (C2.FCFTRIM, C4.FCTRIM, C4.SCFTRIM)
+    * - Bugfix version: Errata e7993
+    *
+    * @param clockInfo  Clock settings information
+    * @param bugFix     Mask to flip MCG.C4 value
+    */
+   static void writeMainRegs(const ClockInfo &clockInfo, uint8_t bugFix);
 
    /**
     * Transition from current clock mode to mode given
@@ -248,7 +224,7 @@ $(/MCG/publicMethods: // No public methods found)
    static void finalise() {
       clockTransition(clockInfo[ClockConfig_default]);
    }
-   
+
 #endif
 
    /**

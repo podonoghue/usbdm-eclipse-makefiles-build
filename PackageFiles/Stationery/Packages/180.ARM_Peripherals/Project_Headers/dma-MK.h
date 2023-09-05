@@ -635,13 +635,13 @@ public:
     */
    static void configure(DmaChannelNum dmaChannelNum, DmaSlot dmaSlot, DmaMuxEnable dmaMuxEnable=DmaMuxEnable_Continuous) {
 
-#if $(/PIT/$present:false)
+#if $(/PIT/_present:false)
       // Throttled DMA channels limited by PIT channels available
       usbdm_assert((dmaMuxEnable != DmaMuxEnable_Triggered) || (dmaChannelNum<=USBDM::PitInfo::NumChannels),
             "Illegal PIT throttled channel");
 #endif
 
-#if $(/LPIT/$present:false)
+#if $(/LPIT/_present:false)
       usbdm_assert((dmaMuxEnable != DmaMuxEnable_Triggered) || (dmaChannelNum<=USBDM::Lpit0Info::NumChannels),
             "Illegal PIT throttled channel");
 #endif
@@ -816,7 +816,7 @@ $(/DMA/Setters:#error "/DMA/Setters not found" )
 
       unsigned channelNum;
 
-#if $(/PIT/$present:false)
+#if $(/PIT/_present:false)
       // Try non-PIT channel first
       channelNum = __builtin_ffs(allocatedChannels&~0xF);
       if (channelNum == 0) {
@@ -854,7 +854,7 @@ $(/DMA/Setters:#error "/DMA/Setters not found" )
       return (DmaChannelNum) pitChannelNum;
    }
 
-#if $(/LPIT/$present:false)
+#if $(/LPIT/_present:false)
    /**
     * Allocate Periodic DMA channel.
     * This is a channel that may be throttled by an associated LPIT channel.
@@ -874,7 +874,7 @@ $(/DMA/Setters:#error "/DMA/Setters not found" )
    }
 #endif
 
-#if $(/PIT/$present:false)
+#if $(/PIT/_present:false)
    /**
     * Allocate Periodic DMA channel.
     * This is a channel that may be throttled by an associated PIT channel.

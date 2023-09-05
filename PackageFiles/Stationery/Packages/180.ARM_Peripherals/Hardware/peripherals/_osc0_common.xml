@@ -46,10 +46,10 @@
 -->
    <!-- ************* CR ****************** -->
 
-   <aliasOption key="/MCG/oscMode" constant="false" />
+   <aliasOption key="/MCG/mcg_c2_oscmode" constant="false" />
 
    <intOption key="osc_input_freq"
-      enabledBy="/MCG/oscMode!=/OscMode_NotConfigured"
+      enabledBy="/MCG/mcg_c2_oscmode!=/OscMode_NotConfigured"
       units="Hz"
       description="OSC frequency"
       toolTip="Frequency of external crystal or clock on XTAL/EXTAL"
@@ -57,7 +57,7 @@
       disabledValue="0" />
 
    <intOption key="osc_clock"
-      enabledBy="/MCG/oscMode!=/OscMode_NotConfigured"
+      enabledBy="/MCG/mcg_c2_oscmode!=/OscMode_NotConfigured"
       ref="osc_input_freq"
       valueFormat="%s"
       constant="true"
@@ -70,7 +70,7 @@
       min="1" />
 
    <binaryOption key="osc_cr_erclken"
-      enabledBy="/MCG/oscMode!=/OscMode_NotConfigured"
+      enabledBy="/MCG/mcg_c2_oscmode!=/OscMode_NotConfigured"
       enumStem="OscErClkEn"
       description="External Reference Enable"
       disabledValue="0"
@@ -94,7 +94,7 @@
 
    <choiceOption key="osc_cr_scp"
       enumStem="OscCap"
-      enabledBy="(/MCG/oscMode>/OscMode_ExternalClock)&amp;&amp;(/MCG/oscMode!=/OscMode_RTC_Controlled)"
+      enabledBy="(/MCG/mcg_c2_oscmode>/OscMode_ExternalClock)&amp;&amp;(/MCG/mcg_c2_oscmode!=/OscMode_RTC_Controlled)"
       description="Oscillator load capacitance"
       toolTip="Configures the oscillator load capacitance">
       <choice value="0"  enum="None" name="0 pF" />
@@ -177,7 +177,7 @@
    </if>
 
    <intOption key="osc32k_clock"
-         enabledBy="(/MCG/oscMode!=/OscMode_NotConfigured)&amp;&amp;(osc_input_freq&gt;=32000)&amp;&amp;(osc_input_freq&lt;=40000), Disable as XTAL frequency unsuitable"
+         enabledBy="(/MCG/mcg_c2_oscmode!=/OscMode_NotConfigured)&amp;&amp;(osc_input_freq&gt;=32000)&amp;&amp;(osc_input_freq&lt;=40000), Disable as XTAL frequency unsuitable"
          ref="osc_clock"
          valueFormat="%s"
          derived="true"

@@ -7,7 +7,7 @@
  * @date     13 April 2016
  */
 
-#ifndef INCLUDE_USBDM_MCG_H_
+#ifndef INCLUDE_USBDM_MCG_H_ 
 #define INCLUDE_USBDM_MCG_H_
  /*
  * *****************************
@@ -29,15 +29,6 @@ namespace USBDM {
  * @{
  */
 
-/** MCGFFCLK - Fixed frequency clock (input to FLL) */
-extern volatile uint32_t SystemMcgFFClock;
-/** MCGOUTCLK - Primary output from MCG, various sources */
-extern volatile uint32_t SystemMcgOutClock;
-/** MCGFLLCLK - Output of FLL */
-extern volatile uint32_t SystemMcgFllClock;
-/** MCGPLLCLK - Output of PLL */
-extern volatile uint32_t SystemMcgPllClock;
-
 /**
  * Clock configurations
  */
@@ -50,15 +41,23 @@ $(/MCG/ClockInfoType:#error ClockInfoType not found)
 
 class ClockChangeCallback {
 
-public:
+friend class Mcg;
+
+private:
       // Pointer to next in chain
       ClockChangeCallback *next = nullptr;
 
+public:
       virtual ~ClockChangeCallback() = default;
 
-      // This method is overridden to obtain notification before clock change
+      /**
+       * This method is overridden to obtain notification before clock change
+       */
       virtual void beforeClockChange(){}
-      // This method is overridden to obtain notification after clock change
+
+      /**
+       * This method is overridden to obtain notification after clock change
+       */
       virtual void afterClockChange(){};
 };
 
@@ -75,9 +74,10 @@ typedef void (*MCGCallbackFunction)(void);
  *    Mcg::initialise();
  * @endcode
  */
-class Mcg {
+class Mcg : public McgInfo {
 
 private:
+#if $(/MCG/enableClockChangeNotifications:false)
    static ClockChangeCallback *clockChangeCallbackQueue;
 
    static void notifyBeforeClockChange() {
@@ -94,6 +94,7 @@ private:
          p = p->next;
       }
    }
+
 public:
    /**
     * Add callback for clock configuration changes
@@ -104,6 +105,7 @@ public:
       callback.next = clockChangeCallbackQueue;
       clockChangeCallbackQueue = &callback;
    }
+#endif
 
 private:
    /** Callback function for ISR */
@@ -123,14 +125,8 @@ $(/MCG/publicMethods: // No public methods found)
     */
    static const ClockInfo clockInfo[];
 
-   /**
-    * Transition from current clock mode to mode given
-    *
-    * @param[in]  clockInfo Clock mode to transition to
-    *
-    * @return E_NO_ERROR on success
-    */
-   static ErrorCode clockTransition(const ClockInfo &clockInfo);
+   /** Current clock mode (LIRC_8M out of reset) */
+   static McgClockMode currentClockMode;
 
    /**
     * Update SystemCoreClock variable
@@ -139,9 +135,17 @@ $(/MCG/publicMethods: // No public methods found)
     */
    static void SystemCoreClockUpdate(void);
 
+#if $(/MCG/enablePeripheralSupport:false) // /MCG/enablePeripheralSupport
 
-   /** Current clock mode (LIRC_8M out of reset) */
-   static McgClockMode currentClockMode;
+   /**
+    * Transition from current clock mode to mode given
+    *
+    * @param[in]  clockInfo Clock mode to transition to
+    *
+    * @return E_NO_ERROR          on success
+    * @return E_CLOCK_INIT_FAILED on failure
+    */
+   static ErrorCode clockTransition(const ClockInfo &clockInfo);
 
    /**
     * Get current clock mode
@@ -184,19 +188,17 @@ $(/MCG/publicMethods: // No public methods found)
       clockTransition(clockInfo[ClockConfig_default]);
    }
 
-   /**
-    * Initialise MCG to default settings.
-    */
-   static void defaultConfigure();
+#endif
 
    /**
-    * Set up the OSC out of reset.
+    * Initialise MCG as part of startup sequence
     */
-   static void initialise() {
-      defaultConfigure();
-   }
+   static void startupConfigure();
 
+$(/MCG/InitMethod: // No /MCG/InitMethod methods found)
 };
+
+$(/MCG/declarations: // /MCG/No declarations methods found)
 
 /**
  * @}

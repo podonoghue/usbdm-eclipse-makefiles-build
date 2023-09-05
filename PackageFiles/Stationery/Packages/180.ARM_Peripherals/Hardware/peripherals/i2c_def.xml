@@ -75,7 +75,7 @@
       <choice value="true"  enum="Enabled"  name="Speed may be specified in Hertz" />
    </binaryOption>
 
-   <choiceOption key="i2cClockConfig" condition="/MCG/$present"
+   <choiceOption key="i2cClockConfig" condition="/MCG/_present"
       enabledBy="enablePeripheralSupport"
       target="i2cInputClock"
       description="Clock configuration"
@@ -86,7 +86,7 @@
       <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
    </choiceOption>
 
-   <choiceOption key="i2cClockConfig" condition="/ICS/$present"
+   <choiceOption key="i2cClockConfig" condition="/ICS/_present"
       enabledBy="enablePeripheralSupport"
       target="i2cInputClock"
       description="Clock configuration"

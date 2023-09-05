@@ -67,7 +67,7 @@
       <choice value="true"  enum="Enabled"  name="Speed may be specified in Hertz" />
    </binaryOption>
 
-   <choiceOption key="i2cClockConfig" condition="/MCG/$present"
+   <choiceOption key="i2cClockConfig" condition="/MCG/_present"
       enabledBy="enablePeripheralSupport"
       target="i2cInputClock"
       description="Clock configuration"
@@ -78,7 +78,7 @@
       <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
    </choiceOption>
 
-   <choiceOption key="i2cClockConfig" condition="/ICS/$present"
+   <choiceOption key="i2cClockConfig" condition="/ICS/_present"
       enabledBy="enablePeripheralSupport"
       target="i2cInputClock"
       description="Clock configuration"
@@ -378,8 +378,7 @@
    <intOption key="i2c_slt_value" condition="i2c_slth_sslt_present"
       units="ticks"
       enabledBy="enablePeripheralSupport"
-      typeName="uint16_t"
-      description="SCL low timeout value"
+      description="SMB SCL low timeout value"
       toolTip="SCL low timeout"
    />
 
@@ -998,12 +997,9 @@
       </setTemplate>
    </for>
 
-   <for keys="r"
-      values="
-            i2c_slt_value
-            " >
       <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
-         variables="%(r)"
+         variables="i2c_slt_value"
+         params="sclLowTime"
          linePadding="xxx" >
       <![CDATA[
          \t   /**
@@ -1012,17 +1008,16 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         \t    * @param value %description
+         %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr Init(Ticks value, Types... rest) : Init(rest...) {
+         \t   constexpr Init(%param0, Types... rest) : Init(rest...) {
          \t
-         \t      %registerName = value;
+         \t      %registerName = %paramExpression;
          \t   }
          \t\n
       ]]>
       </setTemplate>
-   </for>
 
 
 <!--   Default Initialisation value -->

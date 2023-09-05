@@ -4,12 +4,12 @@
 
 <list name="NewProjectActions" >
 
-   <if condition="/MCG/$present" >
+   <if condition="/MCG/_present" >
       <projectActionList id = "_new_project_files_mcg" >
          <createFolder   target="Snippets" />
          <copy source="Sources/main-mcg.cpp"  target="Sources/main.cpp"  overwrite="true" />
       </projectActionList>
-   <else_if condition="/ICS/$present" />
+   <else_if condition="/ICS/_present" />
       <projectActionList id = "_new_project_files_ics" >
          <createFolder   target="Snippets" />
          <copy source="Sources/main-ics.cpp"  target="Sources/main.cpp"  overwrite="true" />

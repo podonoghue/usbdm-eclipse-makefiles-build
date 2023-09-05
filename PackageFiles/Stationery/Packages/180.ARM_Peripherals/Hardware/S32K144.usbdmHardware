@@ -14,12 +14,12 @@
       <device variant="FS32K144UAT0VLLT" manual="S32K1XXRM"  package="LQFP_100"  deviceName="" />
    </family>
    <peripherals>
-      <peripheral baseName="ADC"      instance="0"        instanceCount="2"   version="adc0_s32k142">
+      <peripheral baseName="ADC"      instance="0"        instanceList="ADC0;ADC1" version="adc0_s32k142">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForAdc" />
          <clock clockEnable="PCC->PCC_ADC0 = PCC->PCC_ADC0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_ADC0 = PCC->PCC_ADC0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="ADC0_IRQn" />
-         <param type="LongVariable"           value="2"           name="instanceCount"               key="/ADC0/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/ADC0/$present" />
+         <param type="StringVariable"         value="ADC0;ADC1"   name="instanceList"                key="/ADC0/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/ADC0/_present" />
          <param type="StringVariable"         value="true"        name="adc_base_ofs_ba_ofs_present" key="/ADC0/adc_base_ofs_ba_ofs_present" />
          <param type="StringVariable"         value="true"        name="adc_cfg1_adiclk_present"     key="/ADC0/adc_cfg1_adiclk_present" />
          <param type="StringVariable"         value="true"        name="adc_cfg1_adiv_present"       key="/ADC0/adc_cfg1_adiv_present" />
@@ -66,12 +66,12 @@
          <param type="StringVariable"         value="true"        name="adc_xofs_xofs_present"       key="/ADC0/adc_xofs_xofs_present" />
          <param type="StringVariable"         value="true"        name="adc_yofs_yofs_present"       key="/ADC0/adc_yofs_yofs_present" />
       </peripheral>
-      <peripheral baseName="ADC"      instance="1"        instanceCount="2"   version="adc0_s32k142">
+      <peripheral baseName="ADC"      instance="1"        instanceList="ADC0;ADC1" version="adc0_s32k142">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForAdc" />
          <clock clockEnable="PCC->PCC_ADC1 = PCC->PCC_ADC1 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_ADC1 = PCC->PCC_ADC1 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="ADC1_IRQn" />
-         <param type="LongVariable"           value="2"           name="instanceCount"               key="/ADC1/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/ADC1/$present" />
+         <param type="StringVariable"         value="ADC0;ADC1"   name="instanceList"                key="/ADC1/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/ADC1/_present" />
          <param type="StringVariable"         value="true"        name="adc_base_ofs_ba_ofs_present" key="/ADC1/adc_base_ofs_ba_ofs_present" />
          <param type="StringVariable"         value="true"        name="adc_cfg1_adiclk_present"     key="/ADC1/adc_cfg1_adiclk_present" />
          <param type="StringVariable"         value="true"        name="adc_cfg1_adiv_present"       key="/ADC1/adc_cfg1_adiv_present" />
@@ -118,7 +118,7 @@
          <param type="StringVariable"         value="true"        name="adc_xofs_xofs_present"       key="/ADC1/adc_xofs_xofs_present" />
          <param type="StringVariable"         value="true"        name="adc_yofs_yofs_present"       key="/ADC1/adc_yofs_yofs_present" />
       </peripheral>
-      <peripheral baseName="CAN"      instance="0"        instanceCount="3"   version="can0_flex_s32k14x">
+      <peripheral baseName="CAN"      instance="0"        instanceList="CAN0;CAN1;CAN2" version="can0_flex_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
          <clock clockEnable="PCC->PCC_FLEXCAN0 = PCC->PCC_FLEXCAN0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FLEXCAN0 = PCC->PCC_FLEXCAN0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="CAN0_ORed_IRQn" />
@@ -126,8 +126,8 @@
          <irq num="CAN0_WakeUp_IRQn" />
          <irq num="CAN0_MessageBuffer_0_15_IRQn" />
          <irq num="CAN0_MessageBuffer_16_31_IRQn" />
-         <param type="LongVariable"           value="3"           name="instanceCount"               key="/CAN0/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/CAN0/$present" />
+         <param type="StringVariable"         value="CAN0;CAN1;CAN2" name="instanceList"                key="/CAN0/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/CAN0/_present" />
          <param type="StringVariable"         value="true"        name="can_cbt_btf_present"         key="/CAN0/can_cbt_btf_present" />
          <param type="StringVariable"         value="true"        name="can_cbt_epresdiv_present"    key="/CAN0/can_cbt_epresdiv_present" />
          <param type="StringVariable"         value="true"        name="can_cbt_epropseg_present"    key="/CAN0/can_cbt_epropseg_present" />
@@ -341,14 +341,14 @@
          <param type="StringVariable"         value="true"        name="can_wu_mtc_wtof_present"     key="/CAN0/can_wu_mtc_wtof_present" />
          <param type="StringVariable"         value="true"        name="can_wu_mtc_wumf_present"     key="/CAN0/can_wu_mtc_wumf_present" />
       </peripheral>
-      <peripheral baseName="CAN"      instance="1"        instanceCount="3"   version="can1_flex_s32k14x">
+      <peripheral baseName="CAN"      instance="1"        instanceList="CAN0;CAN1;CAN2" version="can1_flex_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
          <clock clockEnable="PCC->PCC_FLEXCAN1 = PCC->PCC_FLEXCAN1 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FLEXCAN1 = PCC->PCC_FLEXCAN1 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="CAN1_ORed_IRQn" />
          <irq num="CAN1_Error_IRQn" />
          <irq num="CAN1_MessageBuffer_0_15_IRQn" />
-         <param type="LongVariable"           value="3"           name="instanceCount"               key="/CAN1/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/CAN1/$present" />
+         <param type="StringVariable"         value="CAN0;CAN1;CAN2" name="instanceList"                key="/CAN1/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/CAN1/_present" />
          <param type="StringVariable"         value="true"        name="can_cbt_btf_present"         key="/CAN1/can_cbt_btf_present" />
          <param type="StringVariable"         value="true"        name="can_cbt_epresdiv_present"    key="/CAN1/can_cbt_epresdiv_present" />
          <param type="StringVariable"         value="true"        name="can_cbt_epropseg_present"    key="/CAN1/can_cbt_epropseg_present" />
@@ -562,14 +562,14 @@
          <param type="StringVariable"         value="true"        name="can_wu_mtc_wtof_present"     key="/CAN1/can_wu_mtc_wtof_present" />
          <param type="StringVariable"         value="true"        name="can_wu_mtc_wumf_present"     key="/CAN1/can_wu_mtc_wumf_present" />
       </peripheral>
-      <peripheral baseName="CAN"      instance="2"        instanceCount="3"   version="can1_flex_s32k14x">
+      <peripheral baseName="CAN"      instance="2"        instanceList="CAN0;CAN1;CAN2" version="can1_flex_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
          <clock clockEnable="PCC->PCC_FLEXCAN2 = PCC->PCC_FLEXCAN2 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FLEXCAN2 = PCC->PCC_FLEXCAN2 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="CAN2_ORed_IRQn" />
          <irq num="CAN2_Error_IRQn" />
          <irq num="CAN2_MessageBuffer_0_15_IRQn" />
-         <param type="LongVariable"           value="3"           name="instanceCount"               key="/CAN2/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/CAN2/$present" />
+         <param type="StringVariable"         value="CAN0;CAN1;CAN2" name="instanceList"                key="/CAN2/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/CAN2/_present" />
          <param type="StringVariable"         value="true"        name="can_cbt_btf_present"         key="/CAN2/can_cbt_btf_present" />
          <param type="StringVariable"         value="true"        name="can_cbt_epresdiv_present"    key="/CAN2/can_cbt_epresdiv_present" />
          <param type="StringVariable"         value="true"        name="can_cbt_epropseg_present"    key="/CAN2/can_cbt_epropseg_present" />
@@ -783,12 +783,12 @@
          <param type="StringVariable"         value="true"        name="can_wu_mtc_wtof_present"     key="/CAN2/can_wu_mtc_wtof_present" />
          <param type="StringVariable"         value="true"        name="can_wu_mtc_wumf_present"     key="/CAN2/can_wu_mtc_wumf_present" />
       </peripheral>
-      <peripheral baseName="CMP"      instance="0"        instanceCount="1"   version="cmp0_mke16f16">
+      <peripheral baseName="CMP"      instance="0"        instanceList="CMP0" version="cmp0_mke16f16">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
          <clock clockEnable="PCC->PCC_CMP0 = PCC->PCC_CMP0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_CMP0 = PCC->PCC_CMP0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="CMP0_IRQn" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/CMP0/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/CMP0/$present" />
+         <param type="StringVariable"         value="CMP0"        name="instanceList"                key="/CMP0/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/CMP0/_present" />
          <param type="StringVariable"         value="true"        name="cmp_c0_cff_present"          key="/CMP0/cmp_c0_cff_present" />
          <param type="StringVariable"         value="true"        name="cmp_c0_cfr_present"          key="/CMP0/cmp_c0_cfr_present" />
          <param type="StringVariable"         value="true"        name="cmp_c0_cos_present"          key="/CMP0/cmp_c0_cos_present" />
@@ -839,15 +839,15 @@
          <param type="StringVariable"         value="true"        name="cmp_c2_rre_present"          key="/CMP0/cmp_c2_rre_present" />
          <param type="StringVariable"         value="true"        name="cmp_c2_rrie_present"         key="/CMP0/cmp_c2_rrie_present" />
       </peripheral>
-      <peripheral baseName="CONTROL"  instance=""         instanceCount="1">
+      <peripheral baseName="CONTROL"  instance=""         instanceList="CONTROL">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForControl" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/CONTROL/_instanceCount" />
+         <param type="StringVariable"         value="CONTROL"     name="instanceList"                key="/CONTROL/_instanceList" />
       </peripheral>
-      <peripheral baseName="CRC"      instance="0"        instanceCount="1"   version="crc0_0x40032000">
+      <peripheral baseName="CRC"      instance="0"        instanceList="CRC0" version="crc0_0x40032000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCrc" />
          <clock clockEnable="PCC->PCC_CRC = PCC->PCC_CRC | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_CRC = PCC->PCC_CRC &amp; ~PCC_PCCn_CGC_MASK;" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/CRC0/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/CRC0/$present" />
+         <param type="StringVariable"         value="CRC0"        name="instanceList"                key="/CRC0/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/CRC0/_present" />
          <param type="StringVariable"         value="true"        name="crc_ctrl_fxor_present"       key="/CRC0/crc_ctrl_fxor_present" />
          <param type="StringVariable"         value="true"        name="crc_ctrl_tcrc_present"       key="/CRC0/crc_ctrl_tcrc_present" />
          <param type="StringVariable"         value="true"        name="crc_ctrl_tot_present"        key="/CRC0/crc_ctrl_tot_present" />
@@ -860,11 +860,11 @@
          <param type="StringVariable"         value="true"        name="crc_gpoly_high_present"      key="/CRC0/crc_gpoly_high_present" />
          <param type="StringVariable"         value="true"        name="crc_gpoly_low_present"       key="/CRC0/crc_gpoly_low_present" />
       </peripheral>
-      <peripheral baseName="Console"  instance=""         instanceCount="1">
+      <peripheral baseName="Console"  instance=""         instanceList="Console">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/Console/_instanceCount" />
+         <param type="StringVariable"         value="Console"     name="instanceList"                key="/Console/_instanceList" />
       </peripheral>
-      <peripheral baseName="DMA"      instance="0"        instanceCount="1"   version="dma0_16ch_ears16">
+      <peripheral baseName="DMA"      instance="0"        instanceList="DMA0" version="dma0_16ch_ears16">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
          <irq num="DMA0_IRQn" />
          <irq num="DMA1_IRQn" />
@@ -883,8 +883,8 @@
          <irq num="DMA14_IRQn" />
          <irq num="DMA15_IRQn" />
          <irq num="DMA_Error_IRQn" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/DMA0/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/DMA0/$present" />
+         <param type="StringVariable"         value="DMA0"        name="instanceList"                key="/DMA0/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/DMA0/_present" />
          <param type="StringVariable"         value="true"        name="dma_attr_dmod_present"       key="/DMA0/dma_attr_dmod_present" />
          <param type="StringVariable"         value="true"        name="dma_attr_dsize_present"      key="/DMA0/dma_attr_dsize_present" />
          <param type="StringVariable"         value="true"        name="dma_attr_smod_present"       key="/DMA0/dma_attr_smod_present" />
@@ -1067,10 +1067,10 @@
          <param type="StringVariable"         value="true"        name="dma_ssrt_sast_present"       key="/DMA0/dma_ssrt_sast_present" />
          <param type="StringVariable"         value="true"        name="dma_ssrt_ssrt_present"       key="/DMA0/dma_ssrt_ssrt_present" />
       </peripheral>
-      <peripheral baseName="DMAMUX"   instance="0"        instanceCount="1"   version="dmamux0_16ch_trig_s32k14x">
+      <peripheral baseName="DMAMUX"   instance="0"        instanceList="DMAMUX0" version="dmamux0_16ch_trig_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock clockEnable="PCC->PCC_DMAMUX = PCC->PCC_DMAMUX | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_DMAMUX = PCC->PCC_DMAMUX &amp; ~PCC_PCCn_CGC_MASK;" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/DMAMUX0/_instanceCount" />
+         <param type="StringVariable"         value="DMAMUX0"     name="instanceList"                key="/DMAMUX0/_instanceList" />
          <dma source="Disabled"             num="0" />
          <dma source="ENET"                 num="1" />
          <dma source="LPUART0_Rx"           num="2" />
@@ -1136,33 +1136,33 @@
          <dma source="AlwaysEnabled62"      num="62" />
          <dma source="AlwaysEnabled63"      num="63" />
       </peripheral>
-      <peripheral baseName="EWM"      instance=""         instanceCount="1"   version="ewm_int_pr">
+      <peripheral baseName="EWM"      instance=""         instanceList="EWM"  version="ewm_int_pr">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />
          <clock clockEnable="PCC->PCC_EWM = PCC->PCC_EWM | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_EWM = PCC->PCC_EWM &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="WDOG_EWM_IRQn" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/EWM/_instanceCount" />
+         <param type="StringVariable"         value="EWM"         name="instanceList"                key="/EWM/_instanceList" />
       </peripheral>
-      <peripheral baseName="FLEXIO"   instance=""         instanceCount="1"   version="flexio_4sh_4tmr_mke15z7">
+      <peripheral baseName="FLEXIO"   instance=""         instanceList="FLEXIO" version="flexio_4sh_4tmr_mke15z7">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexio" />
          <clock clockEnable="PCC->PCC_FLEXIO |= PCC_PCCn_CGC_MASK = PCC->PCC_FLEXIO |= PCC_PCCn_CGC_MASK | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FLEXIO |= PCC_PCCn_CGC_MASK = PCC->PCC_FLEXIO |= PCC_PCCn_CGC_MASK &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="FLEXIO_IRQn" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/FLEXIO/_instanceCount" />
+         <param type="StringVariable"         value="FLEXIO"      name="instanceList"                key="/FLEXIO/_instanceList" />
       </peripheral>
-      <peripheral baseName="FTFC"     instance=""         instanceCount="1"   version="ftfc_s32k14x">
+      <peripheral baseName="FTFC"     instance=""         instanceList="FTFC" version="ftfc_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock clockEnable="PCC->PCC_FTFC = PCC->PCC_FTFC | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FTFC = PCC->PCC_FTFC &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="FTFC_IRQn" />
          <irq num="FTFC_Read_Collision_IRQn" />
          <irq num="FTFC_Fault_IRQn" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/FTFC/_instanceCount" />
+         <param type="StringVariable"         value="FTFC"        name="instanceList"                key="/FTFC/_instanceList" />
          <param type="StringVariable"         value="4"           name="pflash_phrase_size"          key="/FTFC/pflash_phrase_size" />
          <param type="StringVariable"         value="2048"        name="pflash_sector_size"          key="/FTFC/pflash_sector_size" />
       </peripheral>
-      <peripheral baseName="FTM"      instance=""         instanceCount="4">
+      <peripheral baseName="FTM"      instance=""         instanceList="FTM;FTM0;FTM1;FTM2;FTM3">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
-         <param type="LongVariable"           value="4"           name="instanceCount"               key="/FTM/_instanceCount" />
+         <param type="StringVariable"         value="FTM;FTM0;FTM1;FTM2;FTM3" name="instanceList"                key="/FTM/_instanceList" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="0"        instanceCount="4"   version="ftm0_8ch_s32k144">
+      <peripheral baseName="FTM"      instance="0"        instanceList="FTM;FTM0;FTM1;FTM2;FTM3" version="ftm0_8ch_s32k144">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="PCC->PCC_FTM0 = PCC->PCC_FTM0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FTM0 = PCC->PCC_FTM0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="FTM0_Ch0_Ch1_IRQn" />
@@ -1171,8 +1171,8 @@
          <irq num="FTM0_Ch6_Ch7_IRQn" />
          <irq num="FTM0_Fault_IRQn" />
          <irq num="FTM0_Ovf_Reload_IRQn" />
-         <param type="LongVariable"           value="4"           name="instanceCount"               key="/FTM0/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/FTM0/$present" />
+         <param type="StringVariable"         value="FTM;FTM0;FTM1;FTM2;FTM3" name="instanceList"                key="/FTM0/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/FTM0/_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_chf_present"        key="/FTM0/ftm_cnsc_chf_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_chie_present"       key="/FTM0/ftm_cnsc_chie_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_chis_present"       key="/FTM0/ftm_cnsc_chis_present" />
@@ -1397,7 +1397,7 @@
          <param type="StringVariable"         value="true"        name="ftm_synconf_swwrbuf_present" key="/FTM0/ftm_synconf_swwrbuf_present" />
          <param type="StringVariable"         value="true"        name="ftm_synconf_syncmode_present" key="/FTM0/ftm_synconf_syncmode_present" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="1"        instanceCount="4"   version="ftm0_8ch_s32k144">
+      <peripheral baseName="FTM"      instance="1"        instanceList="FTM;FTM0;FTM1;FTM2;FTM3" version="ftm0_8ch_s32k144">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="PCC->PCC_FTM1 = PCC->PCC_FTM1 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FTM1 = PCC->PCC_FTM1 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="FTM1_Ch0_Ch1_IRQn" />
@@ -1406,8 +1406,8 @@
          <irq num="FTM1_Ch6_Ch7_IRQn" />
          <irq num="FTM1_Fault_IRQn" />
          <irq num="FTM1_Ovf_Reload_IRQn" />
-         <param type="LongVariable"           value="4"           name="instanceCount"               key="/FTM1/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/FTM1/$present" />
+         <param type="StringVariable"         value="FTM;FTM0;FTM1;FTM2;FTM3" name="instanceList"                key="/FTM1/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/FTM1/_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_chf_present"        key="/FTM1/ftm_cnsc_chf_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_chie_present"       key="/FTM1/ftm_cnsc_chie_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_chis_present"       key="/FTM1/ftm_cnsc_chis_present" />
@@ -1632,7 +1632,7 @@
          <param type="StringVariable"         value="true"        name="ftm_synconf_swwrbuf_present" key="/FTM1/ftm_synconf_swwrbuf_present" />
          <param type="StringVariable"         value="true"        name="ftm_synconf_syncmode_present" key="/FTM1/ftm_synconf_syncmode_present" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="2"        instanceCount="4"   version="ftm0_8ch_s32k144">
+      <peripheral baseName="FTM"      instance="2"        instanceList="FTM;FTM0;FTM1;FTM2;FTM3" version="ftm0_8ch_s32k144">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="PCC->PCC_FTM2 = PCC->PCC_FTM2 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FTM2 = PCC->PCC_FTM2 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="FTM2_Ch0_Ch1_IRQn" />
@@ -1641,8 +1641,8 @@
          <irq num="FTM2_Ch6_Ch7_IRQn" />
          <irq num="FTM2_Fault_IRQn" />
          <irq num="FTM2_Ovf_Reload_IRQn" />
-         <param type="LongVariable"           value="4"           name="instanceCount"               key="/FTM2/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/FTM2/$present" />
+         <param type="StringVariable"         value="FTM;FTM0;FTM1;FTM2;FTM3" name="instanceList"                key="/FTM2/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/FTM2/_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_chf_present"        key="/FTM2/ftm_cnsc_chf_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_chie_present"       key="/FTM2/ftm_cnsc_chie_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_chis_present"       key="/FTM2/ftm_cnsc_chis_present" />
@@ -1867,7 +1867,7 @@
          <param type="StringVariable"         value="true"        name="ftm_synconf_swwrbuf_present" key="/FTM2/ftm_synconf_swwrbuf_present" />
          <param type="StringVariable"         value="true"        name="ftm_synconf_syncmode_present" key="/FTM2/ftm_synconf_syncmode_present" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="3"        instanceCount="4"   version="ftm0_8ch_s32k144">
+      <peripheral baseName="FTM"      instance="3"        instanceList="FTM;FTM0;FTM1;FTM2;FTM3" version="ftm0_8ch_s32k144">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="PCC->PCC_FTM3 = PCC->PCC_FTM3 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FTM3 = PCC->PCC_FTM3 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="FTM3_Ch0_Ch1_IRQn" />
@@ -1876,8 +1876,8 @@
          <irq num="FTM3_Ch6_Ch7_IRQn" />
          <irq num="FTM3_Fault_IRQn" />
          <irq num="FTM3_Ovf_Reload_IRQn" />
-         <param type="LongVariable"           value="4"           name="instanceCount"               key="/FTM3/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/FTM3/$present" />
+         <param type="StringVariable"         value="FTM;FTM0;FTM1;FTM2;FTM3" name="instanceList"                key="/FTM3/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/FTM3/_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_chf_present"        key="/FTM3/ftm_cnsc_chf_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_chie_present"       key="/FTM3/ftm_cnsc_chie_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_chis_present"       key="/FTM3/ftm_cnsc_chis_present" />
@@ -2102,14 +2102,14 @@
          <param type="StringVariable"         value="true"        name="ftm_synconf_swwrbuf_present" key="/FTM3/ftm_synconf_swwrbuf_present" />
          <param type="StringVariable"         value="true"        name="ftm_synconf_syncmode_present" key="/FTM3/ftm_synconf_syncmode_present" />
       </peripheral>
-      <peripheral baseName="GPIO"     instance="A"        instanceCount="5"   version="gpioa_s32k">
+      <peripheral baseName="GPIO"     instance="A"        instanceList="GPIOA;GPIOB;GPIOC;GPIOD;GPIOE" version="gpioa_s32k">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="PCC->PCC_GPIOA = PCC->PCC_GPIOA | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOA = PCC->PCC_GPIOA &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTA_IRQn" />
-         <param type="LongVariable"           value="5"           name="instanceCount"               key="/GPIOA/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/GPIOA/$present" />
+         <param type="StringVariable"         value="GPIOA;GPIOB;GPIOC;GPIOD;GPIOE" name="instanceList"                key="/GPIOA/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/GPIOA/_present" />
          <param type="StringVariable"         value="true"        name="dfer_register_present"       key="/GPIOA/dfer_register_present" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/PCR/$present" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/PCR/_present" />
          <param type="StringVariable"         value="true"        name="dfer_register_present"       key="/PCR/dfer_register_present" />
          <param type="StringVariable"         value="true"        name="dse_present"                 key="/PCR/dse_present" />
          <param type="StringVariable"         value="true"        name="irqc_present"                key="/PCR/irqc_present" />
@@ -2121,45 +2121,45 @@
          <param type="StringVariable"         value="true"        name="pfe_present"                 key="/PCR/pfe_present" />
          <param type="StringVariable"         value="true"        name="ps_present"                  key="/PCR/ps_present" />
       </peripheral>
-      <peripheral baseName="GPIO"     instance="B"        instanceCount="5"   version="gpioa_s32k">
+      <peripheral baseName="GPIO"     instance="B"        instanceList="GPIOA;GPIOB;GPIOC;GPIOD;GPIOE" version="gpioa_s32k">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="PCC->PCC_GPIOB = PCC->PCC_GPIOB | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOB = PCC->PCC_GPIOB &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTB_IRQn" />
-         <param type="LongVariable"           value="5"           name="instanceCount"               key="/GPIOB/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/GPIOB/$present" />
+         <param type="StringVariable"         value="GPIOA;GPIOB;GPIOC;GPIOD;GPIOE" name="instanceList"                key="/GPIOB/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/GPIOB/_present" />
          <param type="StringVariable"         value="true"        name="dfer_register_present"       key="/GPIOB/dfer_register_present" />
       </peripheral>
-      <peripheral baseName="GPIO"     instance="C"        instanceCount="5"   version="gpioa_s32k">
+      <peripheral baseName="GPIO"     instance="C"        instanceList="GPIOA;GPIOB;GPIOC;GPIOD;GPIOE" version="gpioa_s32k">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="PCC->PCC_GPIOC = PCC->PCC_GPIOC | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOC = PCC->PCC_GPIOC &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTC_IRQn" />
-         <param type="LongVariable"           value="5"           name="instanceCount"               key="/GPIOC/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/GPIOC/$present" />
+         <param type="StringVariable"         value="GPIOA;GPIOB;GPIOC;GPIOD;GPIOE" name="instanceList"                key="/GPIOC/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/GPIOC/_present" />
          <param type="StringVariable"         value="true"        name="dfer_register_present"       key="/GPIOC/dfer_register_present" />
       </peripheral>
-      <peripheral baseName="GPIO"     instance="D"        instanceCount="5"   version="gpioa_s32k">
+      <peripheral baseName="GPIO"     instance="D"        instanceList="GPIOA;GPIOB;GPIOC;GPIOD;GPIOE" version="gpioa_s32k">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="PCC->PCC_GPIOD = PCC->PCC_GPIOD | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOD = PCC->PCC_GPIOD &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTD_IRQn" />
-         <param type="LongVariable"           value="5"           name="instanceCount"               key="/GPIOD/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/GPIOD/$present" />
+         <param type="StringVariable"         value="GPIOA;GPIOB;GPIOC;GPIOD;GPIOE" name="instanceList"                key="/GPIOD/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/GPIOD/_present" />
          <param type="StringVariable"         value="true"        name="dfer_register_present"       key="/GPIOD/dfer_register_present" />
       </peripheral>
-      <peripheral baseName="GPIO"     instance="E"        instanceCount="5"   version="gpioa_s32k">
+      <peripheral baseName="GPIO"     instance="E"        instanceList="GPIOA;GPIOB;GPIOC;GPIOD;GPIOE" version="gpioa_s32k">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="PCC->PCC_GPIOE = PCC->PCC_GPIOE | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOE = PCC->PCC_GPIOE &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTE_IRQn" />
-         <param type="LongVariable"           value="5"           name="instanceCount"               key="/GPIOE/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/GPIOE/$present" />
+         <param type="StringVariable"         value="GPIOA;GPIOB;GPIOC;GPIOD;GPIOE" name="instanceList"                key="/GPIOE/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/GPIOE/_present" />
          <param type="StringVariable"         value="true"        name="dfer_register_present"       key="/GPIOE/dfer_register_present" />
       </peripheral>
-      <peripheral baseName="LPI2C"    instance="0"        instanceCount="1"   version="lpi2c0_s32k14x">
+      <peripheral baseName="LPI2C"    instance="0"        instanceList="LPI2C0" version="lpi2c0_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
          <clock clockEnable="PCC->PCC_LPI2C0 = PCC->PCC_LPI2C0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPI2C0 = PCC->PCC_LPI2C0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPI2C0_Master_IRQn" />
          <irq num="LPI2C0_Slave_IRQn" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/LPI2C0/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/LPI2C0/$present" />
+         <param type="StringVariable"         value="LPI2C0"      name="instanceList"                key="/LPI2C0/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/LPI2C0/_present" />
          <param type="StringVariable"         value="true"        name="lpi2c_mccr0_clkhi_present"   key="/LPI2C0/lpi2c_mccr0_clkhi_present" />
          <param type="StringVariable"         value="true"        name="lpi2c_mccr0_clklo_present"   key="/LPI2C0/lpi2c_mccr0_clklo_present" />
          <param type="StringVariable"         value="true"        name="lpi2c_mccr0_datavd_present"  key="/LPI2C0/lpi2c_mccr0_datavd_present" />
@@ -2284,15 +2284,15 @@
          <param type="StringVariable"         value="true"        name="lpi2c_verid_major_present"   key="/LPI2C0/lpi2c_verid_major_present" />
          <param type="StringVariable"         value="true"        name="lpi2c_verid_minor_present"   key="/LPI2C0/lpi2c_verid_minor_present" />
       </peripheral>
-      <peripheral baseName="LPIT"     instance="0"        instanceCount="1"   version="lpit0">
+      <peripheral baseName="LPIT"     instance="0"        instanceList="LPIT0" version="lpit0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPit" />
          <clock clockEnable="PCC->PCC_LPIT = PCC->PCC_LPIT | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPIT = PCC->PCC_LPIT &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPIT0_Ch0_IRQn" />
          <irq num="LPIT0_Ch1_IRQn" />
          <irq num="LPIT0_Ch2_IRQn" />
          <irq num="LPIT0_Ch3_IRQn" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/LPIT0/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/LPIT0/$present" />
+         <param type="StringVariable"         value="LPIT0"       name="instanceList"                key="/LPIT0/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/LPIT0/_present" />
          <param type="StringVariable"         value="true"        name="lpit_clrten_clr_t_en_0_present" key="/LPIT0/lpit_clrten_clr_t_en_0_present" />
          <param type="StringVariable"         value="true"        name="lpit_clrten_clr_t_en_1_present" key="/LPIT0/lpit_clrten_clr_t_en_1_present" />
          <param type="StringVariable"         value="true"        name="lpit_clrten_clr_t_en_2_present" key="/LPIT0/lpit_clrten_clr_t_en_2_present" />
@@ -2329,12 +2329,12 @@
          <param type="StringVariable"         value="true"        name="lpit_verid_major_present"    key="/LPIT0/lpit_verid_major_present" />
          <param type="StringVariable"         value="true"        name="lpit_verid_minor_present"    key="/LPIT0/lpit_verid_minor_present" />
       </peripheral>
-      <peripheral baseName="LPSPI"    instance="0"        instanceCount="3"   version="lpspi0">
+      <peripheral baseName="LPSPI"    instance="0"        instanceList="LPSPI0;LPSPI1;LPSPI2" version="lpspi0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock clockEnable="PCC->PCC_LPSPI0 = PCC->PCC_LPSPI0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPSPI0 = PCC->PCC_LPSPI0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPSPI0_IRQn" />
-         <param type="LongVariable"           value="3"           name="instanceCount"               key="/LPSPI0/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/LPSPI0/$present" />
+         <param type="StringVariable"         value="LPSPI0;LPSPI1;LPSPI2" name="instanceList"                key="/LPSPI0/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/LPSPI0/_present" />
          <param type="StringVariable"         value="true"        name="lpspi_ccr_dbt_present"       key="/LPSPI0/lpspi_ccr_dbt_present" />
          <param type="StringVariable"         value="true"        name="lpspi_ccr_pcssck_present"    key="/LPSPI0/lpspi_ccr_pcssck_present" />
          <param type="StringVariable"         value="true"        name="lpspi_ccr_sckdiv_present"    key="/LPSPI0/lpspi_ccr_sckdiv_present" />
@@ -2405,12 +2405,12 @@
          <param type="StringVariable"         value="true"        name="lpspi_verid_major_present"   key="/LPSPI0/lpspi_verid_major_present" />
          <param type="StringVariable"         value="true"        name="lpspi_verid_minor_present"   key="/LPSPI0/lpspi_verid_minor_present" />
       </peripheral>
-      <peripheral baseName="LPSPI"    instance="1"        instanceCount="3"   version="lpspi0">
+      <peripheral baseName="LPSPI"    instance="1"        instanceList="LPSPI0;LPSPI1;LPSPI2" version="lpspi0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock clockEnable="PCC->PCC_LPSPI1 = PCC->PCC_LPSPI1 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPSPI1 = PCC->PCC_LPSPI1 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPSPI1_IRQn" />
-         <param type="LongVariable"           value="3"           name="instanceCount"               key="/LPSPI1/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/LPSPI1/$present" />
+         <param type="StringVariable"         value="LPSPI0;LPSPI1;LPSPI2" name="instanceList"                key="/LPSPI1/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/LPSPI1/_present" />
          <param type="StringVariable"         value="true"        name="lpspi_ccr_dbt_present"       key="/LPSPI1/lpspi_ccr_dbt_present" />
          <param type="StringVariable"         value="true"        name="lpspi_ccr_pcssck_present"    key="/LPSPI1/lpspi_ccr_pcssck_present" />
          <param type="StringVariable"         value="true"        name="lpspi_ccr_sckdiv_present"    key="/LPSPI1/lpspi_ccr_sckdiv_present" />
@@ -2481,12 +2481,12 @@
          <param type="StringVariable"         value="true"        name="lpspi_verid_major_present"   key="/LPSPI1/lpspi_verid_major_present" />
          <param type="StringVariable"         value="true"        name="lpspi_verid_minor_present"   key="/LPSPI1/lpspi_verid_minor_present" />
       </peripheral>
-      <peripheral baseName="LPSPI"    instance="2"        instanceCount="3"   version="lpspi0">
+      <peripheral baseName="LPSPI"    instance="2"        instanceList="LPSPI0;LPSPI1;LPSPI2" version="lpspi0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock clockEnable="PCC->PCC_LPSPI2 = PCC->PCC_LPSPI2 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPSPI2 = PCC->PCC_LPSPI2 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPSPI2_IRQn" />
-         <param type="LongVariable"           value="3"           name="instanceCount"               key="/LPSPI2/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/LPSPI2/$present" />
+         <param type="StringVariable"         value="LPSPI0;LPSPI1;LPSPI2" name="instanceList"                key="/LPSPI2/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/LPSPI2/_present" />
          <param type="StringVariable"         value="true"        name="lpspi_ccr_dbt_present"       key="/LPSPI2/lpspi_ccr_dbt_present" />
          <param type="StringVariable"         value="true"        name="lpspi_ccr_pcssck_present"    key="/LPSPI2/lpspi_ccr_pcssck_present" />
          <param type="StringVariable"         value="true"        name="lpspi_ccr_sckdiv_present"    key="/LPSPI2/lpspi_ccr_sckdiv_present" />
@@ -2557,12 +2557,12 @@
          <param type="StringVariable"         value="true"        name="lpspi_verid_major_present"   key="/LPSPI2/lpspi_verid_major_present" />
          <param type="StringVariable"         value="true"        name="lpspi_verid_minor_present"   key="/LPSPI2/lpspi_verid_minor_present" />
       </peripheral>
-      <peripheral baseName="LPTMR"    instance="0"        instanceCount="1"   version="lptmr0_dma">
+      <peripheral baseName="LPTMR"    instance="0"        instanceList="LPTMR0" version="lptmr0_dma">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
          <clock clockEnable="PCC->PCC_LPTMR0 = PCC->PCC_LPTMR0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPTMR0 = PCC->PCC_LPTMR0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPTMR0_IRQn" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/LPTMR0/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/LPTMR0/$present" />
+         <param type="StringVariable"         value="LPTMR0"      name="instanceList"                key="/LPTMR0/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/LPTMR0/_present" />
          <param type="StringVariable"         value="true"        name="lptmr_cmr_compare_present"   key="/LPTMR0/lptmr_cmr_compare_present" />
          <param type="StringVariable"         value="true"        name="lptmr_cnr_counter_present"   key="/LPTMR0/lptmr_cnr_counter_present" />
          <param type="StringVariable"         value="true"        name="lptmr_csr_tcf_present"       key="/LPTMR0/lptmr_csr_tcf_present" />
@@ -2577,12 +2577,12 @@
          <param type="StringVariable"         value="true"        name="lptmr_psr_pcs_present"       key="/LPTMR0/lptmr_psr_pcs_present" />
          <param type="StringVariable"         value="true"        name="lptmr_psr_prescale_present"  key="/LPTMR0/lptmr_psr_prescale_present" />
       </peripheral>
-      <peripheral baseName="LPUART"   instance="0"        instanceCount="3"   version="lpuart0_mke_fifo">
+      <peripheral baseName="LPUART"   instance="0"        instanceList="LPUART0;LPUART1;LPUART2" version="lpuart0_mke_fifo">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
          <clock clockEnable="PCC->PCC_LPUART0 = PCC->PCC_LPUART0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPUART0 = PCC->PCC_LPUART0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPUART0_RxTx_IRQn" />
-         <param type="LongVariable"           value="3"           name="instanceCount"               key="/LPUART0/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/LPUART0/$present" />
+         <param type="StringVariable"         value="LPUART0;LPUART1;LPUART2" name="instanceList"                key="/LPUART0/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/LPUART0/_present" />
          <param type="StringVariable"         value="true"        name="lpuart_baud_bothedge_present" key="/LPUART0/lpuart_baud_bothedge_present" />
          <param type="StringVariable"         value="true"        name="lpuart_baud_lbkdie_present"  key="/LPUART0/lpuart_baud_lbkdie_present" />
          <param type="StringVariable"         value="true"        name="lpuart_baud_m10_present"     key="/LPUART0/lpuart_baud_m10_present" />
@@ -2685,12 +2685,12 @@
          <param type="StringVariable"         value="true"        name="lpuart_water_txcount_present" key="/LPUART0/lpuart_water_txcount_present" />
          <param type="StringVariable"         value="true"        name="lpuart_water_txwater_present" key="/LPUART0/lpuart_water_txwater_present" />
       </peripheral>
-      <peripheral baseName="LPUART"   instance="1"        instanceCount="3"   version="lpuart0_mke_fifo">
+      <peripheral baseName="LPUART"   instance="1"        instanceList="LPUART0;LPUART1;LPUART2" version="lpuart0_mke_fifo">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
          <clock clockEnable="PCC->PCC_LPUART1 = PCC->PCC_LPUART1 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPUART1 = PCC->PCC_LPUART1 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPUART1_RxTx_IRQn" />
-         <param type="LongVariable"           value="3"           name="instanceCount"               key="/LPUART1/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/LPUART1/$present" />
+         <param type="StringVariable"         value="LPUART0;LPUART1;LPUART2" name="instanceList"                key="/LPUART1/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/LPUART1/_present" />
          <param type="StringVariable"         value="true"        name="lpuart_baud_bothedge_present" key="/LPUART1/lpuart_baud_bothedge_present" />
          <param type="StringVariable"         value="true"        name="lpuart_baud_lbkdie_present"  key="/LPUART1/lpuart_baud_lbkdie_present" />
          <param type="StringVariable"         value="true"        name="lpuart_baud_m10_present"     key="/LPUART1/lpuart_baud_m10_present" />
@@ -2793,12 +2793,12 @@
          <param type="StringVariable"         value="true"        name="lpuart_water_txcount_present" key="/LPUART1/lpuart_water_txcount_present" />
          <param type="StringVariable"         value="true"        name="lpuart_water_txwater_present" key="/LPUART1/lpuart_water_txwater_present" />
       </peripheral>
-      <peripheral baseName="LPUART"   instance="2"        instanceCount="3"   version="lpuart0_mke_fifo">
+      <peripheral baseName="LPUART"   instance="2"        instanceList="LPUART0;LPUART1;LPUART2" version="lpuart0_mke_fifo">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
          <clock clockEnable="PCC->PCC_LPUART2 = PCC->PCC_LPUART2 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPUART2 = PCC->PCC_LPUART2 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPUART2_RxTx_IRQn" />
-         <param type="LongVariable"           value="3"           name="instanceCount"               key="/LPUART2/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/LPUART2/$present" />
+         <param type="StringVariable"         value="LPUART0;LPUART1;LPUART2" name="instanceList"                key="/LPUART2/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/LPUART2/_present" />
          <param type="StringVariable"         value="true"        name="lpuart_baud_bothedge_present" key="/LPUART2/lpuart_baud_bothedge_present" />
          <param type="StringVariable"         value="true"        name="lpuart_baud_lbkdie_present"  key="/LPUART2/lpuart_baud_lbkdie_present" />
          <param type="StringVariable"         value="true"        name="lpuart_baud_m10_present"     key="/LPUART2/lpuart_baud_m10_present" />
@@ -2901,16 +2901,16 @@
          <param type="StringVariable"         value="true"        name="lpuart_water_txcount_present" key="/LPUART2/lpuart_water_txcount_present" />
          <param type="StringVariable"         value="true"        name="lpuart_water_txwater_present" key="/LPUART2/lpuart_water_txwater_present" />
       </peripheral>
-      <peripheral baseName="PCC"      instance=""         instanceCount="1"   version="pcc_s32k144">
+      <peripheral baseName="PCC"      instance=""         instanceList="PCC"  version="pcc_s32k144">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPcc" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/PCC/_instanceCount" />
+         <param type="StringVariable"         value="PCC"         name="instanceList"                key="/PCC/_instanceList" />
       </peripheral>
-      <peripheral baseName="PDB"      instance="0"        instanceCount="2"   version="pdb0_2ch_8pt_0dac_1po">
+      <peripheral baseName="PDB"      instance="0"        instanceList="PDB0;PDB1" version="pdb0_2ch_8pt_0dac_1po">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPdb" />
          <clock clockEnable="PCC->PCC_PDB0 = PCC->PCC_PDB0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_PDB0 = PCC->PCC_PDB0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PDB0_IRQn" />
-         <param type="LongVariable"           value="2"           name="instanceCount"               key="/PDB0/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/PDB0/$present" />
+         <param type="StringVariable"         value="PDB0;PDB1"   name="instanceList"                key="/PDB0/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/PDB0/_present" />
          <param type="StringVariable"         value="true"        name="pdb_c1_bb_present"           key="/PDB0/pdb_c1_bb_present" />
          <param type="StringVariable"         value="true"        name="pdb_c1_en_present"           key="/PDB0/pdb_c1_en_present" />
          <param type="StringVariable"         value="true"        name="pdb_c1_tos_present"          key="/PDB0/pdb_c1_tos_present" />
@@ -2936,12 +2936,12 @@
          <param type="StringVariable"         value="true"        name="pdb_sc_swtrig_present"       key="/PDB0/pdb_sc_swtrig_present" />
          <param type="StringVariable"         value="true"        name="pdb_sc_trgsel_present"       key="/PDB0/pdb_sc_trgsel_present" />
       </peripheral>
-      <peripheral baseName="PDB"      instance="1"        instanceCount="2"   version="pdb0_2ch_8pt_0dac_1po">
+      <peripheral baseName="PDB"      instance="1"        instanceList="PDB0;PDB1" version="pdb0_2ch_8pt_0dac_1po">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPdb" />
          <clock clockEnable="PCC->PCC_PDB1 = PCC->PCC_PDB1 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_PDB1 = PCC->PCC_PDB1 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PDB1_IRQn" />
-         <param type="LongVariable"           value="2"           name="instanceCount"               key="/PDB1/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/PDB1/$present" />
+         <param type="StringVariable"         value="PDB0;PDB1"   name="instanceList"                key="/PDB1/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/PDB1/_present" />
          <param type="StringVariable"         value="true"        name="pdb_c1_bb_present"           key="/PDB1/pdb_c1_bb_present" />
          <param type="StringVariable"         value="true"        name="pdb_c1_en_present"           key="/PDB1/pdb_c1_en_present" />
          <param type="StringVariable"         value="true"        name="pdb_c1_tos_present"          key="/PDB1/pdb_c1_tos_present" />
@@ -2967,11 +2967,11 @@
          <param type="StringVariable"         value="true"        name="pdb_sc_swtrig_present"       key="/PDB1/pdb_sc_swtrig_present" />
          <param type="StringVariable"         value="true"        name="pdb_sc_trgsel_present"       key="/PDB1/pdb_sc_trgsel_present" />
       </peripheral>
-      <peripheral baseName="PMC"      instance=""         instanceCount="1"   version="pmc_s32k14x">
+      <peripheral baseName="PMC"      instance=""         instanceList="PMC"  version="pmc_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPmc" />
          <irq num="LVD_LVW_IRQn" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/PMC/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/PMC/$present" />
+         <param type="StringVariable"         value="PMC"         name="instanceList"                key="/PMC/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/PMC/_present" />
          <param type="StringVariable"         value="true"        name="pmc_lpotrim_lpotrim_present" key="/PMC/pmc_lpotrim_lpotrim_present" />
          <param type="StringVariable"         value="true"        name="pmc_lvdsc1_lvdack_present"   key="/PMC/pmc_lvdsc1_lvdack_present" />
          <param type="StringVariable"         value="true"        name="pmc_lvdsc1_lvdf_present"     key="/PMC/pmc_lvdsc1_lvdf_present" />
@@ -2986,17 +2986,17 @@
          <param type="StringVariable"         value="true"        name="pmc_regsc_lpostat_present"   key="/PMC/pmc_regsc_lpostat_present" />
          <param type="StringVariable"         value="true"        name="pmc_regsc_regfpm_present"    key="/PMC/pmc_regsc_regfpm_present" />
       </peripheral>
-      <peripheral baseName="POWER"    instance=""         instanceCount="1">
+      <peripheral baseName="POWER"    instance=""         instanceList="POWER">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/POWER/_instanceCount" />
+         <param type="StringVariable"         value="POWER"       name="instanceList"                key="/POWER/_instanceList" />
       </peripheral>
-      <peripheral baseName="RTC"      instance=""         instanceCount="1"   version="rtc_s32k14x">
+      <peripheral baseName="RTC"      instance=""         instanceList="RTC"  version="rtc_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />
          <clock clockEnable="PCC->PCC_RTC |= PCC_PCCn_CGC_MASK = PCC->PCC_RTC |= PCC_PCCn_CGC_MASK | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_RTC |= PCC_PCCn_CGC_MASK = PCC->PCC_RTC |= PCC_PCCn_CGC_MASK &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="RTC_IRQn" />
          <irq num="RTC_Seconds_IRQn" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/RTC/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/RTC/$present" />
+         <param type="StringVariable"         value="RTC"         name="instanceList"                key="/RTC/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/RTC/_present" />
          <param type="StringVariable"         value="true"        name="rtc_cr_cpe_present"          key="/RTC/rtc_cr_cpe_present" />
          <param type="StringVariable"         value="true"        name="rtc_cr_cps_present"          key="/RTC/rtc_cr_cps_present" />
          <param type="StringVariable"         value="true"        name="rtc_cr_lpos_present"         key="/RTC/rtc_cr_lpos_present" />
@@ -3024,15 +3024,15 @@
          <param type="StringVariable"         value="true"        name="rtc_tpr_tpr_present"         key="/RTC/rtc_tpr_tpr_present" />
          <param type="StringVariable"         value="true"        name="rtc_tsr_tsr_present"         key="/RTC/rtc_tsr_tsr_present" />
       </peripheral>
-      <peripheral baseName="SCG"      instance=""         instanceCount="1"   version="scg_s32k14x">
+      <peripheral baseName="SCG"      instance=""         instanceList="SCG"  version="scg_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForScg" />
          <irq num="SCG_IRQn" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/SCG/_instanceCount" />
+         <param type="StringVariable"         value="SCG"         name="instanceList"                key="/SCG/_instanceList" />
       </peripheral>
-      <peripheral baseName="SIM"      instance=""         instanceCount="1"   version="sim_s32k142">
+      <peripheral baseName="SIM"      instance=""         instanceList="SIM"  version="sim_s32k142">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/SIM/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/SIM/$present" />
+         <param type="StringVariable"         value="SIM"         name="instanceList"                key="/SIM/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/SIM/_present" />
          <param type="StringVariable"         value="true"        name="sim_adcopt_adc0pretrgsel_present" key="/SIM/sim_adcopt_adc0pretrgsel_present" />
          <param type="StringVariable"         value="true"        name="sim_adcopt_adc0swpretrg_present" key="/SIM/sim_adcopt_adc0swpretrg_present" />
          <param type="StringVariable"         value="true"        name="sim_adcopt_adc0trgsel_present" key="/SIM/sim_adcopt_adc0trgsel_present" />
@@ -3098,11 +3098,11 @@
          <param type="StringVariable"         value="true"        name="sim_uidmh_uid95_64_present"  key="/SIM/sim_uidmh_uid95_64_present" />
          <param type="StringVariable"         value="true"        name="sim_uidml_uid63_32_present"  key="/SIM/sim_uidml_uid63_32_present" />
       </peripheral>
-      <peripheral baseName="SMC"      instance=""         instanceCount="1"   version="smc_s32k14x">
+      <peripheral baseName="SMC"      instance=""         instanceList="SMC"  version="smc_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />
          <clock clockEnable="PCC->PCC_SMC |= PCC_PCCn_CGC_MASK = PCC->PCC_SMC |= PCC_PCCn_CGC_MASK | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_SMC |= PCC_PCCn_CGC_MASK = PCC->PCC_SMC |= PCC_PCCn_CGC_MASK &amp; ~PCC_PCCn_CGC_MASK;" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/SMC/_instanceCount" />
-         <param type="StringVariable"         value="true"        name="$present"                    key="/SMC/$present" />
+         <param type="StringVariable"         value="SMC"         name="instanceList"                key="/SMC/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/SMC/_present" />
          <param type="StringVariable"         value="true"        name="smc_param_ehsrun_present"    key="/SMC/smc_param_ehsrun_present" />
          <param type="StringVariable"         value="true"        name="smc_param_ells2_present"     key="/SMC/smc_param_ells2_present" />
          <param type="StringVariable"         value="true"        name="smc_param_ells_present"      key="/SMC/smc_param_ells_present" />
@@ -3119,9 +3119,9 @@
          <param type="StringVariable"         value="true"        name="smc_verid_major_present"     key="/SMC/smc_verid_major_present" />
          <param type="StringVariable"         value="true"        name="smc_verid_minor_present"     key="/SMC/smc_verid_minor_present" />
       </peripheral>
-      <peripheral baseName="TRGMUX"   instance=""         instanceCount="1"   version="trgmux_s32k142">
+      <peripheral baseName="TRGMUX"   instance=""         instanceList="TRGMUX" version="trgmux_s32k142">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForTrgmux" />
-         <param type="LongVariable"           value="1"           name="instanceCount"               key="/TRGMUX/_instanceCount" />
+         <param type="StringVariable"         value="TRGMUX"      name="instanceList"                key="/TRGMUX/_instanceList" />
       </peripheral>
    </peripherals>
    <pins>

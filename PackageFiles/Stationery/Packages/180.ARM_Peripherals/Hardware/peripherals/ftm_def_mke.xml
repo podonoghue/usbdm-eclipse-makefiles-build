@@ -4,27 +4,33 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <!-- 
+   <!--
       Create shared option /$(_BASENAME)/irqHandlingMethod along with
       individual option    /$(_NAME)/irqHandlingMethod == irqHandlingMethod
    -->
    <if condition="$(_instance)==0" >
-      <equation key="individualChannelCallbacksEnable" value="=&quot;false&quot;" />
-      <for keys="i" dim="=@_instanceCount" >
-         <equation  key="individualChannelCallbacksEnable" value="=individualChannelCallbacksEnable+&quot;||/$(_BASENAME)%(i)/individualChannelCallbacks&quot;"/>
-      </for >
-      <stringOption key="xxx" value="=individualChannelCallbacksEnable" />
-      
+
+      <!-- Construct equation to check if any individual call-backs is enabled -->
+      <equation key="_individualChannelCallbacksEnable" value="=&quot;false&quot;" />
+
+      <for keys="instance" values="=_instanceList">
+         <if condition="/%(instance)/_present">
+            <!-- stringOption key="$(BASENAME)/xxx_%(instance)" value="%(instance)" modify="true" / -->
+            <equation key="_individualChannelCallbacksEnable" value="=_individualChannelCallbacksEnable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/individualChannelCallbacks&quot;"/>
+         </if>
+      </for>
+      <!-- stringOption key="$(BASENAME)/_individualChannelCallbacksEnableX" value="=_individualChannelCallbacksEnable" modify="true" / -->
+
       <!-- Enable for shared code needed by all instances of peripheral -->
       <binaryOption key="/$(_BASENAME)/individualChannelCallbacks"
-         ref="=individualChannelCallbacksEnable"
+         ref="=_individualChannelCallbacksEnable"
          constant="true"
          derived="true" >
          <choice value="false" name="Disabled"  isDefault="true" />
          <choice value="true"  name="Enabled"   />
       </binaryOption>
-      
-   </if>   
+
+   </if>
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
@@ -73,7 +79,7 @@
       toolTip="Clock frequency of external clock supplied to FTM_CLKIN pin"
       value="0" min="0" units="Hz"/>
 
-   <choiceOption key="ftm_sc_clks" condition="/MCG/$present"
+   <choiceOption key="ftm_sc_clks" condition="/MCG/_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="Clock Source"
       enumStem="FtmClockSource"
@@ -85,7 +91,7 @@
       <choice value="3" name="External clock"        ref="ftmExternalClock"             code="ftmExternalClock" enum="ExternalClock"       />
    </choiceOption>
 
-   <choiceOption key="ftm_sc_clks"  condition="/ICS/$present"
+   <choiceOption key="ftm_sc_clks"  condition="/ICS/_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       description="FTM Clock Source"
       enumStem="FtmClockSource"
@@ -1771,7 +1777,7 @@ $(init_description)
       \t   ChannelCallbackFunction channelCallbackFunction = nullptr;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" 
+   <initialValueTemplate namespace="usbdm" discardRepeats="true"
       variables="ftm_sc_action,ftm_sc_cpwms,ftm_sc_clks,ftm_sc_ps,ftm_sc_mode"
    ><![CDATA[
       \t   /// Status And Control Register
@@ -1785,21 +1791,21 @@ $(init_description)
       \t   %enumClass %registerName = %enumClass_Normal;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" 
+   <initialValueTemplate namespace="usbdm" discardRepeats="true"
       variables="ftm_cntin"
    ><![CDATA[
       \t   /// %description
       \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" 
+   <initialValueTemplate namespace="usbdm" discardRepeats="true"
       variables="ftm_mod"
    ><![CDATA[
       \t   /// %description
       \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" 
+   <initialValueTemplate namespace="usbdm" discardRepeats="true"
       variables= "ftm_modPeriod"
     ><![CDATA[
       \t   /// %description
@@ -1918,7 +1924,7 @@ $(init_description)
    ]]></constructorTemplate>
 
    <for keys="r" values="ftm_sc_action;ftm_sc_cpwms;ftm_sc_mode;ftm_sc_clks">
-      <constructorTemplate  namespace="usbdm" discardRepeats="true" 
+      <constructorTemplate  namespace="usbdm" discardRepeats="true"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -1939,7 +1945,7 @@ $(init_description)
       ]]></constructorTemplate>
    </for>
 
-   <constructorTemplate namespace="usbdm" discardRepeats="true" 
+   <constructorTemplate namespace="usbdm" discardRepeats="true"
       variables="ftm_sc_ps, ftm_cntin, ftm_mod"
       params=",cntin_ticks,mod_ticks"
       linePadding="xxx"
@@ -1964,7 +1970,7 @@ $(init_description)
          \t\n
    ]]></constructorTemplate>
 
-   <constructorTemplate namespace="usbdm" discardRepeats="true" 
+   <constructorTemplate namespace="usbdm" discardRepeats="true"
       variables="ftm_sc_ps, ftm_mod"
       params=",mod_ticks"
       linePadding="xxx"
@@ -1989,7 +1995,7 @@ $(init_description)
          \t\n
    ]]></constructorTemplate>
 
-   <constructorTemplate namespace="usbdm" discardRepeats="true" 
+   <constructorTemplate namespace="usbdm" discardRepeats="true"
       nonDefaultParams="2"
       variables="ftm_modPeriod"
       linePadding="xxx"
@@ -2094,21 +2100,21 @@ $(channel_init_description)
       \t   ChannelCallbackFunction callbackFunction = nullptr;\n\n
    ]]></setTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" 
+   <initialValueTemplate namespace="usbdm" discardRepeats="true"
       variables="ftm_cnv[]"
    ><![CDATA[
       \t   /// %description
       \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" 
+   <initialValueTemplate namespace="usbdm" discardRepeats="true"
       variables="ftm_cnsc_mode[]"
    ><![CDATA[
       \t   /// Channel Status And Control Register
       \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" 
+   <initialValueTemplate namespace="usbdm" discardRepeats="true"
       variables="ftm_channel_number"
    ><![CDATA[
       \t   /// %description
@@ -2183,7 +2189,7 @@ $(channel_init_description)
       ftm_cnsc_mode[];
       ftm_cnsc_action[];
       ftm_cnsc_icrst[]">
-      <constructorTemplate  namespace="usbdm" discardRepeats="true" 
+      <constructorTemplate  namespace="usbdm" discardRepeats="true"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -2206,7 +2212,7 @@ $(channel_init_description)
    <for keys="r" values="
       ftm_channel_number;
       ftm_cnv[]">
-      <constructorTemplate  namespace="usbdm" discardRepeats="true" 
+      <constructorTemplate  namespace="usbdm" discardRepeats="true"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -2318,14 +2324,14 @@ $(quad_init_description)
       \t   %params = nullptr;\n\n
    ]]></setTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" 
+   <initialValueTemplate namespace="usbdm" discardRepeats="true"
       variables="ftm_qdfilter_a,ftm_qdfilter_b"
    ><![CDATA[
       \t   /// Quad input filter control
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" 
+   <initialValueTemplate namespace="usbdm" discardRepeats="true"
       variables="ftm_qdctrl_quadmode"
    ><![CDATA[
       \t   /// Quadrature Decoder Control And Status Register
@@ -2456,7 +2462,7 @@ $(quad_init_description)
       ]]></constructorTemplate>
    </for>
 
-   <constructorTemplate  namespace="usbdm" discardRepeats="true" 
+   <constructorTemplate  namespace="usbdm" discardRepeats="true"
       variables="ftm_qdfilter_a"
       linePadding="xxx"
    ><![CDATA[
@@ -2476,7 +2482,7 @@ $(quad_init_description)
       \t\n
    ]]></constructorTemplate>
 
-   <constructorTemplate  namespace="usbdm" discardRepeats="true" 
+   <constructorTemplate  namespace="usbdm" discardRepeats="true"
       variables="ftm_qdfilter_b"
       linePadding="xxx"
    ><![CDATA[

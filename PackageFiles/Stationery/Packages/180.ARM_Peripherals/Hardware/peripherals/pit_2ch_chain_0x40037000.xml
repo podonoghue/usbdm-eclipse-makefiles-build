@@ -84,7 +84,7 @@
       <choice value="0b10000000" name="Channel Not Allocated"  enum="None" />
    </choiceOption>
 
-   <choiceOption key="pitClockConfig" condition="/MCG/$present"
+   <choiceOption key="pitClockConfig" condition="/MCG/_present"
       enabledBy="enablePeripheralSupport"
       target="pitInputClock"
       description="Clock configuration"
@@ -95,7 +95,7 @@
       <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
    </choiceOption>
 
-   <choiceOption key="pitClockConfig" condition="/ICS/$present"
+   <choiceOption key="pitClockConfig" condition="/ICS/_present"
       enabledBy="enablePeripheralSupport"
       target="pitInputClock"
       description="Clock configuration"

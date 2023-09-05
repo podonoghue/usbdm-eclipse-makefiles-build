@@ -662,6 +662,7 @@ flag is set"
       \tstatic void unhandledCallback($(irq_dummy_parameters)) {
       \t   setAndCheckErrorCode(E_NO_HANDLER);
       \t}
+      \t\n
    ]]>
    </template>
 

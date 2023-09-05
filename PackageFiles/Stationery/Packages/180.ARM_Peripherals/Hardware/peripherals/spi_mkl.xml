@@ -77,7 +77,7 @@
       <choice value="true"  enum="Enabled"  name="Speed may be specified in Hertz" />
    </binaryOption>
 
-   <choiceOption key="spiClockConfig" condition="/MCG/$present"
+   <choiceOption key="spiClockConfig" condition="/MCG/_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       target="spiInputClock"
       description="Clock configuration"
@@ -88,7 +88,7 @@
       <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
    </choiceOption>
 
-   <choiceOption key="spiClockConfig" condition="/ICS/$present"
+   <choiceOption key="spiClockConfig" condition="/ICS/_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       target="spiInputClock"
       description="Clock configuration"

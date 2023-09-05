@@ -159,26 +159,14 @@
 </category>
 
 
-<template namespace="usbdm" condition="/MCG/$present" ><![CDATA[
-   \t/* MCGFFCLK - Fixed frequency clock (input to FLL) */
-   \textern volatile uint32_t SystemMcgFFClock;
-
-   \t/* MCGOUTCLK - Primary output from MCG, various sources */
-   \textern volatile uint32_t SystemMcgOutClock;
-
-   \t/* MCGFLLCLK - Output of FLL */
-   \textern volatile uint32_t SystemMcgFllClock;
-
-   \t/* MCGPLLCLK - Output of PLL */
-   \textern volatile uint32_t SystemMcgPllClock;
-   \t
+<!-- template namespace="usbdm" condition="/MCG/_present" ><![CDATA[
    \t/** Clock for CORE (CPU) and SYSTEM (NVIC, RAM ...) */
    \textern "C" uint32_t SystemCoreClock;
    \t
    \t/** Clock for Bus (PIT, SPI, UART ...) */
    \textern "C" uint32_t SystemBusClock;
    \t\n
-]]></template>
+]]></template -->
 
 <template namespace="usbdm" condition="(/PCR/lk_present)" ><![CDATA[
    /* Template:_common_settings.xml */
@@ -294,7 +282,7 @@
 ]]></template>
 
 <!-- Template is added to pin_mapping.h -->
-<template namespace="usbdm" condition="/PCR/$present" ><![CDATA[
+<template namespace="usbdm" condition="/PCR/_present" ><![CDATA[
    \t/** Dummy port information for pins without an associated PCR */
    \tconstexpr PortInfo  __attribute__((unused)) NoPortInfo {0, 0, IRQn_None, 0, NvicPriority_NotInstalled};
 

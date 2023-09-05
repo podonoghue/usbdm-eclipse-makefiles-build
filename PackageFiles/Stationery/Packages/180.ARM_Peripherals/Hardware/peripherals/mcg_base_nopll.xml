@@ -4,12 +4,16 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <constant key="irq_parameters"           type="String" value="&quot;&quot;"  />
-   <constant key="irq_call"                 type="String" value="&quot;&quot;"  />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"    />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false"   />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true"    />
-   <xi:include href="_enablePeripheral.xml" />
+   <constant key="irq_common"               type="Boolean" value="true"          />
+   <constant key="suppressInstance"         type="Boolean" value="false"         />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
+   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="_enablePeripheral.xml"  />
+
    <title description="------------------------------------------" />
 
    <!-- Clock mode as indicated by mcgClockMode[%(n)] choice index -->
@@ -79,18 +83,18 @@
    />
 
    <!--  Run mode independent -->
-   <choiceOption key="oscMode" condition="mcg_c2_erefs0_present"
+   <choiceOption key="mcg_c2_oscmode" condition="mcg_c2_erefs0_present"
       enumStem="OscMode"
-      valueFormat="%s"
+      valueFormat="MCG_C2_EREFS0(%s),MCG_C2_HGO0(%s)"
       hidden="true"
       description="OSC0 mode"
       toolTip="Determines oscillator power mode and\n
                whether an external clock or crystal is used.">
-      <choice value="0"                               name="OSC0 Not configured"            enum="NotConfigured"        />
-      <choice value="MCG_C2_EREFS0(0)"                name="External clock"                 enum="ExternalClock"        />
-      <choice value="MCG_C2_EREFS0(1)"                name="Low Power Oscillator"           enum="LowPowerOscillator"   isDefault="true"                />
-      <choice value="MCG_C2_EREFS0(1)|MCG_C2_HGO0(1)" name="High Gain Oscillator"           enum="HighPowerOscillator"  condition="mcg_c2_hgo0_present" />
-      <choice value="1-1"                             name="32kHz Oscillator driven by RTC" enum="RTC_Controlled"       condition="/SIM/RtcForcing"     enabledBy="/RTC/ConfigureRtc"  />
+      <choice value="0,2-2" name="OSC0 Not configured"            enum="NotConfigured"        />
+      <choice value="0,0"   name="External clock"                 enum="ExternalClock"        />
+      <choice value="1,0"   name="Low Power Oscillator"           enum="LowPowerOscillator"   isDefault="true"                />
+      <choice value="1,1"   name="High Gain Oscillator"           enum="HighPowerOscillator"  condition="mcg_c2_hgo0_present" />
+      <choice value="0,1-1" name="32kHz Oscillator driven by RTC" enum="RTC_Controlled"       condition="/SIM/RtcForcing"     enabledBy="/RTC/ConfigureRtc"  />
    </choiceOption>
 
    <constant key="/OscMode_NotConfigured"  type="Integer" value="0"                        condition="mcg_c2_erefs0_present"/>
@@ -99,22 +103,24 @@
 
    <choiceOption key="mcg_c2_erefs0"  condition="mcg_c2_erefs0_present"
       hidden="true"
-      ref="oscMode>=2"
+      enumStem="McgExternalClock"
+      ref="mcg_c2_oscmode>=2"
       derived="true"
       description="External Reference Select"
       toolTip="Determines whether an external clock or crystal is used">
-      <choice value="0" name="External clock"     />
-      <choice value="1" name="Oscillator"         isDefault="true" />
+      <choice value="0" name="External clock"   enum="ExternalClk"  />
+      <choice value="1" name="Oscillator"       enum="Oscillator"  isDefault="true" />
    </choiceOption>
 
    <choiceOption key="mcg_c2_hgo0"  condition="mcg_c2_hgo0_present"
       hidden="true"
-      ref="oscMode==3"
+      enumStem="McgOscMode"
+      ref="mcg_c2_oscmode==3"
       derived="true"
       description="Oscillator mode"
-      toolTip="Operation mdoe for oscillator">
-      <choice value="0" name="Low Power"  />
-      <choice value="1" name="High Gain"  />
+      toolTip="Operation mode for oscillator">
+      <choice value="0" name="Low Power" enum="LowPower"   />
+      <choice value="1" name="High Gain" enum="HighPower"  />
    </choiceOption>
 
    <for keys="n" dim="/SIM/numberOfClockSettings">
@@ -187,7 +193,7 @@
                   <!-- MCGERCLK => FRDIV/(PLL)/CLKS   (no OSCSEL) -->
                   <graphicItem id="MCGERCLK_C_CLKS"             var="mcg_erc_clock[%(n)]"                type="connector"   params="MCGERCLK_IN_IN0,0,     CLKS,2,      y,x"                 />
                   <graphicItem id="MCGERCLK_C_FRDIV"            var="mcg_erc_clock[%(n)]"                type="connector"   params="MCGERCLK_IN_IN0,0,     FRDIV,0,     y-20,d,(x-15),y,x"   />
-                  <graphicItem id="MCGERCLK_C_PLL"              var="mcg_erc_clock[%(n)]"                type="connector"   params="MCGERCLK_IN_IN0,0,     PLL,0,       y-20,d,(x-20),d,y,x" condition="mcg_c5_prdiv0_present&amp;&amp;!/USBPHY1/$present" />
+                  <graphicItem id="MCGERCLK_C_PLL"              var="mcg_erc_clock[%(n)]"                type="connector"   params="MCGERCLK_IN_IN0,0,     PLL,0,       y-20,d,(x-20),d,y,x" condition="mcg_c5_prdiv0_present&amp;&amp;!/USBPHY1/_present" />
                   <graphicItem id="MCGERCLK"                    var="mcg_erc_clock[%(n)]"                type="annotation"  params="280, 50, 70, 20"                               />
 
                   <graphicItem id="MCGERCLK_IN_IN0,NONAME"      var=""                                   type="node"        params="430, 100, is,on"                                />
@@ -222,7 +228,7 @@
 
                <graphicItem id="SCP,NONAME"                var="/OSC0/osc_cr_scp"                   type="annotation"  params="10,  60,  100, 16, Cap=%v"                     />
                <graphicItem id="RTC_SCP,NONAME"            var="/RTC/rtc_cr_scp"                    type="annotation"  params="10,  75,  100, 16, Cap=%v"                     condition="/SIM/RtcForcing"               />
-               <graphicItem id="MODE,NONAME"               var="oscMode"                            type="annotation"  params="10,  145, 180, 16"                              />
+               <graphicItem id="MODE,NONAME"               var="mcg_c2_oscmode"                            type="annotation"  params="10,  145, 180, 16"                              />
                <graphicItem id="RANGE,NONAME"              var="/OSC0/oscillatorRange"              type="annotation"  params="10,  165, 180, 16"                              />
                <graphicItem id="EREFSTEN,NONAME"           var="/OSC0/osc_cr_erefsten"              type="annotation"  params="10,  185, 140, 20"                              />
 
@@ -634,7 +640,7 @@
          <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" constant="false" />
 
          <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
-            <aliasOption key="oscMode"                       constant="false"  optional="true" />
+            <aliasOption key="mcg_c2_oscmode"                       constant="false"  optional="true" />
             <aliasOption key="/OSC0/rsim_control_rf_osc_en"  constant="false"  optional="true" />
             <aliasOption key="/OSC0/osc_input_freq"          constant="false"  />
             <aliasOption key="/OSC0/osc_clock"               optional="true"   />
@@ -793,7 +799,7 @@
             <binaryOption key="mcg_c2_ircs[%(n)]"
                enumStem="McgIrClkSrc"
                target="system_mcgirclk_ungated[%(n)]"
-               description="Internal Reference Clock [MCGIRCLK] Source"
+               description="Internal Reference Clock [MCGIRCLK]"
                toolTip="Clock Source for MCGIRCLK" >
                <choice value="0" ref="system_slow_irc_clock[%(n)]" enum="Slow" name="Slow internal reference clock" code="system_slow_irc_clock"           />
                <choice value="1" ref="firc_divided_clock[%(n)]"    enum="Fast" name="Fast internal reference clock" code="getFastInternalReferenceClock()" isDefault="true" />
@@ -955,7 +961,7 @@
 
             <binaryOption key="mcg_c1_irefs[%(n)]"
                ref="(mcgClockMode[%(n)]==@FEI)||(mcgClockMode[%(n)]==@FBI)||(mcgClockMode[%(n)]==@BLPI)"
-               enumStem="IcsIref"
+               enumStem="McgIref"
                target="irefs_clock[%(n)]"
                derived="true"
                constant="true"
@@ -1044,7 +1050,7 @@
          <aliasOption key="/PMC/system_low_power_clock" />
 
          <intOption key="system_mcgoutclk_clock[%(n)]"
-            enabledBy="enablePeripheralSupport&amp;&amp;enableClockConfiguration[%(n)]"
+            enabledBy="(%(n)==0)||enableClockConfiguration[%(n)]"
             max="/SIM/MCGOUTCLK_max[/SMC/smc_pmctrl_runm[%(n)]]"
             min="1"
             derived="true"
@@ -1139,6 +1145,121 @@
       </categoryOption>
    </for>
 
+<!--   ========== Global Clocks =============================== -->
+
+   <template namespace="usbdm" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
+      \t/*
+      \t * Global clocks
+      \t */
+      \t\n
+   ]]></template>
+   <template namespace="usbdm" codeGenCondition="!/MCG/enablePeripheralSupport" ><![CDATA[
+      \t/*
+      \t * Global clock constants
+      \t * These are provided when minimal clock generator code is used.
+      \t * They assume no clock changes are made after startup.
+      \t * Values provided are from USBDM configuration.
+      \t */
+      \t\n
+   ]]></template>
+
+   <for keys=" clock                       : name "
+      values=" system_mcgffclk_clock[0]    : SystemMcgFFClock;
+               system_mcgoutclk_clock[0]   : SystemMcgOutClock;
+               system_mcgfllclk_clock[0]   : SystemMcgFllClock
+         ">
+      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport"
+                   tooltipPadding="x*xx" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \textern volatile uint32_t %(name);
+         \t\n
+      ]]></setTemplate>
+      <setTemplate namespace="all" key="/$(_BASENAME)/clocks" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport"
+                   tooltipPadding="x*xx" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \tvolatile uint32_t %(name);
+         \t\n
+      ]]></setTemplate>
+      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/MCG/enablePeripheralSupport"
+                   tooltipPadding="x*xx" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \tconstexpr uint32_t %(name) = %valueExpression;
+         \t\n
+      ]]></setTemplate>
+   </for>
+
+
+<!-- Interrupt code -->
+
+   <template codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+   <![CDATA[
+      \t/**
+      \t * Type definition for $(_Baseclass) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)($(irq_parameters));
+      \t
+      \t/**
+      \t * Callback to catch unhandled interrupt
+      \t */
+      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/** Callback function for ISR */
+      \tstatic CallbackFunction sCallback;
+      \t
+      \t/**
+      \t * Set interrupt callback function.
+      \t *
+      \t * @param[in]  acmpCallback Callback function to execute on interrupt
+      \t */
+      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
+      \t   if ($(_basename)Callback == nullptr) {
+      \t      $(_basename)Callback = unhandledCallback;
+      \t   }
+      \t   // Allow either no handler set yet or removing handler
+      \t   usbdm_assert(
+      \t         (sCallback == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
+      \t         "Handler already set");
+      \t   sCallback = $(_basename)Callback;
+      \t}
+      \t
+      \t/**
+      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
+      \t */
+      \tstatic void irqHandler() {
+      \t
+      \t   // Execute call-back
+      \t   sCallback($(irq_call));
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/** Callback for programmatically set handler */
+      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
+      \t\n
+   ]]>
+   </template>
+
+<!--   ========== Methods =============================== -->
+
    <clockCodeTemplate variable="mcg_c7_oscsel[]"
       returnFormat="%s"
    ><![CDATA[
@@ -1172,7 +1293,7 @@
    <template condition="mcg_sc_fcrdiv[]"
    ><![CDATA[
       \t/**
-      \t * Get Fast Internal Reference Clock (undivided)
+      \t * Get Fast Internal Reference Clock (divided)
       \t *
       \t * @return Clock frequency in Hz
       \t */
@@ -1185,15 +1306,6 @@
    <clockCodeTemplate variable="mcg_c2_ircs[]"
       returnFormat="%s"
    ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      \t * @param %enumParam %tooltip
-      \t */
-      \tstatic void setInternalReferenceClock(%enumClass %enumParam) {
-      \t   %defaultClockExpression
-      \t}
-
       \t/**
       \t * Get %description
       \t *
@@ -1208,18 +1320,9 @@
       \t}\n\n
       ]]></clockCodeTemplate>
 
-   <clockCodeTemplate variable="mcg_c1_irclken[]"
+   <clockCodeTemplate variables="mcg_c2_ircs[], mcg_c1_irclken[]"
       returnFormat="%s"
    ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      \t * @param %enumParam %tooltip
-      \t */
-      \tstatic void enableMcgIrClock(%enumClass %enumParam) {
-      \t   %defaultClockExpression
-      \t}
-
       \t/**
       \t * Get %description
       \t *
@@ -1227,12 +1330,51 @@
       \t */
       \tstatic uint32_t getMcgIrClock() {
       \t
-      \t   switch(%defaultMaskingExpression) {
+      \t   if ((%register1&%mask1)==0) {
+      \t      return 0;
+      \t   }
+      \t   switch(%register0&%mask0) {
       \t      default: return 0;
       %body
       \t   }
       \t}\n\n
       ]]></clockCodeTemplate>
+
+   <for
+      keys   = "var              : name        "
+      values = "
+                mcg_c2_oscmode   : ExternalReference;
+                mcg_c1_irclken[] : McgIrClkEn;
+                mcg_c2_ircs[]    : McgIrClkSrc;
+                mcg_sc_fcrdiv[]  : FastIrcDivider;
+                mcg_c6_cme0[]    : OSC0ClockMonitor;
+                mcg_c2_locre0[]  : OSC0ActionOnLossOfClock;
+                mcg_c8_cme1[]    : RTCClockMonitor;
+                mcg_c8_locre1[]  : RTCActionOnLossOfClock;
+      "
+      >
+      <setTemplate variables="%(var)" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         \t * @param %paramName %tooltip
+         \t */
+         \tstatic void set%(name)(%paramType %paramName) {
+         \t   %defaultClockExpression
+         \t}
+
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return Clock frequency in Hz
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t
+         \t      return %paramType(%register&%mask);
+         \t}\n\n
+         ]]></setTemplate>
+   </for>
 
    <template><![CDATA[
       \t/*
@@ -1314,7 +1456,7 @@
          variables=
             "mcg_c2_locre0[%(n)],
              mcg_c2_range0[%(n)],
-             oscMode,
+             mcg_c2_oscmode,
              mcg_c2_ircs[%(n)]"
       ><![CDATA[\t   /// Control Register 2 - Excluding LP, FCTRIM %initExpression\n\n ]]></initialValueTemplate>
 
@@ -1427,7 +1569,7 @@
       \t   const uint8_t c1; \n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c2_locre0[]||mcg_c2_range0[]||oscMode||mcg_c2_ircs[]"
+      condition="mcg_c2_locre0[]||mcg_c2_range0[]||mcg_c2_oscmode||mcg_c2_ircs[]"
    ><![CDATA[
       \t   /// Control Register 2 - LOCRE0, RANGE0, HGO0, EREFS0, IRCS, (-LP, -FCTRIM)
       \t   const uint8_t c2;\n ]]></template>

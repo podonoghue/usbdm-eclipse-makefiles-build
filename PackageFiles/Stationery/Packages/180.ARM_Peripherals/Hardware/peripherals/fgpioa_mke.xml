@@ -43,11 +43,11 @@
                   b : B :  64;
                   c : C :  72"
       >
-      <template key="/GPIO/getGpioAddress" namespace="all" condition="/GPIO%(P)/$present" >
+      <template key="/GPIO/getGpioAddress" namespace="all" condition="/GPIO%(P)/_present" >
       <![CDATA[
          \t         GPIO%(P)_BasePtr,\n
       ]]></template>
-      <constant key="/GPIO/MaxPinIndex" type="Integer" value="%(size)" replace="true"  condition="/GPIO%(P)/$present" />
+      <constant key="/GPIO/MaxPinIndex" type="Integer" value="%(size)" replace="true"  condition="/GPIO%(P)/_present" />
    </for>
    <template key="/GPIO/getGpioAddress" namespace="all" >
    <![CDATA[

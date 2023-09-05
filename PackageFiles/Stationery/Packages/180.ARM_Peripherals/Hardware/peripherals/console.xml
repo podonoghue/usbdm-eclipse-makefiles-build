@@ -16,18 +16,18 @@
       enabledBy="consoleEnable"
       description="UART to use for console"
       toolTip="Not all UARTs listed may be available on a particular device" >
-      <choice name="Uart 0"   value="USBDM::Uart0"    condition="/UART0/$present" />
-      <choice name="Uart 1"   value="USBDM::Uart1"    condition="/UART1/$present" />
-      <choice name="Uart 2"   value="USBDM::Uart2"    condition="/UART2/$present" />
-      <choice name="Uart 3"   value="USBDM::Uart3"    condition="/UART3/$present" />
-      <choice name="Uart 4"   value="USBDM::Uart4"    condition="/UART4/$present" />
-      <choice name="Uart 5"   value="USBDM::Uart5"    condition="/UART5/$present" />
-      <choice name="Lpuart 0" value="USBDM::Lpuart0"  condition="/LPUART0/$present" />
-      <choice name="Lpuart 1" value="USBDM::Lpuart1"  condition="/LPUART1/$present" />
-      <choice name="Lpuart 2" value="USBDM::Lpuart2"  condition="/LPUART2/$present" />
-      <choice name="Lpuart 3" value="USBDM::Lpuart3"  condition="/LPUART3/$present" />
-      <choice name="Lpuart 4" value="USBDM::Lpuart4"  condition="/LPUART4/$present" />
-      <choice name="Lpuart 5" value="USBDM::Lpuart5"  condition="/LPUART5/$present" />
+      <choice name="Uart 0"   value="USBDM::Uart0"    condition="/UART0/_present" />
+      <choice name="Uart 1"   value="USBDM::Uart1"    condition="/UART1/_present" />
+      <choice name="Uart 2"   value="USBDM::Uart2"    condition="/UART2/_present" />
+      <choice name="Uart 3"   value="USBDM::Uart3"    condition="/UART3/_present" />
+      <choice name="Uart 4"   value="USBDM::Uart4"    condition="/UART4/_present" />
+      <choice name="Uart 5"   value="USBDM::Uart5"    condition="/UART5/_present" />
+      <choice name="Lpuart 0" value="USBDM::Lpuart0"  condition="/LPUART0/_present" />
+      <choice name="Lpuart 1" value="USBDM::Lpuart1"  condition="/LPUART1/_present" />
+      <choice name="Lpuart 2" value="USBDM::Lpuart2"  condition="/LPUART2/_present" />
+      <choice name="Lpuart 3" value="USBDM::Lpuart3"  condition="/LPUART3/_present" />
+      <choice name="Lpuart 4" value="USBDM::Lpuart4"  condition="/LPUART4/_present" />
+      <choice name="Lpuart 5" value="USBDM::Lpuart5"  condition="/LPUART5/_present" />
    </choiceOption>
 
    <choiceOption key="defaultBaudRate"
@@ -62,7 +62,7 @@
       \t   console.setEcho();\n
    ]]>
    </template>
-   <template key="Initialise" namespace="all" condition="/PCR/$present" >
+   <template key="Initialise" namespace="all" condition="/PCR/_present" >
    <![CDATA[
       \t   console.configureAllPins();\n
    ]]>
