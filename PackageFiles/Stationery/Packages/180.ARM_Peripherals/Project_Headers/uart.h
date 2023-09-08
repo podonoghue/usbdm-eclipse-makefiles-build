@@ -368,8 +368,8 @@ public:
    Uart_T() : Uart(Info::baseAddress) {
 #ifdef PORT_PCR_MUX
       // Check pin assignments
-      static_assert(Info::info[0].gpioBit >= 0, "Uart_Tx has not been assigned to a pin - Modify Configure.usbdm");
-      static_assert(Info::info[1].gpioBit >= 0, "Uart_Rx has not been assigned to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[0].pinIndex >= PinIndex::MIN_PIN_INDEX, "Uart_Tx has not been assigned to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[1].pinIndex >= PinIndex::MIN_PIN_INDEX, "Uart_Rx has not been assigned to a pin - Modify Configure.usbdm");
 #endif
 
       initialise();

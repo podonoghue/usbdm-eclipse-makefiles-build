@@ -28,6 +28,7 @@ namespace USBDM {
  * @{
  */
 
+#if $(/SMC/enablePeripheralSupport) // /SMC/enablePeripheralSupport
 /**
  *  Sleep on exit from Interrupt Service Routine (ISR)\n
  *  This option controls whether the processor re-enters sleep mode when exiting the\n
@@ -46,12 +47,11 @@ enum SmcSleepOnExit {
  *
  * @image html KinetisPowerModes.png
  */
-template <class Info>
-class SmcBase_T : public Info {
+class SmcBase : public SmcInfo {
 
 protected:
 	   /** Hardware instance pointer */
-	   static constexpr HardwarePtr<SMC_Type> smc = Info::baseAddress;
+	   static constexpr HardwarePtr<SMC_Type> smc = baseAddress;
 
    /**
     * Enter Stop Mode (STOP, VLPS, LLSx, VLLSx)
@@ -106,7 +106,7 @@ public:
     * @return Pointer to static string
     */
    static const char *getSmcStatusName() {
-      return getSmcStatusName(Info::getStatus());
+      return getSmcStatusName(getStatus());
    }
 
    /**
@@ -130,7 +130,7 @@ public:
     * @return E_INTERRUPTED Processor failed to enter STOP mode due to interrupt
     */
    static ErrorCode enterStopMode(SmcStopMode smcStopMode) {
-      Info::setStopMode(smcStopMode);
+      setStopMode(smcStopMode);
 
       return enterStopMode();
    }
@@ -171,7 +171,7 @@ $(/SMC/postExitStopMode: // /SMC/postExitStopMode not found)
     * @return E_NO_ERROR    Processor entered STOP
     * @return E_INTERRUPTED Processor failed to enter STOP mode due to interrupt
     */
-   static ErrorCode enterStopMode(typename Info::Init smcInit) {
+   static ErrorCode enterStopMode(Init smcInit) {
       smcInit.setOptions();
       return enterStopMode();
    }
@@ -235,13 +235,13 @@ $(/SMC/postExitStopMode: // /SMC/postExitStopMode not found)
       // Make sure write completes
       (void)(SCB->SCR);
    }
-   
 $(/SMC/enterRunMode:    #error "/SMC/enterRunMode not found" )   
 $(/SMC/enterPowerMode:  #error "/SMC/enterPowerMode not found" )   
 $(/SMC/DefaultInitValue: // /SMC/DefaultInitValue not found)
 };
 
 $(/SMC/declarations: // No declarations found)
+#endif // /SMC/enablePeripheralSupport
 /**
  * End SMC_Group
  * @}

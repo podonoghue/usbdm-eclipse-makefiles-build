@@ -972,6 +972,6 @@
    ]]></template>
 
 
-   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
+   <signals enabledBy="enablePeripheralSupport" />
 
 </peripheralPage>

@@ -66,7 +66,7 @@
       description="KBI Pin Enables"
       toolTip="Bitmask selecting enabled pins"
       bitmask="0xFFFFFFFF"
-      bitList="PT(A-D)(0-7);"
+      bitList="PT(A-D)(0-7)"
       pinMap="KBI$(_instance)_P%i,PT(A-D)(0-7);"
       value="0"
    />
@@ -210,10 +210,10 @@
       \t */
       \tstatic void enablePin(%param0, Polarity polarity) {
       \t
-      \t   const uint32_t index = (%paramName0-(32*$(_instance)));
+      \t   const uint32_t index = (unsigned(%paramName0)-(32*$(_instance)));
       \t   const uint32_t mask = 1<<index;
       \t
-      \t   usbdm_assert(pinIndex<32, "Illegal pin index");
+      \t   usbdm_assert(unsigned(pinIndex)<32, "Illegal pin index");
       \t
       \t   %register1 = %register1 | mask;
       \t   %register2 = (%register2&~mask) | (~polarity&mask);
@@ -226,10 +226,10 @@
       \t */
       \tstatic void disablePin(%param0) {
       \t
-      \t   const uint32_t index = (%paramName0-(32*$(_instance)));
+      \t   const uint32_t index = (unsigned(%paramName0)-(32*$(_instance)));
       \t   const uint32_t mask = 1<<index;
       \t
-      \t   usbdm_assert(pinIndex<32, "Illegal pin index");
+      \t   usbdm_assert(unsigned(pinIndex)<32, "Illegal pin index");
       \t
       \t   %register1 = %register1 & ~mask;
       \t}
@@ -612,10 +612,10 @@
       \t          %param0,
       \t          Polarity %paramName1, Types... rest) : Init(rest...) {
       \t
-      \t   const uint32_t index = (%paramName0-(32*$(_instance)));
+      \t   const uint32_t index = (unsigned(%paramName0)-(32*$(_instance)));
       \t   const uint32_t mask = 1<<index;
       \t
-      \t      usbdm_assert(index<32, "Illegal pin index");
+      \t      usbdm_assert(unsigned(index)<32, "Illegal pin index");
       \t
       \t      %registerName1 |= mask;
       \t      %registerName2 |= mask&~%paramName1;
@@ -690,7 +690,7 @@
       <aliasOption key="/SIM/sim_scgc_$(_name)"     constant="false" optional="true" />
    </category>
 
-   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
+   <signals enabledBy="enablePeripheralSupport" locked="true" />
 
    <!-- ************* Common ****************** -->
 

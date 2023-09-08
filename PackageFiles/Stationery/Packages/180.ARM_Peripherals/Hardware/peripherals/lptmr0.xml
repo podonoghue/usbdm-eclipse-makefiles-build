@@ -4,15 +4,71 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Power Timer">
 
-   <xi:include href="_default_instance.xml"/>
+   <constant key="irq_pattern"              type="String"  value="&quot;^.*%b%i.*$&quot;"       />
+   <constant key="irq_ClassHandler"         type="String"  value="&quot;%c%i::irqHandler&quot;" />
+   <constant key="suppressInstance"         type="Boolean" value="false"            />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"             />
+   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"     />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"     />
+   <constant key="irq_call"                 type="String"  value="&quot;&quot;"     />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"            />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"             />
+   <xi:include href="_enablePeripheral.xml"  />
+   <title description="------------------------------------------" />
 
-   <xi:include href="_mapPinsOption.xml"/>
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
 
-   <stringOption key="irq_pattern"        constant="true" value="^.*%b%i.*$"       hidden="true" />
-   <stringOption key="irq_ClassHandler"   constant="true" value="%c%i::irqHandler" hidden="true" />
-   <xi:include href="_irqOptionSubstituted.xml"/>
+<!--
+    * Template substitutions
+    *
+    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
+    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
+    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
+    * %description[index]             Description from controlVar e.g. Compare Function Enable
+    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
+    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
+    * %params                         Formatted parameter list for function
+    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
+    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
+    * %enumClass[index]               As for %paramType
+    * %enumParam[index]               As for %paramName
+    * %valueExpression                Numeric variable value e.g. 0x3
+    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %variable[index]                Variable name from condition
+    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * %register[index]                Register associated with variable e.g. adc->APCTL1
+    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+-->
 
-   <binaryOption key="lptmr_csr_tie"
+   <!-- ************* Class Declaration ****************** -->
+   <!-- constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" / -->
+
+   <!-- ************* CSR ****************** -->
+
+   <!-- binaryOption key="lptmr_csr_ten" condition="lptmr_csr_ten_present"
+      enabledBy="enablePeripheralSupport"
+      enumStem="LptmrCsrTen"
+      description="Timer Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption -->
+
+   <binaryOption key="lptmr_csr_tie" condition="lptmr_csr_tie_present"
+      enabledBy="/$(_BASENAME)/irqHandlingMethod"
       enumStem="LptmrInterrupt"
       description="Timer interrupt enable"
       toolTip="Enables LPTMR interrupts">
@@ -20,15 +76,17 @@
       <choice value="1" name="Interrupt enabled"  enum="Enabled"  />
    </binaryOption>
 
-   <binaryOption key="lptmr_csr_tfc"
+   <binaryOption key="lptmr_csr_tfc" condition="lptmr_csr_tfc_present"
+      enabledBy="enablePeripheralSupport"
       enumStem="LptmrResetOnCompare"
       description="Counter Action on Compare Event"
-      toolTip="Counter action when lptmr_csr_tcf is set">
-      <choice value="0" name="lptmr_cnr is reset whenever lptmr_csr_tcf is set" enum="Enabled"  />
-      <choice value="1" name="lptmr_cnr is reset on overflow only"              enum="Disabled" />
+      toolTip="Counter action when CSR.TCF is set">
+      <choice value="0" name="lptmr_cnr is reset whenever CSR.TCF is set" enum="Enabled"  />
+      <choice value="1" name="lptmr_cnr is reset on overflow only"        enum="Disabled" />
    </binaryOption>
 
-   <binaryOption key="lptmr_csr_tms" description="Timer Mode Select"
+   <binaryOption key="lptmr_csr_tms" condition="lptmr_csr_tms_present"
+      enabledBy="enablePeripheralSupport"
       enumStem="LptmrMode"
       toolTip="Configures the mode of the LPTMR">
       <choice value="0" name="Time Interval mode" enum="TimeInterval"  />
@@ -42,7 +100,10 @@
       value="100" min="1"
    />
 
-   <intOption key="lptmr_cmr_compare"
+   <!-- ************* CMR ****************** -->
+
+   <intOption key="lptmr_cmr_compare" condition="lptmr_cmr_compare_present"
+      enabledBy="enablePeripheralSupport"
       description="Timer Compare Register"
       typeName="Ticks &amp;"
       valueFormat="%s_ticks"
@@ -53,13 +114,8 @@
       This value determines the period in TimeInterval mode or the event time in Pulse Counting mode"
       value="65535" min="1" max="65535" />
 
-   <template><![CDATA[
-      \t
-      \t/// Minimum resolution for time interval setting
-      \tstatic constexpr uint32_t minimumResolution = $(minimumResolution);\n\n
-   ]]></template>
-
-   <choiceOption key="lptmr_psr_pcs" description="Clock Source"
+   <choiceOption key="lptmr_psr_pcs" condition="lptmr_psr_pcs_present"
+      enabledBy="enablePeripheralSupport"
       target="inputClockFrequency"
       enumStem="LptmrClockSel"
       toolTip="Clock source for LPTMR">
@@ -75,9 +131,12 @@
       derived="true"
       constant="true" />
 
-   <stringOption key="-- Time Interval --" description="" value="-- Time Interval --" constant="true" />
+   <title description="----------- Time Interval -----------------" />
 
-   <choiceOption key="lptmr_psr_prescaler"
+   <!-- ************* PSR ****************** -->
+
+   <choiceOption key="lptmr_psr_prescaler" condition="lptmr_psr_prescale_present"
+      enabledBy="enablePeripheralSupport&amp;&amp;!lptmr_csr_tms"
       target="counterFrequency"
       description="Prescaler Value"
       valueFormat="LPTMR_PSR_PBYP(%s),LPTMR_PSR_PRESCALE(%s)"
@@ -103,6 +162,7 @@
    </choiceOption>
 
    <floatOption key="counterFrequency"
+      enabledBy="enablePeripheralSupport&amp;&amp;!lptmr_csr_tms"
       constant="true"
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
@@ -110,6 +170,7 @@
       units="Hz"/>
 
    <floatOption key="maximumPeriod"
+      enabledBy="enablePeripheralSupport&amp;&amp;!lptmr_csr_tms"
       ref="65536/(counterFrequency)"
       typeName="Seconds"
       constant="true"
@@ -119,7 +180,8 @@
       units="s"/>
 
    <floatOption key="lptmr_cmrPeriod"
-      ref="counterFrequency#(lptmr_cmr_compare+1)/counterFrequency"
+      enabledBy="enablePeripheralSupport&amp;&amp;!lptmr_csr_tms"
+      ref="(lptmr_cmr_compare+1)/counterFrequency#counterFrequency"
       typeName="Seconds &amp;"
       valueFormat="%s_s"
       description="Timer Compare Interval"
@@ -131,15 +193,17 @@
       min="0" units="s"/>
 
    <floatOption key="lptmr_cmrFrequency"  description="Timer Compare Frequency"
+      enabledBy="enablePeripheralSupport&amp;&amp;!lptmr_csr_tms"
       ref="(counterFrequency)/(lptmr_cmr_compare+1)"
       toolTip="This is determined from lptmr_cmr register and clock frequency.\n
                When lptmr_csr_tfc=0 this is the lptmr_cnr roll-over frequency"
       derived="true"
       min="0" units="Hz"/>
 
-   <stringOption key="-- Pulse Counting --" description="" value="-- Pulse Counting --" constant="true" />
+   <title description="----------- Pulse Counting -----------------" />
 
    <choiceOption key="lptmr_psr_glitchFilter"
+      enabledBy="enablePeripheralSupport&amp;&amp;lptmr_csr_tms"
       target="filterDuration"
       description="Filter Value"
       valueFormat="LPTMR_PSR_PBYP(%s),LPTMR_PSR_PRESCALE(%s)"
@@ -170,26 +234,86 @@
       derived="true"
       units="s" />
 
-   <choiceOption key="lptmr_csr_tps"
+   <choiceOption key="lptmr_csr_tps" condition="lptmr_csr_tps_present"
+      enabledBy="enablePeripheralSupport&amp;&amp;lptmr_csr_tms"
       enumStem="LptmrPinSel"
       description="Input Pin"
       toolTip="Input source to be used in Pulse Counter mode">
       <choice value="0" name="CMP0 output"    enum="Cmp0" />
       <choice value="1" name="LPTMR_ALT1 pin" enum="AltPin1" />
       <choice value="2" name="LPTMR_ALT2 pin" enum="AltPin2" />
-   </choiceOption>
+      <choice value="3" name="LPTMR_ALT3 pin" enum="AltPin3" />
+   </choiceOption >
 
-   <binaryOption key="lptmr_csr_tpp"
+   <binaryOption key="lptmr_csr_tpp" condition="lptmr_csr_tpp_present"
+      enabledBy="enablePeripheralSupport&amp;&amp;lptmr_csr_tms"
       enumStem="LptmrPulseEdge"
       description="Pin Polarity"
       toolTip="Polarity of the input source in Pulse Counter mode">
       <choice value="0" name="Active-high source, rising-edge increments lptmr_cnr"  enum="Rising"  />
       <choice value="1" name="Active-low source,  falling-edge increments lptmr_cnr" enum="Falling" />
-   </binaryOption>
+   </binaryOption >
 
 <!--   ========== Methods =============================== -->
 
-   <setTemplate variables="lptmr_cmr_compare"
+<!-- Graphic here -->
+
+   <setTemplate variables="lptmr_csr_tcf" codeGenCondition="enableGettersAndSetters"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void clearTimerCompleteFlag() {
+      \t   %register = $register|%mask;
+      \t}
+      \t\n
+   ]]></setTemplate>
+
+   <for keys="field:name"
+        values="
+      lptmr_csr_tie:CsrTie;
+      lptmr_csr_tps:CsrTps;
+      lptmr_csr_tpp:CsrTpp;
+      lptmr_csr_tfc:CsrTfc;
+      lptmr_csr_tms:CsrTms;
+      lptmr_csr_ten:CsrTen;
+      lptmr_psr_prescale:PsrPrescale;
+      lptmr_psr_pbyp:PsrPbyp;
+      lptmr_psr_pcs:PsrPcs" >
+      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register&%mask);
+         \t}
+         \t\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== Methods =============================== -->
+
+   <template><![CDATA[
+      \t
+      \t/// Minimum resolution for time interval setting
+      \tstatic constexpr uint32_t minimumResolution = $(minimumResolution);\n\n
+   ]]></template>
+
+   <setTemplate variables="lptmr_cmr_compare" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -201,7 +325,7 @@
       \t}\n\n
    ]]></setTemplate>
 
-   <setTemplate variables="lptmr_csr_tfc"
+   <setTemplate variables="lptmr_csr_tfc" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -213,7 +337,7 @@
       \t}\n\n
    ]]></setTemplate>
 
-   <setTemplate variables="lptmr_csr_tps, lptmr_csr_tpp"
+   <setTemplate variables="lptmr_csr_tps, lptmr_csr_tpp" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t/**
       \t * Set %description0 and %description1
@@ -226,7 +350,7 @@
       \t}\n\n
    ]]></setTemplate>
 
-   <setTemplate variables="lptmr_csr_tie"
+   <setTemplate variables="lptmr_csr_tie" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -251,7 +375,7 @@
       \t}\n\n
    ]]></setTemplate>
 
-   <setTemplate variables="lptmr_psr_pcs,lptmr_psr_prescaler"
+   <setTemplate variables="lptmr_psr_pcs,lptmr_psr_prescaler" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t/**
       \t * Set %description0 and %description1
@@ -271,7 +395,7 @@
       \t}\n\n
    ]]></setTemplate>
 
-   <setTemplate variables="lptmr_psr_pcs,lptmr_psr_glitchFilter"
+   <setTemplate variables="lptmr_psr_pcs,lptmr_psr_glitchFilter" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t/**
       \t * Set %description0 and %description1
@@ -291,7 +415,7 @@
       \t}\n\n
    ]]></setTemplate>
 
-   <clockCodeTemplate variable="lptmr_psr_pcs"
+   <clockCodeTemplate variable="lptmr_psr_pcs" codeGenCondition="enablePeripheralSupport"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -357,7 +481,7 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
-   <setTemplate key="/LPTMR/StaticMethods" namespace="all"
+   <setTemplate key="/LPTMR/StaticMethods" namespace="all" codeGenCondition="enablePeripheralSupport"
       nonDefaultParams="3"
       discardRepeats="true"
       variables="
@@ -927,7 +1051,7 @@
       \t   };\n\n
    ]]></template>
 
-<!-- Configure method -->
+   <!-- ************* Common ****************** -->
 
    <template key="/LPTMR/declarations" namespace="all" ><![CDATA[
       \t   /**
@@ -948,8 +1072,6 @@
       \t};\n\n
    ]]></template>
 
- <!--  ========== Common =============================== -->
-
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.LptmrValidate">
    </validate>
@@ -961,8 +1083,19 @@
       <copy source="Snippets/timer-inline-handler-example.cpp" target="Snippets/timer-inline-handler-example.cpp"    overwrite="true" derived="true" />
    </projectActionList>
 
-   <xi:include href="_clockOption.xml"/>
+   <!-- ************* Startup ****************** -->
 
-   <signals/>
+   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
+
+   <!-- ************* Signal mapping ****************** -->
+   <signals enabledBy="enablePeripheralSupport" />
 
 </peripheralPage>

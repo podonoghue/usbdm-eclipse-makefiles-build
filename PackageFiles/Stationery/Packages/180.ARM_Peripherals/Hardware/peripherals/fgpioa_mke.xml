@@ -52,7 +52,7 @@
    <template key="/GPIO/getGpioAddress" namespace="all" >
    <![CDATA[
       \t   };
-      \t   return gpioAddresses[pinInd / 32];
+      \t   return gpioAddresses[unsigned(pinInd) / 32];
       \t}\n
    ]]></template>
 
@@ -366,6 +366,6 @@
       <copy source="Project_Headers/gpio-MKE.h"  target="Project_Headers/gpio.h"  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <signals />
+   <signals enabledBy="enablePeripheralSupport" />
 
 </peripheralPage>

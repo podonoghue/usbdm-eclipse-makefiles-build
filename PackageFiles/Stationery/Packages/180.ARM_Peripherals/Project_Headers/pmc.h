@@ -26,21 +26,7 @@ namespace USBDM {
  * @{
  */
 
-/**
- * Indicates reason for execution of call-back
- */
-enum PmcInterruptReason {
-   PmcInterruptReason_LowVoltageDetect,//!< Low Voltage Detect
-   PmcInterruptReason_LowVoltageWarning//!< Low Voltage Warning
-};
-
-/**
- * Type definition for PDB interrupt call back
- *
- * @param pmcInterruptReason Reason for interrupt leading to call-back
- */
-typedef void (*PmcCallbackFunction)(PmcInterruptReason pmcInterruptReason);
-
+#if $(/PMC/enablePeripheralSupport) // /PMC/enablePeripheralSupport
 /**
  * Template class providing interface to Power Management Controller
  *
@@ -53,44 +39,12 @@ typedef void (*PmcCallbackFunction)(PmcInterruptReason pmcInterruptReason);
  *
  * @endcode
  */
-template <class Info>
-class PmcBase_T {
+class PmcBase_T : public PmcInfo {
 
 protected:
-   /** Callback function for ISR */
-   static PmcCallbackFunction sCallback;
+$(/PMC/protectedMethods: // No protected methods found)
 
-   /** Handler for unexpected interrupts */
-   static void unhandledCallback(PmcInterruptReason) {
-      setAndCheckErrorCode(E_NO_HANDLER);
-   }
 public:
-   /**
-    * IRQ handler
-    */
-   static void irqHandler(void) {
-
-      if ((PmcBase_T<Info>::pmc->LVDSC1 & (PMC_LVDSC1_LVDF_MASK|PMC_LVDSC1_LVDIE_MASK)) ==
-            (PMC_LVDSC1_LVDF_MASK|PMC_LVDSC1_LVDIE_MASK)) {
-
-         // LVDF enabled and detected
-         PmcBase_T<Info>::pmc->LVDSC1 = PmcBase_T<Info>::pmc->LVDSC1 | PMC_LVDSC1_LVDF_MASK;
-         sCallback(PmcInterruptReason_LowVoltageDetect);
-         return;
-      }
-      if ((PmcBase_T<Info>::pmc->LVDSC2 & (PMC_LVDSC2_LVWF_MASK|PMC_LVDSC2_LVWIE_MASK)) ==
-            (PMC_LVDSC2_LVWF_MASK|PMC_LVDSC2_LVWIE_MASK)) {
-
-         // LVWF enabled and detected
-         PmcBase_T<Info>::pmc->LVDSC2 = PmcBase_T<Info>::pmc->LVDSC2 | PMC_LVDSC2_LVWF_MASK;
-         sCallback(PmcInterruptReason_LowVoltageWarning);
-         return;
-      }
-#ifdef DEBUG_BUILD
-      // Should be impossible
-      __BKPT();
-#endif
-   }
 
    /**
     * Wrapper to allow the use of a class member as a callback function
@@ -124,8 +78,8 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(PmcInterruptReason reason), T &object>
-   static PmcCallbackFunction wrapCallback() {
-      static PmcCallbackFunction fn = [](PmcInterruptReason reason) {
+   static CallbackFunction wrapCallback() {
+      static CallbackFunction fn = [](PmcInterruptReason reason) {
          (object.*callback)(reason);
       };
       return fn;
@@ -163,132 +117,26 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(PmcInterruptReason reason)>
-   static PmcCallbackFunction wrapCallback(T &object) {
+   static CallbackFunction wrapCallback(T &object) {
       static T &obj = object;
-      static PmcCallbackFunction fn = [](PmcInterruptReason reason) {
+      static CallbackFunction fn = [](PmcInterruptReason reason) {
          (obj.*callback)(reason);
       };
       return fn;
    }
 
-   /**
-    * Set Callback function
-    *
-    *  @param[in]  callback  Callback function to be executed on interrupt.\n
-    *                        Use nullptr to remove callback.
-    */
-   static void setCallback(PmcCallbackFunction callback) {
-      static_assert(Info::irqHandlerInstalled, "PMC not configure for interrupts");
-      if (callback == nullptr) {
-         callback = unhandledCallback;
-      }
-      sCallback = callback;
-   }
-
-
 protected:
    /** Hardware instance */
-   static constexpr HardwarePtr<PMC_Type> pmc = Info::baseAddress;
+   static constexpr HardwarePtr<PMC_Type> pmc = baseAddress;
 
 public:
+$(/PMC/publicMethods:// /PMC/publicMethods not found)
+$(/PMC/InitMethod:// /PMC/InitMethod not found)
    /**
     * Enable clock to the PMC
     */
    static void  __attribute__((always_inline)) enable() {
    }
-
-   /**
-    * Enables PMC and sets to default configuration.
-    *
-    * Includes enabling clock and any pins used.\n
-    * Sets PMC to default configuration.
-    */
-   static void defaultConfigure() {
-      enable();
-
-      pmc->LVDSC1 = Info::pmc_lvdsc1;
-      pmc->LVDSC2 = Info::pmc_lvdsc2;
-      pmc->REGSC  = Info::pmc_regsc;
-
-      enableNvicInterrupts(Info::irqLevel);
-   }
-
-#ifdef PMC_LVDSC1_LVDV
-   /**
-    * Set action and level for Low Voltage Detect
-    *
-    * @param[in] pmcLowVoltageDetectAction Action to take on Low Voltage Detect
-    * @param[in] pmcLowVoltageDetectLevel  Level at which Low Voltage Detect operates
-    */
-   static void configureLowVoltageReset (
-         PmcLowVoltageDetectAction pmcLowVoltageDetectAction = PmcLowVoltageDetectAction_None,
-         PmcLowVoltageDetectLevel  pmcLowVoltageDetectLevel  = PmcLowVoltageDetectLevel_High
-         ) {
-      pmc->LVDSC1 = pmc->LVDSC1 | (pmcLowVoltageDetectAction|pmcLowVoltageDetectLevel);
-   }
-
-#else
-   /**
-    * Set action and level for Low Voltage Detect
-    *
-    * @param[in] pmcLowVoltageDetectAction Action to take on Low Voltage Detect
-    */
-   static void configureLowVoltageReset (PmcLowVoltageDetectAction pmcLowVoltageDetectAction = PmcLowVoltageDetectAction_None) {
-      pmc->LVDSC1 = pmcLowVoltageDetectAction;
-   }
-
-#endif
-
-#ifdef PMC_LVDSC2_LVWV
-   /**
-    * Set action and level for Low Voltage Warning
-    *
-    * @param[in] pmcLowVoltageWarningAction   Action to take on Low Voltage Warning
-    * @param[in] pmcLowVoltageWarningLevel    Level at which Low Voltage Warning operates
-    */
-   static void configureLowVoltageWarning (
-         PmcLowVoltageWarningAction pmcLowVoltageWarningAction = PmcLowVoltageWarningAction_None,
-         PmcLowVoltageWarningLevel  pmcLowVoltageWarningLevel  = PmcLowVoltageWarningLevel_High
-         ) {
-      pmc->LVDSC2 = pmc->LVDSC2 | (pmcLowVoltageWarningAction|pmcLowVoltageWarningLevel);
-   }
-
-#else
-   /**
-    * Set action and level for Low Voltage Warning
-    *
-    * @param[in] pmcLowVoltageWarningAction   Action to take on Low Voltage Warning
-    */
-   static void configureLowVoltageWarning (
-         PmcLowVoltageWarningAction pmcLowVoltageWarningAction = PmcLowVoltageWarningAction_None
-         ) {
-      pmc->LVDSC2 = pmcLowVoltageWarningAction;
-   }
-
-#endif
-
-#ifdef PMC_REGSC_ACKISO_MASK
-   /**
-    * Release pins after VLLSx exit
-    */
-   static void releasePins () {
-      pmc->REGSC = pmc->REGSC | PMC_REGSC_ACKISO_MASK;
-   }
-#endif
-
-#ifdef PMC_REGSC_BGBE
-   /**
-    * Determines availability of Band-gap reference
-    *
-    * @param[in] pmcBandgapBuffer              Controls whether the band-gap reference is available to internal devices e.g. CMP etc
-    * @param[in] pmcBandgapOperationInLowPower Controls operation of the band-gap in low power modes
-    */
-   static void configureBandgapOperation(
-         PmcBandgapBuffer              pmcBandgapBuffer,
-         PmcBandgapOperationInLowPower pmcBandgapOperationInLowPower=PmcBandgapOperationInLowPower_Disabled) {
-      pmc->REGSC = pmc->REGSC | (pmcBandgapBuffer|pmcBandgapOperationInLowPower);
-   }
-#endif
 
 #ifdef PMC_REGSC_BIASEN
    /**
@@ -399,7 +247,7 @@ public:
     * Enable interrupts in NVIC
     */
    static void enableNvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[0]);
+      NVIC_EnableIRQ(irqNums[0]);
    }
 
    /**
@@ -409,14 +257,14 @@ public:
     * @param[in]  nvicPriority  Interrupt priority
     */
    static void enableNvicInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
+      enableNvicInterrupt(irqNums[0], nvicPriority);
    }
 
    /**
     * Disable interrupts in NVIC
     */
    static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[0]);
+      NVIC_DisableIRQ(irqNums[0]);
    }
 
 #ifdef PMC_SRAMCTL_VLLS2PD_MASK
@@ -431,9 +279,10 @@ public:
 #endif
 };
 
-template<class Info> PmcCallbackFunction PmcBase_T<Info>::sCallback = PmcBase_T<Info>::unhandledCallback;
-
+$(/PMC/staticDefinitions: // No static declarations found)
 $(/PMC/declarations: // No declarations found)
+#endif // /PMC/enablePeripheralSupport
+
 /**
  * End PMC_Group
  * @}

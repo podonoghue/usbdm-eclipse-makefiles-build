@@ -1,14 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"
 ?>
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
-<!-- smc_mk22f51212.xml -->
+<!-- _smc_base.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <xi:include href="_default_instance.xml"/>
+   <constant key="suppressInstance"         type="Boolean" value="false"         />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"          />
+   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="_enablePeripheral.xml"  />
+   <title description="------------------------------------------" />
 
-   <!-- ************** PMPROT ************** -->
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
+
+<!--
+    * Template substitutions
+    *
+    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
+    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
+    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
+    * %description[index]             Description from controlVar e.g. Compare Function Enable
+    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
+    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
+    * %params                         Formatted parameter list for function
+    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
+    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
+    * %enumClass[index]               As for %paramType
+    * %enumParam[index]               As for %paramName
+    * %valueExpression                Numeric variable value e.g. 0x3
+    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %variable[index]                Variable name from condition
+    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * %register[index]                Register associated with variable e.g. adc->APCTL1
+    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+-->
+
+   <!-- ************* PMPROT ****************** -->
    <binaryOption key="smc_pmprot_ahsrun" condition="smc_pmprot_ahsrun_present"
+      enabledBy="enablePeripheralSupport"
       enumStem="SmcAllowHighSpeedRun"
       enumType="uint8_t"
       description="Allow High Speed Run mode"
@@ -18,6 +64,7 @@
    </binaryOption>
 
    <binaryOption key="smc_pmprot_avlp" condition="smc_pmprot_avlp_present"
+      enabledBy="enablePeripheralSupport"
       enumStem="SmcAllowVeryLowPower"
       enumType="uint8_t"
       description="Allow very low power modes"
@@ -27,6 +74,7 @@
    </binaryOption>
 
    <binaryOption key="smc_pmprot_alls" condition="smc_pmprot_alls_present"
+      enabledBy="enablePeripheralSupport"
       enumStem="SmcAllowLowLeakageStop"
       enumType="uint8_t"
       description="Allow low leakage stop mode"
@@ -36,6 +84,7 @@
    </binaryOption>
 
    <binaryOption key="smc_pmprot_avlls" condition="smc_pmprot_avlls_present"
+      enabledBy="enablePeripheralSupport"
       enumStem="SmcAllowVeryLowLeakageStop"
       enumType="uint8_t"
       description="Allow very low leakage stop mode"
@@ -44,7 +93,7 @@
       <choice name="VLLSx is allowed"     enum="Enabled"  value="1" isDefault="true" />
    </binaryOption>
 
-   <setTemplate
+   <setTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="smc_pmprot_ahsrun,smc_pmprot_avlp,smc_pmprot_alls,smc_pmprot_avlls" > <![CDATA[
       \t/**
       \t * Enable all power modes.
@@ -72,9 +121,10 @@
       \t}\n\n
    ]]></setTemplate>
 
-   <!-- ************** PMCTRL ************** -->
+   <!-- ************* PMCTRL ****************** -->
 
    <binaryOption key="smc_pmctrl_lpwui" condition="smc_pmctrl_lpwui_present"
+      enabledBy="enablePeripheralSupport"
       enumStem="SmcExitLowPowerOnInt"
       enumType="uint8_t"
       description="Exit low power on interrupt"
@@ -84,7 +134,8 @@
       <choice name="Exit VLPR on int"    enum="Enabled"  value="1" />
    </binaryOption>
 
-   <clockCodeTemplate variable="smc_pmctrl_lpwui" ><![CDATA[
+   <clockCodeTemplate variable="smc_pmctrl_lpwui"  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   ><![CDATA[
       \t/**
       \t * Set %description
       \t *
@@ -121,6 +172,7 @@
    </for>
 
    <choiceOption key="smc_pmctrl_stopm" condition="smc_pmctrl_stopm_present"
+      enabledBy="enablePeripheralSupport"
       enumStem="SmcStopMode"
       enumType="uint8_t"
       description="Stop Mode Control"
@@ -132,7 +184,8 @@
       <choice value="4" enum="VeryLowLeakageStop"  name="Very-Low-Leakage Stop (VLLSx)" />
    </choiceOption>
 
-   <clockCodeTemplate variable="smc_pmctrl_stopm" ><![CDATA[
+   <clockCodeTemplate variable="smc_pmctrl_stopm"  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   ><![CDATA[
       \t/**
       \t * Set %description
       \t *
@@ -145,9 +198,10 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
-   <!-- ************** STOPCTRL ************** -->
+   <!-- ************* STOPCTRL ****************** -->
 
    <choiceOption key="smc_stopctrl_pstopo" condition="smc_stopctrl_pstopo_present"
+      enabledBy="enablePeripheralSupport"
       enumStem="SmcPartialStopMode"
       enumType="uint8_t"
       description="Partial Stop Mode"
@@ -157,7 +211,8 @@
       <choice value="2" enum="Partial2"  name="PSTOP2 - Partial Stop with system clock disabled and bus clock enabled" />
    </choiceOption>
 
-   <clockCodeTemplate variable="smc_stopctrl_pstopo"><![CDATA[
+   <clockCodeTemplate variable="smc_stopctrl_pstopo" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   ><![CDATA[
       \t/**
       \t * Set %description
       \t *
@@ -169,6 +224,7 @@
    ]]></clockCodeTemplate>
 
    <binaryOption key="smc_stopctrl_porpo" condition="smc_stopctrl_porpo_present"
+      enabledBy="enablePeripheralSupport"
       enumStem="SmcPowerOnResetInVlls0"
       enumType="uint8_t"
       description="Power-On_Reset Detection in VLLS0 mode"
@@ -177,7 +233,8 @@
       <choice value="1" enum="Disabled" name="POR detect circuit is disabled in VLLS0"  />
    </binaryOption>
 
-   <clockCodeTemplate variable="smc_stopctrl_porpo"><![CDATA[
+   <clockCodeTemplate variable="smc_stopctrl_porpo" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   ><![CDATA[
       \t/**
       \t * Set %description
       \t *
@@ -189,6 +246,7 @@
    ]]></clockCodeTemplate>
 
    <binaryOption key="smc_stopctrl_ram2po" condition="smc_stopctrl_ram2po_present"
+      enabledBy="enablePeripheralSupport"
       enumStem="SmcLowLeakageRam2"
       enumType="uint8_t"
       description="RAM2 Power Option"
@@ -197,18 +255,8 @@
       <choice value="1" enum="Enabled"  name="RAM2 powered in VLLS2" />
    </binaryOption>
 
-   <clockCodeTemplate variable="smc_stopctrl_ram2po"><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      \t * @param %enumParam %tooltip
-      \t */
-      \tstatic void setRam2PoweredInLLS2_VLLS2(%enumClass %enumParam) {
-      \t   %defaultClockExpression
-      \t}\n\n
-   ]]></clockCodeTemplate>
-
    <binaryOption key="smc_stopctrl_lpopo" condition="smc_stopctrl_lpopo_present"
+      enabledBy="enablePeripheralSupport"
       enumStem="SmcLpoInLowLeakage"
       enumType="uint8_t"
       description="Stop mode LPO Option"
@@ -217,18 +265,8 @@
       <choice value="1" enum="Enabled"  name="LPO clock is disabled in LLS/VLLSx" />
    </binaryOption>
 
-   <clockCodeTemplate variable="smc_stopctrl_lpopo"><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      \t * @param %enumParam %tooltip
-      \t */
-      \tstatic void setLpoPoweredInLLS_VLLS(%enumClass %enumParam) {
-      \t   %defaultClockExpression
-      \t}\n\n
-   ]]></clockCodeTemplate>
-
    <choiceOption key="smc_stopctrl_vllsm" condition="!smc_stopctrl_llsm_present &amp;&amp; smc_stopctrl_vllsm_present"
+      enabledBy="enablePeripheralSupport"
       enumStem="SmcLowLeakageStopMode"
       enumType="uint8_t"
       description="Low Leakage Mode Control"
@@ -239,7 +277,42 @@
       <choice value="3" enum="VLLS3" name="Enter VLLS3 in VLLSx mode" isDefault="true" />
    </choiceOption>
 
-   <clockCodeTemplate variable="smc_stopctrl_vllsm"><![CDATA[
+   <choiceOption key="smc_stopctrl_llsm" condition="smc_stopctrl_llsm_present &amp;&amp; !smc_stopctrl_vllsm_present"
+      enabledBy="enablePeripheralSupport"
+      enumStem="SmcLowLeakageStopMode"
+      enumType="uint8_t"
+      description="Low Leakage Mode Control"
+      toolTip="Controls which LLS sub-mode to enter if STOPM = LLSx">
+      <choice value="2" enum="LLS2" name="Enter LLS2 in LLSx mode" />
+      <choice value="3" enum="LLS3" name="Enter LLS3 in LLSx mode" isDefault="true" />
+   </choiceOption>
+
+   <clockCodeTemplate variable="smc_stopctrl_ram2po" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setRam2PoweredInLLS2_VLLS2(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t}\n\n
+   ]]></clockCodeTemplate>
+
+   <clockCodeTemplate variable="smc_stopctrl_lpopo" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setLpoPoweredInLLS_VLLS(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t}\n\n
+   ]]></clockCodeTemplate>
+
+   <clockCodeTemplate variable="smc_stopctrl_vllsm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   ><![CDATA[
       \t/**
       \t * Set %description
       \t *
@@ -250,16 +323,8 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
-   <choiceOption key="smc_stopctrl_llsm" condition="smc_stopctrl_llsm_present &amp;&amp; !smc_stopctrl_vllsm_present"
-      enumStem="SmcLowLeakageStopMode"
-      enumType="uint8_t"
-      description="Low Leakage Mode Control"
-      toolTip="Controls which LLS sub-mode to enter if STOPM = LLSx">
-      <choice value="2" enum="LLS2" name="Enter LLS2 in LLSx mode" />
-      <choice value="3" enum="LLS3" name="Enter LLS3 in LLSx mode" isDefault="true" />
-   </choiceOption>
-
-   <clockCodeTemplate variable="smc_stopctrl_llsm"><![CDATA[
+   <clockCodeTemplate variable="smc_stopctrl_llsm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   ><![CDATA[
       \t/**
       \t * Set %description
       \t *
@@ -271,6 +336,7 @@
    ]]></clockCodeTemplate>
 
    <choiceOption key="smc_stopctrl_vllsm_llsm" condition="smc_stopctrl_llsm_present &amp;&amp; smc_stopctrl_vllsm_present"
+      enabledBy="enablePeripheralSupport"
       valueFormat="SMC_STOPCTRL_VLLSM(%s)"
       enumStem="SmcLowLeakageStopMode"
       enumType="uint8_t"
@@ -296,7 +362,7 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
-   <setTemplate
+   <setTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="smc_stopctrl_pstopo,smc_stopctrl_llsm,smc_stopctrl_vllsm,smc_stopctrl_vllsm_llsm,smc_stopctrl_porpo,smc_stopctrl_ram2po,smc_stopctrl_lpopo">
       <![CDATA[
       \t/**
@@ -347,7 +413,8 @@
    <!-- ************** General ************** -->
 
    <if condition="smc_pmprot_ahsrun" >
-      <template key="enterRunMode" namespace="all" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
+      <template key="enterRunMode" namespace="all"
+         codeGenCondition="/MCG/enablePeripheralSupport&amp;&amp;/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
          \t/**
          \t * Enter Run Mode.
          \t *
@@ -373,7 +440,7 @@
          \t    * RUN->HSRUN    After
          \t    * RUN->VLPR     Before
          \t    */
-         \t   auto smcStatus = Info::getStatus();
+         \t   auto smcStatus = getStatus();
          \t   bool changeBefore = (smcStatus == SmcStatus_HSRUN);
          \t
          \t   switch(smcRunMode) {
@@ -390,7 +457,7 @@
          \t         SMC->PMCTRL = (SMC->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
          \t
          \t         // Wait for power status to change
-         \t         while (Info::getStatus() != SmcStatus_RUN) {
+         \t         while (getStatus() != SmcStatus_RUN) {
          \t            __asm__("nop");
          \t         }
          \t         if (!changeBefore) {
@@ -408,7 +475,7 @@
          \t         SMC->PMCTRL = (SMC->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
          \t
          \t         // Wait for power status to change
-         \t         while (Info::getStatus() != SmcStatus_HSRUN) {
+         \t         while (getStatus() != SmcStatus_HSRUN) {
          \t            __asm__("nop");
          \t         }
          \t         rc = Mcg::clockTransition(Mcg::clockInfo[clockConfig]);
@@ -428,7 +495,7 @@
          \t         SMC->PMCTRL = (SMC->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
          \t
          \t         // Wait for power status to change
-         \t         while (Info::getStatus() != SmcStatus_VLPR) {
+         \t         while (getStatus() != SmcStatus_VLPR) {
          \t            __asm__("nop");
          \t         }
          \t         break;
@@ -440,7 +507,8 @@
          \t}\n\n
       ]]></template>
    <else />
-      <template key="enterRunMode" namespace="all" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
+      <template key="enterRunMode" namespace="all"
+         codeGenCondition="/MCG/enablePeripheralSupport&amp;&amp;/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
          \t/**
          \t * Enter Run Mode.
          \t *
@@ -471,7 +539,7 @@
          \t         SMC->PMCTRL = (SMC->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
          \t
          \t         // Wait for power status to change
-         \t         while (Info::getStatus() != SmcStatus_RUN) {
+         \t         while (getStatus() != SmcStatus_RUN) {
          \t            __asm__("nop");
          \t         }
          \t         // Change clock mode
@@ -488,7 +556,7 @@
          \t         SMC->PMCTRL = (SMC->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
          \t
          \t         // Wait for power status to change
-         \t         while (Info::getStatus() != SmcStatus_VLPR) {
+         \t         while (getStatus() != SmcStatus_VLPR) {
          \t            __asm__("nop");
          \t         }
          \t         break;
@@ -500,7 +568,7 @@
       ]]></template>
    </if>
 
-   <template key="enterPowerMode" namespace="all" ><![CDATA[
+   <template key="enterPowerMode" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Change power mode.
       \t *
@@ -523,10 +591,10 @@
       \t      case SmcPowerMode_RUN   : // (VLPR,HSRUN)->RUN Transition 3,12
       \t      case SmcPowerMode_VLPR  : // RUN->VLPR         Transition 3\n
    ]]></template>
-   <template variables="smc_pmprot_ahsrun" key="enterPowerMode" namespace="all" ><![CDATA[
+   <template variables="smc_pmprot_ahsrun" key="enterPowerMode" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t      case SmcPowerMode_HSRUN : // RUN->HSRUN        Transition 12\n
    ]]></template>
-   <template key="enterPowerMode" namespace="all" ><![CDATA[
+   <template key="enterPowerMode" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t         // Clock changes needed etc. Use enterRunMode()
       \t         return E_ILLEGAL_PARAM;
       \t
@@ -543,11 +611,11 @@
       \t
       \t      case SmcPowerMode_NormalSTOP   : // RUN->STOP Transition 2a\n
    ]]></template>
-   <template variables="smc_stopctrl_pstopo" key="enterPowerMode" namespace="all" ><![CDATA[
+   <template variables="smc_stopctrl_pstopo" key="enterPowerMode" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t      case SmcPowerMode_PartialSTOP1 : // RUN->STOP Transition 2b
       \t      case SmcPowerMode_PartialSTOP2 : // RUN->STOP Transition 2c\n
    ]]></template>
-   <template key="enterPowerMode" namespace="all" ><![CDATA[
+   <template key="enterPowerMode" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t         // Check if in correct run mode
       \t         if (SmcRunMode_Normal != (SMC->PMCTRL&SMC_PMCTRL_RUNM_MASK)) {
       \t            return E_ILLEGAL_POWER_TRANSITION;
@@ -555,35 +623,35 @@
       \t         [[fallthrough]];
       \t      case SmcPowerMode_VLPS  :        // (RUN,VLPR)->VLPS  Transition 7,6 \n
    ]]></template>
-   <template condition="smc_stopctrl_llsm_present" key="enterPowerMode" namespace="all" ><![CDATA[
+   <template condition="smc_stopctrl_llsm_present" key="enterPowerMode" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t      case SmcPowerMode_LLS2  :        // (RUN,VLPR)->LLS2   Transition 10a,11a
       \t      case SmcPowerMode_LLS3  :        // (RUN,VLPR)->LLS3   Transition 10b,11b \n
    ]]></template>
-   <template condition="smc_stopctrl_vllsm_present" key="enterPowerMode" namespace="all" ><![CDATA[
+   <template condition="smc_stopctrl_vllsm_present" key="enterPowerMode" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t      case SmcPowerMode_VLLS0 :        // (RUN,VLPR)->VLLS0 Transition 8a,9a
       \t      case SmcPowerMode_VLLS1 :        // (RUN,VLPR)->VLLS1 Transition 8b,9b
       \t      case SmcPowerMode_VLLS2 :        // (RUN,VLPR)->VLLS2/LLS2 Transition 8c,9c
       \t      case SmcPowerMode_VLLS3 :        // (RUN,VLPR)->VLLS3/LLS3 Transition 8d,9d \n
    ]]></template>
-   <template variables="smc_pmprot_ahsrun" key="enterPowerMode" namespace="all" ><![CDATA[
+   <template variables="smc_pmprot_ahsrun" key="enterPowerMode" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t         // Check if in allowable run modes
       \t         if (SmcRunMode_HighSpeed == (SMC->PMCTRL&SMC_PMCTRL_RUNM_MASK)) {
       \t            return E_ILLEGAL_POWER_TRANSITION;
       \t         }\n
    ]]></template>
-   <template variables="smc_stopctrl_pstopo, smc_stopctrl_llsm, smc_stopctrl_vllsm, smc_stopctrl_vllsm_llsm" key="enterPowerMode" namespace="all" ><![CDATA[
+   <template variables="smc_stopctrl_pstopo, smc_stopctrl_llsm, smc_stopctrl_vllsm, smc_stopctrl_vllsm_llsm" key="enterPowerMode" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t         // Set partial_stop and (v)lls options
       \t         %register = (%register&~%mask)|(smcPowerMode>>8);
       \t
       \t         return enterStopMode((SmcStopMode)(smcPowerMode&SMC_PMCTRL_STOPM_MASK));\n
    ]]></template>
-   <template key="enterPowerMode" namespace="all" ><![CDATA[
+   <template key="enterPowerMode" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t   }
       \t   return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
       \t}\n\n
    ]]></template>
 
-   <template namespace="usbdm" ><![CDATA[
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
    \tconsteval uint32_t make16(uint8_t pmctrl, uint8_t stopctrl=0, uint8_t bias=0) {
    \t   return pmctrl+(stopctrl<<8)+(bias<<16);
    \t}
@@ -593,46 +661,46 @@
    \t   SmcPowerMode_RUN           = make16(SmcRunMode_Normal),                                                            /* (VLPR,HSRUN)->RUN 3,12   Run        SMC_PMCTRL_RUNM(0)                                     */ ///<  Run mode
    \t   SmcPowerMode_VLPR          = make16(SmcRunMode_VeryLowPower),                                                      /* RUN->VLPR         3      Run        SMC_PMCTRL_RUNM(2)                                     */ ///<  Very low power run mode     \n
    ]]></template>
-   <template namespace="usbdm" variables="smc_pmprot_ahsrun" ><![CDATA[
+   <template namespace="usbdm" variables="smc_pmprot_ahsrun" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
    \t   SmcPowerMode_HSRUN         = make16(SmcRunMode_HighSpeed),                                                         /* RUN->HSRUN        12     Run        SMC_PMCTRL_RUNM(3)                                     */ ///<  High-speed run mode         \n
    ]]></template>
-   <template namespace="usbdm" ><![CDATA[
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
    \t
    \t   SmcPowerMode_WAIT          = make16(SmcRunMode_Normal,0,1),                                                        /* RUN->WAIT         1      Sleep      wfi+SMC_PMCTRL_RUNM(0)                                 */ ///<  Wait mode
    \t   SmcPowerMode_VLPW          = make16(SmcRunMode_VeryLowPower,0,1),                                                  /* VLPR->VLPW        4      Sleep      wfi+SMC_PMCTRL_RUNM(2)                                 */ ///<  Very low power wait mode
    \t
    \t   SmcPowerMode_NormalSTOP    = make16(SmcRunMode_Normal|SmcStopMode_NormalStop,0,2),                                 /* RUN->STOP         2a     Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(0) RUN<->STOP           */ ///<  Stop mode                   \n
    ]]></template>
-   <template namespace="usbdm" condition="smc_stopctrl_pstopo" ><![CDATA[
+   <template namespace="usbdm" condition="smc_stopctrl_pstopo" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
    \t   SmcPowerMode_PartialSTOP1  = make16(SmcRunMode_Normal|SmcStopMode_NormalStop,SmcPartialStopMode_Partial1),         /* RUN->STOP         2b     Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(0) RUN<->STOP           */ ///<  Stop mode
    \t   SmcPowerMode_PartialSTOP2  = make16(SmcRunMode_Normal|SmcStopMode_NormalStop,SmcPartialStopMode_Partial2),         /* RUN->STOP         2c     Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(0) RUN<->STOP           */ ///<  Stop mode                   \n
    ]]></template>
-   <template namespace="usbdm" condition="smc_pmprot_avlp_present" ><![CDATA[
+   <template namespace="usbdm" condition="smc_pmprot_avlp_present" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
    \t
    \t   SmcPowerMode_VLPS          = make16(SmcRunMode_Normal|SmcStopMode_VeryLowPowerStop),                               /* (RUN,VLPR)->VLPS  7,6    Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(2)                      */ ///<  Very low power stop mode
    \t   /*                               or if SmcRunMode_VeryLowPower,                                                       VLPR->VLPS        6      Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(0/2)                    */ ///<  Very low power stop mode    \n
    ]]></template>
-   <template namespace="usbdm" condition="smc_stopctrl_llsm_present" ><![CDATA[
+   <template namespace="usbdm" condition="smc_stopctrl_llsm_present" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
    \t
    \t   SmcPowerMode_LLS2          = make16(SmcRunMode_Normal|SmcStopMode_LowLeakageStop,SmcLowLeakageStopMode_LLS2),      /* (RUN,VLPR)->LLS   10,11a Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(3)+SMC_STOPCTRL_LLSM(2) */ ///<  Low leakage stop mode 2
    \t   SmcPowerMode_LLS3          = make16(SmcRunMode_Normal|SmcStopMode_LowLeakageStop,SmcLowLeakageStopMode_LLS3),      /* (RUN,VLPR)->LLS   10,11b Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(3)+SMC_STOPCTRL_LLSM(3) */ ///<  Low leakage stop mode 3     \n
    ]]></template>
-   <template namespace="usbdm" condition="smc_stopctrl_vllsm_present" ><![CDATA[
+   <template namespace="usbdm" condition="smc_stopctrl_vllsm_present" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
    \t
    \t   SmcPowerMode_VLLS0         = make16(SmcRunMode_Normal|SmcStopMode_VeryLowLeakageStop,SmcLowLeakageStopMode_VLLS0), /* (RUN,VLPR)->VLLS0 8,9a   Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(4)+SMC_STOPCTRL_LLSM(0) */ ///<  Very low leakage stop mode 0
    \t   SmcPowerMode_VLLS1         = make16(SmcRunMode_Normal|SmcStopMode_VeryLowLeakageStop,SmcLowLeakageStopMode_VLLS1), /* (RUN,VLPR)->VLLS1 8,9b   Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(4)+SMC_STOPCTRL_LLSM(1) */ ///<  Very low leakage stop mode 1
    \t   SmcPowerMode_VLLS2         = make16(SmcRunMode_Normal|SmcStopMode_VeryLowLeakageStop,SmcLowLeakageStopMode_VLLS2), /* (RUN,VLPR)->VLLS2 8,9c   Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(4)+SMC_STOPCTRL_LLSM(2) */ ///<  Very low leakage stop mode 2
    \t   SmcPowerMode_VLLS3         = make16(SmcRunMode_Normal|SmcStopMode_VeryLowLeakageStop,SmcLowLeakageStopMode_VLLS3), /* (RUN,VLPR)->VLLS3 8,9d   Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(4)+SMC_STOPCTRL_LLSM(3) */ ///<  Very low leakage stop mode 3 \n
    ]]></template>
-   <template namespace="usbdm" ><![CDATA[
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
    \t};\n\n
    ]]></template>
 
-   <template key="/SMC/declarations" namespace="all"  ><![CDATA[
+   <template key="/SMC/declarations" namespace="all" ><![CDATA[
    \t/**
    \t * Class representing $(_NAME)
    \t */
-   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
+   \tclass $(_Class) : public $(_Baseclass)Base {};\n
    ]]></template>
 
    <projectActionList id = "smc_files" >
@@ -642,7 +710,7 @@
       <copy source="Snippets/vlpr-run-hsrun-example.cpp"    target="Snippets/vlpr-run-hsrun-example.cpp"    overwrite="true" derived="true" />
    </projectActionList>
 
-   <template><![CDATA[
+   <template codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"><![CDATA[
       \t/**
       \t **
       \t * Class used to do initialisation of SMC.
@@ -760,7 +828,7 @@
    ]]></template>
 
    <for keys="r" values="smc_pmprot_ahsrun;smc_pmprot_avlp;smc_pmprot_alls;smc_pmprot_avlls">
-      <setTemplate
+      <setTemplate  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -780,30 +848,45 @@
          \t   }\n\n
       ]]></setTemplate>
    </for>
+
+<!--   Constructors -->
+
    <for keys="r"
-      values="smc_stopctrl_pstopo;smc_stopctrl_porpo;smc_stopctrl_ram2po;smc_stopctrl_lpopo;smc_stopctrl_llsm;smc_stopctrl_vllsm;smc_stopctrl_vllsm_llsm;
-              smc_pmctrl_lpwui;smc_pmctrl_stopm" >
-      <setTemplate
+      values="
+         smc_stopctrl_pstopo;
+         smc_stopctrl_porpo;
+         smc_stopctrl_ram2po;
+         smc_stopctrl_lpopo;
+         smc_stopctrl_llsm;
+         smc_stopctrl_vllsm;
+         smc_stopctrl_vllsm_llsm;
+         smc_pmctrl_lpwui;
+         smc_pmctrl_stopm
+            " >
+      <setTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
-         linePadding="xxx"
-      ><![CDATA[
+         linePadding="xxx" >
+      <![CDATA[
          \t   /**
-         \t    * Constructor - %description
-         \t    *
+         \t    * Constructor for %description
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
-         \t   }\n\n
-      ]]></setTemplate>
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
    </for>
-   <template><![CDATA[
-   \t};\n\n
+   <template  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"><![CDATA[
+   \t}; // class $(_BASENAME)/Init
+   \t\n
    ]]></template>
 
    <setTemplate key="/SMC/DefaultInitValue" namespace="all"
@@ -815,10 +898,10 @@
       separator=","
    ><![CDATA[
       \t/**
-      \t * Default value for Smc::Init
-      \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->SMC)
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr SmcInfo::Init DefaultInitValue {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};
       \t
       \t/**
@@ -828,5 +911,18 @@
       \t   DefaultInitValue.initialise();
       \t}\n\n
    ]]></setTemplate>
+
+   <!-- ************* Startup ****************** -->
+
+   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
+
 
 </fragment>

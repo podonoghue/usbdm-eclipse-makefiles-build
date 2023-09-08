@@ -255,7 +255,7 @@
 
    <intOption key="wdog_timeout"
       enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
-      ref="timerTickPeriod#(wdog_timeoutPeriod)/timerTickPeriod"
+      ref="(wdog_timeoutPeriod)/timerTickPeriod#timerTickPeriod"
       constant="true"
       units="ticks"
       description="Watchdog Timeout in ticks"
@@ -279,7 +279,7 @@
 
    <intOption key="wdog_window"
       enabledBy="wdog_cs2_win&amp;&amp;wdog_cs1_en&amp;&amp;fullCodeSupport"
-      ref="timerTickPeriod#(wdog_windowPeriod)/timerTickPeriod"
+      ref="(wdog_windowPeriod)/timerTickPeriod#timerTickPeriod"
       constant="true"
       units="ticks"
       description="Watchdog Window in ticks"

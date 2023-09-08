@@ -211,7 +211,7 @@
 
    <intOption key="i2c_rangeaddress" condition="i2c_ra_rad_present"
       radix="16"
-      enabledBy="enablePeripheralSupport&amp;&amp;i2c_c2_rmen,Disabled by i2c_c2_rmen"
+      enabledBy="enablePeripheralSupport&amp;&amp;i2c_c2_rmen##Disabled by i2c_c2_rmen"
       typeName="int"
       description="Slave Address used in matching"
       toolTip="Range slave address used by the I2C module when it is addressed as a slave.\n
@@ -1134,6 +1134,6 @@
       <aliasOption key="/SIM/sim_sopt1_$(_name)4wen" constant="false" optional="true" />
    </category>
 
-   <signals enabledBy="enablePeripheralSupport" />
+   <signals enabledBy="enablePeripheralSupport" locked="true" />
 
 </peripheralPage>

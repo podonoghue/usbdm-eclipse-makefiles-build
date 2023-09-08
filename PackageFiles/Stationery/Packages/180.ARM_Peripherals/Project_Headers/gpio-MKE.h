@@ -192,7 +192,7 @@ template<PinIndex pinIndex, Polarity polarity>
 class Gpio_T : public Gpio, public Port_T<pinIndex> {
 
    // Restrict to available ports
-   static_assert((pinIndex>=0)&&(pinIndex<$(/GPIO/MaxPinIndex:0)),
+   static_assert((pinIndex>=PinIndex::MIN_PIN_INDEX)&&(pinIndex<PinIndex::MAX_PIN_INDEX),
       "Illegal bit number for left or right in GpioField");
 
 
@@ -213,7 +213,7 @@ $(/GPIO/getGpioAddress: // /GPIO/getGpioAddress not found)
    static constexpr PinIndex PININDEX = pinIndex;
 
    // Bit number for port pin within individual port e.g. GPIOB[31..0]
-   static constexpr PinNum BITNUM   = (pinIndex%32);
+   static constexpr PinNum BITNUM   = (unsigned(pinIndex)%32);
 
    // Bit mask for port pin within individual port e.g. GPIOB[31..0]
    static constexpr uint32_t BITMASK = (1<<BITNUM);
@@ -491,7 +491,9 @@ class GpioField_T : public GpioField, public PortField_T<bitIndexLeft, bitIndexR
 
    // Restrict to same Port i.e. 8 bits wide
    // In practice it could extend across Ports A-B-C-D or E-F-G-H as they are accessed through the same GPIO register
-   static_assert((bitIndexLeft<$(/GPIO/MaxPinIndex:0))&&((bitIndexLeft&~0b111)==(bitIndexRight&~0b111))&&(bitIndexLeft>=bitIndexRight),
+   static_assert((bitIndexLeft<PinIndex::MAX_PIN_INDEX)&&
+         ((unsigned(bitIndexLeft)&~0b111)==(unsigned(bitIndexRight)&~0b111))&&
+         (bitIndexLeft>=bitIndexRight),
       "Illegal bit number for left or right in GpioField");
 
 private:
@@ -510,10 +512,10 @@ $(/GPIO/getGpioAddress: // /GPIO/getGpioAddress not found)
    static constexpr uint32_t gpioAddress = getGpioAddress(bitIndexLeft);
 
    /// Left bit within used GPIO registers
-   static constexpr PinNum Left  = bitIndexLeft%32;
+   static constexpr PinNum Left  = unsigned(bitIndexLeft)%32;
 
    /// Right bit within used GPIO registers
-   static constexpr PinNum Right = bitIndexRight%32;
+   static constexpr PinNum Right = unsigned(bitIndexRight)%32;
 
    constexpr GpioField_T() : GpioField(gpioAddress, BITMASK, Right, FLIP_MASK) {}
 

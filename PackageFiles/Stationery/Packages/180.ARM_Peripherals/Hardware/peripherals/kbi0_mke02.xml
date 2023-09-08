@@ -521,6 +521,6 @@
       <copy source="Project_Headers/kbi-MKE.h"  target="Project_Headers/kbi.h"  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
+   <signals enabledBy="enablePeripheralSupport" locked="true" />
 
 </peripheralPage>

@@ -26,6 +26,7 @@ namespace USBDM {
  * @{
  */
 
+#if $(/PMC/enablePeripheralSupport) // /PMC/enablePeripheralSupport
 /**
  * Template class providing interface to Power Management Controller
  *
@@ -38,15 +39,14 @@ namespace USBDM {
  *
  * @endcode
  */
-template <class Info>
-class PmcBase_T : public Info {
+class PmcBase : public PmcInfo {
 
 protected:
 $(/PMC/protectedMethods: // No protected methods found)
 
 protected:
    /** Hardware instance */
-   static constexpr HardwarePtr<PMC_Type> pmc = Info::baseAddress;
+   static constexpr HardwarePtr<PMC_Type> pmc = baseAddress;
 
 public:
 $(/PMC/publicMethods:// /PMC/publicMethods not found)
@@ -55,7 +55,7 @@ $(/PMC/InitMethod:// /PMC/InitMethod not found)
     * Enable interrupts in NVIC
     */
    static void enableNvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[0]);
+      NVIC_EnableIRQ(irqNums[0]);
    }
 
    /**
@@ -65,20 +65,22 @@ $(/PMC/InitMethod:// /PMC/InitMethod not found)
     * @param[in]  nvicPriority  Interrupt priority
     */
    static void enableNvicInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
+      enableNvicInterrupt(irqNums[0], nvicPriority);
    }
 
    /**
     * Disable interrupts in NVIC
     */
    static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[0]);
+      NVIC_DisableIRQ(irqNums[0]);
    }
 
 };
 
 $(/PMC/staticDefinitions: // No static declarations found)
 $(/PMC/declarations: // No declarations found)
+#endif // /PMC/enablePeripheralSupport
+
 /**
  * End PMC_Group
  * @}

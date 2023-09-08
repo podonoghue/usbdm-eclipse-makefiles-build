@@ -1,0 +1,1161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- gpio_def.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="General Purpose Input/Output">
+
+   <constant key="suppressInstance"         type="Boolean" value="false"         />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
+   <constant key="suppressIrqArray"         type="Boolean" value="true"          />
+   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="_enablePeripheral.xml"  />
+   <title description="------------------------------------------" />
+
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
+
+<!--
+    * Template substitutions
+    *
+    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
+    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
+    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
+    * %description[index]             Description from controlVar e.g. Compare Function Enable
+    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
+    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
+    * %params                         Formatted parameter list for function
+    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
+    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
+    * %enumClass[index]               As for %paramType
+    * %enumParam[index]               As for %paramName
+    * %valueExpression                Numeric variable value e.g. 0x3
+    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %variable[index]                Variable name from condition
+    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * %register[index]                Register associated with variable e.g. adc->APCTL1
+    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+-->
+
+   <template key="/PORT/PinIndex" namespace="all" discardRepeats="true" >
+   <![CDATA[
+      /**
+       * Port pin index
+       *
+       * Global indices for port pins
+       */
+      enum class PinIndex : int16_t {
+         \tINVALID_PCR  = -2,   // Signal does not exist
+         \tUNMAPPED_PCR = -3,   // Signal is not currently mapped to a pin
+         \tFIXED_NO_PCR = -4,   // Signal has mapping to fixed pin
+         \tMIN_PIN_INDEX = 0,   // First available pin (inclusive)
+         \tUnassigned    = UNMAPPED_PCR,\n
+   ]]></template>
+   <for keys=   "Name : pinIndex"
+        values= "  A   :   0;
+                   B   :  32;
+                   C   :  64;
+                   D   :  96;
+                   E   : 128;
+                   F   : 160;
+                   G   : 192;
+                   H   : 224;
+                   I   : 256"
+                    >
+
+      <for keys="i" dim="32">
+         <template key="/PORT/PinIndex" namespace="all"  discardRepeats="true" variables="/GPIO%(Name)/_present" codeGenCondition="enablePeripheralSupport"
+         ><![CDATA[
+            \tPT%(Name)%(i) = %(pinIndex)+%(i),\n
+         ]]></template>
+      </for>
+   </for>
+   <template key="/PORT/PinIndex" namespace="all" discardRepeats="true" >
+      <![CDATA[
+         \tMAX_PIN_INDEX, // Last available pin (exclusive)
+         };
+         \t\n
+   ]]></template>
+
+   <template key="/GPIO/AccessFunctions" namespace="all" discardRepeats="true" >
+   <![CDATA[
+      \t/**
+      \t * Get GPIO from pinIndex
+      \t *
+      \t * @param pinIndex PinIndex Used to determine return value
+      \t *
+      \t * @return Pointer to relevant GPIO
+      \t */
+      \tstatic constexpr uint32_t getGpioAddress(PinIndex pinIndex ){
+      \t   if (pinIndex < PinIndex::MIN_PIN_INDEX) {
+      \t      // INVALID_PCR, UNMAPPED_PCR, FIXED_NO_PCR
+      \t      return 0;
+      \t   }\n
+   ]]></template>
+   <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
+
+      <template key="/GPIO/AccessFunctions" namespace="all"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+         variables="/GPIO%(Name)/_present"
+      ><![CDATA[
+         \t   if (pinIndex <= PinIndex::PT%(Name)31) {
+         \t      return GPIO%(Name)_BasePtr;
+         \t   }\n
+      ]]></template>
+   </for>
+   <template key="/GPIO/AccessFunctions" namespace="all" discardRepeats="true" >
+   <![CDATA[
+      \t    static_assert("Illegal Port");
+      \t    return 0;
+      \t}
+      \t\n
+   ]]></template>
+
+   <template key="/PORT/AccessFunctions" namespace="all" discardRepeats="true" >
+   <![CDATA[
+      \t/**
+      \t * Get PORT from pinIndex
+      \t *
+      \t * @param pinIndex Pin index e.g. PTB3. Used to determine return value
+      \t *
+      \t * @return Pointer to relevant PORT
+      \t */
+      \tstatic constexpr uint32_t getPortAddress(PinIndex pinIndex) {
+      \t   if (pinIndex < PinIndex::MIN_PIN_INDEX) {
+      \t      // INVALID_PCR, UNMAPPED_PCR, FIXED_NO_PCR
+      \t      return 0;
+      \t   }\n
+   ]]></template>
+   <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
+
+      <template key="/PORT/AccessFunctions" namespace="all"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+         variables="/GPIO%(Name)/_present"
+      ><![CDATA[
+         \t   if (pinIndex <= PinIndex::PT%(Name)31) {
+         \t      return PORT%(Name)_BasePtr;
+         \t   }\n
+      ]]></template>
+   </for>
+   <template key="/PORT/AccessFunctions" namespace="all" discardRepeats="true" >
+   <![CDATA[
+      \t    static_assert("Illegal Port");
+      \t    return 0;
+      \t}
+      \t\n
+   ]]></template>
+
+   <template key="/PORT/AccessFunctions" namespace="all" discardRepeats="true" >
+   <![CDATA[
+      \t/**
+      \t * Get PORT clock enable mask from pinIndex
+      \t *
+      \t * @param pinIndex Pin index e.g. PTB3. Used to determine return value
+      \t *
+      \t * @return Clock enable mask e.g. SIM_SCGC5_PORTB
+      \t */
+      \tstatic constexpr uint32_t getClockMask(PinIndex pinIndex) {
+      \t   if (pinIndex < PinIndex::MIN_PIN_INDEX) {
+      \t      // INVALID_PCR, UNMAPPED_PCR, FIXED_NO_PCR
+      \t      return 0;
+      \t   }\n
+   ]]></template>
+   <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
+
+      <template key="/PORT/AccessFunctions" namespace="all"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+         variables="/GPIO%(Name)/_present"
+      ><![CDATA[
+         \t   if (pinIndex <= PinIndex::PT%(Name)31) {
+         \t      return SIM_SCGC5_PORT%(Name)_MASK;
+         \t   }\n
+      ]]></template>
+   </for>
+   <template key="/PORT/AccessFunctions" namespace="all" discardRepeats="true" >
+   <![CDATA[
+      \t    static_assert("Illegal Port");
+      \t    return 0;
+      \t}
+      \t\n
+   ]]></template>
+
+   <template key="/PORT/AccessFunctions" namespace="all" discardRepeats="true" >
+   <![CDATA[
+      \t/**
+      \t * Get IRQ number from pinIndex
+      \t *
+      \t * @param pinIndex Pin index e.g. PTB3. Used to determine return value
+      \t *
+      \t * @return IRQ number
+      \t */
+      \tstatic constexpr IRQn_Type getIrqNum(PinIndex pinIndex) {
+      \t   if (pinIndex > PinIndex::MIN_PIN_INDEX) {\n
+   ]]></template>
+   <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
+
+      <template key="/PORT/AccessFunctions" namespace="all"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+         variables="/GPIO%(Name)/_present"
+      ><![CDATA[
+         \t      if (pinIndex <= PinIndex::PT%(Name)31) {
+         \t         constexpr IRQn_Type PortIrqs[] = PORT%(Name)_IRQS;
+         \t         return PortIrqs[0];
+         \t      }\n
+      ]]></template>
+   </for>
+   <template key="/PORT/AccessFunctions" namespace="all" discardRepeats="true" >
+   <![CDATA[
+      \t   }
+      \t   // INVALID_PCR, UNMAPPED_PCR, FIXED_NO_PCR
+      \t   static_assert("Illegal Port");
+      \t   return IRQn_Type(0);
+      \t}
+      \t\n
+   ]]></template>
+
+   <template key="/PORT/AccessFunctions" namespace="all" discardRepeats="true" >
+   <![CDATA[
+      \t/**
+      \t * Check if interrupt handler has been installed
+      \t *
+      \t * @param pinIndex Pin index e.g. PTB3. Used to determine relevant port
+      \t *
+      \t * @return true if handler installed
+      \t */
+      \tstatic constexpr bool isHandlerInstalled(PinIndex pinIndex) {\n
+   ]]></template>
+   <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
+
+      <template key="/PORT/AccessFunctions" namespace="all"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+         variables="/GPIO%(Name)/_present"
+      ><![CDATA[
+         \t      if (pinIndex <= PinIndex::PT%(Name)31) {
+         \t         return $(/GPIO%(Name)/irqHandlingMethod:false);
+         \t      }\n
+      ]]></template>
+   </for>
+   <template key="/PORT/AccessFunctions" namespace="all" discardRepeats="true" >
+   <![CDATA[
+      \t   return false;
+      \t}
+      \t\n
+   ]]></template>
+
+
+   <!-- irqOption key="irqHandlingMethod"
+      typeName="CallbackFunction"
+      description="Peripheral interrupt handling"
+      toolTip="If enabled, the handler may be set using the setCallback() function or\n
+         by overriding the interrupt handler method in the peripheral class\n
+         If not enabled, then interrupt handlers may be installed by naming them \n
+         (see weak names used in vector table)."
+      pattern=".*PORT%i.*"
+      classHandler="%c%i::irqHandler" / >
+
+   <choiceOption key="irqLevel"
+      enabledBy="irqHandlingMethod"
+      description="IRQ level for this peripheral"
+      toolTip="Priority level used to configure the NVIC"
+      valueFormat="%s"
+      derivedFrom="/PCR/nvic_irqLevel" >
+   </choiceOption -->
+
+   <template namespace="usbdm"><![CDATA[
+      /* gpio_def.xml */
+
+      #if defined(PCC_PCC_PORT$(_instance)_CGC_MASK)
+      \t/** Port information for PORT$(_instance) */
+      \tconstexpr PortInfo  __attribute__((unused)) Port$(_instance)Info {PORT$(_instance)_BasePtr, static_cast<uint32_t>(PCC_BasePtr+offsetof(PCC_Type, PCC_PORT$(_instance))), PORT$(_instance)_IRQn, GPIO$(_instance)_BasePtr, $(irqLevel.enum[])};
+      #elif defined(SIM_SCGC5_PORT$(_instance)_MASK)
+      #ifndef PORT$(_instance)_IRQS
+      \t/** Port information for PORT$(_instance) */
+      \tconstexpr PortInfo  __attribute__((unused)) Port$(_instance)Info {$(irqLevel.enum[])};
+      #else
+      \tconstexpr IRQn_Type PORT$(_instance)_IRQS_AR[] = PORT$(_instance)_IRQS;
+      \t/** Port information for PORT$(_instance) */
+      \tconstexpr PortInfo  __attribute__((unused)) Port$(_instance)Info {$(irqLevel.enum[])};
+      #endif
+      #endif\n\n
+   ]]></template>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
+   </validate>
+
+   <projectActionList id = "gpio_files" >
+      <copy source="Snippets/digital-rotary-encoder-example.cpp" target="Snippets/digital-rotary-encoder-example.cpp" overwrite="true" derived="true" />
+      <copy source="Snippets/digital-interrupt-example.cpp"      target="Snippets/digital-interrupt-example.cpp"      overwrite="true" derived="true" />
+      <copy source="Snippets/digital-example1.cpp"               target="Snippets/digital-example1.cpp"               overwrite="true" derived="true" />
+      <copy source="Snippets/digital-example2.cpp"               target="Snippets/digital-example2.cpp"               overwrite="true" derived="true" />
+      <copy source="Snippets/sht10.h"                            target="Snippets/sht10.h"                            overwrite="true" derived="true" />
+      <copy source="Snippets/sht10-example.cpp"                  target="Snippets/sht10-example.cpp"                  overwrite="true" derived="true" />
+   </projectActionList>
+
+   <template key="/GPIO/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * @brief Convenience template for $(_Class). See @ref Gpio_T
+   \t *
+   \t * <b>Usage</b>
+   \t * @code
+   \t * using namespace USBDM;
+   \t *
+   \t * // Instantiate for bit 3 of $(_Class)
+   \t * using $(_Class)3 = $(_Class)<3, ActiveHigh>;
+   \t *
+   \t * // Set as digital output
+   \t * $(_Class)3::setOutput();
+   \t *
+   \t * // Set pin high
+   \t * $(_Class)3::set();
+   \t *
+   \t * // Set pin low
+   \t * $(_Class)3::clear();
+   \t *
+   \t * // Toggle pin
+   \t * $(_Class)3::toggle();
+   \t *
+   \t * // Set pin to boolean value
+   \t * $(_Class)3::write(true);
+   \t *
+   \t * // Set pin to boolean value
+   \t * $(_Class)3::write(false);
+   \t *
+   \t * // Set as digital input
+   \t * $(_Class)3::setInput();
+   \t *
+   \t * // Read pin as boolean value
+   \t * bool x = $(_Class)3::read();
+   \t * @endcode
+   \t *
+   \t * @tparam bitNum        Bit number in the port
+   \t * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
+   \t */
+   \ttemplate<int bitNum, Polarity polarity=ActiveHigh> class $(_Class) :
+   \t      public Gpio_T<GPIO_DEFAULT_PCR, PcrBase::pinIndexOf(PinIndex::PT$(_instance)0,bitNum), polarity> {};
+   \ttypedef PcrBase_T<PinIndex::PT$(_instance)0> Port$(_instance);
+
+   \t/**
+   \t * @brief Convenience template for $(_Class) fields. See @ref GpioField_T
+   \t *
+   \t * <b>Usage</b>
+   \t * @code
+   \t * using namespace USBDM;
+   \t *
+   \t * // Instantiate for bit 6 down to 3 of $(_Class)
+   \t * using $(_Class)6_3 = $(_Class)Field<6,3>;
+   \t *
+   \t * // Set as digital output
+   \t * $(_Class)6_3::setOutput();
+   \t *
+   \t * // Write value to field
+   \t * $(_Class)6_3::write(0x53);
+   \t *
+   \t * // Clear all of field
+   \t * $(_Class)6_3::bitClear();
+   \t *
+   \t * // Clear lower two bits of field
+   \t * $(_Class)6_3::bitClear(0x3);
+   \t *
+   \t * // Set lower two bits of field
+   \t * $(_Class)6_3::bitSet(0x3);
+   \t *
+   \t * // Set as digital input
+   \t * $(_Class)6_3::setInput();
+   \t *
+   \t * // Read pin as int value
+   \t * int x = $(_Class)6_3::read();
+   \t * @endcode
+   \t *
+   \t * @tparam left          Bit number of leftmost bit in port (inclusive)
+   \t * @tparam right         Bit number of rightmost bit in port (inclusive)
+   \t * @tparam polarity      Polarity of all pins. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
+   \t */
+   \ttemplate<int left, int right, uint32_t polarity=ActiveHigh>
+   \tclass $(_Class)Field : public GpioField_T<GPIO_DEFAULT_PCR, Port$(_instance)Info.irqLevel, PcrBase::pinIndexOf(PinIndex::PT$(_instance)0,left), PcrBase::pinIndexOf(PinIndex::PT$(_instance)0,right), polarity> {};\n\n
+   ]]></template>
+
+   <aliasOption key="dfer_register_present" optional="true" />
+
+   <template namespace="all" key="/PCR/pcr_enums" condition="/PCR/dfer_register_present" discardRepeats="true" ><![CDATA[
+      // 'Extra' bit used to map DFER use to PCR value
+      #define PORT_PCR_DIGITALFILTER(x)    (((uint32_t)(((uint32_t)(x))<<PORT_PCR_DIGITALFILTER_SHIFT))&PORT_PCR_DIGITALFILTER_MASK)
+      #define PORT_PCR_DIGITALFILTER_MASK  (0b1<<PORT_PCR_DIGITALFILTER_SHIFT)
+      #define PORT_PCR_DIGITALFILTER_SHIFT (20U)\n\n
+   ]]></template>
+
+   <choiceOption key="port_pcr_pfe" condition="/PCR/dfer_register_present"
+      enumStem="PinFilter"
+      enumType="uint32_t"
+      valueFormat="PORT_PCR_DIGITALFILTER(%s),PORT_PCR_PFE(%s)"
+      templateKey="/PCR/pcr_enums"
+      description="Pin input filter"
+      toolTip="Pin filtering on digital inputs"
+      >
+      <choice name="No pin filter"              enum="None"     value="0,0" />
+      <choice name="Pin filter enabled"         enum="Passive"  value="0,1" />
+      <choice name="Digital pin filter enabled" enum="Digital"  value="1,0" />
+   </choiceOption>
+
+   <choiceOption key="port_pcr_pfe" condition="!/PCR/dfer_register_present&amp;&amp;/PCR/pfe_present"
+      enumStem="PinFilter"
+      enumType="uint32_t"
+      templateKey="/PCR/pcr_enums"
+      description="Pin input filter"
+      toolTip="Pin filtering on digital inputs"
+      >
+      <choice name="No pin filter"              enum="None"     value="0" />
+      <choice name="Pin filter enabled"         enum="Passive"  value="1" />
+   </choiceOption>
+
+   <choiceOption key="port_pcr_pd" condition="/PCR/pd_present"
+      enumStem="PinPull"
+      enumType="uint32_t"
+      templateKey="/PCR/pcr_enums"
+      description="Pin pull device"
+      toolTip="Pin pull device (up/down/none) on digital inputs"
+      >
+      <choice name="No pull device" enum="None"  value="0b00" />
+      <choice name="Weak pull-up"   enum="Up"    value="0b11" />
+      <choice name="Weak pull-down" enum="Down"  value="0b10" />
+   </choiceOption>
+
+   <choiceOption key="port_pcr_dse" condition="/PCR/dse_present"
+      enumStem="PinDriveStrength"
+      enumType="uint32_t"
+      templateKey="/PCR/pcr_enums"
+      description="Pin drive strength"
+      toolTip="Pin drive strength of digital outputs"
+      >
+      <choice name="Low drive strength"  enum="Low"   value="0" />
+      <choice name="High drive strength" enum="High"  value="1" />
+   </choiceOption>
+
+   <choiceOption key="port_pcr_ode" condition="/PCR/ode_present"
+      enumStem="PinDriveMode"
+      enumType="uint32_t"
+      templateKey="/PCR/pcr_enums"
+      description="Pin drive mode"
+      toolTip="Pin drive mode (push-pull/open-drain) of digital outputs"
+      >
+      <choice name="Push-pull"  enum="PushPull"   value="0" />
+      <choice name="Open-drain" enum="OpenDrain"  value="1" />
+   </choiceOption>
+
+   <choiceOption key="port_pcr_sre" condition="/PCR/sre_present"
+      enumStem="PinSlewRate"
+      enumType="uint32_t"
+      templateKey="/PCR/pcr_enums"
+      description="Pin slew rate"
+      toolTip="Pin slew rate of digital outputs"
+      >
+      <choice name="Fast"  enum="*"  value="0" />
+      <choice name="Slow"  enum="*"  value="1" />
+   </choiceOption>
+
+   <choiceOption key="port_pcr_lk" condition="(/PCR/lk_present)"
+      enumStem="PinLock"
+      enumType="uint32_t"
+      templateKey="/PCR/pcr_enums"
+      description="Pin Control Register (PCR) lock"
+      toolTip="Prevents modification of some of the PCR values once set"
+      >
+      <choice name="PCR not locked after 1st write" enum="Unlocked"  value="0" />
+      <choice name="PCR locked after 1st write"     enum="Locked"    value="1" />
+   </choiceOption>
+
+   <choiceOption key="port_pcr_irqc" condition="/PCR/irqc_present"
+      enumStem="PinAction"
+      enumType="uint32_t"
+      templateKey="/PCR/pcr_enums"
+      description="Pin interrupt/DMA actions"
+      toolTip="DMA and/or interrupt actions to happen on pin change or level"
+      >
+      <choice name="No interrupt or DMA function"         enum="None"       value="0"  />
+
+      <choice name="Generate DMA request on rising edge"  enum="DmaRising"  value="1"  />
+      <choice name="Generate DMA request on falling edge" enum="DmaFalling" value="2"  />
+      <choice name="Generate DMA request on either edge"  enum="DmaEither"  value="3"  />
+
+      <choice name="Generate IRQ request on low level"    enum="IrqLow"     value="8"  />
+      <choice name="Generate IRQ request on rising edge"  enum="IrqRising"  value="9"  />
+      <choice name="Generate IRQ request on falling edge" enum="IrqFalling" value="10" />
+      <choice name="Generate IRQ request on either edge"  enum="IrqEither"  value="11" />
+      <choice name="Generate IRQ request on high level"   enum="IrqHigh"    value="12" />
+   </choiceOption>
+
+   <choiceOption key="port_pcr_mux" condition="/PCR/mux_present"
+      enumStem="PinMux"
+      enumType="uint32_t"
+      templateKey="/PCR/pcr_enums"
+      description="Pin Multiplexor setting"
+      toolTip="Which function is mapped to the pin"
+      >
+      <choice name="Analogue function (ADC/TSI etc)" enum="Analogue"  value="0" />
+      <choice name="Touch Sense Input"               enum="Tsi"       value="0" hidden="true" />
+      <choice name="Disabled"                        enum="Disabled"  value="0" hidden="true" />
+      <choice name="GPIO function"                   enum="Gpio"      value="1" />
+      <choice name="Multiplexor 2 function"          enum="2"         value="2" />
+      <choice name="Multiplexor 3 function"          enum="3"         value="3" />
+      <choice name="Multiplexor 4 function"          enum="4"         value="4" />
+      <choice name="Multiplexor 5 function"          enum="5"         value="5" />
+      <choice name="Multiplexor 6 function"          enum="6"         value="6" />
+      <choice name="Multiplexor 7 function"          enum="7"         value="7" />
+   </choiceOption>
+
+   <template namespace="all" key="/PCR/pcr_enums" discardRepeats="true" ><![CDATA[
+      \t/**
+      \t * Enable clock to selected ports
+      \t *
+      \t * @param[in] clockMask Mask for PORTs to enable
+      \t */
+      \tstatic inline void enablePortClocks(uint32_t clockMask) {
+      \t   SIM->SCGC5 = SIM->SCGC5 | clockMask;
+      \t   __DMB();
+      \t}
+      \t
+      \t/**
+      \t * Disable clock to selected ports
+      \t *
+      \t * @param[in] clockMask Mask for PORTs to disable
+      \t */
+      \tstatic inline void disablePortClocks(uint32_t clockMask) {
+      \t   SIM->SCGC5 = SIM->SCGC5 & ~clockMask;
+      \t   __DMB();
+      \t}
+      \t
+      \t/**
+      \t * Creates a bitmask with a single '1' in the bit location indicated
+      \t *
+      \t * @param bitNum
+      \t *
+      \t * @return Bit mask
+      \t */
+      \tstatic constexpr uint32_t makeBitMask(int bitNum) {
+      \t   if (bitNum < 0) {
+      \t      // Negative bitNum is used to indicate illegal value - suppress to reduce assert noise.
+      \t      return 0;
+      \t   }
+      \t   else {
+      \t      return (uint32_t)(1<<bitNum);
+      \t   }
+      \t}\n\n
+   ]]></template>
+
+   <for keys="right" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux" >
+      <setTemplate variables="%(right)" namespace="all" key="/PCR/pcr_enums" discardRepeats="true" ><![CDATA[
+         \tconstexpr inline PcrValue operator|(PcrValue op1, %enumClass op2) { return static_cast<PcrValue>(static_cast<uint32_t>(op1)|static_cast<uint32_t>(op2)); }\n
+      ]]></setTemplate>
+   </for>
+   <for keys="left" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux" >
+      <for keys="right" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux">
+         <setTemplate
+            variables="%(left),%(right)"
+            condition="%(left)&amp;&amp;%(right)"
+            namespace="all"
+            key="/PCR/pcr_enums"
+            nonDefaultParams="2"
+            discardRepeats="true" ><![CDATA[
+            \tconstexpr inline PcrValue operator|(%enumClass0 op1, %enumClass1 op2) { return static_cast<PcrValue>(static_cast<uint32_t>(op1)|static_cast<uint32_t>(op2)); }\n
+         ]]></setTemplate>
+      </for>
+   </for>
+
+   <template namespace="all" key="/PCR/pcr_enums" discardRepeats="true" ><![CDATA[
+      \n
+      \t/** Port Clock enable masks **/\n
+   ]]></template>
+   <template namespace="all" key="/PCR/pcr_enums" ><![CDATA[
+      \tstatic constexpr uint32_t PORT$(_instance)_CLOCK_MASK = SIM_SCGC5_PORT$(_instance)_MASK; ///< PORT$(_instance) clock mask\n
+   ]]></template>
+
+   <template namespace="all" key="/PCR/extra_methods" discardRepeats="true" >
+      ><![CDATA[
+      \t/**
+      \t *
+      \t * Class used to do initialisation of GPIO PCR value
+      \t *
+      \t * This class has a templated constructor that accepts a list of options to set.
+      \t * Options not explicitly mentioned are cleared to 0.
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example1:
+      \t * @code
+      \t * // Initialisation value
+      \t * static constexpr PcrInit pcrInit(PinDriveStrength_High, PinSlewRate_Slow, PinPull_Down, PinFilter_Passive);
+      \t *
+      \t * Initialise devices
+      \t * Led::setOutput(pcrInit.value);
+      \t * Switch::setInput(pcrInit.value);
+      \t * Cmt::setOutput(pcrInit.value);
+      \t * @endcode
+      \t */
+      \tclass PcrInit {
+      \t
+      \tprivate:
+      \t   PcrInit(PcrInit&&) = delete;
+      \t
+      \tpublic:
+      \t   /// Value for PCR register
+      \t   PcrValue value = (PcrValue)0;
+      \t
+      \t   /**
+      \t    * Constructor
+      \t    */
+      \t   constexpr PcrInit()  {
+      \t   }
+      \t
+      \t   /**
+      \t    * Construct from PcrValue
+      \t    *
+      \t    * @param value
+      \t    */
+      \t   constexpr PcrInit(PcrValue value) : value(value) {}
+      \t
+      \t   /**
+      \t    * Construct from PcrInit
+      \t    *
+      \t    * @param other
+      \t    */
+      \t   constexpr PcrInit(const USBDM::PcrInit &other) : value(other.value) {}
+      \t\n
+   ]]></template>
+   <setTemplate
+      variables="port_pcr_dse,port_pcr_ode,port_pcr_sre"
+      namespace="all"
+      key="/PCR/extra_methods"
+      discardRepeats="true"
+      nonDefaultParams="3" ><![CDATA[
+      \t   /**
+      \t    * Constructor
+      \t    * This version is appropriate for a pin used as a digital output
+      \t    *
+      %comments
+      \t    */
+      \t   constexpr PcrInit(
+      %params
+      \t   ) : value (%paramExpression) {
+      \t   }
+      \t\n
+   ]]></setTemplate>
+   <setTemplate
+      variables="port_pcr_pd,port_pcr_pfe,port_pcr_irqc"
+      namespace="all"
+      key="/PCR/extra_methods"
+      discardRepeats="true"
+      nonDefaultParams="3" ><![CDATA[
+      \t   /**
+      \t    * Constructor
+      \t    * This version is appropriate for a pin used as a digital input
+      \t    *
+      %comments
+      \t    */
+      \t   constexpr PcrInit(
+      %params
+      \t   ) : value (%paramExpression) {
+      \t   }
+      \t\n
+   ]]></setTemplate>
+   <setTemplate
+      variables="port_pcr_dse,port_pcr_ode,port_pcr_sre,port_pcr_pd,port_pcr_pfe,port_pcr_irqc"
+      namespace="all"
+      key="/PCR/extra_methods"
+      discardRepeats="true"
+      nonDefaultParams="6" ><![CDATA[
+      \t   /**
+      \t    * Constructor
+      \t    * This version is appropriate for a pin used as a digital input/output
+      \t    *
+      %comments
+      \t    */
+      \t   constexpr PcrInit(
+      %params
+      \t   ) : value (%paramExpression) {
+      \t   }
+      \t\n
+   ]]></setTemplate>
+   <for keys="n" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux">
+      <setTemplate variables="%(n)" namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
+         \t   /**
+         \t    * Constructor
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         \t    * @param %enumParam %description
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr PcrInit(%enumClass %enumParam, Types... rest) : PcrInit(rest...)  {
+         \t
+         \t      value = value | %enumParam;
+         \t   }\n\n
+      ]]></setTemplate>
+   </for>
+
+   <template namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
+      \t   constexpr operator       PcrValue() const { return value; }
+      \t   constexpr operator       PcrValue()       { return value; }
+      \t   constexpr PcrValue       pcrValue() const { return value; }
+      \t   constexpr PcrValue       pcrValue()       { return value; }
+      \n
+   ]]></template>
+
+   <for keys="n" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux">
+      <setTemplate variables="%(n)" namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
+         \t   constexpr operator         %enumClass() const { return static_cast<%enumClass>(value&%mask); }
+         \t   constexpr operator         %enumClass()       { return static_cast<%enumClass>(value&%mask); }
+         \t   constexpr %enumClass       %enumParam() const { return static_cast<%enumClass>(value&%mask); }
+         \t   constexpr %enumClass       %enumParam()       { return static_cast<%enumClass>(value&%mask); }
+         \n
+      ]]></setTemplate>
+   </for>
+
+   <template namespace="all" key="/PCR/extra_methods"  discardRepeats="true" >
+      ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+   <template namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
+      \t/**
+      \t * Default PCR value for pins used as GPIO (including multiplexor value)
+      \t * High drive strength + Pull-up + GPIO_MUX value
+      \t */
+      \tstatic constexpr PcrValue GPIO_DEFAULT_PCR(
+   ]]></template>
+   <for keys="v" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc" >
+      <setTemplate variables="%(v)" namespace="all" key="/PCR/extra_methods" discardRepeats="true" ><![CDATA[
+         $(%variable.enum[])|
+      ]]></setTemplate>
+   </for>
+   <template namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
+      PinMux_Gpio);\n\n
+   ]]></template>
+
+   <if condition="true">
+   <template
+      namespace="all"
+      key="/PCR/set_pcr"
+      discardRepeats="true" ><![CDATA[
+      \t/**
+      \t * Set Pin Control Register Attributes
+      \t * Mux value is set appropriately for the pin function being used
+      \t * The clock to the port will be enabled before changing the PCR
+      \t *
+      \t * @param[in] pcrValue PCR value excluding MUX value. Defaults to template value.
+      \t */
+      \tstatic void setPCR(PcrValue pcrValue=defaultPcrValue)  {
+      \t
+      \t   if constexpr (portAddress != 0) {
+      \t      PcrBase::enablePortClock(pinIndex);
+      \t
+      \t      uint32_t pcr  = static_cast<uint32_t>(pcrValue);
+      \t\n
+   ]]></template>
+   <template
+      condition="/PCR/dfer_register_present"
+      namespace="all"
+      key="/PCR/set_pcr"
+      discardRepeats="true" ><![CDATA[
+      \t      if (pcr&PORT_PCR_DIGITALFILTER_MASK) {
+      \t         Pcr_T::port->DFER = Pcr_T::port->DFER | BITMASK;
+      \t      }
+      \t      else {
+      \t         Pcr_T::port->DFER = Pcr_T::port->DFER & ~BITMASK;
+      \t      }
+      \t      // Make sure MUX value is correct and clear PinFilter_Digital
+      \t      pcr = (pcr & ~(PORT_PCR_MUX_MASK|PORT_PCR_DIGITALFILTER_MASK)) | defaultPcrValue.pinMux();\n
+      \t\n
+   ]]></template>
+   <template
+      condition="!/PCR/dfer_register_present"
+      namespace="all"
+      key="/PCR/set_pcr"
+      discardRepeats="true" ><![CDATA[
+      \t      // Make sure MUX value is correct
+      \t      pcr = (pcr & ~(PORT_PCR_MUX_MASK)) | defaultPcrValue.pinMux();
+      \t\n
+   ]]></template>
+   <template
+      namespace="all"
+      key="/PCR/set_pcr"
+      discardRepeats="true" ><![CDATA[
+      \t      // Set PCR register for pin
+      \t      *PCR = pcr;
+      \t   }
+      \t}\n\n
+   ]]></template>
+   </if>
+
+   <template
+      namespace="all"
+      key="/PCR/set_pcr"
+      discardRepeats="true" ><![CDATA[
+      \t/**
+      \t * Set Pin Control Register Attributes
+      \t * Mux value is set appropriately for the pin function being used
+      \t * The clock to the port will be enabled before changing the PCR
+      \t *
+      \t * @param[in] pcrInit PCR value excluding MUX value. Defaults to template value.
+      \t */
+      \tstatic void setPCR(const PcrInit &pcrInit)  {
+      \t
+      \t   if constexpr (portAddress != 0) {
+      \t      PcrBase::enablePortClock(pinIndex);
+      \t
+      \t      uint32_t pcr  = static_cast<uint32_t>(pcrInit.value);
+      \t\n
+   ]]></template>
+   <template
+      condition="/PCR/dfer_register_present"
+      namespace="all"
+      key="/PCR/set_pcr"
+      discardRepeats="true" ><![CDATA[
+      \t      if (pcr&PORT_PCR_DIGITALFILTER_MASK) {
+      \t         Pcr_T::port->DFER = Pcr_T::port->DFER | BITMASK;
+      \t      }
+      \t      else {
+      \t         Pcr_T::port->DFER = Pcr_T::port->DFER & ~BITMASK;
+      \t      }
+      \t      // Make sure MUX value is correct and clear PinFilter_Digital
+      \t      pcr = (pcr & ~(PORT_PCR_MUX_MASK|PORT_PCR_DIGITALFILTER_MASK)) | defaultPcrValue.pinMux();\n
+      \t\n
+   ]]></template>
+   <template
+      condition="!/PCR/dfer_register_present"
+      namespace="all"
+      key="/PCR/set_pcr"
+      discardRepeats="true" ><![CDATA[
+      \t      // Make sure MUX value is correct
+      \t      pcr = (pcr & ~(PORT_PCR_MUX_MASK)) | defaultPcrValue.pinMux();
+      \t\n
+   ]]></template>
+   <template
+      namespace="all"
+      key="/PCR/set_pcr"
+      discardRepeats="true" ><![CDATA[
+      \t      // Set PCR register for pin
+      \t      *PCR = pcr;
+      \t   }
+      \t}\n\n
+   ]]></template>
+
+   <setTemplate
+      variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre,port_pcr_mux"
+      defaultParamValue="defaultPcrValue"
+      namespace="all"
+      key="/PCR/set_pcr"
+      discardRepeats="true" ><![CDATA[
+      \t/**
+      \t * Set Pin Control Register Attributes
+      \t * Parameters default to values appropriate for the pin function being used.
+      \t * The clock to the port will be enabled before changing the PCR
+      \t *
+         %comments
+      \t */
+      \tstatic void setPCR(
+            %params)  {
+      \t
+      \t   if constexpr (portAddress != 0) {
+      \t      PcrBase::enablePortClock(pinIndex);
+      \t\n
+   ]]></setTemplate>
+   <setTemplate
+      variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre,port_pcr_mux"
+      condition="/PCR/dfer_register_present"
+      namespace="all"
+      key="/PCR/set_pcr"
+      discardRepeats="true" ><![CDATA[
+      \t      if (pinFilter == PinFilter_Digital) {
+      \t         Pcr_T::port->DFER = Pcr_T::port->DFER | BITMASK;
+      \t         pinFilter = PinFilter_None;
+      \t      }
+      \t      else {
+      \t         Pcr_T::port->DFER = Pcr_T::port->DFER & ~BITMASK;
+      \t      }\n
+   ]]></setTemplate>
+   <setTemplate
+      variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre,port_pcr_mux"
+      namespace="all"
+      key="/PCR/set_pcr"
+      discardRepeats="true" ><![CDATA[
+      \t      // Set PCR register for pin
+      \t      *PCR = %paramExpression;
+      \t   }
+      \t}\n
+   ]]></setTemplate>
+
+   <setTemplate
+      variables="port_pcr_dse,port_pcr_ode,port_pcr_sre"
+      defaultParamValue="defaultPcrValue"
+      namespace="all"
+      key="/PCR/set_output"
+      discardRepeats="true" ><![CDATA[
+      \t/**
+      \t * @brief
+      \t * Set the Pin Control Register Attributes to the default values determined by Configure.usbdmProject.
+      \t * Mux value is set appropriately for the pin function being used.
+      \t * The clock to the port will be enabled before changing the PCR.
+      \t */
+      \tstatic void setOutput() {
+      \t   setPCR(defaultPcrValue.value);
+      \t}
+
+      \t/**
+      \t * @brief
+      \t * Set the Pin Control Register Attributes
+      \t * Mux value is set appropriately for the pin function being used.
+      \t * The clock to the port will be enabled before changing the PCR.
+      \t */
+      \tstatic void setOutput(PcrValue pcrValue) {
+      \t   setPCR(pcrValue);
+      \t}
+
+      \t/**
+      \t * @brief
+      \t * Set subset of Pin Control Register Attributes associated with output direction
+      \t *
+      \t * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
+      \t * The clock to the port will be enabled before changing the PCR.
+      \t *
+         %comments
+      \t */
+      \tstatic void setOutput(
+            %params)  {
+      \t
+      \t   setPCR(%paramExpression);
+      \t}\n
+   ]]></setTemplate>
+
+   <setTemplate
+      variables="port_pcr_pd,port_pcr_irqc,port_pcr_pfe"
+      defaultParamValue="defaultPcrValue"
+      namespace="all"
+      key="/PCR/set_input"
+      discardRepeats="true" ><![CDATA[
+      \t/**
+      \t * @brief
+      \t * Set the Pin Control Register Attributes to the default values determined by Configure.usbdmProject.
+      \t * Mux value is set appropriately for the pin function being used.
+      \t * The clock to the port will be enabled before changing the PCR.
+      \t */
+      \tstatic void setInput() {
+      \t
+      \t   setPCR(defaultPcrValue.value);
+      \t}
+      \t
+      \t/**
+      \t * @brief
+      \t * Set the Pin Control Register Attributes
+      \t * Mux value is set appropriately for the pin function being used.
+      \t * The clock to the port will be enabled before changing the PCR.
+      \t */
+      \tstatic void setInput(PcrValue pcrValue) {
+      \t
+      \t   setPCR(pcrValue);
+      \t}
+      \t
+      \t/**
+      \t * @brief
+      \t * Set subset of Pin Control Register Attributes associated with input direction
+      \t *
+      \t * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
+      \t * The clock to the port will be enabled before changing the PCR.
+      \t *
+         %comments
+      \t */
+      \tstatic void setInput(
+            %params)  {
+      \t
+      \t   setPCR(%paramExpression);
+      \t}\n
+   ]]></setTemplate>
+
+   <for keys="v" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux" >
+      <setTemplate variables="%(v)" namespace="all" key="/PCR/set_pcr_option" discardRepeats="true" ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         \t * %enumParam %tooltip
+         \t */
+         \tstatic void setPcrOption(%enumClass %enumParam)  {
+         \t
+         \t   if constexpr (portAddress != 0) {
+         \t      *PCR = (*PCR & ~%mask)|%enumParam;
+         \t   }
+         \t}\n
+      ]]></setTemplate>
+   </for>
+
+   <setTemplate
+      variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre"
+      namespace="all"
+      key="/GPIO/set_in_out"
+      defaultParamValue="defaultPcrValue"
+      discardRepeats="true" ><![CDATA[
+         \t/**
+         \t * Set pin as digital I/O.
+         \t * Pin is initially set as an input.
+         \t * Use SetIn() and SetOut() to change direction.
+         \t * If open-drain then input function may meaningfully be used while set as output
+         \t *
+         \t * @note Resets the Pin Control Register value (PCR value).
+         \t * @note Resets the pin output value to the inactive state
+         \t *
+            %comments
+         \t */
+         \tstatic void setInOut(
+                        %params)  {
+         \t
+         \t   // Make input initially
+         \t   setIn();
+         \t   // Set inactive pin state (if later made output)
+         \t   setInactive();
+         \t   // Configure PCR
+         \t   Pcr::setPCR(%paramExpression);
+         \t}\n
+   ]]></setTemplate>
+
+   <setTemplate
+      variables="port_pcr_dse,port_pcr_ode,port_pcr_sre"
+      namespace="all"
+      key="/GPIO/set_output"
+      defaultParamValue="defaultPcrValue"
+      discardRepeats="true" ><![CDATA[
+         \t/**
+         \t * @brief
+         \t * Enable pin as digital output with initial inactive level
+         \t * Configures <b>all</b> Pin Control Register (PCR) values\n
+         \t * Unreferenced fields are cleared.
+         \t *
+         \t * @note Resets the Pin Control Register value (PCR value).
+         \t * @note Resets the pin value to the inactive state
+         \t * @note Use setOut() for a lightweight change of direction without affecting other pin settings.
+         \t *
+            %comments
+         \t */
+         \tstatic void setOutput(
+                        %params)  {
+         \t
+         \t   // Set initial level before enabling pin drive
+         \t   setInactive();
+         \t   // Make pin an output
+         \t   setOut();
+         \t   // Configure PCR
+         \t   Pcr::setPCR(%paramExpression);
+         \t}\n
+   ]]></setTemplate>
+
+   <setTemplate
+      variables="port_pcr_pd,port_pcr_irqc,port_pcr_pfe"
+      namespace="all"
+      key="/GPIO/set_input"
+      defaultParamValue="defaultPcrValue"
+      discardRepeats="true" ><![CDATA[
+   \t/**
+   \t * Enable pin as digital input.
+   \t * Configures <b>all</b> Pin Control Register (PCR) values
+   \t * Unreferenced fields are cleared.
+   \t *
+   \t * @note Resets the Pin Control Register value (PCR value).
+   \t * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
+   \t *
+      %comments
+   \t */
+   \tstatic void setInput(
+                  %params)  {
+   \t
+   \t   // Make input
+   \t   setIn();
+   \t   // Configure PCR
+   \t   Pcr::setPCR(%paramExpression);
+   \t}\n
+   ]]></setTemplate>
+
+   <setTemplate
+      variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre"
+      namespace="all"
+      key="/GPIO/field_set_in_out"
+      defaultParamValue="defaultPcrValue"
+      discardRepeats="true" ><![CDATA[
+   \t/**
+   \t * Set pin as digital I/O.
+   \t * Pins are initially set as inputs.
+   \t * Use setIn(), setOut() and setDirection() to change pin directions.
+   \t * If open-drain then input function may meaningfully be used while set as output
+   \t *
+   \t * @note Resets the Pin Control Register value (PCR value).
+   \t * @note Resets the pin output value to the inactive state
+   \t *
+      %comments
+   \t */
+   \tstatic void setInOut(
+                  %params)  {
+   \t
+   \t   setInOut(%paramExpression);
+   \t}\n
+   ]]></setTemplate>
+
+   <setTemplate
+      variables="port_pcr_dse,port_pcr_ode,port_pcr_sre"
+      namespace="all"
+      key="/GPIO/field_set_output"
+      defaultParamValue="defaultPcrValue"
+      discardRepeats="true" ><![CDATA[
+   \t/**
+   \t * @brief
+   \t * Set all pins as digital outputs with initial inactive level
+   \t * Configures <b>all</b> Pin Control Register (PCR) values\n
+   \t * Unreferenced PCR fields are cleared.
+   \t *
+   \t * @note Resets the Pin Control Register value (PCR value).
+   \t * @note Resets the pin value to the inactive state
+   \t * @note Use setOut(), setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
+   \t *
+      %comments
+   \t */
+   \tstatic void setOutput(
+                  %params)  {
+   \t
+   \t   setOutput(%paramExpression);
+   \t}\n
+   ]]></setTemplate>
+
+   <setTemplate
+      variables="port_pcr_pd,port_pcr_irqc,port_pcr_pfe"
+      namespace="all"
+      key="/GPIO/field_set_input"
+      defaultParamValue="defaultPcrValue"
+      discardRepeats="true" ><![CDATA[
+   \t/**
+   \t * Set all pins as digital inputs
+   \t * Configures <b>all</b> Pin Control Register (PCR) values
+   \t * Unreferenced fields are cleared.
+   \t *
+   \t * @note Resets the Pin Control Register value (PCR value).
+   \t * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
+   \t *
+      %comments
+   \t */
+   \tstatic void setInput(
+                  %params)  {
+   \t
+   \t   setInOut(%paramExpression);
+   \t}\n
+   ]]></setTemplate>
+
+   <signals/>
+
+   <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator"/>
+
+</peripheralPage>

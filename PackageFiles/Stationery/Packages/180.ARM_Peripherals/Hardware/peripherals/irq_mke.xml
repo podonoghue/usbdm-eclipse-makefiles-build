@@ -478,6 +478,6 @@
       <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" constant="false" optional="true" />
    </category>
 
-   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
+   <signals enabledBy="enablePeripheralSupport" locked="true" />
 
 </peripheralPage>

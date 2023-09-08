@@ -653,6 +653,7 @@ addChoices
    <!ATTLIST signals name        CDATA          "" >
    <!ATTLIST signals optional    (false|true)   #IMPLIED>
    <!ATTLIST signals enabledBy   CDATA          #IMPLIED>
+   <!ATTLIST signals locked      (false|true)   #IMPLIED>
 
 <!-- List of actions to be applied to a project -->
 <!ELEMENT projectActionList ((deleteResource|copy|constant|createFolder)*) >

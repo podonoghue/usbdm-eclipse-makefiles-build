@@ -141,7 +141,7 @@
    <floatOption key="rtc_period"
       derived="true"
       constant="true"
-      ref="rtc_clock#(rtc_mod_mod+1)/rtc_clock"
+      ref="(rtc_mod_mod+1)/rtc_clock#rtc_clock"
       description="RTCCNTR counter period"
       toolTip="Input clock selected by rtc_sc_rtclks"
       units="s"
@@ -562,6 +562,6 @@
       <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" constant="false" optional="true" />
    </category>
 
-   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
+   <signals enabledBy="enablePeripheralSupport" locked="true" />
 
 </peripheralPage>

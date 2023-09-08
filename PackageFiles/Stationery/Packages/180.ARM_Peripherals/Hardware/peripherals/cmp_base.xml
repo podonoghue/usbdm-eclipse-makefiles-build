@@ -314,7 +314,7 @@
 
    <floatOption key="cmp_fpr_filt_period"
       enabledBy="cmp_filter>0"
-      ref="input_clock#(1.0*cmp_fpr_filt_per)/input_clock"
+      ref="(1.0*cmp_fpr_filt_per)/input_clock#input_clock"
       valueFormat="%s_seconds"
       typeName="const Seconds &amp;"
       description="Filter Sample Period in seconds"

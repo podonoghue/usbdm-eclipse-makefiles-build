@@ -628,10 +628,10 @@
    <![CDATA[
       \t\n
       \t   };
-      \t   if (highDriveIndex[pinInd]<0) {
+      \t   if (highDriveIndex[unsigned(pinInd)]<0) {
       \t      return 0;
       \t   }
-      \t   return (1<<highDriveIndex[pinInd]);
+      \t   return (1<<highDriveIndex[unsigned(pinInd)]);
       \t}
       \t
       \tstatic constexpr HardwarePtr<uint32_t> hdrve = PORT_BasePtr+offsetof(PORT_Type, HDRVE);
@@ -649,14 +649,13 @@
       \t * @return Mask value for use with the PUE[] registers
       \t */
       \tstatic constexpr auto calculatePueMask(PinIndex pinInd) {
-      \t   constexpr unsigned MAX_BIT = 71; // Pti7
-      \t   if (pinInd > MAX_BIT) {
+      \t   if (pinInd > PinIndex::MAX_PIN_INDEX) {
       \t      return 0;
       \t   }
-      \t   return 1<<(pinInd%32);
+      \t   return 1<<(unsigned(pinInd)%32);
       \t}
       \t
-      \tstatic constexpr HardwarePtr<uint32_t> pue   = PORT_BasePtr+offsetof(PORT_Type, PUE0)+4*(pinIndex/32);
+      \tstatic constexpr HardwarePtr<uint32_t> pue   = PORT_BasePtr+offsetof(PORT_Type, PUE0)+4*(unsigned(pinIndex)/32);
       \tstatic constexpr unsigned MASK               = calculatePueMask(pinIndex);\n
    ]]>
    </template>
@@ -707,8 +706,9 @@
           *
           * Global indices for port pins
           */
-         enum PinIndex : uint8_t {
-            \tPinIndex_Illegal = 0xFFU, ///< Illegal\n
+         enum class PinIndex : int8_t {
+            \tINVALID_PIN   = -1,  // Invalid pin
+            \tMIN_PIN_INDEX = 0,   // First available pin (inclusive)\n
    ]]></template>
    <for keys=   "    field             : Name : pinIndex"
         values= "/PORT/port_pue0_ptape :  A   :   0;
@@ -751,6 +751,7 @@
    </for>
    <template key="/PORT/PinIndex" namespace="all" >
       <![CDATA[
+         \tMAX_PIN_INDEX, // Last available pin (exclusive)
          };
          \t\n
    ]]></template>
@@ -759,7 +760,5 @@
    <projectActionList id = "port_files" >
       <copy source="Project_Headers/port_MKE.h"  target="Project_Headers/port.h"  overwrite="true"  derived="true" />
    </projectActionList>
-
-   <signals />
 
 </peripheralPage>

@@ -95,9 +95,6 @@ static void setSysDividers(uint32_t simClkDiv1) {
 }
 #endif
 
-/** Callback for programmatically set handler */
-MCGCallbackFunction Mcg::callback = {unhandledCallback};
-
 constexpr McgClockMode clockTransitionTable[][8] = {
    /* from to => FEI,               FEE,               FBI,               BLPI,              FBE,              BLPE, */
    /* FEI,  */ { McgClockMode_FBI,  McgClockMode_FBE,  McgClockMode_FBI,  McgClockMode_FBI,  McgClockMode_FBE,  McgClockMode_FBE,   },
@@ -417,23 +414,20 @@ void Mcg::SystemCoreClockUpdate(void) {
       SystemMcgFFClock = getSlowIrcFrequency();
    }
 
-   uint32_t mcgFllClock = 0;
+   // Calculate FLL clock if active
+   SystemMcgFllClock = 0;
 
-   if ((mcg->C2&MCG_C2_LP_MASK) == 0) {
-      // Calculate FLL clock if active
-      mcgFllClock = SystemMcgFFClock *
+   if (((mcg->C1&MCG_C1_CLKS_MASK)==0)||(mcg->C2&MCG_C2_LP_MASK) == 0) {
+      SystemMcgFllClock = SystemMcgFFClock *
       /**/                ((mcg->C4&MCG_C4_DMX32_MASK)?732:640) *
       /**/                (((mcg->C4&MCG_C4_DRST_DRS_MASK)>>MCG_C4_DRST_DRS_SHIFT)+1);
 
       // PLL - not available
    }
 
-   SystemMcgFllClock = 0;
-
    switch (mcg->S&MCG_S_CLKST_MASK) {
       case MCG_S_CLKST(0) : // FLL
-         SystemMcgOutClock = mcgFllClock;
-         SystemMcgFllClock = mcgFllClock;
+         SystemMcgOutClock = SystemMcgFllClock;
          break;
       case MCG_S_CLKST(1) : // Internal Reference Clock
          SystemMcgOutClock = McgInfo::getInternalReferenceClock();
@@ -449,7 +443,7 @@ void Mcg::SystemCoreClockUpdate(void) {
    SimInfo::updateSystemClocks(SystemMcgOutClock);
 }
 #endif
- 
+
 /**
  * Initialise MCG as part of startup sequence
  */
@@ -467,7 +461,7 @@ static constexpr uint8_t  SCFTRIM = CLOCK_TRIM&0b1;
 if constexpr (CLOCK_TRIM != 0) {
    mcg->C3 = SCTRIM;
    mcg->C4 = (mcg->C4&~MCG_C4_SCFTRIM_MASK)|SCFTRIM;
-   
+
 #if !$(/MCG/enablePeripheralSupport:false) // !/MCG/enablePeripheralSupport
    // Minimal configuration: Only set clock dividers if clock is trimmed
    SIM->CLKDIV1 = SimInfo::sim_clkdiv1;

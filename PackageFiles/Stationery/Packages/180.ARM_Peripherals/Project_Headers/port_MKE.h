@@ -61,7 +61,8 @@ class PortField_T : private Port_T<pinIndexLeft> {
 
    // Restrict to same Port i.e. 8 bits wide
    // In practice it could extend across Ports A-B-C-D or E-F-G-H as they are accessed through the same GPIO register
-   static_assert((pinIndexLeft<$(/GPIO/MaxPinIndex:0))&&((pinIndexLeft&~0b111)==(pinIndexRight&~0b111))&&(pinIndexLeft>=pinIndexRight),
+   static_assert((pinIndexLeft<PinIndex::MAX_PIN_INDEX), "Illegal bit number for left in PortField");
+   static_assert(((unsigned(pinIndexLeft)&~0b111)==(unsigned(pinIndexRight)&~0b111)) && (pinIndexLeft>=pinIndexRight),
       "Illegal bit number for left or right in PortField");
 
 private:
@@ -72,10 +73,10 @@ private:
    PortField_T(PortField_T&&) = delete;
 
    /// Left bit within used GPIO registers
-   static constexpr PinNum Left  = pinIndexLeft%32;
+   static constexpr PinNum Left  = unsigned(pinIndexLeft)%32;
 
    /// Right bit within used GPIO registers
-   static constexpr PinNum Right = pinIndexRight%32;
+   static constexpr PinNum Right = unsigned(pinIndexRight)%32;
 
 
 protected:

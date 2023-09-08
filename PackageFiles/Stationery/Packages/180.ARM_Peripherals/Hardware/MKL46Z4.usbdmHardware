@@ -557,6 +557,21 @@
       <peripheral baseName="RCM"      instance=""         instanceList="RCM"  version="rcm_mkl_0x4007f000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRcm" />
          <param type="StringVariable"         value="RCM"         name="instanceList"                key="/RCM/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/RCM/_present" />
+         <param type="StringVariable"         value="true"        name="rcm_rpfc_rstfltsrw_present"  key="/RCM/rcm_rpfc_rstfltsrw_present" />
+         <param type="StringVariable"         value="true"        name="rcm_rpfc_rstfltss_present"   key="/RCM/rcm_rpfc_rstfltss_present" />
+         <param type="StringVariable"         value="true"        name="rcm_rpfw_rstfltsel_present"  key="/RCM/rcm_rpfw_rstfltsel_present" />
+         <param type="StringVariable"         value="true"        name="rcm_srs0_loc_present"        key="/RCM/rcm_srs0_loc_present" />
+         <param type="StringVariable"         value="true"        name="rcm_srs0_lol_present"        key="/RCM/rcm_srs0_lol_present" />
+         <param type="StringVariable"         value="true"        name="rcm_srs0_lvd_present"        key="/RCM/rcm_srs0_lvd_present" />
+         <param type="StringVariable"         value="true"        name="rcm_srs0_pin_present"        key="/RCM/rcm_srs0_pin_present" />
+         <param type="StringVariable"         value="true"        name="rcm_srs0_por_present"        key="/RCM/rcm_srs0_por_present" />
+         <param type="StringVariable"         value="true"        name="rcm_srs0_wakeup_present"     key="/RCM/rcm_srs0_wakeup_present" />
+         <param type="StringVariable"         value="true"        name="rcm_srs0_wdog_present"       key="/RCM/rcm_srs0_wdog_present" />
+         <param type="StringVariable"         value="true"        name="rcm_srs1_lockup_present"     key="/RCM/rcm_srs1_lockup_present" />
+         <param type="StringVariable"         value="true"        name="rcm_srs1_mdm_ap_present"     key="/RCM/rcm_srs1_mdm_ap_present" />
+         <param type="StringVariable"         value="true"        name="rcm_srs1_sackerr_present"    key="/RCM/rcm_srs1_sackerr_present" />
+         <param type="StringVariable"         value="true"        name="rcm_srs1_sw_present"         key="/RCM/rcm_srs1_sw_present" />
       </peripheral>
       <peripheral baseName="RTC"      instance=""         instanceList="RTC"  version="rtc_wps_mkl03z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />

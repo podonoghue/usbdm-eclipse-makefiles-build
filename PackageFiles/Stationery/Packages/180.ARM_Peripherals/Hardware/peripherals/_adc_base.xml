@@ -60,7 +60,7 @@
 <!-- ==========  PGA features =============================== -->
    <title description="------- Programmable Gain -------" condition="adc_pga_pgag_present" />
    <choiceOption key="adc_pga_pgaen" condition="adc_pga_pgaen_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       description="PGA Enable and mode"
       valueFormat="(%s)"
       enumStem="AdcPgaMode"
@@ -71,7 +71,7 @@
    </choiceOption>
 
    <choiceOption key="adc_pga_pgag" condition="adc_pga_pgag_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       description="PGA Gain Setting"
       enumStem="AdcPgaGain"
       toolTip="Sets gain of PGA amplifier">
@@ -85,7 +85,7 @@
    </choiceOption>
 
    <binaryOption key="adc_pga_pgachp" condition="adc_pga_pgachp_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       description="PGA chopping"
       valueFormat="ADC_PGA_PGACHPb(%s)"
       enumStem="AdcPgaChop"
@@ -99,7 +99,7 @@
    <title description="------- Clocking -------" />
 
    <choiceOption key="adcClockConfig"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       target="input_bus_clock"
       description="Clock configuration"
       toolTip="Selects the clock configuration used for calculations if bus clock is chosen as clock source" >
@@ -110,7 +110,7 @@
    </choiceOption>
 
    <intOption key="input_bus_clock"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       constant="true"
       derived="true"
       units="Hz"
@@ -118,7 +118,7 @@
                    Based on current clock configuration" />
 
    <intOption key="adcInternalClock"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       derived="true"
       constant="true"
       description="Frequency of Internal ADC clock"
@@ -128,7 +128,7 @@
       units="Hz"/>
 
    <choiceOption key="adc_cfg1_adiclk"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       description="ADC Clock Source"
       enumStem="AdcClockSource"
       target="adcInputClock"
@@ -141,13 +141,13 @@
    </choiceOption>
 
    <intOption key="adcInputClock"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       constant="true"
       derived="true"
       units="Hz"
       description="Frequency of ADC Clock" />
 
-   <clockCodeTemplate variable="adc_cfg1_adiclk" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <clockCodeTemplate variable="adc_cfg1_adiclk" codeGenCondition="enablePeripheralSupport"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -179,7 +179,7 @@
    </choiceOption>
 
    <intOption key="adcClockFrequency"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       constant="true"
       description="Frequency of ADC clock"
       toolTip="Determined from clock source and prescaler"
@@ -191,7 +191,7 @@
    <title description="------------------------------------------" />
 
    <choiceOption key="adc_cfg1_mode" description="ADC Resolution"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="AdcResolution"
       toolTip="The resolutions available vary with single-ended/differential modes\n
                Note the equivalence between modes e.g. 8-bit-se = 9-bit-diff" >
@@ -256,7 +256,7 @@
    </if>
 
    <binaryOption key="adc_cfg1_adlpc" description="Low-Power Configuration"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="AdcPower"
       toolTip="Adjust power consumption">
       <choice value="0" enum="Normal" name="Normal power configuration" isDefault="true" />
@@ -264,7 +264,7 @@
    </binaryOption>
 
    <choiceOption key="adc_sample" description="Long Sample Time Select"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="AdcSample"
       valueFormat="(%s)"
       toolTip="Selects sample times \n
@@ -279,7 +279,7 @@
    </choiceOption>
 
    <choiceOption key="adc_sc3_avg" description="Hardware Average Select"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="AdcAveraging"
       valueFormat="ADC_SC3_CAL(%s),ADC_SC3_CALF(%s),ADC_SC3_AVGE(%s),ADC_SC3_AVGS(%s)"
       toolTip="Determines how many ADC conversions will be averaged\n
@@ -293,7 +293,7 @@
    </choiceOption>
 
    <binaryOption key="adc_cfg2_adhsc" description="High-Speed Configuration"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="AdcClockRange"
       toolTip="Configures the ADC for high-speed clock operation\n
                This actually extends the number of conversion clock cycles\n
@@ -303,7 +303,7 @@
    </binaryOption>
 
    <binaryOption key="adc_cfg2_adacken" description="Asynchronous Clock Output Enable"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="AdcAsyncClock"
       toolTip="Enables the ADC internal asynchronous clock source irrespective of ADC need.\n
          This reduces the initial delay at the start of a sequence of conversions.\n
@@ -313,7 +313,7 @@
    </binaryOption>
 
    <choiceOption key="adc_sc2_refsel" description="Voltage Reference Selection"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="AdcRefSel"
       toolTip="Selects the voltage reference source used for conversions">
       <choice value="0" enum="VrefHL"  name="VRefH and VRefl" isDefault="true" />
@@ -322,7 +322,7 @@
    </choiceOption>
 
    <binaryOption key="adc_sc2_dmaen" condition="adc_sc2_dmaen_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       description="DMA Enable"
       enumStem="AdcDma"
       toolTip="Enables use of DMA with ADC">
@@ -340,7 +340,7 @@
    </binaryOption>
 
    <binaryOption key="adc_pretrigger" description="Selects the pretrigger"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="AdcPretrigger"
       valueFormat="(%s)"
       hidden="true"
@@ -350,7 +350,7 @@
    </binaryOption>
 
    <binaryOption key="adc_cfg2_muxsel" description="Selects between A/B multiplexor inputs on some ADC channels"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="AdcMuxsel"
       toolTip="Some ADC inputs may be multiplexed to two pins e.g. adcCh4a and adcCh4b">
       <choice value="0" enum="A"  name="The multiplexor selects A channels" />
@@ -358,7 +358,7 @@
    </binaryOption>
 
    <binaryOption key="adc_sc3_adco" description="Selects between single and continuous conversion"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="AdcContinuous"
       toolTip="When enabled, continuous conversion are triggered when the first conversion is initiated">
       <choice value="0" enum="Disabled" name="Single conversion on each trigger" isDefault="true" />
@@ -366,7 +366,7 @@
    </binaryOption>
 
    <choiceOption key="adc_sc2_compare" description="Compare function"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="AdcCompare"
       valueFormat="ADC_SC2_ACFE(%s),ADC_SC2_ACREN(%s),ADC_SC2_ACFGT(%s),(%s)"
       toolTip="Enables comparison of ADC result with CV1 and CV2" >
@@ -380,21 +380,21 @@
    </choiceOption>
 
    <intOption key="adc_cv1" description="ADC CV low value"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       valueFormat="%s"
       toolTip="CV Low threshold value\n
          This value will be used for CV1 or CV2 as needed"
       derived="true" />
 
    <intOption key="adc_cv2" description="ADC CV high value"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       valueFormat="%s"
       toolTip="CV High threshold value\n
          This value will be used for CV1 or CV2 as needed"
       derived="true" />
 
    <binaryOption key="adc_sc2_adtrg" description="Conversion Trigger Select"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="AdcTrigger"
       toolTip="Selects the type of trigger used for initiating a conversion">
       <choice value="0" enum="Software" name="Software trigger (write to SC1A)" isDefault="true" />
@@ -810,7 +810,7 @@
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <initialValueTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -936,7 +936,7 @@
       <aliasOption key="/SIM/sim_sopt7_adc$(_instance)trgsel"    constant="false" optional="true"/>
    </category>
 
-   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
+   <signals enabledBy="enablePeripheralSupport" />
 
    <!-- ************* Startup ****************** -->
 

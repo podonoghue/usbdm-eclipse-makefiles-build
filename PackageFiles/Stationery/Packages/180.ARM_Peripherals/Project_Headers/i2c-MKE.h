@@ -576,51 +576,52 @@ $(/I2C/InitMethod: // /I2C/InitMethod not found)
       // Disable I2C to clear some status flags
       i2c->C1 = i2c->C1 & ~I2C_C1_IICEN_MASK;
 
-//      static auto delay = [] {
-//         for(int j=0; j<20; j++) {
-//            __asm__("nop");
-//         }
-//      };
-//      // I2C SCL (clock) Pin
-//      using sclGpio = GpioTable_T<Info, Info::sclPin, USBDM::ActiveHigh>;
-//
-//      // I2C SDA (data) Pin
-//      using sdaGpio = GpioTable_T<Info, Info::sdaPin, USBDM::ActiveHigh>;
-//
-//      // Re-map pins to GPIOs initially 3-state
-//      sclGpio::setInput();
-//      sdaGpio::setInput();
-//
-//      // SCL & SDA data values are low but direction is manipulated to achieve open-drain operation
-//      sclGpio::low();
-//      sdaGpio::low();
-//
-//      for (int i=0; i<9; i++) {
-//         // Set clock 3-state
-//         sclGpio::setIn();    // SCL=T, SDA=?
-//         delay();
-//         bool sda = sdaGpio::isHigh();
-//         // Set clock low
-//         sclGpio::setOut();   // SCL=0, SDA=?
-//         delay();
-//         // If data is high bus is OK
-//         if (sda) {
-//            break;
-//         }
-//      }
-//      // Generate stop on I2C bus
-//      sdaGpio::setOut(); // SCL=0, SDA=0
-//      delay();
-//      sclGpio::setIn();  // SCL=T, SDA=0
-//      delay();
-//      sdaGpio::setIn();  // SCL=T, SDA=T
-//      delay();
-//
-      // Enable I2C
-      i2c->C1 = i2c->C1 | ~I2C_C1_IICEN_MASK;
+      static auto delay = [] {
+         for(int j=0; j<20; j++) {
+            __asm__("nop");
+         }
+      };
+      // I2C SCL (clock) Pin
+      using sclGpio = Gpio_T<Info::sclPinIndex, ActiveHigh>;
+
+      // I2C SDA (data) Pin
+      using sdaGpio = Gpio_T<Info::sdaPinIndex, ActiveHigh>;
+
+      // Re-map pins to GPIOs initially 3-state (inputs)
+      sclGpio::setInput();
+      sdaGpio::setInput();
+      Info::disableClock();
+
+      // SCL & SDA data values are low but direction is manipulated to achieve open-drain operation
+      sclGpio::low();
+      sdaGpio::low();
+
+      for (int i=0; i<9; i++) {
+         // Set clock 3-state
+         sclGpio::setIn();    // SCL=T, SDA=?
+         delay();
+         bool sda = sdaGpio::isHigh();
+         // Set clock low
+         sclGpio::setOut();   // SCL=0, SDA=?
+         delay();
+         // If data is high bus is OK
+         if (sda) {
+            break;
+         }
+      }
+      // Generate stop on I2C bus
+      sdaGpio::setOut(); // SCL=0, SDA=0
+      delay();
+      sclGpio::setIn();  // SCL=T, SDA=0
+      delay();
+      sdaGpio::setIn();  // SCL=T, SDA=T
+      delay();
 
       // Restore pin mapping
-//      Info::initPCRs();
+      Info::enableClock();
+
+      // Enable I2C
+      i2c->C1 = i2c->C1 | ~I2C_C1_IICEN_MASK;
    }
 };
 

@@ -503,7 +503,7 @@
          <category name="FLL" description="FLL Settings" >
 
             <binaryOption key="fll_enabled[%(n)]"
-               enabledBy="irefs_clock[%(n)]#((irefs_clock[%(n)]&gt;=31.25_kHz)&amp;&amp;(irefs_clock[%(n)]&lt;=39.0625_kHz))"
+               enabledBy="((irefs_clock[%(n)]&gt;=31.25_kHz)&amp;&amp;(irefs_clock[%(n)]&lt;=39.0625_kHz))#irefs_clock[%(n)]"
                ref="(icsClockMode[%(n)]!=@FBILP)&amp;&amp;(icsClockMode[%(n)]!=@FBELP)"
                derived="true"
                constant="true"
@@ -619,8 +619,9 @@
          <aliasOption key="system_icsfllclk_clock[%(n)]" />
 
          <choiceOption key="ics_c1_clks[%(n)]" condition="ics_c1_clks_present"
-            ref="icsClockMode[%(n)]#((icsClockMode[%(n)]==@FEI)||(icsClockMode[%(n)]==@FEE))?0b00:
-                 ((icsClockMode[%(n)]==@FBI)||(icsClockMode[%(n)]==@FBILP))?0b01:0b10"
+            ref="((icsClockMode[%(n)]==@FEI)||(icsClockMode[%(n)]==@FEE))?0b00:
+                 ((icsClockMode[%(n)]==@FBI)||(icsClockMode[%(n)]==@FBILP))?0b01:0b10
+                 #icsClockMode[%(n)]"
             enumStem="IcsClkSrc"
             target="icsoutclk_undivided[%(n)]"
             derived="true"
@@ -639,7 +640,7 @@
             constant="true" />
 
          <choiceOption key="ics_c2_bdiv[%(n)]" condition="ics_c2_bdiv_present"
-            enabledBy="enableClockConfiguration[%(n)]#((%(n)==0)&amp;&amp;(slowInternalClockTrim!=0))||enableClockConfiguration[%(n)]"
+            enabledBy="((%(n)==0)&amp;&amp;(slowInternalClockTrim!=0))||enableClockConfiguration[%(n)]#enableClockConfiguration[%(n)]"
             target="system_icsoutclk_clock[%(n)]"
             enumStem="IcsBusDivider"
             description="Output divider for ICS"

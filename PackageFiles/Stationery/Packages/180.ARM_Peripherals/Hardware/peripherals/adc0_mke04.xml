@@ -126,8 +126,16 @@
                This is only necessary for Channels 0-15\n
                0:pin is GPIO, 1:pin is Analogue"
       value="0"
-      bitmask="=0b1111111111111111"
-      bitList="CH0,CH1,CH2,CH3,CH4,CH5,CH6,CH7,CH8,CH9,CH10,CH11,CH12,CH13,CH14,CH15"
+      bitmask="=0xFFFF"
+      bitList="PTA0,PTA1,PTA6,PTA7,
+               PTB0,PTB1,PTB2,PTB3,
+               PTC0,PTC1,PTC2,PTC3,
+               PTF4,PTF5,PTF6,PTF7,"
+      pinMap="ADC$(_instance)_SE%i,
+              PTA0:PTA1:PTA6:PTA7:
+              PTB0:PTB1:PTB2:PTB3:
+              PTC0:PTC1:PTC2:PTC3:
+              PTF4:PTF5:PTF6:PTF7;"
     />
 
    <!-- ************* SC2 ****************** -->
@@ -896,7 +904,7 @@
       <aliasOption key="/SIM/sim_sopt0_delay"  constant="false" optional="true" />
    </category>
 
-   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
+   <signals enabledBy="enablePeripheralSupport" locked="true" />
 
    <!-- ************* Startup ****************** -->
 

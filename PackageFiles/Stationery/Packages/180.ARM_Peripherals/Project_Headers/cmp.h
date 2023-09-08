@@ -102,7 +102,7 @@ protected:
    template<int cmpOutput> class CheckOutputIsMapped {
 
       // Check mapping - no need to check existence
-      static constexpr bool Test1 = (Info::info[cmpOutput].gpioBit != UNMAPPED_PCR);
+      static constexpr bool Test1 = (Info::info[cmpOutput].gpioBit != PinIndex::UNMAPPED_PCR);
 
       static_assert(Test1, "CMP output is not mapped to a pin - Modify Configure.usbdm");
 
@@ -118,9 +118,9 @@ protected:
       // Out of bounds value for function index
       static constexpr bool Test1 = (cmpInput>=0) && (cmpInput<(Info::numSignals));
       // Function is not currently mapped to a pin
-      static constexpr bool Test2 = !Test1 || (Info::info[cmpInput].gpioBit != UNMAPPED_PCR);
+      static constexpr bool Test2 = !Test1 || (Info::info[cmpInput].gpioBit != PinIndex::UNMAPPED_PCR);
       // Non-existent function and catch-all. (should be INVALID_PCR)
-      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[cmpInput].gpioBit >= 0);
+      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[cmpInput].gpioBit >= PinIndex::MIN_PIN_INDEX);
 
       static_assert(Test1, "Illegal CMP Input - Check Configure.usbdm for available inputs");
       static_assert(Test2, "CMP input is not mapped to a pin - Modify Configure.usbdm");

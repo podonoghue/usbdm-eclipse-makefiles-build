@@ -365,7 +365,7 @@
       \tstatic inline void defaultConfigure() {
       \t
       \t   // Update settings
-      \t   configure(Info::DefaultInitValue);
+      \t   configure(DefaultInitValue);
       \t}
       \t\n
    ]]></template>
@@ -376,15 +376,15 @@
       \t *
       \t * @param init Class containing initialisation values
       \t */
-      \tstatic void configure(const typename Info::Init &init) {
+      \tstatic void configure(const Init &init) {
       \t   // ..........  Configure ...........
       \t
       \t\n
    ]]></template>
    <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
              condition="irqHandlingMethod" ><![CDATA[
-      \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      Info::setCallback(init.callbackFunction);
+      \t   if constexpr (irqHandlerInstalled) {
+      \t      setCallback(init.callbackFunction);
       \t      enableNvicInterrupts(init.irqlevel);
       \t   }
       \t\n
@@ -511,7 +511,7 @@
    \t/**
    \t * Class representing $(_NAME)
    \t */
-   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
+   \tclass $(_Class) : public $(_Baseclass)Base {};\n
    ]]></template>
 
    <validate

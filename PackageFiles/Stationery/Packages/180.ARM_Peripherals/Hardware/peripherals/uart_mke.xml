@@ -343,6 +343,6 @@ Devices using this peripheral:
       <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" constant="false" optional="true" />
    </category>
 
-   <signals/>
+   <signals enabledBy="enablePeripheralSupport" locked="true" />
 
 </peripheralPage>

@@ -78,9 +78,9 @@ protected:
       // Out of bounds value for function index
       static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
       // Function is not currently mapped to a pin
-      static constexpr bool Test2 = !Test1 || (Info::info[channel].gpioBit != UNMAPPED_PCR);
+      static constexpr bool Test2 = !Test1 || (Info::info[channel].pinIndex != PinIndex::UNMAPPED_PCR);
       // Non-existent function and catch-all. (should be INVALID_PCR)
-      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[channel].gpioBit >= 0);
+      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[channel].pinIndex >= PinIndex::MIN_PIN_INDEX);
       static_assert(Test1, "Non-existent ADC channel - Check Configure.usbdm for available inputs");
       static_assert(Test2, "ADC channel is not mapped to a pin - Modify Configure.usbdm");
       static_assert(Test3, "ADC channel doesn't exist in this device/package - Check Configure.usbdm for available channels");

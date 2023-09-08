@@ -108,7 +108,7 @@ void SystemInit(void) {
     */
 
 #ifdef PMC_REGSC_ACKISO
-   USBDM::Pmc::releasePins();
+   USBDM::PmcInfo::releaseIsolation();
 #endif
 
    /* Use Clock initialisation - if present */

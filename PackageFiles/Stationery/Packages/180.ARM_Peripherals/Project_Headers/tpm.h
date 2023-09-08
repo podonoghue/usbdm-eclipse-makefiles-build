@@ -62,7 +62,7 @@ public:
       // Out of bounds value for function index
       static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
       // Non-existent function
-      static constexpr bool Test2 = !Test1 || (Info::info[channel].gpioBit != INVALID_PCR);
+      static constexpr bool Test2 = !Test1 || (Info::info[channel].pinIndex != PinIndex::INVALID_PCR);
 
       static_assert(Test1, "Illegal TPM channel - Check Configure.usbdm for available channels");
       static_assert(Test2, "TPM channel doesn't exist in this device/package - Check Configure.usbdm for available channels");
@@ -79,9 +79,9 @@ public:
       // Out of bounds value for function index
       static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
       // Function is not currently mapped to a pin
-      static constexpr bool Test2 = !Test1 || (Info::info[channel].gpioBit != UNMAPPED_PCR);
+      static constexpr bool Test2 = !Test1 || (Info::info[channel].pinIndex != PinIndex::UNMAPPED_PCR);
       // Non-existent function and catch-all. (should be INVALID_PCR)
-      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[channel].gpioBit >= 0);
+      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[channel].pinIndex >= PinIndex::MIN_PIN_INDEX);
 
       static_assert(Test1, "Illegal TPM channel - Check Configure.usbdm for available inputs");
       static_assert(Test2, "TPM input is not mapped to a pin - Modify Configure.usbdm");
@@ -98,7 +98,7 @@ public:
       // Out of bounds value for function index
       static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
       // Function is not currently mapped to a pin
-      static constexpr bool Test2 = !Test1 || (Info::info[channel].gpioBit != UNMAPPED_PCR);
+      static constexpr bool Test2 = !Test1 || (Info::info[channel].pinIndex != PinIndex::UNMAPPED_PCR);
 
       static_assert(Test2, "TPM channel is not mapped to a pin - Modify Configure.usbdm");
 
@@ -887,8 +887,8 @@ public:
    static ErrorCode configure(const typename Info::QuadInit &quadInit) {
 
       // Assertions placed here so only checked if TpmQuadDecoder actually used
-      static_assert(Info::InfoQUAD::info[0].gpioBit >= 0, "TpmQuadDecoder PHA is not mapped to a pin - Modify Configure.usbdm");
-      static_assert(Info::InfoQUAD::info[1].gpioBit >= 0, "TpmQuadDecoder PHB is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Info::InfoQUAD::info[0].pinIndex >= 0, "TpmQuadDecoder PHA is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Info::InfoQUAD::info[1].pinIndex >= 0, "TpmQuadDecoder PHB is not mapped to a pin - Modify Configure.usbdm");
 
       // Enable peripheral clock and map pins
       enable();
@@ -931,8 +931,8 @@ public:
          TpmQuadratureMode tpmQuadratureMode = TpmQuadratureMode_Phase_AB_Mode
          ) {
       // Assertions placed here so only checked if TpmQuadDecoder actually used
-      static_assert(Info::InfoQUAD::info[0].gpioBit >= 0, "TpmQuadDecoder PHA is not mapped to a pin - Modify Configure.usbdm");
-      static_assert(Info::InfoQUAD::info[1].gpioBit >= 0, "TpmQuadDecoder PHB is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Info::InfoQUAD::info[0].pinIndex >= 0, "TpmQuadDecoder PHA is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Info::InfoQUAD::info[1].pinIndex >= 0, "TpmQuadDecoder PHB is not mapped to a pin - Modify Configure.usbdm");
 
       enable();
 

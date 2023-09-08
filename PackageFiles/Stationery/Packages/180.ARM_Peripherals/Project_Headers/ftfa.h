@@ -15,7 +15,6 @@
 #define SOURCES_FLASH_H_
 
 #include "pin_mapping.h"
-#include "smc.h"
 
 namespace USBDM {
 /**
@@ -92,10 +91,10 @@ public:
 
    static void Command_irqHandler() {
    }
-   
+
    static void ReadCollision_irqHandler() {
    }
-   
+
    /**
     * Hardware instance pointer
     *
@@ -126,7 +125,7 @@ public:
     * @return false => Processor not in correct mode
     */
    static bool isFlashAvailable() {
-      return (Smc::getStatus() == SmcStatus_RUN);
+      return (SmcInfo::getStatus() == SmcStatus_RUN);
    }
 
    /**

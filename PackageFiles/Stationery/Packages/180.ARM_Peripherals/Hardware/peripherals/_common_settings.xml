@@ -284,7 +284,7 @@
 <!-- Template is added to pin_mapping.h -->
 <template namespace="usbdm" condition="/PCR/_present" ><![CDATA[
    \t/** Dummy port information for pins without an associated PCR */
-   \tconstexpr PortInfo  __attribute__((unused)) NoPortInfo {0, 0, IRQn_None, 0, NvicPriority_NotInstalled};
+   \tconstexpr PortInfo  __attribute__((unused)) NoPortInfo {NvicPriority_NotInstalled};
 
    \t/**
    \t * Class to static check signal mapping is valid
@@ -292,8 +292,8 @@
    \t */
    \ttemplate<class Info, int signalNum> class CheckSignalMapping {
    \t   static constexpr bool check1 = signalNum<Info::numSignals;
-   \t   static constexpr bool check2 = !check1 || (Info::info[signalNum].gpioBit != UNMAPPED_PCR);
-   \t   static constexpr bool check3 = !check1 || !check2 || (Info::info[signalNum].gpioBit != INVALID_PCR);
+   \t   static constexpr bool check2 = !check1 || (Info::info[signalNum].gpioBit != PinIndex::UNMAPPED_PCR);
+   \t   static constexpr bool check3 = !check1 || !check2 || (Info::info[signalNum].gpioBit != PinIndex::INVALID_PCR);
    \t   static constexpr bool check4 = !check1 || !check2 || !check3 || (Info::info[signalNum].gpioBit >= 0);
    \t
    \t   static_assert(check1, "Non-existent signal - Modify Configure.usbdm");

@@ -2716,6 +2716,6 @@ $(quad_init_description)
       </for>
    </category>
 
-   <signals enabledBy="/$(_BASENAME)/enablePeripheralSupport" />
+   <signals enabledBy="enablePeripheralSupport" locked="true" />
 
 </fragment>

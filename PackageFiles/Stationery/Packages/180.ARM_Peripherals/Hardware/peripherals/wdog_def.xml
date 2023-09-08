@@ -206,7 +206,7 @@
 
    <intOption key="wdog_timeout"
       enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
-      ref="timerTickPeriod#(wdog_timeoutPeriod)/timerTickPeriod"
+      ref="(wdog_timeoutPeriod)/timerTickPeriod#timerTickPeriod"
       constant="true"
       description="Watchdog Timeout in ticks"
       toolTip="The watchdog must be refreshed before the counter reaches this value"
@@ -230,7 +230,7 @@
 
    <intOption key="wdog_window"
       enabledBy="wdog_stctrlh_winen&amp;&amp;wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
-      ref="timerTickPeriod#(wdog_windowPeriod)/timerTickPeriod"
+      ref="(wdog_windowPeriod)/timerTickPeriod#timerTickPeriod"
       constant="true"
       description="Watchdog Window in ticks"
       toolTip="If windowed operation is enabled, then the watchdog can only be refreshed \n
