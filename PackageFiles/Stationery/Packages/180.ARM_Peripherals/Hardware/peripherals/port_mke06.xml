@@ -684,6 +684,24 @@
    ]]>
    </template>
 
+   <template namespace="all" key="publicFieldMethods" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/** Mask for the bits being manipulated within underlying port hardware */
+      \tstatic constexpr uint32_t BITMASK = static_cast<uint32_t>((1ULL<<(Left-Right+1))-1)<<Right;
+      \t
+      \t/**
+      \t * Set pull device for port pin
+      \t *
+      \t * @param pullDirection PullDirection_none or PullDirection_up
+      \t */
+      \tstatic void setPup(PullDirection pullDirection) {
+      \t
+      \t   static_assert(BITMASK!=0, "Pin not supported on this device");
+      \t   *Port_T<pinIndexLeft>::pue = (*Port_T<pinIndexLeft>::pue|(BITMASK&pullDirection))&(~BITMASK|pullDirection);
+      \t}
+   ]]>
+   </template>
+
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>

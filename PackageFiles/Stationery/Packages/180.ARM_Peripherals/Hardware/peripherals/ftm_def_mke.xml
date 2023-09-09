@@ -24,6 +24,7 @@
       <!-- Enable for shared code needed by all instances of peripheral -->
       <binaryOption key="/$(_BASENAME)/individualChannelCallbacks"
          ref="=_individualChannelCallbacksEnable"
+         hidden="true"
          constant="true"
          derived="true" >
          <choice value="false" name="Disabled"  isDefault="true" />
@@ -50,7 +51,7 @@
    </binaryOption>
 
    <binaryOption key="check_minimums"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       description="Check minimum interval and minimum resolution"
       toolTip="Enables boundary checks of minimum interval and minimum resolution when setting values" >
       <choice value="0" name="No checks done" />
@@ -74,13 +75,13 @@
    <title description="------- Clocking -------" />
 
    <intOption key="ftmExternalClock"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       description="FTM External clock"
       toolTip="Clock frequency of external clock supplied to FTM_CLKIN pin"
       value="0" min="0" units="Hz"/>
 
    <choiceOption key="ftm_sc_clks" condition="/MCG/_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       description="Clock Source"
       enumStem="FtmClockSource"
       target="inputClockFrequency"
@@ -92,7 +93,7 @@
    </choiceOption>
 
    <choiceOption key="ftm_sc_clks"  condition="/ICS/_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       description="FTM Clock Source"
       enumStem="FtmClockSource"
       target="inputClockFrequency"
@@ -104,14 +105,14 @@
    </choiceOption>
 
    <intOption key="inputClockFrequency"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       constant="true"
       description="Frequency of input clock to timer"
       derived="true"
       units="Hz"/>
 
    <choiceOption key="ftm_sc_ps"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       description="Clock prescaler"
       enumStem="FtmPrescale"
       target="clockFrequency"
@@ -127,7 +128,7 @@
    </choiceOption>
 
    <intOption key="clockFrequency"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       constant="true"
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
@@ -135,7 +136,7 @@
       units="Hz"/>
 
    <floatOption key="clockPeriod"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       ref="(1.0/clockFrequency)"
       constant="true"
       description="Period of timer clock"
@@ -144,7 +145,7 @@
       units="s"/>
 
    <choiceOption key="ftm_sc_mode"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       valueFormat="FTM_SC_TOF(%s),FTM_SC_CPWMS(%s)"
       enumStem="FtmMode"
       description="Alignment and whether interval or free-running mode"
@@ -207,7 +208,7 @@
    </binaryOption>
 
    <binaryOption key="ftm_qdctrl_quadmode" condition="ftm_qdctrl_quadmode_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="FtmQuadratureMode"
       description="Quadrature decoding mode"
       toolTip="Determines how the inputs control the counting sequence">
@@ -216,7 +217,7 @@
    </binaryOption>
 
    <binaryOption key="ftm_qdctrl_phapol" condition="ftm_qdctrl_phapol_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="FtmPhaseAPolarity"
       description="Polarity of Phase A input"
       toolTip="Polarity of Phase A input">
@@ -225,7 +226,7 @@
    </binaryOption>
 
    <binaryOption key="ftm_qdctrl_phbpol" condition="ftm_qdctrl_phbpol_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       enumStem="FtmPhaseBPolarity"
       description="Polarity of Phase B input"
       toolTip="Polarity of Phase B input">
@@ -234,7 +235,7 @@
    </binaryOption>
 
    <choiceOption key="ftm_qdfilter_a" condition="ftm_qdctrl_phafltren_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       valueFormat="(FTM_QDCTRL_PHAFLTREN(%s)&lt;&lt;8),FTM_FILTER_CH0FVAL(%s)"
       enumType="uint16_t"
       enumStem="FtmPhaseAFilter"
@@ -259,7 +260,7 @@
    </choiceOption>
 
    <choiceOption key="ftm_qdfilter_b" condition="ftm_qdctrl_phbfltren_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       valueFormat="(FTM_QDCTRL_PHBFLTREN(%s)&lt;&lt;8),FTM_FILTER_CH1FVAL(%s)"
       enumType="uint16_t"
       enumStem="FtmPhaseBFilter"
@@ -308,7 +309,7 @@
       <title description="------- FTM Channel %(ch) -------" toolTip="" />
 
       <choiceOption key="ftm_cnsc_mode[%(ch)]" condition="ftm_combine_decap0_present&amp;&amp;ftm_cnsc_ms_present&amp;&amp;ftm_cnsc_els_present"
-         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+         enabledBy="enablePeripheralSupport"
          valueFormat="(FTM_COMBINE_DECAPEN0(%s)&lt;&lt;8),(FTM_COMBINE_COMBINE0(%s)&lt;&lt;8),FTM_CnSC_MS(%s),FTM_CnSC_ELS(%s)"
          enumType="uint16_t"
          enumStem="FtmChannelMode"
@@ -333,7 +334,7 @@
       </choiceOption>
 
       <choiceOption key="ftm_cnsc_mode[%(ch)]" condition="!ftm_combine_decap0_present&amp;&amp;ftm_cnsc_ms_present&amp;&amp;ftm_cnsc_els_present"
-         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+         enabledBy="enablePeripheralSupport"
          valueFormat="FTM_CnSC_MS(%s),FTM_CnSC_ELS(%s)"
          enumType="uint16_t"
          enumStem="FtmChannelMode"
@@ -375,7 +376,7 @@
       </binaryOption>
 
       <binaryOption key="ftm_cnsc_icrst[%(ch)]" condition="ftm_cnsc_icrst_present"
-         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+         enabledBy="enablePeripheralSupport"
          valueFormat="FTM_CnSC_ICRST(%s)"
          enumStem="FtmChannelReset"
          enumType="uint8_t"
@@ -2535,7 +2536,7 @@ $(quad_init_description)
 
 <!--  ========== Misc =============================== -->
 
-   <template  codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
+   <template  codeGenCondition="irqHandlingMethod" ><![CDATA[
       \t/**
       \t * Set overflow and fault interrupt call-back
       \t *
@@ -2555,22 +2556,7 @@ $(quad_init_description)
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="!/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
-      \t/**
-      \t * Set callbacks and IRQ priority from Init structure
-      \t */
-      \tstatic void setCallbacks(const Init &) {
-      \t}
-      \t
-      \t/**
-      \t * Set channel callbacks from ChannelInit structure
-      \t */
-      \tstatic void setChannelCallback(const ChannelInit &) {
-      \t}
-      \t\n
-   ]]></template>
-
-   <template  codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;!individualChannelCallbacks" ><![CDATA[
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;!individualChannelCallbacks" ><![CDATA[
       \t/**
       \t * Set channel call-back function
       \t * Configured for shared channel call-backs i.e. all channels use same call-back
@@ -2623,7 +2609,7 @@ $(quad_init_description)
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;individualChannelCallbacks" ><![CDATA[
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;individualChannelCallbacks" ><![CDATA[
       \t/**
       \t * Set channel call-back function
       \t * Configured for individual channel call-backs

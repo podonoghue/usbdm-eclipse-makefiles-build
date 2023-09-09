@@ -103,7 +103,7 @@
    <category name="SOPT1" description="RTC clocks" >
 
       <intOption key="rtc_clkin_clock"
-         enabledBy="!/RTC/rtc_cr_osce, Disabled as shares pin with XTAL32"
+         enabledBy="!/RTC/rtc_cr_osce##Disabled as shares pin with XTAL32"
          hidden="true"
          units="Hz"
          description="RTC_CLKIN pin"

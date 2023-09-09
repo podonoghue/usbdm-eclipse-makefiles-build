@@ -84,21 +84,7 @@ protected:
    using Info = PortInfo;
 
 public:
-
-   /** Mask for the bits being manipulated within underlying port hardware */
-   static constexpr uint32_t BITMASK = static_cast<uint32_t>((1ULL<<(Left-Right+1))-1)<<Right;
-
-   /**
-    * Set pull device for port pin
-    *
-    * @param pullDirection PullDirection_none or PullDirection_up
-    */
-   static void setPup(PullDirection pullDirection) {
-
-      static_assert(BITMASK!=0, "Pin not supported on this device");
-      *Port_T<pinIndexLeft>::pue = (*Port_T<pinIndexLeft>::pue|(BITMASK&pullDirection))&(~BITMASK|pullDirection);
-   }
-
+$(/PORT/publicFieldMethods: // /PORT/publicMethods not found)
 };
 
 $(/PORT/declarations: // /PORT/declarations not found) 

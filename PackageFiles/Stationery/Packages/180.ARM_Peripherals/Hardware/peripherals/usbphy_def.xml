@@ -40,7 +40,8 @@
 
    <choiceOption key="usbphy_pll_sic_pll_div_sel"
       ref="(/OSC0/osc_clock==12_MHz)?0:((/OSC0/osc_clock==16_MHz)?1:2)"
-      enabledBy="(/OSC0/osc_cr_erclken)&amp;&amp;((/OSC0/osc_clock==12_MHz)||(/OSC0/osc_clock==16_MHz)||(/OSC0/osc_clock==24_MHz)),Disabled by unsuitable input clock (OSCERCLK)"
+      enabledBy="(/OSC0/osc_cr_erclken)&amp;&amp;((/OSC0/osc_clock==12_MHz)||(/OSC0/osc_clock==16_MHz)||(/OSC0/osc_clock==24_MHz))
+                 ##Disabled by unsuitable input clock (OSCERCLK)"
       register="pll_sic"
       constant="true"
       derived="true"
@@ -55,7 +56,8 @@
    </choiceOption>
 
    <intOption key="pfd_pll_frequency"
-      enabledBy="(/OSC0/osc_clock==12_MHz)||(/OSC0/osc_clock==16_MHz)||(/OSC0/osc_clock==24_MHz),Disabled by unsuitable input clock (OSCCLK)"
+      enabledBy="(/OSC0/osc_clock==12_MHz)||(/OSC0/osc_clock==16_MHz)||(/OSC0/osc_clock==24_MHz)
+                 ##Disabled by unsuitable input clock (OSCCLK)"
       description="Fixed frequency output of the USBPLL"
       toolTip="This fixed frequency clock is produced by the USBPLL from the input clock (12/16/24MHz)"
       value="400000000"

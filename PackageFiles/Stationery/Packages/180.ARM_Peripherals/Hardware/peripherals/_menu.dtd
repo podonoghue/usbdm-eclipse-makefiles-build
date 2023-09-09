@@ -236,14 +236,15 @@ addChoices
    <!ATTLIST bitmaskOption value          CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption disabledValue  CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption valueFormat    CDATA        #IMPLIED>
-   <!ATTLIST bitmaskOption bitmask        CDATA        "0xFFFF">
-   <!ATTLIST bitmaskOption bitList        CDATA        "">
    <!ATTLIST bitmaskOption derived        (true)       #IMPLIED>
    <!ATTLIST bitmaskOption derivedFrom    CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption typeName       CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption defaultValue   CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption enabledBy      CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption enumType       CDATA        #IMPLIED>
+   <!-- These must match in length -->
+   <!ATTLIST bitmaskOption bitmask        CDATA        #REQUIRED>
+   <!ATTLIST bitmaskOption bitList        CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption pinMap         CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption disabledPinMap CDATA        #IMPLIED>
 
@@ -631,7 +632,8 @@ addChoices
    <!ATTLIST clockCodeTemplate namespace                 (info|usbdm|all)  #IMPLIED >
    <!ATTLIST clockCodeTemplate key                       CDATA                   #IMPLIED >
    <!ATTLIST clockCodeTemplate condition                 CDATA                   #IMPLIED>
-   <!ATTLIST clockCodeTemplate variable                  CDATA                   #REQUIRED>
+   <!ATTLIST clockCodeTemplate variable                  CDATA                   #IMPLIED>
+   <!ATTLIST clockCodeTemplate variables                 CDATA                   #IMPLIED>
    <!ATTLIST clockCodeTemplate discardRepeats            (true)                  #IMPLIED>
    <!ATTLIST clockCodeTemplate returnFormat              CDATA                   #IMPLIED> <!-- Format for return value in generated case statement -->
    <!ATTLIST clockCodeTemplate initExpressionOnSameLine  (true)                  #IMPLIED> <!-- No newline before initExpression (suitable fora single initialisation value) -->

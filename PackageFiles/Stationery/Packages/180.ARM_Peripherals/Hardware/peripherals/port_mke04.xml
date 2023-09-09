@@ -498,10 +498,10 @@
    <![CDATA[
       \t\n
       \t   };
-      \t   if (highDriveIndex[pinInd]<0) {
+      \t   if (highDriveIndex[unsigned(pinInd)]<0) {
       \t      return 0;
       \t   }
-      \t   return (1<<highDriveIndex[pinInd]);
+      \t   return (1<<highDriveIndex[unsigned(pinInd)]);
       \t}
       \t
       \tstatic constexpr HardwarePtr<uint32_t> hdrve = PORT_BasePtr+offsetof(PORT_Type, HDRVE);
@@ -519,14 +519,13 @@
       \t * @return Mask value for use with the PUE[] registers
       \t */
       \tstatic constexpr auto calculatePueMask(PinIndex pinInd) {
-      \t   constexpr unsigned MAX_BIT = 71; // Pti7
-      \t   if (pinInd > MAX_BIT) {
+      \t   if (pinInd > PinIndex::MAX_PIN_INDEX) {
       \t      return 0;
       \t   }
-      \t   return 1<<(pinInd%32);
+      \t   return 1<<(unsigned(pinInd)%32);
       \t}
       \t
-      \tstatic constexpr HardwarePtr<uint32_t> pue   = PORT_BasePtr+offsetof(PORT_Type, PUEL)+4*(pinIndex/32);
+      \tstatic constexpr HardwarePtr<uint32_t> puel  = PORT_BasePtr+offsetof(PORT_Type, PUEL)+4*(unsigned(pinIndex)/32);
       \tstatic constexpr unsigned MASK               = calculatePueMask(pinIndex);\n
    ]]>
    </template>
@@ -540,7 +539,7 @@
       \t*/
       \tstatic void setPup(PullDirection pullDirection) {
       \t   static_assert(MASK!=0, "Pin not supported on this device");
-      \t   *pue = (*pue|(MASK&pullDirection))&(~MASK|pullDirection);
+      \t   *puel = (*puel|(MASK&pullDirection))&(~MASK|pullDirection);
       \t}
       \t
       \t/**
@@ -551,6 +550,24 @@
       \tstatic void setHdrive(HighDrive highDrive) {
       \t   static_assert(HDRIVE_MASK!=0, "High-drive not supported on this pin");
       \t   *hdrve = (*hdrve|(HDRIVE_MASK&highDrive))&(~HDRIVE_MASK|highDrive);
+      \t}
+   ]]>
+   </template>
+
+   <template namespace="all" key="publicFieldMethods" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/** Mask for the bits being manipulated within underlying port hardware */
+      \tstatic constexpr uint32_t BITMASK = static_cast<uint32_t>((1ULL<<(Left-Right+1))-1)<<Right;
+      \t
+      \t/**
+      \t * Set pull device for port pin
+      \t *
+      \t * @param pullDirection PullDirection_none or PullDirection_up
+      \t */
+      \tstatic void setPup(PullDirection pullDirection) {
+      \t
+      \t   static_assert(BITMASK!=0, "Pin not supported on this device");
+      \t   *Port_T<pinIndexLeft>::puel = (*Port_T<pinIndexLeft>::puel|(BITMASK&pullDirection))&(~BITMASK|pullDirection);
       \t}
    ]]>
    </template>
@@ -577,8 +594,9 @@
           *
           * Global indices for port pins
           */
-         enum PinIndex : uint8_t {
-            \tPinIndex_Illegal = 0xFFU, ///< Illegal\n
+         enum class PinIndex : int8_t {
+            \tINVALID_PIN   = -1,  // Invalid pin
+            \tMIN_PIN_INDEX = 0,   // First available pin (inclusive)\n
    ]]></template>
    <for keys=   "    field             : Name : pinIndex"
         values= "/PORT/port_puel_ptape :  A   :   0;
@@ -616,6 +634,7 @@
    </for>
    <template key="/PORT/PinIndex" namespace="all" >
       <![CDATA[
+         \tMAX_PIN_INDEX, // Last available pin (exclusive)
          };
          \t\n
    ]]></template>
@@ -624,7 +643,5 @@
    <projectActionList id = "port_files" >
       <copy source="Project_Headers/port_MKE.h"  target="Project_Headers/port.h"  overwrite="true"  derived="true" />
    </projectActionList>
-
-   <signals />
 
 </peripheralPage>

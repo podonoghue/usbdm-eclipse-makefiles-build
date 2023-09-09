@@ -126,16 +126,9 @@
                This is only necessary for Channels 0-15\n
                0:pin is GPIO, 1:pin is Analogue"
       value="0"
-      bitmask="=0xFFFF"
-      bitList="PTA0,PTA1,PTA6,PTA7,
-               PTB0,PTB1,PTB2,PTB3,
-               PTC0,PTC1,PTC2,PTC3,
-               PTF4,PTF5,PTF6,PTF7,"
-      pinMap="ADC$(_instance)_SE%i,
-              PTA0:PTA1:PTA6:PTA7:
-              PTB0:PTB1:PTB2:PTB3:
-              PTC0:PTC1:PTC2:PTC3:
-              PTF4:PTF5:PTF6:PTF7;"
+      bitmask="0"
+      bitList="=pinMap"
+      pinMap="=&quot;ADC$(_instance)_SE%i:&quot;+pinMap"
     />
 
    <!-- ************* SC2 ****************** -->

@@ -177,7 +177,8 @@
    </if>
 
    <intOption key="osc32k_clock"
-         enabledBy="(/MCG/mcg_c2_oscmode!=/OscMode_NotConfigured)&amp;&amp;(osc_input_freq&gt;=32000)&amp;&amp;(osc_input_freq&lt;=40000), Disable as XTAL frequency unsuitable"
+         enabledBy="(/MCG/mcg_c2_oscmode!=/OscMode_NotConfigured)&amp;&amp;(osc_input_freq&gt;=32000)&amp;&amp;(osc_input_freq&lt;=40000)
+                     ##Disabled as XTAL frequency unsuitable"
          ref="osc_clock"
          valueFormat="%s"
          derived="true"

@@ -6,9 +6,9 @@
 
    <constant key="suppressInstance"         type="Boolean" value="false"         />
    <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
-   <constant key="irq_parameters"           type="String"  value="&quot;uint32_t kbi_sp&quot;"  />
-   <constant key="irq_dummy_parameters"     type="String"  value="&quot;uint32_t&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;kbi_sp&quot;"  />
+   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;&quot;"    />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
    <xi:include href="_enablePeripheral.xml"  />
@@ -16,11 +16,13 @@
 
 <!--
     * General substitutions
-    *  $(_NAME)         => e.g FTM2                    (fProvider.getName())
-    *  $(_Baseclass)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
-    *  $(_Class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
 -->
 
 <!--
@@ -48,15 +50,29 @@
     * %register[index]                Register associated with variable e.g. adc->APCTL1
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Class)BasicInfo&quot;" />
+
    <!-- ************* PE ****************** -->
+
+   <constant key="pinMap" type="String" value="&quot;PT(A-B)(0-3)&quot;"               condition="$(_instance)==0" />
+   <constant key="pinMap" type="String" value="&quot;PTC(4-5),PTC(0-3),PTB(4-5)&quot;" condition="$(_instance)==1" />
+
+   <constant key="expandedPinMap" type="String" value="ExpandPinList(pinMap)" />
 
    <bitmaskOption key="kbi_pe_kbipe" condition="kbi_pe_kbipe_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      typeName="uint32_t"
+      typeName="KbiEnableMask"
+      enumType="uint32_t"
+      valueFormat="KbiEnableMask(%s)"
       defaultValue="0"
       description="KBI Pin Enables"
       toolTip="Bitmask selecting enabled pins"
-      bitmask="0xFF"
+      bitmask="0"
+      bitList="=pinMap"
+      pinMap="=&quot;KBI$(_instance)_P%i:&quot;+pinMap"
       value="0"
    />
 
@@ -64,11 +80,14 @@
 
    <bitmaskOption key="kbi_es_kbedg" condition="kbi_es_kbedg_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      typeName="uint32_t"
+      typeName="KbiPolarityMask"
+      enumType="uint32_t"
+      valueFormat="KbiPolarityMask(%s)"
       defaultValue="0"
       description="KBI Edge Selects"
-      toolTip="Bitmask selecting polarity : 0=>Falling edge/low level; 1=>Rising edge/high level"
-      bitmask="0xFF"
+      toolTip="Bitmask selecting polarity : 0=Falling edge/low level; 1=Rising edge/high level"
+      bitmask="0"
+      bitList="=pinMap"
       value="0"
    />
 
@@ -103,21 +122,111 @@
 
    <for keys="field:name"
         values="
-      kbi_pe_kbipe:PeKbipe;
-      kbi_es_kbedg:EsKbedg;
-
-      kbi_sc_kbie:ScKbie;
-      kbi_sc_kbmod:ScKbmod" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      kbi_pe_kbipe:EnabledPins;
+      kbi_es_kbedg:PinPolarity" >
+      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
          \t *
          %paramDescription
          \t */
-         \tstatic void configure%(name)(%params) {
+         \tstatic void set%(name)(%params) {
+         \t   %register = %paramName0;
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register);
+         \t}
+         \t\n
+      ]]></setTemplate>
+   </for>
+
+   <setTemplate codeGenCondition="enableGettersAndSetters"
+      variables="/PORT/pin_index,kbi_pe_kbipe,kbi_es_kbedg"
+      params=",polarity" >
+   <![CDATA[
+      \t/**
+      \t * Enable input with polarity selection
+      \t *
+      %paramDescription0
+      \t * @param polarity        Polarity of the input
+      \t */
+      \tstatic void enablePin(Kbi$(_instance)PinIndex %paramName0, Polarity polarity) {
+      \t
+      \t   const uint8_t mask = 1U<<unsigned(%paramName0);
+      \t
+      \t   %register1 = %register1 | mask;
+      \t   %register2 = (%register2&~mask) | (~polarity&mask);
+      \t}
+      \t
+      \t/**
+      \t * Disable input
+      \t *
+      %paramDescription0
+      \t */
+      \tstatic void disablePin(Kbi$(_instance)PinIndex %paramName0) {
+      \t
+      \t   const uint8_t mask = 1U<<unsigned(%paramName0);
+      \t
+      \t   %register1 = %register1 & ~mask;
+      \t}
+      \t\n
+   ]]>
+   </setTemplate>
+
+   <setTemplate variables="kbi_sc_kback" codeGenCondition="enableGettersAndSetters"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void clearInteruptFlag() {
+      \t   %register = %register|%mask;
+      \t}
+      \t
+      \t/**
+      \t * Get %description
+      \t *
+      \t * @return %tooltip
+      \t */
+      \tstatic %paramType getInteruptFlag() {
+      \t   return %paramType(%register&%mask);
+      \t}
+      \t\n
+   ]]></setTemplate>
+
+   <for keys="field:name"
+        values="
+      kbi_sc_kbspen:Status;
+      kbi_sc_kbie:EnabledInterrupts;
+      kbi_sc_kbmod:DetectionMode" >
+      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
          \t   %defaultFieldExpression
-         \t}\n\n
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register&%mask);
+         \t}
+         \t\n
       ]]></setTemplate>
    </for>
 
@@ -134,35 +243,47 @@
       \t *
       \t * Example:
       \t * ///
-      \t * /// KBI call-back
+      \t * /// $(_NAME) call-back
       \t * ///
       \t * /// @param status  Status reflecting active inputs
       \t * ///
-      \t * void kbiCallback(uint32_t status) {
+      \t * void $(_name)Callback(uint32_t status) {
       \t *    (void) status;
       \t * }
       \t *
       \t * @code
-      \t * static const $(_Class)::Init kbiInit {
+      \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *    // Setup values
-      \t *    3, ActiveHigh,                   // Enabled pin and associated polarity - 3, Rising-edge/High-level
-      \t *    5, ActiveLow,                    // Enabled pin and associated polarity - 5, Falling-edge/Low-level
+      \t *    Kbi$(_instance)PinIndex::PTA3, ActiveHigh,  // Enabled pin and set associated polarity - PTA3, Rising-edge/High-level
+      \t *    Kbi$(_instance)PinIndex::PTB5, ActiveLow,   // Enabled pin and set associated polarity - PTB5, Falling-edge/Low-level
       \t *    KbiInterrupt_Disabled ,          // KBI Interrupt Enable - Disabled
       \t *    KbiDetectionMode_EdgesOnly,      // KBI Detection Mode - Edges only
       \t *
-      \t *    kbiCallback,                     // Call-back to execute on event - call-back function name
+      \t *    $(_name)Callback,                // Call-back to execute on event - call-back function name
       \t *    NvicPriority_Low,                // Priority for interrupt - Low
       \t * };
       \t *
       \t * // Initialise $(_Class) from values specified above
-      \t * $(_Class)::configure(kbiInit)
+      \t * $(_Class)::configure($(_name)Init)
       \t * @endcode
       \t */
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" >
+   <![CDATA[
+      \t/**
+      \t *  Pin indices for Kbi$(_instance)
+      \t */
+      \tenum class Kbi$(_instance)PinIndex {
+      \t   $(expandedPinMap)
+      \t};
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm" >
    <![CDATA[
       class $(_Class)BasicInfo {
       \t
@@ -181,11 +302,6 @@
 
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t/**
-      \t * Type definition for $(_Class) interrupt call back.
-      \t */
-      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
-      \t
       \t/** Callback function for ISR */
       \tstatic CallbackFunction sCallback;
       \t
@@ -221,11 +337,8 @@
       \t */
       \tstatic void irqHandler() {
       \t
-      \t   // Get pin capture value and mask for valid bits only
-      \t   uint32_t kbi_sp = kbi->SP & kbi->ES;
-      \t
       \t   // Clear status
-      \t   kbi->SC = kbi->SC|KBI_SC_KBACK_MASK|KBI_SC_RSTKBSP_MASK;
+      \t   kbi->SC = kbi->SC|KBI_SC_KBACK_MASK;
       \t
       \t   // Execute call-back
       \t   sCallback($(irq_call));
@@ -265,11 +378,11 @@
 
 <!--   Member variables -->
 
-   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></setTemplate>
+   ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="kbi_pe_kbipe"
@@ -379,18 +492,18 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t   %registerName = %paramExpression;
+      \t      %registerName = %paramExpression;
       \t   }\n\n
    ]]></setTemplate>
 
    <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      variables="kbi_pe_kbipe,kbi_es_kbedg"
-      params="enableMask,polarityMask"
+      variables="kbi_pe_kbipe"
+      params="enableMask"
       nonDefaultParams="2"
       linePadding="xxx" >
    <![CDATA[
       \t   /**
-      \t    * Constructor for %description0, %description1
+      \t    * Constructor for %description
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -398,19 +511,40 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      %registerName0 = %paramName0;
-      \t      %registerName1 = %paramName1;
+      \t      %registerName = %paramName;
       \t   }
       \t\n
    ]]>
    </setTemplate>
 
    <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      variables="kbi_pe_kbipe,kbi_es_kbedg"
-      params="enableMask,polarity"
+      variables="kbi_es_kbedg"
+      params="polarityMask"
+      nonDefaultParams="2"
+      linePadding="xxx" >
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName = %paramName;
+      \t   }
+      \t\n
+   ]]>
+   </setTemplate>
+
+   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      variables="/PORT/pin_index,kbi_pe_kbipe,kbi_es_kbedg"
+      params=",polarity"
       linePadding="xxx" >
    <![CDATA[
       \t   /**
@@ -419,14 +553,18 @@
       \t    * @tparam   Types
       \t    * @param    rest
       \t    *
-      \t    * @param    kbiInputNum Number of KBI input to enable
-      \t    * @param    polarity    Polarity of the input
+      \t    * @paramDescription0
+      \t    * @param polarity    Polarity of the input
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(PinNum kbiInputNum, Polarity polarity, Types... rest) : Init(rest...) {
+      \t   constexpr Init(
+      \t          Kbi$(_instance)PinIndex %paramName0,
+      \t          Polarity     %paramName1, Types... rest) : Init(rest...) {
       \t
-      \t      %registerName0 |= (1<<kbiInputNum);
-      \t      %registerName1 |= (((polarity==ActiveHigh)?1:0)<<kbiInputNum);
+      \t      const uint32_t mask  = 1<<unsigned(%paramName0);
+      \t
+      \t      %registerName1 |= mask;
+      \t      %registerName2 |= mask&~%paramName1;
       \t   }
       \t\n
    ]]>
@@ -471,9 +609,6 @@
             kbi_sc_kbmod
          "
    ><![CDATA[
-      $(init_description)
-      \ttypedef $(_Class)BasicInfo::Init Init;
-      \t
       \t/**
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
@@ -488,11 +623,18 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" >
       <![CDATA[
       }; // $(_Class)BasicInfo\n\n
    ]]>
    </template>
+
+   <!-- ************* Signal mapping ****************** -->
+   <category name="SIM" description="Pin mapping">
+      <aliasOption key="/SIM/sim_scgc_$(_name)"     constant="false" optional="true" />
+   </category>
+
+   <signals enabledBy="enablePeripheralSupport" locked="true" />
 
    <!-- ************* Common ****************** -->
 
@@ -507,6 +649,12 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>
 
+   <projectActionList id = "kbi_files" >
+      <copy source="Project_Headers/kbi-MKE.h"  target="Project_Headers/kbi.h"  overwrite="true"  derived="true" />
+   </projectActionList>
+
+   <!-- ************* Startup ****************** -->
+
    <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
@@ -516,11 +664,5 @@
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
-
-   <projectActionList id = "kbi_files" >
-      <copy source="Project_Headers/kbi-MKE.h"  target="Project_Headers/kbi.h"  overwrite="true"  derived="true" />
-   </projectActionList>
-
-   <signals enabledBy="enablePeripheralSupport" locked="true" />
 
 </peripheralPage>

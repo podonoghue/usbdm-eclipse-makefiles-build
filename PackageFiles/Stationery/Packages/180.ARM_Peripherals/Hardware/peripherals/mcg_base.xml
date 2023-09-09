@@ -781,7 +781,7 @@
 
             <intOption key="system_slow_irc_clock[%(n)]"
                enabledBy="(/SMC/smc_pmctrl_runm[%(n)]!=VLPR) &amp;&amp;
-                          (mcg_c1_irclken[%(n)]||mcg_c1_irefs[%(n)]), Disabled in VLPR or when not in use"
+                          (mcg_c1_irclken[%(n)]||mcg_c1_irefs[%(n)])##Disabled in VLPR or when not in use"
                constant="true"
                derived="true"
                origin="Slow IRC"
@@ -792,7 +792,7 @@
                disabledValue="0" />
 
             <intOption key="system_fast_irc_clock[%(n)]"
-               enabledBy="mcg_c1_irclken[%(n)]||mcg_c1_irefs[%(n)], Disabled as not in use"
+               enabledBy="mcg_c1_irclken[%(n)]||mcg_c1_irefs[%(n)]##Disabled as not in use"
                constant="true"
                derived="true"
                origin="Fast IRC"
@@ -811,7 +811,7 @@
 
          <choiceOption key="mcgClockMode[%(n)]"
             enabledBy="enableClockConfiguration[%(n)]"
-            errorIf="(/SMC/smc_pmctrl_runm[%(n)]==VLPR)&amp;&amp;(mcgClockMode[%(n)]&lt;4),Illegal clock mode in VLPR"
+            errorIf="(/SMC/smc_pmctrl_runm[%(n)]==VLPR)&amp;&amp;(mcgClockMode[%(n)]&lt;4)##Illegal clock mode in VLPR"
             enumStem="McgClockMode"
             enumType="uint8_t"
             valueFormat="%s"
@@ -1083,7 +1083,7 @@
 
             <!-- RTC available as clock source -->
             <choiceOption key="mcg_c1_frdiv[%(n)]" condition="mcg_c7_oscsel_present"
-               enabledBy="!mcg_c1_irefs[%(n)], Disabled by IREFS"
+               enabledBy="!mcg_c1_irefs[%(n)]##Disabled by IREFS"
                target="mcg_erc_clock_divided[%(n)]"
                enumStem="McgFllPrescale"
                derived="true"
@@ -1116,7 +1116,7 @@
 
             <!-- RTC not available as clock source -->
             <choiceOption key="mcg_c1_frdiv[%(n)]" condition="!mcg_c7_oscsel_present"
-               enabledBy="!mcg_c1_irefs[%(n)], Disabled by IREFS"
+               enabledBy="!mcg_c1_irefs[%(n)]##Disabled by IREFS"
                target="mcg_erc_clock_divided[%(n)]"
                enumStem="McgFllPrescale"
                constant="true"
@@ -1147,7 +1147,7 @@
             </choiceOption>
 
             <intOption key="mcg_erc_clock_divided[%(n)]"
-               enabledBy="!mcg_c1_irefs[%(n)], Disabled by IREFS"
+               enabledBy="!mcg_c1_irefs[%(n)]##Disabled by IREFS"
                derived="true"
                constant="true"
                units="Hz"
@@ -1173,11 +1173,11 @@
             <intOption key="irefs_clock[%(n)]"
                hidden="true"
                derived="true"
-               enabledBy="(mcgClockMode[%(n)]!=@BLPI),Unavailable in BLPI" />
+               enabledBy="(mcgClockMode[%(n)]!=@BLPI)##Unavailable in BLPI" />
 
             <intOption key="system_mcgffclk_clock[%(n)]"
                ref="irefs_clock[%(n)]"
-               enabledBy="(irefs_clock[%(n)]&lt;=(system_mcgoutclk_clock[%(n)]/8))&amp;&amp;(mcgClockMode[%(n)]!=@BLPI), Disabled in BLPI and limited to f &lt;= (MCGOUTCLK/8)"
+               enabledBy="(irefs_clock[%(n)]&lt;=(system_mcgoutclk_clock[%(n)]/8))&amp;&amp;(mcgClockMode[%(n)]!=@BLPI)##Disabled in BLPI and limited to f &lt;= (MCGOUTCLK/8)"
                hidden="true"
                units="Hz"
                derived="true"

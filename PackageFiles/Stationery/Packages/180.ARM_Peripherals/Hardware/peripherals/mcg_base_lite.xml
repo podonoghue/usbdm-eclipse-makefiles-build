@@ -567,7 +567,7 @@
             toolTip="SLOW_IRC, FAST_IRC, MCGIRCLK" >
 
             <intOption key="system_slow_irc_clock[%(n)]"
-               enabledBy="(/MCG/mcgClockMode[%(n)]==LIRC_2MHz)||((!/MCG/mcg_c2_ircs[%(n)])&amp;&amp;(/MCG/mcg_c1_irclken[%(n)])), Disabled as IRC not in use by MCG"
+               enabledBy="(/MCG/mcgClockMode[%(n)]==LIRC_2MHz)||((!/MCG/mcg_c2_ircs[%(n)])&amp;&amp;(/MCG/mcg_c1_irclken[%(n)]))##Disabled as IRC not in use by MCG"
                constant="true"
                derived="true"
                origin="Slow IRC"
@@ -578,7 +578,7 @@
                disabledValue="0" />
 
             <intOption key="system_fast_irc_clock[%(n)]"
-               enabledBy="(/MCG/mcgClockMode[%(n)]==LIRC_8MHz)||((/MCG/mcg_c2_ircs[%(n)])&amp;&amp;(/MCG/mcg_c1_irclken[%(n)])), Disabled as IRC not in use by MCG"
+               enabledBy="(/MCG/mcgClockMode[%(n)]==LIRC_8MHz)||((/MCG/mcg_c2_ircs[%(n)])&amp;&amp;(/MCG/mcg_c1_irclken[%(n)]))##Disabled as IRC not in use by MCG"
                constant="true"
                derived="true"
                origin="Fast IRC"
@@ -616,7 +616,7 @@
 
       <binaryOption key="mcg_c2_ircs[%(n)]"
          enumStem="McgIrClkSrc"
-         enabledBy="(/MCG/mcgClockMode[%(n)]==LIRC_2MHz)||(/MCG/mcgClockMode[%(n)]==LIRC_8MHz)||(/MCG/mcg_c1_irclken[%(n)]), Disabled as IRC not available"
+         enabledBy="(/MCG/mcgClockMode[%(n)]==LIRC_2MHz)||(/MCG/mcgClockMode[%(n)]==LIRC_8MHz)||(/MCG/mcg_c1_irclken[%(n)])##Disabled as IRC not available"
          target="system_lirc_clock[%(n)]"
          description="Internal Reference [MCGIRCLK] Clock Source"
          toolTip="Clock Source for MCGIRCLK" >

@@ -254,11 +254,11 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
             <intOption key="irefs_clock[%(n)]"
                hidden="true"
                derived="true"
-               enabledBy="(icsClockMode[%(n)]!=@FBILP),Unavailable in FBILP" />
+               enabledBy="(icsClockMode[%(n)]!=@FBILP)##Unavailable in FBILP" />
 
             <intOption key="system_icsffclk_clock[%(n)]"
                ref="irefs_clock[%(n)]"
-               enabledBy="(irefs_clock[%(n)]&lt;=(system_icsoutclk_clock[%(n)]/8))&amp;&amp;(icsClockMode[%(n)]!=@FBILP), Disabled in FBILP or if F &gt; (ICSOUTCLK/8)"
+               enabledBy="(irefs_clock[%(n)]&lt;=(system_icsoutclk_clock[%(n)]/8))&amp;&amp;(icsClockMode[%(n)]!=@FBILP)##Disabled in FBILP or if F &gt; (ICSOUTCLK/8)"
                hidden="true"
                units="Hz"
                derived="true"
@@ -280,7 +280,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
                min="31250" max="39063" />
 
             <intOption key="system_icsfllclk_clock[%(n)]"
-               enabledBy="((irefs_clock[%(n)]&gt;=31.25_kHz)&amp;&amp;(irefs_clock[%(n)]&lt;=39.0625_kHz)), Disabled as FLL input clock out of range"
+               enabledBy="((irefs_clock[%(n)]&gt;=31.25_kHz)&amp;&amp;(irefs_clock[%(n)]&lt;=39.0625_kHz))##Disabled as FLL input clock out of range"
                ref="fllInputFrequency[%(n)]*1280"
                max="50_MHz"
                units="Hz"

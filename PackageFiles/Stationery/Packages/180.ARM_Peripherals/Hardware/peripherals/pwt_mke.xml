@@ -81,10 +81,10 @@
       enumStem="PwtPinSelection"
       toolTip="Enables the corresponding PWT input port, if this PWT input comes from an external source"
       description="PWT Pulse Inputs Selection" >
-      <choice name="PWTIN[0] enabled"  value="0" enum="Pwtin0Enabled"/>
-      <choice name="PWTIN[1] enabled"  value="1" enum="Pwtin1Enabled"/>
-      <choice name="PWTIN[2] enabled"  value="2" enum="Pwtin2Enabled"/>
-      <choice name="PWTIN[3] enabled"  value="3" enum="Pwtin3Enabled"/>
+      <choice name="PWTIN[0] enabled"  value="0" enum="Pwtin0Enabled" />
+      <choice name="PWTIN[1] enabled"  value="1" enum="Pwtin1Enabled" />
+      <choice name="PWTIN[2] enabled"  value="2" enum="Pwtin2Enabled" />
+      <choice name="PWTIN[3] enabled"  value="3" enum="Pwtin3Enabled" />
    </choiceOption >
 
    <choiceOption key="pwt_r1_edge" condition="pwt_r1_edge_present"
@@ -629,6 +629,6 @@
       </for>
    </category>
 
-   <signals enabledBy="enablePeripheralSupport" locked="true" />
+   <signals enabledBy="enablePeripheralSupport" />
 
 </peripheralPage>

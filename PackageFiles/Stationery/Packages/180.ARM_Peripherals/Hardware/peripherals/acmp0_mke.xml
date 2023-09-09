@@ -93,15 +93,6 @@
       <choice name="Interrupt enabled"   value="1" enum="Enabled"/>
    </binaryOption >
 
-   <binaryOption key="acmp_cs_acope" condition="acmp_cs_acope_present"
-      enabledBy="acmp_cs_ace"
-      enumStem="AcmpOutputPin"
-      toolTip="Allows the ACMP output to be placed onto external pin"
-      description="ACMP Output Pin Enable" >
-      <choice name="Pin disabled"  value="0" enum="Disabled" pinMap="ACMP$(_instance)_OUT," />
-      <choice name="Pin enabled"   value="1" enum="Enabled"  pinMap="=($(_instance)==0)?&quot;ACMP0_OUT,PTA4&quot;:&quot;ACMP1_OUT,PTB5&quot;" />
-   </binaryOption >
-
    <choiceOption key="acmp_cs_acmod" condition="acmp_cs_acmod_present"
       enabledBy="acmp_cs_ace"
       enumStem="AcmpMode"
@@ -167,6 +158,16 @@
    />
 
    <!-- ************* C2 ****************** -->
+
+   <binaryOption key="acmp_cs_acope" condition="acmp_cs_acope_present"
+      enabledBy="acmp_cs_ace"
+      enumStem="AcmpOutputPin"
+      toolTip="Allows the ACMP output to be placed onto external pin"
+      description="ACMP Output Pin Enable" >
+      <choice name="Pin disabled"  value="0" enum="Disabled" pinMap="ACMP$(_instance)_OUT," />
+      <choice name="Pin enabled"   value="1" enum="Enabled"  pinMap="=&quot;ACMP$(_instance)_OUT,&quot;+outMap" />
+   </binaryOption >
+
    <bitmaskOption key="acmp_c2_acipe" condition="acmp_c2_acipe_present"
       enabledBy="acmp_cs_ace"
       typeName="AcmpInput"
@@ -176,13 +177,11 @@
       toolTip="Bitmask controlling which ACMP pins are available as analogue inputs"
       description="ACMP Input Pin Enables"
       bitmask="0x7"
-      bitList="=($(_instance)==0)?&quot;PTA0,PTA1,PTC4;&quot;:
-                                  &quot;PTA6,PTA7,PTB4;&quot;"
-      pinMap="=($(_instance)==0)?&quot;ACMP0_IN%i=>PTA0:PTA1:PTC4;&quot;:
-                                 &quot;ACMP1_IN%i=>PTA6:PTA7:PTB4;&quot;"
+      bitList="=pinMap"
+      pinMap="=&quot;ACMP$(_instance)_IN%i:&quot;+pinMap"
       value="0"
    />
-
+   <!-- enum generation only-->
    <choiceOption key="acmp_c2_inputenable"
       derived="true"
       hidden="true"

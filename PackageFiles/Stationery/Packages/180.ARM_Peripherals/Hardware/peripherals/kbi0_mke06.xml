@@ -57,7 +57,12 @@
 
    <!-- ************* PE ****************** -->
 
-   <bitmaskOption key="kbi_pe_kbipe" condition="kbi_pe_kbipe_present&amp;&amp;($(_instance)==0)"
+   <constant key="pinMap" type="String" value="&quot;PT(A-D)(0-7)&quot;"   condition="$(_instance)==0" />
+   <constant key="pinMap" type="String" value="&quot;PT(E-H)(0-7)&quot;"   condition="$(_instance)==1" />
+
+   <constant key="expandedPinMap" type="String" value="ExpandPinList(pinMap)" />
+
+   <bitmaskOption key="kbi_pe_kbipe" condition="kbi_pe_kbipe_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       typeName="KbiEnableMask"
       enumType="uint32_t"
@@ -65,30 +70,15 @@
       defaultValue="0"
       description="KBI Pin Enables"
       toolTip="Bitmask selecting enabled pins"
-      bitmask="0xFFFFFFFF"
-      bitList="PT(A-D)(0-7)"
-      pinMap="KBI$(_instance)_P%i,PT(A-D)(0-7);"
+      bitmask="0"
+      bitList="=pinMap"
+      pinMap="=&quot;KBI$(_instance)_P%i:&quot;+pinMap"
       value="0"
    />
-
-   <bitmaskOption key="kbi_pe_kbipe" condition="kbi_pe_kbipe_present&amp;&amp;($(_instance)==1)"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      typeName="KbiEnableMask"
-      enumType="uint32_t"
-      valueFormat="KbiEnableMask(%s)"
-      defaultValue="0"
-      description="KBI Pin Enables"
-      toolTip="Bitmask selecting enabled pins"
-      bitmask="0xFFFFFFFF"
-      bitList="PT(E-H)(0-7);"
-      pinMap="KBI$(_instance)_P%i,PT(E-H)(0-7);"
-      value="0"
-   />
-
 
    <!-- ************* ES ****************** -->
 
-   <bitmaskOption key="kbi_es_kbedg" condition="kbi_es_kbedg_present&amp;&amp;($(_instance)==0)"
+   <bitmaskOption key="kbi_es_kbedg" condition="kbi_es_kbedg_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       typeName="KbiPolarityMask"
       enumType="uint32_t"
@@ -96,21 +86,8 @@
       defaultValue="0"
       description="KBI Edge Selects"
       toolTip="Bitmask selecting polarity : 0=Falling edge/low level; 1=Rising edge/high level"
-      bitmask="0xFFFFFFFF"
-      bitList="PT(A-D)(0-7);"
-      value="0"
-   />
-
-   <bitmaskOption key="kbi_es_kbedg" condition="kbi_es_kbedg_present&amp;&amp;($(_instance)==1)"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      typeName="KbiPolarityMask"
-      enumType="uint32_t"
-      valueFormat="KbiPolarityMask(%s)"
-      defaultValue="0"
-      description="KBI Edge Selects"
-      toolTip="Bitmask selecting polarity : 0=Falling edge/low level; 1=Rising edge/high level"
-      bitmask="0xFFFFFFFF"
-      bitList="PT(E-H)(0-7);"
+      bitmask="0"
+      bitList="=pinMap"
       value="0"
    />
 
@@ -208,12 +185,9 @@
       %paramDescription0
       \t * @param polarity        Polarity of the input
       \t */
-      \tstatic void enablePin(%param0, Polarity polarity) {
+      \tstatic void enablePin(Kbi$(_instance)PinIndex %paramName0, Polarity polarity) {
       \t
-      \t   const uint32_t index = (unsigned(%paramName0)-(32*$(_instance)));
-      \t   const uint32_t mask = 1<<index;
-      \t
-      \t   usbdm_assert(unsigned(pinIndex)<32, "Illegal pin index");
+      \t   const uint8_t mask = 1U<<unsigned(%paramName0);
       \t
       \t   %register1 = %register1 | mask;
       \t   %register2 = (%register2&~mask) | (~polarity&mask);
@@ -224,19 +198,15 @@
       \t *
       %paramDescription0
       \t */
-      \tstatic void disablePin(%param0) {
+      \tstatic void disablePin(Kbi$(_instance)PinIndex %paramName0) {
       \t
-      \t   const uint32_t index = (unsigned(%paramName0)-(32*$(_instance)));
-      \t   const uint32_t mask = 1<<index;
-      \t
-      \t   usbdm_assert(unsigned(pinIndex)<32, "Illegal pin index");
+      \t   const uint8_t mask = 1U<<unsigned(%paramName0);
       \t
       \t   %register1 = %register1 & ~mask;
       \t}
       \t\n
    ]]>
    </setTemplate>
-
 
    <setTemplate variables="kbi_sc_kback" codeGenCondition="enableGettersAndSetters"
    ><![CDATA[
@@ -272,7 +242,7 @@
          \t *
          %paramDescription
          \t */
-         \tstatic void configure%(name)(%params) {
+         \tstatic void set%(name)(%params) {
          \t   %defaultFieldExpression
          \t}
          \t
@@ -313,8 +283,8 @@
       \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *    // Setup values
-      \t *    3, ActiveHigh,                   // Enabled pin and associated polarity - 3, Rising-edge/High-level
-      \t *    5, ActiveLow,                    // Enabled pin and associated polarity - 5, Falling-edge/Low-level
+      \t *    Kbi$(_instance)PinIndex::PTA3, ActiveHigh,  // Enabled pin and set associated polarity - PTA3, Rising-edge/High-level
+      \t *    Kbi$(_instance)PinIndex::PTB5, ActiveLow,   // Enabled pin and set associated polarity - PTB5, Falling-edge/Low-level
       \t *    KbiStatusReflects_CurrentValue , // Real KBI_SP register enable - Current value
       \t *    KbiInterrupt_Disabled ,          // KBI Interrupt Enable - Disabled
       \t *    KbiDetectionMode_EdgesOnly,      // KBI Detection Mode - Edges only
@@ -327,6 +297,18 @@
       \t * $(_Class)::configure($(_name)Init)
       \t * @endcode
       \t */
+   ]]>
+   </template>
+
+   <template namespace="usbdm" >
+   <![CDATA[
+      \t/**
+      \t *  Pin indices for Kbi$(_instance)
+      \t */
+      \tenum class Kbi$(_instance)PinIndex {
+      \t   $(expandedPinMap)
+      \t};
+      \t\n
    ]]>
    </template>
 
@@ -609,13 +591,10 @@
       \t    */
       \t   template <typename... Types>
       \t   constexpr Init(
-      \t          %param0,
-      \t          Polarity %paramName1, Types... rest) : Init(rest...) {
+      \t          Kbi$(_instance)PinIndex %paramName0,
+      \t          Polarity     %paramName1, Types... rest) : Init(rest...) {
       \t
-      \t   const uint32_t index = (unsigned(%paramName0)-(32*$(_instance)));
-      \t   const uint32_t mask = 1<<index;
-      \t
-      \t      usbdm_assert(unsigned(index)<32, "Illegal pin index");
+      \t      const uint32_t mask  = 1<<unsigned(%paramName0);
       \t
       \t      %registerName1 |= mask;
       \t      %registerName2 |= mask&~%paramName1;

@@ -19,6 +19,18 @@
    <constant key="LPUART_max"     value="48MHz"  type="Integer"    hidden="false" />
    <constant key="TPM_max"        value="48MHz"  type="Integer"    hidden="false" />
 
+   <!-- Pin mapping for ADC0 -->
+   <constant key="/ADC0/pinMap" type="String" 
+      value="&quot;PTA0,PTA1,PTA6,PTA7,PTB0,PTB1,PTB2,PTB3,PTC0,PTC1,PTC2,PTC3,PTF4,PTF5,PTF6,PTF7&quot;" />
+
+   <!-- Pin mapping for ACMP0 -->
+   <constant key="/ACMP0/pinMap" type="String" value="&quot;PTA0,PTA1,PTC4&quot;" />
+   <constant key="/ACMP0/outMap" type="String" value="&quot;PTA4&quot;" />
+
+   <!-- Pin mapping for ACMP1 -->
+   <constant key="/ACMP1/pinMap" type="String" value="&quot;PTA6,PTA7,PTB4&quot;" />
+   <constant key="/ACMP1/outMap" type="String" value="&quot;PTB5&quot;" />
+
    <for keys="n" dim="numberOfClockSettings" >
       <aliasCategoryOption key="/ICS/ClockConfig[%(n)]" derived="true" constant="true" >
 
