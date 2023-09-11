@@ -10,15 +10,15 @@
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"   />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"    />
    <xi:include href="_enablePeripheral.xml" />
-   <title description="------------------------------------------" />
+   <title />
 
    <!-- Clock mode as indicated by icsClockMode[%(n)] choice index -->
-   <constant key="FEI"   value="0" type="Integer" />
-   <constant key="FEE"   value="1" type="Integer" />
-   <constant key="FBI"   value="2" type="Integer" />
-   <constant key="FBE"   value="3" type="Integer" />
-   <constant key="FBILP" value="4" type="Integer" />
-   <constant key="FBELP" value="5" type="Integer" />
+   <constant key="FEI"   value="0" type="Long" />
+   <constant key="FEE"   value="1" type="Long" />
+   <constant key="FBI"   value="2" type="Long" />
+   <constant key="FBE"   value="3" type="Long" />
+   <constant key="FBILP" value="4" type="Long" />
+   <constant key="FBELP" value="5" type="Long" />
 
    <clockSelectionOption key="currentClockConfig"
       derived="true"

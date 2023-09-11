@@ -53,6 +53,13 @@
    <choice value="true"  name="Use extended type system" />
 </binaryOption>
 
+<binaryOption name="Debug definitions" key="/HARDWARE/generateDebugDefinitions"
+   description="Generate some debug definintions"
+   toolTip="These definitions are used to control testing">
+   <choice value="No definitions"         name="Don't Generate definitions" isDefault="true"/>
+   <choice value="Definitions generated"  name="Generate definitions" />
+</binaryOption>
+
 <category name="Examples" description="Pin mapping for examples">
    <stringOption name="Led1"        key="/HARDWARE/Led1"       value="GpioA&lt;1,  ActiveLow&gt;"  description="LED for examples" />
    <stringOption name="Led2"        key="/HARDWARE/Led2"       value="GpioA&lt;2,  ActiveLow&gt;"  description="LED for examples" />

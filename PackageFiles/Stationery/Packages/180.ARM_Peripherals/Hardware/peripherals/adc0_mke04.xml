@@ -12,7 +12,7 @@
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
    <xi:include href="_enablePeripheral.xml"  />
-   <title description="------------------------------------------" />
+   <title />
 
 <!--
     * General substitutions
@@ -63,6 +63,7 @@
       description="Adc internal asynchronous clock"
       toolTip="This is nominally 8MHz.  (Actually 4MHz in in ADC low power)"
       constant="true"
+      units="Hz"
       value="8_MHz"
    />
    <binaryOption key="adc_sc1_aien" condition="adc_sc1_aien_present"

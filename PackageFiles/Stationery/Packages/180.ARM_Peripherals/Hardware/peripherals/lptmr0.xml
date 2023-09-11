@@ -14,7 +14,7 @@
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"            />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"             />
    <xi:include href="_enablePeripheral.xml"  />
-   <title description="------------------------------------------" />
+   <title />
 
 <!--
     * General substitutions
@@ -131,7 +131,7 @@
       derived="true"
       constant="true" />
 
-   <title description="----------- Time Interval -----------------" />
+   <title description="Time Interval Mode" />
 
    <!-- ************* PSR ****************** -->
 
@@ -200,7 +200,7 @@
       derived="true"
       min="0" units="Hz"/>
 
-   <title description="----------- Pulse Counting -----------------" />
+   <title description="Pulse Counting Mode" />
 
    <choiceOption key="lptmr_psr_glitchFilter"
       enabledBy="enablePeripheralSupport&amp;&amp;lptmr_csr_tms"

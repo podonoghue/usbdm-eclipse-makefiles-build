@@ -194,8 +194,8 @@ $(/ICS/publicMethods: // No public methods found)
     *
     *  @param[in]  settingNumber Clock setting number
     */
-   static void configure(ClockConfig settingNumber=ClockConfig_default) {
-      clockTransition(clockInfo[settingNumber]);
+   static void configure(ClockConfig clockConfig=ClockConfig_default) {
+      clockTransition(clockInfo[clockConfig]);
    }
 
    /**

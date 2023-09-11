@@ -63,7 +63,7 @@
       \tstatic constexpr int sdaPin  = 1;\n\n
    ]]></template>
 
-   <title description="------- Clock Settings -------" />
+   <title description="Clock Settings" />
 
    <binaryOption key="/$(_BASENAME)/baudSupport"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
@@ -307,7 +307,7 @@
 
    <!-- ************* SMB ****************** -->
 
-   <title description="--------------- SMB ---------------------"
+   <title description="SMB"
       condition="i2c_smb_fack_present" />
 
    <binaryOption key="i2c_smb_fack" condition="i2c_smb_fack_present"

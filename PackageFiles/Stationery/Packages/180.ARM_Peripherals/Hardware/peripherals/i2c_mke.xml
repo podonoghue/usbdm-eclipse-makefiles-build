@@ -55,7 +55,7 @@
    <constant key="_class_declaration" type="String"
       value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
 
-   <title description="------- Clock Settings -------" />
+   <title description="Clock Settings" />
 
    <binaryOption key="/$(_BASENAME)/baudSupport"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
@@ -299,109 +299,107 @@
 
    <!-- ************* SMB ****************** -->
 
-   <title description="--------------- SMB ---------------------"
-      condition="i2c_smb_fack_present" />
-
-   <binaryOption key="i2c_smb_fack" condition="i2c_smb_fack_present"
-      enabledBy="enablePeripheralSupport"
-      enumStem="I2cSmbFastAck"
-      toolTip="For SMBus packet error checking, the CPU must be able to issue an ACK or NACK according to the result of receiving data byte"
-      description="Fast NACK/ACK" >
-      <choice name="ACK/NAK on data byte"   value="0" enum="Disabled" />
-      <choice name="ACK/NAK on TXAK write"  value="1" enum="Enabled" />
-   </binaryOption >
-
-   <binaryOption key="i2c_smb_alerten" condition="i2c_smb_alerten_present"
-      enabledBy="enablePeripheralSupport"
-      enumStem="I2cSmbAlert"
-      toolTip="Enables or disables SMBus alert response address matching"
-      description="SMBus Alert Response Address" >
-      <choice name="Matching disabled"  value="0" enum="Disabled" />
-      <choice name="Matching enabled"   value="1" enum="Enabled" />
-   </binaryOption >
-
-   <binaryOption key="i2c_smb_tcksel" condition="i2c_smb_tcksel_present"
-      enabledBy="enablePeripheralSupport"
-      enumStem="I2cSmbTimwoutClock"
-      toolTip="Selects the clock source of the timeout counter"
-      description="Timeout Counter Clock Select" >
-      <choice name="Bus clock / 64"  value="0" enum="BusClockDiv64" />
-      <choice name="Bus clock"       value="1" enum="BusClock"     />
-   </binaryOption >
-
-   <binaryOption key="i2c_smb_sltf" condition="i2c_smb_sltf_present"
-      hidden="true"
-      toolTip="This flag sets when an SCL low timeout occurs"
-      description="SCL Low Timeout Flag" >
-      <choice name="No timeout occurs"  value="0" enum="NoTimeoutOccurs" />
-      <choice name="Timeout occurs"     value="1" enum="TimeoutOccurs" />
-   </binaryOption >
-
-   <binaryOption key="i2c_smb_shtf2" condition="i2c_smb_shtf2_present"
-      hidden="true"
-      toolTip="This flag sets when SCL is held high and SDA is held low more than LoValue/512 clock cycles."
-      description="SCL High Timeout Flag 2" >
-      <choice name="No timeout occurs"  value="0" enum="NoTimeoutOccurs" />
-      <choice name="Timeout occurs"     value="1" enum="TimeoutOccurs" />
-   </binaryOption >
-
-   <binaryOption key="i2c_smb_shtf2ie" condition="i2c_smb_shtf2ie_present"
-      enabledBy="irqHandlingMethod"
-      enumStem="I2cSmbTimoutInterrupt"
-      toolTip="Enables SCL high and SDA low timeout interrupt"
-      description="SHTF2 Interrupt" >
-      <choice name="Interrupt disabled"  value="0" enum="Disabled" />
-      <choice name="Interrupt enabled"   value="1" enum="Enabled" />
-   </binaryOption >
-
-   <!-- ************* SMB_SIICAEN, A2 ****************** -->
-
-   <binaryOption key="i2c_smb_siicaen" condition="i2c_smb_siicaen_present"
-      enabledBy="enablePeripheralSupport"
-      enumStem="I2cSmbAddress"
-      toolTip="Enables or disables SMBus device default address"
-      description="Second I2C Address (SMB)" >
-      <choice name="Address 2 (SMB) disabled"  value="0" enum="Disabled" />
-      <choice name="Address 2 (SMB) enabled"   value="1" enum="Enabled" />
-   </binaryOption >
-
-   <intOption key="i2c_a2_sad" condition="i2c_a2_sad_present"
-      enabledBy="enablePeripheralSupport&amp;&amp;i2c_smb_siicaen"
-      typeName="int"
-      description="SMBus Address"
-      toolTip="Contains the slave address used by the SMBus.\n
-               This field is used as the device default address or other related addresses"
-   />
-
-   <!-- ************* SLTH & SLTL****************** -->
-
-   <intOption key="i2c_slt_value" condition="i2c_slth_sslt_present"
-      units="ticks"
-      enabledBy="enablePeripheralSupport"
-      description="SMB SCL low timeout value"
-      toolTip="SCL low timeout"
-   />
-
-   <intOption key="i2c_slth_sslt" condition="i2c_slth_sslt_present"
-      hidden="true"
-      derived="true"
-      constant="true"
-      ref="(i2c_slt_value&gt;&gt;8)&amp;0xFF"
-      enabledBy="enablePeripheralSupport"
-      typeName="uint8_t"
-      description="MSB of SCL low timeout value"
-   />
-
-   <intOption key="i2c_sltl_sslt" condition="i2c_sltl_sslt_present"
-      hidden="true"
-      derived="true"
-      constant="true"
-      ref="i2c_slt_value&amp;0xFF"
-      enabledBy="enablePeripheralSupport"
-      typeName="uint8_t"
-      description="LSB of SCL low timeout value"
-   />
-
+   <category name="SMB" description="SMB options" >
+      <binaryOption key="i2c_smb_fack" condition="i2c_smb_fack_present"
+         enabledBy="enablePeripheralSupport"
+         enumStem="I2cSmbFastAck"
+         toolTip="For SMBus packet error checking, the CPU must be able to issue an ACK or NACK according to the result of receiving data byte"
+         description="Fast NACK/ACK" >
+         <choice name="ACK/NAK on data byte"   value="0" enum="Disabled" />
+         <choice name="ACK/NAK on TXAK write"  value="1" enum="Enabled" />
+      </binaryOption >
+   
+      <binaryOption key="i2c_smb_alerten" condition="i2c_smb_alerten_present"
+         enabledBy="enablePeripheralSupport"
+         enumStem="I2cSmbAlert"
+         toolTip="Enables or disables SMBus alert response address matching"
+         description="SMBus Alert Response Address" >
+         <choice name="Matching disabled"  value="0" enum="Disabled" />
+         <choice name="Matching enabled"   value="1" enum="Enabled" />
+      </binaryOption >
+   
+      <binaryOption key="i2c_smb_tcksel" condition="i2c_smb_tcksel_present"
+         enabledBy="enablePeripheralSupport"
+         enumStem="I2cSmbTimwoutClock"
+         toolTip="Selects the clock source of the timeout counter"
+         description="Timeout Counter Clock Select" >
+         <choice name="Bus clock / 64"  value="0" enum="BusClockDiv64" />
+         <choice name="Bus clock"       value="1" enum="BusClock"     />
+      </binaryOption >
+   
+      <binaryOption key="i2c_smb_sltf" condition="i2c_smb_sltf_present"
+         hidden="true"
+         toolTip="This flag sets when an SCL low timeout occurs"
+         description="SCL Low Timeout Flag" >
+         <choice name="No timeout occurs"  value="0" enum="NoTimeoutOccurs" />
+         <choice name="Timeout occurs"     value="1" enum="TimeoutOccurs" />
+      </binaryOption >
+   
+      <binaryOption key="i2c_smb_shtf2" condition="i2c_smb_shtf2_present"
+         hidden="true"
+         toolTip="This flag sets when SCL is held high and SDA is held low more than LoValue/512 clock cycles."
+         description="SCL High Timeout Flag 2" >
+         <choice name="No timeout occurs"  value="0" enum="NoTimeoutOccurs" />
+         <choice name="Timeout occurs"     value="1" enum="TimeoutOccurs" />
+      </binaryOption >
+   
+      <binaryOption key="i2c_smb_shtf2ie" condition="i2c_smb_shtf2ie_present"
+         enabledBy="irqHandlingMethod"
+         enumStem="I2cSmbTimoutInterrupt"
+         toolTip="Enables SCL high and SDA low timeout interrupt"
+         description="SHTF2 Interrupt" >
+         <choice name="Interrupt disabled"  value="0" enum="Disabled" />
+         <choice name="Interrupt enabled"   value="1" enum="Enabled" />
+      </binaryOption >
+   
+      <!-- ************* SMB_SIICAEN, A2 ****************** -->
+   
+      <binaryOption key="i2c_smb_siicaen" condition="i2c_smb_siicaen_present"
+         enabledBy="enablePeripheralSupport"
+         enumStem="I2cSmbAddress"
+         toolTip="Enables or disables SMBus device default address"
+         description="Second I2C Address (SMB)" >
+         <choice name="Address 2 (SMB) disabled"  value="0" enum="Disabled" />
+         <choice name="Address 2 (SMB) enabled"   value="1" enum="Enabled" />
+      </binaryOption >
+   
+      <intOption key="i2c_a2_sad" condition="i2c_a2_sad_present"
+         enabledBy="enablePeripheralSupport&amp;&amp;i2c_smb_siicaen"
+         typeName="int"
+         description="SMBus Address"
+         toolTip="Contains the slave address used by the SMBus.\n
+                  This field is used as the device default address or other related addresses"
+      />
+   
+      <!-- ************* SLTH & SLTL****************** -->
+   
+      <intOption key="i2c_slt_value" condition="i2c_slth_sslt_present"
+         units="ticks"
+         enabledBy="enablePeripheralSupport"
+         description="SMB SCL low timeout value"
+         toolTip="SCL low timeout"
+      />
+   
+      <intOption key="i2c_slth_sslt" condition="i2c_slth_sslt_present"
+         hidden="true"
+         derived="true"
+         constant="true"
+         ref="(i2c_slt_value&gt;&gt;8)&amp;0xFF"
+         enabledBy="enablePeripheralSupport"
+         typeName="uint8_t"
+         description="MSB of SCL low timeout value"
+      />
+   
+      <intOption key="i2c_sltl_sslt" condition="i2c_sltl_sslt_present"
+         hidden="true"
+         derived="true"
+         constant="true"
+         ref="i2c_slt_value&amp;0xFF"
+         enabledBy="enablePeripheralSupport"
+         typeName="uint8_t"
+         description="LSB of SCL low timeout value"
+      />
+   </category>
 <!-- Graphic here -->
 
    <setTemplate variables="i2c_f_mult,i2c_f_icr" codeGenCondition="enableGettersAndSetters"
@@ -1124,7 +1122,7 @@
    ]]></template>
 
    <!-- ************* Signal mapping ****************** -->
-   <category name="Advanced" description="SIgnal routing" >
+   <category name="Advanced" description="Signal routing" >
       <aliasOption key="/SIM/sim_scgc_$(_name)"      constant="false" optional="true" />
       <aliasOption key="/SIM/sim_scgc_$(_basename)"  constant="false" optional="true" />
       <aliasOption key="/SIM/sim_pinsel_$(_name)ps"  constant="false" optional="true" />

@@ -58,7 +58,7 @@
 
 
 <!-- ==========  PGA features =============================== -->
-   <title description="------- Programmable Gain -------" condition="adc_pga_pgag_present" />
+   <title description="Programmable Gain" condition="adc_pga_pgag_present" />
    <choiceOption key="adc_pga_pgaen" condition="adc_pga_pgaen_present"
       enabledBy="enablePeripheralSupport"
       description="PGA Enable and mode"
@@ -96,7 +96,7 @@
 
 <!-- ==========  ADC clock sources =============================== -->
 
-   <title description="------- Clocking -------" />
+   <title description="Clocking" />
 
    <choiceOption key="adcClockConfig"
       enabledBy="enablePeripheralSupport"
@@ -188,7 +188,7 @@
 
 <!--  ========== ADC =============================== -->
 
-   <title description="------------------------------------------" />
+   <title />
 
    <choiceOption key="adc_cfg1_mode" description="ADC Resolution"
       enabledBy="enablePeripheralSupport"

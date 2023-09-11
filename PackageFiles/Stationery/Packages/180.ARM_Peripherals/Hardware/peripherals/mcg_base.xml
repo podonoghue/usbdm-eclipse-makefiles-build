@@ -10,22 +10,22 @@
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"   />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"    />
    <xi:include href="_enablePeripheral.xml" />
-   <title description="------------------------------------------" />
+   <title />
 
    <!-- Clock mode as indicated by mcgClockMode[%(n)] choice index -->
-   <constant key="FEI"  value="0" type="Integer" />
-   <constant key="FEE"  value="1" type="Integer" />
-   <constant key="FBI"  value="2" type="Integer" />
-   <constant key="FBE"  value="3" type="Integer" />
-   <constant key="PBE"  value="4" type="Integer" />
-   <constant key="PEE"  value="5" type="Integer" />
-   <constant key="BLPI" value="6" type="Integer" />
-   <constant key="BLPE" value="7" type="Integer" />
+   <constant key="FEI"  value="0" type="Long" />
+   <constant key="FEE"  value="1" type="Long" />
+   <constant key="FBI"  value="2" type="Long" />
+   <constant key="FBE"  value="3" type="Long" />
+   <constant key="PBE"  value="4" type="Long" />
+   <constant key="PEE"  value="5" type="Long" />
+   <constant key="BLPI" value="6" type="Long" />
+   <constant key="BLPE" value="7" type="Long" />
 
    <!-- Run mode as indicated by smc_pmctrl_runm[%(n)] choice index -->
-   <constant key="RUN"     value="0" type="Integer" />
-   <constant key="VLPR"    value="1" type="Integer" />
-   <constant key="HSRUN"   value="2" type="Integer" />
+   <constant key="RUN"     value="0" type="Long" />
+   <constant key="VLPR"    value="1" type="Long" />
+   <constant key="HSRUN"   value="2" type="Long" />
 
    <clockSelectionOption key="currentClockConfig"
       derived="true"
@@ -95,9 +95,9 @@
       <choice value="1-1"                             name="32kHz Oscillator driven by RTC" enum="RTC_Controlled"       condition="/SIM/RtcForcing"     enabledBy="/RTC/ConfigureRtc"  />
    </choiceOption>
 
-   <constant key="/OscMode_NotConfigured"  type="Integer" value="0"                        condition="mcg_c2_erefs0_present"/>
-   <constant key="/OscMode_ExternalClock"  type="Integer" value="1"                        condition="mcg_c2_erefs0_present"/>
-   <constant key="/OscMode_RTC_Controlled" type="Integer" value="mcg_c2_hgo0_present?4:3"  condition="mcg_c2_erefs0_present"/>
+   <constant key="/OscMode_NotConfigured"  type="Long" value="0"                        condition="mcg_c2_erefs0_present"/>
+   <constant key="/OscMode_ExternalClock"  type="Long" value="1"                        condition="mcg_c2_erefs0_present"/>
+   <constant key="/OscMode_RTC_Controlled" type="Long" value="mcg_c2_hgo0_present?4:3"  condition="mcg_c2_erefs0_present"/>
 
    <choiceOption key="mcg_c2_erefs0"  condition="mcg_c2_erefs0_present"
       hidden="true"

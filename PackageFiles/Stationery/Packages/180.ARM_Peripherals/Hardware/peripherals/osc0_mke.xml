@@ -8,7 +8,7 @@
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
    <xi:include href="_enablePeripheral.xml"  />
-   <title description="------------------------------------------" />
+   <title />
 
 <!--
     * General substitutions
@@ -58,9 +58,9 @@
       <choice value="1,1" name="High Gain Oscillator"    enum="HighPowerOscillator"  />
    </choiceOption>
 
-   <constant key="/OscMode_ExternalClock"            type="Integer" value="0"  condition="osc_cr_oscos_present" />
-   <constant key="/OscMode_LowGainOsc"               type="Integer" value="1"  condition="osc_cr_oscos_present" />
-   <constant key="/OscMode_HighGainOsc"              type="Integer" value="2"  condition="osc_cr_oscos_present" />
+   <constant key="/OscMode_ExternalClock"            type="Long" value="0"  condition="osc_cr_oscos_present" />
+   <constant key="/OscMode_LowGainOsc"               type="Long" value="1"  condition="osc_cr_oscos_present" />
+   <constant key="/OscMode_HighGainOsc"              type="Long" value="2"  condition="osc_cr_oscos_present" />
 
    <intOption key="osc_input_freq"
       units="Hz"
@@ -380,6 +380,6 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <signals />
+   <signals enabledBy="enablePeripheralSupport"/>
 
 </peripheralPage>

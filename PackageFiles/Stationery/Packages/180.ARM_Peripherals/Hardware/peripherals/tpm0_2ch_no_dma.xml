@@ -11,7 +11,7 @@
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
    <xi:include href="_enablePeripheral.xml"  />
-   <title description="------------------------------------------" />
+   <title />
 
 <!--
     * Template substitutions

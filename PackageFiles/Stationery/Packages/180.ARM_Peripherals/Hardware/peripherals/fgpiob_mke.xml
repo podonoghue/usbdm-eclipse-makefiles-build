@@ -9,7 +9,7 @@
    <constant key="isGeneratedByDefault"     type="Boolean" value="false" />
    <constant key="isSupportedinStartup"     type="Boolean" value="false" />
    <xi:include href="_enablePeripheral.xml" />
-   <title description="------------------------------------------" />
+   <title />
 
    <!-- ************* Common ****************** -->
 

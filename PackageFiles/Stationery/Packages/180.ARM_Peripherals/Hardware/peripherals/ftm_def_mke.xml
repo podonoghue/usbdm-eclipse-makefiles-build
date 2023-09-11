@@ -72,7 +72,7 @@
          so that a reasonable resolution is available for PWM duty-cycle"
       value="100" min="0" max="65535" />
 
-   <title description="------- Clocking -------" />
+   <title description="Clocking" />
 
    <intOption key="ftmExternalClock"
       enabledBy="enablePeripheralSupport"
@@ -306,7 +306,7 @@
    <!--  **************** Channels **************** -->
 
    <for keys="ch" dim="NumChannels">
-      <title description="------- FTM Channel %(ch) -------" toolTip="" />
+      <title description="FTM Channel %(ch)" toolTip="" />
 
       <choiceOption key="ftm_cnsc_mode[%(ch)]" condition="ftm_combine_decap0_present&amp;&amp;ftm_cnsc_ms_present&amp;&amp;ftm_cnsc_els_present"
          enabledBy="enablePeripheralSupport"
@@ -1778,7 +1778,7 @@ $(init_description)
       \t   ChannelCallbackFunction channelCallbackFunction = nullptr;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="ftm_sc_action,ftm_sc_cpwms,ftm_sc_clks,ftm_sc_ps,ftm_sc_mode"
    ><![CDATA[
       \t   /// Status And Control Register
@@ -1792,21 +1792,21 @@ $(init_description)
       \t   %enumClass %registerName = %enumClass_Normal;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="ftm_cntin"
    ><![CDATA[
       \t   /// %description
       \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="ftm_mod"
    ><![CDATA[
       \t   /// %description
       \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables= "ftm_modPeriod"
     ><![CDATA[
       \t   /// %description
@@ -1815,7 +1815,7 @@ $(init_description)
 
 <!--   Configure method -->
 
-   <setTemplate variables="ftm_sc_clks" discardRepeats="true" key="/$(_BASENAME)/InitMethod" namespace="all" ><![CDATA[
+   <setTemplate variables="ftm_sc_clks" discardRepeats="true" key="/$(_BASENAME)/InitMethod" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Configure FTM from values specified in init
       \t
@@ -1925,7 +1925,7 @@ $(init_description)
    ]]></constructorTemplate>
 
    <for keys="r" values="ftm_sc_action;ftm_sc_cpwms;ftm_sc_mode;ftm_sc_clks">
-      <constructorTemplate  namespace="usbdm" discardRepeats="true"
+      <constructorTemplate  namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -1946,7 +1946,7 @@ $(init_description)
       ]]></constructorTemplate>
    </for>
 
-   <constructorTemplate namespace="usbdm" discardRepeats="true"
+   <constructorTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="ftm_sc_ps, ftm_cntin, ftm_mod"
       params=",cntin_ticks,mod_ticks"
       linePadding="xxx"
@@ -1971,7 +1971,7 @@ $(init_description)
          \t\n
    ]]></constructorTemplate>
 
-   <constructorTemplate namespace="usbdm" discardRepeats="true"
+   <constructorTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="ftm_sc_ps, ftm_mod"
       params=",mod_ticks"
       linePadding="xxx"
@@ -1996,7 +1996,7 @@ $(init_description)
          \t\n
    ]]></constructorTemplate>
 
-   <constructorTemplate namespace="usbdm" discardRepeats="true"
+   <constructorTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       nonDefaultParams="2"
       variables="ftm_modPeriod"
       linePadding="xxx"
@@ -2019,17 +2019,16 @@ $(init_description)
          \t\n
    ]]></constructorTemplate>
 
-   <template namespace="usbdm" discardRepeats="true"  ><![CDATA[
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[ 
       \t}; // class $(_Baseclass)BasicInfo::Init\n\n
    ]]></template>
 
-   <initialValueTemplate
+   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
          ftm_sc_mode,
          ftm_sc_action,
-         irqLevel,
          ftm_sc_clks,
          ftm_sc_ps,
          ftm_cntin,
@@ -2046,7 +2045,7 @@ $(init_description)
 
 <!--   ========== FTM CHANNEL Init class =============================== -->
 
-   <template key="channel_init_description" namespace="all"><![CDATA[
+   <template key="channel_init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"><![CDATA[
       \t/**
       \t * Class used to do initialisation of $(_Class)Channel
       \t *
@@ -2075,7 +2074,7 @@ $(init_description)
       \t */
    ]]></template>
 
-   <template namespace="usbdm" discardRepeats="true" ><![CDATA[
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"><![CDATA[
 $(channel_init_description)
       \tclass ChannelInit {
       \t
@@ -2101,21 +2100,21 @@ $(channel_init_description)
       \t   ChannelCallbackFunction callbackFunction = nullptr;\n\n
    ]]></setTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="ftm_cnv[]"
    ><![CDATA[
       \t   /// %description
       \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="ftm_cnsc_mode[]"
    ><![CDATA[
       \t   /// Channel Status And Control Register
       \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="ftm_channel_number"
    ><![CDATA[
       \t   /// %description
@@ -2131,7 +2130,7 @@ $(channel_init_description)
 
 <!--  Configure method -->
 
-   <template discardRepeats="true" key="/$(_BASENAME)/ChannelInitMethod" namespace="all" ><![CDATA[
+   <template discardRepeats="true" key="/$(_BASENAME)/ChannelInitMethod" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Configure Channel from values specified in channelInit
       \t
@@ -2147,7 +2146,7 @@ $(channel_init_description)
       \t   }
       \t\n
    ]]></template>
-   <template discardRepeats="true" key="/$(_BASENAME)/ChannelInitMethod" namespace="all" condition="ftm_combine_combine0_present" ><![CDATA[
+   <template discardRepeats="true" key="/$(_BASENAME)/ChannelInitMethod" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" condition="ftm_combine_combine0_present" ><![CDATA[
       \t   // Configure timer combine mode
       \t   if ((channelInit.channel&0b1) == 0) {
       \t      // Even channel value controls paired channels n,n+1
@@ -2190,7 +2189,7 @@ $(channel_init_description)
       ftm_cnsc_mode[];
       ftm_cnsc_action[];
       ftm_cnsc_icrst[]">
-      <constructorTemplate  namespace="usbdm" discardRepeats="true"
+      <constructorTemplate  namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -2213,7 +2212,7 @@ $(channel_init_description)
    <for keys="r" values="
       ftm_channel_number;
       ftm_cnv[]">
-      <constructorTemplate  namespace="usbdm" discardRepeats="true"
+      <constructorTemplate  namespace="usbdm" discardRepeats="true"  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -2232,13 +2231,13 @@ $(channel_init_description)
          \t\n
       ]]></constructorTemplate>
    </for>
-   <template namespace="usbdm" discardRepeats="true" ><![CDATA[
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t}; // class  $(_Baseclass)BasicInfo::ChannelInit\n\n
    ]]></template>
 
 <!--  Default Initialisation value -->
 
-  <template><![CDATA[
+  <template codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"><![CDATA[
       \t/**
       \t * Default initialisation value for $(_Class)ChannelInit
       \t * This value is created from Configure.usbdmProject settings
@@ -2246,7 +2245,7 @@ $(channel_init_description)
       \tstatic constexpr ChannelInit DefaultChannelInitValues[] = {\n
   ]]></template>
    <for keys="ch" dim="NumChannels">
-      <initialValueTemplate
+      <initialValueTemplate  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          separator=","
          terminator=","
          variables="
@@ -2260,7 +2259,7 @@ $(channel_init_description)
          %initExpression\n\t},\n
       ]]></initialValueTemplate>
    </for>
-  <template><![CDATA[
+  <template  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"><![CDATA[
       \n\t};\n\n
   ]]></template>
 
@@ -2695,6 +2694,9 @@ $(quad_init_description)
    <category name="SIM" description="Pin mapping and clock enables">
       <aliasOption key="/SIM/sim_scgc_$(_name)"     constant="false" optional="true" />
       <aliasOption key="/SIM/sim_scgc_$(_basename)" constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel_$(_name)clkps" constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt_ftmic" constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt_rxdce" constant="false" optional="true" />
       <for keys="ch" dim="8" >
          <aliasOption key="/SIM/sim_pinsel_$(_name)ps%(ch)"  constant="false" optional="true" />
          <aliasOption key="/SIM/sim_pinsel0_$(_name)ps%(ch)" constant="false" optional="true" />
@@ -2703,5 +2705,6 @@ $(quad_init_description)
    </category>
 
    <signals enabledBy="enablePeripheralSupport" locked="true" />
+   <signals name="FTM" optional="true" />
 
 </fragment>

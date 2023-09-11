@@ -73,7 +73,7 @@ addChoices
 <!ENTITY % simple_items     "xi:include|
                               projectActionList|
                               title|constant|signals|
-                              intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption|irqOption|pinListOption|aliasOption|
+                              intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption|irqOption|pinListOption|aliasOption|pinMapOption|
                               clockSelectionOption|validate|equation|
                               %template_items;" >
                   
@@ -112,11 +112,13 @@ addChoices
 <!ENTITY % if_clause_items "%general_items;|%structure_items;" >
 
 <!ELEMENT if ( (%if_clause_items;)+, (else_if, (%if_clause_items;)+)*, (else, (%if_clause_items;)+)?) >
+   <!-- Condition evaluated during parsing that controls processing of remaining children (up to else/else_if) -->
    <!ATTLIST if condition             CDATA        #REQUIRED>
 
 <!ELEMENT else EMPTY >
 
 <!ELEMENT else_if EMPTY >
+   <!-- Condition evaluated during parsing that controls processing of remaining children (up to else/else_if) -->
    <!ATTLIST else_if condition             CDATA        #REQUIRED>
 
 <!ELEMENT graphic ((%graphic_items;)*) >
@@ -130,6 +132,7 @@ addChoices
 <!ELEMENT graphicGroup ((%graphic_items;)*) >
    <!ATTLIST graphicGroup  x                CDATA        #IMPLIED>
    <!ATTLIST graphicGroup  y                CDATA        #IMPLIED>
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST graphicGroup  condition        CDATA        #IMPLIED>
 
 <!ELEMENT graphicBox ((%graphic_items;)*) >
@@ -137,6 +140,7 @@ addChoices
    <!ATTLIST graphicBox  x                CDATA        #REQUIRED>
    <!ATTLIST graphicBox  y                CDATA        #REQUIRED>
    <!ATTLIST graphicBox  params           CDATA        #REQUIRED>
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST graphicBox  condition        CDATA        #IMPLIED>
 
 <!ELEMENT graphicItem EMPTY >
@@ -146,6 +150,7 @@ addChoices
    <!ATTLIST graphicItem  params          CDATA        #REQUIRED>
    <!ATTLIST graphicItem  var             CDATA        #IMPLIED>
    <!ATTLIST graphicItem  edit            CDATA        #IMPLIED>
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST graphicItem  condition       CDATA        #IMPLIED>
 
 <!ELEMENT aliasCategoryOption ((%general_items;)*) >
@@ -175,9 +180,11 @@ addChoices
    <!ATTLIST categoryOption  disabledValue   CDATA        #IMPLIED>
    <!ATTLIST categoryOption  toolTip         CDATA        #IMPLIED>
    <!ATTLIST categoryOption  hidden          (false|true) #IMPLIED>
+   <!-- Expression enables this option -->
    <!ATTLIST categoryOption  enabledBy       CDATA        #IMPLIED>
 
 <!ELEMENT title EMPTY >
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST title condition              CDATA        #IMPLIED>
    <!ATTLIST title name                   CDATA        #IMPLIED>
    <!ATTLIST title toolTip                CDATA        #IMPLIED>
@@ -188,6 +195,7 @@ addChoices
    <!ATTLIST equation  value           CDATA        #REQUIRED>
 
 <!ELEMENT intOption EMPTY >
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST intOption condition     CDATA        #IMPLIED>
    <!ATTLIST intOption constant      (true)       #IMPLIED>
    <!ATTLIST intOption hidden        (true)       #IMPLIED>
@@ -214,17 +222,21 @@ addChoices
    <!ATTLIST intOption derived       (true)       #IMPLIED>
    <!ATTLIST intOption derivedFrom   CDATA        #IMPLIED>
    <!ATTLIST intOption radix         CDATA        #IMPLIED>
-   <!ATTLIST intOption ref           CDATA        #IMPLIED> <!-- Equation that controls this variable -->
-   <!ATTLIST intOption valueFormat   CDATA        #IMPLIED> <!-- How to format value e.g. %s_ticks-->
-   <!ATTLIST intOption enabledBy     CDATA        #IMPLIED> <!-- Enabled by an expression -->
-   <!ATTLIST intOption unlockedBy    CDATA        #IMPLIED> <!-- Unlocked by an expression -->
+   <!-- Equation that controls this variable -->
+   <!ATTLIST intOption ref           CDATA        #IMPLIED> 
+   <!-- How to format value e.g. %s_ticks-->
+   <!ATTLIST intOption valueFormat   CDATA        #IMPLIED> 
+   <!-- Expression enables this option -->
+   <!ATTLIST intOption enabledBy     CDATA        #IMPLIED> 
+   <!-- Unlocked by an expression -->
+   <!ATTLIST intOption unlockedBy    CDATA        #IMPLIED> 
    <!ATTLIST intOption isNamedClock  (true)       #IMPLIED>
-   <!ATTLIST intOption enabledBy     CDATA        #IMPLIED>
    <!ATTLIST intOption defaultValue  CDATA        #IMPLIED>
    <!ATTLIST intOption enumType      CDATA        #IMPLIED>
    
   
 <!ELEMENT bitmaskOption EMPTY >
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST bitmaskOption condition      CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption constant       (false|true) #IMPLIED>
    <!ATTLIST bitmaskOption hidden         (false|true) #IMPLIED>
@@ -240,6 +252,7 @@ addChoices
    <!ATTLIST bitmaskOption derivedFrom    CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption typeName       CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption defaultValue   CDATA        #IMPLIED>
+   <!-- Expression enables this option -->
    <!ATTLIST bitmaskOption enabledBy      CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption enumType       CDATA        #IMPLIED>
    <!-- These must match in length -->
@@ -249,6 +262,7 @@ addChoices
    <!ATTLIST bitmaskOption disabledPinMap CDATA        #IMPLIED>
 
 <!ELEMENT floatOption EMPTY >
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST floatOption condition     CDATA        #IMPLIED>
    <!ATTLIST floatOption constant      (false|true) #IMPLIED>
    <!ATTLIST floatOption hidden        (false|true) #IMPLIED>
@@ -269,10 +283,14 @@ addChoices
    <!ATTLIST floatOption max           CDATA        #IMPLIED>
    <!ATTLIST floatOption derived       (true)       #IMPLIED>
    <!ATTLIST floatOption derivedFrom   CDATA        #IMPLIED>
-   <!ATTLIST floatOption ref           CDATA        #IMPLIED> <!-- Equation that controls this variable -->
-   <!ATTLIST floatOption valueFormat   CDATA        #IMPLIED> <!-- How to format value e.g. %s_Hz-->
-   <!ATTLIST floatOption enabledBy     CDATA        #IMPLIED> <!-- Enabled by an expression -->
-   <!ATTLIST floatOption unlockedBy    CDATA        #IMPLIED> <!-- Unlocked by an expression -->
+   <!-- Equation that controls this variable -->
+   <!ATTLIST floatOption ref           CDATA        #IMPLIED> 
+   <!-- How to format value e.g. %s_Hz-->
+   <!ATTLIST floatOption valueFormat   CDATA        #IMPLIED> 
+   <!-- Expression enables this option -->
+   <!ATTLIST floatOption enabledBy     CDATA        #IMPLIED> 
+   <!-- Unlocked by an expression -->
+   <!ATTLIST floatOption unlockedBy    CDATA        #IMPLIED> 
 
 <!ELEMENT aliasOption EMPTY >
    <!-- Allows reference to an option (possibly) in another file -->
@@ -291,6 +309,7 @@ addChoices
    <!ATTLIST aliasOption hidden            (true)      #IMPLIED>
 
 <!ELEMENT stringOption EMPTY >
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST stringOption condition        CDATA        #IMPLIED>
    <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
    <!ATTLIST stringOption valueFormat      CDATA        #IMPLIED>
@@ -313,6 +332,7 @@ addChoices
    <!ATTLIST stringOption code             CDATA        #IMPLIED>
   
 <!ELEMENT numericListOption EMPTY >
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST numericListOption condition     CDATA        #IMPLIED>
    <!ATTLIST numericListOption constant      (false|true) #IMPLIED>
    <!ATTLIST numericListOption hidden        (false|true) #IMPLIED>
@@ -332,6 +352,7 @@ addChoices
 <!-- Signal to add a dependency -->
 
 <!ELEMENT pinListOption EMPTY >
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST pinListOption condition          CDATA        #IMPLIED>
    <!ATTLIST pinListOption constant           (false|true) #IMPLIED>
    <!ATTLIST pinListOption hidden             (false|true) #IMPLIED>
@@ -347,7 +368,7 @@ addChoices
    <!ATTLIST pinListOption derivedFrom        CDATA        #IMPLIED>
 
 <!ELEMENT clockSelectionOption ((choice)*) >
-   <!-- Condition evaluated during parsing that controls procsing of this variable -->
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST clockSelectionOption condition           CDATA        #IMPLIED>
    <!-- Locks varibale against change by user in GUI -->
    <!ATTLIST clockSelectionOption constant            (false|true) #IMPLIED>
@@ -391,7 +412,7 @@ addChoices
    <!ATTLIST clockSelectionOption disabledValue       CDATA        #IMPLIED>
    
 <!ELEMENT choiceOption ((choice)*) >
-   <!-- Condition evaluated during parsing that controls procsing of this variable -->
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST choiceOption condition           CDATA        #IMPLIED>
    <!-- Locks variable against change by user in GUI -->
    <!ATTLIST choiceOption constant            (false|true) #IMPLIED>
@@ -440,7 +461,7 @@ addChoices
    <!ATTLIST choiceOption disabledValue       CDATA        #IMPLIED>
    <!-- Set as error based on expression -->
    <!ATTLIST choiceOption errorIf             CDATA        #IMPLIED>
-   <!-- Enabled by an expression -->
+   <!-- Expression enables this option -->
    <!ATTLIST choiceOption enabledBy           CDATA        #IMPLIED>
    <!-- Unlocked by an expression -->
    <!ATTLIST choiceOption unlockedBy          CDATA        #IMPLIED>
@@ -452,23 +473,28 @@ addChoices
    <!ATTLIST choiceOption modify              CDATA        #IMPLIED>
    <!-- Allow variable to be replaced by later variable of same name -->
    <!ATTLIST choiceOption replace             CDATA        #IMPLIED>
+   
+   <!-- List of pin mappings if option disabled#Expression to enable pin map -->
    <!ATTLIST choiceOption disabledPinMap      CDATA        #IMPLIED>
 
 <!ELEMENT choice EMPTY >
-   <!ATTLIST choice value                     CDATA        #REQUIRED> <!-- Values may be a list e.g. 1,0,3 for use with valueFormat -->
+   <!-- Values may be a list e.g. 1,0,3 for use with valueFormat -->
+   <!ATTLIST choice value                     CDATA        #REQUIRED> 
    <!ATTLIST choice name                      CDATA        #REQUIRED>
    <!ATTLIST choice requiredPeripherals       CDATA        #IMPLIED>
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST choice condition                 CDATA        #IMPLIED>
    <!ATTLIST choice isDefault                 CDATA        #IMPLIED>
    <!ATTLIST choice ref                       CDATA        #IMPLIED>
    <!ATTLIST choice enum                      CDATA        #IMPLIED>
    <!ATTLIST choice code                      CDATA        #IMPLIED>
    <!ATTLIST choice hidden                    CDATA        #IMPLIED>
+   <!-- This choice is enabled by an expression -->
    <!ATTLIST choice enabledBy                 CDATA        #IMPLIED>
    <!ATTLIST choice pinMap                    CDATA        #IMPLIED>
 
 <!ELEMENT binaryOption (choice?, choice?) >
-   <!-- Condition evaluated during parsing that controls procsing of this variable -->
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST binaryOption condition           CDATA        #IMPLIED>
    <!-- Locks variable against change by user in GUI -->
    <!ATTLIST binaryOption constant            (false|true) #IMPLIED>
@@ -517,7 +543,7 @@ addChoices
    <!ATTLIST binaryOption disabledValue       CDATA        #IMPLIED>
    <!-- Set as error based on expression -->
    <!ATTLIST binaryOption errorIf             CDATA        #IMPLIED>
-   <!-- Enabled by an expression -->
+   <!-- Expression enables this option -->
    <!ATTLIST binaryOption enabledBy           CDATA        #IMPLIED>
    <!-- Unlocked by an expression -->
    <!ATTLIST binaryOption unlockedBy          CDATA        #IMPLIED>
@@ -525,11 +551,40 @@ addChoices
    <!ATTLIST binaryOption ref                 CDATA        #IMPLIED>
    <!-- Target variable dependent on this variable -->
    <!ATTLIST binaryOption target              CDATA        #IMPLIED>
-
+   <!-- Allows this option to modify previous option of same name 
+        The variable behind this option is shared -->
    <!ATTLIST binaryOption modify              CDATA        #IMPLIED>
+
+   <!-- List of pin mappings if option disabled#Expression to enable pin map -->
    <!ATTLIST binaryOption disabledPinMap      CDATA        #IMPLIED>
 
+<!-- Describes pin mapping for a peripheral -->
+<!ELEMENT pinMapOption (choice?, choice?) >
+   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!ATTLIST pinMapOption condition           CDATA        #IMPLIED>
+   <!-- Locks variable against change by user in GUI -->
+   <!ATTLIST pinMapOption constant            (false|true) #IMPLIED>
+   <!-- Variable is not visible in GUI -->
+   <!ATTLIST pinMapOption hidden              (false|true) #IMPLIED>
+   <!-- Display name for variable (derived from key if not provided -->
+   <!ATTLIST pinMapOption name                CDATA        #IMPLIED>
+   <!-- Unique key used to identify variable. Prepended with peripheral name if not absolute -->
+   <!ATTLIST pinMapOption key                 CDATA        #REQUIRED>
+   <!-- Replace existing variable quietly -->
+   <!ATTLIST pinMapOption replace             CDATA        #IMPLIED>
+   <!-- Expression enables this option -->
+   <!ATTLIST pinMapOption enabledBy           CDATA        #IMPLIED>
+    <!-- Equation that controls this variable -->
+   <!ATTLIST pinMapOption ref                 CDATA        #IMPLIED>
+   <!-- Allows this option to modify previous option of same name 
+        The variable behind this option is shared -->
+   <!ATTLIST pinMapOption modify              CDATA        #IMPLIED>
+
+   <!-- List of pin mappings if option disabled#Expression to enable pin map -->
+   <!ATTLIST pinMapOption disabledPinMap      CDATA        #IMPLIED>
+
 <!ELEMENT irqOption EMPTY >
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST irqOption condition     CDATA        #IMPLIED>
    <!ATTLIST irqOption constant      (false|true) #IMPLIED>
    <!ATTLIST irqOption hidden        (false|true) #IMPLIED>
@@ -546,8 +601,10 @@ addChoices
    <!ATTLIST irqOption derivedFrom   CDATA        #IMPLIED>
    <!ATTLIST irqOption typeName      CDATA        #IMPLIED> <!-- e.g. CallbackFunction -->
    <!ATTLIST irqOption valueFormat   CDATA        #IMPLIED> <!-- e.g. void (*%s)(void) -->
+   <!-- Expression enables this option -->
    <!ATTLIST irqOption enabledBy     CDATA        #IMPLIED>
-   <!-- Allow variable to be modified by later variable of same name -->
+   <!-- Allows this option to modify previous option of same name 
+        The variable behind this option is shared -->
    <!ATTLIST irqOption modify        CDATA        #IMPLIED>
    <!-- Allow variable to be replaced by later variable of same name -->
    <!ATTLIST irqOption replace        CDATA        #IMPLIED>
@@ -561,6 +618,7 @@ addChoices
 <!ELEMENT template (#PCDATA)* >
    <!ATTLIST template namespace                 (info|usbdm|all)  #IMPLIED >
    <!ATTLIST template key                       CDATA                   #IMPLIED >
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST template condition                 CDATA                   #IMPLIED>
    <!ATTLIST template codeGenCondition          CDATA                   #IMPLIED>
    <!ATTLIST template variables                 CDATA                   #IMPLIED>
@@ -573,12 +631,15 @@ addChoices
 <!ELEMENT setTemplate (#PCDATA)* >
    <!ATTLIST setTemplate namespace                 (info|usbdm|all)  #IMPLIED >
    <!ATTLIST setTemplate key                       CDATA                   #IMPLIED >
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST setTemplate condition                 CDATA                   #IMPLIED>
    <!ATTLIST setTemplate codeGenCondition          CDATA                   #IMPLIED>
    <!ATTLIST setTemplate variables                 CDATA                   #REQUIRED>
    <!ATTLIST setTemplate discardRepeats            (true)                  #IMPLIED>
-   <!ATTLIST setTemplate terminator                CDATA                   #IMPLIED> <!-- Terminator for initExpression -->
-   <!ATTLIST setTemplate separator                 CDATA                   #IMPLIED> <!-- Separator for initExpression -->
+   <!-- Terminator for initExpression -->
+   <!ATTLIST setTemplate terminator                CDATA                   #IMPLIED>
+    <!-- Separator for initExpression --> 
+   <!ATTLIST setTemplate separator                 CDATA                   #IMPLIED>
    <!ATTLIST setTemplate initExpressionOnSameLine  (true)                  #IMPLIED>
    <!ATTLIST setTemplate nonDefaultParams          CDATA                   #IMPLIED>
    <!ATTLIST setTemplate defaultParamValue         CDATA                   #IMPLIED>
@@ -591,12 +652,15 @@ addChoices
 <!ELEMENT constructorTemplate (#PCDATA)* >
    <!ATTLIST constructorTemplate namespace                 (info|usbdm|all)  #IMPLIED >
    <!ATTLIST constructorTemplate key                       CDATA                   #IMPLIED >
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST constructorTemplate condition                 CDATA                   #IMPLIED>
    <!ATTLIST constructorTemplate codeGenCondition          CDATA                   #IMPLIED>
    <!ATTLIST constructorTemplate variables                 CDATA                   #REQUIRED>
    <!ATTLIST constructorTemplate discardRepeats            (true)                  #IMPLIED>
-   <!ATTLIST constructorTemplate terminator                CDATA                   #IMPLIED> <!-- Terminator for initExpression -->
-   <!ATTLIST constructorTemplate separator                 CDATA                   #IMPLIED> <!-- Separator for initExpression -->
+    <!-- Terminator for initExpression -->
+   <!ATTLIST constructorTemplate terminator                CDATA                   #IMPLIED>
+    <!-- Separator for initExpression -->
+   <!ATTLIST constructorTemplate separator                 CDATA                   #IMPLIED>
    <!ATTLIST constructorTemplate initExpressionOnSameLine  (true)                  #IMPLIED>
    <!ATTLIST constructorTemplate nonDefaultParams          CDATA                   #IMPLIED>
    <!ATTLIST constructorTemplate defaultParamValue         CDATA                   #IMPLIED>
@@ -608,12 +672,15 @@ addChoices
 <!ELEMENT initialValueTemplate (#PCDATA|for)* >
    <!ATTLIST initialValueTemplate namespace                 (info|usbdm|all)  #IMPLIED >
    <!ATTLIST initialValueTemplate key                       CDATA                   #IMPLIED >
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST initialValueTemplate condition                 CDATA                   #IMPLIED>
    <!ATTLIST initialValueTemplate codeGenCondition          CDATA                   #IMPLIED>
    <!ATTLIST initialValueTemplate variables                 CDATA                   #REQUIRED>
    <!ATTLIST initialValueTemplate discardRepeats            (true)                  #IMPLIED>
-   <!ATTLIST initialValueTemplate terminator                CDATA                   #IMPLIED> <!-- Terminator for initExpression -->
-   <!ATTLIST initialValueTemplate separator                 CDATA                   #IMPLIED> <!-- Separator for initExpression -->
+    <!-- Terminator for initExpression -->
+   <!ATTLIST initialValueTemplate terminator                CDATA                   #IMPLIED>
+    <!-- Separator for initExpression -->
+   <!ATTLIST initialValueTemplate separator                 CDATA                   #IMPLIED>
    <!ATTLIST initialValueTemplate initExpressionOnSameLine  (true)                  #IMPLIED>
    <!ATTLIST initialValueTemplate tooltipPadding            CDATA                   #IMPLIED>
    <!ATTLIST initialValueTemplate linePadding               CDATA                   #IMPLIED>
@@ -631,14 +698,19 @@ addChoices
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
    <!ATTLIST clockCodeTemplate namespace                 (info|usbdm|all)  #IMPLIED >
    <!ATTLIST clockCodeTemplate key                       CDATA                   #IMPLIED >
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST clockCodeTemplate condition                 CDATA                   #IMPLIED>
    <!ATTLIST clockCodeTemplate variable                  CDATA                   #IMPLIED>
    <!ATTLIST clockCodeTemplate variables                 CDATA                   #IMPLIED>
    <!ATTLIST clockCodeTemplate discardRepeats            (true)                  #IMPLIED>
-   <!ATTLIST clockCodeTemplate returnFormat              CDATA                   #IMPLIED> <!-- Format for return value in generated case statement -->
-   <!ATTLIST clockCodeTemplate initExpressionOnSameLine  (true)                  #IMPLIED> <!-- No newline before initExpression (suitable fora single initialisation value) -->
-   <!ATTLIST clockCodeTemplate tooltipPadding            CDATA                   #IMPLIED> <!-- Padding applied to tooltips (e.g. "x*xx") -->
-   <!ATTLIST clockCodeTemplate linePadding               CDATA                   #IMPLIED> <!-- Padding applied to start of line -->
+   <!-- Format for return value in generated case statement -->
+   <!ATTLIST clockCodeTemplate returnFormat              CDATA                   #IMPLIED> 
+   <!-- No newline before initExpression (suitable fora single initialisation value) -->
+   <!ATTLIST clockCodeTemplate initExpressionOnSameLine  (true)                  #IMPLIED> 
+   <!-- Padding applied to tooltips (e.g. "x*xx") -->
+   <!ATTLIST clockCodeTemplate tooltipPadding            CDATA                   #IMPLIED>
+   <!-- Padding applied to start of line --> 
+   <!ATTLIST clockCodeTemplate linePadding               CDATA                   #IMPLIED>
    <!ATTLIST clockCodeTemplate params                    CDATA                   #IMPLIED>
    <!ATTLIST clockCodeTemplate codeGenCondition          CDATA                   #IMPLIED>
    <!ATTLIST clockCodeTemplate useDefinitions            CDATA                   #IMPLIED>
@@ -654,14 +726,17 @@ addChoices
 <!ELEMENT signals EMPTY >
    <!ATTLIST signals name        CDATA          "" >
    <!ATTLIST signals optional    (false|true)   #IMPLIED>
+   <!-- Expression enables this option -->
    <!ATTLIST signals enabledBy   CDATA          #IMPLIED>
    <!ATTLIST signals locked      (false|true)   #IMPLIED>
+   <!ATTLIST signals filter      CDATA          #IMPLIED>
 
 <!-- List of actions to be applied to a project -->
 <!ELEMENT projectActionList ((deleteResource|copy|constant|createFolder)*) >
    <!ATTLIST projectActionList id            ID            #REQUIRED>
    <!ATTLIST projectActionList root          CDATA         #IMPLIED>
    <!ATTLIST projectActionList doOnceOnly    (true|false)  "true">
+   <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST projectActionList condition     CDATA         #IMPLIED>
       
 <!-- Exclude/include source file in Eclipse project -->
@@ -684,12 +759,17 @@ addChoices
 
 <!-- File to be copied to a project -->
 <!ELEMENT copy EMPTY >
+   <!--  Path of source -->
    <!ATTLIST copy source               CDATA #REQUIRED>
+   <!--  Path of destination -->
    <!ATTLIST copy target               CDATA #REQUIRED>
    <!ATTLIST copy type                 CDATA #IMPLIED>
    <!ATTLIST copy sourcePathType       (absolute|relative|unknown) #IMPLIED>
+   <!-- Replace macros ($(name)) when copy file  -->
    <!ATTLIST copy macroReplace         (true|false) "true">
+   <!-- Target file may be overwritten without error -->
    <!ATTLIST copy overwrite            (true|false) #IMPLIED>
+   <!-- Target file will be marked as derived -->
    <!ATTLIST copy derived              (true|false) #IMPLIED>
    
 <!ELEMENT constant EMPTY >
@@ -702,7 +782,7 @@ addChoices
    <!-- Description of variable -->
    <!ATTLIST constant description  CDATA                          #IMPLIED>
    <!-- Type of variable -->
-   <!ATTLIST constant type         (String|Boolean|Integer|Float) "string">
+   <!ATTLIST constant type         (String|Boolean|Long|Float) "string">
    <!-- If true indicates the constant may already exist and this constant is discarded -->
    <!ATTLIST constant weak         (true)                         #IMPLIED>
    <!-- Replaces any existing constant of the same key -->

@@ -28,7 +28,7 @@
 
 <!-- GENERAL SETTINGS -->
 
-   <title description="------- General Settings -------" toolTip="" />
+   <title description="General Settings" toolTip="" />
 
    <if condition="&quot;$(_BASENAME)&quot;==&quot;$(_NAME)&quot;">
       <!--
@@ -199,7 +199,7 @@
 
    <if condition="@peripheralUsesInterrupts" >
 
-      <title description="------- Interrupts -------" />
+      <title description="Interrupts" />
 
       <!--
       Patterns for pattern and classHandler
@@ -459,7 +459,7 @@
 
    <constant key="class_present" type="Boolean"  value = "true"   />
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport&amp;&amp;/HARDWARE/generateDebugDefinitions" ><![CDATA[
       \t//! Indicates $(_NAME) is available
       \t#define USBDM_$(_NAME)_AVAILABLE
       \t\n

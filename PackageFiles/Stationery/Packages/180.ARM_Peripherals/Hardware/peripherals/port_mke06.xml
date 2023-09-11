@@ -8,7 +8,7 @@
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
    <xi:include href="_enablePeripheral.xml" />
-   <title description="------------------------------------------" />
+   <title />
 
    <!-- ************* IOFLT0 and IOFLT1 ****************** -->
    <category name="Filters" description="Filters for pins" >
@@ -718,15 +718,18 @@
    ]]></template>
 
    <template key="/PORT/PinIndex" namespace="all" >
-      <![CDATA[
-         /**
-          * Port pin index
-          *
-          * Global indices for port pins
-          */
-         enum class PinIndex : int8_t {
-            \tINVALID_PIN   = -1,  // Invalid pin
-            \tMIN_PIN_INDEX = 0,   // First available pin (inclusive)\n
+   <![CDATA[
+      /**
+       * Port pin index
+       *
+       * Global indices for port pins
+       */
+      enum class PinIndex : int8_t {
+         \tINVALID_PCR  = -2,   // Signal does not exist
+         \tUNMAPPED_PCR = -3,   // Signal is not currently mapped to a pin
+         \tFIXED_NO_PCR = -4,   // Signal has mapping to fixed pin
+         \tMIN_PIN_INDEX = 0,   // First available pin (inclusive)
+         \tUnassigned    = UNMAPPED_PCR,\n
    ]]></template>
    <for keys=   "    field             : Name : pinIndex"
         values= "/PORT/port_pue0_ptape :  A   :   0;

@@ -12,7 +12,7 @@
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
    <xi:include href="_enablePeripheral.xml"  />
-   <title description="------------------------------------------" />
+   <title />
 
 <!--
     * General substitutions
@@ -157,16 +157,8 @@
                The Voutput range is from Vin/64 to Vin, the step is Vin/64"
    />
 
-   <!-- ************* C2 ****************** -->
-
-   <binaryOption key="acmp_cs_acope" condition="acmp_cs_acope_present"
-      enabledBy="acmp_cs_ace"
-      enumStem="AcmpOutputPin"
-      toolTip="Allows the ACMP output to be placed onto external pin"
-      description="ACMP Output Pin Enable" >
-      <choice name="Pin disabled"  value="0" enum="Disabled" pinMap="ACMP$(_instance)_OUT," />
-      <choice name="Pin enabled"   value="1" enum="Enabled"  pinMap="=&quot;ACMP$(_instance)_OUT,&quot;+outMap" />
-   </binaryOption >
+   <!-- ************* Input/Output ****************** -->
+   <title description="Input/Output" />
 
    <bitmaskOption key="acmp_c2_acipe" condition="acmp_c2_acipe_present"
       enabledBy="acmp_cs_ace"
@@ -181,6 +173,16 @@
       pinMap="=&quot;ACMP$(_instance)_IN%i:&quot;+pinMap"
       value="0"
    />
+   
+   <binaryOption key="acmp_cs_acope" condition="acmp_cs_acope_present"
+      enabledBy="acmp_cs_ace"
+      enumStem="AcmpOutputPin"
+      toolTip="Allows the ACMP output to be placed onto external pin"
+      description="ACMP Output Pin Enable" >
+      <choice name="Pin disabled"  value="0" enum="Disabled" pinMap="ACMP$(_instance)_OUT," />
+      <choice name="Pin enabled"   value="1" enum="Enabled"  pinMap="=&quot;ACMP$(_instance)_OUT,&quot;+outMap" />
+   </binaryOption >
+
    <!-- enum generation only-->
    <choiceOption key="acmp_c2_inputenable"
       derived="true"

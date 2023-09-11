@@ -8,19 +8,19 @@
    <constant key="isGeneratedByDefault"     type="Boolean" value="false" />
    <constant key="isSupportedinStartup"     type="Boolean" value="true" />
    <xi:include href="_enablePeripheral.xml" />
-   <title description="------------------------------------------" />
+   <title />
 
    <xi:include href="_simCommon.xml" />
 
    <!--                                   RUN        -->
-   <constant key="ICSOUTCLK_max"  value="50MHz"  type="Integer"    hidden="false" />
-   <constant key="ICSFLLCLK_max"  value="50MHz"  type="Integer"    hidden="false" />
-   <constant key="I2S_max"        value="25MHz"  type="Integer"    hidden="false" />
-   <constant key="LPUART_max"     value="48MHz"  type="Integer"    hidden="false" />
-   <constant key="TPM_max"        value="48MHz"  type="Integer"    hidden="false" />
+   <constant key="ICSOUTCLK_max"  value="50MHz"  type="Long"    hidden="false" />
+   <constant key="ICSFLLCLK_max"  value="50MHz"  type="Long"    hidden="false" />
+   <constant key="I2S_max"        value="25MHz"  type="Long"    hidden="false" />
+   <constant key="LPUART_max"     value="48MHz"  type="Long"    hidden="false" />
+   <constant key="TPM_max"        value="48MHz"  type="Long"    hidden="false" />
 
    <!-- Pin mapping for ADC0 -->
-   <constant key="/ADC0/pinMap" type="String" 
+   <constant key="/ADC0/pinMap" type="String"
       value="&quot;PTA0,PTA1,PTA6,PTA7,PTB0,PTB1,PTB2,PTB3,PTC0,PTC1,PTC2,PTC3,PTF4,PTF5,PTF6,PTF7&quot;" />
 
    <!-- Pin mapping for ACMP0 -->
@@ -134,7 +134,48 @@
       </aliasCategoryOption>
    </for>
 
-   <title description="------------------------------------------" />
+   <title />
+
+   <category name="Derived Pin Mappings" description="Mapping of signals controlled by multiple sources" >
+      <aliasOption key="/FTM0/enablePeripheralSupport"   constant="false" />
+      <aliasOption key="sim_pinsel_ftm0clkps"            constant="false" />
+      <aliasOption key="/FTM0/ftm_sc_clks"               constant="false" />
+      <aliasOption key="/FTM1/enablePeripheralSupport"   constant="false" />
+      <aliasOption key="sim_pinsel0_ftm1clkps"            constant="false" />
+      <aliasOption key="/FTM1/ftm_sc_clks"               constant="false" />
+      <aliasOption key="/FTM2/enablePeripheralSupport"   constant="false" />
+      <aliasOption key="sim_pinsel0_ftm2clkps"            constant="false" />
+      <aliasOption key="/FTM2/ftm_sc_clks"               constant="false" />
+      <aliasOption key="/PWT/enablePeripheralSupport"    constant="false" />
+      <aliasOption key="sim_pinsel0_pwtclkps"             constant="false" />
+      <aliasOption key="/PWT/pwt_r1_pclks"               constant="false" />
+
+      <binaryOption key="sim_pinsel_tclk1"
+         ref="((sim_pinsel0_ftm0clkps==false)&amp;&amp;/FTM0/enablePeripheralSupport&amp;&amp;(/FTM0/ftm_sc_clks==3))||
+              ((sim_pinsel0_ftm1clkps==false)&amp;&amp;/FTM1/enablePeripheralSupport&amp;&amp;(/FTM1/ftm_sc_clks==3))||
+              ((sim_pinsel0_ftm2clkps==false)&amp;&amp;/FTM2/enablePeripheralSupport&amp;&amp;(/FTM2/ftm_sc_clks==3))||
+              ((sim_pinsel0_pwtclkps==false)&amp;&amp;/PWT/enablePeripheralSupport&amp;&amp;(/PWT/pwt_r1_pclks==true))
+              ##Unmapped when unused by FTM0, FTM1, FTM2, PWT"
+         disabledPinMap="TCLK1,"
+         constant="true"
+         derived="true"
+         description="TCLK1 Pin Select" >
+         <choice name="TCLK1 unmapped"  value="0" pinMap="TCLK1" />
+         <choice name="TCLK1 -> PTA5"   value="1" pinMap="TCLK1,PTA5,"  />
+      </binaryOption>
+
+      <binaryOption key="sim_pinsel_tclk2"
+         ref="((sim_pinsel_ftm0clkps==true)&amp;&amp;/FTM0/enablePeripheralSupport&amp;&amp;(/FTM0/ftm_sc_clks==3))||
+              ((sim_pinsel_ftm2clkps==true)&amp;&amp;/FTM2/enablePeripheralSupport&amp;&amp;(/FTM2/ftm_sc_clks==3))||
+              ((sim_pinsel_pwtclkps==true)&amp;&amp;/PWT/enablePeripheralSupport&amp;&amp;(/PWT/pwt_r1_pclks==true))"
+         disabledPinMap="TCLK2,"
+         constant="true"
+         derived="true"
+         description="TCLK2 Pin Select" >
+         <choice name="TCLK2 unmapped"  value="0" pinMap="TCLK2" />
+         <choice name="TCLK2 -> PTB2"   value="1" pinMap="TCLK2,PTB1,"  />
+      </binaryOption>
+   </category>
 
    <category name="Control Signals" description="Mapping of control signals" >
       <binaryOption key="sim_scgc_swd" condition="sim_scgc_swd_present"
@@ -315,7 +356,7 @@
          <choice name="Generates trigger"  value="1" enum="GenerateFtmTrigger" isDefault="true" />
       </binaryOption>
 
-      <title description="----- FTM 0 -----"/>
+      <title description="FTM 0"/>
 
       <binaryOption key="sim_scgc_ftm0" condition="sim_scgc_ftm0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
@@ -377,7 +418,7 @@
          <choice name="RTC overflow used as input channel"  value="1" enum="RtcOverflowUsedAsInputChannel" />
       </binaryOption>
 
-      <title description="----- FTM 1 -----"/>
+      <title description="FTM 1"/>
 
       <binaryOption key="sim_scgc_ftm1" condition="sim_scgc_ftm1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
@@ -412,7 +453,7 @@
          <choice name="PTE7"        value="1" enum="Pte7" pinMap="FTM1_CH1,PTE7" />
       </binaryOption>
 
-      <title description="----- FTM 2 -----"/>
+      <title description="FTM 2"/>
 
       <binaryOption key="sim_scgc_ftm2" condition="sim_scgc_ftm2_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
@@ -489,7 +530,7 @@
 
    <category name="I2C" description="Peripheral  options and clock enable" >
 
-      <title description="----- I2C 0 -----"/>
+      <title description="I2C 0"/>
 
       <binaryOption key="sim_scgc_i2c0" condition="sim_scgc_i2c0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
@@ -526,7 +567,7 @@
          <choice name="4-wire interface enabled"   value="1" enum="Enabled"  />
       </binaryOption>
 
-      <title description="----- I2C 1 -----"/>
+      <title description="I2C 1"/>
 
       <binaryOption key="sim_scgc_i2c1" condition="sim_scgc_i2c1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
@@ -674,7 +715,7 @@
 
    <category name="SPI" description="Peripheral  options and clock enable" >
 
-      <title description="----- SPI 0 -----"/>
+      <title description="SPI 0"/>
 
       <binaryOption key="sim_scgc_spi0" condition="sim_scgc_spi0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
@@ -693,7 +734,7 @@
          <choice name="PTE0,PTE1,PTE2,PTE3 mapped to SPI0 pins"  value="1" enum="Pte0Pte1Pte2Pte3MappedToSpi0" pinMap="SPI0_SCK,PTE0;SPI0_MOSI,PTE1;SPI0_MISO,PTE2;SPI0_PCS,PTE3" />
       </binaryOption>
 
-      <title description="----- SPI 1 -----"/>
+      <title description="SPI 1"/>
 
       <binaryOption key="sim_scgc_spi1" condition="sim_scgc_spi1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
@@ -713,7 +754,7 @@
    </category>
 
    <category name="UART" description="Peripheral  options and clock enable" >
-      <title description="----- UART 0 -----"/>
+      <title description="UART 0"/>
 
       <binaryOption key="sim_scgc_uart0" condition="sim_scgc_uart0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
@@ -752,7 +793,7 @@
          <choice name="Reserved"               value="3" enum="Reserved" />
       </choiceOption>
 
-      <title description="----- UART 1 -----"/>
+      <title description="UART 1"/>
 
       <binaryOption key="sim_scgc_uart1" condition="sim_scgc_uart1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
@@ -770,7 +811,7 @@
          <choice name="PTF3,PTF2 mapped to Tx,Rx"  value="1" enum="MappedToPtf3Ptf2" pinMap="UART1_TX,PTF3;UART1_RX,PTF2" />
       </binaryOption>
 
-      <title description="----- UART 2 -----"/>
+      <title description="UART 2"/>
 
       <binaryOption key="sim_scgc_uart2" condition="sim_scgc_uart2_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"

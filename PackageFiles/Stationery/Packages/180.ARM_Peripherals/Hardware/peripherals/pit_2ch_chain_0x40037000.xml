@@ -13,9 +13,9 @@
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="false" />
    <xi:include href="_enablePeripheral.xml" />
-   <title description="------------------------------------------" />
+   <title />
 
-   <constant key="numChannels" value="2" type="Integer" />
+   <constant key="numChannels" value="2" type="Long" />
 
 <!--
     * General substitutions
@@ -135,7 +135,7 @@
    </binaryOption>
 
    <for keys="ch" dim="numChannels" >
-      <title description="----- Channel %(ch) -----" />
+      <title description="Channel %(ch)" />
 
       <binaryOption key="pit_tctrl_ten[%(ch)]"  condition="pit_tctrl_tie_present"
          enabledBy="enablePeripheralSupport"

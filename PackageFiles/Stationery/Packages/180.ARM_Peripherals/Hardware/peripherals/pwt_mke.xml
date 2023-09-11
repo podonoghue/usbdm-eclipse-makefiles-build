@@ -12,7 +12,7 @@
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
    <xi:include href="_enablePeripheral.xml"  />
-   <title description="------------------------------------------" />
+   <title />
 
 <!--
     * General substitutions
@@ -622,6 +622,8 @@
 
    <!-- ************* Signal mapping ****************** -->
    <category name="SIM" description="Pin mapping">
+      <aliasOption key="/SIM/sim_scgc_$(_name)"             constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel_$(_name)clkps"      constant="false" optional="true" />
       <for keys="ch" dim="4" >
          <aliasOption key="/SIM/sim_pinsel_$(_name)in%(ch)ps"  constant="false" optional="true" />
          <aliasOption key="/SIM/sim_pinsel0_$(_name)in%(ch)ps" constant="false" optional="true" />
@@ -630,5 +632,6 @@
    </category>
 
    <signals enabledBy="enablePeripheralSupport" />
+   <signals name="FTM" />
 
 </peripheralPage>

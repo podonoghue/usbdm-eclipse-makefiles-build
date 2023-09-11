@@ -43,7 +43,7 @@
          so that a reasonable resolution is available for PWM duty-cycle"
       value="100" min="0" max="65535" />
 
-   <title description="------- Clocking -------" />
+   <title description="Clocking" />
 
   <category name="Advanced" description="SIM controlled options">
       <for keys="p" values="0;1">
@@ -202,7 +202,7 @@
    <!--  **************** Channels **************** -->
 
    <for keys="ch" dim="NumChannels">
-      <title description="------- TPM Channel %(ch) -------" toolTip="" />
+      <title description="TPM Channel %(ch)" />
 
       <choiceOption key="tpm_cnsc_mode[%(ch)]" condition="tpm_combine_decap0_present&amp;&amp;tpm_cnsc_ms_present&amp;&amp;tpm_cnsc_els_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
