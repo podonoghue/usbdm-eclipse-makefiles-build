@@ -6,7 +6,7 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <aliasOption key="/PCC/pcc_lpit$(_instance)" constant="false" optional="true" />
+   <aliasOption key="/PCC/pcc_lpit$(_instance)" locked="false" optional="true" />
 
    <intOption key="lpit_ldval" description="Reload value"
       toolTip="Value loaded in timer register on roll-over"

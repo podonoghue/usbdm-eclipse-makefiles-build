@@ -52,7 +52,7 @@
       key="Pin Mapping"
       value="------- Pin Mapping -------"
       description="Pin Mapping"
-      constant="true"
+      locked="true"
       />
 
    <binaryOption key="mapPinsOnEnable" condition="/PCR/mux_present"

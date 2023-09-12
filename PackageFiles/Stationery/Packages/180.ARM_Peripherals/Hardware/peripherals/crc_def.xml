@@ -14,8 +14,8 @@
 
    <!-- ************* Signal mapping ****************** -->
    <category name="SIM" description="Pin mapping and clock enables">
-      <aliasOption key="/SIM/sim_scgc_$(_name)"         constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_scgc_$(_basename)"     constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc_$(_name)"         locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc_$(_basename)"     locked="false" optional="true" />
    </category>
 
    <template><![CDATA[

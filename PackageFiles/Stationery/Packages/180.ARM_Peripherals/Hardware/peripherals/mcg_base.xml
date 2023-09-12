@@ -48,7 +48,7 @@
    </binaryOption>
 
    <binaryOption key="enableClockConfiguration[0]"
-      constant="true"
+      locked="true"
       hidden="true"
       enabledBy="enablePeripheralSupport" >
       <choice value="false" name="Disabled" />
@@ -130,7 +130,7 @@
          <if condition="%(n)==0" >
             <aliasOption key="enableClockConfiguration[%(n)]" />
          <else/>
-            <aliasOption key="enableClockConfiguration[%(n)]" constant="false" />
+            <aliasOption key="enableClockConfiguration[%(n)]" locked="false" />
          </if>
 
          <graphic key="Clock configuration GUI[%(n)]"
@@ -757,22 +757,22 @@
 
          </graphic>
 
-         <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" constant="false" />
+         <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" locked="false" />
 
          <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
-            <aliasOption key="oscMode"                       constant="false"  optional="true" />
-            <aliasOption key="/OSC0/rsim_control_rf_osc_en"  constant="false"  optional="true" />
-            <aliasOption key="/OSC0/osc_input_freq"          constant="false"  />
+            <aliasOption key="oscMode"                       locked="false"  optional="true" />
+            <aliasOption key="/OSC0/rsim_control_rf_osc_en"  locked="false"  optional="true" />
+            <aliasOption key="/OSC0/osc_input_freq"          locked="false"  />
             <aliasOption key="/OSC0/osc_clock"               optional="true"   />
-            <aliasOption key="/OSC0/osc_div_erps"            optional="true" constant="false" />
+            <aliasOption key="/OSC0/osc_div_erps"            optional="true" locked="false" />
             <aliasOption key="/OSC0/oscer_clock"      />
          </category>
 
          <category name="OSC1 (Real Time Clock)" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
-            <aliasOption key="/RTC/osc_input_freq"        optional="true" constant="false"  />
-            <aliasOption key="/RTC/rtc_cr_osce"           optional="true" constant="false"/>
+            <aliasOption key="/RTC/osc_input_freq"        optional="true" locked="false"  />
+            <aliasOption key="/RTC/rtc_cr_osce"           optional="true" locked="false"/>
             <aliasOption key="/RTC/osc_clock"             optional="true"/>
-            <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
+            <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" locked="false" />
             <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
          </category>
 
@@ -782,7 +782,7 @@
             <intOption key="system_slow_irc_clock[%(n)]"
                enabledBy="(/SMC/smc_pmctrl_runm[%(n)]!=VLPR) &amp;&amp;
                           (mcg_c1_irclken[%(n)]||mcg_c1_irefs[%(n)])##Disabled in VLPR or when not in use"
-               constant="true"
+               locked="true"
                derived="true"
                origin="Slow IRC"
                units="Hz"
@@ -793,7 +793,7 @@
 
             <intOption key="system_fast_irc_clock[%(n)]"
                enabledBy="mcg_c1_irclken[%(n)]||mcg_c1_irefs[%(n)]##Disabled as not in use"
-               constant="true"
+               locked="true"
                derived="true"
                origin="Fast IRC"
                units="Hz"
@@ -962,7 +962,7 @@
                <choice value="7" enum="DivBy128" ref="(system_fast_irc_clock[%(n)])/128" name="/128" />
             </choiceOption>
 
-            <intOption key="firc_divided_clock[%(n)]" units="Hz" constant="true" derived="true" />
+            <intOption key="firc_divided_clock[%(n)]" units="Hz" locked="true" derived="true" />
 
             <binaryOption key="mcg_c2_ircs[%(n)]"
                enumStem="McgIrClkSrc"
@@ -973,7 +973,7 @@
                <choice value="1" ref="firc_divided_clock[%(n)]"    enum="Fast" name="Fast internal reference clock" code="getFastInternalReferenceClock()" isDefault="true" />
             </binaryOption>
 
-            <intOption key="system_mcgirclk_ungated[%(n)]" units="Hz" constant="true" derived="true" />
+            <intOption key="system_mcgirclk_ungated[%(n)]" units="Hz" locked="true" derived="true" />
 
             <binaryOption key="mcg_c1_irclken[%(n)]"
                enumStem="McgIrClkEn"
@@ -995,7 +995,7 @@
 
             <intOption key="system_mcgirclk_clock[%(n)]"
                derived="true"
-               constant="true"
+               locked="true"
                units="Hz"
                description="Frequency of Internal Reference [MCGIRCLK] "
                toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock/fcrdiv" />
@@ -1015,7 +1015,7 @@
             <intOption key="pll0InputFrequency[%(n)]" condition="oscsel_pll_modified_select"
                ref="(mcg_c7_oscsel[%(n)]==1)?(/OSC0/osc_clock):(mcg_erc_clock[%(n)])"
                derived="true"
-               constant="true"
+               locked="true"
                units="Hz"
                description="PLL0 Input clock frequency"
                toolTip="Frequency of input to PLL"
@@ -1024,7 +1024,7 @@
             <intOption key="pll0InputFrequency[%(n)]" condition="!oscsel_pll_modified_select"
                ref="mcg_erc_clock[%(n)]"
                derived="true"
-               constant="true"
+               locked="true"
                units="Hz"
                description="PLL0 Input clock frequency"
                toolTip="Frequency of input to PLL"
@@ -1041,7 +1041,7 @@
             <intOption key="pll0InputFrequency[%(n)]"
                ref="mcg_erc_clock[%(n)]"
                derived="true"
-               constant="true"
+               locked="true"
                units="Hz"
                description="PLL0 Input clock frequency"
                toolTip="Frequency of input to PLL"
@@ -1050,7 +1050,7 @@
          </if>
 
          <intOption key="mcg_erc_clock[%(n)]"
-            constant="true"
+            locked="true"
             units="Hz"
             derived="true"
             description="Frequency of MCG External reference"
@@ -1062,7 +1062,7 @@
             <binaryOption key="fll_enabled[%(n)]"
                ref="(mcgClockMode[%(n)]!=@BLPI)&amp;&amp;(mcgClockMode[%(n)]!=@BLPE)"
                derived="true"
-               constant="true"
+               locked="true"
                description="FLL State"
                toolTip="Determined from clock mode selected"
                disabledValue="0" >
@@ -1072,7 +1072,7 @@
 
             <choiceOption key="mcg_c2_range0[%(n)]" condition="mcg_c2_range0_present"
                enumStem="McgRange0"
-               constant="true"
+               locked="true"
                description="Frequency Range Select"
                toolTip="Selects the frequency range for the crystal oscillator if used.\n
                         It may determine the divider for FLL input clock">
@@ -1087,7 +1087,7 @@
                target="mcg_erc_clock_divided[%(n)]"
                enumStem="McgFllPrescale"
                derived="true"
-               constant="true"
+               locked="true"
                description="FLL External Reference Divider"
                origin="Determined by FLL input frequency constraints and external reference clock frequency"
                toolTip="Selects the amount to divide down the external reference clock for the FLL.\n
@@ -1119,7 +1119,7 @@
                enabledBy="!mcg_c1_irefs[%(n)]##Disabled by IREFS"
                target="mcg_erc_clock_divided[%(n)]"
                enumStem="McgFllPrescale"
-               constant="true"
+               locked="true"
                description="FLL External Reference Divider"
                origin="Determined by FLL input frequency constraints and external reference clock frequency"
                toolTip="Selects the amount to divide down the external reference clock for the FLL.\n
@@ -1149,7 +1149,7 @@
             <intOption key="mcg_erc_clock_divided[%(n)]"
                enabledBy="!mcg_c1_irefs[%(n)]##Disabled by IREFS"
                derived="true"
-               constant="true"
+               locked="true"
                units="Hz"
                description="Divided external reference clock"
                toolTip="mcg_erc_clock after FRDIV"
@@ -1161,7 +1161,7 @@
                enumStem="McgIref"
                target="irefs_clock[%(n)]"
                derived="true"
-               constant="true"
+               locked="true"
                description="Internal Reference Select"
                disabledValue="1"
                toolTip="Selects the reference clock source for the FLL\n
@@ -1181,7 +1181,7 @@
                hidden="true"
                units="Hz"
                derived="true"
-               constant="true"
+               locked="true"
                description="MCG Fixed Frequency Clock [MCGFFCLK]"
                toolTip="Used as input clock to FLL and available to some peripherals\n
                         Derived from External Reference Clock or Slow IRC"
@@ -1189,7 +1189,7 @@
 
             <intOption key="fllInputFrequency[%(n)]"
                derived="true"
-               constant="true"
+               locked="true"
                units="Hz"
                description="FLL Input clock frequency"
                toolTip="Frequency of input to FLL"
@@ -1218,7 +1218,7 @@
             <choiceOption key="mcg_c4_drst_drs[%(n)]"
                enumStem="McgFllLockRange"
                derived="true"
-               constant="true"
+               locked="true"
                description="DCO Range Select"
                toolTip="Frequency range for the FLL output, DCOOUT\n
                         This is determined from the FLL input and output clock frequencies" >
@@ -1241,7 +1241,7 @@
 
             <binaryOption key="pll0Enabled[%(n)]"
                derived="true"
-               constant="true"
+               locked="true"
                description="PLL0 State"
                toolTip="Determined from clock mode selected or enabled by mcg_c5_pllclken0" >
                <choice value="0" name="PLL Inactive" />
@@ -1268,7 +1268,7 @@
             <intOption key="mcg_c5_prdiv0[%(n)]"
                enabledBy="pll0Enabled[%(n)]"
                derived="true"
-               constant="true"
+               locked="true"
                description="PLL0 External Reference Divider"
                toolTip="Determines the amount to divide down the external reference clock for PLL0\n
                         This value is calculated from PLL0 input and output clock frequencies"
@@ -1277,7 +1277,7 @@
             <intOption key="mcg_c6_vdiv0[%(n)]"
                enabledBy="pll0Enabled[%(n)]"
                derived="true"
-               constant="true"
+               locked="true"
                description="PLL0 VCO Divider (VDIV0)"
                toolTip="Determines the multiplication factor for the reference clock for PLL0.\n
                         This value is calculated from PLL0 input and output clock frequencies"
@@ -1285,9 +1285,9 @@
          </category>
 
          <category name="USB PLL1" description="USB PLL1 Settings">
-            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_frac[%(n)]"      constant="false"  optional="true"/>
+            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_frac[%(n)]"      locked="false"  optional="true"/>
             <aliasOption key="/USBPHY1/internal_pfd_clock_frequency[%(n)]"                   optional="true"/>
-            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_clk_sel[%(n)]"   constant="false"  optional="true"/>
+            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_clk_sel[%(n)]"   locked="false"  optional="true"/>
             <aliasOption key="/SIM/usb1pfdclk_Clock[%(n)]"                                   optional="true"/>
          </category>
 
@@ -1303,7 +1303,7 @@
          <!-- system_mcgpllclk_clock = pll0OutputFrequency directly -->
          <stringOption key="mcg_c11_pllcs_fixed[%(n)]" condition="!mcg_c11_pllcs_present"
             hidden="true"
-            constant="true"
+            locked="true"
             value="pll0OutputFrequency[%(n)]"
             target="system_mcgpllclk_clock[%(n)]" />
 
@@ -1313,13 +1313,13 @@
             max="/SIM/MCGPLLCLK_max[/SMC/smc_pmctrl_runm[%(n)]]"
             toolTip="Output of PLL"
             derived="true"
-            constant="true"
+            locked="true"
             units="Hz"
             description="PLL Output clock frequency" />
 
-         <aliasOption key="/SIM/sim_sopt2_pllfllsel[%(n)]" constant="false" />
+         <aliasOption key="/SIM/sim_sopt2_pllfllsel[%(n)]" locked="false" />
 
-         <aliasOption key="/SIM/sim_clkdiv3_pllfll[%(n)]"                  optional="true" constant="false" />
+         <aliasOption key="/SIM/sim_clkdiv3_pllfll[%(n)]"                  optional="true" locked="false" />
          <aliasOption key="/SIM/system_peripheral_postdivider_clock[%(n)]" optional="true"/>
 
          <aliasOption key="/SIM/system_peripheral_clock[%(n)]" />
@@ -1336,24 +1336,24 @@
             max="/SIM/MCGOUTCLK_max[/SMC/smc_pmctrl_runm[%(n)]]"
             min="1"
             derived="true"
-            constant="true"
+            locked="true"
             units="Hz"
             description="System MCG Output Clock [MCGOUTCLK]"
             toolTip="MCG Main clock output"
             value="120000000"
             disabledValue="0" />
 
-         <aliasOption key="/SIM/system_core_clock[%(n)]"    constant="false" />
-         <aliasOption key="/SIM/system_bus_clock[%(n)]"     constant="false" />
-         <aliasOption key="/SIM/system_flexbus_clock[%(n)]" constant="false"  optional="true" />
-         <aliasOption key="/SIM/system_flash_clock[%(n)]"   constant="false"  optional="true" />
+         <aliasOption key="/SIM/system_core_clock[%(n)]"    locked="false" />
+         <aliasOption key="/SIM/system_bus_clock[%(n)]"     locked="false" />
+         <aliasOption key="/SIM/system_flexbus_clock[%(n)]" locked="false"  optional="true" />
+         <aliasOption key="/SIM/system_flash_clock[%(n)]"   locked="false"  optional="true" />
 
          <category name="Device Parameters" description="Register values">
             <category name="MCG_C1" description="MCG Control Register 1">
                <choiceOption key="mcg_c1_clks[%(n)]"
                   target="system_mcgoutclk_clock[%(n)]"
                   derived="true"
-                  constant="true"
+                  locked="true"
                   description="MCGOUTCLK Clock Source Select"
                   toolTip="Selects the clock source for MCGOUTCLK\n
                            This option is determined by the Clock Mode selection" >
@@ -1377,7 +1377,7 @@
 
                <binaryOption key="mcg_c2_lp[%(n)]"
                   derived="true"
-                  constant="true"
+                  locked="true"
                   description="Low Power Select"
                   toolTip="Whether FLL or PLL continues operation when bypassed\n
                            This option is determined by the Clock Mode selection">
@@ -1406,7 +1406,7 @@
                   enumStem="McgPllFllSelect"
                   target="pllsOutputFrequency[%(n)]"
                   derived="true"
-                  constant="true"
+                  locked="true"
                   description="FLL/PLL Clock selection for MCGOUTCLK when CLKS=0"
                   toolTip="Selects PLL or FLL output as clock source when CLKS=0\n
                            This option is determined by the Clock Mode selection" >

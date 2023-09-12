@@ -29,7 +29,7 @@
 
    <aliasOption key="/SIM/numberOfClockSettings" />
 
-   <binaryOption key="enableClockConfiguration[0]" constant="true" hidden="true" >
+   <binaryOption key="enableClockConfiguration[0]" locked="true" hidden="true" >
       <choice value="false" name="Disabled" />
       <choice value="true"  name="Enabled"  isDefault="true" />
    </binaryOption>
@@ -45,7 +45,7 @@
    </for>
 
    <intOption key="system_icsirclk_ungated"
-      constant="true"
+      locked="true"
       derived="true"
       origin="ICS Internal Reference Clock"
       units="Hz"
@@ -60,7 +60,7 @@
          value="ClockConfig_%(n)"
          disabledValue="Disabled" >
 
-         <aliasOption key="enableClockConfiguration[%(n)]" constant="false" />
+         <aliasOption key="enableClockConfiguration[%(n)]" locked="false" />
 
          <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
             <aliasOption key="/OSC0/oscMode"                 />
@@ -167,7 +167,7 @@ This is indicated by ICS_S[LOLS] being set." >
                ref="system_icsirclk_ungated"
                enabledBy="ics_c1_irclken[%(n)]||(icsClockMode[%(n)]==@FEI)||(icsClockMode[%(n)]==@FBI)||(icsClockMode[%(n)]==@FBILP),
                           Inactive as IRCLKEN not set and ICSIRCLK unused by active clock mode"
-               constant="true"
+               locked="true"
                derived="true"
                origin="ICS Internal Reference Clock"
                units="Hz"
@@ -185,7 +185,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
          </choiceOption>
 
          <intOption key="ics_erc_clock[%(n)]"
-            constant="true"
+            locked="true"
             units="Hz"
             derived="true"
             description="Frequency of ICS External reference"
@@ -195,7 +195,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
          <category name="FLL" description="FLL Settings">
             <binaryOption key="fll_enabled[%(n)]"
                derived="true"
-               constant="true"
+               locked="true"
                description="FLL State"
                toolTip="Determined from clock mode selected" >
                <choice value="0" name="FLL Inactive" />
@@ -232,7 +232,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
 
             <intOption key="ics_erc_clock_divided[%(n)]"
                derived="true"
-               constant="true"
+               locked="true"
                units="Hz"
                description="Divided external reference clock"
                toolTip="ics_erc_clock after FRDIV"
@@ -243,7 +243,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
                enumStem="McgIref"
                target="irefs_clock[%(n)]"
                derived="true"
-               constant="false"
+               locked="false"
                description="Internal Reference Select"
                toolTip="Selects the reference clock source for the FLL\n
                         This option is determined by the Clock Mode selection">
@@ -262,7 +262,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
                hidden="true"
                units="Hz"
                derived="true"
-               constant="true"
+               locked="true"
                description="ICS Fixed Frequency Clock [ICSFFCLK]"
                toolTip="Used as input clock to FLL and available to some peripherals\n
                         Derived from External Reference Clock or Slow IRC"
@@ -271,7 +271,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
             <intOption key="fllInputFrequency[%(n)]"
                ref="irefs_clock[%(n)]"
                derived="true"
-               constant="true"
+               locked="true"
                units="Hz"
                description="FLL Input clock frequency"
                toolTip="Frequency of input to FLL"
@@ -314,17 +314,17 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
             max="50_MHz"
             min="1"
             derived="true"
-            constant="true"
+            locked="true"
             units="Hz"
             description="System ICS Output Clock [ICSOUTCLK]"
             toolTip="ICS Main clock output"
             value="120000000"
             disabledValue="0" />
 
-         <aliasOption key="/SIM/system_core_clock[%(n)]"    constant="false"  optional="true" />
-         <aliasOption key="/SIM/system_bus_clock[%(n)]"     constant="false"  optional="true" />
-         <aliasOption key="/SIM/system_flexbus_clock[%(n)]" constant="false"  optional="true" />
-         <aliasOption key="/SIM/system_flash_clock[%(n)]"   constant="false"  optional="true" />
+         <aliasOption key="/SIM/system_core_clock[%(n)]"    locked="false"  optional="true" />
+         <aliasOption key="/SIM/system_bus_clock[%(n)]"     locked="false"  optional="true" />
+         <aliasOption key="/SIM/system_flexbus_clock[%(n)]" locked="false"  optional="true" />
+         <aliasOption key="/SIM/system_flash_clock[%(n)]"   locked="false"  optional="true" />
 
          <category name="Device Parameters" description="Register values">
             <category name="OSC_CR" description="ICS Control Register 2">
@@ -340,7 +340,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
                   enumStem="McgClkSrc"
                   target="system_icsoutclk_clock[%(n)]"
                   derived="true"
-                  constant="true"
+                  locked="true"
                   description="ICSOUTCLK Clock Source Select"
                   toolTip="Selects the clock source for ICSOUTCLK\n
                            This option is determined by the Clock Mode selection" >
@@ -361,7 +361,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
                <binaryOption key="ics_c2_lp[%(n)]"
                   enumStem="McgFllInLowpower"
                   derived="true"
-                  constant="true"
+                  locked="true"
                   description="Low Power Select"
                   toolTip="Whether FLL continues operation when bypassed\n
                            This option is determined by the Clock Mode selection">

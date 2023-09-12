@@ -43,7 +43,7 @@
       enabledBy="(/OSC0/osc_cr_erclken)&amp;&amp;((/OSC0/osc_clock==12_MHz)||(/OSC0/osc_clock==16_MHz)||(/OSC0/osc_clock==24_MHz))
                  ##Disabled by unsuitable input clock (OSCERCLK)"
       register="pll_sic"
-      constant="true"
+      locked="true"
       derived="true"
       enumStem="UsbPllInputClkFrq"
       description="USB PLL feedback loop divider"
@@ -62,18 +62,18 @@
       toolTip="This fixed frequency clock is produced by the USBPLL from the input clock (12/16/24MHz)"
       value="400000000"
       units="Hz"
-      constant="true" />
+      locked="true" />
 
    <for keys="n" dim="/SIM/numberOfClockSettings" >
-      <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" constant="true" >
+      <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" locked="true" >
 
-         <aliasOption key="/OSC0/osc_cr_erclken" constant="false" />
+         <aliasOption key="/OSC0/osc_cr_erclken" locked="false" />
          <aliasOption key="/MCG/mcg_c1_irclken[%(n)]" />
          <aliasOption key="/OSC0/osc_clock" />
 
          <binaryOption key="usbpllPreconditionsMet[%(n)]"
             ref="(/SMC/smc_pmctrl_runm[%(n)]!=1)&amp;&amp;(/OSC0/osc_cr_erclken)&amp;&amp;(/MCG/mcg_c1_irclken[%(n)])&amp;&amp;((/OSC0/osc_clock==12_MHz)||(/OSC0/osc_clock==16_MHz)||(/OSC0/osc_clock==24_MHz))"
-            constant="true"
+            locked="true"
             derived="true"
             description="USB PLL preconditions"
             toolTip="Indicates if preconditions for USB PLL operation are satisfied\n
@@ -134,7 +134,7 @@
             toolTip="Clock available from the USBPFD"
             derived="true"
             units="Hz"
-            constant="true"
+            locked="true"
             disabledValue="0" />
 
          <choiceOption key="usbphy_anactrl_pfd_clk_sel[%(n)]"

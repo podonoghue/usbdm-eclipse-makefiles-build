@@ -169,18 +169,18 @@
       toolTip="Bitmask controlling which ACMP pins are available as analogue inputs"
       description="ACMP Input Pin Enables"
       bitmask="0x7"
-      bitList="=pinMap"
-      pinMap="=&quot;ACMP$(_instance)_IN%i:&quot;+pinMap"
+      bitList="=inputPinMap"
+      pinMap="=&quot;ACMP$(_instance)_IN%i:&quot;+inputPinMap"
       value="0"
    />
-   
+
    <binaryOption key="acmp_cs_acope" condition="acmp_cs_acope_present"
       enabledBy="acmp_cs_ace"
       enumStem="AcmpOutputPin"
       toolTip="Allows the ACMP output to be placed onto external pin"
       description="ACMP Output Pin Enable" >
       <choice name="Pin disabled"  value="0" enum="Disabled" pinMap="ACMP$(_instance)_OUT," />
-      <choice name="Pin enabled"   value="1" enum="Enabled"  pinMap="=&quot;ACMP$(_instance)_OUT,&quot;+outMap" />
+      <choice name="Pin enabled"   value="1" enum="Enabled"  pinMap="=&quot;ACMP$(_instance)_OUT,&quot;+outputPinMap" />
    </binaryOption >
 
    <!-- enum generation only-->
@@ -672,8 +672,8 @@
     <!-- ************* SIM controls ****************** -->
 
    <category name="Advanced" description="Pin mapping and clock enables">
-      <aliasOption key="/SIM/sim_scgc_$(_name)"  constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt0_actrg"    constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc_$(_name)"  locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt0_actrg"    locked="false" optional="true" />
    </category>
 
    <signals enabledBy="enablePeripheralSupport" locked="true" />

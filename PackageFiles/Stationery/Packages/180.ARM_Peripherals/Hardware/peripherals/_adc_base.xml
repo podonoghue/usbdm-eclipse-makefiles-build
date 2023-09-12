@@ -111,7 +111,7 @@
 
    <intOption key="input_bus_clock"
       enabledBy="enablePeripheralSupport"
-      constant="true"
+      locked="true"
       derived="true"
       units="Hz"
       description="Frequency of ADC input Clock\n
@@ -120,7 +120,7 @@
    <intOption key="adcInternalClock"
       enabledBy="enablePeripheralSupport"
       derived="true"
-      constant="true"
+      locked="true"
       description="Frequency of Internal ADC clock"
       toolTip="Varies with ADLPC and ADHSC"
       value="2000000"
@@ -142,7 +142,7 @@
 
    <intOption key="adcInputClock"
       enabledBy="enablePeripheralSupport"
-      constant="true"
+      locked="true"
       derived="true"
       units="Hz"
       description="Frequency of ADC Clock" />
@@ -180,7 +180,7 @@
 
    <intOption key="adcClockFrequency"
       enabledBy="enablePeripheralSupport"
-      constant="true"
+      locked="true"
       description="Frequency of ADC clock"
       toolTip="Determined from clock source and prescaler"
       derived="true"
@@ -931,9 +931,9 @@
 
     <!-- ************* SIM controls ****************** -->
    <category name="Advanced" description="Advanced options">
-      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)alttrgen"  constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)pretrgsel" constant="false" optional="true"/>
-      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)trgsel"    constant="false" optional="true"/>
+      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)alttrgen"  locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)pretrgsel" locked="false" optional="true"/>
+      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)trgsel"    locked="false" optional="true"/>
    </category>
 
    <signals enabledBy="enablePeripheralSupport" />

@@ -17,7 +17,7 @@
          description="Frequency of Fast Internal Reference Clock [FIRC_CLK]"
          toolTip="Dependent on device and clock Trim. [Typically ~48MHz]"
          origin="FIRC frequency"
-         constant="true"
+         locked="true"
          units="Hz"
          value="48000000" />
 
@@ -25,7 +25,7 @@
          description="Frequency of Slow Internal Reference Clock [SIRC_CLK]"
          toolTip="Dependent on device and clock Trim. [Typically ~8MHz]"
          origin="SIRC frequency"
-         constant="true"
+         locked="true"
          units="Hz"
          value="8000000" />
    </category>
@@ -60,7 +60,7 @@
          toolTip="Selects the frequency range for the crystal oscillator"
          origin="Determined from crystal oscillator frequency"
          derived="true"
-         constant="true">
+         locked="true">
          <choice value="0" name="Reserved" />
          <choice value="1" name="Low range" />
          <choice value="2" name="Medium range" />
@@ -120,14 +120,14 @@
          toolTip="Determines CORE_CLK/SYS_CLK, BUS_CLK, FLASH_CLK clock frequencies for RUN mode\n
                   Clock transitions to VLPR/HSRUN use this RUN state as an intermediate state"
          derived="true"
-         constant="true"
+         locked="true"
          >
 
          <choiceOption key="scg_runccr_scs[]" 
             description="System Clock Source"
             toolTip="Clock used to generate core/system, bus and flash clocks"
 	    origin="Determined by clock_transition_mode"
-            constant="true"
+            locked="true"
             >
             <choice name="System Oscillator Clock (SOSC)"        value="0001" />
             <choice name="Slow Internal Reference Clock (SIRC)"  value="0010" />
@@ -156,7 +156,7 @@
             disabledValue="0.0"
             min="0" max="80MHz" 
             derived="true"
-            constant="true" />
+            locked="true" />
             
          <floatOption key="run_mode_bus_clock[]" 
             description="Bus clock [BUS_CLK]" 
@@ -164,7 +164,7 @@
             disabledValue="0.0"
             min="0" max="48MHz" 
             derived="true"
-            constant="true" />
+            locked="true" />
             
          <floatOption key="run_mode_flash_clock[]" 
             description="Flash clock [FLASH_CLK]" 
@@ -172,22 +172,22 @@
             disabledValue="0.0"
             min="0" max="26.67MHz" 
             derived="true"
-            constant="true" />
+            locked="true" />
       </category>        
        
       <category name="alternativeModeSystemClocks[]" 
          description="Alternative VLPR/HSRUN mode clock settings"
          toolTip="Determines CORE_CLK/SYS_CLK, BUS_CLK, FLASH_CLK clock frequencies for alternative run mode"
          derived="true"
-         constant="true"
+         locked="true"
          >
-         <choiceOption key="scg_altccr_scs[]"        constant="true" derivedFrom="scg_runccr_scs[]"/>
+         <choiceOption key="scg_altccr_scs[]"        locked="true" derivedFrom="scg_runccr_scs[]"/>
          <intOption    key="scg_altccr_divcore[]"                    derivedFrom="scg_runccr_divcore[]" />
          <intOption    key="scg_altccr_divbus[]"                     derivedFrom="scg_runccr_divbus[]" />
          <intOption    key="scg_altccr_divslow[]"                    derivedFrom="scg_runccr_divslow[]" />
-         <floatOption  key="alt_mode_core_clock[]"   constant="true" derivedFrom="run_mode_core_clock[]"  max="4MHz" />
-         <floatOption  key="alt_mode_bus_clock[]"    constant="true" derivedFrom="run_mode_bus_clock[]"   max="4MHz" />
-         <floatOption  key="alt_mode_flash_clock[]"  constant="true" derivedFrom="run_mode_flash_clock[]" max="1MHz" />
+         <floatOption  key="alt_mode_core_clock[]"   locked="true" derivedFrom="run_mode_core_clock[]"  max="4MHz" />
+         <floatOption  key="alt_mode_bus_clock[]"    locked="true" derivedFrom="run_mode_bus_clock[]"   max="4MHz" />
+         <floatOption  key="alt_mode_flash_clock[]"  locked="true" derivedFrom="run_mode_flash_clock[]" max="1MHz" />
       </category>
       
       <category name="FIRC" 
@@ -203,7 +203,7 @@
          <choiceOption key="scg_firccfg_range[]"
             description="Fast IRC Frequency Range Select"
             toolTip="Selects the frequency range for trimming the Fast IRC"
-            constant="true">
+            locked="true">
             <choice value="0" name="48 MHz" />
             <choice value="1" name="Reserved (52 MHz)" />
             <choice value="1" name="Reserved (56 MHz)" />
@@ -243,7 +243,7 @@
             units="Hz"
             disabledValue="0"
             derived="true"
-            constant="true" />
+            locked="true" />
 
          <floatOption key="firc_div1_frequency[]" 
             description="Fast IRC via divider 1 [FIRCDIV1_CLK]" 
@@ -251,7 +251,7 @@
             units="Hz" 
             disabledValue="0.0"
             derived="true"
-            constant="true" />
+            locked="true" />
          
          <floatOption key="firc_div2_frequency[]" 
             description="Fast IRC via divider 2 [FIRCDIV2_CLK]" 
@@ -259,7 +259,7 @@
             units="Hz" 
             disabledValue="0.0"
             derived="true"
-            constant="true" />
+            locked="true" />
       </category>
       
       <category name="SIRC" description="Slow Internal Reference Clock">
@@ -287,7 +287,7 @@
          <choiceOption key="scg_sirccfg_range[]"
             description="Slow IRC Frequency Range Select"
             toolTip="Selects the frequency for Slow IRC"
-            constant="true" >
+            locked="true" >
             <choice value="0" name="Reserved (2 MHz)" />
             <choice value="1" name="8 MHz" isDefault="true" />
          </choiceOption>
@@ -311,7 +311,7 @@
             units="Hz"
             disabledValue="0"
             derived="true"
-            constant="true" />
+            locked="true" />
 
          <floatOption key="sirc_div1_frequency[]" 
             description="Slow IRC via divider 1 [SIRCDIV1_CLK]" 
@@ -319,7 +319,7 @@
             units="Hz" 
             disabledValue="0"
             derived="true"
-            constant="true" />
+            locked="true" />
          
          <floatOption key="sirc_div2_frequency[]" 
             description="Slow IRC via divider 2 [SIRCDIV2_CLK]" 
@@ -327,7 +327,7 @@
             units="Hz" 
             disabledValue="0"
             derived="true"
-            constant="true" />
+            locked="true" />
       </category>
       
       <category name="SOSC" description="System Oscillator Clock">
@@ -347,8 +347,8 @@
             <choice value="1" name="Enabled" />
          </binaryOption>
          
-         <aliasOption key="scg_sosccfg_erefs" constant="false" />
-         <aliasOption key="scg_sosccfg_hgo"   constant="false" />
+         <aliasOption key="scg_sosccfg_erefs" locked="false" />
+         <aliasOption key="scg_sosccfg_hgo"   locked="false" />
          <aliasOption key="scg_sosccfg_range" />
 
          <binaryOption key="scg_sosccsr_sosccmre[]"
@@ -377,7 +377,7 @@
             disabledValue="0"
             units="Hz"
             derived="true"
-            constant="true" />
+            locked="true" />
             
          <floatOption key="sosc_div1_frequency[]" 
             description="System Oscillator via divider 1 [SOSCDIV1_CLK]" 
@@ -385,7 +385,7 @@
             disabledValue="0"
             units="Hz" 
             derived="true"
-            constant="true" />
+            locked="true" />
          
          <floatOption key="sosc_div2_frequency[]" 
             description="System Oscillator via divider 2 [SOSCDIV2_CLK]" 
@@ -393,7 +393,7 @@
             disabledValue="0"
             units="Hz" 
             derived="true"
-            constant="true" />
+            locked="true" />
       </category>
 
       <category name="SPLL" description="System PLL Clock">
@@ -447,7 +447,7 @@
             units="Hz" 
             disabledValue="0"
             derived="true"
-            constant="true" />
+            locked="true" />
          
          <floatOption key="spll_div1_frequency[]" 
             description="System PLL via divider 1 (SPLLDIV1_CLK)" 
@@ -455,7 +455,7 @@
             units="Hz" 
             disabledValue="0"
             derived="true"
-            constant="true" />
+            locked="true" />
          
          <floatOption key="spll_div2_frequency[]" 
             description="System PLL via divider 2 (SPLLDIV2_CLK)" 
@@ -463,26 +463,26 @@
             units="Hz" 
             disabledValue="0"
             derived="true"
-            constant="true" />
+            locked="true" />
       </category>
    </indexedCategory>
    
    <category name="SCG Parameters" description="" toolTip="Parameters limiting SCG operation">
-      <intOption key="pll_mult_min"              constant="true" value="16" />
-      <intOption key="pll_mult_max"              constant="true" value="47" />
-      <intOption key="pll_prediv_min"            constant="true" value="1" />
-      <intOption key="pll_prediv_max"            constant="true" value="8" />
-      <intOption key="pll_post_divider"          constant="true" value="2" />
-      <intOption key="pll_in_min"                constant="true" units="Hz" value="8MHz" />
-      <intOption key="pll_in_max"                constant="true" units="Hz" value="40MHz" />
-      <intOption key="pll_after_prediv_min"      constant="true" units="Hz" value="8MHz" />
-      <intOption key="pll_after_prediv_max"      constant="true" units="Hz" value="16MHz" />
-      <intOption key="pll_output_min"            constant="true" units="Hz" value="90MHz" />
-      <intOption key="pll_output_max"            constant="true" units="Hz" value="160MHz" />
-      <intOption key="osc_Low_min_frequency"     constant="true" units="Hz" value="4MHz" />
-      <intOption key="osc_medium_min_frequency"  constant="true" units="Hz" value="4MHz" />
-      <intOption key="osc_high_min_frequency"    constant="true" units="Hz" value="8MHz" />
-      <intOption key="osc_high_max_frequency"    constant="true" units="Hz" value="40MHz" />
+      <intOption key="pll_mult_min"              locked="true" value="16" />
+      <intOption key="pll_mult_max"              locked="true" value="47" />
+      <intOption key="pll_prediv_min"            locked="true" value="1" />
+      <intOption key="pll_prediv_max"            locked="true" value="8" />
+      <intOption key="pll_post_divider"          locked="true" value="2" />
+      <intOption key="pll_in_min"                locked="true" units="Hz" value="8MHz" />
+      <intOption key="pll_in_max"                locked="true" units="Hz" value="40MHz" />
+      <intOption key="pll_after_prediv_min"      locked="true" units="Hz" value="8MHz" />
+      <intOption key="pll_after_prediv_max"      locked="true" units="Hz" value="16MHz" />
+      <intOption key="pll_output_min"            locked="true" units="Hz" value="90MHz" />
+      <intOption key="pll_output_max"            locked="true" units="Hz" value="160MHz" />
+      <intOption key="osc_Low_min_frequency"     locked="true" units="Hz" value="4MHz" />
+      <intOption key="osc_medium_min_frequency"  locked="true" units="Hz" value="4MHz" />
+      <intOption key="osc_high_min_frequency"    locked="true" units="Hz" value="8MHz" />
+      <intOption key="osc_high_max_frequency"    locked="true" units="Hz" value="40MHz" />
    </category>
 
    <xi:include href="_irqOption.xml"/>

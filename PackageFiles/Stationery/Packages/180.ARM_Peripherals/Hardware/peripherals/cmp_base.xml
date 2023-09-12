@@ -87,7 +87,7 @@
    </binaryOption>
 
    <!--  Configuration -->
-   <stringOption key="Clocking" value="------- Clocking -------" constant="true" description="Clocking" />
+   <title description="Clocking" />
 
    <choiceOption key="cmpClockConfig"
       target="input_clock"
@@ -101,7 +101,7 @@
 
    <intOption key="input_clock"
       ref="/SIM/system_bus_clock[0]"
-      constant="true"
+      locked="true"
       derived="true"
       units="Hz"
       description="Frequency of CMP input Clock" />
@@ -109,7 +109,7 @@
    <stringOption key="Configuration"
       value="------- Configuration -------"
       description="Configuration"
-      constant="true"/>
+      locked="true"/>
 
    <choiceOption key="cmp_cr0_hystctr" condition="cmp_cr0_hystctr_present"
       enumStem="CmpHysteresis"
@@ -159,17 +159,15 @@
       <choice value="1,0" name="Filtered"             enum="Filtered" />
    </choiceOption>
 
-   <aliasOption key="cmp_muxcr_psel$(_instance)"
-      constant="false"/>
+   <aliasOption key="cmp_muxcr_psel$(_instance)" locked="false"/>
 
-   <aliasOption key="cmp_muxcr_msel$(_instance)"
-      constant="false"/>
+   <aliasOption key="cmp_muxcr_msel$(_instance)" locked="false"/>
 
    <!-- DAC Configuration -->
    <stringOption key="DAC Configuration"
       value="------- Internal DAC Configuration -------"
       description="DAC Configuration"
-      constant="true"/>
+      locked="true"/>
 
    <binaryOption key="cmp_daccr_dacen" condition="cmp_daccr_dacen_present"
       enumStem="CmpDacEnable"
@@ -199,7 +197,7 @@
    <stringOption key="Sampling"
       value="------- Filtering and Sampling -------"
       description="Filtering and Sampling"
-      constant="true"/>
+      locked="true"/>
 
    <binaryOption key="secondsSupport"
       description="Enable use of Seconds for time"
@@ -267,7 +265,7 @@
       description="Comparator Enable"
       toolTip="Enable comparator"
       disabledValue="false"
-      constant="true"
+      locked="true"
       derived="true">
       <choice value="0" name="Comparator is disabled" enum="Disabled"  />
       <choice value="1" name="Comparator is enabled"  enum="Enabled"   isDefault="true" />
@@ -282,7 +280,7 @@
                clocked directly by the bus clock when enabled.\n
                Usually a PDB output is available for this purpose."
       disabledValue="false"
-      constant="true"
+      locked="true"
       derived="true">
       <choice value="0" name="Disabled" enum="Disabled" />
       <choice value="1" name="Enabled"  enum="Enabled"  isDefault="true" />
@@ -294,7 +292,7 @@
       description="Sample Enable"
       toolTip="Select between the divided bus clock and an external clock for the filter block"
       disabledValue="false"
-      constant="true"
+      locked="true"
       derived="true">
       <choice value="0" name="Internal clock" enum="Internal"  />
       <choice value="1" name="External clock" enum="External" isDefault="true" />
@@ -322,7 +320,7 @@
                This has no effect if SE=1. In that case, the external SAMPLE signal is used to \n
                determine the sampling period."
       derived="true"
-      constant="true"
+      locked="true"
       value="1k" min="0" units="s" />
 
    <intOption key="cmp_cr0_filter_cnt"
@@ -340,7 +338,7 @@
       enumStem="CmpFilterSamples"
       description="Filter Sample Count"
       derived="true"
-      constant="true"
+      locked="true"
       toolTip="Represents the number of consecutive samples that must agree prior \n
                to the comparator output filter accepting a new output state">
       <choice value="0" name="Disabled"             enum="Bypassed"       />
@@ -361,7 +359,7 @@
       description="Filter Sample Interval in seconds"
       toolTip="The calculated interval of the comparator output filter (sample period*number of samples)."
       derived="true"
-      constant="true"
+      locked="true"
       units="s" />
 
    <choiceOption key="cmp_cr1_mode"

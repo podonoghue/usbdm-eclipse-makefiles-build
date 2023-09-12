@@ -25,7 +25,7 @@
       <binaryOption key="/$(_BASENAME)/individualChannelCallbacks"
          ref="=_individualChannelCallbacksEnable"
          hidden="true"
-         constant="true"
+         locked="true"
          derived="true" >
          <choice value="false" name="Disabled"  isDefault="true" />
          <choice value="true"  name="Enabled"   />
@@ -72,8 +72,25 @@
          so that a reasonable resolution is available for PWM duty-cycle"
       value="100" min="0" max="65535" />
 
-   <title description="Clocking" />
+   <!-- Fault detection -->
+   <title description="Fault detection" />
+   
+   <bitmaskOption key="ftm_fltctrl_faulten" condition="faultPinMap"
+      enabledBy="enablePeripheralSupport"
+      typeName="FtmFaultEnableMask"
+      enumType="uint32_t"
+      valueFormat="FtmFaultEnableMask(%s)"
+      defaultValue="0"
+      description="Fault inputs"
+      toolTip="Enables fault enable inputs"
+      bitmask="0"
+      bitList="=faultPinMap"
+      pinMap="=&quot;FTM$(_instance)_FLT%i:&quot;+faultPinMap"
+      value="0"
+   />
 
+   <title description="Clocking" />
+   
    <intOption key="ftmExternalClock"
       enabledBy="enablePeripheralSupport"
       description="FTM External clock"
@@ -106,7 +123,7 @@
 
    <intOption key="inputClockFrequency"
       enabledBy="enablePeripheralSupport"
-      constant="true"
+      locked="true"
       description="Frequency of input clock to timer"
       derived="true"
       units="Hz"/>
@@ -129,7 +146,7 @@
 
    <intOption key="clockFrequency"
       enabledBy="enablePeripheralSupport"
-      constant="true"
+      locked="true"
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
@@ -138,7 +155,7 @@
    <floatOption key="clockPeriod"
       enabledBy="enablePeripheralSupport"
       ref="(1.0/clockFrequency)"
-      constant="true"
+      locked="true"
       description="Period of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
@@ -450,24 +467,24 @@
    ]]></template>
 
    <category name="Advanced" description="Advanced options">
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)clksel"  optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt0"    optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt1"    optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt2"    optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt3"    optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)trg0src" optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)trg1src" optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)ch0src"  optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)ch1src"  optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_Class)clksel"  optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt0"    optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt1"    optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt2"    optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt3"    optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_Class)trg0src" optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_Class)trg1src" optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_Class)ch0src"  optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_Class)ch1src"  optional="true" locked="false" />
 
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och7src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och6src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och5src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och4src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och3src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och2src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och1src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och0src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_Class)och7src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_Class)och6src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_Class)och5src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_Class)och4src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_Class)och3src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_Class)och2src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_Class)och1src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_Class)och0src" optional="true" locked="false"/>
    </category>
 
    <setTemplate key="/$(_BASENAME)/static_functions" namespace="all"
@@ -2692,15 +2709,17 @@ $(quad_init_description)
    <!-- ************* Signal mapping ****************** -->
 
    <category name="SIM" description="Pin mapping and clock enables">
-      <aliasOption key="/SIM/sim_scgc_$(_name)"     constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_scgc_$(_basename)" constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_pinsel_$(_name)clkps" constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt_ftmic" constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt_rxdce" constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc_$(_name)"     locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc_$(_basename)" locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel_$(_name)clkps" locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel0_$(_name)clkps" locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt_ftmic" locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt_rxdce" locked="false" optional="true" />
+      
       <for keys="ch" dim="8" >
-         <aliasOption key="/SIM/sim_pinsel_$(_name)ps%(ch)"  constant="false" optional="true" />
-         <aliasOption key="/SIM/sim_pinsel0_$(_name)ps%(ch)" constant="false" optional="true" />
-         <aliasOption key="/SIM/sim_pinsel1_$(_name)ps%(ch)" constant="false" optional="true" />
+         <aliasOption key="/SIM/sim_pinsel_$(_name)ps%(ch)"  locked="false" optional="true" />
+         <aliasOption key="/SIM/sim_pinsel0_$(_name)ps%(ch)" locked="false" optional="true" />
+         <aliasOption key="/SIM/sim_pinsel1_$(_name)ps%(ch)" locked="false" optional="true" />
       </for>
    </category>
 

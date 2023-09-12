@@ -8,7 +8,7 @@
       key="Interrupts"
       value="------- Interrupts -------"
       description="Interrupts"
-      constant="true"
+      locked="true"
       />
 
    <!--

@@ -19,7 +19,7 @@ addChoices
 
 <!ELEMENT clockMultiplexorOption ((choice)*) >
    <!ATTLIST clockMultiplexorOption condition           CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption constant            (false|true) #IMPLIED>
+   <!ATTLIST clockMultiplexorOption locked            (false|true) #IMPLIED>
    <!ATTLIST clockMultiplexorOption hidden              (false|true) #IMPLIED>
    <!ATTLIST clockMultiplexorOption name                CDATA        #IMPLIED>
    <!ATTLIST clockMultiplexorOption key                 CDATA        #REQUIRED>
@@ -46,7 +46,7 @@ addChoices
    <!ATTLIST clockMultiplexorOption ref                 CDATA        #IMPLIED> <!- Equation that controls this variable - >
 
 <!ELEMENT indexedCategory ((%general_items;|%general_items;|template)*) >
-   <!ATTLIST indexedCategory  constant     (false|true) #IMPLIED>
+   <!ATTLIST indexedCategory  locked     (false|true) #IMPLIED>
    <!ATTLIST indexedCategory  xmlns:xi     CDATA        #IMPLIED>
    <!ATTLIST indexedCategory  name         CDATA        #IMPLIED>
    <!ATTLIST indexedCategory  value        CDATA        #IMPLIED>
@@ -104,6 +104,7 @@ addChoices
    <!ATTLIST for keys                 CDATA        #REQUIRED>
    <!ATTLIST for values               CDATA        #IMPLIED>
    <!ATTLIST for dim                  CDATA        #IMPLIED>
+   <!ATTLIST for delimiter            CDATA        #IMPLIED>
 
 <!ELEMENT break EMPTY >
 
@@ -157,11 +158,11 @@ addChoices
    <!ATTLIST aliasCategoryOption  name         CDATA        #IMPLIED>
    <!ATTLIST aliasCategoryOption  key          CDATA        #REQUIRED>
    <!ATTLIST aliasCategoryOption  derived      (false|true) #IMPLIED>
-   <!ATTLIST aliasCategoryOption  constant     (false|true) "true">
+   <!ATTLIST aliasCategoryOption  locked     (false|true) "true">
 
 <!-- Expandable grouping -->
 <!ELEMENT category ((%general_items;)*) >
-   <!ATTLIST category  constant     (false|true) #IMPLIED>
+   <!ATTLIST category  locked     (false|true) #IMPLIED>
    <!ATTLIST category  xmlns:xi     CDATA        #IMPLIED>
    <!ATTLIST category  name         CDATA        #IMPLIED>
    <!ATTLIST category  description  CDATA        #IMPLIED>
@@ -171,7 +172,7 @@ addChoices
 
 <!-- Expandable grouping with associated variable -->
 <!ELEMENT categoryOption ((%general_items;)*) >
-   <!ATTLIST categoryOption  constant        (false|true) #IMPLIED>
+   <!ATTLIST categoryOption  locked        (false|true) #IMPLIED>
    <!ATTLIST categoryOption  xmlns:xi        CDATA        #IMPLIED>
    <!ATTLIST categoryOption  name            CDATA        #IMPLIED>
    <!ATTLIST categoryOption  key             CDATA        #REQUIRED>
@@ -197,7 +198,7 @@ addChoices
 <!ELEMENT intOption EMPTY >
    <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST intOption condition     CDATA        #IMPLIED>
-   <!ATTLIST intOption constant      (true)       #IMPLIED>
+   <!ATTLIST intOption locked      (true)       #IMPLIED>
    <!ATTLIST intOption hidden        (true)       #IMPLIED>
    <!ATTLIST intOption graphic       CDATA        #IMPLIED>
    <!ATTLIST intOption modify        CDATA        #IMPLIED>
@@ -238,7 +239,7 @@ addChoices
 <!ELEMENT bitmaskOption EMPTY >
    <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST bitmaskOption condition      CDATA        #IMPLIED>
-   <!ATTLIST bitmaskOption constant       (false|true) #IMPLIED>
+   <!ATTLIST bitmaskOption locked         (false|true) #IMPLIED>
    <!ATTLIST bitmaskOption hidden         (false|true) #IMPLIED>
    <!ATTLIST bitmaskOption name           CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption key            CDATA        #REQUIRED>
@@ -252,19 +253,25 @@ addChoices
    <!ATTLIST bitmaskOption derivedFrom    CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption typeName       CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption defaultValue   CDATA        #IMPLIED>
+   <!ATTLIST bitmaskOption enumType       CDATA        #IMPLIED>
+
    <!-- Expression enables this option -->
    <!ATTLIST bitmaskOption enabledBy      CDATA        #IMPLIED>
-   <!ATTLIST bitmaskOption enumType       CDATA        #IMPLIED>
-   <!-- These must match in length -->
+   
+   <!-- Bit mask indicating active bits.  May be zero to indicate calculation from bitList -->
    <!ATTLIST bitmaskOption bitmask        CDATA        #REQUIRED>
+   <!-- List of names for the bits in mask. -->
    <!ATTLIST bitmaskOption bitList        CDATA        #IMPLIED>
+   
+   <!-- Pin mapping applied if a given bit is active.  Mapping is removed if inactive -->
    <!ATTLIST bitmaskOption pinMap         CDATA        #IMPLIED>
+   <!-- List of pin mappings applied if option disabled#Expression to enable use of any pin map -->
    <!ATTLIST bitmaskOption disabledPinMap CDATA        #IMPLIED>
 
 <!ELEMENT floatOption EMPTY >
    <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST floatOption condition     CDATA        #IMPLIED>
-   <!ATTLIST floatOption constant      (false|true) #IMPLIED>
+   <!ATTLIST floatOption locked      (false|true) #IMPLIED>
    <!ATTLIST floatOption hidden        (false|true) #IMPLIED>
    <!ATTLIST floatOption modify        CDATA        #IMPLIED>
    <!ATTLIST floatOption replace       CDATA        #IMPLIED>
@@ -302,7 +309,7 @@ addChoices
    <!-- Tooltip for GUI and code generation -->
    <!ATTLIST aliasOption toolTip           CDATA        #IMPLIED>
    <!-- Allows aliased variable to be altered by user (unless locked) -->
-   <!ATTLIST aliasOption constant          (false)      #IMPLIED>
+   <!ATTLIST aliasOption locked          (false)      #IMPLIED>
    <!-- Indicates key may refer to non-existant variable -->
    <!ATTLIST aliasOption optional          (true)       #IMPLIED>
    <!-- Inidicates it should be visible in GUI -->
@@ -313,7 +320,7 @@ addChoices
    <!ATTLIST stringOption condition        CDATA        #IMPLIED>
    <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
    <!ATTLIST stringOption valueFormat      CDATA        #IMPLIED>
-   <!ATTLIST stringOption constant         (false|true) #IMPLIED>
+   <!ATTLIST stringOption locked         (false|true) #IMPLIED>
    <!ATTLIST stringOption hidden           (false|true) #IMPLIED>
    <!ATTLIST stringOption name             CDATA        #IMPLIED>
    <!ATTLIST stringOption key              CDATA        #REQUIRED>
@@ -334,7 +341,7 @@ addChoices
 <!ELEMENT numericListOption EMPTY >
    <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST numericListOption condition     CDATA        #IMPLIED>
-   <!ATTLIST numericListOption constant      (false|true) #IMPLIED>
+   <!ATTLIST numericListOption locked      (false|true) #IMPLIED>
    <!ATTLIST numericListOption hidden        (false|true) #IMPLIED>
    <!ATTLIST numericListOption name          CDATA        #IMPLIED>
    <!ATTLIST numericListOption key           CDATA        #REQUIRED>
@@ -354,7 +361,7 @@ addChoices
 <!ELEMENT pinListOption EMPTY >
    <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST pinListOption condition          CDATA        #IMPLIED>
-   <!ATTLIST pinListOption constant           (false|true) #IMPLIED>
+   <!ATTLIST pinListOption locked           (false|true) #IMPLIED>
    <!ATTLIST pinListOption hidden             (false|true) #IMPLIED>
    <!ATTLIST pinListOption name               CDATA        #IMPLIED>
    <!ATTLIST pinListOption key                CDATA        #REQUIRED>
@@ -371,7 +378,7 @@ addChoices
    <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST clockSelectionOption condition           CDATA        #IMPLIED>
    <!-- Locks varibale against change by user in GUI -->
-   <!ATTLIST clockSelectionOption constant            (false|true) #IMPLIED>
+   <!ATTLIST clockSelectionOption locked            (false|true) #IMPLIED>
    <!-- Variable is not visible in GUI -->
    <!ATTLIST clockSelectionOption hidden              (false|true) #IMPLIED>
    <!-- DIsplay name for variable (derived from key if not provided -->
@@ -415,7 +422,7 @@ addChoices
    <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST choiceOption condition           CDATA        #IMPLIED>
    <!-- Locks variable against change by user in GUI -->
-   <!ATTLIST choiceOption constant            (false|true) #IMPLIED>
+   <!ATTLIST choiceOption locked            (false|true) #IMPLIED>
    <!-- Variable is not visible in GUI -->
    <!ATTLIST choiceOption hidden              (false|true) #IMPLIED>
    <!-- Display name for variable (derived from key if not provided -->
@@ -474,7 +481,7 @@ addChoices
    <!-- Allow variable to be replaced by later variable of same name -->
    <!ATTLIST choiceOption replace             CDATA        #IMPLIED>
    
-   <!-- List of pin mappings if option disabled#Expression to enable pin map -->
+   <!-- List of pin mappings applied if option disabled#Expression to enable use of any pin map -->
    <!ATTLIST choiceOption disabledPinMap      CDATA        #IMPLIED>
 
 <!ELEMENT choice EMPTY >
@@ -497,7 +504,7 @@ addChoices
    <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST binaryOption condition           CDATA        #IMPLIED>
    <!-- Locks variable against change by user in GUI -->
-   <!ATTLIST binaryOption constant            (false|true) #IMPLIED>
+   <!ATTLIST binaryOption locked            (false|true) #IMPLIED>
    <!-- Variable is not visible in GUI -->
    <!ATTLIST binaryOption hidden              (false|true) #IMPLIED>
    <!-- Display name for variable (derived from key if not provided -->
@@ -555,7 +562,7 @@ addChoices
         The variable behind this option is shared -->
    <!ATTLIST binaryOption modify              CDATA        #IMPLIED>
 
-   <!-- List of pin mappings if option disabled#Expression to enable pin map -->
+   <!-- List of pin mappings applied if option disabled#Expression to enable use of any pin map -->
    <!ATTLIST binaryOption disabledPinMap      CDATA        #IMPLIED>
 
 <!-- Describes pin mapping for a peripheral -->
@@ -563,7 +570,7 @@ addChoices
    <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST pinMapOption condition           CDATA        #IMPLIED>
    <!-- Locks variable against change by user in GUI -->
-   <!ATTLIST pinMapOption constant            (false|true) #IMPLIED>
+   <!ATTLIST pinMapOption locked            (false|true) #IMPLIED>
    <!-- Variable is not visible in GUI -->
    <!ATTLIST pinMapOption hidden              (false|true) #IMPLIED>
    <!-- Display name for variable (derived from key if not provided -->
@@ -586,7 +593,7 @@ addChoices
 <!ELEMENT irqOption EMPTY >
    <!-- Condition evaluated during parsing that controls processing of this option -->
    <!ATTLIST irqOption condition     CDATA        #IMPLIED>
-   <!ATTLIST irqOption constant      (false|true) #IMPLIED>
+   <!ATTLIST irqOption locked      (false|true) #IMPLIED>
    <!ATTLIST irqOption hidden        (false|true) #IMPLIED>
    <!ATTLIST irqOption name          CDATA        #IMPLIED>
    <!ATTLIST irqOption key           CDATA        #REQUIRED>

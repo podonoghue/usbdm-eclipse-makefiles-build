@@ -10,8 +10,8 @@
 
    <aliasOption key="/SIM/system_bus_clock[]" />
 
-   <stringOption key="irq_pattern"        constant="true" value="^I2S%i_?(Rx|Tx)?$" hidden="true" />
-   <stringOption key="irq_ClassHandler"   constant="true" value="%c%i::irqHandler" hidden="true" />
+   <stringOption key="irq_pattern"        locked="true" value="^I2S%i_?(Rx|Tx)?$" hidden="true" />
+   <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irqHandler" hidden="true" />
    <xi:include href="_irqOptionSubstituted.xml"/>
    <projectActionList id = "i2s_files" >
       <copy source="Project_Headers/i2s.h"            target="Project_Headers/i2s.h"            overwrite="true"  derived="true" />

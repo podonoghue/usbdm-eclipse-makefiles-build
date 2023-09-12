@@ -8,7 +8,7 @@
 
    <category name="LPO" description="Low Power Clock Sources" >
       <intOption key="system_low_power_clock_128kHz"
-         constant="true" 
+         locked="true" 
          origin="LPO Clock - 128kHz"
          units="Hz"
          description="Frequency of Internal Low Power Oscillator [LPO] Clock"

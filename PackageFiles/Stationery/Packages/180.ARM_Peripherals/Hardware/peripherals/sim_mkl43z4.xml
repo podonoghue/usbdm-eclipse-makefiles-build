@@ -21,7 +21,7 @@
 
    <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
    <binaryOption key="RtcForcing"
-      constant="true"
+      locked="true"
       derived="true"
       ref="(/MCG/oscMode==/OscMode_RTC_Controlled)?1:0"
       description="RTC control of OSC0"
@@ -96,7 +96,7 @@
 
    <intOption key="system_usb_clkin_clock"
       hidden="true"
-      constant="true"
+      locked="true"
       origin="USB Clock In pin"
       units="Hz"
       description="Frequency of External USB Clock"
@@ -105,9 +105,9 @@
 
    <category name="SOPT1" description="RTC clocks" >
 
-      <aliasOption key="rtc_clkin_clock" optional="true" constant="false" />
+      <aliasOption key="rtc_clkin_clock" optional="true" locked="false" />
 
-      <aliasOption key="sim_sopt1_osc32ksel" constant="false" />
+      <aliasOption key="sim_sopt1_osc32ksel" locked="false" />
       <aliasOption key="system_erclk32k_clock" />
 
       <choiceOption key="sim_sopt1_usbpower" condition="sim_sopt1_usbregen_present &amp;&amp; sim_sopt1_usbsstby_present &amp;&amp; sim_sopt1_usbvstby_present"
@@ -136,13 +136,13 @@
 
    <category name="SOPT2" description="Clock Gating">
 
-      <aliasOption key="sim_sopt2_rtcclkoutsel"  optional="true" constant="false"/>
+      <aliasOption key="sim_sopt2_rtcclkoutsel"  optional="true" locked="false"/>
       <aliasOption key="rtc_clkout"              optional="true" />
 
       <aliasOption key="/MCG/system_mcgpclk_clock[]"    optional="true" />
       <aliasOption key="system_peripheral_clock[]" optional="true" />
 
-      <aliasOption key="sim_sopt2_usbsrc[]" constant="false" />
+      <aliasOption key="sim_sopt2_usbsrc[]" locked="false" />
       <aliasOption key="system_usbfs_clock[]" />
 
       <aliasOption key="/OSC0/oscer_clock"               optional="true" />
@@ -243,15 +243,15 @@
    </category>
 
    <for keys="n" dim="numberOfClockSettings" >
-      <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" constant="true" >
+      <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" locked="true" >
 
-         <aliasOption key="/MCG/enableClockConfiguration[%(n)]" constant="false" />
-         <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]"          constant="false" />
+         <aliasOption key="/MCG/enableClockConfiguration[%(n)]" locked="false" />
+         <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]"          locked="false" />
 
          <category name="Peripheral Clocks" description="Peripheral Clock Selection">
             <intOption key="system_irc48m_clock[%(n)]"
                enabledBy="/SMC/smc_pmctrl_runm[%(n)]!=1,IRC48M Disabled in VLPR"
-               constant="true"
+               locked="true"
                units="Hz"
                description="Frequency of Internal 48MHz Clock [IRC48MCLK]"
                toolTip="48 MHz Internal Oscillator [May be trimmed against USB bus]"
@@ -278,7 +278,7 @@
 
             <intOption key="clockOut[%(n)]" condition="sim_sopt2_clkoutsel_present"
                derived="true"
-               constant="true"
+               locked="true"
                units="Hz"
                description="Clock out"
                toolTip="Clock available on CLKOUT pin" />
@@ -301,7 +301,7 @@
             <intOption key="system_peripheral_clock[%(n)]"
                ref="/MCG/system_mcgpclk_clock[%(n)]"
                derived="true"
-               constant="true"
+               locked="true"
                units="Hz"
                description="Peripheral Clock frequency"
                toolTip="Frequency of Peripheral Clock available to various peripherals"  />
@@ -315,12 +315,12 @@
                <choice value="1"  name="Peripheral Clock (MCGPCLK)"        enum="PeripheralClk" ref="system_peripheral_clock[%(n)]"    isDefault="true" />
             </choiceOption>
 
-            <aliasOption key="system_usb_clkin_clock" constant="false" optional="true" />
+            <aliasOption key="system_usb_clkin_clock" locked="false" optional="true" />
 
             <intOption key="system_usbfs_clock[%(n)]"  condition="sim_sopt2_usbsrc_present"
                errorPropagate="error"
                derived="true"
-               constant="true"
+               locked="true"
                units="Hz"
                description="USB Full Speed Clock"
                toolTip="Frequency of clock to USB full speed controller"
@@ -331,7 +331,7 @@
 
                <choiceOption key="system_uart%(u)_fixedclocksource[%(n)]"
                   target="system_uart%(u)_clock[%(n)]"
-                  constant="true"
+                  locked="true"
                   derived="true"
                   description="UART%(u) Clock source"
                   toolTip="Fixed clock source for UART (%(code))" >
@@ -339,7 +339,7 @@
                </choiceOption>
 
                <intOption key="system_uart%(u)_clock[%(n)]"
-                  constant="true"
+                  locked="true"
                   derived="true"
                   units="Hz"
                   description="UART%(u) Clock frequency"
@@ -365,7 +365,7 @@
                   <intOption key="system_%(name)_clock[%(n)]" condition="sim_sopt2_%(name)src_present"
                      max="%(bNAME)_max[/SMC/smc_pmctrl_runm[%(n)]]"
                      derived="true"
-                     constant="true"
+                     locked="true"
                      units="Hz"
                      description="%(NAME) Clock frequency"
                      toolTip="Frequency of clock to %(NAME)"
@@ -387,7 +387,7 @@
             <intOption key="system_tpm_clock[%(n)]" condition="sim_sopt2_tpmsrc_present"
                max="TPM_max[/SMC/smc_pmctrl_runm[%(n)]]"
                derived="true"
-               constant="true"
+               locked="true"
                units="Hz"
                description="TPM Clock frequency"
                toolTip="Frequency of clock to TPM" />
@@ -404,7 +404,7 @@
             </choiceOption>
 
             <intOption key="system_flexio_clock[%(n)]" condition="sim_sopt2_flexiosrc_present"
-               constant="true"
+               locked="true"
                derived="true"
                units="Hz"
                description="FLEXIO Clock frequency"
@@ -438,7 +438,7 @@
 
          <category name="CLKDIV1" description="System Clock Dividers">
             <choiceOption key="sim_clkdiv1_outdiv1[%(n)]"  condition="sim_clkdiv1_outdiv1_present"
-               constant="true"
+               locked="true"
                description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
                toolTip="Clocks the ARM Cortex-M4 core and bus masters\n
                         Divides MCGOUTCLK Clock to generate system_core_clock.">
@@ -461,7 +461,7 @@
             </choiceOption>
 
             <choiceOption key="sim_clkdiv1_outdiv4[%(n)]"  condition="sim_clkdiv1_outdiv4_present"
-               constant="true"
+               locked="true"
                derivedFrom="sim_clkdiv1_outdiv1[%(n)]"
                description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"
                toolTip="Clocks the flash memory\n

@@ -91,7 +91,7 @@
 
    <intOption key="i2cInputClock"
       enabledBy="enablePeripheralSupport"
-      constant="true"
+      locked="true"
       derived="true"
       description="I2C input clock"
       toolTip="The I2C uses the bus clock for timing.\n
@@ -111,7 +111,7 @@
       enabledBy="enablePeripheralSupport"
       enumStem="I2cFMult"
       derived="true"
-      constant="true"
+      locked="true"
       toolTip="Prescale divider to generate the I2C baud rate"
       description="Baud rate prescaler" >
       <choice name="mul = 1"     value="0" enum="Mul1" />
@@ -126,7 +126,7 @@
       description="Baud rate divider"
       toolTip="Divider to generate the I2C baud rate"
       derived="true"
-      constant="true"
+      locked="true"
    />
 
    <!-- ************* C1 ****************** -->
@@ -141,7 +141,7 @@
    </binaryOption >
 
    <binaryOption key="i2c_c1_mst" condition="i2c_c1_mst_present"
-      constant="true"
+      locked="true"
       enabledBy="enablePeripheralSupport"
       enumStem="I2cBusRole"
       description="Bus Role Select"
@@ -222,7 +222,7 @@
    <intOption key="i2c_c2_ad" condition="i2c_c2_ad_present"
       hidden="true"
       derived="true"
-      constant="true"
+      locked="true"
       ref="(i2c_slaveaddress&lt;&lt;8)&amp;0xFF"
       enabledBy="enablePeripheralSupport"
       typeName="uint8_t"
@@ -232,7 +232,7 @@
    <intOption key="i2c_a1_ad" condition="i2c_a1_ad_present"
       hidden="true"
       derived="true"
-      constant="true"
+      locked="true"
       ref="i2c_slaveaddress&amp;0xFF"
       enabledBy="enablePeripheralSupport"
       typeName="uint8_t"
@@ -242,7 +242,7 @@
    <intOption key="i2c_ra_rad" condition="i2c_ra_rad_present"
       hidden="true"
       derived="true"
-      constant="true"
+      locked="true"
       ref="i2c_rangeaddress&amp;0xFF"
       enabledBy="enablePeripheralSupport"
       typeName="int"
@@ -383,7 +383,7 @@
       <intOption key="i2c_slth_sslt" condition="i2c_slth_sslt_present"
          hidden="true"
          derived="true"
-         constant="true"
+         locked="true"
          ref="(i2c_slt_value&gt;&gt;8)&amp;0xFF"
          enabledBy="enablePeripheralSupport"
          typeName="uint8_t"
@@ -393,7 +393,7 @@
       <intOption key="i2c_sltl_sslt" condition="i2c_sltl_sslt_present"
          hidden="true"
          derived="true"
-         constant="true"
+         locked="true"
          ref="i2c_slt_value&amp;0xFF"
          enabledBy="enablePeripheralSupport"
          typeName="uint8_t"
@@ -1123,13 +1123,13 @@
 
    <!-- ************* Signal mapping ****************** -->
    <category name="Advanced" description="Signal routing" >
-      <aliasOption key="/SIM/sim_scgc_$(_name)"      constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_scgc_$(_basename)"  constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_pinsel_$(_name)ps"  constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_pinsel0_$(_name)ps" constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt1_$(_name)oinv" constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt1_$(_name)4wen" constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc_$(_name)"      locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc_$(_basename)"  locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel_$(_name)ps"  locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel0_$(_name)ps" locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt1_$(_name)oinv" locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt1_$(_name)4wen" locked="false" optional="true" />
    </category>
 
    <signals enabledBy="enablePeripheralSupport" locked="true" />

@@ -6,7 +6,7 @@
 
    <xi:include href="_default_instance.xml"/>
    
-   <aliasOption key="/PCC/pcc_lptmr$(_instance)" constant="false" />
+   <aliasOption key="/PCC/pcc_lptmr$(_instance)" locked="false" />
 
    <xi:include href="_mapPinsOption.xml"/>
 
@@ -57,21 +57,21 @@
    </choiceOption>
    
    <floatOption key="clockFrequency" 
-      constant="true"
+      locked="true"
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
       units="Hz"/>
       
    <floatOption key="clockPeriod" 
-      constant="true"
+      locked="true"
       description="Period of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
       units="s"/>
       
    <floatOption key="maximumPeriod" 
-      constant="true"
+      locked="true"
       description="Maximum period of timer"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
@@ -152,8 +152,8 @@
       derived="true"
       min="0" units="Hz"/>
   
-   <stringOption key="irq_pattern"        constant="true" value="^.*%b%i.*$" hidden="true" />
-   <stringOption key="irq_ClassHandler"   constant="true" value="%c%i::irqHandler" hidden="true" />
+   <stringOption key="irq_pattern"        locked="true" value="^.*%b%i.*$" hidden="true" />
+   <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irqHandler" hidden="true" />
    <xi:include href="_irqOptionSubstituted.xml"/>
 
    <!-- validate

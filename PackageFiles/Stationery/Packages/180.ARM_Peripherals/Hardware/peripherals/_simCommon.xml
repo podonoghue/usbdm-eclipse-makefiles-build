@@ -12,7 +12,7 @@
       toolTip="This determines the number of clock settings provided"
       value="4"
       derived = "true"
-      constant = "true" />
+      locked  = "true" />
 
    <choiceOption key="/PCR/nvic_irqLevel"
       hidden="true"

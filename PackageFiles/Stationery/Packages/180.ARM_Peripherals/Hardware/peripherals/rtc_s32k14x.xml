@@ -19,13 +19,13 @@
       \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
    ]]></template>
 
-   <aliasOption key="/SIM/system_rtcclkin_frequency" constant="false" optional="true"/>
-   <aliasOption key="/SIM/lpoclks_rtcclksel"         constant="false" optional="true"/>
-   <aliasOption key="/PCC/pcc_rtc"                   constant="false" />
+   <aliasOption key="/SIM/system_rtcclkin_frequency" locked="false" optional="true"/>
+   <aliasOption key="/SIM/lpoclks_rtcclksel"         locked="false" optional="true"/>
+   <aliasOption key="/PCC/pcc_rtc"                   locked="false" />
 
    <intOption key="rtcclk_gated_clock"
       derived="true"
-      constant="true"
+      locked="true"
       units="Hz"
       description="Frequency of RTC Peripheral Clock"
       toolTip="RTC clock available to peripherals"
@@ -75,13 +75,13 @@
    </binaryOption>
 
    <intOption key="rtc_1hz_clock"
-      constant="true"
+      locked="true"
       derived="true"
       description="1Hz output from RTC"
       origin="RTC 1Hz output"
       units="Hz"/>
 
-   <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" optional="true" constant="false" />
+   <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" optional="true" locked="false" />
    <aliasOption key="/SIM/rtc_clkout"             optional="true" />
 
    <template><![CDATA[

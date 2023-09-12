@@ -56,7 +56,7 @@
       value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
 
    <intOption key="system_low_power_clock"
-      constant="true"
+      locked="true"
       derived="true"
       origin="LPO Clock"
       units="Hz"

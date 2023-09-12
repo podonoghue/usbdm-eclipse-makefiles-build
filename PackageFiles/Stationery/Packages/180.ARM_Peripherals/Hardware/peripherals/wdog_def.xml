@@ -164,7 +164,7 @@
 
    <intOption key="inputClockFrequency"
       enabledBy="wdogSystemEnable"
-      constant="true"
+      locked="true"
       description="Watchdog Input clock frequency"
       toolTip="Determined from timer clock source"
       derived="true"
@@ -189,7 +189,7 @@
 
    <floatOption key="timerTickPeriod"
       enabledBy="wdogSystemEnable"
-      constant="true"
+      locked="true"
       description="Period of watchdog counter"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
@@ -207,7 +207,7 @@
    <intOption key="wdog_timeout"
       enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
       ref="(wdog_timeoutPeriod)/timerTickPeriod#timerTickPeriod"
-      constant="true"
+      locked="true"
       description="Watchdog Timeout in ticks"
       toolTip="The watchdog must be refreshed before the counter reaches this value"
       valueFormat="%s_ticks"
@@ -231,7 +231,7 @@
    <intOption key="wdog_window"
       enabledBy="wdog_stctrlh_winen&amp;&amp;wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
       ref="(wdog_windowPeriod)/timerTickPeriod#timerTickPeriod"
-      constant="true"
+      locked="true"
       description="Watchdog Window in ticks"
       toolTip="If windowed operation is enabled, then the watchdog can only be refreshed \n
                if the timer reaches a value greater than or equal to this window length value.\n

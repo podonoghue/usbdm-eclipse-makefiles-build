@@ -82,7 +82,7 @@
 
    <stringOption key="Common options"
       derived="true"
-      constant="true"
+      locked="true"
       description="Options applied to whole peripheral"
       value="--- Common options ---" />
 
@@ -203,7 +203,7 @@
       <stringOption name="CTAR %(c)"
          key="CtarNum%(c)"
          description="Clock and Transfer Attributes #%(c)"
-         constant="true"
+         locked="true"
          derived="true"
          value="----- %(c) -----"/>
 
@@ -262,7 +262,7 @@
 
    <stringOption key="Initial configuration"
       derived="true"
-      constant="true"
+      locked="true"
       description="Device and CTAR choice after default configuration"
       toolTip="These options can be changed by selectConfiguration(...)"
       value="--- Initial device options ---" />

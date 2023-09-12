@@ -36,7 +36,7 @@ Devices using this peripheral:
          toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
          origin="Derived from OSC32KCLK, RTCCLK or LPO" 
          value="32768"
-         constant="true" />
+         locked="true" />
    
       <choiceOption key="sim_sopt1_osc32kout" 
          description="ERCLK32K Clock Output"
@@ -73,7 +73,7 @@ Devices using this peripheral:
    
    <category name="SOPT2" description="Clock Gating">
       
-      <aliasOption key="/SIM/sim_sopt2_pllfllsel[]" constant="false" />
+      <aliasOption key="/SIM/sim_sopt2_pllfllsel[]" locked="false" />
       
       <aliasOption key="/SIM/system_peripheral_clock[]" />
       
@@ -135,7 +135,7 @@ Devices using this peripheral:
    
       <intOption key="system_lpuart_clock" 
          derived="true" 
-         constant="true"
+         locked="true"
          units="Hz"
          description="LPUART Clock frequency"
          toolTip="Frequency of clock to LPUART"
@@ -819,7 +819,7 @@ Devices using this peripheral:
    
       <intOption key="system_peripheral_clock[]"
          derived="true"
-         constant="true"
+         locked="true"
          units="Hz"
          description="Peripheral Clock frequency"
          toolTip="Frequency of Peripheral Clock available to various peripherals"  />
@@ -855,7 +855,7 @@ Devices using this peripheral:
       <category name="CLKDIV1" description="System Clock Dividers">
          <intOption key="sim_clkdiv1_outdiv1[]" 
             derived="true"
-            constant="true"
+            locked="true"
             description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
             toolTip="Clocks the ARM Cortex-M4 core and bus masters [SIM_CLKDIV1_OUTDIV1]\n
                      Divides MCGOUT Clock to generate system_core_clock"
@@ -863,7 +863,7 @@ Devices using this peripheral:
          
          <intOption key="sim_clkdiv1_outdiv2[]" 
             derived="true"
-            constant="true"
+            locked="true"
             description="Bus Clock Divider (OUTDIV2) - Divide by [1-16]"
             toolTip="Clocks the bus slaves and peripheral [SIM_CLKDIV1_OUTDIV2]\n
                Divides MCGOUT Clock to generate system_bus_clock\n
@@ -872,7 +872,7 @@ Devices using this peripheral:
       
          <intOption key="sim_clkdiv1_outdiv3[]" 
             derived="true"
-            constant="true"
+            locked="true"
             description="Flexbus Clock Divider (OUTDIV3) - Divide by [1-16]"
             toolTip="Clocks the flexbus interface [SIM_CLKDIV1_OUTDIV3]\n
                      Divides MCGOUT Clock to generate system_flexbus_clock\n
@@ -881,7 +881,7 @@ Devices using this peripheral:
          
          <intOption key="sim_clkdiv1_outdiv4[]" 
             derived="true"
-            constant="true"
+            locked="true"
             description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"
             toolTip="Clocks the flash memory [SIM_CLKDIV1_OUTDIV4]\n
                      Divides MCGOUT Clock to generate system_flash_clock\n

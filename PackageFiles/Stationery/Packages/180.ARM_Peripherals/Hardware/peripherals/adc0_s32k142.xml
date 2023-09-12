@@ -16,7 +16,7 @@
    </choiceOption>
 
    <floatOption key="clockFrequency" 
-      constant="true"
+      locked="true"
       description="Frequency of ADC clock"
       toolTip="Determined from clock source and prescaler"
       derived="true"
@@ -76,25 +76,25 @@
    <intOption key="adc_cv1" description="ADC CV1 value" 
       toolTip="CV1 threshold value\n
          Either low or high value" 
-      constant="true" 
+      locked="true" 
       derived="true" />
    <intOption key="adc_cv2" description="ADC CV2 value" 
       toolTip="CV2 threshold value\n
          Either low or high value"  
-      constant="true" 
+      locked="true" 
       derived="true" />
    
    <intOption key="adc_sc2_acfe"  description="Compare Function Enable"               
       toolTip="Enable comparison" 
-      constant="true" 
+      locked="true" 
       derived="true" />
    <intOption key="adc_sc2_acfgt" description="Compare Function Greater Than Enable"  
       toolTip="Greater-than enable" 
-      constant="true" 
+      locked="true" 
       derived="true" />
    <intOption key="adc_sc2_acren" description="Compare Function Range Enable"         
       toolTip="Compare using range" 
-      constant="true" 
+      locked="true" 
       derived="true" />
    
    <binaryOption key="adc_sc2_adtrg" description="Conversion Trigger Select"
@@ -104,9 +104,9 @@
    </binaryOption>
    
    <category name="Advanced" description="Advanced Options" >
-      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)alttrgen"  constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)pretrgsel" constant="false" optional="true"/>
-      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)trgsel"    constant="false" optional="true"/>
+      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)alttrgen"  locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)pretrgsel" locked="false" optional="true"/>
+      <aliasOption key="/SIM/sim_sopt7_adc$(_instance)trgsel"    locked="false" optional="true"/>
    </category>
 
    <xi:include href="_irqOption.xml"/>

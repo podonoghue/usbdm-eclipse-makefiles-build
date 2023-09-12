@@ -40,12 +40,12 @@
 -->
    <constant key = "disable_peripheral"      value = "&quot;tpm->SC = TPM_SC_CMOD(0);&quot;" type="String"  />
 
-   <intOption key="NumChannels" constant="true" derived="true"
+   <intOption key="NumChannels" locked="true" derived="true"
       description="Number of Channels"
       toolTip="The number of timer channels available"
       value="2" />
 
-   <intOption key="NumChannelVectors" constant="true" derived="true"
+   <intOption key="NumChannelVectors" locked="true" derived="true"
       description="Number of Channel interrupt vectors"
       toolTip="Number of channel event interrupt vectors - \n
                Multiple Channels may be mapped to the same vector"

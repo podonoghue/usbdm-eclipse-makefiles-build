@@ -4,7 +4,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Watchdog Timer" >
 
-   <binaryOption key="irqEnable" ref="fullCodeSupport" hidden="true" derived="true" constant="true" >
+   <binaryOption key="irqEnable" ref="fullCodeSupport" hidden="true" derived="true" locked="true" >
       <choice value="false" name="false" />
       <choice value="true"  name="true"  />
    </binaryOption>
@@ -220,7 +220,7 @@
 
    <intOption key="inputClockFrequency"
       enabledBy="fullCodeSupport"
-      constant="true"
+      locked="true"
       description="Watchdog Input clock frequency"
       toolTip="Determined from timer clock source"
       derived="true"
@@ -239,7 +239,7 @@
 
    <floatOption key="timerTickPeriod"
       enabledBy="fullCodeSupport"
-      constant="true"
+      locked="true"
       description="Period of watchdog counter"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
@@ -256,7 +256,7 @@
    <intOption key="wdog_timeout"
       enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       ref="(wdog_timeoutPeriod)/timerTickPeriod#timerTickPeriod"
-      constant="true"
+      locked="true"
       units="ticks"
       description="Watchdog Timeout in ticks"
       toolTip="The watchdog must be refreshed before the counter reaches this value"
@@ -280,7 +280,7 @@
    <intOption key="wdog_window"
       enabledBy="wdog_cs2_win&amp;&amp;wdog_cs1_en&amp;&amp;fullCodeSupport"
       ref="(wdog_windowPeriod)/timerTickPeriod#timerTickPeriod"
-      constant="true"
+      locked="true"
       units="ticks"
       description="Watchdog Window in ticks"
       toolTip="If windowed operation is enabled, then the watchdog can only be refreshed \n

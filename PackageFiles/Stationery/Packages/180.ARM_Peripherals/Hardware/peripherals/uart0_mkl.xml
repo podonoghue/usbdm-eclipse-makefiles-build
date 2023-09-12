@@ -10,7 +10,7 @@ Devices using this peripheral:
 
    <xi:include href="_mapPinsOption_on.xml"/>
 
-   <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src[]"              optional="true" constant="false" />
+   <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src[]"              optional="true" locked="false" />
    <aliasOption key="/SIM/system_uart$(_instance)_fixedclocksource[]"   optional="true"/>
    <aliasOption key="/SIM/system_uart$(_instance)_clock[]"              optional="true" />
 
@@ -200,13 +200,13 @@ Devices using this peripheral:
       />
 
    <category name="Advanced" description="Advanced options">
-      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)ode"   optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)txsrc" optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)ode"   optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)txsrc" optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" optional="true" locked="false" />
    </category>
 
-   <stringOption key="irq_pattern"        constant="true" value="^UART%i_?((RxTx|Error|Lon)|.*)?$" hidden="true" />
-   <stringOption key="irq_ClassHandler"   constant="true" value="%c%i::irq$2Handler" hidden="true" />
+   <stringOption key="irq_pattern"        locked="true" value="^UART%i_?((RxTx|Error|Lon)|.*)?$" hidden="true" />
+   <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irq$2Handler" hidden="true" />
    <xi:include href="_irqOptionSubstituted.xml"/>
 
    <xi:include href="_clockOption.xml"/>

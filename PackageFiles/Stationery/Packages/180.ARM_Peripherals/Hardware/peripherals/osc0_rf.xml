@@ -42,7 +42,7 @@
 
    <intOption key="osc_clock"
       enabledBy="rsim_control_rf_osc_en>0"
-      constant="true"
+      locked="true"
       derived="true"
       units="Hz"
       description="Frequency of RF oscillator"
@@ -52,7 +52,7 @@
 
    <choiceOption key="oscillatorRange"
       derived="true"
-      constant="true"
+      locked="true"
       description="Oscillator Frequency Range Select"
       toolTip="This range value is determined from the crystal frequency.\n
                It some cases it may be unused and a range value suited to the FLL is used instead">
@@ -68,7 +68,7 @@
          units="Hz"
          description="Oscillator clock [OSCERCLK]"
          toolTip="Generated from osc_clock, available for peripherals"
-         constant="true" />
+         locked="true" />
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.OscRfValidate">

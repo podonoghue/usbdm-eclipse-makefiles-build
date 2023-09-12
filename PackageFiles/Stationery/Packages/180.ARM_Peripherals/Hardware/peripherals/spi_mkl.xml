@@ -101,7 +101,7 @@
 
    <intOption key="spiInputClock"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      constant="true"
+      locked="true"
       derived="true"
       description="SPI input clock"
       toolTip="The SPI uses the bus clock for timing.\n
@@ -137,7 +137,7 @@
    </choiceOption>
 
    <binaryOption key="spi_c1_mstr" condition="spi_c1_mstr_present"
-      constant="true"
+      locked="true"
       enabledBy="spi_c1_spe"
       enumStem="SpiRole"
       description="Controller/Peripheral role select"
@@ -238,7 +238,7 @@
       min="0" max="@/SIM/system_bus_clock[0]/2" />
 
    <choiceOption key="spi_br_sppr" condition="spi_br_sppr_present"
-      constant="true"
+      locked="true"
       derived="true"
       enabledBy="spi_c1_spe"
       enumStem="SpiBrSppr"
@@ -256,7 +256,7 @@
    </choiceOption >
 
    <choiceOption key="spi_br_spr" condition="spi_br_spr_present"
-      constant="true"
+      locked="true"
       derived="true"
       enabledBy="spi_c1_spe"
       enumStem="SpiBrSpr"

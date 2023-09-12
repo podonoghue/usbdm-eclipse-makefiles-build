@@ -81,7 +81,7 @@ Symbols
       description="yyyyyy" 
       toolTip="yyyyyyy"
       value="4000000" 
-      constant="true" />
+      locked="true" />
       
    
    <bitmaskOption key="XXX" 

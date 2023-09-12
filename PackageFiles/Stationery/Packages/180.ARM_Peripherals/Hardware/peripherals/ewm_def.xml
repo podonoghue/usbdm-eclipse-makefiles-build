@@ -24,8 +24,8 @@
    \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
    ]]></template>
 
-   <stringOption key="irq_pattern"        constant="true" value="^WDOG%i_?$" hidden="true" />
-   <stringOption key="irq_ClassHandler"   constant="true" value="%c%i::irqHandler" hidden="true" />
+   <stringOption key="irq_pattern"        locked="true" value="^WDOG%i_?$" hidden="true" />
+   <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irqHandler" hidden="true" />
    <xi:include href="_irqOptionSubstituted.xml"/>
 
    <xi:include href="_clockOption.xml"/>

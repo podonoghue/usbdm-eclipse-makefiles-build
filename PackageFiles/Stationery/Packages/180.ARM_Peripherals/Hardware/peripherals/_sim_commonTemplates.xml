@@ -104,7 +104,7 @@
 
          <intOption key="rtc_clkout"
             hidden="true"
-            constant="true"
+            locked="true"
             derived="true"
             units="Hz"
             description="RTC clock out frequency"
@@ -161,7 +161,7 @@
 
          <intOption key="rtc_clkout"
             hidden="true"
-            constant="true"
+            locked="true"
             derived="true"
             units="Hz"
             description="RTC clock out frequency"
@@ -196,7 +196,7 @@
 
    <intOption key="system_erclk32k_clock" condition="sim_sopt1_osc32ksel||sim_sopt1_osc32ksel_Fixed"
       hidden="true"
-      constant="true"
+      locked="true"
       units="Hz"
       derived="true"
       description="Frequency of External 32k Reference Clock [ERCLK32K]"

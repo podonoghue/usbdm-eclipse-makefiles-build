@@ -10,7 +10,7 @@
       \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
    ]]></template>
 
-   <aliasOption key="/SIM/sim_sopt1_osc32ksel"   constant="false" />
+   <aliasOption key="/SIM/sim_sopt1_osc32ksel"   locked="false" />
    <aliasOption key="/SIM/system_erclk32k_clock"/>
 
    <choiceOption key="lcd_gcr_clock"
@@ -32,7 +32,7 @@
 
    <floatOption key="lcdClock"
       description="LCD clock"
-      constant="true"
+      locked="true"
       toolTip="Calculated from input clock and dividers\n
          (Nominally 32kHz)"
       units="Hz" />
@@ -132,13 +132,13 @@
       toolTip="Comma separated list of lcd signal numbers in backplane order e.g. 40,52,19,18\n
          Number must agree with LCD Duty Select"
       value="40, 52, 19, 18"
-      constant="false" />
+      locked="false" />
 
    <pinListOption key="frontplanes"
       description="Pins used for Frontplane"
       toolTip="Comma separated list of lcd signal numbers in frontplane order e.g. 37,17,7,8,53,38,10,11"
       value="37, 17, 7, 8, 53, 38, 10, 11"
-      constant="false"/>
+      locked="false"/>
 
    <signals/>
    <signals name="LCD_POWER"/>

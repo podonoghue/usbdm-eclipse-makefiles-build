@@ -666,7 +666,7 @@
 
    <!-- ************* Signal mapping ****************** -->
    <category name="SIM" description="Pin mapping">
-      <aliasOption key="/SIM/sim_scgc_$(_name)"     constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc_$(_name)"     locked="false" optional="true" />
    </category>
 
    <signals enabledBy="enablePeripheralSupport" locked="true" />

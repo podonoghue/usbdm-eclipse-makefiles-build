@@ -61,7 +61,7 @@
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="PwtEnable"
       toolTip="Enables/disables the PWT module.\n
-               To avoid unexpected behavior, do not change any PWT configurations as long as PWTEN is set"
+               To avoid unexpected behaviour, do not change any PWT configurations while PWTEN is set"
       description="PWT Module Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
       <choice name="Enabled"     value="1" enum="Enabled"/>
@@ -76,15 +76,28 @@
       <choice name="Alternative clock"  value="1" enum="AlternativeClock"/>
    </binaryOption >
 
-   <choiceOption key="pwt_r1_pinsel" condition="pwt_r1_pinsel_present"
+   <choiceOption key="pwt_r1_pinsel" condition="pwt_r1_pinsel_present &amp;&amp; inputMapping[]"
       enabledBy="pwt_r1_pwten"
-      enumStem="PwtPinSelection"
+      enumStem="PwtInput"
       toolTip="Enables the corresponding PWT input port, if this PWT input comes from an external source"
-      description="PWT Pulse Inputs Selection" >
-      <choice name="PWTIN[0] enabled"  value="0" enum="Pwtin0Enabled" />
-      <choice name="PWTIN[1] enabled"  value="1" enum="Pwtin1Enabled" />
-      <choice name="PWTIN[2] enabled"  value="2" enum="Pwtin2Enabled" />
-      <choice name="PWTIN[3] enabled"  value="3" enum="Pwtin3Enabled" />
+      description="PWT Pulse Input Selection" 
+      disabledPinMap="PWT_IN0,;PWT_IN1," >
+      <choice name="=inputMapping[0]"  value="0" enum="=inputMapping[0]" pinMap="=&quot;PWT_IN0,&quot;+inputMapping[0]+&quot;;PWT_IN1,;PWT_IN2,;PWT_IN3,&quot;" />
+      <choice name="=inputMapping[1]"  value="1" enum="=inputMapping[1]" pinMap="=&quot;PWT_IN0,;PWT_IN1,&quot;+inputMapping[1]+&quot;;PWT_IN2,;PWT_IN3,&quot;" />
+      <choice name="=inputMapping[2]"  value="2" enum="=inputMapping[2]" pinMap="=&quot;PWT_IN0,;PWT_IN1,;PWT_IN2,&quot;+inputMapping[2]+&quot;;PWT_IN3,&quot;"/>
+      <choice name="=inputMapping[3]"  value="3" enum="=inputMapping[3]" pinMap="=&quot;PWT_IN0,;PWT_IN1,;PWT_IN2,;PWT_IN3,&quot;+inputMapping[3]"/>
+   </choiceOption >
+
+   <choiceOption key="pwt_r1_pinsel" condition="pwt_r1_pinsel_present &amp;&amp; altInputMapping[]"
+      enabledBy="pwt_r1_pwten"
+      enumStem="PwtInput"
+      toolTip="Enables the corresponding PWT input port, if this PWT input comes from an external source"
+      description="PWT Pulse Input Selection" 
+      disabledPinMap="PWT_IN0,;PWT_IN1," >
+      <choice name="=altInputMapping[0]"  value="0" enum="=altInputMapping[0]" />
+      <choice name="=altInputMapping[1]"  value="1" enum="=altInputMapping[1]" />
+      <choice name="=altInputMapping[2]"  value="2" enum="=altInputMapping[2]" />
+      <choice name="=altInputMapping[3]"  value="3" enum="=altInputMapping[3]" />
    </choiceOption >
 
    <choiceOption key="pwt_r1_edge" condition="pwt_r1_edge_present"
@@ -622,12 +635,13 @@
 
    <!-- ************* Signal mapping ****************** -->
    <category name="SIM" description="Pin mapping">
-      <aliasOption key="/SIM/sim_scgc_$(_name)"             constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_pinsel_$(_name)clkps"      constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc_$(_name)"             locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel_$(_name)clkps"      locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel0_$(_name)clkps"     locked="false" optional="true" />
       <for keys="ch" dim="4" >
-         <aliasOption key="/SIM/sim_pinsel_$(_name)in%(ch)ps"  constant="false" optional="true" />
-         <aliasOption key="/SIM/sim_pinsel0_$(_name)in%(ch)ps" constant="false" optional="true" />
-         <aliasOption key="/SIM/sim_pinsel1_$(_name)in%(ch)ps" constant="false" optional="true" />
+         <aliasOption key="/SIM/sim_pinsel_$(_name)in%(ch)ps"  locked="false" optional="true" />
+         <aliasOption key="/SIM/sim_pinsel0_$(_name)in%(ch)ps" locked="false" optional="true" />
+         <aliasOption key="/SIM/sim_pinsel1_$(_name)in%(ch)ps" locked="false" optional="true" />
       </for>
    </category>
 

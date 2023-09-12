@@ -19,24 +19,50 @@
    <constant key="LPUART_max"     value="48MHz"  type="Long"    hidden="false" />
    <constant key="TPM_max"        value="48MHz"  type="Long"    hidden="false" />
 
+   <!--
+        Simple pin mapping information
+        inputPinMap  Input pins with custom mapping implementation in peripheral file
+        outputPinMap Output pins with custom mapping implementation in peripheral file
+        pinMap       Default pin mapping enabled whenever the peripheral is enabled
+   -->
    <!-- Pin mapping for ADC0 -->
-   <constant key="/ADC0/pinMap" type="String"
+   <constant key="/ADC0/inputPinMap" type="String"
       value="&quot;PTA0,PTA1,PTA6,PTA7,PTB0,PTB1,PTB2,PTB3,PTC0,PTC1,PTC2,PTC3&quot;" />
 
    <!-- Pin mapping for ACMP0 -->
-   <constant key="/ACMP0/pinMap" type="String" value="&quot;PTB2,PTA1,PTA0&quot;" />
-   <constant key="/ACMP0/outMap" type="String" value="&quot;PTA4&quot;" />
+   <constant key="/ACMP0/inputPinMap"  type="String" value="&quot;PTB2,PTA1,PTA0&quot;" />
+   <constant key="/ACMP0/outputPinMap" type="String" value="&quot;PTA4&quot;" />
 
    <!-- Pin mapping for ACMP1 -->
-   <constant key="/ACMP1/pinMap" type="String" value="&quot;PTA6,PTA7,PTB4&quot;" />
-   <constant key="/ACMP1/outMap" type="String" value="&quot;PTB5&quot;" />
+   <constant key="/ACMP1/inputPinMap"  type="String" value="&quot;PTA6,PTA7,PTB4&quot;" />
+   <constant key="/ACMP1/outputPinMap" type="String" value="&quot;PTB5&quot;" />
+
+   <!-- Pin mapping for FTM2 -->
+   <constant key="/FTM2/faultPinMap" type="String" value="&quot;ACMP0_OUT,PTA6,PTA7,ACMP1_OUT&quot;" />
+   <constant key="/FTM2/pinMap"      type="String" value="&quot;FTM2_CH0,PTC0;FTM2_CH1,PTC1;FTM2_CH4,PTB4;FTM2_CH5,PTB5&quot;" />
+
+   <!-- Pin mapping for IRQ -->
+   <constant key="/IRQ/pinMap"      type="String" value="&quot;IRQ,PTA5&quot;" />
+
+   <!-- Pin mapping for KBIs -->
+   <constant key="/KBI0/inputPinMap" type="String" value="&quot;PT(A-B)(0-3)&quot;"               />
+   <constant key="/KBI1/inputPinMap" type="String" value="&quot;PTC(4-5),PTC(0-3),PTB(4-5)&quot;" />
+
+   <!-- Pin mapping for OSC0 -->
+   <constant key="/OSC0/pinMap"      type="String" value="&quot;XTAL,PTB6;EXTAL,PTB7&quot;" />
+
+   <!-- Pin mapping for PWT -->
+   <constant key="/PWT/inputMapping" value="&quot;PTC4&quot;,&quot;PTB0&quot;,&quot;ACMP0_O&quot;,&quot;ACMP1_O&quot;" type="String" />
+
+   <!-- Pin mapping for RTC -->
+   <constant key="/RTC/outputPinMap" type="String" value="&quot;PTA0&quot;" />
 
    <for keys="n" dim="numberOfClockSettings" >
-      <aliasCategoryOption key="/ICS/ClockConfig[%(n)]" derived="true" constant="true" >
+      <aliasCategoryOption key="/ICS/ClockConfig[%(n)]" derived="true" locked="true" >
 
-         <aliasOption key="/ICS/enableClockConfiguration[%(n)]" constant="false" />
+         <aliasOption key="/ICS/enableClockConfiguration[%(n)]" locked="false" />
          <if condition="%(n)==0">
-            <aliasOption key="/ICS/ics_c2_bdiv[%(n)]" constant="false" />
+            <aliasOption key="/ICS/ics_c2_bdiv[%(n)]" locked="false" />
          </if>
          <for keys="u : name              : code            : ref"
             values="0 : System bus clock : SystemBusClock : system_bus_clock[%(n)]" >
@@ -44,7 +70,7 @@
             <choiceOption key="system_uart%(u)_fixedclocksource[%(n)]"
                hidden="true"
                target="system_uart%(u)_clock[%(n)]"
-               constant="true"
+               locked="true"
                derived="true"
                description="UART%(u) Clock source"
                toolTip="Fixed clock source for UART (%(code))" >
@@ -53,7 +79,7 @@
 
             <intOption key="system_uart%(u)_clock[%(n)]"
                hidden="true"
-               constant="true"
+               locked="true"
                derived="true"
                units="Hz"
                description="UART%(u) Clock frequency"
@@ -91,7 +117,7 @@
          </binaryOption>
 
          <intOption key="system_core_clock[%(n)]"
-            constant="true"
+            locked="true"
             enabledBy="(%(n)==0)||/ICS/enableClockConfiguration[%(n)]"
             ref="(/ICS/system_icsoutclk_clock[%(n)])/((sim_clkdiv_outdiv1[%(n)])+1)#/ICS/system_icsoutclk_clock[%(n)]"
             derived="true"
@@ -104,7 +130,7 @@
             min="1" />
 
          <intOption key="system_bus_clock[%(n)]"
-            constant="true"
+            locked="true"
             enabledBy="(%(n)==0)||/ICS/enableClockConfiguration[%(n)]"
             ref="(system_core_clock[%(n)])/((sim_clkdiv_outdiv2[%(n)])?2:1)#system_core_clock[%(n)]"
             derived="true"
@@ -117,7 +143,7 @@
             min="1"/>
 
          <intOption key="system_timer_clock[%(n)]"
-            constant="true"
+            locked="true"
             enabledBy="(%(n)==0)||/ICS/enableClockConfiguration[%(n)]"
             ref="(/ICS/system_icsoutclk_clock[%(n)])/((sim_clkdiv_outdiv3[%(n)])?2:1)#/ICS/system_icsoutclk_clock[%(n)]"
             derived="true"
@@ -135,68 +161,42 @@
    <title />
 
    <category name="Derived Pin Mappings" description="Mapping of signals controlled by multiple sources" >
-      <aliasOption key="/FTM0/enablePeripheralSupport"   constant="false" />
-      <aliasOption key="sim_pinsel_ftm0clkps"            constant="false" />
-      <aliasOption key="/FTM0/ftm_sc_clks"               constant="false" />
-      <aliasOption key="/FTM2/enablePeripheralSupport"   constant="false" />
-      <aliasOption key="sim_pinsel_ftm2clkps"            constant="false" />
-      <aliasOption key="/FTM2/ftm_sc_clks"               constant="false" />
-      <aliasOption key="/PWT/enablePeripheralSupport"    constant="false" />
-      <aliasOption key="sim_pinsel_pwtclkps"             constant="false" />
-      <aliasOption key="/PWT/pwt_r1_pclks"               constant="false" />
-      <binaryOption key="sim_pinsel_tclk1"
-         ref="((sim_pinsel_ftm0clkps==false)&amp;&amp;/FTM0/enablePeripheralSupport&amp;&amp;(/FTM0/ftm_sc_clks==3))||
-              ((sim_pinsel_ftm2clkps==false)&amp;&amp;/FTM2/enablePeripheralSupport&amp;&amp;(/FTM2/ftm_sc_clks==3))||
-              ((sim_pinsel_pwtclkps==false)&amp;&amp;/PWT/enablePeripheralSupport&amp;&amp;(/PWT/pwt_r1_pclks==true))
-              ##Mapped when used by FTM0, FTM2, PWT"
-         disabledPinMap="TCLK1,"
-         constant="true"
-         derived="true"
-         description="TCLK1 Pin Select" >
-         <choice name="TCLK1 unmapped"  value="0" pinMap="TCLK1" />
-         <choice name="TCLK1 -> PTA5"   value="1" pinMap="TCLK1,PTA5,"  />
-      </binaryOption>
+      <!--
+      <aliasOption key="/FTM0/enablePeripheralSupport"   locked="false" />
+      <aliasOption key="sim_pinsel_ftm0clkps"            locked="false" />
+      <aliasOption key="/FTM0/ftm_sc_clks"               locked="false" />
 
-      <binaryOption key="sim_pinsel_tclk2"
-         ref="((sim_pinsel_ftm0clkps==true)&amp;&amp;/FTM0/enablePeripheralSupport&amp;&amp;(/FTM0/ftm_sc_clks==3))||
-              ((sim_pinsel_ftm2clkps==true)&amp;&amp;/FTM2/enablePeripheralSupport&amp;&amp;(/FTM2/ftm_sc_clks==3))||
-              ((sim_pinsel_pwtclkps==true)&amp;&amp;/PWT/enablePeripheralSupport&amp;&amp;(/PWT/pwt_r1_pclks==true))
-              ##Mapped when used by FTM0, FTM2, PWT"
-         disabledPinMap="TCLK2,"
-         constant="true"
-         derived="true"
-         description="TCLK2 Pin Select" >
-         <choice name="TCLK2 unmapped"  value="0" pinMap="TCLK2" />
-         <choice name="TCLK2 -> PTB2"   value="1" pinMap="TCLK2,PTB1,"  />
-      </binaryOption>
+      <aliasOption key="/FTM2/enablePeripheralSupport"   locked="false" />
+      <aliasOption key="sim_pinsel_ftm2clkps"            locked="false" />
+      <aliasOption key="/FTM2/ftm_sc_clks"               locked="false" />
 
-      <aliasOption key="/PWT/pwt_r1_pinsel"               constant="false" />
+      <aliasOption key="/PWT/enablePeripheralSupport"    locked="false" />
+      <aliasOption key="sim_pinsel_pwtclkps"             locked="false" />
+      <aliasOption key="/PWT/pwt_r1_pclks"               locked="false" />
 
-      <for keys="i:pin" values="1:PTB0"  >
-         <binaryOption key="sim_pinsel_pwtin%(i)" condition="/PWT/pwt_r1_pinsel_present"
-            ref="(/PWT/enablePeripheralSupport&amp;&amp;(/PWT/pwt_r1_pinsel==%(i)))
-              ##Mapped when used by PWT"
-            disabledPinMap="PWT_IN%(i),"
-            constant="true"
+      <aliasOption key="/PWT/pwt_r1_pinsel"              locked="false" />
+
+      <aliasOption key="/OSC0/enablePeripheralSupport"   locked="false" />
+      -->
+
+      <for delimiter="|"
+           keys   =" t  :  p                "
+           values =" 1  :  PTA5            |
+                     2  :  PTB1
+             ">
+         <binaryOption key="sim_pinsel_tclk%(t)"
+            ref="((sim_pinsel_ftm0clkps==(%(t)==2))&amp;&amp;/FTM0/enablePeripheralSupport&amp;&amp;(/FTM0/ftm_sc_clks==3))||
+                 ((sim_pinsel_ftm2clkps==(%(t)==2))&amp;&amp;/FTM2/enablePeripheralSupport&amp;&amp;(/FTM2/ftm_sc_clks==3))||
+                 ((sim_pinsel_pwtclkps==(%(t)==2)) &amp;&amp;/PWT/enablePeripheralSupport &amp;&amp;(/PWT/pwt_r1_pclks==true))
+                 ##Unmapped when unused by FTM0, FTM1, FTM2, PWT"
+            disabledPinMap="TCLK%(t),"
+            locked="true"
             derived="true"
-            description="PWT_IN%(i) Pin Select" >
-            <choice name="PWT_IN%(i) unmapped"  value="0" pinMap="PWT_IN%(i)," />
-            <choice name="PWT_IN%(i) -> %(pin)" value="1" pinMap="PWT_IN%(i),%(pin),"  />
+            description="TCLK%(t) Pin Select" >
+            <choice name="TCLK%(t) unmapped"  value="0" pinMap="TCLK%(t)"        />
+            <choice name="TCLK%(t) -> %(p)"   value="1" pinMap="TCLK%(t),%(p),"  />
          </binaryOption>
-      </for>      
-
-      <aliasOption key="/OSC0/enablePeripheralSupport"  constant="false" />
-      <binaryOption key="sim_pinsel_osc"
-         ref="/OSC0/enablePeripheralSupport
-           ##Mapped when used by OSC"
-         disabledPinMap="XTAL,;EXTAL,"
-         constant="true"
-         derived="true"
-         description="OSC0 Pin Select" >
-         <choice name="XTAL/EXTAL unmapped"     value="0" pinMap="XTAL,;EXTAL," />
-         <choice name="XTAL/EXTAL -> PTB6/PTB7" value="1" pinMap="XTAL,PTB6;EXTAL,PTB7"  />
-      </binaryOption>
-      
+      </for>
    </category>
 
    <category name="Control Signals" description="Mapping of control signals" >
@@ -212,7 +212,7 @@
       <binaryOption key="sim_sopt_swde" condition="sim_sopt_swde_present"
          ref="sim_scgc_swd"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         constant="true"
+         locked="true"
          derived="true"
          disabledValue="1"
          enumStem="SimSWDEnable"
@@ -352,7 +352,7 @@
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          enumStem="SimSoptFtmsync"
          derived="true"
-         constant="true"
+         locked="true"
          hidden="true"
          toolTip="Writing this field generates a PWM synchronisation trigger to the FTM2 module"
          description="FTM2 Synchronisation Select" >
@@ -433,31 +433,6 @@
          <choice name="Selects TCLK2 for FTM2 module"  value="1" enum="SelectsTclk2ForFtm2Module" />
       </binaryOption>
 
-
-
-
-
-      <binaryOption key="sim_pinsel_ftm2"
-         enabledBy="/FTM2/enablePeripheralSupport"
-         disabledPinMap="FTM2_CH0,;FTM2_CH1,;FTM2_CH4,;FTM2_CH5,;"
-         constant="true"
-         derived="true"
-         description="FTM2 Pin Select" >
-         <choice name="CH0/CH1/CH4/CH5 -> PTC0/PTC1/PTB4/PTB5" value="0" pinMap="FTM2_CH0,PTC0;FTM2_CH1,PTC1;FTM2_CH4,PTB4;FTM2_CH5,PTB5;" />
-      </binaryOption>
-
-      <!-- pinMapOption key="sim_pinsel_ftm2"
-         enabledBy="/FTM2/enablePeripheralSupport" >
-         disabledPinMap="#/FTM2/enablePeripheralSupport"
-         <choice name="Selects TCLK1 for FTM2 module"  value="0" enum="SelectsTclk1ForFtm2Module" />
-         <choice name="Selects TCLK2 for FTM2 module"  value="1" enum="SelectsTclk2ForFtm2Module" />
-      </pinMapOption -->
-
-
-
-
-
-
       <binaryOption key="sim_pinsel_ftm2ps2" condition="sim_pinsel_ftm2ps2_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          enumStem="SimPinselFtm2ps2"
@@ -506,7 +481,6 @@
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
       </binaryOption>
-
    </category>
 
    <category name="KBI" description="Peripheral  options and clock enable" >

@@ -1171,6 +1171,16 @@
       </peripheral>
    </peripherals>
    <pins>
+      <pin name="ACMP0_O"      isFixed="true">
+         <mux sel="fixed"         signal="FTM2_FLT0" />
+         <mux sel="fixed"         signal="PWT_IN2" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="ACMP1_O"      isFixed="true">
+         <mux sel="fixed"         signal="FTM2_FLT3" />
+         <mux sel="fixed"         signal="PWT_IN3" />
+         <reset sel="fixed" />
+      </pin>
       <pin name="BANDGAP"      isFixed="true">
          <mux sel="fixed"         signal="ADC0_SE23" />
          <reset sel="fixed" />
@@ -1662,6 +1672,8 @@
    </pins>
    <packages>
       <package name="FRDM_KE06Z">
+         <placement pin="ACMP0_O"       location="Internal" />
+         <placement pin="ACMP1_O"       location="Internal" />
          <placement pin="BANDGAP"       location="Internal" />
          <placement pin="PIT_CH0"       location="Internal" />
          <placement pin="PIT_CH1"       location="Internal" />
@@ -1741,6 +1753,8 @@
          <placement pin="TEMP_SENSOR"   location="Internal" />
       </package>
       <package name="KE06_LQFP_44">
+         <placement pin="ACMP0_O"       location="Internal" />
+         <placement pin="ACMP1_O"       location="Internal" />
          <placement pin="BANDGAP"       location="Internal" />
          <placement pin="PIT_CH0"       location="Internal" />
          <placement pin="PIT_CH1"       location="Internal" />
@@ -1787,6 +1801,8 @@
          <placement pin="TEMP_SENSOR"   location="Internal" />
       </package>
       <package name="KE06_LQFP_64">
+         <placement pin="ACMP0_O"       location="Internal" />
+         <placement pin="ACMP1_O"       location="Internal" />
          <placement pin="BANDGAP"       location="Internal" />
          <placement pin="PIT_CH0"       location="Internal" />
          <placement pin="PIT_CH1"       location="Internal" />
@@ -1853,6 +1869,8 @@
          <placement pin="TEMP_SENSOR"   location="Internal" />
       </package>
       <package name="KE06_LQFP_80">
+         <placement pin="ACMP0_O"       location="Internal" />
+         <placement pin="ACMP1_O"       location="Internal" />
          <placement pin="BANDGAP"       location="Internal" />
          <placement pin="PIT_CH0"       location="Internal" />
          <placement pin="PIT_CH1"       location="Internal" />

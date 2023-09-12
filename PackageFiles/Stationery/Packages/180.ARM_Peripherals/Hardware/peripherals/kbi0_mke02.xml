@@ -57,10 +57,7 @@
 
    <!-- ************* PE ****************** -->
 
-   <constant key="pinMap" type="String" value="&quot;PT(A-B)(0-3)&quot;"               condition="$(_instance)==0" />
-   <constant key="pinMap" type="String" value="&quot;PTC(4-5),PTC(0-3),PTB(4-5)&quot;" condition="$(_instance)==1" />
-
-   <constant key="expandedPinMap" type="String" value="ExpandPinList(pinMap)" />
+   <constant key="expandedPinMap" type="String" value="ExpandPinList(inputPinMap)" />
 
    <bitmaskOption key="kbi_pe_kbipe" condition="kbi_pe_kbipe_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
@@ -71,8 +68,8 @@
       description="KBI Pin Enables"
       toolTip="Bitmask selecting enabled pins"
       bitmask="0"
-      bitList="=pinMap"
-      pinMap="=&quot;KBI$(_instance)_P%i:&quot;+pinMap"
+      bitList="=inputPinMap"
+      pinMap="=&quot;KBI$(_instance)_P%i:&quot;+inputPinMap"
       value="0"
    />
 
@@ -87,7 +84,7 @@
       description="KBI Edge Selects"
       toolTip="Bitmask selecting polarity : 0=Falling edge/low level; 1=Rising edge/high level"
       bitmask="0"
-      bitList="=pinMap"
+      bitList="=inputPinMap"
       value="0"
    />
 
@@ -631,7 +628,7 @@
 
    <!-- ************* Signal mapping ****************** -->
    <category name="SIM" description="Pin mapping">
-      <aliasOption key="/SIM/sim_scgc_$(_name)"     constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc_$(_name)"     locked="false" optional="true" />
    </category>
 
    <signals enabledBy="enablePeripheralSupport" locked="true" />

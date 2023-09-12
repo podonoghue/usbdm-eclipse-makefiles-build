@@ -41,7 +41,7 @@
    </binaryOption>
 
    <binaryOption key="enableClockConfiguration[0]"
-      constant="true"
+      locked="true"
       hidden="true"
       enabledBy="enablePeripheralSupport" >
       <choice value="false" name="Disabled" />
@@ -67,7 +67,7 @@
    />
 
    <intOption key="icsirclk"
-      constant="true"
+      locked="true"
       derived="true"
       hidden="true"
       units="Hz"
@@ -86,7 +86,7 @@
          <if condition="%(n)==0" >
             <aliasOption key="enableClockConfiguration[%(n)]" />
          <else/>
-            <aliasOption key="enableClockConfiguration[%(n)]" constant="false" />
+            <aliasOption key="enableClockConfiguration[%(n)]" locked="false" />
          </if>
 
          <graphic key="Clock configuration GUI[%(n)]"
@@ -476,7 +476,7 @@
             <intOption key="system_icsirclk_clock[%(n)]"
                ref="icsirclk"
                enabledBy="ics_c1_irclken[%(n)]"
-               constant="true"
+               locked="true"
                derived="true"
                units="Hz"
                description="ICS Internal Reference Clock [ICSIRC]"
@@ -493,7 +493,7 @@
          </choiceOption>
 
          <intOption key="ics_erc_clock[%(n)]"
-            constant="true"
+            locked="true"
             units="Hz"
             derived="true"
             description="Frequency of ICS External reference"
@@ -506,7 +506,7 @@
                enabledBy="((irefs_clock[%(n)]&gt;=31.25_kHz)&amp;&amp;(irefs_clock[%(n)]&lt;=39.0625_kHz))#irefs_clock[%(n)]"
                ref="(icsClockMode[%(n)]!=@FBILP)&amp;&amp;(icsClockMode[%(n)]!=@FBELP)"
                derived="true"
-               constant="true"
+               locked="true"
                description="FLL State"
                toolTip="Determined from clock mode selected"
                disabledValue="0" >
@@ -521,7 +521,7 @@
                target="ics_erc_clock_divided[%(n)]"
                enumStem="IcsFllPrescale"
                derived="true"
-               constant="true"
+               locked="true"
                description="FLL External Reference Divider"
                origin="Determined by FLL input frequency constraints and external reference clock frequency"
                toolTip="Selects the amount to divide down the external reference clock for the FLL.\n
@@ -551,7 +551,7 @@
             <intOption key="ics_erc_clock_divided[%(n)]"
                enabledBy="ics_c1_rdiv[%(n)]!=0"
                derived="true"
-               constant="true"
+               locked="true"
                units="Hz"
                description="Divided external reference clock"
                toolTip="ics_erc_clock after RDIV"
@@ -563,7 +563,7 @@
                enumStem="IcsIref"
                target="irefs_clock[%(n)]"
                derived="true"
-               constant="true"
+               locked="true"
                description="Internal Reference Select"
                disabledValue="1"
                toolTip="Selects the reference clock source for the FLL\n
@@ -583,7 +583,7 @@
                           ((irefs_clock[%(n)]&lt;=(system_icsoutclk_clock[%(n)]/8))&amp;&amp;(icsClockMode[%(n)]!=@FBILP))"
                units="Hz"
                derived="true"
-               constant="true"
+               locked="true"
                description="ICS Fixed Frequency Clock [ICSFFCLK]"
                isNamedClock="true"
                toolTip="Used as input clock to FLL and available to some peripherals\n
@@ -593,7 +593,7 @@
             <intOption key="fllInputFrequency[%(n)]"
                ref="irefs_clock[%(n)]"
                derived="true"
-               constant="true"
+               locked="true"
                units="Hz"
                description="FLL Input clock frequency"
                toolTip="Frequency of input to FLL"
@@ -603,7 +603,7 @@
                enabledBy="fll_enabled[%(n)]&amp;&amp;((fllInputFrequency[%(n)]&gt;=31.25_kHz)&amp;&amp;(fllInputFrequency[%(n)]&lt;=39.0625_kHz))"
                ref="fllInputFrequency[%(n)]*1280"
                derived="true"
-               constant="true"
+               locked="true"
                max="50_MHz"
                units="Hz"
                description="ICS FLL Output clock [ICSFLLCLK]"
@@ -625,7 +625,7 @@
             enumStem="IcsClkSrc"
             target="icsoutclk_undivided[%(n)]"
             derived="true"
-            constant="true"
+            locked="true"
             description="ICS Output Clock Source Select"
             toolTip="Selects the clock source for ICSOUTCLK\n
                      This option is determined by the Clock Mode selection" >
@@ -637,7 +637,7 @@
          <intOption key="icsoutclk_undivided[%(n)]"
             hidden="true"
             derived="true"
-            constant="true" />
+            locked="true" />
 
          <choiceOption key="ics_c2_bdiv[%(n)]" condition="ics_c2_bdiv_present"
             enabledBy="((%(n)==0)&amp;&amp;(slowInternalClockTrim!=0))||enableClockConfiguration[%(n)]#enableClockConfiguration[%(n)]"
@@ -662,7 +662,7 @@
             max="50_MHz"
             min="1"
             derived="true"
-            constant="true"
+            locked="true"
             units="Hz"
             description="ICS Output Clock [ICSOUTCLK]"
             isNamedClock="true"
@@ -670,10 +670,10 @@
             value="120000000"
             disabledValue="0" />
 
-         <aliasOption key="/SIM/system_core_clock[%(n)]"    constant="false"  optional="true" />
-         <aliasOption key="/SIM/system_bus_clock[%(n)]"     constant="false"  optional="true" />
-         <aliasOption key="/SIM/system_flexbus_clock[%(n)]" constant="false"  optional="true" />
-         <aliasOption key="/SIM/system_flash_clock[%(n)]"   constant="false"  optional="true" />
+         <aliasOption key="/SIM/system_core_clock[%(n)]"    locked="false"  optional="true" />
+         <aliasOption key="/SIM/system_bus_clock[%(n)]"     locked="false"  optional="true" />
+         <aliasOption key="/SIM/system_flexbus_clock[%(n)]" locked="false"  optional="true" />
+         <aliasOption key="/SIM/system_flash_clock[%(n)]"   locked="false"  optional="true" />
 
          <category name="Device Parameters" description="Register values" >
             <category name="OSC_CR" description="ICS Control Register 2" >
@@ -698,7 +698,7 @@
                <binaryOption key="ics_c2_lp[%(n)]"
                   enumStem="IcsFllInLowpower"
                   derived="true"
-                  constant="true"
+                  locked="true"
                   description="Low Power Select"
                   toolTip="Whether FLL continues operation when bypassed\n
                            This option is determined by the Clock Mode selection" >

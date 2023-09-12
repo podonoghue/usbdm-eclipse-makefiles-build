@@ -69,7 +69,7 @@
          \t}\n\n
       ]]></template>
 
-      <aliasOption key="sim_sopt2_rtcclkoutsel"  optional="true" constant="false"/>
+      <aliasOption key="sim_sopt2_rtcclkoutsel"  optional="true" locked="false"/>
       <aliasOption key="rtc_clkout"              optional="true" />
 
       <aliasOption key="system_peripheral_clock[]"  optional="true" />
@@ -107,7 +107,7 @@
          <intOption key="Tpm%(p)ExternalClkin"
             description="TMP%(p) External clock"
             toolTip="This clock is available as the TPM%(p) external clock source"
-            constant="true"
+            locked="true"
             derived="true"
             units="Hz"
          />
@@ -220,10 +220,10 @@
    </category>
 
    <for keys="n" dim="numberOfClockSettings" >
-      <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" constant="true" >
+      <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" locked="true" >
 
-         <aliasOption key="/MCG/enableClockConfiguration[%(n)]" constant="false" />
-         <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]"          constant="false" />
+         <aliasOption key="/MCG/enableClockConfiguration[%(n)]" locked="false" />
+         <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]"          locked="false" />
 
          <category name="Peripheral Clocks" description="Peripheral Clock Selection">
             <choiceOption key="sim_sopt2_clkoutsel[%(n)]" condition="sim_sopt2_clkoutsel_present"
@@ -244,7 +244,7 @@
 
             <intOption key="clockOut[%(n)]" condition="sim_sopt2_clkoutsel_present"
                derived="true"
-               constant="true"
+               locked="true"
                units="Hz"
                description="Clock out"
                toolTip="Clock available on CLKOUT pin" />
@@ -261,7 +261,7 @@
             <intOption key="system_peripheral_clock[%(n)]"
                enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
                derived="true"
-               constant="true"
+               locked="true"
                units="Hz"
                description="Peripheral Clock frequency"
                toolTip="Frequency of Peripheral Clock available to various peripherals"  />
@@ -275,12 +275,12 @@
                <choice value="1"  name="Peripheral Clock"                  enum="PeripheralClk" ref="system_peripheral_clock[%(n)]"    isDefault="true" />
             </choiceOption>
 
-            <aliasOption key="system_usb_clkin_clock" constant="false" optional="true" />
+            <aliasOption key="system_usb_clkin_clock" locked="false" optional="true" />
 
             <intOption key="system_usbfs_clock[%(n)]"  condition="sim_sopt2_usbsrc_present"
                errorPropagate="error"
                derived="true"
-               constant="true"
+               locked="true"
                units="Hz"
                description="USB Full Speed Clock"
                toolTip="Frequency of clock to USB full speed controller"
@@ -306,7 +306,7 @@
                   <intOption key="system_%(name)_clock[%(n)]" condition="sim_sopt2_%(name)src_present"
                      max="%(bNAME)_max[/SMC/smc_pmctrl_runm[%(n)]]"
                      derived="true"
-                     constant="true"
+                     locked="true"
                      units="Hz"
                      description="%(NAME) Clock frequency"
                      toolTip="Frequency of clock to %(NAME)"
@@ -327,7 +327,7 @@
             </choiceOption>
 
             <intOption key="system_flexio_clock[%(n)]" condition="sim_sopt2_flexiosrc_present"
-               constant="true"
+               locked="true"
                derived="true"
                units="Hz"
                description="FLEXIO Clock frequency"
@@ -365,7 +365,7 @@
             <choiceOption key="sim_clkdiv1_outdiv1[%(n)]"  condition="sim_clkdiv1_outdiv1_present"
                enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
                enumStem="SimCoreClkDivider"
-               constant="true"
+               locked="true"
                description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
                toolTip="Clocks the ARM Cortex-M4 core and bus masters\n
                         Divides MCGOUTCLK Clock to generate system_core_clock.">
@@ -389,7 +389,7 @@
 
             <choiceOption key="sim_clkdiv1_outdiv4[%(n)]"  condition="sim_clkdiv1_outdiv4_present"
                enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
-               constant="true"
+               locked="true"
                derivedFrom="sim_clkdiv1_outdiv1[%(n)]"
                enumStem="SimFlashClkDivider"
                description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"

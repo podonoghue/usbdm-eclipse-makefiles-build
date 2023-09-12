@@ -67,7 +67,7 @@
       <choice value="6" name="32 uA" />
       <choice value="7" name="64 uA" />
    </choiceOption>
-   <aliasOption key="tsi_gencs_dvolt" constant="false" />
+   <aliasOption key="tsi_gencs_dvolt" locked="false" />
    <choiceOption key="tsi_gencs_refchrg" 
       description="Reference Oscillator Charge Current select" 
       toolTip="These bits indicate the reference oscillator charge and discharge current value" >

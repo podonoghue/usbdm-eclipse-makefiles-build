@@ -99,21 +99,21 @@
       <choice value="1" name="Enabled" />
    </binaryOption>
 
-   <intOption name="Bootloader size"               key="/LINKER/bootloaderSize"      constant="true" value = "0x4000" radix="16" description="Amount of flash reserved for bootloader"   />
-   <intOption name="Bootloader Information size"   key="/LINKER/bootloaderInfoSize"  constant="true" value = "0x10"   radix="16" description="Size of bootloader information block"       />
+   <intOption name="Bootloader size"               key="/LINKER/bootloaderSize"      locked="true" value = "0x4000" radix="16" description="Amount of flash reserved for bootloader"   />
+   <intOption name="Bootloader Information size"   key="/LINKER/bootloaderInfoSize"  locked="true" value = "0x10"   radix="16" description="Size of bootloader information block"       />
 
-   <intOption name="Program Flash size" key="/LINKER/flashSize"       constant="true" description="Program Flash available in target"   />
-   <intOption name="Upper SRAM size"    key="/LINKER/ramUpperSize"    constant="true" description="Upper RAM available in target"    />
-   <intOption name="Lower SRAM size"    key="/LINKER/ramLowerSize"    constant="true" description="Lower RAM available in target"    />
-   <intOption name="Flex RAM size"      key="/LINKER/flexRamSize"     constant="true" description="Flex RAM available in target"     />
-   <intOption name="Flex NVM size"      key="/LINKER/flexNvmSize"     constant="true" description="Flex Flash available in target"   />
+   <intOption name="Program Flash size" key="/LINKER/flashSize"       locked="true" description="Program Flash available in target"   />
+   <intOption name="Upper SRAM size"    key="/LINKER/ramUpperSize"    locked="true" description="Upper RAM available in target"    />
+   <intOption name="Lower SRAM size"    key="/LINKER/ramLowerSize"    locked="true" description="Lower RAM available in target"    />
+   <intOption name="Flex RAM size"      key="/LINKER/flexRamSize"     locked="true" description="Flex RAM available in target"     />
+   <intOption name="Flex NVM size"      key="/LINKER/flexNvmSize"     locked="true" description="Flex Flash available in target"   />
 
    <constant name="Linker Extra Regions" key="/LINKER/extraRegions" type="String" />
    <constant name="Linker Information"   key="/LINKER/information"  type="String" />
 
-   <stringOption name="Linker script"        key="/LINKER/scriptFilename"   constant="true" description="File used as linker script"       />
-   <stringOption name="Linker memory map"    key="/LINKER/mapFilename"      constant="true" description="File used for target memory map"  />
-   <stringOption name="Linker vector table"  key="/LINKER/vectorsFilename"  constant="true" description="File used for target vector table"  />
+   <stringOption name="Linker script"        key="/LINKER/scriptFilename"   locked="true" description="File used as linker script"       />
+   <stringOption name="Linker memory map"    key="/LINKER/mapFilename"      locked="true" description="File used for target memory map"  />
+   <stringOption name="Linker vector table"  key="/LINKER/vectorsFilename"  locked="true" description="File used for target vector table"  />
 
    <category name="Section placement in Flash" description="How regions are mapped to available Flash"
      toolTip=
@@ -124,7 +124,8 @@
    >
 
       <choiceOption name="Startup code" key="/LINKER/startup_rom" description="Segment allocation"
-         toolTip="Fixed placement for vector table and reset code" constant="true"  >
+         toolTip="Fixed placement for vector table and reset code"
+         locked="true"  >
          <choice value="flash"       name="Main Flash"  isDefault="true"/>
          <choice value="flexNVM"     name="Flex NVM Flash" />
       </choiceOption>

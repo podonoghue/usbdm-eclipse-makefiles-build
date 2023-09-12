@@ -4,7 +4,7 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <aliasOption key="/PCC/pcc_cmp$(_instance)" constant="false" />
+   <aliasOption key="/PCC/pcc_cmp$(_instance)" locked="false" />
 
    <template><![CDATA[
       \t//! Pin number in Info table for comparator output

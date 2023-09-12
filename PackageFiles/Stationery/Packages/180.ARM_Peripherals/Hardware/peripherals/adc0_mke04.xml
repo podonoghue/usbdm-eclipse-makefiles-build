@@ -62,7 +62,7 @@
    <intOption key="adiclk"
       description="Adc internal asynchronous clock"
       toolTip="This is nominally 8MHz.  (Actually 4MHz in in ADC low power)"
-      constant="true"
+      locked="true"
       units="Hz"
       value="8_MHz"
    />
@@ -128,8 +128,8 @@
                0:pin is GPIO, 1:pin is Analogue"
       value="0"
       bitmask="0"
-      bitList="=pinMap"
-      pinMap="=&quot;ADC$(_instance)_SE%i:&quot;+pinMap"
+      bitList="=inputPinMap"
+      pinMap="=&quot;ADC$(_instance)_SE%i:&quot;+inputPinMap"
     />
 
    <!-- ************* SC2 ****************** -->
@@ -893,9 +893,9 @@
 
     <!-- ************* SIM controls ****************** -->
    <category name="Advanced" description="Advanced options">
-      <aliasOption key="/SIM/sim_scgc_$(_name)"  constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt0_adhwt"  constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt0_delay"  constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc_$(_name)"  locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt0_adhwt"    locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt0_delay"    locked="false" optional="true" />
    </category>
 
    <signals enabledBy="enablePeripheralSupport" locked="true" />

@@ -47,11 +47,11 @@
 
   <category name="Advanced" description="SIM controlled options">
       <for keys="p" values="0;1">
-         <aliasOption key="/SIM/TpmClkin%(p)" constant="false"  optional="true" />
+         <aliasOption key="/SIM/TpmClkin%(p)" locked="false"  optional="true" />
       </for>
-      <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)clksel" constant="false" optional="true" />
-      <aliasOption key="/SIM/Tpm$(_instance)ExternalClkin"    constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)ch0src" constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)clksel" locked="false" optional="true" />
+      <aliasOption key="/SIM/Tpm$(_instance)ExternalClkin"    locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)ch0src" locked="false" optional="true" />
    </category>
 
 
@@ -66,7 +66,7 @@
    </choiceOption>
 
    <intOption key="system_tpm_clock"
-      constant="true"
+      locked="true"
       derived="true"
       description="System TPM Clock"
       toolTip="Based on current clock configuration"
@@ -87,7 +87,7 @@
 
    <intOption key="inputClockFrequency"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      constant="true"
+      locked="true"
       description="Frequency of input clock to timer"
       derived="true"
       units="Hz"/>
@@ -110,7 +110,7 @@
 
    <intOption key="clockFrequency"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      constant="true"
+      locked="true"
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
@@ -119,7 +119,7 @@
    <floatOption key="clockPeriod"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       ref="(1.0/clockFrequency)"
-      constant="true"
+      locked="true"
       description="Period of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"

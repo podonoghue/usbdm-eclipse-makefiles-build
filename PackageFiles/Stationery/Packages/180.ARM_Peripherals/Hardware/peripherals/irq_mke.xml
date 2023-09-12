@@ -53,7 +53,7 @@
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
+      value="&quot;$(_Class)Info : public $(_Class)BasicInfo&quot;" />
 
    <!-- ************* SC ****************** -->
 
@@ -472,10 +472,10 @@
 
    <!-- ************* Signal mapping ****************** -->
    <category name="SIM" description="Pin mapping">
-      <aliasOption key="/SIM/sim_scgc_$(_name)"     constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_pinsel_$(_name)ps"  constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_pinsel0_$(_name)ps" constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc_$(_name)"     locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel_$(_name)ps"  locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel0_$(_name)ps" locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" locked="false" optional="true" />
    </category>
 
    <signals enabledBy="enablePeripheralSupport" locked="true" />

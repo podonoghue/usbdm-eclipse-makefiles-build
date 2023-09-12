@@ -53,7 +53,7 @@
    <binaryOption key="chipctl_traceclk_sel" 
       description="Debug trace clock select"
       toolTip="Selects the the trace clock source" 
-      constant="true">
+      locked="true">
       <choice value="0"  name="Core clock" isDefault="true" />
       <choice value="1"  name="Reserved" />
    </binaryOption>   
@@ -636,7 +636,7 @@
       <intOption key="system_lpo_frequency"
          description="Frequency of internal 128kHz LPO Clock [LPO12K_CLK]"
          toolTip="Dependent on clock trim. [Typically ~128kHz]" 
-         constant="true" 
+         locked="true" 
          origin="LPO128K_CLK frequency"
          units="Hz"
          value="128000"/>
@@ -644,33 +644,33 @@
       <intOption key="system_rtcclkin_frequency"
          description="Frequency of External RTC_CLKIN Clock"
          toolTip="Externally supplied [Typically ~32kHz]" 
-         constant="false" 
+         locked="false" 
          origin="RTC_CLKIN frequency"
          units="Hz"
          value="32000"/>
             
-      <stringOption key="pdb_input_clock"   constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption key="ftm0_input1_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption key="ftm0_input2_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption key="ftm0_input3_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption key="ftm1_input1_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption key="ftm1_input2_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption key="ftm1_input3_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption key="ftm2_input1_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption key="ftm2_input2_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption key="ftm2_input3_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption key="ftm3_input1_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption key="ftm3_input2_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <stringOption key="ftm3_input3_clock" constant="true" value="/SCG/run_mode_core_clock" />
-      <floatOption  key="vlpr_mode_max_core_frequency"   constant="true" value="4MHz"    units="Hz" />
-      <floatOption  key="vlpr_mode_max_bus_frequency"    constant="true" value="4MHz"    units="Hz" />
-      <floatOption  key="vlpr_mode_max_flash_frequency"  constant="true" value="1MHz"    units="Hz" />
-      <floatOption  key="run_mode_max_core_frequency"    constant="true" value="80MHz"   units="Hz" />
-      <floatOption  key="run_mode_max_bus_frequency"     constant="true" value="48MHz"   units="Hz" />
-      <floatOption  key="run_mode_max_flash_frequency"   constant="true" value="18.7MHz" units="Hz" />
-      <floatOption  key="hsrun_mode_max_core_frequency"  constant="true" value="112MHz"  units="Hz" />
-      <floatOption  key="hsrun_mode_max_bus_frequency"   constant="true" value="56MHz"   units="Hz" />
-      <floatOption  key="hsrun_mode_max_flash_frequency" constant="true" value="28MHz"   units="Hz" />
+      <stringOption key="pdb_input_clock"   locked="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm0_input1_clock" locked="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm0_input2_clock" locked="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm0_input3_clock" locked="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm1_input1_clock" locked="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm1_input2_clock" locked="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm1_input3_clock" locked="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm2_input1_clock" locked="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm2_input2_clock" locked="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm2_input3_clock" locked="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm3_input1_clock" locked="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm3_input2_clock" locked="true" value="/SCG/run_mode_core_clock" />
+      <stringOption key="ftm3_input3_clock" locked="true" value="/SCG/run_mode_core_clock" />
+      <floatOption  key="vlpr_mode_max_core_frequency"   locked="true" value="4MHz"    units="Hz" />
+      <floatOption  key="vlpr_mode_max_bus_frequency"    locked="true" value="4MHz"    units="Hz" />
+      <floatOption  key="vlpr_mode_max_flash_frequency"  locked="true" value="1MHz"    units="Hz" />
+      <floatOption  key="run_mode_max_core_frequency"    locked="true" value="80MHz"   units="Hz" />
+      <floatOption  key="run_mode_max_bus_frequency"     locked="true" value="48MHz"   units="Hz" />
+      <floatOption  key="run_mode_max_flash_frequency"   locked="true" value="18.7MHz" units="Hz" />
+      <floatOption  key="hsrun_mode_max_core_frequency"  locked="true" value="112MHz"  units="Hz" />
+      <floatOption  key="hsrun_mode_max_bus_frequency"   locked="true" value="56MHz"   units="Hz" />
+      <floatOption  key="hsrun_mode_max_flash_frequency" locked="true" value="28MHz"   units="Hz" />
    </category>
 
    <signals name="CONTROL" />

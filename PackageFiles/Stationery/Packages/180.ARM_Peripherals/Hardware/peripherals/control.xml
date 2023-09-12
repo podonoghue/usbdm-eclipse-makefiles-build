@@ -6,12 +6,12 @@
 
    <!-- ************* Signal mapping ****************** -->
    <category name="SIM" description="Pin mapping">
-      <aliasOption key="/SIM/sim_scgc_swd"      constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc_swd"      locked="false" optional="true" />
       <for keys="reg" values="sopt;sopt0" >
-         <aliasOption key="/SIM/sim_%(reg)_swde"    constant="false" optional="true" />
-         <aliasOption key="/SIM/sim_%(reg)_rstpe"   constant="false" optional="true" />
-         <aliasOption key="/SIM/sim_%(reg)_nmie"    constant="false" optional="true" />
-         <aliasOption key="/SIM/sim_%(reg)_busref"  constant="false" optional="true" />
+         <aliasOption key="/SIM/sim_%(reg)_swde"    locked="false" optional="true" />
+         <aliasOption key="/SIM/sim_%(reg)_rstpe"   locked="false" optional="true" />
+         <aliasOption key="/SIM/sim_%(reg)_nmie"    locked="false" optional="true" />
+         <aliasOption key="/SIM/sim_%(reg)_busref"  locked="false" optional="true" />
       </for>
    </category>
 

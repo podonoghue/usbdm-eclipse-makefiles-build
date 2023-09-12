@@ -7,12 +7,12 @@
    <constant key = "disable_peripheral"      value = "&quot;ftm->SC = FTM_SC_CLKS(0);&quot;" type="String"  />
    <xi:include href="_mapPinsOption.xml"/>
 
-   <intOption key="NumChannels" constant="true" derived="true"
+   <intOption key="NumChannels" locked="true" derived="true"
       description="Number of Channels"
       toolTip="The number of timer channels available"
       value="8" />
 
-   <intOption key="NumChannelVectors" constant="true" derived="true"
+   <intOption key="NumChannelVectors" locked="true" derived="true"
       description="Number of Channel interrupt vectors"
       toolTip="Number of channel event interrupt vectors - \n
                Multiple Channels may be mapped to the same vector"
@@ -59,13 +59,13 @@
    </choiceOption>
 
    <floatOption key="clockFrequency"
-      constant="true"
+      locked="true"
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
       units="Hz"/>
    <floatOption key="clockPeriod"
-      constant="true"
+      locked="true"
       description="Period of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
@@ -129,24 +129,24 @@
    ]]></template>
 
    <category name="Advanced" description="Advanced options">
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)clksel"  optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt0"    optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt1"    optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt2"    optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt3"    optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)trg0src" optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)trg1src" optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)ch0src"  optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)ch1src"  optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)clksel"  optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt0"    optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt1"    optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt2"    optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt3"    optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)trg0src" optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)trg1src" optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)ch0src"  optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)ch1src"  optional="true" locked="false" />
 
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och7src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och6src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och5src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och4src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och3src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och2src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och1src" optional="true" constant="false"/>
-      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och0src" optional="true" constant="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och7src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och6src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och5src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och4src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och3src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och2src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och1src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och0src" optional="true" locked="false"/>
    </category>
 
    <!--

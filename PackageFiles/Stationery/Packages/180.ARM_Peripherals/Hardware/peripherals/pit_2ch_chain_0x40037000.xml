@@ -108,7 +108,7 @@
 
    <intOption key="pitInputClock"
       enabledBy="enablePeripheralSupport"
-      constant="true"
+      locked="true"
       derived="true"
       description="PIT input clock"
       toolTip="The PIT uses the bus clock for timing.\n

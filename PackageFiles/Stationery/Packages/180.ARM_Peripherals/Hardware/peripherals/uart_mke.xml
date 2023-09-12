@@ -6,8 +6,8 @@ Devices using this peripheral:
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART" >
 
-   <stringOption key="irq_pattern"        constant="true" value="^UART%i_?((RxTx|Error|Lon)|.*)?$" hidden="true" />
-   <stringOption key="irq_ClassHandler"   constant="true" value="%c%i::irq$2Handler" hidden="true" />
+   <stringOption key="irq_pattern"        locked="true" value="^UART%i_?((RxTx|Error|Lon)|.*)?$" hidden="true" />
+   <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irq$2Handler" hidden="true" />
 
    <constant key="suppressInstance"         type="Boolean" value="false"         />
    <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
@@ -54,7 +54,7 @@ Devices using this peripheral:
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
 
-   <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src[]"              optional="true" constant="false" />
+   <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src[]"              optional="true" locked="false" />
    <aliasOption key="/SIM/system_uart$(_instance)_fixedclocksource[]"   optional="true"/>
    <aliasOption key="/SIM/system_uart$(_instance)_clock[]"              optional="true" />
 
@@ -75,7 +75,7 @@ Devices using this peripheral:
       description="usedAsConsole"
       toolTip="Inidcates if this device is allocated as the Console for I/O"
       ref="/Console/consoleDevice.name==&quot;$(_Baseclass) $(_instance)&quot;"
-      constant="true"
+      locked="true"
       derived="true" >
       <choice value="0" name="Not used as console" />
       <choice value="1" name="Used as console" />
@@ -279,9 +279,9 @@ Devices using this peripheral:
    />
 
    <category name="Advanced" description="Advanced options" >
-      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)ode"   optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)txsrc" optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)ode"   optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)txsrc" optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" optional="true" locked="false" />
    </category>
 
    <validate
@@ -338,9 +338,9 @@ Devices using this peripheral:
 
    <!-- ************* Signal mapping ****************** -->
    <category name="SIM" description="Pin mapping">
-      <aliasOption key="/SIM/sim_pinsel_$(_name)ps"  constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_pinsel0_$(_name)ps" constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel_$(_name)ps"  locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel0_$(_name)ps" locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" locked="false" optional="true" />
    </category>
 
    <signals enabledBy="enablePeripheralSupport" locked="true" />

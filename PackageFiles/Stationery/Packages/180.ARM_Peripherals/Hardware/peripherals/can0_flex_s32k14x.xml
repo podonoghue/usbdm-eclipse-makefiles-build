@@ -23,7 +23,7 @@
       toolTip="This is the maximum value determined by the hardware.\n
                The CAN memory is shared between the FIFO filters and message buffers so\n
                the actual number available will be reduced by use of the FIFO and FIFO filters"
-      constant="true"
+      locked="true"
       value="32" />
 
    <intOption key="MaxNumberOfFifoMessageFilters"
@@ -31,7 +31,7 @@
       toolTip="This is the maximum value determined by the hardware.\n
                The CAN memory is shared between the FIFO filters and message buffers\n
 	       so a usable number will be less than this"
-      constant="true"
+      locked="true"
       value="104" />
 
    <intOption key="NumberOfFifoMessageFilters"

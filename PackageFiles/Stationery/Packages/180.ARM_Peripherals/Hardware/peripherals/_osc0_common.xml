@@ -46,7 +46,7 @@
 -->
    <!-- ************* CR ****************** -->
 
-   <aliasOption key="/MCG/mcg_c2_oscmode" constant="false" />
+   <aliasOption key="/MCG/mcg_c2_oscmode" locked="false" />
 
    <intOption key="osc_input_freq"
       enabledBy="/MCG/mcg_c2_oscmode!=/OscMode_NotConfigured"
@@ -60,7 +60,7 @@
       enabledBy="/MCG/mcg_c2_oscmode!=/OscMode_NotConfigured"
       ref="osc_input_freq"
       valueFormat="%s"
-      constant="true"
+      locked="true"
       derived="true"
       units="Hz"
       description="Frequency of OSC Clock or Crystal [OSCCLK]"
@@ -82,7 +82,7 @@
 
    <choiceOption key="oscillatorRange"
       derived="true"
-      constant="true"
+      locked="true"
       description="Oscillator Frequency Range Select"
       toolTip="This range value is determined from the crystal frequency.\n
                It some cases it may be unused and a range value suited to the FLL is used instead">
@@ -134,7 +134,7 @@
          description="Oscillator clock to some peripherals [OSCERCLK_UNDIV]"
          toolTip="Generated from OSCCLK without division"
          value="8000000"
-         constant="true"
+         locked="true"
          disabledValue="0" />
 
       <choiceOption key="osc_div_erps"
@@ -159,7 +159,7 @@
          origin="OSC0 gated by ERCLKEN"
          value="8000000"
          disabledValue="0"
-         constant="true"
+         locked="true"
          min="1" />
    <else />
       <intOption key="oscer_clock"
@@ -172,7 +172,7 @@
          toolTip="Clock available to some peripherals"
          value="8000000"
          disabledValue="0"
-         constant="true"
+         locked="true"
          min="1" />
    </if>
 
@@ -188,7 +188,7 @@
          origin="OSC0 in low frequency mode"
          value="8000000"
          disabledValue="0"
-         constant="true" />
+         locked="true" />
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.OscValidate">

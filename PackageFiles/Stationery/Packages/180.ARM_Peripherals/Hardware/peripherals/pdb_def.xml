@@ -14,7 +14,7 @@
 
 <!--  ============== PDB_SC Trigger ============== -->
 
-   <stringOption key="Triggers and Sequence" value="------- Triggers -------" constant="true" description="Triggers and sequence" />
+   <stringOption key="Triggers and Sequence" value="------- Triggers -------" locked="true" description="Triggers and sequence" />
 
    <choiceOption key="pdb_sc_trgsel"
       enumStem="PdbTrigger"
@@ -93,7 +93,7 @@
 
 <!--  ============== PDB_SC related ============== -->
 
-   <stringOption key="Clocking" value="------- Clocking -------" constant="true" description="Clocking" />
+   <stringOption key="Clocking" value="------- Clocking -------" locked="true" description="Clocking" />
 
    <choiceOption key="pdbClockConfig"
       target="input_clock"
@@ -107,7 +107,7 @@
 
    <intOption key="input_clock"
       ref="/SIM/system_bus_clock[]"
-      constant="true"
+      locked="true"
       derived="true"
       units="Hz"
       description="Frequency of PDB input Clock" />
@@ -169,7 +169,7 @@
       description="Frequency of PDB clock"
       toolTip="PDB clock frequency (Tick rate of PDB)"
       derived="true"
-      constant="true"
+      locked="true"
       min="0" units="Hz" />
 
    <floatOption key="pdb_clock_period"
@@ -178,12 +178,12 @@
       description="Period of PDB clock"
       toolTip="PDB clock period (Tick period of PDB)"
       derived="true"
-      constant="true"
+      locked="true"
       value="1k" min="0" units="s" />
 
 <!--  ============== PDB_MOD ============== -->
 
-   <stringOption key="MainCounter" value="------- Counter -------" constant="true" description="Main counter" />
+   <stringOption key="MainCounter" value="------- Counter -------" locked="true" description="Main counter" />
 
    <intOption key="pdb_mod" condition="pdb_mod_mod_present"
       valueFormat="%s_ticks"
@@ -239,7 +239,7 @@
 <!--  ============== PDB Channels ============== -->
 
    <for keys="n" dim="NumChannels" >
-      <stringOption key="Channel %(n)" value="------- Channel %(n) -------" constant="true"
+      <stringOption key="Channel %(n)" value="------- Channel %(n) -------" locked="true"
          description="PDB Channel %(n) (usually associated with ADC%(n))"
          toolTip="Each channel has a number of pre-trigger outputs that are usually associated with an ADC\n
                   Each pre-trigger is asserted once during a PDB cycle."
@@ -280,7 +280,7 @@
 <!--  ============== DAC Triggers ============== -->
 
    <for keys="x" dim="NumDacIntervalTriggers" >
-      <stringOption key="DAC %(x)" value="------- DAC %(x) -------" constant="true"
+      <stringOption key="DAC %(x)" value="------- DAC %(x) -------" locked="true"
          description="Trigger to DAC%(x)"
          toolTip="Each DAC trigger is associated with a DAC\n
                   Each DAC trigger has an independent counter so may be asserted multiple times within a PDB cycle\n
@@ -329,7 +329,7 @@
 <!--  ============== Pulse Outputs ============== -->
 
    <for keys="y" dim="NumPulseOutputs" >
-      <stringOption key="Pulse Output %(y)" value="------- PULSE %(y) -------" constant="true"
+      <stringOption key="Pulse Output %(y)" value="------- PULSE %(y) -------" locked="true"
          description="Pulse output %(y) to CMP%(y)"
          toolTip="The pulse output is usually used to control the sample window for an associated CMP.\n
                   The pulse is generated once per PDB cycle and has adjustable start and end times."

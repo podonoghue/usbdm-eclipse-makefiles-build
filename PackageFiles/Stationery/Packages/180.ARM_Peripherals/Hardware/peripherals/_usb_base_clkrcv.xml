@@ -5,7 +5,7 @@
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
    <category name="Clock Recovery" description="USB clock recovery options">
-      <aliasOption key="usb_clk_enable" optional="true" constant="false" />
+      <aliasOption key="usb_clk_enable" optional="true" locked="false" />
       
       <choiceOption key="usb_clk_tracking_mode" 
          enumStem="UsbIrc48mClockTrackingMode"

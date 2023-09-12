@@ -26,7 +26,7 @@
       <choice value="0b10000000" name="Channel Not Allocated"  enum="None" />
    </choiceOption>
 
-   <stringOption key="Clocking" value="------- Clocking -------" constant="true" description="Clocking" />
+   <stringOption key="Clocking" value="------- Clocking -------" locked="true" description="Clocking" />
 
    <choiceOption key="pitClockConfig"
       target="pitInputClock"
@@ -39,7 +39,7 @@
    </choiceOption>
 
    <intOption key="pitInputClock"
-      constant="true"
+      locked="true"
       derived="true"
       description="PIT input clock"
       toolTip="The PIT uses the bus clock for timing\n

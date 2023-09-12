@@ -45,7 +45,7 @@
 
    <aliasOption key="/SIM/numberOfClockSettings" />
 
-   <binaryOption key="enableClockConfiguration[0]" constant="true" hidden="true" >
+   <binaryOption key="enableClockConfiguration[0]" locked="true" hidden="true" >
       <choice value="false" name="Disabled" />
       <choice value="true"  name="Enabled"  isDefault="true" />
    </binaryOption>
@@ -106,7 +106,7 @@
          value="ClockConfig_%(n)"
          disabledValue="Disabled" >
 
-         <aliasOption key="enableClockConfiguration[%(n)]" constant="false" />
+         <aliasOption key="enableClockConfiguration[%(n)]" locked="false" />
 
          <graphic key="Clock configuration GUI[%(n)]"
             var="ClockConfig[%(n)]"
@@ -544,22 +544,22 @@
 
          </graphic>
 
-         <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" constant="false" />
+         <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" locked="false" />
 
          <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
-            <aliasOption key="oscMode"                       constant="false"  optional="true" />
-            <aliasOption key="/OSC0/rsim_control_rf_osc_en"  constant="false"  optional="true" />
-            <aliasOption key="/OSC0/osc_input_freq"          constant="false"  />
+            <aliasOption key="oscMode"                       locked="false"  optional="true" />
+            <aliasOption key="/OSC0/rsim_control_rf_osc_en"  locked="false"  optional="true" />
+            <aliasOption key="/OSC0/osc_input_freq"          locked="false"  />
             <aliasOption key="/OSC0/osc_clock"               optional="true"   />
-            <aliasOption key="/OSC0/osc_div_erps"            optional="true" constant="false" />
+            <aliasOption key="/OSC0/osc_div_erps"            optional="true" locked="false" />
             <aliasOption key="/OSC0/oscer_clock"      />
          </category>
 
          <category name="OSC1 (Real Time Clock)" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
-            <aliasOption key="/RTC/osc_input_freq"        optional="true" constant="false"  />
-            <aliasOption key="/RTC/rtc_cr_osce"           optional="true" constant="false"/>
+            <aliasOption key="/RTC/osc_input_freq"        optional="true" locked="false"  />
+            <aliasOption key="/RTC/rtc_cr_osce"           optional="true" locked="false"/>
             <aliasOption key="/RTC/osc_clock"             optional="true"/>
-            <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
+            <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" locked="false" />
             <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
          </category>
 
@@ -568,7 +568,7 @@
 
             <intOption key="system_slow_irc_clock[%(n)]"
                enabledBy="(/MCG/mcgClockMode[%(n)]==LIRC_2MHz)||((!/MCG/mcg_c2_ircs[%(n)])&amp;&amp;(/MCG/mcg_c1_irclken[%(n)]))##Disabled as IRC not in use by MCG"
-               constant="true"
+               locked="true"
                derived="true"
                origin="Slow IRC"
                units="Hz"
@@ -579,7 +579,7 @@
 
             <intOption key="system_fast_irc_clock[%(n)]"
                enabledBy="(/MCG/mcgClockMode[%(n)]==LIRC_8MHz)||((/MCG/mcg_c2_ircs[%(n)])&amp;&amp;(/MCG/mcg_c1_irclken[%(n)]))##Disabled as IRC not in use by MCG"
-               constant="true"
+               locked="true"
                derived="true"
                origin="Fast IRC"
                units="Hz"
@@ -625,7 +625,7 @@
       </binaryOption>
 
       <intOption key="system_lirc_clock[%(n)]"
-         constant="true"
+         locked="true"
          units="Hz"
          description="Frequency of Low Speed Internal Reference [LIRC_CLK] "
          toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock"
@@ -667,7 +667,7 @@
       </choiceOption>
 
       <intOption key="system_lirc_div1_clock[%(n)]"
-         constant="true"
+         locked="true"
          units="Hz"
          description="Frequency of Low Speed Internal Reference [LIRC_DIV1_CLK] "
          toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock/lirc_div1"
@@ -692,7 +692,7 @@
 
       <intOption key="system_mcgirclk_clock[%(n)]"
          derived="true"
-         constant="true"
+         locked="true"
          units="Hz"
          description="Frequency of Internal Reference [MCGIRCLK] "
          toolTip="Derived from Slow IRC or Fast IRC/lirc_div1/lirc_div2"
@@ -700,7 +700,7 @@
 
          <intOption key="mcg_erc_clock[%(n)]"
             ref="/OSC0/osc_clock"
-            constant="true"
+            locked="true"
             units="Hz"
             derived="true"
             description="Frequency of MCG External reference"
@@ -710,7 +710,7 @@
       <choiceOption key="mcg_c1_clks[%(n)]"
          target="system_mcgoutclk_clock[%(n)]"
          derived="true"
-         constant="true"
+         locked="true"
          description="MCGOUTCLK Clock Source Select"
          toolTip="Selects the clock source for MCGOUTCLK\n
                   This option is determined by the Clock Mode selection\n" >
@@ -737,7 +737,7 @@
       <choiceOption key="mcg_c2_range0[%(n)]" condition="mcg_c2_range0_present"
          enumStem="McgRange0"
          derived="true"
-         constant="true"
+         locked="true"
          description="Frequency Range Select"
          toolTip="Selects the frequency range for the crystal oscillator if used.\n
                   It may determine the divider for FLL input clock">
@@ -749,7 +749,7 @@
       <intOption key="system_mcgpclk_clock[%(n)]"
          ref="/SIM/system_irc48m_clock[%(n)]"
          derived="true"
-         constant="true"
+         locked="true"
          units="Hz"
          description="MCGPCLK Output clock frequency"
          toolTip="Output of HIRC_48MHz available as peripheral clock"
@@ -766,14 +766,14 @@
          max="/SIM/MCGOUTCLK_max[/SMC/smc_pmctrl_runm[%(n)]]"
          min="1"
          derived="true"
-         constant="true"
+         locked="true"
          units="Hz"
          description="System MCG Output Clock [MCGOUTCLK]"
          toolTip="MCG Main clock output\n
                   Derived from HIRC_48MHz, LIRC-8M/2M, EXT" />
 
-      <aliasOption key="/SIM/system_core_clock[%(n)]"    constant="false" />
-      <aliasOption key="/SIM/system_bus_clock[%(n)]"     constant="false" />
+      <aliasOption key="/SIM/system_core_clock[%(n)]"    locked="false" />
+      <aliasOption key="/SIM/system_bus_clock[%(n)]"     locked="false" />
 
       <category name="Device Parameters" description="Register values">
          <category name="MCG_C1" description="MCG Control Register 1">

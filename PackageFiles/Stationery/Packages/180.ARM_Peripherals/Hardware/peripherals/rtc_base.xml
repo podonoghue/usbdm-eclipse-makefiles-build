@@ -18,8 +18,8 @@
 
    <category name="ERCLK32K Selection" description="Control source of ERCLK32K clock (nominally 32kHz)">
       <aliasOption key="/PMC/system_low_power_clock"  optional="true" />
-      <aliasOption key="/SIM/rtc_clkin_clock"         optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt1_osc32ksel"     optional="true" constant="false" />
+      <aliasOption key="/SIM/rtc_clkin_clock"         optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt1_osc32ksel"     optional="true" locked="false" />
       <aliasOption key="/SIM/system_erclk32k_clock"   optional="true" />
    </category>
 
@@ -36,7 +36,7 @@
    <binaryOption key="rtc_cr_osce" condition="/SIM/RtcForcing"
       ref="(/MCG/oscMode == /OscMode_RTC_Controlled)?1:0"
       enumStem="RtcOscEnable"
-      constant="true"
+      locked="true"
       derived="true"
       hidden="true"
       description="Enable RTC oscillator"
@@ -62,7 +62,7 @@
          description="RTC oscillator clock"
          toolTip="Output of RTC oscillator"
          derived="true"
-         constant="true"
+         locked="true"
          units="Hz"
          disabledValue="0" />
 
@@ -79,7 +79,7 @@
          enabledBy="rtc_cr_clko"
          ref="osc_clock"
          derived="true"
-         constant="true"
+         locked="true"
          units="Hz"
          description="Frequency of RTC Peripheral Clock"
          toolTip="RTC clock available to peripherals"
@@ -90,7 +90,7 @@
    <if condition="/SIM/rtc_independent" >
       <floatOption key="rtc_1hz_clock"
          ref="(osc_clock)/32768.0"
-         constant="true"
+         locked="true"
          derived="true"
          description="1Hz output from RTC"
          origin="RTC 1Hz output"
@@ -101,20 +101,20 @@
    <if condition="/SIM/RtcForcing || /SIM/rtc_mkw41z4" >
       <aliasOption key="/SIM/RtcForcing" optional="true" />
 
-      <aliasOption key="/OSC0/osc_input_freq" constant="false" />
+      <aliasOption key="/OSC0/osc_input_freq" locked="false" />
 
       <intOption key="rtc_input_clock"
          ref="/SIM/system_erclk32k_clock"
          description="RTC input clock"
          toolTip="Input to RTC counters"
          derived="true"
-         constant="true"
+         locked="true"
          units="Hz"
          disabledValue="0" />
 
       <floatOption key="rtc_1hz_clock"
          ref="(rtc_input_clock)/32768.0"
-         constant="true"
+         locked="true"
          derived="true"
          description="1Hz output from RTC"
          origin="RTC 1Hz output"
@@ -171,7 +171,7 @@
       <choice value="1" enum="Enabled"  name="Wakeup pin is enabled" />
    </binaryOption>
 
-   <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" optional="true" constant="false" />
+   <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" optional="true" locked="false" />
    <aliasOption key="/SIM/rtc_clkout"             optional="true" />
 
    <template><![CDATA[
@@ -426,8 +426,8 @@
       ]]></initialValueTemplate>
    </category>
 
-   <stringOption key="irq_pattern"        constant="true" value="^RTC_(Alarm|Seconds)$" hidden="true" />
-   <stringOption key="irq_ClassHandler"   constant="true" value="%c%i::irq$1Handler" hidden="true" />
+   <stringOption key="irq_pattern"        locked="true" value="^RTC_(Alarm|Seconds)$" hidden="true" />
+   <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irq$1Handler" hidden="true" />
    <xi:include href="_irqOptionSubstituted.xml"/>
 
    <rtcTimeOption key="rtc_coldstart_value"

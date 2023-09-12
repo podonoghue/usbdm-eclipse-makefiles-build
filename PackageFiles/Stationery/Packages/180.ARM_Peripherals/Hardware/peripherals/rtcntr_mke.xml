@@ -57,7 +57,7 @@
 
    <!-- ************* SC ****************** -->
 
-   <aliasOption key="/SIM/sim_pinsel0_rtcps" constant="false" optional="true" />
+   <aliasOption key="/SIM/sim_pinsel0_rtcps" locked="false" optional="true" />
 
    <binaryOption key="rtc_sc_rtie" condition="rtc_sc_rtie_present"
       enabledBy="irqHandlingMethod"
@@ -69,13 +69,22 @@
       <choice name="Enabled"     value="1" enum="Enabled"/>
    </binaryOption >
 
-   <binaryOption key="rtc_sc_rtco" condition="rtc_sc_rtco_present"
+   <binaryOption key="rtc_sc_rtco" condition="rtc_sc_rtco_present &amp;&amp; outputPinMap"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumStem="RtcOutput"
       toolTip="Enables the toggling of RTCO pin on overflow"
       description="Real-Time Counter Output" >
-      <choice name="Output Disabled"  value="0" enum="OutputDisabled"/>
-      <choice name="Output Enabled"   value="1" enum="OutputEnabled"/>
+      <choice name="Output Disabled"  value="0" enum="OutputDisabled" pinMap="=&quot;RTC_CLKOUT,&quot;"/>
+      <choice name="Output Enabled"   value="1" enum="OutputEnabled"  pinMap="=&quot;RTC_CLKOUT,&quot;+outputPinMap"/>
+   </binaryOption >
+
+   <binaryOption key="rtc_sc_rtco" condition="rtc_sc_rtco_present &amp;&amp; !outputPinMap"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enumStem="RtcOutput"
+      toolTip="Enables the toggling of RTCO pin on overflow"
+      description="Real-Time Counter Output" >
+      <choice name="Output Disabled"  value="0" enum="OutputDisabled" />
+      <choice name="Output Enabled"   value="1" enum="OutputEnabled"  />
    </binaryOption >
 
    <choiceOption key="rtc_sc_rtclks" condition="rtc_sc_rtclks_present"
@@ -94,7 +103,7 @@
 
    <intOption key="rtc_input_clock"
       derived="true"
-      constant="true"
+      locked="true"
       description="RTCCNTR input clock frequency"
       toolTip="Input clock selected by rtc_sc_rtclks"
       units="Hz"
@@ -120,7 +129,7 @@
 
    <floatOption key="rtc_clock"
       derived="true"
-      constant="true"
+      locked="true"
       description="RTCCNTR input clock frequency"
       toolTip="Input clock selected by rtc_sc_rtclks"
       units="Hz"
@@ -140,7 +149,7 @@
 
    <floatOption key="rtc_period"
       derived="true"
-      constant="true"
+      locked="true"
       ref="(rtc_mod_mod+1)/rtc_clock#rtc_clock"
       description="RTCCNTR counter period"
       toolTip="Input clock selected by rtc_sc_rtclks"
@@ -150,7 +159,7 @@
    <floatOption key="rtc_out"
       enabledBy="rtc_sc_rtco"
       derived="true"
-      constant="true"
+      locked="true"
       ref="1/rtc_period"
       description="RTC Output"
       toolTip="RTC output if enabled"
@@ -557,9 +566,9 @@
 
    <!-- ************* Signal mapping ****************** -->
    <category name="SIM" description="Pin mapping">
-      <aliasOption key="/SIM/sim_pinsel_$(_name)ps"  constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_pinsel0_$(_name)ps" constant="false" optional="true" />
-      <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" constant="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel_$(_name)ps"  locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel0_$(_name)ps" locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" locked="false" optional="true" />
    </category>
 
    <signals enabledBy="enablePeripheralSupport" locked="true" />

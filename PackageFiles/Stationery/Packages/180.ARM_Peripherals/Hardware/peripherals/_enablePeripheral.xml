@@ -77,7 +77,7 @@
          <binaryOption key="/$(_BASENAME)/enablePeripheralSupport"
             ref="=_enable"
             hidden="true"
-            constant="true"
+            locked="true"
             derived="true">
             <choice value="false" name="Minimal code"  />
             <choice value="true"  name="All code"      />
@@ -291,10 +291,10 @@
       </if>
 
       <!-- Display here (wherever the original) -->
-      <aliasOption key="irqHandlingMethod" constant="false" />
+      <aliasOption key="irqHandlingMethod" locked="false" />
 
       <!-- Debug -->
-      <!-- aliasOption key="/$(_BASENAME)/irqHandlingMethod" constant="false" / -->
+      <!-- aliasOption key="/$(_BASENAME)/irqHandlingMethod" locked="false" / -->
 
       <!-- Create only if needed -->
       <choiceOption key="irqLevel" condition="!irqLevel"
@@ -309,7 +309,7 @@
       </choiceOption>
 
       <!-- Display here (wherever the original) -->
-      <aliasOption key="irqLevel"          constant="false" />
+      <aliasOption key="irqLevel"          locked="false" />
 
       <initialValueTemplate variables="/$(_BASENAME)/irqHandlingMethod,irqLevel" condition="!suppressIrqArray" ><![CDATA[
          \t//! IRQ numbers for hardware
@@ -464,5 +464,16 @@
       \t#define USBDM_$(_NAME)_AVAILABLE
       \t\n
    ]]></template>
+
+   <!-- ************* Base pin mapping ****************** -->
+   <binaryOption key="$(_name)_pin_map" condition="pinMap"
+      description="$(_NAME) Pin mapping"
+      toolTip="Pin mapping used when $(_NAME) enabled"
+      disabledPinMap="#enablePeripheralSupport"
+      locked="true"
+      derived="true" >
+      <choice name="Pin mapping" value="0" pinMap="=pinMap" />
+   </binaryOption>
+
 
 </fragment>

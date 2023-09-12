@@ -129,7 +129,7 @@
       description="Frequency of input clock to timer"
       units="Hz"
       derived="true"
-      constant="true" />
+      locked="true" />
 
    <title description="Time Interval Mode" />
 
@@ -163,7 +163,7 @@
 
    <floatOption key="counterFrequency"
       enabledBy="enablePeripheralSupport&amp;&amp;!lptmr_csr_tms"
-      constant="true"
+      locked="true"
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
@@ -173,7 +173,7 @@
       enabledBy="enablePeripheralSupport&amp;&amp;!lptmr_csr_tms"
       ref="65536/(counterFrequency)"
       typeName="Seconds"
-      constant="true"
+      locked="true"
       description="Maximum period of timer"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
@@ -228,7 +228,7 @@
    </choiceOption>
 
    <floatOption key="filterDuration"
-      constant="true"
+      locked="true"
       description="Input filter duration"
       toolTip="Determined from timer clock source and glitch filter selection"
       derived="true"
