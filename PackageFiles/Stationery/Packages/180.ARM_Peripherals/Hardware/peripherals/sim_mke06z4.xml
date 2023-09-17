@@ -38,7 +38,8 @@
    <constant key="/ACMP1/outputPinMap" type="String" value="&quot;PTB5&quot;" />
 
    <!-- Pin mapping for FTM2 -->
-   <constant key="/FTM2/faultPinMap" type="String" value="&quot;ACMP0_OUT,PTA6,PTA7,ACMP1_OUT&quot;" />
+   <constant key="/FTM2/faultPinMap"           type="String" value="&quot;ACMP0_O,PTA6,PTA7,ACMP1_O&quot;" />
+   <constant key="/FTM2/hardwareTriggerPinMap" type="String" value="&quot;ACMP0_O/ACMP1_O,FTM0_CH0,FTMSYNC&quot;"  />
 
    <!-- Pin mapping for IRQ TODO -->
    <constant key="/IRQ/pinMap"      type="String" value="&quot;IRQ,PTA5&quot;" />
@@ -50,8 +51,8 @@
    <!-- Pin mapping for OSC0 -->
    <constant key="/OSC0/pinMap"      type="String" value="&quot;XTAL,PTB6;EXTAL,PTB7&quot;" />
 
-   <!-- Pin mapping for PWT -->
-   <constant key="/PWT/altInputMapping" value="&quot;PTD5_PTE2&quot;,&quot;PTH7_PTB0&quot;,&quot;ACMP0_O&quot;,&quot;ACMP1_O&quot;" type="String" />
+   <!-- Input names for PWT (mapping done in SIM -->
+   <constant key="/PWT/inputNames" value="&quot;PTD5_PTE2&quot;,&quot;PTH7_PTB0&quot;,&quot;ACMPx_O&quot;,&quot;UARTx_RX&quot;" type="String" />
 
    <for keys="n" dim="numberOfClockSettings" >
       <aliasCategoryOption key="/ICS/ClockConfig[%(n)]" derived="true" locked="true" >
@@ -308,15 +309,6 @@
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
       </binaryOption>
 
-      <binaryOption key="sim_sopt0_actrg" condition="sim_sopt0_actrg_present"
-         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimSoptActrg"
-         toolTip="Selects ACMP output used as the trigger0 input of FTM2"
-         description="ACMP Trigger FTM2 selection" >
-         <choice name="ACMP0_OUT"   value="0" enum="Acmp0_out" />
-         <choice name="ACMP1_OUT"   value="1" enum="Acmp1_out" />
-      </binaryOption>
-
       <binaryOption key="sim_scgc_acmp1" condition="sim_scgc_acmp1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          enumStem="SimScgcAcmp1"
@@ -324,6 +316,8 @@
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
       </binaryOption>
+
+      <aliasOption key="sim_sopt0_actrg" locked="false" optional="true" />
    </category>
 
    <category name="CAN0" description="Peripheral  options and clock enable" >
@@ -400,7 +394,7 @@
 
       <binaryOption key="sim_pinsel0_ftm0ps0" condition="sim_pinsel0_ftm0ps0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM0/enablePeripheralSupport"
+         disabledPinMap="#/FTM0/enablePeripheralSupport&amp;&amp;(/FTM0/ftm_cnsc_mode[0]!=0)"
          enumStem="SimPinselFtm0ps0"
          description="FTM0 channel 0 Pin Select" >
          <choice name="PTA0"        value="0" enum="Pta0" pinMap="FTM0_CH0,PTA0" />
@@ -409,7 +403,7 @@
 
       <binaryOption key="sim_pinsel0_ftm0ps1" condition="sim_pinsel0_ftm0ps1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM0/enablePeripheralSupport"
+         disabledPinMap="#/FTM0/enablePeripheralSupport&amp;&amp;(/FTM0/ftm_cnsc_mode[1]!=0)"
          enumStem="SimPinselFtm0ps1"
          description="FTM0 channel 1 Pin Select" >
          <choice name="PTA1"        value="0" enum="Pta1" pinMap="FTM0_CH1,PTA1" />
@@ -464,7 +458,7 @@
 
       <binaryOption key="sim_pinsel0_ftm1ps0" condition="sim_pinsel0_ftm1ps0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM1/enablePeripheralSupport"
+         disabledPinMap="#/FTM1/enablePeripheralSupport&amp;&amp;(/FTM1/ftm_cnsc_mode[0]!=0)"
          enumStem="SimPinselFtm1ps0"
          description="FTM1 channel 0 Pin Select" >
          <choice name="PTC4"        value="0" enum="Ptc4" pinMap="FTM1_CH0,PTC4" />
@@ -473,7 +467,7 @@
 
       <binaryOption key="sim_pinsel0_ftm1ps1" condition="sim_pinsel0_ftm1ps1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM1/enablePeripheralSupport"
+         disabledPinMap="#/FTM1/enablePeripheralSupport&amp;&amp;(/FTM1/ftm_cnsc_mode[1]!=0)"
          enumStem="SimPinselFtm1ps1"
          description="FTM1 channel 1 Pin Select" >
          <choice name="PTC5"        value="0" enum="Ptc5" pinMap="FTM1_CH1,PTC5" />
@@ -499,9 +493,21 @@
          <choice name="Selects TCLK2 for FTM2 module"  value="2" enum="SelectsTclk2ForFtm2Module" />
       </choiceOption>
 
+      <binaryOption key="sim_sopt0_actrg" condition="sim_sopt0_actrg_present"
+         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+         enumStem="SimSoptActrg"
+         toolTip="Selects ACMP output to use as the trigger0 input of FTM2"
+         description="ACMP Trigger FTM2 selection" 
+         disabledPinMap="FTM2_TRIG0,#/FTM2/enablePeripheralSupport&amp;&amp;((/FTM2/ftm_sync_trig&amp;0b1)!=0)">
+         <choice name="ACMP0_OUT"   value="0" enum="Acmp0_out" pinMap="FTM2_TRIG0,ACMP0_O" />
+         <choice name="ACMP1_OUT"   value="1" enum="Acmp1_out" pinMap="FTM2_TRIG0,ACMP1_O" />
+      </binaryOption>
+      
+      <aliasOption key="sim_sopt0_delay" locked="false" optional="true" />
+
       <choiceOption key="sim_pinsel1_ftm2ps0" condition="sim_pinsel1_ftm2ps0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM2/enablePeripheralSupport"
+         disabledPinMap="#/FTM2/enablePeripheralSupport&amp;&amp;(/FTM2/ftm_cnsc_mode[0]!=0)"
          enumStem="SimPinselFtm2ps0"
          description="FTM2 Channel 0 Pin Select" >
          <choice name="PTC0"        value="0" enum="Ptc0" pinMap="FTM2_CH0,PTC0" />
@@ -511,7 +517,7 @@
 
       <choiceOption key="sim_pinsel1_ftm2ps1" condition="sim_pinsel1_ftm2ps1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM2/enablePeripheralSupport"
+         disabledPinMap="#/FTM2/enablePeripheralSupport&amp;&amp;(/FTM2/ftm_cnsc_mode[1]!=0)"
          enumStem="SimPinselFtm2ps1"
          description="FTM2 Channel 1 Pin Select" >
          <choice name="PTC1"        value="0" enum="Ptc1" pinMap="FTM2_CH1,PTC1" />
@@ -521,7 +527,7 @@
 
       <choiceOption key="sim_pinsel1_ftm2ps2" condition="sim_pinsel1_ftm2ps2_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM2/enablePeripheralSupport"
+         disabledPinMap="#/FTM2/enablePeripheralSupport&amp;&amp;(/FTM2/ftm_cnsc_mode[2]!=0)"
          enumStem="SimPinselFtm2ps2"
          description="FTM2 Channel 2 Pin Select" >
          <choice name="PTC2"        value="0" enum="Ptc2" pinMap="FTM2_CH2,PTC2" />
@@ -531,7 +537,7 @@
 
       <choiceOption key="sim_pinsel1_ftm2ps3" condition="sim_pinsel1_ftm2ps3_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM2/enablePeripheralSupport"
+         disabledPinMap="#/FTM2/enablePeripheralSupport&amp;&amp;(/FTM2/ftm_cnsc_mode[3]!=0)"
          enumStem="SimPinselFtm2ps3"
          description="FTM2 Channel 3 Pin Select" >
          <choice name="PTC3"        value="0" enum="Ptc3" pinMap="FTM2_CH3,PTC3" />
@@ -541,7 +547,7 @@
 
       <binaryOption key="sim_pinsel1_ftm2ps4" condition="sim_pinsel1_ftm2ps4_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM2/enablePeripheralSupport"
+         disabledPinMap="#/FTM2/enablePeripheralSupport&amp;&amp;(/FTM2/ftm_cnsc_mode[4]!=0)"
          enumStem="SimPinselFtm2ps4"
          description="FTM2 Channel 4 Pin Select" >
          <choice name="PTB4"        value="0" enum="Ptb4" pinMap="FTM2_CH4,PTB4" />
@@ -550,15 +556,12 @@
 
       <binaryOption key="sim_pinsel1_ftm2ps5" condition="sim_pinsel1_ftm2ps5_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM2/enablePeripheralSupport"
+         disabledPinMap="#/FTM2/enablePeripheralSupport&amp;&amp;(/FTM2/ftm_cnsc_mode[5]!=0)"
          enumStem="SimPinselFtm2ps5"
          description="FTM2 Channel 5 Pin Select" >
          <choice name="PTB5"        value="0" enum="Ptb5" pinMap="FTM2_CH5,PTB5" />
          <choice name="PTG7"        value="1" enum="Ptg7" pinMap="FTM2_CH5,PTG7" />
       </binaryOption>
-
-      <aliasOption key="sim_sopt0_actrg" locked="false" optional="true" />
-      <aliasOption key="sim_sopt0_delay" locked="false" optional="true" />
    </category>
 
    <category name="I2C" description="Peripheral  options and clock enable" >
@@ -688,20 +691,21 @@
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          enumStem="SimSoptAcpwts"
          toolTip="This field selects PWTIN2 input signal"
-         description="PWT ACMP_OUT select" >
-         <choice name="ACMP1_OUT is connected to PWTIN2"  value="0" enum="Acmp1_outIsConnectedToPwtin2" />
-         <choice name="ACMP0_OUT is connected to PWTIN2"  value="1" enum="Acmp0_outIsConnectedToPwtin2" />
+         description="PWT ACMP_OUT select" 
+         disabledPinMap="PWT_IN2,#/PWT/enablePeripheralSupport" >
+         <choice name="ACMP1_OUT is connected to PWTIN2"  value="0" enum="Acmp1_outIsConnectedToPwtin2" pinMap="PWT_IN2,ACMP1_O" />
+         <choice name="ACMP0_OUT is connected to PWTIN2"  value="1" enum="Acmp0_outIsConnectedToPwtin2" pinMap="PWT_IN2,ACMP0_O" />
       </binaryOption>
 
       <choiceOption key="sim_sopt1_uartpwts" condition="sim_sopt1_uartpwts_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          enumStem="SimSoptUartpwts"
          toolTip="This field select PWTIN3 input signal"
-         description="PWT UART RX select" >
-         <choice name="UART0 RX is connected to PWTIN3"  value="0" enum="Uart0RxIsConnectedToPwtin3" />
-         <choice name="UART1 RX is connected to PWTIN3"  value="1" enum="Uart1RxIsConnectedToPwtin3" />
-         <choice name="UART2 RX is connected to PWTIN3"  value="2" enum="Uart2RxIsConnectedToPwtin3" />
-         <choice name="Reserved"                         value="3" enum="Reserved" />
+         description="PWT UART RX select"  
+         disabledPinMap="PWT_IN3,#/PWT/enablePeripheralSupport" >
+         <choice name="UART0 RX is connected to PWTIN3"  value="0" enum="Uart0RxIsConnectedToPwtin3" pinMap="PWT_IN3,UART0_RX" />
+         <choice name="UART1 RX is connected to PWTIN3"  value="1" enum="Uart1RxIsConnectedToPwtin3" pinMap="PWT_IN3,UART1_RX" />
+         <choice name="UART2 RX is connected to PWTIN3"  value="2" enum="Uart2RxIsConnectedToPwtin3" pinMap="PWT_IN3,UART2_RX" />
       </choiceOption>
 
       <binaryOption key="sim_pinsel1_pwtin0ps" condition="sim_pinsel1_pwtin0ps_present"
@@ -875,7 +879,11 @@
    </category>
 
 
-<!-- Grahic here -->
+<!-- Graphic here -->
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
 
    <template namespace="usbdm" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
       \t/*
@@ -1409,9 +1417,6 @@
             sim_scgc_rtc
          "
    ><![CDATA[
-      $(init_description)
-      \ttypedef $(_Class)BasicInfo::Init Init;
-      \t
       \t/**
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings

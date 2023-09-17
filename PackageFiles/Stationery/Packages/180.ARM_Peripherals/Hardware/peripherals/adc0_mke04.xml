@@ -115,23 +115,6 @@
       <choice name="Module disabled"    value="31" enum="Disabled"/>
    </choiceOption >
 
-   <!-- ************* APCTL1 ****************** -->
-
-   <bitmaskOption key="adc_apctl1_adpc"  condition="adc_apctl1_adpc_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      typeName="AdcChannelMask"
-      enumType="uint16_t"
-      valueFormat="AdcChannelMask(%s)"
-      description="GPIO Pin Disable"
-      toolTip="Bit mask controlling the GPIO function on the corresponding pins\n
-               This is only necessary for Channels 0-15\n
-               0:pin is GPIO, 1:pin is Analogue"
-      value="0"
-      bitmask="0"
-      bitList="=inputPinMap"
-      pinMap="=&quot;ADC$(_instance)_SE%i:&quot;+inputPinMap"
-    />
-
    <!-- ************* SC2 ****************** -->
 
    <binaryOption key="adc_sc2_adtrg" condition="adc_sc2_adtrg_present"
@@ -278,6 +261,26 @@
       <choice name="Masked"                        value="1,0" enum="Masked"/>
       <choice name="Masked when FIFO is not empty" value="0,1" enum="MaskedByFifo"/>
    </choiceOption>
+
+   <!-- ************* APCTL1 ****************** -->
+
+   <title description="Inputs" />
+
+   <bitmaskOption key="adc_apctl1_adpc"  condition="adc_apctl1_adpc_present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      typeName="AdcChannelMask"
+      enumType="uint16_t"
+      valueFormat="AdcChannelMask(%s)"
+      description="GPIO Pin Disable"
+      toolTip="Bit mask controlling the GPIO function on the corresponding pins\n
+               This is only necessary for Channels 0-15\n
+               0:pin is GPIO, 1:pin is Analogue"
+      value="0"
+      bitmask="0"
+      bitList="=inputPinMap"
+      pinMap="=&quot;ADC$(_instance)_SE%i:&quot;+inputPinMap"
+    />
+
 
 <!-- Graphic here -->
 

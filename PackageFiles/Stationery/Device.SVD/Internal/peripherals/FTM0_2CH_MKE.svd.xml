@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE02Z2
       MKE02Z4
       MKE04Z4
@@ -652,6 +652,14 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <description>Function for Linked Channels</description>
                <addressOffset>0x64</addressOffset>
                <fields>
+                  <field>
+                     <name>COMB0</name>
+                     <?ignoreOverlap?>
+                     <description>Combination Control for CH 0 &amp; 1</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+
                   <field>
                      <name>COMBINE0</name>
                      <description>Combine Channels 0 &amp; 1</description>

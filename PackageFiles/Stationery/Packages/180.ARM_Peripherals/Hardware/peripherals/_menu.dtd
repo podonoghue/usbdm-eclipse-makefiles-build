@@ -69,6 +69,9 @@ addChoices
 <!-- Drawing elements with a Graphic -->
 <!ENTITY % graphic_items    "graphicGroup|graphicBox|graphicItem|equation|for|if" >
 
+<!-- Dialogue elements -->
+<!ENTITY % dialogue_items    "intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption" >
+
 <!-- Simple items that don't that don''t recurse -->
 <!ENTITY % simple_items     "xi:include|
                               projectActionList|
@@ -77,7 +80,11 @@ addChoices
                               clockSelectionOption|validate|equation|
                               %template_items;" >
                   
-<!ENTITY % general_items    "graphic|category|categoryOption|aliasCategoryOption|if|for|%simple_items;" >
+<!ENTITY % general_items    "dialogue|graphic|category|categoryOption|aliasCategoryOption|if|for|%simple_items;" >
+
+<!ELEMENT dialogue (%dialogue_items;)*>
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST dialogue condition     CDATA        #IMPLIED>
 
 <!-- Include another file -->
 <!ELEMENT xi:include EMPTY>
@@ -113,13 +120,13 @@ addChoices
 <!ENTITY % if_clause_items "%general_items;|%structure_items;" >
 
 <!ELEMENT if ( (%if_clause_items;)+, (else_if, (%if_clause_items;)+)*, (else, (%if_clause_items;)+)?) >
-   <!-- Condition evaluated during parsing that controls processing of remaining children (up to else/else_if) -->
+   <!-- Condition evaluated during parsing that enables processing of remaining children (up to else/else_if) -->
    <!ATTLIST if condition             CDATA        #REQUIRED>
 
 <!ELEMENT else EMPTY >
 
 <!ELEMENT else_if EMPTY >
-   <!-- Condition evaluated during parsing that controls processing of remaining children (up to else/else_if) -->
+   <!-- Condition evaluated during parsing that enables processing of remaining children (up to else/else_if) -->
    <!ATTLIST else_if condition             CDATA        #REQUIRED>
 
 <!ELEMENT graphic ((%graphic_items;)*) >
@@ -133,7 +140,7 @@ addChoices
 <!ELEMENT graphicGroup ((%graphic_items;)*) >
    <!ATTLIST graphicGroup  x                CDATA        #IMPLIED>
    <!ATTLIST graphicGroup  y                CDATA        #IMPLIED>
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST graphicGroup  condition        CDATA        #IMPLIED>
 
 <!ELEMENT graphicBox ((%graphic_items;)*) >
@@ -141,7 +148,7 @@ addChoices
    <!ATTLIST graphicBox  x                CDATA        #REQUIRED>
    <!ATTLIST graphicBox  y                CDATA        #REQUIRED>
    <!ATTLIST graphicBox  params           CDATA        #REQUIRED>
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST graphicBox  condition        CDATA        #IMPLIED>
 
 <!ELEMENT graphicItem EMPTY >
@@ -151,14 +158,16 @@ addChoices
    <!ATTLIST graphicItem  params          CDATA        #REQUIRED>
    <!ATTLIST graphicItem  var             CDATA        #IMPLIED>
    <!ATTLIST graphicItem  edit            CDATA        #IMPLIED>
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST graphicItem  condition       CDATA        #IMPLIED>
 
 <!ELEMENT aliasCategoryOption ((%general_items;)*) >
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST aliasCategoryOption  condition    CDATA        #IMPLIED>
    <!ATTLIST aliasCategoryOption  name         CDATA        #IMPLIED>
    <!ATTLIST aliasCategoryOption  key          CDATA        #REQUIRED>
    <!ATTLIST aliasCategoryOption  derived      (false|true) #IMPLIED>
-   <!ATTLIST aliasCategoryOption  locked     (false|true) "true">
+   <!ATTLIST aliasCategoryOption  locked       (false|true) "true">
 
 <!-- Expandable grouping -->
 <!ELEMENT category ((%general_items;)*) >
@@ -185,7 +194,7 @@ addChoices
    <!ATTLIST categoryOption  enabledBy       CDATA        #IMPLIED>
 
 <!ELEMENT title EMPTY >
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST title condition              CDATA        #IMPLIED>
    <!ATTLIST title name                   CDATA        #IMPLIED>
    <!ATTLIST title toolTip                CDATA        #IMPLIED>
@@ -196,9 +205,9 @@ addChoices
    <!ATTLIST equation  value           CDATA        #REQUIRED>
 
 <!ELEMENT intOption EMPTY >
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST intOption condition     CDATA        #IMPLIED>
-   <!ATTLIST intOption locked      (true)       #IMPLIED>
+   <!ATTLIST intOption locked        (true)       #IMPLIED>
    <!ATTLIST intOption hidden        (true)       #IMPLIED>
    <!ATTLIST intOption graphic       CDATA        #IMPLIED>
    <!ATTLIST intOption modify        CDATA        #IMPLIED>
@@ -237,7 +246,7 @@ addChoices
    
   
 <!ELEMENT bitmaskOption EMPTY >
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST bitmaskOption condition      CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption locked         (false|true) #IMPLIED>
    <!ATTLIST bitmaskOption hidden         (false|true) #IMPLIED>
@@ -262,6 +271,8 @@ addChoices
    <!ATTLIST bitmaskOption bitmask        CDATA        #REQUIRED>
    <!-- List of names for the bits in mask. -->
    <!ATTLIST bitmaskOption bitList        CDATA        #IMPLIED>
+   <!-- Extended description of each bit - comma separated list -->
+   <!ATTLIST bitmaskOption bitDescription CDATA        #IMPLIED>
    
    <!-- Pin mapping applied if a given bit is active.  Mapping is removed if inactive -->
    <!ATTLIST bitmaskOption pinMap         CDATA        #IMPLIED>
@@ -269,7 +280,7 @@ addChoices
    <!ATTLIST bitmaskOption disabledPinMap CDATA        #IMPLIED>
 
 <!ELEMENT floatOption EMPTY >
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST floatOption condition     CDATA        #IMPLIED>
    <!ATTLIST floatOption locked      (false|true) #IMPLIED>
    <!ATTLIST floatOption hidden        (false|true) #IMPLIED>
@@ -300,6 +311,8 @@ addChoices
    <!ATTLIST floatOption unlockedBy    CDATA        #IMPLIED> 
 
 <!ELEMENT aliasOption EMPTY >
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST aliasOption condition        CDATA        #IMPLIED>
    <!-- Allows reference to an option (possibly) in another file -->
    <!ATTLIST aliasOption key               CDATA        #REQUIRED>
    <!-- Optional name in GUI otherwise derived from key -->
@@ -316,7 +329,7 @@ addChoices
    <!ATTLIST aliasOption hidden            (true)      #IMPLIED>
 
 <!ELEMENT stringOption EMPTY >
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST stringOption condition        CDATA        #IMPLIED>
    <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
    <!ATTLIST stringOption valueFormat      CDATA        #IMPLIED>
@@ -339,7 +352,7 @@ addChoices
    <!ATTLIST stringOption code             CDATA        #IMPLIED>
   
 <!ELEMENT numericListOption EMPTY >
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST numericListOption condition     CDATA        #IMPLIED>
    <!ATTLIST numericListOption locked      (false|true) #IMPLIED>
    <!ATTLIST numericListOption hidden        (false|true) #IMPLIED>
@@ -359,7 +372,7 @@ addChoices
 <!-- Signal to add a dependency -->
 
 <!ELEMENT pinListOption EMPTY >
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST pinListOption condition          CDATA        #IMPLIED>
    <!ATTLIST pinListOption locked           (false|true) #IMPLIED>
    <!ATTLIST pinListOption hidden             (false|true) #IMPLIED>
@@ -375,7 +388,7 @@ addChoices
    <!ATTLIST pinListOption derivedFrom        CDATA        #IMPLIED>
 
 <!ELEMENT clockSelectionOption ((choice)*) >
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST clockSelectionOption condition           CDATA        #IMPLIED>
    <!-- Locks varibale against change by user in GUI -->
    <!ATTLIST clockSelectionOption locked            (false|true) #IMPLIED>
@@ -419,7 +432,7 @@ addChoices
    <!ATTLIST clockSelectionOption disabledValue       CDATA        #IMPLIED>
    
 <!ELEMENT choiceOption ((choice)*) >
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST choiceOption condition           CDATA        #IMPLIED>
    <!-- Locks variable against change by user in GUI -->
    <!ATTLIST choiceOption locked            (false|true) #IMPLIED>
@@ -489,7 +502,7 @@ addChoices
    <!ATTLIST choice value                     CDATA        #REQUIRED> 
    <!ATTLIST choice name                      CDATA        #REQUIRED>
    <!ATTLIST choice requiredPeripherals       CDATA        #IMPLIED>
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST choice condition                 CDATA        #IMPLIED>
    <!ATTLIST choice isDefault                 CDATA        #IMPLIED>
    <!ATTLIST choice ref                       CDATA        #IMPLIED>
@@ -501,7 +514,7 @@ addChoices
    <!ATTLIST choice pinMap                    CDATA        #IMPLIED>
 
 <!ELEMENT binaryOption (choice?, choice?) >
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST binaryOption condition           CDATA        #IMPLIED>
    <!-- Locks variable against change by user in GUI -->
    <!ATTLIST binaryOption locked            (false|true) #IMPLIED>
@@ -567,7 +580,7 @@ addChoices
 
 <!-- Describes pin mapping for a peripheral -->
 <!ELEMENT pinMapOption (choice?, choice?) >
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST pinMapOption condition           CDATA        #IMPLIED>
    <!-- Locks variable against change by user in GUI -->
    <!ATTLIST pinMapOption locked            (false|true) #IMPLIED>
@@ -591,7 +604,7 @@ addChoices
    <!ATTLIST pinMapOption disabledPinMap      CDATA        #IMPLIED>
 
 <!ELEMENT irqOption EMPTY >
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST irqOption condition     CDATA        #IMPLIED>
    <!ATTLIST irqOption locked      (false|true) #IMPLIED>
    <!ATTLIST irqOption hidden        (false|true) #IMPLIED>
@@ -625,7 +638,7 @@ addChoices
 <!ELEMENT template (#PCDATA)* >
    <!ATTLIST template namespace                 (info|usbdm|all)  #IMPLIED >
    <!ATTLIST template key                       CDATA                   #IMPLIED >
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST template condition                 CDATA                   #IMPLIED>
    <!ATTLIST template codeGenCondition          CDATA                   #IMPLIED>
    <!ATTLIST template variables                 CDATA                   #IMPLIED>
@@ -638,7 +651,7 @@ addChoices
 <!ELEMENT setTemplate (#PCDATA)* >
    <!ATTLIST setTemplate namespace                 (info|usbdm|all)  #IMPLIED >
    <!ATTLIST setTemplate key                       CDATA                   #IMPLIED >
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST setTemplate condition                 CDATA                   #IMPLIED>
    <!ATTLIST setTemplate codeGenCondition          CDATA                   #IMPLIED>
    <!ATTLIST setTemplate variables                 CDATA                   #REQUIRED>
@@ -659,7 +672,7 @@ addChoices
 <!ELEMENT constructorTemplate (#PCDATA)* >
    <!ATTLIST constructorTemplate namespace                 (info|usbdm|all)  #IMPLIED >
    <!ATTLIST constructorTemplate key                       CDATA                   #IMPLIED >
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST constructorTemplate condition                 CDATA                   #IMPLIED>
    <!ATTLIST constructorTemplate codeGenCondition          CDATA                   #IMPLIED>
    <!ATTLIST constructorTemplate variables                 CDATA                   #REQUIRED>
@@ -679,7 +692,7 @@ addChoices
 <!ELEMENT initialValueTemplate (#PCDATA|for)* >
    <!ATTLIST initialValueTemplate namespace                 (info|usbdm|all)  #IMPLIED >
    <!ATTLIST initialValueTemplate key                       CDATA                   #IMPLIED >
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST initialValueTemplate condition                 CDATA                   #IMPLIED>
    <!ATTLIST initialValueTemplate codeGenCondition          CDATA                   #IMPLIED>
    <!ATTLIST initialValueTemplate variables                 CDATA                   #REQUIRED>
@@ -705,7 +718,7 @@ addChoices
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
    <!ATTLIST clockCodeTemplate namespace                 (info|usbdm|all)  #IMPLIED >
    <!ATTLIST clockCodeTemplate key                       CDATA                   #IMPLIED >
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST clockCodeTemplate condition                 CDATA                   #IMPLIED>
    <!ATTLIST clockCodeTemplate variable                  CDATA                   #IMPLIED>
    <!ATTLIST clockCodeTemplate variables                 CDATA                   #IMPLIED>
@@ -743,7 +756,7 @@ addChoices
    <!ATTLIST projectActionList id            ID            #REQUIRED>
    <!ATTLIST projectActionList root          CDATA         #IMPLIED>
    <!ATTLIST projectActionList doOnceOnly    (true|false)  "true">
-   <!-- Condition evaluated during parsing that controls processing of this option -->
+   <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST projectActionList condition     CDATA         #IMPLIED>
       
 <!-- Exclude/include source file in Eclipse project -->

@@ -145,22 +145,16 @@
    <!-- ************* PUEL ****************** -->
 
    <category name="Pullups" description="Pull-up enables for Port pins" >
-      <for keys=   "r:P:p:v"
-           values= "l:A:a:0b00000001;
-                    l:B:b:0b00000000;
-                    l:C:c:0b00000000;
-                    l:D:d:0b00000000;
-                    l:E:e:0b00000000;
-                    l:F:f:0b00000000;
-                    l:G:g:0b00000000;
-                    l:H:h:0b00000000;
-                    l:I:i:0b00000000"
+      <for keys=   "P:p:v         :m"
+           values= "A:a:0b00000001:0xFF;
+                    B:b:0b00000000:0xFF;
+                    C:c:0b00000000:0x3F"
          >
-         <bitmaskOption key="port_pue%(r)_pt%(p)pe"  condition="port_pue%(r)_pt%(p)pe_present"
+         <bitmaskOption key="port_puel_pt%(p)pe"  condition="port_puel_pt%(p)pe_present"
             description="Pull-up control for Port %(P)"
             toolTip="Each bit controls the pull-up for the corresponding pin"
             value="%(v)"
-            bitmask="0xFF" />
+            bitmask="%(m)" />
       </for>
    </category>
 

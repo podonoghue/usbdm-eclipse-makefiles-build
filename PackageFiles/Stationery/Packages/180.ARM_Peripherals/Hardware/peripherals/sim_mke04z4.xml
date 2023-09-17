@@ -380,16 +380,16 @@
       <binaryOption key="sim_pinsel_ftm0ps0" condition="sim_pinsel_ftm0ps0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          enumStem="SimPinselFtm0ps0"
-         disabledPinMap="FTM0_CH0,PTA0#/FTM0/enablePeripheralSupport"
+         disabledPinMap="FTM0_CH0,PTA0;FTM0_CH0,#/FTM0/enablePeripheralSupport&amp;&amp;(/FTM0/ftm_cnsc_mode[0]!=0)"
          description="FTM0 channel 0 Pin Select" >
          <choice name="PTA0"        value="0" enum="Pta0" pinMap="FTM0_CH0,PTA0" />
          <choice name="PTB2"        value="1" enum="Ptb2" pinMap="FTM0_CH0,PTB2" />
       </binaryOption>
 
       <binaryOption key="sim_pinsel_ftm0ps1" condition="sim_pinsel_ftm0ps1_present"
-         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+         enabledBy="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;(/FTM0/ftm_cnsc_mode[1]!=0)"
          enumStem="SimPinselFtm0ps1"
-         disabledPinMap="FTM0_CH1,PTA1#/FTM0/enablePeripheralSupport"
+         disabledPinMap="FTM0_CH1,PTA1;FTM0_CH1,#/FTM0/enablePeripheralSupport"
          description="FTM0 channel 1 Pin Select" >
          <choice name="PTA1"        value="0" enum="Pta1" pinMap="FTM0_CH1,PTA1" />
          <choice name="PTB3"        value="1" enum="Ptb3" pinMap="FTM0_CH1,PTB3" />
@@ -603,6 +603,10 @@
 
 
 <!-- Grahic here -->
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
 
    <template namespace="usbdm" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
       \t/*
@@ -1013,9 +1017,6 @@
             sim_scgc_rtc
          "
    ><![CDATA[
-      $(init_description)
-      \ttypedef $(_Class)BasicInfo::Init Init;
-      \t
       \t/**
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings

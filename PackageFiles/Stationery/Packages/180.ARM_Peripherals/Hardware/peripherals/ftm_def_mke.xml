@@ -37,7 +37,7 @@
    <constant key="_class_declaration" type="String"
       value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
 
-   <binaryOption key="individualChannelCallbacks" condition="@NumChannels>@NumChannelVectors"
+   <binaryOption key="individualChannelCallbacks" condition="=NumChannels>NumChannelVectors"
       enabledBy="irqHandlingMethod"
       description="Use individual channel call-backs"
       toolTip="The different FTM channels use a common hardware interrupt handler. \n
@@ -72,30 +72,7 @@
          so that a reasonable resolution is available for PWM duty-cycle"
       value="100" min="0" max="65535" />
 
-   <!-- Fault detection -->
-   <title description="Fault detection" />
-   
-   <bitmaskOption key="ftm_fltctrl_faulten" condition="faultPinMap"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmFaultEnableMask"
-      enumType="uint32_t"
-      valueFormat="FtmFaultEnableMask(%s)"
-      defaultValue="0"
-      description="Fault inputs"
-      toolTip="Enables fault enable inputs"
-      bitmask="0"
-      bitList="=faultPinMap"
-      pinMap="=&quot;FTM$(_instance)_FLT%i:&quot;+faultPinMap"
-      value="0"
-   />
-
    <title description="Clocking" />
-   
-   <intOption key="ftmExternalClock"
-      enabledBy="enablePeripheralSupport"
-      description="FTM External clock"
-      toolTip="Clock frequency of external clock supplied to FTM_CLKIN pin"
-      value="0" min="0" units="Hz"/>
 
    <choiceOption key="ftm_sc_clks" condition="/MCG/_present"
       enabledBy="enablePeripheralSupport"
@@ -120,6 +97,12 @@
       <choice value="2" name="Fixed frequency clock" ref="/ICS/system_icsffclk_clock[0]" code="SystemIcsFFClock" enum="FixedFrequencyClock" />
       <choice value="3" name="External clock"        ref="ftmExternalClock"             code="ftmExternalClock" enum="ExternalClock"       />
    </choiceOption>
+
+   <intOption key="ftmExternalClock"
+      enabledBy="enablePeripheralSupport&amp;&amp;(ftm_sc_clks==3)"
+      description="FTM External clock"
+      toolTip="Assumed clock frequency used for calculations when External clock is selected"
+      value="0" min="0" units="Hz"/>
 
    <intOption key="inputClockFrequency"
       enabledBy="enablePeripheralSupport"
@@ -224,6 +207,233 @@
       <choice value="1" name="Overflow Interrupt" enum="Interrupt"  />
    </binaryOption>
 
+
+   <!-- ************* MODE ****************** -->
+
+   <title description="MODE register" />
+
+   <binaryOption key="ftm_mode_faultie" condition="ftm_mode_faultie_present"
+      enabledBy="enablePeripheralSupport"
+      enumStem="FtmFaultInterrupt"
+      description="Fault Interrupt Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption >
+
+   <choiceOption key="ftm_mode_faultm" condition="ftm_mode_faultm_present"
+      enabledBy="enablePeripheralSupport"
+      enumStem="FtmFaultMode"
+      description="Fault Control Mode"
+      toolTip="This is a write-once after reset setting" >
+      <choice name="Disabled"                                    value="0" enum="Disabled"/>
+      <choice name="Even channels with manual fault clearing"    value="1" enum="EvenChannelsManualFaultClearing"/>
+      <choice name="All channels with manual fault clearing"     value="2" enum="AllChannelsManualFaultClearing"/>
+      <choice name="All channels with automatic fault clearing"  value="3" enum="AllChannelsAutomaticFaultClearing"/>
+   </choiceOption >
+
+   <binaryOption key="ftm_mode_captest" condition="ftm_mode_captest_present"
+      enabledBy="enablePeripheralSupport"
+      enumStem="FtmCaptestMode"
+      description="Capture Test Mode Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption >
+
+   <binaryOption key="ftm_mode_pwmsync" condition="ftm_mode_pwmsync_present"
+      enabledBy="enablePeripheralSupport"
+      enumStem="FtmModePwmsync"
+      description="PWM Synchronization Mode" >
+      <choice name="No restrictions."  value="0" enum="NoRestrictions"/>
+      <choice name="Restricted"        value="1" enum="Restricted"/>
+   </binaryOption >
+
+   <binaryOption key="ftm_mode_wpdis" condition="ftm_mode_wpdis_present"
+      enabledBy="enablePeripheralSupport"
+      enumStem="FtmModeWpdis"
+      description="Write Protection Disable" >
+      <choice name="Enabled"     value="0" enum="Enabled"/>
+      <choice name="Disabled"    value="1" enum="Disabled"/>
+   </binaryOption >
+
+   <choiceOption key="ftm_mode_init" condition="ftm_mode_init_present"
+      locked="true"
+      enabledBy="enablePeripheralSupport"
+      enumStem="FtmInitialiseOutputs"
+      description="Initialize the Channel Outputs"
+      toolTip="When written to '1' the channels outputs are initialized according to the state of\n
+               their corresponding bit in the OUTINIT register">
+      <choice name="Write 1 to initialise"  value="0" enum="Write1ToInitialise"/>
+   </choiceOption >
+
+   <binaryOption key="ftm_mode_ftmen" condition="ftm_mode_ftmen_present"
+      enabledBy="enablePeripheralSupport"
+      enumStem="FtmModeFtmen"
+      description="FTM Mode Enable"
+      toolTip="This field is write protected. It can be written only when MODE[WPDIS] = 1" >
+      <choice name="TPM registers only"  value="0" enum="TpmRegistersOnly"/>
+      <choice name="All registers"       value="1" enum="AllRegisters"/>
+   </binaryOption >
+
+   <!-- ************* SYNC ****************** -->
+
+   <!-- Hardware Trigger -->
+   <title description="Sync and Triggers" condition="ftm_sync_swsync_present" />
+
+   <bitmaskOption key="ftm_sync_trig" condition="hardwareTriggerPinMap"
+      enabledBy="enablePeripheralSupport"
+      typeName="FtmHardwareTrigger"
+      enumType="uint32_t"
+      valueFormat="FtmHardwareTrigger(%s)"
+      defaultValue="0"
+      description="Hardware trigger inputs"
+      toolTip="Enables hardware trigger to the PWM synchronization.\n
+               Hardware trigger occurs on a rising edge of the corresponding trigger input signal."
+      bitmask="0"
+      bitList="=hardwareTriggerPinMap"
+      pinMap="=&quot;FTM$(_instance)_TRIG%i:&quot;+hardwareTriggerPinMap"
+      value="0" />
+
+   <binaryOption key="ftm_sync_swsync" condition="ftm_sync_swsync_present"
+      enabledBy="enablePeripheralSupport"
+      enumStem="FtmSyncSwsync"
+      description="PWM Synchronization Software Trigger" >
+      <choice name="Not selected"  value="0" enum="NotSelected"/>
+      <choice name="Selected"      value="1" enum="Selected"/>
+   </binaryOption >
+
+   <binaryOption key="ftm_sync_synchom" condition="ftm_sync_synchom_present"
+      enabledBy="enablePeripheralSupport"
+      enumStem="FtmSyncSynchom"
+      description="Output Mask Synchronization with buffer"
+      toolTip="Selects when the OUTMASK register is updated with the value of its buffer" >
+      <choice name="Rising edges of the system clock"  value="0" enum="RisingEdgesOfSystemClock"/>
+      <choice name="PWM synchronization"               value="1" enum="PwmSynchronization"/>
+   </binaryOption >
+
+   <binaryOption key="ftm_sync_reinit" condition="ftm_sync_reinit_present"
+      enabledBy="enablePeripheralSupport"
+      enumStem="FtmSyncReinit"
+      description="FTM Counter Reinitialization by Synchronization (FTM Counter Synchronization)"
+      toolTip="Determines if the FTM counter is reinitialized when the selected trigger for\n
+               the synchronization is detected.\n
+               The REINIT bit configures the synchronization when SYNCMODE is zero." >
+      <choice name="Counts normally"                         value="0" enum="CountsNormally"/>
+      <choice name="Updated with initial value on triggerd"  value="1" enum="UpdatedWithInitialValueOnTriggerd"/>
+   </binaryOption >
+
+   <binaryOption key="ftm_sync_cntmax" condition="ftm_sync_cntmax_present"
+      enabledBy="enablePeripheralSupport"
+      enumStem="FtmSyncCntmax"
+      description="Maximum Loading Point Enable"
+      toolTip="Selects the maximum loading point to PWM synchronization. \n
+               See Boundary cycle and loading points. \n
+               If CNTMAX is 1, the selected loading point is when the FTM counter \n
+               reaches its maximum value (MOD register)." >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption >
+
+   <binaryOption key="ftm_sync_cntmin" condition="ftm_sync_cntmin_present"
+      enabledBy="enablePeripheralSupport"
+      enumStem="FtmSyncCntmin"
+      description="Minimum Loading Point Enable"
+      toolTip="Selects the minimum loading point to PWM synchronization. \n
+               See Boundary cycle and loading points. \n
+               If CNTMIN is one, the selected loading point is when the FTM counter \n
+               reaches its minimum value (CNTIN register).">
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption >
+
+   <!-- ************* OUTINIT ****************** -->
+
+   <bitmaskOption key="ftm_outinit_choi" condition="ftm_outinit_ch0oi_present"
+      valueFormat="FTM_OUTINIT_CHOI(%s)"
+      enabledBy="enablePeripheralSupport"
+      bitmask="0"
+      bitList="CH(0-7)"
+      description="Channel Output Initialization Value"
+      toolTip="Selects the value that is forced into the channel output when initialization occurs." />
+
+   <!-- ************* OUTMASK ****************** -->
+
+   <bitmaskOption key="ftm_outmask_chom" condition="ftm_outmask_ch0om_present"
+      valueFormat="FTM_OUTMASK_CHOM(%s)"
+      enabledBy="enablePeripheralSupport"
+      bitmask="0"
+      bitList="CH(0-7)"
+      description="Channel Output mask"
+      toolTip="Defines if the channel output is masked or unmasked." />
+
+   <!-- ************* COMBINE ****************** -->
+
+    
+   <category
+      name="Functions For Linked Channels" 
+      toolTip="Configure the Fault control, Synchronization, Deadtime insertion, \n
+               Dual Edge Capture mode, Complementary, and Combine mode for each pair of channels" 
+      description="Channels (0,1) (2,3) (4,5) (6,7)">
+      
+      <for keys   =" num : pair"
+           values =" 0   : 0 &amp; 1 ;
+                     1   : 2 &amp; 3 ;
+                     2   : 4 &amp; 5 ;
+                     3   : 6 &amp; 7 ;
+           ">
+         <bitmaskOption key="ftm_combine%(num)" condition="ftm_combine_comb%(num)_present"
+            enabledBy="enablePeripheralSupport"
+            typeName="FtmCombine%(num)"
+            enumType="uint8_t"
+            bitmask="0"
+            bitList="COMBINE%(num), COMP%(num), DECAPEN%(num), DECAP%(num), DTEN%(num), SYNCEN%(num), FAULTEN%(num)"
+            description="Paired Channels %(pair)"
+            bitDescription="
+               Combine Channels enable,
+               Complementary output mode enable,
+               Dual Edge Capture Mode captures,
+               Dual Edge Capture Mode enable,
+               Dead-time Insertion enable,
+               PWM synchronization enable,
+               Fault Control enable"                          
+            toolTip="Options controlling paired operation of channels" />
+      </for>
+      
+      <!-- ************* DEADTIME ****************** -->
+   
+      <choiceOption key="ftm_deadtime_dtps" condition="ftm_deadtime_dtps_present"
+         enabledBy="enablePeripheralSupport"
+         enumStem="FtmDeadtimeDtps"
+         description="Deadtime Prescaler Value" >
+         <choice name="Divide by 1"   value="0" enum="DivideBy1"/>
+         <choice name="Divide by 4"   value="2" enum="DivideBy4"/>
+         <choice name="Divide by 16"  value="3" enum="DivideBy16"/>
+      </choiceOption >
+   
+      <intOption key="ftm_deadtime_dtval" condition="ftm_deadtime_dtval_present"
+         enabledBy="enablePeripheralSupport"
+         enumType="uint8_t"
+         typeName="FtmDeadtime"
+         description="Dead-time Value"
+         toolTip="This tick value is scaled by ftm_deadtime_dtps"
+      />
+   
+      <intOption key="ftm_deadtime" condition="ftm_deadtime_dtval_present"
+         ref="ftm_deadtime_dtval*((ftm_deadtime_dtps==0)?1:((ftm_deadtime_dtps==1)?4:16))"
+         derived="true"
+         locked="true"
+         enabledBy="enablePeripheralSupport"
+         typeName="uint32_t"
+         units="ticks"
+         description="Deadtime Value"
+         toolTip="Deadtime in ticks"
+      />
+   
+   </category>
+
+   <!-- ************* QUAD ****************** -->
+
+   <title description="Quadrature Decoder" condition="ftm_qdctrl_quadmode_present" />
+
    <binaryOption key="ftm_qdctrl_quadmode" condition="ftm_qdctrl_quadmode_present"
       enabledBy="enablePeripheralSupport"
       enumStem="FtmQuadratureMode"
@@ -322,11 +532,15 @@
 
    <!--  **************** Channels **************** -->
 
+   <!-- dialogue condition="1&gt;2">
+      <stringOption key="xxxx" value="123" />
+   </dialogue -->
+   
    <for keys="ch" dim="NumChannels">
       <title description="FTM Channel %(ch)" toolTip="" />
 
       <choiceOption key="ftm_cnsc_mode[%(ch)]" condition="ftm_combine_decap0_present&amp;&amp;ftm_cnsc_ms_present&amp;&amp;ftm_cnsc_els_present"
-         enabledBy="enablePeripheralSupport"
+         enabledBy="enablePeripheralSupport&amp;&amp;(((%(ch)%2)!=1)||(ftm_cnsc_mode[%(ch)-1]&lt;10))"
          valueFormat="(FTM_COMBINE_DECAPEN0(%s)&lt;&lt;8),(FTM_COMBINE_COMBINE0(%s)&lt;&lt;8),FTM_CnSC_MS(%s),FTM_CnSC_ELS(%s)"
          enumType="uint16_t"
          enumStem="FtmChannelMode"
@@ -425,6 +639,23 @@
 
    </for>
 
+   <!-- Fault Detection -->
+   <title description="Fault detection" condition="faultPinMap" />
+
+   <bitmaskOption key="ftm_fltctrl_faulten" condition="faultPinMap"
+      enabledBy="enablePeripheralSupport"
+      typeName="FtmFaultEnableMask"
+      enumType="uint32_t"
+      valueFormat="FtmFaultEnableMask(%s)"
+      defaultValue="0"
+      description="Fault inputs"
+      toolTip="Enables fault enable inputs"
+      bitmask="0"
+      bitList="=faultPinMap"
+      pinMap="=&quot;FTM$(_instance)_FLT%i:&quot;+faultPinMap"
+      value="0"
+   />
+
    <initialValueTemplate variables="minimumResolution"
    ><![CDATA[
       \t/// %description
@@ -448,7 +679,7 @@
          toolTip="Enables the generation of the trigger when the FTM counter \n
           is equal to the channel CnV register"
          value="0"
-         bitmask="0x3F"
+         bitmask="0"
          bitList="CH2TRIG,CH3TRIG,CH4TRIG,CH5TRIG,CH0TRIG,CH1TRIG,"
          />
       <binaryOption key="ftm_exttrig_inittrigen" description="Initialisation Trigger Enable"
@@ -465,27 +696,6 @@
       \t    $(ftm_exttrig_trig)|                  // External Trigger Enable
       \t    $(ftm_exttrig_inittrigen.usageValue); // Initialisation Trigger Enable \n\n
    ]]></template>
-
-   <category name="Advanced" description="Advanced options">
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)clksel"  optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt0"    optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt1"    optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt2"    optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt3"    optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)trg0src" optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)trg1src" optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)ch0src"  optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)ch1src"  optional="true" locked="false" />
-
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och7src" optional="true" locked="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och6src" optional="true" locked="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och5src" optional="true" locked="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och4src" optional="true" locked="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och3src" optional="true" locked="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och2src" optional="true" locked="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och1src" optional="true" locked="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och0src" optional="true" locked="false"/>
-   </category>
 
    <setTemplate key="/$(_BASENAME)/static_functions" namespace="all"
       discardRepeats="true"
@@ -1621,7 +1831,6 @@
       \t * @note This constructor may be used to create a const instance in ROM
       \t *
       \t * Example:
-      \t * Example:
       \t * ///
       \t * /// $(_NAME) call-back
       \t * ///
@@ -2036,7 +2245,7 @@ $(init_description)
          \t\n
    ]]></constructorTemplate>
 
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[ 
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t}; // class $(_Baseclass)BasicInfo::Init\n\n
    ]]></template>
 
@@ -2706,7 +2915,7 @@ $(quad_init_description)
    \ttypedef $(_Baseclass)QuadDecoder_T<$(_Class)Info> $(_Baseclass)QuadDecoder$(_instance);\n
    ]]></template>
 
-   <!-- ************* Signal mapping ****************** -->
+   <!-- ************* SIM mapping ****************** -->
 
    <category name="SIM" description="Pin mapping and clock enables">
       <aliasOption key="/SIM/sim_scgc_$(_name)"     locked="false" optional="true" />
@@ -2715,7 +2924,14 @@ $(quad_init_description)
       <aliasOption key="/SIM/sim_pinsel0_$(_name)clkps" locked="false" optional="true" />
       <aliasOption key="/SIM/sim_sopt_ftmic" locked="false" optional="true" />
       <aliasOption key="/SIM/sim_sopt_rxdce" locked="false" optional="true" />
-      
+
+      <aliasOption key="/SIM/sim_sopt0_acic"  locked="false" optional="true" condition="$(_instance)==0" />
+      <aliasOption key="/SIM/sim_sopt0_rtcc"  locked="false" optional="true" condition="$(_instance)==0" />
+      <aliasOption key="/SIM/sim_sopt0_rxdce" locked="false" optional="true" condition="$(_instance)==0" />
+
+      <aliasOption key="/SIM/sim_sopt0_actrg" locked="false" optional="true" condition="$(_instance)==2" />
+      <aliasOption key="/SIM/sim_sopt0_delay" locked="false" optional="true" condition="$(_instance)==2" />
+
       <for keys="ch" dim="8" >
          <aliasOption key="/SIM/sim_pinsel_$(_name)ps%(ch)"  locked="false" optional="true" />
          <aliasOption key="/SIM/sim_pinsel0_$(_name)ps%(ch)" locked="false" optional="true" />

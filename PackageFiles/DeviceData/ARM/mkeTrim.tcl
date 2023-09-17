@@ -34,7 +34,12 @@
    set ::ICS_C4_SCFTRIM_MASK    0x01
    
    set ::LOAD_ADDRESS           0x20000000
-   
+
+###################################################   
+# Write trim value to trim registers
+#
+# @param value Trim value to write
+#   
 proc writeTrim { value } {
    puts stderr [format "Trim = 0x%02X (%d)" $value $value]
    
@@ -43,22 +48,36 @@ proc writeTrim { value } {
    wb $::ICS_C3 [ expr $value>>1 ]
 }
 
+###################################################   
+# Wait while CPU is executing
+#
+# @return wait time in ms or -1 on fail
+#
 proc waitWhileBusy { retries } {
+
+   set TIME_start [clock clicks -milliseconds]
+
+#   puts stderr "waitWhileBusy{} - retries = $retries"
+   
    rcreg $::MDM_AP_Status
    
    for {set retry 0} {$retry < $retries} {incr retry} {
 #      puts stderr "waitWhileBusy{} - Waiting..."
       set mdmApStatus [rcreg -q $::MDM_AP_Status]
       if [expr (($mdmApStatus & $::MDM_AP_ST_CORE_HALTED) != 0)] {
+         set TIME_taken [expr [clock clicks -milliseconds] - $TIME_start]
          puts stderr "waitWhileBusy{} - MDM_AP_ST_CORE_HALTED asserted OK"
-         return $retry;
+         return $TIME_taken;
       }
-      after 10
+      after 5
    }
    puts stderr "waitWhileBusy{} - MDM_AP_ST_CORE_HALTED failed to set"
    return -1
 }
 
+###################################################   
+# Write timing loop code to RAM
+#
 # Timing loop code
 #   0: 2064        movs  r0, #100 @ 0x64
 #   2: 4903        ldr   r1, [pc, #12]  @ (10 <count>)
@@ -69,12 +88,16 @@ proc waitWhileBusy { retries } {
 #   c: be01        bkpt  0x0001
 #   e: e7fe        b.n   .
 #  10: 0002ffff    .word 0x0002ffff
-
 proc writeTimingCode {} {
    connect
    ww $::LOAD_ADDRESS 0x2064 0x4903 0x3901 0xd1fd 0x3801 0xd1fa 0xBE01 0xE7FE 0xffff 0x0002
 }
 
+###################################################   
+# Write Watchdog disable code to RAM
+#
+# @param value Trim value to write
+#   
 # Watchdog disable code
 #   0: 4807        ldr   r0, [pc, #28]  @ (20 <wdog>)
 #   2: 4908        ldr   r1, [pc, #32]  @ (24 <Unlock1>)
@@ -103,6 +126,9 @@ proc writeWdogCode {} {
    ww $::LOAD_ADDRESS 0x4807 0x4908 0x4a08 0x8041 0x8042 0x8842 0x8081 0x80c1 0x2100 0x8001 0xbe01 0xe7fe 0x0000 0x0000 0x0000 0x0000 0x2000 0x4005 0x20c5 0x0000 0x28d9
 }
 
+###################################################   
+# Disable watch-dog
+#
 proc disableWdog {} {
    reset
    writeWdogCode
@@ -111,13 +137,29 @@ proc disableWdog {} {
    return [waitWhileBusy 500]
 }
 
+###################################################   
+# Write trim value to trim registers
+#
+# @param value Trim value to write
+#   
+# @return measured timing loop delay in ms
+#
 proc timingLoop { trim } {
    writeTrim $trim 
    wpc $::LOAD_ADDRESS
    go
-   return [waitWhileBusy 500]
+   set time [waitWhileBusy 4000]
+   puts "time = $time"
+   return $time
 }
 
+###################################################   
+# Estimate trim value
+# It runs the trim measurement several times and then
+# uses linear regression to estimate a trim value
+#
+# @return measured trim
+#
 proc regress {} {
 
    set sumx    0.0     ;#  sum of x     
@@ -130,7 +172,8 @@ proc regress {} {
    writeTimingCode
       
    # Trim values to try
-   set yValues { 0 100 200 300 }
+   # This assumes the expected trim is ~200
+   set yValues { 150 200 250 }
    set n [llength $yValues]
    
    foreach {yValue} $yValues {
@@ -162,12 +205,17 @@ proc regress {} {
 #   puts stderr [format "M = %.2f, B = %.1f" $m $b ]
    
    # The following value was found by trial and error for default MKE 24MHz target clock out of reset
-   set targetCount 235
+   set targetCount 2460
    set trimValue [expr round($m * $targetCount + $b)]
    
    return $trimValue
 }
 
+###################################################   
+# Find and print trim value
+#
+# @return measured trim value
+#
 proc findTrim {} {
    disableWdog
    set trimValue [ regress ]
@@ -175,11 +223,24 @@ proc findTrim {} {
    return $trimValue
 }
 
+###################################################   
+# Used to find a calibration value
+#
+# @param trim The trim value to use
+#
+# @return measured timing loop delay
+#
+proc testTrim { trim } {
+  timingLoop $trim
+}
+
+###################################################   
+# Open BDM 
+#
 proc init {} {
-
    settarget arm
+   settargetvdd 5
    openbdm
-
 }
 
 

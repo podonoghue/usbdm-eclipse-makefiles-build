@@ -601,8 +601,8 @@
       ]]>
       </template>
       <for keys="n" dim="8" >
-         <for keys="pinIndex" values="@pinIndex">
-            <if condition="port_hdrve_pt%(r)%(n)">
+         <for keys="pinIndex" values="=pinIndex" >
+            <if condition="port_hdrve_pt%(r)%(n)" >
                <template namespace="all" key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
                <![CDATA[
                   \t   %(pinIndex),
@@ -742,10 +742,18 @@
                  /PORT/port_pue1_pthpe :  H   :  56;
                  /PORT/port_pue2_ptipe :  I   :  64" >
 
-      <for keys="i" dim="8">
+      <for keys="     ii           : i  "
+           values="\=%(pinIndex)   : 0 ;
+                    =%(pinIndex)+1 : 1 ;
+                    =%(pinIndex)+2 : 2 ;
+                    =%(pinIndex)+3 : 3 ;
+                    =%(pinIndex)+4 : 4 ;
+                    =%(pinIndex)+5 : 5 ;
+                    =%(pinIndex)+6 : 6 ;
+                    =%(pinIndex)+7 : 7 " >
          <template key="/PORT/PinIndex" namespace="all" variables="%(field)_present" codeGenCondition="enablePeripheralSupport"
          ><![CDATA[
-            \tPT%(Name)%(i) = %(pinIndex)+%(i),\n
+            \tPT%(Name)%(i) = %(ii),\n
          ]]></template>
       </for>
       <template key="/PORT/declarations" namespace="all" variables="%(field)_present" codeGenCondition="enablePeripheralSupport"
