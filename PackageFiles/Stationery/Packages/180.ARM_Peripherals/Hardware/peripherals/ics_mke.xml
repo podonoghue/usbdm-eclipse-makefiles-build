@@ -59,12 +59,17 @@
       </binaryOption>
    </for>
 
-   <intOption key="slowInternalClockTrim" condition="ics_c4_scftrim_present"
-      description="Slow clock trim value"
-      toolTip="This 9-bit trim value is written to ICS.C3[SCTRIM] and ICS.C4[SCFTRIM] if non-zero"
-      value="0"
-      min="0" max="511"
-   />
+   <binaryOption key="assumeSlowIrcTrimmed"
+      enabledBy="!enablePeripheralSupport"
+      description="Assume slow IRC trimmed in minimal configuration"
+      toolTip="Used to indicate that the Slow Internal Reference clock has been trimmed and\n
+               hence it is safe to use higher clock frequencies derived from the IRC\n
+               without danger of exceeding the maximim clock frequency.\n
+               Only used in minimal configuration"
+      >
+      <choice value="false" name="Clock is not trimmed" />
+      <choice value="true"  name="Clock is trimmed"     />
+   </binaryOption>
 
    <intOption key="icsirclk"
       locked="true"
@@ -640,7 +645,7 @@
             locked="true" />
 
          <choiceOption key="ics_c2_bdiv[%(n)]" condition="ics_c2_bdiv_present"
-            enabledBy="((%(n)==0)&amp;&amp;(slowInternalClockTrim!=0))||enableClockConfiguration[%(n)]#enableClockConfiguration[%(n)]"
+            enabledBy="((%(n)==0)&amp;&amp;assumeSlowIrcTrimmed)||enableClockConfiguration[%(n)]#enableClockConfiguration[%(n)]"
             target="system_icsoutclk_clock[%(n)]"
             enumStem="IcsBusDivider"
             description="Output divider for ICS"

@@ -269,7 +269,8 @@ FlashProgrammer_ARM::FlashProgrammer_ARM() :
       initTargetDone(false),
       currentFlashOperation(OpNone),
       currentFlashAlignment(0),
-      doRamWrites(false) {
+      doRamWrites(false),
+      calculatedTrimValue(0) {
    LOGGING_E;
 }
 
@@ -2751,7 +2752,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::verifyFlash(FlashImagePtr flashImage,
       if (rc != PROGRAMMING_RC_OK) {
          break;
       }
-#if (TARGET == CFV1) || (TARGET == HCS08)
+#if (TARGET == CFV1) || (TARGET == HCS08) || (TARGET == ARM)
       // Modify flash image according to trim options - to be consistent with what is programmed
       rc = dummyTrimLocations(flashImage);
       if (rc != PROGRAMMING_RC_OK) {
@@ -2769,6 +2770,63 @@ USBDM_ErrorCode FlashProgrammer_ARM::verifyFlash(FlashImagePtr flashImage,
    log.print("Verifying Time = %3.2f s, rc = %d\n", progressTimer->elapsedTime(), rc);
 
    return rc;
+}
+
+/**
+ * Get calculated clock trim values
+ *
+ * @return trim value
+ */
+uint16_t FlashProgrammer_ARM::getCalculatedTrimValue() {
+   return calculatedTrimValue;
+}
+
+/**
+ * Determines trim values for the target clock. \n
+ * The values determined are written to the Flash image for later programming.
+ *
+ * @param flashImage - Flash image to be updated.
+ *
+ * @return error code see \ref USBDM_ErrorCode
+ *
+ * @note If the trim frequency indicated in parameters is zero then no trimming is done.
+ *       This is not an error.
+ */
+USBDM_ErrorCode FlashProgrammer_ARM::setFlashTrimValues(FlashImagePtr flashImage) {
+   LOGGING_F;
+
+   calculatedTrimValue = 0;
+
+   unsigned long clockFrequency = device->getClockTrimFreq();
+
+   // No trimming required
+   if (clockFrequency == 0) {
+      log.print("Trimming not required\n");
+      return PROGRAMMING_RC_OK;
+   }
+
+   int trimValue;
+   char buff[100];
+   snprintf(buff, sizeof(buff)-2, "findTrim %ld", clockFrequency);
+   USBDM_ErrorCode rc = runTCLCommandWithRc(buff, trimValue);
+   if (rc != PROGRAMMING_RC_OK) {
+      return rc;
+   }
+   if (trimValue<0) {
+      // Trim calculation failed rc is negated error code
+      USBDM_ErrorCode rc = USBDM_ErrorCode(-trimValue);
+      log.error("Error: Failed - rc = %d (%s)\n", rc, bdmInterface->getErrorString(rc));
+      return rc;
+   }
+
+   // Save trim value
+   calculatedTrimValue = trimValue;
+
+   log.print("trimValue = %d (%d,0x%2X)\n", trimValue, trimValue&0x1, (trimValue>>1)&0xFF);
+   uint32_t trimAddress = device->getClockTrimNVAddress();
+   flashImage->setValue(trimAddress,    trimValue&0x01);
+   flashImage->setValue(trimAddress+1, (trimValue>>1)&0xFF);
+   return PROGRAMMING_RC_OK;
 }
 
 //=======================================================================
@@ -2930,10 +2988,10 @@ USBDM_ErrorCode FlashProgrammer_ARM::programFlash(FlashImagePtr flashImage,
          break;
       }
 #endif
-#if (TARGET == RS08) || (TARGET == CFV1) || (TARGET == HCS08)
+#if (TARGET == RS08) || (TARGET == CFV1) || (TARGET == HCS08) || (TARGET == ARM)
       // Calculate clock trim values & update memory image
       // log.print("setFlashTrimValues() - trimming\n");
-      progressTimer->restart("Calculating Clock Trim");
+      progressTimer->restart("Calculating Trim");
 
       rc = setFlashTrimValues(flashImage);
       if (rc != PROGRAMMING_RC_OK) {

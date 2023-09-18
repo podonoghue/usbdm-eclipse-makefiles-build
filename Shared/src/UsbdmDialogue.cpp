@@ -66,9 +66,9 @@ const uint32_t UsbdmDialogue::targetPropertyFlags[] = {
 /*  5 JTAG      */  HAS_NONE,
 /*  6 EZFLASH   */  HAS_NONE,
 /*  7 MC56F80xx */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE|HAS_PROBE_SECURED|HAS_SELECT_SPEED,
-/*  8 ARM       */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE|                  HAS_SELECT_SPEED|HAS_VLLS_RESET_CAPTURE|HAS_NVM_EEEPROM|HAS_MASK_INTERRUPTS|HAS_RESET_CHOICES,
-/*  9 ARM_JTAG  */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE|                  HAS_SELECT_SPEED|HAS_VLLS_RESET_CAPTURE|HAS_NVM_EEEPROM|HAS_MASK_INTERRUPTS|HAS_RESET_CHOICES,
-/* 10 ARM_SWD   */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE|                  HAS_SELECT_SPEED|HAS_VLLS_RESET_CAPTURE|HAS_NVM_EEEPROM|HAS_MASK_INTERRUPTS|HAS_RESET_CHOICES,
+/*  8 ARM       */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE|HAS_TRIM|         HAS_SELECT_SPEED|HAS_VLLS_RESET_CAPTURE|HAS_TRIM|HAS_NVM_EEEPROM|HAS_MASK_INTERRUPTS|HAS_RESET_CHOICES,
+/*  9 ARM_JTAG  */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE|HAS_TRIM|         HAS_SELECT_SPEED|HAS_VLLS_RESET_CAPTURE|HAS_TRIM|HAS_NVM_EEEPROM|HAS_MASK_INTERRUPTS|HAS_RESET_CHOICES,
+/* 10 ARM_SWD   */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE|HAS_TRIM|         HAS_SELECT_SPEED|HAS_VLLS_RESET_CAPTURE|HAS_TRIM|HAS_NVM_EEEPROM|HAS_MASK_INTERRUPTS|HAS_RESET_CHOICES,
 /* 11 S12Z      */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE,
 };
 
@@ -266,7 +266,6 @@ void UsbdmDialogue::Init() {
    forcelinearToPagedImage    = false;
    autoFileLoad               = false;
    fileLoaded                 = false;
-   doTrim                     = false;
    needManualFrequencySet     = false;
    sound                      = false;
    lastFileLoaded             = wxEmptyString;
@@ -304,7 +303,7 @@ void UsbdmDialogue::Init() {
    updateFilterDescription();
    updateFlashNVM();
    updateSecurity();
-//   update();
+   update();
 }
 
 /**
@@ -556,18 +555,27 @@ std::string UsbdmDialogue::update() {
 
    if (deviceChanged) {
       log.print("Resetting device specific information to defaults\n");
-      deviceInterface->getCurrentDevice()->setClockTrimFreq(deviceInterface->getCurrentDevice()->getDefaultClockTrimFreq());
       deviceInterface->getCurrentDevice()->setClockTrimNVAddress(deviceInterface->getCurrentDevice()->getDefaultClockTrimNVAddress());
       populateSecurityControl();
       populateEeepromControl();
-
+      trimFrequencyTextControl->SetDoubleValue(deviceInterface->getCurrentDevice()->getClockTrimFreq());
+      trimAddressTextControl->SetHexValue(deviceInterface->getCurrentDevice()->getClockTrimNVAddress());
       deviceChanged = false;
    }
-   bool usingClock = (deviceInterface->getCurrentDevice()->getClockType() != CLKEXT) && (deviceInterface->getCurrentDevice()->getClockType() != CLKINVALID);
+   bool usingClock = (deviceInterface->getCurrentDevice()->getClockType() != CLKEXT) &&
+                     (deviceInterface->getCurrentDevice()->getClockType() != CLKINVALID);
    bool trimEnabled = usingClock && doTrim;
+   log.print("doTrim = %s\n", doTrim?"true":"false");
+   log.print("trimEnabled = %s\n", trimEnabled?"true":"false");
 
    trimFrequencyCheckBoxControl->Enable(usingClock);
    trimFrequencyCheckBoxControl->SetValue(doTrim);
+   if (!doTrim) {
+      deviceInterface->getCurrentDevice()->setClockTrimFreq(0);
+   }
+   else {
+      deviceInterface->getCurrentDevice()->setClockTrimFreq(deviceInterface->getCurrentDevice()->getClockTrimFreq());
+   }
 
    trimFrequencyStaticControl->Enable(trimEnabled);
    trimFrequencyTextControl->Enable(trimEnabled);
@@ -762,6 +770,7 @@ void UsbdmDialogue::loadSettings() {
 
    doTrim = deviceInterface->getCurrentDevice()->getClockTrimFreq() != 0;
 
+   log.print("doTrim = %s\n", doTrim?"true":"false");
    currentDirectory = appSettings.getValue(settingsKey+".currentDirectory", "");
 }
 
@@ -1052,6 +1061,7 @@ void UsbdmDialogue::setDeviceIndex(int newDeviceIndex) {
    deviceInterface->getCurrentDevice()->setSecurity(savedDevice.getSecurity());
    deviceInterface->getCurrentDevice()->setConnectionFreq(savedDevice.getConnectionFreq());
    if (!doTrim) {
+      log.print("doTrim = %s\n", doTrim?"true":"false");
       deviceInterface->getCurrentDevice()->setClockTrimFreq(0);
    }
 }
@@ -1244,18 +1254,21 @@ void UsbdmDialogue::populateDeviceDropDown() {
       deviceTypeChoiceControl->SetClientData(0, (void *) -22);
       deviceTypeChoiceControl->SetSelection(0);
       deviceTypeChoiceControl->Enable(false);
+      deviceChanged = true;
    }
    else if (previousDeviceStillInList) {
       // Select originally selected device in re-populated list control if it is still present
       log.print("Selecting previous device #%d\n", deviceInterface->getCurrentDeviceIndex());
       setDeviceIndex(deviceInterface->getCurrentDeviceIndex());
       deviceTypeChoiceControl->Enable(true);
+      deviceChanged = true;
    }
    else {
       // Select 1st added device in list control
       log.print("Selecting 1st added device (firstAddedDeviceIndex = %d)\n", firstAddedDeviceIndex);
       setDeviceIndex(firstAddedDeviceIndex);
       deviceTypeChoiceControl->Enable(true);
+      deviceChanged = true;
    }
 }
 

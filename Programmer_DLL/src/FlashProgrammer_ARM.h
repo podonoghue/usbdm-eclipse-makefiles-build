@@ -99,6 +99,8 @@ protected:
    uint32_t                currentFlashAlignment;        //!< Alignment applicable to flash operation
    bool                    doRamWrites;                  //!< Write RAM region of image to target (after programming)
 
+   uint16_t                calculatedTrimValue;
+
    USBDM_ErrorCode initialiseTargetFlash();
    USBDM_ErrorCode initialiseTarget();
    USBDM_ErrorCode setFlashChecksum(FlashImagePtr flashImage, MemoryRegionConstPtr flashRegion);
@@ -118,10 +120,6 @@ protected:
       UsbdmSystem::Log::error("Clock configuration not supported\n");
       return  PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-   USBDM_ErrorCode dummyTrimLocations(FlashImagePtr flashImage)  {
-      UsbdmSystem::Log::error("Clock trimming not supported\n");
-      return  PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
-   };
    USBDM_ErrorCode eraseFlash(void);
    USBDM_ErrorCode convertTargetErrorCode(FlashDriverError_t rc);
    USBDM_ErrorCode initSmallTargetBuffer(uint8_t *buffer);
@@ -154,11 +152,14 @@ public:
 
    virtual USBDM_ErrorCode checkTargetUnSecured() override;
    virtual USBDM_ErrorCode massEraseTarget(bool resetTarget) override;
+   virtual USBDM_ErrorCode setFlashTrimValues(FlashImagePtr flashImage) override;
+
    virtual USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false) override;
    virtual USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0) override;
    virtual USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID, bool doinit=false) override;
    virtual USBDM_ErrorCode confirmSDID(void) override;
    virtual USBDM_ErrorCode resetAndConnectTarget(void) override;
+   virtual uint16_t getCalculatedTrimValue() override;
 };
 
 #endif /* SOURCE_FLASHPROGRAMMER_ARM_H_ */

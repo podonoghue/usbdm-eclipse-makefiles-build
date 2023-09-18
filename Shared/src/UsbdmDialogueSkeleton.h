@@ -200,7 +200,7 @@ class UsbdmDialogueSkeleton : public wxDialog
 	public:
 
 		UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("USBDM"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 529,1017 ), long style = wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxDIALOG_NO_PARENT|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER );
-		~UsbdmDialogueSkeleton();
+		virtual ~UsbdmDialogueSkeleton();
 
 };
 
@@ -221,7 +221,7 @@ class UsbdmDialogueSkeletonX : public wxFrame
 
 		UsbdmDialogueSkeletonX( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 529,1017 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 
-		~UsbdmDialogueSkeletonX();
+		virtual ~UsbdmDialogueSkeletonX();
 
 };
 

@@ -158,23 +158,50 @@ USBDM_ErrorCode FlashProgrammerCommon::releaseTCL(void) {
 /**
  * Executes a TCL command previously loaded in the TCL interpreter
  *
- * @param command Command to execute
+ * @param command Command to execute.  This would usually be the name of a TCL function.
+ * @param result  The return code is the result from the TCL command
+ *
+ * @return Error code on failed execution
+ */
+USBDM_ErrorCode FlashProgrammerCommon::runTCLCommandWithRc(const char *command, int &result) {
+   LOGGING;
+   log.print("Command = '%s'\n", command);
+   result = 0;
+//   log.print("tclInterpreter = %p\n", tclInterpreter.get());
+   if (tclInterpreter == NULL) {
+      log.error("Error: No TCL Interpreter\n");
+      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
+   }
+   USBDM_ErrorCode rc = tclInterpreter->evalTclScript(command, result);
+   if (rc != PROGRAMMING_RC_OK) {
+      log.error("Error: Failed - rc = %d (%s)\n", rc, bdmInterface->getErrorString(rc));
+   }
+   return rc;
+}
+
+/**
+ * Executes a TCL command previously loaded in the TCL interpreter
+ *
+ * @param command Command to execute.  This would usually be the name of a TCL function.
+ *                A non-zero return code is interpreted as an error and flagged
+ *
+ * @return  Error code
  */
 USBDM_ErrorCode FlashProgrammerCommon::runTCLCommand(const char *command) {
    LOGGING;
-   log.print("Command = '%s'\n", command);
+   log.print("TCL Command = '%s'\n", command);
+
 //   log.print("tclInterpreter = %p\n", tclInterpreter.get());
    if (tclInterpreter == NULL) {
       log.error("Error: No TCL Interpreter\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    USBDM_ErrorCode rc = tclInterpreter->evalTclScript(command);
-   if (rc != BDM_RC_OK) {
+   if (rc != PROGRAMMING_RC_OK) {
       log.error("Error: Failed - rc = %d (%s)\n", rc, bdmInterface->getErrorString(rc));
    }
    return rc;
 }
-
 /**
  * Release device data
  *
@@ -547,6 +574,10 @@ USBDM_ErrorCode FlashProgrammerCommon::configureTargetClock(unsigned long  *busF
 //   log.print("Configuring Target clock\n");
 
    switch (device->getClockType()) {
+      case MKEICS:
+         // not used
+         return BDM_RC_OK;
+
       case CLKEXT:
       case CLKINVALID:
          return configureExternal_Clock(busFrequency);
@@ -856,6 +887,19 @@ USBDM_ErrorCode FlashProgrammerCommon::trimTargetClock(uint32_t       trimAddres
    return rc;
 }
 
+
+/**
+ * Trim clock (must be MKEICS)
+ *
+ * @param clockParameters Describes the clock
+ */
+USBDM_ErrorCode FlashProgrammerCommon::trimMKEICS_Clock(MKEICS_ClockParameters_t *clockParameters) {
+   LOGGING;
+   USBDM_ErrorCode rc =BDM_RC_OK;
+   return rc;
+}
+
+
 /**
  * Trim clock (must be ICS)
  *
@@ -1100,6 +1144,25 @@ USBDM_ErrorCode FlashProgrammerCommon::setFlashTrimValues(FlashImagePtr flashIma
       case CLKEXT:
       case CLKINVALID:
          return PROGRAMMING_RC_OK;
+
+      case MKEICS:
+         // 9-bit value
+         rc = trimICS_Clock(&clockTrimParameters.ics);
+         if (rc != PROGRAMMING_RC_OK) {
+            return rc;
+         }
+         calculatedClockTrimValue = ((clockTrimParameters.ics.icsTrim<<1)|(clockTrimParameters.ics.icsSC&0x01));
+         flashImage->setValue(NVTRIM_address, clockTrimParameters.ics.icsTrim);
+         // The FTRIM bit may be combined with other bits such as DMX32 or DRS
+         ftrimMergeValue = flashImage->getValue(device->getClockTrimNVAddress());
+         if (((ftrimMergeValue&0xFF) == 0xFF)||(ftrimMergeValue >= 0xFF00U)) {
+            // Image location is unused or contains the unprogrammed FLASH value
+            // So no value to merge trim with - clear all other bits
+            ftrimMergeValue = 0x00;
+         }
+         log.print("Merging FTRIM with 0x%02X\n", ftrimMergeValue);
+         flashImage->setValue(NVFTRIM_address, (ftrimMergeValue&~0x01)|(clockTrimParameters.ics.icsSC&0x01));
+         return PROGRAMMING_RC_OK;
       case S08ICGV1:
       case S08ICGV2:
       case S08ICGV3:
@@ -1173,6 +1236,7 @@ USBDM_ErrorCode FlashProgrammerCommon::dummyTrimLocations(FlashImagePtr flashIma
       return PROGRAMMING_RC_OK;
    }
    switch (device->getClockType()) {
+      case MKEICS:
       case S08ICGV1:
       case S08ICGV2:
       case S08ICGV3:

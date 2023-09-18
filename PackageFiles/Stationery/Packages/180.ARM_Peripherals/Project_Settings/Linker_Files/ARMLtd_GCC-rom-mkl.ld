@@ -49,6 +49,9 @@ SECTIONS
 {
    .interrupts :
    {
+      /* Fill unused area with 0xFF to allow for programmer adding trim etc */
+      FILL(0xFF) 
+      
       __flash_start = .;
 
       /* Vector table */

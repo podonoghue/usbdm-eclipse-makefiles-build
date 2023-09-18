@@ -19,6 +19,7 @@
 #####################################################################################
 #  History
 #
+#  V4.12.1.320 - Added clock trim
 #  V4.12.1.180 - Removed unnecessary semi-colons
 #  V4.12.1.180 - Messages directed to stderr
 #  V4.12.1.180 - Changed to reset special vendor
@@ -46,7 +47,7 @@ proc loadSymbols {} {
 
    set ::NAME  "Kinetis-MKExxZ-flash-scripts"
 
-   puts stderr "$::NAME.loadSymbols{} - V4.12.1.180"
+   puts stderr "$::NAME.loadSymbols{} - V4.12.1.320"
    
    # These variables are available from driver
    #::RESET_DURATION
@@ -215,7 +216,21 @@ proc loadSymbols {} {
 
    set ::SIM_SOPT                       0x40048004
    set ::SIM_SOPT_NMIE_MASK             0x02                 
- 
+    
+   set ::SIM_SRSID                       0x40048000
+   set ::SIM_SRSID_WDOG_MASK             0b100000
+   
+   set ::ICS_C3                 0x40064002
+   set ::ICS_C4                 0x40064003
+   set ::ICS_C4_SCFTRIM_MASK    0x01
+   
+   set ::LOAD_ADDRESS           0x20000000
+
+   set ::PROGRAMMING_RC_OK                    0
+   set ::PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS -101
+   set ::PROGRAMMING_RC_ERROR_TRIM           -113
+
+
    return
 }
 
@@ -409,6 +424,230 @@ proc t { } {
    after 100
    pinSet
 }
+
+###################################################   
+# Write trim value to trim registers
+#
+# @param value Trim value to write
+#   
+proc writeTrim { value } {
+   puts stderr [format "Trim = 0x%02X (%d)" $value $value]
+   
+   set ics_c4 [ expr [rb $::ICS_C4] & ~$::ICS_C4_SCFTRIM_MASK ]
+   wb $::ICS_C4 [ expr $ics_c4|($value&$::ICS_C4_SCFTRIM_MASK) ]
+   wb $::ICS_C3 [ expr $value>>1 ]
+}
+
+###################################################   
+# Wait while CPU is executing
+#
+# @return wait time in ms or -1 on fail
+#
+proc runUntilStopped { retries } {
+
+#   puts stderr "runUntilStopped{} - retries = $retries"
+   
+   set TIME_start [clock clicks -milliseconds]
+   
+   go
+
+#   rcreg $::MDM_AP_Status
+   
+   for {set retry 0} {$retry < $retries} {incr retry} {
+#      puts stderr "runUntilStopped{} - Waiting..."
+      set mdmApStatus [rcreg -q $::MDM_AP_Status]
+      if [expr (($mdmApStatus & $::MDM_AP_ST_CORE_HALTED) != 0)] {
+         set TIME_taken [expr [clock clicks -milliseconds] - $TIME_start]
+         puts stderr "runUntilStopped{} - MDM_AP_ST_CORE_HALTED asserted OK"
+         return $TIME_taken;
+      }
+      after 5
+   }
+   puts stderr "runUntilStopped{} - MDM_AP_ST_CORE_HALTED failed to set"
+   return -1
+}
+
+###################################################   
+# Write timing loop code to RAM
+#
+#   //    Timing loop code
+#   asm (
+#      "        movs   r0, #100 \n" //  2: 2064      movs   r0,#100
+#      "oloop:  ldr    r1, data \n" //  4: 4903      ldr    r1,[pc, #24]
+#      "iloop:  sub    r1, #1   \n" //  6: 3901      subs   r1,#1
+#      "        bne    iloop    \n" //  8: d1fd      bne.n  iloop
+#      "        sub    r0, #1   \n" //  a: 3801      subs   r0,#1
+#      "        bne    oloop    \n" //  c: d1fa      bne.n  oloop
+#      "        bkpt   0x0001   \n" //  e: be01      bkpt   0x0001
+#      "        b      .        \n" // 10: e7fe      b.n    .
+#      "       .align 2         \n" // 12: 46c0      fill
+#      " data: .word 0x0002ffff \n" // 14: 0002 ffff .word 0x0002ffff
+#   );
+proc writeTimingCode {} {
+   connect
+   ww $::LOAD_ADDRESS 0x2064 0x4903 0x3901 0xd1fd 0x3801 0xd1fa 0xBE01 0xE7FE 0xFFFF 0x0002
+}
+
+###################################################   
+# Write Watchdog disable code to RAM
+#
+# @param value Trim value to write
+#   
+# Watchdog disable code
+#   0: 4807        ldr   r0, [pc, #28]  @ (20 <wdog>)
+#   2: 4908        ldr   r1, [pc, #32]  @ (24 <Unlock1>)
+#   4: 4a08        ldr   r2, [pc, #32]  @ (28 <Unlock2>)
+#   6: 8041        strh  r1, [r0, #2]
+#   8: 8042        strh  r2, [r0, #2]
+#   a: 8842        ldrh  r2, [r0, #2]
+#   c: 8081        strh  r1, [r0, #4]
+#   e: 80c1        strh  r1, [r0, #6]
+#  10: 2100        movs  r1, #0
+#  12: 8001        strh  r1, [r0, #0]
+#  14: be01        bkpt  0x0001
+#  16: e7fe        b.n   .
+#  18: 46c0        fill
+#  1a: 46c0        fill
+#  1c: 46c0        fill
+#  1e: 46c0        fill
+#
+#  20: 40052000    .word 0x40052000
+#  24: 20c5        .short   0x20c5
+#  26: 46c0        nop         @ (mov r8, r8)
+#  28: 28d9        .short   0x28d9
+
+proc writeWdogCode {} {
+   connect
+   ww $::LOAD_ADDRESS 0x4807 0x4908 0x4a08 0x8041 0x8042 0x8842 0x8081 0x80c1 0x2100 0x8001 0xbe01 0xe7fe 0x0000 0x0000 0x0000 0x0000 0x2000 0x4005 0x20c5 0x0000 0x28d9
+}
+
+###################################################   
+# Disable watch-dog
+#
+proc disableWdog {} {
+   reset
+   writeWdogCode
+   wpc $::LOAD_ADDRESS
+   return [runUntilStopped 500]
+}
+
+###################################################   
+# Write trim value to trim registers
+#
+# @param value Trim value to write
+#   
+# @return measured timing loop delay in ms
+#
+proc timingLoop { trim } {
+   writeTrim $trim 
+   wpc $::LOAD_ADDRESS
+   set time [runUntilStopped 4000]
+   puts "time = $time"
+   return $time
+}
+
+###################################################   
+# Estimate trim value
+# It runs the trim measurement several times and then
+# uses linear regression to estimate a trim value
+#
+# @param targetCount The delay time to trim against
+#        This value is an emprical value determined for the target device.
+#        It is the measured delay time for a 'correctly' trimmed device
+#        executing the timing code.
+#
+# @return measured trim
+#
+proc regress { targetCount } {
+
+   set sumx    0.0     ;#  sum of x     
+   set sumy    0.0     ;#  sum of y     
+   set sumx2   0.0     ;#  sum of x**2  
+   set sumy2   0.0     ;#  sum of y**2  
+   set sumxy   0.0     ;#  sum of x * y 
+
+   # Load code
+   writeTimingCode
+      
+   # Trim values to try
+   # This assumes the expected trim is ~200
+   set yValues { 120 200 280 }
+   set n [llength $yValues]
+   
+   foreach {yValue} $yValues {
+#      puts stderr "yValue = $yValue"
+      set xValue [timingLoop $yValue]
+      if [expr $xValue < 0 ] {
+         return -1
+      }
+      lappend xValues $xValue
+      
+#      puts stderr "xValue = $xValue"
+      set sumx  [expr $sumx + $xValue] 
+      set sumy  [expr $sumy + $yValue] 
+      set sumx2 [expr $sumx2 + ($xValue * $xValue)] 
+      set sumy2 [expr $sumy2 + ($yValue * $yValue)] 
+      set sumxy [expr $sumxy + ($xValue * $yValue)] 
+   }
+   set denom [expr $n * $sumx2 - $sumx*$sumx]
+   if [expr $denom == 0 ] {
+      return $::PROGRAMMING_RC_ERROR_TRIM
+   }
+#   puts stderr "denom = $denom"
+#   
+#   puts stderr "Xs = $yValues"
+#   puts stderr "Ys = $xValues"
+   
+   set m [expr ($n * $sumxy  -  $sumx * $sumy) / $denom]
+   set b [expr ($sumy * $sumx2  -  $sumx * $sumxy) / $denom]
+#   puts stderr [format "M = %.2f, B = %.1f" $m $b ]
+   
+   set trimValue [expr round($m * $targetCount + $b)]
+   
+   return $trimValue
+}
+
+###################################################   
+# Find and print trim value
+#
+# @return measured trim value
+#
+proc findTrim { targetfrequency } {
+
+   # Only supports 37.50 kHz trimming
+   if [expr $targetfrequency != 37500 ] {
+      return $::PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS
+   }
+
+   # The following value was found by trial and error for default MKE04 24MHz target clock out of reset
+   set targetCount 2458
+   
+   disableWdog
+   set trimValue [ regress $targetCount ]
+   puts stderr "Trim value = $trimValue"
+   return $trimValue
+}
+
+###################################################   
+# Used to find a calibration value
+#
+# @param trim The trim value to use
+#
+# @return measured timing loop delay
+#
+proc testTrim { trim } {
+  timingLoop $trim
+}
+
+###################################################   
+# Open BDM 
+#
+proc init {} {
+   settarget arm
+   settargetvdd 5
+   openbdm
+}
+
 
 ######################################################################################
 # Actions on initial load

@@ -478,7 +478,7 @@
       \t      wdogCallback = unhandledCallback;
       \t   }
       \t   usbdm_assert(
-      \t         (sCallback == unhandledCallback) || (sCallback == wdogCallback),
+      \t         (sCallback == unhandledCallback) || (wdogCallback == unhandledCallback),
       \t         "Handler already set");
       \t   sCallback = wdogCallback;
       \t}

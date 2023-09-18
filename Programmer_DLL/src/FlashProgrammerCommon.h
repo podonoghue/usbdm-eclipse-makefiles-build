@@ -29,6 +29,7 @@ public:
 
    virtual USBDM_ErrorCode    massEraseTarget()  override { return massEraseTarget(true); };
    virtual uint16_t           getCalculatedTrimValue()  override { return calculatedClockTrimValue; };
+   virtual USBDM_ErrorCode    setFlashTrimValues(FlashImagePtr flashImage);
 
 private:
 
@@ -144,13 +145,18 @@ protected:
       uint8_t  icsTrim;      //!< ICSTRM value
       uint8_t  icsSC;        //!< ICSSC value (FTRIM)
    } ;
+   //! Structure for MKEICS parameters
+   struct MKEICS_ClockParameters_t {
+      uint8_t  scTrim;       //!< ICS_C3.SCTRIM
+      uint8_t  scFtrim;      //!< ICS_C4.SCFTRIM
+   } ;
    union ClockParameters {
-      ICG_ClockParameters_t icg;
-      MCG_ClockParameters_t mcg;
-      ICS_ClockParameters_t ics;
+      ICG_ClockParameters_t    icg;
+      MCG_ClockParameters_t    mcg;
+      ICS_ClockParameters_t    ics;
+      MKEICS_ClockParameters_t mkeIcs;
    };
 
-   USBDM_ErrorCode setFlashTrimValues(FlashImagePtr flashImage);
    USBDM_ErrorCode configureTargetClock(unsigned long *busFrequency);
    USBDM_ErrorCode dummyTrimLocations(FlashImagePtr flashImage);
 
@@ -161,9 +167,11 @@ protected:
    USBDM_ErrorCode trimTargetClock(
          uint32_t trimAddress, unsigned long targetBusFrequency, uint16_t *returnTrimValue,
          unsigned long *measuredBusFrequency, int do9BitTrim);
+   USBDM_ErrorCode trimMKEICS_Clock(MKEICS_ClockParameters_t *clockParameters);
    USBDM_ErrorCode trimICS_Clock(ICS_ClockParameters_t *clockParameters);
    USBDM_ErrorCode trimMCG_Clock(MCG_ClockParameters_t *clockParameters);
    USBDM_ErrorCode trimICG_Clock(ICG_ClockParameters_t *clockParameters);
+
    /**
     * Checks that there are no modified security areas
     *
@@ -229,14 +237,25 @@ protected:
     * Release the current TCL interpreter
     */
    USBDM_ErrorCode releaseTCL(void);
-//   /*
-//    * Executes a TCL script in the current TCL interpreter
-//    */
-//   USBDM_ErrorCode runTCLScript(TclScriptConstPtr script);
-   /*
+   /**
     * Executes a TCL command previously loaded in the TCL interpreter
+    *
+    * @param command Command to execute.  This would usually be the name of a TCL function.
+    *                A non-zero return code is interpreted as an error and flagged
+    *
+    * @return  Error code
     */
    USBDM_ErrorCode runTCLCommand(const char *command);
+
+   /**
+    * Executes a TCL command previously loaded in the TCL interpreter
+    *
+    * @param command Command to execute.  This would usually be the name of a TCL function.
+    * @param result  The return code is the result from the TCL command
+    *
+    * @return  Error code on failed execution
+    */
+   USBDM_ErrorCode runTCLCommandWithRc(const char *command, int &result);
 
    /*
     * Probe memory location to check if RAM

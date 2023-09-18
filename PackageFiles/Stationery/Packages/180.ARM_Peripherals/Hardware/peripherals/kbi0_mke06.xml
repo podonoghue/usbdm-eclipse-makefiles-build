@@ -60,7 +60,7 @@
    <constant key="pinMap" type="String" value="&quot;PT(A-D)(0-7)&quot;"   condition="$(_instance)==0" />
    <constant key="pinMap" type="String" value="&quot;PT(E-H)(0-7)&quot;"   condition="$(_instance)==1" />
 
-   <constant key="expandedPinMap" type="String" value="ExpandPinList(pinMap)" />
+   <constant key="expandedPinMap" type="String" value="ExpandPinList(pinMap,&quot;,\n      &quot;)" />
 
    <bitmaskOption key="kbi_pe_kbipe" condition="kbi_pe_kbipe_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"

@@ -1235,6 +1235,7 @@ std::ostream& operator<<(std::ostream& s, const MemoryRegion mr) {
 //! Mappings for Clock types
 const EnumValuePair ClockTypes::clockNames[] = {
    EnumValuePair(  CLKEXT,       ("External") ),
+   EnumValuePair(  MKEICS,       ("MKEICS") ),
    EnumValuePair(  S08ICGV1,     ("S08ICGV1") ),
    EnumValuePair(  S08ICGV2,     ("S08ICGV2") ),
    EnumValuePair(  S08ICGV3,     ("S08ICGV3") ),
@@ -1299,7 +1300,7 @@ uint32_t DeviceData::getDefaultClockTrimNVAddress(ClockTypes_t clockType) const 
          default :            return 0U;
       }
    }
-   else if (targetType == T_ARM) {
+   else if ((targetType == T_ARM)||(targetType == T_ARM_JTAG)||(targetType == T_ARM_SWD)) {
       return 0x03FE;
    }
    return 0;
@@ -1321,6 +1322,8 @@ uint32_t DeviceData::getDefaultClockTrimNVAddress()  const {
  */
 uint32_t DeviceData::getDefaultClockTrimFreq(ClockTypes_t clockType) const {
    switch (clockType) {
+   case MKEICS :
+      return 37500UL;
    case S08ICGV1 :
    case S08ICGV2 :
    case S08ICGV3 :
@@ -1429,6 +1432,9 @@ uint32_t DeviceData::getDefaultClockAddress(ClockTypes_t clockType) const {
    else if (targetType == T_HCS08) {
       return  MKMCGV1;
    }
+   else if ((targetType == T_ARM)||(targetType == T_ARM_JTAG)||(targetType == T_ARM_SWD)) {
+      return 0;
+   }
    return 0U;
 }
 
@@ -1504,7 +1510,7 @@ bool DeviceData::isThisDevice(uint32_t desiredSDID, bool acceptZero) const {
    LOGGING_Q;
    unsigned int index;
 
-   if (targetType == T_ARM) {
+   if ((targetType == T_ARM)||(targetType == T_ARM_JTAG)||(targetType == T_ARM_SWD)) {
       // Some Kinetis devices don't have the SDID programmed correctly
       if (acceptZero && (desiredSDID == 0x000000FF)) {
          log.print("Matching %10s as blank SDID\n", getTargetName().c_str());
@@ -2043,8 +2049,8 @@ const string DeviceData::toString() const {
    stream << "targetName            = " << this->targetName          << endl;
    stream << "SDIDAddress           = " << (snprintf(buff, sizeof(buff), "0x%08X",     this->SDIDAddress),               buff) << endl;
    stream << "clockAddress          = " << (snprintf(buff, sizeof(buff), "0x%08X",     this->clockAddress),              buff) << endl;
-   stream << "clockTrimFreq         = " << (snprintf(buff, sizeof(buff), "0x%ld kHz",  this->clockTrimFreq),             buff) << endl;
-   stream << "clockDefaultTrimFreq  = " << (snprintf(buff, sizeof(buff), "0x%d kHz",   this->getDefaultClockTrimFreq()), buff) << endl;
+   stream << "clockTrimFreq         = " << (snprintf(buff, sizeof(buff), "%ld kHz",    this->clockTrimFreq),             buff) << endl;
+   stream << "clockDefaultTrimFreq  = " << (snprintf(buff, sizeof(buff), "%d kHz",     this->getDefaultClockTrimFreq()), buff) << endl;
    stream << "clockTrimNVAddress    = " << (snprintf(buff, sizeof(buff), "0x%08X",     this->clockTrimNVAddress),        buff) << endl;
 //   stream << "clockTrimValue        = " << (snprintf(buff, sizeof(buff), "0x%d",       this->clockTrimValue),            buff) << endl;
    stream << "connectionFreq        = " << (snprintf(buff, sizeof(buff), "0x%ld",      this->connectionFreq),            buff) << endl;

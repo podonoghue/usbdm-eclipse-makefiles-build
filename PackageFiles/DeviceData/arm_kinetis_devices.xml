@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE root SYSTEM "usbdmDeviceSchema.dtd" >
 
-<!-- 
+<!--
       V4.12.1.270  - Split MKL RAM into upper+lower
       V4.12.1.260  - Split MK RAM into upper+lower
       V4.12.1.210  - Added S32K144
@@ -19,13 +19,13 @@
       V4.12.1.40   - Renames families (to MKL27Z4, MKL27Z644)
       V4.11.1.70   - Added disable NMI to FTMRH, FTMRE, MKM-FTFA (MKE, MKM family)
       V4.11.1.20   - Added MK22FN128M10
- 
+
 NOTES:
    subfamily="XXX" is used to determine header file
-   
+
 Test Devices:
    Kinetis-FTFA-MK-flash-program       M4F   MK22FN256M12, MKV45F256M16, MKE04Z8, MKV31F512M12
-   Kinetis-FTFA-MKL-flash-program      M0    MKL27Z64M4, MKL05Z32M4   
+   Kinetis-FTFA-MKL-flash-program      M0    MKL27Z64M4, MKL05Z32M4
    Kinetis-FTFA-MKM-flash-program      M0    MKM33Z128M5
    Kinetis-FTFA-MKV10-flash-program    M0    MKV11Z128M7
    Kinetis-FTFE-MK-flash-program       M4F   MK10FX512M12, MK66FX1M0M18
@@ -39,15 +39,15 @@ Test Devices:
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude" >
    <sharedInformation>
-      <!-- 
-            TCL Scripts 
+      <!--
+            TCL Scripts
       -->
       <tclScript    id="Kinetis-Default-flash-scripts">      <xi:include parse="text" href="ARM/Kinetis-Default-flash-scripts.tcl" />         </tclScript>
       <tclScript    id="Kinetis-MKxx-Scripts">               <xi:include parse="text" href="ARM/Kinetis-MKxx-flash-scripts.tcl" />             </tclScript>
       <tclScript    id="Kinetis-MKExxZ-Scripts">             <xi:include parse="text" href="ARM/Kinetis-MKExxZ-flash-scripts.tcl" />           </tclScript>
       <tclScript    id="Kinetis-MKLxx-Scripts">              <xi:include parse="text" href="ARM/Kinetis-MKLxx-flash-scripts.tcl" />            </tclScript>
-      
-      <!-- 
+
+      <!--
             Flash Programs
       -->
       <flashProgram id="Kinetis-FTMRH-eeprom-program">       <xi:include parse="text" href="ARM/Kinetis-FTMRH-eeprom-program-gcc.hex" />      </flashProgram>
@@ -61,8 +61,8 @@ Test Devices:
       <flashProgram id="Kinetis-FTFE-MK-flash-program">      <xi:include parse="text" href="ARM/Kinetis-FTFE-MK-flash-program-gcc.hex" />     </flashProgram>
       <flashProgram id="Kinetis-FTFE-MKE-flash-program">     <xi:include parse="text" href="ARM/Kinetis-FTFE-MKE-flash-program-gcc.hex" />    </flashProgram>
       <flashProgram id="Kinetis-FTFE-MKE18-flash-program">   <xi:include parse="text" href="ARM/Kinetis-FTFE-MKE18-flash-program-gcc.hex" />  </flashProgram>
-      
-      <!--  
+
+      <!--
             Register sets (dummy sets to pass validation)
       -->
       <registerDescription id="CortexM0-register-description"  count="0" />
@@ -71,8 +71,8 @@ Test Devices:
       <registerDescription id="CortexM4-register-description"  count="0" />
       <registerDescription id="CortexM4F-register-description" count="0" />
 
-      <!-- 
-            Security Entries 
+      <!--
+            Security Entries
       -->
       <securityEntry id="Kinetis-KE-security">
          <securityDescription id="Kinetis-KE-security-description">
@@ -85,7 +85,7 @@ Test Devices:
          <!-- Kinetis Secured value -->
          <securityInfo size="16" type="secure" id="Kinetis-KE-security-on">
             0123456789ABCDEFFFFFFFFFFFFFBDFF
-         </securityInfo>  
+         </securityInfo>
       </securityEntry>
       <securityEntry id="Kinetis-KL-security">
          <securityDescription id="Kinetis-KL-security-description">
@@ -98,7 +98,7 @@ Test Devices:
          <!-- Kinetis Secured value -->
          <securityInfo size="16" type="secure" id="Kinetis-KL-security-on">
             0123456789ABCDEFFFFFFFFFBFFFFFFF
-         </securityInfo>  
+         </securityInfo>
       </securityEntry>
       <securityEntry id="Kinetis-K-security">
          <securityDescription id="Kinetis-K-security-description">
@@ -111,31 +111,30 @@ Test Devices:
          <!-- Kinetis Secured value -->
          <securityInfo size="16" type="secure" id="Kinetis-K-security-on">
             0123456789ABCDEFFFFFFFFFBFFFFFFF
-         </securityInfo>  
+         </securityInfo>
       </securityEntry>
-      
-      <!-- 
-            FlexNVM Partition Tables 
+
+      <!--
+            FlexNVM Partition Tables
       -->
       <!-- Single (up to) 2K EEPROM with 24K/32K EEPROM backing, EEERST=1 -->
       <memory id="FTFC_DFlash0_32K_2KS" type="flexNVM" registerAddress="0x40020000"  sectorSize="2048" alignment="8">
-         <memoryRange start="0x10000000" size="32K" />
          <flexNVMInfo id="kinetis32K_FlexPartitionInfoEERST_Single" backingRatio="16">
-            <eeepromEntry   description="Unchanged/None"         eeeSize="0"     value="0xFF" /> 
-            <eeepromEntry   description="Up to 2048"             eeeSize="2048"  value="0xF3" /> 
+            <eeepromEntry   description="Unchanged/None"         eeeSize="0"     value="0xFF" />
+            <eeepromEntry   description="Up to 2048"             eeeSize="2048"  value="0xF3" />
             <eeepromEntry   description="Up to 1024"             eeeSize="1024"  value="0xF3" />  <!-- Size is not limited by hardware -->
             <eeepromEntry   description="Up to 512"              eeeSize="512"   value="0xF3" />  <!-- Size is not limited by hardware -->
             <partitionEntry description="DFlash=64, No EEPROM"   eeSize="0K"     value="0x00" />
             <partitionEntry description="DFlash=8, EEPROM=24"    eeSize="24K"    value="0x09" />
             <partitionEntry description="No DFlash, EEPROM=32"   eeSize="32K"    value="0x08" />
          </flexNVMInfo>
+         <memoryRange start="0x10000000" size="32K" />
       </memory>
       <!-- Single (up to) 4K EEPROM with 32K/48K/64K EEPROM backing, EEERST=1 -->
       <memory id="FTFC_DFlash0_64K_2KS" type="flexNVM" registerAddress="0x40020000"  sectorSize="2048" alignment="8">
-         <memoryRange start="0x10000000" size="64K" />
          <flexNVMInfo id="kinetis64K_FlexPartitionInfoEERST_Single" backingRatio="16">
-            <eeepromEntry   description="Unchanged/None"         eeeSize="0"     value="0xFF" /> 
-            <eeepromEntry   description="Up to 4096"             eeeSize="4096"  value="0xF2" /> 
+            <eeepromEntry   description="Unchanged/None"         eeeSize="0"     value="0xFF" />
+            <eeepromEntry   description="Up to 4096"             eeeSize="4096"  value="0xF2" />
             <eeepromEntry   description="Up to 2048"             eeeSize="2048"  value="0xF2" /> <!-- Size is not limited by hardware -->
             <eeepromEntry   description="Up to 1024"             eeeSize="1024"  value="0xF2" /> <!-- Size is not limited by hardware -->
             <partitionEntry description="DFlash=64, No EEPROM"   eeSize="0K"     value="0x00" />
@@ -143,30 +142,31 @@ Test Devices:
             <partitionEntry description="DFlash=16, EEPROM=48"   eeSize="48K"    value="0x0A" />
             <partitionEntry description="No DFlash, EEPROM=64"   eeSize="64K"    value="0x08" />
          </flexNVMInfo>
+         <memoryRange start="0x10000000" size="64K" />
       </memory>
       <!-- Single (up to) 4K EEPROM with 64K EEPROM backing as part of 512K block, EEERST=1 -->
       <memory id="FTFC_DFlash0_512K_4KS" type="flexNVM" registerAddress="0x40020000"  sectorSize="4096" alignment="8">
-         <memoryRange start="0x10000000" size="512K" />
          <flexNVMInfo id="kinetis512K_64K_FlexPartitionInfoEERST_Single" backingRatio="16">
-            <eeepromEntry   description="Unchanged/None"         eeeSize="0"     value="0xFF" /> 
-            <eeepromEntry   description="4096"                   eeeSize="4096"  value="0xF2" /> 
+            <eeepromEntry   description="Unchanged/None"         eeeSize="0"     value="0xFF" />
+            <eeepromEntry   description="4096"                   eeeSize="4096"  value="0xF2" />
             <partitionEntry description="DFlash=512, No EEPROM"  eeSize="0K"     value="0x00" />
             <partitionEntry description="DFlash=448, EEPROM=64"  eeSize="64K"    value="0x04" />
          </flexNVMInfo>
+         <memoryRange start="0x10000000" size="512K" />
       </memory>
       <!-- Single 2K EEPROM with 32K/48K/64K EEPROM backing, EEERST=1 -->
       <flexNVMInfo id="kinetis32K_FlexPartitionInfoEERST" backingRatio="16"> <!-- EEERST=1 -->
-         <eeepromEntry   description="Unchanged/None"         eeeSize="0"     value="0xFF" /> 
-         <eeepromEntry   description="32"                     eeeSize="32"    value="0x79" /> 
-         <eeepromEntry   description="64"                     eeeSize="64"    value="0x78" /> 
-         <eeepromEntry   description="128"                    eeeSize="128"   value="0x77" /> 
-         <eeepromEntry   description="256"                    eeeSize="256"   value="0x76" /> 
-         <eeepromEntry   description="512"                    eeeSize="512"   value="0x75" /> 
-         <eeepromEntry   description="1024"                   eeeSize="1024"  value="0x74" /> 
-         <eeepromEntry   description="2048"                   eeeSize="2048"  value="0x73" /> 
-         <partitionEntry description="DFlash=32, No EEPROM"   eeSize="0K"     value="0xFF" /> 
-         <partitionEntry description="DFlash=8, EEPROM=24"    eeSize="24K"    value="0x09" /> 
-         <partitionEntry description="No DFlash, EEPROM=32"   eeSize="32K"    value="0x08" /> 
+         <eeepromEntry   description="Unchanged/None"         eeeSize="0"     value="0xFF" />
+         <eeepromEntry   description="32"                     eeeSize="32"    value="0x79" />
+         <eeepromEntry   description="64"                     eeeSize="64"    value="0x78" />
+         <eeepromEntry   description="128"                    eeeSize="128"   value="0x77" />
+         <eeepromEntry   description="256"                    eeeSize="256"   value="0x76" />
+         <eeepromEntry   description="512"                    eeeSize="512"   value="0x75" />
+         <eeepromEntry   description="1024"                   eeeSize="1024"  value="0x74" />
+         <eeepromEntry   description="2048"                   eeeSize="2048"  value="0x73" />
+         <partitionEntry description="DFlash=32, No EEPROM"   eeSize="0K"     value="0xFF" />
+         <partitionEntry description="DFlash=8, EEPROM=24"    eeSize="24K"    value="0x09" />
+         <partitionEntry description="No DFlash, EEPROM=32"   eeSize="32K"    value="0x08" />
       </flexNVMInfo>
       <flexNVMInfo id="kinetis32K_FlexPartitionInfo" backingRatio="16">
          <eeepromEntry   description="Unchanged/None"         eeeSize="0"     value="0xFF" />
@@ -349,9 +349,9 @@ Test Devices:
          <partitionEntry description="DFlash=128, EEPROM=384" eeSize="384K"   value="0x0D" />
          <partitionEntry description="DFlash=64, EEPROM=448"  eeSize="448K"   value="0x0C" />
          <partitionEntry description="No DFlash, EEPROM=512"  eeSize="512K"   value="0x08" />
-      </flexNVMInfo>      
-      
-      <!-- 
+      </flexNVMInfo>
+
+      <!--
             FlexRAM Memory
       -->
       <memory id="kinetis2K_FlexRam" type="flexRAM">
@@ -364,7 +364,7 @@ Test Devices:
          <memoryRange start="0x14001000" size="128" name="csePRAM" />
       </memory>
 
-      <!-- 
+      <!--
             Cortex M0 RAM Memory (Break at 0x20000000 boundary)
       -->
       <memory id="kinetis_M0_256b_768b_Ram" type="ram">
@@ -404,7 +404,7 @@ Test Devices:
          <memoryRange start="0x1FFF8000" end="0x1FFFFFFF" name="ram_low" />
       </memory>
 
-      <!-- 
+      <!--
             Cortex M4 RAM Memory (Break at 0x20000000 boundary)
 	    Note: Programmer uses first RAM region which should include 0x20000000
       -->
@@ -479,22 +479,22 @@ Test Devices:
          <memoryRange start="0x1FFC0000" size="256K" name="ram_low" />
          <memoryRange start="0x22000000" size="8M"   name="bitband"  />  <!-- ram_high bit-band -->
       </memory>
-      
-      <!-- 
+
+      <!--
             Flash Memory
       -->
-      <!--  
-         EEPROM Block (Kinetis-E02) - 2 byte sector size 
+      <!--
+         EEPROM Block (Kinetis-E02) - 2 byte sector size
       -->
-      <!--  A Single Block of small sector EEPROM -->     
+      <!--  A Single Block of small sector EEPROM -->
       <memory id="FTMRH_EEPROM_256b_2bS" type="eeprom" registerAddress="0x40020000" sectorSize="2" alignment="1" >
          <flashProgramRef ref="Kinetis-FTMRH-eeprom-program" />
          <memoryRange start="0x10000000" size="256" />
       </memory>
-      <!--  
-         Flash Block (Kinetis-E02) - 512 byte sector size 
+      <!--
+         Flash Block (Kinetis-E02) - 512 byte sector size
       -->
-      <!--  A Single Block containing  the security info -->	  
+      <!--  A Single Block containing  the security info -->
       <memory id="FTMRH_PFlash0_SEC_8K_512bS" type="flash" registerAddress="0x40020000" sectorSize="512" alignment="4" securityAddress="0x0400">
          <flashProgramRef ref="Kinetis-FTMRH-flash-program" />
          <securityEntryRef ref="Kinetis-KE-security" />
@@ -525,10 +525,10 @@ Test Devices:
          <securityEntryRef ref="Kinetis-KE-security" />
          <memoryRange start="0x00000000" size="256K" />
       </memory>
-      <!--  
-         Flash Block (Kinetis-E0x) - 512 byte sector size 
+      <!--
+         Flash Block (Kinetis-E0x) - 512 byte sector size
       -->
-      <!--  A Single Block containing  the security info -->     
+      <!--  A Single Block containing  the security info -->
       <memory id="FTMRE_PFlash0_SEC_8K_512bS" type="flash" registerAddress="0x40020000" sectorSize="512" alignment="4" securityAddress="0x0400">
          <flashProgramRef ref="Kinetis-FTMRE-flash-program" />
          <securityEntryRef ref="Kinetis-KE-security" />
@@ -559,10 +559,10 @@ Test Devices:
          <securityEntryRef ref="Kinetis-KE-security" />
          <memoryRange start="0x00000000" size="256K" />
       </memory>
-      <!--  
-         Flash Block (Kinetis-L) - 1K sector size 
+      <!--
+         Flash Block (Kinetis-L) - 1K sector size
       -->
-      <!--  A Single Block containing  the security info -->	  
+      <!--  A Single Block containing  the security info -->
       <memory id="FTFA_PFlash0_SEC_8K_1KS" type="flash" registerAddress="0x40020000" sectorSize="1024" alignment="4" securityAddress="0x0400">
          <securityEntryRef ref="Kinetis-KL-security" />
          <memoryRange start="0x00000000" size="8K" />
@@ -596,10 +596,10 @@ Test Devices:
          <securityEntryRef ref="Kinetis-KL-security" />
          <memoryRange start="0x00020000" size="128K" />
       </memory>
-      <!--  
-         Flash Block (Kinetis-K) - 2K sector size 
+      <!--
+         Flash Block (Kinetis-K) - 2K sector size
       -->
-      <!--  A Single Block containing  the security info -->     
+      <!--  A Single Block containing  the security info -->
       <memory id="FTFA_PFlash0_SEC_8K_2KS" type="flash" registerAddress="0x40020000" sectorSize="2048" alignment="4" securityAddress="0x0400">
          <securityEntryRef ref="Kinetis-KL-security" />
          <memoryRange start="0x00000000" size="8K" />
@@ -633,20 +633,20 @@ Test Devices:
       <memory id="FTFA_PFlash3_256K_2KS" type="flash" registerAddress="0x40020000" sectorSize="2048" alignment="4">
          <memoryRange start="0x000C0000" size="256K" />
       </memory>
-      
-      <!--  
-         Flash Block (Kinetis-K) - 4K sector size 
+
+      <!--
+         Flash Block (Kinetis-K) - 4K sector size
       -->
-      <!--  A Single Block containing  the security info -->     
+      <!--  A Single Block containing  the security info -->
       <memory id="FTFA_PFlash0_SEC_256K_4KS" type="flash" registerAddress="0x40020000" sectorSize="4096" alignment="4" securityAddress="0x0400">
          <securityEntryRef ref="Kinetis-K-security" />
          <memoryRange start="0x00000000" size="256K" />
       </memory>
-      
-      <!--  
-         Flash Block - FTFL 1K sector size 
+
+      <!--
+         Flash Block - FTFL 1K sector size
       -->
-      <!--  It appears that only the lowest block determines the security - ignoring flash swap -->	  
+      <!--  It appears that only the lowest block determines the security - ignoring flash swap -->
       <memory id="FTFL_PFlash0_SEC_32K_1KS" type="flash" registerAddress="0x40020000" sectorSize="1024" alignment="4" securityAddress="0x0400">
          <securityEntryRef ref="Kinetis-K-security" />
          <memoryRange start="0x00000000" size="32K" />
@@ -663,10 +663,10 @@ Test Devices:
          <securityEntryRef ref="Kinetis-K-security" />
          <memoryRange start="0x00000000" size="1M" />
       </memory>
-      <!--  
-         Flash Block - FTFL 2K sector size 
+      <!--
+         Flash Block - FTFL 2K sector size
       -->
-      <!--  It appears that only the lowest block determines the security - ignoring flash swap -->	  
+      <!--  It appears that only the lowest block determines the security - ignoring flash swap -->
       <memory id="FTFL_PFlash0_SEC_64K_2KS" type="flash" registerAddress="0x40020000" sectorSize="2048" alignment="4" securityAddress="0x0400">
          <securityEntryRef ref="Kinetis-K-security" />
          <memoryRange start="0x00000000" size="64K" />
@@ -689,8 +689,8 @@ Test Devices:
       <memory id="FTFL_PFlash0_128K_2KS" type="flash" registerAddress="0x40020000" sectorSize="2048" alignment="4" >
          <memoryRange start="0x00020000" size="128K" />
       </memory>
-      <!--  
-         FlexNVM - FTFL 1K sector size 
+      <!--
+         FlexNVM - FTFL 1K sector size
       -->
       <memory id="FTFL_DFlash0_32K_1KS" type="flexNVM" registerAddress="0x40020000"  sectorSize="1024" alignment="4">
          <flexNVMInfoRef ref="kinetis32K_FlexPartitionInfo" />
@@ -700,8 +700,8 @@ Test Devices:
          <flexNVMInfoRef ref="kinetis512K_FlexPartitionInfo" />
          <memoryRange start="0x10000000" size="512K" />
       </memory>
-      <!--  
-         FlexNVM - FTFL 2K sector size 
+      <!--
+         FlexNVM - FTFL 2K sector size
       -->
       <memory id="FTFL_DFlash0_64K_2KS" type="flexNVM" registerAddress="0x40020000"  sectorSize="2048" alignment="4">
          <flexNVMInfoRef ref="kinetis64K_FlexPartitionInfo" />
@@ -720,8 +720,8 @@ Test Devices:
          <memoryRange start="0x10000000" size="512K" />
       </memory>
 
-      <!--  
-         Flash Block - FTFE 2K sector size 
+      <!--
+         Flash Block - FTFE 2K sector size
       -->
       <memory id="FTFE_PFlash0_SEC_128K_2KS" type="flash" registerAddress="0x40020000" sectorSize="2048" alignment="8" securityAddress="0x0400">
          <securityEntryRef ref="Kinetis-K-security" />
@@ -739,10 +739,10 @@ Test Devices:
          <memoryRange start="0x00000000" size="512K" />
       </memory>
 
-      <!--  
-         Flash Block - FTFE 4K sector size 
+      <!--
+         Flash Block - FTFE 4K sector size
       -->
-      <!--  It appears that only the lowest block determines the security - ignoring flash swap -->	  
+      <!--  It appears that only the lowest block determines the security - ignoring flash swap -->
       <memory id="FTFE_PFlash0_SEC_256K_4KS" type="flash" registerAddress="0x40020000" sectorSize="4096" alignment="8" securityAddress="0x0400">
          <securityEntryRef ref="Kinetis-K-security" />
          <memoryRange start="0x00000000" size="256K" />
@@ -773,8 +773,8 @@ Test Devices:
          <securityEntryRef ref="Kinetis-K-security" />
          <memoryRange start="0x00000000" size="1M" />
       </memory>
-      <!--  
-         FlexNVM - FTFE 2K sector size 
+      <!--
+         FlexNVM - FTFE 2K sector size
       -->
       <memory id="FTFE_DFlash0_32K_2KS" type="flexNVM" registerAddress="0x40020000"  sectorSize="2048" alignment="8">
          <flexNVMInfoRef ref="kinetis32K_FlexPartitionInfoEERST" />
@@ -785,8 +785,8 @@ Test Devices:
          <memoryRange start="0x10000000" size="64K" />
       </memory>
 
-      <!--  
-         FlexNVM - FTFE 4K sector size 
+      <!--
+         FlexNVM - FTFE 4K sector size
       -->
       <memory id="FTFE_DFlash0_128K_4KS" type="flexNVM" registerAddress="0x40020000"  sectorSize="4096" alignment="8">
          <flexNVMInfoRef ref="kinetis128K_FlexPartitionInfo" />
@@ -801,8 +801,8 @@ Test Devices:
          <memoryRange start="0x10000000" size="512K" />
       </memory>
 
-      <!-- 
-            Kinetis I/O space 
+      <!--
+            Kinetis I/O space
       -->
       <memory id="kinetisIO_MKE02" type="io">
          <memoryRange start="0x40000000" end="0x4007FFFF" name="aips"         />  <!-- AIPS Peripherals -->
@@ -812,7 +812,7 @@ Test Devices:
          <memoryRange start="0xF0002000" end="0xF0002FFF" name="romTable"     />  <!-- ROM table -->
          <memoryRange start="0xF0003000" end="0xF0003FFF" name="mcm"          />  <!-- Miscellaneous Control Module (MCM) -->
          <memoryRange start="0xF8000000" end="0xFFFFFFFF" name="fgpio"        />  <!-- IOPORT: GPIO (single cycle) -->
-      </memory>         
+      </memory>
       <memory id="kinetisIO_MKE" type="io">
          <memoryRange start="0x40000000" end="0x4007FFFF" name="aips"         />  <!-- AIPS Peripherals -->
          <memoryRange start="0x400FF000" end="0x400FFFFF" name="gpio"         />  <!-- General purpose input/output (GPIO) -->
@@ -821,7 +821,7 @@ Test Devices:
          <memoryRange start="0xF0002000" end="0xF0002FFF" name="romTable"     />  <!-- ROM table -->
          <memoryRange start="0xF0003000" end="0xF0003FFF" name="mcm"          />  <!-- Miscellaneous Control Module (MCM) -->
          <memoryRange start="0xF8000000" end="0xFFFFFFFF" name="fgpio"        />  <!-- IOPORT: GPIO (single cycle) -->
-      </memory>         
+      </memory>
       <memory id="kinetisIO_MKL" type="io">
          <memoryRange start="0x40000000" end="0x4007FFFF" name="aips"         />  <!-- AIPS Peripherals -->
          <memoryRange start="0x400FF000" end="0x400FFFFF" name="gpio"         />  <!-- General purpose input/output (GPIO) -->
@@ -832,41 +832,41 @@ Test Devices:
          <memoryRange start="0xF0002000" end="0xF0002FFF" name="romTable"     />  <!-- ROM table -->
          <memoryRange start="0xF0003000" end="0xF0003FFF" name="mcm"          />  <!-- Miscellaneous Control Module (MCM) -->
          <memoryRange start="0xF8000000" end="0xFFFFFFFF" name="fgpio"        />  <!-- IOPORT: GPIO (single cycle) -->
-      </memory>         
+      </memory>
       <memory id="kinetisIO_MK" type="io">
          <memoryRange start="0x40000000" end="0x4007FFFF" name="aips0"        />  <!-- Bit-band AIPS-Lite0 -->
          <memoryRange start="0x40080000" end="0x400FEFFF" name="aips1"        />  <!-- Bit-band AIPS-Lite1 -->
          <memoryRange start="0x400FF000" end="0x400FFFFF" name="gpio"         />  <!-- General purpose input/output (GPIO) -->
-         <memoryRange start="0x42000000" end="0x43FFFFFF" name="gpioBitband"  />  <!-- Bit-band GPIO -->  
+         <memoryRange start="0x42000000" end="0x43FFFFFF" name="gpioBitband"  />  <!-- Bit-band GPIO -->
          <memoryRange start="0xE0000000" end="0xE00FFFFF" name="peripherals"  />  <!-- Private Peripherals -->
-      </memory>         
+      </memory>
       <memory id="kinetisIO_MKE1xF" type="io">
          <memoryRange start="0x40000000" end="0x4007FFFF" name="aips"         />  <!-- AIPS Peripherals -->
          <memoryRange start="0x400FF000" end="0x400FFFFF" name="gpio"         />  <!-- General purpose input/output (GPIO) -->
-         <memoryRange start="0x42000000" end="0x43FFFFFF" name="gpioBitband"  />  <!-- Bit-band GPIO -->  
+         <memoryRange start="0x42000000" end="0x43FFFFFF" name="gpioBitband"  />  <!-- Bit-band GPIO -->
          <memoryRange start="0xE0000000" end="0xE00FFFFF" name="peripherals"  />  <!-- Private Peripherals -->
-      </memory>         
+      </memory>
       <memory id="kinetisBootROM_16K" type="rom">
          <memoryRange start="0x1C000000" size="16K" name="bootROM"      />  <!-- Kinetis Boot ROM on some devices -->
-      </memory>         
+      </memory>
       <memory id="kinetisBootROM_32K" type="rom">
          <memoryRange start="0x1C000000" size="32K" name="bootROM"      />  <!-- Kinetis Boot ROM on some devices -->
-      </memory>         
+      </memory>
 
       <memory id="kinetisQSPI" type="io">
          <memoryRange start="0x68000000" end="0x6FFFFFFF" name="qspi"         />  <!-- QSPI range -->
-      </memory>         
+      </memory>
 
       <memory id="kinetisSDRAM" type="io">
          <memoryRange start="0x80000000" end="0x87FFFFFF" name="sdram"        />  <!-- SDRAM range -->
-      </memory>         
-           
+      </memory>
+
       <resetMethods id="kinetisResetMethods" >
          <resetMethod method="hardware" />
          <resetMethod method="software" />
          <resetMethod method="vendor" isDefault="true" />
       </resetMethods>
-      
+
       <eraseMethods id="kinetisEraseMethods" >
          <eraseMethod method="Mass" isDefault="true"  />
          <eraseMethod method="All" />
@@ -874,12 +874,12 @@ Test Devices:
       </eraseMethods>
 
    </sharedInformation>
-   
-            <!-- 
+
+            <!--
          // KE series
          SDID[15..0]  = Other uses
          SDID[6..4]   = "000"
-         SDID[19..16] = Pin ID      
+         SDID[19..16] = Pin ID
          SDID[23..20] = Rev ID
          SDID[27..24] = Sub-family ID  2 => KEx2
             0010 KEx2 sub-family
@@ -890,7 +890,7 @@ Test Devices:
          // KL series
          SDID[3..0]   = Pin ID         0,1,2,4,5,6,8 => 16,24,32,48,64,80,100p
          SDID[6..4]   = "000"
-         SDID[11..7]  = Die ID      
+         SDID[11..7]  = Die ID
          SDID[15..12] = Rev ID
          SDID[19..16] = RAM Size       0..7 => .5,1,2,4,8,16,32,64 KB
          SDID[23..20] = Series ID      1 => Cortex M0+
@@ -918,20 +918,20 @@ Test Devices:
                100 K60 or K62 Family
                101 K70 Family
                110 Reserved
-               111 Reserved         
+               111 Reserved
          SDID[11..7]  = DIEID "00010"/"00000"
          SDID[15..12] = Rev ID
          SDID[31..16] = 0
          mask 0x0xFFFF0FF0
-         
+
          // New UNIFIED????? System
          // KL series
          SDID[3..0]   = Pin ID  0-15 => 16,24,32,44,48,64,80,81 or 121,100,121,144,WLCSP,169,-,256,-
          SDID[6..4]   = Family ID (legacy) - ignored
-         SDID[11..7]  = Die ID - ignored     
+         SDID[11..7]  = Die ID - ignored
          SDID[15..12] = Rev ID - ignored
          SDID[19..16] = ATTR??
-         SDID[23..20] = Series ID      
+         SDID[23..20] = Series ID
             0000 => Kinetis K series
             0001 => Kinetis L series
             0011 => Kinetis M Metering series
@@ -954,19 +954,19 @@ Test Devices:
                0100 Kx5x Family
                0100 Kx6x Family
                0100 Kx7x Family
-               
+
          mask 0xFFFF0F80
-	 
+
       // S32 K devices
-      SDID[31..28] = S32K product series generation 
+      SDID[31..28] = S32K product series generation
       SDID[27..24] = Sub-series
-        4 S32K14x 
+        4 S32K14x
         1 S32K11x
       SDID[23..20] = Derivate
-        8 S32K148 
-        6 S32K146 
-        4 S32K144 
-        2 S32K142 
+        8 S32K148
+        6 S32K146
+        4 S32K144
+        2 S32K142
         8 S32118
         6 S32K116
       SDID[19..16] = RAM size
@@ -1014,10 +1014,10 @@ Test Devices:
          1: SAI
          0: Reserved
          -->
-   
+
    <deviceList>
 <!-- ===================================================================================== -->
-<!-- 
+<!--
    Kinetis Defaults
 -->
       <device name="kinetisDefaultDevice" family="CortexM4" isDefault="true">
@@ -1030,7 +1030,7 @@ Test Devices:
          <sdid value="0x00000000" mask="0x00000000" />
          <note>Default ARM Device</note>
       </device>
-	  
+
 <!-- ===================================================================================== -->
 <!-- S32K14 -->
       <device name="S32K142" family="CortexM4F" subfamily="S32K14">
@@ -1095,6 +1095,7 @@ Test Devices:
 <!-- ===================================================================================== -->
 <!-- MKE02Z2 -->
       <device name="MKE02Z16M2" family="CortexM0plus" subfamily="MKE02Z2">
+         <clock registerAddress="0x0100" type="MKEICS" />
          <memoryRef ref="kinetis_M0_512b_1536b_Ram" />
          <memoryRef ref="FTMRH_EEPROM_256b_2bS" />
          <memoryRef ref="FTMRH_PFlash0_SEC_16K_512bS" />
@@ -1106,6 +1107,7 @@ Test Devices:
          <note>MKE02Z64M20SF0RM</note>
       </device>
       <device name="MKE02Z32M2" family="CortexM0plus" subfamily="MKE02Z2">
+         <clock registerAddress="0x0100" type="MKEICS" />
          <memoryRef ref="kinetis_M0_1K_3K_Ram" />
          <memoryRef ref="FTMRH_EEPROM_256b_2bS" />
          <memoryRef ref="FTMRH_PFlash0_SEC_32K_512bS" />
@@ -1117,6 +1119,7 @@ Test Devices:
          <note>MKE02Z64M20SF0RM</note>
       </device>
       <device name="MKE02Z64M2" family="CortexM0plus" subfamily="MKE02Z2">
+         <clock registerAddress="0x0100" type="MKEICS" />
          <memoryRef ref="kinetis_M0_1K_3K_Ram" />
          <memoryRef ref="FTMRH_EEPROM_256b_2bS" />
          <memoryRef ref="FTMRH_PFlash0_SEC_64K_512bS" />
@@ -1129,6 +1132,7 @@ Test Devices:
       </device>
 <!-- MKE02Z4 -->
       <device name="MKE02Z16M4" family="CortexM0plus" subfamily="MKE02Z4">
+         <clock registerAddress="0x0100" type="MKEICS" />
          <memoryRef ref="kinetis_M0_512b_1536b_Ram" />
          <memoryRef ref="FTMRH_EEPROM_256b_2bS" />
          <memoryRef ref="FTMRH_PFlash0_SEC_16K_512bS" />
@@ -1140,6 +1144,7 @@ Test Devices:
          <note>MKE02P64M40SF0RM</note>
       </device>
       <device name="MKE02Z32M4" family="CortexM0plus" subfamily="MKE02Z4">
+         <clock registerAddress="0x0100" type="MKEICS" />
          <memoryRef ref="kinetis_M0_1K_3K_Ram" />
          <memoryRef ref="FTMRH_EEPROM_256b_2bS" />
          <memoryRef ref="FTMRH_PFlash0_SEC_32K_512bS" />
@@ -1151,6 +1156,7 @@ Test Devices:
          <note>MKE02P64M40SF0RM</note>
       </device>
       <device name="MKE02Z64M4" family="CortexM0plus" subfamily="MKE02Z4">
+         <clock registerAddress="0x0100" type="MKEICS" />
          <memoryRef ref="kinetis_M0_1K_3K_Ram" />
          <memoryRef ref="FTMRH_EEPROM_256b_2bS" />
          <memoryRef ref="FTMRH_PFlash0_SEC_64K_512bS" />
@@ -1163,6 +1169,7 @@ Test Devices:
       </device>
 <!-- MKE04Z4 -->
       <device name="MKE04Z8M4" family="CortexM0plus" subfamily="MKE04Z4">
+         <clock registerAddress="0x0" type="MKEICS" />
          <memoryRef ref="kinetis_M0_256b_768b_Ram" />
          <memoryRef ref="FTMRE_PFlash0_SEC_8K_512bS" />
          <memoryRef ref="kinetisIO_MKE" />
@@ -1173,6 +1180,7 @@ Test Devices:
          <note>MKE04P24M48SF0RM</note>
       </device>
       <device name="MKE04Z64M4" family="CortexM0plus" subfamily="MKE04Z4">
+         <clock registerAddress="0x0100" type="MKEICS" />
          <memoryRef ref="kinetis_M0_2K_6K_Ram" />
          <memoryRef ref="FTMRE_PFlash0_SEC_64K_512bS" />
          <memoryRef ref="kinetisIO_MKE" />
@@ -1183,6 +1191,7 @@ Test Devices:
          <note>MKE04P80M48SF0RM</note>
       </device>
       <device name="MKE04Z128M4" family="CortexM0plus" subfamily="MKE04Z4">
+         <clock registerAddress="0x0100" type="MKEICS" />
          <memoryRef ref="kinetis_M0_4K_12K_Ram" />
          <memoryRef ref="FTMRE_PFlash0_SEC_128K_512bS" />
          <memoryRef ref="kinetisIO_MKE" />
@@ -1194,6 +1203,7 @@ Test Devices:
       </device>
 <!-- MKE06Z4 -->
       <device name="MKE06Z64M4" family="CortexM0plus" subfamily="MKE06Z4">
+         <clock registerAddress="0x0100" type="MKEICS" />
          <memoryRef ref="kinetis_M0_2K_6K_Ram" />
          <memoryRef ref="FTMRE_PFlash0_SEC_64K_512bS" />
          <memoryRef ref="kinetisIO_MKE" />
@@ -1204,6 +1214,7 @@ Test Devices:
          <note>MKE06P80M48SF0RM</note>
       </device>
       <device name="MKE06Z128M4" family="CortexM0plus" subfamily="MKE06Z4">
+         <clock registerAddress="0x0100" type="MKEICS" />
          <memoryRef ref="kinetis_M0_4K_12K_Ram" />
          <memoryRef ref="FTMRE_PFlash0_SEC_128K_512bS" />
          <memoryRef ref="kinetisIO_MKE" />
@@ -1240,14 +1251,14 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>KE1xZP100M72SF0RM</note>
       </device>
-      
+
       <device name="MKE15Z128M7"      alias="MKE14Z128M7"> <!-- These are identical apart from TSI -->
-         <sdid value="0x1525110A" mask="0xFFFF0000" /> 
-      </device> 
+         <sdid value="0x1525110A" mask="0xFFFF0000" />
+      </device>
       <device name="MKE15Z256M7"      alias="MKE14Z256M7"> <!-- These are identical apart from TSI -->
-         <sdid value="0x1526110A" mask="0xFFFF0000" /> 
-      </device> 
-     
+         <sdid value="0x1526110A" mask="0xFFFF0000" />
+      </device>
+
 <!-- MKE1xF16 -->
       <device name="MKE14F256M16" family="CortexM4F" subfamily="MKE1xF16">
          <memoryRef ref="kinetis_M4_16K_16K_Ram" />
@@ -1278,19 +1289,19 @@ Test Devices:
       </device>
 
       <device name="MKE16F256M16"      alias="MKE14F256M16"> <!-- These are identical apart from FLEXCAN -->
-         <sdid value="0x16250087" mask="0xFFFF0000" /> 
-      </device> 
+         <sdid value="0x16250087" mask="0xFFFF0000" />
+      </device>
       <device name="MKE16F512M16"      alias="MKE14F512M16"> <!-- These are identical apart from FLEXCAN -->
-         <sdid value="0x16270087" mask="0xFFFF0000" /> 
-      </device> 
-     
+         <sdid value="0x16270087" mask="0xFFFF0000" />
+      </device>
+
       <device name="MKE18F256M16"      alias="MKE14F256M16"> <!-- These are identical apart from FLEXCAN -->
-         <sdid value="0x18250087" mask="0xFFFF0000" /> 
-      </device> 
+         <sdid value="0x18250087" mask="0xFFFF0000" />
+      </device>
       <device name="MKE18F512M16"      alias="MKE14F512M16"> <!-- These are identical apart from FLEXCAN -->
-         <sdid value="0x18270087" mask="0xFFFF0000" /> 
-      </device> 
-     
+         <sdid value="0x18270087" mask="0xFFFF0000" />
+      </device>
+
 
 <!-- ===================================================================================== -->
 <!-- MKW41Z4 -->
@@ -1333,7 +1344,7 @@ Test Devices:
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
-      
+
       <device name="MKW41Z256M4" family="CortexM0plus" subfamily="MKW41Z4">
          <memoryRef ref="kinetis_M0_16K_48K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
@@ -1554,7 +1565,7 @@ Test Devices:
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
-      
+
 <!-- MKL17Z4 -->
       <device name="MKL17Z32M4"  family="CortexM0plus" subfamily="MKL17Z644">
          <memoryRef ref="kinetis_M0_2K_6K_Ram" />
@@ -1602,7 +1613,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>KL17P64M48SF6RM</note>
       </device>
-      
+
 <!-- MKL24Z4 -->
       <device name="MKL24Z32M4" family="CortexM0plus" subfamily="MKL24Z4">
          <memoryRef ref="kinetis_M0_1K_3K_Ram" />
@@ -1687,7 +1698,7 @@ Test Devices:
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
-      
+
 <!-- MKL27Z4 -->
       <device name="MKL27Z32M4"  family="CortexM0plus" subfamily="MKL27Z644">
          <memoryRef ref="kinetis_M0_2K_6K_Ram" />
@@ -1737,7 +1748,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>KL27P64M48SF6RM</note>
       </device>
-      
+
 <!-- MKL34Z4 -->
       <device name="MKL34Z64M4"  family="CortexM0plus" subfamily="MKL34Z4">
          <memoryRef ref="kinetis_M0_2K_6K_Ram" />
@@ -1748,7 +1759,7 @@ Test Devices:
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
-      
+
 <!-- MKL36Z4 -->
       <device name="MKL36Z64M4"  family="CortexM0plus" subfamily="MKL36Z4">
          <memoryRef ref="kinetis_M0_2K_6K_Ram" />
@@ -3345,7 +3356,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4F-register-description" />
          <note>K64P144M120SF5RM</note>
       </device>
-      
+
 <!-- MK65-M18 -->
       <device name="MK65FX1M0M18" family="CortexM4F" subfamily="MK65F18">
          <memoryRef ref="kinetis_M4_64K_192K_Ram" />
@@ -3372,7 +3383,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4F-register-description" />
          <note>K65P169M180SF5RMV2</note>
       </device>
-      
+
 <!-- MK66-M18 -->
       <device name="MK66FX1M0M18" family="CortexM4F" subfamily="MK66F18">
          <memoryRef ref="kinetis_M4_64K_192K_Ram" />
@@ -3400,7 +3411,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4F-register-description" />
          <note>K66P144M180SF5RMV2</note>
       </device>
-      
+
 <!-- MK70-M12 -->
       <device name="MK70FX512M12" family="CortexM4F" subfamily="MK70F12">
          <memoryRef ref="kinetis_M4_64K_64K_Ram" />
@@ -3426,7 +3437,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4F-register-description" />
       </device>
       <device name="MK70FN1M0M15"      alias="MK70FN1M0M12" /> <!-- These are identical apart from speed grade -->
-      
+
 <!-- MK82-M15 -->
       <device name="MK82FN256M15" family="CortexM4F" subfamily="MK82F25615">
          <memoryRef ref="kinetis_M4_64K_192K_Ram" />
@@ -3440,29 +3451,29 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4F-register-description" />
          <note>K82P121M150SF5RM</note>
       </device>
-      
-<!-- Aliases 
+
+<!-- Aliases
 
    Aliases may set <sdid>, <sdidAddress> and <sdidMask> otherwise they are inherited from aliased device.
    If re-using a device description for a _different_ device then SDID should be set (use 0 if necessary)
--->     
-<!-- 
+-->
+<!--
    Aliases S9KEAZ devices
  -->
       <device name="S9KEAZN8M4"      alias="MKE04Z8M4" />  <!-- S9KEA8Z24M48SF0RM -->
-      
+
       <device name="S9KEAZN16M4"     alias="MKE02Z16M4" /> <!-- S9KEA64Z64M20SF0RM -->
       <device name="S9KEAZN32M4"     alias="MKE02Z32M4" /> <!-- S9KEA64Z64M20SF0RM -->
-      
+
       <device name="S9KEAZN64M4"     alias="MKE02Z64M4" /> <!-- S9KEA64Z64M20SF0RM -->
-      
+
       <device name="S9KEAZ64M4"      alias="MKE06Z64M4" />  <!-- S9KEA128Z80M48SF0RM -->
       <device name="S9KEAZ128M4"     alias="MKE06Z128M4" /> <!-- S9KEA128Z80M48SF0RM -->
 
-<!-- 
+<!--
    Aliases used for hardware
  -->
- 
+
       <device name="EVB_S32K144"     alias="S32K144"        hardware="evbs32k144" />
       <device name="FRDM_K20D50M"    alias="MK20DX128M5"    hardware="frdmk20d50m" />
       <device name="FRDM_K22F1M0"    alias="MK22FN1M0M12"   hardware="frdmk22f1m0" />
@@ -3473,7 +3484,7 @@ Test Devices:
       <device name="FRDM_K64F"       alias="MK64FN1M0M12"   hardware="frdmk64f" />
       <device name="FRDM_K66F"       alias="MK66FN2M0M18"   hardware="frdmk66f" />
       <device name="FRDM_K82F"       alias="MK82FN256M15"   hardware="frdmk82f" />
-      
+
       <device name="FRDM_KE02Z"      alias="MKE02Z64M2"     hardware="frdmke02z" />
       <device name="FRDM_KE02Z40M"   alias="MKE02Z64M4"     hardware="frdmke02z40m" />
       <device name="FRDM_KE04Z"      alias="MKE04Z8M4"      hardware="frdmke04z" />
@@ -3482,7 +3493,7 @@ Test Devices:
       <device name="FRDM_KE15Z"      alias="MKE15Z256M7"    hardware="frdmke15z" />
 
       <device name="FRDM_KEAZ128"    alias="S9KEAZ128M4"    hardware="frdmkeaz128" />
-      
+
       <device name="FRDM_KL02Z"      alias="MKL02Z32M4"     hardware="frdmkl02z" />
       <device name="FRDM_KL03Z"      alias="MKL03Z32M4"     hardware="frdmkl03z48m" />
       <device name="FRDM_KL05Z"      alias="MKL05Z32M4"     hardware="frdmkl05z" />
@@ -3492,21 +3503,21 @@ Test Devices:
       <device name="FRDM_KL43Z"      alias="MKL43Z256M4"    hardware="frdmkl43z" />
       <device name="FRDM_KL46Z"      alias="MKL46Z256M4"    hardware="frdmkl46z" />
       <device name="FRDM_KL82Z"      alias="MKL82Z128M7"    hardware="frdmkl82z" />
-      
+
       <device name="FRDM_KV10Z"      alias="MKV10Z32M7"     hardware="frdmkv10z" />
       <device name="FRDM_KV31F"      alias="MKV31F512M12"   hardware="frdmkv31f" />
 
       <device name="FRDM_KW41Z"      alias="MKW41Z512M4"    hardware="frdmk41z" />
       <device name="R41Z_EVAL"       alias="MKW41Z512M4"    hardware="frdmk41z" />
 
-      <device name="TWR_K22F120M"    alias="MK22FN512M12"   hardware="twrk22f120m" /> 
-      <device name="TWR_K24F120M"    alias="MK24FN256M12"   hardware="twrk24f120m" /> 
+      <device name="TWR_K22F120M"    alias="MK22FN512M12"   hardware="twrk22f120m" />
+      <device name="TWR_K24F120M"    alias="MK24FN256M12"   hardware="twrk24f120m" />
       <device name="TWR_K40X256"     alias="MK40DX256ZM10"  hardware="twrmk40" />       <!--  older tower board -->
       <device name="TWR_K60N512"     alias="MK60DN512ZM10"  hardware="twrk60d100zm" />  <!--  older tower board -->
-      <device name="TWR_K60D100M"    alias="MK60DN512M10"   hardware="twrk60d100m" /> 
-      <device name="TWR_K64F120M"    alias="MK64FN1M0M12"   hardware="twrk64f120m" /> 
-      <!-- device name="TWR_KV10Z32"     alias="MKV10Z32 "   hardware="twrkv10z32" / --> 
-      <!-- device name="TWR_KV31F"       alias="MKV31Z"      hardware="twrkv31f" / --> 
+      <device name="TWR_K60D100M"    alias="MK60DN512M10"   hardware="twrk60d100m" />
+      <device name="TWR_K64F120M"    alias="MK64FN1M0M12"   hardware="twrk64f120m" />
+      <!-- device name="TWR_KV10Z32"     alias="MKV10Z32 "   hardware="twrkv10z32" / -->
+      <!-- device name="TWR_KV31F"       alias="MKV31Z"      hardware="twrkv31f" / -->
 
 <!-- Codewarrior IDE aliases -->
       <device name="K10DN32"           alias="MK10DN32M5"        hidden="true"/>
@@ -3612,19 +3623,19 @@ Test Devices:
       <device name="K70FN1M0"          alias="MK70FN1M0M12"      hidden="true"/>
       <device name="K70FX512"          alias="MK70FX512M12"      hidden="true"/>
       <device name="K82FN256M15"       alias="MK82FN256M15"      hidden="true"/>
-      
+
       <device name="KE02Z16M2"         alias="MKE02Z16M2"        hidden="true"/>
       <device name="KE02Z32M2"         alias="MKE02Z32M2"        hidden="true"/>
       <device name="KE02Z64M2"         alias="MKE02Z64M2"        hidden="true"/>
-      
+
       <device name="KE02Z16M4"         alias="MKE02Z16M4"        hidden="true"/>
       <device name="KE02Z32M4"         alias="MKE02Z32M4"        hidden="true"/>
       <device name="KE02Z64M4"         alias="MKE02Z64M4"        hidden="true"/>
-      
+
       <device name="KE04Z8M4"          alias="MKE04Z8M4"         hidden="true"/>
       <device name="KE04Z64M4"         alias="MKE04Z64M4"        hidden="true"/>
       <device name="KE04Z128M4"        alias="MKE04Z128M4"       hidden="true"/>
-      
+
       <device name="KE06Z64M4"         alias="MKE06Z64M4"        hidden="true"/>
       <device name="KE06Z128M4"        alias="MKE06Z128M4"       hidden="true"/>
 
@@ -3633,64 +3644,64 @@ Test Devices:
       <device name="KL02Z8M4"          alias="MKL02Z8M4"         hidden="true"/>
       <device name="KL02Z16M4"         alias="MKL02Z16M4"        hidden="true"/>
       <device name="KL02Z32M4"         alias="MKL02Z32M4"        hidden="true"/>
-      
+
       <device name="KL03Z8M4"          alias="MKL03Z8M4"         hidden="true"/>
       <device name="KL03Z16M4"         alias="MKL03Z16M4"        hidden="true"/>
       <device name="KL03Z32M4"         alias="MKL03Z32M4"        hidden="true"/>
-      
+
       <device name="KL04Z8M4"          alias="MKL04Z8M4"         hidden="true"/>
       <device name="KL04Z16M4"         alias="MKL04Z16M4"        hidden="true"/>
       <device name="KL04Z32M4"         alias="MKL04Z32M4"        hidden="true"/>
-      
+
       <device name="KL05Z8M4"          alias="MKL05Z8M4"         hidden="true"/>
       <device name="KL05Z16M4"         alias="MKL05Z16M4"        hidden="true"/>
       <device name="KL05Z32M4"         alias="MKL05Z32M4"        hidden="true"/>
-      
+
       <device name="KL14Z32M4"         alias="MKL14Z32M4"        hidden="true"/>
       <device name="KL14Z64M4"         alias="MKL14Z64M4"        hidden="true"/>
-      
+
       <device name="KL15Z32M4"         alias="MKL15Z32M4"        hidden="true"/>
       <device name="KL15Z64M4"         alias="MKL15Z64M4"        hidden="true"/>
       <device name="KL15Z128M4"        alias="MKL15Z128M4"       hidden="true"/>
-      
+
       <device name="KL16Z32M4"         alias="MKL16Z32M4"        hidden="true"/>
       <device name="KL16Z64M4"         alias="MKL16Z64M4"        hidden="true"/>
       <device name="KL16Z128M4"        alias="MKL16Z128M4"       hidden="true"/>
       <device name="KL16Z256M4"        alias="MKL16Z256M4"       hidden="true"/>
-      
+
       <device name="KL17Z32M4"         alias="MKL17Z32M4"        hidden="true"/>
       <device name="KL17Z64M4"         alias="MKL17Z64M4"        hidden="true"/>
       <device name="KL17Z128M4"        alias="MKL17Z128M4"       hidden="true"/>
       <device name="KL17Z256M4"        alias="MKL17Z256M4"       hidden="true"/>
-      
+
       <device name="KL24Z32M4"         alias="MKL24Z32M4"        hidden="true"/>
       <device name="KL24Z64M4"         alias="MKL24Z64M4"        hidden="true"/>
-      
+
       <device name="KL25Z32M4"         alias="MKL25Z32M4"        hidden="true"/>
       <device name="KL25Z64M4"         alias="MKL25Z64M4"        hidden="true"/>
       <device name="KL25Z128M4"        alias="MKL25Z128M4"       hidden="true"/>
-      
+
       <device name="KL26Z32M4"         alias="MKL26Z32M4"        hidden="true"/>
       <device name="KL26Z64M4"         alias="MKL26Z64M4"        hidden="true"/>
       <device name="KL26Z128M4"        alias="MKL26Z128M4"       hidden="true"/>
       <device name="KL26Z256M4"        alias="MKL26Z256M4"       hidden="true"/>
-      
+
       <device name="KL27Z32M4"         alias="MKL27Z32M4"        hidden="true"/>
       <device name="KL27Z64M4"         alias="MKL27Z64M4"        hidden="true"/>
       <device name="KL27Z128M4"        alias="MKL27Z128M4"       hidden="true"/>
       <device name="KL27Z256M4"        alias="MKL27Z256M4"       hidden="true"/>
-      
+
       <device name="KL34Z64M4"         alias="MKL34Z64M4"        hidden="true"/>
-      
+
       <device name="KL36Z64M4"         alias="MKL36Z64M4"        hidden="true"/>
       <device name="KL36Z128M4"        alias="MKL36Z128M4"       hidden="true"/>
       <device name="KL36Z256M4"        alias="MKL36Z256M4"       hidden="true"/>
-      
+
       <device name="KL46Z128M4"        alias="MKL46Z128M4"       hidden="true"/>
       <device name="KL46Z256M4"        alias="MKL46Z256M4"       hidden="true"/>
-      
+
       <device name="KL82Z128M7"        alias="MKL82Z128M7"       hidden="true"/>
-      
+
       <!-- device name="KM13Z64M5"         alias="MKM13Z64M5"        hidden="true"/-->
       <device name="KM14Z64M5"         alias="MKM14Z64M5"        hidden="true"/>
       <device name="KM14Z128M5"        alias="MKM14Z128M5"       hidden="true"/>

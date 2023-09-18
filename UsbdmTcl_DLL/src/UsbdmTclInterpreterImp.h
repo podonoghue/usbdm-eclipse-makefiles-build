@@ -50,6 +50,17 @@ public:
     */
    virtual USBDM_ErrorCode  evalTclScript(const char *script) override;
    /**
+    * Evaluates a TCL script
+    *
+    * @param script String containing the script to evaluate in the interpreter
+    * @param result Result returned from script
+    *
+    *  @return
+    *      BDM_RC_OK    => OK \n
+    *      other        => Error code - see \ref USBDM_ErrorCode
+    */
+   virtual USBDM_ErrorCode  evalTclScript(const char *script, int &result) override;
+   /**
     * @param interp Interpreter to get result from
     *
     * @return a point to the result string (a static buffer)

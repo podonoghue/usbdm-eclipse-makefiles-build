@@ -27,6 +27,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.534544393" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.include.paths.400992683" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${WX_LIBPATH1}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WX_LIBPATH2}&quot;"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.preprocessor.def.1881427077" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="TARGET=ARM"/>
@@ -42,12 +43,12 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.118151735" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.compiler.option.include.paths.131529907" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${WX_LIBPATH1}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WX_LIBPATH2}&quot;"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.compiler.option.preprocessor.def.symbols.2144225802" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="TARGET=ARM"/>
 									<listOptionValue builtIn="false" value="useWxWidgets"/>
 									<listOptionValue builtIn="false" value="UNICODE"/>
-									<listOptionValue builtIn="false" value="__GNUWIN32__"/>
 									<listOptionValue builtIn="false" value="wxUSE_GUI=1"/>
 									<listOptionValue builtIn="false" value="__WXGTK__"/>
 									<listOptionValue builtIn="false" value="_FILE_OFFSET_BITS=64"/>

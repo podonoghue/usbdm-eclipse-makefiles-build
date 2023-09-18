@@ -561,6 +561,64 @@ int UsbdmTclInterpreterImp::appInitProc(Tcl_Interp *interp) {
  *
  * @param script String containing the script to evaluate in the interpreter
  */
+USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script, int &result) {
+   LOGGING_Q;
+   MyLock lock;
+
+   int rcTCL = Tcl_Eval(interp.get(), script);
+   const char *sResult = getTclResult();
+
+   USBDM_ErrorCode rc = BDM_RC_OK;
+   if (rcTCL != TCL_OK) {
+      // We expect no error
+      // Assume anything else is an error
+      rc = PROGRAMMING_RC_ERROR_TCL_SCRIPT;
+   }
+   else {
+      // Null result is OK
+      if ((sResult != NULL) && (*sResult != '\0')) {
+         // Return value from TCL script
+         // Use as return value if a number
+         // We do NOT accept zero
+         char *eptr = 0;
+         long temp = strtol(sResult, &eptr, 0);
+         if (eptr != sResult) {
+            result = temp;
+         }
+         else {
+            log.error("Non-numeric return value = %s\n", sResult);
+            return PROGRAMMING_RC_ERROR_TCL_SCRIPT;
+         }
+      }
+   }
+   if (tclChannel != NULL) {
+      Tcl_Flush(tclChannel);
+      if (rcTCL != TCL_OK) {
+         // Try to PRINT TCL stack frame
+         Tcl_Obj *options = Tcl_GetReturnOptions(interp.get(), rcTCL);
+         Tcl_Obj *key = Tcl_NewStringObj("-errorinfo", -1);
+         if ((options != NULL) && (key != NULL)) {
+            Tcl_IncrRefCount(key);
+            Tcl_Obj *stackTrace;
+            Tcl_DictObjGet(NULL, options, key, &stackTrace);
+            Tcl_DecrRefCount(key);
+            const char *res = Tcl_GetString(stackTrace);
+            Tcl_Eval(interp.get(), "flush stdout\n");
+            Tcl_Eval(interp.get(), "flush stderr\n");
+            if (res != NULL) {
+               log.error("TCL Stack Frame = %s\n", res);
+            }
+         }
+      }
+   }
+   return rc;
+}
+
+/**
+ * Evaluates a TCL script
+ *
+ * @param script String containing the script to evaluate in the interpreter
+ */
 USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script) {
    LOGGING_Q;
    MyLock lock;
@@ -617,7 +675,7 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script) {
 /**
  * @param interp Interpreter to get result from
  *
- * @return a point to the result string (a static buffer)
+ * @return a pointer to the result string (a static buffer)
  */
 const char *UsbdmTclInterpreterImp::getTclResult() {
    LOGGING_Q;

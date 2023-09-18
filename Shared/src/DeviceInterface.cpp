@@ -4,7 +4,7 @@
  *  Created on: 05/07/2013
  *      Author: Peter
  */
-
+#include <string.h>
 #include "DeviceData.h"
 #include "Names.h"
 
@@ -54,6 +54,10 @@ USBDM_ErrorCode DeviceInterface::setCurrentDeviceByIndex(int newDeviceIndex) {
       newDeviceIndex = 0;
       rc = BDM_RC_UNKNOWN_DEVICE;
    }
+   if (currentDevice->getTargetName().compare((*deviceDatabase)[newDeviceIndex].getTargetName()) == 0 ) {
+      log.print("Device is unchanged\n");
+      return rc;
+   }
    currentDevice = (*deviceDatabase)[newDeviceIndex].shallowCopy();
    if (currentDevice->isAlias()) {
       // Keep device name & SDIDs but update device details from real device
@@ -66,6 +70,9 @@ USBDM_ErrorCode DeviceInterface::setCurrentDeviceByIndex(int newDeviceIndex) {
       currentDevice->setTargetSDIDs(targetSDIDs);
    }
    currentDeviceIndex = newDeviceIndex;
+   log.print("Resetting device data to defaults\n");
+   currentDevice->setClockTrimFreq(currentDevice->getDefaultClockTrimFreq());
+   currentDevice->setClockAddress(currentDevice->getDefaultClockAddress());
    return rc;
 }
 
@@ -128,8 +135,12 @@ void DeviceInterface::loadSettings(const AppSettings &settings) {
    setCurrentDeviceByName(settings.getValue(deviceNameKey, ""));
 
    // Load the trim information (mutable device data)
-   currentDevice->setClockTrimFreq(                          settings.getValue(setClockTrimFreqKey,    0));
-   currentDevice->setClockTrimNVAddress(                     settings.getValue(clockTrimNVAddressKey,  currentDevice->getClockTrimNVAddress()));
+   currentDevice->setClockTrimFreq(      settings.getValue(setClockTrimFreqKey,    0));
+   currentDevice->setClockTrimNVAddress( settings.getValue(clockTrimNVAddressKey,  currentDevice->getDefaultClockTrimNVAddress()));
+
+   log.print("getClockTrimFreq = %ld\n",     currentDevice->getClockTrimFreq());
+   log.print("getClockTrimNVAddress = %d\n", currentDevice->getClockTrimNVAddress());
+
    SecurityOptions_t securityOption =  (SecurityOptions_t)   settings.getValue(securityKey,            currentDevice->getSecurity());
    if (securityOption == SEC_CUSTOM) {
       securityOption = SEC_UNSECURED;
@@ -153,10 +164,8 @@ void DeviceInterface::saveSettings(AppSettings &settings) {
    settings.addValue(deviceNameKey,                currentDevice->getTargetName());
 
    // Save non-device fixed settings
-   if (currentDevice->getClockTrimFreq() != 0) {
       settings.addValue(setClockTrimFreqKey,       currentDevice->getClockTrimFreq());
       settings.addValue(clockTrimNVAddressKey,     currentDevice->getClockTrimNVAddress());
-   }
    SecurityOptions_t securityOption = currentDevice->getSecurity();
    if (securityOption == SEC_CUSTOM) {
       securityOption = SEC_UNSECURED;

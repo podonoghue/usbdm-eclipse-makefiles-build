@@ -75,6 +75,7 @@ USBDM_ErrorCode ProgressTimer::restart(const char *message) {
 //! @param message  - Message to post, May be NULL to indicate no change.
 //!
 USBDM_ErrorCode ProgressTimer::progress(int progress, const char *message) {
+   LOGGING;
    USBDM_ErrorCode rc = PROGRAMMING_RC_OK;
    if (message != NULL) {
       this->message = message;
@@ -94,6 +95,7 @@ USBDM_ErrorCode ProgressTimer::progress(int progress, const char *message) {
    }
    char messageBuffer[200];
    snprintf(messageBuffer, sizeof(messageBuffer), "%s (%2.2f kBytes/sec)", this->message, kBytesPerSec);
+   log.print("messageBuffer = '%s'\n", messageBuffer);
    if ((progressCallBack != NULL)/* && (progress != 0)*/) {
       if (bytesDone>0) {
          rc = progressCallBack(PROGRAMMING_RC_OK, percent, messageBuffer);
