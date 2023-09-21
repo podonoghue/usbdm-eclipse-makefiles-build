@@ -34,7 +34,7 @@
 
    <!-- Controlled by OSC0 mode -->
    <binaryOption key="rtc_cr_osce" condition="/SIM/RtcForcing"
-      ref="(/MCG/oscMode == /OscMode_RTC_Controlled)?1:0"
+      ref="(/MCG/mcg_c2_oscMode == /OscMode_RTC_Controlled)?1:0"
       enumStem="RtcOscEnable"
       locked="true"
       derived="true"

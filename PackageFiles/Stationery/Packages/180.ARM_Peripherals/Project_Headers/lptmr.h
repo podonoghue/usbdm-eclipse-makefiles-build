@@ -64,51 +64,10 @@ protected:
    }
 
 public:
+
 $(/LPTMR/classInfo: // No class Info found)
 $(/LPTMR/StaticMethods: // /LPTMR/StaticMethods not found)
 $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
-   /**
-    * Configure LPTMR from values specified in init.
-    *
-    * @param init Class containing initialisation information
-    */
-   static ErrorCode configure(const typename Info::Init &init) {
-
-      // Enable peripheral clock and map pins
-      enable();
-
-      if constexpr (Info::irqHandlerInstalled) {
-         // Only set call-back if feature enabled and non-null
-         if (init.callbackFunction != nullptr) {
-            setCallback(init.callbackFunction);
-         }
-         enableNvicInterrupts(init.irqlevel);
-      }
-      uint8_t  psr = init.psr;
-      uint32_t cmr = init.cmr;
-
-      if (init.cmrperiod != 0) {
-         // Calculate values from duration in seconds
-         ErrorCode rc = calculateDurationValues(init.cmrperiod, psr, cmr);
-         if (rc != E_NO_ERROR) {
-            return rc;
-         }
-      }
-      // Change settings with timer disabled
-      lptmr->CSR = 0;
-
-      // Update clock setting
-      lptmr->PSR = psr;
-
-      // Timer Compare Register
-      lptmr->CMR = cmr;
-
-      // Enable timer
-      lptmr->CSR = init.csr|LPTMR_CSR_TEN_MASK;
-
-      return E_NO_ERROR;
-   }
-
    /**
     * Restarts the counter\n
     * Mostly for debug.

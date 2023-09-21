@@ -42,8 +42,4 @@
 
    <xi:include href="cmp_base.xml"/>
 
-   <xi:include href="_clockOption.xml"/>
-
-   <signals/>
-
 </peripheralPage>

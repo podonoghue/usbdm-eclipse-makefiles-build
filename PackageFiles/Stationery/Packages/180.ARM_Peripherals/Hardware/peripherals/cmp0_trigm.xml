@@ -38,6 +38,4 @@
 
    <xi:include href="cmp_base.xml"/>
 
-   <signals/>
-
 </peripheralPage>

@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
 
-<!-- _osc0_co.xml -->
+<!-- _osc0_common.xml -->
+
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"          />
+   <constant key="enablePeripheralSupport"  type="Boolean" value="true"          />
+   <constant key="/$(_BASENAME)/enablePeripheralSupport"  type="Boolean" value="true"          />
+   <constant key="enableGettersAndSetters"  type="Boolean" value="true"          />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"         />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
    <xi:include href="_enablePeripheral.xml"  />
@@ -12,11 +16,13 @@
 
 <!--
     * General substitutions
-    *  $(_NAME)         => e.g FTM2                    (fProvider.getName())
-    *  $(_Baseclass)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
-    *  $(_Class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
 -->
 
 <!--
@@ -44,12 +50,17 @@
     * %register[index]                Register associated with variable e.g. adc->APCTL1
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
+
    <!-- ************* CR ****************** -->
 
-   <aliasOption key="/MCG/mcg_c2_oscmode" locked="false" />
+   <aliasOption key="/MCG/mcg_c2_oscMode" locked="false" />
 
    <intOption key="osc_input_freq"
-      enabledBy="/MCG/mcg_c2_oscmode!=/OscMode_NotConfigured"
+      enabledBy="/MCG/mcg_c2_oscMode!=/OscMode_NotConfigured"
       units="Hz"
       description="OSC frequency"
       toolTip="Frequency of external crystal or clock on XTAL/EXTAL"
@@ -57,7 +68,7 @@
       disabledValue="0" />
 
    <intOption key="osc_clock"
-      enabledBy="/MCG/mcg_c2_oscmode!=/OscMode_NotConfigured"
+      enabledBy="/MCG/mcg_c2_oscMode!=/OscMode_NotConfigured"
       ref="osc_input_freq"
       valueFormat="%s"
       locked="true"
@@ -70,7 +81,7 @@
       min="1" />
 
    <binaryOption key="osc_cr_erclken"
-      enabledBy="/MCG/mcg_c2_oscmode!=/OscMode_NotConfigured"
+      enabledBy="/MCG/mcg_c2_oscMode!=/OscMode_NotConfigured"
       enumStem="OscErClkEn"
       description="External Reference Enable"
       disabledValue="0"
@@ -94,7 +105,7 @@
 
    <choiceOption key="osc_cr_scp"
       enumStem="OscCap"
-      enabledBy="(/MCG/mcg_c2_oscmode>/OscMode_ExternalClock)&amp;&amp;(/MCG/mcg_c2_oscmode!=/OscMode_RTC_Controlled)"
+      enabledBy="(/MCG/mcg_c2_oscMode>/OscMode_ExternalClock)&amp;&amp;(/MCG/mcg_c2_oscMode!=/OscMode_RTC_Controlled)"
       description="Oscillator load capacitance"
       toolTip="Configures the oscillator load capacitance">
       <choice value="0"  enum="None" name="0 pF" />
@@ -177,7 +188,7 @@
    </if>
 
    <intOption key="osc32k_clock"
-         enabledBy="(/MCG/mcg_c2_oscmode!=/OscMode_NotConfigured)&amp;&amp;(osc_input_freq&gt;=32000)&amp;&amp;(osc_input_freq&lt;=40000)
+         enabledBy="(/MCG/mcg_c2_oscMode!=/OscMode_NotConfigured)&amp;&amp;(osc_input_freq&gt;=32000)&amp;&amp;(osc_input_freq&lt;=40000)
                      ##Disabled as XTAL frequency unsuitable"
          ref="osc_clock"
          valueFormat="%s"
@@ -190,13 +201,7 @@
          disabledValue="0"
          locked="true" />
 
-   <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.OscValidate">
-   </validate>
-
-   <projectActionList id = "osc_files" >
-      <copy source="Project_Headers/osc.h"  target="Project_Headers/osc.h"  overwrite="true"  derived="true" />
-   </projectActionList>
+<!--   ========== Class constants =============================== -->
 
    <initialValueTemplate
       variables="osc_clock"
@@ -214,28 +219,199 @@
       \t\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate
-      separator="|"
-      terminator=";"
+<!--   ========== OSC Init class =============================== -->
+
+   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_Class)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_Class)::Init $(_name)Init {
+      \t *
+      \t *   // Setup values
+      \t *   OscErClkEn_Enabled ,            // External Reference Enable - Enabled
+      \t *   OscExternalRef_DisabledInStop , // External Reference Stop Enable - Disabled in Stop mode
+      \t *   OscCap_8pf,                     // Oscillator load capacitance - 8 pF
+      \t * };
+      \t *
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_name)Init)
+      \t * @endcode
+      \t */
+   ]]>
+
+   </template>
+
+   <template namespace="usbdm" discardRepeats="true" >
+   <![CDATA[
+      class $(_Baseclass)BasicInfo {
+      \t
+      public:\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <![CDATA[
+      $(init_description)
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      variables="osc_cr_erclken,osc_cr_erefsten,osc_cr_scp,osc_cr_scp"
+   ><![CDATA[
+      \t   /// Control Register
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+
+<!--   Configure methods -->
+
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   if constexpr (Info::DefaultInitValue.cr & OSC_CR_ERCLKEN_MASK) {
+      \t      (void)CheckPinMapped<0>::checker;
+      \t      (void)CheckPinMapped<1>::checker;
+      \t   }
+      \t   if (Info::mapPinsOnEnable) {
+      \t      configureAllPins();
+      \t   }
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t
+      \t   osc->CR    = init.cr;
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!--   Constructors -->
+
+   <for keys="r"
+      values="
+            osc_cr_erclken;
+            osc_cr_erefsten;
+            osc_cr_scp
+            " >
+      <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+
+<!--   Default Initialisation value -->
+
+   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      separator=","
+      terminator=","
       variables="
             osc_cr_erclken,
             osc_cr_erefsten,
-            osc_cr_scp"
+            osc_cr_scp,
+            osc_div_erps
+         "
    ><![CDATA[
-      \t//! Oscillator control register
-      \tstatic constexpr uint32_t cr = %initExpression
-      \t\n
-   ]]></initialValueTemplate>
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]>
+   </initialValueTemplate>
 
-   <initialValueTemplate
-      separator="|"
-      terminator=";"
-      variables="osc_div_erps"
-   ><![CDATA[
-      \t//! OSC Clock divider register
-      \tstatic constexpr uint32_t div = %initExpression
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+      <![CDATA[
+      \t}; // class $(_Baseclass)BasicInfo::Init
       \t\n
-   ]]></initialValueTemplate>
+   ]]>
+   </template>
+
+   <template namespace="usbdm" discardRepeats="true" >
+      <![CDATA[
+      }; // class $(_Class)BasicInfo\n\n
+   ]]>
+   </template>
+
+<!-- ************* Class methods ****************** -->
+
+   <for keys="field:name"
+        values="
+      osc_cr_erclken:ExternalReference;
+      osc_cr_erefsten:ExternalReferenceInStop;
+      osc_cr_scp:LoadCapacitance;
+      osc_div_erps:Divider" >
+      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register&%mask);
+         \t}
+         \t\n
+      ]]></setTemplate>
+   </for>
 
    <template><![CDATA[
       \t/**
@@ -248,7 +424,7 @@
       \t}\n\n
    ]]></template>
 
-   <if condition="osc_div_erps">
+   <if condition="osc_div_erps" >
       <template><![CDATA[
          \t/**
          \t * Get OSC clock (external, gated by OSC_CR_ERCLKEN)
@@ -311,20 +487,44 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
-   <template key="/OSC/declarations" namespace="all"  ><![CDATA[
-   \t/**
-   \t * Class representing $(_NAME)
-   \t */
-   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
+   <!-- ************* Common ****************** -->
+
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      /**
+       * Class representing $(_NAME)
+       */
+      class $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
+      \t\n
+   ]]>
+   </template>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.OscValidate">
+   </validate>
+
+   <projectActionList id = "osc_files" >
+      <copy source="Project_Headers/osc.h"  target="Project_Headers/osc.h"  overwrite="true"  derived="true" />
+   </projectActionList>
+
+   <!-- ************* Startup ****************** -->
+
+   <template key="/MCG/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/MCG/Includes" namespace="all"  ><![CDATA[
-   #include "osc.h"\n
+   <template key="/MCG/ClockStartupBefore" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <template key="/MCG/Initialisation" namespace="all"  ><![CDATA[
-   \tUSBDM::$(_Class)::initialise();\n
-   ]]></template>
+   <!-- ************* Signal mapping ****************** -->
+   <category name="SIM" description="Pin mapping and clock enables">
+      <aliasOption key="/SIM/sim_scgc_$(_name)"      locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc_$(_basename)"  locked="false" optional="true" />
+   </category>
 
-   <signals />
+   <signals enabledBy="enablePeripheralSupport" />
+
 </fragment>

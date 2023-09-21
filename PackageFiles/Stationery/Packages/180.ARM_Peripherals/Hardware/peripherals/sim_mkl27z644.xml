@@ -5,9 +5,9 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
 
    <!--                                   RUN       VLPR     -->
-   <constant key="MCGOUTCLK_max"  value="100MHz,     4MHz"   type="Integer"    hidden="false"/>
-   <constant key="LPUART_max"     value=" 48MHz,     4MHz"   type="Integer"    hidden="false"/>
-   <constant key="TPM_max"        value=" 48MHz,     4MHz"   type="Integer"    hidden="false"/>
+   <constant key="MCGOUTCLK_max"  value="100MHz,     4MHz"   type="Long"    hidden="false"/>
+   <constant key="LPUART_max"     value=" 48MHz,     4MHz"   type="Long"    hidden="false"/>
+   <constant key="TPM_max"        value=" 48MHz,     4MHz"   type="Long"    hidden="false"/>
 
    <xi:include href="_default_instance.xml"/>
 
@@ -17,13 +17,13 @@
       value="&quot;LPTMR0;CMP0;;;;RTC_Alarm;;RTC_Seconds&quot;" />
 
    <!-- Clock divider -->
-   <constant key="clock_divider_type" type="Integer" value="2" />
+   <constant key="clock_divider_type" type="Long" value="2" />
 
    <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
    <binaryOption key="RtcForcing"
       locked="true"
       derived="true"
-      ref="(/MCG/oscMode==/OscMode_RTC_Controlled)?1:0"
+      ref="(/MCG/mcg_c2_oscMode==/OscMode_RTC_Controlled)?1:0"
       description="RTC control of OSC0"
       toolTip="Indicates if OSC0 is being controlled by RTC which shares XTAL/EXTAL pins">
       <choice value="0" name="OSC0 is independent"        isDefault="true" />

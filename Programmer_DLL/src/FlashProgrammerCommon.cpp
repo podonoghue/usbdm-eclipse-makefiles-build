@@ -1612,9 +1612,9 @@ void FlashProgrammerCommon::restoreSecurityAreas(FlashImagePtr flashImage) {
             log.printq("0x%02X ", (uint8_t)securityData[index].data[count]);
          }
       }
+      log.printq("\n");
       flashImage->dumpRange(securityData[index].address, securityData[index].address+securityData[index].size-1);
    }
-   log.printq("\n");
    securityAreaCount = 0;
 }
 

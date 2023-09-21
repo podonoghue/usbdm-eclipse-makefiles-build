@@ -361,10 +361,12 @@
          <param type="StringVariable"         value="true"        name="crc_ctrl_tot_present"        key="/CRC0/crc_ctrl_tot_present" />
          <param type="StringVariable"         value="true"        name="crc_ctrl_totr_present"       key="/CRC0/crc_ctrl_totr_present" />
          <param type="StringVariable"         value="true"        name="crc_ctrl_was_present"        key="/CRC0/crc_ctrl_was_present" />
+         <param type="StringVariable"         value="true"        name="crc_data_data_present"       key="/CRC0/crc_data_data_present" />
          <param type="StringVariable"         value="true"        name="crc_data_hl_present"         key="/CRC0/crc_data_hl_present" />
          <param type="StringVariable"         value="true"        name="crc_data_hu_present"         key="/CRC0/crc_data_hu_present" />
          <param type="StringVariable"         value="true"        name="crc_data_ll_present"         key="/CRC0/crc_data_ll_present" />
          <param type="StringVariable"         value="true"        name="crc_data_lu_present"         key="/CRC0/crc_data_lu_present" />
+         <param type="StringVariable"         value="true"        name="crc_gpoly_gpoly_present"     key="/CRC0/crc_gpoly_gpoly_present" />
          <param type="StringVariable"         value="true"        name="crc_gpoly_high_present"      key="/CRC0/crc_gpoly_high_present" />
          <param type="StringVariable"         value="true"        name="crc_gpoly_low_present"       key="/CRC0/crc_gpoly_low_present" />
       </peripheral>

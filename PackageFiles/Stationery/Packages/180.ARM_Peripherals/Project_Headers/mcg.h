@@ -62,11 +62,6 @@ public:
 };
 
 /**
- * Type definition for MCG interrupt call back
- */
-typedef void (*MCGCallbackFunction)(void);
-
-/**
  * @brief Class representing the MCG
  *
  * <b>Example</b>
@@ -108,8 +103,6 @@ public:
 #endif
 
 private:
-   /** Callback function for ISR */
-   static MCGCallbackFunction callback;
 
    /** Hardware instance */
    static constexpr HardwarePtr<MCG_Type> mcg = McgInfo::baseAddress;
@@ -124,9 +117,6 @@ $(/MCG/publicMethods: // No public methods found)
     * Table of clock settings
     */
    static const ClockInfo clockInfo[];
-
-   /** Current clock mode (FEI out of reset) */
-   static McgClockMode currentClockMode;
 
    /**
     * Enable interrupts in NVIC
@@ -151,6 +141,9 @@ $(/MCG/publicMethods: // No public methods found)
    static void disableNvicInterrupts() {
       NVIC_DisableIRQ(McgInfo::irqNums[0]);
    }
+
+   /** Current clock mode (FEI out of reset) */
+   static McgClockMode currentClockMode;
 
    /**
     * Update SystemCoreClock variable
@@ -212,7 +205,7 @@ $(/MCG/publicMethods: // No public methods found)
    /**
     *  Configure the MCG for given mode
     *
-    *  @param[in]  settingNumber CLock setting number
+    *  @param[in]  settingNumber Clock setting number
     */
    static void configure(ClockConfig settingNumber=ClockConfig_default) {
       clockTransition(clockInfo[settingNumber]);

@@ -8,7 +8,7 @@
    <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
    <constant key="irq_parameters"           type="String"  value="&quot;const CmpStatus &amp;status&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;const CmpStatus &amp;&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;status&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;cmpStatus&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
    <xi:include href="_enablePeripheral.xml"  />
@@ -86,7 +86,7 @@
       <choice value="1" name="Enabled"  enum="Enabled"  />
    </binaryOption>
 
-   <!--  Configuration -->
+   <!--  Clocking -->
    <title description="Clocking" />
 
    <choiceOption key="cmpClockConfig"
@@ -106,10 +106,8 @@
       units="Hz"
       description="Frequency of CMP input Clock" />
 
-   <stringOption key="Configuration"
-      value="------- Configuration -------"
-      description="Configuration"
-      locked="true"/>
+   <!--  Configuration -->
+   <title description="Configuration" />
 
    <choiceOption key="cmp_cr0_hystctr" condition="cmp_cr0_hystctr_present"
       enumStem="CmpHysteresis"
@@ -164,10 +162,7 @@
    <aliasOption key="cmp_muxcr_msel$(_instance)" locked="false"/>
 
    <!-- DAC Configuration -->
-   <stringOption key="DAC Configuration"
-      value="------- Internal DAC Configuration -------"
-      description="DAC Configuration"
-      locked="true"/>
+   <title description="Internal DAC Configuration" />
 
    <binaryOption key="cmp_daccr_dacen" condition="cmp_daccr_dacen_present"
       enumStem="CmpDacEnable"
@@ -373,7 +368,7 @@
       <choice value="0,1" name="Windowing mode" enum="Windowed" />
    </choiceOption>
 
-   <!--   ========== Init class =============================== -->
+<!--   ========== CMP Init class =============================== -->
 
    <setTemplate
       variables="/GPIOA/port_pcr_dse,/GPIOA/port_pcr_ode,/GPIOA/port_pcr_sre"
@@ -452,7 +447,7 @@
    ]]>
    </template>
 
-   <!--   ========== Init class =============================== -->
+<!--   ========== CMP Init class =============================== -->
 
    <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
@@ -559,7 +554,7 @@
       \t/**
       \t * Set interrupt callback function.
       \t *
-      \t * @param[in]  acmpCallback Callback function to execute on interrupt
+      \t * @param[in]  $(_basename)Callback Callback function to execute on interrupt
       \t */
       \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
       \t   if ($(_basename)Callback == nullptr) {
@@ -591,7 +586,7 @@
       \t   };
       \t
       \t   // Execute call-back
-      \t   sCallback(cmpStatus);
+      \t   sCallback($(irq_call));
       \t}
       \t\n
    ]]>
@@ -599,6 +594,7 @@
 
    <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
+      \t
       \t/** Callback for programmatically set handler */
       \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
       \t\n
@@ -697,10 +693,8 @@
 
    <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      namespace="all"
-      discardRepeats="true" >
- <![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+    <![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -713,9 +707,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/InitMethod" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      namespace="all"
-      discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="cmp_cr1_en,
                  cmp_fpr_filt_per" >
    <![CDATA[
@@ -746,11 +738,10 @@
       \t\n
    ]]>
    </template>
-   <template key="/$(_BASENAME)/InitMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
-      namespace="all"
-      discardRepeats="true"
-      variables="cmp_cr1_en,
-                 cmp_fpr_filt_per"  >
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+             condition="irqHandlingMethod"
+             variables="cmp_cr1_en,
+                        cmp_fpr_filt_per"  >
    <![CDATA[
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      // Only set call-backs if feature enabled
@@ -760,10 +751,9 @@
       \t\n
    ]]>
    </template>
-   <template key="/$(_BASENAME)/InitMethod" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      namespace="all"
-      discardRepeats="true"
-      variables="cmp_scr_dmaen"  >
+
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+             variables="cmp_scr_dmaen"  >
    <![CDATA[
       \t   %register0 = init.%registerName0;
    ]]>
@@ -823,7 +813,6 @@
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
-      \t    *
       %paramDescription
       \t    */
       \t   template <typename... Types>
@@ -935,6 +924,7 @@
    </setTemplate>
 
 <!--   Default Initialisation value -->
+
    <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       separator=","
       terminator=","
@@ -983,28 +973,28 @@
       \t   %register = %paramExpression;
       \t}
       \t
-      \t   /**
-      \t    * Class representing a Comparator pin
-      \t    *
-      \t    * @tparam cmpInput Number of comparator input (0-7) for associated pin.
-      \t    */
-      \t   template<Cmp$(_instance)InputMinus cmpInput>
-      \t   class Pin {
-      \t      using Pcr = PcrTable_T<Cmp$(_instance)Info,cmpInput>;
+      \t/**
+      \t * Class representing a Comparator pin
+      \t *
+      \t * @tparam cmpInput Number of comparator input (0-7) for associated pin.
+      \t */
+      \ttemplate<Cmp$(_instance)InputMinus cmpInput>
+      \tclass Pin {
+      \t   using Pcr = PcrTable_T<Cmp$(_instance)Info,cmpInput>;
       \t
-      \t   public:
-      \t      static constexpr Cmp$(_instance)InputPlus  plusPin  = (Cmp$(_instance)InputPlus)CMP_MUXCR_PSEL(cmpInput);
-      \t      static constexpr Cmp$(_instance)InputMinus minusPin = cmpInput;
+      \tpublic:
+      \t   static constexpr Cmp$(_instance)InputPlus  plusPin  = (Cmp$(_instance)InputPlus)CMP_MUXCR_PSEL(cmpInput);
+      \t   static constexpr Cmp$(_instance)InputMinus minusPin = cmpInput;
       \t
-      \t      constexpr operator Cmp$(_instance)InputPlus()  const { return plusPin;  }
-      \t      constexpr operator Cmp$(_instance)InputMinus() const { return minusPin; }
+      \t   constexpr operator Cmp$(_instance)InputPlus()  const { return plusPin;  }
+      \t   constexpr operator Cmp$(_instance)InputMinus() const { return minusPin; }
       \t
-      \t      constexpr Pin() {}
+      \t   constexpr Pin() {}
       \t
-      \t      static void setInput() {
-      \t         Pcr::setPCR();
-      \t      }
-      \t   };
+      \t   static void setInput() {
+      \t      Pcr::setPCR();
+      \t   }
+      \t};
       \t\n
    ]]>
    </setTemplate>
@@ -1018,7 +1008,7 @@
 
    <template namespace="usbdm" discardRepeats="true" >
       <![CDATA[
-      }; // $(_Baseclass)BasicInfo\n\n
+      }; // class $(_Class)BasicInfo\n\n
    ]]>
    </template>
 
@@ -1030,14 +1020,15 @@
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       /**
        * Class representing $(_NAME)
        */
       class $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
       \t\n
-   ]]></template>
+   ]]>
+   </template>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.CmpValidate" >
@@ -1059,5 +1050,8 @@
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
+
+
+   <signals enabledBy="enablePeripheralSupport" />
 
 </fragment>

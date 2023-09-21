@@ -57,6 +57,11 @@ enum LpuartDma {
  */
 class Lpuart : public FormattedIO {
 
+private:
+   Lpuart() = delete;
+   Lpuart(const Lpuart&) = delete;
+   Lpuart(Lpuart&&) = delete;
+
 protected:
 #ifdef __CMSIS_RTOS
    /**
@@ -373,10 +378,12 @@ public:
 #ifdef PCC_BASE_PTR
       Info::setClockSource(Info::defaultClockSource);
 #endif
+#ifdef PORT_PCR_MUX
       // Check pin assignments
-      static_assert(Info::info[0].gpioBit >= 0, "LpUart_Tx has not been assigned to a pin - Modify Configure.usbdm");
-      static_assert(Info::info[1].gpioBit >= 0, "LpUart_Rx has not been assigned to a pin - Modify Configure.usbdm");
-      
+      static_assert(Info::info[0].pinIndex >= PinIndex::MIN_PIN_INDEX, "LpUart_Tx has not been assigned to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[1].pinIndex >= PinIndex::MIN_PIN_INDEX, "LpUart_Rx has not been assigned to a pin - Modify Configure.usbdm");
+#endif
+    
       initialise();
    }
 

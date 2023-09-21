@@ -420,6 +420,7 @@ template<class Info> typename Info::CallbackFunction DacBase_T<Info>::sCallback 
 
 $(/DAC/declarations: // No declarations found)
 /**
+ * End DAC_Group
  * @}
  */
 } // End namespace USBDM

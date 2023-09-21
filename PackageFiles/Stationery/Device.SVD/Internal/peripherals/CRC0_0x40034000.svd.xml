@@ -28,6 +28,13 @@ Devices using this peripheral:
                <resetValue>0xFFFFFFFF</resetValue>
                <fields>
                   <field>
+                     <name>DATA</name>
+                     <?ignoreOverlap?>
+                     <description>Data value or seed</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>32</bitWidth>
+                  </field>
+                  <field>
                      <name>LL</name>
                      <description>Low Lower Byte</description>
                      <bitOffset>0</bitOffset>
@@ -155,6 +162,13 @@ Devices using this peripheral:
                <addressOffset>0x4</addressOffset>
                <resetValue>0x1021</resetValue>
                <fields>
+                  <field>
+                     <name>GPOLY</name>
+                     <?ignoreOverlap?>
+                     <description>Polynomial</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>32</bitWidth>
+                  </field>
                   <field>
                      <name>LOW</name>
                      <description>Low Polynomial Half-word</description>

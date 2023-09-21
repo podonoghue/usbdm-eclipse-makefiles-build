@@ -24,8 +24,6 @@ $(/MCG/Includes:// No extra includes found)
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-extern "C" uint32_t SystemCoreClock;
-extern "C" uint32_t SystemBusClock;
 
 namespace USBDM {
 
@@ -37,15 +35,28 @@ namespace USBDM {
 #define SIM_CLKDIV1_OUTDIV3(x) (0)
 #endif
 
+#if $(/MCG/enableClockChangeNotifications) // /MCG/enableClockChangeNotifications
 ClockChangeCallback *Mcg::clockChangeCallbackQueue = nullptr;
+#endif
 
 /**
  * Table of clock settings
  */
 const ClockInfo Mcg::clockInfo[] = {
+   // /MCG/McgClockInfoEntries
 $(/MCG/McgClockInfoEntries:!!!!!!!Not found!!!!!!!)
 };
+$(/MCG/clocks)
 
+/** Current clock mode (FEI out of reset) */
+McgClockMode Mcg::currentClockMode = McgClockMode_LIRC_2MHz;
+
+
+// /MCG/staticDefinitions
+$(/MCG/staticDefinitions: // No static declarations found) 
+#if $(/MCG/enablePeripheralSupport) // /MCG/enablePeripheralSupport
+
+#if 0
 /** MCGFFCLK - Fixed frequency clock (input to FLL) */
 volatile uint32_t SystemMcgFFClock;
 
@@ -57,6 +68,7 @@ volatile uint32_t SystemMcgFllClock;
 
 /** MCGPLLCLK - Output of PLL */
 volatile uint32_t SystemMcgPllClock;
+#endif
 
 /**
  *  Change SIM->CLKDIV1 value
@@ -67,12 +79,6 @@ static void setSysDividers(uint32_t simClkDiv1) {
    // Change CLKDIV1
    SIM->CLKDIV1 = simClkDiv1;
 }
-
-/** Callback for programmatically set handler */
-MCGCallbackFunction Mcg::callback = {unhandledCallback};
-
-/** Current clock mode (FEI out of reset) */
-McgClockMode Mcg::currentClockMode = McgClockMode_LIRC_2MHz;
 
 constexpr McgClockMode clockTransitionTable[4][4] = {
          /*  from  to =>   LIRC_2M,                  LIRC_8M,                  HIRC_48M,                  EXT,   */
@@ -247,25 +253,36 @@ void Mcg::SystemCoreClockUpdate(void) {
 //   ::SystemBusClock  = SystemBusClock;
 //   ::SystemCoreClock = SystemCoreClock;
 }
+#endif
 
 /**
- * Initialise MCG to default settings.
+ * Initialise MCG as part of startup sequence
  */
-void Mcg::defaultConfigure() {
+void Mcg::startupConfigure() {
 
 #if !defined(INITIAL_CLOCK_STATE)
 // Needed for use with a boot-loader that changes the clock
 #define INITIAL_CLOCK_STATE McgClockMode_LIRC_2MHz;
 #endif
 
+#if !$(/MCG/enablePeripheralSupport:false) // !/MCG/enablePeripheralSupport
+   // Minimal configuration: Only set clock dividers if clock is trimmed
+   SIM->CLKDIV1 = SimInfo::sim_clkdiv1;
+#endif
+
+#if $(/MCG/configurePeripheralInStartUp:false) // /MCG/configurePeripheralInStartUp
+   // Device resets into this clock mode
    currentClockMode = INITIAL_CLOCK_STATE;
 
    // Transition to desired clock mode
    clockTransition(clockInfo[ClockConfig_default]);
 
-   Sim::initRegs();
-
    SystemCoreClockUpdate();
+#endif
+
+#if $(/MCG/irqHandlingMethod:false) // /MCG/irqHandlingMethod
+   enableNvicInterrupts();
+#endif
 }
 
 } // end namespace USBDM
@@ -276,7 +293,11 @@ void Mcg::defaultConfigure() {
 extern "C"
 void clock_initialise(void) {
 
-$(/MCG/Initialisation:// No Initialisation found)
-   USBDM::Mcg::initialise();
+   // /MCG/ClockStartupBefore
+$(/MCG/ClockStartupBefore:// No /MCG/ClockStartupBefore found)
+   // /MCG/ClockStartup
+$(/MCG/ClockStartup:// No /MCG/ClockStartup found)
+   // /MCG/ClockStartupAfter
+$(/MCG/ClockStartupAfter:// No /MCG/ClockStartupAfter found)
 }
 

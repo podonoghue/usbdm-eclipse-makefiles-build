@@ -1,28 +1,80 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- vref_def.xml -->
-<!--
-Devices using this peripheral:
--->
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="VREF">
+<!-- vref_c.xml -->
 
-   <xi:include href="_default_instance.xml"/>
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Voltage Reference" >
+
+   <constant key="suppressInstance"         type="Boolean" value="false"         />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"          />
+   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="_enablePeripheral.xml"  />
+   <title />
+
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
+
+<!--
+    * Template substitutions
+    *
+    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
+    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
+    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
+    * %description[index]             Description from controlVar e.g. Compare Function Enable
+    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
+    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
+    * %params                         Formatted parameter list for function
+    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
+    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
+    * %enumClass[index]               As for %paramType
+    * %enumParam[index]               As for %paramName
+    * %valueExpression                Numeric variable value e.g. 0x3
+    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %variable[index]                Variable name from condition
+    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * %register[index]                Register associated with variable e.g. adc->APCTL1
+    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+-->
+
+   <constant key="disable_peripheral"  value = "&quot;vref->SC = 0;&quot;" type="String"  />
 
    <template><![CDATA[
       \t//! Pin number in Info table for VREF output if mapped to a pin
       \tstatic constexpr int outputPin  = 0;\n\n
    ]]></template>
 
-   <constant key="disable_peripheral"  value = "&quot;vref->SC = 0;&quot;" type="String"  />
-   <xi:include href="_mapPinsOption.xml"/>
+   <!-- ************* Class Declaration ****************** -->
+
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
+
+   <!-- ************* SC ****************** -->
 
    <binaryOption key="vref_sc_vrefen" condition="vref_sc_vrefen_present"
+      enabledBy="enablePeripheralSupport"
       enumStem="VrefEnable"
       description="Internal Voltage Reference enable"
-      toolTip="This controls the bandgap reference within the Voltage Reference module">
+      toolTip="Controls the bandgap reference within the Voltage Reference module">
       <choice value="0" name="Disabled" enum="Disabled" />
       <choice value="1" name="Enabled"  enum="Enabled"  isDefault="true" />
    </binaryOption>
+
+   <!-- ************* TRM ****************** -->
 
    <binaryOption key="vref_trm_chopen" condition="vref_trm_chopen_present"
       enabledBy="vref_sc_vrefen"
@@ -37,11 +89,21 @@ Devices using this peripheral:
       <choice value="1" name="Enabled"  enum="Enabled"  isDefault="true" />
    </binaryOption>
 
+   <intOption key="vref_trm_trim" condition="vref_trm_trim_present"
+      enabledBy="enablePeripheralSupport"
+      toolTip="Changes the resulting VREF by approximately ~0.5 mV for each step"
+      description="Trim bits"
+      typeName="int8_t"
+      value="31"
+      min="0"
+      max="63"
+      />
+
    <binaryOption key="vref_sc_regen" condition="vref_sc_regen_present"
       enabledBy="vref_sc_vrefen"
       enumStem="VrefReg"
       description="Regulator enable"
-      toolTip="This controls the internal 1.75 V regulator which produce a constant\n
+      toolTip="Controls the internal 1.75 V regulator which produce a constant\n
          internal voltage supply in order to reduce the sensitivity to external supply noise and variation\n
          If it is desired to keep the regulator enabled in very low power modes see PmcBandgapLowPowerEnable">
       <choice value="0" name="Disabled" enum="Disabled" />
@@ -52,55 +114,96 @@ Devices using this peripheral:
       enabledBy="vref_sc_vrefen"
       enumStem="VrefIcomp"
       description="Second order curvature compensation enable"
-      toolTip="This should be enabled to achieve the performance stated in the data sheet">
+      toolTip="Controls the second order curvature compensation\.n
+               This should be enabled to achieve the performance stated in the data sheet">
       <choice value="0" name="Disabled" enum="Disabled" />
       <choice value="1" name="Enabled"  enum="Enabled" isDefault="true" />
    </binaryOption>
 
-   <choiceOption key="vref_sc_mode_lv"
+   <choiceOption key="vref_sc_mode_lv" condition="vref_sc_mode_lv_present"
       enabledBy="vref_sc_vrefen"
       enumStem="VrefBuffer"
       description="Buffer Mode selection"
-      toolTip="This selects the buffer modes for the Voltage Reference module">
+      toolTip="Selects the buffer mode for the Voltage Reference module">
       <choice value="0" name="Bandgap on only, for stabilisation and startup" enum="Bandgap"    />
       <choice value="1" name="High power buffer mode enabled"                 enum="HighPower"  isDefault="true" />
       <choice value="2" name="Low-power buffer mode enabled"                  enum="LowPower"   />
    </choiceOption>
 
-<!--  ========== VREF Init class =============================== -->
+<!-- Graphic here -->
 
-   <template key="init_description" namespace="all" ><![CDATA[
+   <for keys="field:name"
+        values="
+      vref_trm_chopen:Chop;
+      vref_trm_trim:Trim;
+      vref_sc_vrefen:Enable;
+      vref_sc_regen:Regulator;
+      vref_sc_icompen:Compensastion;
+      vref_sc_mode_lv:BufferMode" >
+      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %defaultFieldExpression
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register&%mask);
+         \t}
+         \t\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== VREF Init class =============================== -->
+
+   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <![CDATA[
       \t/**
-      \t * Class used to do initialisation of the VREF
+      \t * Class used to do initialisation of the $(_Baseclass)
       \t *
-      \t * This class has a templated constructor that accepts various values:
+      \t * This class has a templated constructor that accepts various values.
       \t *
-      \t * @note This constructor may be used to create a const instance in ROM
+      \t * @note This constructor may be used to create a const instance in Flash
       \t *
       \t * Example:
       \t * @code
-      \t * static const Vref$(_instance)::Init vrefInit {
-      \t      VrefEnable_Enabled ,   // Internal Voltage Reference enable
-      \t      VrefChop_Enabled ,     // Chop oscillator enable
-      \t      VrefReg_Enabled ,      // Regulator enable
-      \t      VrefIcomp_Enabled ,    // Second order curvature compensation enable
-      \t      VrefBuffer_HighPower,  // Buffer Mode selection
+      \t * static const $(_Class)::Init $(_name)Init {
+      \t *
+      \t *   // Setup values
+      \t *   VrefEnable_Enabled ,   // Internal Voltage Reference enable
+      \t *   31,                    // Trim bits,
+      \t *   VrefChop_Enabled ,     // Chop oscillator enable
+      \t *   VrefReg_Enabled ,      // Regulator enable
+      \t *   VrefIcomp_Enabled ,    // Second order curvature compensation enable
+      \t *   VrefBuffer_HighPower,  // Buffer Mode selection
       \t * };
       \t *
-      \t * // Initialise VREF from values specified above
-      \t * Vref$(_instance)::configure(vrefInit)
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_name)Init)
       \t * @endcode
       \t */
-   ]]></template>
+   ]]>
+   </template>
 
-   <template namespace="usbdm" ><![CDATA[
-      class $(_Class)BasicInfo {
+   <template namespace="usbdm" discardRepeats="true" >
+   <![CDATA[
+      class $(_Baseclass)BasicInfo {
       \t
-      public:
-      \t
-   ]]></template>
+      public:\n
+   ]]>
+   </template>
 
-   <template namespace="usbdm"><![CDATA[
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <![CDATA[
       $(init_description)
       \tclass Init {
       \t
@@ -108,49 +211,74 @@ Devices using this peripheral:
       \t   /**
       \t    * Copy Constructor
       \t    */
-      \t   constexpr Init(const Init &other) = delete;
+      \t   constexpr Init(const Init &other) = default;
       \t
       \t   /**
       \t    * Default Constructor
       \t    */
       \t   constexpr Init() = default;
       \t\n
-   ]]></template>
+   ]]>
+   </template>
 
-<!--  Member variables -->
+<!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm"
-      variables="
-         vref_trm_chopen"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      variables="vref_trm_chopen,vref_trm_trim"
    ><![CDATA[
-      \t   ///  Voltage Reference Trim Register
+      \t   /// Trim Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
-      variables="
-         vref_sc_regen"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      variables="vref_sc_vrefen,vref_sc_regen,vref_sc_icompen,vref_sc_mode_lv"
    ><![CDATA[
-      \t   ///  Voltage Reference Status and Control Register
+      \t   /// Status and Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-<!--  Configure method -->
+<!--   Configure methods -->
 
-   <setTemplate  key="/VREF/InitMethod" namespace="all"  discardRepeats="true"
-      variables="vref_sc_regen, vref_trm_chopen"
-   ><![CDATA[
+   <setTemplate key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      variables="vref_sc_regen" >
+   <![CDATA[
       \t/**
-      \t * Configure VREF from values specified in init
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
       \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
       \t * @param init Class containing initialisation values
       \t */
       \tstatic void configure(const typename Info::Init &init) {
       \t
       \t   enable();
       \t
-      \t   %register1 = (%register1&~%mask1)|init.%registerName1;
-      \t   %register0 = init.%registerName0 & ~%mask0;
+      \t   uint8_t trm = init.trm;\n
+   ]]></setTemplate>
+   <if condition="vref_sc_regen&amp;&amp;vref_trm_chopen">
+      <setTemplate key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+         variables="vref_sc_regen, vref_trm_chopen"
+         linePadding="xxx"
+      ><![CDATA[
+         \t   if (init.%registerName0&%mask0) {
+         \t      // Chop must be enabled if regulator enabled
+         \t      %registerName1 |= %mask1;
+         \t   }\n
+      ]]></setTemplate>
+   </if>
+   <setTemplate key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      variables="vref_sc_regen" >
+   <![CDATA[
+      \t   vref->TRM = trm;
+      \t   %register0  = init.%registerName0 & ~%mask0;
       \t
       \t   // Regulator must be enabled >300ns after other settings
       \t   waitUS(1);
@@ -162,121 +290,22 @@ Devices using this peripheral:
       \t}\n\n
    ]]></setTemplate>
 
-   <setTemplate  key="/VREF/InitMethod" namespace="all"  discardRepeats="true"
-      variables="vref_sc_regen, vref_trm_chopen"
-   ><![CDATA[
-      \t/**
-      \t * Configure VREF with default settings
-      \t */
-      \tstatic void defaultConfigure() {
-      \t
-      \t   configure(Info::DefaultInitValue);
-      \t}\n\n
-   ]]></setTemplate>
-
-   <setTemplate key="/VREF/InitMethod" discardRepeats="true" namespace="all"
-      variables="
-         vref_sc_mode_lv,
-         vref_sc_regen,
-         vref_sc_icompen,
-         vref_trm_chopen
-         "
-   ><![CDATA[
-      \t/**
-      \t * Configure VREF from values specified
-      \t *
-      %paramDescription
-      \t */
-      \tstatic void configure(
-      %params) {\n\n
-      \t   enable();\n
-   ]]></setTemplate>
-   <setTemplate key="/VREF/InitMethod" discardRepeats="true" namespace="all"
-      condition="vref_sc_regen&amp;&amp;vref_trm_chopen"
-      variables="vref_sc_regen,vref_trm_chopen"
-   ><![CDATA[
-      \t
-      \t   if (%enumParam0) {
-      \t      // Chop must be enabled if regulator enabled
-      \t      %enumParam1 = %enumClass1_Enabled;
-      \t   }\n
-   ]]></setTemplate>
-   <setTemplate key="/VREF/InitMethod" discardRepeats="true" namespace="all"
-      variables="vref_trm_chopen"
-   ><![CDATA[
-      \t   %register = (%register&~%mask)|%enumParam0;\n
-   ]]></setTemplate>
-   <setTemplate key="/VREF/InitMethod" discardRepeats="true" namespace="all"
-      variables="
-         vref_sc_mode_lv,
-         vref_sc_icompen"
-   ><![CDATA[
-      \t   %register = %paramExpression;
-      \t\n
-   ]]></setTemplate>
-   <setTemplate key="/VREF/InitMethod" discardRepeats="true" namespace="all"
-      variables="
-         vref_sc_mode_lv,
-         vref_sc_regen,
-         vref_sc_icompen"
-   ><![CDATA[
-      \t   // Regulator must be enabled >300ns after other settings
-      \t   waitUS(1);
-      \t   %register = %paramExpression;
-      \t
-      \t   while ((vref->SC & VREF_SC_VREFST_MASK) == 0) {
-      \t      // Wait until stable
-      \t   }
-      \t}\n\n
-   ]]></setTemplate>
 
 <!--  Constructors -->
 
-   <setTemplate namespace="usbdm"
-      variables="vref_sc_regen"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %comments
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t\n
-   ]]></setTemplate>
-   <if condition="vref_sc_regen&amp;&amp;vref_trm_chopen">
-      <setTemplate namespace="usbdm"
-         variables="vref_sc_regen, vref_trm_chopen"
-         linePadding="xxx"
-      ><![CDATA[
-         \t      if (%enumParam0) {
-         \t         // Chop must be enabled as well
-         \t         %registerName1 |= %enumClass1_Enabled;
-         \t      }
-         \t\n
-      ]]></setTemplate>
-   </if>
-   <setTemplate namespace="usbdm"
-      variables="vref_sc_regen"
-      linePadding="xxx"
-   ><![CDATA[
-      \t      %registerName = (%registerName&~%mask) | %paramExpression;
-      \t   }
-      \t\n
-   ]]></setTemplate>
-
-   <for keys="r" values="
-         vref_trm_chopen;
+   <for keys="r"
+      values="
          vref_sc_vrefen;
+         vref_sc_regen;
          vref_sc_icompen;
-         vref_sc_mode_lv">
-      <setTemplate  namespace="usbdm" variables="%(r)"
-         linePadding="xxx"
-      ><![CDATA[
+         vref_sc_mode_lv;
+         vref_trm_chopen;
+         vref_trm_trim
+         ">
+      <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
          \t   /**
          \t    * Constructor for %description
          \t    *
@@ -294,7 +323,7 @@ Devices using this peripheral:
       ]]></setTemplate>
    </for>
 
-   <template namespace="usbdm" ><![CDATA[
+   <template  namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t};\n\n
    ]]></template>
 
@@ -304,19 +333,17 @@ Devices using this peripheral:
 
 <!--  Default Initialisation value -->
 
-   <initialValueTemplate
+   <initialValueTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
-         vref_trm_chopen,
          vref_sc_vrefen,
          vref_sc_regen,
          vref_sc_icompen,
-         vref_sc_mode_lv"
+         vref_sc_mode_lv,
+         vref_trm_chopen,
+         vref_trm_trim"
    ><![CDATA[
-      $(init_description)
-      \ttypedef $(_Class)BasicInfo::Init Init;
-      \t
       \t/**
       \t * Default initialisation value for Vref$(_instance)
       \t * This value is created from Configure.usbdmProject settings
@@ -340,7 +367,5 @@ Devices using this peripheral:
       <copy source="Project_Headers/vref.h"  target="Project_Headers/vref.h"  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <xi:include href="_clockOption.xml"/>
-
-   <signals/>
+   <signals enabledBy="enablePeripheralSupport" />
 </peripheralPage>

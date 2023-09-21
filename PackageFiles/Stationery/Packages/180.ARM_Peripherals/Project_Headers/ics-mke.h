@@ -69,9 +69,7 @@ public:
  *    Ics::initialise();
  * @endcode
  */
-class Ics {
-
-   using Info = IcsInfo;
+class Ics : public IcsInfo {
 
 private:
 #if $(/ICS/enableClockChangeNotifications:false)
@@ -142,6 +140,7 @@ $(/ICS/publicMethods: // No public methods found)
    static void disableNvicInterrupts() {
       NVIC_DisableIRQ(IcsInfo::irqNums[0]);
    }
+   
    /** Current clock mode (FEI out of reset) */
    static IcsClockMode currentClockMode;
 
@@ -194,17 +193,17 @@ $(/ICS/publicMethods: // No public methods found)
     *
     *  @param[in]  settingNumber Clock setting number
     */
-   static void configure(ClockConfig clockConfig=ClockConfig_default) {
-      clockTransition(clockInfo[clockConfig]);
+   static void configure(ClockConfig settingNumber=ClockConfig_default) {
+      clockTransition(clockInfo[settingNumber]);
    }
 
    /**
-    *   Finalise the ICS
+    *   Finalise the ICS 
     */
    static void finalise() {
       clockTransition(clockInfo[ClockConfig_default]);
    }
-   
+
 #endif
 
    /**

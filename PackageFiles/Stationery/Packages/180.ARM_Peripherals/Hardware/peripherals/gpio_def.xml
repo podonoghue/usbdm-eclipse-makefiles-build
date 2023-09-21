@@ -75,11 +75,10 @@
                    F   : 160;
                    G   : 192;
                    H   : 224;
-                   I   : 256"
-                    >
+                   I   : 256" >
 
       <for keys="i" dim="32">
-         <template key="/PORT/PinIndex" namespace="all"  discardRepeats="true" variables="/GPIO%(Name)/_present" codeGenCondition="enablePeripheralSupport"
+         <template key="/PORT/PinIndex" namespace="all" discardRepeats="true" variables="/GPIO%(Name)/_present"
          ><![CDATA[
             \tPT%(Name)%(i) = %(pinIndex)+%(i),\n
          ]]></template>
@@ -107,8 +106,7 @@
       \t      return 0;
       \t   }\n
    ]]></template>
-   <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
-
+   <for keys="Name" values="A;B;C;D;E;F;G;H;I" >
       <template key="/GPIO/AccessFunctions" namespace="all"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
          variables="/GPIO%(Name)/_present"
       ><![CDATA[
@@ -233,7 +231,8 @@
       \t *
       \t * @return true if handler installed
       \t */
-      \tstatic constexpr bool isHandlerInstalled(PinIndex pinIndex) {\n
+      \tstatic constexpr bool isHandlerInstalled(PinIndex pinIndex) {
+      \t   (void)pinIndex;\n
    ]]></template>
    <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
 

@@ -367,13 +367,13 @@
 
    <!-- ************* COMBINE ****************** -->
 
-    
+
    <category
-      name="Functions For Linked Channels" 
+      name="Functions For Linked Channels"
       toolTip="Configure the Fault control, Synchronization, Deadtime insertion, \n
-               Dual Edge Capture mode, Complementary, and Combine mode for each pair of channels" 
+               Dual Edge Capture mode, Complementary, and Combine mode for each pair of channels"
       description="Channels (0,1) (2,3) (4,5) (6,7)">
-      
+
       <for keys   =" num : pair"
            values =" 0   : 0 &amp; 1 ;
                      1   : 2 &amp; 3 ;
@@ -394,12 +394,12 @@
                Dual Edge Capture Mode enable,
                Dead-time Insertion enable,
                PWM synchronization enable,
-               Fault Control enable"                          
+               Fault Control enable"
             toolTip="Options controlling paired operation of channels" />
       </for>
-      
+
       <!-- ************* DEADTIME ****************** -->
-   
+
       <choiceOption key="ftm_deadtime_dtps" condition="ftm_deadtime_dtps_present"
          enabledBy="enablePeripheralSupport"
          enumStem="FtmDeadtimeDtps"
@@ -408,7 +408,7 @@
          <choice name="Divide by 4"   value="2" enum="DivideBy4"/>
          <choice name="Divide by 16"  value="3" enum="DivideBy16"/>
       </choiceOption >
-   
+
       <intOption key="ftm_deadtime_dtval" condition="ftm_deadtime_dtval_present"
          enabledBy="enablePeripheralSupport"
          enumType="uint8_t"
@@ -416,7 +416,7 @@
          description="Dead-time Value"
          toolTip="This tick value is scaled by ftm_deadtime_dtps"
       />
-   
+
       <intOption key="ftm_deadtime" condition="ftm_deadtime_dtval_present"
          ref="ftm_deadtime_dtval*((ftm_deadtime_dtps==0)?1:((ftm_deadtime_dtps==1)?4:16))"
          derived="true"
@@ -427,7 +427,7 @@
          description="Deadtime Value"
          toolTip="Deadtime in ticks"
       />
-   
+
    </category>
 
    <!-- ************* QUAD ****************** -->
@@ -532,10 +532,6 @@
 
    <!--  **************** Channels **************** -->
 
-   <!-- dialogue condition="1&gt;2">
-      <stringOption key="xxxx" value="123" />
-   </dialogue -->
-   
    <for keys="ch" dim="NumChannels">
       <title description="FTM Channel %(ch)" toolTip="" />
 
@@ -675,20 +671,24 @@
    ]]></initialValueTemplate>
 
    <category name="External Triggers" description="External Triggers">
-      <bitmaskOption key="ftm_exttrig_trig"   description="External Trigger Enable"
-         toolTip="Enables the generation of the trigger when the FTM counter \n
-          is equal to the channel CnV register"
-         value="0"
-         bitmask="0"
-         bitList="CH2TRIG,CH3TRIG,CH4TRIG,CH5TRIG,CH0TRIG,CH1TRIG,"
-         />
-      <binaryOption key="ftm_exttrig_inittrigen" description="Initialisation Trigger Enable"
+      <binaryOption key="ftm_exttrig_inittrigen" condition="ftm_exttrig_inittrigen_present"
+         enabledBy="enablePeripheralSupport" 
+         description="Initialisation Trigger Enable"
          enumStem="FtmInitTrig"
          toolTip="Enables the generation of the trigger when the FTM counter \n
           is equal to the CNTIN register">
          <choice value="0" name="Disabled" enum="Disabled" />
          <choice value="1" name="Enabled"  enum="Enabled" />
       </binaryOption>
+      <bitmaskOption key="ftm_exttrig_trig" condition="ftm_exttrig_inittrigen_present"
+         enabledBy="enablePeripheralSupport&amp;&amp;ftm_exttrig_inittrigen"   
+         description="External Trigger Enable"
+         toolTip="Enables the generation of the trigger when the FTM counter \n
+          is equal to the channel CnV register"
+         value="0"
+         bitmask="0"
+         bitList="CH2TRIG,CH3TRIG,CH4TRIG,CH5TRIG,CH0TRIG,CH1TRIG,"
+         />
    </category>
    <template><![CDATA[
       \t/// Default value for EXTTRIG) register
@@ -710,6 +710,9 @@
       \t */
       \tstatic void configure(
       %params) {
+      \t
+      \t   // Enable clock to peripheral
+      \t   enable();
       \t
       \t   // Disable timer to change settings
       \t   %register=0;
@@ -2049,6 +2052,9 @@ $(init_description)
       \t */
       \tstatic ErrorCode configure(const typename Info::Init &init) {
       \t
+      \t   // Enable peripheral clock and map pins
+      \t   enable();
+      \t
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      Info::setCallbacks(init);
       \t   }
@@ -2900,7 +2906,7 @@ $(quad_init_description)
       <copy source="Snippets/neopixel-example.cpp"        target="Snippets/neopixel-example.cpp"        overwrite="true" derived="true" />
    </projectActionList>
 
-   <template key="/$(_BASENAME)/declarations" namespace="all"
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
    /**
     * Class representing $(_NAME)

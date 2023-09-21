@@ -220,7 +220,7 @@ public:
    virtual ~TpmBase_T() = default;
 
    /** Maximum counter value in ticks */
-   static constexpr Ticks MaximumPeriodInTicks = TPM_MOD_MOD_MASK;
+   static constexpr Ticks MaximumPeriodInTicks = Ticks(TPM_MOD_MOD_MASK);
 
    /** Hardware instance pointer */
    static constexpr HardwarePtr<TPM_Type> tpm = Info::baseAddress;

@@ -81,7 +81,7 @@
       toolTip="Selects the clock source for the module">
       <choice value="0" name="Disabled"         ref="disabled"          code="0"                      enum="Disabled"        />
       <choice value="1" name="System TPM Clock" ref="system_tpm_clock"  code="SimInfo::getTpmClock()" enum="SystemTpmClock"  isDefault="true"  />
-      <choice value="2" name="External clock"   ref="/SIM/Tpm$(_instance)ExternalClkin"  
+      <choice value="2" name="External clock"   ref="/SIM/Tpm$(_instance)ExternalClkin"
          code="SimInfo::getTpm$(_instance)ExternalClockFrequency()"       enum="ExternalClock"   />
    </choiceOption>
 
@@ -927,7 +927,7 @@
          \t
          \t   if (tpm->SC&TPM_SC_CPWMS_MASK) {
          \t      // In CPWM the pulse width is doubled
-         \t      highTime = (highTime+1_ticks)/2U;
+         \t      highTime = Ticks((highTime+1_ticks)/2U);
          \t   }
          #ifdef DEBUG_BUILD
          \t   if ((unsigned)highTime > tpm->MOD) {
@@ -946,7 +946,7 @@
          \t * @return Absolute time of last event in ticks i.e. value from timer event register
          \t */
          \t%(static)Ticks getEventTime(int channel)%(const) {
-         \t   return (unsigned)(tpm->CONTROLS[channel].CnV);
+         \t   return Ticks(tpm->CONTROLS[channel].CnV);
          \t}
          \t
          \t/**
@@ -2011,7 +2011,7 @@ $(channel_init_description)
       <copy source="Snippets/tpm-oc-init-example.cpp" target="Snippets/tpm-oc-init-example.cpp" overwrite="true" derived="true"/>
    </projectActionList>
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" 
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       /**
        * Class representing $(_NAME)

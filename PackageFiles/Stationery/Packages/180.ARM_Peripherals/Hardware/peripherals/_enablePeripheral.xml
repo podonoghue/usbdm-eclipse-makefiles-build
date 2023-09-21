@@ -30,65 +30,67 @@
 
    <title description="General Settings" toolTip="" />
 
-   <if condition="&quot;$(_BASENAME)&quot;==&quot;$(_NAME)&quot;">
-      <!--
-         Since BASENAME=NAME, there is only a soingle instance so create shared/common option:
-             /$(_BASENAME)/enablePeripheralSupport == /$(_NAME)/enablePeripheralSupport == enablePeripheralSupport
-      -->
+   <if condition="!enablePeripheralSupport" >
+      <if condition="&quot;$(_BASENAME)&quot;==&quot;$(_NAME)&quot;">
+         <!--
+            Since BASENAME=NAME, there is only a soingle instance so create shared/common option:
+                /$(_BASENAME)/enablePeripheralSupport == /$(_NAME)/enablePeripheralSupport == enablePeripheralSupport
+         -->
 
-      <!-- Enable for this and all instances of peripheral -->
-      <binaryOption key="/$(_BASENAME)/enablePeripheralSupport"
-         modify="true"
-         description="Enable peripheral support (common)"
-         toolTip="Even if disabled, some code may still be generated but will \n
-                  be removed by linker if not used">
-         <choice value="false" name="Minimal code for $(_NAME)"   isDefault="!@isGeneratedByDefault" />
-         <choice value="true"  name="Generate code for $(_NAME)"  isDefault="@isGeneratedByDefault" />
-      </binaryOption>
-   <else/>
-      <!--
-         Create shared option /$(_BASENAME)/enablePeripheralSupport along with
-         individual option    /$(_NAME)/enablePeripheralSupport == enablePeripheralSupport
-      -->
-      <!-- Enable for this instance of this peripheral -->
-      <binaryOption key="enablePeripheralSupport"
-         description="Enable peripheral support (individual)"
-         toolTip="Even if disabled, some code may still be generated but will \n
-                  be removed by linker if not used">
-         <choice value="false" name="Minimal code for $(_NAME)"   isDefault="!@isGeneratedByDefault" />
-         <choice value="true"  name="Generate code for $(_NAME)"  isDefault="@isGeneratedByDefault" />
-      </binaryOption>
-
-      <if condition="=(&quot;$(_instance)&quot;==&quot;0&quot;)||(&quot;$(_instance)&quot;==&quot;A&quot;)">
-         <!-- Generate once only -->
-
-         <!-- Construct equation to check if any instance is enabled -->
-         <equation key="_enable" value="=&quot;false&quot;" />
-
-         <for keys="instance" values="=_instanceList">
-            <if condition="/%(instance)/_present">
-               <!-- stringOption key="$(BASENAME)/xxx_%(instance)" value="%(instance)" / -->
-               <equation  key="_enable" value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/enablePeripheralSupport&quot;"/>
-            </if>
-         </for>
-         <!-- stringOption key="$(BASENAME)/enable" value="=_enable" modify="true" / -->
-
-         <!-- Enable for shared code needed by all instances of peripheral -->
+         <!-- Enable for this and all instances of peripheral -->
          <binaryOption key="/$(_BASENAME)/enablePeripheralSupport"
-            ref="=_enable"
-            hidden="true"
-            locked="true"
-            derived="true">
-            <choice value="false" name="Minimal code"  />
-            <choice value="true"  name="All code"      />
+            modify="true"
+            description="Enable peripheral support (common)"
+            toolTip="Even if disabled, some code may still be generated but will \n
+                     be removed by linker if not used">
+            <choice value="false" name="Minimal code for $(_NAME)"   isDefault="!@isGeneratedByDefault" />
+            <choice value="true"  name="Generate code for $(_NAME)"  isDefault="@isGeneratedByDefault" />
+         </binaryOption>
+      <else/>
+         <!--
+            Create shared option /$(_BASENAME)/enablePeripheralSupport along with
+            individual option    /$(_NAME)/enablePeripheralSupport == enablePeripheralSupport
+         -->
+         <!-- Enable for this instance of this peripheral -->
+         <binaryOption key="enablePeripheralSupport"
+            description="Enable peripheral support (individual)"
+            toolTip="Even if disabled, some code may still be generated but will \n
+                     be removed by linker if not used">
+            <choice value="false" name="Minimal code for $(_NAME)"   isDefault="!@isGeneratedByDefault" />
+            <choice value="true"  name="Generate code for $(_NAME)"  isDefault="@isGeneratedByDefault" />
          </binaryOption>
 
-      </if>
+         <if condition="=(&quot;$(_instance)&quot;==&quot;0&quot;)||(&quot;$(_instance)&quot;==&quot;A&quot;)">
+            <!-- Generate once only -->
 
+            <!-- Construct equation to check if any instance is enabled -->
+            <equation key="_enable" value="=&quot;false&quot;" />
+
+            <for keys="instance" values="=_instanceList">
+               <if condition="/%(instance)/_present">
+                  <!-- stringOption key="$(BASENAME)/xxx_%(instance)" value="%(instance)" / -->
+                  <equation  key="_enable" value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/enablePeripheralSupport&quot;"/>
+               </if>
+            </for>
+            <!-- stringOption key="$(BASENAME)/enable" value="=_enable" modify="true" / -->
+
+            <!-- Enable for shared code needed by all instances of peripheral -->
+            <binaryOption key="/$(_BASENAME)/enablePeripheralSupport"
+               ref="=_enable"
+               hidden="true"
+               locked="true"
+               derived="true">
+               <choice value="false" name="Minimal code"  />
+               <choice value="true"  name="All code"      />
+            </binaryOption>
+
+         </if>
+
+      </if>
    </if>
 
    <!-- Enable for generation of getters and setters -->
-   <binaryOption key="enableGettersAndSetters"
+   <binaryOption key="enableGettersAndSetters" condition="!enableGettersAndSetters"
       enabledBy="enablePeripheralSupport"
       description="Enable Getter and Setter methods"
       toolTip="Even if disabled, some code may still be generated">
@@ -115,13 +117,14 @@
    ]]></template >
 
    <!-- Pin mapping and enables -->
+
    <binaryOption key="mapPinsOnEnable" condition="/PCR/mux_present"
       enabledBy="enablePeripheralSupport"
       description="Map pins when peripheral is configured"
       toolTip="Map all allocated pins on a peripheral when the\n
                peripheral is enabled by configure() method etc">
-      <choice value="false" name="Don't map"  />
-      <choice value="true"  name="Map when configured"  isDefault="true"/>
+      <choice value="false" name="Don't map pins"  />
+      <choice value="true"  name="Map pins when configured"  isDefault="true"/>
    </binaryOption>
 
    <!-- Template is added to class within pin_mapping.h -->
@@ -132,7 +135,7 @@
 
    <!-- Template is added to peripheral classes -->
    <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" condition="/PCR/mux_present" ><![CDATA[
-      // Template _mapPinsOption_on.xml
+      // Template /$(_BASENAME)/classInfo
 
       \t/**
       \t * Configures all mapped pins associated with $(_BASENAME)
@@ -184,15 +187,17 @@
       \t */
       \tstatic void disable() {
       \t   $(disable_interrupts_code: )
-      \t   $(disable_peripheral: )\n\n
+      \t   $(disable_peripheral: )\n
    ]]></template>
    <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" condition="/PCR/mux_present" ><![CDATA[
-      \t   disableAllPins();\n\n
+      \t   disableAllPins();
+      \t\n
    ]]></template>
    <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" ><![CDATA[
       \t   Info::disableClock();
       \t}
-      // End Template _mapPinsOption_on.xml\n
+      \t// End Template /$(_BASENAME)/classInfo
+      \t\n
    ]]></template>
 
 <!-- INTERRUPTS -->

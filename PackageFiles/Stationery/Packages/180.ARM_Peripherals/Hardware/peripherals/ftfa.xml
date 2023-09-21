@@ -2,9 +2,57 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- ftfl.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module" >
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Interface" >
 
-   <xi:include href="_default_instance.xml"/>
+   <stringOption key="irq_pattern"        locked="true" value="^FTF_(Command|ReadCollision)$" hidden="true" />
+   <stringOption key="irq_ClassHandler"   locked="true" value="Flash::$1_irqHandler" hidden="true" />
+
+   <constant key="suppressInstance"         type="Boolean" value="false"         />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
+   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="_enablePeripheral.xml"  />
+   <title description="------------------------------------------" />
+
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
+
+<!--
+    * Template substitutions
+    *
+    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
+    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
+    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
+    * %description[index]             Description from controlVar e.g. Compare Function Enable
+    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
+    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
+    * %params                         Formatted parameter list for function
+    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
+    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
+    * %enumClass[index]               As for %paramType
+    * %enumParam[index]               As for %paramName
+    * %valueExpression                Numeric variable value e.g. 0x3
+    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %variable[index]                Variable name from condition
+    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * %register[index]                Register associated with variable e.g. adc->APCTL1
+    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+-->
 
    <stringOption name="FlashType" key="/Flash/FlashType" value="ftfa" derived="true" locked="true" />
 
@@ -15,13 +63,6 @@
       description="Phrase size for program flash (minimum program element)"/>
 
 
-   <projectActionList id = "flash_files" >
-      <copy source="Project_Headers/flash.h"                 target="Project_Headers/flash.h"                 overwrite="true"  derived="true" />
-      <copy source="Project_Headers/ftfa.h"                  target="Project_Headers/ftfa.h"                  overwrite="true"  derived="true" />
-      <copy source="Sources/ftfa.cpp"                        target="Sources/ftfa.cpp"                        overwrite="true"  derived="true" />
-      <copy source="Snippets/flash-programming-example.cpp"  target="Snippets/flash-programming-example.cpp"  overwrite="true"  derived="true" />
-   </projectActionList>
-
    <template key="FlashConfig" namespace="all"> <![CDATA[
       \t// Sector size for program flash (minimum erase element)
       \tstatic constexpr unsigned programFlashSectorSize = $(pflash_sector_size);
@@ -31,12 +72,27 @@
    ]]></template>
 
 
-   <stringOption key="irq_pattern"        locked="true" value="^FTF_(Command|ReadCollision)$" hidden="true" />
-   <stringOption key="irq_ClassHandler"   locked="true" value="Flash::$1_irqHandler" hidden="true" />
-   <xi:include href="_irqOptionSubstituted.xml"/>
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
+   </validate>
 
-   <xi:include href="_clockOption.xml"/>
+   <projectActionList id = "flash_files" >
+      <copy source="Project_Headers/flash.h"                 target="Project_Headers/flash.h"                 overwrite="true"  derived="true" />
+      <copy source="Project_Headers/ftfa.h"                  target="Project_Headers/ftfa.h"                  overwrite="true"  derived="true" />
+      <copy source="Sources/ftfa.cpp"                        target="Sources/ftfa.cpp"                        overwrite="true"  derived="true" />
+      <copy source="Snippets/flash-programming-example.cpp"  target="Snippets/flash-programming-example.cpp"  overwrite="true"  derived="true" />
+   </projectActionList>
 
-   <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator"/>
+   <!-- ************* Startup ****************** -->
+
+   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
 
 </peripheralPage>

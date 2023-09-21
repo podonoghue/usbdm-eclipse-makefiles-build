@@ -5,41 +5,39 @@
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
 <!--
-      Predefined symbols generated for current peripheral
-      $(_instance)   FTM0 => 0
-      $(_Baseclass) FTM0 => Ftm
-      $(_Class)      FTM0 => Ftm0
-      $(_BASENAME)   FTM0 => FTM
-      $(_NAME)       FTM0 => FTM0
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
 
-      Template Rules based on attributes  info|usbdm|class|all)  "info"
+   Template Rules based on attributes  info|usbdm|class|all)  "info"
 
-      - namespace=info (default if blank)
-        Placed in Info class in pin_mapping.h
+   - namespace="info" (default if blank)
+     Placed in Info class in pin_mapping.h
 
-      - namespace="usbdm"
-        Placed before Info class in pin_mapping.h
+   - namespace="usbdm"
+     Placed before Info class in pin_mapping.h i.e. in USBDM namespace
 
-      - namespace="all" key="keyValue"
-        Substituted anywhere for $(keyValue)
-        key is
+   - namespace="all" key="keyValue"
+     Substituted anywhere for $(keyValue)
 
-      - dim="expr"
-        Allow subscripted template
+   Constants that affect this inclusion
 
-      Constants that affect this inclusion
+   - Code to disable interrupts (has default of 'disableNvicInterrupts();')
+        <constant name = "disable_interrupts_code" derived = "true" value = "XXXXXX"  />
 
-      - Code to disable interrupts (has default of 'disableNvicInterrupts();')
-           <constant name = "disable_interrupts_code" derived = "true" value = "XXXXXX"  />
+   - Code to disable peripheral (has default of ' ')
+        <constant name = "disable_peripheral"      derived = "true" value = "YYYYYY"  />
 
-      - Code to disable peripheral (has default of ' ')
-           <constant name = "disable_peripheral"      derived = "true" value = "YYYYYY"  />
+   - Code to enable clock (has default of 'Info::enableClock();')
+        <constant name = "enable_clock"            derived = "true" value = "YYYYYY"  />
 
-      - Code to enable clock (has default of 'Info::enableClock();')
-           <constant name = "enable_clock"            derived = "true" value = "YYYYYY"  />
-
-      - Code to disable clock (has default of 'Info::disableClock();')
-           <constant name = "disable_clock"           derived = "true" value = "YYYYYY"  />
+   - Code to disable clock (has default of 'Info::disableClock();')
+        <constant name = "disable_clock"           derived = "true" value = "YYYYYY"  />
 
    <constant name = "disable_interrupts_code" derived = "true" value = "XXXXXX"  />
    <constant name = "disable_peripheral"      derived = "true" value = "YYYYYY"  />
@@ -48,19 +46,14 @@
 
  -->
 
-   <stringOption
-      key="Pin Mapping"
-      value="------- Pin Mapping -------"
-      description="Pin Mapping"
-      locked="true"
-      />
+   <title description="General Settings" />
 
    <binaryOption key="mapPinsOnEnable" condition="/PCR/mux_present"
       description="Map pins when peripheral is configured"
       toolTip="Map all allocated pins on a peripheral when the\n
                peripheral is enabled by configure() method etc">
-      <choice value="false" name="Don't map"  />
-      <choice value="true"  name="Map when configured"  isDefault="true"/>
+      <choice value="false" name="Don't map pins"  />
+      <choice value="true"  name="Map pins when configured"  isDefault="true"/>
    </binaryOption>
 
    <!-- Template is added to class within pin_mapping.h -->
@@ -71,7 +64,7 @@
 
    <!-- Template is added to peripheral classes -->
    <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" condition="/PCR/mux_present" ><![CDATA[
-      // Template _mapPinsOption_on.xml
+      // Template /$(_BASENAME)/classInfo
 
       \t/**
       \t * Configures all mapped pins associated with $(_BASENAME)
@@ -100,7 +93,7 @@
       \t      Info::clearPCRs();
       \t   }
       \t}
-      \t
+      \t\n
    ]]></template>
 
    <!-- Template is added to peripheral classes -->

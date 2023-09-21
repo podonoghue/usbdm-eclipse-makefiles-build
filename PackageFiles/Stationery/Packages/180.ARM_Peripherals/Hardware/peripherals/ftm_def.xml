@@ -461,20 +461,24 @@
    ]]></initialValueTemplate>
 
    <category name="External Triggers" description="External Triggers">
-      <bitmaskOption key="ftm_exttrig_trig"   description="External Trigger Enable"
-         toolTip="Enables the generation of the trigger when the FTM counter \n
-          is equal to the channel CnV register"
-         value="0"
-         bitmask="0"
-         bitList="CH2TRIG,CH3TRIG,CH4TRIG,CH5TRIG,CH0TRIG,CH1TRIG,"
-         />
-      <binaryOption key="ftm_exttrig_inittrigen" description="Initialisation Trigger Enable"
+      <binaryOption key="ftm_exttrig_inittrigen" condition="ftm_exttrig_inittrigen_present"
+         enabledBy="enablePeripheralSupport"
+         description="Initialisation Trigger Enable"
          enumStem="FtmInitTrig"
          toolTip="Enables the generation of the trigger when the FTM counter \n
           is equal to the CNTIN register">
          <choice value="0" name="Disabled" enum="Disabled" />
          <choice value="1" name="Enabled"  enum="Enabled" />
       </binaryOption>
+      <bitmaskOption key="ftm_exttrig_trig" condition="ftm_exttrig_inittrigen_present"
+         enabledBy="enablePeripheralSupport&amp;&amp;ftm_exttrig_inittrigen"
+         description="External Trigger Enable"
+         toolTip="Enables the generation of the trigger when the FTM counter \n
+          is equal to the channel CnV register"
+         value="0"
+         bitmask="0"
+         bitList="CH2TRIG,CH3TRIG,CH4TRIG,CH5TRIG,CH0TRIG,CH1TRIG,"
+         />
    </category>
    <template><![CDATA[
       \t/// Default value for EXTTRIG) register
@@ -1092,9 +1096,9 @@
       <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
          #ifdef DEBUG_BUILD
          \t   static_assert((inputNum<Info::InfoFAULT::numSignals), "FtmBase_T: Illegal fault channel");
-         \t   static_assert((inputNum>=Info::InfoFAULT::numSignals)||(Info::InfoFAULT::info[inputNum].gpioBit != UNMAPPED_PCR), "FtmBase_T: Fault signal is not mapped to a pin - Modify Configure.usbdm");
-         \t   static_assert((inputNum>=Info::InfoFAULT::numSignals)||(Info::InfoFAULT::info[inputNum].gpioBit != INVALID_PCR),  "FtmBase_T: Non-existent signal used for fault input");
-         \t   static_assert((inputNum>=Info::InfoFAULT::numSignals)||(Info::InfoFAULT::info[inputNum].gpioBit == UNMAPPED_PCR)||(Info::InfoFAULT::info[inputNum].gpioBit == INVALID_PCR)||(Info::InfoFAULT::info[inputNum].gpioBit >= 0), "Pcr_T: Illegal signal used for fault");
+         \t   static_assert((inputNum>=Info::InfoFAULT::numSignals)||(Info::InfoFAULT::info[inputNum].pinIndex != pinIndex::UNMAPPED_PCR), "FtmBase_T: Fault signal is not mapped to a pin - Modify Configure.usbdm");
+         \t   static_assert((inputNum>=Info::InfoFAULT::numSignals)||(Info::InfoFAULT::info[inputNum].pinIndex != pinIndex::INVALID_PCR),  "FtmBase_T: Non-existent signal used for fault input");
+         \t   static_assert((inputNum>=Info::InfoFAULT::numSignals)||(Info::InfoFAULT::info[inputNum].pinIndex == pinIndex::UNMAPPED_PCR)||(Info::InfoFAULT::info[inputNum].gpioBit == INVALID_PCR)||(Info::InfoFAULT::info[inputNum].gpioBit >= 0), "Pcr_T: Illegal signal used for fault");
          #endif
          \t
          \t   PcrTable_T<typename Info::InfoFAULT, inputNum>::setPCR();\n
@@ -2702,7 +2706,7 @@ $(quad_init_description)
       <copy source="Snippets/neopixel-example.cpp"        target="Snippets/neopixel-example.cpp"        overwrite="true" derived="true" />
    </projectActionList>
 
-   <template key="/$(_BASENAME)/declarations" namespace="all"
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
    /**
     * Class representing $(_NAME)

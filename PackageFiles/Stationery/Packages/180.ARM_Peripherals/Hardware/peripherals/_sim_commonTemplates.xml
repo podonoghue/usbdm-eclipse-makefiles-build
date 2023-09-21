@@ -258,7 +258,7 @@
       \tstatic constexpr uint32_t rtc_clkin_clock = $(rtc_clkin_clock);  \n\n
    ]]></template>
 
-   <clockCodeTemplate variable="sim_sopt1_osc32ksel"
+   <clockCodeTemplate variable="sim_sopt1_osc32ksel"  codeGenCondition="enableGettersAndSetters"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -296,7 +296,7 @@
       \t}\n\n
    ]]></template>
 
-   <clockCodeTemplate variable="sim_sopt1_osc32kout"
+   <clockCodeTemplate variable="sim_sopt1_osc32kout" codeGenCondition="enableGettersAndSetters"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -308,7 +308,7 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
-   <clockCodeTemplate variable="sim_sopt1_usbpower"
+   <clockCodeTemplate variable="sim_sopt1_usbpower" codeGenCondition="enableGettersAndSetters"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -333,7 +333,7 @@
                 sim_sopt2_ptd7pad         : PortDPad;
                 sim_sopt2_rmiisrc         : Rmiiclock
         ">
-      <clockCodeTemplate variable="%(var)"
+      <clockCodeTemplate variable="%(var)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -467,12 +467,12 @@
 <!-- ========== SIM BasicInfo class - Start =============================== -->
 
    <template namespace="usbdm" ><![CDATA[
-      class $(_Class)BasicInfo {
+      class $(_Baseclass)BasicInfo {
       \t
       public:\n
    ]]></template>
 
-<!-- ========== SOPT2 ClockInit class =============================== -->
+<!-- ========== SOPT2 ClockSourceInit class =============================== -->
 
    <template key="clockInit_description" namespace="all" ><![CDATA[
       \t/**
@@ -484,7 +484,7 @@
       \t *
       \t * Generic Example: (see Sim::DefaultSopt2Values for device specific example)
       \t * @code
-      \t * static const ClockInit clockInit {
+      \t * static const ClockSourceInit clockSourceInit {
       \t *    SimUsbFullSpeedClockSource_McgPClk, // USB Clock - Peripheral clock (MCGPCLK)
       \t *    SimTpmClockSource_McgPClk,          // TPM Clock source - MCGPCLK (HIRC=IRC48M) Clock
       \t *    SimFlexioClockSource_McgPClk,       // FLEXIO Clock select - MCGPCLK (HIRC=IRC48M) Clock
@@ -498,7 +498,7 @@
       \t * };
       \t *
       \t * // Initialise SIM Clock control from values specified above
-      \t * Sim::configure(clockInit);
+      \t * Sim::configure(clockSourceInit);
       \t * @endcode
       \t */
    ]]></template>
@@ -517,7 +517,7 @@
          sim_sopt2_ptd7pad"
    ><![CDATA[
 $(clockInit_description)
-      \tclass ClockInit {
+      \tclass ClockSourceInit {
       \t
       \tpublic:
       \t
@@ -527,12 +527,12 @@ $(clockInit_description)
       \t   /**
       \t    * Copy Constructor
       \t    */
-      \t   constexpr ClockInit(const ClockInit &other) = default;
+      \t   constexpr ClockSourceInit(const ClockSourceInit &other) = default;
       \t
       \t   /**
       \t    * Default Constructor
       \t    */
-      \t   constexpr ClockInit() = default;
+      \t   constexpr ClockSourceInit() = default;
       \t
    ]]></initialValueTemplate>
 
@@ -550,13 +550,11 @@ $(clockInit_description)
          sim_sopt2_ptd7pad"
    ><![CDATA[
 $(clockInit_description)
-      \ttypedef SimBasicInfo::ClockInit ClockInit;
-      \t
       \t/**
       \t * Configure SIM Clock control from values specified in constructor.
       \t */
-      \tstatic void configure(const ClockInit &clockInit) {\n
-      \t   %register = clockInit.%registerName;
+      \tstatic void configure(const ClockSourceInit &clockSourceInit) {\n
+      \t   %register = clockSourceInit.%registerName;
       \t}\n\n
    ]]></initialValueTemplate>
 
@@ -591,7 +589,7 @@ $(clockInit_description)
          %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr ClockInit(%params, Types... rest) : ClockInit(rest...) {
+         \t   constexpr ClockSourceInit(%params, Types... rest) : ClockSourceInit(rest...) {
          \t
          \t      %registerName |= %paramExpression;
          \t   }
@@ -616,7 +614,7 @@ $(clockInit_description)
             %paramDescription
             \t    */
             \t   template <typename... Types>
-            \t   constexpr ClockInit(%params, Types... rest) : ClockInit(rest...) {
+            \t   constexpr ClockSourceInit(%params, Types... rest) : ClockSourceInit(rest...) {
             \t
             \t      %registerName |= %paramExpression;
             \t   }
@@ -638,15 +636,15 @@ $(clockInit_description)
          sim_sopt2_usbregen,
          sim_sopt2_ptd7pad"
    ><![CDATA[
-      \t}; // class ClockInit \n\n
+      \t}; // class ClockSourceInit \n\n
    ]]></initialValueTemplate>
 
    <template  ><![CDATA[
       \t/**
-      \t * Default value for Sim::ClockInit
+      \t * Default value for Sim::ClockSourceInit
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr ClockInit DefaultSopt2Values[] = {\n
+      \tstatic constexpr ClockSourceInit DefaultSopt2Values[] = {\n
    ]]></template>
 
    <for keys="n" dim="/SIM/numberOfClockSettings" >
@@ -705,7 +703,7 @@ $(clockInit_description)
 <!-- ========== SOPT4 =============================== -->
    <for keys="ftm" values="0;1;2;3">
       <for keys="flt" values="0;1;2;3">
-         <clockCodeTemplate variable="sim_sopt4_ftm%(ftm)flt%(flt)"
+         <clockCodeTemplate variable="sim_sopt4_ftm%(ftm)flt%(flt)" codeGenCondition="enableGettersAndSetters"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -721,7 +719,7 @@ $(clockInit_description)
 
    <for keys="ftm" values="0;1;2;3">
       <for keys="ch" values="0;1;2;3">
-         <clockCodeTemplate variable="sim_sopt4_ftm%(ftm)ch%(ch)src"
+         <clockCodeTemplate variable="sim_sopt4_ftm%(ftm)ch%(ch)src" codeGenCondition="enableGettersAndSetters"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -736,7 +734,7 @@ $(clockInit_description)
    </for>
 
    <for keys="ftm" values="0;1;2;3">
-      <clockCodeTemplate variable="sim_sopt4_ftm%(ftm)clksel"
+      <clockCodeTemplate variable="sim_sopt4_ftm%(ftm)clksel" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -751,7 +749,7 @@ $(clockInit_description)
 
    <for keys="ftm" values="0;1;2;3">
       <for keys="trg" values="0;1;2;3">
-         <clockCodeTemplate variable="sim_sopt4_ftm%(ftm)trg%(trg)src"
+         <clockCodeTemplate variable="sim_sopt4_ftm%(ftm)trg%(trg)src" codeGenCondition="enableGettersAndSetters"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -766,7 +764,7 @@ $(clockInit_description)
    </for>
 
    <for keys="tpm" values="0;1;2;3">
-      <clockCodeTemplate variable="sim_sopt4_tpm%(tpm)clksel"
+      <clockCodeTemplate variable="sim_sopt4_tpm%(tpm)clksel" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -784,7 +782,7 @@ $(clockInit_description)
 
     <for keys="tpm" values="0;1;2;3">
       <for keys="ch" values="0;1;2;3">
-         <clockCodeTemplate variable="sim_sopt4_tpm%(tpm)ch%(ch)src"
+         <clockCodeTemplate variable="sim_sopt4_tpm%(tpm)ch%(ch)src" codeGenCondition="enableGettersAndSetters"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -863,9 +861,6 @@ $(%(name)Init_description)
             variables="sim_sopt5_%(name)ode,sim_sopt5_%(name)txsrc,sim_sopt5_%(name)rxsrc"
             linePadding="xxx"
          ><![CDATA[
-$(%(name)Init_description)
-            \ttypedef SimBasicInfo::%(Name)Init %(Name)Init;
-            \t
             \t/**
             \t * Configure %(Name) signals from values specified in constructor.
             \t */
@@ -901,7 +896,7 @@ $(%(name)Init_description)
             \t}; // class %(Name)Init \n\n
          ]]></setTemplate>
 
-         <setTemplate variables="sim_sopt5_%(name)ode,sim_sopt5_%(name)txsrc,sim_sopt5_%(name)rxsrc"
+         <setTemplate variables="sim_sopt5_%(name)ode,sim_sopt5_%(name)txsrc,sim_sopt5_%(name)rxsrc" codeGenCondition="enableGettersAndSetters"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -914,7 +909,7 @@ $(%(name)Init_description)
             \t}\n\n
          ]]></setTemplate>
 
-         <clockCodeTemplate variable="sim_sopt5_%(name)ode"
+         <clockCodeTemplate variable="sim_sopt5_%(name)ode" codeGenCondition="enableGettersAndSetters"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -926,7 +921,7 @@ $(%(name)Init_description)
             \t}\n\n
          ]]></clockCodeTemplate>
 
-         <clockCodeTemplate variable="sim_sopt5_%(name)rxsrc"
+         <clockCodeTemplate variable="sim_sopt5_%(name)rxsrc" codeGenCondition="enableGettersAndSetters"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -938,7 +933,7 @@ $(%(name)Init_description)
             \t}\n\n
          ]]></clockCodeTemplate>
 
-         <clockCodeTemplate variable="sim_sopt5_%(name)txsrc"
+         <clockCodeTemplate variable="sim_sopt5_%(name)txsrc" codeGenCondition="enableGettersAndSetters"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -1046,9 +1041,6 @@ $(AdcInit_description)
          sim_sopt7_adc1trigger,sim_sopt7_adc1trgsel"
       linePadding="xxx"
    ><![CDATA[
-$(AdcInit_description)
-      \ttypedef SimBasicInfo::AdcInit AdcInit;
-      \t
       \t/**
       \t * Configure ADC trigger sources from values specified
       \t */
@@ -1125,9 +1117,6 @@ $(Adc%(p)Init_description)
          variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel"
             linePadding="xxx"
       ><![CDATA[
-$(Adc%(p)Init_description)
-         \ttypedef SimBasicInfo::Adc%(p)Init Adc%(p)Init;
-         \t
          \t/**
          \t * Configure Adc signals from values specified
          \t */
@@ -1137,7 +1126,8 @@ $(Adc%(p)Init_description)
          \t\n
       ]]></setTemplate>
 
-      <setTemplate variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel" ><![CDATA[
+      <setTemplate variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel" codeGenCondition="enableGettersAndSetters" >
+      <![CDATA[
          \t/**
          \t * Set %description0 and %description2
          \t *
@@ -1158,7 +1148,7 @@ $(Adc%(p)Init_description)
 
    <for keys="p" values="0;1;2;3">
       <for keys="ch" values="0;1;2;3;4;5;6;7">
-         <clockCodeTemplate variable="sim_sopt8_ftm%(p)och%(ch)src"
+         <clockCodeTemplate variable="sim_sopt8_ftm%(p)och%(ch)src" codeGenCondition="enableGettersAndSetters"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -1172,7 +1162,7 @@ $(Adc%(p)Init_description)
       </for>
    </for>
 
-   <clockCodeTemplate variable="sim_sopt8_ftm_syncbits"
+   <clockCodeTemplate variable="sim_sopt8_ftm_syncbits" codeGenCondition="enableGettersAndSetters"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -1211,7 +1201,7 @@ $(Adc%(p)Init_description)
 
    <for keys="p" values="1;2">
       <for keys="Fn:FN:fn" values="ClkSel:CLKSEL:clksel;Ch0Src:CH0SRC:ch0src">
-         <clockCodeTemplate variable="sim_sopt9_tpm%(p)%(fn)"
+         <clockCodeTemplate variable="sim_sopt9_tpm%(p)%(fn)" codeGenCondition="enableGettersAndSetters"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -1468,8 +1458,6 @@ $(Init_description)
    ]]></template>
 
    <template><![CDATA[
-$(Init_description)
-      \ttypedef SimBasicInfo::Init Init;
       \t/**
       \t * Configure SIM from values specified
       \t */
@@ -1810,7 +1798,7 @@ $(Init_description)
 <!-- ========== SIM BasicInfo class - End =============================== -->
 
    <template namespace="usbdm" ><![CDATA[
-      }; // class $(_Class)BasicInfo \n\n
+      }; // class $(_Baseclass)BasicInfo \n\n
    ]]></template>
 
    </if>

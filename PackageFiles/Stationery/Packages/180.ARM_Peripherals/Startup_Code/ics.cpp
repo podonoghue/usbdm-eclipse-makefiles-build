@@ -300,7 +300,7 @@ if (SCTRIM != 0xFF) {
    ics->C4 = (ics->C4&~ICS_C4_SCFTRIM_MASK)|SCFTRIM;
    
 }
-#if $(/ICS/configurePeripheralInStartUp:false) // /ICS/configurePeripheralInStartUp
+#if $(/ICS/enablePeripheralSupport:false) // /ICS/enablePeripheralSupport
 
    // Do full configuration
    

@@ -241,7 +241,7 @@ public:
    virtual ~FtmBase_T() = default;
 
    /** Maximum counter value in ticks */
-   static constexpr Ticks MaximumPeriodInTicks = FTM_MOD_MOD_MASK;
+   static constexpr Ticks MaximumPeriodInTicks = Ticks(FTM_MOD_MOD_MASK);
 
    /** Hardware instance pointer */
    static constexpr HardwarePtr<FTM_Type> ftm = Info::baseAddress;

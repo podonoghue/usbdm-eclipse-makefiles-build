@@ -452,7 +452,7 @@ $(/SPI/public: // /SPI/public not found)
  * @tparam  Info  Class describing SPI hardware
  */
 template<class Info>
-class SpiBase_T : public Spi, public Info{
+class SpiBase_T : public Spi, public Info {
 
 private:
    SpiBase_T() = delete;
@@ -511,6 +511,17 @@ protected:
    }
 
 public:
+#if 0
+   /** SPI SCK (clock) Pin */
+   using sckGpio  = GpioTable_T<Info, 0, ActiveHigh>;
+
+   /** SPI SIN (data in = usually MISO) Pin */
+   using sinGpio  = GpioTable_T<Info, 1, ActiveHigh>;
+
+   /** SPI SOUT (data out = usually MOSI) Pin */
+   using soutGpio = GpioTable_T<Info, 2, ActiveHigh>;
+#endif
+
    /**
     * Configures all mapped pins associated with this peripheral
     */
@@ -520,7 +531,7 @@ public:
    }
 
 $(/SPI/InitMethod: // /SPI/InitMethod not found)
-   /** 
+   /**
     * Constructor
     */
    SpiBase_T(const SpiBasicInfo::Init &init) : Spi(Info::baseAddress) {

@@ -6,7 +6,7 @@
 
    <constant key="irq_common"               type="Boolean" value="true"          />
    <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"         />
    <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
@@ -68,22 +68,20 @@
       </binaryOption>
    </for>
 
-   <intOption key="slowInternalClockTrim" condition="mcg_c4_scftrim_present"
-      description="Slow clock trim value"
-      toolTip="This 9-bit trim value is written to MCG.C3[SCTRIM] and MCG.C4[SCFTRIM] if non-zero"
-      value="0"
-      min="0" max="511"
-   />
-
-   <intOption key="fastInternalClockTrim"  condition="mcg_c4_fcftrim_present"
-      description="Fast clock trim value"
-      toolTip="This 4-bit trim value is written to MCG.C4[FCFTRIM] if non-zero"
-      value="0"
-      min="0" max="15"
-   />
+   <binaryOption key="assumeSlowIrcTrimmed"
+      enabledBy="!enablePeripheralSupport"
+      description="Assume slow IRC trimmed in minimal configuration"
+      toolTip="Used to indicate that the Slow Internal Reference clock has been trimmed and\n
+               hence it is safe to use higher clock frequencies derived from the IRC\n
+               without danger of exceeding the maximim clock frequency.\n
+               Only used in minimal configuration"
+      >
+      <choice value="false" name="Clock is not trimmed" />
+      <choice value="true"  name="Clock is trimmed"     />
+   </binaryOption>
 
    <!--  Run mode independent -->
-   <choiceOption key="mcg_c2_oscmode" condition="mcg_c2_erefs0_present"
+   <choiceOption key="mcg_c2_oscMode" condition="mcg_c2_erefs0_present"
       enumStem="OscMode"
       valueFormat="MCG_C2_EREFS0(%s),MCG_C2_HGO0(%s)"
       hidden="true"
@@ -97,14 +95,14 @@
       <choice value="0,1-1" name="32kHz Oscillator driven by RTC" enum="RTC_Controlled"       condition="/SIM/RtcForcing"     enabledBy="/RTC/ConfigureRtc"  />
    </choiceOption>
 
-   <constant key="/OscMode_NotConfigured"  type="Long" value="0"                        condition="mcg_c2_erefs0_present"/>
-   <constant key="/OscMode_ExternalClock"  type="Long" value="1"                        condition="mcg_c2_erefs0_present"/>
-   <constant key="/OscMode_RTC_Controlled" type="Long" value="mcg_c2_hgo0_present?4:3"  condition="mcg_c2_erefs0_present"/>
+   <constant key="/OscMode_NotConfigured"  type="Long" value="0"                                condition="mcg_c2_erefs0_present"/>
+   <constant key="/OscMode_ExternalClock"  type="Long" value="1"                                condition="mcg_c2_erefs0_present"/>
+   <constant key="/OscMode_RTC_Controlled" type="Long" value="Exists(mcg_c2_hgo0_present)?4:3"  condition="mcg_c2_erefs0_present"/>
 
    <choiceOption key="mcg_c2_erefs0"  condition="mcg_c2_erefs0_present"
       hidden="true"
       enumStem="McgExternalClock"
-      ref="mcg_c2_oscmode>=2"
+      ref="mcg_c2_oscMode>=2"
       derived="true"
       description="External Reference Select"
       toolTip="Determines whether an external clock or crystal is used">
@@ -115,7 +113,7 @@
    <choiceOption key="mcg_c2_hgo0"  condition="mcg_c2_hgo0_present"
       hidden="true"
       enumStem="McgOscMode"
-      ref="mcg_c2_oscmode==3"
+      ref="mcg_c2_oscMode==3"
       derived="true"
       description="Oscillator mode"
       toolTip="Operation mode for oscillator">
@@ -228,7 +226,7 @@
 
                <graphicItem id="SCP,NONAME"                var="/OSC0/osc_cr_scp"                   type="annotation"  params="10,  60,  100, 16, Cap=%v"                     />
                <graphicItem id="RTC_SCP,NONAME"            var="/RTC/rtc_cr_scp"                    type="annotation"  params="10,  75,  100, 16, Cap=%v"                     condition="/SIM/RtcForcing"               />
-               <graphicItem id="MODE,NONAME"               var="mcg_c2_oscmode"                            type="annotation"  params="10,  145, 180, 16"                              />
+               <graphicItem id="MODE,NONAME"               var="mcg_c2_oscMode"                            type="annotation"  params="10,  145, 180, 16"                              />
                <graphicItem id="RANGE,NONAME"              var="/OSC0/oscillatorRange"              type="annotation"  params="10,  165, 180, 16"                              />
                <graphicItem id="EREFSTEN,NONAME"           var="/OSC0/osc_cr_erefsten"              type="annotation"  params="10,  185, 140, 20"                              />
 
@@ -640,7 +638,7 @@
          <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" locked="false" />
 
          <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
-            <aliasOption key="mcg_c2_oscmode"                       locked="false"  optional="true" />
+            <aliasOption key="mcg_c2_oscMode"                       locked="false"  optional="true" />
             <aliasOption key="/OSC0/rsim_control_rf_osc_en"  locked="false"  optional="true" />
             <aliasOption key="/OSC0/osc_input_freq"          locked="false"  />
             <aliasOption key="/OSC0/osc_clock"               optional="true"   />
@@ -1198,7 +1196,6 @@
       ]]></setTemplate>
    </for>
 
-
 <!-- Interrupt code -->
 
    <template codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
@@ -1344,7 +1341,7 @@
    <for
       keys   = "var              : name        "
       values = "
-                mcg_c2_oscmode   : ExternalReference;
+                mcg_c2_oscMode          : ExternalReference;
                 mcg_c1_irclken[] : McgIrClkEn;
                 mcg_c2_ircs[]    : McgIrClkSrc;
                 mcg_sc_fcrdiv[]  : FastIrcDivider;
@@ -1457,7 +1454,7 @@
          variables=
             "mcg_c2_locre0[%(n)],
              mcg_c2_range0[%(n)],
-             mcg_c2_oscmode,
+             mcg_c2_oscMode,
              mcg_c2_ircs[%(n)]"
       ><![CDATA[\t   /// Control Register 2 - Excluding LP, FCTRIM %initExpression\n\n ]]></initialValueTemplate>
 
@@ -1570,7 +1567,7 @@
       \t   const uint8_t c1; \n ]]></template>
 
    <template key="ClockInfoType" namespace="all"
-      condition="mcg_c2_locre0[]||mcg_c2_range0[]||mcg_c2_oscmode||mcg_c2_ircs[]"
+      condition="mcg_c2_locre0[]||mcg_c2_range0[]||mcg_c2_oscMode||mcg_c2_ircs[]"
    ><![CDATA[
       \t   /// Control Register 2 - LOCRE0, RANGE0, HGO0, EREFS0, IRCS, (-LP, -FCTRIM)
       \t   const uint8_t c2;\n ]]></template>

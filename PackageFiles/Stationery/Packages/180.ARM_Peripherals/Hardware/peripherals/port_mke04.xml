@@ -588,7 +588,7 @@
        *
        * Global indices for port pins
        */
-      enum class PinIndex : int8_t {
+      enum class PinIndex : int16_t {
          \tINVALID_PCR  = -2,   // Signal does not exist
          \tUNMAPPED_PCR = -3,   // Signal is not currently mapped to a pin
          \tFIXED_NO_PCR = -4,   // Signal has mapping to fixed pin
@@ -601,10 +601,18 @@
                  /PORT/port_puel_ptcpe :  C   :  16;
                  /PORT/port_puel_ptdpe :  D   :  24" >
 
-      <for keys="i" dim="8">
-         <template key="/PORT/PinIndex" namespace="all" variables="%(field)_present" codeGenCondition="enablePeripheralSupport"
+      <for keys="     ii           : i  "
+           values="\=%(pinIndex)   : 0 ;
+                    =%(pinIndex)+1 : 1 ;
+                    =%(pinIndex)+2 : 2 ;
+                    =%(pinIndex)+3 : 3 ;
+                    =%(pinIndex)+4 : 4 ;
+                    =%(pinIndex)+5 : 5 ;
+                    =%(pinIndex)+6 : 6 ;
+                    =%(pinIndex)+7 : 7 " >
+         <template key="/PORT/PinIndex" namespace="all" discardRepeats="true" variables="%(field)_present"
          ><![CDATA[
-            \tPT%(Name)%(i) = %(pinIndex)+%(i),\n
+            \tPT%(Name)%(i) = %(ii),\n
          ]]></template>
       </for>
       <template key="/PORT/declarations" namespace="all" variables="%(field)_present" codeGenCondition="enablePeripheralSupport"

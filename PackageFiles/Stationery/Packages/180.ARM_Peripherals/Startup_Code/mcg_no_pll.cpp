@@ -47,12 +47,15 @@ const ClockInfo Mcg::clockInfo[] = {
 $(/MCG/McgClockInfoEntries:!!!!!!!Not found!!!!!!!)
 };
 $(/MCG/clocks)
+
 /** Current clock mode (FEI out of reset) */
 McgClockMode Mcg::currentClockMode = McgClockMode_FEI;
+
 
 // /MCG/staticDefinitions
 $(/MCG/staticDefinitions: // No static declarations found) 
 #if $(/MCG/enablePeripheralSupport) // /MCG/enablePeripheralSupport
+
 
 #if USBDM_ERRATA_E2448
 /**

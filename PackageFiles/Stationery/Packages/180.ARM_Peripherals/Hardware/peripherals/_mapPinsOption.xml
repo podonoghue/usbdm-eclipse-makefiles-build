@@ -7,7 +7,7 @@
 <!--
       Predefined symbols generated for current peripheral
       $(_instance)   FTM0 => 0
-      $(_Baseclass) FTM0 => Ftm
+      $(_Baseclass)  FTM0 => Ftm
       $(_Class)      FTM0 => Ftm0
       $(_BASENAME)   FTM0 => FTM
       $(_NAME)       FTM0 => FTM0
@@ -48,23 +48,18 @@
 
  -->
 
-   <stringOption
-      key="Pin Mapping"
-      value="------- Pin Mapping -------"
-      description="Pin Mapping"
-      locked="true"
-      />
+   <title description="Pin Mapping" />
 
-   <binaryOption key="mapPinsOnEnable"
+   <binaryOption key="mapPinsOnEnable" condition="/PCR/mux_present"
       description="Map pins when peripheral is configured"
       toolTip="Map all allocated pins on a peripheral when the\n
                peripheral is enabled by configure() method etc">
-      <choice value="false" name="Don't map"  isDefault="true" />
-      <choice value="true"  name="Map when configured"/>
+      <choice value="false" name="Don't map pins"  isDefault="true" />
+      <choice value="true"  name="Map pipns when configured"/>
    </binaryOption>
 
    <!-- Template is added to class within pin_mapping.h -->
-   <template><![CDATA[
+   <template  condition="/PCR/mux_present" ><![CDATA[
       \t//! Map all allocated pins on a peripheral when enabled
       \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
    ]]></template>

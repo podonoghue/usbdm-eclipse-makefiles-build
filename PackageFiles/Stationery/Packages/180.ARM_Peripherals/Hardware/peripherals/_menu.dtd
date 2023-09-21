@@ -117,7 +117,7 @@ addChoices
 
 <!ELEMENT continue EMPTY >
 
-<!ENTITY % if_clause_items "%general_items;|%structure_items;" >
+<!ENTITY % if_clause_items "%general_items;|%structure_items;|break" >
 
 <!ELEMENT if ( (%if_clause_items;)+, (else_if, (%if_clause_items;)+)*, (else, (%if_clause_items;)+)?) >
    <!-- Condition evaluated during parsing that enables processing of remaining children (up to else/else_if) -->

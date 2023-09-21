@@ -20,12 +20,13 @@
 
 namespace USBDM {
 
+#if $(/LLWU/enablePeripheralSupport) // /LLWU/enablePeripheralSupport
+
 /**
  * @addtogroup LLWU_Group LLWU, Low-leakage Wake-up Unit
  * @brief Abstraction for Low-leakage Wake-up Unit
  * @{
  */
-
 
 /**
  * Type definition for LLWU interrupt call back
@@ -55,9 +56,9 @@ protected:
       // Out of bounds value for function index
       static constexpr bool Test1 = (llwuPin>=0) && (llwuPin<(Info::numSignals));
       // Function is not currently mapped to a pin
-      static constexpr bool Test2 = !Test1 || (Info::info[llwuPin].gpioBit != UNMAPPED_PCR);
+      static constexpr bool Test2 = !Test1 || (Info::info[llwuPin].pinIndex != PinIndex::UNMAPPED_PCR);
       // Non-existent function and catch-all. (should be INVALID_PCR)
-      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[llwuPin].gpioBit >= 0);
+      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[llwuPin].pinIndex >= PinIndex::MIN_PIN_INDEX);
 
       static_assert(Test1, "Illegal LLWU Input - Check Configure.usbdm for available inputs");
       static_assert(Test2, "LLWU input is not mapped to a pin - Modify Configure.usbdm");
@@ -181,21 +182,10 @@ public:
    /** Pointer to hardware */
    static constexpr HardwarePtr<LLWU_Type> llwu = Info::baseAddress;
 
-   $(/LLWU/classInfo: // No class Info found)
-   /**
-    * Configure with settings from Configure.usbdmProject.
-    */
-   static void defaultConfigure() {
-
-      // Configure pins
-      Info::initPCRs();
-      
-      // Configure registers
-      DefaultInitValue.configure();
-      
-      enableNvicInterrupts(Info::irqLevel);
-   }
-
+$(/LLWU/classInfo: // /LLWU/classInfo not found)
+$(/LLWU/staticFunctions: // /LLWU/staticFunctions not found)
+$(/LLWU/DefaultInitValue: // /LLWU/DefaultInitValue not found)
+$(/LLWU/InitMethod: // /LLWU/InitMethod not found)
    /*
     * ***************************************************
     * Wake-up pins
@@ -417,18 +407,17 @@ public:
 
 $(/LLWU/llwu_base_methods:// /LLWU/llwu_base_methods not found)
 
-$(/LLWU/DefaultInitValue:// /LLWU/DefaultInitValue not found)
-
 };
 
 template<class Info> LlwuCallbackFunction LlwuBase_T<Info>::sCallback = LlwuBase_T<Info>::unhandledCallback;
 
 $(/LLWU/declarations: // No declarations found)
-
 /**
  * End LLWU_Group
  * @}
  */
+
+#endif // /LLWU/enablePeripheralSupport
 
 } // End namespace USBDM
 

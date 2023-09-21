@@ -74,13 +74,6 @@ class CmpBase_T : public Info {
 
 protected:
    /**
-    * Type definition for CMP interrupt call back
-    *
-    * @param[in]  status Struct indicating interrupt source and state
-    */
-   typedef typename Info::CallbackFunction CmpCallbackFunction;
-
-   /**
     * Limit index to permitted pin index range
     * Used to prevent noise from static assertion checks that detect a condition already detected in a more useful fashion.
     *
@@ -102,7 +95,7 @@ protected:
    template<int cmpOutput> class CheckOutputIsMapped {
 
       // Check mapping - no need to check existence
-      static constexpr bool Test1 = (Info::info[cmpOutput].gpioBit != PinIndex::UNMAPPED_PCR);
+      static constexpr bool Test1 = (Info::info[cmpOutput].pinIndex != PinIndex::UNMAPPED_PCR);
 
       static_assert(Test1, "CMP output is not mapped to a pin - Modify Configure.usbdm");
 
@@ -141,9 +134,6 @@ protected:
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 
-   /** Callback function for ISR */
-   static typename Info::CallbackFunction sCallback;
-
 public:
    /// Pin mapped to CMP output
    using OutputPin = PcrTable_T<Info, Info::outputPin>;
@@ -155,6 +145,7 @@ public:
     */
    static constexpr HardwarePtr<CMP_Type> cmp = Info::baseAddress;
 
+#if $(/CMP/irqHandlingMethod:false) // /CMP/irqHandlingMethod
    /**
     * Wrapper to allow the use of a class member as a callback function
     * @note Only usable with static objects.
@@ -187,8 +178,8 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(CmpStatus status), T &object>
-   static CmpCallbackFunction wrapCallback() {
-      static CmpCallbackFunction fn = [](CmpStatus status) {
+   static typename Info::CallbackFunction wrapCallback() {
+      static typename Info::CallbackFunction fn = [](CmpStatus status) {
          (object.*callback)(status);
       };
       return fn;
@@ -226,27 +217,14 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(CmpStatus status)>
-   static CmpCallbackFunction wrapCallback(T &object) {
+   static typename Info::CallbackFunction wrapCallback(T &object) {
       static T &obj = object;
-      static CmpCallbackFunction fn = [](CmpStatus status) {
+      static typename Info::CallbackFunction fn = [](CmpStatus status) {
          (obj.*callback)(status);
       };
       return fn;
    }
-
-   /**
-    * Set callback function
-    *
-    * @param[in] callback Callback function to execute on interrupt.\n
-    *                     Use nullptr to remove callback.
-    */
-   static void setCallback(CmpCallbackFunction callback) {
-      static_assert(Info::irqHandlerInstalled, "CMP not configured for interrupts");
-      if (callback == nullptr) {
-         callback = unhandledCallback;
-      }
-      sCallback = callback;
-   }
+#endif
 
 public:
 $(/CMP/classInfo: // /CMP/classInfo not found)
@@ -666,7 +644,6 @@ protected:
    };
 };
 
-template<class Info> typename Info::CallbackFunction CmpBase_T<Info>::sCallback = CmpBase_T<Info>::unhandledCallback;
 $(/CMP/InputMapping:   // /CMP/InputMapping None Found)
 $(/CMP/declarations:   // /CMP/declarations None Found)
 

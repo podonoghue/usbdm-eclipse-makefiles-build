@@ -26,5 +26,5 @@
       \tstatic constexpr unsigned NumChannelVectors = $(NumChannelVectors);\n\n
    ]]></template>
 
-   <xi:include href="ftm_def.xml"/>
+   <xi:include href="ftm_def_mke.xml"/>
 </peripheralPage>
