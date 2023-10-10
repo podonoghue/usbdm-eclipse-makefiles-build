@@ -74,7 +74,7 @@
          </category>
 
          <choiceOption key="icsClockMode[%(n)]"
-            enumStem="McgClockMode"
+            typeName="McgClockMode"
             enumType="uint8_t"
             valueFormat="%s"
             description="Default Clock Mode"
@@ -120,7 +120,7 @@
          <category name="Clock monitors"
             description="Clock monitors" >
             <binaryOption key="ics_c4_cme[%(n)]" condition="ics_c4_cme_present"
-               enumStem="McgClockMonitor"
+               typeName="McgClockMonitor"
                description="Clock Monitor Enable"
                toolTip="Determines if a reset request is made following a loss of external clock indication.\n
                         The CME0 bit must only be when using an external clock mode (FEE, FBE, or FBELP)" >
@@ -129,7 +129,7 @@
             </binaryOption>
 
             <binaryOption key="ics_c4_lolie0[%(n)]" condition="ics_c4_lolie0_present"
-               enumStem="McgLossOfLockInterrupt"
+               typeName="McgLossOfLockInterrupt"
                description="Loss of Lock Interrupt Enable"
                toolTip="Determines if an interrupt request is made following a loss of lock.\n
 This is indicated by ICS_S[LOLS] being set." >
@@ -144,7 +144,7 @@ This is indicated by ICS_S[LOLS] being set." >
             <aliasOption key="system_icsirclk_ungated" />
 
             <binaryOption key="ics_c1_irclken[%(n)]" condition="ics_c1_irclken_present"
-               enumStem="McgIrClkEn"
+               typeName="McgIrClkEn"
                target="system_icsirclk_clock[%(n)]"
                description="Internal Reference Clock [ICSIRCLK]"
                toolTip="Enables the internal reference clock for use by peripherals" >
@@ -153,7 +153,7 @@ This is indicated by ICS_S[LOLS] being set." >
             </binaryOption>
 
             <binaryOption key="ics_c1_irefsten[%(n)]"
-               enumStem="McgIrefs"
+               typeName="McgIrefs"
                enabledBy="ics_c1_irclken[%(n)]||(icsClockMode[%(n)]==@FEI)||(icsClockMode[%(n)]==@FBI)||(icsClockMode[%(n)]==@FBILP),
                           Unavailable as IRCLKEN not set and ICSIRCLK unused by active clock mode"
                description="Internal Reference [ICSIRCLK] Stop Enable"
@@ -206,7 +206,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
 
             <choiceOption key="ics_c1_rdiv[%(n)]" condition="ics_c1_rdiv_present"
                target="ics_erc_clock_divided[%(n)]"
-               enumStem="McgFllPrescale"
+               typeName="McgFllPrescale"
                description="FLL External Reference Divider"
                toolTip="Selects the amount to divide down the external reference clock for the FLL.\n
                         The resulting frequency must be in [31.25 kHz to 39.0625 kHz] to be suitable for the FLL\n
@@ -240,7 +240,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
                disabledValue="0" />
 
             <binaryOption key="ics_c1_irefs[%(n)]"
-               enumStem="McgIref"
+               typeName="McgIref"
                target="irefs_clock[%(n)]"
                derived="true"
                locked="false"
@@ -297,7 +297,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
 
          <choiceOption key="ics_c2_bdiv[%(n)]" condition="ics_c2_bdiv_present"
             target="system_icsoutclk_clock[%(n)]"
-            enumStem="McgBusDivider"
+            typeName="McgBusDivider"
             toolTip="This value can not be written or read back in some devices"
             description="Bus Frequency Divider" >
             <choice name="Divide by 1"    value="0" enum="DivideBy1"    ref="system_icsfllclk_clock[%(n)]"     />
@@ -337,7 +337,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
 
             <category name="ICS_C1" description="ICS Control Register 1">
                <choiceOption key="ics_c1_clks[%(n)]" condition="ics_c1_clks_present"
-                  enumStem="McgClkSrc"
+                  typeName="McgClkSrc"
                   target="system_icsoutclk_clock[%(n)]"
                   derived="true"
                   locked="true"
@@ -359,7 +359,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
                <aliasOption key="ics_c2_bdiv[%(n)]"              optional="true" />
 
                <binaryOption key="ics_c2_lp[%(n)]"
-                  enumStem="McgFllInLowpower"
+                  typeName="McgFllInLowpower"
                   derived="true"
                   locked="true"
                   description="Low Power Select"
@@ -403,10 +403,10 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void enableMcgIrClock(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \tstatic void enableMcgIrClock(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}
 
       \t/**
@@ -416,7 +416,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       \t */
       \tstatic uint32_t getInternalReferenceClock() {
       \t
-      \t   switch(%defaultMaskingExpression) {
+      \t   switch(%maskingExpression) {
       \t      default: return 0;
       %body
       \t   }

@@ -26,6 +26,7 @@
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_ADC0_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_ADC0_MASK;" />
          <irq num="ADC0_IRQn" />
          <param type="StringVariable"         value="ADC0"        name="instanceList"                key="/ADC0/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/ADC0/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/ADC0/_present" />
          <param type="StringVariable"         value="true"        name="adc_cfg1_adiclk_present"     key="/ADC0/adc_cfg1_adiclk_present" />
          <param type="StringVariable"         value="true"        name="adc_cfg1_adiv_present"       key="/ADC0/adc_cfg1_adiv_present" />
@@ -68,6 +69,7 @@
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_CMP_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_CMP_MASK;" />
          <irq num="CMP0_IRQn" />
          <param type="StringVariable"         value="CMP0"        name="instanceList"                key="/CMP0/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/CMP0/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/CMP0/_present" />
          <param type="StringVariable"         value="true"        name="cmp_cr0_filter_cnt_present"  key="/CMP0/cmp_cr0_filter_cnt_present" />
          <param type="StringVariable"         value="true"        name="cmp_cr0_hystctr_present"     key="/CMP0/cmp_cr0_hystctr_present" />
@@ -106,6 +108,7 @@
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_DAC0_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_DAC0_MASK;" />
          <irq num="DAC0_IRQn" />
          <param type="StringVariable"         value="DAC0"        name="instanceList"                key="/DAC0/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/DAC0/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/DAC0/_present" />
          <param type="StringVariable"         value="true"        name="dac_c0_dacbbien_present"     key="/DAC0/dac_c0_dacbbien_present" />
          <param type="StringVariable"         value="true"        name="dac_c0_dacbtien_present"     key="/DAC0/dac_c0_dacbtien_present" />
@@ -133,7 +136,9 @@
          <irq num="DMA2_IRQn" />
          <irq num="DMA3_IRQn" />
          <param type="StringVariable"         value="DMA0"        name="instanceList"                key="/DMA0/_instanceList" />
+         <param type="LongVariable"           value="4"           name="instanceList"                key="/DMA0/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/DMA0/_present" />
+         <param type="StringVariable"         value="true"        name="dma_dar_addr_present"        key="/DMA0/dma_dar_addr_present" />
          <param type="StringVariable"         value="true"        name="dma_dcr_aa_present"          key="/DMA0/dma_dcr_aa_present" />
          <param type="StringVariable"         value="true"        name="dma_dcr_cs_present"          key="/DMA0/dma_dcr_cs_present" />
          <param type="StringVariable"         value="true"        name="dma_dcr_d_req_present"       key="/DMA0/dma_dcr_d_req_present" />
@@ -163,11 +168,16 @@
          <param type="StringVariable"         value="true"        name="dma_dsr_ce_present"          key="/DMA0/dma_dsr_ce_present" />
          <param type="StringVariable"         value="true"        name="dma_dsr_done_present"        key="/DMA0/dma_dsr_done_present" />
          <param type="StringVariable"         value="true"        name="dma_dsr_req_present"         key="/DMA0/dma_dsr_req_present" />
+         <param type="StringVariable"         value="true"        name="dma_sar_addr_present"        key="/DMA0/dma_sar_addr_present" />
       </peripheral>
       <peripheral baseName="DMAMUX"   instance="0"        instanceList="DMAMUX0" version="dmamux0_4ch_trig">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_DMAMUX0_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_DMAMUX0_MASK;" />
          <param type="StringVariable"         value="DMAMUX0"     name="instanceList"                key="/DMAMUX0/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/DMAMUX0/_present" />
+         <param type="StringVariable"         value="true"        name="dmamux_chcfg_enbl_present"   key="/DMAMUX0/dmamux_chcfg_enbl_present" />
+         <param type="StringVariable"         value="true"        name="dmamux_chcfg_source_present" key="/DMAMUX0/dmamux_chcfg_source_present" />
+         <param type="StringVariable"         value="true"        name="dmamux_chcfg_trig_present"   key="/DMAMUX0/dmamux_chcfg_trig_present" />
          <dma source="Disabled"             num="0" />
          <dma source="Slot1"                num="1" />
          <dma source="Slot2"                num="2" />
@@ -242,6 +252,7 @@
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTF_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTF_MASK;" />
          <irq num="FTF_Command_IRQn" />
          <param type="StringVariable"         value="FTFA"        name="instanceList"                key="/FTFA/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/FTFA/_irqCount" />
          <param type="StringVariable"         value="4"           name="Program flash phrase size"   key="/FTFA/pflash_phrase_size" />
          <param type="StringVariable"         value="1024"        name="Program flash sector size"   key="/FTFA/pflash_sector_size" />
       </peripheral>
@@ -250,6 +261,7 @@
          <clock clockEnable="SIM->SCGC5 = SIM->SCGC5 | SIM_SCGC5_PORTA_MASK;" clockDisable="SIM->SCGC5 = SIM->SCGC5 &amp; ~SIM_SCGC5_PORTA_MASK;" />
          <irq num="PORTA_IRQn" />
          <param type="StringVariable"         value="GPIOA;GPIOB" name="instanceList"                key="/GPIOA/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/GPIOA/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/GPIOA/_present" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/PCR/_present" />
          <param type="StringVariable"         value="true"        name="dse_present"                 key="/PCR/dse_present" />
@@ -267,6 +279,7 @@
          <clock clockEnable="SIM->SCGC5 = SIM->SCGC5 | SIM_SCGC5_PORTB_MASK;" clockDisable="SIM->SCGC5 = SIM->SCGC5 &amp; ~SIM_SCGC5_PORTB_MASK;" />
          <irq num="PORTB_IRQn" />
          <param type="StringVariable"         value="GPIOA;GPIOB" name="instanceList"                key="/GPIOB/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/GPIOB/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/GPIOB/_present" />
       </peripheral>
       <peripheral baseName="I2C"      instance="0"        instanceList="I2C0" version="i2c0_mkl04z4">
@@ -274,6 +287,7 @@
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_I2C0_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_I2C0_MASK;" />
          <irq num="I2C0_IRQn" />
          <param type="StringVariable"         value="I2C0"        name="instanceList"                key="/I2C0/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/I2C0/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/I2C0/_present" />
          <param type="StringVariable"         value="true"        name="i2c_a1_ad_present"           key="/I2C0/i2c_a1_ad_present" />
          <param type="StringVariable"         value="true"        name="i2c_a2_sad_present"          key="/I2C0/i2c_a2_sad_present" />
@@ -322,6 +336,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
          <param type="StringVariable"         value="LLWU"        name="instanceList"                key="/LLWU/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/LLWU/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/LLWU/_present" />
          <param type="StringVariable"         value="true"        name="llwu_filt1_filte_present"    key="/LLWU/llwu_filt1_filte_present" />
          <param type="StringVariable"         value="true"        name="llwu_filt1_filtf_present"    key="/LLWU/llwu_filt1_filtf_present" />
@@ -359,6 +374,7 @@
          <clock clockEnable="SIM->SCGC5 = SIM->SCGC5 | SIM_SCGC5_LPTMR_MASK;" clockDisable="SIM->SCGC5 = SIM->SCGC5 &amp; ~SIM_SCGC5_LPTMR_MASK;" />
          <irq num="LPTMR0_IRQn" />
          <param type="StringVariable"         value="LPTMR0"      name="instanceList"                key="/LPTMR0/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/LPTMR0/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/LPTMR0/_present" />
          <param type="StringVariable"         value="true"        name="lptmr_cmr_compare_present"   key="/LPTMR0/lptmr_cmr_compare_present" />
          <param type="StringVariable"         value="true"        name="lptmr_cnr_counter_present"   key="/LPTMR0/lptmr_cnr_counter_present" />
@@ -377,6 +393,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
          <irq num="MCG_IRQn" />
          <param type="StringVariable"         value="MCG"         name="instanceList"                key="/MCG/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/MCG/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/MCG/_present" />
          <param type="StringVariable"         value="true"        name="mcg_atcvh_atcvh_present"     key="/MCG/mcg_atcvh_atcvh_present" />
          <param type="StringVariable"         value="true"        name="mcg_atcvl_atcvl_present"     key="/MCG/mcg_atcvl_atcvl_present" />
@@ -425,6 +442,7 @@
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_PIT_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_PIT_MASK;" />
          <irq num="PIT_IRQn" />
          <param type="StringVariable"         value="PIT"         name="instanceList"                key="/PIT/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/PIT/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/PIT/_present" />
          <param type="StringVariable"         value="true"        name="pit_cval_tvl_present"        key="/PIT/pit_cval_tvl_present" />
          <param type="StringVariable"         value="true"        name="pit_ldval_tsv_present"       key="/PIT/pit_ldval_tsv_present" />
@@ -441,6 +459,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPmc" />
          <irq num="PMC_IRQn" />
          <param type="StringVariable"         value="PMC"         name="instanceList"                key="/PMC/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/PMC/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/PMC/_present" />
          <param type="StringVariable"         value="true"        name="pmc_lvdsc1_lvdack_present"   key="/PMC/pmc_lvdsc1_lvdack_present" />
          <param type="StringVariable"         value="true"        name="pmc_lvdsc1_lvdf_present"     key="/PMC/pmc_lvdsc1_lvdf_present" />
@@ -484,6 +503,7 @@
          <irq num="RTC_Alarm_IRQn" />
          <irq num="RTC_Seconds_IRQn" />
          <param type="StringVariable"         value="RTC"         name="instanceList"                key="/RTC/_instanceList" />
+         <param type="LongVariable"           value="2"           name="instanceList"                key="/RTC/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/RTC/_present" />
          <param type="StringVariable"         value="true"        name="rtc_cr_clko_present"         key="/RTC/rtc_cr_clko_present" />
          <param type="StringVariable"         value="true"        name="rtc_cr_osce_present"         key="/RTC/rtc_cr_osce_present" />
@@ -593,6 +613,7 @@
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_SPI0_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_SPI0_MASK;" />
          <irq num="SPI0_IRQn" />
          <param type="StringVariable"         value="SPI0"        name="instanceList"                key="/SPI0/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/SPI0/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/SPI0/_present" />
          <param type="StringVariable"         value="true"        name="spi_br_sppr_present"         key="/SPI0/spi_br_sppr_present" />
          <param type="StringVariable"         value="true"        name="spi_br_spr_present"          key="/SPI0/spi_br_spr_present" />
@@ -628,6 +649,7 @@
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_TPM0_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_TPM0_MASK;" />
          <irq num="TPM0_IRQn" />
          <param type="StringVariable"         value="TPM;TPM0;TPM1" name="instanceList"                key="/TPM0/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/TPM0/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/TPM0/_present" />
          <param type="StringVariable"         value="true"        name="tpm_cnsc_chf_present"        key="/TPM0/tpm_cnsc_chf_present" />
          <param type="StringVariable"         value="true"        name="tpm_cnsc_chie_present"       key="/TPM0/tpm_cnsc_chie_present" />
@@ -667,6 +689,7 @@
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_TPM1_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_TPM1_MASK;" />
          <irq num="TPM1_IRQn" />
          <param type="StringVariable"         value="TPM;TPM0;TPM1" name="instanceList"                key="/TPM1/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/TPM1/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/TPM1/_present" />
          <param type="StringVariable"         value="true"        name="tpm_cnsc_chf_present"        key="/TPM1/tpm_cnsc_chf_present" />
          <param type="StringVariable"         value="true"        name="tpm_cnsc_chie_present"       key="/TPM1/tpm_cnsc_chie_present" />
@@ -702,12 +725,14 @@
          <clock clockEnable="SIM->SCGC5 = SIM->SCGC5 | SIM_SCGC5_TSI0_MASK;" clockDisable="SIM->SCGC5 = SIM->SCGC5 &amp; ~SIM_SCGC5_TSI0_MASK;" />
          <irq num="TSI0_IRQn" />
          <param type="StringVariable"         value="TSI0"        name="instanceList"                key="/TSI0/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/TSI0/_irqCount" />
       </peripheral>
       <peripheral baseName="UART"     instance="0"        instanceList="UART0" version="uart0_mkl04z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_UART0_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_UART0_MASK;" />
          <irq num="UART0_IRQn" />
          <param type="StringVariable"         value="UART0"       name="instanceList"                key="/UART0/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/UART0/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/UART0/_present" />
          <param type="StringVariable"         value="true"        name="uart_bdh_lbkdie_present"     key="/UART0/uart_bdh_lbkdie_present" />
          <param type="StringVariable"         value="true"        name="uart_bdh_rxedgie_present"    key="/UART0/uart_bdh_rxedgie_present" />
@@ -767,6 +792,50 @@
       </peripheral>
    </peripherals>
    <pins>
+      <pin name="BANDGAP"      isFixed="true">
+         <mux sel="fixed"         signal="ADC0_SE27" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PIT_CH0"      isFixed="true">
+         <mux sel="fixed"         signal="PIT_CH0" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PIT_CH1"      isFixed="true">
+         <mux sel="fixed"         signal="PIT_CH1" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="TEMP_SENSOR"  isFixed="true">
+         <mux sel="fixed"         signal="ADC0_SE26" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDD"          isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDD1"         isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VREFH"        isFixed="true">
+         <mux sel="fixed"         signal="VREFH" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VREFL"        isFixed="true">
+         <mux sel="fixed"         signal="VREFL" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS"          isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS1"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS2"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
       <pin name="PTA0">
          <mux sel="mux0"          signal="ADC0_SE12" />
          <mux sel="mux0"          signal="CMP0_IN2" />
@@ -1048,42 +1117,19 @@
          <mux sel="mux1"          signal="GPIOB_20" />
          <reset sel="mux0" />
       </pin>
-      <pin name="VDD"          isFixed="true">
-         <mux sel="fixed"         signal="VDD" />
-         <reset sel="fixed" />
-      </pin>
-      <pin name="VDD1"         isFixed="true">
-         <mux sel="fixed"         signal="VDD" />
-         <reset sel="fixed" />
-      </pin>
-      <pin name="VREFH"        isFixed="true">
-         <mux sel="fixed"         signal="VREFH" />
-         <reset sel="fixed" />
-      </pin>
-      <pin name="VREFL"        isFixed="true">
-         <mux sel="fixed"         signal="VREFL" />
-         <reset sel="fixed" />
-      </pin>
-      <pin name="VSS"          isFixed="true">
-         <mux sel="fixed"         signal="VSS" />
-         <reset sel="fixed" />
-      </pin>
-      <pin name="VSS1"         isFixed="true">
-         <mux sel="fixed"         signal="VSS" />
-         <reset sel="fixed" />
-      </pin>
-      <pin name="VSS2"         isFixed="true">
-         <mux sel="fixed"         signal="VSS" />
-         <reset sel="fixed" />
-      </pin>
    </pins>
    <packages>
       <package name="FRDM_KL05Z">
-         <placement pin="PTA0"          location="A3" />
+         <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="PIT_CH0"       location="Internal" />
+         <placement pin="PIT_CH1"       location="Internal" />
+         <placement pin="PTA0"          location="SWD_CLK/A3" />
+         <placement pin="PTA1"          location="RESET_b" />
          <placement pin="PTA10"         location="D4" />
          <placement pin="PTA11"         location="D2" />
          <placement pin="PTA12"         location="D5" />
          <placement pin="PTA13"         location="Touch1" />
+         <placement pin="PTA2"          location="SWD_DIO" />
          <placement pin="PTA3"          location="EXTAL0" />
          <placement pin="PTA4"          location="XTAL0" />
          <placement pin="PTA5"          location="D10" />
@@ -1105,12 +1151,16 @@
          <placement pin="PTB7"          location="D7" />
          <placement pin="PTB8"          location="A0/RGB_Red" />
          <placement pin="PTB9"          location="A1/RGB_Green" />
+         <placement pin="TEMP_SENSOR"   location="Internal" />
          <placement pin="VDD"           location="VDD" />
          <placement pin="VREFH"         location="VREFH" />
          <placement pin="VREFL"         location="VREFL" />
          <placement pin="VSS"           location="VSS" />
       </package>
       <package name="LQFP_32">
+         <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="PIT_CH0"       location="Internal" />
+         <placement pin="PIT_CH1"       location="Internal" />
          <placement pin="PTA0"          location="p30" />
          <placement pin="PTA1"          location="p31" />
          <placement pin="PTA10"         location="p21" />
@@ -1139,12 +1189,16 @@
          <placement pin="PTB7"          location="p2" />
          <placement pin="PTB8"          location="p11" />
          <placement pin="PTB9"          location="p12" />
+         <placement pin="TEMP_SENSOR"   location="Internal" />
          <placement pin="VDD"           location="p3" />
          <placement pin="VREFH"         location="p4" />
          <placement pin="VREFL"         location="p5" />
          <placement pin="VSS"           location="p6" />
       </package>
       <package name="LQFP_48">
+         <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="PIT_CH0"       location="Internal" />
+         <placement pin="PIT_CH1"       location="Internal" />
          <placement pin="PTA0"          location="p46" />
          <placement pin="PTA1"          location="p47" />
          <placement pin="PTA10"         location="p33" />
@@ -1186,6 +1240,7 @@
          <placement pin="PTB7"          location="p2" />
          <placement pin="PTB8"          location="p16" />
          <placement pin="PTB9"          location="p17" />
+         <placement pin="TEMP_SENSOR"   location="Internal" />
          <placement pin="VDD"           location="p5" />
          <placement pin="VDD1"          location="p31" />
          <placement pin="VREFH"         location="p6" />
@@ -1195,6 +1250,9 @@
          <placement pin="VSS2"          location="p30" />
       </package>
       <package name="QFN_24">
+         <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="PIT_CH0"       location="Internal" />
+         <placement pin="PIT_CH1"       location="Internal" />
          <placement pin="PTA0"          location="p22" />
          <placement pin="PTA1"          location="p23" />
          <placement pin="PTA12"         location="p20" />
@@ -1217,12 +1275,16 @@
          <placement pin="PTB5"          location="p19" />
          <placement pin="PTB6"          location="p1" />
          <placement pin="PTB7"          location="p2" />
+         <placement pin="TEMP_SENSOR"   location="Internal" />
          <placement pin="VDD"           location="p3" />
          <placement pin="VREFH"         location="p3" />
          <placement pin="VREFL"         location="p4" />
          <placement pin="VSS"           location="p4" />
       </package>
       <package name="QFN_32">
+         <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="PIT_CH0"       location="Internal" />
+         <placement pin="PIT_CH1"       location="Internal" />
          <placement pin="PTA0"          location="p30" />
          <placement pin="PTA1"          location="p31" />
          <placement pin="PTA10"         location="p21" />
@@ -1251,6 +1313,7 @@
          <placement pin="PTB7"          location="p2" />
          <placement pin="PTB8"          location="p11" />
          <placement pin="PTB9"          location="p12" />
+         <placement pin="TEMP_SENSOR"   location="Internal" />
          <placement pin="VDD"           location="p3" />
          <placement pin="VREFH"         location="p4" />
          <placement pin="VREFL"         location="p5" />

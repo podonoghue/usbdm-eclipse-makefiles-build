@@ -9,7 +9,7 @@
    <!-- DMA->CR -->
 
    <binaryOption key="dma_cr_hoe"
-      enumStem="DmaActionOnError"
+      typeName="DmaActionOnError"
       description="DMA halt on error"
       toolTip="Whether to halt transfer when a DMA error occurs">
       <choice value="0" name="Transfer continues on any error" enum="Continue" />
@@ -17,7 +17,7 @@
    </binaryOption>
 
    <binaryOption key="dma_cr_clm"
-      enumStem="DmaContinuousLink"
+      typeName="DmaContinuousLink"
       description="Continuous Link mode"
       toolTip="Whether to enable continuous link mode \n
                If enabled, on minor loop completion, the channel activates again if that \n
@@ -28,7 +28,7 @@
    </binaryOption>
 
    <binaryOption key="dma_cr_emlm"
-      enumStem="DmaMinorLoopMapping"
+      typeName="DmaMinorLoopMapping"
       description="Minor loop mapping"
       toolTip="Whether to enable minor loop mapping\n
                When enabled, TCDn.word2 is redefined to include individual enable fields, an offset field \n
@@ -40,7 +40,7 @@
    </binaryOption>
 
    <binaryOption key="dma_cr_erca"
-      enumStem="DmaArbitration"
+      typeName="DmaArbitration"
       description="Channel Arbitration"
       toolTip="How to arbitrate between requests from different channels">
       <choice value="0" name="Fixed (within group)"       enum="Fixed" />
@@ -49,7 +49,7 @@
 
    <choiceOption key="dma_cr_GroupArb" condition="dma_cr_erga_present"
       valueFormat="DMA_CR_ERGA(%s),DMA_CR_GRP1PRI(%s),DMA_CR_GRP0PRI(%s)"
-      enumStem="DmaGroupArbitration"
+      typeName="DmaGroupArbitration"
       description="Group Arbitration"
       toolTip="Controls priority of DMA groups">
       <choice value="1,0,1" name="Round Robin" enum="RoundRobin"  />
@@ -58,7 +58,7 @@
    </choiceOption>
 
    <binaryOption key="dma_cr_edbg"
-      enumStem="DmaInDebug"
+      typeName="DmaInDebug"
       description="Operation in Debug mode"
       toolTip="Control DMA operation in debug mode">
       <choice value="0" name="Continue in debug" enum="Continue"                  />
@@ -68,7 +68,7 @@
    <choiceOption key="DmaChannelNum"
       hidden="true"
       valueFormat="%s"
-      enumStem="DmaChannelNum"
+      typeName="DmaChannelNum"
       description="DMA channel numbers"
       toolTip="Identifies DMA channel">
 
@@ -112,7 +112,7 @@
    <!-- DMA->TCD[CSR] -->
    <choiceOption key="dma_csr_bwc"
       hidden="true"
-      enumStem="DmaSpeed"
+      typeName="DmaSpeed"
       description="Bandwidth Control"
       toolTip="Throttles the amount of bus bandwidth consumed by the eDMA. \n
                Generally, as the eDMA processes the minor loop, it continuously generates \n
@@ -127,7 +127,7 @@
    <choiceOption key="dma_csr_majorelink"
       hidden="true"
       valueFormat="DMA_CSR_MAJORELINK(%s),DMA_CSR_MAJORLINKCH(%s)"
-      enumStem="DmaMajorLink"
+      typeName="DmaMajorLink"
       description="Channel linking on major loop complete"
       toolTip="As the channel completes the major loop, this option enables the linking to another channel. \n
                The link target channel initiates a channel service request via an internal mechanism that sets the \n
@@ -171,7 +171,7 @@
 
    <binaryOption key="dma_csr_esg"
       hidden="true"
-      enumStem="DmaScatterGather"
+      typeName="DmaScatterGather"
       description="Scatter/Gather Processing"
       toolTip="If selected, scatter/gather processing occurs when the channel completes the major loop. \n
                The eDMA engine uses DLASTSGA as a memory pointer to a 0-modulo-32 address containing a 32-byte \n
@@ -184,7 +184,7 @@
 
    <binaryOption key="dma_csr_dreq"
       hidden="true"
-      enumStem="DmaStopOnComplete"
+      typeName="DmaStopOnComplete"
       description="Clear request on complete"
       toolTip="If selected, the eDMA hardware automatically clears the ERQ bit when \n
                the current major iteration count reaches zero">
@@ -194,7 +194,7 @@
 
    <binaryOption key="dma_csr_inthalf"
       hidden="true"
-      enumStem="DmaIntHalf"
+      typeName="DmaIntHalf"
       description="Interrupt when major counter is half complete"
       toolTip="If selected, the channel generates an interrupt request by setting the appropriate bit in the INT \n
                register when the current major iteration count reaches the halfway point. Specifically, the comparison \n
@@ -208,7 +208,7 @@
 
    <binaryOption key="dma_csr_intmajor"
       hidden="true"
-      enumStem="DmaIntMajor"
+      typeName="DmaIntMajor"
       description="Interrupt when major counter completes"
       toolTip="If selected, the channel generates an interrupt request by setting the appropriate bit in \n
                the INT when the current major iteration count reaches zero">
@@ -218,7 +218,7 @@
 
    <binaryOption key="dma_csr_start"
       hidden="true"
-      enumStem="DmaStart"
+      typeName="DmaStart"
       description="Channel Start"
       toolTip="If selected, the channel immediately requests service, \n
                otherwise start is triggered later by a hardware request. \n
@@ -345,7 +345,7 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr DmaTcdCsr(%params, Types... rest) : DmaTcdCsr(rest...) {
@@ -445,7 +445,7 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr DmaConfig(%params, Types... rest) : DmaConfig(rest...) {
@@ -469,7 +469,7 @@
          \t/**
          \t * Set %description
          \t *
-         %comments
+         %paramDescription
          \t */
          \tvoid %(name)(%params) {
          \t

@@ -31,7 +31,7 @@
     * Template substitutions
     *
     * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
     * %variable[index]                Variable name /ADC0/adc_sc2_acfe
     * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
     * %description[index]             Description from controlVar e.g. Compare Function Enable
@@ -41,12 +41,12 @@
     * %params                         Formatted parameter list for function
     * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
     * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %enumClass[index]               As for %paramType
-    * %enumParam[index]               As for %paramName
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
     * %variable[index]                Variable name from condition
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
@@ -61,7 +61,7 @@
 
    <!-- binaryOption key="lptmr_csr_ten" condition="lptmr_csr_ten_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="LptmrCsrTen"
+      typeName="LptmrCsrTen"
       description="Timer Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
       <choice name="Enabled"     value="1" enum="Enabled"/>
@@ -69,7 +69,7 @@
 
    <binaryOption key="lptmr_csr_tie" condition="lptmr_csr_tie_present"
       enabledBy="/$(_BASENAME)/irqHandlingMethod"
-      enumStem="LptmrInterrupt"
+      typeName="LptmrInterrupt"
       description="Timer interrupt enable"
       toolTip="Enables LPTMR interrupts">
       <choice value="0" name="Interrupt disabled" enum="Disabled" />
@@ -78,7 +78,7 @@
 
    <binaryOption key="lptmr_csr_tfc" condition="lptmr_csr_tfc_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="LptmrResetOnCompare"
+      typeName="LptmrResetOnCompare"
       description="Counter Action on Compare Event"
       toolTip="Counter action when CSR.TCF is set">
       <choice value="0" name="lptmr_cnr is reset whenever CSR.TCF is set" enum="Enabled"  />
@@ -87,7 +87,7 @@
 
    <binaryOption key="lptmr_csr_tms" condition="lptmr_csr_tms_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="LptmrMode"
+      typeName="LptmrMode"
       description="Selects between timer Interval and PUlse Counting"
       toolTip="Configures the mode of the LPTMR">
       <choice value="0" name="Time Interval mode" enum="TimeInterval"  />
@@ -118,7 +118,7 @@
    <choiceOption key="lptmr_psr_pcs" condition="lptmr_psr_pcs_present"
       enabledBy="enablePeripheralSupport"
       target="inputClockFrequency"
-      enumStem="LptmrClockSel"
+      typeName="LptmrClockSel"
       toolTip="Clock source for LPTMR">
       <choice value="0" name="MCG Internal Reference Clock (MCGIRCLK)"        enum="Mcgirclk" ref="/MCG/system_mcgirclk_clock[0]" code="McgInfo::getMcgIrClock()"  />
       <choice value="1" name="Low power oscillator (LPO - 1kHz)"              enum="Lpoclk"   ref="/PMC/system_low_power_clock"   code="PmcInfo::getLpoClock()"    isDefault="true" />
@@ -143,7 +143,7 @@
       target="counterFrequency"
       description="Prescaler Value"
       valueFormat="LPTMR_PSR_PBYP(%s),LPTMR_PSR_PRESCALE(%s)"
-      enumStem="LptmrPrescale"
+      typeName="LptmrPrescale"
       toolTip="Configures the size of the Prescaler in Time Interval mode" >
       <choice value="1,0"  name="Prescaler = 1"      ref="(inputClockFrequency)"        enum="Direct"       />
       <choice value="0,0"  name="Prescaler = 2"      ref="(inputClockFrequency)/2."     enum="DivBy_2"      />
@@ -212,7 +212,7 @@
       target="filterDuration"
       description="Filter Value"
       valueFormat="LPTMR_PSR_PBYP(%s),LPTMR_PSR_PRESCALE(%s)"
-      enumStem="LptmrGlitchFilter"
+      typeName="LptmrGlitchFilter"
       toolTip="Configures the size of the glitch filter in Pulse Counting mode" >
       <choice value="1,0"  name="No glitch filter"                 ref="0."                         enum="Direct"       />
       <choice value="0,1"  name="2 clock cycle glitch filter"      ref="2./inputClockFrequency"     enum="2_clocks"     />
@@ -241,7 +241,7 @@
 
    <choiceOption key="lptmr_csr_tps" condition="lptmr_csr_tps_present"
       enabledBy="enablePeripheralSupport&amp;&amp;lptmr_csr_tms"
-      enumStem="LptmrPinSel"
+      typeName="LptmrPinSel"
       description="Input Pin"
       toolTip="Input source to be used in Pulse Counter mode">
       <choice value="0" name="CMP0 output"    enum="Cmp0" />
@@ -252,7 +252,7 @@
 
    <binaryOption key="lptmr_csr_tpp" condition="lptmr_csr_tpp_present"
       enabledBy="enablePeripheralSupport&amp;&amp;lptmr_csr_tms"
-      enumStem="LptmrPulseEdge"
+      typeName="LptmrPulseEdge"
       description="Pin Polarity"
       toolTip="Polarity of the input source in Pulse Counter mode">
       <choice value="0" name="Active-high source, rising-edge increments lptmr_cnr"  enum="Rising"  />
@@ -295,7 +295,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}
          \t
          \t/**
@@ -336,7 +336,7 @@
       %paramDescription
       \t */
       \tstatic void setActionOnCompare(%params) {
-      \t   %defaultFieldExpression
+      \t   %fieldAssignment
       \t}\n\n
    ]]></setTemplate>
 
@@ -349,7 +349,7 @@
       \t */
       \tstatic void selectPulseInput(
       %params) {
-      \t   %defaultFieldExpression
+      \t   %fieldAssignment
       \t}\n\n
    ]]></setTemplate>
 
@@ -424,10 +424,10 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setInputClockSource(%enumClass %enumParam) {
-      \t   %defaultFieldExpression
+      \tstatic void setInputClockSource(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}
       \t
       \t/**
@@ -452,7 +452,7 @@
       \t */
       \tstatic uint32_t getInputClockFrequency() {
       \t
-      \t   return getInputClockFrequency((LptmrClockSel)(%defaultMaskingExpression));
+      \t   return getInputClockFrequency((LptmrClockSel)(%maskingExpression));
       \t}
       \t
       \t/**
@@ -507,16 +507,16 @@
       \t
       \t   enable();
       \t   // Change settings with timer disabled 1
-      \t   %register0 = %enumParam0|LptmrMode_TimeInterval|LPTMR_CSR_TCF_MASK;
+      \t   %register0 = %paramName0|LptmrMode_TimeInterval|LPTMR_CSR_TCF_MASK;
       \t
       \t   // Set clock source and prescaler
-      \t   %register2 = %enumParam2|%enumParam4;
+      \t   %register2 = %paramName2|%paramName4;
       \t
       \t   // Set event time
-      \t   %register3 = %enumParam3;
+      \t   %register3 = %paramName3;
       \t
       \t   // Enable timer
-      \t   %register0 = %enumParam0|%enumParam1|LptmrMode_TimeInterval|LPTMR_CSR_TCF_MASK|LPTMR_CSR_TEN_MASK;
+      \t   %register0 = %paramName0|%paramName1|LptmrMode_TimeInterval|LPTMR_CSR_TCF_MASK|LPTMR_CSR_TEN_MASK;
       \t}\n\n
    ]]></setTemplate>
 
@@ -540,16 +540,16 @@
       \t
       \t   enable();
       \t
-      \t   uint8_t  %registerName3 = %enumParam3;
+      \t   uint8_t  %registerName3 = %paramName3;
       \t   uint32_t cmr;
       \t
-      \t   ErrorCode rc = calculateDurationValues(%enumParam2, %registerName3, cmr);
+      \t   ErrorCode rc = calculateDurationValues(%paramName2, %registerName3, cmr);
       \t   if (rc != E_NO_ERROR) {
       \t      return rc;
       \t   }
       \t
       \t   // Change settings with timer disabled 2
-      \t   %register0 = %enumParam0|LptmrMode_TimeInterval|LPTMR_CSR_TCF_MASK;
+      \t   %register0 = %paramName0|LptmrMode_TimeInterval|LPTMR_CSR_TCF_MASK;
       \t
       \t   // Set clock source and prescaler
       \t   %register3 = %registerName3;
@@ -558,7 +558,7 @@
       \t   lptmr->CMR = cmr;
       \t
       \t   // Enable timer
-      \t   %register0 = %enumParam0|%enumParam1|LptmrMode_TimeInterval|LPTMR_CSR_TCF_MASK|LPTMR_CSR_TEN_MASK;
+      \t   %register0 = %paramName0|%paramName1|LptmrMode_TimeInterval|LPTMR_CSR_TCF_MASK|LPTMR_CSR_TEN_MASK;
       \t
       \t   return E_NO_ERROR;
       \t}\n\n
@@ -591,16 +591,16 @@
       \t   enable();
       \t
       \t   // Change settings with timer disabled 3
-      \t   %register0 = %enumParam0|%enumParam1|%enumParam4|LptmrMode_PulseCounting|LPTMR_CSR_TCF_MASK;
+      \t   %register0 = %paramName0|%paramName1|%paramName4|LptmrMode_PulseCounting|LPTMR_CSR_TCF_MASK;
       \t
       \t   // Set clock source and prescaler
-      \t   %register2 = %enumParam2|%enumParam3;
+      \t   %register2 = %paramName2|%paramName3;
       \t
       \t   // Set Event time
-      \t   %register6 = %enumParam6;
+      \t   %register6 = %paramName6;
       \t
       \t   // Enable timer
-      \t   %register0 = %enumParam0|%enumParam1|%enumParam4|%enumParam5|LptmrMode_PulseCounting|LPTMR_CSR_TCF_MASK|LPTMR_CSR_TEN_MASK;
+      \t   %register0 = %paramName0|%paramName1|%paramName4|%paramName5|LptmrMode_PulseCounting|LPTMR_CSR_TCF_MASK|LPTMR_CSR_TEN_MASK;
       \t}\n\n
    ]]></setTemplate>
 
@@ -623,7 +623,7 @@
 
    <setTemplate variables="irqHandlingMethod"><![CDATA[
       \t/// Type for %description
-      \ttypedef void (*%enumClass)();\n\n
+      \ttypedef void (*%paramType)();\n\n
    ]]></setTemplate>
 
 <!--   ========== class BasicInfo =============================== -->
@@ -743,14 +743,14 @@
       variables="lptmr_cmrPeriod"
     ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = 0_s;\n\n
+      \t   %paramType %registerName = 0_s;\n\n
    ]]></setTemplate >
 
    <setTemplate  namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="lptmr_cmr_compare"
     ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = 0_ticks;\n\n
+      \t   %paramType %registerName = 0_ticks;\n\n
    ]]></setTemplate >
 
    <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
@@ -766,7 +766,7 @@
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+      \t   %paramType %registerName = %paramType_Normal;\n\n
    ]]></initialValueTemplate>
 
    <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
@@ -840,7 +840,7 @@
       \t   template <typename... Types>
       \t   constexpr TimeIntervalModeInit(%params, Types... rest) : TimeIntervalModeInit(rest...) {
       \t
-      \t      this->%enumParam0 = %paramExpression;
+      \t      this->%paramName0 = %paramExpression;
       \t   }
       #endif\n\n
    ]]></constructorTemplate>
@@ -971,7 +971,7 @@
       \t   template <typename... Types>
       \t   constexpr PulseCountingModeInit(%params, Types... rest) : PulseCountingModeInit(rest...) {
       \t
-      \t      this->%enumParam0 = %enumParam0;
+      \t      this->%paramName0 = %paramName0;
       \t   }
       #endif\n\n
    ]]></constructorTemplate>

@@ -21,7 +21,7 @@
          %paramDescription
          \t */
          \tstatic void configure%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}\n\n
       ]]></setTemplate>
    </for>

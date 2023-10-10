@@ -29,7 +29,7 @@
     * Template substitutions
     *
     * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
     * %variable[index]                Variable name /ADC0/adc_sc2_acfe
     * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
     * %description[index]             Description from controlVar e.g. Compare Function Enable
@@ -39,21 +39,19 @@
     * %params                         Formatted parameter list for function
     * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
     * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %enumClass[index]               As for %paramType
-    * %enumParam[index]               As for %paramName
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
-    * %variable[index]                Variable name from condition
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
-    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1
+    * %registerNAME[index]            Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
 -->
 
-   <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
+   <!-- ************* Constants ****************** -->
 
    <template><![CDATA[
       \t//! Pin number in Info table for SCL if mapped to a pin
@@ -62,6 +60,10 @@
       \t//! Pin number in Info table for SDA if mapped to a pin
       \tstatic constexpr int sdaPin  = 1;\n\n
    ]]></template>
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
 
    <title description="Clock Settings" />
 
@@ -117,7 +119,7 @@
 
    <choiceOption key="i2c_f_mult" condition="i2c_f_mult_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="I2cFMult"
+      typeName="I2cFMult"
       derived="true"
       locked="true"
       toolTip="Prescale divider to generate the I2C baud rate"
@@ -139,10 +141,18 @@
 
    <!-- ************* C1 ****************** -->
 
+   <!--binaryOption key="i2c_c1_iicen" condition="i2c_c1_iicen_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2cC1Iicen"
+      description="Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption -->
+
    <binaryOption key="i2c_c1_iicie" condition="i2c_c1_iicie_present"
       hidden="true"
       enabledBy="enablePeripheralSupport"
-      enumStem="I2cInterrupt"
+      typeName="I2cInterrupt"
       description="Interrupt Enable" >
       <choice name="Disabled"    value="0" enum="Disabled" />
       <choice name="Enabled"     value="1" enum="Enabled" />
@@ -151,16 +161,44 @@
    <binaryOption key="i2c_c1_mst" condition="i2c_c1_mst_present"
       locked="true"
       enabledBy="enablePeripheralSupport"
-      enumStem="I2cBusRole"
+      typeName="I2cBusRole"
       description="Bus Role Select"
       toolTip="Slave mode not supported">
       <choice name="Peripheral mode"  value="0" enum="Peripheral" />
       <choice name="Controller mode"  value="1" enum="Controller" isDefault="true" />
    </binaryOption >
 
+   <!--binaryOption key="i2c_c1_tx" condition="i2c_c1_tx_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2cC1Tx"
+      description="Transmit Mode Select" >
+      <choice name="Receive"     value="0" enum="Receive"/>
+      <choice name="Transmit"    value="1" enum="Transmit"/>
+   </binaryOption -->
+
+   <!--binaryOption key="i2c_c1_txak" condition="i2c_c1_txak_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2cC1Txak"
+      toolTip="Controls if an acknowledge signal is sent to the bus on\n
+               the following receiving byte (if FACK is cleared) or the current receiving byte (if FACK is set)"
+      description="Transmit Acknowledge Enable" >
+      <choice name="Acknowledge sent"  value="0" enum="AcknowledgeSent"/>
+      <choice name="No acknowledge"    value="1" enum="NoAcknowledge"/>
+   </binaryOption -->
+
+   <!--choiceOption key="i2c_c1_rsta" condition="i2c_c1_rsta_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2cC1Rsta"
+      toolTip="Writing a one to this bit generates a repeated START condition\n
+               provided it is the current master.\n
+               This bit will always be read as zero"
+      description="Repeat START" >
+      <choice name="Write 1 to trigger"  value="0" enum="Write1ToTrigger"/>
+   </choiceOption -->
+
    <binaryOption key="i2c_c1_wuen" condition="i2c_c1_wuen_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="I2cWakeup"
+      typeName="I2cWakeup"
       toolTip="Controls if an interrupt is generated when address matching in low power mode\n
                To have effect interrupts must be enabled in I2C"
       description="Wake-up on match" >
@@ -168,35 +206,106 @@
       <choice name="Enabled"     value="1" enum="Enabled" />
    </binaryOption >
 
+   <!-- binaryOption key="i2c_c1_dmaen" condition="i2c_c1_dmaen_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2cC1Dmaen"
+      toolTip="If DMA transfer is enabled the following conditions trigger the DMA request:\n
+               \t- While FACK = 0, a data byte is received, either address or data is transmitted. (ACK/NACK automatic)\n
+               \t- While FACK = 0, the first byte received matches the A1 register or is general call address.
+If any address matching occurs, IAAS and TCF are set.
+If the direction of transfer is known from master to slave, then it is not required to check the SRW.
+With this assumption, DMA can also be used in this case.
+In other cases, if the master reads data from the slave, then it is required to rewrite the C1 register operation.
+ With this assumption, DMA cannot be used.
+\t- When FACK = 1, an address or a data byte is transmitted"
+      description="DMA transfer enable" >
+      <choice name="DMA disabled"  value="0" enum="DmaDisabled"/>
+      <choice name="DMA enabled"   value="1" enum="DmaEnabled"/>
+   </binaryOption -->
+
+   <!-- ************* S ****************** -->
+
+   <!--binaryOption key="i2c_s_iaas" condition="i2c_s_iaas_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2cSIaas"
+      description="Addressed As A Slave" >
+      <choice name="Not addressed"         value="0" enum="NotAddressed"/>
+      <choice name="Addressed as a slave"  value="1" enum="AddressedAsASlave"/>
+   </binaryOption -->
+
+   <!-- binaryOption key="i2c_s_arbl" condition="i2c_s_arbl_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2cSArbl"
+      description="Arbitration Lost" >
+      <choice name="Standard bus operation"  value="0" enum="StandardBusOperation"/>
+      <choice name="Loss of arbitration"     value="1" enum="LossOfArbitration"/>
+   </binaryOption -->
+
+   <!-- binaryOption key="i2c_s_ram" condition="i2c_s_ram_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2cSRam"
+      toolTip="This bit is set by any of the following conditions:\n
+               - Any nonzero calling address is received that matches the address in the RA register.\n
+               - The RMEN bit is set and the calling address is within the range of values of the A1 and RA register"
+      description="Range Address Match" >
+      <choice name="Not addressed"         value="0" enum="NotAddressed"/>
+      <choice name="Addressed as a slave"  value="1" enum="AddressedAsASlave"/>
+   </binaryOption -->
+
+   <!-- binaryOption key="i2c_s_iicif" condition="i2c_s_iicif_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2cSIicif"
+      description="Interrupt Flag" >
+      <choice name="Interrupt not pending"  value="0" enum="InterruptNotPending"/>
+      <choice name="Interrupt pending"      value="1" enum="InterruptPending"/>
+   </binaryOption -->
+
+   <!-- ************* D ****************** -->
+
+   <!--intOption key="i2c_d_data" condition="i2c_d_data_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="uint8_t"
+      description="Data"
+   / -->
+
    <!-- ************* C2 ****************** -->
 
    <binaryOption key="i2c_c2_gcaen" condition="i2c_c2_gcaen_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="I2cCallAddress"
+      typeName="I2cCallAddress"
       description="General Call Address"
       toolTip="Controls General call address" >
       <choice name="Disabled"    value="0" enum="Disabled" />
       <choice name="Enabled"     value="1" enum="Enabled" />
    </binaryOption >
 
-   <binaryOption key="i2c_c2_sbrc" condition="i2c_c2_sbrc_present"
+   <binaryOption key="i2c_c2_hdrs" condition="i2c_c2_hdrs_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="I2cClockStretching"
-      toolTip="Allows the slave baud rate to follows the master baud rate with clock stretching occurring"
-      description="Slave Baud Rate Control" >
-      <choice name="Slave rate follows master"  value="0" enum="Disabled" />
-      <choice name="Slave rate independent"     value="1" enum="Enabled" />
+      typeName="I2cHighDrive"
+      description="High Drive Select"
+      toolTip="Increases the pin drive on SCL and SDA" >
+      <choice name="Normal drive mode"  value="0" enum="NormalDriveMode"/>
+      <choice name="High drive mode"    value="1" enum="HighDriveMode"/>
    </binaryOption >
 
    <!-- ************* C2_ADEXT, C2_RMEM, A1, RA ****************** -->
 
    <binaryOption key="i2c_c2_adext" condition="i2c_c2_adext_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="I2cAddressLength"
+      typeName="I2cAddressLength"
       toolTip="Selects between 7-bit and 9-bit address schemes"
       description="Address Extension" >
       <choice name="7-bit address"   value="0" enum="7Bit" />
       <choice name="10-bit address"  value="1" enum="10Bit" />
+   </binaryOption >
+
+   <binaryOption key="i2c_c2_sbrc" condition="i2c_c2_sbrc_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2cClockStretching"
+      toolTip="Allows the slave baud rate to follows the master baud rate with clock stretching occurring"
+      description="Slave Baud Rate Control" >
+      <choice name="Slave rate follows master"  value="0" enum="Disabled" />
+      <choice name="Slave rate independent"     value="1" enum="Enabled" />
    </binaryOption >
 
    <intOption key="i2c_slaveaddress" condition="i2c_a1_ad_present"
@@ -205,12 +314,12 @@
       typeName="int"
       description="Slave Address"
       toolTip="Primary slave address used by the I2C module when it is addressed as a slave\n
-               Note: This is a physical device address with the LSB=0 i.e. an 8-bit or 11-bit value"
+               Note: Note: This is a physical device address i.e. an 8-bit or 11-bit value with the LSB=0"
    />
 
    <binaryOption key="i2c_c2_rmen" condition="i2c_c2_rmen_present"
-      enabledBy="enablePeripheralSupport"
-      enumStem="I2cAddressRange"
+      enabledBy="enablePeripheralSupport&amp;&amp;!i2c_c2_adext##Disabled in 10-bit address mode"
+      typeName="I2cAddressRange"
       toolTip="Enables address matching for a range of slave addresses"
       description="Range Address Matching" >
       <choice name="Range mode disabled"  value="0" enum="Disabled" />
@@ -218,13 +327,13 @@
    </binaryOption >
 
    <intOption key="i2c_rangeaddress" condition="i2c_ra_rad_present"
+      enabledBy="enablePeripheralSupport&amp;&amp;!i2c_c2_adext##Disabled in 10-bit address mode"
       radix="16"
-      enabledBy="enablePeripheralSupport&amp;&amp;i2c_c2_rmen##Disabled by i2c_c2_rmen"
       typeName="int"
       description="Slave Address used in matching"
       toolTip="Range slave address used by the I2C module when it is addressed as a slave.\n
                A slave address is matched in the range (i2c_slaveaddress,i2c_slaveaddress2].\n
-               Note: This is a physical device address with the LSB=0 i.e. 7-bit or 10-bit value"
+               Note: This is a physical device address i.e. an 8-bit value with the LSB=0"
    />
 
    <intOption key="i2c_c2_ad" condition="i2c_c2_ad_present"
@@ -261,16 +370,41 @@
 
    <binaryOption key="i2c_flt_shen" condition="i2c_flt_shen_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="I2cStopHoldOff"
-      toolTip="Set this bit to hold off entry to stop mode when any data transmission or reception is occurring"
+      typeName="I2cStopHoldOff"
+      toolTip="Set this bit to hold off entry to stop mode when any data transmission\n
+               or reception is occurring"
       description="Stop Hold-off" >
       <choice name="Stop hold-off is disabled"  value="0" enum="Disabled" />
       <choice name="Stop hold-off is enabled"   value="1" enum="Enabled" />
    </binaryOption >
 
+   <binaryOption key="i2c_flt_stopf" condition="i2c_flt_stopf_present"
+      hidden="true"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2cFltStopf"
+      toolTip="Hardware sets this bit when the I2C bus stop status is detected.\n
+               The STOPF bit must be cleared by writing 1 to it"
+      description="Bus Stop Detect Flag" >
+      <choice name="No stop happens on I2C bus"  value="0" enum="NoStopHappensOnI2cBus"/>
+      <choice name="Stop detected on I2C bus"    value="1" enum="StopDetectedOnI2cBus"/>
+   </binaryOption>
+
+   <binaryOption key="i2c_flt_stopie" condition="i2c_flt_stopie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2cFltStopie"
+      toolTip="This bit enables the interrupt for I2C bus stop detection.\n
+               NOTE: To clear the detection interrupt:\n
+               In the interrupt service routine, first clear the STOPF or STARTF bit by writing 1 to it,\n
+               and then clear the IICIF bit in the status register.\n
+               If this sequence is reversed, the IICIF bit is asserted again"
+      description="Bus Stop Interrupt Enable" >
+      <choice name="Interrupt disabled"  value="0" enum="InterruptDisabled"/>
+      <choice name="Interrupt enabled"   value="1" enum="InterruptEnabled"/>
+   </binaryOption >
+
    <binaryOption key="i2c_flt_ssie" condition="i2c_flt_ssie_present"
       enabledBy="irqHandlingMethod"
-      enumStem="I2cStartStopInterrupt"
+      typeName="I2cStartStopInterrupt"
       toolTip="This bit enables the interrupt for I2C bus stop or start detection.\n
                NOTE: To clear the detection interrupt: In the interrupt service routine, \n
                first clear the STOPF or STARTF bit by writing 1 to it and\n
@@ -283,7 +417,7 @@
 
    <choiceOption key="i2c_flt_flt" condition="i2c_flt_flt_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="I2cFilter"
+      typeName="I2cFilter"
       toolTip="Controls the width of the glitch, in terms of I2C module clock cycles, that the filter must absorb.\n
                For any glitch whose size is less than or equal to this width setting, the filter does not allow the glitch to pass"
       description="Programmable Filter Factor" >
@@ -310,9 +444,19 @@
    <title description="SMB"
       condition="i2c_smb_fack_present" />
 
+   <binaryOption key="/$(_BASENAME)/smbOptionsAvailable"
+      condition="i2c_smb_fack_present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      modify="true"
+      description="Enables the SMB options"
+      toolTip="If not selected then options are limited to those associated with basic I2C operation" >
+      <choice value="false" enum="I2cOnly"   name="I2C options only"       isDefault="true" />
+      <choice value="true"  enum="I2cAndSmb" name="SMB options available" />
+   </binaryOption>
+
    <binaryOption key="i2c_smb_fack" condition="i2c_smb_fack_present"
-      enabledBy="enablePeripheralSupport"
-      enumStem="I2cSmbFastAck"
+      enabledBy="/$(_BASENAME)/smbOptionsAvailable"
+      typeName="I2cSmbFastAck"
       toolTip="For SMBus packet error checking, the CPU must be able to issue an ACK or NACK according to the result of receiving data byte"
       description="Fast NACK/ACK" >
       <choice name="ACK/NAK on data byte"   value="0" enum="Disabled" />
@@ -320,8 +464,8 @@
    </binaryOption >
 
    <binaryOption key="i2c_smb_alerten" condition="i2c_smb_alerten_present"
-      enabledBy="enablePeripheralSupport"
-      enumStem="I2cSmbAlert"
+      enabledBy="/$(_BASENAME)/smbOptionsAvailable"
+      typeName="I2cSmbAlert"
       toolTip="Enables or disables SMBus alert response address matching"
       description="SMBus Alert Response Address" >
       <choice name="Matching disabled"  value="0" enum="Disabled" />
@@ -329,8 +473,8 @@
    </binaryOption >
 
    <binaryOption key="i2c_smb_tcksel" condition="i2c_smb_tcksel_present"
-      enabledBy="enablePeripheralSupport"
-      enumStem="I2cSmbTimwoutClock"
+      enabledBy="/$(_BASENAME)/smbOptionsAvailable"
+      typeName="I2cSmbTimwoutClock"
       toolTip="Selects the clock source of the timeout counter"
       description="Timeout Counter Clock Select" >
       <choice name="Bus clock / 64"  value="0" enum="BusClockDiv64" />
@@ -339,6 +483,7 @@
 
    <binaryOption key="i2c_smb_sltf" condition="i2c_smb_sltf_present"
       hidden="true"
+      typeName="I2cSclLowTimeout"
       toolTip="This flag sets when an SCL low timeout occurs"
       description="SCL Low Timeout Flag" >
       <choice name="No timeout occurs"  value="0" enum="NoTimeoutOccurs" />
@@ -347,6 +492,7 @@
 
    <binaryOption key="i2c_smb_shtf2" condition="i2c_smb_shtf2_present"
       hidden="true"
+      typeName="I2cSclHighTimeout"
       toolTip="This flag sets when SCL is held high and SDA is held low more than LoValue/512 clock cycles."
       description="SCL High Timeout Flag 2" >
       <choice name="No timeout occurs"  value="0" enum="NoTimeoutOccurs" />
@@ -354,8 +500,8 @@
    </binaryOption >
 
    <binaryOption key="i2c_smb_shtf2ie" condition="i2c_smb_shtf2ie_present"
-      enabledBy="irqHandlingMethod"
-      enumStem="I2cSmbTimoutInterrupt"
+      enabledBy="/$(_BASENAME)/smbOptionsAvailable"
+      typeName="I2cSmbTimoutInterrupt"
       toolTip="Enables SCL high and SDA low timeout interrupt"
       description="SHTF2 Interrupt" >
       <choice name="Interrupt disabled"  value="0" enum="Disabled" />
@@ -365,8 +511,8 @@
    <!-- ************* SMB_SIICAEN, A2 ****************** -->
 
    <binaryOption key="i2c_smb_siicaen" condition="i2c_smb_siicaen_present"
-      enabledBy="enablePeripheralSupport"
-      enumStem="I2cSmbAddress"
+      enabledBy="/$(_BASENAME)/smbOptionsAvailable"
+      typeName="I2cSmbAddress"
       toolTip="Enables or disables SMBus device default address"
       description="Second I2C Address (SMB)" >
       <choice name="Address 2 (SMB) disabled"  value="0" enum="Disabled" />
@@ -374,8 +520,8 @@
    </binaryOption >
 
    <intOption key="i2c_a2_sad" condition="i2c_a2_sad_present"
-      enabledBy="enablePeripheralSupport&amp;&amp;i2c_smb_siicaen"
-      typeName="int"
+      enabledBy="i2c_smb_siicaen"
+      typeName="uint8_t"
       description="SMBus Address"
       toolTip="Contains the slave address used by the SMBus.\n
                This field is used as the device default address or other related addresses"
@@ -385,7 +531,7 @@
 
    <intOption key="i2c_slt_value" condition="i2c_slth_sslt_present"
       units="ticks"
-      enabledBy="enablePeripheralSupport"
+      enabledBy="/$(_BASENAME)/smbOptionsAvailable"
       typeName="uint16_t"
       description="SCL low timeout value"
       toolTip="SCL low timeout"
@@ -431,11 +577,14 @@
 
    <for keys="field:name"
         values="
-      i2c_smb_sltf:SclLowTimeout;
-      i2c_smb_shtf2:SclHighTimeout;
-      i2c_smb_sltf,i2c_smb_shtf2:Timeouts;
-      i2c_s_arbl:ArbitrationFlag;
-      i2c_s_iicif:InterruptFlag" >
+      i2c_smb_sltf   : SclLowTimeout;
+      i2c_smb_shtf2  : SclHighTimeout;
+      i2c_s_tcf      : TxComplete;
+      i2c_s_arbl     : ArbLost;
+      i2c_s_ram      : RangeMatch;
+      i2c_s_iicif    : Interrupt;
+      i2c_flt_stopf  : StopDetect;
+      " >
       <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
@@ -446,29 +595,47 @@
          \tstatic void clear%(name)() {
          \t   %register = %register | %mask;
          \t}
+         \t
+         \t/**
+         \t * Check %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register&%mask);
+         \t}
          \t\n
       ]]></setTemplate>
    </for>
 
    <for keys="field:name"
         values="
-      i2c_c1_iicen:Enable;
-      i2c_c1_iicie:Interrupt;
-      i2c_c1_mst:Master;
-      i2c_c1_wuen:Wakeup;
-      i2c_s_ram:RangeMatch;
-      i2c_c2_gcaen:GeneralCall;
-      i2c_c2_adext:AddressSize;
-      i2c_c2_sbrc:SlaveRate;
-      i2c_c2_rmen:RangeMatch;
-      i2c_flt_shen:StopHold;
-      i2c_flt_ssie:BusStopInterrupt;
-      i2c_flt_flt:Filter;
-      i2c_smb_fack:SmbFastAck;
-      i2c_smb_alerten:SmbAlertAddr;
-      i2c_smb_siicaen:SmbSecondIcAddress;
-      i2c_smb_tcksel:SmbTimerSelect;
-      i2c_smb_shtf2ie:SmbTimeout" >
+         i2c_f_mult      : Multiplier;
+         i2c_f_icr       : ClockRate;
+         i2c_c1_iicen    : Enable;
+         i2c_c1_iicie    : Interrupt;
+         i2c_c1_mst      : Mode;
+         i2c_c1_tx       : TxRxMode;
+         i2c_c1_txak     : TxAck;
+         i2c_c1_rsta     : RepeatedStart;
+         i2c_c1_wuen     : Wakeup;
+         i2c_c1_dmaen    : Dma;
+         i2c_s_iaas      : AddressedAsPeripheral;
+         i2c_s_busy      : SBusy;
+         i2c_s_srw       : PeripheralReadWrite;
+         i2c_s_rxak      : RxAck;
+         i2c_d_data      : Data;
+         i2c_c2_gcaen    : GeneralCall;
+         i2c_c2_adext    : AddressSize;
+         i2c_c2_hdrs     : HighDrive;
+         i2c_c2_sbrc     : SlaveRate;
+         i2c_c2_rmen     : RangeMatch;
+         i2c_c2_ad       : UpperAddress;
+         i2c_flt_shen    : StopHold;
+         i2c_flt_stopie  : StopInterrupt;
+         i2c_flt_ssie    : StopStartInterrupt;
+         i2c_flt_flt     : Filter;
+         i2c_ra_rad      : RangeAddress" >
       <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
@@ -477,7 +644,42 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register&%mask);
+         \t}
+         \t\n
+      ]]></setTemplate>
+   </for>
+
+   <for keys="field:name"
+        values="
+         i2c_smb_fack    : SmbFastAck;
+         i2c_smb_alerten : SmbAlertAddr;
+         i2c_smb_siicaen : SmbSecondIcAddress;
+         i2c_smb_tcksel  : SmbTimerSelect;
+         i2c_smb_shtf1   : SmbShtf1;
+         i2c_smb_shtf2ie : SmbTimeout;
+         i2c_a2_sad      : SmbAddress;
+         i2c_slth_sslt   : SclLowTimoutHigh;
+         i2c_sltl_sslt   : SclLowTimoutLow" >
+      <setTemplate variables="%(field)"
+                   codeGenCondition="enableGettersAndSetters&amp;&amp;/$(_BASENAME)/smbOptionsAvailable"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %fieldAssignment
          \t}
          \t
          \t/**
@@ -494,22 +696,29 @@
 
 <!--   ========== I2C Init class =============================== -->
 
-   <template key="/$(_BASENAME)/init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true" >
+   <template key="/$(_BASENAME)/init_description" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
       \t/**
-      \t * Class used to do initialisation of the $(_BASENAME)
+      \t * Class used to do initialisation of the $(_Baseclass)
       \t *
       \t * This class has a templated constructor that accepts various values.
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
       \t *
       \t * @note This constructor may be used to create a const instance in Flash
       \t *
       \t * Example:
       \t * @code
-      \t *  void i2cCallback(ErrorCode ec) {
-      \t *     ...
-      \t *  }
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(ErrorCode ec) {
+      \t *    ...
+      \t * }
       \t *
-      \t * static const $(_Class)::Init init {
+      \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *   // Setup values - Multiple values shown on a single line must appear together in order shown
       \t *   I2cAddressLength_7Bit, 0x70 ,      // Address Length - 7-bit address and Slave Address
@@ -533,12 +742,14 @@
       \t *   I2cSmbAddress_Enabled , 0x23,      // Second I2C Address (SMB) - enabled and SMBus Address
       \t *   3000_ticks,                        // SCL low timeout value
       \t *
-      \t *   NvicPriority_Normal,               // IRQ level for this peripheral - Normal
-      \t *   i2cCallback,                       // Call-back function
+      \t *   $(_name)Callback,                  // Call-back to execute on event - call-back function name
+      \t *   NvicPriority_Low,                  // Priority for interrupt - Low
+      \t *
+      \t *   $(_Class)::DefaultInitValue       // Used as base value modified by above
       \t * };
       \t *
       \t * // Initialise $(_Class) from values specified above
-      \t * $(_Class)::configure(init)
+      \t * $(_Class)::configure($(_name)Init)
       \t * @endcode
       \t */
    ]]>
@@ -552,15 +763,15 @@
    ]]>
    </template>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicValueExpression;
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
        \t\n
    ]]></initialValueTemplate>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
    <![CDATA[
       \t/**
       \t * Type definition for $(_Baseclass) interrupt call back.
@@ -577,7 +788,7 @@
    ]]>
    </template>
 
-   <template namespace="all" key="/$(_BASENAME)/protected" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
+   <template namespace="all" key="/$(_BASENAME)/protected" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
    <![CDATA[
       \t/**
       \t * Callback function for status changes
@@ -634,7 +845,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true" >
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
       $(/$(_BASENAME)/init_description)
       \tclass Init {
@@ -662,93 +873,87 @@
       \t   unsigned %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
+   <setTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></setTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="i2c_a1_ad"
    ><![CDATA[
       \t   /// Address Register 1
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="i2c_f_mult,i2c_f_icr"
    ><![CDATA[
       \t   /// Frequency Divider register
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
-      variables="i2c_c1_iicie,i2c_c1_mst,i2c_c1_wuen"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      variables="i2c_c1_iicie,i2c_c1_mst,i2c_c1_wuen,i2c_c1_dmaen"
    ><![CDATA[
       \t   /// Control Register 1
       \t   uint8_t %registerName = I2cBusRole_Controller;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
-      variables="i2c_d_data"
-   ><![CDATA[
-      \t   /// Data I/O register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
-
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
-      variables="i2c_c2_gcaen,i2c_c2_adext,i2c_c2_sbrc,i2c_c2_rmen,i2c_c2_ad"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      variables="i2c_c2_gcaen,i2c_c2_adext,i2c_c2_hdrs,i2c_c2_sbrc,i2c_c2_rmen,i2c_c2_ad"
    ><![CDATA[
       \t   /// Control Register 2
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
-      variables="i2c_flt_shen,i2c_flt_ssie,i2c_flt_flt"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      variables="i2c_flt_shen,i2c_flt_stopie,i2c_flt_ssie,i2c_flt_flt"
    ><![CDATA[
       \t   /// Programmable Input Glitch Filter register
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="i2c_ra_rad"
    ><![CDATA[
       \t   /// Range Address register
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable"
       variables="i2c_smb_fack,i2c_smb_alerten,i2c_smb_siicaen,i2c_smb_tcksel,i2c_smb_shtf2ie"
    ><![CDATA[
       \t   /// SMBus Control and Status register
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable"
       variables="i2c_a2_sad"
    ><![CDATA[
       \t   /// Address Register 2
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable"
       variables="i2c_slt_value"
    ><![CDATA[
       \t   /// SCL Low Timeout Register
       \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName0 = %symbolicValueExpression1;
+      \t   %paramType %registerName0 = %symbolicExpression1;
       \t\n
    ]]></initialValueTemplate>
 
 <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -758,10 +963,7 @@
       \t   // Update settings
       \t   configure(Info::DefaultInitValue);
       \t}
-      \t\n
-   ]]></template>
-
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+      \t
       \t/**
       \t * Configure $(_BASENAME) from values specified in init
       \t *
@@ -774,8 +976,10 @@
       \t   Info::enableClock();
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+             condition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-backs if feature enabled
       \t      setCallback(init.callbackFunction);
       \t      enableNvicInterrupts(init.irqlevel);
       \t   }
@@ -796,32 +1000,39 @@
       \t   // Clear flags
       \t   i2c->S       = I2C_S_ARBL_MASK|I2C_S_IICIF_MASK;
       \t
-      \t   // ..........  Regs to init .......... ;
+      \t   // Initialise registers
       \t   i2c->A1      = init.a1;
       \t   i2c->F       = f;
       \t   i2c->C1      = init.c1;
       \t   i2c->C2      = init.c2;
       \t   i2c->FLT     = init.flt;
-      \t   //i2c->RA      = init.ra;
-      \t   //i2c->SMB     = init.smb;
-      \t   //i2c->A2      = init.a2;
-      \t   //i2c->SLTH    = (uint8_t)(init.slt>>8);
-      \t   //i2c->SLTL    = (uint8_t)init.slt;
+      \t   i2c->RA      = init.ra;\n
+   ]]></template>
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" condition="i2c_smb_fack_present"
+      codeGenCondition="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;/$(_BASENAME)/smbOptionsAvailable" ><![CDATA[
+      \t   i2c->SMB     = init.smb;
+      \t   i2c->A2      = init.a2;
+      \t   i2c->SLTH    = (uint8_t)(init.slt>>8);
+      \t   i2c->SLTL    = (uint8_t)init.slt;\n
+   ]]></template>
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t}
       \t\n
-   ]]></template>
+   ]]>
+   </template>
 
-<!--   Constructors -->
+   <!--   Constructors -->
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
+   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
-    ><![CDATA[
+   ><![CDATA[
       \t   /**
       \t    * Constructor for %description
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
+      \t
       %paramDescription
       \t    */
       \t   template <typename... Types>
@@ -831,15 +1042,16 @@
       \t   }\n\n
    ]]></setTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
+   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
-    ><![CDATA[
+   ><![CDATA[
       \t   /**
       \t    * Constructor for %description
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
+      \t
       %paramDescription
       \t    */
       \t   template <typename... Types>
@@ -898,7 +1110,8 @@
    ]]>
    </setTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <setTemplate namespace="usbdm" discardRepeats="true"
+      codeGenCondition="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;/$(_BASENAME)/smbOptionsAvailable"
       variables="i2c_smb_siicaen,i2c_a2_sad"
       params=",address"
       linePadding="xxx"
@@ -974,17 +1187,47 @@
       values="
             i2c_c1_mst;
             i2c_c1_wuen;
+            i2c_c1_dmaen;
             i2c_c2_gcaen;
+            i2c_c2_hdrs;
             i2c_c2_sbrc;
+            i2c_c2_rmen;
             i2c_flt_shen;
+            i2c_flt_stopie;
             i2c_flt_ssie;
-            i2c_flt_flt;
+            i2c_flt_flt
+            " >
+      <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </setTemplate>
+   </for>
+   <for keys="r"
+      values="
             i2c_smb_fack;
             i2c_smb_alerten;
+            i2c_smb_siicaen;
             i2c_smb_tcksel;
             i2c_smb_shtf2ie
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      <setTemplate namespace="usbdm" discardRepeats="true"
+         codeGenCondition="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;/$(_BASENAME)/smbOptionsAvailable"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -1010,7 +1253,8 @@
       values="
             i2c_slt_value
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      <setTemplate namespace="usbdm" discardRepeats="true"
+         codeGenCondition="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;/$(_BASENAME)/smbOptionsAvailable"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -1048,12 +1292,26 @@
             i2c_c1_wuen,
             i2c_d_data,
             i2c_c2_gcaen,
+            i2c_c2_hdrs,
             i2c_c2_sbrc,
             i2c_c2_rmen,
             i2c_ra_rad,
             i2c_flt_shen,
+            i2c_flt_stopie,
             i2c_flt_ssie,
-            i2c_flt_flt,
+            i2c_flt_flt
+         "
+   ><![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression\n
+   ]]></initialValueTemplate>
+   <initialValueTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;/$(_BASENAME)/smbOptionsAvailable"
+      separator=","
+      terminator=","
+      variables="
             i2c_smb_fack,
             i2c_smb_alerten,
             i2c_smb_tcksel,
@@ -1063,14 +1321,14 @@
             i2c_slt_value
          "
    ><![CDATA[
-      \t/**
-      \t * Default initialisation value for $(_Baseclass)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t%initExpression\n
+   ]]></initialValueTemplate>
+   <template codeGenCondition="enablePeripheralSupport"
+   ><![CDATA[
       \t};
       \t\n
-   ]]></initialValueTemplate>
+   ]]></template>
+
 
    <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
@@ -1084,20 +1342,41 @@
       \t\n
    ]]></template>
 
-   <template namespace="usbdm" discardRepeats="true" >
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[
-      \t}; // $(_Baseclass)BasicInfo::Init
+      \t}; // class $(_Baseclass)BasicInfo::Init
       \t\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true" >
+   <template namespace="usbdm" discardRepeats="true" >
       <![CDATA[
-      }; // $(_Baseclass)BasicInfo\n\n
+      }; // class $(_Baseclass)BasicInfo\n\n
    ]]>
    </template>
 
    <!-- ************* Common ****************** -->
+
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Class representing $(_NAME) interface
+      \t */
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {
+      \tpublic:
+      \t
+      \t   $(_Class)(const $(_Baseclass)BasicInfo::Init &init = $(_Class)Info::DefaultInitValue) : $(_Baseclass)Base_T(init) {}
+      \t
+      \t$(/$(_NAME)/InputMapping:   // No user mappings found)
+      \t};
+      \t\n
+   ]]>
+   </template>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.I2cValidate_MKE" >
+   </validate>
+
    <projectActionList id = "i2c_files" >
       <copy source="Project_Headers/i2c.h"            target="Project_Headers/i2c.h"            overwrite="true"  derived="true" />
       <copy source="Sources/i2c.cpp"                  target="Sources/i2c.cpp"                  overwrite="true"  derived="true" />
@@ -1134,25 +1413,6 @@
       <copy source="Snippets/pca9685-example.cpp"     target="Snippets/pca9685-example.cpp"     overwrite="true"  derived="true" />
    </projectActionList>
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" 
-   ><![CDATA[
-      \t/**
-      \t * Class representing $(_NAME) interface
-      \t */
-      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {
-      \tpublic:
-      \t
-      \t   $(_Class)(const $(_Baseclass)BasicInfo::Init &init = $(_Class)Info::DefaultInitValue) : $(_Baseclass)Base_T(init) {}
-      \t
-      \t$(/$(_NAME)/InputMapping:   // No user mappings found)
-      \t};
-      \t\n
-   ]]></template>
-
-   <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.I2cValidate_MKE" >
-   </validate>
-
    <!-- ************* Startup ****************** -->
 
    <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
@@ -1166,7 +1426,7 @@
    ]]></template>
 
    <!-- ************* Signal mapping ****************** -->
-   <category name="Advanced" description="SIgnal routing" >
+   <category name="Advanced" description="Signal routing" >
    </category>
 
    <signals enabledBy="enablePeripheralSupport" />

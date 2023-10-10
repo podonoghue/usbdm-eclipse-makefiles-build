@@ -388,7 +388,7 @@
 
          <choiceOption key="icsClockMode[%(n)]"
             enabledBy="enableClockConfiguration[%(n)]"
-            enumStem="IcsClockMode"
+            typeName="IcsClockMode"
             enumType="uint8_t"
             valueFormat="%s"
             description="ICS Clock Mode"
@@ -434,7 +434,7 @@
             description="Clock monitors" >
             <binaryOption key="ics_c4_cme[%(n)]" condition="ics_c4_cme_present"
                enabledBy="enableClockConfiguration[%(n)]"
-               enumStem="IcsClockMonitor"
+               typeName="IcsClockMonitor"
                description="Clock Monitor Enable"
                toolTip="Determines if a reset request is made following a loss of external clock indication.\n
                         The CME0 bit must only be when using an external clock mode (FEE, FBE, or FBELP)" >
@@ -444,7 +444,7 @@
 
             <binaryOption key="ics_c4_lolie0[%(n)]" condition="ics_c4_lolie0_present"
                enabledBy="enableClockConfiguration[%(n)]"
-               enumStem="IcsLossOfLockInterrupt"
+               typeName="IcsLossOfLockInterrupt"
                description="Loss of Lock Interrupt Enable"
                toolTip="Determines if an interrupt request is made following a loss of lock.\n
                         This is indicated by ICS_S[LOLS] being set." >
@@ -460,7 +460,7 @@
 
             <binaryOption key="ics_c1_irclken[%(n)]" condition="ics_c1_irclken_present"
                enabledBy="enableClockConfiguration[%(n)]"
-               enumStem="IcsIrClkEn"
+               typeName="IcsIrClkEn"
                target="system_icsirclk_clock[%(n)]"
                description="Internal Reference Clock [ICSIRCLK] enable"
                toolTip="Enables the internal reference clock for use by peripherals" >
@@ -469,7 +469,7 @@
             </binaryOption>
 
             <binaryOption key="ics_c1_irefsten[%(n)]"
-               enumStem="IcsIrefs"
+               typeName="IcsIrefs"
                enabledBy="ics_c1_irclken[%(n)]"
                description="Internal Reference [ICSIRCLK] Stop Enable"
                toolTip="Controls whether or not the internal reference clock remains enabled when the ICS enters Stop mode.\n
@@ -524,7 +524,7 @@
             <choiceOption key="ics_c1_rdiv[%(n)]" condition="ics_c1_rdiv_present"
                enabledBy="enableClockConfiguration[%(n)]"
                target="ics_erc_clock_divided[%(n)]"
-               enumStem="IcsFllPrescale"
+               typeName="IcsFllPrescale"
                derived="true"
                locked="true"
                description="FLL External Reference Divider"
@@ -565,7 +565,7 @@
 
             <binaryOption key="ics_c1_irefs[%(n)]"
                ref="(icsClockMode[%(n)]==@FEI)||(icsClockMode[%(n)]==@FBI)||(icsClockMode[%(n)]==@FBILP)"
-               enumStem="IcsIref"
+               typeName="IcsIref"
                target="irefs_clock[%(n)]"
                derived="true"
                locked="true"
@@ -627,7 +627,7 @@
             ref="((icsClockMode[%(n)]==@FEI)||(icsClockMode[%(n)]==@FEE))?0b00:
                  ((icsClockMode[%(n)]==@FBI)||(icsClockMode[%(n)]==@FBILP))?0b01:0b10
                  #icsClockMode[%(n)]"
-            enumStem="IcsClkSrc"
+            typeName="IcsClkSrc"
             target="icsoutclk_undivided[%(n)]"
             derived="true"
             locked="true"
@@ -647,7 +647,7 @@
          <choiceOption key="ics_c2_bdiv[%(n)]" condition="ics_c2_bdiv_present"
             enabledBy="((%(n)==0)&amp;&amp;assumeSlowIrcTrimmed)||enableClockConfiguration[%(n)]#enableClockConfiguration[%(n)]"
             target="system_icsoutclk_clock[%(n)]"
-            enumStem="IcsBusDivider"
+            typeName="IcsBusDivider"
             description="Output divider for ICS"
             toolTip="This divides the output of the ICS.\n
                      If in FEI mode and the ICS internal clock is not trimmed,\n
@@ -701,7 +701,7 @@
                <aliasOption key="ics_c2_bdiv[%(n)]"              optional="true" />
 
                <binaryOption key="ics_c2_lp[%(n)]"
-                  enumStem="IcsFllInLowpower"
+                  typeName="IcsFllInLowpower"
                   derived="true"
                   locked="true"
                   description="Low Power Select"
@@ -804,10 +804,10 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void enableIcsIrClock(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \tstatic void enableIcsIrClock(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}
 
       \t/**
@@ -826,7 +826,7 @@
       \t */
       \tstatic uint32_t getInternalReferenceClock() {
       \t
-      \t   switch(%defaultMaskingExpression) {
+      \t   switch(%maskingExpression) {
       \t      default: return 0;
       %body
       \t   }
@@ -954,7 +954,7 @@
          %paramDescription
          \t */
          \tstatic void configure%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}\n\n
       ]]></setTemplate>
    </for>

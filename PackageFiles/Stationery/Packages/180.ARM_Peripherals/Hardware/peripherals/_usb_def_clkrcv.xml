@@ -19,7 +19,7 @@
    </for>
 
    <choiceOption key="usb_clk_enable"
-      enumStem="UsbIrc48mClockEnable"
+      typeName="UsbIrc48mClockEnable"
       valueFormat="(%s)"
       description="IRC48M enable"
       toolTip="Enables the IRC48M clock as a clock source for FS USB">

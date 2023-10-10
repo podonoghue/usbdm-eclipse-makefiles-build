@@ -34,7 +34,7 @@
     * Template substitutions
     *
     * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
     * %variable[index]                Variable name /ADC0/adc_sc2_acfe
     * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
     * %description[index]             Description from controlVar e.g. Compare Function Enable
@@ -44,12 +44,12 @@
     * %params                         Formatted parameter list for function
     * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
     * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %enumClass[index]               As for %paramType
-    * %enumParam[index]               As for %paramName
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
     * %variable[index]                Variable name from condition
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
@@ -82,7 +82,7 @@
 
    <binaryOption key="wdog_cs1_en" condition="wdog_cs1_en_present"
       enabledBy="fullCodeSupport"
-      enumStem="WdogEnable"
+      typeName="WdogEnable"
       enumType="uint16_t"
       description="Watchdog enable"
       toolTip="Main enable for WDOG" >
@@ -93,7 +93,7 @@
    <choiceOption key="wdog_cs1_tst" condition="wdog_cs1_tst_present"
       enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       enumType="uint16_t"
-      enumStem="WdogTestMode"
+      typeName="WdogTestMode"
       description="Test Mode: Controls the fast test mode."
       toolTip="Allows exercising all bits of the counter to confirm that the watchdog is functioning properly.\n
                This write-once field is cleared on POR only" >
@@ -106,7 +106,7 @@
    <binaryOption key="wdog_cs1_wait" condition="wdog_cs1_wait_present"
       enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       enumType="uint16_t"
-      enumStem="WdogEnableInWait"
+      typeName="WdogEnableInWait"
       description="Enable watchdog in WAIT mode"
       toolTip="This write-once bit enables the watchdog to operate when the chip is in wait mode" >
       <choice name="Disabled in WAIT mode"  value="0" enum="Disabled" isDefault="true" />
@@ -116,7 +116,7 @@
    <binaryOption key="wdog_cs1_stop" condition="wdog_cs1_stop_present"
       enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       enumType="uint16_t"
-      enumStem="WdogEnableInStop"
+      typeName="WdogEnableInStop"
       description="Enable watchdog in STOP mode"
       toolTip="This write-once bit enables the watchdog to operate when the chip is in stop mode" >
       <choice name="Disabled in STOP mode"  value="0" enum="Disabled" isDefault="true" />
@@ -126,7 +126,7 @@
    <binaryOption key="wdog_cs1_dbg" condition="wdog_cs1_dbg_present"
       enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       enumType="uint16_t"
-      enumStem="WdogEnableInDebug"
+      typeName="WdogEnableInDebug"
       description="Enable watchdog in DEBUG mode"
       toolTip="This write-once bit enables the watchdog to operate when the chip is in debug mode" >
       <choice name="Disabled in DEBUG mode"  value="0" enum="Disabled" isDefault="true" />
@@ -136,7 +136,7 @@
    <binaryOption key="wdog_cs1_update" condition="wdog_cs1_update_present"
       enabledBy="fullCodeSupport"
       enumType="uint16_t"
-      enumStem="WdogAllowUpdate"
+      typeName="WdogAllowUpdate"
       description="Allow watchdog update"
       toolTip="Enables updates to watchdog write-once registers, after \n
                the initial configuration.\n
@@ -149,7 +149,7 @@
    <binaryOption key="wdog_cs2_win" condition="wdog_cs2_win_present"
       enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       enumType="uint16_t"
-      enumStem="WdogWindow"
+      typeName="WdogWindow"
       description="Enable watchdog windowing mode"
       toolTip="Windowing mode only allows refresh during a restricted window" >
       <choice name="Windowing mode disabled" value="0" enum="Disabled" isDefault="true" />
@@ -159,7 +159,7 @@
    <binaryOption key="wdog_cs1_int" condition="wdog_cs1_int_present"
       enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       enumType="uint16_t"
-      enumStem="WdogAction"
+      typeName="WdogAction"
       description="Action on watchdog event"
       toolTip="This write-once bit allows an interrupt handler to record state prior to forcing a reset.\n
                The reset occurs after a delay of 128 bus clocks following the interrupt vector fetch, " >
@@ -171,7 +171,7 @@
       enabledBy="fullCodeSupport"
       target="inputClockFrequency"
       enumType="uint16_t"
-      enumStem="WdogClock"
+      typeName="WdogClock"
       description="Watchdog clock source"
       toolTip="This write-once field indicates the clock source that feeds the watchdog counter"  >
       <choice name="System Bus clock"                        value="0" enum="SystemBusClk" code="SystemBusClock"                       ref="/SIM/system_bus_clock[0]"     />
@@ -188,8 +188,8 @@
       \t *
       \t * @param %paramName %tooltip
       \t */
-      \tstatic void setClockSource(%enumClass %paramName) {
-      \t   %defaultFieldExpression
+      \tstatic void setClockSource(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}
 
       \t/**
@@ -214,7 +214,7 @@
       \t */
       \tstatic uint32_t getInputClockFrequency() {
       \t
-      \t   return getInputClockFrequency((%enumClass)(%defaultMaskingExpression));
+      \t   return getInputClockFrequency((%paramType)(%maskingExpression));
       \t}\n\n
    ]]></clockCodeTemplate>
 
@@ -229,7 +229,7 @@
    <binaryOption key="wdog_cs2_pres" condition="wdog_cs2_pres_present"
       enabledBy="wdog_cs1_en&amp;&amp;fullCodeSupport"
       target="timerTickPeriod"
-      enumStem="WdogPrescale"
+      typeName="WdogPrescale"
       enumType="uint16_t"
       description="Prescaler for the watchdog clock source"
       toolTip="This write-once bit enables a fixed 256 pre-scaling of watchdog counter reference clock" >
@@ -329,7 +329,7 @@
       \t * @note This is a protected operation which uses unlock
       \t * @note Register changes after unlock is enabled
       \t
-      %comments
+      %paramDescription
       \t */
       \tstatic void configure(
       %params) {
@@ -352,7 +352,7 @@
    <!-- ************* MISC ****************** -->
    <choiceOption key="wdog_constants1"
       hidden="true"
-      enumStem="WdogRefresh"
+      typeName="WdogRefresh"
       valueFormat="%s"
       description="Values for refresh and update registers"
       toolTip="Note values are transposed for direct write to CNT register"
@@ -363,7 +363,7 @@
 
    <choiceOption key="wdog_constants2"
       hidden="true"
-      enumStem="WdogUnlock"
+      typeName="WdogUnlock"
       valueFormat="%s"
       description="Values for refresh and update registers"
       toolTip="Note values are transposed for direct write to CNT register"
@@ -578,7 +578,7 @@
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName0 = %symbolicValueExpression1;
+      \t   %paramType %registerName0 = %symbolicExpression1;
       \t\n
    ]]></initialValueTemplate>
 
@@ -768,9 +768,9 @@
       \t   constexpr Init(
       %params, Types... rest) : Init(rest...) {
       \t
-      \t      this->%registerName1.fromTicks(%enumParam1);
-      \t      this->%registerName2.fromTicks(%enumParam2);
-      \t      this->%registerName0 = (%registerName0&~%mask0) | %enumParam0;
+      \t      this->%registerName1.fromTicks(%paramName1);
+      \t      this->%registerName2.fromTicks(%paramName2);
+      \t      this->%registerName0 = (%registerName0&~%mask0) | %paramName0;
       \t   }
       \t\n
    ]]></setTemplate>
@@ -793,8 +793,8 @@
       \t        %paramType0 %paramName0,
       \t        %paramType1 %paramName1 = 0.0, Types... rest) : Init(rest...) {
       \t
-      \t      this->%enumParam0.fromSeconds(%paramName0);
-      \t      this->%enumParam1.fromSeconds(%paramName1);
+      \t      this->%paramName0.fromSeconds(%paramName0);
+      \t      this->%paramName1.fromSeconds(%paramName1);
       \t      this->calculatePrescale = true;
       \t      this->%registerName2 = (%registerName2&~%mask2);
       \t   }\n

@@ -1,65 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- Deleted stuff
-
-addDependency
-deleteOption
-clockMultiplexorOption
-numericListOption
-indexedCategory
-addChoices
-
-<!ELEMENT addChoices ((choice)*) >
-   <!ATTLIST addChoices key                 CDATA        #REQUIRED>
-   
-<!ELEMENT deleteOption EMPTY >
-   <!ATTLIST deleteOption condition     CDATA         #IMPLIED>
-   <!ATTLIST deleteOption key           CDATA         #REQUIRED>
-   <!ATTLIST deleteOption mustExist     (false|true)  #IMPLIED>
-
-<!ELEMENT clockMultiplexorOption ((choice)*) >
-   <!ATTLIST clockMultiplexorOption condition           CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption locked            (false|true) #IMPLIED>
-   <!ATTLIST clockMultiplexorOption hidden              (false|true) #IMPLIED>
-   <!ATTLIST clockMultiplexorOption name                CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption key                 CDATA        #REQUIRED>
-   <!ATTLIST clockMultiplexorOption templateKey         CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption origin              CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption description         CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption toolTip             CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption units               (None|Hz|s)  #IMPLIED>
-   <!ATTLIST clockMultiplexorOption derived             (true)       #IMPLIED>
-   <!ATTLIST clockMultiplexorOption derivedFrom         CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption namespace           (info|usbdm|all)  #IMPLIED >
-   <!ATTLIST clockMultiplexorOption enumStem            CDATA        #IMPLIED> <!- Type for enum and first part of enum name - >
-   <!ATTLIST clockMultiplexorOption typeName            CDATA        #IMPLIED> <!- as for enumStem - >
-   <!ATTLIST clockMultiplexorOption enumType            CDATA        #IMPLIED> <!- Type to use for enums e.g.uint8_t - >
-   <!ATTLIST clockMultiplexorOption target              CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption register            CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption replace             CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption valueFormat         CDATA        #IMPLIED> <!- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  - >
-   <!- Text to add to enum body generated from choices - >
-   <!ATTLIST clockMultiplexorOption enumText            CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption disabledValue       CDATA        #IMPLIED>
-   <!ATTLIST clockMultiplexorOption enabledBy           CDATA        #IMPLIED> <!- Enabled by an expression - >
-   <!ATTLIST clockMultiplexorOption unlockedBy          CDATA        #IMPLIED> <!- Unlocked by an expression - >
-   <!ATTLIST clockMultiplexorOption ref                 CDATA        #IMPLIED> <!- Equation that controls this variable - >
-
-<!ELEMENT indexedCategory ((%general_items;|%general_items;|template)*) >
-   <!ATTLIST indexedCategory  locked     (false|true) #IMPLIED>
-   <!ATTLIST indexedCategory  xmlns:xi     CDATA        #IMPLIED>
-   <!ATTLIST indexedCategory  name         CDATA        #IMPLIED>
-   <!ATTLIST indexedCategory  value        CDATA        #IMPLIED>
-   <!ATTLIST indexedCategory  dim          CDATA        #IMPLIED>
-   <!ATTLIST indexedCategory  description  CDATA        #IMPLIED>
-   <!ATTLIST indexedCategory  toolTip      CDATA        #IMPLIED>
-   <!ATTLIST indexedCategory  derived      (false|true) #IMPLIED>
-   <!ATTLIST indexedCategory  hidden       (false|true) #IMPLIED>
-
-<!ELEMENT addDependency EMPTY >
-   <!ATTLIST addDependency key                CDATA        #REQUIRED>
-
--->                          
 <!-- all templates -->    
 <!ENTITY % template_items   "template|setTemplate|constructorTemplate|initialValueTemplate|enumTemplate|clockCodeTemplate" >
 
@@ -70,17 +10,17 @@ addChoices
 <!ENTITY % graphic_items    "graphicGroup|graphicBox|graphicItem|equation|for|if" >
 
 <!-- Dialogue elements -->
-<!ENTITY % dialogue_items    "intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption" >
+<!ENTITY % dialogue_items    "timeOption|intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption" >
 
 <!-- Simple items that don't that don''t recurse -->
 <!ENTITY % simple_items     "xi:include|
                               projectActionList|
                               title|constant|signals|
-                              intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption|irqOption|pinListOption|aliasOption|pinMapOption|
+                              timeOption|intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption|irqOption|pinListOption|aliasOption|pinMapOption|
                               clockSelectionOption|validate|equation|
                               %template_items;" >
                   
-<!ENTITY % general_items    "dialogue|graphic|category|categoryOption|aliasCategoryOption|if|for|%simple_items;" >
+<!ENTITY % general_items    "dynamicSignalMapping|dialogue|graphic|category|categoryOption|aliasCategoryOption|if|for|%simple_items;" >
 
 <!ELEMENT dialogue (%dialogue_items;)*>
    <!-- Condition evaluated during parsing that enables processing of this option -->
@@ -108,9 +48,15 @@ addChoices
    <!ATTLIST section name         CDATA        #IMPLIED>
 
 <!ELEMENT for (%general_items;|%structure_items;|%general_items;|%graphic_items;|break|continue)* >
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST for condition           CDATA        #IMPLIED>
+   <!-- Substitution keys separated by ':'' -->
    <!ATTLIST for keys                 CDATA        #REQUIRED>
+   <!-- Values for each key separated by ':'', each iteratiuon separated by ';' -->
    <!ATTLIST for values               CDATA        #IMPLIED>
+   <!-- For simple iterated list. Either N or A,B -->
    <!ATTLIST for dim                  CDATA        #IMPLIED>
+   <!-- Delimeter to use to separate keys / iteration values??? -->
    <!ATTLIST for delimiter            CDATA        #IMPLIED>
 
 <!ELEMENT break EMPTY >
@@ -128,6 +74,10 @@ addChoices
 <!ELEMENT else_if EMPTY >
    <!-- Condition evaluated during parsing that enables processing of remaining children (up to else/else_if) -->
    <!ATTLIST else_if condition             CDATA        #REQUIRED>
+
+
+
+
 
 <!ELEMENT graphic ((%graphic_items;)*) >
    <!ATTLIST graphic  key                CDATA        #REQUIRED>
@@ -161,17 +111,24 @@ addChoices
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST graphicItem  condition       CDATA        #IMPLIED>
 
+
+
+
+
 <!ELEMENT aliasCategoryOption ((%general_items;)*) >
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST aliasCategoryOption  condition    CDATA        #IMPLIED>
    <!ATTLIST aliasCategoryOption  name         CDATA        #IMPLIED>
+   <!-- Key for option - also used as visible name if not provided -->
    <!ATTLIST aliasCategoryOption  key          CDATA        #REQUIRED>
    <!ATTLIST aliasCategoryOption  derived      (false|true) #IMPLIED>
+   <!-- Locks option in GUI -->
    <!ATTLIST aliasCategoryOption  locked       (false|true) "true">
 
 <!-- Expandable grouping -->
 <!ELEMENT category ((%general_items;)*) >
-   <!ATTLIST category  locked     (false|true) #IMPLIED>
+   <!-- Locks option in GUI -->
+   <!ATTLIST category  locked       (false|true) #IMPLIED>
    <!ATTLIST category  xmlns:xi     CDATA        #IMPLIED>
    <!ATTLIST category  name         CDATA        #IMPLIED>
    <!ATTLIST category  description  CDATA        #IMPLIED>
@@ -184,6 +141,7 @@ addChoices
    <!ATTLIST categoryOption  locked        (false|true) #IMPLIED>
    <!ATTLIST categoryOption  xmlns:xi        CDATA        #IMPLIED>
    <!ATTLIST categoryOption  name            CDATA        #IMPLIED>
+   <!-- Key for option - also used as visible name if not provided -->
    <!ATTLIST categoryOption  key             CDATA        #REQUIRED>
    <!ATTLIST categoryOption  description     CDATA        #IMPLIED>
    <!ATTLIST categoryOption  value           CDATA        #IMPLIED>
@@ -196,30 +154,101 @@ addChoices
 <!ELEMENT title EMPTY >
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST title condition              CDATA        #IMPLIED>
+   <!-- Visible name of title-->
    <!ATTLIST title name                   CDATA        #IMPLIED>
+   <!-- Tool-tip visble in GUI and used for documentation in C++ code  -->
    <!ATTLIST title toolTip                CDATA        #IMPLIED>
+   <!-- Description visible in GUI -->
    <!ATTLIST title description            CDATA        #IMPLIED>
 
 <!ELEMENT equation EMPTY >
+   <!-- Unique key -->
    <!ATTLIST equation  key             CDATA        #REQUIRED>
+   <!-- Value expressed as equation for immediate evaluation?? -->
    <!ATTLIST equation  value           CDATA        #REQUIRED>
 
+
+
+
+
+<!ELEMENT aliasOption EMPTY >
+   <!-- Allows reference to an option (possibly) in another file -->
+   <!ATTLIST aliasOption key               CDATA        #REQUIRED>
+   <!-- Optional name in GUI otherwise derived from key -->
+   <!ATTLIST aliasOption name              CDATA        #IMPLIED>
+   <!-- Description for GUI and code generation -->
+   <!ATTLIST aliasOption description       CDATA        #IMPLIED>
+   <!-- Tooltip for GUI and code generation -->
+   <!ATTLIST aliasOption toolTip           CDATA        #IMPLIED>
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST aliasOption condition        CDATA        #IMPLIED>
+   <!-- Allows aliased variable to be altered by user (unless locked) -->
+   <!ATTLIST aliasOption locked          (false)      #IMPLIED>
+   <!-- Hides option in GUI -->
+   <!ATTLIST aliasOption hidden            (true)      #IMPLIED>
+   
+   <!-- Indicates key may refer to non-existant variable -->
+   <!ATTLIST aliasOption optional          (true)       #IMPLIED>
+
+<!ELEMENT timeOption EMPTY >
+   <!-- Visible name of option - also used for key if not provided -->
+   <!ATTLIST timeOption name            CDATA        #IMPLIED>
+   <!-- Key for option - also used as visible name if not provided -->
+   <!ATTLIST timeOption key             CDATA        #IMPLIED>
+   <!-- Description of option visible in GUI and used for documentation in C++ code -->
+   <!ATTLIST timeOption description     CDATA        #IMPLIED>
+   <!-- Tool-tip visble in GUI and used for documentation in C++ code  -->
+   <!ATTLIST timeOption toolTip         CDATA        #IMPLIED>
+   <!-- Equation that controls this variable's primary value  -->
+   <!ATTLIST timeOption ref             CDATA         #IMPLIED> 
+   <!-- Equation that calculates the period from the variable primary value (in ticks) -->
+   <!ATTLIST timeOption periodEquation  CDATA         #IMPLIED> 
+   <!-- Indicates primary quantity for display -->
+   <!ATTLIST timeOption units            (Hz|s|ticks) #IMPLIED>
+
 <!ELEMENT intOption EMPTY >
+   <!-- Visible name of option - also used for key if not provided -->
+   <!ATTLIST intOption name          CDATA        #IMPLIED>
+   <!-- Key for option - also used as visible name if not provided -->
+   <!ATTLIST intOption key           CDATA        #REQUIRED>
+   <!-- Origin of this option's value. Visible in GUI as part of tool-tip -->
+   <!ATTLIST intOption origin        CDATA        #IMPLIED>
+   <!-- Description of option visible in GUI and used for documentation in C++ code -->
+   <!ATTLIST intOption description   CDATA        #IMPLIED>
+   <!-- Tool-tip visble in GUI and used for documentation in C++ code  -->
+   <!ATTLIST intOption toolTip       CDATA        #IMPLIED>
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST intOption condition     CDATA        #IMPLIED>
+   <!-- Locks option in GUI -->
    <!ATTLIST intOption locked        (true)       #IMPLIED>
+   <!-- Hides option in GUI -->
    <!ATTLIST intOption hidden        (true)       #IMPLIED>
-   <!ATTLIST intOption graphic       CDATA        #IMPLIED>
-   <!ATTLIST intOption modify        CDATA        #IMPLIED>
-   <!ATTLIST intOption replace       CDATA        #IMPLIED>
-   <!ATTLIST intOption name          CDATA        #IMPLIED>
-   <!ATTLIST intOption key           CDATA        #REQUIRED>
-   <!ATTLIST intOption origin        CDATA        #IMPLIED>
-   <!ATTLIST intOption description   CDATA        #IMPLIED>
-   <!ATTLIST intOption toolTip       CDATA        #IMPLIED>
+   <!-- Option value is derived and should not be saved -->
+   <!ATTLIST intOption derived       (true)       #IMPLIED>
+   <!-- Expression enables this option -->
+   <!ATTLIST intOption enabledBy     CDATA        #IMPLIED> 
+   <!-- Dynamic expression that disables and hides this option -->
+   <!ATTLIST intOption hiddenBy      CDATA        #IMPLIED>
+   <!-- Unlocked by an expression -->
+   <!ATTLIST intOption unlockedBy    CDATA        #IMPLIED> 
+   <!-- How to format a raw value e.g. 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)' or '%s_s' -->
+   <!ATTLIST intOption valueFormat   CDATA        #IMPLIED> 
+   <!-- Text to add to enum body generated from choices -->
+   <!ATTLIST intOption enumText      CDATA        #IMPLIED>
+   <!-- Equation that controls this variable -->
+   <!ATTLIST intOption ref           CDATA        #IMPLIED> 
+   <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
+   <!ATTLIST intOption enumType      CDATA        #IMPLIED>
+   <!-- Type for int .e.g. Ticks & -->
    <!ATTLIST intOption typeName      CDATA        #IMPLIED>
+   <!-- Allows this option to modify previous option with the same key 
+        The variable behind this option is shared -->
+   <!ATTLIST intOption modify        CDATA        #IMPLIED>
+   <!-- Replace existing variable associated with option quietly -->
+   <!ATTLIST intOption replace       CDATA        #IMPLIED>
    <!ATTLIST intOption disabledValue CDATA        #IMPLIED>
    <!ATTLIST intOption value         CDATA        #IMPLIED>
+   <!-- Unit to use for numeric value -->
    <!ATTLIST intOption units         (Hz|s|ticks) #IMPLIED>
    <!ATTLIST intOption step          CDATA        "1">
    <!ATTLIST intOption errorPropagate (ok|info|warning|error)  #IMPLIED>
@@ -229,194 +258,225 @@ addChoices
    <!ATTLIST intOption max           CDATA        #IMPLIED>
    <!-- Offset to translate from displayed value to substitution value -->
    <!ATTLIST intOption offset        CDATA        #IMPLIED>
-   <!ATTLIST intOption derived       (true)       #IMPLIED>
    <!ATTLIST intOption derivedFrom   CDATA        #IMPLIED>
    <!ATTLIST intOption radix         CDATA        #IMPLIED>
-   <!-- Equation that controls this variable -->
-   <!ATTLIST intOption ref           CDATA        #IMPLIED> 
-   <!-- How to format value e.g. %s_ticks-->
-   <!ATTLIST intOption valueFormat   CDATA        #IMPLIED> 
-   <!-- Expression enables this option -->
-   <!ATTLIST intOption enabledBy     CDATA        #IMPLIED> 
-   <!-- Unlocked by an expression -->
-   <!ATTLIST intOption unlockedBy    CDATA        #IMPLIED> 
    <!ATTLIST intOption isNamedClock  (true)       #IMPLIED>
-   <!ATTLIST intOption defaultValue  CDATA        #IMPLIED>
-   <!ATTLIST intOption enumType      CDATA        #IMPLIED>
    
   
 <!ELEMENT bitmaskOption EMPTY >
+   <!-- Visible name of option - also used for key if not provided -->
+   <!ATTLIST bitmaskOption name           CDATA        #IMPLIED>
+   <!-- Key for option - also used as visible name if not provided -->
+   <!ATTLIST bitmaskOption key            CDATA        #REQUIRED>
+   <!-- Origin of this option's value. Visible in GUI as part of tool-tip -->
+   <!ATTLIST bitmaskOption origin         CDATA        #IMPLIED>
+   <!-- Description of option visible in GUI and used for documentation in C++ code -->
+   <!ATTLIST bitmaskOption description    CDATA        #IMPLIED>
+   <!-- Tool-tip visble in GUI and used for documentation in C++ code  -->   
+   <!ATTLIST bitmaskOption toolTip        CDATA        #IMPLIED>
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST bitmaskOption condition      CDATA        #IMPLIED>
+   <!-- Locks option in GUI -->
    <!ATTLIST bitmaskOption locked         (false|true) #IMPLIED>
+   <!-- Hides option in GUI -->
    <!ATTLIST bitmaskOption hidden         (false|true) #IMPLIED>
-   <!ATTLIST bitmaskOption name           CDATA        #IMPLIED>
-   <!ATTLIST bitmaskOption key            CDATA        #REQUIRED>
-   <!ATTLIST bitmaskOption origin         CDATA        #IMPLIED>
-   <!ATTLIST bitmaskOption description    CDATA        #IMPLIED>
-   <!ATTLIST bitmaskOption toolTip        CDATA        #IMPLIED>
+   <!-- Option value is derived and should not be saved -->
+   <!ATTLIST bitmaskOption derived        (true)       #IMPLIED>
+   <!-- Expression enables this option -->
+   <!ATTLIST bitmaskOption enabledBy      CDATA        #IMPLIED> 
+   <!-- Dynamic expression that disables and hides this option -->
+   <!ATTLIST bitmaskOption hiddenBy       CDATA        #IMPLIED>
+   <!-- Unlocked by an expression -->
+   <!ATTLIST bitmaskOption unlockedBy     CDATA        #IMPLIED> 
+   <!-- How to format a raw value e.g. 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)' or '%s_s' -->
+   <!ATTLIST bitmaskOption valueFormat    CDATA        #IMPLIED>
+   <!-- Text to add to enum body generated from choices -->
+   <!ATTLIST bitmaskOption enumText       CDATA        #IMPLIED>
+   
    <!ATTLIST bitmaskOption value          CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption disabledValue  CDATA        #IMPLIED>
-   <!ATTLIST bitmaskOption valueFormat    CDATA        #IMPLIED>
-   <!ATTLIST bitmaskOption derived        (true)       #IMPLIED>
    <!ATTLIST bitmaskOption derivedFrom    CDATA        #IMPLIED>
+   <!-- Type for bitmask -->
    <!ATTLIST bitmaskOption typeName       CDATA        #IMPLIED>
-   <!ATTLIST bitmaskOption defaultValue   CDATA        #IMPLIED>
+   <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
    <!ATTLIST bitmaskOption enumType       CDATA        #IMPLIED>
-
-   <!-- Expression enables this option -->
-   <!ATTLIST bitmaskOption enabledBy      CDATA        #IMPLIED>
-   
-   <!-- Bit mask indicating active bits.  May be zero to indicate calculation from bitList -->
+    <!-- Bit mask indicating active bits.  May be zero to indicate calculation from bitList -->
    <!ATTLIST bitmaskOption bitmask        CDATA        #REQUIRED>
-   <!-- List of names for the bits in mask. -->
+   <!-- List of names for the bits in mask or pattern e.g. CH%i -->
    <!ATTLIST bitmaskOption bitList        CDATA        #IMPLIED>
    <!-- Extended description of each bit - comma separated list -->
    <!ATTLIST bitmaskOption bitDescription CDATA        #IMPLIED>
-   
    <!-- Pin mapping applied if a given bit is active.  Mapping is removed if inactive -->
    <!ATTLIST bitmaskOption pinMap         CDATA        #IMPLIED>
    <!-- List of pin mappings applied if option disabled#Expression to enable use of any pin map -->
    <!ATTLIST bitmaskOption disabledPinMap CDATA        #IMPLIED>
 
 <!ELEMENT floatOption EMPTY >
+   <!-- Visible name of option - also used for key if not provided -->
+   <!ATTLIST floatOption name          CDATA        #IMPLIED>
+   <!-- Key for option - also used as visible name if not provided -->
+   <!ATTLIST floatOption key           CDATA        #REQUIRED>
+   <!-- Origin of this option's value. Visible in GUI as part of tool-tip -->
+   <!ATTLIST floatOption origin        CDATA        #IMPLIED>
+   <!-- Description of option visible in GUI and used for documentation in C++ code -->
+   <!ATTLIST floatOption description   CDATA        #IMPLIED>
+   <!-- Tool-tip visble in GUI and used for documentation in C++ code  -->
+   <!ATTLIST floatOption toolTip       CDATA        #IMPLIED>
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST floatOption condition     CDATA        #IMPLIED>
+   <!-- Locks option in GUI -->
    <!ATTLIST floatOption locked      (false|true) #IMPLIED>
+   <!-- Hides option in GUI -->
    <!ATTLIST floatOption hidden        (false|true) #IMPLIED>
-   <!ATTLIST floatOption modify        CDATA        #IMPLIED>
-   <!ATTLIST floatOption replace       CDATA        #IMPLIED>
-   <!ATTLIST floatOption name          CDATA        #IMPLIED>
-   <!ATTLIST floatOption key           CDATA        #REQUIRED>
-   <!ATTLIST floatOption origin        CDATA        #IMPLIED>
-   <!ATTLIST floatOption description   CDATA        #IMPLIED>
-   <!ATTLIST floatOption toolTip       CDATA        #IMPLIED>
+   <!-- Option value is derived and should not be saved -->
+   <!ATTLIST floatOption derived       (true)       #IMPLIED>
+   <!-- Expression enables this option -->
+   <!ATTLIST floatOption enabledBy     CDATA        #IMPLIED> 
+   <!-- Dynamic expression that disables and hides this option -->
+   <!ATTLIST floatOption hiddenBy      CDATA        #IMPLIED>
+   <!-- Unlocked by an expression -->
+   <!ATTLIST floatOption unlockedBy    CDATA        #IMPLIED> 
+   <!-- How to format a raw value e.g. 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)' or '%s_s' -->
+   <!ATTLIST floatOption valueFormat   CDATA        #IMPLIED> 
+
+   <!-- Type for float e.g. Seconds & -->
    <!ATTLIST floatOption typeName      CDATA        #IMPLIED>
+   <!-- Equation that controls this variable -->
+   <!ATTLIST floatOption ref           CDATA        #IMPLIED> 
+   <!-- Allows this option to modify previous option of same key 
+        The variable behind this option is shared -->
+   <!ATTLIST floatOption modify        CDATA        #IMPLIED>
+   <!-- Replace existing variable associated with option quietly -->
+   <!ATTLIST floatOption replace       CDATA        #IMPLIED>
    <!ATTLIST floatOption value         CDATA        #IMPLIED>
    <!ATTLIST floatOption disabledValue CDATA        #IMPLIED>
+   <!-- Unit to use for numeric value -->
    <!ATTLIST floatOption units         (None|Hz|s)  #IMPLIED>
    <!-- Minimum value (displayed value) -->
    <!ATTLIST floatOption min           CDATA        #IMPLIED>
    <!-- Maximum value (displayed value) -->
    <!ATTLIST floatOption max           CDATA        #IMPLIED>
-   <!ATTLIST floatOption derived       (true)       #IMPLIED>
    <!ATTLIST floatOption derivedFrom   CDATA        #IMPLIED>
-   <!-- Equation that controls this variable -->
-   <!ATTLIST floatOption ref           CDATA        #IMPLIED> 
-   <!-- How to format value e.g. %s_Hz-->
-   <!ATTLIST floatOption valueFormat   CDATA        #IMPLIED> 
-   <!-- Expression enables this option -->
-   <!ATTLIST floatOption enabledBy     CDATA        #IMPLIED> 
-   <!-- Unlocked by an expression -->
-   <!ATTLIST floatOption unlockedBy    CDATA        #IMPLIED> 
-
-<!ELEMENT aliasOption EMPTY >
-   <!-- Condition evaluated during parsing that enables processing of this option -->
-   <!ATTLIST aliasOption condition        CDATA        #IMPLIED>
-   <!-- Allows reference to an option (possibly) in another file -->
-   <!ATTLIST aliasOption key               CDATA        #REQUIRED>
-   <!-- Optional name in GUI otherwise derived from key -->
-   <!ATTLIST aliasOption name              CDATA        #IMPLIED>
-   <!-- Description for GUI and code generation -->
-   <!ATTLIST aliasOption description       CDATA        #IMPLIED>
-   <!-- Tooltip for GUI and code generation -->
-   <!ATTLIST aliasOption toolTip           CDATA        #IMPLIED>
-   <!-- Allows aliased variable to be altered by user (unless locked) -->
-   <!ATTLIST aliasOption locked          (false)      #IMPLIED>
-   <!-- Indicates key may refer to non-existant variable -->
-   <!ATTLIST aliasOption optional          (true)       #IMPLIED>
-   <!-- Inidicates it should be visible in GUI -->
-   <!ATTLIST aliasOption hidden            (true)      #IMPLIED>
 
 <!ELEMENT stringOption EMPTY >
+   <!-- Visible name of option - also used for key if not provided -->
+   <!ATTLIST stringOption name             CDATA        #IMPLIED>
+   <!-- Key for option - also used as visible name if not provided -->
+   <!ATTLIST stringOption key              CDATA        #REQUIRED>
+   <!-- Origin of this option's value. Visible in GUI as part of tool-tip -->
+   <!ATTLIST stringOption origin           CDATA        #IMPLIED>
+   <!-- Description of option visible in GUI and used for documentation in C++ code -->
+   <!ATTLIST stringOption description      CDATA        #IMPLIED>
+   <!-- Tool-tip visble in GUI and used for documentation in C++ code  -->
+   <!ATTLIST stringOption toolTip          CDATA        #IMPLIED>
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST stringOption condition        CDATA        #IMPLIED>
-   <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
-   <!ATTLIST stringOption valueFormat      CDATA        #IMPLIED>
+   <!-- Locks option in GUI -->
    <!ATTLIST stringOption locked         (false|true) #IMPLIED>
+   <!-- Hides option in GUI -->
    <!ATTLIST stringOption hidden           (false|true) #IMPLIED>
-   <!ATTLIST stringOption name             CDATA        #IMPLIED>
-   <!ATTLIST stringOption key              CDATA        #REQUIRED>
-   <!ATTLIST stringOption origin           CDATA        #IMPLIED>
-   <!ATTLIST stringOption description      CDATA        #IMPLIED>
-   <!ATTLIST stringOption toolTip          CDATA        #IMPLIED>
+   <!-- Option value is derived and should not be saved -->
+   <!ATTLIST stringOption derived          (true)       #IMPLIED>
+
+   <!-- How to format a raw value e.g. 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)' or '%s_s' -->
+   <!ATTLIST stringOption valueFormat      CDATA        #IMPLIED>
    <!ATTLIST stringOption value            CDATA        #IMPLIED>
-   <!ATTLIST stringOption typeName         CDATA        #IMPLIED>
+   <!-- Allows this option to modify previous option with the same key 
+        The variable behind this option is shared -->
    <!ATTLIST stringOption modify           CDATA        #IMPLIED>
+   <!-- Replace existing variable associated with option quietly -->
    <!ATTLIST stringOption replace          CDATA        #IMPLIED>
    <!ATTLIST stringOption disabledValue    CDATA        #IMPLIED>
-   <!ATTLIST stringOption derived          (true)       #IMPLIED>
    <!ATTLIST stringOption derivedFrom      CDATA        #IMPLIED>
    <!ATTLIST stringOption enum             CDATA        #IMPLIED>
    <!ATTLIST stringOption target           CDATA        #IMPLIED>
    <!ATTLIST stringOption code             CDATA        #IMPLIED>
   
 <!ELEMENT numericListOption EMPTY >
+   <!-- Visible name of option - also used for key if not provided -->
+   <!ATTLIST numericListOption name          CDATA        #IMPLIED>
+   <!-- Key for option - also used as visible name if not provided -->
+   <!ATTLIST numericListOption key           CDATA        #REQUIRED>
+   <!-- Origin of this option's value. Visible in GUI as part of tool-tip -->
+   <!ATTLIST numericListOption origin        CDATA        #IMPLIED>
+   <!-- Description of option visible in GUI and used for documentation in C++ code -->
+   <!ATTLIST numericListOption description   CDATA        #IMPLIED>
+   <!-- Tool-tip visble in GUI and used for documentation in C++ code  -->
+   <!ATTLIST numericListOption toolTip       CDATA        #IMPLIED>
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST numericListOption condition     CDATA        #IMPLIED>
+   <!-- Locks option in GUI -->
    <!ATTLIST numericListOption locked      (false|true) #IMPLIED>
+   <!-- Hides option in GUI -->
    <!ATTLIST numericListOption hidden        (false|true) #IMPLIED>
-   <!ATTLIST numericListOption name          CDATA        #IMPLIED>
-   <!ATTLIST numericListOption key           CDATA        #REQUIRED>
-   <!ATTLIST numericListOption origin        CDATA        #IMPLIED>
-   <!ATTLIST numericListOption description   CDATA        #IMPLIED>
-   <!ATTLIST numericListOption toolTip       CDATA        #IMPLIED>
+   <!-- Option value is derived and should not be saved -->
+   <!ATTLIST numericListOption derived       (true)       #IMPLIED>
+
    <!ATTLIST numericListOption value         CDATA        #IMPLIED>
    <!ATTLIST numericListOption disabledValue CDATA        #IMPLIED>
    <!ATTLIST numericListOption size          CDATA        #IMPLIED>
    <!ATTLIST numericListOption min           CDATA        #IMPLIED>
    <!ATTLIST numericListOption max           CDATA        #IMPLIED>
-   <!ATTLIST numericListOption derived       (true)       #IMPLIED>
    <!ATTLIST numericListOption derivedFrom   CDATA        #IMPLIED>
   
 <!-- Signal to add a dependency -->
 
 <!ELEMENT pinListOption EMPTY >
+   <!-- Visible name of option - also used for key if not provided -->
+   <!ATTLIST pinListOption name               CDATA        #IMPLIED>
+   <!-- Key for option - also used as visible name if not provided -->
+   <!ATTLIST pinListOption key                CDATA        #REQUIRED>
+   <!-- Origin of this option's value. Visible in GUI as part of tool-tip -->
+   <!ATTLIST pinListOption origin             CDATA        #IMPLIED>
+   <!-- Description of option visible in GUI and used for documentation in C++ code -->
+   <!ATTLIST pinListOption description        CDATA        #IMPLIED>
+   <!-- Tool-tip visble in GUI and used for documentation in C++ code  -->
+   <!ATTLIST pinListOption toolTip            CDATA        #IMPLIED>
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST pinListOption condition          CDATA        #IMPLIED>
+   <!-- Locks option in GUI -->
    <!ATTLIST pinListOption locked           (false|true) #IMPLIED>
+   <!-- Hides option in GUI -->
    <!ATTLIST pinListOption hidden             (false|true) #IMPLIED>
-   <!ATTLIST pinListOption name               CDATA        #IMPLIED>
-   <!ATTLIST pinListOption key                CDATA        #REQUIRED>
-   <!ATTLIST pinListOption origin             CDATA        #IMPLIED>
-   <!ATTLIST pinListOption description        CDATA        #IMPLIED>
-   <!ATTLIST pinListOption toolTip            CDATA        #IMPLIED>
+   <!-- Option value is derived and should not be saved -->
+   <!ATTLIST pinListOption derived            (true)       #IMPLIED>
+   
    <!ATTLIST pinListOption value              CDATA        #IMPLIED>
    <!ATTLIST pinListOption disabledValue      CDATA        #IMPLIED>
    <!ATTLIST pinListOption size               CDATA        #IMPLIED>
-   <!ATTLIST pinListOption derived            (true)       #IMPLIED>
    <!ATTLIST pinListOption derivedFrom        CDATA        #IMPLIED>
 
 <!ELEMENT clockSelectionOption ((choice)*) >
-   <!-- Condition evaluated during parsing that enables processing of this option -->
-   <!ATTLIST clockSelectionOption condition           CDATA        #IMPLIED>
-   <!-- Locks varibale against change by user in GUI -->
-   <!ATTLIST clockSelectionOption locked            (false|true) #IMPLIED>
-   <!-- Variable is not visible in GUI -->
-   <!ATTLIST clockSelectionOption hidden              (false|true) #IMPLIED>
-   <!-- DIsplay name for variable (derived from key if not provided -->
+   <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST clockSelectionOption name                CDATA        #IMPLIED>
-   <!-- Unique key used to identify variable -->
+   <!-- Key for option - also used as visible name if not provided -->
    <!ATTLIST clockSelectionOption key                 CDATA        #REQUIRED>
-   <!-- Key used for template -->
-   <!ATTLIST clockSelectionOption templateKey         CDATA        #IMPLIED>
    <!-- Origin displayed as part of tool-tip -->
    <!ATTLIST clockSelectionOption origin              CDATA        #IMPLIED>
-   <!-- Description  of variable -->
+   <!-- Description of option visible in GUI and used for documentation in C++ code -->
    <!ATTLIST clockSelectionOption description         CDATA        #IMPLIED>
    <!-- Tool-tip to display in GUI and used for documentation in C++ code -->
    <!ATTLIST clockSelectionOption toolTip             CDATA        #IMPLIED>
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST clockSelectionOption condition           CDATA        #IMPLIED>
+   <!-- Locks option in GUI -->
+   <!ATTLIST clockSelectionOption locked            (false|true) #IMPLIED>
+   <!-- Hides option in GUI -->
+   <!ATTLIST clockSelectionOption hidden              (false|true) #IMPLIED>
+   <!-- Option value is derived and should not be saved -->
+   <!ATTLIST clockSelectionOption derived             (true)       #IMPLIED>
+   
+   <!-- How to format a raw value e.g. 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)' or '%s_s' -->
+   <!ATTLIST clockSelectionOption valueFormat         CDATA        #IMPLIED>
    <!-- Unit to use for numeric value -->
    <!ATTLIST clockSelectionOption units               (None|Hz|s)  #IMPLIED>
-   <!-- Value is derived and should not be saved -->
-   <!ATTLIST clockSelectionOption derived             (true)       #IMPLIED>
+   <!-- Key used for template -->
+   <!ATTLIST clockSelectionOption templateKey         CDATA        #IMPLIED>
    <!-- Variable defined earlier to inherit values from -->
    <!ATTLIST clockSelectionOption derivedFrom         CDATA        #IMPLIED>
-   <!-- Type for enum and first part of enum name -->
-   <!ATTLIST clockSelectionOption enumStem            CDATA        #IMPLIED> 
-   <!-- As for enumStem = Type for enum and first part of enum name-->
+   <!-- Name for enum and first part of enum values -->
    <!ATTLIST clockSelectionOption typeName            CDATA        #IMPLIED>
-   <!-- Type to use for enums e.g.uint8_t -->
+   <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
    <!ATTLIST clockSelectionOption enumType            CDATA        #IMPLIED>
    <!-- Text to add to enum body generated from choices -->
    <!ATTLIST clockSelectionOption enumText            CDATA        #IMPLIED> 
@@ -424,36 +484,39 @@ addChoices
    <!ATTLIST clockSelectionOption target              CDATA        #IMPLIED>
    <!-- Name of register -->
    <!ATTLIST clockSelectionOption register            CDATA        #IMPLIED>
-   <!-- Replace existing variable quietly -->
+   <!-- Replace existing variable associated with option quietly -->
    <!ATTLIST clockSelectionOption replace             CDATA        #IMPLIED>
-   <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
-   <!ATTLIST clockSelectionOption valueFormat         CDATA        #IMPLIED>
    <!-- Value to take when disabled --> 
    <!ATTLIST clockSelectionOption disabledValue       CDATA        #IMPLIED>
    
-<!ELEMENT choiceOption ((choice)*) >
-   <!-- Condition evaluated during parsing that enables processing of this option -->
-   <!ATTLIST choiceOption condition           CDATA        #IMPLIED>
-   <!-- Locks variable against change by user in GUI -->
-   <!ATTLIST choiceOption locked            (false|true) #IMPLIED>
-   <!-- Variable is not visible in GUI -->
-   <!ATTLIST choiceOption hidden              (false|true) #IMPLIED>
-   <!-- Display name for variable (derived from key if not provided -->
+<!ELEMENT choiceOption ((choice|choiceExpansion)*) >
+   <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST choiceOption name                CDATA        #IMPLIED>
-   <!-- Unique key used to identify variable. Prepended with peripheral name if not absolute -->
+   <!-- Key for option - also used as visible name if not provided -->
    <!ATTLIST choiceOption key                 CDATA        #REQUIRED>
-   <!--Used with enum generation to give explicit template name to enum template -->
-   <!ATTLIST choiceOption templateKey         CDATA        #IMPLIED>
    <!-- Origin displayed as part of tool-tip -->
    <!ATTLIST choiceOption origin              CDATA        #IMPLIED>
    <!-- Description  of variable -->
    <!ATTLIST choiceOption description         CDATA        #IMPLIED>
    <!-- Tool-tip to display in GUI and used for documentation in C++ code -->
    <!ATTLIST choiceOption toolTip             CDATA        #IMPLIED>
-   <!-- Unit to use for numeric value -->
-   <!ATTLIST choiceOption units               (None|Hz|s)  #IMPLIED>
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST choiceOption condition           CDATA        #IMPLIED>
+   <!-- Locks option in GUI -->
+   <!ATTLIST choiceOption locked              (false|true) #IMPLIED>
+   <!-- Hides option in GUI -->
+   <!ATTLIST choiceOption hidden              CDATA        #IMPLIED>
    <!-- Value is derived and should not be saved -->
    <!ATTLIST choiceOption derived             (true)       #IMPLIED>
+   <!-- Expression enables this option -->
+   <!ATTLIST choiceOption enabledBy           CDATA        #IMPLIED>
+   
+   <!--Used with enum generation to give explicit template name to enum template -->
+   <!ATTLIST choiceOption templateKey         CDATA        #IMPLIED>
+   <!-- Dynamic expression that disables and hides this option -->
+   <!ATTLIST choiceOption hiddenBy            CDATA        #IMPLIED>
+   <!-- Unit to use for numeric value -->
+   <!ATTLIST choiceOption units               (None|Hz|s)  #IMPLIED>
    <!-- Variable defined earlier to inherit values from -->
    <!ATTLIST choiceOption derivedFrom         CDATA        #IMPLIED>
    <!-- 
@@ -463,17 +526,13 @@ addChoices
       all   - Explicitly available anywhere controlled by key substitution
    -->
    <!ATTLIST choiceOption namespace           (info|usbdm|all)  #IMPLIED >
-   <!-- Type for enum and first part of enum name -->
-   <!ATTLIST choiceOption enumStem            CDATA        #IMPLIED>
-   <!-- As for enumStem = Type for enum and first part of enum name-->
+   <!-- Name for enum and first part of enum values -->
    <!ATTLIST choiceOption typeName            CDATA        #IMPLIED>
-   <!-- Type to use for enums e.g.uint8_t -->
+   <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
    <!ATTLIST choiceOption enumType            CDATA        #IMPLIED>
    <!-- Name of register. If not provided it is derived from variable -->
    <!ATTLIST choiceOption register            CDATA        #IMPLIED>
-   <!-- Replace existing variable quietly -->
-   <!ATTLIST choiceOption replace             CDATA        #IMPLIED>
-   <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
+   <!-- How to format a raw value e.g. 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)' or '%s_s' -->
    <!ATTLIST choiceOption valueFormat         CDATA        #IMPLIED>
    <!-- Text to add to enum body generated from choices -->
    <!ATTLIST choiceOption enumText            CDATA        #IMPLIED>
@@ -481,15 +540,14 @@ addChoices
    <!ATTLIST choiceOption disabledValue       CDATA        #IMPLIED>
    <!-- Set as error based on expression -->
    <!ATTLIST choiceOption errorIf             CDATA        #IMPLIED>
-   <!-- Expression enables this option -->
-   <!ATTLIST choiceOption enabledBy           CDATA        #IMPLIED>
    <!-- Unlocked by an expression -->
    <!ATTLIST choiceOption unlockedBy          CDATA        #IMPLIED>
     <!-- Equation that controls this variable -->
    <!ATTLIST choiceOption ref                 CDATA        #IMPLIED>
    <!-- Target variable dependent on this variable -->
    <!ATTLIST choiceOption target              CDATA        #IMPLIED>
-   <!-- Allow variable to be modified by later variable of same name -->
+   <!-- Allows this option to modify previous option with the same key 
+        The variable behind this option is shared -->
    <!ATTLIST choiceOption modify              CDATA        #IMPLIED>
    <!-- Allow variable to be replaced by later variable of same name -->
    <!ATTLIST choiceOption replace             CDATA        #IMPLIED>
@@ -500,6 +558,7 @@ addChoices
 <!ELEMENT choice EMPTY >
    <!-- Values may be a list e.g. 1,0,3 for use with valueFormat -->
    <!ATTLIST choice value                     CDATA        #REQUIRED> 
+   <!-- Visible name of choice -->
    <!ATTLIST choice name                      CDATA        #REQUIRED>
    <!ATTLIST choice requiredPeripherals       CDATA        #IMPLIED>
    <!-- Condition evaluated during parsing that enables processing of this option -->
@@ -513,29 +572,50 @@ addChoices
    <!ATTLIST choice enabledBy                 CDATA        #IMPLIED>
    <!ATTLIST choice pinMap                    CDATA        #IMPLIED>
 
+<!ELEMENT choiceExpansion EMPTY >
+   <!-- A single key used for substitution e.g 'ch' => '%(ch)' will be replaced with index -->
+   <!ATTLIST choiceExpansion keys                      CDATA        #REQUIRED>
+   <!-- Dimension for index e.g. '6' => [0..6) '1,4' => [1..4)-->
+   <!ATTLIST choiceExpansion dim                       CDATA        #REQUIRED> 
+   <!-- Value for choice (substutions will be applied) --> 
+   <!ATTLIST choiceExpansion value                     CDATA        #REQUIRED> 
+   <!-- Name of choice (substutions will be applied) --> 
+   <!ATTLIST choiceExpansion name                      CDATA        #REQUIRED>
+   <!-- Enum for choice (substutions will be applied) --> 
+   <!ATTLIST choiceExpansion enum                      CDATA        #IMPLIED>
+
 <!ELEMENT binaryOption (choice?, choice?) >
-   <!-- Condition evaluated during parsing that enables processing of this option -->
-   <!ATTLIST binaryOption condition           CDATA        #IMPLIED>
-   <!-- Locks variable against change by user in GUI -->
-   <!ATTLIST binaryOption locked            (false|true) #IMPLIED>
-   <!-- Variable is not visible in GUI -->
-   <!ATTLIST binaryOption hidden              (false|true) #IMPLIED>
-   <!-- Display name for variable (derived from key if not provided -->
+   <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST binaryOption name                CDATA        #IMPLIED>
-   <!-- Unique key used to identify variable. Prepended with peripheral name if not absolute -->
+   <!-- Key for option - also used as visible name if not provided -->
    <!ATTLIST binaryOption key                 CDATA        #REQUIRED>
-   <!--Used with enum generation to give explicit template name to enum template -->
-   <!ATTLIST binaryOption templateKey         CDATA        #IMPLIED>
    <!-- Origin displayed as part of tool-tip -->
    <!ATTLIST binaryOption origin              CDATA        #IMPLIED>
    <!-- Description  of variable -->
    <!ATTLIST binaryOption description         CDATA        #IMPLIED>
    <!-- Tool-tip to display in GUI and used for documentation in C++ code -->
    <!ATTLIST binaryOption toolTip             CDATA        #IMPLIED>
-   <!-- Unit to use for numeric value -->
-   <!ATTLIST binaryOption units               (None|Hz|s)  #IMPLIED>
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST binaryOption condition           CDATA        #IMPLIED>
+   <!-- Locks option in GUI -->
+   <!ATTLIST binaryOption locked              (false|true) #IMPLIED>
+   <!-- Hides option in GUI -->
+   <!ATTLIST binaryOption hidden              CDATA      #IMPLIED>
    <!-- Value is derived and should not be saved -->
    <!ATTLIST binaryOption derived             (true)       #IMPLIED>
+   <!-- Expression enables this option -->
+   <!ATTLIST binaryOption enabledBy           CDATA        #IMPLIED>
+   <!-- Dynamic expression that disables and hides this option -->
+   <!ATTLIST binaryOption hiddenBy            CDATA        #IMPLIED>
+   <!-- Unlocked by an expression -->
+   <!ATTLIST binaryOption unlockedBy          CDATA        #IMPLIED>
+   
+    <!-- Equation that controls this variable -->
+   <!ATTLIST binaryOption ref                 CDATA        #IMPLIED>
+   <!--Used with enum generation to give explicit template name to enum template -->
+   <!ATTLIST binaryOption templateKey         CDATA        #IMPLIED>
+   <!-- Unit to use for numeric value -->
+   <!ATTLIST binaryOption units               (None|Hz|s)  #IMPLIED>
    <!-- Variable defined earlier to inherit values from -->
    <!ATTLIST binaryOption derivedFrom         CDATA        #IMPLIED>
    <!-- 
@@ -545,98 +625,148 @@ addChoices
       all   - Explicitly available anywhere controlled by key substitution
    -->
    <!ATTLIST binaryOption namespace           (info|usbdm|all)  #IMPLIED >
-   <!-- Type for enum and first part of enum name -->
-   <!ATTLIST binaryOption enumStem            CDATA        #IMPLIED>
-   <!-- As for enumStem = Type for enum and first part of enum name-->
+   <!-- Name for enum and first part of enum values -->
    <!ATTLIST binaryOption typeName            CDATA        #IMPLIED>
-   <!-- Type to use for enums e.g.uint8_t -->
+   <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
    <!ATTLIST binaryOption enumType            CDATA        #IMPLIED>
    <!-- Text to add to enum body generated from choices -->
    <!ATTLIST binaryOption enumText            CDATA        #IMPLIED>
    <!-- Name of register. If not provided it is derived from variable -->
    <!ATTLIST binaryOption register            CDATA        #IMPLIED>
-   <!-- Replace existing variable quietly -->
+   <!-- Replace existing variable associated with option quietly -->
    <!ATTLIST binaryOption replace             CDATA        #IMPLIED>
-   <!-- Mask(s) similar to 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)'  -->
+   <!-- How to format a raw value e.g. 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)' or '%s_s' -->
    <!ATTLIST binaryOption valueFormat         CDATA        #IMPLIED>
    <!-- Value to take when disabled --> 
    <!ATTLIST binaryOption disabledValue       CDATA        #IMPLIED>
    <!-- Set as error based on expression -->
    <!ATTLIST binaryOption errorIf             CDATA        #IMPLIED>
-   <!-- Expression enables this option -->
-   <!ATTLIST binaryOption enabledBy           CDATA        #IMPLIED>
-   <!-- Unlocked by an expression -->
-   <!ATTLIST binaryOption unlockedBy          CDATA        #IMPLIED>
-    <!-- Equation that controls this variable -->
-   <!ATTLIST binaryOption ref                 CDATA        #IMPLIED>
    <!-- Target variable dependent on this variable -->
    <!ATTLIST binaryOption target              CDATA        #IMPLIED>
-   <!-- Allows this option to modify previous option of same name 
+   <!-- Allows this option to modify previous option with the same key 
         The variable behind this option is shared -->
    <!ATTLIST binaryOption modify              CDATA        #IMPLIED>
 
    <!-- List of pin mappings applied if option disabled#Expression to enable use of any pin map -->
    <!ATTLIST binaryOption disabledPinMap      CDATA        #IMPLIED>
 
+<!ELEMENT irqOption EMPTY >
+   <!-- Visible name of option - also used for key if not provided -->
+   <!ATTLIST irqOption name          CDATA        #IMPLIED>
+   <!-- Key for option - also used as visible name if not provided -->
+   <!ATTLIST irqOption key           CDATA        #REQUIRED>
+   <!-- Origin displayed as part of tool-tip -->
+   <!ATTLIST irqOption origin        CDATA        #IMPLIED>
+   <!-- Description of option visible in GUI and used for documentation in C++ code -->
+   <!ATTLIST irqOption description   CDATA        #IMPLIED>
+   <!-- Tool-tip to display in GUI and used for documentation in C++ code -->
+   <!ATTLIST irqOption toolTip       CDATA        #IMPLIED>
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST irqOption condition     CDATA        #IMPLIED>
+   <!-- Locks option in GUI -->
+   <!ATTLIST irqOption locked        (false|true) #IMPLIED>
+   <!-- Hides option in GUI -->
+   <!ATTLIST irqOption hidden        (false|true) #IMPLIED>
+   <!-- Expression enables this option -->
+   <!ATTLIST irqOption enabledBy     CDATA        #IMPLIED>
+
+   <!ATTLIST irqOption pattern       CDATA        #REQUIRED>
+   <!ATTLIST irqOption classHandler  CDATA        #REQUIRED>
+   <!ATTLIST irqOption value         CDATA        #IMPLIED>
+   <!ATTLIST irqOption disabledValue CDATA        #IMPLIED>
+   <!ATTLIST irqOption derived       (true)       #IMPLIED>
+   <!ATTLIST irqOption derivedFrom   CDATA        #IMPLIED>
+   <!-- e.g. CallbackFunction -->
+   <!ATTLIST irqOption typeName      CDATA        #IMPLIED>
+   <!-- e.g. void (*%s)(void) -->
+   <!ATTLIST irqOption valueFormat   CDATA        #IMPLIED>
+   <!-- Allows this option to modify previous option with the same key 
+        The variable behind this option is shared -->
+   <!ATTLIST irqOption modify        CDATA        #IMPLIED>
+   <!-- Replace existing variable associated with option quietly -->
+   <!ATTLIST irqOption replace        CDATA        #IMPLIED>
+
+<!ELEMENT rtcTimeOption (#PCDATA)>
+   <!-- Key for option - also used as visible name if not provided -->
+   <!ATTLIST rtcTimeOption key          CDATA       #REQUIRED>
+   <!-- Equation giving value -->
+   <!ATTLIST rtcTimeOption value        CDATA       #REQUIRED>
+   <!-- Description of variable -->
+   <!ATTLIST rtcTimeOption description  CDATA       #IMPLIED>
+   <!-- Tooltip for GUI and code generation -->
+   <!ATTLIST rtcTimeOption toolTip      CDATA       #IMPLIED>
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST rtcTimeOption condition     CDATA        #IMPLIED>
+   <!-- Locks option in GUI -->
+   <!ATTLIST rtcTimeOption locked        (false|true) #IMPLIED>
+   <!-- Hides option in GUI -->
+   <!ATTLIST rtcTimeOption hidden        (false|true) #IMPLIED>
+      
+
+
+
+
+
 <!-- Describes pin mapping for a peripheral -->
 <!ELEMENT pinMapOption (choice?, choice?) >
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST pinMapOption condition           CDATA        #IMPLIED>
-   <!-- Locks variable against change by user in GUI -->
+   <!-- Locks option in GUI -->
    <!ATTLIST pinMapOption locked            (false|true) #IMPLIED>
-   <!-- Variable is not visible in GUI -->
+   <!-- Hides option in GUI -->
    <!ATTLIST pinMapOption hidden              (false|true) #IMPLIED>
-   <!-- Display name for variable (derived from key if not provided -->
+   <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST pinMapOption name                CDATA        #IMPLIED>
-   <!-- Unique key used to identify variable. Prepended with peripheral name if not absolute -->
+   <!-- Key for option - also used as visible name if not provided -->
    <!ATTLIST pinMapOption key                 CDATA        #REQUIRED>
-   <!-- Replace existing variable quietly -->
+   <!-- Replace existing variable associated with option quietly -->
    <!ATTLIST pinMapOption replace             CDATA        #IMPLIED>
    <!-- Expression enables this option -->
    <!ATTLIST pinMapOption enabledBy           CDATA        #IMPLIED>
     <!-- Equation that controls this variable -->
    <!ATTLIST pinMapOption ref                 CDATA        #IMPLIED>
-   <!-- Allows this option to modify previous option of same name 
+   <!-- Allows this option to modify previous option with the same key 
         The variable behind this option is shared -->
    <!ATTLIST pinMapOption modify              CDATA        #IMPLIED>
 
    <!-- List of pin mappings if option disabled#Expression to enable pin map -->
    <!ATTLIST pinMapOption disabledPinMap      CDATA        #IMPLIED>
+<!ELEMENT constant EMPTY >
+   <!-- Used as visible name in GUI (model) -->
+   <!ATTLIST constant name         CDATA                          #IMPLIED>
+   <!-- Key for variable -->
+   <!ATTLIST constant key          CDATA                          #REQUIRED>
 
-<!ELEMENT irqOption EMPTY >
-   <!-- Condition evaluated during parsing that enables processing of this option -->
-   <!ATTLIST irqOption condition     CDATA        #IMPLIED>
-   <!ATTLIST irqOption locked      (false|true) #IMPLIED>
-   <!ATTLIST irqOption hidden        (false|true) #IMPLIED>
-   <!ATTLIST irqOption name          CDATA        #IMPLIED>
-   <!ATTLIST irqOption key           CDATA        #REQUIRED>
-   <!ATTLIST irqOption pattern       CDATA        #REQUIRED>
-   <!ATTLIST irqOption classHandler  CDATA        #REQUIRED>
-   <!ATTLIST irqOption value         CDATA        #IMPLIED>
-   <!ATTLIST irqOption disabledValue CDATA        #IMPLIED>
-   <!ATTLIST irqOption origin        CDATA        #IMPLIED>
-   <!ATTLIST irqOption description   CDATA        #IMPLIED>
-   <!ATTLIST irqOption toolTip       CDATA        #IMPLIED>
-   <!ATTLIST irqOption derived       (true)       #IMPLIED>
-   <!ATTLIST irqOption derivedFrom   CDATA        #IMPLIED>
-   <!ATTLIST irqOption typeName      CDATA        #IMPLIED> <!-- e.g. CallbackFunction -->
-   <!ATTLIST irqOption valueFormat   CDATA        #IMPLIED> <!-- e.g. void (*%s)(void) -->
-   <!-- Expression enables this option -->
-   <!ATTLIST irqOption enabledBy     CDATA        #IMPLIED>
-   <!-- Allows this option to modify previous option of same name 
-        The variable behind this option is shared -->
-   <!ATTLIST irqOption modify        CDATA        #IMPLIED>
-   <!-- Allow variable to be replaced by later variable of same name -->
-   <!ATTLIST irqOption replace        CDATA        #IMPLIED>
+   <!-- Equation giving value -->
+   <!ATTLIST constant value        CDATA                          #IMPLIED>
+   <!-- Description of variable -->
+   <!ATTLIST constant description  CDATA                          #IMPLIED>
+   <!-- Type of variable -->
+   <!ATTLIST constant type         (String|Boolean|Long|Float) "string">
+   <!-- If true indicates the constant may already exist and this constant is discarded -->
+   <!ATTLIST constant weak         (true)                         #IMPLIED>
+   <!-- Replaces any existing constant of the same key -->
+   <!ATTLIST constant replace      (true)                         #IMPLIED>
+   <!-- By default constants are derived - Used to disable this -->
+   <!ATTLIST constant derived      (false)                        #IMPLIED>
+   <!-- Make visible - doesn't have any visible effect as no model is created -->
+   <!ATTLIST constant hidden       (false)                        #IMPLIED>
+   <!-- Condition to include this constant -->
+   <!ATTLIST constant condition    CDATA                          #IMPLIED>
+   
 
-<!-- 
-   info  Appear within peripheral info class e.g. Osc0Info
-   usbdm Appears in pin_mapping.h immediately before the class declaration
-   all   Can appear anywhere. Requires explicit key use.
-   class Appears as classInfo variable with peripheral path e.g. /ADC/classInfo 
--->
+
+
+
 <!ELEMENT template (#PCDATA)* >
-   <!ATTLIST template namespace                 (info|usbdm|all)  #IMPLIED >
+   <!-- 
+      info  Appear within peripheral info class e.g. Osc0Info
+      usbdm Appears in pin_mapping.h immediately before the class declaration
+      all   Can appear anywhere. Requires explicit key use.
+      class Appears as classInfo variable with peripheral path e.g. /ADC/classInfo 
+   -->
+   <!ATTLIST template namespace                 (info|usbdm|all)        #IMPLIED >
+   <!-- Key for template -->
    <!ATTLIST template key                       CDATA                   #IMPLIED >
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST template condition                 CDATA                   #IMPLIED>
@@ -646,6 +776,7 @@ addChoices
    <!ATTLIST template initExpressionOnSameLine  (true)                  #IMPLIED>
    <!ATTLIST template tooltipPadding            CDATA                   #IMPLIED>
    <!ATTLIST template linePadding               CDATA                   #IMPLIED>
+   <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
    <!ATTLIST template useDefinitions            CDATA                   #IMPLIED>
 
 <!ELEMENT setTemplate (#PCDATA)* >
@@ -667,6 +798,7 @@ addChoices
    <!ATTLIST setTemplate linePadding               CDATA                   #IMPLIED>
    <!ATTLIST setTemplate params                    CDATA                   #IMPLIED>
    <!ATTLIST setTemplate codeGenCondition          CDATA                   #IMPLIED>
+   <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
    <!ATTLIST setTemplate useDefinitions            CDATA                   #IMPLIED>
 
 <!ELEMENT constructorTemplate (#PCDATA)* >
@@ -687,6 +819,7 @@ addChoices
    <!ATTLIST constructorTemplate tooltipPadding            CDATA                   #IMPLIED>
    <!ATTLIST constructorTemplate linePadding               CDATA                   #IMPLIED>
    <!ATTLIST constructorTemplate params                    CDATA                   #IMPLIED>
+   <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
    <!ATTLIST constructorTemplate useDefinitions            CDATA                   #IMPLIED>
 
 <!ELEMENT initialValueTemplate (#PCDATA|for)* >
@@ -704,16 +837,18 @@ addChoices
    <!ATTLIST initialValueTemplate initExpressionOnSameLine  (true)                  #IMPLIED>
    <!ATTLIST initialValueTemplate tooltipPadding            CDATA                   #IMPLIED>
    <!ATTLIST initialValueTemplate linePadding               CDATA                   #IMPLIED>
+   <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
    <!ATTLIST initialValueTemplate useDefinitions            CDATA                   #IMPLIED>
 
 <!ELEMENT enumTemplate (#PCDATA)* >
-   <!ATTLIST enumTemplate namespace       (info|usbdm|all)  #IMPLIED >
-   <!ATTLIST enumTemplate key             CDATA                   #IMPLIED >
-   <!ATTLIST enumTemplate condition       CDATA                   #IMPLIED>
-   <!ATTLIST enumTemplate variable        CDATA                   #REQUIRED>
-   <!ATTLIST enumTemplate discardRepeats  (true)                  #IMPLIED>
-   <!ATTLIST enumTemplate template        CDATA                   #IMPLIED>
-   <!ATTLIST enumTemplate useDefinitions            CDATA                   #IMPLIED>
+   <!ATTLIST enumTemplate namespace         (info|usbdm|all)        #IMPLIED >
+   <!ATTLIST enumTemplate key               CDATA                   #IMPLIED >
+   <!ATTLIST enumTemplate condition         CDATA                   #IMPLIED>
+   <!ATTLIST enumTemplate variable          CDATA                   #REQUIRED>
+   <!ATTLIST enumTemplate discardRepeats    (true)                  #IMPLIED>
+   <!ATTLIST enumTemplate template          CDATA                   #IMPLIED>
+   <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
+   <!ATTLIST enumTemplate useDefinitions    CDATA                   #IMPLIED>
 
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
    <!ATTLIST clockCodeTemplate namespace                 (info|usbdm|all)  #IMPLIED >
@@ -733,7 +868,12 @@ addChoices
    <!ATTLIST clockCodeTemplate linePadding               CDATA                   #IMPLIED>
    <!ATTLIST clockCodeTemplate params                    CDATA                   #IMPLIED>
    <!ATTLIST clockCodeTemplate codeGenCondition          CDATA                   #IMPLIED>
+   <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
    <!ATTLIST clockCodeTemplate useDefinitions            CDATA                   #IMPLIED>
+
+
+
+
 
 <!ELEMENT validate (param*) >
    <!ATTLIST validate class         CDATA        #REQUIRED>
@@ -744,10 +884,12 @@ addChoices
    <!ATTLIST param value      CDATA         #REQUIRED>
 
 <!ELEMENT signals EMPTY >
+   <!-- Visible name of signal -->
    <!ATTLIST signals name        CDATA          "" >
    <!ATTLIST signals optional    (false|true)   #IMPLIED>
    <!-- Expression enables this option -->
    <!ATTLIST signals enabledBy   CDATA          #IMPLIED>
+   <!-- Locks option in GUI -->
    <!ATTLIST signals locked      (false|true)   #IMPLIED>
    <!ATTLIST signals filter      CDATA          #IMPLIED>
 
@@ -792,37 +934,17 @@ addChoices
    <!-- Target file will be marked as derived -->
    <!ATTLIST copy derived              (true|false) #IMPLIED>
    
-<!ELEMENT constant EMPTY >
-   <!-- Used as visible name in GUI (model) -->
-   <!ATTLIST constant name         CDATA                          #IMPLIED>
-   <!-- Key for variable -->
-   <!ATTLIST constant key          CDATA                          #REQUIRED>
-   <!-- Equation giving value -->
-   <!ATTLIST constant value        CDATA                          #IMPLIED>
-   <!-- Description of variable -->
-   <!ATTLIST constant description  CDATA                          #IMPLIED>
-   <!-- Type of variable -->
-   <!ATTLIST constant type         (String|Boolean|Long|Float) "string">
-   <!-- If true indicates the constant may already exist and this constant is discarded -->
-   <!ATTLIST constant weak         (true)                         #IMPLIED>
-   <!-- Replaces any existing constant of the same key -->
-   <!ATTLIST constant replace      (true)                         #IMPLIED>
-   <!-- By default constants are derived - Used to disable this -->
-   <!ATTLIST constant derived      (false)                        #IMPLIED>
-   <!-- Make visible - doesn't have any visible effect as no model is created -->
-   <!ATTLIST constant hidden       (false)                        #IMPLIED>
-   <!-- Condition to include this constant -->
-   <!ATTLIST constant condition    CDATA                          #IMPLIED>
+<!ELEMENT signalMapping EMPTY >
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST signalMapping condition            CDATA    #IMPLIED>
+   <!-- Name of signal to dynamically map -->
+   <!ATTLIST signalMapping pin                  CDATA    #REQUIRED>
+   <!-- Dynamic expression enabling this mapping (assumed true if absent) -->
+   <!ATTLIST signalMapping expression           CDATA    #IMPLIED>
    
-<!ELEMENT rtcTimeOption (#PCDATA)>
-   <!-- Key for variable -->
-   <!ATTLIST rtcTimeOption key          CDATA       #REQUIRED>
-   <!-- Equation giving value -->
-   <!ATTLIST rtcTimeOption value        CDATA       #REQUIRED>
-   <!-- Description of variable -->
-   <!ATTLIST rtcTimeOption description  CDATA       #IMPLIED>
-   <!-- Tooltip for GUI and code generation -->
-   <!ATTLIST rtcTimeOption toolTip      CDATA       #IMPLIED>
-      
-<!ELEMENT divider EMPTY >
-   
+<!ELEMENT dynamicSignalMapping (signalMapping)* >
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST dynamicSignalMapping condition     CDATA    #IMPLIED>
+   <!-- Name of signal to dynamically map -->
+   <!ATTLIST dynamicSignalMapping signal        CDATA    #REQUIRED>
+ 

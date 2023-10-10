@@ -15,7 +15,7 @@
    />
 
    <binaryOption key="dwt_tbctrl_acomp1" condition="dwt_tbctrl_acomp1_present"
-      enumStem="DwtTbctrlAcomp1"
+      typeName="DwtTbctrlAcomp1"
       toolTip="When the MTBDWT_FCT1[MATCHED] is set, it indicates MTBDWT_COMP1 address compare has
 triggered and the trace buffer&apos;s recording state is changed"
       description="Action based on Comparator 1 match" >
@@ -24,7 +24,7 @@ triggered and the trace buffer&apos;s recording state is changed"
    </binaryOption>
 
    <binaryOption key="dwt_tbctrl_acomp0" condition="dwt_tbctrl_acomp0_present"
-      enumStem="DwtTbctrlAcomp0"
+      typeName="DwtTbctrlAcomp0"
       toolTip="When the MTBDWT_FCT0[MATCHED] is set, it indicates MTBDWT_COMP0 address compare has
 triggered and the trace buffer&apos;s recording state is changed.\n
                The assertion of MTBDWT_FCT0[MATCHED] is caused by the following conditions:\n
@@ -50,7 +50,7 @@ triggered and the trace buffer&apos;s recording state is changed.\n
          %paramDescription
          \t */
          \tstatic void configure%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}\n\n
       ]]></setTemplate>
    </for>
@@ -164,7 +164,7 @@ triggered and the trace buffer&apos;s recording state is changed.\n
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {

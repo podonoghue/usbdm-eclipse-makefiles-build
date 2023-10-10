@@ -130,7 +130,7 @@
    />
 
    <choiceOption key="can_ctrl1_clksrc"
-      enumStem="CanClockSource"
+      typeName="CanClockSource"
       description="FlexCAN Clock"
       toolTip="Selects the clock source for the CAN interface">
       <choice value="0"  name="OSCERCLK Clock" enum="OscerClk"  code="Osc0Info::getOscerClock()" />
@@ -143,10 +143,10 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setCanClock(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \tstatic void setCanClock(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}
       \t
       \t/**
@@ -156,7 +156,7 @@
       \t */
       \tstatic uint32_t getCanClock() {
       \t
-      \t   switch(%defaultMaskingExpression) {
+      \t   switch(%maskingExpression) {
       \t      default: return 0;
       %body
       \t   }

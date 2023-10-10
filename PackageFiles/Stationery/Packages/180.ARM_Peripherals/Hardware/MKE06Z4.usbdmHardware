@@ -23,6 +23,7 @@
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_ACMP0_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_ACMP0_MASK;" />
          <irq num="ACMP0_IRQn" />
          <param type="StringVariable"         value="ACMP0;ACMP1" name="instanceList"                key="/ACMP0/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/ACMP0/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/ACMP0/_present" />
          <param type="StringVariable"         value="true"        name="acmp_c0_acnsel_present"      key="/ACMP0/acmp_c0_acnsel_present" />
          <param type="StringVariable"         value="true"        name="acmp_c0_acpsel_present"      key="/ACMP0/acmp_c0_acpsel_present" />
@@ -43,6 +44,7 @@
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_ACMP1_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_ACMP1_MASK;" />
          <irq num="ACMP1_IRQn" />
          <param type="StringVariable"         value="ACMP0;ACMP1" name="instanceList"                key="/ACMP1/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/ACMP1/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/ACMP1/_present" />
          <param type="StringVariable"         value="true"        name="acmp_c0_acnsel_present"      key="/ACMP1/acmp_c0_acnsel_present" />
          <param type="StringVariable"         value="true"        name="acmp_c0_acpsel_present"      key="/ACMP1/acmp_c0_acpsel_present" />
@@ -63,6 +65,7 @@
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_ADC0_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_ADC0_MASK;" />
          <irq num="ADC0_IRQn" />
          <param type="StringVariable"         value="ADC0"        name="instanceList"                key="/ADC0/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/ADC0/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/ADC0/_present" />
          <param type="StringVariable"         value="true"        name="adc_apctl1_adpc_present"     key="/ADC0/adc_apctl1_adpc_present" />
          <param type="StringVariable"         value="true"        name="adc_cv_cv_present"           key="/ADC0/adc_cv_cv_present" />
@@ -97,6 +100,7 @@
          <irq num="CAN_RX_IRQn" />
          <irq num="CAN_TX_IRQn" />
          <param type="StringVariable"         value="CAN0"        name="instanceList"                key="/CAN0/_instanceList" />
+         <param type="LongVariable"           value="2"           name="instanceList"                key="/CAN0/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/CAN0/_present" />
          <param type="StringVariable"         value="true"        name="can_canbtr0_brp_present"     key="/CAN0/can_canbtr0_brp_present" />
          <param type="StringVariable"         value="true"        name="can_canbtr0_sjw_present"     key="/CAN0/can_canbtr0_sjw_present" />
@@ -178,6 +182,7 @@
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_FTM0_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_FTM0_MASK;" />
          <irq num="FTM0_IRQn" />
          <param type="StringVariable"         value="FTM;FTM0;FTM1;FTM2" name="instanceList"                key="/FTM0/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/FTM0/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/FTM0/_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_chf_present"        key="/FTM0/ftm_cnsc_chf_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_chie_present"       key="/FTM0/ftm_cnsc_chie_present" />
@@ -206,6 +211,7 @@
          <param type="StringVariable"         value="true"        name="ftm_deadtime_dtval_present"  key="/FTM0/ftm_deadtime_dtval_present" />
          <param type="StringVariable"         value="true"        name="ftm_exttrig_ch0trig_present" key="/FTM0/ftm_exttrig_ch0trig_present" />
          <param type="StringVariable"         value="true"        name="ftm_exttrig_ch1trig_present" key="/FTM0/ftm_exttrig_ch1trig_present" />
+         <param type="StringVariable"         value="true"        name="ftm_exttrig_chtrig_present"  key="/FTM0/ftm_exttrig_chtrig_present" />
          <param type="StringVariable"         value="true"        name="ftm_exttrig_inittrigen_present" key="/FTM0/ftm_exttrig_inittrigen_present" />
          <param type="StringVariable"         value="true"        name="ftm_exttrig_trigf_present"   key="/FTM0/ftm_exttrig_trigf_present" />
          <param type="StringVariable"         value="true"        name="ftm_filter_ch0fval_present"  key="/FTM0/ftm_filter_ch0fval_present" />
@@ -241,12 +247,16 @@
          <param type="StringVariable"         value="true"        name="ftm_mode_wpdis_present"      key="/FTM0/ftm_mode_wpdis_present" />
          <param type="StringVariable"         value="true"        name="ftm_outinit_ch0oi_present"   key="/FTM0/ftm_outinit_ch0oi_present" />
          <param type="StringVariable"         value="true"        name="ftm_outinit_ch1oi_present"   key="/FTM0/ftm_outinit_ch1oi_present" />
+         <param type="StringVariable"         value="true"        name="ftm_outinit_choi_present"    key="/FTM0/ftm_outinit_choi_present" />
          <param type="StringVariable"         value="true"        name="ftm_outmask_ch0om_present"   key="/FTM0/ftm_outmask_ch0om_present" />
          <param type="StringVariable"         value="true"        name="ftm_outmask_ch1om_present"   key="/FTM0/ftm_outmask_ch1om_present" />
+         <param type="StringVariable"         value="true"        name="ftm_outmask_chom_present"    key="/FTM0/ftm_outmask_chom_present" />
          <param type="StringVariable"         value="true"        name="ftm_pol_pol0_present"        key="/FTM0/ftm_pol_pol0_present" />
          <param type="StringVariable"         value="true"        name="ftm_pol_pol1_present"        key="/FTM0/ftm_pol_pol1_present" />
+         <param type="StringVariable"         value="true"        name="ftm_pol_pol_present"         key="/FTM0/ftm_pol_pol_present" />
          <param type="StringVariable"         value="true"        name="ftm_pwmload_ch0sel_present"  key="/FTM0/ftm_pwmload_ch0sel_present" />
          <param type="StringVariable"         value="true"        name="ftm_pwmload_ch1sel_present"  key="/FTM0/ftm_pwmload_ch1sel_present" />
+         <param type="StringVariable"         value="true"        name="ftm_pwmload_chsel_present"   key="/FTM0/ftm_pwmload_chsel_present" />
          <param type="StringVariable"         value="true"        name="ftm_pwmload_ldok_present"    key="/FTM0/ftm_pwmload_ldok_present" />
          <param type="StringVariable"         value="true"        name="ftm_sc_clks_present"         key="/FTM0/ftm_sc_clks_present" />
          <param type="StringVariable"         value="true"        name="ftm_sc_cpwms_present"        key="/FTM0/ftm_sc_cpwms_present" />
@@ -259,6 +269,8 @@
          <param type="StringVariable"         value="true"        name="ftm_swoctrl_ch0ocv_present"  key="/FTM0/ftm_swoctrl_ch0ocv_present" />
          <param type="StringVariable"         value="true"        name="ftm_swoctrl_ch1oc_present"   key="/FTM0/ftm_swoctrl_ch1oc_present" />
          <param type="StringVariable"         value="true"        name="ftm_swoctrl_ch1ocv_present"  key="/FTM0/ftm_swoctrl_ch1ocv_present" />
+         <param type="StringVariable"         value="true"        name="ftm_swoctrl_choc_present"    key="/FTM0/ftm_swoctrl_choc_present" />
+         <param type="StringVariable"         value="true"        name="ftm_swoctrl_chocv_present"   key="/FTM0/ftm_swoctrl_chocv_present" />
          <param type="StringVariable"         value="true"        name="ftm_sync_cntmax_present"     key="/FTM0/ftm_sync_cntmax_present" />
          <param type="StringVariable"         value="true"        name="ftm_sync_cntmin_present"     key="/FTM0/ftm_sync_cntmin_present" />
          <param type="StringVariable"         value="true"        name="ftm_sync_reinit_present"     key="/FTM0/ftm_sync_reinit_present" />
@@ -288,6 +300,7 @@
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_FTM1_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_FTM1_MASK;" />
          <irq num="FTM1_IRQn" />
          <param type="StringVariable"         value="FTM;FTM0;FTM1;FTM2" name="instanceList"                key="/FTM1/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/FTM1/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/FTM1/_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_chf_present"        key="/FTM1/ftm_cnsc_chf_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_chie_present"       key="/FTM1/ftm_cnsc_chie_present" />
@@ -316,6 +329,7 @@
          <param type="StringVariable"         value="true"        name="ftm_deadtime_dtval_present"  key="/FTM1/ftm_deadtime_dtval_present" />
          <param type="StringVariable"         value="true"        name="ftm_exttrig_ch0trig_present" key="/FTM1/ftm_exttrig_ch0trig_present" />
          <param type="StringVariable"         value="true"        name="ftm_exttrig_ch1trig_present" key="/FTM1/ftm_exttrig_ch1trig_present" />
+         <param type="StringVariable"         value="true"        name="ftm_exttrig_chtrig_present"  key="/FTM1/ftm_exttrig_chtrig_present" />
          <param type="StringVariable"         value="true"        name="ftm_exttrig_inittrigen_present" key="/FTM1/ftm_exttrig_inittrigen_present" />
          <param type="StringVariable"         value="true"        name="ftm_exttrig_trigf_present"   key="/FTM1/ftm_exttrig_trigf_present" />
          <param type="StringVariable"         value="true"        name="ftm_filter_ch0fval_present"  key="/FTM1/ftm_filter_ch0fval_present" />
@@ -351,12 +365,16 @@
          <param type="StringVariable"         value="true"        name="ftm_mode_wpdis_present"      key="/FTM1/ftm_mode_wpdis_present" />
          <param type="StringVariable"         value="true"        name="ftm_outinit_ch0oi_present"   key="/FTM1/ftm_outinit_ch0oi_present" />
          <param type="StringVariable"         value="true"        name="ftm_outinit_ch1oi_present"   key="/FTM1/ftm_outinit_ch1oi_present" />
+         <param type="StringVariable"         value="true"        name="ftm_outinit_choi_present"    key="/FTM1/ftm_outinit_choi_present" />
          <param type="StringVariable"         value="true"        name="ftm_outmask_ch0om_present"   key="/FTM1/ftm_outmask_ch0om_present" />
          <param type="StringVariable"         value="true"        name="ftm_outmask_ch1om_present"   key="/FTM1/ftm_outmask_ch1om_present" />
+         <param type="StringVariable"         value="true"        name="ftm_outmask_chom_present"    key="/FTM1/ftm_outmask_chom_present" />
          <param type="StringVariable"         value="true"        name="ftm_pol_pol0_present"        key="/FTM1/ftm_pol_pol0_present" />
          <param type="StringVariable"         value="true"        name="ftm_pol_pol1_present"        key="/FTM1/ftm_pol_pol1_present" />
+         <param type="StringVariable"         value="true"        name="ftm_pol_pol_present"         key="/FTM1/ftm_pol_pol_present" />
          <param type="StringVariable"         value="true"        name="ftm_pwmload_ch0sel_present"  key="/FTM1/ftm_pwmload_ch0sel_present" />
          <param type="StringVariable"         value="true"        name="ftm_pwmload_ch1sel_present"  key="/FTM1/ftm_pwmload_ch1sel_present" />
+         <param type="StringVariable"         value="true"        name="ftm_pwmload_chsel_present"   key="/FTM1/ftm_pwmload_chsel_present" />
          <param type="StringVariable"         value="true"        name="ftm_pwmload_ldok_present"    key="/FTM1/ftm_pwmload_ldok_present" />
          <param type="StringVariable"         value="true"        name="ftm_sc_clks_present"         key="/FTM1/ftm_sc_clks_present" />
          <param type="StringVariable"         value="true"        name="ftm_sc_cpwms_present"        key="/FTM1/ftm_sc_cpwms_present" />
@@ -369,6 +387,8 @@
          <param type="StringVariable"         value="true"        name="ftm_swoctrl_ch0ocv_present"  key="/FTM1/ftm_swoctrl_ch0ocv_present" />
          <param type="StringVariable"         value="true"        name="ftm_swoctrl_ch1oc_present"   key="/FTM1/ftm_swoctrl_ch1oc_present" />
          <param type="StringVariable"         value="true"        name="ftm_swoctrl_ch1ocv_present"  key="/FTM1/ftm_swoctrl_ch1ocv_present" />
+         <param type="StringVariable"         value="true"        name="ftm_swoctrl_choc_present"    key="/FTM1/ftm_swoctrl_choc_present" />
+         <param type="StringVariable"         value="true"        name="ftm_swoctrl_chocv_present"   key="/FTM1/ftm_swoctrl_chocv_present" />
          <param type="StringVariable"         value="true"        name="ftm_sync_cntmax_present"     key="/FTM1/ftm_sync_cntmax_present" />
          <param type="StringVariable"         value="true"        name="ftm_sync_cntmin_present"     key="/FTM1/ftm_sync_cntmin_present" />
          <param type="StringVariable"         value="true"        name="ftm_sync_reinit_present"     key="/FTM1/ftm_sync_reinit_present" />
@@ -398,6 +418,7 @@
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_FTM2_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_FTM2_MASK;" />
          <irq num="FTM2_IRQn" />
          <param type="StringVariable"         value="FTM;FTM0;FTM1;FTM2" name="instanceList"                key="/FTM2/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/FTM2/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/FTM2/_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_chf_present"        key="/FTM2/ftm_cnsc_chf_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_chie_present"       key="/FTM2/ftm_cnsc_chie_present" />
@@ -446,6 +467,7 @@
          <param type="StringVariable"         value="true"        name="ftm_exttrig_ch3trig_present" key="/FTM2/ftm_exttrig_ch3trig_present" />
          <param type="StringVariable"         value="true"        name="ftm_exttrig_ch4trig_present" key="/FTM2/ftm_exttrig_ch4trig_present" />
          <param type="StringVariable"         value="true"        name="ftm_exttrig_ch5trig_present" key="/FTM2/ftm_exttrig_ch5trig_present" />
+         <param type="StringVariable"         value="true"        name="ftm_exttrig_chtrig_present"  key="/FTM2/ftm_exttrig_chtrig_present" />
          <param type="StringVariable"         value="true"        name="ftm_exttrig_inittrigen_present" key="/FTM2/ftm_exttrig_inittrigen_present" />
          <param type="StringVariable"         value="true"        name="ftm_exttrig_trigf_present"   key="/FTM2/ftm_exttrig_trigf_present" />
          <param type="StringVariable"         value="true"        name="ftm_filter_ch0fval_present"  key="/FTM2/ftm_filter_ch0fval_present" />
@@ -490,24 +512,28 @@
          <param type="StringVariable"         value="true"        name="ftm_outinit_ch3oi_present"   key="/FTM2/ftm_outinit_ch3oi_present" />
          <param type="StringVariable"         value="true"        name="ftm_outinit_ch4oi_present"   key="/FTM2/ftm_outinit_ch4oi_present" />
          <param type="StringVariable"         value="true"        name="ftm_outinit_ch5oi_present"   key="/FTM2/ftm_outinit_ch5oi_present" />
+         <param type="StringVariable"         value="true"        name="ftm_outinit_choi_present"    key="/FTM2/ftm_outinit_choi_present" />
          <param type="StringVariable"         value="true"        name="ftm_outmask_ch0om_present"   key="/FTM2/ftm_outmask_ch0om_present" />
          <param type="StringVariable"         value="true"        name="ftm_outmask_ch1om_present"   key="/FTM2/ftm_outmask_ch1om_present" />
          <param type="StringVariable"         value="true"        name="ftm_outmask_ch2om_present"   key="/FTM2/ftm_outmask_ch2om_present" />
          <param type="StringVariable"         value="true"        name="ftm_outmask_ch3om_present"   key="/FTM2/ftm_outmask_ch3om_present" />
          <param type="StringVariable"         value="true"        name="ftm_outmask_ch4om_present"   key="/FTM2/ftm_outmask_ch4om_present" />
          <param type="StringVariable"         value="true"        name="ftm_outmask_ch5om_present"   key="/FTM2/ftm_outmask_ch5om_present" />
+         <param type="StringVariable"         value="true"        name="ftm_outmask_chom_present"    key="/FTM2/ftm_outmask_chom_present" />
          <param type="StringVariable"         value="true"        name="ftm_pol_pol0_present"        key="/FTM2/ftm_pol_pol0_present" />
          <param type="StringVariable"         value="true"        name="ftm_pol_pol1_present"        key="/FTM2/ftm_pol_pol1_present" />
          <param type="StringVariable"         value="true"        name="ftm_pol_pol2_present"        key="/FTM2/ftm_pol_pol2_present" />
          <param type="StringVariable"         value="true"        name="ftm_pol_pol3_present"        key="/FTM2/ftm_pol_pol3_present" />
          <param type="StringVariable"         value="true"        name="ftm_pol_pol4_present"        key="/FTM2/ftm_pol_pol4_present" />
          <param type="StringVariable"         value="true"        name="ftm_pol_pol5_present"        key="/FTM2/ftm_pol_pol5_present" />
+         <param type="StringVariable"         value="true"        name="ftm_pol_pol_present"         key="/FTM2/ftm_pol_pol_present" />
          <param type="StringVariable"         value="true"        name="ftm_pwmload_ch0sel_present"  key="/FTM2/ftm_pwmload_ch0sel_present" />
          <param type="StringVariable"         value="true"        name="ftm_pwmload_ch1sel_present"  key="/FTM2/ftm_pwmload_ch1sel_present" />
          <param type="StringVariable"         value="true"        name="ftm_pwmload_ch2sel_present"  key="/FTM2/ftm_pwmload_ch2sel_present" />
          <param type="StringVariable"         value="true"        name="ftm_pwmload_ch3sel_present"  key="/FTM2/ftm_pwmload_ch3sel_present" />
          <param type="StringVariable"         value="true"        name="ftm_pwmload_ch4sel_present"  key="/FTM2/ftm_pwmload_ch4sel_present" />
          <param type="StringVariable"         value="true"        name="ftm_pwmload_ch5sel_present"  key="/FTM2/ftm_pwmload_ch5sel_present" />
+         <param type="StringVariable"         value="true"        name="ftm_pwmload_chsel_present"   key="/FTM2/ftm_pwmload_chsel_present" />
          <param type="StringVariable"         value="true"        name="ftm_pwmload_ldok_present"    key="/FTM2/ftm_pwmload_ldok_present" />
          <param type="StringVariable"         value="true"        name="ftm_sc_clks_present"         key="/FTM2/ftm_sc_clks_present" />
          <param type="StringVariable"         value="true"        name="ftm_sc_cpwms_present"        key="/FTM2/ftm_sc_cpwms_present" />
@@ -532,6 +558,8 @@
          <param type="StringVariable"         value="true"        name="ftm_swoctrl_ch4ocv_present"  key="/FTM2/ftm_swoctrl_ch4ocv_present" />
          <param type="StringVariable"         value="true"        name="ftm_swoctrl_ch5oc_present"   key="/FTM2/ftm_swoctrl_ch5oc_present" />
          <param type="StringVariable"         value="true"        name="ftm_swoctrl_ch5ocv_present"  key="/FTM2/ftm_swoctrl_ch5ocv_present" />
+         <param type="StringVariable"         value="true"        name="ftm_swoctrl_choc_present"    key="/FTM2/ftm_swoctrl_choc_present" />
+         <param type="StringVariable"         value="true"        name="ftm_swoctrl_chocv_present"   key="/FTM2/ftm_swoctrl_chocv_present" />
          <param type="StringVariable"         value="true"        name="ftm_sync_cntmax_present"     key="/FTM2/ftm_sync_cntmax_present" />
          <param type="StringVariable"         value="true"        name="ftm_sync_cntmin_present"     key="/FTM2/ftm_sync_cntmin_present" />
          <param type="StringVariable"         value="true"        name="ftm_sync_reinit_present"     key="/FTM2/ftm_sync_reinit_present" />
@@ -576,6 +604,7 @@
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_I2C0_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_I2C0_MASK;" />
          <irq num="I2C0_IRQn" />
          <param type="StringVariable"         value="I2C0;I2C1"   name="instanceList"                key="/I2C0/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/I2C0/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/I2C0/_present" />
          <param type="StringVariable"         value="true"        name="i2c_a1_ad_present"           key="/I2C0/i2c_a1_ad_present" />
          <param type="StringVariable"         value="true"        name="i2c_a2_sad_present"          key="/I2C0/i2c_a2_sad_present" />
@@ -624,6 +653,7 @@
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_I2C1_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_I2C1_MASK;" />
          <irq num="I2C1_IRQn" />
          <param type="StringVariable"         value="I2C0;I2C1"   name="instanceList"                key="/I2C1/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/I2C1/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/I2C1/_present" />
          <param type="StringVariable"         value="true"        name="i2c_a1_ad_present"           key="/I2C1/i2c_a1_ad_present" />
          <param type="StringVariable"         value="true"        name="i2c_a2_sad_present"          key="/I2C1/i2c_a2_sad_present" />
@@ -671,6 +701,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForIcs" />
          <irq num="ICS_IRQn" />
          <param type="StringVariable"         value="ICS"         name="instanceList"                key="/ICS/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/ICS/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/ICS/_present" />
          <param type="StringVariable"         value="true"        name="ics_c1_clks_present"         key="/ICS/ics_c1_clks_present" />
          <param type="StringVariable"         value="true"        name="ics_c1_irclken_present"      key="/ICS/ics_c1_irclken_present" />
@@ -693,6 +724,7 @@
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_IRQ_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_IRQ_MASK;" />
          <irq num="IRQ_IRQn" />
          <param type="StringVariable"         value="IRQ"         name="instanceList"                key="/IRQ/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/IRQ/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/IRQ/_present" />
          <param type="StringVariable"         value="true"        name="irq_sc_irqack_present"       key="/IRQ/irq_sc_irqack_present" />
          <param type="StringVariable"         value="true"        name="irq_sc_irqedg_present"       key="/IRQ/irq_sc_irqedg_present" />
@@ -707,6 +739,7 @@
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_KBI0_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_KBI0_MASK;" />
          <irq num="KBI0_IRQn" />
          <param type="StringVariable"         value="KBI0;KBI1"   name="instanceList"                key="/KBI0/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/KBI0/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/KBI0/_present" />
          <param type="StringVariable"         value="true"        name="kbi_es_kbedg_present"        key="/KBI0/kbi_es_kbedg_present" />
          <param type="StringVariable"         value="true"        name="kbi_pe_kbipe_present"        key="/KBI0/kbi_pe_kbipe_present" />
@@ -722,6 +755,7 @@
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_KBI1_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_KBI1_MASK;" />
          <irq num="KBI1_IRQn" />
          <param type="StringVariable"         value="KBI0;KBI1"   name="instanceList"                key="/KBI1/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/KBI1/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/KBI1/_present" />
          <param type="StringVariable"         value="true"        name="kbi_es_kbedg_present"        key="/KBI1/kbi_es_kbedg_present" />
          <param type="StringVariable"         value="true"        name="kbi_pe_kbipe_present"        key="/KBI1/kbi_pe_kbipe_present" />
@@ -749,6 +783,7 @@
          <irq num="PIT0_IRQn" />
          <irq num="PIT1_IRQn" />
          <param type="StringVariable"         value="PIT"         name="instanceList"                key="/PIT/_instanceList" />
+         <param type="LongVariable"           value="2"           name="instanceList"                key="/PIT/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/PIT/_present" />
          <param type="StringVariable"         value="true"        name="pit_cval_tvl_present"        key="/PIT/pit_cval_tvl_present" />
          <param type="StringVariable"         value="true"        name="pit_ldval_tsv_present"       key="/PIT/pit_ldval_tsv_present" />
@@ -763,6 +798,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPmc" />
          <irq num="PMC_IRQn" />
          <param type="StringVariable"         value="PMC"         name="instanceList"                key="/PMC/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/PMC/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/PMC/_present" />
          <param type="StringVariable"         value="true"        name="pmc_spmsc1_bgbe_present"     key="/PMC/pmc_spmsc1_bgbe_present" />
          <param type="StringVariable"         value="true"        name="pmc_spmsc1_lvde_present"     key="/PMC/pmc_spmsc1_lvde_present" />
@@ -823,6 +859,7 @@
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_PWT_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_PWT_MASK;" />
          <irq num="PWT_IRQn" />
          <param type="StringVariable"         value="PWT"         name="instanceList"                key="/PWT/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/PWT/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/PWT/_present" />
          <param type="StringVariable"         value="true"        name="pwt_r1_edge_present"         key="/PWT/pwt_r1_edge_present" />
          <param type="StringVariable"         value="true"        name="pwt_r1_pclks_present"        key="/PWT/pwt_r1_pclks_present" />
@@ -844,6 +881,7 @@
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_RTC_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_RTC_MASK;" />
          <irq num="RTC_Alarm_IRQn" />
          <param type="StringVariable"         value="RTC"         name="instanceList"                key="/RTC/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/RTC/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/RTC/_present" />
          <param type="StringVariable"         value="true"        name="rtc_cnt_cnt_present"         key="/RTC/rtc_cnt_cnt_present" />
          <param type="StringVariable"         value="true"        name="rtc_mod_mod_present"         key="/RTC/rtc_mod_mod_present" />
@@ -947,6 +985,7 @@
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_SPI0_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_SPI0_MASK;" />
          <irq num="SPI0_IRQn" />
          <param type="StringVariable"         value="SPI0;SPI1"   name="instanceList"                key="/SPI0/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/SPI0/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/SPI0/_present" />
          <param type="StringVariable"         value="true"        name="spi_br_sppr_present"         key="/SPI0/spi_br_sppr_present" />
          <param type="StringVariable"         value="true"        name="spi_br_spr_present"          key="/SPI0/spi_br_spr_present" />
@@ -976,6 +1015,7 @@
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_SPI1_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_SPI1_MASK;" />
          <irq num="SPI1_IRQn" />
          <param type="StringVariable"         value="SPI0;SPI1"   name="instanceList"                key="/SPI1/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/SPI1/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/SPI1/_present" />
          <param type="StringVariable"         value="true"        name="spi_br_sppr_present"         key="/SPI1/spi_br_sppr_present" />
          <param type="StringVariable"         value="true"        name="spi_br_spr_present"          key="/SPI1/spi_br_spr_present" />
@@ -1005,6 +1045,7 @@
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_UART0_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_UART0_MASK;" />
          <irq num="UART0_IRQn" />
          <param type="StringVariable"         value="UART0;UART1;UART2" name="instanceList"                key="/UART0/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/UART0/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/UART0/_present" />
          <param type="StringVariable"         value="true"        name="uart_bdh_lbkdie_present"     key="/UART0/uart_bdh_lbkdie_present" />
          <param type="StringVariable"         value="true"        name="uart_bdh_rxedgie_present"    key="/UART0/uart_bdh_rxedgie_present" />
@@ -1057,6 +1098,7 @@
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_UART1_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_UART1_MASK;" />
          <irq num="UART1_IRQn" />
          <param type="StringVariable"         value="UART0;UART1;UART2" name="instanceList"                key="/UART1/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/UART1/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/UART1/_present" />
          <param type="StringVariable"         value="true"        name="uart_bdh_lbkdie_present"     key="/UART1/uart_bdh_lbkdie_present" />
          <param type="StringVariable"         value="true"        name="uart_bdh_rxedgie_present"    key="/UART1/uart_bdh_rxedgie_present" />
@@ -1109,6 +1151,7 @@
          <clock clockEnable="SIM->SCGC = SIM->SCGC | SIM_SCGC_UART2_MASK;" clockDisable="SIM->SCGC = SIM->SCGC &amp; ~SIM_SCGC_UART2_MASK;" />
          <irq num="UART2_IRQn" />
          <param type="StringVariable"         value="UART0;UART1;UART2" name="instanceList"                key="/UART2/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/UART2/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/UART2/_present" />
          <param type="StringVariable"         value="true"        name="uart_bdh_lbkdie_present"     key="/UART2/uart_bdh_lbkdie_present" />
          <param type="StringVariable"         value="true"        name="uart_bdh_rxedgie_present"    key="/UART2/uart_bdh_rxedgie_present" />
@@ -1160,6 +1203,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForWdog" />
          <irq num="WDOG_IRQn" />
          <param type="StringVariable"         value="WDOG"        name="instanceList"                key="/WDOG/_instanceList" />
+         <param type="LongVariable"           value="1"           name="instanceList"                key="/WDOG/_irqCount" />
          <param type="StringVariable"         value="true"        name="_present"                    key="/WDOG/_present" />
          <param type="StringVariable"         value="true"        name="wdog_cnt_count_present"      key="/WDOG/wdog_cnt_count_present" />
          <param type="StringVariable"         value="true"        name="wdog_cs1_dbg_present"        key="/WDOG/wdog_cs1_dbg_present" />
@@ -1208,19 +1252,19 @@
          <reset sel="unassigned" />
       </pin>
       <pin name="PIT_CH0"      isFixed="true">
-         <mux sel="fixed"         signal="Disabled" />
+         <mux sel="fixed"         signal="PIT_CH0" />
          <reset sel="fixed" />
       </pin>
       <pin name="PIT_CH1"      isFixed="true">
-         <mux sel="fixed"         signal="Disabled" />
+         <mux sel="fixed"         signal="PIT_CH1" />
          <reset sel="fixed" />
       </pin>
       <pin name="PIT_CH2"      isFixed="true">
-         <mux sel="fixed"         signal="Disabled" />
+         <mux sel="fixed"         signal="PIT_CH2" />
          <reset sel="fixed" />
       </pin>
       <pin name="PIT_CH3"      isFixed="true">
-         <mux sel="fixed"         signal="Disabled" />
+         <mux sel="fixed"         signal="PIT_CH3" />
          <reset sel="fixed" />
       </pin>
       <pin name="RTC_OVF">

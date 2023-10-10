@@ -318,7 +318,7 @@ $(/CMP/set_output: // /CMP/set_output not found)
       if (res >= 256) {
          setErrorCode(E_TOO_LARGE);
       }
-      return res;
+      return Ticks(res);
    }
 
    /**

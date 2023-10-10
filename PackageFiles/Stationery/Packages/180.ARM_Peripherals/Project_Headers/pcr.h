@@ -694,21 +694,41 @@ public:
       // Tests are chained so only a single assertion can fail so as to reduce noise
 
       // Function is not currently mapped to a pin
-      static constexpr bool Test1 = (pinIndex != PinIndex::UNMAPPED_PCR);
+      static constexpr bool check1 = (pinIndex != PinIndex::UNMAPPED_PCR);
       // Peripheral signal does not exit
-      static constexpr bool Test2 = !Test1 || (pinIndex != PinIndex::INVALID_PCR);
+      static constexpr bool check2 = !check1 || (pinIndex != PinIndex::INVALID_PCR);
       // Peripheral signal mapped directly to pin - no PCR (not an error)
-      static constexpr bool Test3 = !Test1 || !Test2 || (pinIndex != PinIndex::FIXED_NO_PCR);
+      static constexpr bool check3 = !check1 || !check2 || (pinIndex != PinIndex::FIXED_NO_PCR);
       // Illegal value
-      static constexpr bool Test4 = !Test1 || !Test2 || !Test3 || ((pinIndex>=PinIndex::MIN_PIN_INDEX) && (pinIndex<PinIndex::MAX_PIN_INDEX));
+      static constexpr bool check4 = !check1 || !check2 || !check3 || ((pinIndex>=PinIndex::MIN_PIN_INDEX) && (pinIndex<PinIndex::MAX_PIN_INDEX));
 
-      static_assert(Test1, "Peripheral signal is not mapped to a pin - Modify Configure.usbdm");
-      static_assert(Test2, "Peripheral signal doesn't exist in this device/package - Check Configure.usbdm for available signals");
-      static_assert(Test4, "Illegal pin index - should be in range [PinIndex::MIN_PIN_INDEX..PinIndex::MAX_PIN_INDEX)");
+      static_assert(check1, "Peripheral signal is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(check2, "Peripheral signal doesn't exist in this device/package - Check Configure.usbdm for available signals");
+      static_assert(check4, "Illegal pin index - should be in range [PinIndex::MIN_PIN_INDEX..PinIndex::MAX_PIN_INDEX)");
 
    public:
       /** Dummy function to allow convenient in-line checking */
       static constexpr void check() {}
+   };
+
+   /**
+    * Class to static check signal mapping is valid for a peripheral
+    * Conditions are chained so only a single assert is reported
+    *
+    * @tparam Info         Info table used for lookup
+    * @tparam signalNum    Index into table
+    */
+   template<class Info, int signalNum> class CheckSignalMapping {
+
+      static constexpr PinIndex pinIndex = Info::info[signalNum].pinIndex;
+
+      // Illegal index for table
+      static_assert(signalNum<Info::numSignals, "Illegal signal index for this peripheral");
+
+   public:
+      static void check() {
+         CheckPinExistsAndIsMapped<pinIndex>::check();
+      }
    };
 
 private:

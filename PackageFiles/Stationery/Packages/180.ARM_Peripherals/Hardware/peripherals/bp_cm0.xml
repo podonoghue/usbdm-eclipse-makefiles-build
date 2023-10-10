@@ -13,7 +13,7 @@
    />
 
    <binaryOption key="bp_ctrl_enable" condition="bp_ctrl_enable_present"
-      enumStem="BpCtrlEnable"
+      typeName="BpCtrlEnable"
       toolTip="A Power-on reset clears this bit to 0"
       description="Enable bit for the FPB." >
       <choice name="FPB disabled"  value="0" enum="FpbDisabled"/>
@@ -21,7 +21,7 @@
    </binaryOption>
 
    <choiceOption key="bp_comp_bp_match" condition="bp_comp_bp_match_present"
-      enumStem="BpCompBpMatch"
+      typeName="BpCompBpMatch"
       description="BP_MATCH defines the behavior when the COMP address is matched" >
       <choice name="no breakpoint matching"                             value="0" enum="NoBreakpointMatching"/>
       <choice name="breakpoint on lower halfword, upper is unaffected"  value="1" enum="BreakpointOnLowerHalfword_UpperIsUnaffected"/>
@@ -38,7 +38,7 @@
    />
 
    <binaryOption key="bp_comp_enable" condition="bp_comp_enable_present"
-      enumStem="BpCompEnable"
+      typeName="BpCompEnable"
       toolTip="A Power-on reset clears this bit to 0"
       description="Enable bit for this comparator." >
       <choice name="Comparator disabled"  value="0" enum="ComparatorDisabled"/>
@@ -60,7 +60,7 @@
          %paramDescription
          \t */
          \tstatic void configure%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}\n\n
       ]]></setTemplate>
    </for>
@@ -185,7 +185,7 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {

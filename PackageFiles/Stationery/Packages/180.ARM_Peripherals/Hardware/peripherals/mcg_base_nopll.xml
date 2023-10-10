@@ -82,7 +82,7 @@
 
    <!--  Run mode independent -->
    <choiceOption key="mcg_c2_oscMode" condition="mcg_c2_erefs0_present"
-      enumStem="OscMode"
+      typeName="OscMode"
       valueFormat="MCG_C2_EREFS0(%s),MCG_C2_HGO0(%s)"
       hidden="true"
       description="OSC0 mode"
@@ -101,7 +101,7 @@
 
    <choiceOption key="mcg_c2_erefs0"  condition="mcg_c2_erefs0_present"
       hidden="true"
-      enumStem="McgExternalClock"
+      typeName="McgExternalClock"
       ref="mcg_c2_oscMode>=2"
       derived="true"
       description="External Reference Select"
@@ -112,7 +112,7 @@
 
    <choiceOption key="mcg_c2_hgo0"  condition="mcg_c2_hgo0_present"
       hidden="true"
-      enumStem="McgOscMode"
+      typeName="McgOscMode"
       ref="mcg_c2_oscMode==3"
       derived="true"
       description="Oscillator mode"
@@ -690,7 +690,7 @@
          <choiceOption key="mcgClockMode[%(n)]"
             enabledBy="enableClockConfiguration[%(n)]"
             errorIf="(/SMC/smc_pmctrl_runm[%(n)]==VLPR)&amp;&amp;(mcgClockMode[%(n)]&lt;4)##Illegal clock mode in VLPR"
-            enumStem="McgClockMode"
+            typeName="McgClockMode"
             enumType="uint8_t"
             valueFormat="%s"
             description="MCG Clock Mode"
@@ -736,7 +736,7 @@
             description="Clock monitors" >
             <binaryOption key="mcg_c6_cme0[%(n)]" condition="mcg_c6_cme0_present"
                enabledBy="enableClockConfiguration[%(n)]"
-               enumStem="McgOsc0ClockMonitor"
+               typeName="McgOsc0ClockMonitor"
                description="OSC0 Clock Monitor Enable"
                toolTip="Enables the loss of clock monitoring circuit for the OSC0 external reference.\n
                         C2.LOCRE0 determines if an interrupt or a reset request is generated.\n
@@ -745,7 +745,7 @@
                <choice value="1" enum="Enabled"  name="Clock monitor enabled"  />
             </binaryOption>
             <binaryOption key="mcg_c2_locre0[%(n)]" condition="mcg_c2_locre0_present"
-               enumStem="McgOsc0LossOfClockAction"
+               typeName="McgOsc0LossOfClockAction"
                enabledBy="mcg_c6_cme0[%(n)]"
                description="OSC0 Action on Loss of Clock"
                toolTip="Determines if an Interrupt or Reset occurs on loss of OSC0 external reference\n
@@ -755,7 +755,7 @@
             </binaryOption>
 
             <binaryOption key="mcg_c8_cme1[%(n)]" condition="mcg_c8_cme1_present"
-               enumStem="McgOsc1ClockMonitor"
+               typeName="McgOsc1ClockMonitor"
                description="OSC1 (RTC) Clock Monitor Enable"
                toolTip="Determines if the clock monitor is enabled for the RTC external clock.\n
                         CME1 bit must be set to a logic 0 before the MCG enters any Stop mode">
@@ -764,7 +764,7 @@
             </binaryOption>
 
             <binaryOption key="mcg_c8_locre1[%(n)]"  condition="mcg_c8_locre1_present"
-               enumStem="McgOsc1LossOfClockAction"
+               typeName="McgOsc1LossOfClockAction"
                enabledBy="mcg_c8_cme1[%(n)]"
                description="OSC1 (RTC) Loss of Clock Reset Enable"
                toolTip="Determines if a interrupt or a reset request is made following a loss of RTC external reference clock.\n
@@ -776,7 +776,7 @@
 
          <category name="MCGIR" description="Internal Reference Clock Sources [MCGIRCLK]" >
             <choiceOption key="mcg_sc_fcrdiv[%(n)]"
-               enumStem="McgFastInternalClockDivider"
+               typeName="McgFastInternalClockDivider"
                enabledBy="system_fast_irc_clock[%(n)]!=0"
                target="firc_divided_clock[%(n)]"
                description="Fast Internal Clock [FIRC] Reference Divider"
@@ -795,7 +795,7 @@
             <intOption key="firc_divided_clock[%(n)]" units="Hz" locked="true" derived="true" />
 
             <binaryOption key="mcg_c2_ircs[%(n)]"
-               enumStem="McgIrClkSrc"
+               typeName="McgIrClkSrc"
                target="system_mcgirclk_ungated[%(n)]"
                description="Internal Reference Clock [MCGIRCLK]"
                toolTip="Clock Source for MCGIRCLK" >
@@ -806,7 +806,7 @@
             <intOption key="system_mcgirclk_ungated[%(n)]" units="Hz" locked="true" derived="true" />
 
             <binaryOption key="mcg_c1_irclken[%(n)]"
-               enumStem="McgIrClkEn"
+               typeName="McgIrClkEn"
                target="system_mcgirclk_clock[%(n)]"
                description="Internal Reference Clock [MCGIRCLK]"
                toolTip="Enables the internal reference clock for use by peripherals" >
@@ -815,7 +815,7 @@
             </binaryOption>
 
             <binaryOption key="mcg_c1_irefsten[%(n)]"
-               enumStem="McgIrefs"
+               typeName="McgIrefs"
                enabledBy="mcg_c1_irclken[%(n)]"
                description="Internal Reference [MCGIRCLK] Stop Enable"
                toolTip="Determines if MCGIRCLK is enabled in Stop mode">
@@ -833,7 +833,7 @@
 
          <if condition="mcg_c7_oscsel_present">
             <choiceOption key="mcg_c7_oscsel[%(n)]"
-               enumStem="McgErcSelect"
+               typeName="McgErcSelect"
                target="mcg_erc_clock[%(n)]"
                description="MCG External reference clock"
                toolTip="Source for MCG External Reference Clock">
@@ -872,7 +872,7 @@
             </binaryOption>
 
             <choiceOption key="mcg_c2_range0[%(n)]" condition="mcg_c2_range0_present"
-               enumStem="McgRange0"
+               typeName="McgRange0"
                locked="true"
                description="Frequency Range Select"
                toolTip="Selects the frequency range for the crystal oscillator if used.\n
@@ -886,7 +886,7 @@
             <choiceOption key="mcg_c1_frdiv[%(n)]" condition="mcg_c7_oscsel_present"
                enabledBy="!mcg_c1_irefs[%(n)]##Disabled by IREFS"
                target="mcg_erc_clock_divided[%(n)]"
-               enumStem="McgFllPrescale"
+               typeName="McgFllPrescale"
                derived="true"
                locked="true"
                description="FLL External Reference Divider"
@@ -919,7 +919,7 @@
             <choiceOption key="mcg_c1_frdiv[%(n)]" condition="!mcg_c7_oscsel_present"
                enabledBy="!mcg_c1_irefs[%(n)]##Disabled by IREFS"
                target="mcg_erc_clock_divided[%(n)]"
-               enumStem="McgFllPrescale"
+               typeName="McgFllPrescale"
                locked="true"
                description="FLL External Reference Divider"
                origin="Determined by FLL input frequency constraints and external reference clock frequency"
@@ -959,7 +959,7 @@
 
             <binaryOption key="mcg_c1_irefs[%(n)]"
                ref="(mcgClockMode[%(n)]==@FEI)||(mcgClockMode[%(n)]==@FBI)||(mcgClockMode[%(n)]==@BLPI)"
-               enumStem="McgIref"
+               typeName="McgIref"
                target="irefs_clock[%(n)]"
                derived="true"
                locked="true"
@@ -1007,7 +1007,7 @@
                disabledValue="0" />
 
             <binaryOption key="mcg_c4_dmx32[%(n)]"
-               enumStem="McgFllLockRangeWidth"
+               typeName="McgFllLockRangeWidth"
                enabledBy="fll_enabled[%(n)]"
                description="DMX32 DCO lock range"
                toolTip="Allows the FLL parameters to be optimised for either:\n
@@ -1018,7 +1018,7 @@
             </binaryOption>
 
             <choiceOption key="mcg_c4_drst_drs[%(n)]"
-               enumStem="McgFllLockRange"
+               typeName="McgFllLockRange"
                derived="true"
                locked="true"
                description="DCO Range Select"
@@ -1268,7 +1268,7 @@
       \t */
       \tstatic uint32_t getExternalReferenceClock() {
       \t
-      \t   switch(%defaultMaskingExpression) {
+      \t   switch(%maskingExpression) {
       \t      default: return 0;
       %body
       \t   }
@@ -1311,7 +1311,7 @@
       \t */
       \tstatic uint32_t getInternalReferenceClock() {
       \t
-      \t   switch(%defaultMaskingExpression) {
+      \t   switch(%maskingExpression) {
       \t      default: return 0;
       %body
       \t   }
@@ -1359,7 +1359,7 @@
          \t * @param %paramName %tooltip
          \t */
          \tstatic void set%(name)(%paramType %paramName) {
-         \t   %defaultClockExpression
+         \t   %fieldAssignment
          \t}
 
          \t/**

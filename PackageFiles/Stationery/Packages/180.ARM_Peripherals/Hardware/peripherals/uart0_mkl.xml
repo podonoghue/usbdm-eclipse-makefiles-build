@@ -17,7 +17,7 @@
     * Template substitutions
     *
     * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
     * %variable[index]                Variable name /ADC0/adc_sc2_acfe
     * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
     * %description[index]             Description from controlVar e.g. Compare Function Enable
@@ -27,12 +27,12 @@
     * %params                         Formatted parameter list for function
     * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
     * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %enumClass[index]               As for %paramType
-    * %enumParam[index]               As for %paramName
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
     * %variable[index]                Variable name from condition
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
@@ -63,7 +63,7 @@
 
    <choiceOption key="defaultBaudRate"
       valueFormat="%s"
-      enumStem="UartBaudRate"
+      typeName="UartBaudRate"
       description="$(_BASENAME) default baud rate"
       toolTip="Used by default $(_BASENAME) setup for stdio">
       <choice value="110"     name="110"     enum="110"    />
@@ -84,7 +84,7 @@
 
    <choiceOption key="uart_c2_tcie" condition="uart_c2_tcie_present"
       hidden="true"
-      enumStem="UartTxCompleteAction"
+      typeName="UartTxCompleteAction"
       description="Transmit complete action"
       toolTip="Enable interrupt on transmission complete">
       <choice value="0"   name="None"      enum="None"      />
@@ -105,7 +105,7 @@
 
    <choiceOption key="uart_c2_ilie" condition="uart_c2_ilie_present"
       hidden="true"
-      enumStem="UartIdleLineDetectAction"
+      typeName="UartIdleLineDetectAction"
       description="Idle line detect sction"
       toolTip="Enable interrupt on tidele line detect">
       <choice value="0"   name="None"      enum="None"      />
@@ -127,7 +127,7 @@
    <choiceOption key="uartTxEmptyAction" condition="!uart_c5_tdmas_present&amp;&amp;uart_c2_tie_present"
       hidden="true"
       valueFormat="UART_C2_TIE(%s)"
-      enumStem="UartTxEmptyAction"
+      typeName="UartTxEmptyAction"
       description="Transmit empty DMA/Interrupt action"
       toolTip="Enable transmit holding register empty DMA/Interrupt action">
       <choice value="0"   name="None"      enum="None"      />
@@ -137,7 +137,7 @@
    <choiceOption key="uartTxEmptyAction" condition="uart_c5_tdmas_present&amp;&amp;uart_c2_tie_present"
       hidden="true"
       valueFormat="(UART_C5_TDMAS(%s)&lt;&lt;8),UART_C2_TIE(%s)"
-      enumStem="UartTxEmptyAction"
+      typeName="UartTxEmptyAction"
       description="Transmit empty DMA/Interrupt action"
       toolTip="Enable transmit holding register empty DMA/Interrupt action">
       <choice value="0,0"   name="None"      enum="None"      />
@@ -168,7 +168,7 @@
    <choiceOption key="uartRxFullAction" condition="!uart_c5_rdmas_present&amp;&amp;uart_c2_rie_present"
       hidden="true"
       valueFormat="UART_C2_RIE(%s)"
-      enumStem="UartRxFullAction"
+      typeName="UartRxFullAction"
       description="Receive full interrupt action"
       toolTip="Enable receive buffer full interrupt action">
       <choice value="0"   name="None"      enum="None"      />
@@ -178,7 +178,7 @@
    <choiceOption key="uartRxFullAction" condition="uart_c5_rdmas_present&amp;&amp;uart_c2_rie_present"
       hidden="true"
       valueFormat="(UART_C5_RDMAS(%s)&lt;&lt;8),UART_C2_RIE(%s)"
-      enumStem="UartRxFullAction"
+      typeName="UartRxFullAction"
       description="Receive full DMA/interrupt action"
       toolTip="Enable receive buffer full DMA/interrupt action">
       <choice value="0,0"   name="None"      enum="None"      />

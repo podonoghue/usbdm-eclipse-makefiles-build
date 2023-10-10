@@ -538,8 +538,8 @@ public:
    I2cBase_T(const I2cBasicInfo::Init &init) : I2c(Info::baseAddress) {
 
       // Check pin assignments
-      PcrBase::CheckPinExistsAndIsMapped<Info::info[Info::sclPin].pinIndex> check1; check1.check();
-      PcrBase::CheckPinExistsAndIsMapped<Info::info[Info::sclPin].pinIndex> check2; check2.check();
+      PcrBase::CheckPinExistsAndIsMapped<Info::info[Info::sclPin].pinIndex>::check();
+      PcrBase::CheckPinExistsAndIsMapped<Info::info[Info::sclPin].pinIndex>::check();
 
       busHangReset();
       thisPtr = this;

@@ -28,7 +28,7 @@
     * Template substitutions
     *
     * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
     * %variable[index]                Variable name /ADC0/adc_sc2_acfe
     * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
     * %description[index]             Description from controlVar e.g. Compare Function Enable
@@ -38,12 +38,12 @@
     * %params                         Formatted parameter list for function
     * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
     * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %enumClass[index]               As for %paramType
-    * %enumParam[index]               As for %paramName
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
     * %variable[index]                Variable name from condition
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
@@ -63,7 +63,7 @@
       enabledBy="enablePeripheralSupport"
       description="PGA Enable and mode"
       valueFormat="(%s)"
-      enumStem="AdcPgaMode"
+      typeName="AdcPgaMode"
       toolTip="">
       <choice value="ADC_PGA_PGAEN(0)"                   name="PGA is disabled"          enum="Disabled" isDefault="true" />
       <choice value="ADC_PGA_PGAEN(1)|ADC_PGA_PGALPb(0)" name="PGA is in low power mode" enum="LowPower"      />
@@ -73,7 +73,7 @@
    <choiceOption key="adc_pga_pgag" condition="adc_pga_pgag_present"
       enabledBy="enablePeripheralSupport"
       description="PGA Gain Setting"
-      enumStem="AdcPgaGain"
+      typeName="AdcPgaGain"
       toolTip="Sets gain of PGA amplifier">
       <choice value="0" name="Gain = x1"  enum="x1" isDefault="true" />
       <choice value="1" name="Gain = x2"  enum="x2"   />
@@ -88,7 +88,7 @@
       enabledBy="enablePeripheralSupport"
       description="PGA chopping"
       valueFormat="ADC_PGA_PGACHPb(%s)"
-      enumStem="AdcPgaChop"
+      typeName="AdcPgaChop"
       toolTip="Controls PGA chopping to remove/reduce offset">
       <choice value="0" enum="Disabled" name="No chopping"        isDefault="true" />
       <choice value="1" enum="Enabled"  name="Chopping enabled"   />
@@ -130,7 +130,7 @@
    <choiceOption key="adc_cfg1_adiclk"
       enabledBy="enablePeripheralSupport"
       description="ADC Clock Source"
-      enumStem="AdcClockSource"
+      typeName="AdcClockSource"
       target="adcInputClock"
       toolTip="Clock source for the ADC module" >
       <choice value="0" name="Bus clock"                   ref="(input_bus_clock)"              enum="Bus"       code="SystemBusClock"            />
@@ -153,13 +153,13 @@
       \t/**
       \t * Get %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t *
       \t * @return Clock frequency in Hz
       \t */
-      \tstatic uint32_t getAdcClock(%enumClass %enumParam) {
+      \tstatic uint32_t getAdcClock(%paramType %paramName) {
       \t
-      \t   switch(%enumParam) {
+      \t   switch(%paramName) {
       \t      default: return 0;
       %body
       \t   }
@@ -169,7 +169,7 @@
    <choiceOption key="adc_cfg1_adiv"
       enabledBy="adc_cfg1_adiclk!=3"
       description="Clock Divide Select"
-      enumStem="AdcClockDivider"
+      typeName="AdcClockDivider"
       target="adcClockFrequency"
       toolTip="Selects the divide ratio used by the ADC to generate the internal clock ADCK">
       <choice value="0" name="Divide by 1" ref="adcInputClock"     enum="1" isDefault="true" />
@@ -192,7 +192,7 @@
 
    <choiceOption key="adc_cfg1_mode" description="ADC Resolution"
       enabledBy="enablePeripheralSupport"
-      enumStem="AdcResolution"
+      typeName="AdcResolution"
       toolTip="The resolutions available vary with single-ended/differential modes\n
                Note the equivalence between modes e.g. 8-bit-se = 9-bit-diff" >
       <choice value="0" name="8-bit unsigned (single-ended mode)"   enum="8bit_se"    />
@@ -257,7 +257,7 @@
 
    <binaryOption key="adc_cfg1_adlpc" description="Low-Power Configuration"
       enabledBy="enablePeripheralSupport"
-      enumStem="AdcPower"
+      typeName="AdcPower"
       toolTip="Adjust power consumption">
       <choice value="0" enum="Normal" name="Normal power configuration" isDefault="true" />
       <choice value="1" enum="Low"    name="Low-power configuration (reduced speed)" />
@@ -265,7 +265,7 @@
 
    <choiceOption key="adc_sample" description="Long Sample Time Select"
       enabledBy="enablePeripheralSupport"
-      enumStem="AdcSample"
+      typeName="AdcSample"
       valueFormat="(%s)"
       toolTip="Selects sample times \n
                Longer times allow higher impedance inputs to be accurately sampled or\n
@@ -280,7 +280,7 @@
 
    <choiceOption key="adc_sc3_avg" description="Hardware Average Select"
       enabledBy="enablePeripheralSupport"
-      enumStem="AdcAveraging"
+      typeName="AdcAveraging"
       valueFormat="ADC_SC3_CAL(%s),ADC_SC3_CALF(%s),ADC_SC3_AVGE(%s),ADC_SC3_AVGS(%s)"
       toolTip="Determines how many ADC conversions will be averaged\n
                by the hardware to create the ADC result">
@@ -294,7 +294,7 @@
 
    <binaryOption key="adc_cfg2_adhsc" description="High-Speed Configuration"
       enabledBy="enablePeripheralSupport"
-      enumStem="AdcClockRange"
+      typeName="AdcClockRange"
       toolTip="Configures the ADC for high-speed clock operation\n
                This actually extends the number of conversion clock cycles\n
                but is offset by allowing a faster input clock">
@@ -304,7 +304,7 @@
 
    <binaryOption key="adc_cfg2_adacken" description="Asynchronous Clock Output Enable"
       enabledBy="enablePeripheralSupport"
-      enumStem="AdcAsyncClock"
+      typeName="AdcAsyncClock"
       toolTip="Enables the ADC internal asynchronous clock source irrespective of ADC need.\n
          This reduces the initial delay at the start of a sequence of conversions.\n
 	 It also allows use of the ADC internal clock as a clock source for other peripherals">
@@ -314,7 +314,7 @@
 
    <choiceOption key="adc_sc2_refsel" description="Voltage Reference Selection"
       enabledBy="enablePeripheralSupport"
-      enumStem="AdcRefSel"
+      typeName="AdcRefSel"
       toolTip="Selects the voltage reference source used for conversions">
       <choice value="0" enum="VrefHL"  name="VRefH and VRefl" isDefault="true" />
       <choice value="1" enum="VrefOut" name="Gnd and VrefOut(1.2V)" />
@@ -324,7 +324,7 @@
    <binaryOption key="adc_sc2_dmaen" condition="adc_sc2_dmaen_present"
       enabledBy="enablePeripheralSupport"
       description="DMA Enable"
-      enumStem="AdcDma"
+      typeName="AdcDma"
       toolTip="Enables use of DMA with ADC">
       <choice value="0" enum="Disabled" name="Disabled" isDefault="true" />
       <choice value="1" enum="Enabled"  name="Enabled" />
@@ -332,7 +332,7 @@
 
    <binaryOption key="adc_sc1_aien" description="Enables conversion interrupts"
       enabledBy="irqHandlingMethod"
-      enumStem="AdcInterrupt"
+      typeName="AdcInterrupt"
       hidden="true"
       toolTip="An interrupt is triggered at the end of each conversion">
       <choice value="0" enum="Disabled" name="Disabled" isDefault="true" />
@@ -341,7 +341,7 @@
 
    <binaryOption key="adc_pretrigger" description="Selects the pretrigger"
       enabledBy="enablePeripheralSupport"
-      enumStem="AdcPretrigger"
+      typeName="AdcPretrigger"
       valueFormat="(%s)"
       hidden="true"
       toolTip="Selects which SC1[x]/R[x] register pair to use">
@@ -351,7 +351,7 @@
 
    <binaryOption key="adc_cfg2_muxsel" description="Selects between A/B multiplexor inputs on some ADC channels"
       enabledBy="enablePeripheralSupport"
-      enumStem="AdcMuxsel"
+      typeName="AdcMuxsel"
       toolTip="Some ADC inputs may be multiplexed to two pins e.g. adcCh4a and adcCh4b">
       <choice value="0" enum="A"  name="The multiplexor selects A channels" />
       <choice value="1" enum="B"  name="The multiplexor selects B channels" isDefault="true" />
@@ -359,7 +359,7 @@
 
    <binaryOption key="adc_sc3_adco" description="Selects between single and continuous conversion"
       enabledBy="enablePeripheralSupport"
-      enumStem="AdcContinuous"
+      typeName="AdcContinuous"
       toolTip="When enabled, continuous conversion are triggered when the first conversion is initiated">
       <choice value="0" enum="Disabled" name="Single conversion on each trigger" isDefault="true" />
       <choice value="1" enum="Enabled"  name="Continuous conversions after 1st trigger" />
@@ -367,7 +367,7 @@
 
    <choiceOption key="adc_sc2_compare" description="Compare function"
       enabledBy="enablePeripheralSupport"
-      enumStem="AdcCompare"
+      typeName="AdcCompare"
       valueFormat="ADC_SC2_ACFE(%s),ADC_SC2_ACREN(%s),ADC_SC2_ACFGT(%s),(%s)"
       toolTip="Enables comparison of ADC result with CV1 and CV2" >
       <choice value="0,0,0,0"            enum="Disabled"              name="No comparison done"                              isDefault="true"    />
@@ -395,7 +395,7 @@
 
    <binaryOption key="adc_sc2_adtrg" description="Conversion Trigger Select"
       enabledBy="enablePeripheralSupport"
-      enumStem="AdcTrigger"
+      typeName="AdcTrigger"
       toolTip="Selects the type of trigger used for initiating a conversion">
       <choice value="0" enum="Software" name="Software trigger (write to SC1A)" isDefault="true" />
       <choice value="1" enum="Hardware" name="Hardware trigger (ADHWT source)" />
@@ -477,7 +477,7 @@
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicValueExpression;
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
        \t\n
    ]]></initialValueTemplate>
 
@@ -637,7 +637,7 @@
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName0 = %symbolicValueExpression1;
+      \t   %paramType %registerName0 = %symbolicExpression1;
       \t\n
    ]]></initialValueTemplate>
 
@@ -781,7 +781,7 @@
       \t    * @param[in] high         Higher threshold (if needed)
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(%enumClass0 %enumParam0, int low, int high=0, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%paramType0 %paramName0, int low, int high=0, Types... rest) : Init(rest...) {
       \t
       \t      // Juggle CV1, CV2 values to satisfy comparison rules
       \t      switch (adcCompare) {
@@ -802,7 +802,7 @@
       \t            cv2 = low;
       \t            break;
       \t      }
-      \t      %registerName0 = (%registerName0&~(%mask0)) | %enumParam0;
+      \t      %registerName0 = (%registerName0&~(%mask0)) | %paramName0;
       \t   }
       \t\n
    ]]>

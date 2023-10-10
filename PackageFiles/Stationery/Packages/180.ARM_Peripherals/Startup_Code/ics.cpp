@@ -291,6 +291,9 @@ void Ics::SystemCoreClockUpdate(void) {
  */
 void Ics::startupConfigure() {
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+
 #define SCFTRIM (*(uint8_t *)0x03FE)
 #define SCTRIM  (*(uint8_t *)0x03FF)
 
@@ -298,8 +301,11 @@ if (SCTRIM != 0xFF) {
    // Trim clock
    ics->C3 = SCTRIM;
    ics->C4 = (ics->C4&~ICS_C4_SCFTRIM_MASK)|SCFTRIM;
+
+#pragma GCC diagnostic pop
    
 }
+
 #if $(/ICS/enablePeripheralSupport:false) // /ICS/enablePeripheralSupport
 
    // Do full configuration

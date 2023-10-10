@@ -24,7 +24,7 @@
    </category>
 
    <binaryOption key="rtc_cr_osce" condition="!/SIM/RtcForcing"
-      enumStem="RtcOscEnable"
+      typeName="RtcOscEnable"
       enabledBy="ConfigureRtc"
       description="Enable RTC oscillator"
       toolTip="Enable 32kHz RTC oscillator">
@@ -35,7 +35,7 @@
    <!-- Controlled by OSC0 mode -->
    <binaryOption key="rtc_cr_osce" condition="/SIM/RtcForcing"
       ref="(/MCG/mcg_c2_oscMode == /OscMode_RTC_Controlled)?1:0"
-      enumStem="RtcOscEnable"
+      typeName="RtcOscEnable"
       locked="true"
       derived="true"
       hidden="true"
@@ -67,7 +67,7 @@
          disabledValue="0" />
 
       <binaryOption key="rtc_cr_clko"
-         enumStem="RtcClockOut"
+         typeName="RtcClockOut"
          enabledBy="rtc_cr_osce"
          description="Enable RTC 32kHz Clock Output"
          toolTip="Determines if RTC 32kHz Clock is available to peripherals" >
@@ -122,7 +122,7 @@
    </if>
 
    <choiceOption key="rtc_cr_scp"
-      enumStem="RtcCap"
+      typeName="RtcCap"
       enabledBy="rtc_cr_osce"
       description="Oscillator load capacitance"
       toolTip="Configures the oscillator load capacitance" >
@@ -145,7 +145,7 @@
    </choiceOption>
 
    <binaryOption key="rtc_cr_um"
-      enumStem="RtcTceUpdate"
+      typeName="RtcTceUpdate"
       description="Update Mode"
       toolTip="Allows the SR[TCE] to be written even when the Status Register is locked.\n
                When set, the SR[TCE] can always be written if the SR[TIF] or SR[TOF] are set or if the SR[TCE] is clear" >
@@ -154,7 +154,7 @@
    </binaryOption>
 
    <binaryOption key="rtc_cr_sup"
-      enumStem="RtcUserWriteAccess"
+      typeName="RtcUserWriteAccess"
       description="Supervisor access"
       toolTip="Determines if the RTC register access is available in non-supervisor mode \n
                Non supported write accesses generate a bus error" >
@@ -163,7 +163,7 @@
    </binaryOption>
 
    <binaryOption key="rtc_cr_wpe"
-      enumStem="RtcWakeupPin"
+      typeName="RtcWakeupPin"
       description="Wakeup Pin Enable"
       toolTip="Determines if the wakeup pin is asserted on RTC interrupt when powered down \n
                The wakeup pin is optional and not available on all devices" >
@@ -228,7 +228,7 @@
 
    <category name="Register Locks" description="Locks RTC Registers">
 	   <binaryOption key="rtc_lr_lrl"
-         enumStem="RtcLockReg"
+         typeName="RtcLockReg"
 	      description="Lock Register Lock"
 	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
 	      <choice value="0" enum="Locked"   name="Locked" />
@@ -236,7 +236,7 @@
 	   </binaryOption>
 
 	   <binaryOption key="rtc_lr_srl"
-         enumStem="RtcStatusReg"
+         typeName="RtcStatusReg"
 	      description="Status Register Lock"
 	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
 	      <choice value="0" enum="Locked"   name="Locked" />
@@ -244,7 +244,7 @@
 	   </binaryOption>
 
 	   <binaryOption key="rtc_lr_crl"
-         enumStem="RtcControlReg"
+         typeName="RtcControlReg"
 	      description="Control Register Lock"
 	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
 	      <choice value="0" enum="Locked"   name="Locked" />
@@ -252,7 +252,7 @@
 	   </binaryOption>
 
 	   <binaryOption key="rtc_lr_tcl"
-         enumStem="RtcTimeCompensation"
+         typeName="RtcTimeCompensation"
 	      description="Time Compensation Lock"
 	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
 	      <choice value="0" enum="Locked"   name="Locked" />

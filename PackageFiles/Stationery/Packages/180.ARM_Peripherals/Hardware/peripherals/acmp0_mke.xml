@@ -29,7 +29,7 @@
     * Template substitutions
     *
     * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
     * %variable[index]                Variable name /ADC0/adc_sc2_acfe
     * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
     * %description[index]             Description from controlVar e.g. Compare Function Enable
@@ -39,12 +39,12 @@
     * %params                         Formatted parameter list for function
     * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
     * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %enumClass[index]               As for %paramType
-    * %enumParam[index]               As for %paramName
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment                Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression              Based on variable etc. Similar to (%register&%mask)
     * %variable[index]                Variable name from condition
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
@@ -59,7 +59,7 @@
 
    <binaryOption key="acmp_cs_ace" condition="acmp_cs_ace_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="AcmpEnable"
+      typeName="AcmpEnable"
       description="Analogue Comparator Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
       <choice name="Enabled"     value="1" enum="Enabled"/>
@@ -67,7 +67,7 @@
 
    <binaryOption key="acmp_cs_hyst" condition="acmp_cs_hyst_present"
       enabledBy="acmp_cs_ace"
-      enumStem="AcmpHysterisis"
+      typeName="AcmpHysterisis"
       description="Analogue Comparator Hysteresis Selection" >
       <choice name="20 mV"       value="0" enum="20mV"/>
       <choice name="30 mV"       value="1" enum="30mV"/>
@@ -75,7 +75,7 @@
 
    <binaryOption key="acmp_cs_acf" condition="acmp_cs_acf_present"
       hidden="true"
-      enumStem="AcmpFlag"
+      typeName="AcmpFlag"
       toolTip="Synchronously set by hardware when ACMP output has a valid edge defined by ACMOD.\n
                Cleared by writing a 0 to this bit. Writing a 1 to this bit has no effect.\n
                The setting of this bit lags the ACMPO ... bus clocks"
@@ -86,7 +86,7 @@
 
    <binaryOption key="acmp_cs_acie" condition="acmp_cs_acie_present"
       enabledBy="irqHandlingMethod"
-      enumStem="AcmpInterrupt"
+      typeName="AcmpInterrupt"
       toolTip="Controls Interrupt generation"
       description="ACMP Interrupt Enable" >
       <choice name="Interrupt disabled"  value="0" enum="Disabled"/>
@@ -95,7 +95,7 @@
 
    <choiceOption key="acmp_cs_acmod" condition="acmp_cs_acmod_present"
       enabledBy="acmp_cs_ace"
-      enumStem="AcmpMode"
+      typeName="AcmpMode"
       toolTip="Determines the sensitivity modes of the interrupt trigger"
       description="InterruptEdge" >
       <choice name="Falling edge"      value="0" enum="FallingEdge"     />
@@ -108,7 +108,7 @@
 
    <choiceOption key="acmp_c0_acpsel" condition="acmp_c0_acpsel_present"
       enabledBy="acmp_cs_ace"
-      enumStem="AcmpPositiveInput"
+      typeName="AcmpPositiveInput"
       toolTip="Selects the positive input source"
       description="ACMP Positive Input Select" >
       <choice name="External ref 0"  value="0" enum="ExternalRef0"/>
@@ -119,7 +119,7 @@
 
    <choiceOption key="acmp_c0_acnsel" condition="acmp_c0_acnsel_present"
       enabledBy="acmp_cs_ace"
-      enumStem="AcmpNegativeInput"
+      typeName="AcmpNegativeInput"
       toolTip="Selects the negative input source"
       description="ACMP Negative Input Select" >
       <choice name="External ref 0"  value="0" enum="ExternalRef0"/>
@@ -132,7 +132,7 @@
 
    <binaryOption key="acmp_c1_dacen" condition="acmp_c1_dacen_present"
       enabledBy="acmp_cs_ace"
-      enumStem="AcmpDacEnable"
+      typeName="AcmpDacEnable"
       toolTip="Enables the DAC"
       description="DAC Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -141,7 +141,7 @@
 
    <binaryOption key="acmp_c1_dacref" condition="acmp_c1_dacref_present"
       enabledBy="acmp_cs_ace"
-      enumStem="AcmpDacReference"
+      typeName="AcmpDacReference"
       toolTip="Selects the reference for the DAC"
       description="DAC Reference Select" >
       <choice name="Bandgap"     value="0" enum="Bandgap"/>
@@ -150,7 +150,8 @@
 
    <intOption key="acmp_c1_dacval" condition="acmp_c1_dacval_present"
       enabledBy="acmp_cs_ace"
-      typeName="uint8_t"
+      typeName="AcmpDacValue"
+      enumType="uint8_t"
       description="DAC Output Level Selection"
       toolTip="Selects the DAC output voltage using the formula: \n
                \tVoutput= (Vin/64)x(DACVAL[5:0]+1) \n
@@ -163,9 +164,7 @@
    <bitmaskOption key="acmp_c2_acipe" condition="acmp_c2_acipe_present"
       enabledBy="acmp_cs_ace"
       typeName="AcmpInput"
-      defaultValue="0"
       disabledValue="0"
-      valueFormat="AcmpInput(ACMP_C2_ACIPE(%s))"
       toolTip="Bitmask controlling which ACMP pins are available as analogue inputs"
       description="ACMP Input Pin Enables"
       bitmask="0x7"
@@ -176,18 +175,18 @@
 
    <binaryOption key="acmp_cs_acope" condition="acmp_cs_acope_present"
       enabledBy="acmp_cs_ace"
-      enumStem="AcmpOutputPin"
+      typeName="AcmpOutputPin"
       toolTip="Allows the ACMP output to be placed onto external pin"
       description="ACMP Output Pin Enable" >
       <choice name="Pin disabled"  value="0" enum="Disabled" pinMap="ACMP$(_instance)_OUT," />
-      <choice name="Pin enabled"   value="1" enum="Enabled"  pinMap="=&quot;ACMP$(_instance)_OUT,&quot;+outputPinMap" />
+      <choice name="Pin enabled"   value="1" enum="Enabled"  pinMap="ACMP$(_instance)_OUT,*" />
    </binaryOption >
 
    <!-- enum generation only-->
    <choiceOption key="acmp_c2_inputenable"
       derived="true"
       hidden="true"
-      enumStem="AcmpInput"
+      typeName="AcmpInput"
       valueFormat="ACMP_C2_ACIPE(%s)"
       toolTip="Bitmask controlling analogue function on ACMP pin"
       description="ACMP Input Pin Control"
@@ -242,7 +241,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}
          \t
          \t/**
@@ -291,7 +290,7 @@
       \t *   AcmpNegativeInput_ExternalRef0 , // ACMP Negative Input Select - External ref 0
       \t *   AcmpDacEnable_Disabled ,         // DAC Enable - Disabled
       \t *   AcmpDacReference_Bandgap ,       // DAC Reference Select - Bandgap
-      \t *   100,                             // DAC Output Level Selection
+      \t *   AcmpDacValue(100),               // DAC Output Level Selection
       \t *
       \t *   // Inputs
       \t *   AcmpInput_Input1,                // ACMP Input Pin Enables
@@ -324,7 +323,7 @@
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicValueExpression;
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
        \t\n
    ]]></initialValueTemplate>
 
@@ -448,7 +447,7 @@
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName0 = %symbolicValueExpression1;
+      \t   %paramType %registerName0 = %symbolicExpression1;
       \t\n
    ]]></initialValueTemplate>
 

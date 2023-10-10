@@ -4,12 +4,70 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Integration Module" >
 
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"          />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="true"         />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"         />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="true"          />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
    <xi:include href="_enablePeripheral.xml"  />
    <title />
+
+<!-- ==================== Constants ==================== -->
+
+   <!-- Peripheral speeds                  RUN       VLPR     -->
+   <constant key="MCGOUTCLK_max"  value="100MHz,     4MHz"   type="Long" />
+   <constant key="MCGFLLCLK_max"  value=" 48MHz,     0MHz"   type="Long" />
+   <constant key="MCGPLLCLK_max"  value="100MHz,     0MHz"   type="Long" />
+   <constant key="UART_max"       value=" 48MHz,     4MHz"   type="Long" />
+   <constant key="TPM_max"        value=" 48MHz,     4MHz"   type="Long" />
+
+   <!-- Indicates the number of PIT channels -->
+   <constant key="/PIT_NumChannels" type="Long" value="2" />
+
+   <!-- Indicates the number of DMA channels -->
+   <constant key="/DMA0_NumChannels" type="Long" value="4" />
+
+   <!-- LLWU wakeup devices -->
+   <constant key="llwu_device_list"
+      description="LLWU Wakeup sources"
+      type="String"
+      value="&quot;LPTMR0;CMP0;;;TSI0;RTC_Alarm;;RTC_Seconds&quot;" />
+
+   <!-- DMA slots -->
+   <choiceOption key="/DMAMUX0/dmamux_chcfg_src"
+      hidden="true"
+      typeName="DmamuxSlot"
+      valueFormat="DMAMUX_CHCFG_SOURCE(%s)"
+      toolTip="Specifies which DMA source (slot) is routed to a particular DMA channel"
+      description="Mapping of DMA slot to DMA channel" >
+      <choice value="0"  name="Disabled"           enum="Disabled"        />
+      <choice value="2"  name="UART0 Receive"      enum="UART0_Receive"   />
+      <choice value="3"  name="UART0 Transmit"     enum="UART0_Transmit"  />
+      <choice value="16" name="SPI0 Receive"       enum="SPI0_Receive"    />
+      <choice value="17" name="SPI0 Transmit"      enum="SPI0_Transmit"   />
+      <choice value="22" name="I2C0"               enum="I2C0"            />
+      <choice value="24" name="TPM0 Channel 0"     enum="TPM0_Channel0"   />
+      <choice value="25" name="TPM0 Channel 1"     enum="TPM0_Channel1"   />
+      <choice value="26" name="TPM0 Channel 2"     enum="TPM0_Channel2"   />
+      <choice value="27" name="TPM0 Channel 3"     enum="TPM0_Channel3"   />
+      <choice value="28" name="TPM0 Channel 4"     enum="TPM0_Channel4"   />
+      <choice value="29" name="TPM0 Channel 5"     enum="TPM0_Channel5"   />
+      <choice value="32" name="TPM1 Channel 0"     enum="TPM1_Channel0"   />
+      <choice value="33" name="TPM1 Channel 1"     enum="TPM1_Channel1"   />
+      <choice value="40" name="ADC0"               enum="ADC0"            />
+      <choice value="42" name="CMP0"               enum="CMP0"            />
+      <choice value="45" name="DAC0"               enum="DAC0"            />
+      <choice value="49" name="Port A"             enum="PortA"           />
+      <choice value="50" name="Port B"             enum="PortB"           />
+      <choice value="54" name="TPM0 overflow"      enum="TPM0_Overflow"   />
+      <choice value="55" name="TPM1 overflow"      enum="TPM1_Overflow"   />
+      <choice value="57" name="TSI"                enum="TSI"             />
+      <choice value="60" name="Always enabled 60"  enum="AlwaysEnabled60" />
+      <choice value="61" name="Always enabled 61"  enum="AlwaysEnabled61" />
+      <choice value="62" name="Always enabled 62"  enum="AlwaysEnabled62" />
+      <choice value="63" name="Always enabled 63"  enum="AlwaysEnabled63" />
+   </choiceOption>
+
+   <!-- Clock divider -->
+   <constant key="clock_divider_type" type="Long" value="2" />
 
 <!--
     * General substitutions
@@ -26,7 +84,7 @@
     * Template substitutions
     *
     * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
     * %variable[index]                Variable name /ADC0/adc_sc2_acfe
     * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
     * %description[index]             Description from controlVar e.g. Compare Function Enable
@@ -36,33 +94,17 @@
     * %params                         Formatted parameter list for function
     * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
     * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %enumClass[index]               As for %paramType
-    * %enumParam[index]               As for %paramName
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
     * %variable[index]                Variable name from condition
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
-
-   <!--                                   RUN       VLPR     -->
-   <constant key="MCGOUTCLK_max"  value="100MHz,     4MHz"   type="Long"    hidden="false"/>
-   <constant key="MCGFLLCLK_max"  value=" 48MHz,     0MHz"   type="Long"    hidden="false"/>
-   <constant key="MCGPLLCLK_max"  value="100MHz,     0MHz"   type="Long"    hidden="false"/>
-   <constant key="UART_max"       value=" 48MHz,     4MHz"   type="Long"    hidden="false"/>
-   <constant key="TPM_max"        value=" 48MHz,     4MHz"   type="Long"    hidden="false"/>
-
-   <constant key="llwu_device_list"
-      description="LLWU Wakeup sources"
-      type="String"
-      value="&quot;LPTMR0;CMP0;;;TSI0;RTC_Alarm;;RTC_Seconds&quot;" />
-
-   <!-- Clock divider -->
-
-   <constant key="clock_divider_type" type="Long" value="2" />
 
    <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
    <binaryOption key="RtcForcing"
@@ -87,7 +129,7 @@
 
       <choiceOption key="sim_copc_copt"
          description="COP Watchdog Timeout"
-         enumStem="SimCopDuration"
+         typeName="SimCopDuration"
          valueFormat="SIM_COPC_COPCLKS(%s),SIM_COPC_COPT(%s)"
          toolTip="Selects the Computer Operating Properly Timeout\n
                   This is a write-once field" >
@@ -102,7 +144,7 @@
 
       <binaryOption key="sim_copc_copw"
          enabledBy="sim_copc_copt&gt;3"
-         enumStem="SimCopMode"
+         typeName="SimCopMode"
          description="COP Windowed Mode"
          toolTip="Windowed mode is only supported when COP is using bus clock\n
                   The COP window is opened three quarters through the timeout period\n
@@ -124,7 +166,7 @@
 
       <choiceOption key="sim_sopt1_usbpower" condition="sim_sopt1_usbregen_present &amp;&amp; sim_sopt1_usbsstby_present &amp;&amp; sim_sopt1_usbvstby_present"
          valueFormat="SIM_SOPT1_USBREGEN(%s),SIM_SOPT1_USBSSTBY(%s),SIM_SOPT1_USBVSTBY(%s)"
-         enumStem="SimUsbPower"
+         typeName="SimUsbPower"
          description="USB voltage regulator power control"
          toolTip="Controls when the USB voltage regulator is enabled in\n
                   (RUN), (STOP, VLPS, LLS and VLLS) or (VLPR and VLPW) modes">
@@ -188,7 +230,7 @@
       <for keys="p" values="0;1;2">
          <binaryOption key="sim_sopt4_tpm%(p)clksel" condition="sim_sopt4_tpm%(p)clksel_present"
             target="Tpm%(p)ExternalClkin"
-            enumStem="SimTpm%(p)ClkSel"
+            typeName="SimTpm%(p)ClkSel"
             description="TPM %(p) External Clock Pin "
             toolTip="External pin used to drive the external clock to TPM%(p) module">
             <choice value="0"  name="TPM_CLKIN0 pin" enum="0" ref="TpmClkin0" code="tpmExternalClock0" isDefault="true" />
@@ -208,10 +250,10 @@
             \t/**
             \t * Select %description
             \t *
-            \t * @param %enumParam %tooltip
+            \t * @param %paramName %tooltip
             \t */
-            \tstatic void selectTpm%(p)ExternalClock(%enumClass %enumParam) {
-            \t   %defaultFieldExpression
+            \tstatic void selectTpm%(p)ExternalClock(%paramType %paramName) {
+            \t   %fieldAssignment
             \t}
             \t
             \t/**
@@ -221,7 +263,7 @@
             \t */
             \tstatic uint32_t getTpm%(p)ExternalClockFrequency() {
             \t
-            \t   switch(%defaultMaskingExpression) {
+            \t   switch(%maskingExpression) {
             %body
             \t      default: return 0;
             \t   }
@@ -231,7 +273,7 @@
 
       <for keys="p" values=";1;2">
          <choiceOption key="sim_sopt4_tpm%(p)ch0src" condition="sim_sopt4_tpm%(p)ch0src_present"
-            enumStem="SimTpm%(p)Ch0Src"
+            typeName="SimTpm%(p)Ch0Src"
             description="TPM %(p) channel 0 input capture source"
             toolTip="Source for TPM channel input capture\n
                NOTE: When the TPM is not in input capture mode, clear this field">
@@ -250,7 +292,7 @@
               values = "uart%(n)   : Uart%(n)   : UART%(n);
                         lpuart%(n) : Lpuart%(n) : LPUART%(n)" >
             <binaryOption key="sim_sopt5_%(name)ode" condition="sim_sopt5_%(name)ode_present"
-               enumStem="Sim%(Name)Drive"
+               typeName="Sim%(Name)Drive"
                description="%(NAME) Open Drain"
                toolTip="Enables Open Drain output">
                <choice value="0" name="Push-pull"  enum="PushPull"  />
@@ -258,7 +300,7 @@
             </binaryOption>
 
             <choiceOption key="sim_sopt5_%(name)rxsrc" condition="sim_sopt5_%(name)rxsrc_present"
-               enumStem="Sim%(Name)RxSrc"
+               typeName="Sim%(Name)RxSrc"
                description="%(NAME) receive data source"
                toolTip="Source for the %(NAME) receive data">
                <choice value="0" name="Rx pin"        enum="RxPin"  isDefault="true" />
@@ -266,7 +308,7 @@
             </choiceOption>
 
             <choiceOption key="sim_sopt5_%(name)txsrc" condition="sim_sopt5_%(name)txsrc_present"
-               enumStem="Sim%(Name)TxSrc"
+               typeName="Sim%(Name)TxSrc"
                description="%(NAME) transmit data source"
                toolTip="Source for the %(NAME) transmit data">
                <choice value="0" name="Tx pin" isDefault="true"             enum="Direct" />
@@ -282,7 +324,7 @@
    <category name="SOPT7" description="ADC signals">
       <for keys="adc" values="0;1">
          <choiceOption key="sim_sopt7_adc%(adc)trigger" condition="sim_sopt7_adc%(adc)alttrgen_present"
-            enumStem="SimAdc%(adc)TriggerMode"
+            typeName="SimAdc%(adc)TriggerMode"
             valueFormat="SIM_SOPT7_ADC%(adc)ALTTRGEN(%s),SIM_SOPT7_ADC%(adc)PRETRGSEL(%s)"
             description="ADC%(adc) trigger mode"
             toolTip="Alternative conversion triggers for ADC\n
@@ -295,7 +337,7 @@
          </choiceOption>
 
          <choiceOption key="sim_sopt7_adc%(adc)trgsel" condition="sim_sopt7_adc%(adc)pretrgsel_present"
-            enumStem="SimAdc%(adc)TriggerSrc"
+            typeName="SimAdc%(adc)TriggerSrc"
             description="ADC%(adc) trigger source"
             toolTip="ADC Trigger source in STOP and VLPS modes, or when ADC Alternative Trigger is active">
             <choice value="0"  name="External trigger pin input (EXTRG_IN)"   enum="External"     isDefault="true" />
@@ -329,16 +371,21 @@
                     5   : portb   : Portb   : false ;
                     5   : lptmr   : Lptmr   : false ;
                     5   : lpuart0 : Lpuart0 : false ;
+                    5   : tsi0    : Tsi0    : false ;
                     6   : rtc     : Rtc     : false ;
+                    6   : dac0    : Dac0    : false ;
                     4   : spi0    : Spi0    : false ;
                     6   : tpm0    : Tpm0    : false ;
                     6   : tpm1    : Tpm1    : false ;
+                    6   : pit     : Pit     : false ;
+                    6   : dmamux0 : Dmamux0 : false ;
                     4   : uart0   : Uart0   : false ;
                     4   : vref    : Vref    : false ;
+                    7   : dma     : Dma     : false ;
       ">
          <binaryOption key="sim_scgc%(reg)_%(name)" condition="sim_scgc%(reg)_%(name)_present"
             enabledBy="enablePeripheralSupport"
-            enumStem="Sim%(Name)Clock"
+            typeName="Sim%(Name)Clock"
             description="%(Name) Clock Gate Control"
             toolTip="This clock gate must be enabled to access %(Name)\n
                      This may be done here or when the individual peripheral is configured." >
@@ -357,7 +404,7 @@
          <category name="Peripheral Clocks" description="Peripheral Clock Selection">
             <choiceOption key="sim_sopt2_clkoutsel[%(n)]" condition="sim_sopt2_clkoutsel_present"
                target="clockOut[%(n)]"
-               enumStem="SimClkoutSel"
+               typeName="SimClkoutSel"
                description="CLKOUT pin clock"
                toolTip="Clock to output on the CLKOUT pin" >
                <choice value="0"  name="Disabled0"           ref="disabled"                         enum="Unused0"     />
@@ -389,7 +436,7 @@
 
             <choiceOption key="sim_sopt2_usbsrc[%(n)]" condition="sim_sopt2_usbsrc_present"
                target="system_usbfs_clock[%(n)]"
-               enumStem="SimUsbFullSpeedClockSource"
+               typeName="SimUsbFullSpeedClockSource"
                description="USB Clock"
                toolTip="Source for the USB clock">
                <choice value="0"  name="External bypass clock (USB_CLKIN)" enum="External"      ref="system_usb_clkin_clock"           />
@@ -414,7 +461,7 @@
                               tpm%(p)    : Tpm%(p)    : TPM%(p)    : TPM" >
 
                   <choiceOption key="sim_sopt2_%(name)src[%(n)]" condition="sim_sopt2_%(name)src_present"
-                     enumStem="Sim%(Name)ClockSource"
+                     typeName="Sim%(Name)ClockSource"
                      target="system_%(name)_clock[%(n)]"
                      description="%(NAME) Clock"
                      toolTip="Clock source for the peripheral" >
@@ -437,7 +484,7 @@
 
             <choiceOption key="sim_sopt2_flexiosrc[%(n)]" condition="sim_sopt2_flexiosrc_present"
                target="system_flexio_clock[%(n)]"
-               enumStem="SimFlexioClockSource"
+               typeName="SimFlexioClockSource"
                description="FLEXIO Clock select"
                toolTip="Selects the clock source for the FlexIO transmit and receive clock">
                <choice value="0"  name="Disabled"                      ref="disabled"                          enum="Disabled"        code="0"                         />
@@ -484,7 +531,7 @@
          <category name="CLKDIV1" description="System Clock Dividers">
             <choiceOption key="sim_clkdiv1_outdiv1[%(n)]"  condition="sim_clkdiv1_outdiv1_present"
                enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
-               enumStem="SimCoreClkDivider"
+               typeName="SimCoreClkDivider"
                locked="true"
                description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
                toolTip="Clocks the ARM Cortex-M4 core and bus masters\n
@@ -511,7 +558,7 @@
                enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
                locked="true"
                derivedFrom="sim_clkdiv1_outdiv1[%(n)]"
-               enumStem="SimFlashClkDivider"
+               typeName="SimFlashClkDivider"
                description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"
                toolTip="Clocks the flash memory\n
                         Divides Core Clock to generate system_flash_clock." />
@@ -524,7 +571,7 @@
 
    <binaryOption key="sim_fcfg1_flashdoze" condition="sim_fcfg1_flashdoze_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="SimFcfg1Flashdoze"
+      typeName="SimFcfg1Flashdoze"
       description="Flash Doze" >
       <choice name="Flash remains enabled during Doze mode"           value="0" enum="FlashRemainsEnabledDuringDozeMode"/>
       <choice name="Flash is disabled for the duration of Doze mode"  value="1" enum="FlashIsDisabledForTheDurationOfDozeMode"/>
@@ -532,7 +579,7 @@
 
    <binaryOption key="sim_fcfg1_flashdis" condition="sim_fcfg1_flashdis_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="SimFcfg1Flashdis"
+      typeName="SimFcfg1Flashdis"
       description="Flash Disable" >
       <choice name="Flash is enabled"   value="0" enum="FlashIsEnabled"/>
       <choice name="Flash is disabled"  value="1" enum="FlashIsDisabled"/>
@@ -549,15 +596,20 @@
       sim_scgc4_uart0           : Uart0           ;
       sim_scgc4_i2c1            : I2c1            ;
       sim_scgc4_i2c0            : I2c0            ;
+      sim_scgc5_tsi0            : Scgc5Tsi0       ;
       sim_scgc5_lpuart0         : Lpuart0         ;
       sim_scgc5_portb           : Portb           ;
       sim_scgc5_porta           : Porta           ;
       sim_scgc5_lptmr           : Lptmr           ;
+      sim_scgc6_dac0            : Dac0            ;
+      sim_scgc6_pit             : 6Pit            ;
+      sim_scgc6_dmamux0         : Dmamux0         ;
       sim_scgc6_rtc             : Rtc             ;
       sim_scgc6_adc0            : Adc0            ;
       sim_scgc6_tpm1            : Tpm1            ;
       sim_scgc6_tpm0            : Tpm0            ;
-      sim_scgc6_ftf             : Ftf             " >
+      sim_scgc6_ftf             : Ftf             ;
+      sim_scgc7_dma             : Dma             " >
       <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
@@ -566,7 +618,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)ClockEnable(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}
          \t
          \t/**
@@ -607,7 +659,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}
          \t
          \t/**
@@ -688,29 +740,36 @@
 <!--   Member variables -->
 
    <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      variables="sim_scgc4_spi0,sim_scgc4_vref,sim_scgc4_cmp0,sim_scgc4_cmp,sim_scgc4_uart0,sim_scgc4_i2c1,sim_scgc4_i2c0"
+      variables="sim_scgc4_spi0,sim_scgc4_vref,sim_scgc4_cmp,sim_scgc4_cmp0,sim_scgc4_uart0,sim_scgc4_i2c0,sim_scgc4_i2c1"
    ><![CDATA[
       \t   /// System Clock Gating Control Register 4
       \t   uint32_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      variables="sim_scgc5_lpuart0,sim_scgc5_portb,sim_scgc5_porta,sim_scgc5_lptmr"
+      variables="sim_scgc5_lpuart0,sim_scgc5_portb,sim_scgc5_porta,sim_scgc5_tsi0,sim_scgc5_lptmr"
    ><![CDATA[
       \t   /// System Clock Gating Control Register 5
       \t   uint32_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      variables="sim_scgc6_rtc,sim_scgc6_adc0,sim_scgc6_tpm1,sim_scgc6_tpm0,sim_scgc6_ftf"
+      variables="sim_scgc6_dac0,sim_scgc6_rtc,sim_scgc6_adc0,sim_scgc6_tpm1,sim_scgc6_tpm0,sim_scgc6_pit,sim_scgc6_dmamux0,sim_scgc6_ftf"
    ><![CDATA[
       \t   /// System Clock Gating Control Register 6
       \t   uint32_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      variables="sim_scgc7_dma"
+   ><![CDATA[
+      \t   /// System Clock Gating Control Register 7
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
+
 <!--   Configure methods -->
 
-   <template codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Configure with default settings.
@@ -751,12 +810,17 @@
             sim_scgc5_lpuart0;
             sim_scgc5_portb;
             sim_scgc5_porta;
+            sim_scgc5_tsi0;
             sim_scgc5_lptmr;
+            sim_scgc6_dac0;
             sim_scgc6_rtc;
             sim_scgc6_adc0;
             sim_scgc6_tpm1;
             sim_scgc6_tpm0;
+            sim_scgc6_pit;
+            sim_scgc6_dmamux0;
             sim_scgc6_ftf;
+            sim_scgc7_dma;
             " >
       <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
@@ -796,12 +860,17 @@
             sim_scgc5_lpuart0,
             sim_scgc5_portb,
             sim_scgc5_porta,
+            sim_scgc5_tsi0,
             sim_scgc5_lptmr,
+            sim_scgc6_dac0,
             sim_scgc6_rtc,
             sim_scgc6_adc0,
             sim_scgc6_tpm1,
             sim_scgc6_tpm0,
+            sim_scgc6_pit,
+            sim_scgc6_dmamux0,
             sim_scgc6_ftf,
+            sim_scgc7_dma,
          "
    ><![CDATA[
       \t/**

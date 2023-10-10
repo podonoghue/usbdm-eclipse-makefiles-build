@@ -29,7 +29,7 @@
     * Template substitutions
     *
     * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
     * %variable[index]                Variable name /ADC0/adc_sc2_acfe
     * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
     * %description[index]             Description from controlVar e.g. Compare Function Enable
@@ -39,12 +39,12 @@
     * %params                         Formatted parameter list for function
     * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
     * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %enumClass[index]               As for %paramType
-    * %enumParam[index]               As for %paramName
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
     * %variable[index]                Variable name from condition
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
@@ -64,10 +64,9 @@
 
    <bitmaskOption key="kbi_pe_kbipe" condition="kbi_pe_kbipe_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      valueFormat="%s"
       typeName="KbiEnableMask"
       enumType="uint32_t"
-      valueFormat="KbiEnableMask(%s)"
-      defaultValue="0"
       description="KBI Pin Enables"
       toolTip="Bitmask selecting enabled pins"
       bitmask="0"
@@ -80,10 +79,9 @@
 
    <bitmaskOption key="kbi_es_kbedg" condition="kbi_es_kbedg_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      valueFormat="%s"
       typeName="KbiPolarityMask"
       enumType="uint32_t"
-      valueFormat="KbiPolarityMask(%s)"
-      defaultValue="0"
       description="KBI Edge Selects"
       toolTip="Bitmask selecting polarity : 0=Falling edge/low level; 1=Rising edge/high level"
       bitmask="0"
@@ -95,7 +93,7 @@
 
    <binaryOption key="kbi_sc_kbspen" condition="kbi_sc_kbspen_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="KbiStatusReflects"
+      typeName="KbiStatusReflects"
       description="Real KBI_SP register enable"
       toolTip="The SP register may show either the current KBI pin values or\n
                the value captured when interrupt flag was set" >
@@ -106,7 +104,7 @@
    <binaryOption key="kbi_sc_kbf" condition="kbi_sc_kbf_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       hidden="true"
-      enumStem="KbiEvent"
+      typeName="KbiEvent"
       description="KBI Interrupt Flag" >
       <choice name="Not detected"  value="0" enum="None"/>
       <choice name="Detected"      value="1" enum="InterruptDetected"/>
@@ -115,7 +113,7 @@
    <binaryOption key="kbi_sc_kback" condition="kbi_sc_kback_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       hidden="true"
-      enumStem="KbiAck"
+      typeName="KbiAck"
       description="KBI Acknowledge"
       toolTip="Writing a 1 to KBACK is part of the flag clearing mechanism" >
       <choice name="Clear"      value="1" enum="Write1ToClear"/>
@@ -125,14 +123,14 @@
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       hidden="true"
       description="Reset KBI_SP register"
-      enumStem="KbiRst"
+      typeName="KbiRst"
       toolTip="Writing a 1 to RSTKBSP is to clear the KBIxSP Register. This bit always reads as 0" >
       <choice name="Clear"      value="1" enum="Write1ToClear"/>
    </binaryOption >
 
    <binaryOption key="kbi_sc_kbie" condition="kbi_sc_kbie_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="KbiInterrupt"
+      typeName="KbiInterrupt"
       description="KBI Interrupt Enable" >
       <choice name="Interrupt disabled"  value="0" enum="Disabled"/>
       <choice name="Interrupt enabled"   value="1" enum="Enabled"/>
@@ -140,7 +138,7 @@
 
    <binaryOption key="kbi_sc_kbmod" condition="kbi_sc_kbmod_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="KbiDetectionMode"
+      typeName="KbiDetectionMode"
       description="KBI Detection Mode" >
       <choice name="Edges only"       value="0" enum="EdgesOnly"/>
       <choice name="Edges or levels"  value="1" enum="EdgesOrLevels"/>
@@ -243,7 +241,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}
          \t
          \t/**
@@ -441,7 +439,7 @@
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName0 = %symbolicValueExpression1;
+      \t   %paramType %registerName0 = %symbolicExpression1;
       \t\n
    ]]></initialValueTemplate>
 

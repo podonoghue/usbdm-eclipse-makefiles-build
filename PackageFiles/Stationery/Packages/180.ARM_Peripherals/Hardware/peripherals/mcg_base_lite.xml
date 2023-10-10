@@ -95,7 +95,7 @@
 
    <!--  Run mode independent -->
    <choiceOption key="mcg_c2_oscMode" condition="mcg_c2_erefs0_present"
-      enumStem="OscMode"
+      typeName="OscMode"
       valueFormat="%s"
       hidden="true"
       description="OSC0 mode"
@@ -114,7 +114,7 @@
 
    <choiceOption key="mcg_c2_erefs0"  condition="mcg_c2_erefs0_present"
       hidden="true"
-      enumStem="McgExternalClock"
+      typeName="McgExternalClock"
       ref="mcg_c2_oscMode>=2"
       derived="true"
       description="External Reference Select"
@@ -125,7 +125,7 @@
 
    <choiceOption key="mcg_c2_hgo0"  condition="mcg_c2_hgo0_present"
       hidden="true"
-      enumStem="McgOscMode"
+      typeName="McgOscMode"
       ref="mcg_c2_oscMode==3"
       derived="true"
       description="Oscillator mode"
@@ -630,7 +630,7 @@
          </category>
 
       <binaryOption key="mcg_mc_hircen[%(n)]" condition="mcg_mc_hircen_present&amp;&amp;!mcg_mc_hirclpen_present"
-         enumStem="McgHircEnable"
+         typeName="McgHircEnable"
          enabledBy="/SMC/smc_pmctrl_runm[%(n)] != 1"
          description="High-frequency IRC Clock Enable [MCGPCLK]"
          toolTip="Enables the HIRC even when MCG_Lite is not working at HIRC mode">
@@ -639,7 +639,7 @@
       </binaryOption>
 
       <binaryOption key="mcg_mc_hircen[%(n)]" condition="mcg_mc_hircen_present&amp;&amp;mcg_mc_hirclpen_present"
-         enumStem="McgHircEnable"
+         typeName="McgHircEnable"
          description="High-frequency IRC Clock Enable [MCGPCLK]"
          toolTip="Enables the HIRC even when MCG_Lite is not working at HIRC mode">
          <choice value="0" enum="AsNeeded" name="Enabled as required by MCG mode" />
@@ -655,7 +655,7 @@
       </binaryOption>
 
       <binaryOption key="mcg_c2_ircs[%(n)]"
-         enumStem="McgIrClkSrc"
+         typeName="McgIrClkSrc"
          enabledBy="(/MCG/mcgClockMode[%(n)]==LIRC_2MHz)||(/MCG/mcgClockMode[%(n)]==LIRC_8MHz)||(/MCG/mcg_c1_irclken[%(n)])##Disabled as IRC not available"
          target="system_lirc_clock[%(n)]"
          description="Internal Reference [MCGIRCLK] Clock Source"
@@ -673,7 +673,7 @@
          disabledValue="0" />
 
       <binaryOption key="mcg_c1_irclken[%(n)]"
-         enumStem="McgIrClkEn"
+         typeName="McgIrClkEn"
          description="Internal Reference Clock Enable [MCGIRCLK]"
          toolTip="Enables the LIRC, even when MCG not using LIRC">
          <choice value="0" enum="Disabled" name="Disabled when not used by MCG" />
@@ -681,7 +681,7 @@
       </binaryOption>
 
       <binaryOption key="mcg_c1_irefsten[%(n)]"
-         enumStem="McgIrefs"
+         typeName="McgIrefs"
          enabledBy="mcg_c1_irclken[%(n)]"
          description="Internal Reference Stop Enable [MCGIRCLK]"
          toolTip="Enables the LIRC in Stop mode (also requires IRCLKEN=1)">
@@ -690,7 +690,7 @@
       </binaryOption>
 
       <choiceOption key="mcg_sc_fcrdiv[%(n)]"
-         enumStem="McgLowFequencyInternalClockDivider1"
+         typeName="McgLowFequencyInternalClockDivider1"
          enabledBy="system_lirc_clock[%(n)]!=0"
          target="system_lirc_div1_clock[%(n)]"
          description="Internal Clock Reference Divider[LIRC_DIV1]"
@@ -715,7 +715,7 @@
          disabledValue="0" />
 
       <choiceOption key="mcg_mc_lirc_div2[%(n)]"
-         enumStem="McgLowFequencyInternalClockDivider2"
+         typeName="McgLowFequencyInternalClockDivider2"
          enabledBy="system_lirc_div1_clock[%(n)]!=0"
          target="system_mcgirclk_clock[%(n)]"
          description="Second Low-frequency Internal Reference Clock Divider"
@@ -760,7 +760,7 @@
       </choiceOption>
 
       <choiceOption key="mcgClockMode[%(n)]"
-         enumStem="McgClockMode"
+         typeName="McgClockMode"
          valueFormat="%s"
          description="MCG Clock Mode"
          toolTip="Clock Modes\n
@@ -775,7 +775,7 @@
       </choiceOption>
 
       <choiceOption key="mcg_c2_range0[%(n)]" condition="mcg_c2_range0_present"
-         enumStem="McgRange0"
+         typeName="McgRange0"
          derived="true"
          locked="true"
          description="Frequency Range Select"

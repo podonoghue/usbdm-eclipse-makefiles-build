@@ -154,7 +154,7 @@
    ]]></template>
 
    <choiceOption key="port_pcr_pfe" condition="/PCR/dfer_register_present"
-      enumStem="PinFilter"
+      typeName="PinFilter"
       enumType="uint32_t"
       valueFormat="PORT_PCR_DIGITALFILTER(%s),PORT_PCR_PFE(%s)"
       templateKey="/PCR/pcr_enums"
@@ -167,7 +167,7 @@
    </choiceOption>
 
    <choiceOption key="port_pcr_pfe" condition="!/PCR/dfer_register_present&amp;&amp;/PCR/pfe_present"
-      enumStem="PinFilter"
+      typeName="PinFilter"
       enumType="uint32_t"
       templateKey="/PCR/pcr_enums"
       description="Pin input filter"
@@ -178,7 +178,7 @@
    </choiceOption>
 
    <choiceOption key="port_pcr_pd" condition="/PCR/pd_present"
-      enumStem="PinPull"
+      typeName="PinPull"
       enumType="uint32_t"
       templateKey="/PCR/pcr_enums"
       description="Pin pull device"
@@ -190,7 +190,7 @@
    </choiceOption>
 
    <choiceOption key="port_pcr_dse" condition="/PCR/dse_present"
-      enumStem="PinDriveStrength"
+      typeName="PinDriveStrength"
       enumType="uint32_t"
       templateKey="/PCR/pcr_enums"
       description="Pin drive strength"
@@ -201,7 +201,7 @@
    </choiceOption>
 
    <choiceOption key="port_pcr_ode" condition="/PCR/ode_present"
-      enumStem="PinDriveMode"
+      typeName="PinDriveMode"
       enumType="uint32_t"
       templateKey="/PCR/pcr_enums"
       description="Pin drive mode"
@@ -212,7 +212,7 @@
    </choiceOption>
 
    <choiceOption key="port_pcr_sre" condition="/PCR/sre_present"
-      enumStem="PinSlewRate"
+      typeName="PinSlewRate"
       enumType="uint32_t"
       templateKey="/PCR/pcr_enums"
       description="Pin slew rate"
@@ -223,7 +223,7 @@
    </choiceOption>
 
    <choiceOption key="port_pcr_lk" condition="(/PCR/lk_present)"
-      enumStem="PinLock"
+      typeName="PinLock"
       enumType="uint32_t"
       templateKey="/PCR/pcr_enums"
       description="Pin Control Register (PCR) lock"
@@ -234,7 +234,7 @@
    </choiceOption>
 
    <choiceOption key="port_pcr_irqc" condition="/PCR/irqc_present"
-      enumStem="PinAction"
+      typeName="PinAction"
       enumType="uint32_t"
       templateKey="/PCR/pcr_enums"
       description="Pin interrupt/DMA actions"
@@ -254,7 +254,7 @@
    </choiceOption>
 
    <choiceOption key="port_pcr_mux" condition="/PCR/mux_present"
-      enumStem="PinMux"
+      typeName="PinMux"
       enumType="uint32_t"
       templateKey="/PCR/pcr_enums"
       description="Pin Multiplexor setting"
@@ -313,7 +313,7 @@
 
    <for keys="right" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux" >
       <setTemplate variables="%(right)" namespace="all" key="/PCR/pcr_enums" discardRepeats="true" ><![CDATA[
-         \tconstexpr inline PcrValue operator|(PcrValue op1, %enumClass op2) { return static_cast<PcrValue>(static_cast<uint32_t>(op1)|static_cast<uint32_t>(op2)); }\n
+         \tconstexpr inline PcrValue operator|(PcrValue op1, %paramType op2) { return static_cast<PcrValue>(static_cast<uint32_t>(op1)|static_cast<uint32_t>(op2)); }\n
       ]]></setTemplate>
    </for>
    <for keys="left" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux" >
@@ -325,7 +325,7 @@
             key="/PCR/pcr_enums"
             nonDefaultParams="2"
             discardRepeats="true" ><![CDATA[
-            \tconstexpr inline PcrValue operator|(%enumClass0 op1, %enumClass1 op2) { return static_cast<PcrValue>(static_cast<uint32_t>(op1)|static_cast<uint32_t>(op2)); }\n
+            \tconstexpr inline PcrValue operator|(%paramType0 op1, %paramType1 op2) { return static_cast<PcrValue>(static_cast<uint32_t>(op1)|static_cast<uint32_t>(op2)); }\n
          ]]></setTemplate>
       </for>
    </for>
@@ -400,7 +400,7 @@
       \t    * Constructor
       \t    * This version is appropriate for a pin used as a digital output
       \t    *
-      %comments
+      %paramDescription
       \t    */
       \t   constexpr PcrInit(
       %params
@@ -418,7 +418,7 @@
       \t    * Constructor
       \t    * This version is appropriate for a pin used as a digital input
       \t    *
-      %comments
+      %paramDescription
       \t    */
       \t   constexpr PcrInit(
       %params
@@ -436,7 +436,7 @@
       \t    * Constructor
       \t    * This version is appropriate for a pin used as a digital input/output
       \t    *
-      %comments
+      %paramDescription
       \t    */
       \t   constexpr PcrInit(
       %params
@@ -452,12 +452,12 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         \t    * @param %enumParam %description
+         \t    * @param %paramName %description
          \t    */
          \t   template <typename... Types>
-         \t   constexpr PcrInit(%enumClass %enumParam, Types... rest) : PcrInit(rest...)  {
+         \t   constexpr PcrInit(%paramType %paramName, Types... rest) : PcrInit(rest...)  {
          \t
-         \t      value = value | %enumParam;
+         \t      value = value | %paramName;
          \t   }\n\n
       ]]></setTemplate>
    </for>
@@ -472,10 +472,10 @@
 
    <for keys="n" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux">
       <setTemplate variables="%(n)" namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
-         \t   constexpr operator         %enumClass() const { return static_cast<%enumClass>(value&%mask); }
-         \t   constexpr operator         %enumClass()       { return static_cast<%enumClass>(value&%mask); }
-         \t   constexpr %enumClass       %enumParam() const { return static_cast<%enumClass>(value&%mask); }
-         \t   constexpr %enumClass       %enumParam()       { return static_cast<%enumClass>(value&%mask); }
+         \t   constexpr operator         %paramType() const { return static_cast<%paramType>(value&%mask); }
+         \t   constexpr operator         %paramType()       { return static_cast<%paramType>(value&%mask); }
+         \t   constexpr %paramType       %paramName() const { return static_cast<%paramType>(value&%mask); }
+         \t   constexpr %paramType       %paramName()       { return static_cast<%paramType>(value&%mask); }
          \n
       ]]></setTemplate>
    </for>
@@ -620,7 +620,7 @@
       \t * Parameters default to values appropriate for the pin function being used.
       \t * The clock to the port will be enabled before changing the PCR
       \t *
-         %comments
+         %paramDescription
       \t */
       \tstatic void setPCR(
             %params)  {
@@ -687,7 +687,7 @@
       \t * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
       \t * The clock to the port will be enabled before changing the PCR.
       \t *
-         %comments
+         %paramDescription
       \t */
       \tstatic void setOutput(
             %params)  {
@@ -731,7 +731,7 @@
       \t * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
       \t * The clock to the port will be enabled before changing the PCR.
       \t *
-         %comments
+         %paramDescription
       \t */
       \tstatic void setInput(
             %params)  {
@@ -745,12 +745,12 @@
          \t/**
          \t * Set %description
          \t *
-         \t * %enumParam %tooltip
+         \t * %paramName %tooltip
          \t */
-         \tstatic void setPcrOption(%enumClass %enumParam)  {
+         \tstatic void setPcrOption(%paramType %paramName)  {
          \t
          \t   if constexpr (portAddress != 0) {
-         \t      *PCR = (*PCR & ~%mask)|%enumParam;
+         \t      *PCR = (*PCR & ~%mask)|%paramName;
          \t   }
          \t}\n
       ]]></setTemplate>
@@ -771,7 +771,7 @@
          \t * @note Resets the Pin Control Register value (PCR value).
          \t * @note Resets the pin output value to the inactive state
          \t *
-            %comments
+            %paramDescription
          \t */
          \tstatic void setInOut(
                         %params)  {
@@ -801,7 +801,7 @@
          \t * @note Resets the pin value to the inactive state
          \t * @note Use setOut() for a lightweight change of direction without affecting other pin settings.
          \t *
-            %comments
+            %paramDescription
          \t */
          \tstatic void setOutput(
                         %params)  {
@@ -829,7 +829,7 @@
    \t * @note Resets the Pin Control Register value (PCR value).
    \t * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
    \t *
-      %comments
+      %paramDescription
    \t */
    \tstatic void setInput(
                   %params)  {
@@ -856,7 +856,7 @@
    \t * @note Resets the Pin Control Register value (PCR value).
    \t * @note Resets the pin output value to the inactive state
    \t *
-      %comments
+      %paramDescription
    \t */
    \tstatic void setInOut(
                   %params)  {
@@ -881,7 +881,7 @@
    \t * @note Resets the pin value to the inactive state
    \t * @note Use setOut(), setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
    \t *
-      %comments
+      %paramDescription
    \t */
    \tstatic void setOutput(
                   %params)  {
@@ -904,7 +904,7 @@
    \t * @note Resets the Pin Control Register value (PCR value).
    \t * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
    \t *
-      %comments
+      %paramDescription
    \t */
    \tstatic void setInput(
                   %params)  {

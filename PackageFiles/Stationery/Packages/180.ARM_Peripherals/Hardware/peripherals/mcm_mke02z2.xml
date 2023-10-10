@@ -9,42 +9,42 @@
    <xi:include href="_mapPinsOption.xml"/>
 
    <binaryOption key="mcm_placr_esfc" condition="mcm_placr_esfc_present"
-      enumStem="McmPlacrEsfc"
+      typeName="McmPlacrEsfc"
       description="Enable Stalling Flash Controller" >
       <choice name="Disable stalling flash controller when flash is busy"  value="0" enum="DisableStallingFlashControllerWhenFlashIsBusy"/>
       <choice name="Enable stalling flash controller when flash is busy"   value="1" enum="EnableStallingFlashControllerWhenFlashIsBusy"/>
    </binaryOption>
 
    <binaryOption key="mcm_placr_dfcs" condition="mcm_placr_dfcs_present"
-      enumStem="McmPlacrDfcs"
+      typeName="McmPlacrDfcs"
       description="Disable Flash Controller Speculation" >
       <choice name="Enable flash controller speculation"   value="0" enum="EnableFlashControllerSpeculation"/>
       <choice name="Disable flash controller speculation"  value="1" enum="DisableFlashControllerSpeculation"/>
    </binaryOption>
 
    <binaryOption key="mcm_placr_efds" condition="mcm_placr_efds_present"
-      enumStem="McmPlacrEfds"
+      typeName="McmPlacrEfds"
       description="Enable Flash Data Speculation" >
       <choice name="Disable flash data speculation"  value="0" enum="DisableFlashDataSpeculation"/>
       <choice name="Enable flash data speculation"   value="1" enum="EnableFlashDataSpeculation"/>
    </binaryOption>
 
    <binaryOption key="mcm_placr_dfcc" condition="mcm_placr_dfcc_present"
-      enumStem="McmPlacrDfcc"
+      typeName="McmPlacrDfcc"
       description="Disable Flash Controller Cache" >
       <choice name="Enable flash controller cache"   value="0" enum="EnableFlashControllerCache"/>
       <choice name="Disable flash controller cache"  value="1" enum="DisableFlashControllerCache"/>
    </binaryOption>
 
    <binaryOption key="mcm_placr_dfcic" condition="mcm_placr_dfcic_present"
-      enumStem="McmPlacrDfcic"
+      typeName="McmPlacrDfcic"
       description="Disable Flash Controller Instruction Caching" >
       <choice name="Enable flash controller instruction caching"   value="0" enum="EnableFlashControllerInstructionCaching"/>
       <choice name="Disable flash controller instruction caching"  value="1" enum="DisableFlashControllerInstructionCaching"/>
    </binaryOption>
 
    <binaryOption key="mcm_placr_dfcda" condition="mcm_placr_dfcda_present"
-      enumStem="McmPlacrDfcda"
+      typeName="McmPlacrDfcda"
       description="Disable Flash Controller Data Caching" >
       <choice name="Enable flash controller data caching"   value="0" enum="EnableFlashControllerDataCaching"/>
       <choice name="Disable flash controller data caching"  value="1" enum="DisableFlashControllerDataCaching"/>
@@ -72,7 +72,7 @@
          %paramDescription
          \t */
          \tstatic void configure%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}\n\n
       ]]></setTemplate>
    </for>
@@ -194,7 +194,7 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {

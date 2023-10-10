@@ -605,6 +605,13 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <addressOffset>0x5C</addressOffset>
                <fields>
                   <field>
+                     <?ignoreOverlap?>
+                     <name>CHOI</name>
+                     <description>Channel Output Initialization Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
                      <name>CH0OI</name>
                      <description>Channel 0 Output Initialization Value</description>
                      <bitOffset>0</bitOffset>
@@ -634,6 +641,13 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <description>Output Mask</description>
                <addressOffset>0x60</addressOffset>
                <fields>
+                  <field>
+                     <?ignoreOverlap?>
+                     <name>CHOM</name>
+                     <description>Channel Output Mask</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
                   <field>
                      <name>CH0OM</name>
                      <description>Channel 0 Output Mask</description>
@@ -808,6 +822,13 @@ Controls whether channels are the some or complement</description>
                <addressOffset>0x6C</addressOffset>
                <fields>
                   <field>
+                     <?ignoreOverlap?>
+                     <name>CHTRIG</name>
+                     <description>Channel Trigger Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
                      <name>CH2TRIG</name>
                      <description>Channel 2 Trigger Enable</description>
                      <bitOffset>0</bitOffset>
@@ -873,6 +894,13 @@ Controls whether channels are the some or complement</description>
                <description>Channels Polarity</description>
                <addressOffset>0x70</addressOffset>
                <fields>
+                  <field>
+                     <?ignoreOverlap?>
+                     <name>POL</name>
+                     <description>Channel Polarity</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
                   <field>
                      <name>POL0</name>
                      <description>Channel 0 Polarity</description>
@@ -1442,6 +1470,13 @@ Selects the ratio between the number of counter overflows to the number of times
                <addressOffset>0x94</addressOffset>
                <fields>
                   <field>
+                     <?ignoreOverlap?>
+                     <name>CHOC</name>
+                     <description>Channel Software Output Control Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
                      <name>CH0OC</name>
                      <description>Channel 0 Software Output Control Enable</description>
                      <bitOffset>0</bitOffset>
@@ -1464,6 +1499,13 @@ Selects the ratio between the number of counter overflows to the number of times
                   <field derivedFrom="CH0OC" > <name>CH3OC</name> <description>Channel 3 Software Output Control Enable</description> <bitOffset>3</bitOffset> </field>
                   <field derivedFrom="CH0OC" > <name>CH4OC</name> <description>Channel 4 Software Output Control Enable</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="CH0OC" > <name>CH5OC</name> <description>Channel 5 Software Output Control Enable</description> <bitOffset>5</bitOffset> </field>
+                  <field>
+                     <?ignoreOverlap?>
+                     <name>CHOCV</name>
+                     <description>Channel Software Output Control Value</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
                   <field>
                      <name>CH0OCV</name>
                      <description>Channel 0 Software Output Control Value</description>
@@ -1494,6 +1536,13 @@ Selects the ratio between the number of counter overflows to the number of times
                <description>FTM PWM Load</description>
                <addressOffset>0x98</addressOffset>
                <fields>
+                  <field>
+                     <?ignoreOverlap?>
+                     <name>CHSEL</name>
+                     <description>Channel Select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
                   <field>
                      <name>CH0SEL</name>
                      <description>Channel 0 Select</description>

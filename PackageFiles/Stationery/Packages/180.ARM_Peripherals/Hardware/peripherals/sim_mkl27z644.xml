@@ -36,7 +36,7 @@
 
       <choiceOption key="sim_copc_copt"
          description="COP Watchdog Timeout"
-         enumStem="SimCopDuration"
+         typeName="SimCopDuration"
          valueFormat="SIM_COPC_COPCLKS(%s),SIM_COPC_COPT(%s)"
          toolTip="Selects the Computer Operating Properly Timeout\n
                   This is a write-once field" >
@@ -51,7 +51,7 @@
 
       <choiceOption key="sim_copc_copclksel"
          enabledBy="sim_copc_copt>0"
-         enumStem="SimCopClkSrc"
+         typeName="SimCopClkSrc"
          description="COP Clock Select"
          toolTip="Selects the clock source of the COP watchdog\n
                   This is a write-once field">
@@ -63,7 +63,7 @@
 
       <binaryOption key="sim_copc_copdbgen"
          enabledBy="sim_copc_copt>0"
-         enumStem="SimCopDebugMode"
+         typeName="SimCopDebugMode"
          description="COP Debug Enable"
          toolTip="Controls whether COP is enabled in debug mode\n
                   This is a write-once field">
@@ -73,7 +73,7 @@
 
       <binaryOption key="sim_copc_copstpen"
          enabledBy="sim_copc_copt>0"
-         enumStem="SimCopStopMode"
+         typeName="SimCopStopMode"
          description="COP Stop Enable"
          toolTip="Controls whether COP is enabled in stop mode\n
                   This is a write-once field">
@@ -83,7 +83,7 @@
 
       <binaryOption key="sim_copc_copw"
          enabledBy="sim_copc_copt&gt;3"
-         enumStem="SimCopMode"
+         typeName="SimCopMode"
          description="COP Windowed Mode"
          toolTip="Windowed mode is only supported when COP is using longer periods\n
                   The COP window is opened three quarters through the timeout period\n
@@ -112,7 +112,7 @@
 
       <choiceOption key="sim_sopt1_usbpower" condition="sim_sopt1_usbregen_present &amp;&amp; sim_sopt1_usbsstby_present &amp;&amp; sim_sopt1_usbvstby_present"
          valueFormat="SIM_SOPT1_USBREGEN(%s),SIM_SOPT1_USBSSTBY(%s),SIM_SOPT1_USBVSTBY(%s)"
-         enumStem="SimUsbPower"
+         typeName="SimUsbPower"
          description="USB voltage regulator power control"
          toolTip="Controls when the USB voltage regulator is enabled in\n
                   (RUN), (STOP, VLPS, LLS and VLLS) or (VLPR and VLPW) modes">
@@ -124,7 +124,7 @@
       </choiceOption>
 
       <choiceOption key="sim_sopt1_osc32kout"
-         enumStem="SimErc32kClkoutPinSelect"
+         typeName="SimErc32kClkoutPinSelect"
          description="ERCLK32K Clock Output"
          toolTip="Outputs the ERCLK32K on the selected pin in all modes of operation">
          <choice value="0"  name="ERCLK32K is not output"      enum="None"  isDefault="true" />
@@ -151,7 +151,7 @@
    <category name="SOPT4" description="TPM signals">
       <for keys="p" values="0;1;2">
          <binaryOption key="sim_sopt4_tpm%(p)clksel" condition="sim_sopt4_tpm%(p)clksel_present"
-            enumStem="SimTpm%(p)ClkSel"
+            typeName="SimTpm%(p)ClkSel"
             description="TPM %(p) External Clock Pin "
             toolTip="External pin used to drive the clock to the TPM module">
             <choice value="0"  name="TPM_CLKIN0 pin" enum="0" isDefault="true" />
@@ -161,7 +161,7 @@
 
       <for keys="p" values="1;2">
          <choiceOption key="sim_sopt4_tpm%(p)ch0src" condition="sim_sopt4_tpm%(p)ch0src_present"
-            enumStem="SimTpm%(p)Ch0Src"
+            typeName="SimTpm%(p)Ch0Src"
             description="TPM %(p) channel 0 input capture source"
             toolTip="Source for TPM channel input capture\n
                NOTE: When the TPM is not in input capture mode, clear this field">
@@ -179,7 +179,7 @@
               values = "uart%(n)   : Uart%(n)   : UART%(n);
                         lpuart%(n) : Lpuart%(n) : LPUART%(n)" >
             <binaryOption key="sim_sopt5_%(name)ode" condition="sim_sopt5_%(name)ode_present"
-               enumStem="Sim%(Name)Drive"
+               typeName="Sim%(Name)Drive"
                description="%(NAME) Open Drain"
                toolTip="Enables Open Drain output">
                <choice value="0" name="Push-pull"  enum="PushPull"  />
@@ -187,7 +187,7 @@
             </binaryOption>
 
             <choiceOption key="sim_sopt5_%(name)rxsrc" condition="sim_sopt5_%(name)rxsrc_present"
-               enumStem="Sim%(Name)RxSrc"
+               typeName="Sim%(Name)RxSrc"
                description="%(NAME) receive data source"
                toolTip="Source for the %(NAME) receive data">
                <choice value="0" name="Rx pin"        enum="RxPin"  isDefault="true" />
@@ -195,7 +195,7 @@
             </choiceOption>
 
             <choiceOption key="sim_sopt5_%(name)txsrc" condition="sim_sopt5_%(name)txsrc_present"
-               enumStem="Sim%(Name)TxSrc"
+               typeName="Sim%(Name)TxSrc"
                description="%(NAME) transmit data source"
                toolTip="Source for the %(NAME) transmit data">
                <choice value="0" name="Tx pin" isDefault="true"             enum="Direct" />
@@ -209,7 +209,7 @@
    <category name="SOPT7" description="ADC signals">
       <for keys="adc" values="0;1">
          <choiceOption key="sim_sopt7_adc%(adc)trigger" condition="sim_sopt7_adc%(adc)alttrgen_present"
-            enumStem="SimAdc%(adc)TriggerMode"
+            typeName="SimAdc%(adc)TriggerMode"
             valueFormat="SIM_SOPT7_ADC%(adc)ALTTRGEN(%s),SIM_SOPT7_ADC%(adc)PRETRGSEL(%s)"
             description="ADC%(adc) trigger mode"
             toolTip="Alternative conversion triggers for ADC\n
@@ -222,7 +222,7 @@
          </choiceOption>
 
          <choiceOption key="sim_sopt7_adc%(adc)trgsel" condition="sim_sopt7_adc%(adc)pretrgsel_present"
-            enumStem="SimAdc%(adc)TriggerSrc"
+            typeName="SimAdc%(adc)TriggerSrc"
             description="ADC%(adc) trigger source"
             toolTip="ADC Trigger source in STOP and VLPS modes, or when ADC Alternative Trigger is active">
             <choice value="0"  name="External trigger pin input (EXTRG_IN)"   enum="External"     isDefault="true" />
@@ -260,7 +260,7 @@
 
             <choiceOption key="sim_sopt2_clkoutsel[%(n)]" condition="sim_sopt2_clkoutsel_present"
                target="clockOut[%(n)]"
-               enumStem="SimClkoutSel"
+               typeName="SimClkoutSel"
                description="CLKOUT pin clock"
                toolTip="Clock to output on the CLKOUT pin" >
                <choice value="0"  name="Disabled0"           ref="disabled"                         enum="Unused0"     />
@@ -307,7 +307,7 @@
 
             <choiceOption key="sim_sopt2_usbsrc[%(n)]" condition="sim_sopt2_usbsrc_present"
                target="system_usbfs_clock[%(n)]"
-               enumStem="SimUsbFullSpeedClockSource"
+               typeName="SimUsbFullSpeedClockSource"
                description="USB Clock"
                toolTip="Source for the USB clock">
                <choice value="0"  name="External bypass clock (USB_CLKIN)" enum="External"      ref="system_usb_clkin_clock"           />
@@ -351,7 +351,7 @@
                     values = "uart%(p)   : Uart%(p)   : UART%(p)   : UART  ;
                               lpuart%(p) : Lpuart%(p) : LPUART%(p) : LPUART" >
                   <choiceOption key="sim_sopt2_%(name)src[%(n)]" condition="sim_sopt2_%(name)src_present"
-                     enumStem="Sim%(Name)ClockSource"
+                     typeName="Sim%(Name)ClockSource"
                      target="system_%(name)_clock[%(n)]"
                      description="%(NAME) Clock"
                      toolTip="Clock source for the transmit and receive clock" >
@@ -373,7 +373,7 @@
             </for>
 
             <choiceOption key="sim_sopt2_tpmsrc[%(n)]" condition="sim_sopt2_tpmsrc_present"
-               enumStem="SimTpmClockSource"
+               typeName="SimTpmClockSource"
                target="system_tpm_clock[%(n)]"
                description="TPM Clock source"
                toolTip="Clock source for the TPM counter clock">
@@ -393,7 +393,7 @@
 
             <choiceOption key="sim_sopt2_flexiosrc[%(n)]" condition="sim_sopt2_flexiosrc_present"
                target="system_flexio_clock[%(n)]"
-               enumStem="SimFlexioClockSource"
+               typeName="SimFlexioClockSource"
                description="FLEXIO Clock select"
                toolTip="Selects the clock source for the FlexIO transmit and receive clock">
                <choice value="0"  name="Disabled"                      ref="disabled"                          enum="Disabled"        code="0"                         />

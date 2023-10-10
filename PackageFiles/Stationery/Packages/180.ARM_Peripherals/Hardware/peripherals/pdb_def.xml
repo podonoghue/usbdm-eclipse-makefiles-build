@@ -17,7 +17,7 @@
    <stringOption key="Triggers and Sequence" value="------- Triggers -------" locked="true" description="Triggers and sequence" />
 
    <choiceOption key="pdb_sc_trgsel"
-      enumStem="PdbTrigger"
+      typeName="PdbTrigger"
       valueFormat="PDB_SC_PDBEN(%s),PDB_SC_TRGSEL(%s)"
       description="Trigger Input Source Select"
       toolTip="Selects the trigger input source for the PDB.\n
@@ -61,7 +61,7 @@
       value="1000" min="0" max="65535"/>
 
    <binaryOption key="pdb_sc_pdbeie" condition="pdb_sc_pdbeie_present"
-      enumStem="PdbErrorAction"
+      typeName="PdbErrorAction"
       enabledBy="pdb_sc_trgsel>0"
       description="Sequence Error Interrupt Enable"
       toolTip="This bit enables the sequence error interrupt\n
@@ -71,7 +71,7 @@
    </binaryOption>
 
    <binaryOption key="pdb_sc_cont" condition="pdb_sc_cont_present"
-      enumStem="PdbMode"
+      typeName="PdbMode"
       enabledBy="pdb_sc_trgsel>0"
       description="PDB operation mode"
       toolTip="Select continuous or one-shot mode" >
@@ -80,7 +80,7 @@
    </binaryOption>
 
    <choiceOption key="pdb_sc_ldmod" condition="pdb_sc_ldmod_present"
-      enumStem="PdbLoadMode"
+      typeName="PdbLoadMode"
       enabledBy="pdb_sc_trgsel>0"
       description="Register Load Select"
       toolTip="Selects when to load the MOD, IDLY, CHnDLYm, INTx, and POyDLY registers,\n
@@ -113,7 +113,7 @@
       description="Frequency of PDB input Clock" />
 
    <choiceOption key="pdb_channel"
-      enumStem="PdbChannel"
+      typeName="PdbChannel"
       valueFormat="%s"
       hidden="true"
       description="PDB Channel select"
@@ -132,7 +132,7 @@
       target="pdb_clock_frequency"
       valueFormat="PDB_SC_MULT(%s),PDB_SC_PRESCALER(%s)"
       enabledBy="pdb_sc_trgsel>0"
-      enumStem="PdbPrescale"
+      typeName="PdbPrescale"
       description="Clock Prescaler Divider Select"
       toolTip="The PDB input clock is divided by this factor">
       <choice value="0,0"   name="Divide by 1"      enum="DivBy_1"      ref="(input_clock)/1"    />
@@ -157,7 +157,7 @@
 
    <choiceOption key="pdb_sc_auto_divider"
       valueFormat="PDB_SC_MULT(%s),PDB_SC_PRESCALER(%s)"
-      enumStem="PdbPrescale_Auto"
+      typeName="PdbPrescale_Auto"
       hidden="true"
       description="Auto select divider from period in seconds"
       toolTip="Auto select divider from period in seconds">
@@ -209,7 +209,7 @@
 
    <choiceOption key="pdb_sc_action" condition="pdb_sc_dmaen_present&amp;&amp;pdb_sc_pdbie_present"
       enabledBy="pdb_sc_trgsel>0"
-      enumStem="PdbAction"
+      typeName="PdbAction"
       valueFormat="PDB_SC_DMAEN(%s),PDB_SC_PDBIE(%s)"
       description="Interrupt action"
       toolTip="Selects the action when timer reached interrupt delay value" >
@@ -249,7 +249,7 @@
          <choiceOption key="pdb_ch%(n)_c1_pt%(m)" condition="pdb_c1_en_present&amp;&amp;pdb_c1_tos_present&amp;&amp;pdb_c1_bb_present"
             valueFormat="PDB_C1_EN(%s&lt;&lt;%(m)),PDB_C1_TOS(%s&lt;&lt;%(m)),PDB_C1_BB(%s&lt;&lt;%(m))"
             enabledBy="pdb_sc_trgsel>0"
-            enumStem="PdbPretrigger%(m)"
+            typeName="PdbPretrigger%(m)"
             description="Channel Pretrigger control (usually ADC%(n).SC1[%(m)])"
             toolTip="Select pre-trigger mode" >
             <choice value="0,0,0" name="Pretrigger disabled"                                                  enum="Disabled"   />
@@ -289,7 +289,7 @@
 
       <choiceOption key="pdb_intc%(x)_triggerMode" condition="pdb_intc_toe_present&amp;&amp;pdb_intc_ext_present"
          valueFormat="PDB_INTC_TOE(%s),PDB_INTC_EXT(%s)"
-         enumStem="PdbDac%(x)TriggerMode"
+         typeName="PdbDac%(x)TriggerMode"
          enabledBy="pdb_sc_trgsel>0"
          description="DAC trigger control"
          toolTip="_Disabled\n
@@ -335,7 +335,7 @@
                   The pulse is generated once per PDB cycle and has adjustable start and end times."
       />
       <binaryOption key="pdb_poen_en%(y)"
-         enumStem="PdbPulseOutput%(y)"
+         typeName="PdbPulseOutput%(y)"
          valueFormat="PDB_POEN_POEN(%s&lt;&lt;%(y))"
          enabledBy="pdb_sc_trgsel>0"
          description="Pulse output trigger enable"
@@ -545,7 +545,7 @@
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+      \t   %paramType %registerName = %paramType_Normal;\n\n
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm"
@@ -781,8 +781,8 @@
       \t   constexpr Init(
       %params, Types... rest) : Init(rest...) {
       \t
-      \t      %registerName0 = (%registerName0 & ~%mask0) | %enumParam0;
-      \t      %registerName1.fromTicks(%enumParam1);
+      \t      %registerName0 = (%registerName0 & ~%mask0) | %paramName0;
+      \t      %registerName1.fromTicks(%paramName1);
       \t   }\n\n
    ]]></constructorTemplate>
 
@@ -803,8 +803,8 @@
       \t   constexpr Init(
       %params, Types... rest) : Init(rest...) {
       \t
-      \t      %registerName0 = (%registerName0 & ~%mask0) | %enumParam0;
-      \t      %registerName1.fromSeconds(%enumParam1);
+      \t      %registerName0 = (%registerName0 & ~%mask0) | %paramName0;
+      \t      %registerName1.fromSeconds(%paramName1);
       \t   }\n\n
    ]]></constructorTemplate>
 
@@ -826,9 +826,9 @@
       \t   constexpr Init(
       %params, Types... rest) : Init(rest...) {
       \t
-      \t      %registerName0 = (%registerName0 & ~%mask0) | %enumParam0;
-      \t      %registerName1.fromTicks(%enumParam1);
-      \t      callback = %enumParam2;
+      \t      %registerName0 = (%registerName0 & ~%mask0) | %paramName0;
+      \t      %registerName1.fromTicks(%paramName1);
+      \t      callback = %paramName2;
       \t   }\n\n
    ]]></constructorTemplate>
 
@@ -850,9 +850,9 @@
       \t   constexpr Init(
       %params, Types... rest) : Init(rest...) {
       \t
-      \t      %registerName0 = (%registerName0 & ~%mask0) | %enumParam0;
-      \t      %registerName1.fromSeconds(%enumParam1);
-      \t      callback = %enumParam2;
+      \t      %registerName0 = (%registerName0 & ~%mask0) | %paramName0;
+      \t      %registerName1.fromSeconds(%paramName1);
+      \t      callback = %paramName2;
       \t   }\n\n
    ]]></constructorTemplate>
 
@@ -871,7 +871,7 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      %registerName0 = (%registerName0 & ~%mask0) | %enumParam0;
+      \t      %registerName0 = (%registerName0 & ~%mask0) | %paramName0;
       \t   }\n\n
    ]]></constructorTemplate>
 
@@ -892,8 +892,8 @@
       \t   constexpr Init(
       %params, Types... rest) : Init(rest...) {
       \t
-      \t      %registerName0 = (%registerName0 & ~%mask0) | %enumParam0;
-      \t      errorCallback = %enumParam1;
+      \t      %registerName0 = (%registerName0 & ~%mask0) | %paramName0;
+      \t      errorCallback = %paramName1;
       \t   }\n\n
    ]]></constructorTemplate>
 
@@ -914,8 +914,8 @@
       \t   constexpr Init(
       %params, Types... rest) : Init(rest...) {
       \t
-      \t      %registerName0        = (%registerName0 & ~%mask0) | %enumParam0;
-      \t      %registerName1.fromTicks(%enumParam1);
+      \t      %registerName0        = (%registerName0 & ~%mask0) | %paramName0;
+      \t      %registerName1.fromTicks(%paramName1);
       \t   }\n\n
    ]]></constructorTemplate>
 
@@ -937,8 +937,8 @@
       \t   constexpr Init(
       %params, Types... rest) : Init(rest...) {
       \t
-      \t      %registerName0          = (%registerName0 & ~%mask0) | %enumParam0;
-      \t      %registerName1.fromSeconds(%enumParam1);
+      \t      %registerName0          = (%registerName0 & ~%mask0) | %paramName0;
+      \t      %registerName1.fromSeconds(%paramName1);
       \t   }\n\n
    ]]></constructorTemplate>
 
@@ -961,8 +961,8 @@
          \t   constexpr Init(
          %params, Types... rest) : Init(rest...) {
          \t
-         \t      c1[%enumParam0] |= %enumParam1;
-         \t      dly[%enumParam0][%(m)].fromTicks(%enumParam2);
+         \t      c1[%paramName0] |= %paramName1;
+         \t      dly[%paramName0][%(m)].fromTicks(%paramName2);
          \t   }\n\n
       ]]></constructorTemplate>
       <constructorTemplate namespace="usbdm"
@@ -983,8 +983,8 @@
          \t   constexpr Init(
          %params, Types... rest) : Init(rest...) {
          \t
-         \t      c1[%enumParam0] |= %enumParam1;
-         \t      dly[%enumParam0][%(m)].fromSeconds(%enumParam2);
+         \t      c1[%paramName0] |= %paramName1;
+         \t      dly[%paramName0][%(m)].fromSeconds(%paramName2);
          \t   }\n\n
       ]]></constructorTemplate>
       <constructorTemplate namespace="usbdm"
@@ -1004,8 +1004,8 @@
          \t   constexpr Init(
          %params, Types... rest) : Init(rest...) {
          \t
-         \t      c1[%enumParam0] |= %enumParam1;
-         \t      dly[%enumParam0][%(m)].fromTicks(0_ticks);
+         \t      c1[%paramName0] |= %paramName1;
+         \t      dly[%paramName0][%(m)].fromTicks(0_ticks);
          \t   }\n\n
       ]]></constructorTemplate>
    </for>
@@ -1029,8 +1029,8 @@
          \t   constexpr Init(
          %params, Types... rest) : Init(rest...) {
          \t
-         \t      intc[%(x)] = %enumParam0;
-         \t      interval[%(x)].fromTicks(%enumParam1);
+         \t      intc[%(x)] = %paramName0;
+         \t      interval[%(x)].fromTicks(%paramName1);
          \t   }\n\n
       ]]></constructorTemplate>
       <constructorTemplate namespace="usbdm"
@@ -1051,8 +1051,8 @@
          \t   constexpr Init(
          %params, Types... rest) : Init(rest...) {
          \t
-         \t      intc[%(x)]             = %enumParam0;
-         \t      interval[%(x)].fromSeconds(%enumParam1);
+         \t      intc[%(x)]             = %paramName0;
+         \t      interval[%(x)].fromSeconds(%paramName1);
          \t   }\n\n
       ]]></constructorTemplate>
       <constructorTemplate namespace="usbdm"
@@ -1071,7 +1071,7 @@
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
-         \t      intc[%(x)] = %enumParam0;
+         \t      intc[%(x)] = %paramName0;
          \t      interval[%(x)].fromTicks(0_ticks);
          \t   }\n\n
       ]]></constructorTemplate>
@@ -1099,9 +1099,9 @@
          \t   constexpr Init(
          %params, Types... rest) : Init(rest...) {
          \t
-         \t      poen          |= %enumParam0;
-         \t      dly1[%(y)].fromTicks(%enumParam1);
-         \t      dly2[%(y)].fromTicks(%enumParam2);
+         \t      poen          |= %paramName0;
+         \t      dly1[%(y)].fromTicks(%paramName1);
+         \t      dly2[%(y)].fromTicks(%paramName2);
          \t   }\n\n
       ]]></constructorTemplate>
       <constructorTemplate namespace="usbdm"
@@ -1125,9 +1125,9 @@
          \t   constexpr Init(
          %params, Types... rest) : Init(rest...) {
          \t
-         \t      poen            |= %enumParam0;
-         \t      dly1[%(y)].fromSeconds(%enumParam1);
-         \t      dly2[%(y)].fromSeconds(%enumParam2);
+         \t      poen            |= %paramName0;
+         \t      dly1[%(y)].fromSeconds(%paramName1);
+         \t      dly2[%(y)].fromSeconds(%paramName2);
          \t   }\n\n
       ]]></constructorTemplate>
    </for>

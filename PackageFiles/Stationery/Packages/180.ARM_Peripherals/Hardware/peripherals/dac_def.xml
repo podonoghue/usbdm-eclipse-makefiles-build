@@ -4,22 +4,77 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <xi:include href="_default_instance.xml"/>
+   <constant key="suppressInstance"         type="Boolean" value="false"         />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
+   <constant key="irq_parameters"           type="String"  value="&quot;uint8_t status&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;uint8_t&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;getAndClearStatus()&quot;"  />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="_enablePeripheral.xml"  />
+   <title />
 
-   <xi:include href="_irqOption.xml"/>
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
+
+<!--
+    * Template substitutions
+    *
+    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
+    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
+    * %description[index]             Description from controlVar e.g. Compare Function Enable
+    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
+    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
+    * %params                         Formatted parameter list for function
+    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
+    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
+    * %valueExpression                Numeric variable value e.g. 0x3
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %variable[index]                Variable name from condition
+    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * %register[index]                Register associated with variable e.g. adc->APCTL1
+    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+-->
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
+
+   <constant key="disable_peripheral" value = "&quot;dac->C0 = DAC_C0_DACEN(0);&quot;" type="String" />
 
    <template><![CDATA[
       \t//! Pin number in Info table for DAC output if mapped to a pin
       \tstatic constexpr int outputPin  = 0;\n\n
    ]]></template>
 
-   <constant key="disable_peripheral" value = "&quot;dac->C0 = DAC_C0_DACEN(0);&quot;" type="String" />
+   <!-- ************* C0 ****************** -->
 
-   <xi:include href="_mapPinsOption.xml"/>
+   <binaryOption key="dac_c0_dacen" condition="dac_c0_dacen_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="DacMode"
+      description="Enable" >
+      <choice name="DAC is disabled"  value="0" enum="Disabled"/>
+      <choice name="DAC is enabled"   value="1" enum="Enabled"/>
+   </binaryOption >
 
-<!-- C0 -->
    <binaryOption key="dac_c0_dacrfs" condition="dac_c0_dacrfs_present"
-      enumStem="DacReferenceSelect"
+      enabledBy="dac_c0_dacen"
+      typeName="DacReferenceSelect"
       description="DAC Reference Select"
       toolTip="Selects the DAC reference voltage. \n
                The output range is [0..Vselected]">
@@ -28,33 +83,46 @@
    </binaryOption>
 
    <binaryOption key="dac_c0_dactrgsel" condition="dac_c0_dactrgsel_present"
+      enabledBy="dac_c0_dacen"
       description="DAC Trigger Select"
-      enumStem="DacTriggerSelect"
+      typeName="DacTriggerSelect"
       toolTip="Selects the DAC Trigger">
       <choice value="0" name="Hardware trigger" enum="Hardware" />
       <choice value="1" name="Software trigger" enum="Software" isDefault="true" />
    </binaryOption>
 
    <binaryOption key="dac_c0_lpen" condition="dac_c0_lpen_present"
+      enabledBy="dac_c0_dacen"
       description="DAC Low Power Control"
-      enumStem="DacPower"
+      typeName="DacPower"
       toolTip="Controls power consumption of DAC">
       <choice value="0" name="High-Power mode" enum="High" isDefault="true" />
       <choice value="1" name="Low-Power mode"  enum="Low"  />
    </binaryOption>
 
    <binaryOption key="dac_c0_dacbwien" condition="dac_c0_dacbwien_present"
+      enabledBy="dac_c0_dacen"
       description="DAC Buffer Watermark Interrupt Enable"
-      enumStem="DacWatermarkIrq"
+      typeName="DacWatermarkIrq"
       toolTip="Control whether an interrupt is generated when SR.DACBFWMF is set i.e.\n
                when the DAC buffer read pointer has reached the watermark level.">
       <choice value="0" name="Interrupt is disabled" enum="Disabled" isDefault="true" />
       <choice value="1" name="Interrupt is enabled"  enum="Enabled"  />
    </binaryOption>
 
+   <binaryOption key="dac_c0_dacswtrg" condition="dac_c0_dacswtrg_present"
+      enabledBy="enablePeripheralSupport"
+      locked="true"
+      typeName="DacTrigger"
+      description="Software Trigger" >
+      <choice name="Trigger is not valid"  value="0" enum="TriggerIsNotValid"/>
+      <choice name="Trigger is valid"      value="1" enum="TriggerIsValid"/>
+   </binaryOption >
+
    <binaryOption key="dac_c0_dacbtien" condition="dac_c0_dacbtien_present"
+      enabledBy="dac_c0_dacen"
       description="DAC Buffer Read Pointer Top Flag Interrupt Enable"
-      enumStem="DacReadPtrTopIrq"
+      typeName="DacReadPtrTopIrq"
       toolTip="Control whether an interrupt is generated when SR.DACBFRPTF is set i.e.\n
                when the DAC buffer read pointer is zero.">
       <choice value="0" name="Interrupt is disabled" enum="Disabled" isDefault="true" />
@@ -62,34 +130,20 @@
    </binaryOption>
 
    <binaryOption key="dac_c0_dacbbien" condition="dac_c0_dacbbien_present"
+      enabledBy="dac_c0_dacen"
       description="DAC Buffer Read Pointer Bottom Flag Interrupt Enable"
-      enumStem="DacReadPtrBottomIrq"
+      typeName="DacReadPtrBottomIrq"
       toolTip="Control whether an interrupt is generated when SR.DACBFRPBF is set i.e. \n
                when the DAC buffer read pointer is equal to buffer upper limit (C2.DACBFUP)">
       <choice value="0" name="Interrupt is disabled" enum="Disabled" isDefault="true" />
       <choice value="1" name="Interrupt is enabled"  enum="Enabled" />
    </binaryOption>
 
-   <setTemplate  key="/DAC/InitMethod" namespace="all"  discardRepeats="true"
-      variables="dac_c0_dacbwien, dac_c0_dacbtien, dac_c0_dacbbien"
-   ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      %comments
-      \t */
-      \tvoid setActions(
-      %params) {
-      \t
-      \t   %register = (%register&~%mask) |
-      \t               %paramExpression;
-      \t}
-      \t\n
-   ]]></setTemplate>
+   <!-- ************* C1 ****************** -->
 
-<!-- C1 -->
    <binaryOption key="dac_c1_dmaen" condition="dac_c1_dmaen_present"
-      enumStem="DacDma"
+      enabledBy="dac_c0_dacen"
+      typeName="DacDma"
       description="Generate DMA request"
       toolTip="When DMA is enabled, DMA requests are generated instead of interrupt requests. \n
                The DMA Done signal clears the DMA request. \n
@@ -99,8 +153,9 @@
    </binaryOption>
 
    <choiceOption key="dac_c1_buffer_mode" condition="dac_c1_dacbfen_present &amp;&amp; dac_c1_dacbfmd_present"
+      enabledBy="dac_c0_dacen"
       valueFormat="DAC_C1_DACBFEN(%s),DAC_C1_DACBFMD(%s)"
-      enumStem="DacBufferMode"
+      typeName="DacBufferMode"
       description="Buffer operation mode"
       toolTip="Modes:\n
                Disabled: The first word of the buffer is used to control the DAC output level.\n
@@ -118,7 +173,8 @@
    </choiceOption>
 
    <choiceOption key="dac_c1_dacbfwm" condition="dac_c1_dacbfwm_present"
-      enumStem="DacWaterMark"
+      enabledBy="dac_c0_dacen"
+      typeName="DacWaterMark"
       description="Buffer Watermark Select"
       toolTip="Controls when SR[DACBFWMF] is set.\n
                Normal Mode: \n
@@ -136,9 +192,19 @@
       <choice value="3" name="FIFO threshold: &lt;= Max-2 full entries" enum="FifoMaxMinus2" condition="dac_c1_dacbfmd_fifo_present" />
    </choiceOption>
 
-<!-- C2 -->
+   <!-- ************* C2 ****************** -->
+
+   <choiceOption key="dac_c2_dacbfrp" condition="dac_c2_dacbfrp_present"
+      locked="true"
+      enabledBy="enablePeripheralSupport"
+      typeName="DacC2Dacbfrp"
+      description="Buffer Read Pointer" >
+      <choice name="Buffer Pointer"  value="0" enum="BufferPointer"/>
+   </choiceOption >
+
    <choiceOption key="dac_c2_dacbfup" condition="dac_c2_dacbfup_present"
-      enumStem="DacBufferUpperLimit"
+      enabledBy="dac_c0_dacen"
+      typeName="DacBufferUpperLimit"
       description="DAC Buffer Upper Limit"
       toolTip="Normal mode\n
                - Selects the upper limit of the DAC buffer. The buffer read pointer cannot exceed it\n
@@ -165,11 +231,12 @@
       <choice value="15" name="max entries" enum="Max" isDefault="true" />
    </choiceOption>
 
-<!-- SR -->
+   <!-- ************* SR ****************** -->
    <binaryOption key="dac_sr_dacbfwmf" condition="dac_sr_dacbfwmf_present"
+      enabledBy="dac_c0_dacen"
       description="DAC Buffer Watermark Flag"
       hidden="true"
-      enumStem="DacWatermarkFlag"
+      typeName="DacWatermarkFlag"
       toolTip="This bit is set if the remaining FIFO data is less than the watermark setting.\n
                It is cleared automatically by writing data into FIFO by DMA or CPU. \n
                Write to this bit is ignored in FIFO mode." >
@@ -180,7 +247,7 @@
    <binaryOption key="dac_sr_dacbfrptf" condition="dac_sr_dacbfrptf_present"
       description="DAC Buffer Read Pointer Top Position Flag"
       hidden="true"
-      enumStem="DacReadPtrTopFlag"
+      typeName="DacReadPtrTopFlag"
       toolTip="In FIFO mode, it is FIFO nearly empty flag. \n
                It is set when only one data remains in FIFO. \n
                Any DAC trigger does not increase the Read Pointer if this bit is set to \n
@@ -193,7 +260,7 @@
    <binaryOption key="dac_sr_dacbfrpbf" condition="dac_sr_dacbfrpbf_present"
       description="DAC Buffer Read Pointer Bottom Position Flag"
       hidden="true"
-      enumStem="DacReadPtrBottomFlag"
+      typeName="DacReadPtrBottomFlag"
       toolTip="In FIFO mode, it is FIFO FULL status bit. \n
       It means FIFO read pointer equals Write Pointer because of Write Pointer increase. \n
       If this bit is set, any write to FIFO from either DMA or CPU is ignored by DAC. \n
@@ -203,52 +270,207 @@
       <choice value="1" name="Reached"     enum="Reached" />
    </binaryOption>
 
-<!--  ========== DAC Init class =============================== -->
+<!-- Graphic here -->
 
-   <template key="init_description" namespace="all" ><![CDATA[
+   <setTemplate codeGenCondition="enableGettersAndSetters"
+      variables="dac_c0_dacbwien, dac_c0_dacbtien, dac_c0_dacbbien"
+   ><![CDATA[
       \t/**
-      \t * Class used to do initialisation of the DAC
+      \t * Set %description
+      \t *
+      %paramDescription
+      \t */
+      \tvoid setActions(
+      %params) {
+      \t
+      \t   %register = (%register&~%mask) |
+      \t               %paramExpression;
+      \t}
+      \t\n
+   ]]></setTemplate>
+
+   <for keys="field:name"
+        values="
+      dac_sr_dacbfrptf : SrDacbfrptf;
+      dac_sr_dacbfrpbf : SrDacbfrpbf;
+      dac_c0_dacen      :C0Dacen;
+      dac_c0_dacrfs     :C0Dacrfs;
+      dac_c0_dactrgsel  :C0Dactrgsel;
+      dac_c0_dacswtrg   :C0Dacswtrg;
+      dac_c0_lpen       :C0Lpen;
+      dac_c1_dmaen      :C1Dmaen;
+      dac_c1_dacbfmd    :C1Dacbfmd;
+      dac_c1_dacbfen    :C1Dacbfen;
+      dac_c2_dacbfrp    :C2Dacbfrp;
+      dac_c2_dacbfup    :C2Dacbfup" >
+      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %fieldAssignment
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register&%mask);
+         \t}
+         \t\n
+      ]]></setTemplate>
+   </for>
+
+<!--   ========== DAC Init class =============================== -->
+
+   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_Baseclass)
       \t *
       \t * This class has a templated constructor that accepts various values.  <br>
       \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.  <br>
       \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.  <br>
       \t *
-      \t * @note This constructor may be used to create a const instance in ROM
+      \t * @note This constructor may be used to create a const instance in Flash
       \t *
       \t * Example:
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(uint32_t status) {
+      \t *    (void) status;
+      \t * }
+      \t *
       \t * @code
-      \t * static const Dac$(_instance)::Init dacInit {
-      \t *    DacReferenceSelect_Vdda ,       // DAC Reference Select - VddA
-      \t *    DacTriggerSelect_Software ,     // DAC Trigger Select - Software trigger
-      \t *    DacPower_High ,                 // DAC Low Power Control - High-Power mode
-      \t *    DacWatermarkIrq_Enabled,        // DAC Buffer Watermark Interrupt Enable - Interrupt is disabled
-      \t *    DacReadPtrTopIrq_Disabled ,     // DAC Buffer Read Pointer Top Flag Interrupt Enable - Interrupt is disabled
-      \t *    DacReadPtrBottomIrq_Disabled ,  // DAC Buffer Read Pointer Bottom Flag Interrupt Enable - Interrupt is disabled
-      \t *    DacDma_Enabled ,                // DMA Enable Select - DMA is disabled
-      \t *    DacWaterMark_Normal_1 ,         // Buffer Watermark Select - Normal mode: 1 free entry
-      \t *    DacBufferMode_Normal ,          // Buffer operation mode - Normal
-      \t *    DacBufferUpperLimit_Max,        // DAC Buffer Upper Limit - max entries
-      \t *    dacCallback,                    // Interrupt call-back
+      \t * static const $(_Class)::Init $(_name)Init {
+      \t *
+      \t *   // Setup values
+      \t *   DacMode_Enabled ,               // Enable - DAC is enabled
+      \t *   DacReferenceSelect_VrefOut ,    // DAC Reference Select - Vrefh or VrefOut(1.2V)
+      \t *   DacTriggerSelect_Hardware ,     // DAC Trigger Select - Hardware trigger
+      \t *   DacPower_High ,                 // DAC Low Power Control - High-Power mode
+      \t *   DacReadPtrTopIrq_Disabled ,     // DAC Buffer Read Pointer Top Flag Interrupt Enable - Interrupt is disabled
+      \t *   DacReadPtrBottomIrq_Disabled ,  // DAC Buffer Read Pointer Bottom Flag Interrupt Enable - Interrupt is disabled
+      \t *   DacTrigger_TriggerIsNotValid ,  // Software Trigger - Trigger is not valid
+      \t *   DacDma_Enabled ,                // Generate DMA request - DMA is disabled
+      \t *   DacBufferMode_Disabled ,        // Buffer operation mode - Disabled
+      \t *   DacC2Dacbfrp_BufferPointer ,    // Buffer Read Pointer - Buffer Pointer
+      \t *   DacBufferUpperLimit_Max,        // DAC Buffer Upper Limit - max entries
+      \t *
+      \t *   $(_name)Callback,                  // Call-back to execute on event - call-back function name
+      \t *   NvicPriority_Low,               // Priority for interrupt - Low
+      \t *
+      \t *   Dac0::DefaultInitValue,         // Based on this configuration
       \t * };
       \t *
-      \t * // Initialise DAC from values specified above
-      \t * Dac$(_instance)::configure(dacInit)
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_name)Init)
       \t * @endcode
       \t */
-   ]]></template>
+   ]]>
+   </template>
 
-   <template namespace="usbdm" ><![CDATA[
-      class $(_Class)BasicInfo {
+   <template namespace="usbdm" discardRepeats="true" >
+   <![CDATA[
+      class $(_Baseclass)BasicInfo {
       \t
-      public:
-      \t/**
-      \t * Type definition for $(_Class) interrupt call back.
-      \t */
-      \ttypedef void (*CallbackFunction)(uint8_t status);
-      \t\n
-   ]]></template>
+      public:\n
+   ]]>
+   </template>
 
-   <template namespace="usbdm"><![CDATA[
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      variables="/$(_BASENAME)/irqHandlingMethod"
+   ><![CDATA[
+       \t//! Common class based callback code has been generated for this class of peripheral
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
+       \t\n
+   ]]></initialValueTemplate>
+
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+   <![CDATA[
+      \t/**
+      \t * Type definition for $(_Baseclass) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)($(irq_parameters));
+      \t
+      \t/**
+      \t * Callback to catch unhandled interrupt
+      \t */
+      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/** Callback function for ISR */
+      \tstatic CallbackFunction sCallback;
+      \t
+      \t/**
+      \t * Set interrupt callback function.
+      \t *
+      \t * @param[in]  $(_basename)Callback Callback function to execute on interrupt
+      \t */
+      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
+      \t   if ($(_basename)Callback == nullptr) {
+      \t      $(_basename)Callback = unhandledCallback;
+      \t   }
+      \t   // Allow either no handler set yet or removing handler
+      \t   usbdm_assert(
+      \t         (sCallback == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
+      \t         "Handler already set");
+      \t   sCallback = $(_basename)Callback;
+      \t}
+      \t
+      \t/**
+      \t * Get and clear DAC status
+      \t *
+      \t * @return DAC status value see DacStatus
+      \t */
+      \tstatic uint8_t getAndClearStatus() {
+      \t   // Get status
+      \t   uint8_t status = dac->SR;
+      \t
+      \t   // Clear set flags
+      \t   dac->SR = ~status;
+      \t
+      \t   // return original status
+      \t   return status;
+      \t}
+      \t
+      \t/**
+      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
+      \t */
+      \tstatic void irqHandler() {
+      \t
+      \t   // Execute call-back
+      \t   sCallback($(irq_call));
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t
+      \t/** Callback for programmatically set handler */
+      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <![CDATA[
       $(init_description)
       \tclass Init {
       \t
@@ -263,95 +485,101 @@
       \t    */
       \t   constexpr Init() = default;
       \t\n
-   ]]></template>
+   ]]>
+   </template>
 
-<!--  Member variables -->
+<!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
-      \t   CallbackFunction callback = nullptr;\n\n
+      \t   %params = nullptr;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
-      variables="/PCR/nvic_irqLevel"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+      variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+      \t   %paramType %registerName0 = %symbolicExpression1;
+      \t\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
-      variables="dac_c0_dacrfs, dac_c0_dactrgsel, dac_c0_lpen, dac_c0_dacbwien, dac_c0_dacbtien, dac_c0_dacbbien"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      variables="dac_c0_dacen,dac_c0_dacrfs,dac_c0_dactrgsel,dac_c0_dacswtrg,dac_c0_lpen,dac_c0_dacbtien,dac_c0_dacbbien"
    ><![CDATA[
-      \t   ///  DAC Control Register 0
-      \t   uint8_t %registerName = DAC_C0_DACEN_MASK;\n\n
-   ]]></initialValueTemplate>
-
-   <initialValueTemplate namespace="usbdm"
-      variables="dac_c1_dmaen, dac_c1_dacbfwm, dac_c1_dacbfmd, dac_c1_buffer_mode"
-   ><![CDATA[
-      \t   ///  DAC Control Register 1
+      \t   /// Control Register 0
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
-      variables="dac_c2_dacbfup"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      variables="dac_c1_dmaen,dac_c1_dacbfmd,dac_c1_dacbfen"
    ><![CDATA[
-      \t   ///  DAC Control Register 2
+      \t   /// Control Register 1
       \t   uint8_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-<!--  Configure method -->
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      variables="dac_c2_dacbfrp,dac_c2_dacbfup"
+   ><![CDATA[
+      \t   /// Control Register 2
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></initialValueTemplate>
 
-   <setTemplate key="/DAC/InitMethod" namespace="all"  discardRepeats="true"
+<!--   Configure methods -->
+
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="dac_c0_dacrfs,dac_c1_buffer_mode,dac_c2_dacbfup"
    ><![CDATA[
       \t/**
-      \t * Configure DAC from values specified in init
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
       \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
       \t * @param init Class containing initialisation values
       \t */
       \tstatic void configure(const typename Info::Init &init) {
       \t
-      \t   enable();
+      \t   // Enable peripheral
+      \t   Info::enableClock();
       \t
       \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      // Only set call-back if feature enabled
-      \t      setCallback(init.callback);
+      \t      // Only set call-backs if feature enabled
+      \t      Info::setCallback(init.callbackFunction);
       \t      enableNvicInterrupts(init.irqlevel);
       \t   }
       \t
       \t   %register0 = init.%registerName0;
       \t   %register1 = init.%registerName1;
       \t   %register2 = init.%registerName2;
-      \t}
-      \t
-      \t/**
-      \t * Configure DAC with default settings
-      \t */
-      \tstatic void defaultConfigure() {
-      \t
-      \t   configure(Info::DefaultInitValue);
       \t}\n\n
-   ]]></setTemplate>
+   ]]></template>
 
-<!--  Constructors -->
+   <!--   Constructors -->
 
    <for keys="r" values="
-         dac_c0_dacrfs; dac_c0_dactrgsel; dac_c0_lpen; dac_c0_dacbwien; dac_c0_dacbtien; dac_c0_dacbbien;
-         dac_c1_dmaen; dac_c1_dacbfwm; dac_c1_dacbfmd; dac_c1_buffer_mode;
-         dac_c2_dacbfup" >
+         dac_c0_dacen; dac_c0_dacrfs; dac_c0_dactrgsel; dac_c0_lpen; dac_c0_dacbwien; dac_c0_dacbtien; dac_c0_dacbbien;dac_c0_dacswtrg;
+         dac_c1_dmaen; dac_c1_dacbfwm; dac_c1_buffer_mode;
+         dac_c2_dacbfrp; dac_c2_dacbfup" >
 
-      <setTemplate  namespace="usbdm" variables="%(r)"
-         linePadding="xxx"
-      ><![CDATA[
+      <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
          \t   /**
          \t    * Constructor for %description
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
@@ -359,10 +587,11 @@
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
-      ]]></setTemplate>
+      ]]>
+      </setTemplate>
    </for>
 
-   <constructorTemplate namespace="usbdm"
+   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -379,11 +608,10 @@
       \t
       \t      %registerName = %paramExpression;
       \t   }\n\n
-   ]]></constructorTemplate>
+   ]]></setTemplate>
 
-   <constructorTemplate namespace="usbdm"  codeGenCondition="irqHandlingMethod"
+   <constructorTemplate namespace="usbdm"  codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
-      nonDefaultParams="2"
       linePadding="xxx"
     ><![CDATA[
       \t   /**
@@ -397,48 +625,43 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      callback = %enumParam;
+      \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
    ]]></constructorTemplate>
 
-   <template namespace="usbdm" ><![CDATA[
-      \t};\n\n
-   ]]></template>
+<!--   Default Initialisation value -->
 
-   <template namespace="usbdm" ><![CDATA[
-      };\n\n
-   ]]></template>
-
-<!--  Default Initialisation value -->
-
-   <template><![CDATA[
-      \t/**
-      \t * $(_Class) interrupt call back
-      \t */
-      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
-      \t\n
-   ]]></template>
-
-   <initialValueTemplate
+   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
-         dac_c0_dacrfs, dac_c0_dactrgsel, dac_c0_lpen, dac_c0_dacbwien, dac_c0_dacbtien, dac_c0_dacbbien,
-         dac_c1_dmaen, dac_c1_dacbfwm, dac_c1_dacbfmd, dac_c1_buffer_mode,
-         dac_c2_dacbfup"
+         dac_c0_dacen, dac_c0_dacrfs, dac_c0_dactrgsel, dac_c0_lpen, dac_c0_dacbwien, dac_c0_dacbtien, dac_c0_dacbbien,dac_c0_dacswtrg,
+         dac_c1_dmaen, dac_c1_dacbfwm, dac_c1_buffer_mode,
+         dac_c2_dacbfrp, dac_c2_dacbfup" >
    ><![CDATA[
-      $(init_description)
-      \ttypedef $(_Class)BasicInfo::Init Init;
-      \t
       \t/**
-      \t * Default initialisation value for Dac$(_instance)
+      \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
-   ]]></initialValueTemplate>
+   ]]>
+   </initialValueTemplate>
 
-<!-- ======================== Misc ======================== -->
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+      <![CDATA[
+      \t}; // class $(_Baseclass)BasicInfo::Init
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm" discardRepeats="true" >
+      <![CDATA[
+      }; // class $(_Class)BasicInfo\n\n
+   ]]>
+   </template>
+
+   <!-- ************* Common ****************** -->
 
    <template><![CDATA[
       \t/// Number of Data output registers
@@ -453,7 +676,9 @@
    \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
    ]]></template>
 
-   <xi:include href="_clockOption.xml"/>
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
+   </validate>
 
    <projectActionList id = "dac_files" >
       <copy source="Project_Headers/dac.h"                         target="Project_Headers/dac.h"                         overwrite="true" derived="true" />
@@ -465,8 +690,19 @@
       <copy source="Snippets/dac-softwareTrigger-example.cpp"      target="Snippets/dac-softwareTrigger-example.cpp"      overwrite="true" derived="true" />
    </projectActionList>
 
-   <signals/>
+   <!-- ************* Startup ****************** -->
 
-   <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator"/>
+   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
+
+   <!-- ************* Signal mapping ****************** -->
+   <signals enabledBy="enablePeripheralSupport" />
 
 </fragment>

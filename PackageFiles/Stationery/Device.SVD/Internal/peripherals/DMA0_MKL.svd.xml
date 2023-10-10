@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKL04Z4
       MKL05Z4
       MKL14Z4
@@ -50,6 +50,14 @@ Devices using this peripheral:
                   <addressOffset>0x0</addressOffset>
                   <size>32</size>
                   <access>read-write</access>
+                  <fields>
+                     <field>
+                        <name>ADDR</name>
+                        <description>Source address</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>32</bitWidth>
+                     </field>
+                  </fields>
                </register>
                <register>
                   <name>DAR</name>
@@ -60,6 +68,14 @@ Devices using this peripheral:
                   <addressOffset>0x4</addressOffset>
                   <size>32</size>
                   <access>read-write</access>
+                  <fields>
+                     <field>
+                        <name>ADDR</name>
+                        <description>Destination address</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>32</bitWidth>
+                     </field>
+                  </fields>
                </register>
                <register>
                   <name>DSR_BCR</name>
@@ -500,7 +516,8 @@ Devices using this peripheral:
                            </enumeratedValue>
                         </enumeratedValues>
                      </field>
-                     <field derivedFrom="DMOD" > <name>SMOD</name> <description>Source address modulo\nSets the size of the source circular buffer</description> <bitOffset>12</bitOffset> </field>
+                     <field derivedFrom="DMOD" > <name>SMOD</name> <description>Source address modulo\n
+                        Sets the size of the source circular buffer</description> <bitOffset>12</bitOffset> </field>
                      <field>
                         <name>START</name>
                         <description>Start transfer\n

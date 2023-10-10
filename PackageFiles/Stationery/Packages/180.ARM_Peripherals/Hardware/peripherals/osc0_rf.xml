@@ -17,7 +17,7 @@
    <xi:include href="_mapPinsOption_on.xml"/>
 
    <choiceOption key="rsim_control_rf_osc_en"
-      enumStem="OscRunMode"
+      typeName="OscRunMode"
       valueFormat="RSIM_CONTROL_RF_OSC_EN(%s)"
       register="control"
       description="RF Reference Oscillator Enable Select"
@@ -81,18 +81,18 @@
    <clockCodeTemplate variable="rsim_control_rf_osc_en"
    ><![CDATA[
       \t//! RF Reference Oscillator Enable Select
-      \tstatic constexpr %enumClass %registerName = %initExpression;
+      \tstatic constexpr %paramType %registerName = %initExpression;
       \t
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t *
-      \t * @return true => OSC enable by %enumParam value - Wait for OSC stabilise may be needed
+      \t * @return true => OSC enable by %paramName value - Wait for OSC stabilise may be needed
       \t */
-      \tstatic bool setOscillatorRunModes(%enumClass %enumParam) {
-      \t   RSIM->CONTROL = (RSIM->CONTROL&~%mask)|%enumParam;
-      \t   return %enumParam!=0;
+      \tstatic bool setOscillatorRunModes(%paramType %paramName) {
+      \t   RSIM->CONTROL = (RSIM->CONTROL&~%mask)|%paramName;
+      \t   return %paramName!=0;
       \t}
       \t
       \t/**

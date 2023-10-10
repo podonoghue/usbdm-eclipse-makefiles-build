@@ -13,7 +13,7 @@
    <category name="SOPT8" description="FTM signals">
       <for keys="ch" values="0;1;2;3;4;5;6;7">
          <binaryOption key="sim_sopt8_ftm0och%(ch)src" condition="sim_sopt8_ftm0och%(ch)src_present"
-            enumStem="SimFtm0Ch%(ch)OutputSrc"
+            typeName="SimFtm0Ch%(ch)OutputSrc"
             description="FTM0 channel %(ch) output source"
             toolTip="Allows modulation of FTM output">
             <choice value="0" name="FTM0 ch %(ch) direct"                 enum="Direct"             isDefault="true" />
@@ -23,7 +23,7 @@
 
       <for keys="ch" values="0;1;2;3;4;5;6;7">
          <binaryOption key="sim_sopt8_ftm3och%(ch)src"  condition="sim_sopt8_ftm3och%(ch)src_present"
-            enumStem="SimFtm3Ch%(ch)OutputSrc"
+            typeName="SimFtm3Ch%(ch)OutputSrc"
             description="FTM3 channel %(ch) output source"
             toolTip="Allows modulation of FTM output">
             <choice value="0" name="FTM3 ch %(ch) direct"                 enum="Direct"             isDefault="true" />
@@ -32,7 +32,7 @@
       </for>
 
       <choiceOption key="sim_sopt8_ftm_syncbits"  condition="sim_sopt8_ftm0syncbit_present"
-         enumStem="SimFtmSync"
+         typeName="SimFtmSync"
          valueFormat="%s"
          hidden="true"
          description="FTM Hardware Trigger 0 Software Asserts"
@@ -50,7 +50,7 @@
 
       <for keys="p" values="0;1;2;3">
          <binaryOption key="sim_sopt9_tpm%(p)clksel" condition="sim_sopt9_tpm%(p)clksel_present"
-            enumStem="SimTpm%(p)ClkSel"
+            typeName="SimTpm%(p)ClkSel"
             description="TPM%(p) External Clock Pin"
             toolTip="External pin used to drive the clock to the TPM module">
             <choice value="0"  name="TPM_CLKIN0 pin" enum="TpmClkin0" isDefault="true" />
@@ -58,7 +58,7 @@
          </binaryOption>
 
          <choiceOption key="sim_sopt9_tpm%(p)ch0src" condition="sim_sopt9_tpm%(p)ch0src_present"
-            enumStem="SimTpm%(p)Ch0Src"
+            typeName="SimTpm%(p)Ch0Src"
             description="TPM%(p) channel 0 input capture source"
             toolTip="Source for TPM channel 0 input capture\n
                NOTE: When the TPM is not in input capture mode, clear this field">
@@ -81,7 +81,7 @@
 
       <!-- ERCCLK32K Sources -->
       <choiceOption key="sim_sopt1_osc32ksel" condition="!sim_sopt1_osc32ksel"
-         enumStem="SimErc32kSel"
+         typeName="SimErc32kSel"
          target="system_erclk32k_clock"
          hidden="true"
          description="ERCLK32K clock source"
@@ -93,7 +93,7 @@
 
       <if condition="sim_sopt2_rtcclkoutsel_present" >
          <choiceOption key="sim_sopt2_rtcclkoutsel"
-            enumStem="SimRtcClkoutSel"
+            typeName="SimRtcClkoutSel"
             target="rtc_clkout"
             hidden="true"
             description="RTC clock out source"
@@ -115,10 +115,10 @@
             \t/**
             \t * Set %description
             \t *
-            \t * @param %enumParam %tooltip
+            \t * @param %paramName %tooltip
             \t */
-            \tstatic void setRtcClockout(%enumClass %enumParam) {
-            \t   %defaultFieldExpression
+            \tstatic void setRtcClockout(%paramType %paramName) {
+            \t   %fieldAssignment
             \t}\n\n
          ]]></clockCodeTemplate>
       </if>
@@ -138,7 +138,7 @@
 
       <!-- ERCCLK32K Sources -->
       <choiceOption key="sim_sopt1_osc32ksel" condition="!sim_sopt1_osc32ksel"
-         enumStem="SimErc32kSel"
+         typeName="SimErc32kSel"
          target="system_erclk32k_clock"
          hidden="true"
          description="ERCLK32K clock source"
@@ -150,7 +150,7 @@
 
       <if condition="sim_sopt2_rtcclkoutsel_present" >
          <choiceOption key="sim_sopt2_rtcclkoutsel"
-            enumStem="SimRtcClkoutSel"
+            typeName="SimRtcClkoutSel"
             target="rtc_clkout"
             hidden="true"
             description="RTC clock out source"
@@ -172,10 +172,10 @@
             \t/**
             \t * Set %description
             \t *
-            \t * @param %enumParam %tooltip
+            \t * @param %paramName %tooltip
             \t */
-            \tstatic void setRtcClockout(%enumClass %enumParam) {
-            \t   %defaultFieldExpression
+            \tstatic void setRtcClockout(%paramType %paramName) {
+            \t   %fieldAssignment
             \t}\n\n
          ]]></clockCodeTemplate>
       </if>
@@ -264,10 +264,10 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setErc32kClock(%enumClass %enumParam) {
-      \t   %defaultFieldExpression
+      \tstatic void setErc32kClock(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}
 
       \t/**
@@ -277,7 +277,7 @@
       \t */
       \tstatic uint32_t getErc32kClock() {
       \t
-      \t   switch(%defaultMaskingExpression) {
+      \t   switch(%maskingExpression) {
       \t      default: return 0;
       %body
       \t   }
@@ -301,10 +301,10 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setErc32kClkoutPin(%enumClass %enumParam) {
-      \t   %defaultFieldExpression
+      \tstatic void setErc32kClkoutPin(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}\n\n
    ]]></clockCodeTemplate>
 
@@ -313,11 +313,11 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setUsbPowerModes(%enumClass %enumParam) {
+      \tstatic void setUsbPowerModes(%paramType %paramName) {
       \t   sim->SOPT1CFG = SIM_SOPT1CFG_USSWE_MASK|SIM_SOPT1CFG_UVSWE_MASK|SIM_SOPT1CFG_URWE_MASK;
-      \t   %defaultFieldExpression
+      \t   %fieldAssignment
       \t}\n\n
    ]]></clockCodeTemplate>
 
@@ -338,10 +338,10 @@
          \t/**
          \t * Set %description
          \t *
-         \t * @param %enumParam %tooltip
+         \t * @param %paramName %tooltip
          \t */
-         \tstatic void set%(name)(%enumClass %enumParam) {
-         \t   %defaultFieldExpression
+         \tstatic void set%(name)(%paramType %paramName) {
+         \t   %fieldAssignment
          \t}
          \t
          \t/**
@@ -351,7 +351,7 @@
          \t */
          \tstatic uint32_t get%(name)() {
          \t
-         \t   return %defaultMaskingExpression;
+         \t   return %maskingExpression;
          \t}\n\n
       ]]></clockCodeTemplate>
    </for>
@@ -373,10 +373,10 @@
          \t/**
          \t * Set %description
          \t *
-         \t * @param %enumParam %tooltip
+         \t * @param %paramName %tooltip
          \t */
-         \tstatic void set%(name)(%enumClass %enumParam) {
-         \t   %defaultFieldExpression
+         \tstatic void set%(name)(%paramType %paramName) {
+         \t   %fieldAssignment
          \t}
 
          \t/**
@@ -387,7 +387,7 @@
          \t */
          \tstatic uint32_t get%(name)() {
          \t
-         \t   switch(%defaultMaskingExpression) {
+         \t   switch(%maskingExpression) {
          \t      default: return 0;
          %body
          \t   }
@@ -402,10 +402,10 @@
          \t/**
          \t * Set %description
          \t *
-         \t * @param %enumParam %tooltip
+         \t * @param %paramName %tooltip
          \t */
-         \tstatic void setLpuart%(n)Clock(%enumClass %enumParam) {
-         \t   %defaultFieldExpression
+         \tstatic void setLpuart%(n)Clock(%paramType %paramName) {
+         \t   %fieldAssignment
          \t}
 
          \t/**
@@ -415,7 +415,7 @@
          \t */
          \tstatic uint32_t getLpuart%(n)Clock() {
          \t
-         \t   switch(%defaultMaskingExpression) {
+         \t   switch(%maskingExpression) {
          \t      default: return 0;
          %body
          \t   }
@@ -430,10 +430,10 @@
          \t/**
          \t * Set %description
          \t *
-         \t * @param %enumParam %tooltip
+         \t * @param %paramName %tooltip
          \t */
-         \tstatic void setUart%(n)Clock(%enumClass %enumParam) {
-         \t   %defaultFieldExpression
+         \tstatic void setUart%(n)Clock(%paramType %paramName) {
+         \t   %fieldAssignment
          \t}
 
          \t/**
@@ -443,7 +443,7 @@
          \t */
          \tstatic uint32_t getUart%(n)Clock() {
          \t
-         \t   switch(%defaultMaskingExpression) {
+         \t   switch(%maskingExpression) {
          \t      default:
          %body
          \t   }
@@ -708,10 +708,10 @@ $(clockInit_description)
             \t/**
             \t * Set %description
             \t *
-            \t * @param %enumParam %tooltip
+            \t * @param %paramName %tooltip
             \t */
-            \tstatic void setFtm%(ftm)Flt%(flt)(%enumClass %enumParam) {
-            \t   %defaultFieldExpression
+            \tstatic void setFtm%(ftm)Flt%(flt)(%paramType %paramName) {
+            \t   %fieldAssignment
             \t}\n\n
          ]]></clockCodeTemplate>
       </for>
@@ -724,10 +724,10 @@ $(clockInit_description)
             \t/**
             \t * Set %description
             \t *
-            \t * @param %enumParam %tooltip
+            \t * @param %paramName %tooltip
             \t */
-            \tstatic void setFtm%(ftm)Ch%(ch)Src(%enumClass %enumParam) {
-            \t   %defaultFieldExpression
+            \tstatic void setFtm%(ftm)Ch%(ch)Src(%paramType %paramName) {
+            \t   %fieldAssignment
             \t}\n\n
          ]]></clockCodeTemplate>
       </for>
@@ -739,10 +739,10 @@ $(clockInit_description)
          \t/**
          \t * Set %description
          \t *
-         \t * @param %enumParam %tooltip
+         \t * @param %paramName %tooltip
          \t */
-         \tstatic void setFtm%(ftm)ClkSel(%enumClass %enumParam) {
-         \t   %defaultFieldExpression
+         \tstatic void setFtm%(ftm)ClkSel(%paramType %paramName) {
+         \t   %fieldAssignment
          \t}\n\n
       ]]></clockCodeTemplate>
    </for>
@@ -754,10 +754,10 @@ $(clockInit_description)
             \t/**
             \t * Set %description
             \t *
-            \t * @param %enumParam %tooltip
+            \t * @param %paramName %tooltip
             \t */
-            \tstatic void setFtm%(ftm)Trg%(trg)Src(%enumClass %enumParam) {
-            \t   %defaultFieldExpression
+            \tstatic void setFtm%(ftm)Trg%(trg)Src(%paramType %paramName) {
+            \t   %fieldAssignment
             \t}\n\n
          ]]></clockCodeTemplate>
       </for>
@@ -769,13 +769,13 @@ $(clockInit_description)
          \t/**
          \t * Set %description
          \t *
-         \t * @param %enumParam %tooltip
+         \t * @param %paramName %tooltip
          \t *
          \t * @note The selected pin must also be configured for the TPM external clock function
          \t * through the appropriate pin control register in the port control module
          \t */
-         \tstatic void setTpm%(tpm)ExternalClockInput(%enumClass %enumParam) {
-         \t   %defaultFieldExpression
+         \tstatic void setTpm%(tpm)ExternalClockInput(%paramType %paramName) {
+         \t   %fieldAssignment
          \t}\n\n
       ]]></clockCodeTemplate>
    </for>
@@ -787,13 +787,13 @@ $(clockInit_description)
             \t/**
             \t * Set %description
             \t *
-            \t * @param %enumParam %tooltip
+            \t * @param %paramName %tooltip
             \t *
             \t * @note The selected pin must also be configured for the TPM external clock function
             \t * through the appropriate pin control register in the port control module
             \t */
-            \tstatic void setTpm%(tpm)Ch%(ch)InputCaptureSource(%enumClass %enumParam) {
-            \t   %defaultFieldExpression
+            \tstatic void setTpm%(tpm)Ch%(ch)InputCaptureSource(%paramType %paramName) {
+            \t   %fieldAssignment
             \t}\n\n
          ]]></clockCodeTemplate>
       </for>
@@ -881,10 +881,10 @@ $(%(name)Init_description)
             \t    * @tparam   Types
             \t    * @param    rest
             \t    *
-            \t    * @param %enumParam %tooltip
+            \t    * @param %paramName %tooltip
             \t    */
             \t      template <typename... Types>
-            \t      constexpr %(Name)Init(%enumClass %enumParam, Types... rest) : %(Name)Init(rest...) {
+            \t      constexpr %(Name)Init(%paramType %paramName, Types... rest) : %(Name)Init(rest...) {
             \t         %registerName = (%registerName & ~%mask) | %paramExpression;
             \t   }\n\n
             ]]></setTemplate>
@@ -905,7 +905,7 @@ $(%(name)Init_description)
             \t */
             \tstatic void configure%(Name)(
             %params) {
-            \t   %defaultFieldExpression
+            \t   %fieldAssignment
             \t}\n\n
          ]]></setTemplate>
 
@@ -914,10 +914,10 @@ $(%(name)Init_description)
             \t/**
             \t * Set %description
             \t *
-            \t * @param %enumParam %tooltip
+            \t * @param %paramName %tooltip
             \t */
-            \tstatic void set%(Name)Drive(%enumClass %enumParam) {
-            \t   %defaultFieldExpression
+            \tstatic void set%(Name)Drive(%paramType %paramName) {
+            \t   %fieldAssignment
             \t}\n\n
          ]]></clockCodeTemplate>
 
@@ -926,10 +926,10 @@ $(%(name)Init_description)
             \t/**
             \t * Set %description
             \t *
-            \t * @param %enumParam %tooltip
+            \t * @param %paramName %tooltip
             \t */
-            \tstatic void set%(Name)RxSrc(%enumClass %enumParam) {
-            \t   %defaultFieldExpression
+            \tstatic void set%(Name)RxSrc(%paramType %paramName) {
+            \t   %fieldAssignment
             \t}\n\n
          ]]></clockCodeTemplate>
 
@@ -938,10 +938,10 @@ $(%(name)Init_description)
             \t/**
             \t * Set %description
             \t *
-            \t * @param %enumParam %tooltip
+            \t * @param %paramName %tooltip
             \t */
-            \tstatic void set%(Name)TxSrc(%enumClass %enumParam) {
-            \t   %defaultFieldExpression
+            \tstatic void set%(Name)TxSrc(%paramType %paramName) {
+            \t   %fieldAssignment
             \t}\n\n
          ]]></clockCodeTemplate>
       </for>
@@ -1153,10 +1153,10 @@ $(Adc%(p)Init_description)
             \t/**
             \t * Set %description
             \t *
-            \t * @param %enumParam %tooltip
+            \t * @param %paramName %tooltip
             \t */
-            \tstatic void setFtm%(p)Ch%(ch)OutputSrc(%enumClass %enumParam) {
-            \t   %defaultFieldExpression
+            \tstatic void setFtm%(p)Ch%(ch)OutputSrc(%paramType %paramName) {
+            \t   %fieldAssignment
             \t}\n\n
          ]]></clockCodeTemplate>
       </for>
@@ -1169,10 +1169,10 @@ $(Adc%(p)Init_description)
       \t *
       \t * %tooltip
       \t *
-      \t * @param %enumParam Mask of bits made up from %enumClass values
+      \t * @param %paramName Mask of bits made up from %paramType values
       \t */
-      \tstatic void setFtmSyncBits(uint32_t %enumParam) {
-      \t   sim->SOPT8 = sim->SOPT8 | %enumParam;
+      \tstatic void setFtmSyncBits(uint32_t %paramName) {
+      \t   sim->SOPT8 = sim->SOPT8 | %paramName;
       \t}
 
       \t/**
@@ -1180,10 +1180,10 @@ $(Adc%(p)Init_description)
       \t *
       \t * %tooltip
       \t *
-      \t * @param %enumParam Mask of bits made up from %enumClass values
+      \t * @param %paramName Mask of bits made up from %paramType values
       \t */
-      \tstatic void clearFtmSyncBits(uint32_t %enumParam) {
-      \t   sim->SOPT8 = sim->SOPT8 & ~%enumParam;
+      \tstatic void clearFtmSyncBits(uint32_t %paramName) {
+      \t   sim->SOPT8 = sim->SOPT8 & ~%paramName;
       \t}
 
       \t/**
@@ -1206,10 +1206,10 @@ $(Adc%(p)Init_description)
             \t/**
             \t * Set %description
             \t *
-            \t * @param %enumParam %tooltip
+            \t * @param %paramName %tooltip
             \t */
-            \tstatic void setTpm%(p)%(Fn)(%enumClass %enumParam) {
-            \t   %defaultFieldExpression
+            \tstatic void setTpm%(p)%(Fn)(%paramType %paramName) {
+            \t   %fieldAssignment
             \t}\n\n
          ]]></clockCodeTemplate>
       </for>
@@ -1223,16 +1223,16 @@ $(Adc%(p)Init_description)
       \t *
       \t * If the internal clock is selected then the clock divider will be recalculated
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic ErrorCode setUsbFullSpeedClock(%enumClass %enumParam) {
+      \tstatic ErrorCode setUsbFullSpeedClock(%paramType %paramName) {
       \t   ErrorCode rc = E_NO_ERROR;
       \t
       \t   // The USB interface must be disabled for clock changes to have effect
       \t   sim->SCGC4 = sim->SCGC4 & ~SIM_SCGC4_USBOTG_MASK;
       \t
       \t   // Set clock source
-      \t   %defaultFieldExpression
+      \t   %fieldAssignment
       \t\n
    ]]></clockCodeTemplate>
    <template variables="sim_clkdiv2_usb[]" ><![CDATA[
@@ -1300,9 +1300,9 @@ $(Adc%(p)Init_description)
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setPeripheralClockDivider(%enumClass %enumParam) {
+      \tstatic void setPeripheralClockDivider(%paramType %paramName) {
       \t   // Must disable clock to TPMs, LPUARTs and FLEXIO before changing clock divider
       \t   uint32_t scgc2 = sim->SCGC2;
       \t   sim->SCGC2   = 0;

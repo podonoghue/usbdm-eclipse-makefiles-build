@@ -29,7 +29,7 @@
     * Template substitutions
     *
     * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
     * %variable[index]                Variable name /ADC0/adc_sc2_acfe
     * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
     * %description[index]             Description from controlVar e.g. Compare Function Enable
@@ -39,12 +39,12 @@
     * %params                         Formatted parameter list for function
     * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
     * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %enumClass[index]               As for %paramType
-    * %enumParam[index]               As for %paramName
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
     * %variable[index]                Variable name from condition
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
@@ -68,7 +68,7 @@
    />
    <binaryOption key="adc_sc1_aien" condition="adc_sc1_aien_present"
       enabledBy="irqHandlingMethod"
-      enumStem="AdcInterrupt"
+      typeName="AdcInterrupt"
       description="Conversion Complete Interrupt" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
       <choice name="Enabled"     value="1" enum="Enabled"/>
@@ -76,7 +76,7 @@
 
    <binaryOption key="adc_sc1_adco" condition="adc_sc1_adco_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="AdcContinuous"
+      typeName="AdcContinuous"
       toolTip="Selects between single and multiple conversions.\n
                Conversions are triggered by a write to the ADC_SC1 when software triggered operation is selected,\n
                or following assertion of ADHWT when hardware triggered operation is selected.\n
@@ -88,7 +88,7 @@
 
    <choiceOption key="adc_sc1_adch" condition="adc_sc1_adch_present"
       hidden="true"
-      enumStem="AdcChannelNum"
+      typeName="AdcChannelNum"
       description="Input Channel"
       toolTip="Channel to modify" >
       <choice name="AD0"                 value="0" enum="Ad0"/>
@@ -119,7 +119,7 @@
 
    <binaryOption key="adc_sc2_adtrg" condition="adc_sc2_adtrg_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="AdcPretrigger"
+      typeName="AdcPretrigger"
       toolTip="Controls whether conversions are triggered by writes to ADC_SC1 (software) or assertion of ADHWT input (hardware)"
       description="Conversion Trigger Select" >
       <choice name="Software trigger"  value="0" enum="SoftwareTrigger"/>
@@ -128,7 +128,7 @@
 
    <choiceOption key="adc_sc2_refsel" condition="adc_sc2_refsel_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="AdcRefSel"
+      typeName="AdcRefSel"
       description="Voltage Reference Selection" >
       <choice name="VREFH and VREFL"  value="0" enum="VrefhAndVrefl"/>
       <choice name="VDDA and VSSA"    value="1" enum="VddaAndVssa"/>
@@ -137,7 +137,7 @@
 
    <choiceOption key="adc_sc2_compare" condition="adc_sc2_acfe_present&amp;&amp;adc_sc2_acfgt_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="AdcCompare"
+      typeName="AdcCompare"
       valueFormat="ADC_SC2_ACFE(%s),ADC_SC2_ACFGT(%s)"
       description="Compare Function Control"
       toolTip="Configures the ADC compare function">
@@ -155,14 +155,13 @@
       description="Compare Value"
       toolTip="Value compared against ADC conversion result"
       value="0"
-      defaultValue="0"
    />
 
    <!-- ************* SC3 ****************** -->
 
    <binaryOption key="adc_sc3_adlpc" condition="adc_sc3_adlpc_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="AdcPower"
+      typeName="AdcPower"
       toolTip="Controls trade-off between speed and power consumption"
       description="Low-Power Configuration" >
       <choice name="Normal"      value="0" enum="Normal"/>
@@ -171,7 +170,7 @@
 
    <choiceOption key="adc_sc3_adiv" condition="adc_sc3_adiv_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="AdcClockDivider"
+      typeName="AdcClockDivider"
       description="Clock Divide Select" >
       <choice name="Divide by 1"  value="0" enum="DivBy1"/>
       <choice name="Divide by 2"  value="1" enum="DivBy2"/>
@@ -181,7 +180,7 @@
 
    <binaryOption key="adc_sc3_adlsmp" condition="adc_sc3_adlsmp_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="AdcSample"
+      typeName="AdcSample"
       description="Sample Time Configuration" >
       <choice name="Short sample"  value="0" enum="Short"/>
       <choice name="Long sample"   value="1" enum="Long"/>
@@ -189,7 +188,7 @@
 
    <choiceOption key="adc_sc3_mode" condition="adc_sc3_mode_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="AdcResolution"
+      typeName="AdcResolution"
       description="ADC resolution" >
       <choice name="8-bit"       value="0" enum="8bit_se"/>
       <choice name="10-bit"      value="1" enum="10bit_se"/>
@@ -198,7 +197,7 @@
 
    <choiceOption key="adc_sc3_adiclk" condition="adc_sc3_adiclk_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="AdcClockSource"
+      typeName="AdcClockSource"
       description="Input Clock Select" >
       <choice name="Bus clock"                   value="0" enum="BusClock"     code="SystemBusClock" />
       <choice name="(Bus clock)/2"               value="1" enum="BusClockDiv2" code="SystemBusClock/2" />
@@ -210,7 +209,7 @@
 
    <binaryOption key="adc_sc4_htrgme" condition="adc_sc4_htrgme_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="AdcSc4Htrgme"
+      typeName="AdcSc4Htrgme"
       toolTip="This field enables hardware trigger multiple conversions in fifo mode"
       description="Hardware Trigger Multiple Conversion Enable" >
       <choice name="Single"      value="0" enum="Single"/>
@@ -219,7 +218,7 @@
 
    <binaryOption key="adc_sc4_ascane" condition="adc_sc4_ascane_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="AdcSc4Ascane"
+      typeName="AdcSc4Ascane"
       description="FIFO Scan Mode Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
       <choice name="Enabled"     value="1" enum="Enabled"/>
@@ -227,7 +226,7 @@
 
    <binaryOption key="adc_sc4_acfsel" condition="adc_sc4_acfsel_present"
       enabledBy="adc_sc4_afdep>0"
-      enumStem="AdcSc4Acfsel"
+      typeName="AdcSc4Acfsel"
       toolTip="If cleared, ADC will OR all of the compare triggers and set COCO if at least one trigger occurs. \n
                If set, ADC will AND all of compare triggers and set COCO only when all triggers have occurred"
       description="Compare function OR/AND selection." >
@@ -237,7 +236,7 @@
 
    <choiceOption key="adc_sc4_afdep" condition="adc_sc4_afdep_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="AdcSc4Afdep"
+      typeName="AdcSc4Afdep"
       description="FIFO Depth" >
       <choice name="FIFO disabled"  value="0" enum="FifoDisabled"/>
       <choice name="2-level FIFO"   value="1" enum="2LevelFifo"/>
@@ -254,7 +253,7 @@
    <choiceOption key="adc_sc5_hwtriggermask" condition="adc_sc5_htrgmaske_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
    valueFormat="ADC_SC5_HTRGMASKE(%s),ADC_SC5_HTRGMASKSEL(%s)"
-      enumStem="AdcHardwareTriggerMask"
+      typeName="AdcHardwareTriggerMask"
       toolTip="Control hardware trigger"
       description="Hardware Trigger Mask" >
       <choice name="Unmasked"                      value="0,0" enum="Unmasked"/>
@@ -270,7 +269,6 @@
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       typeName="AdcChannelMask"
       enumType="uint16_t"
-      valueFormat="AdcChannelMask(%s)"
       description="GPIO Pin Disable"
       toolTip="Bit mask controlling the GPIO function on the corresponding pins\n
                This is only necessary for Channels 0-15\n
@@ -349,7 +347,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}
          \t
          \t/**
@@ -457,7 +455,7 @@
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicValueExpression;
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
        \t\n
    ]]></initialValueTemplate>
 
@@ -595,7 +593,7 @@
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName0 = %symbolicValueExpression1;
+      \t   %paramType %registerName0 = %symbolicExpression1;
       \t\n
    ]]></initialValueTemplate>
 
@@ -830,10 +828,10 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setClockout(%enumClass %enumParam) {
-      \t   %defaultFieldExpression
+      \tstatic void setClockout(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}
       \t
       \t/**
@@ -841,9 +839,9 @@
       \t *
       \t * @return Clock frequency in Hz
       \t */
-      \tstatic uint32_t getClockFrequency(%enumClass %enumParam) {
+      \tstatic uint32_t getClockFrequency(%paramType %paramName) {
       \t
-      \t   switch(%enumParam) {
+      \t   switch(%paramName) {
       \t      default: return 0;
       %body
       \t   }
@@ -855,7 +853,7 @@
       \t * @return Input clock frequency as a uint32_t in Hz
       \t */
       \tstatic uint32_t getClockFrequency() {
-      \t   return getClockFrequency((%enumClass)(%defaultMaskingExpression));
+      \t   return getClockFrequency((%paramType)(%maskingExpression));
       \t}; \n\n
    ]]></clockCodeTemplate>
 

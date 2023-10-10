@@ -15,7 +15,7 @@
       ******************** Flash Controller  ********************
    -->
    <binaryOption key="mcm_placr_esfc" condition="mcm_placr_esfc_present"
-      enumStem="McmStallFlashController"
+      typeName="McmStallFlashController"
       description="Enable Stalling Flash Controller"
       toolTip="Enables stalling flash controller when flash is busy \n
       When software needs to access the flash memory while a flash memory resource is being manipulated \n
@@ -36,7 +36,7 @@
       \t/**
       \t * Set %description
       \t *
-      %comments
+      %paramDescription
       \t */
       \tstatic void setStallFlashController(%params) {
 
@@ -45,7 +45,7 @@
    ]]></setTemplate>
 
    <choiceOption key="mcm_placr_flash_speculation" condition="mcm_placr_dfcs_present||mcm_placr_efds_present"
-      enumStem="McmFlashSpeculation"
+      typeName="McmFlashSpeculation"
       valueFormat="MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)"
       description="Flash Controller Speculation Buffer"
       toolTip="Controls the operation of the Flash Controller Speculation Buffer"
@@ -61,7 +61,7 @@
       \t/**
       \t * Configure Flash Controller
       \t *
-      %comments
+      %paramDescription
       \t */
       \tstatic void setFlashControllerSpeculation(%params) {
 
@@ -70,7 +70,7 @@
    ]]></setTemplate>
 
    <choiceOption key="mcm_placr_flash_cache" condition="mcm_placr_dfcc_present||mcm_placr_dfcic_present||mcm_placr_dfcda_present"
-      enumStem="McmFlashCache"
+      typeName="McmFlashCache"
       valueFormat="MCM_PLACR_DFCC(%s),MCM_PLACR_DFCIC(%s),MCM_PLACR_DFCDA(%s)"
       description="Flash Controller Cache"
       toolTip="Controls the operation of the Flash Controller Cache"
@@ -87,7 +87,7 @@
       \t/**
       \t * Set %description
       \t *
-      %comments
+      %paramDescription
       \t */
       \tstatic void setFlashControllerCache(%params) {
 
@@ -96,7 +96,7 @@
    ]]></setTemplate>
 
    <binaryOption key="mcm_placr_cfcc" condition="mcm_placr_cfcc_present"
-      enumStem="McmFlashControllerCache"
+      typeName="McmFlashControllerCache"
       description="Clear Flash Controller Cache"
       toolTip="Write to clear flash controller cache"
       >
@@ -123,7 +123,7 @@
       \t/**
       \t * Configure Flash Controller
       \t *
-      %comments
+      %paramDescription
       \t */
       \tstatic void configureFlashController(
       %params) {
@@ -211,12 +211,12 @@
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
-         \t    * @param %enumParam %description
+         \t    * @param %paramName %description
          \t    */
          \t   template <typename... Types>
-         \t   constexpr FlashInit(%enumClass %enumParam, Types... rest) : FlashInit(rest...)  {
+         \t   constexpr FlashInit(%paramType %paramName, Types... rest) : FlashInit(rest...)  {
          \t
-         \t      %registerName = (%registerName&~%mask) | %enumParam;
+         \t      %registerName = (%registerName&~%mask) | %paramName;
          \t   }\n\n
       ]]></setTemplate>
    </for>
@@ -254,7 +254,7 @@
       ******************** Bus arbitration ********************
    -->
    <binaryOption key="mcm_placr_arb" condition="mcm_placr_arb_present"
-      enumStem="McmArbitration"
+      typeName="McmArbitration"
       description="Arbitration select for the crossbar masters"
       toolTip="Arbitration select for the crossbar masters"
       >
@@ -268,11 +268,11 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setCrossbarArbitration(%enumClass %enumParam) {
+      \tstatic void setCrossbarArbitration(%paramType %paramName) {
       \t
-      \t   %defaultClockExpression
+      \t   %fieldAssignment
       \t}\n\n
    ]]></setTemplate>
 
@@ -280,7 +280,7 @@
       ******************** Compute Mode ********************
    -->
    <choiceOption key="mcm_cpo_request" condition="mcm_cpo_cporeq_present||mcm_cpo_cpowoi_present"
-      enumStem="McmComputeOnlyMode"
+      typeName="McmComputeOnlyMode"
       valueFormat="MCM_CPO_CPOREQ(%s),MCM_CPO_CPOWOI(%s)"
       description="Request Compute Operation (with Wake on interrupt)"
       toolTip="Request for Compute Operation with optional wake-on-interrupt"
@@ -307,7 +307,7 @@
       \t/**
       \t * Set %description
       \t *
-      %comments
+      %paramDescription
       \t */
       \tstatic void enterComputeMode(%params) {
       \t
@@ -319,7 +319,7 @@
    ]]></setTemplate>
 
    <binaryOption key="mcm_cpo_cpoack" condition="mcm_cpo_cpoack_present"
-      enumStem="McmCpoAcknowledge"
+      typeName="McmCpoAcknowledge"
       description="Acknowledge entry to Computer Operation mode"
       toolTip="Acknowledge entry to Computer Operation mode"
       >
@@ -330,7 +330,7 @@
       ******************** Floating point exceptions ********************
    -->
    <binaryOption key="mcm_iscr_fidce" condition="mcm_iscr_fidce_present"
-      enumStem="McmFpuDenormalIrq"
+      typeName="McmFpuDenormalIrq"
       description="FPU input de-normalized interrupt"
       toolTip=""
       >
@@ -339,7 +339,7 @@
    </binaryOption>
 
    <binaryOption key="mcm_iscr_fixce" condition="mcm_iscr_fixce_present"
-      enumStem="McmFpuInexactIrq"
+      typeName="McmFpuInexactIrq"
       description="FPU inexact interrupt"
       toolTip=""
       >
@@ -348,7 +348,7 @@
    </binaryOption>
 
    <binaryOption key="mcm_iscr_fufce" condition="mcm_iscr_fufc_present"
-      enumStem="McmFpuUnderflowIrq"
+      typeName="McmFpuUnderflowIrq"
       description="FPU underflow interrupt"
       toolTip=""
       >
@@ -357,7 +357,7 @@
    </binaryOption>
 
    <binaryOption key="mcm_iscr_fofce" condition="mcm_iscr_fofc_present"
-      enumStem="McmFpuOverflowIrq"
+      typeName="McmFpuOverflowIrq"
       description="FPU overflow interrupt"
       toolTip=""
       >
@@ -366,7 +366,7 @@
    </binaryOption>
 
    <binaryOption key="mcm_iscr_fdzce" condition="mcm_iscr_fdzce_present"
-      enumStem="McmFpuDivideByZeroIrq"
+      typeName="McmFpuDivideByZeroIrq"
       description="FPU divide-by-zero interrupt"
       toolTip=""
       >
@@ -375,7 +375,7 @@
    </binaryOption>
 
    <binaryOption key="mcm_iscr_fioce" condition="mcm_iscr_fioce_present"
-      enumStem="McmFpuInvalidOperationIrq"
+      typeName="McmFpuInvalidOperationIrq"
       description="FPU invalid-operation interrupt"
       toolTip=""
       >
@@ -391,18 +391,18 @@
       \t/**
       \t * Enable Floating point interrupts
       \t *
-      %comments
+      %paramDescription
       \t */
-      \tstatic void enable%enumClass() {
+      \tstatic void enable%paramType() {
       \t   %register = %register|$(%variable.enum[1]);
       \t}
       \t
       \t/**
       \t * Disable %description
       \t *
-      %comments
+      %paramDescription
       \t */
-      \tstatic void disable%enumClass() {
+      \tstatic void disable%paramType() {
       \t   %register = %register&~$(%variable.enum[1]);
       \t}\n
    ]]></setTemplate>
@@ -513,12 +513,12 @@
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
-         \t    * @param %enumParam %description
+         \t    * @param %paramName %description
          \t    */
          \t   template <typename... Types>
-         \t   constexpr FloatingPointIrqInit(%enumClass %enumParam, Types... rest) : FloatingPointIrqInit(rest...)  {
+         \t   constexpr FloatingPointIrqInit(%paramType %paramName, Types... rest) : FloatingPointIrqInit(rest...)  {
          \t
-         \t      %registerName = (%registerName&~%mask) | %enumParam;
+         \t      %registerName = (%registerName&~%mask) | %paramName;
          \t   }\n\n
       ]]></setTemplate>
    </for>
@@ -546,7 +546,7 @@
    -->
 
    <binaryOption key="mcm_cr_sramlwp" condition="mcm_cr_sramlwp_present"
-      enumStem="McmSramLowerAccess"
+      typeName="McmSramLowerAccess"
       description="SRAM Lower access control (write protect)"
       toolTip="When protected, writes to SRAM array generates a bus error"
       >
@@ -555,7 +555,7 @@
    </binaryOption>
 
    <choiceOption key="mcm_cr_sramlap" condition="mcm_cr_sramlap_present"
-      enumStem="McmSramLowerArbitration"
+      typeName="McmSramLowerArbitration"
       description="SRAM Lower arbitration priority"
       toolTip="Defines the arbitration scheme and priority for the processor and SRAM backdoor accesses to the SRAM array"
       >
@@ -567,7 +567,7 @@
 
 
    <binaryOption key="mcm_cr_sramuwp" condition="mcm_cr_sramuwp_present"
-      enumStem="McmSramUpperAccess"
+      typeName="McmSramUpperAccess"
       description="SRAM Upper access control (write protect)"
       toolTip="When protected, writes to SRAM array generates a bus error"
       >
@@ -576,7 +576,7 @@
    </binaryOption>
 
    <choiceOption key="mcm_cr_sramuap" condition="mcm_cr_sramuap_present"
-      enumStem="McmSramUpperArbitration"
+      typeName="McmSramUpperArbitration"
       description="SRAM Upper arbitration priority"
       toolTip="Defines the arbitration scheme and priority for the processor and SRAM backdoor accesses to the SRAM array"
       >
@@ -662,12 +662,12 @@
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
-         \t    * @param %enumParam %description
+         \t    * @param %paramName %description
          \t    */
          \t   template <typename... Types>
-         \t   constexpr SramAccessInit(%enumClass %enumParam, Types... rest) : SramAccessInit(rest...)  {
+         \t   constexpr SramAccessInit(%paramType %paramName, Types... rest) : SramAccessInit(rest...)  {
          \t
-         \t      %registerName = (%registerName&~%mask) | %enumParam;
+         \t      %registerName = (%registerName&~%mask) | %paramName;
          \t   }\n\n
       ]]></setTemplate>
    </for>

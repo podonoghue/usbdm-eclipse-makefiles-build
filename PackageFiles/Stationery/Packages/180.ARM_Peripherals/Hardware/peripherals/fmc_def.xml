@@ -16,7 +16,7 @@
    -->   
    <for keys="n:m" values ="0:0;1:1;01:0;23:1" >
       <choiceOption key="fmc_pfb%(n)cr_flash_speculation" condition="fmc_pfb%(n)cr_b%(m)dpe_present||fmc_pfb%(n)cr_b%(m)ipe_present"
-         enumStem="FmcFlashSpeculation"
+         typeName="FmcFlashSpeculation"
          valueFormat="FMC_PFB%(n)CR_B%(m)DPE(%s),FMC_PFB%(n)CR_B%(m)IPE(%s)"
          description="Bank %(n) Flash Controller Speculation Buffer"
          toolTip="Controls the operation of the Speculation Buffer for each Flash Controller bank"
@@ -33,7 +33,7 @@
          \t/**
          \t * Set %description
          \t *
-         %comments
+         %paramDescription
          \t */
          \tstatic void setFlashBank%(n)Speculation(%params) {
          
@@ -42,7 +42,7 @@
       ]]></setTemplate>
             
       <choiceOption key="fmc_pfb%(n)cr_flash_cache" condition="fmc_pfb%(n)cr_b%(m)dce_present||fmc_pfb%(n)cr_b%(m)ice_present"
-         enumStem="FmcFlashCache"
+         typeName="FmcFlashCache"
          valueFormat="FMC_PFB%(n)CR_B%(m)DCE(%s),FMC_PFB%(n)CR_B%(m)ICE(%s)"
          description="Bank %(n) Flash Controller Cache"
          toolTip="Controls the operation of the Cache for each Flash Controller bank"
@@ -59,7 +59,7 @@
          \t/**
          \t * Set %description
          \t *
-         %comments
+         %paramDescription
          \t */
          \tstatic void setFlashBank%(n)Cache(%params) {
          
@@ -133,12 +133,12 @@
             \t    *
             \t    * @tparam   Types
             \t    * @param    rest
-            \t    * @param %enumParam %description
+            \t    * @param %paramName %description
             \t    */
             \t   template <typename... Types>
-            \t   constexpr FlashBank%(n)Init(%enumClass %enumParam, Types... rest) : FlashBank%(n)Init(rest...)  {
+            \t   constexpr FlashBank%(n)Init(%paramType %paramName, Types... rest) : FlashBank%(n)Init(rest...)  {
             \t   
-            \t      %registerName = (%registerName&~%mask) | %enumParam;
+            \t      %registerName = (%registerName&~%mask) | %paramName;
             \t   }\n\n
       ]]></setTemplate>
       </for>

@@ -17,7 +17,7 @@
    <choiceOption key="/PCR/nvic_irqLevel"
       hidden="true"
       templateKey="/PCR/nvicPriority"
-      enumStem="NvicPriority"
+      typeName="NvicPriority"
       enumType="int8_t"
       valueFormat="%s"
       disabledValue="Not Installed"

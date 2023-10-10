@@ -15,7 +15,7 @@
    <choiceOption key="pit_channelNumber"
       hidden="true"
       description="Pit Channel Number"
-      enumStem="PitChannelNum"
+      typeName="PitChannelNum"
       valueFormat="%s"
       enumType="uint8_t"
       toolTip="Selected PIT channel">
@@ -48,7 +48,7 @@
       />
 
    <binaryOption key="pit_mcr_frz" condition="pit_mcr_frz_present"
-      enumStem="PitDebugMode"
+      typeName="PitDebugMode"
       description="Freeze in debug mode"
       toolTip="Controls whether the timer continues to run in debug mode">
       <choice value="0" name="Timers continue to run in debug mode" enum="Run"  />
@@ -59,7 +59,7 @@
       <stringOption key="PIT Channel %(ch)" derived="true" value="----- %(ch) -----"/>
 
       <binaryOption key="pit_tctrl_ten[%(ch)]"  condition="pit_tctrl_tie_present"
-         enumStem="PitChannelEnable"
+         typeName="PitChannelEnable"
          description="Timer Channel Enable"
          toolTip="Allows operation of this channel">
          <choice value="0" name="Channel disabled" enum="Disabled" isDefault="true"/>
@@ -94,7 +94,7 @@
 
       <binaryOption key="pit_tctrl_chn[%(ch)]"  condition="pit_tctrl_chn_present &amp;&amp; (%(ch)>0)"
          enabledBy="pit_tctrl_ten[%(ch)]"
-         enumStem="PitChannelChain"
+         typeName="PitChannelChain"
          description="Chain with previous channel"
          toolTip="Controls whether the timer channels are chained to creater a larger counter">
          <choice value="0" name="Timers are not chained" enum="Disabled" isDefault="true"/>
@@ -103,7 +103,7 @@
 
       <binaryOption key="pit_tctrl_tie[%(ch)]"  condition="pit_tctrl_tie_present"
          enabledBy="pit_tctrl_ten[%(ch)] &amp;&amp;irqHandlingMethod"
-         enumStem="PitChannelIrq"
+         typeName="PitChannelIrq"
          description="Timer Interrupt Enable"
          toolTip="Allows interrupts from this channel">
          <choice value="0" name="Interrupts are disabled" enum="Disabled" isDefault="true"/>
@@ -181,21 +181,21 @@
       variables="pit_ldval_tsv[]"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = 0_ticks;\n\n
+      \t   %paramType %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm"
       variables="pit_period[]"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = 0_s;\n\n
+      \t   %paramType %registerName = 0_s;\n\n
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+      \t   %paramType %registerName = %paramType_Normal;\n\n
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm"
@@ -209,7 +209,7 @@
       variables="pit_channelNumber"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = PitChannelNum_None;\n\n
+      \t   %paramType %registerName = PitChannelNum_None;\n\n
    ]]></initialValueTemplate>
 
 <!--  Configure method -->
@@ -266,7 +266,7 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      this->%enumParam0 = %paramExpression;
+      \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
    ]]></constructorTemplate>
 
@@ -303,7 +303,7 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {

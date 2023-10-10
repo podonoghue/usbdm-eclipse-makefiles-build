@@ -8,7 +8,7 @@
       <aliasOption key="usb_clk_enable" optional="true" locked="false" />
       
       <choiceOption key="usb_clk_tracking_mode" 
-         enumStem="UsbIrc48mClockTrackingMode"
+         typeName="UsbIrc48mClockTrackingMode"
          valueFormat="(%s)"
          description="IRC48M mode for USB operation"
          toolTip="This controls the mode of clock recovery when IRC48M is used as a crystal-less USB clock\n
@@ -22,7 +22,7 @@
       </choiceOption>
       
       <binaryOption key="usb_clk_recover_ctrl_restart_ifrtrim_en" 
-         enumStem="UsbIrc48mClockResetTrim"
+         typeName="UsbIrc48mClockResetTrim"
          description="Restart from IFR trim value"
          toolTip="IRC48 has a default trim fine value whose default value is factory trimmed (the IFR trim value)\n
                   The clock recover block tracks the accuracy of the clock 48Mhz and keeps updating the trim fine value accordingly\n
@@ -35,15 +35,15 @@
    <template variables="usb_clk_enable"><![CDATA[
       \t//! 
       \tstatic constexpr uint32_t usb_clk_recover_irc_en =
-      \t   %symbolicValueExpression; // %shortDescription \n\n
+      \t   %symbolicExpression; // %shortDescription \n\n
    ]]></template>
 
    <template><![CDATA[
       \t//! 
       \tstatic constexpr uint32_t usb_clk_recover_ctrl = \n
    ]]></template>
-   <template variables="usb_clk_tracking_mode"      ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription    \n ]]></template>
-   <template variables="usb_clk_recover_ctrl_restart_ifrtrim_en"    ><![CDATA[ \t   %symbolicValueExpression | // %shortDescription    \n ]]></template>
+   <template variables="usb_clk_tracking_mode"      ><![CDATA[ \t   %symbolicExpression | // %shortDescription    \n ]]></template>
+   <template variables="usb_clk_recover_ctrl_restart_ifrtrim_en"    ><![CDATA[ \t   %symbolicExpression | // %shortDescription    \n ]]></template>
    <template><![CDATA[
       \t   0;\n\n
    ]]></template>

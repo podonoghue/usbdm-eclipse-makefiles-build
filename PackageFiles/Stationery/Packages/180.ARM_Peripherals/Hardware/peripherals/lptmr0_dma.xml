@@ -23,7 +23,7 @@
    ]]></template>
    
    <choiceOption key="lptmr_psr_pcs" description="Clock Source"
-      enumStem="LptmrClockSel"
+      typeName="LptmrClockSel"
       toolTip="Low Power Timer clock source">
       <choice value="0" name="SIRC Div 2 Internal Reference Clock (SIRCDIV2_CLK)"  enum="SircDiv2clk"  />
       <choice value="1" name="Low power oscillator (LPO - 1kHz)"                   enum="Lpoclk"   isDefault="true" />
@@ -34,7 +34,7 @@
    <choiceOption key="lptmr_psr_prescaler" 
       description="Prescaler Value" 
       valueFormat="LPTMR_PSR_PBYP(%s),LPTMR_PSR_PRESCALE(%s)"
-      enumStem="LptmrPrescale"
+      typeName="LptmrPrescale"
       toolTip="Configures the size of the Prescaler in Time Counter mode or\n
          width of the glitch filter in Pulse Counter mode">
       <choice value="1,0"  name="Prescaler = 1, no glitch filter"              enum="Direct_NoFilter"    />

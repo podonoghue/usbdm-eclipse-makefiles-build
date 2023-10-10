@@ -9,7 +9,7 @@
 
    <binaryOption key="usbphy_ctrl_sftrst"
       hidden="true"
-      enumStem="UsbphyReset"
+      typeName="UsbphyReset"
       description="Soft-reset of PHY registers"
       toolTip="Soft-reset the USBPHY_PWD, USBPHY_TX, USBPHY_RX, and USBPHY_CTRL registers">
       <choice value="1" name="Hold in reset"       enum="HoldInReset" isDefault="true" />
@@ -18,7 +18,7 @@
 
    <binaryOption key="usbphy_ctrl_clkgate"
       hidden="true"
-      enumStem="UsbphyUtmiClkEn"
+      typeName="UsbphyUtmiClkEn"
       description="UTMI clock gate"
       toolTip="Clock gate for UTMI\n
                Configuration state is kept while gated\n
@@ -31,7 +31,7 @@
    <binaryOption key="usbphy_pll_sic_pll_power"
       hidden="true"
       register="pll_sic"
-      enumStem="UsbPllPwr"
+      typeName="UsbPllPwr"
       description="Power up the USB PLL"
       toolTip="Power control for the USB PLL">
       <choice value="1" name="Disabled" enum="Disabled" isDefault="true" />
@@ -45,7 +45,7 @@
       register="pll_sic"
       locked="true"
       derived="true"
-      enumStem="UsbPllInputClkFrq"
+      typeName="UsbPllInputClkFrq"
       description="USB PLL feedback loop divider"
       toolTip="The USB PLL produces a 480MHz clock from the input clock.\n
                This field sets the PLL feedback divider appropriately.\n
@@ -86,7 +86,7 @@
 
          <binaryOption key="usbphy_pll_sic_pll_enable[%(n)]"
             enabledBy="usbpllPreconditionsMet[%(n)], Preconditions not met"
-            enumStem="UsbPllClock"
+            typeName="UsbPllClock"
             description="Enable clock output"
             toolTip="Enables the clock output from the USB PLL[%(n)]">
             <choice value="0" enum="Disabled" name="Disabled" />
@@ -95,7 +95,7 @@
 
          <binaryOption key="usbphy_pll_sic_pll_en_usb_clks[%(n)]"
             enabledBy="usbpllPreconditionsMet[%(n)], Preconditions not met"
-            enumStem="UsbPllUsbClock"
+            typeName="UsbPllUsbClock"
             description="Enable USB clock output"
             toolTip="Enables the USB clock output from the USB PHY PLL[%(n)]">
             <choice value="0" enum="Disabled" name="Disabled" />
@@ -105,7 +105,7 @@
          <choiceOption key="usbphy_anactrl_pfd_frac[%(n)]"
             enabledBy="usbpllPreconditionsMet[%(n)], Preconditions not met"
             target="internal_pfd_clock_frequency[%(n)]"
-            enumStem="UsbPfdClkFreq"
+            typeName="UsbPfdClkFreq"
             description="PFD clock [USBPFDCLK] divider"
             toolTip="USBPFD (Phase Fractional Divider) input/output ratio">
             <choice value="18"  name="/18 = 400.00 MHz" enum="F400000000" ref="pfd_pll_frequency" />
@@ -140,7 +140,7 @@
          <choiceOption key="usbphy_anactrl_pfd_clk_sel[%(n)]"
             enabledBy="usbpllPreconditionsMet[%(n)], Preconditions not met"
             target="/SIM/usb1pfdclk_Clock[%(n)]"
-            enumStem="UsbPfdClkSrc"
+            typeName="UsbPfdClkSrc"
             description="PFD clock [USBPFDCLK] output selection"
             toolTip="Clock to output as PFD output clock [USBPFDCLK]">
             <choice value="0b00" name="Input clock"  enum="Xtal"     ref="/OSC0/oscer_clock"                      />
@@ -226,15 +226,15 @@
       \t *
       \t * %tooltip
       \t *
-      \t * @param %enumParam
+      \t * @param %paramName
       \t */
-      \tstatic void setPllInputFrequency(%enumClass %enumParam) {
+      \tstatic void setPllInputFrequency(%paramType %paramName) {
       \t   %register_CLR = %mask;
-      \t   %register_SET = %enumParam;
+      \t   %register_SET = %paramName;
       \t}
 
       \t /// %description
-      \t static constexpr %enumClass %enumParam_default = %symbolicValueExpression; // %shortDescription \n\n
+      \t static constexpr %paramType %paramName_default = %symbolicExpression; // %shortDescription \n\n
    ]]></clockCodeTemplate>
 
    <clockCodeTemplate variable="usbphy_anactrl_pfd_frac[]"
@@ -242,15 +242,15 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setPfdClkFrequency(%enumClass %enumParam) {
+      \tstatic void setPfdClkFrequency(%paramType %paramName) {
       \t   %register_CLR = %mask;
-      \t   %register_SET = %enumParam;
+      \t   %register_SET = %paramName;
       \t}
 
       \t /// %description
-      \t static constexpr %enumClass %enumParam_default = %symbolicValueExpression; // %shortDescription\n\n
+      \t static constexpr %paramType %paramName_default = %symbolicExpression; // %shortDescription\n\n
    ]]></clockCodeTemplate>
 
    <clockCodeTemplate variable="usbphy_anactrl_pfd_clk_sel[]"
@@ -258,15 +258,15 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setPfdClockSrc(%enumClass %enumParam) {
+      \tstatic void setPfdClockSrc(%paramType %paramName) {
       \t   %register_CLR = %mask;
-      \t   %register_SET = %enumParam;
+      \t   %register_SET = %paramName;
       \t}
 
       \t /// %description
-      \t static constexpr %enumClass %enumParam_default = %symbolicValueExpression; // %shortDescription\n\n
+      \t static constexpr %paramType %paramName_default = %symbolicExpression; // %shortDescription\n\n
    ]]></clockCodeTemplate>
 
    <setTemplate variables="usbphy_anactrl_pfd_clk_sel[],usbphy_anactrl_pfd_frac[]"
@@ -274,7 +274,7 @@
       \t/**
       \t * %description0
       \t *
-      %comments
+      %paramDescription
       \t */
       \tstatic void setPfdClk(
       %params) {

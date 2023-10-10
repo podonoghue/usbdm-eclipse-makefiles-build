@@ -28,7 +28,7 @@ Devices using this peripheral:
 
    <choiceOption key="defaultBaudRate"
       valueFormat="%s"
-      enumStem="UartBaudRate"
+      typeName="UartBaudRate"
       description="UART default baud rate"
       toolTip="Used by default UART setup for stdio">
       <choice value="110"     name="110"     enum="110"    />
@@ -49,7 +49,7 @@ Devices using this peripheral:
 
    <choiceOption key="uart_c2_tcie" condition="uart_c2_tcie_present"
       hidden="true"
-      enumStem="UartTxCompleteAction"
+      typeName="UartTxCompleteAction"
       description="Transmit complete action"
       toolTip="Enable interrupt on transmission complete">
       <choice value="0"   name="None"      enum="None"      />
@@ -70,7 +70,7 @@ Devices using this peripheral:
 
    <choiceOption key="uart_c2_ilie" condition="uart_c2_ilie_present"
       hidden="true"
-      enumStem="UartIdleLineDetectAction"
+      typeName="UartIdleLineDetectAction"
       description="Idle line detect sction"
       toolTip="Enable interrupt on tidele line detect">
       <choice value="0"   name="None"      enum="None"      />
@@ -92,7 +92,7 @@ Devices using this peripheral:
    <choiceOption key="uartTxEmptyAction" condition="!uart_c5_tdmas_present&amp;&amp;uart_c2_tie_present"
       hidden="true"
       valueFormat="UART_C2_TIE(%s)"
-      enumStem="UartTxEmptyAction"
+      typeName="UartTxEmptyAction"
       description="Transmit empty DMA/Interrupt action"
       toolTip="Enable transmit holding register empty DMA/Interrupt action">
       <choice value="0"   name="None"      enum="None"      />
@@ -102,7 +102,7 @@ Devices using this peripheral:
    <choiceOption key="uartTxEmptyAction" condition="uart_c5_tdmas_present&amp;&amp;uart_c2_tie_present"
       hidden="true"
       valueFormat="(UART_C5_TDMAS(%s)&lt;&lt;8),UART_C2_TIE(%s)"
-      enumStem="UartTxEmptyAction"
+      typeName="UartTxEmptyAction"
       description="Transmit empty DMA/Interrupt action"
       toolTip="Enable transmit holding register empty DMA/Interrupt action">
       <choice value="0,0"   name="None"      enum="None"      />
@@ -133,7 +133,7 @@ Devices using this peripheral:
    <choiceOption key="uartRxFullAction" condition="!uart_c5_rdmas_present&amp;&amp;uart_c2_rie_present"
       hidden="true"
       valueFormat="UART_C2_RIE(%s)"
-      enumStem="UartRxFullAction"
+      typeName="UartRxFullAction"
       description="Receive full interrupt action"
       toolTip="Enable receive buffer full interrupt action">
       <choice value="0"   name="None"      enum="None"      />
@@ -143,7 +143,7 @@ Devices using this peripheral:
    <choiceOption key="uartRxFullAction" condition="uart_c5_rdmas_present&amp;&amp;uart_c2_rie_present"
       hidden="true"
       valueFormat="(UART_C5_RDMAS(%s)&lt;&lt;8),UART_C2_RIE(%s)"
-      enumStem="UartRxFullAction"
+      typeName="UartRxFullAction"
       description="Receive full DMA/interrupt action"
       toolTip="Enable receive buffer full DMA/interrupt action">
       <choice value="0,0"   name="None"      enum="None"      />

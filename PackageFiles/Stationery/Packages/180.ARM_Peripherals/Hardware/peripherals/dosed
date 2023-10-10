@@ -4,14 +4,14 @@ HOME_DIR="$(dirname $(readlink -f $0))"
 echo "Working in "${HOME_DIR}""
 cd ${HOME_DIR}
 
-exit
+#exit
 
 echo starting
 rm -r new
 mkdir new
 
 for filename in *.xml; do
-   echo sed  's/constant=/locked=/g' "${filename}" "new/${filename}"
-   sed  's/constant=/locked=/g' "${filename}" >"new/${filename}"
+   echo sed  's/%enumParam/%paramName/g' "${filename}" "new/${filename}"
+   sed  's/%enumParam/%paramName/g' "${filename}" >"new/${filename}"
 done
 

@@ -29,7 +29,7 @@
     * Template substitutions
     *
     * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
     * %variable[index]                Variable name /ADC0/adc_sc2_acfe
     * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
     * %description[index]             Description from controlVar e.g. Compare Function Enable
@@ -39,12 +39,12 @@
     * %params                         Formatted parameter list for function
     * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
     * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %enumClass[index]               As for %paramType
-    * %enumParam[index]               As for %paramName
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
     * %variable[index]                Variable name from condition
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
@@ -59,7 +59,7 @@
 
    <binaryOption key="can_canctl0_rxfrm" condition="can_canctl0_rxfrm_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanRxFrameFlag"
+      typeName="CanRxFrameFlag"
       hidden="true"
       derived="true"
       toolTip="This bit is read and clear only.\n
@@ -71,7 +71,7 @@
 
    <binaryOption key="can_canctl0_cswai" condition="can_canctl0_cswai_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanStopInWait"
+      typeName="CanStopInWait"
       toolTip="This bit allows for lower power consumption in wait mode"
       description="CAN Stops in Wait Mode" >
       <choice name="Ignore wait mode"      value="0" enum="IgnoreWaitMode"/>
@@ -80,7 +80,7 @@
 
    <binaryOption key="can_canctl0_time" condition="can_canctl0_time_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanTimer"
+      typeName="CanTimer"
       toolTip="Enables an internal 16-bit wide free running timer which is clocked by the bit clock rate"
       description="Timer Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -89,7 +89,7 @@
 
    <binaryOption key="can_canctl0_wupe" condition="can_canctl0_wupe_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanWakeup"
+      typeName="CanWakeup"
       toolTip="Allows the MSCAN to restart from sleep mode or from power down mode when traffic detected on CAN"
       description="WakeUp Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -98,7 +98,7 @@
 
    <binaryOption key="can_canctl0_slprq" condition="can_canctl0_slprq_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanSleep"
+      typeName="CanSleep"
       toolTip="This bit requests the MSCAN to enter sleep mode"
       description="Sleep Mode Request" >
       <choice name="Normal mode"          value="0" enum="NormalMode"/>
@@ -107,7 +107,7 @@
 
    <binaryOption key="can_canctl0_initrq" condition="can_canctl0_initrq_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanInitialisationReq"
+      typeName="CanInitialisationReq"
       toolTip="When this bit is set by the CPU, the MSCAN skips to initialization mode.\n
                Any ongoing transmission or reception is aborted and synchronization to the CAN bus is lost.\n
                The module indicates entry to initialization mode by setting INITAK = 1"
@@ -120,7 +120,7 @@
 
    <binaryOption key="can_canctl1_cane" condition="can_canctl1_cane_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanEnable"
+      typeName="CanEnable"
       toolTip="Module enable"
       description="MSCAN Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -129,7 +129,7 @@
 
    <binaryOption key="can_canctl1_clksrc" condition="can_canctl1_clksrc_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanClockSource"
+      typeName="CanClockSource"
       toolTip="This bit defines the clock source for the MSCAN module"
       description="MSCAN Clock Source" >
       <choice name="Oscillator clock"  value="0" enum="OscillatorClock"/>
@@ -138,7 +138,7 @@
 
    <binaryOption key="can_canctl1_loopb" condition="can_canctl1_loopb_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanLoopback"
+      typeName="CanLoopback"
       toolTip="Allows the MSCAN to perform an internal loop-back test"
       description="Loop-back Self Test Mode" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -147,7 +147,7 @@
 
    <binaryOption key="can_canctl1_listen" condition="can_canctl1_listen_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanListen"
+      typeName="CanListen"
       toolTip="This bit configures the MSCAN as a CAN bus monitor"
       description="Listen Only Mode" >
       <choice name="Normal"            value="0" enum="Normal"/>
@@ -156,7 +156,7 @@
 
    <binaryOption key="can_canctl1_borm" condition="can_canctl1_borm_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanBusOffRecovery"
+      typeName="CanBusOffRecovery"
       toolTip="This bit configures the bus-off state recovery mode of the MSCAN\n
                See Bosch CAN 2.0A/B protocol specification"
       description="Bus-Off Recovery Mode" >
@@ -166,7 +166,7 @@
 
    <binaryOption key="can_canctl1_wupm" condition="can_canctl1_wupm_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanWakeUpMode"
+      typeName="CanWakeUpMode"
       toolTip="If WUPE in CANCTL0 is enabled, this bit defines whether the integrated low-pass filter is\n
                applied to protect the MSCAN from spurious wakeup\n
                If enabled, MSCAN wakes only on a dominant pulse on the CAN bus of length Twup"
@@ -179,7 +179,7 @@
 
    <choiceOption key="can_canbtr0_sjw" condition="can_canbtr0_sjw_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanJumpWidth"
+      typeName="CanJumpWidth"
       description="Synchronization Jump Width"
       toolTip="The synchronization jump width defines the maximum number of time quanta (Tq) clock cycles a bit can\n
                be shortened or lengthened to achieve resynchronization to data transitions on the CAN bus" >
@@ -203,7 +203,7 @@
 
    <binaryOption key="can_canbtr1_samp" condition="can_canbtr1_samp_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanCanbtr1Samp"
+      typeName="CanCanbtr1Samp"
       toolTip="This bit determines the number of CAN bus samples taken per bit time,\n
                For 3 samples, PHASE_SEG1 must be at least 2 time quanta (Tq)"
       description="Sampling" >
@@ -214,7 +214,7 @@
    <choiceOption key="can_canbtr1_tseg1" condition="can_canbtr1_tseg1_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumType="uint8_t"
-      enumStem="CanTimeSegment1"
+      typeName="CanTimeSegment1"
       description="Time Segment 1"
       toolTip="Time segments within the bit time fix the number of clock cycles per bit time and the location of the sample point.\n
                Time = N+1\n
@@ -238,7 +238,7 @@
    <choiceOption key="can_canbtr1_tseg2" condition="can_canbtr1_tseg2_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumType="uint8_t"
-      enumStem="CanTimeSegment2"
+      typeName="CanTimeSegment2"
       description="Time Segment 2"
       toolTip="Time segments within the bit time fix the number of clock cycles per bit time and the location of the sample point.\n
                Time = N+1">
@@ -256,7 +256,7 @@
 
    <binaryOption key="can_canrflg_wupif" condition="can_canrflg_wupif_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanCanrflgWupif"
+      typeName="CanCanrflgWupif"
       toolTip="If the MSCAN detects CAN bus activity while in sleep mode and CANTCTL0[WUPE] = 1, the module will\n
                set WUPIF. If not masked, a wake-up interrupt is pending while this flag is set"
       description="Wake-Up Interrupt Flag" >
@@ -266,7 +266,7 @@
 
    <binaryOption key="can_canrflg_cscif" condition="can_canrflg_cscif_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanCanrflgCscif"
+      typeName="CanCanrflgCscif"
       toolTip="This flag is set when the MSCAN changes its current CAN bus status due to the actual value of the\n
                transmit error counter (TEC) and the receive error counter (REC)"
       description="CAN Status Change Interrupt Flag" >
@@ -276,7 +276,7 @@
 
    <binaryOption key="can_canrflg_ovrif" condition="can_canrflg_ovrif_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanCanrflgOvrif"
+      typeName="CanCanrflgOvrif"
       toolTip="This flag is set when a data overrun condition occurs. If not masked, an error interrupt is pending while this
 flag is set"
       description="Overrun Interrupt Flag" >
@@ -286,7 +286,7 @@ flag is set"
 
    <binaryOption key="can_canrflg_rxf" condition="can_canrflg_rxf_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanCanrflgRxf"
+      typeName="CanCanrflgRxf"
       toolTip="RXF is set by the MSCAN when a new message is shifted in the receiver FIFO"
       description="Receive Buffer Full Flag" >
       <choice name="No new message"     value="0" enum="NoNewMessage"/>
@@ -297,7 +297,7 @@ flag is set"
 
    <binaryOption key="can_canrier_wupie" condition="can_canrier_wupie_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanCanrierWupie"
+      typeName="CanCanrierWupie"
       toolTip="WUPIE and WUPE must both be enabled if the recovery mechanism from stop or wait is required"
       description="WakeUp Interrupt Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -306,7 +306,7 @@ flag is set"
 
    <binaryOption key="can_canrier_cscie" condition="can_canrier_cscie_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanCanrierCscie"
+      typeName="CanCanrierCscie"
       description="CAN Status Change Interrupt Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
       <choice name="Enabled"     value="1" enum="Enabled"/>
@@ -314,7 +314,7 @@ flag is set"
 
    <choiceOption key="can_canrier_rstate" condition="can_canrier_rstate_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanCanrierRstate"
+      typeName="CanCanrierRstate"
       toolTip="These RSTAT enable bits control the sensitivity level in which receiver state changes\n
                are causing CSCIF interrupts"
       description="Receiver Status Change Enable" >
@@ -326,7 +326,7 @@ flag is set"
 
    <choiceOption key="can_canrier_tstate" condition="can_canrier_tstate_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanCanrierTstate"
+      typeName="CanCanrierTstate"
       toolTip="These TSTAT enable bits control the sensitivity level in which transmitter state
                changes are causing CSCIF interrupts"
       description="Transmitter Status Change Enable" >
@@ -338,7 +338,7 @@ flag is set"
 
    <binaryOption key="can_canrier_ovrie" condition="can_canrier_ovrie_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanCanrierOvrie"
+      typeName="CanCanrierOvrie"
       description="Overrun Interrupt Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
       <choice name="Enabled"     value="1" enum="Enabled"/>
@@ -346,7 +346,7 @@ flag is set"
 
    <binaryOption key="can_canrier_rxfie" condition="can_canrier_rxfie_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanCanrierRxfie"
+      typeName="CanCanrierRxfie"
       description="Receiver Full Interrupt Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
       <choice name="Enabled"     value="1" enum="Enabled"/>
@@ -356,7 +356,7 @@ flag is set"
 
    <binaryOption key="can_cantflg_txe" condition="can_cantflg_txe_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanCantflgTxe"
+      typeName="CanCantflgTxe"
       toolTip="These flags indicates that the associated transmit message buffer is empty, and\n
                thus not scheduled for transmission"
       description="Transmitter Buffer Empty" >
@@ -368,7 +368,7 @@ flag is set"
 
    <binaryOption key="can_cantier_txeie" condition="can_cantier_txeie_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanCantierTxeie"
+      typeName="CanCantierTxeie"
       description="Transmitter Empty Interrupt Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
       <choice name="Enabled"     value="1" enum="Enabled"/>
@@ -378,7 +378,7 @@ flag is set"
 
    <binaryOption key="can_cantarq_abtrq" condition="can_cantarq_abtrq_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanCantarqAbtrq"
+      typeName="CanCantarqAbtrq"
       toolTip="The CPU sets the ABTRQx bit to request that a scheduled message buffer (TXEx = 0) be aborted"
       description="Abort Request" >
       <choice name="No request"  value="0" enum="NoRequest"/>
@@ -399,7 +399,7 @@ flag is set"
 
    <choiceOption key="can_canidac_idam" condition="can_canidac_idam_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanCanidacIdam"
+      typeName="CanCanidacIdam"
       toolTip="The CPU sets these flags to define the identifier acceptance filter organization. In filter closed mode, no\n
                message is accepted such that the foreground buffer is never reloaded"
       description="Identifier Acceptance Mode" >
@@ -413,7 +413,7 @@ flag is set"
 
    <binaryOption key="can_canmisc_bohold" condition="can_canmisc_bohold_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="CanCanmiscBohold"
+      typeName="CanCanmiscBohold"
       toolTip="If BORM is set in MSCAN Control Register 1 (CANCTL1), this bit indicates whether the module has\n
                entered the bus-off state. Clearing this bit requests the recovery from bus-off"
       description="Bus-off State Hold Until User Request" >
@@ -444,7 +444,7 @@ flag is set"
    <choiceOption key="can_rdlr_rdlc" condition="can_rdlr_rdlc_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
       enumType="uint8_t"
-      enumStem="CanDataLength"
+      typeName="CanDataLength"
       description="Data Length Code Bits"
       toolTip="The data length code contains the number of bytes (data byte count) of the respective message. During\n
                the transmission of a remote frame, the data length code is transmitted as programmed while the number\n
@@ -547,7 +547,7 @@ flag is set"
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}
          \t
          \t/**
@@ -645,7 +645,7 @@ flag is set"
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicValueExpression;
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
        \t\n
    ]]></initialValueTemplate>
 
@@ -824,7 +824,7 @@ flag is set"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName0 = %symbolicValueExpression1;
+      \t   %paramType %registerName0 = %symbolicExpression1;
       \t\n
    ]]></initialValueTemplate>
 

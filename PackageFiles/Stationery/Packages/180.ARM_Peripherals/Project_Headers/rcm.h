@@ -200,7 +200,7 @@ $(/RCM/InitMethod:// /RCM/InitMethod not found)
     * at 0x1C00_0000.
     */
    static RcmBootSource getBootSource() {
-      return reinterpret_cast<RcmBootSource>(rcm->MR&RCM_MR_BOOTROM_MASK);
+      return RcmBootSource(rcm->MR&RCM_MR_BOOTROM_MASK);
    }
 
    /**

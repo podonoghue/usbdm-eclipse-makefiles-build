@@ -47,7 +47,7 @@ class VrefBase_T : public Info {
    template<int output> class CheckOutputIsMapped {
 
       // Check mapping - no need to check existence
-      static constexpr bool Test1 = (Info::info[output].gpioBit >= 0);
+      static constexpr bool Test1 = (Info::info[output].pinIndex >= PinIndex::MIN_PIN_INDEX);
 
       static_assert(Test1, "VREF output is not mapped to a pin - Modify Configure.usbdm");
 

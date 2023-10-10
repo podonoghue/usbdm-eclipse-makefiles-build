@@ -9,7 +9,7 @@
    <xi:include href="_mapPinsOption.xml"/>
 
    <binaryOption key="syst_csr_countflag" condition="syst_csr_countflag_present"
-      enumStem="SystCsrCountflag"
+      typeName="SystCsrCountflag"
       toolTip="Clears on read by application of any part of the SysTick Control and Status Register"
       description="Timer counted to 0 flag" >
       <choice name="Counter has not reached 0"  value="0" enum="CounterHasNotReached0"/>
@@ -17,14 +17,14 @@
    </binaryOption>
 
    <binaryOption key="syst_csr_clksource" condition="syst_csr_clksource_present"
-      enumStem="SystCsrClksource"
+      typeName="SystCsrClksource"
       description="Clock source" >
       <choice name="External clock"   value="0" enum="ExternalClock"/>
       <choice name="Processor clock"  value="1" enum="ProcessorClock"/>
    </binaryOption>
 
    <binaryOption key="syst_csr_tickint" condition="syst_csr_tickint_present"
-      enumStem="SystCsrTickint"
+      typeName="SystCsrTickint"
       toolTip="Enables SysTick exception request when counting down to 0"
       description="Enable SysTick handler to be pend" >
       <choice name="Exception masked"    value="0" enum="ExceptionMasked"/>
@@ -32,7 +32,7 @@
    </binaryOption>
 
    <binaryOption key="syst_csr_enable" condition="syst_csr_enable_present"
-      enumStem="SystCsrEnable"
+      typeName="SystCsrEnable"
       description="Enable SysTick counter" >
       <choice name="Counter disabled"  value="0" enum="CounterDisabled"/>
       <choice name="Counter enabled"   value="1" enum="CounterEnabled"/>
@@ -64,7 +64,7 @@
          %paramDescription
          \t */
          \tstatic void configure%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}\n\n
       ]]></setTemplate>
    </for>
@@ -199,7 +199,7 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {

@@ -24,7 +24,7 @@
     * Template substitutions
     *
     * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
     * %variable[index]                Variable name /ADC0/adc_sc2_acfe
     * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
     * %description[index]             Description from controlVar e.g. Compare Function Enable
@@ -34,12 +34,12 @@
     * %params                         Formatted parameter list for function
     * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
     * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %enumClass[index]               As for %paramType
-    * %enumParam[index]               As for %paramName
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
     * %variable[index]                Variable name from condition
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
@@ -54,7 +54,7 @@
    <choiceOption key="osc_cr_oscMode" condition="osc_cr_oscos_present"
       valueFormat="OSC_CR_OSCOS(%s),OSC_CR_HGO(%s)"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="OscMode"
+      typeName="OscMode"
       description="OSC0 mode"
       toolTip="Determines oscillator power mode and\n
                whether an external clock or crystal is used." >
@@ -76,7 +76,7 @@
 
    <binaryOption key="osc_cr_oscen" condition="osc_cr_oscen_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;(osc_cr_oscMode!=/OscMode_ExternalClock)"
-      enumStem="OscEnable"
+      typeName="OscEnable"
       toolTip="Enables the OSC module. The OSC module can also be enabled by the ICS module"
       description="OSC Enable" >
       <choice name="OSC disabled"  value="0" enum="Disabled" isDefault="true" />
@@ -98,7 +98,7 @@
 
    <binaryOption key="osc_cr_oscsten" condition="osc_cr_oscsten_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;osc_cr_oscen"
-      enumStem="OscInStopMode"
+      typeName="OscInStopMode"
       toolTip="Controls whether or not the OSC clock remains enabled when MCU enters Stop mode when OSCEN is set.\n
                OSCSTEN has no effect if ICS requests OSC enable"
       description="OSC Enable in Stop mode" >
@@ -111,7 +111,7 @@
       ref="osc_cr_oscMode&gt;=@/OscMode_LowGainOsc"
       derived="true"
       locked="true"
-      enumStem="OscOutputSelect"
+      typeName="OscOutputSelect"
       toolTip="Selects the output clock of the OSC module"
       description="OSC Output Select" >
       <choice name="External clock source"    value="0" enum="ExternalClock" isDefault="true" />
@@ -123,7 +123,7 @@
       ref="osc_input_freq&gt;=4_MHz"
       derived="true"
       locked="true"
-      enumStem="OscFrequencyRange"
+      typeName="OscFrequencyRange"
       toolTip="Selects the frequency range for the OSC module"
       description="Frequency Range Select" >
       <choice name="Low range of 32 kHz"     value="0" enum="LowRange" isDefault="true" />
@@ -135,7 +135,7 @@
       ref="osc_cr_oscMode&gt;=@/OscMode_HighGainOsc"
       derived="true"
       locked="true"
-      enumStem="OscCrHgo"
+      typeName="OscCrHgo"
       toolTip="Controls the OSC mode of operation"
       description="High Gain Oscillator Select" >
       <choice name="Low-power mode"  value="0" enum="LowPowerMode" isDefault="true" />
@@ -170,7 +170,7 @@
          %paramDescription
          \t */
          \tstatic void configure%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}\n\n
       ]]></setTemplate>
    </for>
@@ -204,7 +204,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" >
    <![CDATA[
       class $(_Baseclass)BasicInfo {
       \t
@@ -317,7 +317,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" >
       <![CDATA[
       \t}; // $(_Baseclass)BasicInfo::Init\n\n
    ]]>

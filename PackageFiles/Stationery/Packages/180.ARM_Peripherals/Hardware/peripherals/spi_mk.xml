@@ -24,7 +24,7 @@
    <!-- DMA/Interrupt Request Select and Enable Register (RSER) register -->
    <choiceOption key="spi_rser_txfifo"
       hidden="true"
-      enumStem="SpiTxFifoRequest"
+      typeName="SpiTxFifoRequest"
       valueFormat="SPI_RSER_TFFF_RE(%s),SPI_RSER_TFFF_DIRS(%s)"
       description="Transmit FIFO Fill Request interrupt/DMA enable"
       toolTip="Enable DMA or interrupts requests on Transmit FIFO space" >
@@ -35,7 +35,7 @@
 
    <choiceOption key="spi_rser_rxfifo"
       hidden="true"
-      enumStem="SpiRxFifoRequest"
+      typeName="SpiRxFifoRequest"
       valueFormat="SPI_RSER_RFDF_RE(%s),SPI_RSER_RFDF_DIRS(%s)"
       description="Receive FIFO Drain Request interrupt/DMA enable"
       toolTip="Enable DMA or interrupts requests on Receive FIFO data" >
@@ -46,7 +46,7 @@
 
    <binaryOption key="spi_rser_tfuf_re"
       hidden="true"
-      enumStem="SpiTxFifoUnderflowInterrupt"
+      typeName="SpiTxFifoUnderflowInterrupt"
       description="TxFIFO Underflow interrupts"
       toolTip="Controls Transmit FIFO Underflow interrupts (on TFUF flag)">
       <choice value="0" name="No requests"             enum="Disabled" />
@@ -55,7 +55,7 @@
 
    <binaryOption key="spi_rser_rfof_re"
       hidden="true"
-      enumStem="SpiRxFifoOverflowInterrupt"
+      typeName="SpiRxFifoOverflowInterrupt"
       description="RxFIFO Overflow interrupts"
       toolTip="Receive FIFO Overflow interrupts (on RFOF flag)">
       <choice value="0" name="No requests"            enum="Disabled" />
@@ -64,7 +64,7 @@
 
    <binaryOption key="spi_rser_tcf_re"
       hidden="true"
-      enumStem="SpiTxCompleteInterrupt"
+      typeName="SpiTxCompleteInterrupt"
       description="Tx complete interrupts"
       toolTip="Transmit complete interrupts (TCF Flag)">
       <choice value="0" name="No requests"             enum="Disabled" />
@@ -73,7 +73,7 @@
 
    <binaryOption key="spi_rser_eoqf_re"
       hidden="true"
-      enumStem="SpiEndOfQueueInterrupt"
+      typeName="SpiEndOfQueueInterrupt"
       description="EOQ interrupts"
       toolTip="End of Queue interrupts (EOQF flag)">
       <choice value="0" name="No requests"               enum="Disabled" />
@@ -97,7 +97,7 @@
 
    <choiceOption key="spi_mcr_pcsis"
       hidden="true"
-      enumStem="SpiPeripheralSelectPolarity"
+      typeName="SpiPeripheralSelectPolarity"
       description="Peripheral Chip Select Polarity"
       toolTip="Mask to select the polarity of Peripheral Chip Select Lines (PCSx)" >
       <choice value="0"          name="All PCSx active-high" enum="All_ActiveHigh"  isDefault="true" />
@@ -114,7 +114,7 @@
    <choiceOption key="spi_mcr_clr_fifox"
       hidden="true"
       valueFormat="SPI_MCR_CLR_TXF(%s),SPI_MCR_CLR_RXF(%s)"
-      enumStem="SpiClearFifo"
+      typeName="SpiClearFifo"
       description="Clear selected FIFOs"
       toolTip="Selectively clear transmit or receive FIFOs" >
       <choice value="0,0"  name="FIFOs not affected"       enum="None" />
@@ -126,7 +126,7 @@
    <choiceOption key="spi_mcr_dis_fifox"
       hidden="true"
       valueFormat="SPI_MCR_DIS_TXF(%s),SPI_MCR_DIS_RXF(%s)"
-      enumStem="SpiEnableFifo"
+      typeName="SpiEnableFifo"
       description="Enable selected FIFOs"
       toolTip="Selectively enable transmit or receive FIFOs" >
       <choice value="0,0"  name="Rx and Tx FIFOs enabled"    enum="Both" isDefault="true" />
@@ -137,7 +137,7 @@
 
    <binaryOption key="spi_mcr_mstr"
       hidden="true"
-      enumStem="SpiMasterSlave"
+      typeName="SpiMasterSlave"
       description="Master or Slave operation"
       toolTip="Whether to operate as Master or Slave device">
       <choice value="0" name="Operate as Master" enum="Slave"   />
@@ -146,7 +146,7 @@
 
    <choiceOption key="spi_mcr_mtfe"
       valueFormat="SPI_MCR_MTFE(%s),SPI_MCR_SMPL_PT(%s)"
-      enumStem="SpiModifiedTiming"
+      typeName="SpiModifiedTiming"
       description="Modified Timing Format"
       toolTip="Controls when the module master samples serial-in,\n
                This field is only valid when CPHA bit 0." >
@@ -157,7 +157,7 @@
    </choiceOption>
 
    <binaryOption key="spi_mcr_pcsse" condition="spi_mcr_pcsse_present"
-      enumStem="SpiPcsMode"
+      typeName="SpiPcsMode"
       description="PCS5/PCSS* pin mode"
       toolTip="Select use of PCS5/PCSS as PCS5 or PCS strobe*\n
                The strobe may be used to enable decoding of the remaining\n
@@ -167,7 +167,7 @@
    </binaryOption>
 
    <binaryOption key="spi_mcr_rooe"
-      enumStem="SpiRxOverflowHandling"
+      typeName="SpiRxOverflowHandling"
       description="Handling of Rx Overflow Data"
       toolTip="Discard incoming data or overwite previous data on RxFIFO overflow ">
       <choice value="0" name="Ignore incoming"      enum="Ignore"    />
@@ -175,7 +175,7 @@
    </binaryOption>
 
    <binaryOption key="spi_mcr_doze"
-      enumStem="SpiDoze"
+      typeName="SpiDoze"
       description="Enables Doze mode (when processor is waiting?)"
       toolTip="Enables Doze mode (when processor is waiting?)">
       <choice value="0" name="Ignore doze"      enum="Disabled" />
@@ -183,7 +183,7 @@
    </binaryOption>
 
    <binaryOption key="spi_mcr_frz"
-      enumStem="SpiFreeze"
+      typeName="SpiFreeze"
       description="Controls SPI operation while in debug mode"
       toolTip="Enable transfers to be stopped on the next frame boundary when the device enters Debug mode.">
       <choice value="0" name="Continue in debug"  enum="Disabled" />
@@ -191,7 +191,7 @@
    </binaryOption>
 
    <binaryOption key="spi_mcr_cont_scke"
-      enumStem="SpiContinuousClock"
+      typeName="SpiContinuousClock"
       description="Continuous SCK Enable"
       toolTip="Whether the Serial Communication Clock (SCK) runs continuously">
       <choice value="0" name="Clock during transfers only" enum="Disable" />
@@ -216,7 +216,7 @@
          min="0" max="10000000" />
 
       <choiceOption key="spi_ctar_mode[%(c)]"
-         enumStem="SpiMode"
+         typeName="SpiMode"
          valueFormat="SPI_CTAR_CPOL(%s),SPI_CTAR_CPHA(%s)"
          description="Mode"
          toolTip="Communication mode\n
@@ -232,7 +232,7 @@
       </choiceOption>
 
       <choiceOption key="spi_ctar_fmsz[%(c)]"
-         enumStem="SpiFrameSize"
+         typeName="SpiFrameSize"
          description="SPI Frame sizes"
          toolTip="Transfers are from 4 to 16 bits in size" >
          <choice value="4-1"  name="4 bits/transfer"                 enum="4_bits"  />
@@ -251,7 +251,7 @@
       </choiceOption>
 
       <binaryOption key="spi_ctar_lsbfe[%(c)]"
-         enumStem="SpiBitOrder"
+         typeName="SpiBitOrder"
          description="Transmission order"
          toolTip="Transmission order">
          <choice value="0" name="MSB sent first" enum="MsbFirst" />
@@ -269,7 +269,7 @@
 
    <choiceOption key="spi_ctar_sel"
       enumType="uint8_t"
-      enumStem="SpiCtarSelect"
+      typeName="SpiCtarSelect"
       valueFormat="%s"
       description="CTAR Selection"
       toolTip="Selects between available CTAR registers">
@@ -278,7 +278,7 @@
    </choiceOption>
 
    <choiceOption key="PeripheralSelectMode"
-      enumStem="SpiPeripheralSelectMode"
+      typeName="SpiPeripheralSelectMode"
       enumType="uint8_t"
       valueFormat="(%s)"
       description="Controls PCS between transfers/transactions"
@@ -290,7 +290,7 @@
 
    <binaryOption key="spi_pushr_cont"
       hidden="true"
-      enumStem="SpiSelectMode"
+      typeName="SpiSelectMode"
       description="Assert PCS between transfers"
       toolTip="Select whether Peripheral Select is returned to idle between transfers">
       <choice value="0" name="Idle between transactions"     enum="Idle"       />
@@ -298,7 +298,7 @@
    </binaryOption>
 
    <choiceOption key="spi_pushr_pcs"
-      enumStem="SpiPeripheralSelect"
+      typeName="SpiPeripheralSelect"
       description="Peripheral Chip Select"
       toolTip="Mask to select which Peripheral Chip Select Line (PCS) to assert during transaction\n
                Note: more than one PCS may be asserted (allows external decoder)" >
@@ -315,7 +315,7 @@
 
    <!--binaryOption key="spi_pushr_eoq"
       hidden="true"
-      enumStem="SpiEndOfQueue"
+      typeName="SpiEndOfQueue"
       description="Mark data value as End of Queue"
       toolTip="Indicates the associated data value is End of Queue, the Transmit and
                Receive operations will be disabled after this item completes transmission">
@@ -325,7 +325,7 @@
 
    <!--binaryOption key="spi_pushr_ctcnt"
       hidden="true"
-      enumStem="SpiClearCounter"
+      typeName="SpiClearCounter"
       description="Mark data value to clear transmit count"
       toolTip="The transmit counter will be cleared before transmission of the associated data">
       <choice value="0" name="Transmission counter is not cleared" enum="Disable"  />
@@ -445,7 +445,7 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr SerialInit(%params, Types... rest) : SerialInit(rest...) {
@@ -465,7 +465,7 @@
       \t    * @tparam   Types
       \t    * @param    rest
       \t    *
-      %comments
+      %paramDescription
       \t    */
       \t   template <typename... Types>
       \t   constexpr SerialInit(%params, Types... rest) : SerialInit(rest...) {
@@ -484,7 +484,7 @@
       \t    * @tparam   Types
       \t    * @param    rest
       \t    *
-      %comments
+      %paramDescription
       \t    */
       \t   template <typename... Types>
       \t   constexpr SerialInit(%params, Types... rest) : SerialInit(rest...) {
@@ -606,7 +606,7 @@
       \t   template <typename... Types>
       \t   constexpr Config(%params, Types... rest) : Config(rest...) {
       \t
-      \t      this->%enumParam0 = %paramExpression;
+      \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
    ]]></setTemplate>
 
@@ -626,7 +626,7 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Config(%params, Types... rest) : Config(rest...) {
@@ -1127,8 +1127,8 @@
       \t *
       %paramDescription
       \t */
-      \t void setContinousClock(%enumClass %enumParam) {
-      \t   %defaultFieldExpression
+      \t void setContinousClock(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}\n\n
    ]]></setTemplate>
 
@@ -1139,8 +1139,8 @@
       \t *
       %paramDescription
       \t */
-      \t void setMasterSlave(%enumClass %enumParam) {
-      \t   %defaultFieldExpression
+      \t void setMasterSlave(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}\n\n
    ]]></setTemplate>
 
@@ -1161,8 +1161,8 @@
       \t *    setPcsIdleLevels(SpiPeripheralSelectPolarity_All_ActiveHigh)
       \t * @endcode
       \t */
-      \t void setPcsPolarity(%enumClass %enumParam) {
-      \t   %defaultFieldExpression
+      \t void setPcsPolarity(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}\n\n
    ]]></setTemplate>
 

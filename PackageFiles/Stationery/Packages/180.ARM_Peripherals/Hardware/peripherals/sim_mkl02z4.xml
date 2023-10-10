@@ -26,7 +26,7 @@
     * Template substitutions
     *
     * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
     * %variable[index]                Variable name /ADC0/adc_sc2_acfe
     * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
     * %description[index]             Description from controlVar e.g. Compare Function Enable
@@ -36,12 +36,12 @@
     * %params                         Formatted parameter list for function
     * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
     * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %enumClass[index]               As for %paramType
-    * %enumParam[index]               As for %paramName
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
     * %variable[index]                Variable name from condition
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
@@ -76,7 +76,7 @@
 
       <choiceOption key="sim_copc_copt"
          description="COP Watchdog Timeout"
-         enumStem="SimCopDuration"
+         typeName="SimCopDuration"
          valueFormat="SIM_COPC_COPCLKS(%s),SIM_COPC_COPT(%s)"
          toolTip="Selects the Computer Operating Properly Timeout\n
                   This is a write-once field" >
@@ -91,7 +91,7 @@
 
       <binaryOption key="sim_copc_copw"
          enabledBy="sim_copc_copt&gt;3"
-         enumStem="SimCopMode"
+         typeName="SimCopMode"
          description="COP Windowed Mode"
          toolTip="Windowed mode is only supported when COP is using bus clock\n
                   The COP window is opened three quarters through the timeout period\n
@@ -153,7 +153,7 @@
       <for keys="p" values="0;1;2">
          <binaryOption key="sim_sopt4_tpm%(p)clksel" condition="sim_sopt4_tpm%(p)clksel_present"
             target="Tpm%(p)ExternalClkin"
-            enumStem="SimTpm%(p)ClkSel"
+            typeName="SimTpm%(p)ClkSel"
             description="TPM %(p) External Clock Pin "
             toolTip="External pin used to drive the external clock to TPM%(p) module">
             <choice value="0"  name="TPM_CLKIN0 pin" enum="0" ref="TpmClkin0" code="tpmExternalClock0" isDefault="true" />
@@ -173,10 +173,10 @@
             \t/**
             \t * Select %description
             \t *
-            \t * @param %enumParam %tooltip
+            \t * @param %paramName %tooltip
             \t */
-            \tstatic void selectTpm%(p)ExternalClock(%enumClass %enumParam) {
-            \t   %defaultFieldExpression
+            \tstatic void selectTpm%(p)ExternalClock(%paramType %paramName) {
+            \t   %fieldAssignment
             \t}
             \t
             \t/**
@@ -186,7 +186,7 @@
             \t */
             \tstatic uint32_t getTpm%(p)ExternalClockFrequency() {
             \t
-            \t   switch(%defaultMaskingExpression) {
+            \t   switch(%maskingExpression) {
             %body
             \t      default: return 0;
             \t   }
@@ -196,7 +196,7 @@
 
       <for keys="p" values=";1;2">
          <choiceOption key="sim_sopt4_tpm%(p)ch0src" condition="sim_sopt4_tpm%(p)ch0src_present"
-            enumStem="SimTpm%(p)Ch0Src"
+            typeName="SimTpm%(p)Ch0Src"
             description="TPM %(p) channel 0 input capture source"
             toolTip="Source for TPM channel input capture\n
                NOTE: When the TPM is not in input capture mode, clear this field">
@@ -215,7 +215,7 @@
               values = "uart%(n)   : Uart%(n)   : UART%(n);
                         lpuart%(n) : Lpuart%(n) : LPUART%(n)" >
             <binaryOption key="sim_sopt5_%(name)ode" condition="sim_sopt5_%(name)ode_present"
-               enumStem="Sim%(Name)Drive"
+               typeName="Sim%(Name)Drive"
                description="%(NAME) Open Drain"
                toolTip="Enables Open Drain output">
                <choice value="0" name="Push-pull"  enum="PushPull"  />
@@ -223,7 +223,7 @@
             </binaryOption>
 
             <choiceOption key="sim_sopt5_%(name)rxsrc" condition="sim_sopt5_%(name)rxsrc_present"
-               enumStem="Sim%(Name)RxSrc"
+               typeName="Sim%(Name)RxSrc"
                description="%(NAME) receive data source"
                toolTip="Source for the %(NAME) receive data">
                <choice value="0" name="Rx pin"        enum="RxPin"  isDefault="true" />
@@ -231,7 +231,7 @@
             </choiceOption>
 
             <choiceOption key="sim_sopt5_%(name)txsrc" condition="sim_sopt5_%(name)txsrc_present"
-               enumStem="Sim%(Name)TxSrc"
+               typeName="Sim%(Name)TxSrc"
                description="%(NAME) transmit data source"
                toolTip="Source for the %(NAME) transmit data">
                <choice value="0" name="Tx pin" isDefault="true"             enum="Direct" />
@@ -247,7 +247,7 @@
    <category name="SOPT7" description="ADC signals">
       <for keys="adc" values="0;1">
          <choiceOption key="sim_sopt7_adc%(adc)trigger" condition="sim_sopt7_adc%(adc)alttrgen_present"
-            enumStem="SimAdc%(adc)TriggerMode"
+            typeName="SimAdc%(adc)TriggerMode"
             valueFormat="SIM_SOPT7_ADC%(adc)ALTTRGEN(%s),SIM_SOPT7_ADC%(adc)PRETRGSEL(%s)"
             description="ADC%(adc) trigger mode"
             toolTip="Alternative conversion triggers for ADC\n
@@ -260,7 +260,7 @@
          </choiceOption>
 
          <choiceOption key="sim_sopt7_adc%(adc)trgsel" condition="sim_sopt7_adc%(adc)pretrgsel_present"
-            enumStem="SimAdc%(adc)TriggerSrc"
+            typeName="SimAdc%(adc)TriggerSrc"
             description="ADC%(adc) trigger source"
             toolTip="ADC Trigger source in STOP and VLPS modes, or when ADC Alternative Trigger is active">
             <choice value="0"  name="External trigger pin input (EXTRG_IN)"   enum="External"     isDefault="true" />
@@ -303,7 +303,7 @@
       ">
          <binaryOption key="sim_scgc%(reg)_%(name)" condition="sim_scgc%(reg)_%(name)_present"
             enabledBy="enablePeripheralSupport"
-            enumStem="Sim%(Name)Clock"
+            typeName="Sim%(Name)Clock"
             description="%(Name) Clock Gate Control"
             toolTip="This clock gate must be enabled to access %(Name)\n
                      This may be done here or when the individual peripheral is configured." >
@@ -322,7 +322,7 @@
          <category name="Peripheral Clocks" description="Peripheral Clock Selection">
             <choiceOption key="sim_sopt2_clkoutsel[%(n)]" condition="sim_sopt2_clkoutsel_present"
                target="clockOut[%(n)]"
-               enumStem="SimClkoutSel"
+               typeName="SimClkoutSel"
                description="CLKOUT pin clock"
                toolTip="Clock to output on the CLKOUT pin" >
                <choice value="0"  name="Disabled0"           ref="disabled"                         enum="Unused0"     />
@@ -363,7 +363,7 @@
 
             <choiceOption key="sim_sopt2_usbsrc[%(n)]" condition="sim_sopt2_usbsrc_present"
                target="system_usbfs_clock[%(n)]"
-               enumStem="SimUsbFullSpeedClockSource"
+               typeName="SimUsbFullSpeedClockSource"
                description="USB Clock"
                toolTip="Source for the USB clock">
                <choice value="0"  name="External bypass clock (USB_CLKIN)" enum="External"      ref="system_usb_clkin_clock"           />
@@ -388,7 +388,7 @@
                               tpm%(p)    : Tpm%(p)    : TPM%(p)    : TPM" >
 
                   <choiceOption key="sim_sopt2_%(name)src[%(n)]" condition="sim_sopt2_%(name)src_present"
-                     enumStem="Sim%(Name)ClockSource"
+                     typeName="Sim%(Name)ClockSource"
                      target="system_%(name)_clock[%(n)]"
                      description="%(NAME) Clock"
                      toolTip="Clock source for the peripheral" >
@@ -411,7 +411,7 @@
 
             <choiceOption key="sim_sopt2_flexiosrc[%(n)]" condition="sim_sopt2_flexiosrc_present"
                target="system_flexio_clock[%(n)]"
-               enumStem="SimFlexioClockSource"
+               typeName="SimFlexioClockSource"
                description="FLEXIO Clock select"
                toolTip="Selects the clock source for the FlexIO transmit and receive clock">
                <choice value="0"  name="Disabled"                      ref="disabled"                          enum="Disabled"        code="0"                         />
@@ -458,7 +458,7 @@
          <category name="CLKDIV1" description="System Clock Dividers">
             <choiceOption key="sim_clkdiv1_outdiv1[%(n)]"  condition="sim_clkdiv1_outdiv1_present"
                enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
-               enumStem="SimCoreClkDivider"
+               typeName="SimCoreClkDivider"
                locked="true"
                description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
                toolTip="Clocks the ARM Cortex-M4 core and bus masters\n
@@ -485,7 +485,7 @@
                enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
                locked="true"
                derivedFrom="sim_clkdiv1_outdiv1[%(n)]"
-               enumStem="SimFlashClkDivider"
+               typeName="SimFlashClkDivider"
                description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"
                toolTip="Clocks the flash memory\n
                         Divides Core Clock to generate system_flash_clock." />
@@ -498,7 +498,7 @@
 
    <binaryOption key="sim_fcfg1_flashdoze" condition="sim_fcfg1_flashdoze_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="SimFcfg1Flashdoze"
+      typeName="SimFcfg1Flashdoze"
       description="Flash Doze" >
       <choice name="Flash remains enabled during Doze mode"           value="0" enum="FlashRemainsEnabledDuringDozeMode"/>
       <choice name="Flash is disabled for the duration of Doze mode"  value="1" enum="FlashIsDisabledForTheDurationOfDozeMode"/>
@@ -506,7 +506,7 @@
 
    <binaryOption key="sim_fcfg1_flashdis" condition="sim_fcfg1_flashdis_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="SimFcfg1Flashdis"
+      typeName="SimFcfg1Flashdis"
       description="Flash Disable" >
       <choice name="Flash is enabled"   value="0" enum="FlashIsEnabled"/>
       <choice name="Flash is disabled"  value="1" enum="FlashIsDisabled"/>
@@ -540,7 +540,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)ClockEnable(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}
          \t
          \t/**
@@ -581,7 +581,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}
          \t
          \t/**

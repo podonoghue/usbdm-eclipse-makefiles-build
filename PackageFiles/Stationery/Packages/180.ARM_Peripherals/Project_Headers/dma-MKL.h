@@ -31,23 +31,10 @@ namespace USBDM {
 /**
  * Controls operation of DMA-MUX channel.
  */
-enum DmaMuxEnable {
-   DmaMuxEnable_Disabled    = DMAMUX_CHCFG_ENBL(0),                      //!< DMA channel is disabled
-   DmaMuxEnable_Continuous = DMAMUX_CHCFG_ENBL(1)|DMAMUX_CHCFG_TRIG(0), //!< DMA channel is enabled continuously
-   DmaMuxEnable_Triggered  = DMAMUX_CHCFG_ENBL(1)|DMAMUX_CHCFG_TRIG(1), //!< DMA channel is enabled and triggered by PIT channel
-};
-
-/**
- * DMA Channel numbers.
- */
-enum DmaChannelNum : unsigned {
-   DmaChannelNum_0,      //!< Channel  0
-   DmaChannelNum_1,      //!< Channel  1
-   DmaChannelNum_2,      //!< Channel  2
-   DmaChannelNum_3,      //!< Channel  3
-
-   DmaChannelNum_All  = (1<<6),  //!< All channels, some operations may be applied to all channels
-   DmaChannelNum_None = (1<<7),  //!< Used to indicate failed channel allocation 
+enum DmamuxEnable {
+   DmamuxEnable_Disabled   = DMAMUX_CHCFG_ENBL(0),                      //!< DMA channel is disabled
+   DmamuxEnable_Continuous = DMAMUX_CHCFG_ENBL(1)|DMAMUX_CHCFG_TRIG(0), //!< DMA channel is enabled continuously
+   DmamuxEnable_Triggered  = DMAMUX_CHCFG_ENBL(1)|DMAMUX_CHCFG_TRIG(1), //!< DMA channel is enabled and triggered by PIT channel
 };
 
 /**
@@ -230,7 +217,7 @@ struct DmaTcdDcr {
  * | Loop =                       |  ===============================================================
  * | +--------------------------+ |
  * | | Each transfer            | |  The following are used during a loop:
- * | |   SADDR->DADDR           | |   - SADDR      Source address
+ * | |   mem[SADDR]->mem[DADDR] | |   - SADDR      Source address
  * | |   SADDR += DCR.SSIZE     | |   - DCR.SSIZE  Adjustment applied to SADDR after each transfer
  * | |   DADDR += DCR.DSIZE     | |   - DADDR      Destination address
  * | +--------------------------+ |   - DCR.DSIZE  Adjustment applied to DADDR after each transfer
@@ -299,6 +286,48 @@ struct DmaTcd {
     * @param linkControl                         Link channel control
     * @param linkChannel1                        Link channel 1
     * @param linkChannel2                        Link channel 2
+    *
+    * Example:
+    *
+    * @code
+    *    static const DmaTcd tcd {
+    *       size,                   //  Transfer size                           - Total transfer size in bytes
+    *       (uint32_t)(source),     //  Source address                          - Source array
+    *       dmaSize(*source),       //  Source size                             - 32-bit source
+    *       DmaModulo_Disabled,     //  Source modulo                           - No modulo
+    *       true,                   //  Source increment                        - Increment source address
+    *       (uint32_t)(destination),//  Destination address                     - Start of array for result
+    *       dmaSize(*destination),  //  Destination size                        - 32-bit destination
+    *       DmaModulo_Disabled,     //  Destination modulo                      - No modulo
+    *       true,                   //  Destination increment                   - Increment destination address
+    *       DmaMode_Continuous,     //  DMA mode                                - All data for each request
+    *       false,                  //  Auto align                              -
+    *       true,                   //  Start transfer                          - Start transfer immediately
+    *       true,                   //  Enable asynchronous requests            - Asynchronous DMA
+    *       false,                  //  Enable peripheral requests              -
+    *       false,                  //  Disable peripheral request on complete  -
+    *       true                    //  Enable interrupts                       - Interrupt when complete
+    *    };
+    *
+    *    // Sequence not complete yet
+    *    complete = false;
+    *
+    *    // Enable DMAC with default settings
+    *    Dma0::configure();
+    *
+    *    // Set callback (Interrupts are enabled in TCD)
+    *    Dma0::setCallback(dmaChannelNum, dmaCallback);
+    *    Dma0::enableNvicInterrupts(dmaChannelNum, NvicPriority_Normal);
+    *
+    *    // Configure the transfer
+    *    Dma0::configureTransfer(dmaChannelNum, tcd);
+    *
+    *    while (!complete) {
+    *       __asm__("nop");
+    *    }
+    *    return E_NO_ERROR;
+    *
+    * @endcode
     */
    constexpr DmaTcd(
          uint32_t  transferSize,
@@ -399,51 +428,31 @@ static constexpr DmaSize dmaSize() {
 /**
  * Template class providing interface to DMA Multiplexor.
  *
- * @tparam DmaMuxInfo  Information class for DMAMux
+ * @tparam Info  Information class for Dmamux
  * @tparam NumChannels Number of DMA channels in associated DMA controller
  *
  * @code
- * using dmamux = DmaMux_T<DmaMuxInfo>;
+ * using Dmamux = Dmamux_T<Info>;
  *
- *  dmamux::configure();
+ *  Dmamux::configure();
  *
  * @endcode
  */
-template <class DmaMuxInfo, unsigned NumChannels>
-class DmaMux_T {
+template <class Info>
+class Dmamux_T : public Info {
+
+protected:
+   /** Hardware instance pointer */
+   static constexpr HardwarePtr<DMAMUX_Type> dmamux = Info::baseAddress;
 
 public:
-   /**
-    * Configures and enable hardware requests on a channel.
-    *
-    * @param[in] dmaChannel   The DMA channel being enabled
-    * @param[in] dmaSlot      The DMA slot (source) to connect to this channel
-    * @param[in] dmaMuxEnable The mode for the channel
-    */
-   static void configure(DmaChannelNum dmaChannel, DmaSlot dmaSlot, DmaMuxEnable dmaMuxEnable=DmaMuxEnable_Continuous) {
-#ifdef DEBUG_BUILD
-      if (dmaChannel >= NumChannels) {
-         // Channel doesn't exists
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-      if ((dmaMuxEnable == DmaMuxEnable_Triggered) && (dmaChannel>USBDM::PitInfo::NumChannels)) {
-         // PIT triggering only available on channels corresponding to PIT channels
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-      if (((dmaChannel>=16)&&(dmaSlot<64))||((dmaChannel<16)&&(dmaSlot>=64))) {
-         // DmaSlots 0-63 must associate with DMA channels 0-15
-         // DmaSlots 64-128 must associate with DMA channels 15-31
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
-      // Enable clock to peripheral
-      DmaMuxInfo::enableClock();
+   /// Number of DMA channels available
+   static constexpr unsigned NumChannels         = Info::NumChannels;
 
-      // Configure channel - must be disabled to change
-      DmaMuxInfo::dmamux->CHCFG[dmaChannel] = 0;
-      DmaMuxInfo::dmamux->CHCFG[dmaChannel] = dmaMuxEnable|DMAMUX_CHCFG_SOURCE(dmaSlot);
-   }
-
+   /// Number of DMA channels with periodic feature available
+   static constexpr unsigned NumPeriodicChannels = Info::NumPeriodicChannels;
+   
+$(/DMAMUX/InitMethod:// /DMAMUX/InitMethod not found)
    /**
     * Disable hardware requests on channel
     *
@@ -451,10 +460,10 @@ public:
     */
    static void disable(DmaChannelNum dmaChannel) {
       // Enable clock to peripheral
-      DmaMuxInfo::enableClock();
+      Info::enableClock();
 
       // Disable channel
-      DmaMuxInfo::dmamux->CHCFG[dmaChannel] = 0;
+      Info::Dmamux->CHCFG[dmaChannel] = 0;
    }
 };
 
@@ -464,16 +473,13 @@ public:
  * @tparam Info Information describing DMA controller
  */
 template<class Info>
-class DmaBase_T {
+class Dma_T : public Info {
 
    using MuxInfo = Dmamux0Info;
 
 protected:
    /** Hardware instance pointer */
    static constexpr HardwarePtr<DMA_Type> dmac = Info::baseAddress;
-
-   /** Callback functions for ISRs */
-   static DmaCallbackFunction sCallbacks[Info::NumVectors];
 
    /** Bit-mask of allocated channels */
    static uint32_t allocatedChannels;
@@ -484,15 +490,16 @@ protected:
    }
 
 public:
-   /** DMA interrupt handler - Calls DMA callback
-    *
-    * @tparam channel Channel number
-    */
-   template<unsigned channel>
-   static void irqHandler() {
-      sCallbacks[channel]((DmaChannelNum)channel);
-   }
+   /// Number of DMA channels implemented
+   static constexpr unsigned NumChannels = Info::NumChannels;
 
+   /// Number of DMA vectors implemented
+   static constexpr unsigned NumVectors = Info::NumVectors;
+
+   /// Number of DMA channels with periodic feature
+   static constexpr unsigned NumPeriodicChannels = Info::NumPeriodicChannels;
+
+$(/DMA/InitMethod: // /DMA/InitMethod not found)
    /**
     * Enable and configure shared DMA settings.
     * This also clears all DMA channels.
@@ -504,7 +511,7 @@ public:
       // Clear call-backs and TCDs
       for (unsigned channel=0; channel<Info::NumVectors; channel++) {
          static const DmaTcd emptyTcd;
-         sCallbacks[channel] = noHandlerCallback;
+         Info::sCallbacks[channel] = noHandlerCallback;
          configureTransfer((DmaChannelNum)channel, emptyTcd);
       }
       // Reset record of allocated channels
@@ -520,7 +527,7 @@ public:
    static DmaChannelNum allocateChannel() {
       CriticalSection cs;
       unsigned channelNum = __builtin_ffs(allocatedChannels);
-      if ((channelNum == 0)||(--channelNum>=Info::NumChannels)) {
+      if ((channelNum == 0)||(--channelNum>=NumChannels)) {
          setErrorCode(E_NO_RESOURCE);
          return DmaChannelNum_None;
       }
@@ -538,7 +545,7 @@ public:
    static DmaChannelNum allocatePeriodicChannel() {
       CriticalSection cs;
       unsigned channelNum = __builtin_ffs(allocatedChannels);
-      if ((channelNum == 0)||(--channelNum>=Info::NumChannels)||(channelNum>=USBDM::PitInfo::NumChannels)) {
+      if ((channelNum == 0)||(--channelNum>=NumChannels)||(channelNum>=NumPeriodicChannels)) {
          setErrorCode(E_NO_RESOURCE);
          return DmaChannelNum_None;
       }
@@ -549,11 +556,11 @@ public:
    /**
     * Free DMA channel.
     *
-    * @param dmaChannelNum Channel to release
+    * @param DmaChannelNum dma channel to release
     */
    static void freeChannel(DmaChannelNum dmaChannelNum) {
       const uint32_t channelMask = (1<<dmaChannelNum);
-      usbdm_assert(dmaChannelNum<Info::NumChannels,        "Illegal DMA channel");
+      usbdm_assert(dmaChannelNum<NumChannels,              "Illegal DMA channel");
       usbdm_assert((allocatedChannels & channelMask) == 0, "Freeing unallocated DMA channel");
 
       CriticalSection cs;
@@ -563,40 +570,44 @@ public:
    /**
     * Configure channel for arbitrary transfer defined by tcd.
     *
-    * @param[in] channel DMA channel number
-    * @param[in] tcd     Transfer Control Descriptor describing the transfer
+    * @param[in] dmaChannelNum DMA channel number
+    * @param[in] tcd           Transfer Control Descriptor describing the transfer
     */
-   static void configureTransfer(DmaChannelNum channel, const DmaTcd &tcd) {
+   static void configureTransfer(DmaChannelNum dmaChannelNum, const DmaTcd &tcd) {
 
       // Stop channel
-      dmac->DMA[channel].DCR      = DMA_DCR_START(0)|DMA_DCR_ERQ(0);
+      dmac->DMA[dmaChannelNum].DCR      = DMA_DCR_START(0)|DMA_DCR_ERQ(0);
       // Clear all flags
-      dmac->DMA[channel].DSR_BCR  = DMA_DSR_BCR_DONE_MASK;
+      dmac->DMA[dmaChannelNum].DSR_BCR  = DMA_DSR_BCR_DONE_MASK;
 
       // Copy TCD to DMAC channel
-      (*(DmaTcd* const)(&dmac->DMA[channel])) = tcd;
+      (*(DmaTcd* const)(&dmac->DMA[dmaChannelNum])) = tcd;
    }
 
    /**
     * Waits until the channel indicates the transaction has completed.
-    *	
-    * @param[in] channel DMA channel number
+    *
+    * @param[in] dmaChannelNum DMA channel number
     */
-   static void waitUntilComplete(DmaChannelNum channel) {
-      while ((dmac->DMA[channel].DSR & DMA_DSR_DONE_MASK) == 0) {
+   static void waitUntilComplete(DmaChannelNum dmaChannelNum) {
+      while ((dmac->DMA[dmaChannelNum].DSR & DMA_DSR_DONE_MASK) == 0) {
          __asm__ volatile("nop");
       }
-      dmac->DMA[channel].DSR = DMA_DSR_DONE_MASK;
+      dmac->DMA[dmaChannelNum].DSR = DMA_DSR_DONE_MASK;
    }
 
    /**
     * Clear interrupt request flag for a channel.
+    * This also clears the request information and pending IRQ in NVIC.
     *
-    * @param[in]  channel Channel being modified
+    * @param[in]  dmaChannelNum Channel being modified
     */
-   static void __attribute__((always_inline)) clearInterruptRequest(DmaChannelNum channel) {
-      dmac->DMA[channel].DSR_BCR = DMA_DSR_BCR_DONE_MASK;
-      dmac->DMA[channel].DCR     = DMA_DCR_START(0)|DMA_DCR_ERQ(0);
+   static void __attribute__((always_inline)) clearInterruptRequest(DmaChannelNum dmaChannelNum) {
+      dmac->DMA[dmaChannelNum].DSR_BCR = DMA_DSR_BCR_DONE_MASK;
+      dmac->DMA[dmaChannelNum].DCR     = DMA_DCR_START(0)|DMA_DCR_ERQ(0);
+
+      const IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));
+      NVIC_ClearPendingIRQ(irqNum);
    }
 
    /**
@@ -605,7 +616,7 @@ public:
     * @param[in]  dmaChannelNum  Channel being modified
     */
    static void enableNvicInterrupts(DmaChannelNum dmaChannelNum) {
-      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+      usbdm_assert(dmaChannelNum<NumChannels, "Illegal DMA channel");
 
       const IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));
       NVIC_EnableIRQ(irqNum);
@@ -619,7 +630,7 @@ public:
     * @param[in]  nvicPriority   Interrupt priority
     */
    static void enableNvicInterrupts(DmaChannelNum dmaChannelNum, uint32_t nvicPriority) {
-      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+      usbdm_assert(dmaChannelNum<NumChannels, "Illegal DMA channel");
 
       const IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));
       enableNvicInterrupt(irqNum, nvicPriority);
@@ -631,52 +642,20 @@ public:
     * @param[in]  dmaChannelNum  Channel being modified
     */
    static void disableNvicInterrupts(DmaChannelNum dmaChannelNum) {
-      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+      usbdm_assert(dmaChannelNum<NumChannels, "Illegal DMA channel");
 
       const IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));
       NVIC_DisableIRQ(irqNum);
    }
 
-
-   /**
-    * Set callback for ISR.
-    *
-    * @param[in]  dmaChannelNum  The DMA channel to set callback for
-    * @param[in]  callback       The function to call from stub ISR
-    */
-   static void __attribute__((always_inline)) setCallback(DmaChannelNum dmaChannelNum, DmaCallbackFunction callback) {
-      if (callback == nullptr) {
-         callback = noHandlerCallback;
-      }
-      sCallbacks[dmaChannelNum] = callback;
-   }
-
 };
 
-/**
- * Callback table for programmatically set handlers.
- */
-template<class Info> DmaCallbackFunction DmaBase_T<Info>::sCallbacks[];
+   /** Bit-mask of allocated DMA channels */
+   template<class Info>
+   uint32_t Dma_T<Info>::allocatedChannels = 0;
 
-/** Bit-mask of allocated channels */
-template<class Info> uint32_t DmaBase_T<Info>::allocatedChannels = -1;
-
-#ifdef USBDM_DMAMUX0_IS_DEFINED
-using DmaMux0 = DmaMux_T<Dmamux0Info, Dma0Info::NumChannels>;
-#endif
-
-#ifdef USBDM_DMAMUX1_IS_DEFINED
-using DmaMux1 = DmaMux_T<Dmamux1Info, Dma0Info::NumChannels>;
-#endif
-
-#ifdef USBDM_DMA0_IS_DEFINED
-using Dma0 = DmaBase_T<Dma0Info>;
-#endif
-
-#ifdef USBDM_DMA1_IS_DEFINED
-using Dma0 = DmaBase_T<Dma1Info>;
-#endif
-
+$(/DMA/declarations:// /DMA/declarations not found)
+$(/DMAMUX/declarations:// /DMAMUX/declarations not found)
 /**
  * End DMA_Group
  * @}

@@ -38,14 +38,14 @@ namespace USBDM {
  * @endcode
  */
 template <class Info>
-class OscBase_T {
+class OscBase_T :public Info {
 
 private:
    /** Class to static check OSC signal is mapped to a pin - Assumes existence */
    template<int xtalPin> class CheckPinMapped {
    private:
       // Check mapping - no need to check existence
-      static constexpr bool Test1 = (Info::info[xtalPin].gpioBit >= 0);
+      static constexpr bool Test1 = (Info::info[xtalPin].pinIndex >= PinIndex::MIN_PIN_INDEX);
 
       static_assert(Test1, "OSC XTAL/EXTAL signal is not mapped to a pin - Modify Configure.usbdm");
 
@@ -61,30 +61,7 @@ protected:
 public:
    $(/OSC/classInfo: // No class Info found)
 
-   /**
-    * Initialise OSC to default settings.
-    * Configures all OSC pins
-    */
-   static void defaultConfigure() {
-
-      if constexpr (Osc0Info::cr & OSC_CR_ERCLKEN_MASK) {
-         (void)CheckPinMapped<0>::checker;
-         (void)CheckPinMapped<1>::checker;
-      }
-
-      if (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
-      // Configure OSC
-      Info::osc->CR  = Info::cr;
-   }
-
-   /**
-    * Set up the OSC out of reset.
-    */
-   static void initialise() {
-      defaultConfigure();
-   }
+$(/OSC/InitMethod: // /OSC/InitMethod not found)
 
 };
 

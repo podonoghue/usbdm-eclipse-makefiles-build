@@ -20,7 +20,7 @@ Symbols
    
       <choiceOption key="KKKKK" 
          target="TTTTT"
-         enumStem="SSSS" 
+         typeName="SSSS" 
          description="YYYYY"
          toolTip="ZZZZZZZ">
          <choice value="0" name="Reserved" enum="yyyy" code="cccc" ref = "zzzz" />
@@ -38,7 +38,7 @@ Symbols
       \t *
       \t * %tooltip
       \t */
-      \tenum %enumClass {
+      \tenum %paramType {
       %body
       \t};\n\n
    ]]></enumTemplate>
@@ -49,10 +49,10 @@ Symbols
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setLpuart%(n)Clock(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \tstatic void setLpuart%(n)Clock(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}
 
       \t/**
@@ -62,7 +62,7 @@ Symbols
       \t */
       \tstatic uint32_t getLpuart%(n)Clock() {
       \t   
-      \t   switch(%defaultMaskingExpression) {
+      \t   switch(%maskingExpression) {
       \t      default: return 0;
       %body
       \t   }

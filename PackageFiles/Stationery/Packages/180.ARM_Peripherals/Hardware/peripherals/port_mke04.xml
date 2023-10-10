@@ -14,7 +14,7 @@
    <category name="Filters" description="Filters for pins" >
 
       <choiceOption key="port_ioflt_fltdiv1" condition="port_ioflt_fltdiv1_present"
-         enumStem="PortFilterClock1"
+         typeName="PortFilterClock1"
          description="Filter Division Set 1"
          toolTip="Selects the clock speed for the filter" >
          <choice name="BUSCLK/2"    value="0" enum="Busclk2"/>
@@ -24,7 +24,7 @@
       </choiceOption >
 
       <choiceOption key="port_ioflt_fltdiv2" condition="port_ioflt_fltdiv2_present"
-         enumStem="PortFilterClock2"
+         typeName="PortFilterClock2"
          description="Filter Division Set 2"
          toolTip="Selects the clock speed for the filter" >
          <choice name="BUSCLK/32"    value="0" enum="Busclk32"/>
@@ -38,7 +38,7 @@
       </choiceOption >
 
       <choiceOption key="port_ioflt_fltdiv3" condition="port_ioflt_fltdiv3_present"
-         enumStem="PortFilterClock3"
+         typeName="PortFilterClock3"
          description="Filter Division Set 3"
          toolTip="Selects the clock speed for the filter" >
          <choice name="LPOCLK"      value="0" enum="Lpoclk"/>
@@ -52,7 +52,7 @@
       </choiceOption >
 
       <choiceOption key="port_ioflt_fltnmi" condition="port_ioflt_fltnmi_present"
-         enumStem="PortNmiFilterSel"
+         typeName="PortNmiFilterSel"
          description="Filter Selection for Input from NMI" >
          <choice name="No filter"                                                               value="0" enum="NoFilter"/>
          <choice name="Selects FLTDIV1, and will switch to FLTDIV3 in Stop mode automatically"  value="1" enum="SelectsFltdiv1_AndWillSwitchToFltdiv3InStopModeAutomatically"/>
@@ -61,7 +61,7 @@
       </choiceOption >
 
       <choiceOption key="port_ioflt_fltrst" condition="port_ioflt_fltrst_present"
-         enumStem="PortResetFilterSel"
+         typeName="PortResetFilterSel"
          description="Filter Selection for Input from RESET" >
          <choice name="No filter"                                                               value="0" enum="NoFilter"/>
          <choice name="Selects FLTDIV1, and will switch to FLTDIV3 in Stop mode automatically"  value="1" enum="SelectsFltdiv1_AndWillSwitchToFltdiv3InStopModeAutomatically"/>
@@ -70,7 +70,7 @@
       </choiceOption >
 
       <choiceOption key="port_ioflt_fltkbi0" condition="port_ioflt_fltkbi0_present"
-         enumStem="PortKbi0FilterSel"
+         typeName="PortKbi0FilterSel"
          description="Filter Selection for Input from KBI0" >
          <choice name="No filter"                                                               value="0" enum="NoFilter"/>
          <choice name="Selects FLTDIV1, and will switch to FLTDIV3 in Stop mode automatically"  value="1" enum="SelectsFltdiv1_AndWillSwitchToFltdiv3InStopModeAutomatically"/>
@@ -79,7 +79,7 @@
       </choiceOption >
 
       <choiceOption key="port_ioflt_fltkbi1" condition="port_ioflt_fltkbi1_present"
-         enumStem="PortKbi1FilterSel"
+         typeName="PortKbi1FilterSel"
          description="Filter Selection for Input from KBI1" >
          <choice name="No filter"                                                               value="0" enum="NoFilter"/>
          <choice name="Selects FLTDIV1, and will switch to FLTDIV3 in Stop mode automatically"  value="1" enum="SelectsFltdiv1_AndWillSwitchToFltdiv3InStopModeAutomatically"/>
@@ -88,7 +88,7 @@
       </choiceOption >
 
       <choiceOption key="port_ioflt_fltiic" condition="port_ioflt_fltiic_present"
-         enumStem="PortI2c0FilterSel"
+         typeName="PortI2c0FilterSel"
          description="Filter Selection for Input from SCL0/SDA0" >
          <choice name="No Filter"   value="0" enum="NoFilter"/>
          <choice name="FLTDIV1"     value="1" enum="Fltdiv1"/>
@@ -97,7 +97,7 @@
       </choiceOption >
 
       <choiceOption key="port_ioflt_fltpwt" condition="port_ioflt_fltpwt_present"
-         enumStem="PortPwtFilterSel"
+         typeName="PortPwtFilterSel"
          description="Filter Selection for Input from PWT_IN0/PWT_IN1" >
          <choice name="No Filter"   value="0" enum="NoFilter"/>
          <choice name="FLTDIV1"     value="1" enum="Fltdiv1"/>
@@ -106,7 +106,7 @@
       </choiceOption >
 
       <choiceOption key="port_ioflt_fltftm0" condition="port_ioflt_fltftm0_present"
-         enumStem="PortFtm0FilterSel"
+         typeName="PortFtm0FilterSel"
          description="Filter Selection for Input from FTM0 Channels" >
          <choice name="No Filter"   value="0" enum="NoFilter"/>
          <choice name="FLTDIV1"     value="1" enum="Fltdiv1"/>
@@ -115,7 +115,7 @@
       </choiceOption >
 
       <choiceOption key="port_ioflt_flta" condition="port_ioflt_flta_present"
-         enumStem="PortPtaFilterSel"
+         typeName="PortPtaFilterSel"
          description="Filter Selection for Input from PTA" >
          <choice name="BUSCLK"      value="0" enum="Busclk"/>
          <choice name="FLTDIV1"     value="1" enum="Fltdiv1"/>
@@ -124,7 +124,7 @@
       </choiceOption >
 
       <choiceOption key="port_ioflt_fltb" condition="port_ioflt_fltb_present"
-         enumStem="PortPtbFilterSel"
+         typeName="PortPtbFilterSel"
          description="Filter Selection for Input from PTB" >
          <choice name="BUSCLK"      value="0" enum="Busclk"/>
          <choice name="FLTDIV1"     value="1" enum="Fltdiv1"/>
@@ -133,7 +133,7 @@
       </choiceOption >
 
       <choiceOption key="port_ioflt_fltc" condition="port_ioflt_fltc_present"
-         enumStem="PortPtcFilterSel"
+         typeName="PortPtcFilterSel"
          description="Filter Selection for Input from PTC" >
          <choice name="BUSCLK"      value="0" enum="Busclk"/>
          <choice name="FLTDIV1"     value="1" enum="Fltdiv1"/>
@@ -163,7 +163,7 @@
    <category name="High Drive" description="High-drive enables for Port pins" >
       <for keys="P:p:n" values="B:b:5;C:c:1;C:c:5">
          <binaryOption key="port_hdrve_pt%(p)%(n)" condition="port_hdrve_pt%(p)%(n)_present"
-            enumStem="PortHdrvePt%(p)%(n)"
+            typeName="PortHdrvePt%(p)%(n)"
             description="High drive enable for Port %(P) bit %(n)" >
             <choice name="Low drive strength"   value="0" enum="LowDriveStrength"/>
             <choice name="High drive strength"  value="1" enum="HighDriveStrength"/>
@@ -196,7 +196,7 @@
          %paramDescription
          \t */
          \tstatic void configure%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}\n\n
       ]]></setTemplate>
    </for>
@@ -349,7 +349,7 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {

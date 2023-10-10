@@ -29,7 +29,7 @@
     * Template substitutions
     *
     * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
     * %variable[index]                Variable name /ADC0/adc_sc2_acfe
     * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
     * %description[index]             Description from controlVar e.g. Compare Function Enable
@@ -39,12 +39,12 @@
     * %params                         Formatted parameter list for function
     * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
     * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %enumClass[index]               As for %paramType
-    * %enumParam[index]               As for %paramName
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
     * %variable[index]                Variable name from condition
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
@@ -59,7 +59,7 @@
 
    <binaryOption key="irq_sc_irqpe" condition="irq_sc_irqpe_present"
       enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-      enumStem="IrqPinEnable"
+      typeName="IrqPinEnable"
       description="IRQ Pin Enable"
       toolTip="Selectively enables the IRQ pin">
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -68,7 +68,7 @@
 
    <binaryOption key="irq_sc_irqpdd" condition="irq_sc_irqpdd_present"
       enabledBy="irq_sc_irqpe"
-      enumStem="IrqPullUp"
+      typeName="IrqPullUp"
       toolTip="Controls pull-up device on IRQ pin"
       description="Interrupt Request (IRQ) Pull Device Disable" >
       <choice name="Pull-up Enabled"     value="0" enum="Enabled"/>
@@ -78,7 +78,7 @@
    <choiceOption key="irq_sc_irqmod" condition="irq_sc_irqmod_present&amp;&amp;irq_sc_irqedg_present"
       enabledBy="irq_sc_irqpe"
       valueFormat="IRQ_SC_IRQMOD(%s),IRQ_SC_IRQEDG(%s)"
-      enumStem="IrqMode"
+      typeName="IrqMode"
       toolTip="Selects edge/level and polarity to trigger event"
       description="IRQ Detection Mode" >
       <choice name="Falling Edge only"          value="0,0" enum="FallingEdgeOnly"/>
@@ -89,7 +89,7 @@
 
    <choiceOption key="irq_sc_irqack" condition="irq_sc_irqack_present"
       hidden="true"
-      enumStem="IrqAcknowledge"
+      typeName="IrqAcknowledge"
       toolTip="Acknowledges interrupt request events (write 1 to clear IRQF).\n
                Writing 0 has no meaning or effect. Reads always return 0. \n
                If edge-and-level detection is selected, then IRQF cannot be cleared \n
@@ -100,7 +100,7 @@
 
    <binaryOption key="irq_sc_irqie" condition="irq_sc_irqie_present"
       enabledBy="irq_sc_irqpe"
-      enumStem="IrqInterrupt"
+      typeName="IrqInterrupt"
       toolTip="Determines whether IRQ events (IRQF=1) generate an interrupt request"
       description="IRQ Interrupt Enable" >
       <choice name="Interrupts Disabled"    value="0" enum="Disabled"/>
@@ -133,7 +133,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}
          \t
          \t/**
@@ -289,7 +289,7 @@
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName0 = %symbolicValueExpression1;
+      \t   %paramType %registerName0 = %symbolicExpression1;
       \t\n
    ]]></initialValueTemplate>
 

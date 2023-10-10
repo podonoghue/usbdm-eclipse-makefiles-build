@@ -29,7 +29,7 @@
     * Template substitutions
     *
     * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
     * %variable[index]                Variable name /ADC0/adc_sc2_acfe
     * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
     * %description[index]             Description from controlVar e.g. Compare Function Enable
@@ -39,12 +39,12 @@
     * %params                         Formatted parameter list for function
     * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
     * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %enumClass[index]               As for %paramType
-    * %enumParam[index]               As for %paramName
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
     * %variable[index]                Variable name from condition
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
@@ -67,7 +67,7 @@
    <!-- Interrupts and DMA -->
    <choiceOption key="cmp_scr_interrupt" condition="cmp_scr_ier_present || cmp_scr_ief_present"
       enabledBy="irqHandlingMethod"
-      enumStem="CmpEvent"
+      typeName="CmpEvent"
       valueFormat="CMP_SCR_IER(%s),CMP_SCR_IEF(%s)"
       description="Action on transition"
       toolTip="Enables interrupt request on comparator transition">
@@ -78,7 +78,7 @@
    </choiceOption>
 
    <binaryOption key="cmp_scr_dmaen" condition="cmp_scr_dmaen_present"
-      enumStem="CmpDma"
+      typeName="CmpDma"
       description="DMA Enable Control"
       toolTip="Enables the DMA transfer triggered from the CMP module (If DMA supported by device)\n
                When this field is set, a DMA request is asserted when CFR or CFF is set">
@@ -110,7 +110,8 @@
    <title description="Configuration" />
 
    <choiceOption key="cmp_cr0_hystctr" condition="cmp_cr0_hystctr_present"
-      enumStem="CmpHysteresis"
+      enabledBy="enablePeripheralSupport"
+      typeName="CmpHysteresis"
       description="Comparator hard block hysteresis control"
       toolTip="Defines the programmable hysteresis level.\n
                The hysteresis values associated with each level are device specific">
@@ -121,7 +122,8 @@
    </choiceOption>
 
    <binaryOption key="cmp_cr1_pmode" condition="cmp_cr1_pmode_present"
-      enumStem="CmpPower"
+      enabledBy="enablePeripheralSupport"
+      typeName="CmpPower"
       description="Power Mode Select"
       toolTip="Selects trade-off between speed and power consumption">
       <choice value="0" name="Low-Speed Comparison mode"  enum="LowSpeed"  />
@@ -129,7 +131,8 @@
    </binaryOption>
 
    <binaryOption key="cmp_cr1_inv" condition="cmp_cr1_inv_present"
-      enumStem="CmpPolarity"
+      enabledBy="enablePeripheralSupport"
+      typeName="CmpPolarity"
       description="Comparator Invert"
       toolTip="Allows selection of the polarity of the analog comparator function">
       <choice value="0" name="Not inverted" enum="Normal"   />
@@ -137,7 +140,8 @@
    </binaryOption>
 
    <binaryOption key="cmp_cr1_trigm" condition="cmp_cr1_trigm_present"
-      enumStem="CmpTrigger"
+      enabledBy="enablePeripheralSupport"
+      typeName="CmpTrigger"
       description="Trigger Mode Enable"
       toolTip="CMP and DAC are configured to CMP Trigger mode.  \n
               CMP Trigger mode depends on an external timer resource to periodically enable \n
@@ -148,7 +152,8 @@
    </binaryOption>
 
    <choiceOption key="cmp_cr1_output" condition="cmp_cr1_ope_present || cmp_cr1_cos_present"
-      enumStem="CmpOutput"
+      enabledBy="enablePeripheralSupport"
+      typeName="CmpOutput"
       valueFormat="CMP_CR1_OPE(%s),CMP_CR1_COS(%s)"
       description="Comparator output pin source"
       toolTip="Selects whether the output pin is driven by the filtered or unfiltered comparator output">
@@ -165,7 +170,8 @@
    <title description="Internal DAC Configuration" />
 
    <binaryOption key="cmp_daccr_dacen" condition="cmp_daccr_dacen_present"
-      enumStem="CmpDacEnable"
+      enabledBy="enablePeripheralSupport"
+      typeName="CmpDacEnable"
       description="DAC Enable"
       toolTip="Enables the internal DAC">
       <choice value="0" name="Disabled" enum="Disabled" />
@@ -174,7 +180,7 @@
 
    <binaryOption key="cmp_daccr_vrsel" condition="cmp_daccr_vrsel_present"
       enabledBy="cmp_daccr_dacen"
-      enumStem="CmpDacrefSel"
+      typeName="CmpDacrefSel"
       description="DAC Reference Voltage Select"
       toolTip="Supply Voltage Reference Source Select">
       <choice value="0" name="Vin1 (Vref_OUT)"  enum="VrefOut" />
@@ -182,8 +188,8 @@
    </binaryOption>
 
    <intOption key="cmp_daccr_vosel" condition="cmp_daccr_vosel_present"
-      typeName="uint8_t"
       enabledBy="cmp_daccr_dacen"
+      typeName="uint8_t"
       description="DAC level"
       toolTip="Specifies the output level of the internal DAC"
       value="31" min="0" max="63"/>
@@ -195,6 +201,7 @@
       locked="true"/>
 
    <binaryOption key="secondsSupport"
+      enabledBy="enablePeripheralSupport"
       description="Enable use of Seconds for time"
       toolTip="Use of floating point is necessary to support specifing CMP filter times in seconds in runtime code.\n
                If not needed, the overhead can be avoided by disabling this option">
@@ -203,9 +210,10 @@
    </binaryOption>
 
    <choiceOption key="cmp_filter"
+      enabledBy="enablePeripheralSupport"
       target="cmp_cr1_en;cmp_cr1_we;cmp_cr1_se;cmp_cr0_filter;cmp_fpr_filt_per"
       valueFormat="%s"
-      enumStem="CmpFilterMode"
+      typeName="CmpFilterMode"
       description="Comparator Filtering Mode"
       toolTip="Disabled\n
                Comparator is non-functional and consumes no power.\n
@@ -256,7 +264,7 @@
 
    <binaryOption key="cmp_cr1_en"
       enabledBy="cmp_filter>0"
-      enumStem="CmpEnable"
+      typeName="CmpEnable"
       description="Comparator Enable"
       toolTip="Enable comparator"
       disabledValue="false"
@@ -268,7 +276,7 @@
 
    <binaryOption key="cmp_cr1_we"
       enabledBy="cmp_filter>0"
-      enumStem="CmpWindowEnable"
+      typeName="CmpWindowEnable"
       description="Windowing Enable"
       toolTip="Enable the use of an external signal to qualify the comparator output (before filtering).\n
                The comparator output is held when the external signal is inactive and\n
@@ -283,7 +291,7 @@
 
    <binaryOption key="cmp_cr1_se"
       enabledBy="cmp_filter>0"
-      enumStem="CmpSampleEnable"
+      typeName="CmpSampleEnable"
       description="Sample Enable"
       toolTip="Select between the divided bus clock and an external clock for the filter block"
       disabledValue="false"
@@ -330,7 +338,7 @@
    <choiceOption key="cmp_cr0_filter"
       ref="cmp_cr0_filter_cnt"
       valueFormat="CMP_CR0_FILTER_CNT(%s)"
-      enumStem="CmpFilterSamples"
+      typeName="CmpFilterSamples"
       description="Filter Sample Count"
       derived="true"
       locked="true"
@@ -359,7 +367,7 @@
 
    <choiceOption key="cmp_cr1_mode"
       hidden="true"
-      enumStem="CmpMode"
+      typeName="CmpMode"
       valueFormat="CMP_CR1_SE(%s),CMP_CR1_WE(%s)"
       description="Operating mode"
       toolTip="Selects operation in sampling or windowed mode">
@@ -412,7 +420,7 @@
       \t * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
       \t * The clock to the port will be enabled before changing the PCR.
       \t *
-         %comments
+         %paramDescription
       \t */
       \tstatic void setOutput(
             %params)  {
@@ -525,7 +533,7 @@
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicValueExpression;
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
        \t\n
    ]]></initialValueTemplate>
 
@@ -688,7 +696,7 @@
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+      \t   %paramType %registerName = %paramType_Normal;\n\n
    ]]></initialValueTemplate>
 
    <!--   Configure methods -->
@@ -862,7 +870,7 @@
       \t    * @tparam   Types
       \t    * @param    rest
       \t    *
-      %comments
+      %paramDescription
       \t    */
       \t   template <typename... Types>
       \t   constexpr Init(
@@ -886,7 +894,7 @@
       \t    * @tparam   Types
       \t    * @param    rest
       \t    *
-      %comments
+      %paramDescription
       \t    */
       \t   template <typename... Types>
       \t   constexpr Init(
@@ -910,7 +918,7 @@
       \t    * @tparam   Types
       \t    * @param    rest
       \t    *
-      %comments
+      %paramDescription
       \t    */
       \t   template <typename... Types>
       \t   constexpr Init(

@@ -437,6 +437,10 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_DMAMUX0_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_DMAMUX0_MASK;" />
          <param type="StringVariable"         value="DMAMUX0"     name="instanceList"                key="/DMAMUX0/_instanceList" />
+         <param type="StringVariable"         value="true"        name="_present"                    key="/DMAMUX0/_present" />
+         <param type="StringVariable"         value="true"        name="dmamux_chcfg_enbl_present"   key="/DMAMUX0/dmamux_chcfg_enbl_present" />
+         <param type="StringVariable"         value="true"        name="dmamux_chcfg_source_present" key="/DMAMUX0/dmamux_chcfg_source_present" />
+         <param type="StringVariable"         value="true"        name="dmamux_chcfg_trig_present"   key="/DMAMUX0/dmamux_chcfg_trig_present" />
          <dma source="Disabled"             num="0" />
          <dma source="UART0 Receive"        num="2" />
          <dma source="UART0 Transmit"       num="3" />

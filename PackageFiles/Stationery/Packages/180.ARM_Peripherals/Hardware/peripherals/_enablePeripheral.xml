@@ -208,9 +208,9 @@
 
       <!--
       Patterns for pattern and classHandler
-        -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
-        -  %b replaced with peripheral base name e.g. FTM1 => FTM
-        -  %c replaced with peripheral C++ base class name e.g. FTM1 => Ftm
+        -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A          Use $(_instance) instead
+        -  %b replaced with peripheral base name e.g. FTM1 => FTM                 Use $(_BASENAME) instead
+        -  %c replaced with peripheral C++ base class name e.g. FTM1 => Ftm       Use $(_Baseclass) instead
         -  _IRQHandler is appended to the pattern (only)
       Multiple patterns and classsHandlers may be used separated by ';'
       -->
@@ -327,7 +327,7 @@
 
       <initialValueTemplate variables="/$(_BASENAME)/irqHandlingMethod,irqLevel" ><![CDATA[
          \t//! Default IRQ level
-         \tstatic constexpr NvicPriority irqLevel =  %symbolicValueExpression1;
+         \tstatic constexpr NvicPriority irqLevel =  %symbolicExpression1;
          \t\n
       ]]></initialValueTemplate>
 
@@ -338,7 +338,7 @@
          variables="irqHandlingMethod"
       ><![CDATA[
           \t//! Class based callback handler has been installed in vector table for this instance
-          \tstatic constexpr bool irqHandlerInstalled = %symbolicValueExpression;
+          \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
           \t\n
       ]]></initialValueTemplate>
 

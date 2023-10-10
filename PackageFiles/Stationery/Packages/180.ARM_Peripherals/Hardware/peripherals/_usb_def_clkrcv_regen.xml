@@ -19,7 +19,7 @@
    </for>
 
    <choiceOption key="usb_clk_enable"
-      enumStem="UsbIrc48mClockEnable"
+      typeName="UsbIrc48mClockEnable"
       valueFormat="(%s)"
       description="IRC48M enable"
       toolTip="This is used to control when the the on-chip IRC48M module is enabled\n

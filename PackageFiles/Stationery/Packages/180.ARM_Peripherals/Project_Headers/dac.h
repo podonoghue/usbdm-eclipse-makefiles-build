@@ -57,12 +57,6 @@ protected:
       static constexpr void check() {}
    };
 
-public:
-   /**
-    * Type definition for DAC interrupt call back
-    */
-   typedef typename Info::CallbackFunction CallbackFunction;
-
 protected:
    /**
     * Callback to catch unhandled interrupt
@@ -70,9 +64,6 @@ protected:
    static void unhandledCallback(uint8_t) {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
-
-   /** Callback function for ISR */
-   static CallbackFunction sCallback;
 
 public:
    /**
@@ -90,16 +81,8 @@ public:
 
    /** Get base address of DAC.DATA[index] register as uint32_t */
    static constexpr uint32_t dacData(unsigned index) { return dacBase() + offsetof(DAC_Type, DATA) + index*sizeof(DAC_Type::DATA[0]); }
-
-   /**
-    * IRQ handler
-    */
-   static void irqHandler() {
-      // Call handler
-      sCallback(getAndClearStatus());
-   }
-
 $(/DAC/classInfo: // No class Info found)
+#if $(/DAC/irqHandlingMethod:false) // /DAC/irqHandlingMethod
    /**
     * Wrapper to allow the use of a class member as a callback function
     * @note Only usable with static objects.
@@ -132,8 +115,8 @@ $(/DAC/classInfo: // No class Info found)
     * @endcode
     */
    template<class T, void(T::*callback)(uint8_t), T &object>
-   static CallbackFunction wrapCallback() {
-      static CallbackFunction fn = [](uint8_t status) {
+   static typename Info::CallbackFunction wrapCallback() {
+      static typename Info::CallbackFunction fn = [](uint8_t status) {
          (object.*callback)(status);
       };
       return fn;
@@ -171,9 +154,9 @@ $(/DAC/classInfo: // No class Info found)
     * @endcode
     */
    template<class T, void(T::*callback)(uint8_t)>
-   static CallbackFunction wrapCallback(T &object) {
+   static typename Info::CallbackFunction wrapCallback(T &object) {
       static T &obj = object;
-      static CallbackFunction fn = [](uint8_t status) {
+      static typename Info::CallbackFunction fn = [](uint8_t status) {
          (obj.*callback)(status);
       };
       return fn;
@@ -185,13 +168,14 @@ $(/DAC/classInfo: // No class Info found)
     * @param[in] callback Callback function to execute on interrupt.\n
     *                     Use nullptr to remove callback.
     */
-   static void setCallback(CallbackFunction callback) {
+   static void setCallback(typename Info::CallbackFunction callback) {
       static_assert(Info::irqHandlerInstalled, "DAC not configured for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }
-      sCallback = callback;
+      Info::sCallback = callback;
    }
+#endif
 
 $(/DAC/InitMethod: // /DAC/InitMethod not found)
 
@@ -370,19 +354,6 @@ $(/DAC/InitMethod: // /DAC/InitMethod not found)
    }
 
    /**
-    * Get and clear DAC status
-    *
-    * @return DAC status value see DacStatus
-    */
-   static uint8_t getAndClearStatus() {
-      // Get status
-      uint8_t status = dac->SR;
-      // Clear set flags
-      dac->SR = ~status;
-      // return original status
-      return status;
-   }
-   /**
     *   Disable the DAC
     */
    static void finalise() {
@@ -412,11 +383,6 @@ $(/DAC/InitMethod: // /DAC/InitMethod not found)
    }
 
 };
-
-/**
- * Callback table for programmatically set handlers
- */
-template<class Info> typename Info::CallbackFunction DacBase_T<Info>::sCallback =  DacBase_T<Info>::unhandledCallback;
 
 $(/DAC/declarations: // No declarations found)
 /**

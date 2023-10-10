@@ -30,7 +30,7 @@
     * Template substitutions
     *
     * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicValueExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
     * %variable[index]                Variable name /ADC0/adc_sc2_acfe
     * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
     * %description[index]             Description from controlVar e.g. Compare Function Enable
@@ -40,12 +40,12 @@
     * %params                         Formatted parameter list for function
     * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
     * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %enumClass[index]               As for %paramType
-    * %enumParam[index]               As for %paramName
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicValueExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %defaultClockExpression         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %defaultMaskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
     * %variable[index]                Variable name from condition
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
@@ -55,7 +55,7 @@
    <!-- ************* PMPROT ****************** -->
    <binaryOption key="smc_pmprot_ahsrun" condition="smc_pmprot_ahsrun_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="SmcAllowHighSpeedRun"
+      typeName="SmcAllowHighSpeedRun"
       enumType="uint8_t"
       description="Allow High Speed Run mode"
       toolTip="Allows the MCU to enter High Speed Run mode (HSRUN)" >
@@ -65,7 +65,7 @@
 
    <binaryOption key="smc_pmprot_avlp" condition="smc_pmprot_avlp_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="SmcAllowVeryLowPower"
+      typeName="SmcAllowVeryLowPower"
       enumType="uint8_t"
       description="Allow very low power modes"
       toolTip="Allows the MCU to enter any very low power modes: VLPR, VLPW, and VLPS" >
@@ -75,7 +75,7 @@
 
    <binaryOption key="smc_pmprot_alls" condition="smc_pmprot_alls_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="SmcAllowLowLeakageStop"
+      typeName="SmcAllowLowLeakageStop"
       enumType="uint8_t"
       description="Allow low leakage stop mode"
       toolTip="Allows the MCU to enter any low leakage stop mode: LLS" >
@@ -85,7 +85,7 @@
 
    <binaryOption key="smc_pmprot_avlls" condition="smc_pmprot_avlls_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="SmcAllowVeryLowLeakageStop"
+      typeName="SmcAllowVeryLowLeakageStop"
       enumType="uint8_t"
       description="Allow very low leakage stop mode"
       toolTip="Allows the MCU to enter any low leakage stop mode: VLLSx" >
@@ -112,7 +112,7 @@
       \t
       \t * @note This is a write-once operation after reset
       \t *
-      %comments
+      %paramDescription
       \t */
       \tstatic void enablePowerModes(
       %params) {
@@ -125,7 +125,7 @@
 
    <binaryOption key="smc_pmctrl_lpwui" condition="smc_pmctrl_lpwui_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="SmcExitLowPowerOnInt"
+      typeName="SmcExitLowPowerOnInt"
       enumType="uint8_t"
       description="Exit low power on interrupt"
       toolTip="Causes the SMC to exit to normal RUN mode when any active interrupt\n
@@ -139,18 +139,18 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t *
       \t * @return E_NO_ERROR                 Success
       \t * @return E_ILLEGAL_POWER_TRANSITION If not in RUN mode
       \t */
-      \tstatic ErrorCode setExitVeryLowPowerOnInterrupt(%enumClass %enumParam) {
+      \tstatic ErrorCode setExitVeryLowPowerOnInterrupt(%paramType %paramName) {
       \t   if (getStatus() != SmcStatus_RUN) {
       \t      // Can only change in RUN mode
       \t      return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
       \t   }
       \t
-      \t   %defaultClockExpression
+      \t   %fieldAssignment
       \t
       \t   // Make sure write completes
       \t   (void)smc->PMCTRL;
@@ -161,7 +161,7 @@
    <for keys="n" dim="/SIM/numberOfClockSettings" >
       <choiceOption key="smc_pmctrl_runm[%(n)]"
          hidden="true"
-         enumStem="SmcRunMode"
+         typeName="SmcRunMode"
          enumType="uint8_t"
          description="Run mode"
          toolTip="Determines the clock speed restrictions that apply">
@@ -173,7 +173,7 @@
 
    <choiceOption key="smc_pmctrl_stopm" condition="smc_pmctrl_stopm_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="SmcStopMode"
+      typeName="SmcStopMode"
       enumType="uint8_t"
       description="Stop Mode Control"
       toolTip="Controls entry into the selected stop mode when Sleep-Now or Sleep-On-Exit \n
@@ -189,10 +189,10 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setStopMode(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \tstatic void setStopMode(%paramType %paramName) {
+      \t   %fieldAssignment
       \t   // Make sure write completes
       \t   (void)(%register);
       \t}\n\n
@@ -202,7 +202,7 @@
 
    <choiceOption key="smc_stopctrl_pstopo" condition="smc_stopctrl_pstopo_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="SmcPartialStopMode"
+      typeName="SmcPartialStopMode"
       enumType="uint8_t"
       description="Partial Stop Mode"
       toolTip="Controls whether a Partial Stop mode is entered when STOPM=STOP">
@@ -216,16 +216,16 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setPartialStopMode(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \tstatic void setPartialStopMode(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}\n\n
    ]]></clockCodeTemplate>
 
    <binaryOption key="smc_stopctrl_porpo" condition="smc_stopctrl_porpo_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="SmcPowerOnResetInVlls0"
+      typeName="SmcPowerOnResetInVlls0"
       enumType="uint8_t"
       description="Power-On_Reset Detection in VLLS0 mode"
       toolTip="Controls whether the Power-On-Reset detect circuit is enabled in VLLS0 mode (Brown-out detection)" >
@@ -238,16 +238,16 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setPowerOnResetInVLLS0(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \tstatic void setPowerOnResetInVLLS0(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}\n\n
    ]]></clockCodeTemplate>
 
    <binaryOption key="smc_stopctrl_ram2po" condition="smc_stopctrl_ram2po_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="SmcLowLeakageRam2"
+      typeName="SmcLowLeakageRam2"
       enumType="uint8_t"
       description="RAM2 Power Option"
       toolTip="Controls powering of RAM partition 2 in LLS2/VLLS2 mode" >
@@ -257,7 +257,7 @@
 
    <binaryOption key="smc_stopctrl_lpopo" condition="smc_stopctrl_lpopo_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="SmcLpoInLowLeakage"
+      typeName="SmcLpoInLowLeakage"
       enumType="uint8_t"
       description="Stop mode LPO Option"
       toolTip="Controls whether the 1 kHz LPO clock is enabled in LLS/VLLSx modes" >
@@ -267,7 +267,7 @@
 
    <choiceOption key="smc_stopctrl_vllsm" condition="!smc_stopctrl_llsm_present &amp;&amp; smc_stopctrl_vllsm_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="SmcLowLeakageStopMode"
+      typeName="SmcLowLeakageStopMode"
       enumType="uint8_t"
       description="Low Leakage Mode Control"
       toolTip="Controls which VLLS sub-mode to enter if STOPM = VLLSx">
@@ -279,7 +279,7 @@
 
    <choiceOption key="smc_stopctrl_llsm" condition="smc_stopctrl_llsm_present &amp;&amp; !smc_stopctrl_vllsm_present"
       enabledBy="enablePeripheralSupport"
-      enumStem="SmcLowLeakageStopMode"
+      typeName="SmcLowLeakageStopMode"
       enumType="uint8_t"
       description="Low Leakage Mode Control"
       toolTip="Controls which LLS sub-mode to enter if STOPM = LLSx">
@@ -292,10 +292,10 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setRam2PoweredInLLS2_VLLS2(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \tstatic void setRam2PoweredInLLS2_VLLS2(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}\n\n
    ]]></clockCodeTemplate>
 
@@ -304,10 +304,10 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setLpoPoweredInLLS_VLLS(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \tstatic void setLpoPoweredInLLS_VLLS(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}\n\n
    ]]></clockCodeTemplate>
 
@@ -316,10 +316,10 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setLowLeakageStopMode(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \tstatic void setLowLeakageStopMode(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}\n\n
    ]]></clockCodeTemplate>
 
@@ -328,17 +328,17 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setLowLeakageStopMode(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \tstatic void setLowLeakageStopMode(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}\n\n
    ]]></clockCodeTemplate>
 
    <choiceOption key="smc_stopctrl_vllsm_llsm" condition="smc_stopctrl_llsm_present &amp;&amp; smc_stopctrl_vllsm_present"
       enabledBy="enablePeripheralSupport"
       valueFormat="SMC_STOPCTRL_VLLSM(%s)"
-      enumStem="SmcLowLeakageStopMode"
+      typeName="SmcLowLeakageStopMode"
       enumType="uint8_t"
       description="Low Leakage Mode Control"
       toolTip="Controls which VLLS/LLS sub-mode to enter if STOPM = LLSx/VLLSx\n
@@ -355,10 +355,10 @@
       \t/**
       \t * Set %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t */
-      \tstatic void setLowLeakageStopMode(%enumClass %enumParam) {
-      \t   %defaultClockExpression
+      \tstatic void setLowLeakageStopMode(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}\n\n
    ]]></clockCodeTemplate>
 
@@ -368,7 +368,7 @@
       \t/**
       \t * Allows the detailed operation in STOP mode to be controlled.
       \t *
-      %comments
+      %paramDescription
       \t */
       \tstatic void setStopOptions(
       %params) {
@@ -381,7 +381,7 @@
 
    <choiceOption key="smc_pmstat_pmstat"
       hidden="true"
-      enumStem="SmcStatus"
+      typeName="SmcStatus"
       enumType="uint8_t"
       description="Processor execution state"
       toolTip="This register changes to reflect the execution state of the processor">
@@ -400,13 +400,13 @@
       \t/**
       \t * Get %description
       \t *
-      \t * @param %enumParam %tooltip
+      \t * @param %paramName %tooltip
       \t *
       \t * @return Processor execution state
       \t */
-      \tstatic %enumClass getStatus() {
+      \tstatic %paramType getStatus() {
       \t
-      \t   return (%enumClass) (%register & %mask);
+      \t   return (%paramType) (%register & %mask);
       \t}\n\n
    ]]></clockCodeTemplate>
 
@@ -840,7 +840,7 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {

@@ -1,14 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
-<!-- tpm_quad.xml -->
+<!-- tpm_def.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
+   <constant key="suppressInstance"         type="Boolean" value="false"         />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
+   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="_enablePeripheral.xml"  />
+   <title />
+
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
+
+<!--
+    * Template substitutions
+    *
+    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
+    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
+    * %description[index]             Description from controlVar e.g. Compare Function Enable
+    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
+    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
+    * %params                         Formatted parameter list for function
+    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
+    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
+    * %valueExpression                Numeric variable value e.g. 0x3
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %variable[index]                Variable name from condition
+    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * %register[index]                Register associated with variable e.g. adc->APCTL1
+    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+-->
+
+   <!-- ====================== constants ====================== -->
+   <constant key = "disable_peripheral"      value = "&quot;tpm->SC = TPM_SC_CMOD(0);&quot;" type="String"  />
+
+   <intOption key="NumChannels"
+      locked="true"
+      derived="true"
+      description="Number of Channels"
+      toolTip="The number of timer channels available"
+      value="=_channelCount" />
+
+   <intOption key="NumChannelVectors"
+      locked="true"
+      derived="true"
+      description="Number of Channel interrupt vectors"
+      toolTip="Number of channel event interrupt vectors - \n
+               Multiple Channels may be mapped to the same vector"
+      value="=_irqCount" />
+
+   <template><![CDATA[
+      \t//! Number of channels implemented
+      \tstatic constexpr unsigned NumChannels = $(NumChannels);
+
+      \t//! Number of channel event vectors implemented
+      \tstatic constexpr unsigned NumChannelVectors = $(NumChannelVectors);\n\n
+   ]]></template>
+
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Class)BasicInfo&quot;" />
+      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
 
-   <binaryOption key="individual_channel_call_backs" condition="@NumChannels>@NumChannelVectors"
+   <binaryOption key="individualChannelCallbacks" condition="=_channelCount>_irqCount"
       enabledBy="irqHandlingMethod"
       description="Use individual channel call-backs"
       toolTip="The different FTM channels use a common hardware interrupt handler. \n
@@ -16,13 +88,13 @@
                and dispatches to individual channel call-backs. \n
                This is more convenient but will increase the interrupt latency. \n
                If disabled, then a common call-back is used for all channels which leads to lower latency. \n
-               The common call-back will then have to determine the interrupt source if needed." >
+               The common call-back will then have to determine the interrupt source as needed." >
       <choice value="false"  name="Shared call-back"      isDefault="true" />
       <choice value="true"   name="Individual call-backs" />
    </binaryOption>
 
    <binaryOption key="check_minimums"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       description="Check minimum interval and minimum resolution"
       toolTip="Enables boundary checks of minimum interval and minimum resolution when setting values" >
       <choice value="0" name="No checks done" />
@@ -45,16 +117,6 @@
 
    <title description="Clocking" />
 
-  <category name="Advanced" description="SIM controlled options">
-      <for keys="p" values="0;1">
-         <aliasOption key="/SIM/TpmClkin%(p)" locked="false"  optional="true" />
-      </for>
-      <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)clksel" locked="false" optional="true" />
-      <aliasOption key="/SIM/Tpm$(_instance)ExternalClkin"    locked="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)ch0src" locked="false" optional="true" />
-   </category>
-
-
    <choiceOption key="tpmClockConfig"
       target="system_tpm_clock"
       description="Clock configuration"
@@ -74,9 +136,9 @@
       />
 
    <choiceOption key="tpm_sc_cmod"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       description="Clock Source"
-      enumStem="TpmClockSource"
+      typeName="TpmClockSource"
       target="inputClockFrequency"
       toolTip="Selects the clock source for the module">
       <choice value="0" name="Disabled"         ref="disabled"          code="0"                      enum="Disabled"        />
@@ -86,16 +148,16 @@
    </choiceOption>
 
    <intOption key="inputClockFrequency"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       locked="true"
       description="Frequency of input clock to timer"
       derived="true"
       units="Hz"/>
 
    <choiceOption key="tpm_sc_ps"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       description="Clock prescaler"
-      enumStem="TpmPrescale"
+      typeName="TpmPrescale"
       target="clockFrequency"
       toolTip="Selects the prescaler for the module">
       <choice value="0" name="Divide by 1"   ref="inputClockFrequency"        enum="DivBy1"  isDefault="true" />
@@ -109,7 +171,7 @@
    </choiceOption>
 
    <intOption key="clockFrequency"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       locked="true"
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
@@ -117,7 +179,7 @@
       units="Hz"/>
 
    <floatOption key="clockPeriod"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       ref="(1.0/clockFrequency)"
       locked="true"
       description="Period of timer clock"
@@ -126,9 +188,9 @@
       units="s"/>
 
    <choiceOption key="tpm_sc_mode"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="enablePeripheralSupport"
       valueFormat="TPM_SC_TOF(%s),TPM_SC_CPWMS(%s)"
-      enumStem="TpmMode"
+      typeName="TpmMode"
       description="Alignment and whether interval or free-running mode"
       toolTip="Left-aligned   (0...mod) or\n
                Centre-aligned (0...mod...0) or\n
@@ -160,7 +222,7 @@
       enabledBy="irqHandlingMethod"
       valueFormat="TPM_SC_TOIE(%s),TPM_SC_DMA(%s)"
       enumType="uint16_t"
-      enumStem="TpmOverflowAction"
+      typeName="TpmOverflowAction"
       description="Action on Counter overflow"
       toolTip="Enable interrupt and/or DMA on counter overflow">
        <choice value="0,0" name="No action"                    enum="None"             />
@@ -173,7 +235,7 @@
       enabledBy="irqHandlingMethod"
       valueFormat="TPM_SC_TOIE(%s)"
       enumType="uint8_t"
-      enumStem="TpmOverflowAction"
+      typeName="TpmOverflowAction"
       description="Action on Counter overflow"
       toolTip="Enable interrupt on counter overflow">
       <choice value="0" name="No action"          enum="None"       />
@@ -185,7 +247,7 @@
       derived="true"
       enumType="uint8_t"
       valueFormat="%s"
-      enumStem="TpmChannelNum"
+      typeName="TpmChannelNum"
       description="Channel Number"
       toolTip="Select a channel">
       <choice value="0"             name="Channel 0"      enum="0" />
@@ -204,55 +266,77 @@
    <for keys="ch" dim="NumChannels">
       <title description="TPM Channel %(ch)" />
 
-      <choiceOption key="tpm_cnsc_mode[%(ch)]" condition="tpm_combine_decap0_present&amp;&amp;tpm_cnsc_ms_present&amp;&amp;tpm_cnsc_els_present"
-         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      <choiceOption key="tpm_cnsc_mode[%(ch)]"
+         condition="tpm_combine_decap0_present&amp;&amp;tpm_cnsc_ms_present&amp;&amp;tpm_cnsc_els_present"
+         enabledBy="enablePeripheralSupport&amp;&amp;(((%(ch)%2)!=1)||(tpm_cnsc_mode[%(ch)-1]&lt;10))"
          valueFormat="(TPM_COMBINE_DECAPEN0(%s)&lt;&lt;8),(TPM_COMBINE_COMBINE0(%s)&lt;&lt;8),TPM_CnSC_MS(%s),TPM_CnSC_ELS(%s)"
          enumType="uint16_t"
-         enumStem="TpmChannelMode"
+         typeName="TpmChannelMode"
          description="Channel Mode"
          toolTip="Determines channel operation (PWM/Input capture/Output compare)">
-          <choice value="0,0,0,0" name="Disabled"                                   enum="Disabled"                               />
-          <choice value="0,0,0,1" name="Input Capture Rising-edge"                  enum="InputCaptureRisingEdge"                 />
-          <choice value="0,0,0,2" name="Input Capture Falling-edge"                 enum="InputCaptureFallingEdge"                />
-          <choice value="0,0,0,3" name="Input Capture Either-edge"                  enum="InputCaptureEitherEdge"                 />
-          <choice value="0,0,1,0" name="Output Compare No action"                   enum="OutputCompare"                          />
-          <choice value="0,0,1,1" name="Output Compare Toggle"                      enum="OutputCompareToggle"                    />
-          <choice value="0,0,1,2" name="Output Compare Clear"                       enum="OutputCompareClear"                     />
-          <choice value="0,0,1,3" name="Output Compare Set"                         enum="OutputCompareSet"                       />
-          <choice value="0,0,2,2" name="Pwm High-true Pulses"                       enum="PwmHighTruePulses"                      />
-          <choice value="0,0,2,1" name="Pwm Low-true Pulses"                        enum="PwmLowTruePulses"                       />
-          <choice value="1,0,0,1" name="Dual-edge Capture One-Shot Rising-edge"     enum="DualEdgeCaptureOneShotRisingEdge"       condition="(%(ch)&amp;1)==0" />
-          <choice value="1,0,1,1" name="Dual-edge Capture Continuous Rising-edge"   enum="DualEdgeCaptureContinuousRisingEdge"    condition="(%(ch)&amp;1)==0" />
-          <choice value="1,0,0,2" name="Dual-edge Capture One-Shot Falling-edge"    enum="DualEdgeCaptureOneShotFallingEdge"      condition="(%(ch)&amp;1)==0" />
-          <choice value="1,0,1,2" name="Dual-edge Capture Continuous Falling-edge"  enum="DualEdgeCaptureContinuousFallingEdge"   condition="(%(ch)&amp;1)==0" />
-          <choice value="0,1,0,2" name="Combined Positive-pulse"                    enum="CombinePositivePulse"                   condition="(%(ch)&amp;1)==0" />
-          <choice value="0,1,0,1" name="Combine Negative-pulse"                     enum="CombineNegativePulse"                   condition="(%(ch)&amp;1)==0" />
+         <!--            +............... DECAPEN   -->
+         <!--            | +............. COMBINE   -->
+         <!--            | |   +......... MS(B:A)   -->
+         <!--            | |   |    +.... ELS(B:A)  -->
+         <!--            | |   |    |               -->
+         <!--            v v   v    v               -->
+          <choice value="0,0,0b00,0b00" name="Disabled"                                   enum="Disabled"                               />
+          <!-- ..............-->
+          <choice value="0,0,0b00,0b01" name="Input Capture Rising-edge"                  enum="InputCaptureRisingEdge"                 />
+          <choice value="0,0,0b00,0b01" name="Input Capture Falling-edge"                 enum="InputCaptureFallingEdge"                />
+          <choice value="0,0,0b00,0b11" name="Input Capture Either-edge"                  enum="InputCaptureEitherEdge"                 />
+          <!-- .............. -->
+          <choice value="0,0,0b01,0b00" name="Output Compare No action"                   enum="OutputCompare"                          />
+          <choice value="0,0,0b01,0b01" name="Output Compare Toggle"                      enum="OutputCompareToggle"                    />
+          <choice value="0,0,0b01,0b10" name="Output Compare Clear"                       enum="OutputCompareClear"                     />
+          <choice value="0,0,0b01,0b11" name="Output Compare Set"                         enum="OutputCompareSet"                       />
+          <!-- ..............-->
+          <choice value="0,0,0b02,0b10" name="Pwm High-true Pulses"                       enum="PwmHighTruePulses"                      />
+          <choice value="0,0,0b02,0b01" name="Pwm Low-true Pulses"                        enum="PwmLowTruePulses"                       />
+          <!-- ..............-->
+          <choice value="0,1,0b00,0b10" name="Combined Positive-pulse"                    enum="CombinePositivePulse"                   condition="(%(ch)&amp;1)==0" />
+          <choice value="0,1,0b00,0b01" name="Combine Negative-pulse"                     enum="CombineNegativePulse"                   condition="(%(ch)&amp;1)==0" />
+          <!-- ..............-->
+          <choice value="1,0,0b00,0b01" name="Dual-edge Capture One-Shot Rising-edge"     enum="DualEdgeCaptureOneShotRisingEdge"       condition="(%(ch)&amp;1)==0" />
+          <choice value="1,0,0b01,0b01" name="Dual-edge Capture Continuous Rising-edge"   enum="DualEdgeCaptureContinuousRisingEdge"    condition="(%(ch)&amp;1)==0" />
+          <choice value="1,0,0b00,0b10" name="Dual-edge Capture One-Shot Falling-edge"    enum="DualEdgeCaptureOneShotFallingEdge"      condition="(%(ch)&amp;1)==0" />
+          <choice value="1,0,0b01,0b10" name="Dual-edge Capture Continuous Falling-edge"  enum="DualEdgeCaptureContinuousFallingEdge"   condition="(%(ch)&amp;1)==0" />
+          <choice value="1,0,0b00,0b11" name="Dual-edge Capture One-Shot Either-edge"     enum="DualEdgeCaptureOneShotEitherEdge"       condition="(%(ch)&amp;1)==0" />
+          <choice value="1,0,0b01,0b11" name="Dual-edge Capture Continuous Either-edge"   enum="DualEdgeCaptureContinuousEitherEdge"    condition="(%(ch)&amp;1)==0" />
       </choiceOption>
 
-      <choiceOption key="tpm_cnsc_mode[%(ch)]" condition="!tpm_combine_decap0_present&amp;&amp;tpm_cnsc_ms_present&amp;&amp;tpm_cnsc_els_present"
-         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      <choiceOption key="tpm_cnsc_mode[%(ch)]"
+         condition="!tpm_combine_decap0_present&amp;&amp;tpm_cnsc_ms_present&amp;&amp;tpm_cnsc_els_present"
+         enabledBy="enablePeripheralSupport"
          valueFormat="TPM_CnSC_MS(%s),TPM_CnSC_ELS(%s)"
          enumType="uint16_t"
-         enumStem="TpmChannelMode"
+         typeName="TpmChannelMode"
          description="Channel Mode"
          toolTip="Determines channel operation (PWM/Input capture/Output compare)">
-          <choice value="0,0" name="Disabled"                                   enum="Disabled"                               />
-          <choice value="0,1" name="Input Capture Rising-edge"                  enum="InputCaptureRisingEdge"                 />
-          <choice value="0,2" name="Input Capture Falling-edge"                 enum="InputCaptureFallingEdge"                />
-          <choice value="0,3" name="Input Capture Either-edge"                  enum="InputCaptureEitherEdge"                 />
-          <choice value="1,0" name="Output Compare No action"                   enum="OutputCompare"                          />
-          <choice value="1,1" name="Output Compare Toggle"                      enum="OutputCompareToggle"                    />
-          <choice value="1,2" name="Output Compare Clear"                       enum="OutputCompareClear"                     />
-          <choice value="1,3" name="Output Compare Set"                         enum="OutputCompareSet"                       />
-          <choice value="2,2" name="Pwm High-true Pulses"                       enum="PwmHighTruePulses"                      />
-          <choice value="2,1" name="Pwm Low-true Pulses"                        enum="PwmLowTruePulses"                       />
+         <!--              +......... MS(B:A)   -->
+         <!--              |    +.... ELS(B:A)  -->
+         <!--              |    |               -->
+         <!--              v    v               -->
+          <choice value="0b00,0b00" name="Disabled"                                   enum="Disabled"                               />
+          <!-- ..............-->
+          <choice value="0b00,0b01" name="Input Capture Rising-edge"                  enum="InputCaptureRisingEdge"                 />
+          <choice value="0b00,0b10" name="Input Capture Falling-edge"                 enum="InputCaptureFallingEdge"                />
+          <choice value="0b00,0b11" name="Input Capture Either-edge"                  enum="InputCaptureEitherEdge"                 />
+          <!-- ..............-->
+          <choice value="0b01,0b00" name="Output Compare No action"                   enum="OutputCompare"                          />
+          <choice value="0b01,0b01" name="Output Compare Toggle"                      enum="OutputCompareToggle"                    />
+          <choice value="0b01,0b10" name="Output Compare Clear"                       enum="OutputCompareClear"                     />
+          <choice value="0b01,0b11" name="Output Compare Set"                         enum="OutputCompareSet"                       />
+          <!-- ..............-->
+          <choice value="0b10,0b10" name="Pwm High-true Pulses"                       enum="PwmHighTruePulses"                      />
+          <choice value="0b01,0b01" name="Pwm Low-true Pulses"                        enum="PwmLowTruePulses"                       />
       </choiceOption>
 
       <choiceOption key="tpm_cnsc_action[%(ch)]" condition="tpm_cnsc_chie_present&amp;&amp;tpm_cnsc_dma_present"
          enabledBy="irqHandlingMethod&amp;&amp;(tpm_cnsc_mode[%(ch)]!=0)"
          valueFormat="TPM_CnSC_CHIE(%s),TPM_CnSC_DMA(%s)"
          enumType="uint8_t"
-         enumStem="TpmChannelAction"
+         typeName="TpmChannelAction"
          description="Action on Channel Event"
          toolTip="Enable interrupt and/or DMA on channel event">
           <choice value="0,0" name="No action"                    enum="None"             />
@@ -265,7 +349,7 @@
          enabledBy="irqHandlingMethod&amp;&amp;(tpm_cnsc_mode[%(ch)]!=0)"
          valueFormat="TPM_CnSC_CHIE(%s)"
          enumType="uint8_t"
-         enumStem="TpmChannelAction"
+         typeName="TpmChannelAction"
          description="Action on Channel Event"
          toolTip="Enable interrupt on channel event">
           <choice value="0" name="No action"              enum="None"             />
@@ -273,9 +357,9 @@
       </binaryOption>
 
       <binaryOption key="tpm_cnsc_icrst[%(ch)]" condition="tpm_cnsc_icrst_present"
-         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+         enabledBy="enablePeripheralSupport"
          valueFormat="TPM_CnSC_ICRST(%s)"
-         enumStem="TpmChannelReset"
+         typeName="TpmChannelReset"
          enumType="uint8_t"
          description="Reset counter on channel IC event"
          toolTip="Enables the channel IC event to reset the shared counter">
@@ -326,7 +410,7 @@
       \t * Enables clock to peripheral and configures all pins.
       \t * Configures main operating settings for timer.
       \t *
-      %comments
+      %paramDescription
       \t */
       \tstatic void configure(
       %params) {
@@ -370,7 +454,7 @@
          \t/**
          \t * Set %description0 and %description1
          \t *
-         %comments
+         %paramDescription
          \t */
          \t%(static)void selectClock(
          %params)%(const) {
@@ -401,7 +485,7 @@
             \t/**
             \t * Set %description
             \t *
-            %comments
+            %paramDescription
             \t *
             \t * @note This function will affect all channels of the timer.
             \t * @note The timer will be disabled while making changes.
@@ -424,11 +508,11 @@
             \t/**
             \t * Get %description
             \t *
-            %comments
+            %paramDescription
             \t */
-            \t%(static)%enumClass get%(n)()%(const) {
+            \t%(static)%paramType get%(n)()%(const) {
             \t
-            \t   return (%enumClass)(%register&~%mask);
+            \t   return (%paramType)(%register&~%mask);
             \t}\n\n
          ]]></setTemplate>
       </for>
@@ -444,7 +528,7 @@
             \t * Set %description
             \t * This value is write-buffered and updated by MOD synchronisation
             \t *
-            %comments
+            %paramDescription
             \t *
             \t * @note This function will affect all channels of the timer.
             \t */
@@ -457,11 +541,11 @@
             \t/**
             \t * Get %description
             \t *
-            %comments
+            %paramDescription
             \t */
-            \t%(static)%enumClass get%(n)()%(const) {
+            \t%(static)%paramType get%(n)()%(const) {
             \t
-            \t   return (%enumClass)%register;
+            \t   return (%paramType)%register;
             \t}\n\n
          ]]></setTemplate>
       </for>
@@ -504,10 +588,12 @@
          \t      unsigned modValue = round(modValueF);\n
       ]]></template>
       <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
-         \t      if (modValue < Info::minimumResolution) {
-         \t         usbdm_assert(false, "Interval is too short");
-         \t         // Too short a period for minimum resolution
-         \t         return setErrorCode(E_TOO_SMALL);
+         \t      if constexpr (Info::minimumResolution>0) {
+         \t         if (modValue < Info::minimumResolution) {
+         \t            usbdm_assert(false, "Interval is too short");
+         \t            // Too short a period for minimum resolution
+         \t            return setErrorCode(E_TOO_SMALL);
+         \t         }
          \t      }\n
       ]]></template>
       <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true"><![CDATA[
@@ -661,9 +747,11 @@
          \t   }\n
       ]]></template>
       <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
-         \t   if (rv < Info::minimumInterval) {
-         \t      // Attempt to set too short a period
-         \t      setErrorCode(E_TOO_SMALL);
+         \t   if constexpr (Info::minimumInterval>0) {
+         \t      if (rv < Info::minimumInterval) {
+         \t         // Attempt to set too short a period
+         \t         setErrorCode(E_TOO_SMALL);
+         \t      }
          \t   }\n
       ]]></template>
       <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
@@ -1227,19 +1315,29 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
-<!--  ========== TPM Init class =============================== -->
+<!--   ========== Init class =============================== -->
 
-   <template key="init_description" namespace="all" ><![CDATA[
+   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <![CDATA[
       \t/**
-      \t * Class used to do initialisation of $(_Class)
+      \t * Class used to do initialisation of the $(_Baseclass)
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
       \t * @note This constructor may be used to create a const instance in ROM
       \t *
       \t * Example:
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback() {
+      \t *    ...
+      \t * }
+      \t *
       \t * @code
-      \t * static const Tpm$(_instance)::Init tpmInit {
+      \t * static const $(_Class)::Init $(_Class)Init {
       \t *
       \t *    // Omitted parameters are taken to be zero unless a base value is given
       \t *    TpmMode_Freerunning,           // Alignment and whether interval or free-running mode
@@ -1253,20 +1351,24 @@
       \t *    // OR
       \t *    100_ms,                        // Timer period or minimum interval in seconds
       \t *
+      \t *    $(_name)Callback,              // Call-back to execute on event - call-back function name
+      \t *    NvicPriority_Low,              // Priority for interrupt - Low
+      \t *
       \t *    // Optional base value to start with (must be last parameter)
       \t *    $(_Class)::DefaultValue
       \t * };
       \t *
-      \t * // Initialise TPM from values specified above
-      \t * Tpm$(_instance)::configure(tpmInit)
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_Class)Init)
       \t * @endcode
       \t */
    ]]></template>
 
-   <template namespace="usbdm" ><![CDATA[
-      class $(_Class)BasicInfo {
+   <template namespace="usbdm" discardRepeats="true"  ><![CDATA[
+      class $(_Baseclass)BasicInfo {
       \t
-      public:\n\n
+      public:
+      \t\n
    ]]></template>
 
    <setTemplate namespace="usbdm"
@@ -1329,7 +1431,7 @@ $(init_description)
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+      \t   %paramType %registerName = %paramType_Normal;\n\n
    ]]></initialValueTemplate>
 
    <initialValueTemplate namespace="usbdm"
@@ -1343,7 +1445,7 @@ $(init_description)
       variables= "tpm_modPeriod"
     ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = 0_s;\n\n
+      \t   %paramType %registerName = 0_s;\n\n
    ]]></initialValueTemplate >
 
 <!--  Configure method -->
@@ -1475,7 +1577,7 @@ $(init_description)
       ]]></constructorTemplate>
    </for>
 
-   <constructorTemplate namespace="usbdm"
+   <constructorTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="tpm_sc_ps, tpm_mod"
       params=",mod_ticks"
       linePadding="xxx"
@@ -1493,13 +1595,13 @@ $(init_description)
          \t   constexpr Init(
          %params, Types... rest) : Init(rest...) {
          \t
-         \t      %registerName0    = (%registerName0&~%mask0) | %enumParam0;
-         \t      %registerName1   = %enumParam1;
+         \t      %registerName0    = (%registerName0&~%mask0) | %paramName0;
+         \t      %registerName1   = %paramName1;
          \t   }
          \t\n
    ]]></constructorTemplate>
 
-   <constructorTemplate namespace="usbdm"
+   <constructorTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       nonDefaultParams="2"
       variables="tpm_modPeriod"
       linePadding="xxx"
@@ -1583,9 +1685,9 @@ $(init_description)
 
 <!--  ========== TPM CHANNEL Init class =============================== -->
 
-   <template key="channel_init_description" namespace="all"><![CDATA[
+   <template key="channel_init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"><![CDATA[
       \t/**
-      \t * Class used to do initialisation of Tpm$(_instance)Channel
+      \t * Class used to do initialisation of $(_Class)Channel
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
@@ -1593,7 +1695,7 @@ $(init_description)
       \t *
       \t * Example:
       \t * @code
-      \t * static const Tpm$(_instance)::ChannelInit channelInit {
+      \t * static const $(_Class)::ChannelInit channelInit {
       \t *
       \t *    // Omitted parameters are taken to be zero unless a base value is given
       \t *    TpmChannelNum_3,            // Channel to initialise
@@ -1606,13 +1708,13 @@ $(init_description)
       \t *    $(_Class)::DefaultChannelInitValues[TpmChannelNum_3]
       \t * };
       \t *
-      \t * // Initialise TPM from values specified above
-      \t * Tpm$(_instance)::configureChannel(channelInit)
+      \t * // Initialise $(_NAME) from values specified above
+      \t * $(_Class)::configureChannel(channelInit)
       \t * @endcode
       \t */
    ]]></template>
 
-   <template namespace="usbdm"><![CDATA[
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"><![CDATA[
 $(channel_init_description)
       \tclass ChannelInit {
       \t
@@ -1631,44 +1733,44 @@ $(channel_init_description)
 
 <!--  Member variables -->
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;individual_channel_call_backs"
-      variables="/$(_BASENAME)/irqHandlingMethod"
+   <setTemplate namespace="usbdm" discardRepeats="true"  codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;/$(_BASENAME)/individualChannelCallbacks"
+      variables="irqHandlingMethod"
     ><![CDATA[
       \t   /// $(_Class) channel interrupt call-back
       \t   ChannelCallbackFunction callbackFunction = nullptr;\n\n
    ]]></setTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="tpm_cnv[]"
    ><![CDATA[
       \t   /// %description
       \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="tpm_cnsc_mode[]"
    ><![CDATA[
       \t   /// Channel Status And Control Register
       \t   uint16_t %registerName = 0;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="tpm_channel_number"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = TpmChannelNum_None;\n\n
+      \t   %paramType %registerName = TpmChannelNum_None;\n\n
    ]]></initialValueTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;(NumChannelVectors>1)"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true"  codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;(NumChannelVectors>1)"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+      \t   %paramType %registerName = %paramType_Normal;\n\n
    ]]></initialValueTemplate>
 
-<!-- Configure method -->
+<!--  Configure methods -->
 
-   <template discardRepeats="true" key="/$(_BASENAME)/ChannelInitMethod" namespace="all" ><![CDATA[
+   <template discardRepeats="true" key="/$(_BASENAME)/ChannelInitMethod" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Configure Channel from values specified in channelInit
       \t
@@ -1684,7 +1786,7 @@ $(channel_init_description)
       \t   }
       \t\n
    ]]></template>
-   <template discardRepeats="true" key="/$(_BASENAME)/ChannelInitMethod" namespace="all" condition="tpm_combine_combine0_present" ><![CDATA[
+   <template discardRepeats="true" key="/$(_BASENAME)/ChannelInitMethod" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" condition="ftm_combine_combine0_present" ><![CDATA[
       \t   // Configure timer combine mode
       \t   if ((channelInit.channel&0b1) == 0) {
       \t      // Even channel value controls paired channels n,n+1
@@ -1704,8 +1806,8 @@ $(channel_init_description)
 
 <!--  Constructors -->
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;individual_channel_call_backs"
-      variables="/$(_BASENAME)/irqHandlingMethod"
+   <constructorTemplate namespace="usbdm" discardRepeats="true"  codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;/$(_BASENAME)/individualChannelCallbacks"
+      variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
       \t   /**
@@ -1719,7 +1821,7 @@ $(channel_init_description)
       \t   template <typename... Types>
       \t   constexpr ChannelInit(ChannelCallbackFunction callbackFunction, Types... rest) : ChannelInit(rest...) {
       \t
-      \t      this->%enumParam0 = %paramExpression;
+      \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
    ]]></constructorTemplate>
 
@@ -1727,7 +1829,7 @@ $(channel_init_description)
       tpm_cnsc_mode[];
       tpm_cnsc_action[];
       tpm_cnsc_icrst[]">
-      <constructorTemplate  namespace="usbdm"
+      <constructorTemplate  namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -1736,7 +1838,7 @@ $(channel_init_description)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
@@ -1750,7 +1852,7 @@ $(channel_init_description)
    <for keys="r" values="
       tpm_channel_number;
       tpm_cnv[]">
-      <constructorTemplate  namespace="usbdm"
+      <constructorTemplate  namespace="usbdm" discardRepeats="true"  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -1759,7 +1861,7 @@ $(channel_init_description)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
@@ -1769,21 +1871,21 @@ $(channel_init_description)
          \t\n
       ]]></constructorTemplate>
    </for>
-   <template namespace="usbdm"><![CDATA[
-      \t};\n\n
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+      \t}; // class  $(_Baseclass)BasicInfo::ChannelInit\n\n
    ]]></template>
 
 <!--  Default Initialisation value -->
 
-  <template><![CDATA[
+  <template codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"><![CDATA[
       \t/**
-      \t * Default initialisation value for Tpm$(_instance)ChannelInit
+      \t * Default initialisation value for $(_Class)ChannelInit
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr ChannelInit DefaultChannelInitValues[] = {\n
   ]]></template>
    <for keys="ch" dim="NumChannels">
-      <initialValueTemplate
+      <initialValueTemplate  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          separator=","
          terminator=","
          variables="
@@ -1797,7 +1899,7 @@ $(channel_init_description)
          %initExpression\n\t},\n
       ]]></initialValueTemplate>
    </for>
-  <template><![CDATA[
+  <template  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"><![CDATA[
       \n\t};\n\n
   ]]></template>
 
@@ -1834,7 +1936,7 @@ $(channel_init_description)
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
+   <template  codeGenCondition="irqHandlingMethod" ><![CDATA[
       \t/**
       \t * Set overflow and fault interrupt call-back
       \t *
@@ -1848,7 +1950,7 @@ $(channel_init_description)
       \t   if (newCallback == nullptr) {
       \t      newCallback = unhandledCallback;
       \t   }
-      \t   callback = newCallback;
+      \t   sCallback = newCallback;
       \t   return E_NO_ERROR;
       \t}
       \t\n
@@ -1869,7 +1971,7 @@ $(channel_init_description)
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;!individual_channel_call_backs" ><![CDATA[
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;!individualChannelCallbacks" ><![CDATA[
       \t/**
       \t * Set channel call-back function
       \t * Configured for shared channel call-backs i.e. all channels use same call-back
@@ -1885,12 +1987,12 @@ $(channel_init_description)
       \t */
       \tstatic ErrorCode setChannelCallback(ChannelCallbackFunction callback) {
       \t   if (callback == nullptr) {
-      \t      channelCallbacks[0] = timerUnhandledChannelCallback;
+      \t      channelCallbacks[0] = unhandledChannelCallback;
       \t      return E_NO_ERROR;
       \t   }
       #ifdef DEBUG_BUILD
       \t   // Callback is shared across all channels. Check if callback already assigned
-      \t   if ((channelCallbacks[0] != timerUnhandledChannelCallback) &&
+      \t   if ((channelCallbacks[0] != unhandledChannelCallback) &&
       \t       (channelCallbacks[0] != callback)) {
       \t      return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
       \t   }
@@ -1922,7 +2024,7 @@ $(channel_init_description)
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="/$(_BASENAME)/irqHandlingMethod&amp;&amp;individual_channel_call_backs" ><![CDATA[
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;individualChannelCallbacks" ><![CDATA[
       \t/**
       \t * Set channel call-back function
       \t * Configured for individual channel call-backs
@@ -1943,7 +2045,7 @@ $(channel_init_description)
       \t      return setErrorCode(ErrorCode::E_ILLEGAL_PARAM);
       \t   }
       \t   if (callback == nullptr) {
-      \t      channelCallbacks[channelNum] = timerUnhandledChannelCallback;
+      \t      channelCallbacks[channelNum] = unhandledChannelCallback;
       \t      return ErrorCode::E_NO_ERROR;
       \t   }
       \t   channelCallbacks[channelNum] = callback;
@@ -2013,10 +2115,10 @@ $(channel_init_description)
 
    <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
-      /**
-       * Class representing $(_NAME)
-       */
-      class $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n\n
+   /**
+    * Class representing $(_NAME)
+    */
+   class $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n\n
    ]]></template>
 
    <template key="/$(_BASENAME)/quadDeclarations" namespace="all"  ><![CDATA[
@@ -2028,6 +2130,17 @@ $(channel_init_description)
 
    <!-- ************* Signal mapping ****************** -->
 
-   <signals enabledBy="enablePeripheralSupport" />
+   <category name="Advanced" description="Advanced options">
+      <for keys="p" values="0;1">
+         <aliasOption key="/SIM/TpmClkin%(p)" locked="false"  optional="true" />
+      </for>
+      <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)clksel" locked="false" optional="true" />
+      <aliasOption key="/SIM/Tpm$(_instance)ExternalClkin"    locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)ch0src" locked="false" optional="true" />
+   </category>
+
+
+   <signals enabledBy="enablePeripheralSupport" locked="true" />
+   <signals name="TPM" optional="true" />
 
 </fragment>

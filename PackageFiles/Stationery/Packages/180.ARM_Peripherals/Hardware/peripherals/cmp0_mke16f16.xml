@@ -9,7 +9,7 @@
    <choiceOption key="cmp_muxcr_psel$(_instance)"
       hidden="true"
       valueFormat="CMP_MUXCR_PSEL(%s)"
-      enumStem="Cmp$(_instance)InputPlus"
+      typeName="Cmp$(_instance)InputPlus"
       description="Plus Input Mux Control"
       toolTip="Determines which input is selected for the plus input of the comparator" >
       <choice value="CMP_C1_PSEL(0)|CMP_C1_INPSEL(1)" enum="0" name="CMP_IN0" />
@@ -26,7 +26,7 @@
    <choiceOption key="cmp_muxcr_msel$(_instance)"
       hidden="true"
       valueFormat="CMP_MUXCR_MSEL(%s)"
-      enumStem="Cmp$(_instance)InputMinus"
+      typeName="Cmp$(_instance)InputMinus"
       description="Minus Input Mux Control"
       toolTip="Determines which input is selected for the minus input of the comparator" >
       <choice value="CMP_C1_MSEL(0)|CMP_C1_INNSEL(1)" enum="0" name="CMP_IN0" />

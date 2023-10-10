@@ -6,18 +6,46 @@
 
    <constant key="peripheralUsesInterrupts" type="Boolean" value="false" />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false" />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true" />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"  />
    <xi:include href="_enablePeripheral.xml" />
    <title />
 
-   <xi:include href="_simCommon.xml" />
+<!-- ==================== Constants ==================== -->
 
    <!--                                   RUN        -->
    <constant key="ICSOUTCLK_max"  value="50MHz"  type="Long"    hidden="false" />
    <constant key="ICSFLLCLK_max"  value="50MHz"  type="Long"    hidden="false" />
    <constant key="I2S_max"        value="25MHz"  type="Long"    hidden="false" />
    <constant key="LPUART_max"     value="48MHz"  type="Long"    hidden="false" />
-   <constant key="TPM_max"        value="48MHz"  type="Long"    hidden="false" />
+   <constant key="FTM_max"        value="48MHz"  type="Long"    hidden="false" />
+
+   <!-- Indicates the number of PIT channels -->
+   <constant key="/PIT_NumChannels" type="Long" value="2" />
+
+   <!-- Indicates the number of IRQ vectors allocated to the PIT -->
+   <constant key="/PIT_NumVectors" type="Long" value="2" />
+
+   <!-- Indicates the number of FTM channels -->
+   <constant key="/FTM0_NumChannels" type="Long" value="2" />
+   <constant key="/FTM1_NumChannels" type="Long" value="2" />
+   <constant key="/FTM2_NumChannels" type="Long" value="6" />
+
+   <!-- Indicates the number of IRQ vectors allocated to the FTMs -->
+   <constant key="/FTM0_NumVectors" type="Long" value="1" />
+   <constant key="/FTM1_NumVectors" type="Long" value="1" />
+   <constant key="/FTM2_NumVectors" type="Long" value="1" />
+
+   <!-- Indicates the number of DMA channels -->
+   <!-- None -->
+
+   <!-- Indicates the number of DMA channels -->
+   <!-- None -->
+
+   <!-- LLWU wakeup devices -->
+   <!-- None -->
+
+   <!-- DMA slots -->
+   <!-- None -->
 
    <!--
         Simple pin mapping information
@@ -31,17 +59,92 @@
 
    <!-- Pin mapping for ACMP0 -->
    <constant key="/ACMP0/inputPinMap" type="String" value="&quot;PTA0,PTA1,PTC4&quot;" />
-   <constant key="/ACMP0/outputPinMap" type="String" value="&quot;PTA4&quot;" />
 
    <!-- Pin mapping for ACMP1 -->
    <constant key="/ACMP1/inputPinMap" type="String" value="&quot;PTA6,PTA7,PTB4&quot;" />
-   <constant key="/ACMP1/outputPinMap" type="String" value="&quot;PTB5&quot;" />
 
-   <!-- Pin mapping for FTM2 -->
-   <constant key="/FTM2/faultPinMap"           type="String" value="&quot;ACMP0_O,PTA6,PTA7,ACMP1_O&quot;" />
-   <constant key="/FTM2/hardwareTriggerPinMap" type="String" value="&quot;ACMP0_O/ACMP1_O,FTM0_CH0,FTMSYNC&quot;"  />
 
-   <!-- Pin mapping for IRQ TODO -->
+   <!-- FTM0 channels -->
+   <dynamicSignalMapping signal="FTM0_CH0" >
+      <signalMapping pin="-"     expression="(/FTM0/ftm_cnsc_mode[0]==0)"  />
+      <signalMapping pin="PTA0"  expression="(!sim_pinsel0_ftm0ps0)"        />
+      <signalMapping pin="PTB2" />
+   </dynamicSignalMapping>
+   <dynamicSignalMapping signal="FTM0_CH1" >
+      <signalMapping pin="-"     expression="(/FTM0/ftm_cnsc_mode[1]==0)&amp;&amp;((/FTM0/ftm_cnsc_mode[0]&lt;10)||(/FTM0/ftm_cnsc_mode[0]>11))" />
+      <signalMapping pin="PTA1"  expression="(!sim_pinsel0_ftm0ps1)"        />
+      <signalMapping pin="PTB3" />
+   </dynamicSignalMapping>
+
+   <!-- FTM1 channels -->
+   <dynamicSignalMapping signal="FTM1_CH0" >
+      <signalMapping pin="-"     expression="(/FTM1/ftm_cnsc_mode[0]==0)"  />
+      <signalMapping pin="PTC4"  expression="(!sim_pinsel0_ftm1ps0)"        />
+      <signalMapping pin="PTH2" />
+   </dynamicSignalMapping>
+   <dynamicSignalMapping signal="FTM1_CH1" >
+      <signalMapping pin="-"     expression="(/FTM1/ftm_cnsc_mode[1]==0)&amp;&amp;((/FTM1/ftm_cnsc_mode[0]&lt;10)||(/FTM1/ftm_cnsc_mode[0]>11))" />
+      <signalMapping pin="PTC5"  expression="(!sim_pinsel0_ftm1ps1)"        />
+      <signalMapping pin="PTE7" />
+   </dynamicSignalMapping>
+
+   <!-- FTM2 channels -->
+   <dynamicSignalMapping signal="FTM2_CH0" >
+      <signalMapping pin="-"     expression="(/FTM2/ftm_cnsc_mode[0]==0)"  />
+      <signalMapping pin="PTC0"  expression="(sim_pinsel1_ftm2ps0==0)"        />
+      <signalMapping pin="PTF0"  expression="(sim_pinsel1_ftm2ps0==1)"        />
+      <signalMapping pin="PTH0" />
+   </dynamicSignalMapping>
+   <dynamicSignalMapping signal="FTM2_CH1" >
+      <signalMapping pin="-"     expression="(/FTM2/ftm_cnsc_mode[1]==0)&amp;&amp;((/FTM2/ftm_cnsc_mode[0]&lt;10)||(/FTM2/ftm_cnsc_mode[0]>11))" />
+      <signalMapping pin="PTC1"  expression="(sim_pinsel1_ftm2ps1==0)"        />
+      <signalMapping pin="PTF1"  expression="(sim_pinsel1_ftm2ps1==1)"        />
+      <signalMapping pin="PTH1" />
+   </dynamicSignalMapping>
+   <dynamicSignalMapping signal="FTM2_CH2" >
+      <signalMapping pin="-"     expression="(/FTM2/ftm_cnsc_mode[2]==0)"  />
+      <signalMapping pin="PTC2"  expression="(sim_pinsel1_ftm2ps2==0)"        />
+      <signalMapping pin="PTD0"  expression="(sim_pinsel1_ftm2ps2==1)"        />
+      <signalMapping pin="PTG4" />
+   </dynamicSignalMapping>
+   <dynamicSignalMapping signal="FTM2_CH3" >
+      <signalMapping pin="-"     expression="(/FTM2/ftm_cnsc_mode[3]==0)&amp;&amp;((/FTM2/ftm_cnsc_mode[2]&lt;10)||(/FTM2/ftm_cnsc_mode[2]>11))" />
+      <signalMapping pin="PTC3"  expression="(sim_pinsel1_ftm2ps3==0)"        />
+      <signalMapping pin="PTD1"  expression="(sim_pinsel1_ftm2ps3==1)"        />
+      <signalMapping pin="PTG5" />
+   </dynamicSignalMapping>
+   <dynamicSignalMapping signal="FTM2_CH4" >
+      <signalMapping pin="-"     expression="(/FTM2/ftm_cnsc_mode[4]==0)"  />
+      <signalMapping pin="PTB4"  expression="(!sim_pinsel1_ftm2ps4)"       />
+      <signalMapping pin="PTG6" />
+   </dynamicSignalMapping>
+   <dynamicSignalMapping signal="FTM2_CH5" >
+      <signalMapping pin="-"     expression="(/FTM2/ftm_cnsc_mode[5]==0)&amp;&amp;((/FTM2/ftm_cnsc_mode[4]&lt;10)||(/FTM2/ftm_cnsc_mode[4]>11))" />
+      <signalMapping pin="PTB5"  expression="(!sim_pinsel1_ftm2ps5)"       />
+      <signalMapping pin="PTG7" />
+   </dynamicSignalMapping>
+
+   <!-- Fault pin mapping for FTM2 -->
+   <for keys="inp" dim="4">
+      <dynamicSignalMapping signal="FTM2_FLT%(inp)" >
+         <signalMapping pin="*"     expression="/FTM2/ftm_fltctrl_fault%(inp)en != 0" />
+         <signalMapping pin="-"    />
+      </dynamicSignalMapping>
+   </for>
+
+   <constant key="/FTM2/hardwareTriggerPinMap" type="String"
+       value="&quot;ACMP0_O/ACMP1_O,FTM0_CH0,FTMSYNC&quot;"  />
+
+   <constant key="/FTM0/TriggerChannels" type="String"
+       value="&quot;,,,,CH0TRIG,CH1TRIG,CNTIN&quot;"  />
+
+   <constant key="/FTM1/TriggerChannels" type="String"
+       value="&quot;,,,,CH0TRIG,CH1TRIG,CNTIN&quot;"  />
+
+   <constant key="/FTM2/TriggerChannels" type="String"
+       value="&quot;CH2TRIG,CH3TRIG,CH4TRIG,CH5TRIG,CH0TRIG,CH1TRIG,CNTIN&quot;"  />
+
+   <!-- Pin mapping for IRQ -->
    <constant key="/IRQ/pinMap"      type="String" value="&quot;IRQ,PTA5&quot;" />
 
    <!-- Pin mapping for KBIs -->
@@ -53,6 +156,46 @@
 
    <!-- Input names for PWT (mapping done in SIM -->
    <constant key="/PWT/inputNames" value="&quot;PTD5_PTE2&quot;,&quot;PTH7_PTB0&quot;,&quot;ACMPx_O&quot;,&quot;UARTx_RX&quot;" type="String" />
+
+
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
+
+<!--
+    * Template substitutions
+    *
+    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
+    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
+    * %description[index]             Description from controlVar e.g. Compare Function Enable
+    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
+    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
+    * %params                         Formatted parameter list for function
+    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
+    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
+    * %valueExpression                Numeric variable value e.g. 0x3
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %variable[index]                Variable name from condition
+    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * %register[index]                Register associated with variable e.g. adc->APCTL1
+    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+-->
+
+   <xi:include href="_simCommon.xml" />
 
    <for keys="n" dim="numberOfClockSettings" >
       <aliasCategoryOption key="/ICS/ClockConfig[%(n)]" derived="true" locked="true" >
@@ -88,7 +231,7 @@
 
          <choiceOption key="sim_clkdiv_outdiv1[%(n)]" condition="sim_clkdiv_outdiv1_present"
             enabledBy="(%(n)==0)||/ICS/enableClockConfiguration[%(n)]"
-            enumStem="SimCoreClkDivider"
+            typeName="SimCoreClkDivider"
             toolTip="This field sets the divide value for the core/system clock"
             description="Core/System Clock Divider value" >
             <choice name="ICSOUTCLK/1"    value="0" enum="Direct" />
@@ -99,7 +242,7 @@
 
          <binaryOption key="sim_clkdiv_outdiv2[%(n)]" condition="sim_clkdiv_outdiv2_present"
             enabledBy="(%(n)==0)||/ICS/enableClockConfiguration[%(n)]"
-            enumStem="SimBusClkDivider"
+            typeName="SimBusClkDivider"
             toolTip="This field sets the divide value for the bus/FLASH, follows OUTDIV1"
             description="Bus/Flash Clock Divider value" >
             <choice name="Core clock/1"    value="0" enum="Direct" />
@@ -108,7 +251,7 @@
 
          <binaryOption key="sim_clkdiv_outdiv3[%(n)]" condition="sim_clkdiv_outdiv3_present"
             enabledBy="(%(n)==0)||/ICS/enableClockConfiguration[%(n)]"
-            enumStem="SimTimerClkDivider"
+            typeName="SimTimerClkDivider"
             toolTip="This field sets the divide value for the timers(FTM0, FTM2,PWT)"
             description="Timer Clock Divider value" >
             <choice name="ICSOUTCLK/1"    value="0" enum="Direct" />
@@ -162,7 +305,7 @@
    <category name="Derived Pin Mappings" description="Mapping of signals controlled by multiple sources" >
       <!--
       <aliasOption key="/FTM0/enablePeripheralSupport"   locked="false" />
-      <aliasOption key="sim_pinsel0_ftm0clkps"            locked="false" />
+      <aliasOption key="sim_pinsel_ftm0clkps"            locked="false" />
       <aliasOption key="/FTM0/ftm_sc_clks"               locked="false" />
 
       <aliasOption key="/FTM2/enablePeripheralSupport"   locked="false" />
@@ -183,7 +326,7 @@
            values =" 0  :  PTA5            |
                      1  :  PTE0            |
                      2  :  PTE7
-             ">   
+             ">
          <binaryOption key="sim_pinsel_tclk%(t)"
             ref="((sim_pinsel0_ftm0clkps==%(t))&amp;&amp;/FTM0/enablePeripheralSupport&amp;&amp;(/FTM0/ftm_sc_clks==3))||
                  ((sim_pinsel0_ftm1clkps==%(t))&amp;&amp;/FTM1/enablePeripheralSupport&amp;&amp;(/FTM1/ftm_sc_clks==3))||
@@ -204,7 +347,7 @@
       <binaryOption key="sim_scgc_swd" condition="sim_scgc_swd_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          disabledValue="1"
-         enumStem="SimScgcSwd"
+         typeName="SimScgcSwd"
          description="SWD Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" isDefault="true" />
@@ -216,7 +359,7 @@
          locked="true"
          derived="true"
          disabledValue="1"
-         enumStem="SimSWDEnable"
+         typeName="SimSWDEnable"
          disabledPinMap="SWD_DIO,PTA4;SWD_CLK,PTC4"
          toolTip="Controls: \n
                   PTA4 as PTA4/ACMP0_OUT or SWD_DIO, \n
@@ -229,7 +372,7 @@
       <binaryOption key="sim_sopt0_rstpe" condition="sim_sopt0_rstpe_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          disabledValue="1"
-         enumStem="SimResetEnable"
+         typeName="SimResetEnable"
          toolTip="This field can only be written once after any reset"
          description="RESET Pin Enable" >
          <choice name="PTA5 available for peripherals"  value="0" enum="Pta5AsPeripheralPin" pinMap="RESET_b," />
@@ -239,7 +382,7 @@
       <binaryOption key="sim_sopt0_nmie" condition="sim_sopt0_nmie_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          disabledValue="1"
-         enumStem="SimNmiEnable"
+         typeName="SimNmiEnable"
          toolTip="This field can only be written once after any reset"
          description="NMI Pin Enable" >
          <choice name="PTB4 available for peripherals" value="0" enum="Ptb4AsPeripheralPins" pinMap="NMI_b," />
@@ -249,7 +392,7 @@
       <choiceOption key="sim_sopt0_busref" condition="sim_sopt0_busref_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          valueFormat="SIM_SOPT0_CLKOE(%s),SIM_SOPT0_BUSREF(%s)"
-         enumStem="SimSoptRefClock"
+         typeName="SimSoptRefClock"
          toolTip="Enable bus reference clock output on PTH2 with prescaler"
          description="BUS Clock Output select" >
          <choice name="Disabled (PTH2 available)" value="0,0" enum="Disabled"             pinMap="CLKOUT," />
@@ -267,7 +410,7 @@
    <category name="ADC" description="Peripheral  options and clock enable" >
       <binaryOption key="sim_scgc_adc0" condition="sim_scgc_adc0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcAdc"
+         typeName="SimScgcAdc"
          description="ADC Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -275,7 +418,7 @@
 
       <choiceOption key="sim_sopt0_adhwt" condition="sim_sopt0_adhwt_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimSoptAdhwt"
+         typeName="SimSoptAdhwt"
          toolTip="Selects the ADC hardware trigger source. All trigger sources start ADC conversion on rising-edge"
          description="ADC Hardware Trigger Source" >
          <choice name="RTC overflow"                         value="0" enum="RtcOverflow" />
@@ -303,7 +446,7 @@
    <category name="ACMP" description="Peripheral  options and clock enable" >
       <binaryOption key="sim_scgc_acmp0" condition="sim_scgc_acmp0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcAcmp0"
+         typeName="SimScgcAcmp0"
          description="ACMP0 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -311,7 +454,7 @@
 
       <binaryOption key="sim_scgc_acmp1" condition="sim_scgc_acmp1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcAcmp1"
+         typeName="SimScgcAcmp1"
          description="ACMP1 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -323,7 +466,7 @@
    <category name="CAN0" description="Peripheral  options and clock enable" >
       <binaryOption key="sim_scgc_mscan" condition="sim_scgc_mscan_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcMscan"
+         typeName="SimScgcMscan"
          description="CAN Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -332,7 +475,7 @@
       <binaryOption key="sim_pinsel1_mscanps" condition="sim_pinsel1_mscanps_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          disabledPinMap="#/CAN0/enablePeripheralSupport"
-         enumStem="SimPinselMscanps"
+         typeName="SimPinselMscanps"
          toolTip="Selects the pins used by CAN"
          description="CAN Pin Select" >
          <choice name="CAN0_TX on PTC7, CAN0_RX on PTC6"  value="0" enum="Can_txOnPtc7_Can_rxOnPtc6" pinMap="CAN0_TX,PTC7;CAN0_RX,PTC6" />
@@ -343,7 +486,7 @@
    <category name="CRC" description="Peripheral  options and clock enable" >
       <binaryOption key="sim_scgc_crc" condition="sim_scgc_crc_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcCrc"
+         typeName="SimScgcCrc"
          description="CRC Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -354,7 +497,7 @@
       <binaryOption key="sim_scgc_flash" condition="sim_scgc_flash_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          disabledValue="1"
-         enumStem="SimScgcFlash"
+         typeName="SimScgcFlash"
          description="FLASH Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" isDefault="true" />
@@ -364,7 +507,7 @@
    <category name="FTM" description="Peripheral  options and clock enable" >
       <binaryOption key="sim_sopt0_ftmsync" condition="sim_sopt0_ftmsync_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimSoptFtmsync"
+         typeName="SimSoptFtmsync"
          derived="true"
          locked="true"
          hidden="true"
@@ -377,7 +520,7 @@
 
       <binaryOption key="sim_scgc_ftm0" condition="sim_scgc_ftm0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcFtm0"
+         typeName="SimScgcFtm0"
          description="FTM0 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -385,7 +528,7 @@
 
       <choiceOption key="sim_pinsel0_ftm0clkps" condition="sim_pinsel0_ftm0clkps_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimPinselFtm0clkps"
+         typeName="SimPinselFtm0clkps"
          description="FTM0 TCLK Pin Select" >
          <choice name="Selects TCLK0 for FTM0 module"  value="0" enum="SelectsTclk0ForFtm0Module" />
          <choice name="Selects TCLK1 for FTM0 module"  value="1" enum="SelectsTclk1ForFtm0Module" />
@@ -394,25 +537,23 @@
 
       <binaryOption key="sim_pinsel0_ftm0ps0" condition="sim_pinsel0_ftm0ps0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM0/enablePeripheralSupport&amp;&amp;(/FTM0/ftm_cnsc_mode[0]!=0)"
-         enumStem="SimPinselFtm0ps0"
+         typeName="SimPinselFtm0ps0"
          description="FTM0 channel 0 Pin Select" >
-         <choice name="PTA0"        value="0" enum="Pta0" pinMap="FTM0_CH0,PTA0" />
-         <choice name="PTB2"        value="1" enum="Ptb2" pinMap="FTM0_CH0,PTB2" />
+         <choice name="PTA0"        value="0" enum="Pta0" />
+         <choice name="PTB2"        value="1" enum="Ptb2" />
       </binaryOption>
 
       <binaryOption key="sim_pinsel0_ftm0ps1" condition="sim_pinsel0_ftm0ps1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM0/enablePeripheralSupport&amp;&amp;(/FTM0/ftm_cnsc_mode[1]!=0)"
-         enumStem="SimPinselFtm0ps1"
+         typeName="SimPinselFtm0ps1"
          description="FTM0 channel 1 Pin Select" >
-         <choice name="PTA1"        value="0" enum="Pta1" pinMap="FTM0_CH1,PTA1" />
-         <choice name="PTB3"        value="1" enum="Ptb3" pinMap="FTM0_CH1,PTB3" />
+         <choice name="PTA1"        value="0" enum="Pta1" />
+         <choice name="PTB3"        value="1" enum="Ptb3" />
       </binaryOption>
 
       <binaryOption key="sim_sopt0_rxdce" condition="sim_sopt0_rxdce_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimSoptRxdce"
+         typeName="SimSoptRxdce"
          toolTip="Enables the UART0_RX to be captured by FTM0 channel 1"
          description="UART0_RX Capture on FTM0 channel 1" >
          <choice name="Not connected"                         value="0" enum="NotConnected" />
@@ -421,7 +562,7 @@
 
       <binaryOption key="sim_sopt0_acic" condition="sim_sopt0_acic_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimSoptAcic"
+         typeName="SimSoptAcic"
          toolTip="Connects the output of ACMP0 to FTM1 input channel 0"
          description="Analog Comparator on FTM1 input channel 0" >
          <choice name="ACMP0_OUT is not connected"          value="0" enum="Acmp0_outIsNotConnected" />
@@ -430,7 +571,7 @@
 
       <binaryOption key="sim_sopt0_rtcc" condition="sim_sopt0_rtcc_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimSoptRtcc"
+         typeName="SimSoptRtcc"
          toolTip="Allows the Real-time Counter (RTC) overflow to be captured by FTM1 channel 1"
          description="Real-Time Counter on FTM1 input channel 1" >
          <choice name="RTC not connected"                   value="0" enum="RtcNotConnected" />
@@ -441,7 +582,7 @@
 
       <binaryOption key="sim_scgc_ftm1" condition="sim_scgc_ftm1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcFtm1"
+         typeName="SimScgcFtm1"
          description="FTM1 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -449,7 +590,7 @@
 
       <choiceOption key="sim_pinsel0_ftm1clkps" condition="sim_pinsel0_ftm1clkps_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimPinselFtm1clkps"
+         typeName="SimPinselFtm1clkps"
          description="FTM1 TCLK Pin Select" >
          <choice name="Selects TCLK0 for FTM1 module"  value="0" enum="SelectsTclk0ForFtm1Module" />
          <choice name="Selects TCLK1 for FTM1 module"  value="1" enum="SelectsTclk1ForFtm1Module" />
@@ -459,7 +600,7 @@
       <binaryOption key="sim_pinsel0_ftm1ps0" condition="sim_pinsel0_ftm1ps0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          disabledPinMap="#/FTM1/enablePeripheralSupport&amp;&amp;(/FTM1/ftm_cnsc_mode[0]!=0)"
-         enumStem="SimPinselFtm1ps0"
+         typeName="SimPinselFtm1ps0"
          description="FTM1 channel 0 Pin Select" >
          <choice name="PTC4"        value="0" enum="Ptc4" pinMap="FTM1_CH0,PTC4" />
          <choice name="PTH2"        value="1" enum="Pth2" pinMap="FTM1_CH0,PTH2" />
@@ -468,7 +609,7 @@
       <binaryOption key="sim_pinsel0_ftm1ps1" condition="sim_pinsel0_ftm1ps1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          disabledPinMap="#/FTM1/enablePeripheralSupport&amp;&amp;(/FTM1/ftm_cnsc_mode[1]!=0)"
-         enumStem="SimPinselFtm1ps1"
+         typeName="SimPinselFtm1ps1"
          description="FTM1 channel 1 Pin Select" >
          <choice name="PTC5"        value="0" enum="Ptc5" pinMap="FTM1_CH1,PTC5" />
          <choice name="PTE7"        value="1" enum="Pte7" pinMap="FTM1_CH1,PTE7" />
@@ -478,7 +619,7 @@
 
       <binaryOption key="sim_scgc_ftm2" condition="sim_scgc_ftm2_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcFtm2"
+         typeName="SimScgcFtm2"
          description="FTM2 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -486,7 +627,7 @@
 
       <choiceOption key="sim_pinsel0_ftm2clkps" condition="sim_pinsel0_ftm2clkps_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimPinselFtm2clkps"
+         typeName="SimPinselFtm2clkps"
          description="FTM2 TCLK Pin Select" >
          <choice name="Selects TCLK0 for FTM2 module"  value="0" enum="SelectsTclk0ForFtm2Module" />
          <choice name="Selects TCLK1 for FTM2 module"  value="1" enum="SelectsTclk1ForFtm2Module" />
@@ -495,72 +636,66 @@
 
       <binaryOption key="sim_sopt0_actrg" condition="sim_sopt0_actrg_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimSoptActrg"
+         typeName="SimSoptActrg"
          toolTip="Selects ACMP output to use as the trigger0 input of FTM2"
-         description="ACMP Trigger FTM2 selection" 
+         description="ACMP Trigger FTM2 selection"
          disabledPinMap="FTM2_TRIG0,#/FTM2/enablePeripheralSupport&amp;&amp;((/FTM2/ftm_sync_trig&amp;0b1)!=0)">
          <choice name="ACMP0_OUT"   value="0" enum="Acmp0_out" pinMap="FTM2_TRIG0,ACMP0_O" />
          <choice name="ACMP1_OUT"   value="1" enum="Acmp1_out" pinMap="FTM2_TRIG0,ACMP1_O" />
       </binaryOption>
-      
+
       <aliasOption key="sim_sopt0_delay" locked="false" optional="true" />
 
       <choiceOption key="sim_pinsel1_ftm2ps0" condition="sim_pinsel1_ftm2ps0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM2/enablePeripheralSupport&amp;&amp;(/FTM2/ftm_cnsc_mode[0]!=0)"
-         enumStem="SimPinselFtm2ps0"
+         typeName="SimPinselFtm2ps0"
          description="FTM2 Channel 0 Pin Select" >
-         <choice name="PTC0"        value="0" enum="Ptc0" pinMap="FTM2_CH0,PTC0" />
-         <choice name="PTH0"        value="1" enum="Pth0" pinMap="FTM2_CH0,PTH0" />
-         <choice name="PTF0"        value="2" enum="Ptf0" pinMap="FTM2_CH0,PTF0" />
+         <choice name="PTC0"        value="0" enum="Ptc0" />
+         <choice name="PTH0"        value="1" enum="Pth0" />
+         <choice name="PTF0"        value="2" enum="Ptf0" />
       </choiceOption>
 
       <choiceOption key="sim_pinsel1_ftm2ps1" condition="sim_pinsel1_ftm2ps1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM2/enablePeripheralSupport&amp;&amp;(/FTM2/ftm_cnsc_mode[1]!=0)"
-         enumStem="SimPinselFtm2ps1"
+         typeName="SimPinselFtm2ps1"
          description="FTM2 Channel 1 Pin Select" >
-         <choice name="PTC1"        value="0" enum="Ptc1" pinMap="FTM2_CH1,PTC1" />
-         <choice name="PTH1"        value="1" enum="Pth1" pinMap="FTM2_CH1,PTH1" />
-         <choice name="PTF1"        value="2" enum="Ptf1" pinMap="FTM2_CH1,PTF1" />
+         <choice name="PTC1"        value="0" enum="Ptc1" />
+         <choice name="PTH1"        value="1" enum="Pth1" />
+         <choice name="PTF1"        value="2" enum="Ptf1" />
       </choiceOption>
 
       <choiceOption key="sim_pinsel1_ftm2ps2" condition="sim_pinsel1_ftm2ps2_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM2/enablePeripheralSupport&amp;&amp;(/FTM2/ftm_cnsc_mode[2]!=0)"
-         enumStem="SimPinselFtm2ps2"
+         typeName="SimPinselFtm2ps2"
          description="FTM2 Channel 2 Pin Select" >
-         <choice name="PTC2"        value="0" enum="Ptc2" pinMap="FTM2_CH2,PTC2" />
-         <choice name="PTD0"        value="1" enum="Ptd0" pinMap="FTM2_CH2,PTD0" />
-         <choice name="PTG4"        value="2" enum="Ptg4" pinMap="FTM2_CH2,PTG4" />
+         <choice name="PTC2"        value="0" enum="Ptc2" />
+         <choice name="PTD0"        value="1" enum="Ptd0" />
+         <choice name="PTG4"        value="2" enum="Ptg4" />
       </choiceOption>
 
       <choiceOption key="sim_pinsel1_ftm2ps3" condition="sim_pinsel1_ftm2ps3_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM2/enablePeripheralSupport&amp;&amp;(/FTM2/ftm_cnsc_mode[3]!=0)"
-         enumStem="SimPinselFtm2ps3"
+         typeName="SimPinselFtm2ps3"
          description="FTM2 Channel 3 Pin Select" >
-         <choice name="PTC3"        value="0" enum="Ptc3" pinMap="FTM2_CH3,PTC3" />
-         <choice name="PTD1"        value="1" enum="Ptd1" pinMap="FTM2_CH3,PTD1" />
-         <choice name="PTG5"        value="2" enum="Ptg5" pinMap="FTM2_CH3,PTG5" />
+         <choice name="PTC3"        value="0" enum="Ptc3" />
+         <choice name="PTD1"        value="1" enum="Ptd1" />
+         <choice name="PTG5"        value="2" enum="Ptg5" />
       </choiceOption>
 
       <binaryOption key="sim_pinsel1_ftm2ps4" condition="sim_pinsel1_ftm2ps4_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM2/enablePeripheralSupport&amp;&amp;(/FTM2/ftm_cnsc_mode[4]!=0)"
-         enumStem="SimPinselFtm2ps4"
+         typeName="SimPinselFtm2ps4"
          description="FTM2 Channel 4 Pin Select" >
-         <choice name="PTB4"        value="0" enum="Ptb4" pinMap="FTM2_CH4,PTB4" />
-         <choice name="PTG6"        value="1" enum="Ptg6" pinMap="FTM2_CH4,PTG6" />
+         <choice name="PTB4"        value="0" enum="Ptb4" />
+         <choice name="PTG6"        value="1" enum="Ptg6" />
       </binaryOption>
 
       <binaryOption key="sim_pinsel1_ftm2ps5" condition="sim_pinsel1_ftm2ps5_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM2/enablePeripheralSupport&amp;&amp;(/FTM2/ftm_cnsc_mode[5]!=0)"
-         enumStem="SimPinselFtm2ps5"
+         typeName="SimPinselFtm2ps5"
          description="FTM2 Channel 5 Pin Select" >
-         <choice name="PTB5"        value="0" enum="Ptb5" pinMap="FTM2_CH5,PTB5" />
-         <choice name="PTG7"        value="1" enum="Ptg7" pinMap="FTM2_CH5,PTG7" />
+         <choice name="PTB5"        value="0" enum="Ptb5" />
+         <choice name="PTG7"        value="1" enum="Ptg7" />
       </binaryOption>
    </category>
 
@@ -570,7 +705,7 @@
 
       <binaryOption key="sim_scgc_i2c0" condition="sim_scgc_i2c0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcI2c0"
+         typeName="SimScgcI2c0"
          description="I2C0 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -579,7 +714,7 @@
       <binaryOption key="sim_pinsel0_i2c0ps" condition="sim_pinsel0_i2c0ps_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          disabledPinMap="#/I2C0/enablePeripheralSupport"
-         enumStem="SimPinselI2c0ps"
+         typeName="SimPinselI2c0ps"
          description="I2C0 Pin Select" >
          <choice name="PTA3,PTA2 mapped to SCL,SDA"  value="0" enum="Pta3Pta2MappedToI2c0" pinMap="I2C0_SCL,PTA3;I2C0_SDA,PTA2" />
          <choice name="PTB7,PTB6 mapped to SCL,SDA"  value="1" enum="Ptb7Ptb6MappedToI2c0" pinMap="I2C0_SCL,PTB7;I2C0_SDA,PTB6" />
@@ -587,7 +722,7 @@
 
       <binaryOption key="sim_sopt1_i2c0oinv" condition="sim_sopt1_i2c0oinv_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimSoptI2c0oinv"
+         typeName="SimSoptI2c0oinv"
          toolTip="This field controls inversion of the I2C0 SDA_OUT and SCL_OUT in 4-wire mode"
          description="I2C0 Output Invert in 4-wire mode" >
          <choice name="Not inverted" value="0" enum="NotInverted" />
@@ -596,7 +731,7 @@
 
       <binaryOption key="sim_sopt1_i2c04wen" condition="sim_sopt1_i2c04wen_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimSoptI2c04wen"
+         typeName="SimSoptI2c04wen"
          toolTip="This field controls I2C0 4-wire interface configuration.\n
                   NOTE: This field works only when SIM_PINSEL0[I2C0PS] is 0"
          description="I2C0 4-Wire Interface Enable" >
@@ -608,7 +743,7 @@
 
       <binaryOption key="sim_scgc_i2c1" condition="sim_scgc_i2c1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcI2c1"
+         typeName="SimScgcI2c1"
          description="I2C1 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -617,7 +752,7 @@
       <binaryOption key="sim_pinsel1_i2c1ps" condition="sim_pinsel1_i2c1ps_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          disabledPinMap="#/I2C1/enablePeripheralSupport"
-         enumStem="SimPinselI2c1ps"
+         typeName="SimPinselI2c1ps"
          description="I2C1 Pin Select" >
          <choice name="PTE1,PTE0 mapped to SCL,SDA"  value="0" enum="Pte1Pte0MappedToI2c0" pinMap="I2C1_SCL,PTE1;I2C1_SDA,PTE0" />
          <choice name="PTH4,PTH3 mapped to SCL,SDA"  value="1" enum="Pth4Pth3MappedToI2c0" pinMap="I2C1_SCL,PTH4;I2C1_SDA,PTH3" />
@@ -627,7 +762,7 @@
    <category name="IRQ" description="Peripheral  options and clock enable" >
       <binaryOption key="sim_scgc_irq" condition="sim_scgc_irq_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcIrq"
+         typeName="SimScgcIrq"
          description="IRQ Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -636,7 +771,7 @@
       <choiceOption key="sim_pinsel0_irqps" condition="sim_pinsel0_irqps_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          disabledPinMap="#/IRQ/enablePeripheralSupport"
-         enumStem="SimPinselIrqps"
+         typeName="SimPinselIrqps"
          toolTip="Selects the IRQ port pins"
          description="IRQ Pin Select" >
          <choice name="PTA5"        value="0" enum="Pta5" pinMap="IRQ,PTA5" />
@@ -653,7 +788,7 @@
    <category name="KBI" description="Peripheral  options and clock enable" >
       <binaryOption key="sim_scgc_kbi0" condition="sim_scgc_kbi0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcKbi0"
+         typeName="SimScgcKbi0"
          description="KBI0 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -661,7 +796,7 @@
 
       <binaryOption key="sim_scgc_kbi1" condition="sim_scgc_kbi1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcKbi1"
+         typeName="SimScgcKbi1"
          description="KBI1 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -671,7 +806,7 @@
    <category name="PIT" description="Peripheral  options and clock enable" >
       <binaryOption key="sim_scgc_pit" condition="sim_scgc_pit_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcPit"
+         typeName="SimScgcPit"
          description="PIT Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -681,7 +816,7 @@
    <category name="PWT" description="Peripheral  options and clock enable" >
       <binaryOption key="sim_scgc_pwt" condition="sim_scgc_pwt_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcPwt"
+         typeName="SimScgcPwt"
          description="PWT Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -689,9 +824,9 @@
 
       <binaryOption key="sim_sopt1_acpwts" condition="sim_sopt1_acpwts_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimSoptAcpwts"
+         typeName="SimSoptAcpwts"
          toolTip="This field selects PWTIN2 input signal"
-         description="PWT ACMP_OUT select" 
+         description="PWT ACMP_OUT select"
          disabledPinMap="PWT_IN2,#/PWT/enablePeripheralSupport" >
          <choice name="ACMP1_OUT is connected to PWTIN2"  value="0" enum="Acmp1_outIsConnectedToPwtin2" pinMap="PWT_IN2,ACMP1_O" />
          <choice name="ACMP0_OUT is connected to PWTIN2"  value="1" enum="Acmp0_outIsConnectedToPwtin2" pinMap="PWT_IN2,ACMP0_O" />
@@ -699,9 +834,9 @@
 
       <choiceOption key="sim_sopt1_uartpwts" condition="sim_sopt1_uartpwts_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimSoptUartpwts"
+         typeName="SimSoptUartpwts"
          toolTip="This field select PWTIN3 input signal"
-         description="PWT UART RX select"  
+         description="PWT UART RX select"
          disabledPinMap="PWT_IN3,#/PWT/enablePeripheralSupport" >
          <choice name="UART0 RX is connected to PWTIN3"  value="0" enum="Uart0RxIsConnectedToPwtin3" pinMap="PWT_IN3,UART0_RX" />
          <choice name="UART1 RX is connected to PWTIN3"  value="1" enum="Uart1RxIsConnectedToPwtin3" pinMap="PWT_IN3,UART1_RX" />
@@ -711,7 +846,7 @@
       <binaryOption key="sim_pinsel1_pwtin0ps" condition="sim_pinsel1_pwtin0ps_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          disabledPinMap="#/PWT/enablePeripheralSupport"
-         enumStem="SimPinselPwtin0ps"
+         typeName="SimPinselPwtin0ps"
          description="PWTIN0 Pin Select" >
          <choice name="PWTIN0 on PTD5"  value="0" enum="Pwtin0OnPtd5" pinMap="PWT_IN0,PTD5" />
          <choice name="PWTIN0 on PTE2"  value="1" enum="Pwtin0OnPte2" pinMap="PWT_IN0,PTE2" />
@@ -720,7 +855,7 @@
       <binaryOption key="sim_pinsel1_pwtin1ps" condition="sim_pinsel1_pwtin1ps_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          disabledPinMap="#/PWT/enablePeripheralSupport"
-         enumStem="SimPinselPwtin1ps"
+         typeName="SimPinselPwtin1ps"
          description="PWTIN1 Pin Select" >
          <choice name="PWTIN1 on PTB0"  value="0" enum="Pwtin1OnPtb0" pinMap="PWT_IN1,PTB0" />
          <choice name="PWTIN1 on PTH7"  value="1" enum="Pwtin1OnPth7" pinMap="PWT_IN1,PTH7" />
@@ -728,7 +863,7 @@
 
       <choiceOption key="sim_pinsel0_pwtclkps" condition="sim_pinsel0_pwtclkps_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimPinselPwtclkps"
+         typeName="SimPinselPwtclkps"
          description="PWT TCLK Pin Select" >
          <choice name="Selects TCLK0 for PWT module"  value="0" enum="SelectsTclk0ForPwtModule" />
          <choice name="Selects TCLK1 for PWT module"  value="1" enum="SelectsTclk1ForPwtModule" />
@@ -739,7 +874,7 @@
    <category name="RTC" description="Peripheral  options and clock enable" >
       <binaryOption key="sim_scgc_rtc" condition="sim_scgc_rtc_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcRtc"
+         typeName="SimScgcRtc"
          description="RTC Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -747,8 +882,8 @@
 
       <binaryOption key="sim_pinsel0_rtcps" condition="sim_pinsel0_rtcps_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/RTC/enablePeripheralSupport&amp;&amp;/RTC/rtc_sc_rtco" 
-         enumStem="SimPinselRtcps"
+         disabledPinMap="#/RTC/enablePeripheralSupport&amp;&amp;/RTC/rtc_sc_rtco"
+         typeName="SimPinselRtcps"
          toolTip="Selects the RTC_CLKOUT port pins"
          description="RTC_CLKOUT Pin Select">
          <choice name="PTC4"        value="0" enum="Ptc4" pinMap="RTC_CLKOUT,PTC4" />
@@ -762,7 +897,7 @@
 
       <binaryOption key="sim_scgc_spi0" condition="sim_scgc_spi0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcSpi0"
+         typeName="SimScgcSpi0"
          description="SPI0 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -770,8 +905,8 @@
 
       <binaryOption key="sim_pinsel0_spi0ps" condition="sim_pinsel0_spi0ps_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/SPI0/enablePeripheralSupport" 
-         enumStem="SimPinselSpi0ps"
+         disabledPinMap="#/SPI0/enablePeripheralSupport"
+         typeName="SimPinselSpi0ps"
          toolTip="Selects the SPI0 Pinouts"
          description="SPI0 Pin Select" >
          <choice name="PTB2,PTB3,PTB4,PTB5 mapped to SPI0 pins"  value="0" enum="Ptb2Ptb3Ptb4Ptb5MappedToSpi0" pinMap="SPI0_SCK,PTB2;SPI0_MOSI,PTB3;SPI0_MISO,PTB4;SPI0_PCS,PTB5" />
@@ -782,7 +917,7 @@
 
       <binaryOption key="sim_scgc_spi1" condition="sim_scgc_spi1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcSpi1"
+         typeName="SimScgcSpi1"
          description="SPI1 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -790,8 +925,8 @@
 
       <binaryOption key="sim_pinsel1_spi1ps" condition="sim_pinsel1_spi1ps_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/SPI1/enablePeripheralSupport" 
-         enumStem="SimPinselSpi1ps"
+         disabledPinMap="#/SPI1/enablePeripheralSupport"
+         typeName="SimPinselSpi1ps"
          description="SPI1 Pin Select" >
          <choice name="PTD0,PTD1,PTD2,PTD3 mapped to SPI pins"  value="0" enum="Ptd0Ptd1Ptd2Ptd3MappedToSpi1" pinMap="SPI1_SCK,PTD0;SPI1_MOSI,PTD1;SPI1_MISO,PTD2;SPI1_PCS,PTD3" />
          <choice name="PTG4,PTG5,PTG6,PTG7 mapped to SPI pins"  value="1" enum="Ptg4Ptg5Ptg6Ptg7MappedToSpi1" pinMap="SPI1_SCK,PTG4;SPI1_MOSI,PTG5;SPI1_MISO,PTG6;SPI1_PCS,PTG7" />
@@ -803,7 +938,7 @@
 
       <binaryOption key="sim_scgc_uart0" condition="sim_scgc_uart0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcUart0"
+         typeName="SimScgcUart0"
          description="UART0 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -811,8 +946,8 @@
 
       <binaryOption key="sim_pinsel0_uart0ps" condition="sim_pinsel0_uart0ps_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/UART0/enablePeripheralSupport" 
-         enumStem="SimPinselUart0ps"
+         disabledPinMap="#/UART0/enablePeripheralSupport"
+         typeName="SimPinselUart0ps"
          description="UART0 Pin Select" >
          <choice name="PTB1,PTB0 mapped to Tx,Rx"  value="0" enum="MappedToPtb1Ptb0" pinMap="UART0_TX,PTB1;UART0_RX,PTB0" />
          <choice name="PTA3,PTA2 mapped to Tx,Rx"  value="1" enum="MappedToPta3Pta2" pinMap="UART0_TX,PTA3;UART0_RX,PTA2" />
@@ -820,7 +955,7 @@
 
       <binaryOption key="sim_sopt0_txdme" condition="sim_sopt0_txdme_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimSoptTxdme"
+         typeName="SimSoptTxdme"
          toolTip="Enables the UART0_TX output modulated by FTM0 channel 0"
          description="UART0_TX Modulation Select" >
          <choice name="UART0_TX directly connected to pin"  value="0" enum="Uart0_txDirectlyConnectedToPin" />
@@ -829,7 +964,7 @@
 
       <choiceOption key="sim_sopt0_rxdfe" condition="sim_sopt0_rxdfe_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimSoptRxdfe"
+         typeName="SimSoptRxdfe"
          toolTip="Enables the UART0_RX input to be filtered by ACMP.\n
                   When this function is enabled, any signal tagged with ACMP inputs can be regarded as UART0"
          description="UART0_RX Filter Select" >
@@ -843,7 +978,7 @@
 
       <binaryOption key="sim_scgc_uart1" condition="sim_scgc_uart1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcUart1"
+         typeName="SimScgcUart1"
          description="UART1 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -851,8 +986,8 @@
 
       <binaryOption key="sim_pinsel1_uart1ps" condition="sim_pinsel1_uart1ps_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/UART1/enablePeripheralSupport" 
-         enumStem="SimPinselUart1ps"
+         disabledPinMap="#/UART1/enablePeripheralSupport"
+         typeName="SimPinselUart1ps"
          description="UART1 Pin Select" >
          <choice name="PTC7,PTC6 mapped to Tx,Rx"  value="0" enum="MappedToPtc7Ptc6" pinMap="UART1_TX,PTC7;UART1_RX,PTC6" />
          <choice name="PTF3,PTF2 mapped to Tx,Rx"  value="1" enum="MappedToPtf3Ptf2" pinMap="UART1_TX,PTF3;UART1_RX,PTF2" />
@@ -862,7 +997,7 @@
 
       <binaryOption key="sim_scgc_uart2" condition="sim_scgc_uart2_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         enumStem="SimScgcUart2"
+         typeName="SimScgcUart2"
          description="UART2 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
@@ -870,8 +1005,8 @@
 
       <binaryOption key="sim_pinsel1_uart2ps" condition="sim_pinsel1_uart2ps_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/UART2/enablePeripheralSupport" 
-         enumStem="SimPinselUart2ps"
+         disabledPinMap="#/UART2/enablePeripheralSupport"
+         typeName="SimPinselUart2ps"
          description="UART2 Pin Select" >
          <choice name="PTD7,PTD6 mapped to Tx,Rx"  value="0" enum="MappedToPtd7Ptd6" pinMap="UART2_TX,PTD7;UART2_RX,PTD6" />
          <choice name="PTI1,PTI0 mapped to Tx,Rx"  value="1" enum="MappedToPti1Pti0" pinMap="UART2_TX,PTI1;UART2_RX,PTI0" />
@@ -946,23 +1081,23 @@
 
    <for keys="field:name"
         values="
-      sim_sopt0_delay:Ftm2Delay;
-      sim_sopt0_adhwt:Adhwt;
-      sim_sopt0_clkout:SoptClkOut;
-      sim_sopt0_busref:BusClockReference;
-      sim_sopt0_txdme:Txdme;
-      sim_sopt0_rxdce:Rxdce;
-      sim_sopt0_acic:Acic;
-      sim_sopt0_rtcc:Rtcc;
-      sim_sopt0_rxdfe:Rxdfe;
-      sim_sopt0_actrg:Actrg;
-      sim_sopt0_swde:SingleWireDebugPins;
-      sim_sopt0_rstpe:ResetPin;
-      sim_sopt0_nmie:NonMaskableInterruptPin;
-      sim_sopt1_uartpwts:Uartpwts;
-      sim_sopt1_acpwts:Acpwts;
-      sim_sopt1_i2c0oinv:I2c0oinv;
-      sim_sopt1_i2c04wen:I2c04wen" >
+      sim_sopt0_delay      : Ftm2Delay;
+      sim_sopt0_adhwt      : Adhwt;
+      sim_sopt0_clkout     : SoptClkOut;
+      sim_sopt0_busref     : BusClockReference;
+      sim_sopt0_txdme      : Txdme;
+      sim_sopt0_rxdce      : Rxdce;
+      sim_sopt0_acic       : Acic;
+      sim_sopt0_rtcc       : Rtcc;
+      sim_sopt0_rxdfe      : Rxdfe;
+      sim_sopt0_actrg      : Actrg;
+      sim_sopt0_swde       : SingleWireDebugPins;
+      sim_sopt0_rstpe      : ResetPin;
+      sim_sopt0_nmie       : NonMaskableInterruptPin;
+      sim_sopt1_uartpwts   : Uartpwts;
+      sim_sopt1_acpwts     : Acpwts;
+      sim_sopt1_i2c0oinv   : I2c0oinv;
+      sim_sopt1_i2c04wen   : I2c04wen" >
       <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
@@ -971,7 +1106,7 @@
          %paramDescription
          \t */
          \tstatic void configure%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}\n\n
       ]]></setTemplate>
    </for>
@@ -1012,7 +1147,7 @@
          %paramDescription
          \t */
          \tstatic void select%(name)Pins(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}\n\n
       ]]></setTemplate>
    </for>
@@ -1050,7 +1185,7 @@
          %paramDescription
          \t */
          \tstatic void enable%(name)Clock(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}\n\n
       ]]></setTemplate>
    </for>
@@ -1067,7 +1202,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %defaultFieldExpression
+         \t   %fieldAssignment
          \t}\n\n
       ]]></setTemplate>
    </for>
@@ -1163,7 +1298,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template namespace="usbdm" >
    <![CDATA[
       class $(_Class)BasicInfo {
       \t
@@ -1308,7 +1443,7 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
@@ -1466,13 +1601,13 @@
 
    <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
-      \t}; // $(_Class)::BasicInfo::Init\n\n
+      \t}; // class $(_Class)::BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template namespace="usbdm" >
       <![CDATA[
-      }; // $(_Class)::BasicInfo\n\n
+      }; // class $(_Class)::BasicInfo\n\n
    ]]>
    </template>
 

@@ -33,7 +33,7 @@
 
    <binaryOption key="wdog_stctrlh_wdogen"
       enabledBy="wdogSystemEnable"
-      enumStem="WdogEnable"
+      typeName="WdogEnable"
       enumType="uint16_t"
       description="Watchdog enable"
       toolTip="Main enable for WDOG">
@@ -44,7 +44,7 @@
    <binaryOption key="wdog_stctrlh_distestwdog"
       enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
       enumType="uint16_t"
-      enumStem="WdogTestMode"
+      typeName="WdogTestMode"
       description="Test mode disable"
       toolTip="Disables watchdog test mode until next reset">
       <choice value="0" enum="Enabled"  name="Test mode enabled" />
@@ -54,7 +54,7 @@
    <binaryOption key="wdog_stctrlh_waiten"
       enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
       enumType="uint16_t"
-      enumStem="WdogEnableInWait"
+      typeName="WdogEnableInWait"
       description="Enable watchdog in WAIT mode"
       toolTip="Control watchdog operation in WAIT mode">
       <choice name="Enabled in WAIT mode"  value="1" enum="Enabled"   />
@@ -64,7 +64,7 @@
    <binaryOption key="wdog_stctrlh_stopen"
       enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
       enumType="uint16_t"
-      enumStem="WdogEnableInStop"
+      typeName="WdogEnableInStop"
       description="Enable watchdog in STOP mode"
       toolTip="Control watchdog operation in STOP mode">
       <choice name="Enabled in STOP mode"  value="1" enum="Enabled"  />
@@ -74,7 +74,7 @@
    <binaryOption key="wdog_stctrlh_dbgen"
       enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
       enumType="uint16_t"
-      enumStem="WdogEnableInDebug"
+      typeName="WdogEnableInDebug"
       description="Enable watchdog in DEBUG mode"
       toolTip="Control watchdog operation in DEBUG mode">
       <choice name="Enabled in DEBUG mode"  value="1" enum="Enabled"  />
@@ -84,7 +84,7 @@
    <binaryOption key="wdog_stctrlh_allowupdate"
       enabledBy="wdogSystemEnable"
       enumType="uint16_t"
-      enumStem="WdogAllowUpdate"
+      typeName="WdogAllowUpdate"
       description="Allow watchdog update"
       toolTip="Enables updates to watchdog write-once registers, after \n
                the reset-triggered initial configuration window closes\n
@@ -96,7 +96,7 @@
    <binaryOption key="wdog_stctrlh_winen"
       enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
       enumType="uint16_t"
-      enumStem="WdogWindow"
+      typeName="WdogWindow"
       description="Enable watchdog windowing mode"
       toolTip="Windowing mode only allows refresh during a restricted window">
       <choice name="Windowing mode disabled" value="0" enum="Disabled" isDefault="true" />
@@ -106,7 +106,7 @@
    <binaryOption key="wdog_stctrlh_irqrsten"
       enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
       enumType="uint16_t"
-      enumStem="WdogAction"
+      typeName="WdogAction"
       description="Controls interrupt before reset"
       toolTip="This write-once bit allows an interrupt handler to record state prior to forcing a reset">
       <choice name="Immediate Reset"             value="0" enum="ImmediateReset" isDefault="true" />
@@ -117,7 +117,7 @@
       enabledBy="wdogSystemEnable"
       target="inputClockFrequency"
       enumType="uint16_t"
-      enumStem="WdogClock"
+      typeName="WdogClock"
       description="Watchdog clock source"
       toolTip="Clock source for watchdog" >
       <choice name="1 kHz low-power oscillator (LPOCLK)"  value="0" enum="LpoClk"       code="PmcInfo::getLpoClock()"  ref="/PMC/system_low_power_clock"  isDefault="true" />
@@ -132,8 +132,8 @@
       \t *
       \t * @param %paramName %tooltip
       \t */
-      \tstatic void setClockSource(%enumClass %paramName) {
-      \t   %defaultFieldExpression
+      \tstatic void setClockSource(%paramType %paramName) {
+      \t   %fieldAssignment
       \t}
 
       \t/**
@@ -158,7 +158,7 @@
       \t */
       \tstatic uint32_t getInputClockFrequency() {
       \t
-      \t   return getInputClockFrequency((%enumClass)(%defaultMaskingExpression));
+      \t   return getInputClockFrequency((%paramType)(%maskingExpression));
       \t}\n\n
    ]]></clockCodeTemplate>
 
@@ -173,7 +173,7 @@
    <choiceOption key="wdog_presc_prescval"
       enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
       target="timerTickPeriod"
-      enumStem="WdogPrescale"
+      typeName="WdogPrescale"
       enumType="uint16_t"
       description="Prescaler for the watchdog clock source"
       toolTip="This prescaler divides the input clock for the watchdog counter">
@@ -269,7 +269,7 @@
       \t * @note This is a protected operation which uses unlock
       \t * @note Register changes after unlock is enabled
       \t
-      %comments
+      %paramDescription
       \t */
       \tstatic void configure(
       %params) {
@@ -291,7 +291,7 @@
    <!-- ************* MISC ****************** -->
    <choiceOption key="wdog_constants1"
       hidden="true"
-      enumStem="WdogRefresh"
+      typeName="WdogRefresh"
       valueFormat="%s"
       description="Values for refresh and update registers"
       toolTip=""
@@ -302,7 +302,7 @@
 
    <choiceOption key="wdog_constants2"
       hidden="true"
-      enumStem="WdogUnlock"
+      typeName="WdogUnlock"
       valueFormat="%s"
       description="Values for refresh and update registers"
       toolTip=""
@@ -445,7 +445,7 @@
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %enumClass %registerName = %enumClass_Normal;\n\n
+      \t   %paramType %registerName = %paramType_Normal;\n\n
    ]]></initialValueTemplate>
 
 <!--   Configure methods -->
@@ -606,7 +606,7 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         %comments
+         %paramDescription
          \t    */
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
