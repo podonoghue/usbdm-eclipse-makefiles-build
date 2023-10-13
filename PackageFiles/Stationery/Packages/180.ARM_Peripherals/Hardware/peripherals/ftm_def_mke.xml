@@ -121,10 +121,10 @@
       typeName="FtmClockSource"
       target="inputClockFrequency"
       toolTip="Selects the clock source for the module">
-      <choice value="0" name="Disabled"              ref="disabled"                     code="0"                enum="Disabled"            />
+      <choice value="0" name="Disabled"              ref="disabled"                      code="0"                enum="Disabled"            />
       <choice value="1" name="System clock"          ref="/SIM/system_bus_clock[0]"      code="SystemBusClock"   enum="SystemClock"         isDefault="true" />
       <choice value="2" name="Fixed frequency clock" ref="/MCG/system_mcgffclk_clock[0]" code="SystemMcgFFClock" enum="FixedFrequencyClock" />
-      <choice value="3" name="External clock"        ref="ftmExternalClock"             code="ftmExternalClock" enum="ExternalClock"       />
+      <choice value="3" name="External clock"        ref="ftmExternalClock"              code="ftmExternalClock" enum="ExternalClock"       />
    </choiceOption>
 
    <choiceOption key="ftm_sc_clks"  condition="/ICS/_present"
@@ -133,10 +133,10 @@
       typeName="FtmClockSource"
       target="inputClockFrequency"
       toolTip="Selects the clock source for the module">
-      <choice value="0" name="Disabled"              ref="disabled"                     code="0"                enum="Disabled"            />
+      <choice value="0" name="Disabled"              ref="disabled"                      code="0"                enum="Disabled"            />
       <choice value="1" name="System timer clock"    ref="/SIM/system_timer_clock[0]"    code="SystemTimerClock" enum="SystemTimerClock"    isDefault="true" />
       <choice value="2" name="Fixed frequency clock" ref="/ICS/system_icsffclk_clock[0]" code="SystemIcsFFClock" enum="FixedFrequencyClock" />
-      <choice value="3" name="External clock"        ref="ftmExternalClock"             code="ftmExternalClock" enum="ExternalClock"       />
+      <choice value="3" name="External clock"        ref="ftmExternalClock"              code="ftmExternalClock" enum="ExternalClock"       />
    </choiceOption>
 
    <intOption key="ftmExternalClock"
@@ -168,12 +168,14 @@
       <choice value="7" name="Divide by 128" ref="(inputClockFrequency)/128." enum="DivBy128" />
    </choiceOption>
 
-   <timeOption key="clock"
+   <floatOption key="clock"
       description="Counter tick rate"
       toolTip="The tick rate of the main FTM counter"
+      derived="true"
+      locked="true"
       units="Hz"
     />
-       
+
    <floatOption key="clockPeriod"
       ref="(1.0/clock)"
       hidden="true"
@@ -215,12 +217,13 @@
    <floatOption key="ftm_modPeriod"
       ref="clockPeriod*((ftm_sc_mode==2)?(65536):((ftm_sc_mode==1)?(2*(ftm_mod-ftm_cntin)):(ftm_mod-ftm_cntin+1)))"
       typeName="Seconds &amp;"
+      unlockedBy="ftm_sc_mode!=2"
       valueFormat="%s_s"
       description="Period or minimum interval of timer"
       toolTip="In left-aligned or centre-aligned this is the period of the timer\n
                In free-running mode it is the minimum interval"
       derived="true"
-      min="0" units="s"/>
+      units="s" />
 
    <choiceOption key="ftm_sc_action" condition="ftm_sc_toie_present&amp;&amp;ftm_sc_dma_present"
       enabledBy="irqHandlingMethod"
@@ -248,162 +251,161 @@
 
    <!-- ************* MODE ****************** -->
 
-   <title description="MODE register" condition="ftm_mode_ftmen_present" />
+   <category name="Miscellaneous" description="Miscellaneous" >
+      <!-- not sensible to initialise these -->
+      <!-- binaryOption key="ftm_mode_captest" condition="ftm_mode_captest_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmCaptestMode"
+         description="Capture Test Mode Enable" >
+         <choice name="Disabled"    value="0" enum="Disabled"/>
+         <choice name="Enabled"     value="1" enum="Enabled"/>
+      </binaryOption -->
 
-   <!-- not sensible to initialise these -->
-   <!-- binaryOption key="ftm_mode_captest" condition="ftm_mode_captest_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmCaptestMode"
-      description="Capture Test Mode Enable" >
-      <choice name="Disabled"    value="0" enum="Disabled"/>
-      <choice name="Enabled"     value="1" enum="Enabled"/>
-   </binaryOption -->
+      <binaryOption key="ftm_mode_pwmsync" condition="ftm_mode_pwmsync_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmModePwmsync"
+         description="PWM Synchronization Mode"
+         toolTip="Selects which triggers can be used by MOD, CnV, OUTMASK, and FTM counter synchronization.\n
+                  It only configures the synchronization when SYNCMODE is 0.\n
+                  No restriction:  MOD, CnV, OUTMASK and FTM counter synch, may use softwar or hardware trigger,\n
+                  MOD,CnV use software trigger, OUTMASK,FTM counter synch use hardware trigger." >
+         <choice name="No restrictions (hardware or software)."  value="0" enum="NoRestrictions"/>
+         <choice name="MOD,CnV use software, OUTMASK, counter synch use hardware"    value="1" enum="Restricted"/>
+      </binaryOption >
 
-   <binaryOption key="ftm_mode_pwmsync" condition="ftm_mode_pwmsync_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmModePwmsync"
-      description="PWM Synchronization Mode"
-      toolTip="Selects which triggers can be used by MOD, CnV, OUTMASK, and FTM counter synchronization.\n
-               It only configures the synchronization when SYNCMODE is 0.\n
-               No restriction:  MOD, CnV, OUTMASK and FTM counter synch, may use softwar or hardware trigger,\n
-               MOD,CnV use software trigger, OUTMASK,FTM counter synch use hardware trigger." >
-      <choice name="No restrictions (hardware or software)."  value="0" enum="NoRestrictions"/>
-      <choice name="MOD,CnV use software, OUTMASK, counter synch use hardware"    value="1" enum="Restricted"/>
-   </binaryOption >
+      <binaryOption key="ftm_mode_wpdis" condition="ftm_mode_wpdis_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmModeWpdis"
+         description="Write Protection Disable"
+         toolTip="This value is applied after main FTM configuration" >
+         <choice name="Enabled"     value="0" enum="Enabled"/>
+         <choice name="Disabled"    value="1" enum="Disabled"/>
+      </binaryOption >
 
-   <binaryOption key="ftm_mode_wpdis" condition="ftm_mode_wpdis_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmModeWpdis"
-      description="Write Protection Disable"
-      toolTip="This value is applied after main FTM configuration" >
-      <choice name="Enabled"     value="0" enum="Enabled"/>
-      <choice name="Disabled"    value="1" enum="Disabled"/>
-   </binaryOption >
+      <binaryOption key="ftm_mode_ftmen" condition="ftm_mode_ftmen_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmModeFtmen"
+         description="FTM Mode Enable"
+         toolTip="This field is write protected. It can be written only when MODE[WPDIS] = 1" >
+         <choice name="TPM registers only"  value="0" enum="TpmRegistersOnly"/>
+         <choice name="All registers"       value="1" enum="AllRegisters"/>
+      </binaryOption >
 
-   <binaryOption key="ftm_mode_ftmen" condition="ftm_mode_ftmen_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmModeFtmen"
-      description="FTM Mode Enable"
-      toolTip="This field is write protected. It can be written only when MODE[WPDIS] = 1" >
-      <choice name="TPM registers only"  value="0" enum="TpmRegistersOnly"/>
-      <choice name="All registers"       value="1" enum="AllRegisters"/>
-   </binaryOption >
+      <binaryOption key="ftm_mode_init" condition="ftm_mode_init_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmInitialiseOutputs"
+         description="Initialisation of Channel Outputs"
+         toolTip="When written to 1 the channels outputs are initialized according to the state of\n
+                  their corresponding bit in the OUTINIT register\n
+                  This is applied after the main FTM configuration">
+         <choice name="No initialisation" value="0" enum="Unchanged"/>
+         <choice name="Initialised"       value="1" enum="Initialised"/>
+      </binaryOption >
 
-   <binaryOption key="ftm_mode_init" condition="ftm_mode_init_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmInitialiseOutputs"
-      description="Initialisation of Channel Outputs"
-      toolTip="When written to 1 the channels outputs are initialized according to the state of\n
-               their corresponding bit in the OUTINIT register\n
-               This is applied after the main FTM configuration">
-      <choice name="No initialisation" value="0" enum="Unchanged"/>
-      <choice name="Initialised"       value="1" enum="Initialised"/>
-   </binaryOption >
+      <!-- ************* OUTINIT ****************** -->
+      <bitmaskOption key="ftm_outinit_choi" condition="ftm_outinit_choi_present"
+         enabledBy="enablePeripheralSupport"
+         valueFormat="%s"
+         typeName="FtmInitialValue"
+         enumType="uint8_t"
+         enumText="\t   FtmInitialValue_AllLow  = 0x00,\n\t   FtmInitialValue_AllHigh = 0xFF"
+         description="Channel Output Initialization Value"
+         toolTip="Bitmask defining the value that is forced\n
+                  into the channel output when initialization occurs."
+         value="0"
+         bitmask="0"
+         bitList="CH(0-7)" />
 
-   <!-- ************* OUTINIT ****************** -->
-   <bitmaskOption key="ftm_outinit_choi" condition="ftm_outinit_choi_present"
-      enabledBy="enablePeripheralSupport"
-      valueFormat="%s"
-      typeName="FtmInitialValue"
-      enumType="uint8_t"
-      enumText="\t   FtmInitialValue_AllLow  = 0x00,\n\t   FtmInitialValue_AllHigh = 0xFF"
-      description="Channel Output Initialization Value"
-      toolTip="Bitmask defining the value that is forced\n
-               into the channel output when initialization occurs."
-      value="0"
-      bitmask="0"
-      bitList="CH(0-7)" />
+      <!-- ************* POL ****************** -->
+      <bitmaskOption key="ftm_pol_pol" condition="ftm_pol_pol_present"
+         enabledBy="enablePeripheralSupport"
+         valueFormat="%s"
+         typeName="FtmPolarity"
+         enumType="uint8_t"
+         enumText="\t   FtmPolarity_AllActiveHigh = 0x00,\n\t   FtmPolarity_AllActiveLow  = 0xFF"
+         description="Channel Output Polarity"
+         toolTip="Bitmask defining the polarity of the channel output.\n
+                  0=ActiveHigh, 1=ActiveLow\n
+                  This field is write protected. It can be written only when MODE[WPDIS] = 1."
+         value="0"
+         bitmask="0"
+         bitList="CH(0-7)" />
 
-   <!-- ************* POL ****************** -->
-   <bitmaskOption key="ftm_pol_pol" condition="ftm_pol_pol_present"
-      enabledBy="enablePeripheralSupport"
-      valueFormat="%s"
-      typeName="FtmPolarity"
-      enumType="uint8_t"
-      enumText="\t   FtmPolarity_AllActiveHigh = 0x00,\n\t   FtmPolarity_AllActiveLow  = 0xFF"
-      description="Channel Output Polarity"
-      toolTip="Bitmask defining the polarity of the channel output.\n
-               0=ActiveHigh, 1=ActiveLow\n
-               This field is write protected. It can be written only when MODE[WPDIS] = 1."
-      value="0"
-      bitmask="0"
-      bitList="CH(0-7)" />
+   </category>
 
-   <!-- ************* SYNC ****************** -->
+   <!-- ************* TRIGGERING ****************** -->
 
-    <!-- Hardware Trigger -->
-   <title description="Triggering" condition="hardwareTriggerPinMap" />
+   <category name="Triggering" description="Triggering" >
 
-   <bitmaskOption key="ftm_sync_trig" condition="hardwareTriggerPinMap"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmHardwareTrigger"
-      enumType="uint32_t"
-      valueFormat="FtmHardwareTrigger(%s)"
-      description="Hardware trigger inputs"
-      toolTip="Enables hardware trigger to the PWM synchronization.\n
-               Hardware trigger occurs on a rising edge of the corresponding trigger input signal."
-      bitmask="0"
-      bitList="=hardwareTriggerPinMap"
-      pinMap="=&quot;FTM$(_instance)_TRIG%i:&quot;+hardwareTriggerPinMap"
-      value="0" />
+      <bitmaskOption key="ftm_sync_trig" condition="hardwareTriggerPinMap"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmHardwareTrigger"
+         enumType="uint32_t"
+         valueFormat="FtmHardwareTrigger(%s)"
+         description="Hardware trigger inputs"
+         toolTip="Enables hardware trigger to the PWM synchronization.\n
+                  Hardware trigger occurs on a rising edge of the corresponding trigger input signal."
+         bitmask="0"
+         bitList="=hardwareTriggerPinMap"
+         pinMap="=&quot;FTM$(_instance)_TRIG%i:&quot;+hardwareTriggerPinMap"
+         value="0" />
 
-   <binaryOption key="ftm_sync_swsync" condition="ftm_sync_swsync_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmSyncSwsync"
-      description="PWM Synchronization Software Trigger" >
-      <choice name="Not selected"  value="0" enum="NotSelected"/>
-      <choice name="Selected"      value="1" enum="Selected"/>
-   </binaryOption >
+      <binaryOption key="ftm_sync_swsync" condition="ftm_sync_swsync_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmSyncSwsync"
+         description="PWM Synchronization Software Trigger" >
+         <choice name="Not selected"  value="0" enum="NotSelected"/>
+         <choice name="Selected"      value="1" enum="Selected"/>
+      </binaryOption >
 
-   <binaryOption key="ftm_sync_synchom" condition="ftm_sync_synchom_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmSyncSynchom"
-      description="Output Mask Synchronization with buffer"
-      toolTip="Selects when the OUTMASK register is updated with the value of its buffer" >
-      <choice name="Rising edges of the system clock"  value="0" enum="RisingEdgesOfSystemClock"/>
-      <choice name="PWM synchronization"               value="1" enum="PwmSynchronization"/>
-   </binaryOption >
+      <binaryOption key="ftm_sync_synchom" condition="ftm_sync_synchom_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmSyncSynchom"
+         description="Output Mask Synchronization with buffer"
+         toolTip="Selects when the OUTMASK register is updated with the value of its buffer" >
+         <choice name="Rising edges of the system clock"  value="0" enum="RisingEdgesOfSystemClock"/>
+         <choice name="PWM synchronization"               value="1" enum="PwmSynchronization"/>
+      </binaryOption >
 
-   <binaryOption key="ftm_sync_reinit" condition="ftm_sync_reinit_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmSyncReinit"
-      description="Counter Reinitialization"
-      toolTip="Determines if the FTM counter is reinitialized when \n
-               the selected synchronization trigger is detected. \n
-               It only configures the synchronization when SYNCMODE is zero." >
-      <choice name="Counts normally"                         value="0" enum="CountsNormally"/>
-      <choice name="Updated with initial value on triggerd"  value="1" enum="UpdatedWithInitialValueOnTriggerd"/>
-   </binaryOption >
+      <binaryOption key="ftm_sync_reinit" condition="ftm_sync_reinit_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmSyncReinit"
+         description="Counter Reinitialization"
+         toolTip="Determines if the FTM counter is reinitialized when \n
+                  the selected synchronization trigger is detected. \n
+                  It only configures the synchronization when SYNCMODE is zero." >
+         <choice name="Counts normally"                         value="0" enum="CountsNormally"/>
+         <choice name="Updated with initial value on triggerd"  value="1" enum="UpdatedWithInitialValueOnTriggerd"/>
+      </binaryOption >
 
-   <binaryOption key="ftm_sync_cntmax" condition="ftm_sync_cntmax_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmSyncCntmax"
-      description="Maximum Loading Point Enable"
-      toolTip="Selects the maximum loading point to PWM synchronization. \n
-               See Boundary cycle and loading points. \n
-               If CNTMAX is 1, the selected loading point is when the FTM counter \n
-               reaches its maximum value (MOD register)." >
-      <choice name="Disabled"    value="0" enum="Disabled"/>
-      <choice name="Enabled"     value="1" enum="Enabled"/>
-   </binaryOption >
+      <binaryOption key="ftm_sync_cntmax" condition="ftm_sync_cntmax_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmSyncCntmax"
+         description="Maximum Loading Point Enable"
+         toolTip="Selects the maximum loading point to PWM synchronization. \n
+                  See Boundary cycle and loading points. \n
+                  If CNTMAX is 1, the selected loading point is when the FTM counter \n
+                  reaches its maximum value (MOD register)." >
+         <choice name="Disabled"    value="0" enum="Disabled"/>
+         <choice name="Enabled"     value="1" enum="Enabled"/>
+      </binaryOption >
 
-   <binaryOption key="ftm_sync_cntmin" condition="ftm_sync_cntmin_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmSyncCntmin"
-      description="Minimum Loading Point Enable"
-      toolTip="Selects the minimum loading point to PWM synchronization. \n
-               See Boundary cycle and loading points. \n
-               If CNTMIN is one, the selected loading point is when the FTM counter \n
-               reaches its minimum value (CNTIN register).">
-      <choice name="Disabled"    value="0" enum="Disabled"/>
-      <choice name="Enabled"     value="1" enum="Enabled"/>
-   </binaryOption >
+      <binaryOption key="ftm_sync_cntmin" condition="ftm_sync_cntmin_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmSyncCntmin"
+         description="Minimum Loading Point Enable"
+         toolTip="Selects the minimum loading point to PWM synchronization. \n
+                  See Boundary cycle and loading points. \n
+                  If CNTMIN is one, the selected loading point is when the FTM counter \n
+                  reaches its minimum value (CNTIN register).">
+         <choice name="Disabled"    value="0" enum="Disabled"/>
+         <choice name="Enabled"     value="1" enum="Enabled"/>
+      </binaryOption >
+   </category>
 
-   <category
-      name="Functions For Linked Channels"
+   <category name="Functions For Linked Channels" description="Channels (0,1) (2,3) (4,5) (6,7)"
       toolTip="Configure the Fault control, Synchronization, Dead-time insertion, \n
-               Dual Edge Capture mode, Complementary, and Combine mode for each pair of channels"
-      description="Channels (0,1) (2,3) (4,5) (6,7)">
+               Dual Edge Capture mode, Complementary, and Combine mode for each pair of channels" >
 
       <for keys   =" num : pair"
            values =" 0   : 0 &amp; 1 ;
@@ -454,89 +456,111 @@
          periodEquation="ftm_deadtime*clockPeriod"
          description="Calculated dead-time"
          toolTip="Dead-time calculated using clock specified in clocking"
+         units="ticks"
        />
+
+      <!-- ************* INVCTRL ****************** -->
+
+      <!-- Not sensible to configure statically -->
+      <for keys="    Num : Left : Right"
+           values="   0  :   0  :   1;
+                      1  :   2  :   3;
+                      2  :   4  :   5;
+                      3  :   6  :   7" >
+         <binaryOption key="ftm_invctrl_inv%(Num)en" condition="ftm_invctrl_inv0en_present"
+            enabledBy="enablePeripheralSupport"
+            typeName="FtmInvctrl%(Left)_%(Right)"
+            description="Paired Channels %(Left) &amp; %(Right) Inverting Enable"
+            toolTip="Selects the inverting operation for the corresponding pair channels\n
+                     This register has a write buffer. \n
+                     The INVmEN bit is updated by the INVCTRL register synchronization." >
+            <choice name="Not inverted"  value="0" enum="NotInverted" />
+            <choice name="Inverted"      value="1" enum="Inverted"    />
+         </binaryOption >
+      </for>
+
    </category>
 
    <!-- ************* QUAD ****************** -->
 
-   <title description="Quadrature Decoder" condition="ftm_qdctrl_quadmode_present" />
+   <category name="Quadrature decoder"  description="Quadrature decoder" >
+      <binaryOption key="ftm_qdctrl_quadmode" condition="ftm_qdctrl_quadmode_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmQuadratureMode"
+         description="Quadrature decoding mode"
+         toolTip="Determines how the inputs control the counting sequence">
+         <choice value="0" name="Phase-AB Mode"         enum="Phase_AB_Mode" />
+         <choice value="1" name="Count-Direction Mode"  enum="Count_Direction_Mode"  />
+      </binaryOption>
 
-   <binaryOption key="ftm_qdctrl_quadmode" condition="ftm_qdctrl_quadmode_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmQuadratureMode"
-      description="Quadrature decoding mode"
-      toolTip="Determines how the inputs control the counting sequence">
-      <choice value="0" name="Phase-AB Mode"         enum="Phase_AB_Mode" />
-      <choice value="1" name="Count-Direction Mode"  enum="Count_Direction_Mode"  />
-   </binaryOption>
+      <binaryOption key="ftm_qdctrl_phapol" condition="ftm_qdctrl_phapol_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmPhaseAPolarity"
+         description="Polarity of Phase A input"
+         toolTip="Polarity of Phase A input">
+         <choice value="0" name="Active High" enum="ActiveHigh" />
+         <choice value="1" name="Active Low"  enum="ActiveLow"  />
+      </binaryOption>
 
-   <binaryOption key="ftm_qdctrl_phapol" condition="ftm_qdctrl_phapol_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmPhaseAPolarity"
-      description="Polarity of Phase A input"
-      toolTip="Polarity of Phase A input">
-      <choice value="0" name="Active High" enum="ActiveHigh" />
-      <choice value="1" name="Active Low"  enum="ActiveLow"  />
-   </binaryOption>
+      <binaryOption key="ftm_qdctrl_phbpol" condition="ftm_qdctrl_phbpol_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmPhaseBPolarity"
+         description="Polarity of Phase B input"
+         toolTip="Polarity of Phase B input">
+         <choice value="0" name="Active High" enum="ActiveHigh" />
+         <choice value="1" name="Active Low"  enum="ActiveLow"  />
+      </binaryOption>
 
-   <binaryOption key="ftm_qdctrl_phbpol" condition="ftm_qdctrl_phbpol_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmPhaseBPolarity"
-      description="Polarity of Phase B input"
-      toolTip="Polarity of Phase B input">
-      <choice value="0" name="Active High" enum="ActiveHigh" />
-      <choice value="1" name="Active Low"  enum="ActiveLow"  />
-   </binaryOption>
+      <choiceOption key="ftm_qdfilter_a" condition="ftm_qdctrl_phafltren_present"
+         enabledBy="enablePeripheralSupport"
+         valueFormat="(FTM_QDCTRL_PHAFLTREN(%s)&lt;&lt;8),FTM_FILTER_CH0FVAL(%s)"
+         enumType="uint16_t"
+         typeName="FtmPhaseAFilter"
+         description="Filtering on Phase A input"
+         toolTip="Filtering on Phase A input">
+         <choice value="0,0"  name="No Filter"      enum="Disabled" />
+         <choice value="1,1"  name="1 clock cycle"  enum="1_Clock"  />
+         <choice value="1,2"  name="2 clock cycle"  enum="2_Clock"  />
+         <choice value="1,3"  name="3 clock cycle"  enum="3_Clock"  />
+         <choice value="1,4"  name="4 clock cycle"  enum="4_Clock"  />
+         <choice value="1,5"  name="5 clock cycle"  enum="5_Clock"  />
+         <choice value="1,6"  name="6 clock cycle"  enum="6_Clock"  />
+         <choice value="1,7"  name="7 clock cycle"  enum="7_Clock"  />
+         <choice value="1,8"  name="8 clock cycle"  enum="8_Clock"  />
+         <choice value="1,9"  name="9 clock cycle"  enum="9_Clock"  />
+         <choice value="1,10" name="10 clock cycle" enum="10_Clock" />
+         <choice value="1,11" name="11 clock cycle" enum="11_Clock" />
+         <choice value="1,12" name="12 clock cycle" enum="12_Clock" />
+         <choice value="1,13" name="13 clock cycle" enum="13_Clock" />
+         <choice value="1,14" name="14 clock cycle" enum="14_Clock" />
+         <choice value="1,15" name="15 clock cycle" enum="15_Clock" />
+      </choiceOption>
 
-   <choiceOption key="ftm_qdfilter_a" condition="ftm_qdctrl_phafltren_present"
-      enabledBy="enablePeripheralSupport"
-      valueFormat="(FTM_QDCTRL_PHAFLTREN(%s)&lt;&lt;8),FTM_FILTER_CH0FVAL(%s)"
-      enumType="uint16_t"
-      typeName="FtmPhaseAFilter"
-      description="Filtering on Phase A input"
-      toolTip="Filtering on Phase A input">
-      <choice value="0,0"  name="No Filter"      enum="Disabled" />
-      <choice value="1,1"  name="1 clock cycle"  enum="1_Clock"  />
-      <choice value="1,2"  name="2 clock cycle"  enum="2_Clock"  />
-      <choice value="1,3"  name="3 clock cycle"  enum="3_Clock"  />
-      <choice value="1,4"  name="4 clock cycle"  enum="4_Clock"  />
-      <choice value="1,5"  name="5 clock cycle"  enum="5_Clock"  />
-      <choice value="1,6"  name="6 clock cycle"  enum="6_Clock"  />
-      <choice value="1,7"  name="7 clock cycle"  enum="7_Clock"  />
-      <choice value="1,8"  name="8 clock cycle"  enum="8_Clock"  />
-      <choice value="1,9"  name="9 clock cycle"  enum="9_Clock"  />
-      <choice value="1,10" name="10 clock cycle" enum="10_Clock" />
-      <choice value="1,11" name="11 clock cycle" enum="11_Clock" />
-      <choice value="1,12" name="12 clock cycle" enum="12_Clock" />
-      <choice value="1,13" name="13 clock cycle" enum="13_Clock" />
-      <choice value="1,14" name="14 clock cycle" enum="14_Clock" />
-      <choice value="1,15" name="15 clock cycle" enum="15_Clock" />
-   </choiceOption>
-
-   <choiceOption key="ftm_qdfilter_b" condition="ftm_qdctrl_phbfltren_present"
-      enabledBy="enablePeripheralSupport"
-      valueFormat="(FTM_QDCTRL_PHBFLTREN(%s)&lt;&lt;8),FTM_FILTER_CH1FVAL(%s)"
-      enumType="uint16_t"
-      typeName="FtmPhaseBFilter"
-      description="Filtering on Phase B input"
-      toolTip="Filtering on Phase B input">
-      <choice value="0,0"  name="No Filter"      enum="Disabled" />
-      <choice value="1,1"  name="1 clock cycle"  enum="1_Clock"  />
-      <choice value="1,2"  name="2 clock cycle"  enum="2_Clock"  />
-      <choice value="1,3"  name="3 clock cycle"  enum="3_Clock"  />
-      <choice value="1,4"  name="4 clock cycle"  enum="4_Clock"  />
-      <choice value="1,5"  name="5 clock cycle"  enum="5_Clock"  />
-      <choice value="1,6"  name="6 clock cycle"  enum="6_Clock"  />
-      <choice value="1,7"  name="7 clock cycle"  enum="7_Clock"  />
-      <choice value="1,8"  name="8 clock cycle"  enum="8_Clock"  />
-      <choice value="1,9"  name="9 clock cycle"  enum="9_Clock"  />
-      <choice value="1,10" name="10 clock cycle" enum="10_Clock" />
-      <choice value="1,11" name="11 clock cycle" enum="11_Clock" />
-      <choice value="1,12" name="12 clock cycle" enum="12_Clock" />
-      <choice value="1,13" name="13 clock cycle" enum="13_Clock" />
-      <choice value="1,14" name="14 clock cycle" enum="14_Clock" />
-      <choice value="1,15" name="15 clock cycle" enum="15_Clock" />
-   </choiceOption>
+      <choiceOption key="ftm_qdfilter_b" condition="ftm_qdctrl_phbfltren_present"
+         enabledBy="enablePeripheralSupport"
+         valueFormat="(FTM_QDCTRL_PHBFLTREN(%s)&lt;&lt;8),FTM_FILTER_CH1FVAL(%s)"
+         enumType="uint16_t"
+         typeName="FtmPhaseBFilter"
+         description="Filtering on Phase B input"
+         toolTip="Filtering on Phase B input">
+         <choice value="0,0"  name="No Filter"      enum="Disabled" />
+         <choice value="1,1"  name="1 clock cycle"  enum="1_Clock"  />
+         <choice value="1,2"  name="2 clock cycle"  enum="2_Clock"  />
+         <choice value="1,3"  name="3 clock cycle"  enum="3_Clock"  />
+         <choice value="1,4"  name="4 clock cycle"  enum="4_Clock"  />
+         <choice value="1,5"  name="5 clock cycle"  enum="5_Clock"  />
+         <choice value="1,6"  name="6 clock cycle"  enum="6_Clock"  />
+         <choice value="1,7"  name="7 clock cycle"  enum="7_Clock"  />
+         <choice value="1,8"  name="8 clock cycle"  enum="8_Clock"  />
+         <choice value="1,9"  name="9 clock cycle"  enum="9_Clock"  />
+         <choice value="1,10" name="10 clock cycle" enum="10_Clock" />
+         <choice value="1,11" name="11 clock cycle" enum="11_Clock" />
+         <choice value="1,12" name="12 clock cycle" enum="12_Clock" />
+         <choice value="1,13" name="13 clock cycle" enum="13_Clock" />
+         <choice value="1,14" name="14 clock cycle" enum="14_Clock" />
+         <choice value="1,15" name="15 clock cycle" enum="15_Clock" />
+      </choiceOption>
+   </category>
 
    <choiceOption key="ftm_channel_number"
       hidden="true"
@@ -557,45 +581,45 @@
       <choice value="(uint8_t(-1))" name="No Channel"     enum="None" />
    </choiceOption>
 
-   <!-- ************* CONF ****************** -->
+   <category name="Global timebase" description="Global timebase" >
 
-   <binaryOption key="ftm_conf_gtbeout" condition="ftm_conf_gtbeout_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmConfGtbeout"
-      description="Global Time Base Output"
-      toolTip="Enables the global time base signal generation to other FTMs" >
-      <choice name="Disabled"    value="0" enum="Disabled"/>
-      <choice name="Enabled"     value="1" enum="Enabled"/>
-   </binaryOption >
+      <binaryOption key="ftm_conf_gtbeout" condition="ftm_conf_gtbeout_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmConfGtbeout"
+         description="Global Time Base Output"
+         toolTip="Enables the global time base signal generation to other FTMs" >
+         <choice name="Disabled"    value="0" enum="Disabled"/>
+         <choice name="Enabled"     value="1" enum="Enabled"/>
+      </binaryOption >
 
-   <binaryOption key="ftm_conf_gtbeen" condition="ftm_conf_gtbeen_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmConfGtbeen"
-      description="External Global Time Base Enable"
-      toolTip="Configures the FTM to use an external global time base signal that is generated by another FTM." >
-      <choice name="Disabled"    value="0" enum="Disabled"/>
-      <choice name="Enabled"     value="1" enum="Enabled"/>
-   </binaryOption >
+      <binaryOption key="ftm_conf_gtbeen" condition="ftm_conf_gtbeen_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmConfGtbeen"
+         description="External Global Time Base Enable"
+         toolTip="Configures the FTM to use an external global time base signal that is generated by another FTM." >
+         <choice name="Disabled"    value="0" enum="Disabled"/>
+         <choice name="Enabled"     value="1" enum="Enabled"/>
+      </binaryOption >
 
-   <choiceOption key="ftm_conf_bdmmode" condition="ftm_conf_bdmmode_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmConfBdmmode"
-      toolTip="Selects the ratio between the number of counter overflows to the number of times the TOF bit is set"
-      description="Controls operation in BDM Mode" >
-      <choice name="Stopped, outputs functional"            value="0" enum="Stopped_OutputsFunctional"/>
-      <choice name="Stopped, outputs forced to safe value"  value="1" enum="Stopped_OutputsForcedToSafeValue"/>
-      <choice name="Stopped, outputs frozen"                value="2" enum="Stopped_OutputsFrozen"/>
-      <choice name="Functioning"                            value="3" enum="Functioning"/>
-   </choiceOption >
+      <choiceOption key="ftm_conf_bdmmode" condition="ftm_conf_bdmmode_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmConfBdmmode"
+         toolTip="Selects the ratio between the number of counter overflows to the number of times the TOF bit is set"
+         description="Controls operation in BDM Mode" >
+         <choice name="Stopped, outputs functional"            value="0" enum="Stopped_OutputsFunctional"/>
+         <choice name="Stopped, outputs forced to safe value"  value="1" enum="Stopped_OutputsForcedToSafeValue"/>
+         <choice name="Stopped, outputs frozen"                value="2" enum="Stopped_OutputsFrozen"/>
+         <choice name="Functioning"                            value="3" enum="Functioning"/>
+      </choiceOption >
 
-   <intOption key="ftm_conf_numtof" condition="ftm_conf_numtof_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="uint32_t"
-      description="TOF Frequency"
-      toolTip="Selects the ratio between the number of counter overflows to the number of times the TOF bit is set."
-   />
+      <intOption key="ftm_conf_numtof" condition="ftm_conf_numtof_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="uint32_t"
+         description="TOF Frequency"
+         toolTip="Selects the ratio between the number of counter overflows to the number of times the TOF bit is set."
+      />
+   </category>
 
-   <!-- ************* SYNCONF ****************** -->
    <category description="Synchronization Configuration" name="Synchronization">
 
       <binaryOption key="ftm_synconf_hwsoc" condition="ftm_synconf_hwsoc_present"
@@ -734,31 +758,12 @@
       </binaryOption >
    </category>
 
-   <!-- ************* INVCTRL ****************** -->
-
-   <!-- Not sensible to configure statically -->
-   <for keys="    Num : Left : Right"
-        values="   0  :   0  :   1;
-                   1  :   2  :   3;
-                   2  :   4  :   5;
-                   3  :   6  :   7" >
-      <binaryOption key="ftm_invctrl_inv%(Num)en" condition="ftm_invctrl_inv0en_present"
-         enabledBy="enablePeripheralSupport"
-         typeName="FtmInvctrl%(Left)_%(Right)"
-         description="Paired Channels %(Left) &amp; %(Right) Inverting Enable"
-         toolTip="Selects the inverting operation for the corresponding pair channels\n
-                  This register has a write buffer. \n
-                  The INVmEN bit is updated by the INVCTRL register synchronization." >
-         <choice name="Not inverted"  value="0" enum="NotInverted" />
-         <choice name="Inverted"      value="1" enum="Inverted"    />
-      </binaryOption >
-   </for>
-
    <!-- ************* SWOCTRL ****************** -->
 
    <!-- Not sensible to configure statically -->
    <for keys="Ch" dim="8" >
       <choiceOption key="ftm_swoctrl_ch%(Ch)ocv" condition="ftm_swoctrl_choc_present&amp;&amp;ftm_swoctrl_chocv_present"
+         hidden="true"
          valueFormat="FTM_SWOCTRL_CH%(Ch)OC(%s),FTM_SWOCTRL_CH%(Ch)OCV(%s)"
          enabledBy="enablePeripheralSupport"
          typeName="FtmForceOutput%(Ch)"
@@ -770,25 +775,27 @@
       </choiceOption >
    </for>
 
-   <!-- ************* PWMLOAD ****************** -->
+   <category name="PWM load" description="PWM load" >
+      <!-- ************* PWMLOAD ****************** -->
 
-   <binaryOption key="ftm_pwmload_ldok" condition="ftm_pwmload_ldok_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="FtmPwmload"
-      description="Load Enable"
-      toolTip="Enables loading of MOD/CNTIN/CnV from buffers when Counter=MOD" >
-      <choice name="Loading disabled"  value="0" enum="Disabled"/>
-      <choice name="Loading enabled"   value="1" enum="Enabled"/>
-   </binaryOption >
+      <binaryOption key="ftm_pwmload_ldok" condition="ftm_pwmload_ldok_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmPwmload"
+         description="Load Enable"
+         toolTip="Enables loading of MOD/CNTIN/CnV from buffers when Counter=MOD" >
+         <choice name="Loading disabled"  value="0" enum="Disabled"/>
+         <choice name="Loading enabled"   value="1" enum="Enabled"/>
+      </binaryOption >
 
-   <bitmaskOption key="ftm_pwmload_chsel" condition="ftm_pwmload_chsel_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="uint32_t"
-      description="Match Channel Select"
-      toolTip="Selects which channels trigger loading of MOD/CNTIN/CnV from buffers"
-      bitmask="0xFF"
-      bitList="CH%i"
-   />
+      <bitmaskOption key="ftm_pwmload_chsel" condition="ftm_pwmload_chsel_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="uint32_t"
+         description="Match Channel Select"
+         toolTip="Selects which channels trigger loading of MOD/CNTIN/CnV from buffers"
+         bitmask="0xFF"
+         bitList="CH%i"
+      />
+   </category>
 
 <!-- ============================ FAULT INPUTS ============================= -->
 
@@ -847,7 +854,7 @@
          <choice value="14" name="14 Clock cycles"  enum="14_clocks" />
          <choice value="15" name="15 Clock cycles"  enum="15_clocks" />
       </choiceOption>
-      
+
       <aliasOption key="ftm_fltctrl_ffval" optional="true"  locked="false"
          condition="(SignalExists(&quot;$(_NAME)_FLT0&quot;)||SignalExists(&quot;$(_NAME)_FLT1&quot;)||
                      SignalExists(&quot;$(_NAME)_FLT2&quot;)||SignalExists(&quot;$(_NAME)_FLT2&quot;))"
@@ -858,10 +865,10 @@
          locked="true"
          derived="true"
          ref="ftm_fltctrl_ffval*clockPeriod"
-         description="Filter delay"  
+         description="Filter delay"
          units="s"
        />
-      
+
       <for keys="inp" dim="8" >
          <choiceOption key="ftm_fltctrl_fault%(inp)en" condition="ftm_fltctrl_fault%(inp)en_present"
             hidden="true"
@@ -1149,7 +1156,7 @@
          units="ticks"
          description="Output Compare Event time in ticks"
          toolTip="This value is compared against the main counter"
-         value="0" min="0" max="@ftm_mod" />
+         value="0" min="0" max="ftm_mod" />
 
       <floatOption key="ftm_cnvEventTime[%(ch)]"
          hiddenBy="ftm_cnv[%(ch)]==0"
@@ -1160,7 +1167,7 @@
          units="s"
          description="Output Compare Event time in seconds"
          toolTip="This value, converted to ticks, is compared against the main counter"
-         value="0" min="0" max="65535" />
+         value="0" min="0" max="ftm_mod*clockPeriod" />
 
       <choiceOption key="ftm_filter_ch%(ch)fval" condition="ftm_filter_ch%(ch)fval_present"
          derivedFrom="ftm_filter_chnfval"

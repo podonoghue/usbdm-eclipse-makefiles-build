@@ -473,7 +473,7 @@
                enabledBy="ics_c1_irclken[%(n)]"
                description="Internal Reference [ICSIRCLK] Stop Enable"
                toolTip="Controls whether or not the internal reference clock remains enabled when the ICS enters Stop mode.\n
-               (only if IRCLKEN is set or if ICS is in FEI, FBI, or FBILP modes before entering Stop mode)" >
+                        (only if IRCLKEN is set or if ICS is in FEI, FBI, or FBILP modes before entering Stop mode)" >
                <choice value="0" enum="DisabledInStop" name="IR disabled in STOP" />
                <choice value="1" enum="EnabledInStop"  name="IR enabled in STOP" />
             </binaryOption>
@@ -664,6 +664,7 @@
          </choiceOption>
 
          <intOption key="system_icsoutclk_clock[%(n)]"
+               enabledBy="(%(n)==0)||enableClockConfiguration[%(n)]"
             max="50_MHz"
             min="1"
             derived="true"

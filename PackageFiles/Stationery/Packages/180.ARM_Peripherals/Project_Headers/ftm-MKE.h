@@ -34,19 +34,19 @@ namespace USBDM {
  * @{
  */
 
-/**
- * Enables External trigger on a channel comparison or initialisation event
- */
-enum FtmExternalTrigger {
-   FtmExternalTrigger_ch0   = FTM_EXTTRIG_CH0TRIG_MASK,    ///< External trigger on channel 0 event
-   FtmExternalTrigger_ch1   = FTM_EXTTRIG_CH1TRIG_MASK,    ///< External trigger on channel 1 event
-   FtmExternalTrigger_ch2   = FTM_EXTTRIG_CH2TRIG_MASK,    ///< External trigger on channel 2 event
-   FtmExternalTrigger_ch3   = FTM_EXTTRIG_CH3TRIG_MASK,    ///< External trigger on channel 3 event
-   FtmExternalTrigger_ch4   = FTM_EXTTRIG_CH4TRIG_MASK,    ///< External trigger on channel 4 event
-   FtmExternalTrigger_ch5   = FTM_EXTTRIG_CH5TRIG_MASK,    ///< External trigger on channel 5 event
-   FtmExternalTrigger_init  = FTM_EXTTRIG_INITTRIGEN_MASK, ///< External trigger on initialisation
-   FtmExternalTrigger_all   = 0x7F,                        ///< All triggers
-};
+///**
+// * Enables External trigger on a channel comparison or initialisation event
+// */
+//enum FtmExternalTrigger {
+//   FtmExternalTrigger_ch0   = FTM_EXTTRIG_CH0TRIG_MASK,    ///< External trigger on channel 0 event
+//   FtmExternalTrigger_ch1   = FTM_EXTTRIG_CH1TRIG_MASK,    ///< External trigger on channel 1 event
+//   FtmExternalTrigger_ch2   = FTM_EXTTRIG_CH2TRIG_MASK,    ///< External trigger on channel 2 event
+//   FtmExternalTrigger_ch3   = FTM_EXTTRIG_CH3TRIG_MASK,    ///< External trigger on channel 3 event
+//   FtmExternalTrigger_ch4   = FTM_EXTTRIG_CH4TRIG_MASK,    ///< External trigger on channel 4 event
+//   FtmExternalTrigger_ch5   = FTM_EXTTRIG_CH5TRIG_MASK,    ///< External trigger on channel 5 event
+//   FtmExternalTrigger_init  = FTM_EXTTRIG_INITTRIGEN_MASK, ///< External trigger on initialisation
+//   FtmExternalTrigger_all   = 0x7F,                        ///< All triggers
+//};
 
 /**
  * Selects pairs of channels for some operations
@@ -70,11 +70,67 @@ enum FtmChannelForce {    // Enable|Value
 /**
  * Provides shared methods.
  */
-class FtmBase {
+class FtmBase : public FtmBasicInfo {
 
 private:
    FtmBase(const FtmBase&) = delete;
    FtmBase(FtmBase&&) = delete;
+
+#if $(/PCR/_present:false) // /PCR/_present
+public:
+
+   /** Class to static check channel exists - it does not check that it is mapped to a pin */
+   template<class Info, int channel> class CheckChannel {
+      // Tests are chained so only a single assertion can fail so as to reduce noise
+
+      // Out of bounds value for function index
+      static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
+      // Non-existent function
+      static constexpr bool Test2 = !Test1 || (Info::info[channel].gpioBit != INVALID_PCR);
+
+      static_assert(Test1, "Illegal FTM channel - Check Configure.usbdm for available channels");
+      static_assert(Test2, "FTM channel doesn't exist in this device/package - Check Configure.usbdm for available channels");
+
+   public:
+      /** Dummy function to allow convenient in-line checking */
+      static constexpr void check() {}
+   };
+
+   /** Class to static check channel exists and is mapped to a pin */
+   template<class Info, int channel> class CheckChannelExistsAndMapped {
+      // Tests are chained so only a single assertion can fail so as to reduce noise
+
+      // Out of bounds value for function index
+      static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
+      // Function is not currently mapped to a pin
+      static constexpr bool Test2 = !Test1 || (Info::info[channel].gpioBit != UNMAPPED_PCR);
+      // Non-existent function and catch-all. (should be INVALID_PCR)
+      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[channel].gpioBit >= 0);
+
+      static_assert(Test1, "Illegal FTM channel - Check Configure.usbdm for available inputs");
+      static_assert(Test2, "FTM input is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Test3, "FTM channel doesn't exist in this device/package - Check Configure.usbdm for available input pins");
+
+   public:
+      /** Dummy function to allow convenient in-line checking */
+      static constexpr void check() {}
+   };
+
+   /** Class to static check channel is mapped to a pin - Ignores non-existence etc. */
+   template<class Info, int channel> class CheckChannelIsMappedToPinOnly {
+
+      // Out of bounds value for function index
+      static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
+      // Function is not currently mapped to a pin
+      static constexpr bool Test2 = !Test1 || (Info::info[channel].gpioBit != UNMAPPED_PCR);
+
+      static_assert(Test2, "FTM channel is not mapped to a pin - Modify Configure.usbdm");
+
+   public:
+      /** Dummy function to allow convenient in-line checking */
+      static constexpr void check() {}
+   };
+#endif
 
 protected:
    // Constructor
@@ -161,6 +217,25 @@ public:
    /** Mask for Timer channel */
    const uint32_t CHANNEL_MASK;
 
+      /**
+       * Configure Channel from values specified in channelInit
+       *
+       * @param channelInit Class containing initialisation values
+       */
+       void configure(const FtmBasicInfo::ChannelInit &channelInit) const {
+
+          // Configure timer combine mode
+          if ((channelInit.channel&0b1) == 0) {
+             // Even channel value controls paired channels n,n+1
+             const unsigned offset = 4*channelInit.channel;
+             const uint32_t mask = 0xFF<<offset;
+             ftm->COMBINE = (ftm->COMBINE & ~mask) | (((channelInit.cnsc>>8)<<offset)&mask);
+          }
+          // Configure timer channel
+          ftm->CONTROLS[channelInit.channel].CnSC = channelInit.cnsc;
+          ftm->CONTROLS[channelInit.channel].CnV  = channelInit.cnv;
+       }
+
 $(/FTM_CHANNEL/non_static_functions:  // /FTM_CHANNEL/non_static_functions not found)
 };
 
@@ -180,7 +255,9 @@ private:
    FtmBase_T(const FtmBase_T&) = delete;
    FtmBase_T(FtmBase_T&&) = delete;
 
+#if $(/FTM/irqHandlingMethod:false) // /FTM/irqHandlingMethod
    typedef typename Info::ChannelCallbackFunction ChannelCallbackFunction;
+#endif
 
 public:
 
@@ -229,7 +306,7 @@ public:
     */
    static void faultIrqHandler() {
       ftm->FMS = ftm->FMS & ~FTM_FMS_FAULTF_MASK;
-      Info::callback();
+      Info::sCallback();
    }
 
    /**
@@ -238,7 +315,7 @@ public:
    static void overflowIrqHandler() {
       // Clear TOI flag
       ftm->SC = ftm->SC & ~FTM_SC_TOF_MASK;
-      Info::callback();
+      Info::sCallback();
    }
 
    /**
@@ -258,7 +335,7 @@ public:
          // Get status for channels
          uint32_t status = ftm->STATUS;
          if (status) {
-            if constexpr (Info::IndividualCallbacks) {
+            if constexpr (Info::individualChannelCallbacks) {
                do {
                   auto channelNum = __builtin_ffs(status);
                   if (channelNum == 0) {
@@ -284,6 +361,7 @@ public:
       }
    }
 
+#if $(/FTM/irqHandlingMethod) // /FTM/irqHandlingMethod
    /**
     * Wrapper to allow the use of a class member as a callback function
     * @note Only usable with static objects.
@@ -362,11 +440,14 @@ public:
       };
       return fn;
    }
+#endif // /FTM/irqHandlingMethod
 
 public:
 $(/FTM/classInfo: // No class Info found)
 $(/FTM/InitMethod:// /FTM/InitMethod not found)
 $(/FTM/ChannelInitMethod: // /FTM/ChannelInitMethod not found)
+$(/FTM/FaultInitMethod: // /FTM/FaultInitMethod not found)
+
 /*
  *   // Static functions (mirrored)
  */
@@ -422,9 +503,17 @@ public:
     * @tparam channel FTM timer channel
     */
    template <int channel>
-   class Channel : public FtmChannel {
+   class Channel : 
+#if $(/PCR/_present:false) // /PCR/_present
+   public PcrTable_T<Info, limitIndex<Info>(channel)>, 
+#endif
+   public FtmChannel {
 
    private:
+#if $(/PCR/_present:false) // /PCR/_present
+      FtmBase::CheckChannel<Info, channel> check;
+#endif
+
       /**
        * This class is not intended to be instantiated
        */
@@ -432,7 +521,7 @@ public:
       Channel(Channel&&) = delete;
 
    public:
-      typedef typename Info::ChannelInit ChannelInit;
+//      typedef typename Info::ChannelInit ChannelInit;
 
       constexpr Channel() : FtmChannel(Info::baseAddress, (FtmChannelNum)channel) {}
       virtual ~Channel() = default;
@@ -448,9 +537,14 @@ public:
       }
 
    public:
+#if $(/PCR/_present:false) // /PCR/_present
       // GPIO associated with this channel
-      //template<Polarity polarity>
-      //using Gpio = GpioTable_T<Info, limitIndex<Info>(channel), polarity>; // Inactive is high
+      template<Polarity polarity>
+      using Gpio = GpioTable_T<Info, limitIndex<Info>(channel), polarity>; // Inactive is high
+
+      /** Allow access to PCR of associated pin */
+      using Pcr = PcrTable_T<Info, limitIndex<Info>(channel)>;
+#endif
 
       /** Allow access owning FTM */
       using OwningFtm = FtmBase_T<Info>;
@@ -501,16 +595,19 @@ public:
       }
 
       /**
-       * Configure channel
+       * Configure channel from Init data
        *
        * @note This method has the side-effect of clearing the register update synchronisation i.e.
        *       pending CnV register updates are discarded.
+       *
+       * @param channelInit (channel number is ignored)
        */
       static void configure(const ChannelInit &channelInit) {
-         OwningFtm::configureChannel(channelInit);
+         OwningFtm::configureChannel(FtmChannelNum(channel), channelInit);
       }
       
 $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
+#if false // /FTM/irqHandlingMethod
    /**
     * Set channel event callback function
     *
@@ -524,13 +621,151 @@ $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
     *       It is necessary to identify the originating channel in the callback
     */
    static ErrorCode setChannelCallback(ChannelCallbackFunction callback) {
-      if constexpr (Info::IndividualCallbacks) {
+      if constexpr (Info::individualChannelCallbacks) {
          return OwningFtm::setChannelCallback(channel, callback);
       }
       else {
          return OwningFtm::setChannelCallback(callback);
       }
    }
+#endif // /FTM/irqHandlingMethod
+#if $(/PCR/_present:false) // /PCR/_present
+   /*******************************
+    *  PIN Functions
+    *******************************/
+   /**
+    * Set callback for Pin IRQ.
+    *
+    * @param[in] callback The function to call on Pin interrupt.
+    *                     nullptr to indicate none
+    *
+    * @note There is a single callback function for all pins on the related port.
+    */
+   static __attribute__((always_inline)) void setPinCallback(PinCallbackFunction callback) {
+      FtmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+      static_assert(Pcr::HANDLER_INSTALLED, "Gpio associated with FTM channel not configured for PIN interrupts - Modify Configure.usbdm");
+      Pcr::setPinCallback(callback);
+   }
+
+#if defined(PORT_PCR_ODE_MASK) and defined (PORT_PCR_SRE_MASK)
+   /**
+    * @brief
+    * Set subset of Pin Control Register Attributes associated with output direction \n
+    * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
+    * Assumes clock to the port has already been enabled
+    *
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
+    * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain
+    * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast
+    */
+   static void setOutput(
+         PinDriveStrength  pinDriveStrength  = Pcr::defaultPcrValue,
+         PinDriveMode      pinDriveMode      = Pcr::defaultPcrValue,
+         PinSlewRate       pinSlewRate       = Pcr::defaultPcrValue) {
+
+      FtmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+
+#ifdef FTM_SC_PWMEN0_SHIFT
+      // Enable output pin in FTM
+      ftm->SC = ftm->SC | (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+#endif
+      Pcr::setPCR(pinDriveStrength|pinDriveMode|pinSlewRate);
+   }
+#elif defined(PORT_PCR_ODE_ASK)
+   /**
+    * @brief
+    * Set subset of Pin Control Register Attributes associated with output direction \n
+    * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
+    * Assumes clock to the port has already been enabled
+    *
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
+    * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain
+    */
+   static void setOutput(
+         PinDriveStrength  pinDriveStrength  = Pcr::defaultPcrValue,
+         PinDriveMode      pinDriveMode      = Pcr::defaultPcrValue) {
+
+      FtmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+
+#ifdef FTM_SC_PWMEN0_SHIFT
+      // Enable output pin in FTM
+      ftm->SC = ftm->SC | (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+#endif
+      Pcr::setPCR(pinDriveStrength|pinDriveMode);
+   }
+#elif defined(PORT_PCR_SRE_MASK)
+   /**
+    * @brief
+    * Set subset of Pin Control Register Attributes associated with output direction \n
+    * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
+    * Assumes clock to the port has already been enabled
+    *
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
+    * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast
+    */
+   static void setOutput(
+         PinDriveStrength  pinDriveStrength  = Pcr::defaultPcrValue,
+         PinSlewRate       pinSlewRate       = Pcr::defaultPcrValue) {
+
+      FtmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+
+#ifdef FTM_SC_PWMEN0_SHIFT
+      // Enable output pin in FTM
+      ftm->SC = ftm->SC | (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+#endif
+      Pcr::setPCR(pinDriveStrength|pinSlewRate);
+   }
+#else
+   /**
+    * @brief
+    * Set subset of Pin Control Register Attributes associated with output direction \n
+    * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
+    * Assumes clock to the port has already been enabled
+    *
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
+    */
+   static void setOutput(
+         PinDriveStrength  pinDriveStrength  = Pcr::defaultPcrValue) {
+
+      FtmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+
+#ifdef FTM_SC_PWMEN0_SHIFT
+      // Enable output pin in FTM
+      ftm->SC = ftm->SC | (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+#endif
+
+      Pcr::setPCR(pinDriveStrength);
+   }
+#endif
+
+      /**
+       * @brief
+       * Set subset of Pin Control Register Attributes associated with input direction \n
+       * Mux value is set appropriately for the pin function being used. Other attributes are cleared.\n
+       * The clock to the port will be enabled before changing the PCR.
+       *
+       * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
+       * @param[in] pinAction        One of PinAction_None, etc
+       * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive
+       *
+       *  @note see also configureDigitalFilter(), enableDigitalFilter(), disableDigitalFilter()
+       */
+      static void setInput(
+            PinPull           pinPull           = Pcr::defaultPcrValue,
+            PinAction         pinAction         = Pcr::defaultPcrValue,
+            PinFilter         pinFilter         = Pcr::defaultPcrValue) {
+
+         FtmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+//         FtmBase::CheckChannelExistsAndMapped<Info, channel>::check(); // More noisy errors
+
+#ifdef FTM_SC_PWMEN0_SHIFT
+         // Disable output pin in FTM
+         ftm->SC = ftm->SC & ~(1<<(channel+FTM_SC_PWMEN0_SHIFT));
+#endif
+
+         Pcr::setInput(pinPull,pinAction,pinFilter);
+      }
+#endif
 
    };
 
@@ -541,7 +776,6 @@ $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
 
      configure(Info::DefaultInitValue);
 
-     ftm->EXTTRIG = Info::exttrig;
      ftm->CONF    = FTM_CONF_BDMMODE(1);
      ftm->COMBINE = FTM_COMBINE_FAULTEN0_MASK|FTM_COMBINE_FAULTEN1_MASK|FTM_COMBINE_FAULTEN2_MASK /*|FTM_COMBINE_FAULTEN3_MASK */;
 

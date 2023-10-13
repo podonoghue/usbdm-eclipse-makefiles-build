@@ -21,6 +21,8 @@
 #include <cmath>
 #include "pin_mapping.h"
 
+#if $(/FTM/enablePeripheralSupport) // /FTM/enablePeripheralSupport
+
 /*
  * Default port information
  */
@@ -68,12 +70,13 @@ enum FtmChannelForce {    // Enable|Value
 /**
  * Provides shared methods.
  */
-class FtmBase {
+class FtmBase : public FtmBasicInfo {
 
 private:
    FtmBase(const FtmBase&) = delete;
    FtmBase(FtmBase&&) = delete;
 
+#if $(/PCR/_present:false) // /PCR/_present
 public:
 
    /** Class to static check channel exists - it does not check that it is mapped to a pin */
@@ -127,6 +130,7 @@ public:
       /** Dummy function to allow convenient in-line checking */
       static constexpr void check() {}
    };
+#endif
 
 protected:
    // Constructor
@@ -213,6 +217,25 @@ public:
    /** Mask for Timer channel */
    const uint32_t CHANNEL_MASK;
 
+      /**
+       * Configure Channel from values specified in channelInit
+       *
+       * @param channelInit Class containing initialisation values
+       */
+       void configure(const FtmBasicInfo::ChannelInit &channelInit) const {
+
+          // Configure timer combine mode
+          if ((channelInit.channel&0b1) == 0) {
+             // Even channel value controls paired channels n,n+1
+             const unsigned offset = 4*channelInit.channel;
+             const uint32_t mask = 0xFF<<offset;
+             ftm->COMBINE = (ftm->COMBINE & ~mask) | (((channelInit.cnsc>>8)<<offset)&mask);
+          }
+          // Configure timer channel
+          ftm->CONTROLS[channelInit.channel].CnSC = channelInit.cnsc;
+          ftm->CONTROLS[channelInit.channel].CnV  = channelInit.cnv;
+       }
+
 $(/FTM_CHANNEL/non_static_functions:  // /FTM_CHANNEL/non_static_functions not found)
 };
 
@@ -232,7 +255,9 @@ private:
    FtmBase_T(const FtmBase_T&) = delete;
    FtmBase_T(FtmBase_T&&) = delete;
 
+#if $(/FTM/irqHandlingMethod:false) // /FTM/irqHandlingMethod
    typedef typename Info::ChannelCallbackFunction ChannelCallbackFunction;
+#endif
 
 public:
 
@@ -281,7 +306,7 @@ public:
     */
    static void faultIrqHandler() {
       ftm->FMS = ftm->FMS & ~FTM_FMS_FAULTF_MASK;
-      Info::callback();
+      Info::sCallback();
    }
 
    /**
@@ -290,7 +315,7 @@ public:
    static void overflowIrqHandler() {
       // Clear TOI flag
       ftm->SC = ftm->SC & ~FTM_SC_TOF_MASK;
-      Info::callback();
+      Info::sCallback();
    }
 
    /**
@@ -299,18 +324,18 @@ public:
    static void irqHandler() {
       if ((ftm->MODE&FTM_MODE_FAULTIE_MASK) && (ftm->FMS&FTM_FMS_FAULTF_MASK)) {
          ftm->FMS = ftm->FMS & ~FTM_FMS_FAULTF_MASK;
-         Info::callback();
+         Info::sCallback();
       }
       else if ((ftm->SC&(FTM_SC_TOF_MASK|FTM_SC_TOIE_MASK)) == (FTM_SC_TOF_MASK|FTM_SC_TOIE_MASK)) {
          // Clear TOI flag
          ftm->SC = ftm->SC & ~FTM_SC_TOF_MASK;
-         Info::callback();
+         Info::sCallback();
       }
       else {
          // Get status for channels
          uint32_t status = ftm->STATUS;
          if (status) {
-            if constexpr (Info::IndividualCallbacks) {
+            if constexpr (Info::individualChannelCallbacks) {
                do {
                   auto channelNum = __builtin_ffs(status);
                   if (channelNum == 0) {
@@ -336,6 +361,7 @@ public:
       }
    }
 
+#if $(/FTM/irqHandlingMethod) // /FTM/irqHandlingMethod
    /**
     * Wrapper to allow the use of a class member as a callback function
     * @note Only usable with static objects.
@@ -414,11 +440,14 @@ public:
       };
       return fn;
    }
+#endif // /FTM/irqHandlingMethod
 
 public:
 $(/FTM/classInfo: // No class Info found)
 $(/FTM/InitMethod:// /FTM/InitMethod not found)
 $(/FTM/ChannelInitMethod: // /FTM/ChannelInitMethod not found)
+$(/FTM/FaultInitMethod: // /FTM/FaultInitMethod not found)
+
 /*
  *   // Static functions (mirrored)
  */
@@ -474,12 +503,17 @@ public:
     * @tparam channel FTM timer channel
     */
    template <int channel>
-   class Channel : public PcrTable_T<Info, limitIndex<Info>(channel)>, public FtmChannel {
+   class Channel : 
+#if $(/PCR/_present:false) // /PCR/_present
+   public PcrTable_T<Info, limitIndex<Info>(channel)>, 
+#endif
+   public FtmChannel {
 
    private:
+#if $(/PCR/_present:false) // /PCR/_present
       FtmBase::CheckChannel<Info, channel> check;
+#endif
 
-   private:
       /**
        * This class is not intended to be instantiated
        */
@@ -487,7 +521,7 @@ public:
       Channel(Channel&&) = delete;
 
    public:
-      typedef typename Info::ChannelInit ChannelInit;
+//      typedef typename Info::ChannelInit ChannelInit;
 
       constexpr Channel() : FtmChannel(Info::baseAddress, (FtmChannelNum)channel) {}
       virtual ~Channel() = default;
@@ -503,12 +537,14 @@ public:
       }
 
    public:
+#if $(/PCR/_present:false) // /PCR/_present
       // GPIO associated with this channel
       template<Polarity polarity>
       using Gpio = GpioTable_T<Info, limitIndex<Info>(channel), polarity>; // Inactive is high
 
       /** Allow access to PCR of associated pin */
       using Pcr = PcrTable_T<Info, limitIndex<Info>(channel)>;
+#endif
 
       /** Allow access owning FTM */
       using OwningFtm = FtmBase_T<Info>;
@@ -559,16 +595,19 @@ public:
       }
 
       /**
-       * Configure channel
+       * Configure channel from Init data
        *
        * @note This method has the side-effect of clearing the register update synchronisation i.e.
        *       pending CnV register updates are discarded.
+       *
+       * @param channelInit (channel number is ignored)
        */
       static void configure(const ChannelInit &channelInit) {
-         OwningFtm::configureChannel(channelInit);
+         OwningFtm::configureChannel(FtmChannelNum(channel), channelInit);
       }
       
 $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
+#if false // /FTM/irqHandlingMethod
    /**
     * Set channel event callback function
     *
@@ -582,14 +621,15 @@ $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
     *       It is necessary to identify the originating channel in the callback
     */
    static ErrorCode setChannelCallback(ChannelCallbackFunction callback) {
-      if constexpr (Info::IndividualCallbacks) {
+      if constexpr (Info::individualChannelCallbacks) {
          return OwningFtm::setChannelCallback(channel, callback);
       }
       else {
          return OwningFtm::setChannelCallback(callback);
       }
    }
-
+#endif // /FTM/irqHandlingMethod
+#if $(/PCR/_present:false) // /PCR/_present
    /*******************************
     *  PIN Functions
     *******************************/
@@ -606,7 +646,7 @@ $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
       static_assert(Pcr::HANDLER_INSTALLED, "Gpio associated with FTM channel not configured for PIN interrupts - Modify Configure.usbdm");
       Pcr::setPinCallback(callback);
    }
-       
+
 #if defined(PORT_PCR_ODE_MASK) and defined (PORT_PCR_SRE_MASK)
    /**
     * @brief
@@ -725,6 +765,7 @@ $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
 
          Pcr::setInput(pinPull,pinAction,pinFilter);
       }
+#endif
 
    };
 
@@ -1043,6 +1084,8 @@ $(/FTM/quadDeclarations: // No declarations found)
  */
 
 } // End namespace USBDM
+
+#endif // /FTM/enablePeripheralSupport
 
 #endif /* HEADER_FTM_H */
 

@@ -192,19 +192,50 @@
 
 <!ELEMENT timeOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
-   <!ATTLIST timeOption name            CDATA        #IMPLIED>
+   <!ATTLIST timeOption name          CDATA        #IMPLIED>
    <!-- Key for option - also used as visible name if not provided -->
-   <!ATTLIST timeOption key             CDATA        #IMPLIED>
+   <!ATTLIST timeOption key           CDATA        #REQUIRED>
+   <!-- Origin of this option's value. Visible in GUI as part of tool-tip -->
+   <!ATTLIST timeOption origin        CDATA        #IMPLIED>
    <!-- Description of option visible in GUI and used for documentation in C++ code -->
-   <!ATTLIST timeOption description     CDATA        #IMPLIED>
+   <!ATTLIST timeOption description   CDATA        #IMPLIED>
    <!-- Tool-tip visble in GUI and used for documentation in C++ code  -->
-   <!ATTLIST timeOption toolTip         CDATA        #IMPLIED>
-   <!-- Equation that controls this variable's primary value  -->
-   <!ATTLIST timeOption ref             CDATA         #IMPLIED> 
-   <!-- Equation that calculates the period from the variable primary value (in ticks) -->
-   <!ATTLIST timeOption periodEquation  CDATA         #IMPLIED> 
+   <!ATTLIST timeOption toolTip       CDATA        #IMPLIED>
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST timeOption condition     CDATA        #IMPLIED>
+   <!-- Expression enables this option -->
+   <!ATTLIST timeOption enabledBy     CDATA        #IMPLIED> 
+   <!-- Dynamic expression that disables and hides this option -->
+   <!ATTLIST timeOption hiddenBy      CDATA        #IMPLIED>
+   <!-- Unlocked by an expression -->
+   <!ATTLIST timeOption unlockedBy    CDATA        #IMPLIED> 
+   <!-- How to format a raw value e.g. 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)' or '%s_s' -->
+   <!ATTLIST timeOption valueFormat   CDATA        #IMPLIED> 
+
+   <!-- Type for float e.g. Seconds & -->
+   <!ATTLIST timeOption typeName      CDATA        #IMPLIED>
+   <!-- Equation that controls the tick value for variable -->
+   <!ATTLIST timeOption ref           CDATA        #IMPLIED> 
+   <!-- Allows this option to modify previous option of same key 
+        The variable behind this option is shared -->
+   <!ATTLIST timeOption modify        CDATA        #IMPLIED>
+   <!-- Replace existing variable associated with option quietly -->
+   <!ATTLIST timeOption replace       CDATA        #IMPLIED>
+   <!-- Initial/default value -->
+   <!ATTLIST timeOption value         CDATA        #IMPLIED>
+   <!-- Value returned when disabled -->
+   <!ATTLIST timeOption disabledValue CDATA        #IMPLIED>
+   <!-- Minimum value (displayed value) -->
+   <!ATTLIST timeOption min           CDATA        #IMPLIED>
+   <!-- Maximum value (displayed value) -->
+   <!ATTLIST timeOption max           CDATA        #IMPLIED>
+
    <!-- Indicates primary quantity for display -->
-   <!ATTLIST timeOption units            (Hz|s|ticks) #IMPLIED>
+   <!ATTLIST timeOption units          (Hz|s|ticks) #REQUIRED>
+   <!-- Equation that calculates the period from the variable primary value (only used if units = ticks) -->
+   <!ATTLIST timeOption periodEquation  CDATA       #IMPLIED> 
+
+
 
 <!ELEMENT intOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -247,6 +278,7 @@
    <!-- Replace existing variable associated with option quietly -->
    <!ATTLIST intOption replace       CDATA        #IMPLIED>
    <!ATTLIST intOption disabledValue CDATA        #IMPLIED>
+   <!-- Initial/default value -->
    <!ATTLIST intOption value         CDATA        #IMPLIED>
    <!-- Unit to use for numeric value -->
    <!ATTLIST intOption units         (Hz|s|ticks) #IMPLIED>
@@ -293,6 +325,7 @@
    <!-- Text to add to enum body generated from choices -->
    <!ATTLIST bitmaskOption enumText       CDATA        #IMPLIED>
    
+   <!-- Initial/default value -->
    <!ATTLIST bitmaskOption value          CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption disabledValue  CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption derivedFrom    CDATA        #IMPLIED>
@@ -348,10 +381,11 @@
    <!ATTLIST floatOption modify        CDATA        #IMPLIED>
    <!-- Replace existing variable associated with option quietly -->
    <!ATTLIST floatOption replace       CDATA        #IMPLIED>
+   <!-- Initial/default value -->
    <!ATTLIST floatOption value         CDATA        #IMPLIED>
    <!ATTLIST floatOption disabledValue CDATA        #IMPLIED>
    <!-- Unit to use for numeric value -->
-   <!ATTLIST floatOption units         (None|Hz|s)  #IMPLIED>
+   <!ATTLIST floatOption units         (None|Hz|s|ticks)  #IMPLIED>
    <!-- Minimum value (displayed value) -->
    <!ATTLIST floatOption min           CDATA        #IMPLIED>
    <!-- Maximum value (displayed value) -->
@@ -380,6 +414,7 @@
 
    <!-- How to format a raw value e.g. 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)' or '%s_s' -->
    <!ATTLIST stringOption valueFormat      CDATA        #IMPLIED>
+   <!-- Initial/default value -->
    <!ATTLIST stringOption value            CDATA        #IMPLIED>
    <!-- Allows this option to modify previous option with the same key 
         The variable behind this option is shared -->
@@ -441,6 +476,7 @@
    <!-- Option value is derived and should not be saved -->
    <!ATTLIST pinListOption derived            (true)       #IMPLIED>
    
+   <!-- Initial/default value -->
    <!ATTLIST pinListOption value              CDATA        #IMPLIED>
    <!ATTLIST pinListOption disabledValue      CDATA        #IMPLIED>
    <!ATTLIST pinListOption size               CDATA        #IMPLIED>
@@ -672,6 +708,7 @@
 
    <!ATTLIST irqOption pattern       CDATA        #REQUIRED>
    <!ATTLIST irqOption classHandler  CDATA        #REQUIRED>
+   <!-- Initial/default value -->
    <!ATTLIST irqOption value         CDATA        #IMPLIED>
    <!ATTLIST irqOption disabledValue CDATA        #IMPLIED>
    <!ATTLIST irqOption derived       (true)       #IMPLIED>
