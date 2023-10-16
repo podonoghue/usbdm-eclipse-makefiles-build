@@ -193,107 +193,13 @@
          <param type="StringVariable"         value="true"        name="ftm_cnsc_msa_present"        key="/FTM0/ftm_cnsc_msa_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_msb_present"        key="/FTM0/ftm_cnsc_msb_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnt_count_present"       key="/FTM0/ftm_cnt_count_present" />
-         <param type="StringVariable"         value="true"        name="ftm_cntin_init_present"      key="/FTM0/ftm_cntin_init_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnv_val_present"         key="/FTM0/ftm_cnv_val_present" />
-         <param type="StringVariable"         value="true"        name="ftm_combine_comb0_present"   key="/FTM0/ftm_combine_comb0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_combine_combine0_present" key="/FTM0/ftm_combine_combine0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_combine_comp0_present"   key="/FTM0/ftm_combine_comp0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_combine_decap0_present"  key="/FTM0/ftm_combine_decap0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_combine_decapen0_present" key="/FTM0/ftm_combine_decapen0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_combine_dten0_present"   key="/FTM0/ftm_combine_dten0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_combine_faulten0_present" key="/FTM0/ftm_combine_faulten0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_combine_syncen0_present" key="/FTM0/ftm_combine_syncen0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_conf_bdmmode_present"    key="/FTM0/ftm_conf_bdmmode_present" />
-         <param type="StringVariable"         value="true"        name="ftm_conf_gtbeen_present"     key="/FTM0/ftm_conf_gtbeen_present" />
-         <param type="StringVariable"         value="true"        name="ftm_conf_gtbeout_present"    key="/FTM0/ftm_conf_gtbeout_present" />
-         <param type="StringVariable"         value="true"        name="ftm_conf_numtof_present"     key="/FTM0/ftm_conf_numtof_present" />
-         <param type="StringVariable"         value="true"        name="ftm_deadtime_dtps_present"   key="/FTM0/ftm_deadtime_dtps_present" />
-         <param type="StringVariable"         value="true"        name="ftm_deadtime_dtval_present"  key="/FTM0/ftm_deadtime_dtval_present" />
-         <param type="StringVariable"         value="true"        name="ftm_exttrig_ch0trig_present" key="/FTM0/ftm_exttrig_ch0trig_present" />
-         <param type="StringVariable"         value="true"        name="ftm_exttrig_ch1trig_present" key="/FTM0/ftm_exttrig_ch1trig_present" />
-         <param type="StringVariable"         value="true"        name="ftm_exttrig_chtrig_present"  key="/FTM0/ftm_exttrig_chtrig_present" />
-         <param type="StringVariable"         value="true"        name="ftm_exttrig_inittrigen_present" key="/FTM0/ftm_exttrig_inittrigen_present" />
-         <param type="StringVariable"         value="true"        name="ftm_exttrig_trigf_present"   key="/FTM0/ftm_exttrig_trigf_present" />
-         <param type="StringVariable"         value="true"        name="ftm_filter_ch0fval_present"  key="/FTM0/ftm_filter_ch0fval_present" />
-         <param type="StringVariable"         value="true"        name="ftm_filter_ch1fval_present"  key="/FTM0/ftm_filter_ch1fval_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltctrl_fault0en_present" key="/FTM0/ftm_fltctrl_fault0en_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltctrl_fault1en_present" key="/FTM0/ftm_fltctrl_fault1en_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltctrl_fault2en_present" key="/FTM0/ftm_fltctrl_fault2en_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltctrl_fault3en_present" key="/FTM0/ftm_fltctrl_fault3en_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltctrl_ffltr0en_present" key="/FTM0/ftm_fltctrl_ffltr0en_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltctrl_ffltr1en_present" key="/FTM0/ftm_fltctrl_ffltr1en_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltctrl_ffltr2en_present" key="/FTM0/ftm_fltctrl_ffltr2en_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltctrl_ffltr3en_present" key="/FTM0/ftm_fltctrl_ffltr3en_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltctrl_ffval_present"   key="/FTM0/ftm_fltctrl_ffval_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltpol_flt0pol_present"  key="/FTM0/ftm_fltpol_flt0pol_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltpol_flt1pol_present"  key="/FTM0/ftm_fltpol_flt1pol_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltpol_flt2pol_present"  key="/FTM0/ftm_fltpol_flt2pol_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltpol_flt3pol_present"  key="/FTM0/ftm_fltpol_flt3pol_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fms_faultf0_present"     key="/FTM0/ftm_fms_faultf0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fms_faultf1_present"     key="/FTM0/ftm_fms_faultf1_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fms_faultf2_present"     key="/FTM0/ftm_fms_faultf2_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fms_faultf3_present"     key="/FTM0/ftm_fms_faultf3_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fms_faultf_present"      key="/FTM0/ftm_fms_faultf_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fms_faultin_present"     key="/FTM0/ftm_fms_faultin_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fms_wpen_present"        key="/FTM0/ftm_fms_wpen_present" />
-         <param type="StringVariable"         value="true"        name="ftm_invctrl_inv0en_present"  key="/FTM0/ftm_invctrl_inv0en_present" />
          <param type="StringVariable"         value="true"        name="ftm_mod_mod_present"         key="/FTM0/ftm_mod_mod_present" />
-         <param type="StringVariable"         value="true"        name="ftm_mode_captest_present"    key="/FTM0/ftm_mode_captest_present" />
-         <param type="StringVariable"         value="true"        name="ftm_mode_faultie_present"    key="/FTM0/ftm_mode_faultie_present" />
-         <param type="StringVariable"         value="true"        name="ftm_mode_faultm_present"     key="/FTM0/ftm_mode_faultm_present" />
-         <param type="StringVariable"         value="true"        name="ftm_mode_ftmen_present"      key="/FTM0/ftm_mode_ftmen_present" />
-         <param type="StringVariable"         value="true"        name="ftm_mode_init_present"       key="/FTM0/ftm_mode_init_present" />
-         <param type="StringVariable"         value="true"        name="ftm_mode_pwmsync_present"    key="/FTM0/ftm_mode_pwmsync_present" />
-         <param type="StringVariable"         value="true"        name="ftm_mode_wpdis_present"      key="/FTM0/ftm_mode_wpdis_present" />
-         <param type="StringVariable"         value="true"        name="ftm_outinit_ch0oi_present"   key="/FTM0/ftm_outinit_ch0oi_present" />
-         <param type="StringVariable"         value="true"        name="ftm_outinit_ch1oi_present"   key="/FTM0/ftm_outinit_ch1oi_present" />
-         <param type="StringVariable"         value="true"        name="ftm_outinit_choi_present"    key="/FTM0/ftm_outinit_choi_present" />
-         <param type="StringVariable"         value="true"        name="ftm_outmask_ch0om_present"   key="/FTM0/ftm_outmask_ch0om_present" />
-         <param type="StringVariable"         value="true"        name="ftm_outmask_ch1om_present"   key="/FTM0/ftm_outmask_ch1om_present" />
-         <param type="StringVariable"         value="true"        name="ftm_outmask_chom_present"    key="/FTM0/ftm_outmask_chom_present" />
-         <param type="StringVariable"         value="true"        name="ftm_pol_pol0_present"        key="/FTM0/ftm_pol_pol0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_pol_pol1_present"        key="/FTM0/ftm_pol_pol1_present" />
-         <param type="StringVariable"         value="true"        name="ftm_pol_pol_present"         key="/FTM0/ftm_pol_pol_present" />
-         <param type="StringVariable"         value="true"        name="ftm_pwmload_ch0sel_present"  key="/FTM0/ftm_pwmload_ch0sel_present" />
-         <param type="StringVariable"         value="true"        name="ftm_pwmload_ch1sel_present"  key="/FTM0/ftm_pwmload_ch1sel_present" />
-         <param type="StringVariable"         value="true"        name="ftm_pwmload_chsel_present"   key="/FTM0/ftm_pwmload_chsel_present" />
-         <param type="StringVariable"         value="true"        name="ftm_pwmload_ldok_present"    key="/FTM0/ftm_pwmload_ldok_present" />
          <param type="StringVariable"         value="true"        name="ftm_sc_clks_present"         key="/FTM0/ftm_sc_clks_present" />
          <param type="StringVariable"         value="true"        name="ftm_sc_cpwms_present"        key="/FTM0/ftm_sc_cpwms_present" />
          <param type="StringVariable"         value="true"        name="ftm_sc_ps_present"           key="/FTM0/ftm_sc_ps_present" />
          <param type="StringVariable"         value="true"        name="ftm_sc_tof_present"          key="/FTM0/ftm_sc_tof_present" />
          <param type="StringVariable"         value="true"        name="ftm_sc_toie_present"         key="/FTM0/ftm_sc_toie_present" />
-         <param type="StringVariable"         value="true"        name="ftm_status_ch0f_present"     key="/FTM0/ftm_status_ch0f_present" />
-         <param type="StringVariable"         value="true"        name="ftm_status_ch1f_present"     key="/FTM0/ftm_status_ch1f_present" />
-         <param type="StringVariable"         value="true"        name="ftm_swoctrl_ch0oc_present"   key="/FTM0/ftm_swoctrl_ch0oc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_swoctrl_ch0ocv_present"  key="/FTM0/ftm_swoctrl_ch0ocv_present" />
-         <param type="StringVariable"         value="true"        name="ftm_swoctrl_ch1oc_present"   key="/FTM0/ftm_swoctrl_ch1oc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_swoctrl_ch1ocv_present"  key="/FTM0/ftm_swoctrl_ch1ocv_present" />
-         <param type="StringVariable"         value="true"        name="ftm_swoctrl_choc_present"    key="/FTM0/ftm_swoctrl_choc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_swoctrl_chocv_present"   key="/FTM0/ftm_swoctrl_chocv_present" />
-         <param type="StringVariable"         value="true"        name="ftm_sync_cntmax_present"     key="/FTM0/ftm_sync_cntmax_present" />
-         <param type="StringVariable"         value="true"        name="ftm_sync_cntmin_present"     key="/FTM0/ftm_sync_cntmin_present" />
-         <param type="StringVariable"         value="true"        name="ftm_sync_reinit_present"     key="/FTM0/ftm_sync_reinit_present" />
-         <param type="StringVariable"         value="true"        name="ftm_sync_swsync_present"     key="/FTM0/ftm_sync_swsync_present" />
-         <param type="StringVariable"         value="true"        name="ftm_sync_synchom_present"    key="/FTM0/ftm_sync_synchom_present" />
-         <param type="StringVariable"         value="true"        name="ftm_sync_trig0_present"      key="/FTM0/ftm_sync_trig0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_sync_trig1_present"      key="/FTM0/ftm_sync_trig1_present" />
-         <param type="StringVariable"         value="true"        name="ftm_sync_trig2_present"      key="/FTM0/ftm_sync_trig2_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_cntinc_present"  key="/FTM0/ftm_synconf_cntinc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_hwinvc_present"  key="/FTM0/ftm_synconf_hwinvc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_hwom_present"    key="/FTM0/ftm_synconf_hwom_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_hwrstcnt_present" key="/FTM0/ftm_synconf_hwrstcnt_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_hwsoc_present"   key="/FTM0/ftm_synconf_hwsoc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_hwtrigmode_present" key="/FTM0/ftm_synconf_hwtrigmode_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_hwwrbuf_present" key="/FTM0/ftm_synconf_hwwrbuf_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_invc_present"    key="/FTM0/ftm_synconf_invc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_swinvc_present"  key="/FTM0/ftm_synconf_swinvc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_swoc_present"    key="/FTM0/ftm_synconf_swoc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_swom_present"    key="/FTM0/ftm_synconf_swom_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_swrstcnt_present" key="/FTM0/ftm_synconf_swrstcnt_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_swsoc_present"   key="/FTM0/ftm_synconf_swsoc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_swwrbuf_present" key="/FTM0/ftm_synconf_swwrbuf_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_syncmode_present" key="/FTM0/ftm_synconf_syncmode_present" />
       </peripheral>
       <peripheral baseName="FTM"      instance="1"        instanceList="FTM;FTM0;FTM1;FTM2" version="ftm0_2ch_mke">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
@@ -311,107 +217,13 @@
          <param type="StringVariable"         value="true"        name="ftm_cnsc_msa_present"        key="/FTM1/ftm_cnsc_msa_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnsc_msb_present"        key="/FTM1/ftm_cnsc_msb_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnt_count_present"       key="/FTM1/ftm_cnt_count_present" />
-         <param type="StringVariable"         value="true"        name="ftm_cntin_init_present"      key="/FTM1/ftm_cntin_init_present" />
          <param type="StringVariable"         value="true"        name="ftm_cnv_val_present"         key="/FTM1/ftm_cnv_val_present" />
-         <param type="StringVariable"         value="true"        name="ftm_combine_comb0_present"   key="/FTM1/ftm_combine_comb0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_combine_combine0_present" key="/FTM1/ftm_combine_combine0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_combine_comp0_present"   key="/FTM1/ftm_combine_comp0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_combine_decap0_present"  key="/FTM1/ftm_combine_decap0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_combine_decapen0_present" key="/FTM1/ftm_combine_decapen0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_combine_dten0_present"   key="/FTM1/ftm_combine_dten0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_combine_faulten0_present" key="/FTM1/ftm_combine_faulten0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_combine_syncen0_present" key="/FTM1/ftm_combine_syncen0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_conf_bdmmode_present"    key="/FTM1/ftm_conf_bdmmode_present" />
-         <param type="StringVariable"         value="true"        name="ftm_conf_gtbeen_present"     key="/FTM1/ftm_conf_gtbeen_present" />
-         <param type="StringVariable"         value="true"        name="ftm_conf_gtbeout_present"    key="/FTM1/ftm_conf_gtbeout_present" />
-         <param type="StringVariable"         value="true"        name="ftm_conf_numtof_present"     key="/FTM1/ftm_conf_numtof_present" />
-         <param type="StringVariable"         value="true"        name="ftm_deadtime_dtps_present"   key="/FTM1/ftm_deadtime_dtps_present" />
-         <param type="StringVariable"         value="true"        name="ftm_deadtime_dtval_present"  key="/FTM1/ftm_deadtime_dtval_present" />
-         <param type="StringVariable"         value="true"        name="ftm_exttrig_ch0trig_present" key="/FTM1/ftm_exttrig_ch0trig_present" />
-         <param type="StringVariable"         value="true"        name="ftm_exttrig_ch1trig_present" key="/FTM1/ftm_exttrig_ch1trig_present" />
-         <param type="StringVariable"         value="true"        name="ftm_exttrig_chtrig_present"  key="/FTM1/ftm_exttrig_chtrig_present" />
-         <param type="StringVariable"         value="true"        name="ftm_exttrig_inittrigen_present" key="/FTM1/ftm_exttrig_inittrigen_present" />
-         <param type="StringVariable"         value="true"        name="ftm_exttrig_trigf_present"   key="/FTM1/ftm_exttrig_trigf_present" />
-         <param type="StringVariable"         value="true"        name="ftm_filter_ch0fval_present"  key="/FTM1/ftm_filter_ch0fval_present" />
-         <param type="StringVariable"         value="true"        name="ftm_filter_ch1fval_present"  key="/FTM1/ftm_filter_ch1fval_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltctrl_fault0en_present" key="/FTM1/ftm_fltctrl_fault0en_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltctrl_fault1en_present" key="/FTM1/ftm_fltctrl_fault1en_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltctrl_fault2en_present" key="/FTM1/ftm_fltctrl_fault2en_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltctrl_fault3en_present" key="/FTM1/ftm_fltctrl_fault3en_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltctrl_ffltr0en_present" key="/FTM1/ftm_fltctrl_ffltr0en_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltctrl_ffltr1en_present" key="/FTM1/ftm_fltctrl_ffltr1en_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltctrl_ffltr2en_present" key="/FTM1/ftm_fltctrl_ffltr2en_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltctrl_ffltr3en_present" key="/FTM1/ftm_fltctrl_ffltr3en_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltctrl_ffval_present"   key="/FTM1/ftm_fltctrl_ffval_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltpol_flt0pol_present"  key="/FTM1/ftm_fltpol_flt0pol_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltpol_flt1pol_present"  key="/FTM1/ftm_fltpol_flt1pol_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltpol_flt2pol_present"  key="/FTM1/ftm_fltpol_flt2pol_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fltpol_flt3pol_present"  key="/FTM1/ftm_fltpol_flt3pol_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fms_faultf0_present"     key="/FTM1/ftm_fms_faultf0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fms_faultf1_present"     key="/FTM1/ftm_fms_faultf1_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fms_faultf2_present"     key="/FTM1/ftm_fms_faultf2_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fms_faultf3_present"     key="/FTM1/ftm_fms_faultf3_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fms_faultf_present"      key="/FTM1/ftm_fms_faultf_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fms_faultin_present"     key="/FTM1/ftm_fms_faultin_present" />
-         <param type="StringVariable"         value="true"        name="ftm_fms_wpen_present"        key="/FTM1/ftm_fms_wpen_present" />
-         <param type="StringVariable"         value="true"        name="ftm_invctrl_inv0en_present"  key="/FTM1/ftm_invctrl_inv0en_present" />
          <param type="StringVariable"         value="true"        name="ftm_mod_mod_present"         key="/FTM1/ftm_mod_mod_present" />
-         <param type="StringVariable"         value="true"        name="ftm_mode_captest_present"    key="/FTM1/ftm_mode_captest_present" />
-         <param type="StringVariable"         value="true"        name="ftm_mode_faultie_present"    key="/FTM1/ftm_mode_faultie_present" />
-         <param type="StringVariable"         value="true"        name="ftm_mode_faultm_present"     key="/FTM1/ftm_mode_faultm_present" />
-         <param type="StringVariable"         value="true"        name="ftm_mode_ftmen_present"      key="/FTM1/ftm_mode_ftmen_present" />
-         <param type="StringVariable"         value="true"        name="ftm_mode_init_present"       key="/FTM1/ftm_mode_init_present" />
-         <param type="StringVariable"         value="true"        name="ftm_mode_pwmsync_present"    key="/FTM1/ftm_mode_pwmsync_present" />
-         <param type="StringVariable"         value="true"        name="ftm_mode_wpdis_present"      key="/FTM1/ftm_mode_wpdis_present" />
-         <param type="StringVariable"         value="true"        name="ftm_outinit_ch0oi_present"   key="/FTM1/ftm_outinit_ch0oi_present" />
-         <param type="StringVariable"         value="true"        name="ftm_outinit_ch1oi_present"   key="/FTM1/ftm_outinit_ch1oi_present" />
-         <param type="StringVariable"         value="true"        name="ftm_outinit_choi_present"    key="/FTM1/ftm_outinit_choi_present" />
-         <param type="StringVariable"         value="true"        name="ftm_outmask_ch0om_present"   key="/FTM1/ftm_outmask_ch0om_present" />
-         <param type="StringVariable"         value="true"        name="ftm_outmask_ch1om_present"   key="/FTM1/ftm_outmask_ch1om_present" />
-         <param type="StringVariable"         value="true"        name="ftm_outmask_chom_present"    key="/FTM1/ftm_outmask_chom_present" />
-         <param type="StringVariable"         value="true"        name="ftm_pol_pol0_present"        key="/FTM1/ftm_pol_pol0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_pol_pol1_present"        key="/FTM1/ftm_pol_pol1_present" />
-         <param type="StringVariable"         value="true"        name="ftm_pol_pol_present"         key="/FTM1/ftm_pol_pol_present" />
-         <param type="StringVariable"         value="true"        name="ftm_pwmload_ch0sel_present"  key="/FTM1/ftm_pwmload_ch0sel_present" />
-         <param type="StringVariable"         value="true"        name="ftm_pwmload_ch1sel_present"  key="/FTM1/ftm_pwmload_ch1sel_present" />
-         <param type="StringVariable"         value="true"        name="ftm_pwmload_chsel_present"   key="/FTM1/ftm_pwmload_chsel_present" />
-         <param type="StringVariable"         value="true"        name="ftm_pwmload_ldok_present"    key="/FTM1/ftm_pwmload_ldok_present" />
          <param type="StringVariable"         value="true"        name="ftm_sc_clks_present"         key="/FTM1/ftm_sc_clks_present" />
          <param type="StringVariable"         value="true"        name="ftm_sc_cpwms_present"        key="/FTM1/ftm_sc_cpwms_present" />
          <param type="StringVariable"         value="true"        name="ftm_sc_ps_present"           key="/FTM1/ftm_sc_ps_present" />
          <param type="StringVariable"         value="true"        name="ftm_sc_tof_present"          key="/FTM1/ftm_sc_tof_present" />
          <param type="StringVariable"         value="true"        name="ftm_sc_toie_present"         key="/FTM1/ftm_sc_toie_present" />
-         <param type="StringVariable"         value="true"        name="ftm_status_ch0f_present"     key="/FTM1/ftm_status_ch0f_present" />
-         <param type="StringVariable"         value="true"        name="ftm_status_ch1f_present"     key="/FTM1/ftm_status_ch1f_present" />
-         <param type="StringVariable"         value="true"        name="ftm_swoctrl_ch0oc_present"   key="/FTM1/ftm_swoctrl_ch0oc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_swoctrl_ch0ocv_present"  key="/FTM1/ftm_swoctrl_ch0ocv_present" />
-         <param type="StringVariable"         value="true"        name="ftm_swoctrl_ch1oc_present"   key="/FTM1/ftm_swoctrl_ch1oc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_swoctrl_ch1ocv_present"  key="/FTM1/ftm_swoctrl_ch1ocv_present" />
-         <param type="StringVariable"         value="true"        name="ftm_swoctrl_choc_present"    key="/FTM1/ftm_swoctrl_choc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_swoctrl_chocv_present"   key="/FTM1/ftm_swoctrl_chocv_present" />
-         <param type="StringVariable"         value="true"        name="ftm_sync_cntmax_present"     key="/FTM1/ftm_sync_cntmax_present" />
-         <param type="StringVariable"         value="true"        name="ftm_sync_cntmin_present"     key="/FTM1/ftm_sync_cntmin_present" />
-         <param type="StringVariable"         value="true"        name="ftm_sync_reinit_present"     key="/FTM1/ftm_sync_reinit_present" />
-         <param type="StringVariable"         value="true"        name="ftm_sync_swsync_present"     key="/FTM1/ftm_sync_swsync_present" />
-         <param type="StringVariable"         value="true"        name="ftm_sync_synchom_present"    key="/FTM1/ftm_sync_synchom_present" />
-         <param type="StringVariable"         value="true"        name="ftm_sync_trig0_present"      key="/FTM1/ftm_sync_trig0_present" />
-         <param type="StringVariable"         value="true"        name="ftm_sync_trig1_present"      key="/FTM1/ftm_sync_trig1_present" />
-         <param type="StringVariable"         value="true"        name="ftm_sync_trig2_present"      key="/FTM1/ftm_sync_trig2_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_cntinc_present"  key="/FTM1/ftm_synconf_cntinc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_hwinvc_present"  key="/FTM1/ftm_synconf_hwinvc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_hwom_present"    key="/FTM1/ftm_synconf_hwom_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_hwrstcnt_present" key="/FTM1/ftm_synconf_hwrstcnt_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_hwsoc_present"   key="/FTM1/ftm_synconf_hwsoc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_hwtrigmode_present" key="/FTM1/ftm_synconf_hwtrigmode_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_hwwrbuf_present" key="/FTM1/ftm_synconf_hwwrbuf_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_invc_present"    key="/FTM1/ftm_synconf_invc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_swinvc_present"  key="/FTM1/ftm_synconf_swinvc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_swoc_present"    key="/FTM1/ftm_synconf_swoc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_swom_present"    key="/FTM1/ftm_synconf_swom_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_swrstcnt_present" key="/FTM1/ftm_synconf_swrstcnt_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_swsoc_present"   key="/FTM1/ftm_synconf_swsoc_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_swwrbuf_present" key="/FTM1/ftm_synconf_swwrbuf_present" />
-         <param type="StringVariable"         value="true"        name="ftm_synconf_syncmode_present" key="/FTM1/ftm_synconf_syncmode_present" />
       </peripheral>
       <peripheral baseName="FTM"      instance="2"        instanceList="FTM;FTM0;FTM1;FTM2" version="ftm2_6ch_mke">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
@@ -497,7 +309,6 @@
          <param type="StringVariable"         value="true"        name="ftm_invctrl_inv0en_present"  key="/FTM2/ftm_invctrl_inv0en_present" />
          <param type="StringVariable"         value="true"        name="ftm_invctrl_inv1en_present"  key="/FTM2/ftm_invctrl_inv1en_present" />
          <param type="StringVariable"         value="true"        name="ftm_invctrl_inv2en_present"  key="/FTM2/ftm_invctrl_inv2en_present" />
-         <param type="StringVariable"         value="true"        name="ftm_invctrl_inv3en_present"  key="/FTM2/ftm_invctrl_inv3en_present" />
          <param type="StringVariable"         value="true"        name="ftm_mod_mod_present"         key="/FTM2/ftm_mod_mod_present" />
          <param type="StringVariable"         value="true"        name="ftm_mode_captest_present"    key="/FTM2/ftm_mode_captest_present" />
          <param type="StringVariable"         value="true"        name="ftm_mode_faultie_present"    key="/FTM2/ftm_mode_faultie_present" />

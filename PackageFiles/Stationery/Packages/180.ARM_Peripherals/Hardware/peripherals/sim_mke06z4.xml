@@ -135,15 +135,6 @@
    <constant key="/FTM2/hardwareTriggerPinMap" type="String"
        value="&quot;ACMP0_O/ACMP1_O,FTM0_CH0,FTMSYNC&quot;"  />
 
-   <constant key="/FTM0/TriggerChannels" type="String"
-       value="&quot;,,,,CH0TRIG,CH1TRIG,CNTIN&quot;"  />
-
-   <constant key="/FTM1/TriggerChannels" type="String"
-       value="&quot;,,,,CH0TRIG,CH1TRIG,CNTIN&quot;"  />
-
-   <constant key="/FTM2/TriggerChannels" type="String"
-       value="&quot;CH2TRIG,CH3TRIG,CH4TRIG,CH5TRIG,CH0TRIG,CH1TRIG,CNTIN&quot;"  />
-
    <!-- Pin mapping for IRQ -->
    <constant key="/IRQ/pinMap"      type="String" value="&quot;IRQ,PTA5&quot;" />
 

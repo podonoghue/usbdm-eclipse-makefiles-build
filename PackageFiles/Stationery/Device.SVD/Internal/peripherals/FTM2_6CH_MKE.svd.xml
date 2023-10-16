@@ -14,7 +14,7 @@ Devices using this peripheral:
          <name>FTM2</name>
          <description>FlexTimer Module (6 channels)</description>
          <groupName>FTM</groupName>
-         <headerStructName>FTM2</headerStructName>
+         <headerStructName>FTM</headerStructName>
          <baseAddress>0x4003A000</baseAddress>
          <size>32</size>
          <access>read-write</access>
@@ -829,9 +829,9 @@ Controls whether channels are the some or complement</description>
                      <bitWidth>8</bitWidth>
                   </field>
                   <field>
-                     <name>CH2TRIG</name>
-                     <description>Channel 2 Trigger Enable</description>
-                     <bitOffset>0</bitOffset>
+                     <name>CH0TRIG</name>
+                     <description>Channel 0 Trigger Enable</description>
+                     <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
@@ -846,11 +846,11 @@ Controls whether channels are the some or complement</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="CH2TRIG" > <name>CH3TRIG</name> <description>Channel 3 Trigger Enable</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="CH2TRIG" > <name>CH4TRIG</name> <description>Channel 4 Trigger Enable</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="CH2TRIG" > <name>CH5TRIG</name> <description>Channel 5 Trigger Enable</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="CH2TRIG" > <name>CH0TRIG</name> <description>Channel 0 Trigger Enable</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="CH2TRIG" > <name>CH1TRIG</name> <description>Channel 1 Trigger Enable</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="CH0TRIG" > <name>CH1TRIG</name> <description>Channel 1 Trigger Enable</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="CH0TRIG" > <name>CH2TRIG</name> <description>Channel 2 Trigger Enable</description> <bitOffset>0</bitOffset> </field>
+                  <field derivedFrom="CH0TRIG" > <name>CH3TRIG</name> <description>Channel 3 Trigger Enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CH0TRIG" > <name>CH4TRIG</name> <description>Channel 4 Trigger Enable</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="CH0TRIG" > <name>CH5TRIG</name> <description>Channel 5 Trigger Enable</description> <bitOffset>3</bitOffset> </field>
                   <field>
                      <name>INITTRIGEN</name>
                      <description>Initialization Trigger Enable</description>
@@ -1461,7 +1461,6 @@ Selects the ratio between the number of counter overflows to the number of times
                   </field>
                   <field derivedFrom="INV0EN" > <name>INV1EN</name> <description>Pair Channels 1 Inverting Enable</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="INV0EN" > <name>INV2EN</name> <description>Pair Channels 2 Inverting Enable</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="INV0EN" > <name>INV3EN</name> <description>Pair Channels 3 Inverting Enable</description> <bitOffset>3</bitOffset> </field>
                </fields>
             </register>
             <register>

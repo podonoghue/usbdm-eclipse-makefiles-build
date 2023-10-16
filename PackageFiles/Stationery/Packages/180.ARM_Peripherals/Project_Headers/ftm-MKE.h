@@ -70,7 +70,7 @@ enum FtmChannelForce {    // Enable|Value
 /**
  * Provides shared methods.
  */
-class FtmBase : public FtmBasicInfo {
+class FtmBase {
 
 private:
    FtmBase(const FtmBase&) = delete;
@@ -217,25 +217,6 @@ public:
    /** Mask for Timer channel */
    const uint32_t CHANNEL_MASK;
 
-      /**
-       * Configure Channel from values specified in channelInit
-       *
-       * @param channelInit Class containing initialisation values
-       */
-       void configure(const FtmBasicInfo::ChannelInit &channelInit) const {
-
-          // Configure timer combine mode
-          if ((channelInit.channel&0b1) == 0) {
-             // Even channel value controls paired channels n,n+1
-             const unsigned offset = 4*channelInit.channel;
-             const uint32_t mask = 0xFF<<offset;
-             ftm->COMBINE = (ftm->COMBINE & ~mask) | (((channelInit.cnsc>>8)<<offset)&mask);
-          }
-          // Configure timer channel
-          ftm->CONTROLS[channelInit.channel].CnSC = channelInit.cnsc;
-          ftm->CONTROLS[channelInit.channel].CnV  = channelInit.cnv;
-       }
-
 $(/FTM_CHANNEL/non_static_functions:  // /FTM_CHANNEL/non_static_functions not found)
 };
 
@@ -256,10 +237,18 @@ private:
    FtmBase_T(FtmBase_T&&) = delete;
 
 #if $(/FTM/irqHandlingMethod:false) // /FTM/irqHandlingMethod
-   typedef typename Info::ChannelCallbackFunction ChannelCallbackFunction;
+/**
+ * Type definition for overflow and fault call-back.
+ */
+typedef void (*ChannelCallbackFunction)(uint8_t status);
+
 #endif
 
 public:
+
+   // Disambiguate in favour of static functions when available
+   using Info::setCounterMaximumValue;
+   using Info::getCounterMaximumValue;
 
    // Empty constructor
    constexpr FtmBase_T() : FtmBase(Info::baseAddress) {}
@@ -503,11 +492,11 @@ public:
     * @tparam channel FTM timer channel
     */
    template <int channel>
-   class Channel : 
+   class Channel :
 #if $(/PCR/_present:false) // /PCR/_present
-   public PcrTable_T<Info, limitIndex<Info>(channel)>, 
+   public PcrTable_T<Info, limitIndex<Info>(channel)>,
 #endif
-   public FtmChannel {
+   public FtmChannel, public Info {
 
    private:
 #if $(/PCR/_present:false) // /PCR/_present
@@ -591,7 +580,7 @@ public:
        *       pending CnV register updates are discarded.
        */
       static void defaultConfigure() {
-         OwningFtm::configureChannel(OwningFtm::DefaultChannelInitValues[channel]);
+         Info::configure(OwningFtm::DefaultChannelInitValues[channel]);
       }
 
       /**
@@ -602,8 +591,8 @@ public:
        *
        * @param channelInit (channel number is ignored)
        */
-      static void configure(const ChannelInit &channelInit) {
-         OwningFtm::configureChannel(FtmChannelNum(channel), channelInit);
+      static void configure(const typename Info::ChannelInit &channelInit) {
+         Info::configure(FtmChannelNum(channel), channelInit);
       }
       
 $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)

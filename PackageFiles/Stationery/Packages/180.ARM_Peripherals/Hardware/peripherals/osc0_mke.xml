@@ -14,7 +14,7 @@
 <!--
     * General substitutions
     *  $(_NAME)         => e.g FTM2                    (fProvider.getName())
-    *  $(_Baseclass)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
+    *  $(_Baseclass)    => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
     *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
     *  $(_Class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
     *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
@@ -371,12 +371,12 @@
    </projectActionList>
 
    <!-- ************* Startup ****************** -->
-
-   <template key="/$(_BASENAME)/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <!-- Already included -->
+   <!-- template key="/ICS/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
-   ]]></template>
+   ]]></template -->
 
-   <template key="/$(_BASENAME)/ClockStartupBefore" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/ICS/ClockStartupBefore" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n

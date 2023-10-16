@@ -14,7 +14,7 @@
 
 <!-- Simple items that don't that don''t recurse -->
 <!ENTITY % simple_items     "xi:include|
-                              projectActionList|
+                              deleteOption|projectActionList|
                               title|constant|signals|
                               timeOption|intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption|irqOption|pinListOption|aliasOption|pinMapOption|
                               clockSelectionOption|validate|equation|
@@ -52,7 +52,7 @@
    <!ATTLIST for condition           CDATA        #IMPLIED>
    <!-- Substitution keys separated by ':'' -->
    <!ATTLIST for keys                 CDATA        #REQUIRED>
-   <!-- Values for each key separated by ':'', each iteratiuon separated by ';' -->
+   <!-- Values for each key separated by ':'', each iteration separated by ';' -->
    <!ATTLIST for values               CDATA        #IMPLIED>
    <!-- For simple iterated list. Either N or A,B -->
    <!ATTLIST for dim                  CDATA        #IMPLIED>
@@ -131,6 +131,7 @@
    <!ATTLIST category  locked       (false|true) #IMPLIED>
    <!ATTLIST category  xmlns:xi     CDATA        #IMPLIED>
    <!ATTLIST category  name         CDATA        #IMPLIED>
+   <!-- Description visible in GUI -->
    <!ATTLIST category  description  CDATA        #IMPLIED>
    <!ATTLIST category  toolTip      CDATA        #IMPLIED>
    <!ATTLIST category  derived      (false|true) #IMPLIED>
@@ -138,18 +139,28 @@
 
 <!-- Expandable grouping with associated variable -->
 <!ELEMENT categoryOption ((%general_items;)*) >
-   <!ATTLIST categoryOption  locked        (false|true) #IMPLIED>
-   <!ATTLIST categoryOption  xmlns:xi        CDATA        #IMPLIED>
-   <!ATTLIST categoryOption  name            CDATA        #IMPLIED>
    <!-- Key for option - also used as visible name if not provided -->
-   <!ATTLIST categoryOption  key             CDATA        #REQUIRED>
-   <!ATTLIST categoryOption  description     CDATA        #IMPLIED>
-   <!ATTLIST categoryOption  value           CDATA        #IMPLIED>
-   <!ATTLIST categoryOption  disabledValue   CDATA        #IMPLIED>
-   <!ATTLIST categoryOption  toolTip         CDATA        #IMPLIED>
-   <!ATTLIST categoryOption  hidden          (false|true) #IMPLIED>
+   <!ATTLIST categoryOption key                 CDATA        #REQUIRED>
+   <!-- Description  of variable -->
+   <!ATTLIST categoryOption description         CDATA        #REQUIRED>
+   <!-- Tool-tip to display in GUI and used for documentation in C++ code -->
+   <!ATTLIST categoryOption toolTip             CDATA        #IMPLIED>
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST categoryOption condition           CDATA        #IMPLIED>
+   <!-- Locks option in GUI -->
+   <!ATTLIST categoryOption locked              (false|true) #IMPLIED>
+   <!-- Hides option in GUI -->
+   <!ATTLIST categoryOption hidden              CDATA        #IMPLIED>
    <!-- Expression enables this option -->
-   <!ATTLIST categoryOption  enabledBy       CDATA        #IMPLIED>
+   <!ATTLIST categoryOption enabledBy           CDATA        #IMPLIED> 
+   <!-- Dynamic expression that disables and hides this option -->
+   <!ATTLIST categoryOption hiddenBy            CDATA        #IMPLIED>
+   <!-- Initial value (and default) for option -->
+   <!ATTLIST categoryOption  value              CDATA        #IMPLIED>
+   <!-- Disabled value for option -->
+   <!ATTLIST categoryOption  disabledValue      CDATA        #IMPLIED>
+   <!-- Include another XML file -->
+   <!ATTLIST categoryOption  xmlns:xi           CDATA        #IMPLIED>
 
 <!ELEMENT title EMPTY >
    <!-- Condition evaluated during parsing that enables processing of this option -->
@@ -162,6 +173,8 @@
    <!ATTLIST title description            CDATA        #IMPLIED>
 
 <!ELEMENT equation EMPTY >
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST equation condition              CDATA        #IMPLIED>
    <!-- Unique key -->
    <!ATTLIST equation  key             CDATA        #REQUIRED>
    <!-- Value expressed as equation for immediate evaluation?? -->
@@ -169,7 +182,11 @@
 
 
 
-
+<!ELEMENT deleteOption EMPTY >
+   <!-- Key for option to delete -->
+   <!ATTLIST deleteOption key           CDATA        #REQUIRED>
+   <!-- Stops check for existence before deleting -->
+   <!ATTLIST deleteOption mustExist     (false)      #IMPLIED>
 
 <!ELEMENT aliasOption EMPTY >
    <!-- Allows reference to an option (possibly) in another file -->
@@ -281,7 +298,7 @@
    <!-- Initial/default value -->
    <!ATTLIST intOption value         CDATA        #IMPLIED>
    <!-- Unit to use for numeric value -->
-   <!ATTLIST intOption units         (Hz|s|ticks) #IMPLIED>
+   <!ATTLIST intOption units         (Hz|s|ticks|percent) #IMPLIED>
    <!ATTLIST intOption step          CDATA        "1">
    <!ATTLIST intOption errorPropagate (ok|info|warning|error)  #IMPLIED>
    <!-- Minimum value (displayed value) -->
@@ -385,7 +402,7 @@
    <!ATTLIST floatOption value         CDATA        #IMPLIED>
    <!ATTLIST floatOption disabledValue CDATA        #IMPLIED>
    <!-- Unit to use for numeric value -->
-   <!ATTLIST floatOption units         (None|Hz|s|ticks)  #IMPLIED>
+   <!ATTLIST floatOption units         (None|Hz|s|ticks|percent)  #IMPLIED>
    <!-- Minimum value (displayed value) -->
    <!ATTLIST floatOption min           CDATA        #IMPLIED>
    <!-- Maximum value (displayed value) -->
@@ -556,12 +573,13 @@
    <!-- Variable defined earlier to inherit values from -->
    <!ATTLIST choiceOption derivedFrom         CDATA        #IMPLIED>
    <!-- 
-   Where to place generated code
-      info  - Within peripheral info class in pinmapping.h (default if not provided)
-      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)
-      all   - Explicitly available anywhere controlled by key substitution
+   Where to place generated code<br>
+      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
+      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
+      all   - Explicitly available anywhere controlled by key substitution<br>
+      forceInfo - forces Info namespace and clears key and discardRepeats
    -->
-   <!ATTLIST choiceOption namespace           (info|usbdm|all)  #IMPLIED >
+   <!ATTLIST choiceOption namespace           CDATA        #IMPLIED >
    <!-- Name for enum and first part of enum values -->
    <!ATTLIST choiceOption typeName            CDATA        #IMPLIED>
    <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
@@ -593,19 +611,26 @@
 
 <!ELEMENT choice EMPTY >
    <!-- Values may be a list e.g. 1,0,3 for use with valueFormat -->
-   <!ATTLIST choice value                     CDATA        #REQUIRED> 
+   <!ATTLIST choice value                     CDATA        #REQUIRED>
    <!-- Visible name of choice -->
    <!ATTLIST choice name                      CDATA        #REQUIRED>
-   <!ATTLIST choice requiredPeripherals       CDATA        #IMPLIED>
+   <!-- Additional information added to the Tool-tip displayed in GUI -->
+   <!ATTLIST choice toolTip                   CDATA        #IMPLIED>
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST choice condition                 CDATA        #IMPLIED>
+   <!-- This choice is default -->
    <!ATTLIST choice isDefault                 CDATA        #IMPLIED>
+   <!-- Used in conjunction with a target="varialbe" to control the target -->
    <!ATTLIST choice ref                       CDATA        #IMPLIED>
+   <!-- enum value for this choice in enum generation -->
    <!ATTLIST choice enum                      CDATA        #IMPLIED>
+   <!-- Code fragment associated with this choice -->
    <!ATTLIST choice code                      CDATA        #IMPLIED>
+   <!-- Choice is hidden?? -->
    <!ATTLIST choice hidden                    CDATA        #IMPLIED>
    <!-- This choice is enabled by an expression -->
    <!ATTLIST choice enabledBy                 CDATA        #IMPLIED>
+   <!-- Pin-map fragment associated with this choice -->
    <!ATTLIST choice pinMap                    CDATA        #IMPLIED>
 
 <!ELEMENT choiceExpansion EMPTY >
@@ -655,12 +680,13 @@
    <!-- Variable defined earlier to inherit values from -->
    <!ATTLIST binaryOption derivedFrom         CDATA        #IMPLIED>
    <!-- 
-   Where to place generated code
-      info  - Within peripheral info class in pinmapping.h (default if not provided)
-      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)
-      all   - Explicitly available anywhere controlled by key substitution
+   Where to place generated code<br>
+      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
+      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
+      all   - Explicitly available anywhere controlled by key substitution<br>
+      forceInfo - forces Info namespace and clears key and discardRepeats
    -->
-   <!ATTLIST binaryOption namespace           (info|usbdm|all)  #IMPLIED >
+   <!ATTLIST binaryOption namespace           CDATA                   #IMPLIED >
    <!-- Name for enum and first part of enum values -->
    <!ATTLIST binaryOption typeName            CDATA        #IMPLIED>
    <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
@@ -797,12 +823,13 @@
 
 <!ELEMENT template (#PCDATA)* >
    <!-- 
-      info  Appear within peripheral info class e.g. Osc0Info
-      usbdm Appears in pin_mapping.h immediately before the class declaration
-      all   Can appear anywhere. Requires explicit key use.
-      class Appears as classInfo variable with peripheral path e.g. /ADC/classInfo 
+   Where to place generated code<br>
+      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
+      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
+      all   - Explicitly available anywhere controlled by key substitution<br>
+      forceInfo - forces Info namespace and clears key and discardRepeats
    -->
-   <!ATTLIST template namespace                 (info|usbdm|all)        #IMPLIED >
+   <!ATTLIST template namespace                 CDATA                   #IMPLIED >
    <!-- Key for template -->
    <!ATTLIST template key                       CDATA                   #IMPLIED >
    <!-- Condition evaluated during parsing that enables processing of this option -->
@@ -817,7 +844,14 @@
    <!ATTLIST template useDefinitions            CDATA                   #IMPLIED>
 
 <!ELEMENT setTemplate (#PCDATA)* >
-   <!ATTLIST setTemplate namespace                 (info|usbdm|all)  #IMPLIED >
+   <!-- 
+   Where to place generated code<br>
+      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
+      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
+      all   - Explicitly available anywhere controlled by key substitution<br>
+      forceInfo - forces Info namespace and clears key and discardRepeats
+   -->
+   <!ATTLIST setTemplate namespace                 CDATA                   #IMPLIED >
    <!ATTLIST setTemplate key                       CDATA                   #IMPLIED >
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST setTemplate condition                 CDATA                   #IMPLIED>
@@ -839,7 +873,14 @@
    <!ATTLIST setTemplate useDefinitions            CDATA                   #IMPLIED>
 
 <!ELEMENT constructorTemplate (#PCDATA)* >
-   <!ATTLIST constructorTemplate namespace                 (info|usbdm|all)  #IMPLIED >
+   <!-- 
+   Where to place generated code<br>
+      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
+      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
+      all   - Explicitly available anywhere controlled by key substitution<br>
+      forceInfo - forces Info namespace and clears key and discardRepeats
+   -->
+   <!ATTLIST constructorTemplate namespace                 CDATA                   #IMPLIED >
    <!ATTLIST constructorTemplate key                       CDATA                   #IMPLIED >
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST constructorTemplate condition                 CDATA                   #IMPLIED>
@@ -860,7 +901,14 @@
    <!ATTLIST constructorTemplate useDefinitions            CDATA                   #IMPLIED>
 
 <!ELEMENT initialValueTemplate (#PCDATA|for)* >
-   <!ATTLIST initialValueTemplate namespace                 (info|usbdm|all)  #IMPLIED >
+   <!-- 
+   Where to place generated code<br>
+      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
+      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
+      all   - Explicitly available anywhere controlled by key substitution<br>
+      forceInfo - forces Info namespace and clears key and discardRepeats
+   -->
+   <!ATTLIST initialValueTemplate namespace                 CDATA                   #IMPLIED >
    <!ATTLIST initialValueTemplate key                       CDATA                   #IMPLIED >
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST initialValueTemplate condition                 CDATA                   #IMPLIED>
@@ -878,17 +926,31 @@
    <!ATTLIST initialValueTemplate useDefinitions            CDATA                   #IMPLIED>
 
 <!ELEMENT enumTemplate (#PCDATA)* >
-   <!ATTLIST enumTemplate namespace         (info|usbdm|all)        #IMPLIED >
-   <!ATTLIST enumTemplate key               CDATA                   #IMPLIED >
-   <!ATTLIST enumTemplate condition         CDATA                   #IMPLIED>
-   <!ATTLIST enumTemplate variable          CDATA                   #REQUIRED>
-   <!ATTLIST enumTemplate discardRepeats    (true)                  #IMPLIED>
-   <!ATTLIST enumTemplate template          CDATA                   #IMPLIED>
+   <!-- 
+   Where to place generated code<br>
+      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
+      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
+      all   - Explicitly available anywhere controlled by key substitution<br>
+      forceInfo - forces Info namespace and clears key and discardRepeats
+   -->
+   <!ATTLIST enumTemplate namespace                 CDATA                   #IMPLIED >
+   <!ATTLIST enumTemplate key                       CDATA                   #IMPLIED >
+   <!ATTLIST enumTemplate condition                 CDATA                   #IMPLIED>
+   <!ATTLIST enumTemplate variable                  CDATA                   #REQUIRED>
+   <!ATTLIST enumTemplate discardRepeats            (true)                  #IMPLIED>
+   <!ATTLIST enumTemplate template                  CDATA                   #IMPLIED>
    <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
-   <!ATTLIST enumTemplate useDefinitions    CDATA                   #IMPLIED>
+   <!ATTLIST enumTemplate useDefinitions            CDATA                   #IMPLIED>
 
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
-   <!ATTLIST clockCodeTemplate namespace                 (info|usbdm|all)  #IMPLIED >
+   <!-- 
+   Where to place generated code<br>
+      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
+      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
+      all   - Explicitly available anywhere controlled by key substitution<br>
+      forceInfo - forces Info namespace and clears key and discardRepeats
+   -->
+   <!ATTLIST clockCodeTemplate namespace                 CDATA                   #IMPLIED >
    <!ATTLIST clockCodeTemplate key                       CDATA                   #IMPLIED >
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST clockCodeTemplate condition                 CDATA                   #IMPLIED>
