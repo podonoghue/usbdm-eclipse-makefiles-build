@@ -284,7 +284,7 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
-   <template variables="rtc_none" ><![CDATA[
+   <template condition="rtc_none" ><![CDATA[
       \t/**
       \t * Get ERCLK32K clock frequency
       \t *
@@ -1063,7 +1063,7 @@ $(AdcInit_description)
 
    <for keys="p" values=";0;1">
 
-      <template key="Adc%(p)Init_description" namespace="usbdm" ><![CDATA[
+      <template key="Adc%(p)Init_description" namespace="all" ><![CDATA[
          \t/**
          \t * Class used to do initialisation of Adc%(p) trigger sources
          \t *

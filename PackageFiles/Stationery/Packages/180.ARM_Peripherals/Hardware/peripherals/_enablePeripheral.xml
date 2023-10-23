@@ -202,7 +202,7 @@
 
 <!-- INTERRUPTS -->
 
-   <if condition="@peripheralUsesInterrupts" >
+   <if condition="_irqCount" >
 
       <title description="Interrupts" />
 
@@ -276,7 +276,7 @@
             <equation key="_irqEnable" value="=&quot;false&quot;" />
 
             <for keys="instance" values="=_instanceList">
-               <if condition="/%(instance)/_present">
+               <if condition="/%(instance)/_irqCount">
                   <!-- stringOption key="$(BASENAME)/yyy_%(instance)" value="%(instance)" modify="true" / -->
                   <equation key="_irqEnable" value="=_irqEnable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/irqHandlingMethod&quot;"/>
                </if>
@@ -286,6 +286,7 @@
             <!-- Enable for shared code needed by all instances of peripheral -->
             <binaryOption key="/$(_BASENAME)/irqHandlingMethod" condition="!/$(_BASENAME)/irqHandlingMethod"
                ref="=_irqEnable"
+               description="Peripheral interrupt handling"
                hidden="true"
                derived="true" >
                <choice value="false" name="Disabled"  isDefault="true" />
@@ -342,7 +343,7 @@
           \t\n
       ]]></initialValueTemplate>
 
-   </if>
+   </if> <!-- condition="_irqCount" -->
 
    <template condition="clockEnable"  codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**

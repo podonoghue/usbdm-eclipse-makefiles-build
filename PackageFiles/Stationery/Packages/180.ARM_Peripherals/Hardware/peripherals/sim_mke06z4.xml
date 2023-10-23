@@ -4,10 +4,10 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Integration Module" >
 
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="false" />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false" />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true"  />
-   <xi:include href="_enablePeripheral.xml" />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"         />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="true"          />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="_enablePeripheral.xml"  />
    <title />
 
 <!-- ==================== Constants ==================== -->
@@ -30,13 +30,10 @@
    <constant key="/FTM1_NumChannels" type="Long" value="2" />
    <constant key="/FTM2_NumChannels" type="Long" value="6" />
 
-   <!-- Indicates the number of IRQ vectors allocated to the FTMs -->
+   <!-- Indicates the number of IRQ vectors allocated to the FTM channels -->
    <constant key="/FTM0_NumVectors" type="Long" value="1" />
    <constant key="/FTM1_NumVectors" type="Long" value="1" />
    <constant key="/FTM2_NumVectors" type="Long" value="1" />
-
-   <!-- Indicates the number of DMA channels -->
-   <!-- None -->
 
    <!-- Indicates the number of DMA channels -->
    <!-- None -->
@@ -53,73 +50,73 @@
         outputPinMap Output pins with custom mapping implementation in peripheral file
         pinMap       Default pin mapping enabled whenever the peripheral is enabled
    -->
-   <!-- Pin mapping for ADC0 -->
+   <!-- Pin mapping for ADC0 SE0-SE15 -->
    <constant key="/ADC0/inputPinMap" type="String"
       value="&quot;PTA0,PTA1,PTA6,PTA7,PTB0,PTB1,PTB2,PTB3,PTC0,PTC1,PTC2,PTC3,PTF4,PTF5,PTF6,PTF7&quot;" />
 
-   <!-- Pin mapping for ACMP0 -->
+   <!-- Pin mapping for ACMP0 IN0,IN1,IN2 -->
    <constant key="/ACMP0/inputPinMap" type="String" value="&quot;PTA0,PTA1,PTC4&quot;" />
 
-   <!-- Pin mapping for ACMP1 -->
+   <!-- Pin mapping for ACMP1 IN0,IN1,IN2 -->
    <constant key="/ACMP1/inputPinMap" type="String" value="&quot;PTA6,PTA7,PTB4&quot;" />
 
 
    <!-- FTM0 channels -->
    <dynamicSignalMapping signal="FTM0_CH0" >
-      <signalMapping pin="-"     expression="(/FTM0/ftm_cnsc_mode[0]==0)"  />
-      <signalMapping pin="PTA0"  expression="(!sim_pinsel0_ftm0ps0)"        />
+      <signalMapping pin="-"     expression="!/FTM0/Ch0PinInUse"  />
+      <signalMapping pin="PTA0"  expression="!sim_pinsel0_ftm0ps0"        />
       <signalMapping pin="PTB2" />
    </dynamicSignalMapping>
    <dynamicSignalMapping signal="FTM0_CH1" >
-      <signalMapping pin="-"     expression="(/FTM0/ftm_cnsc_mode[1]==0)&amp;&amp;((/FTM0/ftm_cnsc_mode[0]&lt;10)||(/FTM0/ftm_cnsc_mode[0]>11))" />
+      <signalMapping pin="-"     expression="!/FTM0/Ch1PinInUse" />
       <signalMapping pin="PTA1"  expression="(!sim_pinsel0_ftm0ps1)"        />
       <signalMapping pin="PTB3" />
    </dynamicSignalMapping>
 
    <!-- FTM1 channels -->
    <dynamicSignalMapping signal="FTM1_CH0" >
-      <signalMapping pin="-"     expression="(/FTM1/ftm_cnsc_mode[0]==0)"  />
+      <signalMapping pin="-"     expression="!/FTM1/Ch0PinInUse"  />
       <signalMapping pin="PTC4"  expression="(!sim_pinsel0_ftm1ps0)"        />
       <signalMapping pin="PTH2" />
    </dynamicSignalMapping>
    <dynamicSignalMapping signal="FTM1_CH1" >
-      <signalMapping pin="-"     expression="(/FTM1/ftm_cnsc_mode[1]==0)&amp;&amp;((/FTM1/ftm_cnsc_mode[0]&lt;10)||(/FTM1/ftm_cnsc_mode[0]>11))" />
+      <signalMapping pin="-"     expression="!/FTM1/Ch1PinInUse" />
       <signalMapping pin="PTC5"  expression="(!sim_pinsel0_ftm1ps1)"        />
       <signalMapping pin="PTE7" />
    </dynamicSignalMapping>
 
    <!-- FTM2 channels -->
    <dynamicSignalMapping signal="FTM2_CH0" >
-      <signalMapping pin="-"     expression="(/FTM2/ftm_cnsc_mode[0]==0)"  />
+      <signalMapping pin="-"     expression="!/FTM2/Ch0PinInUse"  />
       <signalMapping pin="PTC0"  expression="(sim_pinsel1_ftm2ps0==0)"        />
       <signalMapping pin="PTF0"  expression="(sim_pinsel1_ftm2ps0==1)"        />
       <signalMapping pin="PTH0" />
    </dynamicSignalMapping>
    <dynamicSignalMapping signal="FTM2_CH1" >
-      <signalMapping pin="-"     expression="(/FTM2/ftm_cnsc_mode[1]==0)&amp;&amp;((/FTM2/ftm_cnsc_mode[0]&lt;10)||(/FTM2/ftm_cnsc_mode[0]>11))" />
+      <signalMapping pin="-"     expression="!/FTM2/Ch1PinInUse" />
       <signalMapping pin="PTC1"  expression="(sim_pinsel1_ftm2ps1==0)"        />
       <signalMapping pin="PTF1"  expression="(sim_pinsel1_ftm2ps1==1)"        />
       <signalMapping pin="PTH1" />
    </dynamicSignalMapping>
    <dynamicSignalMapping signal="FTM2_CH2" >
-      <signalMapping pin="-"     expression="(/FTM2/ftm_cnsc_mode[2]==0)"  />
+      <signalMapping pin="-"     expression="!/FTM2/Ch2PinInUse"  />
       <signalMapping pin="PTC2"  expression="(sim_pinsel1_ftm2ps2==0)"        />
       <signalMapping pin="PTD0"  expression="(sim_pinsel1_ftm2ps2==1)"        />
       <signalMapping pin="PTG4" />
    </dynamicSignalMapping>
    <dynamicSignalMapping signal="FTM2_CH3" >
-      <signalMapping pin="-"     expression="(/FTM2/ftm_cnsc_mode[3]==0)&amp;&amp;((/FTM2/ftm_cnsc_mode[2]&lt;10)||(/FTM2/ftm_cnsc_mode[2]>11))" />
+      <signalMapping pin="-"     expression="!/FTM2/Ch3PinInUse" />
       <signalMapping pin="PTC3"  expression="(sim_pinsel1_ftm2ps3==0)"        />
       <signalMapping pin="PTD1"  expression="(sim_pinsel1_ftm2ps3==1)"        />
       <signalMapping pin="PTG5" />
    </dynamicSignalMapping>
    <dynamicSignalMapping signal="FTM2_CH4" >
-      <signalMapping pin="-"     expression="(/FTM2/ftm_cnsc_mode[4]==0)"  />
+      <signalMapping pin="-"     expression="!/FTM2/Ch4PinInUse"  />
       <signalMapping pin="PTB4"  expression="(!sim_pinsel1_ftm2ps4)"       />
       <signalMapping pin="PTG6" />
    </dynamicSignalMapping>
    <dynamicSignalMapping signal="FTM2_CH5" >
-      <signalMapping pin="-"     expression="(/FTM2/ftm_cnsc_mode[5]==0)&amp;&amp;((/FTM2/ftm_cnsc_mode[4]&lt;10)||(/FTM2/ftm_cnsc_mode[4]>11))" />
+      <signalMapping pin="-"     expression="!/FTM2/Ch5PinInUse" />
       <signalMapping pin="PTB5"  expression="(!sim_pinsel1_ftm2ps5)"       />
       <signalMapping pin="PTG7" />
    </dynamicSignalMapping>
@@ -148,6 +145,19 @@
    <!-- Input names for PWT (mapping done in SIM -->
    <constant key="/PWT/inputNames" value="&quot;PTD5_PTE2&quot;,&quot;PTH7_PTB0&quot;,&quot;ACMPx_O&quot;,&quot;UARTx_RX&quot;" type="String" />
 
+   <!-- Pin mapping for TCLK 0, 1 and 2 inputs -->
+   <for keys="tclk" dim="3" >
+      <dynamicSignalMapping signal="TCLK%(tclk)" >
+         <signalMapping
+            pin="*"
+            expression="
+               (/FTM0/externalClockUsed&amp;&amp;(sim_pinsel0_ftm0clkps==%(tclk)))||
+               (/FTM1/externalClockUsed&amp;&amp;(sim_pinsel0_ftm1clkps==%(tclk)))||
+               (/FTM2/externalClockUsed&amp;&amp;(sim_pinsel0_ftm2clkps==%(tclk)))||
+               (/PWT/externalClockUsed &amp;&amp;(sim_pinsel0_pwtclkps==%(tclk)))"  />
+         <signalMapping pin="-" />
+      </dynamicSignalMapping>
+   </for>
 
 <!--
     * General substitutions
@@ -292,47 +302,6 @@
    </for>
 
    <title />
-
-   <category name="Derived Pin Mappings" description="Mapping of signals controlled by multiple sources" >
-      <!--
-      <aliasOption key="/FTM0/enablePeripheralSupport"   locked="false" />
-      <aliasOption key="sim_pinsel_ftm0clkps"            locked="false" />
-      <aliasOption key="/FTM0/ftm_sc_clks"               locked="false" />
-
-      <aliasOption key="/FTM2/enablePeripheralSupport"   locked="false" />
-      <aliasOption key="sim_pinsel_ftm2clkps"            locked="false" />
-      <aliasOption key="/FTM2/ftm_sc_clks"               locked="false" />
-
-      <aliasOption key="/PWT/enablePeripheralSupport"    locked="false" />
-      <aliasOption key="sim_pinsel_pwtclkps"             locked="false" />
-      <aliasOption key="/PWT/pwt_r1_pclks"               locked="false" />
-
-      <aliasOption key="/PWT/pwt_r1_pinsel"              locked="false" />
-
-      <aliasOption key="/OSC0/enablePeripheralSupport"   locked="false" />
-      -->
-
-      <for delimiter="|"
-           keys   =" t  :  p                "
-           values =" 0  :  PTA5            |
-                     1  :  PTE0            |
-                     2  :  PTE7
-             ">
-         <binaryOption key="sim_pinsel_tclk%(t)"
-            ref="((sim_pinsel0_ftm0clkps==%(t))&amp;&amp;/FTM0/enablePeripheralSupport&amp;&amp;(/FTM0/ftm_sc_clks==3))||
-                 ((sim_pinsel0_ftm1clkps==%(t))&amp;&amp;/FTM1/enablePeripheralSupport&amp;&amp;(/FTM1/ftm_sc_clks==3))||
-                 ((sim_pinsel0_ftm2clkps==%(t))&amp;&amp;/FTM2/enablePeripheralSupport&amp;&amp;(/FTM2/ftm_sc_clks==3))||
-                 ((sim_pinsel0_pwtclkps==%(t)) &amp;&amp;/PWT/enablePeripheralSupport &amp;&amp;(/PWT/pwt_r1_pclks==true))
-                 ##Unmapped when unused by FTM0, FTM1, FTM2, PWT"
-            disabledPinMap="TCLK%(t),"
-            locked="true"
-            derived="true"
-            description="TCLK%(t) Pin Select" >
-            <choice name="TCLK%(t) unmapped"  value="0" pinMap="TCLK%(t)"        />
-            <choice name="TCLK%(t) -> %(p)"   value="1" pinMap="TCLK%(t),%(p),"  />
-         </binaryOption>
-      </for>
-   </category>
 
    <category name="Control Signals" description="Mapping of control signals" >
       <binaryOption key="sim_scgc_swd" condition="sim_scgc_swd_present"
@@ -590,7 +559,7 @@
 
       <binaryOption key="sim_pinsel0_ftm1ps0" condition="sim_pinsel0_ftm1ps0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM1/enablePeripheralSupport&amp;&amp;(/FTM1/ftm_cnsc_mode[0]!=0)"
+         disabledPinMap="#/FTM1/enablePeripheralSupport&amp;&amp;/FTM1/Ch0PinInUse"
          typeName="SimPinselFtm1ps0"
          description="FTM1 channel 0 Pin Select" >
          <choice name="PTC4"        value="0" enum="Ptc4" pinMap="FTM1_CH0,PTC4" />
@@ -599,7 +568,7 @@
 
       <binaryOption key="sim_pinsel0_ftm1ps1" condition="sim_pinsel0_ftm1ps1_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         disabledPinMap="#/FTM1/enablePeripheralSupport&amp;&amp;(/FTM1/ftm_cnsc_mode[1]!=0)"
+         disabledPinMap="#/FTM1/enablePeripheralSupport&amp;&amp;/FTM1/Ch1PinInUse"
          typeName="SimPinselFtm1ps1"
          description="FTM1 channel 1 Pin Select" >
          <choice name="PTC5"        value="0" enum="Ptc5" pinMap="FTM1_CH1,PTC5" />
@@ -1010,53 +979,6 @@
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
       value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
-
-   <template namespace="usbdm" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
-      \t/*
-      \t * Global clocks
-      \t */
-      \t\n
-   ]]></template>
-   <template namespace="usbdm" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
-      \t/*
-      \t * Global clocks constants
-      \t * These are provided when minimal clock generator code is used.
-      \t * They assume no clock changes are made after startup.
-      \t * Values provided are from USBDM configuration.
-      \t */
-      \t\n
-   ]]></template>
-
-   <for keys=" clock                  : name "
-      values=" system_core_clock[0]   : SystemCoreClock;
-               system_bus_clock[0]    : SystemBusClock;
-               system_timer_clock[0]  : SystemTimerClock
-         ">
-      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
-         \t/**
-         \t *  %description
-         \t *  %tooltip
-         \t */
-         \textern "C" uint32_t %(name);
-         \t\n
-      ]]></setTemplate>
-      <setTemplate namespace="all" key="/SYSTEM/Clocks" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
-         \t/**
-         \t *  %description
-         \t *  %tooltip
-         \t */
-         \tuint32_t %(name);
-         \t\n
-      ]]></setTemplate>
-      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
-         \t/**
-         \t *  %description
-         \t *  %tooltip
-         \t */
-         \tconstexpr uint32_t %(name) = %valueExpression;
-         \t\n
-      ]]></setTemplate>
-   </for>
 
    <setTemplate variables="sim_sopt0_ftmsync" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
@@ -1551,20 +1473,6 @@
       \t};\n\n
    ]]></initialValueTemplate>
 
-   <template codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
-      \t/**
-      \t * Update system clock values
-      \t *
-      \t * @param systemClock Frequency of clock provided to system clock dividers
-      \t */
-      \tstatic void updateSystemClocks(unsigned systemClock) {
-      \t
-      \t   SystemCoreClock    = systemClock/(((SIM->CLKDIV&SIM_CLKDIV_OUTDIV1_MASK)>>SIM_CLKDIV_OUTDIV1_SHIFT)+1);
-      \t   SystemBusClock     = SystemCoreClock/(((SIM->CLKDIV&SIM_CLKDIV_OUTDIV2_MASK)>>SIM_CLKDIV_OUTDIV2_SHIFT)+1);
-      \t   SystemTimerClock   = systemClock/(((SIM->CLKDIV&SIM_CLKDIV_OUTDIV3_MASK)>>SIM_CLKDIV_OUTDIV3_SHIFT)+1);
-      \t}\n\n
-   ]]></template>
-
    <template  codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
       \t/**
@@ -1601,6 +1509,69 @@
       }; // class $(_Class)::BasicInfo\n\n
    ]]>
    </template>
+
+   <!-- ************* Clock Variables ****************** -->
+
+   <template namespace="usbdm" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+      \t/*
+      \t * Global clocks
+      \t */
+      \t\n
+   ]]></template>
+   <template namespace="usbdm" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
+      \t/*
+      \t * Global clocks constants
+      \t * These are provided when minimal clock generator code is used.
+      \t * They assume no clock changes are made after startup.
+      \t * Values provided are from USBDM configuration.
+      \t */
+      \t\n
+   ]]></template>
+
+   <for keys=" clock                  : name "
+      values=" system_core_clock[0]   : SystemCoreClock;
+               system_bus_clock[0]    : SystemBusClock;
+               system_timer_clock[0]  : SystemTimerClock
+         ">
+      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \textern "C" uint32_t %(name);
+         \t\n
+      ]]></setTemplate>
+      <setTemplate namespace="all" key="/SYSTEM/Clocks" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \tuint32_t %(name);
+         \t\n
+      ]]></setTemplate>
+      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \tconstexpr uint32_t %(name) = %valueExpression;
+         \t\n
+      ]]></setTemplate>
+   </for>
+
+   <template codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+      \t/**
+      \t * Update system clock values
+      \t *
+      \t * @param systemClock Frequency of clock provided to system clock dividers
+      \t */
+      \tstatic void updateSystemClocks(unsigned systemClock) {
+      \t
+      \t   SystemCoreClock    = systemClock/(((SIM->CLKDIV&SIM_CLKDIV_OUTDIV1_MASK)>>SIM_CLKDIV_OUTDIV1_SHIFT)+1);
+      \t   SystemBusClock     = SystemCoreClock/(((SIM->CLKDIV&SIM_CLKDIV_OUTDIV2_MASK)>>SIM_CLKDIV_OUTDIV2_SHIFT)+1);
+      \t   SystemTimerClock   = systemClock/(((SIM->CLKDIV&SIM_CLKDIV_OUTDIV3_MASK)>>SIM_CLKDIV_OUTDIV3_SHIFT)+1);
+      \t}\n\n
+   ]]></template>
 
    <!-- ************* Common ****************** -->
 

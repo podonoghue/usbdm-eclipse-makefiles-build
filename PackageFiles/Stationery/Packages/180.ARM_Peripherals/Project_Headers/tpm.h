@@ -256,46 +256,6 @@ protected:
 
 public:
    /**
-    * Common IRQ handler
-    */
-   static void irqHandler() {
-      // Check of TOF set and enabled
-      if ((tpm->SC&(TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) == (TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) {
-         // Clear TOI flag (w1c)
-         tpm->SC = tpm->SC | TPM_SC_TOF_MASK;
-         Info::callback();
-      }
-      else {
-         // Get status for channels
-         uint32_t status = tpm->STATUS;
-         if (status) {
-            if constexpr (Info::IndividualCallbacks) {
-               do {
-                  auto channelNum = __builtin_ffs(status);
-                  if (channelNum == 0) {
-                     break;
-                  }
-                  channelNum--;
-                  uint32_t flag = (1<<channelNum);
-
-                  // Clear flag for channel event being handled
-                  status &= ~flag;
-
-                  // Call individual handler
-                  Info::channelCallbacks[channelNum](flag);
-               } while(true);
-            }
-            else {
-               // Call shared handler
-               Info::channelCallbacks[0](status);
-            }
-            // Clear flags for channel events being handled (w1c register if read)
-            tpm->STATUS = status;
-         }
-      }
-   }
-
-   /**
     * Wrapper to allow the use of a class member as a callback function
     * @note Only usable with static objects.
     *
@@ -514,7 +474,7 @@ public:
        *       pending CnV register updates are discarded.
        */
       static void defaultConfigure() {
-         OwningTpm::configureChannel(OwningTpm::DefaultChannelInitValues[channel]);
+         OwningTpm::configure(OwningTpm::DefaultChannelInitValues[channel]);
       }
 
       /**
@@ -524,7 +484,7 @@ public:
        *       pending CnV register updates are discarded.
        */
       static void configure(ChannelInit channelInit) {
-         OwningTpm::configureChannel(channelInit);
+         OwningTpm::configure(channelInit);
       }
       
 $(/TPM_CHANNEL/static_functions:  // /TPM_CHANNEL/static_functions not found)

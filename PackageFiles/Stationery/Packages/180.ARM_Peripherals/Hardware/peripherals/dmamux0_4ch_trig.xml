@@ -4,11 +4,9 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="DMA channel multiplexor" >
 
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"          />
-   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
-   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="enablePeripheralSupport"  type="Boolean" value="true"          />
+   <constant key="enableGettersAndSetters"  type="Boolean" value="true"          />
+   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"         />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
    <xi:include href="_enablePeripheral.xml"  />
@@ -29,8 +27,8 @@
     * Template substitutions
     *
     * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
-    * %variable[index]                Variable name from condition e.g /ADC0/adc_sc2_acfe
+    * %symbolicExpression[index]      Symbolic formatted value e.g. AdcCompare_Disabled
+    * %variable[index]                Variable name from variable= e.g /ADC0/adc_sc2_acfe
     * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
     * %description[index]             Description from controlVar e.g. Compare Function Enable
     * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
@@ -42,9 +40,9 @@
     * %paramType[index]               As for %paramType
     * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %symbolicExpression             Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment                Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression              Based on variable etc. Similar to (%register&%mask)
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
@@ -52,8 +50,8 @@
 
    <!-- ************* Constants ****************** -->
    <intOption key="NumChannels" locked="true" derived="true"
-      value="=/DMA$(_instance)_NumChannels" 
-      description="Number of DMA channels" 
+      value="=/DMA$(_instance)_NumChannels"
+      description="Number of DMA channels"
       toolTip="The number of DMA channels available"/>
 
    <intOption key="NumPeriodicChannels" locked="true" derived="true"
@@ -64,8 +62,8 @@
    <for keys="var" values="NumChannels;NumPeriodicChannels" >
       <initialValueTemplate variables="%(var)"
          initExpressionOnSameLine="true"
-         linePadding="//x" 
-         tooltipPadding="" 
+         linePadding="//x"
+         tooltipPadding=""
       ><![CDATA[
          \t// %tooltip
          \tstatic constexpr unsigned %(var) = %initExpression;
@@ -141,7 +139,7 @@
 
 <!--   ========== DMAMUX Init class =============================== -->
 
-   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template key="init_description" namespace="all" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of a $(_Baseclass) channel (slot)
@@ -184,7 +182,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -205,13 +203,13 @@
 
 <!--   Member variables -->
 
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t   /// Channel number for this configuration
       \t   DmaChannelNum channelNum = DmaChannelNum_None;\n\n
    ]]></template>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="enablePeripheralSupport"
       variables="dmamux_chcfg_enbl[],dmamux_chcfg_trig[],dmamux_chcfg_source[]"
    ><![CDATA[
       \t   /// Channel Configuration Register
@@ -220,7 +218,7 @@
 
 <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Configure $(_BASENAME) channel
@@ -287,7 +285,7 @@
 
    <!--   Constructors -->
 
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="enablePeripheralSupport"
       linePadding="xxx" >
    <![CDATA[
       \t   /**
@@ -312,7 +310,7 @@
             dmamux_chcfg_trig[];
             dmamux_chcfg_source[]
             " >
-      <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -336,7 +334,7 @@
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <initialValueTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -353,7 +351,7 @@
    ]]>
    </initialValueTemplate>
    <for keys="ch" dim="/DMA$(_instance)/NumChannels" >
-      <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <initialValueTemplate codeGenCondition="enablePeripheralSupport"
          variables="dmamux_chcfg_enbl[%(ch)],dmamux_chcfg_trig[%(ch)],dmamux_chcfg_source[%(ch)]"
          terminator=","
          separator=","
@@ -364,13 +362,13 @@
          \t   },\n
       ]]></initialValueTemplate>
    </for>
-   <template codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t}; // $(_Class)Info::DefaultInitValue
       \t\n
    ]]></template>
 
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
       \t}; // class $(_Baseclass)BasicInfo::Init
       \t\n

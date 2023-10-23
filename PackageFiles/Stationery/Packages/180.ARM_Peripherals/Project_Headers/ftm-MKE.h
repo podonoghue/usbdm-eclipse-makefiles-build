@@ -246,10 +246,6 @@ typedef void (*ChannelCallbackFunction)(uint8_t status);
 
 public:
 
-   // Disambiguate in favour of static functions when available
-   using Info::setCounterMaximumValue;
-   using Info::getCounterMaximumValue;
-
    // Empty constructor
    constexpr FtmBase_T() : FtmBase(Info::baseAddress) {}
    virtual ~FtmBase_T() = default;
@@ -290,65 +286,6 @@ protected:
    }
 
 public:
-   /**
-    * Fault IRQ handler (if individually available)
-    */
-   static void faultIrqHandler() {
-      ftm->FMS = ftm->FMS & ~FTM_FMS_FAULTF_MASK;
-      Info::sCallback();
-   }
-
-   /**
-    * Overflow IRQ handler (if individually available)
-    */
-   static void overflowIrqHandler() {
-      // Clear TOI flag
-      ftm->SC = ftm->SC & ~FTM_SC_TOF_MASK;
-      Info::sCallback();
-   }
-
-   /**
-    * Common IRQ handler
-    */
-   static void irqHandler() {
-      if ((ftm->MODE&FTM_MODE_FAULTIE_MASK) && (ftm->FMS&FTM_FMS_FAULTF_MASK)) {
-         ftm->FMS = ftm->FMS & ~FTM_FMS_FAULTF_MASK;
-         Info::sCallback();
-      }
-      else if ((ftm->SC&(FTM_SC_TOF_MASK|FTM_SC_TOIE_MASK)) == (FTM_SC_TOF_MASK|FTM_SC_TOIE_MASK)) {
-         // Clear TOI flag
-         ftm->SC = ftm->SC & ~FTM_SC_TOF_MASK;
-         Info::sCallback();
-      }
-      else {
-         // Get status for channels
-         uint32_t status = ftm->STATUS;
-         if (status) {
-            if constexpr (Info::individualChannelCallbacks) {
-               do {
-                  auto channelNum = __builtin_ffs(status);
-                  if (channelNum == 0) {
-                     break;
-                  }
-                  channelNum--;
-                  uint32_t flag = (1<<channelNum);
-
-                  // Clear flag for channel event being handled
-                  status &= ~flag;
-
-                  // Call individual handler
-                  Info::channelCallbacks[channelNum](flag);
-               } while(true);
-            }
-            else {
-               // Call shared handler
-               Info::channelCallbacks[0](status);
-            }
-            // Clear flags for channel events being handled (w0c register if read first)
-            ftm->STATUS = ~status;
-         }
-      }
-   }
 
 #if $(/FTM/irqHandlingMethod) // /FTM/irqHandlingMethod
    /**

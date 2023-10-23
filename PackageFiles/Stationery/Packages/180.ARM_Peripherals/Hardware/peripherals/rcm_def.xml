@@ -60,9 +60,9 @@
    <binaryOption key="rcm_rpfc_rstfltss" condition="rcm_rpfc_rstfltss_present"
       enabledBy="enablePeripheralSupport"
       typeName="RcmResetPinStopFilter"
-      description="Reset pin filter select in low power modes
-               On exit from VLLS mode, this bit should be reconfigured before clearing PMC_REGSC[ACKISO]"
-      toolTip="Controls the reset reset pin filter in STOP and VLPS modes">
+      description="Reset pin filter select in low power modes"
+      toolTip="Controls the reset reset pin filter in STOP and VLPS modes\n
+               On exit from VLLS mode, this bit should be reconfigured before clearing PMC_REGSC[ACKISO]">
       <choice value="0" enum="Disabled"           name="No filter"    isDefault="true" />
       <choice value="1" enum="LowPowerOscillator" name="LPO clock based filter" />
    </binaryOption>

@@ -997,7 +997,7 @@ class GpioTable_T : public Gpio_T<Info::info[index].pcrValue, Info::info[index].
  * @tparam right                Bit number of rightmost bit in GPIO (inclusive)
  * @tparam FlipMask             Polarity of all bits in field. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
  */
-template<PcrValue defPcrValue, NvicPriority  irqLevel, PinIndex Left, PinIndex Right, uint32_t FlipMask=ActiveHigh>
+template<PcrValue defPcrValue, PinIndex Left, PinIndex Right, uint32_t FlipMask=ActiveHigh>
 class GpioField_T : public GpioField, public PcrBase_T<Left>{
 
 private:
@@ -1362,7 +1362,7 @@ $(/GPIO/field_set_input: // /GPIO/field_set_input not found)
  */
 template<class Info, PinIndex left, PinIndex right, uint32_t polarity>
 class GpioFieldTable_T :
-      public GpioField_T<Info::info[right].pcrValue, Info::info[right].irqLevel, left, right, polarity> {
+      public GpioField_T<Info::info[right].pcrValue, left, right, polarity> {
 
       static constexpr int bitNum = Info::info[right].pinIndex;
 

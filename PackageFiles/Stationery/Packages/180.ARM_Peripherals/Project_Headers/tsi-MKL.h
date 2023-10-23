@@ -27,15 +27,6 @@ namespace USBDM {
  */
 
 /**
- * Selects out-of-range or end-of-scan event to generate an interrupt or DMA request.
- */
-enum TsiInterrupt {
-   TsiInterrupt_Disabled   = TSI_GENCS_TSIIEN(0b0)|TSI_GENCS_ESOR(0b0), //!< Interrupts disabled
-   TsiInterrupt_OutOfRange = TSI_GENCS_TSIIEN(0b1)|TSI_GENCS_ESOR(0b0), //!< Interrupt/DMA for Out Of Range
-   TsiInterrupt_EndOfScan  = TSI_GENCS_TSIIEN(0b1)|TSI_GENCS_ESOR(0b1), //!< Interrupt/DMA for End Of Scan
-};
-
-/**
  * Determines if a DMA or Interrupt request is generated on a TSI event
  *
  * @note Requires TsiInterrupt selection
@@ -43,29 +34,6 @@ enum TsiInterrupt {
 enum TsiDma {
    TsiDma_Disabled = TSI_DATA_DMAEN(0b0), //!< Interrupt is generated on TSI event
    TsiDma_Enabled  = TSI_DATA_DMAEN(0b1), //!< DMA request is generated on TSI event
-};
-
-/**
- * Determines the TSI analogue mode
- */
-enum TsiMode {
-   TsiMode_Capacitive                = TSI_GENCS_MODE(0b0000), //!< Capacitive sensing (non-noise detection) mode
-   TsiMode_NoiseDetect_NoFreqLimit   = TSI_GENCS_MODE(0b0100), //!< Single threshold noise detection mode with no frequency limitation circuit
-   TsiMode_NoiseDetect_FreqLimit     = TSI_GENCS_MODE(0b1000), //!< Single threshold noise detection mode with frequency limitation circuit
-   TsiMode_NoiseDetect_Automatic     = TSI_GENCS_MODE(0b1100), //!< Automatic noise detection mode
-
-};
-
-/**
- * Determine the oscillators' voltage limits.
- * This directly affects the oscillators' frequencies but does not affect the count values as it is a ratio.
- * Values may differ by device.
- */
-enum TsiDeltaVoltage {
-   TsiDeltaVoltage_High    = TSI_GENCS_DVOLT(0b00), //!< Delta Voltage High     e.g. (DV = 1.026 V; Vp = 1.328 V; Vm = 0.302 V)
-   TsiDeltaVoltage_MidHigh = TSI_GENCS_DVOLT(0b01), //!< Delta Voltage Mid-high e.g. (DV = 0.592 V; Vp = 1.111 V; Vm = 0.519 V)
-   TsiDeltaVoltage_MidLow  = TSI_GENCS_DVOLT(0b10), //!< Delta Voltage Mid-low  e.g. (DV = 0.342 V; Vp = 0.986 V; Vm = 0.644 V)
-   TsiDeltaVoltage_Low     = TSI_GENCS_DVOLT(0b11), //!< Delta Voltage Low      e.g. (DV = 0.197 V; Vp = 0.914 V; Vm = 0.716 V)
 };
 
 /**
@@ -89,51 +57,6 @@ enum TsiNoiseThreshold {
    TsiNoiseThreshold_13 = TSI_GENCS_NOISE_THRESHOLD(0b1101), //!< DVpm = 1.350 V, Vp = 1.490 V, Vm = 0.140 V
    TsiNoiseThreshold_14 = TSI_GENCS_NOISE_THRESHOLD(0b1110), //!< DVpm = 1.630 V, Vp = 1.630 V, Vm = 0 V
    TsiNoiseThreshold_15 = TSI_GENCS_NOISE_THRESHOLD(0b1111), //!< DVpm = 1.630 V, Vp = 1.630 V, Vm = 0 V, Rs = 5k5R
-};
-
-/**
- * Determines the reference oscillator charge and discharge current value.\n
- * This directly affects the reference oscillator frequency and hence count values.
- */
-enum TsiReferenceCharge {
-   TsiReferenceCharge_500nA = TSI_GENCS_REFCHRG(0b000), //!< Reference Charge = 500nA
-   TsiReferenceCharge_1uA   = TSI_GENCS_REFCHRG(0b001), //!< Reference Charge = 1uA
-   TsiReferenceCharge_2uA   = TSI_GENCS_REFCHRG(0b010), //!< Reference Charge = 2uA
-   TsiReferenceCharge_4uA   = TSI_GENCS_REFCHRG(0b011), //!< Reference Charge = 4uA
-   TsiReferenceCharge_8uA   = TSI_GENCS_REFCHRG(0b100), //!< Reference Charge = 8uA
-   TsiReferenceCharge_16uA  = TSI_GENCS_REFCHRG(0b101), //!< Reference Charge = 16uA
-   TsiReferenceCharge_32uA  = TSI_GENCS_REFCHRG(0b110), //!< Reference Charge = 32uA
-   TsiReferenceCharge_64uA  = TSI_GENCS_REFCHRG(0b111), //!< Reference Charge = 64uA
-};
-
-/**
- * Determines the electrode oscillator charge and discharge current value\n
- * This inversely affects the electrode oscillator frequency and hence count values.
- */
-enum TsiExternalCharge {
-   TsiExternalCharge_500nA = TSI_GENCS_EXTCHRG(0b000), //!< External Charge = 500nA
-   TsiExternalCharge_1uA   = TSI_GENCS_EXTCHRG(0b001), //!< External Charge = 1uA
-   TsiExternalCharge_2uA   = TSI_GENCS_EXTCHRG(0b010), //!< External Charge = 2uA
-   TsiExternalCharge_4uA   = TSI_GENCS_EXTCHRG(0b011), //!< External Charge = 4uA
-   TsiExternalCharge_8uA   = TSI_GENCS_EXTCHRG(0b100), //!< External Charge = 8uA
-   TsiExternalCharge_16uA  = TSI_GENCS_EXTCHRG(0b101), //!< External Charge = 16uA
-   TsiExternalCharge_32uA  = TSI_GENCS_EXTCHRG(0b110), //!< External Charge = 32uA
-   TsiExternalCharge_64uA  = TSI_GENCS_EXTCHRG(0b111), //!< External Charge = 64uA
-};
-
-/**
- * Determines the prescaler for the output of the electrode oscillator.\n
- * This directly affects the TSI counts.
- */
-enum TsiElectrodePrescaler {
-   TsiElectrodePrescaler_1   = TSI_GENCS_PS(0b000), //!< Electrode Prescaler /1
-   TsiElectrodePrescaler_2   = TSI_GENCS_PS(0b001), //!< Electrode Prescaler /2
-   TsiElectrodePrescaler_4   = TSI_GENCS_PS(0b010), //!< Electrode Prescaler /4
-   TsiElectrodePrescaler_8   = TSI_GENCS_PS(0b011), //!< Electrode Prescaler /8
-   TsiElectrodePrescaler_16  = TSI_GENCS_PS(0b100), //!< Electrode Prescaler /16
-   TsiElectrodePrescaler_32  = TSI_GENCS_PS(0b101), //!< Electrode Prescaler /32
-   TsiElectrodePrescaler_64  = TSI_GENCS_PS(0b110), //!< Electrode Prescaler /64
-   TsiElectrodePrescaler_128 = TSI_GENCS_PS(0b111), //!< Electrode Prescaler /128
 };
 
 /**
@@ -173,22 +96,6 @@ enum TsiScanNumber {
    TsiScanNumber_30 = TSI_GENCS_NSCN(0b11101), //!< 30 times per electrode
    TsiScanNumber_31 = TSI_GENCS_NSCN(0b11110), //!< 31 times per electrode
    TsiScanNumber_32 = TSI_GENCS_NSCN(0b11111), //!< 32 times per electrode
-};
-
-/**
- * Determines operation in low power modes (STOP, VLPS, LLS and VLLS{3,2,1}).
- */
-enum TsiLowPower {
-   TsiLowPower_Disabled = TSI_GENCS_STPE(0b0), //!< TSI is disabled in low power modes
-   TsiLowPower_Enabled  = TSI_GENCS_STPE(0b1), //!< TSI is enabled in low power modes
-};
-
-/**
- * Determines if sources of electrode and reference oscillators are swapped
- */
-enum TsiCurrentSource {
-   TsiCurrentSource_NotSwapped = TSI_GENCS_CURSW(0b0), //!< Not swapped
-   TsiCurrentSource_Swapped    = TSI_GENCS_CURSW(0b1), //!< Swapped
 };
 
 /**
@@ -247,11 +154,11 @@ public:
    template<class Info, TsiInput channel> class CheckSignal {
       static_assert((channel<Info::numSignals),
             "Non-existent TSI channel - Check Configure.usbdm for available channels");
-      static_assert((channel>=Info::numSignals)||(Info::info[channel].gpioBit != UNMAPPED_PCR),
+      static_assert((channel>=Info::numSignals)||(Info::info[channel].gpioBit != PinIndex::UNMAPPED_PCR),
             "TSI channel is not mapped to a pin - Modify Configure.usbdm");
-      static_assert((channel>=Info::numSignals)||(Info::info[channel].gpioBit != INVALID_PCR),
+      static_assert((channel>=Info::numSignals)||(Info::info[channel].gpioBit != PinIndex::INVALID_PCR),
             "TSI channel doesn't exist in this device/package - Check Configure.usbdm for available channels");
-      static_assert((channel>=Info::numSignals)||((Info::info[channel].gpioBit == UNMAPPED_PCR)||(Info::info[channel].gpioBit == INVALID_PCR)||(Info::info[channel].gpioBit >= 0)),
+      static_assert((channel>=Info::numSignals)||((Info::info[channel].gpioBit == PinIndex::UNMAPPED_PCR)||(Info::info[channel].gpioBit == PinIndex::INVALID_PCR)||(Info::info[channel].gpioBit >= 0)),
             "Illegal TSI Channel - Check Configure.usbdm for available channels");
    public:
       /** Dummy function to allow convenient in-line checking */
@@ -265,9 +172,13 @@ public:
  * @tparam Info      Information class describing the TSI interface
  */
 template <class Info>
-class TsiBase_T {
+class Tsi_T : public Info {
 
 public:
+
+   // Make Info::configue methods visible
+   using Info::configure;
+
    /** Hardware instance pointer */
    static constexpr HardwarePtr<TSI_Type> tsi = Info::baseAddress;
 
@@ -280,19 +191,6 @@ public:
       __DMB();
 
       Info::initPCRs();
-   }
-
-   /**
-    * Initialise TSI to default settings\n
-    * Configures all TSI pins
-    */
-   static void defaultConfigure() {
-      enable();
-
-      tsi->GENCS  = Info::tsi_gencs|TSI_GENCS_TSIEN_MASK;
-      tsi->TSHD   = Info::tsi_tshd;
-
-      enableNvicInterrupts(Info::irqLevel);
    }
 
    /**
@@ -332,8 +230,8 @@ public:
    static void configure(
          TsiLowPower             tsiLowPower           = TsiLowPower_Disabled,
          TsiScanNumber           tsiScanNumber         = TsiScanNumber_8,
-         TsiElectrodePrescaler   tsiElectrodePrescaler = TsiElectrodePrescaler_8,
-         TsiReferenceCharge      tsiReferenceCharge    = TsiReferenceCharge_8uA,
+         TsiElectrodePrescaler   tsiElectrodePrescaler = TsiElectrodePrescaler_DivBy8,
+         TsiReferenceCurrent      tsiReferenceCharge    = TsiReferenceCurrent_8uA,
          TsiExternalCharge       tsiExternalCharge     = TsiExternalCharge_8uA,
          TsiDeltaVoltage         tsiDeltaVoltage       = TsiDeltaVoltage_High) {
 
@@ -363,8 +261,8 @@ public:
          TsiNoiseFilter          tsiNoiseFilter        = TsiNoiseFilter_Disabled,
          TsiLowPower             tsiLowPower           = TsiLowPower_Disabled,
          TsiScanNumber           tsiScanNumber         = TsiScanNumber_8,
-         TsiElectrodePrescaler   tsiElectrodePrescaler = TsiElectrodePrescaler_8,
-         TsiReferenceCharge      tsiReferenceCharge    = TsiReferenceCharge_8uA,
+         TsiElectrodePrescaler   tsiElectrodePrescaler = TsiElectrodePrescaler_DivBy8,
+         TsiReferenceCurrent      tsiReferenceCharge    = TsiReferenceCurrent_8uA,
          TsiDeltaVoltage         tsiDeltaVoltage       = TsiDeltaVoltage_High) {
 
       usbdm_assert(tsiMode != TsiMode_Capacitive, "Wrong mode for this configuration ");
@@ -396,7 +294,7 @@ public:
     * @param tsiDeltaVoltage     Determine the oscillators' voltage limits (not applicable in noise modes)
     */
    static void configureOscillators(
-         TsiReferenceCharge      tsiReferenceCharge    = TsiReferenceCharge_8uA,
+         TsiReferenceCurrent      tsiReferenceCharge    = TsiReferenceCurrent_8uA,
          TsiExternalCharge       tsiExternalCharge     = TsiExternalCharge_8uA,
          TsiDeltaVoltage         tsiDeltaVoltage       = TsiDeltaVoltage_High) {
 
@@ -413,7 +311,7 @@ public:
     */
    static void configureCounting(
          TsiScanNumber           tsiScanNumber         = TsiScanNumber_8,
-         TsiElectrodePrescaler   tsiElectrodePrescaler = TsiElectrodePrescaler_8) {
+         TsiElectrodePrescaler   tsiElectrodePrescaler = TsiElectrodePrescaler_DivBy8) {
       enable();
       tsi->GENCS =
             (tsi->GENCS&~(TSI_GENCS_NSCN_MASK|TSI_GENCS_PS_MASK)) |
@@ -491,40 +389,6 @@ public:
    static void setThresholds(uint16_t high, uint16_t low) {
       tsi->TSHD = TSI_TSHD_THRESH(high)|TSI_TSHD_THRESL(low);
    }
-};
-
-/**
- * Template class to provide TSI callback
- *
- * @tparam Info      Information class describing the TSI interface
- */
-template<class Info>
-class TsiIrq_T : public TsiBase_T<Info> {
-
-protected:
-   /** Callback function for ISR */
-   static TSICallbackFunction callback;
-
-public:
-   /**
-    * IRQ handler
-    */
-   static void irqHandler(void) {
-      uint8_t status = TsiBase_T<Info>::tsi->GENCS&(TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK);
-      if (callback != 0) {
-         TsiBase_T<Info>::tsi->GENCS = TsiBase_T<Info>::tsi->GENCS | status;
-         callback(status);
-      }
-   }
-
-   /**
-    * Set Callback function
-    *
-    *   @param theCallback - Callback function to be executed on TSI alarm interrupt
-    */
-   static void setCallback(TSICallbackFunction theCallback) {
-      callback = theCallback;
-   }
 
    /**
     * Class representing a TSI button
@@ -557,8 +421,8 @@ public:
        * @return true => pressed, false => not pressed
        */
       static bool poll() {
-         TsiIrq_T<Info>::startScanAndWait(channel);
-         return TsiIrq_T<Info>::getCount()>threshold;
+         Tsi_T::startScanAndWait(channel);
+         return getCount()>threshold;
       }
 
       /**
@@ -567,7 +431,7 @@ public:
        * @return Error code indicating if scan was successful
        */
       static void startScanAndWait() {
-         TsiIrq_T<Info>::startScanAndWait(channel);
+         Tsi_T::startScanAndWait(channel);
       }
       /**
        * Get channel count value from last scan
@@ -591,18 +455,16 @@ public:
 
    public:
       static int measure() {
-         TsiIrq_T<Info>::startScanAndWait(channel1);
-         int value1 = TsiIrq_T<Info>::getCount();
-         TsiIrq_T<Info>::startScanAndWait(channel2);
-         int value2 = TsiIrq_T<Info>::getCount();
+         startScanAndWait(channel1);
+         int value1 = getCount();
+         startScanAndWait(channel2);
+         int value2 = getCount();
 
          return 0; //TODO ???
       }
    };
 
 };
-
-template<class Info> TSICallbackFunction TsiIrq_T<Info>::callback = 0;
 
 $(/TSI/declarations:  // No declarations found)
 /**

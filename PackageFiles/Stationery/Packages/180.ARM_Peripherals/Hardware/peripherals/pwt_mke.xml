@@ -72,10 +72,20 @@
       typeName="PwtClockSource"
       toolTip="Controls the selection of clock source for the PWT counter"
       description="PWT Clock Source Selection" >
-      <choice name="Timer clock"        value="0" enum="TimerClock"/>
-      <choice name="Alternative clock"  value="1" enum="AlternativeClock"/>
+      <choice name="Timer clock"             value="0" enum="TimerClock"/>
+      <choice name="Alternative clock(TCLK)" value="1" enum="AlternativeClock"/>
    </binaryOption >
 
+   <binaryOption key="externalClockUsed" 
+      ref="pwt_r1_pclks"
+      derived="true"
+      locked="true"
+      hidden="true"
+   > 
+      <choice value="0" name="External clock unused" />
+      <choice value="1" name="External clock used"   />   
+   </binaryOption>
+   
    <!-- Controlled by sim_mke04z4.xml -->
    <choiceOption key="pwt_r1_pinsel" condition="pwt_r1_pinsel_present &amp;&amp; inputMapping[]"
       enabledBy="pwt_r1_pwten"

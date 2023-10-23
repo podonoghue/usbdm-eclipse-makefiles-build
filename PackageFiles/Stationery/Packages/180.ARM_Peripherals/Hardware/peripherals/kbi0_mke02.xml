@@ -317,16 +317,16 @@
       \t/**
       \t * Set interrupt callback function.
       \t *
-      \t * @param[in]  kbiCallback Callback function to execute on interrupt
+      \t * @param[in]  $(_Baseclass)Callback Callback function to execute on interrupt
       \t */
-      \tstatic void setCallback(CallbackFunction kbiCallback) {
-      \t   if (kbiCallback == nullptr) {
-      \t      kbiCallback = unhandledCallback;
+      \tstatic void setCallback(CallbackFunction $(_Baseclass)Callback) {
+      \t   if ($(_Baseclass)Callback == nullptr) {
+      \t      $(_Baseclass)Callback = unhandledCallback;
       \t   }
       \t   usbdm_assert(
-      \t         (sCallback == unhandledCallback) || (sCallback == kbiCallback),
+      \t         (sCallback == unhandledCallback) || (sCallback == $(_Baseclass)Callback),
       \t         "Handler already set");
-      \t   sCallback = kbiCallback;
+      \t   sCallback = $(_Baseclass)Callback;
       \t}
       \t
       \t/**

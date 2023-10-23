@@ -751,12 +751,12 @@
                     =%(pinIndex)+5 : 5 ;
                     =%(pinIndex)+6 : 6 ;
                     =%(pinIndex)+7 : 7 " >
-         <template key="/PORT/PinIndex" namespace="all" discardRepeats="true" variables="%(field)_present"
+         <template key="/PORT/PinIndex" namespace="all" discardRepeats="true" condition="%(field)_present"
          ><![CDATA[
             \tPT%(Name)%(i) = %(ii),\n
          ]]></template>
       </for>
-      <template key="/PORT/declarations" namespace="all" variables="%(field)_present" codeGenCondition="enablePeripheralSupport"
+      <template key="/PORT/declarations" namespace="all" condition="%(field)_present" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
       \t/**
       \t * Class representing individual pin options for pins in Port %(Name)

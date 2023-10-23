@@ -49,56 +49,56 @@
         Simple pin mapping information
         inputPinMap  Input pins with custom mapping implementation in peripheral file
         outputPinMap Output pins with custom mapping implementation in peripheral file
-        pinMap       Default pin mapping enabled whenever the peripheral is enabled
+        pinMap       Default pin mapping enabled whenever the peripheral signal is enabled
    -->
-   <!-- Pin mapping for ADC0 -->
+   <!-- Pin mapping for ADC0 SE0-SE11 -->
    <constant key="/ADC0/inputPinMap" type="String"
       value="&quot;PTA0,PTA1,PTA6,PTA7,PTB0,PTB1,PTB2,PTB3,PTC0,PTC1,PTC2,PTC3&quot;" />
 
-   <!-- Pin mapping for ACMP0 -->
+   <!-- Pin mapping for ACMP0 IN0,IN1,IN2 -->
    <constant key="/ACMP0/inputPinMap"  type="String" value="&quot;PTB2,PTA1,PTA0&quot;" />
 
-   <!-- Pin mapping for ACMP1 -->
+   <!-- Pin mapping for ACMP1 IN0,IN1,IN2 -->
    <constant key="/ACMP1/inputPinMap"  type="String" value="&quot;PTA6,PTA7,PTB4&quot;" />
 
 
    <!-- FTM0 channels -->
    <dynamicSignalMapping signal="FTM0_CH0" >
-      <signalMapping pin="-"     expression="(/FTM0/ftm_cnsc_mode[0]==0)"  />
-      <signalMapping pin="PTA0"  expression="(!sim_pinsel_ftm0ps0)"        />
+      <signalMapping pin="-"     expression="!/FTM0/Ch0PinInUse"  />
+      <signalMapping pin="PTA0"  expression="!sim_pinsel_ftm0ps0"        />
       <signalMapping pin="PTB2" />
    </dynamicSignalMapping>
    <dynamicSignalMapping signal="FTM0_CH1" >
-      <signalMapping pin="-"     expression="(/FTM0/ftm_cnsc_mode[1]==0)&amp;&amp;((/FTM0/ftm_cnsc_mode[0]&lt;10)||(/FTM0/ftm_cnsc_mode[0]>11))" />
+      <signalMapping pin="-"     expression="!/FTM0/Ch1PinInUse" />
       <signalMapping pin="PTA1"  expression="(!sim_pinsel_ftm0ps1)"        />
       <signalMapping pin="PTB3" />
    </dynamicSignalMapping>
 
    <!-- FTM2 channels -->
    <dynamicSignalMapping signal="FTM2_CH0" >
-      <signalMapping pin="-"     expression="(/FTM2/ftm_cnsc_mode[0]==0)"  />
+      <signalMapping pin="-"     expression="!/FTM2/Ch0PinInUse"  />
       <signalMapping pin="*"    />
    </dynamicSignalMapping>
    <dynamicSignalMapping signal="FTM2_CH1" >
-      <signalMapping pin="-"     expression="(/FTM2/ftm_cnsc_mode[1]==0)&amp;&amp;((/FTM2/ftm_cnsc_mode[0]&lt;10)||(/FTM2/ftm_cnsc_mode[0]>11))" />
+      <signalMapping pin="-"     expression="!/FTM2/Ch1PinInUse" />
       <signalMapping pin="*"    />
    </dynamicSignalMapping>
    <dynamicSignalMapping signal="FTM2_CH2" >
-      <signalMapping pin="-"     expression="(/FTM2/ftm_cnsc_mode[2]==0)"  />
+      <signalMapping pin="-"     expression="!/FTM2/Ch2PinInUse"  />
       <signalMapping pin="PTC2"  expression="(!sim_pinsel_ftm2ps2)"        />
       <signalMapping pin="PTC4" />
    </dynamicSignalMapping>
    <dynamicSignalMapping signal="FTM2_CH3" >
-      <signalMapping pin="-"     expression="(/FTM2/ftm_cnsc_mode[3]==0)&amp;&amp;((/FTM2/ftm_cnsc_mode[2]&lt;10)||(/FTM2/ftm_cnsc_mode[2]>11))" />
+      <signalMapping pin="-"     expression="!/FTM2/Ch3PinInUse" />
       <signalMapping pin="PTC3"  expression="(!sim_pinsel_ftm2ps3)"        />
       <signalMapping pin="PTC5" />
    </dynamicSignalMapping>
    <dynamicSignalMapping signal="FTM2_CH4" >
-      <signalMapping pin="-"     expression="(/FTM2/ftm_cnsc_mode[4]==0)"  />
+      <signalMapping pin="-"     expression="!/FTM2/Ch4PinInUse"  />
       <signalMapping pin="*"    />
    </dynamicSignalMapping>
    <dynamicSignalMapping signal="FTM2_CH5" >
-      <signalMapping pin="-"     expression="(/FTM2/ftm_cnsc_mode[5]==0)&amp;&amp;((/FTM2/ftm_cnsc_mode[4]&lt;10)||(/FTM2/ftm_cnsc_mode[4]>11))" />
+      <signalMapping pin="-"     expression="!/FTM2/Ch5PinInUse" />
       <signalMapping pin="*"    />
    </dynamicSignalMapping>
 
@@ -126,12 +126,17 @@
    <!-- Pin mapping for RTC -->
    <constant key="/RTC/outputPinMap" type="String" value="&quot;PTA0&quot;" />
 
-   <!-- Pin mapping for TCLK inputs -->
-   <for keys="t" dim="2">
-      <dynamicSignalMapping signal="TCLK%(t)" >
-         <signalMapping pin="*"  expression="/FTM0/enablePeripheralSupport&amp;&amp;(sim_pinsel_ftm0clkps==(%(t)==2))&amp;&amp;(/FTM0/ftm_sc_clks==3)"  />
-         <signalMapping pin="*"  expression="/FTM2/enablePeripheralSupport&amp;&amp;(sim_pinsel_ftm2clkps==(%(t)==2))&amp;&amp;(/FTM2/ftm_sc_clks==3)"  />
-         <signalMapping pin="*"  expression="/PWT/enablePeripheralSupport &amp;&amp;(sim_pinsel_pwtclkps==(%(t)==2)) &amp;&amp;(/PWT/pwt_r1_pclks==true)"  />
+   <!-- Pin mapping for TCLK 1 and 2 inputs -->
+   <for keys=  " tclk : clksel "
+        values="  1   : false  ;
+                  2   : true   " >
+      <dynamicSignalMapping signal="TCLK%(tclk)" >
+         <signalMapping
+            pin="*"
+            expression="
+               (/FTM0/externalClockUsed&amp;&amp;(sim_pinsel_ftm0clkps==%(clksel)))||
+               (/FTM2/externalClockUsed&amp;&amp;(sim_pinsel_ftm2clkps==%(clksel)))||
+               (/PWT/externalClockUsed &amp;&amp;(sim_pinsel_pwtclkps ==%(clksel)))"  />
          <signalMapping pin="-" />
       </dynamicSignalMapping>
    </for>
@@ -456,15 +461,6 @@
          <choice name="Selects TCLK2 for FTM0 module"  value="1" enum="SelectsTclk2ForFtm0Module" />
       </binaryOption>
 
-      <!-- binaryOption key="sim_pinsel_ftm0ps0" condition="sim_pinsel_ftm0ps0_present"
-         enabledBy="/$(_BASENAME)/enablePeripheralSupport"
-         typeName="SimPinselFtm0ps0"
-         disabledPinMap="FTM0_CH0,PTA0;FTM0_CH0,#/FTM0/enablePeripheralSupport&amp;&amp;(/FTM0/ftm_cnsc_mode[0]!=0)"
-         description="FTM0 channel 0 Pin Select" >
-         <choice name="PTA0"        value="0" enum="Pta0" pinMap="FTM0_CH0,PTA0" />
-         <choice name="PTB2"        value="1" enum="Ptb2" pinMap="FTM0_CH0,PTB2" />
-      </binaryOption -->
-
       <binaryOption key="sim_pinsel_ftm0ps0" condition="sim_pinsel_ftm0ps0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          typeName="SimPinselFtm0ps0"
@@ -530,7 +526,7 @@
       <binaryOption key="sim_pinsel_ftm2ps3" condition="sim_pinsel_ftm2ps3_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          typeName="SimPinselFtm2ps3"
-         disabledPinMap="FTM2_CH3,PTC3#(/FTM2/ftm_cnsc_mode[3]!=0)"
+         disabledPinMap="FTM2_CH3,PTC3#/FTM2/Ch3PinInUse"
          description="FTM2 Channel 3 Pin Select" >
          <choice name="PTC3"  value="0" enum="Ptc3" />
          <choice name="PTC5"  value="1" enum="Ptc5" />

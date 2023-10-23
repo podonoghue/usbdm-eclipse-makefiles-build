@@ -171,7 +171,12 @@
    <!ATTLIST title toolTip                CDATA        #IMPLIED>
    <!-- Description visible in GUI -->
    <!ATTLIST title description            CDATA        #IMPLIED>
+   <!-- Dynamic expression that hides the title -->
+   <!ATTLIST title hiddenBy               CDATA        #IMPLIED>
 
+<!-- This is an immediate value expression.  The value is assumed to be
+     a literal string unless the attribute is force evaluated by prefixing with '=' 
+-->
 <!ELEMENT equation EMPTY >
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST equation condition              CDATA        #IMPLIED>
@@ -287,6 +292,8 @@
    <!ATTLIST intOption ref           CDATA        #IMPLIED> 
    <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
    <!ATTLIST intOption enumType      CDATA        #IMPLIED>
+   <!-- C #if expression to guard enum declaration -->
+   <!ATTLIST choiceOption enumGuard           CDATA        #IMPLIED>
    <!-- Type for int .e.g. Ticks & -->
    <!ATTLIST intOption typeName      CDATA        #IMPLIED>
    <!-- Allows this option to modify previous option with the same key 
@@ -350,6 +357,8 @@
    <!ATTLIST bitmaskOption typeName       CDATA        #IMPLIED>
    <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
    <!ATTLIST bitmaskOption enumType       CDATA        #IMPLIED>
+   <!-- C #if expression to guard enum declaration -->
+   <!ATTLIST choiceOption enumGuard           CDATA        #IMPLIED>
     <!-- Bit mask indicating active bits.  May be zero to indicate calculation from bitList -->
    <!ATTLIST bitmaskOption bitmask        CDATA        #REQUIRED>
    <!-- List of names for the bits in mask or pattern e.g. CH%i -->
@@ -531,7 +540,9 @@
    <!ATTLIST clockSelectionOption typeName            CDATA        #IMPLIED>
    <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
    <!ATTLIST clockSelectionOption enumType            CDATA        #IMPLIED>
-   <!-- Text to add to enum body generated from choices -->
+      <!-- C #if expression to guard enum declaration -->
+   <!ATTLIST choiceOption enumGuard           CDATA        #IMPLIED>
+<!-- Text to add to enum body generated from choices -->
    <!ATTLIST clockSelectionOption enumText            CDATA        #IMPLIED> 
    <!-- Target variable for control-->
    <!ATTLIST clockSelectionOption target              CDATA        #IMPLIED>
@@ -584,6 +595,8 @@
    <!ATTLIST choiceOption typeName            CDATA        #IMPLIED>
    <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
    <!ATTLIST choiceOption enumType            CDATA        #IMPLIED>
+   <!-- C #if expression to guard enum declaration -->
+   <!ATTLIST choiceOption enumGuard           CDATA        #IMPLIED>
    <!-- Name of register. If not provided it is derived from variable -->
    <!ATTLIST choiceOption register            CDATA        #IMPLIED>
    <!-- How to format a raw value e.g. 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)' or '%s_s' -->
@@ -691,6 +704,10 @@
    <!ATTLIST binaryOption typeName            CDATA        #IMPLIED>
    <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
    <!ATTLIST binaryOption enumType            CDATA        #IMPLIED>
+   <!-- C #if expression to guard enum declaration -->
+   <!ATTLIST choiceOption enumGuard           CDATA        #IMPLIED>
+   <!-- Name of register. If not provided it is derived from variable -->
+   <!ATTLIST choiceOption register            CDATA        #IMPLIED>
    <!-- Text to add to enum body generated from choices -->
    <!ATTLIST binaryOption enumText            CDATA        #IMPLIED>
    <!-- Name of register. If not provided it is derived from variable -->
@@ -1033,17 +1050,20 @@
    <!-- Target file will be marked as derived -->
    <!ATTLIST copy derived              (true|false) #IMPLIED>
    
-<!ELEMENT signalMapping EMPTY >
-   <!-- Condition evaluated during parsing that enables processing of this option -->
-   <!ATTLIST signalMapping condition            CDATA    #IMPLIED>
-   <!-- Name of signal to dynamically map -->
-   <!ATTLIST signalMapping pin                  CDATA    #REQUIRED>
-   <!-- Dynamic expression enabling this mapping (assumed true if absent) -->
-   <!ATTLIST signalMapping expression           CDATA    #IMPLIED>
-   
+<!-- List of signal mappings available for given signal -->
 <!ELEMENT dynamicSignalMapping (signalMapping)* >
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST dynamicSignalMapping condition     CDATA    #IMPLIED>
    <!-- Name of signal to dynamically map -->
    <!ATTLIST dynamicSignalMapping signal        CDATA    #REQUIRED>
  
+<!-- Each signal mapping is checked in order and 1st enabled is used  -->   
+<!ELEMENT signalMapping EMPTY >
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST signalMapping condition            CDATA    #IMPLIED>
+   <!-- Name of pin that signal is mapped to if condition  is true.  
+        May be '-' to be unmapped, '*'' to use the SINGLE mapping available. -->
+   <!ATTLIST signalMapping pin                  CDATA    #REQUIRED>
+   <!-- Dynamic expression enabling this mapping (assumed true if absent) -->
+   <!ATTLIST signalMapping expression           CDATA    #IMPLIED>
+

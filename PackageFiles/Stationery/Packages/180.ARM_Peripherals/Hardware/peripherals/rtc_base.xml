@@ -16,7 +16,7 @@
       <choice value="true"  name="Enabled"  />
    </binaryOption>
 
-   <category name="ERCLK32K Selection" description="Control source of ERCLK32K clock (nominally 32kHz)">
+   <category name="ERCLK32K Selection" description="ERCLK32K clock Selection" >
       <aliasOption key="/PMC/system_low_power_clock"  optional="true" />
       <aliasOption key="/SIM/rtc_clkin_clock"         optional="true" locked="false" />
       <aliasOption key="/SIM/sim_sopt1_osc32ksel"     optional="true" locked="false" />

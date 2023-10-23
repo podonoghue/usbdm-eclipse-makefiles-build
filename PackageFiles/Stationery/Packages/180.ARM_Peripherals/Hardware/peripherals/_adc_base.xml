@@ -114,8 +114,9 @@
       locked="true"
       derived="true"
       units="Hz"
-      description="Frequency of ADC input Clock\n
-                   Based on current clock configuration" />
+      description="Frequency of ADC input Clock"
+      toolTip="Based on current clock configuration" 
+      />
 
    <intOption key="adcInternalClock"
       enabledBy="enablePeripheralSupport"
@@ -349,18 +350,20 @@
       <choice value="1" enum="1"  name="Use pretrigger 1 = SC1[1]/R[1]" />
    </binaryOption>
 
-   <binaryOption key="adc_cfg2_muxsel" description="Selects between A/B multiplexor inputs on some ADC channels"
+   <binaryOption key="adc_cfg2_muxsel" 
       enabledBy="enablePeripheralSupport"
       typeName="AdcMuxsel"
+      description="A/B multiplexor selection"
       toolTip="Some ADC inputs may be multiplexed to two pins e.g. adcCh4a and adcCh4b">
       <choice value="0" enum="A"  name="The multiplexor selects A channels" />
       <choice value="1" enum="B"  name="The multiplexor selects B channels" isDefault="true" />
    </binaryOption>
 
-   <binaryOption key="adc_sc3_adco" description="Selects between single and continuous conversion"
+   <binaryOption key="adc_sc3_adco" 
+      description="Single or continuous conversion"
       enabledBy="enablePeripheralSupport"
       typeName="AdcContinuous"
-      toolTip="When enabled, continuous conversion are triggered when the first conversion is initiated">
+      toolTip="Selects between single and continuous conversion">
       <choice value="0" enum="Disabled" name="Single conversion on each trigger" isDefault="true" />
       <choice value="1" enum="Enabled"  name="Continuous conversions after 1st trigger" />
    </binaryOption>

@@ -597,7 +597,7 @@ constexpr PcrValue analoguePcrValue(PcrValue op) {
 
 
 $(/PCR/extra_methods: // /GPIO/extra_methods Not found)
-
+#if 0
 /**
  * Port information
  * Information required to configure the PCR for a particular function
@@ -616,6 +616,7 @@ public:
                irqLevel(nvicPriority) {
    }
 };
+#endif
 
 /**
  * Pin information
@@ -986,7 +987,7 @@ public:
  * Code examples:
  * @code
  * // Create PCR type
- * using PortC_3 = USBDM::Pcr_T<USBDM::DEFAULT_PCR, NvicPriority_Normal, PTC3>;
+ * using PortC_3 = USBDM::Pcr_T<USBDM::DEFAULT_PCR, PTC3>;
  *
  * // Configure PCR
  * PortC_3::setPCR(PinPull_Up,PinDriveStrength_High,PinDriveMode_PushPull,PinAction_None,PinFilter_None,PinSlewRate_Fast,PinMux_3);
@@ -996,8 +997,6 @@ public:
  * @endcode
  *
  * @tparam defPcrValue           Default value for PCR (including MUX value)
- * @tparam defaultNvicPriority   Default interrupt priority e.g. NvicPriority_Normal.\n
- *                               NvicPriority_NotInstalled indicates PORT not configured for interrupts.
  * @tparam pinIndex              Pin index e.g. PTA3
  */
 template<PcrValue defPcrValue, PinIndex pinIndex>

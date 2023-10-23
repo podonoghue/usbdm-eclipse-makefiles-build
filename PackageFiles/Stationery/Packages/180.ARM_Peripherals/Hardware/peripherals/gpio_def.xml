@@ -4,14 +4,13 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="General Purpose Input/Output">
 
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
-   <constant key="suppressIrqArray"         type="Boolean" value="true"          />
-   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
-   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <constant key="suppressInstance"         type="Boolean" value="false"               />
+   <constant key="suppressIrqArray"         type="Boolean" value="true"                />
+   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"        />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"        />
+   <constant key="irq_call"                 type="String"  value="&quot;&quot;"        />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"               />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"                />
    <xi:include href="_enablePeripheral.xml"  />
    <title />
 
@@ -78,7 +77,7 @@
                    I   : 256" >
 
       <for keys="i" dim="32">
-         <template key="/PORT/PinIndex" namespace="all" discardRepeats="true" variables="/GPIO%(Name)/_present"
+         <template key="/PORT/PinIndex" namespace="all" discardRepeats="true" condition="/GPIO%(Name)/_present"
          ><![CDATA[
             \tPT%(Name)%(i) = %(pinIndex)+%(i),\n
          ]]></template>
@@ -108,7 +107,7 @@
    ]]></template>
    <for keys="Name" values="A;B;C;D;E;F;G;H;I" >
       <template key="/GPIO/AccessFunctions" namespace="all"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
-         variables="/GPIO%(Name)/_present"
+         condition="/GPIO%(Name)/_present"
       ><![CDATA[
          \t   if (pinIndex <= PinIndex::PT%(Name)31) {
          \t      return GPIO%(Name)_BasePtr;
@@ -141,7 +140,7 @@
    <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
 
       <template key="/PORT/AccessFunctions" namespace="all"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
-         variables="/GPIO%(Name)/_present"
+         condition="/GPIO%(Name)/_present"
       ><![CDATA[
          \t   if (pinIndex <= PinIndex::PT%(Name)31) {
          \t      return PORT%(Name)_BasePtr;
@@ -174,7 +173,7 @@
    <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
 
       <template key="/PORT/AccessFunctions" namespace="all"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
-         variables="/GPIO%(Name)/_present"
+         condition="/GPIO%(Name)/_present"
       ><![CDATA[
          \t   if (pinIndex <= PinIndex::PT%(Name)31) {
          \t      return SIM_SCGC5_PORT%(Name)_MASK;
@@ -202,13 +201,19 @@
       \t   if (pinIndex > PinIndex::MIN_PIN_INDEX) {\n
    ]]></template>
    <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
-
       <template key="/PORT/AccessFunctions" namespace="all"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
-         variables="/GPIO%(Name)/_present"
+         condition="/GPIO%(Name)/_present&amp;&amp;/GPIO%(Name)/_irqCount"
       ><![CDATA[
          \t      if (pinIndex <= PinIndex::PT%(Name)31) {
          \t         constexpr IRQn_Type PortIrqs[] = PORT%(Name)_IRQS;
          \t         return PortIrqs[0];
+         \t      }\n
+      ]]></template>
+      <template key="/PORT/AccessFunctions" namespace="all"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+         condition="/GPIO%(Name)/_present&amp;&amp;!/GPIO%(Name)/_irqCount"
+      ><![CDATA[
+         \t      if (pinIndex <= PinIndex::PT%(Name)31) {
+         \t         static_assert("Port does not support interrupts");
          \t      }\n
       ]]></template>
    </for>
@@ -237,7 +242,7 @@
    <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
 
       <template key="/PORT/AccessFunctions" namespace="all"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
-         variables="/GPIO%(Name)/_present"
+         condition="/GPIO%(Name)/_present"
       ><![CDATA[
          \t      if (pinIndex <= PinIndex::PT%(Name)31) {
          \t         return $(/GPIO%(Name)/irqHandlingMethod:false);
@@ -270,7 +275,7 @@
       derivedFrom="/PCR/nvic_irqLevel" >
    </choiceOption -->
 
-   <template namespace="usbdm"><![CDATA[
+   <template namespace="usbdm" condition="false" ><![CDATA[
       /* gpio_def.xml */
 
       #if defined(PCC_PCC_PORT$(_instance)_CGC_MASK)
@@ -381,7 +386,7 @@
    \t * @tparam polarity      Polarity of all pins. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
    \t */
    \ttemplate<int left, int right, uint32_t polarity=ActiveHigh>
-   \tclass $(_Class)Field : public GpioField_T<GPIO_DEFAULT_PCR, Port$(_instance)Info.irqLevel, PcrBase::pinIndexOf(PinIndex::PT$(_instance)0,left), PcrBase::pinIndexOf(PinIndex::PT$(_instance)0,right), polarity> {};\n\n
+   \tclass $(_Class)Field : public GpioField_T<GPIO_DEFAULT_PCR, PcrBase::pinIndexOf(PinIndex::PT$(_instance)0,left), PcrBase::pinIndexOf(PinIndex::PT$(_instance)0,right), polarity> {};\n\n
    ]]></template>
 
    <aliasOption key="dfer_register_present" optional="true" />

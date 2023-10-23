@@ -201,6 +201,7 @@
 
    <intOption key="spi_m_bits" condition="spi_m_bits_present"
       enabledBy="spi_c1_spe"
+      valueFormat="%s"
       typeName="int"
       description="Hardware compare value"
       toolTip="This value is compared to incoming data\n
@@ -308,6 +309,7 @@
 
    <setTemplate variables="spi_c2_spmie,spi_m_bits" codeGenCondition="enableGettersAndSetters"
       nonDefaultParams="2"
+      params=",matchValue"
    ><![CDATA[
       \t/**
       \t * Set %description0 , %description1
@@ -318,7 +320,7 @@
       %params) {
       \t
       \t      %register0 = (%register0 & ~%mask0) | %paramName0;
-      \t      %register1 = %paramName1;
+      \t      %register1 = uint8_t(%paramName1);
       \t}\n\n
    ]]></setTemplate>
 
@@ -399,7 +401,7 @@
       \t *   SpiMatchInterrupt_Enabled, 0x12, // Match interrupt - Enabled, Hardware compare value
       \t *
       \t *   NvicPriority_Normal,             // IRQ level for this peripheral - Normal
-      \t *   0,                               // Hardware compare value
+      \t *   spiCallback,                     // Match event call-back
       \t * };
       \t *
       \t * // Initialise $(_Class) from values specified above
@@ -856,7 +858,7 @@
       \t   constexpr Init(%paramType0 %paramName0, %paramType1 %paramName1, Types... rest) : Init(rest...) {
       \t
       \t      %registerName0 = (%registerName0&~%mask0) | %paramName0;
-      \t      %registerName1 = %paramName1;
+      \t      %registerName1 = uint8_t(%paramName1);
       \t   }
       \t\n
    ]]>
@@ -940,7 +942,7 @@
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" ><![CDATA[
    \t/**
    \t * Class representing $(_NAME) interface
    \t * <b>Example</b>

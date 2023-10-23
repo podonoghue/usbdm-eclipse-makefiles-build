@@ -521,12 +521,12 @@
       \t\n
    ]]></template>
    <for keys="n:b" values="1:0;2:8;3:16;4:24" >
-      <setTemplate key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-         variables="llwu_pf%(n)_wuf%(b)_present" >
+      <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+         condition="llwu_pf%(n)_wuf%(b)_present" >
       <![CDATA[
          \t      // Clear pin flags
-         \t      %register  = 0xFF;\n
-      ]]></setTemplate>
+         \t      llwu->PF%(n) = 0xFF;\n
+      ]]></template>
    </for>
    <for keys="i:n:b" values="0:1:0;1:2:4;2:3:8;3:4:12;4:5:16;5:6:20;6:7:24;7:8:28;" >
       <setTemplate key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"

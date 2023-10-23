@@ -679,7 +679,7 @@
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       /**
        * Class representing $(_NAME)

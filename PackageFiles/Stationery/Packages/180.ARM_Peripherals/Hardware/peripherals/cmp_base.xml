@@ -251,15 +251,15 @@
                sample rate determined by the FILT_PER to generate COUT.\n
                FILTER_CNT determines the filter sample count (width)">
       <!--                                                                                            cr1_en; cr1_we; cr1_se;filter_cnt;fpr_filt_per  -->
-      <choice value="0" name="1    Disabled"                         enum="Disabled"             ref="false ; false ; false ;     0    ;     0      ;"  />
-      <choice value="1" name="2a/b Continuous"                       enum="Continuous"           ref="true  ; false ; false ;     0    ;     0      ;"  />
-      <choice value="2" name="3a   Externally sampled, Non-Filtered" enum="External_NonFiltered" ref="true  ; false ; true  ;     1    ;     0      ;"  />
-      <choice value="3" name="3b   Internally sampled, Non-Filtered" enum="Internal_NonFiltered" ref="true  ; false ; false ;     1    ;            ;"  />
-      <choice value="4" name="4a   Externally sampled, Filtered"     enum="External_Filtered"    ref="true  ; false ; true  ;          ;     0      ;"  />
-      <choice value="5" name="4b   Internally sampled, Filtered"     enum="Internal_Filtered"    ref="true  ; false ; false ;          ;            ;"  />
-      <choice value="6" name="5a/b Windowed"                         enum="Windowed"             ref="true  ; true  ; false ;     0    ;     0      ;"  />
-      <choice value="7" name="6    Windowed, Re-sampled"             enum="Windowed_Resampled"   ref="true  ; true  ; false ;     1    ;            ;"  />
-      <choice value="8" name="7    Windowed, Filtered"               enum="Windowed_Filtered"    ref="true  ; true  ; false ;          ;            ;"  />
+      <choice value="0" name="1    Disabled"                         enum="Disabled"             ref="false ; false ; false ;     0    ;     0      "  />
+      <choice value="1" name="2a/b Continuous"                       enum="Continuous"           ref="true  ; false ; false ;     0    ;     0      "  />
+      <choice value="2" name="3a   Externally sampled, Non-Filtered" enum="External_NonFiltered" ref="true  ; false ; true  ;     1    ;     0      "  />
+      <choice value="3" name="3b   Internally sampled, Non-Filtered" enum="Internal_NonFiltered" ref="true  ; false ; false ;     1    ;            "  />
+      <choice value="4" name="4a   Externally sampled, Filtered"     enum="External_Filtered"    ref="true  ; false ; true  ;          ;     0      "  />
+      <choice value="5" name="4b   Internally sampled, Filtered"     enum="Internal_Filtered"    ref="true  ; false ; false ;          ;            "  />
+      <choice value="6" name="5a/b Windowed"                         enum="Windowed"             ref="true  ; true  ; false ;     0    ;     0      "  />
+      <choice value="7" name="6    Windowed, Re-sampled"             enum="Windowed_Resampled"   ref="true  ; true  ; false ;     1    ;            "  />
+      <choice value="8" name="7    Windowed, Filtered"               enum="Windowed_Filtered"    ref="true  ; true  ; false ;          ;            "  />
    </choiceOption>
 
    <binaryOption key="cmp_cr1_en"

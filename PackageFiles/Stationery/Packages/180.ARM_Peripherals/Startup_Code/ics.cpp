@@ -224,7 +224,7 @@ ErrorCode Ics::clockTransition(const ClockInfo &clockInfo) {
 
 #endif // /ICS/enablePeripheralSupport
 
-#if $(/ICS/enablePeripheralSupport) // !/ICS/enablePeripheralSupport
+#if $(/ICS/enablePeripheralSupport) // /ICS/enablePeripheralSupport
 /**
  * Update SystemCoreClock variable
  *
@@ -284,7 +284,7 @@ void Ics::SystemCoreClockUpdate(void) {
 
    SimInfo::updateSystemClocks(SystemIcsOutClock);
 }
-#endif
+#endif // /ICS/enablePeripheralSupport
  
 /**
  * Initialise ICS as part of startup sequence

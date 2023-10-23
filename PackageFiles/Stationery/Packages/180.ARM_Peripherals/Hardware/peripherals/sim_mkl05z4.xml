@@ -176,7 +176,6 @@
          <choice value="1,0,1"  name="Enabled in run and stop"       enum="EnabledInRun_Stop"      />
          <choice value="1,1,1"  name="Enabled in run only"           enum="EnabledInRun"           />
       </choiceOption>
-
    </category>
 
    <!-- ************* SOPT2 ****************** -->
@@ -205,7 +204,6 @@
 
       <aliasOption key="/OSC0/oscer_clock"               optional="true" />
       <aliasOption key="/MCG/system_mcgirclk_clock[]"    optional="true" />
-
    </category>
 
    <!-- ************* SOPT4 ****************** -->
@@ -359,28 +357,27 @@
    <!-- ************* Bus clock enables ****************** -->
 
    <category name="SCGC" description="Peripheral Clock Enables">
-      <for keys=  " reg : name  : Name  : isDefault"
+      <for keys=  " reg : name   : Name     : isDefault"
            values="
-                    6   : adc0    : Adc0    : false ;
-                    4   : cmp     : Cmp     : false ;
-                    4   : cmp0    : Cmp0    : false ;
-                    4   : i2c0    : I2c0    : false ;
-                    4   : i2c1    : I2c1    : false ;
-                    6   : ftf     : Ftf     : true  ;
-                    5   : porta   : Porta   : false ;
-                    5   : portb   : Portb   : false ;
-                    5   : lptmr   : Lptmr   : false ;
-                    5   : lpuart0 : Lpuart0 : false ;
-                    5   : tsi0    : Tsi0    : false ;
-                    6   : rtc     : Rtc     : false ;
-                    6   : dac0    : Dac0    : false ;
                     4   : spi0    : Spi0    : false ;
-                    6   : tpm0    : Tpm0    : false ;
+                    4   : cmp0    : Cmp0    : false ;
+                    4   : uart0   : Uart0   : false ;
+                    4   : i2c0    : I2c0    : false ;
+
+                    5   : portb   : Portb   : false ;
+                    5   : porta   : Porta   : false ;
+                    5   : tsi0    : Tsi0    : false ;
+                    5   : lptmr   : Lptmr   : false ;
+                    6   : dac0    : Dac0    : false ;
+                    6   : rtc     : Rtc     : false ;
+
+                    6   : adc0    : Adc0    : false ;
                     6   : tpm1    : Tpm1    : false ;
+                    6   : tpm0    : Tpm0    : false ;
                     6   : pit     : Pit     : false ;
                     6   : dmamux0 : Dmamux0 : false ;
-                    4   : uart0   : Uart0   : false ;
-                    4   : vref    : Vref    : false ;
+                    6   : ftf     : Ftf     : true  ;
+
                     7   : dma     : Dma     : false ;
       ">
          <binaryOption key="sim_scgc%(reg)_%(name)" condition="sim_scgc%(reg)_%(name)_present"
@@ -425,6 +422,15 @@
                units="Hz"
                description="Clock out"
                toolTip="Clock available on CLKOUT pin" />
+
+            <choiceOption key="sim_sopt2_pllfllsel_Fixed[%(n)]"
+               target="system_peripheral_clock[%(n)]"
+               description="Peripheral Clock"
+               toolTip="Clock for various peripherals (LPUART, TPM etc.)\n
+                        If there is a peripheral clock divider then this is the\n
+                        Frequency of the undivided peripheral clock">
+               <choice value="0"  name="MCGFLLCLK clock"   ref="/MCG/system_mcgfllclk_clock[%(n)]"     enum="McgFllClk"  code="SystemMcgFllClock"   isDefault="true" />
+            </choiceOption>
 
             <intOption key="system_peripheral_clock[%(n)]"
                enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
@@ -563,7 +569,6 @@
                toolTip="Clocks the flash memory\n
                         Divides Core Clock to generate system_flash_clock." />
          </category>
-
       </aliasCategoryOption>
    </for>
 

@@ -119,7 +119,8 @@
       enabledBy="enablePeripheralSupport"
       target="inputClockFrequency"
       typeName="LptmrClockSel"
-      toolTip="Clock source for LPTMR">
+      description="Clock source for LPTMR"
+      toolTip="Selects the clock source for LPTMR">
       <choice value="0" name="MCG Internal Reference Clock (MCGIRCLK)"        enum="Mcgirclk" ref="/MCG/system_mcgirclk_clock[0]" code="McgInfo::getMcgIrClock()"  />
       <choice value="1" name="Low power oscillator (LPO - 1kHz)"              enum="Lpoclk"   ref="/PMC/system_low_power_clock"   code="PmcInfo::getLpoClock()"    isDefault="true" />
       <choice value="2" name="32kHz Clock Source (ERCLK32)"                   enum="Erclk32"  ref="/SIM/system_erclk32k_clock"    code="SimInfo::getErc32kClock()" />

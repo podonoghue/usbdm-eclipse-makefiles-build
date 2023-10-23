@@ -942,7 +942,7 @@
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" ><![CDATA[
    \t/**
    \t * Class representing $(_NAME) interface
    \t * <b>Example</b>

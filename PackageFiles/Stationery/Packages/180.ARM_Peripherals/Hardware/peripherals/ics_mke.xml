@@ -20,6 +20,7 @@
    <constant key="FBILP" value="4" type="Long" />
    <constant key="FBELP" value="5" type="Long" />
 
+
    <clockSelectionOption key="currentClockConfig"
       derived="true"
       description="Active clock selection"
@@ -392,42 +393,42 @@
             enumType="uint8_t"
             valueFormat="%s"
             description="ICS Clock Mode"
-            toolTip="FLL Engaged Internal(FEI)\n
+            toolTip="Selects the basic clock mode for the Clock generator" >
+            <choice name="FLL Engaged Internal (FEI)"               enum="FEI"   code="IcsClockMode_FEI"   value="0"
+               toolTip="FLL Engaged Internal(FEI)\n
                      In FEI mode, ICSOUT is derived from the FLL clock (DCOCLK) that is controlled by the Internal Reference Clock (IRC).\n
-                     The FLL loop will lock the DCO frequency to the FLL factor (1280) times the internal reference frequency.\n
-                     \n
-                     FLL Engaged External(FEE)\n
+                     The FLL loop will lock the DCO frequency to the FLL factor (1280) times the internal reference frequency."
+            />
+            <choice name="FLL Engaged External (FEE)"               enum="FEE"   code="IcsClockMode_FEE"   value="1"
+               toolTip="FLL Engaged External(FEE)\n
                      In FEE mode, ICSOUT is derived from the FLL clock (DCOCLK) that is controlled by the external reference clock. The FLL loop\n
                      will lock the DCO frequency to the FLL factor (1280) times the external reference frequency, as specified by the C1[RDIV] and\n
-                     OSC.C2[RANGE].\n
-                     \n
-                     FLL Bypassed Internal(FBI)\n
+                     OSC.C2[RANGE]."
+            />
+            <choice name="FLL bypassed internal (FBI)"              enum="FBI"   code="IcsClockMode_FBI"   value="2"
+               toolTip="FLL Bypassed Internal(FBI)\n
                      In FBI mode, the ICSOUT clock is derived either from the internal reference clock,\n
                      as selected by the C2[IRCS] bit. The FLL is operational but its output is not used. This mode is useful to allow the FLL\n
                      to acquire its target frequency while the ICSOUT clock is driven from the C2[IRCS] selected internal reference clock. The\n
                      FLL clock (DCOCLK) is controlled by the internal reference clock, and the DCO clock frequency locks to a multiplication\n
-                     factor (1280) times the internal reference frequency.\n
-                     \n
-                     FLL Bypassed External(FBE)\n
+                     factor (1280) times the internal reference frequency."
+            />
+            <choice name="FLL bypassed external (FBE)"              enum="FBE"   code="IcsClockMode_FBE"   value="4"
+               toolTip="FLL Bypassed External(FBE)\n
                      In FBE mode, the ICSOUT clock is derived from the external reference clock. The FLL is operational but its output is not\n
                      used. This mode is useful to allow the FLL to acquire its target frequency while the ICSOUT clock is driven from the\n
                      external reference clock. The FLL clock (DCOCLK) is controlled by the external reference clock, and the DCO clock frequency\n
                      locks to a multiplication factor (1280) times the divided external reference\n
-                     frequency.\n
-                     \n
-                     FLL bypassed internal low power (FBILP)\n
-                     In FBILP mode, ICSOUT is derived from the internal reference clock. The FLL is disabled\n
-                     \n
-                     FLL bypassed external low power (FBELP)\n
-                     In FBELP mode, ICSOUT is derived from the external reference clock. The FLL is disabled\n
-                     " >
-
-            <choice name="FLL Engaged Internal (FEI)"               enum="FEI"   code="IcsClockMode_FEI"   value="0" />
-            <choice name="FLL Engaged External (FEE)"               enum="FEE"   code="IcsClockMode_FEE"   value="1" />
-            <choice name="FLL bypassed internal (FBI)"              enum="FBI"   code="IcsClockMode_FBI"   value="2" />
-            <choice name="FLL bypassed external (FBE)"              enum="FBE"   code="IcsClockMode_FBE"   value="4" />
-            <choice name="FLL bypassed low power internal (FBILP)"  enum="FBILP" code="IcsClockMode_FBILP" value="3" />
-            <choice name="FLL bypassed low power external (FBELP)"  enum="FBELP" code="IcsClockMode_FBELP" value="5" />
+                     frequency."
+            />
+            <choice name="FLL bypassed low power internal (FBILP)"  enum="FBILP" code="IcsClockMode_FBILP" value="3"
+               toolTip="FLL bypassed internal low power (FBILP)\n
+                     In FBILP mode, ICSOUT is derived from the internal reference clock. The FLL is disabled."
+            />
+            <choice name="FLL bypassed low power external (FBELP)"  enum="FBELP" code="IcsClockMode_FBELP" value="5"
+               toolTip="FLL bypassed external low power (FBELP)\n
+                     In FBELP mode, ICSOUT is derived from the external reference clock. The FLL is disabled."
+            />
          </choiceOption>
 
          <category name="Clock monitors"
@@ -723,56 +724,6 @@
    </for>
 
 <!--   ========== Methods =============================== -->
-
-   <template namespace="usbdm" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
-      \t/*
-      \t * Global clocks
-      \t */
-      \t\n
-   ]]></template>
-   <template namespace="usbdm" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
-      \t/*
-      \t * Global clock constants
-      \t * These are provided when minimal clock generator code is used.
-      \t * They assume no clock changes are made after startup.
-      \t * Values provided are from USBDM configuration.
-      \t */
-      \t\n
-   ]]></template>
-
-   <for keys=" clock                       : name "
-      values=" system_icsffclk_clock[0]    : SystemIcsFFClock;
-               system_icsoutclk_clock[0]   : SystemIcsOutClock;
-               system_icsfllclk_clock[0]   : SystemIcsFllClock
-         ">
-      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport"
-                   tooltipPadding="x*xx" ><![CDATA[
-         \t/**
-         \t *  %description
-         \t *  %tooltip
-         \t */
-         \textern volatile uint32_t %(name);
-         \t\n
-      ]]></setTemplate>
-      <setTemplate namespace="all" key="/$(_BASENAME)/clocks" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport"
-                   tooltipPadding="x*xx" ><![CDATA[
-         \t/**
-         \t *  %description
-         \t *  %tooltip
-         \t */
-         \tvolatile uint32_t %(name);
-         \t\n
-      ]]></setTemplate>
-      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport"
-                   tooltipPadding="x*xx" ><![CDATA[
-         \t/**
-         \t *  %description
-         \t *  %tooltip
-         \t */
-         \tconstexpr uint32_t %(name) = %valueExpression;
-         \t\n
-      ]]></setTemplate>
-   </for>
 
    <initialValueTemplate codeGenCondition="!enablePeripheralSupport"
       variables="ics_c2_bdiv[0],ics_c2_lp[0]"
@@ -1072,6 +1023,59 @@
    ]]>
    </template>
 
+   <!--
+      Global clock frequencies
+   -->
+   <template namespace="usbdm" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+      \t/*
+      \t * Global clocks
+      \t */
+      \t\n
+   ]]></template>
+   <template namespace="usbdm" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
+      \t/*
+      \t * Global clock constants
+      \t * These are provided when minimal clock generator code is used.
+      \t * They assume no clock changes are made after startup.
+      \t * Values provided are from USBDM configuration.
+      \t */
+      \t\n
+   ]]></template>
+
+   <for keys=" clock                       : name "
+      values=" system_icsffclk_clock[0]    : SystemIcsFFClock;
+               system_icsoutclk_clock[0]   : SystemIcsOutClock;
+               system_icsfllclk_clock[0]   : SystemIcsFllClock
+         ">
+      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport"
+                   tooltipPadding="x*xx" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \textern volatile uint32_t %(name);
+         \t\n
+      ]]></setTemplate>
+      <setTemplate namespace="all" key="/$(_BASENAME)/clocks" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport"
+                   tooltipPadding="x*xx" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \tvolatile uint32_t %(name);
+         \t\n
+      ]]></setTemplate>
+      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport"
+                   tooltipPadding="x*xx" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \tconstexpr uint32_t %(name) = %valueExpression;
+         \t\n
+      ]]></setTemplate>
+   </for>
+
    <!-- ************* Common ****************** -->
 
    <template key="/ICS/Includes" namespace="all"  ><![CDATA[
@@ -1086,7 +1090,7 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.IcsValidator" dim="/SIM/numberOfClockSettings" >
    </validate>
 
-   <projectActionList id = "ics_files" >
+   <projectActionList id="ics_files" >
       <copy source="Project_Headers/ics-mke.h"         target="Project_Headers/ics.h"                 overwrite="true"  derived="true" />
       <copy source="Startup_Code/ics.cpp"              target="Startup_Code/ics.cpp"                  overwrite="true"  derived="true" />
       <copy source="Snippets/ics-test.cpp"             target="Snippets/ics-test.cpp"                 overwrite="true"  derived="true" />
