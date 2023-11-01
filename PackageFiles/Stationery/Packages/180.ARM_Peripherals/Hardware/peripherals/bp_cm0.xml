@@ -4,9 +4,9 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Breakpoint Unit">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
-   <xi:include href="_mapPinsOption.xml"/>
+   <xi:include href="mapPinsOption.xml"/>
 
    <intOption key="bp_ctrl_key" condition="bp_ctrl_key_present"
       description="KEY bit. On any write to FP_CTRL, the FPB unit ignores the write unless this bit is 1. This bit is RAZ"
@@ -52,7 +52,7 @@
       bp_ctrl_enable:CtrlEnable;
       bp_comp_bp_match:CompBpMatch;
       bp_comp_enable:CompEnable">
-      <setTemplate variables="%(field)"
+      <variableTemplate variables="%(field)"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -62,7 +62,7 @@
          \tstatic void configure%(name)(%params) {
          \t   %fieldAssignment
          \t}\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== BP Init class =============================== -->
@@ -125,19 +125,19 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="bp_ctrl_key,bp_ctrl_enable"
    ><![CDATA[
       \t   /// FlashPatch Control Register
       \t   uint32_t ctrl = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="bp_comp_bp_match,bp_comp_comp,bp_comp_enable"
    ><![CDATA[
       \t   /// FlashPatch Comparator Register %s
       \t   uint32_t comp = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Configure methods -->
 
@@ -175,7 +175,7 @@
             bp_comp_bp_match;
             bp_comp_enable
             ">
-      <setTemplate namespace="usbdm"
+      <variableTemplate namespace="usbdm"
          variables="%(r)"
          linePadding="xxx">
       <![CDATA[
@@ -194,7 +194,7 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 <!--   Constructors -->
@@ -204,7 +204,7 @@
             bp_ctrl_key;
             bp_comp%s_comp
             ">
-      <setTemplate namespace="usbdm"
+      <variableTemplate namespace="usbdm"
          variables="%(r)"
          linePadding="xxx">
       <![CDATA[
@@ -223,12 +223,12 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate
+   <variableTemplate
       separator=","
       terminator=","
       variables="
@@ -246,7 +246,7 @@
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm">
       <![CDATA[

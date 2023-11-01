@@ -4,7 +4,6 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
    <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
@@ -19,7 +18,7 @@
    </if>
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true" />
-   <xi:include href="_enablePeripheral.xml" />
+   <xi:include href="enablePeripheral.xml" />
    <title />
 
 <!-- ==================== Constants ==================== -->
@@ -215,6 +214,7 @@
 
       <intOption key="pit_ldval_tsv[%(ch)]" condition="pit_ldval_tsv_present"
          enabledBy="pit_tctrl_ten[%(ch)]"
+         valueFormat="%s"
          typeName="Ticks &amp;"
          units="ticks"
          description="Reload value channel %(ch)"
@@ -264,7 +264,7 @@
         values="
       pit_mcr_mdis : Enable;
       pit_mcr_frz  : DebugMode" >
-      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -284,7 +284,7 @@
          \t   return %paramType(%register&%mask);
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== static/member functions =============================== -->
@@ -530,68 +530,6 @@
       </template>
    </for>
 
-<!--   ========== PIT ChannelInit class =============================== -->
-
-   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
-   <![CDATA[
-      \t/**
-      \t * Class used to do initialisation of the $(_Baseclass)
-      \t *
-      \t * This class has a templated constructor that accepts various values.
-      \t *
-      \t * @note This constructor may be used to create a const instance in Flash
-      \t *
-      \t * Example:
-      \t * @code
-      \t * static const $(_Class)::Init $(_name)Init {
-      \t *
-      \t *   // Setup values
-      \t *   PitMcrMdis_ClockEnabled                   // Module Disable,
-      \t *   PitMcrFrz_TimersRunInDebug                // Freeze,
-      \t *
-      \t * };
-      \t *
-      \t * // Initialise $(_Class) from values specified above
-      \t * $(_Class)::configure($(_name)Init)
-      \t * @endcode
-      \t */
-   ]]>
-   </template>
-
-   <template key="pitchannel_init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
-   <![CDATA[
-      \t/**
-      \t * Class used to do initialisation of a $(_Baseclass) channel
-      \t *
-      \t * This class has a templated constructor that accepts various values:
-      \t *
-      \t * @note This constructor may be used to create a const instance in ROM
-      \t *
-      \t * Example:
-      \t * @code
-      \t * // Initialisation values for $(_Class) channel
-      \t * // Parameters available may vary with device - see $(_Class)::DefaultChannelInitValues[] for relevant example
-      \t * static const Pit::ChannelInit channelInit {
-      \t *       PitChannelNum_0,
-      \t *
-      \t *       PitChannelEnable_Enabled , // Timer Channel Enable - Channel enabled
-      \t *       PitChannelChain_Disabled , // Chain with previous channel - Timers are not chained
-      \t *       PitChannelIrq_Disabled ,   // Timer Interrupt Enable - Interrupts are disabled
-      \t *       callBackFunction,          // Call-back function to use
-      \t *       NvicPriority_Normal ,      // IRQ level for this peripheral - Normal
-      \t *       3999_ticks,                // Reload value for channel (in ticks or seconds)
-      \t *
-      \t *       Pit::DefaultChannelInitValues[1], // An existing declaration may be referenced as the last item
-      \t *                                            This becomes a base value modified by above values.
-      \t * };
-      \t *
-      \t * // Initialise PIT channel from values specified above
-      \t * Pit::configure(channelInit)
-      \t * @endcode
-      \t */
-   ]]>
-   </template>
-
    <template namespace="usbdm" >
    <![CDATA[
       class $(_Baseclass)BasicInfo {
@@ -600,13 +538,13 @@
    ]]>
    </template>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
        \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
        \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
    <![CDATA[
@@ -733,7 +671,27 @@
 <!-- Common Initialisation class -->
    <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
-      $(init_description)
+      \t/**
+      \t * Class used to do initialisation of the $(_Baseclass)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_Class)::Init $(_name)Init {
+      \t *
+      \t *   // Setup values
+      \t *   PitMcrMdis_ClockEnabled                   // Module Disable,
+      \t *   PitMcrFrz_TimersRunInDebug                // Freeze,
+      \t *
+      \t * };
+      \t *
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_name)Init)
+      \t * @endcode
+      \t */
       \tclass Init {
       \t
       \tpublic:
@@ -752,12 +710,12 @@
 
 <!--  Common Initialisation class member variables -->
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="pit_mcr_mdis,pit_mcr_frz"
    ><![CDATA[
       \t   /// Module Control Register
       \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!-- Common Initialisation class configure methods -->
 
@@ -819,7 +777,7 @@
 <!--  Common Initialisation class constructors -->
 
    <for keys="v" values="pit_mcr_mdis; pit_mcr_frz">
-      <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(v)"
          linePadding="xxx"
        ><![CDATA[
@@ -836,21 +794,50 @@
          \t
          \t      this->%registerName = (this->%registerName&~%mask) | %paramExpression;
          \t   }\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!-- End of Common Initialisation class -->
-   <setTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
    ><![CDATA[
       \t};// class $(_Baseclass)BasicInfo::Init
       \t\n
       ]]>
-   </setTemplate>
+   </variableTemplate>
 
-<!-- Channel Initialisation class -->
+<!--   ========== PIT ChannelInit class =============================== -->
+
    <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
    <![CDATA[
-      $(pitchannel_init_description)
+      \t/**
+      \t * Class used to do initialisation of a $(_Baseclass) channel
+      \t *
+      \t * This class has a templated constructor that accepts various values:
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * @code
+      \t * // Initialisation values for $(_Class) channel
+      \t * // Parameters available may vary with device - see $(_Class)::DefaultChannelInitValues[] for relevant example
+      \t * static const Pit::ChannelInit channelInit {
+      \t *       PitChannelNum_0,
+      \t *
+      \t *       PitChannelEnable_Enabled , // Timer Channel Enable - Channel enabled
+      \t *       PitChannelChain_Disabled , // Chain with previous channel - Timers are not chained
+      \t *       PitChannelIrq_Disabled ,   // Timer Interrupt Enable - Interrupts are disabled
+      \t *       callBackFunction,          // Call-back function to use
+      \t *       NvicPriority_Normal ,      // IRQ level for this peripheral - Normal
+      \t *       3999_ticks,                // Reload value for channel (in ticks or seconds)
+      \t *
+      \t *       Pit::DefaultChannelInitValues[1], // An existing declaration may be referenced as the last item
+      \t *                                            This becomes a base value modified by above values.
+      \t * };
+      \t *
+      \t * // Initialise PIT channel from values specified above
+      \t * Pit::configure(channelInit)
+      \t * @endcode
+      \t */
       \tclass ChannelInit {
       \t
       \tpublic:
@@ -869,47 +856,202 @@
 
 <!-- Channel Initialisation class member variables -->
 
-   <setTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="pit_ldval_tsv[]"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName = 0_ticks;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/secondsSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/secondsSupport"
       variables="pit_period[]"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName = 0_s;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="pit_tctrl_ten[],pit_tctrl_chn[],pit_tctrl_tie[]"
    ><![CDATA[
       \t   /// Timer Control Register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName0 = %symbolicExpression1;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="pit_channelNumber"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName = PitChannelNum_None;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
+
+<!-- Channel Initialisation class Constructors -->
+
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
+      \t
+      \t      this->%paramName0 = %paramExpression;
+      \t   }\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
+      \t
+      \t      %registerName = %paramExpression;
+      \t   }\n\n
+   ]]></variableTemplate>
+
+   <for keys="r" values="pit_channelNumber;pit_ldval_tsv[]" >
+      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+         variables="%(r)"
+         linePadding="xxx"
+       ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
+         \t
+         \t      %registerName = %paramExpression;
+         \t   }
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;secondsSupport"
+      variables="pit_period[]"
+      linePadding="xxx"
+    ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
+      \t
+      \t      %registerName = %paramExpression;
+      \t   }\n\n
+   ]]></variableTemplate>
+
+   <for keys="r" values="pit_tctrl_ten[];pit_tctrl_tie[];pit_tctrl_chn[1]" >
+      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+         variables="%(r)"
+         linePadding="xxx"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </variableTemplate>
+   </for>
+
+<!--   Default Initialisation value -->
+
+   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      separator=","
+      terminator=","
+      variables="
+            pit_mcr_mdis,
+            pit_mcr_frz
+         "
+   ><![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]>
+   </variableTemplate>
+
+   <template codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+      \t/**
+      \t * Default initialisation values for PIT channels
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr ChannelInit DefaultChannelInitValues[] = {\n
+   ]]></template>
+
+   <for keys="ch" dim="NumChannels" >
+      <variableTemplate  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+         separator=","
+         terminator=","
+         variables="
+            pit_tctrl_ten[%(ch)],
+            pit_tctrl_chn[%(ch)],
+            pit_tctrl_tie[%(ch)],
+            pit_ldval_tsv[%(ch)]"
+         >
+      <![CDATA[
+         \t   {
+         \t   PitChannelNum_%(ch),
+         %initExpression
+         \t   },\n
+      ]]></variableTemplate>
+   </for>
+
+   <template codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <![CDATA[
+      \t}; // DefaultChannelInitValues\n\n
+   ]]>
+   </template>
 
 <!-- Channel Initialisation class configure method -->
 
@@ -986,162 +1128,7 @@
       \t\n
    ]]></template>
 
-<!-- Channel Initialisation class Constructors -->
-
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
-      variables="irqHandlingMethod"
-      linePadding="xxx"
-    ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
-      \t
-      \t      this->%paramName0 = %paramExpression;
-      \t   }\n\n
-   ]]></setTemplate>
-
-   <constructorTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
-      variables="/PCR/nvic_irqLevel"
-      linePadding="xxx"
-    ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
-      \t
-      \t      %registerName = %paramExpression;
-      \t   }\n\n
-   ]]></constructorTemplate>
-
-   <for keys="r" values="pit_channelNumber;pit_ldval_tsv[]" >
-      <constructorTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-         variables="%(r)"
-         linePadding="xxx"
-       ><![CDATA[
-         \t   /**
-         \t    * Constructor for %description
-         \t    *
-         \t    * @tparam   Types
-         \t    * @param    rest
-         \t    *
-         %paramDescription
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
-         \t
-         \t      %registerName = %paramExpression;
-         \t   }
-         \t\n
-      ]]></constructorTemplate>
-   </for>
-
-   <constructorTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      variables="pit_period[]"
-      linePadding="xxx"
-    ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
-      \t
-      \t      %registerName = %paramExpression;
-      \t   }\n\n
-   ]]></constructorTemplate>
-
-   <for keys="r" values="pit_tctrl_ten[];pit_tctrl_tie[];pit_tctrl_chn[1]" >
-      <constructorTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-         variables="%(r)"
-         linePadding="xxx"
-      ><![CDATA[
-         \t   /**
-         \t    * Constructor for %description
-         \t    *
-         \t    * @tparam   Types
-         \t    * @param    rest
-         \t    *
-         %paramDescription
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
-         \t
-         \t      %registerName = (%registerName&~%mask) | %paramExpression;
-         \t   }
-         \t\n
-      ]]>
-      </constructorTemplate>
-   </for>
-
-<!--   Default Initialisation value -->
-
-   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      separator=","
-      terminator=","
-      variables="
-            pit_mcr_mdis,
-            pit_mcr_frz
-         "
-   ><![CDATA[
-      \t/**
-      \t * Default initialisation value for $(_Class)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
-      \t};\n\n
-   ]]>
-   </initialValueTemplate>
-
-   <template codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
-      \t/**
-      \t * Default initialisation values for PIT channels
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr ChannelInit DefaultChannelInitValues[] = {\n
-   ]]></template>
-
-   <for keys="ch" dim="NumChannels" >
-      <setTemplate  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-         separator=","
-         terminator=","
-         variables="
-            pit_tctrl_ten[%(ch)],
-            pit_tctrl_chn[%(ch)],
-            pit_tctrl_tie[%(ch)],
-            pit_ldval_tsv[%(ch)]"
-         >
-      <![CDATA[
-         \t   {
-         \t   PitChannelNum_%(ch),
-         %initExpression
-         \t   },\n
-      ]]></setTemplate>
-   </for>
-
-   <template codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
-   <![CDATA[
-      \t}; // DefaultChannelInitValues\n\n
-   ]]>
-   </template>
-
-   <template namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
    ><![CDATA[
       \t};// class $(_Baseclass)BasicInfo::ChannelInit
       \t\n

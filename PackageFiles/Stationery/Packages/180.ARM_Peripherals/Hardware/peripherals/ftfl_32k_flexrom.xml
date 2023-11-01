@@ -5,21 +5,21 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module" >
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
    <stringOption name="Flash Type" key="/Flash/FlashType" value="ftfl" derived="true" locked="true" />
 
-   <stringOption key="pflash_sector_size" locked="true" derived="true" modify="true"
+   <intOption key="pflash_sector_size" locked="true" derived="true" modify="true"
       description="Sector size for program flash (minimum erase element)"/>
 
-   <stringOption key="pflash_phrase_size" locked="true" derived="true" modify="true"
+   <intOption key="pflash_phrase_size" locked="true" derived="true" modify="true"
       description="Phrase size for program flash (minimum program element)"/>
 
-   <stringOption key="dflash_sector_size" locked="true" derived="true" modify="true"
+   <intOption key="dflash_sector_size" locked="true" derived="true" modify="true"
       description="Sector size for data flash (minimum erase element)"
       toolTip="Only for device with FlexNVM" />
 
-   <stringOption key="dflash_phrase_size" locked="true" derived="true" modify="true"
+   <intOption key="dflash_phrase_size" locked="true" derived="true" modify="true"
       description="Phrase size for data flash (minimum program element)"
       toolTip="Only for device with FlexNVM" />
 
@@ -144,9 +144,9 @@
       \tstatic constexpr SplitSel partitionSplit = SplitSel_disabled;\n\n
    ]]></template>
 
-   <xi:include href="_irqOption.xml"/>
+   <xi:include href="irqOption.xml"/>
 
-   <xi:include href="_clockOption.xml"/>
+   <xi:include href="clockOption.xml"/>
 
    <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator"/>
 

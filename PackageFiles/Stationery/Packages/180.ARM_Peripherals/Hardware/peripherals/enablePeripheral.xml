@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
-<!-- _mapPinsOption.xml -->
+<!-- mapPinsOption.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
@@ -110,7 +110,7 @@
 
    <!-- Template is added to class within pin_mapping.h -->
    <template ><![CDATA[
-      \t/* Template _enablePeripheral  */
+      \t/* Template enablePeripheral  */
       \t
       \t//! Configure peripheral in start-up
       \tstatic constexpr bool configurePeripheralInStartUp = $(configurePeripheralInStartUp:false);\n\n
@@ -134,7 +134,7 @@
    ]]></template>
 
    <!-- Template is added to peripheral classes -->
-   <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" condition="/PCR/mux_present" ><![CDATA[
+   <template condition="/PCR/mux_present&amp;&amp;_hasPcrTable" ><![CDATA[
       // Template /$(_BASENAME)/classInfo
 
       \t/**
@@ -145,8 +145,8 @@
       \tstatic void configureAllPins() {
       \t
       \t   // Configure pins if selected and not already locked
-      \t   if constexpr (Info::mapPinsOnEnable) {
-      \t      Info::initPCRs();
+      \t   if constexpr (mapPinsOnEnable) {
+      \t      initPCRs();
       \t   }
       \t}
 
@@ -160,43 +160,10 @@
       \tstatic void disableAllPins() {
       \t
       \t   // Disable pins if selected and not already locked
-      \t   if constexpr (Info::mapPinsOnEnable) {
-      \t      Info::clearPCRs();
+      \t   if constexpr (mapPinsOnEnable) {
+      \t      clearPCRs();
       \t   }
       \t}
-      \t\n
-   ]]></template>
-
-   <!-- Template is added to peripheral classes -->
-   <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" ><![CDATA[
-      \t/**
-      \t * Basic enable of $(_BASENAME)
-      \t * Includes enabling clock and configuring all mapped pins if mapPinsOnEnable is selected in configuration
-      \t */
-      \tstatic void enable() {
-      \t   Info::enableClock();\n
-   ]]></template>
-   <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" condition="/PCR/mux_present" ><![CDATA[
-      \t   configureAllPins();\n
-   ]]></template>
-   <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" ><![CDATA[
-      \t}
-
-      \t/**
-      \t * Disables the clock to $(_BASENAME) and all mapped pins
-      \t */
-      \tstatic void disable() {
-      \t   $(disable_interrupts_code: )
-      \t   $(disable_peripheral: )\n
-   ]]></template>
-   <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" condition="/PCR/mux_present" ><![CDATA[
-      \t   disableAllPins();
-      \t\n
-   ]]></template>
-   <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" ><![CDATA[
-      \t   Info::disableClock();
-      \t}
-      \t// End Template /$(_BASENAME)/classInfo
       \t\n
    ]]></template>
 
@@ -315,37 +282,34 @@
       </choiceOption>
 
       <!-- Display here (wherever the original) -->
-      <aliasOption key="irqLevel"          locked="false" />
+      <aliasOption key="irqLevel" locked="false" />
 
-      <initialValueTemplate variables="/$(_BASENAME)/irqHandlingMethod,irqLevel" condition="!suppressIrqArray" ><![CDATA[
+      <variableTemplate variables="/$(_BASENAME)/irqHandlingMethod,irqLevel" condition="!suppressIrqArray" ><![CDATA[
          \t//! IRQ numbers for hardware
          \tstatic constexpr IRQn_Type irqNums[]  = $(_NAME)_IRQS;
          \t
          \t//! Number of IRQs for hardware
          \tstatic constexpr uint32_t irqCount  = sizeofArray(irqNums);
          \t\n
-      ]]></initialValueTemplate>
+      ]]></variableTemplate>
 
-      <initialValueTemplate variables="/$(_BASENAME)/irqHandlingMethod,irqLevel" ><![CDATA[
+      <variableTemplate variables="/$(_BASENAME)/irqHandlingMethod,irqLevel" ><![CDATA[
          \t//! Default IRQ level
          \tstatic constexpr NvicPriority irqLevel =  %symbolicExpression1;
          \t\n
-      ]]></initialValueTemplate>
+      ]]></variableTemplate>
 
-      <constant key="enable_interrupts_code"  value="&quot;enableNvicInterrupts();&quot;"   type="String"   />
-      <constant key="disable_interrupts_code" value="&quot;disableNvicInterrupts();&quot;"  type="String"   />
-
-      <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="irqHandlingMethod"
       ><![CDATA[
           \t//! Class based callback handler has been installed in vector table for this instance
           \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
           \t\n
-      ]]></initialValueTemplate>
+      ]]></variableTemplate>
 
    </if> <!-- condition="_irqCount" -->
 
-   <template condition="clockEnable"  codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template condition="clockEnable" codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t *  Enable clock to $(_Class)
       \t */
@@ -358,6 +322,42 @@
       \t */
       \tstatic void disableClock() {
       \t   $(clockDisable)
+      \t}
+      \t\n
+   ]]></template>
+
+   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t/**
+      \t * Basic enable of $(_Class)
+      \t * Includes enabling clock and configuring all mapped pins if mapPinsOnEnable is selected in configuration
+      \t */
+      \tstatic void enable() {\n
+   ]]></template>
+   <template codeGenCondition="enablePeripheralSupport" condition="clockEnable" ><![CDATA[
+      \t   enableClock();\n
+   ]]></template>
+   <template codeGenCondition="enablePeripheralSupport" condition="/PCR/mux_present&amp;&amp;_hasPcrTable" ><![CDATA[
+      \t   configureAllPins();\n
+   ]]></template>
+   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t}
+      \t
+      \t/**
+      \t * Disables the clock to $(_Class) and all mapped pins
+      \t */
+      \tstatic void disable() {
+      \t   $(disable_peripheral: )\n
+   ]]></template>
+   <template codeGenCondition="irqHandlingMethod" condition="_irqCount&amp;&amp;!suppressIrqArray" ><![CDATA[
+      \t   NVIC_DisableIRQ(irqNums[0]);\n
+   ]]></template>
+   <template codeGenCondition="enablePeripheralSupport" condition="/PCR/mux_present&amp;&amp;_hasPcrTable" ><![CDATA[
+      \t   disableAllPins();\n
+   ]]></template>
+   <template codeGenCondition="enablePeripheralSupport" condition="clockEnable" ><![CDATA[
+      \t   disableClock();\n
+   ]]></template>
+   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t}
       \t\n
    ]]></template>
@@ -453,11 +453,12 @@
       \tstatic constexpr uint32_t baseAddress = $(_NAME)_BasePtr;
       \t
       \t//! Hardware base pointer
-      \tstatic constexpr HardwarePtr<$(_BASENAME)_Type> $(_basename) = baseAddress;
+      \tstatic constexpr HardwarePtr<$(structName)_Type> $(_basename) = baseAddress;
       \t\n
    ]]></template>
 
-   <template condition="(&quot;$(_instance)&quot; != &quot;&quot;)&amp;&amp;!suppressInstance" ><![CDATA[
+   <!-- Don't generate instance if suppressed or empty -->
+   <template condition="!suppressInstance&amp;&amp;&quot;$(_instance)&quot;!=&quot;&quot;" ><![CDATA[
       \t//! Peripheral instance number
       \tstatic constexpr unsigned instance = $(_instance);
       \t\n

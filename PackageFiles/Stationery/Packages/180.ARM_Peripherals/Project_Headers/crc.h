@@ -203,7 +203,7 @@ $(/CRC/InitMethod: // /CRC/InitMethod not found)
          CrcWriteTranspose_BitsAndBytesTransposed,
          CrcReadTranspose_BitsAndBytesTransposed,
          CrcReadComplement_Inverted,
-         0x04c11db7,
+         CrcPolynomial(0x04c11db7),
       };
       configure(init);
       writeSeed(0xffffffff);
@@ -219,7 +219,7 @@ $(/CRC/InitMethod: // /CRC/InitMethod not found)
          CrcWriteTranspose_NoTransposition,
          CrcReadTranspose_NoTransposition,
          CrcReadComplement_Inverted,
-         0x04c11db7,
+         CrcPolynomial(0x04c11db7),
       };
       configure(init);
       writePolynomial(0x04c11db7);
@@ -236,7 +236,7 @@ $(/CRC/InitMethod: // /CRC/InitMethod not found)
          CrcWriteTranspose_BitsAndBytesTransposed,
          CrcReadTranspose_BitsAndBytesTransposed,
          CrcReadComplement_Inverted,
-         0x1EDC6F41,
+         CrcPolynomial(0x1EDC6F41),
       };
       configure(init);
       writePolynomial(0x1EDC6F41);
@@ -253,7 +253,7 @@ $(/CRC/InitMethod: // /CRC/InitMethod not found)
          CrcWriteTranspose_BitsAndBytesTransposed,
          CrcReadTranspose_BitsAndBytesTransposed,
          CrcReadComplement_Inverted,
-         0xA833982B,
+         CrcPolynomial(0xA833982B),
       };
       configure(init);
       writeSeed(0xffffffff);
@@ -269,7 +269,7 @@ $(/CRC/InitMethod: // /CRC/InitMethod not found)
          CrcWriteTranspose_NoTransposition,
          CrcReadTranspose_NoTransposition,
          CrcReadComplement_Normal,
-         0x04c11db7,
+         CrcPolynomial(0x04c11db7),
       };
       configure(init);
       writeSeed(0xffffffff);
@@ -285,7 +285,7 @@ $(/CRC/InitMethod: // /CRC/InitMethod not found)
          CrcWriteTranspose_NoTransposition,
          CrcReadTranspose_NoTransposition,
          CrcReadComplement_Inverted,
-         0x04c11db7,
+         CrcPolynomial(0x04c11db7),
       };
       configure(init);
       writeSeed(0x00000000);

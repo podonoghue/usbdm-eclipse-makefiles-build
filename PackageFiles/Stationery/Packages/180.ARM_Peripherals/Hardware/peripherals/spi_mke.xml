@@ -5,14 +5,12 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Serial Peripheral Interface" >
 
    <constant key="irq_common"               type="Boolean" value="true"          />
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
    <constant key="irq_parameters"           type="String"  value="&quot;ErrorCode errorcode&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;ErrorCode&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;E_NO_ERROR&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="false"         />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
    <title />
 
 <!--
@@ -277,7 +275,7 @@
 
 <!-- Graphic here -->
 
-   <setTemplate variables="spi_pinuse" codeGenCondition="enableGettersAndSetters"
+   <variableTemplate variables="spi_pinuse" codeGenCondition="enableGettersAndSetters"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -289,9 +287,9 @@
       \t   spi->C1 = (spi->C1&~SPI_C1_SSOE_MASK)   | (%paramExpression&SPI_C1_SSOE_MASK);
       \t   spi->C2 = (spi->C2&~SPI_C2_MODFEN_MASK) | (%paramExpression&SPI_C2_MODFEN_MASK);
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate variables="spi_br_sppr,spi_br_spr" codeGenCondition="enableGettersAndSetters"
+   <variableTemplate variables="spi_br_sppr,spi_br_spr" codeGenCondition="enableGettersAndSetters"
       nonDefaultParams="2"
    ><![CDATA[
       \t/**
@@ -305,9 +303,9 @@
       \t   %fieldAssignment
       \t}
       \t\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate variables="spi_c2_spmie,spi_m_bits" codeGenCondition="enableGettersAndSetters"
+   <variableTemplate variables="spi_c2_spmie,spi_m_bits" codeGenCondition="enableGettersAndSetters"
       nonDefaultParams="2"
       params=",matchValue"
    ><![CDATA[
@@ -322,9 +320,9 @@
       \t      %register0 = (%register0 & ~%mask0) | %paramName0;
       \t      %register1 = uint8_t(%paramName1);
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate variables="spi_c1_mode,spi_c1_lsbfe" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate variables="spi_c1_mode,spi_c1_lsbfe" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       nonDefaultParams="2"
    ><![CDATA[
       \t/**
@@ -337,7 +335,7 @@
       \t
       \t      %register = (%register & ~%mask) | %paramExpression;
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <for keys="field:name"
         values="
@@ -349,7 +347,7 @@
       spi_c1_lsbfe:BitOrder;
       spi_c2_spiswai:WaitMode;
       spi_c2_bidirectional:PinUse" >
-      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -369,7 +367,7 @@
          \t   return %paramType(%register&%mask);
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== SPI Init class =============================== -->
@@ -419,13 +417,13 @@
    ]]>
    </template>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="irqHandlingMethod"
    ><![CDATA[
        \t//! Class based callback handler has been installed in vector table
        \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
        \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
    <![CDATA[
@@ -614,54 +612,54 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/baudSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/baudSupport" discardRepeats="true"
       variables="spi_speed"
    ><![CDATA[
       \t   ///  %description
       \t   unsigned %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
+   <variableTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="spi_c1_mstr,spi_c1_mode,spi_pinuse,spi_c1_lsbfe"
    ><![CDATA[
       \t   /// Control register 1
       \t   uint8_t %registerName = %mask0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="spi_c2_spmie,spi_pinuse,spi_c2_spiswai,spi_c2_bidirectional"
    ><![CDATA[
       \t   /// Control register 2
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="spi_br_sppr,spi_br_spr"
    ><![CDATA[
       \t   /// Baud rate register
       \t   uint8_t %registerName = 0xFFU;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="spi_m_bits"
    ><![CDATA[
       \t   /// Match register:
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName0 = %symbolicExpression1;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Configure methods -->
 
@@ -735,7 +733,7 @@
 
 <!--   Constructors -->
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -751,9 +749,9 @@
       \t
       \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -769,9 +767,9 @@
       \t
       \t      %registerName = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="spi_br_sppr,spi_br_spr"
       linePadding="xxx"
       nonDefaultParams="2"
@@ -793,9 +791,9 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/baudSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/baudSupport" discardRepeats="true"
       variables="spi_br_sppr, spi_speed"
       linePadding="xxx"
    >
@@ -816,9 +814,9 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="spi_pinuse"
       linePadding="xxx"
    >
@@ -839,9 +837,9 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="spi_c2_spmie,spi_m_bits"
       nonDefaultParams="2"
       linePadding="xxx" >
@@ -862,7 +860,7 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
    <for keys="r"
       values="
@@ -873,7 +871,7 @@
             spi_c2_spiswai;
             spi_c2_bidirectional
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -892,12 +890,12 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -919,7 +917,7 @@
       \t */
       \tstatic constexpr $(_Baseclass)BasicInfo::Init DefaultInitValue = {%initExpression
       \t};\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template><![CDATA[
       \tstatic uint32_t getClockFrequency() {

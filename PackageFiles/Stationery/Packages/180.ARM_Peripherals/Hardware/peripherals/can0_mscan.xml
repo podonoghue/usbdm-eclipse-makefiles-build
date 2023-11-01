@@ -4,14 +4,12 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Scalable Controller Area Network" >
 
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
    <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="false"         />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
    <title />
 
 <!--
@@ -482,7 +480,7 @@ flag is set"
    <for keys="field:name"
         values="
       can_canctl0_rxfrm:ClearRxFlag" >
-      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -492,10 +490,10 @@ flag is set"
          \tstatic void %(name)() {
          \t   %register = %register | %mask;
          \t}\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
-   <setTemplate variables="can_cantflg_txe, can_cantbsel_tx" codeGenCondition="enableGettersAndSetters"
+   <variableTemplate variables="can_cantflg_txe, can_cantbsel_tx" codeGenCondition="enableGettersAndSetters"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -508,7 +506,7 @@ flag is set"
       \t   %register1 = %register0;
       \t   return %register1;
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
    <for keys="field:name"
         values="
       can_canctl0_rxfrm:RxFrameFlag;
@@ -539,7 +537,7 @@ flag is set"
       can_cantarq_abtrq:Abort;
       can_canidac_idam:IdentifierAcceptanceMode;
       can_canmisc_bohold:BusOffStateHold" >
-      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -559,7 +557,7 @@ flag is set"
          \t   return %paramType(%register&%mask);
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== CAN Init class =============================== -->
@@ -641,13 +639,13 @@ flag is set"
    ]]>
    </template>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
        \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
        \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
    <![CDATA[
@@ -730,103 +728,103 @@ flag is set"
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="can_canctl0_rxfrm,can_canctl0_cswai,can_canctl0_time,can_canctl0_wupe,can_canctl0_slprq,can_canctl0_initrq"
    ><![CDATA[
       \t   /// Control Register 0
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="can_canctl1_cane,can_canctl1_clksrc,can_canctl1_loopb,can_canctl1_listen,can_canctl1_borm,can_canctl1_wupm"
    ><![CDATA[
       \t   /// Control Register 1
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="can_canbtr0_sjw,can_canbtr0_brp"
    ><![CDATA[
       \t   /// Bus Timing Register 0
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="can_canbtr1_samp,can_canbtr1_tseg2,can_canbtr1_tseg1"
    ><![CDATA[
       \t   /// Bus Timing Register 1
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="can_canrflg_wupif,can_canrflg_cscif,can_canrflg_ovrif,can_canrflg_rxf"
    ><![CDATA[
       \t   /// Receiver Flag Register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="can_canrier_wupie,can_canrier_cscie,can_canrier_rstate,can_canrier_tstate,can_canrier_ovrie,can_canrier_rxfie"
    ><![CDATA[
       \t   /// Receiver Interrupt Enable Register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="can_cantflg_txe"
    ><![CDATA[
       \t   /// Transmitter Flag Register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="can_cantier_txeie"
    ><![CDATA[
       \t   /// Transmitter Interrupt Enable Register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="can_cantarq_abtrq"
    ><![CDATA[
       \t   /// Transmitter Message Abort Request Register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="can_canidac_idam"
    ><![CDATA[
       \t   /// Identifier Acceptance Control Register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="can_canmisc_bohold"
    ><![CDATA[
       \t   /// Miscellaneous Register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="can_rdlr_rdlc"
    ><![CDATA[
       \t   /// Receive Data Length Register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName0 = %symbolicExpression1;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Configure methods -->
 
@@ -902,7 +900,7 @@ flag is set"
 
 <!--   Constructors -->
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -918,9 +916,9 @@ flag is set"
       \t
       \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -936,7 +934,7 @@ flag is set"
       \t
       \t      %registerName = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <for keys="r"
       values="
@@ -971,7 +969,7 @@ flag is set"
             can_canmisc_bohold;
             can_rdlr_rdlc
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -990,7 +988,7 @@ flag is set"
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
    <for keys="r"
@@ -999,7 +997,7 @@ flag is set"
             can_canbtr1_tseg2;
             can_canbtr1_tseg1
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -1018,13 +1016,13 @@ flag is set"
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -1069,7 +1067,7 @@ flag is set"
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm" >
       <![CDATA[

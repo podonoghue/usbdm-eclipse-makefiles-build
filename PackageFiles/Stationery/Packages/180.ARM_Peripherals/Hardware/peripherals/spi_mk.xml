@@ -2,9 +2,57 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- spi_mk.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Serial Peripheral Interface">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Serial Peripheral Interface" >
 
-   <xi:include href="_default_instance.xml"/>
+   <constant key="irq_common"               type="Boolean" value="true"          />
+   <constant key="irq_parameters"           type="String"  value="&quot;ErrorCode errorcode&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;ErrorCode&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;E_NO_ERROR&quot;"  />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
+   <constant key="isSupportedinStartup"     type="Boolean" value="false"         />
+   <xi:include href="enablePeripheral.xml"  />
+   <title />
+
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
+
+<!--
+    * Template substitutions
+    *
+    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
+    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
+    * %description[index]             Description from controlVar e.g. Compare Function Enable
+    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
+    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
+    * %params                         Formatted parameter list for function
+    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
+    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
+    * %valueExpression                Numeric variable value e.g. 0x3
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %variable[index]                Variable name from condition
+    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * %register[index]                Register associated with variable e.g. adc->APCTL1
+    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+-->
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
 
    <template><![CDATA[
       \t//! Pin number in Info table for SCK if mapped to a pin
@@ -17,9 +65,50 @@
       \tstatic constexpr int soutPin  = 2;\n\n
    ]]></template>
 
-   <xi:include href="_mapPinsOption_on.xml"/>
+   <binaryOption key="/$(_BASENAME)/baudSupport"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      modify="true"
+      description="Enable specifying speed in Hertz"
+      toolTip="If not selected, the communication speed must be specified using the\n
+               prescale values (SPPR and SPP) in initialisation structures" >
+      <choice value="false" enum="Disabled" name="Prescale values must be used" isDefault="true" />
+      <choice value="true"  enum="Enabled"  name="Speed may be specified in Hertz" />
+   </binaryOption>
 
-   <constant key="NumCtars" value="2" type="Integer"/>
+   <choiceOption key="spiClockConfig" condition="/MCG/_present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      target="spiInputClock"
+      description="Clock configuration"
+      toolTip="Selects the clock configuration used for calculations involving the bus clock" >
+      <choice value="0" name="@/MCG/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
+      <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
+      <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
+      <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
+   </choiceOption>
+
+   <choiceOption key="spiClockConfig" condition="/ICS/_present"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      target="spiInputClock"
+      description="Clock configuration"
+      toolTip="Selects the clock configuration used for calculations involving the bus clock" >
+      <choice value="0" name="@/ICS/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
+      <choice value="1" name="@/ICS/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
+      <choice value="2" name="@/ICS/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
+      <choice value="3" name="@/ICS/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
+   </choiceOption>
+
+   <intOption key="spiInputClock"
+      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      locked="true"
+      derived="true"
+      description="SPI input clock"
+      toolTip="The SPI uses the bus clock for timing.\n
+               The frequency shown is based on the selected clock configuration.\n
+               This frequency is used as the basis for calculations on this page."
+      units="Hz"
+      />
+
+   <constant key="NumCtars" value="2" type="Long" />
 
    <!-- DMA/Interrupt Request Select and Enable Register (RSER) register -->
    <choiceOption key="spi_rser_txfifo"
@@ -48,7 +137,7 @@
       hidden="true"
       typeName="SpiTxFifoUnderflowInterrupt"
       description="TxFIFO Underflow interrupts"
-      toolTip="Controls Transmit FIFO Underflow interrupts (on TFUF flag)">
+      toolTip="Controls Transmit FIFO Underflow interrupts (on TFUF flag)" >
       <choice value="0" name="No requests"             enum="Disabled" />
       <choice value="1" name="Interrupt on underflow"  enum="Enabled"  />
    </binaryOption>
@@ -57,7 +146,7 @@
       hidden="true"
       typeName="SpiRxFifoOverflowInterrupt"
       description="RxFIFO Overflow interrupts"
-      toolTip="Receive FIFO Overflow interrupts (on RFOF flag)">
+      toolTip="Receive FIFO Overflow interrupts (on RFOF flag)" >
       <choice value="0" name="No requests"            enum="Disabled" />
       <choice value="1" name="Interrupt on overflow"  enum="Enabled"  />
    </binaryOption>
@@ -66,7 +155,7 @@
       hidden="true"
       typeName="SpiTxCompleteInterrupt"
       description="Tx complete interrupts"
-      toolTip="Transmit complete interrupts (TCF Flag)">
+      toolTip="Transmit complete interrupts (TCF Flag)" >
       <choice value="0" name="No requests"             enum="Disabled" />
       <choice value="1" name="Interrupt on completion" enum="Enabled"  />
    </binaryOption>
@@ -75,7 +164,7 @@
       hidden="true"
       typeName="SpiEndOfQueueInterrupt"
       description="EOQ interrupts"
-      toolTip="End of Queue interrupts (EOQF flag)">
+      toolTip="End of Queue interrupts (EOQF flag)" >
       <choice value="0" name="No requests"               enum="Disabled" />
       <choice value="1" name="Interrupt on end of queue" enum="Enabled"  />
    </binaryOption>
@@ -139,7 +228,7 @@
       hidden="true"
       typeName="SpiMasterSlave"
       description="Master or Slave operation"
-      toolTip="Whether to operate as Master or Slave device">
+      toolTip="Whether to operate as Master or Slave device" >
       <choice value="0" name="Operate as Master" enum="Slave"   />
       <choice value="1" name="Operate as Slave"  enum="Master"  />
    </binaryOption>
@@ -169,7 +258,7 @@
    <binaryOption key="spi_mcr_rooe"
       typeName="SpiRxOverflowHandling"
       description="Handling of Rx Overflow Data"
-      toolTip="Discard incoming data or overwite previous data on RxFIFO overflow ">
+      toolTip="Discard incoming data or overwite previous data on RxFIFO overflow " >
       <choice value="0" name="Ignore incoming"      enum="Ignore"    />
       <choice value="1" name="Overwrite existing"   enum="Overwrite" />
    </binaryOption>
@@ -177,7 +266,7 @@
    <binaryOption key="spi_mcr_doze"
       typeName="SpiDoze"
       description="Enables Doze mode (when processor is waiting?)"
-      toolTip="Enables Doze mode (when processor is waiting?)">
+      toolTip="Enables Doze mode (when processor is waiting?)" >
       <choice value="0" name="Ignore doze"      enum="Disabled" />
       <choice value="1" name="Suspend in doze"  enum="Enabled"  isDefault="true" />
    </binaryOption>
@@ -185,7 +274,7 @@
    <binaryOption key="spi_mcr_frz"
       typeName="SpiFreeze"
       description="Controls SPI operation while in debug mode"
-      toolTip="Enable transfers to be stopped on the next frame boundary when the device enters Debug mode.">
+      toolTip="Enable transfers to be stopped on the next frame boundary when the device enters Debug mode." >
       <choice value="0" name="Continue in debug"  enum="Disabled" />
       <choice value="1" name="Suspend in debug"   enum="Enabled"  isDefault="true" />
    </binaryOption>
@@ -193,26 +282,27 @@
    <binaryOption key="spi_mcr_cont_scke"
       typeName="SpiContinuousClock"
       description="Continuous SCK Enable"
-      toolTip="Whether the Serial Communication Clock (SCK) runs continuously">
+      toolTip="Whether the Serial Communication Clock (SCK) runs continuously" >
       <choice value="0" name="Clock during transfers only" enum="Disable" />
       <choice value="1" name="Continuous clock "           enum="Enable"  />
    </binaryOption>
 
-   <for keys="c" dim="NumCtars">
+   <for keys="c" dim="NumCtars" >
 
       <stringOption name="CTAR %(c)"
          key="CtarNum%(c)"
          description="Clock and Transfer Attributes #%(c)"
          locked="true"
          derived="true"
-         value="----- %(c) -----"/>
+         value="----- %(c) -----" />
 
       <intOption key="speed[%(c)]"
          description="Speed of interface"
          toolTip="Speed of transmission"
          typeName="const Hertz &amp;"
-         valueFormat="%s_Hz"
-         value="10_MHz" units="Hz"
+         valueFormat="%s"
+         units="Hz"
+         value="10_MHz" 
          min="0" max="10000000" />
 
       <choiceOption key="spi_ctar_mode[%(c)]"
@@ -224,7 +314,7 @@
                   1: Active-high clock (idles low), Data changes on leading edge of SCK and is captured on the following edge.\n
                   2: Active-low clock (idles high), Data is captured on leading edge of SCK and changes on the following edge.\n
                   3: Active-low clock (idles high), Data changes on leading edge of SCK and is captured on the following edge.
-                  ">
+                  " >
          <choice value="0,0" name="Mode 0: CPOL=0, CPHA=0" enum="0" isDefault="true" />
          <choice value="0,1" name="Mode 1: CPOL=0, CPHA=1" enum="1" />
          <choice value="1,0" name="Mode 2: CPOL=1, CPHA=0" enum="2" />
@@ -253,7 +343,7 @@
       <binaryOption key="spi_ctar_lsbfe[%(c)]"
          typeName="SpiBitOrder"
          description="Transmission order"
-         toolTip="Transmission order">
+         toolTip="Transmission order" >
          <choice value="0" name="MSB sent first" enum="MsbFirst" />
          <choice value="1" name="LSB sent first" enum="LsbFirst" />
       </binaryOption>
@@ -272,7 +362,7 @@
       typeName="SpiCtarSelect"
       valueFormat="%s"
       description="CTAR Selection"
-      toolTip="Selects between available CTAR registers">
+      toolTip="Selects between available CTAR registers" >
       <choice value="0" name="CTAR 0" enum="0" isDefault="true" />
       <choice value="1" name="CTAR 1" enum="1" />
    </choiceOption>
@@ -282,7 +372,7 @@
       enumType="uint8_t"
       valueFormat="(%s)"
       description="Controls PCS between transfers/transactions"
-      toolTip="Select whether Peripheral Select is returned to idle between transfers or transactions">
+      toolTip="Select whether Peripheral Select is returned to idle between transfers or transactions" >
       <choice value="0" name="Idle between each transfer"                enum="Transfer"    />
       <choice value="1" name="Idle between each transaction"             enum="Transaction" />
       <choice value="2" name="Asserted until another device is selected" enum="Continuous"  />
@@ -292,7 +382,7 @@
       hidden="true"
       typeName="SpiSelectMode"
       description="Assert PCS between transfers"
-      toolTip="Select whether Peripheral Select is returned to idle between transfers">
+      toolTip="Select whether Peripheral Select is returned to idle between transfers" >
       <choice value="0" name="Idle between transactions"     enum="Idle"       />
       <choice value="1" name="Asserted between transactions" enum="Continuous" />
    </binaryOption>
@@ -318,7 +408,7 @@
       typeName="SpiEndOfQueue"
       description="Mark data value as End of Queue"
       toolTip="Indicates the associated data value is End of Queue, the Transmit and
-               Receive operations will be disabled after this item completes transmission">
+               Receive operations will be disabled after this item completes transmission" >
       <choice value="0" name="Not end of queue data item" enum="Disable"  />
       <choice value="1" name="End of Queue data item"     enum="Enable"   />
    </binaryOption-->
@@ -327,7 +417,7 @@
       hidden="true"
       typeName="SpiClearCounter"
       description="Mark data value to clear transmit count"
-      toolTip="The transmit counter will be cleared before transmission of the associated data">
+      toolTip="The transmit counter will be cleared before transmission of the associated data" >
       <choice value="0" name="Transmission counter is not cleared" enum="Disable"  />
       <choice value="1" name="Transmission counter is cleared"     enum="Enable"   />
    </binaryOption-->
@@ -380,12 +470,12 @@
       \t * };
       \t *
       \t * // Initialise SPI from values specified above
-      \t * $(_Class)::configure(serialInit); // TODO
+      \t * $(_Class)::configure(serialInit);
       \t * @endcode
       \t */
    ]]></template>
 
-   <template namespace="usbdm"><![CDATA[
+   <template namespace="usbdm" ><![CDATA[
       $(/SPI/serial_init_description)
       \tclass SerialInit {
       \t
@@ -404,15 +494,15 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="
          spi_ctar_sel"
    ><![CDATA[
       \t   ///  CTAR Selection
       \t   SpiCtarSelect ctarNum = SpiCtarSelect_0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="
          spi_ctar_mode[],
          spi_ctar_fmsz[],
@@ -420,23 +510,23 @@
    ><![CDATA[
       \t   ///  Clock and Transfer Attributes Register
       \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="
          speed[]"
    ><![CDATA[
       \t   ///  Module Configuration Register
       \t   Hertz speed = 0_Hz;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--    SerialInit Constructors -->
 
    <for keys="r" values="
          spi_ctar_mode[];
          spi_ctar_fmsz[];
-         spi_ctar_lsbfe[]">
-      <constructorTemplate namespace="usbdm" variables="%(r)"
+         spi_ctar_lsbfe[]" >
+      <variableTemplate namespace="usbdm" variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
          \t   /**
@@ -453,10 +543,10 @@
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
-      ]]></constructorTemplate>
+      ]]></variableTemplate>
    </for>
 
-   <constructorTemplate namespace="usbdm" variables="speed[]"
+   <variableTemplate namespace="usbdm" variables="speed[]"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -473,9 +563,9 @@
       \t      speed = %paramExpression;
       \t   }
       \t\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
-   <constructorTemplate namespace="usbdm" variables="spi_ctar_sel"
+   <variableTemplate namespace="usbdm" variables="spi_ctar_sel"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -492,7 +582,7 @@
       \t      ctarNum = %paramExpression;
       \t   }
       \t\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
 <!--   ========== SerialInit class - end =============================== -->
 
@@ -540,7 +630,7 @@
       \t */
    ]]></template>
 
-   <template namespace="usbdm"><![CDATA[
+   <template namespace="usbdm" ><![CDATA[
       $(/SPI/config_description)
       \tclass Config {
       \t
@@ -559,13 +649,13 @@
 
 <!--   Member variables -->
 
-   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="
          spi_mcr_mtfe,
          spi_mcr_pcsse,
@@ -576,9 +666,9 @@
    ><![CDATA[
       \t   ///  Module Configuration Register
       \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="
          spi_ctar_sel,
          spi_pushr_pcs,
@@ -588,11 +678,11 @@
       \t   uint32_t pushr      = 0;
       \t   uint32_t pushrFinal = 0;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--  Constructors -->
 
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -608,7 +698,7 @@
       \t
       \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <for keys="r" values="
          spi_mcr_mtfe;
@@ -616,8 +706,8 @@
          spi_mcr_doze;
          spi_mcr_frz;
          spi_mcr_rooe;
-         spi_mcr_cont_scke">
-      <setTemplate namespace="usbdm" variables="%(r)"
+         spi_mcr_cont_scke" >
+      <variableTemplate namespace="usbdm" variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
          \t   /**
@@ -634,10 +724,10 @@
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
-   <setTemplate namespace="usbdm" variables="spi_mcr_pcsis"
+   <variableTemplate namespace="usbdm" variables="spi_mcr_pcsis"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -663,9 +753,9 @@
       \t      }
       \t   }
       \t\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" variables="spi_pushr_pcs"
+   <variableTemplate namespace="usbdm" variables="spi_pushr_pcs"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -691,9 +781,9 @@
       \t      }
       \t   }
       \t\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" variables="spi_ctar_sel"
+   <variableTemplate namespace="usbdm" variables="spi_ctar_sel"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -711,9 +801,9 @@
       \t      pushrFinal = (pushrFinal & ~SPI_PUSHR_CTAS_MASK)|SPI_PUSHR_CTAS(%paramExpression);
       \t   }
       \t\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" variables="PeripheralSelectMode"
+   <variableTemplate namespace="usbdm" variables="PeripheralSelectMode"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -731,7 +821,7 @@
       \t      pushrFinal |= (%paramExpression>=2)?SPI_PUSHR_CONT_MASK:0;
       \t   }
       \t\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
 <!--   ========== Config class - end =============================== -->
 
@@ -850,7 +940,7 @@
       \t */
    ]]></template>
 
-   <template namespace="usbdm"><![CDATA[
+   <template namespace="usbdm" ><![CDATA[
       $(/SPI/init_description)
       \tclass Init {
       \t
@@ -996,9 +1086,9 @@
       \tstatic constexpr SpiBasicInfo::SerialInit DefaultSerialInitValue[] = {\n
       ]]></template>
 
-   <for keys="c" dim="NumCtars">
+   <for keys="c" dim="NumCtars" >
 
-      <initialValueTemplate
+      <variableTemplate
          separator=","
          terminator=","
          variables="
@@ -1011,7 +1101,7 @@
          \t{
          \t   SpiCtarSelect_%(c),
          %initExpression\n\t},\n
-      ]]></initialValueTemplate>
+      ]]></variableTemplate>
 
    </for>
 
@@ -1020,7 +1110,7 @@
       \t\n
       ]]></template>
 
-   <initialValueTemplate
+   <variableTemplate
       separator=","
       terminator=","
       variables="
@@ -1042,7 +1132,7 @@
       \t */
       \tstatic constexpr SpiBasicInfo::Config DefaultConfigValue = {%initExpression
       \t};\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template><![CDATA[
       \t/**
@@ -1052,7 +1142,7 @@
       \tstatic constexpr SpiBasicInfo::Init DefaultInitValue = {
       \t   DefaultConfigValue,\n
    ]]></template>
-   <for keys="c" dim="NumCtars">
+   <for keys="c" dim="NumCtars" >
       <template><![CDATA[
          \t   DefaultSerialInitValue[%(c)],\n
       ]]></template>
@@ -1060,19 +1150,6 @@
    <template><![CDATA[
       \t};\n\n
    ]]></template>
-
-<!--    Files -->
-
-   <projectActionList id = "spi_files" >
-      <copy source="Project_Headers/spi-MK.h"            target="Project_Headers/spi.h"             overwrite="true"  derived="true" />
-      <copy source="Sources/spi-MK.cpp"                  target="Sources/spi.cpp"                   overwrite="true"  derived="true" />
-      <copy source="Snippets/spi-example.cpp"            target="Snippets/spi-example.cpp"          overwrite="true"  derived="true" />
-      <copy source="Snippets/spi-N-config-example.cpp"   target="Snippets/spi-N-config-example.cpp" overwrite="true"  derived="true" />
-      <copy source="Snippets/spi-2-config-example.cpp"   target="Snippets/spi-2-config-example.cpp" overwrite="true"  derived="true" />
-      <copy source="Snippets/spi-flash-example.cpp"      target="Snippets/spi-flash-example.cpp"    overwrite="true"  derived="true" />
-      <copy source="Snippets/at45db041e.h"               target="Snippets/at45db041e.h"             overwrite="true"  derived="true" />
-
-   </projectActionList>
 
    <template key="/SPI/declarations" namespace="all"  ><![CDATA[
    // $(_NAME) mappings
@@ -1118,7 +1195,7 @@
    \t\n
    ]]></template>
 
-   <setTemplate variables="spi_mcr_cont_scke" key="/SPI/methods" discardRepeats="true"
+   <variableTemplate variables="spi_mcr_cont_scke" namespace="all" key="/SPI/methods" discardRepeats="true"
    ><![CDATA[
       /* Template /SPI/methods - start */
       \t
@@ -1130,9 +1207,9 @@
       \t void setContinousClock(%paramType %paramName) {
       \t   %fieldAssignment
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate variables="spi_mcr_mstr" key="/SPI/methods" discardRepeats="true"
+   <variableTemplate variables="spi_mcr_mstr" namespace="all" key="/SPI/methods" discardRepeats="true"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -1142,9 +1219,9 @@
       \t void setMasterSlave(%paramType %paramName) {
       \t   %fieldAssignment
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate variables="spi_mcr_pcsis" key="/SPI/methods" discardRepeats="true"
+   <variableTemplate variables="spi_mcr_pcsis" namespace="all" key="/SPI/methods" discardRepeats="true"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -1164,20 +1241,11 @@
       \t void setPcsPolarity(%paramType %paramName) {
       \t   %fieldAssignment
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <xi:include href="_irqOption.xml"/>
-
-   <xi:include href="_clockOption.xml"/>
-
-   <template key="/SPI/handlerSlot"><![CDATA[
+   <template namespace="all" key="/SPI/handlerSlot" ><![CDATA[
       \t{nullptr}, // $(_NAME)\n
    ]]></template>
-
-   <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SpiValidate">
-   </validate>
-
    <template><![CDATA[
       \t/**
       \t * Get SPI input clock frequency
@@ -1189,5 +1257,35 @@
       \t}\n\n
    ]]></template>
 
-   <signals/>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
+   </validate>
+
+   <!-- ************* Common ****************** -->
+   <projectActionList id = "spi_files" >
+      <copy source="Project_Headers/spi-MK.h"            target="Project_Headers/spi.h"             overwrite="true"  derived="true" />
+      <copy source="Sources/spi-MK.cpp"                  target="Sources/spi.cpp"                   overwrite="true"  derived="true" />
+      <copy source="Snippets/spi-example.cpp"            target="Snippets/spi-example.cpp"          overwrite="true"  derived="true" />
+      <copy source="Snippets/spi-N-config-example.cpp"   target="Snippets/spi-N-config-example.cpp" overwrite="true"  derived="true" />
+      <copy source="Snippets/spi-2-config-example.cpp"   target="Snippets/spi-2-config-example.cpp" overwrite="true"  derived="true" />
+      <copy source="Snippets/spi-flash-example.cpp"      target="Snippets/spi-flash-example.cpp"    overwrite="true"  derived="true" />
+      <copy source="Snippets/at45db041e.h"               target="Snippets/at45db041e.h"             overwrite="true"  derived="true" />
+   </projectActionList>
+
+   <!-- ************* Startup ****************** -->
+
+   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
+
+   <!-- ************* Signal mapping ****************** -->
+   <signals enabledBy="enablePeripheralSupport" />
+
 </peripheralPage>

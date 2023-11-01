@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
-<!-- _mapPinsOption.xml -->
+<!-- mapPinsOption.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
@@ -98,7 +98,7 @@
 
    <!-- Template is added to peripheral classes -->
    <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" condition="!/PCR/mux_present" ><![CDATA[
-      // Template _mapPinsOption_on.xml
+      // Template mapPinsOption_on.xml
 
       \t/**
       \t * Configures all mapped pins associated with $(_BASENAME)
@@ -151,7 +151,7 @@
       \t   disableAllPins();
       \t   $(disable_clock: )
       \t}
-      // End Template _mapPinsOption_on.xml\n
+      // End Template mapPinsOption_on.xml\n
    ]]></template>
 
 </fragment>

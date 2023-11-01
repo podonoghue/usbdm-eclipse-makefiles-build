@@ -4,13 +4,11 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
    <constant key="irq_parameters"           type="String"  value="&quot;uint8_t&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;0&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
 
 <!--
     * General substitutions
@@ -83,7 +81,7 @@
 
    <choiceOption key="ftm_sc_clks" condition="/MCG/_present"
       enabledBy="enablePeripheralSupport"
-      description="Clock Source"
+      description="FTM Clock Source"
       typeName="FtmClockSource"
       target="inputClockFrequency"
       toolTip="Selects the clock source for the module" >
@@ -250,6 +248,7 @@
       enabledBy="!freeRunningCounter"
       description="End value for counter"
       toolTip="The timer counts from 0 to this value"
+      valueFormat="%s"
       typeName="Ticks &amp;"
       units="ticks"
       value="65535" min="0" max="65535" />
@@ -260,7 +259,7 @@
       ref="clockPeriod*(ftm_sc_cpwms?(2*(ftm_mod)):(ftm_mod+1))"
       typeName="Seconds &amp;"
       unlockedBy="!freeRunningCounter"
-      valueFormat="%s_s"
+      valueFormat="%s"
       description="Period or minimum interval of timer"
       toolTip="In left-aligned or centre-aligned this is the period of the timer\n
                In free-running mode it is the minimum interval"
@@ -1364,7 +1363,7 @@
       <!-- Even channel -->
       <intOption key="ftm_cnv[%(ch)]" condition="((%(ch)&amp;1)==0)"
          hiddenBy="(ftm_cnsc_mode_independent[%(ch)]&lt;4)&amp;&amp;(ftm_cnsc_mode_combined[%(ch)]!=(1,2))"
-         valueFormat="%s_ticks"
+         valueFormat="%s"
          typeName="Ticks &amp;"
          units="ticks"
          description="Output Compare Event time in ticks"
@@ -1375,7 +1374,7 @@
       <floatOption key="ftm_cnvEventTime[%(ch)]" condition="((%(ch)&amp;1)==0)"
          hiddenBy="(ftm_cnsc_mode_independent[%(ch)]&lt;4)&amp;&amp;(ftm_cnsc_mode_combined[%(ch)]!=(1,2))"
          ref="ftm_cnv[%(ch)]*clockPeriod"
-         valueFormat="%s_s"
+         valueFormat="%s"
          derived="true"
          units="s"
          description="Output Compare Event time in seconds"
@@ -1385,7 +1384,7 @@
       <!-- Odd channel -->
       <intOption key="ftm_cnv[%(ch)]" condition="((%(ch)&amp;1)!=0)"
          hiddenBy="(ftm_cnsc_mode_independent[%(ch)]&lt;4)&amp;&amp;(ftm_cnsc_mode_combined[%(ch)-1]!=(1,2))"
-         valueFormat="%s_ticks"
+         valueFormat="%s"
          typeName="Ticks &amp;"
          units="ticks"
          description="Output Compare Event time in ticks"
@@ -1396,7 +1395,7 @@
       <floatOption key="ftm_cnvEventTime[%(ch)]" condition="((%(ch)&amp;1)!=0)"
          hiddenBy="(ftm_cnsc_mode_independent[%(ch)]&lt;4)&amp;&amp;(ftm_cnsc_mode_combined[%(ch)-1]!=(1,2))"
          ref="ftm_cnv[%(ch)]*clockPeriod"
-         valueFormat="%s_s"
+         valueFormat="%s"
          derived="true"
          units="s"
          description="Output Compare Event time in seconds"
@@ -1408,7 +1407,7 @@
          locked="true"
          derived="true"
          ref="(ftm_sc_cpwms?2.0:1.0)*(ftm_cnv[%(ch)])*clockPeriod"
-         valueFormat="%s_s"
+         valueFormat="%s"
          units="s"
          description="Output high-time in seconds"
          toolTip="Calculated high-time" />
@@ -1418,7 +1417,7 @@
          locked="true"
          derived="true"
          ref="ftm_cnvHighTime[%(ch)]/ftm_modPeriod"
-         valueFormat="%s_s"
+         valueFormat="%s"
          units="percent"
          description="Output duty cycle as pecentage"
          toolTip="Calculated duty cycle" />
@@ -1428,7 +1427,7 @@
          locked="true"
          derived="true"
          ref="(ftm_cnv[%(ch)]-ftm_cnv[%(ch)-1])*clockPeriod"
-         valueFormat="%s_s"
+         valueFormat="%s"
          units="s"
          description="Output high-time in seconds"
          toolTip="Calculated high-time" />
@@ -1438,7 +1437,7 @@
          locked="true"
          derived="true"
          ref="ftm_pwmHighTime[%(ch)]/ftm_modPeriod"
-         valueFormat="%s_s"
+         valueFormat="%s"
          units="percent"
          description="Output duty cycle as pecentage"
          toolTip="Calculated duty cycle" />
@@ -1454,7 +1453,7 @@
 
    <!-- ************* Quadrature decoder ****************** -->
 
-   <categoryOption key="quadDecoder"  description="Quadrature decoder"
+   <categoryOption key="quadDecoder" description="Quadrature decoder"
       hiddenBy="mode!=Quad"
    >
       <binaryOption key="ftm_qdctrl_quadmode" condition="ftm_qdctrl_quadmode_present"
@@ -1542,26 +1541,26 @@
 
 <!-- Info class members-->
 
-   <initialValueTemplate variables="minimumResolution"
+   <variableTemplate variables="minimumResolution"
    ><![CDATA[
       \t// %description
       \tstatic constexpr uint32_t minimumResolution  = $(?check_minimums:$(minimumResolution):0);\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate variables="minimumInterval"
+   <variableTemplate variables="minimumInterval"
    ><![CDATA[
       \t// %description
       \tstatic constexpr uint32_t minimumInterval  = $(?check_minimums:$(minimumInterval):0);\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate variables="ftmExternalClock"
+   <variableTemplate variables="ftmExternalClock"
    ><![CDATA[
       \t// %description
       \tstatic constexpr uint32_t ftmExternalClock  = $(ftmExternalClock);\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate key="/$(_BASENAME)/static_functions" namespace="all"
-      discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/static_functions" namespace="all"
+     discardRepeats="true"
       variables="ftm_sc_cpwms,ftm_sc_clks,ftm_sc_ps"
       nonDefaultParams="2"
    ><![CDATA[
@@ -1575,7 +1574,7 @@
       %params) {
       \t
       \t   // Enable clock to peripheral
-      \t   enable();
+      \t   Info::enable();
       \t
       \t   // Disable timer to change settings
       \t   %register=0;
@@ -1586,15 +1585,15 @@
       \t   // Write new value
       \t   ftm->SC = %paramExpression;
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
 <!--  ========== Static/Non-Static Methods =============================== -->
    <for  keys  ="  k                   : static    : const    : getInputClockFrequency         : channel : Ftm       : isStatic : namespace"
          values=" non_static_functions : ''        : ' const' : getInputClockFrequencyVirtual  : CHANNEL : FtmBase   : false    : all;
                   static_functions     : 'static ' : ''       : 'Info::getInputClockFrequency' : channel : OwningFtm : true     : forceInfo
    " >
-      <setTemplate key="/$(_BASENAME)/%(k)" namespace="all"
-         discardRepeats="true"
+      <variableTemplate key="/$(_BASENAME)/%(k)" namespace="all"
+        discardRepeats="true"
          variables="ftm_sc_clks,ftm_sc_ps"
          nonDefaultParams="2"
       ><![CDATA[
@@ -1630,14 +1629,14 @@
          \t   // Write new value
          \t   %register = %registerName;
          \t}\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
 
       <for keys="  f            :  n"
          values=" ftm_sc_cpwms  : CountMode;
                   ftm_sc_clks   : ClockSource;
                   ftm_sc_ps     : Prescaler" >
-         <setTemplate key="/$(_BASENAME)/%(k)" namespace="all"
-            discardRepeats="true"
+         <variableTemplate key="/$(_BASENAME)/%(k)" namespace="all"
+           discardRepeats="true"
             variables="%(f)"
             nonDefaultParams="2"
          ><![CDATA[
@@ -1673,13 +1672,13 @@
             \t
             \t   return (%paramType)(%register&~%mask);
             \t}\n\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
       </for>
 
       <for keys="  f           :  n"
          values=" ftm_mod      : CounterMaximumValue" >
-         <setTemplate key="/$(_BASENAME)/%(k)" namespace="all"
-            discardRepeats="true"
+         <variableTemplate key="/$(_BASENAME)/%(k)" namespace="all"
+           discardRepeats="true"
             variables="%(f)"
             nonDefaultParams="2"
          ><![CDATA[
@@ -1706,7 +1705,7 @@
             \t
             \t   return (%paramType)%register;
             \t}\n\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
       </for>
 
       <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
@@ -2078,7 +2077,7 @@
          \t}
          \t\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" namespace="%(namespace)" discardRepeats="true" condition="ftm_exttrig_inittrigen_present" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" namespace="%(namespace)" discardRepeats="true" condition="ftm_exttrig_inittrigen_present&amp;&amp;%(isStatic)" ><![CDATA[
          \t/**
          \t * Enables/disable external trigger generation by a channel comparison or initialisation event
          \t *
@@ -2172,15 +2171,15 @@
       ]]></template>
       <template key="/$(_BASENAME)/%(k)" namespace="%(namespace)" condition="/PCR/_present&amp;&amp;ftm_mode_faultie_present" codeGenCondition="%(isStatic)" ><![CDATA[
          #ifdef DEBUG_BUILD
-         \t   static_assert((inputNum<Info::InfoFAULT::numSignals), "FtmBase_T: Illegal fault channel");
-         \t   static_assert((inputNum>=Info::InfoFAULT::numSignals)||(Info::InfoFAULT::info[inputNum].pinIndex != pinIndex::UNMAPPED_PCR), "FtmBase_T: Fault signal is not mapped to a pin - Modify Configure.usbdm");
-         \t   static_assert((inputNum>=Info::InfoFAULT::numSignals)||(Info::InfoFAULT::info[inputNum].pinIndex != pinIndex::INVALID_PCR),  "FtmBase_T: Non-existent signal used for fault input");
-         \t   static_assert((inputNum>=Info::InfoFAULT::numSignals)||(Info::InfoFAULT::info[inputNum].pinIndex == pinIndex::UNMAPPED_PCR)||(Info::InfoFAULT::info[inputNum].gpioBit == INVALID_PCR)||(Info::InfoFAULT::info[inputNum].gpioBit >= 0), "Pcr_T: Illegal signal used for fault");
+         \t   static_assert((inputNum<InfoFAULT::numSignals), "FtmBase_T: Illegal fault channel");
+         \t   static_assert((inputNum>=InfoFAULT::numSignals)||(InfoFAULT::info[inputNum].pinIndex != PinIndex::UNMAPPED_PCR), "FtmBase_T: Fault signal is not mapped to a pin - Modify Configure.usbdm");
+         \t   static_assert((inputNum>=InfoFAULT::numSignals)||(InfoFAULT::info[inputNum].pinIndex != PinIndex::INVALID_PCR),  "FtmBase_T: Non-existent signal used for fault input");
+         \t   static_assert((inputNum>=InfoFAULT::numSignals)||(InfoFAULT::info[inputNum].pinIndex == PinIndex::UNMAPPED_PCR)||(InfoFAULT::info[inputNum].pinIndex == PinIndex::INVALID_PCR)||(InfoFAULT::info[inputNum].pinIndex >= PinIndex::MIN_PIN_INDEX), "Pcr_T: Illegal signal used for fault");
          #endif
          \t\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" namespace="%(namespace)" condition="/PCR/_present&amp;&amp;ftm_mode_faultie_present" ><![CDATA[
-         \t   PcrTable_T<typename Info::InfoFAULT, inputNum>::setPCR();
+      <template key="/$(_BASENAME)/%(k)" namespace="%(namespace)" condition="/PCR/_present&amp;&amp;ftm_mode_faultie_present" codeGenCondition="%(isStatic)" ><![CDATA[
+         \t   PcrTable_T<InfoFAULT, inputNum>::setPCR();
          \t\n
       ]]></template>
       <template key="/$(_BASENAME)/%(k)" namespace="%(namespace)" discardRepeats="true" condition="ftm_mode_faultie_present" ><![CDATA[
@@ -2758,13 +2757,13 @@
       \t\n
    ]]></template>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
        \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
        \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
@@ -2955,85 +2954,85 @@
 
 <!--   Init class Member variables -->
 
-   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   // Shared overflow or fault interrupt call-back
       \t   %params = nullptr;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
     ><![CDATA[
       \t   // Shared channel interrupt call-back
       \t   ChannelCallbackFunction channelCallbackFunction = nullptr;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="ftm_sc_action,ftm_sc_cpwms,ftm_sc_clks,ftm_sc_ps"
    ><![CDATA[
       \t   // Status And Control Register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   // %description
       \t   %paramType %registerName = %paramType_Normal;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="ftm_mod"
    ><![CDATA[
       \t   // %description
       \t   uint16_t %registerName = 0_ticks;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables= "ftm_modPeriod"
     ><![CDATA[
       \t   // %description
       \t   %paramType %registerName = 0_s;\n\n
-   ]]></initialValueTemplate >
+   ]]></variableTemplate >
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="ftm_mode_pwmsync,ftm_mode_wpdis,ftm_mode_ftmen"
    ><![CDATA[
       \t   // Mode register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables= "ftm_deadtime_dtps,ftm_deadtime_dtval"
     ><![CDATA[
       \t   // %description0 and %description1
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate >
+   ]]></variableTemplate >
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables= "ftm_outinit_choi"
     ><![CDATA[
       \t   // %description
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate >
+   ]]></variableTemplate >
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables= "ftm_pol_pol"
     ><![CDATA[
       \t   // %description
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate >
+   ]]></variableTemplate >
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables= "ftm_exttrig_trig"
     ><![CDATA[
       \t   // %description
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate >
+   ]]></variableTemplate >
 
 <!--  Init class Constructors -->
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -3050,9 +3049,9 @@
       \t
       \t      this->channelCallbackFunction = %paramExpression;
       \t   }\n\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -3069,9 +3068,9 @@
       \t
       \t      this->callbackFunction = %paramExpression;
       \t   }\n\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -3088,9 +3087,9 @@
       \t
       \t   %registerName = %paramExpression;
       \t   }\n\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
-   <constructorTemplate  namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="ftm_pol_pol"
       linePadding="xxx"
    ><![CDATA[
@@ -3110,9 +3109,9 @@
       \t      %registerName &= ~(%paramExpression>>8);
       \t   }
       \t\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
-   <constructorTemplate  namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="ftm_outinit_choi"
       linePadding="xxx"
    ><![CDATA[
@@ -3130,11 +3129,11 @@
       \t      %registerName = %paramExpression;
       \t   }
       \t\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
    <for keys="r" values="ftm_sc_action;ftm_sc_cpwms;ftm_sc_clks;
                          ftm_mode_pwmsync;ftm_mode_wpdis;ftm_mode_init;ftm_mode_ftmen" >
-      <constructorTemplate  namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -3152,10 +3151,10 @@
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
-      ]]></constructorTemplate>
+      ]]></variableTemplate>
    </for>
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="ftm_deadtime_dtps, ftm_deadtime_dtval"
       linePadding="xxx"
       params=",ticks"
@@ -3176,9 +3175,9 @@
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="ftm_exttrig_trig"
       linePadding="xxx"
       nonDefaultParams="2"
@@ -3197,9 +3196,9 @@
          \t      %registerName |= %paramExpression;
          \t   }
          \t\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="ftm_sc_ps, ftm_mod"
       params=",mod_ticks"
       linePadding="xxx"
@@ -3221,9 +3220,9 @@
       \t      %registerName1   = %paramName1;
       \t   }
       \t\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       nonDefaultParams="2"
       variables="ftm_modPeriod"
       linePadding="xxx"
@@ -3243,7 +3242,7 @@
       \t      %registerName = %paramExpression;
       \t   }
       \t\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t}; // class $(_Class)BasicInfo::Init\n\n
@@ -3251,7 +3250,7 @@
 
 <!--  Init class Configure method -->
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" codeGenCondition="enablePeripheralSupport"  discardRepeats="true" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" codeGenCondition="enablePeripheralSupport" discardRepeats="true" ><![CDATA[
       \t/**
       \t * Configure FTM from values specified in init
       \t *
@@ -3305,11 +3304,11 @@
       \t   ftm->SC  = sc;\n
    ]]></template>
    <for keys="var" values="ftm_mode_faultie;ftm_outinit_choi;ftm_pol_pol;ftm_deadtime;ftm_exttrig_trig" >
-      <setTemplate variables="%(var)" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      <variableTemplate variables="%(var)" codeGenCondition="enablePeripheralSupport" ><![CDATA[
          \t
          \t   // %description (%(var))
          \t   ftm->%registerNAME = init.%registerName;\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
    <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t
@@ -3319,7 +3318,7 @@
 
 <!--  Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="enablePeripheralSupport"
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -3342,197 +3341,198 @@
       \t};
       \t\n
    ]]>
-   </initialValueTemplate>
+   </variableTemplate>
 
 <!--   ========== FTM Fault Init class =============================== -->
 
-   <template key="fault_init_description" namespace="all" codeGenCondition="enablePeripheralSupport" ><![CDATA[
-      \t/**
-      \t * Class used to do initialisation of $(_Class) Fault handling
-      \t *
-      \t * This class has a templated constructor that accepts various values:
-      \t *
-      \t * @note This constructor may be used to create a const instance in ROM
-      \t *
-      \t * Example:
-      \t * @code
-      \t * static const $(_Class)::FaultInit faultInit {
-      \t *
-      \t *    // Omitted parameters are taken to be zero unless a base value is given
-      \t *    FtmFaultMode_EvenChannelsManualFaultClearing , // Fault Control Mode - Even channels with manual fault clearing
-      \t *    FtmFaultInterrupt_Disabled ,                   // Fault Interrupt Enable - Disabled
-      \t *    FtmFaultFilter_4_clocks,                       // Fault Input Filter - 4 Clock cycles
-      \t *    FtmFault0Mode_Disabled ,                       // Fault Input 0 Enable and Filter - Fault input disabled
-      \t *    FtmFault0Polarity_ActiveHigh,                  // Fault Input 0 Polarity - Active High
-      \t *    FtmFault1Mode_Filtered ,                       // Fault Input 1 Enable and Filter - Fault input enabled with filter
-      \t *    FtmFault1Polarity_ActiveHigh,                  // Fault Input 1 Polarity - Active High
-      \t *    FtmFault2Mode_Direct ,                         // Fault Input 2 Enable and Filter - Fault input enabled
-      \t *    FtmFault2Polarity_ActiveLow,                   // Fault Input 2 Polarity - Active Low
-      \t *    FtmFault3Mode_Direct ,                         // Fault Input 3 Enable and Filter - Fault input enabled
-      \t *    FtmFault3Polarity_ActiveHigh,                  // Fault Input 3 Polarity - Active High
-      \t *
-      \t *    // Inherit default value
-      \t *    $(_Class)::DefaultFaultInitValue
-      \t * };
-      \t *
-      \t * // Initialise $(_NAME) from values specified above
-      \t * $(_Class)::configureFaultHandling(faultInit)
-      \t * @endcode
-      \t */
-   ]]></template>
+   <if condition="ftm_fltctrl_ffval" >
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" condition="ftm_fltctrl_ffval"
-   ><![CDATA[
-$(fault_init_description)
-      \tclass FaultInit {
-      \t
-      \tpublic:
-      \t   /**
-      \t    * Copy Constructor
-      \t    */
-      \t   constexpr FaultInit(const FaultInit &other) = default;
-      \t
-      \t   /**
-      \t    * Default Constructor
-      \t    */
-      \t   constexpr FaultInit() = default;
-      \t\n
-   ]]></template>
-
-<!-- InitFault Member variables -->
-
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-      variables="ftm_mode_faultm,ftm_mode_faultie,ftm_mode_pwmsync,ftm_mode_wpdis,ftm_mode_ftmen"
-   ><![CDATA[
-      \t   // Mode register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
-
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-      variables="ftm_fltctrl_ffval,ftm_fltctrl_fault0en"
-   ><![CDATA[
-      \t   // Fault Control register
-      \t   uint16_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
-
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-      variables="ftm_fltpol_flt0pol"
-   ><![CDATA[
-      \t   // Fault Input Polarity register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate
-   >
-
-<!-- InitFault Configure methods -->
-
-   <template codeGenCondition="enablePeripheralSupport" condition="ftm_fltctrl_ffval" ><![CDATA[
-      \t/**
-      \t * Configure fault handling from values specified in faultInit
-      \t *
-      \t * @param faultInit Class containing initialisation values
-      \t */
-      \tstatic ErrorCode configureFaultHandling(const FaultInit &faultInit) {
-      \t
-      \t   ftm->FLTCTRL = faultInit.fltctrl;
-      \t   ftm->FLTPOL  = faultInit.fltpol;
-      \t   ftm->MODE    = (ftm->MODE&~(FTM_MODE_FAULTIE_MASK|FTM_MODE_FAULTM_MASK)) | faultInit.mode;
-      \t
-      \t   return E_NO_ERROR;
-      \t}\n\n
-   ]]></template>
-
-<!--  Constructors -->
-
-   <for keys="r" values="ftm_mode_faultm;ftm_mode_faultie;ftm_fltctrl_ffval" >
-      <constructorTemplate  namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-         variables="%(r)"
-         linePadding="xxx"
+      <template namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
-         \t   /**
-         \t    * Constructor for %description
-         \t    *
-         \t    * @tparam   Types
-         \t    * @param    rest
-         \t    *
-         %paramDescription
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr FaultInit(%params, Types... rest) : FaultInit(rest...) {
+         \t/**
+         \t * Class used to do initialisation of $(_Class) Fault handling
+         \t *
+         \t * This class has a templated constructor that accepts various values:
+         \t *
+         \t * @note This constructor may be used to create a const instance in ROM
+         \t *
+         \t * Example:
+         \t * @code
+         \t * static const $(_Class)::FaultInit faultInit {
+         \t *
+         \t *    // Omitted parameters are taken to be zero unless a base value is given
+         \t *    FtmFaultMode_EvenChannelsManualFaultClearing , // Fault Control Mode - Even channels with manual fault clearing
+         \t *    FtmFaultInterrupt_Disabled ,                   // Fault Interrupt Enable - Disabled
+         \t *    FtmFaultFilter_4_clocks,                       // Fault Input Filter - 4 Clock cycles
+         \t *    FtmFault0Mode_Disabled ,                       // Fault Input 0 Enable and Filter - Fault input disabled
+         \t *    FtmFault0Polarity_ActiveHigh,                  // Fault Input 0 Polarity - Active High
+         \t *    FtmFault1Mode_Filtered ,                       // Fault Input 1 Enable and Filter - Fault input enabled with filter
+         \t *    FtmFault1Polarity_ActiveHigh,                  // Fault Input 1 Polarity - Active High
+         \t *    FtmFault2Mode_Direct ,                         // Fault Input 2 Enable and Filter - Fault input enabled
+         \t *    FtmFault2Polarity_ActiveLow,                   // Fault Input 2 Polarity - Active Low
+         \t *    FtmFault3Mode_Direct ,                         // Fault Input 3 Enable and Filter - Fault input enabled
+         \t *    FtmFault3Polarity_ActiveHigh,                  // Fault Input 3 Polarity - Active High
+         \t *
+         \t *    // Inherit default value
+         \t *    $(_Class)::DefaultFaultInitValue
+         \t * };
+         \t *
+         \t * // Initialise $(_NAME) from values specified above
+         \t * $(_Class)::configureFaultHandling(faultInit)
+         \t * @endcode
+         \t */
+         \tclass FaultInit {
          \t
-         \t      %registerName = (%registerName&~%mask) | %paramExpression;
-         \t   }
+         \tpublic:
+         \t   /**
+         \t    * Copy Constructor
+         \t    */
+         \t   constexpr FaultInit(const FaultInit &other) = default;
+         \t
+         \t   /**
+         \t    * Default Constructor
+         \t    */
+         \t   constexpr FaultInit() = default;
          \t\n
-      ]]></constructorTemplate>
-   </for>
-   <for keys="pin" dim="8" >
-      <constructorTemplate  namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-         variables="ftm_fltctrl_fault%(pin)en,ftm_fltpol_flt%(pin)pol"
-         linePadding="xxx"
-         tooltipPadding="x*xxxxxxxx"
+      ]]></template>
+
+   <!-- InitFault Member variables -->
+
+      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+         variables="ftm_mode_faultm,ftm_mode_faultie,ftm_mode_pwmsync,ftm_mode_wpdis,ftm_mode_ftmen"
       ><![CDATA[
-         \t   /**
-         \t    * Constructor for %description
-         \t    *
-         \t    * @tparam   Types
-         \t    * @param    rest
-         \t    *
-         %paramDescription
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr FaultInit(
-         %params, Types... rest) : FaultInit(rest...) {
+         \t   // Mode register
+         \t   uint8_t %registerName = 0;\n\n
+      ]]></variableTemplate>
+
+      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+         variables="ftm_fltctrl_ffval,ftm_fltctrl_fault0en"
+      ><![CDATA[
+         \t   // Fault Control register
+         \t   uint16_t %registerName = 0;\n\n
+      ]]></variableTemplate>
+
+      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+         variables="ftm_fltpol_flt0pol"
+      ><![CDATA[
+         \t   // Fault Input Polarity register
+         \t   uint8_t %registerName = 0;\n\n
+      ]]></variableTemplate
+      >
+
+   <!--  Constructors -->
+
+      <for keys="r" values="ftm_mode_faultm;ftm_mode_faultie;ftm_fltctrl_ffval" >
+         <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+            variables="%(r)"
+            linePadding="xxx"
+         ><![CDATA[
+            \t   /**
+            \t    * Constructor for %description
+            \t    *
+            \t    * @tparam   Types
+            \t    * @param    rest
+            \t    *
+            %paramDescription
+            \t    */
+            \t   template <typename... Types>
+            \t   constexpr FaultInit(%params, Types... rest) : FaultInit(rest...) {
+            \t
+            \t      %registerName = (%registerName&~%mask) | %paramExpression;
+            \t   }
+            \t\n
+         ]]></variableTemplate>
+      </for>
+
+      <for keys="pin" dim="8" >
+         <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+            variables="ftm_fltctrl_fault%(pin)en,ftm_fltpol_flt%(pin)pol"
+            linePadding="xxx"
+            tooltipPadding="x*xxxxxxxx"
+         ><![CDATA[
+            \t   /**
+            \t    * Constructor for %description
+            \t    *
+            \t    * @tparam   Types
+            \t    * @param    rest
+            \t    *
+            %paramDescription
+            \t    */
+            \t   template <typename... Types>
+            \t   constexpr FaultInit(
+            %params, Types... rest) : FaultInit(rest...) {
+            \t
+            \t      %registerName0 = (%registerName0&~%mask0) | %paramName0;
+            \t      %registerName1 = (%registerName1&~%mask1) | %paramName1;
+            \t   }
+            \t\n
+         ]]></variableTemplate>
+      </for>
+
+      <!-- InitFault Configure methods -->
+
+      <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+         \t/**
+         \t * Configure fault handling from values specified in faultInit
+         \t *
+         \t * @param faultInit Class containing initialisation values
+         \t */
+         \tstatic ErrorCode configureFaultHandling(const FaultInit &faultInit) {
          \t
-         \t      %registerName0 = (%registerName0&~%mask0) | %paramName0;
-         \t      %registerName1 = (%registerName1&~%mask1) | %paramName1;
-         \t   }
-         \t\n
-      ]]></constructorTemplate>
-   </for>
+         \t   ftm->FLTCTRL = faultInit.fltctrl;
+         \t   ftm->FLTPOL  = faultInit.fltpol;
+         \t   ftm->MODE    = (ftm->MODE&~(FTM_MODE_FAULTIE_MASK|FTM_MODE_FAULTM_MASK)) | faultInit.mode;
+         \t
+         \t   return E_NO_ERROR;
+         \t}\n\n
+      ]]></template>
 
-<!--  Fault Init value -->
+      <!--  Fault Init value -->
 
-   <initialValueTemplate codeGenCondition="enablePeripheralSupport"
-      condition="SignalExists(&quot;$(_NAME)_FLT0&quot;)||SignalExists(&quot;$(_NAME)_FLT1&quot;)||SignalExists(&quot;$(_NAME)_FLT2&quot;)||SignalExists(&quot;$(_NAME)_FLT3&quot;)"
-      separator=","
-      terminator=","
-      variables=",
-         ftm_mode_faultm,
-         ftm_mode_faultie,
-         ftm_mode_ffval,
-         ftm_fltctrl_ffval"
-   ><![CDATA[
-      \t/**
-      \t * Default initialisation value for $(_Class)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr FaultInit DefaultFaultInitValue = {%initExpression\n
-   ]]></initialValueTemplate>
-
-   <for keys="inp" dim="4" >
-      <initialValueTemplate codeGenCondition="enablePeripheralSupport"
-         condition="SignalExists(&quot;$(_NAME)_FLT%(inp)&quot;)"
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+         condition="SignalExists(&quot;$(_NAME)_FLT0&quot;)||SignalExists(&quot;$(_NAME)_FLT1&quot;)||SignalExists(&quot;$(_NAME)_FLT2&quot;)||SignalExists(&quot;$(_NAME)_FLT3&quot;)"
          separator=","
          terminator=","
-         variables="
-            ftm_fltctrl_fault%(inp)en,
-            ftm_fltpol_flt%(inp)pol"
+         variables=",
+            ftm_mode_faultm,
+            ftm_mode_faultie,
+            ftm_mode_ffval,
+            ftm_fltctrl_ffval"
       ><![CDATA[
-         %initExpression\n
-      ]]></initialValueTemplate>
-   </for>
+         \t/**
+         \t * Default initialisation value for $(_Class)
+         \t * This value is created from Configure.usbdmProject settings
+         \t */
+         \tstatic constexpr FaultInit DefaultFaultInitValue = {%initExpression\n
+      ]]></variableTemplate>
 
-   <template codeGenCondition="enablePeripheralSupport"
-      condition="SignalExists(&quot;$(_NAME)_FLT0&quot;)||SignalExists(&quot;$(_NAME)_FLT1&quot;)||SignalExists(&quot;$(_NAME)_FLT2&quot;)||SignalExists(&quot;$(_NAME)_FLT3&quot;)"
-   >
-   <![CDATA[
-      \t};
-      \t\n
-   ]]>
-   </template>
+      <for keys="inp" dim="4" >
+         <variableTemplate codeGenCondition="enablePeripheralSupport"
+            condition="SignalExists(&quot;$(_NAME)_FLT%(inp)&quot;)"
+            separator=","
+            terminator=","
+            variables="
+               ftm_fltctrl_fault%(inp)en,
+               ftm_fltpol_flt%(inp)pol"
+         ><![CDATA[
+            %initExpression\n
+         ]]></variableTemplate>
+      </for>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" condition="ftm_fltctrl_ffval" ><![CDATA[
-      \t}; // class  $(_Class)BasicInfo::FaultInit\n\n
-   ]]></template>
+      <template codeGenCondition="enablePeripheralSupport"
+         condition="SignalExists(&quot;$(_NAME)_FLT0&quot;)||SignalExists(&quot;$(_NAME)_FLT1&quot;)||SignalExists(&quot;$(_NAME)_FLT2&quot;)||SignalExists(&quot;$(_NAME)_FLT3&quot;)"
+      >
+      <![CDATA[
+         \t};
+         \t\n
+      ]]>
+      </template>
+
+      <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+         \t}; // class  $(_Class)BasicInfo::FaultInit\n\n
+      ]]></template>
+
+   </if> <!-- condition="ftm_fltctrl_ffval" -->
 
 <!--   ========== ChannelInit class =============================== -->
 
@@ -3578,48 +3578,48 @@ $(fault_init_description)
       \t\n
    ]]></template>
 
-<!-- ChannelInit Class Member variables -->
+   <!-- ChannelInit Class Member variables -->
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="ftm_cnv[]"
    ><![CDATA[
       \t   // %description
       \t   uint16_t %registerName = 0_ticks;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="ftm_cnsc_mode_independent[]"
    ><![CDATA[
       \t   // Channel Status And Control Register
       \t   uint8_t cnsc = 0;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-      condition="ftm_combine_comb0_present"
+      condition="ftm_combine_combine$(_instance)_present"
    ><![CDATA[
       \t   // Function For Linked Channels
       \t   uint8_t combine = 0;
       \t\n
    ]]></template>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="ftm_channel_number"
    ><![CDATA[
       \t   // %description
       \t   %paramType %registerName = %paramType_None;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="ftm_filter_ch0fval"
    ><![CDATA[
       \t   // %description
       \t   %paramType %registerName = %paramType_Disabled;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-<!-- ChannelInit Configure methods -->
+   <!-- ChannelInit Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" codeGenCondition="enablePeripheralSupport"  discardRepeats="true" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" codeGenCondition="enablePeripheralSupport" discardRepeats="true" ><![CDATA[
       \t/**
       \t * Configure FTM channel from values specified in channelInit
       \t *
@@ -3654,7 +3654,7 @@ $(fault_init_description)
       \tstatic ErrorCode configure(FtmChannelNum channelNum, const ChannelInit &channelInit) {
       \t\n
    ]]></template>
-   <template codeGenCondition="enablePeripheralSupport" condition="ftm_combine_combine0_present" ><![CDATA[
+   <template codeGenCondition="enablePeripheralSupport" condition="ftm_combine_combine$(_instance)_present" ><![CDATA[
       \t   // Configure timer combine mode
       \t   if ((channelNum&0b1) == 0) {
       \t      // Even channel value controls paired channels n,n+1
@@ -3689,12 +3689,12 @@ $(fault_init_description)
       \t\n
    ]]></template>
 
-<!-- ChannelInit Constructors -->
+   <!-- ChannelInit Constructors -->
 
    <for keys="   r                    :  c    "
       values=" ftm_cnsc_action[]      : true  ;
                ftm_cnsc_icrst[]       : true  " >
-      <constructorTemplate  namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx"
          condition="%(c)"
@@ -3713,10 +3713,10 @@ $(fault_init_description)
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
-      ]]></constructorTemplate>
+      ]]></variableTemplate>
    </for>
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="ftm_cnsc_mode_independent[]"
       linePadding="xxx"
    ><![CDATA[
@@ -3734,13 +3734,13 @@ $(fault_init_description)
       \t      cnsc    = %paramExpression;
       \t   }
       \t\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
    <for keys="r" values="
       ftm_filter_ch0fval;
       ftm_channel_number;
       ftm_cnv[]" >
-      <constructorTemplate  namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -3758,13 +3758,13 @@ $(fault_init_description)
          \t      %registerName = %paramExpression;
          \t   }
          \t\n
-      ]]></constructorTemplate>
+      ]]></variableTemplate>
    </for>
    <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t}; // class  $(_Class)BasicInfo::ChannelInit\n\n
    ]]></template>
 
-<!--  ChannelInit Default Initialisation value -->
+   <!--  ChannelInit Default Initialisation value -->
 
   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
@@ -3774,7 +3774,7 @@ $(fault_init_description)
       \tstatic constexpr ChannelInit DefaultChannelInitValues[] = {\n
   ]]></template>
    <for keys="ch" dim="NumChannels" >
-      <initialValueTemplate  codeGenCondition="enablePeripheralSupport"
+      <variableTemplate  codeGenCondition="enablePeripheralSupport"
          separator=","
          terminator=","
          variables="
@@ -3787,7 +3787,7 @@ $(fault_init_description)
          \t{
          \t   FtmChannelNum_%(ch),
          %initExpression\n\t},\n
-      ]]></initialValueTemplate>
+      ]]></variableTemplate>
    </for>
   <template  codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \n\t};\n\n
@@ -3795,185 +3795,158 @@ $(fault_init_description)
 
 <!--  ========== FTM QUAD Init class =============================== -->
 
-   <template key="quad_init_description" namespace="all" condition="ftm_qdctrl_quadmode_present" ><![CDATA[
-      \t/**
-      \t * Class used to do initialisation of FtmQuadDecoder$(_instance)
-      \t *
-      \t * This class has a templated constructor that accepts various values:
-      \t *
-      \t * @note This constructor may be used to create a const instance in ROM
-      \t *
-      \t * Example:
-      \t * @code
-      \t * static const FtmQuadDecoder$(_instance)::QuadInit quadInit {
-      \t *
-      \t *    // Omitted parameters are taken to be zero unless a base value is given
-      \t *    FtmQuadratureMode_Phase_AB_Mode , // Quadrature decoding mode
-      \t *    FtmPhaseAPolarity_ActiveHigh ,    // Polarity of Phase A input
-      \t *    FtmPhaseBPolarity_ActiveHigh ,    // Polarity of Phase B input
-      \t *    FtmPhaseAFilter_Disabled ,        // Filtering on Phase A input
-      \t *    FtmPhaseBFilter_Disabled ,        // Filtering on Phase B input
-      \t *    FtmOverflowInterrupt_Enabled ,    // Overflow Interrupt
-      \t *    NvicPriority_Normal ,             // IRQ level for this peripheral
-      \t *    FtmPrescale_DivBy32,              // Clock prescaler
-      \t *    ftmCallbak,                       // Timer overflow call-back
-      \t *
-      \t *    // Optional base value to start with (must be last parameter)
-      \t *    $(_Class)::DefaultQuadInitValue
-      \t * };
-      \t *
-      \t * // Initialise FTM from values specified above
-      \t * FtmQuadDecoder$(_instance)::configure(ftmInit)
-      \t * @endcode
-      \t */
-   ]]></template>
+   <if condition="ftm_qdctrl_quadmode_present" >
 
-   <template namespace="usbdm" condition="ftm_qdctrl_quadmode_present" ><![CDATA[
-$(quad_init_description)
-      \tclass QuadInit {
-      \t
-      \tpublic:
-      \t   /**
-      \t    * Copy Constructor
-      \t    */
-      \t   constexpr QuadInit(const QuadInit &other) = default;
-      \t
-      \t   /**
-      \t    * Default Constructor
-      \t    */
-      \t   constexpr QuadInit() = default;
-      \t\n
-   ]]></template>
+      <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+         \t/**
+         \t * Class used to do initialisation of FtmQuadDecoder$(_instance)
+         \t *
+         \t * This class has a templated constructor that accepts various values:
+         \t *
+         \t * @note This constructor may be used to create a const instance in ROM
+         \t *
+         \t * Example:
+         \t * @code
+         \t * static const FtmQuadDecoder$(_instance)::QuadInit quadInit {
+         \t *
+         \t *    // Omitted parameters are taken to be zero unless a base value is given
+         \t *    FtmQuadratureMode_Phase_AB_Mode , // Quadrature decoding mode
+         \t *    FtmPhaseAPolarity_ActiveHigh ,    // Polarity of Phase A input
+         \t *    FtmPhaseBPolarity_ActiveHigh ,    // Polarity of Phase B input
+         \t *    FtmPhaseAFilter_Disabled ,        // Filtering on Phase A input
+         \t *    FtmPhaseBFilter_Disabled ,        // Filtering on Phase B input
+         \t *    FtmOverflowInterrupt_Enabled ,    // Overflow Interrupt
+         \t *    FtmPrescale_DivBy32,              // Clock prescaler
+         \t *
+         \t *    NvicPriority_Normal ,             // IRQ level for this peripheral
+         \t *    ftmCallbak,                       // Timer overflow call-back
+         \t *
+         \t *    // Optional base value to start with (must be last parameter)
+         \t *    FtmQuadDecoder$(_instance)::DefaultQuadInitValue
+         \t * };
+         \t *
+         \t * // Initialise FTM from values specified above
+         \t * FtmQuadDecoder$(_instance)::configure(quadInit)
+         \t * @endcode
+         \t */
+         \tclass QuadInit {
+         \t
+         \tpublic:
+         \t   /**
+         \t    * Copy Constructor
+         \t    */
+         \t   constexpr QuadInit(const QuadInit &other) = default;
+         \t
+         \t   /**
+         \t    * Default Constructor
+         \t    */
+         \t   constexpr QuadInit() = default;
+         \t\n
+      ]]></template>
 
-<!-- QUAD Init class Member variables -->
+      <!-- QUAD Init class Member variables -->
 
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"  condition="ftm_qdctrl_quadmode_present"
-      variables="irqHandlingMethod"
-    ><![CDATA[
-      \t   // %description
-      \t   %params = nullptr;\n\n
-   ]]></setTemplate>
+      <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+         variables="irqHandlingMethod"
+       ><![CDATA[
+         \t   // %description
+         \t   %params = nullptr;\n\n
+      ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true"
-      variables="ftm_qdfilter_a,ftm_qdfilter_b"
-   ><![CDATA[
-      \t   // Quad input filter control
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+         variables="ftm_qdfilter_a,ftm_qdfilter_b"
+      ><![CDATA[
+         \t   // Quad input filter control
+         \t   uint8_t %registerName = 0;\n\n
+      ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true"
-      variables="ftm_qdctrl_quadmode"
-   ><![CDATA[
-      \t   // Quadrature Decoder Control And Status Register
-      \t   uint8_t %registerName = FTM_QDCTRL_QUADEN_MASK;\n\n
-   ]]></initialValueTemplate>
+      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+         variables="ftm_qdctrl_quadmode"
+      ><![CDATA[
+         \t   // Quadrature Decoder Control And Status Register
+         \t   uint8_t %registerName = FTM_QDCTRL_QUADEN_MASK;\n\n
+      ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" condition="ftm_qdctrl_quadmode_present"
-      variables="ftm_sc_action,ftm_sc_ps"
-   ><![CDATA[
-      \t   // Status And Control Register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+         variables="ftm_sc_action,ftm_sc_ps"
+      ><![CDATA[
+         \t   // Status And Control Register
+         \t   uint8_t %registerName = 0;\n\n
+      ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod" condition="ftm_qdctrl_quadmode_present"
-      variables="/PCR/nvic_irqLevel"
-   ><![CDATA[
-      \t   // %description
-      \t   %paramType %registerName = %paramType_Normal;\n\n
-   ]]></initialValueTemplate>
+      <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+         variables="/PCR/nvic_irqLevel"
+      ><![CDATA[
+         \t   // %description
+         \t   %paramType %registerName = %paramType_Normal;\n\n
+      ]]></variableTemplate>
 
-<!-- QUAD Init class Configure method -->
+      <!-- QUAD Init class Constructors -->
 
-   <template key="/$(_BASENAME)/QuadInitMethod" namespace="all" condition="ftm_qdctrl_quadmode_present" ><![CDATA[
-      \t/**
-      \t * Configure QuadDecoder from values specified in init
-      \t
-      \t * @param quadInit Class containing initialisation values
-      \t */
-      \tstatic ErrorCode configure(const typename Info::QuadInit &quadInit) {
-      \t
-      \t   // Assertions placed here so only checked if FtmQuadDecoder actually used
-      \t   static_assert(Info::InfoQUAD::info[0].gpioBit >= 0, "FtmQuadDecoder PHA is not mapped to a pin - Modify Configure.usbdm");
-      \t   static_assert(Info::InfoQUAD::info[1].gpioBit >= 0, "FtmQuadDecoder PHB is not mapped to a pin - Modify Configure.usbdm");
-      \t
-      \t   // Enable peripheral clock and map pins
-      \t   enable();
-      \t
-      \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      // Only set call-back if feature enabled and non-null
-      \t      if (quadInit.callbackFunction != nullptr) {
-      \t         FtmBase_T<Info>::setCallback(quadInit.callbackFunction);
-      \t      }
-      \t      enableNvicInterrupts(quadInit.irqlevel);
-      \t   }
-      \t
-      \t   // Disable timer to change clock (unable to switch directly between clock sources)
-      \t   ftm->SC  = 0;
-      \t
-      \t   // Start value for counter
-      \t   ftm->CNTIN = 0;
-      \t
-      \t   // End value for counter
-      \t   ftm->MOD =0;
-      \t
-      \t   // Restart counter
-      \t   ftm->CNT = 0;
-      \t
-      \t   // Configure timer
-      \t   ftm->FILTER = quadInit.qdfilter;
-      \t   ftm->SC     = quadInit.sc;
-      \t   ftm->QDCTRL = quadInit.qdctrl;
-      \t
-      \t   return E_NO_ERROR;
-      \t}\n\n
-   ]]></template>
+      <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+         variables="irqHandlingMethod"
+         linePadding="xxx"
+       ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
+         \t
+         \t      this->%paramName0 = %paramExpression;
+         \t   }\n\n
+      ]]></variableTemplate>
 
-<!-- QUAD Init class Constructors -->
+      <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+         variables="/PCR/nvic_irqLevel"
+         linePadding="xxx"
+       ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
+         \t
+         \t      %registerName = %paramExpression;
+         \t   }\n\n
+      ]]></variableTemplate>
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod" condition="ftm_qdctrl_quadmode_present"
-      variables="irqHandlingMethod"
-      linePadding="xxx"
-    ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
-      \t
-      \t      this->%paramName0 = %paramExpression;
-      \t   }\n\n
-   ]]></constructorTemplate>
+      <for keys="r" values="
+         ftm_sc_action;
+         ftm_sc_ps;
+         ftm_qdctrl_quadmode;
+         ftm_qdctrl_phapol;
+         ftm_qdctrl_phbpol" >
+         <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+            variables="%(r)"
+            linePadding="xxx"
+         ><![CDATA[
+            \t   /**
+            \t    * Constructor for %description
+            \t    *
+            \t    * @tparam   Types
+            \t    * @param    rest
+            %paramDescription
+            \t    */
+            \t   template <typename... Types>
+            \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
+            \t
+            \t      %registerName = (%registerName&~%mask) | %paramExpression;
+            \t   }
+            \t\n
+         ]]></variableTemplate>
+      </for>
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod" condition="ftm_qdctrl_quadmode_present"
-      variables="/PCR/nvic_irqLevel"
-      linePadding="xxx"
-    ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
-      \t
-      \t      %registerName = %paramExpression;
-      \t   }\n\n
-   ]]></constructorTemplate>
-
-   <for keys="r" values="
-      ftm_sc_action;
-      ftm_sc_ps;
-      ftm_qdctrl_quadmode;
-      ftm_qdctrl_phapol;
-      ftm_qdctrl_phbpol" >
-      <constructorTemplate  namespace="usbdm"  condition="ftm_qdctrl_quadmode_present"
-         variables="%(r)"
+      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+         variables="ftm_qdfilter_a"
          linePadding="xxx"
       ><![CDATA[
          \t   /**
@@ -3986,77 +3959,108 @@ $(quad_init_description)
          \t   template <typename... Types>
          \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
          \t
-         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t      qdctrl   = (qdctrl&~FTM_QDCTRL_PHAFLTREN_MASK) | ((%paramExpression>>8) & FTM_QDCTRL_PHAFLTREN_MASK);
+         \t      qdfilter = (qdfilter&~FTM_FILTER_CH0FVAL_MASK) | (%paramExpression&FTM_FILTER_CH0FVAL_MASK);
          \t   }
          \t\n
-      ]]></constructorTemplate>
-   </for>
+      ]]></variableTemplate>
 
-   <constructorTemplate  namespace="usbdm" discardRepeats="true"
-      variables="ftm_qdfilter_a"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
-      \t
-      \t      qdctrl   = (qdctrl&~FTM_QDCTRL_PHAFLTREN_MASK) | ((%paramExpression>>8) & FTM_QDCTRL_PHAFLTREN_MASK);
-      \t      qdfilter = (qdfilter&~FTM_FILTER_CH0FVAL_MASK) | (%paramExpression&FTM_FILTER_CH0FVAL_MASK);
-      \t   }
-      \t\n
-   ]]></constructorTemplate>
+      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+         variables="ftm_qdfilter_b"
+         linePadding="xxx"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
+         \t
+         \t      qdctrl   = (qdctrl&~FTM_QDCTRL_PHBFLTREN_MASK) | ((%paramExpression>>8) & FTM_QDCTRL_PHBFLTREN_MASK);
+         \t      qdfilter = (qdfilter&~FTM_FILTER_CH1FVAL_MASK) | (%paramExpression&FTM_FILTER_CH1FVAL_MASK);
+         \t   }
+         \t\n
+      ]]></variableTemplate>
 
-   <constructorTemplate  namespace="usbdm" discardRepeats="true"
-      variables="ftm_qdfilter_b"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
-      \t
-      \t      qdctrl   = (qdctrl&~FTM_QDCTRL_PHBFLTREN_MASK) | ((%paramExpression>>8) & FTM_QDCTRL_PHBFLTREN_MASK);
-      \t      qdfilter = (qdfilter&~FTM_FILTER_CH1FVAL_MASK) | (%paramExpression&FTM_FILTER_CH1FVAL_MASK);
-      \t   }
-      \t\n
-   ]]></constructorTemplate>
+      <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+         \t};\n\n
+      ]]></template>
 
-   <template namespace="usbdm"  condition="ftm_qdctrl_quadmode_present" ><![CDATA[
-      \t};\n\n
-   ]]></template>
-<!--  Default Initialisation value -->
+   <!--  Default QuadInitValue value -->
 
-   <initialValueTemplate  condition="ftm_qdctrl_quadmode_present"
-      separator=","
-      terminator=","
-      variables="
-         ftm_qdctrl_quadmode,
-         ftm_qdctrl_phapol,
-         ftm_qdctrl_phbpol,
-         ftm_qdfilter_a,
-         ftm_qdfilter_b,
-         ftm_sc_action,
-         irqLevel,
-         ftm_sc_ps"
-   ><![CDATA[
-      \t/**
-      \t * Default initialisation value for $(_Class)QuadDecoder
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr QuadInit DefaultQuadInitValue = {%initExpression
-      \t};\n\n
-   ]]></initialValueTemplate>
+      <variableTemplate  codeGenCondition="enablePeripheralSupport"
+         separator=","
+         terminator=","
+         variables="
+            ftm_qdctrl_quadmode,
+            ftm_qdctrl_phapol,
+            ftm_qdctrl_phbpol,
+            ftm_qdfilter_a,
+            ftm_qdfilter_b,
+            ftm_sc_action,
+            ftm_sc_ps"
+      ><![CDATA[
+         \t/**
+         \t * Default initialisation value for $(_Class)QuadDecoder
+         \t * This value is created from Configure.usbdmProject settings
+         \t */
+         \tstatic constexpr QuadInit DefaultQuadInitValue = {%initExpression
+         \t};\n\n
+      ]]></variableTemplate>
+
+      <!-- QUAD Init class Configure method -->
+
+      <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+         \t/**
+         \t * Configure QuadDecoder from values specified in init
+         \t
+         \t * @param quadInit Class containing initialisation values
+         \t */
+         \tstatic ErrorCode configure(const QuadInit &quadInit) {
+         \t
+         \t   // Assertions placed here so only checked if FtmQuadDecoder actually used
+         \t   static_assert(InfoQUAD::info[0].pinIndex >= PinIndex::MIN_PIN_INDEX, "FtmQuadDecoder PHA is not mapped to a pin - Modify Configure.usbdm");
+         \t   static_assert(InfoQUAD::info[1].pinIndex >= PinIndex::MIN_PIN_INDEX, "FtmQuadDecoder PHB is not mapped to a pin - Modify Configure.usbdm");
+         \t
+         \t   // Enable peripheral clock
+         \t   enableClock();\n\n
+      ]]></template>
+      <template codeGenCondition="irqHandlingMethod" ><![CDATA[
+         \t   // Only set call-back if feature enabled and non-null
+         \t   if (quadInit.callbackFunction != nullptr) {
+         \t      setCallback(quadInit.callbackFunction);
+         \t   }
+         \t   enableNvicInterrupt(irqNums[0], quadInit.irqlevel);\n
+      ]]></template>
+      <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+         \t
+         \t   // Disable timer to change clock (unable to switch directly between clock sources)
+         \t   ftm->SC  = 0;
+         \t
+         \t   // Start value for counter
+         \t   ftm->CNTIN = 0;
+         \t
+         \t   // End value for counter
+         \t   ftm->MOD =0;
+         \t
+         \t   // Restart counter
+         \t   ftm->CNT = 0;
+         \t
+         \t   // Configure timer
+         \t   ftm->FILTER = quadInit.qdfilter;
+         \t   ftm->SC     = quadInit.sc;
+         \t   ftm->QDCTRL = quadInit.qdctrl;
+         \t
+         \t   return E_NO_ERROR;
+         \t}\n\n
+      ]]></template>
+
+   </if> <!-- condition="ftm_qdctrl_quadmode_present" -->
+
+<!--  ========== End of class  $(_Class)BasicInfo =============================== -->
 
    <template namespace="usbdm" ><![CDATA[
       }; // class  $(_Class)BasicInfo\n\n
@@ -4196,7 +4200,7 @@ $(quad_init_description)
    </validate>
 
    <projectActionList id = "ftm_common_files" >
-      <copy source="Project_Headers/ftm-MKE.h"            target="Project_Headers/ftm.h"                overwrite="true" derived="true" />
+      <copy source="Project_Headers/ftm.h"                target="Project_Headers/ftm.h"                overwrite="true" derived="true" />
       <copy source="Snippets/ftm-pwm-example.cpp"         target="Snippets/ftm-pwm-example.cpp"         overwrite="true" derived="true" />
       <copy source="Snippets/ftm-ic-example.cpp"          target="Snippets/ftm-ic-example.cpp"          overwrite="true" derived="true" />
       <copy source="Snippets/ftm-oc-example.cpp"          target="Snippets/ftm-oc-example.cpp"          overwrite="true" derived="true" />
@@ -4247,7 +4251,7 @@ $(quad_init_description)
       </for>
    </category>
 
-   <signals enabledBy="enablePeripheralSupport" locked="true" />
+   <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
    <signals name="FTM" optional="true" />
 
 </fragment>

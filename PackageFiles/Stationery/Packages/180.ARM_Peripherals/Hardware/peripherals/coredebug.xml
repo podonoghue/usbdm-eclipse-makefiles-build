@@ -4,9 +4,9 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Core Debug">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
-   <xi:include href="_mapPinsOption.xml"/>
+   <xi:include href="mapPinsOption.xml"/>
 
    <intOption key="coredebug_dfsr_external" condition="coredebug_dfsr_external_present"
       description="Indicates a debug event generated because of the assertion of EDBGRQ"
@@ -41,7 +41,7 @@
    <for keys="field:name"
         values="
 ">
-      <setTemplate variables="%(field)"
+      <variableTemplate variables="%(field)"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -51,7 +51,7 @@
          \tstatic void configure%(name)(%params) {
          \t   %fieldAssignment
          \t}\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== CoreDebug Init class =============================== -->
@@ -116,19 +116,19 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="coredebug_dfsr_external,coredebug_dfsr_vcatch,coredebug_dfsr_dwttrap,coredebug_dfsr_bkpt,coredebug_dfsr_halted"
    ><![CDATA[
       \t   /// Debug Fault Status Register
       \t   uint32_t dfsr = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="coredebug_dcrsr_regwnr,coredebug_dcrsr_regsel"
    ><![CDATA[
       \t   /// Debug Core Register Selector Register
       \t   uint32_t dcrsr = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Configure methods -->
 
@@ -173,7 +173,7 @@
             coredebug_dcrsr_regwnr;
             coredebug_dcrsr_regsel
             ">
-      <setTemplate namespace="usbdm"
+      <variableTemplate namespace="usbdm"
          variables="%(r)"
          linePadding="xxx">
       <![CDATA[
@@ -192,12 +192,12 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate
+   <variableTemplate
       separator=","
       terminator=","
       variables="
@@ -213,7 +213,7 @@
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm">
       <![CDATA[

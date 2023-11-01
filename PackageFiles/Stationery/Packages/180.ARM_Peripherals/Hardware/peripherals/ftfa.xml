@@ -7,14 +7,12 @@
    <stringOption key="irq_pattern"        locked="true" value="^FTF_(Command|ReadCollision)$" hidden="true" />
    <stringOption key="irq_ClassHandler"   locked="true" value="Flash::$1_irqHandler" hidden="true" />
 
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
    <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
    <title description="------------------------------------------" />
 
 <!--

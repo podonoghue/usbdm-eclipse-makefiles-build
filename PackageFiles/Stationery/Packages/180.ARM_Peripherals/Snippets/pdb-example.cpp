@@ -30,57 +30,87 @@ using MyAdcChannel  = $(/HARDWARE/Analogue0:Adc0\:\:Channel<10>);
 using MyAdc         = MyAdcChannel::OwningAdc;
 
 // Length of PDB sequence
-static constexpr Seconds SEQ_LENGTH    = 100_ms;
+static constexpr Seconds SEQ_LENGTH    = 10_ms;
 
-// When to take ADC sample within sequence
+// When to take ADC sample
 static constexpr Seconds TRIGGER_TIME  =  9_ms;
 
 static uint32_t result;
 static bool     complete=false;
 
 static void pdbCallback() {
+   if ((Pdb0::getChannelFlags(0) & PDB_S_ERR_MASK) != 0) {
+      Pdb0::clearChannelFlags(0);
+      // Channel sequence error
+      console.writeln("Sequence Error!!");
+   }
+   Pdb0::clearEventFlag();
+
    complete = true;
-   Led::toggle();
+   Led::clear();
 }
 
-static void pdbErrorCallback() {
-   complete = true;
-   __BKPT();
-}
+//static void pdbErrorCallback() {
+//   complete = true;
+//   __BKPT();
+//}
 
 static void configurePdb() {
 
-#if 1
-   static const Pdb0::Init pdbInit {
+   static constexpr Pdb0::Init pdbInit = {
 
-      PdbTrigger_Software ,      // Trigger Input Source Select - Software trigger is selected
+         PdbTrigger_Software ,   // Trigger Input Source Select
+         PdbMode_OneShot ,       // PDB operation mode - Sequence runs once only
+         PdbLoadMode_Immediate , // Register Load Select - Registers loaded immediately on LDOK=1
+         NvicPriority_Normal ,   // IRQ level for this peripheral
 
-      PdbLoadMode_Event ,        // Register Load Select - Registers loaded on event (software trigger)
+         // Period
+         PdbPrescale_Auto_Calculated,  // Clock Prescaler and modulo calculated
+         SEQ_LENGTH,
 
-      PdbMode_Continuous,        // Sequence repeats
+         // Error IRQ
+         PdbErrorAction_Interrupt,  // Sequence Error Interrupt Enable - Interrupt on error
 
-      PdbPrescale_Auto_Select,   // Prescale selected automatically from modulo
-      SEQ_LENGTH ,               // Counter modulo
+         // Event IRQ
+         PdbAction_Interrupt ,      // Timer event action
+         SEQ_LENGTH  ,              // Interrupt delay
+         pdbCallback,
 
-      PdbAction_Interrupt ,      // Event action - Interrupt
-      SEQ_LENGTH ,               // Interrupt delay
-      pdbCallback,               // Interrupt handler
+         // Pre-trigger 0 configuration
+         PdbChannel_0,
+         PdbPretrigger0_Delayed , // Channel Pretrigger ADC0.SC1[0] - Pretrigger disabled
+         TRIGGER_TIME,            // Delay
 
-      PdbErrorAction_Interrupt , // Sequence Error Interrupt Enable - Interrupt on error
-      pdbErrorCallback,          // Call-back to use
+//         // Pre-trigger 1 configuration
+//         PdbChannel_0,
+//         PdbPretrigger1_Disabled , // Channel Pretrigger ADC0.SC1[1] - Pretrigger disabled
+//         0_ticks,  // Delay
 
-      PdbMode_Continuous ,       // PDB operation mode - Sequence runs continuously once triggered
-
-      NvicPriority_Normal,       // IRQ level for this peripheral - Normal
-
-      PdbChannel_0,              // Channel 0 set up
-      PdbPretrigger0_Delayed ,   // Channel Pretrigger control (usually ADC0.SC1[0]) - Pretrigger delayed
-      TRIGGER_TIME,              // Delay
-   };
+//         // Pulse output 0 (CMP0) configuration
+//         PdbPulseOutput0_Disabled , // Pulse output trigger enable - Pulse output disabled
+//         0_ticks , // Pulse-Output Delay 1 - rising edge
+//         0_ticks,  // Pulse-Output Delay 2 - falling edge
+//
+//         // Pulse output 1 (CMP1) configuration
+//         PdbPulseOutput1_Disabled , // Pulse output trigger enable - Pulse output disabled
+//         0_ticks , // Pulse-Output Delay 1 - rising edge
+//         0_ticks,  // Pulse-Output Delay 2 - falling edge
+//
+      };
 
    Pdb0::configure(pdbInit);
 
-#else
+   // Wait for register load to complete
+   while (!Pdb::isRegisterLoadComplete()) {
+      __asm__("nop");
+   }
+
+#if 0
+   // Note: Can work in timer ticks and avoid floating point if desired
+   //   Pdb::setClock(PdbPrescale_128, PdbMultiplier_10);
+   //   Pdb::setModulo(1000);
+   //   Pdb::setInterruptDelayInTicks(900_ticks);
+   //   Pdb::setPretriggersInTicks(0, PdbPretrigger0_Delayed, 800_ticks);
 
    Pdb::enable();
 
@@ -88,23 +118,23 @@ static void configurePdb() {
    Pdb::setTriggerSource(PdbTrigger_Software);
 
    // Set call-backs
-   Pdb::setErrorCallback(pdbErrorCallback);
+//   Pdb::setErrorCallback(pdbErrorCallback);
    Pdb::setCallback(pdbCallback);
 
-   // Interrupts during sequence or error
-   Pdb::setActions(PdbAction_Interrupt, PdbErrorAction_Interrupt);
-
-   // Set period of sequence
+   // Set period of sequence - must be done before setting times
    Pdb::setPeriod(SEQ_LENGTH);
 
-   // Generate interrupt at end of sequence
-   Pdb::setInterruptDelay(SEQ_LENGTH);
+   // Interrupts during sequence or error
+   Pdb::setEventAction(PdbAction_Interrupt, SEQ_LENGTH);
+   Pdb::setErrorAction(PdbErrorAction_Interrupt);
 
-   // Take single ADC sample at TRIGGER_TIME
+   // Take single ADC (SC0) sample at TRIGGER_TIME
    Pdb::configureAdcPretrigger(PdbChannel_0, PdbPretrigger0_Delayed, TRIGGER_TIME);
 
    // Update registers
    Pdb::configureRegisterLoad(PdbLoadMode_Immediate);
+
+   // Wait for register load to complete
    while (!Pdb::isRegisterLoadComplete()) {
       __asm__("nop");
    }
@@ -114,6 +144,7 @@ static void configurePdb() {
 
 static void adcCallback(uint32_t value, int) {
    result = value;
+   Led::set();
 }
 
 static void configureAdc() {
@@ -137,13 +168,12 @@ int main() {
    configureAdc();
    configurePdb();
 
-   complete = false;
-   Pdb::softwareTrigger();
    for(;;) {
+      complete = false;
+      Pdb::softwareTrigger();
       while (!complete) {
          __WFI();
       }
-      complete = false;
       console.write("ch1 = ").writeln(result);
    }
    for(;;) {

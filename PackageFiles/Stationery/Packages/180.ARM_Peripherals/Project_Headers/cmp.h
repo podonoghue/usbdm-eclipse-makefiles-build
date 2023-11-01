@@ -235,7 +235,7 @@ $(/CMP/InitMethod: // /CMP/InitMethod not found)
     * This function is of use if mapAllPins and mapAllPinsOnEnable are not selected in USBDM configuration.
     */
    static void setInputs() {
-      configureAllPins();
+      Info::configureAllPins();
    }
 
 $(/CMP/set_output: // /CMP/set_output not found)
@@ -269,7 +269,7 @@ $(/CMP/set_output: // /CMP/set_output not found)
          CmpHysteresis  cmpHysteresis  = CmpHysteresis_Level_2,
          CmpPolarity    cmpPolarity    = CmpPolarity_Normal
          ) {
-      enable();
+      Info::enable();
 
       // Initialise hardware
       cmp->CR1   = CmpEnable_Enabled|cmpPower|cmpPolarity;

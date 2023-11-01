@@ -4,8 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analogue to Digital Converter">
 
-   <xi:include href="_default_instance.xml"/>
-   <xi:include href="_mapPinsOption.xml"/>
+   <xi:include href="default_instance.xml"/>
+   <xi:include href="mapPinsOption.xml"/>
    
    <choiceOption key="adc_cfg1_adiv" description="Clock Divide Select"
       toolTip="Selects the divide ratio used by the ADC to generate the internal clock ADCK">
@@ -109,7 +109,7 @@
       <aliasOption key="/SIM/sim_sopt7_adc$(_instance)trgsel"    locked="false" optional="true"/>
    </category>
 
-   <xi:include href="_irqOption.xml"/>
+   <xi:include href="irqOption.xml"/>
       
    <template namespace="usbdm"><![CDATA[
    #ifndef USBDM_ADC_CLOCK_SOURCES_DEFINED
@@ -195,7 +195,7 @@
       
    <signals/>
    
-   <xi:include href="_clockOption.xml"/>
+   <xi:include href="clockOption.xml"/>
 
    <!-- validate
       class="net.sourceforge.usbdm.deviceEditor.validators.AdcValidate">

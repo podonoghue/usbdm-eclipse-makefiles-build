@@ -4,14 +4,12 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
    <constant key="irq_parameters"           type="String"  value="&quot;const CmpStatus &amp;status&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;const CmpStatus &amp;&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;cmpStatus&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
    <title />
 
 <!--
@@ -29,7 +27,7 @@
     * Template substitutions
     *
     * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %symbolicExpression[index]      Symbolic formatted value e.g. AdcCompare_Disabled
     * %variable[index]                Variable name /ADC0/adc_sc2_acfe
     * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
     * %description[index]             Description from controlVar e.g. Compare Function Enable
@@ -42,9 +40,9 @@
     * %paramType[index]               As for %paramType
     * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %symbolicExpression             Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment                Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression              Based on variable etc. Similar to (%register&%mask)
     * %variable[index]                Variable name from condition
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
@@ -378,7 +376,7 @@
 
 <!--   ========== CMP Init class =============================== -->
 
-   <setTemplate
+   <variableTemplate
       variables="/GPIOA/port_pcr_dse,/GPIOA/port_pcr_ode,/GPIOA/port_pcr_sre"
       defaultParamValue="OutputPin::defaultPcrValue"
       namespace="all"
@@ -427,7 +425,7 @@
       \t
       \t   setOutput(%paramExpression);
       \t}\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
 
    <template namespace="usbdm" discardRepeats="true" >
@@ -529,13 +527,13 @@
    ]]>
    </template>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
        \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
        \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
    <![CDATA[
@@ -630,74 +628,75 @@
 
    <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+       variables="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="cmp_daccr_dacen, cmp_daccr_vrsel, cmp_daccr_vosel">
    <![CDATA[
       \t   ///  DAC Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]>
-   </initialValueTemplate>
+   </variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="cmp_cr0_filter, cmp_cr0_hystctr">
    <![CDATA[
       \t   ///  CMP Control Register 0
       \t   uint8_t %registerName = 0;\n\n
    ]]>
-   </initialValueTemplate>
+   </variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="cmp_cr1_en,cmp_cr1_mode,cmp_cr1_trigm,cmp_cr1_pmode,cmp_cr1_inv,cmp_cr1_output">
    <![CDATA[
       \t   ///  CMP Control Register 1
       \t   uint8_t %registerName = 0;\n\n
    ]]>
-   </initialValueTemplate>
+   </variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="cmp_scr_dmaen,cmp_scr_interrupt">
    <![CDATA[
       \t   ///  CMP Status and Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]>
-   </initialValueTemplate>
+   </variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="cmp_fpr_filt_per">
    <![CDATA[
       \t   ///  CMP Filter Period Register
       \t   uint8_t %registerName = 0;\n\n
    ]]>
-   </initialValueTemplate>
+   </variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="secondsSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="secondsSupport"
       variables="cmp_fpr_filt_period">
    <![CDATA[
       \t   ///  CMP Filter Period Register
       \t   Seconds period = 0_s;\n\n
    ]]>
-   </initialValueTemplate>
+   </variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="cmp_muxcr_psel$(_instance), cmp_muxcr_msel$(_instance)">
    <![CDATA[
       \t   ///  CMP MUX Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]>
-   </initialValueTemplate>
+   </variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName = %paramType_Normal;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <!--   Configure methods -->
 
@@ -715,7 +714,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="cmp_cr1_en,
                  cmp_fpr_filt_per" >
    <![CDATA[
@@ -727,14 +726,14 @@
       \tstatic void configure(const typename Info::Init &init) {
       \t
       \t   // Enable peripheral
-      \t   enable();
+      \t   Info::enable();
       \t
       \t   %register0 = 0;
       \t
       \t   uint8_t %registerName1 = init.%registerName1;
       \t\n
-   ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" codeGenCondition="secondsSupport"
+   ]]></variableTemplate>
+   <variableTemplate key="/$(_BASENAME)/InitMethod" codeGenCondition="secondsSupport"
       namespace="all"
       discardRepeats="true"
       variables="cmp_cr1_en,
@@ -745,11 +744,9 @@
       \t   }
       \t\n
    ]]>
-   </template>
+   </variableTemplate>
    <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-             condition="irqHandlingMethod"
-             variables="cmp_cr1_en,
-                        cmp_fpr_filt_per"  >
+             condition="irqHandlingMethod">
    <![CDATA[
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      // Only set call-backs if feature enabled
@@ -760,13 +757,13 @@
    ]]>
    </template>
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
              variables="cmp_scr_dmaen"  >
    <![CDATA[
       \t   %register0 = init.%registerName0;
    ]]>
-   </template>
-   <template key="/$(_BASENAME)/InitMethod" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   </variableTemplate>
+   <variableTemplate key="/$(_BASENAME)/InitMethod" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       namespace="all"
       discardRepeats="true"
       variables="
@@ -785,11 +782,11 @@
       \t}
       \t\n
    ]]>
-   </template>
+   </variableTemplate>
 
    <!--   Constructors -->
 
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="cmp_scr_interrupt, irqHandlingMethod"
       nonDefaultParams="2"
       defaultParamValue=",,nullptr"
@@ -810,9 +807,9 @@
       \t      %registerName0 = (%registerName0 & ~%mask0) | %paramName0;
       \t      this->%paramName1 = %paramName1;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -828,7 +825,7 @@
       \t
       \t      %registerName = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <for keys="r"
       values="
@@ -837,7 +834,7 @@
             cmp_scr_dmaen;cmp_scr_interrupt;
             cmp_muxcr_psel$(_instance);cmp_muxcr_msel$(_instance)
             " >
-      <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -856,10 +853,10 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="cmp_cr0_filter,cmp_fpr_filt_per"
       nonDefaultParams="2"
       linePadding="xxx">
@@ -881,9 +878,9 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="secondsSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="secondsSupport"
       variables="cmp_cr0_filter,cmp_fpr_filt_period"
       nonDefaultParams="2"
       linePadding="xxx">
@@ -905,9 +902,9 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="cmp_daccr_dacen,cmp_daccr_vrsel,cmp_daccr_vosel"
       nonDefaultParams="3"
       linePadding="xxx">
@@ -929,11 +926,11 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -951,7 +948,7 @@
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
    ]]>
-   </initialValueTemplate>
+   </variableTemplate>
 
    <!-- Templates -->
    <template><![CDATA[
@@ -965,7 +962,7 @@
       \t}\n\n
    ]]></template>
 
-   <setTemplate
+   <variableTemplate
       variables="cmp_muxcr_psel$(_instance),cmp_muxcr_msel$(_instance)"
       nonDefaultParams="2"
    ><![CDATA[
@@ -986,16 +983,16 @@
       \t *
       \t * @tparam cmpInput Number of comparator input (0-7) for associated pin.
       \t */
-      \ttemplate<Cmp$(_instance)InputMinus cmpInput>
+      \ttemplate<CmpInputMinus cmpInput>
       \tclass Pin {
       \t   using Pcr = PcrTable_T<Cmp$(_instance)Info,cmpInput>;
       \t
       \tpublic:
-      \t   static constexpr Cmp$(_instance)InputPlus  plusPin  = (Cmp$(_instance)InputPlus)CMP_MUXCR_PSEL(cmpInput);
-      \t   static constexpr Cmp$(_instance)InputMinus minusPin = cmpInput;
+      \t   static constexpr CmpInputPlus  plusPin  = (CmpInputPlus)CMP_MUXCR_PSEL(cmpInput);
+      \t   static constexpr CmpInputMinus minusPin = cmpInput;
       \t
-      \t   constexpr operator Cmp$(_instance)InputPlus()  const { return plusPin;  }
-      \t   constexpr operator Cmp$(_instance)InputMinus() const { return minusPin; }
+      \t   constexpr operator CmpInputPlus()  const { return plusPin;  }
+      \t   constexpr operator CmpInputMinus() const { return minusPin; }
       \t
       \t   constexpr Pin() {}
       \t
@@ -1005,7 +1002,7 @@
       \t};
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
    <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[
@@ -1059,7 +1056,6 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-
-   <signals enabledBy="enablePeripheralSupport" />
+   <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </fragment>

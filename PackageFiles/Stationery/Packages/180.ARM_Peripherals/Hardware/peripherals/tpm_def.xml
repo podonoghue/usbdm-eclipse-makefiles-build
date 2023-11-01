@@ -4,13 +4,11 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
    <constant key="irq_parameters"           type="String"  value="&quot;uint8_t&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;0&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
 
 <!--
     * General substitutions
@@ -240,6 +238,7 @@
       enabledBy="!freeRunningCounter"
       description="End value for counter"
       toolTip="The timer counts from 0 to this value"
+      valueFormat="%s"
       typeName="Ticks &amp;"
       units="ticks"
       value="65535" min="0" max="65535" />
@@ -631,7 +630,7 @@
       <!-- Even channel -->
       <intOption key="tpm_cnv[%(ch)]" condition="((%(ch)&amp;1)==0)"
          hiddenBy="(tpm_cnsc_mode_independent[%(ch)]&lt;4)&amp;&amp;(tpm_cnsc_mode_combined[%(ch)]!=(1,2))"
-         valueFormat="%s_ticks"
+         valueFormat="%s"
          typeName="Ticks &amp;"
          units="ticks"
          description="Output Compare Event time in ticks"
@@ -709,31 +708,24 @@
          units="percent"
          description="Output duty cycle as pecentage"
          toolTip="Calculated duty cycle" />
-
-
-
-
-
-
-
    </for>
    </categoryOption>
 
 <!-- Info class members-->
 
-   <initialValueTemplate variables="minimumResolution"
+   <variableTemplate variables="minimumResolution"
    ><![CDATA[
       \t// %description
       \tstatic constexpr uint32_t minimumResolution  = $(?check_minimums:$(minimumResolution):0);\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate variables="minimumInterval"
+   <variableTemplate variables="minimumInterval"
    ><![CDATA[
       \t// %description
       \tstatic constexpr uint32_t minimumInterval  = $(?check_minimums:$(minimumInterval):0);\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate key="/$(_BASENAME)/static_functions" namespace="all"
+   <variableTemplate key="/$(_BASENAME)/static_functions" namespace="all"
       discardRepeats="true"
       variables="tpm_sc_cpwms,tpm_sc_cmod,tpm_sc_ps"
       nonDefaultParams="2"
@@ -759,14 +751,14 @@
       \t   // Write new value
       \t   tpm->SC = %paramExpression;
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
 <!--  ========== Static/Non-Static Methods =============================== -->
    <for  keys  ="  k                   : static    : const    : getInputClockFrequency         : channel : Tpm       : isStatic : namespace"
          values=" non_static_functions : ''        : ' const' : getInputClockFrequencyVirtual  : CHANNEL : TpmBase   : false    : all;
                   static_functions     : 'static ' : ''       : 'Info::getInputClockFrequency' : channel : OwningTpm : true     : forceInfo
    " >
-      <setTemplate key="/$(_BASENAME)/%(k)" namespace="all"
+      <variableTemplate key="/$(_BASENAME)/%(k)" namespace="all"
          discardRepeats="true"
          variables="tpm_sc_cmod,tpm_sc_ps"
          nonDefaultParams="2"
@@ -803,13 +795,13 @@
          \t   // Write new value
          \t   %register = %registerName;
          \t}\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
 
       <for keys="  f            :  n"
          values=" tpm_sc_cpwms  : CountMode;
                   tpm_sc_cmod   : ClockSource;
                   tpm_sc_ps     : Prescaler" >
-         <setTemplate key="/$(_BASENAME)/%(k)" namespace="all"
+         <variableTemplate key="/$(_BASENAME)/%(k)" namespace="all"
             discardRepeats="true"
             variables="%(f)"
             nonDefaultParams="2"
@@ -846,12 +838,12 @@
             \t
             \t   return (%paramType)(%register&~%mask);
             \t}\n\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
       </for>
 
       <for keys="  f           :  n"
          values=" tpm_mod      : CounterMaximumValue" >
-         <setTemplate key="/$(_BASENAME)/%(k)" namespace="all"
+         <variableTemplate key="/$(_BASENAME)/%(k)" namespace="all"
             discardRepeats="true"
             variables="%(f)"
             nonDefaultParams="2"
@@ -879,7 +871,7 @@
             \t
             \t   return (%paramType)%register;
             \t}\n\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
       </for>
 
       <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
@@ -1704,13 +1696,13 @@
       \t\n
    ]]></template>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
        \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
        \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
@@ -1897,51 +1889,51 @@
 
 <!--   Init class Member variables -->
 
-   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   // Shared overflow or fault interrupt call-back
       \t   %params = nullptr;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
     ><![CDATA[
       \t   // Shared channel interrupt call-back
       \t   ChannelCallbackFunction channelCallbackFunction = nullptr;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="tpm_sc_action,tpm_sc_cpwms,tpm_sc_cmod,tpm_sc_ps"
    ><![CDATA[
       \t   // Status And Control Register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   // %description
       \t   %paramType %registerName = %paramType_Normal;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="tpm_mod"
    ><![CDATA[
       \t   // %description
       \t   uint16_t %registerName = 0_ticks;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables= "tpm_modPeriod"
     ><![CDATA[
       \t   // %description
       \t   %paramType %registerName = 0_s;\n\n
-   ]]></initialValueTemplate >
+   ]]></variableTemplate >
 
 
 <!--  Init class Constructors -->
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -1958,9 +1950,9 @@
       \t
       \t      this->channelCallbackFunction = %paramExpression;
       \t   }\n\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -1977,9 +1969,9 @@
       \t
       \t      this->callbackFunction = %paramExpression;
       \t   }\n\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -1996,10 +1988,10 @@
       \t
       \t   %registerName = %paramExpression;
       \t   }\n\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
    <for keys="r" values="tpm_sc_action;tpm_sc_cpwms;tpm_sc_cmod;tpm_sc_ps" >
-      <constructorTemplate  namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate  namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -2017,10 +2009,10 @@
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
-      ]]></constructorTemplate>
+      ]]></variableTemplate>
    </for>
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="tpm_sc_ps, tpm_mod"
       params=",mod_ticks"
       linePadding="xxx"
@@ -2042,9 +2034,9 @@
       \t      %registerName1   = %paramName1;
       \t   }
       \t\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       nonDefaultParams="2"
       variables="tpm_modPeriod"
       linePadding="xxx"
@@ -2064,7 +2056,7 @@
       \t      %registerName = %paramExpression;
       \t   }
       \t\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t}; // class $(_Class)BasicInfo::Init\n\n
@@ -2131,7 +2123,7 @@
 
 <!--  Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="enablePeripheralSupport"
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -2149,7 +2141,7 @@
       \t};
       \t\n
    ]]>
-   </initialValueTemplate>
+   </variableTemplate>
 
 <!--   ========== ChannelInit class =============================== -->
 
@@ -2197,27 +2189,27 @@
 
 <!-- ChannelInit Class Member variables -->
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="tpm_cnv[]"
    ><![CDATA[
       \t   // %description
       \t   uint16_t %registerName = 0_ticks;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="tpm_cnsc_mode_independent[]"
    ><![CDATA[
       \t   // Channel Status And Control Register
       \t   uint8_t cnsc = 0;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="tpm_channel_number"
    ><![CDATA[
       \t   // %description
       \t   %paramType %registerName = %paramType_None;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!-- ChannelInit Configure methods -->
 
@@ -2296,7 +2288,7 @@
    <for keys="   r                    :  c    "
       values=" tpm_cnsc_action[]      : true  ;
                tpm_cnsc_icrst[]       : true  " >
-      <constructorTemplate  namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate  namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx"
          condition="%(c)"
@@ -2315,10 +2307,10 @@
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
-      ]]></constructorTemplate>
+      ]]></variableTemplate>
    </for>
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="tpm_cnsc_mode_independent[]"
       linePadding="xxx"
    ><![CDATA[
@@ -2336,13 +2328,13 @@
       \t      cnsc    = %paramExpression;
       \t   }
       \t\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
    <for keys="r" values="
       tpm_filter_ch0fval;
       tpm_channel_number;
       tpm_cnv[]" >
-      <constructorTemplate  namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate  namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -2360,7 +2352,7 @@
          \t      %registerName = %paramExpression;
          \t   }
          \t\n
-      ]]></constructorTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--  ChannelInit Default Initialisation value -->
@@ -2373,7 +2365,7 @@
       \tstatic constexpr ChannelInit DefaultChannelInitValues[] = {\n
   ]]></template>
    <for keys="ch" dim="NumChannels" >
-      <initialValueTemplate  codeGenCondition="enablePeripheralSupport"
+      <variableTemplate  codeGenCondition="enablePeripheralSupport"
          separator=","
          terminator=","
          variables="
@@ -2386,7 +2378,7 @@
          \t{
          \t   TpmChannelNum_%(ch),
          %initExpression\n\t},\n
-      ]]></initialValueTemplate>
+      ]]></variableTemplate>
    </for>
   <template  codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \n\t};\n\n

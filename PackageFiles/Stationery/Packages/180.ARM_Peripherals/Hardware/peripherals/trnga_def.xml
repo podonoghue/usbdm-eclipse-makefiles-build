@@ -4,9 +4,9 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="True Random Number Generator">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
-   <xi:include href="_irqOption.xml"/>         
+   <xi:include href="irqOption.xml"/>         
    
    <template key="/TRNG/declarations" namespace="all"  ><![CDATA[
    \t/**
@@ -19,6 +19,6 @@
       <copy source="Project_Headers/trng.h"         target="Project_Headers/trng.h"          overwrite="true" derived="true" />
    </projectActionList>
    
-   <xi:include href="_clockOption.xml"/>
+   <xi:include href="clockOption.xml"/>
    
 </peripheralPage>

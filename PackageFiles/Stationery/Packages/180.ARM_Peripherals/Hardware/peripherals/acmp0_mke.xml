@@ -4,14 +4,12 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analogue comparator" >
 
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
    <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
    <title />
 
 <!--
@@ -198,7 +196,7 @@
 
 <!-- Graphic here -->
 
-   <setTemplate variables="acmp_c2_inputenable" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate variables="acmp_c2_inputenable" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
    ><![CDATA[
       \t/**
       \t * Allocate %description
@@ -220,7 +218,7 @@
       \t   %register = %register & ~%paramName0;
       \t}
       \t\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <for keys="field:name"
         values="
@@ -233,7 +231,7 @@
       acmp_c0_acnsel:NegativeInput;
       acmp_c1_dacen:Dac;
       acmp_c1_dacref:DacLevel" >
-      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -253,7 +251,7 @@
          \t   return %paramType(%register&%mask);
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
    <!--   ========== Init class =============================== -->
@@ -319,13 +317,13 @@
    ]]>
    </template>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
        \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
        \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!-- Interrupt code -->
 
@@ -409,47 +407,47 @@
 
    <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="acmp_cs_hyst,acmp_cs_acie,acmp_cs_acope,acmp_cs_acmod"
    ><![CDATA[
       \t   /// ACMP Control and Status Register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="acmp_c0_acpsel,acmp_c0_acnsel"
    ><![CDATA[
       \t   /// ACMP Control Register 0
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="acmp_c1_dacen,acmp_c1_dacref,acmp_c1_dacval"
    ><![CDATA[
       \t   /// ACMP Control Register 1
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="acmp_c2_inputenable"
    ><![CDATA[
       \t   /// ACMP Control Register 2
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName0 = %symbolicExpression1;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <!--   Configure methods -->
 
@@ -511,7 +509,7 @@
 
    <!--   Constructors -->
 
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -527,9 +525,9 @@
       \t
       \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -546,9 +544,9 @@
       \t
       \t      %registerName = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="acmp_c2_inputenable"
       linePadding="xxx" >
    <![CDATA[
@@ -567,7 +565,7 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
    <for keys="r"
       values="
             acmp_cs_ace;
@@ -580,7 +578,7 @@
             acmp_c1_dacen;
             acmp_c1_dacref
             " >
-      <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -599,14 +597,14 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
    <for keys="r"
       values="
             acmp_c1_dacval
             " >
-      <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -625,11 +623,11 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 <!--   Default Initialisation value -->
-   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -653,7 +651,7 @@
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
    ]]>
-   </initialValueTemplate>
+   </variableTemplate>
 
    <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[

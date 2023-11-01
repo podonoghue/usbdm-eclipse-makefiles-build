@@ -4,7 +4,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Clock Generator">
    
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
    <category name="Internal Clocks" 
       description="Clock Sources"
@@ -485,14 +485,14 @@
       <intOption key="osc_high_max_frequency"    locked="true" units="Hz" value="40MHz" />
    </category>
 
-   <xi:include href="_irqOption.xml"/>
+   <xi:include href="irqOption.xml"/>
       
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
    ]]></template>
    
-   <xi:include href="_mapPinsOption.xml"/>
+   <xi:include href="mapPinsOption.xml"/>
    
    <signals/>
          

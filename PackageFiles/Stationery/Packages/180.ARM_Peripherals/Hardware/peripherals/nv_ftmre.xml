@@ -4,16 +4,16 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash configuration field">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
-   <xi:include href="_mapPinsOption.xml"/>
+   <xi:include href="mapPinsOption.xml"/>
 
 <!-- Grahic here -->  
 
    <for keys="field:name"
         values="
 ">
-      <setTemplate variables="%(field)"
+      <variableTemplate variables="%(field)"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -23,7 +23,7 @@
          \tstatic void configure%(name)(%params) {
          \t   %fieldAssignment
          \t}\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== NV Init class =============================== -->
@@ -108,7 +108,7 @@
    ]]></template>
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate
+   <variableTemplate
       separator=","
       terminator=","
       variables="
@@ -124,7 +124,7 @@
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm">
       <![CDATA[

@@ -12,7 +12,7 @@
    <constant key="FBILP" value="4" type="Integer" />
    <constant key="FBELP" value="5" type="Integer" />
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
    <clockSelectionOption key="currentClockConfig"
       derived="true"
@@ -25,7 +25,7 @@
       <choice value="3" name="ClockConfig[3]" ref="&quot;3: &quot;+ClockConfig[3]" />
    </clockSelectionOption>
 
-   <xi:include href="_irqOption.xml" />
+   <xi:include href="irqOption.xml" />
 
    <aliasOption key="/SIM/numberOfClockSettings" />
 
@@ -436,40 +436,40 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
          \t\n
       ]]></template>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables="
             /SIM/sim_clkdiv_outdiv3[%(n)],
             /SIM/sim_clkdiv_outdiv2[%(n)],
             /SIM/sim_clkdiv_outdiv1[%(n)]"
-      ><![CDATA[\t   /// SIM CLKDIV1 System Clock Divider Register 1 %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// SIM CLKDIV1 System Clock Divider Register 1 %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables="
             icsClockMode[%(n)]"
-      ><![CDATA[\t   /// Clock Mode %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Clock Mode %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables="
             ics_c1_rdiv[%(n)],
             ics_c1_irclken[%(n)],
             ics_c1_irefsten[%(n)]"
-      ><![CDATA[\t   /// Control Register 1 - Excluding CLKS, IREFS %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 1 - Excluding CLKS, IREFS %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables=
             "ics_c2_bdiv[%(n)]"
-      ><![CDATA[\t   /// Control Register 2 - Excluding LP, FCTRIM %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 2 - Excluding LP, FCTRIM %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables=
             "ics_c4_cme[%(n)],
              ics_c4_lolie0[%(n)]"
-      ><![CDATA[\t   /// Control Register 4 - Excluding FCTRIM, SCFTRIM %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 4 - Excluding FCTRIM, SCFTRIM %initExpression\n\n ]]></variableTemplate>
 
       <template key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
          \t},\n

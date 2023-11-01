@@ -5,5 +5,5 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Oscillator" >
 
-   <xi:include href="_osc0_common.xml"/>
+   <xi:include href="osc0_common.xml"/>
 </peripheralPage>

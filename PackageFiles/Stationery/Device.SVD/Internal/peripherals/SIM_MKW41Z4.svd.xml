@@ -603,7 +603,7 @@ Devices using this peripheral:
                   </field>
                   <field derivedFrom="CMT" > <name>I2C0</name> <description>I2C0 Clock Gate Control</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="CMT" > <name>I2C1</name> <description>I2C1 Clock Gate Control</description> <bitOffset>7</bitOffset> </field>
-                  <field derivedFrom="CMT" > <name>CMP</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="CMT" > <name>CMP0</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
                   <field derivedFrom="CMT" > <name>VREF</name> <description>VREF Clock Gate Control</description> <bitOffset>20</bitOffset> </field>
                </fields>
             </register>
@@ -614,7 +614,7 @@ Devices using this peripheral:
                <resetValue>0x2000182</resetValue>
                <fields>
                   <field>
-                     <name>LPTMR</name>
+                     <name>LPTMR0</name>
                      <description>Low Power Timer Access Control</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -631,7 +631,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="LPTMR" > <name>TSI</name> <description>TSI Access Control</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="LPTMR0" > <name>TSI</name> <description>TSI Access Control</description> <bitOffset>5</bitOffset> </field>
                   <field>
                      <name>PORTA</name>
                      <description>Port A Clock Gate Control</description>
@@ -764,7 +764,7 @@ Devices using this peripheral:
                <resetValue>0x100</resetValue>
                <fields>
                   <field>
-                     <name>DMA</name>
+                     <name>DMA0</name>
                      <description>DMA Clock Gate Control</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>1</bitWidth>

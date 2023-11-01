@@ -14,7 +14,7 @@
       \tstatic constexpr int roundRobinPin  = 9;\n\n
    ]]></template>
 
-   <xi:include href="_mapPinsOption.xml"/>
+   <xi:include href="mapPinsOption.xml"/>
 
    <choiceOption key="cmp_c0_filter_cnt"
       description="Filter Sample Count"

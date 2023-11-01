@@ -5,7 +5,7 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
 
    <constant key = "disable_peripheral"      value = "&quot;ftm->SC = FTM_SC_CLKS(0);&quot;" type="String"  />
-   <xi:include href="_mapPinsOption.xml"/>
+   <xi:include href="mapPinsOption.xml"/>
 
    <intOption key="NumChannels" locked="true" derived="true"
       description="Number of Channels"
@@ -245,7 +245,7 @@
       \t}\n\n
    ]]></template>
 
-   <xi:include href="_clockOption.xml"/>
+   <xi:include href="clockOption.xml"/>
 
 
    <template key="/FTM/declarations" namespace="all"  ><![CDATA[

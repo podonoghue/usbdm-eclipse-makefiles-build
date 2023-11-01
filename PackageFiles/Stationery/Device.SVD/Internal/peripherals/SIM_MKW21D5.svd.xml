@@ -800,7 +800,7 @@ Devices using this peripheral:
                   <field derivedFrom="EWM" > <name>UART1</name> <description>UART1 Clock Gate Control</description> <bitOffset>11</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>UART2</name> <description>UART2 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>UART3</name> <description>UART3 Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
-                  <field derivedFrom="EWM" > <name>CMP</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="EWM" > <name>CMP0</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>VREF</name> <description>VREF Clock Gate Control</description> <bitOffset>20</bitOffset> </field>
                </fields>
             </register>
@@ -811,7 +811,7 @@ Devices using this peripheral:
                <resetValue>0x40182</resetValue>
                <fields>
                   <field>
-                     <name>LPTMR</name>
+                     <name>LPTMR0</name>
                      <description>Low Power Timer Access Control</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -885,7 +885,7 @@ Devices using this peripheral:
                   </field>
                   <field derivedFrom="FTFL" > <name>SPI0</name> <description>SPI0 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="FTFL" > <name>SPI1</name> <description>SPI1 Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
-                  <field derivedFrom="FTFL" > <name>I2S</name> <description>I2S Clock Gate Control</description> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="FTFL" > <name>I2S0</name> <description>I2S Clock Gate Control</description> <bitOffset>15</bitOffset> </field>
                   <field derivedFrom="FTFL" > <name>CRC</name> <description>CRC Clock Gate Control</description> <bitOffset>18</bitOffset> </field>
                   <field derivedFrom="FTFL" > <name>PDB</name> <description>PDB Clock Gate Control</description> <bitOffset>22</bitOffset> </field>
                   <field derivedFrom="FTFL" > <name>PIT</name> <description>PIT Clock Gate Control</description> <bitOffset>23</bitOffset> </field>
@@ -920,7 +920,7 @@ Devices using this peripheral:
                <resetValue>0x2</resetValue>
                <fields>
                   <field>
-                     <name>DMA</name>
+                     <name>DMA0</name>
                      <description>DMA Clock Gate Control</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>

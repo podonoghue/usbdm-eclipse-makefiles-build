@@ -6,10 +6,9 @@
 
    <constant key="enablePeripheralSupport"  type="Boolean" value="true"          />
    <constant key="enableGettersAndSetters"  type="Boolean" value="true"          />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"         />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
    <title />
 
 <!--
@@ -60,7 +59,7 @@
       toolTip="Each periodic channel may be controlled by the corresponding PIT channel" />
 
    <for keys="var" values="NumChannels;NumPeriodicChannels" >
-      <initialValueTemplate variables="%(var)"
+      <variableTemplate variables="%(var)"
          initExpressionOnSameLine="true"
          linePadding="//x"
          tooltipPadding=""
@@ -68,7 +67,7 @@
          \t// %tooltip
          \tstatic constexpr unsigned %(var) = %initExpression;
          \t\n
-      ]]></initialValueTemplate>
+      ]]></variableTemplate>
    </for>
 
    <!-- ************* Class Declaration ****************** -->
@@ -114,7 +113,7 @@
          dmamux_chcfg_enbl[]    : ChcfgEnbl;
          dmamux_chcfg_trig[]    : ChcfgTrig;
          dmamux_chcfg_source[]  : ChcfgSource" >
-      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -134,7 +133,7 @@
          \t   return %paramType((%register[dmaChannelNum]&~%mask));
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== DMAMUX Init class =============================== -->
@@ -209,12 +208,12 @@
       \t   DmaChannelNum channelNum = DmaChannelNum_None;\n\n
    ]]></template>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="enablePeripheralSupport"
       variables="dmamux_chcfg_enbl[],dmamux_chcfg_trig[],dmamux_chcfg_source[]"
    ><![CDATA[
       \t   /// Channel Configuration Register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Configure methods -->
 
@@ -310,7 +309,7 @@
             dmamux_chcfg_trig[];
             dmamux_chcfg_source[]
             " >
-      <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -329,12 +328,12 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="enablePeripheralSupport"
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -349,9 +348,9 @@
       \t */
       \tstatic constexpr Init DefaultInitValue[] = {\n
    ]]>
-   </initialValueTemplate>
+   </variableTemplate>
    <for keys="ch" dim="/DMA$(_instance)/NumChannels" >
-      <initialValueTemplate codeGenCondition="enablePeripheralSupport"
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
          variables="dmamux_chcfg_enbl[%(ch)],dmamux_chcfg_trig[%(ch)],dmamux_chcfg_source[%(ch)]"
          terminator=","
          separator=","
@@ -360,7 +359,7 @@
          \t   DmaChannelNum_%(ch),
          \t   %initExpression
          \t   },\n
-      ]]></initialValueTemplate>
+      ]]></variableTemplate>
    </for>
    <template codeGenCondition="enablePeripheralSupport" >
    <![CDATA[

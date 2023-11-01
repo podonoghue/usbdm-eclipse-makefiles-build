@@ -4,14 +4,12 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Keyboard interrupts" >
 
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
    <constant key="irq_parameters"           type="String"  value="&quot;uint32_t kbi_sp&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;uint32_t&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;kbi_sp&quot;"    />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
    <title />
 
 <!--
@@ -150,7 +148,7 @@
         values="
       kbi_pe_kbipe:EnabledPins;
       kbi_es_kbedg:PinPolarity" >
-      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -170,10 +168,10 @@
          \t   return %paramType(%register);
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
-   <setTemplate codeGenCondition="enableGettersAndSetters"
+   <variableTemplate codeGenCondition="enableGettersAndSetters"
       variables="/PORT/pin_index,kbi_pe_kbipe,kbi_es_kbedg"
       params=",polarity" >
    <![CDATA[
@@ -204,9 +202,9 @@
       \t}
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
-   <setTemplate variables="kbi_sc_kback" codeGenCondition="enableGettersAndSetters"
+   <variableTemplate variables="kbi_sc_kback" codeGenCondition="enableGettersAndSetters"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -226,14 +224,14 @@
       \t   return %paramType(%register&%mask);
       \t}
       \t\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <for keys="field:name"
         values="
       kbi_sc_kbspen:Status;
       kbi_sc_kbie:EnabledInterrupts;
       kbi_sc_kbmod:DetectionMode" >
-      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -253,7 +251,7 @@
          \t   return %paramType(%register&%mask);
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== KBI Init class =============================== -->
@@ -408,40 +406,40 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="kbi_pe_kbipe"
    ><![CDATA[
       \t   /// KBI Pin Enables
       \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="kbi_es_kbedg"
    ><![CDATA[
       \t   /// KBI Edge Selects
       \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="kbi_sc_rstkbsp,kbi_sc_kbspen,kbi_sc_kbf,kbi_sc_kback,kbi_sc_kbie,kbi_sc_kbmod"
    ><![CDATA[
       \t   /// KBI Status and Control Register
       \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName0 = %symbolicExpression1;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Configure methods -->
 
@@ -491,7 +489,7 @@
 
 <!--   Constructors -->
 
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -507,9 +505,9 @@
       \t
       \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -525,9 +523,9 @@
       \t
       \t      %registerName = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="kbi_pe_kbipe"
       params="enableMask"
       nonDefaultParams="2"
@@ -548,9 +546,9 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="kbi_es_kbedg"
       params="polarityMask"
       nonDefaultParams="2"
@@ -571,9 +569,9 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="/PORT/pin_index,kbi_pe_kbipe,kbi_es_kbedg"
       params=",polarity"
       linePadding="xxx" >
@@ -599,7 +597,7 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
    <for keys="r"
       values="
@@ -607,7 +605,7 @@
             kbi_sc_kbie;
             kbi_sc_kbmod
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -626,12 +624,12 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -648,7 +646,7 @@
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[

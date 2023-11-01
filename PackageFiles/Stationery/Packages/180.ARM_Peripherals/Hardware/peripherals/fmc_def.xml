@@ -1,19 +1,57 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- fmc_def.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <xi:include href="_default_instance.xml"/>
-   
-   <if condition="irqOption_present" >
-      <xi:include href="_irqOption.xml"/>
-   </if>   
-   
-   <!-- 
-      ******************** Flash Controller  ******************** 
-   -->   
+   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
+   <constant key="isSupportedinStartup"     type="Boolean" value="false"         />
+   <xi:include href="enablePeripheral.xml"  />
+   <title />
+
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
+
+<!--
+    * Template substitutions
+    *
+    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
+    * <li>%valueExpression            Numeric variable value e.g. 0x3
+    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
+    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
+    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
+    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
+    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
+    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * <li>%params                     Formatted parameter list for function
+    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
+    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
+    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
+    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
+    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
+    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
+    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
+    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
+-->
+
+
+
+   <!--
+      ******************** Flash Controller  ********************
+   -->
    <for keys="n:m" values ="0:0;1:1;01:0;23:1" >
       <choiceOption key="fmc_pfb%(n)cr_flash_speculation" condition="fmc_pfb%(n)cr_b%(m)dpe_present||fmc_pfb%(n)cr_b%(m)ipe_present"
          typeName="FmcFlashSpeculation"
@@ -27,7 +65,7 @@
          <choice value="1,1" name="Instructions and Data" enum="InstructionsAndData"    isDefault="true" />
       </choiceOption>
 
-      <setTemplate  
+      <variableTemplate
          variables="fmc_pfb%(n)cr_flash_speculation"
       > <![CDATA[
          \t/**
@@ -36,11 +74,11 @@
          %paramDescription
          \t */
          \tstatic void setFlashBank%(n)Speculation(%params) {
-         
+
          \t   %register = (%register&~(%mask)) | %paramExpression;
          \t}\n\n
-      ]]></setTemplate>
-            
+      ]]></variableTemplate>
+
       <choiceOption key="fmc_pfb%(n)cr_flash_cache" condition="fmc_pfb%(n)cr_b%(m)dce_present||fmc_pfb%(n)cr_b%(m)ice_present"
          typeName="FmcFlashCache"
          valueFormat="FMC_PFB%(n)CR_B%(m)DCE(%s),FMC_PFB%(n)CR_B%(m)ICE(%s)"
@@ -52,8 +90,8 @@
          <choice value="0,1" name="Instructions Only"     enum="InstructionsOnly"       />
          <choice value="1,1" name="Instructions and Data" enum="InstructionsAndData"    isDefault="true" />
       </choiceOption>
-      
-      <setTemplate  
+
+      <variableTemplate
          variables="fmc_pfb%(n)cr_flash_cache"
       > <![CDATA[
          \t/**
@@ -62,12 +100,12 @@
          %paramDescription
          \t */
          \tstatic void setFlashBank%(n)Cache(%params) {
-         
+
          \t   %register = (%register&~(%mask)) | %paramExpression;
          \t}\n\n
-      ]]></setTemplate>
-      
-      <setTemplate variables="fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_flash_speculation" 
+      ]]></variableTemplate>
+
+      <variableTemplate variables="fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_flash_speculation"
          ><![CDATA[
          \t/**
          \t **
@@ -82,7 +120,7 @@
          \t * @code
          \t * const Fmc::FlashBank%(n)Init flashInit {
          \t *    // List of options
-         \t *    FmcFlashCache_Disabled, 
+         \t *    FmcFlashCache_Disabled,
          \t *    FmcFlashSpeculation_InstructionsAndData,
          \t * };
          \t *
@@ -103,29 +141,29 @@
          \t      %register = (%register & ~%mask)|
          \t                   %registerName;
          \t   }
-         \t  
+         \t
          \t   /**
-         \t    * Read the current settings from hardware registers 
+         \t    * Read the current settings from hardware registers
          \t    */
          \t   void readConfig() {
          \t      %registerName = %register & %mask;
          \t   }
-         \t  
-         \t   /**                               
-         \t    * Copy Constructor                  
-         \t    */                             
+         \t
+         \t   /**
+         \t    * Copy Constructor
+         \t    */
          \t   constexpr FlashBank%(n)Init(const FlashBank%(n)Init &other) = default;
-         \t   
+         \t
          \t   /**
          \t    * Constructor
          \t    */
          \t   constexpr FlashBank%(n)Init()  {
          \t   }
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
 
-      <for keys="v" values="fmc_pfb%(n)cr_flash_cache;fmc_pfb%(n)cr_flash_speculation" >      
-         <setTemplate 
+      <for keys="v" values="fmc_pfb%(n)cr_flash_cache;fmc_pfb%(n)cr_flash_speculation" >
+         <variableTemplate
             variables="%(v)"
          ><![CDATA[
             \t   /**
@@ -137,18 +175,17 @@
             \t    */
             \t   template <typename... Types>
             \t   constexpr FlashBank%(n)Init(%paramType %paramName, Types... rest) : FlashBank%(n)Init(rest...)  {
-            \t   
+            \t
             \t      %registerName = (%registerName&~%mask) | %paramName;
             \t   }\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
       </for>
-   
-      <template condition="fmc_pfb%(n)cr_flash_cache||fmc_pfb%(n)cr_flash_speculation" > 
-         ><![CDATA[
+
+      <template condition="fmc_pfb%(n)cr_flash_cache||fmc_pfb%(n)cr_flash_speculation" ><![CDATA[
          \t};\n\n
       ]]></template>
-   
-      <setTemplate key="/FMC/DefaultFlashInitValue" namespace="all"
+
+      <variableTemplate key="/FMC/DefaultFlashInitValue" namespace="all"
          variables="fmc_pfb%(n)cr_flash_speculation, fmc_pfb%(n)cr_flash_cache"
          terminator=","
          separator=","
@@ -168,24 +205,24 @@
          \tstatic void configureFlashBank%(n)(const FmcInfo::FlashBank%(n)Init &flashInit) {
          \t   flashInit.configure();
          \t}\n
-      ]]></setTemplate>
-            
-      <template namespace="all" key="/SMC/preEnterStopMode" variables="fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_flash_speculation" ><![CDATA[
+      ]]></variableTemplate>
+
+      <variableTemplate namespace="all" key="/SMC/preEnterStopMode" variables="fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_flash_speculation" ><![CDATA[
       \t   // Save current Flash Bank%(n) settings
       \t   FmcInfo::FlashBank%(n)Init savedFlashBank%(n)Settings;
       \t   savedFlashBank%(n)Settings.readConfig();
       \t   // Disable Flash Bank%(n) prefetch
       \t   FmcInfo::setFlashBank%(n)Speculation(FmcFlashSpeculation_Disabled);\n
-      ]]></template>
-   
-      <template namespace="all" key="/SMC/postExitStopMode" variables="fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_flash_speculation" ><![CDATA[
+      ]]></variableTemplate>
+
+      <variableTemplate namespace="all" key="/SMC/postExitStopMode" variables="fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_flash_speculation" ><![CDATA[
       \t   // Restore flash Bank%(n) settings
       \t   savedFlashBank%(n)Settings.configure();\n
-      ]]></template>
+      ]]></variableTemplate>
    </for>
-   
-   <!-- 
-      ******************** misc ******************** 
+
+   <!--
+      ******************** misc ********************
    -->
    <template key="/FMC/declarations" namespace="all" ><![CDATA[
       \t/**
@@ -198,7 +235,7 @@
    <template key="/FMC/declarations" namespace="all" condition="!irqOption_present" ><![CDATA[
       \tclass $(_Class) : public $(_Baseclass)Base {};\n
    ]]></template>
-   
+
    <projectActionList id = "fmc_files" >
       <copy source="Project_Headers/fmc.h"         target="Project_Headers/fmc.h"          overwrite="true" derived="true" />
    </projectActionList>

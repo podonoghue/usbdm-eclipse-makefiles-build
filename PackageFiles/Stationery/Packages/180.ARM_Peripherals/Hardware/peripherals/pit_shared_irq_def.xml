@@ -4,9 +4,9 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
-   <xi:include href="_irqOption.xml"/>
+   <xi:include href="irqOption.xml"/>
    <template><![CDATA[
       \t//! Number of PIT channels
       \tstatic constexpr uint32_t NumChannels  = $(numChannels);\n\n
@@ -171,50 +171,50 @@
 
 <!-- Member variables -->
 
-   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="pit_ldval_tsv[]"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName = 0_ticks;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="pit_period[]"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName = 0_s;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName = %paramType_Normal;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="pit_tctrl_ten[],pit_tctrl_chn[],pit_tctrl_tie[]"
    ><![CDATA[
       \t   /// Timer Control Register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="pit_channelNumber"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName = PitChannelNum_None;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--  Configure method -->
 
-   <setTemplate variables="pit_tctrl_ten[]" discardRepeats="true" key="/PIT/InitMethod" namespace="all" ><![CDATA[
+   <variableTemplate variables="pit_tctrl_ten[]" discardRepeats="true" key="/PIT/InitMethod" namespace="all" ><![CDATA[
    \t/**
    \t * Configure a PIT channel from values specified in init
    \t *
@@ -247,11 +247,11 @@
    \t   // Configure channel
    \t   pit->CHANNEL[init.channelnumber].TCTRL = init.tctrl;
    \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
 <!--  Constructors -->
 
-   <constructorTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -268,11 +268,11 @@
       \t
       \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
-   ]]></constructorTemplate>
+   ]]></variableTemplate>
 
 
    <for keys="r" values="pit_channelNumber;pit_ldval_tsv[];pit_period[];/PCR/nvic_irqLevel">
-      <constructorTemplate namespace="usbdm"
+      <variableTemplate namespace="usbdm"
          variables="%(r)"
          linePadding="xxx"
        ><![CDATA[
@@ -289,11 +289,11 @@
          \t
          \t      %registerName = %paramExpression;
          \t   }\n\n
-      ]]></constructorTemplate>
+      ]]></variableTemplate>
    </for>
 
    <for keys="r" values="pit_tctrl_ten[];pit_tctrl_chn[1];pit_tctrl_tie[]">
-      <constructorTemplate namespace="usbdm"
+      <variableTemplate namespace="usbdm"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -310,7 +310,7 @@
          \t
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }\n\n
-      ]]></constructorTemplate>
+      ]]></variableTemplate>
    </for>
 
    <template namespace="usbdm" ><![CDATA[
@@ -323,12 +323,12 @@
 
 <!--  Default Values -->
 
-   <setTemplate
+   <variableTemplate
       variables="pit_mcr_frz"
    ><![CDATA[
       \t/// %description
       \tstatic constexpr uint32_t %registerName = %initExpression; \n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <template><![CDATA[
       $(init_description)
@@ -347,7 +347,7 @@
    ]]></template>
 
    <for keys="ch" dim="numChannels">
-      <setTemplate
+      <variableTemplate
          separator=","
          terminator=","
          variables="
@@ -362,7 +362,7 @@
          \t   PitChannelNum_%(ch),
          %initExpression
          \t   },\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
    <template><![CDATA[
          \t};\n\n
@@ -456,7 +456,7 @@
    \tusing $(_Class)Channel = $(_Class)::PitChannel;
    ]]></template>
 
-   <xi:include href="_clockOption.xml"/>
+   <xi:include href="clockOption.xml"/>
 
    <signals/>
 

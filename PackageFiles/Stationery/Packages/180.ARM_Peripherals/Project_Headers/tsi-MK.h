@@ -27,120 +27,8 @@ namespace USBDM {
  * @{
  */
 
-/**
- * Active mode clock source
- */
-enum TsiClockSource {
-   TsiClockSource_LpOscClk = TSI_SCANC_AMCLKS(0), //!< Low Power Oscillator (PMC 1kHz oscillator)
-   TsiClockSource_McgIrClk = TSI_SCANC_AMCLKS(1), //!< MCG IR Clock
-   TsiClockSource_OscerClk = TSI_SCANC_AMCLKS(2), //!< Oscillator external reference clock
-};
-/**
- * Active mode clock divider
- */
-enum TsiClockDivider {
-   TsiClockDivider_1     = TSI_SCANC_AMPSC(0), //!< Divide by 1
-   TsiClockDivider_2     = TSI_SCANC_AMPSC(1), //!< Divide by 2
-   TsiClockDivider_4     = TSI_SCANC_AMPSC(2), //!< Divide by 4
-   TsiClockDivider_8     = TSI_SCANC_AMPSC(3), //!< Divide by 8
-   TsiClockDivider_16    = TSI_SCANC_AMPSC(4), //!< Divide by 16
-   TsiClockDivider_32    = TSI_SCANC_AMPSC(5), //!< Divide by 32
-   TsiClockDivider_64    = TSI_SCANC_AMPSC(6), //!< Divide by 64
-   TsiClockDivider_128   = TSI_SCANC_AMPSC(7), //!< Divide by 1128
-};
-/**
- * Low Power Mode clock source (LLS, VLLSx)
- */
-enum TsiLowPowerClockSource {
-   TsiLowPowerClockSource_LpOscClk   = TSI_GENCS_LPCLKS(0), //!< Low Power Oscillator (PMC 1kHz oscillator)
-   TsiLowPowerClockSource_ERClk32k   = TSI_GENCS_LPCLKS(1), //!< External 32K Oscillator (RTC or main oscillator in 32K mode)
-};
-/**
- * Low Power Mode scan interval (LLS, VLLSx)
- */
-enum TsiLowPowerScanInterval {
-   TsiLowPowerScanInterval_1ms     = TSI_GENCS_LPSCNITV(0),  //!< 1ms   scan interval
-   TsiLowPowerScanInterval_5ms     = TSI_GENCS_LPSCNITV(1),  //!< 5ms   scan interval
-   TsiLowPowerScanInterval_10ms    = TSI_GENCS_LPSCNITV(2),  //!< 10ms  scan interval
-   TsiLowPowerScanInterval_15ms    = TSI_GENCS_LPSCNITV(3),  //!< 15ms  scan interval
-   TsiLowPowerScanInterval_20ms    = TSI_GENCS_LPSCNITV(4),  //!< 20ms  scan interval
-   TsiLowPowerScanInterval_30ms    = TSI_GENCS_LPSCNITV(5),  //!< 30ms  scan interval
-   TsiLowPowerScanInterval_40ms    = TSI_GENCS_LPSCNITV(6),  //!< 40ms  scan interval
-   TsiLowPowerScanInterval_50ms    = TSI_GENCS_LPSCNITV(7),  //!< 50ms  scan interval
-   TsiLowPowerScanInterval_75ms    = TSI_GENCS_LPSCNITV(8),  //!< 75ms  scan interval
-   TsiLowPowerScanInterval_100ms   = TSI_GENCS_LPSCNITV(9),  //!< 100ms scan interval
-   TsiLowPowerScanInterval_125ms   = TSI_GENCS_LPSCNITV(10), //!< 125ms scan interval
-   TsiLowPowerScanInterval_150ms   = TSI_GENCS_LPSCNITV(11), //!< 150ms scan interval
-   TsiLowPowerScanInterval_200ms   = TSI_GENCS_LPSCNITV(12), //!< 200ms scan interval
-   TsiLowPowerScanInterval_300ms   = TSI_GENCS_LPSCNITV(13), //!< 300ms scan interval
-   TsiLowPowerScanInterval_400ms   = TSI_GENCS_LPSCNITV(14), //!< 400ms scan interval
-   TsiLowPowerScanInterval_500ms   = TSI_GENCS_LPSCNITV(15), //!< 500ms scan interval
-};
-/**
- * Electrode oscillator prescaler
- */
-enum TsiElectrodePrescaler {
-   TsiElectrodePrescaler_1     = TSI_GENCS_PS(0), //!< Divide by 1
-   TsiElectrodePrescaler_2     = TSI_GENCS_PS(1), //!< Divide by 2
-   TsiElectrodePrescaler_4     = TSI_GENCS_PS(2), //!< Divide by 4
-   TsiElectrodePrescaler_8     = TSI_GENCS_PS(3), //!< Divide by 8
-   TsiElectrodePrescaler_16    = TSI_GENCS_PS(4), //!< Divide by 16
-   TsiElectrodePrescaler_32    = TSI_GENCS_PS(5), //!< Divide by 32
-   TsiElectrodePrescaler_64    = TSI_GENCS_PS(6), //!< Divide by 64
-   TsiElectrodePrescaler_128   = TSI_GENCS_PS(7), //!< Divide by 1128
-};
-
-/**
- * Selects if a single software scan is initiated or period scans
- */
-enum TsiScanMode {
-   TsiScanMode_Disabled     = TSI_GENCS_TSIEN(0)|TSI_GENCS_STM(0)|TSI_GENCS_SWTS(0), //!< Module disabled
-   TsiScanMode_Triggered    = TSI_GENCS_TSIEN(1)|TSI_GENCS_STM(0)|TSI_GENCS_SWTS(1), //!< Enable & software triggered single scan
-   TsiScanMode_Periodic     = TSI_GENCS_TSIEN(1)|TSI_GENCS_STM(1)|TSI_GENCS_SWTS(0), //!< Enable hardware scanning (repeated periodically)
-};
-
-/**
- * Selects if the module operates in selected low power modes
- */
-enum TsiStopMode {
-   TsiStopMode_Disabled    = TSI_GENCS_STPE(0), //!< Disabled in Stop, VLPStop, LLS, VLLSx
-   TsiStopMode_Enabled     = TSI_GENCS_STPE(1), //!< Enabled in Stop, VLPStop, LLS, VLLSx
-};
-
-enum TsiInterrupt {
-   TsiInterrupt_Disabled   = TSI_GENCS_TSIIE(0)|TSI_GENCS_ESOR(0),   //!< Interrupts disabled
-   TsiInterrupt_OutOfRange = TSI_GENCS_TSIIE(1)|TSI_GENCS_ESOR(0),   //!< Interrupt generated on Out-of-Range condition (OUTRGF flag)
-   TsiInterrupt_EndOfScan  = TSI_GENCS_TSIIE(1)|TSI_GENCS_ESOR(1),   //!< Interrupt generated on End-of-Scan condition (EOSF flag)
-};
-enum TsiErrorInterrupt {
-   TsiErrorInterrupt_Disabled  = TSI_GENCS_ERIE(0),   //!< Error interrupts disabled
-   TsiErrorInterrupt_Enabled   = TSI_GENCS_ERIE(1),   //!< Error interrupts enabled (overrun or illegal measurement result)
-};
-
-/**
- * Select TSI inputs
- */
-enum TsiInput {
-   // Mapped inputs
-   TsiInput_0          =  0, //!< TSI input 0
-   TsiInput_1          =  1, //!< TSI input 1
-   TsiInput_2          =  2, //!< TSI input 2
-   TsiInput_3          =  3, //!< TSI input 3
-   TsiInput_4          =  4, //!< TSI input 4
-   TsiInput_5          =  5, //!< TSI input 5
-   TsiInput_6          =  6, //!< TSI input 6
-   TsiInput_7          =  7, //!< TSI input 7
-   TsiInput_8          =  9, //!< TSI input 8
-   TsiInput_9          =  8, //!< TSI input 9
-   TsiInput_10         = 10, //!< TSI input 10
-   TsiInput_11         = 11, //!< TSI input 11
-   TsiInput_12         = 12, //!< TSI input 12
-   TsiInput_13         = 13, //!< TSI input 13
-   TsiInput_14         = 14, //!< TSI input 14
-   TsiInput_15         = 15, //!< TSI input 15
 $(/TSI/InputMapping:   // No user defined TSI inputs found)
 $(/TSI0/InputMapping:   // No user defined TSI0 inputs found)
-};
 
 
 /**
@@ -159,7 +47,7 @@ typedef void (*TSICallbackFunction)(uint32_t status);
  *  Only a single electrode is scanned (PEN.LPSP) for low-power mode.
  */
 template <class Info>
-class TsiBase_T {
+class TsiBase_T : public Info {
 
 protected:
    /**
@@ -183,9 +71,9 @@ protected:
       // Out of bounds value for function index
       static constexpr bool Test1 = (electrodeNum>=0) && (electrodeNum<(Info::numSignals));
       // Function is not currently mapped to a pin
-      static constexpr bool Test2 = !Test1 || (Info::info[electrodeNum].gpioBit != UNMAPPED_PCR);
+      static constexpr bool Test2 = !Test1 || (Info::info[electrodeNum].pinIndex != PinIndex::UNMAPPED_PCR);
       // Non-existent function and catch-all. (should be INVALID_PCR)
-      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[electrodeNum].gpioBit >= 0);
+      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[electrodeNum].pinIndex >= PinIndex::MIN_PIN_INDEX);
 
       static_assert(Test1, "Illegal TSI Input - Check Configure.usbdm for available inputs");
       static_assert(Test2, "TSI input is not mapped to a pin - Modify Configure.usbdm");
@@ -200,31 +88,6 @@ protected:
    static TSICallbackFunction sCallback;
 
 public:
-   /**
-    * IRQ handler
-    */
-   static void irqHandler(void) {
-
-      // Capture flags
-      uint32_t status = TsiBase_T<Info>::tsi->GENCS;
-
-      status &= TSI_GENCS_SCNIP_MASK|TSI_GENCS_EOSF_MASK|TSI_GENCS_OUTRGF_MASK|TSI_GENCS_OVRF_MASK|TSI_GENCS_EXTERF_MASK;
-
-      if ((status&(TSI_GENCS_EOSF_MASK|TSI_GENCS_OUTRGF_MASK|TSI_GENCS_OVRF_MASK|TSI_GENCS_EXTERF_MASK)) == 0) {
-         // Ignore spurious interrupts?
-         return;
-      }
-      // Clear flags
-      TsiBase_T<Info>::tsi->GENCS = TsiBase_T<Info>::tsi->GENCS | status; // w1c found flags
-      if (status == (TSI_GENCS_SCNIP_MASK|TSI_GENCS_EOSF_MASK)) {
-         // Ignore EOSF unless SCNIP is clear to avoid multiple events due to errata e3926
-         // This assumes that there is at least some idle time between sequences - as there should be
-         return;
-      }
-      // Execute call-back
-      sCallback(status);
-   }
-
    /**
     * Set Callback function
     *
@@ -250,22 +113,8 @@ public:
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 
-   $(/TSI/classInfo: // No class Info found)
-   /**
-    * Initialise TSI to default settings determined by Configure.usbdmProject\n
-    * Configures all TSI pins.
-    */
-   static void defaultConfigure() {
-      enable();
-
-      tsi->GENCS     = Info::tsi_gencs|TSI_GENCS_TSIEN_MASK;
-      tsi->SCANC     = Info::tsi_scanc;
-      tsi->THRESHOLD = Info::tsi_threshold;
-      tsi->PEN       = Info::tsi_pen;
-
-      enableNvicInterrupts(Info::irqLevel);
-   }
-
+   $(/TSI/classInfo: // /TSI/classInfo not found)
+   $(/TSI/InitMethod: // /TSI/InitMethod not found)
    /**
     * Enable interrupts in NVIC
     */
@@ -311,8 +160,8 @@ public:
     * @param[in] scanModulus     Scan modulus (0=continuous, otherwise scan period)
     */
    static void setClock(
-         TsiClockSource  tsiClockSource   = TsiClockSource_LpOscClk,
-         TsiClockDivider tsiClockDivider  = TsiClockDivider_128,
+         TsiClockSource  tsiClockSource   = TsiClockSource_LpoClk,
+         TsiClockDivider tsiClockDivider  = TsiClockDivider_DivBy128,
          uint16_t        scanModulus      = 0 ) {
 
       tsi->SCANC = (tsi->SCANC&~(TSI_SCANC_AMCLKS_MASK|TSI_SCANC_AMPSC_MASK|TSI_SCANC_SMOD_MASK))|
@@ -360,7 +209,7 @@ public:
    static void setLowPowerClock(
          TsiStopMode             tsiStopMode,
          TsiLowPowerScanInterval tsiLowPowerScanInterval = TsiLowPowerScanInterval_500ms,
-         TsiLowPowerClockSource  tsiLowPowerClockSource  = TsiLowPowerClockSource_LpOscClk) {
+         TsiLowPowerClockSource  tsiLowPowerClockSource  = TsiLowPowerClockSource_LpoClk) {
 
       tsi->GENCS = (tsi->GENCS&~(TSI_GENCS_STPE_MASK|TSI_GENCS_LPCLKS_MASK|TSI_GENCS_LPSCNITV_MASK))|
             tsiStopMode|tsiLowPowerScanInterval|tsiLowPowerClockSource;
@@ -399,13 +248,13 @@ public:
    /**
     * Configure touch sensing interrupts
     *
-    * @param[in] tsiInterrupt       Selects End-of-Scan or Out-of-Range interrupt behaviour
+    * @param[in] tsiEventSource     Selects End-of-Scan or Out-of-Range interrupt behaviour
     * @param[in] tsiErrorInterrupt  Selects error interrupt behaviour
     */
    static void enableTsiInterrupts(
-         TsiInterrupt      tsiInterrupt,
+         TsiEventSource    tsiEventSource,
          TsiErrorInterrupt tsiErrorInterrupt = TsiErrorInterrupt_Disabled) {
-      tsi->GENCS = (tsi->GENCS&~(TSI_GENCS_TSIIE_MASK|TSI_GENCS_ERIE_MASK))|tsiInterrupt|tsiErrorInterrupt;
+      tsi->GENCS = (tsi->GENCS&~(TSI_GENCS_TSIIE_MASK|TSI_GENCS_ERIE_MASK))|tsiEventSource|tsiErrorInterrupt;
    }
 
    /**
@@ -477,8 +326,11 @@ public:
       using Pcr = PcrTable_T<Info, limitElectrode(tsiInput)>;
 
    public:
-      static constexpr TsiInput TSI_INPUT      = tsiInput;
-      static constexpr uint16_t TSI_INPUT_MASK = 1<<tsiInput;
+      /// TSI input number
+      static constexpr TsiInput         TSI_INPUT          = tsiInput;
+
+      /// TSI input as low-power input number
+      static constexpr TsiLowPowerInput TSI_LOWPOWER_INPUT = TsiLowPowerInput(TSI_PEN_LPSP(tsiInput));
 
       /**
        * Configure the pin associated with a TSI input electrode.

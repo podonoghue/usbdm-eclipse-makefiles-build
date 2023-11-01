@@ -4,14 +4,12 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Cyclic Redundancy Check (CRC)">
 
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"          />
    <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
    <title description="------------------------------------------" />
 
 <!--
@@ -59,7 +57,8 @@
 
    <intOption key="crc_gpoly_gpoly" condition="crc_gpoly_gpoly_present"
       enabledBy="enablePeripheralSupport"
-      typeName="uint32_t"
+      enumType="uint32_t"
+      typeName="CrcPolynomial"
       description="CRC Polynomial"
       toolTip="Polynomial used for the CRC calculation"
       value="0x000000"
@@ -68,7 +67,8 @@
 
    <intOption key="crc_data_data" condition="crc_data_data_present"
       enabledBy="enablePeripheralSupport"
-      typeName="uint32_t"
+      enumType="uint32_t"
+      typeName="CrcSeed"
       description="CRC Seed"
       toolTip="Seed value used for the CRC calculation"
       value="0x000000"
@@ -138,7 +138,7 @@
       crc_ctrl_fxor  : ReadComplement;
       crc_ctrl_was   : WriteMode;
       crc_ctrl_tcrc  : Width" >
-      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -158,7 +158,7 @@
          \t   return %paramType(%register&%mask);
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== CRC Init class =============================== -->
@@ -178,12 +178,12 @@
       \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *   // Setup values
-      \t *   uint32_t(0x4567) ,                         // CRC Polynomial
-      \t *   uint32_t(0x12345678) ,                     // CRC Seed value
-      \t *   CrcWriteTranspose_BitsAndBytesTransposed , // Type of Transpose For Writes - Bits and bytes transposed
-      \t *   CrcReadTranspose_BytesTransposed ,         // Type of Transpose For Read - Bytes transposed
-      \t *   CrcReadComplement_Normal ,                 // Complement Read Of CRC Data Register - No inversion
-      \t *   CrcWidth_16BitCrc,                         // Width of CRC protocol - 16-bit CRC
+      \t *   CrcPolynomial(0x0) ,                // CRC Polynomial
+      \t *   CrcSeed(0x0) ,                      // CRC Seed
+      \t *   CrcWriteTranspose_NoTransposition , // Type of Transpose For Writes - No transposition
+      \t *   CrcReadTranspose_NoTransposition ,  // Type of Transpose For Read - No transposition
+      \t *   CrcReadComplement_Normal ,          // Complement Read Of CRC Data Register - No inversion
+      \t *   CrcWidth_16BitCrc,                  // Width of CRC protocol - 16-bit CRC
       \t * };
       \t *
       \t * // Initialise $(_Class) from values specified above
@@ -223,29 +223,84 @@
 <!--   Member variables -->
 
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="crc_gpoly_gpoly"
    ><![CDATA[
       \t   /// Polynomial register
       \t   uint32_t %registerName = 0;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
    
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="crc_data_data"
    ><![CDATA[
       \t   /// Data register (used as seed value)
       \t   uint32_t %registerName = 0;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="crc_ctrl_tot,crc_ctrl_totr,crc_ctrl_fxor,crc_ctrl_tcrc"
    ><![CDATA[
       \t   /// Control register
       \t   uint32_t %registerName = 0;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
+
+<!--   Constructors -->
+
+   <for keys="r"
+      values="
+            crc_ctrl_tot;
+            crc_ctrl_totr;
+            crc_ctrl_fxor;
+            crc_ctrl_tcrc;
+            crc_gpoly_gpoly;
+            crc_data_data
+            " >
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </variableTemplate>
+   </for>
+
+<!--   Default Initialisation value -->
+
+   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      separator=","
+      terminator=","
+      variables="
+            crc_gpoly_gpoly,
+            crc_data_data,
+            crc_ctrl_tot,
+            crc_ctrl_totr,
+            crc_ctrl_fxor,
+            crc_ctrl_tcrc,
+         "
+   ><![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};\n\n
+   ]]></variableTemplate>
 
 <!--   Configure methods -->
 
@@ -281,86 +336,6 @@
       \t}
       \t\n
    ]]></template>
-
-<!--   Constructors -->
-
-   <for keys="r"
-      values="
-            crc_ctrl_tot;
-            crc_ctrl_totr;
-            crc_ctrl_fxor;
-            crc_ctrl_tcrc;
-            " >
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-         variables="%(r)"
-         linePadding="xxx" >
-      <![CDATA[
-         \t   /**
-         \t    * Constructor for %description
-         \t    *
-         \t    * @tparam   Types
-         \t    * @param    rest
-         \t    *
-         %paramDescription
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-         \t
-         \t      %registerName = (%registerName&~%mask) | %paramExpression;
-         \t   }
-         \t\n
-      ]]>
-      </setTemplate>
-   </for>
-
-<!--   Constructors -->
-
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      variables="crc_gpoly_gpoly,crc_data_data"
-      params="polynomial, seed"
-      nonDefaultParams="2"
-      linePadding="xxx" >
-   <![CDATA[
-      \t   /**
-      \t    * Constructor for %description0 and %description1 
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName0 = %paramName0;
-      \t      %registerName1  = %paramName1;
-      \t   }
-      \t\n
-   ]]>
-   </setTemplate>
-
-<!--   Default Initialisation value -->
-
-   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      separator=","
-      terminator=","
-      variables="
-            crc_gpoly_gpoly,
-            crc_data_data,
-            crc_ctrl_tot,
-            crc_ctrl_totr,
-            crc_ctrl_fxor,
-            crc_ctrl_tcrc,
-         "
-   ><![CDATA[
-      \t/**
-      \t * Default initialisation value for $(_Class)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
-      \t};\n\n
-   ]]></initialValueTemplate>
 
    <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[

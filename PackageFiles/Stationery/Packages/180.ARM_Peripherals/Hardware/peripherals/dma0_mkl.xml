@@ -4,8 +4,6 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Enhanced direct memory access controller" >
 
-   <constant key="suppressInstance"         type="Boolean" value="false"                                   />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"                                    />
    <constant key="irq_pattern"              type="String"  value="&quot;^%b_?(\d+)(_DMA.*)?$&quot;"        />
    <constant key="irq_ClassHandler"         type="String"  value="&quot;%c%i::irqHandler&lt;$1&gt;&quot;"  />
    <constant key="irq_parameters"           type="String"  value="&quot;DmaChannelNum channel&quot;"       />
@@ -13,7 +11,7 @@
    <constant key="irq_call"                 type="String"  value="&quot;DmaChannelNum(channel)&quot;"      />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"                                   />
    <constant key="isSupportedinStartup"     type="Boolean" value="false"                                   />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
    <title />
 
 <!--
@@ -76,7 +74,7 @@
       toolTip="Each periodic channel may be controlled by the corresponding PIT channel"  />
 
    <for keys="var" values="NumVectors;NumChannels;NumPeriodicChannels" >
-      <initialValueTemplate variables="%(var)"
+      <variableTemplate variables="%(var)"
          initExpressionOnSameLine="true"
          linePadding="//x"
          tooltipPadding=""
@@ -84,7 +82,7 @@
          \t// %tooltip
          \tstatic constexpr unsigned %(var) = %initExpression;
          \t\n
-      ]]></initialValueTemplate>
+      ]]></variableTemplate>
    </for>
 
    <choiceOption key="DmaChannelNum"
@@ -425,7 +423,7 @@
          dma_dcr_linkcc       : DcrLinkcc;
          dma_dcr_lch1         : DcrLch1;
          dma_dcr_lch2         : DcrLch2" >
-      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -445,7 +443,7 @@
          \t   return %paramType(dma->DMA[dmaChannelNum].%registerNAME&%mask);
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== DMA Init class =============================== -->
@@ -521,13 +519,13 @@
    ]]>
    </template>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
        \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
        \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
    <![CDATA[
@@ -629,7 +627,7 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="DmaChannelNum"
       linePadding=""
       tooltipPadding="///x"
@@ -637,51 +635,51 @@
       \t   /// %description
       \t   /// %tooltip
       \t   %paramType %paramName = DmaChannelNum_None;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       linePadding=""
       tooltipPadding="xxx///x"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="dma_sar_addr"
    ><![CDATA[
       \t   /// Source Address Register
       \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="dma_dar_addr"
    ><![CDATA[
       \t   /// Destination Address Register
       \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="dma_dsr_bcr_done,dma_dsr_bcr_bcr"
    ><![CDATA[
       \t   /// DMA Status / Byte Count Register
       \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="dma_dcr_eint,dma_dcr_erq,dma_dcr_cs,dma_dcr_aa,dma_dcr_eadreq,dma_dcr_sinc,dma_dcr_ssize,dma_dcr_dinc,dma_dcr_dsize,dma_dcr_start,dma_dcr_smod,dma_dcr_dmod,dma_dcr_d_req,dma_dcr_linkcc,dma_dcr_lch1,dma_dcr_lch2"
    ><![CDATA[
       \t   /// DMA Control Register
       \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName0 = %symbolicExpression1;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Configure methods -->
 
@@ -723,7 +721,7 @@
 
    <!--   Constructors -->
 
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -740,9 +738,9 @@
       \t
       \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -759,9 +757,9 @@
       \t
       \t      %registerName = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="DmaChannelNum"
       linePadding="xxx" >
    <![CDATA[
@@ -780,7 +778,7 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
    <for keys="r"
       values="
@@ -807,7 +805,7 @@
             dma_dcr_lch1;
             dma_dcr_lch2
             " >
-      <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -826,7 +824,7 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
    <for keys="r"
@@ -835,7 +833,7 @@
             dma_dar_addr;
             dma_dsr_bcr_bcr
             " >
-      <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -854,13 +852,13 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -900,7 +898,7 @@
       \tstatic constexpr Init ExampleValue = {%initExpression
       \t};\n\n
    ]]>
-   </initialValueTemplate>
+   </variableTemplate>
 
    <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[

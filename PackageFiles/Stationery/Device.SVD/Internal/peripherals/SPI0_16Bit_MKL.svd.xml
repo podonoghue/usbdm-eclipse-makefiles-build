@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKL16Z4
       MKL17Z4
       MKL26Z4
@@ -632,57 +632,57 @@ Defines inactive state of the CLK</description>
                </fields>
             </register>
             <register>
-               <name>ML</name>
-               <description>Match register low</description>
+               <name>M</name>
+               <description>8-bit Match register</description>
                <addressOffset>0x4</addressOffset>
                <size>8</size>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
                      <name>Bits</name>
-                     <description>Hardware compare value (low byte)</description>
+                     <description>Hardware compare value (8-bits)</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
             </register>
             <register>
-               <name>MH</name>
-               <description>Match register high</description>
-               <addressOffset>0x5</addressOffset>
-               <size>8</size>
-               <resetMask>0xFF</resetMask>
+               <name>M16</name>
+               <description>16-bit Match register</description>
+               <addressOffset>0x4</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
                <fields>
                   <field>
                      <name>Bits</name>
-                     <description>Hardware compare value (high byte)</description>
+                     <description>Hardware compare value (16-bits)</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
             </register>
             <register>
-               <name>DL</name>
-               <description>Data register low</description>
+               <name>D</name>
+               <description>8-bit Data register</description>
                <addressOffset>0x6</addressOffset>
                <size>8</size>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
                      <name>Bits</name>
-                     <description>Data (low byte)</description>
+                     <description>Data (16-bits)</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
             </register>
             <register>
-               <name>DH</name>
-               <description>Data register high</description>
-               <addressOffset>0x7</addressOffset>
-               <size>8</size>
-               <resetMask>0xFF</resetMask>
+               <name>D16</name>
+               <description>16-bit Data register</description>
+               <addressOffset>0x6</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
                <fields>
                   <field>
                      <name>Bits</name>
-                     <description>Data (high byte)</description>
+                     <description>Data (16-bits)</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>

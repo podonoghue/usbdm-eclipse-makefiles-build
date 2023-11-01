@@ -1805,8 +1805,8 @@ Devices using this peripheral:
                   <field derivedFrom="EWM" > <name>CMT</name> <description>CMT Clock Gate Control</description> <bitOffset>2</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>I2C0</name> <description>I2C0 Clock Gate Control</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>I2C1</name> <description>I2C1 Clock Gate Control</description> <bitOffset>7</bitOffset> </field>
-                  <field derivedFrom="EWM" > <name>USBOTG</name> <description>USB Clock Gate Control</description> <bitOffset>18</bitOffset> </field>
-                  <field derivedFrom="EWM" > <name>CMP</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="EWM" > <name>USB0</name> <description>USB Clock Gate Control</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="EWM" > <name>CMP0</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>VREF</name> <description>VREF Clock Gate Control</description> <bitOffset>20</bitOffset> </field>
                </fields>
             </register>
@@ -1941,7 +1941,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="FLEXBUS" > <name>DMA</name> <description>DMA Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="FLEXBUS" > <name>DMA0</name> <description>DMA Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="FLEXBUS" > <name>MPU</name> <description>MPU Clock Gate Control</description> <bitOffset>2</bitOffset> </field>
                   <field derivedFrom="FLEXBUS" > <name>SDRAMC</name> <description>SDRAMC Clock Gate Control</description> <bitOffset>3</bitOffset> </field>
                </fields>

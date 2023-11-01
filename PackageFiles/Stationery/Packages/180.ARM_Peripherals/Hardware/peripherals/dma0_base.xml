@@ -4,7 +4,7 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
    <!-- DMA->CR -->
 
@@ -295,7 +295,7 @@
 
 <!-- DmaTcdCsr Member variables -->
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="
          dma_csr_bwc,
          dma_csr_majorelink,
@@ -324,7 +324,7 @@
       \t
       \tpublic:
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   DmaTcdCsr Constructors -->
 
@@ -336,7 +336,7 @@
          dma_csr_inthalf;
          dma_csr_intmajor;
          dma_csr_start">
-      <constructorTemplate namespace="usbdm" variables="%(r)"
+      <variableTemplate namespace="usbdm" variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
          \t   /**
@@ -353,7 +353,7 @@
          \t      %registerName |= %paramExpression;
          \t   }
          \t\n
-      ]]></constructorTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--  ========== DmaTcdCsr class - end =============================== -->
@@ -413,7 +413,7 @@
 
 <!-- DmaConfig Member variables -->
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="
          dma_cr_hoe,
          dma_cr_clm,
@@ -425,7 +425,7 @@
       \t   ///  DMA TCD Control and Status
       \t   uint32_t %registerName;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   DmaConfig Constructors -->
 
@@ -436,7 +436,7 @@
          dma_cr_GroupArb;
          dma_cr_erca;
          dma_cr_edbg">
-      <constructorTemplate namespace="usbdm" variables="%(r)"
+      <variableTemplate namespace="usbdm" variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
          \t   /**
@@ -453,7 +453,7 @@
          \t      %registerName |= %paramExpression;
          \t   }
          \t\n
-      ]]></constructorTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--    DmaConfig Setters -->
@@ -464,7 +464,7 @@
                 dma_cr_emlm                 : SetMinorLoopMapping;
                 dma_cr_erca,dma_cr_GroupArb : SetArbitration;
                 dma_cr_edbg                 : SetActionInDebug">
-      <setTemplate namespace="usbdm" variables="%(var)" key="/DMA/Setters"
+      <variableTemplate namespace="all" variables="%(var)" key="/DMA/Setters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -476,7 +476,7 @@
          \t   %register = (%register & ~%mask)|%paramExpression;
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== DmaTcdCsr class - end =============================== -->
@@ -495,7 +495,7 @@
 
 <!--    Default Initialisation values -->
 
-   <initialValueTemplate
+   <variableTemplate
       separator=","
       terminator=","
       variables="
@@ -513,9 +513,9 @@
       \t */
       \tstatic constexpr DmaBasicInfo::DmaTcdCsr DefaultDmaTcdCsrValue = {%initExpression\n\t};
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate
+   <variableTemplate
       separator=","
       terminator=","
       variables="
@@ -532,7 +532,7 @@
       \t */
       \tstatic constexpr DmaBasicInfo::DmaConfig DefaultDmaConfigValue = {%initExpression\n\t};
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template><![CDATA[
       \t/**
@@ -560,7 +560,7 @@
 
    <stringOption key="irq_pattern"        locked="true" value="^%b_?(\d+)(_DMA.*)?$;^%b_Error.*$" hidden="true" />
    <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irqHandler&lt;$1&gt;;%c%i::errorIrqHandler" hidden="true" />
-   <xi:include href="_irqOptionSubstituted.xml"/>
+   <xi:include href="irqOptionSubstituted.xml"/>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">

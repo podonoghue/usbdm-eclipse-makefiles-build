@@ -4,7 +4,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Power Management Controller">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
    <category name="LPO" description="Low Power Clock Sources" >
       <intOption key="system_low_power_clock_128kHz"
@@ -93,7 +93,7 @@
    \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
    ]]></template>
       
-   <xi:include href="_irqOption.xml"/>
+   <xi:include href="irqOption.xml"/>
    
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">

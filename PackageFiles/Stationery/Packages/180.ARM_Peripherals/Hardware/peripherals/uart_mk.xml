@@ -6,9 +6,9 @@ Devices using this peripheral:
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
-   <xi:include href="_mapPinsOption_on.xml"/>
+   <xi:include href="mapPinsOption_on.xml"/>
 
    <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src[]"              optional="true" locked="false" />
    <aliasOption key="/SIM/system_uart$(_instance)_fixedclocksource[]"   optional="true"/>
@@ -56,7 +56,7 @@ Devices using this peripheral:
       <choice value="1"   name="Interrupt" enum="Interrupt" />
    </choiceOption>
 
-   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
       variables="uart_c2_tcie" ><![CDATA[
       \t/**
       \t * Set %description
@@ -66,7 +66,7 @@ Devices using this peripheral:
       \tvoid setTransmitCompleteAction(%params) const {
       \t   %register = (%register & ~%mask) | %paramExpression;
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <choiceOption key="uart_c2_ilie" condition="uart_c2_ilie_present"
       hidden="true"
@@ -77,7 +77,7 @@ Devices using this peripheral:
       <choice value="1"   name="Interrupt" enum="Interrupt" />
    </choiceOption>
 
-   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
       variables="uart_c2_ilie" ><![CDATA[
       \t/**
       \t * Set %description
@@ -87,7 +87,7 @@ Devices using this peripheral:
       \tvoid setIdleLineDetectAction(%params) const {
       \t   %register = (%register & ~%mask) | %paramExpression;
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <choiceOption key="uartTxEmptyAction" condition="!uart_c5_tdmas_present&amp;&amp;uart_c2_tie_present"
       hidden="true"
@@ -110,7 +110,7 @@ Devices using this peripheral:
       <choice value="1,1"   name="DMA"       enum="Dma"       />
    </choiceOption>
 
-   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
        variables="uartTxEmptyAction" ><![CDATA[
       \t/**
       \t * Set %description
@@ -119,16 +119,16 @@ Devices using this peripheral:
       \t */
       \tvoid setTransmitEmptyAction(%params) const {
       \t   uart->C2 = (uart->C2 & ~UART_C2_TIE_MASK)   | %paramExpression; \n
-   ]]></setTemplate>
-   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+   ]]></variableTemplate>
+   <variableTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
       variables="uartTxEmptyAction"
       condition="uart_c5_tdmas_present" ><![CDATA[
       \t   uart->C5 = (uart->C5 & ~UART_C5_TDMAS_MASK) | %paramExpression>>8; \n
-   ]]></setTemplate>
-   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+   ]]></variableTemplate>
+   <variableTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
        variables="uartTxEmptyAction" ><![CDATA[
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <choiceOption key="uartRxFullAction" condition="!uart_c5_rdmas_present&amp;&amp;uart_c2_rie_present"
       hidden="true"
@@ -151,7 +151,7 @@ Devices using this peripheral:
       <choice value="1,1"   name="DMA"       enum="Dma"       />
    </choiceOption>
 
-   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
       variables="uartRxFullAction" ><![CDATA[
       \t/**
       \t * Set %description
@@ -160,16 +160,16 @@ Devices using this peripheral:
       \t */
       \tvoid setReceiveFullAction(%params) const {
       \t   uart->C2 = (uart->C2 & ~UART_C2_RIE_MASK)   | %paramExpression;\n
-   ]]></setTemplate>
-   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+   ]]></variableTemplate>
+   <variableTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
       variables="uartRxFullAction"
       condition="uart_c5_rdmas_present" ><![CDATA[
       \t   uart->C5 = (uart->C5 & ~UART_C5_RDMAS_MASK) | %paramExpression>>8;\n
-   ]]></setTemplate>
-   <setTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+   ]]></variableTemplate>
+   <variableTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
       variables="uartRxFullAction" ><![CDATA[
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <if condition="uart_c4_brfa_present">
       <binaryOption key="uartClass"
@@ -216,9 +216,9 @@ Devices using this peripheral:
 
    <stringOption key="irq_pattern"        locked="true" value="^UART%i_?((RxTx|Error|Lon)|.*)?$" hidden="true" />
    <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irq$2Handler" hidden="true" />
-   <xi:include href="_irqOptionSubstituted.xml"/>
+   <xi:include href="irqOptionSubstituted.xml"/>
 
-   <xi:include href="_clockOption.xml"/>
+   <xi:include href="clockOption.xml"/>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.UartValidate">

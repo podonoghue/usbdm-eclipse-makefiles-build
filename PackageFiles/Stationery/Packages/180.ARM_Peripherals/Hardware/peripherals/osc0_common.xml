@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
 
-<!-- _osc0_common.xml -->
+<!-- osc0_common.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
    <constant key="enablePeripheralSupport"  type="Boolean" value="true"          />
    <constant key="/$(_BASENAME)/enablePeripheralSupport"  type="Boolean" value="true"          />
    <constant key="enableGettersAndSetters"  type="Boolean" value="true"          />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"         />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
    <title />
 
 <!--
@@ -203,21 +202,21 @@
 
 <!--   ========== Class constants =============================== -->
 
-   <initialValueTemplate
+   <variableTemplate
       variables="osc_clock"
    ><![CDATA[
       \t//! Frequency of OSC Clock or Crystal
       \tstatic constexpr uint32_t osc_clock = %initExpression
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate
+   <variableTemplate
       variables="osc32k_clock"
    ><![CDATA[
       \t//! Frequency of 32K OSC Clock or Crystal (if applicable)
       \tstatic constexpr uint32_t osc32k_clock = %initExpression
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   ========== OSC Init class =============================== -->
 
@@ -277,12 +276,12 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="osc_cr_erclken,osc_cr_erefsten,osc_cr_scp,osc_cr_scp"
    ><![CDATA[
       \t   /// Control Register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Configure methods -->
 
@@ -299,7 +298,7 @@
       \t      (void)CheckPinMapped<1>::checker;
       \t   }
       \t   if (Info::mapPinsOnEnable) {
-      \t      configureAllPins();
+      \t      Info::configureAllPins();
       \t   }
       \t   // Update settings
       \t   configure(Info::DefaultInitValue);
@@ -326,7 +325,7 @@
             osc_cr_erefsten;
             osc_cr_scp
             " >
-      <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -345,12 +344,12 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -367,7 +366,7 @@
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
    ]]>
-   </initialValueTemplate>
+   </variableTemplate>
 
    <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
       <![CDATA[
@@ -390,7 +389,7 @@
       osc_cr_erefsten:ExternalReferenceInStop;
       osc_cr_scp:LoadCapacitance;
       osc_div_erps:Divider" >
-      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -410,7 +409,7 @@
          \t   return %paramType(%register&%mask);
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
    <template><![CDATA[

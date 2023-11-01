@@ -821,7 +821,7 @@ Enables alternative conversion triggers for ADC0</description>
                <resetValue>0x182</resetValue>
                <fields>
                   <field>
-                     <name>LPTMR</name>
+                     <name>LPTMR0</name>
                      <description>Low Power Timer Access Control</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -891,7 +891,7 @@ Enables alternative conversion triggers for ADC0</description>
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="FTF" > <name>DMAMUX0</name> <description>DMA Mux Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="FTF" > <name>I2S</name> <description>I2S Clock Gate Control</description> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>I2S0</name> <description>I2S Clock Gate Control</description> <bitOffset>15</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>PIT</name> <description>PIT Clock Gate Control</description> <bitOffset>23</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>TPM0</name> <description>TPM0 Clock Gate Control</description> <bitOffset>24</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>TPM1</name> <description>TPM1 Clock Gate Control</description> <bitOffset>25</bitOffset> </field>
@@ -925,7 +925,7 @@ Enables alternative conversion triggers for ADC0</description>
                <resetValue>0x100</resetValue>
                <fields>
                   <field>
-                     <name>DMA</name>
+                     <name>DMA0</name>
                      <description>DMA Clock Gate Control</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>1</bitWidth>

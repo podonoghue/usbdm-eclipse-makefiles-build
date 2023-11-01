@@ -4,8 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="External Bus Interface">
 
-   <xi:include href="_mapPinsOption_on.xml"/>
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="mapPinsOption_on.xml"/>
+   <xi:include href="default_instance.xml"/>
 
    <aliasOption key="/SIM/system_bus_clock[]" />
 
@@ -14,7 +14,7 @@
       <copy source="Snippets/flexbus-example.cpp"         target="Snippets/flexbus-example.cpp"         overwrite="true"  derived="true" />
    </projectActionList>
 
-   <xi:include href="_clockOption.xml"/>
+   <xi:include href="clockOption.xml"/>
 
    <template namespace="usbdm"><![CDATA[
       \t/**

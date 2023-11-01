@@ -18,14 +18,14 @@ using namespace USBDM;
 using Led   = GpioA<2,ActiveLow>;
 
 // Assumes prescaler set to obtain 8MHz clock
-constexpr uint8_t  PrimaryCarrierHalfTime   = ((8000000UL/40000)/2); // 40kHz
-constexpr uint8_t  SecondaryCarrierHalfTime = ((8000000UL/80000)/2); // 80kHz
+constexpr Ticks  PrimaryCarrierHalfTime   = Ticks((8000000UL/40000)/2); // 40kHz
+constexpr Ticks  SecondaryCarrierHalfTime = Ticks((8000000UL/80000)/2); // 80kHz
 
-constexpr uint16_t OneMarkTime  = 100;
-constexpr uint16_t OneSpaceTime = 100;
+constexpr Ticks OneMarkTime  = 100_ticks;
+constexpr Ticks OneSpaceTime = 100_ticks;
 
-constexpr uint16_t ZeroMarkTime  = 200;
-constexpr uint16_t ZeroSpaceTime = 100;
+constexpr Ticks ZeroMarkTime  = 200_ticks;
+constexpr Ticks ZeroSpaceTime = 100_ticks;
 
 constexpr uint16_t data = 0xF0A5;
 volatile int bitNum = 15;
@@ -35,10 +35,10 @@ void cmtCallback() {
    if (Cmt::getStatus()) {
       // LSB
       if (data&(1<<bitNum)) {
-         Cmt::setMarkSpaceTiming(OneMarkTime, OneSpaceTime);
+         Cmt::setMarkSpacePeriod(OneMarkTime, OneSpaceTime);
       }
       else {
-         Cmt::setMarkSpaceTiming(ZeroMarkTime, ZeroSpaceTime);
+         Cmt::setMarkSpacePeriod(ZeroMarkTime, ZeroSpaceTime);
       }
       if (bitNum == 15) {
          Cmt::setExtendedSpace(CmtExtendedSpace_Enabled);
@@ -50,36 +50,78 @@ void cmtCallback() {
 }
 
 void configureCmtFrequencyShiftKeying() {
+#if 1
+   static constexpr Cmt::Init cmtInit {
+
+      CmtMode_FreqShiftKeying ,                            // Mode of operation
+      CmtClockPrescaler_Auto ,                             // Primary Prescaler Divider
+      CmtIntermediatePrescaler_DivBy1 ,                    // Intermediate frequency Prescaler
+      CmtOutput_ActiveHigh ,                               // Output Control
+      CmtEndOfCycleAction_Interrupt ,                      // End of Cycle Action
+      CmtPrimaryCarrierHighTime(PrimaryCarrierHalfTime) ,  // Primary Carrier High Time
+      CmtPrimaryCarrierLowTime(PrimaryCarrierHalfTime) ,   // Primary Carrier Low Time
+      CmtMarkPeriod(ZeroMarkTime) ,                        // Mark period
+      CmtSpacePeriod(ZeroSpaceTime),                       // Space period
+
+      NvicPriority_Normal,
+      cmtCallback,
+   };
+   Cmt::configure(cmtInit);
+   Cmt::setOutput(PinDriveStrength_High);
+#else
    Cmt::configure(CmtMode_Direct);
    Cmt::setPrimaryTiming(PrimaryCarrierHalfTime,PrimaryCarrierHalfTime);
    Cmt::setSecondaryTiming(SecondaryCarrierHalfTime,SecondaryCarrierHalfTime);
-   Cmt::setMarkSpaceTiming(ZeroMarkTime, ZeroSpaceTime);
-   Cmt::outputControl(CmtOutput_Enabled);
+   Cmt::setMarkSpacePeriod(ZeroMarkTime, ZeroSpaceTime);
+   Cmt::setOutputControl(CmtOutput_ActiveHigh);
    Cmt::setOutput(PinDriveStrength_High);
 
    Cmt::setCallback(cmtCallback);
-   Cmt::enableInterruptDma(CmtInterruptDma_Irq);
+   Cmt::setEndOfCycleAction(CmtEndOfCycleAction_Interrupt);
    Cmt::enableNvicInterrupts(NvicPriority_Normal);
    Cmt::setMode(CmtMode_FreqShiftKeying);
+#endif
 }
 
 void configureCmtTime() {
+#if 1
+   static constexpr Cmt::Init cmtInit {
+
+      CmtMode_Time ,                                       // Mode of operation
+      CmtClockPrescaler_Auto ,                             // Primary Prescaler Divider
+      CmtIntermediatePrescaler_DivBy1 ,                    // Intermediate frequency Prescaler
+      CmtOutput_ActiveHigh ,                               // Output Control
+      CmtEndOfCycleAction_Interrupt ,                      // End of Cycle Action
+      CmtPrimaryCarrierHighTime(PrimaryCarrierHalfTime) ,  // Primary Carrier High Time
+      CmtPrimaryCarrierLowTime(PrimaryCarrierHalfTime) ,   // Primary Carrier Low Time
+      CmtMarkPeriod(ZeroMarkTime) ,                        // Mark period
+      CmtSpacePeriod(ZeroSpaceTime),                       // Space period
+
+      NvicPriority_Normal,
+      cmtCallback
+   };
+   Cmt::configure(cmtInit);
+   Cmt::setOutput(PinDriveStrength_High);
+#else
+   Cmt::setClockDivider(CmtClockPrescaler_Auto);
+
    Cmt::configure(CmtMode_Direct);
    Cmt::setPrimaryTiming(PrimaryCarrierHalfTime,PrimaryCarrierHalfTime);
-   Cmt::setMarkSpaceTiming(ZeroMarkTime, ZeroSpaceTime);
-   Cmt::outputControl(CmtOutput_Enabled);
+   Cmt::setMarkSpacePeriod(ZeroMarkTime, ZeroSpaceTime);
+   Cmt::setOutputControl(CmtOutput_ActiveHigh);
    Cmt::setOutput(PinDriveStrength_High);
 
    Cmt::setCallback(cmtCallback);
-   Cmt::enableInterruptDma(CmtInterruptDma_Irq);
+   Cmt::setEndOfCycleAction(CmtEndOfCycleAction_Interrupt);
    Cmt::enableNvicInterrupts(NvicPriority_Normal);
    Cmt::setMode(CmtMode_Time);
+#endif
 }
 
 int main() {
    console.writeln("Starting\n");
-   console.writeln("SystemCoreClock = ", ::SystemCoreClock);
-   console.writeln("SystemBusClock  = ", ::SystemBusClock);
+   console.writeln("SystemCoreClock = ", SystemCoreClock);
+   console.writeln("SystemBusClock  = ", SystemBusClock);
 
 //   configureCmtFrequencyShiftKeying();
    configureCmtTime();

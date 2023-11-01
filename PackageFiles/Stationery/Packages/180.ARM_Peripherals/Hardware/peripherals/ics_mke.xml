@@ -6,10 +6,9 @@
 
    <constant key="irq_parameters"           type="String" value="&quot;&quot;"  />
    <constant key="irq_call"                 type="String" value="&quot;&quot;"  />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"    />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"   />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"    />
-   <xi:include href="_enablePeripheral.xml" />
+   <xi:include href="enablePeripheral.xml" />
    <title />
 
    <!-- Clock mode as indicated by icsClockMode[%(n)] choice index -->
@@ -725,16 +724,16 @@
 
 <!--   ========== Methods =============================== -->
 
-   <initialValueTemplate codeGenCondition="!enablePeripheralSupport"
+   <variableTemplate codeGenCondition="!enablePeripheralSupport"
       variables="ics_c2_bdiv[0],ics_c2_lp[0]"
       terminator=";"
    ><![CDATA[
       \t/// ICS_C2 value used for ICS minimal configuration
       \tstatic constexpr uint8_t ics_c2 = %initExpression;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <template variables="ics_oscsel_fixed[]"
+   <variableTemplate variables="ics_oscsel_fixed[]"
    ><![CDATA[
       \t/**
       \t * Get %description
@@ -745,7 +744,7 @@
       \t
       \t   return $(%variable.code[0]);
       \t}\n\n
-      ]]></template>
+      ]]></variableTemplate>
 
    <clockCodeTemplate variable="ics_c1_irclken[]"
       returnFormat="%s"
@@ -798,40 +797,40 @@
          \t\n
       ]]></template>
 
-      <initialValueTemplate key="IcsClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="IcsClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables="
             /SIM/sim_clkdiv_outdiv3[%(n)],
             /SIM/sim_clkdiv_outdiv2[%(n)],
             /SIM/sim_clkdiv_outdiv1[%(n)]"
-      ><![CDATA[\t   /// SIM CLKDIV1 System Clock Divider Register 1 %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// SIM CLKDIV1 System Clock Divider Register 1 %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="IcsClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="IcsClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables="
             icsClockMode[%(n)]"
-      ><![CDATA[\t   /// Clock Mode %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Clock Mode %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="IcsClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="IcsClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables="
             ics_c1_rdiv[%(n)],
             ics_c1_irclken[%(n)],
             ics_c1_irefsten[%(n)]"
-      ><![CDATA[\t   /// Control Register 1 - Excluding CLKS, IREFS %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 1 - Excluding CLKS, IREFS %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="IcsClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="IcsClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables=
             "ics_c2_bdiv[%(n)]"
-      ><![CDATA[\t   /// Control Register 2 - Excluding LP, FCTRIM %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 2 - Excluding LP, FCTRIM %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="IcsClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="IcsClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables=
             "ics_c4_cme[%(n)],
              ics_c4_lolie0[%(n)]"
-      ><![CDATA[\t   /// Control Register 4 - Excluding FCTRIM, SCFTRIM %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 4 - Excluding FCTRIM, SCFTRIM %initExpression\n\n ]]></variableTemplate>
 
       <template key="IcsClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
          \t},\n
@@ -898,7 +897,7 @@
       ics_c2_lp[]:C2Lp;
       ics_c4_lolie0[]:C4Lolie0;
       ics_c4_cme[]:C4Cme" >
-      <setTemplate variables="%(field)"
+      <variableTemplate variables="%(field)"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -908,7 +907,7 @@
          \tstatic void configure%(name)(%params) {
          \t   %fieldAssignment
          \t}\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== ICS Init class =============================== -->
@@ -1047,7 +1046,7 @@
                system_icsoutclk_clock[0]   : SystemIcsOutClock;
                system_icsfllclk_clock[0]   : SystemIcsFllClock
          ">
-      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport"
                    tooltipPadding="x*xx" ><![CDATA[
          \t/**
          \t *  %description
@@ -1055,8 +1054,8 @@
          \t */
          \textern volatile uint32_t %(name);
          \t\n
-      ]]></setTemplate>
-      <setTemplate namespace="all" key="/$(_BASENAME)/clocks" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport"
+      ]]></variableTemplate>
+      <variableTemplate namespace="all" key="/$(_BASENAME)/clocks" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport"
                    tooltipPadding="x*xx" ><![CDATA[
          \t/**
          \t *  %description
@@ -1064,8 +1063,8 @@
          \t */
          \tvolatile uint32_t %(name);
          \t\n
-      ]]></setTemplate>
-      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport"
+      ]]></variableTemplate>
+      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport"
                    tooltipPadding="x*xx" ><![CDATA[
          \t/**
          \t *  %description
@@ -1073,7 +1072,7 @@
          \t */
          \tconstexpr uint32_t %(name) = %valueExpression;
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
    <!-- ************* Common ****************** -->

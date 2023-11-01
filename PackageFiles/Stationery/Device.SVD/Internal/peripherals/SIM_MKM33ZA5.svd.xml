@@ -772,7 +772,7 @@ This bit controls the clock gate to the SAR ADC Module</description> <bitOffset>
 This bit controls the clock to all four AFE channels</description> <bitOffset>16</bitOffset> </field>
                   <field derivedFrom="FTFA" > <name>CRC</name> <description>Programmable CRC Clock Gate Control
 This bit controls the clock gate to the PCRC Module</description> <bitOffset>20</bitOffset> </field>
-                  <field derivedFrom="FTFA" > <name>LPTMR</name> <description>LPTMR Clock Gate Control
+                  <field derivedFrom="FTFA" > <name>LPTMR0</name> <description>LPTMR Clock Gate Control
 This bit controls the clock gate to the LPTMR Module</description> <bitOffset>28</bitOffset> </field>
                   <field derivedFrom="FTFA" > <name>SIM_LP</name> <description>SIM_LP Clock Gate Control\n
 This bit controls the clock gate to the SIM Low Power logic</description> <bitOffset>30</bitOffset> </field>
@@ -817,7 +817,7 @@ This bit controls the clock gate to the SIM High Power Logic</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="MPU" > <name>DMA</name> <description>DMA Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="MPU" > <name>DMA0</name> <description>DMA Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
                </fields>
             </register>
             <register>

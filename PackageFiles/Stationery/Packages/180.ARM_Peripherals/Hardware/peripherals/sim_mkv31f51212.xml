@@ -6,7 +6,7 @@ Devices using this peripheral:
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
    
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
    <!-- Indicates RTC/OSC0 share XTAL/EXTAL pins -->
    <constant key="rtcSharesPins" value="true" />
@@ -800,7 +800,7 @@ Devices using this peripheral:
       ]]></template>
    </category>
    
-   <xi:include href="_simCommon.xml"/>
+   <xi:include href="simCommon.xml"/>
 
    <indexedCategory name="ClockConfig[]" dim="/SIM/numberOfClockSettings" 
         description="Clock configurations" 
@@ -898,7 +898,7 @@ Devices using this peripheral:
       <param type="long" value="30MHz" />     <!-- FlexBus      -->
    </validate>
    
-   <xi:include href="_simFiles-MK.xml"/>
+   <xi:include href="simFiles-MK.xml"/>
    
    <template><![CDATA[
       \t/**

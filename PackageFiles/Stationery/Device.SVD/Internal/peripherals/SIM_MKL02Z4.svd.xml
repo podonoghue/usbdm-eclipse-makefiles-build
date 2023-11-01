@@ -620,7 +620,7 @@ Devices using this peripheral:
                   </field>
                   <field derivedFrom="I2C0" > <name>I2C1</name> <description>I2C1 Clock Gate Control</description> <bitOffset>7</bitOffset> </field>
                   <field derivedFrom="I2C0" > <name>UART0</name> <description>UART0 Clock Gate Control</description> <bitOffset>10</bitOffset> </field>
-                  <field derivedFrom="I2C0" > <name>CMP</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="I2C0" > <name>CMP0</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
                   <field derivedFrom="I2C0" > <name>SPI0</name> <description>SPI0 Clock Gate Control</description> <bitOffset>22</bitOffset> </field>
                </fields>
             </register>
@@ -631,7 +631,7 @@ Devices using this peripheral:
                <resetValue>0x180</resetValue>
                <fields>
                   <field>
-                     <name>LPTMR</name>
+                     <name>LPTMR0</name>
                      <description>Low Power Timer Access Control</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>

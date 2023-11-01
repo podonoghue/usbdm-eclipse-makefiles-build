@@ -4,14 +4,12 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analog-to-Digital Converter" >
 
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
    <constant key="irq_parameters"           type="String"  value="&quot;uint32_t result, int channel&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;uint32_t, int&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;adc->R[0], adc->SC1[0]&amp;ADC_SC1_ADCH_MASK&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
    <title />
 
 <!--
@@ -287,7 +285,7 @@
       adc_sc1_aien:Interrupt;
       adc_sc1_adco:Continuous;
       adc_sc1_adch:Channel" >
-      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -307,10 +305,10 @@
          \t   return %paramType(%register[0]&%mask);
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
-   <setTemplate variables="adc_sc2_compare,adc_cv_cv" codeGenCondition="enableGettersAndSetters"
+   <variableTemplate variables="adc_sc2_compare,adc_cv_cv" codeGenCondition="enableGettersAndSetters"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -323,7 +321,7 @@
       \t      %register0 =  (%register0 & ~%mask0)| %paramName0;
       \t      %register1 =  %paramName1;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <for keys="field:name"
         values="
@@ -339,7 +337,7 @@
       adc_sc4_acfsel:CompareOperation;
       adc_sc4_afdep:FifoDepth;
       adc_sc5_hwtriggermask:HardwareMask" >
-      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -359,10 +357,10 @@
          \t   return %paramType(%register&%mask);
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
-   <setTemplate variables="adc_sc1_adch, adc_apctl1_adpc" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate variables="adc_sc1_adch, adc_apctl1_adpc" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
    ><![CDATA[
       \t/**
       \t * Allocate %description0
@@ -383,7 +381,7 @@
       \tstatic void releaseAnaloguePin(%paramType0 %paramName0) {
       \t   %register1 = %register1 & ~(1<<%paramName0);
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
 <!--   ========== ADC Init class =============================== -->
 
@@ -451,13 +449,13 @@
    ]]>
    </template>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
        \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
        \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
    <![CDATA[
@@ -541,61 +539,61 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_sc2_adtrg,adc_sc2_compare,adc_sc2_refsel"
    ><![CDATA[
       \t   /// Status and Control Register 2
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_sc3_adlpc,adc_sc3_adiv,adc_sc3_adlsmp,adc_sc3_mode,adc_sc3_adiclk"
    ><![CDATA[
       \t   /// Status and Control Register 3
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_sc4_htrgme,adc_sc4_ascane,adc_sc4_acfsel,adc_sc4_afdep"
    ><![CDATA[
       \t   /// Status and Control Register 4
       \t   uint16_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_cv_cv"
    ><![CDATA[
       \t   /// Compare Value Register
       \t   uint16_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_apctl1_adpc"
    ><![CDATA[
       \t   /// Pin Control 1 Register
       \t   uint16_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_sc5_hwtriggermask"
    ><![CDATA[
       \t   /// Status and Control Register 5
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName0 = %symbolicExpression1;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Configure methods -->
 
@@ -648,7 +646,7 @@
 
 <!--   Constructors -->
 
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -664,9 +662,9 @@
       \t
       \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -682,7 +680,7 @@
       \t
       \t      %registerName = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <for keys="r"
       values="
@@ -699,7 +697,7 @@
             adc_sc4_afdep;
             adc_sc5_hwtriggermask
             " >
-      <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -718,10 +716,10 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_sc2_compare,adc_cv_cv"
       linePadding="xxx"
       nonDefaultParams="3" >
@@ -743,9 +741,9 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_apctl1_adpc"
       linePadding="xxx" >
    <![CDATA[
@@ -764,9 +762,9 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="adc_sc1_adch, adc_apctl1_adpc"
       linePadding="xxx" >
    <![CDATA[
@@ -785,11 +783,11 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -816,7 +814,7 @@
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--  ==========  ADC MISC =============================== -->
 

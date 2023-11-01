@@ -3,5 +3,5 @@
 <!-- usb0_otg_b.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="_usb_def.xml"/>
+<xi:include href="usb_def.xml"/>
 </fragment>

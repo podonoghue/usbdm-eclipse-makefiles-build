@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
-<!-- _sim_commonTemplates.xml -->
+<!-- sim_commonTemplates.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
@@ -9,6 +9,97 @@
       \t * Template:sim_commonTemplates.xml
       \t */ \n
    ]]></template>
+
+   <!-- ************* SCGCx Bus clock enables ****************** -->
+
+   <!--             reg : name    : Name    : isDefault -->
+   <constant key="clockEnables" type="String" value="&quot;
+                    4   : spi1    : Spi1    : false ;
+                    4   : spi0    : Spi0    : false ;
+                    4   : vref    : Vref    : false ;
+                    4   : cmp     : Cmp     : false ;
+                    4   : cmp0    : Cmp0    : false ;
+                    4   : usb0    : Usb0    : false ;
+                    4   : uart2   : Uart2   : false ;
+                    4   : uart1   : Uart1   : false ;
+                    4   : uart0   : Uart0   : false ;
+                    4   : i2c0    : I2c0    : false ;
+                    4   : i2c1    : I2c1    : false ;
+                    4   : cmt     : Cmt     : false ;
+                    4   : ewm     : Ewm     : false ;
+
+                    5   : slcd    : Slcd    : false ;
+                    5   : flexio  : Flexio  : false ;
+                    5   : lpuart1 : Lpuart1 : false ;
+                    5   : lpuart0 : Lpuart0 : false ;
+                    5   : porte   : Porte   : false ;
+                    5   : portd   : Portd   : false ;
+                    5   : portc   : Portc   : false ;
+                    5   : portb   : Portb   : false ;
+                    5   : porta   : Porta   : false ;
+                    5   : tsi0    : Tsi0    : false ;
+                    5   : lptmr   : Lptmr   : false ;
+                    5   : lptmr0  : Lptmr0  : false ;
+
+                    6   : dac0    : Dac0    : false ;
+                    6   : rtc     : Rtc     : false ;
+                    6   : adc0    : Adc0    : false ;
+                    6   : ftm2    : Ftm2    : false ;
+                    6   : ftm1    : Ftm1    : false ;
+                    6   : ftm0    : Ftm0    : false ;
+                    6   : tpm2    : Tpm2    : false ;
+                    6   : tpm1    : Tpm1    : false ;
+                    6   : tpm0    : Tpm0    : false ;
+                    6   : pdb     : Pdb     : false ;
+                    6   : usbdcd  : Usbdcd  : false ;
+                    6   : pit     : Pit     : false ;
+                    6   : crc0    : Crc0    : false ;
+                    6   : crc     : Crc     : false ;
+                    6   : i2s     : I2s     : false ;
+                    6   : i2s0    : I2s0    : false ;
+                    6   : dmamux0 : Dmamux0 : false ;
+                    6   : ftf     : Ftf     : true  ;
+                    6   : ftfa    : Ftfa    : true  ;
+                    6   : ftfe    : Ftfe    : true  ;
+                    6   : ftfl    : Ftfl    : true  ;
+                    6   : spi0    : Spi0    : false ;
+
+                    7   : dma0    : Dma0    : false
+   &quot;" />
+
+   <!-- Peripheral routing MKL -->
+   <!--   field                 :   name                -->
+   <constant key="peripheralRouting" type="String" value="&quot;
+      sim_sopt2_lpuart1src      : Lpuart1src      ;
+      sim_sopt2_lpuart0src      : Lpuart0src      ;
+      sim_sopt2_uart0src        : Uart0src        ;
+      sim_sopt2_tpmsrc          : Tpmsrc          ;
+      sim_sopt2_flexiosrc       : Flexiosrc       ;
+      sim_sopt2_usbsrc          : Usbsrc          ;
+      sim_sopt2_clkoutsel       : Clkoutsel       ;
+      sim_sopt2_rtcclkoutsel    : RtcClkoutsel    ;
+      sim_sopt7_adc0alttrgen    : Adc0AltTrgEn    ;
+      sim_sopt7_adc0pretrgsel   : Adc0PretrgSel   ;
+      sim_sopt7_adc0trgsel      : Adc0TrgSel      ;
+      sim_fcfg1_flashdoze       : FlashDoze       ;
+      sim_fcfg1_flashdis        : FlashDisable
+   &quot;" />
+
+   <category name="SCGC" description="Peripheral Clock Enables">
+      <for keys=  " reg : name    : Name    : isDefault"
+           values="=clockEnables" >
+         <binaryOption key="sim_scgc%(reg)_%(name)" condition="sim_scgc%(reg)_%(name)_present"
+            enabledBy="enablePeripheralSupport"
+            typeName="Sim%(Name)Clock"
+            description="%(Name) Clock Gate Control"
+            toolTip="This clock gate must be enabled to access %(Name)\n
+                     This may be done here or when the individual peripheral is configured." >
+            <choice name="%(Name) Clock disabled"  value="0" enum="Disabled"/>
+            <choice name="%(Name) Clock enabled"   value="1" enum="Enabled" isDefault="%(isDefault)" />
+         </binaryOption >
+      </for>
+   </category>
+
 
    <category name="SOPT8" description="FTM signals">
       <for keys="ch" values="0;1;2;3;4;5;6;7">
@@ -206,23 +297,23 @@
       disabledValue="0" />
 
 <!-- ========== External clock sources =============================== -->
-   <template variables="system_usb_clkin_clock" ><![CDATA[
+   <variableTemplate variables="system_usb_clkin_clock" ><![CDATA[
    \t///  %description
    \tstatic constexpr uint32_t usbExternalClock=$(system_usb_clkin_clock);\n\n
-   ]]></template>
+   ]]></variableTemplate>
 
-   <template variables="system_sdhc_clockin" ><![CDATA[
+   <variableTemplate variables="system_sdhc_clockin" ><![CDATA[
    \t/// %description
    \tstatic constexpr uint32_t sdhcExternalClock=$(system_sdhc_clockin);\n\n
-   ]]></template>
+   ]]></variableTemplate>
 
-   <template variables="system_irc48m_clock[]" ><![CDATA[
+   <variableTemplate variables="system_irc48m_clock[]" ><![CDATA[
    \t/// %description
    \tstatic constexpr uint32_t irc48mClock=$(system_irc48m_clock[]);\n\n
-   ]]></template>
+   ]]></variableTemplate>
 
 <!-- ========== SOPT1 =============================== -->
-   <template namespace="usbdm" variables="sim_sopt1_ramsize"><![CDATA[
+   <variableTemplate namespace="usbdm" variables="sim_sopt1_ramsize"><![CDATA[
       \t/**
       \t * RAM size
       \t */
@@ -239,9 +330,9 @@
       \t   SimRamSize_512KiB  = SIM_SOPT1_RAMSIZE(12), ///< 256KiB RAM
       \t   SimRamSize_1024KiB = SIM_SOPT1_RAMSIZE(13), ///< 256KiB RAM
       \t};\n\n
-   ]]></template>
+   ]]></variableTemplate>
 
-   <template variables="sim_sopt1_ramsize"><![CDATA[
+   <variableTemplate variables="sim_sopt1_ramsize"><![CDATA[
       \t/**
       \t * Get RAM size
       \t *
@@ -251,14 +342,14 @@
       \t
       \t   return static_cast<SimRamSize>(sim->SOPT1&SIM_SOPT1_RAMSIZE_MASK);
       \t}\n\n
-   ]]></template>
+   ]]></variableTemplate>
 
-   <template variables="rtc_clkin_clock" ><![CDATA[
+   <variableTemplate variables="rtc_clkin_clock" ><![CDATA[
       \t/// Frequency of clock provided to RTC external input pin
       \tstatic constexpr uint32_t rtc_clkin_clock = $(rtc_clkin_clock);  \n\n
-   ]]></template>
+   ]]></variableTemplate>
 
-   <clockCodeTemplate variable="sim_sopt1_osc32ksel"  codeGenCondition="enableGettersAndSetters"
+   <clockCodeTemplate variable="sim_sopt1_osc32ksel"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -452,7 +543,7 @@
    </for>
 
    <for keys="n" values=";0;1;2;3;4;5;6">
-      <template variables="system_uart%(n)_fixedclocksource[0]" ><![CDATA[
+      <variableTemplate variables="system_uart%(n)_fixedclocksource[0]" ><![CDATA[
          \t/**
          \t * Get UART%(n) input clock frequency
          \t *
@@ -461,7 +552,7 @@
          \tstatic inline uint32_t getUart%(n)Clock() {
          \t   return $(system_uart%(n)_fixedclocksource[0].code[]);
          \t}\n\n
-      ]]></template>
+      ]]></variableTemplate>
    </for>
 
 <!-- ========== SIM BasicInfo class - Start =============================== -->
@@ -472,9 +563,242 @@
       public:\n
    ]]></template>
 
+<!-- ========== Getters and Setters =============================== -->
+
+   <for keys=  " regNum : name    : Name    : isDefault"
+        values="=clockEnables" >
+      <variableTemplate variables="sim_scgc%(regNum)_%(name)" codeGenCondition="enableGettersAndSetters"
+      ><![CDATA[
+         \t/**
+         \t * Enable %description
+         \t */
+         \tstatic void enable%(Name)Clock() {
+         \t   %register = %register|%mask;
+         \t}
+         \t
+         \t/**
+         \t * Disable %description
+         \t */
+         \tstatic void disable%(Name)Clock() {
+         \t   %register = %register&~%mask;
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic bool get%(Name)ClockEnable() {
+         \t   return %register&%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <for keys="field:name"
+        values="=peripheralRouting" >
+      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %fieldAssignment
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register&%mask);
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+<!--   ========== SIM Clock Init class =============================== -->
+
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_Baseclass) clock enables
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_Class)::ClockEnables $(_name)ClockEnables {
+      \t *
+      \t *   // Setup values
+      \t *   SimScgc4Spi1_ClockDisabled                // SPI1 Clock Gate Control,
+      \t *   SimScgc4Spi0_ClockDisabled                // SPI0 Clock Gate Control,
+      \t *   SimScgc4Cmp0_ClockDisabled                // Comparator Clock Gate Control,
+      \t *   SimScgc4Usb0_ClockDisabled                // USB Clock Gate Control,
+      \t *   SimScgc4Uart2_ClockDisabled               // UART2 Clock Gate Control,
+      \t *   SimScgc4Uart1_ClockDisabled               // UART1 Clock Gate Control,
+      \t *   SimScgc4Uart0_ClockDisabled               // UART0 Clock Gate Control,
+      \t *   SimScgc4I2c1_ClockDisabled                // I2C1 Clock Gate Control,
+      \t *   SimScgc4I2c0_ClockDisabled                // I2C0 Clock Gate Control,
+      \t *   SimScgc5Porte_ClockDisabled               // Port E Clock Gate Control,
+      \t *   SimScgc5Portd_ClockDisabled               // Port D Clock Gate Control,
+      \t *   SimScgc5Portc_ClockDisabled               // Port C Clock Gate Control,
+      \t *   SimScgc5Portb_ClockDisabled               // Port B Clock Gate Control,
+      \t *   SimScgc5Porta_ClockDisabled               // Port A Clock Gate Control,
+      \t *   SimScgc5Tsi0_ClockDisabled                // TSI0 Clock Gate Control,
+      \t *   SimScgc5Lptmr_ClockDisabled               // LPTMR  Clock Gate Control,
+      \t *   SimScgc6Rtc_ClockDisabled                 // RTC Clock Gate Control,
+      \t *   SimScgc6Adc0_ClockDisabled                // ADC0 Clock Gate Control,
+      \t *   SimScgc6Tpm1_ClockDisabled                // TPM1 Clock Gate Control,
+      \t *   SimScgc6Tpm0_ClockDisabled                // TPM0 Clock Gate Control,
+      \t *   SimScgc6Ftf_ClockDisabled                 // Flash Clock Gate Control,
+      \t * };
+      \t *
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_name)ClockEnables)
+      \t * @endcode
+      \t */
+      \tclass ClockEnables {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr ClockEnables(const ClockEnables &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr ClockEnables() = default;
+      \t\n
+   ]]>
+   </template>
+
+<!--   Member variables -->
+
+   <for keys="regNum" dim="8" >
+      <template namespace="usbdm" discardRepeats="true" 
+         codeGenCondition="enablePeripheralSupport&amp;&amp;Exists(sim_scgc%(regNum)_present)" ><![CDATA[
+         \t   /// System Clock Gating Control Register %(regNum) 
+         \t   uint32_t scgc%(regNum) = 0;\n\n
+      ]]></template>
+   </for>
+
+   <!--   Constructors -->
+
+   <for keys=  " regNum : name    : Name    : isDefault"
+        values="=clockEnables" >
+      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+         variables="sim_scgc%(regNum)_%(name)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr ClockEnables(%params, Types... rest) : ClockEnables(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </variableTemplate>
+   </for>
+
+<!--   Default Initialisation value -->
+
+   <template codeGenCondition="enablePeripheralSupport"><![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class) peripheral clock gating
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr ClockEnables DefaultClockEnables = {\n
+   ]]>
+   </template>
+
+   <for keys=  " reg : name    : Name    : isDefault"
+        values="=clockEnables" >
+
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+         separator=","
+         terminator=","
+         variables="sim_scgc%(reg)_%(name)"
+      ><![CDATA[
+         %initExpression\n
+      ]]>
+      </variableTemplate >
+
+   </for >
+   <template codeGenCondition="enablePeripheralSupport"><![CDATA[
+      \t};
+      \t\n
+   ]]>
+   </template>
+
+<!--   Configure methods -->
+
+   <for keys="name            : Name      : op "
+      values="configureClocks : Configure : \=        ;
+              enableClocks    : Enable    : |=        ;
+              disableClocks   : Disable   : &amp;= ~  "
+   >
+      <template codeGenCondition="enablePeripheralSupport" >
+      <![CDATA[
+         \t/**
+         \t * %(Name) peripheral clock gating from values specified in init
+         \t *
+         \t * @param init Class containing initialisation values
+         \t */
+         \tstatic void %(name)(const ClockEnables &init) {
+         \t\n
+      ]]>
+      </template>
+      <for keys="regNum" dim="8" >
+         <template codeGenCondition="Exists(sim_scgc%(regNum)_present)" ><![CDATA[
+            \t   sim->SCGC%(regNum)  %(op) init.scgc%(regNum);\n
+         ]]></template>
+      </for>
+      <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+         \t}
+         \t\n
+      ]]>
+      </template>
+   </for>
+
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="enablePeripheralSupport" >
+      <![CDATA[
+      \t}; // class $(_Baseclass)BasicInfo::ClockEnables
+      \t\n
+   ]]>
+   </template>
+
 <!-- ========== SOPT2 ClockSourceInit class =============================== -->
 
-   <template key="clockInit_description" namespace="all" ><![CDATA[
+   <variableTemplate namespace="usbdm"
+      variables="
+         sim_sopt2_pllfllsel[],
+         sim_sopt2_usbsrc[],
+
+         sim_sopt2_uart0src[],
+         sim_sopt2_tpmsrc[],
+         sim_sopt2_clkoutsel[],
+         sim_sopt2_rtcclkoutsel,
+         sim_sopt2_traceclksel,
+         sim_sopt2_usbregen,
+         sim_sopt2_ptd7pad"
+   ><![CDATA[
       \t/**
       \t * Class used to do initialisation of SIM Clock control (SOPT2)
       \t *
@@ -501,22 +825,6 @@
       \t * Sim::configure(clockSourceInit);
       \t * @endcode
       \t */
-   ]]></template>
-
-   <initialValueTemplate namespace="usbdm"
-      variables="
-         sim_sopt2_pllfllsel[],
-         sim_sopt2_usbsrc[],
-
-         sim_sopt2_uart0src[],
-         sim_sopt2_tpmsrc[],
-         sim_sopt2_clkoutsel[],
-         sim_sopt2_rtcclkoutsel,
-         sim_sopt2_traceclksel,
-         sim_sopt2_usbregen,
-         sim_sopt2_ptd7pad"
-   ><![CDATA[
-$(clockInit_description)
       \tclass ClockSourceInit {
       \t
       \tpublic:
@@ -534,9 +842,9 @@ $(clockInit_description)
       \t    */
       \t   constexpr ClockSourceInit() = default;
       \t
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate
+   <variableTemplate
       variables="
          sim_sopt2_pllfllsel[],
          sim_sopt2_usbsrc[],
@@ -549,14 +857,13 @@ $(clockInit_description)
          sim_sopt2_usbregen,
          sim_sopt2_ptd7pad"
    ><![CDATA[
-$(clockInit_description)
       \t/**
       \t * Configure SIM Clock control from values specified in constructor.
       \t */
       \tstatic void configure(const ClockSourceInit &clockSourceInit) {\n
       \t   %register = clockSourceInit.%registerName;
       \t}\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <for keys="v"
       values="
@@ -577,7 +884,7 @@ $(clockInit_description)
          sim_sopt2_usbregen;
          sim_sopt2_ptd7pad
          ">
-      <setTemplate  namespace="usbdm" variables="%(v)"
+      <variableTemplate  namespace="usbdm" variables="%(v)"
             linePadding="xxx"
       ><![CDATA[
          \t   /**
@@ -594,7 +901,7 @@ $(clockInit_description)
          \t      %registerName |= %paramExpression;
          \t   }
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
    <for keys="m" values="'';0;1;2;3;4">
@@ -602,7 +909,7 @@ $(clockInit_description)
          values="
              sim_sopt2_lpuart%(m)src[];
              sim_sopt2_uart%(m)src[]">
-         <setTemplate namespace="usbdm" variables="%(v)"
+         <variableTemplate namespace="usbdm" variables="%(v)"
             linePadding="xxx"
          ><![CDATA[
             \t   /**
@@ -619,11 +926,11 @@ $(clockInit_description)
             \t      %registerName |= %paramExpression;
             \t   }
             \t\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
       </for>
    </for>
 
-   <initialValueTemplate  namespace="usbdm"
+   <variableTemplate  namespace="usbdm"
       variables="
          sim_sopt2_pllfllsel[],
          sim_sopt2_usbsrc[],
@@ -637,7 +944,7 @@ $(clockInit_description)
          sim_sopt2_ptd7pad"
    ><![CDATA[
       \t}; // class ClockSourceInit \n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template  ><![CDATA[
       \t/**
@@ -652,7 +959,7 @@ $(clockInit_description)
       ><![CDATA[
          \t{ // $(/MCG/ClockConfig[%(n)]) ($(/MCG/mcgClockMode[%(n)].enum[]))\n
       ]]></template>
-      <setTemplate  codeGenCondition="/MCG/enableClockConfiguration[%(n)]"
+      <variableTemplate  codeGenCondition="/MCG/enableClockConfiguration[%(n)]"
          variables="
             sim_sopt2_pllfllsel[%(n)],
             sim_sopt2_usbsrc[%(n)],
@@ -675,20 +982,20 @@ $(clockInit_description)
          separator=","
       ><![CDATA[
          %initExpression\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
       <for keys="m" values="'';0;1;2;3;4">
          <for keys="v"
             values="
                 sim_sopt2_lpuart%(m)src[%(n)];
                 sim_sopt2_uart%(m)src[%(n)]"
                 >
-            <setTemplate   codeGenCondition="/MCG/enableClockConfiguration[%(n)]"
+            <variableTemplate   codeGenCondition="/MCG/enableClockConfiguration[%(n)]"
                terminator=","
                separator=","
                variables="%(v)"
                ><![CDATA[
                %initExpression\n
-            ]]></setTemplate>
+            ]]></variableTemplate>
          </for>
       </for>
       <template   codeGenCondition="/MCG/enableClockConfiguration[%(n)]"
@@ -713,6 +1020,15 @@ $(clockInit_description)
             \tstatic void setFtm%(ftm)Flt%(flt)(%paramType %paramName) {
             \t   %fieldAssignment
             \t}\n\n
+            \t
+            \t/**
+            \t * Get %description
+            \t *
+            \t * @param %paramName %tooltip
+            \t */
+            \tstatic %paramType getFtm%(ftm)Flt%(flt)() {
+            \t   return %paramType(%maskingExpression);
+            \t}\n\n
          ]]></clockCodeTemplate>
       </for>
    </for>
@@ -728,6 +1044,15 @@ $(clockInit_description)
             \t */
             \tstatic void setFtm%(ftm)Ch%(ch)Src(%paramType %paramName) {
             \t   %fieldAssignment
+            \t}
+            \t
+            \t/**
+            \t * Get %description
+            \t *
+            \t * @param %paramName %tooltip
+            \t */
+            \tstatic %paramType getFtm%(ftm)Ch%(ch)Src() {
+            \t   return %paramType(%maskingExpression);
             \t}\n\n
          ]]></clockCodeTemplate>
       </for>
@@ -743,6 +1068,15 @@ $(clockInit_description)
          \t */
          \tstatic void setFtm%(ftm)ClkSel(%paramType %paramName) {
          \t   %fieldAssignment
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @param %paramName %tooltip
+         \t */
+         \tstatic %paramType getFtm%(ftm)ClkSel() {
+         \t   return %paramType(%maskingExpression);
          \t}\n\n
       ]]></clockCodeTemplate>
    </for>
@@ -758,6 +1092,15 @@ $(clockInit_description)
             \t */
             \tstatic void setFtm%(ftm)Trg%(trg)Src(%paramType %paramName) {
             \t   %fieldAssignment
+            \t}
+            \t
+            \t/**
+            \t * Get %description
+            \t *
+            \t * @param %paramName %tooltip
+            \t */
+            \tstatic %paramType getFtm%(ftm)Trg%(trg)Src() {
+            \t   return %paramType(%maskingExpression);
             \t}\n\n
          ]]></clockCodeTemplate>
       </for>
@@ -776,6 +1119,18 @@ $(clockInit_description)
          \t */
          \tstatic void setTpm%(tpm)ExternalClockInput(%paramType %paramName) {
          \t   %fieldAssignment
+         \t}
+         \t
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @param %paramName %tooltip
+         \t *
+         \t * @note The selected pin must also be configured for the TPM external clock function
+         \t * through the appropriate pin control register in the port control module
+         \t */
+         \tstatic %paramType getTpm%(tpm)ExternalClockInput() {
+         \t   return %paramType(%maskingExpression);
          \t}\n\n
       ]]></clockCodeTemplate>
    </for>
@@ -794,6 +1149,18 @@ $(clockInit_description)
             \t */
             \tstatic void setTpm%(tpm)Ch%(ch)InputCaptureSource(%paramType %paramName) {
             \t   %fieldAssignment
+            \t}
+            \t
+            \t/**
+            \t * Get %description
+            \t *
+            \t * @param %paramName %tooltip
+            \t *
+            \t * @note The selected pin must also be configured for the TPM external clock function
+            \t * through the appropriate pin control register in the port control module
+            \t */
+            \tstatic %paramType getTpm%(tpm)Ch%(ch)InputCaptureSource() {
+            \t   return %paramType(%maskingExpression);
             \t}\n\n
          ]]></clockCodeTemplate>
       </for>
@@ -806,7 +1173,10 @@ $(clockInit_description)
            values = "uart%(n)   : Uart%(n);
                      lpuart%(n) : Lpuart%(n)" >
 
-         <template key="%(name)Init_description" namespace="all" ><![CDATA[
+         <variableTemplate namespace="usbdm"
+            variables="sim_sopt5_%(name)ode,sim_sopt5_%(name)txsrc,sim_sopt5_%(name)rxsrc"
+            linePadding="xxx"
+         ><![CDATA[
             \t/**
             \t * Class used to do initialisation of %(Name) signals
             \t *
@@ -821,13 +1191,6 @@ $(clockInit_description)
             \t * Sim.configure(%(name)Init)
             \t * @endcode
             \t */
-         ]]></template>
-
-         <setTemplate namespace="usbdm"
-            variables="sim_sopt5_%(name)ode,sim_sopt5_%(name)txsrc,sim_sopt5_%(name)rxsrc"
-            linePadding="xxx"
-         ><![CDATA[
-$(%(name)Init_description)
             \tclass %(Name)Init {
             \t
             \tpublic:
@@ -855,9 +1218,9 @@ $(%(name)Init_description)
             \t                       %paramExpression;
             \t   }
             \t\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
 
-         <setTemplate
+         <variableTemplate
             variables="sim_sopt5_%(name)ode,sim_sopt5_%(name)txsrc,sim_sopt5_%(name)rxsrc"
             linePadding="xxx"
          ><![CDATA[
@@ -868,10 +1231,10 @@ $(%(name)Init_description)
             \t   %register = (%register&~%mask) | config.%registerName;
             \t}
             \t\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
 
          <for keys="v" values="sim_sopt5_%(name)ode;sim_sopt5_%(name)txsrc;sim_sopt5_%(name)rxsrc">
-            <setTemplate namespace="usbdm"
+            <variableTemplate namespace="usbdm"
                variables="%(v)"
                linePadding="xxx"
             ><![CDATA[
@@ -887,16 +1250,16 @@ $(%(name)Init_description)
             \t      constexpr %(Name)Init(%paramType %paramName, Types... rest) : %(Name)Init(rest...) {
             \t         %registerName = (%registerName & ~%mask) | %paramExpression;
             \t   }\n\n
-            ]]></setTemplate>
+            ]]></variableTemplate>
          </for>
-         <setTemplate namespace="usbdm"
+         <variableTemplate namespace="usbdm"
             variables="sim_sopt5_%(name)ode,sim_sopt5_%(name)txsrc,sim_sopt5_%(name)rxsrc"
             linePadding="xxx"
          ><![CDATA[
             \t}; // class %(Name)Init \n\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
 
-         <setTemplate variables="sim_sopt5_%(name)ode,sim_sopt5_%(name)txsrc,sim_sopt5_%(name)rxsrc" codeGenCondition="enableGettersAndSetters"
+         <variableTemplate variables="sim_sopt5_%(name)ode,sim_sopt5_%(name)txsrc,sim_sopt5_%(name)rxsrc" codeGenCondition="enableGettersAndSetters"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -907,43 +1270,35 @@ $(%(name)Init_description)
             %params) {
             \t   %fieldAssignment
             \t}\n\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
 
-         <clockCodeTemplate variable="sim_sopt5_%(name)ode" codeGenCondition="enableGettersAndSetters"
-         ><![CDATA[
-            \t/**
-            \t * Set %description
-            \t *
-            \t * @param %paramName %tooltip
-            \t */
-            \tstatic void set%(Name)Drive(%paramType %paramName) {
-            \t   %fieldAssignment
-            \t}\n\n
-         ]]></clockCodeTemplate>
+         <for keys="  ext    : fullName  "
+              values="ode    : %(Name)Drive ;
+                      rxsrc  : %(Name)RxSrc ;
+                      txsrc  : %(Name)TxSrc " >
+            <clockCodeTemplate variable="sim_sopt5_%(name)%(ext)" codeGenCondition="enableGettersAndSetters"
+            ><![CDATA[
+               \t/**
+               \t * Set %description
+               \t *
+               %paramDescription
+               \t */
+               \tstatic void set%(fullName)(%params) {
+               \t   %fieldAssignment
+               \t}
+               \t
+               \t/**
+               \t * Get %description
+               \t *
+               \t * @return %tooltip
+               \t */
+               \tstatic %paramType get%(fullName)() {
+               \t   return %paramType(%register&%mask);
+               \t}
+               \t\n
+            ]]></clockCodeTemplate>
+         </for>
 
-         <clockCodeTemplate variable="sim_sopt5_%(name)rxsrc" codeGenCondition="enableGettersAndSetters"
-         ><![CDATA[
-            \t/**
-            \t * Set %description
-            \t *
-            \t * @param %paramName %tooltip
-            \t */
-            \tstatic void set%(Name)RxSrc(%paramType %paramName) {
-            \t   %fieldAssignment
-            \t}\n\n
-         ]]></clockCodeTemplate>
-
-         <clockCodeTemplate variable="sim_sopt5_%(name)txsrc" codeGenCondition="enableGettersAndSetters"
-         ><![CDATA[
-            \t/**
-            \t * Set %description
-            \t *
-            \t * @param %paramName %tooltip
-            \t */
-            \tstatic void set%(Name)TxSrc(%paramType %paramName) {
-            \t   %fieldAssignment
-            \t}\n\n
-         ]]></clockCodeTemplate>
       </for>
    </for>
 
@@ -966,7 +1321,7 @@ $(%(name)Init_description)
       \t */
    ]]></template>
 
-   <setTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="
          sim_sopt7_adc0trigger,sim_sopt7_adc0trgsel,
          sim_sopt7_adc1trigger,sim_sopt7_adc1trgsel"
@@ -989,10 +1344,10 @@ $(AdcInit_description)
       \t    */
       \t   constexpr AdcInit() = default;
       \t\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <for keys="p" values=";0;1">
-      <setTemplate namespace="usbdm"
+      <variableTemplate namespace="usbdm"
          variables="sim_sopt7_adc%(p)trigger"
          linePadding="xxx"
       ><![CDATA[
@@ -1010,9 +1365,9 @@ $(AdcInit_description)
          \t      %registerName = (%registerName & ~%mask) | %paramExpression;
          \t   }
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
 
-      <setTemplate namespace="usbdm"
+      <variableTemplate namespace="usbdm"
          variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel"
          linePadding="xxx"
          nonDefaultParams="2"
@@ -1032,10 +1387,10 @@ $(AdcInit_description)
          \t      %registerName = (%registerName & ~%mask) | %paramExpression;
          \t   }
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
-   <setTemplate
+   <variableTemplate
       variables="
          sim_sopt7_adc0trigger,sim_sopt7_adc0trgsel,
          sim_sopt7_adc1trigger,sim_sopt7_adc1trgsel"
@@ -1049,9 +1404,9 @@ $(AdcInit_description)
       \t                config.%registerName;
       \t}
       \t\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="
          sim_sopt7_adc0trigger,sim_sopt7_adc0trgsel,
          sim_sopt7_adc1trigger,sim_sopt7_adc1trgsel"
@@ -1059,7 +1414,7 @@ $(AdcInit_description)
    ><![CDATA[
       \t};\n\n
       \t\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <for keys="p" values=";0;1">
 
@@ -1080,7 +1435,7 @@ $(AdcInit_description)
          \t */
       ]]></template>
 
-      <setTemplate namespace="usbdm"
+      <variableTemplate namespace="usbdm"
          variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel"
             linePadding="xxx"
       ><![CDATA[
@@ -1111,9 +1466,9 @@ $(Adc%(p)Init_description)
          \t      %registerName = %paramExpression;
          \t   }
          \t};\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
 
-      <setTemplate
+      <variableTemplate
          variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel"
             linePadding="xxx"
       ><![CDATA[
@@ -1124,9 +1479,9 @@ $(Adc%(p)Init_description)
          \t   %register = (%register&~%mask) | config.%registerName;
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
 
-      <setTemplate variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel" codeGenCondition="enableGettersAndSetters" >
+      <variableTemplate variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel" codeGenCondition="enableGettersAndSetters" >
       <![CDATA[
          \t/**
          \t * Set %description0 and %description2
@@ -1141,7 +1496,7 @@ $(Adc%(p)Init_description)
          \t
          \t   %register = (%register&~%mask)|(%paramExpression);
          \t};\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!-- ========== SOPT8 =============================== -->
@@ -1229,13 +1584,13 @@ $(Adc%(p)Init_description)
       \t   ErrorCode rc = E_NO_ERROR;
       \t
       \t   // The USB interface must be disabled for clock changes to have effect
-      \t   sim->SCGC4 = sim->SCGC4 & ~SIM_SCGC4_USBOTG_MASK;
+      \t   sim->SCGC4 = sim->SCGC4 & ~SIM_SCGC4_USB0_MASK;
       \t
       \t   // Set clock source
       \t   %fieldAssignment
       \t\n
    ]]></clockCodeTemplate>
-   <template variables="sim_clkdiv2_usb[]" ><![CDATA[
+   <variableTemplate variables="sim_clkdiv2_usb[]" ><![CDATA[
       \t   if (simUsbFullSpeedClockSource == SimUsbFullSpeedClockSource_PeripheralClk) {
       \t      // Set clock divider for internal clock
       \t      rc = E_CLOCK_INIT_FAILED;
@@ -1253,10 +1608,10 @@ $(Adc%(p)Init_description)
       \t      }
       \t   }
       \t   rc = setErrorCode(rc);\n\n
-   ]]></template>
-   <template variables="sim_sopt2_usbsrc[]" ><![CDATA[
+   ]]></variableTemplate>
+   <variableTemplate variables="sim_sopt2_usbsrc[]" ><![CDATA[
       \t   // Restore USB clock
-      \t   sim->SCGC4 = sim->SCGC4 | SIM_SCGC4_USBOTG_MASK;
+      \t   sim->SCGC4 = sim->SCGC4 | SIM_SCGC4_USB0_MASK;
       \t   return rc;
       \t}
 
@@ -1269,22 +1624,22 @@ $(Adc%(p)Init_description)
       \t   switch ((sim->SOPT2&SIM_SOPT2_USBSRC_MASK)) {
       \t      default:
       \t      case $(sim_sopt2_usbsrc[].enum[0]) : return usbExternalClock;\n
-   ]]></template>
-   <template variables="sim_clkdiv2_usb[]" ><![CDATA[
+   ]]></variableTemplate>
+   <variableTemplate variables="sim_clkdiv2_usb[]" ><![CDATA[
       \t      case $(sim_sopt2_usbsrc[].enum[1]) :
       \t         return  (getPeripheralClock()*
       \t            (((sim->CLKDIV2&SIM_CLKDIV2_USBFRAC_MASK)>>SIM_CLKDIV2_USBFRAC_SHIFT)+1))/
       \t            (((sim->CLKDIV2&SIM_CLKDIV2_USBDIV_MASK)>>SIM_CLKDIV2_USBDIV_SHIFT)+1);\n
-   ]]></template>
+   ]]></variableTemplate>
    <template condition="!sim_clkdiv2_usb[]&amp;&amp;sim_sopt2_usbsrc[]" ><![CDATA[
       \t      case $(sim_sopt2_usbsrc[].enum[1]) : return getPeripheralClock();\n
    ]]></template>
-   <template variables="sim_sopt2_usbsrc[]" ><![CDATA[
+   <variableTemplate variables="sim_sopt2_usbsrc[]" ><![CDATA[
       \t   }
       \t}\n\n
-   ]]></template>
+   ]]></variableTemplate>
 
-   <template variables="sim_clkdiv2_usb[]"><![CDATA[
+   <variableTemplate variables="sim_clkdiv2_usb[]"><![CDATA[
       \t/**
       \t * Set USB clock divisors to suitable value and enable clock
       \t */
@@ -1292,7 +1647,7 @@ $(Adc%(p)Init_description)
       \t
       \t   setUsbFullSpeedClock((SimUsbFullSpeedClockSource)(sim->SOPT2&SIM_SOPT2_USBSRC_MASK));
       \t}\n\n
-   ]]></template>
+   ]]></variableTemplate>
 
 <!-- ========== CLKDIV3 =============================== -->
    <clockCodeTemplate variable="sim_clkdiv3_pllfll[]"
@@ -1324,7 +1679,7 @@ $(Adc%(p)Init_description)
    ]]></clockCodeTemplate>
 
 <!-- ========== COP Watchdog =============================== -->
-   <initialValueTemplate
+   <variableTemplate
       variables="
          sim_copc_copdbgen,
          sim_copc_copstpen,
@@ -1333,7 +1688,7 @@ $(Adc%(p)Init_description)
    ><![CDATA[
          \t/// COP Control Register
          \tstatic constexpr uint32_t copc = %initExpression\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <if condition="sim_copc_copt" >
       <template><![CDATA[
@@ -1349,18 +1704,18 @@ $(Adc%(p)Init_description)
       <template key="/SYSTEM/Includes" namespace="all" ><![CDATA[
       ]]></template>
 
-      <template key="/SYSTEM/WatchdogInitialise" namespace="all" variables="sim_copc_copt" ><![CDATA[
+      <variableTemplate key="/SYSTEM/WatchdogInitialise" namespace="all" variables="sim_copc_copt" ><![CDATA[
          \t/*
          \t * Initialise watchdog
          \t */
          \tUSBDM::SimInfo::sim->COPC = USBDM::SimInfo::copc;
          \t
-      ]]></template>
+      ]]></variableTemplate>
    </if>
 
 <!-- ========== SIM Init class =============================== -->
    <if condition="true">
-   <template key="Init_description" namespace="all" ><![CDATA[
+  <template namespace="usbdm" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of SIM
       \t *
@@ -1438,10 +1793,6 @@ $(Adc%(p)Init_description)
       \t * Sim::configure(simInit);
       \t * @endcode
       \t */
-   ]]></template>
-
-   <template namespace="usbdm" ><![CDATA[
-$(Init_description)
       \tclass Init {
       \t
       \tpublic:
@@ -1475,21 +1826,21 @@ $(Init_description)
       \t   sim->SOPT5 = config.sopt5;
       \t   sim->SOPT7 = config.sopt7;\n
       ]]></template>
-   <template variables="sim_sopt8_ftm0och0src" ><![CDATA[
+   <variableTemplate variables="sim_sopt8_ftm0och0src" ><![CDATA[
       \t   sim->SOPT8 = config.sopt8;\n
-   ]]></template>
-   <template variables="sim_sopt9_tpm1clksel" ><![CDATA[
+   ]]></variableTemplate>
+   <variableTemplate variables="sim_sopt9_tpm1clksel" ><![CDATA[
       \t   sim->SOPT9 = config.sopt9;\n
-   ]]></template>
-   <template variables="sim_clkdiv2_usb[]" ><![CDATA[
+   ]]></variableTemplate>
+   <variableTemplate variables="sim_clkdiv2_usb[]" ><![CDATA[
       \t
       \t   updateUsbClockDivider();\n
-   ]]></template>
+   ]]></variableTemplate>
    <template><![CDATA[
       \t}\n\n
    ]]></template>
 
-   <setTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables=
          "sim_sopt1_osc32kout,
           sim_sopt1_osc32ksel,
@@ -1497,8 +1848,8 @@ $(Init_description)
     ><![CDATA[
       \t   /// System Options Register 1
       \t   uint32_t sopt1 = 0;\n\n
-   ]]></setTemplate >
-   <initialValueTemplate namespace="usbdm"
+   ]]></variableTemplate >
+   <variableTemplate namespace="usbdm"
       variables="
          sim_sopt2_pllfllsel[],
          sim_sopt2_lpuartsrc[],
@@ -1520,8 +1871,8 @@ $(Init_description)
    ><![CDATA[
       \t   /// System Options Register 2
       \t   uint32_t sopt2 = 0;\n\n
-   ]]></initialValueTemplate>
-   <initialValueTemplate namespace="usbdm"
+   ]]></variableTemplate>
+   <variableTemplate namespace="usbdm"
       variables="
          sim_sopt4_ftm0flt0,
          sim_sopt4_ftm0trg0src,
@@ -1532,8 +1883,8 @@ $(Init_description)
    ><![CDATA[
       \t   /// System Options Register 4
       \t   uint32_t sopt4 = 0;\n\n
-   ]]></initialValueTemplate>
-   <initialValueTemplate namespace="usbdm"
+   ]]></variableTemplate>
+   <variableTemplate namespace="usbdm"
       variables="
          sim_sopt5_uart0ode,
          sim_sopt5_uart0rxsrc,
@@ -1544,24 +1895,24 @@ $(Init_description)
    ><![CDATA[
       \t   /// System Options Register 5
       \t   uint32_t sopt5 = 0;\n\n
-   ]]></initialValueTemplate>
-   <initialValueTemplate namespace="usbdm"
+   ]]></variableTemplate>
+   <variableTemplate namespace="usbdm"
       variables="
          sim_sopt7_adc0trigger,
          sim_sopt7_adc0trgsel"
    ><![CDATA[
       \t   /// System Options Register 7
       \t   uint32_t sopt7 = 0;\n\n
-   ]]></initialValueTemplate>
-   <initialValueTemplate namespace="usbdm"
+   ]]></variableTemplate>
+   <variableTemplate namespace="usbdm"
       variables="
          sim_sopt8_ftm0och0src,
          sim_sopt8_ftm3och0src"
    ><![CDATA[
       \t   /// System Options Register 8
       \t   uint32_t sopt8 = 0;\n\n
-   ]]></initialValueTemplate>
-   <initialValueTemplate namespace="usbdm"
+   ]]></variableTemplate>
+   <variableTemplate namespace="usbdm"
       variables="
          sim_sopt9_tpm1clksel,
          sim_sopt9_tpm2ch0src,
@@ -1570,7 +1921,7 @@ $(Init_description)
    ><![CDATA[
       \t   /// System Options Register 9
       \t   uint32_t sopt9 = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm" ><![CDATA[
       \t
@@ -1582,7 +1933,7 @@ $(Init_description)
          values="
              sim_sopt2_lpuart%(n)src[];
              sim_sopt2_uart%(n)src[]">
-         <setTemplate namespace="usbdm" variables="%(v)"
+         <variableTemplate namespace="usbdm" variables="%(v)"
             linePadding="xxx"
          ><![CDATA[
             \t   /**
@@ -1599,7 +1950,7 @@ $(Init_description)
             \t      %registerName |= %paramExpression;
             \t   }
             \t\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
       </for>
    </for>
    <for keys="v"
@@ -1620,10 +1971,12 @@ $(Init_description)
          sim_sopt2_rtcclkoutsel;
          sim_sopt2_fbsl;
          sim_sopt2_rmiisrc;
+         sim_sopt1_usbsstby;
+         sim_sopt1_usbvstby;
          sim_sopt2_usbregen;
          sim_sopt2_usbslsrc
          ">
-      <setTemplate namespace="usbdm" variables="%(v)"
+      <variableTemplate namespace="usbdm" variables="%(v)"
             linePadding="xxx"
       ><![CDATA[
          \t   /**
@@ -1640,7 +1993,7 @@ $(Init_description)
          \t      %registerName |= %paramExpression;
          \t   }
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
    <for keys="p" values="0;1;2;3" >
       <for keys="u" values="0;1;2;3" >
@@ -1650,7 +2003,7 @@ $(Init_description)
                 sim_sopt4_ftm%(p)trg%(u)src;
                 sim_sopt4_ftm%(p)ch%(u)src;
                 sim_sopt4_tpm%(p)ch%(u)src">
-            <setTemplate namespace="usbdm" variables="%(v)"
+            <variableTemplate namespace="usbdm" variables="%(v)"
                   linePadding="xxx"
             ><![CDATA[
                \t   /**
@@ -1667,14 +2020,14 @@ $(Init_description)
                \t      %registerName |= %paramExpression;
                \t   }
                \t\n
-            ]]></setTemplate>
+            ]]></variableTemplate>
          </for>
       </for>
       <for keys="v"
          values="
              sim_sopt4_tpm%(p)clksel;
              sim_sopt4_ftm%(p)clksel">
-         <setTemplate namespace="usbdm" variables="%(v)"
+         <variableTemplate namespace="usbdm" variables="%(v)"
             linePadding="xxx"
          ><![CDATA[
             \t   /**
@@ -1691,7 +2044,7 @@ $(Init_description)
             \t      %registerName |= %paramExpression;
             \t   }
             \t\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
       </for>
    </for>
    <for keys="p" values=";0;1;2;3;4">
@@ -1703,7 +2056,7 @@ $(Init_description)
              sim_sopt5_lpuart%(p)ode;
              sim_sopt5_lpuart%(p)rxsrc;
              sim_sopt5_lpuart%(p)txsrc">
-         <setTemplate namespace="usbdm" variables="%(v)"
+         <variableTemplate namespace="usbdm" variables="%(v)"
                   linePadding="xxx"
          ><![CDATA[
             \t   /**
@@ -1720,11 +2073,11 @@ $(Init_description)
             \t      %registerName |= %paramExpression;
             \t   }
             \t\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
       </for>
    </for>
    <for keys="p" values=";0;1">
-      <setTemplate namespace="usbdm" variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel"
+      <variableTemplate namespace="usbdm" variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel"
          linePadding="xxx"
        ><![CDATA[
       \t   /**
@@ -1742,14 +2095,14 @@ $(Init_description)
       \t      %registerName |= %paramExpression;
       \t   }
       \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
    <for keys="ch" values="0;1;2;3;4;5;6;7">
       <for keys="v"
          values="
              sim_sopt8_ftm0och%(ch)src;
              sim_sopt8_ftm3och%(ch)src">
-         <setTemplate namespace="usbdm" variables="%(v)"
+         <variableTemplate namespace="usbdm" variables="%(v)"
             linePadding="xxx"
          ><![CDATA[
             \t   /**
@@ -1766,12 +2119,12 @@ $(Init_description)
             \t      %registerName |= %paramExpression;
             \t   }
             \t\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
       </for>
    </for>
    <for keys="p" values="1;2">
       <for keys="fn" values="clksel;ch0src">
-         <setTemplate namespace="usbdm" variables="sim_sopt9_tpm%(p)%(fn)"
+         <variableTemplate namespace="usbdm" variables="sim_sopt9_tpm%(p)%(fn)"
             linePadding="xxx"
          ><![CDATA[
             \t   /**
@@ -1788,7 +2141,7 @@ $(Init_description)
             \t      %registerName |= %paramExpression;
             \t   }
             \t\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
       </for>
    </for>
    <template namespace="usbdm" ><![CDATA[
@@ -1811,7 +2164,7 @@ $(Init_description)
       \t */
       \tstatic constexpr Init DefaultInitValue {\n
    ]]></template>
-   <setTemplate
+   <variableTemplate
       variables="
          sim_sopt2_pllfllsel[],
          sim_sopt2_sdhcsrc[],
@@ -1836,20 +2189,20 @@ $(Init_description)
       separator=","
    ><![CDATA[
       %initExpression\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
    <for keys="n" values=";0;1;2;3;4">
       <for keys="v"
          values="
              sim_sopt2_lpuart%(n)src[];
              sim_sopt2_uart%(n)src[]"
              >
-         <setTemplate
+         <variableTemplate
             terminator=","
             separator=","
             variables="%(v)"
             ><![CDATA[
             %initExpression\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
       </for>
    </for>
    <for keys="p" values="0;1;2;3" >
@@ -1860,26 +2213,26 @@ $(Init_description)
                 sim_sopt4_ftm%(p)trg%(u)src;
                 sim_sopt4_ftm%(p)ch%(u)src;
                 sim_sopt4_tpm%(p)ch%(u)src">
-            <setTemplate
+            <variableTemplate
                terminator=","
                separator=","
                variables="%(v)"
             ><![CDATA[
                %initExpression\n
-            ]]></setTemplate>
+            ]]></variableTemplate>
          </for>
       </for>
       <for keys="v"
          values="
              sim_sopt4_tpm%(p)clksel;
              sim_sopt4_ftm%(p)clksel">
-         <setTemplate
+         <variableTemplate
             terminator=","
             separator=","
             variables="%(v)"
          ><![CDATA[
             %initExpression\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
       </for>
    </for>
    <for keys="p" values=";0;1;2;3;4">
@@ -1891,47 +2244,47 @@ $(Init_description)
              sim_sopt5_lpuart%(p)ode;
              sim_sopt5_lpuart%(p)rxsrc;
              sim_sopt5_lpuart%(p)txsrc">
-         <setTemplate
+         <variableTemplate
             terminator=","
             separator=","
             variables="%(v)"
          ><![CDATA[
             %initExpression\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
       </for>
    </for>
    <for keys="p" values=";0;1">
-      <setTemplate
+      <variableTemplate
          terminator=","
          separator=","
          variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel"
        ><![CDATA[
          %initExpression\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
    <for keys="ch" values="0;1;2;3;4;5;6;7">
       <for keys="v"
          values="
              sim_sopt8_ftm0och%(ch)src;
              sim_sopt8_ftm3och%(ch)src">
-         <setTemplate
+         <variableTemplate
             terminator=","
             separator=","
             variables="%(v)"
             ><![CDATA[
             %initExpression\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
       </for>
    </for>
    <for keys="p" values="1;2">
       <for keys="fn" values="clksel;ch0src">
-         <setTemplate
+         <variableTemplate
             terminator=","
             separator=","
             variables="sim_sopt9_tpm%(p)%(fn)"
             ><![CDATA[
             %initExpression\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
       </for>
    </for>
    <template  ><![CDATA[

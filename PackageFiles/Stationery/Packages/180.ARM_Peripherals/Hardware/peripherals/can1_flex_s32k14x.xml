@@ -4,10 +4,10 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="FlexCAN">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
    <constant key="disable_peripheral" value = "&quot;can->MCR = CAN_MCR_MDIS(1);&quot;"  type="String" />
-   <xi:include href="_mapPinsOption.xml"/>
+   <xi:include href="mapPinsOption.xml"/>
 
    <!-- Note: second entry gets the tick irrespective of true/false value -->
    <binaryOption key="EnableFifo"
@@ -185,7 +185,7 @@
        \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
    ]]></template>
 
-   <xi:include href="_clockOption.xml"/>
+   <xi:include href="clockOption.xml"/>
 
    <projectActionList id = "can_files" >
       <copy source="Project_Headers/can.h"                    target="Project_Headers/can.h"                    overwrite="true"  derived="true" />

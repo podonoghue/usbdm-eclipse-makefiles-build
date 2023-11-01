@@ -174,7 +174,7 @@ public:
 
    static void Command_irqHandler() {
    }
-   
+    
    static void ReadCollision_irqHandler() {
    }
    
@@ -238,7 +238,7 @@ public:
     * @return false => Processor not in correct mode
     */
    static bool isFlashAvailable() {
-      return (Smc::getStatus() == SmcStatus_RUN);
+      return (SmcInfo::getStatus() == SmcStatus_RUN);
    }
 
    /**

@@ -4,14 +4,14 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="General Purpose Input/Output">
 
-   <constant key="suppressInstance"         type="Boolean" value="false"               />
+   <constant key="suppressInstance"         type="Boolean"  value="true"         />
    <constant key="suppressIrqArray"         type="Boolean" value="true"                />
    <constant key="irq_parameters"           type="String"  value="&quot;&quot;"        />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"        />
    <constant key="irq_call"                 type="String"  value="&quot;&quot;"        />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"               />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"                />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
    <title />
 
 <!--
@@ -557,13 +557,13 @@
    ]]></template>
 
    <for keys="right" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux" >
-      <setTemplate variables="%(right)" namespace="all" key="/PCR/pcr_enums" discardRepeats="true" ><![CDATA[
+      <variableTemplate variables="%(right)" namespace="all" key="/PCR/pcr_enums" discardRepeats="true" ><![CDATA[
          \tconstexpr inline PcrValue operator|(PcrValue op1, %paramType op2) { return static_cast<PcrValue>(static_cast<uint32_t>(op1)|static_cast<uint32_t>(op2)); }\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
    <for keys="left" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux" >
       <for keys="right" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux">
-         <setTemplate
+         <variableTemplate
             variables="%(left),%(right)"
             condition="%(left)&amp;&amp;%(right)"
             namespace="all"
@@ -571,7 +571,7 @@
             nonDefaultParams="2"
             discardRepeats="true" ><![CDATA[
             \tconstexpr inline PcrValue operator|(%paramType0 op1, %paramType1 op2) { return static_cast<PcrValue>(static_cast<uint32_t>(op1)|static_cast<uint32_t>(op2)); }\n
-         ]]></setTemplate>
+         ]]></variableTemplate>
       </for>
    </for>
 
@@ -583,8 +583,7 @@
       \tstatic constexpr uint32_t PORT$(_instance)_CLOCK_MASK = SIM_SCGC5_PORT$(_instance)_MASK; ///< PORT$(_instance) clock mask\n
    ]]></template>
 
-   <template namespace="all" key="/PCR/extra_methods" discardRepeats="true" >
-      ><![CDATA[
+   <template namespace="all" key="/PCR/extra_methods" discardRepeats="true" ><![CDATA[
       \t/**
       \t *
       \t * Class used to do initialisation of GPIO PCR value
@@ -635,7 +634,7 @@
       \t   constexpr PcrInit(const USBDM::PcrInit &other) : value(other.value) {}
       \t\n
    ]]></template>
-   <setTemplate
+   <variableTemplate
       variables="port_pcr_dse,port_pcr_ode,port_pcr_sre"
       namespace="all"
       key="/PCR/extra_methods"
@@ -652,8 +651,8 @@
       \t   ) : value (%paramExpression) {
       \t   }
       \t\n
-   ]]></setTemplate>
-   <setTemplate
+   ]]></variableTemplate>
+   <variableTemplate
       variables="port_pcr_pd,port_pcr_pfe,port_pcr_irqc"
       namespace="all"
       key="/PCR/extra_methods"
@@ -670,8 +669,8 @@
       \t   ) : value (%paramExpression) {
       \t   }
       \t\n
-   ]]></setTemplate>
-   <setTemplate
+   ]]></variableTemplate>
+   <variableTemplate
       variables="port_pcr_dse,port_pcr_ode,port_pcr_sre,port_pcr_pd,port_pcr_pfe,port_pcr_irqc"
       namespace="all"
       key="/PCR/extra_methods"
@@ -688,9 +687,9 @@
       \t   ) : value (%paramExpression) {
       \t   }
       \t\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
    <for keys="n" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux">
-      <setTemplate variables="%(n)" namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
+      <variableTemplate variables="%(n)" namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
          \t   /**
          \t    * Constructor
          \t    *
@@ -704,7 +703,7 @@
          \t
          \t      value = value | %paramName;
          \t   }\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
    <template namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
@@ -716,17 +715,16 @@
    ]]></template>
 
    <for keys="n" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux">
-      <setTemplate variables="%(n)" namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
+      <variableTemplate variables="%(n)" namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
          \t   constexpr operator         %paramType() const { return static_cast<%paramType>(value&%mask); }
          \t   constexpr operator         %paramType()       { return static_cast<%paramType>(value&%mask); }
          \t   constexpr %paramType       %paramName() const { return static_cast<%paramType>(value&%mask); }
          \t   constexpr %paramType       %paramName()       { return static_cast<%paramType>(value&%mask); }
          \n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
-   <template namespace="all" key="/PCR/extra_methods"  discardRepeats="true" >
-      ><![CDATA[
+   <template namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
       \t};\n\n
    ]]></template>
 
@@ -738,9 +736,9 @@
       \tstatic constexpr PcrValue GPIO_DEFAULT_PCR(
    ]]></template>
    <for keys="v" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc" >
-      <setTemplate variables="%(v)" namespace="all" key="/PCR/extra_methods" discardRepeats="true" ><![CDATA[
+      <variableTemplate variables="%(v)" namespace="all" key="/PCR/extra_methods" discardRepeats="true" ><![CDATA[
          $(%variable.enum[])|
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
    <template namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
       PinMux_Gpio);\n\n
@@ -854,7 +852,7 @@
       \t}\n\n
    ]]></template>
 
-   <setTemplate
+   <variableTemplate
       variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre,port_pcr_mux"
       defaultParamValue="defaultPcrValue"
       namespace="all"
@@ -873,8 +871,8 @@
       \t   if constexpr (portAddress != 0) {
       \t      PcrBase::enablePortClock(pinIndex);
       \t\n
-   ]]></setTemplate>
-   <setTemplate
+   ]]></variableTemplate>
+   <variableTemplate
       variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre,port_pcr_mux"
       condition="/PCR/dfer_register_present"
       namespace="all"
@@ -887,8 +885,8 @@
       \t      else {
       \t         Pcr_T::port->DFER = Pcr_T::port->DFER & ~BITMASK;
       \t      }\n
-   ]]></setTemplate>
-   <setTemplate
+   ]]></variableTemplate>
+   <variableTemplate
       variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre,port_pcr_mux"
       namespace="all"
       key="/PCR/set_pcr"
@@ -897,9 +895,9 @@
       \t      *PCR = %paramExpression;
       \t   }
       \t}\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate
+   <variableTemplate
       variables="port_pcr_dse,port_pcr_ode,port_pcr_sre"
       defaultParamValue="defaultPcrValue"
       namespace="all"
@@ -939,9 +937,9 @@
       \t
       \t   setPCR(%paramExpression);
       \t}\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate
+   <variableTemplate
       variables="port_pcr_pd,port_pcr_irqc,port_pcr_pfe"
       defaultParamValue="defaultPcrValue"
       namespace="all"
@@ -983,10 +981,10 @@
       \t
       \t   setPCR(%paramExpression);
       \t}\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <for keys="v" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux" >
-      <setTemplate variables="%(v)" namespace="all" key="/PCR/set_pcr_option" discardRepeats="true" ><![CDATA[
+      <variableTemplate variables="%(v)" namespace="all" key="/PCR/set_pcr_option" discardRepeats="true" ><![CDATA[
          \t/**
          \t * Set %description
          \t *
@@ -998,10 +996,10 @@
          \t      *PCR = (*PCR & ~%mask)|%paramName;
          \t   }
          \t}\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
-   <setTemplate
+   <variableTemplate
       variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre"
       namespace="all"
       key="/GPIO/set_in_out"
@@ -1028,9 +1026,9 @@
          \t   // Configure PCR
          \t   Pcr::setPCR(%paramExpression);
          \t}\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate
+   <variableTemplate
       variables="port_pcr_dse,port_pcr_ode,port_pcr_sre"
       namespace="all"
       key="/GPIO/set_output"
@@ -1058,9 +1056,9 @@
          \t   // Configure PCR
          \t   Pcr::setPCR(%paramExpression);
          \t}\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate
+   <variableTemplate
       variables="port_pcr_pd,port_pcr_irqc,port_pcr_pfe"
       namespace="all"
       key="/GPIO/set_input"
@@ -1084,9 +1082,9 @@
    \t   // Configure PCR
    \t   Pcr::setPCR(%paramExpression);
    \t}\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate
+   <variableTemplate
       variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre"
       namespace="all"
       key="/GPIO/field_set_in_out"
@@ -1108,9 +1106,9 @@
    \t
    \t   setInOut(%paramExpression);
    \t}\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate
+   <variableTemplate
       variables="port_pcr_dse,port_pcr_ode,port_pcr_sre"
       namespace="all"
       key="/GPIO/field_set_output"
@@ -1133,9 +1131,9 @@
    \t
    \t   setOutput(%paramExpression);
    \t}\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate
+   <variableTemplate
       variables="port_pcr_pd,port_pcr_irqc,port_pcr_pfe"
       namespace="all"
       key="/GPIO/field_set_input"
@@ -1156,7 +1154,7 @@
    \t
    \t   setInOut(%paramExpression);
    \t}\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <signals/>
 

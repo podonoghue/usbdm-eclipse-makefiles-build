@@ -4,15 +4,15 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="FlexCAN">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
    
-   <xi:include href="_mapPinsOption_on.xml"/>
+   <xi:include href="mapPinsOption_on.xml"/>
    
    <signals/>
    
-   <xi:include href="_clockOption.xml"/>
+   <xi:include href="clockOption.xml"/>
       
-   <xi:include href="_irqOption.xml"/>
+   <xi:include href="irqOption.xml"/>
    
    <projectActionList id = "lcd_files" >
       <copy source="Project_Headers/lcd.h"                    target="Project_Headers/lcd.h"                    overwrite="true"  derived="true" />

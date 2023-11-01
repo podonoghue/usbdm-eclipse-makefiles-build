@@ -31,7 +31,7 @@ Symbols
       
    </category>
 
-   <enumTemplate namespace="usbdm" variable="KKKKK" 
+   <variableTemplate namespace="usbdm" variables="KKKKK" 
    ><![CDATA[    
       \t/**
       \t * %description
@@ -41,7 +41,7 @@ Symbols
       \tenum %paramType {
       %body
       \t};\n\n
-   ]]></enumTemplate>
+   ]]></variableTemplate>
       
    <clockCodeTemplate variable="KKKKK"
       returnFormat="%s"
@@ -101,7 +101,7 @@ Symbols
       \t   $(irqHandlerInstalled);\n\n
    ]]></template>
    
-   <xi:include href="_irqOption.xml"/>
+   <xi:include href="irqOption.xml"/>
    
    <projectActionList id = "cmp_files" >
    <copy source="Project_Headers/cmp.h"     target="Project_Headers/cmp.h"     overwrite="true"  derived="true" />

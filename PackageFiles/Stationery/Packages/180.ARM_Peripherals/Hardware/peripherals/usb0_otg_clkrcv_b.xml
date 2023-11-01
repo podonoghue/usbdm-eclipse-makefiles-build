@@ -3,6 +3,6 @@
 <!-- usb0_otg_clkrcv_b.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="_usb_def_clkrcv_regen.xml"/>
+<xi:include href="usb_def_clkrcv_regen.xml"/>
 
 </fragment>

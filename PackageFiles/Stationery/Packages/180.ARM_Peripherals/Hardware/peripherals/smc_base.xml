@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"
 ?>
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
-<!-- _smc_base.xml -->
+<!-- smc_base.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"          />
    <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
    <title />
 
 <!--
@@ -93,7 +91,7 @@
       <choice name="VLLSx is allowed"     enum="Enabled"  value="1" isDefault="true" />
    </binaryOption>
 
-   <setTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="smc_pmprot_ahsrun,smc_pmprot_avlp,smc_pmprot_alls,smc_pmprot_avlls" > <![CDATA[
       \t/**
       \t * Enable all power modes.
@@ -119,7 +117,7 @@
 
       \t   %register = %paramExpression;
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <!-- ************* PMCTRL ****************** -->
 
@@ -362,7 +360,7 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
-   <setTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="smc_stopctrl_pstopo,smc_stopctrl_llsm,smc_stopctrl_vllsm,smc_stopctrl_vllsm_llsm,smc_stopctrl_porpo,smc_stopctrl_ram2po,smc_stopctrl_lpopo">
       <![CDATA[
       \t/**
@@ -375,7 +373,7 @@
 
       \t   %register = %paramExpression;
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <!-- ************** PMSTAT ************** -->
 
@@ -395,6 +393,7 @@
       <choice value="1&lt;&lt;6" enum="VLLS"  name="Processor is in Very Low Leakage Stop mode" />
    </choiceOption>
 
+   <!-- Required as used by FTF -->
    <clockCodeTemplate variable="smc_pmstat_pmstat"
    ><![CDATA[
       \t/**
@@ -828,7 +827,7 @@
    ]]></template>
 
    <for keys="r" values="smc_pmprot_ahsrun;smc_pmprot_avlp;smc_pmprot_alls;smc_pmprot_avlls">
-      <setTemplate  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -846,7 +845,7 @@
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   Constructors -->
@@ -863,7 +862,7 @@
          smc_pmctrl_lpwui;
          smc_pmctrl_stopm
             " >
-      <setTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -882,14 +881,14 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
    <template  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"><![CDATA[
    \t}; // class $(_BASENAME)/Init
    \t\n
    ]]></template>
 
-   <setTemplate key="/SMC/DefaultInitValue" namespace="all"
+   <variableTemplate key="/SMC/DefaultInitValue" namespace="all"
       variables="
          smc_pmprot_ahsrun,smc_pmprot_avlp,smc_pmprot_alls,smc_pmprot_avlls,
          smc_pmctrl_lpwui,smc_pmctrl_stopm,
@@ -910,7 +909,7 @@
       \tstatic void defaultConfigure() {
       \t   DefaultInitValue.initialise();
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <!-- ************* Startup ****************** -->
 

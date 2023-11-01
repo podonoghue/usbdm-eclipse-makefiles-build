@@ -5,14 +5,12 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated Circuit" >
 
    <constant key="irq_common"               type="Boolean" value="true"          />
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
    <constant key="irq_parameters"           type="String"  value="&quot;ErrorCode errorCode&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;ErrorCode&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;errorCode&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="false"         />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
 
 <!--
     * General substitutions
@@ -558,7 +556,7 @@ In other cases, if the master reads data from the slave, then it is required to 
    </category>
 <!-- Graphic here -->
 
-   <setTemplate variables="i2c_f_mult,i2c_f_icr" codeGenCondition="enableGettersAndSetters"
+   <variableTemplate variables="i2c_f_mult,i2c_f_icr" codeGenCondition="enableGettersAndSetters"
       nonDefaultParams="2"
    ><![CDATA[
       \t/**
@@ -572,7 +570,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t      %register = %paramName0 | %macro1(%paramName1);
       \t}
       \t\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <for keys="field:name"
         values="
@@ -585,7 +583,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       i2c_smb_shtf2              : SclHighTimeoutFlag;
       i2c_smb_sltf,i2c_smb_shtf2 : Timeouts
       " >
-      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Clear %description
@@ -605,7 +603,7 @@ In other cases, if the master reads data from the slave, then it is required to 
          \t   return %paramType(%register&%mask);
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
    <for keys="field:name"
@@ -636,7 +634,7 @@ In other cases, if the master reads data from the slave, then it is required to 
          i2c_flt_ssie    : StopStartInterrupt;
          i2c_flt_flt     : Filter;
          i2c_ra_rad      : RangeAddress" >
-      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -656,7 +654,7 @@ In other cases, if the master reads data from the slave, then it is required to 
          \t   return %paramType(%register&%mask);
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
    <for keys="field:name"
@@ -670,7 +668,7 @@ In other cases, if the master reads data from the slave, then it is required to 
          i2c_a2_sad      : SmbAddress;
          i2c_slth_sslt   : SclLowTimoutHigh;
          i2c_sltl_sslt   : SclLowTimoutLow" >
-      <setTemplate variables="%(field)"
+      <variableTemplate variables="%(field)"
                    codeGenCondition="enableGettersAndSetters&amp;&amp;/$(_BASENAME)/smbOptionsAvailable"
       ><![CDATA[
          \t/**
@@ -691,7 +689,7 @@ In other cases, if the master reads data from the slave, then it is required to 
          \t   return %paramType(%register&%mask);
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== I2C Init class =============================== -->
@@ -763,13 +761,13 @@ In other cases, if the master reads data from the slave, then it is required to 
    ]]>
    </template>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
        \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
        \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
    <![CDATA[
@@ -866,89 +864,89 @@ In other cases, if the master reads data from the slave, then it is required to 
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/baudSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/baudSupport" discardRepeats="true"
       variables="i2c_speed"
    ><![CDATA[
       \t   ///  %description
       \t   unsigned %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="i2c_a1_ad"
    ><![CDATA[
       \t   /// Address Register 1
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="i2c_f_mult,i2c_f_icr"
    ><![CDATA[
       \t   /// Frequency Divider register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="i2c_c1_iicie,i2c_c1_mst,i2c_c1_wuen,i2c_c1_dmaen"
    ><![CDATA[
       \t   /// Control Register 1
       \t   uint8_t %registerName = I2cBusRole_Controller;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="i2c_c2_gcaen,i2c_c2_adext,i2c_c2_hdrs,i2c_c2_sbrc,i2c_c2_rmen,i2c_c2_ad"
    ><![CDATA[
       \t   /// Control Register 2
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="i2c_flt_shen,i2c_flt_stopie,i2c_flt_ssie,i2c_flt_flt"
    ><![CDATA[
       \t   /// Programmable Input Glitch Filter register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="i2c_ra_rad"
    ><![CDATA[
       \t   /// Range Address register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable"
       variables="i2c_smb_fack,i2c_smb_alerten,i2c_smb_siicaen,i2c_smb_tcksel,i2c_smb_shtf2ie"
    ><![CDATA[
       \t   /// SMBus Control and Status register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable"
       variables="i2c_a2_sad"
    ><![CDATA[
       \t   /// Address Register 2
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable"
       variables="i2c_slt_value"
    ><![CDATA[
       \t   /// SCL Low Timeout Register
       \t   uint16_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName0 = %symbolicExpression1;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Configure methods -->
 
@@ -1023,7 +1021,7 @@ In other cases, if the master reads data from the slave, then it is required to 
 
    <!--   Constructors -->
 
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -1040,9 +1038,9 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t
       \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -1059,9 +1057,9 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t
       \t      %registerName = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_c2_adext,i2c_slaveaddress,i2c_c2_ad,i2c_a1_ad"
       linePadding="xxx"
       params=",address">
@@ -1083,9 +1081,9 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_c2_rmen,i2c_rangeaddress,i2c_ra_rad"
       linePadding="xxx"
       nonDefaultParams="2"
@@ -1108,9 +1106,9 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
-   <setTemplate namespace="usbdm" discardRepeats="true"
+   <variableTemplate namespace="usbdm" discardRepeats="true"
       codeGenCondition="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;/$(_BASENAME)/smbOptionsAvailable"
       variables="i2c_smb_siicaen,i2c_a2_sad"
       params=",address"
@@ -1135,9 +1133,9 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_f_mult,i2c_f_icr"
       linePadding="xxx"
       nonDefaultParams="2"
@@ -1158,9 +1156,9 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/baudSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/baudSupport" discardRepeats="true"
       variables="i2c_f_mult, i2c_speed"
       linePadding="xxx"
    >
@@ -1181,7 +1179,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
    <for keys="r"
       values="
@@ -1197,7 +1195,7 @@ In other cases, if the master reads data from the slave, then it is required to 
             i2c_flt_ssie;
             i2c_flt_flt
             " >
-      <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -1216,7 +1214,7 @@ In other cases, if the master reads data from the slave, then it is required to 
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
    <for keys="r"
       values="
@@ -1226,7 +1224,7 @@ In other cases, if the master reads data from the slave, then it is required to 
             i2c_smb_tcksel;
             i2c_smb_shtf2ie
             " >
-      <setTemplate namespace="usbdm" discardRepeats="true"
+      <variableTemplate namespace="usbdm" discardRepeats="true"
          codeGenCondition="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;/$(_BASENAME)/smbOptionsAvailable"
          variables="%(r)"
          linePadding="xxx" >
@@ -1246,14 +1244,14 @@ In other cases, if the master reads data from the slave, then it is required to 
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
    <for keys="r"
       values="
             i2c_slt_value
             " >
-      <setTemplate namespace="usbdm" discardRepeats="true"
+      <variableTemplate namespace="usbdm" discardRepeats="true"
          codeGenCondition="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;/$(_BASENAME)/smbOptionsAvailable"
          variables="%(r)"
          linePadding="xxx" >
@@ -1273,13 +1271,13 @@ In other cases, if the master reads data from the slave, then it is required to 
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="enablePeripheralSupport"
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -1307,8 +1305,8 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression\n
-   ]]></initialValueTemplate>
-   <initialValueTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;/$(_BASENAME)/smbOptionsAvailable"
+   ]]></variableTemplate>
+   <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;/$(_BASENAME)/smbOptionsAvailable"
       separator=","
       terminator=","
       variables="
@@ -1322,7 +1320,7 @@ In other cases, if the master reads data from the slave, then it is required to 
          "
    ><![CDATA[
       \t%initExpression\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
    <template codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t};

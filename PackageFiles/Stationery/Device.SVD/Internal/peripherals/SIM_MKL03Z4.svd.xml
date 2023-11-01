@@ -775,7 +775,7 @@ Controls the clock gate to the VREF module</description> <bitOffset>20</bitOffse
                <resetValue>0x182</resetValue>
                <fields>
                   <field>
-                     <name>LPTMR</name>
+                     <name>LPTMR0</name>
                      <description>Low Power Timer Access Control</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>

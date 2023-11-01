@@ -735,7 +735,7 @@ Enables alternative conversion triggers for ADC0</description>
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="I2C0" > <name>UART0</name> <description>UART0 Clock Gate Control</description> <bitOffset>10</bitOffset> </field>
-                  <field derivedFrom="I2C0" > <name>CMP</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="I2C0" > <name>CMP0</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
                   <field derivedFrom="I2C0" > <name>SPI0</name> <description>SPI0 Clock Gate Control</description> <bitOffset>22</bitOffset> </field>
                </fields>
             </register>
@@ -746,7 +746,7 @@ Enables alternative conversion triggers for ADC0</description>
                <resetValue>0x180</resetValue>
                <fields>
                   <field>
-                     <name>LPTMR</name>
+                     <name>LPTMR0</name>
                      <description>Low Power Timer Access Control</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -840,7 +840,7 @@ Enables alternative conversion triggers for ADC0</description>
                <resetValue>0x100</resetValue>
                <fields>
                   <field>
-                     <name>DMA</name>
+                     <name>DMA0</name>
                      <description>DMA Clock Gate Control</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>1</bitWidth>

@@ -6,9 +6,9 @@ Devices using this peripheral:
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
-   <xi:include href="_mapPinsOption_on.xml"/>
+   <xi:include href="mapPinsOption_on.xml"/>
 
    <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src[]"            optional="true" locked="false" />
    <aliasOption key="/SIM/system_uart$(_instance)_fixedclocksource[]" optional="true"/>
@@ -61,9 +61,9 @@ Devices using this peripheral:
 
    <stringOption key="irq_pattern"        locked="true" value="^UART%i_?(RxTx|Error|Lon)?$" hidden="true" />
    <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irq$1Handler" hidden="true" />
-   <xi:include href="_irqOptionSubstituted.xml"/>
+   <xi:include href="irqOptionSubstituted.xml"/>
 
-   <xi:include href="_clockOption.xml"/>
+   <xi:include href="clockOption.xml"/>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.UartValidate">

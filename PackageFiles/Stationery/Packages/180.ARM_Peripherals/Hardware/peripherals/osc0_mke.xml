@@ -5,10 +5,9 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Oscillator" >
 
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"         />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
    <title />
 
 <!--
@@ -162,7 +161,7 @@
       osc_cr_oscsten:OscStopMode;
       osc_cr_oscMode:OscMode;
       osc_cr_range:OscFrequencyRange" >
-      <setTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -172,7 +171,7 @@
          \tstatic void configure%(name)(%params) {
          \t   %fieldAssignment
          \t}\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== OSC Init class =============================== -->
@@ -233,12 +232,12 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="osc_cr_oscen,osc_cr_oscsten,osc_cr_oscos,osc_cr_range,osc_cr_hgo"
    ><![CDATA[
       \t   /// Control Register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Constructors -->
 
@@ -249,7 +248,7 @@
             osc_cr_oscMode;
             osc_cr_range
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -268,12 +267,12 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -289,7 +288,7 @@
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Default Configure -->
 
@@ -323,13 +322,13 @@
    ]]>
    </template>
 
-   <initialValueTemplate
+   <variableTemplate
       variables="osc_clock"
    ><![CDATA[
       \t//! Frequency of OSC Clock or Crystal
       \tstatic constexpr uint32_t osc_clock = %initExpression
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template><![CDATA[
       \t/**

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- all templates -->    
-<!ENTITY % template_items   "template|setTemplate|constructorTemplate|initialValueTemplate|enumTemplate|clockCodeTemplate" >
+<!ENTITY % template_items   "template|variableTemplate|variableTemplate|variableTemplate|enumTemplate|clockCodeTemplate" >
 
 <!-- High level items-->
 <!ENTITY % structure_items  "xi:include|section|list" >
@@ -294,7 +294,7 @@
    <!ATTLIST intOption enumType      CDATA        #IMPLIED>
    <!-- C #if expression to guard enum declaration -->
    <!ATTLIST choiceOption enumGuard           CDATA        #IMPLIED>
-   <!-- Type for int .e.g. Ticks & -->
+   <!-- Type for int .e.g. Ticks & or name or enum wrapper -->
    <!ATTLIST intOption typeName      CDATA        #IMPLIED>
    <!-- Allows this option to modify previous option with the same key 
         The variable behind this option is shared -->
@@ -811,6 +811,7 @@
 
    <!-- List of pin mappings if option disabled#Expression to enable pin map -->
    <!ATTLIST pinMapOption disabledPinMap      CDATA        #IMPLIED>
+   
 <!ELEMENT constant EMPTY >
    <!-- Used as visible name in GUI (model) -->
    <!ATTLIST constant name         CDATA                          #IMPLIED>
@@ -834,10 +835,6 @@
    <!-- Condition to include this constant -->
    <!ATTLIST constant condition    CDATA                          #IMPLIED>
    
-
-
-
-
 <!ELEMENT template (#PCDATA)* >
    <!-- 
    Where to place generated code<br>
@@ -851,16 +848,14 @@
    <!ATTLIST template key                       CDATA                   #IMPLIED >
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST template condition                 CDATA                   #IMPLIED>
+   <!-- Condition evaluated during code generation that enables this template -->
    <!ATTLIST template codeGenCondition          CDATA                   #IMPLIED>
-   <!ATTLIST template variables                 CDATA                   #IMPLIED>
+   <!-- Suppress repeats of this template -->
    <!ATTLIST template discardRepeats            (true)                  #IMPLIED>
-   <!ATTLIST template initExpressionOnSameLine  (true)                  #IMPLIED>
-   <!ATTLIST template tooltipPadding            CDATA                   #IMPLIED>
+   <!-- Padding applied to lines generated -->
    <!ATTLIST template linePadding               CDATA                   #IMPLIED>
-   <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
-   <!ATTLIST template useDefinitions            CDATA                   #IMPLIED>
 
-<!ELEMENT setTemplate (#PCDATA)* >
+<!ELEMENT variableTemplate (#PCDATA)* >
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
@@ -868,96 +863,37 @@
       all   - Explicitly available anywhere controlled by key substitution<br>
       forceInfo - forces Info namespace and clears key and discardRepeats
    -->
-   <!ATTLIST setTemplate namespace                 CDATA                   #IMPLIED >
-   <!ATTLIST setTemplate key                       CDATA                   #IMPLIED >
+   <!ATTLIST variableTemplate namespace                 CDATA                   #IMPLIED >
+   <!-- Key for template -->
+   <!ATTLIST variableTemplate key                       CDATA                   #IMPLIED >
    <!-- Condition evaluated during parsing that enables processing of this option -->
-   <!ATTLIST setTemplate condition                 CDATA                   #IMPLIED>
-   <!ATTLIST setTemplate codeGenCondition          CDATA                   #IMPLIED>
-   <!ATTLIST setTemplate variables                 CDATA                   #REQUIRED>
-   <!ATTLIST setTemplate discardRepeats            (true)                  #IMPLIED>
+   <!ATTLIST variableTemplate condition                 CDATA                   #IMPLIED>
+   <!-- Condition evaluated during code generation that enables this template -->
+   <!ATTLIST variableTemplate codeGenCondition          CDATA                   #IMPLIED>
+   <!-- Comma separated list of variable associated with this template -->
+   <!ATTLIST variableTemplate variables                 CDATA                   #REQUIRED>
+   <!-- Suppress repeats of this template -->
+   <!ATTLIST variableTemplate discardRepeats            (true)                  #IMPLIED>
    <!-- Terminator for initExpression -->
-   <!ATTLIST setTemplate terminator                CDATA                   #IMPLIED>
+   <!ATTLIST variableTemplate terminator                CDATA                   #IMPLIED>
     <!-- Separator for initExpression --> 
-   <!ATTLIST setTemplate separator                 CDATA                   #IMPLIED>
-   <!ATTLIST setTemplate initExpressionOnSameLine  (true)                  #IMPLIED>
-   <!ATTLIST setTemplate nonDefaultParams          CDATA                   #IMPLIED>
-   <!ATTLIST setTemplate defaultParamValue         CDATA                   #IMPLIED>
-   <!ATTLIST setTemplate tooltipPadding            CDATA                   #IMPLIED>
-   <!ATTLIST setTemplate linePadding               CDATA                   #IMPLIED>
-   <!ATTLIST setTemplate params                    CDATA                   #IMPLIED>
-   <!ATTLIST setTemplate codeGenCondition          CDATA                   #IMPLIED>
+   <!ATTLIST variableTemplate separator                 CDATA                   #IMPLIED>
+   <!-- Causes init expression to be generated on the same line -->
+   <!ATTLIST variableTemplate initExpressionOnSameLine  (true)                  #IMPLIED>
+   <!-- Number of non-default parameters in function -->
+   <!ATTLIST variableTemplate nonDefaultParams          CDATA                   #IMPLIED>
+   <!-- Comma separated list of parameter default values normally deduced from variables.  Items may be blank. -->
+   <!ATTLIST variableTemplate defaultParamValue         CDATA                   #IMPLIED>
+   <!-- Padding applied to tooltips (e.g. "x*xx") -->
+   <!ATTLIST variableTemplate tooltipPadding            CDATA                   #IMPLIED>
+   <!-- Padding applied to lines generated -->
+   <!ATTLIST variableTemplate linePadding               CDATA                   #IMPLIED>
+   <!-- Comma separates list of parameter names normally deduced from variables. Items may be blank -->
+   <!ATTLIST variableTemplate params                    CDATA                   #IMPLIED>
+   <!-- Comma separates list of parameter types normally deduced from variables. Items may be blank -->
+   <!ATTLIST variableTemplate paramTypes                    CDATA                   #IMPLIED>
    <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
-   <!ATTLIST setTemplate useDefinitions            CDATA                   #IMPLIED>
-
-<!ELEMENT constructorTemplate (#PCDATA)* >
-   <!-- 
-   Where to place generated code<br>
-      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
-      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
-      all   - Explicitly available anywhere controlled by key substitution<br>
-      forceInfo - forces Info namespace and clears key and discardRepeats
-   -->
-   <!ATTLIST constructorTemplate namespace                 CDATA                   #IMPLIED >
-   <!ATTLIST constructorTemplate key                       CDATA                   #IMPLIED >
-   <!-- Condition evaluated during parsing that enables processing of this option -->
-   <!ATTLIST constructorTemplate condition                 CDATA                   #IMPLIED>
-   <!ATTLIST constructorTemplate codeGenCondition          CDATA                   #IMPLIED>
-   <!ATTLIST constructorTemplate variables                 CDATA                   #REQUIRED>
-   <!ATTLIST constructorTemplate discardRepeats            (true)                  #IMPLIED>
-    <!-- Terminator for initExpression -->
-   <!ATTLIST constructorTemplate terminator                CDATA                   #IMPLIED>
-    <!-- Separator for initExpression -->
-   <!ATTLIST constructorTemplate separator                 CDATA                   #IMPLIED>
-   <!ATTLIST constructorTemplate initExpressionOnSameLine  (true)                  #IMPLIED>
-   <!ATTLIST constructorTemplate nonDefaultParams          CDATA                   #IMPLIED>
-   <!ATTLIST constructorTemplate defaultParamValue         CDATA                   #IMPLIED>
-   <!ATTLIST constructorTemplate tooltipPadding            CDATA                   #IMPLIED>
-   <!ATTLIST constructorTemplate linePadding               CDATA                   #IMPLIED>
-   <!ATTLIST constructorTemplate params                    CDATA                   #IMPLIED>
-   <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
-   <!ATTLIST constructorTemplate useDefinitions            CDATA                   #IMPLIED>
-
-<!ELEMENT initialValueTemplate (#PCDATA|for)* >
-   <!-- 
-   Where to place generated code<br>
-      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
-      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
-      all   - Explicitly available anywhere controlled by key substitution<br>
-      forceInfo - forces Info namespace and clears key and discardRepeats
-   -->
-   <!ATTLIST initialValueTemplate namespace                 CDATA                   #IMPLIED >
-   <!ATTLIST initialValueTemplate key                       CDATA                   #IMPLIED >
-   <!-- Condition evaluated during parsing that enables processing of this option -->
-   <!ATTLIST initialValueTemplate condition                 CDATA                   #IMPLIED>
-   <!ATTLIST initialValueTemplate codeGenCondition          CDATA                   #IMPLIED>
-   <!ATTLIST initialValueTemplate variables                 CDATA                   #REQUIRED>
-   <!ATTLIST initialValueTemplate discardRepeats            (true)                  #IMPLIED>
-    <!-- Terminator for initExpression -->
-   <!ATTLIST initialValueTemplate terminator                CDATA                   #IMPLIED>
-    <!-- Separator for initExpression -->
-   <!ATTLIST initialValueTemplate separator                 CDATA                   #IMPLIED>
-   <!ATTLIST initialValueTemplate initExpressionOnSameLine  (true)                  #IMPLIED>
-   <!ATTLIST initialValueTemplate tooltipPadding            CDATA                   #IMPLIED>
-   <!ATTLIST initialValueTemplate linePadding               CDATA                   #IMPLIED>
-   <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
-   <!ATTLIST initialValueTemplate useDefinitions            CDATA                   #IMPLIED>
-
-<!ELEMENT enumTemplate (#PCDATA)* >
-   <!-- 
-   Where to place generated code<br>
-      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
-      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
-      all   - Explicitly available anywhere controlled by key substitution<br>
-      forceInfo - forces Info namespace and clears key and discardRepeats
-   -->
-   <!ATTLIST enumTemplate namespace                 CDATA                   #IMPLIED >
-   <!ATTLIST enumTemplate key                       CDATA                   #IMPLIED >
-   <!ATTLIST enumTemplate condition                 CDATA                   #IMPLIED>
-   <!ATTLIST enumTemplate variable                  CDATA                   #REQUIRED>
-   <!ATTLIST enumTemplate discardRepeats            (true)                  #IMPLIED>
-   <!ATTLIST enumTemplate template                  CDATA                   #IMPLIED>
-   <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
-   <!ATTLIST enumTemplate useDefinitions            CDATA                   #IMPLIED>
+   <!ATTLIST variableTemplate useDefinitions            CDATA                   #IMPLIED>
 
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
    <!-- 
@@ -968,11 +904,13 @@
       forceInfo - forces Info namespace and clears key and discardRepeats
    -->
    <!ATTLIST clockCodeTemplate namespace                 CDATA                   #IMPLIED >
+   <!-- Key for template -->
    <!ATTLIST clockCodeTemplate key                       CDATA                   #IMPLIED >
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST clockCodeTemplate condition                 CDATA                   #IMPLIED>
+   <!-- Variable associated with this template -->
    <!ATTLIST clockCodeTemplate variable                  CDATA                   #IMPLIED>
-   <!ATTLIST clockCodeTemplate variables                 CDATA                   #IMPLIED>
+   <!-- Suppress repeats of this template -->
    <!ATTLIST clockCodeTemplate discardRepeats            (true)                  #IMPLIED>
    <!-- Format for return value in generated case statement -->
    <!ATTLIST clockCodeTemplate returnFormat              CDATA                   #IMPLIED> 
@@ -982,7 +920,9 @@
    <!ATTLIST clockCodeTemplate tooltipPadding            CDATA                   #IMPLIED>
    <!-- Padding applied to start of line --> 
    <!ATTLIST clockCodeTemplate linePadding               CDATA                   #IMPLIED>
+   <!-- Comma separates list of parameter names. Items may be blank -->
    <!ATTLIST clockCodeTemplate params                    CDATA                   #IMPLIED>
+   <!-- Condition evaluated during code generation that enables this template -->
    <!ATTLIST clockCodeTemplate codeGenCondition          CDATA                   #IMPLIED>
    <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
    <!ATTLIST clockCodeTemplate useDefinitions            CDATA                   #IMPLIED>
@@ -1006,7 +946,7 @@
    <!-- Expression enables this option -->
    <!ATTLIST signals enabledBy   CDATA          #IMPLIED>
    <!-- Locks option in GUI -->
-   <!ATTLIST signals locked      (false|true)   #IMPLIED>
+   <!ATTLIST signals locked      CDATA          #IMPLIED>
    <!ATTLIST signals filter      CDATA          #IMPLIED>
 
 <!-- List of actions to be applied to a project -->

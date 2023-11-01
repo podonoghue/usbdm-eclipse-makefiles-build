@@ -4,9 +4,9 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Nested Vectored Interrupt Controller">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
-   <xi:include href="_mapPinsOption.xml"/>
+   <xi:include href="mapPinsOption.xml"/>
 
    <binaryOption key="nvic_iser_setena31" condition="nvic_iser_setena31_present"
       typeName="NvicIserSetena31"
@@ -1052,7 +1052,7 @@
       nvic_icpr_clrpend2:IcprClrpend2;
       nvic_icpr_clrpend1:IcprClrpend1;
       nvic_icpr_clrpend0:IcprClrpend0">
-      <setTemplate variables="%(field)"
+      <variableTemplate variables="%(field)"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -1062,7 +1062,7 @@
          \tstatic void configure%(name)(%params) {
          \t   %fieldAssignment
          \t}\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== NVIC Init class =============================== -->
@@ -1252,40 +1252,40 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="nvic_iser_setena31,nvic_iser_setena30,nvic_iser_setena29,nvic_iser_setena28,nvic_iser_setena27,nvic_iser_setena26,nvic_iser_setena25,nvic_iser_setena24,nvic_iser_setena23,nvic_iser_setena22,nvic_iser_setena21,nvic_iser_setena20,nvic_iser_setena19,nvic_iser_setena18,nvic_iser_setena17,nvic_iser_setena16,nvic_iser_setena15,nvic_iser_setena14,nvic_iser_setena13,nvic_iser_setena12,nvic_iser_setena11,nvic_iser_setena10,nvic_iser_setena9,nvic_iser_setena8,nvic_iser_setena7,nvic_iser_setena6,nvic_iser_setena5,nvic_iser_setena4,nvic_iser_setena3,nvic_iser_setena2,nvic_iser_setena1,nvic_iser_setena0"
    ><![CDATA[
       \t   /// Interrupt Set Enable Register
       \t   uint32_t iser = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="nvic_icer_clren31,nvic_icer_clren30,nvic_icer_clren29,nvic_icer_clren28,nvic_icer_clren27,nvic_icer_clren26,nvic_icer_clren25,nvic_icer_clren24,nvic_icer_clren23,nvic_icer_clren22,nvic_icer_clren21,nvic_icer_clren20,nvic_icer_clren19,nvic_icer_clren18,nvic_icer_clren17,nvic_icer_clren16,nvic_icer_clren15,nvic_icer_clren14,nvic_icer_clren13,nvic_icer_clren12,nvic_icer_clren11,nvic_icer_clren10,nvic_icer_clren9,nvic_icer_clren8,nvic_icer_clren7,nvic_icer_clren6,nvic_icer_clren5,nvic_icer_clren4,nvic_icer_clren3,nvic_icer_clren2,nvic_icer_clren1,nvic_icer_clren0"
    ><![CDATA[
       \t   /// Interrupt Clear Enable Register
       \t   uint32_t icer = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="nvic_ispr_setpend31,nvic_ispr_setpend30,nvic_ispr_setpend29,nvic_ispr_setpend28,nvic_ispr_setpend27,nvic_ispr_setpend26,nvic_ispr_setpend25,nvic_ispr_setpend24,nvic_ispr_setpend23,nvic_ispr_setpend22,nvic_ispr_setpend21,nvic_ispr_setpend20,nvic_ispr_setpend19,nvic_ispr_setpend18,nvic_ispr_setpend17,nvic_ispr_setpend16,nvic_ispr_setpend15,nvic_ispr_setpend14,nvic_ispr_setpend13,nvic_ispr_setpend12,nvic_ispr_setpend11,nvic_ispr_setpend10,nvic_ispr_setpend9,nvic_ispr_setpend8,nvic_ispr_setpend7,nvic_ispr_setpend6,nvic_ispr_setpend5,nvic_ispr_setpend4,nvic_ispr_setpend3,nvic_ispr_setpend2,nvic_ispr_setpend1,nvic_ispr_setpend0"
    ><![CDATA[
       \t   /// Interrupt Set Pending Register
       \t   uint32_t ispr = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="nvic_icpr_clrpend31,nvic_icpr_clrpend30,nvic_icpr_clrpend29,nvic_icpr_clrpend28,nvic_icpr_clrpend27,nvic_icpr_clrpend26,nvic_icpr_clrpend25,nvic_icpr_clrpend24,nvic_icpr_clrpend23,nvic_icpr_clrpend22,nvic_icpr_clrpend21,nvic_icpr_clrpend20,nvic_icpr_clrpend19,nvic_icpr_clrpend18,nvic_icpr_clrpend17,nvic_icpr_clrpend16,nvic_icpr_clrpend15,nvic_icpr_clrpend14,nvic_icpr_clrpend13,nvic_icpr_clrpend12,nvic_icpr_clrpend11,nvic_icpr_clrpend10,nvic_icpr_clrpend9,nvic_icpr_clrpend8,nvic_icpr_clrpend7,nvic_icpr_clrpend6,nvic_icpr_clrpend5,nvic_icpr_clrpend4,nvic_icpr_clrpend3,nvic_icpr_clrpend2,nvic_icpr_clrpend1,nvic_icpr_clrpend0"
    ><![CDATA[
       \t   /// Interrupt Clear Pending Register
       \t   uint32_t icpr = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="nvic_ipr_pri_nplus3,nvic_ipr_pri_nplus2,nvic_ipr_pri_nplus1,nvic_ipr_pri_nplus0"
    ><![CDATA[
       \t   /// Interrupt Priority Register n
       \t   uint32_t ipr = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Configure methods -->
 
@@ -1451,7 +1451,7 @@
             nvic_icpr_clrpend1;
             nvic_icpr_clrpend0
             ">
-      <setTemplate namespace="usbdm"
+      <variableTemplate namespace="usbdm"
          variables="%(r)"
          linePadding="xxx">
       <![CDATA[
@@ -1470,7 +1470,7 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 <!--   Constructors -->
@@ -1482,7 +1482,7 @@
             nvic_ipr%s_pri_nplus1;
             nvic_ipr%s_pri_nplus0
             ">
-      <setTemplate namespace="usbdm"
+      <variableTemplate namespace="usbdm"
          variables="%(r)"
          linePadding="xxx">
       <![CDATA[
@@ -1501,12 +1501,12 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate
+   <variableTemplate
       separator=","
       terminator=","
       variables="
@@ -1649,7 +1649,7 @@
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm">
       <![CDATA[

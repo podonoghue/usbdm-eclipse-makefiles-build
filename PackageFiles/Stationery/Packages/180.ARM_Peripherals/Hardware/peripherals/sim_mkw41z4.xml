@@ -11,7 +11,7 @@
    <constant key="LPUART_max"     value=" 48MHz,     4MHz"   type="Integer"    hidden="false"/>
    <constant key="TPM_max"        value=" 48MHz,     4MHz"   type="Integer"    hidden="false"/>
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
    <constant key="llwu_device_list"
       description="LLWU Wakeup sources"
@@ -24,7 +24,7 @@
    <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) do not share XTAL/EXTAL pins -->
    <constant key="rtc_mkw41z4" type="Boolean" value="true"  />
 
-   <xi:include href="_simCommon.xml"/>
+   <xi:include href="simCommon.xml"/>
 
    <choiceOption key="sim_sopt1_osc32ksel"
       typeName="SimOsc32kSel"
@@ -459,7 +459,7 @@
       \t}\n\n
    ]]></template>
 
-   <xi:include href="_sim_commonTemplates.xml" />
+   <xi:include href="sim_commonTemplates.xml" />
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL" dim="numberOfClockSettings">
@@ -470,6 +470,6 @@
       <param type="long" value="800kHz" />     <!-- VLPR Bus          -->
    </validate>
 
-   <xi:include href="_simFiles-MKL.xml"/>
+   <xi:include href="simFiles-MKL.xml"/>
 
 </peripheralPage>

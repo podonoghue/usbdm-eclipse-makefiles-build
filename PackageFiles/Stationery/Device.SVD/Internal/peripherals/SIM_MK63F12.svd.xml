@@ -1482,8 +1482,8 @@ This bit controls the clock gate to the I2C2 module</description>
                   <field derivedFrom="EWM" > <name>UART1</name> <description>UART1 Clock Gate Control</description> <bitOffset>11</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>UART2</name> <description>UART2 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>UART3</name> <description>UART3 Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
-                  <field derivedFrom="EWM" > <name>USBOTG</name> <description>USB Clock Gate Control</description> <bitOffset>18</bitOffset> </field>
-                  <field derivedFrom="EWM" > <name>CMP</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="EWM" > <name>USB0</name> <description>USB Clock Gate Control</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="EWM" > <name>CMP0</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>VREF</name> <description>VREF Clock Gate Control</description> <bitOffset>20</bitOffset> </field>
                </fields>
             </register>
@@ -1494,7 +1494,7 @@ This bit controls the clock gate to the I2C2 module</description>
                <resetValue>0x40182</resetValue>
                <fields>
                   <field>
-                     <name>LPTMR</name>
+                     <name>LPTMR0</name>
                      <description>LPTMR Clock Gate Control</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -1511,11 +1511,11 @@ This bit controls the clock gate to the I2C2 module</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="LPTMR" > <name>PORTA</name> <description>PORTA Clock Gate Control</description> <bitOffset>9</bitOffset> </field>
-                  <field derivedFrom="LPTMR" > <name>PORTB</name> <description>PORTB Clock Gate Control</description> <bitOffset>10</bitOffset> </field>
-                  <field derivedFrom="LPTMR" > <name>PORTC</name> <description>PORTC Clock Gate Control</description> <bitOffset>11</bitOffset> </field>
-                  <field derivedFrom="LPTMR" > <name>PORTD</name> <description>PORTD Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
-                  <field derivedFrom="LPTMR" > <name>PORTE</name> <description>PORTE Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="LPTMR0" > <name>PORTA</name> <description>PORTA Clock Gate Control</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="LPTMR0" > <name>PORTB</name> <description>PORTB Clock Gate Control</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="LPTMR0" > <name>PORTC</name> <description>PORTC Clock Gate Control</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="LPTMR0" > <name>PORTD</name> <description>PORTD Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="LPTMR0" > <name>PORTE</name> <description>PORTE Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1547,7 +1547,7 @@ This bit controls the clock gate to the I2C2 module</description>
                   <field derivedFrom="FTF" > <name>RNGA</name> <description>RNGA Clock Gate Control</description> <bitOffset>9</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>SPI0</name> <description>SPI0 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>SPI1</name> <description>SPI1 Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
-                  <field derivedFrom="FTF" > <name>I2S</name> <description>I2S Clock Gate Control</description> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>I2S0</name> <description>I2S Clock Gate Control</description> <bitOffset>15</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>CRC</name> <description>CRC Clock Gate Control</description> <bitOffset>18</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>USBDCD</name> <description>USB DCD Clock Gate Control</description> <bitOffset>21</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>PDB</name> <description>PDB Clock Gate Control</description> <bitOffset>22</bitOffset> </field>
@@ -1584,7 +1584,7 @@ This bit controls the clock gate to the I2C2 module</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="FLEXBUS" > <name>DMA</name> <description>DMA Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="FLEXBUS" > <name>DMA0</name> <description>DMA Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="FLEXBUS" > <name>MPU</name> <description>MPU Clock Gate Control</description> <bitOffset>2</bitOffset> </field>
                </fields>
             </register>

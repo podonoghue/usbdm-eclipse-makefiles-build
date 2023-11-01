@@ -4,8 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SDRAM Controller">
 
-   <xi:include href="_mapPinsOption_on.xml"/>
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="mapPinsOption_on.xml"/>
+   <xi:include href="default_instance.xml"/>
    
    <template key="/SDRAMC/declarations" namespace="all"  ><![CDATA[
    \t/**
@@ -20,7 +20,7 @@
       <copy source="Snippets/is42sm16800h.h"      target="Snippets/is42sm16800h.h"  overwrite="true" derived="true" />
    </projectActionList>
    
-   <xi:include href="_clockOption.xml"/>
+   <xi:include href="clockOption.xml"/>
    
    <signals/>
 

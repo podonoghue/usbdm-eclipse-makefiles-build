@@ -6,14 +6,14 @@ cd ${HOME_DIR}
 
 #exit
 
-FROM="_enablePeripheral"
-TO="enablePeripheral"
+FROM="<name>I2S<"
+TO="<name>I2S0<"
 
 echo starting
 rm -r new
 mkdir new
 
-for filename in *.xml; do
+for filename in SIM*.svd.xml; do
    echo sed  "s/${FROM}/${TO}/g" "${filename}" "new/${filename}"
    sed  "s/${FROM}/${TO}/g" "${filename}" >"new/${filename}"
 done

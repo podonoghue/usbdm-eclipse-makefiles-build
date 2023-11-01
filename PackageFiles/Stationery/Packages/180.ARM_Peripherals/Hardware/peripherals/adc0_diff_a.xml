@@ -7,6 +7,6 @@
    <constant key="adc_cfg1_mode_diff_present"  type="String" />
    <constant key="adc_cfg1_mode_16bit_present" type="String" />
 
-   <xi:include href="_adc_base.xml"/>
+   <xi:include href="adc_base.xml"/>
 
 </peripheralPage>

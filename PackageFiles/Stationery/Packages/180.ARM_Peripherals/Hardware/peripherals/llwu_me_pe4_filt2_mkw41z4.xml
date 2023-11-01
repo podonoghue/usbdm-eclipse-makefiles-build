@@ -5,7 +5,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
       
-   <xi:include href="_llwu_base.xml"/>   
+   <xi:include href="llwu_base.xml"/>   
 
    <projectActionList id = "llwu_files_mkw41z" >
       <copy source="Snippets/llwu-example-mkw41z.cpp"  target="Snippets/llwu-example-mkw41z.cpp"  overwrite="true" derived="true" />

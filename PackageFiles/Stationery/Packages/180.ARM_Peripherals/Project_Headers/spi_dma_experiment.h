@@ -391,7 +391,43 @@ public:
       return ctarValue;
    }
 
-$(/SPI/InitMethod: #error "/SPI/InitMethod not found")
+   /**
+    * Set Continuous SCK Enable
+    *
+    * @param spiContinuousClock Whether the Serial Communication Clock (SCK) runs continuously
+    */
+    void setContinousClock(SpiContinuousClock spiContinuousClock) {
+      spi->MCR = (spi->MCR&~SPI_MCR_CONT_SCKE_MASK) | spiContinuousClock;
+   }
+
+   /**
+    * Set Master or Slave operation
+    *
+    * @param spiMasterSlave Whether to operate as Master or Slave device
+    */
+    void setMasterSlave(SpiMasterSlave spiMasterSlave) {
+      spi->MCR = (spi->MCR&~SPI_MCR_MSTR_MASK) | spiMasterSlave;
+   }
+
+   /**
+    * Set Peripheral Chip Select Polarity
+    *
+    * @param spiPeripheralSelectPolarity Mask to select the polarity of Peripheral Chip Select Lines (PCSx)
+    *
+    * The mask would be created by ORing together the <b>active-low</b> PCS selection values
+    * Examples:
+    * @code
+    *    // Set PCS0 and PCS3 active-low and all others active-high
+    *    setPcsIdleLevels(SpiPeripheralSelectPolarity_Pcs0_ActiveLow|SpiPeripheralSelectPolarity_Pcs3_ActiveLow)
+    *
+    *    // Set all PCSx to active high (the most common situation)
+    *    setPcsIdleLevels(SpiPeripheralSelectPolarity_All_ActiveHigh)
+    * @endcode
+    */
+    void setPcsPolarity(SpiPeripheralSelectPolarity spiPeripheralSelectPolarity) {
+      spi->MCR = (spi->MCR&~SPI_MCR_PCSIS_MASK) | spiPeripheralSelectPolarity;
+   }
+
 #ifdef __CMSIS_RTOS
    /**
     * Obtain SPI mutex and set SPI configuration
@@ -1281,7 +1317,119 @@ public:
    }
 };
 
-#endif
+/**
+ * Class to handle SPI DMA operations
+ * It will create the required buffer to format data for the DMA transfer.
+ * This is necessary because of the really stupid SPI transfers that require 32-bit writes to include COMMAND+DATA
+ * for each item transferred. Note that some later devices may not require this.
+ * This means that to transfer a buffer of data (8/16 bit items) requires copying it to a RAM Buffer up to 4-times its size
+ * and add in the command values for each entry.
+ *
+ * @tparam itemCount Maximum size of buffer that can be expanded (in items)
+ * @tparam  Spi      Associated SPI type
+ */
+template<unsigned itemCount>
+class SpiDmaHandler_T : public SpiDmaHandlerBase<itemCount> {
+
+private:
+   using Super = SpiDmaHandlerBase<itemCount>;
+
+   static unsigned complete;
+   static bool     keepDmaConfiguration;
+   static uint32_t dmaErrorCode;
+
+   /**
+    * DMA complete callback
+    *
+    * Sets flag to indicate sequence complete.
+    */
+   static void dmaCallback(DmaChannelNum channel, uint32_t errorStatus) {
+
+      Dma0::clearInterruptRequest(channel);
+      Dma0::enableRequests(channel, false);
+      if (complete>0) {
+         complete--;
+      }
+      if (errorStatus&DMA_ES_VLD_MASK) {
+         // Error callback
+         dmaErrorCode = errorStatus;
+         complete = 0;
+      }
+   }
+
+   /**
+    * SPI callback
+    *
+    * Used for debug timing checks.
+    * LED toggles on each SPI event
+    *
+    * @param status Interrupt status value from SPI->SR
+    */
+   static void spiCallback(uint32_t status) {
+      (void)status;
+   }
+
+public:
+   SpiDmaHandler_T(Spi &spi) : Super(spi) {
+      spi.setCallback(spiCallback);
+   }
+
+   /**
+    * Start transfer
+    */
+   void startTransfer() {
+
+      complete = 2;
+
+      // Set up DMA IRQ handlers
+      Dma0::setCallback(Super::dmaTransmitChannel, dmaCallback);
+      Dma0::setCallback(Super::dmaReceiveChannel,  dmaCallback);
+
+      Dma0::enableNvicInterrupts(Super::dmaTransmitChannel, NvicPriority_Normal);
+      Dma0::enableNvicInterrupts(Super::dmaReceiveChannel,  NvicPriority_Normal);
+      Dma0::enableNvicErrorInterrupt(NvicPriority_MidHigh);
+      Super::startTransfer();
+   }
+
+   bool isBusy() {
+      if (errorCode != 0) {
+         // Release resources on error
+         Super::cleanUp();
+      }
+      if ((complete == 0) && !keepDmaConfiguration) {
+         // Release DMA channels
+         Super::cleanUp();
+      }
+      return complete != 0;
+   }
+
+   /**
+    * If set:
+    *    - The DMA configuration (including allocated DMA channels) set up by initialiseDma() are
+    *      retained for re-use.
+    *    - Resources must be manually released by calling cleanUp().
+    *
+    * If not set:
+    *    - Allocated resources are released when the DMA transfer completes successfully
+    *
+    * @param keepConfiguration  true to keep configuration and resources
+    */
+   static void setKeepDmaConfiguration(bool keepConfiguration) {
+      keepDmaConfiguration = keepConfiguration;
+   }
+
+};
+
+template<unsigned itemCount>
+unsigned SpiDmaHandler_T<itemCount>::complete = false;
+
+template<unsigned itemCount>
+bool SpiDmaHandler_T<itemCount>::keepDmaConfiguration = false;
+
+template<unsigned itemCount>
+uint32_t SpiDmaHandler_T<itemCount>::dmaErrorCode = 0;
+
+#endif // false||false||false||false||false||false
 
 /**
  * @brief Template class representing a SPI interface
@@ -1524,171 +1672,142 @@ public:
    ~SpiBase_T() override {
    }
 
-#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
+};
 
-   static unsigned dmaComplete;
-   static uint32_t dmaErrorCode;
-   static bool     keepDmaConfiguration;
 
    /**
-    * Class to handle SPI DMA operations
-    * It will create the required buffer to format data for the DMA transfer.
-    * This is necessary because of the really stupid SPI transfers that require 32-bit writes to include COMMAND+DATA
-    * for each item transferred. Note that some later devices may not require this.
-    * This means that to transfer a buffer of data (8/16 bit items) requires copying it to a RAM Buffer up to 4-times its size
-    * and add in the command values for each entry.
+    * Class representing SPI0 interface
+    * <b>Example</b>
+    * @code
+    * USBDM::Spi *spi = new USBDM::Spi0;
     *
-    * @tparam itemCount Maximum size of buffer that can be expanded (in items)
+    * uint8_t txData[] = {1,2,3};
+    * uint8_t rxData[10];
+    * spi->txRxBytes(sizeof(txData), txData, rxData);
+    * @endcode
     */
-   template<unsigned itemCount>
-   class SpiDmaHandler_T : public SpiDmaHandlerBase<itemCount> {
-
-   private:
-      using Super = SpiDmaHandlerBase<itemCount>;
-
-      /**
-       * DMA complete callback
-       *
-       * Sets flag to indicate sequence complete.
-       */
-      static void dmaCallback(DmaChannelNum channel, uint32_t errorStatus) {
-
-         Dma0::clearInterruptRequest(channel);
-         Dma0::enableRequests(channel, false);
-         if (dmaComplete>0) {
-            dmaComplete--;
-         }
-         if (errorStatus&DMA_ES_VLD_MASK) {
-            // Error callback
-            dmaErrorCode = errorStatus;
-            dmaComplete = 0;
-         }
-      }
-
-      /**
-       * SPI callback
-       *
-       * Used for debug timing checks.
-       * LED toggles on each SPI event
-       *
-       * @param status Interrupt status value from SPI->SR
-       */
-      static void spiCallback(uint32_t status) {
-         (void)status;
-      }
-
+   class Spi0 : public SpiBase_T<Spi0Info> {
    public:
-      SpiDmaHandler_T(Spi &spi) : Super(spi) {
-         spi.setCallback(spiCallback);
-      }
+
+
+      Spi0() : SpiBase_T<Spi0Info>() {}
+      Spi0(const typename SpiBasicInfo::Init &init) : SpiBase_T<Spi0Info>(init) {}
 
       /**
-       * Start transfer
-       */
-      void startTransfer() {
-
-         dmaComplete = 2;
-
-         // Set up DMA IRQ handlers
-         Dma0::setCallback(Super::dmaTransmitChannel, dmaCallback);
-         Dma0::setCallback(Super::dmaReceiveChannel,  dmaCallback);
-
-         Dma0::enableNvicInterrupts(Super::dmaTransmitChannel, NvicPriority_Normal);
-         Dma0::enableNvicInterrupts(Super::dmaReceiveChannel,  NvicPriority_Normal);
-         Dma0::enableNvicErrorInterrupt(NvicPriority_MidHigh);
-         Super::startTransfer();
-      }
-
-      bool isBusy() {
-         if (errorCode != 0) {
-            // Release resources on error
-            Super::cleanUp();
-         }
-         if ((dmaComplete == 0) && !keepDmaConfiguration) {
-            // Release DMA channels
-            Super::cleanUp();
-         }
-         return dmaComplete != 0;
-      }
-
-      /**
-       * If set:
-       *    - The DMA configuration (including allocated DMA channels) set up by initialiseDma() are
-       *      retained for re-use.
-       *    - Resources must be manually released by calling cleanUp().
+       * Dummy routine for error check
        *
-       * If not set:
-       *    - Allocated resources are released when the DMA transfer completes successfully
+       * @tparam itemCount Number of items in internal DMA buffer buffer
        *
-       * @param keepConfiguration  true to keep configuration and resources
+       * @return Instance of SpiDmaHandler customised for buffer size
        */
-      static void setKeepDmaConfiguration(bool keepConfiguration) {
-         keepDmaConfiguration = keepConfiguration;
+      template<unsigned itemCount>
+      void createDmaHandler() {
+         constexpr bool Spi0IrqAvailable = false&&itemCount;
+         static_assert(Spi0IrqAvailable, "Spi0 not configured for interrupts");
       }
 
    };
 
    /**
-    * Creates a DMA buffer and associated code for DMA transfers to/from the SPI
-    *
-    * Examples use:
+    * Class representing SPI1 interface
+    * <b>Example</b>
     * @code
-    *    Spi0 spi;
+    * USBDM::Spi *spi = new USBDM::Spi1;
     *
-    *    // Configure SPI
-    *
-    *    constexpr unsigned NumDataItems = 10;
-    *
-    *    using DataSize = uint16_t; // Can be uint8_t or uint16_t
-    *
-    *    // Transmit data
-    *    DataSize txBuffer[NumDataItems];
-    *
-    *    // Create DMA buffers etc.
-    *    auto txBuffer = spi.createDmaHandler<NumDataItems>();
-    *
-    *    // Receive buffer
-    *    DataSize rxBuffer[NumDataItems];
-    *
-    *    // Set up DMA transfer from internal buffer -> SPI -> rxBuffer
-    *    txBuffer.initialiseDma(rxBuffer);
-    *
-    *    // Load data into SPI transmit buffer
-    *    txBuffer.loadTxData(txBufferOriginal);
-    *
-    *    // Start transfer
-    *    txBuffer.startTransfer();
-    *
-    *    // Wait for completion
-    *    while (txBuffer.isBusy()) {
-    *       __asm__("nop");
-    *    }
+    * uint8_t txData[] = {1,2,3};
+    * uint8_t rxData[10];
+    * spi->txRxBytes(sizeof(txData), txData, rxData);
     * @endcode
-    *
-    * @tparam itemCount Number of items in internal DMA buffer buffer
-    *
-    * @return Instance of SpiDmaHandler customised for buffer size
     */
-   template<unsigned itemCount>
-   SpiDmaHandler_T<itemCount> createDmaHandler() {
-      return SpiDmaHandler_T<itemCount>(*this);
-   }
-#endif
+   class Spi1 : public SpiBase_T<Spi1Info> {
+   public:
 
-};
 
-#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
-template<class Info>
-unsigned SpiBase_T<Info>::dmaComplete = false;
+      Spi1() : SpiBase_T<Spi1Info>() {}
+      Spi1(const typename SpiBasicInfo::Init &init) : SpiBase_T<Spi1Info>(init) {}
 
-template<class Info>
-bool SpiBase_T<Info>::keepDmaConfiguration = false;
+      /**
+       * Dummy routine for error check
+       *
+       * @tparam itemCount Number of items in internal DMA buffer buffer
+       *
+       * @return Instance of SpiDmaHandler customised for buffer size
+       */
+      template<unsigned itemCount>
+      void createDmaHandler() {
+         constexpr bool Spi1IrqAvailable = false&&itemCount;
+         static_assert(Spi1IrqAvailable, "Spi1 not configured for interrupts");
+      }
 
-template<class Info>
-uint32_t SpiBase_T<Info>::dmaErrorCode = 0;
-#endif
+   };
 
-$(/SPI/declarations: // No declarations found)
+   /**
+    * Class representing SPI2 interface
+    * <b>Example</b>
+    * @code
+    * USBDM::Spi *spi = new USBDM::Spi2;
+    *
+    * uint8_t txData[] = {1,2,3};
+    * uint8_t rxData[10];
+    * spi->txRxBytes(sizeof(txData), txData, rxData);
+    * @endcode
+    */
+   class Spi2 : public SpiBase_T<Spi2Info> {
+   public:
+
+
+      Spi2() : SpiBase_T<Spi2Info>() {}
+      Spi2(const typename SpiBasicInfo::Init &init) : SpiBase_T<Spi2Info>(init) {}
+
+      /**
+       * Dummy routine for error check
+       *
+       * @tparam itemCount Number of items in internal DMA buffer buffer
+       *
+       * @return Instance of SpiDmaHandler customised for buffer size
+       */
+      template<unsigned itemCount>
+      void createDmaHandler() {
+         constexpr bool Spi2IrqAvailable = false&&itemCount;
+         static_assert(Spi2IrqAvailable, "Spi2 not configured for interrupts");
+      }
+
+   };
+
+   /**
+    * Class representing SPI3 interface
+    * <b>Example</b>
+    * @code
+    * USBDM::Spi *spi = new USBDM::Spi3;
+    *
+    * uint8_t txData[] = {1,2,3};
+    * uint8_t rxData[10];
+    * spi->txRxBytes(sizeof(txData), txData, rxData);
+    * @endcode
+    */
+   class Spi3 : public SpiBase_T<Spi3Info> {
+   public:
+
+
+      Spi3() : SpiBase_T<Spi3Info>() {}
+      Spi3(const typename SpiBasicInfo::Init &init) : SpiBase_T<Spi3Info>(init) {}
+
+      /**
+       * Dummy routine for error check
+       *
+       * @tparam itemCount Number of items in internal DMA buffer buffer
+       *
+       * @return Instance of SpiDmaHandler customised for buffer size
+       */
+      template<unsigned itemCount>
+      void createDmaHandler() {
+         constexpr bool Spi3IrqAvailable = false&&itemCount;
+         static_assert(Spi3IrqAvailable, "Spi3 not configured for interrupts");
+      }
+
+   };
+
+
 /**
  * End SPI_Group
  * @}

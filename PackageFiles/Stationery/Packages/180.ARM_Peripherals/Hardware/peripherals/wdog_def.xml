@@ -4,9 +4,9 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Watchdog Monitor">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
-   <xi:include href="_irqOption.xml"/>
+   <xi:include href="irqOption.xml"/>
 
    <projectActionList id = "wdog_files" >
       <copy source="Project_Headers/wdog.h"         target="Project_Headers/wdog.h"          overwrite="true" derived="true" />
@@ -121,7 +121,7 @@
       description="Watchdog clock source"
       toolTip="Clock source for watchdog" >
       <choice name="1 kHz low-power oscillator (LPOCLK)"  value="0" enum="LpoClk"       code="PmcInfo::getLpoClock()"  ref="/PMC/system_low_power_clock"  isDefault="true" />
-      <choice name="System bus clock"                     value="1" enum="SystemBusClk" code="SystemBusClock"          ref="/SIM/system_bus_clock[]"     />
+      <choice name="System bus clock"                     value="1" enum="SystemBusClk" code="SystemBusClock"          ref="/SIM/system_bus_clock[0]"     />
    </binaryOption>
 
    <clockCodeTemplate variable="wdog_stctrlh_clksrc"
@@ -253,7 +253,7 @@
       \t
    ]]></template>
 
-   <setTemplate key="/WDOG/publicMethods" namespace="all"
+   <variableTemplate key="/WDOG/publicMethods" namespace="all"
       variables="
          wdog_stctrlh_wdogen,
          wdog_stctrlh_clksrc,
@@ -286,7 +286,7 @@
       \t
       \t   %register = %paramExpression;
       \t}
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <!-- ************* MISC ****************** -->
    <choiceOption key="wdog_constants1"
@@ -395,29 +395,29 @@
 
 <!--   Member variables -->
 
-   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="
          wdog_timeout"
    ><![CDATA[
       \t   ///  %description or seconds
       \t   Seconds_Ticks %registerName;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="
          wdog_window"
    ><![CDATA[
       \t   ///  %description or seconds
       \t   Seconds_Ticks %registerName;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="
          wdog_stctrlh_wdogen,
          wdog_stctrlh_distestwdog,
@@ -431,26 +431,26 @@
    ><![CDATA[
       \t   ///  Watchdog Status and Control Register High
       \t   uint16_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="
          wdog_presc_prescval"
    ><![CDATA[
       \t   ///  %description
       \t   uint16_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName = %paramType_Normal;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Configure methods -->
 
-   <setTemplate key="/WDOG/InitMethod" namespace="all" discardRepeats="true"
+   <variableTemplate key="/WDOG/InitMethod" namespace="all" discardRepeats="true"
       variables="wdogSystemEnable"
       codeGenCondition="wdogSystemEnable"
       ><![CDATA[
@@ -463,9 +463,9 @@
       \t   // Update settings
       \t   configure(Info::DefaultInitValue);
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate key="/WDOG/InitMethod" namespace="all" discardRepeats="true"
+   <variableTemplate key="/WDOG/InitMethod" namespace="all" discardRepeats="true"
       variables="wdogSystemEnable"
       codeGenCondition="!wdogSystemEnable"
       ><![CDATA[
@@ -485,9 +485,9 @@
       \t   // Disable watchdog
       \t   wdog->STCTRLH = WdogEnable_Disabled|WdogAllowUpdate_Disabled;
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate variables="wdog_stctrlh_wdogen" discardRepeats="true" key="/WDOG/InitMethod" namespace="all" ><![CDATA[
+   <variableTemplate variables="wdog_stctrlh_wdogen" discardRepeats="true" key="/WDOG/InitMethod" namespace="all" ><![CDATA[
       \t/**
       \t * Configure WDOG from values specified in init
       \t
@@ -505,8 +505,8 @@
       \t         setCallback(init.callbackFunction);
       \t      }
       \t   }\n
-   ]]></setTemplate>
-   <setTemplate variables="wdog_stctrlh_wdogen" discardRepeats="true" key="/WDOG/InitMethod" namespace="all" codeGenCondition="secondsSupport" ><![CDATA[
+   ]]></variableTemplate>
+   <variableTemplate variables="wdog_stctrlh_wdogen" discardRepeats="true" key="/WDOG/InitMethod" namespace="all" codeGenCondition="secondsSupport" ><![CDATA[
       \t   if (presc == ((uint16_t)-1)) {
       \t
       \t      // Calculate timeout, window and prescaler
@@ -515,8 +515,8 @@
       \t         return rc;
       \t      }
       \t   }\n
-   ]]></setTemplate>
-   <setTemplate variables="wdog_stctrlh_wdogen" discardRepeats="true" key="/WDOG/InitMethod" namespace="all" ><![CDATA[
+   ]]></variableTemplate>
+   <variableTemplate variables="wdog_stctrlh_wdogen" discardRepeats="true" key="/WDOG/InitMethod" namespace="all" ><![CDATA[
       \t   // Protect sequence from interrupts
       \t   CriticalSection cs;
       \t
@@ -541,11 +541,11 @@
       \t   }
       \t   return E_NO_ERROR;
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
 <!--  Constructors -->
 
-   <setTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -561,9 +561,9 @@
       \t
       \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -583,7 +583,7 @@
       \t      (void)%paramExpression;
       #endif
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <for keys="r" values="
          wdog_stctrlh_wdogen;
@@ -596,7 +596,7 @@
          wdog_stctrlh_irqrsten;
          wdog_stctrlh_clksrc;
          ">
-      <setTemplate namespace="usbdm"
+      <variableTemplate namespace="usbdm"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -614,10 +614,10 @@
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
-   <setTemplate namespace="usbdm" variables="wdog_presc_prescval,wdog_timeout,wdog_window"
+   <variableTemplate namespace="usbdm" variables="wdog_presc_prescval,wdog_timeout,wdog_window"
       linePadding="xxx"
       nonDefaultParams="2"
       params=",timeout,window"
@@ -640,9 +640,9 @@
       \t      this->%registerName0 = %paramName0;
       \t   }
       \t\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" variables="wdog_timeoutPeriod,wdog_windowPeriod"
+   <variableTemplate namespace="usbdm" variables="wdog_timeoutPeriod,wdog_windowPeriod"
       codeGenCondition="secondsSupport"
       linePadding="xxx"
       params="timeout,window"
@@ -663,11 +663,11 @@
       \t      this->%paramName1.fromSeconds(%paramName1);
       \t      this->presc = ((uint16_t)-1);
       \t   }\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate
+   <variableTemplate
       separator=","
       terminator=","
       variables="
@@ -700,7 +700,7 @@
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm" ><![CDATA[
       \t};\n\n

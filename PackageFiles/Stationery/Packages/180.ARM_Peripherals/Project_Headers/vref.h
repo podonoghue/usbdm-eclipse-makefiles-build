@@ -43,18 +43,7 @@ namespace USBDM {
 template<class Info>
 class VrefBase_T : public Info {
 
-   /** Class to static check output is mapped to a pin - Assumes existence */
-   template<int output> class CheckOutputIsMapped {
-
-      // Check mapping - no need to check existence
-      static constexpr bool Test1 = (Info::info[output].pinIndex >= PinIndex::MIN_PIN_INDEX);
-
-      static_assert(Test1, "VREF output is not mapped to a pin - Modify Configure.usbdm");
-
-   public:
-      /** Dummy function to allow convenient in-line checking */
-      static constexpr void check() {}
-   };
+   CreatePeripheralPinChecker("VREF");
 
 private:
    /**
@@ -78,8 +67,7 @@ $(/VREF/InitMethod: // /VREF/InitMethod not found)
     * Configures all Pin Control Register (PCR) values
     */
    static void setOutput() {
-
-      CheckOutputIsMapped<Info::outputPin>::check();
+      CheckPinExistsAndIsMapped<Info,Info::outputPin>::check();
 
       using Pcr = PcrTable_T<Info, Info::outputPin>;
 

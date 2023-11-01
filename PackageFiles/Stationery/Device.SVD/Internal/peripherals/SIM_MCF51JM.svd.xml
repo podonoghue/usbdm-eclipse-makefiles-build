@@ -789,8 +789,8 @@ Selects the frequency range for the crystal oscillator or external clock source<
                   <field derivedFrom="DAC12B" > <name>ADC</name> <description>ADC clock enable</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="DAC12B" > <name>VREF</name> <description>VREF clock enable</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="DAC12B" > <name>TSI</name> <description>TSI clock enable</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="DAC12B" > <name>CMP</name> <description>CMP clock enable</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="DAC12B" > <name>I2S</name> <description>I2S clock enable</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="DAC12B" > <name>CMP0</name> <description>CMP clock enable</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="DAC12B" > <name>I2S0</name> <description>I2S clock enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -847,7 +847,7 @@ Selects the frequency range for the crystal oscillator or external clock source<
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="WDOG" > <name>IRQ</name> <description>IRQ clock enable</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="WDOG" > <name>DMA</name> <description>DMA clock enable</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="WDOG" > <name>DMA0</name> <description>DMA clock enable</description> <bitOffset>3</bitOffset> </field>
                   <field derivedFrom="WDOG" > <name>FTFL</name> <description>FTFL clock enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
@@ -909,7 +909,7 @@ Selects the frequency range for the crystal oscillator or external clock source<
                   <field derivedFrom="PORTA" > <name>PORTE</name> <description>PORTE clock enable</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="PORTA" > <name>PORTF</name> <description>PORTF clock enable</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="PORTA" > <name>USBDCD</name> <description>USBDCD clock enable</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="PORTA" > <name>USBOTG</name> <description>USBOTG clock enable</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="PORTA" > <name>USB0</name> <description>USB0 clock enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>

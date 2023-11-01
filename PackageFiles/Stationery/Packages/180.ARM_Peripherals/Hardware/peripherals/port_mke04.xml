@@ -4,10 +4,9 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Port control" >
 
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"         />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
-   <xi:include href="_enablePeripheral.xml" />
+   <xi:include href="enablePeripheral.xml" />
    <title />
 
    <!-- ************* IOFLT ****************** -->
@@ -188,7 +187,7 @@
       port_ioflt_fltc:PtcFilter;
       port_ioflt_fltb:PtbFilter;
       port_ioflt_flta:PtaFilter" >
-      <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -198,7 +197,7 @@
          \tstatic void configure%(name)(%params) {
          \t   %fieldAssignment
          \t}\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== PORT Init class =============================== -->
@@ -268,12 +267,12 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="port_ioflt_fltdiv3,port_ioflt_fltdiv2,port_ioflt_fltdiv1,port_ioflt_fltnmi,port_ioflt_fltkbi1,port_ioflt_fltkbi0,port_ioflt_fltrst,port_ioflt_fltpwt,port_ioflt_fltftm0,port_ioflt_fltiic,port_ioflt_fltc,port_ioflt_fltb,port_ioflt_flta"
    ><![CDATA[
       \t   /// Port Filter Register
       \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Configure methods -->
 
@@ -339,7 +338,7 @@
             port_ioflt_fltb;
             port_ioflt_flta
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -358,7 +357,7 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 <!--   Default for PUPs and HDRIVE -->
@@ -367,7 +366,7 @@
       values="
             port_puel_ptcpe,port_puel_ptbpe,port_puel_ptape
             " >
-      <initialValueTemplate codeGenCondition="enablePeripheralSupport"
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx"
          useDefinitions="true" >
@@ -376,14 +375,14 @@
          \t   static constexpr uint32_t %registerName = %initExpression;
          \t\n
       ]]>
-      </initialValueTemplate>
+      </variableTemplate>
    </for>
 
    <for keys="r"
       values="
             port_hdrve_ptc5,port_hdrve_ptc1,port_hdrve_ptb5
             " >
-      <initialValueTemplate codeGenCondition="enablePeripheralSupport"
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -391,12 +390,12 @@
          \t   static constexpr uint32_t %registerName = %initExpression;
          \t\n
       ]]>
-      </initialValueTemplate>
+      </variableTemplate>
    </for>
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="enablePeripheralSupport"
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -424,7 +423,7 @@
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[

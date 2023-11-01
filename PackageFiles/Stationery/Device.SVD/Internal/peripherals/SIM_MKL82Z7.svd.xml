@@ -774,8 +774,8 @@ Devices using this peripheral:
                   </field>
                   <field derivedFrom="EWM" > <name>I2C0</name> <description>I2C0 Clock Gate Control</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>I2C1</name> <description>I2C1 Clock Gate Control</description> <bitOffset>7</bitOffset> </field>
-                  <field derivedFrom="EWM" > <name>USBOTG</name> <description>USB_OTG Clock Gate Control</description> <bitOffset>18</bitOffset> </field>
-                  <field derivedFrom="EWM" > <name>CMP</name> <description>CMP Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="EWM" > <name>USB0</name> <description>USB_OTG Clock Gate Control</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="EWM" > <name>CMP0</name> <description>CMP Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>VREF</name> <description>VREF Clock Gate Control</description> <bitOffset>20</bitOffset> </field>
                </fields>
             </register>
@@ -885,7 +885,7 @@ Devices using this peripheral:
                <resetValue>0x6</resetValue>
                <fields>
                   <field>
-                     <name>DMA</name>
+                     <name>DMA0</name>
                      <description>DMA Clock Gate Control</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>

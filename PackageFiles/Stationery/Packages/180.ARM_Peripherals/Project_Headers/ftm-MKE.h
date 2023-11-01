@@ -34,20 +34,6 @@ namespace USBDM {
  * @{
  */
 
-///**
-// * Enables External trigger on a channel comparison or initialisation event
-// */
-//enum FtmExternalTrigger {
-//   FtmExternalTrigger_ch0   = FTM_EXTTRIG_CH0TRIG_MASK,    ///< External trigger on channel 0 event
-//   FtmExternalTrigger_ch1   = FTM_EXTTRIG_CH1TRIG_MASK,    ///< External trigger on channel 1 event
-//   FtmExternalTrigger_ch2   = FTM_EXTTRIG_CH2TRIG_MASK,    ///< External trigger on channel 2 event
-//   FtmExternalTrigger_ch3   = FTM_EXTTRIG_CH3TRIG_MASK,    ///< External trigger on channel 3 event
-//   FtmExternalTrigger_ch4   = FTM_EXTTRIG_CH4TRIG_MASK,    ///< External trigger on channel 4 event
-//   FtmExternalTrigger_ch5   = FTM_EXTTRIG_CH5TRIG_MASK,    ///< External trigger on channel 5 event
-//   FtmExternalTrigger_init  = FTM_EXTTRIG_INITTRIGEN_MASK, ///< External trigger on initialisation
-//   FtmExternalTrigger_all   = 0x7F,                        ///< All triggers
-//};
-
 /**
  * Selects pairs of channels for some operations
  */
@@ -76,60 +62,9 @@ private:
    FtmBase(const FtmBase&) = delete;
    FtmBase(FtmBase&&) = delete;
 
-#if $(/PCR/_present:false) // /PCR/_present
 public:
-
-   /** Class to static check channel exists - it does not check that it is mapped to a pin */
-   template<class Info, int channel> class CheckChannel {
-      // Tests are chained so only a single assertion can fail so as to reduce noise
-
-      // Out of bounds value for function index
-      static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
-      // Non-existent function
-      static constexpr bool Test2 = !Test1 || (Info::info[channel].gpioBit != INVALID_PCR);
-
-      static_assert(Test1, "Illegal FTM channel - Check Configure.usbdm for available channels");
-      static_assert(Test2, "FTM channel doesn't exist in this device/package - Check Configure.usbdm for available channels");
-
-   public:
-      /** Dummy function to allow convenient in-line checking */
-      static constexpr void check() {}
-   };
-
-   /** Class to static check channel exists and is mapped to a pin */
-   template<class Info, int channel> class CheckChannelExistsAndMapped {
-      // Tests are chained so only a single assertion can fail so as to reduce noise
-
-      // Out of bounds value for function index
-      static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
-      // Function is not currently mapped to a pin
-      static constexpr bool Test2 = !Test1 || (Info::info[channel].gpioBit != UNMAPPED_PCR);
-      // Non-existent function and catch-all. (should be INVALID_PCR)
-      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[channel].gpioBit >= 0);
-
-      static_assert(Test1, "Illegal FTM channel - Check Configure.usbdm for available inputs");
-      static_assert(Test2, "FTM input is not mapped to a pin - Modify Configure.usbdm");
-      static_assert(Test3, "FTM channel doesn't exist in this device/package - Check Configure.usbdm for available input pins");
-
-   public:
-      /** Dummy function to allow convenient in-line checking */
-      static constexpr void check() {}
-   };
-
-   /** Class to static check channel is mapped to a pin - Ignores non-existence etc. */
-   template<class Info, int channel> class CheckChannelIsMappedToPinOnly {
-
-      // Out of bounds value for function index
-      static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
-      // Function is not currently mapped to a pin
-      static constexpr bool Test2 = !Test1 || (Info::info[channel].gpioBit != UNMAPPED_PCR);
-
-      static_assert(Test2, "FTM channel is not mapped to a pin - Modify Configure.usbdm");
-
-   public:
-      /** Dummy function to allow convenient in-line checking */
-      static constexpr void check() {}
-   };
+#if $(/PCR/_present:false) // /PCR/_present
+   CreatePeripheralPinChecker("FTM");
 #endif
 
 protected:
@@ -237,11 +172,7 @@ private:
    FtmBase_T(FtmBase_T&&) = delete;
 
 #if $(/FTM/irqHandlingMethod:false) // /FTM/irqHandlingMethod
-/**
- * Type definition for overflow and fault call-back.
- */
-typedef void (*ChannelCallbackFunction)(uint8_t status);
-
+   typedef typename Info::ChannelCallbackFunction ChannelCallbackFunction;
 #endif
 
 public:
@@ -437,7 +368,7 @@ public:
 
    private:
 #if $(/PCR/_present:false) // /PCR/_present
-      FtmBase::CheckChannel<Info, channel> check;
+      FtmBase::CheckPinExistsAndIsMapped<Info, channel> check;
 #endif
 
       /**
@@ -568,7 +499,7 @@ $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
     * @note There is a single callback function for all pins on the related port.
     */
    static __attribute__((always_inline)) void setPinCallback(PinCallbackFunction callback) {
-      FtmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+      FtmBase::CheckPinExistsAndIsMapped<Info, channel> check;
       static_assert(Pcr::HANDLER_INSTALLED, "Gpio associated with FTM channel not configured for PIN interrupts - Modify Configure.usbdm");
       Pcr::setPinCallback(callback);
    }
@@ -589,7 +520,7 @@ $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
          PinDriveMode      pinDriveMode      = Pcr::defaultPcrValue,
          PinSlewRate       pinSlewRate       = Pcr::defaultPcrValue) {
 
-      FtmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+      FtmBase::CheckPinExistsAndIsMapped<Info, channel>::check();
 
 #ifdef FTM_SC_PWMEN0_SHIFT
       // Enable output pin in FTM
@@ -681,8 +612,7 @@ $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
             PinAction         pinAction         = Pcr::defaultPcrValue,
             PinFilter         pinFilter         = Pcr::defaultPcrValue) {
 
-         FtmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
-//         FtmBase::CheckChannelExistsAndMapped<Info, channel>::check(); // More noisy errors
+         FtmBase::CheckPinExistsAndIsMapped<Info, channel> check;
 
 #ifdef FTM_SC_PWMEN0_SHIFT
          // Disable output pin in FTM
@@ -701,9 +631,6 @@ $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
    static void defaultConfigure() {
 
      configure(Info::DefaultInitValue);
-
-     ftm->CONF    = FTM_CONF_BDMMODE(1);
-     ftm->COMBINE = FTM_COMBINE_FAULTEN0_MASK|FTM_COMBINE_FAULTEN1_MASK|FTM_COMBINE_FAULTEN2_MASK /*|FTM_COMBINE_FAULTEN3_MASK */;
 
      NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
    }
@@ -742,8 +669,8 @@ private:
    FtmQuadDecoder_T(const FtmQuadDecoder_T&) = delete;
    FtmQuadDecoder_T(FtmQuadDecoder_T&&) = delete;
 
-   FtmBase::CheckChannel<typename Info::InfoQUAD, 0> checkQ0;
-   FtmBase::CheckChannel<typename Info::InfoQUAD, 1> checkQ1;
+   FtmBase::CheckPinExistsAndIsMapped<typename Info::InfoQUAD, 0> check0;
+   FtmBase::CheckPinExistsAndIsMapped<typename Info::InfoQUAD, 1> check1;
 
 public:
    // Default constructor
@@ -759,9 +686,9 @@ public:
       FtmBase_T<Info>::setCallback(theCallback);
    }
 
-   using QuadInit = typename Info::QuadInit;
-
-   static constexpr QuadInit DefaultInitValue = Info::DefaultQuadInitValue;
+   // Make these visible
+   using Info::QuadInit;
+   using Info::DefaultQuadInitValue;
 
    /** Hardware instance pointer */
    static constexpr HardwarePtr<FTMQUAD_Type> ftm = Info::baseAddress;
@@ -922,6 +849,8 @@ public:
 
 $(/FTM/QuadInitMethod:// /FTM/InitMethod not found)
 
+   using Info::configure;
+
    /**
     * Basic configuration of Quadrature decoder.
     * Includes configuring all pins if
@@ -935,8 +864,8 @@ $(/FTM/QuadInitMethod:// /FTM/InitMethod not found)
          FtmQuadratureMode ftmQuadratureMode = FtmQuadratureMode_Phase_AB_Mode
          ) {
       // Assertions placed here so only checked if FtmQuadDecoder actually used
-      static_assert(Info::InfoQUAD::info[0].gpioBit >= 0, "FtmQuadDecoder PHA is not mapped to a pin - Modify Configure.usbdm");
-      static_assert(Info::InfoQUAD::info[1].gpioBit >= 0, "FtmQuadDecoder PHB is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Info::InfoQUAD::info[0].pinIndex >= PinIndex::MIN_PIN_INDEX, "FtmQuadDecoder PHA is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Info::InfoQUAD::info[1].pinIndex >= PinIndex::MIN_PIN_INDEX, "FtmQuadDecoder PHB is not mapped to a pin - Modify Configure.usbdm");
 
       enable();
 

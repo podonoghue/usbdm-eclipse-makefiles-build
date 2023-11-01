@@ -7,10 +7,9 @@
    <constant key="irq_parameters"           type="String" value="&quot;&quot;"  />
    <constant key="irq_dummy_parameters"     type="String" value="&quot;&quot;"  />
    <constant key="irq_call"                 type="String" value="&quot;&quot;"  />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"    />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"   />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"    />
-   <xi:include href="_enablePeripheral.xml" />
+   <xi:include href="enablePeripheral.xml" />
    <title />
 
    <!-- Clock mode as indicated by mcgClockMode[%(n)] choice index -->
@@ -1474,7 +1473,7 @@
       \t}\n\n
       ]]></clockCodeTemplate>
 
-   <template variables="mcg_c7_oscsel_fixed[]"
+   <variableTemplate variables="mcg_c7_oscsel_fixed[]"
    ><![CDATA[
       \t/**
       \t * Get %description
@@ -1485,7 +1484,7 @@
       \t
       \t   return $(%variable.code[0]);
       \t}\n\n
-      ]]></template>
+      ]]></variableTemplate>
 
    <template condition="mcg_sc_fcrdiv[]"
    ><![CDATA[
@@ -1594,110 +1593,110 @@
          \t\n
       ]]></template>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables="
             /SIM/sim_clkdiv1_outdiv4[%(n)],
             /SIM/sim_clkdiv1_outdiv3[%(n)],
             /SIM/sim_clkdiv1_outdiv2[%(n)],
             /SIM/sim_clkdiv1_outdiv1[%(n)]"
-      ><![CDATA[\t   /// SIM CLKDIV1 System Clock Divider Register 1 %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// SIM CLKDIV1 System Clock Divider Register 1 %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables=
             "/SIM/sim_clkdiv3_pllfll[%(n)]"
-      ><![CDATA[\t   /// SIM CLKDIV3 System Clock Divider Register 3 %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// SIM CLKDIV3 System Clock Divider Register 3 %initExpression\n\n ]]></variableTemplate>
 
       <template key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
          \t   Sim::DefaultSopt2Values[$(ClockConfig[%(n)])].sopt2,\n\n
       ]]></template>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables="
             mcgClockMode[%(n)]"
-      ><![CDATA[\t   /// Clock Mode %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Clock Mode %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables=
             "/SMC/smc_pmctrl_runm[%(n)]"
-      ><![CDATA[\t   /// Run Mode %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Run Mode %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables="
             mcg_c1_frdiv[%(n)],
             mcg_c1_irclken[%(n)],
             mcg_c1_irefsten[%(n)]"
-      ><![CDATA[\t   /// Control Register 1 - Excluding CLKS, IREFS %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 1 - Excluding CLKS, IREFS %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables=
             "mcg_c2_locre0[%(n)],
              mcg_c2_range0[%(n)],
              mcg_c2_oscMode,
              mcg_c2_ircs[%(n)]"
-      ><![CDATA[\t   /// Control Register 2 - Excluding LP, FCTRIM %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 2 - Excluding LP, FCTRIM %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables=
             "mcg_c4_dmx32[%(n)],
              mcg_c4_drst_drs[%(n)]"
-      ><![CDATA[\t   /// Control Register 4 - Excluding FCTRIM, SCFTRIM %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 4 - Excluding FCTRIM, SCFTRIM %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables="
             mcg_c5_pllclken0[%(n)],
             mcg_c5_pllsten0[%(n)],
             mcg_c5_prdiv0[%(n)]"
-      ><![CDATA[\t   /// Control Register 5 %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 5 %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables="
             mcg_c6_lolie0[%(n)],
             mcg_c6_plls[%(n)],
             mcg_c6_cme0[%(n)],
             mcg_c6_vdiv0[%(n)]"
-      ><![CDATA[\t   /// Control Register 6 %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 6 %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables=
             "mcg_sc_fcrdiv[%(n)]"
-      ><![CDATA[\t   /// Status and Control Register %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Status and Control Register %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables=
             "mcg_c7_oscsel[%(n)]"
-      ><![CDATA[\t   /// Control Register 7 %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 7 %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables=
             "mcg_c8_locre1[%(n)],
              mcg_c8_cme1[%(n)],
              mcg_c8_lolre[%(n)]"
-      ><![CDATA[\t   /// Control Register 8 %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 8 %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables=
             "mcg_c9_pll_cme[%(n)],
              mcg_c9_pll_locre[%(n)]"
-      ><![CDATA[\t   /// Control Register 9 %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 9 %initExpression\n\n ]]></variableTemplate>
 
-      <initialValueTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables=
             "mcg_c11_pllcs[%(n)]"
-      ><![CDATA[\t   /// Control Register 11 %initExpression\n\n ]]></initialValueTemplate>
+      ><![CDATA[\t   /// Control Register 11 %initExpression\n\n ]]></variableTemplate>
 
       <template key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
          \t},\n
@@ -1891,7 +1890,7 @@
                system_mcgfllclk_clock[0]   : SystemMcgFllClock;
                system_mcgpllclk_clock[0]   : SystemMcgPllClock
          ">
-      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport"
                    tooltipPadding="x*xx" ><![CDATA[
          \t/**
          \t *  %description
@@ -1899,8 +1898,8 @@
          \t */
          \textern volatile uint32_t %(name);
          \t\n
-      ]]></setTemplate>
-      <setTemplate namespace="all" key="/$(_BASENAME)/clocks" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport"
+      ]]></variableTemplate>
+      <variableTemplate namespace="all" key="/$(_BASENAME)/clocks" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport"
                    tooltipPadding="x*xx" ><![CDATA[
          \t/**
          \t *  %description
@@ -1908,8 +1907,8 @@
          \t */
          \tvolatile uint32_t %(name);
          \t\n
-      ]]></setTemplate>
-      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/MCG/enablePeripheralSupport"
+      ]]></variableTemplate>
+      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/MCG/enablePeripheralSupport"
                    tooltipPadding="x*xx" ><![CDATA[
          \t/**
          \t *  %description
@@ -1917,7 +1916,7 @@
          \t */
          \tconstexpr uint32_t %(name) = %valueExpression;
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
    <!-- ************* Common ****************** -->

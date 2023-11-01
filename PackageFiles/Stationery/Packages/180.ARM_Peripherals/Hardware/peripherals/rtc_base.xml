@@ -4,8 +4,8 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <xi:include href="_mapPinsOption_on.xml"/>
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="mapPinsOption_on.xml"/>
+   <xi:include href="default_instance.xml"/>
 
    <binaryOption key="ConfigureRtc"
       description="Configure RTC"
@@ -182,7 +182,7 @@
       \t\n
    ]]></template>
 
-   <initialValueTemplate
+   <variableTemplate
       separator="|"
       terminator=";"
       variables="
@@ -196,7 +196,7 @@
       \t//! Oscillator control register
       \tstatic constexpr uint32_t cr = %initExpression
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <intOption key="rtc_tcr_tcr" min="-128" max="127"
       description="Time Compensation Register"
@@ -214,7 +214,7 @@
       value="1"
       units="ticks" />
 
-   <initialValueTemplate
+   <variableTemplate
       separator="|"
       terminator=";"
       variables="
@@ -224,7 +224,7 @@
       \t//! RTC Time Compensation Register
       \tstatic constexpr uint32_t tcr = %initExpression
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <category name="Register Locks" description="Locks RTC Registers">
 	   <binaryOption key="rtc_lr_lrl"
@@ -260,7 +260,7 @@
 	   </binaryOption>
    </category>
 
-   <initialValueTemplate
+   <variableTemplate
       separator="|"
       terminator=";"
       variables="
@@ -272,7 +272,7 @@
       \t//! RTC Lock Register
       \tstatic constexpr uint32_t lr = %initExpression
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <category name="Write Access" description="Controls write access to RTC Registers">
       <binaryOption key="rtc_war_ierw" condition="rtc_war_ierw_present"
@@ -331,7 +331,7 @@
          <choice value="1" name="Writes allowed"  isDefault="true" />
       </binaryOption>
 
-      <initialValueTemplate
+      <variableTemplate
          separator="|"
          terminator=";"
          variables="
@@ -347,7 +347,7 @@
          \t//! RTC Write Access Register
          \tstatic constexpr uint32_t war = %initExpression
          \t\n
-      ]]></initialValueTemplate>
+      ]]></variableTemplate>
    </category>
 
    <category name="Read Access" description="Controls read access to RTC Registers">
@@ -407,7 +407,7 @@
          <choice value="1" name="Reads allowed"  isDefault="true" />
       </binaryOption>
 
-      <initialValueTemplate
+      <variableTemplate
          separator="|"
          terminator=";"
          variables="
@@ -423,12 +423,12 @@
          \t//! RTC Read Access Register
          \tstatic constexpr uint32_t rar = %initExpression
          \t\n
-      ]]></initialValueTemplate>
+      ]]></variableTemplate>
    </category>
 
    <stringOption key="irq_pattern"        locked="true" value="^RTC_(Alarm|Seconds)$" hidden="true" />
    <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irq$1Handler" hidden="true" />
-   <xi:include href="_irqOptionSubstituted.xml"/>
+   <xi:include href="irqOptionSubstituted.xml"/>
 
    <rtcTimeOption key="rtc_coldstart_value"
       value="1672538401"
@@ -504,7 +504,7 @@
       \tUSBDM::$(_Class)::initialise();\n
    ]]></template>
 
-   <xi:include href="_clockOption.xml"/>
+   <xi:include href="clockOption.xml"/>
 
    <signals/>
 

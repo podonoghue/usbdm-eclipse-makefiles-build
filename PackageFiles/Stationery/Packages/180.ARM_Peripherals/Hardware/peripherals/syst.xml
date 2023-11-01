@@ -4,9 +4,9 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System timer">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
-   <xi:include href="_mapPinsOption.xml"/>
+   <xi:include href="mapPinsOption.xml"/>
 
    <binaryOption key="syst_csr_countflag" condition="syst_csr_countflag_present"
       typeName="SystCsrCountflag"
@@ -56,7 +56,7 @@
       syst_csr_clksource:CsrClksource;
       syst_csr_tickint:CsrTickint;
       syst_csr_enable:CsrEnable">
-      <setTemplate variables="%(field)"
+      <variableTemplate variables="%(field)"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -66,7 +66,7 @@
          \tstatic void configure%(name)(%params) {
          \t   %fieldAssignment
          \t}\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== SYST Init class =============================== -->
@@ -130,26 +130,26 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="syst_csr_countflag,syst_csr_clksource,syst_csr_tickint,syst_csr_enable"
    ><![CDATA[
       \t   /// Control and Status Register
       \t   uint32_t csr = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="syst_rvr_reload"
    ><![CDATA[
       \t   /// Reload Value Register
       \t   uint32_t rvr = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="syst_cvr_current"
    ><![CDATA[
       \t   /// Current Value Register
       \t   uint32_t cvr = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Configure methods -->
 
@@ -189,7 +189,7 @@
             syst_csr_tickint;
             syst_csr_enable
             ">
-      <setTemplate namespace="usbdm"
+      <variableTemplate namespace="usbdm"
          variables="%(r)"
          linePadding="xxx">
       <![CDATA[
@@ -208,7 +208,7 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 <!--   Constructors -->
@@ -218,7 +218,7 @@
             syst_rvr_reload;
             syst_cvr_current
             ">
-      <setTemplate namespace="usbdm"
+      <variableTemplate namespace="usbdm"
          variables="%(r)"
          linePadding="xxx">
       <![CDATA[
@@ -237,12 +237,12 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate
+   <variableTemplate
       separator=","
       terminator=","
       variables="
@@ -261,7 +261,7 @@
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm">
       <![CDATA[

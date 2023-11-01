@@ -15,6 +15,6 @@
 
    <!-- ************** Common ************** -->
 
-   <xi:include href="_smc_base.xml"/>
+   <xi:include href="smc_base.xml"/>
 
 </peripheralPage>

@@ -4,13 +4,25 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Integration Module" >
 
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"          />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="true"         />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
-   <xi:include href="_enablePeripheral.xml"  />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="true"           />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"           />
+   <xi:include href="enablePeripheral.xml"  />
    <title />
 
+<!-- ==================== Constants ==================== -->
+
+   <!-- Peripheral speeds                  RUN       VLPR     -->
+   <constant key="MCGOUTCLK_max"  value=" 48MHz,     8MHz"   type="Long" />
+   <constant key="MCGFLLCLK_max"  value=" 48MHz,     0MHz"   type="Long" />
+   <constant key="LPUART_max"     value=" 48MHz,     8MHz"   type="Long" />
+   <constant key="TPM_max"        value=" 48MHz,     8MHz"   type="Long" />
+
+   <!-- No LLWU devices -->
+
+   <!-- Clock divider -->
+   <constant key="clock_divider_type" type="Long" value="2" />
+
+   <!-- No DMA slots -->
 <!--
     * General substitutions
     *  $(_NAME)         => e.g FTM2 => FTM2
@@ -25,39 +37,25 @@
 <!--
     * Template substitutions
     *
-    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
-    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
-    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
-    * %description[index]             Description from controlVar e.g. Compare Function Enable
-    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
-    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
-    * %params                         Formatted parameter list for function
-    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
-    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %paramType[index]               As for %paramType
-    * %paramName[index]               As for %paramName
-    * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
-    * %variable[index]                Variable name from condition
-    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * %register[index]                Register associated with variable e.g. adc->APCTL1
-    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
+    * <li>%valueExpression            Numeric variable value e.g. 0x3
+    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
+    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
+    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
+    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
+    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
+    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * <li>%params                     Formatted parameter list for function
+    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
+    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
+    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
+    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
+    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
+    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
+    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
+    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
 -->
-
-   <!--                                   RUN       VLPR     -->
-   <constant key="MCGOUTCLK_max"  value="100MHz,     4MHz"   type="Long"    hidden="false"/>
-   <constant key="LPUART_max"     value=" 48MHz,     4MHz"   type="Long"    hidden="false"/>
-   <constant key="TPM_max"        value=" 48MHz,     4MHz"   type="Long"    hidden="false"/>
-
-   <!-- No LLWU devices -->
-
-   <!-- Clock divider -->
-
-   <constant key="clock_divider_type" type="Long" value="2" />
 
    <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
    <binaryOption key="RtcForcing"
@@ -70,7 +68,7 @@
       <choice value="1" name="OSC0 is controlled by RTC"                   />
    </binaryOption>
 
-   <xi:include href="_simCommon.xml"/>
+   <xi:include href="simCommon.xml"/>
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
@@ -169,7 +167,6 @@
          <choice value="0"  name="ERCLK32K is not output"      enum="None"  isDefault="true" />
          <choice value="1"  name="ERCLK32K is output on PTB13" enum="PTB13" />
       </choiceOption>
-
    </category>
 
    <!-- ************* SOPT2 ****************** -->
@@ -199,7 +196,6 @@
 
       <aliasOption key="/OSC0/oscer_clock"               optional="true" />
       <aliasOption key="/MCG/system_mcgirclk_clock[]"    optional="true" />
-
    </category>
 
    <!-- ************* SOPT4 ****************** -->
@@ -212,13 +208,13 @@
             value="0"
             units="Hz"
          />
-         <initialValueTemplate variables="TpmClkin%(p)"
+         <variableTemplate variables="TpmClkin%(p)"
             initExpressionOnSameLine="true"
          ><![CDATA[
             \t/// %tooltip
             \tstatic constexpr uint32_t tpmExternalClock%(p) =  %initExpression;
             \t\n
-         ]]></initialValueTemplate>
+         ]]></variableTemplate>
       </for>
 
       <for keys="p" values="0;1;2">
@@ -350,38 +346,31 @@
       </for>
    </category>
 
-   <!-- ************* Bus clock enables ****************** -->
+   <!-- ************* FCFG1 ****************** -->
 
-   <category name="SCGC" description="Peripheral Clock Enables">
-      <for keys=  " reg : name  : Name  : isDefault"
-           values="
-                    6   : adc0    : Adc0    : false ;
-                    4   : cmp     : Cmp     : false ;
-                    4   : cmp0    : Cmp0    : false ;
-                    4   : i2c0    : I2c0    : false ;
-                    4   : i2c1    : I2c1    : false ;
-                    6   : ftf     : Ftf     : true  ;
-                    5   : porta   : Porta   : false ;
-                    5   : portb   : Portb   : false ;
-                    5   : lptmr   : Lptmr   : false ;
-                    5   : lpuart0 : Lpuart0 : false ;
-                    6   : rtc     : Rtc     : false ;
-                    4   : spi0    : Spi0    : false ;
-                    6   : tpm0    : Tpm0    : false ;
-                    6   : tpm1    : Tpm1    : false ;
-                    4   : uart0   : Uart0   : false ;
-                    4   : vref    : Vref    : false ;
-      ">
-         <binaryOption key="sim_scgc%(reg)_%(name)" condition="sim_scgc%(reg)_%(name)_present"
-            enabledBy="enablePeripheralSupport"
-            typeName="Sim%(Name)Clock"
-            description="%(Name) Clock Gate Control"
-            toolTip="This clock gate must be enabled to access %(Name)\n
-                     This may be done here or when the individual peripheral is configured." >
-            <choice name="Clock disabled"  value="0" enum="Disabled"/>
-            <choice name="Clock enabled"   value="1" enum="Enabled" isDefault="%(isDefault)" />
-         </binaryOption >
-      </for>
+   <category name="Flash" description="Flash control" >
+      <binaryOption key="sim_fcfg1_flashdoze" condition="sim_fcfg1_flashdoze_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="SimFlashDoze"
+         description="Flash Doze"
+         toolTip="Allows flash memory to be disabled in Doze mode. \n
+                  This bit should be clear during VLP modes. \n
+                  The Flash will be automatically enabled again at the end of Doze mode" >
+         <choice name="Flash remains enabled during Doze mode"           value="0" enum="EnabledInDoze"/>
+         <choice name="Flash is disabled for the duration of Doze mode"  value="1" enum="DisabledInDoze"/>
+      </binaryOption >
+
+      <binaryOption key="sim_fcfg1_flashdis" condition="sim_fcfg1_flashdis_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="SimFlashEn"
+         description="Flash Disable"
+         toolTip="Flash accesses are disabled (and generate a bus error).\n
+                  Flash memory is placed in a low power state.\n
+                  This bit should not be changed during VLP modes"
+         >
+         <choice name="Flash is enabled"   value="0" enum="Enabled"/>
+         <choice name="Flash is disabled"  value="1" enum="Disabled"/>
+      </binaryOption >
    </category>
 
    <for keys="n" dim="numberOfClockSettings" >
@@ -426,6 +415,7 @@
                toolTip="Clock available on CLKOUT pin" />
 
             <intOption key="system_peripheral_clock[%(n)]"
+               enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
                ref="/MCG/system_mcgpclk_clock[%(n)]"
                derived="true"
                locked="true"
@@ -455,16 +445,17 @@
 
             <for keys="p" values=";0;1">
                <for keys   = "name       : Name       : NAME       : bNAME"
-                    values = "uart%(p)   : Uart%(p)   : UART%(p)   : UART  ;
-                              lpuart%(p) : Lpuart%(p) : LPUART%(p) : LPUART;
-                              tpm%(p)    : Tpm%(p)    : TPM%(p)    : TPM" >
+                    values = "uart%(p)   : Uart%(p)   : UART%(p)   : UART   ;
+                              lpuart%(p) : Lpuart%(p) : LPUART%(p) : LPUART ;
+                              flexio%(p) : Flexio%(p) : FLEXIO%(p) : FLEXIO ;
+                              tpm%(p)    : Tpm%(p)    : TPM%(p)    : TPM    " >
 
                   <choiceOption key="sim_sopt2_%(name)src[%(n)]" condition="sim_sopt2_%(name)src_present"
                      typeName="Sim%(Name)ClockSource"
                      target="system_%(name)_clock[%(n)]"
                      description="%(NAME) Clock"
-                     toolTip="Clock source for the transmit and receive clock" >
-                     <choice value="0"  name="Disabled"                      ref="disabled"                          enum="Disabled"        code="0"                         />
+                     toolTip="Clock source for the peripheral" >
+                     <choice value="0"  name="Clock Disabled"                ref="disabled"                          enum="Disabled"        code="0"                         />
                      <choice value="1"  name="Peripheral Clock (MCGPCLK)"    ref="system_peripheral_clock[%(n)]"     enum="PeripheralClk"   code="getPeripheralClock()"       isDefault="true"/>
                      <choice value="2"  name="OSCERCLK clock"                ref="/OSC0/oscer_clock"                 enum="OscerClk"        code="Osc0Info::getOscerClock()" />
                      <choice value="3"  name="MCGIRCLK clock"                ref="/MCG/system_mcgirclk_clock[%(n)]"  enum="McgIrClk"        code="McgInfo::getMcgIrClock()"  />
@@ -480,26 +471,6 @@
                      value="0" />
                </for>
             </for>
-
-            <choiceOption key="sim_sopt2_flexiosrc[%(n)]" condition="sim_sopt2_flexiosrc_present"
-               target="system_flexio_clock[%(n)]"
-               typeName="SimFlexioClockSource"
-               description="FLEXIO Clock select"
-               toolTip="Selects the clock source for the FlexIO transmit and receive clock">
-               <choice value="0"  name="Disabled"                      ref="disabled"                          enum="Disabled"        code="0"                         />
-               <choice value="1"  name="Peripheral Clock (MCGPCLK)"    ref="system_peripheral_clock[%(n)]"     enum="PeripheralClk"   code="getPeripheralClock()"      isDefault="true" />
-               <choice value="2"  name="OSCERCLK clock"                ref="/OSC0/oscer_clock"                 enum="OscerClk"        code="Osc0Info::getOscerClock()" />
-               <choice value="3"  name="MCGIRCLK clock"                ref="/MCG/system_mcgirclk_clock[%(n)]"  enum="McgIrClk"        code="McgInfo::getMcgIrClock()"  />
-            </choiceOption>
-
-            <intOption key="system_flexio_clock[%(n)]" condition="sim_sopt2_flexiosrc_present"
-               locked="true"
-               derived="true"
-               units="Hz"
-               description="FLEXIO Clock frequency"
-               toolTip="Frequency of clock to FLEXIO"
-               value="0" />
-
          </category>
 
          <aliasOption key="/MCG/system_mcgoutclk_clock[%(n)]" />
@@ -526,6 +497,8 @@
                      Must be &lt;= Core Clock frequency"
             value="24_MHz"
             disabledValue="0" />
+
+   <!-- ************* CLKDIV1 ****************** -->
 
          <category name="CLKDIV1" description="System Clock Dividers">
             <choiceOption key="sim_clkdiv1_outdiv1[%(n)]"  condition="sim_clkdiv1_outdiv1_present"
@@ -562,7 +535,6 @@
                toolTip="Clocks the flash memory\n
                         Divides Core Clock to generate system_flash_clock." />
          </category>
-
       </aliasCategoryOption>
    </for>
 
@@ -586,285 +558,7 @@
 
 <!-- Graphic here -->
 
-   <for keys="field:name"
-        values="
-      sim_scgc4_spi0            : Spi0            ;
-      sim_scgc4_vref            : Vref            ;
-      sim_scgc4_cmp             : Cmp             ;
-      sim_scgc4_cmp0            : Cmp0            ;
-      sim_scgc4_uart0           : Uart0           ;
-      sim_scgc4_i2c1            : I2c1            ;
-      sim_scgc4_i2c0            : I2c0            ;
-      sim_scgc5_lpuart0         : Lpuart0         ;
-      sim_scgc5_portb           : Portb           ;
-      sim_scgc5_porta           : Porta           ;
-      sim_scgc5_lptmr           : Lptmr           ;
-      sim_scgc6_rtc             : Rtc             ;
-      sim_scgc6_adc0            : Adc0            ;
-      sim_scgc6_tpm1            : Tpm1            ;
-      sim_scgc6_tpm0            : Tpm0            ;
-      sim_scgc6_ftf             : Ftf             " >
-      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
-      ><![CDATA[
-         \t/**
-         \t * Set %description
-         \t *
-         %paramDescription
-         \t */
-         \tstatic void set%(name)ClockEnable(%params) {
-         \t   %fieldAssignment
-         \t}
-         \t
-         \t/**
-         \t * Get %description
-         \t *
-         \t * @return %tooltip
-         \t */
-         \tstatic %paramType get%(name)ClockEnable() {
-         \t   return %paramType(%register&%mask);
-         \t}
-         \t\n
-      ]]></setTemplate>
-   </for>
-   <for keys="field:name"
-        values="
-      sim_sopt2_lpuart0src      : Lpuart0src      ;
-      sim_sopt2_uart0src        : Uart0src        ;
-      sim_sopt2_tpmsrc          : Tpmsrc          ;
-      sim_sopt4_tpm1clksel      : Tpm1clksel      ;
-      sim_sopt4_tpm0clksel      : Tpm0clksel      ;
-      sim_sopt4_tpm1ch0src      : Tpm1ch0src      ;
-      sim_sopt5_lpuart0ode      : Lpuart0ode      ;
-      sim_sopt5_lpuart0rxsrc    : Lpuart0rxsrc    ;
-      sim_sopt5_lpuart0txsrc    : Lpuart0txsrc    ;
-      sim_sopt5_uart0ode        : Uart0ode        ;
-      sim_sopt5_uart0rxsrc      : Uart0rxsrc      ;
-      sim_sopt5_uart0txsrc      : Uart0txsrc      ;
-      sim_sopt7_adc0alttrgen    : Adc0alttrgen    ;
-      sim_sopt7_adc0pretrgsel   : Adc0pretrgsel   ;
-      sim_sopt7_adc0trgsel      : Adc0trgsel      ;
-      sim_fcfg1_flashdoze       : Fcfg1Flashdoze  ;
-      sim_fcfg1_flashdis        : Fcfg1Flashdis   " >
-      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
-      ><![CDATA[
-         \t/**
-         \t * Set %description
-         \t *
-         %paramDescription
-         \t */
-         \tstatic void set%(name)(%params) {
-         \t   %fieldAssignment
-         \t}
-         \t
-         \t/**
-         \t * Get %description
-         \t *
-         \t * @return %tooltip
-         \t */
-         \tstatic %paramType get%(name)() {
-         \t   return %paramType(%register&%mask);
-         \t}
-         \t\n
-      ]]></setTemplate>
-   </for>
-
-<!--   ========== SIM Clock Init class =============================== -->
-
-   <template key="clockinit_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
-   <![CDATA[
-      \t/**
-      \t * Class used to do initialisation of the $(_Baseclass) clock enables
-      \t *
-      \t * This class has a templated constructor that accepts various values.
-      \t *
-      \t * @note This constructor may be used to create a const instance in Flash
-      \t *
-      \t *
-      \t * @code
-      \t * static const $(_Class)::ClockEnables $(_name)ClockEnables {
-      \t *
-      \t *   // Setup values
-      \t *   SimScgc4Spi0_ClockDisabled                // SPI0 Clock Gate Control,
-      \t *   SimScgc4Cmp_ClockDisabled                 // Comparator Clock Gate Control,
-      \t *   SimScgc4Uart0_ClockDisabled               // UART0 Clock Gate Control,
-      \t *   SimScgc4I2c1_ClockDisabled                // I2C1 Clock Gate Control,
-      \t *   SimScgc4I2c0_ClockDisabled                // I2C0 Clock Gate Control,
-      \t *   SimScgc5Lpuart0_ClockDisabled             // LPUART0 Clock Gate Control,
-      \t *   SimScgc5Portb_ClockDisabled               // Port B Clock Gate Control,
-      \t *   SimScgc5Porta_ClockDisabled               // Port A Clock Gate Control,
-      \t *   SimScgc5Lptmr_AccessDisabled              // Low Power Timer Access Control,
-      \t *   SimScgc6Rtc_ClockDisabled                 // RTC Access Control,
-      \t *   SimScgc6Adc0_ClockDisabled                // ADC0 Clock Gate Control,
-      \t *   SimScgc6Tpm1_ClockDisabled                // TPM1 Clock Gate Control,
-      \t *   SimScgc6Tpm0_ClockDisabled                // TPM0 Clock Gate Control,
-      \t *   SimScgc6Ftf_ClockDisabled                 // Flash Clock Gate Control,
-      \t *
-      \t *    $(_name)Callback,                // Call-back to execute on event - call-back function name
-      \t *    NvicPriority_Low,                // Priority for interrupt - Low
-      \t * };
-      \t *
-      \t * // Initialise $(_Class) from values specified above
-      \t * $(_Class)::configure($(_name)ClockEnables)
-      \t * @endcode
-      \t */
-   ]]>
-
-   </template>
-
-
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
-   <![CDATA[
-      $(clockinit_description)
-      \tclass ClockEnables {
-      \t
-      \tpublic:
-      \t   /**
-      \t    * Copy Constructor
-      \t    */
-      \t   constexpr ClockEnables(const ClockEnables &other) = default;
-      \t
-      \t   /**
-      \t    * Default Constructor
-      \t    */
-      \t   constexpr ClockEnables() = default;
-      \t\n
-   ]]>
-   </template>
-
-<!--   Member variables -->
-
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      variables="sim_scgc4_spi0,sim_scgc4_vref,sim_scgc4_cmp0,sim_scgc4_cmp,sim_scgc4_uart0,sim_scgc4_i2c1,sim_scgc4_i2c0"
-   ><![CDATA[
-      \t   /// System Clock Gating Control Register 4
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
-
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      variables="sim_scgc5_lpuart0,sim_scgc5_portb,sim_scgc5_porta,sim_scgc5_lptmr"
-   ><![CDATA[
-      \t   /// System Clock Gating Control Register 5
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
-
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      variables="sim_scgc6_rtc,sim_scgc6_adc0,sim_scgc6_tpm1,sim_scgc6_tpm0,sim_scgc6_ftf"
-   ><![CDATA[
-      \t   /// System Clock Gating Control Register 6
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
-
-<!--   Configure methods -->
-
-   <template codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
-   <![CDATA[
-      \t/**
-      \t * Configure with default settings.
-      \t * Configuration determined from Configure.usbdmProject
-      \t */
-      \tstatic inline void defaultConfigure() {
-      \t
-      \t   // Update settings
-      \t   configure(DefaultInitValue);
-      \t}
-      \t
-      \t/**
-      \t * Configure $(_BASENAME) from values specified in init
-      \t *
-      \t * @param init Class containing initialisation values
-      \t */
-      \tstatic void configure(const ClockEnables &init) {
-      \t
-      \t   sim->SCGC4    = init.scgc4;
-      \t   sim->SCGC5    = init.scgc5;
-      \t   sim->SCGC6    = init.scgc6;
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <!--   Constructors -->
-
-   <for keys="r"
-      values="
-            sim_scgc4_spi0;
-            sim_scgc4_cmp;
-            sim_scgc4_cmp0;
-            sim_scgc4_uart0;
-            sim_scgc4_vref;
-            sim_scgc4_i2c1;
-            sim_scgc4_i2c0;
-            sim_scgc5_lpuart0;
-            sim_scgc5_portb;
-            sim_scgc5_porta;
-            sim_scgc5_lptmr;
-            sim_scgc6_rtc;
-            sim_scgc6_adc0;
-            sim_scgc6_tpm1;
-            sim_scgc6_tpm0;
-            sim_scgc6_ftf;
-            " >
-      <setTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-         variables="%(r)"
-         linePadding="xxx" >
-      <![CDATA[
-         \t   /**
-         \t    * Constructor for %description
-         \t    *
-         \t    * @tparam   Types
-         \t    * @param    rest
-         \t    *
-         %paramDescription
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr ClockEnables(%params, Types... rest) : ClockEnables(rest...) {
-         \t
-         \t      %registerName = (%registerName&~%mask) | %paramExpression;
-         \t   }
-         \t\n
-      ]]>
-      </setTemplate>
-   </for>
-
-<!--   Default Initialisation value -->
-
-   <initialValueTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      separator=","
-      terminator=","
-      variables="
-            sim_scgc4_spi0,
-            sim_scgc4_vref,
-            sim_scgc4_cmp0,
-            sim_scgc4_cmp,
-            sim_scgc4_uart0,
-            sim_scgc4_i2c1,
-            sim_scgc4_i2c0,
-            sim_scgc5_lpuart0,
-            sim_scgc5_portb,
-            sim_scgc5_porta,
-            sim_scgc5_lptmr,
-            sim_scgc6_rtc,
-            sim_scgc6_adc0,
-            sim_scgc6_tpm1,
-            sim_scgc6_tpm0,
-            sim_scgc6_ftf,
-         "
-   ><![CDATA[
-      \t/**
-      \t * Default initialisation value for $(_Class)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr ClockEnables DefaultClockEnables = {%initExpression
-      \t};\n\n
-   ]]>
-   </initialValueTemplate>
-
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
-      <![CDATA[
-      \t}; // class $(_Baseclass)BasicInfo::ClockEnables
-      \t\n
-   ]]>
-   </template>
+   <xi:include href="sim_commonTemplates.xml" />
 
    <!-- ************* Clock Variables ****************** -->
 
@@ -889,30 +583,30 @@
                system_bus_clock[0]    : SystemBusClock;
                system_timer_clock[0]  : SystemTimerClock
          ">
-      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
+      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
          \t/**
          \t *  %description
          \t *  %tooltip
          \t */
          \textern "C" uint32_t %(name);
          \t\n
-      ]]></setTemplate>
-      <setTemplate namespace="all" key="/SYSTEM/Clocks" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
+      ]]></variableTemplate>
+      <variableTemplate namespace="all" key="/SYSTEM/Clocks" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
          \t/**
          \t *  %description
          \t *  %tooltip
          \t */
          \tuint32_t %(name);
          \t\n
-      ]]></setTemplate>
-      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/MCG/enablePeripheralSupport" ><![CDATA[
+      ]]></variableTemplate>
+      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/MCG/enablePeripheralSupport" ><![CDATA[
          \t/**
          \t *  %description
          \t *  %tooltip
          \t */
          \tconstexpr uint32_t %(name) = %valueExpression;
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
    <template codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
@@ -928,15 +622,13 @@
       \t}\n\n
    ]]></template>
 
-   <xi:include href="_sim_commonTemplates.xml" />
-
-   <!-- ************* Common ****************** -->
-
-   <initialValueTemplate variables="sim_clkdiv1_outdiv1[0],sim_clkdiv1_outdiv2[0],sim_clkdiv1_outdiv3[0],sim_clkdiv1_outdiv4[0]"><![CDATA[
+   <variableTemplate variables="sim_clkdiv1_outdiv1[0],sim_clkdiv1_outdiv2[0],sim_clkdiv1_outdiv3[0],sim_clkdiv1_outdiv4[0]"><![CDATA[
       \t/** Reset clock divider value if clock not fully configured */
       \tstatic constexpr uint32_t sim_clkdiv1 = %initExpression;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
+
+   <!-- ************* Common ****************** -->
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL" dim="numberOfClockSettings">
@@ -946,8 +638,6 @@
       <param type="long" value="4MHz"   />     <!-- VLPR Core         -->
       <param type="long" value="1MHz"   />     <!-- VLPR Bus          -->
    </validate>
-
-   <xi:include href="_simFiles-MKL.xml"/>
 
    <!-- ************* Startup ****************** -->
 
@@ -961,6 +651,7 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
+   <xi:include href="simFiles-MKL.xml"/>
    <signals enabledBy="enablePeripheralSupport" />
 
 </peripheralPage>

@@ -4,9 +4,9 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Quad Serial Peripheral Interface">
 
-   <xi:include href="_mapPinsOption_on.xml"/>
-   <xi:include href="_default_instance.xml"/>
-   <xi:include href="_irqOption.xml"/>
+   <xi:include href="mapPinsOption_on.xml"/>
+   <xi:include href="default_instance.xml"/>
+   <xi:include href="irqOption.xml"/>
    
    <template key="/QSPI/declarations" namespace="all"  ><![CDATA[
    \t/**
@@ -22,7 +22,7 @@
       <copy source="Snippets/mx25u3235fzni.h"   target="Snippets/mx25u3235fzni.h"   overwrite="true" derived="true" />
    </projectActionList>
    
-   <xi:include href="_clockOption.xml"/>
+   <xi:include href="clockOption.xml"/>
    
    <signals/>
 </peripheralPage>

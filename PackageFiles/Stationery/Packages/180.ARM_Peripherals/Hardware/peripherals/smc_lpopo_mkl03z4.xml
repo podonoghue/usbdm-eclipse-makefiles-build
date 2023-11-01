@@ -5,6 +5,6 @@
  
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Mode Controller">
 
-   <xi:include href="_smc_base.xml"/>
+   <xi:include href="smc_base.xml"/>
 
 </peripheralPage>

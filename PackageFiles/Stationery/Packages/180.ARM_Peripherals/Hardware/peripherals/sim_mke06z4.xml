@@ -4,10 +4,9 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Integration Module" >
 
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="false"         />
    <constant key="isGeneratedByDefault"     type="Boolean" value="true"          />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
    <title />
 
 <!-- ==================== Constants ==================== -->
@@ -196,7 +195,7 @@
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
 
-   <xi:include href="_simCommon.xml" />
+   <xi:include href="simCommon.xml" />
 
    <for keys="n" dim="numberOfClockSettings" >
       <aliasCategoryOption key="/ICS/ClockConfig[%(n)]" derived="true" locked="true" >
@@ -303,7 +302,7 @@
 
    <title />
 
-   <category name="Control Signals" description="Mapping of control signals" >
+   <category name="Control Signals" description="Control Signal Mapping" >
       <binaryOption key="sim_scgc_swd" condition="sim_scgc_swd_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          disabledValue="1"
@@ -367,7 +366,7 @@
       </choiceOption>
    </category>
 
-   <category name="ADC" description="Peripheral  options and clock enable" >
+   <category name="ADC" description="ADC Options" >
       <binaryOption key="sim_scgc_adc0" condition="sim_scgc_adc0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          typeName="SimScgcAdc"
@@ -403,7 +402,7 @@
       />
    </category>
 
-   <category name="ACMP" description="Peripheral  options and clock enable" >
+   <category name="ACMP" description="ACMP Options" >
       <binaryOption key="sim_scgc_acmp0" condition="sim_scgc_acmp0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          typeName="SimScgcAcmp0"
@@ -423,7 +422,7 @@
       <aliasOption key="sim_sopt0_actrg" locked="false" optional="true" />
    </category>
 
-   <category name="CAN0" description="Peripheral  options and clock enable" >
+   <category name="CAN" description="CAN Options" >
       <binaryOption key="sim_scgc_mscan" condition="sim_scgc_mscan_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          typeName="SimScgcMscan"
@@ -443,7 +442,7 @@
       </binaryOption>
    </category>
 
-   <category name="CRC" description="Peripheral  options and clock enable" >
+   <category name="CRC" description="CRC Options" >
       <binaryOption key="sim_scgc_crc" condition="sim_scgc_crc_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          typeName="SimScgcCrc"
@@ -453,7 +452,7 @@
       </binaryOption>
    </category>
 
-   <category name="FLASH" description="Peripheral  options and clock enable" >
+   <category name="FLASH" description="FLASH Options" >
       <binaryOption key="sim_scgc_flash" condition="sim_scgc_flash_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          disabledValue="1"
@@ -464,7 +463,7 @@
       </binaryOption>
    </category>
 
-   <category name="FTM" description="Peripheral  options and clock enable" >
+   <category name="FTM" description="FTM Options" >
       <binaryOption key="sim_sopt0_ftmsync" condition="sim_sopt0_ftmsync_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          typeName="SimSoptFtmsync"
@@ -659,7 +658,7 @@
       </binaryOption>
    </category>
 
-   <category name="I2C" description="Peripheral  options and clock enable" >
+   <category name="I2C" description="I2C Options" >
 
       <title description="I2C 0"/>
 
@@ -719,7 +718,7 @@
       </binaryOption>
    </category>
 
-   <category name="IRQ" description="Peripheral  options and clock enable" >
+   <category name="IRQ" description="IRQ Options" >
       <binaryOption key="sim_scgc_irq" condition="sim_scgc_irq_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          typeName="SimScgcIrq"
@@ -745,7 +744,7 @@
       </choiceOption>
    </category>
 
-   <category name="KBI" description="Peripheral  options and clock enable" >
+   <category name="KBI" description="KBI Options" >
       <binaryOption key="sim_scgc_kbi0" condition="sim_scgc_kbi0_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          typeName="SimScgcKbi0"
@@ -763,7 +762,7 @@
       </binaryOption>
    </category>
 
-   <category name="PIT" description="Peripheral  options and clock enable" >
+   <category name="PIT" description="PIT Options" >
       <binaryOption key="sim_scgc_pit" condition="sim_scgc_pit_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          typeName="SimScgcPit"
@@ -773,7 +772,7 @@
       </binaryOption>
    </category>
 
-   <category name="PWT" description="Peripheral  options and clock enable" >
+   <category name="PWT" description="PWT Options" >
       <binaryOption key="sim_scgc_pwt" condition="sim_scgc_pwt_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          typeName="SimScgcPwt"
@@ -831,7 +830,7 @@
       </choiceOption>
    </category>
 
-   <category name="RTC" description="Peripheral  options and clock enable" >
+   <category name="RTC" description="RTC Options" >
       <binaryOption key="sim_scgc_rtc" condition="sim_scgc_rtc_present"
          enabledBy="/$(_BASENAME)/enablePeripheralSupport"
          typeName="SimScgcRtc"
@@ -851,7 +850,7 @@
       </binaryOption>
    </category>
 
-   <category name="SPI" description="Peripheral  options and clock enable" >
+   <category name="SPI" description="SPI Options" >
 
       <title description="SPI 0"/>
 
@@ -893,7 +892,7 @@
       </binaryOption>
    </category>
 
-   <category name="UART" description="Peripheral  options and clock enable" >
+   <category name="UART" description="UART Options" >
       <title description="UART 0"/>
 
       <binaryOption key="sim_scgc_uart0" condition="sim_scgc_uart0_present"
@@ -980,7 +979,7 @@
    <constant key="_class_declaration" type="String"
       value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
 
-   <setTemplate variables="sim_sopt0_ftmsync" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate variables="sim_sopt0_ftmsync" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t/**
       \t * %description
@@ -990,7 +989,7 @@
       \tstatic void triggerFtm2() {
       \t   %register |= %mask;
       \t}\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <for keys="field:name"
         values="
@@ -1011,7 +1010,7 @@
       sim_sopt1_acpwts     : Acpwts;
       sim_sopt1_i2c0oinv   : I2c0oinv;
       sim_sopt1_i2c04wen   : I2c04wen" >
-      <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -1021,7 +1020,7 @@
          \tstatic void configure%(name)(%params) {
          \t   %fieldAssignment
          \t}\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
    <for keys="field:name"
@@ -1052,7 +1051,7 @@
       sim_pinsel1_ftm2ps2:Ftm2ps2;
       sim_pinsel1_ftm2ps1:Ftm2ps1;
       sim_pinsel1_ftm2ps0:Ftm2ps0" >
-      <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -1062,7 +1061,7 @@
          \tstatic void select%(name)Pins(%params) {
          \t   %fieldAssignment
          \t}\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
    <for keys="field:name"
@@ -1090,24 +1089,36 @@
       sim_scgc_pwt:Pwt;
       sim_scgc_pit:Pit;
       sim_scgc_rtc:Rtc" >
-      <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
-         \t * Set %description
-         \t *
-         %paramDescription
+         \t * Get %description
          \t */
-         \tstatic void enable%(name)Clock(%params) {
-         \t   %fieldAssignment
+         \tstatic bool get%(name)ClockEnable() {
+         \t   return %register & %mask;
+         \t}
+         \t
+         \t/**
+         \t * Disable %description
+         \t */
+         \tstatic void enable%(name)Clock() {
+         \t   %register = %register | %mask;
+         \t}
+         \t
+         \t/**
+         \t * Enable %description
+         \t */
+         \tstatic void disable%(name)Clock() {
+         \t   %register = %register & ~%mask;
          \t}\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
    <for keys="         field         :   name"
         values="sim_clkdiv_outdiv1[] : CoreClkDivider;
                 sim_clkdiv_outdiv2[] : BusClockDivider;
                 sim_clkdiv_outdiv3[] : TimerClockDivider" >
-      <setTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -1117,7 +1128,7 @@
          \tstatic void set%(name)(%params) {
          \t   %fieldAssignment
          \t}\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== SIM Init class =============================== -->
@@ -1241,40 +1252,40 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="sim_sopt0_delay,sim_sopt0_adhwt,sim_sopt0_clkoe,sim_sopt0_busref,sim_sopt0_txdme,sim_sopt0_rxdce,sim_sopt0_acic,sim_sopt0_rtcc,sim_sopt0_rxdfe,sim_sopt0_actrg,sim_sopt0_swde,sim_sopt0_rstpe,sim_sopt0_nmie"
    ><![CDATA[
       \t   /// System Options Register 0
       \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="sim_sopt1_uartpwts,sim_sopt1_acpwts,sim_sopt1_i2c0oinv,sim_sopt1_i2c04wen"
    ><![CDATA[
       \t   /// System Options Register 1
       \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="sim_pinsel0_pwtclkps,sim_pinsel0_ftm2clkps,sim_pinsel0_ftm1clkps,sim_pinsel0_ftm0clkps,sim_pinsel0_ftm1ps1,sim_pinsel0_ftm1ps0,sim_pinsel0_ftm0ps1,sim_pinsel0_ftm0ps0,sim_pinsel0_uart0ps,sim_pinsel0_spi0ps,sim_pinsel0_i2c0ps,sim_pinsel0_rtcps,sim_pinsel0_irqps"
    ><![CDATA[
       \t   /// Pin Selection Register 0
       \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="sim_pinsel1_mscanps,sim_pinsel1_pwtin1ps,sim_pinsel1_pwtin0ps,sim_pinsel1_uart2ps,sim_pinsel1_uart1ps,sim_pinsel1_spi1ps,sim_pinsel1_i2c1ps,sim_pinsel1_ftm2ps5,sim_pinsel1_ftm2ps4,sim_pinsel1_ftm2ps3,sim_pinsel1_ftm2ps2,sim_pinsel1_ftm2ps1,sim_pinsel1_ftm2ps0"
    ><![CDATA[
       \t   /// Pin Selection Register 1
       \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="sim_scgc_acmp1,sim_scgc_acmp0,sim_scgc_adc,sim_scgc_irq,sim_scgc_kbi1,sim_scgc_kbi0,sim_scgc_uart2,sim_scgc_uart1,sim_scgc_uart0,sim_scgc_spi1,sim_scgc_spi0,sim_scgc_i2c1,sim_scgc_i2c0,sim_scgc_mscan,sim_scgc_swd,sim_scgc_flash,sim_scgc_crc,sim_scgc_ftm2,sim_scgc_ftm1,sim_scgc_ftm0,sim_scgc_pwt,sim_scgc_pit,sim_scgc_rtc"
    ><![CDATA[
       \t   /// System Clock Gating Control Register
       \t   uint32_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Constructors -->
 
@@ -1344,9 +1355,10 @@
             sim_scgc_ftm0;
             sim_scgc_pwt;
             sim_scgc_pit;
-            sim_scgc_rtc
+            sim_scgc_rtc;
+            sim_sopt0_delay
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -1365,35 +1377,12 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
-
-<!--   Constructors -->
-
-   <setTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-      variables="sim_sopt0_delay"
-      linePadding="xxx" >
-   <![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      \t    * @param value %description
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%paramType0 value, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName = (%registerName&~%mask0) | %macro0(value);
-      \t   }
-      \t\n
-   ]]>
-   </setTemplate>
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="enablePeripheralSupport"
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -1471,7 +1460,7 @@
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template  codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
@@ -1533,30 +1522,30 @@
                system_bus_clock[0]    : SystemBusClock;
                system_timer_clock[0]  : SystemTimerClock
          ">
-      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
          \t/**
          \t *  %description
          \t *  %tooltip
          \t */
          \textern "C" uint32_t %(name);
          \t\n
-      ]]></setTemplate>
-      <setTemplate namespace="all" key="/SYSTEM/Clocks" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+      ]]></variableTemplate>
+      <variableTemplate namespace="all" key="/SYSTEM/Clocks" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
          \t/**
          \t *  %description
          \t *  %tooltip
          \t */
          \tuint32_t %(name);
          \t\n
-      ]]></setTemplate>
-      <setTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
+      ]]></variableTemplate>
+      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
          \t/**
          \t *  %description
          \t *  %tooltip
          \t */
          \tconstexpr uint32_t %(name) = %valueExpression;
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
    <template codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
@@ -1591,16 +1580,16 @@
       \t};\n\n
    ]]></template>
 
-   <xi:include href="_simFiles-MKE.xml" />
+   <xi:include href="simFiles-MKE.xml" />
 
-   <initialValueTemplate variables="sim_clkdiv_outdiv1[0],sim_clkdiv_outdiv2[0],sim_clkdiv_outdiv3[0],sim_clkdiv_outdiv4[0]"><![CDATA[
+   <variableTemplate variables="sim_clkdiv_outdiv1[0],sim_clkdiv_outdiv2[0],sim_clkdiv_outdiv3[0],sim_clkdiv_outdiv4[0]"><![CDATA[
       \t/** Reset clock divider value if clock not fully configured */
       \tstatic constexpr uint32_t sim_clkdiv = %initExpression;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <for keys="n" values=";0;1;2;3;4;5;6" >
-      <template variables="system_uart%(n)_fixedclocksource[%(n)]" ><![CDATA[
+      <variableTemplate variables="system_uart%(n)_fixedclocksource[%(n)]" ><![CDATA[
          \t/**
          \t * Get UART%(n) input clock frequency
          \t *
@@ -1609,7 +1598,7 @@
          \tstatic inline uint32_t getUart%(n)Clock() {
          \t   return $(system_uart%(n)_fixedclocksource[%(n)].code[]);
          \t}\n\n
-      ]]></template>
+      ]]></variableTemplate>
    </for>
 
 </peripheralPage>

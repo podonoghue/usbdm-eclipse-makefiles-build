@@ -4,7 +4,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="LP LPIT">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
    <aliasOption key="/PCC/pcc_lpit$(_instance)" locked="false" optional="true" />
 
@@ -90,6 +90,6 @@
       \t}\n\n
    ]]></template>
    
-   <xi:include href="_clockOption.xml"/>
+   <xi:include href="clockOption.xml"/>
    
 </peripheralPage>

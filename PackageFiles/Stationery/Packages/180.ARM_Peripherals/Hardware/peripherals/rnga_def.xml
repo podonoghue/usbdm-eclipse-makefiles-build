@@ -11,16 +11,16 @@
    \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
    ]]></template>
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
-   <xi:include href="_irqOption.xml"/>
+   <xi:include href="irqOption.xml"/>
 
    <projectActionList id = "rnga_files" >
       <copy source="Project_Headers/rnga.h"         target="Project_Headers/rnga.h"          overwrite="true" derived="true" />
       <copy source="Snippets/rnga-example.cpp"      target="Snippets/rnga-example.cpp"       overwrite="true" derived="true" />
    </projectActionList>
 
-   <xi:include href="_clockOption.xml"/>
+   <xi:include href="clockOption.xml"/>
 
    <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" />
 

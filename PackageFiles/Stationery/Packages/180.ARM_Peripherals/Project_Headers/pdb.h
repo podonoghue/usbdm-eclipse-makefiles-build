@@ -73,37 +73,8 @@ namespace USBDM {
 template <class Info>
 class PdbBase_T : public Info {
 
-protected:
-
-   typedef typename Info::CallbackFunction CallbackFunction;
-
-   /** Callback function for ISR */
-   static CallbackFunction sCallback;
-
-   /** Callback function for error ISR */
-   static CallbackFunction sErrorCallback;
-
-   /** Handler for unexpected interrupts */
-   static void unhandledCallback() {
-      setAndCheckErrorCode(E_NO_HANDLER);
-   }
-
 public:
-   /**
-    * IRQ handler
-    */
-   static void irqHandler(void) {
-
-      if (PdbBase_T<Info>::pdb->SC & PDB_SC_PDBIF_MASK) {
-         // Clear interrupt flag
-         PdbBase_T<Info>::pdb->SC = PdbBase_T<Info>::pdb->SC & ~PDB_SC_PDBIF_MASK;
-         // Handle expected interrupt
-         sCallback();
-         return;
-      }
-      // Assume sequence error
-      sErrorCallback();
-   }
+   using Info::configure;
 
    /**
     * Wrapper to allow the use of a class member as a callback function
@@ -137,8 +108,8 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(), T &object>
-   static CallbackFunction wrapCallback() {
-      static CallbackFunction fn = []() {
+   static typename Info::CallbackFunction wrapCallback() {
+      static typename Info::CallbackFunction fn = []() {
          (object.*callback)();
       };
       return fn;
@@ -176,45 +147,13 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)()>
-   static CallbackFunction wrapCallback(T &object) {
+   static typename Info::CallbackFunction wrapCallback(T &object) {
       static T &obj = object;
-      static CallbackFunction fn = []() {
+      static typename Info::CallbackFunction fn = []() {
          (obj.*callback)();
       };
       return fn;
    }
-
-   /**
-    * Set Callback function
-    *
-    *   @param[in]  callback Callback function to be executed on interrupt\n
-    *                        Use nullptr to remove callback.
-    */
-   static void setCallback(CallbackFunction callback) {
-
-      static_assert(Info::irqHandlerInstalled, "PDB not configure for interrupts");
-      if (callback == nullptr) {
-         callback = unhandledCallback;
-      }
-      sCallback = callback;
-   }
-
-   /**
-    * Set Callback function
-    *
-    *   @param[in]  callback Callback function to be executed on error interrupt\n
-    *                        Use nullptr to remove callback.
-    */
-   static void setErrorCallback(CallbackFunction callback) {
-
-      static_assert(Info::irqHandlerInstalled, "PDB not configure for interrupts");
-      if (callback == nullptr) {
-         callback = unhandledCallback;
-      }
-      sErrorCallback = callback;
-   }
-
-
 protected:
    /** Hardware instance pointer */
    static constexpr HardwarePtr<PDB_Type> pdb = Info::baseAddress;
@@ -240,7 +179,7 @@ $(/PDB/classInfo: // No class Info found)
          PdbAction   pdbAction = PdbAction_None
    ) {
 
-      enable();
+      Info::enable();
       pdb->SC = pdbMode|pdbTrigger|pdbAction;
 
       for (unsigned index=0; index<(sizeof(pdb->CH)/sizeof(pdb->CH[0])); index++) {
@@ -366,7 +305,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     */
    static Ticks convertSecondsToTicks(const Seconds &seconds, uint32_t scValue) {
 
-      return seconds*getTickFrequency(scValue);
+      return Ticks(seconds*getTickFrequency(scValue));
    }
 
    /**
@@ -496,7 +435,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     */
    static void setEventAction(
          PdbAction   pdbAction,
-         Ticks       delay = 0
+         Ticks       delay
          ) {
 
       pdb->SC = (pdb->SC&~(PDB_SC_PDBIE_MASK|PDB_SC_DMAEN_MASK))|pdbAction|PDB_SC_PDBIF_MASK;
@@ -542,8 +481,8 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
     */
    static void softwareTrigger() {
 
-      // Set software trigger + do trigger + without clearing interrupt flag
-      pdb->SC = pdb->SC | PDB_SC_TRGSEL_MASK|PDB_SC_SWTRIG_MASK|PDB_SC_PDBIF_MASK;
+      // Set software trigger source + do trigger + without clearing interrupt flag
+      pdb->SC = pdb->SC | PDB_SC_TRGSEL(15)|PDB_SC_SWTRIG_MASK|PDB_SC_PDBIF_MASK;
    }
 
    /**
@@ -705,26 +644,35 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
    }
 
    /**
+    * Clear event interrupt flag
+    */
+   static void clearEventFlag() {
+
+      // Clear flags (w0c)
+      pdb->SC = (pdb->SC&~PDB_SC_PDBIF_MASK);
+   }
+
+   /**
     * Clear error and sequence flags in the PDB channel (ADC trigger)
     *
     * @param[in] adcNum The ADC to clear flags for
     */
-   static void clearErrorFlags(unsigned adcNum) {
+   static void clearChannelFlags(unsigned adcNum) {
 
       // Clear flags
-      pdb->CH[adcNum].S = 0; // w0c bits
+      pdb->CH[adcNum].S = 0xFFFF; // w0c channel flags, w1c error flags
    }
 
    /**
-    * @tparam adcNum The number of the ADC pretrigger (channel) to control
+    * @tparam pdbChannel The number of the PDB channel (usually = ADC instance) to control
     */
-   template<unsigned adcNum>
+   template<PdbChannel pdbChannel>
    class AdcPreTrigger {
 
-      static_assert(adcNum<(sizeof(pdb->CH)/sizeof(pdb->CH[0])), "Illegal ADC number");
+      static_assert(pdbChannel<Info::numChannels, "Illegal ADC number");
 
    public:
-      static constexpr unsigned ADC_NUM = adcNum;
+      static constexpr PdbChannel PDB_CHANNEL = pdbChannel;
 
       /**
        * Configures the pretriggers associated with an ADC.
@@ -742,7 +690,6 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
        * @param delay            Delay in ticks - only needed for PdbPretrigger_Delayed
        */
       static void configure (
-            PdbChannel      pdbChannel,
             PdbPretrigger0  pdbPretrigger,
             Ticks           delay          = 0_ticks) {
 
@@ -765,7 +712,6 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
        * @param delay            Delay in ticks - only needed for PdbPretrigger_Delayed
        */
       static void configure (
-            PdbChannel      pdbChannel,
             PdbPretrigger1  pdbPretrigger,
             Ticks           delay          = 0_ticks) {
 
@@ -788,7 +734,6 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
        * @param delay            Delay - only needed for PdbPretrigger_Delayed
        */
       static void configure (
-            PdbChannel      pdbChannel,
             PdbPretrigger0  pdbPretrigger,
             Seconds         delay          = 0.0_s) {
 
@@ -811,7 +756,6 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
        * @param delay            Delay - only needed for PdbPretrigger_Delayed
        */
       static void configure (
-            PdbChannel      pdbChannel,
             PdbPretrigger1  pdbPretrigger,
             Seconds         delay          = 0.0_s) {
 
@@ -819,27 +763,27 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
       }
 
       /**
-       * Disables the pretriggers associated with an ADC.
+       * Disables the pretriggers associated with channel
        */
       static void disable() {
 
-         PdbBase_T::disableAdcPretriggers(adcNum);
+         PdbBase_T::disableAdcPretriggers(pdbChannel);
       }
 
       /**
-       * Get error and sequence flags for the adcNum
+       * Get error and sequence flags for the channel
        */
       static uint32_t getFlags() {
 
-         return PdbBase_T::getChannelFlags(adcNum);
+         return PdbBase_T::getChannelFlags(pdbChannel);
       }
 
       /**
-       * Clear error and sequence flags for the adcNum
+       * Clear error and sequence flags for the channel
        */
       static void clearFlags() {
 
-         PdbBase_T::clearErrorFlags(adcNum);
+         PdbBase_T::clearErrorFlags(pdbChannel);
       }
 
    };
@@ -1069,9 +1013,6 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
    };
 #endif
 };
-
-template<class Info> typename Info::CallbackFunction PdbBase_T<Info>::sCallback      = PdbBase_T<Info>::unhandledCallback;
-template<class Info> typename Info::CallbackFunction PdbBase_T<Info>::sErrorCallback = PdbBase_T<Info>::unhandledCallback;
 
 $(/PDB/declarations: // No declarations found)
 /**

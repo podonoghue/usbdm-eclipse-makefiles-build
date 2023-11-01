@@ -5,14 +5,12 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated Circuit" >
 
    <constant key="irq_common"               type="Boolean" value="true"          />
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="peripheralUsesInterrupts" type="Boolean" value="true"          />
    <constant key="irq_parameters"           type="String"  value="&quot;ErrorCode errorCode&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;ErrorCode&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;errorCode&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="false"         />
-   <xi:include href="_enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"  />
 
 <!--
     * General substitutions
@@ -394,6 +392,7 @@
       <intOption key="i2c_slt_value" condition="i2c_slth_sslt_present"
          units="ticks"
          enabledBy="/$(_BASENAME)/smbOptionsAvailable"
+         valueFormat="%s"
          typeName="Ticks &amp;"
          description="SCL low timeout value"
          toolTip="SCL low timeout"
@@ -422,7 +421,7 @@
    </category>
 <!-- Graphic here -->
 
-   <setTemplate variables="i2c_f_mult,i2c_f_icr" codeGenCondition="enableGettersAndSetters"
+   <variableTemplate variables="i2c_f_mult,i2c_f_icr" codeGenCondition="enableGettersAndSetters"
       nonDefaultParams="2"
    ><![CDATA[
       \t/**
@@ -436,7 +435,7 @@
       \t      %register = %paramName0 | %paramName1;
       \t}
       \t\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <for  keys="   field                      : name                 : get   : set   : w1clear"
          values=" i2c_s_tcf                  : TxCompleteFlag       : true  : false : false ;
@@ -447,13 +446,13 @@
                   i2c_s_srw                  : SlaveReadWrite       : true  : false : false ;
                   i2c_s_iicif                : InterruptFlag        : true  : false : true  ;
                   i2c_s_rxax                 : ReceiveAckFlag       : true  : false : false ;
-                  
+
                   i2c_flt_stopf              : StopDetectFlag       : false : false : false ;
                   i2c_smb_sltf               : SclLowTimeoutFlag    : false : false : false ;
                   i2c_smb_shtf2              : SclHighTimeoutFlag   : false : false : false ;
                   i2c_smb_sltf,i2c_smb_shtf2 : Timeouts             : false : false : false
       " >
-      <setTemplate codeGenCondition="enableGettersAndSetters" variables="%(field)" condition="%(get)" ><![CDATA[
+      <variableTemplate codeGenCondition="enableGettersAndSetters" variables="%(field)" condition="%(get)" ><![CDATA[
          \t/**
          \t * Get %description
          \t *
@@ -463,8 +462,8 @@
          \t   return %paramType(%register&%mask);
          \t}
          \t\n
-      ]]></setTemplate>
-      <setTemplate codeGenCondition="enableGettersAndSetters" variables="%(field)" condition="%(set)" ><![CDATA[
+      ]]></variableTemplate>
+      <variableTemplate codeGenCondition="enableGettersAndSetters" variables="%(field)" condition="%(set)" ><![CDATA[
          \t/**
          \t * Set %description
          \t *
@@ -474,8 +473,8 @@
          \t   %fieldAssignment
          \t}
          \t\n
-      ]]></setTemplate>
-      <setTemplate codeGenCondition="enableGettersAndSetters" variables="%(field)" condition="%(w1clear)" ><![CDATA[
+      ]]></variableTemplate>
+      <variableTemplate codeGenCondition="enableGettersAndSetters" variables="%(field)" condition="%(w1clear)" ><![CDATA[
          \t/**
          \t * Clear %description
          \t *
@@ -485,7 +484,7 @@
          \t   %register = %register | %mask;
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
    <for keys="field:name"
@@ -517,7 +516,7 @@
       i2c_smb_siicaen:SmbSecondIcAddress;
       i2c_smb_tcksel:SmbTimerSelect;
       i2c_smb_shtf2ie:SmbTimeout" >
-      <setTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -537,7 +536,7 @@
          \t   return %paramType(%register&%mask);
          \t}
          \t\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== Init class =============================== -->
@@ -609,13 +608,13 @@
    ]]>
    </template>
 
-   <initialValueTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
        \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
        \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
    <![CDATA[
@@ -712,96 +711,96 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/baudSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/baudSupport" discardRepeats="true"
       variables="i2c_speed"
    ><![CDATA[
       \t   ///  %description
       \t   unsigned %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
+   <variableTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_a1_ad"
    ><![CDATA[
       \t   /// Address Register 1
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_f_mult,i2c_f_icr"
    ><![CDATA[
       \t   /// Frequency Divider register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_c1_iicie,i2c_c1_mst,i2c_c1_wuen"
    ><![CDATA[
       \t   /// Control Register 1
       \t   uint8_t %registerName = I2cBusRole_Controller;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_d_data"
    ><![CDATA[
       \t   /// Data I/O register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_c2_gcaen,i2c_c2_adext,i2c_c2_sbrc,i2c_c2_rmen,i2c_c2_ad"
    ><![CDATA[
       \t   /// Control Register 2
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_flt_shen,i2c_flt_ssie,i2c_flt_flt"
    ><![CDATA[
       \t   /// Programmable Input Glitch Filter register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_ra_rad"
    ><![CDATA[
       \t   /// Range Address register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_smb_fack,i2c_smb_alerten,i2c_smb_siicaen,i2c_smb_tcksel,i2c_smb_shtf2ie"
    ><![CDATA[
       \t   /// SMBus Control and Status register
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_a2_sad"
    ><![CDATA[
       \t   /// Address Register 2
       \t   uint8_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_slt_value"
    ><![CDATA[
       \t   /// SCL Low Timeout Register
       \t   uint16_t %registerName = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName0 = %symbolicExpression1;
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Configure methods -->
 
@@ -870,7 +869,7 @@
 
 <!--   Constructors -->
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -886,9 +885,9 @@
       \t
       \t      this->%paramName0 = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -904,9 +903,9 @@
       \t
       \t      %registerName = %paramExpression;
       \t   }\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_c2_adext,i2c_slaveaddress,i2c_c2_ad,i2c_a1_ad"
       linePadding="xxx"
       params=",address">
@@ -928,9 +927,9 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_c2_rmen,i2c_rangeaddress,i2c_ra_rad"
       linePadding="xxx"
       nonDefaultParams="2"
@@ -953,9 +952,9 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_smb_siicaen,i2c_a2_sad"
       params=",address"
       linePadding="xxx"
@@ -979,9 +978,9 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_f_mult,i2c_f_icr"
       linePadding="xxx"
       nonDefaultParams="2"
@@ -1003,9 +1002,9 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
-   <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/baudSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/baudSupport" discardRepeats="true"
       variables="i2c_f_mult, i2c_speed"
       linePadding="xxx"
    >
@@ -1026,7 +1025,7 @@
       \t   }
       \t\n
    ]]>
-   </setTemplate>
+   </variableTemplate>
 
    <for keys="r"
       values="
@@ -1042,7 +1041,7 @@
             i2c_smb_tcksel;
             i2c_smb_shtf2ie
             " >
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -1061,10 +1060,10 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
-      <setTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
          variables="i2c_slt_value"
          params="sclLowTime"
          linePadding="xxx" >
@@ -1084,12 +1083,12 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
 
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate codeGenCondition="enablePeripheralSupport"
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -1124,7 +1123,7 @@
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};
       \t\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**

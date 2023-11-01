@@ -4,7 +4,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
    <aliasOption key="/DMA0/NumChannels" name="NumChannels" />
 
@@ -82,7 +82,7 @@
    <choiceOption key="dma_chcfg14" derivedFrom="dma_chcfg0"/>
    <choiceOption key="dma_chcfg15" derivedFrom="dma_chcfg0"/>
 
-   <xi:include href="_clockOption.xml"/>
+   <xi:include href="clockOption.xml"/>
 
    <template><![CDATA[
       \t// Number of DMA channels implemented

@@ -15,7 +15,7 @@
    <constant key="TPM_max"        value=" 75MHz,    16MHz,   75MHz"   type="Integer"    hidden="false"/>
    <constant key="QSPI_max"       value="100MHz,     4MHz,  100MHz"   type="Integer"    hidden="false"/>
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
    <constant key="llwu_device_list"
       description="LLWU Wakeup sources"
@@ -27,7 +27,7 @@
    <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) does not share XTAL/EXTAL pins -->
    <constant key="rtc_independent"  type="Boolean" value="true" />
 
-   <xi:include href="_simCommon.xml"/>
+   <xi:include href="simCommon.xml"/>
 
    <intOption key="system_usb_clkin_clock"
       hidden="true"
@@ -728,7 +728,7 @@
       \t}\n\n
    ]]></template>
 
-   <xi:include href="_sim_commonTemplates.xml" />
+   <xi:include href="sim_commonTemplates.xml" />
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="numberOfClockSettings">
@@ -748,6 +748,6 @@
       <param type="long" value="25MHz"  />     <!-- HSRUN Flash       -->
    </validate>
 
-   <xi:include href="_simFiles-MK.xml"/>
+   <xi:include href="simFiles-MK.xml"/>
 
 </peripheralPage>

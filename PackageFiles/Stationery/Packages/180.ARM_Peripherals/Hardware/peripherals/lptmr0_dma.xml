@@ -4,11 +4,11 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Power Timer">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
    
    <aliasOption key="/PCC/pcc_lptmr$(_instance)" locked="false" />
 
-   <xi:include href="_mapPinsOption.xml"/>
+   <xi:include href="mapPinsOption.xml"/>
 
    <intOption key="minimumResolution" 
       description="Minimum resolution for time interval setting"
@@ -82,12 +82,12 @@
       \tstatic constexpr uint32_t cmr = $(lptmr_cmr);\n\n
    ]]></template>
    
-   <initialValueTemplate 
+   <variableTemplate 
       variables="lptmr_psr_pcs,lptmr_psr_prescaler"     
    ><![CDATA[
       \t//! Default PSR value
       \tstatic constexpr uint32_t psr = %initExpression\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
    
    <binaryOption key="lptmr_csr_tms" description="Timer Mode Select"
       toolTip="Configures the mode of the LPTMR">
@@ -154,7 +154,7 @@
   
    <stringOption key="irq_pattern"        locked="true" value="^.*%b%i.*$" hidden="true" />
    <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irqHandler" hidden="true" />
-   <xi:include href="_irqOptionSubstituted.xml"/>
+   <xi:include href="irqOptionSubstituted.xml"/>
 
    <!-- validate
       class="net.sourceforge.usbdm.deviceEditor.validators.LptmrValidate">
@@ -256,7 +256,7 @@
       \t#define LPTMR$(_instance)_HANDLER() template<> void $(_Class)::irqHandler()\n\n
    ]]></template>
       
-   <xi:include href="_clockOption.xml"/>
+   <xi:include href="clockOption.xml"/>
 
    <signals/>
    

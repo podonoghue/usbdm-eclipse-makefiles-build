@@ -712,6 +712,56 @@ public:
       static constexpr void check() {}
    };
 
+#define CreatePinChecker(periph)                                                                                                                        \
+   template<PinIndex pinIndex> class CheckPinExistsAndIsMapped {                                                                                        \
+      /* Tests are chained so only a single assertion can fail so as to reduce noise */                                                                 \
+                                                                                                                                                        \
+      /* Function is not currently mapped to a pin */                                                                                                   \
+      static constexpr bool check1 = (pinIndex != PinIndex::UNMAPPED_PCR);                                                                              \
+      /* Peripheral signal does not exit */                                                                                                             \
+      static constexpr bool check2 = !check1 || (pinIndex != PinIndex::INVALID_PCR);                                                                    \
+      /* Peripheral signal mapped directly to pin - no PCR (not an error) */                                                                            \
+      static constexpr bool check3 = !check1 || !check2 || (pinIndex != PinIndex::FIXED_NO_PCR);                                                        \
+      /* Illegal value */                                                                                                                               \
+      static constexpr bool check4 = !check1 || !check2 || !check3 || ((pinIndex>=PinIndex::MIN_PIN_INDEX) && (pinIndex<PinIndex::MAX_PIN_INDEX));      \
+                                                                                                                                                        \
+      static_assert(check1, periph " signal is not mapped to a pin - Modify Configure.usbdm");                                                          \
+      static_assert(check2, periph " signal doesn't exist in this device/package - Check Configure.usbdm for available signals");                       \
+      static_assert(check4, periph " illegal pin index - should be in range [PinIndex::MIN_PIN_INDEX..PinIndex::MAX_PIN_INDEX)");                       \
+                                                                                                                                                        \
+   public:                                                                                                                                              \
+      /** Dummy function to allow convenient in-line checking */                                                                                        \
+      static constexpr void check() {}                                                                                                                  \
+   };
+
+#define CreatePeripheralPinChecker(periph)                                                                                                              \
+   template<class Inf, int signalNum> class CheckPinExistsAndIsMapped {                                                                                \
+                                                                                                                                                        \
+      /* Check index is valid for peripheral INFO table */                                                                                              \
+      static_assert(signalNum<Inf::numSignals, periph " illegal signal index");                                                                        \
+                                                                                                                                                        \
+      static constexpr PinIndex pinIndex = Inf::info[signalNum].pinIndex;                                                                              \
+                                                                                                                                                        \
+      /* Tests are chained so only a single assertion can fail so as to reduce noise */                                                                 \
+                                                                                                                                                        \
+      /* Function is not currently mapped to a pin */                                                                                                   \
+      static constexpr bool check1 = (pinIndex != PinIndex::UNMAPPED_PCR);                                                                              \
+      /* Peripheral signal does not exit */                                                                                                             \
+      static constexpr bool check2 = !check1 || (pinIndex != PinIndex::INVALID_PCR);                                                                    \
+      /* Peripheral signal mapped directly to pin - no PCR (not an error) */                                                                            \
+      static constexpr bool check3 = !check1 || !check2 || (pinIndex != PinIndex::FIXED_NO_PCR);                                                        \
+      /* Illegal value */                                                                                                                               \
+      static constexpr bool check4 = !check1 || !check2 || !check3 || ((pinIndex>=PinIndex::MIN_PIN_INDEX) && (pinIndex<PinIndex::MAX_PIN_INDEX));      \
+                                                                                                                                                        \
+      static_assert(check1, periph " signal is not mapped to a pin - Modify Configure.usbdm");                                                          \
+      static_assert(check2, periph " signal doesn't exist in this device/package - Check Configure.usbdm for available signals");                       \
+      static_assert(check4, periph " illegal pin index - should be in range [PinIndex::MIN_PIN_INDEX..PinIndex::MAX_PIN_INDEX)");                       \
+                                                                                                                                                        \
+   public:                                                                                                                                              \
+      /** Dummy function to allow convenient in-line checking */                                                                                        \
+      static constexpr void check() {}                                                                                                                  \
+   };
+
    /**
     * Class to static check signal mapping is valid for a peripheral
     * Conditions are chained so only a single assert is reported
@@ -723,7 +773,7 @@ public:
 
       static constexpr PinIndex pinIndex = Info::info[signalNum].pinIndex;
 
-      // Illegal index for table
+      /* Illegal index for table */
       static_assert(signalNum<Info::numSignals, "Illegal signal index for this peripheral");
 
    public:

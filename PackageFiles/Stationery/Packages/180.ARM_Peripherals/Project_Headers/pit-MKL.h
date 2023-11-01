@@ -41,7 +41,7 @@ enum DmaChannelNum : unsigned;
  * @return  PIT channel number calculated from channel+offset
  */
 constexpr PitChannelNum inline operator+(PitChannelNum pitChannelNum, unsigned offset) {
-   return (PitChannelNum)((unsigned)pitChannelNum + offset);
+   return PitChannelNum(unsigned(pitChannelNum) + offset);
 }
 
 /**
@@ -53,7 +53,7 @@ constexpr PitChannelNum inline operator+(PitChannelNum pitChannelNum, unsigned o
  * @return  PIT channel number calculated from channel+offset
  */
 constexpr PitChannelNum inline operator+(PitChannelNum pitChannelNum, int offset) {
-   return pitChannelNum + (unsigned)offset;
+   return PitChannelNum(unsigned(pitChannelNum) + unsigned(offset));
 }
 
 /**

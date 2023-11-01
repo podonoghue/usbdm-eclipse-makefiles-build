@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKL27Z644
 -->
       <peripheral>
@@ -916,7 +916,7 @@ Controls the clock gate to the I2C0 module</description>
 Controls the clock gate to the I2C1 module</description> <bitOffset>7</bitOffset> </field>
                   <field derivedFrom="I2C0" > <name>UART2</name> <description>UART2 Clock Gate Control
 Controls the clock gate to the UART2 module</description> <bitOffset>12</bitOffset> </field>
-                  <field derivedFrom="I2C0" > <name>USBOTG</name> <description>USB Clock Gate Control
+                  <field derivedFrom="I2C0" > <name>USB0</name> <description>USB Clock Gate Control
 This bit controls the clock gate to the USB module</description> <bitOffset>18</bitOffset> </field>
                   <field derivedFrom="I2C0" > <name>CMP0</name> <description>Comparator Clock Gate Control
 Controls the clock gate to the comparator module</description> <bitOffset>19</bitOffset> </field>
@@ -935,7 +935,7 @@ Controls the clock gate to the SPI1 module</description> <bitOffset>23</bitOffse
                <resetValue>0x182</resetValue>
                <fields>
                   <field>
-                     <name>LPTMR</name>
+                     <name>LPTMR0</name>
                      <description>Low Power Timer Access Control
 Controls software access to the Low Power Timer module</description>
                      <bitOffset>0</bitOffset>
@@ -1016,7 +1016,7 @@ clock gated, but entry into low power modes is blocked</description>
                   </field>
                   <field derivedFrom="FTF" > <name>DMAMUX0</name> <description>DMA Mux Clock Gate Control
 Controls the clock gate to the DMA Mux module</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="FTF" > <name>CRC</name> <description>CRC Clock Gate Control
+                  <field derivedFrom="FTF" > <name>CRC0</name> <description>CRC0 Clock Gate Control
 This bit controls the clock gate to the CRC module</description> <bitOffset>18</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>PIT</name> <description>PIT Clock Gate Control
 This bit controls the clock gate to the PIT module</description> <bitOffset>23</bitOffset> </field>
@@ -1056,7 +1056,7 @@ Controls software access and interrupts to the RTC module</description>
                <resetValue>0x100</resetValue>
                <fields>
                   <field>
-                     <name>DMA</name>
+                     <name>DMA0</name>
                      <description>DMA Clock Gate Control
 Controls the clock gate to the DMA module</description>
                      <bitOffset>8</bitOffset>

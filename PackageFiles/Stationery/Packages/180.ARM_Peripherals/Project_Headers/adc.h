@@ -72,22 +72,7 @@ protected:
    }
 
    /** Class to static check channel exists and is mapped to an input pin */
-   template<class Info, int channel> class CheckInputPin {
-      // Tests are chained so only a single assertion can fail so as to reduce noise
-
-      // Out of bounds value for function index
-      static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
-      // Function is not currently mapped to a pin
-      static constexpr bool Test2 = !Test1 || (Info::info[channel].pinIndex != PinIndex::UNMAPPED_PCR);
-      // Non-existent function and catch-all. (should be INVALID_PCR)
-      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[channel].pinIndex >= PinIndex::MIN_PIN_INDEX);
-      static_assert(Test1, "Non-existent ADC channel - Check Configure.usbdm for available inputs");
-      static_assert(Test2, "ADC channel is not mapped to a pin - Modify Configure.usbdm");
-      static_assert(Test3, "ADC channel doesn't exist in this device/package - Check Configure.usbdm for available channels");
-   public:
-      /** Dummy function to allow convenient in-line checking */
-      static constexpr void check() {}
-   };
+   CreatePeripheralPinChecker("ADC");
 
    /**
     * Constructor
@@ -483,7 +468,7 @@ public:
 
 $(/ADC/classInfo: // No class Info found)
 public:
-
+#if $(/ADC/irqHandlingMethod:false) // /ADC/irqHandlingMethod
    constexpr AdcBase_T() : Adc(Info::baseAddress) {};
 
    /** Allow convenient access to associate AdcInfo */
@@ -563,7 +548,7 @@ public:
       };
       return fn;
    }
-
+#endif
 
 
 $(/ADC/publicMethods: // No /ADC/publicMethods found)
@@ -593,7 +578,7 @@ $(/ADC/InitMethod: // /ADC/InitMethod not found)
          AdcClockRange   adcClockRange   = AdcClockRange_High,
          AdcAsyncClock   adcAsyncClock   = AdcAsyncClock_Disabled
    ) {
-      enable();
+      Info::enable();
       adc->CFG1 = adcResolution|calculateClockDivider(adcClockSource, adcClockRange, adcPower)|adcPower|(adcSample&ADC_CFG1_ADLSMP_MASK);
       adc->CFG2 = adcMuxsel|adcClockRange|adcAsyncClock|(adcSample&ADC_CFG2_ADLSTS_MASK);
    }
@@ -1095,7 +1080,7 @@ public:
       Channel(const Channel&) = delete;
       Channel(Channel&&) = delete;
 
-      CheckInputPin<Info, channel&ADC_SC1_ADCH_MASK> check;
+      CheckPinExistsAndIsMapped<Info, channel&ADC_SC1_ADCH_MASK> check;
 
    public:
       constexpr Channel() : AdcChannel(AdcInfo::baseAddress, channel) {}
@@ -1269,8 +1254,8 @@ public:
       DiffChannel(const DiffChannel&) = delete;
       DiffChannel(DiffChannel&&) = delete;
 
-      CheckInputPin<typename Info::InfoDP, channel&ADC_SC1_ADCH_MASK> checkPos;
-      CheckInputPin<typename Info::InfoDM, channel&ADC_SC1_ADCH_MASK> checkNeg;
+      CheckPinExistsAndIsMapped<typename Info::InfoDP, channel&ADC_SC1_ADCH_MASK> checkPos;
+      CheckPinExistsAndIsMapped<typename Info::InfoDM, channel&ADC_SC1_ADCH_MASK> checkNeg;
 
    public:
       constexpr DiffChannel() : Channel<channel|ADC_SC1_DIFF_MASK>() {}

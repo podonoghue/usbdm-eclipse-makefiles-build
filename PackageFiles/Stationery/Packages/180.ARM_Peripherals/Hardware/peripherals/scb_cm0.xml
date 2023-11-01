@@ -4,9 +4,9 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Control Block">
 
-   <xi:include href="_default_instance.xml"/>
+   <xi:include href="default_instance.xml"/>
 
-   <xi:include href="_mapPinsOption.xml"/>
+   <xi:include href="mapPinsOption.xml"/>
 
    <binaryOption key="scb_icsr_nmipendset" condition="scb_icsr_nmipendset_present"
       typeName="ScbIcsrNmipendset"
@@ -156,7 +156,7 @@
       scb_dfsr_dwttrap:DfsrDwttrap;
       scb_dfsr_bkpt:DfsrBkpt;
       scb_dfsr_halted:DfsrHalted">
-      <setTemplate variables="%(field)"
+      <variableTemplate variables="%(field)"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -166,7 +166,7 @@
          \tstatic void configure%(name)(%params) {
          \t   %fieldAssignment
          \t}\n\n
-      ]]></setTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!--   ========== SCB Init class =============================== -->
@@ -245,61 +245,61 @@
 
 <!--   Member variables -->
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="scb_icsr_nmipendset,scb_icsr_pendsvset,scb_icsr_pendsvclr,scb_icsr_pendstset,scb_icsr_pendstclr"
    ><![CDATA[
       \t   /// Interrupt Control and State Register
       \t   uint32_t icsr = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="scb_vtor_tbloff"
    ><![CDATA[
       \t   /// Vector Table Offset Register
       \t   uint32_t vtor = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="scb_aircr_vectkey,scb_aircr_sysresetreq,scb_aircr_vectclractive"
    ><![CDATA[
       \t   /// Application Interrupt and Reset Control Register
       \t   uint32_t aircr = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="scb_scr_sevonpend,scb_scr_sleepdeep,scb_scr_sleeponexit"
    ><![CDATA[
       \t   /// System Control Register
       \t   uint32_t scr = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="scb_shpr2_pri_11"
    ><![CDATA[
       \t   /// System Handler Priority Register 2
       \t   uint32_t shpr2 = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="scb_shpr3_pri_15,scb_shpr3_pri_14"
    ><![CDATA[
       \t   /// System Handler Priority Register 3
       \t   uint32_t shpr3 = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="scb_shcsr_svcallpended"
    ><![CDATA[
       \t   /// System Handler Control and State Register
       \t   uint32_t shcsr = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
-   <initialValueTemplate namespace="usbdm"
+   <variableTemplate namespace="usbdm"
       variables="scb_dfsr_external,scb_dfsr_vcatch,scb_dfsr_dwttrap,scb_dfsr_bkpt,scb_dfsr_halted"
    ><![CDATA[
       \t   /// Debug Fault Status Register
       \t   uint32_t dfsr = 0;\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
 <!--   Configure methods -->
 
@@ -355,7 +355,7 @@
             scb_dfsr_bkpt;
             scb_dfsr_halted
             ">
-      <setTemplate namespace="usbdm"
+      <variableTemplate namespace="usbdm"
          variables="%(r)"
          linePadding="xxx">
       <![CDATA[
@@ -374,7 +374,7 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 <!--   Constructors -->
@@ -388,7 +388,7 @@
             scb_shpr3_pri_15;
             scb_shpr3_pri_14
             ">
-      <setTemplate namespace="usbdm"
+      <variableTemplate namespace="usbdm"
          variables="%(r)"
          linePadding="xxx">
       <![CDATA[
@@ -407,12 +407,12 @@
          \t   }
          \t\n
       ]]>
-      </setTemplate>
+      </variableTemplate>
    </for>
 
 <!--   Default Initialisation value -->
 
-   <initialValueTemplate
+   <variableTemplate
       separator=","
       terminator=","
       variables="
@@ -442,7 +442,7 @@
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};\n\n
-   ]]></initialValueTemplate>
+   ]]></variableTemplate>
 
    <template namespace="usbdm">
       <![CDATA[

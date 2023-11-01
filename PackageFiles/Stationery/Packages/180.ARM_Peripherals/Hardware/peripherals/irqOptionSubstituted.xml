@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
-<!-- _irqOption.xml -->
+<!-- irqOption.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
@@ -47,8 +47,8 @@
       derivedFrom="/PCR/nvic_irqLevel" >
    </choiceOption>
 
-   <setTemplate variables="irqHandlingMethod" ><![CDATA[
-      \t/* Template_irqOption.xml */
+   <variableTemplate variables="irqHandlingMethod" ><![CDATA[
+      \t/* TemplateirqOption.xml */
 
       \t//! IRQ numbers for hardware
       \tstatic constexpr IRQn_Type irqNums[]  = $(_NAME)_IRQS;
@@ -61,7 +61,7 @@
 
        \t//! Default IRQ level
        \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel.enum[]):NvicPriority_NotInstalled);\n\n
-   ]]></setTemplate>
+   ]]></variableTemplate>
 
    <constant key="enable_interrupts_code"  value="&quot;enableNvicInterrupts();&quot;"  type="String" />
    <constant key="disable_interrupts_code" value="&quot;disableNvicInterrupts();&quot;" type="String" />

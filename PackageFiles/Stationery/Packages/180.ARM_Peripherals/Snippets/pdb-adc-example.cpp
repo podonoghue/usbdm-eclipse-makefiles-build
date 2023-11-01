@@ -47,15 +47,15 @@ static volatile bool     complete=false;
 static void pdbCallback() {
    result[0] = Adc0::getHardwareConversionResult(AdcPretrigger_0);
    result[1] = Adc0::getHardwareConversionResult(AdcPretrigger_1);
-   result[2] = Adc1::getHardwareConversionResult(AdcPretrigger_0);
-   result[3] = Adc1::getHardwareConversionResult(AdcPretrigger_1);
+//   result[2] = Adc1::getHardwareConversionResult(AdcPretrigger_0);
+//   result[3] = Adc1::getHardwareConversionResult(AdcPretrigger_1);
    complete = true;
    Led::toggle();
 }
 
-static void pdbErrorCallback() {
-   __BKPT();
-}
+//static void pdbErrorCallback() {
+//   __BKPT();
+//}
 
 static void configurePdb() {
 
@@ -69,7 +69,7 @@ static void configurePdb() {
 
       PdbMode_Continuous,        // Sequence repeats
 
-      PdbPrescale_Auto_Select,   // Prescale selected automatically from modulo
+      PdbPrescale_Auto_Calculated,   // Prescale selected automatically from modulo
       SEQ_LENGTH ,               // Counter modulo
 
       PdbAction_Interrupt ,      // Event action - Interrupt
@@ -77,7 +77,7 @@ static void configurePdb() {
       pdbCallback,               // Interrupt handler
 
       PdbErrorAction_Interrupt , // Sequence Error Interrupt Enable - Interrupt on error
-      pdbErrorCallback,          // Call-back to use
+//      pdbErrorCallback,          // Call-back to use
 
       NvicPriority_Normal,       // IRQ level for this peripheral - Normal
 
@@ -89,13 +89,13 @@ static void configurePdb() {
       PdbPretrigger1_Delayed ,   // Channel Pretrigger control ADC0.SC1[1] - Pretrigger delayed
       TRIGGER_TIME2,             // Delay
 
-      PdbChannel_1,              // Channel 1 set up
-      PdbPretrigger0_Delayed ,   // Channel Pretrigger control ADC1.SC1[0] - Pretrigger delayed
-      TRIGGER_TIME3,             // Delay
-
-      PdbChannel_1,              // Channel 1 set up
-      PdbPretrigger1_Delayed ,   // Channel Pretrigger control ADC1.SC1[1] - Pretrigger delayed
-      TRIGGER_TIME4,             // Delay
+//      PdbChannel_1,              // Channel 1 set up
+//      PdbPretrigger0_Delayed ,   // Channel Pretrigger control ADC1.SC1[0] - Pretrigger delayed
+//      TRIGGER_TIME3,             // Delay
+//
+//      PdbChannel_1,              // Channel 1 set up
+//      PdbPretrigger1_Delayed ,   // Channel Pretrigger control ADC1.SC1[1] - Pretrigger delayed
+//      TRIGGER_TIME4,             // Delay
    };
 
    ErrorCode rc = Pdb0::configure(pdbInit);
@@ -153,9 +153,9 @@ static void configureAdc() {
    // Connect trigger sources
    static const SimInfo::AdcInit adcTriggerInit {
       SimAdc0TriggerMode_Pdb,
-      SimAdc1TriggerMode_Pdb,
+//      SimAdc1TriggerMode_Pdb,
    };
-   adcTriggerInit.configure();
+   SimInfo::configure(adcTriggerInit);
 
    static const Adc0::Init adc0Init {
       AdcClockSource_Asynch , // ADC Clock Source - Asynchronous clock (ADACK)

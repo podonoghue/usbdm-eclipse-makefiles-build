@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
-<!-- _default_instance.xml -->
+<!-- default_instance.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
@@ -31,7 +31,7 @@
       \tstatic constexpr uint32_t baseAddress = $(_NAME)_BasePtr;
       \t
       \t//! Hardware base pointer
-      \tstatic constexpr HardwarePtr<$(_BASENAME)_Type> $(_basename) = baseAddress;
+      \tstatic constexpr HardwarePtr<$(structName)_Type> $(_basename) = baseAddress;
       \t\n
    ]]></template>
 
