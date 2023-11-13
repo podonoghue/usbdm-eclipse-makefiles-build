@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd" >
-<!-- 
+<!--
       V4.12.1.30  - Fixed MC9S12T64
       V4.10.6.230 - Added MC9S12XF512 - untested
       V4.10.6.210 - Added MC9S12Gxxx - untested
@@ -14,14 +14,14 @@
 
    <sharedInformation>
 
-      <!-- 
-            TCL Scripts 
+      <!--
+            TCL Scripts
       -->
       <tclScript id="HCS12-FTS-flash-scripts">             <xi:include parse="text" href="HCS12/HCS12-FTS-flash-scripts.tcl" />          </tclScript>
       <tclScript id="HCS12-XFTMRK-flash-scripts">          <xi:include parse="text" href="HCS12/HCS12-XFTMRK-flash-scripts.tcl" />       </tclScript>
       <tclScript id="HCS12-FTMRCK-flash-scripts">          <xi:include parse="text" href="HCS12/HCS12-FTMRCK-flash-scripts.tcl" />       </tclScript>
 
-      <!-- 
+      <!--
             Flash Programs
       -->
       <flashProgram id="HCS12-MMCV4-FTS-flash-program">     <xi:include parse="text" href="HCS12/HCS12-MMCV4-FTS-flash-program.s19" />       </flashProgram>
@@ -89,12 +89,12 @@
             FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD
          </securityInfo>
       </securityEntry>
-      
+
       <resetMethods id="hcs12ResetMethods" >
          <resetMethod method="hardware" isDefault="true"  />
          <resetMethod method="software"/>
       </resetMethods>
-      
+
       <eraseMethods id="hcs12EraseMethods" >
          <eraseMethod method="Mass" isDefault="true"  />
          <eraseMethod method="All" />
@@ -104,7 +104,7 @@
 
    <deviceList>
 <!-- ===================================================================================== -->
-<!-- 
+<!--
    HCS12 Defaults
 -->
       <device name="hcs12DefaultDevice" family="HCS12" isDefault="true">
@@ -133,9 +133,9 @@
          <flashProgramRef ref="HCS12-MMCV4-FTS-flash-program" />
          <note>Default HCS12 Device</note>
       </device>
-<!-- 
+<!--
 ===================================================================================
- -->      
+ -->
       <device family="HCS12" name="MC9S12A32">
          <clock type="External" />
          <memory type="ram">
@@ -199,9 +199,9 @@
          <flashProgramRef ref="HCS12-MMCV4-FTS-flash-program" />
          <note>EEPROM re-mapped to 0x1000</note>
       </device>
-<!-- 
+<!--
 ===================================================================================
- -->      
+ -->
       <device family="HCS12" name="MC9S12A128">
          <clock type="External" />
          <memory type="ram">
@@ -269,9 +269,9 @@
          <flashProgramRef ref="HCS12-MMCV4-FTS_2-flash-program" />
          <note>Untested</note>
       </device>
-<!-- 
+<!--
 ===================================================================================
- -->      
+ -->
       <device family="HCS12" name="MC9S12B128">
          <clock type="External" />
          <memory type="ram">
@@ -295,9 +295,9 @@
          <note>Untested</note>
          <note>EEPROM Hidden</note>
       </device>
- <!-- 
+ <!--
 ===================================================================================
- -->      
+ -->
       <device family="HCS12" name="MC9S12C32">
          <clock type="External" />
          <memory type="ram">
@@ -380,9 +380,9 @@
          <sdid value="0x3103" />
          <flashProgramRef ref="HCS12-MMCV4-FTS-flash-program" />
       </device>
-<!-- 
+<!--
 ===================================================================================
- -->      
+ -->
       <device family="HCS12" name="MC9S12D32">
          <clock type="External" />
          <memory type="ram">
@@ -427,9 +427,9 @@
          <note>EEPROM mapped to 0x1000</note>
          <note>Untested</note>
       </device>
-<!-- 
+<!--
 ===================================================================================
- -->      
+ -->
       <device family="HCS12" name="MC9S12DB128">
          <clock type="External" />
          <memory type="ram">
@@ -596,9 +596,9 @@
          <flashProgramRef ref="HCS12-MMCV4-FTS-flash-program" />
          <note>Untested</note>
       </device>
-<!-- 
+<!--
 ===================================================================================
- -->      
+ -->
       <device family="HCS12" name="MC9S12DJ64">
          <clock type="External" />
          <memory type="ram">
@@ -620,9 +620,9 @@
          <flashProgramRef ref="HCS12-MMCV4-FTS-flash-program" />
          <note>Untested</note>
       </device>
-<!-- 
+<!--
 ===================================================================================
- -->      
+ -->
       <device family="HCS12" name="MC9S12DJ128">
          <clock type="External" />
          <memory type="ram">
@@ -908,9 +908,9 @@
          <flashProgramRef ref="HCS12-MMCV4-FTS_2-flash-program" />
          <note>Untested</note>
       </device>
-<!-- 
+<!--
 ===================================================================================
- -->      
+ -->
       <device family="HCS12" name="MC9S12E32">
          <clock type="External" />
          <memory type="ram">
@@ -974,7 +974,7 @@
          <flashProgramRef ref="HCS12-MMCV4-FTS_2-flash-program" />
          <note>Untested</note>
       </device>
-<!-- 
+<!--
 ===================================================================================
 -->
       <device family="HCS12" name="MC9S12G16">
@@ -1161,9 +1161,9 @@
          <flashProgramRef ref="HCS12-GMMC-FTMRG-flash-program" />
          <note>MC9S12GRMV1</note>
       </device>
-      <!-- 
+      <!--
 ==========GA240 definition created by Carl Barnes - Technological Arts===========
--->      
+-->
       <device family="HCS12" name="MC9S12GA240">
          <clock type="External" />
          <memory registerAddress="0x0100" type="eeprom" sectorSize="4" alignment="2">
@@ -1186,9 +1186,9 @@
          </flashScripts>
          <flashProgramRef ref="HCS12-GMMC-FTMRG-flash-program" />
       </device>
-<!-- 
+<!--
 ===================================================================================
- -->      
+ -->
       <device family="HCS12" name="MC9S12GC16">
          <clock type="External" />
          <memory type="ram">
@@ -1268,9 +1268,9 @@
          <sdid value="0x3103" />
          <flashProgramRef ref="HCS12-MMCV4-FTS-flash-program" />
       </device>
-<!-- 
+<!--
 ===================================================================================
--->      
+-->
       <device family="HCS12" name="MC9S12HA32">
          <clock type="External" />
          <memory type="ram">
@@ -1331,8 +1331,8 @@
          </flashScripts>
          <flashProgramRef ref="HCS12-PMMC-FTMRCK-flash-program" />
       </device>
-      
-      
+
+
       <device family="HCS12" name="MC9S12HZ256">
          <clock type="External" />
          <memory type="ram">
@@ -1351,8 +1351,8 @@
          <sdid value="0x1403" />
          <flashProgramRef ref="HCS12-MMCV4-FTS_2-flash-program" />
       </device>
-      
-      
+
+
       <device family="HCS12" name="MC9S12HY32">
          <clock type="External" />
          <memory type="ram">
@@ -1413,9 +1413,9 @@
          </flashScripts>
          <flashProgramRef ref="HCS12-PMMC-FTMRCK-flash-program" />
       </device>
-<!-- 
+<!--
 ===================================================================================
--->      
+-->
       <device family="HCS12" name="MC9S12P32">
          <clock type="External" />
          <memory type="ram">
@@ -1498,9 +1498,9 @@
          </flashScripts>
          <flashProgramRef ref="HCS12-PMMC-FTMRCK-flash-program" />
       </device>
-<!-- 
+<!--
 ===================================================================================
- -->      
+ -->
       <device family="HCS12" name="MC9S12NE64">
          <clock type="External" />
          <memory type="ram">
@@ -1516,9 +1516,9 @@
          <sdid value="0x8201" />
          <flashProgramRef ref="HCS12-MMCV4-FTS-flash-program" />
       </device>
-<!-- 
+<!--
 ===================================================================================
- -->      
+ -->
       <device family="HCS12" name="MC9S12Q32">
          <clock type="External" />
          <memory type="ram">
@@ -1582,9 +1582,9 @@
          <flashProgramRef ref="HCS12-MMCV4-FTS-flash-program" />
          <note>Untested</note>
       </device>
-<!-- 
+<!--
 ===================================================================================
- -->      
+ -->
       <device family="HCS12" name="MC9S12T64">
          <clock type="External" />
          <memory type="ram">
@@ -1601,9 +1601,9 @@
          <sdid value="0x4220" />
          <flashProgramRef ref="HCS12-MMCV4-FTS_T-flash-program" />
       </device>
-<!-- 
+<!--
 ===================================================================================
- -->      
+ -->
       <device family="HCS12" name="MC9S12UF32">
          <clock type="External" />
          <memory type="ram">
@@ -1621,9 +1621,9 @@
          <flashProgramRef ref="HCS12-MMCV4-FTS-flash-program" />
          <note>Untested</note>
       </device>
-<!-- 
+<!--
 ===================================================================================
- -->      
+ -->
       <device family="HCS12" name="MC9S12VR48">
          <clock type="External" />
          <memory registerAddress="0x0100" type="eeprom" sectorSize="4" alignment="2">
@@ -1647,7 +1647,7 @@
          <flashProgramRef ref="HCS12-GMMC-FTMRG-flash-program" />
          <note>MC9S12VRRMV3</note>
       </device>
-      
+
       <device family="HCS12" name="MC9S12VR64">
          <clock type="External" />
          <memory registerAddress="0x0100" type="eeprom" sectorSize="4" alignment="2">
@@ -1671,10 +1671,10 @@
          <flashProgramRef ref="HCS12-GMMC-FTMRG-flash-program" />
          <note>MC9S12VRRMV3</note>
       </device>
-      
-<!-- 
+
+<!--
 ===================================================================================
- -->      
+ -->
       <device family="HCS12" name="MC9S12XA_B_D-linear">
          <clock type="External" />
          <memory type="ram">
@@ -1990,9 +1990,9 @@
          <sdid value="0xC411" />
          <flashProgramRef ref="HCS12-XMMC-XFTXK-flash-program" />
       </device>
-<!-- 
+<!--
 ===================================================================================
- -->      
+ -->
       <device family="HCS12" name="MC9S12XS64">
          <clock type="External" />
          <memory type="ram">
@@ -2113,9 +2113,9 @@
          </flashScripts>
          <flashProgramRef ref="HCS12-XMMC-XFTMRK-flash-program" />
       </device>
-<!-- 
+<!--
 ===================================================================================
--->      
+-->
       <device family="HCS12" name="MC9S12XF512 ">
          <clock type="External" />
          <memory type="ram">
@@ -2183,9 +2183,9 @@
          </flashScripts>
          <flashProgramRef ref="HCS12-XMMC-XFTMRK-flash-program" />
       </device>
-<!-- 
+<!--
 ===================================================================================
--->      
+-->
       <device family="HCS12" name="MM912G634">
          <clock type="External" />
          <memory type="ram">
@@ -2231,7 +2231,7 @@
          <flashProgramRef ref="HCS12-PMMC-FTMRCK-flash-program" />
          <note>Ref MM912_634D1</note>
       </device>
-      
+
       <device family="HCS12" name="MM912I637">
          <clock type="External" />
          <memory type="ram">

@@ -30,8 +30,8 @@ static volatile bool complete;
  *
  * Sets flag to indicate sequence complete.
  */
-static void dmaCallback(DmaChannelNum channel) {
-   Dma0::clearInterruptRequest(channel);
+static void dmaCallback(DmaChannelNum dmaChannelNum, uint32_t) {
+   Dma0::clearInterruptRequest(dmaChannelNum);
    complete = true;
 }
 
@@ -91,34 +91,34 @@ static ErrorCode dmaTransfer(uint32_t *source, uint32_t *destination, int size) 
     *
     * Structure to define the DMA transfer
     */
-   static const DmaTcd tcd (
-      /* Source address                 */ (uint32_t)(source),      // Source array
-      /* Source offset                  */ sizeof(*source),         // Source address advances source element size for each transfer
-      /* Source size                    */ dmaSize(*source),        // 32-bit read from source address
-      /* Source modulo                  */ DmaModulo_Disabled,      // Disabled
-      /* Last source adjustment         */ -size,                   // Reset Source address to start of array on completion
+   static DmaTcd tcd (
+      { // DmaInfo source
+      /* Source address         */ uint32_t(source),               // Source array
+      /* Source offset          */ int32_t(sizeof(*source)),       // Source address advances source element size for each transfer
+      /* Source size            */ dmaSize(*source),               // 32-bit read from source address
+      /* Last source adjustment */ -size,                          // Reset Source address to start of array on completion
+      /* Source modulo          */ DmaModulo_Disabled,             // Disabled
+      },
+      { // DmaInfo destination
+      /* Destination address    */ uint32_t(destination),          // Start of array for result
+      /* Destination offset     */ int32_t(sizeof(*destination)),  // Destination address advances destination element size for each transfer
+      /* Destination size       */ dmaSize(*destination),          // 32-bit write to destination address
+      /* Last dest. adjustment  */ -size,                          // Reset destination address to start of array on completion
+      /* Destination modulo     */ DmaModulo_Disabled,             // Disabled
+      },
 
-      /* Destination address            */ (uint32_t)(destination), // Start of array for result
-      /* Destination offset             */ sizeof(*destination),    // Destination address advances destination element size for each transfer
-      /* Destination size               */ dmaSize(*destination),   // 32-bit write to destination address
-      /* Destination modulo             */ DmaModulo_Disabled,      // Disabled
-      /* Last destination adjustment    */ -size,                   // Reset destination address to start of array on completion
+      /* Minor loop byte count  */ dmaNBytes(size),         // Total transfer in one minor-loop
+      /* Major loop count       */ dmaCiter(1),             // Single (1) software transfer
 
-      /* Minor loop byte count          */ dmaNBytes(size),         // Total transfer in one minor-loop
-      /* Major loop count               */ dmaCiter(1),             // Single (1) software transfer
-
-      /* Start channel                  */ true,                    // Software start
-      /* Disable Req. on major complete */ false,                   // Don't clear hardware request when major loop completed
-      /* Interrupt on major complete    */ true,                    // Generate interrupt on completion of major-loop
-      /* Interrupt on half complete     */ false,                   // No interrupt
-      /* Bandwidth (speed) Control      */ DmaSpeed_NoStalls        // Full speed
+      { // DmaTcdCsr control
+      DmaStopOnComplete_Enabled ,  // Clear request on complete - ERQ bit is cleared
+      DmaIntMajor_Enabled ,        // Interrupt when major counter completes
+      DmaStart_Immediate,          // Channel Start immediate (rather than by external request)
+      }
    );
 
    // Sequence not complete yet
    complete = false;
-
-   // Enable DMAC with default settings
-   Dma0::configure();
 
    // Set callback (Interrupts are enabled in TCD)
    Dma0::setCallback(dmaChannelNum, dmaCallback);
@@ -130,39 +130,61 @@ static ErrorCode dmaTransfer(uint32_t *source, uint32_t *destination, int size) 
    while (!complete) {
       __asm__("nop");
    }
+
+   Dma0::freeChannel(dmaChannelNum);
+
    return E_NO_ERROR;
 }
 
-constexpr int DataSize = 3*((1<<10)/sizeof(uint32_t));  // 3KiB
+constexpr int DataSize = 2*((1<<10)/sizeof(uint32_t));  // 3KiB
 uint32_t source[DataSize];
 uint32_t destination[DataSize];
 
-int main() {
-   console.writeln("Starting");
+#define PRINT_BUFFER
+
+void doTestTransfer() {
 
    for(uint32_t *p=source; p<(source+DataSize); p++) {
       *p = (uint32_t)rand();
    }
+   IoFormat format;
+
+#ifdef PRINT_BUFFER
+   console.getFormat(format);
+   format.setIntegerFormat(8, Padding_LeadingZeroes, Radix_16);
+   console.setFormat(format);
    console.writeln("Source buffer contents");
    console.writeArray(source, sizeof(source)/sizeof(source[0]));
+#endif
 
-   console.writeln("Starting Transfer");
+   console.writeln("\nStarting Transfer");
    ErrorCode rc = dmaTransfer(source, destination, sizeof(source));
    console.writeln("Completed Transfer rc = ", getErrorMessage(rc));
 
+#ifdef PRINT_BUFFER
    if (rc == E_NO_ERROR) {
       console.writeln("Destination buffer contents");
       console.writeArray(destination, sizeof(destination)/sizeof(destination[0]));
 
       if (memcmp(source,destination,sizeof(source)) == 0) {
-         console.writeln("Contents verify passed");
+         console.writeln("\nContents verify passed");
       }
       else {
-         console.writeln("Contents verify failed");
+         console.writeln("\nContents verify failed");
       }
    }
-   for(;;) {
-      __asm__("nop");
+#endif
+}
+
+int main() {
+   console.writeln("Starting");
+
+   // Enable DMAC with default settings
+   Dma0::configure();
+
+   while(true) {
+      doTestTransfer();
    }
+
    return 0;
 }

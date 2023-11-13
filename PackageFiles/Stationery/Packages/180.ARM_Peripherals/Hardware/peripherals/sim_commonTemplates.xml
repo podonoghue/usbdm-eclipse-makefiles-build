@@ -954,7 +954,7 @@
       \tstatic constexpr ClockSourceInit DefaultSopt2Values[] = {\n
    ]]></template>
 
-   <for keys="n" dim="/SIM/numberOfClockSettings" >
+   <for keys="n" dim="=/SIM/numberOfClockSettings" >
       <template  codeGenCondition="/MCG/enableClockConfiguration[%(n)]"
       ><![CDATA[
          \t{ // $(/MCG/ClockConfig[%(n)]) ($(/MCG/mcgClockMode[%(n)].enum[]))\n

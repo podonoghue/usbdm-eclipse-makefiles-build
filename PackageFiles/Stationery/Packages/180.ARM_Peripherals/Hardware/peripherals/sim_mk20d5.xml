@@ -19,6 +19,8 @@
    <constant key="LPUART_max"     value=" 48MHz,     4MHz"   type="Long" />
    <constant key="TPM_max"        value=" 48MHz,     4MHz"   type="Long" />
 
+   <constant key="/adc_alt_clock_is_busDiv2" value="true" type="Boolean" />
+
    <!-- LLWU wakeup devices -->
    <constant key="llwu_device_list"
       description="LLWU Wakeup sources"
@@ -29,7 +31,7 @@
    <constant key="clock_divider_type" type="Long" value="1" />
 
    <!-- Indicates the number of PIT channels -->
-   <constant key="/PIT_NumChannels" type="Long" value="2" />
+   <constant key="/PIT_NumChannels" type="Long" value="4" />
 
    <!-- Indicates the number of DMA channels -->
    <constant key="/DMA0_NumChannels" type="Long" value="4" />
@@ -469,7 +471,7 @@
       </binaryOption >
    </category>
 
-   <for keys="n" dim="numberOfClockSettings" >
+   <for keys="n" dim="=numberOfClockSettings" >
       <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" locked="true" >
 
          <aliasOption key="/MCG/enableClockConfiguration[%(n)]" locked="false" />
@@ -955,7 +957,7 @@
    <!-- ************* Common ****************** -->
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="numberOfClockSettings">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="=numberOfClockSettings">
       <param type="long" value="50MHz"  />     <!-- RUN Core          -->
       <param type="long" value="50MHz"  />     <!-- RUN Bus           -->
       <param type="long" value="50MHz"  />     <!-- RUN FlexBus       -->

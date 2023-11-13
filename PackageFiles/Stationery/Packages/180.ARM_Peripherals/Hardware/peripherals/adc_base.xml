@@ -94,28 +94,6 @@
 
 <!-- ==========  ADC clock sources =============================== -->
 
-   <title description="Clocking" />
-
-   <choiceOption key="adcClockConfig"
-      enabledBy="enablePeripheralSupport"
-      target="input_bus_clock"
-      description="Clock configuration"
-      toolTip="Selects the clock configuration used for calculations if bus clock is chosen as clock source" >
-      <choice value="0" name="@/MCG/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
-      <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
-      <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
-      <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
-   </choiceOption>
-
-   <intOption key="input_bus_clock"
-      enabledBy="enablePeripheralSupport"
-      locked="true"
-      derived="true"
-      units="Hz"
-      description="Frequency of ADC input Clock"
-      toolTip="Based on current clock configuration"
-      />
-
    <intOption key="adcInternalClock"
       enabledBy="enablePeripheralSupport"
       derived="true"
@@ -130,21 +108,13 @@
       enabledBy="enablePeripheralSupport"
       description="ADC Clock Source"
       typeName="AdcClockSource"
-      target="adcInputClock"
       toolTip="Clock source for the ADC module" >
-      <choice value="0" name="Bus clock"                   ref="(input_bus_clock)"              enum="Bus"       code="SystemBusClock"            />
-      <choice value="1" name="Bus clock/2"                 ref="(input_bus_clock)/2"            enum="Busdiv2"   code="SystemBusClock/2"          condition="!/SIM/system_irc48m_clock[]" />
-      <choice value="1" name="Irc48M clock"                ref="/SIM/system_irc48m_clock[0]"    enum="Irc48mClk" code="SimInfo::irc48mClock"      condition="/SIM/system_irc48m_clock[]"  />
-      <choice value="2" name="Alternate clock (OSCERCLK)"  ref="/OSC0/oscer_clock"              enum="OscerClk"  code="Osc0Info::getOscerClock()" />
-      <choice value="3" name="Asynchronous clock (ADACK)"  ref="/ADC0/adcInternalClock"         enum="Asynch"    code="$(adcInternalClock)"       isDefault="true" />
+      <choice value="0" name="Bus clock"                  enum="Bus"       code="SystemBusClock"            />
+      <choice value="1" name="Bus clock/2"                enum="Busdiv2"   code="SystemBusClock/2"          condition="!/SIM/system_irc48m_clock[]" />
+      <choice value="1" name="Irc48M clock"               enum="Irc48mClk" code="SimInfo::irc48mClock"      condition="/SIM/system_irc48m_clock[]"  />
+      <choice value="2" name="Alternate clock (OSCERCLK)" enum="OscerClk"  code="Osc0Info::getOscerClock()" />
+      <choice value="3" name="Asynchronous clock (ADACK)" enum="Asynch"    code="$(adcInternalClock)"       isDefault="true" />
    </choiceOption>
-
-   <intOption key="adcInputClock"
-      enabledBy="enablePeripheralSupport"
-      locked="true"
-      derived="true"
-      units="Hz"
-      description="Frequency of ADC Clock" />
 
    <clockCodeTemplate variable="adc_cfg1_adiclk" codeGenCondition="enablePeripheralSupport"
       returnFormat="%s"
@@ -166,24 +136,15 @@
    ]]></clockCodeTemplate>
 
    <choiceOption key="adc_cfg1_adiv"
-      enabledBy="adc_cfg1_adiclk!=3"
+      hidden="true"
       description="Clock Divide Select"
       typeName="AdcClockDivider"
-      target="adcClockFrequency"
       toolTip="Selects the divide ratio used by the ADC to generate the internal clock ADCK">
-      <choice value="0" name="Divide by 1" ref="adcInputClock"     enum="1" isDefault="true" />
-      <choice value="1" name="Divide by 2" ref="(adcInputClock)/2" enum="2" />
-      <choice value="2" name="Divide by 4" ref="(adcInputClock)/4" enum="4" />
-      <choice value="3" name="Divide by 8" ref="(adcInputClock)/8" enum="8" />
+      <choice value="0" name="Divide by 1" enum="1" isDefault="true" />
+      <choice value="1" name="Divide by 2" enum="2" />
+      <choice value="2" name="Divide by 4" enum="4" />
+      <choice value="3" name="Divide by 8" enum="8" />
    </choiceOption>
-
-   <intOption key="adcClockFrequency"
-      enabledBy="enablePeripheralSupport"
-      locked="true"
-      description="Frequency of ADC clock"
-      toolTip="Determined from clock source and prescaler"
-      derived="true"
-      units="Hz"/>
 
 <!--  ========== ADC =============================== -->
 
@@ -381,14 +342,14 @@
    </choiceOption>
 
    <intOption key="adc_cv1" description="ADC CV low value"
-      enabledBy="enablePeripheralSupport"
+      enabledBy="adc_sc2_compare>=1"
       valueFormat="%s"
       toolTip="CV Low threshold value\n
          This value will be used for CV1 or CV2 as needed"
       derived="true" />
 
    <intOption key="adc_cv2" description="ADC CV high value"
-      enabledBy="enablePeripheralSupport"
+      enabledBy="adc_sc2_compare>=3"
       valueFormat="%s"
       toolTip="CV High threshold value\n
          This value will be used for CV1 or CV2 as needed"
@@ -595,7 +556,6 @@
    <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="
          adc_cfg1_adiclk,
-         adc_cfg1_adiv,
          adc_cfg1_mode,
          adc_cfg1_adlpc"
    ><![CDATA[
@@ -646,6 +606,67 @@
 
    <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
       \t/**
+      \t * Calculate ADC clock divider (ADC_CFG1_ADIV) and confirm clock source (ADC_CFG1_ADICLK)
+      \t *
+      \t * @param cfg1 ADC CFG1 register value
+      \t * @param cfg2 ADC CFG2 register value
+      \t *
+      \t * @return modified cfg1 value (ADC_CFG1_ADIV|ADC_CFG1_ADICLK fields may be changed)
+      \t */
+      \tstatic unsigned calculateClockDivider(uint8_t cfg1, uint8_t cfg2) {
+      \t
+      \t   AdcClockSource adcClockSource = AdcClockSource(ADC_CFG1_ADICLK_MASK&cfg1);
+      \t   AdcClockRange  adcClockRange  = AdcClockRange(ADC_CFG2_ADHSC(cfg2));
+      \t   AdcPower       adcPower       = AdcPower(ADC_CFG1_ADLPC(cfg1));
+      \t
+      \t   // Clear existing fields
+      \t   cfg1 &= ~(ADC_CFG1_ADICLK_MASK|ADC_CFG1_ADIV_MASK);
+      \t
+      \t   if (adcClockSource == AdcClockSource_Asynch) {
+      \t      // Internal clock is always OK with /1
+      \t      return cfg1|AdcClockSource_Asynch|AdcClockDivider_1;
+      \t   }
+      \t   static constexpr unsigned MinClock =  2000000;
+      \t   unsigned maxClock = 0;
+      \t   switch(adcPower|adcClockRange) {
+      \t      case AdcPower_Low|AdcClockRange_Normal :
+      \t      maxClock =  4000000;
+      \t      break;
+      \t      case AdcPower_Low|AdcClockRange_High :
+      \t      maxClock =  6000000; // Guess
+      \t      break;
+      \t      case AdcPower_Normal|AdcClockRange_Normal :
+      \t      maxClock =  8000000;
+      \t      break;
+      \t      case AdcPower_Normal|AdcClockRange_High :
+      \t      maxClock = 12000000;
+      \t      break;
+      \t   }
+      \t   unsigned adiv;
+      \t   for(;;) {
+      \t      unsigned clockFrequency = Info::getAdcClock(adcClockSource);
+      \t      for (adiv=0; adiv<=3; adiv++) {
+      \t         if ((clockFrequency <= maxClock) && (clockFrequency >= MinClock)) {
+      \t            break;
+      \t         }
+      \t         clockFrequency /= 2;
+      \t      }
+      #if $(/adc_alt_clock_is_busDiv2:false)
+      \t      if ((adiv>3) && (adcClockSource == AdcClockSource_Bus)) {
+      \t         // Automatically switch from  AdcClockSource_Bus -> AdcClockSource_Busdiv2
+      \t         adcClockSource = AdcClockSource_Busdiv2;
+      \t         continue;
+      \t      }
+      #endif
+      \t      break;
+      \t   }
+      \t   usbdm_assert(adiv<4, "Unable to find suitable ADC clock");
+      \t   return cfg1|adcClockSource|ADC_CFG1_ADIV(adiv);
+      \t}
+      \t\n
+   ]]></template>
+   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+      \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
       \t */
@@ -679,8 +700,10 @@
    ]]></template>
 
    <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
-      \t   // ..........  Regs to init .......... ;
-      \t   adc->CFG1    = init.cfg1;
+      \t   // Calculate clock dividers and update cfg1
+      \t   uint8_t cfg1 = calculateClockDivider(init.cfg1, init.cfg2);
+      \t
+      \t   adc->CFG1    = cfg1;
       \t   adc->CFG2    = init.cfg2;
       \t   adc->SC2     = init.sc2;
       \t   adc->SC3     = init.sc3;
@@ -732,7 +755,6 @@
 
    <for keys="r" values="
          adc_cfg1_adiclk;
-         adc_cfg1_adiv;
          adc_cfg1_mode;
          adc_cfg1_adlpc;
          adc_cfg2_adhsc;
@@ -802,7 +824,11 @@
       \t            cv2 = low;
       \t            break;
       \t      }
-      \t      %registerName0 = (%registerName0&~(%mask0)) | %paramName0;
+      \t      // Mask for valid bits (note adcCompare value may contain out-of-bound bits)
+      \t      constexpr uint32_t mask = %mask0;
+      \t
+      \t      // Set comparison fields
+      \t      %registerName0 = (%registerName0&~mask)|(%paramName0&mask);
       \t   }
       \t\n
    ]]>
@@ -815,7 +841,6 @@
       terminator=","
       variables="
          adc_cfg1_adiclk,
-         adc_cfg1_adiv,
          adc_cfg1_mode,
          adc_cfg1_adlpc,
          adc_cfg2_adhsc,
@@ -916,7 +941,7 @@
    ]]></template>
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.AdcValidate">
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
    </validate>
 
    <projectActionList id = "adc_files" >

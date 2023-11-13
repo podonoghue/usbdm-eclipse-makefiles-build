@@ -15,24 +15,24 @@
 using namespace USBDM;
 
 // LED connection - change as required
-using Led   = GpioA<2,ActiveLow>;
+using Led   = TestLed;
 
 // Assumes prescaler set to obtain 8MHz clock
 constexpr Ticks  PrimaryCarrierHalfTime   = Ticks((8000000UL/40000)/2); // 40kHz
 constexpr Ticks  SecondaryCarrierHalfTime = Ticks((8000000UL/80000)/2); // 80kHz
 
 constexpr Ticks OneMarkTime  = 100_ticks;
-constexpr Ticks OneSpaceTime = 100_ticks;
+constexpr Ticks OneSpaceTime = 0_ticks;
 
 constexpr Ticks ZeroMarkTime  = 200_ticks;
-constexpr Ticks ZeroSpaceTime = 100_ticks;
+constexpr Ticks ZeroSpaceTime = 0_ticks;
 
 constexpr uint16_t data = 0xF0A5;
 volatile int bitNum = 15;
 
 void cmtCallback() {
 
-   if (Cmt::getStatus()) {
+   if (Cmt::getEndOfCycleFlag()) {
       // LSB
       if (data&(1<<bitNum)) {
          Cmt::setMarkSpacePeriod(OneMarkTime, OneSpaceTime);
@@ -50,31 +50,37 @@ void cmtCallback() {
 }
 
 void configureCmtFrequencyShiftKeying() {
+   // Configure CMT output and connect to pin
+   Cmt::setOutput(
+         PinDriveStrength_High,
+         PinDriveMode_PushPull,
+         PinSlewRate_Slow);
+
 #if 1
    static constexpr Cmt::Init cmtInit {
 
-      CmtMode_FreqShiftKeying ,                            // Mode of operation
-      CmtClockPrescaler_Auto ,                             // Primary Prescaler Divider
-      CmtIntermediatePrescaler_DivBy1 ,                    // Intermediate frequency Prescaler
-      CmtOutput_ActiveHigh ,                               // Output Control
-      CmtEndOfCycleAction_Interrupt ,                      // End of Cycle Action
-      CmtPrimaryCarrierHighTime(PrimaryCarrierHalfTime) ,  // Primary Carrier High Time
-      CmtPrimaryCarrierLowTime(PrimaryCarrierHalfTime) ,   // Primary Carrier Low Time
-      CmtMarkPeriod(ZeroMarkTime) ,                        // Mark period
-      CmtSpacePeriod(ZeroSpaceTime),                       // Space period
+      CmtMode_FreqShiftKeying ,                              // Mode of operation
+      CmtClockPrescaler_Auto ,                               // Primary Prescaler Divider
+      CmtIntermediatePrescaler_DivBy1 ,                      // Intermediate frequency Prescaler
+      CmtOutput_ActiveHigh ,                                 // Output Control
+      CmtEndOfCycleAction_Interrupt ,                        // End of Cycle Action
+      CmtPrimaryCarrierHighTime(PrimaryCarrierHalfTime) ,    // Primary Carrier High Time
+      CmtPrimaryCarrierLowTime(PrimaryCarrierHalfTime) ,     // Primary Carrier Low Time
+      CmtSecondaryCarrierHighTime(SecondaryCarrierHalfTime), // Secondary Carrier High Time
+      CmtSecondaryCarrierLowTime(SecondaryCarrierHalfTime),  // Secondary Carrier Low Time
+      CmtMarkPeriod(ZeroMarkTime) ,                          // Mark period
+      CmtSpacePeriod(ZeroSpaceTime),                         // Space period
 
       NvicPriority_Normal,
       cmtCallback,
    };
    Cmt::configure(cmtInit);
-   Cmt::setOutput(PinDriveStrength_High);
 #else
-   Cmt::configure(CmtMode_Direct);
+   Cmt::configure(CmtMode_FreqShiftKeying);
    Cmt::setPrimaryTiming(PrimaryCarrierHalfTime,PrimaryCarrierHalfTime);
    Cmt::setSecondaryTiming(SecondaryCarrierHalfTime,SecondaryCarrierHalfTime);
    Cmt::setMarkSpacePeriod(ZeroMarkTime, ZeroSpaceTime);
    Cmt::setOutputControl(CmtOutput_ActiveHigh);
-   Cmt::setOutput(PinDriveStrength_High);
 
    Cmt::setCallback(cmtCallback);
    Cmt::setEndOfCycleAction(CmtEndOfCycleAction_Interrupt);
@@ -84,6 +90,12 @@ void configureCmtFrequencyShiftKeying() {
 }
 
 void configureCmtTime() {
+   // Configure CMT output and connect to pin
+   Cmt::setOutput(
+         PinDriveStrength_High,
+         PinDriveMode_PushPull,
+         PinSlewRate_Slow);
+
 #if 1
    static constexpr Cmt::Init cmtInit {
 
@@ -96,12 +108,10 @@ void configureCmtTime() {
       CmtPrimaryCarrierLowTime(PrimaryCarrierHalfTime) ,   // Primary Carrier Low Time
       CmtMarkPeriod(ZeroMarkTime) ,                        // Mark period
       CmtSpacePeriod(ZeroSpaceTime),                       // Space period
-
       NvicPriority_Normal,
       cmtCallback
    };
    Cmt::configure(cmtInit);
-   Cmt::setOutput(PinDriveStrength_High);
 #else
    Cmt::setClockDivider(CmtClockPrescaler_Auto);
 
@@ -109,7 +119,6 @@ void configureCmtTime() {
    Cmt::setPrimaryTiming(PrimaryCarrierHalfTime,PrimaryCarrierHalfTime);
    Cmt::setMarkSpacePeriod(ZeroMarkTime, ZeroSpaceTime);
    Cmt::setOutputControl(CmtOutput_ActiveHigh);
-   Cmt::setOutput(PinDriveStrength_High);
 
    Cmt::setCallback(cmtCallback);
    Cmt::setEndOfCycleAction(CmtEndOfCycleAction_Interrupt);
@@ -123,16 +132,10 @@ int main() {
    console.writeln("SystemCoreClock = ", SystemCoreClock);
    console.writeln("SystemBusClock  = ", SystemBusClock);
 
-//   configureCmtFrequencyShiftKeying();
-   configureCmtTime();
+   configureCmtFrequencyShiftKeying();
+//   configureCmtTime();
 
    Led::setOutput();
-
-   // Configure CMT output and connect to pin
-   Cmt::setOutput(
-         PinDriveStrength_High,
-         PinDriveMode_PushPull,
-         PinSlewRate_Slow);
 
    for(int count = 0;;count++) {
       waitMS(500);

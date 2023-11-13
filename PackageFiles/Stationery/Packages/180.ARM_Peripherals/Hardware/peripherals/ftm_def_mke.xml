@@ -1040,7 +1040,7 @@
    <categoryOption key="Channels" description="Channel Configuration"
       hiddenBy="mode==(None,Quad)"
    >
-   <for keys="ch" dim="NumChannels" >
+   <for keys="ch" dim="=NumChannels" >
 
       <equation key="channelPair%(ch)" value="=&quot;%(ch) &amp; &quot;+ToString(%(ch)+1)" />
 
@@ -1064,7 +1064,7 @@
       </binaryOption>
    </for>
 
-   <for keys="ch" dim="NumChannels" >
+   <for keys="ch" dim="=NumChannels" >
 
       <if condition="((%(ch)&amp;1)==0)" >
          <!-- Even channel -->
@@ -2713,7 +2713,7 @@
    ]]></template>
 
    <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" condition="$(_instance)==0" >
-   ><![CDATA[
+   <![CDATA[
       \t/**
       \t * Type definition for overflow and fault call-back.
       \t */
@@ -2878,7 +2878,7 @@
       \t */
       \t$(_Class)Info::ChannelCallbackFunction $(_Class)Info::channelCallbacks[] = {\n\n
    ]]></template>
-   <for keys="ch" dim="NumChannelVectors" >
+   <for keys="ch" dim="=NumChannelVectors" >
       <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
          \t   $(_Class)Info::unhandledChannelCallback,\n
       ]]></template>
@@ -3773,7 +3773,7 @@
       \t */
       \tstatic constexpr ChannelInit DefaultChannelInitValues[] = {\n
   ]]></template>
-   <for keys="ch" dim="NumChannels" >
+   <for keys="ch" dim="=NumChannels" >
       <variableTemplate  codeGenCondition="enablePeripheralSupport"
          separator=","
          terminator=","
@@ -4244,7 +4244,7 @@
       <aliasOption key="/SIM/sim_sopt0_actrg" locked="false" optional="true" condition="$(_instance)==2" />
       <aliasOption key="/SIM/sim_sopt0_delay" locked="false" optional="true" condition="$(_instance)==2" />
 
-      <for keys="ch" dim="NumChannels" >
+      <for keys="ch" dim="=NumChannels" >
          <aliasOption key="/SIM/sim_pinsel_$(_name)ps%(ch)"  locked="false" optional="true" />
          <aliasOption key="/SIM/sim_pinsel0_$(_name)ps%(ch)" locked="false" optional="true" />
          <aliasOption key="/SIM/sim_pinsel1_$(_name)ps%(ch)" locked="false" optional="true" />

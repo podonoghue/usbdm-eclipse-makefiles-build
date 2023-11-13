@@ -80,6 +80,21 @@
       />
    </choiceOption>
 
+   <binaryOption key="cmt_msc_eocf" condition="cmt_msc_eocf_present"
+      enabledBy="enablePeripheralSupport"
+      hidden="true"
+      typeName="CmtStatus"
+      toolTip="Sets when:\n
+               - The modulator is not currently active and MCGEN is set\n
+               - At the end of each modulation cycle while MCGEN is set\n
+               Cleared by:\n
+               - Calling getStatus() followed by calling getMarkTime(), getSpaceTime() or setMarkSpaceTiming().
+               - A DMA cycle"
+      description="End Of Cycle Status Flag" >
+      <choice name="Cycle not completed"  value="0" enum="CycleIncomplete"/>
+      <choice name="Cycle completed"      value="1" enum="CycleCompleted"/>
+   </binaryOption >
+
    <!-- ************* OC ****************** -->
 
    <choiceOption key="cmt_oc_output" condition="cmt_oc_cmtpol_present"
@@ -116,7 +131,7 @@
       toolTip="Divides the CMT clock to generate the Intermediate Frequency clock\n
                to the secondary prescaler.\n
                This should be chosen to produce a nominal 8MHz frequency from the CMT input clock."
-      description="Primary Prescaler Divider" 
+      description="Primary Prescaler Divider"
       enumText="
       \t   CmtClockPrescaler_Auto            = 0xFF,               ///&lt; Calculate divider to generate 8MHz based on Bus clock"
       >
@@ -148,7 +163,7 @@
       enabledBy="enablePeripheralSupport"
       typeName="CmtIntermediatePrescaler"
       toolTip="Causes the CMT to be clocked at the Intermediate frequency divided by 1, 2, 4, or 8"
-      description="Intermediate frequency Prescaler" 
+      description="Intermediate frequency Prescaler"
       >
       <choice name="Intermediate frequency /1" value="0" enum="DivBy1" />
       <choice name="Intermediate frequency /2" value="1" enum="DivBy2" />
@@ -177,6 +192,28 @@
       <choice value="1,1" name="DMA Transfer Request"  enum="DmaTransfer" />
    </choiceOption>
 
+   <binaryOption key="cmt_msc_eocie" condition="cmt_msc_eocie_present"
+      enabledBy="enablePeripheralSupport"
+      hidden="true"
+      typeName="CmtInterruptEnable"
+      toolTip="Requests to enable a CPU interrupt when EOCF is set if EOCIE is high"
+      description="End of Cycle Interrupt Enable" >
+      <choice name="Interrupt disabled"  value="0" enum="Disabled"/>
+      <choice name="Interrupt enabled"   value="1" enum="Enabled"/>
+   </binaryOption >
+
+   <!-- ************* DMA ****************** -->
+
+   <binaryOption key="cmt_dma_dma" condition="cmt_dma_dma_present"
+      enabledBy="enablePeripheralSupport"
+      hidden="true"
+      typeName="CmtDma"
+      toolTip=""
+      description="DMA Transfer Enable" >
+      <choice name="DMA disabled"  value="0" enum="Disabled"/>
+      <choice name="DMA enabled"   value="1" enum="Enabled"/>
+   </binaryOption >
+
    <!-- ************* CGH1 ****************** -->
 
    <intOption key="cmt_cgh1_ph" condition="cmt_cgh1_ph_present"
@@ -201,7 +238,7 @@
       typeName="CmtPrimaryCarrierLowTime"
       description="Primary Carrier Low Time Data Value"
       toolTip="Contains the number of input clocks required to generate the carrier low time period.\n
-               When operating in Time mode, this register is always selected.
+               When operating in Time mode, this register is always selected.\n
                When operating in FSK mode, this register and the secondary register pair are\n
                alternately selected under the control of the modulator.\n
                The primary carrier low time value is undefined out of reset.\n
@@ -265,19 +302,17 @@
 
 <!-- Graphic here -->
 
-   <for keys="field:name"
+   <for keys="field           : get   : set   : genCode                 : name"
         values="
-         cmt_msc_mode         : Mode;
-         cmt_msc_exspc        : ExtendedSpace;
-         cmt_msc_eocf         : EndOfCycleFlag;
-         cmt_msc_cmtdiv       : Prescaler;
-         cmt_oc_output        : OutputControl;
-         cmt_oc_irol          : OutputLevel;
-         cmt_cgh1_ph          : PrimaryHigh;
-         cmt_cgl1_pl          : PrimaryLow;
-         cmt_cgh2_sh          : SecondaryHigh;
-         cmt_cgl2_sl          : SecondaryLow" >
-      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+         cmt_oc_irol          : true  : true  : enableGettersAndSetters : OutputState;
+         cmt_msc_mode         : true  : true  : enableGettersAndSetters : Mode;
+         cmt_msc_eocf         : true  : false : true                    : EndOfCycleFlag;
+         cmt_msc_cmtdiv       : true  : true  : enableGettersAndSetters : Prescaler;
+         cmt_msc_exspc        : true  : true  : true                    : ExtendedSpace;
+         cmt_msc_eocie        : true  : true  : enableGettersAndSetters : InterruptEnable;
+         cmt_oc_output        : false : true  : enableGettersAndSetters : OutputControl;
+         cmt_dma_dma          : true  : true  : enableGettersAndSetters : DmaControl" >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -287,7 +322,10 @@
          \tstatic void set%(name)(%params) {
          \t   %fieldAssignment
          \t}
-         \t
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
          \t/**
          \t * Get %description
          \t *
@@ -398,7 +436,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate variables="cmt_mark,cmt_space" codeGenCondition="enableGettersAndSetters"
+   <variableTemplate variables="cmt_mark,cmt_space"
       nonDefaultParams="2"
       paramTypes="Ticks,Ticks"
    ><![CDATA[
@@ -758,7 +796,7 @@
       ]]>
       </variableTemplate>
    </for>
-   
+
    <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="cmt_dma_irq"
       linePadding="xxx" >
@@ -774,29 +812,9 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      dma |= CMT_DMA_DMA(%paramName);
-      \t      msc |= CMT_MSC_EOCIE(%paramName);
-      \t   }
-      \t\n
-   ]]>
-   </variableTemplate>
-   
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      variables="cmt_pps_ppsdiv"
-      linePadding="xxx" >
-   <![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName = %paramExpression;
+      \t      // Parameter contains non-overlapping bit fields from two registers
+      \t      dma = (dma & ~CMT_DMA_DMA_MASK)   | (CMT_DMA_DMA_MASK & %paramName);
+      \t      msc = (msc & ~CMT_MSC_EOCIE_MASK) | (CMT_MSC_EOCIE_MASK & %paramName);
       \t   }
       \t\n
    ]]>
@@ -805,36 +823,12 @@
    <for keys="r"
       values="
             cmt_mark;
-            cmt_space
-            " >
-      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-         variables="%(r)"
-         linePadding="xxx" >
-      <![CDATA[
-         \t   /**
-         \t    * Constructor for %description
-         \t    *
-         \t    * @tparam   Types
-         \t    * @param    rest
-         \t    *
-         \t    * @param value %description
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr Init(%paramType0 value, Types... rest) : Init(rest...) {
-         \t
-         \t      %registerName = value;
-         \t   }
-         \t\n
-      ]]>
-      </variableTemplate>
-   </for>
-
-   <for keys="r"
-      values="
+            cmt_space;
             cmt_cgh1_ph;
             cmt_cgl1_pl;
             cmt_cgh2_sh;
-            cmt_cgl2_sl
+            cmt_cgl2_sl;
+            cmt_pps_ppsdiv
             " >
       <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          variables="%(r)"
@@ -846,12 +840,12 @@
          \t    * @tparam   Types
          \t    * @param    rest
          \t    *
-         \t    * @param value %description
+      %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr Init(%paramType0 value, Types... rest) : Init(rest...) {
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
-         \t      %registerName = (%registerName&~%mask0) | %macro0(value);
+         \t      %registerName = %paramExpression;
          \t   }
          \t\n
       ]]>

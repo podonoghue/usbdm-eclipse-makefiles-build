@@ -266,7 +266,7 @@
    <intOption key="OSCERCLK0_DIV8" derived="true" ref="(/OSC0/oscer_clock)/8" value="0" />
 
 
-   <for keys="n" dim="numberOfClockSettings" >
+   <for keys="n" dim="=numberOfClockSettings" >
       <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" locked="true" >
 
          <aliasOption key="/MCG/enableClockConfiguration[%(n)]" locked="false" />
@@ -462,7 +462,7 @@
    <xi:include href="sim_commonTemplates.xml" />
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL" dim="numberOfClockSettings">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL" dim="=numberOfClockSettings">
       <param type="long" value="48MHz"  />     <!-- RUN Core          -->
       <param type="long" value="24MHz"  />     <!-- RUN Bus           -->
 

@@ -79,37 +79,8 @@ public:
     */
    static constexpr HardwarePtr<CMT_Type> cmt = Info::baseAddress;
 
-   /**
-    * Get CMT status.
-    * The status is set:\n
-    * - When the modulator is not currently active and CMT is enabled to begin the initial CMT transmission.
-    * - At the end of each modulation cycle while CMT is enabled.
-    *
-    * @return Status value
-    *
-    * @note The status is cleared by either:\n
-    * - Calling getStatus() followed by calling getMarkTime(), getSpaceTime() or setMarkSpaceTiming().
-    * - A DMA cycle.
-    */
-   static uint32_t getStatus() {
-      return cmt->MSC & CMT_MSC_EOCF_MASK;
-   }
-
 public:
 $(/CMT/classInfo: // No class Info found)
-   /**
-    * Base configuration of CMT.
-    * The CMT clock is configured for a nominal 8MHz frequency
-    *
-    * @param[in] cmtMode             Basic mode
-    * @param[in] cmtClockDivideBy    Divider for carrier (from nominal 8MHz)
-    */
-   static void configure(CmtMode cmtMode, CmtIntermediatePrescaler cmtClockDivideBy=CmtIntermediatePrescaler_DivBy1) {
-      Info::enable();
-      CmtInfo::setClockDivider(CmtClockPrescaler_Auto);
-      cmt->MSC = cmtMode|cmtClockDivideBy;
-   }
-
    /**
     * Enable interrupts in NVIC
     */

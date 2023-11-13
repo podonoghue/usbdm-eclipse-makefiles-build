@@ -5,12 +5,12 @@
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
    <!-- Clock mode as indicated by icsClockMode[%(n)] choice index -->
-   <constant key="FEI"  value="0" type="Integer" />
-   <constant key="FEE"  value="1" type="Integer" />
-   <constant key="FBI"  value="2" type="Integer" />
-   <constant key="FBE"  value="3" type="Integer" />
-   <constant key="FBILP" value="4" type="Integer" />
-   <constant key="FBELP" value="5" type="Integer" />
+   <constant key="FEI"  value="0" type="Long" />
+   <constant key="FEE"  value="1" type="Long" />
+   <constant key="FBI"  value="2" type="Long" />
+   <constant key="FBE"  value="3" type="Long" />
+   <constant key="FBILP" value="4" type="Long" />
+   <constant key="FBELP" value="5" type="Long" />
 
    <xi:include href="default_instance.xml"/>
 
@@ -34,7 +34,7 @@
       <choice value="true"  name="Enabled"  isDefault="true" />
    </binaryOption>
 
-   <for keys="n" dim="1,/SIM/numberOfClockSettings">
+   <for keys="n" dim="=1,/SIM/numberOfClockSettings">
       <binaryOption key="enableClockConfiguration[%(n)]"
          hidden="true"
          description="Enable this clock settings"
@@ -53,7 +53,7 @@
       toolTip="Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       value="37.5_kHz" />
 
-   <for keys="n" dim="/SIM/numberOfClockSettings">
+   <for keys="n" dim="=/SIM/numberOfClockSettings">
       <categoryOption key="ClockConfig[%(n)]"
          description="Clock configuration[%(n)]"
          toolTip="Clock configurations for different run modes"
@@ -381,7 +381,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
 
 <!-- Grahic here -->
 
-   <template variables="ics_oscsel_fixed[]"
+   <variableTemplate variables="ics_oscsel_fixed[]"
    ><![CDATA[
       \t/**
       \t * Get %description
@@ -392,7 +392,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       \t
       \t   return $(%variable.code[0]);
       \t}\n\n
-      ]]></template>
+      ]]></variableTemplate>
 
    <clockCodeTemplate variable="ics_c1_irclken[]"
       returnFormat="%s"
@@ -423,13 +423,13 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       \t}\n\n
       ]]></clockCodeTemplate>
 
-   <for keys="n" dim="/SIM/numberOfClockSettings">
+   <for keys="n" dim="=/SIM/numberOfClockSettings">
       <template key="ClockConfig" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
          \t$(ClockConfig[%(n)]://-- missing name for configuration --),\n
       ]]></template>
    </for>
 
-   <for keys="n" dim="/SIM/numberOfClockSettings">
+   <for keys="n" dim="=/SIM/numberOfClockSettings">
       <template key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
       ><![CDATA[
          \t{  // $(ClockConfig[%(n)]) ($(icsClockMode[%(n)].enum[]))

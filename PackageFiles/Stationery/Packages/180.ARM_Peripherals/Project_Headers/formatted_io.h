@@ -588,12 +588,12 @@ public:
    static NOINLINE_DEBUG char *ultoa(
          char *ptr,
          unsigned long value,
-         Radix radix=Radix_10,
-         Padding padding=Padding_None,
+         Radix radix,
+         Padding padding,
          int width=0
          ) {
       return ultoa(ptr, value, radix, padding, width, false);
-}
+   }
 
    /**
     * Converts a long to a string
@@ -610,8 +610,8 @@ public:
    static NOINLINE_DEBUG char *ltoa(
          char *ptr,
          long value,
-         Radix radix=Radix_10,
-         Padding padding=Padding_None,
+         Radix radix,
+         Padding padding,
          int width=0
          ) {
       bool isNegative = value<0;
@@ -856,7 +856,7 @@ protected:
     * @return Reference to self
     */
    FormattedIO &private_write(unsigned long value) {
-      return private_write(value, Radix_10);
+      return private_write(value, fFormat.fRadix);
    }
 
    /**
@@ -885,7 +885,7 @@ protected:
     * @return Reference to self
     */
    FormattedIO &private_write(long value) {
-      return private_write(value, Radix_10);
+      return private_write(value, fFormat.fRadix);
    }
 
    /**
@@ -909,7 +909,7 @@ protected:
     * @return Reference to self
     */
    FormattedIO &private_writeln(unsigned long value) {
-      return private_writeln(value, Radix_10);
+      return private_writeln(value, fFormat.fRadix);
    }
 
    /**
@@ -980,7 +980,7 @@ protected:
     * @return Reference to self
     */
    FormattedIO &private_writeln(long value) {
-      return private_writeln(value, Radix_10);
+      return private_writeln(value, fFormat.fRadix);
    }
 
    /**
@@ -1003,7 +1003,7 @@ protected:
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG &private_write(unsigned value) {
-      return private_write(static_cast<unsigned long>(value), Radix_10);
+      return private_write(static_cast<unsigned long>(value), fFormat.fRadix);
    }
 
    /**
@@ -1026,7 +1026,7 @@ protected:
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG &private_writeln(unsigned value) {
-      return private_writeln(static_cast<unsigned long>(value), Radix_10);
+      return private_writeln(static_cast<unsigned long>(value), fFormat.fRadix);
    }
 
    /**
@@ -1049,7 +1049,7 @@ protected:
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG &private_write(int value) {
-      return private_write(static_cast<long>(value), Radix_10);
+      return private_write(static_cast<long>(value), fFormat.fRadix);
    }
 
    /**
@@ -1072,7 +1072,7 @@ protected:
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG  &private_writeln(int value) {
-      return private_writeln(static_cast<long>(value), Radix_10);
+      return private_writeln(static_cast<long>(value), fFormat.fRadix);
    }
 
    void convertToEngineeringNotation(double value, bool &isNegative, unsigned &mantissa, int &exponent) {
@@ -1610,6 +1610,18 @@ public:
    }
 
    /**
+    * Controls echoing of input characters
+    *
+    * @param echoMode
+    *
+    * @return Reference to self
+    */
+   FormattedIO NOINLINE_DEBUG &setEcho(EchoMode echoMode=EchoMode_On) {
+      fFormat.fEcho = echoMode;
+      return *this;
+   }
+
+   /**
     * Receives an unsigned long
     *
     * @param[out] value Where to place value read
@@ -1619,7 +1631,7 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO __attribute__((noinline)) &read(unsigned long &value, Radix radix=Radix_10) {
+   FormattedIO __attribute__((noinline)) &read(unsigned long &value, Radix radix) {
       // Skip white space
       int ch;
       do {
@@ -1657,18 +1669,19 @@ public:
       }
       return *this;
    }
-
    /**
-    * Controls echoing of input characters
+    * Receives an unsigned long
     *
-    * @param echoMode
+    * @param[out] value Where to place value read
     *
     * @return Reference to self
+    *
+    * @note Skips leading whitespace
     */
-   FormattedIO NOINLINE_DEBUG &setEcho(EchoMode echoMode=EchoMode_On) {
-      fFormat.fEcho = echoMode;
-      return *this;
+   FormattedIO &read(unsigned long &value) {
+      return read(value, fFormat.fRadix);
    }
+
    /**
     * Receives an unsigned long and then discards characters until end of line.
     *
@@ -1679,9 +1692,21 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO NOINLINE_DEBUG &readln(unsigned long &value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &readln(unsigned long &value, Radix radix) {
       read(value, radix);
       return readln();
+   }
+   /**
+    * Receives an unsigned long and then discards characters until end of line.
+    *
+    * @param[out] value Where to place value read
+    *
+    * @return Reference to self
+    *
+    * @note Skips leading whitespace
+    */
+   FormattedIO &readln(unsigned long &value) {
+      return readln(value,fFormat.fRadix);
    }
 
    /**
@@ -1694,11 +1719,23 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO NOINLINE_DEBUG &read(long &value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &read(long &value, Radix radix) {
       unsigned long temp;
       read(temp, radix);
       value = temp;
       return *this;
+   }
+   /**
+    * Receives a long
+    *
+    * @param[out] value Where to place value read
+    *
+    * @return Reference to self
+    *
+    * @note Skips leading whitespace
+    */
+   FormattedIO &read(long &value) {
+      return read(value,fFormat.fRadix);
    }
 
    /**
@@ -1711,9 +1748,21 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO NOINLINE_DEBUG &readln(long &value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &readln(long &value, Radix radix) {
       read(value, radix);
       return readln();
+   }
+   /**
+    * Receives a long and then discards characters until end of line.
+    *
+    * @param[out] value Where to place value read
+    *
+    * @return Reference to self
+    *
+    * @note Skips leading whitespace
+    */
+   FormattedIO NOINLINE_DEBUG &readln(long &value) {
+      return readln(value, fFormat.fRadix);
    }
 
    /**
@@ -1726,11 +1775,23 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO NOINLINE_DEBUG &read(unsigned int &value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &read(unsigned int &value, Radix radix) {
       unsigned long temp;
       read(temp, radix);
       value = temp;
       return *this;
+   }
+   /**
+    * Receives an unsigned integer
+    *
+    * @param[out] value Where to place value read
+    *
+    * @return Reference to self
+    *
+    * @note Skips leading whitespace
+    */
+   FormattedIO NOINLINE_DEBUG &read(unsigned int &value) {
+      return read(value, fFormat.fRadix);
    }
 
    /**
@@ -1743,9 +1804,21 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO NOINLINE_DEBUG &readln(unsigned &value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &readln(unsigned &value, Radix radix) {
       read(value, radix);
       return readln();
+   }
+   /**
+    * Receives an unsigned integer and then discards characters until end of line.
+    *
+    * @param[out] value Where to place value read
+    *
+    * @return Reference to self
+    *
+    * @note Skips leading whitespace
+    */
+   FormattedIO NOINLINE_DEBUG &readln(unsigned &value) {
+      return readln(value, fFormat.fRadix);
    }
 
    /**
@@ -1758,11 +1831,23 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO NOINLINE_DEBUG &read(int &value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &read(int &value, Radix radix) {
       long temp;
       read(temp, radix);
       value = temp;
       return *this;
+   }
+   /**
+    * Receives an integer
+    *
+    * @param[out] value Where to place value read
+    *
+    * @return Reference to self
+    *
+    * @note Skips leading whitespace
+    */
+   FormattedIO NOINLINE_DEBUG &read(int &value) {
+      return read(value, fFormat.fRadix);
    }
 
    /**
@@ -1775,9 +1860,22 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO NOINLINE_DEBUG &readln(int &value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &readln(int &value, Radix radix) {
       read(value, radix);
       return readln();
+   }
+   /**
+    * Receives an integer and then discards characters until end of line.
+    *
+    * @param[out] value Where to place value read
+    * @param[in]  radix The radix to use
+    *
+    * @return Reference to self
+    *
+    * @note Skips leading whitespace
+    */
+   FormattedIO NOINLINE_DEBUG &readln(int &value) {
+      return readln(value, fFormat.fRadix);
    }
 
    /**
@@ -2032,8 +2130,8 @@ public:
    /**
     * Write an array
     *
-    * @param[in]  array Pointer to array to print
-    * @param[in]  size  Number of elements in array
+    * @param[in]  array        Pointer to array to print
+    * @param[in]  size         Number of elements in array
     *
     * @return Reference to self
     */

@@ -6,8 +6,8 @@ cd ${HOME_DIR}
 
 #exit
 
-FROM="_enablePeripheral"
-TO="enablePeripheral"
+FROM="dim=\"\([a-zA-Z/]\)"
+TO="dim=\"=\1"
 
 echo starting
 rm -r new

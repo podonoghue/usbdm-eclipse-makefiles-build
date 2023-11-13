@@ -371,7 +371,7 @@ $(/GPIO/AccessFunctions: #error /GPIO/AccessFunctions not found)
  * @tparam polarity              Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<PcrValue defPcrValue, PinIndex pinIndex, Polarity polarity>
-class Gpio_T : public Gpio, public Pcr_T<defPcrValue, pinIndex> {
+class Gpio_T : public Gpio, public Pcr_T<gpioPcrValue(defPcrValue), pinIndex> {
 
    static constexpr int bitNum = int(pinIndex) % 32;
 
@@ -384,18 +384,17 @@ private:
     */
    Gpio_T(const Gpio_T&) = delete;
    Gpio_T(Gpio_T&&) = delete;
+protected:
+   constexpr Gpio_T() : Gpio(gpioAddress, bitNum, polarity) {};
 
+public:
    static constexpr PcrInit defaultPcrValue = gpioPcrValue(defPcrValue);
 
    /// GPIO hardware address
    static constexpr uint32_t gpioAddress = Gpio::getGpioAddress(pinIndex);
 
-protected:
-   constexpr Gpio_T() : Gpio(gpioAddress, bitNum, polarity) {};
-
-public:
    /** PCR associated with this GPIO pin */
-   using Pcr = Pcr_T<defPcrValue, pinIndex>;
+   using Pcr = Pcr_T<defaultPcrValue, pinIndex>;
 
    /** Get base address of GPIO hardware as pointer to struct */
    static constexpr HardwarePtr<GPIO_Type> gpio = gpioAddress;

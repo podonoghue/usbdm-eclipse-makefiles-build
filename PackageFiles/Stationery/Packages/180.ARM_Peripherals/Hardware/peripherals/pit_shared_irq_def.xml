@@ -55,7 +55,7 @@
       <choice value="1" name="Timers are stopped in Debug mode"     enum="Stop" isDefault="true" />
    </binaryOption>
 
-   <for keys="ch" dim="numChannels">
+   <for keys="ch" dim="=numChannels">
       <stringOption key="PIT Channel %(ch)" derived="true" value="----- %(ch) -----"/>
 
       <binaryOption key="pit_tctrl_ten[%(ch)]"  condition="pit_tctrl_tie_present"
@@ -346,7 +346,7 @@
       \tstatic constexpr Init DefaultChannelInitValues[] = {\n
    ]]></template>
 
-   <for keys="ch" dim="numChannels">
+   <for keys="ch" dim="=numChannels">
       <variableTemplate
          separator=","
          terminator=","
@@ -378,7 +378,7 @@
       template<class Info>
       typename Info::CallbackFunction PitBase_T<Info>::sCallbacks[] = {\n
    ]]></template>
-   <for keys="ch" dim="numChannels">
+   <for keys="ch" dim="=numChannels">
       <template discardRepeats="true" key="/PIT/CallBackDefinition" namespace="all" ><![CDATA[
          \tPitBase_T<Info>::unhandledCallback,\n
       ]]></template>
@@ -443,7 +443,7 @@
    \t * }
    \t */\n
    ]]></template>
-   <for keys="ch" dim="numChannels">
+   <for keys="ch" dim="=numChannels">
       <template key="/PIT/declarations" namespace="all"  ><![CDATA[
          #define PIT$(_instance)_CHANNEL%(ch)_HANDLER() template<>template<> void Pit$(_instance)::Channel<%(ch)>::irqHandler()\n
       ]]></template>

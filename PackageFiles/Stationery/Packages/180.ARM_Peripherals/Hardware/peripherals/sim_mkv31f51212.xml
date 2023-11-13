@@ -802,7 +802,7 @@ Devices using this peripheral:
    
    <xi:include href="simCommon.xml"/>
 
-   <indexedCategory name="ClockConfig[]" dim="/SIM/numberOfClockSettings" 
+   <indexedCategory name="ClockConfig[]" dim="=/SIM/numberOfClockSettings" 
         description="Clock configurations" 
         toolTip="Clock configurations for different run modes" >
       
@@ -891,7 +891,7 @@ Devices using this peripheral:
    </indexedCategory>
    
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="/SIM/numberOfClockSettings">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="=/SIM/numberOfClockSettings">
       <param type="long" value="120MHz" />    <!-- Core         -->
       <param type="long" value="60MHz" />     <!-- Bus          -->
       <param type="long" value="27MHz" />     <!-- Flash        -->

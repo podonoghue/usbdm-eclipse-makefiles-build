@@ -156,7 +156,7 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
-   <for keys="n" dim="/SIM/numberOfClockSettings" >
+   <for keys="n" dim="=/SIM/numberOfClockSettings" >
       <choiceOption key="smc_pmctrl_runm[%(n)]"
          hidden="true"
          typeName="SmcRunMode"

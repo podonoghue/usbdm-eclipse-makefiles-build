@@ -64,7 +64,7 @@
       units="Hz"
       locked="true" />
 
-   <for keys="n" dim="/SIM/numberOfClockSettings" >
+   <for keys="n" dim="=/SIM/numberOfClockSettings" >
       <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" locked="true" >
 
          <aliasOption key="/OSC0/osc_cr_erclken" locked="false" />

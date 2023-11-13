@@ -9,7 +9,7 @@
 
    <aliasOption key="/SIM/system_usb_clkin_clock"     locked="false" optional="true"/>
 
-   <for keys="n" dim="/SIM/numberOfClockSettings" >
+   <for keys="n" dim="=/SIM/numberOfClockSettings" >
       <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" >
          <aliasOption key="/SIM/system_peripheral_clock[%(n)]"    optional="true"/>
          <aliasOption key="/SIM/sim_sopt2_usbsrc[%(n)]"           locked="false" optional="true"/>

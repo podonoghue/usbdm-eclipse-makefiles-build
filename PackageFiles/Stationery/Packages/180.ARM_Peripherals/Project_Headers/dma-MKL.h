@@ -11,6 +11,7 @@
 
 #include "derivative.h"
 #include "pin_mapping.h"
+#include "dmamux.h"
 
 /*
  * *****************************
@@ -425,47 +426,6 @@ static constexpr DmaSize dmaSize() {
       /*          ==4 */DmaSize_32bit;
 }
 
-/**
- * Template class providing interface to DMA Multiplexor.
- *
- * @tparam Info  Information class for Dmamux
- * @tparam NumChannels Number of DMA channels in associated DMA controller
- *
- * @code
- * using Dmamux = Dmamux_T<Info>;
- *
- *  Dmamux::configure();
- *
- * @endcode
- */
-template <class Info>
-class Dmamux_T : public Info {
-
-protected:
-   /** Hardware instance pointer */
-   static constexpr HardwarePtr<DMAMUX_Type> dmamux = Info::baseAddress;
-
-public:
-   /// Number of DMA channels available
-   static constexpr unsigned NumChannels         = Info::NumChannels;
-
-   /// Number of DMA channels with periodic feature available
-   static constexpr unsigned NumPeriodicChannels = Info::NumPeriodicChannels;
-   
-$(/DMAMUX/InitMethod:// /DMAMUX/InitMethod not found)
-   /**
-    * Disable hardware requests on channel
-    *
-    * @param dmaChannel DMA channel to disable
-    */
-   static void disable(DmaChannelNum dmaChannel) {
-      // Enable clock to peripheral
-      Info::enableClock();
-
-      // Disable channel
-      Info::Dmamux->CHCFG[dmaChannel] = 0;
-   }
-};
 
 /**
  * Class representing a DMA controller.
@@ -655,7 +615,6 @@ $(/DMA/InitMethod: // /DMA/InitMethod not found)
    uint32_t Dma_T<Info>::allocatedChannels = 0;
 
 $(/DMA/declarations:// /DMA/declarations not found)
-$(/DMAMUX/declarations:// /DMAMUX/declarations not found)
 /**
  * End DMA_Group
  * @}

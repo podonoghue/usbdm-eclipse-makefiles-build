@@ -179,7 +179,7 @@
 
    <xi:include href="simCommon.xml" />
 
-   <for keys="n" dim="numberOfClockSettings" >
+   <for keys="n" dim="=numberOfClockSettings" >
       <aliasCategoryOption key="/ICS/ClockConfig[%(n)]" derived="true" locked="true" >
 
          <aliasOption key="/ICS/enableClockConfiguration[%(n)]" locked="false" />

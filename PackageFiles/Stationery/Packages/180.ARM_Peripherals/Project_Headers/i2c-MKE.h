@@ -537,11 +537,14 @@ public:
     */
    I2cBase_T(const I2cBasicInfo::Init &init) : I2c(Info::baseAddress) {
 
+#ifdef PORT_PCR_MUX_MASK
       // Check pin assignments
-//      static_assert(Info::info[Info::sclPin].gpioBit >= 0, "I2Cx_SCL has not been assigned to a pin - Modify Configure.usbdm");
-//      static_assert(Info::info[Info::sdaPin].gpioBit >= 0, "I2Cx_SDA has not been assigned to a pin - Modify Configure.usbdm");
+      PcrBase::CheckPinExistsAndIsMapped<Info::info[Info::sclPin].pinIndex>::check();
+      PcrBase::CheckPinExistsAndIsMapped<Info::info[Info::sclPin].pinIndex>::check();
+#endif
 
-//      busHangReset();
+      busHangReset();
+      
       thisPtr = this;
 
       configure(init);
@@ -581,13 +584,21 @@ $(/I2C/InitMethod: // /I2C/InitMethod not found)
             __asm__("nop");
          }
       };
+#ifdef PORT_PCR_MUX_MASK
+      // I2C SCL (clock) Pin
+      using sclGpio = GpioTable_T<Info, Info::sclPin, USBDM::ActiveHigh>;
+
+      // I2C SDA (data) Pin
+      using sdaGpio = GpioTable_T<Info, Info::sdaPin, USBDM::ActiveHigh>;
+#else
       // I2C SCL (clock) Pin
       using sclGpio = Gpio_T<Info::sclPinIndex, ActiveHigh>;
 
       // I2C SDA (data) Pin
       using sdaGpio = Gpio_T<Info::sdaPinIndex, ActiveHigh>;
+#endif
 
-      // Re-map pins to GPIOs initially 3-state (inputs)
+      // Re-map pins to GPIOs initially 3-state
       sclGpio::setInput();
       sdaGpio::setInput();
       Info::disableClock();

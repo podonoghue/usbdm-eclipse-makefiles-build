@@ -49,16 +49,6 @@
     * %registerNAME[index]            Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
 -->
 
-   <!-- ************* Constants ****************** -->
-
-   <template><![CDATA[
-      \t//! Pin number in Info table for SCL if mapped to a pin
-      \tstatic constexpr int sclPin  = 0;
-
-      \t//! Pin number in Info table for SDA if mapped to a pin
-      \tstatic constexpr int sdaPin  = 1;\n\n
-   ]]></template>
-
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
       value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
@@ -117,7 +107,7 @@
 
    <choiceOption key="i2c_f_mult" condition="i2c_f_mult_present"
       enabledBy="enablePeripheralSupport"
-      typeName="I2cFMult"
+      typeName="I2cPrescale"
       derived="true"
       locked="true"
       toolTip="Prescale divider to generate the I2C baud rate"
@@ -518,7 +508,8 @@ In other cases, if the master reads data from the slave, then it is required to 
 
       <intOption key="i2c_a2_sad" condition="i2c_a2_sad_present"
          enabledBy="i2c_smb_siicaen"
-         typeName="uint8_t"
+         typeName="int"
+         valueFormat="%s"
          description="SMBus Address"
          toolTip="Contains the slave address used by the SMBus.\n
                   This field is used as the device default address or other related addresses"
@@ -529,11 +520,12 @@ In other cases, if the master reads data from the slave, then it is required to 
       <intOption key="i2c_slt_value" condition="i2c_slth_sslt_present"
          units="ticks"
          enabledBy="/$(_BASENAME)/smbOptionsAvailable"
-         typeName="uint16_t"
+         valueFormat="%s"
+         typeName="Ticks &amp;"
          description="SCL low timeout value"
          toolTip="SCL low timeout"
       />
-
+      <!--
       <intOption key="i2c_slth_sslt" condition="i2c_slth_sslt_present"
          hidden="true"
          derived="true"
@@ -553,6 +545,7 @@ In other cases, if the master reads data from the slave, then it is required to 
          typeName="uint8_t"
          description="LSB of SCL low timeout value"
       />
+      -->
    </category>
 <!-- Graphic here -->
 
@@ -572,30 +565,24 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t\n
    ]]></variableTemplate>
 
-   <for keys="field:name"
-        values="
-      i2c_s_iicif                : InterruptFlag;
-      i2c_s_tcf                  : TxCompleteFlag;
-      i2c_s_ram                  : RangeMatchFlag;
-      i2c_flt_stopf              : StopDetectFlag;
-      i2c_s_arbl                 : ArbitrationFlag;
-      i2c_smb_sltf               : SclLowTimeoutFlag;
-      i2c_smb_shtf2              : SclHighTimeoutFlag;
-      i2c_smb_sltf,i2c_smb_shtf2 : Timeouts
+   <for  keys="   field                      : name                 : get   : set   : w1clear"
+         values=" i2c_s_tcf                  : TxCompleteFlag       : true  : false : false ;
+                  i2c_s_iaas                 : AddressedAsSlaveFlag : true  : false : false ;
+                  i2c_s_busy                 : BusBusyFlag          : true  : false : false ;
+                  i2c_s_arbl                 : ArbitrationLostFlag  : true  : false : true  ;
+                  i2c_s_ram                  : RangeMatchFlag       : true  : false : false ;
+                  i2c_s_srw                  : SlaveReadWrite       : true  : false : false ;
+                  i2c_s_iicif                : InterruptFlag        : true  : false : true  ;
+                  i2c_s_rxax                 : ReceiveAckFlag       : true  : false : false ;
+
+                  i2c_flt_stopf              : StopDetectFlag       : true  : false : false ;
+                  i2c_smb_sltf               : SclLowTimeoutFlag    : false : false : false ;
+                  i2c_smb_shtf2              : SclHighTimeoutFlag   : false : false : false ;
+                  i2c_smb_sltf,i2c_smb_shtf2 : Timeouts             : false : false : false
       " >
-      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
-      ><![CDATA[
+      <variableTemplate codeGenCondition="enableGettersAndSetters" variables="%(field)" condition="%(get)" ><![CDATA[
          \t/**
-         \t * Clear %description
-         \t *
-         \t * %tooltip
-         \t */
-         \tstatic void clear%(name)() {
-         \t   %register = %register | %mask;
-         \t}
-         \t
-         \t/**
-         \t * Check %description
+         \t * Get %description
          \t *
          \t * @return %tooltip
          \t */
@@ -604,36 +591,58 @@ In other cases, if the master reads data from the slave, then it is required to 
          \t}
          \t\n
       ]]></variableTemplate>
+      <variableTemplate codeGenCondition="enableGettersAndSetters" variables="%(field)" condition="%(set)" ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %fieldAssignment
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate codeGenCondition="enableGettersAndSetters" variables="%(field)" condition="%(w1clear)" ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t *
+         \t * %tooltip
+         \t */
+         \tstatic void clear%(name)() {
+         \t   %register = %register | %mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
    </for>
 
    <for keys="field:name"
         values="
-         i2c_f_mult      : Multiplier;
-         i2c_f_icr       : ClockRate;
-         i2c_c1_iicen    : Enable;
-         i2c_c1_iicie    : Interrupt;
-         i2c_c1_mst      : Mode;
-         i2c_c1_tx       : TxRxMode;
-         i2c_c1_txak     : TxAck;
-         i2c_c1_rsta     : RepeatedStart;
-         i2c_c1_wuen     : Wakeup;
-         i2c_c1_dmaen    : Dma;
-         i2c_s_iaas      : AddressedAsPeripheral;
-         i2c_s_busy      : SBusy;
-         i2c_s_srw       : PeripheralReadWrite;
-         i2c_s_rxak      : RxAck;
-         i2c_d_data      : Data;
-         i2c_c2_gcaen    : GeneralCall;
-         i2c_c2_adext    : AddressSize;
-         i2c_c2_hdrs     : HighDrive;
-         i2c_c2_sbrc     : SlaveRate;
-         i2c_c2_rmen     : RangeMatch;
-         i2c_c2_ad       : UpperAddress;
-         i2c_flt_shen    : StopHold;
-         i2c_flt_stopie  : StopInterrupt;
-         i2c_flt_ssie    : StopStartInterrupt;
-         i2c_flt_flt     : Filter;
-         i2c_ra_rad      : RangeAddress" >
+         i2c_f_mult        : Multiplier;
+         i2c_f_icr         : ClockRate;
+         i2c_c1_iicen      : Enable;
+         i2c_c1_iicie      : Interrupt;
+         i2c_c1_mst        : Mode;
+         i2c_c1_tx         : TxRxMode;
+         i2c_c1_txak       : TxAck;
+         i2c_c1_rsta       : RepeatedStart;
+         i2c_c1_wuen       : Wakeup;
+         i2c_c1_dmaen      : Dma;
+         i2c_s_iaas        : AddressedAsPeripheral;
+         i2c_s_busy        : SBusy;
+         i2c_s_srw         : PeripheralReadWrite;
+         i2c_s_rxak        : RxAck;
+         i2c_d_data        : Data;
+         i2c_c2_gcaen      : GeneralCall;
+         i2c_c2_adext      : AddressSize;
+         i2c_c2_hdrs       : HighDrive;
+         i2c_c2_sbrc       : SlaveRate;
+         i2c_c2_rmen       : RangeMatch;
+         i2c_c2_ad         : UpperAddress;
+         i2c_flt_shen      : StopHold;
+         i2c_flt_stopie    : StopInterrupt;
+         i2c_flt_ssie      : StopStartInterrupt;
+         i2c_flt_flt       : Filter;
+         i2c_ra_rad        : RangeAddress" >
       <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
@@ -694,7 +703,7 @@ In other cases, if the master reads data from the slave, then it is required to 
 
 <!--   ========== I2C Init class =============================== -->
 
-   <template key="/$(_BASENAME)/init_description" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template key="/$(_BASENAME)/init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_BASENAME)
@@ -722,7 +731,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t *   I2cAddressLength_7Bit, 0x70 ,      // Address Length - 7-bit address and Slave Address
       \t *   400_kHz,                           // Baud rate in Hz (if option enabled)
       \t *                                      //     OR
-      \t *   I2cFMult_Mul1, 100 ,               // Baud rate prescaler - mul = 1 and Baud rate divider = 100
+      \t *   I2cPrescale_Mul1, 100 ,            // Baud rate prescaler - mul = 1 and Baud rate divider = 100
       \t *   I2cBusRole_Controller ,            // Bus Role Select - Controller mode
       \t *   I2cWakeup_Disabled ,               // Wake-up on match - Disabled
       \t *   I2cCallAddress_Disabled ,          // General Call Address - Disabled
@@ -761,7 +770,7 @@ In other cases, if the master reads data from the slave, then it is required to 
    ]]>
    </template>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
@@ -808,7 +817,7 @@ In other cases, if the master reads data from the slave, then it is required to 
    ]]>
    </template>
 
-   <template namespace="all" key="/$(_BASENAME)/static" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
+   <template namespace="all" key="/$(_BASENAME)/static" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
    <![CDATA[
       \t/**
       \t * IRQ handler
@@ -820,7 +829,7 @@ In other cases, if the master reads data from the slave, then it is required to 
    ]]>
    </template>
 
-   <template namespace="all" key="/$(_BASENAME)/public" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
+   <template namespace="all" key="/$(_BASENAME)/public" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
    <![CDATA[
       \t/**
       \t * Set interrupt callback function.
@@ -843,7 +852,7 @@ In other cases, if the master reads data from the slave, then it is required to 
    ]]>
    </template>
 
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true" >
    <![CDATA[
       $(/$(_BASENAME)/init_description)
       \tclass Init {
@@ -877,63 +886,70 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_a1_ad"
    ><![CDATA[
       \t   /// Address Register 1
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_f_mult,i2c_f_icr"
    ><![CDATA[
       \t   /// Frequency Divider register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_c1_iicie,i2c_c1_mst,i2c_c1_wuen,i2c_c1_dmaen"
    ><![CDATA[
       \t   /// Control Register 1
       \t   uint8_t %registerName = I2cBusRole_Controller;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      variables="i2c_c2_gcaen,i2c_c2_adext,i2c_c2_hdrs,i2c_c2_sbrc,i2c_c2_rmen,i2c_c2_ad"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      variables="i2c_d_data"
+   ><![CDATA[
+      \t   /// Data I/O register
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      variables="i2c_c2_gcaen,i2c_c2_adext,i2c_c2_sbrc,i2c_c2_rmen,i2c_c2_ad,i2c_c2_hdrs"
    ><![CDATA[
       \t   /// Control Register 2
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-      variables="i2c_flt_shen,i2c_flt_stopie,i2c_flt_ssie,i2c_flt_flt"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      variables="i2c_flt_shen,i2c_flt_ssie,i2c_flt_flt,i2c_flt_stopie"
    ><![CDATA[
       \t   /// Programmable Input Glitch Filter register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
       variables="i2c_ra_rad"
    ><![CDATA[
       \t   /// Range Address register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable" discardRepeats="true"
       variables="i2c_smb_fack,i2c_smb_alerten,i2c_smb_siicaen,i2c_smb_tcksel,i2c_smb_shtf2ie"
    ><![CDATA[
       \t   /// SMBus Control and Status register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable" discardRepeats="true"
       variables="i2c_a2_sad"
    ><![CDATA[
       \t   /// Address Register 2
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable" discardRepeats="true"
       variables="i2c_slt_value"
    ><![CDATA[
       \t   /// SCL Low Timeout Register
@@ -968,7 +984,6 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t * @param init Class containing initialisation values
       \t */
       \t void configure(const $(_Baseclass)BasicInfo::Init &init) {
-      \t   // ..........  Configure ...........
       \t
       \t   // Enable peripheral clock
       \t   Info::enableClock();
@@ -1139,6 +1154,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       variables="i2c_f_mult,i2c_f_icr"
       linePadding="xxx"
       nonDefaultParams="2"
+      params=",divider"
    >
    <![CDATA[
       \t   /**
@@ -1152,7 +1168,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t   template <typename... Types>
       \t   constexpr Init(%paramType0 %paramName0, %paramType1 %paramName1, Types... rest) : Init(rest...) {
       \t
-      \t      %registerName = %paramName0 | %macro1(%paramName1);
+      \t      %registerName = %paramName0 | (%mask1&%paramName1);
       \t   }
       \t\n
    ]]>
@@ -1195,7 +1211,7 @@ In other cases, if the master reads data from the slave, then it is required to 
             i2c_flt_ssie;
             i2c_flt_flt
             " >
-      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -1327,7 +1343,6 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t\n
    ]]></template>
 
-
    <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Get input clock frequency
@@ -1340,7 +1355,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t\n
    ]]></template>
 
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true" >
       <![CDATA[
       \t}; // class $(_Baseclass)BasicInfo::Init
       \t\n
@@ -1354,26 +1369,6 @@ In other cases, if the master reads data from the slave, then it is required to 
    </template>
 
    <!-- ************* Common ****************** -->
-
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" >
-   <![CDATA[
-      \t/**
-      \t * Class representing $(_NAME) interface
-      \t */
-      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {
-      \tpublic:
-      \t
-      \t   $(_Class)(const $(_Baseclass)BasicInfo::Init &init = $(_Class)Info::DefaultInitValue) : $(_Baseclass)Base_T(init) {}
-      \t
-      \t$(/$(_NAME)/InputMapping:   // No user mappings found)
-      \t};
-      \t\n
-   ]]>
-   </template>
-
-   <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.I2cValidate_MKE" >
-   </validate>
 
    <projectActionList id = "i2c_files" >
       <copy source="Project_Headers/i2c.h"            target="Project_Headers/i2c.h"            overwrite="true"  derived="true" />
@@ -1410,6 +1405,24 @@ In other cases, if the master reads data from the slave, then it is required to 
       <copy source="Snippets/pca9685.cpp"             target="Snippets/pca9685.cpp"             overwrite="true"  derived="true" />
       <copy source="Snippets/pca9685-example.cpp"     target="Snippets/pca9685-example.cpp"     overwrite="true"  derived="true" />
    </projectActionList>
+
+   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t/**
+      \t * Class representing $(_NAME) interface
+      \t */
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {
+      \tpublic:
+      \t
+      \t   $(_Class)(const $(_Baseclass)BasicInfo::Init &init = $(_Class)Info::DefaultInitValue) : $(_Baseclass)Base_T(init) {}
+      \t
+      \t$(/$(_NAME)/InputMapping:   // No user mappings found)
+      \t};
+      \t\n
+   ]]></template>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.I2cValidate_MKE" >
+   </validate>
 
    <!-- ************* Startup ****************** -->
 

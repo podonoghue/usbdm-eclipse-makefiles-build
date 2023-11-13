@@ -579,62 +579,14 @@ $(/ADC/InitMethod: // /ADC/InitMethod not found)
          AdcAsyncClock   adcAsyncClock   = AdcAsyncClock_Disabled
    ) {
       Info::enable();
-      adc->CFG1 = adcResolution|calculateClockDivider(adcClockSource, adcClockRange, adcPower)|adcPower|(adcSample&ADC_CFG1_ADLSMP_MASK);
-      adc->CFG2 = adcMuxsel|adcClockRange|adcAsyncClock|(adcSample&ADC_CFG2_ADLSTS_MASK);
-   }
 
-   /**
-    * Calculate ADC clock divider (ADC_CFG1_ADIV) and confirm clock source (ADC_CFG1_ADICLK)
-    * @note adcClockSource may be modified in return value
-    *
-    * @param adcClockSource   ADC clock source
-    * @param adcClockRange    ADC clock range (high/normal)
-    * @param adcPower         ADC power level (normal/low)
-    *
-    *
-    * @return ADC_CFG1_ADIV|ADC_CFG1_ADICLK value
-    */
-   static unsigned calculateClockDivider(AdcClockSource adcClockSource, AdcClockRange adcClockRange, AdcPower adcPower) {
-      if (adcClockSource == AdcClockSource_Asynch) {
-         // Internal clock is always OK with /1
-         return AdcClockSource_Asynch|AdcClockDivider_1;
-      }
-      static constexpr unsigned MinClock =  2000000;
-      unsigned maxClock = 0;
-      switch(adcPower|adcClockRange) {
-         case AdcPower_Low|AdcClockRange_Normal :
-         maxClock =  4000000;
-         break;
-         case AdcPower_Low|AdcClockRange_High :
-         maxClock =  6000000; // Guess
-         break;
-         case AdcPower_Normal|AdcClockRange_Normal :
-         maxClock =  8000000;
-         break;
-         case AdcPower_Normal|AdcClockRange_High :
-         maxClock = 12000000;
-         break;
-      }
-      unsigned adiv;
-      for(;;) {
-         unsigned clockFrequency = Info::getAdcClock(adcClockSource);
-         for (adiv=0; adiv<=3; adiv++) {
-            if ((clockFrequency <= maxClock) && (clockFrequency >= MinClock)) {
-               break;
-            }
-            clockFrequency /= 2;
-         }
-#if $(adc_alt_clock_is_busDiv2:false)
-         if ((adiv>3) && (adcClockSource == AdcClockSource_Bus)) {
-            // Automatically switch from  AdcClockSource_Bus -> AdcClockSource_Busdiv2
-            adcClockSource = AdcClockSource_Busdiv2;
-            continue;
-         }
-#endif
-         break;
-      }
-      usbdm_assert(adiv<4, "Unable to find suitable ADC clock");
-      return ADC_CFG1_ADIV(adiv)|adcClockSource;
+      uint8_t cfg1 = adcResolution|adcPower|adcClockSource|(adcSample&ADC_CFG1_ADLSMP_MASK);
+      uint8_t cfg2 = adcMuxsel|adcClockRange|adcAsyncClock|(adcSample&ADC_CFG2_ADLSTS_MASK);
+
+      cfg1 = calculateClockDivider(cfg1, cfg2);
+
+      adc->CFG1 = cfg1;
+      adc->CFG2 = cfg2;
    }
 
    /**
@@ -830,9 +782,11 @@ $(/ADC/InitMethod: // /ADC/InitMethod not found)
             adc->CV2 = low;
             break;
       }
+      // The mask for valid bits (note adcCompare value may contain out-of-bound bits)
+      static constexpr uint32_t mask = ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1);
+
       // Set comparison fields
-      adc->SC2 = adc->SC2 | (adc->SC2&~(ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1)))|
-            (adcCompare&(ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1)));
+      adc->SC2 = adc->SC2 | (adc->SC2&~mask)|(adcCompare&mask);
    }
 
    /**

@@ -390,7 +390,7 @@
 
    <constant key="plldivider" type="Long" value="2" />
 
-   <for keys="n" dim="numberOfClockSettings" >
+   <for keys="n" dim="=numberOfClockSettings" >
       <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" locked="true" >
 
          <aliasOption key="/MCG/enableClockConfiguration[%(n)]" locked="false" />
@@ -652,7 +652,7 @@
    <!-- ************* Common ****************** -->
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL" dim="numberOfClockSettings">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL" dim="=numberOfClockSettings">
       <param type="long" value="48MHz"  />     <!-- RUN Core          -->
       <param type="long" value="24MHz"  />     <!-- RUN Bus           -->
 

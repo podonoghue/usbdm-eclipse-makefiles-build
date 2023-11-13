@@ -525,7 +525,7 @@
 
 <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
       variables="dac_c0_dacrfs,dac_c1_buffer_mode,dac_c2_dacbfup"
    ><![CDATA[
       \t/**
@@ -558,7 +558,7 @@
       \t   %register1 = init.%registerName1;
       \t   %register2 = init.%registerName2;
       \t}\n\n
-   ]]></template>
+   ]]></variableTemplate>
 
    <!--   Constructors -->
 
@@ -635,7 +635,7 @@
       variables="
          dac_c0_dacen, dac_c0_dacrfs, dac_c0_dactrgsel, dac_c0_lpen, dac_c0_dacbwien, dac_c0_dacbtien, dac_c0_dacbbien,dac_c0_dacswtrg,
          dac_c1_dmaen, dac_c1_dacbfwm, dac_c1_buffer_mode,
-         dac_c2_dacbfrp, dac_c2_dacbfup" >
+         dac_c2_dacbfrp, dac_c2_dacbfup"
    ><![CDATA[
       \t/**
       \t * Default initialisation value for $(_Class)

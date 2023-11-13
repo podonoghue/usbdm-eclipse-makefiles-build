@@ -10,6 +10,7 @@
 #define INCLUDE_USBDM_DMA_H_
 
 #include "pin_mapping.h"
+#include "dmamux.h"
 #include "cstring"
 
 /*
@@ -30,15 +31,6 @@ typedef DmaBasicInfo::DmaConfig DmaConfig;
  * @brief Support for DMA operations
  * @{
  */
-
-/**
- * Controls operation of DMA-MUX channel.
- */
-enum DmaMuxEnable {
-   DmaMuxEnable_Disabled   = DMAMUX_CHCFG_ENBL(0),                      //!< DMA channel is disabled
-   DmaMuxEnable_Continuous = DMAMUX_CHCFG_ENBL(1)|DMAMUX_CHCFG_TRIG(0), //!< DMA channel is enabled continuously
-   DmaMuxEnable_Triggered  = DMAMUX_CHCFG_ENBL(1)|DMAMUX_CHCFG_TRIG(1), //!< DMA channel is enabled and triggered by PIT channel
-};
 
 /**
  * DMA transfer sizes.
@@ -104,30 +96,6 @@ enum DmaCanPreemptLower {
    DmaCanPreemptLower_Enabled  = DMA_DCHPRI_DPA(0), //!< Channel N can suspend a lower priority channel
    DmaCanPreemptLower_Disabled = DMA_DCHPRI_DPA(1), //!< Channel N cannot suspend a lower priority channel
 };
-
-/**
- * Calculate a DMA slot number using an offset from an existing number
- *
- * @param slot    Base slot to use
- * @param offset  Offset from base slot
- *
- * @return  DMA slot number calculated from slot+offset
- */
-constexpr DmaSlot inline operator+(DmaSlot slot, unsigned offset) {
-   return (DmaSlot)((unsigned)slot + offset);
-}
-
-/**
- * Calculate a DMA slot number using an offset from an existing number
- *
- * @param slot    Base slot to use
- * @param offset  Offset from base slot
- *
- * @return  DMA slot number calculated from slot+offset
- */
-constexpr DmaSlot inline operator+(DmaSlot slot, int offset) {
-   return slot + (unsigned)offset;
-}
 
 /**
  * Type definition for DMA interrupt call back.
@@ -304,48 +272,9 @@ struct __attribute__((__packed__)) DmaTcdAttr {
    }
 };
 
-//union __attribute__((packed)) DmaNbytesInfo {
-//
-//private:
-//   uint32_t nBytes;
-//
-//   struct {
-//      uint8_t   mloe:2;
-//      uint32_t  mloff:20;
-//      uint32_t  nbytes:10;
-//   };
-//
-//public:
-//   /**
-//    * Default constructor
-//    */
-//   constexpr DmaNbytesInfo() : nbytes(0) {}
-//
-//   constexpr DmaNbytesInfo(const DmaNbytesInfo &other) = default;
-//
-//   /**
-//    * Constructor for when Minor Loop Mapping is disabled (CR[EMLM] = 0)
-//    *
-//    * @param nbytes Number of bytes for minor loop
-//    */
-//   constexpr DmaNbytesInfo(uint32_t nbytes) : nbytes(nbytes) {}
-//
-//   /**
-//    * Constructor for when Minor Loop Mapping is enabled (CR[EMLM] = 1)
-//    *
-//    * @param dmaMinorLoopOffsetSelect  Controls whether the mapping as applied to source, destination or both
-//    * @param mloff                     Minor loop offset
-//    * @param nbytes                    Number of bytes for minor loop
-//    */
-//   constexpr DmaNbytesInfo(
-//         DmaMinorLoopOffsetSelect dmaMinorLoopOffsetSelect,
-//         uint32_t                 mloff,
-//         uint32_t                 nbytes
-//         ) : nbytes(dmaMinorLoopOffsetSelect|DMA_NBYTES_MLOFFYES_MLOFF(mloff)|DMA_NBYTES_MLOFFYES_NBYTES(nbytes)) {}
-//
-//   constexpr operator uint32_t() const { return nBytes; }
-//};
-
+/**
+ *  Used to create transfer information for source or destination
+ */
 class DmaInfo {
 
 public:
@@ -365,6 +294,15 @@ public:
    // This allows the address to be restricted to a binary range
    DmaModulo   dmaModulo;
 
+   /**
+    *
+    * @param startAddress           Start address of transfer
+    * @param offset                 Signed adjustment of address after each transfer
+    * @param dmaSize                Data transfer size
+    * @param dmaModulo              Modulo adjustment for address
+    *                               This allows the address to be restricted to a binary range
+    * @param lastAddressAdjustment  Signed adjustment of address at the completion of the major iteration
+    */
    constexpr DmaInfo(
          uint32_t  startAddress,
          int32_t   offset,
@@ -457,15 +395,15 @@ struct __attribute__((__packed__)) DmaTcd {
     *        sourceAddress              Starting source address
     *        sourceOffset               Offset to apply to source address after each read
     *        sourceSize                 Source size
-    *        sourceModulo               Source modulo
     *        lastSourceAdjustment       Source adjustment to apply after completion of the major iteration count
+    *        sourceModulo               Source modulo
     *
     * @param destinationInfo            The following information in this order:
     *        destinationAddress         Starting destination address
     *        destinationOffset          Offset to apply to destination address after each read
     *        destinationSize            Destination size
-    *        destinationModulo          Destination modulo
     *        lastDestinationAdjustment  Destination adjustment to apply after completion of the major iteration count
+    *        destinationModulo          Destination modulo
     *
     * @param minorLoopByteCount         Number of bytes to be transferred in each minor loop (per service request)
     * @param majorLoopCount             Number of major iterations
@@ -508,15 +446,15 @@ struct __attribute__((__packed__)) DmaTcd {
     *        sourceAddress              Starting source address
     *        sourceOffset               Offset to apply to source address after each read
     *        sourceSize                 Source size
-    *        sourceModulo               Source modulo
     *        lastSourceAdjustment       Source adjustment to apply after completion of the major iteration count
+    *        sourceModulo               Source modulo
     *
     * @param destinationInfo            The following information in this order:
     *        destinationAddress         Starting destination address
     *        destinationOffset          Offset to apply to destination address after each read
     *        destinationSize            Destination size
-    *        destinationModulo          Destination modulo
     *        lastDestinationAdjustment  Destination adjustment to apply after completion of the major iteration count
+    *        destinationModulo          Destination modulo
     *
     * @param dmaMinorLoopOffsetSelect   Selects if the minor loop offset is applied to source and/or destination
     * @param minorLoopOffset            Offset applied to source and/or destination after minor loop
@@ -556,7 +494,6 @@ struct __attribute__((__packed__)) DmaTcd {
       DLAST(destinationInfo.lastAddressAdjustment),
       CSR(dmaTcdCsr) {
    }
-
 };
 
 /**
@@ -604,75 +541,6 @@ constexpr uint16_t dmaCiter(DmaChannelNum dmaChannelNum, uint16_t citer) {
          usbdm_assert((citer<(1<<9)), "citer is too large"),
          DMA_CITER_ELINKNO_ELINK(1)|DMA_CITER_ELINKYES_LINKCH(dmaChannelNum)|DMA_CITER_ELINKYES_CITER(citer);
 }
-
-/**
- * Template class providing interface to DMA Multiplexor.
- *
- * @tparam DmaMuxInfo  Information class for DMAMux
- * @tparam NumChannels Number of DMA channels in associated DMA controller
- *
- * @code
- * using dmamux = DmaMux_T<DmaMuxInfo>;
- *
- *  dmamux::configure();
- *
- * @endcode
- */
-template <class DmaMuxInfo, unsigned NumChannels>
-class DmaMux_T {
-
-public:
-
-   /// Number of multiplexor channels
-   static const unsigned numChannels = NumChannels;
-
-   /**
-    * Configures and enable hardware requests on a channel.
-    *
-    * @param[in] dmaChannelNum   The DMA channel being enabled
-    * @param[in] dmaSlot         The DMA slot (source) to connect to this channel
-    * @param[in] dmaMuxEnable    The mode for the channel
-    */
-   static void configure(DmaChannelNum dmaChannelNum, DmaSlot dmaSlot, DmaMuxEnable dmaMuxEnable=DmaMuxEnable_Continuous) {
-
-#if $(/PIT/_present:false)
-      // Throttled DMA channels limited by PIT channels available
-      usbdm_assert((dmaMuxEnable != DmaMuxEnable_Triggered) || (dmaChannelNum<=USBDM::PitInfo::NumChannels),
-            "Illegal PIT throttled channel");
-#endif
-
-#if $(/LPIT/_present:false)
-      usbdm_assert((dmaMuxEnable != DmaMuxEnable_Triggered) || (dmaChannelNum<=USBDM::Lpit0Info::NumChannels),
-            "Illegal PIT throttled channel");
-#endif
-
-      // DmaSlots 0-63 must associate with DMA channels 0-15
-      // DmaSlots 64-128 must associate with DMA channels 15-31
-      usbdm_assert(((dmaChannelNum<16)||(dmaSlot>=64))&&((dmaChannelNum>=16)||(dmaSlot<64)),
-            "Illegal LPIT channel");
-
-      // Enable clock to peripheral
-      DmaMuxInfo::enableClock();
-
-      // Configure channel - must be disabled to change
-      DmaMuxInfo::dmamux->CHCFG[dmaChannelNum] = 0;
-      DmaMuxInfo::dmamux->CHCFG[dmaChannelNum] = dmaMuxEnable|DMAMUX_CHCFG_SOURCE(dmaSlot);
-   }
-
-   /**
-    * Disable hardware requests on channel
-    *
-    * @param dmaChannelNum Channel to modify
-    */
-   static void disable(DmaChannelNum dmaChannelNum) {
-
-      // Enable clock to peripheral
-      DmaMuxInfo::enableClock();
-
-      // Disable channel
-      DmaMuxInfo::dmamux->CHCFG[dmaChannelNum] = 0;
-   }
-};
 
 /**
  * Class representing a DMA controller.

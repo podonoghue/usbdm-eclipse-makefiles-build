@@ -52,7 +52,7 @@
       <choice value="true"  name="Enabled"  isDefault="true" />
    </binaryOption>
 
-   <for keys="n" dim="1,/SIM/numberOfClockSettings" >
+   <for keys="n" dim="=1,/SIM/numberOfClockSettings" >
       <binaryOption key="enableClockConfiguration[%(n)]"
          enabledBy="enablePeripheralSupport"
          hidden="true"
@@ -116,7 +116,7 @@
       <choice value="1" name="High Gain"  />
    </choiceOption>
 
-   <for keys="n" dim="/SIM/numberOfClockSettings">
+   <for keys="n" dim="=/SIM/numberOfClockSettings">
       <categoryOption key="ClockConfig[%(n)]"
          enabledBy="enablePeripheralSupport&amp;&amp;enableClockConfiguration[%(n)]"
          description="Clock configuration[%(n)]"
@@ -1075,7 +1075,7 @@
       \t}\n\n
       ]]></clockCodeTemplate>
 
-   <template variables="mcg_c7_oscsel_fixed[]"
+   <variableTemplate variables="mcg_c7_oscsel_fixed[]"
    ><![CDATA[
       \t/**
       \t * Get %description
@@ -1086,7 +1086,7 @@
       \t
       \t   return $(%variable.code[0]);
       \t}\n\n
-      ]]></template>
+      ]]></variableTemplate>
 
    <template condition="mcg_sc_fcrdiv[]"
    ><![CDATA[
@@ -1176,13 +1176,13 @@
       \t\n
    ]]></template>
 
-   <for keys="n" dim="/SIM/numberOfClockSettings">
+   <for keys="n" dim="=/SIM/numberOfClockSettings">
       <template key="ClockConfig" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
          \t$(ClockConfig[%(n)]://-- missing name for configuration --),\n
       ]]></template>
    </for>
 
-   <for keys="n" dim="/SIM/numberOfClockSettings">
+   <for keys="n" dim="=/SIM/numberOfClockSettings">
       <template key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
       ><![CDATA[
          \t{  // $(ClockConfig[%(n)]) ($(mcgClockMode[%(n)].enum[]))

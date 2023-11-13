@@ -48,7 +48,7 @@
       <choice value="true"  name="Enabled"  isDefault="true" />
    </binaryOption>
 
-   <for keys="n" dim="1,/SIM/numberOfClockSettings" >
+   <for keys="n" dim="=1,/SIM/numberOfClockSettings" >
       <binaryOption key="enableClockConfiguration[%(n)]"
          enabledBy="enablePeripheralSupport"
          hidden="true"
@@ -80,7 +80,7 @@
       toolTip="Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       value="37.5_kHz" />
 
-   <for keys="n" dim="/SIM/numberOfClockSettings" >
+   <for keys="n" dim="=/SIM/numberOfClockSettings" >
       <categoryOption key="ClockConfig[%(n)]"
          enabledBy="enablePeripheralSupport&amp;&amp;enableClockConfiguration[%(n)]"
          description="Clock configuration[%(n)]"
@@ -784,13 +784,13 @@
       \t}\n\n
       ]]></clockCodeTemplate>
 
-   <for keys="n" dim="/SIM/numberOfClockSettings" >
+   <for keys="n" dim="=/SIM/numberOfClockSettings" >
       <template key="ClockConfig" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
          \t$(ClockConfig[%(n)]://-- missing name for configuration --),\n
       ]]></template>
    </for>
 
-   <for keys="n" dim="/SIM/numberOfClockSettings" >
+   <for keys="n" dim="=/SIM/numberOfClockSettings" >
       <template key="IcsClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
       ><![CDATA[
          \t{  // $(ClockConfig[%(n)]) ($(icsClockMode[%(n)].enum[]))
@@ -1086,7 +1086,7 @@
    ]]></template>
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.IcsValidator" dim="/SIM/numberOfClockSettings" >
+      class="net.sourceforge.usbdm.deviceEditor.validators.IcsValidator" dim="=/SIM/numberOfClockSettings" >
    </validate>
 
    <projectActionList id="ics_files" >

@@ -325,7 +325,7 @@
       </for>
    </category>
 
-   <for keys="n" dim="numberOfClockSettings" >
+   <for keys="n" dim="=numberOfClockSettings" >
       <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" locked="true" >
 
          <aliasOption key="/MCG/enableClockConfiguration[%(n)]" locked="false" />
@@ -751,7 +751,7 @@
    <xi:include href="sim_commonTemplates.xml" />
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="numberOfClockSettings">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="=numberOfClockSettings">
       <param type="long" value="120MHz" />     <!-- RUN Core          -->
       <param type="long" value="60MHz"  />     <!-- RUN Bus           -->
       <param type="long" value="60MHz"  />     <!-- RUN FlexBus       -->

@@ -319,9 +319,9 @@
 
 <!--  ============== PDB Channels ============== -->
 
-   <for keys="n" dim="NumChannels" >
+   <for keys="n" dim="=NumChannels" >
       <category description="ADC%(n) pretriggers" >
-         <for keys="m" dim="NumPreTriggers" >
+         <for keys="m" dim="=NumPreTriggers" >
             <title description="Pre-trigger %(m)"
                toolTip="Each channel has a number of pre-trigger outputs that are usually associated with an ADC\n
                         Each pre-trigger is asserted once during a PDB cycle."
@@ -361,7 +361,7 @@
 
 <!--  ============== DAC Triggers ============== -->
 
-   <for keys="x" dim="NumDacIntervalTriggers" >
+   <for keys="x" dim="=NumDacIntervalTriggers" >
       <category
          description="Trigger to DAC%(x)"
          toolTip="Each DAC trigger is associated with a DAC\n
@@ -411,7 +411,7 @@
 
 <!--  ============== Pulse Outputs ============== -->
 
-   <for keys="y" dim="NumPulseOutputs" >
+   <for keys="y" dim="=NumPulseOutputs" >
       <category
          description="Pulse output %(y) to CMP%(y)"
          toolTip="The pulse output is usually used to control the sample window for an associated CMP.\n
@@ -1048,7 +1048,7 @@
    ]]></variableTemplate>
 
    <!--  Pre-triggers -->
-   <for keys="m" dim="NumPreTriggers" >
+   <for keys="m" dim="=NumPreTriggers" >
       <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="pdb_channel, pdb_ch0_c1_pt%(m), pdb_ch0_dly%(m)"
          nonDefaultParams="3"
@@ -1116,7 +1116,7 @@
    </for>
 
    <!--   DAC triggers -->
-   <for keys="x" dim="NumDacIntervalTriggers" >
+   <for keys="x" dim="=NumDacIntervalTriggers" >
       <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="pdb_intc%(x)_triggerMode, pdb_int%(x)"
          nonDefaultParams="2"
@@ -1183,7 +1183,7 @@
    </for>
 
    <!--  Pulse outputs -->
-   <for keys="y" dim="NumPulseOutputs" >
+   <for keys="y" dim="=NumPulseOutputs" >
       <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="pdb_poen_en%(y), pdb_po%(y)_dly1, pdb_po%(y)_dly2"
          nonDefaultParams="3"
@@ -1264,8 +1264,8 @@
        \t
    ]]></variableTemplate>
 
-   <for keys="n" dim="NumChannels" >
-      <for keys="m" dim="NumPreTriggers" >
+   <for keys="n" dim="=NumChannels" >
+      <for keys="m" dim="=NumPreTriggers" >
          <variableTemplate variables="pdb_ch%(n)_c1_pt%(m), pdb_ch%(n)_dly%(m)" codeGenCondition="enablePeripheralSupport"
             separator=","
             terminator=","
@@ -1278,7 +1278,7 @@
       </for>
    </for>
 
-   <for keys="x" dim="NumDacIntervalTriggers" >
+   <for keys="x" dim="=NumDacIntervalTriggers" >
       <variableTemplate variables="pdb_intc%(x)_triggerMode, pdb_int%(x)" codeGenCondition="enablePeripheralSupport"
          separator=","
          terminator=","
@@ -1291,7 +1291,7 @@
       ]]></variableTemplate>
    </for>
 
-   <for keys="y" dim="NumPulseOutputs" >
+   <for keys="y" dim="=NumPulseOutputs" >
       <variableTemplate variables="pdb_poen_en%(y), pdb_po%(y)_dly1, pdb_po%(y)_dly2" codeGenCondition="enablePeripheralSupport"
          separator=","
          terminator=","

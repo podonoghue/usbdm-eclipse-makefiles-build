@@ -597,7 +597,7 @@
       \t */
       \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallbacks[] = {\n
    ]]></template>
-   <for keys="ch" dim="NumChannels" >
+   <for keys="ch" dim="=NumChannels" >
       <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
          \t   $(_Class)Info::unhandledCallback,\n
       ]]></template>

@@ -22,10 +22,12 @@
    <title />
 
 <!-- ==================== Constants ==================== -->
+   <!-- Defined in SIM -->
    <intOption key="NumChannels" locked="true" derived="true"
-      value="=_channelCount"
+      value="=/PIT_NumChannels"
       description="Number of PIT channels" />
 
+   <!-- Derived from SVD -->
    <intOption key="NumVectors" locked="true" derived="true"
       value="=_irqCount"
       description="Number of PIT IRQ vectors" />
@@ -49,7 +51,7 @@
       \t}
       \t\n
    ]]></template>
-   <template condition="=_channelCount == _irqCount" ><![CDATA[
+   <template condition="=/PIT_NumChannels == _irqCount" ><![CDATA[
       \t/**
       \t * Map channel number to corresponding IRQ number
       \t * This is needed as multiple channels may be handled by a single IRQ vector
@@ -64,7 +66,7 @@
       \t}
       \t\n
    ]]></template>
-   <template condition="=(_irqCount!=1) &amp;&amp; (_channelCount&gt;_irqCount)" ><![CDATA[
+   <template condition="=(_irqCount!=1) &amp;&amp; (/PIT_NumChannels&gt;_irqCount)" ><![CDATA[
       \t/**
       \t * Map channel number to corresponding IRQ number
       \t * This is needed as multiple channels may be handled by a single IRQ vector
@@ -200,7 +202,7 @@
       <choice name="Timers stop in Debug"  value="1" enum="StopInDebug" isDefault="true" />
    </binaryOption>
 
-   <for keys="ch" dim="NumChannels" >
+   <for keys="ch" dim="=NumChannels" >
       <title description="Channel %(ch)" />
 
       <binaryOption key="pit_tctrl_ten[%(ch)]"  condition="pit_tctrl_tie_present"
@@ -659,7 +661,7 @@
       \t */
       \tPitInfo::CallbackFunction PitInfo::sCallbacks[] = {\n
    ]]></template>
-   <for keys="ch" dim="_channelCount" >
+   <for keys="ch" dim="=/PIT_NumChannels" >
       <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
          \t   \$(_Baseclass)BasicInfo::unhandledCallback,\n
       ]]></template>
@@ -1029,7 +1031,7 @@
       \tstatic constexpr ChannelInit DefaultChannelInitValues[] = {\n
    ]]></template>
 
-   <for keys="ch" dim="NumChannels" >
+   <for keys="ch" dim="=NumChannels" >
       <variableTemplate  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
          separator=","
          terminator=","
@@ -1204,7 +1206,7 @@
        \n
    ]]></template>
 
-   <for keys="ch" dim="NumChannels">
+   <for keys="ch" dim="=NumChannels">
       <template key="/PIT/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
       <![CDATA[
          #define PIT$(_instance)_CHANNEL%(ch)_HANDLER() template<>template<> void Pit$(_instance)::Channel<%(ch)>::irqHandler()\n

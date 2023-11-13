@@ -24,9 +24,6 @@
         Substituted anywhere for $(keyValue)
         key is
 
-      - dim="expr"
-        Allow subscripted template
-
       Constants that affect this inclusion
 
       - Code to disable interrupts (has default of 'disableNvicInterrupts();')

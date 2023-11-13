@@ -192,7 +192,7 @@ $(/DAC/InitMethod: // /DAC/InitMethod not found)
          DacPower           dacPower           = DacPower_Low,
          DacTriggerSelect   dacTriggerSelect   = DacTriggerSelect_Software) {
 
-      enable();
+      Info::enable();
       dac->C0 = DAC_C0_DACEN_MASK|dacReferenceSelect|dacTriggerSelect|dacPower;
    }
 
