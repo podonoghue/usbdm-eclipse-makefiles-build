@@ -15,6 +15,8 @@
 const int maxSrecSize = 32; // Maximum number of bytes per data S-record
 bool wordAddresses = false;
 bool altName       = false;
+bool verbose       = false;
+bool randomise     = false;
 
       uint32_t  securityStartAddress = 0xFF0F;
       uint32_t  securitySize         = 0;
@@ -179,21 +181,21 @@ void dumpWords(FILE *fp, uint32_t startAddress, uint32_t endAddress) {
 
 void usage(void) {
    fprintf(stderr, "\n\nUsage:\n"
-                   "CreateDummyImage [-alt] [-word] [-hcs08|-hcs12|-kin|-cfv1] imageFile.s19 [startAddress endAddress]*\n\n"
-                   "-alt   - Create file with alternative name\n" 
-                   "-word  - create image with word addresses (DSC)\n"
-                   "-hcs08 - set image as unsecured for hcs08 devices\n"
-                   "-s12z  - set image as unsecured for s12z devices\n"
-                   "-hcs12 - set image as unsecured for hcs12 devices\n"
-                   "-kin   - set image as unsecured for kinetis devices\n"
-                   "-cfv1  - set image as unsecured for coldfire V1 devices\n\n"
+                   "CreateDummyImage [-alt] [-word] [-random] [-verbose] [-hcs08|-hcs12|-kin|-cfv1] imageFile.s19 [startAddress endAddress]*\n\n"
+                   "-alt      - Create file with alternative name\n"
+                   "-word     - create image with word addresses (DSC)\n"
+                   "-random   - Randomise seed before 1st use\n"
+                   "-verbose  - Report as each block range is written\n"
+                   "-hcs08    - Set image as unsecured for hcs08 devices\n"
+                   "-s12z     - Set image as unsecured for s12z devices\n"
+                   "-hcs12    - Set image as unsecured for hcs12 devices\n"
+                   "-kin      - Set image as unsecured for kinetis devices\n"
+                   "-cfv1     - Set image as unsecured for coldfire V1 devices\n\n"
            );
    exit(1);
 }
 int main(int argc, char *argv[]) {
    int argNum;
-
-   srand ((unsigned int)time(NULL));
 
    for(argNum=1;argNum<argc;) {
       if (strcasecmp(argv[argNum], "-word") == 0) {
@@ -202,6 +204,14 @@ int main(int argc, char *argv[]) {
       }
       else if (strcasecmp(argv[argNum], "-alt") == 0) {
          altName = true;
+         argNum++;
+      }
+      else if (strcasecmp(argv[argNum], "-verbose") == 0) {
+         verbose = true;
+         argNum++;
+      }
+      else if (strcasecmp(argv[argNum], "-random") == 0) {
+         randomise = true;
          argNum++;
       }
       else if (strcasecmp(argv[argNum], "-hcs08") == 0) {
@@ -294,7 +304,7 @@ int main(int argc, char *argv[]) {
    }
    // Must have at least a filename remaining
    if (argNum >= argc) {
-      fprintf(stderr, "\nInsufficient arguments (found = %d, argc = %d)\n", argNum, argc);
+      fprintf(stderr, "\nFilename argument missing\n");
       usage();
    }
    char fileName[2000];
@@ -311,6 +321,9 @@ int main(int argc, char *argv[]) {
    printf("Producing image file: %s\n", fileName);
    dumpS0Rec(fp, fileName);
 
+   if (randomise) {
+      srand ((unsigned int)time(NULL));
+   }
    // Remaining parameters must be in pairs
    if (((argc-argNum)%2) != 0) {
       fprintf(stderr, "\nodd number of memory range arguments\n");
@@ -321,6 +334,9 @@ int main(int argc, char *argv[]) {
    for(;argNum<argc-1; argNum+=2) {
       uint32_t startAddress = strtol(argv[argNum  ], &cp, 0);
       uint32_t endAddress   = strtol(argv[argNum+1], &cp, 0);
+      if (verbose) {
+         fprintf(stderr, "Range [0x%08X..0x%08X] \n", startAddress, endAddress);
+      }
       if (wordAddresses) {
          dumpWords(fp, startAddress, endAddress);
       }
