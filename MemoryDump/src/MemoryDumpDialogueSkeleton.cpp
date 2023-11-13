@@ -112,7 +112,7 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	interfaceSpeedControl->SetSelection( 0 );
 	interfaceSpeedControl->Enable( false );
 
-	sbSizer2->Add( interfaceSpeedControl, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	sbSizer2->Add( interfaceSpeedControl, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer8->Add( sbSizer2, 0, wxEXPAND|wxALL, 5 );
@@ -139,7 +139,6 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
 
 	pagedFlashAddressCheckBox = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, wxT("Paged Flash"), wxDefaultPosition, wxDefaultSize, 0 );
-	pagedFlashAddressCheckBox->SetValue(true);
 	pagedFlashAddressCheckBox->SetToolTip( wxT("Use PPAGE register for flash memory in range [0x8000 0xBFFF]") );
 
 	fgSizer1->Add( pagedFlashAddressCheckBox, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
@@ -164,7 +163,6 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	fgSizer1->Add( flashPageTextCntrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	pagedEepromAddressCheckBox = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, wxT("Paged EEPROM"), wxDefaultPosition, wxDefaultSize, 0 );
-	pagedEepromAddressCheckBox->SetValue(true);
 	pagedEepromAddressCheckBox->SetToolTip( wxT("Use EPAGE register for flash memory in range [0x0800 0x0BFF]") );
 
 	fgSizer1->Add( pagedEepromAddressCheckBox, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
@@ -191,21 +189,32 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 
 	bSizer8->Add( fgSizer1, 1, wxEXPAND, 5 );
 
-	m_staticText3 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, wxT("\n[Start...End]\nAddress range\n(inclusive)\n\nWidth\nWidth of access\nSet to 0 to disable range \n\nValues in hex.\n"), wxDefaultPosition, wxSize( 100,-1 ), 0 );
+	linearAddressCheckBox = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, wxT("Global (Linear) Addressing"), wxDefaultPosition, wxDefaultSize, 0 );
+	linearAddressCheckBox->SetToolTip( wxT("Assume address ranges are linear addresses\naccessed through the Global Memory Map") );
+
+	bSizer8->Add( linearAddressCheckBox, 0, wxALL, 5 );
+
+	m_staticText3 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, wxT("\n[Start...End]\nAddress range (inclusive)\n\nWidth\nWidth of access\nSet to 0 to disable range \n\nValues in hex."), wxDefaultPosition, wxSize( 100,-1 ), 0 );
 	m_staticText3->Wrap( -1 );
 	m_staticText3->SetToolTip( wxT("Enter one or more memory ranges") );
 
 	bSizer8->Add( m_staticText3, 0, wxALL|wxEXPAND, 5 );
 
+	wxBoxSizer* bSizer81;
+	bSizer81 = new wxBoxSizer( wxHORIZONTAL );
+
 	LoadSettingsButtonControl = new wxButton( sbSizer3->GetStaticBox(), wxID_ANY, wxT("Load Settings"), wxDefaultPosition, wxDefaultSize, 0 );
 	LoadSettingsButtonControl->SetToolTip( wxT("Load settings from file") );
 
-	bSizer8->Add( LoadSettingsButtonControl, 0, wxALL, 5 );
+	bSizer81->Add( LoadSettingsButtonControl, 0, wxALL, 5 );
 
 	SaveSettingsButtonControl = new wxButton( sbSizer3->GetStaticBox(), wxID_ANY, wxT("Save Settings"), wxDefaultPosition, wxDefaultSize, 0 );
 	SaveSettingsButtonControl->SetToolTip( wxT("Save settings to file") );
 
-	bSizer8->Add( SaveSettingsButtonControl, 0, wxALL, 5 );
+	bSizer81->Add( SaveSettingsButtonControl, 0, wxALL, 5 );
+
+
+	bSizer8->Add( bSizer81, 1, wxEXPAND, 5 );
 
 
 	bSizer5->Add( bSizer8, 1, wxEXPAND, 5 );
@@ -264,6 +273,7 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	pagedFlashAddressCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPagedCheckBoxEvent ), NULL, this );
 	flashPageTextCntrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPageAddressChange ), NULL, this );
 	pagedEepromAddressCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPagedCheckBoxEvent ), NULL, this );
+	linearAddressCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnLinearAddressCheckBoxEvent ), NULL, this );
 	LoadSettingsButtonControl->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnLoadSettingsClick ), NULL, this );
 	SaveSettingsButtonControl->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnSaveSettingsClick ), NULL, this );
 	readMemoryButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnReadMemoryButtonClick ), NULL, this );
@@ -283,6 +293,7 @@ MemoryDumpDialogueSkeleton::~MemoryDumpDialogueSkeleton()
 	pagedFlashAddressCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPagedCheckBoxEvent ), NULL, this );
 	flashPageTextCntrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPageAddressChange ), NULL, this );
 	pagedEepromAddressCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPagedCheckBoxEvent ), NULL, this );
+	linearAddressCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnLinearAddressCheckBoxEvent ), NULL, this );
 	LoadSettingsButtonControl->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnLoadSettingsClick ), NULL, this );
 	SaveSettingsButtonControl->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnSaveSettingsClick ), NULL, this );
 	readMemoryButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnReadMemoryButtonClick ), NULL, this );

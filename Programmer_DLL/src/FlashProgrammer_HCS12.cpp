@@ -1424,7 +1424,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::executeTargetProgram(uint8_t *pBuffer, ui
    }
    progressTimer->progress(0, NULL);
 #ifdef LOG
-   log.print("Polling");
+   log.print("Polling\n");
    int dotCount = 50;
 #endif
    // Wait for target stop at execution completion
@@ -2252,7 +2252,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::doSelectiveErase(FlashImagePtr flashImage
 //!
 //! @param flashImage Description of flash contents to be checked.
 //!
-//! @return error code see \ref USBDM_ErrorCode
+//! @return error code see \ref USBDM_ErrorCode if invalid range
 //!
 //! @note Assumes the target device has already been opened & USBDM options set.
 //! @note Assumes target connection has been established
@@ -2411,6 +2411,8 @@ USBDM_ErrorCode FlashProgrammer_HCS12::doReadbackVerify(FlashImagePtr flashImage
       while (regionSize>0) {
          // Get memory block containing address
          MemoryRegionConstPtr memRegion = device->getMemoryRegionFor(imageAddress, memorySpace);
+         AddressType addressType = memRegion->getAddressType();
+
          if (memRegion == NULL) {
             checkResult = PROGRAMMING_RC_ERROR_OUTSIDE_TARGET_FLASH;
             log.error("Verifying Block %s[0x%8.8X..0x%8.8X] => %s\n", getMemSpaceName(memorySpace), imageAddress, imageAddress+regionSize-1, bdmInterface->getErrorString(checkResult));
@@ -2443,6 +2445,10 @@ USBDM_ErrorCode FlashProgrammer_HCS12::doReadbackVerify(FlashImagePtr flashImage
          if (((imageAddress+blockSize) & ((memorySpace&MS_SIZE)-1)) != 0) {
             // Unaligned end address
             memorySpace = (MemorySpace_t)((memorySpace&~MS_SIZE)|MS_Byte);
+         }
+         if (addressType == AddressType::AddrLinear) {
+            // Make Global address
+            memorySpace = MemorySpace_t(memorySpace|MS_Global);
          }
 #endif
          if (bdmInterface->readMemory(memorySpace, blockSize*sizeof(uint8_t), imageAddress, (uint8_t *)buffer) != BDM_RC_OK) {

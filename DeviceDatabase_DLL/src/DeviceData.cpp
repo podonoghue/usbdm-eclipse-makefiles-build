@@ -1599,7 +1599,7 @@ bool DeviceData::isThisDevice(std::map<uint32_t,uint32_t> desiredSDIDs, bool acc
  *
  * @return Memory type of region (or MemInvalid if no information available)
  */
-MemType_t DeviceData::getMemoryType(uint32_t address, MemorySpace_t memorySpace) {
+MemType_t DeviceData::getMemoryType(uint32_t address, MemorySpace_t memorySpace) const {
    MemoryRegionConstPtr memoryRegion = getMemoryRegionFor(address, memorySpace);
    if (memoryRegion != NULL) {
       return memoryRegion->getMemoryType();

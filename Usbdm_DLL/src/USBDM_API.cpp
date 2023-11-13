@@ -2756,7 +2756,7 @@ USBDM_ErrorCode USBDM_WriteMemory( unsigned int        memorySpace,
 /** ======================================================================
  *  Read data from target memory
  *
- *  @param elementSize = Size of data (1/2/4 bytes)
+ *  @param memorySpace = Size of data (1/2/4 bytes) & memory space
  *  @param byteCount   = Number of bytes to transfer
  *  @param address     = Memory address
  *  @param data        = Where to place data
@@ -2787,7 +2787,7 @@ USBDM_ErrorCode USBDM_ReadMemory( unsigned int  memorySpace,
 
    bdmState.activityFlag = BDM_ACTIVE;
 
-   log.warning("elementSize=%d, count=0x%X(%d), addr=[%s0x%06X..0x%06X]\n",
+   log.printq("elementSize=%d, count=0x%X(%d), addr=[%s0x%06X..0x%06X]\n",
           elementSize, byteCount, byteCount, getMemSpaceAbbreviatedName((MemorySpace_t)memorySpace), address, address+byteCount-1);
 
    #ifdef FIX_ALIGNMENT
@@ -2859,7 +2859,7 @@ USBDM_ErrorCode USBDM_ReadMemory( unsigned int  memorySpace,
          blockSize = MaxDataSize;
       }
       if ((bdmState.targetType == T_HC12) && ((memorySpace&MS_SPACE) == MS_Global)) {
-         log.print("Global Access 0x%6X\n", address);
+//         log.print("Global Access 0x%06X\n", address);
          // Make sure HCS12 Global access doesn't cross page boundary
          uint32_t nextPageBoundary = (address + 0x10000UL)&~0xFFFFUL;
          if ((address+blockSize-1) >= nextPageBoundary) {

@@ -225,6 +225,24 @@ USBDM_ErrorCode MemoryDumpDialogue::doTargetInitializationString() {
    } while (!token.IsEmpty());
    return BDM_RC_OK;
 }
+
+/**
+ * Check if data is all blank (==0xFF)
+ *
+ * @param data Data buffer to check
+ * @param size Number of bytes in buffer
+ *
+ * @return  true if blank.
+ */
+static bool isAllBlank(unsigned char data[], unsigned size) {
+
+   for(unsigned index=0; index<size; index++) {
+      if (data[index] != 0xFF) {
+         return false;
+      }
+   }
+   return true;
+}
 /**
  * Read memory
  *
@@ -249,11 +267,17 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
    };
 
    // Check for paging
-   long ppageRegAddress = 0;
-   long epageRegAddress = 0;
-   bool isFlashPaged    = false;
-   bool isEepromPaged   = false;
+   long ppageRegAddress    = 0;
+   long epageRegAddress    = 0;
+   bool isFlashPaged       = false;
+   bool isEepromPaged      = false;
+   bool isGlobalAddress    = false;
 
+   if (targetType == T_HC12) {
+      if (linearAddressCheckBox->GetValue()) {
+         isGlobalAddress = true;
+      }
+   }
    if (isPagedDevice()) {
       if (pagedFlashAddressCheckBox->GetValue()){
          isFlashPaged = true;
@@ -295,6 +319,21 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
          // Skip disabled rows
          continue;
       }
+      MemorySpace_t memorySpace = MS_None;
+      switch (width) {
+         case 1: memorySpace = MS_Byte; break;
+         case 2: memorySpace = MS_Word; break;
+         case 4: memorySpace = MS_Long; break;
+         default: break;
+      }
+      if (memorySpace == MS_None) {
+         writeStatus("Illegal width (entry #%d), \'%s\'\n", row+1, (const char *)widthValue.c_str());
+         return BDM_RC_ILLEGAL_PARAMS;
+      }
+      if (isGlobalAddress) {
+         // Make global address space access
+         memorySpace = MemorySpace_t(memorySpace | MS_Global);
+      }
       if (!startValue.ToLong(&start, 16)) {
          writeStatus("Illegal start address (entry #%d), \'%s\'\n", row+1, (const char *)startValue.c_str());
          return BDM_RC_ILLEGAL_PARAMS;
@@ -307,6 +346,8 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
          writeStatus("Illegal range (entry #%d), [0x%06lX, 0x%06lX]\n", row+1, start, end);
          return BDM_RC_ILLEGAL_PARAMS;
       }
+      writeStatus("Using Memory space = %s\n", getMemSpaceName(memorySpace));
+
       char buff[100];
       snprintf(buff, sizeof(buff), "Doing block [0x%06lX, 0x%06lX]", start, end);
       progress->update(0, buff);
@@ -380,13 +421,15 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
             long int pagedStart = pageOffset(start);
             long int pagedEnd   = pagedStart+size-1;
             size = pagedEnd-pagedStart+1;
-            writeStatus("Reading memory-block[0x%02X:%04lX, 0x%02X:%04lX, %ld]...\n", page, pagedStart, page, pagedStart+size-1, width);
-            rc = bdmInterface->readMemory(width, size, pagedStart, data);
+            writeStatus("Reading memory-block[0x%02X:%04lX, 0x%02X:%04lX, %ld]...", page, pagedStart, page, pagedStart+size-1, width);
+            rc = bdmInterface->readMemory(memorySpace, size, pagedStart, data);
+            writeStatus(isAllBlank(data, size)?"Blank\n":"\n");
          }
          else {
             // Flat memory or non-paged range
-            writeStatus("Reading memory-block[0x%06lX, 0x%06lX, %ld]...\n", start, start+size-1, width);
-            rc = bdmInterface->readMemory(width, size, start, data);
+            writeStatus("Reading memory-block[0x%06lX, 0x%06lX, %ld]...", start, start+size-1, width);
+            rc = bdmInterface->readMemory(memorySpace, size, start, data);
+            writeStatus(isAllBlank(data, size)?"Blank\n":"\n");
          }
          progress->incrementalUpdate(size);
          if (rc != BDM_RC_OK) {
@@ -440,6 +483,7 @@ void MemoryDumpDialogue::loadSettings(AppSettings &appSettings) {
    keepEmptySRECsCheckbox->SetValue(         appSettings.getValue("keepEmptySRECs", false));
    pagedFlashAddressCheckBox->SetValue(      appSettings.getValue("pagedFlash", false));
    pagedEepromAddressCheckBox->SetValue(     appSettings.getValue("pagedEeprom", false));
+   linearAddressCheckBox->SetValue(          appSettings.getValue("linearAddress", false));
 
    initializationCheckbox->SetValue(         appSettings.getValue("initializeTarget", false));
    initialializeTextCntrl->SetValue(wxString(appSettings.getValue("initializationString", "")));
@@ -496,6 +540,7 @@ void MemoryDumpDialogue::saveSettings(AppSettings &appSettings) {
    appSettings.addValue("interfaceSpeed",   getInterfaceSpeed());
    appSettings.addValue("pagedFlash",       pagedFlashAddressCheckBox->GetValue());
    appSettings.addValue("pagedEeprom",      pagedEepromAddressCheckBox->GetValue());
+   appSettings.addValue("linearAddress",    linearAddressCheckBox->GetValue());
 
    for (int row = 0; row < memoryRangesGrid->GetNumberRows(); row++) {
       long int start, end, width;
@@ -807,7 +852,8 @@ void MemoryDumpDialogue::setTargetType(TargetType_t targetType) {
    bdmInterface = BdmInterfaceFactory::createInterface(targetType);
    targetTypeRadioBox->SetSelection(selection);
    pagedFlashAddressCheckBox->Enable(isPagedDevice());
-   pagedEepromAddressCheckBox->Enable((targetType == T_HCS12));
+   pagedEepromAddressCheckBox->Enable(bool(targetType == T_HCS12));
+   linearAddressCheckBox->Enable(bool(targetType == T_HCS12));
    interfaceSpeedControl->Enable(enableSpeedControl);
    populateInterfaceSpeeds();
 }

@@ -136,7 +136,7 @@ protected:
    USBDM_ErrorCode initialiseTarget();
    USBDM_ErrorCode trimTargetClock(uint32_t trimAddress, unsigned long  targetBusFrequency, uint16_t *returnTrimValue,
                                    unsigned long *measuredBusFrequency, int do9BitTrim);
-   USBDM_ErrorCode setFlashTrimValues(FlashImagePtr flashImage);
+   USBDM_ErrorCode setFlashTrimValues(FlashImagePtr flashImage) override { return BDM_RC_OK; };
    USBDM_ErrorCode configureExternal_Clock(unsigned long *busFrequency);
    USBDM_ErrorCode eraseFlash(void);
    USBDM_ErrorCode convertTargetErrorCode(FlashDriverError_t rc);

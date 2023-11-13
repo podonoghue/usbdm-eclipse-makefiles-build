@@ -15,6 +15,14 @@ There are no driver needed if using the deb installer
 # History
 
 *******  
+**USBDM_V4_12_1_320** (Nov 2023)  
+
+- Fixes for use of linear adressing (for MC912XEP100MAL)
+- UsbdmScript now handles linear addresses (Use G: prefix)
+- UsbdmMemoryDump now has an option for linear address ranges for HCS12 devices.
+- UsbdmFlashProgrammer verify operation now correctly handles linear addresses.
+
+*******  
 **USBDM_V4_12_1_305** (Mar 2023)  
 
 - Minor fixes for RS08

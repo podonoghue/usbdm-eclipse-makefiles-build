@@ -56,6 +56,7 @@ class MemoryDumpDialogueSkeleton : public wxDialog
 		wxCheckBox* pagedEepromAddressCheckBox;
 		wxStaticText* eepromPageRegisterStaticText;
 		wxTextCtrl* eepromPageTextCntrl;
+		wxCheckBox* linearAddressCheckBox;
 		wxStaticText* m_staticText3;
 		wxButton* LoadSettingsButtonControl;
 		wxButton* SaveSettingsButtonControl;
@@ -75,6 +76,7 @@ class MemoryDumpDialogueSkeleton : public wxDialog
 		virtual void OnInitializationCheckboxChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPagedCheckBoxEvent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPageAddressChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnLinearAddressCheckBoxEvent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLoadSettingsClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveSettingsClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnReadMemoryButtonClick( wxCommandEvent& event ) { event.Skip(); }

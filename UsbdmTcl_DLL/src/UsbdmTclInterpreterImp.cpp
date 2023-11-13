@@ -862,7 +862,11 @@ static int cmd_setMemorySpace(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj 
       else if (strncasecmp(arg, "P", 5) == 0) {
          defaultMemorySpace = MS_Program;
       }
+      else if (strncasecmp(arg, "G", 5) == 0) {
+         defaultMemorySpace = MS_Global;
+      }
       else {
+         PRINT("arg = '%s'", arg);
          Tcl_SetResult(interp, (char*)"Unrecognised parameter", TCL_STATIC);
          return TCL_ERROR;
       }
@@ -1939,22 +1943,41 @@ static int cmd_registers(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    return rc;
 }
 
-//! Convert string to long integer
-//!
-//! @param start = ptr to string to convert
-//! @param value = value read
-//!
-//! @return TCL_OK    => OK \n
-//!         TCL_ERROR => failed
-//!
-//! @note Accepts decimal, octal with '0' prefix or hex with '0x' prefix
-//!
+/**
+ * Convert string to long integer
+ *
+ * @param start   String to convert
+ * @param value   Value read
+ *
+ * @return TCL_OK    => OK \n
+ *         TCL_ERROR => failed
+ */
 static int strToULong(const char *start, uint32_t *value) {
+
+   // Make copy deleting '_'
+   char temp[100], *tmp=temp;
+   char t;
+   do {
+      t = *start++;
+      if (t == '_') {
+         // Discard
+         continue;
+      }
+      if (tmp>=(tmp+sizeof(temp))) {
+         PRINT("strToLong() - Number too long\n");
+         return TCL_ERROR;
+      }
+      *tmp++ = t;
+   } while (t != '\0');
+
    char *end_t;
-   unsigned long value_t = strtoul(start, &end_t, 0);
+   unsigned long value_t = strtoul(temp, &end_t, 0);
+
+//   PRINT("strToLong() - Num = '%s'\n", temp);
 
    //   PRINT("strToULong() - s=\'%s\', e='%s', val=%ld(0x%lX)\n", start, end_t, value_t, value_t);
-   if (end_t == start) { // no String found
+   if (end_t == temp) {
+      // No String found
       PRINT("strToLong() - No number found\n");
       return TCL_ERROR;
    }
@@ -1962,8 +1985,7 @@ static int strToULong(const char *start, uint32_t *value) {
       PRINT("strToULong() - Number too large\n");
       return TCL_ERROR;
    }
-   // If end is not used then check if at end of string
-   // Skip trailing spaces
+   // Check if at end of string after skipping trailing spaces
    while (isspace(*end_t)) {
       end_t++;
    }
@@ -4077,7 +4099,7 @@ static const char usageText[] =
       "jtag-idcode                  - Read IDCODE from JTAG\n"
       "load <filename>              - Load file image into buffer\n"
       "log 0|1                      - setting ARM loggin OFF/ON\n"
-      "memorySpace [<N|X|P>]        - set memory space (DSC)\n"
+      "memorySpace [<N|X|P|G>]      - set memory space (DSC=N,X,P, HCS12=N|G)\n"
       "massErase                    - S12Z Mass erase\n"
       "openbdm [<bdmNumber>]        - Open given BDM\n"
       "pinSet <pin=level>           - Control pins, pin=RST|BKGD|TRST|BKPT|TA|SWD|SWC,\n"

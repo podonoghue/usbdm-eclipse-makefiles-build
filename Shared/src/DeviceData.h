@@ -1256,7 +1256,7 @@ public:
    bool                           isThisDevice(uint32_t desiredSDID, bool acceptZero=true) const ;
    bool                           isThisDeviceOrAlias(uint32_t  desiredSDID, bool acceptZero=true) const;
 
-   MemType_t                      getMemoryType(uint32_t address, MemorySpace_t memorySpace=MS_None);
+   MemType_t                      getMemoryType(uint32_t address, MemorySpace_t memorySpace=MS_None) const;
    uint16_t                       getPageNo(uint32_t address);
 
    void                           addSDID(uint32_t mask, uint32_t value);
