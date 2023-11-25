@@ -1640,7 +1640,7 @@
             <memoryRange start="0x8000" end="0xBFFF" pages="3"  pageEnd="0x0F" />
             <memoryRange start="0xC000" end="0xFFFF" />
          </memory>
-         <sdid value="0x3290" mask="0xFFF0"/>
+         <sdid value="0x3280" mask="0xFFF0"/>
          <flashScripts>
             <tclScriptRef ref="HCS12-FTMRCK-flash-scripts" />
          </flashScripts>
@@ -1664,7 +1664,7 @@
             <memoryRange start="0x8000" end="0xBFFF" pages="4"  pageEnd="0x0F" />
             <memoryRange start="0xC000" end="0xFFFF" />
          </memory>
-         <sdid value="0x3290" mask="0xFFF0"/>
+         <sdid value="0x3280" mask="0xFFF0"/>
          <flashScripts>
             <tclScriptRef ref="HCS12-FTMRCK-flash-scripts" />
          </flashScripts>
