@@ -1,4 +1,3 @@
-
 ;#
 ;######################################################################################
 ;#  This file defines the following flash functions
@@ -76,6 +75,11 @@ proc loadSymbols {} {
    set ::NVM_FCMD_ERASE_ALL_BLKS  0x08
    set ::NVM_FCMD_ERASE_P_SECTOR  0x0A
    set ::NVM_FCMD_UNSECURE        0x0B
+   set ::NVM_FCMD_FULLPARTITION   0x0F
+   set ::NVM_FCMD_PARTITION       0x20
+   set ::NVM_FCMD_QUERYPARTITION  0x15
+   set ::NVM_FCMD_EEPROMENABLE    0x13
+   set ::NVM_FCMD_EEPROMDISABLE   0x14
    
    set ::HCS12_BDMSTS               0xFF01
    set ::HCS12_BDMSTS_ENBDM         0x80
@@ -173,9 +177,12 @@ proc calculateFlashDivider { busFrequency } {
 
 ;######################################################################################
 ;#
-;#  cmd     - command to execute
-;#  address - flash address to use
-;#  value   - data value to use
+;#  cmd     - command to execute   = FCCOB[0].high
+;#  address - flash address to use = FCCOB[0].low, FCCOB[1].high/low
+;#  data0   - data0 value to use   = FCCOB[2].high/low
+;#  data1   - data1 value to use   = FCCOB[3].high/low
+;#  data2   - data1 value to use   = FCCOB[4].high/low
+;#  data3   - data1 value to use   = FCCOB[5].high/low
 ;#
 proc executeFlashCommand { cmd {address "none"} {data0 "none"} {data1 "none"} {data2 "none"} {data3 "none"} } {
 
@@ -183,21 +190,27 @@ proc executeFlashCommand { cmd {address "none"} {data0 "none"} {data1 "none"} {d
    
    wb $::NVM_FSTAT     $::NVM_FSTAT_CLEAR           ;# clear any error flags
    wb $::NVM_FCCOBIX   0                            ;# index = 0
-   wb $::NVM_FCCOBHI $cmd                           ;# load program command
+   wb $::NVM_FCCOBHI $cmd                           ;# load command
    if {$address != "none"} {
       wb $::NVM_FCCOBLO [expr ($address>>16)&0xFF]  ;# load GPAGE
       wb $::NVM_FCCOBIX    1                        ;# index = 1
       ww $::NVM_FCCOBHI [expr $address&0xFFFF]      ;# load addr
-      if {$data0 != "none"} { 
-         wb $::NVM_FCCOBIX    2                     ;# index = 2
-         ww $::NVM_FCCOBHI [expr $data0]            ;# load data
-         wb $::NVM_FCCOBIX    3                     ;# index = 3
-         ww $::NVM_FCCOBHI [expr $data1]            ;# load data
-         wb $::NVM_FCCOBIX    4                     ;# index = 4
-         ww $::NVM_FCCOBHI [expr $data2]            ;# load data
-         wb $::NVM_FCCOBIX    5                     ;# index = 5
-         ww $::NVM_FCCOBHI [expr $data3]            ;# load data
-      }
+   }
+   if {$data0 != "none"} { 
+    wb $::NVM_FCCOBIX    2                          ;# index = 2
+    ww $::NVM_FCCOBHI [expr $data0]                 ;# load data
+   }
+   if {$data1 != "none"} { 
+    wb $::NVM_FCCOBIX    3                          ;# index = 3
+    ww $::NVM_FCCOBHI [expr $data1]                 ;# load data
+   }
+   if {$data2 != "none"} { 
+    wb $::NVM_FCCOBIX    4                          ;# index = 4
+    ww $::NVM_FCCOBHI [expr $data2]                 ;# load data
+   }
+   if {$data3 != "none"} { 
+    wb $::NVM_FCCOBIX    5                          ;# index = 5
+    ww $::NVM_FCCOBHI [expr $data3]                 ;# load data
    }
    wb $::NVM_FSTAT $::NVM_FSTAT_CCIF  ;# Clear CCIF to execute the command 
 
@@ -283,6 +296,79 @@ proc rbx { address } {
    return [rb [expr $address&0xFFFF]]
 }
 
+;######################################################################################
+;# Partition DFLASH for EEPROM use
+;#
+;#  dfpart DFPART value
+;#  erpart ERPART value
+;#
+;#  See "28.4.2.15 Full Partition D-Flash Command" in the manual
+;#
+proc partition { dfpart erpart } {
+
+   reset sh
+   connect
+   initTarget 100  ;# dummy value
+   initFlash  8000 ;# Assume 8MHz clock
+   
+   puts "*** Doing flash partition command"
+   puts "DFPART   = $dfpart"
+   puts "ERPART   = $erpart"
+   ;#                  FCCOB[0].high             FCCOB[0].low,FCCOB[1]  FCCOB[2]
+   executeFlashCommand $::NVM_FCMD_FULLPARTITION $dfpart                $erpart
+   
+   queryPartition
+}
+
+;######################################################################################
+;# Query flash partition information
+;#
+;# Assumes initFlash done
+;#
+proc queryPartition { } {
+   
+   puts "*** Doing query partition command"
+   executeFlashCommand $::NVM_FCMD_QUERYPARTITION
+   
+   wb $::NVM_FCCOBIX   1                            ;# index = 1
+   set DFPART [rw $::NVM_FCCOBHI]                   ;# DFPART
+   wb $::NVM_FCCOBIX   2                            ;# index = 2
+   set ERPART [rw $::NVM_FCCOBHI]                   ;# ERPART
+   wb $::NVM_FCCOBIX   3                            ;# index = 3
+   set ECOUNT [rw $::NVM_FCCOBHI]                   ;# ECOUNT
+   wb $::NVM_FCCOBIX   4                            ;# index = 4
+   set DEADSEC   [rb $::NVM_FCCOBHI]                ;# Dead sector count
+   set READYSEC  [rw $::NVM_FCCOBLO]                ;# Ready sector count
+   
+   puts "*** Current flash partition information"
+   puts "DFPART   = $DFPART"
+   puts "ERPART   = $ERPART"
+   puts "ECOUNT   = $ECOUNT"
+   puts "DEADSEC  = $DEADSEC"
+   puts "READYSEC = $READYSEC"
+}
+
+;######################################################################################
+;# Enable EEPROM operation
+;#
+;# Assumes initFlash done
+;#
+proc enableEeprom { } {
+   
+   puts "*** Doing enable eeprom command"
+   executeFlashCommand $::NVM_FCMD_EEPROMENABLE
+}
+
+;######################################################################################
+;# Disable EEPROM operation
+;#
+;# Assumes initFlash done
+;#
+proc disableEeprom { } {
+   
+   puts "*** Doing enable eeprom command"
+   executeFlashCommand $::NVM_FCMD_EEPROMDISABLE
+}
 
 ;######################################################################################
 ;# Actions on initial load
