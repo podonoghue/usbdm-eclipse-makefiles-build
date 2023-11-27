@@ -23,6 +23,8 @@
  */
 namespace USBDM {
 
+#if $(/DMA/enablePeripheralSupport) // /DMA/enablePeripheralSupport
+
 typedef DmaBasicInfo::DmaTcdCsr DmaTcdCsr;
 typedef DmaBasicInfo::DmaConfig DmaConfig;
 
@@ -80,29 +82,6 @@ enum DmaModulo : uint8_t {
    DmaModulo_1GiByte    = 0b11110, //!< 1-Gibibyte modulo
    DmaModulo_2GiByte    = 0b11111, //!< 2-Gibibyte modulo
 };
-
-/**
- * Controls whether a channel can be suspended by a higher priority channel.
- */
-enum DmaCanBePreempted {
-   DmaCanBePreempted_Disabled = DMA_DCHPRI_ECP(0), //!< Channel N cannot be suspended by a higher priority channel's service request
-   DmaCanBePreempted_Enabled  = DMA_DCHPRI_ECP(1), //!< Channel N can be temporarily suspended by the service request of a higher priority channel
-};
-
-/**
- * Controls whether a channel can suspend a lower priority channel.
- */
-enum DmaCanPreemptLower {
-   DmaCanPreemptLower_Enabled  = DMA_DCHPRI_DPA(0), //!< Channel N can suspend a lower priority channel
-   DmaCanPreemptLower_Disabled = DMA_DCHPRI_DPA(1), //!< Channel N cannot suspend a lower priority channel
-};
-
-/**
- * Type definition for DMA interrupt call back.
- *
- * @param[in] dmaChannelNum
- */
-typedef void (*DmaCallbackFunction)(DmaChannelNum dmaChannelNum, uint32_t errorFlags);
 
 /**
  * Get DMA size of object.
@@ -200,15 +179,6 @@ template <class Ts, class Td>
 static constexpr uint16_t dmaSize(const Ts &sobj, const Td &dobj) {
    return DMA_ATTR_SSIZE(dmaSize(sobj))|DMA_ATTR_DSIZE(dmaSize(dobj));
 }
-
-/**
- * Determines if the offset is applied to source and/or destination
- */
-enum DmaMinorLoopOffsetSelect {
-   DmaMinorLoopOffsetSelect_Source        = DMA_NBYTES_MLOFFYES_SMLOE(1)|DMA_NBYTES_MLOFFYES_DMLOE(0),//!< Source only
-   DmaMinorLoopOffsetSelect_Destination   = DMA_NBYTES_MLOFFYES_SMLOE(0)|DMA_NBYTES_MLOFFYES_DMLOE(1),//!< Destination only
-   DmaMinorLoopOffsetSelect_Both          = DMA_NBYTES_MLOFFYES_SMLOE(1)|DMA_NBYTES_MLOFFYES_DMLOE(1),//!< Both Source and Destination
-};
 
 /**
  * Creates DMA NBYTES entry for:
@@ -548,16 +518,13 @@ constexpr uint16_t dmaCiter(DmaChannelNum dmaChannelNum, uint16_t citer) {
  * @tparam Info Information describing DMA controller
  */
 template<class Info>
-class DmaBase_T : public DmaBasicInfo {
+class DmaBase_T : public Info {
 
    using MuxInfo = Dmamux0Info;
 
 protected:
    /** Hardware instance pointer */
    static constexpr HardwarePtr<DMA_Type> dma = Info::baseAddress;
-
-   /** Callback functions for ISRs */
-   static DmaCallbackFunction sCallbacks[Info::NumVectors];
 
    /** Bit-mask of allocated channels */
    static uint32_t allocatedChannels;
@@ -568,34 +535,6 @@ protected:
    }
 
 public:
-   /** DMA interrupt handler -  Error callback */
-   static void errorIrqHandler() {
-
-      // Capture error status
-      uint32_t      errorFlags = dma->ES;
-
-      // Error channel
-      DmaChannelNum channel    = (DmaChannelNum)((errorFlags&DMA_ES_ERRCHN_MASK)>>DMA_ES_ERRCHN_SHIFT);
-
-      // Disable channel
-      dma->CERQ = channel;
-
-      // Clear channel error flag
-      dma->CERR = channel;
-
-      // Call channel call-back
-      sCallbacks[channel](channel, errorFlags);
-   }
-
-   /** DMA interrupt handler - Calls DMA callback
-    *
-    * @tparam channel Channel number
-    */
-   template<unsigned channel>
-   static void irqHandler() {
-      sCallbacks[channel]((DmaChannelNum)channel, 0);
-   }
-
    /**
     * Enable and configure shared DMA settings.
     * This also clears all DMA channels.
@@ -620,16 +559,12 @@ public:
 
       // Clear call-backs
       for (unsigned channel=0; channel<Info::NumVectors; channel++) {
-         sCallbacks[channel] = noHandlerCallback;
+         Info::sCallbacks[channel] = noHandlerCallback;
       }
 #ifndef NDEBUG
       // Clear the TCDs
-      volatile uint32_t *ar = (uint32_t *)dma->TCD;
-      for (unsigned index=0;
-            index<(sizeofArray(dma->TCD)*sizeof(dma->TCD[0])/sizeof(uint32_t));
-            index++) {
-
-         ar[index] = 0;
+      for (unsigned index=0; index<sizeof(dma->TCD_RAW);index++) {
+         dma->TCD_RAW[index] = 0;
       }
 #endif
       // Reset record of allocated channels
@@ -640,7 +575,7 @@ public:
     * Enable and configure shared DMA settings from settings in Configure.usbdmProject
     * This also clears all DMA channels.
     */
-   static void configure() {
+   static void defaultConfigure() {
       configure(Dma0Info::DefaultDmaConfigValue);
    }
 
@@ -788,13 +723,13 @@ $(/DMA/Setters:#error "/DMA/Setters not found" )
     */
    static void setChannelPriority(
          DmaChannelNum      dmaChannelNum,
-         int                priority,
+         DmaPriority        dmaPriority,
          DmaCanBePreempted  dmaCanBePreempted=DmaCanBePreempted_Enabled,
          DmaCanPreemptLower dmaCanPreemptLower=DmaCanPreemptLower_Enabled) {
 
       int index = (dmaChannelNum&0xFC)|(3-(dmaChannelNum&0x03));
       constexpr volatile uint8_t *priorities = &dma->DCHPRI3;
-      priorities[index] = dmaCanBePreempted|dmaCanPreemptLower|DMA_DCHPRI_CHPRI(priority);
+      priorities[index] = dmaCanBePreempted|dmaCanPreemptLower|dmaPriority;
    }
 
    /**
@@ -1056,30 +991,12 @@ $(/DMA/Setters:#error "/DMA/Setters not found" )
       NVIC_DisableIRQ(Info::irqNums[Info::irqCount-1]);
    }
 
-   /**
-    * Set callback for ISR.
-    *
-    * @param[in] dmaChannelNum  The DMA channel to set callback for
-    * @param[in] callback       Callback function to execute on interrupt.\n
-    *                           Use nullptr to remove callback.
-    */
-   static void __attribute__((always_inline)) setCallback(DmaChannelNum dmaChannelNum, DmaCallbackFunction callback) {
-
-      static_assert(Info::irqHandlerInstalled, "DMA not configured for interrupts");
-      if (callback == nullptr) {
-         callback = noHandlerCallback;
-      }
-      sCallbacks[dmaChannelNum] = callback;
-   }
 };
-
-/**
- * Callback table for programmatically set handlers.
- */
-template<class Info> DmaCallbackFunction DmaBase_T<Info>::sCallbacks[];
 
 /** Bit-mask of allocated channels */
 template<class Info> uint32_t DmaBase_T<Info>::allocatedChannels = (1<<Info::NumChannels)-1;
+
+#endif
 
 $(/DMA/declarations: // No declaractions found)
 /**

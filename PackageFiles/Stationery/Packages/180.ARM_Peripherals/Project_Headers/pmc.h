@@ -30,16 +30,14 @@ namespace USBDM {
 /**
  * Template class providing interface to Power Management Controller
  *
- * @tparam info      Information class for PMC
- *
  * @code
- * using pmc = PmcBase_T<PmcInfo>;
+ * using pmc = PmcBase;
  *
  *  pmc::defaultConfigure();
  *
  * @endcode
  */
-class PmcBase_T : public PmcInfo {
+class PmcBase : public PmcInfo {
 
 protected:
 $(/PMC/protectedMethods: // No protected methods found)

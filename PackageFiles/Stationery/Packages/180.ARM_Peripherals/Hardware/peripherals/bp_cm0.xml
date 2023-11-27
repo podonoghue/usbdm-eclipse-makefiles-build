@@ -141,7 +141,7 @@
 
 <!--   Configure methods -->
 
-   <template discardRepeats="true" key="/BP/InitMethod" namespace="all" ><![CDATA[
+   <template discardRepeats="true" key="/BP/InitMethod" ><![CDATA[
       \t/**
       \t * Configure BP from values specified in init
       \t *

@@ -186,7 +186,7 @@
      \tstatic constexpr uint32_t cv2  = $(adc_cv2);\n\n
    ]]></template>
    
-   <template key="/ADC/declarations" namespace="all"  ><![CDATA[
+   <template key="/ADC/declarations"  ><![CDATA[
    \t/**
    \t * Class representing $(_NAME)
    \t */

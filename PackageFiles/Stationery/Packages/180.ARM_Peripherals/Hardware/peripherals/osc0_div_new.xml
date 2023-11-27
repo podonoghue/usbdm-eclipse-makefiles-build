@@ -440,16 +440,8 @@
       \t */
       \tstatic void configure(const typename Info::Init &init) {
       \t
-      \t   osc->CR    = init.cr;\n
-   ]]>
-   </template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="enablePeripheralSupport" condition="osc_div_erps" >
-   <![CDATA[
-      \t   osc->DIV    = init.div;\n
-   ]]>
-   </template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="enablePeripheralSupport" >
-   <![CDATA[
+      \t   osc->CR    = init.cr;
+      \t   osc->DIV    = init.div;
       \t}
       \t\n
    ]]>

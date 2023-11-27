@@ -68,7 +68,7 @@
    </binaryOption >
 
    <binaryOption key="rtc_sc_rtco" condition="rtc_sc_rtco_present &amp;&amp; outputPinMap"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="RtcOutput"
       toolTip="Enables the toggling of RTCO pin on overflow"
       description="Real-Time Counter Output" >
@@ -77,7 +77,7 @@
    </binaryOption >
 
    <binaryOption key="rtc_sc_rtco" condition="rtc_sc_rtco_present &amp;&amp; !outputPinMap"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="RtcOutput"
       toolTip="Enables the toggling of RTCO pin on overflow"
       description="Real-Time Counter Output" >
@@ -87,7 +87,7 @@
 
    <choiceOption key="rtc_sc_rtclks" condition="rtc_sc_rtclks_present"
       target="rtc_input_clock"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="RtcClockSource"
       toolTip="Selects the clock source for the RTC prescaler.\n
                This also determines the prescaler range. \n
@@ -109,7 +109,7 @@
 
    <choiceOption key="rtc_sc_rtcps" condition="rtc_sc_rtcps_present"
       target="rtc_clock"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="RtcPrescaler"
       toolTip="Selects binary-based or decimal-based divide-by values for the clock source.\n
                Changing the prescaler value clears the prescaler and RTCCNT counters\n
@@ -136,7 +136,7 @@
    <!-- ************* MOD ****************** -->
 
    <intOption key="rtc_mod_mod" condition="rtc_mod_mod_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="Ticks"
       description="Modulo"
       units="ticks"
@@ -197,7 +197,7 @@
 
 <!--   ========== RTC Init class =============================== -->
 
-   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template key="init_description" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Class)
@@ -303,7 +303,7 @@
    ]]>
    </template>
 
-   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t
       \t/** Callback for programmatically set handler */
@@ -312,7 +312,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -339,14 +339,14 @@
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="rtc_sc_rtclks,rtc_sc_rtcps,rtc_sc_rtie,rtc_sc_rtco"
    ><![CDATA[
       \t   /// Status and Control Register
       \t   uint16_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="rtc_mod_mod"
    ><![CDATA[
       \t   /// Modulo Register
@@ -363,7 +363,7 @@
 
 <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -376,7 +376,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Configure $(_BASENAME) from values specified in init
       \t *
@@ -389,7 +389,7 @@
       \t   Info::enableClock();
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
              condition="irqHandlingMethod" ><![CDATA[
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      Info::setCallback(init.callbackFunction);
@@ -398,7 +398,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t   // ..........  Regs to init .......... ;
       \t   rtc->MOD   = init.mod;
       \t   rtc->SC    = init.sc;
@@ -451,7 +451,7 @@
             rtc_sc_rtie;
             rtc_sc_rtco
             " >
-      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -477,7 +477,7 @@
       values="
             rtc_mod_mod
             " >
-      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -502,7 +502,7 @@
 
 <!--   Default Initialisation value -->
 
-   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       separator=","
       terminator=","
       variables="
@@ -521,7 +521,7 @@
       \t};\n\n
    ]]></variableTemplate>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
       <![CDATA[
       \t}; // $(_Baseclass)BasicInfo::Init\n\n
    ]]>
@@ -535,7 +535,7 @@
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
    \t/**
    \t * Class representing $(_NAME)
    \t */
@@ -552,11 +552,11 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n

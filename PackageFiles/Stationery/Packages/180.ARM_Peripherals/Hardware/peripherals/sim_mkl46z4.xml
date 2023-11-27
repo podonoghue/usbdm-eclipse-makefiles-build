@@ -31,9 +31,6 @@
    <!-- Indicates the number of PIT channels -->
    <constant key="/PIT_NumChannels" type="Long" value="2" />
 
-   <!-- Indicates the number of DMA channels -->
-   <constant key="/DMA0_NumChannels" type="Long" value="4" />
-
    <!-- DMA slots -->
    <choiceOption key="/DMAMUX0/dmamux_chcfg_src"
       hidden="true"
@@ -616,7 +613,7 @@
          \textern "C" uint32_t %(name);
          \t\n
       ]]></variableTemplate>
-      <variableTemplate namespace="all" key="/SYSTEM/Clocks" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
+      <variableTemplate key="/SYSTEM/Clocks" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
          \t/**
          \t *  %description
          \t *  %tooltip
@@ -666,11 +663,11 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n

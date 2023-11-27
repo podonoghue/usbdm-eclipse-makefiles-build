@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- fmc_def.xml -->
 
@@ -47,7 +46,153 @@
     * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
 -->
 
+   <!-- ************* PFAPR ****************** -->
 
+   <binaryOption key="fmc_pfapr_mpfd" condition="fmc_pfapr_m0pfd_present"
+      valueFormat="FMC_PFAPR_M0PFD(%s)"
+      hidden="true"
+      typeName="FmcPrefetch"
+      toolTip="These bits control whether prefetching is enabled based on the logical number\n
+               of the requesting crossbar switch master. \n
+               This field is further qualified by the PFBnCR[BxDPE,BxIPE] bits."
+      description="Master N Prefetch Disable" >
+      <choice name="Prefetching enabled"      value="0" enum="Enabled" />
+      <choice name="Prefetching is disabled"  value="1" enum="Disabled" />
+   </binaryOption >
+
+   <variableTemplate codeGenCondition="enableGettersAndSetters"
+      variables="fmc_pfapr_mpfd"
+   > <![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param master      Number of master to modify
+      %paramDescription
+      \t */
+      \tstatic void setPrefetch(int master, %params) {
+      \t   const uint32_t mask = %mask<<master;
+      \t   %register = (%register&~mask) | (%paramExpression<<master);
+      \t}\n\n
+   ]]></variableTemplate>
+
+   <choiceOption key="fmc_pfapr_map" condition="fmc_pfapr_m0ap_present"
+      valueFormat="FMC_PFAPR_M0AP(%s)"
+      hidden="true"
+      typeName="FmcAccessProtection"
+      toolTip="This field controls whether read and write access to the flash are allowed\n
+               based on the logical master number of the requesting crossbar switch master"
+      description="Master N Access Protection" >
+      <choice name="No access allowed"        value="0" enum="NoAccessAllowed" />
+      <choice name="Only read accesses"       value="1" enum="OnlyReadAccesses" />
+      <choice name="Only write accesses"      value="2" enum="OnlyWriteAccesses" />
+      <choice name="Read and write accesses"  value="3" enum="ReadAndWriteAccesses" />
+   </choiceOption >
+
+   <variableTemplate codeGenCondition="enableGettersAndSetters"
+      variables="fmc_pfapr_map"
+   > <![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param master              Number of master to modify
+      %paramDescription
+      \t */
+      \tstatic void setProtection(int master, %params) {
+      \t   const uint32_t mask = %mask<<master;
+      \t   %register = (%register&~mask) | (%paramExpression<<master);
+      \t}\n\n
+   ]]></variableTemplate>
+
+   <!-- ************* PFB0CR ****************** -->
+
+   <binaryOption key="fmc_pfb0cr_clck_way" condition="fmc_pfb0cr_clck_way_present"
+      hidden="true"
+      typeName="FmcCacheWayLock"
+      toolTip="Determine if the given cache way is locked such that its contents will not be displaced by future misses"
+      description="Cache Lock Way x" >
+      <choice name="Cache way is unlocked"  value="0" enum="CacheWayIsUnlocked" />
+      <choice name="Cache way is locked"    value="1" enum="CacheWayIsLocked" />
+   </binaryOption >
+
+   <variableTemplate codeGenCondition="enableGettersAndSetters"
+      variables="fmc_pfb0cr_clck_way"
+   > <![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param way         Cache way to modify
+      %paramDescription
+      \t */
+      \tstatic void setCacheWayLock(int way, %params) {
+      \t   const uint32_t mask = %mask<<way;
+      \t   %register = (%register&~mask) | (%paramExpression<<way);
+      \t}\n\n
+   ]]></variableTemplate>
+
+   <choiceOption key="fmc_pfb0cr_cinv_way" condition="fmc_pfb0cr_cinv_way_present"
+      hidden="true"
+      typeName="FmcWayInvalidate"
+      toolTip="Selects a cache Way to immediately invalidate.\n
+               The tag, data, and valid contents are cleared."
+      description="Cache Invalidate Way x" >
+      <choiceExpansion keys="w" dim="4" value="1&lt;&lt;%(w)" name="Invalidate Way %(w)" enum="Way%(w)" />
+      <choice name="Invalidate all Ways"  value="-1" enum="AllWays" />
+   </choiceOption >
+
+   <variableTemplate codeGenCondition="enableGettersAndSetters"
+      variables="fmc_pfb0cr_cinv_way"
+   > <![CDATA[
+      \t/**
+      \t * %description
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void cacheWayInvalidate(%params) {
+      \t   %register = %register | %paramExpression;
+      \t}\n\n
+   ]]></variableTemplate>
+
+   <choiceOption key="fmc_pfb0cr_s_b_inv" condition="fmc_pfb0cr_s_b_inv_present"
+      hidden="true"
+      typeName="FmcSpeculationBuffer"
+      toolTip="When this bit is written, the prefetch speculation buffer and single entry buffer are immediately cleared"
+      description="Invalidate Prefetch Speculation Buffer" >
+      <choice name="Write 1 to invalidate"  value="1" enum="Invalidate" />
+   </choiceOption >
+
+   <variableTemplate codeGenCondition="enableGettersAndSetters"
+      variables="fmc_pfb0cr_s_b_inv"
+   > <![CDATA[
+      \t/**
+      \t * %description
+      \t */
+      \tstatic void speculationBufferInvalidate() {
+      \t   %register = %register | %mask;
+      \t}\n\n
+   ]]></variableTemplate>
+
+   <choiceOption key="fmc_pfb0cr_crc" condition="fmc_pfb0cr_crc_present"
+      hidden="true"
+      typeName="FmcReplacementPolicy"
+      toolTip="This field defines the replacement algorithm for accesses that are cached"
+      description="Cache Replacement Policy" >
+      <choice name="LRU across all ways"                              value="0" enum="LruAllWays" />
+      <choice name="Independent LRU ways [0-1] ifetches, [2-3] data"  value="2" enum="LruWays_01Instruction_23Data" />
+      <choice name="Independent LRU ways [0-2] ifetches, [3] data"    value="3" enum="LruWays_012Instruction_3Data" />
+   </choiceOption >
+
+   <variableTemplate codeGenCondition="enableGettersAndSetters"
+      variables="fmc_pfb0cr_crc"
+   > <![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void setReplacementPolicy(%params) {
+      \t   %register = (%register&~%mask) | %paramExpression;
+      \t}\n\n
+   ]]></variableTemplate>
 
    <!--
       ******************** Flash Controller  ********************
@@ -91,7 +236,7 @@
          <choice value="1,1" name="Instructions and Data" enum="InstructionsAndData"    isDefault="true" />
       </choiceOption>
 
-      <variableTemplate
+      <variableTemplate codeGenCondition="enableGettersAndSetters"
          variables="fmc_pfb%(n)cr_flash_cache"
       > <![CDATA[
          \t/**
@@ -105,7 +250,31 @@
          \t}\n\n
       ]]></variableTemplate>
 
-      <variableTemplate variables="fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_flash_speculation"
+      <binaryOption key="fmc_pfb%(n)cr_b%(n)sebe" condition="fmc_pfb%(n)cr_b%(n)sebe_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FmcPageBuffer"
+         toolTip="Controls whether the single entry page buffer is enabled in response to flash read accesses.\n
+                  A disabled-to-enabled transition forces the page buffer to be invalidated"
+         description="Bank %(n) Single Entry Buffer Enable" >
+         <choice name="Buffer is disabled"  value="0" enum="Disabled" />
+         <choice name="Buffer is enabled"   value="1" enum="Enabled"  isDefault="true" />
+      </binaryOption >
+
+      <variableTemplate codeGenCondition="enableGettersAndSetters"
+         variables="fmc_pfb%(n)cr_b%(n)sebe"
+      > <![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void setFlashBank%(n)PageBuffer(%params) {
+         \t   %register = (%register&~%mask) | %paramExpression;
+         \t}\n\n
+      ]]></variableTemplate>
+
+      <variableTemplate
+         variables="fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_flash_speculation,fmc_pfb%(n)cr_b%(n)sebe"
          ><![CDATA[
          \t/**
          \t **
@@ -135,12 +304,14 @@
          \t
          \tpublic:
          \t   /**
-         \t    * Configure Flash options as specified in the constructor
+         \t    * Empty Constructor
          \t    */
-         \t   inline void configure() const {
-         \t      %register = (%register & ~%mask)|
-         \t                   %registerName;
-         \t   }
+         \t   constexpr FlashBank%(n)Init() = default;
+         \t
+         \t   /**
+         \t    * Copy Constructor
+         \t    */
+         \t   constexpr FlashBank%(n)Init(const FlashBank%(n)Init &other) = default;
          \t
          \t   /**
          \t    * Read the current settings from hardware registers
@@ -150,19 +321,16 @@
          \t   }
          \t
          \t   /**
-         \t    * Copy Constructor
+         \t    * Configure Flash options as specified in the constructor
          \t    */
-         \t   constexpr FlashBank%(n)Init(const FlashBank%(n)Init &other) = default;
-         \t
-         \t   /**
-         \t    * Constructor
-         \t    */
-         \t   constexpr FlashBank%(n)Init()  {
+         \t   void configure() const {
+         \t      %register = (%register & ~%mask)|
+         \t                   %registerName;
          \t   }
          \t\n
       ]]></variableTemplate>
 
-      <for keys="v" values="fmc_pfb%(n)cr_flash_cache;fmc_pfb%(n)cr_flash_speculation" >
+      <for keys="v" values="fmc_pfb%(n)cr_b%(n)sebe;fmc_pfb%(n)cr_flash_cache;fmc_pfb%(n)cr_flash_speculation" >
          <variableTemplate
             variables="%(v)"
          ><![CDATA[
@@ -171,6 +339,7 @@
             \t    *
             \t    * @tparam   Types
             \t    * @param    rest
+            \t    *
             \t    * @param %paramName %description
             \t    */
             \t   template <typename... Types>
@@ -186,7 +355,7 @@
       ]]></template>
 
       <variableTemplate key="/FMC/DefaultFlashInitValue" namespace="all"
-         variables="fmc_pfb%(n)cr_flash_speculation, fmc_pfb%(n)cr_flash_cache"
+         variables="fmc_pfb%(n)cr_flash_speculation;fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_b%(n)sebe"
          terminator=","
          separator=","
       ><![CDATA[
@@ -196,18 +365,10 @@
          \t */
          \tstatic constexpr FmcInfo::FlashBank%(n)Init DefaultFlashBank%(n)InitValue {%initExpression
          \t};
-         \t
-         \t/**
-         \t * Configure Flash Bank %(n)
-         \t *
-         \t * @param flashInit Initialisation value
-         \t */
-         \tstatic void configureFlashBank%(n)(const FmcInfo::FlashBank%(n)Init &flashInit) {
-         \t   flashInit.configure();
-         \t}\n
+         \t\n
       ]]></variableTemplate>
 
-      <variableTemplate namespace="all" key="/SMC/preEnterStopMode" variables="fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_flash_speculation" ><![CDATA[
+      <variableTemplate key="/SMC/preEnterStopMode" variables="fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_flash_speculation" ><![CDATA[
       \t   // Save current Flash Bank%(n) settings
       \t   FmcInfo::FlashBank%(n)Init savedFlashBank%(n)Settings;
       \t   savedFlashBank%(n)Settings.readConfig();
@@ -215,28 +376,33 @@
       \t   FmcInfo::setFlashBank%(n)Speculation(FmcFlashSpeculation_Disabled);\n
       ]]></variableTemplate>
 
-      <variableTemplate namespace="all" key="/SMC/postExitStopMode" variables="fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_flash_speculation" ><![CDATA[
+      <variableTemplate key="/SMC/postExitStopMode" variables="fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_flash_speculation" ><![CDATA[
       \t   // Restore flash Bank%(n) settings
       \t   savedFlashBank%(n)Settings.configure();\n
       ]]></variableTemplate>
    </for>
 
-   <!--
-      ******************** misc ********************
-   -->
-   <template key="/FMC/declarations" namespace="all" ><![CDATA[
+   <!-- ************* Common ****************** -->
+
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
       \t/**
       \t * Class representing $(_NAME)
       \t */\n
    ]]></template>
-   <template key="/FMC/declarations" namespace="all" condition="irqOption_present" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" condition="irqOption_present" ><![CDATA[
       \tclass $(_Class) : public $(_Baseclass)Base, public $(_Baseclass)Interrupt_T<$(_Class)Info> {};\n
    ]]></template>
-   <template key="/FMC/declarations" namespace="all" condition="!irqOption_present" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" condition="!irqOption_present" ><![CDATA[
       \tclass $(_Class) : public $(_Baseclass)Base {};\n
    ]]></template>
 
-   <projectActionList id = "fmc_files" >
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
+   </validate>
+
+   <projectActionList id="fmc_files" >
       <copy source="Project_Headers/fmc.h"         target="Project_Headers/fmc.h"          overwrite="true" derived="true" />
    </projectActionList>
 

@@ -33,8 +33,18 @@ int main(){
 
    Led::setOutput(PinDriveStrength_High);
 
+   static constexpr Ewm::Init ewmInitValue = {
+      EwmInterrupt_Disabled , // Interrupt Enable - Interrupt disabled
+      EwmInputPin_Disabled ,  // Input pin control - Input disabled
+      EwmMode_Disabled ,      // EWM enable - Disabled
+#ifdef EWM_CLKPRESCALER_CLK_DIV
+      EwmClockPrescaler(10) , // LPO Clock prescaler
+#endif
+      0_ticks ,               // Minimum service time in ticks (x10 ms)
+      254_ticks,              // Maximum service time in ticks (x10 ms)
+   };
    // Configure EWM for no external input
-   Ewm::configure(EwmInput_Disabled);
+   Ewm::configure(ewmInitValue);
 
    // Expire if not serviced for ~254ms (LPO ~1kHz)
    Ewm::setWindow(0,254);
@@ -51,7 +61,7 @@ int main(){
       waitMS(200);
 
       // This is not a sensible way to service a watchdog!
-      Ewm::writeKeys(EwmKey1, EwmKey2);
+      Ewm::writeKeys(EwmService_First, EwmService_Second);
    }
 
    console.write("Waiting for watchdog timeout");

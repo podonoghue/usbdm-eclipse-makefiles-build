@@ -138,6 +138,8 @@ public:
    /// Pin mapped to CMP output
    using OutputPin = PcrTable_T<Info, Info::outputPin>;
 
+   using Info::configure;
+
    /**
     * Hardware instance pointer
     *

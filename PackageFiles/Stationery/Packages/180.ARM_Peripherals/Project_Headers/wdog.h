@@ -27,18 +27,6 @@ namespace USBDM {
  * @{
  */
 
-/** Watchdog Refresh value 1 */
-static constexpr uint16_t WdogRefresh1 = 0xA602;
-
-/** Watchdog Refresh value 2 */
-static constexpr uint16_t WdogRefresh2 = 0xB480;
-
-/** Watchdog Unlock value 1 */
-static constexpr uint16_t WdogUnlock1 = 0xC520;
-
-/** Watchdog Unlock value 2 */
-static constexpr uint16_t WdogUnlock2 = 0xD928;
-
 /**
  * Template class representing the Watchdog Monitor
  *
@@ -55,19 +43,8 @@ static constexpr uint16_t WdogUnlock2 = 0xD928;
 template<class Info>
 class WdogBase_T : public Info {
 
-   using CallbackFunction = typename Info::CallbackFunction;
 
 protected:
-   /**
-    * Callback to catch unhandled interrupt
-    */
-   static void unhandledCallback() {
-      setAndCheckErrorCode(E_NO_HANDLER);
-   }
-
-   /** Callback function for ISR */
-   static CallbackFunction callback;
-
 $(/WDOG/protectedMethods: // No private methods found)
 
 public:
@@ -101,14 +78,6 @@ public:
       wdog->REFRESH = wdogRefresh_2;
    }
 
-   /**
-    * IRQ handler
-    */
-   static void irqHandler() {
-      // Call handler
-      callback();
-   }
-
 protected:
 #if $(/WDOG/secondsSupport)
    /**
@@ -138,8 +107,8 @@ protected:
          float counterFrequency = clockFrequency/(float)prescale;
          maxTime = maxCount/clockFrequency;
          if (maxTime > timeout.toSeconds()) {
-            timeout.fromTicks(roundf(timeout.toSeconds()*counterFrequency));
-            window.fromTicks(roundf(window.toSeconds()*counterFrequency));
+            timeout.fromTicks(roundf(float(timeout.toSeconds())*counterFrequency));
+            window.fromTicks(roundf(float(window.toSeconds())*counterFrequency));
             presc = WDOG_PRESC_PRESCVAL(prescale-1);
             return E_NO_ERROR;
          }
@@ -150,9 +119,9 @@ protected:
 
 public:
 $(/WDOG/InitMethod: // /WDOG/InitMethod not found)
-   
 $(/WDOG/publicMethods: // No public methods found)
 
+#if $(/WDOG/generateSharedIrqInfo: false) // /WDOG/generateSharedIrqInfo
    /**
     * Wrapper to allow the use of a class member as a callback function
     * @note Only usable with static objects.
@@ -185,8 +154,8 @@ $(/WDOG/publicMethods: // No public methods found)
     * @endcode
     */
    template<class T, void(T::*callback)(), T &object>
-   static CallbackFunction wrapCallback() {
-      static CallbackFunction fn = []() {
+   static typename Info::CallbackFunction wrapCallback() {
+      static typename Info::CallbackFunction fn = []() {
          (object.*callback)();
       };
       return fn;
@@ -224,29 +193,14 @@ $(/WDOG/publicMethods: // No public methods found)
     * @endcode
     */
    template<class T, void(T::*callback)()>
-   static CallbackFunction wrapCallback(T &object) {
+   static typename Info::CallbackFunction wrapCallback(T &object) {
       static T &obj = object;
-      static CallbackFunction fn = []() {
+      static typename Info::CallbackFunction fn = []() {
          (obj.*callback)();
       };
       return fn;
    }
-
-   /**
-    * Set callback function.
-    *
-    * The callback may be executed prior to the WDOG reset.
-    * This allows the system to save important information or log the watchdog event.
-    *
-    * @param[in]  theCallback Callback function to execute on interrupt
-    */
-   static void setCallback(CallbackFunction theCallback) {
-      static_assert(Info::irqHandlerInstalled, "WDOG not configured for interrupts");
-      if (theCallback == nullptr) {
-         theCallback = unhandledCallback;
-      }
-      callback = theCallback;
-   }
+#endif
 
 public:
 
@@ -296,7 +250,11 @@ public:
 
       // Disable interrupts while accessing watchdog
       CriticalSection cs;
-      Info::writeUnlock(WdogUnlock1, WdogUnlock2);
+
+      // Unlock before changing settings
+      wdog->UNLOCK = WdogUnlock_1;
+      wdog->UNLOCK = WdogUnlock_2;
+
       wdog->PRESC  = wdogPrescale;
       wdog->TOVALH = (unsigned)timeout>>16;
       wdog->TOVALL = (unsigned)timeout;
@@ -304,7 +262,7 @@ public:
       wdog->WINL   = (unsigned)window;
    }
 
-#if $(/WDOG/secondsSupport)
+#if $(/WDOG/secondsSupport: false) // /WDOG/secondsSupport
    /**
     * Sets the watchdog time-out value in seconds.
     *
@@ -407,7 +365,7 @@ public:
    }
 };
 
-template<class Info> typename WdogBase_T<Info>::CallbackFunction WdogBase_T<Info>::callback = WdogBase_T<Info>::unhandledCallback;
+//template<class Info> typename WdogBase_T<Info>::CallbackFunction WdogBase_T<Info>::callback = WdogBase_T<Info>::unhandledCallback;
 
 $(/WDOG/declarations: // No declarations found)
 /**

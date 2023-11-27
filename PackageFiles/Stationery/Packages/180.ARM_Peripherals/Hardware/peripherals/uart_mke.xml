@@ -57,7 +57,7 @@ Devices using this peripheral:
    <aliasOption key="/SIM/system_uart$(_instance)_clock[]"              optional="true" />
 
    <intOption key="oversampleRatio"  condition="uart_c4_osr_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       description="Number of samples per bit"
       toolTip="This value determines the number of times an Rx bit is sampled.\n
                This also affects the clock divider and hence the range of baud rates available"
@@ -80,7 +80,7 @@ Devices using this peripheral:
    </binaryOption>
 
    <choiceOption key="defaultBaudRate"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       valueFormat="%s"
       typeName="UartBaudRate"
       description="UART default baud rate"
@@ -111,7 +111,7 @@ Devices using this peripheral:
       <choice value="1"   name="Interrupt" enum="Interrupt" />
    </choiceOption>
 
-   <variableTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
       variables="uart_c2_tcie" ><![CDATA[
       \t/**
       \t * Set %description
@@ -124,7 +124,7 @@ Devices using this peripheral:
    ]]></variableTemplate>
 
    <choiceOption key="uart_c2_ilie" condition="uart_c2_ilie_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       hidden="true"
       typeName="UartIdleLineDetectAction"
       description="Idle line detect sction"
@@ -133,7 +133,7 @@ Devices using this peripheral:
       <choice value="1"   name="Interrupt" enum="Interrupt" />
    </choiceOption>
 
-   <variableTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
       variables="uart_c2_ilie" ><![CDATA[
       \t/**
       \t * Set %description
@@ -146,7 +146,7 @@ Devices using this peripheral:
    ]]></variableTemplate>
 
    <choiceOption key="uartTxEmptyAction" condition="!uart_c5_tdmas_present&amp;&amp;uart_c2_tie_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       hidden="true"
       valueFormat="UART_C2_TIE(%s)"
       typeName="UartTxEmptyAction"
@@ -157,7 +157,7 @@ Devices using this peripheral:
    </choiceOption>
 
    <choiceOption key="uartTxEmptyAction" condition="uart_c5_tdmas_present&amp;&amp;uart_c2_tie_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       hidden="true"
       valueFormat="(UART_C5_TDMAS(%s)&lt;&lt;8),UART_C2_TIE(%s)"
       typeName="UartTxEmptyAction"
@@ -168,7 +168,7 @@ Devices using this peripheral:
       <choice value="1,1"   name="DMA"       enum="Dma"       />
    </choiceOption>
 
-   <variableTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
        variables="uartTxEmptyAction" ><![CDATA[
       \t/**
       \t * Set %description
@@ -178,18 +178,18 @@ Devices using this peripheral:
       \tvoid setTransmitEmptyAction(%params) const {
       \t   uart->C2 = (uart->C2 & ~UART_C2_TIE_MASK)   | %paramExpression; \n
    ]]></variableTemplate>
-   <variableTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
       variables="uartTxEmptyAction"
       condition="uart_c5_tdmas_present" ><![CDATA[
       \t   uart->C5 = (uart->C5 & ~UART_C5_TDMAS_MASK) | %paramExpression>>8; \n
    ]]></variableTemplate>
-   <variableTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
        variables="uartTxEmptyAction" ><![CDATA[
       \t}\n\n
    ]]></variableTemplate>
 
    <choiceOption key="uartRxFullAction" condition="!uart_c5_rdmas_present&amp;&amp;uart_c2_rie_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       hidden="true"
       valueFormat="UART_C2_RIE(%s)"
       typeName="UartRxFullAction"
@@ -200,7 +200,7 @@ Devices using this peripheral:
    </choiceOption>
 
    <choiceOption key="uartRxFullAction" condition="uart_c5_rdmas_present&amp;&amp;uart_c2_rie_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       hidden="true"
       valueFormat="(UART_C5_RDMAS(%s)&lt;&lt;8),UART_C2_RIE(%s)"
       typeName="UartRxFullAction"
@@ -211,7 +211,7 @@ Devices using this peripheral:
       <choice value="1,1"   name="DMA"       enum="Dma"       />
    </choiceOption>
 
-   <variableTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
       variables="uartRxFullAction" ><![CDATA[
       \t/**
       \t * Set %description
@@ -221,12 +221,12 @@ Devices using this peripheral:
       \tvoid setReceiveFullAction(%params) const {
       \t   uart->C2 = (uart->C2 & ~UART_C2_RIE_MASK)   | %paramExpression;\n
    ]]></variableTemplate>
-   <variableTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
       variables="uartRxFullAction"
       condition="uart_c5_rdmas_present" ><![CDATA[
       \t   uart->C5 = (uart->C5 & ~UART_C5_RDMAS_MASK) | %paramExpression>>8;\n
    ]]></variableTemplate>
-   <variableTemplate key="/UART/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
       variables="uartRxFullAction" ><![CDATA[
       \t}\n\n
    ]]></variableTemplate>
@@ -315,9 +315,9 @@ Devices using this peripheral:
    \t}\n\n
    ]]></template>
 
-   <template key="/UART/Present" namespace="all"  ><![CDATA[\ ||\ 1]]></template>
+   <template key="/UART/Present"  ><![CDATA[\ ||\ 1]]></template>
 
-   <template key="/UART/declarations" namespace="all"  ><![CDATA[
+   <template key="/UART/declarations"  ><![CDATA[
       \t/**
       \t * Class representing $(_NAME) interface
       \t *

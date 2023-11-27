@@ -86,7 +86,7 @@
       \t   PMC_REGSC_BIASEN($(pmc_regsc_biasen));      // Core bias enable   \n\n
    ]]></template>
 
-   <template key="/PMC/declarations" namespace="all"  ><![CDATA[
+   <template key="/PMC/declarations"  ><![CDATA[
    \t/**
    \t * Class representing $(_NAME)
    \t */

@@ -66,7 +66,7 @@
    </binaryOption -->
 
    <binaryOption key="lptmr_csr_tie" condition="lptmr_csr_tie_present"
-      enabledBy="/$(_BASENAME)/irqHandlingMethod"
+      enabledBy="irqHandlingMethod"
       typeName="LptmrInterrupt"
       description="Timer interrupt enable"
       toolTip="Enables LPTMR interrupts">
@@ -485,7 +485,7 @@
 
 <!--  ========== LPTMR Init function - time counting mode ============================ -->
 
-   <variableTemplate key="/LPTMR/StaticMethods" namespace="all" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate key="/LPTMR/StaticMethods" codeGenCondition="enablePeripheralSupport"
       nonDefaultParams="3"
       discardRepeats="true"
       variables="
@@ -606,7 +606,7 @@
 
 <!--   ========== Interrupt handler wrapper ============================ -->
 
-   <template key="/LPTMR/declarations" namespace="all"  ><![CDATA[
+   <template key="/LPTMR/declarations"  ><![CDATA[
       \t/**
       \t * MACRO defining the start of a interrupt handler for a LPTMR
       \t * This will override the handler incorporated within the LPTMR class.
@@ -692,7 +692,7 @@
    ]]>
    </template>
 
-   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t
       \t/** Callback for programmatically set handler */
@@ -703,7 +703,7 @@
 
 <!--  ========== LPTMR Init class =============================== -->
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of LPTMR
       \t */
@@ -731,7 +731,7 @@
 
 <!-- Member variables -->
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
     ><![CDATA[
       \t
@@ -739,21 +739,21 @@
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="lptmr_cmrPeriod"
     ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName = 0_s;\n\n
    ]]></variableTemplate >
 
-   <variableTemplate  namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate  namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="lptmr_cmr_compare"
     ><![CDATA[
       \t   /// %description
       \t   uint16_t %registerName = 0;\n\n
    ]]></variableTemplate >
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables=
          "lptmr_psr_prescaler,
           lptmr_psr_pcs"
@@ -762,14 +762,14 @@
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate >
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName = %paramType_Normal;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables=
          "lptmr_csr_tie,
           lptmr_csr_tfc"
@@ -778,13 +778,13 @@
       \t   uint8_t %registerName;\n\n
    ]]></variableTemplate >
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t}; // class $(_Baseclass)BasicInfo::Init\n\n
    ]]></template >
 
 <!--   ========== LPTMR TimeIntervalModeInit class =============================== -->
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of LPTMR in Time Interval Mode
       \t *
@@ -824,7 +824,7 @@
 
 <!--  Constructors -->
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -845,7 +845,7 @@
       #endif\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"><![CDATA[
       \t   /**
@@ -869,7 +869,7 @@
          lptmr_csr_tfc;
          lptmr_psr_prescaler;
          lptmr_psr_pcs">
-      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(v)"
          linePadding="xxx"><![CDATA[
          \t   /**
@@ -892,7 +892,7 @@
       values="
          lptmr_cmr_compare;
          lptmr_cmrPeriod">
-      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(v)"
          linePadding="xxx"><![CDATA[
          \t   /**
@@ -907,13 +907,13 @@
       ]]></variableTemplate>
    </for>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t}; // class $(_Baseclass)BasicInfo::TimeIntervalModeInit\n\n
    ]]></template>
 
 <!--   ========== LPTMR PulseCountingModeInit class =============================== -->
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of LPTMR in Pulse Counting Mode
       \t *
@@ -955,7 +955,7 @@
 
 <!-- Constructors -->
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -976,7 +976,7 @@
       #endif\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"><![CDATA[
       \t   /**
@@ -1002,7 +1002,7 @@
          lptmr_csr_tfc;
          lptmr_psr_pcs;
          lptmr_psr_glitchFilter;">
-      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(v)"
          linePadding="xxx" ><![CDATA[
          \t   /**
@@ -1024,7 +1024,7 @@
    <for keys="v"
       values="
          lptmr_cmr_compare">
-      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(v)"
          linePadding="xxx"><![CDATA[
          \t   /**
@@ -1041,7 +1041,7 @@
 
 <!--   ========== Default Values =============================== -->
 
-   <template  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"><![CDATA[
+   <template  codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"><![CDATA[
       \t/**
       \t * Default value for Lptmr::PulseCountingModeInit
       \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->LPTMR)
@@ -1056,7 +1056,7 @@
             lptmr_csr_tie;
             lptmr_csr_tfc;
             lptmr_cmr_compare">
-      <variableTemplate  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate  codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(v)"
          terminator=","
          separator=","
@@ -1064,11 +1064,11 @@
          %initExpression\n
       ]]></variableTemplate>
    </for>
-   <template  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"><![CDATA[
+   <template  codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"><![CDATA[
       \t};\n\n
    ]]></template>
 
-   <template  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"><![CDATA[
+   <template  codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"><![CDATA[
       \t/**
       \t * Default value for Lptmr::TimeIntervalModeInit
       \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->LPTMR)
@@ -1081,7 +1081,7 @@
             lptmr_psr_pcs;
             lptmr_psr_prescaler;
             lptmr_cmr_compare">
-      <variableTemplate  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate  codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(v)"
          terminator=","
          separator=","
@@ -1089,13 +1089,13 @@
          %initExpression\n
       ]]></variableTemplate>
    </for>
-   <template  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"><![CDATA[
+   <template  codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"><![CDATA[
       \t}; \n\n
    ]]></template>
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Configure LPTMR from values specified in init.
       \t *
@@ -1107,7 +1107,7 @@
       \t   Info::enable();
       \t   \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
              condition="irqHandlingMethod" ><![CDATA[
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      // Only set call-back if feature enabled and non-null
@@ -1118,7 +1118,7 @@
       \t   }
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"><![CDATA[
       \t   uint8_t  psr = init.psr;
       \t   uint32_t cmr = init.cmr;
       \t
@@ -1146,7 +1146,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Enable LPTMR with default configuration.
       \t *
@@ -1165,7 +1165,7 @@
       \t\n
    ]]></template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
       <![CDATA[
       \t}; // $(_Class)BasicInfo::Init\n\n
    ]]>
@@ -1179,7 +1179,7 @@
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Class representing LPTMR$(_instance)
       \t *
@@ -1224,11 +1224,11 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n

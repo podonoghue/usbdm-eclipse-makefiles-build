@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
-<!-- dma0_base.xml -->
+<!-- dma_base.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
@@ -8,11 +8,11 @@
    <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irqHandler&lt;$1&gt;;%c%i::errorIrqHandler" hidden="true" />
 
    <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
-   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="irq_parameters"           type="String"  value="&quot;DmaChannelNum channel, uint32_t status&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;DmaChannelNum, uint32_t&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;(DmaChannelNum)channel, 0&quot;"  />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <constant key="isSupportedinStartup"     type="Boolean" value="false"          />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -50,13 +50,13 @@
     * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
 -->
 
-   <!-- Defined in SIM -->
-   <intOption key="NumChannels" locked="true" derived="true"
-      value="=/DMA$(_instance)_NumChannels"
-      description="Number of DMA channels"
-   />
+   <!-- ************* Constants ****************** -->
 
    <!-- Derived from SVD -->
+   <intOption key="NumChannels" locked="true" derived="true"
+      value="=dma_tcd_dim"
+      description="Number of DMA channels"
+   />
    <intOption key="NumVectors" locked="true" derived="true"
      value="=_irqCount"
      description="Number of individual interrupt vectors"
@@ -69,6 +69,10 @@
       \t//! Number of DMA vectors implemented
       \tstatic constexpr unsigned NumVectors = $(NumVectors);\n\n
    ]]></template>
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
 
    <!-- ************* CR ****************** -->
 
@@ -279,27 +283,181 @@
       <choice name="Completed"      value="1" enum="Completed"/>
    </binaryOption >
 
-<!--   ========== DmaBasicInfo class - start =============================== -->
+   <binaryOption key="dma_csr_active" condition="dma_csr_active_present"
+      hidden="true"
+      typeName="DmaChannelActive"
+      toolTip="This flag signals the channel is currently in execution.\n
+               It sets when service begins and clears when the minor loop completes or on any error"
+      description="Channel Active" >
+      <choice name="Idle"        value="0" enum="Idle"/>
+      <choice name="Busy"        value="1" enum="Busy"/>
+   </binaryOption >
 
-<if condition="!/DMA/DmaBasicInfo_generated" >
-   <constant key="/DMA/DmaBasicInfo_generated" type="Boolean" value="true" />
+   <!-- ************* DCHPRI ****************** -->
 
-   <template namespace="usbdm" ><![CDATA[
-      class DmaBasicInfo {
-      \t
-      public:
+   <binaryOption key="dma_dchpri_ecp" condition="dma_dchpri_ecp_present"
+      hidden="true"
+      typeName="DmaCanBePreempted"
+      toolTip="Allows suspension of this channel by a higher priority channel"
+      description="Enable Channel Preemption" >
+      <choice name="Cannot be suspended"  value="0" enum="Disabled"/>
+      <choice name="Can be suspended"     value="1" enum="Enabled"/>
+   </binaryOption >
+
+   <binaryOption key="dma_dchpri_dpa" condition="dma_dchpri_dpa_present"
+      hidden="true"
+      typeName="DmaCanPreemptLower"
+      toolTip="Disallows the channel to suspend lower priority channels"
+      description="Disable Preempt Ability" >
+      <choice name="Can suspend"     value="0" enum="Disabled"/>
+      <choice name="Cannot suspend"  value="1" enum="Enabled"/>
+   </binaryOption >
+
+   <choiceOption key="dma_dchpri_chpri" condition="dma_dchpri_chpri_present"
+      hidden="true"
+      typeName="DmaPriority"
+      toolTip="Channel priority when fixed-priority arbitration is enabled\n
+               Lower values are higher priority."
+      description="Channel Arbitration Priority" >
+      <choiceExpansion keys="p" dim="16" value="%(p)" name="Level %(p)" enum="%(p)" />
+   </choiceOption >
+
+   <!-- ************* NBYTES_MLOFFYES ****************** -->
+
+   <choiceOption key="dma_nbytes_mloffyes" condition="dma_nbytes_mloffyes_smloe_present"
+      valueFormat="DMA_NBYTES_MLOFFYES_SMLOE(%s),DMA_NBYTES_MLOFFYES_DMLOE(%s)"
+      hidden="true"
+      typeName="DmaMinorLoopOffsetSelect"
+      toolTip="Selects whether the minor loop offset is applied to\n
+               the source and destination addresses upon minor loop completion."
+      description="Source Minor Loop Offset Enable" >
+      <choice name="No offset"                     value="0,0" enum="None"        />
+      <choice name="Offset Source"                 value="1,0" enum="Source"      />
+      <choice name="Offset Destination"            value="0,1" enum="Destination" />
+      <choice name="Offset Source and Destination" value="1,1" enum="Both"        />
+   </choiceOption >
+
+   <!--   ========== class $(_Structname)BasicInfo =============================== -->
+
+   <template namespace="baseClass" ><![CDATA[
+      class $(_Structname)BasicInfo {
+
+      public:\n
+   ]]></template>
+
+   <!--   ========== Interrupt handling =============================== -->
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="irqHandlingMethod"
+   ><![CDATA[
+       \t//! Common class based callback code has been generated for this class of peripheral
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
+       \t\n
+   ]]></variableTemplate>
+
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <![CDATA[
       \t/**
-      \t * Type definition for $(_Class) interrupt call back.
+      \t * Type definition for $(_Baseclass) interrupt call back.
       \t *
       \t * @param status Interrupt status value from SPI->SR
       \t */
-      \ttypedef void (*CallbackFunction)(DmaChannelNum channel, uint32_t status);
+      \ttypedef void (*CallbackFunction)($(irq_dummy_parameters));
+      \t
+      \t/**
+      \t * Callback to catch unhandled interrupt
+      \t */
+      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}
       \t\n
+   ]]>
+   </template>
+
+   <template codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/** Callback function for ISR */
+      \tstatic CallbackFunction sCallbacks[irqCount];
+      \t
+      \t/**
+      \t * Set interrupt callback function.
+      \t *
+      \t * @param[in]  irqNum          Interrupt to configure
+      \t * @param[in]  $(_basename)Callback Callback function to execute on interrupt
+      \t *                             Use nullptr to remove callback.
+      \t */
+      \tstatic void setCallback(DmaChannelNum dmaChannelNum, CallbackFunction $(_basename)Callback) {
+      \t   if ($(_basename)Callback == nullptr) {
+      \t      $(_basename)Callback = unhandledCallback;
+      \t   }
+      \t   // Allow either no handler set yet or removing handler
+      \t   usbdm_assert(
+      \t         (sCallbacks[dmaChannelNum] == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
+      \t         "Handler already set");
+      \t   sCallbacks[dmaChannelNum] = $(_basename)Callback;
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/**
+      \t * $(_BASENAME) error interrupt handler -  Calls $(_BASENAME) channel callback with error flags
+      \t */
+      \tstatic void errorIrqHandler() {
+      \t
+      \t   // Capture error status
+      \t   uint32_t errorFlags = dma->ES;
+      \t
+      \t   // Error channel
+      \t   DmaChannelNum channel = (DmaChannelNum)((errorFlags&DMA_ES_ERRCHN_MASK)>>DMA_ES_ERRCHN_SHIFT);
+      \t
+      \t   // Disable channel
+      \t   dma->CERQ = channel;
+      \t
+      \t   // Clear channel error flag
+      \t   dma->CERR = channel;
+      \t
+      \t   // Call channel call-back with error flags
+      \t   sCallbacks[channel](channel, errorFlags);
+      \t}
+      \t
+      \t/**
+      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
+      \t *
+      \t * @tparam channel Channel number
+      \t */
+      \ttemplate<unsigned channel>
+      \tstatic void irqHandler() {
+      \t
+      \t   // Execute call-back
+      \t   sCallbacks[channel]($(irq_call));
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/**
+      \t * Callback table of programmatically set handlers for $(_Class)
+      \t */
+      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallbacks[] = {\n
+   ]]></template>
+   <for keys="ch" dim="=NumChannels" >
+      <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+         \t   $(_Class)Info::unhandledCallback,\n
+      ]]></template>
+   </for>
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+      \t};\n\n
    ]]></template>
 
 <!--   ========== DMA DmaTcdCsr class - start =============================== -->
 
-   <template key="/DMA/dma_csr_description" namespace="all" ><![CDATA[
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
       \t/**
       \t * Union used to do initialisation of a TCD CSR in $(_Class)
       \t *
@@ -321,10 +479,6 @@
       \t * };
       \t * @endcode
       \t */
-   ]]></template>
-
-   <template namespace="usbdm" ><![CDATA[
-      $(/DMA/dma_csr_description)
       \tunion __attribute__((__packed__)) DmaTcdCsr {
       \t
       \tpublic:
@@ -347,7 +501,7 @@
 
 <!-- DmaTcdCsr Member variables -->
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="
          dma_csr_bwc,
          dma_csr_majorelink,
@@ -388,7 +542,8 @@
          dma_csr_inthalf;
          dma_csr_intmajor;
          dma_csr_start" >
-      <variableTemplate namespace="usbdm" variables="%(r)"
+      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
          \t   /**
@@ -410,13 +565,13 @@
 
 <!--  ========== DmaTcdCsr class - end =============================== -->
 
-   <template namespace="usbdm" ><![CDATA[
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t};\n\n
    ]]></template>
 
 <!--   ========== DMA DmaConfig class - start =============================== -->
 
-   <template key="/DMA/dma_config_description" namespace="all" ><![CDATA[
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of $(_Class)
       \t *
@@ -439,10 +594,6 @@
       \t * Dma0::configure(config);
       \t * @endcode
       \t */
-   ]]></template>
-
-   <template namespace="usbdm" ><![CDATA[
-      $(/DMA/dma_config_description)
       \tunion __attribute__((__packed__)) DmaConfig {
       \t
       \tpublic:
@@ -465,7 +616,7 @@
 
 <!-- DmaConfig Member variables -->
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="
          dma_cr_hoe,
          dma_cr_clm,
@@ -488,7 +639,7 @@
          dma_cr_GroupArb;
          dma_cr_erca;
          dma_cr_edbg" >
-      <variableTemplate namespace="usbdm" variables="%(r)"
+      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
          \t   /**
@@ -516,7 +667,7 @@
                 dma_cr_emlm                 : SetMinorLoopMapping;
                 dma_cr_erca,dma_cr_GroupArb : SetArbitration;
                 dma_cr_edbg                 : SetActionInDebug" >
-      <variableTemplate namespace="all" variables="%(var)" key="/DMA/Setters"
+      <variableTemplate variables="%(var)" key="/DMA/Setters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -533,21 +684,13 @@
 
 <!--   ========== DmaTcdCsr class - end =============================== -->
 
-   <template namespace="usbdm" ><![CDATA[
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t};\n\n
    ]]></template>
 
-<!--   ========== BasicInfo class - end =============================== -->
-
-   <template namespace="usbdm" ><![CDATA[
-      };\n\n
-   ]]></template>
-
-</if>
-
 <!--    Default Initialisation values -->
 
-   <variableTemplate
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -563,11 +706,11 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr DmaBasicInfo::DmaTcdCsr DefaultDmaTcdCsrValue = {%initExpression\n\t};
+      \tstatic constexpr $(_Structname)BasicInfo::DmaTcdCsr DefaultDmaTcdCsrValue = {%initExpression\n\t};
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -582,18 +725,28 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr DmaBasicInfo::DmaConfig DefaultDmaConfigValue = {%initExpression\n\t};
+      \tstatic constexpr $(_Structname)BasicInfo::DmaConfig DefaultDmaConfigValue = {%initExpression\n\t};
       \t\n
    ]]></variableTemplate>
 
+<!--   ========== BasicInfo class - end =============================== -->
+
+   <template namespace="baseClass" >
+   <![CDATA[
+      }; // class $(_Structname)BasicInfo
+      \t\n
+   ]]>
+   </template>
+
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" >
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
-   \t/**
-   \t * Class representing $(_NAME)
-   \t */
-   \ttypedef $(_Baseclass)Base_T<$(_Class)Info> $(_Class);\n
+      \t/**
+      \t * Class representing $(_NAME)
+      \t */
+      \ttypedef $(_Baseclass)Base_T<$(_Class)Info> $(_Class);
+      \t\n
    ]]>
    </template>
 
@@ -601,7 +754,7 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>
 
-   <projectActionList id = "dma_files" >
+   <projectActionList id="dma_files" >
       <copy source="Project_Headers/dma-MK.h"                   target="Project_Headers/dma.h"                      overwrite="true"  derived="true" />
       <copy source="Snippets/dma-memory-example.cpp"            target="Snippets/dma-memory-example.cpp"            overwrite="true"  derived="true" />
       <copy source="Snippets/dma-memory-template-example.cpp"   target="Snippets/dma-memory-template-example.cpp"   overwrite="true"  derived="true" />
@@ -614,14 +767,20 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
+
+   <!-- ************* SIM configuration ****************** -->
+   <category name="Advanced" description="SIM configuration">
+      <aliasOption key="/SIM/sim_scgc7_$(_name)"      locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc7_$(_basename)"  locked="false" optional="true" />
+   </category>
 
 </fragment>

@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MK22F51212
       MK28F15
 -->
@@ -416,7 +416,7 @@ Controls availability of the comparator output on the associated CMPO output pin
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b100</name>
-                           <description>IN4/12-bit DAC1 Output</description>
+                           <description>IN4</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -431,7 +431,7 @@ Controls availability of the comparator output on the associated CMPO output pin
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b111</name>
-                           <description>6b DAC0 Reference</description>
+                           <description>6b DAC Reference</description>
                            <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>

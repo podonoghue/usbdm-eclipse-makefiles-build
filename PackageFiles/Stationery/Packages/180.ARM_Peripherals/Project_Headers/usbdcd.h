@@ -27,13 +27,6 @@ namespace USBDM {
  * @{
  */
 
-/**
- * Disables watchdog test mode until next reset
- */
-enum UsbdcdClockUnit {
-   UsbdcdClockUnit_kHz = USBDCD_CLOCK_CLOCK_UNIT(0), //!< Frequency in kHz
-   UsbdcdClockUnit_MHz = USBDCD_CLOCK_CLOCK_UNIT(1), //!< Frequency in MHz
-};
 
 /**
  * Charger Detection Sequence Status.
@@ -60,7 +53,7 @@ enum UsbdcdSeqResult {
 /**
  * USBDCD status
  */
-union UsbdcdStatus {
+union UsbdcdStatusResults {
    uint32_t mask;
    struct {
       unsigned :16;
@@ -89,7 +82,7 @@ typedef void (*USBDCDCallbackFunction)();
  * @tparam info      Information class for USBDCD
  */
 template<class Info>
-class UsbdcdBase_T {
+class UsbdcdBase_T : public Info {
 
 protected:
    /**
@@ -115,10 +108,10 @@ public:
     *
     * @return Status value
     */
-   static UsbdcdStatus getStatus() {
+   static UsbdcdStatusResults getStatus() {
       union {
-         uint32_t       a;
-         UsbdcdStatus   b;
+         uint32_t              a;
+         UsbdcdStatusResults   b;
       } x;
       x.a = usbdcd->STATUS;
       return (x.b);
@@ -158,35 +151,7 @@ public:
       Info::enableClock();
    }
 
-   /**
-    * Enable with default settings.
-    * Includes configuring all pins
-    */
-   static void defaultConfigure() {
-      enable();
-      softwareReset();
-   }
-
-   /**
-    * Configure
-    *
-    * Sets default clock settings based on SystemBusClock
-    */
-   static __attribute__((always_inline)) void configure() {
-      enable();
-      softwareReset();
-      setClock(SystemBusClock/1000000, UsbdcdClockUnit_MHz);
-   }
-
-   /**
-    *
-    * @param freq
-    * @param usbdcdClockUnit
-    */
-   static void setClock(unsigned freq, UsbdcdClockUnit usbdcdClockUnit) {
-      usbdcd->CLOCK = USBDCD_CLOCK_CLOCK_SPEED(freq)|usbdcdClockUnit;
-   }
-
+$(/USBDCD/InitMethod: // /USBDCD/InitMethod not found)
    /**
     * Disable interface to USBDCD
     */
@@ -199,23 +164,6 @@ public:
     */
    static void enableNvicInterrupts() {
       NVIC_EnableIRQ(Info::irqNums[0]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableNvicInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[0]);
    }
 
    /**

@@ -74,17 +74,6 @@ $(/VREF/InitMethod: // /VREF/InitMethod not found)
       // Enable and map pin to Vref_out is needed
       Pcr::setPCR();
    }
-
-
-   /**
-    * Sets the voltage reference mode
-    *
-    * @param scValue Value for SC register e.g. VREF_SC_VREFEN_MASK|VREF_SC_REGEN_MASK|VREF_SC_ICOMPEN_MASK|VREF_SC_MO`DE_LV(2)
-    */
-   static void setMode(uint32_t scValue=Info::vref_sc|VREF_SC_VREFEN_MASK) {
-      vref->SC   = scValue;
-   }
-
 };
 
 $(/VREF/declarations: // No declarations found)

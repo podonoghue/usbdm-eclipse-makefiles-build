@@ -60,16 +60,19 @@
          <param type="BooleanVariable"        value="true"             name="adc_clpx_ofs_present"           key="/ADC0/adc_clpx_ofs_present" />
          <param type="BooleanVariable"        value="true"             name="adc_clpx_present"               key="/ADC0/adc_clpx_present" />
          <param type="BooleanVariable"        value="true"             name="adc_cv_cv_present"              key="/ADC0/adc_cv_cv_present" />
+         <param type="LongVariable"           value="2"                name="adc_cv_dim"                     key="/ADC0/adc_cv_dim" />
          <param type="BooleanVariable"        value="true"             name="adc_cv_present"                 key="/ADC0/adc_cv_present" />
          <param type="BooleanVariable"        value="true"             name="adc_g_g_present"                key="/ADC0/adc_g_g_present" />
          <param type="BooleanVariable"        value="true"             name="adc_g_present"                  key="/ADC0/adc_g_present" />
          <param type="BooleanVariable"        value="true"             name="adc_ofs_ofs_present"            key="/ADC0/adc_ofs_ofs_present" />
          <param type="BooleanVariable"        value="true"             name="adc_ofs_present"                key="/ADC0/adc_ofs_present" />
          <param type="BooleanVariable"        value="true"             name="adc_r_d_present"                key="/ADC0/adc_r_d_present" />
+         <param type="LongVariable"           value="16"               name="adc_r_dim"                      key="/ADC0/adc_r_dim" />
          <param type="BooleanVariable"        value="true"             name="adc_r_present"                  key="/ADC0/adc_r_present" />
          <param type="BooleanVariable"        value="true"             name="adc_sc1_adch_present"           key="/ADC0/adc_sc1_adch_present" />
          <param type="BooleanVariable"        value="true"             name="adc_sc1_aien_present"           key="/ADC0/adc_sc1_aien_present" />
          <param type="BooleanVariable"        value="true"             name="adc_sc1_coco_present"           key="/ADC0/adc_sc1_coco_present" />
+         <param type="LongVariable"           value="16"               name="adc_sc1_dim"                    key="/ADC0/adc_sc1_dim" />
          <param type="BooleanVariable"        value="true"             name="adc_sc1_present"                key="/ADC0/adc_sc1_present" />
          <param type="BooleanVariable"        value="true"             name="adc_sc2_acfe_present"           key="/ADC0/adc_sc2_acfe_present" />
          <param type="BooleanVariable"        value="true"             name="adc_sc2_acfgt_present"          key="/ADC0/adc_sc2_acfgt_present" />
@@ -143,16 +146,19 @@
          <param type="BooleanVariable"        value="true"             name="adc_clpx_ofs_present"           key="/ADC1/adc_clpx_ofs_present" />
          <param type="BooleanVariable"        value="true"             name="adc_clpx_present"               key="/ADC1/adc_clpx_present" />
          <param type="BooleanVariable"        value="true"             name="adc_cv_cv_present"              key="/ADC1/adc_cv_cv_present" />
+         <param type="LongVariable"           value="2"                name="adc_cv_dim"                     key="/ADC1/adc_cv_dim" />
          <param type="BooleanVariable"        value="true"             name="adc_cv_present"                 key="/ADC1/adc_cv_present" />
          <param type="BooleanVariable"        value="true"             name="adc_g_g_present"                key="/ADC1/adc_g_g_present" />
          <param type="BooleanVariable"        value="true"             name="adc_g_present"                  key="/ADC1/adc_g_present" />
          <param type="BooleanVariable"        value="true"             name="adc_ofs_ofs_present"            key="/ADC1/adc_ofs_ofs_present" />
          <param type="BooleanVariable"        value="true"             name="adc_ofs_present"                key="/ADC1/adc_ofs_present" />
          <param type="BooleanVariable"        value="true"             name="adc_r_d_present"                key="/ADC1/adc_r_d_present" />
+         <param type="LongVariable"           value="16"               name="adc_r_dim"                      key="/ADC1/adc_r_dim" />
          <param type="BooleanVariable"        value="true"             name="adc_r_present"                  key="/ADC1/adc_r_present" />
          <param type="BooleanVariable"        value="true"             name="adc_sc1_adch_present"           key="/ADC1/adc_sc1_adch_present" />
          <param type="BooleanVariable"        value="true"             name="adc_sc1_aien_present"           key="/ADC1/adc_sc1_aien_present" />
          <param type="BooleanVariable"        value="true"             name="adc_sc1_coco_present"           key="/ADC1/adc_sc1_coco_present" />
+         <param type="LongVariable"           value="16"               name="adc_sc1_dim"                    key="/ADC1/adc_sc1_dim" />
          <param type="BooleanVariable"        value="true"             name="adc_sc1_present"                key="/ADC1/adc_sc1_present" />
          <param type="BooleanVariable"        value="true"             name="adc_sc2_acfe_present"           key="/ADC1/adc_sc2_acfe_present" />
          <param type="BooleanVariable"        value="true"             name="adc_sc2_acfgt_present"          key="/ADC1/adc_sc2_acfgt_present" />
@@ -302,11 +308,13 @@
          <param type="BooleanVariable"        value="true"             name="can_fdctrl_tdcfail_present"     key="/CAN0/can_fdctrl_tdcfail_present" />
          <param type="BooleanVariable"        value="true"             name="can_fdctrl_tdcoff_present"      key="/CAN0/can_fdctrl_tdcoff_present" />
          <param type="BooleanVariable"        value="true"             name="can_fdctrl_tdcval_present"      key="/CAN0/can_fdctrl_tdcval_present" />
+         <param type="LongVariable"           value="104"              name="can_filter_id_a_dim"            key="/CAN0/can_filter_id_a_dim" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_a_idea_present"   key="/CAN0/can_filter_id_a_idea_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_a_present"        key="/CAN0/can_filter_id_a_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_a_rtra_present"   key="/CAN0/can_filter_id_a_rtra_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_a_rxida_ext_present" key="/CAN0/can_filter_id_a_rxida_ext_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_a_rxida_std_present" key="/CAN0/can_filter_id_a_rxida_std_present" />
+         <param type="LongVariable"           value="104"              name="can_filter_id_b_dim"            key="/CAN0/can_filter_id_b_dim" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_b_ideb_0_present" key="/CAN0/can_filter_id_b_ideb_0_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_b_ideb_1_present" key="/CAN0/can_filter_id_b_ideb_1_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_b_present"        key="/CAN0/can_filter_id_b_present" />
@@ -316,6 +324,7 @@
          <param type="BooleanVariable"        value="true"             name="can_filter_id_b_rxidb_ext_1_present" key="/CAN0/can_filter_id_b_rxidb_ext_1_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_b_rxidb_std_0_present" key="/CAN0/can_filter_id_b_rxidb_std_0_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_b_rxidb_std_1_present" key="/CAN0/can_filter_id_b_rxidb_std_1_present" />
+         <param type="LongVariable"           value="104"              name="can_filter_id_c_dim"            key="/CAN0/can_filter_id_c_dim" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_c_present"        key="/CAN0/can_filter_id_c_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_c_rxidc_0_present" key="/CAN0/can_filter_id_c_rxidc_0_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_c_rxidc_1_present" key="/CAN0/can_filter_id_c_rxidc_1_present" />
@@ -345,6 +354,7 @@
          <param type="BooleanVariable"        value="true"             name="can_iflag1_present"             key="/CAN0/can_iflag1_present" />
          <param type="BooleanVariable"        value="true"             name="can_imask1_buf31to0m_present"   key="/CAN0/can_imask1_buf31to0m_present" />
          <param type="BooleanVariable"        value="true"             name="can_imask1_present"             key="/CAN0/can_imask1_present" />
+         <param type="LongVariable"           value="32"               name="can_mb_dim"                     key="/CAN0/can_mb_dim" />
          <param type="BooleanVariable"        value="true"             name="can_mcr_aen_present"            key="/CAN0/can_mcr_aen_present" />
          <param type="BooleanVariable"        value="true"             name="can_mcr_dma_present"            key="/CAN0/can_mcr_dma_present" />
          <param type="BooleanVariable"        value="true"             name="can_mcr_fden_present"           key="/CAN0/can_mcr_fden_present" />
@@ -410,12 +420,14 @@
          <param type="BooleanVariable"        value="true"             name="can_rxfgmask_c_rxidc_3_present" key="/CAN0/can_rxfgmask_c_rxidc_3_present" />
          <param type="BooleanVariable"        value="true"             name="can_rxfir_idhit_present"        key="/CAN0/can_rxfir_idhit_present" />
          <param type="BooleanVariable"        value="true"             name="can_rxfir_present"              key="/CAN0/can_rxfir_present" />
+         <param type="LongVariable"           value="32"               name="can_rximr_dim"                  key="/CAN0/can_rximr_dim" />
          <param type="BooleanVariable"        value="true"             name="can_rximr_mi_present"           key="/CAN0/can_rximr_mi_present" />
          <param type="BooleanVariable"        value="true"             name="can_rximr_present"              key="/CAN0/can_rximr_present" />
          <param type="BooleanVariable"        value="true"             name="can_rxmgmask_mg_present"        key="/CAN0/can_rxmgmask_mg_present" />
          <param type="BooleanVariable"        value="true"             name="can_rxmgmask_present"           key="/CAN0/can_rxmgmask_present" />
          <param type="BooleanVariable"        value="true"             name="can_timer_present"              key="/CAN0/can_timer_present" />
          <param type="BooleanVariable"        value="true"             name="can_timer_timer_present"        key="/CAN0/can_timer_timer_present" />
+         <param type="LongVariable"           value="4"                name="can_wmb_dim"                    key="/CAN0/can_wmb_dim" />
          <param type="BooleanVariable"        value="true"             name="can_wmbn_cs_dlc_present"        key="/CAN0/can_wmbn_cs_dlc_present" />
          <param type="BooleanVariable"        value="true"             name="can_wmbn_cs_ide_present"        key="/CAN0/can_wmbn_cs_ide_present" />
          <param type="BooleanVariable"        value="true"             name="can_wmbn_cs_present"            key="/CAN0/can_wmbn_cs_present" />
@@ -569,11 +581,13 @@
          <param type="BooleanVariable"        value="true"             name="can_fdctrl_tdcfail_present"     key="/CAN1/can_fdctrl_tdcfail_present" />
          <param type="BooleanVariable"        value="true"             name="can_fdctrl_tdcoff_present"      key="/CAN1/can_fdctrl_tdcoff_present" />
          <param type="BooleanVariable"        value="true"             name="can_fdctrl_tdcval_present"      key="/CAN1/can_fdctrl_tdcval_present" />
+         <param type="LongVariable"           value="40"               name="can_filter_id_a_dim"            key="/CAN1/can_filter_id_a_dim" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_a_idea_present"   key="/CAN1/can_filter_id_a_idea_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_a_present"        key="/CAN1/can_filter_id_a_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_a_rtra_present"   key="/CAN1/can_filter_id_a_rtra_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_a_rxida_ext_present" key="/CAN1/can_filter_id_a_rxida_ext_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_a_rxida_std_present" key="/CAN1/can_filter_id_a_rxida_std_present" />
+         <param type="LongVariable"           value="40"               name="can_filter_id_b_dim"            key="/CAN1/can_filter_id_b_dim" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_b_ideb_0_present" key="/CAN1/can_filter_id_b_ideb_0_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_b_ideb_1_present" key="/CAN1/can_filter_id_b_ideb_1_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_b_present"        key="/CAN1/can_filter_id_b_present" />
@@ -583,6 +597,7 @@
          <param type="BooleanVariable"        value="true"             name="can_filter_id_b_rxidb_ext_1_present" key="/CAN1/can_filter_id_b_rxidb_ext_1_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_b_rxidb_std_0_present" key="/CAN1/can_filter_id_b_rxidb_std_0_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_b_rxidb_std_1_present" key="/CAN1/can_filter_id_b_rxidb_std_1_present" />
+         <param type="LongVariable"           value="40"               name="can_filter_id_c_dim"            key="/CAN1/can_filter_id_c_dim" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_c_present"        key="/CAN1/can_filter_id_c_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_c_rxidc_0_present" key="/CAN1/can_filter_id_c_rxidc_0_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_c_rxidc_1_present" key="/CAN1/can_filter_id_c_rxidc_1_present" />
@@ -612,6 +627,7 @@
          <param type="BooleanVariable"        value="true"             name="can_iflag1_present"             key="/CAN1/can_iflag1_present" />
          <param type="BooleanVariable"        value="true"             name="can_imask1_buf31to0m_present"   key="/CAN1/can_imask1_buf31to0m_present" />
          <param type="BooleanVariable"        value="true"             name="can_imask1_present"             key="/CAN1/can_imask1_present" />
+         <param type="LongVariable"           value="16"               name="can_mb_dim"                     key="/CAN1/can_mb_dim" />
          <param type="BooleanVariable"        value="true"             name="can_mcr_aen_present"            key="/CAN1/can_mcr_aen_present" />
          <param type="BooleanVariable"        value="true"             name="can_mcr_dma_present"            key="/CAN1/can_mcr_dma_present" />
          <param type="BooleanVariable"        value="true"             name="can_mcr_fden_present"           key="/CAN1/can_mcr_fden_present" />
@@ -677,12 +693,14 @@
          <param type="BooleanVariable"        value="true"             name="can_rxfgmask_c_rxidc_3_present" key="/CAN1/can_rxfgmask_c_rxidc_3_present" />
          <param type="BooleanVariable"        value="true"             name="can_rxfir_idhit_present"        key="/CAN1/can_rxfir_idhit_present" />
          <param type="BooleanVariable"        value="true"             name="can_rxfir_present"              key="/CAN1/can_rxfir_present" />
+         <param type="LongVariable"           value="16"               name="can_rximr_dim"                  key="/CAN1/can_rximr_dim" />
          <param type="BooleanVariable"        value="true"             name="can_rximr_mi_present"           key="/CAN1/can_rximr_mi_present" />
          <param type="BooleanVariable"        value="true"             name="can_rximr_present"              key="/CAN1/can_rximr_present" />
          <param type="BooleanVariable"        value="true"             name="can_rxmgmask_mg_present"        key="/CAN1/can_rxmgmask_mg_present" />
          <param type="BooleanVariable"        value="true"             name="can_rxmgmask_present"           key="/CAN1/can_rxmgmask_present" />
          <param type="BooleanVariable"        value="true"             name="can_timer_present"              key="/CAN1/can_timer_present" />
          <param type="BooleanVariable"        value="true"             name="can_timer_timer_present"        key="/CAN1/can_timer_timer_present" />
+         <param type="LongVariable"           value="4"                name="can_wmb_dim"                    key="/CAN1/can_wmb_dim" />
          <param type="BooleanVariable"        value="true"             name="can_wmbn_cs_dlc_present"        key="/CAN1/can_wmbn_cs_dlc_present" />
          <param type="BooleanVariable"        value="true"             name="can_wmbn_cs_ide_present"        key="/CAN1/can_wmbn_cs_ide_present" />
          <param type="BooleanVariable"        value="true"             name="can_wmbn_cs_present"            key="/CAN1/can_wmbn_cs_present" />
@@ -836,11 +854,13 @@
          <param type="BooleanVariable"        value="true"             name="can_fdctrl_tdcfail_present"     key="/CAN2/can_fdctrl_tdcfail_present" />
          <param type="BooleanVariable"        value="true"             name="can_fdctrl_tdcoff_present"      key="/CAN2/can_fdctrl_tdcoff_present" />
          <param type="BooleanVariable"        value="true"             name="can_fdctrl_tdcval_present"      key="/CAN2/can_fdctrl_tdcval_present" />
+         <param type="LongVariable"           value="40"               name="can_filter_id_a_dim"            key="/CAN2/can_filter_id_a_dim" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_a_idea_present"   key="/CAN2/can_filter_id_a_idea_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_a_present"        key="/CAN2/can_filter_id_a_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_a_rtra_present"   key="/CAN2/can_filter_id_a_rtra_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_a_rxida_ext_present" key="/CAN2/can_filter_id_a_rxida_ext_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_a_rxida_std_present" key="/CAN2/can_filter_id_a_rxida_std_present" />
+         <param type="LongVariable"           value="40"               name="can_filter_id_b_dim"            key="/CAN2/can_filter_id_b_dim" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_b_ideb_0_present" key="/CAN2/can_filter_id_b_ideb_0_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_b_ideb_1_present" key="/CAN2/can_filter_id_b_ideb_1_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_b_present"        key="/CAN2/can_filter_id_b_present" />
@@ -850,6 +870,7 @@
          <param type="BooleanVariable"        value="true"             name="can_filter_id_b_rxidb_ext_1_present" key="/CAN2/can_filter_id_b_rxidb_ext_1_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_b_rxidb_std_0_present" key="/CAN2/can_filter_id_b_rxidb_std_0_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_b_rxidb_std_1_present" key="/CAN2/can_filter_id_b_rxidb_std_1_present" />
+         <param type="LongVariable"           value="40"               name="can_filter_id_c_dim"            key="/CAN2/can_filter_id_c_dim" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_c_present"        key="/CAN2/can_filter_id_c_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_c_rxidc_0_present" key="/CAN2/can_filter_id_c_rxidc_0_present" />
          <param type="BooleanVariable"        value="true"             name="can_filter_id_c_rxidc_1_present" key="/CAN2/can_filter_id_c_rxidc_1_present" />
@@ -879,6 +900,7 @@
          <param type="BooleanVariable"        value="true"             name="can_iflag1_present"             key="/CAN2/can_iflag1_present" />
          <param type="BooleanVariable"        value="true"             name="can_imask1_buf31to0m_present"   key="/CAN2/can_imask1_buf31to0m_present" />
          <param type="BooleanVariable"        value="true"             name="can_imask1_present"             key="/CAN2/can_imask1_present" />
+         <param type="LongVariable"           value="16"               name="can_mb_dim"                     key="/CAN2/can_mb_dim" />
          <param type="BooleanVariable"        value="true"             name="can_mcr_aen_present"            key="/CAN2/can_mcr_aen_present" />
          <param type="BooleanVariable"        value="true"             name="can_mcr_dma_present"            key="/CAN2/can_mcr_dma_present" />
          <param type="BooleanVariable"        value="true"             name="can_mcr_fden_present"           key="/CAN2/can_mcr_fden_present" />
@@ -944,12 +966,14 @@
          <param type="BooleanVariable"        value="true"             name="can_rxfgmask_c_rxidc_3_present" key="/CAN2/can_rxfgmask_c_rxidc_3_present" />
          <param type="BooleanVariable"        value="true"             name="can_rxfir_idhit_present"        key="/CAN2/can_rxfir_idhit_present" />
          <param type="BooleanVariable"        value="true"             name="can_rxfir_present"              key="/CAN2/can_rxfir_present" />
+         <param type="LongVariable"           value="16"               name="can_rximr_dim"                  key="/CAN2/can_rximr_dim" />
          <param type="BooleanVariable"        value="true"             name="can_rximr_mi_present"           key="/CAN2/can_rximr_mi_present" />
          <param type="BooleanVariable"        value="true"             name="can_rximr_present"              key="/CAN2/can_rximr_present" />
          <param type="BooleanVariable"        value="true"             name="can_rxmgmask_mg_present"        key="/CAN2/can_rxmgmask_mg_present" />
          <param type="BooleanVariable"        value="true"             name="can_rxmgmask_present"           key="/CAN2/can_rxmgmask_present" />
          <param type="BooleanVariable"        value="true"             name="can_timer_present"              key="/CAN2/can_timer_present" />
          <param type="BooleanVariable"        value="true"             name="can_timer_timer_present"        key="/CAN2/can_timer_timer_present" />
+         <param type="LongVariable"           value="4"                name="can_wmb_dim"                    key="/CAN2/can_wmb_dim" />
          <param type="BooleanVariable"        value="true"             name="can_wmbn_cs_dlc_present"        key="/CAN2/can_wmbn_cs_dlc_present" />
          <param type="BooleanVariable"        value="true"             name="can_wmbn_cs_ide_present"        key="/CAN2/can_wmbn_cs_ide_present" />
          <param type="BooleanVariable"        value="true"             name="can_wmbn_cs_present"            key="/CAN2/can_wmbn_cs_present" />
@@ -1045,9 +1069,9 @@
          <param type="BooleanVariable"        value="true"             name="cmp_c2_rrie_present"            key="/CMP0/cmp_c2_rrie_present" />
          <param type="StringVariable"         value="CMP"              name="structName"                     key="/CMP0/structName" />
       </peripheral>
-      <peripheral baseName="CONTROL"  instance=""         instanceList="CONTROL">
+      <peripheral baseName="CONTROL"  instance=""         instanceList="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForControl" />
-         <param type="StringVariable"         value="CONTROL"          name="_instanceList"                  key="/CONTROL/_instanceList" />
+         <param type="StringVariable"         value=""                 name="_instanceList"                  key="/CONTROL/_instanceList" />
          <param type="BooleanVariable"        value="true"             name="_hasPcrTable"                   key="/CONTROL/_hasPcrTable" />
       </peripheral>
       <peripheral baseName="CRC"      instance="0"        instanceList="CRC0" version="crc0_0x40032000">
@@ -1073,9 +1097,9 @@
          <param type="BooleanVariable"        value="true"             name="crc_gpoly_present"              key="/CRC0/crc_gpoly_present" />
          <param type="StringVariable"         value="CRC"              name="structName"                     key="/CRC0/structName" />
       </peripheral>
-      <peripheral baseName="Console"  instance=""         instanceList="Console">
+      <peripheral baseName="Console"  instance=""         instanceList="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
-         <param type="StringVariable"         value="Console"          name="_instanceList"                  key="/Console/_instanceList" />
+         <param type="StringVariable"         value=""                 name="_instanceList"                  key="/Console/_instanceList" />
       </peripheral>
       <peripheral baseName="DMA"      instance="0"        instanceList="DMA0" version="dma0_16ch_ears16">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
@@ -1161,6 +1185,7 @@
          <param type="BooleanVariable"        value="true"             name="dma_daddr_daddr_present"        key="/DMA0/dma_daddr_daddr_present" />
          <param type="BooleanVariable"        value="true"             name="dma_daddr_present"              key="/DMA0/dma_daddr_present" />
          <param type="BooleanVariable"        value="true"             name="dma_dchpri_chpri_present"       key="/DMA0/dma_dchpri_chpri_present" />
+         <param type="LongVariable"           value="16"               name="dma_dchpri_dim"                 key="/DMA0/dma_dchpri_dim" />
          <param type="BooleanVariable"        value="true"             name="dma_dchpri_dpa_present"         key="/DMA0/dma_dchpri_dpa_present" />
          <param type="BooleanVariable"        value="true"             name="dma_dchpri_ecp_present"         key="/DMA0/dma_dchpri_ecp_present" />
          <param type="BooleanVariable"        value="true"             name="dma_dchpri_present"             key="/DMA0/dma_dchpri_present" />
@@ -1312,6 +1337,9 @@
          <param type="BooleanVariable"        value="true"             name="dma_ssrt_present"               key="/DMA0/dma_ssrt_present" />
          <param type="BooleanVariable"        value="true"             name="dma_ssrt_sast_present"          key="/DMA0/dma_ssrt_sast_present" />
          <param type="BooleanVariable"        value="true"             name="dma_ssrt_ssrt_present"          key="/DMA0/dma_ssrt_ssrt_present" />
+         <param type="LongVariable"           value="16"               name="dma_tcd_dim"                    key="/DMA0/dma_tcd_dim" />
+         <param type="LongVariable"           value="128"              name="dma_tcd_raw_dim"                key="/DMA0/dma_tcd_raw_dim" />
+         <param type="BooleanVariable"        value="true"             name="dma_tcd_raw_present"            key="/DMA0/dma_tcd_raw_present" />
          <param type="StringVariable"         value="DMA"              name="structName"                     key="/DMA0/structName" />
       </peripheral>
       <peripheral baseName="DMAMUX"   instance="0"        instanceList="DMAMUX0" version="dmamux0_16ch_trig_s32k14x">
@@ -1319,6 +1347,7 @@
          <clock clockEnable="PCC->PCC_DMAMUX = PCC->PCC_DMAMUX | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_DMAMUX = PCC->PCC_DMAMUX &amp; ~PCC_PCCn_CGC_MASK;" />
          <param type="StringVariable"         value="DMAMUX0"          name="_instanceList"                  key="/DMAMUX0/_instanceList" />
          <param type="BooleanVariable"        value="true"             name="_present"                       key="/DMAMUX0/_present" />
+         <param type="LongVariable"           value="16"               name="dmamux_chcfg_dim"               key="/DMAMUX0/dmamux_chcfg_dim" />
          <param type="BooleanVariable"        value="true"             name="dmamux_chcfg_enbl_present"      key="/DMAMUX0/dmamux_chcfg_enbl_present" />
          <param type="BooleanVariable"        value="true"             name="dmamux_chcfg_present"           key="/DMAMUX0/dmamux_chcfg_present" />
          <param type="BooleanVariable"        value="true"             name="dmamux_chcfg_source_present"    key="/DMAMUX0/dmamux_chcfg_source_present" />
@@ -1396,6 +1425,20 @@
          <param type="StringVariable"         value="EWM"              name="_instanceList"                  key="/EWM/_instanceList" />
          <param type="LongVariable"           value="1"                name="_irqCount"                      key="/EWM/_irqCount" />
          <param type="BooleanVariable"        value="true"             name="_hasPcrTable"                   key="/EWM/_hasPcrTable" />
+         <param type="BooleanVariable"        value="true"             name="_present"                       key="/EWM/_present" />
+         <param type="BooleanVariable"        value="true"             name="ewm_clkprescaler_clk_div_present" key="/EWM/ewm_clkprescaler_clk_div_present" />
+         <param type="BooleanVariable"        value="true"             name="ewm_clkprescaler_present"       key="/EWM/ewm_clkprescaler_present" />
+         <param type="BooleanVariable"        value="true"             name="ewm_cmph_compareh_present"      key="/EWM/ewm_cmph_compareh_present" />
+         <param type="BooleanVariable"        value="true"             name="ewm_cmph_present"               key="/EWM/ewm_cmph_present" />
+         <param type="BooleanVariable"        value="true"             name="ewm_cmpl_comparel_present"      key="/EWM/ewm_cmpl_comparel_present" />
+         <param type="BooleanVariable"        value="true"             name="ewm_cmpl_present"               key="/EWM/ewm_cmpl_present" />
+         <param type="BooleanVariable"        value="true"             name="ewm_ctrl_assin_present"         key="/EWM/ewm_ctrl_assin_present" />
+         <param type="BooleanVariable"        value="true"             name="ewm_ctrl_ewmen_present"         key="/EWM/ewm_ctrl_ewmen_present" />
+         <param type="BooleanVariable"        value="true"             name="ewm_ctrl_inen_present"          key="/EWM/ewm_ctrl_inen_present" />
+         <param type="BooleanVariable"        value="true"             name="ewm_ctrl_inten_present"         key="/EWM/ewm_ctrl_inten_present" />
+         <param type="BooleanVariable"        value="true"             name="ewm_ctrl_present"               key="/EWM/ewm_ctrl_present" />
+         <param type="BooleanVariable"        value="true"             name="ewm_serv_present"               key="/EWM/ewm_serv_present" />
+         <param type="BooleanVariable"        value="true"             name="ewm_serv_service_present"       key="/EWM/ewm_serv_service_present" />
          <param type="StringVariable"         value="EWM"              name="structName"                     key="/EWM/structName" />
       </peripheral>
       <peripheral baseName="FLEXIO"   instance=""         instanceList="FLEXIO" version="flexio_4sh_4tmr_mke15z7">
@@ -1419,12 +1462,12 @@
          <param type="StringVariable"         value="2048"             name="pflash_sector_size"             key="/FTFC/pflash_sector_size" />
          <param type="StringVariable"         value="FTFC"             name="structName"                     key="/FTFC/structName" />
       </peripheral>
-      <peripheral baseName="FTM"      instance=""         instanceList="FTM;FTM0;FTM1;FTM2;FTM3">
+      <peripheral baseName="FTM"      instance=""         instanceList="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
-         <param type="StringVariable"         value="FTM;FTM0;FTM1;FTM2;FTM3" name="_instanceList"                  key="/FTM/_instanceList" />
+         <param type="StringVariable"         value="FTM0;FTM1;FTM2;FTM3" name="_instanceList"                  key="/FTM/_instanceList" />
          <param type="BooleanVariable"        value="true"             name="_hasPcrTable"                   key="/FTM/_hasPcrTable" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="0"        instanceList="FTM;FTM0;FTM1;FTM2;FTM3" version="ftm0_8ch_s32k144">
+      <peripheral baseName="FTM"      instance="0"        instanceList="FTM0;FTM1;FTM2;FTM3" version="ftm0_8ch_s32k144">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="PCC->PCC_FTM0 = PCC->PCC_FTM0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FTM0 = PCC->PCC_FTM0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="FTM0_Ch0_Ch1_IRQn" />
@@ -1433,7 +1476,7 @@
          <irq num="FTM0_Ch6_Ch7_IRQn" />
          <irq num="FTM0_Fault_IRQn" />
          <irq num="FTM0_Ovf_Reload_IRQn" />
-         <param type="StringVariable"         value="FTM;FTM0;FTM1;FTM2;FTM3" name="_instanceList"                  key="/FTM0/_instanceList" />
+         <param type="StringVariable"         value="FTM0;FTM1;FTM2;FTM3" name="_instanceList"                  key="/FTM0/_instanceList" />
          <param type="LongVariable"           value="6"                name="_irqCount"                      key="/FTM0/_irqCount" />
          <param type="BooleanVariable"        value="true"             name="_hasPcrTable"                   key="/FTM0/_hasPcrTable" />
          <param type="BooleanVariable"        value="true"             name="_present"                       key="/FTM0/_present" />
@@ -1496,6 +1539,7 @@
          <param type="BooleanVariable"        value="true"             name="ftm_conf_itrigr_present"        key="/FTM0/ftm_conf_itrigr_present" />
          <param type="BooleanVariable"        value="true"             name="ftm_conf_ldfq_present"          key="/FTM0/ftm_conf_ldfq_present" />
          <param type="BooleanVariable"        value="true"             name="ftm_conf_present"               key="/FTM0/ftm_conf_present" />
+         <param type="LongVariable"           value="8"                name="ftm_controls_dim"               key="/FTM0/ftm_controls_dim" />
          <param type="BooleanVariable"        value="true"             name="ftm_deadtime_dtps_present"      key="/FTM0/ftm_deadtime_dtps_present" />
          <param type="BooleanVariable"        value="true"             name="ftm_deadtime_dtval_present"     key="/FTM0/ftm_deadtime_dtval_present" />
          <param type="BooleanVariable"        value="true"             name="ftm_deadtime_dtvalex_present"   key="/FTM0/ftm_deadtime_dtvalex_present" />
@@ -1692,7 +1736,7 @@
          <param type="BooleanVariable"        value="true"             name="ftm_synconf_syncmode_present"   key="/FTM0/ftm_synconf_syncmode_present" />
          <param type="StringVariable"         value="FTM"              name="structName"                     key="/FTM0/structName" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="1"        instanceList="FTM;FTM0;FTM1;FTM2;FTM3" version="ftm0_8ch_s32k144">
+      <peripheral baseName="FTM"      instance="1"        instanceList="FTM0;FTM1;FTM2;FTM3" version="ftm0_8ch_s32k144">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="PCC->PCC_FTM1 = PCC->PCC_FTM1 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FTM1 = PCC->PCC_FTM1 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="FTM1_Ch0_Ch1_IRQn" />
@@ -1701,7 +1745,7 @@
          <irq num="FTM1_Ch6_Ch7_IRQn" />
          <irq num="FTM1_Fault_IRQn" />
          <irq num="FTM1_Ovf_Reload_IRQn" />
-         <param type="StringVariable"         value="FTM;FTM0;FTM1;FTM2;FTM3" name="_instanceList"                  key="/FTM1/_instanceList" />
+         <param type="StringVariable"         value="FTM0;FTM1;FTM2;FTM3" name="_instanceList"                  key="/FTM1/_instanceList" />
          <param type="LongVariable"           value="6"                name="_irqCount"                      key="/FTM1/_irqCount" />
          <param type="BooleanVariable"        value="true"             name="_hasPcrTable"                   key="/FTM1/_hasPcrTable" />
          <param type="BooleanVariable"        value="true"             name="_present"                       key="/FTM1/_present" />
@@ -1764,6 +1808,7 @@
          <param type="BooleanVariable"        value="true"             name="ftm_conf_itrigr_present"        key="/FTM1/ftm_conf_itrigr_present" />
          <param type="BooleanVariable"        value="true"             name="ftm_conf_ldfq_present"          key="/FTM1/ftm_conf_ldfq_present" />
          <param type="BooleanVariable"        value="true"             name="ftm_conf_present"               key="/FTM1/ftm_conf_present" />
+         <param type="LongVariable"           value="8"                name="ftm_controls_dim"               key="/FTM1/ftm_controls_dim" />
          <param type="BooleanVariable"        value="true"             name="ftm_deadtime_dtps_present"      key="/FTM1/ftm_deadtime_dtps_present" />
          <param type="BooleanVariable"        value="true"             name="ftm_deadtime_dtval_present"     key="/FTM1/ftm_deadtime_dtval_present" />
          <param type="BooleanVariable"        value="true"             name="ftm_deadtime_dtvalex_present"   key="/FTM1/ftm_deadtime_dtvalex_present" />
@@ -1960,7 +2005,7 @@
          <param type="BooleanVariable"        value="true"             name="ftm_synconf_syncmode_present"   key="/FTM1/ftm_synconf_syncmode_present" />
          <param type="StringVariable"         value="FTM"              name="structName"                     key="/FTM1/structName" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="2"        instanceList="FTM;FTM0;FTM1;FTM2;FTM3" version="ftm0_8ch_s32k144">
+      <peripheral baseName="FTM"      instance="2"        instanceList="FTM0;FTM1;FTM2;FTM3" version="ftm0_8ch_s32k144">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="PCC->PCC_FTM2 = PCC->PCC_FTM2 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FTM2 = PCC->PCC_FTM2 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="FTM2_Ch0_Ch1_IRQn" />
@@ -1969,7 +2014,7 @@
          <irq num="FTM2_Ch6_Ch7_IRQn" />
          <irq num="FTM2_Fault_IRQn" />
          <irq num="FTM2_Ovf_Reload_IRQn" />
-         <param type="StringVariable"         value="FTM;FTM0;FTM1;FTM2;FTM3" name="_instanceList"                  key="/FTM2/_instanceList" />
+         <param type="StringVariable"         value="FTM0;FTM1;FTM2;FTM3" name="_instanceList"                  key="/FTM2/_instanceList" />
          <param type="LongVariable"           value="6"                name="_irqCount"                      key="/FTM2/_irqCount" />
          <param type="BooleanVariable"        value="true"             name="_hasPcrTable"                   key="/FTM2/_hasPcrTable" />
          <param type="BooleanVariable"        value="true"             name="_present"                       key="/FTM2/_present" />
@@ -2032,6 +2077,7 @@
          <param type="BooleanVariable"        value="true"             name="ftm_conf_itrigr_present"        key="/FTM2/ftm_conf_itrigr_present" />
          <param type="BooleanVariable"        value="true"             name="ftm_conf_ldfq_present"          key="/FTM2/ftm_conf_ldfq_present" />
          <param type="BooleanVariable"        value="true"             name="ftm_conf_present"               key="/FTM2/ftm_conf_present" />
+         <param type="LongVariable"           value="8"                name="ftm_controls_dim"               key="/FTM2/ftm_controls_dim" />
          <param type="BooleanVariable"        value="true"             name="ftm_deadtime_dtps_present"      key="/FTM2/ftm_deadtime_dtps_present" />
          <param type="BooleanVariable"        value="true"             name="ftm_deadtime_dtval_present"     key="/FTM2/ftm_deadtime_dtval_present" />
          <param type="BooleanVariable"        value="true"             name="ftm_deadtime_dtvalex_present"   key="/FTM2/ftm_deadtime_dtvalex_present" />
@@ -2228,7 +2274,7 @@
          <param type="BooleanVariable"        value="true"             name="ftm_synconf_syncmode_present"   key="/FTM2/ftm_synconf_syncmode_present" />
          <param type="StringVariable"         value="FTM"              name="structName"                     key="/FTM2/structName" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="3"        instanceList="FTM;FTM0;FTM1;FTM2;FTM3" version="ftm0_8ch_s32k144">
+      <peripheral baseName="FTM"      instance="3"        instanceList="FTM0;FTM1;FTM2;FTM3" version="ftm0_8ch_s32k144">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="PCC->PCC_FTM3 = PCC->PCC_FTM3 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FTM3 = PCC->PCC_FTM3 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="FTM3_Ch0_Ch1_IRQn" />
@@ -2237,7 +2283,7 @@
          <irq num="FTM3_Ch6_Ch7_IRQn" />
          <irq num="FTM3_Fault_IRQn" />
          <irq num="FTM3_Ovf_Reload_IRQn" />
-         <param type="StringVariable"         value="FTM;FTM0;FTM1;FTM2;FTM3" name="_instanceList"                  key="/FTM3/_instanceList" />
+         <param type="StringVariable"         value="FTM0;FTM1;FTM2;FTM3" name="_instanceList"                  key="/FTM3/_instanceList" />
          <param type="LongVariable"           value="6"                name="_irqCount"                      key="/FTM3/_irqCount" />
          <param type="BooleanVariable"        value="true"             name="_hasPcrTable"                   key="/FTM3/_hasPcrTable" />
          <param type="BooleanVariable"        value="true"             name="_present"                       key="/FTM3/_present" />
@@ -2300,6 +2346,7 @@
          <param type="BooleanVariable"        value="true"             name="ftm_conf_itrigr_present"        key="/FTM3/ftm_conf_itrigr_present" />
          <param type="BooleanVariable"        value="true"             name="ftm_conf_ldfq_present"          key="/FTM3/ftm_conf_ldfq_present" />
          <param type="BooleanVariable"        value="true"             name="ftm_conf_present"               key="/FTM3/ftm_conf_present" />
+         <param type="LongVariable"           value="8"                name="ftm_controls_dim"               key="/FTM3/ftm_controls_dim" />
          <param type="BooleanVariable"        value="true"             name="ftm_deadtime_dtps_present"      key="/FTM3/ftm_deadtime_dtps_present" />
          <param type="BooleanVariable"        value="true"             name="ftm_deadtime_dtval_present"     key="/FTM3/ftm_deadtime_dtval_present" />
          <param type="BooleanVariable"        value="true"             name="ftm_deadtime_dtvalex_present"   key="/FTM3/ftm_deadtime_dtvalex_present" />
@@ -2773,6 +2820,7 @@
          <param type="BooleanVariable"        value="true"             name="lpit_tctrl_trot_present"        key="/LPIT0/lpit_tctrl_trot_present" />
          <param type="BooleanVariable"        value="true"             name="lpit_tctrl_tsoi_present"        key="/LPIT0/lpit_tctrl_tsoi_present" />
          <param type="BooleanVariable"        value="true"             name="lpit_tctrl_tsot_present"        key="/LPIT0/lpit_tctrl_tsot_present" />
+         <param type="LongVariable"           value="4"                name="lpit_tmr_dim"                   key="/LPIT0/lpit_tmr_dim" />
          <param type="BooleanVariable"        value="true"             name="lpit_tval_present"              key="/LPIT0/lpit_tval_present" />
          <param type="BooleanVariable"        value="true"             name="lpit_tval_tmr_val_present"      key="/LPIT0/lpit_tval_tmr_val_present" />
          <param type="BooleanVariable"        value="true"             name="lpit_verid_feature_present"     key="/LPIT0/lpit_verid_feature_present" />
@@ -2820,6 +2868,7 @@
          <param type="BooleanVariable"        value="true"             name="lpspi_der_present"              key="/LPSPI0/lpspi_der_present" />
          <param type="BooleanVariable"        value="true"             name="lpspi_der_rdde_present"         key="/LPSPI0/lpspi_der_rdde_present" />
          <param type="BooleanVariable"        value="true"             name="lpspi_der_tdde_present"         key="/LPSPI0/lpspi_der_tdde_present" />
+         <param type="LongVariable"           value="2"                name="lpspi_dmr_dim"                  key="/LPSPI0/lpspi_dmr_dim" />
          <param type="BooleanVariable"        value="true"             name="lpspi_dmr_match0_present"       key="/LPSPI0/lpspi_dmr_match0_present" />
          <param type="BooleanVariable"        value="true"             name="lpspi_dmr_present"              key="/LPSPI0/lpspi_dmr_present" />
          <param type="BooleanVariable"        value="true"             name="lpspi_fcr_present"              key="/LPSPI0/lpspi_fcr_present" />
@@ -2915,6 +2964,7 @@
          <param type="BooleanVariable"        value="true"             name="lpspi_der_present"              key="/LPSPI1/lpspi_der_present" />
          <param type="BooleanVariable"        value="true"             name="lpspi_der_rdde_present"         key="/LPSPI1/lpspi_der_rdde_present" />
          <param type="BooleanVariable"        value="true"             name="lpspi_der_tdde_present"         key="/LPSPI1/lpspi_der_tdde_present" />
+         <param type="LongVariable"           value="2"                name="lpspi_dmr_dim"                  key="/LPSPI1/lpspi_dmr_dim" />
          <param type="BooleanVariable"        value="true"             name="lpspi_dmr_match0_present"       key="/LPSPI1/lpspi_dmr_match0_present" />
          <param type="BooleanVariable"        value="true"             name="lpspi_dmr_present"              key="/LPSPI1/lpspi_dmr_present" />
          <param type="BooleanVariable"        value="true"             name="lpspi_fcr_present"              key="/LPSPI1/lpspi_fcr_present" />
@@ -3010,6 +3060,7 @@
          <param type="BooleanVariable"        value="true"             name="lpspi_der_present"              key="/LPSPI2/lpspi_der_present" />
          <param type="BooleanVariable"        value="true"             name="lpspi_der_rdde_present"         key="/LPSPI2/lpspi_der_rdde_present" />
          <param type="BooleanVariable"        value="true"             name="lpspi_der_tdde_present"         key="/LPSPI2/lpspi_der_tdde_present" />
+         <param type="LongVariable"           value="2"                name="lpspi_dmr_dim"                  key="/LPSPI2/lpspi_dmr_dim" />
          <param type="BooleanVariable"        value="true"             name="lpspi_dmr_match0_present"       key="/LPSPI2/lpspi_dmr_match0_present" />
          <param type="BooleanVariable"        value="true"             name="lpspi_dmr_present"              key="/LPSPI2/lpspi_dmr_present" />
          <param type="BooleanVariable"        value="true"             name="lpspi_fcr_present"              key="/LPSPI2/lpspi_fcr_present" />
@@ -3478,8 +3529,10 @@
          <param type="BooleanVariable"        value="true"             name="pdb_c1_en_present"              key="/PDB0/pdb_c1_en_present" />
          <param type="BooleanVariable"        value="true"             name="pdb_c1_present"                 key="/PDB0/pdb_c1_present" />
          <param type="BooleanVariable"        value="true"             name="pdb_c1_tos_present"             key="/PDB0/pdb_c1_tos_present" />
+         <param type="LongVariable"           value="2"                name="pdb_ch_dim"                     key="/PDB0/pdb_ch_dim" />
          <param type="BooleanVariable"        value="true"             name="pdb_cnt_cnt_present"            key="/PDB0/pdb_cnt_cnt_present" />
          <param type="BooleanVariable"        value="true"             name="pdb_cnt_present"                key="/PDB0/pdb_cnt_present" />
+         <param type="LongVariable"           value="8"                name="pdb_dly_dim"                    key="/PDB0/pdb_dly_dim" />
          <param type="BooleanVariable"        value="true"             name="pdb_dly_dly_present"            key="/PDB0/pdb_dly_dly_present" />
          <param type="BooleanVariable"        value="true"             name="pdb_dly_present"                key="/PDB0/pdb_dly_present" />
          <param type="BooleanVariable"        value="true"             name="pdb_idly_idly_present"          key="/PDB0/pdb_idly_idly_present" />
@@ -3491,6 +3544,7 @@
          <param type="BooleanVariable"        value="true"             name="pdb_podly_present"              key="/PDB0/pdb_podly_present" />
          <param type="BooleanVariable"        value="true"             name="pdb_poen_poen_present"          key="/PDB0/pdb_poen_poen_present" />
          <param type="BooleanVariable"        value="true"             name="pdb_poen_present"               key="/PDB0/pdb_poen_present" />
+         <param type="LongVariable"           value="1"                name="pdb_pondly_dim"                 key="/PDB0/pdb_pondly_dim" />
          <param type="BooleanVariable"        value="true"             name="pdb_s_cf_present"               key="/PDB0/pdb_s_cf_present" />
          <param type="BooleanVariable"        value="true"             name="pdb_s_err_present"              key="/PDB0/pdb_s_err_present" />
          <param type="BooleanVariable"        value="true"             name="pdb_s_present"                  key="/PDB0/pdb_s_present" />
@@ -3520,8 +3574,10 @@
          <param type="BooleanVariable"        value="true"             name="pdb_c1_en_present"              key="/PDB1/pdb_c1_en_present" />
          <param type="BooleanVariable"        value="true"             name="pdb_c1_present"                 key="/PDB1/pdb_c1_present" />
          <param type="BooleanVariable"        value="true"             name="pdb_c1_tos_present"             key="/PDB1/pdb_c1_tos_present" />
+         <param type="LongVariable"           value="2"                name="pdb_ch_dim"                     key="/PDB1/pdb_ch_dim" />
          <param type="BooleanVariable"        value="true"             name="pdb_cnt_cnt_present"            key="/PDB1/pdb_cnt_cnt_present" />
          <param type="BooleanVariable"        value="true"             name="pdb_cnt_present"                key="/PDB1/pdb_cnt_present" />
+         <param type="LongVariable"           value="8"                name="pdb_dly_dim"                    key="/PDB1/pdb_dly_dim" />
          <param type="BooleanVariable"        value="true"             name="pdb_dly_dly_present"            key="/PDB1/pdb_dly_dly_present" />
          <param type="BooleanVariable"        value="true"             name="pdb_dly_present"                key="/PDB1/pdb_dly_present" />
          <param type="BooleanVariable"        value="true"             name="pdb_idly_idly_present"          key="/PDB1/pdb_idly_idly_present" />
@@ -3533,6 +3589,7 @@
          <param type="BooleanVariable"        value="true"             name="pdb_podly_present"              key="/PDB1/pdb_podly_present" />
          <param type="BooleanVariable"        value="true"             name="pdb_poen_poen_present"          key="/PDB1/pdb_poen_poen_present" />
          <param type="BooleanVariable"        value="true"             name="pdb_poen_present"               key="/PDB1/pdb_poen_present" />
+         <param type="LongVariable"           value="1"                name="pdb_pondly_dim"                 key="/PDB1/pdb_pondly_dim" />
          <param type="BooleanVariable"        value="true"             name="pdb_s_cf_present"               key="/PDB1/pdb_s_cf_present" />
          <param type="BooleanVariable"        value="true"             name="pdb_s_err_present"              key="/PDB1/pdb_s_err_present" />
          <param type="BooleanVariable"        value="true"             name="pdb_s_present"                  key="/PDB1/pdb_s_present" />
@@ -3576,9 +3633,9 @@
          <param type="BooleanVariable"        value="true"             name="pmc_regsc_regfpm_present"       key="/PMC/pmc_regsc_regfpm_present" />
          <param type="StringVariable"         value="PMC"              name="structName"                     key="/PMC/structName" />
       </peripheral>
-      <peripheral baseName="POWER"    instance=""         instanceList="POWER">
+      <peripheral baseName="POWER"    instance=""         instanceList="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
-         <param type="StringVariable"         value="POWER"            name="_instanceList"                  key="/POWER/_instanceList" />
+         <param type="StringVariable"         value=""                 name="_instanceList"                  key="/POWER/_instanceList" />
          <param type="BooleanVariable"        value="true"             name="_hasPcrTable"                   key="/POWER/_hasPcrTable" />
       </peripheral>
       <peripheral baseName="RTC"      instance=""         instanceList="RTC"  version="rtc_s32k14x">

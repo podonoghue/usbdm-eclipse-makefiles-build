@@ -1,7 +1,11 @@
 *******
 *******
 # Windows
-You will also need the [Drivers](https://sourceforge.net/projects/usbdm/files/Version%204.12.1/Drivers/) from this page 
+Use the installer provided.  
+The installer is no longer signed as it expensive to do so.
+
+You will also need the [Drivers](https://sourceforge.net/projects/usbdm/files/Version%204.12.1/Drivers/) from this page  
+The drivers are signed (as they must be under Windows) and will not be updated.
 
 *******
 *******
@@ -20,7 +24,7 @@ There are no driver needed if using the deb installer
 - Fixes for use of linear adressing (for MC912XEP100MAL)
 - UsbdmScript now handles linear addresses (Use G: prefix)
 - UsbdmMemoryDump now has an option for linear address ranges for HCS12 devices.
-- UsbdmFlashProgrammer verify operation now correctly handles linear addresses.
+- HCS12 Flash programmer verify operation now correctly handles linear addresses.
 
 *******  
 **USBDM_V4_12_1_305** (Mar 2023)  

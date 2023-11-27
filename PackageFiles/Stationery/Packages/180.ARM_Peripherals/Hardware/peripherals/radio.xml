@@ -4,7 +4,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated-Circuit">
 
-   <template key="/RADIO/declarations" namespace="all"  ><![CDATA[
+   <template key="/RADIO/declarations"  ><![CDATA[
    \t/**
    \t * Class representing $(_NAME)
    \t */

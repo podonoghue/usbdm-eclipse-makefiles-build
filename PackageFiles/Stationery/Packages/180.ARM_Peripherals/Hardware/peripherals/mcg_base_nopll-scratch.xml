@@ -424,19 +424,19 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       ]]></clockCodeTemplate>
 
    <for keys="n" dim="=/SIM/numberOfClockSettings">
-      <template key="ClockConfig" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
+      <template key="ClockConfig" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
          \t$(ClockConfig[%(n)]://-- missing name for configuration --),\n
       ]]></template>
    </for>
 
    <for keys="n" dim="=/SIM/numberOfClockSettings">
-      <template key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <template key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
       ><![CDATA[
          \t{  // $(ClockConfig[%(n)]) ($(icsClockMode[%(n)].enum[]))
          \t\n
       ]]></template>
 
-      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables="
             /SIM/sim_clkdiv_outdiv3[%(n)],
@@ -444,13 +444,13 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
             /SIM/sim_clkdiv_outdiv1[%(n)]"
       ><![CDATA[\t   /// SIM CLKDIV1 System Clock Divider Register 1 %initExpression\n\n ]]></variableTemplate>
 
-      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables="
             icsClockMode[%(n)]"
       ><![CDATA[\t   /// Clock Mode %initExpression\n\n ]]></variableTemplate>
 
-      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables="
             ics_c1_rdiv[%(n)],
@@ -458,25 +458,25 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
             ics_c1_irefsten[%(n)]"
       ><![CDATA[\t   /// Control Register 1 - Excluding CLKS, IREFS %initExpression\n\n ]]></variableTemplate>
 
-      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables=
             "ics_c2_bdiv[%(n)]"
       ><![CDATA[\t   /// Control Register 2 - Excluding LP, FCTRIM %initExpression\n\n ]]></variableTemplate>
 
-      <variableTemplate key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]"
+      <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
          variables=
             "ics_c4_cme[%(n)],
              ics_c4_lolie0[%(n)]"
       ><![CDATA[\t   /// Control Register 4 - Excluding FCTRIM, SCFTRIM %initExpression\n\n ]]></variableTemplate>
 
-      <template key="McgClockInfoEntries" namespace="all" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
+      <template key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
          \t},\n
       ]]></template>
    </for>
 
-   <template key="ClockInfoType" namespace="all" ><![CDATA[
+   <template key="ClockInfoType" ><![CDATA[
       \t/// Structure for clock configurations
       \tstruct ClockInfo {\n\n
    ]]></template>
@@ -521,7 +521,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       \t   /// Control Register 4 - DMX32, DRST_DRS, (-FCTRIM, -SCFTRIM)
       \t   const uint8_t c4;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all" ><![CDATA[
+   <template key="ClockInfoType" ><![CDATA[
       \t};\n\n
    ]]></template>
 

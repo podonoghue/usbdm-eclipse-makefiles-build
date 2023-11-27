@@ -86,7 +86,7 @@ protected:
     */
    CallbackFunction callback = unhandledCallback;
 
-#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
+#if $(/SPI/irqHandlingMethod:false)
    /**
     * Callback function (trampoline)
     */
@@ -110,7 +110,7 @@ protected:
     */
    Spi(unsigned instanceNum, uint32_t baseAddress) :
       spi(baseAddress), pushrMask(0), pushrMaskFinal(0) {
-#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
+#if $(/SPI/irqHandlingMethod:false)
       irqInformation[instanceNum].This = this;
 #else
       (void)instanceNum;
@@ -856,7 +856,7 @@ $(/SPI/InitMethod: #error "/SPI/InitMethod not found")
       return status;
    }
 
-#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
+#if $(/SPI/irqHandlingMethod:false)
    /**
     * Set Callback function\n
     *
@@ -873,7 +873,7 @@ $(/SPI/InitMethod: #error "/SPI/InitMethod not found")
 #endif
 };
 
-#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
+#if $(/SPI/dmaSupport:false)
 /**
  * Class to handle SPI DMA operations
  * It will create the required buffer to format data for the DMA transfer.
@@ -1327,7 +1327,7 @@ public:
       return status;
    }
 
-#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
+#if $(/SPI/irqHandlingMethod:false)
    /**
     * IRQ handler
     */
@@ -1524,7 +1524,7 @@ public:
    ~SpiBase_T() override {
    }
 
-#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
+#if $(/SPI/dmaSupport:false)
 
    static unsigned dmaComplete;
    static uint32_t dmaErrorCode;
@@ -1677,7 +1677,7 @@ public:
 
 };
 
-#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
+#if $(/SPI/dmaSupport:false)
 template<class Info>
 unsigned SpiBase_T<Info>::dmaComplete = false;
 

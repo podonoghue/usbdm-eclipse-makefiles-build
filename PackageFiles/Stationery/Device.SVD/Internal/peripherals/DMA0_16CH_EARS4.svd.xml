@@ -1030,6 +1030,15 @@ Enables suspension of this channel by a higher priority channel</description>
                </fields>
             </register>
             <register derivedFrom="DCHPRI%s"><dim>16</dim><dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex> <name>DCHPRI</name> <addressOffset>0x100</addressOffset> <resetMask>0xFF</resetMask> </register>
+            <register>
+               <name>TCD_RAW</name>
+               <dim>128</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0-127</dimIndex>
+               <size>32</size>
+               <description>Raw TCD array as uint32_t</description>
+               <addressOffset>0x1000</addressOffset>
+            </register>
             <cluster>
                <dim>16</dim>
                <dimIncrement>32</dimIncrement>

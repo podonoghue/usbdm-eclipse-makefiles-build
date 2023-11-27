@@ -83,7 +83,7 @@
 
 <!--   Configure methods -->
 
-   <template discardRepeats="true" key="/NV/InitMethod" namespace="all" ><![CDATA[
+   <template discardRepeats="true" key="/NV/InitMethod" ><![CDATA[
       \t/**
       \t * Configure NV from values specified in init
       \t *

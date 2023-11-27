@@ -22,7 +22,7 @@
    - namespace="usbdm"
      Placed before Info class in pin_mapping.h i.e. in USBDM namespace
 
-   - namespace="all" key="keyValue"
+   - key="keyValue"
      Substituted anywhere for $(keyValue)
  -->
 

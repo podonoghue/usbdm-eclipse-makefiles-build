@@ -50,7 +50,7 @@
       <choice value="115200"  name="115200" isDefault="true" />
    </choiceOption>
 
-   <template key="Initialise" namespace="all" >
+   <template key="Initialise" >
    <![CDATA[
       \t/*
       \t * Initialises the Console
@@ -62,12 +62,12 @@
       \t   console.setEcho();\n
    ]]>
    </template>
-   <template key="Initialise" namespace="all" condition="/PCR/_present" >
+   <template key="Initialise" condition="/PCR/_present" >
    <![CDATA[
       \t   console.configureAllPins();\n
    ]]>
    </template>
-   <template key="Initialise" namespace="all" >
+   <template key="Initialise" >
    <![CDATA[
       \t}
       \t\n

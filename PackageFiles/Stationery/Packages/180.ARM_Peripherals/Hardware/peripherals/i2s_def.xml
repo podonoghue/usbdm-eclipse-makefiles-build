@@ -17,7 +17,7 @@
       <copy source="Project_Headers/i2s.h"            target="Project_Headers/i2s.h"            overwrite="true"  derived="true" />
    </projectActionList>
 
-   <template key="/I2S/declarations" namespace="all"  ><![CDATA[
+   <template key="/I2S/declarations"  ><![CDATA[
    \t/**
    \t * Class representing $(_NAME)
    \t */

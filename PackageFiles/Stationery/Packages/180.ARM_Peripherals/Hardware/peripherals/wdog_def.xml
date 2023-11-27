@@ -4,24 +4,62 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Watchdog Monitor">
 
-   <xi:include href="default_instance.xml"/>
+   <constant key="suppressInstance"         type="Boolean" value="false"         />
+   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="true"          />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="enablePeripheral.xml"  />
+   <title />
 
-   <xi:include href="irqOption.xml"/>
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
 
-   <projectActionList id = "wdog_files" >
-      <copy source="Project_Headers/wdog.h"         target="Project_Headers/wdog.h"          overwrite="true" derived="true" />
-      <copy source="Snippets/wdog-example.cpp"      target="Snippets/wdog-example.cpp"       overwrite="true" derived="true" />
-   </projectActionList>
+<!--
+    * Template substitutions
+    *
+    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
+    * <li>%valueExpression            Numeric variable value e.g. 0x3
+    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
+    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
+    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
+    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
+    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
+    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * <li>%params                     Formatted parameter list for function
+    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
+    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
+    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
+    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
+    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
+    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
+    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
+    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
+-->
 
-   <binaryOption key="wdogSystemEnable"
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
+
+   <!--binaryOption key="enablePeripheralSupport"
       description="Enable Watchdog system"
       toolTip="This can be used to disable the entire watchdog system">
       <choice value="false" enum="Disabled" name="Watchdog system disabled" isDefault="true" />
       <choice value="true"  enum="Enabled"  name="Watchdog system enabled" />
-   </binaryOption>
+   </binaryOption -->
 
    <binaryOption key="secondsSupport"
-      enabledBy="wdogSystemEnable"
+      enabledBy="enablePeripheralSupport"
       description="Enable use of Seconds for time"
       toolTip="Use of floating point is necessary to support specifing watchdog timeouts in seconds in runtime code.\n
                This is seldom needed and the overhead can be avoided by disabling this option">
@@ -29,92 +67,94 @@
       <choice value="true"  enum="Enabled"  name="Seconds support enabled" />
    </binaryOption>
 
-   <!-- ************* WDOG_STCTRLH ****************** -->
+   <!-- ************* STCTRLH ****************** -->
 
-   <binaryOption key="wdog_stctrlh_wdogen"
-      enabledBy="wdogSystemEnable"
+   <binaryOption key="wdog_stctrlh_wdogen" condition="wdog_stctrlh_wdogen_present"
+      enabledBy="enablePeripheralSupport"
       typeName="WdogEnable"
       enumType="uint16_t"
-      description="Watchdog enable"
-      toolTip="Main enable for WDOG">
+      toolTip="Main enable for WDOG\n
+      When disabled, the watchdog timer is kept in the reset state, but the other exception conditions can \n
+      still trigger a reset/interrupt"
+      description="Watchdog enable" >
       <choice value="0" enum="Disabled" name="Watchdog disabled" isDefault="true" />
       <choice value="1" enum="Enabled"  name="Watchdog enabled" />
    </binaryOption>
 
-   <binaryOption key="wdog_stctrlh_distestwdog"
-      enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
+   <binaryOption key="wdog_stctrlh_distestwdog" condition="wdog_stctrlh_distestwdog_present"
+      enabledBy="wdog_stctrlh_wdogen"
       enumType="uint16_t"
       typeName="WdogTestMode"
-      description="Test mode disable"
-      toolTip="Disables watchdog test mode until next reset">
+      toolTip="Disables watchdog test mode until next reset"
+      description="Test mode disable" >
       <choice value="0" enum="Enabled"  name="Test mode enabled" />
       <choice value="1" enum="Disabled" name="Test mode disabled" isDefault="true" />
    </binaryOption>
 
-   <binaryOption key="wdog_stctrlh_waiten"
-      enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
+   <binaryOption key="wdog_stctrlh_waiten" condition="wdog_stctrlh_waiten_present"
+      enabledBy="wdog_stctrlh_wdogen"
       enumType="uint16_t"
       typeName="WdogEnableInWait"
-      description="Enable watchdog in WAIT mode"
-      toolTip="Control watchdog operation in WAIT mode">
+      toolTip="Control watchdog operation in WAIT mode"
+      description="Enable watchdog in WAIT mode" >
       <choice name="Enabled in WAIT mode"  value="1" enum="Enabled"   />
       <choice name="Disabled in WAIT mode" value="0" enum="Disabled" isDefault="true" />
    </binaryOption>
 
-   <binaryOption key="wdog_stctrlh_stopen"
-      enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
+   <binaryOption key="wdog_stctrlh_stopen" condition="wdog_stctrlh_stopen_present"
+      enabledBy="wdog_stctrlh_wdogen"
       enumType="uint16_t"
       typeName="WdogEnableInStop"
-      description="Enable watchdog in STOP mode"
-      toolTip="Control watchdog operation in STOP mode">
+      toolTip="Control watchdog operation in STOP mode"
+      description="Enable watchdog in STOP mode" >
       <choice name="Enabled in STOP mode"  value="1" enum="Enabled"  />
       <choice name="Disabled in STOP mode" value="0" enum="Disabled" isDefault="true" />
    </binaryOption>
 
-   <binaryOption key="wdog_stctrlh_dbgen"
-      enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
+   <binaryOption key="wdog_stctrlh_dbgen" condition="wdog_stctrlh_dbgen_present"
+      enabledBy="wdog_stctrlh_wdogen"
       enumType="uint16_t"
       typeName="WdogEnableInDebug"
-      description="Enable watchdog in DEBUG mode"
-      toolTip="Control watchdog operation in DEBUG mode">
+      toolTip="Control watchdog operation in DEBUG mode"
+      description="Enable watchdog in DEBUG mode" >
       <choice name="Enabled in DEBUG mode"  value="1" enum="Enabled"  />
       <choice name="Disabled in DEBUG mode" value="0" enum="Disabled" isDefault="true" />
    </binaryOption>
 
-   <binaryOption key="wdog_stctrlh_allowupdate"
-      enabledBy="wdogSystemEnable"
+   <binaryOption key="wdog_stctrlh_allowupdate" condition="wdog_stctrlh_allowupdate_present"
+      enabledBy="enablePeripheralSupport"
       enumType="uint16_t"
       typeName="WdogAllowUpdate"
-      description="Allow watchdog update"
       toolTip="Enables updates to watchdog write-once registers, after \n
                the reset-triggered initial configuration window closes\n
-               This still requires the unlock sequence">
+               This still requires the unlock sequence"
+      description="Allow watchdog update" >
       <choice name="Update Disabled" value="0" enum="Disabled" />
       <choice name="Update Enabled"  value="1" enum="Enabled"  isDefault="true" />
    </binaryOption>
 
-   <binaryOption key="wdog_stctrlh_winen"
-      enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
+   <binaryOption key="wdog_stctrlh_winen" condition="wdog_stctrlh_winen_present"
+      enabledBy="wdog_stctrlh_wdogen"
       enumType="uint16_t"
       typeName="WdogWindow"
-      description="Enable watchdog windowing mode"
-      toolTip="Windowing mode only allows refresh during a restricted window">
+      toolTip="Windowing mode only allows refresh during a restricted window"
+      description="Enable watchdog windowing mode" >
       <choice name="Windowing mode disabled" value="0" enum="Disabled" isDefault="true" />
       <choice name="Windowing mode enabled"  value="1" enum="Enabled"  />
    </binaryOption>
 
-   <binaryOption key="wdog_stctrlh_irqrsten"
-      enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
+   <binaryOption key="wdog_stctrlh_irqrsten" condition="wdog_stctrlh_irqrsten_present"
+      enabledBy="wdog_stctrlh_wdogen"
       enumType="uint16_t"
       typeName="WdogAction"
-      description="Controls interrupt before reset"
-      toolTip="This write-once bit allows an interrupt handler to record state prior to forcing a reset">
+      toolTip="This write-once bit allows an interrupt handler to record state prior to forcing a reset"
+      description="Controls interrupt before reset" >
       <choice name="Immediate Reset"             value="0" enum="ImmediateReset" isDefault="true" />
       <choice name="Interrupt followed by reset" value="1" enum="ResetAfterInterrupt"   />
    </binaryOption>
 
-   <binaryOption key="wdog_stctrlh_clksrc"
-      enabledBy="wdogSystemEnable"
+   <binaryOption key="wdog_stctrlh_clksrc" condition="wdog_stctrlh_clksrc_present"
+      enabledBy="enablePeripheralSupport"
       target="inputClockFrequency"
       enumType="uint16_t"
       typeName="WdogClock"
@@ -163,20 +203,22 @@
    ]]></clockCodeTemplate>
 
    <intOption key="inputClockFrequency"
-      enabledBy="wdogSystemEnable"
+      enabledBy="enablePeripheralSupport"
       locked="true"
       description="Watchdog Input clock frequency"
       toolTip="Determined from timer clock source"
       derived="true"
       units="Hz"/>
 
-   <choiceOption key="wdog_presc_prescval"
-      enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
+   <!-- ************* PRESC ****************** -->
+
+   <choiceOption key="wdog_presc_prescval" condition="wdog_presc_prescval_present"
+      enabledBy="wdog_stctrlh_wdogen"
       target="timerTickPeriod"
       typeName="WdogPrescale"
       enumType="uint16_t"
       description="Prescaler for the watchdog clock source"
-      toolTip="This prescaler divides the input clock for the watchdog counter">
+      toolTip="This prescaler divides the input clock for the watchdog counter" >
       <choice value="0"  name="Prescaler = 1"  ref="1.0/inputClockFrequency" enum="Direct" />
       <choice value="1"  name="Prescaler = 2"  ref="2.0/inputClockFrequency" enum="DivBy2" />
       <choice value="2"  name="Prescaler = 3"  ref="3.0/inputClockFrequency" enum="DivBy3" />
@@ -188,7 +230,7 @@
    </choiceOption>
 
    <floatOption key="timerTickPeriod"
-      enabledBy="wdogSystemEnable"
+      enabledBy="enablePeripheralSupport"
       locked="true"
       description="Period of watchdog counter"
       toolTip="Determined from timer clock source and prescaler"
@@ -196,7 +238,7 @@
       units="s"/>
 
    <floatOption key="wdog_timeoutPeriod"
-      enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
+      enabledBy="wdog_stctrlh_wdogen"
       description="Watchdog Timeout"
       toolTip="The watchdog must be refreshed before this interval expires"
       valueFormat="%s_s"
@@ -205,7 +247,7 @@
       value="1"/>
 
    <intOption key="wdog_timeout"
-      enabledBy="wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
+      enabledBy="wdog_stctrlh_wdogen"
       ref="(wdog_timeoutPeriod)/timerTickPeriod#timerTickPeriod"
       locked="true"
       description="Watchdog Timeout in ticks"
@@ -217,7 +259,7 @@
    />
 
    <floatOption key="wdog_windowPeriod"
-      enabledBy="wdog_stctrlh_winen&amp;&amp;wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
+      enabledBy="wdog_stctrlh_winen&amp;&amp;wdog_stctrlh_wdogen"
       description="Watchdog Window"
       toolTip="Refresh of the watchdog may not be carried out before this interval has expired i.e.\n
                Refresh must occur within [window...timeout] if window mode is enabled.\n
@@ -229,7 +271,7 @@
       value="0"/>
 
    <intOption key="wdog_window"
-      enabledBy="wdog_stctrlh_winen&amp;&amp;wdog_stctrlh_wdogen&amp;&amp;wdogSystemEnable"
+      enabledBy="wdog_stctrlh_winen&amp;&amp;wdog_stctrlh_wdogen"
       ref="(wdog_windowPeriod)/timerTickPeriod#timerTickPeriod"
       locked="true"
       description="Watchdog Window in ticks"
@@ -241,19 +283,113 @@
       value="0" min="0" max="4294967295"
    />
 
-   <template key="/SYSTEM/Includes" namespace="all" ><![CDATA[
-      #include "wdog.h"\n
-   ]]></template>
+   <!-- ************* STCTRLL ****************** -->
 
-   <template key="/SYSTEM/WatchdogInitialise" namespace="all" ><![CDATA[
-      \t/*
-      \t * Initialise watchdog
-      \t */
-      \tUSBDM::Wdog::defaultConfigure();
-      \t
-   ]]></template>
+   <binaryOption key="wdog_stctrll_intflg" condition="wdog_stctrll_intflg_present"
+      hidden="true"
+      typeName="WdogException"
+      toolTip="It is set when an exception occurs. IRQRSTEN = 1 is a precondition to set this flag.\n
+               INTFLG = 1 results in an interrupt being issued followed by a reset, WCT time later. \n
+               The interrupt can be cleared by writing 1 to this bit. It also gets cleared on a system reset"
+      description="Interrupt flag." >
+      <choice name="No interrupt"       value="0" enum="NoInterrupt"/>
+      <choice name="Interrupt pending"  value="1" enum="InterruptPending"/>
+   </binaryOption >
 
-   <variableTemplate key="/WDOG/publicMethods" namespace="all"
+   <!-- ************* RSTCNT ****************** -->
+
+   <intOption key="wdog_rstcnt_rstcnt" condition="wdog_rstcnt_rstcnt_present"
+      hidden="true"
+      typeName="uint16_t"
+      description="Counts the number of times the watchdog resets the system."
+      toolTip="This register is reset only on a POR. Writing 1 to the bit to be cleared, enables you to clear the contents of this register"
+   />
+
+   <!-- ************* MISC ****************** -->
+   <choiceOption key="wdog_constants1"
+      hidden="true"
+      typeName="WdogRefresh"
+      valueFormat="%s"
+      description="Watchdog refresh"
+      toolTip="Key values needed for refreshing the WDOG"
+      >
+      <choice value="0xA602" enum="1" name="1st refresh value"   />
+      <choice value="0xB480" enum="2" name="2nd refresh value"  />
+   </choiceOption>
+
+   <choiceOption key="wdog_constants2"
+      hidden="true"
+      typeName="WdogUnlock"
+      valueFormat="%s"
+      description="Watchdog unlock"
+      toolTip="Key values needed for unlocking the WDOG"
+      >
+      <choice value="0xC520" enum="1"  name="1st unlock value"  />
+      <choice value="0xD928" enum="2"  name="2nd unlock value"  />
+   </choiceOption>
+
+<!-- Setters and getters -->
+
+   <for keys="field                : set   : get   : clear : genCode                 : name"
+        values="
+         wdog_stctrlh_wdogen       : false : true  : false : enableGettersAndSetters : Enable;
+         wdog_stctrlh_distestwdog  : false : true  : false : enableGettersAndSetters : TestMode;
+         wdog_stctrlh_bytesel      : false : true  : false : enableGettersAndSetters : ByteSelect;
+         wdog_stctrlh_testsel      : false : true  : false : enableGettersAndSetters : TestSelect;
+         wdog_stctrlh_testwdog     : false : true  : false : enableGettersAndSetters : TestMode;
+         wdog_stctrlh_waiten       : false : true  : false : enableGettersAndSetters : WaitEnable;
+         wdog_stctrlh_stopen       : false : true  : false : enableGettersAndSetters : StopEnable;
+         wdog_stctrlh_dbgen        : false : true  : false : enableGettersAndSetters : DebugeEnable;
+         wdog_stctrlh_allowupdate  : false : true  : false : enableGettersAndSetters : AllowUpdate;
+         wdog_stctrlh_winen        : false : true  : false : enableGettersAndSetters : StctrlhWinen;
+         wdog_stctrlh_irqrsten     : false : true  : false : enableGettersAndSetters : StctrlhIrqrsten;
+         wdog_stctrlh_clksrc       : false : true  : false : enableGettersAndSetters : StctrlhClksrc;
+         wdog_stctrll_intflg       : false : true  : false : enableGettersAndSetters : StctrllIntflg;
+         wdog_tovalh_tovalhigh     : false : true  : false : enableGettersAndSetters : TovalhTovalhigh;
+         wdog_tovall_tovallow      : false : true  : false : enableGettersAndSetters : TovallTovallow;
+         wdog_winh_winhigh         : false : true  : false : enableGettersAndSetters : WinhWinhigh;
+         wdog_winl_winlow          : false : true  : false : enableGettersAndSetters : WinlWinlow;
+         wdog_tmrouth_timerouthigh : false : true  : false : enableGettersAndSetters : TmrouthTimerouthigh;
+         wdog_tmroutl_timeroutlow  : false : true  : false : enableGettersAndSetters : TmroutlTimeroutlow;
+         wdog_rstcnt_rstcnt        : false : true  : false : enableGettersAndSetters : RstcntRstcnt;
+         wdog_presc_prescval       : false : true  : false : enableGettersAndSetters : PrescPrescval" >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %fieldAssignment
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register&%mask);
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         \tstatic void clear%(name)() {
+         \t   %register = %register|%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <variableTemplate key="/WDOG/publicMethods" namespace="all" codeGenCondition="enablePeripheralSupport"
       variables="
          wdog_stctrlh_wdogen,
          wdog_stctrlh_clksrc,
@@ -288,50 +424,115 @@
       \t}
    ]]></variableTemplate>
 
-   <!-- ************* MISC ****************** -->
-   <choiceOption key="wdog_constants1"
-      hidden="true"
-      typeName="WdogRefresh"
-      valueFormat="%s"
-      description="Values for refresh and update registers"
-      toolTip=""
-      >
-      <choice value="0xA602" enum="1" name="1st refresh value"   />
-      <choice value="0xB480" enum="2" name="2nd refresh value"  />
-   </choiceOption>
+   <!--   ========== class $(_Structname)BasicInfo =============================== -->
 
-   <choiceOption key="wdog_constants2"
-      hidden="true"
-      typeName="WdogUnlock"
-      valueFormat="%s"
-      description="Values for refresh and update registers"
-      toolTip=""
-      >
-      <choice value="0xC520" enum="1"  name="1st unlock value"  />
-      <choice value="0xD928" enum="2"  name="2nd unlock value"  />
-   </choiceOption>
+   <template namespace="baseClass" ><![CDATA[
+      class $(_Structname)BasicInfo {
 
-   <template key="/WDOG/declarations" namespace="all"  ><![CDATA[
-   \t/**
-   \t * Class representing $(_NAME)
-   \t */
-   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
+      public:\n
    ]]></template>
 
-<!--   ========== WDOG Init class =============================== -->
+   <!--   ========== Interrupt handling =============================== -->
 
-   <template key="init_description" namespace="all" >
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="irqHandlingMethod"
+   ><![CDATA[
+       \t//! Common class based callback code has been generated for this class of peripheral
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
+       \t\n
+   ]]></variableTemplate>
+
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
    <![CDATA[
       \t/**
-      \t * Class used to do initialisation of the $(_Class)
+      \t * Type definition for $(_Baseclass) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)($(irq_parameters));
+      \t
+      \t/**
+      \t * Callback to catch unhandled interrupt
+      \t */
+      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/** Callback function for ISR */
+      \tstatic CallbackFunction sCallback;
+      \t
+      \t/**
+      \t * Set interrupt callback function.
+      \t *
+      \t * @param[in]  $(_basename)Callback Callback function to execute on interrupt
+      \t *                             Use nullptr to remove callback.
+      \t */
+      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
+      \t   if ($(_basename)Callback == nullptr) {
+      \t      $(_basename)Callback = unhandledCallback;
+      \t   }
+      \t   // Allow either no handler set yet or removing handler
+      \t   usbdm_assert(
+      \t         (sCallback == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
+      \t         "Handler already set");
+      \t   sCallback = $(_basename)Callback;
+      \t}
+      \t
+      \t/**
+      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
+      \t */
+      \tstatic void irqHandler() {
+      \t
+      \t   //.....IRQ handler code here..........
+      \t
+      \t   // Clear interrupt flag
+      \t   //.....
+      \t   // Execute call-back
+      \t   sCallback($(irq_call));
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t
+      \t/**
+      \t * Callback for programmatically set handler for $(_Class)
+      \t */
+      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Structname)BasicInfo::unhandledCallback;
+      \t\n
+   ]]>
+   </template>
+
+   <!--   ========== WDOG Init class =============================== -->
+
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_Baseclass)
       \t *
       \t * This class has a templated constructor that accepts various values.
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
       \t *
       \t * @note This constructor may be used to create a const instance in Flash
       \t *
       \t * Example:
       \t * @code
-      \t * static const $(_Class)::Init wdogInit {
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(ErrorCode ec) {
+      \t *    ....
+      \t * }
+      \t *
+      \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *   // Setup values
       \t *   WdogEnable_Enabled ,          // Watchdog enable
@@ -354,29 +555,9 @@
       \t * };
       \t *
       \t * // Initialise $(_Class) from values specified above
-      \t * $(_Class)::configure(wdogInit)
+      \t * $(_Class)::configure($(_name)Init)
       \t * @endcode
       \t */
-   ]]>
-   </template>
-
-   <template namespace="usbdm" >
-   <![CDATA[
-      class $(_Class)BasicInfo {
-      \t
-      public:
-      \t
-      \t/**
-      \t * Type definition for $(_Class) interrupt call back
-      \t */
-      \ttypedef void (*CallbackFunction)();
-      \t\n
-   ]]>
-   </template>
-
-   <template namespace="usbdm">
-   <![CDATA[
-      $(init_description)
       \tclass Init {
       \t
       \tpublic:
@@ -393,167 +574,63 @@
    ]]>
    </template>
 
-<!--   Member variables -->
+   <!--   Member variables -->
 
-   <variableTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
-      variables="
-         wdog_timeout"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="wdog_timeout"
    ><![CDATA[
       \t   ///  %description or seconds
       \t   Seconds_Ticks %registerName;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
-      variables="
-         wdog_window"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="wdog_window"
    ><![CDATA[
       \t   ///  %description or seconds
       \t   Seconds_Ticks %registerName;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
-      variables="
-         wdog_stctrlh_wdogen,
-         wdog_stctrlh_distestwdog,
-         wdog_stctrlh_waiten,
-         wdog_stctrlh_stopen,
-         wdog_stctrlh_dbgen,
-         wdog_stctrlh_allowupdate,
-         wdog_stctrlh_winen,
-         wdog_stctrlh_irqrsten,
-         wdog_stctrlh_clksrc"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="wdog_stctrlh_distestwdog,wdog_stctrlh_bytesel,wdog_stctrlh_testsel,wdog_stctrlh_testwdog,wdog_stctrlh_waiten,wdog_stctrlh_stopen,wdog_stctrlh_dbgen,wdog_stctrlh_allowupdate,wdog_stctrlh_winen,wdog_stctrlh_irqrsten,wdog_stctrlh_clksrc,wdog_stctrlh_wdogen"
    ><![CDATA[
       \t   ///  Watchdog Status and Control Register High
       \t   uint16_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
-      variables="
-         wdog_presc_prescval"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="wdog_presc_prescval"
    ><![CDATA[
-      \t   ///  %description
+      \t   /// Prescaler Register
       \t   uint16_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
-      variables="/PCR/nvic_irqLevel"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %paramType %registerName = %paramType_Normal;\n\n
+      \t   %paramType %registerName0 = %symbolicExpression1;
+      \t\n
    ]]></variableTemplate>
 
-<!--   Configure methods -->
+   <!--   Constructors -->
 
-   <variableTemplate key="/WDOG/InitMethod" namespace="all" discardRepeats="true"
-      variables="wdogSystemEnable"
-      codeGenCondition="wdogSystemEnable"
-      ><![CDATA[
-      \t/**
-      \t * Configure with default settings.
-      \t * Configuration determined from Configure.usbdmProject
-      \t */
-      \tstatic inline void defaultConfigure() {
-      \t
-      \t   // Update settings
-      \t   configure(Info::DefaultInitValue);
-      \t}\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate key="/WDOG/InitMethod" namespace="all" discardRepeats="true"
-      variables="wdogSystemEnable"
-      codeGenCondition="!wdogSystemEnable"
-      ><![CDATA[
-      \t/**
-      \t * Configure with default settings.
-      \t * Configuration determined from Configure.usbdmProject
-      \t */
-      \tstatic inline void defaultConfigure() {
-      \t
-      \t   // Unlock before changing settings
-      \t   wdog->UNLOCK  = WdogUnlock_1;
-      \t   wdog->UNLOCK  = WdogUnlock_2;
-      \t
-      \t   // Read-back to delay until change effected
-      \t   (void)(wdog->UNLOCK);
-      \t
-      \t   // Disable watchdog
-      \t   wdog->STCTRLH = WdogEnable_Disabled|WdogAllowUpdate_Disabled;
-      \t}\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate variables="wdog_stctrlh_wdogen" discardRepeats="true" key="/WDOG/InitMethod" namespace="all" ><![CDATA[
-      \t/**
-      \t * Configure WDOG from values specified in init
-      \t
-      \t * @param init Class containing initialisation values
-      \t */
-      \tstatic ErrorCode configure(const typename Info::Init &init) {
-      \t
-      \t   Seconds_Ticks timeout = init.timeout;
-      \t   Seconds_Ticks window  = init.window;
-      \t   uint16_t presc   = init.presc;
-      \t
-      \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      // Only set call-back if feature enabled and non-null
-      \t      if (init.callbackFunction != nullptr) {
-      \t         setCallback(init.callbackFunction);
-      \t      }
-      \t   }\n
-   ]]></variableTemplate>
-   <variableTemplate variables="wdog_stctrlh_wdogen" discardRepeats="true" key="/WDOG/InitMethod" namespace="all" codeGenCondition="secondsSupport" ><![CDATA[
-      \t   if (presc == ((uint16_t)-1)) {
-      \t
-      \t      // Calculate timeout, window and prescaler
-      \t      ErrorCode rc = calculateTimingParameters(init.stctrlh, timeout, window, presc);
-      \t      if (rc != E_NO_ERROR) {
-      \t         return rc;
-      \t      }
-      \t   }\n
-   ]]></variableTemplate>
-   <variableTemplate variables="wdog_stctrlh_wdogen" discardRepeats="true" key="/WDOG/InitMethod" namespace="all" ><![CDATA[
-      \t   // Protect sequence from interrupts
-      \t   CriticalSection cs;
-      \t
-      \t   // Unlock before changing settings
-      \t   wdog->UNLOCK = WdogUnlock_1;
-      \t   wdog->UNLOCK = WdogUnlock_2;
-      \t
-      \t   // Read-back to delay until change effected
-      \t   (void)(wdog->UNLOCK);
-      \t
-      \t   // Configure watchdog
-      \t   wdog->STCTRLH  = init.stctrlh;
-      \t   wdog->PRESC    = presc;
-      \t   wdog->WINH     = window.toTicks()>>16;
-      \t   wdog->WINL     = window.toTicks();
-      \t   wdog->TOVALH   = timeout.toTicks()>>16;
-      \t   wdog->TOVALL   = timeout.toTicks();
-      \t
-      \t   // For some reason this must be done after above
-      \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      enableNvicInterrupts(init.irqlevel);
-      \t   }
-      \t   return E_NO_ERROR;
-      \t}\n\n
-   ]]></variableTemplate>
-
-<!--  Constructors -->
-
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
       linePadding="xxx"
-    ><![CDATA[
+   ><![CDATA[
       \t   /**
       \t    * Constructor for %description
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
+      \t    *
       %paramDescription
       \t    */
       \t   template <typename... Types>
@@ -563,43 +640,41 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
-    ><![CDATA[
+   ><![CDATA[
       \t   /**
       \t    * Constructor for %description
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
+      \t    *
       %paramDescription
       \t    */
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      #if $(irqHandlingMethod)
       \t      %registerName = %paramExpression;
-      #else
-      \t      (void)%paramExpression;
-      #endif
       \t   }\n\n
    ]]></variableTemplate>
 
-   <for keys="r" values="
-         wdog_stctrlh_wdogen;
-         wdog_stctrlh_distestwdog;
-         wdog_stctrlh_waiten;
-         wdog_stctrlh_stopen;
-         wdog_stctrlh_dbgen;
-         wdog_stctrlh_allowupdate;
-         wdog_stctrlh_winen;
-         wdog_stctrlh_irqrsten;
-         wdog_stctrlh_clksrc;
-         ">
-      <variableTemplate namespace="usbdm"
+   <for keys="r"
+      values="
+            wdog_stctrlh_distestwdog;
+            wdog_stctrlh_waiten;
+            wdog_stctrlh_stopen;
+            wdog_stctrlh_dbgen;
+            wdog_stctrlh_allowupdate;
+            wdog_stctrlh_winen;
+            wdog_stctrlh_irqrsten;
+            wdog_stctrlh_clksrc;
+            wdog_stctrlh_wdogen;
+            " >
+      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
-         linePadding="xxx"
-      ><![CDATA[
+         linePadding="xxx" >
+      <![CDATA[
          \t   /**
          \t    * Constructor for %description
          \t    *
@@ -614,10 +689,12 @@
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
-      ]]></variableTemplate>
+      ]]>
+      </variableTemplate>
    </for>
 
-   <variableTemplate namespace="usbdm" variables="wdog_presc_prescval,wdog_timeout,wdog_window"
+      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="wdog_presc_prescval,wdog_timeout,wdog_window"
       linePadding="xxx"
       nonDefaultParams="2"
       params=",timeout,window"
@@ -642,8 +719,8 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" variables="wdog_timeoutPeriod,wdog_windowPeriod"
-      codeGenCondition="secondsSupport"
+   <variableTemplate namespace="baseClass" codeGenCondition="secondsSupport"
+      variables="wdog_timeoutPeriod,wdog_windowPeriod"
       linePadding="xxx"
       params="timeout,window"
    ><![CDATA[
@@ -667,7 +744,7 @@
 
 <!--   Default Initialisation value -->
 
-   <variableTemplate
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
@@ -680,35 +757,151 @@
             wdog_stctrlh_winen,
             wdog_stctrlh_irqrsten,
             wdog_stctrlh_clksrc,
-            irqLevel,
             wdog_presc_prescval,
             wdog_timeout,
-            wdog_window,
-            "
+            wdog_window
+         "
    ><![CDATA[
-      $(init_description)
-      \ttypedef $(_Class)BasicInfo::Init Init;
-      \t
-      \t/**
-      \t * $(_Class) interrupt call back
-      \t */
-      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
-      \t
       \t/**
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
-      \t};\n\n
+      \t};
+      \t\n
    ]]></variableTemplate>
 
-   <template namespace="usbdm" ><![CDATA[
-      \t};\n\n
+<!--   Configure methods -->
+
+   <template key="/WDOG/InitMethod" discardRepeats="true" codeGenCondition="!enablePeripheralSupport" ><![CDATA[
+      \t/**
+      \t * Disable $(_BASENAME)
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Unlock before changing settings
+      \t   wdog->UNLOCK  = WdogUnlock_1;
+      \t   wdog->UNLOCK  = WdogUnlock_2;
+      \t
+      \t   // Read-back to delay until change effected
+      \t   (void)(wdog->UNLOCK);
+      \t
+      \t   // Disable watchdog
+      \t   wdog->STCTRLH = WdogEnable_Disabled|WdogAllowUpdate_Disabled;
+      \t}\n\n
    ]]></template>
 
-   <template namespace="usbdm" ><![CDATA[
-      };\n\n
+   <template key="/WDOG/InitMethod" discardRepeats="true" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n\n
    ]]></template>
-   <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" />
+
+   <template key="/WDOG/InitMethod" discardRepeats="true" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic ErrorCode configure(const typename Info::Init &init) {
+      \t
+      \t   Seconds_Ticks timeout = init.timeout;
+      \t   Seconds_Ticks window  = init.window;
+      \t   uint16_t presc   = init.presc;
+      \t
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-back if feature enabled and non-null
+      \t      if (init.callbackFunction != nullptr) {
+      \t         Info::setCallback(init.callbackFunction);
+      \t      }
+      \t   }\n
+   ]]></template>
+   <template key="/WDOG/InitMethod" discardRepeats="true" codeGenCondition="secondsSupport&amp;&amp;enablePeripheralSupport" ><![CDATA[
+      \t   if (presc == ((uint16_t)-1)) {
+      \t
+      \t      // Calculate timeout, window and prescaler
+      \t      ErrorCode rc = calculateTimingParameters(init.stctrlh, timeout, window, presc);
+      \t      if (rc != E_NO_ERROR) {
+      \t         return rc;
+      \t      }
+      \t   }\n
+   ]]></template>
+   <template key="/WDOG/InitMethod" discardRepeats="true" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t   // Protect sequence from interrupts
+      \t   CriticalSection cs;
+      \t
+      \t   // Unlock before changing settings
+      \t   wdog->UNLOCK = WdogUnlock_1;
+      \t   wdog->UNLOCK = WdogUnlock_2;
+      \t
+      \t   // Read-back to delay until change effected
+      \t   (void)(wdog->UNLOCK);
+      \t
+      \t   // Configure watchdog
+      \t   wdog->STCTRLH  = init.stctrlh;
+      \t   wdog->PRESC    = presc;
+      \t   wdog->WINH     = window.toTicks()>>16;
+      \t   wdog->WINL     = window.toTicks();
+      \t   wdog->TOVALH   = timeout.toTicks()>>16;
+      \t   wdog->TOVALL   = timeout.toTicks();
+      \t
+      \t   // For some reason this must be done after above
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      enableNvicInterrupts(init.irqlevel);
+      \t   }
+      \t   return E_NO_ERROR;
+      \t}\n\n
+   ]]></template>
+
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t}; // class $(_Structname)BasicInfo::Init
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="baseClass" >
+   <![CDATA[
+      }; // class $(_Structname)BasicInfo
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ************* Common ****************** -->
+
+   <template key="/$(_BASENAME)/declarations" >
+   <![CDATA[
+      \t/**
+      \t * Class representing $(_NAME)
+      \t */
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
+      \t\n
+   ]]>
+   </template>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
+   </validate>
+
+   <projectActionList id="wdog_files" >
+      <copy source="Project_Headers/wdog.h"         target="Project_Headers/wdog.h"          overwrite="true" derived="true" />
+      <copy source="Snippets/wdog-example.cpp"      target="Snippets/wdog-example.cpp"       overwrite="true" derived="true" />
+   </projectActionList>
+
+   <!-- ************* Startup ****************** -->
+   <template key="/SYSTEM/Includes" codeGenCondition="!enablePeripheralSupport||configurePeripheralInStartUp" ><![CDATA[
+      #include "$(_basename).h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/WatchdogInitialise" codeGenCondition="!enablePeripheralSupport||configurePeripheralInStartUp" ><![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
 
 </peripheralPage>

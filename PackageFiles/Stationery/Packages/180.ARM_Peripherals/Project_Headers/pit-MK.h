@@ -272,14 +272,13 @@ public:
       Info::disableClock();
    }
 
+#if $(/PIT/irqHandlingMethod:false) // /PIT/irqHandlingMethod
    /**
     * Enable interrupts in NVIC
     *
     * @param[in]  pitChannelNum       Channel being modified
     */
    static void enableNvicInterrupts(PitChannelNum pitChannelNum) {
-
-      static_assert(Info::irqHandlerInstalled, "PIT not configure for interrupts - Modify Configure.usbdm");
       usbdm_assert(pitChannelNum<Info::irqCount,"Illegal PIT channel");
 
       NVIC_EnableIRQ(Info::mapChannelToIrq(pitChannelNum));
@@ -293,7 +292,6 @@ public:
     * @param[in]  nvicPriority  Interrupt priority
     */
    static void enableNvicInterrupts(PitChannelNum pitChannelNum, NvicPriority nvicPriority) {
-      static_assert(Info::irqHandlerInstalled, "PIT not configure for interrupts - Modify Configure.usbdm");
       usbdm_assert(pitChannelNum<Info::irqCount,"Illegal PIT channel");
 
       enableNvicInterrupt(Info::mapChannelToIrq(pitChannelNum), nvicPriority);
@@ -305,11 +303,11 @@ public:
     * @param[in]  pitChannelNum       Channel being modified
     */
    static void disableNvicInterrupts(PitChannelNum pitChannelNum) {
-      static_assert(Info::irqHandlerInstalled, "PIT not configure for interrupts - Modify Configure.usbdm");
       usbdm_assert(pitChannelNum<Info::irqCount,"Illegal PIT channel");
 
       NVIC_DisableIRQ(Info::mapChannelToIrq(pitChannelNum));
    }
+#endif
 
    /**
     *  Enable the PIT channel

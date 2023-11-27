@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE14Z7
       MKE15Z7
       MKL82Z7
@@ -1133,6 +1133,15 @@ Enables suspension of this channel by a higher priority channel</description>
                </fields>
             </register>
             <register derivedFrom="DCHPRI%s"><dim>8</dim><dimIndex>0,1,2,3,4,5,6,7</dimIndex> <name>DCHPRIn%s</name> <addressOffset>0x100</addressOffset> <resetMask>0xFF</resetMask> </register>
+            <register>
+               <name>TCD_RAW</name>
+               <dim>64</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0-63</dimIndex>
+               <size>32</size>
+               <description>Raw TCD array as uint32_t</description>
+               <addressOffset>0x1000</addressOffset>
+            </register>
             <cluster>
                <dim>8</dim>
                <dimIncrement>32</dimIncrement>

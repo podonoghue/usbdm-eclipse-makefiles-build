@@ -81,13 +81,13 @@ enum RcmBootSource {
  * @tparam info      Information class for RCM
  *
  * @code
- * using rcm = RcmBase_T<RcmInfo>;
+ * using rcm = RcmBase<RcmInfo>;
  *
  *  rcm::configure();
  *
  * @endcode
  */
-class RcmBase_T : public RcmInfo{
+class RcmBase : public RcmInfo {
 
 public:
    /** Hardware instance pointer */

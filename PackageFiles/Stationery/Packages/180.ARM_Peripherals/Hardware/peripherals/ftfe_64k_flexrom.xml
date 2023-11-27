@@ -1,66 +1,128 @@
-<?xml version="1.0" encoding="UTF-8"
-?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- ftfe_64k_flexrom.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module" >
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Interface" >
 
-   <xi:include href="default_instance.xml"/>
+   <!-- Default IRQ vector patterns if none specified -->
+   <constant key="irq_pattern"      type="String"  value="&quot;^FTF_(.*)$&quot;"           />
+   <constant key="irq_ClassHandler" type="String"  value="&quot;Flash::$1_irqHandler&quot;" />
 
-   <stringOption name="FlashType" key="/Flash/FlashType" value="ftfe" derived="true" locked="true" />
+   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="enablePeripheral.xml"  />
+   <title />
 
-   <stringOption key="pflash_sector_size" locked="true" derived="true" modify="true"
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
+
+<!--
+    * Template substitutions
+    *
+    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
+    * <li>%valueExpression            Numeric variable value e.g. 0x3
+    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
+    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
+    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
+    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
+    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
+    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * <li>%params                     Formatted parameter list for function
+    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
+    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
+    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
+    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
+    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
+    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
+    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
+    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
+-->
+
+   <stringOption name="FlashType" description="Flash Type" key="/Flash/FlashType" value="ftfe" derived="true" locked="true" />
+
+   <intOption key="pflash_sector_size" locked="true" derived="true" modify="true"
       description="Sector size for program flash (minimum erase element)"/>
 
-   <stringOption key="pflash_phrase_size" locked="true" derived="true" modify="true"
+   <intOption key="pflash_phrase_size" locked="true" derived="true" modify="true"
       description="Phrase size for program flash (minimum program element)"/>
 
-   <stringOption key="dflash_sector_size" locked="true" derived="true" modify="true"
+   <intOption key="dflash_sector_size" locked="true" derived="true" modify="true"
       description="Sector size for data flash (minimum erase element)"
       toolTip="Only for device with FlexNVM" />
 
-   <stringOption key="dflash_phrase_size" locked="true" derived="true" modify="true"
+   <intOption key="dflash_phrase_size" locked="true" derived="true" modify="true"
       description="Phrase size for data flash (minimum program element)"
       toolTip="Only for device with FlexNVM" />
 
-   <choiceOption key="EepromSize"
-      description="FlexNVM - EEPROM size"
-      toolTip="Selects emulated EEPROM size">
-      <choice value="EepromSel_32Bytes"  name="32 bytes" />
-      <choice value="EepromSel_64Bytes"  name="64 bytes" />
-      <choice value="EepromSel_128Bytes" name="128 bytes" />
-      <choice value="EepromSel_256Bytes" name="256 bytes" />
-      <choice value="EepromSel_512Bytes" name="512 bytes" />
-      <choice value="EepromSel_1KBytes"  name="1 KiB" />
-      <choice value="EepromSel_2KBytes"  name="2 KiB" />
-      <choice value="EepromSel_4KBytes"  name="4 KiB" isDefault="true"/>
-   </choiceOption>
-
-   <choiceOption key="FlashPartition"
-      description="FlexNVM - Flash EEPROM partition"
+   <choiceOption key="flash_partition"
+      tableName="flashPartitionInfo"
+      tableType="FlashPartitionInfo"
+      tableDefinition="
+      \tstruct %(tableType) {
+      \n\t   const uint32_t flashSize;     ///&lt; Remaining data flash
+      \n\t   const uint32_t eeepromSize;   ///&lt; Flash allocated to EEPROM backing store
+      \n\t   const uint8_t  value;         ///&lt; Partition value
+      \n\t};
+      "
+      enumText="  \t   %(typeName)_FlashAll_eeprom0K  = %(typeName)_Flash64K_eeprom0K, ///&lt; All Flash
+                \n\t   %(typeName)_Flash0K_eepromAll  = %(typeName)_Flash0K_eeprom64K, ///&lt; All EEPROM "
+      typeName="FlashPartition"
+      valueFormat="%s"
+      description="FlexNVM - Flash EEPROM partitioning"
       toolTip="Selects division of FlexNVM between flash and EEPROM backing storage\n
                The larger the EEPROM backing the better the wear characteristic">
-      <choice value="PartitionSel_flash64K_eeprom0K" name="flash=64KiB eeprom backing=0B" />
-      <choice value="PartitionSel_flash32K_eeprom32K" name="flash=32KiB eeprom backing=32KiB" />
-      <choice value="PartitionSel_flash0K_eeprom64K" name="flash=0B eeprom backing=64KiB" isDefault="true"/>
+      <choice value="0" enum="Flash64K_eeprom0K"  code="{ 64*1024, 0*1024 ,  0xFF }" name="flash=64KiB eeprom backing=0B"    />
+      <choice value="1" enum="Flash32K_eeprom32K" code="{ 32*1024, 32*1024 , 0x09 }" name="flash=32KiB eeprom backing=32KiB" />
+      <choice value="2" enum="Flash0K_eeprom64K"  code="{ 0*1024,  64*1024,  0x08 }" name="flash=0B eeprom backing=64KiB"    isDefault="true"/>
    </choiceOption>
 
-   <choiceOption key="FlexNVM_Partition"
-      description="FlexNVM - EEPROM partition"
-      toolTip="Selects division of the two regions of EEPROM (if supported on device)\n
+   <choiceOption key="eeprom_size"
+      tableName="eepromSizeInfo"
+      tableType="EepromSizeInfo"
+      tableDefinition="
+      \tstruct %(tableType) {
+      \n\t   const uint16_t size;    ///&lt; EEPROM size
+      \n\t   const uint8_t  value;   ///&lt; Value to select size
+      \n\t};
+      "
+      typeName="FlashEepromSize"
+      valueFormat="%s"
+      enabledBy="flash_partition>0"
+      description="FlexNVM - EEPROM size"
+      toolTip="Selects emulated EEPROM size">
+      <choice value="0" enum="32Bytes"  code="{ 32,   0x09 }" name="32 bytes"    />
+      <choice value="1" enum="64Bytes"  code="{ 64,   0x08 }" name="64 bytes"    />
+      <choice value="2" enum="128Bytes" code="{ 128,  0x07 }" name="128 bytes"   />
+      <choice value="3" enum="256Bytes" code="{ 256,  0x06 }" name="256 bytes"   />
+      <choice value="4" enum="512Bytes" code="{ 512,  0x05 }" name="512 bytes"   />
+      <choice value="5" enum="1KBytes"  code="{ 1024, 0x04 }" name="1 KiB"       />
+      <choice value="6" enum="2KBytes"  code="{ 2048, 0x03 }" name="2 KiB"       />
+      <choice value="7" enum="4KBytes"  code="{ 4096, 0x02 }" name="4 KiB"       isDefault="true"/>
+   </choiceOption>
+
+   <choiceOption key="eeprom_split"
+      enabledBy="false"
+      typeName="FlashEepromSplit"
+      valueFormat="%s"
+      description="FlexNVM - EEPROM split"
+      toolTip="Selects division of the two regions of EEPROM  \n
                This allows A/B regions to have different wear characteristics">
-      <choice value="SplitSel_A1_B7_8ths" name="A=1/8, B=7/8" />
-      <choice value="SplitSel_A2_B6_8ths" name="A=1/4, B=3/4" />
-      <choice value="SplitSel_A4_B4_8ths" name="A=1/2, B=1/2" isDefault="true"/>
+      <choice value="0x00" enum="A1_B7_8ths" name="A=1/8, B=7/8" />
+      <choice value="0x10" enum="A2_B6_8ths" name="A=1/4, B=3/4" />
+      <choice value="0x30" enum="A4_B4_8ths" name="A=1/2, B=1/2" isDefault="true" />
    </choiceOption>
-
-   <projectActionList id = "flash_files" >
-      <copy source="Project_Headers/flash.h"                 target="Project_Headers/flash.h"                 overwrite="true"  derived="true" />
-      <copy source="Project_Headers/ftfe.h"                  target="Project_Headers/ftfe.h"                  overwrite="true"  derived="true" />
-      <copy source="Sources/ftfe.cpp"                        target="Sources/ftfe.cpp"                        overwrite="true"  derived="true" />
-      <copy source="Snippets/nonvolatile-example.cpp"        target="Snippets/nonvolatile-example.cpp"        overwrite="true"  derived="true" />
-      <copy source="Snippets/flash-programming-example.cpp"  target="Snippets/flash-programming-example.cpp"  overwrite="true"  derived="true" />
-   </projectActionList>
 
    <template key="FlashConfig" namespace="all"> <![CDATA[
       \t// Sector size for program flash (minimum erase element)
@@ -76,90 +138,46 @@
       \tstatic constexpr unsigned dataFlashPhraseSize = $(dflash_phrase_size);\n\n
    ]]></template>
 
-   <template><![CDATA[
-      \tstruct EepromSizes {
-      \t   const uint16_t size;    // EEPROM size
-      \t   const uint8_t  value;   // Value to select size
-      \t};
+   <variableTemplate variables="eeprom_split" ><![CDATA[
+      \t/// %description
+      \tstatic constexpr %paramType eepromSplit = %initExpression
+      \t\n
+   ]]></variableTemplate>
 
-      \t/** EEPROM Data Set Size Field */
-      \tstatic constexpr EepromSizes eepromSizes[] = {
-      \t      // Size  Value
-      \t      {  32,   0x09, },
-      \t      {  64,   0x08, },
-      \t      {  128,  0x07, },
-      \t      {  256,  0x06, },
-      \t      {  512,  0x05, },
-      \t      {  1024, 0x04, },
-      \t      {  2048, 0x03, },
-      \t      {  4096, 0x02, },
-      \t};
+   <variableTemplate variables="eeprom_size" ><![CDATA[
+      \t/// %description
+      \tstatic constexpr %paramType eepromSize = %initExpression
+      \t\n
+   ]]></variableTemplate>
 
-      \tstruct PartitionInformation {
-      \t   const uint32_t flashSize;     //! Remaining data flash
-      \t   const uint32_t eeepromSize;   //! Flash allocated to EEPROM backing store
-      \t   const uint8_t  value;         //! Partition value
-      \t};
+   <variableTemplate variables="flash_partition" ><![CDATA[
+      \t/// %description
+      \tstatic constexpr %paramType flashPartition = %initExpression
+      \t\n
+   ]]></variableTemplate>
 
-      \t/** Flash partition information */
-      \tstatic constexpr PartitionInformation partitionInformation[] {
-      \t      // Flash   Backing   Value
-      \t      { 64*1024, 0*1024 ,  0xFF},
-      \t      { 32*1024, 32*1024 , 0x09},
-      \t      { 0*1024,  64*1024,  0x08},
-      \t};
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
+   </validate>
 
-      \t/** Selects EEPROM size */
-      \tenum EepromSel {
-      \t   EepromSel_32Bytes,
-      \t   EepromSel_64Bytes,
-      \t   EepromSel_128Bytes,
-      \t   EepromSel_256Bytes,
-      \t   EepromSel_512Bytes,
-      \t   EepromSel_1KBytes,
-      \t   EepromSel_2KBytes,
-      \t   EepromSel_4KBytes,
-      \t};
+   <projectActionList id="flash_files" >
+      <copy source="Project_Headers/flash.h"                 target="Project_Headers/flash.h"                 overwrite="true"  derived="true" />
+      <copy source="Project_Headers/ftfe.h"                  target="Project_Headers/ftfe.h"                  overwrite="true"  derived="true" />
+      <copy source="Sources/ftfe.cpp"                        target="Sources/ftfe.cpp"                        overwrite="true"  derived="true" />
+      <copy source="Snippets/nonvolatile-example.cpp"        target="Snippets/nonvolatile-example.cpp"        overwrite="true"  derived="true" />
+      <copy source="Snippets/flash-programming-example.cpp"  target="Snippets/flash-programming-example.cpp"  overwrite="true"  derived="true" />
+   </projectActionList>
 
-      \t/** Selects division of FlexNVM between flash and EEPROM backing storage */
-      \tenum PartitionSel {
-      \t   PartitionSel_flash64K_eeprom0K,
-      \t   PartitionSel_flash32K_eeprom32K,
-      \t   PartitionSel_flash0K_eeprom64K,
-      \t
-      \t   // All EEPROM
-      \t   PartitionSel_flash0K_eeprom_all = PartitionSel_flash0K_eeprom64K,
-      \t};
+   <!-- ************* Startup ****************** -->
 
-      \t/**
-      \t * Selects division of the EEPROM into two regions
-      \t * This allows A/B regions to have different wear characteristics
-      \t */
-      \tenum SplitSel {
-      \t   SplitSel_A1_B7_8ths = 0x00,                 //! A=1/8, B=7/8
-      \t   SplitSel_A2_B6_8ths = 0x10,                 //! A=2/8=1/4, B=6/8=3/4
-      \t   SplitSel_A4_B4_8ths = 0x30,                 //! A=4/8=1/2, B=4/8=1/2
-      \t   SplitSel_A1_B3_4ths = SplitSel_A2_B6_8ths, //! A=2/8=1/4, B=6/8=3/4
-      \t   SplitSel_A1_B1_2ths = SplitSel_A4_B4_8ths, //! A=4/8=1/2, B=4/8=1/2
-      \t
-      \t   // Default - A = B = 1/2
-      \t   SplitSel_default=SplitSel_A4_B4_8ths,      //! Equal partitions
-      \t};
-
-      \t//! FlexNVM - EEPROM size
-      \tstatic constexpr EepromSel eepromSel = $(EepromSize);
-
-      \t//! FlexNVM - Flash EEPROM partition
-      \tstatic constexpr PartitionSel partitionSel = $(FlashPartition);
-
-      \t//! FlexNVM - EEPROM partition
-      \tstatic constexpr SplitSel partitionSplit = $(FlexNVM_Partition);\n\n
+   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <xi:include href="irqOption.xml"/>
-
-   <xi:include href="clockOption.xml"/>
-
-   <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator"/>
+   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
 
 </peripheralPage>

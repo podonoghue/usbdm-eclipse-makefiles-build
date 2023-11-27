@@ -213,7 +213,7 @@
       \t}\n\n
    ]]></template>
    
-   <template key="/LPTMR/declarations" namespace="all"  ><![CDATA[
+   <template key="/LPTMR/declarations"  ><![CDATA[
       \t/**
       \t * Class representing LPTMR1
       \t *

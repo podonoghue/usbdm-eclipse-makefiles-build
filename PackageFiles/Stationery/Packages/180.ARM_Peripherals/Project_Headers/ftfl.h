@@ -17,6 +17,7 @@
 #include "pin_mapping.h"
 #include "smc.h"
 
+// Set by linker
 extern uint8_t __FlexRamStart[];
 extern uint8_t __FlexRamEnd[];
 
@@ -117,22 +118,22 @@ protected:
     *
     * This function should be called before the first access to variables located in the eeprom.
     *
-    * @tparam eeprom     EEPROM Data Size choice
-    * @tparam partition  FlexNVM Partition choice (defaults to all EEPROM backing store)
-    * @tparam split      Split between A/B Flash portions (if supported by target)
+    * @tparam flashEepromSize  EEPROM Data Size choice
+    * @tparam flashPartition   FlexNVM Partition choice
+    * @tparam flashEepromSplit Split between A/B Flash portions (if supported by target)
     *
     * @return FLASH_ERR_OK         => EEPROM previous configured - no action required
     * @return FLASH_ERR_NEW_EEPROM => EEPROM has just been partitioned - contents are 0xFF, initialisation required
     *
     * @note This routine will only partition EEPROM when first executed after the device has been programmed.
     */
-   template<EepromSel eeprom=eepromSel, PartitionSel partition=partitionSel, SplitSel split=partitionSplit>
+   template<FlashEepromSize flashEepromSize=eepromSize, FlashPartition flashPartition=flashPartition, FlashEepromSplit flashEepromSplit=eepromSplit>
    static FlashDriverError_t initialiseEeprom () {
 
 //      console.
-//      write("initialiseEeprom(eeprom=").write(eepromSizes[eeprom].size).write(" bytes, ").
-//      write("eeprom backing=").write(eepromSizes[eeprom].size).write("K, ").
-//      write("residual flash=").write(partitionInformation[partition].eeepromSize>>10).writeln("K)");
+//      write("initialiseEeprom(flashEepromSize=").write(eepromSizes[flashEepromSize].size).write(" bytes, ").
+//      write("eeprom backing=").write(eepromSizes[flashEepromSize].size).write("K, ").
+//      write("residual flash=").write(partitionInformation[flashPartition].eeepromSize>>10).writeln("K)");
 
       if (isFlexRamConfigured()) {
 //         console.write("flashController->FCNFG.FTFL_FCNFG_EEERDY = ").writeln((bool)(flashController->FCNFG&FTFL_FCNFG_EEERDY_MASK));
@@ -141,14 +142,14 @@ protected:
          return FLASH_ERR_OK;
       }
 //      console.write("flashController->FCNFG.FTFL_FCNFG_EEERDY = ").writeln((bool)(flashController->FCNFG&FTFL_FCNFG_EEERDY_MASK));
-      if ((eepromSizes[eeprom].size*MINIMUM_BACKING_RATIO)>(partitionInformation[partition].eeepromSize)) {
+      if ((eepromSizeInfo[flashEepromSize].size*MINIMUM_BACKING_RATIO)>(flashPartitionInfo[flashPartition].eeepromSize)) {
 //         console.writeln("Backing ratio (Flash/EEPROM) is too small\n");
          USBDM::setErrorCode(E_FLASH_INIT_FAILED);
          return FLASH_ERR_ILLEGAL_PARAMS;
       }
 #if defined(RELEASE_BUILD)
       // EEPROM only available in release build
-      FlashDriverError_t rc = partitionFlash(eepromSizes[eeprom].value|split, partitionInformation[partition].value);
+      FlashDriverError_t rc = partitionFlash(eepromSizeInfo[flashEepromSize].value|flashEepromSplit, flashPartitionInfo[flashPartition].value);
       if (rc != 0) {
 //         console.writeln("Partitioning Flash failed\n");
          return rc;
@@ -156,9 +157,9 @@ protected:
       // Indicate EEPROM needs initialisation - this is not an error
       return FLASH_ERR_NEW_EEPROM;
 #else
-      (void) eeprom;
-      (void) partition;
-      (void) split;
+      (void) flashEepromSize;
+      (void) flashPartition;
+      (void) flashEepromSplit;
 
       // For debug, initialise FlexRam every time (no actual writes to flash)
       // This highlights any initialisation missed by user code
@@ -174,10 +175,10 @@ public:
 
    static void Command_irqHandler() {
    }
-    
+
    static void ReadCollision_irqHandler() {
    }
-   
+
    /**
     * Hardware instance pointer
     *
@@ -255,36 +256,13 @@ public:
             waitForFlashReady();
    }
 
-   /**
-    * Enable interrupts in NVIC
-    */
-   static void enableNvicInterrupts() {
-      NVIC_EnableIRQ(irqNums[0]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableNvicInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(irqNums[0], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(irqNums[0]);
-   }
-
+#if $(/FTFL/_irqCount:0)>1 // /FTFL/_irqCount>1
    /**
     * Enable interrupts in NVIC
     * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicCollisionInterrupts() {
-      NVIC_EnableIRQ(irqNums[1]);
+      NVIC_EnableIRQ(FTF_ReadCollision_IRQn);
    }
 
    /**
@@ -294,15 +272,16 @@ public:
     * @param[in]  nvicPriority  Interrupt priority
     */
    static void enableNvicCollisionInterrupts(uint32_t nvicPriority) {
-      enableNvicInterrupt(irqNums[1], nvicPriority);
+      enableNvicInterrupt(FTF_ReadCollision_IRQn, nvicPriority);
    }
 
    /**
     * Disable interrupts in NVIC
     */
    static void disableNvicCollisionInterrupts() {
-      NVIC_DisableIRQ(irqNums[1]);
+      NVIC_DisableIRQ(FTF_ReadCollision_IRQn);
    }
+#endif
 
 private:
    /**

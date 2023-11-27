@@ -442,6 +442,11 @@ public:
     * @return uint32
     */
    constexpr __attribute__((always_inline))  operator uint32_t() const { return ptr; }
+
+   /**
+    * Get value as volatile pointer to hardware
+    */
+   constexpr __attribute__((always_inline))  operator volatile T *() const { return reinterpret_cast<volatile T *>(ptr);}
 };
 
 /**

@@ -35,46 +35,8 @@ public:
 $(/MCM/DefaultFlashInitValue: // /MCM/DefaultFlashInitValue not found)
 $(/MCM/DefaultSramAccessInitValue: // /MCM/DefaultSramAccessInitValue not found)
 $(/MCM/DefaultFloatingPointIrqInitValue: // /MCM/DefaultFloatingPointIrqInitValue not found)
-};
 
-#if $(/MCM/irqOption_present:false)
-/**
- * Type definition for MCM interrupt call back
- */
-typedef void (*McmCallbackFunction)();
-
-/**
- * Template class providing interface to Miscellaneous Control Module
- *
- * @tparam info      Information class for MCM
- *
- * @code
- * using mcm = McmInterrupt_T<McmInfo>;
- *
- *  mcm::configure();
- *
- * @endcode
- */
-template <class Info>
-class McmInterrupt_T {
-
-protected:
-   /** Callback function for ISR */
-   static McmCallbackFunction sCallback;
-
-   /** Callback to catch unhandled interrupt */
-   static void unhandledCallback() {
-      setAndCheckErrorCode(E_NO_HANDLER);
-   }
-
-public:
-   /**
-    * IRQ handler
-    */
-   static void irqHandler(void) {
-      sCallback();
-   }
-
+#if $(/MCM/generateSharedIrqInfo:false)
    /**
     * Wrapper to allow the use of a class member as a callback function
     * @note Only usable with static objects.
@@ -107,8 +69,8 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(), T &object>
-   static McmCallbackFunction wrapCallback() {
-      static McmCallbackFunction fn = []() {
+   static CallbackFunction wrapCallback() {
+      static CallbackFunction fn = []() {
          (object.*callback)();
       };
       return fn;
@@ -146,73 +108,16 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)()>
-   static McmCallbackFunction wrapCallback(T &object) {
+   static CallbackFunction wrapCallback(T &object) {
       static T &obj = object;
-      static McmCallbackFunction fn = []() {
+      static CallbackFunction fn = []() {
          (obj.*callback)();
       };
       return fn;
    }
-
-   /**
-    * Set Callback function
-    *
-    *   @param[in]  callback Callback function to be executed on interrupt\n
-    *                        Use nullptr to remove callback.
-    */
-   static void setCallback(McmCallbackFunction callback) {
-      static_assert(Info::irqHandlerInstalled, "MCM not configured for interrupts");
-      if (callback == nullptr) {
-         callback = unhandledCallback;
-      }
-      sCallback = callback;
-   }
-
-public:
-
-   /**
-    * Basic enable of MCM\n
-    * Includes configuring all pins
-    */
-   static void enable() {
-   }
-
-   /**
-    * Configure with settings from Configure.usbdmProject.
-    */
-   static void defaultConfigure() {
-
-      enableNvicInterrupts(Info::irqLevel);
-   }
-
-   /**
-    * Enable interrupts in NVIC
-    */
-   static void enableNvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[0]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableNvicInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[0]);
-   }
-   
-};
-
-template<class Info> McmCallbackFunction McmInterrupt_T<Info>::sCallback = McmInterrupt_T<Info>::unhandledCallback;
 #endif
+
+};
 
 $(/MCM/declarations: // No declarations found)
 /**

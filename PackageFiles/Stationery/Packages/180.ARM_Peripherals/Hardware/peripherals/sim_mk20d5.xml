@@ -33,9 +33,6 @@
    <!-- Indicates the number of PIT channels -->
    <constant key="/PIT_NumChannels" type="Long" value="4" />
 
-   <!-- Indicates the number of DMA channels -->
-   <constant key="/DMA0_NumChannels" type="Long" value="4" />
-
    <!-- DMA slots -->
    <choiceOption key="/DMAMUX0/dmamux_chcfg_src"
       hidden="true"
@@ -135,7 +132,6 @@
 
    <intOption key="system_usb_clkin_clock"
       hidden="true"
-      locked="true"
       origin="USB Clock In pin"
       units="Hz"
       description="Frequency of External USB Clock"
@@ -152,6 +148,7 @@
       <aliasOption key="system_erclk32k_clock" />
 
       <choiceOption key="sim_sopt1_usbpower" condition="sim_sopt1_usbregen_present &amp;&amp; sim_sopt1_usbsstby_present &amp;&amp; sim_sopt1_usbvstby_present"
+         enabledBy="enablePeripheralSupport"
          valueFormat="SIM_SOPT1_USBREGEN(%s),SIM_SOPT1_USBSSTBY(%s),SIM_SOPT1_USBVSTBY(%s)"
          typeName="SimUsbPower"
          description="USB voltage regulator power control"
@@ -225,7 +222,7 @@
          target="traceClock"
          typeName="SimTraceClockoutSel"
          description="Debug trace clock select"
-         toolTip="Selects the core/system clock or MCG output clock (MCGOUTCLK) the trace clock source\n
+         toolTip="Selects the core/system clock or MCG output clock (MCGOUTCLK) as the trace clock source\n
                   The chosen clock is divided by 2." >
          <choice value="0"  name="MCGOUTCLK"          ref="/MCG/system_mcgoutclk_clock[0]/2" enum="McgOutClk"  isDefault="true" />
          <choice value="1"  name="Core/system clock"  ref="system_core_clock[0]/2"           enum="CoreClk"    />
@@ -262,6 +259,7 @@
    <category name="SOPT4" description="FTM signals">
 
       <binaryOption key="sim_sopt4_ftm0trg0src" condition="sim_sopt4_ftm0trg0src_present"
+         enabledBy="enablePeripheralSupport"
          typeName="SimFtm0Trg0Src"
          description="FTM0 Hardware Trigger 0 Source"
          toolTip="Source of FTM hardware trigger 0" >
@@ -270,14 +268,16 @@
       </binaryOption>
 
       <binaryOption key="sim_sopt4_ftm0trg1src" condition="sim_sopt4_ftm0trg1src_present"
+         enabledBy="enablePeripheralSupport"
          typeName="SimFtm0Trg1Src"
          description="FTM0 Hardware Trigger 1 Source"
          toolTip="Source of FTM hardware trigger 1" >
          <choice value="0"  name="PDB output trigger 1" enum="PdbTrigger1" isDefault="true" />
-         <choice value="1"  name="FTM2 channel match"   enum="FtmMatch2" />
+         <choice value="1"  name="FTM2 channel match"   enum="Ftm2Match" />
       </binaryOption>
 
       <choiceOption key="sim_sopt4_ftm3trg0src" condition="sim_sopt4_ftm3trg0src_present"
+         enabledBy="enablePeripheralSupport"
          typeName="SimFtm3Trg0Src"
          description="FTM3 Hardware Trigger 0 Source"
          toolTip="Source of FTM hardware trigger 0"
@@ -286,6 +286,7 @@
       </choiceOption>
 
       <choiceOption key="sim_sopt4_ftm3trg1src" condition="sim_sopt4_ftm3trg1src_present"
+         enabledBy="enablePeripheralSupport"
          typeName="SimFtm3Trg1Src"
          description="FTM3 Hardware Trigger 1 Source"
          toolTip="Source of FTM hardware trigger 1"
@@ -295,6 +296,7 @@
 
       <for keys="p" values="0;1;2;3">
          <binaryOption key="sim_sopt4_ftm%(p)clksel" condition="sim_sopt4_ftm%(p)clksel_present"
+            enabledBy="enablePeripheralSupport"
             typeName="SimFtm%(p)ClkSel"
             description="FTM%(p) External Clock Pin"
             toolTip="External pin used to drive the clock to the FTM module">
@@ -304,6 +306,7 @@
       </for>
 
       <choiceOption key="sim_sopt4_ftm1ch0src" condition="sim_sopt4_ftm1ch0src_present"
+         enabledBy="enablePeripheralSupport"
          typeName="SimFtm1Ch0Src"
          description="FTM 1 channel 0 input capture source"
          toolTip="Source for FTM channel 0 input capture\n
@@ -315,6 +318,7 @@
       </choiceOption>
 
       <choiceOption key="sim_sopt4_ftm2ch0src" condition="sim_sopt4_ftm2ch0src_present"
+         enabledBy="enablePeripheralSupport"
          typeName="SimFtm2Ch0Src"
          description="FTM2 channel 0 input capture source"
          toolTip="Source for FTM channel 0 input capture\n
@@ -325,6 +329,7 @@
       </choiceOption>
 
       <binaryOption key="sim_sopt4_ftm2ch1src" condition="sim_sopt4_ftm2ch1src_present"
+         enabledBy="enablePeripheralSupport"
          typeName="SimFtm2Ch1Src"
          description="FTM2 channel 1 input capture source"
          toolTip="Source for FTM channel 1 input capture\n
@@ -335,6 +340,7 @@
 
       <for keys="ftmNum" values="0;1;2;3">
          <binaryOption key="sim_sopt4_ftm%(ftmNum)flt0" condition="sim_sopt4_ftm%(ftmNum)flt0_present"
+            enabledBy="enablePeripheralSupport"
             typeName="SimFtm%(ftmNum)Flt0"
             description="FTM%(ftmNum) Fault 0 Select"
             toolTip="Source of FTM fault input 0" >
@@ -345,6 +351,7 @@
 
       <for keys="ftmNum" values="0">
          <binaryOption key="sim_sopt4_ftm%(ftmNum)flt1" condition="sim_sopt4_ftm%(ftmNum)flt1_present"
+            enabledBy="enablePeripheralSupport"
             typeName="SimFtm%(ftmNum)Flt1"
             description="FTM%(ftmNum) Fault 1 Select"
             toolTip="Source of FTM fault input 1" >
@@ -355,6 +362,7 @@
 
       <for keys="ftmNum" values="0">
          <binaryOption key="sim_sopt4_ftm%(ftmNum)flt2" condition="sim_sopt4_ftm%(ftmNum)flt2_present"
+            enabledBy="enablePeripheralSupport"
             typeName="SimFtm%(ftmNum)Flt2"
             description="FTM%(ftmNum) Fault 2 Select"
             toolTip="Source of FTM fault input 2" >
@@ -365,6 +373,7 @@
 
       <for keys="ftmNum" values="0">
          <binaryOption key="sim_sopt4_ftm%(ftmNum)flt3" condition="sim_sopt4_ftm%(ftmNum)flt3_present"
+            enabledBy="enablePeripheralSupport"
             typeName="SimFtm%(ftmNum)Flt3"
             description="FTM%(ftmNum) Fault 3 Select"
             toolTip="Source of FTM fault input 3" >
@@ -383,6 +392,7 @@
               values = "uart%(n)   : Uart%(n)   : UART%(n);
                         lpuart%(n) : Lpuart%(n) : LPUART%(n)" >
             <choiceOption key="sim_sopt5_%(name)rxsrc" condition="sim_sopt5_%(name)rxsrc_present"
+               enabledBy="enablePeripheralSupport"
                typeName="Sim%(Name)RxSrc"
                description="%(NAME) receive data source"
                toolTip="Source for the %(NAME) receive data">
@@ -392,6 +402,7 @@
             </choiceOption>
 
             <choiceOption key="sim_sopt5_%(name)txsrc" condition="sim_sopt5_%(name)txsrc_present"
+               enabledBy="enablePeripheralSupport"
                typeName="Sim%(Name)TxSrc"
                description="%(NAME) transmit data source"
                toolTip="Source for the %(NAME) transmit data">
@@ -408,6 +419,7 @@
    <category name="SOPT7" description="ADC signals">
       <for keys="adc" values="0;1">
          <choiceOption key="sim_sopt7_adc%(adc)trigger" condition="sim_sopt7_adc%(adc)alttrgen_present"
+            enabledBy="enablePeripheralSupport"
             typeName="SimAdc%(adc)TriggerMode"
             valueFormat="SIM_SOPT7_ADC%(adc)ALTTRGEN(%s),SIM_SOPT7_ADC%(adc)PRETRGSEL(%s)"
             description="ADC%(adc) trigger mode"
@@ -421,6 +433,7 @@
          </choiceOption>
 
          <choiceOption key="sim_sopt7_adc%(adc)trgsel" condition="sim_sopt7_adc%(adc)pretrgsel_present"
+            enabledBy="enablePeripheralSupport"
             typeName="SimAdc%(adc)TriggerSrc"
             description="ADC%(adc) trigger source"
             toolTip="ADC Trigger source in STOP and VLPS modes, or when ADC Alternative Trigger is active">
@@ -443,6 +456,8 @@
          </choiceOption>
       </for>
    </category>
+
+   <!-- ************* SOPT8 in SimCommon.xml ****************** -->
 
    <!-- ************* FCFG1 ****************** -->
 
@@ -911,7 +926,7 @@
          \textern "C" uint32_t %(name);
          \t\n
       ]]></variableTemplate>
-      <variableTemplate namespace="all" key="/SYSTEM/Clocks" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
+      <variableTemplate key="/SYSTEM/Clocks" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
          \t/**
          \t *  %description
          \t *  %tooltip
@@ -971,11 +986,11 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/StartupEarly" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n

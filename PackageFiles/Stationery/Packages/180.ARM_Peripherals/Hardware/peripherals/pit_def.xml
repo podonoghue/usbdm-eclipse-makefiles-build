@@ -24,20 +24,25 @@
 <!-- ==================== Constants ==================== -->
    <!-- Defined in SIM -->
    <intOption key="NumChannels" locked="true" derived="true"
+      hidden="true"
       value="=/PIT_NumChannels"
       description="Number of PIT channels" />
 
    <!-- Derived from SVD -->
    <intOption key="NumVectors" locked="true" derived="true"
+      hidden="true"
       value="=_irqCount"
       description="Number of PIT IRQ vectors" />
+
+   <aliasOption key="NumChannels" condition="=_debugcode"/>
+   <aliasOption key="NumVectors"  condition="=_debugcode"/>
 
    <template><![CDATA[
       \t//! Number of PIT channels
       \tstatic constexpr uint32_t NumChannels  = $(NumChannels);\n\n
    ]]></template>
 
-   <template condition="=_irqCount == 1" ><![CDATA[
+   <template condition="=_irqCount == 1" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t/**
       \t * Map channel number to corresponding IRQ number
       \t * This is needed as multiple channels may be handled by a single IRQ vector
@@ -51,7 +56,7 @@
       \t}
       \t\n
    ]]></template>
-   <template condition="=/PIT_NumChannels == _irqCount" ><![CDATA[
+   <template condition="=/PIT_NumChannels == _irqCount" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t/**
       \t * Map channel number to corresponding IRQ number
       \t * This is needed as multiple channels may be handled by a single IRQ vector
@@ -66,7 +71,7 @@
       \t}
       \t\n
    ]]></template>
-   <template condition="=(_irqCount!=1) &amp;&amp; (/PIT_NumChannels&gt;_irqCount)" ><![CDATA[
+   <template condition="=(_irqCount!=1) &amp;&amp; (/PIT_NumChannels&gt;_irqCount)" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t/**
       \t * Map channel number to corresponding IRQ number
       \t * This is needed as multiple channels may be handled by a single IRQ vector
@@ -81,7 +86,6 @@
       \t}
       \t\n
    ]]></template>
-
 
 <!--
     * General substitutions
@@ -122,10 +126,10 @@
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
+      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
 
    <binaryOption key="/$(_BASENAME)/secondsSupport"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       modify="true"
       description="Enable use of Seconds for time"
       toolTip="Use of floating point libraries is necessary to support routines using seconds in runtime code.\n
@@ -294,7 +298,7 @@
    <for keys="static : const : chan    : location"
       values="static :       : CHANNEL : /$(_BASENAME)/staticFunctions ;
                      : const : chan    : /$(_BASENAME)/memberFunctions" >
-      <template key="%(location)" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+      <template key="%(location)" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
       <![CDATA[
          \t   /**
          \t    * Configure PIT channel from values specified in init.
@@ -397,7 +401,7 @@
          \t   %(static) void setPeriodInMicroseconds(uint32_t microseconds) %(const) {
          \t      uint64_t interval = ((uint64_t)microseconds*Info::getClockFrequency())/1000000;
          \t      usbdm_assert(interval<0xFFFFFFFFUL,"Interval too long");
-         \t      PitBase_T<Info>::setPeriod(%(chan), Ticks(interval));
+         \t      PitBase_T<Info>::setPeriod(%(chan), Ticks(uint32_t(interval)));
          \t   }
          \t
          \t   /**
@@ -431,7 +435,7 @@
    <for keys="static : const : chan    : location"
       values="static :       : CHANNEL : staticFunctions ;
                      : const : chan    : memberFunctions" >
-      <template key="%(location)" namespace="all" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+      <template key="%(location)" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
       <![CDATA[
          \t
          \t   /**
@@ -474,7 +478,7 @@
          \t    *
          \t    *  @param[in]  callback          Callback function to be executed on timeout
          \t    */
-         \t   %(static) void setCallback(CallbackFunction callback) %(const) {
+         \t   %(static) void setCallback(typename Info::CallbackFunction callback) %(const) {
          \t      PitBase_T<Info>::setCallback(%(chan), callback);
          \t   }
          \t
@@ -486,7 +490,7 @@
          \t    *  @param[in]  callback          Callback function to be executed on timeout.
          \t    *  @param[in]  tickInterval      Interval in timer ticks (usually bus clock period)
          \t    */
-         \t   %(static) void oneShot(CallbackFunction callback, Ticks tickInterval) %(const) {
+         \t   %(static) void oneShot(typename Info::CallbackFunction callback, Ticks tickInterval) %(const) {
          \t      PitBase_T<Info>::oneShot(%(chan), callback, tickInterval);
          \t   }
          \t
@@ -499,7 +503,7 @@
          \t    *  @param[in]  callback          Callback function to be executed on timeout.
          \t    *  @param[in]  interval          Interval in seconds until callback is executed
          \t    */
-         \t   %(static) void  oneShot(CallbackFunction callback, Seconds interval) %(const) {
+         \t   %(static) void  oneShot(typename Info::CallbackFunction callback, Seconds interval) %(const) {
          \t      PitBase_T<Info>::oneShot(%(chan), callback, interval);
          \t   }
          #endif
@@ -512,7 +516,7 @@
          \t    *  @param[in]  callback          Callback function to be executed on timeout.
          \t    *  @param[in]  microseconds      Interval in milliseconds
          \t    */
-         \t   %(static) void oneShotInMicroseconds(CallbackFunction callback, uint32_t microseconds) %(const) {
+         \t   %(static) void oneShotInMicroseconds(typename Info::CallbackFunction callback, uint32_t microseconds) %(const) {
          \t      PitBase_T<Info>::oneShotInMicroseconds(%(chan), callback, microseconds);
          \t   }
          \t
@@ -524,7 +528,7 @@
          \t    *  @param[in]  callback          Callback function to be executed on timeout.
          \t    *  @param[in]  milliseconds      Interval in milliseconds
          \t    */
-         \t   %(static) void oneShotInMilliseconds(CallbackFunction callback, uint32_t milliseconds) %(const) {
+         \t   %(static) void oneShotInMilliseconds(typename Info::CallbackFunction callback, uint32_t milliseconds) %(const) {
          \t      PitBase_T<Info>::oneShotInMilliseconds(%(chan), callback, milliseconds);
          \t   }
          \t\n
@@ -534,13 +538,13 @@
 
    <template namespace="usbdm" >
    <![CDATA[
-      class $(_Baseclass)BasicInfo {
+      class $(_Structname)BasicInfo {
       \t
       public:\n
    ]]>
    </template>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
@@ -573,7 +577,7 @@
    ]]>
    </template>
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
    <![CDATA[
       \t/**
       \t * Set channel interrupt callback function.
@@ -582,7 +586,7 @@
       \t *  @param[in]  $(_basename)Callback        Callback function to be executed on interrupt.
       \t *                              Use nullptr to remove callback.
       \t */
-      \tstatic void setCallback(PitChannelNum pitChannelNum, CallbackFunction $(_basename)Callback) {
+      \tstatic void setCallback(PitChannelNum pitChannelNum, typename Info::CallbackFunction $(_basename)Callback) {
       \t   if ($(_basename)Callback == nullptr) {
       \t      $(_basename)Callback = Info::unhandledCallback;
       \t   }
@@ -597,7 +601,7 @@
    </template>
 
    <if condition="@NumChannels&gt;@NumVectors" >
-      <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="irqHandlingMethod" >
+      <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="irqHandlingMethod" >
       <![CDATA[
          \t/**
          \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
@@ -625,7 +629,7 @@
       ]]>
       </template>
    <else />
-      <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="irqHandlingMethod" >
+      <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="irqHandlingMethod" >
       <![CDATA[
          \t/**
          \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
@@ -654,7 +658,7 @@
 
    <!--  ==================== Common ======================== -->
 
-   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
    <![CDATA[
       \t/**
       \t * Callback table of programmatically set handlers for $(_Class)
@@ -662,16 +666,16 @@
       \tPitInfo::CallbackFunction PitInfo::sCallbacks[] = {\n
    ]]></template>
    <for keys="ch" dim="=/PIT_NumChannels" >
-      <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
-         \t   \$(_Baseclass)BasicInfo::unhandledCallback,\n
+      <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+         \t   \$(_Structname)BasicInfo::unhandledCallback,\n
       ]]></template>
    </for>
-   <template namespace="all" key="/HARDWARE/StaticObjects"  codeGenCondition="irqHandlingMethod" ><![CDATA[
+   <template key="/HARDWARE/StaticObjects"  codeGenCondition="irqHandlingMethod" ><![CDATA[
       \t};\n\n
    ]]></template>
 
 <!-- Common Initialisation class -->
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -712,7 +716,7 @@
 
 <!--  Common Initialisation class member variables -->
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="pit_mcr_mdis,pit_mcr_frz"
    ><![CDATA[
       \t   /// Module Control Register
@@ -721,7 +725,7 @@
 
 <!-- Common Initialisation class configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t
       \t/**
@@ -779,7 +783,7 @@
 <!--  Common Initialisation class constructors -->
 
    <for keys="v" values="pit_mcr_mdis; pit_mcr_frz">
-      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(v)"
          linePadding="xxx"
        ><![CDATA[
@@ -800,16 +804,16 @@
    </for>
 
 <!-- End of Common Initialisation class -->
-   <variableTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
    ><![CDATA[
-      \t};// class $(_Baseclass)BasicInfo::Init
+      \t};// class $(_Structname)BasicInfo::Init
       \t\n
       ]]>
    </variableTemplate>
 
 <!--   ========== PIT ChannelInit class =============================== -->
 
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of a $(_Baseclass) channel
@@ -864,7 +868,7 @@
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="pit_ldval_tsv[]"
    ><![CDATA[
       \t   /// %description
@@ -878,7 +882,7 @@
       \t   %paramType %registerName = 0_s;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="pit_tctrl_ten[],pit_tctrl_chn[],pit_tctrl_tie[]"
    ><![CDATA[
       \t   /// Timer Control Register
@@ -893,7 +897,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="pit_channelNumber"
    ><![CDATA[
       \t   /// %description
@@ -941,7 +945,7 @@
    ]]></variableTemplate>
 
    <for keys="r" values="pit_channelNumber;pit_ldval_tsv[]" >
-      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx"
        ><![CDATA[
@@ -962,7 +966,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;secondsSupport"
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo&amp;&amp;secondsSupport"
       variables="pit_period[]"
       linePadding="xxx"
     ><![CDATA[
@@ -982,7 +986,7 @@
    ]]></variableTemplate>
 
    <for keys="r" values="pit_tctrl_ten[];pit_tctrl_tie[];pit_tctrl_chn[1]" >
-      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -1006,7 +1010,7 @@
 
 <!--   Default Initialisation value -->
 
-   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       separator=","
       terminator=","
       variables="
@@ -1023,7 +1027,7 @@
    ]]>
    </variableTemplate>
 
-   <template codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Default initialisation values for PIT channels
       \t * This value is created from Configure.usbdmProject settings
@@ -1032,7 +1036,7 @@
    ]]></template>
 
    <for keys="ch" dim="=NumChannels" >
-      <variableTemplate  codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate  codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          separator=","
          terminator=","
          variables="
@@ -1049,7 +1053,7 @@
       ]]></variableTemplate>
    </for>
 
-   <template codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t}; // DefaultChannelInitValues\n\n
    ]]>
@@ -1057,8 +1061,8 @@
 
 <!-- Channel Initialisation class configure method -->
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
-             codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true"
+             codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t
       \t/**
       \t * Configure $(_BASENAME) channel from values specified in init
@@ -1080,26 +1084,26 @@
       \t   Ticks ldval = init.ldval;
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true"
              codeGenCondition="/$(_BASENAME)/secondsSupport" ><![CDATA[
       \t   if (init.period != 0) {
       \t      ldval = Ticks(convertSecondsToTicks(init.period)-1);
       \t   }\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
-             codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true"
+             codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t
       \t   pit->CHANNEL[channelNum].LDVAL = ldval;
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true"
              codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t   setCallback(channelNum, init.callbackFunction);
       \t   enableNvicInterrupts(channelNum, init.irqlevel);
       \t\n
    ]]></template>
    <template discardRepeats="true" key="/$(_BASENAME)/InitMethod" namespace="all"
-             codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+             codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t   // Configure channel
       \t   pit->CHANNEL[channelNum].TCTRL = init.tctrl;
       \t}
@@ -1130,20 +1134,20 @@
       \t\n
    ]]></template>
 
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
    ><![CDATA[
-      \t};// class $(_Baseclass)BasicInfo::ChannelInit
+      \t};// class $(_Structname)BasicInfo::ChannelInit
       \t\n
       ]]>
    </template>
 
    <template namespace="usbdm" discardRepeats="true" >
    <![CDATA[
-      }; // class $(_Baseclass)BasicInfo\n\n
+      }; // class $(_Structname)BasicInfo\n\n
    ]]>
    </template>
 
-   <template codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Get clock frequency
       \t *
@@ -1155,7 +1159,7 @@
    ]]></template>
 
    <!-- condition="pit_ltmr64l_lth"  -->
-   <template condition="pit_ltmr64h_lth_present" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template condition="pit_ltmr64h_lth_present" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Read chained counter value (Channels 0 and 1)
       \t *
@@ -1170,7 +1174,7 @@
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" >
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       /**
        * Class representing $(_NAME)
@@ -1179,7 +1183,7 @@
       \n
    ]]></template>
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" >
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * @brief class representing a PIT channel
@@ -1188,7 +1192,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
    <![CDATA[
       /**
        * MACRO defining the start of a interrupt handler for a PIT channel
@@ -1207,7 +1211,7 @@
    ]]></template>
 
    <for keys="ch" dim="=NumChannels">
-      <template key="/PIT/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+      <template key="/PIT/declarations" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
       <![CDATA[
          #define PIT$(_instance)_CHANNEL%(ch)_HANDLER() template<>template<> void Pit$(_instance)::Channel<%(ch)>::irqHandler()\n
       ]]></template>
@@ -1227,11 +1231,11 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n

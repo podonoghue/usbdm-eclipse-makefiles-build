@@ -32,8 +32,6 @@ namespace USBDM {
  */
 class Sim : public SimInfo {
 public:
-$(/SIM/DefaultInitValue: // /SIM/DefaultInitValue not found)
-
 };
 
 /**

@@ -83,7 +83,7 @@
 
 <!--   Configure methods -->
 
-   <template discardRepeats="true" key="/ROM/InitMethod" namespace="all" ><![CDATA[
+   <template discardRepeats="true" key="/ROM/InitMethod" ><![CDATA[
       \t/**
       \t * Configure ROM from values specified in init
       \t *

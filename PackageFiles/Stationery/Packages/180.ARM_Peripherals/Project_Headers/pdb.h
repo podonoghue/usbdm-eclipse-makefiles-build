@@ -363,7 +363,7 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
       for (size_t index=0; index<sizeofArray(divisors); index++) {
 
          // Calculate modulo required to get desired period using this divisor
-         float trialMod = roundf(period*inputClock/divisors[index]);
+         float trialMod = roundf(float(period)*inputClock/divisors[index]);
 //       console.writeln("trialMod = ", trialMod);
 
          if (trialMod <= Info::MinimumResolution) {

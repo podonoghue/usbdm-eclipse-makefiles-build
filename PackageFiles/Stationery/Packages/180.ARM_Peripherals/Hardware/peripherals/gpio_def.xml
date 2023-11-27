@@ -51,7 +51,34 @@
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
 
-   <template key="/PORT/PinIndex" namespace="all" discardRepeats="true" >
+   <if condition="!/SYSTEM/$pcrPattern">
+      <!--
+          *  %i => pin.getPortInstance());     => port instance e.g."A"
+          *  %n => pin.getGpioBitNum());       => bit number within associated GPIO
+          *  %p => polarity);                  => polarity of GPIO
+          *  %c => getClassName());            => class name e.g.  FTM2 => Ftm2
+          *  %b => getClassBaseName());        => base class name e.g. FTM2 => Ftm
+          *  %t => infoTableIndex.toString()); => index in infotable
+      -->
+      <constant key="/SYSTEM/$pcrPattern"       type="String"  value="&quot;PcrTable_T&lt;%cInfo, %t&gt;&quot;" />
+      <!--
+          * %i = port instance e.g."A"
+          * %n = bit number
+          * %p = polarity
+          * e.g. Gpio%i<%b,%p>
+      -->
+      <constant key="/SYSTEM/$gpioPattern"      type="String"  value="&quot;USBDM::Gpio%i&lt;%n,%p&gt;&quot;"   />
+      <!--
+          * %i = port instance e.g."A"
+          * %l = left bit number
+          * %r = right bit number
+          * %p = polarity
+          * e.g. Gpio%iField<%l,%r,%p>
+      -->
+      <constant key="/SYSTEM/$gpioFieldPattern" type="String"  value="&quot;USBDM::Gpio%iField&lt;%l,%r,%p&gt;&quot;" />
+   </if>
+
+   <template key="/PORT/PinIndex" discardRepeats="true" >
    <![CDATA[
       /**
        * Port pin index
@@ -77,20 +104,20 @@
                    I   : 256" >
 
       <for keys="i" dim="32">
-         <template key="/PORT/PinIndex" namespace="all" discardRepeats="true" condition="/GPIO%(Name)/_present"
+         <template key="/PORT/PinIndex" discardRepeats="true" condition="/GPIO%(Name)/_present"
          ><![CDATA[
             \tPT%(Name)%(i) = %(pinIndex)+%(i),\n
          ]]></template>
       </for>
    </for>
-   <template key="/PORT/PinIndex" namespace="all" discardRepeats="true" >
+   <template key="/PORT/PinIndex" discardRepeats="true" >
       <![CDATA[
          \tMAX_PIN_INDEX, // Last available pin (exclusive)
          };
          \t\n
    ]]></template>
 
-   <template key="/GPIO/AccessFunctions" namespace="all" discardRepeats="true" >
+   <template key="/GPIO/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
       \t * Get GPIO from pinIndex
@@ -106,7 +133,7 @@
       \t   }\n
    ]]></template>
    <for keys="Name" values="A;B;C;D;E;F;G;H;I" >
-      <template key="/GPIO/AccessFunctions" namespace="all"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+      <template key="/GPIO/AccessFunctions"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
          condition="/GPIO%(Name)/_present"
       ><![CDATA[
          \t   if (pinIndex <= PinIndex::PT%(Name)31) {
@@ -114,7 +141,7 @@
          \t   }\n
       ]]></template>
    </for>
-   <template key="/GPIO/AccessFunctions" namespace="all" discardRepeats="true" >
+   <template key="/GPIO/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t    static_assert("Illegal Port");
       \t    return 0;
@@ -122,7 +149,7 @@
       \t\n
    ]]></template>
 
-   <template key="/PORT/AccessFunctions" namespace="all" discardRepeats="true" >
+   <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
       \t * Get PORT from pinIndex
@@ -139,7 +166,7 @@
    ]]></template>
    <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
 
-      <template key="/PORT/AccessFunctions" namespace="all"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+      <template key="/PORT/AccessFunctions"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
          condition="/GPIO%(Name)/_present"
       ><![CDATA[
          \t   if (pinIndex <= PinIndex::PT%(Name)31) {
@@ -147,7 +174,7 @@
          \t   }\n
       ]]></template>
    </for>
-   <template key="/PORT/AccessFunctions" namespace="all" discardRepeats="true" >
+   <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t    static_assert("Illegal Port");
       \t    return 0;
@@ -155,7 +182,7 @@
       \t\n
    ]]></template>
 
-   <template key="/PORT/AccessFunctions" namespace="all" discardRepeats="true" >
+   <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
       \t * Get PORT clock enable mask from pinIndex
@@ -172,7 +199,7 @@
    ]]></template>
    <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
 
-      <template key="/PORT/AccessFunctions" namespace="all"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+      <template key="/PORT/AccessFunctions"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
          condition="/GPIO%(Name)/_present"
       ><![CDATA[
          \t   if (pinIndex <= PinIndex::PT%(Name)31) {
@@ -180,7 +207,7 @@
          \t   }\n
       ]]></template>
    </for>
-   <template key="/PORT/AccessFunctions" namespace="all" discardRepeats="true" >
+   <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t    static_assert("Illegal Port");
       \t    return 0;
@@ -188,7 +215,7 @@
       \t\n
    ]]></template>
 
-   <template key="/PORT/AccessFunctions" namespace="all" discardRepeats="true" >
+   <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
       \t * Get IRQ number from pinIndex
@@ -201,7 +228,7 @@
       \t   if (pinIndex > PinIndex::MIN_PIN_INDEX) {\n
    ]]></template>
    <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
-      <template key="/PORT/AccessFunctions" namespace="all"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+      <template key="/PORT/AccessFunctions"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
          condition="/GPIO%(Name)/_present&amp;&amp;/GPIO%(Name)/_irqCount"
       ><![CDATA[
          \t      if (pinIndex <= PinIndex::PT%(Name)31) {
@@ -209,7 +236,7 @@
          \t         return PortIrqs[0];
          \t      }\n
       ]]></template>
-      <template key="/PORT/AccessFunctions" namespace="all"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+      <template key="/PORT/AccessFunctions"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
          condition="/GPIO%(Name)/_present&amp;&amp;!/GPIO%(Name)/_irqCount"
       ><![CDATA[
          \t      if (pinIndex <= PinIndex::PT%(Name)31) {
@@ -217,7 +244,7 @@
          \t      }\n
       ]]></template>
    </for>
-   <template key="/PORT/AccessFunctions" namespace="all" discardRepeats="true" >
+   <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t   }
       \t   // INVALID_PCR, UNMAPPED_PCR, FIXED_NO_PCR
@@ -227,7 +254,7 @@
       \t\n
    ]]></template>
 
-   <template key="/PORT/AccessFunctions" namespace="all" discardRepeats="true" >
+   <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
       \t * Check if interrupt handler has been installed
@@ -241,7 +268,7 @@
    ]]></template>
    <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
 
-      <template key="/PORT/AccessFunctions" namespace="all"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+      <template key="/PORT/AccessFunctions"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
          condition="/GPIO%(Name)/_present"
       ><![CDATA[
          \t      if (pinIndex <= PinIndex::PT%(Name)31) {
@@ -249,7 +276,7 @@
          \t      }\n
       ]]></template>
    </for>
-   <template key="/PORT/AccessFunctions" namespace="all" discardRepeats="true" >
+   <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t   return false;
       \t}
@@ -306,7 +333,7 @@
       <copy source="Snippets/sht10-example.cpp"                  target="Snippets/sht10-example.cpp"                  overwrite="true" derived="true" />
    </projectActionList>
 
-   <template key="/GPIO/declarations" namespace="all"  ><![CDATA[
+   <template key="/GPIO/declarations"  ><![CDATA[
    \t/**
    \t * @brief Convenience template for $(_Class). See @ref Gpio_T
    \t *
@@ -346,7 +373,7 @@
    \t * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
    \t */
    \ttemplate<int bitNum, Polarity polarity=ActiveHigh> class $(_Class) :
-   \t      public Gpio_T<GPIO_DEFAULT_PCR, PcrBase::pinIndexOf(PinIndex::PT$(_instance)0,bitNum), polarity> {};
+   \t      public Gpio_T<Gpio$(_instance)Info::info[bitNum].pcrValue, PcrBase::pinIndexOf(PinIndex::PT$(_instance)0,bitNum), polarity> {};
    \ttypedef PcrBase_T<PinIndex::PT$(_instance)0> Port$(_instance);
 
    \t/**
@@ -386,12 +413,12 @@
    \t * @tparam polarity      Polarity of all pins. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
    \t */
    \ttemplate<int left, int right, uint32_t polarity=ActiveHigh>
-   \tclass $(_Class)Field : public GpioField_T<GPIO_DEFAULT_PCR, PcrBase::pinIndexOf(PinIndex::PT$(_instance)0,left), PcrBase::pinIndexOf(PinIndex::PT$(_instance)0,right), polarity> {};\n\n
+   \tclass $(_Class)Field : public GpioField_T<GPIO_DEFAULT_PCR, PcrBase::pinIndexOf(PinIndex::PT$(_instance)0,left), PcrBase::pinIndexOf(PinIndex::PT$(_instance)0,right), Polarity(polarity)> {};\n\n
    ]]></template>
 
    <aliasOption key="dfer_register_present" optional="true" />
 
-   <template namespace="all" key="/PCR/pcr_enums" condition="/PCR/dfer_register_present" discardRepeats="true" ><![CDATA[
+   <template key="/PCR/pcr_enums" condition="/PCR/dfer_register_present" discardRepeats="true" ><![CDATA[
       // 'Extra' bit used to map DFER use to PCR value
       #define PORT_PCR_DIGITALFILTER(x)    (((uint32_t)(((uint32_t)(x))<<PORT_PCR_DIGITALFILTER_SHIFT))&PORT_PCR_DIGITALFILTER_MASK)
       #define PORT_PCR_DIGITALFILTER_MASK  (0b1<<PORT_PCR_DIGITALFILTER_SHIFT)
@@ -517,7 +544,7 @@
       <choice name="Multiplexor 7 function"          enum="7"         value="7" />
    </choiceOption>
 
-   <template namespace="all" key="/PCR/pcr_enums" discardRepeats="true" ><![CDATA[
+   <template key="/PCR/pcr_enums" discardRepeats="true" ><![CDATA[
       \t/**
       \t * Enable clock to selected ports
       \t *
@@ -557,7 +584,7 @@
    ]]></template>
 
    <for keys="right" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux" >
-      <variableTemplate variables="%(right)" namespace="all" key="/PCR/pcr_enums" discardRepeats="true" ><![CDATA[
+      <variableTemplate variables="%(right)" key="/PCR/pcr_enums" discardRepeats="true" ><![CDATA[
          \tconstexpr inline PcrValue operator|(PcrValue op1, %paramType op2) { return static_cast<PcrValue>(static_cast<uint32_t>(op1)|static_cast<uint32_t>(op2)); }\n
       ]]></variableTemplate>
    </for>
@@ -566,7 +593,6 @@
          <variableTemplate
             variables="%(left),%(right)"
             condition="%(left)&amp;&amp;%(right)"
-            namespace="all"
             key="/PCR/pcr_enums"
             nonDefaultParams="2"
             discardRepeats="true" ><![CDATA[
@@ -575,15 +601,15 @@
       </for>
    </for>
 
-   <template namespace="all" key="/PCR/pcr_enums" discardRepeats="true" ><![CDATA[
+   <template key="/PCR/pcr_enums" discardRepeats="true" ><![CDATA[
       \n
       \t/** Port Clock enable masks **/\n
    ]]></template>
-   <template namespace="all" key="/PCR/pcr_enums" ><![CDATA[
+   <template key="/PCR/pcr_enums" ><![CDATA[
       \tstatic constexpr uint32_t PORT$(_instance)_CLOCK_MASK = SIM_SCGC5_PORT$(_instance)_MASK; ///< PORT$(_instance) clock mask\n
    ]]></template>
 
-   <template namespace="all" key="/PCR/extra_methods" discardRepeats="true" ><![CDATA[
+   <template key="/PCR/extra_methods" discardRepeats="true" ><![CDATA[
       \t/**
       \t *
       \t * Class used to do initialisation of GPIO PCR value
@@ -636,7 +662,6 @@
    ]]></template>
    <variableTemplate
       variables="port_pcr_dse,port_pcr_ode,port_pcr_sre"
-      namespace="all"
       key="/PCR/extra_methods"
       discardRepeats="true"
       nonDefaultParams="3" ><![CDATA[
@@ -654,7 +679,6 @@
    ]]></variableTemplate>
    <variableTemplate
       variables="port_pcr_pd,port_pcr_pfe,port_pcr_irqc"
-      namespace="all"
       key="/PCR/extra_methods"
       discardRepeats="true"
       nonDefaultParams="3" ><![CDATA[
@@ -672,7 +696,6 @@
    ]]></variableTemplate>
    <variableTemplate
       variables="port_pcr_dse,port_pcr_ode,port_pcr_sre,port_pcr_pd,port_pcr_pfe,port_pcr_irqc"
-      namespace="all"
       key="/PCR/extra_methods"
       discardRepeats="true"
       nonDefaultParams="6" ><![CDATA[
@@ -689,7 +712,7 @@
       \t\n
    ]]></variableTemplate>
    <for keys="n" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux">
-      <variableTemplate variables="%(n)" namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
+      <variableTemplate variables="%(n)" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
          \t   /**
          \t    * Constructor
          \t    *
@@ -706,7 +729,7 @@
       ]]></variableTemplate>
    </for>
 
-   <template namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
+   <template key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
       \t   constexpr operator       PcrValue() const { return value; }
       \t   constexpr operator       PcrValue()       { return value; }
       \t   constexpr PcrValue       pcrValue() const { return value; }
@@ -715,7 +738,7 @@
    ]]></template>
 
    <for keys="n" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux">
-      <variableTemplate variables="%(n)" namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
+      <variableTemplate variables="%(n)" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
          \t   constexpr operator         %paramType() const { return static_cast<%paramType>(value&%mask); }
          \t   constexpr operator         %paramType()       { return static_cast<%paramType>(value&%mask); }
          \t   constexpr %paramType       %paramName() const { return static_cast<%paramType>(value&%mask); }
@@ -724,11 +747,11 @@
       ]]></variableTemplate>
    </for>
 
-   <template namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
+   <template key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
       \t};\n\n
    ]]></template>
 
-   <template namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
+   <template key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
       \t/**
       \t * Default PCR value for pins used as GPIO (including multiplexor value)
       \t * High drive strength + Pull-up + GPIO_MUX value
@@ -736,17 +759,16 @@
       \tstatic constexpr PcrValue GPIO_DEFAULT_PCR(
    ]]></template>
    <for keys="v" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc" >
-      <variableTemplate variables="%(v)" namespace="all" key="/PCR/extra_methods" discardRepeats="true" ><![CDATA[
+      <variableTemplate variables="%(v)" key="/PCR/extra_methods" discardRepeats="true" ><![CDATA[
          $(%variable.enum[])|
       ]]></variableTemplate>
    </for>
-   <template namespace="all" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
+   <template key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
       PinMux_Gpio);\n\n
    ]]></template>
 
    <if condition="true">
    <template
-      namespace="all"
       key="/PCR/set_pcr"
       discardRepeats="true" ><![CDATA[
       \t/**
@@ -766,7 +788,6 @@
    ]]></template>
    <template
       condition="/PCR/dfer_register_present"
-      namespace="all"
       key="/PCR/set_pcr"
       discardRepeats="true" ><![CDATA[
       \t      if (pcr&PORT_PCR_DIGITALFILTER_MASK) {
@@ -781,7 +802,6 @@
    ]]></template>
    <template
       condition="!/PCR/dfer_register_present"
-      namespace="all"
       key="/PCR/set_pcr"
       discardRepeats="true" ><![CDATA[
       \t      // Make sure MUX value is correct
@@ -789,7 +809,6 @@
       \t\n
    ]]></template>
    <template
-      namespace="all"
       key="/PCR/set_pcr"
       discardRepeats="true" ><![CDATA[
       \t      // Set PCR register for pin
@@ -800,7 +819,6 @@
    </if>
 
    <template
-      namespace="all"
       key="/PCR/set_pcr"
       discardRepeats="true" ><![CDATA[
       \t/**
@@ -820,7 +838,6 @@
    ]]></template>
    <template
       condition="/PCR/dfer_register_present"
-      namespace="all"
       key="/PCR/set_pcr"
       discardRepeats="true" ><![CDATA[
       \t      if (pcr&PORT_PCR_DIGITALFILTER_MASK) {
@@ -835,7 +852,6 @@
    ]]></template>
    <template
       condition="!/PCR/dfer_register_present"
-      namespace="all"
       key="/PCR/set_pcr"
       discardRepeats="true" ><![CDATA[
       \t      // Make sure MUX value is correct
@@ -843,7 +859,6 @@
       \t\n
    ]]></template>
    <template
-      namespace="all"
       key="/PCR/set_pcr"
       discardRepeats="true" ><![CDATA[
       \t      // Set PCR register for pin
@@ -855,7 +870,6 @@
    <variableTemplate
       variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre,port_pcr_mux"
       defaultParamValue="defaultPcrValue"
-      namespace="all"
       key="/PCR/set_pcr"
       discardRepeats="true" ><![CDATA[
       \t/**
@@ -875,7 +889,6 @@
    <variableTemplate
       variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre,port_pcr_mux"
       condition="/PCR/dfer_register_present"
-      namespace="all"
       key="/PCR/set_pcr"
       discardRepeats="true" ><![CDATA[
       \t      if (pinFilter == PinFilter_Digital) {
@@ -888,7 +901,6 @@
    ]]></variableTemplate>
    <variableTemplate
       variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre,port_pcr_mux"
-      namespace="all"
       key="/PCR/set_pcr"
       discardRepeats="true" ><![CDATA[
       \t      // Set PCR register for pin
@@ -900,7 +912,6 @@
    <variableTemplate
       variables="port_pcr_dse,port_pcr_ode,port_pcr_sre"
       defaultParamValue="defaultPcrValue"
-      namespace="all"
       key="/PCR/set_output"
       discardRepeats="true" ><![CDATA[
       \t/**
@@ -942,7 +953,6 @@
    <variableTemplate
       variables="port_pcr_pd,port_pcr_irqc,port_pcr_pfe"
       defaultParamValue="defaultPcrValue"
-      namespace="all"
       key="/PCR/set_input"
       discardRepeats="true" ><![CDATA[
       \t/**
@@ -984,7 +994,7 @@
    ]]></variableTemplate>
 
    <for keys="v" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux" >
-      <variableTemplate variables="%(v)" namespace="all" key="/PCR/set_pcr_option" discardRepeats="true" ><![CDATA[
+      <variableTemplate variables="%(v)" key="/PCR/set_pcr_option" discardRepeats="true" ><![CDATA[
          \t/**
          \t * Set %description
          \t *
@@ -1001,7 +1011,6 @@
 
    <variableTemplate
       variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre"
-      namespace="all"
       key="/GPIO/set_in_out"
       defaultParamValue="defaultPcrValue"
       discardRepeats="true" ><![CDATA[
@@ -1030,7 +1039,6 @@
 
    <variableTemplate
       variables="port_pcr_dse,port_pcr_ode,port_pcr_sre"
-      namespace="all"
       key="/GPIO/set_output"
       defaultParamValue="defaultPcrValue"
       discardRepeats="true" ><![CDATA[
@@ -1060,7 +1068,6 @@
 
    <variableTemplate
       variables="port_pcr_pd,port_pcr_irqc,port_pcr_pfe"
-      namespace="all"
       key="/GPIO/set_input"
       defaultParamValue="defaultPcrValue"
       discardRepeats="true" ><![CDATA[
@@ -1086,7 +1093,6 @@
 
    <variableTemplate
       variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre"
-      namespace="all"
       key="/GPIO/field_set_in_out"
       defaultParamValue="defaultPcrValue"
       discardRepeats="true" ><![CDATA[
@@ -1110,7 +1116,6 @@
 
    <variableTemplate
       variables="port_pcr_dse,port_pcr_ode,port_pcr_sre"
-      namespace="all"
       key="/GPIO/field_set_output"
       defaultParamValue="defaultPcrValue"
       discardRepeats="true" ><![CDATA[
@@ -1135,7 +1140,6 @@
 
    <variableTemplate
       variables="port_pcr_pd,port_pcr_irqc,port_pcr_pfe"
-      namespace="all"
       key="/GPIO/field_set_input"
       defaultParamValue="defaultPcrValue"
       discardRepeats="true" ><![CDATA[

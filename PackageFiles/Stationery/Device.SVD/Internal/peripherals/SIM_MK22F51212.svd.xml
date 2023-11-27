@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MK22F51212
 -->
       <peripheral>
@@ -1759,7 +1759,7 @@ software must clear this bit to allow other trigger sources to assert</descripti
                   <field derivedFrom="EWM" > <name>UART1</name> <description>UART1 Clock Gate Control</description> <bitOffset>11</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>UART2</name> <description>UART2 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>USB0</name> <description>USB Clock Gate Control</description> <bitOffset>18</bitOffset> </field>
-                  <field derivedFrom="EWM" > <name>CMP0</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="EWM" > <name>CMP</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>VREF</name> <description>VREF Clock Gate Control</description> <bitOffset>20</bitOffset> </field>
                </fields>
             </register>
@@ -1832,8 +1832,8 @@ This bit controls the clock gate to the LPUART0 module</description> <bitOffset>
                   <field derivedFrom="FTF" > <name>SPI0</name> <description>SPI0 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>SPI1</name> <description>SPI1 Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>I2S0</name> <description>I2S Clock Gate Control</description> <bitOffset>15</bitOffset> </field>
-                  <field derivedFrom="FTF" > <name>CRC</name> <description>CRC Clock Gate Control</description> <bitOffset>18</bitOffset> </field>
-                  <field derivedFrom="FTF" > <name>PDB</name> <description>PDB Clock Gate Control</description> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>CRC0</name> <description>CRC Clock Gate Control</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>PDB0</name> <description>PDB Clock Gate Control</description> <bitOffset>22</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>PIT</name> <description>PIT Clock Gate Control</description> <bitOffset>23</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>FTM0</name> <description>FTM0 Clock Gate Control</description> <bitOffset>24</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>FTM1</name> <description>FTM1 Clock Gate Control</description> <bitOffset>25</bitOffset> </field>
@@ -2144,7 +2144,7 @@ Divider output clock = Divider input clock*[(USBFRAC+1)/(USBDIV+1)]</description
                      <name>MAXADDR0</name>
                      <description>Max address block 0\n
 This field concatenated with 13 trailing zeros indicates the first invalid address of flash block 0 (program flash 0).
-For example, if MAXADDR0 = 0x20 the first invalid address of flash block 0 is 0x0004_0000. 
+For example, if MAXADDR0 = 0x20 the first invalid address of flash block 0 is 0x0004_0000.
 This would be the MAXADDR0 value for a device with 256 KB program flash in flash block 0</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>7</bitWidth>

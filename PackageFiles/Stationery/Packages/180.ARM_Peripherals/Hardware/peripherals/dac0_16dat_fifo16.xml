@@ -4,7 +4,6 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Digital to Analogue Converter">
 
-   <intOption key="num_dat"                      value="16" hidden="true" /> <!-- Number of DAT registers   -->
    <constant key="dac_c1_dacbfmd_swing_present"  value="1" type="String"  /> <!-- Swing mode available      -->
    <constant key="dac_c1_dacbfmd_fifo_present"   value="1" type="String"  /> <!-- FIFO operation available  -->
 

@@ -6,15 +6,15 @@ cd ${HOME_DIR}
 
 #exit
 
-FROM="dim=\"\([a-zA-Z/]\)"
-TO="dim=\"=\1"
+FROM="deleteOption"
+TO="deleteVariable"
 
 echo starting
 rm -r new
 mkdir new
 
 for filename in *.xml; do
-   echo sed  "s/${FROM}/${TO}/g" "${filename}" "new/${filename}"
-   sed  "s/${FROM}/${TO}/g" "${filename}" >"new/${filename}"
+   echo sed  "s#${FROM}#${TO}#g" "${filename}" "new/${filename}"
+   sed  "s#${FROM}#${TO}#g" "${filename}" >"new/${filename}"
 done
 

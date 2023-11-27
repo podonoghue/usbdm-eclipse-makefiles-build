@@ -58,7 +58,7 @@
    <constant key="expandedPinMap" type="String" value="ExpandPinList(inputPinMap)" />
 
    <bitmaskOption key="kbi_pe_kbipe" condition="kbi_pe_kbipe_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="KbiEnableMask"
       enumType="uint32_t"
       valueFormat="KbiEnableMask(%s)"
@@ -74,7 +74,7 @@
    <!-- ************* ES ****************** -->
 
    <bitmaskOption key="kbi_es_kbedg" condition="kbi_es_kbedg_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="KbiPolarityMask"
       enumType="uint32_t"
       valueFormat="KbiPolarityMask(%s)"
@@ -89,7 +89,7 @@
    <!-- ************* SC ****************** -->
 
    <binaryOption key="kbi_sc_kback" condition="kbi_sc_kback_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       hidden="true"
       typeName="KbiAck"
       description="KBI Acknowledge"
@@ -98,7 +98,7 @@
    </binaryOption >
 
    <binaryOption key="kbi_sc_kbie" condition="kbi_sc_kbie_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="KbiInterrupt"
       description="KBI Interrupt Enable" >
       <choice name="Interrupt disabled"  value="0" enum="Disabled"/>
@@ -106,7 +106,7 @@
    </binaryOption >
 
    <binaryOption key="kbi_sc_kbmod" condition="kbi_sc_kbmod_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="KbiDetectionMode"
       description="KBI Detection Mode" >
       <choice name="Edges only"       value="0" enum="EdgesOnly"/>
@@ -227,7 +227,7 @@
 
 <!--   ========== KBI Init class =============================== -->
 
-   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template key="init_description" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Class)
@@ -343,7 +343,7 @@
    ]]>
    </template>
 
-   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t
       \t/** Callback for programmatically set handler */
@@ -352,7 +352,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -379,21 +379,21 @@
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="kbi_pe_kbipe"
    ><![CDATA[
       \t   /// KBI Pin Enables
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="kbi_es_kbedg"
    ><![CDATA[
       \t   /// KBI Edge Selects
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="kbi_sc_kback,kbi_sc_kbie,kbi_sc_kbmod"
    ><![CDATA[
       \t   /// KBI Status and Control Register
@@ -410,7 +410,7 @@
 
 <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -423,7 +423,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Configure $(_BASENAME) from values specified in init
       \t *
@@ -436,14 +436,14 @@
       \t   Info::enableClock();
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
              condition="irqHandlingMethod" ><![CDATA[
       \t   Info::setCallback(init.callbackFunction);
       \t   enableNvicInterrupts(init.irqlevel);
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t   // ..........  Regs to init .......... ;
       \t   kbi->SC    = KBI_SC_KBACK_MASK;
       \t   kbi->PE    = init.pe;
@@ -491,7 +491,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="kbi_pe_kbipe"
       params="enableMask"
       nonDefaultParams="2"
@@ -514,7 +514,7 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="kbi_es_kbedg"
       params="polarityMask"
       nonDefaultParams="2"
@@ -537,7 +537,7 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="/PORT/pin_index,kbi_pe_kbipe,kbi_es_kbedg"
       params=",polarity"
       linePadding="xxx" >
@@ -570,7 +570,7 @@
             kbi_sc_kbie;
             kbi_sc_kbmod
             " >
-      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -594,7 +594,7 @@
 
 <!--   Default Initialisation value -->
 
-   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       separator=","
       terminator=","
       variables="
@@ -612,7 +612,7 @@
       \t};\n\n
    ]]></variableTemplate>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
       <![CDATA[
       \t}; // $(_Class)BasicInfo::Init\n\n
    ]]>
@@ -633,7 +633,7 @@
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
    \t/**
    \t * Class representing $(_NAME)
    \t */
@@ -650,11 +650,11 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n

@@ -753,6 +753,18 @@
       <param type="long" value="1MHz"   />     <!-- VLPR Flash        -->
    </validate>
 
+   <!-- ************* Startup ****************** -->
+
+   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/StartupEarly" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
+
    <xi:include href="simFiles-MK.xml"/>
 
 </peripheralPage>

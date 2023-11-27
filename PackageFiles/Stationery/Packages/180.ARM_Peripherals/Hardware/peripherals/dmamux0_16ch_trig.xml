@@ -1,105 +1,419 @@
-<?xml version="1.0" encoding="UTF-8"
-?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- dmamux0_16ch_trig.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="DMA channel multiplexor" >
 
-   <xi:include href="default_instance.xml"/>
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="enablePeripheral.xml"  />
+   <title />
 
-   <aliasOption key="/DMA0/NumChannels" name="NumChannels" />
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
 
-   <choiceOption key="dma_chcfg0"
-      description="Mapping of DMA source (slot) to DMA channel" >
-      <choice value="0"  name="Disabled" />
-      <choice value="2"  name="UART0 Receive" />
-      <choice value="3"  name="UART0 Transmit" />
-      <choice value="4"  name="UART1 Receive" />
-      <choice value="5"  name="UART1 Transmit" />
-      <choice value="6"  name="UART2 Receive" />
-      <choice value="7"  name="UART2 Transmit" />
-      <choice value="14" name="I2S0 Receive" />
-      <choice value="15" name="I2S0 Transmit" />
-      <choice value="16" name="SPI0 Receive" />
-      <choice value="17" name="SPI0 Transmit" />
-      <choice value="18" name="SPI1 Receive" />
-      <choice value="19" name="SPI1 Transmit" />
-      <choice value="22" name="I2C0" />
-      <choice value="22" name="I2C1" />
-      <choice value="24" name="FTM0 Channel 0" />
-      <choice value="25" name="FTM0 Channel 1" />
-      <choice value="26" name="FTM0 Channel 2" />
-      <choice value="27" name="FTM0 Channel 3" />
-      <choice value="28" name="FTM0 Channel 4" />
-      <choice value="29" name="FTM0 Channel 5" />
-      <choice value="30" name="FTM0 Channel 6" />
-      <choice value="31" name="FTM0 Channel 7" />
-      <choice value="32" name="FTM1 Channel 0" />
-      <choice value="33" name="FTM1 Channel 1" />
-      <choice value="34" name="FTM2 Channel 0" />
-      <choice value="35" name="FTM2 Channel 1" />
-      <choice value="40" name="ADC0" />
-      <choice value="41" name="ADC1" />
-      <choice value="42" name="CMP0" />
-      <choice value="43" name="CMP1" />
-      <choice value="45" name="DAC0" />
-      <choice value="47" name="CMT" />
-      <choice value="48" name="PDB" />
-      <choice value="49" name="Port A" />
-      <choice value="50" name="Port B" />
-      <choice value="51" name="Port C" />
-      <choice value="52" name="Port D" />
-      <choice value="53" name="Port E" />
-      <choice value="54" name="Always enabled 54" />
-      <choice value="55" name="Always enabled 55" />
-      <choice value="56" name="Always enabled 56" />
-      <choice value="57" name="Always enabled 57" />
-      <choice value="58" name="Always enabled 58" />
-      <choice value="59" name="Always enabled 59" />
-      <choice value="60" name="Always enabled 60" />
-      <choice value="61" name="Always enabled 61" />
-      <choice value="62" name="Always enabled 62" />
-      <choice value="63" name="Always enabled 63" />
-   </choiceOption>
+<!--
+    * Template substitutions
+    *
+    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
+    * <li>%valueExpression            Numeric variable value e.g. 0x3
+    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
+    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
+    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
+    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
+    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
+    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * <li>%params                     Formatted parameter list for function
+    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
+    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
+    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
+    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
+    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
+    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
+    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
+    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
+-->
 
-   <choiceOption key="dma_chcfg1"  derivedFrom="dma_chcfg0"/>
-   <choiceOption key="dma_chcfg2"  derivedFrom="dma_chcfg0"/>
-   <choiceOption key="dma_chcfg3"  derivedFrom="dma_chcfg0"/>
-   <choiceOption key="dma_chcfg4"  derivedFrom="dma_chcfg0"/>
-   <choiceOption key="dma_chcfg5"  derivedFrom="dma_chcfg0"/>
-   <choiceOption key="dma_chcfg6"  derivedFrom="dma_chcfg0"/>
-   <choiceOption key="dma_chcfg7"  derivedFrom="dma_chcfg0"/>
-   <choiceOption key="dma_chcfg8"  derivedFrom="dma_chcfg0"/>
-   <choiceOption key="dma_chcfg9"  derivedFrom="dma_chcfg0"/>
-   <choiceOption key="dma_chcfg10" derivedFrom="dma_chcfg0"/>
-   <choiceOption key="dma_chcfg11" derivedFrom="dma_chcfg0"/>
-   <choiceOption key="dma_chcfg12" derivedFrom="dma_chcfg0"/>
-   <choiceOption key="dma_chcfg13" derivedFrom="dma_chcfg0"/>
-   <choiceOption key="dma_chcfg14" derivedFrom="dma_chcfg0"/>
-   <choiceOption key="dma_chcfg15" derivedFrom="dma_chcfg0"/>
-   
-   <xi:include href="clockOption.xml"/>
-   
-   <template><![CDATA[
-      \t// Number of DMA channels implemented
-      \tstatic constexpr unsigned NumChannels = $(/DMA0/NumChannels);
-      
-      \tstatic constexpr uint8_t chcfg0_source  = DMAMUX_CHCFG_SOURCE($(dma_chcfg0));
-      \tstatic constexpr uint8_t chcfg1_source  = DMAMUX_CHCFG_SOURCE($(dma_chcfg1));
-      \tstatic constexpr uint8_t chcfg2_source  = DMAMUX_CHCFG_SOURCE($(dma_chcfg2));
-      \tstatic constexpr uint8_t chcfg3_source  = DMAMUX_CHCFG_SOURCE($(dma_chcfg3));
-      \tstatic constexpr uint8_t chcfg4_source  = DMAMUX_CHCFG_SOURCE($(dma_chcfg4));
-      \tstatic constexpr uint8_t chcfg5_source  = DMAMUX_CHCFG_SOURCE($(dma_chcfg5));
-      \tstatic constexpr uint8_t chcfg6_source  = DMAMUX_CHCFG_SOURCE($(dma_chcfg6));
-      \tstatic constexpr uint8_t chcfg7_source  = DMAMUX_CHCFG_SOURCE($(dma_chcfg7));
-      \tstatic constexpr uint8_t chcfg8_source  = DMAMUX_CHCFG_SOURCE($(dma_chcfg8));
-      \tstatic constexpr uint8_t chcfg9_source  = DMAMUX_CHCFG_SOURCE($(dma_chcfg9));
-      \tstatic constexpr uint8_t chcfg10_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg10));
-      \tstatic constexpr uint8_t chcfg11_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg11));
-      \tstatic constexpr uint8_t chcfg12_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg12));
-      \tstatic constexpr uint8_t chcfg13_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg13));
-      \tstatic constexpr uint8_t chcfg14_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg14));
-      \tstatic constexpr uint8_t chcfg15_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg15));\n
+   <!-- ************* Constants ****************** -->
+   <intOption key="NumChannels" locked="true" derived="true"
+      value="=dmamux_chcfg_dim"
+      description="Number of DMA channels"
+      toolTip="The number of DMA channels available"/>
+
+   <intOption key="NumPeriodicChannels" locked="true" derived="true"
+      value="=/PIT/pit_channel_dim"
+      description="Number of DMA channels with periodic feature"
+      toolTip="Each periodic channel may be controlled by the corresponding PIT channel" />
+
+   <for keys="var" values="NumChannels;NumPeriodicChannels" >
+      <variableTemplate variables="%(var)"
+         initExpressionOnSameLine="true"
+         linePadding="//x"
+         tooltipPadding=""
+      ><![CDATA[
+         \t// %tooltip
+         \tstatic constexpr unsigned %(var) = %initExpression;
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
+
+   <!-- ************* CHCFG ****************** -->
+
+   <for keys="ch" dim="=NumChannels" >
+
+      <title description="Channel %(ch)" />
+
+      <choiceOption key="dmamux_chcfg_mode[%(ch)]" condition="dmamux_chcfg_enbl_present"
+         enabledBy="enablePeripheralSupport"
+         valueFormat="DMAMUX_CHCFG_ENBL(%s),DMAMUX_CHCFG_TRIG(%s)"
+         typeName="DmamuxMode"
+         toolTip="Controls the mode of operation of the channel"
+         description="DMA Channel Mode"
+      >
+         <choice name="Disabled"                     value="0,0" enum="Disabled"
+            toolTip="The channel is disabled"
+         />
+         <choice name="Request directly routed"      value="1,0" enum="Continuous"
+            toolTip="The channel is not throttled"
+         />
+         <choice name="Periodic triggering enabled"  value="1,1" enum="Throttled" condition="(%(ch)&lt;@NumPeriodicChannels)"
+            toolTip="The channel is throttled by the corresponding PIT channel"
+         />
+      </choiceOption>
+
+      <choiceOption key="dmamux_chcfg_source[%(ch)]" condition="dmamux_chcfg_source_present"
+         enabledBy="dmamux_chcfg_mode[%(ch)]>0"
+         derivedFrom="/DMAMUX0/dmamux_chcfg_src"
+         >
+      </choiceOption>
+   </for>
+
+<!-- Setters and getters -->
+
+   <for keys="field           : get   : set   : genCode                 : name"
+        values="
+         dmamux_chcfg_mode[]    : true  : true  : enableGettersAndSetters : ChannelMode;
+         dmamux_chcfg_source[]  : true  : true  : enableGettersAndSetters : Source" >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(DmaChannelNum dmaChannelNum, %params) {
+         \t   %register[dmaChannelNum] = (%register[dmaChannelNum]&~%mask) | %paramExpression;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)(DmaChannelNum dmaChannelNum) {
+         \t   return %paramType((%register[dmaChannelNum]&~%mask));
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <!--   ========== class $(_Structname)BasicInfo =============================== -->
+
+   <template namespace="baseClass" ><![CDATA[
+      class $(_Structname)BasicInfo {
+
+      public:\n
    ]]></template>
+
+   <!--   ========== Interrupt handling =============================== -->
+
+   <!--   ========== DMAMUX Init class =============================== -->
+
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of a $(_Baseclass) channel (slot)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_Class)::Init $(_name)Init {
+      \t *    {
+      \t *    DmaChannelNum_3,
+      \t *    DmamuxChcfgEnbl_RequestDirectlyRouted , // DMA Channel Enable - Channel enabled
+      \t *    DmamuxSlot_TPM0_Channel2,               // Mapping of DMA slot to DMA channel - TPM0 Channel 2
+      \t *    },
+      \t *    {
+      \t *    DmaChannelNum_1,
+      \t *    DmamuxChcfgEnbl_PeriodicTriggeringEnabled ,   // DMA Channel Enable - Channel enabled and throttled by PIT channel
+      \t *    DmamuxSlot_TPM0_Overflow,                     // Mapping of DMA slot to DMA channel - TPM0 overflow
+      \t *    },
+      \t * };
+      \t *
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_name)Init)
+      \t * @endcode
+      \t */
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+   <!--   Member variables -->
+
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   ><![CDATA[
+      \t   /// Channel number for this configuration
+      \t   DmaChannelNum channelNum = DmaChannelNum_None;\n\n
+   ]]></template>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="dmamux_chcfg_mode[],dmamux_chcfg_trig[],dmamux_chcfg_source[]"
+   ><![CDATA[
+      \t   /// Channel Configuration Register
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <!--   Constructors -->
+
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      linePadding="xxx" >
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for Dma ChannelNum
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      \t    * @param  dmaChannelNum DMA ChannelNumber for this configuration
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(DmaChannelNum dmaChannelNum, Types... rest) : Init(rest...) {
+      \t
+      \t      channelNum = dmaChannelNum;
+      \t   }
+      \t\n
+   ]]>
+   </template>
+   <for keys="r"
+      values="
+            dmamux_chcfg_mode[];
+            dmamux_chcfg_trig[];
+            dmamux_chcfg_source[]
+            " >
+      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </variableTemplate>
+   </for>
+
+<!--   Default Initialisation value -->
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      separator=","
+      terminator=","
+      variables="
+            dmamux_chcfg_mode[],
+            dmamux_chcfg_trig[],
+            dmamux_chcfg_source[]
+         "
+   ><![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue[] = {\n
+   ]]>
+   </variableTemplate>
+   <for keys="ch" dim="=/DMA$(_instance)/NumChannels" >
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+         variables="dmamux_chcfg_mode[%(ch)],dmamux_chcfg_trig[%(ch)],dmamux_chcfg_source[%(ch)]"
+         terminator=","
+         separator=","
+      ><![CDATA[
+         \t   {\n
+         \t   DmaChannelNum_%(ch),
+         \t   %initExpression
+         \t   },\n
+      ]]></variableTemplate>
+   </for>
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t}; // $(_Class)Info::DefaultInitValue
+      \t\n
+   ]]></template>
+
+<!--   Configure methods -->
+
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) channel
+      \t * It is assumed that the clock to the peripheral is already enabled.
+      \t *
+      \t * @param dmaChannelNum Identifies channel to initialise
+      \t * @param init          Initialisation values
+      \t *
+      \t * @note The channel number in the initialisation is ignored
+      \t */
+      \tstatic void configure(DmaChannelNum dmaChannelNum, const typename Info::Init &init) {
+      \t
+      #if defined(DEBUG_BUILD)
+      \t   if constexpr (Info::NumChannels>Info::NumPeriodicChannels) {
+      \t      DmamuxMode mode = DmamuxMode(init.chcfg&(DMAMUX_CHCFG_ENBL_MASK|DMAMUX_CHCFG_TRIG_MASK));
+      \t      usbdm_assert((dmaChannelNum>Info::NumPeriodicChannels) && (mode == DmamuxMode_Throttled), "Channel cannot be throttled");
+      \t   }
+      #endif
+      \t
+      \t   // Must clear before changing
+      \t   dmamux->CHCFG[dmaChannelNum] = 0;
+      \t   dmamux->CHCFG[dmaChannelNum] = init.chcfg;
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) channel
+      \t * It is assumed that the clock to the peripheral is enabled.
+      \t *
+      \t * @param init Initialisation values
+      \t *
+      \t * @note The channel number in the initialisation is used to select the channel being updated
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t
+      \t   configure(init.channelNum, init);
+      \t}
+      \t
+      \t/**
+      \t * Configure all $(_BASENAME) channels
+      \t * The clock to the peripheral is enabled.
+      \t *
+      \t * @param init Array of initialisation values
+      \t *
+      \t * @note The channel numbers in the initialisations are used to select the channel being updated
+      \t */
+      \ttemplate<size_t N>
+      \tstatic void configure(const typename Info::Init (&init)[N]) {
+      \t
+      \t   // Enable peripheral clock
+      \t   Info::enableClock();
+      \t
+      \t   for (unsigned channel=0; channel<N; channel++) {
+      \t      configure(init[channel]);
+      \t   }
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t * The clock to the peripheral is enabled.
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}\n
+   ]]>
+   </template>
+
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t}; // class $(_Structname)BasicInfo::Init
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="baseClass" >
+   <![CDATA[
+      }; // class $(_Structname)BasicInfo
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ************* Common ****************** -->
+
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Class representing $(_NAME)
+      \t */
+      \t//class $(_Class) : public $(_Baseclass)_T<$(_Class)Info> {};
+      \ttypedef $(_Baseclass)_T<$(_Class)Info> $(_Class);
+      \t\n
+   ]]>
+   </template>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
+   </validate>
+
+   <projectActionList id="dmamux_files" >
+      <copy source="Project_Headers/dmamux.h"  target="Project_Headers/dmamux.h"  overwrite="true"  derived="true" />
+   </projectActionList>
+
+   <!-- ************* Startup ****************** -->
+
+   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
+
+   <!-- ************* SIM configuration ****************** -->
+   <category name="Advanced" description="SIM configuration">
+      <aliasOption key="/SIM/sim_scgc6_$(_name)"      locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_scgc6_$(_basename)"  locked="false" optional="true" />
+   </category>
 
 </peripheralPage>

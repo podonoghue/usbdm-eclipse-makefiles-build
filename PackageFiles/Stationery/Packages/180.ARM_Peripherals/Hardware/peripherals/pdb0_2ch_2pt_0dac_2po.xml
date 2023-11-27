@@ -6,11 +6,6 @@ Devices using this peripheral:
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="PDB">
 
-   <intOption key="NumChannels"            value="2" description="Number of channels"            /> <!-- PDB Channels    -->
-   <intOption key="NumPreTriggers"         value="2" description="Number of (ADC) Pre-triggers"  /> <!-- Pretriggers     -->
-   <intOption key="NumDacIntervalTriggers" value="0" description="Number of DAC triggers"        /> <!-- to DAC triggers -->
-   <intOption key="NumPulseOutputs"        value="2" description="Number of Pulse outputs"       /> <!-- to CMP windows  -->
-
    <xi:include href="pdb_def.xml"/>
 
 </peripheralPage>

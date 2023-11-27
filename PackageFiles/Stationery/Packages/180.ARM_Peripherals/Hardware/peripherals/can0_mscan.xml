@@ -56,7 +56,7 @@
    <!-- ************* CANCTL0 ****************** -->
 
    <binaryOption key="can_canctl0_rxfrm" condition="can_canctl0_rxfrm_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanRxFrameFlag"
       hidden="true"
       derived="true"
@@ -68,7 +68,7 @@
    </binaryOption >
 
    <binaryOption key="can_canctl0_cswai" condition="can_canctl0_cswai_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanStopInWait"
       toolTip="This bit allows for lower power consumption in wait mode"
       description="CAN Stops in Wait Mode" >
@@ -77,7 +77,7 @@
    </binaryOption >
 
    <binaryOption key="can_canctl0_time" condition="can_canctl0_time_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanTimer"
       toolTip="Enables an internal 16-bit wide free running timer which is clocked by the bit clock rate"
       description="Timer Enable" >
@@ -86,7 +86,7 @@
    </binaryOption >
 
    <binaryOption key="can_canctl0_wupe" condition="can_canctl0_wupe_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanWakeup"
       toolTip="Allows the MSCAN to restart from sleep mode or from power down mode when traffic detected on CAN"
       description="WakeUp Enable" >
@@ -95,7 +95,7 @@
    </binaryOption >
 
    <binaryOption key="can_canctl0_slprq" condition="can_canctl0_slprq_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanSleep"
       toolTip="This bit requests the MSCAN to enter sleep mode"
       description="Sleep Mode Request" >
@@ -104,7 +104,7 @@
    </binaryOption >
 
    <binaryOption key="can_canctl0_initrq" condition="can_canctl0_initrq_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanInitialisationReq"
       toolTip="When this bit is set by the CPU, the MSCAN skips to initialization mode.\n
                Any ongoing transmission or reception is aborted and synchronization to the CAN bus is lost.\n
@@ -117,7 +117,7 @@
    <!-- ************* CANCTL1 ****************** -->
 
    <binaryOption key="can_canctl1_cane" condition="can_canctl1_cane_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanEnable"
       toolTip="Module enable"
       description="MSCAN Enable" >
@@ -126,7 +126,7 @@
    </binaryOption >
 
    <binaryOption key="can_canctl1_clksrc" condition="can_canctl1_clksrc_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanClockSource"
       toolTip="This bit defines the clock source for the MSCAN module"
       description="MSCAN Clock Source" >
@@ -135,7 +135,7 @@
    </binaryOption >
 
    <binaryOption key="can_canctl1_loopb" condition="can_canctl1_loopb_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanLoopback"
       toolTip="Allows the MSCAN to perform an internal loop-back test"
       description="Loop-back Self Test Mode" >
@@ -144,7 +144,7 @@
    </binaryOption >
 
    <binaryOption key="can_canctl1_listen" condition="can_canctl1_listen_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanListen"
       toolTip="This bit configures the MSCAN as a CAN bus monitor"
       description="Listen Only Mode" >
@@ -153,7 +153,7 @@
    </binaryOption >
 
    <binaryOption key="can_canctl1_borm" condition="can_canctl1_borm_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanBusOffRecovery"
       toolTip="This bit configures the bus-off state recovery mode of the MSCAN\n
                See Bosch CAN 2.0A/B protocol specification"
@@ -163,7 +163,7 @@
    </binaryOption >
 
    <binaryOption key="can_canctl1_wupm" condition="can_canctl1_wupm_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanWakeUpMode"
       toolTip="If WUPE in CANCTL0 is enabled, this bit defines whether the integrated low-pass filter is\n
                applied to protect the MSCAN from spurious wakeup\n
@@ -176,7 +176,7 @@
    <!-- ************* CANBTR0 ****************** -->
 
    <choiceOption key="can_canbtr0_sjw" condition="can_canbtr0_sjw_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanJumpWidth"
       description="Synchronization Jump Width"
       toolTip="The synchronization jump width defines the maximum number of time quanta (Tq) clock cycles a bit can\n
@@ -188,7 +188,7 @@
    </choiceOption>
 
    <intOption key="can_canbtr0_brp" condition="can_canbtr0_brp_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanBaudPrescale"
       enumType="uint8_t"
       description="Baud Rate Prescaler"
@@ -200,7 +200,7 @@
    <!-- ************* CANBTR1 ****************** -->
 
    <binaryOption key="can_canbtr1_samp" condition="can_canbtr1_samp_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanCanbtr1Samp"
       toolTip="This bit determines the number of CAN bus samples taken per bit time,\n
                For 3 samples, PHASE_SEG1 must be at least 2 time quanta (Tq)"
@@ -210,7 +210,7 @@
    </binaryOption >
 
    <choiceOption key="can_canbtr1_tseg1" condition="can_canbtr1_tseg1_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       enumType="uint8_t"
       typeName="CanTimeSegment1"
       description="Time Segment 1"
@@ -234,7 +234,7 @@
    </choiceOption>
 
    <choiceOption key="can_canbtr1_tseg2" condition="can_canbtr1_tseg2_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       enumType="uint8_t"
       typeName="CanTimeSegment2"
       description="Time Segment 2"
@@ -253,7 +253,7 @@
    <!-- ************* CANRFLG ****************** -->
 
    <binaryOption key="can_canrflg_wupif" condition="can_canrflg_wupif_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanCanrflgWupif"
       toolTip="If the MSCAN detects CAN bus activity while in sleep mode and CANTCTL0[WUPE] = 1, the module will\n
                set WUPIF. If not masked, a wake-up interrupt is pending while this flag is set"
@@ -263,7 +263,7 @@
    </binaryOption >
 
    <binaryOption key="can_canrflg_cscif" condition="can_canrflg_cscif_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanCanrflgCscif"
       toolTip="This flag is set when the MSCAN changes its current CAN bus status due to the actual value of the\n
                transmit error counter (TEC) and the receive error counter (REC)"
@@ -273,7 +273,7 @@
    </binaryOption >
 
    <binaryOption key="can_canrflg_ovrif" condition="can_canrflg_ovrif_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanCanrflgOvrif"
       toolTip="This flag is set when a data overrun condition occurs. If not masked, an error interrupt is pending while this
 flag is set"
@@ -283,7 +283,7 @@ flag is set"
    </binaryOption >
 
    <binaryOption key="can_canrflg_rxf" condition="can_canrflg_rxf_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanCanrflgRxf"
       toolTip="RXF is set by the MSCAN when a new message is shifted in the receiver FIFO"
       description="Receive Buffer Full Flag" >
@@ -294,7 +294,7 @@ flag is set"
    <!-- ************* CANRIER ****************** -->
 
    <binaryOption key="can_canrier_wupie" condition="can_canrier_wupie_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanCanrierWupie"
       toolTip="WUPIE and WUPE must both be enabled if the recovery mechanism from stop or wait is required"
       description="WakeUp Interrupt Enable" >
@@ -303,7 +303,7 @@ flag is set"
    </binaryOption >
 
    <binaryOption key="can_canrier_cscie" condition="can_canrier_cscie_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanCanrierCscie"
       description="CAN Status Change Interrupt Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -311,7 +311,7 @@ flag is set"
    </binaryOption >
 
    <choiceOption key="can_canrier_rstate" condition="can_canrier_rstate_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanCanrierRstate"
       toolTip="These RSTAT enable bits control the sensitivity level in which receiver state changes\n
                are causing CSCIF interrupts"
@@ -323,7 +323,7 @@ flag is set"
    </choiceOption >
 
    <choiceOption key="can_canrier_tstate" condition="can_canrier_tstate_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanCanrierTstate"
       toolTip="These TSTAT enable bits control the sensitivity level in which transmitter state
                changes are causing CSCIF interrupts"
@@ -335,7 +335,7 @@ flag is set"
    </choiceOption >
 
    <binaryOption key="can_canrier_ovrie" condition="can_canrier_ovrie_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanCanrierOvrie"
       description="Overrun Interrupt Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -343,7 +343,7 @@ flag is set"
    </binaryOption >
 
    <binaryOption key="can_canrier_rxfie" condition="can_canrier_rxfie_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanCanrierRxfie"
       description="Receiver Full Interrupt Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -353,7 +353,7 @@ flag is set"
    <!-- ************* CANTFLG ****************** -->
 
    <binaryOption key="can_cantflg_txe" condition="can_cantflg_txe_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanCantflgTxe"
       toolTip="These flags indicates that the associated transmit message buffer is empty, and\n
                thus not scheduled for transmission"
@@ -365,7 +365,7 @@ flag is set"
    <!-- ************* CANTIER ****************** -->
 
    <binaryOption key="can_cantier_txeie" condition="can_cantier_txeie_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanCantierTxeie"
       description="Transmitter Empty Interrupt Enable" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
@@ -375,7 +375,7 @@ flag is set"
    <!-- ************* CANTARQ ****************** -->
 
    <binaryOption key="can_cantarq_abtrq" condition="can_cantarq_abtrq_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanCantarqAbtrq"
       toolTip="The CPU sets the ABTRQx bit to request that a scheduled message buffer (TXEx = 0) be aborted"
       description="Abort Request" >
@@ -386,7 +386,7 @@ flag is set"
    <!-- ************* CANTBSEL ****************** -->
 
    <intOption key="can_cantbsel_tx" condition="can_cantbsel_tx_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="uint8_t"
       description="Transmit Buffer Select"
       toolTip="The lowest numbered bit places the respective transmit buffer in the CANTXFG register space (e.g., TX1 = 1\n
@@ -396,7 +396,7 @@ flag is set"
    <!-- ************* CANIDAC ****************** -->
 
    <choiceOption key="can_canidac_idam" condition="can_canidac_idam_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanCanidacIdam"
       toolTip="The CPU sets these flags to define the identifier acceptance filter organization. In filter closed mode, no\n
                message is accepted such that the foreground buffer is never reloaded"
@@ -410,7 +410,7 @@ flag is set"
    <!-- ************* CANMISC ****************** -->
 
    <binaryOption key="can_canmisc_bohold" condition="can_canmisc_bohold_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanCanmiscBohold"
       toolTip="If BORM is set in MSCAN Control Register 1 (CANCTL1), this bit indicates whether the module has\n
                entered the bus-off state. Clearing this bit requests the recovery from bus-off"
@@ -440,7 +440,7 @@ flag is set"
    <!-- ************* RDLR ****************** -->
 
    <choiceOption key="can_rdlr_rdlc" condition="can_rdlr_rdlc_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       enumType="uint8_t"
       typeName="CanDataLength"
       description="Data Length Code Bits"
@@ -562,7 +562,7 @@ flag is set"
 
 <!--   ========== CAN Init class =============================== -->
 
-   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template key="init_description" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Class)
@@ -639,7 +639,7 @@ flag is set"
    ]]>
    </template>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
@@ -699,7 +699,7 @@ flag is set"
    ]]>
    </template>
 
-   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t/** Callback for programmatically set handler */
       \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
@@ -707,7 +707,7 @@ flag is set"
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -734,84 +734,84 @@ flag is set"
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_canctl0_rxfrm,can_canctl0_cswai,can_canctl0_time,can_canctl0_wupe,can_canctl0_slprq,can_canctl0_initrq"
    ><![CDATA[
       \t   /// Control Register 0
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_canctl1_cane,can_canctl1_clksrc,can_canctl1_loopb,can_canctl1_listen,can_canctl1_borm,can_canctl1_wupm"
    ><![CDATA[
       \t   /// Control Register 1
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_canbtr0_sjw,can_canbtr0_brp"
    ><![CDATA[
       \t   /// Bus Timing Register 0
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_canbtr1_samp,can_canbtr1_tseg2,can_canbtr1_tseg1"
    ><![CDATA[
       \t   /// Bus Timing Register 1
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_canrflg_wupif,can_canrflg_cscif,can_canrflg_ovrif,can_canrflg_rxf"
    ><![CDATA[
       \t   /// Receiver Flag Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_canrier_wupie,can_canrier_cscie,can_canrier_rstate,can_canrier_tstate,can_canrier_ovrie,can_canrier_rxfie"
    ><![CDATA[
       \t   /// Receiver Interrupt Enable Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_cantflg_txe"
    ><![CDATA[
       \t   /// Transmitter Flag Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_cantier_txeie"
    ><![CDATA[
       \t   /// Transmitter Interrupt Enable Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_cantarq_abtrq"
    ><![CDATA[
       \t   /// Transmitter Message Abort Request Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_canidac_idam"
    ><![CDATA[
       \t   /// Identifier Acceptance Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_canmisc_bohold"
    ><![CDATA[
       \t   /// Miscellaneous Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_rdlr_rdlc"
    ><![CDATA[
       \t   /// Receive Data Length Register
@@ -828,7 +828,7 @@ flag is set"
 
 <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -841,7 +841,7 @@ flag is set"
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Configure $(_BASENAME) from values specified in init
       \t *
@@ -854,7 +854,7 @@ flag is set"
       \t   Info::enableClock();
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
              condition="irqHandlingMethod" ><![CDATA[
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      Info::setCallback(init.callbackFunction);
@@ -863,7 +863,7 @@ flag is set"
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t   // ..........  Regs to init .......... ;
       \t   can->CANCTL0    = init.canctl0;
       \t   can->CANCTL1    = init.canctl1;
@@ -969,7 +969,7 @@ flag is set"
             can_canmisc_bohold;
             can_rdlr_rdlc
             " >
-      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -997,7 +997,7 @@ flag is set"
             can_canbtr1_tseg2;
             can_canbtr1_tseg1
             " >
-      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -1022,7 +1022,7 @@ flag is set"
 
 <!--   Default Initialisation value -->
 
-   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       separator=","
       terminator=","
       variables="
@@ -1075,7 +1075,7 @@ flag is set"
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
       <![CDATA[
       }; // $(_Class)BasicInfo\n\n
    ]]>
@@ -1083,7 +1083,7 @@ flag is set"
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
    \t/**
    \t * Class representing $(_NAME)
    \t */
@@ -1100,11 +1100,11 @@ flag is set"
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n

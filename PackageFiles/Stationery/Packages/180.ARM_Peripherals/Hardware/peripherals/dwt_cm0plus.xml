@@ -36,7 +36,7 @@ triggered and the trace buffer&apos;s recording state is changed.\n
       <choice name="Trigger TSTART based on the assertion of MTBDWT_FCT0[MATCHED]"  value="1" enum="TriggerTstartBasedOnTheAssertionOfMtbdwt_fct0Matched"/>
    </binaryOption>
 
-<!-- Grahic here -->  
+<!-- Grahic here -->
 
    <for keys="field:name"
         values="
@@ -122,7 +122,7 @@ triggered and the trace buffer&apos;s recording state is changed.\n
 
 <!--   Configure methods -->
 
-   <template discardRepeats="true" key="/DWT/InitMethod" namespace="all" ><![CDATA[
+   <template discardRepeats="true" key="/DWT/InitMethod" ><![CDATA[
       \t/**
       \t * Configure DWT from values specified in init
       \t *

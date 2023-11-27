@@ -11,7 +11,6 @@
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
-   <title />
 
 <!--
     * General substitutions
@@ -65,18 +64,21 @@
       \tstatic constexpr int soutPin  = 2;\n\n
    ]]></template>
 
+<!-- Clocking -->
+
+   <title description="Clocking" />
    <binaryOption key="/$(_BASENAME)/baudSupport"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       modify="true"
       description="Enable specifying speed in Hertz"
       toolTip="If not selected, the communication speed must be specified using the\n
                prescale values (SPPR and SPP) in initialisation structures" >
-      <choice value="false" enum="Disabled" name="Prescale values must be used" isDefault="true" />
-      <choice value="true"  enum="Enabled"  name="Speed may be specified in Hertz" />
+      <choice value="false" name="Prescale values must be used" isDefault="true" />
+      <choice value="true"  name="Speed may be specified in Hertz" />
    </binaryOption>
 
    <choiceOption key="spiClockConfig" condition="/MCG/_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       target="spiInputClock"
       description="Clock configuration"
       toolTip="Selects the clock configuration used for calculations involving the bus clock" >
@@ -87,7 +89,7 @@
    </choiceOption>
 
    <choiceOption key="spiClockConfig" condition="/ICS/_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       target="spiInputClock"
       description="Clock configuration"
       toolTip="Selects the clock configuration used for calculations involving the bus clock" >
@@ -98,7 +100,7 @@
    </choiceOption>
 
    <intOption key="spiInputClock"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       locked="true"
       derived="true"
       description="SPI input clock"
@@ -107,8 +109,6 @@
                This frequency is used as the basis for calculations on this page."
       units="Hz"
       />
-
-   <constant key="NumCtars" value="2" type="Long" />
 
    <!-- DMA/Interrupt Request Select and Enable Register (RSER) register -->
    <choiceOption key="spi_rser_txfifo"
@@ -169,24 +169,67 @@
       <choice value="1" name="Interrupt on end of queue" enum="Enabled"  />
    </binaryOption>
 
-   <stringOption key="Common options"
-      derived="true"
-      locked="true"
-      description="Options applied to whole peripheral"
-      value="--- Common options ---" />
 
+<!-- Common Options -->
+   
+   <title description="Common Options" toolTip="Options applied to whole peripheral" />
+   
+   <binaryOption key="/$(_STRUCTNAME)/dmaSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      modify="true"
+      description="Enable use of DMA"
+      toolTip="This creates some structes to support DMA transfers using the SPI (EXPERIMENTAL)" >
+      <choice value="false" name="Not supported" isDefault="true" />
+      <choice value="true"  name="Supported" />
+   </binaryOption>
+
+   <bitmaskOption key="spi_mcr_pcsisValue" condition="spi_mcr_pcsis_present"
+      bitmask="0xFF0000" 
+      bitList="PCSIS0,PCSIS1,PCSIS2,PCSIS3,PCSIS4,PCSIS5"
+      typeName="SpiPcsPolarity"
+      description="Polarity for PCS signals"
+      toolTip="Mask to select the polarity of Peripheral Chip Select Lines (PCSx)\n
+               Selected PCS signals will be active-low i.e. PCS will go low when accessing the peripheral" 
+   />
+
+   <choiceOption key="spi_mcr_pcsis"
+      hidden="true"
+      typeName="SpiPcsPolarity"
+      description="Polarity for PCS signals"
+      toolTip="Mask to select the polarity of Peripheral Chip Select Lines (PCSx)\n
+               Selected PCS signals will be active-low i.e. PCS will go low when accessing the peripheral" >
+      <choice value="0"          name="All PCSx active-high" enum="All_ActiveHigh"  isDefault="true" />
+      <choice value="-1"         name="All PCSx active-low"  enum="All_ActiveLow"   />
+      <choice value="1&lt;&lt;0" name="PCS 0 Active-low"     enum="0_ActiveLow"     />
+      <choice value="1&lt;&lt;1" name="PCS 1 Active-low"     enum="1_ActiveLow"     />
+      <choice value="1&lt;&lt;2" name="PCS 2 Active-low"     enum="2_ActiveLow"     />
+      <choice value="1&lt;&lt;3" name="PCS 3 Active-low"     enum="3_ActiveLow"     />
+      <choice value="1&lt;&lt;4" name="PCS 4 Active-low"     enum="4_ActiveLow"     />
+      <choice value="1&lt;&lt;5" name="PCS 5 Active-low"     enum="5_ActiveLow"     />
+   </choiceOption>
+
+   <binaryOption key="spi_mcr_pcsse" condition="spi_mcr_pcsse_present"
+      typeName="SpiPcsMode"
+      description="PCS_5/PCSS* pin mode"
+      toolTip="Select use of PCS_5/PCSS as PCS_5 or PCS strobe*\n
+               The strobe may be used to enable 1-of-N decoding of the \n
+               remaining PCSx pins to multiple devices" >
+      <choice value="0" name="Pin is used as PCS_5"             enum="PCS5"        />
+      <choice value="1" name="Pin is used as a strobe for PCSx" enum="PCSx_Strobe" />
+   </binaryOption>
+
+<!--
    <stringOption
       hidden="true"
       derived="true"
       description="Polarity for PCS signals"
       valueFormat="%s"
       key="spi_mcr_pcsisValue"
-      value="(SpiPeripheralSelectPolarity)0"
+      value="(SpiPcsPolarity)0"
       />
 
    <choiceOption key="spi_mcr_pcsis"
-      hidden="true"
-      typeName="SpiPeripheralSelectPolarity"
+      typeName="SpiPcsPolarity"
       description="Peripheral Chip Select Polarity"
       toolTip="Mask to select the polarity of Peripheral Chip Select Lines (PCSx)" >
       <choice value="0"          name="All PCSx active-high" enum="All_ActiveHigh"  isDefault="true" />
@@ -199,6 +242,7 @@
       <choice value="1&lt;&lt;6" name="PCS 6 Active-low"     enum="6_ActiveLow" />
       <choice value="1&lt;&lt;7" name="PCS 7 Active-low"     enum="7_ActiveLow" />
    </choiceOption>
+-->
 
    <choiceOption key="spi_mcr_clr_fifox"
       hidden="true"
@@ -245,16 +289,6 @@
       <choice value="1,2"  name="2 clocks from SCK edge to SIN sample"  enum="2_Clocks" />
    </choiceOption>
 
-   <binaryOption key="spi_mcr_pcsse" condition="spi_mcr_pcsse_present"
-      typeName="SpiPcsMode"
-      description="PCS5/PCSS* pin mode"
-      toolTip="Select use of PCS5/PCSS as PCS5 or PCS strobe*\n
-               The strobe may be used to enable decoding of the remaining\n
-               PCSx pins to multiple devices" >
-      <choice value="0" name="PCS5/PCSS normal operation (PCS5)"        enum="PCS5"        />
-      <choice value="1" name="PCSS/PCSS is used as a strobe for PCSx"   enum="PCSx_Strobe" />
-   </binaryOption>
-
    <binaryOption key="spi_mcr_rooe"
       typeName="SpiRxOverflowHandling"
       description="Handling of Rx Overflow Data"
@@ -287,14 +321,9 @@
       <choice value="1" name="Continuous clock "           enum="Enable"  />
    </binaryOption>
 
-   <for keys="c" dim="=NumCtars" >
+   <for keys="c" dim="=spi_ctar_dim" >
 
-      <stringOption name="CTAR %(c)"
-         key="CtarNum%(c)"
-         description="Clock and Transfer Attributes #%(c)"
-         locked="true"
-         derived="true"
-         value="----- %(c) -----" />
+      <title description="CTAR %(c)" toolTip="Clock and Transfer Attributes #%(c)" />
 
       <intOption key="speed[%(c)]"
          description="Speed of interface"
@@ -350,12 +379,10 @@
 
    </for>
 
-   <stringOption key="Initial configuration"
-      derived="true"
-      locked="true"
-      description="Device and CTAR choice after default configuration"
-      toolTip="These options can be changed by selectConfiguration(...)"
-      value="--- Initial device options ---" />
+   <title description="Initial device options"
+      toolTip="Device and CTAR choice after default configuration\n
+               These options can be changed by selectConfiguration(...)" 
+      />
 
    <choiceOption key="spi_ctar_sel"
       enumType="uint8_t"
@@ -373,8 +400,8 @@
       valueFormat="(%s)"
       description="Controls PCS between transfers/transactions"
       toolTip="Select whether Peripheral Select is returned to idle between transfers or transactions" >
-      <choice value="0" name="Idle between each transfer"                enum="Transfer"    />
-      <choice value="1" name="Idle between each transaction"             enum="Transaction" />
+      <choice value="0" name="Negated between each transfer"             enum="Transfer"    />
+      <choice value="1" name="Negated between each transaction"          enum="Transaction" />
       <choice value="2" name="Asserted until another device is selected" enum="Continuous"  />
    </choiceOption>
 
@@ -386,12 +413,24 @@
       <choice value="0" name="Idle between transactions"     enum="Idle"       />
       <choice value="1" name="Asserted between transactions" enum="Continuous" />
    </binaryOption>
-
-   <choiceOption key="spi_pushr_pcs"
+   
+   <bitmaskOption key="spi_pushr_pcsValue" condition="spi_pushr_pcs_present"
+      valueFormat="SPI_PUSHR_PCS(%s)" 
+      description="Peripheral Chip Select"
+      toolTip="Mask to select which Peripheral Chip Select Line (PCS) to assert during transaction\n
+               Note: more than one PCS may be asserted (allows external decoder)" 
+      bitmask="0xFF0000" 
+      bitList="PCS0,PCS1,PCS2,PCS3,PCS4,PCS5"
+      typeName="SpiPeripheralSelect"
+   />
+      
+   <choiceOption key="spi_pushr_pcs" condition="spi_pushr_pcs_present"
+      hidden="true"
+      derived="true"
       typeName="SpiPeripheralSelect"
       description="Peripheral Chip Select"
       toolTip="Mask to select which Peripheral Chip Select Line (PCS) to assert during transaction\n
-               Note: more than one PCS may be asserted (allows external decoder)" >
+               Note: more than one PCS may be asserted (allows use of an external decoder)" >
       <choice value="0"          name="PCSx not asserted" enum="None"  isDefault="true" />
       <choice value="1&lt;&lt;0" name="Assert PCS 0"      enum="0" />
       <choice value="1&lt;&lt;1" name="Assert PCS 1"      enum="1" />
@@ -399,8 +438,6 @@
       <choice value="1&lt;&lt;3" name="Assert PCS 3"      enum="3" />
       <choice value="1&lt;&lt;4" name="Assert PCS 4"      enum="4" />
       <choice value="1&lt;&lt;5" name="Assert PCS 5"      enum="5" />
-      <choice value="1&lt;&lt;6" name="Assert PCS 6"      enum="6" />
-      <choice value="1&lt;&lt;7" name="Assert PCS 7"      enum="7" />
    </choiceOption>
 
    <!--binaryOption key="spi_pushr_eoq"
@@ -443,7 +480,7 @@
 
 <!--   ========== SPI SerialInit class =============================== -->
 
-   <template key="/SPI/serial_init_description" namespace="all" ><![CDATA[
+   <template namespace="usbdm" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of a CTAR in $(_Class)
       \t *
@@ -473,10 +510,6 @@
       \t * $(_Class)::configure(serialInit);
       \t * @endcode
       \t */
-   ]]></template>
-
-   <template namespace="usbdm" ><![CDATA[
-      $(/SPI/serial_init_description)
       \tclass SerialInit {
       \t
       \tpublic:
@@ -592,7 +625,7 @@
 
 <!--   ========== SPI Init class =============================== -->
 
-   <template key="/SPI/config_description" namespace="all" ><![CDATA[
+   <template namespace="usbdm" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of shared settings for $(_Class)
       \t *
@@ -615,7 +648,7 @@
       \t *    SpiFreeze_Enabled ,                          // Controls SPI operation while in debug mode - Suspend in debug
       \t *    SpiRxOverflowHandling_Overwrite ,            // Handling of Rx Overflow Data - Overwrite existing
       \t *    SpiContinuousClock_Disable,                  // Continuous SCK Enable - Clock during transfers only
-      \t *    SpiPeripheralSelectPolarity_3_ActiveLow,     // Polarity for PCS signals (similar lines may be repeated)
+      \t *    SpiPcsPolarity_3_ActiveLow,                  // Polarity for PCS signals (similar lines may be repeated)
       \t *
       \t *    // The following are initial settings that would commonly be changed by selectConfiguration()
       \t *    SpiPeripheralSelect_Ptc4 ,              // Peripheral to select
@@ -628,10 +661,6 @@
       \t *
       \t * @endcode
       \t */
-   ]]></template>
-
-   <template namespace="usbdm" ><![CDATA[
-      $(/SPI/config_description)
       \tclass Config {
       \t
       \tpublic:
@@ -671,7 +700,7 @@
    <variableTemplate namespace="usbdm"
       variables="
          spi_ctar_sel,
-         spi_pushr_pcs,
+         spi_pushr_pcsValue,
          PeripheralSelectMode"
    ><![CDATA[
       \t   ///  PUSHR values
@@ -732,20 +761,20 @@
    ><![CDATA[
       \t   /**
       \t    * Constructor for Active-low PCSx
-      \t    * By default PCSx signals are active-high i.e. they high to indicate a transfers/transactions
+      \t    * By default PCSx signals are active-high i.e. they are high to indicate a transfers/transactions
       \t    * This constructor changes the given PCSx to active-low i.e. PCSx will go low for transfer
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
       \t    *
       \t    * @param %paramExpression PCS signal to be made Active-low
-      \t    *                SpiPeripheralSelectPolarity_All_ActiveHigh clears all selections
-      \t    *                SpiPeripheralSelectPolarity_XXX_ActiveHigh values are cumulative
+      \t    *                         SpiPcsPolarity_All_ActiveHigh clears all selections
+      \t    *                         SpiPcsPolarity_XXX_ActiveLow values are cumulative
       \t    */
       \t   template <typename... Types>
       \t   constexpr Config(%params, Types... rest) : Config(rest...) {
       \t
-      \t      if (%paramExpression == SpiPeripheralSelectPolarity_All_ActiveHigh) {
+      \t      if (%paramExpression == SpiPcsPolarity_All_ActiveHigh) {
       \t         %registerName &= ~%mask;
       \t      }
       \t      else {
@@ -755,7 +784,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" variables="spi_pushr_pcs"
+   <!-- variableTemplate namespace="usbdm" variables="spi_pushr_pcsValue"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -778,6 +807,34 @@
       \t      else {
       \t         pushr      |= %paramExpression;
       \t         pushrFinal |= %paramExpression;
+      \t      }
+      \t   }
+      \t\n
+   ]]></variableTemplate -->
+
+   <variableTemplate namespace="usbdm" variables="spi_pushr_pcsValue"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for initial Peripheral selection
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      \t    * @param %paramName PCS signal to assert during transfers
+      \t    *                SpiPeripheralSelect_None clears all selections
+      \t    *                SpiPeripheralSelect_XXXX values are cumulative
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Config(%params, Types... rest) : Config(rest...) {
+      \t
+      \t      if (%paramName == SpiPeripheralSelect_None) {
+      \t         pushr      &= ~%mask;
+      \t         pushrFinal &= ~%mask;
+      \t      }
+      \t      else {
+      \t         pushr      |= %paramName;
+      \t         pushrFinal |= %paramName;
       \t      }
       \t   }
       \t\n
@@ -831,7 +888,7 @@
 
 <!--   ========== Config class - start =============================== -->
 
-   <template key="/SPI/init_description" namespace="all" ><![CDATA[
+   <template namespace="usbdm" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of $(_Class)
       \t *
@@ -851,7 +908,7 @@
       \t *    SpiFreeze_Enabled ,                          // Controls SPI operation while in debug mode - Suspend in debug
       \t *    SpiRxOverflowHandling_Overwrite ,            // Handling of Rx Overflow Data - Overwrite existing
       \t *    SpiContinuousClock_Disable,                  // Continuous SCK Enable - Clock during transfers only
-      \t *    SpiPeripheralSelectPolarity_3_ActiveLow,     // Polarity for PCS signals (similar lines may be repeated)
+      \t *    SpiPcsPolarity_3_ActiveLow,                  // Polarity for PCS signals (similar lines may be repeated)
       \t *
       \t *    // The following are initial settings that would commonly be changed by selectConfiguration()
       \t *    SpiPeripheralSelect_Ptc4 ,              // Peripheral to select
@@ -908,7 +965,7 @@
       \t *    SpiFreeze_Enabled ,                          // Controls SPI operation while in debug mode - Suspend in debug
       \t *    SpiRxOverflowHandling_Overwrite ,            // Handling of Rx Overflow Data - Overwrite existing
       \t *    SpiContinuousClock_Disable,                  // Continuous SCK Enable - Clock during transfers only
-      \t *    SpiPeripheralSelectPolarity_3_ActiveLow,     // Polarity for PCS signals (similar lines may be repeated)
+      \t *    SpiPcsPolarity_3_ActiveLow,                  // Polarity for PCS signals (similar lines may be repeated)
       \t *
       \t *    // The following are initial settings that would commonly be changed by selectConfiguration()
       \t *    SpiPeripheralSelect_Ptc4 ,              // Peripheral to select
@@ -938,10 +995,6 @@
       \t * $(_Class)::configure(spiInit);
       \t * @endcode
       \t */
-   ]]></template>
-
-   <template namespace="usbdm" ><![CDATA[
-      $(/SPI/init_description)
       \tclass Init {
       \t
       \tpublic:
@@ -1022,7 +1075,7 @@
 
 <!--  Init Configure methods -->
 
-   <template discardRepeats="true" key="/SPI/InitMethod" namespace="all" ><![CDATA[
+   <template discardRepeats="true" key="/SPI/InitMethod" ><![CDATA[
       /* Template /SPI/InitMethod - start */
       \t
       \t/**
@@ -1086,7 +1139,7 @@
       \tstatic constexpr SpiBasicInfo::SerialInit DefaultSerialInitValue[] = {\n
       ]]></template>
 
-   <for keys="c" dim="=NumCtars" >
+   <for keys="c" dim="=spi_ctar_dim" >
 
       <variableTemplate
          separator=","
@@ -1123,7 +1176,7 @@
          spi_mcr_cont_scke,
          spi_ctar_sel,
          PeripheralSelectMode,
-         spi_pushr_pcs
+         spi_pushr_pcsValue
          "
    ><![CDATA[
       \t/**
@@ -1142,7 +1195,7 @@
       \tstatic constexpr SpiBasicInfo::Init DefaultInitValue = {
       \t   DefaultConfigValue,\n
    ]]></template>
-   <for keys="c" dim="=NumCtars" >
+   <for keys="c" dim="=spi_ctar_dim" >
       <template><![CDATA[
          \t   DefaultSerialInitValue[%(c)],\n
       ]]></template>
@@ -1151,7 +1204,7 @@
       \t};\n\n
    ]]></template>
 
-   <template key="/SPI/declarations" namespace="all"  ><![CDATA[
+   <template key="/SPI/declarations"  ><![CDATA[
    // $(_NAME) mappings
    $(/$(_NAME)/InputMapping:   // No user mappings found for $(_NAME))
    \t/**
@@ -1195,7 +1248,7 @@
    \t\n
    ]]></template>
 
-   <variableTemplate variables="spi_mcr_cont_scke" namespace="all" key="/SPI/methods" discardRepeats="true"
+   <variableTemplate variables="spi_mcr_cont_scke" key="/SPI/methods" discardRepeats="true"
    ><![CDATA[
       /* Template /SPI/methods - start */
       \t
@@ -1209,7 +1262,7 @@
       \t}\n\n
    ]]></variableTemplate>
 
-   <variableTemplate variables="spi_mcr_mstr" namespace="all" key="/SPI/methods" discardRepeats="true"
+   <variableTemplate variables="spi_mcr_mstr" key="/SPI/methods" discardRepeats="true"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -1221,7 +1274,7 @@
       \t}\n\n
    ]]></variableTemplate>
 
-   <variableTemplate variables="spi_mcr_pcsis" namespace="all" key="/SPI/methods" discardRepeats="true"
+   <variableTemplate variables="spi_mcr_pcsis" key="/SPI/methods" discardRepeats="true"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -1232,10 +1285,10 @@
       \t * Examples:
       \t * @code
       \t *    // Set PCS0 and PCS3 active-low and all others active-high
-      \t *    setPcsIdleLevels(SpiPeripheralSelectPolarity_Pcs0_ActiveLow|SpiPeripheralSelectPolarity_Pcs3_ActiveLow)
+      \t *    setPcsIdleLevels(SpiPcsPolarity_Pcs0_ActiveLow|SpiPcsPolarity_Pcs3_ActiveLow)
       \t *
       \t *    // Set all PCSx to active high (the most common situation)
-      \t *    setPcsIdleLevels(SpiPeripheralSelectPolarity_All_ActiveHigh)
+      \t *    setPcsIdleLevels(SpiPcsPolarity_All_ActiveHigh)
       \t * @endcode
       \t */
       \t void setPcsPolarity(%paramType %paramName) {
@@ -1243,7 +1296,7 @@
       \t}\n\n
    ]]></variableTemplate>
 
-   <template namespace="all" key="/SPI/handlerSlot" ><![CDATA[
+   <template key="/SPI/handlerSlot" ><![CDATA[
       \t{nullptr}, // $(_NAME)\n
    ]]></template>
    <template><![CDATA[
@@ -1275,11 +1328,11 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n

@@ -298,7 +298,7 @@
 
 <!--   ========== PORT Init class =============================== -->
 
-   <template key="init_description" namespace="all" codeGenCondition="enablePeripheralSupport" >
+   <template key="init_description" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Class)
@@ -388,7 +388,7 @@
 
 <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true"
       codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/* template /$(_BASENAME)/InitMethod */
       \t/**
@@ -408,7 +408,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true"
       codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Configure $(_BASENAME) from values specified in init
@@ -418,7 +418,7 @@
       \tstatic void configure(const typename Info::Init &init) {
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true"
              condition="irqHandlingMethod"
              codeGenCondition="irqHandlingMethod" ><![CDATA[
       \t   setCallback(init.callbackFunction);
@@ -575,7 +575,7 @@
 
    <!-- ************* Common ****************** -->
 
-   <template namespace="all" key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
+   <template key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t\n
       \t/**
@@ -594,7 +594,7 @@
    <equation key="pinIndex" value="=0" />
 
    <for keys="r:R" values="a:A;b:B;c:C;d:D;e:E;f:F;g:G;h:H;i:I" >
-      <template namespace="all" key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
+      <template key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
          \t      /* PT%(R) */
       ]]>
@@ -602,14 +602,14 @@
       <for keys="n" dim="8" >
          <for keys="pinIndex" values="=pinIndex" >
             <if condition="port_hdrve_pt%(r)%(n)" >
-               <template namespace="all" key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
+               <template key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
                <![CDATA[
                   \t   %(pinIndex),
                ]]>
                </template>
                <equation key="pinIndex" value="=pinIndex+1" />
             <else />
-               <template namespace="all" key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
+               <template key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
                <![CDATA[
                   \t  -1,
                ]]>
@@ -617,13 +617,13 @@
             </if>
          </for>
       </for>
-      <template namespace="all" key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
+      <template key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
          \t\n
       ]]>
       </template>
    </for>
-   <template namespace="all" key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
+   <template key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t\n
       \t   };
@@ -638,7 +638,7 @@
    ]]>
    </template>
 
-   <template namespace="all" key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
+   <template key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Determines the mask for the PUE[] register given port bit number
@@ -659,7 +659,7 @@
    ]]>
    </template>
 
-   <template namespace="all" key="publicMethods" codeGenCondition="enablePeripheralSupport" >
+   <template key="publicMethods" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t* Set pull device for port pin
@@ -683,7 +683,7 @@
    ]]>
    </template>
 
-   <template namespace="all" key="publicFieldMethods" codeGenCondition="enablePeripheralSupport" >
+   <template key="publicFieldMethods" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/** Mask for the bits being manipulated within underlying port hardware */
       \tstatic constexpr uint32_t BITMASK = static_cast<uint32_t>((1ULL<<(Left-Right+1))-1)<<Right;
@@ -705,18 +705,18 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>
 
-   <template key="/SYSTEM/Includes" namespace="all" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       #include "port.h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" namespace="all" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/* Configure Ports (Filters, PUPs and HDRIVE) */
       \tUSBDM::$(_Class)::defaultConfigure();
    ]]></template>
 
-   <template key="/PORT/PinIndex" namespace="all" >
+   <template key="/PORT/PinIndex" >
    <![CDATA[
       /**
        * Port pin index
@@ -750,12 +750,12 @@
                     =%(pinIndex)+5 : 5 ;
                     =%(pinIndex)+6 : 6 ;
                     =%(pinIndex)+7 : 7 " >
-         <template key="/PORT/PinIndex" namespace="all" discardRepeats="true" condition="%(field)_present"
+         <template key="/PORT/PinIndex" discardRepeats="true" condition="%(field)_present"
          ><![CDATA[
             \tPT%(Name)%(i) = %(ii),\n
          ]]></template>
       </for>
-      <template key="/PORT/declarations" namespace="all" condition="%(field)_present" codeGenCondition="enablePeripheralSupport"
+      <template key="/PORT/declarations" condition="%(field)_present" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
       \t/**
       \t * Class representing individual pin options for pins in Port %(Name)
@@ -777,7 +777,7 @@
       \t    class Port%(Name)Field : public PortField_T<PinIndex(leftPinNum+%(pinIndex)), PinIndex(rightPinNum+%(pinIndex))> {};\n\n
       ]]></template>
    </for>
-   <template key="/PORT/PinIndex" namespace="all" >
+   <template key="/PORT/PinIndex" >
       <![CDATA[
          \tMAX_PIN_INDEX, // Last available pin (exclusive)
          };

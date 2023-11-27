@@ -303,7 +303,7 @@
 
 <!--   Configure methods -->
 
-   <template discardRepeats="true" key="/SCB/InitMethod" namespace="all" ><![CDATA[
+   <template discardRepeats="true" key="/SCB/InitMethod" ><![CDATA[
       \t/**
       \t * Configure SCB from values specified in init
       \t *

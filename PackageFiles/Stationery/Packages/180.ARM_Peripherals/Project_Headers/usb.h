@@ -774,7 +774,7 @@ ControlEndpoint<Info, EP0_SIZE> UsbBase_T<Info, EP0_SIZE>::fControlEndpoint;
 /*
  * Implementation class
  */
-#include "usb_implementation.h"
+//#include "usb_implementation.h"
 
 /*
  * Implementation of methods for UsbBase_T
@@ -964,6 +964,7 @@ bool UsbBase_T<Info, EP0_SIZE>::handleTokenComplete(UsbStat usbStat) {
 // Must have handler installed in USBDM configuration
 static_assert(Usb0Info::irqHandlerInstalled);
 
+#if 0
 /**
  * Handler for USB Bus reset\n
  * Re-initialises the interface
@@ -1555,7 +1556,13 @@ void UsbBase_T<Info, EP0_SIZE>::irqHandler() {
       fUsb->ISTAT = pendingInterruptFlags;
    } while(true);
 }
+#else
+template<class Info, int EP0_SIZE>
+void UsbBase_T<Info, EP0_SIZE>::irqHandler() {
+}
+#endif
 
+$(/USB/declarations)
 /**
  * End USB_Group
  * @}

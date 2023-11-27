@@ -91,7 +91,7 @@
       <choice value="1"   name="Interrupt" enum="Interrupt" />
    </choiceOption>
 
-   <variableTemplate key="/$(_BASENAME)/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
       variables="uart_c2_tcie" ><![CDATA[
       \t/**
       \t * Set %description
@@ -112,7 +112,7 @@
       <choice value="1"   name="Interrupt" enum="Interrupt" />
    </choiceOption>
 
-   <variableTemplate key="/$(_BASENAME)/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
       variables="uart_c2_ilie" ><![CDATA[
       \t/**
       \t * Set %description
@@ -145,7 +145,7 @@
       <choice value="1,1"   name="DMA"       enum="Dma"       />
    </choiceOption>
 
-   <variableTemplate key="/$(_BASENAME)/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
        variables="uartTxEmptyAction" ><![CDATA[
       \t/**
       \t * Set %description
@@ -155,12 +155,12 @@
       \tvoid setTransmitEmptyAction(%params) const {
       \t   uart->C2 = (uart->C2 & ~UART_C2_TIE_MASK)   | %paramExpression; \n
    ]]></variableTemplate>
-   <variableTemplate key="/$(_BASENAME)/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
       variables="uartTxEmptyAction"
       condition="uart_c5_tdmas_present" ><![CDATA[
       \t   uart->C5 = (uart->C5 & ~UART_C5_TDMAS_MASK) | %paramExpression>>8; \n
    ]]></variableTemplate>
-   <variableTemplate key="/$(_BASENAME)/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
        variables="uartTxEmptyAction" ><![CDATA[
       \t}\n\n
    ]]></variableTemplate>
@@ -186,7 +186,7 @@
       <choice value="1,1"   name="DMA"       enum="Dma"       />
    </choiceOption>
 
-   <variableTemplate key="/$(_BASENAME)/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
       variables="uartRxFullAction" ><![CDATA[
       \t/**
       \t * Set %description
@@ -196,12 +196,12 @@
       \tvoid setReceiveFullAction(%params) const {
       \t   uart->C2 = (uart->C2 & ~UART_C2_RIE_MASK)   | %paramExpression;\n
    ]]></variableTemplate>
-   <variableTemplate key="/$(_BASENAME)/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
       variables="uartRxFullAction"
       condition="uart_c5_rdmas_present" ><![CDATA[
       \t   uart->C5 = (uart->C5 & ~UART_C5_RDMAS_MASK) | %paramExpression>>8;\n
    ]]></variableTemplate>
-   <variableTemplate key="/$(_BASENAME)/commonMethods" namespace="all" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
       variables="uartRxFullAction" ><![CDATA[
       \t}\n\n
    ]]></variableTemplate>
@@ -279,9 +279,9 @@
       \t}\n\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/Present" namespace="all"  ><![CDATA[\ ||\ 1]]></template>
+   <template key="/$(_BASENAME)/Present"  ><![CDATA[\ ||\ 1]]></template>
 
-   <template key="/$(_BASENAME)/declarations" namespace="all"  ><![CDATA[
+   <template key="/$(_BASENAME)/declarations"  ><![CDATA[
       \t/**
       \t * Class representing $(_NAME) interface
       \t *

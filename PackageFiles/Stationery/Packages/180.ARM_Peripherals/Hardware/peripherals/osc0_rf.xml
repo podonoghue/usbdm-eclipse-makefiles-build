@@ -141,18 +141,18 @@
       \t}\n\n
    ]]></template>
 
-   <template key="/OSC_RF/declarations" namespace="all"  ><![CDATA[
+   <template key="/OSC_RF/declarations"  ><![CDATA[
    \t/**
    \t * Class representing $(_NAME)
    \t */
    \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
    ]]></template>
 
-   <template key="/MCG/Includes" namespace="all"  ><![CDATA[
+   <template key="/MCG/Includes"  ><![CDATA[
    #include "osc.h"\n
    ]]></template>
 
-   <template key="/MCG/Initialisation" namespace="all"  ><![CDATA[
+   <template key="/MCG/Initialisation"  ><![CDATA[
    \tUSBDM::$(_Class)::initialise();\n
    ]]></template>
 

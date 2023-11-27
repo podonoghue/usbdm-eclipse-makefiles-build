@@ -82,7 +82,7 @@ public:
    /** Get base address of DAC.DATA[index] register as uint32_t */
    static constexpr uint32_t dacData(unsigned index) { return dacBase() + offsetof(DAC_Type, DATA) + index*sizeof(DAC_Type::DATA[0]); }
 $(/DAC/classInfo: // No class Info found)
-#if $(/DAC/irqHandlingMethod:false) // /DAC/irqHandlingMethod
+#if $(/DAC/generateSharedIrqInfo:false) // /DAC/generateSharedIrqInfo
    /**
     * Wrapper to allow the use of a class member as a callback function
     * @note Only usable with static objects.

@@ -70,6 +70,7 @@
          <param type="BooleanVariable"        value="true"             name="adc_clps_clps_present"          key="/ADC0/adc_clps_clps_present" />
          <param type="BooleanVariable"        value="true"             name="adc_clps_present"               key="/ADC0/adc_clps_present" />
          <param type="BooleanVariable"        value="true"             name="adc_cv_cv_present"              key="/ADC0/adc_cv_cv_present" />
+         <param type="LongVariable"           value="2"                name="adc_cv_dim"                     key="/ADC0/adc_cv_dim" />
          <param type="BooleanVariable"        value="true"             name="adc_cv_present"                 key="/ADC0/adc_cv_present" />
          <param type="BooleanVariable"        value="true"             name="adc_mg_mg_present"              key="/ADC0/adc_mg_mg_present" />
          <param type="BooleanVariable"        value="true"             name="adc_mg_present"                 key="/ADC0/adc_mg_present" />
@@ -78,11 +79,13 @@
          <param type="BooleanVariable"        value="true"             name="adc_pg_pg_present"              key="/ADC0/adc_pg_pg_present" />
          <param type="BooleanVariable"        value="true"             name="adc_pg_present"                 key="/ADC0/adc_pg_present" />
          <param type="BooleanVariable"        value="true"             name="adc_r_d_present"                key="/ADC0/adc_r_d_present" />
+         <param type="LongVariable"           value="2"                name="adc_r_dim"                      key="/ADC0/adc_r_dim" />
          <param type="BooleanVariable"        value="true"             name="adc_r_present"                  key="/ADC0/adc_r_present" />
          <param type="BooleanVariable"        value="true"             name="adc_sc1_adch_present"           key="/ADC0/adc_sc1_adch_present" />
          <param type="BooleanVariable"        value="true"             name="adc_sc1_aien_present"           key="/ADC0/adc_sc1_aien_present" />
          <param type="BooleanVariable"        value="true"             name="adc_sc1_coco_present"           key="/ADC0/adc_sc1_coco_present" />
          <param type="BooleanVariable"        value="true"             name="adc_sc1_diff_present"           key="/ADC0/adc_sc1_diff_present" />
+         <param type="LongVariable"           value="2"                name="adc_sc1_dim"                    key="/ADC0/adc_sc1_dim" />
          <param type="BooleanVariable"        value="true"             name="adc_sc1_present"                key="/ADC0/adc_sc1_present" />
          <param type="BooleanVariable"        value="true"             name="adc_sc2_acfe_present"           key="/ADC0/adc_sc2_acfe_present" />
          <param type="BooleanVariable"        value="true"             name="adc_sc2_acfgt_present"          key="/ADC0/adc_sc2_acfgt_present" />
@@ -139,14 +142,14 @@
          <param type="BooleanVariable"        value="true"             name="cmp_scr_present"                key="/CMP0/cmp_scr_present" />
          <param type="StringVariable"         value="CMP"              name="structName"                     key="/CMP0/structName" />
       </peripheral>
-      <peripheral baseName="CONTROL"  instance=""         instanceList="CONTROL">
+      <peripheral baseName="CONTROL"  instance=""         instanceList="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForControl" />
-         <param type="StringVariable"         value="CONTROL"          name="_instanceList"                  key="/CONTROL/_instanceList" />
+         <param type="StringVariable"         value=""                 name="_instanceList"                  key="/CONTROL/_instanceList" />
          <param type="BooleanVariable"        value="true"             name="_hasPcrTable"                   key="/CONTROL/_hasPcrTable" />
       </peripheral>
-      <peripheral baseName="Console"  instance=""         instanceList="Console">
+      <peripheral baseName="Console"  instance=""         instanceList="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
-         <param type="StringVariable"         value="Console"          name="_instanceList"                  key="/Console/_instanceList" />
+         <param type="StringVariable"         value=""                 name="_instanceList"                  key="/Console/_instanceList" />
       </peripheral>
       <peripheral baseName="DAC"      instance="0"        instanceList="DAC0" version="dac0_2dat_mkl05">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
@@ -171,7 +174,9 @@
          <param type="BooleanVariable"        value="true"             name="dac_c2_dacbfrp_present"         key="/DAC0/dac_c2_dacbfrp_present" />
          <param type="BooleanVariable"        value="true"             name="dac_c2_dacbfup_present"         key="/DAC0/dac_c2_dacbfup_present" />
          <param type="BooleanVariable"        value="true"             name="dac_c2_present"                 key="/DAC0/dac_c2_present" />
+         <param type="LongVariable"           value="2"                name="dac_dat_dim"                    key="/DAC0/dac_dat_dim" />
          <param type="BooleanVariable"        value="true"             name="dac_data_data_present"          key="/DAC0/dac_data_data_present" />
+         <param type="LongVariable"           value="2"                name="dac_data_dim"                   key="/DAC0/dac_data_dim" />
          <param type="BooleanVariable"        value="true"             name="dac_data_present"               key="/DAC0/dac_data_present" />
          <param type="BooleanVariable"        value="true"             name="dac_dath_data_present"          key="/DAC0/dac_dath_data_present" />
          <param type="BooleanVariable"        value="true"             name="dac_dath_present"               key="/DAC0/dac_dath_present" />
@@ -211,6 +216,7 @@
          <param type="BooleanVariable"        value="true"             name="dma_dcr_smod_present"           key="/DMA0/dma_dcr_smod_present" />
          <param type="BooleanVariable"        value="true"             name="dma_dcr_ssize_present"          key="/DMA0/dma_dcr_ssize_present" />
          <param type="BooleanVariable"        value="true"             name="dma_dcr_start_present"          key="/DMA0/dma_dcr_start_present" />
+         <param type="LongVariable"           value="4"                name="dma_dma_dim"                    key="/DMA0/dma_dma_dim" />
          <param type="BooleanVariable"        value="true"             name="dma_dsr_bcr_bcr_present"        key="/DMA0/dma_dsr_bcr_bcr_present" />
          <param type="BooleanVariable"        value="true"             name="dma_dsr_bcr_bed_present"        key="/DMA0/dma_dsr_bcr_bed_present" />
          <param type="BooleanVariable"        value="true"             name="dma_dsr_bcr_bes_present"        key="/DMA0/dma_dsr_bcr_bes_present" />
@@ -235,6 +241,7 @@
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_DMAMUX0_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_DMAMUX0_MASK;" />
          <param type="StringVariable"         value="DMAMUX0"          name="_instanceList"                  key="/DMAMUX0/_instanceList" />
          <param type="BooleanVariable"        value="true"             name="_present"                       key="/DMAMUX0/_present" />
+         <param type="LongVariable"           value="4"                name="dmamux_chcfg_dim"               key="/DMAMUX0/dmamux_chcfg_dim" />
          <param type="BooleanVariable"        value="true"             name="dmamux_chcfg_enbl_present"      key="/DMAMUX0/dmamux_chcfg_enbl_present" />
          <param type="BooleanVariable"        value="true"             name="dmamux_chcfg_present"           key="/DMAMUX0/dmamux_chcfg_present" />
          <param type="BooleanVariable"        value="true"             name="dmamux_chcfg_source_present"    key="/DMAMUX0/dmamux_chcfg_source_present" />
@@ -277,9 +284,9 @@
          <dma source="AlwaysEnabled62"      num="62" />
          <dma source="AlwaysEnabled63"      num="63" />
       </peripheral>
-      <peripheral baseName="ExternalTrigger" instance=""         instanceList="ExternalTrigger">
+      <peripheral baseName="ExternalTrigger" instance=""         instanceList="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
-         <param type="StringVariable"         value="ExternalTrigger"  name="_instanceList"                  key="/ExternalTrigger/_instanceList" />
+         <param type="StringVariable"         value=""                 name="_instanceList"                  key="/ExternalTrigger/_instanceList" />
          <param type="BooleanVariable"        value="true"             name="_hasPcrTable"                   key="/ExternalTrigger/_hasPcrTable" />
       </peripheral>
       <peripheral baseName="FTFA"     instance=""         instanceList="FTFA" version="ftfa">
@@ -648,6 +655,7 @@
          <param type="StringVariable"         value="PIT"              name="_instanceList"                  key="/PIT/_instanceList" />
          <param type="LongVariable"           value="1"                name="_irqCount"                      key="/PIT/_irqCount" />
          <param type="BooleanVariable"        value="true"             name="_present"                       key="/PIT/_present" />
+         <param type="LongVariable"           value="2"                name="pit_channel_dim"                key="/PIT/pit_channel_dim" />
          <param type="BooleanVariable"        value="true"             name="pit_cval_present"               key="/PIT/pit_cval_present" />
          <param type="BooleanVariable"        value="true"             name="pit_cval_tvl_present"           key="/PIT/pit_cval_tvl_present" />
          <param type="BooleanVariable"        value="true"             name="pit_ldval_present"              key="/PIT/pit_ldval_present" />
@@ -691,9 +699,9 @@
          <param type="BooleanVariable"        value="true"             name="pmc_regsc_regons_present"       key="/PMC/pmc_regsc_regons_present" />
          <param type="StringVariable"         value="PMC"              name="structName"                     key="/PMC/structName" />
       </peripheral>
-      <peripheral baseName="POWER"    instance=""         instanceList="POWER">
+      <peripheral baseName="POWER"    instance=""         instanceList="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
-         <param type="StringVariable"         value="POWER"            name="_instanceList"                  key="/POWER/_instanceList" />
+         <param type="StringVariable"         value=""                 name="_instanceList"                  key="/POWER/_instanceList" />
          <param type="BooleanVariable"        value="true"             name="_hasPcrTable"                   key="/POWER/_hasPcrTable" />
       </peripheral>
       <peripheral baseName="RCM"      instance=""         instanceList="RCM"  version="rcm_mkl_0x4007f000">
@@ -969,16 +977,16 @@
          <param type="BooleanVariable"        value="true"             name="spi_s_sptef_present"            key="/SPI1/spi_s_sptef_present" />
          <param type="StringVariable"         value="SPI"              name="structName"                     key="/SPI1/structName" />
       </peripheral>
-      <peripheral baseName="TPM"      instance=""         instanceList="TPM;TPM0;TPM1;TPM2">
+      <peripheral baseName="TPM"      instance=""         instanceList="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
-         <param type="StringVariable"         value="TPM;TPM0;TPM1;TPM2" name="_instanceList"                  key="/TPM/_instanceList" />
+         <param type="StringVariable"         value="TPM0;TPM1;TPM2"   name="_instanceList"                  key="/TPM/_instanceList" />
          <param type="BooleanVariable"        value="true"             name="_hasPcrTable"                   key="/TPM/_hasPcrTable" />
       </peripheral>
-      <peripheral baseName="TPM"      instance="0"        instanceList="TPM;TPM0;TPM1;TPM2" version="tpm0_6ch">
+      <peripheral baseName="TPM"      instance="0"        instanceList="TPM0;TPM1;TPM2" version="tpm0_6ch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_TPM0_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_TPM0_MASK;" />
          <irq num="TPM0_IRQn" />
-         <param type="StringVariable"         value="TPM;TPM0;TPM1;TPM2" name="_instanceList"                  key="/TPM0/_instanceList" />
+         <param type="StringVariable"         value="TPM0;TPM1;TPM2"   name="_instanceList"                  key="/TPM0/_instanceList" />
          <param type="LongVariable"           value="1"                name="_irqCount"                      key="/TPM0/_irqCount" />
          <param type="BooleanVariable"        value="true"             name="_hasPcrTable"                   key="/TPM0/_hasPcrTable" />
          <param type="BooleanVariable"        value="true"             name="_present"                       key="/TPM0/_present" />
@@ -1005,6 +1013,7 @@
          <param type="BooleanVariable"        value="true"             name="tpm_conf_gtbeen_present"        key="/TPM0/tpm_conf_gtbeen_present" />
          <param type="BooleanVariable"        value="true"             name="tpm_conf_present"               key="/TPM0/tpm_conf_present" />
          <param type="BooleanVariable"        value="true"             name="tpm_conf_trgsel_present"        key="/TPM0/tpm_conf_trgsel_present" />
+         <param type="LongVariable"           value="6"                name="tpm_controls_dim"               key="/TPM0/tpm_controls_dim" />
          <param type="BooleanVariable"        value="true"             name="tpm_mod_mod_present"            key="/TPM0/tpm_mod_mod_present" />
          <param type="BooleanVariable"        value="true"             name="tpm_mod_present"                key="/TPM0/tpm_mod_present" />
          <param type="BooleanVariable"        value="true"             name="tpm_sc_cmod_present"            key="/TPM0/tpm_sc_cmod_present" />
@@ -1023,11 +1032,11 @@
          <param type="BooleanVariable"        value="true"             name="tpm_status_present"             key="/TPM0/tpm_status_present" />
          <param type="BooleanVariable"        value="true"             name="tpm_status_tof_present"         key="/TPM0/tpm_status_tof_present" />
       </peripheral>
-      <peripheral baseName="TPM"      instance="1"        instanceList="TPM;TPM0;TPM1;TPM2" version="tpm1_2ch">
+      <peripheral baseName="TPM"      instance="1"        instanceList="TPM0;TPM1;TPM2" version="tpm1_2ch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_TPM1_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_TPM1_MASK;" />
          <irq num="TPM1_IRQn" />
-         <param type="StringVariable"         value="TPM;TPM0;TPM1;TPM2" name="_instanceList"                  key="/TPM1/_instanceList" />
+         <param type="StringVariable"         value="TPM0;TPM1;TPM2"   name="_instanceList"                  key="/TPM1/_instanceList" />
          <param type="LongVariable"           value="1"                name="_irqCount"                      key="/TPM1/_irqCount" />
          <param type="BooleanVariable"        value="true"             name="_hasPcrTable"                   key="/TPM1/_hasPcrTable" />
          <param type="BooleanVariable"        value="true"             name="_present"                       key="/TPM1/_present" />
@@ -1054,6 +1063,7 @@
          <param type="BooleanVariable"        value="true"             name="tpm_conf_gtbeen_present"        key="/TPM1/tpm_conf_gtbeen_present" />
          <param type="BooleanVariable"        value="true"             name="tpm_conf_present"               key="/TPM1/tpm_conf_present" />
          <param type="BooleanVariable"        value="true"             name="tpm_conf_trgsel_present"        key="/TPM1/tpm_conf_trgsel_present" />
+         <param type="LongVariable"           value="2"                name="tpm_controls_dim"               key="/TPM1/tpm_controls_dim" />
          <param type="BooleanVariable"        value="true"             name="tpm_mod_mod_present"            key="/TPM1/tpm_mod_mod_present" />
          <param type="BooleanVariable"        value="true"             name="tpm_mod_present"                key="/TPM1/tpm_mod_present" />
          <param type="BooleanVariable"        value="true"             name="tpm_sc_cmod_present"            key="/TPM1/tpm_sc_cmod_present" />
@@ -1068,11 +1078,11 @@
          <param type="BooleanVariable"        value="true"             name="tpm_status_present"             key="/TPM1/tpm_status_present" />
          <param type="BooleanVariable"        value="true"             name="tpm_status_tof_present"         key="/TPM1/tpm_status_tof_present" />
       </peripheral>
-      <peripheral baseName="TPM"      instance="2"        instanceList="TPM;TPM0;TPM1;TPM2" version="tpm1_2ch">
+      <peripheral baseName="TPM"      instance="2"        instanceList="TPM0;TPM1;TPM2" version="tpm1_2ch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_TPM2_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_TPM2_MASK;" />
          <irq num="TPM2_IRQn" />
-         <param type="StringVariable"         value="TPM;TPM0;TPM1;TPM2" name="_instanceList"                  key="/TPM2/_instanceList" />
+         <param type="StringVariable"         value="TPM0;TPM1;TPM2"   name="_instanceList"                  key="/TPM2/_instanceList" />
          <param type="LongVariable"           value="1"                name="_irqCount"                      key="/TPM2/_irqCount" />
          <param type="BooleanVariable"        value="true"             name="_hasPcrTable"                   key="/TPM2/_hasPcrTable" />
          <param type="BooleanVariable"        value="true"             name="_present"                       key="/TPM2/_present" />
@@ -1099,6 +1109,7 @@
          <param type="BooleanVariable"        value="true"             name="tpm_conf_gtbeen_present"        key="/TPM2/tpm_conf_gtbeen_present" />
          <param type="BooleanVariable"        value="true"             name="tpm_conf_present"               key="/TPM2/tpm_conf_present" />
          <param type="BooleanVariable"        value="true"             name="tpm_conf_trgsel_present"        key="/TPM2/tpm_conf_trgsel_present" />
+         <param type="LongVariable"           value="2"                name="tpm_controls_dim"               key="/TPM2/tpm_controls_dim" />
          <param type="BooleanVariable"        value="true"             name="tpm_mod_mod_present"            key="/TPM2/tpm_mod_mod_present" />
          <param type="BooleanVariable"        value="true"             name="tpm_mod_present"                key="/TPM2/tpm_mod_present" />
          <param type="BooleanVariable"        value="true"             name="tpm_sc_cmod_present"            key="/TPM2/tpm_sc_cmod_present" />
@@ -1206,6 +1217,7 @@
          <param type="BooleanVariable"        value="true"             name="uart_c5_tdmae_present"          key="/UART0/uart_c5_tdmae_present" />
          <param type="BooleanVariable"        value="true"             name="uart_d_present"                 key="/UART0/uart_d_present" />
          <param type="BooleanVariable"        value="true"             name="uart_d_rt_present"              key="/UART0/uart_d_rt_present" />
+         <param type="LongVariable"           value="2"                name="uart_ma_dim"                    key="/UART0/uart_ma_dim" />
          <param type="BooleanVariable"        value="true"             name="uart_ma_ma_present"             key="/UART0/uart_ma_ma_present" />
          <param type="BooleanVariable"        value="true"             name="uart_ma_present"                key="/UART0/uart_ma_present" />
          <param type="BooleanVariable"        value="true"             name="uart_s1_fe_present"             key="/UART0/uart_s1_fe_present" />
@@ -1366,7 +1378,133 @@
          <param type="StringVariable"         value="USB0"             name="_instanceList"                  key="/USB0/_instanceList" />
          <param type="LongVariable"           value="1"                name="_irqCount"                      key="/USB0/_irqCount" />
          <param type="BooleanVariable"        value="true"             name="_hasPcrTable"                   key="/USB0/_hasPcrTable" />
+         <param type="BooleanVariable"        value="true"             name="_present"                       key="/USB0/_present" />
          <param type="StringVariable"         value="USB"              name="structName"                     key="/USB0/structName" />
+         <param type="BooleanVariable"        value="true"             name="usb_addinfo_iehost_present"     key="/USB0/usb_addinfo_iehost_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_addinfo_irqnum_present"     key="/USB0/usb_addinfo_irqnum_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_addinfo_present"            key="/USB0/usb_addinfo_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_addr_addr_present"          key="/USB0/usb_addr_addr_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_addr_lsen_present"          key="/USB0/usb_addr_lsen_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_addr_present"               key="/USB0/usb_addr_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_bdtpage1_bdtba_present"     key="/USB0/usb_bdtpage1_bdtba_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_bdtpage1_present"           key="/USB0/usb_bdtpage1_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_bdtpage2_bdtba_present"     key="/USB0/usb_bdtpage2_bdtba_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_bdtpage2_present"           key="/USB0/usb_bdtpage2_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_bdtpage3_bdtba_present"     key="/USB0/usb_bdtpage3_bdtba_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_bdtpage3_present"           key="/USB0/usb_bdtpage3_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_control_dppullupnonotg_present" key="/USB0/usb_control_dppullupnonotg_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_control_present"            key="/USB0/usb_control_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_ctl_hostmodeen_present"     key="/USB0/usb_ctl_hostmodeen_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_ctl_jstate_present"         key="/USB0/usb_ctl_jstate_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_ctl_oddrst_present"         key="/USB0/usb_ctl_oddrst_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_ctl_present"                key="/USB0/usb_ctl_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_ctl_reset_present"          key="/USB0/usb_ctl_reset_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_ctl_resume_present"         key="/USB0/usb_ctl_resume_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_ctl_se0_present"            key="/USB0/usb_ctl_se0_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_ctl_txsuspendtokenbusy_present" key="/USB0/usb_ctl_txsuspendtokenbusy_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_ctl_usbensofen_present"     key="/USB0/usb_ctl_usbensofen_present" />
+         <param type="LongVariable"           value="16"               name="usb_endpoint_dim"               key="/USB0/usb_endpoint_dim" />
+         <param type="BooleanVariable"        value="true"             name="usb_endpt_epctldis_present"     key="/USB0/usb_endpt_epctldis_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_endpt_ephshk_present"       key="/USB0/usb_endpt_ephshk_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_endpt_eprxen_present"       key="/USB0/usb_endpt_eprxen_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_endpt_epstall_present"      key="/USB0/usb_endpt_epstall_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_endpt_eptxen_present"       key="/USB0/usb_endpt_eptxen_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_endpt_hostwohub_present"    key="/USB0/usb_endpt_hostwohub_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_endpt_present"              key="/USB0/usb_endpt_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_endpt_retrydis_present"     key="/USB0/usb_endpt_retrydis_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_erren_btoerren_present"     key="/USB0/usb_erren_btoerren_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_erren_btserren_present"     key="/USB0/usb_erren_btserren_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_erren_crc16en_present"      key="/USB0/usb_erren_crc16en_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_erren_crc5eofen_present"    key="/USB0/usb_erren_crc5eofen_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_erren_dfn8en_present"       key="/USB0/usb_erren_dfn8en_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_erren_dmaerren_present"     key="/USB0/usb_erren_dmaerren_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_erren_piderren_present"     key="/USB0/usb_erren_piderren_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_erren_present"              key="/USB0/usb_erren_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_errstat_btoerr_present"     key="/USB0/usb_errstat_btoerr_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_errstat_btserr_present"     key="/USB0/usb_errstat_btserr_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_errstat_crc16_present"      key="/USB0/usb_errstat_crc16_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_errstat_crc5eof_present"    key="/USB0/usb_errstat_crc5eof_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_errstat_dfn8_present"       key="/USB0/usb_errstat_dfn8_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_errstat_dmaerr_present"     key="/USB0/usb_errstat_dmaerr_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_errstat_piderr_present"     key="/USB0/usb_errstat_piderr_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_errstat_present"            key="/USB0/usb_errstat_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_frmnumh_frm_present"        key="/USB0/usb_frmnumh_frm_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_frmnumh_present"            key="/USB0/usb_frmnumh_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_frmnuml_frm_present"        key="/USB0/usb_frmnuml_frm_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_frmnuml_present"            key="/USB0/usb_frmnuml_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_idcomp_nid_present"         key="/USB0/usb_idcomp_nid_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_idcomp_present"             key="/USB0/usb_idcomp_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_inten_attachen_present"     key="/USB0/usb_inten_attachen_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_inten_erroren_present"      key="/USB0/usb_inten_erroren_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_inten_present"              key="/USB0/usb_inten_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_inten_resumeen_present"     key="/USB0/usb_inten_resumeen_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_inten_sleepen_present"      key="/USB0/usb_inten_sleepen_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_inten_softoken_present"     key="/USB0/usb_inten_softoken_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_inten_stallen_present"      key="/USB0/usb_inten_stallen_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_inten_tokdneen_present"     key="/USB0/usb_inten_tokdneen_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_inten_usbrsten_present"     key="/USB0/usb_inten_usbrsten_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_istat_attach_present"       key="/USB0/usb_istat_attach_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_istat_error_present"        key="/USB0/usb_istat_error_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_istat_present"              key="/USB0/usb_istat_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_istat_resume_present"       key="/USB0/usb_istat_resume_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_istat_sleep_present"        key="/USB0/usb_istat_sleep_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_istat_softok_present"       key="/USB0/usb_istat_softok_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_istat_stall_present"        key="/USB0/usb_istat_stall_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_istat_tokdne_present"       key="/USB0/usb_istat_tokdne_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_istat_usbrst_present"       key="/USB0/usb_istat_usbrst_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_observe_dmpd_present"       key="/USB0/usb_observe_dmpd_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_observe_dppd_present"       key="/USB0/usb_observe_dppd_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_observe_dppu_present"       key="/USB0/usb_observe_dppu_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_observe_present"            key="/USB0/usb_observe_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgctl_dmlow_present"       key="/USB0/usb_otgctl_dmlow_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgctl_dphigh_present"      key="/USB0/usb_otgctl_dphigh_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgctl_dplow_present"       key="/USB0/usb_otgctl_dplow_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgctl_otgen_present"       key="/USB0/usb_otgctl_otgen_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgctl_present"             key="/USB0/usb_otgctl_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgicr_avbusen_present"     key="/USB0/usb_otgicr_avbusen_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgicr_bsessen_present"     key="/USB0/usb_otgicr_bsessen_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgicr_iden_present"        key="/USB0/usb_otgicr_iden_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgicr_linestateen_present" key="/USB0/usb_otgicr_linestateen_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgicr_onemsecen_present"   key="/USB0/usb_otgicr_onemsecen_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgicr_present"             key="/USB0/usb_otgicr_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgicr_sessvlden_present"   key="/USB0/usb_otgicr_sessvlden_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgistat_avbuschg_present"  key="/USB0/usb_otgistat_avbuschg_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgistat_b_sess_chg_present" key="/USB0/usb_otgistat_b_sess_chg_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgistat_idchg_present"     key="/USB0/usb_otgistat_idchg_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgistat_line_state_chg_present" key="/USB0/usb_otgistat_line_state_chg_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgistat_onemsec_present"   key="/USB0/usb_otgistat_onemsec_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgistat_present"           key="/USB0/usb_otgistat_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgistat_sessvldchg_present" key="/USB0/usb_otgistat_sessvldchg_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgstat_avbusvld_present"   key="/USB0/usb_otgstat_avbusvld_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgstat_bsessend_present"   key="/USB0/usb_otgstat_bsessend_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgstat_id_present"         key="/USB0/usb_otgstat_id_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgstat_linestatestable_present" key="/USB0/usb_otgstat_linestatestable_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgstat_onemsecen_present"  key="/USB0/usb_otgstat_onemsecen_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgstat_present"            key="/USB0/usb_otgstat_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_otgstat_sess_vld_present"   key="/USB0/usb_otgstat_sess_vld_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_perid_id_present"           key="/USB0/usb_perid_id_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_perid_present"              key="/USB0/usb_perid_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_rev_present"                key="/USB0/usb_rev_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_rev_rev_present"            key="/USB0/usb_rev_rev_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_softhld_cnt_present"        key="/USB0/usb_softhld_cnt_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_softhld_present"            key="/USB0/usb_softhld_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_stat_endp_present"          key="/USB0/usb_stat_endp_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_stat_odd_present"           key="/USB0/usb_stat_odd_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_stat_present"               key="/USB0/usb_stat_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_stat_tx_present"            key="/USB0/usb_stat_tx_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_token_present"              key="/USB0/usb_token_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_token_tokenendpt_present"   key="/USB0/usb_token_tokenendpt_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_token_tokenpid_present"     key="/USB0/usb_token_tokenpid_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_usbctrl_pde_present"        key="/USB0/usb_usbctrl_pde_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_usbctrl_present"            key="/USB0/usb_usbctrl_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_usbctrl_susp_present"       key="/USB0/usb_usbctrl_susp_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_usbfrmadjust_adj_present"   key="/USB0/usb_usbfrmadjust_adj_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_usbfrmadjust_present"       key="/USB0/usb_usbfrmadjust_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_usbtrc0_present"            key="/USB0/usb_usbtrc0_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_usbtrc0_sync_det_present"   key="/USB0/usb_usbtrc0_sync_det_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_usbtrc0_usb_resume_int_present" key="/USB0/usb_usbtrc0_usb_resume_int_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_usbtrc0_usbreset_present"   key="/USB0/usb_usbtrc0_usbreset_present" />
+         <param type="BooleanVariable"        value="true"             name="usb_usbtrc0_usbresmen_present"  key="/USB0/usb_usbtrc0_usbresmen_present" />
       </peripheral>
    </peripherals>
    <pins>

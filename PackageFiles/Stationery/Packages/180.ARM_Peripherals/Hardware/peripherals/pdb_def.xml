@@ -19,7 +19,6 @@
              irqHandler   : Callback        : Event
              &quot;" />
 
-
 <!--
     * General substitutions
     *  $(_NAME)         => e.g FTM2 => FTM2
@@ -53,6 +52,17 @@
     * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
     * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
 -->
+
+   <!-- Constants -->
+   <constant key="NumChannels"            type="Long" value="0" description="Number of channels"            condition="!pdb_ch_dim"     /> <!-- PDB Channels    -->
+   <constant key="NumPreTriggers"         type="Long" value="0" description="Number of (ADC) Pre-triggers"  condition="!pdb_dly_dim"    /> <!-- Pretriggers     -->
+   <constant key="NumDacIntervalTriggers" type="Long" value="0" description="Number of DAC triggers"        condition="!pdb_dac_dim"    /> <!-- to DAC triggers -->
+   <constant key="NumPulseOutputs"        type="Long" value="0" description="Number of Pulse outputs"       condition="!pdb_pondly_dim" /> <!-- to CMP windows  -->
+
+   <constant key="NumChannels"            type="Long" value="pdb_ch_dim"     description="Number of channels"           condition="pdb_ch_dim"     /> <!-- PDB Channels    -->
+   <constant key="NumPreTriggers"         type="Long" value="pdb_dly_dim"    description="Number of (ADC) Pre-triggers" condition="pdb_dly_dim"    /> <!-- Pretriggers     -->
+   <constant key="NumDacIntervalTriggers" type="Long" value="pdb_dac_dim"    description="Number of DAC triggers"       condition="pdb_dac_dim"    /> <!-- to DAC triggers -->
+   <constant key="NumPulseOutputs"        type="Long" value="pdb_pondly_dim" description="Number of Pulse outputs"      condition="pdb_pondly_dim" /> <!-- to CMP windows  -->
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
@@ -587,7 +597,7 @@
          \t\n
       ]]></template>
 
-      <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+      <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
          \t
          \t/**
          \t * Callback for programmatically set %(Description) callback for $(_Class)
@@ -1309,7 +1319,7 @@
 
 <!--  Configure method -->
 
-   <template discardRepeats="true" namespace="all" key="/PDB/InitMethod" codeGenCondition="enablePeripheralSupport"
+   <template discardRepeats="true" key="/PDB/InitMethod" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t/**
       \t * Configure PDB from values specified in init
@@ -1402,7 +1412,7 @@
    ]]></template>
    <variableTemplate variables="pdb_intc0_triggerMode" codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t   // Configure DAC triggers
-      \t   for (size_t x=0; x<Pdb0numDacIntervalTriggers; x++) {
+      \t   for (size_t x=0; x<numDacIntervalTriggers; x++) {
       \t      pdb->DAC[x].INTC = init.intc[x];
       \t      pdb->DAC[x].INT  = convertIfNeeded(init.interval[x]);
       \t   }
@@ -1472,7 +1482,7 @@
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" >
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Class representing $(_NAME)
@@ -1491,11 +1501,11 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n

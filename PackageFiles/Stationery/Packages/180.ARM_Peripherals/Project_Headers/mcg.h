@@ -118,30 +118,6 @@ $(/MCG/publicMethods: // No public methods found)
     */
    static const ClockInfo clockInfo[];
 
-   /**
-    * Enable interrupts in NVIC
-    */
-   static void enableNvicInterrupts() {
-      NVIC_EnableIRQ(McgInfo::irqNums[0]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableNvicInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(McgInfo::irqNums[0], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(McgInfo::irqNums[0]);
-   }
-
    /** Current clock mode (FEI out of reset) */
    static McgClockMode currentClockMode;
 

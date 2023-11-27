@@ -100,7 +100,7 @@
       </for>
    </category>
 
-   <variableTemplate key="llwu_base_methods" namespace="all" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate key="llwu_base_methods" codeGenCondition="enablePeripheralSupport"
       variables="llwu_me_peripherals,llwu_me_wume"
       nonDefaultParams="2" ><![CDATA[
       \t/**
@@ -174,7 +174,7 @@
       <choice name="Filter enabled"     enum="Enabled"  value="1" />
    </binaryOption>
 
-   <variableTemplate key="llwu_base_methods" namespace="all" variables="llwu_rst_rstfilt,llwu_rst_llrste" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <variableTemplate key="llwu_base_methods" variables="llwu_rst_rstfilt,llwu_rst_llrste" codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Controls Reset wake-up control
       \t *
@@ -285,7 +285,7 @@
 
 <!--   ========== LLWU Init class =============================== -->
 
-   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template key="init_description" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Class)
@@ -396,7 +396,7 @@
    ]]>
    </template>
 
-   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t
       \t/** Callback for programmatically set handler */
@@ -405,7 +405,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -607,13 +607,13 @@
 
 <!--   Default Initialisation value -->
 
-   <template key="DefaultInitValue" namespace="all" codeGenCondition="enablePeripheralSupport"
+   <template key="DefaultInitValue" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t// LLWU default init value
       \tstatic constexpr LlwuInfo::Init DefaultInitValue {\n
    ]]></template>
    <for keys="n" dim="8" >
-      <variableTemplate key="DefaultInitValue" namespace="all" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate key="DefaultInitValue" codeGenCondition="enablePeripheralSupport"
          variables="llwu_me_wume%(n)"
          terminator=","
          separator=","
@@ -627,7 +627,7 @@
         "1:0;1:1;1:2;1:3;2:4;2:5;2:6;2:7;3:8;3:9;3:10;3:11;4:12;4:13;4:14;4:15;5:16;
          5:17;5:18;5:19;6:20;6:21;6:22;6:23;7:24;7:25;7:26;7:27;8:28;8:29;8:30;8:31"
         >
-      <variableTemplate key="DefaultInitValue" namespace="all" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate key="DefaultInitValue" codeGenCondition="enablePeripheralSupport"
          variables="llwu_pe%(r)_wupe%(p)"
          terminator=","
          separator=","
@@ -638,7 +638,7 @@
    </for>
 
    <for keys="n" values="1;2;3;4">
-      <variableTemplate key="DefaultInitValue" namespace="all" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate key="DefaultInitValue" codeGenCondition="enablePeripheralSupport"
          variables="llwu_filt%(n)_filtsel, llwu_filt%(n)_filte"
          terminator=","
          separator=","
@@ -648,7 +648,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate key="DefaultInitValue" namespace="all" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate key="DefaultInitValue" codeGenCondition="enablePeripheralSupport"
       variables="llwu_rst_llrste, llwu_rst_rstfilt"
       terminator=","
       separator=","
@@ -656,14 +656,14 @@
       \t   %symbolicExpression0, %symbolicExpression1,  \n
    ]]></variableTemplate>
 
-   <template key="DefaultInitValue" namespace="all" codeGenCondition="enablePeripheralSupport"
+   <template key="DefaultInitValue" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t};\n\n
    ]]></template>
 
 <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t
       \t/**
       \t * Configure with default settings.
@@ -677,7 +677,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t
       \t/**
@@ -692,7 +692,7 @@
       \t   // Enable peripheral clock
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       condition="irqHandlingMethod" >
    <![CDATA[
       \t   if constexpr (Info::irqHandlerInstalled) {
@@ -702,7 +702,7 @@
       \t\n
    ]]></template>
    <for keys="n:b" values="1:0;2:8;3:16;4:24" >
-      <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          condition="llwu_pf%(n)_wuf%(b)_present" >
       <![CDATA[
          \t      // Clear pin flags
@@ -710,7 +710,7 @@
       ]]></template>
    </for>
    <for keys="i:n:b" values="0:1:0;1:2:4;2:3:8;3:4:12;4:5:16;5:6:20;6:7:24;7:8:28;" >
-      <variableTemplate key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="llwu_pe%(n)_wupe%(b)" >
       <![CDATA[
          \t      // Configure pin source
@@ -718,31 +718,31 @@
       ]]></variableTemplate>
    </for>
    <for keys="i:n" values="0:1;1:2;2:3;3:4" >
-      <variableTemplate key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="llwu_filt%(n)_filte" >
       <![CDATA[
          \t      // Configure and clear filtered pin source
          \t      %register = init.filt[%(i)];\n
       ]]></variableTemplate>
    </for>
-   <variableTemplate key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="llwu_me_peripherals" >
    <![CDATA[
       \t      // Configure peripheral sources
       \t      %register    = init.%registerName;\n
    ]]></variableTemplate>
-   <variableTemplate key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="llwu_rst_llrste" >
    <![CDATA[
       \t      // Configure filtered reset pin source
       \t      %register   = init.%registerName;\n
    ]]></variableTemplate>
-   <template  key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template  key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t};\n\n
    ]]></template >
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
       <![CDATA[
       \t}; // $(_Class)BasicInfo::Init\n\n
    ]]>
@@ -756,7 +756,7 @@
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Class representing $(_NAME)
       \t */
@@ -774,11 +774,11 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n

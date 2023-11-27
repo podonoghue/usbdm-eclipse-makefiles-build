@@ -66,7 +66,7 @@
    ]]></template>
 
    <binaryOption key="/$(_BASENAME)/baudSupport"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       modify="true"
       description="Enable specifying speed in Hertz"
       toolTip="If not selected, the communication speed must be specified using the\n
@@ -76,7 +76,7 @@
    </binaryOption>
 
    <choiceOption key="spiClockConfig" condition="/MCG/_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       target="spiInputClock"
       description="Clock configuration"
       toolTip="Selects the clock configuration used for calculations involving the bus clock" >
@@ -87,7 +87,7 @@
    </choiceOption>
 
    <choiceOption key="spiClockConfig" condition="/ICS/_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       target="spiInputClock"
       description="Clock configuration"
       toolTip="Selects the clock configuration used for calculations involving the bus clock" >
@@ -98,7 +98,7 @@
    </choiceOption>
 
    <intOption key="spiInputClock"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       locked="true"
       derived="true"
       description="SPI input clock"
@@ -111,7 +111,7 @@
    <!-- ************* C1 and C2****************** -->
 
    <binaryOption key="spi_c1_spe" condition="spi_c1_spe_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="SpiEnable"
       description="System enable" >
       <choice name="Disabled"    value="0" enum="Disabled" />
@@ -322,7 +322,7 @@
       \t}\n\n
    ]]></variableTemplate>
 
-   <variableTemplate variables="spi_c1_mode,spi_c1_lsbfe" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate variables="spi_c1_mode,spi_c1_lsbfe" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       nonDefaultParams="2"
    ><![CDATA[
       \t/**
@@ -372,7 +372,7 @@
 
 <!--   ========== SPI Init class =============================== -->
 
-   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template key="init_description" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_BASENAME)
@@ -417,7 +417,7 @@
    ]]>
    </template>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
       variables="irqHandlingMethod"
    ><![CDATA[
        \t//! Class based callback handler has been installed in vector table
@@ -442,7 +442,7 @@
    ]]>
    </template>
 
-   <template namespace="all" key="/$(_BASENAME)/private" codeGenCondition="!/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
+   <template key="/$(_BASENAME)/private" codeGenCondition="!/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
    <![CDATA[
       \t/**
       \t * Poll device
@@ -492,7 +492,7 @@
    ]]>
    </template>
 
-   <template namespace="all" key="/$(_BASENAME)/private" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
+   <template key="/$(_BASENAME)/private" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
    <![CDATA[
       \t/**
       \t * Poll device - dummy routine
@@ -560,7 +560,7 @@
    ]]>
    </template>
 
-   <template namespace="all" key="/$(_BASENAME)/public" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
+   <template key="/$(_BASENAME)/public" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
    <![CDATA[
       \t/**
       \t * Set interrupt callback function.
@@ -581,7 +581,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true" >
+   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -625,28 +625,28 @@
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
       variables="spi_c1_mstr,spi_c1_mode,spi_s2_pinuse,spi_c1_lsbfe"
    ><![CDATA[
       \t   /// Control register 1
       \t   uint8_t %registerName = %mask0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
       variables="spi_c2_spmie,spi_s2_pinuse,spi_c2_spiswai,spi_c2_bidirectional"
    ><![CDATA[
       \t   /// Control register 2
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
       variables="spi_br_sppr,spi_br_spr"
    ><![CDATA[
       \t   /// Baud rate register
       \t   uint8_t %registerName = 0xFFU;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
       variables="spi_m_bits"
    ><![CDATA[
       \t   /// Match register:
@@ -663,7 +663,7 @@
 
 <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -676,7 +676,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/private" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/private" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Configure $(_BASENAME) from a subset of values specified in init
       \t * This does not include interrupt or clock settings.
@@ -688,13 +688,13 @@
       \t   uint8_t br = init.br;
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/private" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/baudSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/private" discardRepeats="true" codeGenCondition="/$(_BASENAME)/baudSupport" ><![CDATA[
       \t   if (br == 0xFFU) {
       \t      // Calculate prescale values from speed
       \t      br = calculateBr(getClockFrequency(), init.speed);
       \t   }\n
    ]]></template>
-   <template key="/$(_BASENAME)/private" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/private" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t   // ..........  Regs to init .......... ;
       \t   spi->C1   = 0;
       \t   spi->C2   = init.c2;
@@ -705,7 +705,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Configure $(_BASENAME) from values specified in init
       \t *
@@ -717,7 +717,7 @@
       \t   Info::enableClock();
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true"
          codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      setCallback(init.callbackFunction);
@@ -725,7 +725,7 @@
       \t   }
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" discardRepeats="true" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t   configureBasic(init);
       \t}
       \t\n
@@ -769,7 +769,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
       variables="spi_br_sppr,spi_br_spr"
       linePadding="xxx"
       nonDefaultParams="2"
@@ -816,7 +816,7 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
       variables="spi_s2_pinuse"
       linePadding="xxx"
    >
@@ -839,7 +839,7 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
       variables="spi_c2_spmie,spi_m_bits"
       nonDefaultParams="2"
       linePadding="xxx" >
@@ -871,7 +871,7 @@
             spi_c2_spiswai;
             spi_c2_bidirectional
             " >
-      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -895,7 +895,7 @@
 
 <!--   Default Initialisation value -->
 
-   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       separator=","
       terminator=","
       variables="
@@ -926,7 +926,7 @@
       \t\n
    ]]></template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true" >
+   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true" >
       <![CDATA[
       \t}; // $(_Baseclass)BasicInfo::Init\n\n
    ]]>
@@ -940,7 +940,7 @@
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" ><![CDATA[
    \t/**
    \t * Class representing $(_NAME) interface
    \t * <b>Example</b>
@@ -975,11 +975,11 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n

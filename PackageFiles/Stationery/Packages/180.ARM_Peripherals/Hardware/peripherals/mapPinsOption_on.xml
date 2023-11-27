@@ -22,7 +22,7 @@
    - namespace="usbdm"
      Placed before Info class in pin_mapping.h i.e. in USBDM namespace
 
-   - namespace="all" key="keyValue"
+   - key="keyValue"
      Substituted anywhere for $(keyValue)
 
    Constants that affect this inclusion
@@ -63,7 +63,7 @@
    ]]></template>
 
    <!-- Template is added to peripheral classes -->
-   <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" condition="/PCR/mux_present" ><![CDATA[
+   <template discardRepeats="true" key="/$(_BASENAME)/classInfo" condition="/PCR/mux_present" ><![CDATA[
       // Template /$(_BASENAME)/classInfo
 
       \t/**
@@ -97,7 +97,7 @@
    ]]></template>
 
    <!-- Template is added to peripheral classes -->
-   <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" condition="!/PCR/mux_present" ><![CDATA[
+   <template discardRepeats="true" key="/$(_BASENAME)/classInfo" condition="!/PCR/mux_present" ><![CDATA[
       // Template mapPinsOption_on.xml
 
       \t/**
@@ -131,7 +131,7 @@
    ]]></template>
 
    <!-- Template is added to peripheral classes -->
-   <template discardRepeats="true" namespace="all" key="/$(_BASENAME)/classInfo" ><![CDATA[
+   <template discardRepeats="true" key="/$(_BASENAME)/classInfo" ><![CDATA[
 
       \t/**
       \t * Basic enable of $(_BASENAME)

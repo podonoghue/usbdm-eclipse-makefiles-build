@@ -11,61 +11,24 @@
    ]]></template>
 
    <!-- ************* SCGCx Bus clock enables ****************** -->
-
-   <!--             reg : name    : Name    : isDefault -->
-   <constant key="clockEnables" type="String" value="&quot;
-                    4   : spi1    : Spi1    : false ;
-                    4   : spi0    : Spi0    : false ;
-                    4   : vref    : Vref    : false ;
-                    4   : cmp     : Cmp     : false ;
-                    4   : cmp0    : Cmp0    : false ;
-                    4   : usb0    : Usb0    : false ;
-                    4   : uart2   : Uart2   : false ;
-                    4   : uart1   : Uart1   : false ;
-                    4   : uart0   : Uart0   : false ;
-                    4   : i2c0    : I2c0    : false ;
-                    4   : i2c1    : I2c1    : false ;
-                    4   : cmt     : Cmt     : false ;
-                    4   : ewm     : Ewm     : false ;
-
-                    5   : slcd    : Slcd    : false ;
-                    5   : flexio  : Flexio  : false ;
-                    5   : lpuart1 : Lpuart1 : false ;
-                    5   : lpuart0 : Lpuart0 : false ;
-                    5   : porte   : Porte   : false ;
-                    5   : portd   : Portd   : false ;
-                    5   : portc   : Portc   : false ;
-                    5   : portb   : Portb   : false ;
-                    5   : porta   : Porta   : false ;
-                    5   : tsi0    : Tsi0    : false ;
-                    5   : lptmr   : Lptmr   : false ;
-                    5   : lptmr0  : Lptmr0  : false ;
-
-                    6   : dac0    : Dac0    : false ;
-                    6   : rtc     : Rtc     : false ;
-                    6   : adc0    : Adc0    : false ;
-                    6   : ftm2    : Ftm2    : false ;
-                    6   : ftm1    : Ftm1    : false ;
-                    6   : ftm0    : Ftm0    : false ;
-                    6   : tpm2    : Tpm2    : false ;
-                    6   : tpm1    : Tpm1    : false ;
-                    6   : tpm0    : Tpm0    : false ;
-                    6   : pdb     : Pdb     : false ;
-                    6   : usbdcd  : Usbdcd  : false ;
-                    6   : pit     : Pit     : false ;
-                    6   : crc0    : Crc0    : false ;
-                    6   : crc     : Crc     : false ;
-                    6   : i2s     : I2s     : false ;
-                    6   : i2s0    : I2s0    : false ;
-                    6   : dmamux0 : Dmamux0 : false ;
-                    6   : ftf     : Ftf     : true  ;
-                    6   : ftfa    : Ftfa    : true  ;
-                    6   : ftfe    : Ftfe    : true  ;
-                    6   : ftfl    : Ftfl    : true  ;
-                    6   : spi0    : Spi0    : false ;
-
-                    7   : dma0    : Dma0    : false
-   &quot;" />
+   <!-- Create list of clock enable fields -->
+   <equation key="clockEnables" value="=&quot;&quot;" />
+   <for keys="peripheral"
+      values="adc;cmp;cmt;crc;dac;dma;dmamux;ewm;flexio;ftf;ftfa;ftfe;ftfl;ftm;
+              i2c;i2s;lptmr;lpuart;pdb;pit;porta;portb;portc;portd;porte;rnga;
+              rtc;slcd;spi;tpm;tsi;uart;usb;usbdcd;vref;
+      ">
+      <for keys="scgcNum" values="4;5;6;7">
+         <for keys="instance" values=";0;1;2;3;4;5">
+            <equation key="enabled" value="&quot;%(peripheral)&quot;==&quot;ftf&quot;" />
+            <equation key="clockEnables"
+               value="=clockEnables+&quot;%(scgcNum) : %(peripheral)%(instance) : &quot;+
+                       Prettify(&quot;%(peripheral)&quot;)+&quot;%(instance):&quot;+enabled+&quot;;&quot;"
+               condition="sim_scgc%(scgcNum)_%(peripheral)%(instance)_present" />
+         </for>
+      </for>
+   </for>
+   <deleteVariable key="enabled" />
 
    <!-- Peripheral routing MKL -->
    <!--   field                 :   name                -->
@@ -122,7 +85,7 @@
          </binaryOption>
       </for>
 
-      <choiceOption key="sim_sopt8_ftm_syncbits"  condition="sim_sopt8_ftm0syncbit_present"
+      <choiceOption key="sim_sopt8_ftm_syncbits" condition="sim_sopt8_ftm0syncbit_present"
          typeName="SimFtmSync"
          valueFormat="%s"
          hidden="true"
@@ -684,9 +647,9 @@
 <!--   Member variables -->
 
    <for keys="regNum" dim="8" >
-      <template namespace="usbdm" discardRepeats="true" 
+      <template namespace="usbdm" discardRepeats="true"
          codeGenCondition="enablePeripheralSupport&amp;&amp;Exists(sim_scgc%(regNum)_present)" ><![CDATA[
-         \t   /// System Clock Gating Control Register %(regNum) 
+         \t   /// System Clock Gating Control Register %(regNum)
          \t   uint32_t scgc%(regNum) = 0;\n\n
       ]]></template>
    </for>
@@ -766,7 +729,7 @@
       ]]>
       </template>
       <for keys="regNum" dim="8" >
-         <template codeGenCondition="Exists(sim_scgc%(regNum)_present)" ><![CDATA[
+         <template codeGenCondition="enablePeripheralSupport" condition="sim_scgc%(regNum)_present" ><![CDATA[
             \t   sim->SCGC%(regNum)  %(op) init.scgc%(regNum);\n
          ]]></template>
       </for>
@@ -1304,7 +1267,7 @@
 
 <!-- ========== SOPT7 =============================== -->
 
-   <template key="AdcInit_description" namespace="all" ><![CDATA[
+   <template key="AdcInit_description" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of all Adc trigger sources
       \t *
@@ -1418,7 +1381,7 @@ $(AdcInit_description)
 
    <for keys="p" values=";0;1">
 
-      <template key="Adc%(p)Init_description" namespace="all" ><![CDATA[
+      <template key="Adc%(p)Init_description" ><![CDATA[
          \t/**
          \t * Class used to do initialisation of Adc%(p) trigger sources
          \t *
@@ -1701,10 +1664,10 @@ $(Adc%(p)Init_description)
          \t}\n\n
       ]]></template>
 
-      <template key="/SYSTEM/Includes" namespace="all" ><![CDATA[
+      <template key="/SYSTEM/Includes" ><![CDATA[
       ]]></template>
 
-      <variableTemplate key="/SYSTEM/WatchdogInitialise" namespace="all" variables="sim_copc_copt" ><![CDATA[
+      <variableTemplate key="/SYSTEM/WatchdogInitialise" variables="sim_copc_copt" ><![CDATA[
          \t/*
          \t * Initialise watchdog
          \t */
@@ -1810,7 +1773,7 @@ $(Adc%(p)Init_description)
 
    <template><![CDATA[
       \t/**
-      \t * Configure SIM from values specified
+      \t * Configure SIM from values specified in config
       \t */
       \tstatic void configure(const Init &config) {\n
    ]]></template>
@@ -1837,7 +1800,12 @@ $(Adc%(p)Init_description)
       \t   updateUsbClockDivider();\n
    ]]></variableTemplate>
    <template><![CDATA[
-      \t}\n\n
+      \t}
+      \t
+      \tstatic void defaultConfigure() {
+      \t   configure(DefaultInitValue);
+      \t}
+      \t\n
    ]]></template>
 
    <variableTemplate namespace="usbdm"
@@ -2292,7 +2260,7 @@ $(Adc%(p)Init_description)
    ]]></template>
 
  <!-- ========== Common =============================== -->
-   <template key="DefaultInitValue" namespace="all" ><![CDATA[
+   <template key="DefaultInitValue" ><![CDATA[
       \tstatic void initRegs() {
       \t
       \t   configure(DefaultInitValue);

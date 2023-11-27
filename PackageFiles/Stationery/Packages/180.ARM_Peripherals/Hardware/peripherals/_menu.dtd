@@ -14,7 +14,7 @@
 
 <!-- Simple items that don't that don''t recurse -->
 <!ENTITY % simple_items     "xi:include|
-                              deleteOption|projectActionList|
+                              deleteVariable|projectActionList|
                               title|constant|signals|
                               timeOption|intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption|irqOption|pinListOption|aliasOption|pinMapOption|
                               clockSelectionOption|validate|equation|
@@ -187,11 +187,11 @@
 
 
 
-<!ELEMENT deleteOption EMPTY >
-   <!-- Key for option to delete -->
-   <!ATTLIST deleteOption key           CDATA        #REQUIRED>
-   <!-- Stops check for existence before deleting -->
-   <!ATTLIST deleteOption mustExist     (false)      #IMPLIED>
+<!ELEMENT deleteVariable EMPTY >
+   <!-- Key for variable to delete -->
+   <!ATTLIST deleteVariable key           CDATA        #REQUIRED>
+   <!-- May be used to disable the check for existence that is done before deleting -->
+   <!ATTLIST deleteVariable mustExist     (false)      #IMPLIED>
 
 <!ELEMENT aliasOption EMPTY >
    <!-- Allows reference to an option (possibly) in another file -->
@@ -293,7 +293,7 @@
    <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
    <!ATTLIST intOption enumType      CDATA        #IMPLIED>
    <!-- C #if expression to guard enum declaration -->
-   <!ATTLIST choiceOption enumGuard           CDATA        #IMPLIED>
+   <!ATTLIST intOption enumGuard           CDATA        #IMPLIED>
    <!-- Type for int .e.g. Ticks & or name or enum wrapper -->
    <!ATTLIST intOption typeName      CDATA        #IMPLIED>
    <!-- Allows this option to modify previous option with the same key 
@@ -358,7 +358,7 @@
    <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
    <!ATTLIST bitmaskOption enumType       CDATA        #IMPLIED>
    <!-- C #if expression to guard enum declaration -->
-   <!ATTLIST choiceOption enumGuard           CDATA        #IMPLIED>
+   <!ATTLIST bitmaskOption enumGuard           CDATA        #IMPLIED>
     <!-- Bit mask indicating active bits.  May be zero to indicate calculation from bitList -->
    <!ATTLIST bitmaskOption bitmask        CDATA        #REQUIRED>
    <!-- List of names for the bits in mask or pattern e.g. CH%i -->
@@ -541,7 +541,7 @@
    <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
    <!ATTLIST clockSelectionOption enumType            CDATA        #IMPLIED>
       <!-- C #if expression to guard enum declaration -->
-   <!ATTLIST choiceOption enumGuard           CDATA        #IMPLIED>
+   <!ATTLIST clockSelectionOption enumGuard           CDATA        #IMPLIED>
 <!-- Text to add to enum body generated from choices -->
    <!ATTLIST clockSelectionOption enumText            CDATA        #IMPLIED> 
    <!-- Target variable for control-->
@@ -583,12 +583,20 @@
    <!ATTLIST choiceOption units               (None|Hz|s)  #IMPLIED>
    <!-- Variable defined earlier to inherit values from -->
    <!ATTLIST choiceOption derivedFrom         CDATA        #IMPLIED>
+   
+   <!-- Name for table associated with this choice -->
+   <!ATTLIST choiceOption tableName            CDATA        #IMPLIED>
+   <!-- Type for elements of table associated with this choice -->
+   <!ATTLIST choiceOption tableType            CDATA        #IMPLIED>
+   <!-- Structure for elements of the table associated with this choice -->
+   <!ATTLIST choiceOption tableDefinition      CDATA        #IMPLIED>
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
       usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
       all   - Explicitly available anywhere controlled by key substitution<br>
       forceInfo - forces Info namespace and clears key and discardRepeats
+      baseClass - In base class for peripheral (causes discard repeats using StructName as key)
    -->
    <!ATTLIST choiceOption namespace           CDATA        #IMPLIED >
    <!-- Name for enum and first part of enum values -->
@@ -684,7 +692,7 @@
    <!-- Unlocked by an expression -->
    <!ATTLIST binaryOption unlockedBy          CDATA        #IMPLIED>
    
-    <!-- Equation that controls this variable -->
+   <!-- Equation that controls this variable -->
    <!ATTLIST binaryOption ref                 CDATA        #IMPLIED>
    <!--Used with enum generation to give explicit template name to enum template -->
    <!ATTLIST binaryOption templateKey         CDATA        #IMPLIED>
@@ -692,12 +700,20 @@
    <!ATTLIST binaryOption units               (None|Hz|s)  #IMPLIED>
    <!-- Variable defined earlier to inherit values from -->
    <!ATTLIST binaryOption derivedFrom         CDATA        #IMPLIED>
+   
+   <!-- Name for table associated with this choice -->
+   <!ATTLIST binaryOption tableName            CDATA        #IMPLIED>
+   <!-- Type for elements of table associated with this choice -->
+   <!ATTLIST binaryOption tableType            CDATA        #IMPLIED>
+   <!-- Structure for elements of the table associated with this choice -->
+   <!ATTLIST binaryOption tableDefinition      CDATA        #IMPLIED>
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
       usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
       all   - Explicitly available anywhere controlled by key substitution<br>
       forceInfo - forces Info namespace and clears key and discardRepeats
+      baseClass - In base class for peripheral (causes discard repeats using StructName as key)
    -->
    <!ATTLIST binaryOption namespace           CDATA                   #IMPLIED >
    <!-- Name for enum and first part of enum values -->
@@ -749,7 +765,12 @@
    <!-- Expression enables this option -->
    <!ATTLIST irqOption enabledBy     CDATA        #IMPLIED>
 
+   <!-- Equation that controls this variable -->
+   <!ATTLIST irqOption ref                 CDATA        #IMPLIED>
+   
+   <!-- Pattern for IRQ vector -->
    <!ATTLIST irqOption pattern       CDATA        #REQUIRED>
+   <!-- Pattern for IRQ handler -->
    <!ATTLIST irqOption classHandler  CDATA        #REQUIRED>
    <!-- Initial/default value -->
    <!ATTLIST irqOption value         CDATA        #IMPLIED>
@@ -842,6 +863,7 @@
       usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
       all   - Explicitly available anywhere controlled by key substitution<br>
       forceInfo - forces Info namespace and clears key and discardRepeats
+      baseClass - In base class for peripheral (causes discard repeats using StructName as key)
    -->
    <!ATTLIST template namespace                 CDATA                   #IMPLIED >
    <!-- Key for template -->
@@ -862,6 +884,7 @@
       usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
       all   - Explicitly available anywhere controlled by key substitution<br>
       forceInfo - forces Info namespace and clears key and discardRepeats
+      baseClass - In base class for peripheral (causes discard repeats using StructName as key)
    -->
    <!ATTLIST variableTemplate namespace                 CDATA                   #IMPLIED >
    <!-- Key for template -->
@@ -902,6 +925,7 @@
       usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
       all   - Explicitly available anywhere controlled by key substitution<br>
       forceInfo - forces Info namespace and clears key and discardRepeats
+      baseClass - In base class for peripheral (causes discard repeats using StructName as key)
    -->
    <!ATTLIST clockCodeTemplate namespace                 CDATA                   #IMPLIED >
    <!-- Key for template -->

@@ -113,7 +113,7 @@
 
    <!--  ========== PIT Init class =============================== -->
 
-   <template key="init_description" namespace="all" ><![CDATA[
+   <template key="init_description" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of a $(_Class) channel
       \t *
@@ -214,7 +214,7 @@
 
 <!--  Configure method -->
 
-   <variableTemplate variables="pit_tctrl_ten[]" discardRepeats="true" key="/PIT/InitMethod" namespace="all" ><![CDATA[
+   <variableTemplate variables="pit_tctrl_ten[]" discardRepeats="true" key="/PIT/InitMethod" ><![CDATA[
    \t/**
    \t * Configure a PIT channel from values specified in init
    \t *
@@ -371,7 +371,7 @@
 
    <!--  ==================== Misc ======================== -->
 
-   <template discardRepeats="true" key="CallBackDefinition" namespace="all" ><![CDATA[
+   <template discardRepeats="true" key="CallBackDefinition" ><![CDATA[
       /**
        * Callback table for programmatically set handlers
        */
@@ -379,11 +379,11 @@
       typename Info::CallbackFunction PitBase_T<Info>::sCallbacks[] = {\n
    ]]></template>
    <for keys="ch" dim="=numChannels">
-      <template discardRepeats="true" key="/PIT/CallBackDefinition" namespace="all" ><![CDATA[
+      <template discardRepeats="true" key="/PIT/CallBackDefinition" ><![CDATA[
          \tPitBase_T<Info>::unhandledCallback,\n
       ]]></template>
    </for>
-   <template discardRepeats="true" key="/PIT/CallBackDefinition" namespace="all" ><![CDATA[
+   <template discardRepeats="true" key="/PIT/CallBackDefinition" ><![CDATA[
       };\n\n
    ]]></template>
 
@@ -423,7 +423,7 @@
       \t}\n\n
    ]]></template>
 
-   <template key="/PIT/declarations" namespace="all"  ><![CDATA[
+   <template key="/PIT/declarations"  ><![CDATA[
    \t/**
    \t * Class representing $(_NAME)
    \t */
@@ -444,11 +444,11 @@
    \t */\n
    ]]></template>
    <for keys="ch" dim="=numChannels">
-      <template key="/PIT/declarations" namespace="all"  ><![CDATA[
+      <template key="/PIT/declarations"  ><![CDATA[
          #define PIT$(_instance)_CHANNEL%(ch)_HANDLER() template<>template<> void Pit$(_instance)::Channel<%(ch)>::irqHandler()\n
       ]]></template>
    </for>
-   <template key="/PIT/declarations" namespace="all"  ><![CDATA[
+   <template key="/PIT/declarations"  ><![CDATA[
 
    \t/**
    \t * @brief class representing a PIT channel

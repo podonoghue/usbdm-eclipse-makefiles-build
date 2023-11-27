@@ -1,42 +1,706 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- ewm_def.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="External Watchdog Monitor">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="External Watchdog Monitor" >
 
-   <xi:include href="default_instance.xml"/>
+   <stringOption key="irq_pattern"        locked="true" value="^WDOG%i_?$"       hidden="true" />
+   <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irqHandler" hidden="true" />
+   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="enablePeripheral.xml"  />
+   <title />
 
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
+
+<!--
+    * Template substitutions
+    *
+    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
+    * <li>%valueExpression            Numeric variable value e.g. 0x3
+    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
+    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
+    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
+    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
+    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
+    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * <li>%params                     Formatted parameter list for function
+    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
+    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
+    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
+    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
+    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
+    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
+    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
+    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
+-->
+
+   <!-- Constants -->
    <constant key = "disable_peripheral"      value = "&quot;ewm->CTRL = EWM_CTRL_EWMEN(0);&quot;"  type="String" />
-   <xi:include href="mapPinsOption.xml"/>
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
+
+   <!-- ************* CTRL ****************** -->
+
+   <binaryOption key="ewm_ctrl_ewmen" condition="ewm_ctrl_ewmen_present"
+      enumType="uint8_t"
+      enabledBy="enablePeripheralSupport"
+      typeName="EwmMode"
+      toolTip="Enables the EWM module\n
+               This is a write-once value"
+      description="EWM enable" >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption >
+
+   <binaryOption key="ewm_ctrl_inten" condition="ewm_ctrl_inten_present"
+      enabledBy="ewm_ctrl_ewmen"
+      enumType="uint8_t"
+      typeName="EwmInterrupt"
+      toolTip="Enables an interrupt request on EWM event"
+      description="Interrupt Enable" >
+      <choice name="Interrupt disabled"  value="0" enum="Disabled"/>
+      <choice name="Interrupt enabled"   value="1" enum="Enabled"/>
+   </binaryOption >
+
+   <choiceOption key="ewm_ctrl_input" condition="ewm_ctrl_inen_present&amp;&amp;ewm_ctrl_assin_present"
+      enabledBy="ewm_ctrl_ewmen"
+      enumType="uint8_t"
+      valueFormat="EWM_CTRL_INEN(%s),EWM_CTRL_ASSIN(%s)"
+      typeName="EwmInputPin"
+      toolTip="Enables and selects the polarity of the EWM_in pin\n
+               This is a write-once value"
+      description="Input pin control" >
+      <choice name="Input disabled"    value="0,0" enum="Disabled"/>
+      <choice name="Input active-low"  value="1,0" enum="ActiveLow"/>
+      <choice name="Input active-high" value="1,1" enum="ActiveHigh"/>
+   </choiceOption>
+
+   <!-- ************* SERV ****************** -->
+
+   <choiceOption key="ewm_serv_service" condition="ewm_serv_service_present"
+      enabledBy="ewm_ctrl_ewmen"
+      hidden="true"
+      enumType="uint8_t"
+      typeName="EwmService"
+      description="The EWM service mechanism requires the CPU to write two values to the SERV register:\n
+            a first data byte of 0xB4, \n
+            followed by a second data byte of 0x2C."
+      toolTip="Values to write to service the EWM">
+      <choice value="0xB4" name="First value in sequence"  enum="First"  />
+      <choice value="0x2C" name="Second value in sequence" enum="Second" />
+   </choiceOption>
+
+   <!-- ************* CLKPRESCALER ****************** -->
+
+   <intOption key="ewm_clkprescaler_clk_div" condition="ewm_clkprescaler_clk_div_present"
+      valueFormat="%s"
+      enabledBy="ewm_ctrl_ewmen"
+      typeName="EwmClockPrescaler"
+      enumType="uint16_t"
+      description="LPO Clock prescaler"
+      toolTip="This selects a prescaler value for the LPO clock before it is used by the timer\n
+               This is a write-once register."
+      min="1"
+      max="257"
+      value="1"
+   />
+
+   <floatOption key="ewm_inputClock"  condition="ewm_clkprescaler_clk_div_present"
+      ref="(1.0*/PMC/system_low_power_clock)/(ewm_clkprescaler_clk_div)"
+      locked="true"
+      derived="true"
+      enabledBy="ewm_ctrl_ewmen"
+      description="Input clock (after prescaler)"
+      toolTip="This is the clock used by the timer.\n
+               It is generated from the LPO wth a prescaler."
+      units="Hz"
+   />
+   
+   <floatOption key="ewm_inputClock"  condition="!ewm_clkprescaler_clk_div_present"
+      ref="(1.0*/PMC/system_low_power_clock)"
+      locked="true"
+      derived="true"
+      enabledBy="ewm_ctrl_ewmen"
+      description="Input clock"
+      toolTip="This is the clock used by the timer.\n
+               It is generated from the LPO."
+      units="Hz"
+   />
+   
+   <!-- ************* CMPL ****************** -->
+
+   <intOption key="ewm_cmpl_comparel" condition="ewm_cmpl_comparel_present"
+      enabledBy="ewm_ctrl_ewmen"
+      units="ticks"
+      description="Minimum service time in ticks"
+      toolTip="Minimum time that must elapse before the CPU can service the EWM counter"
+      value="0"
+      min="0"
+      max="254"
+      enumText="\t   EwmMin_None = 0,\n"
+   />
+
+   <floatOption key="ewm_cmpl_minimum"  condition="ewm_cmpl_comparel_present"
+      locked="true"
+      derived="true"
+      ref="ewm_cmpl_comparel/(1.0*ewm_inputClock)"
+      enabledBy="ewm_ctrl_ewmen"
+      description="Minimum service time in seconds"
+      toolTip="Minimum time that must elapse before the CPU can service the EWM counter"
+      units="s"
+   />
+
+   <!-- ************* CMPH ****************** -->
+
+   <intOption key="ewm_cmph_compareh" condition="ewm_cmph_compareh_present"
+      enabledBy="ewm_ctrl_ewmen"
+      units="ticks"
+      description="Maximum service time in ticks"
+      toolTip="Maximum time that may elapse before the CPU has to service the EWM counter"
+      value="0"
+      min="@ewm_cmpl_comparel+1"
+      max="254"
+      enumText="\t   EwmMax_Maximum = 254,\n"
+   />
+
+   <floatOption key="ewm_cmpl_maximum"  condition="ewm_cmph_compareh_present"
+      locked="true"
+      derived="true"
+      ref="ewm_cmph_compareh/(1.0*ewm_inputClock)"
+      enabledBy="ewm_ctrl_ewmen"
+      description="Maximum service time in seconds"
+      toolTip="Maximum time that may elapse before the CPU has to service the EWM counter"
+      units="s"
+   />
+
+<!-- Setters and getters -->
+
+   <for keys="field               : get   : set   : genCode                 : name"
+        values="
+         ewm_ctrl_inten           : true  : true  : enableGettersAndSetters : Interrupt;
+         ewm_ctrl_input           : true  : true  : enableGettersAndSetters : InputPin;
+         ewm_ctrl_ewmen           : true  : true  : enableGettersAndSetters : Enable;
+         ewm_serv_service         : false : true  : enableGettersAndSetters : Service;
+         ewm_cmpl_comparel        : true  : true  : enableGettersAndSetters : MinimumTime;
+         ewm_cmph_compareh        : true  : true  : enableGettersAndSetters : MaximumTime" >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %fieldAssignment
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register&%mask);
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <for keys="field               : get   : set   : genCode                 : name"
+        values="
+         ewm_clkprescaler_clk_div : true  : true  : enableGettersAndSetters : Prescaler" >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %register = %paramExpression-1;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register+1);
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <!--   ========== class $(_Structname)BasicInfo =============================== -->
+
+   <template namespace="baseClass" ><![CDATA[
+      class $(_Structname)BasicInfo {
+
+      public:\n
+   ]]></template>
 
    <template><![CDATA[
       \t//! Pin number in Info table for EWM input if mapped to a pin
       \tstatic constexpr int inputPin  = 0;
 
       \t//! Pin number in Info table for EWM output if mapped to a pin
-      \tstatic constexpr int outputPin  = 1;\n\n
+      \tstatic constexpr int outputPin  = 1;
+      \t\n
    ]]></template>
 
-   <template key="/EWM/declarations" namespace="all"  ><![CDATA[
-   \t/**
-   \t * Class representing $(_NAME)
-   \t */
-   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
+   <!--   ========== Interrupt handling =============================== -->
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="irqHandlingMethod"
+   ><![CDATA[
+       \t//! Common class based callback code has been generated for this class of peripheral
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
+       \t\n
+   ]]></variableTemplate>
+
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <![CDATA[
+      \t/**
+      \t * Type definition for $(_Baseclass) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)($(irq_parameters));
+      \t
+      \t/**
+      \t * Callback to catch unhandled interrupt
+      \t */
+      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/** Callback function for ISR */
+      \tstatic CallbackFunction sCallback;
+      \t
+      \t/**
+      \t * Set interrupt callback function.
+      \t *
+      \t * @param[in]  $(_basename)Callback Callback function to execute on interrupt
+      \t *                             Use nullptr to remove callback.
+      \t */
+      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
+      \t   if ($(_basename)Callback == nullptr) {
+      \t      $(_basename)Callback = unhandledCallback;
+      \t   }
+      \t   // Allow either no handler set yet or removing handler
+      \t   usbdm_assert(
+      \t         (sCallback == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
+      \t         "Handler already set");
+      \t   sCallback = $(_basename)Callback;
+      \t}
+      \t
+      \t/**
+      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
+      \t */
+      \tstatic void irqHandler() {
+      \t
+      \t   // Disable further interrupts
+      \t   ewm->CTRL = ewm->CTRL & ~EWM_CTRL_INTEN_MASK;
+      \t
+      \t   // Execute call-back
+      \t   sCallback($(irq_call));
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t
+      \t/**
+      \t * Callback for programmatically set handler for $(_Class)
+      \t */
+      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Structname)BasicInfo::unhandledCallback;
+      \t\n
+   ]]>
+   </template>
+
+   <!--   ========== EWM Init class =============================== -->
+
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_Baseclass)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(ErrorCode ec) {
+      \t *    ....
+      \t * }
+      \t *
+      \t * static const $(_Class)::Init $(_name)Init {
+      \t *
+      \t *   // Setup values
+      \t *   EwmInterrupt_Enabled ,  // Interrupt Enable - Interrupt enabled
+      \t *   EwmInputPin_Disabled ,  // Input pin control - Input disabled
+      \t *   EwmMode_Enabled ,       // EWM enable - Disabled
+      \t *   0_ticks ,               // Minimum service time - No minimum
+      \t *   150_ticks,              // Maximum service time - 150 ticks
+      \t *
+      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
+      \t *   NvicPriority_Low,                 // Priority for interrupt - Low
+      \t *
+      \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
+      \t * };
+      \t *
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_name)Init)
+      \t * @endcode
+      \t */
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+   <!--   Member variables -->
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="irqHandlingMethod"
+    ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="ewm_ctrl_inten,ewm_ctrl_input,ewm_ctrl_ewmen"
+   ><![CDATA[
+      \t   /// Control Register
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="ewm_cmpl_comparel"
+   ><![CDATA[
+      \t   /// Compare Low Register
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="ewm_cmph_compareh"
+   ><![CDATA[
+      \t   /// Compare High Register
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="ewm_clkprescaler_clk_div"
+   ><![CDATA[
+      \t   /// Clock Prescaler Register
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="/PCR/nvic_irqLevel,irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %paramType %registerName0 = %symbolicExpression1;
+      \t\n
+   ]]></variableTemplate>
+
+   <!--   Constructors -->
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%paramName0 = %paramExpression;
+      \t   }\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName = %paramExpression;
+      \t   }\n\n
+   ]]></variableTemplate>
+
+   <for keys="r"
+      values="
+            ewm_ctrl_inten;
+            ewm_ctrl_input;
+            ewm_ctrl_ewmen
+            " >
+      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </variableTemplate>
+   </for>
+
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="ewm_clkprescaler_clk_div"
+      linePadding="xxx" >
+   <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = %paramExpression-1;
+         \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="ewm_cmpl_comparel,ewm_cmph_compareh"
+      linePadding="xxx" >
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for %description1
+      \t    * %description0 is set to zero
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      \t    * @param value %description1
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%paramType1 value, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName0 = 0;
+      \t      %registerName1 = value;
+      \t   }
+      \t
+      \t   /**
+      \t    * Constructor for %description0 and %description1
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      \t    * @param value0 %description0
+      \t    * @param value1 %description1
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%paramType0 value0, %paramType1 value1, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName0 = value0;
+      \t      %registerName1 = value1;
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+
+
+<!--   Default Initialisation value -->
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      separator=","
+      terminator=","
+      variables="
+            ewm_ctrl_ewmen,
+            ewm_ctrl_inten,
+            ewm_ctrl_input,
+            ewm_clkprescaler_clk_div,
+            ewm_cmpl_comparel,
+            ewm_cmph_compareh
+         "
+   ><![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};
+      \t\n
+   ]]></variableTemplate>
+
+<!--   Configure methods -->
+
+   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(DefaultInitValue);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const Init &init) {
+      \t
+      \t   // Enable peripheral clock
+      \t   enableClock();
+      \t\n
    ]]></template>
+   <template codeGenCondition="irqHandlingMethod"
+             condition="irqHandlingMethod" >   <![CDATA[
+      \t   // Set call-backs
+      \t   setCallback(init.callbackFunction);
+      \t   enableNvicInterrupt(irqNums[0], init.irqlevel);
+      \t
+      \t   // Initialise registers\n
+   ]]></template>
+   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="ewm_clkprescaler_clk_div" >
+   <![CDATA[
+      \t   ewm->CLKPRESCALER    = init.clkprescaler;\n
+   ]]></template>
+   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t   ewm->CMPL    = init.cmpl;
+      \t   ewm->CMPH    = init.cmph;
+      \t   ewm->CTRL    = init.ctrl;
+      \t}
+      \t\n
+   ]]>
+   </template>
 
-   <stringOption key="irq_pattern"        locked="true" value="^WDOG%i_?$" hidden="true" />
-   <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irqHandler" hidden="true" />
-   <xi:include href="irqOptionSubstituted.xml"/>
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t}; // class $(_Structname)BasicInfo::Init
+      \t\n
+   ]]>
+   </template>
 
-   <xi:include href="clockOption.xml"/>
+   <template namespace="baseClass" >
+   <![CDATA[
+      }; // class $(_Structname)BasicInfo
+      \t\n
+   ]]>
+   </template>
 
-   <projectActionList id = "ewm_files" >
+   <!-- ************* Common ****************** -->
+
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Class representing $(_NAME)
+      \t */
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
+      \t\n
+   ]]>
+   </template>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
+   </validate>
+
+   <projectActionList id="ewm_files" >
       <copy source="Project_Headers/ewm.h"          target="Project_Headers/ewm.h"          overwrite="true" derived="true" />
       <copy source="Snippets/ewm-example.cpp"       target="Snippets/ewm-example.cpp"       overwrite="true" derived="true" />
    </projectActionList>
 
-   <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator"/>
+   <!-- ************* Startup ****************** -->
 
-   <signals/>
+   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
+
+   <!-- ************* SIM configuration ****************** -->
+   <category name="Advanced" description="SIM configuration">
+      <aliasOption key="/SIM/sim_scgc4_$(_name)"      locked="false" optional="true" />
+   </category>
+
+   <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </peripheralPage>

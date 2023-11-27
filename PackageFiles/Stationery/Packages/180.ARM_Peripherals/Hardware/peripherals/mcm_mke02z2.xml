@@ -148,7 +148,7 @@
 
 <!--   Configure methods -->
 
-   <template discardRepeats="true" key="/MCM/InitMethod" namespace="all" ><![CDATA[
+   <template discardRepeats="true" key="/MCM/InitMethod" ><![CDATA[
       \t/**
       \t * Configure MCM from values specified in init
       \t *

@@ -173,9 +173,9 @@
       \t}\n\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/Present" namespace="all"  ><![CDATA[\ ||\ 1]]></template>
+   <template key="/$(_BASENAME)/Present"  ><![CDATA[\ ||\ 1]]></template>
 
-   <template key="/$(_BASENAME)/declarations" namespace="all"  ><![CDATA[
+   <template key="/$(_BASENAME)/declarations"  ><![CDATA[
       \t/**
       \t * Class representing $(_NAME) interface
       \t *

@@ -113,7 +113,9 @@ void SystemInit(void) {
 
    /* Use Clock initialisation - if present */
    clock_initialise();
-
+   
+   /* Early system startup code for peripherals */
+$(/SYSTEM/StartupEarly: )
    /* Use UART initialisation - if present */
    console_initialise();
 
@@ -136,7 +138,6 @@ void SystemInit(void) {
    );
 #endif
 /* System startup code for peripherals */
-$(/SYSTEM/StartupEarly: )
 $(/SYSTEM/Startup: )
 $(/SYSTEM/StartupLate: )
 }

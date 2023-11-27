@@ -618,8 +618,8 @@
          bitList="=triggerChannels"
          enumText="=triggerEnums"
          />
-      <deleteOption key="triggerEnums_" />
-      <deleteOption key="triggerChannels" />
+      <deleteVariable key="triggerEnums" />
+      <deleteVariable key="triggerChannels" />
 
    </categoryOption>
 
@@ -691,8 +691,8 @@
          bitmask="0"
          bitList="=polarityChannels" />
 
-      <deleteOption key="polarityEnums" />
-      <deleteOption key="polarityChannels_" />
+      <deleteVariable key="polarityEnums" />
+      <deleteVariable key="polarityChannels" />
    </categoryOption>
 
    <choiceOption key="ftm_channel_number"
@@ -1708,7 +1708,7 @@
          ]]></variableTemplate>
       </for>
 
-      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
          \t/**
          \t * Calculate FTM timing parameters to achieve a given period
          \t *
@@ -1745,7 +1745,7 @@
          \t      }
          \t      unsigned modValue = round(modValueF);\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
          \t      if constexpr (Info::minimumResolution>0) {
          \t         if (modValue < Info::minimumResolution) {
          \t            usbdm_assert(false, "Interval is too short");
@@ -1754,7 +1754,7 @@
          \t         }
          \t      }\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
          \t      if (modValue <= maxModValue) {
          \t         sc   = (sc&~FTM_SC_PS_MASK)|FTM_SC_PS(prescalerValue);
          \t         mod  = modValue;
@@ -1768,7 +1768,7 @@
          \t   return setErrorCode(E_TOO_LARGE);
          \t}\n\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
          \t/**
          \t * Set period
          \t *
@@ -1855,7 +1855,7 @@
          \t   return E_NO_ERROR;
          \t}\n\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
          \t/**
          \t * Get frequency of timer tick
          \t *
@@ -1882,7 +1882,7 @@
          \t   return %(getInputClockFrequency)((FtmClockSource)(ftm->SC&FTM_SC_CLKS_MASK))/prescaleFactor;
          \t}\n\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
          \t/**
          \t * Convert time in microseconds to time in ticks
          \t *
@@ -1904,7 +1904,7 @@
          \t      setErrorCode(E_TOO_LARGE);
          \t   }\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
          \t   if constexpr (Info::minimumInterval>0) {
          \t      if (rv < Info::minimumInterval) {
          \t         // Attempt to set too short a period
@@ -1912,7 +1912,7 @@
          \t      }
          \t   }\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
          \t   return Ticks(uint32_t(rv));
          \t}
          \t
@@ -1937,13 +1937,13 @@
          \t      setErrorCode(E_TOO_LARGE);
          \t   }\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
          \t   if (rv < Info::minimumInterval) {
          \t      // Attempt to set too short a period
          \t      setErrorCode(E_TOO_SMALL);
          \t   }\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
          \t   return Ticks(uint32_t(rv));
          \t}
          \t
@@ -2019,7 +2019,7 @@
          \t}
          \t\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
          \t/**
          \t * Reset counter to initial value
          \t */
@@ -2105,7 +2105,7 @@
          \t}
          \t\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
          \t/**
          \t * Enable/disable Timer Overflow interrupts
          \t */
@@ -2229,7 +2229,7 @@
          \t      ftm->POL = temp;
          \t}\n\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
          \t/*
          \t * *****************************************************************
          \t *          Channel functions
@@ -2460,7 +2460,7 @@
 
 <!-- ================== Channel Functions ================== -->
 
-   <template key="/$(_BASENAME)_CHANNEL/%(k)" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)_CHANNEL/%(k)" discardRepeats="true"
       variables="ftm_cnsc_action[]"
       linePadding="xxx"
    ><![CDATA[
@@ -2479,7 +2479,7 @@
       \t   }\n\n
    ]]></template>
 
-   <template key="/$(_BASENAME)_CHANNEL/%(k)" namespace="all" discardRepeats="true" ><![CDATA[
+   <template key="/$(_BASENAME)_CHANNEL/%(k)" discardRepeats="true" ><![CDATA[
       \t   /**
       \t    * Configure channel.
       \t    * No affect on shared settings of owning Timer
@@ -2666,7 +2666,7 @@
       \t      ftm->SWOCTRL = ((ftm->SWOCTRL & ~MASK)) | (ftmChannelForce & MASK);
       \t   }\n\n
    ]]></template>
-   <template key="/$(_BASENAME)_CHANNEL/%(k)" namespace="all" discardRepeats="true"
+   <template key="/$(_BASENAME)_CHANNEL/%(k)" discardRepeats="true"
       variables="ftm_pol_pol0" ><![CDATA[
       \t   /**
       \t    * Set polarity of channels.
@@ -2793,7 +2793,7 @@
       \t\n
    ]]></template>
 
-   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t/** Callback function for Channel Fault and timer overflow */
       \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
@@ -2872,18 +2872,18 @@
       \t\n
    ]]></template>
 
-   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
       \t/**
       \t * Callback table for programmatically set handlers for $(_Class)
       \t */
       \t$(_Class)Info::ChannelCallbackFunction $(_Class)Info::channelCallbacks[] = {\n\n
    ]]></template>
    <for keys="ch" dim="=NumChannelVectors" >
-      <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+      <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
          \t   $(_Class)Info::unhandledChannelCallback,\n
       ]]></template>
    </for>
-   <template namespace="all" key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
       \t};\n\n
    ]]></template>
 
@@ -3250,7 +3250,7 @@
 
 <!--  Init class Configure method -->
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" codeGenCondition="enablePeripheralSupport" discardRepeats="true" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" codeGenCondition="enablePeripheralSupport" discardRepeats="true" ><![CDATA[
       \t/**
       \t * Configure FTM from values specified in init
       \t *
@@ -3619,7 +3619,7 @@
 
    <!-- ChannelInit Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" namespace="all" codeGenCondition="enablePeripheralSupport" discardRepeats="true" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" codeGenCondition="enablePeripheralSupport" discardRepeats="true" ><![CDATA[
       \t/**
       \t * Configure FTM channel from values specified in channelInit
       \t *
@@ -4210,7 +4210,7 @@
       <copy source="Snippets/neopixel-example.cpp"        target="Snippets/neopixel-example.cpp"        overwrite="true" derived="true" />
    </projectActionList>
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" codeGenCondition="enablePeripheralSupport"
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
    /**
     * Class representing $(_NAME)
@@ -4218,7 +4218,7 @@
    class $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/quadDeclarations" namespace="all"  ><![CDATA[
+   <template key="/$(_BASENAME)/quadDeclarations"  ><![CDATA[
    \t/**
    \t * Class representing $(_Class) as Quadrature decoder
    \t */

@@ -396,7 +396,7 @@ public:
     *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
     * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
     */
-   void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) const {
+   void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcAction adcInterrupt=AdcAction_Disabled) const {
       Adc::enableHardwareConversion(adcInterrupt|sc1Value, adcPretrigger);
    }
 
@@ -409,7 +409,7 @@ public:
     * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
     * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
     */
-   void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt, AdcDma adcDma) const {
+   void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcAction adcInterrupt, AdcDma adcDma) const {
       Adc::enableHardwareConversion(adcInterrupt|sc1Value, adcPretrigger, adcDma);
    }
 #endif
@@ -420,7 +420,7 @@ public:
     *
     * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
     */
-   void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) const {
+   void startConversion(AdcAction adcInterrupt=AdcAction_Disabled) const {
       Adc::startConversion(sc1Value|adcInterrupt);
    };
 
@@ -465,6 +465,8 @@ public:
    static constexpr uint32_t adcSC(unsigned index) { return adcBase() + offsetof(ADC_Type, SC1) + index*sizeof(ADC_Type::SC1[0]); }
    /** @return Base address of ADC.R[index] registers as uint32_t */
    static constexpr uint32_t adcR(unsigned index) { return adcBase() + offsetof(ADC_Type, R) + index*sizeof(ADC_Type::R[0]); }
+
+   using Info::configure;
 
 $(/ADC/classInfo: // No class Info found)
 public:
@@ -553,42 +555,6 @@ public:
 
 $(/ADC/publicMethods: // No /ADC/publicMethods found)
 $(/ADC/InitMethod: // /ADC/InitMethod not found)
-   /**
-    * Configure the ADC
-    *
-    * @param[in] adcResolution   Resolution for converter e.g. AdcResolution_16bit_se
-    * @param[in] adcClockSource  Clock source e.g. AdcClockSource_Asynch
-    * @param[in] adcSample       Input sample interval. Allows use of higher input impedance sources
-    * @param[in] adcPower        Allows reduced power consumption but with restricted input clock speed
-    * @param[in] adcMuxsel       Selects between A/B multiplexor inputs on channels 4-8
-    * @param[in] adcClockRange   Allows higher input clock speed operation
-    * @param[in] adcAsyncClock   Controls whether the internal ADC clock is always enabled or only when needed for a conversion
-    *
-    * @note These settings apply to all channels on the ADC.\n
-    * The resulting ADC clock rate should be restricted to the following ranges (assumes AdcPower_Normal, AdcClockRange_High):\n
-    *  [2..12MHz] for 16-bit conversion modes  \n
-    *  [1..18MHz] for other conversion modes
-    */
-   static void configure(
-         AdcResolution   adcResolution,
-         AdcClockSource  adcClockSource  = AdcClockSource_Asynch,
-         AdcSample       adcSample       = AdcSample_4,
-         AdcPower        adcPower        = AdcPower_Normal,
-         AdcMuxsel       adcMuxsel       = AdcMuxsel_B,
-         AdcClockRange   adcClockRange   = AdcClockRange_High,
-         AdcAsyncClock   adcAsyncClock   = AdcAsyncClock_Disabled
-   ) {
-      Info::enable();
-
-      uint8_t cfg1 = adcResolution|adcPower|adcClockSource|(adcSample&ADC_CFG1_ADLSMP_MASK);
-      uint8_t cfg2 = adcMuxsel|adcClockRange|adcAsyncClock|(adcSample&ADC_CFG2_ADLSTS_MASK);
-
-      cfg1 = calculateClockDivider(cfg1, cfg2);
-
-      adc->CFG1 = cfg1;
-      adc->CFG2 = cfg2;
-   }
-
    /**
     * Enable interrupts in NVIC
     */
@@ -697,59 +663,7 @@ $(/ADC/InitMethod: // /ADC/InitMethod not found)
     * @return E_CALIBRATE_FAIL Failed calibration
     */
    static ErrorCode calibrate() {
-
-      // Save modified registers
-      uint8_t sc2 = adc->SC2;
-      uint8_t sc3 = adc->SC3;
-
-#ifndef ADC_SC2_DMAEN_MASK
-      static constexpr uint32_t mask = ADC_SC2_ADTRG_MASK|ADC_SC2_ACFE_MASK;
-#else
-      static constexpr uint32_t mask = ADC_SC2_ADTRG_MASK|ADC_SC2_ACFE_MASK|ADC_SC2_DMAEN_MASK;
-#endif
-
-      // Disable hardware trigger
-      adc->SC2 = sc2 & ~mask;
-
-      // Start calibration
-      setAveraging(AdcAveraging_Cal);
-
-      // Wait for calibration to complete
-      while ((adc->SC1[0] & ADC_SC1_COCO_MASK) == 0) {
-         __asm__("nop");
-      }
-
-      // Clear COCO
-      (void)adc->R[0];
-
-      // Check if calibration failed
-      bool failed = adc->SC3 & ADC_SC3_CALF_MASK;
-
-      // Restore original register values
-      adc->SC2 = sc2;
-      adc->SC3 = sc3;
-
-      // Check calibration outcome
-      if(failed) {
-         // Failed calibration
-         return setErrorCode(E_CALIBRATE_FAIL);
-      }
-
-      // Calibration factor
-      uint16_t calib;
-      calib = adc->CLPS + adc->CLP4 + adc->CLP3 + adc->CLP2 + adc->CLP1 + adc->CLP0;
-      calib /= 2;
-      calib |= (1<<15);  // Set MSB
-      adc->PG = calib;
-
-#ifdef ADC_MG_MG_MASK
-      calib = adc->CLMS + adc->CLM4 + adc->CLM3 + adc->CLM2 + adc->CLM1 + adc->CLM0;
-      calib /= 2;
-      calib |= (1<<15);  // Set MSB
-      adc->MG = calib;
-#endif
-
-      return E_NO_ERROR;
+      return Info::calibrate(adc);
    }
 
    /**
@@ -1025,7 +939,7 @@ public:
     *
     * @tparam channel ADC channel
     */
-   template<int channel>
+   template<AdcChannelNum channel>
    class Channel : public AdcChannel {
    private:
       /**
@@ -1088,9 +1002,9 @@ public:
        *
        * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
        */
-      static void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) {
+      static void startConversion(AdcAction adcInterrupt=AdcAction_Disabled) {
          if constexpr(!Info::irqHandlerInstalled) {
-            usbdm_assert((adcInterrupt == AdcInterrupt_Disabled),
+            usbdm_assert((adcInterrupt == AdcAction_Disabled),
                   "ADC not configured for interrupts. Modify Configure.usbdmProject");
          }
          AdcBase_T::startConversion(channel|adcInterrupt);
@@ -1131,7 +1045,7 @@ public:
        *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
        * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
        */
-      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) {
+      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcAction adcInterrupt=AdcAction_Disabled) {
          AdcBase_T::enableHardwareConversion(channel|adcInterrupt, adcPretrigger);
       }
 
@@ -1144,7 +1058,7 @@ public:
        * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
        * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
        */
-      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt, AdcDma adcDma) {
+      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcAction adcInterrupt, AdcDma adcDma) {
          AdcBase_T::enableHardwareConversion(channel|adcInterrupt, adcPretrigger, adcDma);
       }
 #endif
@@ -1199,8 +1113,8 @@ public:
     *
     * @tparam channel ADC channel
     */
-   template<int channel>
-   class DiffChannel : public Channel<channel|ADC_SC1_DIFF_MASK> {
+   template<AdcChannelNum channel>
+   class DiffChannel : public Channel<AdcChannelNum(channel|ADC_SC1_DIFF_MASK)> {
    private:
       /**
        * This class is not intended to be instantiated
@@ -1212,7 +1126,7 @@ public:
       CheckPinExistsAndIsMapped<typename Info::InfoDM, channel&ADC_SC1_ADCH_MASK> checkNeg;
 
    public:
-      constexpr DiffChannel() : Channel<channel|ADC_SC1_DIFF_MASK>() {}
+      constexpr DiffChannel() : Channel<AdcChannelNum(channel|ADC_SC1_DIFF_MASK)>() {}
 
       /** PCR associated with plus channel */
       using PcrP = PcrTable_T<typename Info::InfoDP, limitIndex<typename Info::InfoDP>(channel)>;

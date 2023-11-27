@@ -52,7 +52,7 @@
 
    <choiceOption key="osc_cr_oscMode" condition="osc_cr_oscos_present"
       valueFormat="OSC_CR_OSCOS(%s),OSC_CR_HGO(%s)"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="OscMode"
       description="OSC0 mode"
       toolTip="Determines oscillator power mode and\n
@@ -74,7 +74,7 @@
       disabledValue="0" />
 
    <binaryOption key="osc_cr_oscen" condition="osc_cr_oscen_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;(osc_cr_oscMode!=/OscMode_ExternalClock)"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo&amp;&amp;(osc_cr_oscMode!=/OscMode_ExternalClock)"
       typeName="OscEnable"
       toolTip="Enables the OSC module. The OSC module can also be enabled by the ICS module"
       description="OSC Enable" >
@@ -83,7 +83,7 @@
    </binaryOption>
 
    <intOption key="osc_clock"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       ref="osc_input_freq"
       valueFormat="%s"
       locked="true"
@@ -96,7 +96,7 @@
       min="1" />
 
    <binaryOption key="osc_cr_oscsten" condition="osc_cr_oscsten_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;osc_cr_oscen"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo&amp;&amp;osc_cr_oscen"
       typeName="OscInStopMode"
       toolTip="Controls whether or not the OSC clock remains enabled when MCU enters Stop mode when OSCEN is set.\n
                OSCSTEN has no effect if ICS requests OSC enable"
@@ -106,7 +106,7 @@
    </binaryOption>
 
    <binaryOption key="osc_cr_oscos" condition="osc_cr_oscos_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       ref="osc_cr_oscMode&gt;=@/OscMode_LowGainOsc"
       derived="true"
       locked="true"
@@ -118,7 +118,7 @@
    </binaryOption>
 
    <binaryOption key="osc_cr_range" condition="osc_cr_range_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       ref="osc_input_freq&gt;=4_MHz"
       derived="true"
       locked="true"
@@ -130,7 +130,7 @@
    </binaryOption>
 
    <binaryOption key="osc_cr_hgo" condition="osc_cr_hgo_present"
-      enabledBy="/$(_BASENAME)/enablePeripheralSupport"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       ref="osc_cr_oscMode&gt;=@/OscMode_HighGainOsc"
       derived="true"
       locked="true"
@@ -161,7 +161,7 @@
       osc_cr_oscsten:OscStopMode;
       osc_cr_oscMode:OscMode;
       osc_cr_range:OscFrequencyRange" >
-      <variableTemplate variables="%(field)" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate variables="%(field)" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -176,7 +176,7 @@
 
 <!--   ========== OSC Init class =============================== -->
 
-   <template key="init_description" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template key="init_description" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Class)
@@ -211,7 +211,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -232,7 +232,7 @@
 
 <!--   Member variables -->
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="osc_cr_oscen,osc_cr_oscsten,osc_cr_oscos,osc_cr_range,osc_cr_hgo"
    ><![CDATA[
       \t   /// Control Register
@@ -248,7 +248,7 @@
             osc_cr_oscMode;
             osc_cr_range
             " >
-      <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+      <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -272,7 +272,7 @@
 
 <!--   Default Initialisation value -->
 
-   <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
+   <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       separator=","
       terminator=","
       variables="
@@ -292,7 +292,7 @@
 
 <!--   Default Configure -->
 
-   <template codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
       <![CDATA[
       \t/**
       \t * Configure $(_BASENAME)
@@ -304,7 +304,7 @@
    ]]>
    </template>
 
-   <template discardRepeats="true" key="/$(_BASENAME)/InitMethod" namespace="all" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" ><![CDATA[
+   <template discardRepeats="true" key="/$(_BASENAME)/InitMethod" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t
       \t/**
       \t * Default initialisation for $(_BASENAME)
@@ -353,7 +353,7 @@
       \t}\n\n
    ]]></template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" >
+   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
       <![CDATA[
       }; // $(_Baseclass)BasicInfo\n\n
    ]]>
@@ -371,11 +371,11 @@
 
    <!-- ************* Startup ****************** -->
    <!-- Already included -->
-   <!-- template key="/ICS/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <!-- template key="/ICS/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template -->
 
-   <template key="/ICS/ClockStartupBefore" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/ICS/ClockStartupBefore" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n

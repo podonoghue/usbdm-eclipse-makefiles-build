@@ -22,71 +22,90 @@
    - namespace="usbdm"
      Placed before Info class in pin_mapping.h i.e. in USBDM namespace
 
-   - namespace="all" key="keyValue"
+   - key="keyValue"
      Substituted anywhere for $(keyValue)
  -->
 
 <!-- GENERAL SETTINGS -->
 
+   <constant key="_debugcode" type="Boolean" value="false" />
+
    <title description="General Settings" toolTip="" />
 
    <if condition="!enablePeripheralSupport" >
-      <if condition="&quot;$(_BASENAME)&quot;==&quot;$(_NAME)&quot;">
-         <!--
-            Since BASENAME=NAME, there is only a soingle instance so create shared/common option:
-                /$(_BASENAME)/enablePeripheralSupport == /$(_NAME)/enablePeripheralSupport == enablePeripheralSupport
-         -->
+      <!--
+         Generates:
+            enablePeripheralSupport
+            /$(_STRUCTNAME)/generateSharedInfo    = OR of enablePeripheralSupport's' using _STRUCTNAME
+            /$(_BASENAME)/enablePeripheralSupport = OR of all enablePeripheralSupport's'
+      -->
 
-         <!-- Enable for this and all instances of peripheral -->
-         <binaryOption key="/$(_BASENAME)/enablePeripheralSupport"
-            modify="true"
-            description="Enable peripheral support (common)"
-            toolTip="Even if disabled, some code may still be generated but will \n
-                     be removed by linker if not used">
-            <choice value="false" name="Minimal code for $(_NAME)"   isDefault="!@isGeneratedByDefault" />
-            <choice value="true"  name="Generate code for $(_NAME)"  isDefault="@isGeneratedByDefault" />
+      <!-- Enable for this peripheral -->
+      <binaryOption key="enablePeripheralSupport"
+         description="Enable peripheral support"
+         toolTip="Even if disabled, some code may still be generated but will \n
+                  be removed by linker if not used">
+         <choice value="false" name="Minimal code for $(_NAME)"   isDefault="!@isGeneratedByDefault" />
+         <choice value="true"  name="Generate code for $(_NAME)"  isDefault="@isGeneratedByDefault" />
+      </binaryOption>
+
+      <!-- If not already generated -->
+      <if condition="!/$(_STRUCTNAME)/generateSharedInfo">
+
+         <!-- Construct equation to check if any instance sharing the same struct is enabled -->
+         <equation key="_enable" value="=&quot;false&quot;" />
+         <for keys="instance" values="=_instanceList" >
+            <equation
+               key="_enable"
+               condition="=&quot;$(_STRUCTNAME)&quot;==/%(instance)/structName"
+               value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/enablePeripheralSupport&quot;"
+            />
+         </for>
+         <!-- stringOption key="yyy" value="=_enable"/ -->
+
+         <!-- Enable for shared code needed by all instances of peripheral -->
+         <binaryOption key="/$(_STRUCTNAME)/generateSharedInfo"
+            ref="=_enable"
+            description="=_enable"
+            hidden="true"
+            locked="true"
+            derived="true">
+            <choice value="false" name="Minimal shared code for structName=$(_STRUCTNAME)"  />
+            <choice value="true"  name="All shared code for structName=$(_STRUCTNAME)"      />
          </binaryOption>
-      <else/>
-         <!--
-            Create shared option /$(_BASENAME)/enablePeripheralSupport along with
-            individual option    /$(_NAME)/enablePeripheralSupport == enablePeripheralSupport
-         -->
-         <!-- Enable for this instance of this peripheral -->
-         <binaryOption key="enablePeripheralSupport"
-            description="Enable peripheral support (individual)"
-            toolTip="Even if disabled, some code may still be generated but will \n
-                     be removed by linker if not used">
-            <choice value="false" name="Minimal code for $(_NAME)"   isDefault="!@isGeneratedByDefault" />
-            <choice value="true"  name="Generate code for $(_NAME)"  isDefault="@isGeneratedByDefault" />
-         </binaryOption>
-
-         <if condition="=(&quot;$(_instance)&quot;==&quot;0&quot;)||(&quot;$(_instance)&quot;==&quot;A&quot;)">
-            <!-- Generate once only -->
-
-            <!-- Construct equation to check if any instance is enabled -->
-            <equation key="_enable" value="=&quot;false&quot;" />
-
-            <for keys="instance" values="=_instanceList">
-               <if condition="/%(instance)/_present">
-                  <!-- stringOption key="$(BASENAME)/xxx_%(instance)" value="%(instance)" / -->
-                  <equation  key="_enable" value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/enablePeripheralSupport&quot;"/>
-               </if>
-            </for>
-            <!-- stringOption key="$(BASENAME)/enable" value="=_enable" modify="true" / -->
-
-            <!-- Enable for shared code needed by all instances of peripheral -->
-            <binaryOption key="/$(_BASENAME)/enablePeripheralSupport"
-               ref="=_enable"
-               hidden="true"
-               locked="true"
-               derived="true">
-               <choice value="false" name="Minimal code"  />
-               <choice value="true"  name="All code"      />
-            </binaryOption>
-
-         </if>
-
+         <deleteVariable key="_enable" />
       </if>
+
+      <aliasOption name="/$(_STRUCTNAME)/generateSharedInfo" key="/$(_STRUCTNAME)/generateSharedInfo" optional="true" condition="=_debugcode" />
+
+      <!-- If not already generated -->
+      <if condition="!/$(_BASENAME)/enablePeripheralSupport">
+
+         <!-- Construct equation to check if any instance sharing the same struct is enabled -->
+         <equation key="_enable" value="=&quot;false&quot;" />
+         <for keys="instance" values="=_instanceList" >
+            <equation
+               key="_enable"
+               value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/enablePeripheralSupport&quot;"
+            />
+         </for>
+         <!-- stringOption key="yyy" value="=_enable"/ -->
+
+         <!-- Enable for shared code needed by all instances of peripheral -->
+         <binaryOption key="/$(_BASENAME)/enablePeripheralSupport"
+            ref="=_enable"
+            description="=_enable"
+            hidden="true"
+            locked="true"
+            derived="true">
+            <choice value="false" name="Minimal shared code for basename=$(_BASENAME)"  />
+            <choice value="true"  name="All shared code for basename=$(_BASENAME)"      />
+         </binaryOption>
+         <deleteVariable key="_enable" />
+      </if>
+
+      <aliasOption name="/$(_BASENAME)/enablePeripheralSupport" key="/$(_BASENAME)/enablePeripheralSupport" optional="true"  condition="=_debugcode" />
+
    </if>
 
    <!-- Enable for generation of getters and setters -->
@@ -99,7 +118,7 @@
    </binaryOption>
 
     <!-- Configure peripheral instance in startup -->
-   <binaryOption key="configurePeripheralInStartUp" condition="@isSupportedinStartup"
+   <binaryOption key="configurePeripheralInStartUp" condition="!configurePeripheralInStartUp&amp;&amp;@isSupportedinStartup"
       enabledBy="enablePeripheralSupport"
       description="Configure this peripheral"
       toolTip="Configure this peripheral in startup code before main() is entered\n
@@ -108,67 +127,57 @@
       <choice value="true"  name="Configured in startup code"  />
    </binaryOption>
 
-   <!-- Template is added to class within pin_mapping.h -->
-   <template ><![CDATA[
-      \t/* Template enablePeripheral  */
-      \t
-      \t//! Configure peripheral in start-up
-      \tstatic constexpr bool configurePeripheralInStartUp = $(configurePeripheralInStartUp:false);\n\n
-   ]]></template >
-
    <!-- Pin mapping and enables -->
 
-   <binaryOption key="mapPinsOnEnable" condition="/PCR/mux_present"
-      enabledBy="enablePeripheralSupport"
-      description="Map pins when peripheral is configured"
-      toolTip="Map all allocated pins on a peripheral when the\n
-               peripheral is enabled by configure() method etc">
-      <choice value="false" name="Don't map pins"  />
-      <choice value="true"  name="Map pins when configured"  isDefault="true"/>
-   </binaryOption>
+   <if condition="/PCR/mux_present&amp;&amp;_hasPcrTable">
 
-   <!-- Template is added to class within pin_mapping.h -->
-   <template  condition="/PCR/mux_present" ><![CDATA[
-      \t//! Map all allocated pins on a peripheral when enabled
-      \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
-   ]]></template>
+      <binaryOption key="mapPinsOnEnable"
+         enabledBy="enablePeripheralSupport"
+         description="Map pins when peripheral is configured"
+         toolTip="Map all allocated pins on a peripheral when the\n
+                  peripheral is enabled by configure() method etc">
+         <choice value="false" name="Don't map pins"  />
+         <choice value="true"  name="Map pins when configured"  isDefault="true"/>
+      </binaryOption>
 
-   <!-- Template is added to peripheral classes -->
-   <template condition="/PCR/mux_present&amp;&amp;_hasPcrTable" ><![CDATA[
-      // Template /$(_BASENAME)/classInfo
-
-      \t/**
-      \t * Configures all mapped pins associated with $(_BASENAME)
-      \t *
-      \t * @note Locked pins will be unaffected
-      \t */
-      \tstatic void configureAllPins() {
-      \t
-      \t   // Configure pins if selected and not already locked
-      \t   if constexpr (mapPinsOnEnable) {
-      \t      initPCRs();
-      \t   }
-      \t}
-
-      \t/**
-      \t * Disabled all mapped pins associated with $(_BASENAME)
-      \t *
-      \t * @note Only the lower 16-bits of the PCR registers are modified
-      \t *
-      \t * @note Locked pins will be unaffected
-      \t */
-      \tstatic void disableAllPins() {
-      \t
-      \t   // Disable pins if selected and not already locked
-      \t   if constexpr (mapPinsOnEnable) {
-      \t      clearPCRs();
-      \t   }
-      \t}
-      \t\n
-   ]]></template>
+      <template><![CDATA[
+         \t//! Map all allocated pins on a peripheral when enabled
+         \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
+         \t
+         \t/**
+         \t * Configures all mapped pins associated with $(_BASENAME)
+         \t *
+         \t * @note Locked pins will be unaffected
+         \t */
+         \tstatic void configureAllPins() {
+         \t
+         \t   // Configure pins if selected and not already locked
+         \t   if constexpr (mapPinsOnEnable) {
+         \t      initPCRs();
+         \t   }
+         \t}
+         \t
+         \t/**
+         \t * Disabled all mapped pins associated with $(_BASENAME)
+         \t *
+         \t * @note Only the lower 16-bits of the PCR registers are modified
+         \t *
+         \t * @note Locked pins will be unaffected
+         \t */
+         \tstatic void disableAllPins() {
+         \t
+         \t   // Disable pins if selected and not already locked
+         \t   if constexpr (mapPinsOnEnable) {
+         \t      clearPCRs();
+         \t   }
+         \t}
+         \t\n
+      ]]></template>
+   </if>
 
 <!-- INTERRUPTS -->
 
+   <!-- Only create if device has interrupts -->
    <if condition="_irqCount" >
 
       <title description="Interrupts" />
@@ -182,6 +191,13 @@
       Multiple patterns and classsHandlers may be used separated by ';'
       -->
 
+      <!--
+         Generates:
+            irqHandlingMethod
+            /$(_STRUCTNAME)/generateSharedIrqInfo = OR of irqHandlingMethod' using _STRUCTNAME
+            /$(_BASENAME)/irqHandlingMethod       = OR of all irqHandlingMethod'
+      -->
+
       <!-- If not explicitly controlled, IRQ options are always enabled -->
       <if condition="!irqEnable">
          <constant key="irqEnable"        type="Boolean" value="true"  />
@@ -191,23 +207,19 @@
       <if condition="!irq_pattern">
          <constant key="irq_pattern"      type="String"  value="&quot;^$(_NAME)$&quot;"           />
       </if>
+
       <if condition="!irq_ClassHandler">
          <constant key="irq_ClassHandler" type="String"  value="&quot;$(_Class)::irqHandler&quot;" />
       </if>
 
-      <if condition="&quot;$(_BASENAME)&quot;==&quot;$(_NAME)&quot;">
-         <!--
-            Since BASENAME=NAME, there is only 1 instance so create single option:
-                /$(_BASENAME)/irqHandlingMethod == /$(_NAME)/irqHandlingMethod == irqHandlingMethod
-         -->
+      <!-- Create only if needed -->
+      <if condition="!irqHandlingMethod">
 
-         <!-- Enable for all instances of peripheral -->
-         <!-- Create only if needed -->
-         <irqOption key="/$(_BASENAME)/irqHandlingMethod" condition="!/$(_BASENAME)/irqHandlingMethod"
+         <!-- Interrupt control for this peripheral -->
+         <irqOption key="irqHandlingMethod"
             hidden="true"
             valueFormat="%s"
-            modify="true"
-            enabledBy="/$(_BASENAME)/enablePeripheralSupport&amp;&amp;irqEnable"
+            enabledBy="enablePeripheralSupport&amp;&amp;irqEnable"
             typeName="CallbackFunction"
             description="Peripheral interrupt handling"
             toolTip="If enabled, the handler may be set using the setCallback() function or\n
@@ -217,57 +229,66 @@
             pattern="=irq_pattern"
             classHandler="=irq_ClassHandler" />
 
-      <else/>
-         <!--
-            Create shared option /$(_BASENAME)/irqHandlingMethod along with
-            individual option    /$(_NAME)/irqHandlingMethod == irqHandlingMethod
-         -->
-         <!-- Enable for this instance of this peripheral -->
-         <irqOption key="irqHandlingMethod" condition="!irqHandlingMethod"
-            hidden="true"
-            valueFormat="%s"
-            enabledBy="enablePeripheralSupport"
-            typeName="CallbackFunction"
-            description="Peripheral interrupt handling"
-            toolTip="If enabled, the handler may be set using the setCallback() function or\n
-                     by overriding the interrupt handler method in the peripheral class\n
-                     If not enabled, then interrupt handlers may be installed by naming them \n
-                     (see weak names used in vector table)."
-            pattern="=irq_pattern"
-            classHandler="=irq_ClassHandler" />
+         <!-- If not already generated -->
+         <if condition="!/$(_STRUCTNAME)/generateSharedIrqInfo">
 
-         <if condition="=(&quot;$(_instance)&quot;==&quot;0&quot;)||(&quot;$(_instance)&quot;==&quot;A&quot;)">
-             <!-- Generate once only -->
-
-            <!-- Construct equation to check if any instance is enabled -->
-            <equation key="_irqEnable" value="=&quot;false&quot;" />
-
-            <for keys="instance" values="=_instanceList">
-               <if condition="/%(instance)/_irqCount">
-                  <!-- stringOption key="$(BASENAME)/yyy_%(instance)" value="%(instance)" modify="true" / -->
-                  <equation key="_irqEnable" value="=_irqEnable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/irqHandlingMethod&quot;"/>
-               </if>
+            <!-- Construct equation to check if interrupts are enabled on any instance sharing the same struct -->
+            <equation key="_enable" value="=&quot;false&quot;" />
+            <for keys="instance" values="=_instanceList" >
+               <equation
+                  key="_enable"
+                  condition="=&quot;$(_STRUCTNAME)&quot;==/%(instance)/structName"
+                  value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/irqHandlingMethod&quot;"
+               />
             </for>
-            <!-- stringOption key="$(BASENAME)/_irqEnableX" value="=_irqEnable" modify="true" / -->
+            <!-- stringOption key="yyy" value="=_enable"/ -->
 
             <!-- Enable for shared code needed by all instances of peripheral -->
-            <binaryOption key="/$(_BASENAME)/irqHandlingMethod" condition="!/$(_BASENAME)/irqHandlingMethod"
-               ref="=_irqEnable"
-               description="Peripheral interrupt handling"
+            <binaryOption key="/$(_STRUCTNAME)/generateSharedIrqInfo" name="/$(_STRUCTNAME)/generateSharedIrqInfo"
+               ref="=_enable"
+               description="=_enable"
                hidden="true"
-               derived="true" >
-               <choice value="false" name="Disabled"  isDefault="true" />
-               <choice value="true"  name="Enabled"   />
+               locked="true"
+               derived="true">
+               <choice value="false" name="No shared interrupt code for $(_STRUCTNAME)"  />
+               <choice value="true"  name="Shared interrupt code for $(_STRUCTNAME)"      />
             </binaryOption>
+            <deleteVariable key="_enable" />
+         </if>
+
+         <!-- If not already generated -->
+         <if condition="!/$(_BASENAME)/irqHandlingMethod">
+
+            <!-- Construct equation to check if interrupts are enabled on any instance -->
+            <equation key="_enable" value="=&quot;false&quot;" />
+            <for keys="instance" values="=_instanceList" >
+               <equation
+                  key="_enable"
+                  value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/irqHandlingMethod&quot;"
+               />
+            </for>
+            <!-- stringOption key="yyy" value="=_enable"/ -->
+
+            <!-- Enable for shared code needed by all instances of peripheral -->
+            <binaryOption key="/$(_BASENAME)/irqHandlingMethod"  name="/$(_BASENAME)/irqHandlingMethod"
+               ref="=_enable"
+               description="=_enable"
+               hidden="true"
+               locked="true"
+               derived="true">
+               <choice value="false" name="No shared interrupt code for $(_BASENAME)"  />
+               <choice value="true"  name="Shared interrupt code for $(_BASENAME)"      />
+            </binaryOption>
+            <deleteVariable key="_enable" />
          </if>
 
       </if>
 
-      <!-- Display here (wherever the original) -->
-      <aliasOption key="irqHandlingMethod" locked="false" />
+      <!-- Display here -->
+      <aliasOption key="irqHandlingMethod" locked="false" optional="true"  />
 
-      <!-- Debug -->
-      <!-- aliasOption key="/$(_BASENAME)/irqHandlingMethod" locked="false" / -->
+      <aliasOption key="/$(_STRUCTNAME)/generateSharedIrqInfo" optional="true"  condition="=_debugcode" />
+      <aliasOption key="/$(_BASENAME)/irqHandlingMethod"       optional="true"  condition="=_debugcode"/>
 
       <!-- Create only if needed -->
       <choiceOption key="irqLevel" condition="!irqLevel"
@@ -284,7 +305,17 @@
       <!-- Display here (wherever the original) -->
       <aliasOption key="irqLevel" locked="false" />
 
-      <variableTemplate variables="/$(_BASENAME)/irqHandlingMethod,irqLevel" condition="!suppressIrqArray" ><![CDATA[
+      <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="irqHandlingMethod"
+      ><![CDATA[
+          \t//! Class based callback handler has been installed in vector table for this instance
+          \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
+          \t\n
+      ]]></variableTemplate>
+
+      <variableTemplate condition="!suppressIrqArray"  codeGenCondition="irqHandlingMethod"
+         variables="/$(_BASENAME)/irqHandlingMethod,irqLevel"
+      ><![CDATA[
          \t//! IRQ numbers for hardware
          \tstatic constexpr IRQn_Type irqNums[]  = $(_NAME)_IRQS;
          \t
@@ -293,19 +324,39 @@
          \t\n
       ]]></variableTemplate>
 
-      <variableTemplate variables="/$(_BASENAME)/irqHandlingMethod,irqLevel" ><![CDATA[
+      <variableTemplate variables="irqLevel"   codeGenCondition="irqHandlingMethod"
+      ><![CDATA[
          \t//! Default IRQ level
-         \tstatic constexpr NvicPriority irqLevel =  %symbolicExpression1;
+         \tstatic constexpr NvicPriority irqLevel =  %symbolicExpression;
          \t\n
       ]]></variableTemplate>
 
-      <variableTemplate codeGenCondition="/$(_BASENAME)/enablePeripheralSupport"
-         variables="irqHandlingMethod"
-      ><![CDATA[
-          \t//! Class based callback handler has been installed in vector table for this instance
-          \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
-          \t\n
-      ]]></variableTemplate>
+      <template condition="irqHandlingMethod&amp;&amp;!suppressIrqArray" codeGenCondition="irqHandlingMethod" ><![CDATA[
+         \t/**
+         \t * Enable interrupts in NVIC
+         \t */
+         \tstatic void enableNvicInterrupts() {
+         \t   NVIC_EnableIRQ(irqNums[0]);
+         \t}
+         \t
+         \t/**
+         \t * Enable and set priority of interrupts in NVIC
+         \t * Any pending NVIC interrupts are first cleared.
+         \t *
+         \t * @param[in]  nvicPriority  Interrupt priority
+         \t */
+         \tstatic void enableNvicInterrupts(NvicPriority nvicPriority) {
+         \t   enableNvicInterrupt(irqNums[0], nvicPriority);
+         \t}
+         \t
+         \t/**
+         \t * Disable interrupts in NVIC
+         \t */
+         \tstatic void disableNvicInterrupts() {
+         \t   NVIC_DisableIRQ(irqNums[0]);
+         \t}
+         \t\n
+      ]]></template>
 
    </if> <!-- condition="_irqCount" -->
 
@@ -362,7 +413,7 @@
       \t\n
    ]]></template>
 
-   <!-- template key="/$(_BASENAME)/publicMethods" namespace="all" condition="/$(_BASENAME)/irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
+   <!-- template key="/$(_BASENAME)/publicMethods" condition="/$(_BASENAME)/irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
    <![CDATA[
       \t/**
       \t * Wrapper to allow the use of a class member as a callback function
@@ -481,6 +532,5 @@
       derived="true" >
       <choice name="Pin mapping" value="0" pinMap="=pinMap" />
    </binaryOption>
-
 
 </fragment>

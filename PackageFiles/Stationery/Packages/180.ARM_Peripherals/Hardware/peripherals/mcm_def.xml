@@ -11,7 +11,6 @@
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
    <xi:include href="enablePeripheral.xml"  />
-   <title />
 
 <!--
     * General substitutions
@@ -51,6 +50,7 @@
    <!--
       ******************** Flash Controller  ********************
    -->
+   <title description="Flash Controller" condition="mcm_placr_esfc_present" />
    <binaryOption key="mcm_placr_esfc" condition="mcm_placr_esfc_present"
       typeName="McmStallFlashController"
       description="Enable Stalling Flash Controller"
@@ -170,18 +170,18 @@
       \t}\n\n
    ]]></variableTemplate>
 
-   <template namespace="all" key="/SMC/preEnterStopMode" variables="mcm_placr_flash_speculation, mcm_placr_flash_cache" ><![CDATA[
+   <variableTemplate key="/SMC/preEnterStopMode" variables="mcm_placr_flash_speculation, mcm_placr_flash_cache" ><![CDATA[
    \t   // Save current Flash settings
    \t   McmInfo::FlashInit savedFlashSettings;
    \t   savedFlashSettings.readConfig();
    \t   // Disable flash prefetch
    \t   McmInfo::setFlashControllerSpeculation(McmFlashSpeculation_Disabled);\n
-   ]]></template>
+   ]]></variableTemplate>
 
-   <template namespace="all" key="/SMC/postExitStopMode" variables="mcm_placr_flash_speculation, mcm_placr_flash_cache" ><![CDATA[
+   <variableTemplate key="/SMC/postExitStopMode" variables="mcm_placr_flash_speculation, mcm_placr_flash_cache" ><![CDATA[
    \t   // Restore flash settings
    \t   savedFlashSettings.configure();\n
-   ]]></template>
+   ]]></variableTemplate>
 
    <variableTemplate variables="mcm_placr_flash_cache,mcm_placr_flash_speculation" >
       ><![CDATA[
@@ -263,7 +263,6 @@
       \t};\n\n
    ]]></template>
 
-
    <variableTemplate key="/MCM/DefaultFlashInitValue" namespace="all"
       variables="mcm_placr_flash_speculation, mcm_placr_flash_cache"
       terminator=","
@@ -290,6 +289,7 @@
    <!--
       ******************** Bus arbitration ********************
    -->
+   <title description="Bus Arbitration" condition="mcm_placr_arb_present" />
    <binaryOption key="mcm_placr_arb" condition="mcm_placr_arb_present"
       typeName="McmArbitration"
       description="Arbitration select for the crossbar masters"
@@ -316,6 +316,7 @@
    <!--
       ******************** Compute Mode ********************
    -->
+   <title description="Compute Mode" condition="mcm_cpo_cporeq_present||mcm_cpo_cpowoi_present" />
    <choiceOption key="mcm_cpo_request" condition="mcm_cpo_cporeq_present||mcm_cpo_cpowoi_present"
       typeName="McmComputeOnlyMode"
       valueFormat="MCM_CPO_CPOREQ(%s),MCM_CPO_CPOWOI(%s)"
@@ -356,6 +357,7 @@
    ]]></variableTemplate>
 
    <binaryOption key="mcm_cpo_cpoack" condition="mcm_cpo_cpoack_present"
+      hidden="true"
       typeName="McmCpoAcknowledge"
       description="Acknowledge entry to Computer Operation mode"
       toolTip="Acknowledge entry to Computer Operation mode"
@@ -366,6 +368,7 @@
    <!--
       ******************** Floating point exceptions ********************
    -->
+   <title description="Floating point exceptions" condition="mcm_iscr_fidce_present" />
    <binaryOption key="mcm_iscr_fidce" condition="mcm_iscr_fidce_present"
       typeName="McmFpuDenormalIrq"
       description="FPU input de-normalized interrupt"
@@ -441,12 +444,77 @@
       \t */
       \tstatic void disable%paramType() {
       \t   %register = %register&~$(%variable.enum[1]);
-      \t}\n
+      \t}
+      \t\n
    ]]></variableTemplate>
 
    </for>
 
-   <variableTemplate variables="mcm_iscr_fidce,mcm_iscr_fixce,mcm_iscr_fufce,mcm_iscr_fofce,mcm_iscr_fdzce,mcm_iscr_fioce" >
+   <!--   ========== Interrupt handling =============================== -->
+
+   <template condition="irqHandlingMethod" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <![CDATA[
+      \t/**
+      \t * Type definition for $(_Baseclass) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)($(irq_parameters));
+      \t
+      \t/**
+      \t * Callback to catch unhandled interrupt
+      \t */
+      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template condition="irqHandlingMethod" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/** Callback function for ISR */
+      \tstatic CallbackFunction sCallback;
+      \t
+      \t/**
+      \t * Set interrupt callback function.
+      \t *
+      \t * @param[in]  $(_basename)Callback Callback function to execute on interrupt
+      \t *                             Use nullptr to remove callback.
+      \t */
+      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
+      \t   if ($(_basename)Callback == nullptr) {
+      \t      $(_basename)Callback = unhandledCallback;
+      \t   }
+      \t   // Allow either no handler set yet or removing handler
+      \t   usbdm_assert(
+      \t         (sCallback == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
+      \t         "Handler already set");
+      \t   sCallback = $(_basename)Callback;
+      \t}
+      \t
+      \t/**
+      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
+      \t */
+      \tstatic void irqHandler() {
+      \t
+      \t   // Execute call-back
+      \t   sCallback($(irq_call));
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template key="/HARDWARE/StaticObjects" condition="irqHandlingMethod" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t
+      \t/**
+      \t * Callback for programmatically set handler for $(_Class)
+      \t */
+      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
+      \t\n
+   ]]>
+   </template>
+
+   <variableTemplate variables="mcm_iscr_fidce,mcm_iscr_fixce,mcm_iscr_fufce,mcm_iscr_fofce,mcm_iscr_fdzce,mcm_iscr_fioce"
       ><![CDATA[
       \t/**
       \t **
@@ -495,7 +563,7 @@
       \tpublic:
       \t   /**
       \t    * configure Floating Point interrupts as specified in the constructor
-      \t    * ..._Unselect values will disable interrupts
+      \t    * ..._Unselect or absent values will disable interrupts
       \t    * ..._Select values will enable interrupts
       \t    */
       \t   inline void configure() const {
@@ -504,7 +572,7 @@
       \t
       \t   /**
       \t    * Enable Floating Point interrupts as specified in the constructor
-      \t    * ..._Unselect values are ignored
+      \t    * ..._Unselect or absent values are ignored
       \t    * ..._Select values will enable interrupts
       \t    */
       \t   inline void enableInterrupts() const {
@@ -560,10 +628,10 @@
       ]]></variableTemplate>
    </for>
 
-   <template variables="mcm_iscr_fidce,mcm_iscr_fixce,mcm_iscr_fufce,mcm_iscr_fofce,mcm_iscr_fdzce,mcm_iscr_fioce" >
+   <variableTemplate variables="mcm_iscr_fidce,mcm_iscr_fixce,mcm_iscr_fufce,mcm_iscr_fofce,mcm_iscr_fdzce,mcm_iscr_fioce"
       ><![CDATA[
       \t};\n\n
-   ]]></template>
+   ]]></variableTemplate>
 
    <variableTemplate key="/MCM/DefaultFloatingPointIrqInitValue" namespace="all"
       variables="mcm_iscr_fidce,mcm_iscr_fixce,mcm_iscr_fufce,mcm_iscr_fofce,mcm_iscr_fdzce,mcm_iscr_fioce"
@@ -729,13 +797,13 @@
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_BASENAME)/declarations" namespace="all" condition="irqOption_present&amp;&amp;enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" condition="irqOption_present&amp;&amp;enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Class representing $(_NAME)
       \t */
       \tclass $(_Class) : public $(_Baseclass)Base, public $(_Baseclass)Interrupt_T<$(_Class)Info> {};\n
    ]]></template>
-   <template key="/$(_BASENAME)/declarations" namespace="all" condition="!irqOption_present&amp;&amp;enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" condition="!irqOption_present&amp;&amp;enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Class representing $(_NAME)
       \t */
@@ -754,11 +822,11 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" namespace="all" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n

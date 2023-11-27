@@ -51,17 +51,18 @@ static constexpr SpiFrameSize frameSize = SpiFrameSize_8_bits; // 4-8
 
 // Single configuration
 static const Spi0::Init configuration {
-   {  /* Shared settings            */
-      SpiPeripheralSelectPolarity_All_ActiveHigh, // All PCSs active-high
-      SpiFreeze_Enabled,                          // Freeze in debug
-      SpiDoze_Enabled,                            // Doze in sleep
+   {
+      // Shared configuration - not usually modified after initial configuration
+      SpiPcsPolarity_All_ActiveHigh,        // All PCSs active-high
+      SpiFreeze_Enabled,                    // Freeze in debug
+      SpiDoze_Enabled,                      // Doze in sleep
 
       // These are initial transfer settings. Can be changed using selectConfiguration().
       SpiCtarSelect_0,                       // Use CTAR0
-      SpiPeripheralSelect_0,                 // PCS0 is asserted during transfer
-      SpiPeripheralSelectMode_Transaction    // PCSx goes low between transactions
+      SpiPeripheralSelect_1,                 // PCS0 is asserted during transfer
+      SpiPeripheralSelectMode_Transaction    // PCSx negated between transactions
    },
-   //                                Speed   Mode       Frame Size
+   //                                 Speed   Mode       Frame Size
    /* Configuration (all CTARs)  */ { 10_MHz, SpiMode_3, frameSize},
 };
 

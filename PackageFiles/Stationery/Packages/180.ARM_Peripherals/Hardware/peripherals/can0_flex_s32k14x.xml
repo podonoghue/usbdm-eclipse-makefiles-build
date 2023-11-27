@@ -185,7 +185,7 @@
        \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
    ]]></template>
 
-   <template key="/CAN/NvicControl" namespace="all" ><![CDATA[
+   <template key="/CAN/NvicControl" ><![CDATA[
       \t/**
       \t * Enable Miscellaneous interrupts in NVIC
       \t */

@@ -238,6 +238,7 @@ $(/SMC/postExitStopMode: // /SMC/postExitStopMode not found)
 $(/SMC/enterRunMode:    #error "/SMC/enterRunMode not found" )   
 $(/SMC/enterPowerMode:  #error "/SMC/enterPowerMode not found" )   
 $(/SMC/DefaultInitValue: // /SMC/DefaultInitValue not found)
+$(/SMC/InitMethod: // /SMC/InitMethod not found)
 };
 
 $(/SMC/declarations: // No declarations found)

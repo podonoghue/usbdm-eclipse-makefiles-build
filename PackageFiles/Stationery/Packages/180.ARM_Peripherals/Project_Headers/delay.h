@@ -107,7 +107,7 @@ void waitMS(uint32_t msToWait);
  * @note Limited to 2^32 ms (71,582 minutes)
  * @note Uses busy-waiting
  */
-void wait(float seconds);
+void wait(Seconds seconds);
 
 #ifdef __cplusplus
 /**

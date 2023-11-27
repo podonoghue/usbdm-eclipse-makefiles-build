@@ -29,6 +29,7 @@
  */
 #include "hardware.h"
 #include "dma.h"
+#include "dmamux.h"
 #include "pit.h"
 #include "smc.h"
 #include "mcg.h"
@@ -36,7 +37,7 @@
 using namespace USBDM;
 
 // Slot number to use (must agree with console UART)
-static constexpr DmaSlot DMA_SLOT = Dma0Slot_UART1_Tx;
+static constexpr DmamuxSlot DMA_SLOT = DmamuxSlot_UART1_Transmit;
 
 // Used to indicate complete transfer
 static volatile bool complete;
@@ -85,46 +86,40 @@ static const char message[]=
  *
  * Structure to define the DMA transfer
  */
-static const DmaTcd tcd = DmaTcd (
-   /* Source address                 */ (uint32_t)(message),           // Source array
-   /* Source offset                  */ sizeof(message[0]),            // Source address advances 1 element for each request
+static DmaTcd tcd (
+   { // DmaInfo source
+   /* Source address                 */ uint32_t(message),             // Source array
+   /* Source offset                  */ int32_t(sizeof(message[0])),   // Source address advances 1 element for each request
    /* Source size                    */ dmaSize(message[0]),           // 8-bit read from source address
+   /* Last source adjustment         */ -int(sizeof(message)),         // Reset source address to start of array on completion
    /* Source modulo                  */ DmaModulo_Disabled,            // Disabled
-   /* Last source adjustment         */ -(int)sizeof(message),         // Reset source address to start of array on completion
-
+   },
+   { // DmaInfo destination
    /* Destination address            */ console.uartD,                 // Destination is UART data register
    /* Destination offset             */ 0,                             // Destination address doesn't change
    /* Destination size               */ DmaSize_8bit,                  // 8-bit write to destination address
-   /* Destination modulo             */ DmaModulo_Disabled,            // Disabled
    /* Last destination adjustment    */ 0,                             // Destination address doesn't change
+   /* Destination modulo             */ DmaModulo_Disabled,            // Disabled
+   },
 
    /* Minor loop byte count          */ dmaNBytes(sizeof(message[0])), // Total transfer in one minor-loop
-   /* Major loop count               */ dmaCiter(sizeof(message)/      // Transfer entire buffer
-   /*                                */           sizeof(message[0])),
+   /* Major loop count               */ dmaCiter(sizeofArray(message)),      // Transfer entire buffer
 
-   /* Start channel                  */ false,                         // Don't start (triggered by hardware)
-   /* Disable Req. on major complete */ false,                         // Don't clear hardware request when major loop completed
-   /* Interrupt on major complete    */ true,                          // Generate interrupt on completion of Major-loop
-   /* Interrupt on half complete     */ false,                         // No interrupt
+   { // DmaTcdCsr control
+   /* Start channel                  */ DmaStart_Hardware,             // Don't start (triggered by hardware)
+   /* Disable Req. on major complete */ DmaStopOnComplete_Disabled,    // Don't clear hardware request when major loop completed
+   /* Interrupt on major complete    */ DmaIntMajor_Enabled,           // Generate interrupt on completion of Major-loop
+   /* Interrupt on half complete     */ DmaIntHalf_Disabled,           // No interrupt
    /* Bandwidth (speed) Control      */ DmaSpeed_NoStalls              // Full speed
+   }
 );
-
-/**
- * DMA error call back
- *
- * @param errorFlags Channel error information (DMA_ES)
- */
-void dmaErrorCallbackFunction(uint32_t errorFlags) {
-   console.writeln("DMA error DMA_ES = 0b", errorFlags, Radix_2);
-   __BKPT();
-}
 
 /**
  * DMA complete callback
  *
  * Sets flag to indicate sequence complete.
  */
-static void dmaCallback(DmaChannelNum channel) {
+static void dmaCallback(DmaChannelNum channel, uint32_t) {
    // Clear status
    Dma0::clearInterruptRequest(channel);
    // Stop UART requests
@@ -145,20 +140,30 @@ static void configureDma(DmaChannelNum dmaChannel) {
 
    // Enable DMAC
    // Note: These settings affect all DMA channels
-   Dma0::configure(
-         DmaOnError_Halt,
-         DmaMinorLoopMapping_Disabled,
-         DmaContinuousLink_Disabled,
-         DmaArbitration_Fixed);
+   static constexpr DmaBasicInfo::DmaConfig dmaConfigValue = {
+      DmaActionOnError_Halt , // DMA halt on error - Transfer halts on any error
+      DmaContinuousLink_Disabled , // Continuous Link mode - Continuous Link disabled
+      DmaMinorLoopMapping_Disabled , // Minor loop mapping - Mapping disabled
+      DmaArbitration_Fixed , // Channel Arbitration - Fixed (within group)
+      DmaInDebug_Halt,  // Operation in Debug mode - Halt in debug
+   };
+   Dma0::configure(dmaConfigValue);
 
    // Set callback (Interrupts are enabled in TCD)
    Dma0::setCallback(dmaChannel, dmaCallback);
-   Dma0::setErrorCallback(dmaErrorCallbackFunction);
    Dma0::enableNvicInterrupts(dmaChannel, NvicPriority_Normal);
    Dma0::enableNvicErrorInterrupt(NvicPriority_Normal);
 
    // Connect DMA channel to UART but throttle by PIT Channel N (matches DMA channel N)
-   DmaMux0::configure(dmaChannel, DMA_SLOT, DmaMuxEnable_Triggered);
+   static const Dmamux0::Init dmaMuxInit[1] = {
+      {
+      dmaChannel,
+      DmamuxMode_Throttled , // DMA Channel Mode - Request directly routed
+      DMA_SLOT,  // Mapping of DMA slot to DMA channel - SPI0 Receive
+      }
+   };
+   Dmamux0::configure(dmaMuxInit);
+   Dmamux0::defaultConfigure();
 
    // Configure the transfer
    Dma0::configureTransfer(dmaChannel, tcd);
@@ -183,10 +188,22 @@ static void configureDma(DmaChannelNum dmaChannel) {
  */
 static void configurePit(PitChannelNum pitChannel) {
    // Configure base PIT
-   Pit::configure(PitDebugMode_Stop);
+   const Pit::Init pitInitValue = {
+      PitOperation_Enabled , // Module Disable - PIT enabled
+      PitDebugMode_StopInDebug,  // Freeze in Debug - Timers stop in Debug
+   };
+   Pit::configure(pitInitValue);
 
    // Configure channel for delay with interrupts
-   Pit::configureChannel(pitChannel, 40_ms, PitChannelIrq_Enabled);
+   const Pit::ChannelInit pitChannelInitValues[] = {
+      {
+      pitChannel,
+      PitChannelEnable_Enabled , // Timer Channel Enable - Channel enabled
+      PitChannelIrq_Enabled ,    // Timer Interrupt Enable - Interrupts are enabled
+      40_ms,                     // Reload value in seconds for channel
+      },
+   };
+   Pit::configure(pitChannelInitValues);
 }
 
 /**
@@ -250,7 +267,7 @@ int main() {
    waitMS(500);
 
    // RUN->VLPR
-   Smc::enterRunMode(ClockConfig_VLPR_BLPE_4MHz);
+   Smc::enterRunMode(ClockConfig_VLPR_BLPI_4MHz);
    console.write("Changed to VLPR mode, ").flushOutput();
 
    // Re-configure PIT as bus clock may have changed
@@ -283,5 +300,6 @@ int main() {
       // Will wake up after each complete transfer due to DMA complete interrupt
       console.writeln("Woke up at end of DMA!").flushOutput();
    }
+
    return 0;
 }

@@ -132,7 +132,7 @@
 
 <!--   Configure methods -->
 
-   <template discardRepeats="true" key="/COREDEBUG/InitMethod" namespace="all" ><![CDATA[
+   <template discardRepeats="true" key="/COREDEBUG/InitMethod" ><![CDATA[
       \t/**
       \t * Configure COREDEBUG from values specified in init
       \t *
