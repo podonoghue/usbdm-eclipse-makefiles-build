@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MK28F15
 -->
       <peripheral>
@@ -13,6 +13,9 @@ Devices using this peripheral:
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>2</value> <name>CHANNEL_COUNT</name> <description>Number of Tx/Rx channels</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
             <size>0x18</size>
@@ -500,7 +503,7 @@ For example, writing 0 configures the first word in the frame</description>
 Enables the corresponding data channel for transmit operation.\n
 A channel must be enabled before its FIFO is accessed</description>
                      <bitOffset>16</bitOffset>
-                     <bitWidth>2</bitWidth>
+                     <bitWidth>$(CHANNEL_COUNT)</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -759,9 +762,8 @@ Word width of less than 8 bits is not supported</description>
                </fields>
             </register>
             <register>
-               <dim>2</dim>
+               <dim>$(CHANNEL_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1</dimIndex>
                <name>TDR%s</name>
                <description>Transmit Data Register\n
 The corresponding TCR3[TCE] bit must be set before accessing the channel&apos;s transmit data register.\n
@@ -778,9 +780,8 @@ Writes to this register when the transmit FIFO is full are ignored</description>
                </fields>
             </register>
             <register>
-               <dim>2</dim>
+               <dim>$(CHANNEL_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1</dimIndex>
                <name>TFR%s</name>
                <description>SAI Transmit FIFO Register</description>
                <addressOffset>0x40</addressOffset>
@@ -1279,7 +1280,7 @@ The value written should be one less than the word number (for example, write ze
                      <name>RCE</name>
                      <description>Receive Channel Enable\nEnables the corresponding data channel for receive operation</description>
                      <bitOffset>16</bitOffset>
-                     <bitWidth>2</bitWidth>
+                     <bitWidth>$(CHANNEL_COUNT)</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -1538,9 +1539,8 @@ Word width of less than 8 bits is not supported</description>
                </fields>
             </register>
             <register>
-               <dim>2</dim>
+               <dim>$(CHANNEL_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1</dimIndex>
                <name>RDR%s</name>
                <description>SAI Receive Data Register</description>
                <addressOffset>0xA0</addressOffset>
@@ -1556,9 +1556,8 @@ Reads from this register when the receive FIFO is empty are ignored</description
                </fields>
             </register>
             <register>
-               <dim>2</dim>
+               <dim>$(CHANNEL_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1</dimIndex>
                <name>RFR%s</name>
                <description>SAI Receive FIFO Register</description>
                <addressOffset>0xC0</addressOffset>

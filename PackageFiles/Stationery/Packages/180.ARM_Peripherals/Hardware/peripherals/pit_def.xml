@@ -4,6 +4,9 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   <!-- Suppress IRQ nums as channel num are used instead -->
+   <constant key="irq_enum" type="Boolean" value="false" />
+
    <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
@@ -14,7 +17,7 @@
    <else />
       <!-- PITx_IRQHandler => Pit::irqHandler<x> -->
       <constant key="irq_pattern"              type="String"  value="&quot;^$(_NAME)(\d+)$&quot;"           />
-      <constant key="irq_ClassHandler"         type="String"  value="&quot;$(_Class)::irqHandler&lt;$1&gt;&quot;" />
+      <constant key="irq_ClassHandler"         type="String"  value="&quot;$(_Class)::irqHandler&lt;PitChannelNum_$1&gt;&quot;" />
    </if>
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true" />
@@ -145,10 +148,7 @@
       valueFormat="%s"
       enumType="uint8_t"
       toolTip="Selected PIT channel" >
-      <choice value="0"          name="Channel 0"     enum="0" />
-      <choice value="1"          name="Channel 1"     enum="1" />
-      <choice value="2"          name="Channel 2"     enum="2" />
-      <choice value="3"          name="Channel 3"     enum="3" />
+      <choiceExpansion keys="ch" dim="=NumChannels" value="%(ch)" name="Channel %(ch)" enum="%(ch)" />
       <choice value="0b10000000" name="Channel Not Allocated"  enum="None" />
    </choiceOption>
 
@@ -637,7 +637,7 @@
          \t *
          \t *  @tparam pitChannelNum Channel number
          \t */
-         \ttemplate<int pitChannelNum>
+         \ttemplate<PitChannelNum pitChannelNum>
          \tstatic void irqHandler() {
          \t   static_assert(Info::NumChannels==Info::irqCount, "Internal error - unmatched vectors/channels");
          \t
@@ -771,6 +771,8 @@
       \t *  - The configuration is determined from Configure.usbdmProject
       \t */
       \tstatic void defaultConfigureIfNeeded() {
+      \t
+      \t    enable();
       \t
       \t   // Check if disabled and configure if so
       \t   if ((pit->MCR & PIT_MCR_MDIS_MASK) != 0) {
