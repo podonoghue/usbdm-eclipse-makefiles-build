@@ -1,33 +1,1888 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- i2s_def.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated-Circuit">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-IC Sound / Synchronous Audio Interface" >
 
-   <xi:include href="default_instance.xml"/>
+   <stringOption key="irq_pattern"        locked="true" value="^I2S%i_?(Rx|Tx)?$" hidden="true" />
+   <stringOption key="irq_ClassHandler"   locked="true" value="$(_Class)::irqHandler&lt;$(_Class)IrqNum_$1&gt;" hidden="true" />
 
-   <xi:include href="mapPinsOption_on.xml"/>
+   <constant key="suppressInstance"         type="Boolean" value="false"         />
+   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
+   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <xi:include href="enablePeripheral.xml"  />
+   <title />
+
+   <template namespace="usbdm" condition="=_irqCount&gt;0" ><![CDATA[
+      \tconstexpr $(_Class)IrqNum $(_Class)IrqNum_Tx = $(_Class)IrqNum_0;
+      \tconstexpr $(_Class)IrqNum $(_Class)IrqNum_Rx = $(_Class)IrqNum_1;
+      \t\n
+   ]]></template>
+
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
+
+<!--
+    * Template substitutions
+    *
+    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
+    * <li>%valueExpression            Numeric variable value e.g. 0x3
+    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
+    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
+    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
+    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
+    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
+    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * <li>%params                     Formatted parameter list for function
+    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
+    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
+    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
+    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
+    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
+    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
+    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
+    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
+-->
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
+
+   <choiceOption key="channelNum" condition="i2s_tcsr_fr_present"
+      valueFormat="%s"
+      hidden="true"
+      typeName="I2sChannelNum"
+      toolTip="Selects transmit or receive channel"
+      description="Channel Number" >
+      <choiceExpansion keys="ch" dim="=i2s_rdr_dim" value="%(ch)" name="Channel %(ch)" enum="%(ch)" />
+   </choiceOption >
 
    <aliasOption key="/SIM/system_bus_clock[]" />
 
-   <stringOption key="irq_pattern"        locked="true" value="^I2S%i_?(Rx|Tx)?$" hidden="true" />
-   <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irqHandler" hidden="true" />
-   <xi:include href="irqOptionSubstituted.xml"/>
-   <projectActionList id = "i2s_files" >
+   <!-- ************* TCSR ****************** -->
+
+   <binaryOption key="i2s_tcsr_te" condition="i2s_tcsr_te_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitEnable"
+      toolTip="When software clears this field, the transmitter remains enabled, and\n
+               this bit remains set, until the end of the current frame"
+      description="Transmitter Enable" >
+      <choice name="Transmitter disabled" value="0" enum="Disabled" />
+      <choice name="Transmitter enabled"  value="1" enum="Enabled"  />
+   </binaryOption >
+
+   <binaryOption key="i2s_tcsr_sr" condition="i2s_tcsr_sr_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitReset"
+      toolTip="When set, resets the internal transmitter logic including the FIFO pointers.\n
+               Software-visible registers are not affected, except for the status"
+      description="Software Reset" >
+      <choice name="No effect"       value="0" enum="NoEffect" />
+      <choice name="Software reset"  value="1" enum="SoftwareReset" />
+   </binaryOption >
+
+   <choiceOption key="i2s_tcsr_fr" condition="i2s_tcsr_fr_present"
+      hidden="true"
+      typeName="I2sTransmitFifoReset"
+      toolTip="Resets the FIFO pointers. Reading this field will always return zero"
+      description="FIFO Reset" >
+      <choice name="Write 1 to reset"  value="0" enum="Write1ToReset" />
+   </choiceOption >
+
+   <binaryOption key="i2s_tcsr_stope" condition="i2s_tcsr_stope_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitStopMode"
+      toolTip="Configures transmitter operation in Stop mode.\n
+               This field is ignored and the transmitter is disabled in all low-leakage stop modes"
+      description="Stop Enable" >
+      <choice name="Disabled in Stop mode"  value="0" enum="DisabledInStopMode" />
+      <choice name="Enabled in Stop mode"   value="1" enum="EnabledInStopMode" />
+   </binaryOption >
+
+   <binaryOption key="i2s_tcsr_dbge" condition="i2s_tcsr_dbge_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitDebugMode"
+      toolTip="Enables/disables transmitter operation in Debug mode.\n
+               The transmit bit clock is not affected by debug mode"
+      description="Debug Enable" >
+      <choice name="Disabled in Debug mode"  value="0" enum="DisabledInDebugMode" />
+      <choice name="Enabled in Debug mode"   value="1" enum="EnabledInDebugMode"  />
+   </binaryOption >
+
+   <binaryOption key="i2s_tcsr_bce" condition="i2s_tcsr_bce_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitBitClock"
+      toolTip="Enables the transmit bit clock, separately from the TE.\n
+               This field is automatically set whenever TE is set. \n
+               When software clears this field, the transmit bit clock remains enabled, and this bit remains set, until the end of the current frame"
+      description="Bit Clock Enable" >
+      <choice name="Transmit clock disabled"  value="0" enum="Disabled" />
+      <choice name="Transmit clock enabled"   value="1" enum="Enabled"  />
+   </binaryOption >
+
+   <binaryOption key="i2s_tcsr_wsf" condition="i2s_tcsr_wsf_present"
+      hidden="true"
+      typeName="I2sTransmitWordStartFlag"
+      toolTip="Indicates that the start of the configured word has been detected.\n
+               Write a logic 1 to this field to clear this flag"
+      description="Word Start Flag" >
+      <choice name="Start not detected"  value="0" enum="StartNotDetected" />
+      <choice name="Start detected"      value="1" enum="StartDetected" />
+   </binaryOption >
+
+   <binaryOption key="i2s_tcsr_sef" condition="i2s_tcsr_sef_present"
+      hidden="true"
+      typeName="I2sTransmitSyncErrorFlag"
+      toolTip="Indicates that an error in the externally-generated frame sync has been detected.\n
+               Write a logic 1 to this field to clear this flag"
+      description="Sync Error Flag" >
+      <choice name="No error"             value="0" enum="NoError" />
+      <choice name="Sync error detected"  value="1" enum="SyncErrorDetected" />
+   </binaryOption >
+
+   <binaryOption key="i2s_tcsr_fef" condition="i2s_tcsr_fef_present"
+      hidden="true"
+      typeName="I2sTransmitFifoErrorFlag"
+      toolTip="Indicates that an enabled transmit FIFO has underrun.\n
+               Write a logic 1 to this field to clear this flag"
+      description="FIFO Error Flag" >
+      <choice name="Underrun not detected"  value="0" enum="UnderrunNotDetected" />
+      <choice name="Underrun detected"      value="1" enum="UnderrunDetected" />
+   </binaryOption >
+
+   <binaryOption key="i2s_tcsr_fwf" condition="i2s_tcsr_fwf_present"
+      hidden="true"
+      typeName="I2sTransmitFifoEmptyFlag"
+      toolTip="Indicates that an enabled transmit FIFO is empty"
+      description="FIFO Warning Flag" >
+      <choice name="No transmit FIFO empty"  value="0" enum="NoTransmitFifoEmpty" />
+      <choice name="Transmit FIFO is empty"  value="1" enum="TransmitFifoIsEmpty" />
+   </binaryOption >
+
+   <binaryOption key="i2s_tcsr_frf" condition="i2s_tcsr_frf_present"
+      hidden="true"
+      typeName="I2sTransmitFifoRequestFlag"
+      toolTip="Indicates that the number of words in an enabled transmit channel FIFO\n
+               is less than or equal to the transmit FIFO watermark"
+      description="FIFO Request Flag" >
+      <choice name="FIFO watermark not reached"  value="0" enum="FifoWatermarkNotReached" />
+      <choice name="FIFO watermark reached"      value="1" enum="FifoWatermarkReached" />
+   </binaryOption >
+
+   <binaryOption key="i2s_tcsr_wsie" condition="i2s_tcsr_wsie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitWordStartAction"
+      toolTip="Enables/disables word start interrupts"
+      description="Word Start Action" >
+      <choice name="Interrupt disabled"  value="0" enum="None" />
+      <choice name="Interrupt enabled"   value="1" enum="Interrupt" />
+   </binaryOption >
+
+   <binaryOption key="i2s_tcsr_seie" condition="i2s_tcsr_seie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitSyncErrorAction"
+      toolTip="Enables/disables sync error interrupts"
+      description="Sync Error Action" >
+      <choice name="Interrupt disabled"  value="0" enum="None" />
+      <choice name="Interrupt enabled"   value="1" enum="Interrupt" />
+   </binaryOption >
+
+   <binaryOption key="i2s_tcsr_feie" condition="i2s_tcsr_feie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitFifoErrorAction"
+      toolTip="Enables/disables FIFO error interrupts"
+      description="FIFO Error Action" >
+      <choice name="Interrupt disabled"  value="0" enum="None" />
+      <choice name="Interrupt enabled"   value="1" enum="Interrupt" />
+   </binaryOption >
+
+   <choiceOption key="i2s_tcsr_warning" condition="i2s_tcsr_fwie_present&amp;&amp;i2s_tcsr_fwde_present"
+      valueFormat="I2S_TCSR_FWIE(%s),I2S_TCSR_FWDE(%s)"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitWarningAction"
+      toolTip="Action taken in FIFO warning level"
+      description="FIFO Warning Action" >
+      <choice value="0,0" name="No action"                 enum="None"                   />
+      <choice value="1,0" name="Interrupt Request"         enum="Interrupt"              />
+      <choice value="0,1" name="Dma Request"               enum="DmaRequest"             />
+      <choice value="1,1" name="Interrupt and Dma Request" enum="InterruptAndDmaRequest" />
+   </choiceOption>
+
+   <choiceOption key="i2s_tcsr_request" condition="i2s_tcsr_frie_present&amp;&amp;i2s_tcsr_frde_present"
+      valueFormat="I2S_TCSR_FRIE(%s),I2S_TCSR_FRDE(%s)"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitRequestAction"
+      toolTip="Action taken in FIFO request level"
+      description="FIFO Warning Action" >
+      <choice value="0,0" name="No action"                 enum="None"                   />
+      <choice value="1,0" name="Interrupt Request"         enum="Interrupt"              />
+      <choice value="0,1" name="Dma Request"               enum="DmaRequest"             />
+      <choice value="1,1" name="Interrupt and Dma Request" enum="InterruptAndDmaRequest" />
+   </choiceOption>
+
+   <!-- ************* TCR1 ****************** -->
+
+   <binaryOption key="i2s_tcr1_tfw" condition="i2s_tcr1_tfw_present"
+      hidden="true"
+      typeName="I2sTransmitFifoWatermark"
+      description="Transmit FIFO Watermark"
+      toolTip="Configures the watermark level for all enabled transmit channels" >
+      <choice name="Interrupt disabled"  value="0" enum="Level0" />
+      <choice name="Interrupt enabled"   value="1" enum="Level1" />
+   </binaryOption>
+
+   <!-- ************* TCR2 ****************** -->
+
+   <choiceOption key="i2s_tcr2_sync" condition="i2s_tcr2_sync_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitSynchMode"
+      toolTip="Configures between asynchronous and synchronous modes of operation. \n
+               When configured for a synchronous mode of operation, the receiver must\n
+               be configured for asynchronous operation."
+      description="Synchronous Mode" >
+      <choice name="Asynchronous mode"          value="0" enum="AsynchronousMode" />
+      <choice name="Synchronous with receiver"  value="1" enum="SynchronousWithReceiver" />
+      <choice name="External SAI transmitter"   value="2" enum="ExternalSaiTransmitter" />
+      <choice name="External SAI receiver"      value="3" enum="ExternalSaiReceiver" />
+   </choiceOption >
+
+   <binaryOption key="i2s_tcr2_bcs" condition="i2s_tcr2_bcs_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitBitClockSwap"
+      toolTip="When the SAI is in asynchronous mode and this field is set to 1,\n
+               the transmitter is clocked by the receiver bit clock. \n
+               When the SAI is in synchronous mode and this field is set to 1,\n
+               the transmitter is clocked by the transmitter bit clock, but it \n
+               uses the receiver frame sync."
+      description="Bit Clock Swap" >
+      <choice name="Normal bit clock source"  value="0" enum="NormalBitClockSource" />
+      <choice name="Swap bit clock source"    value="1" enum="SwapBitClockSource" />
+   </binaryOption >
+
+   <binaryOption key="i2s_tcr2_bci" condition="i2s_tcr2_bci_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitBitClockInput"
+      toolTip="When set in either asynchronous or synchronous mode and using an\n
+               internally generated bit clock, configures the internal logic to be\n
+               clocked as if the bit clock was externally generated. \n
+               This has the effect of decreasing data input setup time, but\n
+               increasing data output valid time.\n
+               This bit has no effect when configured for an externally generated bit clock."
+      description="Bit Clock Input" >
+      <choice name="No effect"                                        value="0" enum="NoEffect" />
+      <choice name="Internal logic is clocked by external bit clock"  value="1" enum="InternalLogicIsClockedByExternalBitClock" />
+   </binaryOption >
+
+   <choiceOption key="i2s_tcr2_msel" condition="i2s_tcr2_msel_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitMasterClock"
+      toolTip="When configured for external bit clock configures for asynchronous\n
+               or synchronous operation. \n
+               When configured for internal bit clock, selects the Audio Master Clock\n
+               used to generate the internal bit clock"
+      description="Clocking mode" >
+      <choice name="Bus Clock (or Asynchronous)"  value="0" enum="BusClockOrAsynchronous" />
+      <choice name="Master Clock 1"               value="1" enum="MasterClock1" />
+      <choice name="Master Clock 2"               value="2" enum="MasterClock2" />
+      <choice name="Master Clock 3"               value="3" enum="MasterClock3" />
+   </choiceOption >
+
+   <binaryOption key="i2s_tcr2_bcp" condition="i2s_tcr2_bcp_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitBitClockPolarity"
+      toolTip="Configures the polarity of the bit clock"
+      description="Bit Clock Polarity" >
+      <choice name="Active high"  value="0" enum="ActiveHigh" />
+      <choice name="Active Low"   value="1" enum="ActiveLow" />
+   </binaryOption >
+
+   <binaryOption key="i2s_tcr2_bcd" condition="i2s_tcr2_bcd_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitBitClockDirection"
+      toolTip="Configures the direction of the bit clock"
+      description="Bit Clock Direction" >
+      <choice name="External bit clock"  value="0" enum="ExternalBitClock" />
+      <choice name="Internal bit clock"  value="1" enum="InternalBitClock" />
+   </binaryOption >
+
+   <intOption key="i2s_tcr2_div" condition="i2s_tcr2_div_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitBitClockDivider"
+      enumType="uint8_t"
+      description="Bit Clock Divide"
+      toolTip="Divides down the audio master clock to generate the bit clock when configured for an internal bit clock.\n
+               The division value is (DIV + 1) * 2"
+      value="0"
+   />
+
+   <title description="Transmit" />
+
+   <!-- ************* TCR3 ****************** -->
+
+   <!-- Should be BITMASK -->
+   <binaryOption key="i2s_tcr3_tce" condition="i2s_tcr3_tce_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitChannelEnable"
+      toolTip="Enables the corresponding data channel for transmit operation.\n
+               A channel must be enabled before its FIFO is accessed"
+      description="Transmit Channel Enable" >
+      <choice name="Channel disabled"  value="0" enum="ChannelDisabled" />
+      <choice name="Channel enabled"   value="1" enum="ChannelEnabled" />
+   </binaryOption >
+
+   <intOption key="i2s_tcr3_wdfl" condition="i2s_tcr3_wdfl_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitWordFlagNum"
+      enumType="uint8_t"
+      description="Word Flag Configuration"
+      toolTip="Configures which word sets the start of word flag.\n
+               The value written must be one less than the word number.\n
+               For example, writing 0 configures the first word in the frame"
+      value="0"
+   />
+
+   <!-- ************* TCR4 ****************** -->
+
+   <intOption key="i2s_tcr4_frsz" condition="i2s_tcr4_frsz_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitFrameSize"
+      enumType="uint8_t"
+      description="Frame size"
+      toolTip="Configures the number of words in each frame.\n
+               The value written must be one less than the number of words in the frame.\n
+               For example, write 0 for one word per frame"
+      value="0"
+   />
+
+   <intOption key="i2s_tcr4_sywd" condition="i2s_tcr4_sywd_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitSyncWidth"
+      enumType="uint8_t"
+      description="Sync Width"
+      toolTip="Configures the length of the frame sync in number of bit clocks.\n
+               The value written must be one less than the number of bit clocks.\n
+                or example, write 0 for the frame sync to assert for one bit clock only"
+      value="0"
+   />
+
+   <binaryOption key="i2s_tcr4_mf" condition="i2s_tcr4_mf_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitBitOrder"
+      toolTip="Configures whether the LSB or the MSB is transmitted/received first"
+      description="MSB First" >
+      <choice name="LSB first"   value="0" enum="LsbFirst" />
+      <choice name="MSB first"   value="1" enum="MsbFirst" />
+      value="0"
+   </binaryOption >
+
+   <binaryOption key="i2s_tcr4_fse" condition="i2s_tcr4_fse_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitEarlySync"
+      toolTip="Control where frame sync asserts relative to 1st bit of the frame"
+      description="Frame Sync Early" >
+      <choice name="Asserts with first bit"            value="0" enum="AssertsWithFirstBit" />
+      <choice name="Asserts one bit before first bit"  value="1" enum="AssertsOneBitBeforeFirstBit" />
+   </binaryOption >
+
+   <binaryOption key="i2s_tcr4_fsp" condition="i2s_tcr4_fsp_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitFrameSyncPolarity"
+      toolTip="Configures the polarity of the frame sync"
+      description="Frame Sync Polarity" >
+      <choice name="Active high"  value="0" enum="ActiveHigh" />
+      <choice name="Active low"   value="1" enum="ActiveLow" />
+   </binaryOption >
+
+   <binaryOption key="i2s_tcr4_fsd" condition="i2s_tcr4_fsd_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitFrameSyncDirection"
+      toolTip="Configures the direction of the frame sync"
+      description="Frame Sync Direction" >
+      <choice name="External Frame Sync"  value="0" enum="ExternalFrameSync" />
+      <choice name="Internal Frame Sync"  value="1" enum="InternalFrameSync" />
+   </binaryOption >
+
+   <!-- ************* TCR5 ****************** -->
+
+   <intOption key="i2s_tcr5_wnw" condition="i2s_tcr5_wnw_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitWordNWidth"
+      enumType="uint8_t"
+      description="Word N Width"
+      toolTip="Configures the number of bits in each word, for each word except the first in the frame.\n
+               The value written must be one less than the number of bits per word.\n
+               The value of WNW must be greater than or equal to the value of W0W even when there is only one word in each frame.\n
+               Word width of less than 8 bits is not supported"
+      value="0"
+   />
+
+   <intOption key="i2s_tcr5_w0w" condition="i2s_tcr5_w0w_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitWord0Width"
+      enumType="uint8_t"
+      description="Word 0 Width"
+      toolTip="Configures the number of bits in the first word in each frame.\n
+               The value written must be one less than the number of bits in the first word.\n
+               Word width of less than 8 bits is not supported if there is only one word per frame"
+      value="0"
+   />
+
+   <intOption key="i2s_tcr5_fbt" condition="i2s_tcr5_fbt_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitFirstBitShifted"
+      enumType="uint8_t"
+      description="First Bit Shifted"
+      toolTip="Configures the bit index for the first bit transmitted for each word in the frame.\n
+               If configured for MSB First, the index of the next bit transmitted is one less than the current bit transmitted.\n
+               If configured for LSB First, the index of the next bit transmitted is one more than the current bit transmitted"
+      value="0"
+   />
+
+   <!-- ************* TDR ****************** -->
+
+   <intOption key="i2s_tdr_tdr" condition="i2s_tdr_tdr_present"
+      hidden="true"
+      typeName="uint32_t"
+      description="Transmit Data Register"
+      toolTip="Data to transmit"
+      value="0"
+   />
+
+   <!-- ************* TFR ****************** -->
+
+   <intOption key="i2s_tfr_wfp" condition="i2s_tfr_wfp_present"
+      hidden="true"
+      typeName="I2sTransmitFifoWritePointer"
+      enumType="uint8_t"
+      description="Transmit FIFO Write Pointer"
+      toolTip="FIFO write pointer for transmit data channel"
+      value="0"
+   />
+
+   <intOption key="i2s_tfr_rfp" condition="i2s_tfr_rfp_present"
+      hidden="true"
+      typeName="I2sTransmitFifoReadPointer"
+      enumType="uint8_t"
+      description="Transmit FIFO Read Pointer"
+      toolTip="FIFO read pointer for transmit data channel"
+      value="0"
+   />
+
+   <title description="Receive" />
+
+   <!-- ************* TMR ****************** BIT MASK! -->
+
+   <binaryOption key="i2s_tmr_twm" condition="i2s_tmr_twm_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sTransmitWordMask"
+      toolTip="Configures whether the transmit word is masked (transmit data pin tri-stated and \n
+               transmit data not read from FIFO) for the corresponding word in the frame"
+      description="Transmit Word Mask" >
+      <choice name="Word N enabled"    value="0" enum="WordNEnabled" />
+      <choice name="Word N is masked"  value="1" enum="WordNIsMasked" />
+   </binaryOption >
+
+   <!-- ************* RCSR ****************** -->
+
+   <binaryOption key="i2s_rcsr_re" condition="i2s_rcsr_re_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveEnable"
+      toolTip="When software clears this field, the receiver remains enabled, and this bit remains set, until the end of the current frame"
+      description="Receiver Enable" >
+      <choice name="Receiver disabled"  value="0" enum="ReceiverDisabled" />
+      <choice name="Receiver enabled"   value="1" enum="ReceiverEnabled" />
+   </binaryOption >
+
+   <binaryOption key="i2s_rcsr_stope" condition="i2s_rcsr_stope_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveStopMode"
+      toolTip="Configures receiver operation in Stop mode.\n
+               This bit is ignored and the receiver is disabled in all low-leakage stop modes"
+      description="Stop Enable" >
+      <choice name="Disabled in Stop mode"  value="0" enum="DisabledInStopMode" />
+      <choice name="Enabled in Stop mode"   value="1" enum="EnabledInStopMode" />
+   </binaryOption >
+
+   <binaryOption key="i2s_rcsr_dbge" condition="i2s_rcsr_dbge_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveDebugMode"
+      toolTip="Enables/disables receiver operation in Debug mode. The receive bit clock is not affected by Debug mode"
+      description="Debug Enable" >
+      <choice name="Disabled in Debug mode"  value="0" enum="DisabledInDebugMode" />
+      <choice name="Enabled in Debug mode"   value="1" enum="EnabledInDebugMode" />
+   </binaryOption >
+
+   <binaryOption key="i2s_rcsr_bce" condition="i2s_rcsr_bce_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveBitClock"
+      toolTip="Enables the receive bit clock, separately from RE.\n
+               This field is automatically set whenever RE is set.\n
+               When software clears this field, the receive bit clock remains enabled,\n
+               and this field remains set, until the end of the current frame"
+      description="Bit Clock Enable" >
+      <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+      <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+   </binaryOption >
+
+   <binaryOption key="i2s_rcsr_fr" condition="i2s_rcsr_fr_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveFifoReset"
+      toolTip="Resets the FIFO pointers. Reading this field will always return zero"
+      description="FIFO Reset" >
+      <choice name="No effect"   value="0" enum="NoEffect" />
+      <choice name="FIFO reset"  value="1" enum="FifoReset" />
+   </binaryOption >
+
+   <binaryOption key="i2s_rcsr_sr" condition="i2s_rcsr_sr_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveReset"
+      toolTip="Resets the internal receiver logic including the FIFO pointers.\n
+               Software-visible registers are not affected, except for the status"
+      description="Software Reset" >
+      <choice name="No effect"       value="0" enum="NoEffect" />
+      <choice name="Software reset"  value="1" enum="SoftwareReset" />
+   </binaryOption >
+
+   <binaryOption key="i2s_rcsr_wsf" condition="i2s_rcsr_wsf_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveWordStartFlag"
+      toolTip="Indicates that the start of the configured word has been detected.\n
+               Write a logic 1 to this field to clear this flag"
+      description="Word Start Flag" >
+      <choice name="Start not detected"  value="0" enum="StartNotDetected" />
+      <choice name="Start detected"      value="1" enum="StartDetected" />
+   </binaryOption >
+
+   <binaryOption key="i2s_rcsr_sef" condition="i2s_rcsr_sef_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveErrorFlag"
+      toolTip="Indicates that an error in the externally-generated frame sync has been detected.\n
+               Write a logic 1 to this field to clear this flag"
+      description="Sync Error Flag" >
+      <choice name="Sync error not detected"  value="0" enum="SyncErrorNotDetected" />
+      <choice name="Sync error detected"      value="1" enum="SyncErrorDetected" />
+   </binaryOption >
+
+   <binaryOption key="i2s_rcsr_fef" condition="i2s_rcsr_fef_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveOverflowFlag"
+      toolTip="Write a logic 1 to this field to clear this flag"
+      description="FIFO Error Flag\nIndicates that an enabled receive FIFO has overflowed." >
+      <choice name="Overflow not detected"  value="0" enum="OverflowNotDetected" />
+      <choice name="Overflow detected"      value="1" enum="OverflowDetected" />
+   </binaryOption >
+
+   <binaryOption key="i2s_rcsr_fwf" condition="i2s_rcsr_fwf_present"
+      hidden="true"
+      typeName="I2sReceiveFifoFlag"
+      toolTip="Indicates that an enabled receive FIFO is full"
+      description="FIFO Warning Flag" >
+      <choice name="No FIFO full"    value="0" enum="NoFifoFull" />
+      <choice name="A FIFO is full"  value="1" enum="AFifoIsFull" />
+   </binaryOption >
+
+   <binaryOption key="i2s_rcsr_frf" condition="i2s_rcsr_frf_present"
+      hidden="true"
+      typeName="I2sReceiveRequestFlag"
+      toolTip="Indicates that the number of words in an enabled receive channel FIFO is greater than the receive FIFO watermark"
+      description="FIFO Request Flag" >
+      <choice name="Watermark not reached"  value="0" enum="WatermarkNotReached" />
+      <choice name="Watermark reached"      value="1" enum="WatermarkReached" />
+   </binaryOption >
+
+   <binaryOption key="i2s_rcsr_wsie" condition="i2s_rcsr_wsie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveWordStartAction"
+      toolTip="Determines action on word start interrupts."
+      description="Word Start Interrupt Enable" >
+      <choice name="Interrupts disabled"  value="0" enum="None" />
+      <choice name="Interrupts enabled"   value="1" enum="Interrupt" />
+   </binaryOption >
+
+   <binaryOption key="i2s_rcsr_seie" condition="i2s_rcsr_seie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveErrorAction"
+      toolTip="Determines action on sync error"
+      description="Sync Error Interrupt Enable" >
+      <choice name="Interrupts disabled"  value="0" enum="None" />
+      <choice name="Interrupts enabled"   value="1" enum="Interrupt" />
+   </binaryOption >
+
+   <binaryOption key="i2s_rcsr_feie" condition="i2s_rcsr_feie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveFifoErrorFlag"
+      toolTip="Determines action on FIFO errors"
+      description="FIFO Error Interrupt Enable" >
+      <choice name="Interrupts disabled"  value="0" enum="None" />
+      <choice name="Interrupts enabled"   value="1" enum="Interrupt" />
+   </binaryOption >
+
+   <choiceOption key="i2s_rcsr_warning" condition="i2s_rcsr_fwie_present&amp;&amp;i2s_rcsr_fwde_present"
+      valueFormat="I2S_RCSR_FWIE(%s),I2S_RCSR_FWDE(%s)"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveWarningAction"
+      toolTip="Action taken in FIFO warning level"
+      description="FIFO Warning Action" >
+      <choice value="0,0" name="No action"                 enum="None"                   />
+      <choice value="1,0" name="Interrupt Request"         enum="Interrupt"              />
+      <choice value="0,1" name="Dma Request"               enum="DmaRequest"             />
+      <choice value="1,1" name="Interrupt and Dma Request" enum="InterruptAndDmaRequest" />
+   </choiceOption>
+
+   <choiceOption key="i2s_rcsr_request" condition="i2s_rcsr_frie_present&amp;&amp;i2s_rcsr_frde_present"
+      valueFormat="I2S_RCSR_FRIE(%s),I2S_RCSR_FRDE(%s)"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveRequestAction"
+      toolTip="Action taken in FIFO request level"
+      description="FIFO Warning Action" >
+      <choice value="0,0" name="No action"                 enum="None"                   />
+      <choice value="1,0" name="Interrupt Request"         enum="Interrupt"              />
+      <choice value="0,1" name="Dma Request"               enum="DmaRequest"             />
+      <choice value="1,1" name="Interrupt and Dma Request" enum="InterruptAndDmaRequest" />
+   </choiceOption>
+
+   <!-- ************* RCR1 ****************** -->
+
+   <intOption key="i2s_rcr1_rfw" condition="i2s_rcr1_rfw_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveFifoWatermark"
+      enumType="uint8_t"
+      description="Receive FIFO Watermark"
+      toolTip="Configures the watermark level for all enabled receiver channels"
+      value="0"
+   />
+
+   <!-- ************* RCR2 ****************** -->
+
+   <choiceOption key="i2s_rcr2_sync" condition="i2s_rcr2_sync_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveSynchMode"
+      toolTip="Configures between asynchronous and synchronous modes of operation.\n
+               When configured for a synchronous mode of operation, the transmitter \n
+               must be configured for asynchronous operation."
+      description="Synchronous Mode" >
+      <choice name="Asynchronous mode"                         value="0" enum="AsynchronousMode" />
+      <choice name="Synchronous with transmitter"              value="1" enum="SynchronousWithTransmitter" />
+      <choice name="Synchronous with another SAI receiver"     value="2" enum="SynchronousWithAnotherSaiReceiver" />
+      <choice name="Synchronous with another SAI transmitter"  value="3" enum="SynchronousWithAnotherSaiTransmitter" />
+   </choiceOption >
+
+   <binaryOption key="i2s_rcr2_bcs" condition="i2s_rcr2_bcs_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveBitClockSwap"
+      toolTip="When the SAI is in asynchronous mode and this field is set to 1, \n
+               the receiver is clocked by the transmitter bit clock. \n
+               When the SAI is in synchronous mode and this field is set to 1, \n
+               the receiver is clocked by the receiver bit clock, but it uses the transmitter frame sync."
+      description="Bit Clock Swap" >
+      <choice name="Use the normal bit clock source"  value="0" enum="UseTheNormalBitClockSource" />
+      <choice name="Swap the bit clock source"        value="1" enum="SwapTheBitClockSource" />
+   </binaryOption >
+
+   <binaryOption key="i2s_rcr2_bci" condition="i2s_rcr2_bci_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveBitClockInput"
+      toolTip="When set in either asynchronous or synchronous mode and the module is using an internally generated\n
+               bit clock, configures the internal logic to be clocked as if the bit clock was externally generated.\n
+               This has the effect of decreasing data input setup time, but increasing data output valid time. \n
+               This bit has no effect when configured for an externally generated bit clock."
+      description="Bit Clock Input" >
+      <choice name="No effect"                                                           value="0" enum="NoEffect" />
+      <choice name="Internal logic is clocked as if bit clock was externally generated"  value="1" enum="InternalLogicIsClockedAsIfBitClockWasExternallyGenerated" />
+   </binaryOption >
+
+   <choiceOption key="i2s_rcr2_msel" condition="i2s_rcr2_msel_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveClockingMode"
+      toolTip="When configured for external bit clock, this field configures for asynchronous or synchronous operation.\n
+               When configured for internal bit clock, this field selects the audio master clock used to generate the internal bit clock"
+      description="Clocking Mode" >
+      <choice name="Bus clock (or Asynchronous)"  value="0" enum="BusClockOrAsynchronous" />
+      <choice name="Master clock 1"               value="1" enum="MasterClock1" />
+      <choice name="Master clock 2"               value="2" enum="MasterClock2" />
+      <choice name="Master clock 3"               value="3" enum="MasterClock3" />
+   </choiceOption >
+
+   <binaryOption key="i2s_rcr2_bcp" condition="i2s_rcr2_bcp_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveBitClockPolarity"
+      toolTip="Configures the polarity of the bit clock."
+      description="Bit Clock Polarity" >
+      <choice name="Active High"  value="0" enum="ActiveHigh" />
+      <choice name="Active Low"   value="1" enum="ActiveLow" />
+   </binaryOption >
+
+   <binaryOption key="i2s_rcr2_bcd" condition="i2s_rcr2_bcd_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveBitClockDirection"
+      toolTip="Configures the direction of the bit clock"
+      description="Bit Clock Direction" >
+      <choice name="External bit clock"  value="0" enum="ExternalBitClock" />
+      <choice name="Internal bit clock"  value="1" enum="InternalBitClock" />
+   </binaryOption >
+
+   <intOption key="i2s_rcr2_div" condition="i2s_rcr2_div_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveBitClockDivider"
+      enumType="uint8_t"
+      description="Bit Clock Divide"
+      toolTip="Divides down the audio master clock to generate the bit clock when\n
+               configured for an internal bit clock.\n
+               The division value is (DIV + 1) * 2"
+      value="0"
+   />
+
+   <!-- ************* RCR3 ****************** -->
+
+   <binaryOption key="i2s_rcr3_rce" condition="i2s_rcr3_rce_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveChannelEnable"
+      toolTip="Enables a data channel for a receive operation.\n
+               A channel should be enabled before its FIFO is accessed."
+      description="Receive Channel Enable\nEnables the corresponding data channel for receive operation" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <intOption key="i2s_rcr3_wdfl" condition="i2s_rcr3_wdfl_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveWordFlag"
+      enumType="uint8_t"
+      description="Word Flag Configuration"
+      toolTip="Configures which word the start of word flag is set.\n
+               The value written should be one less than the word number \n
+               (for example, write zero to configure for the first word in the frame)"
+      value="0"
+   />
+
+   <!-- ************* RCR4 ****************** -->
+
+   <intOption key="i2s_rcr4_frsz" condition="i2s_rcr4_frsz_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveFrameSize"
+      enumType="uint8_t"
+      description="Frame size"
+      toolTip="Configures the number of words in each frame.\n
+               The value written must be one less than the number of words in the frame.\n
+               For example, write 0 for one word per frame"
+      value="0"
+   />
+
+   <intOption key="i2s_rcr4_sywd" condition="i2s_rcr4_sywd_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveSyncWidth"
+      enumType="uint8_t"
+      description="Sync Width"
+      toolTip="Configures the length of the frame sync in number of bit clocks.\n
+               The value written must be one less than the number of bit clocks.\n
+                or example, write 0 for the frame sync to assert for one bit clock only"
+      value="0"
+   />
+
+   <binaryOption key="i2s_rcr4_mf" condition="i2s_rcr4_mf_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveBitOrder"
+      toolTip="Configures whether the LSB or the MSB is transmitted/received first"
+      description="MSB First" >
+      <choice name="LSB first"   value="0" enum="LsbFirst" />
+      <choice name="MSB first"   value="1" enum="MsbFirst" />
+   </binaryOption >
+
+   <binaryOption key="i2s_rcr4_fse" condition="i2s_rcr4_fse_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveFrameSyncEarly"
+      toolTip="Control where frame sync asserts relative to 1st bit of the frame"
+      description="Frame Sync Early" >
+      <choice name="Asserts with first bit"            value="0" enum="AssertsWithFirstBit" />
+      <choice name="Asserts one bit before first bit"  value="1" enum="AssertsOneBitBeforeFirstBit" />
+   </binaryOption >
+
+   <binaryOption key="i2s_rcr4_fsp" condition="i2s_rcr4_fsp_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveFrameSyncPolarity"
+      toolTip="Configures the polarity of the frame sync"
+      description="Frame Sync Polarity" >
+      <choice name="Active high"  value="0" enum="ActiveHigh" />
+      <choice name="Active low"   value="1" enum="ActiveLow" />
+   </binaryOption >
+
+   <binaryOption key="i2s_rcr4_fsd" condition="i2s_rcr4_fsd_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveI2sReceiveFrameSyncDirection"
+      toolTip="Configures the direction of the frame sync"
+      description="Frame Sync Direction" >
+      <choice name="Generated externally"  value="0" enum="GeneratedExternally" />
+      <choice name="Generated internally"  value="1" enum="GeneratedInternally" />
+   </binaryOption >
+
+   <!-- ************* RCR5 ****************** -->
+
+   <intOption key="i2s_rcr5_wnw" condition="i2s_rcr5_wnw_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveWordNWidth"
+      enumType="uint8_t"
+      description="Word N Width"
+      toolTip="Configures the number of bits in each word, for each word except the first in the frame.\n
+               The value written must be one less than the number of bits per word.\n
+               The value of WNW must be greater than or equal to the value of W0W even when there is only one word in each frame.\n
+               Word width of less than 8 bits is not supported"
+      value="0"
+   />
+
+   <intOption key="i2s_rcr5_w0w" condition="i2s_rcr5_w0w_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveWord0Width"
+      enumType="uint8_t"
+      description="Word 0 Width"
+      toolTip="Configures the number of bits in the first word in each frame.\n
+               The value written must be one less than the number of bits in the first word.\n
+               Word width of less than 8 bits is not supported if there is only one word per frame"
+      value="0"
+   />
+
+   <intOption key="i2s_rcr5_fbt" condition="i2s_rcr5_fbt_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveFirstBitShifted"
+      enumType="uint8_t"
+      description="First Bit Shifted"
+      toolTip="Configures the bit index for the first bit transmitted for each word in the frame.\n
+               If configured for MSB First, the index of the next bit transmitted is one less than the current bit transmitted.\n
+               If configured for LSB First, the index of the next bit transmitted is one more than the current bit transmitted"
+      value="0"
+   />
+
+   <!-- ************* RDR ****************** -->
+
+   <intOption key="i2s_rdr_rdr" condition="i2s_rdr_rdr_present"
+      hidden="true"
+      derived="true"
+      typeName="uint32_t"
+      description="Receive Data Register"
+      toolTip="Reads from this register when the receive FIFO is not empty will return the data from the top of the receive FIFO.\n
+               Reads from this register when the receive FIFO is empty are ignored"
+   />
+
+   <!-- ************* RFR ****************** -->
+
+   <intOption key="i2s_rfr_wfp" condition="i2s_rfr_wfp_present"
+      hidden="true"
+      typeName="I2sReceiveFifoWritePointer"
+      enumType="uint8_t"
+      description="Receiver FIFO Write Pointer"
+      toolTip="FIFO write pointer for receive data channel"
+      value="0"
+   />
+
+   <intOption key="i2s_rfr_rfp" condition="i2s_rfr_rfp_present"
+      hidden="true"
+      typeName="I2sReceiveFifoReadPointer"
+      enumType="uint8_t"
+      description="Receiver FIFO Read Pointer"
+      toolTip="FIFO read pointer for receive data channel"
+      value="0"
+   />
+
+   <!-- ************* RMR BITMASK ****************** -->
+
+   <binaryOption key="i2s_rmr_rwm" condition="i2s_rmr_rwm_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sReceiveWordMask"
+      toolTip="Configures whether the receive word is masked (received data ignored and\n
+               not written to receive FIFO) for the corresponding word in the frame"
+      description="Receive Word Mask" >
+      <choice name="Word N is enabled"  value="0" enum="WordNIsEnabled" />
+      <choice name="Word N is masked"   value="1" enum="WordNIsMasked" />
+   </binaryOption >
+
+   <!-- ************* MCR ****************** -->
+
+   <binaryOption key="i2s_mcr_duf" condition="i2s_mcr_duf_present"
+      hidden="true"
+      typeName="I2sDriverUpdateFlag"
+      toolTip="Provides the status of on-the-fly updates to the MCLK divider ratio\n
+               Updates to the MCLK divider ratio are blocked while this flag remains set"
+      description="Divider Update Flag" >
+      <choice name="Ratio not updating"            value="0" enum="RatioNotUpdating" />
+      <choice name="Ratio is updating on-the-fly"  value="1" enum="RatioIsUpdatingOnTheFly" />
+   </binaryOption >
+
+   <binaryOption key="i2s_mcr_moe" condition="i2s_mcr_moe_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sMasterClockEnable"
+      toolTip="Enables the MCLK divider and configures the MCLK signal pin as an output.\n
+               When software clears this field, it remains set until the MCLK divider is fully disabled"
+      description="MCLK Output Enable" >
+      <choice name="Pin is input bypassing the MCLK Divider"  value="0" enum="PinIsInputBypassingTheMclkDivider" />
+      <choice name="Pin is output from the MCLK Divider"      value="1" enum="PinIsOutputFromTheMclkDivider" />
+   </binaryOption >
+
+   <choiceOption key="i2s_mcr_mics" condition="i2s_mcr_mics_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sMasterClockInput"
+      toolTip="Selects the clock input to the MCLK divider"
+      description="Master Clock Input Clock Select" >
+      <choice name="Input clock 0"  value="0" enum="InputClock0" />
+      <choice name="Input clock 1"  value="1" enum="InputClock1" />
+      <choice name="Input clock 2"  value="2" enum="InputClock2" />
+      <choice name="Input clock 3"  value="3" enum="InputClock3" />
+   </choiceOption >
+
+   <!-- ************* MDR ****************** -->
+
+   <intOption key="i2s_mdr_fract" condition="i2s_mdr_fract_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sMasterClockFraction"
+      enumType="uint8_t"
+      description="Master Clock Fraction"
+      toolTip="Sets the MCLK divide ratio such that: \n
+               MCLK output = MCLK input * ( (FRACT + 1) / (DIVIDE + 1) ).\n
+               FRACT must be set equal or less than the value in the DIVIDE field."
+      value="0"
+   />
+
+   <intOption key="i2s_mdr_divide" condition="i2s_mdr_divide_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="I2sMasterClockDivider"
+      enumType="uint8_t"
+      description="Master Clock Divider"
+      toolTip="Sets the MCLK divide ratio such that:\n
+               MCLK output = MCLK input * ( (FRACT + 1) / (DIVIDE + 1) ).\n
+               FRACT must be set equal or less than the value in the DIVIDE field."
+      value="0"
+   />
+
+<!-- Setters and getters -->
+
+   <for keys="field           : set   : get   : clear : genCode                 : name"
+        values="
+         i2s_tcsr_te          : true  : true  : false : enableGettersAndSetters : Transmitter;
+         i2s_tcsr_stope       : true  : true  : false : enableGettersAndSetters : StopMode;
+         i2s_tcsr_dbge        : true  : true  : false : enableGettersAndSetters : DebugMode;
+         i2s_tcsr_bce         : true  : true  : false : enableGettersAndSetters : BitClock;
+         i2s_tcsr_fr          : true  : false : false : enableGettersAndSetters : FifoReset;
+         i2s_tcsr_sr          : true  : false : false : enableGettersAndSetters : SoftwareReset;
+         i2s_tcsr_wsf         : true  : false : true  : enableGettersAndSetters : WordStartFlag;
+         i2s_tcsr_sef         : true  : false : true  : enableGettersAndSetters : SyncErrorFlag;
+         i2s_tcsr_fef         : true  : false : true  : enableGettersAndSetters : FifoErrroFlag;
+         i2s_tcsr_fwf         : false : false : true  : enableGettersAndSetters : FifoWarningFlag;
+         i2s_tcsr_frf         : false : false : true  : enableGettersAndSetters : FifoRequestFlag;
+         i2s_tcsr_wsie        : true  : true  : false : enableGettersAndSetters : WordStartAction;
+         i2s_tcsr_seie        : true  : true  : false : enableGettersAndSetters : SyncErrorAction;
+         i2s_tcsr_feie        : true  : true  : false : enableGettersAndSetters : FifoErrorAction;
+         i2s_tcsr_warning     : true  : true  : false : enableGettersAndSetters : FifoWarningAction;
+         i2s_tcsr_request     : true  : true  : false : enableGettersAndSetters : FifoRequestAction;
+
+         i2s_tcr1_tfw         : true  : true  : false : enableGettersAndSetters : TransmitFifoWatermark;
+
+         i2s_tcr2_sync        : true  : true  : false : enableGettersAndSetters : TransmitSyncMode;
+         i2s_tcr2_bcs         : true  : true  : false : enableGettersAndSetters : TransmitBitClockSwap;
+         i2s_tcr2_bci         : true  : true  : false : enableGettersAndSetters : TransmitBitClockInput;
+         i2s_tcr2_msel        : true  : true  : false : enableGettersAndSetters : TransmitMasterClock;
+         i2s_tcr2_bcp         : true  : true  : false : enableGettersAndSetters : TransmitBitClockPolarity;
+         i2s_tcr2_bcd         : true  : true  : false : enableGettersAndSetters : TransmitBitClockDirection;
+         i2s_tcr2_div         : true  : true  : false : enableGettersAndSetters : TransmitBitClockDivider;
+
+         i2s_tcr3_tce         : true  : true  : false : enableGettersAndSetters : TransmitChannel;
+         i2s_tcr3_wdfl        : true  : true  : false : enableGettersAndSetters : WorkFlagNum;
+
+         i2s_tcr4_frsz        : true  : true  : false : enableGettersAndSetters : FramSize;
+         i2s_tcr4_sywd        : true  : true  : false : enableGettersAndSetters : SyncWidth;
+         i2s_tcr4_mf          : true  : true  : false : enableGettersAndSetters : BitOrder;
+         i2s_tcr4_fse         : true  : true  : false : enableGettersAndSetters : FrameEarlySync;
+         i2s_tcr4_fsp         : true  : true  : false : enableGettersAndSetters : FrameSyncPolarity;
+         i2s_tcr4_fsd         : true  : true  : false : enableGettersAndSetters : FrameSyncDirection;
+
+         i2s_tcr5_wnw         : true  : true  : false : enableGettersAndSetters : WordNWidth;
+         i2s_tcr5_w0w         : true  : true  : false : enableGettersAndSetters : Word0Width;
+         i2s_tcr5_fbt         : true  : true  : false : enableGettersAndSetters : FirstBitShifted;
+
+         i2s_tmr_twm          : true  : true  : false : enableGettersAndSetters : TransmitWordMask;
+
+         i2s_rcsr_re          : true  : true  : false : enableGettersAndSetters : ReceiverEnable;
+         i2s_rcsr_stope       : true  : true  : false : enableGettersAndSetters : ReceiverStopMode;
+         i2s_rcsr_dbge        : true  : true  : false : enableGettersAndSetters : ReceiverDebugMode;
+         i2s_rcsr_bce         : true  : true  : false : enableGettersAndSetters : ReceiveritClockEnable;
+         i2s_rcsr_fr          : true  : true  : false : enableGettersAndSetters : ReceiverFifoReset;
+         i2s_rcsr_sr          : true  : true  : false : enableGettersAndSetters : ReceiverSoftwareReset;
+         i2s_rcsr_wsf         : true  : true  : false : enableGettersAndSetters : ReceiverWordStartFlag;
+         i2s_rcsr_sef         : true  : true  : false : enableGettersAndSetters : ReceiverSyncErrorFlag;
+         i2s_rcsr_fef         : true  : true  : false : enableGettersAndSetters : ReceiverFifoErrorFlag;
+         i2s_rcsr_fwf         : false : true  : false : enableGettersAndSetters : ReceiverFifoWarningFlag;
+         i2s_rcsr_frf         : false : true  : false : enableGettersAndSetters : ReceiverFifoRequestFlag;
+         i2s_rcsr_wsie        : true  : true  : false : enableGettersAndSetters : RcsrWordStartAction;
+         i2s_rcsr_seie        : true  : true  : false : enableGettersAndSetters : RcsrSyncErrorAction;
+         i2s_rcsr_feie        : true  : true  : false : enableGettersAndSetters : RcsrFifoErrorAction;
+         i2s_rcsr_warning     : true  : true  : false : enableGettersAndSetters : ReceiverWarningAction;
+         i2s_rcsr_request     : true  : true  : false : enableGettersAndSetters : ReceiverRequestAction;
+
+         i2s_rcr1_rfw         : true  : true  : false : enableGettersAndSetters : ReceiveFifoWatermark;
+
+         i2s_rcr2_sync        : true  : true  : false : enableGettersAndSetters : ReceiveSyncMode;
+         i2s_rcr2_bcs         : true  : true  : false : enableGettersAndSetters : ReceiveBitClockSwap;
+         i2s_rcr2_bci         : true  : true  : false : enableGettersAndSetters : ReceiveBitClockInput;
+         i2s_rcr2_msel        : true  : true  : false : enableGettersAndSetters : ReceiveMasterClock;
+         i2s_rcr2_bcp         : true  : true  : false : enableGettersAndSetters : ReceiveBitClockPolarity;
+         i2s_rcr2_bcd         : true  : true  : false : enableGettersAndSetters : ReceiveBitClockDirection;
+         i2s_rcr2_div         : true  : true  : false : enableGettersAndSetters : ReceiveBitClockDivider;
+
+         i2s_rcr3_rce         : true  : true  : false : enableGettersAndSetters : ReceiveChannelEnable;
+         i2s_rcr3_wdfl        : true  : true  : false : enableGettersAndSetters : ReceiveWordFlagConfig;
+
+         i2s_rcr4_frsz        : true  : true  : false : enableGettersAndSetters : ReceiveFrameSize;
+         i2s_rcr4_sywd        : true  : true  : false : enableGettersAndSetters : ReceiveSyncWidth;
+         i2s_rcr4_mf          : true  : true  : false : enableGettersAndSetters : ReceiveBitOrder;
+         i2s_rcr4_fse         : true  : true  : false : enableGettersAndSetters : ReceiveFrameSyncEarly;
+         i2s_rcr4_fsp         : true  : true  : false : enableGettersAndSetters : ReceiveFrameSyncPolarity;
+         i2s_rcr4_fsd         : true  : true  : false : enableGettersAndSetters : ReceiveFramwSyncDirection;
+
+         i2s_rcr5_wnw         : true  : true  : false : enableGettersAndSetters : ReceiveWordNWidth;
+         i2s_rcr5_w0w         : true  : true  : false : enableGettersAndSetters : ReceiveWord0Width;
+         i2s_rcr5_fbt         : true  : true  : false : enableGettersAndSetters : ReceiveFirstBitShifted;
+
+         i2s_rmr_rwm          : true  : true  : false : enableGettersAndSetters : ReceiveWordMask;
+
+         i2s_mcr_duf          : false : true  : false : enableGettersAndSetters : DividerUpdateFlag;
+         i2s_mcr_moe          : true  : true  : false : enableGettersAndSetters : MasterClockOutputEnable;
+         i2s_mcr_mics         : true  : true  : false : enableGettersAndSetters : MasterClockInputSelect;
+
+         i2s_mdr_fract        : true  : true  : false : enableGettersAndSetters : MasterClockFraction;
+         i2s_mdr_divide       : true  : true  : false : enableGettersAndSetters : MasterClockDivider
+         " >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %fieldAssignment
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType(%register&%mask);
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t */
+         \tstatic void clear%(name)() {
+         \t   %register = %register|%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <variableTemplate
+      variables="channelNum, i2s_tdr_tdr"
+      nonDefaultParams="2"
+   ><![CDATA[
+      \t/**
+      \t * Write %description1
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void writeData(
+      %params) {
+      \t   %register[%paramName0] = %paramName1;
+      \t}
+      \t\n
+   ]]></variableTemplate>
+
+   <variableTemplate codeGenCondition="enableGettersAndSetters"
+      variables="channelNum, i2s_tfr_wfp"
+      nonDefaultParams="2"
+   ><![CDATA[
+      \t/**
+      \t * Get %description1
+      \t *
+      %paramDescription
+      \t */
+      \tstatic int getTransmitFifoWritePointer(%param0) {
+      \t   return %paramType(%register[%paramName0]&%mask1)>>%macro1_SHIFT;
+      \t}
+      \t\n
+   ]]></variableTemplate>
+
+   <variableTemplate codeGenCondition="enableGettersAndSetters"
+      variables="channelNum, i2s_tfr_rfp"
+      nonDefaultParams="2"
+   ><![CDATA[
+      \t/**
+      \t * Get %description1
+      \t *
+      %paramDescription
+      \t */
+      \tstatic int getTransmitFifoReadPointer(%param0) {
+      \t   return %paramType(%register[%paramName0]&%mask1)>>%macro1_SHIFT;
+      \t}
+      \t\n
+   ]]></variableTemplate>
+
+   <variableTemplate
+      variables="channelNum, i2s_rdr_rdr"
+      nonDefaultParams="2"
+   ><![CDATA[
+      \t/**
+      \t * Read %description1
+      \t *
+      %paramDescription
+      \t */
+      \tstatic %paramType1 readData(%param0) {
+      \t   return %paramType1(%register1[%paramName0]);
+      \t}
+      \t\n
+   ]]></variableTemplate>
+
+   <variableTemplate codeGenCondition="enableGettersAndSetters"
+      variables="channelNum, i2s_rfr_wfp"
+      nonDefaultParams="2"
+   ><![CDATA[
+      \t/**
+      \t * Get %description1
+      \t *
+      %paramDescription
+      \t */
+      \tstatic int getReceiveFifoWritePointer(%param0) {
+      \t   return %paramType(%register[%paramName0]&%mask1)>>%macro1_SHIFT;
+      \t}
+      \t\n
+   ]]></variableTemplate>
+
+   <variableTemplate codeGenCondition="enableGettersAndSetters"
+      variables="channelNum, i2s_rfr_rfp"
+      nonDefaultParams="2"
+   ><![CDATA[
+      \t/**
+      \t * Get %description1
+      \t *
+      %paramDescription
+      \t */
+      \tstatic int getReceiveFifoReadPointer(%param0) {
+      \t   return %paramType(%register[%paramName0]&%mask1)>>%macro1_SHIFT;
+      \t}
+      \t\n
+   ]]></variableTemplate>
+
+
+   <!--   ========== class $(_Structname)BasicInfo =============================== -->
+
+   <template namespace="baseClass" ><![CDATA[
+      class $(_Structname)BasicInfo {
+
+      public:\n
+   ]]></template>
+
+   <!--   ========== Interrupt handling =============================== -->
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="irqHandlingMethod"
+   ><![CDATA[
+       \t//! Common class based callback code has been generated for this class of peripheral
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
+       \t\n
+   ]]></variableTemplate>
+
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <![CDATA[
+      \t/**
+      \t * Type definition for $(_Baseclass) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)($(irq_parameters));
+      \t
+      \t/**
+      \t * Callback to catch unhandled interrupt
+      \t */
+      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <variableTemplate codeGenCondition="irqHandlingMethod"
+      variables="irq_enum"
+   ><![CDATA[
+      \t/** Callback function for ISR */
+      \tstatic CallbackFunction sCallbacks[irqCount];
+      \t
+      \t/**
+      \t * Set interrupt callback function.
+      \t *
+      %paramDescription
+      \t * @param      $(_basename)Callback Callback function to execute on interrupt
+      \t *                             Use nullptr to remove callback.
+      \t */
+      \tstatic void setCallback(%param0, CallbackFunction $(_basename)Callback) {
+      \t   if ($(_basename)Callback == nullptr) {
+      \t      $(_basename)Callback = unhandledCallback;
+      \t   }
+      \t   // Allow either no handler set yet or removing handler
+      \t   usbdm_assert(
+      \t         (sCallbacks[%paramName0] == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
+      \t         "Handler already set");
+      \t   sCallbacks[%paramName0] = $(_basename)Callback;
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/**
+      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
+      \t *
+      \t * @tparam channel Channel number
+      \t */
+      \ttemplate<I2s0IrqNum channel>
+      \tstatic void irqHandler() {
+      \t
+      \t   // Execute call-back
+      \t   Info::sCallbacks[channel]($(irq_call));
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/**
+      \t * Callback table of programmatically set handlers for $(_Class)
+      \t */
+      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallbacks[] = {\n
+   ]]></template>
+
+   <for keys="ch" dim="=_irqCount" >
+      <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+         \t   $(_Class)Info::unhandledCallback,\n
+      ]]></template>
+   </for>
+
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+   <!--   ========== I2S Init class =============================== -->
+
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_Baseclass)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(ErrorCode ec) {
+      \t *    ....
+      \t * }
+      \t *
+      \t * static const $(_Class)::Init $(_name)Init {
+      \t *
+      \t *   // Setup values
+      \t *   I2sTransmitEnable_Disabled ,                                 // Transmitter Enable - Transmitter disabled
+      \t *   I2sTransmitStopMode_DisabledInStopMode ,                     // Stop Enable - Disabled in Stop mode
+      \t *   I2sTransmitDebugMode_DisabledInDebugMode ,                   // Debug Enable - Disabled in Debug mode
+      \t *   I2sTransmitBitClock_Disabled ,                               // Bit Clock Enable - Transmit clock disabled
+      \t *   I2sTransmitReset_NoEffect ,                                  // Software Reset - No effect
+      \t *   I2sTransmitWordStartAction_None ,                            // Word Start Action - Interrupt disabled
+      \t *   I2sTransmitSyncErrorAction_None ,                            // Sync Error Action - Interrupt disabled
+      \t *   I2sTransmitFifoErrorAction_None ,                            // FIFO Error Action - Interrupt disabled
+      \t *   I2sTransmitWarningAction_None ,                              // FIFO Warning Action - No action
+      \t *   I2sTransmitRequestAction_None ,                              // FIFO Warning Action - No action
+      \t *   I2sTransmitFifoWatermark_Level0 ,                            // Transmit FIFO Watermark - Interrupt disabled
+      \t *   I2sTransmitSynchMode_AsynchronousMode ,                      // Synchronous Mode - Asynchronous mode
+      \t *   I2sTransmitBitClockSwap_NormalBitClockSource ,               // Bit Clock Swap - Normal bit clock source
+      \t *   I2sTransmitBitClockInput_NoEffect ,                          // Bit Clock Input - No effect
+      \t *   I2sTransmitMasterClock_BusClockOrAsynchronous ,              // Clocking mode - Bus Clock (or Asynchronous)
+      \t *   I2sTransmitBitClockPolarity_ActiveHigh ,                     // Bit Clock Polarity - Active high
+      \t *   I2sTransmitBitClockDirection_ExternalBitClock ,              // Bit Clock Direction - External bit clock
+      \t *   I2sTransmitBitClockDivider(0) ,                              // Bit Clock Divide
+      \t *   I2sTransmitChannelEnable_ChannelDisabled ,                   // Transmit Channel Enable - Channel disabled
+      \t *   I2sTransmitWordFlagNum(0) ,                                  // Word Flag Configuration
+      \t *   I2sTransmitFrameSize(0) ,                                    // Frame size
+      \t *   I2sTransmitSyncWidth(0) ,                                    // Sync Width
+      \t *   I2sTransmitEndian_LsbFirst ,                                 // MSB First - LSB first
+      \t *   I2sTransmitEarlySync_AssertsWithFirstBit ,                   // Frame Sync Early - Asserts with first bit
+      \t *   I2TransmitsFrameSyncPolarity_ActiveHigh ,                    // Frame Sync Polarity - Active high
+      \t *   I2sTransmitFrameSyncDirection_ExternalFrameSync ,            // Frame Sync Direction - External Frame Sync
+      \t *   I2sTransmitWordNWidth(0) ,                                   // Word N Width
+      \t *   I2sTransmitWord0Width(0) ,                                   // Word 0 Width
+      \t *   I2sTransmitFirstBitShifted(0) ,                              // First Bit Shifted
+      \t *   I2sTransmitWordMask_WordNEnabled ,                           // Transmit Word Mask - Word N enabled
+      \t *   I2sReceiveEnable_ReceiverDisabled ,                          // Receiver Enable - Receiver disabled
+      \t *   I2sReceiveStopMode_DisabledInStopMode ,                      // Stop Enable - Disabled in Stop mode
+      \t *   I2sReceiveDebugMode_DisabledInDebugMode ,                    // Debug Enable - Disabled in Debug mode
+      \t *   I2sReceiveBitClock_ClockDisabled ,                           // Bit Clock Enable - Clock disabled
+      \t *   I2sReceiveFifoReset_NoEffect ,                               // FIFO Reset - No effect
+      \t *   I2sReceiveReset_NoEffect ,                                   // Software Reset - No effect
+      \t *   I2sReceiveWordStartFlag_StartNotDetected ,                   // Word Start Flag - Start not detected
+      \t *   I2sReceiveErrorFlag_SyncErrorNotDetected ,                   // Sync Error Flag - Sync error not detected
+      \t *   I2sReceiveOverflowFlag_OverflowNotDetected ,                 // FIFO Error Flag - Overflow not detected
+      \t *   I2sReceiveWordStartAction_None ,                             // Word Start Interrupt Enable - Interrupts disabled
+      \t *   I2sReceiveErrorAction_None ,                                 // Sync Error Interrupt Enable - Interrupts disabled
+      \t *   I2sReceiveFifoErrorFlag_None ,                               // FIFO Error Interrupt Enable - Interrupts disabled
+      \t *   I2sReceiveWarningAction_None ,                               // FIFO Warning Action - No action
+      \t *   I2sReceiveRequestAction_None ,                               // FIFO Warning Action - No action
+      \t *   I2sReceiveFifoWatermark(0) ,                                 // Receive FIFO Watermark
+      \t *   I2sReceiveSynchMode_AsynchronousMode ,                       // Synchronous Mode - Asynchronous mode
+      \t *   I2sReceiveBitClockSwap_UseTheNormalBitClockSource ,          // Bit Clock Swap - Use the normal bit clock source
+      \t *   I2sReceiveBitClockInput_NoEffect ,                           // Bit Clock Input - No effect
+      \t *   I2sReceiveClockingMode_BusClockOrAsynchronous ,              // Clocking Mode - Bus clock (or Asynchronous)
+      \t *   I2sReceiveBitClockPolarity_ActiveHigh ,                      // Bit Clock Polarity - Active High
+      \t *   I2sReceiveBitClockDirection_ExternalBitClock ,               // Bit Clock Direction - External bit clock
+      \t *   I2sReceiveBitClockDivider(0) ,                               // Bit Clock Divide
+      \t *   I2sReceiveChannelEnable_Disabled ,                           // Receive Channel Enable - Disabled
+      \t *   I2sReceiveWordFlag(0) ,                                      // Word Flag Configuration
+      \t *   I2sReceiveFrameSize(0) ,                                     // Frame size
+      \t *   I2sReceiveSyncWidth(0) ,                                     // Sync Width
+      \t *   I2sReceiveBitOrder_LsbFirst ,                                // MSB First - LSB first
+      \t *   I2sReceiveFrameSyncEarly_AssertsWithFirstBit ,               // Frame Sync Early - Asserts with first bit
+      \t *   I2sReceiveFrameSyncPolarity_ActiveHigh ,                     // Frame Sync Polarity - Active high
+      \t *   I2sReceiveI2sReceiveFrameSyncDirection_GeneratedExternally , // Frame Sync Direction - Generated externally
+      \t *   I2sReceiveWordNWidth(0) ,                                    // Word N Width
+      \t *   I2sReceiveWord0Width(0) ,                                    // Word 0 Width
+      \t *   I2sReceiveFirstBitShifted(0) ,                               // First Bit Shifted
+      \t *   I2sReceiveWordMask_WordNIsEnabled ,                          // Receive Word Mask - Word N is enabled
+      \t *   I2sMasterClockEnable_PinIsInputBypassingTheMclkDivider ,     // MCLK Output Enable - Pin is input bypassing the MCLK Divider
+      \t *   I2sMasterClockInput_InputClock0 ,                            // MCLK Input Clock Select - Input clock 0
+      \t *   I2sMasterClockFraction(0) ,                                  // MCLK Fraction
+      \t *   I2sMasterClockDivider(0),                                    // MCLK Divider
+      \t *
+      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
+      \t *   NvicPriority_Low,                 // Priority for interrupt - Low
+      \t *
+      \t *   // Optional base value to start with (must be last parameter)
+      \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
+      \t * };
+      \t *
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_name)Init)
+      \t * @endcode
+      \t */
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+   <!--   Member variables -->
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="irqHandlingMethod"
+    ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="i2s_tcsr_te,i2s_tcsr_stope,i2s_tcsr_dbge,i2s_tcsr_bce,i2s_tcsr_fr,i2s_tcsr_sr,i2s_tcsr_wsf,i2s_tcsr_sef,i2s_tcsr_fef,i2s_tcsr_wsie,i2s_tcsr_seie,i2s_tcsr_feie,i2s_tcsr_warning,i2s_tcsr_request"
+   ><![CDATA[
+      \t   /// SAI Transmit Control Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="i2s_tcr1_tfw"
+   ><![CDATA[
+      \t   /// SAI Transmit Configuration 1 Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="i2s_tcr2_sync,i2s_tcr2_bcs,i2s_tcr2_bci,i2s_tcr2_msel,i2s_tcr2_bcp,i2s_tcr2_bcd,i2s_tcr2_div"
+   ><![CDATA[
+      \t   /// SAI Transmit Configuration 2 Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="i2s_tcr3_tce,i2s_tcr3_wdfl"
+   ><![CDATA[
+      \t   /// SAI Transmit Configuration 3 Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="i2s_tcr4_frsz,i2s_tcr4_sywd,i2s_tcr4_mf,i2s_tcr4_fse,i2s_tcr4_fsp,i2s_tcr4_fsd"
+   ><![CDATA[
+      \t   /// SAI Transmit Configuration 4 Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="i2s_tcr5_wnw,i2s_tcr5_w0w,i2s_tcr5_fbt"
+   ><![CDATA[
+      \t   /// SAI Transmit Configuration 5 Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="i2s_tmr_twm"
+   ><![CDATA[
+      \t   /// SAI Transmit Mask Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="i2s_rcsr_re,i2s_rcsr_stope,i2s_rcsr_dbge,i2s_rcsr_bce,i2s_rcsr_fr,i2s_rcsr_sr,i2s_rcsr_wsf,i2s_rcsr_sef,i2s_rcsr_fef,i2s_rcsr_wsie,i2s_rcsr_seie,i2s_rcsr_feie,i2s_rcsr_warning,i2s_rcsr_request"
+   ><![CDATA[
+      \t   /// SAI Receive Control Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="i2s_rcr1_rfw"
+   ><![CDATA[
+      \t   /// SAI Receive Configuration 1 Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="i2s_rcr2_sync,i2s_rcr2_bcs,i2s_rcr2_bci,i2s_rcr2_msel,i2s_rcr2_bcp,i2s_rcr2_bcd,i2s_rcr2_div"
+   ><![CDATA[
+      \t   /// SAI Receive Configuration 2 Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="i2s_rcr3_rce,i2s_rcr3_wdfl"
+   ><![CDATA[
+      \t   /// SAI Receive Configuration 3 Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="i2s_rcr4_frsz,i2s_rcr4_sywd,i2s_rcr4_mf,i2s_rcr4_fse,i2s_rcr4_fsp,i2s_rcr4_fsd"
+   ><![CDATA[
+      \t   /// SAI Receive Configuration 4 Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="i2s_rcr5_wnw,i2s_rcr5_w0w,i2s_rcr5_fbt"
+   ><![CDATA[
+      \t   /// SAI Receive Configuration 5 Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="i2s_rmr_rwm"
+   ><![CDATA[
+      \t   /// SAI Receive Mask Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="i2s_mcr_moe,i2s_mcr_mics"
+   ><![CDATA[
+      \t   /// SAI MCLK Control Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="i2s_mdr_fract,i2s_mdr_divide"
+   ><![CDATA[
+      \t   /// MCLK Divide Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="/PCR/nvic_irqLevel,irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %paramType %registerName0 = %symbolicExpression1;
+      \t\n
+   ]]></variableTemplate>
+
+   <!--   Constructors -->
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%paramName0 = %paramExpression;
+      \t   }\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName = %paramExpression;
+      \t   }\n\n
+   ]]></variableTemplate>
+
+   <for keys="r"
+      values="
+            i2s_tcsr_te;
+            i2s_tcsr_stope;
+            i2s_tcsr_dbge;
+            i2s_tcsr_bce;
+            i2s_tcsr_sr;
+            i2s_tcsr_wsie;
+            i2s_tcsr_seie;
+            i2s_tcsr_feie;
+            i2s_tcsr_warning;
+            i2s_tcsr_request;
+
+            i2s_tcr1_tfw;
+
+            i2s_tcr2_sync;
+            i2s_tcr2_bcs;
+            i2s_tcr2_bci;
+            i2s_tcr2_msel;
+            i2s_tcr2_bcp;
+            i2s_tcr2_bcd;
+            i2s_tcr2_div;
+
+            i2s_tcr3_tce;
+            i2s_tcr3_wdfl;
+
+            i2s_tcr4_frsz;
+            i2s_tcr4_sywd;
+            i2s_tcr4_mf;
+            i2s_tcr4_fse;
+            i2s_tcr4_fsp;
+            i2s_tcr4_fsd;
+
+            i2s_tcr5_wnw;
+            i2s_tcr5_w0w;
+            i2s_tcr5_fbt;
+
+            i2s_tmr_twm;
+
+            i2s_rcsr_re;
+            i2s_rcsr_stope;
+            i2s_rcsr_dbge;
+            i2s_rcsr_bce;
+            i2s_rcsr_fr;
+            i2s_rcsr_sr;
+            i2s_rcsr_wsf;
+            i2s_rcsr_sef;
+            i2s_rcsr_fef;
+            i2s_rcsr_wsie;
+            i2s_rcsr_seie;
+            i2s_rcsr_feie;
+            i2s_rcsr_warning;
+            i2s_rcsr_request;
+
+            i2s_rcr1_rfw;
+
+            i2s_rcr2_sync;
+            i2s_rcr2_bcs;
+            i2s_rcr2_bci;
+            i2s_rcr2_msel;
+            i2s_rcr2_bcp;
+            i2s_rcr2_bcd;
+            i2s_rcr2_div;
+
+            i2s_rcr3_rce;
+            i2s_rcr3_wdfl;
+
+            i2s_rcr4_frsz;
+            i2s_rcr4_sywd;
+            i2s_rcr4_mf;
+            i2s_rcr4_fse;
+            i2s_rcr4_fsp;
+            i2s_rcr4_fsd;
+
+            i2s_rcr5_wnw;
+            i2s_rcr5_w0w;
+            i2s_rcr5_fbt;
+
+            i2s_rmr_rwm;
+
+            i2s_mcr_moe;
+            i2s_mcr_mics;
+
+            i2s_mdr_fract;
+            i2s_mdr_divide
+            " >
+      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </variableTemplate>
+   </for>
+
+
+<!--   Default Initialisation value -->
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      separator=","
+      terminator=","
+      variables="
+            i2s_tcsr_te,
+            i2s_tcsr_stope,
+            i2s_tcsr_dbge,
+            i2s_tcsr_bce,
+            i2s_tcsr_sr,
+            i2s_tcsr_wsie,
+            i2s_tcsr_seie,
+            i2s_tcsr_feie,
+            i2s_tcsr_warning,
+            i2s_tcsr_request,
+
+            i2s_tcr1_tfw,
+
+            i2s_tcr2_sync,
+            i2s_tcr2_bcs,
+            i2s_tcr2_bci,
+            i2s_tcr2_msel,
+            i2s_tcr2_bcp,
+            i2s_tcr2_bcd,
+            i2s_tcr2_div,
+
+            i2s_tcr3_tce,
+            i2s_tcr3_wdfl,
+
+            i2s_tcr4_frsz,
+            i2s_tcr4_sywd,
+            i2s_tcr4_mf,
+            i2s_tcr4_fse,
+            i2s_tcr4_fsp,
+            i2s_tcr4_fsd,
+
+            i2s_tcr5_wnw,
+            i2s_tcr5_w0w,
+            i2s_tcr5_fbt,
+            i2s_tmr_twm,
+            i2s_rcsr_re,
+            i2s_rcsr_stope,
+            i2s_rcsr_dbge,
+            i2s_rcsr_bce,
+            i2s_rcsr_fr,
+            i2s_rcsr_sr,
+            i2s_rcsr_wsf,
+            i2s_rcsr_sef,
+            i2s_rcsr_fef,
+            i2s_rcsr_wsie,
+            i2s_rcsr_seie,
+            i2s_rcsr_feie,
+            i2s_rcsr_warning,
+            i2s_rcsr_request,
+            i2s_rcr1_rfw,
+            i2s_rcr2_sync,
+            i2s_rcr2_bcs,
+            i2s_rcr2_bci,
+            i2s_rcr2_msel,
+            i2s_rcr2_bcp,
+            i2s_rcr2_bcd,
+            i2s_rcr2_div,
+            i2s_rcr3_rce,
+            i2s_rcr3_wdfl,
+            i2s_rcr4_frsz,
+            i2s_rcr4_sywd,
+            i2s_rcr4_mf,
+            i2s_rcr4_fse,
+            i2s_rcr4_fsp,
+            i2s_rcr4_fsd,
+            i2s_rcr5_wnw,
+            i2s_rcr5_w0w,
+            i2s_rcr5_fbt,
+            i2s_rmr_rwm,
+            i2s_mcr_moe,
+            i2s_mcr_mics,
+            i2s_mdr_fract,
+            i2s_mdr_divide
+         "
+   ><![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};
+      \t\n
+   ]]></variableTemplate>
+
+<!--   Configure methods -->
+
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(DefaultInitValue);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const Init &init) {
+      \t
+      \t   // Enable peripheral clock
+      \t   enableClock();
+      \t\n
+   ]]></template>
+   <template codeGenCondition="irqHandlingMethod"
+             condition="/$(_STRUCTNAME)/generateSharedIrqInfo" >   <![CDATA[
+      \t   // Only set call-backs if feature enabled
+      \t   setCallback($(_Class)IrqNum_0, init.callbackFunction);
+      \t   setCallback($(_Class)IrqNum_1, init.callbackFunction);
+      \t   enableNvicInterrupts(init.irqlevel);
+      \t\n
+   ]]></template>
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t   i2s->TCSR    = init.tcsr;
+      \t   i2s->TCR1    = init.tcr1;
+      \t   i2s->TCR2    = init.tcr2;
+      \t   i2s->TCR3    = init.tcr3;
+      \t   i2s->TCR4    = init.tcr4;
+      \t   i2s->TCR5    = init.tcr5;
+      \t   i2s->TMR     = init.tmr;
+      \t   i2s->RCSR    = init.rcsr;
+      \t   i2s->RCR1    = init.rcr1;
+      \t   i2s->RCR2    = init.rcr2;
+      \t   i2s->RCR3    = init.rcr3;
+      \t   i2s->RCR4    = init.rcr4;
+      \t   i2s->RCR5    = init.rcr5;
+      \t   i2s->RMR     = init.rmr;
+      \t   i2s->MCR     = init.mcr;
+      \t   i2s->MDR     = init.mdr;
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t}; // class $(_Structname)BasicInfo::Init
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="baseClass" >
+   <![CDATA[
+      }; // class $(_Structname)BasicInfo
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ************* Common ****************** -->
+
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Class representing $(_NAME)
+      \t */
+      \ttypedef $(_Baseclass)Base_T<$(_Class)Info> $(_Class);
+      \t\n
+   ]]>
+   </template>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
+   </validate>
+
+   <projectActionList id="i2s_files" >
       <copy source="Project_Headers/i2s.h"            target="Project_Headers/i2s.h"            overwrite="true"  derived="true" />
    </projectActionList>
 
-   <template key="/I2S/declarations"  ><![CDATA[
-   \t/**
-   \t * Class representing $(_NAME)
-   \t */
-   \tusing $(_Class) = $(_Baseclass)Base_T<$(_Class)Info>;\n
+   <!-- ************* Startup ****************** -->
+
+   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <xi:include href="clockOption.xml"/>
+   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
 
-   <signals/>
+   <!-- ************* SIM configuration ****************** -->
+   <category name="Advanced" description="SIM configuration" >
+      <aliasOption key="/SIM/sim_scgc6_$(_name)"      locked="false" optional="true" />
+   </category>
 
-   <validate class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" />
+   <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </peripheralPage>

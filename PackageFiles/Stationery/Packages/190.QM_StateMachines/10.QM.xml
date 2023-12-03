@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd" >
+
+<root
+   version="1.0"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   >
+   <projectActionList id="QM-CortexM4-support">
+      <applyWhen>
+         <and>
+            <or>
+               <deviceFamilyIs>CortexM4F</deviceFamilyIs>
+               <deviceFamilyIs>CortexM4</deviceFamilyIs>
+               <deviceFamilyIs>CortexM0plus</deviceFamilyIs>
+            </or>
+            <variableRef idRef="hasCCNature" condition="isTrue" />
+            <variableRef idRef="outputType"  condition="matches"     value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+
+      <variable id="projectOptionValue.QM-support"
+         name="QM (QP Modeler) - QP State Machine"
+         description="Adds support for QP Modeler state machine projects"
+         checkGroup="group-additional-options" />
+
+      <projectActionList >
+         <applyWhen >
+            <variableRef idRef="projectOptionValue.QM-support" condition="isTrue" />
+         </applyWhen>
+
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;/opt/qp/qpc/ports/arm-cm/qv/gnu&quot;</value>
+            <value>&quot;/opt/qp/qpc/include&quot;</value>
+         </projectOption>
+
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;/opt/qp/qpcpp/ports/arm-cm/qv/gnu&quot;</value>
+            <value>&quot;/opt/qp/qpcpp/include&quot;</value>
+         </projectOption>
+
+         <!-- Additional project files -->
+         <copy source="/opt/qp/qpcpp/src/qf"                target="qf"  type="link"  sourcePathType="absolute" />
+         <copy source="/opt/qp/qpcpp/src/qv"                target="qv"  type="link"  sourcePathType="absolute" />
+         <copy source="/opt/qp/qpcpp/ports/arm-cm/qv/gnu"   target="gnu" type="link"  sourcePathType="absolute" />
+         <copy source="QM_settings.qm"                      target="QM_settings.qm"   />
+         <copy source="Sources/main.cpp"                    target="Sources/main.cpp" overwrite="true" />
+
+      </projectActionList>
+   </projectActionList>
+</root>

@@ -15,6 +15,8 @@
 
 $(VectorsIncludeFiles)
 
+using namespace USBDM;
+
 /*
  * Vector table related
  */

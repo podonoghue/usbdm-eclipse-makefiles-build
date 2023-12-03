@@ -171,9 +171,9 @@
 
 
 <!-- Common Options -->
-   
+
    <title description="Common Options" toolTip="Options applied to whole peripheral" />
-   
+
    <binaryOption key="/$(_STRUCTNAME)/dmaSupport"
       enabledBy="/$(_STRUCTNAME)/generateSharedIrqInfo"
       modify="true"
@@ -184,12 +184,13 @@
    </binaryOption>
 
    <bitmaskOption key="spi_mcr_pcsisValue" condition="spi_mcr_pcsis_present"
-      bitmask="0xFF0000" 
+      bitmask="0xFF0000"
       bitList="PCSIS0,PCSIS1,PCSIS2,PCSIS3,PCSIS4,PCSIS5"
       typeName="SpiPcsPolarity"
       description="Polarity for PCS signals"
       toolTip="Mask to select the polarity of Peripheral Chip Select Lines (PCSx)\n
-               Selected PCS signals will be active-low i.e. PCS will go low when accessing the peripheral" 
+               Selected PCS signals will be active-low i.e. PCS will go low when accessing the peripheral"
+      value="0"
    />
 
    <choiceOption key="spi_mcr_pcsis"
@@ -381,7 +382,7 @@
 
    <title description="Initial device options"
       toolTip="Device and CTAR choice after default configuration\n
-               These options can be changed by selectConfiguration(...)" 
+               These options can be changed by selectConfiguration(...)"
       />
 
    <choiceOption key="spi_ctar_sel"
@@ -413,17 +414,18 @@
       <choice value="0" name="Idle between transactions"     enum="Idle"       />
       <choice value="1" name="Asserted between transactions" enum="Continuous" />
    </binaryOption>
-   
+
    <bitmaskOption key="spi_pushr_pcsValue" condition="spi_pushr_pcs_present"
-      valueFormat="SPI_PUSHR_PCS(%s)" 
+      valueFormat="SPI_PUSHR_PCS(%s)"
       description="Peripheral Chip Select"
       toolTip="Mask to select which Peripheral Chip Select Line (PCS) to assert during transaction\n
-               Note: more than one PCS may be asserted (allows external decoder)" 
-      bitmask="0xFF0000" 
+               Note: more than one PCS may be asserted (allows external decoder)"
+      bitmask="0xFF0000"
       bitList="PCS0,PCS1,PCS2,PCS3,PCS4,PCS5"
       typeName="SpiPeripheralSelect"
+      value="0"
    />
-      
+
    <choiceOption key="spi_pushr_pcs" condition="spi_pushr_pcs_present"
       hidden="true"
       derived="true"

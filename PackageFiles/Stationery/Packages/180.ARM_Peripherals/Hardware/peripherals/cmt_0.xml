@@ -228,6 +228,7 @@
                The primary carrier high time value is undefined out of reset.\n
                This register must be written to nonzero values before the carrier \n
                generator is enabled to avoid spurious results."
+      value="0"
    />
 
    <!-- ************* CGL1 ****************** -->
@@ -244,6 +245,7 @@
                The primary carrier low time value is undefined out of reset.\n
                This register must be written to nonzero values before the carrier generator\n
                is enabled to avoid spurious results."
+      value="0"
    />
 
    <!-- ************* CGH2 ****************** -->
@@ -260,6 +262,7 @@
                The secondary carrier high time value is undefined out of reset.\n
                This register must be written to nonzero values before the carrier generator\n
                is enabled when operating in FSK mode."
+      value="0"
    />
 
    <!-- ************* CGL2 ****************** -->
@@ -276,6 +279,7 @@
                The secondary carrier low time value is undefined out of reset.\n
                This register must be written to nonzero values before the carrier generator\n
                is enabled when operating in FSK mode."
+      value="0"
    />
 
    <!-- ************* CMD1/CMD2 ****************** -->
@@ -287,6 +291,7 @@
       typeName="CmtMarkPeriod"
       description="Mark period"
       toolTip="Controls the mark period of the modulator for all modes"
+      value="0"
    />
 
    <!-- ************* CMD3/CMD4 ****************** -->
@@ -298,6 +303,7 @@
       typeName="CmtSpacePeriod"
       description="Space period"
       toolTip="Controls the space periods of the modulator for all modes"
+      value="0"
    />
 
 <!-- Graphic here -->

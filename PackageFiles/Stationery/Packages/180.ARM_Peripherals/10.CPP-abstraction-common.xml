@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" xmlns:xi="http://www.w3.org/2001/XInclude" >
+
+   <projectActionList id="CPP-abstraction-common">
+      <applyWhen >
+         <variableRef idRef="projectOptionValue.CPP-abstraction" />
+      </applyWhen>
+      <copy source="Sources/main.cpp"  target="Sources/main.cpp" />
+   </projectActionList>
+
+</root>

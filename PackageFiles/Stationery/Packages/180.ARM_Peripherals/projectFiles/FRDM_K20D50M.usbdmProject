@@ -9,6 +9,9 @@
    <item key="$$DeviceInfo_SubFamily"                      value="MK20D5" />
    <item key="$$Hardware_Source_Filename"                  value="MK20D5.usbdmHardware" />
    <item key="$peripheral$ADC0_codeIdentifier"             value="UserAdc" />
+   <item key="$peripheral$GPIOA_polarity"                  value="4" />
+   <item key="$peripheral$GPIOC_polarity"                  value="8" />
+   <item key="$peripheral$GPIOD_polarity"                  value="16" />
    <item key="$peripheral$I2C0_codeIdentifier"             value="UserI2c" />
    <item key="$peripheral$I2C0_userDescription"            value="User I2C" />
    <item key="$peripheral$SPI0_codeIdentifier"             value="UserSpi" />
@@ -170,8 +173,17 @@
    <item key="$signal$USB0_DP_descriptionSetting"          value="Reserved(USB_DP)" />
    <item key="$signal$VREF_OUT_descriptionSetting"         value="Vref output" />
    <item key="$signal$XTAL32_descriptionSetting"           value="Reserved(XTAL32)" />
+   <item key="/ADC0/enablePeripheralSupport"               value="true" />
    <item key="/CMP0/cmp_fpr_filt_per"                      value="0" />
    <item key="/CMP1/cmp_fpr_filt_per"                      value="0" />
+   <item key="/FTM0/enablePeripheralSupport"               value="true" />
+   <item key="/FTM1/enablePeripheralSupport"               value="true" />
+   <item key="/GPIOA/enablePeripheralSupport"              value="true" />
+   <item key="/GPIOB/enablePeripheralSupport"              value="true" />
+   <item key="/GPIOC/enablePeripheralSupport"              value="true" />
+   <item key="/GPIOD/enablePeripheralSupport"              value="true" />
+   <item key="/GPIOE/enablePeripheralSupport"              value="true" />
+   <item key="/I2C0/enablePeripheralSupport"               value="true" />
    <item key="/HARDWARE/Analogue0"                         value="Analogue_A0" />
    <item key="/HARDWARE/Analogue1"                         value="Analogue_A1" />
    <item key="/HARDWARE/Digital0"                          value="Digital_D0" />
@@ -186,15 +198,17 @@
    <item key="/LINKER/stackSize"                           value="4096" />
    <item key="/LLWU/llwu_filt1_filtsel"                    value="0" />
    <item key="/LLWU/llwu_filt2_filtsel"                    value="0" />
+   <item key="/LPTMR0/enablePeripheralSupport"             value="true" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_RUN_PEE_48MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_VLPR_BLPI_4MHz" />
    <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_RUN_FEE_40MHz" />
    <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_RUN_FEI_42MHz" />
    <item key="/MCG/ERRATA_E7993"                           value="false" />
+   <item key="/MCG/configurePeripheralInStartUp"           value="true" />
+   <item key="/MCG/enablePeripheralSupport"                value="true" />
    <item key="/MCG/mcgClockMode[0]"                        value="7" />
    <item key="/MCG/mcgClockMode[1]"                        value="3" />
    <item key="/MCG/mcgClockMode[2]"                        value="1" />
-   <item key="/MCG/mcg_c1_frdiv[2]"                        value="3" />
    <item key="/MCG/mcg_c2_range0[0]"                       value="1" />
    <item key="/MCG/mcg_c2_range0[1]"                       value="1" />
    <item key="/MCG/mcg_c2_range0[2]"                       value="1" />
@@ -203,14 +217,14 @@
    <item key="/MCG/pll0OutputFrequency[3]"                 value="96000000" />
    <item key="/MCG/system_mcgfllclk_clock[2]"              value="80000000" />
    <item key="/MCG/system_mcgfllclk_clock[3]"              value="41943040" />
-   <item key="/OSC0/EnableOsc"                             value="true" />
+   <item key="/OSC0/configurePeripheralInStartUp"          value="true" />
    <item key="/PDB0/pdb_ch0_dly0"                          value="0" />
    <item key="/PDB0/pdb_ch0_dly1"                          value="0" />
+   <item key="/PIT/enablePeripheralSupport"                value="true" />
    <item key="/PIT/pit_ldval_tsv[0]"                       value="0" />
    <item key="/PIT/pit_ldval_tsv[1]"                       value="0" />
    <item key="/PIT/pit_ldval_tsv[2]"                       value="0" />
    <item key="/PIT/pit_ldval_tsv[3]"                       value="0" />
-   <item key="/RTC/EnableRtc"                              value="true" />
    <item key="/SIM/sim_clkdiv1_outdiv1[1]"                 value="0" />
    <item key="/SIM/sim_clkdiv1_outdiv1[2]"                 value="15" />
    <item key="/SIM/sim_clkdiv1_outdiv1[3]"                 value="0" />
@@ -228,4 +242,6 @@
    <item key="/SIM/sim_sopt2_clkoutsel[1]"                 value="6" />
    <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
    <item key="/SMC/smc_pmctrl_runm[1]"                     value="2" />
+   <item key="/SPI0/enablePeripheralSupport"               value="true" />
+   <item key="/WDOG/configurePeripheralInStartUp"          value="true" />
 </section>

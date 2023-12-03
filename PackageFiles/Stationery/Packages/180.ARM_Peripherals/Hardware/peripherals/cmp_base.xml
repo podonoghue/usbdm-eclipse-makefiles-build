@@ -387,6 +387,7 @@
 
    <intOption key="cmp_scr_cout" condition="cmp_scr_cout_present"
       enabledBy="enablePeripheralSupport"
+      derived="true"
       hidden="true"
       typeName="uint8_t"
       description="Analog Comparator Output"

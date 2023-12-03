@@ -88,7 +88,6 @@
    </choiceOption>
 
    <intOption key="i2cInputClock"
-      enabledBy="enablePeripheralSupport"
       locked="true"
       derived="true"
       description="I2C input clock"
@@ -303,6 +302,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       description="Slave Address"
       toolTip="Primary slave address used by the I2C module when it is addressed as a slave\n
                Note: This is a physical device address i.e. an 8-bit or 11-bit value with the LSB=0"
+      value="0"
    />
 
    <binaryOption key="i2c_c2_rmen" condition="i2c_c2_rmen_present"
@@ -322,6 +322,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       toolTip="Range slave address used by the I2C module when it is addressed as a slave.\n
                A slave address is matched in the range (i2c_slaveaddress,i2c_slaveaddress2].\n
                Note: This is a physical device address i.e. an 8-bit value with the LSB=0"
+      value="0"
    />
 
    <intOption key="i2c_c2_ad" condition="i2c_c2_ad_present"
@@ -513,6 +514,7 @@ In other cases, if the master reads data from the slave, then it is required to 
          description="SMBus Address"
          toolTip="Contains the slave address used by the SMBus.\n
                   This field is used as the device default address or other related addresses"
+         value="0"
       />
 
       <!-- ************* SLTH & SLTL****************** -->
@@ -524,6 +526,7 @@ In other cases, if the master reads data from the slave, then it is required to 
          typeName="Ticks &amp;"
          description="SCL low timeout value"
          toolTip="SCL low timeout"
+         value="0"
       />
       <!--
       <intOption key="i2c_slth_sslt" condition="i2c_slth_sslt_present"

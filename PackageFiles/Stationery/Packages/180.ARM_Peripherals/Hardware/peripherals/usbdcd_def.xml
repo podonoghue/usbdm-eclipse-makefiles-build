@@ -199,6 +199,7 @@
       toolTip="The represents the amount of elapsed time since the event of setting the START bit plus\n
                the value of TSEQ_INIT. \n
                The timer is automatically initialized with the value of TSEQ_INIT"
+      value="0"
    />
 
    <!-- ************* TIMER1 ****************** -->

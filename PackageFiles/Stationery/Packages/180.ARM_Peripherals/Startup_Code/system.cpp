@@ -85,7 +85,7 @@ void SystemInitLowLevel(void) {
    // Clear Boot ROM flag
    RCM->MR = RCM_MR_BOOTROM(3);
 #endif
-$(/SYSTEM/WatchdogInitialise: #error Watchdog initialisation code not found)
+$(/SYSTEM/WatchdogInitialise)
 #if defined(KINETIS_BOOTLOADER_CHECK)
    /**
     * Hook for ICP code

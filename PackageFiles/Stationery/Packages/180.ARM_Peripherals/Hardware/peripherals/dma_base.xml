@@ -4,6 +4,10 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
+   <!-- Suppress IRQ nums as channel num are used instead -->   
+   <constant key="irq_enum" type="Boolean" value="false" />
+
+   <!-- Custom IRQ handlers -->
    <stringOption key="irq_pattern"        locked="true" value="^%b_?(\d+)(_DMA.*)?$;^%b_Error.*$" hidden="true" />
    <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irqHandler&lt;$1&gt;;%c%i::errorIrqHandler" hidden="true" />
 

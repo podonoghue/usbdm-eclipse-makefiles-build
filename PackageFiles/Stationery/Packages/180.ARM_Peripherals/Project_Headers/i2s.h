@@ -31,21 +31,11 @@ namespace USBDM {
  */
 
 /**
- * Type definition for interrupt call back
- */
-typedef void (*I2sCallbackFunction)();
-
-/**
  * Virtual Base class for I2S interface
  */
 class I2s {
 
 protected:
-   /** Callback to catch unhandled interrupt */
-   static void unhandledCallback() {
-      // Not considered an error as may be using polling
-   }
-
    const HardwarePtr<I2S_Type> i2s;                 //!< I2S hardware instance
 
    /**
@@ -74,7 +64,7 @@ public:
  *
  * @tparam Info            Class describing I2S hardware
  */
-template<class Info> class I2sBase_T : public I2s {
+template<class Info> class I2sBase_T : public I2s, public Info {
 
 public:
    // Handle on I2S hardware
@@ -88,33 +78,6 @@ public:
 
    /** Used by ISR to obtain handle of object */
    static I2S_Type *thisPtr;
-
-   /** Callback function for ISR */
-   static I2sCallbackFunction sCallback;
-
-   /**
-    * Enable interrupts in NVIC
-    */
-   static void enableNvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[0]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableNvicInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[0]);
-   }
 
 public:
    $(/I2S/classInfo: // No class Info found)
@@ -141,27 +104,8 @@ public:
     */
    virtual ~I2sBase_T() {}
 
-   /**
-    * Set channel Callback function\n
-    * This callback is executed when the I2S state machine returns to the IDLE state
-    * at the end of a transaction.
-    *
-    * @param[in] callback Callback function to execute on interrupt.\n
-    *                     Use nullptr to remove callback.
-    */
-   static __attribute__((always_inline)) void setCallback(I2sCallbackFunction callback) {
-      static_assert(Info::irqHandlerInstalled, "I2S not configured for interrupts");
-      if (callback == nullptr) {
-         callback = I2s::unhandledCallback;
-      }
-      sCallback = callback;
-   }
-
-   static void irqHandler() {
-   }
+$(/I2S/InitMethod)
 };
-
-template<class Info> I2sCallbackFunction I2sBase_T<Info>::sCallback = I2s::unhandledCallback;
 
 /** Used by ISR to obtain handle of object */
 template<class Info> I2S_Type *I2sBase_T<Info>::thisPtr = 0;

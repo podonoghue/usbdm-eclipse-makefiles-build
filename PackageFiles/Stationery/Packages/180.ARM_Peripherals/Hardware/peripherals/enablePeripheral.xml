@@ -358,6 +358,15 @@
          \t\n
       ]]></template>
 
+      <choiceOption key="irq_enum" condition="(@_irqCount>1)&amp;&amp;!irq_enum"
+         description="IRQ entry"
+         toolTip="Select amongst interrupts associated with the peripheral"
+         typeName="$(_Class)IrqNum"
+         valueFormat="%s"
+         >
+         <choiceExpansion keys="irq" dim="=_irqCount" value="%(irq)" name="Irq%(irq)" enum="%(irq)" />
+      </choiceOption>
+      
    </if> <!-- condition="_irqCount" -->
 
    <template condition="clockEnable" codeGenCondition="enablePeripheralSupport" ><![CDATA[

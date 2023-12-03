@@ -386,7 +386,7 @@
          units="ticks"
          description="Dead-time Value"
          toolTip="This tick value is scaled by the dead-time prescaler"
-         min="0" max="0x3F"
+         min="0" max="0x3F" value="0"
       />
 
       <timeOption key="ftm_deadtime" condition="ftm_deadtime_dtval_present"

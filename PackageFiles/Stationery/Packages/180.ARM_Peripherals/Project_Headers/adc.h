@@ -611,7 +611,7 @@ $(/ADC/InitMethod: // /ADC/InitMethod not found)
     *  [2..12MHz] for 16-bit conversion modes  \n
     *  [1..18MHz] for other conversion modes
     */
-   static void setClockSource(AdcClockSource adcClockSource, AdcClockDivider adcClockDivider=AdcClockDivider_1) {
+   static void setClockSource(AdcClockSource adcClockSource, AdcClockDivider adcClockDivider=AdcClockDivider_Div1) {
       adc->CFG1 = (adc->CFG1&~(ADC_CFG1_ADIV_MASK|ADC_CFG1_ADICLK_MASK))|adcClockSource|adcClockDivider;
    }
 

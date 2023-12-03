@@ -105,7 +105,7 @@
       <choice name="Single-ended"  value="0" enum="SingleEnded"/>
       <choice name="Differential"  value="1" enum="Differential"/>
    </binaryOption >
-   
+
 <!-- ==========  PGA features =============================== -->
    <title description="Programmable Gain" condition="adc_pga_pgag_present" />
    <choiceOption key="adc_pga_pgaen" condition="adc_pga_pgaen_present"
@@ -160,11 +160,11 @@
       description="ADC Clock Source"
       typeName="AdcClockSource"
       toolTip="Clock source for the ADC module" >
-      <choice value="0" name="Bus clock"                  enum="Bus"       code="SystemBusClock"            />
-      <choice value="1" name="Bus clock/2"                enum="Busdiv2"   code="SystemBusClock/2"          condition="!/SIM/system_irc48m_clock[]" />
-      <choice value="1" name="Irc48M clock"               enum="Irc48mClk" code="SimInfo::irc48mClock"      condition="/SIM/system_irc48m_clock[]"  />
-      <choice value="2" name="Alternate clock (OSCERCLK)" enum="OscerClk"  code="Osc0Info::getOscerClock()" />
-      <choice value="3" name="Asynchronous clock (ADACK)" enum="Asynch"    code="$(adcInternalClock)"       isDefault="true" />
+      <choice value="0" name="Bus clock"                  enum="BusClock"     code="SystemBusClock"            />
+      <choice value="1" name="Bus clock/2"                enum="BusClockDiv2" code="SystemBusClock/2"          condition="!/SIM/system_irc48m_clock[]" />
+      <choice value="1" name="Irc48M clock"               enum="Irc48mClk"    code="SimInfo::irc48mClock"      condition="/SIM/system_irc48m_clock[]"  />
+      <choice value="2" name="Alternate clock (OSCERCLK)" enum="OscerClk"     code="Osc0Info::getOscerClock()" />
+      <choice value="3" name="Asynchronous clock (ADACK)" enum="Asynch"       code="$(adcInternalClock)"       isDefault="true" />
    </choiceOption>
 
    <choiceOption key="adc_cfg1_adiv"
@@ -172,10 +172,10 @@
       description="Clock Divide Select"
       typeName="AdcClockDivider"
       toolTip="Selects the divide ratio used by the ADC to generate the internal clock ADCK">
-      <choice value="0" name="Divide by 1" enum="1" isDefault="true" />
-      <choice value="1" name="Divide by 2" enum="2" />
-      <choice value="2" name="Divide by 4" enum="4" />
-      <choice value="3" name="Divide by 8" enum="8" />
+      <choice value="0" name="Divide by 1" enum="Div1" isDefault="true" />
+      <choice value="1" name="Divide by 2" enum="Div2" />
+      <choice value="2" name="Divide by 4" enum="Div4" />
+      <choice value="3" name="Divide by 8" enum="Div8" />
    </choiceOption>
 
 <!--  ========== ADC =============================== -->
@@ -213,11 +213,11 @@
                Longer times allow higher impedance inputs to be accurately sampled or\n
                shorter times maximize conversion speed for lower impedance inputs\n
                It also affects the conversion rate and power consumption for continuous mode">
-      <choice value="ADC_CFG1_ADLSMP(0)"                    enum="4"   name="4 ADCK total" isDefault="true" />
-      <choice value="ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(3)" enum="6"   name="+2 ADCK cycles; 6 ADCK total" />
-      <choice value="ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(2)" enum="10"  name="+6 ADCK cycles; 10 ADCK total" />
-      <choice value="ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(1)" enum="16"  name="+12 ADCK cycles; 16 ADCK total" />
-      <choice value="ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(0)" enum="24"  name="+20 ADCK cycles; 24 ADCK total" />
+      <choice value="ADC_CFG1_ADLSMP(0)"                    enum="4cycles"   name="4 ADCK total" isDefault="true" />
+      <choice value="ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(3)" enum="6cycles"   name="+2 ADCK cycles; 6 ADCK total" />
+      <choice value="ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(2)" enum="10cycles"  name="+6 ADCK cycles; 10 ADCK total" />
+      <choice value="ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(1)" enum="16cycles"  name="+12 ADCK cycles; 16 ADCK total" />
+      <choice value="ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(0)" enum="24cycles"  name="+20 ADCK cycles; 24 ADCK total" />
    </choiceOption>
 
    <choiceOption key="adc_sc3_avg" description="Hardware Average Select"
@@ -258,9 +258,9 @@
       enabledBy="enablePeripheralSupport"
       typeName="AdcRefSel"
       toolTip="Selects the voltage reference source used for conversions">
-      <choice value="0" enum="VrefHL"  name="VRefH and VRefl" isDefault="true" />
-      <choice value="1" enum="VrefOut" name="Gnd and VrefOut(1.2V)" />
-      <choice value="0" enum="Default" name="Default" />
+      <choice value="0" enum="VrefHL"        name="VRefH and VRefl" isDefault="true" />
+      <choice value="1" enum="VrefhAndVrefl" name="Gnd and VrefOut(1.2V)" />
+      <choice value="0" enum="Default"       name="Default" />
    </choiceOption>
 
    <binaryOption key="adc_sc2_dmaen" condition="adc_sc2_dmaen_present"
@@ -341,15 +341,14 @@
 
    <for keys="field           : get   : set   : genCode                 : name"
         values="
+         adc_sample           : true  : true  : enableGettersAndSetters : SampleTime;
          adc_cfg1_adlpc       : true  : true  : enableGettersAndSetters : LowPower;
          adc_cfg1_adiv        : true  : true  : enableGettersAndSetters : ClockDivider;
-         adc_cfg1_adlsmp      : true  : true  : enableGettersAndSetters : SampleTime;
          adc_cfg1_mode        : true  : true  : enableGettersAndSetters : Resolution;
          adc_cfg1_adiclk      : true  : true  : enableGettersAndSetters : ClockSelect;
          adc_cfg2_muxsel      : true  : true  : enableGettersAndSetters : Muxsel;
          adc_cfg2_adacken     : true  : true  : enableGettersAndSetters : AsyncClockEnable;
          adc_cfg2_adhsc       : true  : true  : enableGettersAndSetters : HighSpeed;
-         adc_cfg2_adlsts      : true  : true  : enableGettersAndSetters : LongSample;
          adc_sc2_adact        : true  : false : enableGettersAndSetters : ConversionActive;
          adc_sc2_adtrg        : true  : true  : enableGettersAndSetters : Trigger;
          adc_sc2_acfe         : true  : true  : enableGettersAndSetters : CompareFunction;
@@ -360,8 +359,7 @@
          adc_sc3_cal          : true  : true  : enableGettersAndSetters : Calibrate;
          adc_sc3_calf         : true  : false : enableGettersAndSetters : CalibrateFlag;
          adc_sc3_adco         : true  : true  : enableGettersAndSetters : Continuous;
-         adc_sc3_avge         : true  : true  : enableGettersAndSetters : Average;
-         adc_sc3_avgs         : true  : true  : enableGettersAndSetters : AverageNum;
+         adc_sc3_avg          : true  : true  : enableGettersAndSetters : Average;
          adc_ofs_ofs          : true  : true  : enableGettersAndSetters : Offset;
          adc_pg_pg            : true  : true  : enableGettersAndSetters : PlusGain;
          adc_mg_mg            : true  : true  : enableGettersAndSetters : MinusGain" >
@@ -474,7 +472,7 @@
       \t
       \t   if (adcClockSource == AdcClockSource_Asynch) {
       \t      // Internal clock is always OK with /1
-      \t      return cfg1|AdcClockSource_Asynch|AdcClockDivider_1;
+      \t      return cfg1|AdcClockSource_Asynch|AdcClockDivider_Div1;
       \t   }
       \t   static constexpr unsigned MinClock =  2000000;
       \t   unsigned maxClock = 0;
@@ -502,9 +500,9 @@
       \t         clockFrequency /= 2;
       \t      }
       #if $(/adc_alt_clock_is_busDiv2:false)
-      \t      if ((adiv>3) && (adcClockSource == AdcClockSource_Bus)) {
+      \t      if ((adiv>3) && (adcClockSource == AdcClockSource_BusClock)) {
       \t         // Automatically switch from  AdcClockSource_Bus -> AdcClockSource_Busdiv2
-      \t         adcClockSource = AdcClockSource_Busdiv2;
+      \t         adcClockSource = AdcClockSource_BusClockDiv2;
       \t         continue;
       \t      }
       #endif
@@ -980,6 +978,28 @@
    </for>
 
    <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="adc_sample"
+      linePadding="xxx" >
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      cfg1 = (cfg1&~ADC_CFG1_ADLSMP_MASK) | (%paramExpression&ADC_CFG1_ADLSMP_MASK);
+      \t      cfg2 = (cfg2&~ADC_CFG2_ADLSTS_MASK) | (%paramExpression&ADC_CFG2_ADLSTS_MASK);
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="adc_sc2_compare,adc_cv1,adc_cv2"
       linePadding="xxx"
       nonDefaultParams="3" >
@@ -1035,6 +1055,7 @@
          adc_cfg1_adiclk,
          adc_cfg1_mode,
          adc_cfg1_adlpc,
+         adc_sample,
          adc_cfg2_adhsc,
          adc_cfg2_adacken,
          adc_sc2_refsel,
