@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- all templates -->    
-<!ENTITY % template_items   "template|variableTemplate|variableTemplate|variableTemplate|enumTemplate|clockCodeTemplate" >
+<!ENTITY % template_items   "template|variableTemplate|variableTemplate|variableTemplate|clockCodeTemplate" >
 
 <!-- High level items-->
 <!ENTITY % structure_items  "xi:include|section|list" >
@@ -12,11 +12,11 @@
 <!-- Dialogue elements -->
 <!ENTITY % dialogue_items    "timeOption|intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption" >
 
-<!-- Simple items that don't that don''t recurse -->
+<!-- Simple items that don't recurse -->
 <!ENTITY % simple_items     "xi:include|
                               deleteVariable|projectActionList|
                               title|constant|signals|
-                              timeOption|intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption|irqOption|pinListOption|aliasOption|pinMapOption|
+                              rtcTimeOption|timeOption|intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption|irqOption|pinListOption|aliasOption|pinMapOption|
                               clockSelectionOption|validate|equation|
                               %template_items;" >
                   
@@ -75,10 +75,6 @@
    <!-- Condition evaluated during parsing that enables processing of remaining children (up to else/else_if) -->
    <!ATTLIST else_if condition             CDATA        #REQUIRED>
 
-
-
-
-
 <!ELEMENT graphic ((%graphic_items;)*) >
    <!ATTLIST graphic  key                CDATA        #REQUIRED>
    <!ATTLIST graphic  var                CDATA        #IMPLIED>
@@ -110,10 +106,6 @@
    <!ATTLIST graphicItem  edit            CDATA        #IMPLIED>
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST graphicItem  condition       CDATA        #IMPLIED>
-
-
-
-
 
 <!ELEMENT aliasCategoryOption ((%general_items;)*) >
    <!-- Condition evaluated during parsing that enables processing of this option -->
@@ -167,7 +159,7 @@
    <!ATTLIST title condition              CDATA        #IMPLIED>
    <!-- Visible name of title-->
    <!ATTLIST title name                   CDATA        #IMPLIED>
-   <!-- Tool-tip visble in GUI and used for documentation in C++ code  -->
+   <!-- Tool-tip visible in GUI and used for documentation in C++ code  -->
    <!ATTLIST title toolTip                CDATA        #IMPLIED>
    <!-- Description visible in GUI -->
    <!ATTLIST title description            CDATA        #IMPLIED>
@@ -802,12 +794,9 @@
    <!ATTLIST rtcTimeOption locked        (false|true) #IMPLIED>
    <!-- Hides option in GUI -->
    <!ATTLIST rtcTimeOption hidden        (false|true) #IMPLIED>
+   <!-- This choice is enabled by an expression -->
+   <!ATTLIST rtcTimeOption enabledBy     CDATA        #IMPLIED>
       
-
-
-
-
-
 <!-- Describes pin mapping for a peripheral -->
 <!ELEMENT pinMapOption (choice?, choice?) >
    <!-- Condition evaluated during parsing that enables processing of this option -->
@@ -844,7 +833,7 @@
    <!-- Description of variable -->
    <!ATTLIST constant description  CDATA                          #IMPLIED>
    <!-- Type of variable -->
-   <!ATTLIST constant type         (String|Boolean|Long|Float) "string">
+   <!ATTLIST constant type         (String|Boolean|Long|Float)    "String">
    <!-- If true indicates the constant may already exist and this constant is discarded -->
    <!ATTLIST constant weak         (true)                         #IMPLIED>
    <!-- Replaces any existing constant of the same key -->

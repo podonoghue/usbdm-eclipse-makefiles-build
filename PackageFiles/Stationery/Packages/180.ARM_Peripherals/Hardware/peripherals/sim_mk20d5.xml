@@ -11,6 +11,22 @@
 
 <!-- ==================== Constants ==================== -->
 
+   <intOption key="/FTFL/pflash_sector_size" hidden="true" locked="true" derived="true" value="1024"
+      description="Sector size for program flash" toolTip="Minimum erase element" />
+
+   <intOption key="/FTFL/pflash_phrase_size" hidden="true" locked="true" derived="true" value="4"
+      description="Phrase size for program flash" toolTip="Minimum program element" />
+
+   <intOption key="/FTFL/dflash_sector_size" hidden="true" locked="true" derived="true" value="1024"
+      description="Sector size for data flash"
+      toolTip="Minimum erase element\n
+               Only for device with FlexNVM" />
+
+   <intOption key="/FTFL/dflash_phrase_size" hidden="true" locked="true" derived="true" value="4"
+      description="Phrase size for data flash"
+      toolTip="Minimum program element\n
+               Only for device with FlexNVM" />
+
    <!-- Peripheral speeds                  RUN       VLPR     -->
    <constant key="MCGOUTCLK_max"  value="100MHz,     4MHz"   type="Long" />
    <constant key="MCGFLLCLK_max"  value="100MHz,     0MHz"   type="Long" />

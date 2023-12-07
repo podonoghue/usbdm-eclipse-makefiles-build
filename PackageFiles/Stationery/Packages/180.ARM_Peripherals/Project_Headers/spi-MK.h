@@ -18,6 +18,7 @@
  * Any manual changes will be lost.
  */
 #include "pin_mapping.h"
+#include "gpio.h"
 
 #include "dma.h"
 

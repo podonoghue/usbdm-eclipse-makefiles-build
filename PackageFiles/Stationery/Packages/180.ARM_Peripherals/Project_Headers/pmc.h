@@ -241,30 +241,6 @@ $(/PMC/InitMethod:// /PMC/InitMethod not found)
    }
 #endif
 
-   /**
-    * Enable interrupts in NVIC
-    */
-   static void enableNvicInterrupts() {
-      NVIC_EnableIRQ(irqNums[0]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableNvicInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(irqNums[0], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(irqNums[0]);
-   }
-
 #ifdef PMC_SRAMCTL_VLLS2PD_MASK
    /**
     * Sets which SRAM blocks are powered during LLS2 mode and VLLS2 modes.

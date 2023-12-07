@@ -4,8 +4,31 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <!-- Suppress IRQ nums as channel num are used instead -->   
-   <constant key="irq_enum" type="Boolean" value="false" />
+   <choiceOption key="irq_enum" condition="=_irqCount>1"
+      valueFormat="%s"
+      hidden="true"
+      derived="true"
+      typeName="$(_Class)IrqNum"
+      description="$(_Class) Interrupt indices"
+      toolTip="Used to identify peripheral interrupt" >
+      <choice value="0"  enum="0"        name="Direct memory access controller" />
+      <choice value="1"  enum="1"        name="Direct memory access controller" />
+      <choice value="2"  enum="2"        name="Direct memory access controller" />
+      <choice value="3"  enum="3"        name="Direct memory access controller" />
+      <choice value="4"  enum="4"        name="Direct memory access controller" />
+      <choice value="5"  enum="5"        name="Direct memory access controller" />
+      <choice value="6"  enum="6"        name="Direct memory access controller" />
+      <choice value="7"  enum="7"        name="Direct memory access controller" />
+      <choice value="8"  enum="8"        name="Direct memory access controller" />
+      <choice value="9"  enum="9"        name="Direct memory access controller" />
+      <choice value="10" enum="10"       name="Direct memory access controller" />
+      <choice value="11" enum="11"       name="Direct memory access controller" />
+      <choice value="12" enum="12"       name="Direct memory access controller" />
+      <choice value="13" enum="13"       name="Direct memory access controller" />
+      <choice value="14" enum="14"       name="Direct memory access controller" />
+      <choice value="15" enum="15"       name="Direct memory access controller" />
+      <choice value="16" enum="Error"    name="Direct memory access controller" />
+   </choiceOption>
 
    <!-- Custom IRQ handlers -->
    <stringOption key="irq_pattern"        locked="true" value="^%b_?(\d+)(_DMA.*)?$;^%b_Error.*$" hidden="true" />
@@ -142,7 +165,7 @@
       <choice value="1" name="Halt in debug"     enum="Halt"     isDefault="true" />
    </binaryOption >
 
-   <choiceOption key="DmaChannelNum"
+   <choiceOption key="dma_channel_num"
       hidden="true"
       valueFormat="%s"
       enumType="uint8_t"
@@ -351,6 +374,41 @@
 
    <!--   ========== Interrupt handling =============================== -->
 
+   <variableTemplate condition="@_irqCount>1" codeGenCondition="irqHandlingMethod"
+      variables="dma_channel_num, irq_enum"
+   ><![CDATA[
+      \t/**
+      \t * Enable interrupts in NVIC
+      %paramDescription
+      \t */
+      \tstatic void enableNvicInterrupts(%param0) {
+      \t   usbdm_assert(%paramName0<irqCount,"Illegal IRQ number");
+      \t   enableNvicInterrupts(%paramType1(%paramName0));
+      \t}
+      \t
+      \t/**
+      \t * Enable and set priority of interrupts in NVIC
+      \t * Any pending NVIC interrupts are first cleared.
+      \t *
+      \t * @param[in]  nvicPriority  Interrupt priority
+      %paramDescription
+      \t */
+      \tstatic void enableNvicInterrupts(%param0, NvicPriority nvicPriority) {
+      \t   usbdm_assert(%paramName0<irqCount,"Illegal IRQ number");
+      \t   enableNvicInterrupts(%paramType1(%paramName0), nvicPriority);
+      \t}
+      \t
+      \t/**
+      \t * Disable interrupts in NVIC
+      %paramDescription
+      \t */
+      \tstatic void disableNvicInterrupts(%param0) {
+      \t   usbdm_assert(%paramName0<irqCount,"Illegal IRQ number");
+      \t   disableNvicInterrupts(%paramType1(%paramName0));
+      \t}
+      \t\n
+   ]]></variableTemplate>
+
    <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="irqHandlingMethod"
    ><![CDATA[
@@ -380,7 +438,7 @@
 
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t/** Callback function for ISR */
+      \t/** Callback function for Direct memory access controller */
       \tstatic CallbackFunction sCallbacks[irqCount];
       \t
       \t/**
@@ -400,12 +458,7 @@
       \t         "Handler already set");
       \t   sCallbacks[dmaChannelNum] = $(_basename)Callback;
       \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
+      \t
       \t/**
       \t * $(_BASENAME) error interrupt handler -  Calls $(_BASENAME) channel callback with error flags
       \t */

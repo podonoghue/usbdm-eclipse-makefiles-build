@@ -4,9 +4,6 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <!-- Suppress IRQ nums as channel num are used instead -->
-   <constant key="irq_enum" type="Boolean" value="false" />
-
    <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
@@ -45,6 +42,39 @@
       \tstatic constexpr uint32_t NumChannels  = $(NumChannels);\n\n
    ]]></template>
 
+   <template condition="=_irqCount > 1" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
+      \t/**
+      \t * Enable interrupts in NVIC
+      \t *
+      \t * @param[in]  pitChannelNum  Channel being modified
+      \t */
+      \tstatic void enableNvicInterrupts(PitChannelNum pitChannelNum) {
+      \t   enableNvicInterrupts(PitIrqNum(pitChannelNum));
+      \t}
+      \t
+      \t/**
+      \t * Enable and set priority of interrupts in NVIC
+      \t * Any pending NVIC interrupts are first cleared.
+      \t *
+      \t * @param[in]  pitChannelNum  Channel being modified
+      \t * @param[in]  nvicPriority   Interrupt priority
+      \t */
+      \tstatic void enableNvicInterrupts(PitChannelNum pitChannelNum, NvicPriority nvicPriority) {
+      \t   enableNvicInterrupts(PitIrqNum(pitChannelNum), nvicPriority);
+      \t}
+      \t
+      \t/**
+      \t * Disable interrupts in NVIC
+      \t *
+      \t * @param[in]  pitChannelNum  Channel being modified
+      \t */
+      \tstatic void disableNvicInterrupts(PitChannelNum pitChannelNum) {
+      \t   disableNvicInterrupts(PitIrqNum(pitChannelNum));
+      \t}
+      \t\n
+   ]]></template>
+
+<!--
    <template condition="=_irqCount == 1" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t/**
       \t * Map channel number to corresponding IRQ number
@@ -89,6 +119,7 @@
       \t}
       \t\n
    ]]></template>
+-->
 
 <!--
     * General substitutions
@@ -435,20 +466,11 @@
    <for keys="static : const : chan    : location"
       values="static :       : CHANNEL : staticFunctions ;
                      : const : chan    : memberFunctions" >
-      <template key="%(location)" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
-      <![CDATA[
-         \t
-         \t   /**
-         \t    * Enable/disable channel interrupts.
-         \t    *
-         \t    * @param[in]  enable  True => enable, False => disable
-         \t    *
-         \t    * @note It is also necessary to modify NVIC using enableNvicInterrupts().
-         \t    */
-         \t   %(static) void enableInterrupts(bool enable=true) %(const) {
-         \t      PitBase_T<Info>::enableInterrupts(%(chan), enable);
-         \t   }
-         \t
+
+      <!-- Only provide if there is a separate IRQ per channel -->
+      <variableTemplate key="%(location)" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+         variables="irq_enum"
+      ><![CDATA[
          \t   /**
          \t    * Enable interrupts in NVIC
          \t    */
@@ -480,6 +502,22 @@
          \t    */
          \t   %(static) void setCallback(typename Info::CallbackFunction callback) %(const) {
          \t      PitBase_T<Info>::setCallback(%(chan), callback);
+         \t   }
+         \t\n
+         ]]>
+      </variableTemplate>
+      <template key="%(location)" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+      <![CDATA[
+         \t
+         \t   /**
+         \t    * Enable/disable channel interrupts.
+         \t    *
+         \t    * @param[in]  enable  True => enable, False => disable
+         \t    *
+         \t    * @note It is also necessary to modify NVIC using enableNvicInterrupts().
+         \t    */
+         \t   %(static) void enableInterrupts(bool enable=true) %(const) {
+         \t      PitBase_T<Info>::enableInterrupts(%(chan), enable);
          \t   }
          \t
          \t   /**
@@ -1098,10 +1136,16 @@
       \t   pit->CHANNEL[channelNum].LDVAL = ldval;
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true"
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" condition="!irq_enum"
+             codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
+      \t   setCallback(init.callbackFunction);
+      \t   Info::enableNvicInterrupts(init.irqlevel);
+      \t\n
+   ]]></template>
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" condition="irq_enum"
              codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t   setCallback(channelNum, init.callbackFunction);
-      \t   enableNvicInterrupts(channelNum, init.irqlevel);
+      \t   Info::enableNvicInterrupts(channelNum, init.irqlevel);
       \t\n
    ]]></template>
    <template discardRepeats="true" key="/$(_BASENAME)/InitMethod" namespace="all"

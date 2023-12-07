@@ -90,7 +90,7 @@
       <choice value="0,0"   name="External clock"                 enum="ExternalClock"        />
       <choice value="1,0"   name="Low Power Oscillator"           enum="LowPowerOscillator"   isDefault="true"                />
       <choice value="1,1"   name="High Gain Oscillator"           enum="HighPowerOscillator"  condition="mcg_c2_hgo0_present" />
-      <choice value="0,1-1" name="32kHz Oscillator driven by RTC" enum="RTC_Controlled"       condition="/SIM/RtcForcing"     enabledBy="/RTC/ConfigureRtc"  />
+      <choice value="0,1-1" name="32kHz Oscillator driven by RTC" enum="RTC_Controlled"       condition="/SIM/RtcForcing"     enabledBy="/RTC/enablePeripheralSupport"  />
    </choiceOption>
 
    <constant key="/OscMode_NotConfigured"  type="Long" value="0"                                condition="mcg_c2_erefs0_present"/>
@@ -255,7 +255,7 @@
             </graphicGroup>
 
             <graphicBox    id="RTC" x="10" y="y" params="0,0, x280, y120,  x" condition="/SIM/RtcForcing" >
-               <graphicItem id="CONFIG RTC,NOVALUE,x40,y17" var="/RTC/ConfigureRtc"                  type="node"        params="20,   30"                                      />
+               <graphicItem id="CONFIG RTC,NOVALUE,x40,y17" var="/RTC/enablePeripheralSupport"                  type="node"        params="20,   30"                                      />
 
                <!-- Inputs -->
                <graphicItem id="RTC_IN"                     var="/RTC/rtc_input_clock"               type="node"        params="280, 30, ie,ow"                                />
@@ -276,7 +276,7 @@
                <graphicItem id="XTAL32"                        var="/RTC/osc_input_freq"                type="variableBox" params="50,   30,  90, large"                          />
                <graphicItem id="RTC_OSC_EN,NOVALUE|NONAME"     var="/RTC/rtc_cr_osce"                   type="node"        params="85,   20"                                      />
                <graphicItem id="RTC_SCP,NONAME"                var="/RTC/rtc_cr_scp"                    type="annotation"  params="10,   55, 50, 16"                              />
-               <graphicItem id="CONFIG RTC,NOVALUE,x40,y17"    var="/RTC/ConfigureRtc"                  type="node"        params="2,   85"                                      />
+               <graphicItem id="CONFIG RTC,NOVALUE,x40,y17"    var="/RTC/enablePeripheralSupport"                  type="node"        params="2,   85"                                      />
 
                <graphicItem id="RTC_CLKO,NOVALUE"           var="/RTC/rtc_cr_clko"                   type="node"        params="200,  30"                                      />
                <graphicItem id="/32768"                     var="/RTC/rtc_1hz_clock"                 type="label"       params="190,  70, 70, small"                            />

@@ -309,30 +309,6 @@ $(/FTM/FaultInitMethod: // /FTM/FaultInitMethod not found)
  *   // Static functions (mirrored)
  */
 $(/FTM/static_functions:  // /FTM/static_functions not found)
-   /**
-    * Enable interrupts in NVIC
-    */
-   static void enableNvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[0]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    *
-    * @note Any pending interrupts are cleared before enabling.
-    */
-   static void enableNvicInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[0]);
-   }
 
 public:
    /**
@@ -771,31 +747,6 @@ public:
     */
    static __attribute__((always_inline)) void disableTimerOverflowInterrupts() {
       OwningFtm::disableTimerOverflowInterrupts();
-   }
-
-   /**
-    * Enable interrupts in NVIC
-    */
-   static void enableNvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[0]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    *
-    * @note Any pending interrupts are cleared before enabling.
-    */
-   static void enableNvicInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[0]);
    }
 
    /**

@@ -934,63 +934,6 @@ $(/DMA/Setters:#error "/DMA/Setters not found" )
       dma->CINT = dmaChannelNum;
    }
 
-   /**
-    * Enable channel interrupts in NVIC.
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  dmaChannelNum  Channel being modified
-    */
-   static void enableNvicInterrupts(DmaChannelNum dmaChannelNum) {
-      const IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));
-      NVIC_EnableIRQ(irqNum);
-   }
-
-   /**
-    * Enable and set priority of channel interrupts in NVIC.
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  dmaChannelNum  Channel being modified
-    * @param[in]  nvicPriority   Interrupt priority
-    */
-   static void enableNvicInterrupts(DmaChannelNum dmaChannelNum, uint32_t nvicPriority) {
-      const IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));
-      enableNvicInterrupt(irqNum, nvicPriority);
-   }
-
-   /**
-    * Disable channel interrupts in NVIC.
-    *
-    * @param[in]  dmaChannelNum  Channel being modified
-    */
-   static void disableNvicInterrupts(DmaChannelNum dmaChannelNum) {
-      const IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));
-      NVIC_DisableIRQ(irqNum);
-   }
-
-   /**
-    * Enable error interrupts in NVIC.
-    */
-   static void enableNvicErrorInterrupt() {
-      NVIC_EnableIRQ(Info::irqNums[Info::irqCount-1]);
-   }
-
-   /**
-    * Enable and set priority of error interrupts in NVIC.
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableNvicErrorInterrupt(uint32_t nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[Info::irqCount-1], nvicPriority);
-   }
-
-   /**
-    * Disable error interrupts in NVIC.
-    */
-   static void disableNvicErrorInterrupt() {
-      NVIC_DisableIRQ(Info::irqNums[Info::irqCount-1]);
-   }
-
 };
 
 /** Bit-mask of allocated channels */

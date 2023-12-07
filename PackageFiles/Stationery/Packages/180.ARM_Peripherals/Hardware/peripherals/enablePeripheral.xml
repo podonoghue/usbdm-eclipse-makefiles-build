@@ -331,34 +331,8 @@
          \t\n
       ]]></variableTemplate>
 
-      <template condition="irqHandlingMethod&amp;&amp;!suppressIrqArray" codeGenCondition="irqHandlingMethod" ><![CDATA[
-         \t/**
-         \t * Enable interrupts in NVIC
-         \t */
-         \tstatic void enableNvicInterrupts() {
-         \t   NVIC_EnableIRQ(irqNums[0]);
-         \t}
-         \t
-         \t/**
-         \t * Enable and set priority of interrupts in NVIC
-         \t * Any pending NVIC interrupts are first cleared.
-         \t *
-         \t * @param[in]  nvicPriority  Interrupt priority
-         \t */
-         \tstatic void enableNvicInterrupts(NvicPriority nvicPriority) {
-         \t   enableNvicInterrupt(irqNums[0], nvicPriority);
-         \t}
-         \t
-         \t/**
-         \t * Disable interrupts in NVIC
-         \t */
-         \tstatic void disableNvicInterrupts() {
-         \t   NVIC_DisableIRQ(irqNums[0]);
-         \t}
-         \t\n
-      ]]></template>
-
       <choiceOption key="irq_enum" condition="(@_irqCount>1)&amp;&amp;!irq_enum"
+         hidden="true"
          description="IRQ entry"
          toolTip="Select amongst interrupts associated with the peripheral"
          typeName="$(_Class)IrqNum"
@@ -366,7 +340,67 @@
          >
          <choiceExpansion keys="irq" dim="=_irqCount" value="%(irq)" name="Irq%(irq)" enum="%(irq)" />
       </choiceOption>
-      
+
+      <if condition="(@_irqCount>1)" >
+         <variableTemplate condition="irqHandlingMethod&amp;&amp;!suppressIrqArray" codeGenCondition="irqHandlingMethod"
+            variables="irq_enum"
+         ><![CDATA[
+            \t/**
+            \t * Enable interrupts in NVIC
+            %paramDescription
+            \t */
+            \tstatic void enableNvicInterrupts(%params) {
+            \t   NVIC_EnableIRQ(irqNums[%paramName0]);
+            \t}
+            \t
+            \t/**
+            \t * Enable and set priority of interrupts in NVIC
+            \t * Any pending NVIC interrupts are first cleared.
+            \t *
+            \t * @param[in]  nvicPriority  Interrupt priority
+            %paramDescription
+            \t */
+            \tstatic void enableNvicInterrupts(%params, NvicPriority nvicPriority) {
+            \t   enableNvicInterrupt(irqNums[%paramName0], nvicPriority);
+            \t}
+            \t
+            \t/**
+            \t * Disable interrupts in NVIC
+            %paramDescription
+            \t */
+            \tstatic void disableNvicInterrupts(%params) {
+            \t   NVIC_DisableIRQ(irqNums[%paramName0]);
+            \t}
+            \t\n
+         ]]></variableTemplate>
+      <else />
+         <template condition="irqHandlingMethod&amp;&amp;!suppressIrqArray" codeGenCondition="irqHandlingMethod" ><![CDATA[
+            \t/**
+            \t * Enable interrupts in NVIC
+            \t */
+            \tstatic void enableNvicInterrupts() {
+            \t   NVIC_EnableIRQ(irqNums[0]);
+            \t}
+            \t
+            \t/**
+            \t * Enable and set priority of interrupts in NVIC
+            \t * Any pending NVIC interrupts are first cleared.
+            \t *
+            \t * @param[in]  nvicPriority  Interrupt priority
+            \t */
+            \tstatic void enableNvicInterrupts(NvicPriority nvicPriority) {
+            \t   enableNvicInterrupt(irqNums[0], nvicPriority);
+            \t}
+            \t
+            \t/**
+            \t * Disable interrupts in NVIC
+            \t */
+            \tstatic void disableNvicInterrupts() {
+            \t   NVIC_DisableIRQ(irqNums[0]);
+            \t}
+            \t\n
+         ]]></template>
+      </if>
    </if> <!-- condition="_irqCount" -->
 
    <template condition="clockEnable" codeGenCondition="enablePeripheralSupport" ><![CDATA[

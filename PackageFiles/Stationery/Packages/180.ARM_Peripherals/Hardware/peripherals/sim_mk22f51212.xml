@@ -4,12 +4,19 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Integration Module" >
 
+<!-- ==================== Constants ==================== -->
+
    <constant key="isGeneratedByDefault"     type="Boolean" value="true"           />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"           />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-<!-- ==================== Constants ==================== -->
+   <!-- Flash characteristics -->
+   <intOption key="/FTFA/pflash_sector_size" hidden="true" locked="true" derived="true" value="2048"
+      description="Sector size for program flash" toolTip="Minimum erase element" />
+
+   <intOption key="/FTFA/pflash_phrase_size" hidden="true" locked="true" derived="true" value="4"
+      description="Phrase size for program flash" toolTip="Minimum program element" />
 
    <!-- Peripheral speeds                  RUN       VLPR    HSRUN       -->
    <constant key="MCGOUTCLK_max"  value="120MHz,     4MHz,  150MHz"   type="Long" />

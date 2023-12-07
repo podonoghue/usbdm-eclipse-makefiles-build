@@ -1,5 +1,5 @@
 <!--
-Devices using this vector table: 
+Devices using this vector table:
    MK22F51212
 -->
 <interrupts>
@@ -266,13 +266,13 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>RTC_Alarm</name>
-      <description>Real Time Clock</description>
+      <description>Real Time Clock Alarm</description>
       <value>46</value>
       <peripheral>RTC</peripheral>
    </interrupt>
    <interrupt>
       <name>RTC_Seconds</name>
-      <description>Real Time Clock</description>
+      <description>Real Time Clock Seconds</description>
       <value>47</value>
       <peripheral>RTC</peripheral>
    </interrupt>

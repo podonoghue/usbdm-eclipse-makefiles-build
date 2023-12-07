@@ -7,6 +7,8 @@
 #ifndef INCLUDE_CPP_BITBAND_H_
 #define INCLUDE_CPP_BITBAND_H_
 
+#include <stdint.h>
+
 namespace USBDM {
 
 /*!

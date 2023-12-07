@@ -342,31 +342,6 @@ $(/TPM/ChannelInitMethod: // /TPM/ChannelInitMethod not found)
  *   // Static functions (mirrored)
  */
 $(/TPM/static_functions:  // /TPM/static_functions not found)
-   /**
-    * Enable interrupts in NVIC
-    */
-   static void enableNvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[0]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    *
-    * @note Any pending interrupts are cleared before enabling.
-    */
-   static void enableNvicInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[0]);
-   }
-
 public:
    /**
     * Template class representing a timer channel

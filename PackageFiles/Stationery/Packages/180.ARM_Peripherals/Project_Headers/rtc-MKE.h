@@ -25,30 +25,6 @@ $(/RTC/protectedMethods: // No /RTC/protectedMethods found)
 public:
 $(/RTC/publicMethods: // No /RTC/publicMethods found)
 $(/RTC/InitMethod: // No /RTC/InitMethod found)
-   /**
-    * Enable interrupts in NVIC
-    */
-   static void enableNvicInterrupts() {
-      NVIC_EnableRTC(Info::irqNums[0]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableNvicInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableNvicInterrupts() {
-      NVIC_DisableRTC(Info::irqNums[0]);
-   }
-
 };
 
 $(/RTC/staticDefinitions: )

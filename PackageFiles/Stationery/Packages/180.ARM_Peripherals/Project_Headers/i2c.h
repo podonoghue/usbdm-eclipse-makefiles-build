@@ -18,6 +18,7 @@
  * Any manual changes will be lost.
  */
 #include "pin_mapping.h"
+#include "gpio.h"
 
 #ifdef __CMSIS_RTOS
 #include "cmsis.h"
@@ -462,30 +463,6 @@ public:
 
    /** Used by ISR to obtain handle of object */
    static I2cBase_T<Info> *thisPtr;
-
-   /**
-    * Enable interrupts in NVIC
-    */
-   static void enableNvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[0]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableNvicInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[0]);
-   }
 
 #ifdef __CMSIS_RTOS
 protected:

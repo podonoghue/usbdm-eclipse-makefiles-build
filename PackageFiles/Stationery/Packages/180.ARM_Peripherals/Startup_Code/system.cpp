@@ -35,11 +35,6 @@ __attribute__((__weak__))
 void console_initialise() {
 }
 
-/* This definition is overridden if RTC initialisation is provided */
-__attribute__((__weak__))
-void rtc_initialise() {
-}
-
 // Dummy hook routine for when CMSIS is not used.
 __attribute__((__weak__))
 void software_init_hook () {
@@ -118,9 +113,6 @@ void SystemInit(void) {
 $(/SYSTEM/StartupEarly: )
    /* Use UART initialisation - if present */
    console_initialise();
-
-   /* Use RTC initialisation - if present */
-   rtc_initialise();
 
 #if defined(__VFP_FP__) && !defined(__SOFTFP__)
 //#warning "Using FP hardware"

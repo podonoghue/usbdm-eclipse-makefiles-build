@@ -51,30 +51,6 @@ protected:
 public:
 $(/PMC/publicMethods:// /PMC/publicMethods not found)
 $(/PMC/InitMethod:// /PMC/InitMethod not found)
-   /**
-    * Enable interrupts in NVIC
-    */
-   static void enableNvicInterrupts() {
-      NVIC_EnableIRQ(irqNums[0]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableNvicInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(irqNums[0], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(irqNums[0]);
-   }
-
 };
 
 $(/PMC/staticDefinitions: // No static declarations found)

@@ -649,40 +649,6 @@ public:
    }
 
    /**
-    * Enable interrupts in NVIC
-    */
-   static void enableNvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[0]);
-      if (Ftm0Info::NumChannelVectors>1) NVIC_EnableIRQ(Info::irqNums[1]);
-      if (Ftm0Info::NumChannelVectors>2) NVIC_EnableIRQ(Info::irqNums[2]);
-      if (Ftm0Info::NumChannelVectors>3) NVIC_EnableIRQ(Info::irqNums[3]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    *
-    * @note Any pending interrupts are cleared before enabling.
-    */
-   static void enableNvicInterrupts(uint32_t nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
-      if (Ftm0Info::NumChannelVectors>1) enableNvicInterrupt(Info::irqNums[1], nvicPriority);
-      if (Ftm0Info::NumChannelVectors>2) enableNvicInterrupt(Info::irqNums[2], nvicPriority);
-      if (Ftm0Info::NumChannelVectors>3) enableNvicInterrupt(Info::irqNums[3], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[0]);
-      if (Ftm0Info::NumChannelVectors>1) NVIC_DisableIRQ(Info::irqNums[1]);
-      if (Ftm0Info::NumChannelVectors>2) NVIC_DisableIRQ(Info::irqNums[2]);
-      if (Ftm0Info::NumChannelVectors>3) NVIC_DisableIRQ(Info::irqNums[3]);
-   }
-
-   /**
     * Set maximum value of timer counter.
     *
     * @param[in] endValue Modulo value in ticks (<65535), 0 = 65536.

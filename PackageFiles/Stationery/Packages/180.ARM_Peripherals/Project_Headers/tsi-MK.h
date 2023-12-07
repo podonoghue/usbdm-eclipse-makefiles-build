@@ -116,30 +116,6 @@ public:
    $(/TSI/classInfo: // /TSI/classInfo not found)
    $(/TSI/InitMethod: // /TSI/InitMethod not found)
    /**
-    * Enable interrupts in NVIC
-    */
-   static void enableNvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[0]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableNvicInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[0]);
-   }
-
-   /**
     * Set the electrode scan configuration for active mode.\n
     * This controls the count interval of the internal oscillator when sampling a pin:\n
     *   T = (Prescaler*consecutiveScans)/Felectrode\n
