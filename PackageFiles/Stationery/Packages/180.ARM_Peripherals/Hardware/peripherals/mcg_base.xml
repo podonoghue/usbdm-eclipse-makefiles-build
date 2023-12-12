@@ -171,7 +171,7 @@
                <graphicItem id=""                          var="system_mcgffclk_clock[%(n)]"        type="connector"   params="IREFS,0, MCGFFCLK.1,0, x45,d,y,x"               />
                <graphicItem id="MCGFFCLK_A1,NONAME"        var="system_mcgffclk_clock[%(n)]"        type="annotation"  params="340, 85, 70, 20"                                />
                <graphicItem id="MCGFFCLK.1,NONAME"         var="system_mcgffclk_clock[%(n)]"        type="node"        params="570, 105"                                       />
-               <graphicItem id=""                          var="system_mcgffclk_clock[%(n)]"        type="connector"   params="IREFS,0, FLL,0"                                 />
+               <graphicItem id=""                          var="fllInputFrequency[%(n)]"            type="connector"   params="IREFS,0, FLL,0"                                 />
                <graphicItem id="FLL"                       var="system_mcgfllclk_clock[%(n)]"       type="variableBox" params="315, 145, 80,  large"                           />
                <graphicItem id="DMX32,NONAME"              var="mcg_c4_dmx32[%(n)]"                 type="annotation"  params="275, 165, 100, 18"                              />
                <graphicItem id="FLLINPUT,NONAME"           var="fllInputFrequency[%(n)]"            type="annotation"  params="275, 180, 100, 18, Fin=%v"                      />
@@ -963,7 +963,11 @@
                <choice value="7" enum="DivBy128" ref="(system_fast_irc_clock[%(n)])/128" name="/128" />
             </choiceOption>
 
-            <intOption key="firc_divided_clock[%(n)]" units="Hz" locked="true" derived="true" />
+            <intOption key="firc_divided_clock[%(n)]"
+               description="FIRC divided clock frequency"
+               units="Hz" 
+               locked="true" 
+               derived="true" />
 
             <binaryOption key="mcg_c2_ircs[%(n)]"
                typeName="McgIrClkSrc"
@@ -974,7 +978,11 @@
                <choice value="1" ref="firc_divided_clock[%(n)]"    enum="Fast" name="Fast internal reference clock" code="getFastInternalReferenceClock()" isDefault="true" />
             </binaryOption>
 
-            <intOption key="system_mcgirclk_ungated[%(n)]" units="Hz" locked="true" derived="true" />
+            <intOption key="system_mcgirclk_ungated[%(n)]"
+               description="MGCIRCLK (internal) frequency" 
+               units="Hz" 
+               locked="true" 
+               derived="true" />
 
             <binaryOption key="mcg_c1_irclken[%(n)]"
                typeName="McgIrClkEn"
@@ -1303,6 +1311,7 @@
                <choice value="1" ref="/SIM/usb1pfdclk_Clock[%(n)]"  name="External PLL (USB1 PFDCLK)" />
             </binaryOption>
             <intOption key="system_mcgpllclk_clock[%(n)]"
+               enabledBy="((%(n)==0)||enableClockConfiguration[%(n)])"
                max="/SIM/MCGPLLCLK_max[/SMC/smc_pmctrl_runm[%(n)]]"
                toolTip="Output of PLL"
                derived="true"
@@ -1337,6 +1346,7 @@
          <aliasOption key="/PMC/system_low_power_clock" />
 
          <intOption key="system_mcgoutclk_clock[%(n)]"
+            enabledBy="((%(n)==0)||enableClockConfiguration[%(n)])"
             max="/SIM/MCGOUTCLK_max[/SMC/smc_pmctrl_runm[%(n)]]"
             min="1"
             derived="true"

@@ -54,19 +54,30 @@
    <!-- ************* CONTROL ****************** -->
 
    <binaryOption key="usbdcd_control_sr" condition="usbdcd_control_sr_present"
+      enabledBy="enablePeripheralSupport"
       typeName="UsbdcdSoftwareReset"
       toolTip="Determines whether a software reset is performed"
       description="Software Reset" >
-      <choice name="No effect"       value="0" enum="NoAction"/>
-      <choice name="Software reset"  value="1" enum="Reset"/>
+      <choice name="No effect"       value="0" enum="NoAction" />
+      <choice name="Software reset"  value="1" enum="Reset" />
    </binaryOption >
 
    <binaryOption key="usbdcd_control_start" condition="usbdcd_control_start_present"
+      enabledBy="enablePeripheralSupport"
       typeName="UsbdcdStart"
       toolTip="Determines whether the charger detection sequence is initiated"
       description="Start Change Detection Sequence" >
-      <choice name="No effect"       value="0" enum="NoAction"/>
-      <choice name="Start sequence"  value="1" enum="StartSequence"/>
+      <choice name="No effect"       value="0" enum="NoAction" />
+      <choice name="Start sequence"  value="1" enum="StartSequence" />
+   </binaryOption >
+
+   <binaryOption key="usbdcd_control_bc12" condition="usbdcd_control_bc12_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UsbdcdCompatibility"
+      toolTip="This bit cannot be changed after start detection"
+      description="BC1.2 compatibility level" >
+      <choice name="Compatible with BC1.1 (default)"  value="0" enum="Bc11" />
+      <choice name="Compatible with BC1.2"            value="1" enum="Bc12" />
    </binaryOption >
 
    <binaryOption key="usbdcd_control_ie" condition="usbdcd_control_ie_present"
@@ -74,8 +85,8 @@
       typeName="UsbdcdEventAction"
       toolTip="Enables/disables interrupts to the system."
       description="Interrupt Handling" >
-      <choice name="Interrupts disabled"  value="0" enum="None"/>
-      <choice name="Interrupts enabled"   value="1" enum="Interrupt"/>
+      <choice name="Interrupts disabled"  value="0" enum="None" />
+      <choice name="Interrupts enabled"   value="1" enum="Interrupt" />
    </binaryOption >
 
    <binaryOption key="usbdcd_control_if" condition="usbdcd_control_if_present"
@@ -83,8 +94,8 @@
       typeName="UsbdcdEvent"
       toolTip="Indicates whether an interrupt is pending."
       description="Interrupt Flag" >
-      <choice name="No interrupt"       value="0" enum="None"/>
-      <choice name="Interrupt Pending"  value="1" enum="InterruptPending"/>
+      <choice name="No interrupt"       value="0" enum="None" />
+      <choice name="Interrupt Pending"  value="1" enum="InterruptPending" />
    </binaryOption >
 
    <choiceOption key="usbdcd_control_iack" condition="usbdcd_control_iack_present"
@@ -92,12 +103,12 @@
       typeName="UsbdcdEventAcknowledge"
       toolTip="Used to clear pending interrupt"
       description="Interrupt Acknowledge" >
-      <choice name="Write 1 to clear IF"  value="0" enum="ClearFlag"/>
+      <choice name="Write 1 to clear IF"  value="0" enum="ClearFlag" />
    </choiceOption >
 
    <!-- ************* CLOCK ****************** -->
 
-   ><aliasOption key="/SIM/system_bus_clock[0]" />
+   <aliasOption key="/SIM/system_bus_clock[0]" />
 
    <binaryOption key="usbdcd_clock_clock_unit" condition="usbdcd_clock_clock_unit_present"
       ref="(/SIM/system_bus_clock[0]>1000000)?1:0"
@@ -131,8 +142,8 @@
       typeName="UsbdcdActiveStatus"
       toolTip="Indicates whether the sequence is running."
       description="Active Status Indicator\nIndicates whether the sequence is running" >
-      <choice name="Sequence not running"  value="0" enum="Idle"/>
-      <choice name="Sequence running"      value="1" enum="SequenceRunning"/>
+      <choice name="Sequence not running"  value="0" enum="Idle" />
+      <choice name="Sequence running"      value="1" enum="SequenceRunning" />
    </binaryOption >
 
    <binaryOption key="usbdcd_status_to" condition="usbdcd_status_to_present"
@@ -141,8 +152,8 @@
       toolTip="Indicates whether the detection sequence has passed the 1s timeout threshhold."
       description="Timeout Flag\n
                    Indicates whether the detection sequence has passed the timeout threshhold" >
-      <choice name="&lt;= 1 second"                value="0" enum="NoTimeout"/>
-      <choice name="&gt;= 1 second since contact"  value="1" enum="TimeoutOccurred"/>
+      <choice name="&lt;= 1 second"                value="0" enum="NoTimeout" />
+      <choice name="&gt;= 1 second since contact"  value="1" enum="TimeoutOccurred" />
    </binaryOption >
 
    <binaryOption key="usbdcd_status_err" condition="usbdcd_status_err_present"
@@ -150,8 +161,8 @@
       typeName="UsbdcdErrorStatus"
       toolTip="Indicates whether there is an error in the detection sequence."
       description="Error Flag\nIndicates whether there is an error in the detection sequence" >
-      <choice name="No sequence errors"  value="0" enum="NoError"/>
-      <choice name="Sequence errors"     value="1" enum="SequenceError"/>
+      <choice name="No sequence errors"  value="0" enum="NoError" />
+      <choice name="Sequence errors"     value="1" enum="SequenceError" />
    </binaryOption >
 
    <choiceOption key="usbdcd_status_seq_stat" condition="usbdcd_status_seq_stat_present"
@@ -159,10 +170,10 @@
       typeName="UsbdcdProgress"
       toolTip="Indicates the status of the charger detection sequence."
       description="Charger Detection Sequence Status" >
-      <choice name="Not enabled/detected"    value="0" enum="NotDetected"/>
-      <choice name="Data pin complete"       value="1" enum="DataPinComplete"/>
-      <choice name="Charging port complete"  value="2" enum="ChargingPortComplete"/>
-      <choice name="Charger type complete"   value="3" enum="ChargerTypeComplete"/>
+      <choice name="Not enabled/detected"    value="0" enum="NotDetected" />
+      <choice name="Data pin complete"       value="1" enum="DataPinComplete" />
+      <choice name="Charging port complete"  value="2" enum="ChargingPortComplete" />
+      <choice name="Charger type complete"   value="3" enum="ChargerTypeComplete" />
    </choiceOption >
 
    <choiceOption key="usbdcd_status_seq_res" condition="usbdcd_status_seq_res_present"
@@ -170,10 +181,24 @@
       typeName="UsbdcdOutcome"
       toolTip="Indicates how the charger detection is attached."
       description="Charger Detection Sequence Results\nReports how the charger detection is attached" >
-      <choice name="No results"         value="0" enum="NoResults"/>
-      <choice name="Standard host"      value="1" enum="StandardHost"/>
-      <choice name="Charging port"      value="2" enum="ChargingPort"/>
-      <choice name="Dedicated charger"  value="3" enum="DedicatedCharger"/>
+      <choice name="No results"         value="0" enum="NoResults" />
+      <choice name="Standard host"      value="1" enum="StandardHost" />
+      <choice name="Charging port"      value="2" enum="ChargingPort" />
+      <choice name="Dedicated charger"  value="3" enum="DedicatedCharger" />
+   </choiceOption >
+
+   <!-- ************* SIGNAL_OVERRIDE ****************** -->
+
+   <choiceOption key="usbdcd_signal_override_ps" condition="usbdcd_signal_override_ps_present"
+      enabledBy="enablePeripheralSupport"
+      register="signal_override"
+      typeName="UsbdcdSignalOverridePs"
+      toolTip="Used to enable specified voltage and current source circuits on the USB_DP and USB_DM pins.\n
+               May set this bit field to 0b10 for required signaling if attached to a Dedicated Charging Port, or\n
+               during operation under the Dead Battery Provision"
+      description="Phase Selection" >
+      <choice name="No overrides. Normal USB data operation"            value="0" enum="Normal" />
+      <choice name="Enables VDP_SRC->USB_DP and IDM_SINK->USB_DM pin"   value="2" enum="EnableVdp_srcIdm_sink" />
    </choiceOption >
 
    <!-- ************* TIMER0 ****************** -->
@@ -199,7 +224,6 @@
       toolTip="The represents the amount of elapsed time since the event of setting the START bit plus\n
                the value of TSEQ_INIT. \n
                The timer is automatically initialized with the value of TSEQ_INIT"
-      value="0"
    />
 
    <!-- ************* TIMER1 ****************** -->
@@ -248,28 +272,85 @@
       min="1" max="15" value="1"
    />
 
+   <!-- ************* TIMER2_BC11 ****************** -->
+
+   <intOption key="usbdcd_timer2_bc11_tvdpsrc_con" condition="usbdcd_timer2_bc11_tvdpsrc_con_present"
+      enabledBy="enablePeripheralSupport"
+      register="timer2_bc11"
+      typeName="UsbdcdDataPlusPullupDelayTime"
+      enumType="uint8_t"
+      description="Time Period Before Enabling D+ Pullup (in ms)"
+      toolTip="Sets the time period (ms) that the module waits after charging port detection before system software must\n
+               enable the D+ pullup to connect to the USB host. Valid values are 1–1023, but the USB Battery Charging\n
+               Specification requires a minimum value of 40 ms."
+      min="0" max="1023" value="40"
+   />
+
+   <intOption key="usbdcd_timer2_bc11_check_dm" condition="usbdcd_timer2_bc11_check_dm_present"
+      enabledBy="enablePeripheralSupport"
+      register="timer2_bc11"
+      typeName="UsbdcdDataMinusCheckDelayTime"
+      enumType="uint8_t"
+      description="Time Before Check of D- Line (in ms)"
+      toolTip="Sets the amount of time (in ms) that the module waits after the device connects to the USB bus until\n
+               checking the state of the D- line to determine the type of charging port. See Charger Type Detection.\n
+               Valid values are 1–15ms."
+      min="1" max="15" value="1"
+   />
+
+   <!-- ************* TIMER2_BC12 ****************** -->
+
+   <intOption key="usbdcd_timer2_bc12_twait_after_prd" condition="usbdcd_timer2_bc12_twait_after_prd_present"
+      enabledBy="enablePeripheralSupport"
+      register="timer2_bc12"
+      typeName="UsbdcdPrimaryToSecondaryWait"
+      enumType="uint32_t"
+      description="Wait time after primary detection."
+      toolTip="Sets the amount of time (in ms) that the module waits after primary detection\n
+               before start to secondary detection\n
+               Valid values are 1-1023ms. Default is 1ms"
+      value="1"
+   />
+
+   <intOption key="usbdcd_timer2_bc12_tvdmsrc_on" condition="usbdcd_timer2_bc12_tvdmsrc_on_present"
+      enabledBy="enablePeripheralSupport"
+      register="timer2_bc12"
+      typeName="UsbdcdTvdmsrcOnTime"
+      enumType="uint32_t"
+      description="VDM_SRC time"
+      toolTip="Sets the amount of time (in ms) that the module enables the VDM_SRC.\n
+               Valid values are 0-40ms"
+      value="0b101000"
+   />
+
 <!-- Setters and getters -->
 
-   <for keys="field                : set   : get   : clear : genCode                 : name"
+   <for keys="field                          : set   : get   : clear : genCode                 : name"
         values="
-         usbdcd_control_sr         : true  : true  : false : enableGettersAndSetters : SoftwareReset;
-         usbdcd_control_start      : true  : true  : false : enableGettersAndSetters : StartSequence;
-         usbdcd_control_ie         : true  : true  : false : enableGettersAndSetters : InterruptEnable;
-         usbdcd_control_if         : false : true  : false : enableGettersAndSetters : InterruptFlag;
-         usbdcd_control_iack       : false : false : true  : enableGettersAndSetters : InterruptFlag;
-         usbdcd_clock_clock_speed  : true  : true  : false : enableGettersAndSetters : ClockSpeed;
-         usbdcd_clock_clock_unit   : true  : true  : false : enableGettersAndSetters : ClockUnit;
-         usbdcd_status_active      : false : true  : false : enableGettersAndSetters : StatusActive;
-         usbdcd_status_to          : false : true  : false : enableGettersAndSetters : StatusTo;
-         usbdcd_status_err         : false : true  : false : enableGettersAndSetters : StatusErr;
-         usbdcd_status_seq_stat    : false : true  : false : enableGettersAndSetters : StatusSeqStat;
-         usbdcd_status_seq_res     : false : true  : false : enableGettersAndSetters : StatusSeqRes;
-         usbdcd_timer0_tseq_init   : true  : true  : false : enableGettersAndSetters : Timer0TseqInit;
-         usbdcd_timer0_tunitcon    : false : true  : false : enableGettersAndSetters : Timer0Tunitcon;
-         usbdcd_timer1_tdcd_dbnc   : true  : true  : false : enableGettersAndSetters : Timer1TdcdDbnc;
-         usbdcd_timer1_tvdpsrc_on  : true  : true  : false : enableGettersAndSetters : Timer1TvdpsrcOn;
-         usbdcd_timer2_tvdpsrc_con : true  : true  : false : enableGettersAndSetters : Timer2TvdpsrcCon;
-         usbdcd_timer2_check_dm    : true  : true  : false : enableGettersAndSetters : Timer2CheckDm" >
+         usbdcd_control_sr                   : true  : true  : false : enableGettersAndSetters : SoftwareReset;
+         usbdcd_control_start                : true  : true  : false : enableGettersAndSetters : StartSequence;
+         usbdcd_control_bc12                 : true  : true  : false : enableGettersAndSetters : Compatibility;
+         usbdcd_control_ie                   : true  : true  : false : enableGettersAndSetters : InterruptEnable;
+         usbdcd_control_if                   : false : true  : false : enableGettersAndSetters : InterruptFlag;
+         usbdcd_control_iack                 : false : false : true  : enableGettersAndSetters : InterruptFlag;
+         usbdcd_clock_clock_speed            : true  : true  : false : enableGettersAndSetters : ClockSpeed;
+         usbdcd_clock_clock_unit             : true  : true  : false : enableGettersAndSetters : ClockUnit;
+         usbdcd_status_active                : false : true  : false : enableGettersAndSetters : StatusActive;
+         usbdcd_status_to                    : false : true  : false : enableGettersAndSetters : StatusTo;
+         usbdcd_status_err                   : false : true  : false : enableGettersAndSetters : StatusErr;
+         usbdcd_status_seq_stat              : false : true  : false : enableGettersAndSetters : StatusSeqStat;
+         usbdcd_status_seq_res               : false : true  : false : enableGettersAndSetters : StatusSeqRes;
+         usbdcd_signal_override_ps           : true  : true  : false : enableGettersAndSetters : PhaseSelection;
+         usbdcd_timer0_tseq_init             : true  : true  : false : enableGettersAndSetters : InitiationTime;
+         usbdcd_timer0_tunitcon              : false : true  : false : enableGettersAndSetters : ConnectionTime;
+         usbdcd_timer1_tdcd_dbnc             : true  : true  : false : enableGettersAndSetters : DataPlusDebounceTime;
+         usbdcd_timer1_tvdpsrc_on            : true  : true  : false : enableGettersAndSetters : ComparatorEnabledTime;
+         usbdcd_timer2_tvdpsrc_con           : true  : true  : false : enableGettersAndSetters : DataPlusPullupDelayTime;
+         usbdcd_timer2_check_dm              : true  : true  : false : enableGettersAndSetters : DataMinusCheckDelayTime;
+         usbdcd_timer2_bc11_tvdpsrc_con      : true  : true  : false : enableGettersAndSetters : DataPlusPullupDelayTime;
+         usbdcd_timer2_bc11_check_dm         : true  : true  : false : enableGettersAndSetters : DataMinusCheckDelayTime;
+         usbdcd_timer2_bc12_twait_after_prd  : true  : true  : false : enableGettersAndSetters : PrimaryToSecondaryWait;
+         usbdcd_timer2_bc12_tvdmsrc_on       : true  : true  : false : enableGettersAndSetters : TvdmsrcOnTime" >
       <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
       ><![CDATA[
          \t/**
@@ -297,7 +378,7 @@
       <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
       ><![CDATA[
          \t/**
-         \t * Set %description
+         \t * Clear %description
          \t *
          \tstatic void clear%(name)() {
          \t   %register = %register|%mask;
@@ -308,7 +389,7 @@
 
    <!--   ========== class $(_Structname)BasicInfo =============================== -->
 
-   <template namespace="baseClass" ><![CDATA[
+   <template where="basicInfo" ><![CDATA[
       class $(_Structname)BasicInfo {
 
       public:\n
@@ -316,7 +397,7 @@
 
    <!--   ========== Interrupt handling =============================== -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
@@ -324,10 +405,10 @@
        \t\n
    ]]></variableTemplate>
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
    <![CDATA[
       \t/**
-      \t * Type definition for $(_Baseclass) interrupt call back.
+      \t * Type for USB Device Charger Detection call back function.
       \t */
       \ttypedef void (*CallbackFunction)($(irq_parameters));
       \t
@@ -343,56 +424,55 @@
 
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t/** Callback function for ISR */
+      \t/** Callback function for USB Device Charger Detection */
       \tstatic CallbackFunction sCallback;
       \t
       \t/**
-      \t * Set interrupt callback function.
+      \t * USB Device Charger Detection interrupt handler
+      \t * Passes control to call-back function
+      \t */
+      \tstatic void irqHandler() {
+      \t
+      \t   // Execute call-back
+      \t   sCallback($(irq_call));
+      \t}
+      \t
+      \t/**
+      \t * Set USB Device Charger Detection callback function.
       \t *
-      \t * @param[in]  $(_basename)Callback Callback function to execute on interrupt
+      \t * @param      $(_basename)Callback Callback function to execute on interrupt
       \t *                             Use nullptr to remove callback.
       \t */
       \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
       \t   if ($(_basename)Callback == nullptr) {
-      \t      $(_basename)Callback = unhandledCallback;
+      \t      $(_basename)Callback = (CallbackFunction)unhandledCallback;
       \t   }
       \t   // Allow either no handler set yet or removing handler
       \t   usbdm_assert(
-      \t         (sCallback == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
+      \t         ((void*)sCallback == (void*)unhandledCallback) ||
+      \t         ((void*)$(_basename)Callback == (void*)unhandledCallback),
       \t         "Handler already set");
       \t   sCallback = $(_basename)Callback;
       \t}
       \t
-      \t/**
-      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
-      \t */
-      \tstatic void irqHandler() {
-      \t
-      \t   //.....IRQ handler code here..........
-      \t
-      \t   // Clear interrupt flag
-      \t   //.....
-      \t   // Execute call-back
-      \t   sCallback($(irq_call));
-      \t}
       \t\n
    ]]>
    </template>
 
    <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t
       \t/**
-      \t * Callback for programmatically set handler for $(_Class)
+      \t * Callback function for USB Device Charger Detection
       \t */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Structname)BasicInfo::unhandledCallback;
+      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = (CallbackFunction)$(_Class)Info::unhandledCallback;
+      \t
       \t\n
    ]]>
    </template>
 
    <!--   ========== USBDCD Init class =============================== -->
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -458,49 +538,69 @@
 
    <!--   Member variables -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
-      variables="irqHandlingMethod"
-    ><![CDATA[
-      \t   /// %description
-      \t   %params = nullptr;\n\n
-   ]]></variableTemplate>
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <![CDATA[
+      \t   /// USB Device Charger Detection
+      \t   CallbackFunction sCallback = nullptr;\n\n
+   ]]></template>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="usbdcd_control_sr,usbdcd_control_start,usbdcd_control_ie,usbdcd_control_iack"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="usbdcd_control_sr,usbdcd_control_start,usbdcd_control_bc12,usbdcd_control_ie,usbdcd_control_iack"
    ><![CDATA[
       \t   /// Control Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="usbdcd_clock_clock_speed,usbdcd_clock_clock_unit"
    ><![CDATA[
       \t   /// Clock Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="usbdcd_signal_override_ps"
+   ><![CDATA[
+      \t   /// Signal Override Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="usbdcd_timer0_tseq_init"
    ><![CDATA[
       \t   /// TIMER0 Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="usbdcd_timer1_tdcd_dbnc,usbdcd_timer1_tvdpsrc_on"
    ><![CDATA[
       \t   /// Timing parameters for USBDCD
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="usbdcd_timer2_tvdpsrc_con,usbdcd_timer2_check_dm"
    ><![CDATA[
       \t   /// Timing parameters for USBDCD
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="usbdcd_timer2_bc11_tvdpsrc_con,usbdcd_timer2_bc11_check_dm"
+   ><![CDATA[
+      \t   /// Timing parameters for USBDCD v1.1
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="usbdcd_timer2_bc12_twait_after_prd,usbdcd_timer2_bc12_tvdmsrc_on"
+   ><![CDATA[
+      \t   /// Timing parameters for USBDCD v1.2
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -508,28 +608,27 @@
       \t\n
    ]]></variableTemplate>
 
-   <!--   Constructors -->
+   <!-- Init Constructors -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
-      variables="irqHandlingMethod"
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
-      \t    * Constructor for %description
+      \t    * Constructor for USB Device Charger Detection
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
       \t    *
-      %paramDescription
+      \t    * @param sCallback   USB Device Charger Detection call-back
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(CallbackFunction sCallback, Types... rest) : Init(rest...) {
       \t
-      \t      this->%paramName0 = %paramExpression;
+      \t      this->sCallback = sCallback;
       \t   }\n\n
-   ]]></variableTemplate>
+   ]]></template>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -552,16 +651,22 @@
       values="
             usbdcd_control_sr;
             usbdcd_control_start;
+            usbdcd_control_bc12;
             usbdcd_control_ie;
-            usbdcd_clock_clock_unit;
             usbdcd_clock_clock_speed;
+            usbdcd_clock_clock_unit;
+            usbdcd_signal_override_ps;
             usbdcd_timer0_tseq_init;
             usbdcd_timer1_tdcd_dbnc;
             usbdcd_timer1_tvdpsrc_on;
             usbdcd_timer2_tvdpsrc_con;
-            usbdcd_timer2_check_dm
+            usbdcd_timer2_check_dm;
+            usbdcd_timer2_bc11_tvdpsrc_con;
+            usbdcd_timer2_bc11_check_dm;
+            usbdcd_timer2_bc12_twait_after_prd;
+            usbdcd_timer2_bc12_tvdmsrc_on
             " >
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -591,14 +696,20 @@
       variables="
             usbdcd_control_sr,
             usbdcd_control_start,
+            usbdcd_control_bc12,
             usbdcd_control_ie,
             usbdcd_clock_clock_speed,
             usbdcd_clock_clock_unit,
+            usbdcd_signal_override_ps,
             usbdcd_timer0_tseq_init,
             usbdcd_timer1_tdcd_dbnc,
             usbdcd_timer1_tvdpsrc_on,
             usbdcd_timer2_tvdpsrc_con,
-            usbdcd_timer2_check_dm
+            usbdcd_timer2_check_dm,
+            usbdcd_timer2_bc11_tvdpsrc_con,
+            usbdcd_timer2_bc11_check_dm,
+            usbdcd_timer2_bc12_twait_after_prd,
+            usbdcd_timer2_bc12_tvdmsrc_on
          "
    ><![CDATA[
       \t/**
@@ -639,32 +750,40 @@
              condition="/$(_STRUCTNAME)/generateSharedIrqInfo" >   <![CDATA[
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      // Only set call-backs if feature enabled
-      \t      Info::setCallback(init.callbackFunction);
+      \t      Info::setCallback(init.sCallback);
       \t      Info::enableNvicInterrupts(init.irqlevel);
       \t   }
       \t\n
    ]]></template>
    <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
-      \t   usbdcd->CONTROL   = init.control&USBDCD_CONTROL_SR_MASK;
-      \t   usbdcd->CLOCK     = init.clock;
-      \t   usbdcd->TIMER0    = init.timer0;
-      \t   usbdcd->TIMER1    = init.timer1;
-      \t   usbdcd->TIMER2    = init.timer2;
-      \t   usbdcd->CONTROL   = init.control&~USBDCD_CONTROL_SR_MASK;
+      \t   // Do software reset if requested
+      \t   usbdcd->CONTROL           = init.control&USBDCD_CONTROL_SR_MASK;
+      \t   usbdcd->CLOCK             = init.clock;
+      \t   usbdcd->SIGNAL_OVERRIDE   = init.signal_override;
+      \t   usbdcd->TIMER0            = init.timer0;
+      \t   usbdcd->TIMER1            = init.timer1;
+      #ifdef USBDCD_TIMER2_CHECK_DM_MASK
+      \t   usbdcd->TIMER2            = init.timer2;
+      #endif
+      #ifdef USBDCD_TIMER2_BC11_CHECK_DM_MASK
+      \t   usbdcd->TIMER2_BC11       = init.timer2_bc11;
+      \t   usbdcd->TIMER2_BC12       = init.timer2_bc12;
+      #endif
+      \t   usbdcd->CONTROL           = init.control&~USBDCD_CONTROL_SR_MASK;
       \t}
       \t\n
    ]]>
    </template>
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t}; // class $(_Structname)BasicInfo::Init
       \t\n
    ]]>
    </template>
 
-   <template namespace="baseClass" >
+   <template where="basicInfo" >
    <![CDATA[
       }; // class $(_Structname)BasicInfo
       \t\n
@@ -706,8 +825,9 @@
    ]]></template>
 
    <!-- ************* SIM configuration ****************** -->
-   <category name="Advanced" description="SIM configuration" >
-      <aliasOption key="/SIM/sim_scgc6_$(_basename)"      locked="false" optional="true" />
+   <category name="Advanced" description="SIM configuration">
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
    </category>
+   <deleteVariable key="_scgc_clock"  mustExist="false" />
 
 </peripheralPage>

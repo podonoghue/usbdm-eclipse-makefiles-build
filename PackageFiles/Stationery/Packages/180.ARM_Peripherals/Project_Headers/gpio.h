@@ -987,7 +987,7 @@ class GpioTable_T : public Gpio_T<Info::info[index].pcrValue, Info::info[index].
  * @tparam FlipMask             Polarity of all bits in field. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
  */
 template<PcrValue defPcrValue, PinIndex Left, PinIndex Right, Polarity FlipMask=ActiveHigh>
-class GpioField_T : public GpioField, public PcrBase_T<Left>{
+class GpioField_T : public GpioField, public PcrBase_T<mapPinToPort(Left)>{
 
 private:
    /**
@@ -1024,7 +1024,7 @@ public:
 
 public:
    /** Port associated with this GPIO Field */
-   using Port = PcrBase_T<Left>;
+   using Port = PcrBase_T<mapPinToPort(Left)>;
 
    /** Bit number of left bit within underlying port hardware */
    static constexpr unsigned LEFT = int(Left)%32;

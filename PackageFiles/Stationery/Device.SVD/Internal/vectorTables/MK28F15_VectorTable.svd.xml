@@ -1,5 +1,5 @@
 <!--
-Devices using this vector table: 
+Devices using this vector table:
    MK28F15
 -->
 <interrupts>
@@ -413,12 +413,6 @@ Devices using this vector table:
       <description>Secured Digital Host Controller</description>
       <value>81</value>
       <peripheral>SDHC0</peripheral>
-   </interrupt>
-   <interrupt>
-      <name>TSI0</name>
-      <description>Touch Sense Input</description>
-      <value>87</value>
-      <peripheral>TSI0</peripheral>
    </interrupt>
    <interrupt>
       <name>TPM1</name>

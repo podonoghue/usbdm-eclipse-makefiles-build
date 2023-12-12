@@ -26,13 +26,8 @@ namespace USBDM {
  * @brief Abstraction for Random Number Generator Accelerator
  * @{
  */
- 
-/**
- * Type definition for TRNG interrupt call back
- *
- * @param[in]  status Struct indicating interrupt source and state
- */
-typedef void (*TRNGCallbackFunction)();
+
+#if $(/TRNG/enablePeripheralSupport:false) // /TRNG/enablePeripheralSupport
 
 /**
  * Template class representing the Random Number Generator Accelerator.
@@ -47,18 +42,7 @@ typedef void (*TRNGCallbackFunction)();
  * @tparam info      Information class for TRNG
  */
 template<class Info>
-class TrngBase_T {
-
-protected:
-   /**
-    * Callback to catch unhandled interrupt
-    */
-   static void unhandledCallback() {
-      setAndCheckErrorCode(E_NO_HANDLER);
-   }
-
-   /** Callback function for ISR */
-   static TRNGCallbackFunction callback;
+class TrngBase_T : public Info {
 
 public:
    /**
@@ -66,88 +50,13 @@ public:
     *
     * @return Reference to TRNG hardware
     */
-   static __attribute__((always_inline)) volatile TRNG_Type &trng() { return Info::trng(); }
+   static constexpr HardwarePtr<TRNG_Type> trng = Info::baseAddress;
 
-   /**
-    * IRQ handler
-    */
-   static void irqHandler() {
-      // Call handler
-      callback();
-   }
-
-   /**
-    * Set callback function
-    *
-    * @param[in]  theCallback Callback function to execute on interrupt
-    */
-   static void setCallback(TRNGCallbackFunction theCallback) {
-      if (theCallback == nullptr) {
-         theCallback = unhandledCallback;
-      }
-      callback = theCallback;
-   }
-
-public:
-
-   /**
-    * Basic enable TRNG.
-    *
-    * Includes enabling clock
-    */
-   static void enable() {
-
-      // Enable clock to TRNG interface
-      Info::enableClock();
-   }
-
-   /**
-    * Enable with default settings.
-    */
-   static void defaultConfigure() {
-      enable();
-   }
-
-   /**
-    * Configure TRNG.
-    *
-    * @param[in] trngHighAssurance  Controls High Assurance mode
-    * @param[in] trngMode           Controls Sleep mode
-    * @param[in] trngInterrupt      Controls Interrupt Mask
-    */
-   static __attribute__((always_inline)) void configure() {
-   }
-
-   /**
-    * Specifies an entropy value that TRNG uses in addition to its ring oscillators
-    * to seed its pseudo-random algorithm.
-    *
-    * @param[in] entropyValue Entropy value used for TRNG calculation
-    *
-    * @note Specifying a value for this field is optional but recommended.
-    * You can write to this field at any time during operation.
-    */
-   static void writeEntropyValue(uint32_t entropyValue) {
-   }
-
-   /**
-    * Disable interface to TRNG.
-    */
-   static void disable() {
-      Info::disableClock();
-   }
-
-   /**
-    * Clear interrupt flag.
-    */
-   static void clearInterruptFlag() {
-   }
-   
+$(/TRNG/InitMethod:// /TRNG/InitMethod not found)
 };
 
-template<class Info> TRNGCallbackFunction TrngBase_T<Info>::callback = TrngBase_T<Info>::unhandledCallback;
-
 $(/TRNG/declarations: // No declarations found)
+#endif  // /TRNG/enablePeripheralSupport
 /**
  * End TRNG_Group
  * @}

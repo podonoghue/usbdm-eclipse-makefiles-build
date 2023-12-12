@@ -103,101 +103,103 @@
       \t}\n\n
    ]]></variableTemplate>
 
-   <!-- ************* PFB0CR ****************** -->
+   <!-- ************* PFBxCR ****************** -->
+   
+   <for keys="b" values="0;01" >
+	   <binaryOption key="fmc_pfb%(b)cr_clck_way" condition="fmc_pfb%(b)cr_clck_way_present"
+	      hidden="true"
+	      typeName="FmcCacheWayLock"
+	      toolTip="Determine if the given cache way is locked such that its contents will not be displaced by future misses"
+	      description="Cache Lock Way N" >
+	      <choice name="Cache way is unlocked"  value="0" enum="CacheWayIsUnlocked" />
+	      <choice name="Cache way is locked"    value="1" enum="CacheWayIsLocked" />
+	   </binaryOption >
+	   
+	   <variableTemplate codeGenCondition="enableGettersAndSetters"
+	      variables="fmc_pfb%(b)cr_clck_way"
+	   > <![CDATA[
+	      \t/**
+	      \t * Set %description
+	      \t *
+	      \t * @param way         Cache way to modify
+	      %paramDescription
+	      \t */
+	      \tstatic void setCacheWayLock(int way, %params) {
+	      \t   const uint32_t mask = %mask<<way;
+	      \t   %register = (%register&~mask) | (%paramExpression<<way);
+	      \t}\n\n
+	   ]]></variableTemplate>
 
-   <binaryOption key="fmc_pfb0cr_clck_way" condition="fmc_pfb0cr_clck_way_present"
-      hidden="true"
-      typeName="FmcCacheWayLock"
-      toolTip="Determine if the given cache way is locked such that its contents will not be displaced by future misses"
-      description="Cache Lock Way x" >
-      <choice name="Cache way is unlocked"  value="0" enum="CacheWayIsUnlocked" />
-      <choice name="Cache way is locked"    value="1" enum="CacheWayIsLocked" />
-   </binaryOption >
+	   <choiceOption key="fmc_pfb%(b)cr_cinv_way" condition="fmc_pfb%(b)cr_cinv_way_present"
+	      hidden="true"
+	      typeName="FmcWayInvalidate"
+	      toolTip="Selects a cache Way to immediately invalidate.\n
+	               The tag, data, and valid contents are cleared."
+	      description="Cache Invalidate Way N" >
+	      <choiceExpansion keys="w" dim="4" value="1&lt;&lt;%(w)" name="Invalidate Way %(w)" enum="Way%(w)" />
+	      <choice name="Invalidate all Ways"  value="-1" enum="AllWays" />
+	   </choiceOption >
+	
+	   <variableTemplate codeGenCondition="enableGettersAndSetters"
+	      variables="fmc_pfb%(b)cr_cinv_way"
+	   > <![CDATA[
+	      \t/**
+	      \t * %description
+	      \t *
+	      %paramDescription
+	      \t */
+	      \tstatic void cacheWayInvalidate(%params) {
+	      \t   %register = %register | %paramExpression;
+	      \t}\n\n
+	   ]]></variableTemplate>
+	   
+	   <choiceOption key="fmc_pfb%(b)cr_s_b_inv" condition="fmc_pfb%(b)cr_s_b_inv_present"
+	      hidden="true"
+	      typeName="FmcSpeculationBuffer"
+	      toolTip="When this bit is written, the prefetch speculation buffer and single entry buffer are immediately cleared"
+	      description="Invalidate Prefetch Speculation Buffer" >
+	      <choice name="Write 1 to invalidate"  value="1" enum="Invalidate" />
+	   </choiceOption >
+	
+	   <variableTemplate codeGenCondition="enableGettersAndSetters"
+	      variables="fmc_pfb%(b)cr_s_b_inv"
+	   > <![CDATA[
+	      \t/**
+	      \t * %description
+	      \t */
+	      \tstatic void speculationBufferInvalidate() {
+	      \t   %register = %register | %mask;
+	      \t}\n\n
+	   ]]></variableTemplate>
 
-   <variableTemplate codeGenCondition="enableGettersAndSetters"
-      variables="fmc_pfb0cr_clck_way"
-   > <![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      \t * @param way         Cache way to modify
-      %paramDescription
-      \t */
-      \tstatic void setCacheWayLock(int way, %params) {
-      \t   const uint32_t mask = %mask<<way;
-      \t   %register = (%register&~mask) | (%paramExpression<<way);
-      \t}\n\n
-   ]]></variableTemplate>
-
-   <choiceOption key="fmc_pfb0cr_cinv_way" condition="fmc_pfb0cr_cinv_way_present"
-      hidden="true"
-      typeName="FmcWayInvalidate"
-      toolTip="Selects a cache Way to immediately invalidate.\n
-               The tag, data, and valid contents are cleared."
-      description="Cache Invalidate Way x" >
-      <choiceExpansion keys="w" dim="4" value="1&lt;&lt;%(w)" name="Invalidate Way %(w)" enum="Way%(w)" />
-      <choice name="Invalidate all Ways"  value="-1" enum="AllWays" />
-   </choiceOption >
-
-   <variableTemplate codeGenCondition="enableGettersAndSetters"
-      variables="fmc_pfb0cr_cinv_way"
-   > <![CDATA[
-      \t/**
-      \t * %description
-      \t *
-      %paramDescription
-      \t */
-      \tstatic void cacheWayInvalidate(%params) {
-      \t   %register = %register | %paramExpression;
-      \t}\n\n
-   ]]></variableTemplate>
-
-   <choiceOption key="fmc_pfb0cr_s_b_inv" condition="fmc_pfb0cr_s_b_inv_present"
-      hidden="true"
-      typeName="FmcSpeculationBuffer"
-      toolTip="When this bit is written, the prefetch speculation buffer and single entry buffer are immediately cleared"
-      description="Invalidate Prefetch Speculation Buffer" >
-      <choice name="Write 1 to invalidate"  value="1" enum="Invalidate" />
-   </choiceOption >
-
-   <variableTemplate codeGenCondition="enableGettersAndSetters"
-      variables="fmc_pfb0cr_s_b_inv"
-   > <![CDATA[
-      \t/**
-      \t * %description
-      \t */
-      \tstatic void speculationBufferInvalidate() {
-      \t   %register = %register | %mask;
-      \t}\n\n
-   ]]></variableTemplate>
-
-   <choiceOption key="fmc_pfb0cr_crc" condition="fmc_pfb0cr_crc_present"
-      hidden="true"
-      typeName="FmcReplacementPolicy"
-      toolTip="This field defines the replacement algorithm for accesses that are cached"
-      description="Cache Replacement Policy" >
-      <choice name="LRU across all ways"                              value="0" enum="LruAllWays" />
-      <choice name="Independent LRU ways [0-1] ifetches, [2-3] data"  value="2" enum="LruWays_01Instruction_23Data" />
-      <choice name="Independent LRU ways [0-2] ifetches, [3] data"    value="3" enum="LruWays_012Instruction_3Data" />
-   </choiceOption >
-
-   <variableTemplate codeGenCondition="enableGettersAndSetters"
-      variables="fmc_pfb0cr_crc"
-   > <![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      %paramDescription
-      \t */
-      \tstatic void setReplacementPolicy(%params) {
-      \t   %register = (%register&~%mask) | %paramExpression;
-      \t}\n\n
-   ]]></variableTemplate>
+	   <choiceOption key="fmc_pfb%(b)cr_crc" condition="fmc_pfb%(b)cr_crc_present"
+	      hidden="true"
+	      typeName="FmcReplacementPolicy"
+	      toolTip="This field defines the replacement algorithm for accesses that are cached"
+	      description="Cache Replacement Policy" >
+	      <choice name="LRU across all ways"                              value="0" enum="LruAllWays" />
+	      <choice name="Independent LRU ways [0-1] ifetches, [2-3] data"  value="2" enum="LruWays_01Instruction_23Data" />
+	      <choice name="Independent LRU ways [0-2] ifetches, [3] data"    value="3" enum="LruWays_012Instruction_3Data" />
+	   </choiceOption >
+	
+	   <variableTemplate codeGenCondition="enableGettersAndSetters"
+	      variables="fmc_pfb%(b)cr_crc"
+	   > <![CDATA[
+	      \t/**
+	      \t * Set %description
+	      \t *
+	      %paramDescription
+	      \t */
+	      \tstatic void setReplacementPolicy(%params) {
+	      \t   %register = (%register&~%mask) | %paramExpression;
+	      \t}\n\n
+	   ]]></variableTemplate>
+   </for>
 
    <!--
       ******************** Flash Controller  ********************
    -->
-   <for keys="n:m" values ="0:0;1:1;01:0;23:1" >
+   <for keys="n:m" values ="0:0; 1:1; 01:0; 23:1" >
       <choiceOption key="fmc_pfb%(n)cr_flash_speculation" condition="fmc_pfb%(n)cr_b%(m)dpe_present||fmc_pfb%(n)cr_b%(m)ipe_present"
          typeName="FmcFlashSpeculation"
          valueFormat="FMC_PFB%(n)CR_B%(m)DPE(%s),FMC_PFB%(n)CR_B%(m)IPE(%s)"
@@ -274,7 +276,7 @@
       ]]></variableTemplate>
 
       <variableTemplate
-         variables="fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_flash_speculation,fmc_pfb%(n)cr_b%(n)sebe"
+         variables="fmc_pfb%(n)cr_flash_speculation,fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_b%(n)sebe"
          ><![CDATA[
          \t/**
          \t **
@@ -330,7 +332,7 @@
          \t\n
       ]]></variableTemplate>
 
-      <for keys="v" values="fmc_pfb%(n)cr_b%(n)sebe;fmc_pfb%(n)cr_flash_cache;fmc_pfb%(n)cr_flash_speculation" >
+      <for keys="v" values="fmc_pfb%(n)cr_flash_speculation;fmc_pfb%(n)cr_b%(n)sebe;fmc_pfb%(n)cr_flash_cache" >
          <variableTemplate
             variables="%(v)"
          ><![CDATA[
@@ -350,8 +352,8 @@
       ]]></variableTemplate>
       </for>
 
-      <template condition="fmc_pfb%(n)cr_flash_cache||fmc_pfb%(n)cr_flash_speculation" ><![CDATA[
-         \t};\n\n
+      <template condition="fmc_pfb%(n)cr_flash_speculation||fmc_pfb%(n)cr_b%(n)sebe||fmc_pfb%(n)cr_flash_cache" ><![CDATA[
+         \t}; // FlashBank%(n)Init\n\n
       ]]></template>
 
       <variableTemplate key="/FMC/DefaultFlashInitValue" namespace="all"
@@ -380,7 +382,8 @@
       \t   // Restore flash Bank%(n) settings
       \t   savedFlashBank%(n)Settings.configure();\n
       ]]></variableTemplate>
-   </for>
+      
+   </for> <!-- keys="n:m" values ="0:0; 1:1; 01:0; 23:1" -->
 
    <!-- ************* Common ****************** -->
 

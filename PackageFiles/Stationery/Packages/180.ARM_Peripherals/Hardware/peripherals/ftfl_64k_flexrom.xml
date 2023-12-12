@@ -4,6 +4,17 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Interface" >
 
+   <choiceOption key="irq_enum" condition="=_irqCount>1"
+      valueFormat="%s"
+      hidden="true"
+      derived="true"
+      typeName="$(_Class)IrqNum"
+      description="$(_Class) Interrupt indices"
+      toolTip="Used to identify peripheral interrupt" >
+      <choice value="0"  enum="Command"       name="Flash Memory Command" />
+      <choice value="1"  enum="ReadCollision" name="Flash Memory Read Collision" />
+   </choiceOption>
+
    <!-- Default IRQ vector patterns if none specified -->
    <constant key="irq_pattern"      type="String"  value="&quot;^FTF_(.*)$&quot;"           />
    <constant key="irq_ClassHandler" type="String"  value="&quot;Flash::$1_irqHandler&quot;" />

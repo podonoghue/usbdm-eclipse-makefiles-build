@@ -296,7 +296,7 @@
       <choice value="14" name="Input 14" enum="14" />
       <choice value="15" name="Input 15" enum="15" />
    </choiceOption>
-   
+
    <bitmaskOption key="tsi_pen_pen" condition="tsi_pen_pen_present"
       enabledBy="enablePeripheralSupport"
       description="Channels enabled as TSI inputs"
@@ -311,7 +311,7 @@
       typeName="TsiLowPowerInput"
       toolTip="Selects which input is active in low-power mode"
       description="Low-Power Scan Pin"
-      derivedFrom="tsi_pen_num" 
+      derivedFrom="tsi_pen_num"
    />
 
    <!-- ************* THRESHOLD ****************** -->
@@ -382,7 +382,7 @@
          tsi_gencs_scnip      : ScanInProgress;
 
          tsi_pen_lpsp         : LowPowerScanPin;
-         
+
          tsi_scanc_refchrg    : ReferenceCharge;
          tsi_scanc_extchrg    : ExternalCharge;
          tsi_scanc_ampsc      : ActiveModePrescaler" >
@@ -464,7 +464,7 @@
       \t}
       \t\n
    ]]></variableTemplate>
-      
+
    <!--   ========== class $(_Class)BasicInfo =============================== -->
 
    <template namespace="usbdm" ><![CDATA[
@@ -526,12 +526,12 @@
       \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
       \t */
       \tstatic void irqHandler() {
-      \t   
+      \t
       \t   // Capture flags
       \t   uint32_t status = tsi->GENCS;
-      \t   
+      \t
       \t   status &= TSI_GENCS_SCNIP_MASK|TSI_GENCS_EOSF_MASK|TSI_GENCS_OUTRGF_MASK|TSI_GENCS_OVRF_MASK|TSI_GENCS_EXTERF_MASK;
-      \t   
+      \t
       \t   if ((status&(TSI_GENCS_EOSF_MASK|TSI_GENCS_OUTRGF_MASK|TSI_GENCS_OVRF_MASK|TSI_GENCS_EXTERF_MASK)) == 0) {
       \t      // Ignore spurious interrupts?
       \t      return;
@@ -600,14 +600,14 @@
       \t *   TsiScanPeriod(8) ,                  // Scan Period Modulus
       \t *   TsiReferenceChargeCurrent_16uA ,    // Reference Oscillator Charge Current select
       \t *   TsiExternalChargeCurrent_16uA ,     // External Oscillator Charge Current select
-      \t *   
+      \t *
       \t *   ElectrodeA::TSI_INPUT,              // Channels enabled as TSI inputs
       \t *   ElectrodeB::TSI_INPUT,
-      \t *   
+      \t *
       \t *   ElectrodeA::TSI_LOWPOWER_INPUT ,    // Low-Power Scan Pin
       \t *   TsiLowThreshold(0) ,                // Low Power Channel Low Threshold value
       \t *   TsiHighThreshold(0),                // Low Power Channel High Threshold value
-      \t *   
+      \t *
       \t *   NvicPriority_Normal,
       \t *   tsiCallback,
       \t *
@@ -721,7 +721,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   
+
    <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="tsi_pen_num"
       linePadding="xxx" >
@@ -753,9 +753,9 @@
             tsi_gencs_ps;
             tsi_gencs_lpscnitv;
             tsi_gencs_lpclks;
-            
+
             tsi_pen_lpsp;
-            
+
             tsi_scanc_refchrg;
             tsi_scanc_extchrg;
             tsi_scanc_amclks;
@@ -782,7 +782,7 @@
       ]]>
       </variableTemplate>
    </for>
-   
+
    <for keys="r"
       values="
             tsi_gencs_nscn;
@@ -843,15 +843,15 @@
       \tstatic constexpr Init DefaultInitValue = {%initExpression\n
    ]]></variableTemplate>
    <for keys="input" dim="16" >
-      <template codeGenCondition="enablePeripheralSupport&amp;&amp;((tsi_pen_pen&amp;(1&lt;&lt;%(input)))!=0)" ><![CDATA[ 
+      <template codeGenCondition="enablePeripheralSupport&amp;&amp;((tsi_pen_pen&amp;(1&lt;&lt;%(input)))!=0)" ><![CDATA[
          \t   TsiInput_%(input), // Input %(input) enabled\n
       ]]></template>
    </for>
-   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[ 
+   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t};
       \t\n
    ]]></template>
-   
+
 <!--   Configure methods -->
 
    <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
@@ -941,6 +941,12 @@
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
+
+   <!-- ************* SIM configuration ****************** -->
+   <category name="Advanced" description="SIM configuration">
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+   </category>
+   <deleteVariable key="_scgc_clock"  mustExist="false" />
 
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 

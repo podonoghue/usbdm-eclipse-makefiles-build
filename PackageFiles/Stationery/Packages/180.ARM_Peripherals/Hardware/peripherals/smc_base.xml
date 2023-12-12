@@ -401,7 +401,7 @@
 
          smc_pmctrl_runm      : false : true  : false : enableGettersAndSetters : RunMode;
          smc_pmctrl_stopa     : true  : false : false : enableGettersAndSetters : StopOutcome;
-         smc_pmctrl_stopm     : true  : true  : false : enableGettersAndSetters : StopMode;
+         smc_pmctrl_stopm     : true  : true  : false : true                    : StopMode;
 
          smc_stopctrl_pstopo  : true  : true  : false : enableGettersAndSetters : PartialStopOption;
          smc_stopctrl_porpo   : true  : true  : false : enableGettersAndSetters : PowerOptionPOR;

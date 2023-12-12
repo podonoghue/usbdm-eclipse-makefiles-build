@@ -30,6 +30,7 @@ namespace USBDM {
  * @brief Abstraction for Quad Serial Peripheral Interface
  * @{
  */
+#if $(/QSPI/enablePeripheralSupport:false) // /QSPI/enablePeripheralSupport
 
 /**
  * Crossbar Switch Master Assignments - with System MPU
@@ -1285,7 +1286,7 @@ struct QspiDqsSettings {
  * @tparam Info            Class describing QSPI hardware
  */
 template<class Info>
-class QspiBase_T : public QspiBase {
+class QspiBase_T : public QspiBase, public Info {
 
 private:
    /**
@@ -1305,7 +1306,7 @@ public:
       // Out of bounds value for function index
       static constexpr bool Test1 = (pin>=0) && (pin<(Info::numSignals));
       // Function is not currently mapped to a pin
-      static constexpr bool Test2 = !Test1 || (Info::info[pin].gpioBit != UNMAPPED_PCR);
+      static constexpr bool Test2 = !Test1 || (Info::info[pin].gpioBit != PinIndex::UNMAPPED_PCR);
       // Non-existent function and catch-all. (should be INVALID_PCR)
       static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[pin].gpioBit >= 0);
 
@@ -1368,7 +1369,7 @@ public:
     * Enable with default settings.
     */
    static void defaultConfigure() {
-      enable();
+      Info::enable();
    }
 
    /**
@@ -1437,7 +1438,7 @@ public:
       usbdm_assert(qspiClockDivide == (divider<<QSPI_MCR_SCLKCFG_SHIFT), "Invalid divider calculated");
 
       // Enable clock and map pins if selected
-      enable();
+      Info::enable();
 
       // Configure clock and default settings - Module is left disabled internally
       qspi->SOCCR = qspiClockSource;
@@ -2631,6 +2632,8 @@ public:
 };
 
 $(/QSPI/declarations: // No declarations found)
+
+#endif // /QSPI/enablePeripheralSupport
 /**
  * End QSPI_Group
  * @}

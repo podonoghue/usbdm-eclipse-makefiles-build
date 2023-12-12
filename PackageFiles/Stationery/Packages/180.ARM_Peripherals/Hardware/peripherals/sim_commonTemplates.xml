@@ -14,12 +14,12 @@
    <!-- Create list of clock enable fields -->
    <equation key="clockEnables" value="=&quot;&quot;" />
    <for keys="peripheral"
-      values="adc;cmp;cmt;crc;dac;dma;dmamux;ewm;flexio;ftf;ftfa;ftfe;ftfl;ftm;
-              i2c;i2s;lptmr;lpuart;pdb;pit;porta;portb;portc;portd;porte;rnga;
-              rtc;slcd;spi;tpm;tsi;uart;usb;usbdcd;vref;
+      values="adc;cmp;cmt;crc;dac;dma;dmamux;ewm;flexio;ftf;ftfa;ftfe;ftfl;ftm;flexbus;
+              i2c;i2s;lptmr;lpuart;pdb;pit;porta;portb;portc;portd;porte;qspi;rnga;
+              rtc;sdhc;sdramc;slcd;spi;tpm;trng;tsi;uart;usb;usbdcd;usbhs;vref;wdog;
       ">
-      <for keys="scgcNum" values="4;5;6;7">
-         <for keys="instance" values=";0;1;2;3;4;5">
+      <for keys="instance" values=";0;1;2;3;4;5">
+         <for keys="scgcNum" values="1;2;3;4;5;6;7">
             <equation key="enabled" value="&quot;%(peripheral)&quot;==&quot;ftf&quot;" />
             <equation key="clockEnables"
                value="=clockEnables+&quot;%(scgcNum) : %(peripheral)%(instance) : &quot;+
@@ -60,66 +60,6 @@
             <choice name="%(Name) Clock disabled"  value="0" enum="Disabled"/>
             <choice name="%(Name) Clock enabled"   value="1" enum="Enabled" isDefault="%(isDefault)" />
          </binaryOption >
-      </for>
-   </category>
-
-
-   <category name="SOPT8" description="FTM signals">
-      <for keys="ch" values="0;1;2;3;4;5;6;7">
-         <binaryOption key="sim_sopt8_ftm0och%(ch)src" condition="sim_sopt8_ftm0och%(ch)src_present"
-            typeName="SimFtm0Ch%(ch)OutputSrc"
-            description="FTM0 channel %(ch) output source"
-            toolTip="Allows modulation of FTM output">
-            <choice value="0" name="FTM0 ch %(ch) direct"                 enum="Direct"             isDefault="true" />
-            <choice value="1" name="FTM0 ch %(ch) modulated by FTM1 ch 1" enum="ModulatedByFtm1Ch1" />
-         </binaryOption>
-      </for>
-
-      <for keys="ch" values="0;1;2;3;4;5;6;7">
-         <binaryOption key="sim_sopt8_ftm3och%(ch)src"  condition="sim_sopt8_ftm3och%(ch)src_present"
-            typeName="SimFtm3Ch%(ch)OutputSrc"
-            description="FTM3 channel %(ch) output source"
-            toolTip="Allows modulation of FTM output">
-            <choice value="0" name="FTM3 ch %(ch) direct"                 enum="Direct"             isDefault="true" />
-            <choice value="1" name="FTM3 ch %(ch) modulated by FTM2 ch 1" enum="ModulatedByFtm2Ch1" />
-         </binaryOption>
-      </for>
-
-      <choiceOption key="sim_sopt8_ftm_syncbits" condition="sim_sopt8_ftm0syncbit_present"
-         typeName="SimFtmSync"
-         valueFormat="%s"
-         hidden="true"
-         description="FTM Hardware Trigger 0 Software Asserts"
-         toolTip="This allows software to assert the hardware trigger (TRIG0) FTM inputs\n
-                  Use setFtmSyncBits() to assert TRIG0 input on multiple FTMs\n
-                  Use clearFtmSyncBits() or clearAllFtmSyncBits() to allow other trigger sources to assert">
-         <choice value="SIM_SOPT8_FTM0SYNCBIT_MASK" name="FTM0 trigger mask" enum="Ftm0" />
-         <choice value="SIM_SOPT8_FTM1SYNCBIT_MASK" name="FTM1 trigger mask" enum="Ftm1" />
-         <choice value="SIM_SOPT8_FTM2SYNCBIT_MASK" name="FTM2 trigger mask" enum="Ftm2" />
-         <choice value="SIM_SOPT8_FTM3SYNCBIT_MASK" name="FTM3 trigger mask" enum="Ftm3" />
-      </choiceOption>
-   </category>
-
-   <category name="SOPT9" description="TPM signals">
-
-      <for keys="p" values="0;1;2;3">
-         <binaryOption key="sim_sopt9_tpm%(p)clksel" condition="sim_sopt9_tpm%(p)clksel_present"
-            typeName="SimTpm%(p)ClkSel"
-            description="TPM%(p) External Clock Pin"
-            toolTip="External pin used to drive the clock to the TPM module">
-            <choice value="0"  name="TPM_CLKIN0 pin" enum="TpmClkin0" isDefault="true" />
-            <choice value="1"  name="TPM_CLKIN1 pin" enum="TpmClkin1" />
-         </binaryOption>
-
-         <choiceOption key="sim_sopt9_tpm%(p)ch0src" condition="sim_sopt9_tpm%(p)ch0src_present"
-            typeName="SimTpm%(p)Ch0Src"
-            description="TPM%(p) channel 0 input capture source"
-            toolTip="Source for TPM channel 0 input capture\n
-               NOTE: When the TPM is not in input capture mode, clear this field">
-            <choice value="0" name="TPM_CH0 signal"           enum="IcPin"  isDefault="true"/>
-            <choice value="1" name="CMP0 output"              enum="Cmp0"     />
-            <choice value="2" name="CMP1 output"              enum="Cmp1"     />
-         </choiceOption>
       </for>
    </category>
 
@@ -379,15 +319,15 @@
 
 <!-- SOPT2 general settings -->
 
-   <for keys="  var                       : name"
-        values="sim_sopt2_clkoutsel[]     : Clkout;
-                sim_sopt2_fbsl            : FlexbusSecurity;
-                sim_sopt2_traceclksel     : TraceClockout;
-                sim_sopt2_usbregen        : UsbPhyRegulator;
-                sim_sopt2_ptd7pad         : PortDPad;
-                sim_sopt2_rmiisrc         : Rmiiclock
+   <for keys="  var                       : enable                  :  name"
+        values="sim_sopt2_clkoutsel[]     : true                    : Clkout;
+                sim_sopt2_fbsl            : enableGettersAndSetters : FlexbusSecurity;
+                sim_sopt2_traceclksel     : enableGettersAndSetters : TraceClockout;
+                sim_sopt2_usbregen        : enableGettersAndSetters : UsbPhyRegulator;
+                sim_sopt2_ptd7pad         : enableGettersAndSetters : PortDPad;
+                sim_sopt2_rmiisrc         : enableGettersAndSetters : Rmiiclock
         ">
-      <clockCodeTemplate variable="%(var)" codeGenCondition="enableGettersAndSetters"
+      <clockCodeTemplate variable="%(var)" codeGenCondition="%(enable)"
       ><![CDATA[
          \t/**
          \t * Set %description

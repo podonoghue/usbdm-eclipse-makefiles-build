@@ -4,6 +4,19 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   <choiceOption key="irq_enum" condition="=_irqCount>1"
+      valueFormat="%s"
+      hidden="true"
+      derived="true"
+      typeName="$(_Class)IrqNum"
+      description="$(_Class) Interrupt indices"
+      toolTip="Used to identify peripheral interrupt" >
+      <choice value="0"  enum="Ch0"     name="Periodic Interrupt Timer" />
+      <choice value="1"  enum="Ch1"     name="Periodic Interrupt Timer" />
+      <choice value="2"  enum="Ch2"     name="Periodic Interrupt Timer" />
+      <choice value="3"  enum="Ch3"     name="Periodic Interrupt Timer" />
+   </choiceOption>
+
    <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
@@ -25,7 +38,7 @@
    <!-- Defined in SIM -->
    <intOption key="NumChannels" locked="true" derived="true"
       hidden="true"
-      value="=/PIT_NumChannels"
+      value="=pit_channel_dim"
       description="Number of PIT channels" />
 
    <!-- Derived from SVD -->
@@ -89,7 +102,7 @@
       \t}
       \t\n
    ]]></template>
-   <template condition="=/PIT_NumChannels == _irqCount" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
+   <template condition="=pit_channel_dim == _irqCount" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t/**
       \t * Map channel number to corresponding IRQ number
       \t * This is needed as multiple channels may be handled by a single IRQ vector
@@ -104,7 +117,7 @@
       \t}
       \t\n
    ]]></template>
-   <template condition="=(_irqCount!=1) &amp;&amp; (/PIT_NumChannels&gt;_irqCount)" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
+   <template condition="=(_irqCount!=1) &amp;&amp; (pit_channel_dim&gt;_irqCount)" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t/**
       \t * Map channel number to corresponding IRQ number
       \t * This is needed as multiple channels may be handled by a single IRQ vector
@@ -256,6 +269,7 @@
          units="ticks"
          description="Reload value channel %(ch)"
          toolTip="Value loaded in timer register on roll-over"
+         value="0"
          min="0" max="0xFFFFFFFF" />
 
       <floatOption key="pit_period[%(ch)]" condition="pit_ldval_tsv_present"
@@ -703,7 +717,7 @@
       \t */
       \tPitInfo::CallbackFunction PitInfo::sCallbacks[] = {\n
    ]]></template>
-   <for keys="ch" dim="=/PIT_NumChannels" >
+   <for keys="ch" dim="=pit_channel_dim" >
       <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
          \t   \$(_Structname)BasicInfo::unhandledCallback,\n
       ]]></template>
@@ -1286,6 +1300,12 @@
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
+
+   <!-- ************* SIM configuration ****************** -->
+   <category name="Advanced" description="SIM configuration">
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+   </category>
+   <deleteVariable key="_scgc_clock"  mustExist="false" />
 
    <signals enabledBy="enablePeripheralSupport" />
 

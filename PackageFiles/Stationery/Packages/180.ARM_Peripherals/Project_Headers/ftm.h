@@ -785,7 +785,7 @@ public:
     */
    static void disable() {
 
-      disableNvicInterrupts();
+      Info::disableNvicInterrupts();
 
       if constexpr (Info::mapPinsOnEnable) {
          disableAllPins();

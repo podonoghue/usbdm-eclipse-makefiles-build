@@ -4,6 +4,17 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-IC Sound / Synchronous Audio Interface" >
 
+    <choiceOption key="irq_enum" condition="(@_irqCount>1)"
+       hidden="true"
+       description="IRQ entry"
+       toolTip="Select amongst interrupts associated with the peripheral"
+       typeName="$(_Class)IrqNum"
+       valueFormat="%s"
+       >
+       <choice name="Transmit" value="0" enum="Tx" />
+       <choice name="Receive"  value="1" enum="Rx" />
+    </choiceOption>
+
    <stringOption key="irq_pattern"        locked="true" value="^I2S%i_?(Rx|Tx)?$" hidden="true" />
    <stringOption key="irq_ClassHandler"   locked="true" value="$(_Class)::irqHandler&lt;$(_Class)IrqNum_$1&gt;" hidden="true" />
 
@@ -15,12 +26,6 @@
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
    <xi:include href="enablePeripheral.xml"  />
    <title />
-
-   <template namespace="usbdm" condition="=_irqCount&gt;0" ><![CDATA[
-      \tconstexpr $(_Class)IrqNum $(_Class)IrqNum_Tx = $(_Class)IrqNum_0;
-      \tconstexpr $(_Class)IrqNum $(_Class)IrqNum_Rx = $(_Class)IrqNum_1;
-      \t\n
-   ]]></template>
 
 <!--
     * General substitutions
@@ -384,7 +389,6 @@
       description="MSB First" >
       <choice name="LSB first"   value="0" enum="LsbFirst" />
       <choice name="MSB first"   value="1" enum="MsbFirst" />
-      value="0"
    </binaryOption >
 
    <binaryOption key="i2s_tcr4_fse" condition="i2s_tcr4_fse_present"
@@ -1250,18 +1254,18 @@
    ]]>
    </variableTemplate>
 
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="irqHandlingMethod" >
+   <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t/**
       \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
       \t *
       \t * @tparam channel Channel number
       \t */
-      \ttemplate<I2s0IrqNum channel>
+      \ttemplate<$(_Class)IrqNum channel>
       \tstatic void irqHandler() {
       \t
       \t   // Execute call-back
-      \t   Info::sCallbacks[channel]($(irq_call));
+      \t   sCallbacks[channel]($(irq_call));
       \t}
       \t\n
    ]]>
@@ -1804,9 +1808,10 @@
    <template codeGenCondition="irqHandlingMethod"
              condition="/$(_STRUCTNAME)/generateSharedIrqInfo" >   <![CDATA[
       \t   // Only set call-backs if feature enabled
-      \t   setCallback($(_Class)IrqNum_0, init.callbackFunction);
-      \t   setCallback($(_Class)IrqNum_1, init.callbackFunction);
-      \t   enableNvicInterrupts(init.irqlevel);
+      \t   setCallback($(_Class)IrqNum_Tx, init.callbackFunction);
+      \t   setCallback($(_Class)IrqNum_Rx,  init.callbackFunction);
+      \t   enableNvicInterrupts($(_Class)IrqNum_Tx, init.irqlevel);
+      \t   enableNvicInterrupts($(_Class)IrqNum_Rx,  init.irqlevel);
       \t\n
    ]]></template>
    <template codeGenCondition="enablePeripheralSupport" >
@@ -1879,9 +1884,10 @@
    ]]></template>
 
    <!-- ************* SIM configuration ****************** -->
-   <category name="Advanced" description="SIM configuration" >
-      <aliasOption key="/SIM/sim_scgc6_$(_name)"      locked="false" optional="true" />
+   <category name="Advanced" description="SIM configuration">
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
    </category>
+   <deleteVariable key="_scgc_clock"  mustExist="false" />
 
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 

@@ -272,6 +272,7 @@
    />
 
    <floatOption key="wdog_windowPeriod"
+      valueFormat="%s"
       enabledBy="wdog_stctrlh_winen&amp;&amp;wdog_stctrlh_wdogen"
       description="Watchdog Window"
       toolTip="Refresh of the watchdog may not be carried out before this interval has expired i.e.\n
@@ -786,8 +787,8 @@
    ]]></template>
    <template key="/$(_BASENAME)/InitMethod" discardRepeats="true"
              codeGenCondition="irqHandlingMethod" ><![CDATA[
-      \t   setCallback(init.callbackFunction);
-      \t   enableNvicInterrupts(init.irqlevel);
+      \t   Info::setCallback(init.callbackFunction);
+      \t   Info::enableNvicInterrupts(init.irqlevel);
       \t\n
    ]]></template>
    <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="secondsSupport&amp;&amp;fullCodeSupport" ><![CDATA[
@@ -821,7 +822,7 @@
       \t
       \t   // For some reason this must be done after above
       \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      enableNvicInterrupts(init.irqlevel);
+      \t      Info::enableNvicInterrupts(init.irqlevel);
       \t   }
       \t   return E_NO_ERROR;
       \t}\n\n
@@ -884,7 +885,15 @@
       \t\n
    ]]></template>
 
+   <!-- ************* SIM configuration ****************** -->
+   <stringOption key="xxx" value="=_scgc_clock" condition="_scgc_clock"  />
 
+   <category name="Advanced" description="SIM configuration" >
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <aliasOption key="/SIM/sim_scgc4_ewm" locked="false" optional="true" />
+   </category>
+   <deleteVariable key="_scgc_clock"  mustExist="false" />
+   
    <signals enabledBy="fullCodeSupport" locked="!/PCR/_present" />
 
 </peripheralPage>

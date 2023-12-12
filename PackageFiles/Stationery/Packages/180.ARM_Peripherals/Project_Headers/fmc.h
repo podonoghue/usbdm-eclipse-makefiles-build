@@ -25,6 +25,7 @@ namespace USBDM {
  * @brief Abstraction for Miscellaneous Control Module
  * @{
  */
+#if $(/FMC/enablePeripheralSupport:false) // /FMC/enablePeripheralSupport
 
 /**
  * Template class providing a base for Miscellaneous Control Module
@@ -188,6 +189,7 @@ template<class Info> FmcCallbackFunction FmcInterrupt_T<Info>::sCallback = FmcIn
 #endif
 
 $(/FMC/declarations: // No declarations found)
+#endif // /FMC/enablePeripheralSupport
 /**
  * End FMC_Group
  * @}

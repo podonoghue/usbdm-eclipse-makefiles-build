@@ -26,7 +26,7 @@ namespace USBDM {
  * @brief Abstraction for Flexible I/O
  * @{
  */
- 
+#if $(/FLEXIO/enablePeripheralSupport:false) // /FLEXIO/enablePeripheralSupport
 /**
  * Doze Enable
  * Controls disabling of FlexIO operation in Doze modes.
@@ -554,7 +554,7 @@ public:
       // Out of bounds value for function index
       static constexpr bool Test1 = (pin>=0) && (pin<(Info::numSignals));
       // Function is not currently mapped to a pin
-      static constexpr bool Test2 = !Test1 || (Info::info[pin].gpioBit != UNMAPPED_PCR);
+      static constexpr bool Test2 = !Test1 || (Info::info[pin].gpioBit != PinIndex::UNMAPPED_PCR);
       // Non-existent function and catch-all. (should be INVALID_PCR)
       static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[pin].gpioBit >= 0);
 
@@ -602,7 +602,7 @@ $(/FLEXIO/classInfo: // No class Info found)
          FlexioDebug       flexioDebug      = FlexioDebug_Disabled,
          FlexioFastAccess  flexioFastAccess = FlexioFastAccess_Disabled
    ) {
-      enable();
+      Info::enable();
       flexio->CTRL = flexioPower|flexioDebug|flexioFastAccess|FLEXIO_CTRL_FLEXEN(1);
    }
 
@@ -610,7 +610,7 @@ $(/FLEXIO/classInfo: // No class Info found)
     * Enable with default settings.
     */
    static void defaultConfigure() {
-      enable();
+      Info::enable();
    }
 
    /**
@@ -1475,6 +1475,7 @@ $(/FLEXIO/classInfo: // No class Info found)
 template<class Info> FLEXIOCallbackFunction FlexioBase_T<Info>::callback = FlexioBase_T<Info>::unhandledCallback;
 
 $(/FLEXIO/declarations: // No declarations found)
+#endif // /FLEXIO/enablePeripheralSupport
 /**
  * End FLEXIO_Group
  * @}

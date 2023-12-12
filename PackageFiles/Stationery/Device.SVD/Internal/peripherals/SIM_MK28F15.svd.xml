@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MK28F15
 -->
       <peripheral>
@@ -1958,7 +1958,7 @@ Devices using this peripheral:
                   <field derivedFrom="EWM" > <name>I2C0</name> <description>I2C0 Clock Gate Control</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>I2C1</name> <description>I2C1 Clock Gate Control</description> <bitOffset>7</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>USB0</name> <description>USB Clock Gate Control</description> <bitOffset>18</bitOffset> </field>
-                  <field derivedFrom="EWM" > <name>CMP0</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="EWM" > <name>CMP</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>VREF</name> <description>VREF Clock Gate Control</description> <bitOffset>20</bitOffset> </field>
                </fields>
             </register>
@@ -2046,27 +2046,10 @@ Devices using this peripheral:
                   <field derivedFrom="FTF" > <name>PIT</name> <description>PIT Clock Gate Control</description> <bitOffset>23</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>FTM0</name> <description>FTM0 Clock Gate Control</description> <bitOffset>24</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>FTM1</name> <description>FTM1 Clock Gate Control</description> <bitOffset>25</bitOffset> </field>
-                  <field derivedFrom="FTF" > <name>FTM2</name> <description>FTM2 Clock Gate Control</description> <bitOffset>26</bitOffset> </field>
+                  <!--field derivedFrom="FTF" > <name>FTM2</name> <description>FTM2 Clock Gate Control</description> <bitOffset>26</bitOffset> </field -->
                   <field derivedFrom="FTF" > <name>ADC0</name> <description>ADC0 Clock Gate Control</description> <bitOffset>27</bitOffset> </field>
-                  <field>
-                     <name>RTC</name>
-                     <description>RTC Access Control</description>
-                     <bitOffset>29</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Access and interrupts disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Access and interrupts enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field derivedFrom="FTF" > <name>DAC0</name> <description>DAC0 Clock Gate Control</description> <bitOffset>31</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>RTC</name> <description>RTC Clock Gate Control</description> <bitOffset>29</bitOffset> </field>
+                  <!-- field derivedFrom="FTF" > <name>DAC0</name> <description>DAC0 Clock Gate Control</description> <bitOffset>31</bitOffset> </field -->
                </fields>
             </register>
             <register>

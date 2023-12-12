@@ -4,6 +4,11 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="General Purpose Input/Output">
 
+   <!-- IRQ vector patterns if none specified -->
+   <constant key="irq_pattern"      type="String"  value="&quot;^PORT$(_instance)$&quot;"        />
+   <constant key="irq_ClassHandler" type="String"  value="&quot;PcrBase_$(_instance)::irqHandler&quot;" />
+
+
    <constant key="suppressInstance"         type="Boolean"  value="true"         />
    <constant key="suppressIrqArray"         type="Boolean" value="true"                />
    <constant key="irq_parameters"           type="String"  value="&quot;&quot;"        />
@@ -50,6 +55,10 @@
     * %register[index]                Register associated with variable e.g. adc->APCTL1
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
 
    <if condition="!/SYSTEM/$pcrPattern">
       <!--
@@ -117,6 +126,63 @@
          \t\n
    ]]></template>
 
+   <template key="/PORT/PinIndex" discardRepeats="true" >
+   <![CDATA[
+      /**
+       * Port index
+       *
+       * Global indices for ports
+       */
+      enum class PortIndex : int16_t {\n
+   ]]></template>
+   <for keys=   "Name : portIndex"
+        values= "  A   :  0;
+                   B   :  1;
+                   C   :  2;
+                   D   :  3;
+                   E   :  4;
+                   F   :  5;
+                   G   :  6;
+                   H   :  7;
+                   I   :  8" >
+
+      <template key="/PORT/PinIndex" discardRepeats="true" condition="/GPIO%(Name)/_present"
+      ><![CDATA[
+         \tPort%(Name) = %(portIndex),\n
+      ]]></template>
+   </for>
+   <template key="/PORT/PinIndex" discardRepeats="true" >
+      <![CDATA[
+         };
+         \t\n
+   ]]></template>
+
+   <template key="/PORT/PinIndex" discardRepeats="true" >
+   <![CDATA[
+      \t/**
+      \t * Map PinIndex to PortIndex e.g. PinIndex::PTA3 => PortIndex::PortA
+      \t *
+      \t * @param pinIndex
+      \t *
+      \t * @return portIndex
+      \t */
+      \tconstexpr PortIndex mapPinToPort(PinIndex pinIndex) {
+      \t   return PortIndex(int(pinIndex)/32);
+	   \t}
+      \t
+      \t/**
+      \t * Map PortIndex to base PinIndex e.g. PortIndex::PortA => PinIndex::PTA0 
+      \t *
+      \t * @param portIndex
+      \t *
+      \t * @return pinIndex
+      \t */
+      \tconstexpr PinIndex mapPortToPin(PortIndex pinIndex) {
+      \t   return PinIndex(int(pinIndex)*32);
+      \t}
+      \t\n
+   ]]></template>
+   
    <template key="/GPIO/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
@@ -152,32 +218,29 @@
    <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
-      \t * Get PORT from pinIndex
+      \t * Get PORT from portIndex
       \t *
-      \t * @param pinIndex Pin index e.g. PTB3. Used to determine return value
+      \t * @param portIndex Port index e.g. PortIndex::PortA. Used to determine return value
       \t *
       \t * @return Pointer to relevant PORT
       \t */
-      \tstatic constexpr uint32_t getPortAddress(PinIndex pinIndex) {
-      \t   if (pinIndex < PinIndex::MIN_PIN_INDEX) {
-      \t      // INVALID_PCR, UNMAPPED_PCR, FIXED_NO_PCR
-      \t      return 0;
-      \t   }\n
+      \tstatic constexpr uint32_t getPortAddress(PortIndex portIndex) {
+      \t\n
    ]]></template>
    <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
 
-      <template key="/PORT/AccessFunctions"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+      <template key="/PORT/AccessFunctions"  discardRepeats="true"
          condition="/GPIO%(Name)/_present"
       ><![CDATA[
-         \t   if (pinIndex <= PinIndex::PT%(Name)31) {
+         \t   if (portIndex <= PortIndex::Port%(Name)) {
          \t      return PORT%(Name)_BasePtr;
          \t   }\n
       ]]></template>
    </for>
    <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
-      \t    static_assert("Illegal Port");
-      \t    return 0;
+      \t   static_assert("Illegal Port");
+      \t   return 0;
       \t}
       \t\n
    ]]></template>
@@ -224,29 +287,28 @@
       \t *
       \t * @return IRQ number
       \t */
-      \tstatic constexpr IRQn_Type getIrqNum(PinIndex pinIndex) {
-      \t   if (pinIndex > PinIndex::MIN_PIN_INDEX) {\n
+      \tstatic constexpr IRQn_Type getIrqNum(PortIndex portIndex) {
+      \t\n
    ]]></template>
    <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
-      <template key="/PORT/AccessFunctions"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+      <template key="/PORT/AccessFunctions"  discardRepeats="true"
          condition="/GPIO%(Name)/_present&amp;&amp;/GPIO%(Name)/_irqCount"
       ><![CDATA[
-         \t      if (pinIndex <= PinIndex::PT%(Name)31) {
-         \t         constexpr IRQn_Type PortIrqs[] = PORT%(Name)_IRQS;
-         \t         return PortIrqs[0];
-         \t      }\n
+         \t   if (portIndex <= PortIndex::Port%(Name)) {
+         \t      constexpr IRQn_Type PortIrqs[] = PORT%(Name)_IRQS;
+         \t      return PortIrqs[0];
+         \t   }\n
       ]]></template>
-      <template key="/PORT/AccessFunctions"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+      <template key="/PORT/AccessFunctions"  discardRepeats="true"
          condition="/GPIO%(Name)/_present&amp;&amp;!/GPIO%(Name)/_irqCount"
       ><![CDATA[
-         \t      if (pinIndex <= PinIndex::PT%(Name)31) {
+         \t   if (portIndex <= PortIndex::Port%(Name)) {
          \t         static_assert("Port does not support interrupts");
          \t      }\n
       ]]></template>
    </for>
    <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
-      \t   }
       \t   // INVALID_PCR, UNMAPPED_PCR, FIXED_NO_PCR
       \t   static_assert("Illegal Port");
       \t   return IRQn_Type(0);
@@ -268,7 +330,7 @@
    ]]></template>
    <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
 
-      <template key="/PORT/AccessFunctions"  discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+      <template key="/PORT/AccessFunctions"  discardRepeats="true"
          condition="/GPIO%(Name)/_present"
       ><![CDATA[
          \t      if (pinIndex <= PinIndex::PT%(Name)31) {
@@ -283,24 +345,95 @@
       \t\n
    ]]></template>
 
+   <!--   ========== class $(_Structname)BasicInfo =============================== -->
 
-   <!-- irqOption key="irqHandlingMethod"
-      typeName="CallbackFunction"
-      description="Peripheral interrupt handling"
-      toolTip="If enabled, the handler may be set using the setCallback() function or\n
-         by overriding the interrupt handler method in the peripheral class\n
-         If not enabled, then interrupt handlers may be installed by naming them \n
-         (see weak names used in vector table)."
-      pattern=".*PORT%i.*"
-      classHandler="%c%i::irqHandler" / >
+   <template where="basicInfo" ><![CDATA[
+      class $(_Structname)BasicInfo {
 
-   <choiceOption key="irqLevel"
-      enabledBy="irqHandlingMethod"
-      description="IRQ level for this peripheral"
-      toolTip="Priority level used to configure the NVIC"
-      valueFormat="%s"
-      derivedFrom="/PCR/nvic_irqLevel" >
-   </choiceOption -->
+      public:\n
+   ]]></template>
+
+   <!--   ========== Interrupt handling =============================== -->
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="irqHandlingMethod"
+   ><![CDATA[
+       \t//! Common class based callback code has been generated for this class of peripheral
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
+       \t\n
+   ]]></variableTemplate>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <![CDATA[
+      \t/**
+      \t * Type for Universal Asynchronous Receiver/Transmitter call back function.
+      \t */
+      \ttypedef void (*CallbackFunction)($(irq_parameters));
+      \t
+      \t/**
+      \t * Callback to catch unhandled interrupt
+      \t */
+      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/** Callback function for Universal Asynchronous Receiver/Transmitter */
+      \tstatic CallbackFunction sCallback;
+      \t
+      \t/**
+      \t * Universal Asynchronous Receiver/Transmitter interrupt handler
+      \t * Passes control to call-back function
+      \t */
+      \tstatic void irqHandler() {
+      \t
+      \t   // Execute call-back
+      \t   sCallback($(irq_call));
+      \t}
+      \t
+      \t/**
+      \t * Set Universal Asynchronous Receiver/Transmitter callback function.
+      \t *
+      \t * @param      $(_basename)Callback Callback function to execute on interrupt
+      \t *                             Use nullptr to remove callback.
+      \t */
+      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
+      \t   if ($(_basename)Callback == nullptr) {
+      \t      $(_basename)Callback = (CallbackFunction)unhandledCallback;
+      \t   }
+      \t   // Allow either no handler set yet or removing handler
+      \t   usbdm_assert(
+      \t         ((void*)sCallback == (void*)unhandledCallback) ||
+      \t         ((void*)$(_basename)Callback == (void*)unhandledCallback),
+      \t         "Handler already set");
+      \t   sCallback = $(_basename)Callback;
+      \t}
+      \t
+      \t\n
+   ]]>
+   </template>
+
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/**
+      \t * Callback function for Universal Asynchronous Receiver/Transmitter
+      \t */
+      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = (CallbackFunction)$(_Class)Info::unhandledCallback;
+      \t
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" >
+   <![CDATA[
+      }; // class $(_Structname)BasicInfo
+      \t\n
+   ]]>
+   </template>
 
    <template namespace="usbdm" condition="false" ><![CDATA[
       /* gpio_def.xml */
@@ -374,7 +507,8 @@
    \t */
    \ttemplate<int bitNum, Polarity polarity=ActiveHigh> class $(_Class) :
    \t      public Gpio_T<Gpio$(_instance)Info::info[bitNum].pcrValue, PcrBase::pinIndexOf(PinIndex::PT$(_instance)0,bitNum), polarity> {};
-   \ttypedef PcrBase_T<PinIndex::PT$(_instance)0> Port$(_instance);
+   \ttypedef PcrBase_T<mapPinToPort(PinIndex::PT$(_instance)0)> Port$(_instance);
+   \tusing PcrBase_$(_instance) = PcrBase_T<mapPinToPort(PinIndex::PT$(_instance)0)>;
 
    \t/**
    \t * @brief Convenience template for $(_Class) fields. See @ref GpioField_T

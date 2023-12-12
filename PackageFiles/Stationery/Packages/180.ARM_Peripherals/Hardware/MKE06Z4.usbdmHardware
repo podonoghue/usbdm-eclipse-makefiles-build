@@ -525,6 +525,51 @@
          <param type="StringVariable"         name="_irqNums"                       value=""                 key="/GPIOA/_irqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/GPIOA/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/GPIOA/_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_present"             value="true"             key="/GPIOA/gpio_hdrve_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_ptb4_present"        value="true"             key="/GPIOA/gpio_hdrve_ptb4_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_ptb5_present"        value="true"             key="/GPIOA/gpio_hdrve_ptb5_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_ptd0_present"        value="true"             key="/GPIOA/gpio_hdrve_ptd0_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_ptd1_present"        value="true"             key="/GPIOA/gpio_hdrve_ptd1_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_pte0_present"        value="true"             key="/GPIOA/gpio_hdrve_pte0_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_pte1_present"        value="true"             key="/GPIOA/gpio_hdrve_pte1_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_pth0_present"        value="true"             key="/GPIOA/gpio_hdrve_pth0_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_pth1_present"        value="true"             key="/GPIOA/gpio_hdrve_pth1_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_flta_present"       value="true"             key="/GPIOA/gpio_ioflt0_flta_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltb_present"       value="true"             key="/GPIOA/gpio_ioflt0_fltb_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltc_present"       value="true"             key="/GPIOA/gpio_ioflt0_fltc_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltd_present"       value="true"             key="/GPIOA/gpio_ioflt0_fltd_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltdiv1_present"    value="true"             key="/GPIOA/gpio_ioflt0_fltdiv1_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltdiv2_present"    value="true"             key="/GPIOA/gpio_ioflt0_fltdiv2_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltdiv3_present"    value="true"             key="/GPIOA/gpio_ioflt0_fltdiv3_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_flte_present"       value="true"             key="/GPIOA/gpio_ioflt0_flte_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltf_present"       value="true"             key="/GPIOA/gpio_ioflt0_fltf_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltg_present"       value="true"             key="/GPIOA/gpio_ioflt0_fltg_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_flth_present"       value="true"             key="/GPIOA/gpio_ioflt0_flth_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltkbi0_present"    value="true"             key="/GPIOA/gpio_ioflt0_fltkbi0_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltkbi1_present"    value="true"             key="/GPIOA/gpio_ioflt0_fltkbi1_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltnmi_present"     value="true"             key="/GPIOA/gpio_ioflt0_fltnmi_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltrst_present"     value="true"             key="/GPIOA/gpio_ioflt0_fltrst_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_present"            value="true"             key="/GPIOA/gpio_ioflt0_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_fltftm0_present"    value="true"             key="/GPIOA/gpio_ioflt1_fltftm0_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_fltftm1_present"    value="true"             key="/GPIOA/gpio_ioflt1_fltftm1_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_flti2c0_present"    value="true"             key="/GPIOA/gpio_ioflt1_flti2c0_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_flti2c1_present"    value="true"             key="/GPIOA/gpio_ioflt1_flti2c1_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_flti_present"       value="true"             key="/GPIOA/gpio_ioflt1_flti_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_fltirq_present"     value="true"             key="/GPIOA/gpio_ioflt1_fltirq_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_fltpwt_present"     value="true"             key="/GPIOA/gpio_ioflt1_fltpwt_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_present"            value="true"             key="/GPIOA/gpio_ioflt1_present" />
+         <param type="BooleanVariable"        name="gpio_pue0_present"              value="true"             key="/GPIOA/gpio_pue0_present" />
+         <param type="BooleanVariable"        name="gpio_pue0_ptape_present"        value="true"             key="/GPIOA/gpio_pue0_ptape_present" />
+         <param type="BooleanVariable"        name="gpio_pue0_ptbpe_present"        value="true"             key="/GPIOA/gpio_pue0_ptbpe_present" />
+         <param type="BooleanVariable"        name="gpio_pue0_ptcpe_present"        value="true"             key="/GPIOA/gpio_pue0_ptcpe_present" />
+         <param type="BooleanVariable"        name="gpio_pue0_ptdpe_present"        value="true"             key="/GPIOA/gpio_pue0_ptdpe_present" />
+         <param type="BooleanVariable"        name="gpio_pue1_present"              value="true"             key="/GPIOA/gpio_pue1_present" />
+         <param type="BooleanVariable"        name="gpio_pue1_ptepe_present"        value="true"             key="/GPIOA/gpio_pue1_ptepe_present" />
+         <param type="BooleanVariable"        name="gpio_pue1_ptfpe_present"        value="true"             key="/GPIOA/gpio_pue1_ptfpe_present" />
+         <param type="BooleanVariable"        name="gpio_pue1_ptgpe_present"        value="true"             key="/GPIOA/gpio_pue1_ptgpe_present" />
+         <param type="BooleanVariable"        name="gpio_pue1_pthpe_present"        value="true"             key="/GPIOA/gpio_pue1_pthpe_present" />
+         <param type="BooleanVariable"        name="gpio_pue2_present"              value="true"             key="/GPIOA/gpio_pue2_present" />
+         <param type="BooleanVariable"        name="gpio_pue2_ptipe_present"        value="true"             key="/GPIOA/gpio_pue2_ptipe_present" />
          <param type="StringVariable"         name="structName"                     value="GPIO"             key="/GPIOA/structName" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="B"        instanceList="GPIOA;GPIOB;GPIOC" version="fgpiob_mke">
@@ -533,6 +578,51 @@
          <param type="StringVariable"         name="_irqNums"                       value=""                 key="/GPIOB/_irqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/GPIOB/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/GPIOB/_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_present"             value="true"             key="/GPIOB/gpio_hdrve_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_ptb4_present"        value="true"             key="/GPIOB/gpio_hdrve_ptb4_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_ptb5_present"        value="true"             key="/GPIOB/gpio_hdrve_ptb5_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_ptd0_present"        value="true"             key="/GPIOB/gpio_hdrve_ptd0_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_ptd1_present"        value="true"             key="/GPIOB/gpio_hdrve_ptd1_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_pte0_present"        value="true"             key="/GPIOB/gpio_hdrve_pte0_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_pte1_present"        value="true"             key="/GPIOB/gpio_hdrve_pte1_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_pth0_present"        value="true"             key="/GPIOB/gpio_hdrve_pth0_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_pth1_present"        value="true"             key="/GPIOB/gpio_hdrve_pth1_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_flta_present"       value="true"             key="/GPIOB/gpio_ioflt0_flta_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltb_present"       value="true"             key="/GPIOB/gpio_ioflt0_fltb_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltc_present"       value="true"             key="/GPIOB/gpio_ioflt0_fltc_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltd_present"       value="true"             key="/GPIOB/gpio_ioflt0_fltd_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltdiv1_present"    value="true"             key="/GPIOB/gpio_ioflt0_fltdiv1_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltdiv2_present"    value="true"             key="/GPIOB/gpio_ioflt0_fltdiv2_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltdiv3_present"    value="true"             key="/GPIOB/gpio_ioflt0_fltdiv3_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_flte_present"       value="true"             key="/GPIOB/gpio_ioflt0_flte_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltf_present"       value="true"             key="/GPIOB/gpio_ioflt0_fltf_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltg_present"       value="true"             key="/GPIOB/gpio_ioflt0_fltg_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_flth_present"       value="true"             key="/GPIOB/gpio_ioflt0_flth_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltkbi0_present"    value="true"             key="/GPIOB/gpio_ioflt0_fltkbi0_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltkbi1_present"    value="true"             key="/GPIOB/gpio_ioflt0_fltkbi1_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltnmi_present"     value="true"             key="/GPIOB/gpio_ioflt0_fltnmi_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltrst_present"     value="true"             key="/GPIOB/gpio_ioflt0_fltrst_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_present"            value="true"             key="/GPIOB/gpio_ioflt0_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_fltftm0_present"    value="true"             key="/GPIOB/gpio_ioflt1_fltftm0_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_fltftm1_present"    value="true"             key="/GPIOB/gpio_ioflt1_fltftm1_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_flti2c0_present"    value="true"             key="/GPIOB/gpio_ioflt1_flti2c0_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_flti2c1_present"    value="true"             key="/GPIOB/gpio_ioflt1_flti2c1_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_flti_present"       value="true"             key="/GPIOB/gpio_ioflt1_flti_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_fltirq_present"     value="true"             key="/GPIOB/gpio_ioflt1_fltirq_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_fltpwt_present"     value="true"             key="/GPIOB/gpio_ioflt1_fltpwt_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_present"            value="true"             key="/GPIOB/gpio_ioflt1_present" />
+         <param type="BooleanVariable"        name="gpio_pue0_present"              value="true"             key="/GPIOB/gpio_pue0_present" />
+         <param type="BooleanVariable"        name="gpio_pue0_ptape_present"        value="true"             key="/GPIOB/gpio_pue0_ptape_present" />
+         <param type="BooleanVariable"        name="gpio_pue0_ptbpe_present"        value="true"             key="/GPIOB/gpio_pue0_ptbpe_present" />
+         <param type="BooleanVariable"        name="gpio_pue0_ptcpe_present"        value="true"             key="/GPIOB/gpio_pue0_ptcpe_present" />
+         <param type="BooleanVariable"        name="gpio_pue0_ptdpe_present"        value="true"             key="/GPIOB/gpio_pue0_ptdpe_present" />
+         <param type="BooleanVariable"        name="gpio_pue1_present"              value="true"             key="/GPIOB/gpio_pue1_present" />
+         <param type="BooleanVariable"        name="gpio_pue1_ptepe_present"        value="true"             key="/GPIOB/gpio_pue1_ptepe_present" />
+         <param type="BooleanVariable"        name="gpio_pue1_ptfpe_present"        value="true"             key="/GPIOB/gpio_pue1_ptfpe_present" />
+         <param type="BooleanVariable"        name="gpio_pue1_ptgpe_present"        value="true"             key="/GPIOB/gpio_pue1_ptgpe_present" />
+         <param type="BooleanVariable"        name="gpio_pue1_pthpe_present"        value="true"             key="/GPIOB/gpio_pue1_pthpe_present" />
+         <param type="BooleanVariable"        name="gpio_pue2_present"              value="true"             key="/GPIOB/gpio_pue2_present" />
+         <param type="BooleanVariable"        name="gpio_pue2_ptipe_present"        value="true"             key="/GPIOB/gpio_pue2_ptipe_present" />
          <param type="StringVariable"         name="structName"                     value="FGPIOB"           key="/GPIOB/structName" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="C"        instanceList="GPIOA;GPIOB;GPIOC" version="fgpioc_mke">
@@ -541,6 +631,51 @@
          <param type="StringVariable"         name="_irqNums"                       value=""                 key="/GPIOC/_irqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/GPIOC/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/GPIOC/_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_present"             value="true"             key="/GPIOC/gpio_hdrve_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_ptb4_present"        value="true"             key="/GPIOC/gpio_hdrve_ptb4_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_ptb5_present"        value="true"             key="/GPIOC/gpio_hdrve_ptb5_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_ptd0_present"        value="true"             key="/GPIOC/gpio_hdrve_ptd0_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_ptd1_present"        value="true"             key="/GPIOC/gpio_hdrve_ptd1_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_pte0_present"        value="true"             key="/GPIOC/gpio_hdrve_pte0_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_pte1_present"        value="true"             key="/GPIOC/gpio_hdrve_pte1_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_pth0_present"        value="true"             key="/GPIOC/gpio_hdrve_pth0_present" />
+         <param type="BooleanVariable"        name="gpio_hdrve_pth1_present"        value="true"             key="/GPIOC/gpio_hdrve_pth1_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_flta_present"       value="true"             key="/GPIOC/gpio_ioflt0_flta_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltb_present"       value="true"             key="/GPIOC/gpio_ioflt0_fltb_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltc_present"       value="true"             key="/GPIOC/gpio_ioflt0_fltc_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltd_present"       value="true"             key="/GPIOC/gpio_ioflt0_fltd_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltdiv1_present"    value="true"             key="/GPIOC/gpio_ioflt0_fltdiv1_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltdiv2_present"    value="true"             key="/GPIOC/gpio_ioflt0_fltdiv2_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltdiv3_present"    value="true"             key="/GPIOC/gpio_ioflt0_fltdiv3_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_flte_present"       value="true"             key="/GPIOC/gpio_ioflt0_flte_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltf_present"       value="true"             key="/GPIOC/gpio_ioflt0_fltf_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltg_present"       value="true"             key="/GPIOC/gpio_ioflt0_fltg_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_flth_present"       value="true"             key="/GPIOC/gpio_ioflt0_flth_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltkbi0_present"    value="true"             key="/GPIOC/gpio_ioflt0_fltkbi0_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltkbi1_present"    value="true"             key="/GPIOC/gpio_ioflt0_fltkbi1_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltnmi_present"     value="true"             key="/GPIOC/gpio_ioflt0_fltnmi_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_fltrst_present"     value="true"             key="/GPIOC/gpio_ioflt0_fltrst_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt0_present"            value="true"             key="/GPIOC/gpio_ioflt0_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_fltftm0_present"    value="true"             key="/GPIOC/gpio_ioflt1_fltftm0_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_fltftm1_present"    value="true"             key="/GPIOC/gpio_ioflt1_fltftm1_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_flti2c0_present"    value="true"             key="/GPIOC/gpio_ioflt1_flti2c0_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_flti2c1_present"    value="true"             key="/GPIOC/gpio_ioflt1_flti2c1_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_flti_present"       value="true"             key="/GPIOC/gpio_ioflt1_flti_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_fltirq_present"     value="true"             key="/GPIOC/gpio_ioflt1_fltirq_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_fltpwt_present"     value="true"             key="/GPIOC/gpio_ioflt1_fltpwt_present" />
+         <param type="BooleanVariable"        name="gpio_ioflt1_present"            value="true"             key="/GPIOC/gpio_ioflt1_present" />
+         <param type="BooleanVariable"        name="gpio_pue0_present"              value="true"             key="/GPIOC/gpio_pue0_present" />
+         <param type="BooleanVariable"        name="gpio_pue0_ptape_present"        value="true"             key="/GPIOC/gpio_pue0_ptape_present" />
+         <param type="BooleanVariable"        name="gpio_pue0_ptbpe_present"        value="true"             key="/GPIOC/gpio_pue0_ptbpe_present" />
+         <param type="BooleanVariable"        name="gpio_pue0_ptcpe_present"        value="true"             key="/GPIOC/gpio_pue0_ptcpe_present" />
+         <param type="BooleanVariable"        name="gpio_pue0_ptdpe_present"        value="true"             key="/GPIOC/gpio_pue0_ptdpe_present" />
+         <param type="BooleanVariable"        name="gpio_pue1_present"              value="true"             key="/GPIOC/gpio_pue1_present" />
+         <param type="BooleanVariable"        name="gpio_pue1_ptepe_present"        value="true"             key="/GPIOC/gpio_pue1_ptepe_present" />
+         <param type="BooleanVariable"        name="gpio_pue1_ptfpe_present"        value="true"             key="/GPIOC/gpio_pue1_ptfpe_present" />
+         <param type="BooleanVariable"        name="gpio_pue1_ptgpe_present"        value="true"             key="/GPIOC/gpio_pue1_ptgpe_present" />
+         <param type="BooleanVariable"        name="gpio_pue1_pthpe_present"        value="true"             key="/GPIOC/gpio_pue1_pthpe_present" />
+         <param type="BooleanVariable"        name="gpio_pue2_present"              value="true"             key="/GPIOC/gpio_pue2_present" />
+         <param type="BooleanVariable"        name="gpio_pue2_ptipe_present"        value="true"             key="/GPIOC/gpio_pue2_ptipe_present" />
          <param type="StringVariable"         name="structName"                     value="FGPIOC"           key="/GPIOC/structName" />
       </peripheral>
       <peripheral baseName="I2C"      instance="0"        instanceList="I2C0;I2C1" version="i2c0_mke">
@@ -825,7 +960,7 @@
          <param type="StringVariable"         name="structName"                     value="PMC"              key="/PMC/structName" />
       </peripheral>
       <peripheral baseName="PORT"     instance=""         instanceList="PORT" version="port_mke06">
-         <handler class="net.sourceforge.usbdm.deviceEditor.information.WriterForPort" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPort" />
          <param type="StringVariable"         name="_instanceList"                  value="PORT"             key="/PORT/_instanceList" />
          <param type="StringVariable"         name="_irqNums"                       value=""                 key="/PORT/_irqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/PORT/_present" />
@@ -928,6 +1063,23 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
          <param type="StringVariable"         name="_instanceList"                  value="SIM"              key="/SIM/_instanceList" />
          <param type="StringVariable"         name="_irqNums"                       value=""                 key="/SIM/_irqNums" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;ACMP0&quot;" key="/ACMP0/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;ACMP1&quot;" key="/ACMP1/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;ADC0&quot;" key="/ADC0/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;CRC&quot;" key="/CRC/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;FLASH&quot;" key="/FLASH/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;FTM0&quot;" key="/FTM0/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;FTM1&quot;" key="/FTM1/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;FTM2&quot;" key="/FTM2/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;I2C0&quot;" key="/I2C0/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;I2C1&quot;" key="/I2C1/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;IRQ&quot;" key="/IRQ/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;KBI0&quot;" key="/KBI0/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;KBI1&quot;" key="/KBI1/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;MSCAN&quot;" key="/MSCAN/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;PIT&quot;" key="/PIT/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;PWT&quot;" key="/PWT/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;RTC&quot;" key="/RTC/_clockMask" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/SIM/_present" />
          <param type="BooleanVariable"        name="sim_clkdiv_outdiv1_present"     value="true"             key="/SIM/sim_clkdiv_outdiv1_present" />
          <param type="BooleanVariable"        name="sim_clkdiv_outdiv2_present"     value="true"             key="/SIM/sim_clkdiv_outdiv2_present" />
@@ -1024,6 +1176,12 @@
          <param type="BooleanVariable"        name="sim_uuidmh_present"             value="true"             key="/SIM/sim_uuidmh_present" />
          <param type="BooleanVariable"        name="sim_uuidml_present"             value="true"             key="/SIM/sim_uuidml_present" />
          <param type="StringVariable"         name="structName"                     value="SIM"              key="/SIM/structName" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;SPI0&quot;" key="/SPI0/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;SPI1&quot;" key="/SPI1/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;SWD&quot;" key="/SWD/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;UART0&quot;" key="/UART0/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;UART1&quot;" key="/UART1/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC&quot;,&quot;UART2&quot;" key="/UART2/_clockMask" />
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        instanceList="SPI0;SPI1" version="spi0_mke_8bit">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />

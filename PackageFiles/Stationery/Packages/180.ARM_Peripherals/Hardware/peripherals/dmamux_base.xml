@@ -94,9 +94,21 @@
          />
       </choiceOption>
 
-      <choiceOption key="dmamux_chcfg_source[%(ch)]" condition="dmamux_chcfg_source_present"
+      <choiceOption key="dmamux_chcfg_source[%(ch)]" condition="/DMAMUX0/dmamux_chcfg_src"
          enabledBy="dmamux_chcfg_mode[%(ch)]>0"
          derivedFrom="/DMAMUX0/dmamux_chcfg_src"
+         >
+      </choiceOption>
+
+      <choiceOption key="dmamux_chcfg_source[%(ch)]" condition="/DMAMUX0/dmamux_chcfg_src_low&amp;&amp;(%(ch)&lt;16)"
+         enabledBy="dmamux_chcfg_mode[%(ch)]>0"
+         derivedFrom="/DMAMUX0/dmamux_chcfg_src_low"
+         >
+      </choiceOption>
+
+      <choiceOption key="dmamux_chcfg_source[%(ch)]" condition="/DMAMUX0/dmamux_chcfg_src_high&amp;&amp;(%(ch)&gt;=16)"
+         enabledBy="dmamux_chcfg_mode[%(ch)]>0"
+         derivedFrom="/DMAMUX0/dmamux_chcfg_src_high"
          >
       </choiceOption>
    </for>
@@ -412,8 +424,8 @@
 
    <!-- ************* SIM configuration ****************** -->
    <category name="Advanced" description="SIM configuration">
-      <aliasOption key="/SIM/sim_scgc6_$(_name)"      locked="false" optional="true" />
-      <aliasOption key="/SIM/sim_scgc6_$(_basename)"  locked="false" optional="true" />
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
    </category>
+   <deleteVariable key="_scgc_clock"  mustExist="false" />
 
 </peripheralPage>

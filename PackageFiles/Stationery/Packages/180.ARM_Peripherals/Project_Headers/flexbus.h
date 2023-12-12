@@ -25,6 +25,7 @@ namespace USBDM {
  * @brief Abstraction for Flexbus - External Bus Interface
  * @{
  */
+#if $(/FLEXBUS/enablePeripheralSupport:false) // /FLEXIO/enablePeripheralSupport
 
 /**
  * Indices for FLEXBUS select regions
@@ -454,6 +455,7 @@ $(/FLEXBUS/classInfo: // No class Info found)
 };
 
 $(/FLEXBUS/declarations: // No declarations found)
+#endif // /FLEXIO/enablePeripheralSupport
 /**
  * End FLEXBUS_Group
  * @}

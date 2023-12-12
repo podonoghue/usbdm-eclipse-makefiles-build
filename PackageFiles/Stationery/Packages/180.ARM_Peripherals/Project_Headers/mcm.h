@@ -25,7 +25,7 @@ namespace USBDM {
  * @brief Abstraction for Miscellaneous Control Module
  * @{
  */
-
+#if $(/MCM/enablePeripheralSupport:false) // /MCM/enablePeripheralSupport
 /**
  * Template class providing a base for Miscellaneous Control Module
  */
@@ -120,6 +120,7 @@ $(/MCM/DefaultFloatingPointIrqInitValue: // /MCM/DefaultFloatingPointIrqInitValu
 };
 
 $(/MCM/declarations: // No declarations found)
+#endif // /MCM/enablePeripheralSupport
 /**
  * End MCM_Group
  * @}

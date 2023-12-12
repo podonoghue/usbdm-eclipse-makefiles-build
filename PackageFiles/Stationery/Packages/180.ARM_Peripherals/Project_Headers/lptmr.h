@@ -28,6 +28,7 @@ namespace USBDM {
  * @brief Abstraction for Low Power Timer
  * @{
  */
+#if $(/LPTMR/enablePeripheralSupport:false) // /LPTMR/enablePeripheralSupport
 
 #ifdef PCC_PCC_LPTMR0_CGC_MASK
 /**
@@ -351,7 +352,7 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
       uint32_t prescalerValue=0;
       while (prescalerValue<=16) {
          float    clockFrequency = inputClock/prescaleFactor;
-         uint32_t mod   = rintf(duration*clockFrequency)-1;
+         uint32_t mod   = rintf(float(duration*clockFrequency))-1;
          if (mod < Info::minimumResolution) {
             // Too short a period for reasonable resolution
             return setAndCheckErrorCode(E_TOO_SMALL);
@@ -475,6 +476,7 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
 template<class Info> typename Info::CallbackFunction LptmrBase_T<Info>::sCallback = LptmrBase_T<Info>::unhandledCallback;
 
 $(/LPTMR/declarations: // No declarations found)
+#endif // /LPTMR/enablePeripheralSupport
 /**
  * End LPTMR_Group
  * @}

@@ -31,83 +31,84 @@
    <constant key="_debugcode" type="Boolean" value="false" />
 
    <title description="General Settings" toolTip="" />
+   
+   <!--
+      Generates:
+         enablePeripheralSupport
+         /$(_STRUCTNAME)/generateSharedInfo    = OR of enablePeripheralSupport's' using _STRUCTNAME
+         /$(_BASENAME)/enablePeripheralSupport = OR of all enablePeripheralSupport's'
+   -->
 
-   <if condition="!enablePeripheralSupport" >
-      <!--
-         Generates:
-            enablePeripheralSupport
-            /$(_STRUCTNAME)/generateSharedInfo    = OR of enablePeripheralSupport's' using _STRUCTNAME
-            /$(_BASENAME)/enablePeripheralSupport = OR of all enablePeripheralSupport's'
-      -->
+   <!-- Enable for this peripheral -->
+   <binaryOption key="enablePeripheralSupport" condition="!enablePeripheralSupport" 
+      hidden="true"
+      description="Enable peripheral support"
+      toolTip="Even if disabled, some code may still be generated but will \n
+               be removed by linker if not used">
+      <choice value="false" name="Minimal code for $(_NAME)"   isDefault="!@isGeneratedByDefault" />
+      <choice value="true"  name="Generate code for $(_NAME)"  isDefault="@isGeneratedByDefault" />
+   </binaryOption>
 
-      <!-- Enable for this peripheral -->
-      <binaryOption key="enablePeripheralSupport"
-         description="Enable peripheral support"
-         toolTip="Even if disabled, some code may still be generated but will \n
-                  be removed by linker if not used">
-         <choice value="false" name="Minimal code for $(_NAME)"   isDefault="!@isGeneratedByDefault" />
-         <choice value="true"  name="Generate code for $(_NAME)"  isDefault="@isGeneratedByDefault" />
+   <!-- If not already generated -->
+   <if condition="!/$(_STRUCTNAME)/generateSharedInfo">
+
+      <!-- Construct equation to check if any instance sharing the same struct is enabled -->
+      <equation key="_enable" value="=&quot;false&quot;" />
+      <for keys="instance" values="=_instanceList" >
+         <equation
+            key="_enable"
+            condition="=&quot;$(_STRUCTNAME)&quot;==/%(instance)/structName"
+            value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/enablePeripheralSupport&quot;"
+         />
+      </for>
+      <!-- stringOption key="yyy" value="=_enable"/ -->
+
+      <!-- Enable for shared code needed by all instances of peripheral -->
+      <binaryOption key="/$(_STRUCTNAME)/generateSharedInfo"
+         ref="=_enable"
+         description="=_enable"
+         hidden="true"
+         locked="true"
+         derived="true">
+         <choice value="false" name="Minimal shared code for structName=$(_STRUCTNAME)"  />
+         <choice value="true"  name="All shared code for structName=$(_STRUCTNAME)"      />
       </binaryOption>
-
-      <!-- If not already generated -->
-      <if condition="!/$(_STRUCTNAME)/generateSharedInfo">
-
-         <!-- Construct equation to check if any instance sharing the same struct is enabled -->
-         <equation key="_enable" value="=&quot;false&quot;" />
-         <for keys="instance" values="=_instanceList" >
-            <equation
-               key="_enable"
-               condition="=&quot;$(_STRUCTNAME)&quot;==/%(instance)/structName"
-               value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/enablePeripheralSupport&quot;"
-            />
-         </for>
-         <!-- stringOption key="yyy" value="=_enable"/ -->
-
-         <!-- Enable for shared code needed by all instances of peripheral -->
-         <binaryOption key="/$(_STRUCTNAME)/generateSharedInfo"
-            ref="=_enable"
-            description="=_enable"
-            hidden="true"
-            locked="true"
-            derived="true">
-            <choice value="false" name="Minimal shared code for structName=$(_STRUCTNAME)"  />
-            <choice value="true"  name="All shared code for structName=$(_STRUCTNAME)"      />
-         </binaryOption>
-         <deleteVariable key="_enable" />
-      </if>
-
-      <aliasOption name="/$(_STRUCTNAME)/generateSharedInfo" key="/$(_STRUCTNAME)/generateSharedInfo" optional="true" condition="=_debugcode" />
-
-      <!-- If not already generated -->
-      <if condition="!/$(_BASENAME)/enablePeripheralSupport">
-
-         <!-- Construct equation to check if any instance sharing the same struct is enabled -->
-         <equation key="_enable" value="=&quot;false&quot;" />
-         <for keys="instance" values="=_instanceList" >
-            <equation
-               key="_enable"
-               value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/enablePeripheralSupport&quot;"
-            />
-         </for>
-         <!-- stringOption key="yyy" value="=_enable"/ -->
-
-         <!-- Enable for shared code needed by all instances of peripheral -->
-         <binaryOption key="/$(_BASENAME)/enablePeripheralSupport"
-            ref="=_enable"
-            description="=_enable"
-            hidden="true"
-            locked="true"
-            derived="true">
-            <choice value="false" name="Minimal shared code for basename=$(_BASENAME)"  />
-            <choice value="true"  name="All shared code for basename=$(_BASENAME)"      />
-         </binaryOption>
-         <deleteVariable key="_enable" />
-      </if>
-
-      <aliasOption name="/$(_BASENAME)/enablePeripheralSupport" key="/$(_BASENAME)/enablePeripheralSupport" optional="true"  condition="=_debugcode" />
-
+      <deleteVariable key="_enable" />
    </if>
 
+   <!-- If not already generated -->
+   <if condition="!/$(_BASENAME)/enablePeripheralSupport">
+
+      <!-- Construct equation to check if any instance sharing the same struct is enabled -->
+      <equation key="_enable" value="=&quot;false&quot;" />
+      <for keys="instance" values="=_instanceList" >
+         <equation
+            key="_enable"
+            value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/enablePeripheralSupport&quot;"
+         />
+      </for>
+      <!-- stringOption key="yyy" value="=_enable"/ -->
+
+      <!-- Enable for shared code needed by all instances of peripheral -->
+      <binaryOption key="/$(_BASENAME)/enablePeripheralSupport"
+         ref="=_enable"
+         description="=_enable"
+         hidden="true"
+         locked="true"
+         derived="true">
+         <choice value="false" name="Minimal shared code for basename=$(_BASENAME)"  />
+         <choice value="true"  name="All shared code for basename=$(_BASENAME)"      />
+      </binaryOption>
+      <deleteVariable key="_enable" />
+   </if>
+   
+   <aliasOption key="enablePeripheralSupport" locked="false" />
+   <aliasOption name="/$(_BASENAME)/enablePeripheralSupport" key="/$(_BASENAME)/enablePeripheralSupport" optional="true"  condition="=_debugcode" />
+   <aliasOption name="/$(_STRUCTNAME)/generateSharedInfo"    key="/$(_STRUCTNAME)/generateSharedInfo"    optional="true"  condition="=_debugcode" />
+   
+   <!-- =======================================================================================================================  -->
+   
+   
    <!-- Enable for generation of getters and setters -->
    <binaryOption key="enableGettersAndSetters" condition="!enableGettersAndSetters"
       enabledBy="enablePeripheralSupport"
@@ -199,18 +200,11 @@
       -->
 
       <!-- If not explicitly controlled, IRQ options are always enabled -->
-      <if condition="!irqEnable">
-         <constant key="irqEnable"        type="Boolean" value="true"  />
-      </if>
+      <constant key="irqEnable"        type="Boolean" value="true"  condition="!irqEnable"/>
 
       <!-- Default IRQ vector patterns if none specified -->
-      <if condition="!irq_pattern">
-         <constant key="irq_pattern"      type="String"  value="&quot;^$(_NAME)$&quot;"           />
-      </if>
-
-      <if condition="!irq_ClassHandler">
-         <constant key="irq_ClassHandler" type="String"  value="&quot;$(_Class)::irqHandler&quot;" />
-      </if>
+      <constant key="irq_pattern"      type="String"  value="&quot;^$(_NAME)$&quot;" condition="!irq_pattern" />
+      <constant key="irq_ClassHandler" type="String"  value="&quot;$(_Class)::irqHandler&quot;" condition="!irq_ClassHandler" />
 
       <!-- Create only if needed -->
       <if condition="!irqHandlingMethod">
@@ -403,23 +397,30 @@
       </if>
    </if> <!-- condition="_irqCount" -->
 
-   <template condition="clockEnable" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <constant key="_clockInfo"  value="=/$(_BASENAME)/_clockMask"   type="String"  condition="/$(_BASENAME)/_clockMask"           />
+   <constant key="_clockInfo"  value="=_clockMask"                 type="String"  condition="_clockMask&amp;&amp;!_clockInfo[]"  />
+   <constant key="_scgc_clock" value="&quot;/SIM/&quot;+ToLowerCase(&quot;sim_&quot;+@_clockInfo[0]+&quot;_&quot;+@_clockInfo[1])"
+             type="String" condition="_clockInfo[]" />
+   
+   <template condition="_clockInfo[]" codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t *  Enable clock to $(_Class)
       \t */
       \tstatic void enableClock() {
-      \t   $(clockEnable)
+      \t   SIM->$(_clockInfo[0]) = SIM->$(_clockInfo[0]) | SIM_$(_clockInfo[0])_$(_clockInfo[1])_MASK;
       \t}
       \t
       \t/**
       \t *  Disable clock to $(_Class)
       \t */
       \tstatic void disableClock() {
-      \t   $(clockDisable)
+      \t   SIM->$(_clockInfo[0]) = SIM->$(_clockInfo[0]) & ~SIM_$(_clockInfo[0])_$(_clockInfo[1])_MASK;
       \t}
       \t\n
    ]]></template>
 
+   <!-- ************* SIM configuration ****************** -->
+   
    <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Basic enable of $(_Class)
@@ -427,7 +428,7 @@
       \t */
       \tstatic void enable() {\n
    ]]></template>
-   <template codeGenCondition="enablePeripheralSupport" condition="clockEnable" ><![CDATA[
+   <template codeGenCondition="enablePeripheralSupport" condition="_clockInfo[]" ><![CDATA[
       \t   enableClock();\n
    ]]></template>
    <template codeGenCondition="enablePeripheralSupport" condition="/PCR/mux_present&amp;&amp;_hasPcrTable" ><![CDATA[
@@ -448,7 +449,7 @@
    <template codeGenCondition="enablePeripheralSupport" condition="/PCR/mux_present&amp;&amp;_hasPcrTable" ><![CDATA[
       \t   disableAllPins();\n
    ]]></template>
-   <template codeGenCondition="enablePeripheralSupport" condition="clockEnable" ><![CDATA[
+   <template codeGenCondition="enablePeripheralSupport" condition="_clockInfo[]" ><![CDATA[
       \t   disableClock();\n
    ]]></template>
    <template codeGenCondition="enablePeripheralSupport" ><![CDATA[

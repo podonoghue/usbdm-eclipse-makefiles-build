@@ -15,7 +15,7 @@
 <!--
     * General substitutions
     *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_name)         => e.g FTM2 => ftm2f
     *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
     *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
     *  $(_Class)        => e.g FTM2 => Ftm2
@@ -514,8 +514,8 @@
    ]]>
    </template>
 
-   <variableTemplate variables="mcm_iscr_fidce,mcm_iscr_fixce,mcm_iscr_fufce,mcm_iscr_fofce,mcm_iscr_fdzce,mcm_iscr_fioce"
-      ><![CDATA[
+   <variableTemplate variables="mcm_iscr_fidce,mcm_iscr_fixce,mcm_iscr_fufce,mcm_iscr_fofce,mcm_iscr_fdzce,mcm_iscr_fioce">
+   <![CDATA[
       \t/**
       \t **
       \t * Class used to do initialisation of Floating Point interrupts
@@ -607,12 +607,13 @@
       \t   constexpr FloatingPointIrqInit()  {
       \t   }
       \t\n
-   ]]></variableTemplate>
+   ]]>
+   </variableTemplate>
 
    <for keys="n" values="mcm_iscr_fidce;mcm_iscr_fixce;mcm_iscr_fufce;mcm_iscr_fofce;mcm_iscr_fdzce;mcm_iscr_fioce" >
       <variableTemplate
-         variables="%(n)"
-      ><![CDATA[
+         variables="%(n)" >
+      <![CDATA[
          \t   /**
          \t    * Constructor
          \t    *
@@ -625,26 +626,29 @@
          \t
          \t      %registerName = (%registerName&~%mask) | %paramName;
          \t   }\n\n
-      ]]></variableTemplate>
+      ]]>
+      </variableTemplate>
    </for>
 
-   <variableTemplate variables="mcm_iscr_fidce,mcm_iscr_fixce,mcm_iscr_fufce,mcm_iscr_fofce,mcm_iscr_fdzce,mcm_iscr_fioce"
-      ><![CDATA[
+   <variableTemplate variables="mcm_iscr_fidce,mcm_iscr_fixce,mcm_iscr_fufce,mcm_iscr_fofce,mcm_iscr_fdzce,mcm_iscr_fioce" >
+   <![CDATA[
       \t};\n\n
-   ]]></variableTemplate>
+   ]]>
+   </variableTemplate>
 
    <variableTemplate key="/MCM/DefaultFloatingPointIrqInitValue" namespace="all"
       variables="mcm_iscr_fidce,mcm_iscr_fixce,mcm_iscr_fufce,mcm_iscr_fofce,mcm_iscr_fdzce,mcm_iscr_fioce"
       terminator=","
-      separator=","
-   ><![CDATA[
+      separator="," >
+   <![CDATA[
       \t/**
       \t * Default value for Mcm::FloatingPointIrqInit
       \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->MCM)
       \t */
       \tstatic constexpr McmInfo::FloatingPointIrqInit DefaultFloatingPointIrqInitValue {%initExpression
       \t};\n
-   ]]></variableTemplate>
+   ]]>
+   </variableTemplate>
 
    <!--
       ******************** MCM_CR ********************
@@ -692,10 +696,9 @@
    </choiceOption>
 
    <variableTemplate variables="mcm_cr_sramlwp,mcm_cr_sramlap,mcm_cr_sramuwp,mcm_cr_sramuap" >
-      ><![CDATA[
+   <![CDATA[
       \t/**
-      \t **
-      \t * Class used to do initialisation of Floating Point interrupts
+      \t * Class used to define arbitration and protection schemes for the system RAM arrays
       \t *
       \t * This class has a templated constructor that accepts a list of options to be configured.
       \t * The last parameter may be a previous instance used as a base for options.
@@ -715,7 +718,7 @@
       \t *    McmSramUpperArbitration_BackDoorHighProcessorLow,
       \t *    // Optional value to build upon - must be last in parameter list
       \t *    // The value below is generated from Configure.usbdmProject
-      \t *    Mcm::DefaultFloatingPointIrqInitValue
+      \t *    Mcm::DefaultSramAccessInitValue
       \t * };
       \t *
       \t * sramInit.configure();  // Enable listed interrupts and disable others
@@ -728,7 +731,7 @@
       \t *    McmSramLowerAccess_ReadWrite,
       \t *    McmSramUpperAccess_ReadOnly,
       \t *    // The value below is generated from Configure.usbdmProject
-      \t *    Mcm::DefaultFloatingPointIrqInitValue}.configure();
+      \t *    Mcm::DefaultSramAccessInitValue}.configure();
       \t * @endcode
       \t */
       \tclass SramAccessInit {
@@ -760,8 +763,8 @@
 
    <for keys="n" values="mcm_cr_sramlwp;mcm_cr_sramlap;mcm_cr_sramuwp;mcm_cr_sramuap" >
       <variableTemplate
-         variables="%(n)"
-      ><![CDATA[
+         variables="%(n)" >
+      <![CDATA[
          \t   /**
          \t    * Constructor
          \t    *
@@ -778,7 +781,7 @@
    </for>
 
    <template condition="mcm_cr_sramlwp||mcm_cr_sramlap||mcm_cr_sramuwp||mcm_cr_sramuap" >
-      ><![CDATA[
+   <![CDATA[
       \t};\n\n
    ]]></template>
 
@@ -797,20 +800,12 @@
 
    <!-- ************* Common ****************** -->
 
-   <template key="/$(_BASENAME)/declarations" condition="irqOption_present&amp;&amp;enablePeripheralSupport" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" condition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base, public $(_Baseclass)Interrupt_T<$(_Class)Info> {};\n
+      \tclass $(_Class) : public $(_Baseclass)Base{};\n
    ]]></template>
-   <template key="/$(_BASENAME)/declarations" condition="!irqOption_present&amp;&amp;enablePeripheralSupport" ><![CDATA[
-      \t/**
-      \t * Class representing $(_NAME)
-      \t */
-      \tclass $(_Class) : public $(_Baseclass)Base {};
-      \t\n
-   ]]>
-   </template>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >

@@ -81,14 +81,26 @@
 
    <choiceOption key="ftm_sc_clks" condition="/MCG/_present"
       enabledBy="enablePeripheralSupport"
-      description="FTM Clock Source"
+      description="Clock Source"
       typeName="FtmClockSource"
       target="inputClockFrequency"
       toolTip="Selects the clock source for the module" >
-      <choice value="0" name="Disabled"              ref="disabled"                      code="0"                enum="Disabled"            />
-      <choice value="1" name="System clock"          ref="/SIM/system_bus_clock[0]"      code="SystemBusClock"   enum="SystemClock"         isDefault="true" />
-      <choice value="2" name="Fixed frequency clock" ref="/MCG/system_mcgffclk_clock[0]" code="SystemMcgFFClock" enum="FixedFrequencyClock" />
-      <choice value="3" name="External clock"        ref="ftmExternalClock"              code="ftmExternalClock" enum="ExternalClock"       />
+      <choice value="0" name="Disabled"              enum="Disabled"            ref="disabled"                      code="0"                                       />
+      <choice value="1" name="System clock"          enum="SystemClock"         ref="/SIM/system_bus_clock[0]"      code="SystemBusClock"                          isDefault="true" />
+      <choice value="2" name="Fixed frequency clock" enum="FixedFrequencyClock" ref="/MCG/system_mcgffclk_clock[0]" code="SystemMcgFFClock"                        />
+      <choice value="3" name="External clock"        enum="ExternalClock"       ref="/SIM/$(_name)ExternalClock"    code="SimInfo::get$(_Class)ClockInFrequency()" />
+   </choiceOption>
+
+   <choiceOption key="ftm_sc_clks"  condition="/ICS/_present"
+      target="inputClockFrequency"
+      enabledBy="enablePeripheralSupport"
+      description="Clock Source"
+      typeName="FtmClockSource"
+      toolTip="Selects the clock source for the module" >
+      <choice value="0" name="Disabled"              enum="Disabled"            ref="disabled"                      code="0"                                       />
+      <choice value="1" name="System timer clock"    enum="SystemTimerClock"    ref="/SIM/system_timer_clock[0]"    code="SystemTimerClock"                        isDefault="true" />
+      <choice value="2" name="Fixed frequency clock" enum="FixedFrequencyClock" ref="/ICS/system_icsffclk_clock[0]" code="SystemIcsFFClock"                        />
+      <choice value="3" name="External clock"        enum="ExternalClock"       ref="/SIM/$(_name)ExternalClock"    code="SimInfo::get$(_Class)ClockInFrequency()" />
    </choiceOption>
 
    <binaryOption key="externalClockUsed"
@@ -100,24 +112,6 @@
       <choice value="0" name="External clock unused" />
       <choice value="1" name="External clock used"   />
    </binaryOption>
-
-   <choiceOption key="ftm_sc_clks"  condition="/ICS/_present"
-      enabledBy="enablePeripheralSupport"
-      description="FTM Clock Source"
-      typeName="FtmClockSource"
-      target="inputClockFrequency"
-      toolTip="Selects the clock source for the module" >
-      <choice value="0" name="Disabled"              ref="disabled"                      code="0"                enum="Disabled"            />
-      <choice value="1" name="System timer clock"    ref="/SIM/system_timer_clock[0]"    code="SystemTimerClock" enum="SystemTimerClock"    isDefault="true" />
-      <choice value="2" name="Fixed frequency clock" ref="/ICS/system_icsffclk_clock[0]" code="SystemIcsFFClock" enum="FixedFrequencyClock" />
-      <choice value="3" name="External clock"        ref="ftmExternalClock"              code="ftmExternalClock" enum="ExternalClock"       />
-   </choiceOption>
-
-   <intOption key="ftmExternalClock"
-      enabledBy="enablePeripheralSupport&amp;&amp;(ftm_sc_clks==3)"
-      description="FTM External clock"
-      toolTip="Assumed clock frequency used for calculations when External clock is selected"
-      value="0" min="0" units="Hz"/>
 
    <intOption key="inputClockFrequency"
       enabledBy="enablePeripheralSupport"
@@ -397,8 +391,8 @@
          units="ticks"
        />
 
-      <for keys   =" num : pair"
-           values =" 0   : 0 &amp; 1 ;
+      <for keys="   num  :  pair      "
+           values="  0   : 0 &amp; 1 ;
                      1   : 2 &amp; 3 ;
                      2   : 4 &amp; 5 ;
                      3   : 6 &amp; 7 ;
@@ -1017,22 +1011,10 @@
       valueFormat="(%s)"
       enumType="uint8_t"
       toolTip="Selects the filter value for the channel input" >
-      <choice value="0"  name="Filter Disabled"  enum="Disabled" isDefault="true" />
-      <choice value="1"  name="1 Clock cycle "   enum="1_clock"   />
-      <choice value="2"  name="2 Clock cycles"   enum="2_clocks"  />
-      <choice value="3"  name="3 Clock cycles"   enum="3_clocks"  />
-      <choice value="4"  name="4 Clock cycles"   enum="4_clocks"  />
-      <choice value="5"  name="5 Clock cycles"   enum="5_clocks"  />
-      <choice value="6"  name="6 Clock cycles"   enum="6_clocks"  />
-      <choice value="7"  name="7 Clock cycles"   enum="7_clocks"  />
-      <choice value="8"  name="8 Clock cycles"   enum="8_clocks"  />
-      <choice value="9"  name="9 Clock cycles"   enum="9_clocks"  />
-      <choice value="10" name="10 Clock cycles"  enum="10_clocks" />
-      <choice value="11" name="11 Clock cycles"  enum="11_clocks" />
-      <choice value="12" name="12 Clock cycles"  enum="12_clocks" />
-      <choice value="13" name="13 Clock cycles"  enum="13_clocks" />
-      <choice value="14" name="14 Clock cycles"  enum="14_clocks" />
-      <choice value="15" name="15 Clock cycles"  enum="15_clocks" />
+      <choice          value="0"         name="Filter Disabled"        enum="Disabled" isDefault="true" />
+      <choice          value="1"         name="1 Clock cycle "         enum="1_clock"   />
+      <choiceExpansion value="%(cycles)" name="%(cycles) clock cycles" enum="%(cycles)_clocks" keys="cycles" dim="2,15" />
+
    </choiceOption>
 
 <!--  **************** Channels **************** -->
@@ -1093,9 +1075,33 @@
          <title description="Channel %(ch)"                           hiddenBy="combineMode%(ch)" />
       </if>
 
-      <!-- All channels when not paired -->
-      <choiceOption name="ftm_cnsc_mode[%(ch)]" key="ftm_cnsc_mode_independent[%(ch)]"
+      <!-- Even channels when not paired -->
+      <choiceOption name="ftm_cnsc_mode[%(ch)]" key="ftm_cnsc_mode_independent[%(ch)]" condition="((%(ch)&amp;1)==0)"
          hiddenBy="!enablePeripheralSupport||combineMode%(ch)"
+         valueFormat="FTM_CnSC_MS(%s),FTM_CnSC_ELS(%s)"
+         enumType="uint16_t"
+         typeName="FtmChannelMode"
+         description="Channel Mode"
+         toolTip="Determines channel operation (PWM/Input capture/Output compare)" >
+         <!--              +......... MS(B:A)  -->
+         <!--              |    +.... ELS(B:A) -->
+         <!--              |    |              -->
+         <!--              v    v              -->
+          <choice value="0b00,0b00"  name="Channel Disabled"                    enum="Disabled"                 />
+          <choice value="0b00,0b01"  name="Input Capture Rising-edge"           enum="InputCaptureRisingEdge"   />
+          <choice value="0b00,0b10"  name="Input Capture Falling-edge"          enum="InputCaptureFallingEdge"  />
+          <choice value="0b00,0b11"  name="Input Capture Either-edge"           enum="InputCaptureEitherEdge"   />
+          <choice value="0b01,0b00"  name="Output Compare No action"            enum="OutputCompare"            />
+          <choice value="0b01,0b01"  name="Output Compare Toggle"               enum="OutputCompareToggle"      />
+          <choice value="0b01,0b10"  name="Output Compare Clear"                enum="OutputCompareClear"       />
+          <choice value="0b01,0b11"  name="Output Compare Set"                  enum="OutputCompareSet"         />
+          <choice value="0b10,0b10"  name="Pwm High-true Pulses (Edge/Centre)"  enum="PwmHighTruePulses"        />
+          <choice value="0b10,0b01"  name="Pwm Low-true Pulses (Edge/Centre)"   enum="PwmLowTruePulses"         />
+      </choiceOption>
+
+      <!-- Odd channels when not paired -->
+      <choiceOption name="ftm_cnsc_mode[%(ch)]" key="ftm_cnsc_mode_independent[%(ch)]" condition="((%(ch)&amp;1)!=0)"
+         hiddenBy="!enablePeripheralSupport"
          valueFormat="FTM_CnSC_MS(%s),FTM_CnSC_ELS(%s)"
          enumType="uint16_t"
          typeName="FtmChannelMode"
@@ -1547,13 +1553,7 @@
       \tstatic constexpr uint32_t minimumInterval  = $(?check_minimums:$(minimumInterval):0);\n\n
    ]]></variableTemplate>
 
-   <variableTemplate variables="ftmExternalClock"
-   ><![CDATA[
-      \t// %description
-      \tstatic constexpr uint32_t ftmExternalClock  = $(ftmExternalClock);\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate key="/$(_BASENAME)/static_functions" namespace="all"
+   <variableTemplate key="/$(_BASENAME)/static_functions" where="all"
      discardRepeats="true"
       variables="ftm_sc_cpwms,ftm_sc_clks,ftm_sc_ps"
       nonDefaultParams="2"
@@ -1571,23 +1571,23 @@
       \t   Info::enable();
       \t
       \t   // Disable timer to change settings
-      \t   %register=0;
+      \t   %register = 0;
       \t
       \t   // Make sure write has completed (disabled)
       \t   (void)(%register);
       \t
       \t   // Write new value
-      \t   ftm->SC = %paramExpression;
+      \t   %register = %paramExpression;
       \t}\n\n
    ]]></variableTemplate>
 
 <!--  ========== Static/Non-Static Methods =============================== -->
-   <for  keys  ="  k                   : static    : const    : getInputClockFrequency         : channel : Ftm       : isStatic : namespace"
+   <for  keys="    k                   : static    : const    : getInputClockFrequency         : channel : Ftm       : isStatic : namespace"
          values=" non_static_functions : ''        : ' const' : getInputClockFrequencyVirtual  : CHANNEL : FtmBase   : false    : all;
                   static_functions     : 'static ' : ''       : 'Info::getInputClockFrequency' : channel : OwningFtm : true     : forceInfo
    " >
-      <variableTemplate key="/$(_BASENAME)/%(k)" namespace="all"
-        discardRepeats="true"
+      <variableTemplate key="/$(_BASENAME)/%(k)" where="all"
+         discardRepeats="true"
          variables="ftm_sc_clks,ftm_sc_ps"
          nonDefaultParams="2"
       ><![CDATA[
@@ -1629,8 +1629,8 @@
          values=" ftm_sc_cpwms  : CountMode;
                   ftm_sc_clks   : ClockSource;
                   ftm_sc_ps     : Prescaler" >
-         <variableTemplate key="/$(_BASENAME)/%(k)" namespace="all"
-           discardRepeats="true"
+         <variableTemplate key="/$(_BASENAME)/%(k)" where="all"
+            discardRepeats="true"
             variables="%(f)"
             nonDefaultParams="2"
          ><![CDATA[
@@ -1671,8 +1671,8 @@
 
       <for keys="  f           :  n"
          values=" ftm_mod      : CounterMaximumValue" >
-         <variableTemplate key="/$(_BASENAME)/%(k)" namespace="all"
-           discardRepeats="true"
+         <variableTemplate key="/$(_BASENAME)/%(k)" where="all"
+            discardRepeats="true"
             variables="%(f)"
             nonDefaultParams="2"
          ><![CDATA[
@@ -1791,13 +1791,13 @@
          \t      return rc;
          \t   }
          \t   // Disable timer to change prescaler and period
-         \t   ftm->SC = 0;
+         \t   ftm->SC  = 0;
          \t
          \t   // Configure for modulo operation
-         \t   ftm->MOD   = modValue;
+         \t   ftm->MOD = modValue;
          \t
          \t   // Clear counter
-         \t   ftm->CNT   = 0;
+         \t   ftm->CNT = 0;
          \t
          \t   // Set prescale and enable timer
          \t   ftm->SC  = sc;
@@ -1818,7 +1818,7 @@
          \t *
          \t * @note This function will affect all channels of the timer.
          \t * @note Adjusts Timer pre-scaler to appropriate value.
-         \t * @note FTM counter is configured for free-running mode i.e. 0-65535
+         \t * @note Counter is configured for free-running mode i.e. 0-65535
          \t * @note The Timer is stopped while being modified.
          \t * @note The Timer counter is restarted from zero
          \t */
@@ -1834,14 +1834,14 @@
          \t   }
          \t
          \t   // Disable timer to change prescaler and period
-         \t   ftm->SC = 0;
+         \t   ftm->SC  = 0;
          \t
          \t   // Configure for free-running mode
          \t   // This is the usual value for IC or OC set-up
-         \t   ftm->MOD   = 0_ticks;
+         \t   ftm->MOD = 0_ticks;
          \t
          \t   // Clear counter
-         \t   ftm->CNT   = 0;
+         \t   ftm->CNT = 0;
          \t
          \t   // Set prescale and enable timer
          \t   ftm->SC  = sc;
@@ -2699,14 +2699,14 @@
 
 <!-- ========== CommonInfo class =============================== -->
 
-   <template namespace="usbdm" condition="$(_instance)==0" ><![CDATA[
+   <template where="commonInfo" condition="!/$(_basename)_common_info_done" ><![CDATA[
       class $(_Baseclass)CommonInfo {
       \t
       public:
       \t\n
    ]]></template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" condition="$(_instance)==0" ><![CDATA[
+   <template where="commonInfo" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" condition="!/$(_basename)_common_info_done" ><![CDATA[
       \t/**
       \t * Type definition for overflow and fault call-back.
       \t */
@@ -2737,18 +2737,29 @@
       \t}\n\n
    ]]></template>
 
-   <template namespace="usbdm" condition="$(_instance)==0" ><![CDATA[
-      }; // FtmCommonInfo
+   <template where="commonInfo" condition="!/$(_basename)_common_info_done" ><![CDATA[
+      }; // $(_Baseclass)CommonInfo
       \t\n
    ]]></template>
 
+   <constant key="/$(_basename)_common_info_done" condition="!/$(_basename)_common_info_done" />
+
 <!-- ========== BasicInfo class =============================== -->
-   <template namespace="baseClass" ><![CDATA[
-      class $(_Structname)BasicInfo : public FtmCommonInfo {
+
+   <template where="basicInfo" ><![CDATA[
+      class $(_Structname)BasicInfo : public $(_Baseclass)CommonInfo {
       \t
       public:
       \t\n
    ]]></template>
+
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
+      variables="irqHandlingMethod"
+   ><![CDATA[
+       \t//! Common class based callback code has been generated for this class of peripheral
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
+       \t\n
+   ]]></variableTemplate>
 
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
@@ -2874,15 +2885,7 @@
 
 <!--  ========== Init class =============================== -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="irqHandlingMethod"
-   ><![CDATA[
-       \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = $(/$(_STRUCTNAME)/generateSharedIrqInfo);
-       \t\n
-   ]]></variableTemplate>
-
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
       \t *
@@ -2947,76 +2950,76 @@
 
 <!--   Init class Member variables -->
 
-   <variableTemplate namespace="baseClass" variables="irqHandlingMethod" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" variables="irqHandlingMethod" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
     ><![CDATA[
       \t   // Shared overflow or fault interrupt call-back
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
     ><![CDATA[
       \t   // Shared channel interrupt call-back
       \t   ChannelCallbackFunction channelCallbackFunction = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="ftm_sc_action,ftm_sc_cpwms,ftm_sc_clks,ftm_sc_ps"
    ><![CDATA[
       \t   // Status And Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   // %description
       \t   %paramType %registerName = %paramType_Normal;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="ftm_mod"
    ><![CDATA[
       \t   // %description
       \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables= "ftm_modPeriod"
     ><![CDATA[
       \t   // %description
       \t   %paramType %registerName = 0_s;\n\n
    ]]></variableTemplate >
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="ftm_mode_pwmsync,ftm_mode_wpdis,ftm_mode_ftmen"
    ><![CDATA[
       \t   // Mode register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables= "ftm_deadtime_dtps,ftm_deadtime_dtval"
     ><![CDATA[
       \t   // %description0 and %description1
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate >
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables= "ftm_outinit_choi"
     ><![CDATA[
       \t   // %description
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate >
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables= "ftm_pol_pol"
     ><![CDATA[
       \t   // %description
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate >
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables= "ftm_exttrig_trig"
     ><![CDATA[
       \t   // %description
@@ -3025,7 +3028,7 @@
 
 <!--  Init class Constructors -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -3044,7 +3047,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -3063,7 +3066,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -3082,7 +3085,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="ftm_pol_pol"
       linePadding="xxx"
    ><![CDATA[
@@ -3104,7 +3107,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="ftm_outinit_choi"
       linePadding="xxx"
    ><![CDATA[
@@ -3126,7 +3129,7 @@
 
    <for keys="r" values="ftm_sc_action;ftm_sc_cpwms;ftm_sc_clks;
                          ftm_mode_pwmsync;ftm_mode_wpdis;ftm_mode_init;ftm_mode_ftmen" >
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -3147,7 +3150,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="ftm_deadtime_dtps, ftm_deadtime_dtval"
       linePadding="xxx"
       params=",ticks"
@@ -3170,7 +3173,7 @@
          \t\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="ftm_exttrig_trig"
       linePadding="xxx"
       nonDefaultParams="2"
@@ -3191,7 +3194,7 @@
          \t\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="ftm_sc_ps, ftm_mod"
       params=",mod_ticks"
       linePadding="xxx"
@@ -3215,7 +3218,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       nonDefaultParams="2"
       variables="ftm_modPeriod"
       linePadding="xxx"
@@ -3237,7 +3240,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t}; // class $(_Structname)BasicInfo::Init\n\n
    ]]></template>
 
@@ -3261,7 +3264,7 @@
       \t *
       \t * @param init Class containing initialisation values
       \t */
-      \ttemplate <class FTM>
+      \ttemplate <class $(_BASENAME)>
       \tstatic ErrorCode configure(const Init &init) {
       \t
       \t   // Enable peripheral clock
@@ -3279,7 +3282,7 @@
       \t   if (init.modperiod != 0) {
       \t
       \t      // Calculate sc.ps, mod (assumes cntin=0 or non-existent)
-      \t      ErrorCode rc = FTM::calculateTimingParameters(init.modperiod, sc, mod);
+      \t      ErrorCode rc = $(_BASENAME)::calculateTimingParameters(init.modperiod, sc, mod);
       \t      if (rc != E_NO_ERROR) {
       \t         return rc;
       \t      }\n
@@ -3340,7 +3343,7 @@
 
    <if condition="ftm_fltctrl_ffval" >
 
-      <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       ><![CDATA[
          \t/**
          \t * Class used to do initialisation of $(_Baseclass) Fault handling
@@ -3391,21 +3394,21 @@
 
    <!-- InitFault Member variables -->
 
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="ftm_mode_faultm,ftm_mode_faultie,ftm_mode_pwmsync,ftm_mode_wpdis,ftm_mode_ftmen"
       ><![CDATA[
          \t   // Mode register
          \t   uint8_t %registerName = 0;\n\n
       ]]></variableTemplate>
 
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="ftm_fltctrl_ffval,ftm_fltctrl_fault0en"
       ><![CDATA[
          \t   // Fault Control register
          \t   uint16_t %registerName = 0;\n\n
       ]]></variableTemplate>
 
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="ftm_fltpol_flt0pol"
       ><![CDATA[
          \t   // Fault Input Polarity register
@@ -3416,7 +3419,7 @@
    <!--  Constructors -->
 
       <for keys="r" values="ftm_mode_faultm;ftm_mode_faultie;ftm_fltctrl_ffval" >
-         <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
             variables="%(r)"
             linePadding="xxx"
          ><![CDATA[
@@ -3438,7 +3441,7 @@
       </for>
 
       <for keys="pin" dim="8" >
-         <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
             variables="ftm_fltctrl_fault%(pin)en,ftm_fltpol_flt%(pin)pol"
             linePadding="xxx"
             tooltipPadding="x*xxxxxxxx"
@@ -3521,7 +3524,7 @@
       ]]>
       </template>
 
-      <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+      <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
          \t}; // class  $(_Structname)BasicInfo::FaultInit\n\n
       ]]></template>
 
@@ -3529,7 +3532,7 @@
 
 <!--   ========== ChannelInit class =============================== -->
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of $(_Baseclass)Channel
       \t *
@@ -3573,14 +3576,14 @@
 
    <!-- ChannelInit Class Member variables -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="ftm_cnv[]"
    ><![CDATA[
       \t   // %description
       \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="ftm_cnsc_mode_independent[]"
    ><![CDATA[
       \t   // Channel Status And Control Register
@@ -3588,7 +3591,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       condition="ftm_combine_combine$(_instance)_present"
    ><![CDATA[
       \t   // Function For Linked Channels
@@ -3596,15 +3599,15 @@
       \t\n
    ]]></template>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="ftm_channel_number"
    ><![CDATA[
       \t   // %description
       \t   %paramType %registerName = %paramType_None;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="ftm_filter_ch0fval"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="ftm_filter_chnfval"
    ><![CDATA[
       \t   // %description
       \t   %paramType %registerName = %paramType_Disabled;\n\n
@@ -3687,7 +3690,7 @@
    <for keys="   r                    :  c    "
       values=" ftm_cnsc_action[]      : true  ;
                ftm_cnsc_icrst[]       : true  " >
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx"
          condition="%(c)"
@@ -3709,7 +3712,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="ftm_cnsc_mode_independent[]"
       linePadding="xxx"
    ><![CDATA[
@@ -3733,7 +3736,7 @@
       ftm_filter_ch0fval;
       ftm_channel_number;
       ftm_cnv[]" >
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -3753,7 +3756,7 @@
          \t\n
       ]]></variableTemplate>
    </for>
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t}; // class  $(_Structname)BasicInfo::ChannelInit\n\n
    ]]></template>
 
@@ -3790,7 +3793,7 @@
 
    <if condition="ftm_qdctrl_quadmode_present" >
 
-      <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+      <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
          \t/**
          \t * Class used to do initialisation of Ftm QuadDecoder
          \t *
@@ -3839,35 +3842,35 @@
 
       <!-- QUAD Init class Member variables -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
          variables="irqHandlingMethod"
        ><![CDATA[
          \t   // %description
          \t   %params = nullptr;\n\n
       ]]></variableTemplate>
 
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="ftm_qdfilter_a,ftm_qdfilter_b"
       ><![CDATA[
          \t   // Quad input filter control
          \t   uint8_t %registerName = 0;\n\n
       ]]></variableTemplate>
 
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="ftm_qdctrl_quadmode"
       ><![CDATA[
          \t   // Quadrature Decoder Control And Status Register
          \t   uint8_t %registerName = FTM_QDCTRL_QUADEN_MASK;\n\n
       ]]></variableTemplate>
 
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="ftm_sc_action,ftm_sc_ps"
       ><![CDATA[
          \t   // Status And Control Register
          \t   uint8_t %registerName = 0;\n\n
       ]]></variableTemplate>
 
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
          variables="/PCR/nvic_irqLevel"
       ><![CDATA[
          \t   // %description
@@ -3876,7 +3879,7 @@
 
       <!-- QUAD Init class Constructors -->
 
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
          variables="irqHandlingMethod"
          linePadding="xxx"
        ><![CDATA[
@@ -3894,7 +3897,7 @@
          \t   }\n\n
       ]]></variableTemplate>
 
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
          variables="/PCR/nvic_irqLevel"
          linePadding="xxx"
        ><![CDATA[
@@ -3918,7 +3921,7 @@
          ftm_qdctrl_quadmode;
          ftm_qdctrl_phapol;
          ftm_qdctrl_phbpol" >
-         <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
             variables="%(r)"
             linePadding="xxx"
          ><![CDATA[
@@ -3938,7 +3941,7 @@
          ]]></variableTemplate>
       </for>
 
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="ftm_qdfilter_a"
          linePadding="xxx"
       ><![CDATA[
@@ -3958,7 +3961,7 @@
          \t\n
       ]]></variableTemplate>
 
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="ftm_qdfilter_b"
          linePadding="xxx"
       ><![CDATA[
@@ -3978,7 +3981,7 @@
          \t\n
       ]]></variableTemplate>
 
-      <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+      <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
          \t};\n\n
       ]]></template>
 
@@ -4051,7 +4054,7 @@
 
 <!--  ========== End of class  $(_Structname)BasicInfo =============================== -->
 
-   <template namespace="baseClass" ><![CDATA[
+   <template where="basicInfo" ><![CDATA[
       }; // class  $(_Structname)BasicInfo\n\n
    ]]></template>
 
@@ -4219,27 +4222,39 @@
    <category name="SIM" description="Pin mapping and clock enables"
       toolTip="Thes settings only have effect if the SIM configuration is enabled"
    >
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)clksel"  optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt0"    optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt1"    optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt2"    optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)flt3"    optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)trg0src" optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)trg1src" optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)ch0src"  optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_Class)ch1src"  optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_scgc3_$(_name)"        optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_scgc6_$(_name)"        optional="true" locked="false" />
+      <aliasOption key="/SIM/$(_basename)_clkin0"       optional="true" locked="false" />
+      <aliasOption key="/SIM/$(_basename)_clkin1"       optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_name)clksel"  optional="true" locked="false" />
+      <aliasOption key="/SIM/$(_name)ExternalClock"     optional="true" locked="false" />
 
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och7src" optional="true" locked="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och6src" optional="true" locked="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och5src" optional="true" locked="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och4src" optional="true" locked="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och3src" optional="true" locked="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och2src" optional="true" locked="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och1src" optional="true" locked="false"/>
-      <aliasOption key="/SIM/sim_sopt8_$(_Class)och0src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt4_$(_name)flt0"    optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_name)flt1"    optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_name)flt2"    optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_name)flt3"    optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_name)trg0src" optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_name)trg1src" optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_name)ch0src"  optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_name)ch1src"  optional="true" locked="false" />
+
+      <aliasOption key="/SIM/sim_sopt8_$(_name)och7src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_name)och6src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_name)och5src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_name)och4src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_name)och3src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_name)och2src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_name)och1src" optional="true" locked="false"/>
+      <aliasOption key="/SIM/sim_sopt8_$(_name)och0src" optional="true" locked="false"/>
    </category>
 
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
    <signals name="FTM" optional="true" />
+
+   <!-- ************* SIM configuration ****************** -->
+   <category name="Advanced" description="SIM configuration">
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+   </category>
+   <deleteVariable key="_scgc_clock"  mustExist="false" />
 
 </fragment>

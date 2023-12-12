@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- all templates -->    
-<!ENTITY % template_items   "template|variableTemplate|variableTemplate|variableTemplate|clockCodeTemplate" >
+<!ENTITY % template_items   "template|variableTemplate|clockCodeTemplate" >
 
 <!-- High level items-->
 <!ENTITY % structure_items  "xi:include|section|list" >
@@ -15,7 +15,7 @@
 <!-- Simple items that don't recurse -->
 <!ENTITY % simple_items     "xi:include|
                               deleteVariable|projectActionList|
-                              title|constant|signals|
+                              title|constant|signals|variable|
                               rtcTimeOption|timeOption|intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption|irqOption|pinListOption|aliasOption|pinMapOption|
                               clockSelectionOption|validate|equation|
                               %template_items;" >
@@ -74,6 +74,15 @@
 <!ELEMENT else_if EMPTY >
    <!-- Condition evaluated during parsing that enables processing of remaining children (up to else/else_if) -->
    <!ATTLIST else_if condition             CDATA        #REQUIRED>
+
+<!-- This is a deferred evaluation expression -->
+<!ELEMENT variable EMPTY>
+   <!ATTLIST variable  key                CDATA        #REQUIRED>
+   <!ATTLIST variable  name               CDATA        #IMPLIED>
+   <!ATTLIST variable  type         (String|Boolean|Long|Float) #REQUIRED>
+   <!ATTLIST variable  expression         CDATA        #REQUIRED>
+   <!-- Immediately evaluated expression used to guard creating this item -->
+   <!ATTLIST variable  condition          CDATA        #IMPLIED>
 
 <!ELEMENT graphic ((%graphic_items;)*) >
    <!ATTLIST graphic  key                CDATA        #REQUIRED>
@@ -266,6 +275,8 @@
    <!ATTLIST intOption condition     CDATA        #IMPLIED>
    <!-- Locks option in GUI -->
    <!ATTLIST intOption locked        (true)       #IMPLIED>
+   <!-- Name of register -->
+   <!ATTLIST intOption register      CDATA        #IMPLIED>
    <!-- Hides option in GUI -->
    <!ATTLIST intOption hidden        (true)       #IMPLIED>
    <!-- Option value is derived and should not be saved -->
@@ -846,6 +857,8 @@
    <!ATTLIST constant condition    CDATA                          #IMPLIED>
    
 <!ELEMENT template (#PCDATA)* >
+   <!-- Where to place generated code -->
+   <!ATTLIST template where                     (all|usbdm|info|basicInfo|commonInfo) #IMPLIED >
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
@@ -867,6 +880,8 @@
    <!ATTLIST template linePadding               CDATA                   #IMPLIED>
 
 <!ELEMENT variableTemplate (#PCDATA)* >
+   <!-- Where to place generated code -->
+   <!ATTLIST variableTemplate where                     (all|usbdm|info|basicInfo|commonInfo) #IMPLIED >
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
@@ -908,6 +923,8 @@
    <!ATTLIST variableTemplate useDefinitions            CDATA                   #IMPLIED>
 
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
+   <!-- Where to place generated code -->
+   <!ATTLIST clockCodeTemplate where                     (all|usbdm|info|basicInfo|commonInfo)  #IMPLIED >
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>

@@ -75,13 +75,13 @@
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Class)BasicInfo&quot;" />
+      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
 
    <title description="Clocking" />
 
    <choiceOption key="tpmClockConfig"
-      target="system_tpm_clock"
       description="Clock configuration"
+      target="system_tpm_clock"
       toolTip="Selects the clock configuration used for calculations if System TPM Clock is chosen as clock source" >
       <choice value="0" name="@/MCG/ClockConfig[0]" ref="/SIM/system_tpm_clock[0]"  isDefault="true" />
       <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_tpm_clock[1]"  />
@@ -98,16 +98,26 @@
       />
 
    <choiceOption key="tpm_sc_cmod"
+      target="inputClockFrequency"
       enabledBy="enablePeripheralSupport"
       description="Clock Source"
       typeName="TpmClockSource"
-      target="inputClockFrequency"
       toolTip="Selects the clock source for the module" >
-      <choice value="0" name="Disabled"         ref="disabled"          code="0"                      enum="Disabled"        />
-      <choice value="1" name="System TPM Clock" ref="system_tpm_clock"  code="SimInfo::getTpmClock()" enum="SystemTpmClock"  isDefault="true"  />
-      <choice value="2" name="External clock"   ref="/SIM/Tpm$(_instance)ExternalClkin"
-         code="SimInfo::getTpm$(_instance)ExternalClockFrequency()"       enum="ExternalClock"   />
+      <choice value="0" name="Disabled"         enum="Disabled"       ref="disabled"                   code="0" />
+      <choice value="1" name="System TPM Clock" enum="SystemTpmClock" ref="system_tpm_clock"           code="SimInfo::getTpmClock()"                  isDefault="true"  />
+      <choice value="2" name="External clock"   enum="ExternalClock"  ref="/SIM/$(_name)ExternalClock" code="SimInfo::get$(_Class)ClockInFrequency()" condition="/SIM/sim_sopt4_$(_name)clksel" />
+      <choice value="2" name="External clock"   enum="ExternalClock"  ref="/SIM/$(_name)ExternalClock" code="SimInfo::get$(_Class)ClockInFrequency()" condition="/SIM/sim_sopt9_$(_name)clksel" />
    </choiceOption>
+
+   <binaryOption key="externalClockUsed"
+      ref="tpm_sc_cmod==2"
+      derived="true"
+      locked="true"
+      hidden="true"
+   >
+      <choice value="0" name="External clock unused" />
+      <choice value="1" name="External clock used"   />
+   </binaryOption>
 
    <intOption key="inputClockFrequency"
       enabledBy="enablePeripheralSupport"
@@ -249,7 +259,7 @@
       ref="clockPeriod*(tpm_sc_cpwms?(2*(tpm_mod)):(tpm_mod+1))"
       typeName="Seconds &amp;"
       unlockedBy="!freeRunningCounter"
-      valueFormat="%s_s"
+      valueFormat="%s"
       description="Period or minimum interval of timer"
       toolTip="In left-aligned or centre-aligned this is the period of the timer\n
                In free-running mode it is the minimum interval"
@@ -301,6 +311,20 @@
       <choice value="(uint8_t(-1))" name="No Channel"     enum="None" />
    </choiceOption>
 
+
+
+   <choiceOption key="tpm_filter_chnfval" condition="tpm_filter_ch0fval_present"
+      hidden="true"
+      description="Channel Input Filter"
+      typeName="TpmInputFilter"
+      valueFormat="(%s)"
+      enumType="uint8_t"
+      toolTip="Selects the filter value for the channel input" >
+      <choice          value="0"         name="Filter Disabled"        enum="Disabled" isDefault="true" />
+      <choice          value="1"         name="1 Clock cycle "         enum="1_clock"   />
+      <choiceExpansion value="%(cycles)" name="%(cycles) clock cycles" enum="%(cycles)_clocks" keys="cycles" dim="2,15" />
+
+   </choiceOption>
 
 <!--  **************** Channels **************** -->
 
@@ -360,9 +384,33 @@
          <title description="Channel %(ch)"                           hiddenBy="combineMode%(ch)" />
       </if>
 
-      <!-- All channels when not paired -->
-      <choiceOption name="tpm_cnsc_mode[%(ch)]" key="tpm_cnsc_mode_independent[%(ch)]"
+      <!-- Even channels when not paired -->
+      <choiceOption name="tpm_cnsc_mode[%(ch)]" key="tpm_cnsc_mode_independent[%(ch)]" condition="((%(ch)&amp;1)==0)"
          hiddenBy="!enablePeripheralSupport||combineMode%(ch)"
+         valueFormat="TPM_CnSC_MS(%s),TPM_CnSC_ELS(%s)"
+         enumType="uint16_t"
+         typeName="TpmChannelMode"
+         description="Channel Mode"
+         toolTip="Determines channel operation (PWM/Input capture/Output compare)" >
+         <!--              +......... MS(B:A)  -->
+         <!--              |    +.... ELS(B:A) -->
+         <!--              |    |              -->
+         <!--              v    v              -->
+          <choice value="0b00,0b00"  name="Channel Disabled"                    enum="Disabled"                 />
+          <choice value="0b00,0b01"  name="Input Capture Rising-edge"           enum="InputCaptureRisingEdge"   />
+          <choice value="0b00,0b10"  name="Input Capture Falling-edge"          enum="InputCaptureFallingEdge"  />
+          <choice value="0b00,0b11"  name="Input Capture Either-edge"           enum="InputCaptureEitherEdge"   />
+          <choice value="0b01,0b00"  name="Output Compare No action"            enum="OutputCompare"            />
+          <choice value="0b01,0b01"  name="Output Compare Toggle"               enum="OutputCompareToggle"      />
+          <choice value="0b01,0b10"  name="Output Compare Clear"                enum="OutputCompareClear"       />
+          <choice value="0b01,0b11"  name="Output Compare Set"                  enum="OutputCompareSet"         />
+          <choice value="0b10,0b10"  name="Pwm High-true Pulses (Edge/Centre)"  enum="PwmHighTruePulses"        />
+          <choice value="0b10,0b01"  name="Pwm Low-true Pulses (Edge/Centre)"   enum="PwmLowTruePulses"         />
+      </choiceOption>
+
+      <!-- Odd channels when not paired -->
+      <choiceOption name="tpm_cnsc_mode[%(ch)]" key="tpm_cnsc_mode_independent[%(ch)]" condition="((%(ch)&amp;1)!=0)"
+         hiddenBy="!enablePeripheralSupport"
          valueFormat="TPM_CnSC_MS(%s),TPM_CnSC_ELS(%s)"
          enumType="uint16_t"
          typeName="TpmChannelMode"
@@ -662,7 +710,7 @@
       <floatOption key="tpm_cnvEventTime[%(ch)]" condition="((%(ch)&amp;1)!=0)"
          hiddenBy="(tpm_cnsc_mode_independent[%(ch)]&lt;4)&amp;&amp;(tpm_cnsc_mode_combined[%(ch)-1]!=(1,2))"
          ref="tpm_cnv[%(ch)]*clockPeriod"
-         valueFormat="%s_s"
+         valueFormat="%s"
          derived="true"
          units="s"
          description="Output Compare Event time in seconds"
@@ -674,7 +722,7 @@
          locked="true"
          derived="true"
          ref="(tpm_sc_cpwms?2.0:1.0)*(tpm_cnv[%(ch)])*clockPeriod"
-         valueFormat="%s_s"
+         valueFormat="%s"
          units="s"
          description="Output high-time in seconds"
          toolTip="Calculated high-time" />
@@ -684,7 +732,7 @@
          locked="true"
          derived="true"
          ref="tpm_cnvHighTime[%(ch)]/tpm_modPeriod"
-         valueFormat="%s_s"
+         valueFormat="%s"
          units="percent"
          description="Output duty cycle as pecentage"
          toolTip="Calculated duty cycle" />
@@ -694,7 +742,7 @@
          locked="true"
          derived="true"
          ref="(tpm_cnv[%(ch)]-tpm_cnv[%(ch)-1])*clockPeriod"
-         valueFormat="%s_s"
+         valueFormat="%s"
          units="s"
          description="Output high-time in seconds"
          toolTip="Calculated high-time" />
@@ -704,10 +752,11 @@
          locked="true"
          derived="true"
          ref="tpm_pwmHighTime[%(ch)]/tpm_modPeriod"
-         valueFormat="%s_s"
+         valueFormat="%s"
          units="percent"
          description="Output duty cycle as pecentage"
          toolTip="Calculated duty cycle" />
+
    </for>
    </categoryOption>
 
@@ -743,18 +792,18 @@
       \t   Info::enable();
       \t
       \t   // Disable timer to change settings
-      \t   %register=0;
+      \t   %register = 0;
       \t
       \t   // Make sure write has completed (disabled)
       \t   (void)(%register);
       \t
       \t   // Write new value
-      \t   tpm->SC = %paramExpression;
+      \t   %register = %paramExpression;
       \t}\n\n
    ]]></variableTemplate>
 
 <!--  ========== Static/Non-Static Methods =============================== -->
-   <for  keys  ="  k                   : static    : const    : getInputClockFrequency         : channel : Tpm       : isStatic : namespace"
+   <for  keys="    k                   : static    : const    : getInputClockFrequency         : channel : Tpm       : isStatic : namespace"
          values=" non_static_functions : ''        : ' const' : getInputClockFrequencyVirtual  : CHANNEL : TpmBase   : false    : all;
                   static_functions     : 'static ' : ''       : 'Info::getInputClockFrequency' : channel : OwningTpm : true     : forceInfo
    " >
@@ -963,13 +1012,13 @@
          \t      return rc;
          \t   }
          \t   // Disable timer to change prescaler and period
-         \t   tpm->SC = 0;
+         \t   tpm->SC  = 0;
          \t
          \t   // Configure for modulo operation
-         \t   tpm->MOD   = modValue;
+         \t   tpm->MOD = modValue;
          \t
          \t   // Clear counter
-         \t   tpm->CNT   = 0;
+         \t   tpm->CNT = 0;
          \t
          \t   // Set prescale and enable timer
          \t   tpm->SC  = sc;
@@ -990,7 +1039,7 @@
          \t *
          \t * @note This function will affect all channels of the timer.
          \t * @note Adjusts Timer pre-scaler to appropriate value.
-         \t * @note TPM counter is configured for free-running mode i.e. 0-65535
+         \t * @note Counter is configured for free-running mode i.e. 0-65535
          \t * @note The Timer is stopped while being modified.
          \t * @note The Timer counter is restarted from zero
          \t */
@@ -1006,14 +1055,14 @@
          \t   }
          \t
          \t   // Disable timer to change prescaler and period
-         \t   tpm->SC = 0;
+         \t   tpm->SC  = 0;
          \t
          \t   // Configure for free-running mode
          \t   // This is the usual value for IC or OC set-up
-         \t   tpm->MOD   = 0_ticks;
+         \t   tpm->MOD = 0_ticks;
          \t
          \t   // Clear counter
-         \t   tpm->CNT   = 0;
+         \t   tpm->CNT = 0;
          \t
          \t   // Set prescale and enable timer
          \t   tpm->SC  = sc;
@@ -1644,14 +1693,14 @@
 
 <!-- ========== CommonInfo class =============================== -->
 
-   <template namespace="usbdm" condition="$(_instance)==0" ><![CDATA[
+   <template namespace="usbdm" condition="!/$(_basename)_common_info_done" ><![CDATA[
       class $(_Baseclass)CommonInfo {
       \t
       public:
       \t\n
    ]]></template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" condition="$(_instance)==0" ><![CDATA[
+   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" condition="!/$(_basename)_common_info_done" ><![CDATA[
       \t/**
       \t * Type definition for overflow and fault call-back.
       \t */
@@ -1682,20 +1731,23 @@
       \t}\n\n
    ]]></template>
 
-   <template namespace="usbdm" condition="$(_instance)==0" ><![CDATA[
-      }; // TpmCommonInfo
+   <template namespace="usbdm" condition="!/$(_basename)_common_info_done" ><![CDATA[
+      }; // $(_Baseclass)CommonInfo
       \t\n
    ]]></template>
 
+   <constant key="/$(_basename)_common_info_done" condition="!/$(_basename)_common_info_done" />
+
 <!-- ========== BasicInfo class =============================== -->
-   <template namespace="usbdm" ><![CDATA[
-      class $(_Class)BasicInfo : public TpmCommonInfo {
+
+   <template namespace="baseClass" ><![CDATA[
+      class $(_Structname)BasicInfo : public $(_Baseclass)CommonInfo {
       \t
       public:
       \t\n
    ]]></template>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="baseClass" codeGenCondition="enablePeripheralSupport"
       variables="irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
@@ -1827,7 +1879,7 @@
 
 <!--  ========== Init class =============================== -->
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
       \t *
@@ -1837,16 +1889,16 @@
       \t *
       \t * Example:
       \t * //
-      \t * // $(_NAME) call-back
+      \t * // $(_BASENAME) call-back
       \t * //
       \t * // @param status  Status reflecting active inputs
       \t * //
-      \t * void $(_name)Callback() {
+      \t * void $(_basename)Callback() {
       \t *    ...
       \t * }
       \t *
       \t * @code
-      \t * static const $(_Class)::Init $(_Class)Init {
+      \t * static const $(_Class)::Init $(_Baseclass)Init {
       \t *
       \t *    // Omitted parameters are taken to be zero unless a base value is given
       \t *    TpmMode_Freerunning,           // Alignment and whether interval or free-running mode
@@ -1868,7 +1920,7 @@
       \t * };
       \t *
       \t * // Initialise $(_Class) from values specified above
-      \t * $(_Class)::configure($(_Class)Init)
+      \t * $(_Class)::configure($(_Baseclass)Init)
       \t * @endcode
       \t */
       \tclass Init {
@@ -1888,41 +1940,41 @@
 
 <!--   Init class Member variables -->
 
-   <variableTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="baseClass" variables="irqHandlingMethod" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
     ><![CDATA[
       \t   // Shared overflow or fault interrupt call-back
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
     ><![CDATA[
       \t   // Shared channel interrupt call-back
       \t   ChannelCallbackFunction channelCallbackFunction = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="tpm_sc_action,tpm_sc_cpwms,tpm_sc_cmod,tpm_sc_ps"
    ><![CDATA[
       \t   // Status And Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   // %description
       \t   %paramType %registerName = %paramType_Normal;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="tpm_mod"
    ><![CDATA[
       \t   // %description
       \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables= "tpm_modPeriod"
     ><![CDATA[
       \t   // %description
@@ -1932,7 +1984,7 @@
 
 <!--  Init class Constructors -->
 
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -1951,7 +2003,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -1970,7 +2022,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -1990,7 +2042,7 @@
    ]]></variableTemplate>
 
    <for keys="r" values="tpm_sc_action;tpm_sc_cpwms;tpm_sc_cmod;tpm_sc_ps" >
-      <variableTemplate  namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -2011,7 +2063,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="tpm_sc_ps, tpm_mod"
       params=",mod_ticks"
       linePadding="xxx"
@@ -2035,7 +2087,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       nonDefaultParams="2"
       variables="tpm_modPeriod"
       linePadding="xxx"
@@ -2057,13 +2109,13 @@
       \t\n
    ]]></variableTemplate>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" ><![CDATA[
-      \t}; // class $(_Class)BasicInfo::Init\n\n
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+      \t}; // class $(_Structname)BasicInfo::Init\n\n
    ]]></template>
 
 <!--  Init class Configure method -->
 
-   <template key="/$(_BASENAME)/InitMethod" codeGenCondition="enablePeripheralSupport"  discardRepeats="true" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true" ><![CDATA[
       \t/**
       \t * Configure TPM from values specified in init
       \t *
@@ -2081,7 +2133,7 @@
       \t *
       \t * @param init Class containing initialisation values
       \t */
-      \ttemplate <class TPM>
+      \ttemplate <class $(_BASENAME)>
       \tstatic ErrorCode configure(const Init &init) {
       \t
       \t   // Enable peripheral clock
@@ -2099,7 +2151,7 @@
       \t   if (init.modperiod != 0) {
       \t
       \t      // Calculate sc.ps, mod (assumes cntin=0 or non-existent)
-      \t      ErrorCode rc = TPM::calculateTimingParameters(init.modperiod, sc, mod);
+      \t      ErrorCode rc = $(_BASENAME)::calculateTimingParameters(init.modperiod, sc, mod);
       \t      if (rc != E_NO_ERROR) {
       \t         return rc;
       \t      }\n
@@ -2144,9 +2196,9 @@
 
 <!--   ========== ChannelInit class =============================== -->
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
-      \t * Class used to do initialisation of $(_Class)Channel
+      \t * Class used to do initialisation of $(_Baseclass)Channel
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
@@ -2186,16 +2238,16 @@
       \t\n
    ]]></template>
 
-<!-- ChannelInit Class Member variables -->
+   <!-- ChannelInit Class Member variables -->
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="tpm_cnv[]"
    ><![CDATA[
       \t   // %description
       \t   uint16_t %registerName = 0_ticks;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="tpm_cnsc_mode_independent[]"
    ><![CDATA[
       \t   // Channel Status And Control Register
@@ -2203,16 +2255,23 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="tpm_channel_number"
    ><![CDATA[
       \t   // %description
       \t   %paramType %registerName = %paramType_None;\n\n
    ]]></variableTemplate>
 
-<!-- ChannelInit Configure methods -->
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="tpm_filter_chnfval"
+   ><![CDATA[
+      \t   // %description
+      \t   %paramType %registerName = %paramType_Disabled;\n\n
+   ]]></variableTemplate>
 
-   <template key="/$(_BASENAME)/InitMethod" codeGenCondition="enablePeripheralSupport"  discardRepeats="true" ><![CDATA[
+   <!-- ChannelInit Configure methods -->
+
+   <template key="/$(_BASENAME)/InitMethod" codeGenCondition="/$(_BASENAME)/enablePeripheralSupport" discardRepeats="true" ><![CDATA[
       \t/**
       \t * Configure TPM channel from values specified in channelInit
       \t *
@@ -2247,7 +2306,7 @@
       \tstatic ErrorCode configure(TpmChannelNum channelNum, const ChannelInit &channelInit) {
       \t\n
    ]]></template>
-   <template codeGenCondition="enablePeripheralSupport" condition="tpm_combine_combine0_present" ><![CDATA[
+   <template codeGenCondition="enablePeripheralSupport" condition="tpm_combine_combine$(_instance)_present" ><![CDATA[
       \t   // Configure timer combine mode
       \t   if ((channelNum&0b1) == 0) {
       \t      // Even channel value controls paired channels n,n+1
@@ -2282,12 +2341,12 @@
       \t\n
    ]]></template>
 
-<!-- ChannelInit Constructors -->
+   <!-- ChannelInit Constructors -->
 
    <for keys="   r                    :  c    "
       values=" tpm_cnsc_action[]      : true  ;
                tpm_cnsc_icrst[]       : true  " >
-      <variableTemplate  namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx"
          condition="%(c)"
@@ -2309,7 +2368,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="tpm_cnsc_mode_independent[]"
       linePadding="xxx"
    ><![CDATA[
@@ -2333,7 +2392,7 @@
       tpm_filter_ch0fval;
       tpm_channel_number;
       tpm_cnv[]" >
-      <variableTemplate  namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -2353,8 +2412,11 @@
          \t\n
       ]]></variableTemplate>
    </for>
+   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+      \t}; // class  $(_Structname)BasicInfo::ChannelInit\n\n
+   ]]></template>
 
-<!--  ChannelInit Default Initialisation value -->
+   <!--  ChannelInit Default Initialisation value -->
 
   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
@@ -2383,11 +2445,11 @@
       \n\t};\n\n
   ]]></template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" ><![CDATA[
-      \t}; // class  $(_Baseclass)BasicInfo::ChannelInit\n\n
-   ]]></template>
-   <template namespace="usbdm" ><![CDATA[
-      }; // class  $(_Class)BasicInfo\n\n
+
+<!--  ========== End of class  $(_Structname)BasicInfo =============================== -->
+
+   <template namespace="baseClass" ><![CDATA[
+      }; // class  $(_Structname)BasicInfo\n\n
    ]]></template>
 
 <!-- =========================== Set interrupt handlers =========================== -->
@@ -2548,16 +2610,27 @@
 
    <!-- ************* Signal mapping ****************** -->
 
-   <category name="Advanced" description="Advanced options" >
-      <for keys="p" values="0;1" >
-         <aliasOption key="/SIM/TpmClkin%(p)" locked="false"  optional="true" />
-      </for>
-      <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)clksel" locked="false" optional="true" />
-      <aliasOption key="/SIM/Tpm$(_instance)ExternalClkin"    locked="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt4_tpm$(_instance)ch0src" locked="false" optional="true" />
+   <category name="SIM" description="Pin mapping and clock enables"
+      toolTip="Thes settings only have effect if the SIM configuration is enabled"
+   >
+      <aliasOption key="/SIM/sim_scgc2_$(_name)"        optional="true" locked="false" />
+      <aliasOption key="/SIM/$(_basename)_clkin0"       optional="true" locked="false" />
+      <aliasOption key="/SIM/$(_basename)_clkin1"       optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt4_$(_name)clksel"  optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt9_$(_name)clksel"  optional="true" locked="false" />
+      <aliasOption key="/SIM/$(_name)ExternalClock"     optional="true" locked="false" />
+
+      <aliasOption key="/SIM/sim_sopt4_$(_name)ch0src"  optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt9_$(_name)ch0src"  optional="true" locked="false" />
    </category>
 
-   <signals enabledBy="enablePeripheralSupport" />
+   <!-- ************* SIM configuration ****************** -->
+   <category name="Advanced" description="SIM configuration">
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+   </category>
+   <deleteVariable key="_scgc_clock"  mustExist="false" />
+
+   <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
    <signals name="TPM" optional="true" />
 
 </fragment>

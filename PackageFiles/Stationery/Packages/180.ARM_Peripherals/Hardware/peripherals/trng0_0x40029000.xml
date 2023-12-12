@@ -3,5 +3,5 @@
 <!-- trng0_0x40029000.svd.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="trnga_def.xml"/>
+<xi:include href="trng_def.xml"/>
 </fragment>

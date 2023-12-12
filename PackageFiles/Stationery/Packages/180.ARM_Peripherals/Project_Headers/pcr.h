@@ -806,13 +806,13 @@ $(/PORT/AccessFunctions: #error /PORT/AccessFunctions not found)
    /**
     * Get PCR from pinIndex
     *
-    * @param pinIndex Pin index e.g. PTB3. Used to determine return value
+    * @param pinIndex Pin index e.g. PinIndex::PTB3. Used to determine return value
     *
     * @return Pointer to relevant PORT
     */
    static constexpr uint32_t getPcrAddress(PinIndex pinIndex){
 
-      return getPortAddress(pinIndex) + offsetof(PORT_Type, PCR) + sizeof(PORT_Type::PCR[0])*(int(pinIndex)%32);
+      return getPortAddress(mapPinToPort(pinIndex)) + offsetof(PORT_Type, PCR) + sizeof(PORT_Type::PCR[0])*(int(pinIndex)%32);
    }
 
    /**
@@ -851,9 +851,9 @@ $(/PORT/AccessFunctions: #error /PORT/AccessFunctions not found)
 /**
  * Common PORT features shared across all port pins
  *
- * @tparam pinIndex Pin index e.g. PTB3. Used to determine associated port
+ * @tparam portIndex PortIndex used to determine associated port
  */
-template<PinIndex pinIndex>
+template<PortIndex portIndex>
 class PcrBase_T {
 
 private:
@@ -863,9 +863,6 @@ private:
    PcrBase_T(const PcrBase_T&) = delete;
    PcrBase_T(PcrBase_T&&) = delete;
 
-   /** Callback functions for ISRs */
-   static PinCallbackFunction fCallback;
-
 public:
 
    // Empty Constructor
@@ -873,17 +870,22 @@ public:
 
 #if defined(PORT_DFCR_CS_MASK)
    /// PORT hardware as pointer to struct
-   static constexpr HardwarePtr<PORT_DFER_Type> port = PcrBase::getPcrAddress(pinIndex);
+   static constexpr HardwarePtr<PORT_DFER_Type> port = PcrBase::getPortAddress(portIndex);
 #else
    /// PORT hardware as pointer to struct
-   static constexpr HardwarePtr<PORT_Type> port = PcrBase::getPcrAddress(pinIndex);
+   static constexpr HardwarePtr<PORT_Type> port = PcrBase::getPortAddress(portIndex);
 #endif
 
    /// Hardware IRQ number
-   static constexpr IRQn_Type irqNum = PcrBase::getIrqNum(pinIndex);
+   static constexpr IRQn_Type irqNum = PcrBase::getIrqNum(portIndex);
 
    /// Indicates if USBDM port pin interrupt handler has been installed in vector table
-   static constexpr bool HANDLER_INSTALLED = PcrBase::isHandlerInstalled(pinIndex);
+   static constexpr bool HANDLER_INSTALLED = PcrBase::isHandlerInstalled(mapPortToPin(portIndex));
+
+public:
+
+   /** Callback functions for ISRs */
+   static PinCallbackFunction fCallback;
 
    /**
     * Interrupt handler\n
@@ -897,9 +899,65 @@ public:
       // Clear flags
       port->ISFR = status;
 
+      // Pass to call-back
       fCallback(status);
    }
 
+   /**
+    * Set callback for Pin interrupts
+    *
+    * @param[in] callback The function to call on Pin interrupt. \n
+    *                     nullptr to indicate none
+    *
+    * @return E_NO_ERROR            No error
+    * @return E_HANDLER_ALREADY_SET Handler already set
+    *
+    * @note There is a single callback function for all pins on the related port.
+    *       It is necessary to identify the originating pin in the callback
+    */
+   static ErrorCode setPinCallback(PinCallbackFunction callback) {
+
+      // Always OK to remove shared handler
+      if (callback == nullptr) {
+         fCallback = PcrBase::unhandledCallback;
+         return E_NO_ERROR;
+      }
+#ifdef DEBUG_BUILD
+      // Callback is shared across all port pins. Check if different callback already assigned
+      if ((fCallback != PcrBase::unhandledCallback) && (fCallback != callback)) {
+         return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
+      }
+#endif
+      fCallback = callback;
+      return E_NO_ERROR;
+   }
+
+   /**
+    * Enable Pin interrupts in NVIC.
+    */
+   static void enableNvicPinInterrupts() {
+      static_assert(irqNum>=0, "Pin does not support interrupts");
+      NVIC_EnableIRQ(irqNum);
+   }
+
+   /**
+    * Enable and set priority of Pin interrupts in NVIC.
+    * Any pending NVIC interrupts are first cleared.
+    *
+    * @param[in]  nvicPriority  Interrupt priority
+    */
+   static void enableNvicPinInterrupts(NvicPriority nvicPriority) {
+      static_assert(irqNum>=0, "Pin does not support interrupts");
+      enableNvicInterrupt(irqNum, nvicPriority);
+   }
+
+   /**
+    * Disable Pin interrupts in NVIC.
+    */
+   static void disableNvicPinInterrupts() {
+      static_assert(irqNum>=0, "Pin does not support interrupts");
+      NVIC_DisableIRQ(irqNum);
+   }
    /**
     * Wrapper to allow the use of a class member as a callback function
     * @note Only usable with static objects.
@@ -978,63 +1036,11 @@ public:
       };
       return fn;
    }
-
-   /**
-    * Set callback for Pin interrupts
-    *
-    * @param[in] callback The function to call on Pin interrupt. \n
-    *                     nullptr to indicate none
-    *
-    * @return E_NO_ERROR            No error
-    * @return E_HANDLER_ALREADY_SET Handler already set
-    *
-    * @note There is a single callback function for all pins on the related port.
-    *       It is necessary to identify the originating pin in the callback
-    */
-   static ErrorCode setPinCallback(PinCallbackFunction callback) {
-      static_assert(HANDLER_INSTALLED, "Gpio not configured for interrupts - Modify Configure.usbdm");
-
-      if (callback == nullptr) {
-         fCallback = PcrBase::unhandledCallback;
-         return E_NO_ERROR;
-      }
-#ifdef DEBUG_BUILD
-      // Callback is shared across all port pins. Check if callback already assigned
-      if ((fCallback != PcrBase::unhandledCallback) && (fCallback != callback)) {
-         return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
-      }
-#endif
-      fCallback = callback;
-      return E_NO_ERROR;
-   }
-
-   /**
-    * Enable Pin interrupts in NVIC.
-    */
-   static void enableNvicPinInterrupts() {
-      static_assert(irqNum>=0, "Pin does not support interrupts");
-      NVIC_EnableIRQ(irqNum);
-   }
-
-   /**
-    * Enable and set priority of Pin interrupts in NVIC.
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableNvicPinInterrupts(NvicPriority nvicPriority) {
-      static_assert(irqNum>=0, "Pin does not support interrupts");
-      enableNvicInterrupt(irqNum, nvicPriority);
-   }
-
-   /**
-    * Disable Pin interrupts in NVIC.
-    */
-   static void disableNvicPinInterrupts() {
-      static_assert(irqNum>=0, "Pin does not support interrupts");
-      NVIC_DisableIRQ(irqNum);
-   }
 };
+
+template<PortIndex portIndex>
+PinCallbackFunction USBDM::PcrBase_T<portIndex>::fCallback = PcrBase::unhandledCallback;
+
 
 /**
  * @brief Template representing a Pin Control Register (PCR)
@@ -1055,7 +1061,7 @@ public:
  * @tparam pinIndex              Pin index e.g. PTA3
  */
 template<PcrValue defPcrValue, PinIndex pinIndex>
-class Pcr_T : public PcrBase_T<pinIndex> {
+class Pcr_T : public PcrBase_T<mapPinToPort(pinIndex)> {
 
 protected:
    /// Default constructor used by derived classes only
@@ -1071,8 +1077,8 @@ public:
    /// Default PCR value including PinMux value for peripheral
    static constexpr PcrInit defaultPcrValue = defPcrValue;
 
-   /// Default PCR value including PinMux value for peripheral
-   static constexpr uint32_t portAddress = PcrBase::getPortAddress(pinIndex);
+   /// Address of associated port
+   static constexpr uint32_t portAddress = PcrBase::getPortAddress(mapPinToPort(pinIndex));
 
 private:
    /**
@@ -1192,9 +1198,6 @@ $(/PCR/set_pcr_option: // /PCR/set_pcr_option not found)
 #endif
 
 };
-
-template<PinIndex pinIndex>
-PinCallbackFunction USBDM::PcrBase_T<pinIndex>::fCallback = PcrBase::unhandledCallback;
 
 /**
  * @brief Template function to set a PCR to the default value

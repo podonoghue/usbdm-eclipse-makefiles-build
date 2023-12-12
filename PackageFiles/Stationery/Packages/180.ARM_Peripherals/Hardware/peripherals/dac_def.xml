@@ -656,7 +656,7 @@
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      // Only set call-backs if feature enabled
       \t      Info::setCallback(init.callbackFunction);
-      \t      enableNvicInterrupts(init.irqlevel);
+      \t      Info::enableNvicInterrupts(init.irqlevel);
       \t   }
       \t\n
    ]]></template>
@@ -729,10 +729,11 @@
    ]]></template>
 
    <!-- ************* SIM configuration ****************** -->
+
    <category name="Advanced" description="SIM configuration">
-      <aliasOption key="/SIM/sim_scgc6_$(_name)"      locked="false" optional="true" />
-      <aliasOption key="/SIM/sim_scgc6_$(_basename)"  locked="false" optional="true" />
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
    </category>
+   <deleteVariable key="_scgc_clock"  mustExist="false" />
 
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 

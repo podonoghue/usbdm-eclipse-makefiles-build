@@ -26,6 +26,7 @@ namespace USBDM {
  * @brief Abstraction for Synchronous DRAM Controller
  * @{
  */
+#if $(/SDRAMC/enablePeripheralSupport:false) // /SDRAMC/enablePeripheralSupport
 
 /**
  * Indices for SDRAMC memory blocks
@@ -465,7 +466,7 @@ public:
       // Out of bounds value for function index
       static constexpr bool Test1 = (pin>=0) && (pin<(Info::numSignals));
       // Function is not currently mapped to a pin
-      static constexpr bool Test2 = !Test1 || (Info::info[pin].gpioBit != UNMAPPED_PCR);
+      static constexpr bool Test2 = !Test1 || (Info::info[pin].gpioBit != PinIndex::UNMAPPED_PCR);
       // Non-existent function and catch-all. (should be INVALID_PCR)
       static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[pin].gpioBit >= 0);
 
@@ -498,7 +499,7 @@ public:
     * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected on configuration
     */
    static void defaultConfigure() {
-      enable();
+      Info::enable();
 
       // The multiplexing of shared FLEXBUS/SDRAMC ports is controlled by the FLEXBUS controller
       FlexbusInfo::configureSharedMultiplexing();
@@ -735,6 +736,8 @@ public:
 };
 
 $(/SDRAMC/declarations: // No declarations found)
+#endif // /SDRAMC/enablePeripheralSupport
+
 /**
  * End SDRAMC_Group
  * @}

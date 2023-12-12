@@ -4,42 +4,28 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
+   <!--  Assumed more than 1 DMA channel and odd # of vectors indicates error handler vector present as last -->
    <choiceOption key="irq_enum" condition="=_irqCount>1"
-      valueFormat="%s"
       hidden="true"
+      valueFormat="%s"
       derived="true"
       typeName="$(_Class)IrqNum"
       description="$(_Class) Interrupt indices"
       toolTip="Used to identify peripheral interrupt" >
-      <choice value="0"  enum="0"        name="Direct memory access controller" />
-      <choice value="1"  enum="1"        name="Direct memory access controller" />
-      <choice value="2"  enum="2"        name="Direct memory access controller" />
-      <choice value="3"  enum="3"        name="Direct memory access controller" />
-      <choice value="4"  enum="4"        name="Direct memory access controller" />
-      <choice value="5"  enum="5"        name="Direct memory access controller" />
-      <choice value="6"  enum="6"        name="Direct memory access controller" />
-      <choice value="7"  enum="7"        name="Direct memory access controller" />
-      <choice value="8"  enum="8"        name="Direct memory access controller" />
-      <choice value="9"  enum="9"        name="Direct memory access controller" />
-      <choice value="10" enum="10"       name="Direct memory access controller" />
-      <choice value="11" enum="11"       name="Direct memory access controller" />
-      <choice value="12" enum="12"       name="Direct memory access controller" />
-      <choice value="13" enum="13"       name="Direct memory access controller" />
-      <choice value="14" enum="14"       name="Direct memory access controller" />
-      <choice value="15" enum="15"       name="Direct memory access controller" />
-      <choice value="16" enum="Error"    name="Direct memory access controller" />
+      <choiceExpansion value="%(num)"     enum="%(num)" name="DMA channel %(num)" keys="num" dim="=(_irqCount&amp;~0x1)" />
+      <choice          value="=_irqCount" enum="Error"  name="DMA Error"          condition="=(_irqCount&amp;~0b1)!=0" />
    </choiceOption>
 
    <!-- Custom IRQ handlers -->
    <stringOption key="irq_pattern"        locked="true" value="^%b_?(\d+)(_DMA.*)?$;^%b_Error.*$" hidden="true" />
    <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irqHandler&lt;$1&gt;;%c%i::errorIrqHandler" hidden="true" />
 
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="irq_parameters"           type="String"  value="&quot;DmaChannelNum channel, uint32_t status&quot;"  />
-   <constant key="irq_dummy_parameters"     type="String"  value="&quot;DmaChannelNum, uint32_t&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;(DmaChannelNum)channel, 0&quot;"  />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
-   <constant key="isSupportedinStartup"     type="Boolean" value="false"          />
+   <constant key="suppressInstance"         type="Boolean" value="false"                        />
+   <constant key="irq_parameters"           type="String"  value="&quot;uint32_t status&quot;"  />
+   <constant key="irq_dummy_parameters"     type="String"  value="&quot;uint32_t&quot;"         />
+   <constant key="irq_call"                 type="String"  value="&quot;0&quot;"                />
+   <constant key="isGeneratedByDefault"     type="Boolean" value="false"                        />
+   <constant key="isSupportedinStartup"     type="Boolean" value="false"                        />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -422,7 +408,8 @@
       \t/**
       \t * Type definition for $(_Baseclass) interrupt call back.
       \t *
-      \t * @param status Interrupt status value from SPI->SR
+      \t * @param status Error status value from DMA->ES
+      \t *               This will be zero for non-error interrupt on channel
       \t */
       \ttypedef void (*CallbackFunction)($(irq_dummy_parameters));
       \t
@@ -477,7 +464,7 @@
       \t   dma->CERR = channel;
       \t
       \t   // Call channel call-back with error flags
-      \t   sCallbacks[channel](channel, errorFlags);
+      \t   sCallbacks[channel](errorFlags);
       \t}
       \t
       \t/**
@@ -502,7 +489,7 @@
       \t */
       \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallbacks[] = {\n
    ]]></template>
-   <for keys="ch" dim="=NumChannels" >
+   <for keys="ch" dim="=_irqCount" >
       <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
          \t   $(_Class)Info::unhandledCallback,\n
       ]]></template>
@@ -835,9 +822,10 @@
    ]]></template>
 
    <!-- ************* SIM configuration ****************** -->
+
    <category name="Advanced" description="SIM configuration">
-      <aliasOption key="/SIM/sim_scgc7_$(_name)"      locked="false" optional="true" />
-      <aliasOption key="/SIM/sim_scgc7_$(_basename)"  locked="false" optional="true" />
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
    </category>
+   <deleteVariable key="_scgc_clock"  mustExist="false" />
 
 </fragment>

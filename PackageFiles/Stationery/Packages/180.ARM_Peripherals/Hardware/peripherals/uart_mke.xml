@@ -71,7 +71,7 @@ Devices using this peripheral:
 
    <binaryOption key="usedAsConsole"
       description="usedAsConsole"
-      toolTip="Inidcates if this device is allocated as the Console for I/O"
+      toolTip="Indicates if this device is allocated as the Console for I/O"
       ref="/Console/consoleDevice.name==&quot;$(_Baseclass) $(_instance)&quot;"
       locked="true"
       derived="true" >

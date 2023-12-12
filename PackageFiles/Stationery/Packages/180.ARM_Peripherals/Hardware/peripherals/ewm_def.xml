@@ -64,18 +64,18 @@
       toolTip="Enables the EWM module\n
                This is a write-once value"
       description="EWM enable" >
-      <choice name="Disabled"    value="0" enum="Disabled"/>
-      <choice name="Enabled"     value="1" enum="Enabled"/>
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
    </binaryOption >
 
    <binaryOption key="ewm_ctrl_inten" condition="ewm_ctrl_inten_present"
       enabledBy="ewm_ctrl_ewmen"
       enumType="uint8_t"
-      typeName="EwmInterrupt"
-      toolTip="Enables an interrupt request on EWM event"
-      description="Interrupt Enable" >
-      <choice name="Interrupt disabled"  value="0" enum="Disabled"/>
-      <choice name="Interrupt enabled"   value="1" enum="Enabled"/>
+      typeName="EwmAction"
+      toolTip="Action taken on EWM event"
+      description="Action on event" >
+      <choice name="None"        value="0" enum="None"       />
+      <choice name="Interrupt"   value="1" enum="Interrupt" />
    </binaryOption >
 
    <choiceOption key="ewm_ctrl_input" condition="ewm_ctrl_inen_present&amp;&amp;ewm_ctrl_assin_present"
@@ -86,9 +86,9 @@
       toolTip="Enables and selects the polarity of the EWM_in pin\n
                This is a write-once value"
       description="Input pin control" >
-      <choice name="Input disabled"    value="0,0" enum="Disabled"/>
-      <choice name="Input active-low"  value="1,0" enum="ActiveLow"/>
-      <choice name="Input active-high" value="1,1" enum="ActiveHigh"/>
+      <choice name="Input disabled"    value="0,0" enum="Disabled" />
+      <choice name="Input active-low"  value="1,0" enum="ActiveLow" />
+      <choice name="Input active-high" value="1,1" enum="ActiveHigh" />
    </choiceOption>
 
    <!-- ************* SERV ****************** -->
@@ -131,7 +131,7 @@
                It is generated from the LPO wth a prescaler."
       units="Hz"
    />
-   
+
    <floatOption key="ewm_inputClock"  condition="!ewm_clkprescaler_clk_div_present"
       ref="(1.0*/PMC/system_low_power_clock)"
       locked="true"
@@ -142,7 +142,7 @@
                It is generated from the LPO."
       units="Hz"
    />
-   
+
    <!-- ************* CMPL ****************** -->
 
    <intOption key="ewm_cmpl_comparel" condition="ewm_cmpl_comparel_present"
@@ -193,7 +193,7 @@
 
    <for keys="field               : get   : set   : genCode                 : name"
         values="
-         ewm_ctrl_inten           : true  : true  : enableGettersAndSetters : Interrupt;
+         ewm_ctrl_inten           : true  : true  : enableGettersAndSetters : Action;
          ewm_ctrl_input           : true  : true  : enableGettersAndSetters : InputPin;
          ewm_ctrl_ewmen           : true  : true  : enableGettersAndSetters : Enable;
          ewm_serv_service         : false : true  : enableGettersAndSetters : Service;
@@ -698,8 +698,9 @@
 
    <!-- ************* SIM configuration ****************** -->
    <category name="Advanced" description="SIM configuration">
-      <aliasOption key="/SIM/sim_scgc4_$(_name)"      locked="false" optional="true" />
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
    </category>
+   <deleteVariable key="_scgc_clock"  mustExist="false" />
 
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 

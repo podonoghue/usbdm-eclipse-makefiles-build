@@ -48,6 +48,10 @@ $(/MCG/McgClockInfoEntries:!!!!!!!Not found!!!!!!!)
 };
 $(/MCG/clocks)
 
+/** Current clock mode (FEI out of reset) */
+McgClockMode Mcg::currentClockMode = McgClockMode_FEI;
+
+#if $(/MCG/enablePeripheralSupport:false) // /MCG/enablePeripheralSupport
 #if USBDM_ERRATA_E2448
 /**
  *  Change SIM->CLKDIV1 value
@@ -88,12 +92,10 @@ static void setSysDividers(uint32_t simClkDiv1) {
    SIM->CLKDIV1 = simClkDiv1;
 }
 #endif
+#endif
 
-/** Current clock mode (FEI out of reset) */
-McgClockMode Mcg::currentClockMode = McgClockMode_FEI;
+$(/MCG/staticDefinitions: // /MCG/staticDefinitions not found) 
 
-// /MCG/staticDefinitions
-$(/MCG/staticDefinitions: // No static declarations found) 
 #if $(/MCG/enablePeripheralSupport:false) // /MCG/enablePeripheralSupport
 
 constexpr McgClockMode clockTransitionTable[][8] = {

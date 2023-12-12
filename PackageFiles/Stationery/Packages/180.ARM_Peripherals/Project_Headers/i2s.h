@@ -104,7 +104,7 @@ public:
     */
    virtual ~I2sBase_T() {}
 
-$(/I2S/InitMethod)
+$(/I2S/InitMethod: // No declarations found)
 };
 
 /** Used by ISR to obtain handle of object */

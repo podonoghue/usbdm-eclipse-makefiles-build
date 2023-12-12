@@ -485,6 +485,7 @@
    <intOption key="rtc_tar_tar" condition="rtc_tar_tar_present"
       hidden="true"
       ref="rtc_alarm_value+60*60*rtc_timezone"
+      derived="true"
       typeName="Alarm"
       enumType="uint32_t"
       description="Alarm time in seconds"
@@ -521,6 +522,7 @@
                The time counter will read as zero when SR[TOF] or SR[TIF] are set.\n
                When the time counter is disabled, the TPR can be read or written.\n
                The TSR[TSR] increments when bit 14 of the TPR transitions from a logic one to a logic zero."
+      value="0"
    />
 
    <intOption key="rtc_tcr_cic" condition="rtc_tcr_cic_present"
@@ -529,6 +531,7 @@
       enumType="uint32_t"
       description="Compensation Interval Counter"
       toolTip="Current value of the compensation interval counter"
+      value="0"
    />
 
    <intOption key="rtc_tcr_tcv" condition="rtc_tcr_tcv_present"
@@ -537,6 +540,7 @@
       description="Time Compensation Value"
       toolTip="Current value used by the compensation logic for the present second interval.\n
                Updated once a second if the CIC equals 0 with the contents of the TCR field"
+      value="0"              
    />
 
    <!-- ********** Time Setup  *********** -->
@@ -664,7 +668,7 @@
                The wake-up pin is optional and not available on all devices."
       description="Wake-up Pin Control" >
       <choice name="No effect"            value="0" enum="Disabled" />
-      <choice name="Wake-up pin asserted"  value="1" enum="Asserted"  />
+      <choice name="Wake-up pin asserted" value="1" enum="Asserted"  />
    </binaryOption >
 
    <category name="Device Registers (view only)" description="RTC Register values">
@@ -1511,9 +1515,10 @@
    ]]></template>
 
    <!-- ************* SIM configuration ****************** -->
-   <category name="Advanced" description="SIM configuration" >
-      <aliasOption key="/SIM/sim_scgc6_$(_name)"      locked="false" optional="true" />
+   <category name="Advanced" description="SIM configuration">
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
    </category>
+   <deleteVariable key="_scgc_clock"  mustExist="false" />
 
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 

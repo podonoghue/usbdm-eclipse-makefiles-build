@@ -33,6 +33,7 @@ namespace USBDM {
  * @brief C++ Class allowing access to UART interface
  * @{
  */
+#if $(/LPUART/enablePeripheralSupport) // /LPUART/enablePeripheralSupport
 
 /**
  * Enumeration selecting interrupt sources
@@ -149,13 +150,6 @@ protected:
       if (ch=='\n') {
          _writeChar('\r');
       }
-   }
-
-   /**
-    * Handler for interrupts when no handler set
-    */
-   static void unhandledCallback(uint8_t) {
-      setAndCheckErrorCode(E_NO_HANDLER);
    }
 
 public:
@@ -291,7 +285,7 @@ typedef void (*LPUARTCallbackFunction)(uint8_t status);
  *
  * @tparam Info   Class describing UART hardware
  */
-template<class Info> class Lpuart_T : public Lpuart {
+template<class Info> class Lpuart_T : public Info, public Lpuart {
 
 private:
    Lpuart_T(const Lpuart_T&) = delete;
@@ -299,7 +293,7 @@ private:
 
 public:
    /** Get reference to LPUART hardware as struct */
-   static volatile LPUART_Type &lpuartPtr() { return Info::lpuart(); }
+   using Info::lpuart;
 
    /** Get base address of LPUART hardware as uint32_t */
    static constexpr uint32_t uartBase() { return Info::baseAddress; }
@@ -363,10 +357,6 @@ public:
    }
 #endif
 
-protected:
-   /** Callback function for RxTx ISR */
-   static LPUARTCallbackFunction rxTxCallback;
-
 public:
    $(/LPUART/classInfo: // No class Info found)
 
@@ -383,7 +373,7 @@ public:
       static_assert(Info::info[0].pinIndex >= PinIndex::MIN_PIN_INDEX, "LpUart_Tx has not been assigned to a pin - Modify Configure.usbdm");
       static_assert(Info::info[1].pinIndex >= PinIndex::MIN_PIN_INDEX, "LpUart_Rx has not been assigned to a pin - Modify Configure.usbdm");
 #endif
-    
+
       initialise();
    }
 
@@ -393,7 +383,7 @@ public:
       Info::enableClock();
 
       if constexpr (Info::mapPinsOnEnable) {
-         configureAllPins();
+         Info::configureAllPins();
       }
       lpuart->CTRL = LPUART_CTRL_TE(1)|LPUART_CTRL_RE(1);
    }
@@ -432,72 +422,7 @@ public:
 protected:
 
 public:
-   /**
-    * Receive/Transmit/Error IRQ handler
-    */
-   static void irqHandler() {
-      uint8_t status = Info::lpuart->STAT;
-      rxTxCallback(status);
-   }
-
-   /**
-    * Set Receive/Transmit Callback function
-    *
-    *  @param[in]  callback  Callback function to be executed on Rx or Tx interrupt.\n
-    *                        Use nullptr to remove callback.
-    */
-   static void setRxTxCallback(LPUARTCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "LPUART not configure for interrupts");
-      if (callback == nullptr) {
-         callback = unhandledCallback;
-      }
-      rxTxCallback = callback;
-   }
-
-   /**
-    * Enable interrupts in NVIC
-    */
-   static void enableNvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[0]);
-      if constexpr (Info::irqCount>1) {
-         NVIC_EnableIRQ(Info::irqNums[1]);
-      }
-      if constexpr (Info::irqCount>2) {
-         NVIC_EnableIRQ(Info::irqNums[2]);
-      }
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableNvicInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
-      if constexpr (Info::irqCount>1) {
-          enableNvicInterrupt(Info::irqNums[1], nvicPriority);
-      }
-      if constexpr (Info::irqCount>2) {
-          enableNvicInterrupt(Info::irqNums[2], nvicPriority);
-      }
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[0]);
-      if constexpr (Info::irqCount>1) {
-         NVIC_DisableIRQ(Info::irqNums[1]);
-      }
-      if constexpr (Info::irqCount>2) {
-         NVIC_DisableIRQ(Info::irqNums[2]);
-      }
-   }
 };
-
-template<class Info> LPUARTCallbackFunction Lpuart_T<Info>::rxTxCallback  = unhandledCallback;
 
 /**
  * @brief Template class representing an UART interface with buffered reception
@@ -522,7 +447,7 @@ private:
    LpuartBuffered_T(LpuartBuffered_T&&) = delete;
 
 public:
-   using Lpuart_T<Info>::lpuart;
+   using Info::lpuart;
 
    LpuartBuffered_T() : Lpuart_T<Info>() {
       Lpuart::enableInterrupt(LpuartInterrupt_RxFull);
@@ -645,6 +570,8 @@ template<class Info, int rxSize, int txSize> volatile uint32_t   LpuartBuffered_
 template<class Info, int rxSize, int txSize> volatile uint32_t   LpuartBuffered_T<Info, rxSize, txSize>::fWriteLock = 0;
 
 $(/LPUART/declarations: // No declarations found)
+#endif // /LPUART/enablePeripheralSupport
+
 /**
  * End LPUART_Group
  * @}

@@ -21,6 +21,8 @@
 #include <cmath>
 #include "pin_mapping.h"
 
+#if $(/TPM/enablePeripheralSupport) // /TPM/enablePeripheralSupport
+
 /*
  * Default port information
  */
@@ -211,7 +213,9 @@ private:
    TpmBase_T(const TpmBase_T&) = delete;
    TpmBase_T(TpmBase_T&&) = delete;
 
+#if $(/TPM/irqHandlingMethod:false) // /TPM/irqHandlingMethod
    typedef typename Info::ChannelCallbackFunction ChannelCallbackFunction;
+#endif
 
 public:
 
@@ -255,6 +259,8 @@ protected:
    }
 
 public:
+
+#if $(/TPM/irqHandlingMethod) // /TPM/irqHandlingMethod
    /**
     * Wrapper to allow the use of a class member as a callback function
     * @note Only usable with static objects.
@@ -333,15 +339,19 @@ public:
       };
       return fn;
    }
+#endif // /TPM/irqHandlingMethod
 
 public:
 $(/TPM/classInfo: // No class Info found)
 $(/TPM/InitMethod:// /TPM/InitMethod not found)
 $(/TPM/ChannelInitMethod: // /TPM/ChannelInitMethod not found)
+$(/TPM/FaultInitMethod: // /TPM/FaultInitMethod not found)
+
 /*
  *   // Static functions (mirrored)
  */
 $(/TPM/static_functions:  // /TPM/static_functions not found)
+
 public:
    /**
     * Template class representing a timer channel
@@ -407,7 +417,7 @@ public:
       /** Allow access owning TPM */
       using OwningTpm = TpmBase_T<Info>;
 
-      /** Allow access to FTM hardware */
+      /** Allow access to TPM hardware */
       static constexpr HardwarePtr<TPM_Type> tpm = Info::baseAddress;
 
       /** @return Base address of TPM.CONTROL struct as uint32_t */
@@ -449,20 +459,23 @@ public:
        *       pending CnV register updates are discarded.
        */
       static void defaultConfigure() {
-         OwningTpm::configure(OwningTpm::DefaultChannelInitValues[channel]);
+         Info::configure(OwningTpm::DefaultChannelInitValues[channel]);
       }
 
       /**
-       * Configure channel
+       * Configure channel from Init data
        *
        * @note This method has the side-effect of clearing the register update synchronisation i.e.
        *       pending CnV register updates are discarded.
+       *
+       * @param channelInit (channel number is ignored)
        */
-      static void configure(ChannelInit channelInit) {
-         OwningTpm::configure(channelInit);
+      static void configure(const typename Info::ChannelInit channelInit) {
+         Info::configure(TpmChannelNum(channel), channelInit);
       }
       
 $(/TPM_CHANNEL/static_functions:  // /TPM_CHANNEL/static_functions not found)
+#if false // /TPM/irqHandlingMethod
    /**
     * Set channel event callback function
     *
@@ -483,7 +496,8 @@ $(/TPM_CHANNEL/static_functions:  // /TPM_CHANNEL/static_functions not found)
          return OwningTpm::setChannelCallback(callback);
       }
    }
-
+#endif // /TPM/irqHandlingMethod
+#if $(/PCR/_present:false) // /PCR/_present
       /*******************************
        *  PIN Functions
        *******************************/
@@ -619,16 +633,16 @@ $(/TPM_CHANNEL/static_functions:  // /TPM_CHANNEL/static_functions not found)
 
          Pcr::setInput(pinPull,pinAction,pinFilter);
       }
+#endif
 
    };
 
    /**
-    * Configure with settings from Configure.usbdmProject.
+    * Default configuration using settings from Configure.usbdmProject
     */
    static void defaultConfigure() {
 
      configure(Info::DefaultInitValue);
-
 
      NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
    }
@@ -682,13 +696,19 @@ public:
    // Default constructor
    TpmQuadDecoder_T() = default;
 
+   /**
+    * Set common fault and Timer Overflow Callback function\n
+    *
+    * @param[in] theCallback Callback function to execute when timer overflows. \n
+    *                        nullptr to indicate none
+    */
    void setCallback(typename Info::CallbackFunction theCallback) {
       TpmBase_T<Info>::setCallback(theCallback);
    }
 
-   using QuadInit = typename Info::QuadInit;
-
-   static constexpr QuadInit DefaultInitValue = Info::DefaultQuadInitValue;
+   // Make these visible
+   using Info::QuadInit;
+   using Info::DefaultQuadInitValue;
 
    /** Hardware instance pointer */
    static constexpr HardwarePtr<TPM_Type> tpm = Info::baseAddress;
@@ -746,31 +766,6 @@ public:
    }
 
    /**
-    * Enable interrupts in NVIC
-    */
-   static void enableNvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[0]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    *
-    * @note Any pending interrupts are cleared before enabling.
-    */
-   static void enableNvicInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[0]);
-   }
-
-   /**
     * Configures all mapped pins associated with this peripheral
     */
    static void configureAllPins() {
@@ -806,7 +801,7 @@ public:
     */
    static void disable() {
 
-      disableNvicInterrupts();
+      Info::disableNvicInterrupts();
 
       if constexpr (Info::mapPinsOnEnable) {
          disableAllPins();
@@ -819,6 +814,7 @@ public:
       Info::disableClock();
    }
 
+$(/TPM/QuadInitMethod:// /TPM/InitMethod not found)
    static ErrorCode configure(const typename Info::QuadInit &quadInit) {
 
       // Assertions placed here so only checked if TpmQuadDecoder actually used
@@ -917,7 +913,7 @@ public:
 };
 #endif // defined(TPM_QDCTRL_QUADEN_MASK)
 
-$(/TPM/declarations: // No FTM declarations found)
+$(/TPM/declarations: // No TPM declarations found)
 $(/TPM/quadDeclarations: // No QUAD declarations found)
 /**
  * End TPM_Group
@@ -925,6 +921,8 @@ $(/TPM/quadDeclarations: // No QUAD declarations found)
  */
 
 } // End namespace USBDM
+
+#endif // /TPM/enablePeripheralSupport
 
 #endif /* HEADER_TPM_H */
 

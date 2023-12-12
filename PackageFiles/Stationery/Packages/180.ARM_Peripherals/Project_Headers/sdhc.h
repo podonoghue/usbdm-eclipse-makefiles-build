@@ -26,6 +26,8 @@ namespace USBDM {
  * @{
  */
 
+#if $(/SDHC/enablePeripheralSupport:false) // /SDHC/enablePeripheralSupport
+
 /**
  * Type definition for SDHC interrupt call back
  */
@@ -104,7 +106,7 @@ enum SdhcAutoCommand12Status {
  * @tparam info      Information class for SDHC
  */
 template<class Info>
-class SdhcBase_T {
+class SdhcBase_T : public Info {
 
 protected:
    /**
@@ -150,7 +152,7 @@ public:
     * Includes configuring all pins
     */
    static void defaultConfigure() {
-      enable();
+      Info::enable();
    }
 
    /**
@@ -274,6 +276,8 @@ public:
 template<class Info> SDHCCallbackFunction SdhcBase_T<Info>::callback = SdhcBase_T<Info>::unhandledCallback;
 
 $(/SDHC/declarations: // No declarations found)
+#endif  // /SDHC/enablePeripheralSupport
+
 /**
  * End SDHC_Group
  * @}

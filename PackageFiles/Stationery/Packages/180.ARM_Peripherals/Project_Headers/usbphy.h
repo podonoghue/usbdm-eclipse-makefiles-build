@@ -29,6 +29,8 @@ namespace USBDM {
  * @brief C++ Class allowing access to USBPHY interface
  * @{
  */
+ 
+#if $(/USBPHY/enablePeripheralSupport:false) // /USBPHY/enablePeripheralSupport
 
 /**
  * Type definition for interrupt call back
@@ -124,7 +126,7 @@ public:
    static void initialise() {
 
       // External reference clock enable
-      Osc0Info::enableExternalReference(OscErClkEn_Enabled);
+      Osc0Info::setExternalReference(OscErClkEn_Enabled);
 
       // IRC enable
       McgInfo::enableMcgIrClock(McgIrClkEn_Enabled);
@@ -159,6 +161,7 @@ template<class Info> UsbphyCallbackFunction UsbphyBase_T<Info>::sCallback = Usbp
 template<class Info> USBPHY_Type *UsbphyBase_T<Info>::thisPtr = 0;
 
 $(/USBPHY/declarations: // No declarations found)
+#endif // /USBPHY/enablePeripheralSupport
 /**
  * End USBPHY_Group
  * @}

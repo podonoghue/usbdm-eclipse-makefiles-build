@@ -381,7 +381,7 @@ public:
       Info::enableClock();
 
       if constexpr (Info::mapPinsOnEnable) {
-         configureAllPins();
+         Info::configureAllPins();
       }
       uart->C2 = UART_C2_TE(1)|UART_C2_RE(1);
    }

@@ -991,6 +991,13 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
+   <!-- ************* SIM configuration ****************** -->
+
+   <category name="Advanced" description="SIM configuration">
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+   </category>
+   <deleteVariable key="_scgc_clock"  mustExist="false" />
+
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </peripheralPage>

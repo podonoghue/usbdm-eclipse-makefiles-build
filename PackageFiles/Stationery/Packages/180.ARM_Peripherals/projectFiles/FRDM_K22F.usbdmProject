@@ -178,11 +178,15 @@
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_VLPR_BLPI_4MHz" />
    <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_HSRUN_PEE_120MHz" />
    <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_RUN_FEE_80MHz" />
+   <item key="/MCG/configurePeripheralInStartUp"           value="true" />
+   <item key="/MCG/enableClockConfiguration[1]"            value="true" />
+   <item key="/MCG/enableClockConfiguration[2]"            value="true" />
+   <item key="/MCG/enableClockConfiguration[3]"            value="true" />
+   <item key="/MCG/enablePeripheralSupport"                value="true" />
    <item key="/MCG/mcgClockMode[0]"                        value="7" />
    <item key="/MCG/mcgClockMode[1]"                        value="3" />
    <item key="/MCG/mcgClockMode[2]"                        value="7" />
    <item key="/MCG/mcgClockMode[3]"                        value="1" />
-   <item key="/MCG/mcg_c1_frdiv[3]"                        value="3" />
    <item key="/MCG/mcg_c2_range0[0]"                       value="1" />
    <item key="/MCG/mcg_c2_range0[1]"                       value="1" />
    <item key="/MCG/mcg_c2_range0[2]"                       value="1" />
@@ -192,9 +196,11 @@
    <item key="/MCG/system_mcgfllclk_clock[1]"              value="0" />
    <item key="/MCG/system_mcgfllclk_clock[2]"              value="0" />
    <item key="/MCG/system_mcgfllclk_clock[3]"              value="80000000" />
-   <item key="/OSC0/EnableOsc"                             value="true" />
+   <item key="/OSC0/configurePeripheralInStartUp"          value="true" />
+   <item key="/OSC0/enablePeripheralSupport"               value="true" />
    <item key="/OSC0/osc_cr_erefsten"                       value="true" />
-   <item key="/RTC/ConfigureRtc"                           value="true" />
+   <item key="/RTC/configurePeripheralInStartUp"           value="true" />
+   <item key="/RTC/enablePeripheralSupport"                value="true" />
    <item key="/RTC/rtc_timezone"                           value="11" />
    <item key="/SIM/sim_clkdiv1_outdiv1[0]"                 value="0" />
    <item key="/SIM/sim_clkdiv1_outdiv1[1]"                 value="0" />
@@ -207,7 +213,7 @@
    <item key="/SIM/sim_clkdiv1_outdiv3[3]"                 value="2" />
    <item key="/SIM/sim_clkdiv1_outdiv4[0]"                 value="2" />
    <item key="/SIM/sim_clkdiv1_outdiv4[1]"                 value="4" />
-   <item key="/SIM/sim_clkdiv1_outdiv4[2]"                 value="5" />
+   <item key="/SIM/sim_clkdiv1_outdiv4[2]"                 value="4" />
    <item key="/SIM/sim_clkdiv1_outdiv4[3]"                 value="2" />
    <item key="/SIM/sim_clkdiv2_usb[2]"                     value="9" />
    <item key="/SIM/sim_sopt2_clkoutsel[0]"                 value="3" />

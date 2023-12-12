@@ -384,10 +384,10 @@
 
    <!-- ************* SIM configuration ****************** -->
    <category name="Advanced" description="SIM configuration" >
-      <aliasOption key="/SIM/sim_sopt1_usbregen"      locked="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt1_usbsstby"      locked="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt1_usbvstby"      locked="false" optional="true" />
-      <aliasOption key="/SIM/sim_scgc4_$(_name)"      locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt1_usbregen"   locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt1_usbsstby"   locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_sopt1_usbvstby"   locked="false" optional="true" />
+      <aliasOption key="=_scgc_clock"              locked="false" condition="_scgc_clock" />
    </category>
 
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />

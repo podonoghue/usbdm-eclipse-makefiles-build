@@ -1254,7 +1254,7 @@
 
    <!-- ************* SIM configuration ****************** -->
    <category name="Advanced" description="SIM configuration">
-      <aliasOption key="/SIM/sim_scgc6_$(_name)"      locked="false" optional="true" />
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
       <aliasOption key="/SIM/sim_sopt7_adc$(_instance)pretrgsel" locked="false" optional="true"/>
       <aliasOption key="/SIM/sim_sopt7_adc$(_instance)trgsel"    locked="false" optional="true"/>
    </category>

@@ -996,7 +996,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      // Only set call-backs if feature enabled
       \t      setCallback(init.callbackFunction);
-      \t      enableNvicInterrupts(init.irqlevel);
+      \t      Info::enableNvicInterrupts(init.irqlevel);
       \t   }
       \t\n
    ]]></template>
@@ -1438,9 +1438,11 @@ In other cases, if the master reads data from the slave, then it is required to 
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ************* Signal mapping ****************** -->
-   <category name="Advanced" description="Signal routing" >
+   <!-- ************* SIM configuration ****************** -->
+   <category name="Advanced" description="SIM configuration">
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
    </category>
+   <deleteVariable key="_scgc_clock"  mustExist="false" />
 
    <signals enabledBy="enablePeripheralSupport" />
 

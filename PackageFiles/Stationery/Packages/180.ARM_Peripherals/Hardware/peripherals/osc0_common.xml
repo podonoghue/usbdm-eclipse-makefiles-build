@@ -5,8 +5,6 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="enablePeripheralSupport"  type="Boolean" value="true"          />
-   <constant key="enableGettersAndSetters"  type="Boolean" value="true"          />
    <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
    <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
    <xi:include href="enablePeripheral.xml"  />
@@ -222,7 +220,7 @@
 
    <for keys="field           : get   : set   : genCode                 : name"
         values="
-         osc_cr_erclken       : true  : true  : enableGettersAndSetters : ExternalReference;
+         osc_cr_erclken       : true  : true  : true                    : ExternalReference;
          osc_cr_erefsten      : true  : true  : enableGettersAndSetters : ExternalReferenceInStop;
          osc_cr_scp           : true  : true  : enableGettersAndSetters : LoadCapacitance;
          osc_div_erps         : true  : true  : enableGettersAndSetters : ErcDivider" >
