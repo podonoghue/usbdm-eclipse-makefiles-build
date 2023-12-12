@@ -459,13 +459,13 @@ USBDM_ErrorCode FlashProgrammer_ARM::confirmSDID() {
    return PROGRAMMING_RC_OK;
 }
 
-//=============================================================================
-//! Prepares the target \n
-//!
-//! @return error code, see \ref USBDM_ErrorCode
-//!
-//! @note Assumes target has been reset & connected
-//!
+/**
+ *  Prepares the target
+ *
+ * @return error code, see \ref USBDM_ErrorCode
+ *
+ * @note Assumes target has been reset & connected
+ */
 USBDM_ErrorCode FlashProgrammer_ARM::initialiseTarget() {
    LOGGING;
    USBDM_ErrorCode rc;
