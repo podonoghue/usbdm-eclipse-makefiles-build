@@ -4,11 +4,11 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
-   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <constant key="irq_parameters"            type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"      type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                  type="String"  value="&quot;&quot;"  />
+   <constant key="generateDefault"           type="Boolean" value="false"         />
+   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title description="------------------------------------------" />
 
@@ -427,7 +427,7 @@
 <!--   Member variables -->
 
    <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
-      variables="irqHandlingMethod" 
+      variables="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
@@ -458,7 +458,7 @@
          <break/>
       </if>
    </for>
-   
+
    <for keys="n" values="4;3;2;1" >
       <if condition="llwu_filt%(n)_filte">
          <template namespace="usbdm" codeGenCondition="enablePeripheralSupport"><![CDATA[
@@ -469,17 +469,17 @@
          <break/>
       </if>
    </for>
-   
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport" 
-      variables="llwu_me_peripherals" 
+
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      variables="llwu_me_peripherals"
    ><![CDATA[
       \t
       \t   /// Module (peripheral) sources enable
       \t   uint8_t %registerName      = 0;\n
    ]]></variableTemplate>
-   
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport" 
-      variables="llwu_rst_llrste" 
+
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      variables="llwu_rst_llrste"
    ><![CDATA[
       \t
       \t   /// Reset Pin Filter configuration
@@ -524,8 +524,8 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport" 
-      variables="llwu_me_peripherals" 
+   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      variables="llwu_me_peripherals"
    ><![CDATA[
       \t   /**
       \t    * Constructor for %description
@@ -774,11 +774,11 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n

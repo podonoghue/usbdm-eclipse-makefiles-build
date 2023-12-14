@@ -160,7 +160,14 @@
    <item key="$signal$USB0_DP_descriptionSetting"          value="USB_DP" />
    <item key="$signal$XTAL0_descriptionSetting"            value="8MHz Crystal" />
    <item key="$signal$XTAL32_descriptionSetting"           value="32kHz Crystal" />
+   <item key="/ADC0/enablePeripheralSupport"               value="true" />
+   <item key="/ADC1/enablePeripheralSupport"               value="true" />
    <item key="/Console/consoleDevice"                      value="USBDM::Uart1" />
+   <item key="/GPIOA/enablePeripheralSupport"              value="true" />
+   <item key="/GPIOB/enablePeripheralSupport"              value="true" />
+   <item key="/GPIOC/enablePeripheralSupport"              value="true" />
+   <item key="/GPIOD/enablePeripheralSupport"              value="true" />
+   <item key="/GPIOE/enablePeripheralSupport"              value="true" />
    <item key="/HARDWARE/Analogue0"                         value="Analogue_A0" />
    <item key="/HARDWARE/Analogue1"                         value="Analogue_A1" />
    <item key="/HARDWARE/Digital0"                          value="Digital_D0" />

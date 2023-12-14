@@ -29,8 +29,8 @@
       <constant key="irq_pattern"              type="String"  value="&quot;^$(_NAME)(\d+)$&quot;"           />
       <constant key="irq_ClassHandler"         type="String"  value="&quot;$(_Class)::irqHandler&lt;PitChannelNum_$1&gt;&quot;" />
    </if>
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true" />
+   <constant key="generateDefault"           type="Boolean" value="false"         />
+   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml" />
    <title />
 
@@ -1291,11 +1291,11 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n
@@ -1305,7 +1305,7 @@
    <category name="Advanced" description="SIM configuration">
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
    </category>
-   <deleteVariable key="_scgc_clock"  mustExist="false" />
+   <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
    <signals enabledBy="enablePeripheralSupport" />
 

@@ -4,11 +4,11 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <constant key="irq_parameters"           type="String"  value="&quot;uint8_t status&quot;"  />
-   <constant key="irq_dummy_parameters"     type="String"  value="&quot;uint8_t&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;getAndClearStatus()&quot;"  />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <constant key="irq_parameters"            type="String"  value="&quot;uint8_t status&quot;"  />
+   <constant key="irq_dummy_parameters"      type="String"  value="&quot;uint8_t&quot;"  />
+   <constant key="irq_call"                  type="String"  value="&quot;getAndClearStatus()&quot;"  />
+   <constant key="generateDefault"           type="Boolean" value="false"         />
+   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -101,7 +101,7 @@
       typeName="DacWatermarkAction"
       toolTip="Control whether an interrupt is generated when SR.DACBFWMF is set i.e.\n
                when the DAC buffer read pointer has reached the watermark level."
-      description="DAC Buffer Watermark Interrupt Enable" >
+      description="Buffer Watermark Action" >
       <choice value="0" name="No action" enum="None"       isDefault="true" />
       <choice value="1" name="Interrupt" enum="Interrupt"  />
    </binaryOption>
@@ -120,7 +120,7 @@
       typeName="DacReadPtrTopAction"
       toolTip="Control whether an interrupt is generated when SR.DACBFRPTF is set i.e.\n
                when the DAC buffer read pointer is zero."
-      description="DAC Buffer Read Pointer Top Flag Interrupt Enable" >
+      description="Read Pointer Top Action" >
       <choice value="0" name="No action" enum="None"      isDefault="true" />
       <choice value="1" name="Interrupt" enum="Interrupt" />
    </binaryOption>
@@ -130,7 +130,7 @@
       typeName="DacReadPtrBottomAction"
       toolTip="Control whether an interrupt is generated when SR.DACBFRPBF is set i.e. \n
                when the DAC buffer read pointer is equal to buffer upper limit (C2.DACBFUP)"
-      description="DAC Buffer Read Pointer Bottom Flag Interrupt Enable" >
+      description="Read Pointer Bottom Action" >
       <choice value="0" name="No action" enum="None"      isDefault="true" />
       <choice value="1" name="Interrupt" enum="Interrupt" />
    </binaryOption>
@@ -718,11 +718,11 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n
@@ -733,7 +733,7 @@
    <category name="Advanced" description="SIM configuration">
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
    </category>
-   <deleteVariable key="_scgc_clock"  mustExist="false" />
+   <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 

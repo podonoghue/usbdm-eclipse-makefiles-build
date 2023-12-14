@@ -6,8 +6,8 @@ cd ${HOME_DIR}
 
 #exit
 
-FROM="deleteOption"
-TO="deleteVariable"
+FROM="deleteVariable key="
+TO="deleteVariables variables="
 
 echo starting
 rm -r new

@@ -6,8 +6,8 @@
 
 <!-- ==================== Constants ==================== -->
 
-   <constant key="isGeneratedByDefault"     type="Boolean" value="true"           />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true"           />
+   <constant key="generateDefault"           type="Boolean" value="false"         />
+   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -88,8 +88,8 @@
       <choice value="51" name="Port C"             enum="PortC"            />
       <choice value="52" name="Port D"             enum="PortD"            />
       <choice value="53" name="Port E"             enum="PortE"            />
-      <choice value="58" name="Lpuart Receive"     enum="Lpuart_receive"   />
-      <choice value="59" name="Lpuart Transmit"    enum="Lpuart_transmit"  />
+      <choice value="58" name="LPUART0 Receive"    enum="LPUART0_Receive"  />
+      <choice value="59" name="LPUART0 Transmit"   enum="LPUART0_Transmit" />
       <choice value="60" name="Always Enabled 60"  enum="AlwaysEnabled60"  />
       <choice value="61" name="Always Enabled 61"  enum="AlwaysEnabled61"  />
       <choice value="62" name="Always Enabled 62"  enum="AlwaysEnabled62"  />
@@ -173,7 +173,7 @@
          <choice value="1,1,1"  name="Enabled in run only"           enum="EnabledInRun"           />
       </choiceOption>
 
-      <choiceOption key="sim_sopt1_osc32kout"
+      <choiceOption key="sim_sopt1_osc32kout" condition="sim_sopt1_osc32kout_present"
          enabledBy="enablePeripheralSupport"
          typeName="SimErc32kClkoutPinSelect"
          description="ERCLK32K Clock Output"
@@ -862,10 +862,10 @@
                typeName="SimTimeStampClkSrc"
                description="IEEE 1588 timestamp clock source select"
                toolTip="Selects the clock source for the Ethernet RMII interface">
-               <choice value="0"  name="Core/system clock"           ref="system_core_clock[]"       enum="CoreClk"         code="SystemCoreClock"            isDefault="true" />
-               <choice value="1"  name="Peripheral Clock"            ref="system_peripheral_clock[]" enum="PeripheralClk"   code="getPeripheralClock()" />
-               <choice value="2"  name="OSCERCLK clock"              ref="/OSC0/oscer_clock"         enum="OscerClk"        code="Osc0Info::getOscerClock()" />
-               <choice value="3"  name="External clock (ENET_CLKIN)" ref="system_time_clockin"       enum="External"        code="sdhcExternalClock" />
+               <choice value="0"  name="Core/system clock"           ref="system_core_clock[0]"       enum="CoreClk"         code="SystemCoreClock"           isDefault="true" />
+               <choice value="1"  name="Peripheral Clock"            ref="system_peripheral_clock[0]" enum="PeripheralClk"   code="getPeripheralClock()"      />
+               <choice value="2"  name="OSCERCLK clock"              ref="/OSC0/oscer_clock"          enum="OscerClk"        code="Osc0Info::getOscerClock()" />
+               <choice value="3"  name="External clock (ENET_CLKIN)" ref="system_time_clockin"        enum="External"        code="sdhcExternalClock"         />
             </choiceOption>
 
             <intOption key="system_time_clock[%(n)]" condition="sim_sopt2_timesrc_present"
@@ -1128,11 +1128,11 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/StartupEarly" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/StartupEarly" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n

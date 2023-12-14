@@ -18,12 +18,12 @@
    <stringOption key="irq_pattern"        locked="true" value="^I2S%i_?(Rx|Tx)?$" hidden="true" />
    <stringOption key="irq_ClassHandler"   locked="true" value="$(_Class)::irqHandler&lt;$(_Class)IrqNum_$1&gt;" hidden="true" />
 
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
-   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <constant key="suppressInstance"          type="Boolean" value="false"         />
+   <constant key="irq_parameters"            type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"      type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                  type="String"  value="&quot;&quot;"  />
+   <constant key="generateDefault"           type="Boolean" value="false"         />
+   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -1873,11 +1873,11 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n
@@ -1887,7 +1887,7 @@
    <category name="Advanced" description="SIM configuration">
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
    </category>
-   <deleteVariable key="_scgc_clock"  mustExist="false" />
+   <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 

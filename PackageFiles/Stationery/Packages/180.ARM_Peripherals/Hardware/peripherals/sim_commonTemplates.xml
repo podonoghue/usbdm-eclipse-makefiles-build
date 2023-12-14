@@ -15,20 +15,23 @@
    <equation key="clockEnables" value="=&quot;&quot;" />
    <for keys="peripheral"
       values="adc;cmp;cmt;crc;dac;dma;dmamux;ewm;flexio;ftf;ftfa;ftfe;ftfl;ftm;flexbus;
-              i2c;i2s;lptmr;lpuart;pdb;pit;porta;portb;portc;portd;porte;qspi;rnga;
+              i2c;i2s;lptmr;lpuart;mpu;pdb;pit;porta;portb;portc;portd;porte;qspi;rnga;
               rtc;sdhc;sdramc;slcd;spi;tpm;trng;tsi;uart;usb;usbdcd;usbhs;vref;wdog;
       ">
       <for keys="instance" values=";0;1;2;3;4;5">
          <for keys="scgcNum" values="1;2;3;4;5;6;7">
-            <equation key="enabled" value="&quot;%(peripheral)&quot;==&quot;ftf&quot;" />
+            <equation key="enabled" value="=&quot;%(peripheral)&quot;==&quot;ftf&quot;" />
+            <equation key="enabled" value="=@enabled||(&quot;%(peripheral)&quot;==&quot;mpu&quot;)" />
             <equation key="clockEnables"
                value="=clockEnables+&quot;%(scgcNum) : %(peripheral)%(instance) : &quot;+
-                       Prettify(&quot;%(peripheral)&quot;)+&quot;%(instance):&quot;+enabled+&quot;;&quot;"
+                       Prettify(&quot;%(peripheral)&quot;)+&quot;%(instance) : &quot;+ToString(@enabled)+&quot;;&quot;"
                condition="sim_scgc%(scgcNum)_%(peripheral)%(instance)_present" />
          </for>
       </for>
    </for>
-   <deleteVariable key="enabled" />
+   <!--  printVar key="clockEnables" split=";" / -->
+
+   <deleteVariables variables="enabled" />
 
    <!-- Peripheral routing MKL -->
    <!--   field                 :   name                -->

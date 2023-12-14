@@ -4,11 +4,11 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
-   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
-   <constant key="isSupportedinStartup"     type="Boolean" value="false"         />
+   <constant key="irq_parameters"            type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"      type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                  type="String"  value="&quot;&quot;"  />
+   <constant key="generateDefault"           type="Boolean" value="false"         />
+   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -104,7 +104,7 @@
    ]]></variableTemplate>
 
    <!-- ************* PFBxCR ****************** -->
-   
+
    <for keys="b" values="0;01" >
 	   <binaryOption key="fmc_pfb%(b)cr_clck_way" condition="fmc_pfb%(b)cr_clck_way_present"
 	      hidden="true"
@@ -114,7 +114,7 @@
 	      <choice name="Cache way is unlocked"  value="0" enum="CacheWayIsUnlocked" />
 	      <choice name="Cache way is locked"    value="1" enum="CacheWayIsLocked" />
 	   </binaryOption >
-	   
+
 	   <variableTemplate codeGenCondition="enableGettersAndSetters"
 	      variables="fmc_pfb%(b)cr_clck_way"
 	   > <![CDATA[
@@ -139,7 +139,7 @@
 	      <choiceExpansion keys="w" dim="4" value="1&lt;&lt;%(w)" name="Invalidate Way %(w)" enum="Way%(w)" />
 	      <choice name="Invalidate all Ways"  value="-1" enum="AllWays" />
 	   </choiceOption >
-	
+
 	   <variableTemplate codeGenCondition="enableGettersAndSetters"
 	      variables="fmc_pfb%(b)cr_cinv_way"
 	   > <![CDATA[
@@ -152,7 +152,7 @@
 	      \t   %register = %register | %paramExpression;
 	      \t}\n\n
 	   ]]></variableTemplate>
-	   
+
 	   <choiceOption key="fmc_pfb%(b)cr_s_b_inv" condition="fmc_pfb%(b)cr_s_b_inv_present"
 	      hidden="true"
 	      typeName="FmcSpeculationBuffer"
@@ -160,7 +160,7 @@
 	      description="Invalidate Prefetch Speculation Buffer" >
 	      <choice name="Write 1 to invalidate"  value="1" enum="Invalidate" />
 	   </choiceOption >
-	
+
 	   <variableTemplate codeGenCondition="enableGettersAndSetters"
 	      variables="fmc_pfb%(b)cr_s_b_inv"
 	   > <![CDATA[
@@ -181,7 +181,7 @@
 	      <choice name="Independent LRU ways [0-1] ifetches, [2-3] data"  value="2" enum="LruWays_01Instruction_23Data" />
 	      <choice name="Independent LRU ways [0-2] ifetches, [3] data"    value="3" enum="LruWays_012Instruction_3Data" />
 	   </choiceOption >
-	
+
 	   <variableTemplate codeGenCondition="enableGettersAndSetters"
 	      variables="fmc_pfb%(b)cr_crc"
 	   > <![CDATA[
@@ -382,7 +382,7 @@
       \t   // Restore flash Bank%(n) settings
       \t   savedFlashBank%(n)Settings.configure();\n
       ]]></variableTemplate>
-      
+
    </for> <!-- keys="n:m" values ="0:0; 1:1; 01:0; 23:1" -->
 
    <!-- ************* Common ****************** -->

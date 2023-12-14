@@ -7,8 +7,8 @@
    <constant key="irq_parameters"           type="String"  value="&quot;PmcInterruptReason pmcInterruptReason&quot;"  />
    <constant key="irq_dummy_parameters"     type="String"  value="&quot;PmcInterruptReason&quot;"  />
    <constant key="irq_call"                 type="String"  value="&quot;pmcInterruptReason&quot;"  />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <constant key="generateDefault"           type="Boolean" value="false"         />
+   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -135,7 +135,7 @@
       typeName="PmcLowVoltageWarningLevel"
       enumType="uint8_t"
       toolTip="Selects the LVW trip point voltage (Vlvw)\n
-               The actual voltage for the warning depends on pmc_lvdsc1_lvdv" 
+               The actual voltage for the warning depends on pmc_lvdsc1_lvdv"
       description="Low-Voltage Warning Voltage Select" >
       <choice value="0" enum="Low"     name="Low trip point selected"   />
       <choice value="1" enum="MidLow"  name="Mid 1 trip point selected" />
@@ -146,7 +146,7 @@
    <binaryOption key="pmc_lvdsc2_lvwack" condition="pmc_lvdsc2_lvwack_present"
       hidden="true"
       typeName="PmcLowVoltageWarningAck"
-      toolTip="Clears low voltage warning detection flag" 
+      toolTip="Clears low voltage warning detection flag"
       description="Acknowledge Low-Voltage Warning" >
       <choice value="0" name="Disabled" enum="Ack" isDefault="true" />
    </binaryOption>
@@ -233,7 +233,7 @@
       \t}
       \t\n
    ]]></variableTemplate>
-   
+
    <for keys="field           : get   : set   : clear : genCode                 : name"
         values="
          pmc_lvdsc1_lvdf      : true  : false : false : enableGettersAndSetters : LowVoltageDetectFlag;
@@ -660,11 +660,11 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n

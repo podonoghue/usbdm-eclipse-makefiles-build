@@ -4,11 +4,11 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="irq_parameters"           type="String" value="&quot;&quot;"  />
-   <constant key="irq_dummy_parameters"     type="String" value="&quot;&quot;"  />
-   <constant key="irq_call"                 type="String" value="&quot;&quot;"  />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false"   />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true"    />
+   <constant key="irq_parameters"            type="String" value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"      type="String" value="&quot;&quot;"  />
+   <constant key="irq_call"                  type="String" value="&quot;&quot;"  />
+   <constant key="generateDefault"           type="Boolean" value="false"         />
+   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml" />
    <title />
 
@@ -965,8 +965,8 @@
 
             <intOption key="firc_divided_clock[%(n)]"
                description="FIRC divided clock frequency"
-               units="Hz" 
-               locked="true" 
+               units="Hz"
+               locked="true"
                derived="true" />
 
             <binaryOption key="mcg_c2_ircs[%(n)]"
@@ -979,9 +979,9 @@
             </binaryOption>
 
             <intOption key="system_mcgirclk_ungated[%(n)]"
-               description="MGCIRCLK (internal) frequency" 
-               units="Hz" 
-               locked="true" 
+               description="MGCIRCLK (internal) frequency"
+               units="Hz"
+               locked="true"
                derived="true" />
 
             <binaryOption key="mcg_c1_irclken[%(n)]"

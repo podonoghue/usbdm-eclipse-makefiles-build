@@ -4,10 +4,10 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="irq_parameters"           type="String"  value="&quot;uint8_t&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;0&quot;"  />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <constant key="irq_parameters"            type="String"  value="&quot;uint8_t&quot;"  />
+   <constant key="irq_call"                  type="String"  value="&quot;0&quot;"  />
+   <constant key="generateDefault"           type="Boolean" value="false"         />
+   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
 
 <!--
@@ -618,8 +618,8 @@
          bitList="=triggerChannels"
          enumText="=triggerEnums"
          />
-      <deleteVariable key="triggerEnums" />
-      <deleteVariable key="triggerChannels" />
+      <deleteVariables variables="triggerEnums" />
+      <deleteVariables variables="triggerChannels" />
 
    </categoryOption>
 
@@ -691,8 +691,8 @@
          bitmask="0"
          bitList="=polarityChannels" />
 
-      <deleteVariable key="polarityEnums" />
-      <deleteVariable key="polarityChannels" />
+      <deleteVariables variables="polarityEnums" />
+      <deleteVariables variables="polarityChannels" />
    </categoryOption>
 
    <choiceOption key="ftm_channel_number"

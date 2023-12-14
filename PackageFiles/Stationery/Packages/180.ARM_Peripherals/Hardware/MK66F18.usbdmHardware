@@ -10,8 +10,8 @@
       <device variant="FRDM_K66F" manual="K66P144M180SF5RMV2" package="FRDM_K66F" deviceName="MK66FN2M0M18" />
       <device variant="MK66FN2M0VLQ18" manual="K66P144M180SF5RMV2" package="LQFP_144_MK66F" deviceName="MK66FN2M0M18" />
       <device variant="MK66FN2M0VMD18" manual="K66P144M180SF5RMV2" package="BGA_144_MK66F" deviceName="MK66FN2M0M18" />
-      <device variant="MK66FX1M0VLQ18" manual="K66P144M180SF5RMV2" package="LQFP_144_MK66F" deviceName="MK66FX2M0M18" />
-      <device variant="MK66FX1M0VMD18" manual="K66P144M180SF5RMV2" package="BGA_144_MK66F" deviceName="MK66FX2M0M18" />
+      <device variant="MK66FX1M0VLQ18" manual="K66P144M180SF5RMV2" package="LQFP_144_MK66F" deviceName="MK66FX1M0M18" />
+      <device variant="MK66FX1M0VMD18" manual="K66P144M180SF5RMV2" package="BGA_144_MK66F" deviceName="MK66FX1M0M18" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        instanceList="ADC0;ADC1" version="adc0_diff_a">
@@ -1723,8 +1723,6 @@
          <param type="LongVariable"           name="_irqCount"                      value="2"                key="/FTFE/_irqCount" />
          <param type="StringVariable"         name="_irqNums"                       value="FTF_Command_IRQn;FTF_ReadCollision_IRQn" key="/FTFE/_irqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/FTFE/_present" />
-         <param type="StringVariable"         name="Data flash phrase size"         value="8"                key="/FTFE/dflash_phrase_size" />
-         <param type="StringVariable"         name="Data flash sector size"         value="4096"             key="/FTFE/dflash_sector_size" />
          <param type="BooleanVariable"        name="ftfe_facsn_numsg_present"       value="true"             key="/FTFE/ftfe_facsn_numsg_present" />
          <param type="BooleanVariable"        name="ftfe_facsn_present"             value="true"             key="/FTFE/ftfe_facsn_present" />
          <param type="BooleanVariable"        name="ftfe_facss_present"             value="true"             key="/FTFE/ftfe_facss_present" />
@@ -1773,8 +1771,6 @@
          <param type="LongVariable"           name="ftfe_xaccl_dim"                 value="4"                key="/FTFE/ftfe_xaccl_dim" />
          <param type="BooleanVariable"        name="ftfe_xaccl_present"             value="true"             key="/FTFE/ftfe_xaccl_present" />
          <param type="BooleanVariable"        name="ftfe_xaccl_xa_present"          value="true"             key="/FTFE/ftfe_xaccl_xa_present" />
-         <param type="StringVariable"         name="Program flash phrase size"      value="8"                key="/FTFE/pflash_phrase_size" />
-         <param type="StringVariable"         name="Program flash sector size"      value="4096"             key="/FTFE/pflash_sector_size" />
          <param type="StringVariable"         name="structName"                     value="FTFE"             key="/FTFE/structName" />
          <param type="StringVariable"         name="Flash version"                  value="ftfe_128k_flexrom_xacch" key="/FTFE/version" />
       </peripheral>
@@ -3274,7 +3270,6 @@
          <param type="StringVariable"         name="_irqNums"                       value="LLWU_IRQn"        key="/LLWU/_irqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/LLWU/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/LLWU/_present" />
-         <param type="StringVariable"         name="Wakeup sources"                 value="LPTMR0;CMP0;CMP1;CMP2/CMP3;TSI0;RTC_Alarm;;RTC_Seconds" key="/LLWU/device_list" />
          <param type="BooleanVariable"        name="llwu_filt1_filte_present"       value="true"             key="/LLWU/llwu_filt1_filte_present" />
          <param type="BooleanVariable"        name="llwu_filt1_filtf_present"       value="true"             key="/LLWU/llwu_filt1_filtf_present" />
          <param type="BooleanVariable"        name="llwu_filt1_filtsel_present"     value="true"             key="/LLWU/llwu_filt1_filtsel_present" />
@@ -4146,10 +4141,6 @@
          <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC3&quot;,&quot;SDHC&quot;" key="/SDHC/_clockMask" />
          <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC7&quot;,&quot;SDRAMC&quot;" key="/SDRAMC/_clockMask" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/SIM/_present" />
-         <param type="StringVariable"         name="busFreq"                        value="60MHz"            key="/SIM/busFreq" />
-         <param type="StringVariable"         name="coreFreq"                       value="180MHz"           key="/SIM/coreFreq" />
-         <param type="StringVariable"         name="flashFreq"                      value="28MHz"            key="/SIM/flashFreq" />
-         <param type="StringVariable"         name="flexFreq"                       value="60MHz"            key="/SIM/flexFreq" />
          <param type="BooleanVariable"        name="sim_clkdiv1_outdiv1_present"    value="true"             key="/SIM/sim_clkdiv1_outdiv1_present" />
          <param type="BooleanVariable"        name="sim_clkdiv1_outdiv2_present"    value="true"             key="/SIM/sim_clkdiv1_outdiv2_present" />
          <param type="BooleanVariable"        name="sim_clkdiv1_outdiv3_present"    value="true"             key="/SIM/sim_clkdiv1_outdiv3_present" />

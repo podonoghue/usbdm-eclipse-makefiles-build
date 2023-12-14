@@ -11,11 +11,11 @@
 
    <constant key="enableGettersAndSetters" type="Boolean" value="false" />
 
-   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
-   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="true"          />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <constant key="irq_parameters"            type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"      type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                  type="String"  value="&quot;&quot;"  />
+   <constant key="generateDefault"           type="Boolean" value="true"         />
+   <constant key="configureInStartupDefault" type="Boolean" value="true"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -892,8 +892,8 @@
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
       <aliasOption key="/SIM/sim_scgc4_ewm" locked="false" optional="true" />
    </category>
-   <deleteVariable key="_scgc_clock"  mustExist="false" />
-   
+   <deleteVariables variables="_scgc_clock"  mustExist="false" />
+
    <signals enabledBy="fullCodeSupport" locked="!/PCR/_present" />
 
 </peripheralPage>

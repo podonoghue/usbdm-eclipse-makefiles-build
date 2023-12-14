@@ -4,11 +4,11 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Keyboard interrupts" >
 
-   <constant key="irq_parameters"           type="String"  value="&quot;uint32_t kbi_sp&quot;"  />
-   <constant key="irq_dummy_parameters"     type="String"  value="&quot;uint32_t&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;kbi_sp&quot;"    />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <constant key="irq_parameters"            type="String"  value="&quot;uint32_t kbi_sp&quot;"  />
+   <constant key="irq_dummy_parameters"      type="String"  value="&quot;uint32_t&quot;"  />
+   <constant key="irq_call"                  type="String"  value="&quot;kbi_sp&quot;"    />
+   <constant key="generateDefault"           type="Boolean" value="false"         />
+   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -686,11 +686,11 @@
 
    <!-- ************* Startup ****************** -->
 
-   <template key="/SYSTEM/Includes" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
    ]]></template>
 
-   <template key="/SYSTEM/Startup" condition="@isSupportedinStartup" codeGenCondition="configurePeripheralInStartUp" >
+   <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n

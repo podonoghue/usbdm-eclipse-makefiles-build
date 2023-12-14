@@ -24,9 +24,8 @@
       derived="true"
       />
 
-   <constant key="suppressInstance"         type="Boolean" value="false"         />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
-   <constant key="isSupportedinStartup"     type="Boolean" value="false"         />
+   <constant key="generateDefault"           type="Boolean" value="false"         />
+   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
 
 <!--

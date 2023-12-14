@@ -4,10 +4,10 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="irq_parameters"           type="String"  value="&quot;uint8_t&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;0&quot;"  />
-   <constant key="isGeneratedByDefault"     type="Boolean" value="false"         />
-   <constant key="isSupportedinStartup"     type="Boolean" value="true"          />
+   <constant key="irq_parameters"            type="String"  value="&quot;uint8_t&quot;"  />
+   <constant key="irq_call"                  type="String"  value="&quot;0&quot;"  />
+   <constant key="generateDefault"           type="Boolean" value="false"         />
+   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
 
 <!--
@@ -612,8 +612,8 @@
          bitList="=triggerChannels"
          enumText="=triggerEnums"
          />
-      <deleteVariable key="triggerEnums" />
-      <deleteVariable key="triggerChannels" />
+      <deleteVariables variables="triggerEnums" />
+      <deleteVariables variables="triggerChannels" />
 
    </categoryOption>
 
@@ -685,8 +685,8 @@
          bitmask="0"
          bitList="=polarityChannels" />
 
-      <deleteVariable key="polarityEnums" />
-      <deleteVariable key="polarityChannels" />
+      <deleteVariables variables="polarityEnums" />
+      <deleteVariables variables="polarityChannels" />
    </categoryOption>
 
    <choiceOption key="ftm_channel_number"
@@ -4222,8 +4222,6 @@
    <category name="SIM" description="Pin mapping and clock enables"
       toolTip="Thes settings only have effect if the SIM configuration is enabled"
    >
-      <aliasOption key="/SIM/sim_scgc3_$(_name)"        optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_scgc6_$(_name)"        optional="true" locked="false" />
       <aliasOption key="/SIM/$(_basename)_clkin0"       optional="true" locked="false" />
       <aliasOption key="/SIM/$(_basename)_clkin1"       optional="true" locked="false" />
       <aliasOption key="/SIM/sim_sopt4_$(_name)clksel"  optional="true" locked="false" />
@@ -4249,12 +4247,11 @@
    </category>
 
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
-   <signals name="FTM" optional="true" />
 
    <!-- ************* SIM configuration ****************** -->
    <category name="Advanced" description="SIM configuration">
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
    </category>
-   <deleteVariable key="_scgc_clock"  mustExist="false" />
+   <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
 </fragment>

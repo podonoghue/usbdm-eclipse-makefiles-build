@@ -13,8 +13,8 @@
 <!ENTITY % dialogue_items    "timeOption|intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption" >
 
 <!-- Simple items that don't recurse -->
-<!ENTITY % simple_items     "xi:include|
-                              deleteVariable|projectActionList|
+<!ENTITY % simple_items     "xi:include|printVar|
+                              deleteVariables|projectActionList|
                               title|constant|signals|variable|
                               rtcTimeOption|timeOption|intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption|irqOption|pinListOption|aliasOption|pinMapOption|
                               clockSelectionOption|validate|equation|
@@ -58,6 +58,11 @@
    <!ATTLIST for dim                  CDATA        #IMPLIED>
    <!-- Delimeter to use to separate keys / iteration values??? -->
    <!ATTLIST for delimiter            CDATA        #IMPLIED>
+
+<!ELEMENT printVar EMPTY >
+   <!--  Key identifying variable to print -->
+   <!ATTLIST printVar  key                CDATA        #REQUIRED>
+   <!ATTLIST printVar  split              CDATA        #IMPLIED>
 
 <!ELEMENT break EMPTY >
 
@@ -180,7 +185,7 @@
 -->
 <!ELEMENT equation EMPTY >
    <!-- Condition evaluated during parsing that enables processing of this option -->
-   <!ATTLIST equation condition              CDATA        #IMPLIED>
+   <!ATTLIST equation  condition       CDATA        #IMPLIED>
    <!-- Unique key -->
    <!ATTLIST equation  key             CDATA        #REQUIRED>
    <!-- Value expressed as equation for immediate evaluation?? -->
@@ -188,11 +193,11 @@
 
 
 
-<!ELEMENT deleteVariable EMPTY >
+<!ELEMENT deleteVariables EMPTY >
    <!-- Key for variable to delete -->
-   <!ATTLIST deleteVariable key           CDATA        #REQUIRED>
+   <!ATTLIST deleteVariables variables      CDATA        #REQUIRED>
    <!-- May be used to disable the check for existence that is done before deleting -->
-   <!ATTLIST deleteVariable mustExist     (false)      #IMPLIED>
+   <!ATTLIST deleteVariables mustExist     (false)      #IMPLIED>
 
 <!ELEMENT aliasOption EMPTY >
    <!-- Allows reference to an option (possibly) in another file -->
@@ -878,6 +883,8 @@
    <!ATTLIST template discardRepeats            (true)                  #IMPLIED>
    <!-- Padding applied to lines generated -->
    <!ATTLIST template linePadding               CDATA                   #IMPLIED>
+   <!-- Variables that will be available for immediate substitution -->
+   <!ATTLIST template immediateVariables       CDATA                   #IMPLIED>
 
 <!ELEMENT variableTemplate (#PCDATA)* >
    <!-- Where to place generated code -->
@@ -921,6 +928,8 @@
    <!ATTLIST variableTemplate paramTypes                    CDATA                   #IMPLIED>
    <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
    <!ATTLIST variableTemplate useDefinitions            CDATA                   #IMPLIED>
+   <!-- Variables that will be available for immediate substitution -->
+   <!ATTLIST template immediateVariables       CDATA                   #IMPLIED>
 
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
    <!-- Where to place generated code -->
@@ -956,10 +965,8 @@
    <!ATTLIST clockCodeTemplate codeGenCondition          CDATA                   #IMPLIED>
    <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
    <!ATTLIST clockCodeTemplate useDefinitions            CDATA                   #IMPLIED>
-
-
-
-
+   <!-- Variables that will be available for immediate substitution -->
+   <!ATTLIST template immediateVariables       CDATA                   #IMPLIED>
 
 <!ELEMENT validate (param*) >
    <!ATTLIST validate class         CDATA        #REQUIRED>

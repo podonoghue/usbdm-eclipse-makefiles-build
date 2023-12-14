@@ -31,7 +31,7 @@
    <constant key="_debugcode" type="Boolean" value="false" />
 
    <title description="General Settings" toolTip="" />
-   
+
    <!--
       Generates:
          enablePeripheralSupport
@@ -40,13 +40,13 @@
    -->
 
    <!-- Enable for this peripheral -->
-   <binaryOption key="enablePeripheralSupport" condition="!enablePeripheralSupport" 
+   <binaryOption key="enablePeripheralSupport" condition="!enablePeripheralSupport"
       hidden="true"
       description="Enable peripheral support"
       toolTip="Even if disabled, some code may still be generated but will \n
                be removed by linker if not used">
-      <choice value="false" name="Minimal code for $(_NAME)"   isDefault="!@isGeneratedByDefault" />
-      <choice value="true"  name="Generate code for $(_NAME)"  isDefault="@isGeneratedByDefault" />
+      <choice value="false" name="Minimal code for $(_NAME)"  />
+      <choice value="true"  name="Generate code for $(_NAME)" isDefault="=generateDefault" />
    </binaryOption>
 
    <!-- If not already generated -->
@@ -73,7 +73,7 @@
          <choice value="false" name="Minimal shared code for structName=$(_STRUCTNAME)"  />
          <choice value="true"  name="All shared code for structName=$(_STRUCTNAME)"      />
       </binaryOption>
-      <deleteVariable key="_enable" />
+      <deleteVariables variables="_enable" />
    </if>
 
    <!-- If not already generated -->
@@ -99,33 +99,33 @@
          <choice value="false" name="Minimal shared code for basename=$(_BASENAME)"  />
          <choice value="true"  name="All shared code for basename=$(_BASENAME)"      />
       </binaryOption>
-      <deleteVariable key="_enable" />
+      <deleteVariables variables="_enable" />
    </if>
-   
+
    <aliasOption key="enablePeripheralSupport" locked="false" />
    <aliasOption name="/$(_BASENAME)/enablePeripheralSupport" key="/$(_BASENAME)/enablePeripheralSupport" optional="true"  condition="=_debugcode" />
    <aliasOption name="/$(_STRUCTNAME)/generateSharedInfo"    key="/$(_STRUCTNAME)/generateSharedInfo"    optional="true"  condition="=_debugcode" />
-   
+
    <!-- =======================================================================================================================  -->
-   
-   
+
+
    <!-- Enable for generation of getters and setters -->
    <binaryOption key="enableGettersAndSetters" condition="!enableGettersAndSetters"
       enabledBy="enablePeripheralSupport"
-      description="Enable Getter and Setter methods"
+      description="Enable Getters and Setters"
       toolTip="Even if disabled, some code may still be generated">
-      <choice value="false" name="Minimal Get and Set methods generated"        isDefault="true" />
-      <choice value="true"  name="All Get and Set methods generated"  />
+      <choice value="false" name="Minimal Get and Set methods"        isDefault="true" />
+      <choice value="true"  name="All Get and Set methods"  />
    </binaryOption>
 
     <!-- Configure peripheral instance in startup -->
-   <binaryOption key="configurePeripheralInStartUp" condition="!configurePeripheralInStartUp&amp;&amp;@isSupportedinStartup"
+   <binaryOption key="configurePeripheralInStartUp" condition="!configurePeripheralInStartUp&amp;&amp;configureInStartupDefault"
       enabledBy="enablePeripheralSupport"
       description="Configure this peripheral"
       toolTip="Configure this peripheral in startup code before main() is entered\n
                Even if disabled, some minimal code may still be executed" >
-      <choice value="false" name="Not Configured"              isDefault="true"/>
-      <choice value="true"  name="Configured in startup code"  />
+      <choice value="false" name="Not Configured"              />
+      <choice value="true"  name="Configured in startup code"  isDefault="=configureInStartupDefault" />
    </binaryOption>
 
    <!-- Pin mapping and enables -->
@@ -134,7 +134,7 @@
 
       <binaryOption key="mapPinsOnEnable"
          enabledBy="enablePeripheralSupport"
-         description="Map pins when peripheral is configured"
+         description="Map pins when configured"
          toolTip="Map all allocated pins on a peripheral when the\n
                   peripheral is enabled by configure() method etc">
          <choice value="false" name="Don't map pins"  />
@@ -176,7 +176,7 @@
       ]]></template>
    </if>
 
-<!-- INTERRUPTS -->
+<!-- ================== INTERRUPTS ==================== -->
 
    <!-- Only create if device has interrupts -->
    <if condition="_irqCount" >
@@ -247,7 +247,7 @@
                <choice value="false" name="No shared interrupt code for $(_STRUCTNAME)"  />
                <choice value="true"  name="Shared interrupt code for $(_STRUCTNAME)"      />
             </binaryOption>
-            <deleteVariable key="_enable" />
+            <deleteVariables variables="_enable" />
          </if>
 
          <!-- If not already generated -->
@@ -273,7 +273,7 @@
                <choice value="false" name="No shared interrupt code for $(_BASENAME)"  />
                <choice value="true"  name="Shared interrupt code for $(_BASENAME)"      />
             </binaryOption>
-            <deleteVariable key="_enable" />
+            <deleteVariables variables="_enable" />
          </if>
 
       </if>
@@ -401,8 +401,10 @@
    <constant key="_clockInfo"  value="=_clockMask"                 type="String"  condition="_clockMask&amp;&amp;!_clockInfo[]"  />
    <constant key="_scgc_clock" value="&quot;/SIM/&quot;+ToLowerCase(&quot;sim_&quot;+@_clockInfo[0]+&quot;_&quot;+@_clockInfo[1])"
              type="String" condition="_clockInfo[]" />
-   
-   <template condition="_clockInfo[]" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+
+   <template condition="_clockInfo[]" codeGenCondition="enablePeripheralSupport"
+      immediateVariables="_clockInfo[0],_clockInfo[1]"
+   ><![CDATA[
       \t/**
       \t *  Enable clock to $(_Class)
       \t */
@@ -420,7 +422,7 @@
    ]]></template>
 
    <!-- ************* SIM configuration ****************** -->
-   
+
    <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Basic enable of $(_Class)
@@ -456,6 +458,8 @@
       \t}
       \t\n
    ]]></template>
+
+   <deleteVariables variables="_clockInfo[0],_clockInfo[1]" mustExist="false" />
 
    <!-- template key="/$(_BASENAME)/publicMethods" condition="/$(_BASENAME)/irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
    <![CDATA[
