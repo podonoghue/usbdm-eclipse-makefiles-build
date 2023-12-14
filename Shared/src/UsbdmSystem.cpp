@@ -204,7 +204,7 @@ UsbdmSystem::Log::Log(const char *name, When pWhen) : when(pWhen), lastLogState(
    logState.forced     = (when==forced) || lastLogState.forced;
 
    if (lastLogState.enabled && ((when==entry)||(when==both)||(when==forced))) {
-      print("Entry %d:%p ===============\n", logState.indent, this);
+      print("Entry %d:/*%p*/ ===============\n", logState.indent, this);
    }
 }
 /**  \brief Record exit from a function
@@ -213,7 +213,7 @@ UsbdmSystem::Log::Log(const char *name, When pWhen) : when(pWhen), lastLogState(
 UsbdmSystem::Log::~Log(){
    logState.enabled = lastLogState.enabled;
    if (lastLogState.enabled && ((when==entry)||(when==both)||(when==forced))) {
-      print("Exit %d:%p ===============\n", logState.indent, this);
+      print("Exit %d:/*%p*/ ===============\n", logState.indent, this);
    }
    logState = lastLogState;
 }

@@ -103,6 +103,20 @@ public:
    virtual const char *getTclResult() = 0;
 
    /**
+    * Returns the USBDM Error code from the last command
+    *
+    * @param script String containing the script to evaluate in the interpreter
+    */
+   virtual USBDM_ErrorCode getLastResult() = 0;
+
+   /**
+    * Returns the USBDM Error code from the last failing command
+    *
+    * @param script String containing the script to evaluate in the interpreter
+    */
+   virtual USBDM_ErrorCode getErrorResult() = 0;
+
+   /**
     * Set BDM interface to use
     *
     *  @param bdmInterface    BDM Interface to use

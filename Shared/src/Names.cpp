@@ -259,6 +259,33 @@ char const *getTargetModeName(TargetMode_t type) {
    return buff;
 }
 
+/*
+ * Convert type to text for use with TCL
+ * e.g. HADRWARE NORMAL or HARDWARE SPECIAL
+ */
+char const *getTargetModeNameForTcl(TargetMode_t type) {
+   static char buff[100] = "";
+   static const char *resetMethod[] = {"ALL",
+         "HARDWARE",
+         "SOFTWARE",
+         "POWER",
+         "VENDOR",
+         "Illegal",
+         "Illegal",
+         "DEFAULT",
+   };
+   static const char *resetMode[] = {"SPECIAL",
+         "NORMAL",
+         "Illegal",
+         "Illegal",
+   };
+   snprintf(buff, sizeof(buff), "%s %s",
+         resetMethod[(type&RESET_METHOD_MASK)>>2],
+         resetMode[type&RESET_MODE_MASK]
+   );
+   return buff;
+}
+
 #if defined(LOG) || defined(NEED_ALL_NAMES)
 
 //! Command String from Command #

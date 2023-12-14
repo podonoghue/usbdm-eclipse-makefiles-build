@@ -107,6 +107,7 @@ static inline char const *printBdmOptions(const USBDM_ExtendedOptions_t *options
 static inline char const *getOnceStatusName(int status)                                 { (void) status; return ""; }
 #endif
 
+char const *getTargetModeNameForTcl(TargetMode_t type);
 char const *getTargetModeName(TargetMode_t type);
 char const *getHardwareDescription(unsigned int hardwareVersion);
 char const *getBriefHardwareDescription(unsigned int hardwareVersion);

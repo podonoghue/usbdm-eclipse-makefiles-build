@@ -19,6 +19,7 @@
 #####################################################################################
 #  History
 #
+#  V4.12.1.320 - Added resetAndConnectTarget()
 #  V4.12.1.180 - Removed unnecessary semi-colons
 #  V4.12.1.180 - Messages directed to stderr
 #  V4.12.1.180 - Changed to reset special vendor
@@ -208,6 +209,30 @@ proc loadSymbols {} {
    set ::PROGRAMMING_RC_ERROR_NO_VALID_FCDIV_VALUE 116
 
    return
+}
+
+######################################################################################
+#
+#  This is used for the initial connection to the target
+#
+proc resetAndConnectTarget { args } {
+
+   puts "resetAndConnectTarget args"
+   
+   settargetvdd off
+   pinSet rst=0
+   after 100
+   
+   settargetvdd on
+   reset sh 
+   
+   if { [catch {connect} rc] } {
+      puts "Failed connect"
+      return rc
+   }
+
+   puts "rc = $rc"
+   return $rc
 }
 
 ######################################################################################

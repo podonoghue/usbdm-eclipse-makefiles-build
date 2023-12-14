@@ -19,7 +19,6 @@
 #####################################################################################
 #  History
 #
-#  V4.12.1.320 - Simplified interface - experimental
 #  V4.12.1.180 - Removed unnecessary semi-colons
 #  V4.12.1.180 - Messages directed to stderr
 #  V4.12.1.180 - Changed to reset special vendor

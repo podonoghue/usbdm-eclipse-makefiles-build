@@ -2586,11 +2586,11 @@ USBDM_ErrorCode UsbdmDialogue::massEraseTarget() {
 //      }
    }
    else if (bdmInterface->getBdmOptions().targetType == T_ARM) {
-      flashRc = bdmInterface->targetConnectWithRetry((BdmInterface::RetryMode)(BdmInterface::retryByReset|BdmInterface::retryNotPartial));
-      if ((flashRc != BDM_RC_OK) && (flashRc != BDM_RC_SECURED)) {
-         bdmInterface->closeBdm();
-         return flashRc;
-      }
+//      flashRc = bdmInterface->targetConnectWithRetry((BdmInterface::RetryMode)(BdmInterface::retryByReset|BdmInterface::retryNotPartial));
+//      if ((flashRc != BDM_RC_OK) && (flashRc != BDM_RC_SECURED)) {
+//         bdmInterface->closeBdm();
+//         return flashRc;
+//      }
    }
    else {
       if (bdmInterface->targetConnectWithRetry((BdmInterface::RetryMode)(BdmInterface::retryAlways|BdmInterface::retryByReset)) != BDM_RC_OK) {
