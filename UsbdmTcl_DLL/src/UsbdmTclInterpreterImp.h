@@ -66,6 +66,21 @@ public:
     * @return a point to the result string (a static buffer)
     */
    virtual const char      *getTclResult() override;
+
+   /**
+    * Returns the USBDM Error code from the last command
+    *
+    * @param script String containing the script to evaluate in the interpreter
+    */
+   virtual USBDM_ErrorCode getLastResult() override;
+
+   /**
+    * Returns the USBDM Error code from the last failing command
+    *
+    * @param script String containing the script to evaluate in the interpreter
+    */
+   virtual USBDM_ErrorCode getErrorResult() override;
+
    /**
     * Set BDM interface to use to communication with BDM
     *

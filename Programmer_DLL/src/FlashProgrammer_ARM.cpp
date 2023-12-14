@@ -280,17 +280,14 @@ FlashProgrammer_ARM::~FlashProgrammer_ARM() {
    LOGGING_E;
 }
 
-//=============================================================================
-//! Connects to the target. \n
-//! - Resets target to special mode
-//! - Connects
-//! - Runs initialisation script
-//!
-//! @return error code, see \ref USBDM_ErrorCode \n
-//!   BDM_OK                       => Success \n
-//!   PROGRAMMING_RC_ERROR_SECURED => Device is connected but secured (target connection speed may have been approximated)\n
-//!                           USBDM_getStatus() may be used to determine connection method.
-//!
+/**
+ * Connects to the target. \n
+ * - Resets target to special mode
+ * - Connects
+ * - Runs initialisation script
+ *
+ * @return error code, see \ref USBDM_ErrorCode \n
+ */
 USBDM_ErrorCode FlashProgrammer_ARM::resetAndConnectTarget(void) {
    LOGGING;
    USBDM_ErrorCode rc;
@@ -324,39 +321,49 @@ USBDM_ErrorCode FlashProgrammer_ARM::resetAndConnectTarget(void) {
          break;
    }
 
-   // Reset to special mode to allow unlocking of Flash
-   rc = bdmInterface->reset(targetMode);
-   if (rc != BDM_RC_OK) {
-      // Try again with hardware reset
-      log.print("failed reset with %s, retry with hardware\n", DeviceData::getResetMethodName(resetMethod));
-      bdmInterface->connect();
-      rc = bdmInterface->reset((TargetMode_t)(RESET_SPECIAL|RESET_HARDWARE));
+//   // Reset to special mode to allow unlocking of Flash
+//   rc = bdmInterface->reset(targetMode);
+//   if (rc != BDM_RC_OK) {
+//      // Try again with hardware reset
+//      log.print("failed reset with %s, retry with hardware\n", DeviceData::getResetMethodName(resetMethod));
+//      bdmInterface->connect();
+//      rc = bdmInterface->reset((TargetMode_t)(RESET_SPECIAL|RESET_HARDWARE));
+//   }
+//   if (rc == BDM_RC_SECURED) {
+//      log.error("... Device is secured\n");
+//      return PROGRAMMING_RC_ERROR_SECURED;
+//   }
+//   if (rc != BDM_RC_OK) {
+//      log.error( "... Failed Reset, %s!\n", bdmInterface->getErrorString(rc));
+//      return rc; //PROGRAMMING_RC_ERROR_BDM_CONNECT;
+//   }
+//   // Try auto Connect to target
+//   // BDM_RC_BDM_EN_FAILED usually means a secured device
+//   rc = bdmInterface->connect();
+//   switch (rc) {
+//   case BDM_RC_SECURED:
+//   case BDM_RC_BDM_EN_FAILED:
+//      // Treat as secured & continue
+//      log.error( "... Partial Connect, rc = %s!\n", bdmInterface->getErrorString(rc));
+//      rc = PROGRAMMING_RC_ERROR_SECURED;
+//      break;
+//   case BDM_RC_OK:
+//      rc = PROGRAMMING_RC_OK;
+//      break;
+//   default:
+//      log.error( "... Failed Connect, rc = %s!\n", bdmInterface->getErrorString(rc));
+//      return rc; //PROGRAMMING_RC_ERROR_BDM_CONNECT;
+//   }
+
+   // Use target TCL script to do entire reset and connection sequence
+   char args[100];
+   snprintf(args, sizeof(args), "resetAndConnectTarget %s", getTargetModeNameForTcl(targetMode));
+   rc = runTCLCommand(args);
+   if (rc != PROGRAMMING_RC_OK) {
+      log.error("Failed - initTarget TCL failed, rc = %d (%s)\n", rc, bdmInterface->getErrorString(rc));
+      return rc;
    }
-   if (rc == BDM_RC_SECURED) {
-      log.error("... Device is secured\n");
-      return PROGRAMMING_RC_ERROR_SECURED;
-   }
-   if (rc != BDM_RC_OK) {
-      log.error( "... Failed Reset, %s!\n", bdmInterface->getErrorString(rc));
-      return rc; //PROGRAMMING_RC_ERROR_BDM_CONNECT;
-   }
-   // Try auto Connect to target
-   // BDM_RC_BDM_EN_FAILED usually means a secured device
-   rc = bdmInterface->connect();
-   switch (rc) {
-   case BDM_RC_SECURED:
-   case BDM_RC_BDM_EN_FAILED:
-      // Treat as secured & continue
-      log.error( "... Partial Connect, rc = %s!\n", bdmInterface->getErrorString(rc));
-      rc = PROGRAMMING_RC_ERROR_SECURED;
-      break;
-   case BDM_RC_OK:
-      rc = PROGRAMMING_RC_OK;
-      break;
-   default:
-      log.error( "... Failed Connect, rc = %s!\n", bdmInterface->getErrorString(rc));
-      return rc; //PROGRAMMING_RC_ERROR_BDM_CONNECT;
-   }
+
    // Use TCL script to set up target
    USBDM_ErrorCode rc2 = initialiseTarget();
    if (rc2 != PROGRAMMING_RC_OK) {
@@ -473,62 +480,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::initialiseTarget() {
       log.print("Already done, skipped\n");
       return PROGRAMMING_RC_OK;
    }
-#if (TARGET == RS08) || (TARGET == HCS08) || (TARGET == S12Z) || (TARGET == HCS12) || (TARGET == CFV1)
-   uint8_t          mask;
-#if TARGET == RS08
-   mask = RS08_BDCSCR_CLKSW;
-#elif TARGET == HCS08
-   mask = HC08_BDCSCR_CLKSW;
-#elif TARGET == HCS12
-   mask = HC12_BDMSTS_CLKSW;
-#elif TARGET == S12Z
-   mask = HC12_BDMSTS_CLKSW;
-#elif TARGET == CFV1
-   mask = CFV1_XCSR_CLKSW;
-#endif
-
-   unsigned long BDMStatusReg;
-   rc = bdmInterface->readStatusReg(&BDMStatusReg);
-   if ((BDMStatusReg&mask) == 0) {
-      log.print("Setting BDCSCR_CLKSW\n");
-      BDMStatusReg |= mask;
-      rc = bdmInterface->writeControlReg(BDMStatusReg);
-      rc = bdmInterface->connect();
-   }
-#endif
-#if (TARGET == HCS08) || (TARGET == HCS12) || (TARGET == S12Z)
-   char args[200] = "initTarget \"";
-   char *argPtr = args+strlen(args);
-
-   // Add address of each flash region
-   for (int index=0; ; index++) {
-      MemoryRegionConstPtr memoryRegionPtr = device->getMemoryRegion(index);
-      if (memoryRegionPtr == NULL) {
-         break;
-      }
-      if (!memoryRegionPtr->isProgrammableMemory()) {
-         continue;
-      }
-      sprintf(argPtr, "{%s 0x%04X} ",
-            memoryRegionPtr->getMemoryTypeName(),
-            memoryRegionPtr->getDummyAddress()&0xFFFF);
-      argPtr += strlen(argPtr);
-   }
-   *argPtr++ = '\"';
-   *argPtr++ = '\0';
-#elif (TARGET == RS08)
-   char args[200] = "initTarget ";
-   char *argPtr = args+strlen(args);
-   sprintf(argPtr, "0x%04X 0x%04X 0x%04X",
-         device->getWatchdogAddress(),
-         flashMemoryRegionPtr->getFOPTAddress(),
-         flashMemoryRegionPtr->getFLCRAddress()
-         );
-   argPtr += strlen(argPtr);
-   *argPtr++ = '\0';
-#else
    char args[] = "initTarget \"\"";
-#endif
 
    rc = runTCLCommand(args);
    if (rc != PROGRAMMING_RC_OK) {
@@ -539,13 +491,13 @@ USBDM_ErrorCode FlashProgrammer_ARM::initialiseTarget() {
    return rc;
 }
 
-//=============================================================================
-//! Prepares the target for Flash and eeprom operations. \n
-//!
-//! @return error code, see \ref USBDM_ErrorCode
-//!
-//! @note Assumes target has been reset & connected
-//!
+/**
+ *  Prepares the target for Flash and eeprom operations. \n
+ *
+ *  @return error code, see \ref USBDM_ErrorCode
+ *
+ *  @note Assumes target has been reset & connected
+ */
 USBDM_ErrorCode FlashProgrammer_ARM::initialiseTargetFlash() {
    LOGGING;
    USBDM_ErrorCode rc;
@@ -554,42 +506,6 @@ USBDM_ErrorCode FlashProgrammer_ARM::initialiseTargetFlash() {
    if (flashReady) {
       return PROGRAMMING_RC_OK;
    }
-#if (TARGET==RS08) || (TARGET==HCS08) || (TARGET==HCS12) || (TARGET==S12Z) || (TARGET==CFV1)
-   unsigned long busFrequency = 0;
-#if (TARGET==RS08) || (TARGET==HCS08) || (TARGET==CFV1)
-   // Configure the target clock for Flash programming
-   rc = configureTargetClock(&busFrequency);
-#elif (TARGET==HCS12)  || (TARGET==S12Z)
-   // Configure the target clock for Flash programming
-   rc = getTargetBusSpeed(&busFrequency);
-   if (rc == PROGRAMMING_RC_ERROR_SPEED_APPROX) {
-      // Estimated speed is not sufficiently accurate for programming
-
-      // Check if user has supplied a speed to use
-      if (device->getConnectionFreq() == 0)
-         return PROGRAMMING_RC_ERROR_SPEED_APPROX;
-
-      // Set user supplied speed & confirm SDID as basic communication check
-      bdmInterface->setSpeedHz(device->getConnectionFreq()/1000);
-      if (confirmSDID() != PROGRAMMING_RC_OK)
-         return PROGRAMMING_RC_ERROR_SPEED_APPROX;
-
-      busFrequency = device->getConnectionFreq()*device->getBDMtoBUSFactor();
-      log.print("Using user-supplied bus speed = %lu kHz\n",
-            busFrequency/1000);
-   }
-   else
-#endif
-   if (rc != PROGRAMMING_RC_OK) {
-      log.error("Failed to get speed\n");
-      return rc;
-   }
-   // Convert to kHz
-   uint32_t targetBusFrequency = (uint32_t)round(busFrequency/1000.0);
-   flashOperationInfo.targetBusFrequency = targetBusFrequency;
-
-   log.print("Target Bus Frequency = %ld kHz\n", (unsigned long)targetBusFrequency);
-#endif
 
    char buffer[100];
    sprintf(buffer, "initFlash %d", flashOperationInfo.targetBusFrequency);
@@ -614,14 +530,17 @@ USBDM_ErrorCode FlashProgrammer_ARM::massEraseTarget(bool resetTarget) {
    LOGGING;
 
    SetProgrammingMode pmode(bdmInterface);
-
+   USBDM_ErrorCode rc = BDM_RC_OK;
    if (resetTarget) {
-      resetAndConnectTarget();
+      rc = resetAndConnectTarget();
+      if (rc != BDM_RC_OK) {
+         return rc;
+      }
    }
    if (progressTimer != NULL) {
       progressTimer->restart("Mass Erasing Target");
    }
-   USBDM_ErrorCode rc = initialiseTarget();
+   rc = initialiseTarget();
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
    }

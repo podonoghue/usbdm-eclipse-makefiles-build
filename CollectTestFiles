@@ -1,26 +1,28 @@
 #!/bin/sh
-# Where Eclipse files are
-ECLIPSE_HOME=.
+
+# Where files are (relative to script)
+HOME_DIR="$(dirname $(readlink -f $0))"
+
+echo "Working in ${HOME_DIR}"
 
 MULTIARCH=`gcc --print-multiarch`
 ARCH=`uname -n`
 
 # Where to place test files
-TEST_DIR=${ECLIPSE_HOME}/Tests
+TEST_DIR=${HOME_DIR}/Tests
 
 # Where DLLs to link against are kept
-DEVICE_DATA=${ECLIPSE_HOME}/PackageFiles/DeviceData
+DEVICE_DATA=${HOME_DIR}/PackageFiles/DeviceData
 
 mkdir -p ${TEST_DIR}
 
 # Executables that are produced as part of USBDM
-cp "${ECLIPSE_HOME}/PackageFiles/bin/${MULTIARCH}/"*                "${TEST_DIR}"
-cp "${ECLIPSE_HOME}/PackageFiles/lib/${MULTIARCH}/"*                "${TEST_DIR}"
+cp "${HOME_DIR}/PackageFiles/bin/${MULTIARCH}/"*                "${TEST_DIR}"
+cp "${HOME_DIR}/PackageFiles/lib/${MULTIARCH}/"*                "${TEST_DIR}"
 
 # Misc commands
-cp "${ECLIPSE_HOME}/PackageFiles/Miscellaneous/"*.tcl  "${TEST_DIR}"
+cp "${HOME_DIR}/PackageFiles/Miscellaneous/"*.tcl  "${TEST_DIR}"
 
 # Device Data
-cp -P -r "${ECLIPSE_HOME}/${DEVICE_DATA}"              "${TEST_DIR}/DeviceData"
-
+cp -P -r "${DEVICE_DATA}"              "${TEST_DIR}/DeviceData"
 

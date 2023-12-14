@@ -123,8 +123,11 @@ static WxPluginPtr                 wxPlugin;
 static BdmInterfacePtr             bdmInterface;
 static MemorySpace_t               defaultMemorySpace   = MS_None;
 static USBDM_ErrorCode             lastError            = BDM_RC_OK;
+static USBDM_ErrorCode             lastResult           = BDM_RC_OK;
 static int                         bigEndian            = true;
 static std::vector<BdmInformation> bdmList;
+static bool                        bdmIsOpen            = false;
+static TargetVddSelect_t           targetVdd            = BDM_TARGET_VDD_3V3;
 
 static void checkRC(USBDM_ErrorCode rc) {
    static char buff[40];
@@ -583,7 +586,7 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script, int &r
          char *eptr = 0;
          long temp = strtol(sResult, &eptr, 0);
          if (eptr != sResult) {
-            result = temp;
+            rc = USBDM_ErrorCode(temp);
          }
          else {
             log.error("Non-numeric return value = %s\n", sResult);
@@ -611,7 +614,26 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script, int &r
          }
       }
    }
+   log.error("rc = %s", bdmInterface->getErrorString(rc));
    return rc;
+}
+
+/**
+ * Returns the USBDM Error code from the last command
+ *
+ * @param script String containing the script to evaluate in the interpreter
+ */
+USBDM_ErrorCode UsbdmTclInterpreterImp::getLastResult() {
+   return lastResult;
+}
+
+/**
+ * Returns the USBDM Error code from the last failing command
+ *
+ * @param script String containing the script to evaluate in the interpreter
+ */
+USBDM_ErrorCode UsbdmTclInterpreterImp::getErrorResult() {
+   return lastError;
 }
 
 /**
@@ -704,6 +726,7 @@ const char *UsbdmTclInterpreterImp::getTclResult() {
  * Save a USBDM Error code as last error and converts and sets the TCL return value
  */
 static int checkUsbdmRC(Tcl_Interp *interp, USBDM_ErrorCode errorCode) {
+   lastResult = errorCode;
    if (errorCode != BDM_RC_OK) {
       lastError = errorCode;
       Tcl_SetResult(interp, (char *)bdmInterface->getErrorString(errorCode), TCL_STATIC);
@@ -793,6 +816,7 @@ static int cmd_s12zMassErase(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *
  */
 static int cmd_setVdd(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    // setTargetVdd <0|3|5|on|off>
+
    bool immediateEffect = false;
    if (argc != 2) {
       Tcl_WrongNumArgs(interp, 1, argv, "<0|3|5|on|off>");
@@ -805,12 +829,15 @@ static int cmd_setVdd(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
    }
    else if (strncasecmp(arg, "0", 1) == 0) {
       bdmInterface->getBdmOptions().targetVdd = BDM_TARGET_VDD_OFF;
+      targetVdd = BDM_TARGET_VDD_OFF;
    }
    else if (strncasecmp(arg, "3", 1) == 0) {
       bdmInterface->getBdmOptions().targetVdd = BDM_TARGET_VDD_3V3;
+      targetVdd = BDM_TARGET_VDD_3V3;
    }
    else if (strncasecmp(arg, "5", 1) == 0) {
       bdmInterface->getBdmOptions().targetVdd = BDM_TARGET_VDD_5V;
+      targetVdd = BDM_TARGET_VDD_5V;
    }
    else if (strncasecmp(arg, "on", 2) == 0) {
       immediateEffect = true;
@@ -825,7 +852,8 @@ static int cmd_setVdd(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
    else {
       Tcl_SetResult(interp, (char*)"Illegal target voltage", TCL_STATIC);
    }
-   PRINT(":setTargetVdd %s %s\n", arg, immediateEffect?"":"(applied when target set)");
+
+   PRINT(":setTargetVdd %s %s\n", arg, immediateEffect?"":"(applied when BDM opened)");
    return TCL_OK;
 }
 
@@ -892,6 +920,8 @@ static int cmd_closeBDM(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
       Tcl_WrongNumArgs(interp, 1, argv, "");
       return TCL_ERROR;
    }
+
+   bdmIsOpen = false;
    bdmInterface->closeBdm();
    return (TCL_OK);
 }
@@ -899,6 +929,9 @@ static int cmd_closeBDM(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
 //! Open BDM before 1st use
 static int cmd_openBDM(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    // cmd_openBDM [<deviceNum>]
+
+   bdmIsOpen = false;
+
    int deviceNum;
 
    if (argc > 2) {
@@ -927,6 +960,7 @@ static int cmd_openBDM(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
    }
    PRINT("BDM Version = %s\n", bdmInterface->getBdmVersionString().c_str());
 
+   bdmIsOpen = true;
    return TCL_OK;
 }
 
@@ -1003,7 +1037,7 @@ static int cmd_setTarget(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    }
    bdmInterface.reset();
    bdmInterface = BdmInterfaceFactory::createInterface(targetType, nullCallback);
-   bdmInterface->getBdmOptions().targetVdd = BDM_TARGET_VDD_3V3;
+   bdmInterface->getBdmOptions().targetVdd = targetVdd;
    log.print("%s", printBdmOptions(&bdmInterface->getBdmOptions()));
 
    PRINT("USBDM DLL Version = %s\n", bdmInterface->getDllVersionString().c_str());
@@ -1528,7 +1562,8 @@ static int cmd_status(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
 }
 
 /**
- * getLastError                 - Get last USBDM rc as number
+ * getLastError - Get USBDM rc value from last FAILING command
+ *                Clears error code
  *
  * @param
  * @param interp
@@ -1539,6 +1574,20 @@ static int cmd_status(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
 static int cmd_getLastError(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    Tcl_SetObjResult(interp, Tcl_NewIntObj(lastError));
    lastError = BDM_RC_OK;
+   return TCL_OK;
+}
+
+/**
+ * getLastResult - Get USBDM rc value from last command
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
+static int cmd_getLastResult(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
+   Tcl_SetObjResult(interp, Tcl_NewIntObj(lastResult));
    return TCL_OK;
 }
 
@@ -4084,8 +4133,9 @@ static const char usageText[] =
       "                             - display dialogue\n"
       "exit                         - Exit program\n"
       "getErrorMessage <rc>         - Get given USBDM rc as String\n"
-      "getLastError                 - Get last USBDM rc as number\n"
-      "getLastErrorMessage          - Get last USBDM rc as string\n"
+      "getLastError                 - Get USBDM rc from last failing command\n"
+      "getLastErrorMessage          - Get error message from last failing command\n"
+      "getLastResult                - Get last USBDM rc as number\n"
       "go                           - Start from current PC\n"
       "getcap                       - Get BDM Capabilities\n"
       "gs                           - Read status register\n"
@@ -4199,6 +4249,7 @@ static struct {
       { cmd_go,                   "go"},
       { cmd_status,               "gs"},
       { cmd_getLastError,         "getLastError"},
+      { cmd_getLastResult,        "getLastResult"},
       { cmd_getErrorMessage,      "getErrorMessage"},
       { cmd_getLastErrorMessage,  "getLastErrorMessage"},
       { cmd_getCapabilities,      "getcap"},

@@ -120,6 +120,7 @@ USBDM_ErrorCode FlashProgrammerCommon::initTCL() {
    rc = tclInterpreter->setDeviceParameters(device);
    return rc;
 }
+
 /**
  *  Release the current TCL interpreter
  */
@@ -198,6 +199,11 @@ USBDM_ErrorCode FlashProgrammerCommon::runTCLCommand(const char *command) {
    }
    USBDM_ErrorCode rc = tclInterpreter->evalTclScript(command);
    if (rc != PROGRAMMING_RC_OK) {
+      USBDM_ErrorCode rcUsbdm = tclInterpreter->getErrorResult();
+      if (rcUsbdm != BDM_RC_OK) {
+         log.error("Updating rc - old rc = %d (%s)\n", rc, bdmInterface->getErrorString(rc));
+         rc = rcUsbdm;
+      }
       log.error("Error: Failed - rc = %d (%s)\n", rc, bdmInterface->getErrorString(rc));
    }
    return rc;
