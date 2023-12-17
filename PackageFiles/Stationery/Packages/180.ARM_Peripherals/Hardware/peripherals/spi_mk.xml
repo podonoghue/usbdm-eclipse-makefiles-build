@@ -209,7 +209,7 @@
       <choice value="1&lt;&lt;5" name="PCS 5 Active-low"     enum="5_ActiveLow"     />
    </choiceOption>
 
-   <binaryOption key="spi_mcr_pcsse" condition="spi_mcr_pcsse_present"
+   <binaryOption key="spi_mcr_pcsse" condition="spi_mcr_pcsse_present||/SPI1/spi_mcr_pcsse_present||/SPI2/spi_mcr_pcsse_present"
       typeName="SpiPcsMode"
       description="PCS_5/PCSS* pin mode"
       toolTip="Select use of PCS_5/PCSS as PCS_5 or PCS strobe*\n

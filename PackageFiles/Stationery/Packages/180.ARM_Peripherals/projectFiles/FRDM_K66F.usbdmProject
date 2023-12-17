@@ -101,6 +101,7 @@
    <item key="/MCG/enableClockConfiguration[1]"            value="true" />
    <item key="/MCG/enableClockConfiguration[2]"            value="true" />
    <item key="/MCG/enableClockConfiguration[3]"            value="true" />
+   <item key="/MCG/enablePeripheralSupport"                value="true" />
    <item key="/MCG/mcgClockMode[0]"                        value="7" />
    <item key="/MCG/mcgClockMode[1]"                        value="3" />
    <item key="/MCG/mcgClockMode[2]"                        value="7" />

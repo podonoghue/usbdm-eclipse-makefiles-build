@@ -616,8 +616,13 @@ union CanFifoIdFilter {
             rxidc0(canMode?(rxid0>>21):(rxid0>>3))
    {}
 
-   // Don't allow implicit declaration
-   constexpr CanFifoIdFilter() = delete;
+   // Empty constructor
+   constexpr CanFifoIdFilter() :
+         rxidc3(0),
+         rxidc2(0),
+         rxidc1(0),
+         rxidc0(0)
+   {};
 
    /**
     * Constructor filter table entry - Format A
@@ -1477,7 +1482,7 @@ protected:
       // Release all mailboxes
       allocatedMailboxes = (1<<NUM_MAILBOXES)-1;
 
-      enable();
+      Info::enable();
 
       usbdm_assert(
             calculateMessageBuffersRequired(Info::NumberOfFifoMessageFilters, Info::NumberOfIndividualMailboxes)<=Info::MaxNumberOfMessageBuffers,
@@ -1852,57 +1857,6 @@ public:
     */
    static CanCrc15 getTransmittedCrc() {
       return (CanCrc15)(can->CRCR);
-   }
-
-   /**
-    * Enable interrupts in NVIC
-    */
-   static void enableWakeupNvicInterrupts() {
-      static_assert(Info::Wakeup_IrqNumIndex>0, "Wakeup not supported");
-      NVIC_EnableIRQ(Info::irqNums[Info::Wakeup_IrqNumIndex]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableWakeupNvicInterrupts(uint32_t nvicPriority) {
-      static_assert(Info::Wakeup_IrqNumIndex>0, "Wakeup not supported");
-      enableNvicInterrupt(Info::irqNums[Info::Wakeup_IrqNumIndex], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableWakeupNvicInterrupts() {
-      static_assert(Info::Wakeup_IrqNumIndex>0, "Wakeup not supported");
-      NVIC_DisableIRQ(Info::irqNums[Info::Wakeup_IrqNumIndex]);
-   }
-
-   /**
-    * Enable interrupts in NVIC
-    */
-   static void enableErrorNvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[Info::Error_IrqNumIndex]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableErrorNvicInterrupts(uint32_t nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[Info::Error_IrqNumIndex], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableErrorNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[Info::Error_IrqNumIndex]);
    }
 
 protected:

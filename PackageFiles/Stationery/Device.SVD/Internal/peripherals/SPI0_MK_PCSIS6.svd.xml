@@ -695,7 +695,9 @@ Defines inactive state of the CLK</description>
                   </field>
                   <field>
                      <name>FMSZ</name>
-                     <description>Frame Size</description>
+                     <description>Frame Size\n
+The number of bits transferred per frame is equal to the FMSZ field value plus 1.\n
+The minimum valid FMSZ field value is 3</description>
                      <bitOffset>27</bitOffset>
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>

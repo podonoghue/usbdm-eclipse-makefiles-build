@@ -130,9 +130,9 @@ void mailboxOnlyExample() {
    // Enable all interrupts from FIFO
    Can::enableFifoInterrupts(CAN_FIFO_DATA_FLAG|CAN_FIFO_OVERFLOW_FLAG|CAN_FIFO_WARNING_FLAG);
 
-   Can::enableErrorNvicInterrupts(NvicPriority_Normal);
-   Can::enableWakeupNvicInterrupts(NvicPriority_Normal);
-   Can::enableMessageBufferNvicInterrupts(NvicPriority_Normal);
+   Can::enableNvicInterrupts(Can0IrqNum_Error,         NvicPriority_Normal);
+   Can::enableNvicInterrupts(Can0IrqNum_WakeUp,        NvicPriority_Normal);
+   Can::enableNvicInterrupts(Can0IrqNum_MessageBuffer, NvicPriority_Normal);
 
    Can::enableMiscellaneousNvicInterrupts(NvicPriority_Normal);
 

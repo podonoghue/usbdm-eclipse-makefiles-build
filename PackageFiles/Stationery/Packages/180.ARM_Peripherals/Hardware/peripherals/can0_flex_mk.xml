@@ -89,7 +89,7 @@
       description="Maximum number of FIFO message filters available"
       toolTip="This is the maximum value determined by the hardware.\n
                The CAN memory is shared between the FIFO filters and message buffers\n
-	       so a usable number will be less than this"
+               so a usable number will be less than this"
       locked="true"
       value="40" />
 
@@ -237,7 +237,7 @@
       \t   NVIC_EnableIRQ(irqNums[$(_Class)IrqNum_TxWarning]);
       \t   NVIC_EnableIRQ(irqNums[$(_Class)IrqNum_RxWarning]);
       \t}
-
+      \t
       \t/**
       \t * Enable and set priority of Miscellaneous interrupts in NVIC
       \t * Any pending NVIC interrupts are first cleared.
@@ -249,7 +249,7 @@
       \t   enableNvicInterrupt(irqNums[$(_Class)IrqNum_TxWarning], nvicPriority);
       \t   enableNvicInterrupt(irqNums[$(_Class)IrqNum_RxWarning], nvicPriority);
       \t}
-
+      \t
       \t/**
       \t * Disable Miscellaneous interrupts in NVIC
       \t */
@@ -258,30 +258,7 @@
       \t   NVIC_DisableIRQ(irqNums[$(_Class)IrqNum_TxWarning]);
       \t   NVIC_DisableIRQ(irqNums[$(_Class)IrqNum_RxWarning]);
       \t}
-
-      \t/**
-      \t * Enable Message Buffer interrupts in NVIC
-      \t */
-      \tstatic void enableMessageBufferNvicInterrupts() {
-      \t   NVIC_EnableIRQ(irqNums[$(_Class)IrqNum_MessageBuffer]);
-      \t}
-
-      \t/**
-      \t * Enable and set priority of Message Buffer interrupts in NVIC
-      \t * Any pending NVIC interrupts are first cleared.
-      \t *
-      \t * @param[in]  nvicPriority  Interrupt priority
-      \t */
-      \tstatic void enableMessageBufferNvicInterrupts(uint32_t nvicPriority) {
-      \t   enableNvicInterrupt(irqNums[$(_Class)IrqNum_MessageBuffer], nvicPriority);
-      \t}
-
-      \t/**
-      \t * Disable Message Buffer interrupts in NVIC
-      \t */
-      \tstatic void disableMessageBufferNvicInterrupts() {
-      \t   NVIC_DisableIRQ(irqNums[$(_Class)IrqNum_MessageBuffer]);
-      \t}\n
+      \t\n
    ]]></template>
 
    <!--   ========== class $(_Structname)BasicInfo =============================== -->
@@ -391,7 +368,7 @@
    </validate>
 
    <projectActionList id="can_files" >
-      <copy source="Project_Headers/can.h"                    target="Project_Headers/can.h"                    overwrite="true"  derived="true" />
+      <copy source="Project_Headers/can-MK.h"                    target="Project_Headers/can.h"                    overwrite="true"  derived="true" />
       <copy source="Snippets/can-mailbox-example.cpp"         target="Snippets/can-mailbox-example.cpp"         overwrite="true"  derived="true" />
       <copy source="Snippets/can-sw-led-example.cpp"          target="Snippets/can-sw-led-example.cpp"          overwrite="true"  derived="true" />
       <copy source="Snippets/can-fifo-example.cpp"            target="Snippets/can-fifo-example.cpp"            overwrite="true"  derived="true" />

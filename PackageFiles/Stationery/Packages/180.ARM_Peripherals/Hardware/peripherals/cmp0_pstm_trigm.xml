@@ -8,7 +8,7 @@
       hidden="true"
       valueFormat="CMP_MUXCR_PSEL(%s)"
       typeName="CmpInputPlus"
-      description="Plus Input Mux Controlxx"
+      description="Plus Input Mux Control"
       toolTip="Determines which input is selected for the plus input of the comparator" >
       <choice value="0" enum="0" name="CMP_IN0"             />
       <choice value="1" enum="1" name="CMP_IN1"             />

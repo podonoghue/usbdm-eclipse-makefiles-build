@@ -6,7 +6,7 @@
 
    <!-- IRQ vector patterns if none specified -->
    <constant key="irq_pattern"      type="String"  value="&quot;^PORT$(_instance)$&quot;"        />
-   <constant key="irq_ClassHandler" type="String"  value="&quot;PcrBase_$(_instance)::irqHandler&quot;" />
+   <constant key="irq_ClassHandler" type="String"  value="&quot;Port$(_instance)::irqHandler&quot;" />
 
 
    <constant key="suppressInstance"          type="Boolean"  value="true"         />
@@ -14,7 +14,7 @@
    <constant key="irq_parameters"            type="String"  value="&quot;&quot;"        />
    <constant key="irq_dummy_parameters"      type="String"  value="&quot;&quot;"        />
    <constant key="irq_call"                  type="String"  value="&quot;&quot;"        />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
+   <constant key="generateDefault"           type="Boolean" value="true"          />
    <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
@@ -179,6 +179,43 @@
       \t */
       \tconstexpr PinIndex mapPortToPin(PortIndex pinIndex) {
       \t   return PinIndex(int(pinIndex)*32);
+      \t}
+      \t\n
+   ]]></template>
+
+   <template key="/GPIO/AccessFunctions" discardRepeats="true" >
+   <![CDATA[
+      \t/**
+      \t * Get default PCR value for a pin
+      \t *
+      \t * @param pinIndex Pin index e.g. PTB3.
+      \t *
+      \t * @return PCR value determined by Configure.usbdm setting
+      \t */
+      \tstatic constexpr PcrValue GpioPcrValue(PinIndex pinIndx) {
+      \t   (void)pinIndx;\n
+   ]]></template>
+   <for keys=   "Name"
+        values= " A ;
+                  B ;
+                  C ;
+                  D ;
+                  E ;
+                  F ;
+                  G ;
+                  H ;
+                  I " >
+
+      <template key="/GPIO/AccessFunctions" discardRepeats="true" condition="/GPIO%(Name)/_present"
+      ><![CDATA[
+         \t   if (pinIndx <= PinIndex::PT%(Name)31) {
+         \t      return Gpio%(Name)Info::info[int(pinIndx)-int(PinIndex::PT%(Name)0)].pcrValue;
+         \t   }\n
+      ]]></template>
+   </for>
+   <template key="/GPIO/AccessFunctions" discardRepeats="true" >
+   <![CDATA[
+      \t   return PcrValue(0);
       \t}
       \t\n
    ]]></template>
@@ -507,8 +544,10 @@
    \t */
    \ttemplate<int bitNum, Polarity polarity=ActiveHigh> class $(_Class) :
    \t      public Gpio_T<Gpio$(_instance)Info::info[bitNum].pcrValue, PcrBase::pinIndexOf(PinIndex::PT$(_instance)0,bitNum), polarity> {};
+   \t/**
+   \t * Common features shared across all pins of Port$(_instance)
+   \t */
    \ttypedef PcrBase_T<mapPinToPort(PinIndex::PT$(_instance)0)> Port$(_instance);
-   \tusing PcrBase_$(_instance) = PcrBase_T<mapPinToPort(PinIndex::PT$(_instance)0)>;
 
    \t/**
    \t * @brief Convenience template for $(_Class) fields. See @ref GpioField_T

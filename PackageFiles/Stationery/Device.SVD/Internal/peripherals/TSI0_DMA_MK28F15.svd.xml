@@ -286,7 +286,7 @@ Number of Consecutive Scans Per Electrode</description>
                   </field>
                   <field>
                      <name>DVOLT</name>
-                     <description>DVOLT</description>
+                     <description>DVOLT - delta voltage \tValues vary with device</description>
                      <bitOffset>19</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>

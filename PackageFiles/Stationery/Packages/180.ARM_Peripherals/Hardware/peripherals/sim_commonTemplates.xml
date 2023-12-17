@@ -14,9 +14,9 @@
    <!-- Create list of clock enable fields -->
    <equation key="clockEnables" value="=&quot;&quot;" />
    <for keys="peripheral"
-      values="adc;cmp;cmt;crc;dac;dma;dmamux;ewm;flexio;ftf;ftfa;ftfe;ftfl;ftm;flexbus;
+      values="adc;can;cmp;cmt;crc;dac;dma;dmamux;enet;ewm;flexio;ftf;ftfa;ftfe;ftfl;ftm;flexbus;
               i2c;i2s;lptmr;lpuart;mpu;pdb;pit;porta;portb;portc;portd;porte;qspi;rnga;
-              rtc;sdhc;sdramc;slcd;spi;tpm;trng;tsi;uart;usb;usbdcd;usbhs;vref;wdog;
+              rtc;sdhc;sdramc;slcd;spi;tpm;trng;tsi;tsi0;uart;usb;usbdcd;usbhs;vref;wdog;
       ">
       <for keys="instance" values=";0;1;2;3;4;5">
          <for keys="scgcNum" values="1;2;3;4;5;6;7">

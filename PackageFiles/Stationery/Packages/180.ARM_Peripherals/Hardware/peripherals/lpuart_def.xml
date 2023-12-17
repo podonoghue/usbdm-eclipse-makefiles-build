@@ -4,6 +4,28 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="$(_BASENAME)">
 
+   <!-- Enable for this peripheral -->
+   <binaryOption key="usedAsConsole"
+      description="usedAsConsole"
+      toolTip="Indicates if this device is allocated as the Console for I/O"
+      ref="/Console/consoleDevice.name==&quot;$(_Baseclass) $(_instance)&quot;"
+      locked="true"
+      derived="true" >
+      <choice value="0" name="Not used as console" />
+      <choice value="1" name="Used as console" />
+   </binaryOption>
+
+   <binaryOption key="enablePeripheralSupport"
+      enabledBy="!usedAsConsole"
+      hidden="true"
+      description="Enable peripheral support"
+      toolTip="Code will also be generated if this UART is used as the console"
+      disabledValue="true"
+      >
+      <choice value="false" name="Minimal code for $(_NAME)"  />
+      <choice value="true"  name="Generate code for $(_NAME)"/>
+   </binaryOption>
+
    <constant key="irq_pattern"               type="String"  value="&quot;^$(_BASENAME)%i_?(RxTx)?$&quot;" />
    <constant key="irq_ClassHandler"          type="String"  value="&quot;%c%i::irqHandler&quot;"          />
    <constant key="irq_parameters"            type="String"  value="&quot;&quot;"                      />

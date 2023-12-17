@@ -1,0 +1,2820 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- can0_flex_mk.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex Controller Area Network module" >
+
+   <choiceOption key="irq_enum" condition="=_irqCount>1"
+      valueFormat="%s"
+      hidden="true"
+      derived="true"
+      typeName="$(_Class)IrqNum"
+      description="$(_Class) Interrupt indices"
+      toolTip="Used to identify peripheral interrupt" >
+      <choice value="0"  enum="MessageBuffer" name="FlexCAN - Message Buffers (Mailboxes and FIFO)" />
+      <choice value="1"  enum="BusOff"        name="FlexCAN - Bus off" />
+      <choice value="2"  enum="Error"         name="FlexCAN - Error" />
+      <choice value="3"  enum="TxWarning"     name="FlexCAN - Transmit Warning" />
+      <choice value="4"  enum="RxWarning"     name="FlexCAN - Receive Warning" />
+      <choice value="5"  enum="WakeUp"        name="FlexCAN - Wakeup" />
+   </choiceOption>
+
+   <constant key="irq_parameters"            type="String"  value="&quot;&quot;"  />
+   <constant key="irq_dummy_parameters"      type="String"  value="&quot;&quot;"  />
+   <constant key="irq_call"                  type="String"  value="&quot;&quot;"  />
+   <constant key="generateDefault"           type="Boolean" value="false"         />
+   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <xi:include href="enablePeripheral.xml"  />
+   <title />
+
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
+
+<!--
+    * Template substitutions
+    *
+    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
+    * <li>%valueExpression            Numeric variable value e.g. 0x3
+    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
+    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
+    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
+    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
+    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
+    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * <li>%params                     Formatted parameter list for function
+    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
+    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
+    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
+    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
+    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
+    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
+    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
+    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
+-->
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
+
+   <!-- ************* MCR ****************** -->
+   <title description="Module Configuration Register" />
+
+   <binaryOption key="can_mcr_mdis" condition="can_mcr_mdis_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanModeX"
+      toolTip="This bit controls whether FlexCAN is enabled or not.\n
+               When disabled, FlexCAN disables the clocks to the CAN Protocol Engine and
+               Controller Host Interface sub-modules. This is the only bit within this register not
+               affected by soft reset."
+      description="Module Disable" >
+      <choice name="Enable the FlexCAN module"   value="0" enum="Enabled" />
+      <choice name="Disable the FlexCAN module"  value="1" enum="Disabled" />
+   </binaryOption >
+
+   <binaryOption key="can_mcr_frz" condition="can_mcr_frz_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanEnterFreeze"
+      toolTip="The FRZ bit specifies the FlexCAN behavior when the HALT bit in the MCR Register is set or when Debug
+               mode is requested at MCU level. When FRZ is asserted, FlexCAN is enabled to enter Freeze mode.
+               Negation of this bit field causes FlexCAN to exit from Freeze mode."
+      description="Freeze Enable" >
+      <choice name="Not enabled to enter Freeze mode"  value="0" enum="NotEnabled" />
+      <choice name="Enabled to enter Freeze mode"      value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="can_mcr_rfen" condition="can_mcr_rfen_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanFifoMode"
+      toolTip="This bit controls whether the Rx FIFO feature is enabled or not.\n
+               When RFEN is set, MBs 0 to 5 cannot be
+               used for normal reception and transmission because the corresponding memory region (0x80-0xDC) is
+               used by the FIFO engine as well as additional MBs (up to 32, depending on CTRL2[RFFN] setting) which
+               are used as Rx FIFO ID Filter Table elements. RFEN also impacts the definition of the minimum number
+               of peripheral clocks per CAN bit as described in the table 'Minimum Ratio Between Peripheral Clock
+               Frequency and CAN Bit Rate' (in section 'Arbitration and Matching Timing'). This bit can be written only in
+               Freeze mode because it is blocked by hardware in other modes."
+      description="Rx FIFO Enable" >
+      <choice name="Rx FIFO not enabled"  value="0" enum="NotEnabled" />
+      <choice name="Rx FIFO enabled"      value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="can_mcr_halt" condition="can_mcr_halt_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanHalt"
+      toolTip="Assertion of this bit puts the FlexCAN module into Freeze mode.\n
+               The CPU should clear it after initializing the Message Buffers and Control Register.
+               No reception or transmission is performed by FlexCAN before
+               this bit is cleared. Freeze mode cannot be entered while FlexCAN is in a low power mode."
+      description="Halt FlexCAN" >
+      <choice name="No Freeze mode request" value="0" enum="NoRequest" />
+      <choice name="Enter Freeze mode"      value="1" enum="FreezeRequested" />
+   </binaryOption >
+
+   <binaryOption key="can_mcr_notrdy" condition="can_mcr_notrdy_present"
+      hidden="true"
+      typeName="CanStatus"
+      toolTip="This read-only bit indicates that FlexCAN is either in Disable mode, Stop mode or Freeze mode.\n
+               It is negated once FlexCAN has exited these modes."
+      description="FlexCAN Not Ready" >
+      <choice name="In Normal, Listen-Only or Loop-Back modes" value="0" enum="Normal" />
+      <choice name="In Disabled, Stop or Freeze modes"         value="1" enum="NotOperating" />
+   </binaryOption >
+
+   <binaryOption key="can_mcr_wakmsk" condition="can_mcr_wakmsk_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanWakeupAction"
+      toolTip="This bit enables the Wake Up Interrupt generation under Self Wake Up mechanism."
+      description="Wake Up Interrupt Mask" >
+      <choice name="Wake Up Interrupt is disabled"  value="0" enum="None" />
+      <choice name="Wake Up Interrupt is enabled"   value="1" enum="Interrupt" />
+   </binaryOption >
+
+   <binaryOption key="can_mcr_softrst" condition="can_mcr_softrst_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanSoftReset"
+      toolTip="When this bit is asserted, FlexCAN resets its internal state machines and some
+               of the memory mapped registers.\n
+               The SOFTRST bit remains asserted while reset is pending, and is automatically negated when\n
+               reset completes. Therefore, software can poll this bit to know when the soft reset has completed."
+      description="Soft Reset" >
+      <choice name="No reset request" value="0" enum="Negated" />
+      <choice name="Reset requested"  value="1" enum="Asserted" />
+   </binaryOption >
+
+   <binaryOption key="can_mcr_frzack" condition="can_mcr_frzack_present"
+      hidden="true"
+      typeName="CanFreezeModeAck"
+      toolTip="This read-only bit indicates that FlexCAN is in Freeze mode and its prescaler is stopped. The Freeze
+               mode request cannot be granted until current transmission or reception processes have finished"
+      description="Freeze Mode Acknowledge" >
+      <choice name="Not in Freeze mode, prescaler running"  value="0" enum="NotComplete" />
+      <choice name="In Freeze mode, prescaler stopped"      value="1" enum="Completed" />
+   </binaryOption >
+
+   <binaryOption key="can_mcr_supv" condition="can_mcr_supv_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanOperatingMode"
+      toolTip="This bit configures the FlexCAN to be either in Supervisor or User mode."
+      description="Supervisor Mode" >
+      <choice name="FlexCAN is in User mode."        value="0" enum="UserMode" />
+      <choice name="FlexCAN is in Supervisor mode."  value="1" enum="SupervisorMode" />
+   </binaryOption >
+
+   <binaryOption key="can_mcr_slfwak" condition="can_mcr_slfwak_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanSelfWakeup"
+      toolTip="This bit enables the Self Wake Up feature when FlexCAN is in a low-power mode other than Disable
+               mode. When this feature is enabled, the FlexCAN module monitors the bus for wake up event, that is, a
+               recessive-to-dominant transition."
+      description="Self Wake Up" >
+      <choice name="Self Wake Up feature is disabled"  value="0" enum="Disabled" />
+      <choice name="Self Wake Up feature is enabled"   value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="can_mcr_wrnen" condition="can_mcr_wrnen_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanWarningAction"
+      toolTip="When asserted, this bit enables the setting of the TWRNINT and RWRNINT flags in the Error and
+               Status Register.  This will only occur on the error counters transitioning to &gt;= 96"
+      description="Warning Interrupt Enable" >
+      <choice name="Error flags held at zero"  value="0" enum="None" />
+      <choice name="Error flags set on error"  value="1" enum="Interrupt" />
+   </binaryOption >
+
+   <binaryOption key="can_mcr_lpmack" condition="can_mcr_lpmack_present"
+      hidden="true"
+      typeName="CanLowPowerMode"
+      toolTip="This read-only bit indicates that FlexCAN is in a low-power mode (Disable mode , Stop mode )."
+      description="Low Power Mode Acknowledge" >
+      <choice name="Not in a low power mode"  value="0" enum="Normal" />
+      <choice name="In a low power mode"      value="1" enum="LowPower" />
+   </binaryOption >
+
+   <binaryOption key="can_mcr_waksrc" condition="can_mcr_waksrc_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanWakupFilter"
+      toolTip="This bit defines whether the integrated low-pass filter is applied to protect the Rx CAN input from spurious
+               wake up. This bit can be written only in Freeze mode because it is blocked by hardware in other modes."
+      description="Wake Up Source" >
+      <choice name="No filter used to detect recessive to dominant edges"  value="0" enum="Disabled" />
+      <choice name="Filtered used to detect recessive to dominant edges"   value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="can_mcr_srxdis" condition="can_mcr_srxdis_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanMcrSrxdis"
+      toolTip="This bit defines whether FlexCAN is allowed to receive frames transmitted by itself. If this bit is asserted,
+               frames transmitted by the module will not be stored in any MB, regardless if the MB is programmed with
+               an ID that matches the transmitted frame, and no interrupt flag or interrupt signal will be generated due to
+               the frame reception. This bit can be written only in Freeze mode because it is blocked by hardware in
+               other modes."
+      description="Self Reception Disable" >
+      <choice name="Self reception enabled"   value="0" enum="SelfReceptionEnabled" />
+      <choice name="Self reception disabled"  value="1" enum="SelfReceptionDisabled" />
+   </binaryOption >
+
+   <binaryOption key="can_mcr_irmq" condition="can_mcr_irmq_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanIndividualMasking"
+      toolTip="This bit indicates whether Rx matching process will be based either on individual masking and queue or
+               on masking scheme with RXMGMASK, RX14MASK and RX15MASK, RXFGMASK. This bit can be written
+               only in Freeze mode because it is blocked by hardware in other modes.\n
+               For backward compatibility, when inactive the reading of C/S word locks the MB even if it is EMPTY"
+      description="Individual Rx Masking and Queue Enable" >
+      <choice name="Individual masking and queue features disabled. "  value="0" enum="Disabled" />
+      <choice name="Individual masking and queue features enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="can_mcr_lprioen" condition="can_mcr_lprioen_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanLocalPriority"
+      toolTip="This bit is provided for backwards compatibility with legacy applications. It controls whether the local
+               priority feature is enabled or not. It is used to expand the ID used during the arbitration process. With this
+               expanded ID concept, the arbitration process is done based on the full 32-bit word, but the actual
+               transmitted ID still has 11-bit for standard frames and 29-bit for extended frames. This bit can be written
+               only in Freeze mode because it is blocked by hardware in other modes."
+      description="Local Priority Enable" >
+      <choice name="Local Priority disabled"  value="0" enum="Disabled" />
+      <choice name="Local Priority enabled"   value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="can_mcr_aen" condition="can_mcr_aen_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanAbort"
+      toolTip="This bit is supplied for backwards compatibility with legacy applications. When asserted, it enables the Tx
+               abort mechanism. This mechanism guarantees a safe procedure for aborting a pending transmission, so
+               that no frame is sent in the CAN bus without notification. This bit can be written only in Freeze mode
+               because it is blocked by hardware in other modes."
+      description="Abort Enable" >
+      <choice name="Abort disabled"  value="0" enum="Disabled" />
+      <choice name="Abort enabled"   value="1" enum="Enabled" />
+   </binaryOption >
+
+   <choiceOption key="can_mcr_idam" condition="can_mcr_idam_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanMcrIdam"
+      toolTip="This field identifies the format of the Rx FIFO ID Filter Table elements. Note that all elements of the
+               table are configured at the same time by this field (they are all the same format). See Section 'Rx FIFO
+               Structure'. This field can be written only in Freeze mode because it is blocked by hardware in other
+               modes."
+      description="ID Acceptance Mode" >
+      <choice name="Format A:" value="0" enum="FormatA" />
+      <choice name="Format B:" value="1" enum="FormatB" />
+      <choice name="Format C:" value="2" enum="FormatC" />
+      <choice name="Format D:" value="3" enum="FormatD" />
+   </choiceOption >
+
+   <intOption key="can_mcr_maxmb" condition="can_mcr_maxmb_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanLastMessageBuffer"
+      enumType="uint32_t"
+      description="Number of the Last Message Buffer"
+      toolTip="Number Of The Last Message Buffer
+               This 7-bit field defines the number of the last Message Buffers that will take part in the matching and
+               arbitration processes. The reset value (0x0F) is equivalent to a 16 MB configuration. This field can be
+               written only in Freeze mode because it is blocked by hardware in other modes."
+      value="0"
+      min="0" max="127"
+   />
+
+   <!-- ************* CTRL1 ****************** -->
+   <title description="Control 1 Register" />
+
+   <intOption key="can_ctrl1_presdiv" condition="can_ctrl1_presdiv_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl1Presdiv"
+      enumType="uint8_t"
+      description="Prescaler Division Factor"
+      toolTip="This 8-bit field defines the ratio between the PE clock frequency and the Serial Clock (Sclock) frequency.\n
+               The Sclock period defines the time quantum of the CAN protocol. \n
+               The Maximum value of this field is 0xFF, that gives a
+               minimum Sclock frequency equal to the PE clock frequency divided by 256. \n
+               This field can be written only in Freeze mode because it is blocked by hardware in other modes.\n
+               Sclock frequency = PE clock frequency / (PRESDIV + 1)"
+      value="0"
+      min="0" max="255"
+   />
+
+   <choiceOption key="can_ctrl1_rjw" condition="can_ctrl1_rjw_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl1Rjw"
+      toolTip=""
+      description="Resync Jump Width" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="can_ctrl1_pseg1" condition="can_ctrl1_pseg1_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl1Pseg1"
+      toolTip=""
+      description="Phase Segment 1" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+      <choice name="Choice 4"  value="4" enum="Choice4" />
+      <choice name="Choice 5"  value="5" enum="Choice5" />
+      <choice name="Choice 6"  value="6" enum="Choice6" />
+      <choice name="Choice 7"  value="7" enum="Choice7" />
+   </choiceOption >
+
+   <choiceOption key="can_ctrl1_pseg2" condition="can_ctrl1_pseg2_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl1Pseg2"
+      toolTip=""
+      description="Phase Segment 2" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+      <choice name="Choice 4"  value="4" enum="Choice4" />
+      <choice name="Choice 5"  value="5" enum="Choice5" />
+      <choice name="Choice 6"  value="6" enum="Choice6" />
+      <choice name="Choice 7"  value="7" enum="Choice7" />
+   </choiceOption >
+
+   <binaryOption key="can_ctrl1_boffmsk" condition="can_ctrl1_boffmsk_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl1Boffmsk"
+      toolTip=""
+      description="Bus Off Interrupt Mask" >
+      <choice name="Bus Off interrupt disabled"  value="0" enum="BusOffInterruptDisabled" />
+      <choice name="Bus Off interrupt enabled"   value="1" enum="BusOffInterruptEnabled" />
+   </binaryOption >
+
+   <binaryOption key="can_ctrl1_errmsk" condition="can_ctrl1_errmsk_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl1Errmsk"
+      toolTip=""
+      description="Error Interrupt Mask" >
+      <choice name="Error interrupt disabled"  value="0" enum="ErrorInterruptDisabled" />
+      <choice name="Error interrupt enabled"   value="1" enum="ErrorInterruptEnabled" />
+   </binaryOption >
+
+   <binaryOption key="can_ctrl1_clksrc" condition="can_ctrl1_clksrc_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl1Clksrc"
+      toolTip=""
+      description="CAN Engine Clock Source" >
+      <choice name="The CAN engine clock source is the oscillator clock. Under this condition, the oscillator clock frequency must be lower than the bus clock"  value="0" enum="TheCanEngineClockSourceIsTheOscillatorClockUnderThisCondition_TheOscillatorClockFrequencyMustBeLowerThanTheBusClock" />
+      <choice name="The CAN engine clock source is the peripheral clock"                                                                                         value="1" enum="TheCanEngineClockSourceIsThePeripheralClock" />
+   </binaryOption >
+
+   <binaryOption key="can_ctrl1_lpb" condition="can_ctrl1_lpb_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl1Lpb"
+      toolTip=""
+      description="Loop Back Mode" >
+      <choice name="Loop Back disabled"  value="0" enum="LoopBackDisabled" />
+      <choice name="Loop Back enabled"   value="1" enum="LoopBackEnabled" />
+   </binaryOption >
+
+   <binaryOption key="can_ctrl1_twrnmsk" condition="can_ctrl1_twrnmsk_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl1Twrnmsk"
+      toolTip=""
+      description="Tx Warning Interrupt Mask" >
+      <choice name="Tx Warning Interrupt disabled"  value="0" enum="TxWarningInterruptDisabled" />
+      <choice name="Tx Warning Interrupt enabled"   value="1" enum="TxWarningInterruptEnabled" />
+   </binaryOption >
+
+   <binaryOption key="can_ctrl1_rwrnmsk" condition="can_ctrl1_rwrnmsk_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl1Rwrnmsk"
+      toolTip=""
+      description="Rx Warning Interrupt Mask" >
+      <choice name="Rx Warning Interrupt disabled"  value="0" enum="RxWarningInterruptDisabled" />
+      <choice name="Rx Warning Interrupt enabled"   value="1" enum="RxWarningInterruptEnabled" />
+   </binaryOption >
+
+   <binaryOption key="can_ctrl1_smp" condition="can_ctrl1_smp_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl1Smp"
+      toolTip=""
+      description="CAN Bit Sampling" >
+      <choice name="Just one sample is used to determine the bit value"                                                                                                  value="0" enum="JustOneSampleIsUsedToDetermineTheBitValue" />
+      <choice name="Three samples are used to determine the value of the received bit: the regular one (sample point) and 2 preceding samples; a majority rule is used"  value="1" enum="ThreeSamplesAreUsedToDetermineTheValueOfTheReceivedBitTheRegularOneSamplePointAnd2PrecedingSamplesAMajorityRuleIsUsed" />
+   </binaryOption >
+
+   <binaryOption key="can_ctrl1_boffrec" condition="can_ctrl1_boffrec_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl1Boffrec"
+      toolTip=""
+      description="Bus Off Recovery" >
+      <choice name="Automatic recovering from Bus Off state enabled"   value="0" enum="AutomaticRecoveringFromBusOffStateEnabled" />
+      <choice name="Automatic recovering from Bus Off state disabled"  value="1" enum="AutomaticRecoveringFromBusOffStateDisabled" />
+   </binaryOption >
+
+   <binaryOption key="can_ctrl1_tsyn" condition="can_ctrl1_tsyn_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl1Tsyn"
+      toolTip=""
+      description="Timer Sync" >
+      <choice name="Timer Sync feature disabled"  value="0" enum="TimerSyncFeatureDisabled" />
+      <choice name="Timer Sync feature enabled"   value="1" enum="TimerSyncFeatureEnabled" />
+   </binaryOption >
+
+   <binaryOption key="can_ctrl1_lbuf" condition="can_ctrl1_lbuf_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl1Lbuf"
+      toolTip=""
+      description="Lowest Buffer Transmitted First" >
+      <choice name="Buffer with highest priority is transmitted first"  value="0" enum="BufferWithHighestPriorityIsTransmittedFirst" />
+      <choice name="Lowest number buffer is transmitted first"          value="1" enum="LowestNumberBufferIsTransmittedFirst" />
+   </binaryOption >
+
+   <binaryOption key="can_ctrl1_lom" condition="can_ctrl1_lom_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl1Lom"
+      toolTip=""
+      description="Listen-Only Mode" >
+      <choice name="Listen-Only Mode is deactivated"              value="0" enum="ListenOnlyModeIsDeactivated" />
+      <choice name="FlexCAN module operates in Listen-Only Mode"  value="1" enum="FlexcanModuleOperatesInListenOnlyMode" />
+   </binaryOption >
+
+   <choiceOption key="can_ctrl1_propseg" condition="can_ctrl1_propseg_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl1Propseg"
+      toolTip=""
+      description="Propagation Segment" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+      <choice name="Choice 4"  value="4" enum="Choice4" />
+      <choice name="Choice 5"  value="5" enum="Choice5" />
+      <choice name="Choice 6"  value="6" enum="Choice6" />
+      <choice name="Choice 7"  value="7" enum="Choice7" />
+   </choiceOption >
+
+   <!-- ************* TIMER ****************** -->
+
+   <intOption key="can_timer_timer" condition="can_timer_timer_present"
+      hidden="true"
+      typeName="CanTimerTimer"
+      enumType="uint16_t"
+      description="Timer Value"
+      toolTip=""
+      value="0"
+      min="0" max="65535"
+   />
+
+   <!-- LEGACY -->
+   <!-- ************* RXMGMASK ****************** -->
+
+   <binaryOption key="can_rxmgmask_mg" condition="can_rxmgmask_mg_present"
+      hidden="true"
+      typeName="CanRxmgmaskMg"
+      toolTip=""
+      description="Rx Mailboxes Global Mask Bits" >
+      <choice name="The corresponding bit in the filter is &quot;dont care.&quot;"  value="0" enum="TheCorrespondingBitInTheFilterIsQuotDonAposTCareQuot" />
+      <choice name="The corresponding bit in the filter is checked"        value="1" enum="TheCorrespondingBitInTheFilterIsChecked" />
+   </binaryOption >
+
+   <!-- ************* RX14MASK ****************** -->
+
+   <binaryOption key="can_rx14mask_rx14m" condition="can_rx14mask_rx14m_present"
+      hidden="true"
+      typeName="CanRx14maskRx14m"
+      toolTip=""
+      description="Rx Buffer 14 Mask Bits" >
+      <choice name="The corresponding bit in the filter is &quot;dont care.&quot;"  value="0" enum="TheCorrespondingBitInTheFilterIsQuotDonAposTCareQuot" />
+      <choice name="The corresponding bit in the filter is checked"        value="1" enum="TheCorrespondingBitInTheFilterIsChecked" />
+   </binaryOption >
+
+   <!-- ************* RX15MASK ****************** -->
+
+   <binaryOption key="can_rx15mask_rx15m" condition="can_rx15mask_rx15m_present"
+      hidden="true"
+      typeName="CanRx15maskRx15m"
+      toolTip=""
+      description="Rx Buffer 15 Mask Bits" >
+      <choice name="The corresponding bit in the filter is &quot;dont care.&quot;"  value="0" enum="TheCorrespondingBitInTheFilterIsQuotDonAposTCareQuot" />
+      <choice name="The corresponding bit in the filter is checked"        value="1" enum="TheCorrespondingBitInTheFilterIsChecked" />
+   </binaryOption >
+
+   <!-- ************* ECR ****************** -->
+
+   <intOption key="can_ecr_rxerrcnt" condition="can_ecr_rxerrcnt_present"
+      hidden="true"
+      typeName="CanEcrRxerrcnt"
+      enumType="uint8_t"
+      description="Receive Error Counter"
+      toolTip=""
+      value="0"
+   />
+
+   <intOption key="can_ecr_txerrcnt" condition="can_ecr_txerrcnt_present"
+      hidden="true"
+      typeName="CanEcrTxerrcnt"
+      enumType="uint8_t"
+      description="Transmit Error Counter"
+      toolTip=""
+      value="0"
+   />
+
+   <!-- ************* ESR1 ****************** -->
+   <title description="Error and Status 1 register" />
+
+   <binaryOption key="can_esr1_synch" condition="can_esr1_synch_present"
+      hidden="true"
+      typeName="CanEsr1Synch"
+      toolTip="This read-only flag indicates whether the FlexCAN is synchronized to the CAN bus\n
+               and able to participate in the communication process. It is set and cleared by the\n
+               FlexCAN."
+      description="CAN Synchronization Status" >
+      <choice name="FlexCAN is not synchronized to the CAN bus"  value="0" enum="FlexcanIsNotSynchronizedToTheCanBus" />
+      <choice name="FlexCAN is synchronized to the CAN bus"      value="1" enum="FlexcanIsSynchronizedToTheCanBus" />
+   </binaryOption >
+
+   <binaryOption key="can_esr1_twrnint" condition="can_esr1_twrnint_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanEsr1Twrnint"
+      toolTip="If the WRNEN bit in MCR is asserted, the TWRNINT bit is set when the TXWRN flag transitions from 0 to\n
+               1, meaning that the Tx error counter reached 96. If the corresponding mask bit in the Control Register\n
+               (TWRNMSK) is set, an interrupt is generated to the CPU. This bit is cleared by writing it to 1. When\n
+               WRNEN is negated, this flag is masked. CPU must clear this flag before disabling the bit. Otherwise it will\n
+               be set when the WRNEN is set again. Writing 0 has no effect. This flag is not generated during Bus Off\n
+               state. This bit is not updated during Freeze mode."
+      description="Tx Warning Interrupt Flag" >
+      <choice name="No such occurrence"                                                                  value="0" enum="NoSuchOccurrence" />
+      <choice name="The Tx error counter transitioned from less than 96 to greater than or equal to 96"  value="1" enum="TheTxErrorCounterTransitionedFromLessThan96ToGreaterThanOrEqualTo96" />
+   </binaryOption >
+
+   <binaryOption key="can_esr1_rwrnint" condition="can_esr1_rwrnint_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanEsr1Rwrnint"
+      toolTip="If the WRNEN bit in MCR is asserted, the RWRNINT bit is set when the RXWRN flag transitions from 0 to\n
+               1, meaning that the Rx error counters reached 96. If the corresponding mask bit in the Control Register\n
+               (RWRNMSK) is set, an interrupt is generated to the CPU. This bit is cleared by writing it to 1. When\n
+               WRNEN is negated, this flag is masked. CPU must clear this flag before disabling the bit. Otherwise it will\n
+               be set when the WRNEN is set again. Writing 0 has no effect. This bit is not updated during Freeze mode."
+      description="Rx Warning Interrupt Flag" >
+      <choice name="No such occurrence"                                                                  value="0" enum="NoSuchOccurrence" />
+      <choice name="The Rx error counter transitioned from less than 96 to greater than or equal to 96"  value="1" enum="TheRxErrorCounterTransitionedFromLessThan96ToGreaterThanOrEqualTo96" />
+   </binaryOption >
+
+   <binaryOption key="can_esr1_bit1err" condition="can_esr1_bit1err_present"
+      hidden="true"
+      typeName="CanEsr1Bit1err"
+      toolTip="This bit indicates when an inconsistency occurs between the transmitted and the received bit in a\n
+               message.\n
+               NOTE: This bit is not set by a transmitter in case of arbitration field or ACK slot, or in case of a node\n
+               sending a passive error flag that detects dominant bits."
+      description="Bit1 Error" >
+      <choice name="No such occurrence"                                          value="0" enum="NoSuchOccurrence" />
+      <choice name="At least one bit sent as recessive is received as dominant"  value="1" enum="AtLeastOneBitSentAsRecessiveIsReceivedAsDominant" />
+   </binaryOption >
+
+   <binaryOption key="can_esr1_bit0err" condition="can_esr1_bit0err_present"
+      hidden="true"
+      typeName="CanEsr1Bit0err"
+      toolTip="This bit indicates when an inconsistency occurs between the transmitted and the received bit in a message."
+      description="Bit0 Error" >
+      <choice name="No such occurrence"                                          value="0" enum="NoSuchOccurrence" />
+      <choice name="At least one bit sent as dominant is received as recessive"  value="1" enum="AtLeastOneBitSentAsDominantIsReceivedAsRecessive" />
+   </binaryOption >
+
+   <binaryOption key="can_esr1_ackerr" condition="can_esr1_ackerr_present"
+      hidden="true"
+      typeName="CanEsr1Ackerr"
+      toolTip="This bit indicates that an Acknowledge Error has been detected by the transmitter node, that is, a\n
+               dominant bit has not been detected during the ACK SLOT"
+      description="Acknowledge Error" >
+      <choice name="No such occurrence"                                      value="0" enum="NoSuchOccurrence" />
+      <choice name="An ACK error occurred since last read of this register"  value="1" enum="AnAckErrorOccurredSinceLastReadOfThisRegister" />
+   </binaryOption >
+
+   <binaryOption key="can_esr1_crcerr" condition="can_esr1_crcerr_present"
+      hidden="true"
+      typeName="CanEsr1Crcerr"
+      toolTip="This bit indicates that a CRC Error has been detected by the receiver node, that is, the calculated CRC is\n
+               different from the received."
+      description="Cyclic Redundancy Check Error" >
+      <choice name="No such occurrence"                                     value="0" enum="NoSuchOccurrence" />
+      <choice name="A CRC error occurred since last read of this register"  value="1" enum="ACrcErrorOccurredSinceLastReadOfThisRegister" />
+   </binaryOption >
+
+   <binaryOption key="can_esr1_frmerr" condition="can_esr1_frmerr_present"
+      hidden="true"
+      typeName="CanEsr1Frmerr"
+      toolTip="This bit indicates that a Form Error has been detected by the receiver node, that is, a fixed-form bit field\n
+               contains at least one illegal bit."
+      description="Form Error" >
+      <choice name="No such occurrence"                                      value="0" enum="NoSuchOccurrence" />
+      <choice name="A Form Error occurred since last read of this register"  value="1" enum="AFormErrorOccurredSinceLastReadOfThisRegister" />
+   </binaryOption >
+
+   <binaryOption key="can_esr1_stferr" condition="can_esr1_stferr_present"
+      hidden="true"
+      typeName="CanEsr1Stferr"
+      toolTip="This bit indicates that a Stuffing Error has been etected."
+      description="Stuffing Error" >
+      <choice name="No such occurrence"                                          value="0" enum="NoSuchOccurrence" />
+      <choice name="A Stuffing Error occurred since last read of this register"  value="1" enum="AStuffingErrorOccurredSinceLastReadOfThisRegister" />
+   </binaryOption >
+
+   <binaryOption key="can_esr1_txwrn" condition="can_esr1_txwrn_present"
+      hidden="true"
+      typeName="CanEsr1Txwrn"
+      toolTip="This bit indicates when repetitive errors are occurring during message transmission. This bit is not updated\n
+               during Freeze mode."
+      description="TX Error Warning" >
+      <choice name="No such occurrence"                       value="0" enum="NoSuchOccurrence" />
+      <choice name="TXERRCNT is greater than or equal to 96"  value="1" enum="TxerrcntIsGreaterThanOrEqualTo96" />
+   </binaryOption >
+
+   <binaryOption key="can_esr1_rxwrn" condition="can_esr1_rxwrn_present"
+      hidden="true"
+      typeName="CanEsr1Rxwrn"
+      toolTip="This bit indicates when repetitive errors are occurring during message reception. This bit is not updated\n
+               during Freeze mode."
+      description="Rx Error Warning" >
+      <choice name="No such occurrence"                       value="0" enum="NoSuchOccurrence" />
+      <choice name="RXERRCNT is greater than or equal to 96"  value="1" enum="RxerrcntIsGreaterThanOrEqualTo96" />
+   </binaryOption >
+
+   <binaryOption key="can_esr1_idle" condition="can_esr1_idle_present"
+      hidden="true"
+      typeName="CanEsr1Idle"
+      toolTip="This bit indicates when CAN bus is in IDLE state. See the table in the overall CAN_ESR1 register\n
+               description."
+      description="This bit indicates when CAN bus is in IDLE state" >
+      <choice name="No such occurrence"   value="0" enum="NoSuchOccurrence" />
+      <choice name="CAN bus is now IDLE"  value="1" enum="CanBusIsNowIdle" />
+   </binaryOption >
+
+   <binaryOption key="can_esr1_tx" condition="can_esr1_tx_present"
+      hidden="true"
+      typeName="CanEsr1Tx"
+      toolTip="This bit indicates if FlexCAN is transmitting a message. See the table in the overall CAN_ESR1 register\n
+               description."
+      description="FlexCAN In Transmission" >
+      <choice name="FlexCAN is not transmitting a message"  value="0" enum="FlexcanIsNotTransmittingAMessage" />
+      <choice name="FlexCAN is transmitting a message"      value="1" enum="FlexcanIsTransmittingAMessage" />
+   </binaryOption >
+
+   <choiceOption key="can_esr1_fltconf" condition="can_esr1_fltconf_present"
+      hidden="true"
+      typeName="CanEsr1Fltconf"
+      toolTip="This 2-bit field indicates the Confinement State of the FlexCAN module.\n
+               If the LOM bit in the Control Register is asserted, after some delay that depends on the CAN bit timing the\n
+               FLTCONF field will indicate “Error Passive”. The very same delay affects the way how FLTCONF reflects\n
+               an update to ECR register by the CPU. It may be necessary up to one CAN bit time to get them coherent\n
+               again.\n
+               Because the Control Register is not affected by soft reset, the FLTCONF field will not be affected by soft\n
+               reset if the LOM bit is asserted."
+      description="Fault Confinement State" >
+      <choice name="Error Active"   value="0" enum="ErrorActive" />
+      <choice name="Error Passive"  value="1" enum="ErrorPassive" />
+      <choice name="Bus Off"        value="2" enum="BusOff" />
+   </choiceOption >
+
+   <binaryOption key="can_esr1_rx" condition="can_esr1_rx_present"
+      hidden="true"
+      typeName="CanEsr1Rx"
+      toolTip="This bit indicates if FlexCAN is receiving a message. See the table in the overall CAN_ESR1 register\n
+               description."
+      description="FlexCAN In Reception" >
+      <choice name="FlexCAN is not receiving a message"  value="0" enum="FlexcanIsNotReceivingAMessage" />
+      <choice name="FlexCAN is receiving a message"      value="1" enum="FlexcanIsReceivingAMessage" />
+   </binaryOption >
+
+   <binaryOption key="can_esr1_boffint" condition="can_esr1_boffint_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanEsr1Boffint"
+      toolTip="This bit is set when FlexCAN enters ‘Bus Off’ state. If the corresponding mask bit in the Control Register\n
+               (BOFFMSK) is set, an interrupt is generated to the CPU. This bit is cleared by writing it to 1. Writing 0 has\n
+               no effect."
+      description="Bus Off Interrupt" >
+      <choice name="No such occurrence"                    value="0" enum="NoSuchOccurrence" />
+      <choice name="FlexCAN module entered Bus Off state"  value="1" enum="FlexcanModuleEnteredBusOffState" />
+   </binaryOption >
+
+   <binaryOption key="can_esr1_errint" condition="can_esr1_errint_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanEsr1Errint"
+      toolTip="This bit indicates that at least one of the Error Bits (bits 15-10) is set. If the corresponding mask bit\n
+               CTRL1[ERRMSK] is set, an interrupt is generated to the CPU. This bit is cleared by writing it to 1. Writing\n
+               0 has no effect."
+      description="Error Interrupt" >
+      <choice name="No such occurrence"                                                   value="0" enum="NoSuchOccurrence" />
+      <choice name="Indicates setting of any Error Bit in the Error and Status Register"  value="1" enum="IndicatesSettingOfAnyErrorBitInTheErrorAndStatusRegister" />
+   </binaryOption >
+
+   <binaryOption key="can_esr1_wakint" condition="can_esr1_wakint_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanEsr1Wakint"
+      toolTip="This field applies when FlexCAN is in low-power mode under Self Wake Up mechanism:
+               Stop mode
+               When a recessive-to-dominant transition is detected on the CAN bus and if the MCR[WAKMSK] bit is set,\n
+               an interrupt is generated to the CPU. This bit is cleared by writing it to 1.\n
+               When MCR[SLFWAK] is negated, this flag is masked. The CPU must clear this flag before disabling the\n
+               bit. Otherwise it will be set when the SLFWAK is set again. Writing 0 has no effect."
+      description="Wake-Up Interrupt" >
+      <choice name="No such occurrence"                                                        value="0" enum="NoSuchOccurrence" />
+      <choice name="Indicates a recessive to dominant transition was received on the CAN bus"  value="1" enum="IndicatesARecessiveToDominantTransitionWasReceivedOnTheCanBus" />
+   </binaryOption >
+
+   <!-- ************* IMASK1 ****************** -->
+   <title description="Interrupt Masks 1 register" />
+
+   <binaryOption key="can_imask1_buflm" condition="can_imask1_buflm_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanImask1Buflm"
+      toolTip=""
+      description="Buffer MB i Mask" >
+      <choice name="The corresponding buffer Interrupt is disabled"  value="0" enum="TheCorrespondingBufferInterruptIsDisabled" />
+      <choice name="The corresponding buffer Interrupt is enabled"   value="1" enum="TheCorrespondingBufferInterruptIsEnabled" />
+   </binaryOption >
+
+   <!-- ************* IFLAG1 ****************** -->
+   <title description="Interrupt Flags 1 register" />
+
+   <binaryOption key="can_iflag1_buf31to8i" condition="can_iflag1_buf31to8i_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanIflag1Buf31to8i"
+      toolTip=""
+      description="Buffer MBi Interrupt" >
+      <choice name="The corresponding buffer has no occurrence of successfully completed transmission or reception"  value="0" enum="TheCorrespondingBufferHasNoOccurrenceOfSuccessfullyCompletedTransmissionOrReception" />
+      <choice name="The corresponding buffer has successfully completed transmission or reception"                   value="1" enum="TheCorrespondingBufferHasSuccessfullyCompletedTransmissionOrReception" />
+   </binaryOption >
+
+   <binaryOption key="can_iflag1_buf7i" condition="can_iflag1_buf7i_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanIflag1Buf7i"
+      toolTip=""
+      description="Buffer MB7 Interrupt Or &quot;Rx FIFO Overflow&quot;" >
+      <choice name="No occurrence of MB7 completing transmission/reception when MCR[RFEN]=0, or of Rx FIFO overflow when MCR[RFEN]=1"  value="0" enum="NoOccurrenceOfMb7CompletingTransmissionReceptionWhenMcrRfen0_OrOfRxFifoOverflowWhenMcrRfen1" />
+      <choice name="MB7 completed transmission/reception when MCR[RFEN]=0, or Rx FIFO overflow when MCR[RFEN]=1"                       value="1" enum="Mb7CompletedTransmissionReceptionWhenMcrRfen0_OrRxFifoOverflowWhenMcrRfen1" />
+   </binaryOption >
+
+   <binaryOption key="can_iflag1_buf6i" condition="can_iflag1_buf6i_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanIflag1Buf6i"
+      toolTip=""
+      description="Buffer MB6 Interrupt Or &quot;Rx FIFO Warning&quot;" >
+      <choice name="No occurrence of MB6 completing transmission/reception when MCR[RFEN]=0, or of Rx FIFO almost full when MCR[RFEN]=1"  value="0" enum="NoOccurrenceOfMb6CompletingTransmissionReceptionWhenMcrRfen0_OrOfRxFifoAlmostFullWhenMcrRfen1" />
+      <choice name="MB6 completed transmission/reception when MCR[RFEN]=0, or Rx FIFO almost full when MCR[RFEN]=1"                       value="1" enum="Mb6CompletedTransmissionReceptionWhenMcrRfen0_OrRxFifoAlmostFullWhenMcrRfen1" />
+   </binaryOption >
+
+   <binaryOption key="can_iflag1_buf5i" condition="can_iflag1_buf5i_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanIflag1Buf5i"
+      toolTip=""
+      description="Buffer MB5 Interrupt Or &quot;Frames available in Rx FIFO&quot;" >
+      <choice name="No occurrence of MB5 completing transmission/reception when MCR[RFEN]=0, or of frame(s) available in the Rx FIFO, when MCR[RFEN]=1"  value="0" enum="NoOccurrenceOfMb5CompletingTransmissionReceptionWhenMcrRfen0_OrOfFrameSAvailableInTheRxFifo_WhenMcrRfen1" />
+      <choice name="MB5 completed transmission/reception when MCR[RFEN]=0, or frame(s) available in the Rx FIFO when MCR[RFEN]=1"                        value="1" enum="Mb5CompletedTransmissionReceptionWhenMcrRfen0_OrFrameSAvailableInTheRxFifoWhenMcrRfen1" />
+   </binaryOption >
+
+   <binaryOption key="can_iflag1_buf4to0i" condition="can_iflag1_buf4to0i_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanIflag1Buf4to0i"
+      toolTip=""
+      description="Buffer MB i Interrupt Or &quot;reserved&quot;" >
+      <choice name="The corresponding buffer has no occurrence of successfully completed transmission or reception when MCR[RFEN]=0"  value="0" enum="TheCorrespondingBufferHasNoOccurrenceOfSuccessfullyCompletedTransmissionOrReceptionWhenMcrRfen0" />
+      <choice name="The corresponding buffer has successfully completed transmission or reception when MCR[RFEN]=0"                   value="1" enum="TheCorrespondingBufferHasSuccessfullyCompletedTransmissionOrReceptionWhenMcrRfen0" />
+   </binaryOption >
+
+   <!-- ************* CTRL2 ****************** -->
+   <title description="Control 2 Register" />
+
+   <binaryOption key="can_ctrl2_wrmfrz" condition="can_ctrl2_wrmfrz_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl2Wrmfrz"
+      toolTip=""
+      description="Write-Access to Memory in Freeze mode" >
+      <choice name="Maintain the write access restrictions"              value="0" enum="MaintainTheWriteAccessRestrictions" />
+      <choice name="Enable unrestricted write access to FlexCAN memory"  value="1" enum="EnableUnrestrictedWriteAccessToFlexcanMemory" />
+   </binaryOption >
+
+   <choiceOption key="can_ctrl2_rffn" condition="can_ctrl2_rffn_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl2Rffn"
+      toolTip=""
+      description="Number Of Rx FIFO Filters" >
+      <choice name="8 IDs"       value="0" enum="8Ids" />
+      <choice name="16 IDs"      value="1" enum="16Ids" />
+      <choice name="24 IDs"      value="2" enum="24Ids" />
+      <choice name="32 IDs"      value="3" enum="32Ids" />
+      <choice name="40 IDs"      value="4" enum="40Ids" />
+      <choice name="48 IDs"      value="5" enum="48Ids" />
+      <choice name="56 IDs"      value="6" enum="56Ids" />
+      <choice name="64 IDs"      value="7" enum="64Ids" />
+      <choice name="74 IDs"      value="8" enum="74Ids" />
+      <choice name="80 IDs"      value="9" enum="80Ids" />
+      <choice name="88 IDs"     value="10" enum="88Ids" />
+      <choice name="96 IDs"     value="11" enum="96Ids" />
+      <choice name="104 IDs"    value="12" enum="104Ids" />
+      <choice name="112 IDs"    value="13" enum="112Ids" />
+      <choice name="120 IDs"    value="14" enum="120Ids" />
+      <choice name="128 IDs"    value="15" enum="128Ids" />
+   </choiceOption >
+
+   <intOption key="can_ctrl2_tasd" condition="can_ctrl2_tasd_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl2Tasd"
+      enumType="uint8_t"
+      description="Tx Arbitration Start Delay"
+      toolTip=""
+      value="0"
+      min="0" max="31"
+   />
+
+   <binaryOption key="can_ctrl2_mrp" condition="can_ctrl2_mrp_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl2Mrp"
+      toolTip=""
+      description="Mailboxes Reception Priority" >
+      <choice name="Matching starts from Rx FIFO and continues on Mailboxes"  value="0" enum="MatchingStartsFromRxFifoAndContinuesOnMailboxes" />
+      <choice name="Matching starts from Mailboxes and continues on Rx FIFO"  value="1" enum="MatchingStartsFromMailboxesAndContinuesOnRxFifo" />
+   </binaryOption >
+
+   <binaryOption key="can_ctrl2_rrs" condition="can_ctrl2_rrs_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl2Rrs"
+      toolTip=""
+      description="Remote Request Storing" >
+      <choice name="Remote Response Frame is generated"  value="0" enum="RemoteResponseFrameIsGenerated" />
+      <choice name="Remote Request Frame is stored"      value="1" enum="RemoteRequestFrameIsStored" />
+   </binaryOption >
+
+   <binaryOption key="can_ctrl2_eacen" condition="can_ctrl2_eacen_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCtrl2Eacen"
+      toolTip=""
+      description="Entire Frame Arbitration Field Comparison Enable for Rx Mailboxes" >
+      <choice name="Rx Mailbox filters IDE bit is always compared and RTR is never compared despite mask bits"                                                 value="0" enum="RxMailboxFilterAposSIdeBitIsAlwaysComparedAndRtrIsNeverComparedDespiteMaskBits" />
+      <choice name="Enables the comparison of both Rx Mailbox filters IDE and RTR bit with their corresponding bits within the incoming frame. Mask bits do apply"  value="1" enum="EnablesTheComparisonOfBothRxMailboxFilterAposSIdeAndRtrBitWithTheirCorrespondingBitsWithinTheIncomingFrameMaskBitsDoApply" />
+   </binaryOption >
+
+   <!-- ************* ESR2 ****************** -->
+   <title description="Error and Status 2 register" />
+
+   <intOption key="can_esr2_lptm" condition="can_esr2_lptm_present"
+      hidden="true"
+      typeName="uint32_t"
+      description="Lowest Priority Tx Mailbox"
+      toolTip=""
+   />
+
+   <binaryOption key="can_esr2_vps" condition="can_esr2_vps_present"
+      hidden="true"
+      typeName="CanEsr2Vps"
+      toolTip=""
+      description="Valid Priority Status" >
+      <choice name="Contents of IMB and LPTM are invalid"  value="0" enum="ContentsOfImbAndLptmAreInvalid" />
+      <choice name="Contents of IMB and LPTM are valid"    value="1" enum="ContentsOfImbAndLptmAreValid" />
+   </binaryOption >
+
+   <binaryOption key="can_esr2_imb" condition="can_esr2_imb_present"
+      hidden="true"
+      typeName="CanEsr2Imb"
+      toolTip=""
+      description="Inactive Mailbox" >
+      <choice name="If ESR2[VPS] is asserted, the ESR2[LPTM] is not an inactive Mailbox"                                            value="0" enum="IfEsr2VpsIsAsserted_TheEsr2LptmIsNotAnInactiveMailbox" />
+      <choice name="If ESR2[VPS] is asserted, there is at least one inactive Mailbox. LPTM content is the number of the first one"  value="1" enum="IfEsr2VpsIsAsserted_ThereIsAtLeastOneInactiveMailboxLptmContentIsTheNumberOfTheFirstOne" />
+   </binaryOption >
+
+   <!-- ************* CRCR ****************** -->
+   <title description="CRC Register" />
+
+   <intOption key="can_crcr_mbcrc" condition="can_crcr_mbcrc_present"
+      hidden="true"
+      typeName="uint32_t"
+      description="CRC Mailbox"
+      toolTip=""
+   />
+
+   <intOption key="can_crcr_txcrc" condition="can_crcr_txcrc_present"
+      hidden="true"
+      typeName="uint32_t"
+      description="Transmitted CRC value"
+      toolTip=""
+   />
+
+   <!-- ************* RXFGMASK ****************** -->
+   <title description="Rx FIFO Global Mask register" />
+
+   <binaryOption key="can_rxfgmask_fgm" condition="can_rxfgmask_fgm_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanRxfgmaskFgm"
+      toolTip=""
+      description="Rx FIFO Global Mask Bits" >
+      <choice name="The corresponding bit in the filter is &quot;dont care.&quot;"  value="0" enum="TheCorrespondingBitInTheFilterIsQuotDonAposTCareQuot" />
+      <choice name="The corresponding bit in the filter is checked"        value="1" enum="TheCorrespondingBitInTheFilterIsChecked" />
+   </binaryOption >
+
+   <!-- ************* RXFGMASK_A ****************** -->
+   <title description="Rx FIFO Global Mask register (format A)" />
+
+   <binaryOption key="can_rxfgmask_a_rtra" condition="can_rxfgmask_a_rtra_present"
+      enabledBy="enablePeripheralSupport"
+      register="rxfgmask_a"
+      typeName="CanRxfgmaskARtra"
+      toolTip=""
+      description="Remote Frame" >
+      <choice name="Data frame"            value="0" enum="DataFrame" />
+      <choice name="Remote Request frame"  value="0" enum="RemoteRequestFrame" />
+   </binaryOption >
+
+   <binaryOption key="can_rxfgmask_a_idea" condition="can_rxfgmask_a_idea_present"
+      enabledBy="enablePeripheralSupport"
+      register="rxfgmask_a"
+      typeName="CanRxfgmaskAIdea"
+      toolTip=""
+      description="Extended Frame" >
+      <choice name="Standard"    value="0" enum="Standard" />
+      <choice name="Extended"    value="0" enum="Extended" />
+   </binaryOption >
+
+   <intOption key="can_rxfgmask_a_rxida_std" condition="can_rxfgmask_a_rxida_std_present"
+      enabledBy="enablePeripheralSupport"
+      register="rxfgmask_a"
+      typeName="CanRxfgmaskARxidaStd"
+      enumType="uint16_t"
+      description="Rx Frame Identifier (Standard format)"
+      toolTip=""
+      value="0"
+      min="0" max="2047"
+   />
+
+   <intOption key="can_rxfgmask_a_rxida_ext" condition="can_rxfgmask_a_rxida_ext_present"
+      enabledBy="enablePeripheralSupport"
+      register="rxfgmask_a"
+      typeName="CanRxfgmaskARxidaExt"
+      enumType="uint32_t"
+      description="Rx Frame Identifier (Extended Format)"
+      toolTip=""
+      value="0"
+      min="0" max="536870911"
+   />
+
+   <!-- ************* RXFGMASK_B ****************** -->
+   <title description="Rx FIFO Global Mask register (format B)" />
+
+   <binaryOption key="can_rxfgmask_b_rtrb_0" condition="can_rxfgmask_b_rtrb_0_present"
+      enabledBy="enablePeripheralSupport"
+      register="rxfgmask_b"
+      typeName="CanRxfgmaskBRtrb0"
+      toolTip=""
+      description="Remote Frame" >
+      <choice name="Data frame"            value="0" enum="DataFrame" />
+      <choice name="Remote Request frame"  value="0" enum="RemoteRequestFrame" />
+   </binaryOption >
+
+   <binaryOption key="can_rxfgmask_b_ideb_0" condition="can_rxfgmask_b_ideb_0_present"
+      enabledBy="enablePeripheralSupport"
+      register="rxfgmask_b"
+      typeName="CanRxfgmaskBIdeb0"
+      toolTip=""
+      description="Extended Frame" >
+      <choice name="Standard"    value="0" enum="Standard" />
+      <choice name="Extended"    value="0" enum="Extended" />
+   </binaryOption >
+
+   <intOption key="can_rxfgmask_b_rxidb_std_0" condition="can_rxfgmask_b_rxidb_std_0_present"
+      enabledBy="enablePeripheralSupport"
+      register="rxfgmask_b"
+      typeName="CanRxfgmaskBRxidbStd0"
+      enumType="uint16_t"
+      description="Rx Frame Identifier (Standard Format)"
+      toolTip=""
+      value="0"
+      min="0" max="2047"
+   />
+
+   <intOption key="can_rxfgmask_b_rxidb_ext_0" condition="can_rxfgmask_b_rxidb_ext_0_present"
+      enabledBy="enablePeripheralSupport"
+      register="rxfgmask_b"
+      typeName="CanRxfgmaskBRxidbExt0"
+      enumType="uint16_t"
+      description="Rx Frame Identifier (Extended Format)"
+      toolTip=""
+      value="0"
+      min="0" max="16383"
+   />
+
+   <binaryOption key="can_rxfgmask_b_rtrb_1" condition="can_rxfgmask_b_rtrb_1_present"
+      enabledBy="enablePeripheralSupport"
+      register="rxfgmask_b"
+      typeName="CanRxfgmaskBRtrb1"
+      toolTip=""
+      description="Remote Frame" >
+      <choice name="Data frame"            value="0" enum="DataFrame" />
+      <choice name="Remote Request frame"  value="0" enum="RemoteRequestFrame" />
+   </binaryOption >
+
+   <binaryOption key="can_rxfgmask_b_ideb_1" condition="can_rxfgmask_b_ideb_1_present"
+      enabledBy="enablePeripheralSupport"
+      register="rxfgmask_b"
+      typeName="CanRxfgmaskBIdeb1"
+      toolTip=""
+      description="Extended Frame" >
+      <choice name="Standard"    value="0" enum="Standard" />
+      <choice name="Extended"    value="0" enum="Extended" />
+   </binaryOption >
+
+   <intOption key="can_rxfgmask_b_rxidb_std_1" condition="can_rxfgmask_b_rxidb_std_1_present"
+      enabledBy="enablePeripheralSupport"
+      register="rxfgmask_b"
+      typeName="CanRxfgmaskBRxidbStd1"
+      enumType="uint16_t"
+      description="Rx Frame Identifier (Standard Format)"
+      toolTip=""
+      value="0"
+      min="0" max="2047"
+   />
+
+   <intOption key="can_rxfgmask_b_rxidb_ext_1" condition="can_rxfgmask_b_rxidb_ext_1_present"
+      enabledBy="enablePeripheralSupport"
+      register="rxfgmask_b"
+      typeName="CanRxfgmaskBRxidbExt1"
+      enumType="uint16_t"
+      description="Rx Frame Identifier (Extended Format)"
+      toolTip=""
+      value="0"
+      min="0" max="16383"
+   />
+
+   <!-- ************* RXFGMASK_C ****************** -->
+   <title description="Rx FIFO Global Mask register (format C)" />
+
+   <intOption key="can_rxfgmask_c_rxidc_0" condition="can_rxfgmask_c_rxidc_0_present"
+      enabledBy="enablePeripheralSupport"
+      register="rxfgmask_c"
+      typeName="CanRxfgmaskCRxidc0"
+      enumType="uint8_t"
+      description="Rx Frame Identifier"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <intOption key="can_rxfgmask_c_rxidc_1" condition="can_rxfgmask_c_rxidc_1_present"
+      enabledBy="enablePeripheralSupport"
+      register="rxfgmask_c"
+      typeName="CanRxfgmaskCRxidc1"
+      enumType="uint8_t"
+      description="Rx Frame Identifier"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <intOption key="can_rxfgmask_c_rxidc_2" condition="can_rxfgmask_c_rxidc_2_present"
+      enabledBy="enablePeripheralSupport"
+      register="rxfgmask_c"
+      typeName="CanRxfgmaskCRxidc2"
+      enumType="uint8_t"
+      description="Rx Frame Identifier"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <intOption key="can_rxfgmask_c_rxidc_3" condition="can_rxfgmask_c_rxidc_3_present"
+      enabledBy="enablePeripheralSupport"
+      register="rxfgmask_c"
+      typeName="CanRxfgmaskCRxidc3"
+      enumType="uint8_t"
+      description="Rx Frame Identifier"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <!-- ************* RXFIR ****************** -->
+   <title description="Rx FIFO Information Register" />
+
+   <intOption key="can_rxfir_idhit" condition="can_rxfir_idhit_present"
+      hidden="true"
+      typeName="uint32_t"
+      description="Identifier Acceptance Filter Hit Indicator"
+      toolTip=""
+   />
+
+   <!-- ************* CS ****************** -->
+   <title description="FIFO Message Buffer CS Register" />
+
+   <intOption key="can_cs_idhit" condition="can_cs_idhit_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCsIdhit"
+      enumType="uint8_t"
+      description="Identifier Acceptance Filter Hit Indicator"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <binaryOption key="can_cs_srr" condition="can_cs_srr_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCsSrr"
+      toolTip=""
+      description="Substitute Remote Request" >
+      <choice name="Dominant is not a valid value"  value="0" enum="DominantIsNotAValidValue" />
+      <choice name="Recessive value is compulsory"  value="0" enum="RecessiveValueIsCompulsory" />
+   </binaryOption >
+
+   <binaryOption key="can_cs_ide" condition="can_cs_ide_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCsIde"
+      toolTip=""
+      description="ID Extended.\t Selects format frame" >
+      <choice name="Standard"    value="0" enum="Standard" />
+      <choice name="Extended"    value="0" enum="Extended" />
+   </binaryOption >
+
+   <binaryOption key="can_cs_rtr" condition="can_cs_rtr_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCsRtr"
+      toolTip=""
+      description="Remote Transmission Request" >
+      <choice name="Data frame"            value="0" enum="DataFrame" />
+      <choice name="Remote Request frame"  value="0" enum="RemoteRequestFrame" />
+   </binaryOption >
+
+   <intOption key="can_cs_dlc" condition="can_cs_dlc_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCsDlc"
+      enumType="uint8_t"
+      description="Length of the data to be stored/transmitted"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <intOption key="can_cs_time_stamp" condition="can_cs_time_stamp_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCsTimeStamp"
+      enumType="uint16_t"
+      description="Free-Running Counter Time stamp. This 16-bit field is a copy of the Free-Running Timer, captured for Tx and Rx frames at the time when the beginning of the Identifier field appears on the CAN bus"
+      toolTip=""
+      value="0"
+      min="0" max="65535"
+   />
+
+   <!-- ************* ID ****************** -->
+   <title description="FIFO Message Buffer ID Register" />
+
+   <choiceOption key="can_id_prio" condition="can_id_prio_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanIdPrio"
+      toolTip="This 3-bit field is only used when LPRIO_EN bit is set in MCR and it only makes sense for Tx buffers. These bits are not transmitted. They are appended to the regular ID to define the transmission priority"
+      description="Local priority." >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+      <choice name="Choice 4"  value="4" enum="Choice4" />
+      <choice name="Choice 5"  value="5" enum="Choice5" />
+      <choice name="Choice 6"  value="6" enum="Choice6" />
+      <choice name="Choice 7"  value="7" enum="Choice7" />
+   </choiceOption >
+
+   <intOption key="can_id_std" condition="can_id_std_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanIdStd"
+      enumType="uint16_t"
+      description="Standard identifier"
+      toolTip=""
+      value="0"
+      min="0" max="2047"
+   />
+
+   <intOption key="can_id_ext" condition="can_id_ext_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanIdExt"
+      enumType="uint32_t"
+      description="Extended identifier"
+      toolTip=""
+      value="0"
+      min="0" max="536870911"
+   />
+
+   <!-- ************* WORD0 ****************** -->
+   <title description="FIFO Message Buffer WORD0 Register" />
+
+   <intOption key="can_word0_data_byte_0" condition="can_word0_data_byte_0_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanWord0DataByte0"
+      enumType="uint8_t"
+      description="Data byte 0 of Rx/Tx frame"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <intOption key="can_word0_data_byte_1" condition="can_word0_data_byte_1_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanWord0DataByte1"
+      enumType="uint8_t"
+      description="Data byte 1 of Rx/Tx frame"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <intOption key="can_word0_data_byte_2" condition="can_word0_data_byte_2_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanWord0DataByte2"
+      enumType="uint8_t"
+      description="Data byte 2 of Rx/Tx frame"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <intOption key="can_word0_data_byte_3" condition="can_word0_data_byte_3_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanWord0DataByte3"
+      enumType="uint8_t"
+      description="Data byte 3 of Rx/Tx frame"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <!-- ************* WORD1 ****************** -->
+   <title description="FIFO Message Buffer WORD1 Register" />
+
+   <intOption key="can_word1_data_byte_4" condition="can_word1_data_byte_4_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanWord1DataByte4"
+      enumType="uint8_t"
+      description="Data byte 4 of Rx/Tx frame"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <intOption key="can_word1_data_byte_5" condition="can_word1_data_byte_5_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanWord1DataByte5"
+      enumType="uint8_t"
+      description="Data byte 5 of Rx/Tx frame"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <intOption key="can_word1_data_byte_6" condition="can_word1_data_byte_6_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanWord1DataByte6"
+      enumType="uint8_t"
+      description="Data byte 6 of Rx/Tx frame"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <intOption key="can_word1_data_byte_7" condition="can_word1_data_byte_7_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanWord1DataByte7"
+      enumType="uint8_t"
+      description="Data byte 7 of Rx/Tx frame"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <!-- ************* FILTER_ID ****************** -->
+
+   <!-- ************* FILTER_ID_A ****************** -->
+   <title description="FIFO Message Filter ID (format A)" />
+
+   <binaryOption key="can_filter_id_a_rtra" condition="can_filter_id_a_rtra_present"
+      enabledBy="enablePeripheralSupport"
+      register="filter_id_a"
+      typeName="CanFilterIdARtra"
+      toolTip=""
+      description="Remote Frame" >
+      <choice name="Data frame"            value="0" enum="DataFrame" />
+      <choice name="Remote Request frame"  value="0" enum="RemoteRequestFrame" />
+   </binaryOption >
+
+   <binaryOption key="can_filter_id_a_idea" condition="can_filter_id_a_idea_present"
+      enabledBy="enablePeripheralSupport"
+      register="filter_id_a"
+      typeName="CanFilterIdAIdea"
+      toolTip=""
+      description="Extended Frame" >
+      <choice name="Standard"    value="0" enum="Standard" />
+      <choice name="Extended"    value="0" enum="Extended" />
+   </binaryOption >
+
+   <intOption key="can_filter_id_a_rxida_std" condition="can_filter_id_a_rxida_std_present"
+      enabledBy="enablePeripheralSupport"
+      register="filter_id_a"
+      typeName="CanFilterIdARxidaStd"
+      enumType="uint16_t"
+      description="Rx Frame Identifier (Standard format)"
+      toolTip=""
+      value="0"
+      min="0" max="2047"
+   />
+
+   <intOption key="can_filter_id_a_rxida_ext" condition="can_filter_id_a_rxida_ext_present"
+      enabledBy="enablePeripheralSupport"
+      register="filter_id_a"
+      typeName="CanFilterIdARxidaExt"
+      enumType="uint32_t"
+      description="Rx Frame Identifier (Extended Format)"
+      toolTip=""
+      value="0"
+      min="0" max="536870911"
+   />
+
+   <!-- ************* FILTER_ID_B ****************** -->
+   <title description="FIFO Message Filter ID (format B)" />
+
+   <binaryOption key="can_filter_id_b_rtrb_0" condition="can_filter_id_b_rtrb_0_present"
+      enabledBy="enablePeripheralSupport"
+      register="filter_id_b"
+      typeName="CanFilterIdBRtrb0"
+      toolTip=""
+      description="Remote Frame" >
+      <choice name="Data frame"            value="0" enum="DataFrame" />
+      <choice name="Remote Request frame"  value="0" enum="RemoteRequestFrame" />
+   </binaryOption >
+
+   <binaryOption key="can_filter_id_b_ideb_0" condition="can_filter_id_b_ideb_0_present"
+      enabledBy="enablePeripheralSupport"
+      register="filter_id_b"
+      typeName="CanFilterIdBIdeb0"
+      toolTip=""
+      description="Extended Frame" >
+      <choice name="Standard"    value="0" enum="Standard" />
+      <choice name="Extended"    value="0" enum="Extended" />
+   </binaryOption >
+
+   <intOption key="can_filter_id_b_rxidb_std_0" condition="can_filter_id_b_rxidb_std_0_present"
+      enabledBy="enablePeripheralSupport"
+      register="filter_id_b"
+      typeName="CanFilterIdBRxidbStd0"
+      enumType="uint16_t"
+      description="Rx Frame Identifier (Standard Format)"
+      toolTip=""
+      value="0"
+      min="0" max="2047"
+   />
+
+   <intOption key="can_filter_id_b_rxidb_ext_0" condition="can_filter_id_b_rxidb_ext_0_present"
+      enabledBy="enablePeripheralSupport"
+      register="filter_id_b"
+      typeName="CanFilterIdBRxidbExt0"
+      enumType="uint16_t"
+      description="Rx Frame Identifier (Extended Format)"
+      toolTip=""
+      value="0"
+      min="0" max="16383"
+   />
+
+   <binaryOption key="can_filter_id_b_rtrb_1" condition="can_filter_id_b_rtrb_1_present"
+      enabledBy="enablePeripheralSupport"
+      register="filter_id_b"
+      typeName="CanFilterIdBRtrb1"
+      toolTip=""
+      description="Remote Frame" >
+      <choice name="Data frame"            value="0" enum="DataFrame" />
+      <choice name="Remote Request frame"  value="0" enum="RemoteRequestFrame" />
+   </binaryOption >
+
+   <binaryOption key="can_filter_id_b_ideb_1" condition="can_filter_id_b_ideb_1_present"
+      enabledBy="enablePeripheralSupport"
+      register="filter_id_b"
+      typeName="CanFilterIdBIdeb1"
+      toolTip=""
+      description="Extended Frame" >
+      <choice name="Standard"    value="0" enum="Standard" />
+      <choice name="Extended"    value="0" enum="Extended" />
+   </binaryOption >
+
+   <intOption key="can_filter_id_b_rxidb_std_1" condition="can_filter_id_b_rxidb_std_1_present"
+      enabledBy="enablePeripheralSupport"
+      register="filter_id_b"
+      typeName="CanFilterIdBRxidbStd1"
+      enumType="uint16_t"
+      description="Rx Frame Identifier (Standard Format)"
+      toolTip=""
+      value="0"
+      min="0" max="2047"
+   />
+
+   <intOption key="can_filter_id_b_rxidb_ext_1" condition="can_filter_id_b_rxidb_ext_1_present"
+      enabledBy="enablePeripheralSupport"
+      register="filter_id_b"
+      typeName="CanFilterIdBRxidbExt1"
+      enumType="uint16_t"
+      description="Rx Frame Identifier (Extended Format)"
+      toolTip=""
+      value="0"
+      min="0" max="16383"
+   />
+
+   <!-- ************* FILTER_ID_C ****************** -->
+   <title description="FIFO Message Filter ID (format C)" />
+
+   <intOption key="can_filter_id_c_rxidc_0" condition="can_filter_id_c_rxidc_0_present"
+      enabledBy="enablePeripheralSupport"
+      register="filter_id_c"
+      typeName="CanFilterIdCRxidc0"
+      enumType="uint8_t"
+      description="Rx Frame Identifier"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <intOption key="can_filter_id_c_rxidc_1" condition="can_filter_id_c_rxidc_1_present"
+      enabledBy="enablePeripheralSupport"
+      register="filter_id_c"
+      typeName="CanFilterIdCRxidc1"
+      enumType="uint8_t"
+      description="Rx Frame Identifier"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <intOption key="can_filter_id_c_rxidc_2" condition="can_filter_id_c_rxidc_2_present"
+      enabledBy="enablePeripheralSupport"
+      register="filter_id_c"
+      typeName="CanFilterIdCRxidc2"
+      enumType="uint8_t"
+      description="Rx Frame Identifier"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <intOption key="can_filter_id_c_rxidc_3" condition="can_filter_id_c_rxidc_3_present"
+      enabledBy="enablePeripheralSupport"
+      register="filter_id_c"
+      typeName="CanFilterIdCRxidc3"
+      enumType="uint8_t"
+      description="Rx Frame Identifier"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <!-- ************* CS ****************** -->
+   <title description="Message Buffer 0 CS Register" />
+
+   <choiceOption key="can_cs_code" condition="can_cs_code_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanCsCode"
+      toolTip=""
+      description="Message Buffer Code" >
+      <choice name="Inactive"    value="0" enum="Inactive" />
+      <choice name="Busy"        value="1" enum="Busy" />
+      <choice name="RxEmpty"     value="4" enum="Rxempty" />
+      <choice name="RxFull"      value="2" enum="Rxfull" />
+      <choice name="Overrun"     value="6" enum="Overrun" />
+      <choice name="RxAnswer"   value="10" enum="Rxanswer" />
+      <choice name="TxInactive"  value="8" enum="Txinactive" />
+      <choice name="TxAbort"     value="9" enum="Txabort" />
+      <choice name="TxData"     value="12" enum="Txdata" />
+      <choice name="TxRemote"   value="12" enum="Txremote" />
+      <choice name="TxAnswer"   value="14" enum="Txanswer" />
+   </choiceOption >
+<!-- Repeated filed name 'can_cs_srr' -->
+<!-- Repeated filed name 'can_cs_ide' -->
+<!-- Repeated filed name 'can_cs_rtr' -->
+<!-- Repeated filed name 'can_cs_dlc' -->
+<!-- Repeated filed name 'can_cs_time_stamp' -->
+
+   <!-- ************* ID ****************** -->
+<!-- Repeated filed name 'can_id_prio' -->
+<!-- Repeated filed name 'can_id_std' -->
+<!-- Repeated filed name 'can_id_ext' -->
+
+   <!-- ************* WORD0 ****************** -->
+<!-- Repeated filed name 'can_word0_data_byte_0' -->
+<!-- Repeated filed name 'can_word0_data_byte_1' -->
+<!-- Repeated filed name 'can_word0_data_byte_2' -->
+<!-- Repeated filed name 'can_word0_data_byte_3' -->
+
+   <!-- ************* WORD1 ****************** -->
+<!-- Repeated filed name 'can_word1_data_byte_4' -->
+<!-- Repeated filed name 'can_word1_data_byte_5' -->
+<!-- Repeated filed name 'can_word1_data_byte_6' -->
+<!-- Repeated filed name 'can_word1_data_byte_7' -->
+
+   <!-- ************* RXIMR ****************** -->
+   <title description="Rx Individual Mask" />
+
+   <binaryOption key="can_rximr_mi" condition="can_rximr_mi_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CanRximrMi"
+      toolTip=""
+      description="Individual Mask Bits" >
+      <choice name="The corresponding bit in the filter is &quot;dont care.&quot;"  value="0" enum="TheCorrespondingBitInTheFilterIsQuotDonAposTCareQuot" />
+      <choice name="The corresponding bit in the filter is checked"        value="1" enum="TheCorrespondingBitInTheFilterIsChecked" />
+   </binaryOption >
+
+<!-- Setters and getters -->
+
+   <for keys="field                     : set   : get   : clear : genCode                 : context      : name"
+        values="
+         can_mcr_mdis                   : true  : true  : false : enableGettersAndSetters : MCR          : McrMdis;
+         can_mcr_frz                    : true  : true  : false : enableGettersAndSetters : MCR          : McrFrz;
+         can_mcr_rfen                   : true  : true  : false : enableGettersAndSetters : MCR          : McrRfen;
+         can_mcr_halt                   : true  : true  : false : enableGettersAndSetters : MCR          : McrHalt;
+         can_mcr_notrdy                 : false : true  : false : enableGettersAndSetters : MCR          : McrNotrdy;
+         can_mcr_wakmsk                 : true  : true  : false : enableGettersAndSetters : MCR          : McrWakmsk;
+         can_mcr_softrst                : true  : true  : false : enableGettersAndSetters : MCR          : McrSoftrst;
+         can_mcr_frzack                 : false : true  : false : enableGettersAndSetters : MCR          : McrFrzack;
+         can_mcr_supv                   : true  : true  : false : enableGettersAndSetters : MCR          : McrSupv;
+         can_mcr_slfwak                 : true  : true  : false : enableGettersAndSetters : MCR          : McrSlfwak;
+         can_mcr_wrnen                  : true  : true  : false : enableGettersAndSetters : MCR          : McrWrnen;
+         can_mcr_lpmack                 : false : true  : false : enableGettersAndSetters : MCR          : McrLpmack;
+         can_mcr_waksrc                 : true  : true  : false : enableGettersAndSetters : MCR          : McrWaksrc;
+         can_mcr_srxdis                 : true  : true  : false : enableGettersAndSetters : MCR          : McrSrxdis;
+         can_mcr_irmq                   : true  : true  : false : enableGettersAndSetters : MCR          : McrIrmq;
+         can_mcr_lprioen                : true  : true  : false : enableGettersAndSetters : MCR          : McrLprioen;
+         can_mcr_aen                    : true  : true  : false : enableGettersAndSetters : MCR          : McrAen;
+         can_mcr_idam                   : true  : true  : false : enableGettersAndSetters : MCR          : McrIdam;
+         can_mcr_maxmb                  : true  : true  : false : enableGettersAndSetters : MCR          : McrMaxmb;
+         can_ctrl1_presdiv              : true  : true  : false : enableGettersAndSetters : CTRL1        : Ctrl1Presdiv;
+         can_ctrl1_rjw                  : true  : true  : false : enableGettersAndSetters : CTRL1        : Ctrl1Rjw;
+         can_ctrl1_pseg1                : true  : true  : false : enableGettersAndSetters : CTRL1        : Ctrl1Pseg1;
+         can_ctrl1_pseg2                : true  : true  : false : enableGettersAndSetters : CTRL1        : Ctrl1Pseg2;
+         can_ctrl1_boffmsk              : true  : true  : false : enableGettersAndSetters : CTRL1        : Ctrl1Boffmsk;
+         can_ctrl1_errmsk               : true  : true  : false : enableGettersAndSetters : CTRL1        : Ctrl1Errmsk;
+         can_ctrl1_clksrc               : true  : true  : false : enableGettersAndSetters : CTRL1        : Ctrl1Clksrc;
+         can_ctrl1_lpb                  : true  : true  : false : enableGettersAndSetters : CTRL1        : Ctrl1Lpb;
+         can_ctrl1_twrnmsk              : true  : true  : false : enableGettersAndSetters : CTRL1        : Ctrl1Twrnmsk;
+         can_ctrl1_rwrnmsk              : true  : true  : false : enableGettersAndSetters : CTRL1        : Ctrl1Rwrnmsk;
+         can_ctrl1_smp                  : true  : true  : false : enableGettersAndSetters : CTRL1        : Ctrl1Smp;
+         can_ctrl1_boffrec              : true  : true  : false : enableGettersAndSetters : CTRL1        : Ctrl1Boffrec;
+         can_ctrl1_tsyn                 : true  : true  : false : enableGettersAndSetters : CTRL1        : Ctrl1Tsyn;
+         can_ctrl1_lbuf                 : true  : true  : false : enableGettersAndSetters : CTRL1        : Ctrl1Lbuf;
+         can_ctrl1_lom                  : true  : true  : false : enableGettersAndSetters : CTRL1        : Ctrl1Lom;
+         can_ctrl1_propseg              : true  : true  : false : enableGettersAndSetters : CTRL1        : Ctrl1Propseg;
+         can_timer_timer                : true  : true  : false : enableGettersAndSetters : TIMER        : TimerTimer;
+         can_rxmgmask_mg                : true  : true  : false : enableGettersAndSetters : RXMGMASK     : RxmgmaskMg;
+         can_rx14mask_rx14m             : true  : true  : false : enableGettersAndSetters : RX14MASK     : Rx14maskRx14m;
+         can_rx15mask_rx15m             : true  : true  : false : enableGettersAndSetters : RX15MASK     : Rx15maskRx15m;
+         can_ecr_rxerrcnt               : true  : true  : false : enableGettersAndSetters : ECR          : EcrRxerrcnt;
+         can_ecr_txerrcnt               : true  : true  : false : enableGettersAndSetters : ECR          : EcrTxerrcnt;
+         can_esr1_synch                 : false : true  : false : enableGettersAndSetters : ESR1         : Esr1Synch;
+         can_esr1_twrnint               : true  : true  : false : enableGettersAndSetters : ESR1         : Esr1Twrnint;
+         can_esr1_rwrnint               : true  : true  : false : enableGettersAndSetters : ESR1         : Esr1Rwrnint;
+         can_esr1_bit1err               : false : true  : false : enableGettersAndSetters : ESR1         : Esr1Bit1err;
+         can_esr1_bit0err               : false : true  : false : enableGettersAndSetters : ESR1         : Esr1Bit0err;
+         can_esr1_ackerr                : false : true  : false : enableGettersAndSetters : ESR1         : Esr1Ackerr;
+         can_esr1_crcerr                : false : true  : false : enableGettersAndSetters : ESR1         : Esr1Crcerr;
+         can_esr1_frmerr                : false : true  : false : enableGettersAndSetters : ESR1         : Esr1Frmerr;
+         can_esr1_stferr                : false : true  : false : enableGettersAndSetters : ESR1         : Esr1Stferr;
+         can_esr1_txwrn                 : false : true  : false : enableGettersAndSetters : ESR1         : Esr1Txwrn;
+         can_esr1_rxwrn                 : false : true  : false : enableGettersAndSetters : ESR1         : Esr1Rxwrn;
+         can_esr1_idle                  : false : true  : false : enableGettersAndSetters : ESR1         : Esr1Idle;
+         can_esr1_tx                    : false : true  : false : enableGettersAndSetters : ESR1         : Esr1Tx;
+         can_esr1_fltconf               : false : true  : false : enableGettersAndSetters : ESR1         : Esr1Fltconf;
+         can_esr1_rx                    : false : true  : false : enableGettersAndSetters : ESR1         : Esr1Rx;
+         can_esr1_boffint               : true  : true  : false : enableGettersAndSetters : ESR1         : Esr1Boffint;
+         can_esr1_errint                : true  : true  : false : enableGettersAndSetters : ESR1         : Esr1Errint;
+         can_esr1_wakint                : true  : true  : false : enableGettersAndSetters : ESR1         : Esr1Wakint;
+         can_imask1_buflm               : true  : true  : false : enableGettersAndSetters : IMASK1       : Imask1Buflm;
+         can_iflag1_buf31to8i           : true  : true  : false : enableGettersAndSetters : IFLAG1       : Iflag1Buf31to8i;
+         can_iflag1_buf7i               : true  : true  : false : enableGettersAndSetters : IFLAG1       : Iflag1Buf7i;
+         can_iflag1_buf6i               : true  : true  : false : enableGettersAndSetters : IFLAG1       : Iflag1Buf6i;
+         can_iflag1_buf5i               : true  : true  : false : enableGettersAndSetters : IFLAG1       : Iflag1Buf5i;
+         can_iflag1_buf4to0i            : true  : true  : false : enableGettersAndSetters : IFLAG1       : Iflag1Buf4to0i;
+         can_ctrl2_wrmfrz               : true  : true  : false : enableGettersAndSetters : CTRL2        : Ctrl2Wrmfrz;
+         can_ctrl2_rffn                 : true  : true  : false : enableGettersAndSetters : CTRL2        : Ctrl2Rffn;
+         can_ctrl2_tasd                 : true  : true  : false : enableGettersAndSetters : CTRL2        : Ctrl2Tasd;
+         can_ctrl2_mrp                  : true  : true  : false : enableGettersAndSetters : CTRL2        : Ctrl2Mrp;
+         can_ctrl2_rrs                  : true  : true  : false : enableGettersAndSetters : CTRL2        : Ctrl2Rrs;
+         can_ctrl2_eacen                : true  : true  : false : enableGettersAndSetters : CTRL2        : Ctrl2Eacen;
+         can_esr2_lptm                  : false : true  : false : enableGettersAndSetters : ESR2         : Esr2Lptm;
+         can_esr2_vps                   : false : true  : false : enableGettersAndSetters : ESR2         : Esr2Vps;
+         can_esr2_imb                   : false : true  : false : enableGettersAndSetters : ESR2         : Esr2Imb;
+         can_crcr_mbcrc                 : false : true  : false : enableGettersAndSetters : CRCR         : CrcrMbcrc;
+         can_crcr_txcrc                 : false : true  : false : enableGettersAndSetters : CRCR         : CrcrTxcrc;
+         can_rxfgmask_fgm               : true  : true  : false : enableGettersAndSetters : RXFGMASK     : RxfgmaskFgm;
+         can_rxfgmask_a_rtra            : true  : true  : false : enableGettersAndSetters : RXFGMASK_A   : RxfgmaskARtra;
+         can_rxfgmask_a_idea            : true  : true  : false : enableGettersAndSetters : RXFGMASK_A   : RxfgmaskAIdea;
+         can_rxfgmask_a_rxida_std       : true  : true  : false : enableGettersAndSetters : RXFGMASK_A   : RxfgmaskARxidaStd;
+         can_rxfgmask_a_rxida_ext       : true  : true  : false : enableGettersAndSetters : RXFGMASK_A   : RxfgmaskARxidaExt;
+         can_rxfgmask_b_rtrb_0          : true  : true  : false : enableGettersAndSetters : RXFGMASK_B   : RxfgmaskBRtrb0;
+         can_rxfgmask_b_ideb_0          : true  : true  : false : enableGettersAndSetters : RXFGMASK_B   : RxfgmaskBIdeb0;
+         can_rxfgmask_b_rxidb_std_0     : true  : true  : false : enableGettersAndSetters : RXFGMASK_B   : RxfgmaskBRxidbStd0;
+         can_rxfgmask_b_rxidb_ext_0     : true  : true  : false : enableGettersAndSetters : RXFGMASK_B   : RxfgmaskBRxidbExt0;
+         can_rxfgmask_b_rtrb_1          : true  : true  : false : enableGettersAndSetters : RXFGMASK_B   : RxfgmaskBRtrb1;
+         can_rxfgmask_b_ideb_1          : true  : true  : false : enableGettersAndSetters : RXFGMASK_B   : RxfgmaskBIdeb1;
+         can_rxfgmask_b_rxidb_std_1     : true  : true  : false : enableGettersAndSetters : RXFGMASK_B   : RxfgmaskBRxidbStd1;
+         can_rxfgmask_b_rxidb_ext_1     : true  : true  : false : enableGettersAndSetters : RXFGMASK_B   : RxfgmaskBRxidbExt1;
+         can_rxfgmask_c_rxidc_0         : true  : true  : false : enableGettersAndSetters : RXFGMASK_C   : RxfgmaskCRxidc0;
+         can_rxfgmask_c_rxidc_1         : true  : true  : false : enableGettersAndSetters : RXFGMASK_C   : RxfgmaskCRxidc1;
+         can_rxfgmask_c_rxidc_2         : true  : true  : false : enableGettersAndSetters : RXFGMASK_C   : RxfgmaskCRxidc2;
+         can_rxfgmask_c_rxidc_3         : true  : true  : false : enableGettersAndSetters : RXFGMASK_C   : RxfgmaskCRxidc3;
+         can_rxfir_idhit                : false : true  : false : enableGettersAndSetters : RXFIR        : RxfirIdhit;
+         can_cs_idhit                   : true  : true  : false : enableGettersAndSetters : FIFO.CS      : CsIdhit;
+         can_cs_srr                     : true  : true  : false : enableGettersAndSetters : FIFO.CS      : CsSrr;
+         can_cs_ide                     : true  : true  : false : enableGettersAndSetters : FIFO.CS      : CsIde;
+         can_cs_rtr                     : true  : true  : false : enableGettersAndSetters : FIFO.CS      : CsRtr;
+         can_cs_dlc                     : true  : true  : false : enableGettersAndSetters : FIFO.CS      : CsDlc;
+         can_cs_time_stamp              : true  : true  : false : enableGettersAndSetters : FIFO.CS      : CsTimeStamp;
+         can_id_prio                    : true  : true  : false : enableGettersAndSetters : FIFO.ID      : IdPrio;
+         can_id_std                     : true  : true  : false : enableGettersAndSetters : FIFO.ID      : IdStd;
+         can_id_ext                     : true  : true  : false : enableGettersAndSetters : FIFO.ID      : IdExt;
+         can_word0_data_byte_0          : true  : true  : false : enableGettersAndSetters : FIFO.WORD0   : Word0DataByte0;
+         can_word0_data_byte_1          : true  : true  : false : enableGettersAndSetters : FIFO.WORD0   : Word0DataByte1;
+         can_word0_data_byte_2          : true  : true  : false : enableGettersAndSetters : FIFO.WORD0   : Word0DataByte2;
+         can_word0_data_byte_3          : true  : true  : false : enableGettersAndSetters : FIFO.WORD0   : Word0DataByte3;
+         can_word1_data_byte_4          : true  : true  : false : enableGettersAndSetters : FIFO.WORD1   : Word1DataByte4;
+         can_word1_data_byte_5          : true  : true  : false : enableGettersAndSetters : FIFO.WORD1   : Word1DataByte5;
+         can_word1_data_byte_6          : true  : true  : false : enableGettersAndSetters : FIFO.WORD1   : Word1DataByte6;
+         can_word1_data_byte_7          : true  : true  : false : enableGettersAndSetters : FIFO.WORD1   : Word1DataByte7" >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   $(_basename)->%(context) = ($(_basename)->%(context) & ~%mask)|%paramExpression;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %paramType($(_basename)->%(context)&%mask);
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t *
+         \tstatic void clear%(name)() {
+         \t   $(_basename)->%(context) = $(_basename)->%(context)|%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <for keys="field                     : set   : get   : clear : genCode                 : context                 : name"
+        values="
+         can_filter_id_a_rtra           : true  : true  : false : enableGettersAndSetters : FIFO.FILTER_ID_A[index] : FilterIdARtra;
+         can_filter_id_a_idea           : true  : true  : false : enableGettersAndSetters : FIFO.FILTER_ID_A[index] : FilterIdAIdea;
+         can_filter_id_a_rxida_std      : true  : true  : false : enableGettersAndSetters : FIFO.FILTER_ID_A[index] : FilterIdARxidaStd;
+         can_filter_id_a_rxida_ext      : true  : true  : false : enableGettersAndSetters : FIFO.FILTER_ID_A[index] : FilterIdARxidaExt;
+         can_filter_id_b_rtrb_0         : true  : true  : false : enableGettersAndSetters : FIFO.FILTER_ID_B[index] : FilterIdBRtrb0;
+         can_filter_id_b_ideb_0         : true  : true  : false : enableGettersAndSetters : FIFO.FILTER_ID_B[index] : FilterIdBIdeb0;
+         can_filter_id_b_rxidb_std_0    : true  : true  : false : enableGettersAndSetters : FIFO.FILTER_ID_B[index] : FilterIdBRxidbStd0;
+         can_filter_id_b_rxidb_ext_0    : true  : true  : false : enableGettersAndSetters : FIFO.FILTER_ID_B[index] : FilterIdBRxidbExt0;
+         can_filter_id_b_rtrb_1         : true  : true  : false : enableGettersAndSetters : FIFO.FILTER_ID_B[index] : FilterIdBRtrb1;
+         can_filter_id_b_ideb_1         : true  : true  : false : enableGettersAndSetters : FIFO.FILTER_ID_B[index] : FilterIdBIdeb1;
+         can_filter_id_b_rxidb_std_1    : true  : true  : false : enableGettersAndSetters : FIFO.FILTER_ID_B[index] : FilterIdBRxidbStd1;
+         can_filter_id_b_rxidb_ext_1    : true  : true  : false : enableGettersAndSetters : FIFO.FILTER_ID_B[index] : FilterIdBRxidbExt1;
+         can_filter_id_c_rxidc_0        : true  : true  : false : enableGettersAndSetters : FIFO.FILTER_ID_C[index] : FilterIdCRxidc0;
+         can_filter_id_c_rxidc_1        : true  : true  : false : enableGettersAndSetters : FIFO.FILTER_ID_C[index] : FilterIdCRxidc1;
+         can_filter_id_c_rxidc_2        : true  : true  : false : enableGettersAndSetters : FIFO.FILTER_ID_C[index] : FilterIdCRxidc2;
+         can_filter_id_c_rxidc_3        : true  : true  : false : enableGettersAndSetters : FIFO.FILTER_ID_C[index] : FilterIdCRxidc3;
+         can_cs_code                    : true  : true  : false : enableGettersAndSetters : MB[index].CS         : CsCode;
+         can_cs_srr                     : true  : true  : false : enableGettersAndSetters : MB[index].CS         : CsSrr;
+         can_cs_ide                     : true  : true  : false : enableGettersAndSetters : MB[index].CS         : CsIde;
+         can_cs_rtr                     : true  : true  : false : enableGettersAndSetters : MB[index].CS         : CsRtr;
+         can_cs_dlc                     : true  : true  : false : enableGettersAndSetters : MB[index].CS         : CsDlc;
+         can_cs_time_stamp              : true  : true  : false : enableGettersAndSetters : MB[index].CS         : CsTimeStamp;
+         can_id_prio                    : true  : true  : false : enableGettersAndSetters : MB[index].ID         : IdPrio;
+         can_id_std                     : true  : true  : false : enableGettersAndSetters : MB[index].ID         : IdStd;
+         can_id_ext                     : true  : true  : false : enableGettersAndSetters : MB[index].ID         : IdExt;
+         can_word0_data_byte_0          : true  : true  : false : enableGettersAndSetters : MB[index].WORD0      : Word0DataByte0;
+         can_word0_data_byte_1          : true  : true  : false : enableGettersAndSetters : MB[index].WORD0      : Word0DataByte1;
+         can_word0_data_byte_2          : true  : true  : false : enableGettersAndSetters : MB[index].WORD0      : Word0DataByte2;
+         can_word0_data_byte_3          : true  : true  : false : enableGettersAndSetters : MB[index].WORD0      : Word0DataByte3;
+         can_word1_data_byte_4          : true  : true  : false : enableGettersAndSetters : MB[index].WORD1      : Word1DataByte4;
+         can_word1_data_byte_5          : true  : true  : false : enableGettersAndSetters : MB[index].WORD1      : Word1DataByte5;
+         can_word1_data_byte_6          : true  : true  : false : enableGettersAndSetters : MB[index].WORD1      : Word1DataByte6;
+         can_word1_data_byte_7          : true  : true  : false : enableGettersAndSetters : MB[index].WORD1      : Word1DataByte7;
+         can_rximr_mi                   : true  : true  : false : enableGettersAndSetters : RXIMR[index]         : RximrMi" >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(int index, %params) {
+         \t   $(_basename)->%(context) = ($(_basename)->%(context) & ~%mask)|%paramExpression;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)(int index) {
+         \t   return %paramType($(_basename)->%(context)&%mask);
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t *
+         \tstatic void clear%(name)(int index) {
+         \t   $(_basename)->%(context) = $(_basename)->%(context)|%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <!--   ========== class $(_Structname)BasicInfo =============================== -->
+
+   <template where="basicInfo" ><![CDATA[
+      class $(_Structname)BasicInfo {
+
+      public:\n
+   ]]></template>
+
+   <!--   ========== Interrupt handling =============================== -->
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="irqHandlingMethod"
+   ><![CDATA[
+       \t//! Common class based callback code has been generated for this class of peripheral
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
+       \t\n
+   ]]></variableTemplate>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <![CDATA[
+      \t/**
+      \t * Type for FlexCAN - Message Buffers (Mailboxes and FIFO) call back function.
+      \t */
+      \ttypedef void (*MessageBuffer_CallbackFunction)($(irq_parameters));
+      \t
+      \t/**
+      \t * Type for FlexCAN - Bus off call back function.
+      \t */
+      \ttypedef void (*BusOff_CallbackFunction)($(irq_parameters));
+      \t
+      \t/**
+      \t * Type for FlexCAN - Error call back function.
+      \t */
+      \ttypedef void (*Error_CallbackFunction)($(irq_parameters));
+      \t
+      \t/**
+      \t * Type for FlexCAN - Transmit Warning call back function.
+      \t */
+      \ttypedef void (*TxWarning_CallbackFunction)($(irq_parameters));
+      \t
+      \t/**
+      \t * Type for FlexCAN - Receive Warning call back function.
+      \t */
+      \ttypedef void (*RxWarning_CallbackFunction)($(irq_parameters));
+      \t
+      \t/**
+      \t * Type for FlexCAN - Wakeup call back function.
+      \t */
+      \ttypedef void (*WakeUp_CallbackFunction)($(irq_parameters));
+      \t
+      \t/**
+      \t * Callback to catch unhandled interrupt
+      \t */
+      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/** Callback function for FlexCAN - Message Buffers (Mailboxes and FIFO) */
+      \tstatic MessageBuffer_CallbackFunction sCallback;
+      \t
+      \t/**
+      \t * FlexCAN - Message Buffers (Mailboxes and FIFO) interrupt handler
+      \t * Passes control to call-back function
+      \t */
+      \tstatic void irqMessageBufferHandler() {
+      \t
+      \t   // Execute call-back
+      \t   sCallback($(irq_call));
+      \t}
+      \t
+      \t/**
+      \t * Set FlexCAN - Message Buffers (Mailboxes and FIFO) callback function.
+      \t *
+      \t * @param      $(_basename)Callback Callback function to execute on interrupt
+      \t *                             Use nullptr to remove callback.
+      \t */
+      \tstatic void setCallback(MessageBuffer_CallbackFunction $(_basename)Callback) {
+      \t   if ($(_basename)Callback == nullptr) {
+      \t      $(_basename)Callback = (MessageBuffer_CallbackFunction)unhandledCallback;
+      \t   }
+      \t   // Allow either no handler set yet or removing handler
+      \t   usbdm_assert(
+      \t         ((void*)sCallback == (void*)unhandledCallback) ||
+      \t         ((void*)$(_basename)Callback == (void*)unhandledCallback),
+      \t         "Handler already set");
+      \t   sCallback = $(_basename)Callback;
+      \t}
+      \t
+      \t/** Callback function for FlexCAN - Bus off */
+      \tstatic BusOff_CallbackFunction sCallback;
+      \t
+      \t/**
+      \t * FlexCAN - Bus off interrupt handler
+      \t * Passes control to call-back function
+      \t */
+      \tstatic void irqBusOffHandler() {
+      \t
+      \t   // Execute call-back
+      \t   sCallback($(irq_call));
+      \t}
+      \t
+      \t/**
+      \t * Set FlexCAN - Bus off callback function.
+      \t *
+      \t * @param      $(_basename)Callback Callback function to execute on interrupt
+      \t *                             Use nullptr to remove callback.
+      \t */
+      \tstatic void setCallback(BusOff_CallbackFunction $(_basename)Callback) {
+      \t   if ($(_basename)Callback == nullptr) {
+      \t      $(_basename)Callback = (BusOff_CallbackFunction)unhandledCallback;
+      \t   }
+      \t   // Allow either no handler set yet or removing handler
+      \t   usbdm_assert(
+      \t         ((void*)sCallback == (void*)unhandledCallback) ||
+      \t         ((void*)$(_basename)Callback == (void*)unhandledCallback),
+      \t         "Handler already set");
+      \t   sCallback = $(_basename)Callback;
+      \t}
+      \t
+      \t/** Callback function for FlexCAN - Error */
+      \tstatic Error_CallbackFunction sCallback;
+      \t
+      \t/**
+      \t * FlexCAN - Error interrupt handler
+      \t * Passes control to call-back function
+      \t */
+      \tstatic void irqErrorHandler() {
+      \t
+      \t   // Execute call-back
+      \t   sCallback($(irq_call));
+      \t}
+      \t
+      \t/**
+      \t * Set FlexCAN - Error callback function.
+      \t *
+      \t * @param      $(_basename)Callback Callback function to execute on interrupt
+      \t *                             Use nullptr to remove callback.
+      \t */
+      \tstatic void setCallback(Error_CallbackFunction $(_basename)Callback) {
+      \t   if ($(_basename)Callback == nullptr) {
+      \t      $(_basename)Callback = (Error_CallbackFunction)unhandledCallback;
+      \t   }
+      \t   // Allow either no handler set yet or removing handler
+      \t   usbdm_assert(
+      \t         ((void*)sCallback == (void*)unhandledCallback) ||
+      \t         ((void*)$(_basename)Callback == (void*)unhandledCallback),
+      \t         "Handler already set");
+      \t   sCallback = $(_basename)Callback;
+      \t}
+      \t
+      \t/** Callback function for FlexCAN - Transmit Warning */
+      \tstatic TxWarning_CallbackFunction sCallback;
+      \t
+      \t/**
+      \t * FlexCAN - Transmit Warning interrupt handler
+      \t * Passes control to call-back function
+      \t */
+      \tstatic void irqTxWarningHandler() {
+      \t
+      \t   // Execute call-back
+      \t   sCallback($(irq_call));
+      \t}
+      \t
+      \t/**
+      \t * Set FlexCAN - Transmit Warning callback function.
+      \t *
+      \t * @param      $(_basename)Callback Callback function to execute on interrupt
+      \t *                             Use nullptr to remove callback.
+      \t */
+      \tstatic void setCallback(TxWarning_CallbackFunction $(_basename)Callback) {
+      \t   if ($(_basename)Callback == nullptr) {
+      \t      $(_basename)Callback = (TxWarning_CallbackFunction)unhandledCallback;
+      \t   }
+      \t   // Allow either no handler set yet or removing handler
+      \t   usbdm_assert(
+      \t         ((void*)sCallback == (void*)unhandledCallback) ||
+      \t         ((void*)$(_basename)Callback == (void*)unhandledCallback),
+      \t         "Handler already set");
+      \t   sCallback = $(_basename)Callback;
+      \t}
+      \t
+      \t/** Callback function for FlexCAN - Receive Warning */
+      \tstatic RxWarning_CallbackFunction sCallback;
+      \t
+      \t/**
+      \t * FlexCAN - Receive Warning interrupt handler
+      \t * Passes control to call-back function
+      \t */
+      \tstatic void irqRxWarningHandler() {
+      \t
+      \t   // Execute call-back
+      \t   sCallback($(irq_call));
+      \t}
+      \t
+      \t/**
+      \t * Set FlexCAN - Receive Warning callback function.
+      \t *
+      \t * @param      $(_basename)Callback Callback function to execute on interrupt
+      \t *                             Use nullptr to remove callback.
+      \t */
+      \tstatic void setCallback(RxWarning_CallbackFunction $(_basename)Callback) {
+      \t   if ($(_basename)Callback == nullptr) {
+      \t      $(_basename)Callback = (RxWarning_CallbackFunction)unhandledCallback;
+      \t   }
+      \t   // Allow either no handler set yet or removing handler
+      \t   usbdm_assert(
+      \t         ((void*)sCallback == (void*)unhandledCallback) ||
+      \t         ((void*)$(_basename)Callback == (void*)unhandledCallback),
+      \t         "Handler already set");
+      \t   sCallback = $(_basename)Callback;
+      \t}
+      \t
+      \t/** Callback function for FlexCAN - Wakeup */
+      \tstatic WakeUp_CallbackFunction sCallback;
+      \t
+      \t/**
+      \t * FlexCAN - Wakeup interrupt handler
+      \t * Passes control to call-back function
+      \t */
+      \tstatic void irqWakeUpHandler() {
+      \t
+      \t   // Execute call-back
+      \t   sCallback($(irq_call));
+      \t}
+      \t
+      \t/**
+      \t * Set FlexCAN - Wakeup callback function.
+      \t *
+      \t * @param      $(_basename)Callback Callback function to execute on interrupt
+      \t *                             Use nullptr to remove callback.
+      \t */
+      \tstatic void setCallback(WakeUp_CallbackFunction $(_basename)Callback) {
+      \t   if ($(_basename)Callback == nullptr) {
+      \t      $(_basename)Callback = (WakeUp_CallbackFunction)unhandledCallback;
+      \t   }
+      \t   // Allow either no handler set yet or removing handler
+      \t   usbdm_assert(
+      \t         ((void*)sCallback == (void*)unhandledCallback) ||
+      \t         ((void*)$(_basename)Callback == (void*)unhandledCallback),
+      \t         "Handler already set");
+      \t   sCallback = $(_basename)Callback;
+      \t}
+      \t
+      \t\n
+   ]]>
+   </template>
+
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/**
+      \t * Callback function for FlexCAN - Message Buffers (Mailboxes and FIFO)
+      \t */
+      \t$(_Class)Info::MessageBuffer_CallbackFunction $(_Class)Info::sCallback = (MessageBuffer_CallbackFunction)$(_Class)Info::unhandledCallback;
+      \t
+      \t/**
+      \t * Callback function for FlexCAN - Bus off
+      \t */
+      \t$(_Class)Info::BusOff_CallbackFunction $(_Class)Info::sCallback = (BusOff_CallbackFunction)$(_Class)Info::unhandledCallback;
+      \t
+      \t/**
+      \t * Callback function for FlexCAN - Error
+      \t */
+      \t$(_Class)Info::Error_CallbackFunction $(_Class)Info::sCallback = (Error_CallbackFunction)$(_Class)Info::unhandledCallback;
+      \t
+      \t/**
+      \t * Callback function for FlexCAN - Transmit Warning
+      \t */
+      \t$(_Class)Info::TxWarning_CallbackFunction $(_Class)Info::sCallback = (TxWarning_CallbackFunction)$(_Class)Info::unhandledCallback;
+      \t
+      \t/**
+      \t * Callback function for FlexCAN - Receive Warning
+      \t */
+      \t$(_Class)Info::RxWarning_CallbackFunction $(_Class)Info::sCallback = (RxWarning_CallbackFunction)$(_Class)Info::unhandledCallback;
+      \t
+      \t/**
+      \t * Callback function for FlexCAN - Wakeup
+      \t */
+      \t$(_Class)Info::WakeUp_CallbackFunction $(_Class)Info::sCallback = (WakeUp_CallbackFunction)$(_Class)Info::unhandledCallback;
+      \t
+      \t\n
+   ]]>
+   </template>
+
+   <!--   ========== CAN Init class =============================== -->
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_Baseclass)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(ErrorCode ec) {
+      \t *    ....
+      \t * }
+      \t *
+      \t * static const $(_Class)::Init $(_name)Init {
+      \t *
+      \t *   // Setup values
+XXXXXXXXXXXXXXXXXXXXXX
+      \t *
+      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
+      \t *   NvicPriority_Low,                 // Priority for interrupt - Low
+      \t *
+      \t *   // Optional base value to start with (must be last parameter)
+      \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
+      \t * };
+      \t *
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_name)Init)
+      \t * @endcode
+      \t */
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+   <!--   Member variables -->
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <![CDATA[
+      \t   /// FlexCAN - Message Buffers (Mailboxes and FIFO)
+      \t   MessageBuffer_CallbackFunction sCallback = nullptr;\n\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <![CDATA[
+      \t   /// FlexCAN - Bus off
+      \t   BusOff_CallbackFunction sCallback = nullptr;\n\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <![CDATA[
+      \t   /// FlexCAN - Error
+      \t   Error_CallbackFunction sCallback = nullptr;\n\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <![CDATA[
+      \t   /// FlexCAN - Transmit Warning
+      \t   TxWarning_CallbackFunction sCallback = nullptr;\n\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <![CDATA[
+      \t   /// FlexCAN - Receive Warning
+      \t   RxWarning_CallbackFunction sCallback = nullptr;\n\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <![CDATA[
+      \t   /// FlexCAN - Wakeup
+      \t   WakeUp_CallbackFunction sCallback = nullptr;\n\n
+   ]]></template>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_mcr_mdis,can_mcr_frz,can_mcr_rfen,can_mcr_halt,can_mcr_wakmsk,can_mcr_softrst,can_mcr_supv,can_mcr_slfwak,can_mcr_wrnen,can_mcr_waksrc,can_mcr_srxdis,can_mcr_irmq,can_mcr_lprioen,can_mcr_aen,can_mcr_idam,can_mcr_maxmb"
+   ><![CDATA[
+      \t   /// Module Configuration Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_ctrl1_presdiv,can_ctrl1_rjw,can_ctrl1_pseg1,can_ctrl1_pseg2,can_ctrl1_boffmsk,can_ctrl1_errmsk,can_ctrl1_clksrc,can_ctrl1_lpb,can_ctrl1_twrnmsk,can_ctrl1_rwrnmsk,can_ctrl1_smp,can_ctrl1_boffrec,can_ctrl1_tsyn,can_ctrl1_lbuf,can_ctrl1_lom,can_ctrl1_propseg"
+   ><![CDATA[
+      \t   /// Control 1 Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_timer_timer"
+   ><![CDATA[
+      \t   /// Free Running Timer
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_rxmgmask_mg"
+   ><![CDATA[
+      \t   /// Rx Mailboxes Global Mask Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_rx14mask_rx14m"
+   ><![CDATA[
+      \t   /// Rx 14 Mask register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_rx15mask_rx15m"
+   ><![CDATA[
+      \t   /// Rx 15 Mask register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_ecr_rxerrcnt,can_ecr_txerrcnt"
+   ><![CDATA[
+      \t   /// Error Counter
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_esr1_twrnint,can_esr1_rwrnint,can_esr1_boffint,can_esr1_errint,can_esr1_wakint"
+   ><![CDATA[
+      \t   /// Error and Status 1 register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_imask1_buflm"
+   ><![CDATA[
+      \t   /// Interrupt Masks 1 register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_iflag1_buf31to8i,can_iflag1_buf7i,can_iflag1_buf6i,can_iflag1_buf5i,can_iflag1_buf4to0i"
+   ><![CDATA[
+      \t   /// Interrupt Flags 1 register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_ctrl2_wrmfrz,can_ctrl2_rffn,can_ctrl2_tasd,can_ctrl2_mrp,can_ctrl2_rrs,can_ctrl2_eacen"
+   ><![CDATA[
+      \t   /// Control 2 Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_rxfgmask_fgm"
+   ><![CDATA[
+      \t   /// Rx FIFO Global Mask register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_rxfgmask_a_rtra,can_rxfgmask_a_idea,can_rxfgmask_a_rxida_std,can_rxfgmask_a_rxida_ext"
+   ><![CDATA[
+      \t   /// Rx FIFO Global Mask register (format A)
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_rxfgmask_b_rtrb_0,can_rxfgmask_b_ideb_0,can_rxfgmask_b_rxidb_std_0,can_rxfgmask_b_rxidb_ext_0,can_rxfgmask_b_rtrb_1,can_rxfgmask_b_ideb_1,can_rxfgmask_b_rxidb_std_1,can_rxfgmask_b_rxidb_ext_1"
+   ><![CDATA[
+      \t   /// Rx FIFO Global Mask register (format B)
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_rxfgmask_c_rxidc_0,can_rxfgmask_c_rxidc_1,can_rxfgmask_c_rxidc_2,can_rxfgmask_c_rxidc_3"
+   ><![CDATA[
+      \t   /// Rx FIFO Global Mask register (format C)
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_cs_idhit,can_cs_srr,can_cs_ide,can_cs_rtr,can_cs_dlc,can_cs_time_stamp"
+   ><![CDATA[
+      \t   /// FIFO Message Buffer CS Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_id_prio,can_id_std,can_id_ext"
+   ><![CDATA[
+      \t   /// FIFO Message Buffer ID Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_word0_data_byte_0,can_word0_data_byte_1,can_word0_data_byte_2,can_word0_data_byte_3"
+   ><![CDATA[
+      \t   /// FIFO Message Buffer WORD0 Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_word1_data_byte_4,can_word1_data_byte_5,can_word1_data_byte_6,can_word1_data_byte_7"
+   ><![CDATA[
+      \t   /// FIFO Message Buffer WORD1 Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_filter_id_a_rtra,can_filter_id_a_idea,can_filter_id_a_rxida_std,can_filter_id_a_rxida_ext"
+   ><![CDATA[
+      \t   /// FIFO Message Filter ID (format A)
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_filter_id_b_rtrb_0,can_filter_id_b_ideb_0,can_filter_id_b_rxidb_std_0,can_filter_id_b_rxidb_ext_0,can_filter_id_b_rtrb_1,can_filter_id_b_ideb_1,can_filter_id_b_rxidb_std_1,can_filter_id_b_rxidb_ext_1"
+   ><![CDATA[
+      \t   /// FIFO Message Filter ID (format B)
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_filter_id_c_rxidc_0,can_filter_id_c_rxidc_1,can_filter_id_c_rxidc_2,can_filter_id_c_rxidc_3"
+   ><![CDATA[
+      \t   /// FIFO Message Filter ID (format C)
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_cs_code"
+   ><![CDATA[
+      \t   /// Message Buffer 0 CS Register
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="can_rximr_mi"
+   ><![CDATA[
+      \t   /// Rx Individual Mask
+      \t   uint32_t %registerName = 0;\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="/PCR/nvic_irqLevel,irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %paramType %registerName0 = %symbolicExpression1;
+      \t\n
+   ]]></variableTemplate>
+
+   <!-- Init Constructors -->
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for FlexCAN - Message Buffers (Mailboxes and FIFO)
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      \t    * @param sCallback   FlexCAN - Message Buffers (Mailboxes and FIFO) call-back
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(MessageBuffer_CallbackFunction sCallback, Types... rest) : Init(rest...) {
+      \t
+      \t      this->sCallback = sCallback;
+      \t   }\n\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for FlexCAN - Bus off
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      \t    * @param sCallback   FlexCAN - Bus off call-back
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(BusOff_CallbackFunction sCallback, Types... rest) : Init(rest...) {
+      \t
+      \t      this->sCallback = sCallback;
+      \t   }\n\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for FlexCAN - Error
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      \t    * @param sCallback   FlexCAN - Error call-back
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(Error_CallbackFunction sCallback, Types... rest) : Init(rest...) {
+      \t
+      \t      this->sCallback = sCallback;
+      \t   }\n\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for FlexCAN - Transmit Warning
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      \t    * @param sCallback   FlexCAN - Transmit Warning call-back
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(TxWarning_CallbackFunction sCallback, Types... rest) : Init(rest...) {
+      \t
+      \t      this->sCallback = sCallback;
+      \t   }\n\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for FlexCAN - Receive Warning
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      \t    * @param sCallback   FlexCAN - Receive Warning call-back
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(RxWarning_CallbackFunction sCallback, Types... rest) : Init(rest...) {
+      \t
+      \t      this->sCallback = sCallback;
+      \t   }\n\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for FlexCAN - Wakeup
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      \t    * @param sCallback   FlexCAN - Wakeup call-back
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(WakeUp_CallbackFunction sCallback, Types... rest) : Init(rest...) {
+      \t
+      \t      this->sCallback = sCallback;
+      \t   }\n\n
+   ]]></template>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName = %paramExpression;
+      \t   }\n\n
+   ]]></variableTemplate>
+
+   <for keys="r"
+      values="
+            can_mcr_mdis;
+            can_mcr_frz;
+            can_mcr_rfen;
+            can_mcr_halt;
+            can_mcr_wakmsk;
+            can_mcr_softrst;
+            can_mcr_supv;
+            can_mcr_slfwak;
+            can_mcr_wrnen;
+            can_mcr_waksrc;
+            can_mcr_srxdis;
+            can_mcr_irmq;
+            can_mcr_lprioen;
+            can_mcr_aen;
+            can_mcr_idam;
+            can_mcr_maxmb;
+            can_ctrl1_presdiv;
+            can_ctrl1_rjw;
+            can_ctrl1_pseg1;
+            can_ctrl1_pseg2;
+            can_ctrl1_boffmsk;
+            can_ctrl1_errmsk;
+            can_ctrl1_clksrc;
+            can_ctrl1_lpb;
+            can_ctrl1_twrnmsk;
+            can_ctrl1_rwrnmsk;
+            can_ctrl1_smp;
+            can_ctrl1_boffrec;
+            can_ctrl1_tsyn;
+            can_ctrl1_lbuf;
+            can_ctrl1_lom;
+            can_ctrl1_propseg;
+            can_timer_timer;
+            can_rxmgmask_mg;
+            can_rx14mask_rx14m;
+            can_rx15mask_rx15m;
+            can_ecr_rxerrcnt;
+            can_ecr_txerrcnt;
+            can_esr1_twrnint;
+            can_esr1_rwrnint;
+            can_esr1_boffint;
+            can_esr1_errint;
+            can_esr1_wakint;
+            can_imask1_buflm;
+            can_iflag1_buf31to8i;
+            can_iflag1_buf7i;
+            can_iflag1_buf6i;
+            can_iflag1_buf5i;
+            can_iflag1_buf4to0i;
+            can_ctrl2_wrmfrz;
+            can_ctrl2_rffn;
+            can_ctrl2_tasd;
+            can_ctrl2_mrp;
+            can_ctrl2_rrs;
+            can_ctrl2_eacen;
+            can_rxfgmask_fgm;
+            can_rxfgmask_a_rtra;
+            can_rxfgmask_a_idea;
+            can_rxfgmask_a_rxida_std;
+            can_rxfgmask_a_rxida_ext;
+            can_rxfgmask_b_rtrb_0;
+            can_rxfgmask_b_ideb_0;
+            can_rxfgmask_b_rxidb_std_0;
+            can_rxfgmask_b_rxidb_ext_0;
+            can_rxfgmask_b_rtrb_1;
+            can_rxfgmask_b_ideb_1;
+            can_rxfgmask_b_rxidb_std_1;
+            can_rxfgmask_b_rxidb_ext_1;
+            can_rxfgmask_c_rxidc_0;
+            can_rxfgmask_c_rxidc_1;
+            can_rxfgmask_c_rxidc_2;
+            can_rxfgmask_c_rxidc_3;
+            can_cs_idhit;
+            can_cs_srr;
+            can_cs_ide;
+            can_cs_rtr;
+            can_cs_dlc;
+            can_cs_time_stamp;
+            can_id_prio;
+            can_id_std;
+            can_id_ext;
+            can_word0_data_byte_0;
+            can_word0_data_byte_1;
+            can_word0_data_byte_2;
+            can_word0_data_byte_3;
+            can_word1_data_byte_4;
+            can_word1_data_byte_5;
+            can_word1_data_byte_6;
+            can_word1_data_byte_7;
+            can_filter_id_a_rtra;
+            can_filter_id_a_idea;
+            can_filter_id_a_rxida_std;
+            can_filter_id_a_rxida_ext;
+            can_filter_id_b_rtrb_0;
+            can_filter_id_b_ideb_0;
+            can_filter_id_b_rxidb_std_0;
+            can_filter_id_b_rxidb_ext_0;
+            can_filter_id_b_rtrb_1;
+            can_filter_id_b_ideb_1;
+            can_filter_id_b_rxidb_std_1;
+            can_filter_id_b_rxidb_ext_1;
+            can_filter_id_c_rxidc_0;
+            can_filter_id_c_rxidc_1;
+            can_filter_id_c_rxidc_2;
+            can_filter_id_c_rxidc_3;
+            can_cs_code;
+            can_rximr_mi
+            " >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </variableTemplate>
+   </for>
+
+<!--   Default Initialisation value -->
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      separator=","
+      terminator=","
+      variables="
+            can_mcr_mdis,
+            can_mcr_frz,
+            can_mcr_rfen,
+            can_mcr_halt,
+            can_mcr_wakmsk,
+            can_mcr_softrst,
+            can_mcr_supv,
+            can_mcr_slfwak,
+            can_mcr_wrnen,
+            can_mcr_waksrc,
+            can_mcr_srxdis,
+            can_mcr_irmq,
+            can_mcr_lprioen,
+            can_mcr_aen,
+            can_mcr_idam,
+            can_mcr_maxmb,
+            can_ctrl1_presdiv,
+            can_ctrl1_rjw,
+            can_ctrl1_pseg1,
+            can_ctrl1_pseg2,
+            can_ctrl1_boffmsk,
+            can_ctrl1_errmsk,
+            can_ctrl1_clksrc,
+            can_ctrl1_lpb,
+            can_ctrl1_twrnmsk,
+            can_ctrl1_rwrnmsk,
+            can_ctrl1_smp,
+            can_ctrl1_boffrec,
+            can_ctrl1_tsyn,
+            can_ctrl1_lbuf,
+            can_ctrl1_lom,
+            can_ctrl1_propseg,
+            can_timer_timer,
+            can_rxmgmask_mg,
+            can_rx14mask_rx14m,
+            can_rx15mask_rx15m,
+            can_ecr_rxerrcnt,
+            can_ecr_txerrcnt,
+            can_esr1_twrnint,
+            can_esr1_rwrnint,
+            can_esr1_boffint,
+            can_esr1_errint,
+            can_esr1_wakint,
+            can_imask1_buflm,
+            can_iflag1_buf31to8i,
+            can_iflag1_buf7i,
+            can_iflag1_buf6i,
+            can_iflag1_buf5i,
+            can_iflag1_buf4to0i,
+            can_ctrl2_wrmfrz,
+            can_ctrl2_rffn,
+            can_ctrl2_tasd,
+            can_ctrl2_mrp,
+            can_ctrl2_rrs,
+            can_ctrl2_eacen,
+            can_rxfgmask_fgm,
+            can_rxfgmask_a_rtra,
+            can_rxfgmask_a_idea,
+            can_rxfgmask_a_rxida_std,
+            can_rxfgmask_a_rxida_ext,
+            can_rxfgmask_b_rtrb_0,
+            can_rxfgmask_b_ideb_0,
+            can_rxfgmask_b_rxidb_std_0,
+            can_rxfgmask_b_rxidb_ext_0,
+            can_rxfgmask_b_rtrb_1,
+            can_rxfgmask_b_ideb_1,
+            can_rxfgmask_b_rxidb_std_1,
+            can_rxfgmask_b_rxidb_ext_1,
+            can_rxfgmask_c_rxidc_0,
+            can_rxfgmask_c_rxidc_1,
+            can_rxfgmask_c_rxidc_2,
+            can_rxfgmask_c_rxidc_3,
+            can_cs_idhit,
+            can_cs_srr,
+            can_cs_ide,
+            can_cs_rtr,
+            can_cs_dlc,
+            can_cs_time_stamp,
+            can_id_prio,
+            can_id_std,
+            can_id_ext,
+            can_word0_data_byte_0,
+            can_word0_data_byte_1,
+            can_word0_data_byte_2,
+            can_word0_data_byte_3,
+            can_word1_data_byte_4,
+            can_word1_data_byte_5,
+            can_word1_data_byte_6,
+            can_word1_data_byte_7,
+            can_filter_id_a_rtra,
+            can_filter_id_a_idea,
+            can_filter_id_a_rxida_std,
+            can_filter_id_a_rxida_ext,
+            can_filter_id_b_rtrb_0,
+            can_filter_id_b_ideb_0,
+            can_filter_id_b_rxidb_std_0,
+            can_filter_id_b_rxidb_ext_0,
+            can_filter_id_b_rtrb_1,
+            can_filter_id_b_ideb_1,
+            can_filter_id_b_rxidb_std_1,
+            can_filter_id_b_rxidb_ext_1,
+            can_filter_id_c_rxidc_0,
+            can_filter_id_c_rxidc_1,
+            can_filter_id_c_rxidc_2,
+            can_filter_id_c_rxidc_3,
+            can_cs_code,
+            can_rximr_mi
+         "
+   ><![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};
+      \t\n
+   ]]></variableTemplate>
+
+<!--   Configure methods -->
+
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(Info::DefaultInitValue);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const typename Info::Init &init) {
+      \t
+      \t   // Enable peripheral clock
+      \t   Info::enableClock();
+      \t\n
+   ]]></template>
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+             condition="/$(_STRUCTNAME)/generateSharedIrqInfo" >   <![CDATA[
+      \t   if constexpr (Info::irqHandlerInstalled) {
+      \t      // Only set call-backs if feature enabled
+      \t      Info::setCallback(init.sCallback);
+      \t      Info::enableNvicInterrupts(init.irqlevel);
+      \t   }
+      \t\n
+   ]]></template>
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t   // ..........  Regs to init .......... ;
+      \t   can->MCR                  = init.mcr;
+      \t   can->CTRL1                = init.ctrl1;
+      \t   can->TIMER                = init.timer;
+      \t   can->RXMGMASK             = init.rxmgmask;
+      \t   can->RX14MASK             = init.rx14mask;
+      \t   can->RX15MASK             = init.rx15mask;
+      \t   can->ECR                  = init.ecr;
+      \t   can->ESR1                 = init.esr1;
+      \t   can->IMASK1               = init.imask1;
+      \t   can->IFLAG1               = init.iflag1;
+      \t   can->CTRL2                = init.ctrl2;
+      \t   can->RXFGMASK             = init.rxfgmask;
+      \t   can->RXFGMASK_A           = init.rxfgmask_a;
+      \t   can->RXFGMASK_B           = init.rxfgmask_b;
+      \t   can->RXFGMASK_C           = init.rxfgmask_c;
+      \t   can->CS                   = init.cs;
+      \t   can->ID                   = init.id;
+      \t   can->WORD0                = init.word0;
+      \t   can->WORD1                = init.word1;
+      \t   can->FILTER_ID            = init.filter_id;
+      \t   can->FILTER_ID_A          = init.filter_id_a;
+      \t   can->FILTER_ID_B          = init.filter_id_b;
+      \t   can->FILTER_ID_C          = init.filter_id_c;
+      \t   can->RXIMR%S              = init.rximr%s;
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t}; // class $(_Structname)BasicInfo::Init
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" >
+   <![CDATA[
+      }; // class $(_Structname)BasicInfo
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ************* Common ****************** -->
+
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Class representing $(_NAME)
+      \t */
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
+      \t//typedef $(_Baseclass)Base_T<$(_Class)Info> $(_Class);
+      \t\n
+   ]]>
+   </template>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
+   </validate>
+
+   <projectActionList id="can_files" >
+      <copy source="Project_Headers/can-MK.h"  target="Project_Headers/can.h"  overwrite="true"  derived="true" />
+   </projectActionList>
+
+   <!-- ************* Startup ****************** -->
+
+   <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
+
+   <!-- ************* SIM configuration ****************** -->
+   <category name="Advanced" description="SIM configuration" >
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <aliasOption key="/SIM/sim_pinsel_$(_name)ps"  locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel0_$(_name)ps" locked="false" optional="true" />
+      <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" locked="false" optional="true" />
+   </category>
+   <deleteVariables variables="_scgc_clock"  mustExist="false" />
+
+   <!-- ************* Signal mapping ****************** -->
+   <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
+
+</peripheralPage>
