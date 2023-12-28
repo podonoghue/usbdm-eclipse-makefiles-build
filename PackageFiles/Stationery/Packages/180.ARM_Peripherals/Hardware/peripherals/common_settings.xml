@@ -2,7 +2,7 @@
 <!DOCTYPE list SYSTEM "_menu.dtd" >
 <!-- _common_settings.xml -->
 
-<list name="CommonSettings" >
+<peripheralPage name="CommonSettings" >
 
 <binaryOption name="Map all pins on startup" key="/HARDWARE/mapAllPins" condition="(/PCR/lk_present)"
    description="Execute mapAllPins() during startup"
@@ -409,4 +409,4 @@
    <copy source="Project_Settings/Linker_Files/$(/LINKER/mapFilename)"     target="Project_Settings/Linker_Files/MemoryMap.ld"   overwrite="true"  derived="true" />
 </projectActionList>
 
-</list>
+</peripheralPage>

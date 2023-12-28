@@ -219,11 +219,14 @@ proc resetAndConnectTarget { args } {
 
    puts "resetAndConnectTarget args"
    
-   settargetvdd off
-   pinSet rst=0
-   after 100
-   
-   settargetvdd on
+   # Cycle power if feature available   
+   if [expr ( [getcap] & $::BDM_CAP_VDDCONTROL) != 0] {
+      settargetvdd off
+      pinSet rst=0
+      after $::RESET_DURATION
+      settargetvdd on
+      after $::POWER_ON_RECOVERY
+   }
    reset sh 
    
    if { [catch {connect} rc] } {
@@ -261,8 +264,8 @@ proc initFlash { frequency } {
 proc massEraseTarget { } {
    puts stderr "$::NAME.massEraseTarget{}"
    
-   # Apply target reset to be sure
-   puts stderr "massEraseTarget{} - Applying hardware reset"
+   # Apply hardware reset for entire mass erase
+   puts stderr "massEraseTarget{} - Applying hardware reset for entire mass erase"
    pinSet rst=0
 
    # Cycle power if feature available   

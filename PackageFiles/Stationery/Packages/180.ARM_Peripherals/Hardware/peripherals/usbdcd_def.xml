@@ -760,7 +760,9 @@
       \t   // Do software reset if requested
       \t   usbdcd->CONTROL           = init.control&USBDCD_CONTROL_SR_MASK;
       \t   usbdcd->CLOCK             = init.clock;
+      \t#ifdef USBDCD_SIGNAL_OVERRIDE_PS
       \t   usbdcd->SIGNAL_OVERRIDE   = init.signal_override;
+      #endif
       \t   usbdcd->TIMER0            = init.timer0;
       \t   usbdcd->TIMER1            = init.timer1;
       #ifdef USBDCD_TIMER2_CHECK_DM_MASK
@@ -827,6 +829,9 @@
    <!-- ************* SIM configuration ****************** -->
    <category name="Advanced" description="SIM configuration">
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
    </category>
    <deleteVariables variables="_scgc_clock"  mustExist="false" />
 

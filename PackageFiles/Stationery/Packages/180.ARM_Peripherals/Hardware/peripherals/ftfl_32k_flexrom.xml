@@ -78,8 +78,6 @@
       \n\t   const uint8_t  value;         ///&lt; Partition value
       \n\t};
       "
-      enumText="  \t   %(typeName)_FlashAll_eeprom0K  = %(typeName)_Flash32K_eeprom0K, ///&lt; All Flash
-                \n\t   %(typeName)_Flash0K_eepromAll  = %(typeName)_Flash0K_eeprom32K, ///&lt; All EEPROM "
       typeName="FlashPartition"
       valueFormat="%s"
       description="FlexNVM - Flash EEPROM partitioning"
@@ -90,6 +88,8 @@
       <choice value="2" enum="Flash16K_eeprom16K" code="{ 16*1024, 16*1024,  0x0A}" name="flash=16KiB eeprom backing=16KiB" />
       <choice value="3" enum="Flash8K_eeprom24K"  code="{ 8*1024,  24*1024,  0x09}" name="flash=8KiB eeprom backing=24KiB"  />
       <choice value="4" enum="Flash0K_eeprom32K"  code="{ 0*1024,  32*1024,  0x08}" name="flash=0B eeprom backing=32KiB"    isDefault="true"/>
+      <choice value="FlashPartition_Flash32K_eeprom0K"  enum="FlashAll_eeprom0K"    name="All Flash"   hidden="true" />
+      <choice value="FlashPartition_Flash0K_eeprom32K"  enum="Flash0K_eepromAll"    name="All EEPROM"  hidden="true" />
    </choiceOption>
 
    <choiceOption key="eeprom_size"
@@ -121,7 +121,7 @@
       valueFormat="%s"
       description="FlexNVM - EEPROM split"
       toolTip="Selects division of the two regions of EEPROM  \n
-               (Not supported for this device)">
+               (Not supported on this device)">
       <choice value="0x30" enum="Disabled" name="Disabled" />
    </choiceOption>
 

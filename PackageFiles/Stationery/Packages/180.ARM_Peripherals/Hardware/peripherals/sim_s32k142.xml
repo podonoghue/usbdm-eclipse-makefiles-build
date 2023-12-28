@@ -3,7 +3,75 @@
 <!-- sim_s32k142.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
-   
+
+      <choiceOption key="dma_chcfg0"
+      description="Mapping of DMA source (slot) to DMA channel" >
+      <choice value="0"  name="Disabled"          />
+      <choice value="1"  name="ENET"              />
+      <choice value="2"  name="LPUART0 Receive"   />
+      <choice value="3"  name="LPUART0 Transmit"  />
+      <choice value="4"  name="LPUART1 Receive"   />
+      <choice value="5"  name="LPUART1 Transmit"  />
+      <choice value="6"  name="LPUART2 Receive"   />
+      <choice value="7"  name="LPUART2 Transmit"  />
+      <choice value="8"  name="LPI2C1 Receive"    />
+      <choice value="9"  name="LPI2C1 Transmit"   />
+      <choice value="10" name="FLEXIO Sh0"        />
+      <choice value="11" name="FLEXIO Sh1"        />
+      <choice value="12" name="FLEXIO Sh2"        />
+      <choice value="13" name="FLEXIO Sh3"        />
+      <choice value="14" name="LPSPI0 Receive"    />
+      <choice value="15" name="LPSPI0 Transmit"   />
+      <choice value="16" name="LPSPI1 Receive"    />
+      <choice value="17" name="LPSPI1 Transmit"   />
+      <choice value="18" name="LPSPI2 Receive"    />
+      <choice value="19" name="LPSPI2 Transmit"   />
+      <choice value="20" name="FTM1 Channel 0"    />
+      <choice value="21" name="FTM1 Channel 1"    />
+      <choice value="22" name="FTM1 Channel 2"    />
+      <choice value="23" name="FTM1 Channel 3"    />
+      <choice value="24" name="FTM1 Channel 4"    />
+      <choice value="25" name="FTM1 Channel 5"    />
+      <choice value="26" name="FTM1 Channel 6"    />
+      <choice value="27" name="FTM1 Channel 7"    />
+      <choice value="28" name="FTM2 Channel 0"    />
+      <choice value="29" name="FTM2 Channel 1"    />
+      <choice value="30" name="FTM2 Channel 2"    />
+      <choice value="31" name="FTM2 Channel 3"    />
+      <choice value="32" name="FTM2 Channel 4"    />
+      <choice value="33" name="FTM2 Channel 5"    />
+      <choice value="34" name="FTM2 Channel 6"    />
+      <choice value="35" name="FTM2 Channel 7"    />
+      <choice value="36" name="FTM0 Or"           />
+      <choice value="37" name="FTM3 Or"           />
+      <choice value="38" name="FTM4 Or"           />
+      <choice value="39" name="FTM5 Or"           />
+      <choice value="40" name="FTM6 Or"           />
+      <choice value="41" name="FTM7 Or"           />
+      <choice value="42" name="ADC0"              />
+      <choice value="43" name="ADC1"              />
+      <choice value="44" name="LPI2C0 Receive"    />
+      <choice value="45" name="LPI2C0 Transmit"   />
+      <choice value="46" name="PDB0"              />
+      <choice value="47" name="PDB1"              />
+      <choice value="48" name="CMP0"              />
+      <choice value="49" name="PORT A"            />
+      <choice value="50" name="PORT B"            />
+      <choice value="51" name="PORT C"            />
+      <choice value="52" name="PORT D"            />
+      <choice value="53" name="PORT E"            />
+      <choice value="54" name="CAN0"              />
+      <choice value="55" name="CAN1"              />
+      <choice value="56" name="CAN2"              />
+      <choice value="57" name="SAI0 Receive"      />
+      <choice value="58" name="SAI0 Transmit"     />
+      <choice value="59" name="LPTMR0"            />
+      <choice value="60" name="QUADSPI Receive"   />
+      <choice value="61" name="QUADSPI Transmit"  />
+      <choice value="62" name="Always Enabled 62" />
+      <choice value="63" name="Always Enabled 63" />
+   </choiceOption>
+
    <xi:include href="default_instance.xml"/>
 
    <xi:include href="simFiles-MK.xml"/>
@@ -11,24 +79,24 @@
    <binaryOption key="chipctl_sraml_reten"
       description="SRAML retention enable"
       toolTip="Enables SRAML contents retention across resets">
-      <choice name="Disabled"  value="1"/>   
-      <choice name="Enabled"   value="0" isDefault="true"/>   
+      <choice name="Disabled"  value="1"/>
+      <choice name="Enabled"   value="0" isDefault="true"/>
    </binaryOption>
-   
+
    <binaryOption key="chipctl_sramu_reten"
       description="SRAMU retention enable"
       toolTip="Enables SRAMU contents retention across resets">
-      <choice name="Disabled"  value="1"/>   
-      <choice name="Enabled"   value="0" isDefault="true"/>   
+      <choice name="Disabled"  value="1"/>
+      <choice name="Enabled"   value="0" isDefault="true"/>
    </binaryOption>
-   
+
    <binaryOption key="chipctl_adc_supplyen"
       description="ADC supply monitoring enable"
       toolTip="Enable for internal supply monitored on ADC0 internal channel 0 (ADC0_SC1n[ADCH] = 010101b)">
-      <choice name="Disabled" value="0"/>   
-      <choice name="Enabled"  value="1"/>   
+      <choice name="Disabled" value="0"/>
+      <choice name="Enabled"  value="1"/>
    </binaryOption>
-   
+
    <choiceOption key="chipctl_adc_supply"
       description="ADC supply monitoring selection"
       toolTip="Selects the internal supply monitored on ADC0 internal channel 0 (ADC0_SC1n[ADCH] = 010101b)">
@@ -41,7 +109,7 @@
       <choice value="6" name="Reserved"/>
       <choice value="7" name="Reserved"/>
    </choiceOption>
-   
+
    <binaryOption key="chipctl_pdb_bb_sel"
       description="PDB back-to-back select"
       toolTip="Determines whether PDB0, PDB1 in conjunction with ADC0.COCO[7..0] and ADC1.COCO[7..0]\n
@@ -49,28 +117,28 @@
       <choice name="Independent rings" value="0"/>
       <choice name="Single ring" value="1"/>
    </binaryOption>
-   
-   <binaryOption key="chipctl_traceclk_sel" 
+
+   <binaryOption key="chipctl_traceclk_sel"
       description="Debug trace clock select"
-      toolTip="Selects the the trace clock source" 
+      toolTip="Selects the the trace clock source"
       locked="true">
       <choice value="0"  name="Core clock" isDefault="true" />
       <choice value="1"  name="Reserved" />
-   </binaryOption>   
-   
+   </binaryOption>
+
    <binaryOption key="chipctl_clkouten"
       description="CLKOUT enable"
       toolTip="Used to enable the clock on the clockout pin">
-      <choice name="Disabled" value="0"/>   
-      <choice name="Enabled"  value="1"/>   
+      <choice name="Disabled" value="0"/>
+      <choice name="Enabled"  value="1"/>
    </binaryOption>
-   
+
    <intOption key="chipctl_clkoutdiv"
       description="CLKOUT Divide Ratio"
       toolTip="Used to select the divisor for the clock on the clockout pin"
       min="1" max="8" offset="-1" value="1" />
 
-   <choiceOption key="chipctl_clkoutsel" 
+   <choiceOption key="chipctl_clkoutsel"
       description="CLKOUT select"
       toolTip="Selects the clock to output on the CLKOUT pin" >
       <choice value="0"   name="SCG CLKOUT" />
@@ -90,7 +158,7 @@
       <choice value="14"  name="RTC_CLK from SIM_LPOCLKS[RTCCLKSEL]" />
       <choice value="15"  name="QSPI_2xSFIF_CLK (if present)" />
    </choiceOption>
-   
+
    <binaryOption key="chipctl_adc_interleave_en_0"
       description="ADC interleave channel enable">
       <choice name="PTB15&lt;-ADC1_SE14, PTB0&lt;-ADC0_SE4"  value="0b0000"/>
@@ -129,7 +197,7 @@
       <choice value="1" name="Enabled"  />
    </binaryOption>
 
-   <choiceOption key="lpoclks_rtcclksel" 
+   <choiceOption key="lpoclks_rtcclksel"
       description="RTC clock (RTC_CLK) source select"
       toolTip="Selects RTC clock source for peripherals">
       <choice value="0" name="System Oscillator/DIV1 (SOSCDIV1_CLK)" />
@@ -137,8 +205,8 @@
       <choice value="2" name="RTC Clock in pin (RTC_CLKIN)" />
       <choice value="3" name="Fast IRC/DIV1 (FIRCDIV1_CLK)" />
    </choiceOption>
-   
-   <choiceOption key="lpoclks_lpoclksel" 
+
+   <choiceOption key="lpoclks_lpoclksel"
       description="LPO clock (LPO_CLK) source select"
       toolTip="Selects LPO clock source for peripherals">
       <choice value="0" name="128 kHz LPO clock (LPO12K_CLK)" />
@@ -150,7 +218,7 @@
    <template>
          <![CDATA[
          /** LPO Clock Select Register (LPOCLKS) */
-         \tuint32_t lpoclks = 
+         \tuint32_t lpoclks =
          \t   SIM_LPOCLKS_RTCCLKSEL($(lpoclks_rtcclksel))|   // RTC clock (RTC_CLK) source select
          \t   SIM_LPOCLKS_LPOCLKSEL($(lpoclks_lpoclksel))|   // LPO clock source select
          \t   SIM_LPOCLKS_LPO32KCLKEN($(lpoclks_lpo32kclken))| // 32 kHz LPO_CLK enable
@@ -170,7 +238,7 @@
          \t   SimAdc%instanceTriggerSelect_Pdb    = SIM_ADCOPT_ADC%instanceTRGSEL(0b0), //!< PDB output
          \t   SimAdc%instanceTriggerSelect_Trgmux = SIM_ADCOPT_ADC%instanceTRGSEL(0b1), //!< TRGMUX output
          \t};
-         
+
          \t/**
          \t * ADC%instance pre-trigger source selection
          \t *
@@ -200,7 +268,7 @@
          \tstatic void setAdc%instanceTrigger(SimAdc%instanceTriggerSelect simAdc%instanceTriggerSelect) {
          \t   sim->ADCOPT = (sim->ADCOPT & SIM_ADCOPT_ADC%instanceTRGSEL_MASK) | simAdc%instanceTriggerSelect;
          \t}
-         
+
          \t/**
          \t * Selects ADC%instance pre-trigger source
          \t *
@@ -223,9 +291,9 @@
       \t   SimAdcChannelInterleave_ADC0_SE8_ADC1_SE8  = SIM_CHIPCTL_ADC_INTERLEAVE_EN(0b0100),
       \t   SimAdcChannelInterleave_ADC0_SE9_ADC1_SE9  = SIM_CHIPCTL_ADC_INTERLEAVE_EN(0b1000),
       \t};
-      
+
       \t/**
-      \t * Selects supply voltage to monitor 
+      \t * Selects supply voltage to monitor
       \t */
       \tenum SimAdcSupplyMonitor {
       \t   SimAdcSupplyMonitor_Disabled     = SIM_CHIPCTL_ADC_SUPPLYEN(0)|SIM_CHIPCTL_ADC_SUPPLY(0),
@@ -238,30 +306,30 @@
       \t   SimAdcSupplyMonitor_Reserved6    = SIM_CHIPCTL_ADC_SUPPLYEN(1)|SIM_CHIPCTL_ADC_SUPPLY(6),
       \t   SimAdcSupplyMonitor_Reserved7    = SIM_CHIPCTL_ADC_SUPPLYEN(1)|SIM_CHIPCTL_ADC_SUPPLY(7),
       \t};
-      
+
       \t/**
       \t * Select Clock to output on CLKOUT pin
       \t */
       \tenum SimClkOutSelect {
       \t   SimClkOutSelect_Disabled          = SIM_CHIPCTL_CLKOUTEN(0)|SIM_CHIPCTL_CLKOUTSEL(0),  //!< Disabled
-      \t   SimClkOutSelect_SCG_CLKOUT        = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(0),  //!< SCG Clock output 
+      \t   SimClkOutSelect_SCG_CLKOUT        = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(0),  //!< SCG Clock output
       \t   SimClkOutSelect_Reserved1         = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(1),  //!< Reserved
-      \t   SimClkOutSelect_SOSCDIV2_CLK      = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(2),  //!< SOSCDIV2 clock 
+      \t   SimClkOutSelect_SOSCDIV2_CLK      = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(2),  //!< SOSCDIV2 clock
       \t   SimClkOutSelect_Reserved3         = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(3),  //!< Reserved
-      \t   SimClkOutSelect_SIRCDIV2_CLK      = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(4),  //!< SIRCDIV2 clock 
-      \t   SimClkOutSelect_Reserved5         = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(5),  //!< Reserved  
-      \t   SimClkOutSelect_FIRCDIV2_CLK      = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(6),  //!< FIRCDIV2 clock 
-      \t   SimClkOutSelect_CORE_CLK          = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(7),  //!< CORE_CLK 
-      \t   SimClkOutSelect_SPLLDIV2_CLK      = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(8),  //!< SPLLDIV2 clock 
+      \t   SimClkOutSelect_SIRCDIV2_CLK      = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(4),  //!< SIRCDIV2 clock
+      \t   SimClkOutSelect_Reserved5         = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(5),  //!< Reserved
+      \t   SimClkOutSelect_FIRCDIV2_CLK      = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(6),  //!< FIRCDIV2 clock
+      \t   SimClkOutSelect_CORE_CLK          = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(7),  //!< CORE_CLK
+      \t   SimClkOutSelect_SPLLDIV2_CLK      = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(8),  //!< SPLLDIV2 clock
       \t   SimClkOutSelect_BUS_CLK           = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(9),  //!< BUS_CLK
-      \t   SimClkOutSelect_LPO12K_CLK        = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(10), //!< LPO12K_CLK 
+      \t   SimClkOutSelect_LPO12K_CLK        = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(10), //!< LPO12K_CLK
       \t   SimClkOutSelect_QSPI_Module_CLK   = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(11), //!< QSPI Module clock
-      \t   SimClkOutSelect_LPO_CLK           = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(12), //!< LPOCLK 
+      \t   SimClkOutSelect_LPO_CLK           = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(12), //!< LPOCLK
       \t   SimClkOutSelect_QSPI_SFIF_CLK     = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(13), //!< QSPI
-      \t   SimClkOutSelect_RTC_CLK           = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(14), //!< RTC_CLK 
+      \t   SimClkOutSelect_RTC_CLK           = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(14), //!< RTC_CLK
       \t   SimClkOutSelect_QSPI_2xSFIF_CLK   = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(15), //!< QSPI
       \t};
-      
+
       \t/**
       \t *  Selects division for external clock
       \t */
@@ -275,12 +343,12 @@
       \t   SimClkOutDiv_Div7     = SIM_CHIPCTL_CLKOUTDIV(6), //!< Divide by 7
       \t   SimClkOutDiv_Div8     = SIM_CHIPCTL_CLKOUTDIV(7), //!< Divide by 8
       \t};
-      
+
       \t/**
       \t *  Controls PDB back-to-back operation
       \t *
       \t *  Determines whether PDB0.CH0, PDB1.CH1 in conjunction with ADC0.COCO[7..0] and ADC1.COCO[7..0]\n
-      \t *  operate as independent back-to-back rings or as a single larger ring 
+      \t *  operate as independent back-to-back rings or as a single larger ring
       \t */
       \tenum SimPdbBackToBack {
       \t   SimPdbBackToBack_Independent = SIM_CHIPCTL_PDB_BB_SEL(0), //!< PDB0 & PDB1 2 independent rings
@@ -298,13 +366,13 @@
       \t};\n\n
 
    ]]></template>
-   
+
    <template><![CDATA[
       \t/**
       \t *  Controls PDB back-to-back operation
       \t *
       \t *  Determines whether PDB0.CH0, PDB1.CH1 in conjunction with ADC0.COCO[7..0] and ADC1.COCO[7..0]\n
-      \t *  operate as independent back-to-back rings or as a single larger ring 
+      \t *  operate as independent back-to-back rings or as a single larger ring
       \t *
       \t * @param simPdbBackToBack Selects independent or linked operation
       \t */
@@ -326,7 +394,7 @@
       \t}
 
       \t// Chip Control register (CHIPCTL)
-      \tstatic constexpr uint32_t chipctl = 
+      \tstatic constexpr uint32_t chipctl =
       \t   SIM_CHIPCTL_SRAML_RETEN($(chipctl_sraml_reten))|     // SRAML retention enable
       \t   SIM_CHIPCTL_SRAMU_RETEN($(chipctl_sramu_reten))|     // SRAMU retention enable
       \t   SIM_CHIPCTL_ADC_SUPPLYEN($(chipctl_adc_supplyen))|    // ADC Internal supply monitoring enable
@@ -337,10 +405,10 @@
       \t   SIM_CHIPCTL_CLKOUTDIV($(chipctl_clkoutdiv))|       // CLKOUT pin divider
       \t   SIM_CHIPCTL_CLKOUTSEL($(chipctl_clkoutsel))|       // CLKOUT pin clock source select
       \t   SIM_CHIPCTL_ADC_INTERLEAVE_EN($(chipctl_adc_interleave_en_3)|$(chipctl_adc_interleave_en_2)|$(chipctl_adc_interleave_en_1)|$(chipctl_adc_interleave_en_0)); // ADC interleave channel enable
-      
+
       \t/**
       \t * Selects the clock and divider for output on the CLKOUT pin
-      \t * 
+      \t *
       \t * @param simClkOutSelect  Clock to output
       \t * @param simClkOutDiv     Divider for clock output
       \t */
@@ -349,28 +417,28 @@
       \t   sim->CHIPCTL &= ~(SIM_CHIPCTL_CLKOUTEN_MASK|SIM_CHIPCTL_CLKOUTDIV_MASK|SIM_CHIPCTL_CLKOUTSEL_MASK);
       \t   // Set divider
       \t   sim->CHIPCTL |= simClkOutDiv;
-      \t   // Enable clock 
+      \t   // Enable clock
       \t   sim->CHIPCTL |= simClkOutSelect;
       \t}
 
       \t/**
       \t * Selects the internal supply monitored on ADC0 internal channel 0.
       \t * (ADC0_SC1n[ADCH] = 010101b)
-      \t * 
+      \t *
       \t * @param simAdcSupplyMonitor
       \t */
       \tstatic void setAdcSupplyMonitoring(SimAdcSupplyMonitor simAdcSupplyMonitor) {
       \t   sim->CHIPCTL = (sim->CHIPCTL&~(SIM_CHIPCTL_ADC_SUPPLYEN_MASK|SIM_CHIPCTL_ADC_SUPPLY_MASK)) |
       \t                    simAdcSupplyMonitor;
       \t}
-      
+
       \t/**
       \t * Clear all ADC channel interleaving
       \t */
       \tstatic void clearAdcChannelInterleave() {
       \t   sim->CHIPCTL &= ~SIM_CHIPCTL_ADC_INTERLEAVE_EN_MASK;
       \t}
-         
+
       \t/**
       \t * Enable ADC channel interleave
       \t *
@@ -379,7 +447,7 @@
       \tstatic void enableAdcChannelInterleave(SimAdcChannelInterleave simAdcChannelInterleave) {
       \t   sim->CHIPCTL |= simAdcChannelInterleave;
       \t}
-         
+
       \t/**
       \t * Disable ADC channel interleave
       \t *
@@ -387,7 +455,7 @@
       \t */
       \tstatic void disableAdcChannelInterleave(SimAdcChannelInterleave simAdcChannelInterleave) {
       \t   sim->CHIPCTL &= ~simAdcChannelInterleave;
-      \t}   
+      \t}
 
       \t/**
       \t * Software trigger to TRGMUX.
@@ -398,7 +466,7 @@
       \t   sim->MISCTRL1 = SIM_MISCTRL1_SW_TRG_MASK;
       \t}\n\n
    ]]></template>
-   
+
    <template><![CDATA[
       \t/**
       \t * Get Internal LPO Frequency LPO128K_CLK
@@ -408,7 +476,7 @@
       \tstatic constexpr uint32_t getLpo128Frequency() {
       \t   return $(system_lpo_frequency);
       \t}
-      
+
       \t/**
       \t * Get External RTC clock input Frequency RTC_CLKIN
       \t *
@@ -418,7 +486,7 @@
       \t   return $(system_rtcclkin_frequency);
       \t}\n\n
    ]]></template>
-   
+
    <template namespace="usbdm"><![CDATA[
       \t/**
       \t * RTC Clock sources
@@ -440,7 +508,7 @@
       \tstatic void setRtcClockSource(SimRtcClockSource simRtcClockSource) {
       \t   sim->LPOCLKS = (sim->LPOCLKS&~SIM_LPOCLKS_RTCCLKSEL_MASK)|simRtcClockSource;
       \t}
-   
+
       \t/**
       \t * Get RTC_CLK Clock
       \t *
@@ -470,7 +538,7 @@
          \tstatic void enable%instanceClock() {
          \t   sim->LPOCLKS |= SIM_LPOCLKS_$(instance::toupper)CLKEN_MASK;
          \t}
-      
+
          \t/**
          \t * Disable $(instance::toupper)_CLK clock
          \t */
@@ -480,7 +548,7 @@
          ]]>
       </template>
    </for>
-   
+
    <template namespace="usbdm"><![CDATA[
       \t/**
       \t * LPO Clock sources
@@ -502,7 +570,7 @@
       \tstatic uint32_t getLpo32kFrequency() {
       \t   return (sim->LPOCLKS && SIM_LPOCLKS_LPO32KCLKEN_MASK)?(getLpo128Frequency()/4):0;
       \t}
-      
+
       \t/**
       \t * Get LPO1K_CLK Clock
       \t *
@@ -511,7 +579,7 @@
       \tstatic uint32_t getLpo1kFrequency() {
       \t   return (sim->LPOCLKS && SIM_LPOCLKS_LPO1KCLKEN_MASK)?(getLpo32kFrequency()/32):0;
       \t}
-   
+
       \t/**
       \t * Set Source for LPO clock
       \t *
@@ -520,7 +588,7 @@
       \tstatic void setLpoClockSource(SimLpoClockSource simLpoClockSource) {
       \t   sim->LPOCLKS = (sim->LPOCLKS&~SIM_LPOCLKS_LPOCLKSEL_MASK)|simLpoClockSource;
       \t}
-   
+
       \t/**
       \t * Get LPO_CLK Clock
       \t *
@@ -540,7 +608,7 @@
       \t   }
       \t}\n\n
    ]]></template>
-   
+
    <for keys="instance" values="0; 1; 2; 3" >
       <template namespace="usbdm">
          <![CDATA[
@@ -555,7 +623,7 @@
          ]]>
       </template>
    </for>
-     
+
    <for keys="instance" values="0; 1; 2; 3" >
       <template>
          <![CDATA[
@@ -570,7 +638,7 @@
          ]]>
       </template>
    </for>
-   
+
    <for keys="instance" values="0;1;2;3" >
       <template namespace="usbdm">
          <![CDATA[
@@ -583,7 +651,7 @@
          \t   SimFtm%instanceFault0Select_Flt0   = SIM_FTMOPT0_FTM%instanceFLTxSEL(0b000), //!< FTM%instance_FLT0 pin
          \t   SimFtm%instanceFault0Select_TrgMux = SIM_FTMOPT0_FTM%instanceFLTxSEL(0b001), //!< FTM%instance Trigger Multiplexor
          \t};
-         
+
          \t/**
          \t * FTM%instance Fault 1 input selection
          \t *
@@ -593,7 +661,7 @@
          \t   SimFtm%instanceFault1Select_Flt1   = SIM_FTMOPT0_FTM%instanceFLTxSEL(0b000), //!< FTM%instance_FLT1 pin
          \t   SimFtm%instanceFault1Select_TrgMux = SIM_FTMOPT0_FTM%instanceFLTxSEL(0b010), //!< FTM%instance Trigger Multiplexor
          \t};
-         
+
          \t/**
          \t * FTM%instance Fault 2 input selection
          \t *
@@ -606,7 +674,7 @@
          ]]>
       </template>
    </for>
-  
+
    <for keys="instance" values="0;1;2;3" >
       <template>
          <![CDATA[
@@ -614,7 +682,7 @@
          \t * Select FTM%instance fault source
          \t *
          \t * This selects between a FTM%instance Fault pin or the output of the FTM%instance trigger multiplexor
-         \t * for each fault input. 
+         \t * for each fault input.
          \t *
          \t * @param simFtm%instanceFault0Select Fault input 0 select
          \t * @param simFtm%instanceFault1Select Fault input 1 select
@@ -630,25 +698,24 @@
          ]]>
       </template>
    </for>
-   
+
    <category name="Device Parameters" description="" toolTip="Parameters controlling device">
-   
+
       <intOption key="system_lpo_frequency"
          description="Frequency of internal 128kHz LPO Clock [LPO12K_CLK]"
-         toolTip="Dependent on clock trim. [Typically ~128kHz]" 
-         locked="true" 
+         toolTip="Dependent on clock trim. [Typically ~128kHz]"
+         locked="true"
          origin="LPO128K_CLK frequency"
          units="Hz"
          value="128000"/>
-   
+
       <intOption key="system_rtcclkin_frequency"
          description="Frequency of External RTC_CLKIN Clock"
-         toolTip="Externally supplied [Typically ~32kHz]" 
-         locked="false" 
+         toolTip="Externally supplied [Typically ~32kHz]"
          origin="RTC_CLKIN frequency"
          units="Hz"
          value="32000"/>
-            
+
       <stringOption key="pdb_input_clock"   locked="true" value="/SCG/run_mode_core_clock" />
       <stringOption key="ftm0_input1_clock" locked="true" value="/SCG/run_mode_core_clock" />
       <stringOption key="ftm0_input2_clock" locked="true" value="/SCG/run_mode_core_clock" />

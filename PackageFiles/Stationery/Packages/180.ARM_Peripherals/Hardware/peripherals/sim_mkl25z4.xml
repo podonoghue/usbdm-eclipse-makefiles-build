@@ -4,6 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Integration Module" >
 
+<!-- ==================== Constants ==================== -->
+
    <constant key="generateDefault"           type="Boolean" value="false"         />
    <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
@@ -26,9 +28,6 @@
 
    <!-- Clock divider -->
    <constant key="clock_divider_type" type="Long" value="2" />
-
-   <!-- Indicates the number of PIT channels -->
-   <constant key="/PIT_NumChannels" type="Long" value="2" />
 
    <!-- DMA slots -->
    <choiceOption key="/DMAMUX0/dmamux_chcfg_src"
@@ -115,7 +114,7 @@
       derived="true"
       ref="(/MCG/mcg_c2_oscMode==/OscMode_RTC_Controlled)?1:0"
       description="RTC control of OSC0"
-      toolTip="Indicates if OSC0 is being controlled by RTC which shares XTAL/EXTAL pins">
+      toolTip="Indicates if OSC0 is being controlled by RTC which shares XTAL/EXTAL pins" >
       <choice value="0" name="OSC0 is independent"        isDefault="true" />
       <choice value="1" name="OSC0 is controlled by RTC"                   />
    </binaryOption>
@@ -128,7 +127,7 @@
 
    <!-- ************* COPC ****************** -->
 
-   <category name="COPC" description="COP Control Register">
+   <category name="COPC" description="COP Control Register" >
 
       <choiceOption key="sim_copc_copt"
          description="COP Watchdog Timeout"
@@ -151,7 +150,7 @@
          description="COP Windowed Mode"
          toolTip="Windowed mode is only supported when COP is using bus clock\n
                   The COP window is opened three quarters through the timeout period\n
-                  This is a write-once field">
+                  This is a write-once field" >
          <choice value="0"  enum="Normal"     name="Normal Mode" isDefault="true" />
          <choice value="1"  enum="WindowMode" name="Windowed Mode" />
       </binaryOption>
@@ -162,7 +161,6 @@
 
    <intOption key="system_usb_clkin_clock"
       hidden="true"
-      locked="true"
       origin="USB Clock In pin"
       units="Hz"
       description="Frequency of External USB Clock"
@@ -175,15 +173,16 @@
 
       <aliasOption key="rtc_clkin_clock" optional="true" locked="false" />
 
-      <aliasOption key="sim_sopt1_osc32ksel" locked="false" />
+      <aliasOption key="sim_sopt1_osc32ksel" locked="false" optional="true" />
       <aliasOption key="system_erclk32k_clock" />
 
       <choiceOption key="sim_sopt1_usbpower" condition="sim_sopt1_usbregen_present &amp;&amp; sim_sopt1_usbsstby_present &amp;&amp; sim_sopt1_usbvstby_present"
+         enabledBy="enablePeripheralSupport"
          valueFormat="SIM_SOPT1_USBREGEN(%s),SIM_SOPT1_USBSSTBY(%s),SIM_SOPT1_USBVSTBY(%s)"
          typeName="SimUsbPower"
          description="USB voltage regulator power control"
          toolTip="Controls when the USB voltage regulator is enabled in\n
-                  (RUN), (STOP, VLPS, LLS and VLLS) or (VLPR and VLPW) modes">
+                  (RUN), (STOP, VLPS, LLS and VLLS) or (VLPR and VLPW) modes" >
          <choice value="0,0,0"  name="Disabled in all modes"         enum="Disabled"               />
          <choice value="1,0,0"  name="Enabled in all modes"          enum="EnabledInAll"           isDefault="true" />
          <choice value="1,1,0"  name="Enabled in run and low power"  enum="EnabledInRun_LowPower"  />
@@ -194,7 +193,7 @@
 
    <!-- ************* SOPT2 ****************** -->
 
-   <category name="SOPT2" description="Clock Gating">
+   <category name="SOPT2" description="Clock Gating" >
 
       <aliasOption key="sim_sopt2_rtcclkoutsel"  optional="true" locked="false"/>
       <aliasOption key="rtc_clkout"              optional="true" />
@@ -211,108 +210,135 @@
 
    <!-- ************* SOPT4 ****************** -->
 
-   <category name="SOPT4" description="TPM signals">
-      <for keys="p" values="0;1">
-         <intOption key="TpmClkin%(p)"
-            description="TPM External clock input #%(p)"
+   <category name="SOPT4" description="TPM signals" >
+
+      <for keys="n" values="0;1" >
+         <intOption key="TpmClkin%(n)"
+            description="TPM External clock input #%(n)"
             toolTip="This input is available as a TPM external clock source"
             value="0"
             units="Hz"
          />
-         <variableTemplate variables="TpmClkin%(p)"
+         <for keys="p" dim="4" >
+            <if condition="sim_sopt4_tpm%(p)clksel_present" >
+               <equation key="Tpm%(p)ExternalItems" value="" condition="!Tpm%(p)ExternalItems" />
+               <equation key="Tpm%(p)ExternalItems" value="=Tpm%(p)ExternalItems+&quot;TpmClkin%(n);&quot;"/>
+            </if>
+         </for>
+         <variableTemplate variables="TpmClkin%(n)"
             initExpressionOnSameLine="true"
          ><![CDATA[
             \t/// %tooltip
-            \tstatic constexpr uint32_t tpmExternalClock%(p) =  %initExpression;
+            \tstatic constexpr uint32_t TpmClkin%(n) =  %initExpression;
             \t\n
          ]]></variableTemplate>
       </for>
 
-      <for keys="p" values="0;1;2">
-         <binaryOption key="sim_sopt4_tpm%(p)clksel" condition="sim_sopt4_tpm%(p)clksel_present"
-            target="Tpm%(p)ExternalClkin"
-            typeName="SimTpm%(p)ClkSel"
-            description="TPM %(p) External Clock Pin "
-            toolTip="External pin used to drive the external clock to TPM%(p) module">
-            <choice value="0"  name="TPM_CLKIN0 pin" enum="0" ref="TpmClkin0" code="tpmExternalClock0" isDefault="true" />
-            <choice value="1"  name="TPM_CLKIN1 pin" enum="1" ref="TpmClkin1" code="tpmExternalClock1"  />
-         </binaryOption>
-         <intOption key="Tpm%(p)ExternalClkin"
-            description="TMP%(p) External clock"
-            toolTip="This clock is available as the TPM%(p) external clock source"
-            locked="true"
-            derived="true"
-            units="Hz"
-         />
+      <for keys="p" dim="4" >
 
-         <clockCodeTemplate variable="sim_sopt4_tpm%(p)clksel"
-            returnFormat="%s" >
-         ><![CDATA[
-            \t/**
-            \t * Select %description
-            \t *
-            \t * @param %paramName %tooltip
-            \t */
-            \tstatic void selectTpm%(p)ExternalClock(%paramType %paramName) {
-            \t   %fieldAssignment
-            \t}
-            \t
-            \t/**
-            \t * Get %description
-            \t *
-            \t * @return Clock frequency in Hz
-            \t */
-            \tstatic uint32_t getTpm%(p)ExternalClockFrequency() {
-            \t
-            \t   switch(%maskingExpression) {
-            %body
-            \t      default: return 0;
-            \t   }
-            \t}\n\n
-         ]]></clockCodeTemplate>
+         <if condition="sim_sopt4_tpm%(p)clksel_present" >
+            <binaryOption key="sim_sopt4_tpm%(p)clksel"
+               addToVar="Tpm%(p)ExternalItems"
+               enabledBy="enablePeripheralSupport"
+               target="Tpm%(p)ExternalClkin"
+               typeName="SimTpm%(p)ClkSel"
+               description="TPM %(p) External Clock Pin "
+               toolTip="External pin used to drive the external clock to TPM%(p) module" >
+               <choice value="0"  name="TPM_CLKIN0 pin" enum="0" ref="TpmClkin0" code="TpmClkin0" isDefault="true" />
+               <choice value="1"  name="TPM_CLKIN1 pin" enum="1" ref="TpmClkin1" code="TpmClkin1"  />
+            </binaryOption>
+
+            <intOption key="Tpm%(p)ExternalClkin"
+               addToVar="Tpm%(p)ExternalItems"
+               description="TMP%(p) External clock"
+               toolTip="This clock is available as the TPM%(p) external clock source"
+               locked="true"
+               derived="true"
+               units="Hz"
+            />
+
+            <clockCodeTemplate variable="sim_sopt4_tpm%(p)clksel"
+               returnFormat="%s" >
+            ><![CDATA[
+               \t/**
+               \t * Select %description
+               \t *
+               \t * @param %paramName %tooltip
+               \t */
+               \tstatic void setTpm%(p)ClockIn(%paramType %paramName) {
+               \t   %fieldAssignment
+               \t}
+               \t
+               \t/**
+               \t * Get %description
+               \t *
+               \t * @return Clock frequency in Hz
+               \t */
+               \tstatic uint32_t getTpm%(p)ClockInFrequency() {
+               \t
+               \t   switch(%maskingExpression) {
+               %body
+               \t      default: return 0;
+               \t   }
+               \t}\n\n
+            ]]></clockCodeTemplate>
+         </if>
       </for>
 
-      <for keys="p" values=";1;2">
+      <for keys="p" values="0;1;2" >
          <choiceOption key="sim_sopt4_tpm%(p)ch0src" condition="sim_sopt4_tpm%(p)ch0src_present"
+            addToVar="Tpm%(p)ExternalItems"
+            enabledBy="enablePeripheralSupport"
             typeName="SimTpm%(p)Ch0Src"
             description="TPM %(p) channel 0 input capture source"
             toolTip="Source for TPM channel input capture\n
-               NOTE: When the TPM is not in input capture mode, clear this field">
+               NOTE: When the TPM is not in input capture mode, clear this field" >
             <choice value="0" name="TPM CH0 signal"            enum="IcPin"  isDefault="true" />
             <choice value="1" name="CMP0 output"               enum="Cmp0"   />
             <choice value="3" name="USB start of frame pulse"  enum="UsbSof" condition="%(p)==1" />
          </choiceOption>
       </for>
    </category>
+   <!--
+   <printVar key="Tpm0ExternalItems"/>
+   <printVar key="Tpm1ExternalItems"/>
+   <printVar key="Tpm2ExternalItems"/>
+   -->
 
    <!-- ************* SOPT5 ****************** -->
 
-   <category name="SOPT5" description="UART signals">
+   <category name="SOPT5" description="UART signals" >
 
-      <for keys="n" values="0;1;2">
+      <for keys="n" values="0;1;2" >
          <for keys   = "name:Name:NAME"
               values = "uart%(n)   : Uart%(n)   : UART%(n);
                         lpuart%(n) : Lpuart%(n) : LPUART%(n)" >
             <binaryOption key="sim_sopt5_%(name)ode" condition="sim_sopt5_%(name)ode_present"
+               addToVar="%(Name)ExternalItems"
+               enabledBy="enablePeripheralSupport"
                typeName="Sim%(Name)Drive"
                description="%(NAME) Open Drain"
-               toolTip="Enables Open Drain output">
+               toolTip="Enables Open Drain output" >
                <choice value="0" name="Push-pull"  enum="PushPull"  />
                <choice value="1" name="Open-drain" enum="OpenDrain" />
             </binaryOption>
 
             <choiceOption key="sim_sopt5_%(name)rxsrc" condition="sim_sopt5_%(name)rxsrc_present"
+               addToVar="%(Name)ExternalItems"
+               enabledBy="enablePeripheralSupport"
                typeName="Sim%(Name)RxSrc"
                description="%(NAME) receive data source"
-               toolTip="Source for the %(NAME) receive data">
+               toolTip="Source for the %(NAME) receive data" >
                <choice value="0" name="Rx pin"        enum="RxPin"  isDefault="true" />
                <choice value="1" name="CMP0 output"   enum="Cmp0"   />
             </choiceOption>
 
             <choiceOption key="sim_sopt5_%(name)txsrc" condition="sim_sopt5_%(name)txsrc_present"
+               addToVar="%(Name)ExternalItems"
+               enabledBy="enablePeripheralSupport"
                typeName="Sim%(Name)TxSrc"
                description="%(NAME) transmit data source"
-               toolTip="Source for the %(NAME) transmit data">
+               toolTip="Source for the %(NAME) transmit data" >
                <choice value="0" name="Tx pin" isDefault="true"             enum="Direct" />
                <choice value="1" name="Tx pin modulated by TPM1 channel 0"  enum="ModulatedByTpm1Ch0" />
                <choice value="2" name="Tx pin modulated by TPM2 channel 0"  enum="ModulatedByTpm2Ch0" condition="/TPM2/_present" />
@@ -323,9 +349,11 @@
 
    <!-- ************* SOPT7 ****************** -->
 
-   <category name="SOPT7" description="ADC signals">
-      <for keys="adc" values="0;1">
+   <category name="SOPT7" description="ADC signals" >
+      <for keys="adc" values="0;1" >
          <choiceOption key="sim_sopt7_adc%(adc)trigger" condition="sim_sopt7_adc%(adc)alttrgen_present"
+            addToVar="Adc%(adc)ExternalItems"
+            enabledBy="enablePeripheralSupport"
             typeName="SimAdc%(adc)TriggerMode"
             valueFormat="SIM_SOPT7_ADC%(adc)ALTTRGEN(%s),SIM_SOPT7_ADC%(adc)PRETRGSEL(%s)"
             description="ADC%(adc) trigger mode"
@@ -339,9 +367,11 @@
          </choiceOption>
 
          <choiceOption key="sim_sopt7_adc%(adc)trgsel" condition="sim_sopt7_adc%(adc)pretrgsel_present"
+            addToVar="Adc%(adc)ExternalItems"
+            enabledBy="enablePeripheralSupport"
             typeName="SimAdc%(adc)TriggerSrc"
             description="ADC%(adc) trigger source"
-            toolTip="ADC Trigger source in STOP and VLPS modes, or when ADC Alternative Trigger is active">
+            toolTip="ADC Trigger source in STOP and VLPS modes, or when ADC Alternative Trigger is active" >
             <choice value="0"  name="External trigger pin input (EXTRG_IN)"   enum="External"     isDefault="true" />
             <choice value="1"  name="CMP 0 output"                            enum="Cmp0"         condition="/CMP0/_present"   />
             <choice value="2"  name="CMP 1 output"                            enum="Cmp1"         condition="/CMP1/_present"   />
@@ -393,8 +423,9 @@
          <aliasOption key="/MCG/enableClockConfiguration[%(n)]" locked="false" />
          <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]"          locked="false" />
 
-         <category name="Peripheral Clocks" description="Peripheral Clock Selection">
+         <category name="Peripheral Clocks" description="Peripheral Clock Selection" >
             <choiceOption key="sim_sopt2_clkoutsel[%(n)]" condition="sim_sopt2_clkoutsel_present"
+               enabledBy="enablePeripheralSupport"
                target="clockOut[%(n)]"
                typeName="SimClkoutSel"
                description="CLKOUT pin clock"
@@ -412,6 +443,7 @@
             </choiceOption>
 
             <intOption key="clockOut[%(n)]" condition="sim_sopt2_clkoutsel_present"
+               enabledBy="enablePeripheralSupport"
                derived="true"
                locked="true"
                units="Hz"
@@ -419,12 +451,13 @@
                toolTip="Clock available on CLKOUT pin" />
 
             <choiceOption key="sim_sopt2_pllfllsel[%(n)]"
+               enabledBy="enablePeripheralSupport"
                typeName="SimPeripheralClockSource"
                target="system_peripheral_clock[%(n)]"
                description="Peripheral Clock"
                toolTip="Clock for various peripherals (LPUART, TPM etc.)\n
                         If there is a peripheral clock divider then this is the\n
-                        Frequency of the undivided peripheral clock">
+                        Frequency of the undivided peripheral clock" >
                <choice value="0"  name="MCGFLLCLK clock"   ref="/MCG/system_mcgfllclk_clock[%(n)]"     enum="McgFllClk"  code="SystemMcgFllClock"   isDefault="true" />
                <choice value="1"  name="MCGPLLCLK clock/2" ref="(/MCG/system_mcgpllclk_clock[%(n)])/2" enum="McgPllClk"  code="SystemMcgPllClock/2" />
             </choiceOption>
@@ -438,10 +471,11 @@
                toolTip="Frequency of Peripheral Clock available to various peripherals"  />
 
             <choiceOption key="sim_sopt2_usbsrc[%(n)]" condition="sim_sopt2_usbsrc_present"
+               enabledBy="enablePeripheralSupport"
                target="system_usbfs_clock[%(n)]"
                typeName="SimUsbFullSpeedClockSource"
                description="USB Clock"
-               toolTip="Source for the USB clock">
+               toolTip="Source for the USB clock" >
                <choice value="0"  name="External bypass clock (USB_CLKIN)" enum="External"      ref="system_usb_clkin_clock"           />
                <choice value="1"  name="Peripheral Clock (PLL/FLL)"        enum="PeripheralClk" ref="system_peripheral_clock[%(n)]"    isDefault="true" />
             </choiceOption>
@@ -449,6 +483,7 @@
             <aliasOption key="system_usb_clkin_clock" locked="false" optional="true" />
 
             <intOption key="system_usbfs_clock[%(n)]"  condition="sim_sopt2_usbsrc_present"
+               enabledBy="enablePeripheralSupport"
                errorPropagate="error"
                derived="true"
                locked="true"
@@ -479,7 +514,7 @@
                   value="0" />
             </for>
 
-            <for keys="p" values=";0;1">
+            <for keys="p" values=";0;1" >
                <for keys   = "name       : Name       : NAME       : bNAME"
                     values = "uart%(p)   : Uart%(p)   : UART%(p)   : UART   ;
                               lpuart%(p) : Lpuart%(p) : LPUART%(p) : LPUART ;
@@ -487,6 +522,7 @@
                               tpm%(p)    : Tpm%(p)    : TPM%(p)    : TPM    " >
 
                   <choiceOption key="sim_sopt2_%(name)src[%(n)]" condition="sim_sopt2_%(name)src_present"
+                     enabledBy="enablePeripheralSupport"
                      typeName="Sim%(Name)ClockSource"
                      target="system_%(name)_clock[%(n)]"
                      description="%(NAME) Clock"
@@ -536,14 +572,14 @@
 
    <!-- ************* CLKDIV1 ****************** -->
 
-         <category name="CLKDIV1" description="System Clock Dividers">
+         <category name="CLKDIV1" description="System Clock Dividers" >
             <choiceOption key="sim_clkdiv1_outdiv1[%(n)]"  condition="sim_clkdiv1_outdiv1_present"
                enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
                typeName="SimCoreClkDivider"
                locked="true"
                description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
                toolTip="Clocks the ARM Cortex-M4 core and bus masters\n
-                        Divides MCGOUTCLK Clock to generate system_core_clock.">
+                        Divides MCGOUTCLK Clock to generate system_core_clock." >
                <choice value="0"   name="/1"  enum="Direct" />
                <choice value="1"   name="/2"  enum="DivBy2" isDefault="true" />
                <choice value="2"   name="/3"  enum="DivBy3"/>
@@ -596,11 +632,11 @@
       \t\n
    ]]></template>
 
-   <for keys=" clock                            : name "
-      values=" system_core_clock[0]             : SystemCoreClock;
-               system_bus_clock[0]              : SystemBusClock;
-               system_timer_clock[0]            : SystemTimerClock;
-         ">
+   <for keys=" clock                  : name "
+      values=" system_core_clock[0]   : SystemCoreClock;
+               system_bus_clock[0]    : SystemBusClock;
+               system_timer_clock[0]  : SystemTimerClock
+         " >
       <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
          \t/**
          \t *  %description
@@ -640,7 +676,7 @@
       \t}\n\n
    ]]></template>
 
-   <variableTemplate variables="sim_clkdiv1_outdiv1[0],sim_clkdiv1_outdiv2[0],sim_clkdiv1_outdiv3[0],sim_clkdiv1_outdiv4[0]"><![CDATA[
+   <variableTemplate variables="sim_clkdiv1_outdiv1[0],sim_clkdiv1_outdiv2[0],sim_clkdiv1_outdiv3[0],sim_clkdiv1_outdiv4[0]" ><![CDATA[
       \t/** Reset clock divider value if clock not fully configured */
       \tstatic constexpr uint32_t sim_clkdiv1 = %initExpression;
       \t\n
@@ -649,7 +685,7 @@
    <!-- ************* Common ****************** -->
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL" dim="=numberOfClockSettings">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL" dim="=numberOfClockSettings" >
       <param type="long" value="48MHz"  />     <!-- RUN Core          -->
       <param type="long" value="24MHz"  />     <!-- RUN Bus           -->
 

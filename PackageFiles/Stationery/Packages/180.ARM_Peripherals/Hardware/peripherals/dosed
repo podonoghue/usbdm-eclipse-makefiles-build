@@ -6,15 +6,29 @@ cd ${HOME_DIR}
 
 #exit
 
-FROM="deleteVariable key="
-TO="deleteVariables variables="
+read -d '' FROMx <<EOF 
+\<aliasOption key=\"=_scgc_clock\" locked=\"false\" condition=\"_scgc_clock\" /\>
+EOF
+
+read -d '' TOx <<EOF 
+      \<aliasOption key=\"=_scgc_clock\" locked=\"false\" condition=\"_scgc_clock\" /\>\\\n\
+      \<for keys=\"v\" values=\"=/SIM/\$(_Class)ExternalItems\" condition=\"/SIM/\$(_Class)ExternalItems\" >\\\n\
+         <aliasOption key=\"/SIM/%(v)\"           optional=\"true\" locked=\"false\" /\>\\\n\
+      \</for\> 
+EOF
+
+FROM="FrequencyFrequency"
+TO="Frequency"
+
+echo from "${FROM}"
+echo to "${TO}"
 
 echo starting
 rm -r new
 mkdir new
 
 for filename in *.xml; do
-   echo sed  "s#${FROM}#${TO}#g" "${filename}" "new/${filename}"
+   #echo sed  "s#${FROM}#${TO}#g" "${filename}" "new/${filename}"
    sed  "s#${FROM}#${TO}#g" "${filename}" >"new/${filename}"
 done
 

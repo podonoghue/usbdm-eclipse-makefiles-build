@@ -19,6 +19,7 @@
 #####################################################################################
 #  History
 #
+#  V4.12.1.320 - Added resetAndConnectTarget()
 #  V4.12.1.180 - Removed unnecessary semi-colons
 #  V4.12.1.180 - Messages directed to stderr
 #  V4.12.1.180 - Changed to reset special vendor
@@ -212,6 +213,33 @@ proc loadSymbols {} {
 
 ######################################################################################
 #
+#  This is used for the initial connection to the target
+#
+proc resetAndConnectTarget { args } {
+
+   puts "resetAndConnectTarget args"
+   
+   # Cycle power if feature available   
+   if [expr ( [getcap] & $::BDM_CAP_VDDCONTROL) != 0] {
+      settargetvdd off
+      pinSet rst=0
+      after $::RESET_DURATION
+      settargetvdd on
+      after $::POWER_ON_RECOVERY
+   }
+   reset sh 
+   
+   if { [catch {connect} rc] } {
+      puts "Failed connect"
+      return rc
+   }
+
+   puts "rc = $rc"
+   return $rc
+}
+
+######################################################################################
+#
 #
 proc initTarget { args } {
    # Not used
@@ -245,9 +273,9 @@ proc massEraseTarget { } {
    #if [expr ( [getcap] & $::BDM_CAP_VDDCONTROL) != 0] {
    #   puts stderr "massEraseTarget{} - Cycling Vdd"
    #   settargetvdd off
-   #   after 200
+   #   after $::RESET_DURATION
    #   settargetvdd on
-   #   after 10
+   #   after $::POWER_ON_RECOVERY
    #}
 
    # Connect with reset asserted, ignore errors as may be secured
@@ -261,7 +289,7 @@ proc massEraseTarget { } {
 
    # Wait for Flash Ready
    for {set retry 0} {$retry < 20} {incr retry} {
-      puts stderr "massEraseTarget{} - Waiting for Flash ready"
+      puts -nonewline stderr "massEraseTarget{} - Waiting for Flash ready  "
       set mdmApStatus [rcreg $::MDM_AP_Status]
       if [expr (($mdmApStatus & $::MDM_AP_ST_MASS_FLASH_RDY) != 0)] {
          puts stderr "massEraseTarget{} - MDM_AP_ST_MASS_FLASH_RDY asserted OK"
@@ -291,7 +319,7 @@ proc massEraseTarget { } {
 
    # Wait for Flash Mass Erase to complete
    for {set retry 0} {$retry < 20} {incr retry} {
-      puts stderr "massEraseTarget{} - Waiting for Flash Mass Erase to complete"
+      puts -nonewline stderr "massEraseTarget{} - Waiting for Flash Mass Erase to complete"
       set mdmApControl [rcreg $::MDM_AP_Control]
       if [expr (($mdmApControl & $::MDM_AP_C_MASS_ERASE) == 0)] {
          puts stderr "massEraseTarget{} - MDM_AP_C_MASS_ERASE cleared - OK"
@@ -300,8 +328,7 @@ proc massEraseTarget { } {
       after 50
    }
 
-   rcreg $::MDM_AP_Control
-   rcreg $::MDM_AP_Status
+   rcreg $::MDM_AP_Control; rcreg $::MDM_AP_Status
 
    puts stderr "massEraseTarget{} - Releasing MDM_AP_C_DEBUG_REQUEST|MDM_AP_C_SYSTEM_RESET|MDM_AP_C_MASS_ERASE"
    wcreg $::MDM_AP_Control 0
@@ -315,20 +342,17 @@ proc massEraseTarget { } {
    puts stderr "massEraseTarget{} - Waiting reset recovery time ($::RESET_RECOVERY)"
    after $::RESET_RECOVERY
 
-   rcreg $::MDM_AP_Control
-   rcreg $::MDM_AP_Status
+   rcreg $::MDM_AP_Control; rcreg $::MDM_AP_Status
 
    puts stderr "massEraseTarget{} - reset s v (Ignoring errors)"
    catch {reset s v}
    rcreg $::MDM_AP_Status
   
-   rcreg $::MDM_AP_Control
-   rcreg $::MDM_AP_Status
+   rcreg $::MDM_AP_Control; rcreg $::MDM_AP_Status
 
    set rc [ isUnsecure ]
    
-   rcreg $::MDM_AP_Status
-   rcreg $::MDM_AP_Control
+   rcreg $::MDM_AP_Control; rcreg $::MDM_AP_Status
    
    return $rc
 }

@@ -300,6 +300,9 @@ public:
 #endif // /FTM/irqHandlingMethod
 
 public:
+   // Make visible
+   using Info::configure;
+
 $(/FTM/classInfo: // No class Info found)
 $(/FTM/InitMethod:// /FTM/InitMethod not found)
 $(/FTM/ChannelInitMethod: // /FTM/ChannelInitMethod not found)
@@ -664,8 +667,7 @@ public:
 
    // Make these visible
    using Info::QuadInit;
-   using Info::DefaultQuadInitValue;
-
+$(/FTM/quadinit_reference: // /FTM/quadinit_reference not found)
    /** Hardware instance pointer */
    static constexpr HardwarePtr<FTMQUAD_Type> ftm = Info::baseAddress;
 

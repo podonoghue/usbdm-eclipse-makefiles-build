@@ -103,10 +103,9 @@
       description="Clock Source"
       typeName="TpmClockSource"
       toolTip="Selects the clock source for the module" >
-      <choice value="0" name="Disabled"         enum="Disabled"       ref="disabled"                   code="0" />
-      <choice value="1" name="System TPM Clock" enum="SystemTpmClock" ref="system_tpm_clock"           code="SimInfo::getTpmClock()"                  isDefault="true"  />
-      <choice value="2" name="External clock"   enum="ExternalClock"  ref="/SIM/$(_name)ExternalClock" code="SimInfo::get$(_Class)ClockInFrequency()" condition="/SIM/sim_sopt4_$(_name)clksel" />
-      <choice value="2" name="External clock"   enum="ExternalClock"  ref="/SIM/$(_name)ExternalClock" code="SimInfo::get$(_Class)ClockInFrequency()" condition="/SIM/sim_sopt9_$(_name)clksel" />
+      <choice value="0" name="Disabled"         enum="Disabled"       ref="disabled"                    code="0" />
+      <choice value="1" name="System TPM Clock" enum="SystemTpmClock" ref="system_tpm_clock"            code="SimInfo::getTpmClock()"                  isDefault="true"  />
+      <choice value="2" name="External clock"   enum="ExternalClock"  ref="/SIM/$(_Class)ExternalClkin" code="SimInfo::get$(_Class)ClockInFrequency()" condition="/SIM/$(_Class)ExternalClkin" />
    </choiceOption>
 
    <binaryOption key="externalClockUsed"
@@ -2608,25 +2607,14 @@
    \ttypedef $(_Baseclass)QuadDecoder_T<$(_Class)Info> $(_Baseclass)QuadDecoder$(_instance);\n
    ]]></template>
 
-   <!-- ************* Signal mapping ****************** -->
-
-   <category name="SIM" description="Pin mapping and clock enables"
-      toolTip="Thes settings only have effect if the SIM configuration is enabled"
-   >
-      <aliasOption key="/SIM/sim_scgc2_$(_name)"        optional="true" locked="false" />
-      <aliasOption key="/SIM/$(_basename)_clkin0"       optional="true" locked="false" />
-      <aliasOption key="/SIM/$(_basename)_clkin1"       optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt4_$(_name)clksel"  optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt9_$(_name)clksel"  optional="true" locked="false" />
-      <aliasOption key="/SIM/$(_name)ExternalClock"     optional="true" locked="false" />
-
-      <aliasOption key="/SIM/sim_sopt4_$(_name)ch0src"  optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt9_$(_name)ch0src"  optional="true" locked="false" />
-   </category>
-
    <!-- ************* SIM configuration ****************** -->
-   <category name="Advanced" description="SIM configuration">
+
+   <category name="Advanced" description="SIM configuration"
+      toolTip="Thes settings only have effect if the SIM configuration is enabled" >
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
    </category>
    <deleteVariables variables="_scgc_clock"  mustExist="false" />
 

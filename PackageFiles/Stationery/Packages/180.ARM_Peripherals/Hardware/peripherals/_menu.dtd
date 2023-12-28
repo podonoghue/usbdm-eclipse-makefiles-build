@@ -41,8 +41,16 @@
    <!ATTLIST fragment xmlns:xi CDATA #IMPLIED>
 
 <!ELEMENT list ((%structure_items;|%general_items;)*) >
+   <!-- Name for variable associated with list -->
    <!ATTLIST list name         CDATA        #IMPLIED>
+   <!-- Key for option - also used as visible name if not provided -->
+   <!ATTLIST list key          CDATA        #IMPLIED>
+   <!-- Description for variable associated with list -->
    <!ATTLIST list description  CDATA        #IMPLIED>
+   <!-- Dynamic expression that disables and hides this list -->
+   <!ATTLIST list hiddenBy     CDATA        #IMPLIED>
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST list condition    CDATA        #IMPLIED>
 
 <!ELEMENT section ((%structure_items;|%general_items;)*) >
    <!ATTLIST section name         CDATA        #IMPLIED>
@@ -144,7 +152,7 @@
    <!ATTLIST category  hidden       (false|true) #IMPLIED>
 
 <!-- Expandable grouping with associated variable -->
-<!ELEMENT categoryOption ((%general_items;)*) >
+<!ELEMENT categoryOption  ((%structure_items;|%general_items;)*) >
    <!-- Key for option - also used as visible name if not provided -->
    <!ATTLIST categoryOption key                 CDATA        #REQUIRED>
    <!-- Description  of variable -->
@@ -209,14 +217,15 @@
    <!-- Tooltip for GUI and code generation -->
    <!ATTLIST aliasOption toolTip           CDATA        #IMPLIED>
    <!-- Condition evaluated during parsing that enables processing of this option -->
-   <!ATTLIST aliasOption condition        CDATA        #IMPLIED>
+   <!ATTLIST aliasOption condition        CDATA         #IMPLIED>
    <!-- Allows aliased variable to be altered by user (unless locked) -->
-   <!ATTLIST aliasOption locked          (false)      #IMPLIED>
+   <!ATTLIST aliasOption locked           (false)       #IMPLIED>
    <!-- Hides option in GUI -->
-   <!ATTLIST aliasOption hidden            (true)      #IMPLIED>
+   <!ATTLIST aliasOption hidden           (true)        #IMPLIED>
    
-   <!-- Indicates key may refer to non-existant variable -->
-   <!ATTLIST aliasOption optional          (true)       #IMPLIED>
+   <!-- Indicates requirement for existence of variable 
+        (true=may not exist but keep, required=must exist, discard=discard immediately if non-existent)-->
+   <!ATTLIST aliasOption optional         (true|required|discard)  #IMPLIED>
 
 <!ELEMENT timeOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -325,6 +334,8 @@
    <!ATTLIST intOption derivedFrom   CDATA        #IMPLIED>
    <!ATTLIST intOption radix         CDATA        #IMPLIED>
    <!ATTLIST intOption isNamedClock  (true)       #IMPLIED>
+   <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
+   <!ATTLIST intOption addToVar            CDATA        #IMPLIED>
    
   
 <!ELEMENT bitmaskOption EMPTY >
@@ -377,6 +388,8 @@
    <!ATTLIST bitmaskOption pinMap         CDATA        #IMPLIED>
    <!-- List of pin mappings applied if option disabled#Expression to enable use of any pin map -->
    <!ATTLIST bitmaskOption disabledPinMap CDATA        #IMPLIED>
+   <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
+   <!ATTLIST bitmaskOption addToVar            CDATA        #IMPLIED>
 
 <!ELEMENT floatOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -425,6 +438,8 @@
    <!-- Maximum value (displayed value) -->
    <!ATTLIST floatOption max           CDATA        #IMPLIED>
    <!ATTLIST floatOption derivedFrom   CDATA        #IMPLIED>
+   <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
+   <!ATTLIST floatOption addToVar            CDATA        #IMPLIED>
 
 <!ELEMENT stringOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -460,6 +475,8 @@
    <!ATTLIST stringOption enum             CDATA        #IMPLIED>
    <!ATTLIST stringOption target           CDATA        #IMPLIED>
    <!ATTLIST stringOption code             CDATA        #IMPLIED>
+   <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
+   <!ATTLIST StringOption addToVar            CDATA        #IMPLIED>
   
 <!ELEMENT numericListOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -487,6 +504,8 @@
    <!ATTLIST numericListOption min           CDATA        #IMPLIED>
    <!ATTLIST numericListOption max           CDATA        #IMPLIED>
    <!ATTLIST numericListOption derivedFrom   CDATA        #IMPLIED>
+   <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
+   <!ATTLIST numericListOption addToVar            CDATA        #IMPLIED>
   
 <!-- Signal to add a dependency -->
 
@@ -515,6 +534,8 @@
    <!ATTLIST pinListOption disabledValue      CDATA        #IMPLIED>
    <!ATTLIST pinListOption size               CDATA        #IMPLIED>
    <!ATTLIST pinListOption derivedFrom        CDATA        #IMPLIED>
+   <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
+   <!ATTLIST pinListOption addToVar            CDATA        #IMPLIED>
 
 <!ELEMENT clockSelectionOption ((choice)*) >
    <!-- Visible name of option - also used for key if not provided -->
@@ -560,6 +581,8 @@
    <!ATTLIST clockSelectionOption replace             CDATA        #IMPLIED>
    <!-- Value to take when disabled --> 
    <!ATTLIST clockSelectionOption disabledValue       CDATA        #IMPLIED>
+   <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
+   <!ATTLIST clockSelectionOption addToVar            CDATA        #IMPLIED>
    
 <!ELEMENT choiceOption ((choice|choiceExpansion)*) >
    <!-- Visible name of option - also used for key if not provided -->
@@ -634,6 +657,8 @@
    <!ATTLIST choiceOption modify              CDATA        #IMPLIED>
    <!-- Allow variable to be replaced by later variable of same name -->
    <!ATTLIST choiceOption replace             CDATA        #IMPLIED>
+   <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
+   <!ATTLIST choiceOption addToVar            CDATA        #IMPLIED>
    
    <!-- List of pin mappings applied if option disabled#Expression to enable use of any pin map -->
    <!ATTLIST choiceOption disabledPinMap      CDATA        #IMPLIED>
@@ -667,12 +692,14 @@
    <!ATTLIST choiceExpansion keys                      CDATA        #REQUIRED>
    <!-- Dimension for index e.g. '6' => [0..6) '1,4' => [1..4)-->
    <!ATTLIST choiceExpansion dim                       CDATA        #REQUIRED> 
-   <!-- Value for choice (substutions will be applied) --> 
+   <!-- Value for choice (substitutions will be applied) --> 
    <!ATTLIST choiceExpansion value                     CDATA        #REQUIRED> 
-   <!-- Name of choice (substutions will be applied) --> 
+   <!-- Name of choice (substitutions will be applied) --> 
    <!ATTLIST choiceExpansion name                      CDATA        #REQUIRED>
-   <!-- Enum for choice (substutions will be applied) --> 
+   <!-- Enum for choice (substitutions will be applied) --> 
    <!ATTLIST choiceExpansion enum                      CDATA        #IMPLIED>
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST choiceExpansion condition           CDATA        #IMPLIED>
 
 <!ELEMENT binaryOption (choice?, choice?) >
    <!-- Visible name of option - also used for key if not provided -->
@@ -749,6 +776,8 @@
    <!-- Allows this option to modify previous option with the same key 
         The variable behind this option is shared -->
    <!ATTLIST binaryOption modify              CDATA        #IMPLIED>
+   <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
+   <!ATTLIST binaryOption addToVar            CDATA        #IMPLIED>
 
    <!-- List of pin mappings applied if option disabled#Expression to enable use of any pin map -->
    <!ATTLIST binaryOption disabledPinMap      CDATA        #IMPLIED>
@@ -794,6 +823,8 @@
    <!ATTLIST irqOption modify        CDATA        #IMPLIED>
    <!-- Replace existing variable associated with option quietly -->
    <!ATTLIST irqOption replace        CDATA        #IMPLIED>
+   <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
+   <!ATTLIST choiceOption addToVar            CDATA        #IMPLIED>
 
 <!ELEMENT rtcTimeOption (#PCDATA)>
    <!-- Key for option - also used as visible name if not provided -->

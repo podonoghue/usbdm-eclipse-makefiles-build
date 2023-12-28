@@ -369,7 +369,7 @@ $(/GPIO/AccessFunctions: #error /GPIO/AccessFunctions not found)
  * @tparam polarity              Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<PcrValue defPcrValue, PinIndex pinIndex, Polarity polarity>
-class Gpio_T : public Gpio, public Pcr_T<defPcrValue, pinIndex> {
+class Gpio_T : public Gpio, public Pcr_T<gpioPcrValue(defPcrValue), pinIndex> {
 
    static constexpr int bitNum = int(pinIndex) % 32;
 
@@ -382,18 +382,17 @@ private:
     */
    Gpio_T(const Gpio_T&) = delete;
    Gpio_T(Gpio_T&&) = delete;
+protected:
+   constexpr Gpio_T() : Gpio(gpioAddress, bitNum, polarity) {};
 
+public:
    static constexpr PcrInit defaultPcrValue = gpioPcrValue(defPcrValue);
 
    /// GPIO hardware address
    static constexpr uint32_t gpioAddress = Gpio::getGpioAddress(pinIndex);
 
-protected:
-   constexpr Gpio_T() : Gpio(gpioAddress, bitNum, polarity) {};
-
-public:
    /** PCR associated with this GPIO pin */
-   using Pcr = Pcr_T<defPcrValue, pinIndex>;
+   using Pcr = Pcr_T<defaultPcrValue, pinIndex>;
 
    /** Get base address of GPIO hardware as pointer to struct */
    static constexpr HardwarePtr<GPIO_Type> gpio = gpioAddress;
@@ -440,15 +439,15 @@ public:
     * @note Resets the Pin Control Register value (PCR value).
     * @note Resets the pin output value to the inactive state
     *
-    * @param[in] pcrValue PCR value to use in configuring pin (excluding MUX value). See pcrValue()
+    * @param[in] pcrInit PCR value to use in configuring pin (excluding MUX value). See pcrValue()
     */
-   static void setInOut(PcrValue pcrValue) {
+   static void setInOut(const PcrInit &pcrInit) {
       // Make input initially
       setIn();
       // Set inactive pin state (if later made output)
       setInactive();
       // Configure PCR
-      Pcr::setPCR(pcrValue);
+      Pcr::setPCR(pcrInit.value);
    }
 
 $(/GPIO/set_in_out: // /GPIO/set_in_out not found)   
@@ -492,15 +491,15 @@ $(/GPIO/set_in_out: // /GPIO/set_in_out not found)
     * @note Resets the pin value to the inactive state
     * @note Use setOut() for a lightweight change of direction without affecting other pin settings.
     *
-    * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value). See pcrValue()
+    * @param[in] pcrInit PCR value to use in configuring port (excluding MUX value). See pcrValue()
     */
-   static void setOutput(PcrValue pcrValue) {
+   static void setOutput(const PcrInit &pcrInit) {
       // Set initial level before enabling pin drive
       setInactive();
       // Make pin an output
       setOut();
       // Configure pin
-      Pcr::setPCR(pcrValue);
+      Pcr::setPCR(pcrInit.value);
    }
 
 $(/GPIO/set_output: // /GPIO/set_output not found)   
@@ -541,13 +540,13 @@ $(/GPIO/set_output: // /GPIO/set_output not found)
     * @note Resets the Pin Control Register value (PCR value).
     * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
     *
-    * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value)
+    * @param[in] pcrInit PCR value to use in configuring port (excluding MUX value)
     */
-   static void setInput(PcrValue pcrValue) {
+   static void setInput(const PcrInit &pcrInit) {
       // Make pin an input
       setIn();
       // Configure pin
-      Pcr::setPCR(pcrValue);
+      Pcr::setPCR(pcrInit.value);
    }
 
 $(/GPIO/set_input: // /GPIO/set_input not found)   
@@ -997,8 +996,8 @@ class GpioTable_T : public Gpio_T<Info::info[index].pcrValue, Info::info[index].
  * @tparam right                Bit number of rightmost bit in GPIO (inclusive)
  * @tparam FlipMask             Polarity of all bits in field. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
  */
-template<PcrValue defPcrValue, PinIndex Left, PinIndex Right, uint32_t FlipMask=ActiveHigh>
-class GpioField_T : public GpioField, public PcrBase_T<Left>{
+template<PcrValue defPcrValue, PinIndex Left, PinIndex Right, Polarity FlipMask=ActiveHigh>
+class GpioField_T : public GpioField, public PcrBase_T<mapPinToPort(Left)>{
 
 private:
    /**
@@ -1035,7 +1034,7 @@ public:
 
 public:
    /** Port associated with this GPIO Field */
-   using Port = PcrBase_T<Left>;
+   using Port = PcrBase_T<mapPinToPort(Left)>;
 
    /** Bit number of left bit within underlying port hardware */
    static constexpr unsigned LEFT = int(Left)%32;
@@ -1360,7 +1359,7 @@ $(/GPIO/field_set_input: // /GPIO/field_set_input not found)
  * @tparam right
  * @tparam polarity
  */
-template<class Info, PinIndex left, PinIndex right, uint32_t polarity>
+template<class Info, PinIndex left, PinIndex right, Polarity polarity>
 class GpioFieldTable_T :
       public GpioField_T<Info::info[right].pcrValue, left, right, polarity> {
 

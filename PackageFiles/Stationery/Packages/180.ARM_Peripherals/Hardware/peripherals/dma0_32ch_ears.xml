@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"
 ?>
-<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- dma0_32ch_ears16.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="DMA Module">
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <xi:include href="dma_base.xml"/>
+   <xi:include href="dma_base_mk.xml"/>
 
-</peripheralPage>
+</fragment>

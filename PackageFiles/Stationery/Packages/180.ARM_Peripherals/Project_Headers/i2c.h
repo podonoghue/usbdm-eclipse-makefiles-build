@@ -41,6 +41,10 @@ class I2c : public I2cBasicInfo {
 
 public:
 
+#if $(/PCR/_present:false) // /PCR/_present
+   CreatePinChecker("I2C");
+#endif
+
    /** States for the I2C state machine */
    enum I2C_State { i2c_idle, i2c_txData, i2c_rxData, i2c_rxAddress };
 
@@ -514,10 +518,10 @@ public:
     */
    I2cBase_T(const I2cBasicInfo::Init &init) : I2c(Info::baseAddress) {
 
-#ifdef PORT_PCR_MUX_MASK
+#if $(/PCR/_present:false) // /PCR/_present
       // Check pin assignments
-      PcrBase::CheckPinExistsAndIsMapped<Info::sclPinIndex>::check();
-      PcrBase::CheckPinExistsAndIsMapped<Info::sdaPinIndex>::check();
+      I2c::CheckPinExistsAndIsMapped<Info::sclPinIndex>::check();
+      I2c::CheckPinExistsAndIsMapped<Info::sdaPinIndex>::check();
 #endif
 
       thisPtr = this;

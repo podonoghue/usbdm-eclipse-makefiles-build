@@ -178,7 +178,7 @@
 
       <constant key="sim_sopt1_ramsize" type="String" description="RAM Size" />
 
-      <aliasOption key="sim_sopt1_osc32ksel" locked="false" />
+      <aliasOption key="sim_sopt1_osc32ksel" locked="false" optional="true" />
       <aliasOption key="system_erclk32k_clock" />
 
       <choiceOption key="sim_sopt1_usbpower" condition="sim_sopt1_usbregen_present &amp;&amp; sim_sopt1_usbsstby_present &amp;&amp; sim_sopt1_usbvstby_present"
@@ -302,28 +302,33 @@
 
    <category name="SOPT4" description="FTM signals" >
 
-      <for keys="clk" values="0;1" >
-         <intOption key="ftm_clkin%(clk)" condition="sim_sopt4_ftm0clksel_present||sim_sopt4_ftm1clksel_present"
-            toolTip="User supplied value for the clock available on FTM_CLKIN%(clk) pin"
-            description="FTM_CLKIN%(clk) frequency"
+      <for keys="n" values="0;1" >
+         <intOption key="FtmClkin%(n)"
+            description="FTM External clock input #%(n)"
+            toolTip="This input is available as a FTM external clock source"
             value="0"
             units="Hz"
          />
-         <variableTemplate
-            variables="ftm_clkin%(clk)"
-            initExpressionOnSameLine="true" >
-         <![CDATA[
-            \t/// %description - %tooltip
-            \tstatic constexpr uint32_t ftm_clkin%(clk) = %initExpression
+         <for keys="f" dim="6" >
+            <if condition="sim_sopt4_ftm%(f)clksel_present" >
+               <equation key="Ftm%(f)ExternalItems" value="" condition="!Ftm%(f)ExternalItems" />
+               <equation key="Ftm%(f)ExternalItems" value="=Ftm%(f)ExternalItems+&quot;FtmClkin%(n);&quot;"/>
+            </if>
+         </for>
+         <variableTemplate variables="FtmClkin%(n)"
+            initExpressionOnSameLine="true"
+         ><![CDATA[
+            \t/// %tooltip
+            \tstatic constexpr uint32_t FtmClkin%(n) =  %initExpression;
             \t\n
-         ]]>
-         </variableTemplate>
+         ]]></variableTemplate>
       </for>
 
       <for keys="f" dim="4" >
 
          <title description="FTM%(f)" />
          <binaryOption key="sim_sopt4_ftm0trg0src" condition="sim_sopt4_ftm0trg0src_present&amp;&amp;(%(f)==0)"
+            addToVar="Ftm%(f)ExternalItems"
             enabledBy="enablePeripheralSupport"
             typeName="SimFtm0Trg0Src"
             description="FTM0 Hardware Trigger 0 Source"
@@ -333,6 +338,7 @@
          </binaryOption>
 
          <binaryOption key="sim_sopt4_ftm0trg1src" condition="sim_sopt4_ftm0trg1src_present&amp;&amp;(%(f)==0)"
+            addToVar="Ftm%(f)ExternalItems"
             enabledBy="enablePeripheralSupport"
             typeName="SimFtm0Trg1Src"
             description="FTM0 Hardware Trigger 1 Source"
@@ -342,6 +348,7 @@
          </binaryOption>
 
          <choiceOption key="sim_sopt4_ftm3trg0src" condition="sim_sopt4_ftm3trg0src_present&amp;&amp;(%(f)==3)"
+            addToVar="Ftm%(f)ExternalItems"
             enabledBy="enablePeripheralSupport"
             typeName="SimFtm3Trg0Src"
             description="FTM3 Hardware Trigger 0 Source"
@@ -351,6 +358,7 @@
          </choiceOption>
 
          <choiceOption key="sim_sopt4_ftm3trg1src" condition="sim_sopt4_ftm3trg1src_present&amp;&amp;(%(f)==3)"
+            addToVar="Ftm%(f)ExternalItems"
             enabledBy="enablePeripheralSupport"
             typeName="SimFtm3Trg1Src"
             description="FTM3 Hardware Trigger 1 Source"
@@ -361,15 +369,17 @@
 
          <for keys="p" values="0;1;2;3" >
             <binaryOption key="sim_sopt4_ftm%(p)clksel" condition="sim_sopt4_ftm%(p)clksel_present&amp;&amp;(%(f)==%(p))"
+               addToVar="Ftm%(f)ExternalItems"
                target="ftm%(p)ExternalClock"
                enabledBy="enablePeripheralSupport"
                typeName="SimFtm%(p)ClkSel"
                description="FTM%(p) External Clock Pin"
                toolTip="External pin used to drive the clock to the FTM module" >
-               <choice value="0"  name="FTM_CLKIN0 pin" enum="FtmClkin0" ref="ftm_clkin0" code="ftm_clkin0" isDefault="true" />
-               <choice value="1"  name="FTM_CLKIN1 pin" enum="FtmClkin1" ref="ftm_clkin1" code="ftm_clkin1" />
+               <choice value="0"  name="FTM_CLKIN0 pin" enum="FtmClkin0" ref="FtmClkin0" code="FtmClkin0" isDefault="true" />
+               <choice value="1"  name="FTM_CLKIN1 pin" enum="FtmClkin1" ref="FtmClkin1" code="FtmClkin1" />
             </binaryOption>
-            <intOption key="ftm%(p)ExternalClock" condition="sim_sopt4_ftm%(p)clksel_present&amp;&amp;(%(f)==%(p))"
+            <intOption key="ftm%(p)ExternalClock" condition="sim_sopt4_ftm%(p)clksel&amp;&amp;(%(f)==%(p))"
+               addToVar="Ftm%(f)ExternalItems"
                toolTip="The frequency of the external clock selected for FTM%(p)"
                description="FTM%(p) external clock"
                locked="true"
@@ -379,6 +389,7 @@
          </for>
 
          <choiceOption key="sim_sopt4_ftm1ch0src" condition="sim_sopt4_ftm1ch0src_present&amp;&amp;(%(f)==1)"
+            addToVar="Ftm%(f)ExternalItems"
             enabledBy="enablePeripheralSupport"
             typeName="SimFtm1Ch0Src"
             description="FTM 1 channel 0 input capture source"
@@ -391,6 +402,7 @@
          </choiceOption>
 
          <choiceOption key="sim_sopt4_ftm2ch0src" condition="sim_sopt4_ftm2ch0src_present&amp;&amp;(%(f)==2)"
+            addToVar="Ftm%(f)ExternalItems"
             enabledBy="enablePeripheralSupport"
             typeName="SimFtm2Ch0Src"
             description="FTM2 channel 0 input capture source"
@@ -402,6 +414,7 @@
          </choiceOption>
 
          <binaryOption key="sim_sopt4_ftm2ch1src" condition="sim_sopt4_ftm2ch1src_present&amp;&amp;(%(f)==2)"
+            addToVar="Ftm%(f)ExternalItems"
             enabledBy="enablePeripheralSupport"
             typeName="SimFtm2Ch1Src"
             description="FTM2 channel 1 input capture source"
@@ -413,6 +426,7 @@
 
          <for keys="ftmNum" values="0;1;2;3" >
             <binaryOption key="sim_sopt4_ftm%(ftmNum)flt0" condition="sim_sopt4_ftm%(ftmNum)flt0_present&amp;&amp;(%(f)==%(ftmNum))"
+               addToVar="Ftm%(f)ExternalItems"
                enabledBy="enablePeripheralSupport"
                typeName="SimFtm%(ftmNum)Flt0"
                description="FTM%(ftmNum) Fault 0 Select"
@@ -424,6 +438,7 @@
 
          <for keys="ftmNum" values="0" >
             <binaryOption key="sim_sopt4_ftm%(ftmNum)flt1" condition="sim_sopt4_ftm%(ftmNum)flt1_present&amp;&amp;(%(f)==%(ftmNum))"
+            addToVar="Ftm%(f)ExternalItems"
                enabledBy="enablePeripheralSupport"
                typeName="SimFtm%(ftmNum)Flt1"
                description="FTM%(ftmNum) Fault 1 Select"
@@ -435,6 +450,7 @@
 
          <for keys="ftmNum" values="0" >
             <binaryOption key="sim_sopt4_ftm%(ftmNum)flt2" condition="sim_sopt4_ftm%(ftmNum)flt2_present&amp;&amp;(%(f)==%(ftmNum))"
+               addToVar="Ftm%(f)ExternalItems"
                enabledBy="enablePeripheralSupport"
                typeName="SimFtm%(ftmNum)Flt2"
                description="FTM%(ftmNum) Fault 2 Select"
@@ -446,6 +462,7 @@
 
          <for keys="ftmNum" values="0" >
             <binaryOption key="sim_sopt4_ftm%(ftmNum)flt3" condition="sim_sopt4_ftm%(ftmNum)flt3_present&amp;&amp;(%(f)==%(ftmNum))"
+               addToVar="Ftm%(f)ExternalItems"
                enabledBy="enablePeripheralSupport"
                typeName="SimFtm%(ftmNum)Flt3"
                description="FTM%(ftmNum) Fault 3 Select"
@@ -503,6 +520,7 @@
               values = "uart%(n)   : Uart%(n)   : UART%(n);
                         lpuart%(n) : Lpuart%(n) : LPUART%(n)" >
             <choiceOption key="sim_sopt5_%(name)rxsrc" condition="sim_sopt5_%(name)rxsrc_present"
+               addToVar="%(Name)ExternalItems"
                enabledBy="enablePeripheralSupport"
                typeName="Sim%(Name)RxSrc"
                description="%(NAME) receive data source"
@@ -513,6 +531,7 @@
             </choiceOption>
 
             <choiceOption key="sim_sopt5_%(name)txsrc" condition="sim_sopt5_%(name)txsrc_present"
+               addToVar="%(Name)ExternalItems"
                enabledBy="enablePeripheralSupport"
                typeName="Sim%(Name)TxSrc"
                description="%(NAME) transmit data source"
@@ -530,6 +549,7 @@
    <category name="SOPT7" description="ADC signals" >
       <for keys="adc" values="0;1" >
          <choiceOption key="sim_sopt7_adc%(adc)trigger" condition="sim_sopt7_adc%(adc)alttrgen_present"
+            addToVar="Adc%(adc)ExternalItems"
             enabledBy="enablePeripheralSupport"
             typeName="SimAdc%(adc)TriggerMode"
             valueFormat="SIM_SOPT7_ADC%(adc)ALTTRGEN(%s),SIM_SOPT7_ADC%(adc)PRETRGSEL(%s)"
@@ -544,6 +564,7 @@
          </choiceOption>
 
          <choiceOption key="sim_sopt7_adc%(adc)trgsel" condition="sim_sopt7_adc%(adc)pretrgsel_present"
+            addToVar="Adc%(adc)ExternalItems"
             enabledBy="enablePeripheralSupport"
             typeName="SimAdc%(adc)TriggerSrc"
             description="ADC%(adc) trigger source"
@@ -573,6 +594,7 @@
    <category name="SOPT8" description="FTM output modulation" >
       <for keys="ch" values="0;1;2;3;4;5;6;7" >
          <binaryOption key="sim_sopt8_ftm0och%(ch)src" condition="sim_sopt8_ftm0och%(ch)src_present"
+            addToVar="Ftm0ExternalItems"
             typeName="SimFtm0Ch%(ch)OutputSrc"
             description="FTM0 channel %(ch) output source"
             toolTip="Allows modulation of FTM output" >
@@ -583,6 +605,7 @@
 
       <for keys="ch" values="0;1;2;3;4;5;6;7" >
          <binaryOption key="sim_sopt8_ftm3och%(ch)src"  condition="sim_sopt8_ftm3och%(ch)src_present"
+            addToVar="Ftm3ExternalItems"
             typeName="SimFtm3Ch%(ch)OutputSrc"
             description="FTM3 channel %(ch) output source"
             toolTip="Allows modulation of FTM output" >

@@ -581,7 +581,7 @@
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      // Only set call-backs if feature enabled
       \t      Info::setCallback(init.callbackFunction);
-      \t      enableNvicInterrupts(init.irqlevel);
+      \t      Info::enableNvicInterrupts(init.irqlevel);
       \t   }
       \t\n
    ]]></template>

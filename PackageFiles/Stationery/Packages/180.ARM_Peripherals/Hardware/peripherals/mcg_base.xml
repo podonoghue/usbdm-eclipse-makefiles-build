@@ -125,6 +125,7 @@
          description="Clock configuration[%(n)]"
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_%(n)"
+         locked="false"
          disabledValue="=(%(n)==0)?&quot;Reset Configuration&quot;:&quot;Disabled&quot;" >
 
          <if condition="%(n)==0" >
@@ -1874,7 +1875,7 @@
    </template>
 
    <!-- ERRATA -->
-   <category name="Hardware bugs" description="" >
+   <category name="Hardware bugs" description="Errata" >
       <binaryOption key="ERRATA_E2448"
          description="Flash prefetch could result in incorrect read data"
          toolTip="Issue: Flash prefetch could result in incorrect read data when CLKDIV1 changed\n

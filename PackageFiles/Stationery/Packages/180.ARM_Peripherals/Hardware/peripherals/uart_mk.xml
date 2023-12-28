@@ -2,6 +2,43 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- lpuart_def.xml -->
 
+<!--
+    * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
+    *  $(_name)         => e.g FTM2 => ftm2
+    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
+    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
+    *  $(_Class)        => e.g FTM2 => Ftm2
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
+    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+-->
+
+<!--
+    * Template substitutions
+    *
+    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
+    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
+    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
+    * %description[index]             Description from controlVar e.g. Compare Function Enable
+    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
+    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
+    * %params                         Formatted parameter list for function
+    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
+    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
+    * %paramType[index]               As for %paramType
+    * %paramName[index]               As for %paramName
+    * %valueExpression                Numeric variable value e.g. 0x3
+    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %variable[index]                Variable name from condition
+    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * %register[index]                Register associated with variable e.g. adc->APCTL1
+    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+-->
+
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="$(_BASENAME)">
 
    <!-- Enable for this peripheral -->
@@ -26,11 +63,11 @@
       <choice value="true"  name="Generate code for $(_NAME)"/>
    </binaryOption>
 
-   <constant key="irq_pattern"              type="String"  value="&quot;^UART%i_?((RxTx|Error|Lon)|.*)?$&quot;"  />
-   <constant key="irq_ClassHandler"         type="String"  value="&quot;%c%i::irq$2Handler&quot;"                />
-   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"                      />
-   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"                      />
-   <constant key="irq_call"                 type="String"  value="&quot;&quot;"                      />
+   <constant key="irq_pattern"               type="String"  value="&quot;^$(_BASENAME)%i_?((RxTx|Error|Lon)|.*)?$&quot;"  />
+   <constant key="irq_ClassHandler"          type="String"  value="&quot;%c%i::irq$2Handler&quot;"                        />
+   <constant key="irq_parameters"            type="String"  value="&quot;&quot;"                      />
+   <constant key="irq_dummy_parameters"      type="String"  value="&quot;&quot;"                      />
+   <constant key="irq_call"                  type="String"  value="&quot;&quot;"                      />
    <constant key="generateDefault"           type="Boolean" value="false"         />
    <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
@@ -70,10 +107,6 @@
     * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
 -->
 
-   <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src[]"              optional="true" locked="false" />
-   <aliasOption key="/SIM/system_uart$(_instance)_fixedclocksource[]"   optional="true"/>
-   <aliasOption key="/SIM/system_uart$(_instance)_clock[]"              optional="true" />
-
    <intOption key="oversampleRatio"  condition="uart_c4_osr_present"
       description="Number of samples per bit"
       toolTip="This value determines the number of times an Rx bit is sampled.\n
@@ -81,7 +114,7 @@
        value="8" min="4" max="32"
       />
 
-   <template  condition="uart_c4_osr_present"><![CDATA[
+   <template  condition="oversampleRatio" ><![CDATA[
    \t//! Number of samples per bit
    \tstatic constexpr uint32_t oversampleRatio = $(oversampleRatio);\n\n
    ]]></template>
@@ -89,8 +122,8 @@
    <choiceOption key="defaultBaudRate"
       valueFormat="%s"
       typeName="UartBaudRate"
-      description="UART default baud rate"
-      toolTip="Used by default UART setup for stdio">
+      description="$(_BASENAME) default baud rate"
+      toolTip="Used by default $(_BASENAME) setup for stdio">
       <choice value="110"     name="110"     enum="110"    />
       <choice value="300"     name="300"     enum="300"    />
       <choice value="600"     name="600"     enum="600"    />
@@ -116,7 +149,7 @@
       <choice value="1"   name="Interrupt" enum="Interrupt" />
    </choiceOption>
 
-   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
       variables="uart_c2_tcie" ><![CDATA[
       \t/**
       \t * Set %description
@@ -137,7 +170,7 @@
       <choice value="1"   name="Interrupt" enum="Interrupt" />
    </choiceOption>
 
-   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
       variables="uart_c2_ilie" ><![CDATA[
       \t/**
       \t * Set %description
@@ -170,7 +203,7 @@
       <choice value="1,1"   name="DMA"       enum="Dma"       />
    </choiceOption>
 
-   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
        variables="uartTxEmptyAction" ><![CDATA[
       \t/**
       \t * Set %description
@@ -180,12 +213,12 @@
       \tvoid setTransmitEmptyAction(%params) const {
       \t   uart->C2 = (uart->C2 & ~UART_C2_TIE_MASK)   | %paramExpression; \n
    ]]></variableTemplate>
-   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
       variables="uartTxEmptyAction"
       condition="uart_c5_tdmas_present" ><![CDATA[
       \t   uart->C5 = (uart->C5 & ~UART_C5_TDMAS_MASK) | %paramExpression>>8; \n
    ]]></variableTemplate>
-   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
        variables="uartTxEmptyAction" ><![CDATA[
       \t}\n\n
    ]]></variableTemplate>
@@ -211,7 +244,7 @@
       <choice value="1,1"   name="DMA"       enum="Dma"       />
    </choiceOption>
 
-   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
       variables="uartRxFullAction" ><![CDATA[
       \t/**
       \t * Set %description
@@ -221,12 +254,12 @@
       \tvoid setReceiveFullAction(%params) const {
       \t   uart->C2 = (uart->C2 & ~UART_C2_RIE_MASK)   | %paramExpression;\n
    ]]></variableTemplate>
-   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
       variables="uartRxFullAction"
       condition="uart_c5_rdmas_present" ><![CDATA[
       \t   uart->C5 = (uart->C5 & ~UART_C5_RDMAS_MASK) | %paramExpression>>8;\n
    ]]></variableTemplate>
-   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
       variables="uartRxFullAction" ><![CDATA[
       \t}\n\n
    ]]></variableTemplate>
@@ -268,12 +301,6 @@
        value="50" min="1" max="1000"
       />
 
-   <category name="Advanced" description="Advanced options">
-      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)ode"   optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)txsrc" optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" optional="true" locked="false" />
-   </category>
-
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.UartValidate">
    </validate>
@@ -285,26 +312,26 @@
    </projectActionList>
 
    <template><![CDATA[
-   \t//! Indicates whether the UART needs a write to clear status errors
-   \tstatic constexpr bool statusNeedsWrite = false;
-   \t
-   \t//! Default Baud rate used if not explicitly given
-   \tstatic constexpr uint32_t defaultBaudRate = $(defaultBaudRate);
-   \t
-   \t//! Default buffer size for receive queue when interrupt driven
-   \tstatic constexpr unsigned receiveBufferSize = $(receiveBufferSize);
-   \t
-   \t//! Default buffer size for transmit queue when interrupt driven
-   \tstatic constexpr unsigned transmitBufferSize = $(transmitBufferSize);
+      \t//! Indicates whether the $(_BASENAME) needs a write to clear status errors
+      \tstatic constexpr bool statusNeedsWrite = true;
+      \t
+      \t//! Default Baud rate used if not explicitly given
+      \tstatic constexpr uint32_t defaultBaudRate = $(defaultBaudRate);
+      \t
+      \t//! Default buffer size for receive queue when interrupt driven
+      \tstatic constexpr unsigned receiveBufferSize = $(receiveBufferSize);
+      \t
+      \t//! Default buffer size for transmit queue when interrupt driven
+      \tstatic constexpr unsigned transmitBufferSize = $(transmitBufferSize);
 
-   \t/**
-   \t * Get input clock frequency
-   \t *
-   \t * @return Input clock frequency as a uint32_t in Hz
-   \t */
-   \tstatic inline uint32_t getInputClockFrequency() {
-   \t   return SimInfo::getUart$(_instance)Clock();
-   \t}\n\n
+      \t/**
+      \t * Get input clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic inline uint32_t getInputClockFrequency() {
+      \t   return SimInfo::getUart$(_instance)Clock();
+      \t}\n\n
    ]]></template>
 
    <template key="/$(_BASENAME)/Present"  ><![CDATA[\ ||\ 1]]></template>
@@ -329,6 +356,16 @@
    <!-- ************* SIM configuration ****************** -->
    <category name="Advanced" description="SIM configuration">
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title/>
+      <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src[]"              optional="true" locked="false" />
+      <aliasOption key="/SIM/system_uart$(_instance)_fixedclocksource[]"   optional="true"/>
+      <aliasOption key="/SIM/system_uart$(_instance)_clock[]"              optional="true" />
+      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)ode"   optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)txsrc" optional="true" locked="false" />
+      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" optional="true" locked="false" />
    </category>
    <deleteVariables variables="_scgc_clock"  mustExist="false" />
 

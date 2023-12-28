@@ -49,6 +49,20 @@
       description="Number of DMA channels"
       toolTip="The number of DMA channels available"/>
 
+   <intOption key="NumLowChannels" condition="dmamux_chcfg_low_dim"
+      locked="true"
+      derived="true"
+      value="=dmamux_chcfg_low_dim"
+      description="Number of low DMA channels"
+      toolTip="The number of DMA channels available"/>
+
+   <intOption key="NumHighChannels" condition="dmamux_chcfg_high_dim"
+      locked="true"
+      derived="true"
+      value="=dmamux_chcfg_high_dim"
+      description="Number of high DMA channels"
+      toolTip="The number of DMA channels available"/>
+
    <intOption key="NumPeriodicChannels" locked="true" derived="true"
       value="=/PIT/pit_channel_dim"
       description="Number of DMA channels with periodic feature"
@@ -65,6 +79,30 @@
          \t\n
       ]]></variableTemplate>
    </for>
+
+   <choiceOption key="dma_low_channel_num" condition="NumLowChannels"
+      hidden="true"
+      valueFormat="%s"
+      enumType="uint8_t"
+      typeName="DmaChannelLowNum"
+      description="DMA Low channel numbers"
+      toolTip="Identifies Low DMA channel" >
+      <choice value="(1&lt;&lt;6)"  name="All DMA channels" enum="All"  />
+      <choice value="(1&lt;&lt;7)"  name="No DMA channel"   enum="None" />
+      <choiceExpansion keys="ch" dim="=NumLowChannels" value="%(ch)" name="Channel %(ch)" enum="%(ch)" />
+   </choiceOption>
+
+   <choiceOption key="dma_high_channel_num" condition="NumHighChannels"
+      hidden="true"
+      valueFormat="%s"
+      enumType="uint8_t"
+      typeName="DmaChannelHighNum"
+      description="DMA High channel numbers"
+      toolTip="Identifies Low DMA channel" >
+      <choice value="(1&lt;&lt;6)"  name="All DMA channels" enum="All"  />
+      <choice value="(1&lt;&lt;7)"  name="No DMA channel"   enum="None" />
+      <choiceExpansion keys="ch" dim="=NumLowChannels,NumLowChannels+NumHighChannels" value="%(ch)" name="Channel %(ch)" enum="%(ch)" />
+   </choiceOption>
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
@@ -100,13 +138,13 @@
          >
       </choiceOption>
 
-      <choiceOption key="dmamux_chcfg_source[%(ch)]" condition="/DMAMUX0/dmamux_chcfg_src_low&amp;&amp;(%(ch)&lt;16)"
+      <choiceOption key="dmamux_chcfg_low_source[%(ch)]" condition="/DMAMUX0/dmamux_chcfg_src_low&amp;&amp;(%(ch)&lt;16)"
          enabledBy="dmamux_chcfg_mode[%(ch)]>0"
          derivedFrom="/DMAMUX0/dmamux_chcfg_src_low"
          >
       </choiceOption>
 
-      <choiceOption key="dmamux_chcfg_source[%(ch)]" condition="/DMAMUX0/dmamux_chcfg_src_high&amp;&amp;(%(ch)&gt;=16)"
+      <choiceOption key="dmamux_chcfg_high_source[%(ch)]" condition="/DMAMUX0/dmamux_chcfg_src_high&amp;&amp;(%(ch)&gt;=16)"
          enabledBy="dmamux_chcfg_mode[%(ch)]>0"
          derivedFrom="/DMAMUX0/dmamux_chcfg_src_high"
          >
@@ -115,10 +153,13 @@
 
 <!-- Setters and getters -->
 
-   <for keys="field           : get   : set   : genCode                 : name"
+   <for keys="field                   : get   : set   : genCode                 : name"
         values="
-         dmamux_chcfg_mode[]    : true  : true  : enableGettersAndSetters : ChannelMode;
-         dmamux_chcfg_source[]  : true  : true  : enableGettersAndSetters : Source" >
+         dmamux_chcfg_mode[]          : true  : true  : enableGettersAndSetters : ChannelMode  ;
+         dmamux_chcfg_source[]        : true  : true  : enableGettersAndSetters : Source       ;
+         dmamux_chcfg_low_source[]    : true  : true  : enableGettersAndSetters : LowSource    ;
+         dmamux_chcfg_high_source[16] : true  : true  : enableGettersAndSetters : HighSource   "
+          >
       <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
       ><![CDATA[
          \t/**
@@ -173,13 +214,13 @@
       \t * static const $(_Class)::Init $(_name)Init {
       \t *    {
       \t *    DmaChannelNum_3,
-      \t *    DmamuxChcfgEnbl_RequestDirectlyRouted , // DMA Channel Enable - Channel enabled
-      \t *    DmamuxSlot_TPM0_Channel2,               // Mapping of DMA slot to DMA channel - TPM0 Channel 2
+      \t *    DmamuxSlot_TPM0_Channel2,   // Mapping of DMA slot to DMA channel - TPM0 Channel 2
+      \t *    DmamuxMode_Continuous ,     // DMA Channel Enable - Channel enabled
       \t *    },
       \t *    {
       \t *    DmaChannelNum_1,
-      \t *    DmamuxChcfgEnbl_PeriodicTriggeringEnabled ,   // DMA Channel Enable - Channel enabled and throttled by PIT channel
-      \t *    DmamuxSlot_TPM0_Overflow,                     // Mapping of DMA slot to DMA channel - TPM0 overflow
+      \t *    DmamuxSlot_TPM0_Overflow,   // Mapping of DMA slot to DMA channel - TPM0 overflow
+      \t *    DmamuxMode_Throttled ,      // DMA Channel Enable - Channel enabled and throttled by PIT channel
       \t *    },
       \t * };
       \t *
@@ -212,7 +253,7 @@
    ]]></template>
 
    <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="dmamux_chcfg_mode[],dmamux_chcfg_trig[],dmamux_chcfg_source[]"
+      variables="dmamux_chcfg_mode[],dmamux_chcfg_source[],dmamux_chcfg_low_source[],dmamux_chcfg_high_source[16]"
    ><![CDATA[
       \t   /// Channel Configuration Register
       \t   uint8_t %registerName = 0;\n\n
@@ -221,6 +262,7 @@
    <!--   Constructors -->
 
    <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      condition="!dma_low_channel_num"
       linePadding="xxx" >
    <![CDATA[
       \t   /**
@@ -239,10 +281,60 @@
       \t\n
    ]]>
    </template>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="dma_low_channel_num,dmamux_chcfg_low_source[]"
+      nonDefaultParams="2"
+      linePadding="xxx" >
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for Dma ChannelNum
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(
+      %params, Types... rest) : Init(rest...) {
+      \t
+      \t      channelNum     = DmaChannelNum(%paramName0);
+      \t      %registerName1 = (%registerName1&~%mask1) |
+      \t                       %paramName1;
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="dma_high_channel_num,dmamux_chcfg_high_source[16]"
+      nonDefaultParams="2"
+      linePadding="xxx" >
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for Dma ChannelNum
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(
+      %params, Types... rest) : Init(rest...) {
+      \t
+      \t      channelNum     = DmaChannelNum(%paramName0);
+      \t      %registerName1 = (%registerName1&~%mask1) |
+      \t                        %paramName1;
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+
    <for keys="r"
       values="
             dmamux_chcfg_mode[];
-            dmamux_chcfg_trig[];
             dmamux_chcfg_source[]
             " >
       <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
@@ -280,12 +372,37 @@
    </template>
    <for keys="ch" dim="=/DMA$(_instance)/NumChannels" >
       <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(dmamux_chcfg_mode[%(ch)]>0)"
-         variables="dmamux_chcfg_mode[%(ch)],dmamux_chcfg_trig[%(ch)],dmamux_chcfg_source[%(ch)]"
+         condition="!dmamux_chcfg_low_source[%(ch)]&amp;&amp;!dmamux_chcfg_high_source[%(ch)]"
+         variables="dmamux_chcfg_source[%(ch)],dmamux_chcfg_mode[%(ch)]"
          terminator=","
          separator=","
       ><![CDATA[
          \t   {\n
          \t   DmaChannelNum_%(ch),
+         \t   %initExpression
+         \t   },\n
+      ]]></variableTemplate>
+      <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(dmamux_chcfg_mode[%(ch)]>0)"
+         condition="dmamux_chcfg_low_source[%(ch)]"
+         variables="dmamux_chcfg_low_source[%(ch)],dmamux_chcfg_mode[%(ch)]"
+         terminator=","
+         separator=","
+      ><![CDATA[
+         \t   {\n
+         \t   // Low source
+         \t   DmaChannelLowNum_%(ch),
+         \t   %initExpression
+         \t   },\n
+      ]]></variableTemplate>
+      <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(dmamux_chcfg_mode[%(ch)]>0)"
+         condition="dmamux_chcfg_high_source[%(ch)]"
+         variables="dmamux_chcfg_high_source[%(ch)],dmamux_chcfg_mode[%(ch)]"
+         terminator=","
+         separator=","
+      ><![CDATA[
+         \t   {\n
+         \t   // High source
+         \t   DmaChannelHighNum_%(ch),
          \t   %initExpression
          \t   },\n
       ]]></variableTemplate>
@@ -438,6 +555,9 @@
    <!-- ************* SIM configuration ****************** -->
    <category name="Advanced" description="SIM configuration">
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
    </category>
    <deleteVariables variables="_scgc_clock"  mustExist="false" />
 

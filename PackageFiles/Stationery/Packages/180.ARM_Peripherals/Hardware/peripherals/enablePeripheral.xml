@@ -229,13 +229,15 @@
             <!-- Construct equation to check if interrupts are enabled on any instance sharing the same struct -->
             <equation key="_enable" value="=&quot;false&quot;" />
             <for keys="instance" values="=_instanceList" >
-               <equation
-                  key="_enable"
-                  condition="=&quot;$(_STRUCTNAME)&quot;==/%(instance)/structName"
-                  value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/irqHandlingMethod&quot;"
-               />
+               <if condition="/%(instance)/_irqCount" >
+                  <equation
+                     key="_enable"
+                     condition="=&quot;$(_STRUCTNAME)&quot;==/%(instance)/structName"
+                     value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/irqHandlingMethod&quot;"
+                  />
+               </if>
             </for>
-            <!-- stringOption key="yyy" value="=_enable"/ -->
+            <!--  printVar key="_enable"/ -->
 
             <!-- Enable for shared code needed by all instances of peripheral -->
             <binaryOption key="/$(_STRUCTNAME)/generateSharedIrqInfo" name="/$(_STRUCTNAME)/generateSharedIrqInfo"
@@ -256,10 +258,12 @@
             <!-- Construct equation to check if interrupts are enabled on any instance -->
             <equation key="_enable" value="=&quot;false&quot;" />
             <for keys="instance" values="=_instanceList" >
-               <equation
-                  key="_enable"
-                  value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/irqHandlingMethod&quot;"
-               />
+               <if condition="/%(instance)/_irqCount" >
+                  <equation
+                     key="_enable"
+                     value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/irqHandlingMethod&quot;"
+                  />
+               </if>
             </for>
             <!-- stringOption key="yyy" value="=_enable"/ -->
 

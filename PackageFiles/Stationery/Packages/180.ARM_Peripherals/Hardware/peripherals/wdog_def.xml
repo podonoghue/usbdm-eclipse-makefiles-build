@@ -890,6 +890,9 @@
 
    <category name="Advanced" description="SIM configuration" >
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
       <aliasOption key="/SIM/sim_scgc4_ewm" locked="false" optional="true" />
    </category>
    <deleteVariables variables="_scgc_clock"  mustExist="false" />

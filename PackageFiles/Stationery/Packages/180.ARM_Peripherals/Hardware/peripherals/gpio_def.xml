@@ -8,7 +8,6 @@
    <constant key="irq_pattern"      type="String"  value="&quot;^PORT$(_instance)$&quot;"        />
    <constant key="irq_ClassHandler" type="String"  value="&quot;Port$(_instance)::irqHandler&quot;" />
 
-
    <constant key="suppressInstance"          type="Boolean"  value="true"         />
    <constant key="suppressIrqArray"          type="Boolean" value="true"                />
    <constant key="irq_parameters"            type="String"  value="&quot;&quot;"        />
@@ -417,7 +416,7 @@
    ]]>
    </template>
 
-   <template codeGenCondition="irqHandlingMethod" >
+   <template codeGenCondition="irqHandlingMethod" condition="irqHandlingMethod" >
    <![CDATA[
       \t/** Callback function for Universal Asynchronous Receiver/Transmitter */
       \tstatic CallbackFunction sCallback;
@@ -454,7 +453,7 @@
    ]]>
    </template>
 
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" condition="irqHandlingMethod" >
    <![CDATA[
       \t/**
       \t * Callback function for Universal Asynchronous Receiver/Transmitter

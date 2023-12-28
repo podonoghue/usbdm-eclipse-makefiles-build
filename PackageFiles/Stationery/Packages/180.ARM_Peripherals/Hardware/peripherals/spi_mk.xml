@@ -183,31 +183,19 @@
       <choice value="true"  name="Supported" />
    </binaryOption>
 
-   <bitmaskOption key="spi_mcr_pcsisValue" condition="spi_mcr_pcsis_present"
-      bitmask="0xFF0000"
-      bitList="PCSIS0,PCSIS1,PCSIS2,PCSIS3,PCSIS4,PCSIS5"
-      typeName="SpiPcsPolarity"
+   <bitmaskOption key="spi_mcr_pcsis" condition="spi_mcr_pcsis_present"
+      bitmask="0x3F0000"
+      bitList="PCS0,PCS1,PCS2,PCS3,PCS4,PCS5"
+      typeName="SpiPcsActiveLow"
       description="Polarity for PCS signals"
       toolTip="Mask to select the polarity of Peripheral Chip Select Lines (PCSx)\n
                Selected PCS signals will be active-low i.e. PCS will go low when accessing the peripheral"
       value="0"
+      bitDescription="%n is active-low"
+      enumText="
+      \t   %(typeName)_None = SPI_MCR_PCSIS(0),    ///&lt; All PCSx active-high\n
+      \t   %(typeName)_All  = SPI_MCR_PCSIS(-1),   ///&lt; All PCSx active-low"
    />
-
-   <choiceOption key="spi_mcr_pcsis"
-      hidden="true"
-      typeName="SpiPcsPolarity"
-      description="Polarity for PCS signals"
-      toolTip="Mask to select the polarity of Peripheral Chip Select Lines (PCSx)\n
-               Selected PCS signals will be active-low i.e. PCS will go low when accessing the peripheral" >
-      <choice value="0"          name="All PCSx active-high" enum="All_ActiveHigh"  isDefault="true" />
-      <choice value="-1"         name="All PCSx active-low"  enum="All_ActiveLow"   />
-      <choice value="1&lt;&lt;0" name="PCS 0 Active-low"     enum="0_ActiveLow"     />
-      <choice value="1&lt;&lt;1" name="PCS 1 Active-low"     enum="1_ActiveLow"     />
-      <choice value="1&lt;&lt;2" name="PCS 2 Active-low"     enum="2_ActiveLow"     />
-      <choice value="1&lt;&lt;3" name="PCS 3 Active-low"     enum="3_ActiveLow"     />
-      <choice value="1&lt;&lt;4" name="PCS 4 Active-low"     enum="4_ActiveLow"     />
-      <choice value="1&lt;&lt;5" name="PCS 5 Active-low"     enum="5_ActiveLow"     />
-   </choiceOption>
 
    <binaryOption key="spi_mcr_pcsse" condition="spi_mcr_pcsse_present||/SPI1/spi_mcr_pcsse_present||/SPI2/spi_mcr_pcsse_present"
       typeName="SpiPcsMode"
@@ -225,7 +213,7 @@
       derived="true"
       description="Polarity for PCS signals"
       valueFormat="%s"
-      key="spi_mcr_pcsisValue"
+      key="spi_mcr_pcsis"
       value="(SpiPcsPolarity)0"
       />
 
@@ -415,32 +403,19 @@
       <choice value="1" name="Asserted between transactions" enum="Continuous" />
    </binaryOption>
 
-   <bitmaskOption key="spi_pushr_pcsValue" condition="spi_pushr_pcs_present"
+   <bitmaskOption key="spi_pushr_pcs" condition="spi_pushr_pcs_present"
       valueFormat="SPI_PUSHR_PCS(%s)"
       description="Peripheral Chip Select"
       toolTip="Mask to select which Peripheral Chip Select Line (PCS) to assert during transaction\n
-               Note: more than one PCS may be asserted (allows external decoder)"
-      bitmask="0xFF0000"
+               Note: more than one PCS may be asserted (allows use of an external decoder)"
+      bitmask="0x3F0000"
       bitList="PCS0,PCS1,PCS2,PCS3,PCS4,PCS5"
       typeName="SpiPeripheralSelect"
       value="0"
+      bitDescription="Assert %n during transaction"
+      enumText="
+      \t   SpiPeripheralSelect_None = SPI_PUSHR_PCS(0),    ///&lt; PCSx not asserted"
    />
-
-   <choiceOption key="spi_pushr_pcs" condition="spi_pushr_pcs_present"
-      hidden="true"
-      derived="true"
-      typeName="SpiPeripheralSelect"
-      description="Peripheral Chip Select"
-      toolTip="Mask to select which Peripheral Chip Select Line (PCS) to assert during transaction\n
-               Note: more than one PCS may be asserted (allows use of an external decoder)" >
-      <choice value="0"          name="PCSx not asserted" enum="None"  isDefault="true" />
-      <choice value="1&lt;&lt;0" name="Assert PCS 0"      enum="0" />
-      <choice value="1&lt;&lt;1" name="Assert PCS 1"      enum="1" />
-      <choice value="1&lt;&lt;2" name="Assert PCS 2"      enum="2" />
-      <choice value="1&lt;&lt;3" name="Assert PCS 3"      enum="3" />
-      <choice value="1&lt;&lt;4" name="Assert PCS 4"      enum="4" />
-      <choice value="1&lt;&lt;5" name="Assert PCS 5"      enum="5" />
-   </choiceOption>
 
    <!--binaryOption key="spi_pushr_eoq"
       hidden="true"
@@ -702,7 +677,7 @@
    <variableTemplate namespace="usbdm"
       variables="
          spi_ctar_sel,
-         spi_pushr_pcsValue,
+         spi_pushr_pcs,
          PeripheralSelectMode"
    ><![CDATA[
       \t   ///  PUSHR values
@@ -769,24 +744,24 @@
       \t    * @tparam   Types
       \t    * @param    rest
       \t    *
-      \t    * @param %paramExpression PCS signal to be made Active-low
-      \t    *                         SpiPcsPolarity_All_ActiveHigh clears all selections
-      \t    *                         SpiPcsPolarity_XXX_ActiveLow values are cumulative
+      \t    * @param %paramName0 PCS signal to be made Active-low
+      \t    *                         SpiPcsActiveLow_None clears all selections
+      \t    *                         SpiPcsActiveLow_PCSn values are cumulative
       \t    */
       \t   template <typename... Types>
       \t   constexpr Config(%params, Types... rest) : Config(rest...) {
       \t
-      \t      if (%paramExpression == SpiPcsPolarity_All_ActiveHigh) {
+      \t      if (%paramExpression == SpiPcsActiveLow_None) {
       \t         %registerName &= ~%mask;
       \t      }
       \t      else {
-      \t         %registerName |= %paramExpression;
+      \t         %registerName |= %paramName;
       \t      }
       \t   }
       \t\n
    ]]></variableTemplate>
 
-   <!-- variableTemplate namespace="usbdm" variables="spi_pushr_pcsValue"
+   <!-- variableTemplate namespace="usbdm" variables="spi_pushr_pcs"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -814,7 +789,7 @@
       \t\n
    ]]></variableTemplate -->
 
-   <variableTemplate namespace="usbdm" variables="spi_pushr_pcsValue"
+   <variableTemplate namespace="usbdm" variables="spi_pushr_pcs"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -1171,14 +1146,14 @@
       variables="
          spi_mcr_mtfe,
          spi_mcr_pcsse,
-         spi_mcr_pcsisValue,
+         spi_mcr_pcsis,
          spi_mcr_doze,
          spi_mcr_frz,
          spi_mcr_rooe,
          spi_mcr_cont_scke,
          spi_ctar_sel,
          PeripheralSelectMode,
-         spi_pushr_pcsValue
+         spi_pushr_pcs
          "
    ><![CDATA[
       \t/**
@@ -1343,6 +1318,9 @@
    <!-- ************* SIM configuration ****************** -->
    <category name="Advanced" description="SIM configuration">
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
    </category>
    <deleteVariables variables="_scgc_clock"  mustExist="false" />
 

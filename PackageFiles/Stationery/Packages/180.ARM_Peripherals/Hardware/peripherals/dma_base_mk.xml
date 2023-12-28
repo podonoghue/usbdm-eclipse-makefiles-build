@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE fragment SYSTEM "_menu.dtd" >
-<!-- dma_base.xml -->
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- dma_base_mk.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Direct memory access controller" >
 
    <!--  Assumed more than 1 DMA channel and odd # of vectors indicates error handler vector present as last -->
    <choiceOption key="irq_enum" condition="=_irqCount>1"
@@ -12,8 +12,8 @@
       typeName="$(_Class)IrqNum"
       description="$(_Class) Interrupt indices"
       toolTip="Used to identify peripheral interrupt" >
-      <choiceExpansion value="%(num)"     enum="%(num)" name="DMA channel %(num)" keys="num" dim="=(_irqCount&amp;~0x1)" />
-      <choice          value="=_irqCount" enum="Error"  name="DMA Error"          condition="=(_irqCount&amp;~0b1)!=0" />
+      <choiceExpansion value="%(num)"               enum="%(num)" name="DMA channel %(num)" keys="num" dim="=(_irqCount&amp;~0x1)" />
+      <choice          value="=ToString(_irqCount)" enum="Error"  name="DMA Error"          condition="=(_irqCount&amp;~0b1)!=0" />
    </choiceOption>
 
    <!-- Custom IRQ handlers -->
@@ -80,6 +80,9 @@
 
       \t//! Number of DMA vectors implemented
       \tstatic constexpr unsigned NumVectors = $(NumVectors);\n\n
+
+      \t//! Whether vectors are paired wrt channels i.e. Ch0_Ch16, Ch1_Ch17 etc
+      \tstatic constexpr bool VectorsPaired = $(NumChannels)>$(NumVectors);\n\n
    ]]></template>
 
    <!-- ************* Class Declaration ****************** -->
@@ -364,9 +367,14 @@
    ><![CDATA[
       \t/**
       \t * Enable interrupts in NVIC
-      %paramDescription
+      \t *
+      %paramDescription0
       \t */
       \tstatic void enableNvicInterrupts(%param0) {
+      \t   if constexpr(VectorsPaired) {
+      \t      // Vectors are paired Ch0_Ch16, Ch1_Ch17 etc
+      \t      %paramName0 = %paramType0(%paramName0&~0x10);
+      \t   }
       \t   usbdm_assert(%paramName0<irqCount,"Illegal IRQ number");
       \t   enableNvicInterrupts(%paramType1(%paramName0));
       \t}
@@ -375,19 +383,28 @@
       \t * Enable and set priority of interrupts in NVIC
       \t * Any pending NVIC interrupts are first cleared.
       \t *
-      \t * @param[in]  nvicPriority  Interrupt priority
-      %paramDescription
+      %paramDescription0
+      \t * @param nvicPriority  Interrupt priority
       \t */
       \tstatic void enableNvicInterrupts(%param0, NvicPriority nvicPriority) {
+      \t   if constexpr(VectorsPaired) {
+      \t      // Vectors are paired Ch0_Ch16, Ch1_Ch17 etc
+      \t      %paramName0 = %paramType0(%paramName0&~0x10);
+      \t   }
       \t   usbdm_assert(%paramName0<irqCount,"Illegal IRQ number");
       \t   enableNvicInterrupts(%paramType1(%paramName0), nvicPriority);
       \t}
       \t
       \t/**
       \t * Disable interrupts in NVIC
-      %paramDescription
+      \t *
+      %paramDescription0
       \t */
       \tstatic void disableNvicInterrupts(%param0) {
+      \t   if constexpr(VectorsPaired) {
+      \t      // Vectors are paired Ch0_Ch16, Ch1_Ch17 etc
+      \t      %paramName0 = %paramType0(%paramName0&~0x10);
+      \t   }
       \t   usbdm_assert(%paramName0<irqCount,"Illegal IRQ number");
       \t   disableNvicInterrupts(%paramType1(%paramName0));
       \t}
@@ -770,7 +787,8 @@
       \t */
       \tstatic constexpr $(_Structname)BasicInfo::DmaConfig DefaultDmaConfigValue = {%initExpression\n\t};
       \t\n
-   ]]></variableTemplate>
+   ]]>
+   </variableTemplate>
 
 <!--   ========== BasicInfo class - end =============================== -->
 
@@ -824,7 +842,10 @@
 
    <category name="Advanced" description="SIM configuration">
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
    </category>
    <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
-</fragment>
+</peripheralPage>
