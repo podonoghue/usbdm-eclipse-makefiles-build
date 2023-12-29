@@ -240,7 +240,7 @@
             <binaryOption key="sim_sopt4_tpm%(p)clksel"
                addToVar="Tpm%(p)ExternalItems"
                enabledBy="enablePeripheralSupport"
-               target="Tpm%(p)ExternalClkin"
+               target="tpm%(p)ExternalClock"
                typeName="SimTpm%(p)ClkSel"
                description="TPM %(p) External Clock Pin "
                toolTip="External pin used to drive the external clock to TPM%(p) module" >
@@ -248,7 +248,7 @@
                <choice value="1"  name="TPM_CLKIN1 pin" enum="1" ref="TpmClkin1" code="TpmClkin1"  />
             </binaryOption>
 
-            <intOption key="Tpm%(p)ExternalClkin"
+            <intOption key="tpm%(p)ExternalClock"
                addToVar="Tpm%(p)ExternalItems"
                description="TMP%(p) External clock"
                toolTip="This clock is available as the TPM%(p) external clock source"

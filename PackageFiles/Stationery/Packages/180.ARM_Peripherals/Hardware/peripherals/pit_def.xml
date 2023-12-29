@@ -1150,18 +1150,29 @@
       \t   pit->CHANNEL[channelNum].LDVAL = ldval;
       \t\n
    ]]></template>
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true"
+             codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
+      \t   setCallback(channelNum, init.callbackFunction);
+      \t\n
+   ]]></template>
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" condition="@_irqCount>1"
+             codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
+      \t   Info::enableNvicInterrupts(channelNum, init.irqlevel);
+      \t\n
+   ]]></template>
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" condition="@_irqCount==1"
+             codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
+      \t   Info::enableNvicInterrupts(init.irqlevel);
+      \t\n
+   ]]></template>
+   <!-- 
    <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" condition="!irq_enum"
              codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t   setCallback(init.callbackFunction);
       \t   Info::enableNvicInterrupts(init.irqlevel);
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" condition="irq_enum"
-             codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
-      \t   setCallback(channelNum, init.callbackFunction);
-      \t   Info::enableNvicInterrupts(channelNum, init.irqlevel);
-      \t\n
-   ]]></template>
+    -->
    <template discardRepeats="true" key="/$(_BASENAME)/InitMethod" namespace="all"
              codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t   // Configure channel

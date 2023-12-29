@@ -94,8 +94,8 @@
       typeName="AdcAction"
       hidden="true"
       toolTip="Controls whether an interrupt is triggered at the end of each conversion" >
-      <choice value="0" enum="Disabled" name="None"      isDefault="true" />
-      <choice value="1" enum="Enabled"  name="Interrupt" />
+      <choice value="0" enum="None"       name="None"      isDefault="true" />
+      <choice value="1" enum="Interrupt"  name="Interrupt" />
    </binaryOption>
 
    <binaryOption key="adc_sc1_coco" condition="adc_sc1_coco_present"
@@ -418,7 +418,7 @@
       \t}
       \t\n
    ]]></variableTemplate>
-   
+
    <for keys="field           : get   : set   : genCode                 : name"
         values="
          adc_sc1_coco         : true  : false : enableGettersAndSetters : CompleteFlag;
@@ -791,8 +791,8 @@
       \t *   5000 ,                   // ADC CV low value
       \t *   6000 ,                   // ADC CV high value (May be omitted)
       \t *
-      \t *   AdcPretrigger_0, AdcChannelNum_11,    AdcAction_Disabled,   // Settings for ADC hardware trigger #0
-      \t *   AdcPretrigger_1, AdcChannelNum_Diff0, AdcAction_Enabled,    // Settings for ADC hardware trigger #1
+      \t *   AdcPretrigger_0, AdcChannelNum_11,    AdcAction_None,         // Settings for ADC hardware trigger #0
+      \t *   AdcPretrigger_1, AdcChannelNum_Diff0, AdcAction_Interrupt,    // Settings for ADC hardware trigger #1
       \t *
       \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
       \t *   NvicPriority_Low,                 // Priority for interrupt - Low

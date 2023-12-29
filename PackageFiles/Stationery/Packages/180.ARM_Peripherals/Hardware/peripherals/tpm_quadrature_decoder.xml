@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
-<!-- ftm_quadrature_decoder.xml -->
+<!-- tpm_quadrature_decoder.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
 <!--
     * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
+    *  $(_NAME)         => e.g TPM2 => TPM2
+    *  $(_name)         => e.g TPM2 => tpm2
+    *  $(_BASENAME)     => e.g TPM0 => TPM, PTA => PT
+    *  $(_basename)     => e.g TPM0 => tpm, PTA => pt
+    *  $(_Class)        => e.g TPM2 => Tpm2
+    *  $(_Baseclass)    => e.g TPM0 => Tpm
+    *  $(_instance)     => e.g TPM0 => 0, PTA => A
 -->
 
 <!--
@@ -39,101 +39,76 @@
     * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
 -->
 
-<!--  ==== FTM QUAD Controls =============================== -->
+<!--  ==== TPM QUAD Controls =============================== -->
 
-   <list key="quadDecoder" condition="ftm_qdctrl_quadmode_present&amp;&amp;_control"
+   <list key="quadDecoder" condition="tpm_qdctrl_quadmode_present&amp;&amp;_control"
       description="Quadrature decoder"
       hiddenBy="mode!=Quad" >
 
       <title description="Quadrature Decoder" />
 
-      <binaryOption key="ftm_qdctrl_quadmode" condition="ftm_qdctrl_quadmode_present"
+      <binaryOption key="tpm_qdctrl_quadmode" condition="tpm_qdctrl_quadmode_present"
          enabledBy="enablePeripheralSupport"
-         typeName="FtmQuadratureMode"
+         typeName="TpmQuadratureMode"
          description="Quadrature decoding mode"
          toolTip="Determines how the inputs control the counting sequence" >
          <choice value="0" name="Phase-AB Mode"         enum="Phase_AB_Mode" />
          <choice value="1" name="Count-Direction Mode"  enum="Count_Direction_Mode"  />
       </binaryOption>
 
-      <title name="Channel A" description="Channel A" condition="ftm_qdctrl_phapol_present" />
-      <binaryOption key="ftm_qdctrl_phapol" condition="ftm_qdctrl_phapol_present"
+      <title name="Channel A" description="Channel A" condition="tpm_qdctrl_phapol_present" />
+      <binaryOption key="tpm_qdctrl_phapol" condition="tpm_qdctrl_phapol_present"
          enabledBy="enablePeripheralSupport"
-         typeName="FtmPhaseAPolarity"
+         typeName="TpmPhaseAPolarity"
          description="Polarity of Phase A input"
          toolTip="Polarity of Phase A input" >
          <choice value="0" name="Active High" enum="ActiveHigh" />
          <choice value="1" name="Active Low"  enum="ActiveLow"  />
       </binaryOption>
 
-      <choiceOption key="ftm_qdfilter_a" condition="ftm_qdctrl_phafltren_present"
+      <choiceOption key="tpm_qdfilter_a" condition="tpm_filter_ch0fval_present"
          enabledBy="enablePeripheralSupport"
-         valueFormat="(FTM_QDCTRL_PHAFLTREN(%s)&lt;&lt;8),FTM_FILTER_CH0FVAL(%s)"
+         valueFormat="TPM_FILTER_CH0FVAL(%s)"
          enumType="uint16_t"
-         typeName="FtmPhaseAFilter"
+         typeName="TpmPhaseAFilter"
          description="Filtering on Phase A input"
          toolTip="Filtering on Phase A input" >
-         <choice value="0,0"  name="No Filter"       enum="Disabled" />
-         <choice value="1,1"  name="1 clock cycle"   enum="1_Clock"  />
-         <choice value="1,2"  name="2 clock cycles"  enum="2_Clocks"  />
-         <choice value="1,3"  name="3 clock cycles"  enum="3_Clocks"  />
-         <choice value="1,4"  name="4 clock cycles"  enum="4_Clocks"  />
-         <choice value="1,5"  name="5 clock cycles"  enum="5_Clocks"  />
-         <choice value="1,6"  name="6 clock cycles"  enum="6_Clocks"  />
-         <choice value="1,7"  name="7 clock cycles"  enum="7_Clocks"  />
-         <choice value="1,8"  name="8 clock cycles"  enum="8_Clocks"  />
-         <choice value="1,9"  name="9 clock cycles"  enum="9_Clocks"  />
-         <choice value="1,10" name="10 clock cycles" enum="10_Clocks" />
-         <choice value="1,11" name="11 clock cycles" enum="11_Clocks" />
-         <choice value="1,12" name="12 clock cycles" enum="12_Clocks" />
-         <choice value="1,13" name="13 clock cycles" enum="13_Clocks" />
-         <choice value="1,14" name="14 clock cycles" enum="14_Clocks" />
-         <choice value="1,15" name="15 clock cycles" enum="15_Clocks" />
+         <choice          value="0"         name="Filter Disabled"        enum="Disabled" isDefault="true" />
+         <choice          value="1"         name="1 Clock cycle "         enum="1_clock"   />
+         <choiceExpansion value="%(cycles)" name="%(cycles) clock cycles" enum="%(cycles)_clocks" keys="cycles" dim="2,15" />
       </choiceOption>
 
-      <title name="Channel B" description="Channel B" condition="ftm_qdctrl_phbpol_present" />
-      <binaryOption key="ftm_qdctrl_phbpol" condition="ftm_qdctrl_phbpol_present"
+      <title name="Channel B" description="Channel B" condition="tpm_qdctrl_phbpol_present" />
+      <binaryOption key="tpm_qdctrl_phbpol" condition="tpm_qdctrl_phbpol_present"
          enabledBy="enablePeripheralSupport"
-         typeName="FtmPhaseBPolarity"
+         typeName="TpmPhaseBPolarity"
          description="Polarity of Phase B input"
          toolTip="Polarity of Phase B input" >
          <choice value="0" name="Active High" enum="ActiveHigh" />
          <choice value="1" name="Active Low"  enum="ActiveLow"  />
       </binaryOption>
 
-      <choiceOption key="ftm_qdfilter_b" condition="ftm_qdctrl_phbfltren_present"
+      <choiceOption key="tpm_qdfilter_b" condition="tpm_filter_ch1fval_present"
          enabledBy="enablePeripheralSupport"
-         valueFormat="(FTM_QDCTRL_PHBFLTREN(%s)&lt;&lt;8),FTM_FILTER_CH1FVAL(%s)"
+         valueFormat="TPM_FILTER_CH1FVAL(%s)"
          enumType="uint16_t"
-         typeName="FtmPhaseBFilter"
+         typeName="TpmPhaseBFilter"
          description="Filtering on Phase B input"
          toolTip="Filtering on Phase B input" >
-         <choice value="0,0"  name="No Filter"       enum="Disabled" />
-         <choice value="1,1"  name="1 clock cycle"   enum="1_Clock"  />
-         <choice value="1,2"  name="2 clock cycles"  enum="2_Clocks"  />
-         <choice value="1,3"  name="3 clock cycles"  enum="3_Clocks"  />
-         <choice value="1,4"  name="4 clock cycles"  enum="4_Clocks"  />
-         <choice value="1,5"  name="5 clock cycles"  enum="5_Clocks"  />
-         <choice value="1,6"  name="6 clock cycles"  enum="6_Clocks"  />
-         <choice value="1,7"  name="7 clock cycles"  enum="7_Clocks"  />
-         <choice value="1,8"  name="8 clock cycles"  enum="8_Clocks"  />
-         <choice value="1,9"  name="9 clock cycles"  enum="9_Clocks"  />
-         <choice value="1,10" name="10 clock cycles" enum="10_Clocks" />
-         <choice value="1,11" name="11 clock cycles" enum="11_Clocks" />
-         <choice value="1,12" name="12 clock cycles" enum="12_Clocks" />
-         <choice value="1,13" name="13 clock cycles" enum="13_Clocks" />
-         <choice value="1,14" name="14 clock cycles" enum="14_Clocks" />
-         <choice value="1,15" name="15 clock cycles" enum="15_Clocks" />
+         <choice          value="0"         name="Filter Disabled"        enum="Disabled" isDefault="true" />
+         <choice          value="1"         name="1 Clock cycle "         enum="1_clock"   />
+         <choiceExpansion value="%(cycles)" name="%(cycles) clock cycles" enum="%(cycles)_clocks" keys="cycles" dim="2,15" />
       </choiceOption>
+
    </list>
 
-<!--  ==== FTM QUAD Init class =============================== -->
+<!--  ==== TPM QUAD Init class =============================== -->
 
-   <if condition="ftm_qdctrl_quadmode_present&amp;&amp;_code" >
+   <if condition="tpm_qdctrl_quadmode_present&amp;&amp;_code" >
 
       <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
          \t/**
-         \t * Class used to do initialisation of Ftm QuadDecoder
+         \t * Class used to do initialisation of Tpm QuadDecoder
          \t *
          \t * This class has a templated constructor that accepts various values:
          \t *
@@ -141,27 +116,27 @@
          \t *
          \t * Example:
          \t * @code
-         \t * static const FtmQuadDecoder$(_instance)::QuadInit quadInit {
+         \t * static const TpmQuadDecoder$(_instance)::QuadInit quadInit {
          \t *
          \t *    // Omitted parameters are taken to be zero unless a base value is given
-         \t *    FtmQuadratureMode_Phase_AB_Mode , // Quadrature decoding mode
-         \t *    FtmPhaseAPolarity_ActiveHigh ,    // Polarity of Phase A input
-         \t *    FtmPhaseBPolarity_ActiveHigh ,    // Polarity of Phase B input
-         \t *    FtmPhaseAFilter_Disabled ,        // Filtering on Phase A input
-         \t *    FtmPhaseBFilter_Disabled ,        // Filtering on Phase B input
-         \t *    FtmOverflowInterrupt_Enabled ,    // Overflow Interrupt
-         \t *    FtmPrescale_DivBy32,              // Clock prescaler
+         \t *    TpmQuadratureMode_Phase_AB_Mode , // Quadrature decoding mode
+         \t *    TpmPhaseAPolarity_ActiveHigh ,    // Polarity of Phase A input
+         \t *    TpmPhaseBPolarity_ActiveHigh ,    // Polarity of Phase B input
+         \t *    TpmPhaseAFilter_Disabled ,        // Filtering on Phase A input
+         \t *    TpmPhaseBFilter_Disabled ,        // Filtering on Phase B input
+         \t *    TpmOverflowInterrupt_Enabled ,    // Overflow Interrupt
+         \t *    TpmPrescale_DivBy32,              // Clock prescaler
          \t *    30000_ticks,                      // End value for counter
          \t *
          \t *    NvicPriority_Normal ,             // IRQ level for this peripheral
-         \t *    ftmCallbak,                       // Timer overflow call-back
+         \t *    tpmCallbak,                       // Timer overflow call-back
          \t *
          \t *    // Optional base value to start with (must be last parameter)
-         \t *    FtmQuadDecoder$(_instance)::DefaultQuadInitValue
+         \t *    TpmQuadDecoder$(_instance)::DefaultQuadInitValue
          \t * };
          \t *
-         \t * // Initialise FTM from values specified above
-         \t * FtmQuadDecoder$(_instance)::configure(quadInit)
+         \t * // Initialise TPM from values specified above
+         \t * TpmQuadDecoder$(_instance)::configure(quadInit)
          \t * @endcode
          \t */
          \tclass QuadInit {
@@ -189,28 +164,28 @@
       ]]></variableTemplate>
 
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="ftm_qdfilter_a,ftm_qdfilter_b"
+         variables="tpm_qdfilter_a,tpm_qdfilter_b"
       ><![CDATA[
          \t   // Quad input filter control
          \t   uint16_t %registerName = 0;\n\n
       ]]></variableTemplate>
 
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="ftm_qdctrl_quadmode"
+         variables="tpm_qdctrl_quadmode"
       ><![CDATA[
          \t   // Quadrature Decoder Control And Status Register
-         \t   uint8_t %registerName = FTM_QDCTRL_QUADEN_MASK;\n\n
+         \t   uint8_t %registerName = TPM_QDCTRL_QUADEN_MASK;\n\n
       ]]></variableTemplate>
 
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="ftm_sc_action,ftm_sc_ps"
+         variables="tpm_sc_action,tpm_sc_ps"
       ><![CDATA[
          \t   // Status And Control Register
          \t   uint8_t %registerName = 0;\n\n
       ]]></variableTemplate>
 
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="ftm_mod"
+         variables="tpm_mod"
       ><![CDATA[
          \t   // %description
          \t   uint16_t %registerName = 0_ticks;\n\n
@@ -262,10 +237,12 @@
       ]]></variableTemplate>
 
       <for keys="r" values="
-         ftm_sc_action;
-         ftm_qdctrl_quadmode;
-         ftm_qdctrl_phapol;
-         ftm_qdctrl_phbpol" >
+         tpm_sc_action;
+         tpm_qdctrl_quadmode;
+         tpm_qdctrl_phapol;
+         tpm_qdctrl_phbpol;
+         tpm_qdfilter_a;
+         tpm_qdfilter_b" >
          <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
             variables="%(r)"
             linePadding="xxx"
@@ -287,7 +264,7 @@
       </for>
 
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="ftm_sc_ps, ftm_mod"
+         variables="tpm_sc_ps, tpm_mod"
          params=",mod_ticks"
          linePadding="xxx"
          nonDefaultParams="2"
@@ -310,8 +287,9 @@
          \t\n
       ]]></variableTemplate>
 
+      <!--
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="ftm_qdfilter_a"
+         variables="tpm_qdfilter_a"
          linePadding="xxx"
       ><![CDATA[
          \t   /**
@@ -324,14 +302,14 @@
          \t   template <typename... Types>
          \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
          \t
-         \t      qdctrl   = (qdctrl&~FTM_QDCTRL_PHAFLTREN_MASK) | ((%paramExpression>>8) & FTM_QDCTRL_PHAFLTREN_MASK);
-         \t      qdfilter = (qdfilter&~FTM_FILTER_CH0FVAL_MASK) | (%paramExpression&FTM_FILTER_CH0FVAL_MASK);
+         \t      qdctrl   = (qdctrl&~TPM_QDCTRL_PHAFLTREN_MASK) | ((%paramExpression>>8) & TPM_QDCTRL_PHAFLTREN_MASK);
+         \t      qdfilter = (qdfilter&~TPM_FILTER_CH0FVAL_MASK) | (%paramExpression&TPM_FILTER_CH0FVAL_MASK);
          \t   }
          \t\n
       ]]></variableTemplate>
 
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="ftm_qdfilter_b"
+         variables="tpm_qdfilter_b"
          linePadding="xxx"
       ><![CDATA[
          \t   /**
@@ -344,11 +322,12 @@
          \t   template <typename... Types>
          \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
          \t
-         \t      qdctrl   = (qdctrl&~FTM_QDCTRL_PHBFLTREN_MASK) | ((%paramExpression>>8) & FTM_QDCTRL_PHBFLTREN_MASK);
-         \t      qdfilter = (qdfilter&~FTM_FILTER_CH1FVAL_MASK) | (%paramExpression&FTM_FILTER_CH1FVAL_MASK);
+         \t      qdctrl   = (qdctrl&~TPM_QDCTRL_PHBFLTREN_MASK) | ((%paramExpression>>8) & TPM_QDCTRL_PHBFLTREN_MASK);
+         \t      qdfilter = (qdfilter&~TPM_FILTER_CH1FVAL_MASK) | (%paramExpression&TPM_FILTER_CH1FVAL_MASK);
          \t   }
          \t\n
       ]]></variableTemplate>
+       -->
 
       <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
          \t};
@@ -367,14 +346,14 @@
          separator=","
          terminator=","
          variables="
-            ftm_qdctrl_quadmode,
-            ftm_qdctrl_phapol,
-            ftm_qdctrl_phbpol,
-            ftm_qdfilter_a,
-            ftm_qdfilter_b,
-            ftm_sc_action,
-            ftm_sc_ps,
-            ftm_mod"
+            tpm_qdctrl_quadmode,
+            tpm_qdctrl_phapol,
+            tpm_qdctrl_phbpol,
+            tpm_qdfilter_a,
+            tpm_qdfilter_b,
+            tpm_sc_action,
+            tpm_sc_ps,
+            tpm_mod"
       ><![CDATA[
          \t/**
          \t * Default initialisation value for $(_Class)QuadDecoder
@@ -408,31 +387,28 @@
       <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
          \t
          \t   // Disable timer to change clock (unable to switch directly between clock sources)
-         \t   ftm->SC  = 0;
-         \t
-         \t   // Start value for counter
-         \t   ftm->CNTIN = 0;
+         \t   tpm->SC  = 0;
          \t
          \t   // End value for counter
-         \t   ftm->MOD = quadInit.mod;
+         \t   tpm->MOD = quadInit.mod;
          \t
          \t   // Restart counter
-         \t   ftm->CNT = 0;
+         \t   tpm->CNT = 0;
          \t
          \t   // Configure timer
-         \t   ftm->FILTER = quadInit.qdfilter;
-         \t   ftm->SC     = quadInit.sc;
-         \t   ftm->QDCTRL = quadInit.qdctrl;
+         \t   tpm->FILTER = quadInit.qdfilter;
+         \t   tpm->SC     = quadInit.sc;
+         \t   tpm->QDCTRL = quadInit.qdctrl;
          \t
          \t   return E_NO_ERROR;
          \t}\n\n
       ]]></template>
 
-   </if> <!-- condition="ftm_qdctrl_quadmode_present" -->
+   </if> <!-- condition="tpm_qdctrl_quadmode_present" -->
 
-<!--  ==== FTM QUAD Declarations =============================== -->
+<!--  ==== TPM QUAD Declarations =============================== -->
 
-   <template key="/$(_BASENAME)/declarations"  condition="_declaration&amp;&amp;ftm_qdctrl_present"
+   <template key="/$(_BASENAME)/declarations"  condition="_declaration&amp;&amp;tpm_qdctrl_present"
       codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t/**

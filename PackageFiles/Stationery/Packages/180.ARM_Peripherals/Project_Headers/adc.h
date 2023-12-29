@@ -396,7 +396,7 @@ public:
     *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
     * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
     */
-   void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcAction adcInterrupt=AdcAction_Disabled) const {
+   void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcAction adcInterrupt=AdcAction_None) const {
       Adc::enableHardwareConversion(adcInterrupt|sc1Value, adcPretrigger);
    }
 
@@ -420,7 +420,7 @@ public:
     *
     * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
     */
-   void startConversion(AdcAction adcInterrupt=AdcAction_Disabled) const {
+   void startConversion(AdcAction adcInterrupt=AdcAction_None) const {
       Adc::startConversion(sc1Value|adcInterrupt);
    };
 
@@ -916,21 +916,16 @@ public:
     * @tparam channel ADC channel
     */
    template<AdcChannelNum channel>
-   class Channel : public AdcChannel {
+   class ChannelCommon : public AdcChannel {
    private:
       /**
        * This class is not intended to be instantiated
        */
-      Channel(const Channel&) = delete;
-      Channel(Channel&&) = delete;
-
-      CheckPinExistsAndIsMapped<Info, channel&ADC_SC1_ADCH_MASK> check;
+      ChannelCommon(const ChannelCommon&) = delete;
+      ChannelCommon(ChannelCommon&&) = delete;
 
    public:
-      constexpr Channel() : AdcChannel(AdcInfo::baseAddress, channel) {}
-
-      /** The PCR associated with this channel (Not all channels have an associated PCR!) */
-      using Pcr = PcrTable_T<Info, limitIndex<Info>(channel)>;
+      constexpr ChannelCommon() : AdcChannel(AdcInfo::baseAddress, channel) {}
 
       /** The ADC that owns this channel */
       using OwningAdc = AdcBase_T;
@@ -941,46 +936,15 @@ public:
       /** Channel number */
       static constexpr int CHANNEL=channel;
 
-      /** GPIO pin associated with this channel (Not all channels have an associated GPIO!) */
-      template<Polarity polarity=ActiveHigh>
-      class GpioPin : public GpioTable_T<Info, channel, polarity> {
-         static_assert((AdcInfo::info[channel].portAddress != 0),
-               "ADC channel does not have corresponding GPIO pin");
-      };
-
-      /**
-       * Configure the pin associated with this ADC channel.
-       * The pin is in analogue mode so no PCR settings are active.
-       * This function is of use if mapAllPins and mapAllPinsOnEnable are not selected in USBDM configuration.
-       */
-      static void setInput() {
-         // Map pin to ADC
-         Pcr::setPCR();
-      }
-
-      /**
-       *  Disable Pin
-       *  This sets the pin to MUX 0 which is specified for minimum leakage in low-power modes.
-       *
-       *  @note The clock is left enabled as shared with other pins.
-       *  @note Mux(0) is also the Analogue MUX setting
-       */
-      static void disablePin() {
-         // Map pin to ADC
-         if constexpr (Info::info[channel].portAddress != 0) {
-            Pcr::disablePin();
-         }
-      }
-
       /**
        * Initiates a conversion but does not wait for it to complete.
        * Intended for use with interrupts or DMA.
        *
        * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
        */
-      static void startConversion(AdcAction adcInterrupt=AdcAction_Disabled) {
+      static void startConversion(AdcAction adcInterrupt=AdcAction_None) {
          if constexpr(!Info::irqHandlerInstalled) {
-            usbdm_assert((adcInterrupt == AdcAction_Disabled),
+            usbdm_assert((adcInterrupt == AdcAction_None),
                   "ADC not configured for interrupts. Modify Configure.usbdmProject");
          }
          AdcBase_T::startConversion(channel|adcInterrupt);
@@ -1021,7 +985,7 @@ public:
        *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
        * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
        */
-      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcAction adcInterrupt=AdcAction_Disabled) {
+      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcAction adcInterrupt=AdcAction_None) {
          AdcBase_T::enableHardwareConversion(channel|adcInterrupt, adcPretrigger);
       }
 
@@ -1038,6 +1002,53 @@ public:
          AdcBase_T::enableHardwareConversion(channel|adcInterrupt, adcPretrigger, adcDma);
       }
 #endif
+   };
+
+   template<AdcChannelNum channel>
+   class Channel : public ChannelCommon<channel>  {
+   private:
+      /**
+       * This class is not intended to be instantiated
+       */
+      Channel(const Channel&) = delete;
+      Channel(Channel&&) = delete;
+
+      CheckPinExistsAndIsMapped<Info, channel&ADC_SC1_ADCH_MASK> check;
+
+   public:
+      /** The PCR associated with this channel (Not all channels have an associated PCR!) */
+      using Pcr = PcrTable_T<Info, limitIndex<Info>(channel)>;
+
+      /** GPIO pin associated with this channel (Not all channels have an associated GPIO!) */
+      template<Polarity polarity=ActiveHigh>
+      class GpioPin : public GpioTable_T<Info, channel, polarity> {
+         static_assert((AdcInfo::info[channel].portAddress != 0),
+               "ADC channel does not have corresponding GPIO pin");
+      };
+
+      /**
+       * Configure the pin associated with this ADC channel.
+       * The pin is in analogue mode so no PCR settings are active.
+       * This function is of use if mapAllPins and mapAllPinsOnEnable are not selected in USBDM configuration.
+       */
+      static void setInput() {
+         // Map pin to ADC
+         Pcr::setPCR();
+      }
+
+      /**
+       *  Disable Pin
+       *  This sets the pin to MUX 0 which is specified for minimum leakage in low-power modes.
+       *
+       *  @note The clock is left enabled as shared with other pins.
+       *  @note Mux(0) is also the Analogue MUX setting
+       */
+      static void disablePin() {
+         // Map pin to ADC
+         if constexpr (Info::info[channel].portAddress != 0) {
+            Pcr::disablePin();
+         }
+      }
    };
 
 #if defined(ADC_PGA_PGAEN_MASK)
@@ -1057,7 +1068,7 @@ public:
     * uint32_t value = Adc0Ch6::readAnalogue();
     * @endcode
     */
-   class PgaChannel : public Channel<2> {
+   class PgaChannel : public ChannelCommon<2> {
    private:
       /**
        * This class is not intended to be instantiated
@@ -1089,7 +1100,7 @@ public:
     * @tparam channel ADC channel
     */
    template<AdcChannelNum channel>
-   class ChannelB : public Channel<AdcChannelNum(channel)> {
+   class ChannelB : public ChannelCommon<AdcChannelNum(channel)> {
    private:
       /**
        * This class is not intended to be instantiated
@@ -1100,7 +1111,7 @@ public:
       CheckPinExistsAndIsMapped<typename Info::InfoBChannels, channel&ADC_SC1_ADCH_MASK> checkPos;
 
    public:
-      constexpr ChannelB() : Channel<AdcChannelNum(channel)>() {}
+      constexpr ChannelB() : ChannelCommon<AdcChannelNum(channel)>() {}
 
       /** PCR associated with plus channel */
       using PcrB = PcrTable_T<typename Info::InfoBChannels, limitIndex<typename Info::InfoBChannels>(channel)>;
@@ -1159,7 +1170,7 @@ public:
     * @tparam channel ADC channel
     */
    template<AdcChannelNum channel>
-   class DiffChannel : public Channel<AdcChannelNum(channel|ADC_SC1_DIFF_MASK)> {
+   class DiffChannel : public ChannelCommon<AdcChannelNum(channel|ADC_SC1_DIFF_MASK)> {
    private:
       /**
        * This class is not intended to be instantiated
@@ -1171,7 +1182,7 @@ public:
       CheckPinExistsAndIsMapped<typename Info::InfoDM, channel&ADC_SC1_ADCH_MASK> checkNeg;
 
    public:
-      constexpr DiffChannel() : Channel<AdcChannelNum(channel|ADC_SC1_DIFF_MASK)>() {}
+      constexpr DiffChannel() : ChannelCommon<AdcChannelNum(channel|ADC_SC1_DIFF_MASK)>() {}
 
       /** PCR associated with plus channel */
       using PcrP = PcrTable_T<typename Info::InfoDP, limitIndex<typename Info::InfoDP>(channel)>;

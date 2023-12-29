@@ -35,18 +35,6 @@ namespace USBDM {
  */
 
 /**
- * Callback to catch unhandled channel interrupt
- *
- * @param mask Mask identifying channel
- */
-void timerUnhandledChannelCallback(uint8_t);
-
-/**
- * Type definition for timer overflow interrupt call back
- */
-typedef void (*TpmCallbackFunction)();
-
-/**
  * Provides shared methods.
  */
 class TpmBase {
@@ -218,6 +206,7 @@ private:
 #endif
 
 public:
+   using Info::configure;
 
    // Empty constructor
    constexpr TpmBase_T() : TpmBase(Info::baseAddress) {}
@@ -650,14 +639,6 @@ $(/TPM_CHANNEL/static_functions:  // /TPM_CHANNEL/static_functions not found)
 };
 
 #ifdef TPM_QDCTRL_QUADEN_MASK
-/**
- *  Quadrature Decoder Mode\n
- *  Selects the encoding mode used in the Quadrature Decoder mode.
- */
-enum TpmQuadratureMode {
-   TpmQuadratureMode_Phase_AB_Mode        = TPM_QDCTRL_QUADMODE(0),   //!< Phase A and phase B encoding mode.
-   TpmQuadratureMode_Count_Direction_Mode = TPM_QDCTRL_QUADMODE(1),   //!< Count and direction encoding mode.
-};
 
 /**
  * Template class representing a TPM configured as a Quadrature decoder
@@ -689,22 +670,15 @@ private:
    TpmQuadDecoder_T(const TpmQuadDecoder_T&) = delete;
    TpmQuadDecoder_T(TpmQuadDecoder_T&&) = delete;
 
-   TpmBase::CheckChannel<typename Info::InfoQUAD, 0> checkQ0;
-   TpmBase::CheckChannel<typename Info::InfoQUAD, 1> checkQ1;
+   TpmBase::CheckChannel<Info, 0> checkQ0;
+   TpmBase::CheckChannel<Info, 1> checkQ1;
 
 public:
    // Default constructor
    TpmQuadDecoder_T() = default;
 
-   /**
-    * Set common fault and Timer Overflow Callback function\n
-    *
-    * @param[in] theCallback Callback function to execute when timer overflows. \n
-    *                        nullptr to indicate none
-    */
-   void setCallback(typename Info::CallbackFunction theCallback) {
-      TpmBase_T<Info>::setCallback(theCallback);
-   }
+   using Info::configure;
+   using Info::setCallback;
 
    // Make these visible
    using Info::QuadInit;
@@ -717,10 +691,10 @@ public:
    using OwningTpm = TpmBase_T<Info>;
 
    /** Allow access to PCR of associated phase-A pin */
-   using Pcr0 = PcrTable_T<typename Info::InfoQUAD, 0>;
+   using Pcr0 = PcrTable_T<Info, 0>;
 
    /** Allow access to PCR of associated phase-B pin */
-   using Pcr1 = PcrTable_T<typename Info::InfoQUAD, 1>;
+   using Pcr1 = PcrTable_T<Info, 1>;
 
    /**
     * Set Pin Control Register (PCR) values for PHA and PHB inputs.
@@ -765,89 +739,7 @@ public:
       OwningTpm::disableTimerOverflowInterrupts();
    }
 
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void configureAllPins() {
-      // Configure pins
-      Info::InfoQUAD::initPCRs();
-   }
-
-   /**
-    * Disabled all mapped pins associated with TPM
-    *
-    * @note Only the lower 16-bits of the PCR registers are modified
-    */
-   static void disableAllPins() {
-      // Configure pins
-      Info::InfoQUAD::clearPCRs();
-   }
-
-   /**
-    * Basic enable of TPM
-    * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected in configuration
-    */
-   static void enable() {
-      // Enable clock to peripheral
-      Info::enableClock();
-
-      if constexpr (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
-   }
-
-   /**
-    * Disables the clock to TPM and all mappable pins
-    */
-   static void disable() {
-
-      Info::disableNvicInterrupts();
-
-      if constexpr (Info::mapPinsOnEnable) {
-         disableAllPins();
-      }
-
-      // Disable TPM (clock source disabled)
-      tpm->QDCTRL = 0;
-
-      // Disable clock to peripheral interface
-      Info::disableClock();
-   }
-
 $(/TPM/QuadInitMethod:// /TPM/InitMethod not found)
-   static ErrorCode configure(const typename Info::QuadInit &quadInit) {
-
-      // Assertions placed here so only checked if TpmQuadDecoder actually used
-      static_assert(Info::InfoQUAD::info[0].pinIndex >= 0, "TpmQuadDecoder PHA is not mapped to a pin - Modify Configure.usbdm");
-      static_assert(Info::InfoQUAD::info[1].pinIndex >= 0, "TpmQuadDecoder PHB is not mapped to a pin - Modify Configure.usbdm");
-
-      // Enable peripheral clock and map pins
-      enable();
-
-      if constexpr (Info::irqHandlerInstalled) {
-         // Only set call-back if feature enabled and non-null
-         if (quadInit.callbackFunction != nullptr) {
-            TpmBase_T<Info>::setCallback(quadInit.callbackFunction);
-         }
-         enableNvicInterrupts(quadInit.irqlevel);
-      }
-
-      // Disable timer to change clock (unable to switch directly between clock sources)
-      tpm->SC  = 0;
-
-      // End value for counter
-      tpm->MOD =0;
-
-      // Restart counter
-      tpm->CNT = 0;
-
-      // Configure timer
-      tpm->FILTER = quadInit.qdfilter;
-      tpm->SC     = quadInit.sc;
-      tpm->QDCTRL = quadInit.qdctrl;
-
-      return E_NO_ERROR;
-   }
 
    /**
     * Basic configuration of Quadrature decoder.
@@ -862,10 +754,10 @@ $(/TPM/QuadInitMethod:// /TPM/InitMethod not found)
          TpmQuadratureMode tpmQuadratureMode = TpmQuadratureMode_Phase_AB_Mode
          ) {
       // Assertions placed here so only checked if TpmQuadDecoder actually used
-      static_assert(Info::InfoQUAD::info[0].pinIndex >= 0, "TpmQuadDecoder PHA is not mapped to a pin - Modify Configure.usbdm");
-      static_assert(Info::InfoQUAD::info[1].pinIndex >= 0, "TpmQuadDecoder PHB is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Info::Info::info[0].pinIndex >= PinIndex::MIN_PIN_INDEX, "TpmQuadDecoder PHA is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Info::Info::info[1].pinIndex >= PinIndex::MIN_PIN_INDEX, "TpmQuadDecoder PHB is not mapped to a pin - Modify Configure.usbdm");
 
-      enable();
+      Info::enable();
 
       // Disable so immediate effect
       tpm->SC = 0;
@@ -914,7 +806,6 @@ $(/TPM/QuadInitMethod:// /TPM/InitMethod not found)
 #endif // defined(TPM_QDCTRL_QUADEN_MASK)
 
 $(/TPM/declarations: // No TPM declarations found)
-$(/TPM/quadDeclarations: // No QUAD declarations found)
 /**
  * End TPM_Group
  * @}

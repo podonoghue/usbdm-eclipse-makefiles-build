@@ -34,15 +34,6 @@ namespace USBDM {
  * @{
  */
 
-/**
- * Selects pairs of channels for some operations
- */
-enum FtmChannelPair {
-   FtmChannelPair_0_1 = (1<<0), ///< Channel Pair select for channels 0 and 1
-   FtmChannelPair_2_3 = (1<<1), ///< Channel Pair select for channels 2 and 3
-   FtmChannelPair_4_5 = (1<<2), ///< Channel Pair select for channels 4 and 5
-   FtmChannelPair_6_7 = (1<<3), ///< Channel Pair select for channels 6 and 6
-};
 
 /**
  * Controls value forced to pin by forceChannelOutputs()
@@ -884,7 +875,6 @@ $(/FTM/QuadInitMethod:// /FTM/InitMethod not found)
 #endif // defined(FTM_QDCTRL_QUADEN_MASK)
 
 $(/FTM/declarations: // No declarations found)
-$(/FTM/quadDeclarations: // No declarations found)
 /**
  * End FTM_Group
  * @}
