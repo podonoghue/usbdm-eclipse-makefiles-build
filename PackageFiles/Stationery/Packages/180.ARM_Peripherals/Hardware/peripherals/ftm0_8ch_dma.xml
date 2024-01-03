@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- ftm0_8ch_dma.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
+
+   <constant key="_channelCount" type="Long" value="8" />
+
+   <xi:include href="ftm_def.xml"/>
+
+</peripheralPage>

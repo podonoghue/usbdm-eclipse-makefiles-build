@@ -31,7 +31,7 @@
       <xi:include href="peripherals/EWM_INT_PR.svd.xml"/>
       <xi:include href="peripherals/FMC_MK02F12810.svd.xml"/>
       <xi:include href="peripherals/FTFA_XACCH.svd.xml"/>
-      <xi:include href="peripherals/FTM0_6CH_ICRST.svd.xml"/>
+      <xi:include href="peripherals/FTM0_6CH_QDCTRL_ICRST.svd.xml"/>
       <xi:include href="peripherals/FTM1_2CH_QUAD_ICRST.svd.xml"/>
       <peripheral derivedFrom="FTM1"><name>FTM2</name><baseAddress>0x4003A000</baseAddress></peripheral>
       <xi:include href="peripherals/GPIOA_0x400FF000.svd.xml"/>

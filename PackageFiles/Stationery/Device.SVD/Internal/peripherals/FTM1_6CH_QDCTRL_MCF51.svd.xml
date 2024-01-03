@@ -1,10 +1,10 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MCF51JF
       MCF51JU
 -->
       <peripheral>
-         <?sourceFile "FTM1_6CH_MCF51" ?>
+         <?sourceFile "FTM1_6CH_QDCTRL_MCF51" ?>
          <name>FTM1</name>
          <description>FlexTimer Module (6 channels)</description>
          <groupName>FTM</groupName>
@@ -925,6 +925,13 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <addressOffset>0x2C</addressOffset>
                <fields>
                   <field>
+                     <name>CHTRIG</name>
+                     <?ignoreOverlap?>
+                     <description>Channel Trigger Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
                      <name>CH2TRIG</name>
                      <description>Channel 2 Trigger Enable</description>
                      <bitOffset>0</bitOffset>
@@ -990,6 +997,13 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <description>Channels Polarity</description>
                <addressOffset>0x2D</addressOffset>
                <fields>
+                  <field>
+                     <name>POL</name>
+                     <?ignoreOverlap?>
+                     <description>Channel Polarity</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
                   <field>
                      <name>POL0</name>
                      <description>Channel 0 Polarity</description>
@@ -1203,6 +1217,13 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                   <field derivedFrom="FAULT0EN" > <name>FAULT1EN</name> <description>Fault Input 1 Enable</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="FAULT0EN" > <name>FAULT2EN</name> <description>Fault Input 2 Enable</description> <bitOffset>2</bitOffset> </field>
                   <field derivedFrom="FAULT0EN" > <name>FAULT3EN</name> <description>Fault Input 3 Enable</description> <bitOffset>3</bitOffset> </field>
+                  <field>
+                     <name>FFLTREN</name>
+                     <?ignoreOverlap?>
+                     <description>Fault Input Filter Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
                   <field>
                      <name>FFLTR0EN</name>
                      <description>Fault Input 0 Filter Enable</description>

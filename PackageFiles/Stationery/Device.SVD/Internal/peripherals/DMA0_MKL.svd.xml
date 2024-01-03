@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral:
+Devices using this peripheral: 
       MKL04Z4
       MKL05Z4
       MKL14Z4
@@ -48,8 +48,6 @@ Devices using this peripheral:
                   Bits 31-20 must be written with a value corresponding to a valid region of device memory.\n
                   If written with an allowed values, bits 31-20 read back as the written value otherwise the value is indeterminate</description>
                   <addressOffset>0x0</addressOffset>
-                  <size>32</size>
-                  <access>read-write</access>
                   <fields>
                      <field>
                         <name>ADDR</name>
@@ -66,8 +64,6 @@ Devices using this peripheral:
                   Bits 31-20 must be written with a value corresponding to a valid region of device memory.\n
                   If written with an allowed values, bits 31-20 read back as the written value otherwise the value is indeterminate</description>
                   <addressOffset>0x4</addressOffset>
-                  <size>32</size>
-                  <access>read-write</access>
                   <fields>
                      <field>
                         <name>ADDR</name>

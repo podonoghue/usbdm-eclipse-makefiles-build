@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral:
+Devices using this peripheral: 
       MKE04Z4
       MKE04Z1284
       MKE06Z4
@@ -109,44 +109,10 @@ Enables/disables the PWT to generate an interrupt when PWTOV is set due to PWT c
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>PRDYIE</name>
-                     <description>PWT Pulse Width Data Ready Interrupt Enable\n
-Enables/disables the PWT to generate an interrupt when PWTRDY is set as long as PWTIE is set</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disable</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enable</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PWTIE</name>
-                     <description>PWT Module Interrupt Enable\n
-Enables the PWT module to generate an interrupt</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disable</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enable</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="POVIE" > <name>PRDYIE</name> <description>PWT Pulse Width Data Ready Interrupt Enable\n
+Enables/disables the PWT to generate an interrupt when PWTRDY is set as long as PWTIE is set</description> <bitOffset>5</bitOffset> <bitWidth>1</bitWidth> </field>
+                  <field derivedFrom="POVIE" > <name>PWTIE</name> <description>PWT Module Interrupt Enable\n
+Enables the PWT module to generate an interrupt</description> <bitOffset>6</bitOffset> <bitWidth>1</bitWidth> </field>
                   <field>
                      <name>PWTEN</name>
                      <description>PWT Module Enable\n

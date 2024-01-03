@@ -64,7 +64,7 @@
          %paramDescription
          \t */
          \tstatic void configure%(name)(%params) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}\n\n
       ]]></variableTemplate>
    </for>

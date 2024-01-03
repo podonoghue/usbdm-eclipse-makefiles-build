@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2022/10
+ * @date     2023/12
  *
  */
 
@@ -827,6 +827,18 @@ typedef struct DMA_Type {
 
 /** @addtogroup DMA0_Register_Masks_GROUP DMA0 Register Masks */
 /** @{ */
+
+/** @name SAR - Source Address Register */ /** @{ */
+#define DMA_SAR_ADDR_MASK                        (0xFFFFFFFFU)                                       /**< DMA0_SAR.ADDR Mask                      */
+#define DMA_SAR_ADDR_SHIFT                       (0U)                                                /**< DMA0_SAR.ADDR Position                  */
+#define DMA_SAR_ADDR(x)                          (((uint32_t)(((uint32_t)(x))<<DMA_SAR_ADDR_SHIFT))&DMA_SAR_ADDR_MASK) /**< DMA0_SAR.ADDR Field                     */
+/** @} */
+
+/** @name DAR - Destination Address Register */ /** @{ */
+#define DMA_DAR_ADDR_MASK                        (0xFFFFFFFFU)                                       /**< DMA0_DAR.ADDR Mask                      */
+#define DMA_DAR_ADDR_SHIFT                       (0U)                                                /**< DMA0_DAR.ADDR Position                  */
+#define DMA_DAR_ADDR(x)                          (((uint32_t)(((uint32_t)(x))<<DMA_DAR_ADDR_SHIFT))&DMA_DAR_ADDR_MASK) /**< DMA0_DAR.ADDR Field                     */
+/** @} */
 
 /** @name DSR_BCR - DMA Status / Byte Count Register */ /** @{ */
 #define DMA_DSR_BCR_BCR_MASK                     (0xFFFFFFU)                                         /**< DMA0_DSR_BCR.BCR Mask                   */
@@ -3770,9 +3782,9 @@ typedef struct SIM_Type {
 #define SIM_SCGC4_UART2_MASK                     (0x1000U)                                           /**< SIM_SCGC4.UART2 Mask                    */
 #define SIM_SCGC4_UART2_SHIFT                    (12U)                                               /**< SIM_SCGC4.UART2 Position                */
 #define SIM_SCGC4_UART2(x)                       (((uint32_t)(((uint32_t)(x))<<SIM_SCGC4_UART2_SHIFT))&SIM_SCGC4_UART2_MASK) /**< SIM_SCGC4.UART2 Field                   */
-#define SIM_SCGC4_CMP_MASK                       (0x80000U)                                          /**< SIM_SCGC4.CMP Mask                      */
-#define SIM_SCGC4_CMP_SHIFT                      (19U)                                               /**< SIM_SCGC4.CMP Position                  */
-#define SIM_SCGC4_CMP(x)                         (((uint32_t)(((uint32_t)(x))<<SIM_SCGC4_CMP_SHIFT))&SIM_SCGC4_CMP_MASK) /**< SIM_SCGC4.CMP Field                     */
+#define SIM_SCGC4_CMP0_MASK                      (0x80000U)                                          /**< SIM_SCGC4.CMP0 Mask                     */
+#define SIM_SCGC4_CMP0_SHIFT                     (19U)                                               /**< SIM_SCGC4.CMP0 Position                 */
+#define SIM_SCGC4_CMP0(x)                        (((uint32_t)(((uint32_t)(x))<<SIM_SCGC4_CMP0_SHIFT))&SIM_SCGC4_CMP0_MASK) /**< SIM_SCGC4.CMP0 Field                    */
 #define SIM_SCGC4_SPI0_MASK                      (0x400000U)                                         /**< SIM_SCGC4.SPI0 Mask                     */
 #define SIM_SCGC4_SPI0_SHIFT                     (22U)                                               /**< SIM_SCGC4.SPI0 Position                 */
 #define SIM_SCGC4_SPI0(x)                        (((uint32_t)(((uint32_t)(x))<<SIM_SCGC4_SPI0_SHIFT))&SIM_SCGC4_SPI0_MASK) /**< SIM_SCGC4.SPI0 Field                    */
@@ -3782,9 +3794,9 @@ typedef struct SIM_Type {
 /** @} */
 
 /** @name SCGC5 - System Clock Gating Control Register 5 */ /** @{ */
-#define SIM_SCGC5_LPTMR_MASK                     (0x1U)                                              /**< SIM_SCGC5.LPTMR Mask                    */
-#define SIM_SCGC5_LPTMR_SHIFT                    (0U)                                                /**< SIM_SCGC5.LPTMR Position                */
-#define SIM_SCGC5_LPTMR(x)                       (((uint32_t)(((uint32_t)(x))<<SIM_SCGC5_LPTMR_SHIFT))&SIM_SCGC5_LPTMR_MASK) /**< SIM_SCGC5.LPTMR Field                   */
+#define SIM_SCGC5_LPTMR0_MASK                    (0x1U)                                              /**< SIM_SCGC5.LPTMR0 Mask                   */
+#define SIM_SCGC5_LPTMR0_SHIFT                   (0U)                                                /**< SIM_SCGC5.LPTMR0 Position               */
+#define SIM_SCGC5_LPTMR0(x)                      (((uint32_t)(((uint32_t)(x))<<SIM_SCGC5_LPTMR0_SHIFT))&SIM_SCGC5_LPTMR0_MASK) /**< SIM_SCGC5.LPTMR0 Field                  */
 #define SIM_SCGC5_TSI0_MASK                      (0x20U)                                             /**< SIM_SCGC5.TSI0 Mask                     */
 #define SIM_SCGC5_TSI0_SHIFT                     (5U)                                                /**< SIM_SCGC5.TSI0 Position                 */
 #define SIM_SCGC5_TSI0(x)                        (((uint32_t)(((uint32_t)(x))<<SIM_SCGC5_TSI0_SHIFT))&SIM_SCGC5_TSI0_MASK) /**< SIM_SCGC5.TSI0 Field                    */
@@ -3836,9 +3848,9 @@ typedef struct SIM_Type {
 /** @} */
 
 /** @name SCGC7 - System Clock Gating Control Register 7 */ /** @{ */
-#define SIM_SCGC7_DMA_MASK                       (0x100U)                                            /**< SIM_SCGC7.DMA Mask                      */
-#define SIM_SCGC7_DMA_SHIFT                      (8U)                                                /**< SIM_SCGC7.DMA Position                  */
-#define SIM_SCGC7_DMA(x)                         (((uint32_t)(((uint32_t)(x))<<SIM_SCGC7_DMA_SHIFT))&SIM_SCGC7_DMA_MASK) /**< SIM_SCGC7.DMA Field                     */
+#define SIM_SCGC7_DMA0_MASK                      (0x100U)                                            /**< SIM_SCGC7.DMA0 Mask                     */
+#define SIM_SCGC7_DMA0_SHIFT                     (8U)                                                /**< SIM_SCGC7.DMA0 Position                 */
+#define SIM_SCGC7_DMA0(x)                        (((uint32_t)(((uint32_t)(x))<<SIM_SCGC7_DMA0_SHIFT))&SIM_SCGC7_DMA0_MASK) /**< SIM_SCGC7.DMA0 Field                    */
 /** @} */
 
 /** @name CLKDIV1 - System Clock Divider Register 1 */ /** @{ */

@@ -1,9 +1,11 @@
 <!--
-Devices using this peripheral: 
-      S32K144
+Devices using this peripheral:
+      MKE14F16
+      MKE16F16
+      MKE18F16
 -->
       <peripheral>
-         <?sourceFile "FTM0_8CH_S32K144" ?>
+         <?sourceFile "FTM0_8CH_QDCTRL_MKE16F16" ?>
          <name>FTM0</name>
          <description>FlexTimer Module (8 channels)</description>
          <groupName>FTM</groupName>
@@ -18,22 +20,7 @@ Devices using this peripheral:
          </parameters>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0xA4</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0xA8</offset>
-            <size>0x4</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0xB0</offset>
-            <size>0x4</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0xB8</offset>
-            <size>0x4</size>
+            <size>0xA0</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -218,94 +205,6 @@ An interrupt is generated when TOF equals one</description> <bitOffset>8</bitOff
                   <field derivedFrom="PWMEN0" > <name>PWMEN5</name> <description>Channel 5 PWM enable bit</description> <bitOffset>21</bitOffset> </field>
                   <field derivedFrom="PWMEN0" > <name>PWMEN6</name> <description>Channel 6 PWM enable bit</description> <bitOffset>22</bitOffset> </field>
                   <field derivedFrom="PWMEN0" > <name>PWMEN7</name> <description>Channel 7 PWM enable bit</description> <bitOffset>23</bitOffset> </field>
-                  <field>
-                     <name>FLTPS</name>
-                     <description>Filter Prescaler</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>Divide by 1</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>Divide by 2</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0010</name>
-                           <description>Divide by 3</description>
-                           <value>0b0010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0011</name>
-                           <description>Divide by 4</description>
-                           <value>0b0011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0100</name>
-                           <description>Divide by 5</description>
-                           <value>0b0100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0101</name>
-                           <description>Divide by 6</description>
-                           <value>0b0101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0110</name>
-                           <description>Divide by 7</description>
-                           <value>0b0110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0111</name>
-                           <description>Divide by 8</description>
-                           <value>0b0111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1000</name>
-                           <description>Divide by 9</description>
-                           <value>0b1000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1001</name>
-                           <description>Divide by 10</description>
-                           <value>0b1001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1010</name>
-                           <description>Divide by 11</description>
-                           <value>0b1010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1011</name>
-                           <description>Divide by 12</description>
-                           <value>0b1011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1100</name>
-                           <description>Divide by 13</description>
-                           <value>0b1100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1101</name>
-                           <description>Divide by 14</description>
-                           <value>0b1101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>Divide by 15</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>Divide by 16</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
                </fields>
             </register>
             <register>
@@ -371,12 +270,12 @@ An interrupt is generated when TOF equals one</description> <bitOffset>8</bitOff
                         <enumeratedValues>
                            <enumeratedValue>
                               <name>0b0</name>
-                              <description>FTM counter is not reset when the selected channel %s input event is detected</description>
+                              <description>FTM counter is not reset when the selected channel input event is detected</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
                               <name>0b1</name>
-                              <description>FTM counter is reset when the selected channel %s input event is detected</description>
+                              <description>FTM counter is reset when the selected channel input event is detected</description>
                               <value>0b1</value>
                            </enumeratedValue>
                         </enumeratedValues>
@@ -534,25 +433,6 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                            <enumeratedValue>
                               <name>0b1</name>
                               <description>The channel input is one</description>
-                              <value>0b1</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
-                     <field>
-                        <name>CHOV</name>
-                        <description>Channel Output Value</description>
-                        <bitOffset>10</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <access>read-only</access>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>The channel output is zero</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>The channel output is one</description>
                               <value>0b1</value>
                            </enumeratedValue>
                         </enumeratedValues>
@@ -829,6 +709,14 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <addressOffset>0x5C</addressOffset>
                <fields>
                   <field>
+                     <name>CHOI</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Output Initialization Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
                      <name>CH0OI</name>
                      <description>Channel 0 Output Initialization Value</description>
                      <bitOffset>0</bitOffset>
@@ -861,6 +749,14 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <addressOffset>0x60</addressOffset>
                <fields>
                   <field>
+                     <name>CHOM</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Output Mask</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
                      <name>CH0OM</name>
                      <description>Channel 0 Output Mask</description>
                      <bitOffset>0</bitOffset>
@@ -892,6 +788,14 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <description>Function for Linked Channels</description>
                <addressOffset>0x64</addressOffset>
                <fields>
+                  <field>
+                     <name>COMBINE</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Combination Control for CH 0 &amp; 1</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
                   <field>
                      <name>COMBINE0</name>
                      <description>Combine Channels 0 &amp; 1</description>
@@ -968,7 +872,6 @@ Controls whether channels are the some or complement</description>
                   <field derivedFrom="DECAPEN0" > <name>DTEN0</name> <description>Deadtime Enable for Channels 0 &amp; 1</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="DECAPEN0" > <name>SYNCEN0</name> <description>PWM Synchronization Enable for Channels 0 &amp; 1</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="DECAPEN0" > <name>FAULTEN0</name> <description>Fault Control Enable for Channels 0 &amp; 1</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="DECAPEN0" > <name>MCOMBINE0</name> <description>Modified Combine Mode for Channels 0 &amp; 1</description> <bitOffset>7</bitOffset> </field>
                   <field derivedFrom="COMBINE0" > <name>COMBINE1</name> <description>Combine Channels 2 &amp; 3</description> <bitOffset>8</bitOffset> </field>
                   <field derivedFrom="COMP0" > <name>COMP1</name> <description>Complement for Channels 2 &amp; 3</description> <bitOffset>9</bitOffset> </field>
                   <field derivedFrom="DECAPEN0" > <name>DECAPEN1</name> <description>Dual Edge Capture Mode Enable for Channels 2 &amp; 3</description> <bitOffset>10</bitOffset> </field>
@@ -976,7 +879,6 @@ Controls whether channels are the some or complement</description>
                   <field derivedFrom="DTEN0" > <name>DTEN1</name> <description>Deadtime Enable for Channels 2 &amp; 3</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="SYNCEN0" > <name>SYNCEN1</name> <description>Synchronization Enable for Channels 2 &amp; 3</description> <bitOffset>13</bitOffset> </field>
                   <field derivedFrom="FAULTEN0" > <name>FAULTEN1</name> <description>Fault Control Enable for Channels 2 &amp; 3</description> <bitOffset>14</bitOffset> </field>
-                  <field derivedFrom="DECAPEN0" > <name>MCOMBINE1</name> <description>Modified Combine Mode for Channels 2 &amp; 3</description> <bitOffset>15</bitOffset> </field>
                   <field derivedFrom="COMBINE0" > <name>COMBINE2</name> <description>Combine Channels 4 &amp; 5</description> <bitOffset>16</bitOffset> </field>
                   <field derivedFrom="COMP0" > <name>COMP2</name> <description>Complement for Channels 4 &amp; 5</description> <bitOffset>17</bitOffset> </field>
                   <field derivedFrom="DECAPEN0" > <name>DECAPEN2</name> <description>Dual Edge Capture Mode Enable for Channels 4 &amp; 5</description> <bitOffset>18</bitOffset> </field>
@@ -984,7 +886,6 @@ Controls whether channels are the some or complement</description>
                   <field derivedFrom="DTEN0" > <name>DTEN2</name> <description>Deadtime Enable for Channels 4 &amp; 5</description> <bitOffset>20</bitOffset> </field>
                   <field derivedFrom="SYNCEN0" > <name>SYNCEN2</name> <description>Synchronization Enable for Channels 4 &amp; 5</description> <bitOffset>21</bitOffset> </field>
                   <field derivedFrom="FAULTEN0" > <name>FAULTEN2</name> <description>Fault Control Enable for Channels 4 &amp; 5</description> <bitOffset>22</bitOffset> </field>
-                  <field derivedFrom="DECAPEN0" > <name>MCOMBINE2</name> <description>Modified Combine Mode for Channels 4 &amp; 5</description> <bitOffset>23</bitOffset> </field>
                   <field derivedFrom="COMBINE0" > <name>COMBINE3</name> <description>Combine Channels 6 &amp; 7</description> <bitOffset>24</bitOffset> </field>
                   <field derivedFrom="COMP0" > <name>COMP3</name> <description>Complement for Channels 6 &amp; 7</description> <bitOffset>25</bitOffset> </field>
                   <field derivedFrom="DECAPEN0" > <name>DECAPEN3</name> <description>Dual Edge Capture Mode Enable for Channels 6 &amp; 7</description> <bitOffset>26</bitOffset> </field>
@@ -992,7 +893,6 @@ Controls whether channels are the some or complement</description>
                   <field derivedFrom="DTEN0" > <name>DTEN3</name> <description>Deadtime Enable for Channels 6 &amp; 7</description> <bitOffset>28</bitOffset> </field>
                   <field derivedFrom="SYNCEN0" > <name>SYNCEN3</name> <description>Synchronization Enable for Channels 6 &amp; 7</description> <bitOffset>29</bitOffset> </field>
                   <field derivedFrom="FAULTEN0" > <name>FAULTEN3</name> <description>Fault Control Enable for Channels 6 &amp; 7</description> <bitOffset>30</bitOffset> </field>
-                  <field derivedFrom="DECAPEN0" > <name>MCOMBINE3</name> <description>Modified Combine Mode for Channels 6 &amp; 7</description> <bitOffset>31</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1029,12 +929,6 @@ Controls whether channels are the some or complement</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>DTVALEX</name>
-                     <description>Extended Deadtime Value</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>4</bitWidth>
-                  </field>
                </fields>
             </register>
             <register>
@@ -1042,6 +936,14 @@ Controls whether channels are the some or complement</description>
                <description>FTM External Trigger</description>
                <addressOffset>0x6C</addressOffset>
                <fields>
+                  <field>
+                     <name>CHTRIG</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Trigger Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
                   <field>
                      <name>CH2TRIG</name>
                      <description>Channel 2 Trigger Enable</description>
@@ -1110,6 +1012,14 @@ Controls whether channels are the some or complement</description>
                <description>Channels Polarity</description>
                <addressOffset>0x70</addressOffset>
                <fields>
+                  <field>
+                     <name>POL</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Polarity</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
                   <field>
                      <name>POL0</name>
                      <description>Channel 0 Polarity</description>
@@ -1254,6 +1164,14 @@ Controls whether channels are the some or complement</description>
                <addressOffset>0x7C</addressOffset>
                <fields>
                   <field>
+                     <name>FAULTEN</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Fault Input Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
                      <name>FAULT0EN</name>
                      <description>Fault Input 0 Enable</description>
                      <bitOffset>0</bitOffset>
@@ -1274,6 +1192,14 @@ Controls whether channels are the some or complement</description>
                   <field derivedFrom="FAULT0EN" > <name>FAULT1EN</name> <description>Fault Input 1 Enable</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="FAULT0EN" > <name>FAULT2EN</name> <description>Fault Input 2 Enable</description> <bitOffset>2</bitOffset> </field>
                   <field derivedFrom="FAULT0EN" > <name>FAULT3EN</name> <description>Fault Input 3 Enable</description> <bitOffset>3</bitOffset> </field>
+                  <field>
+                     <name>FFLTREN</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Fault Input Filter Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
                   <field>
                      <name>FFLTR0EN</name>
                      <description>Fault Input 0 Filter Enable</description>
@@ -1524,12 +1450,12 @@ Selects the ratio between the number of counter overflows to the number of times
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Initialization trigger is generated on counter wrap events</description>
+                           <description>On counter wrap events</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Initialization trigger is generated when a reload point is reached</description>
+                           <description>When reload point is reached</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1541,6 +1467,14 @@ Selects the ratio between the number of counter overflows to the number of times
                <description>FTM Fault Input Polarity</description>
                <addressOffset>0x88</addressOffset>
                <fields>
+                  <field>
+                     <name>FLTPOL</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Fault Input Polarity</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
                   <field>
                      <name>FLT0POL</name>
                      <description>Fault Input 0 Polarity</description>
@@ -1841,6 +1775,14 @@ Selects the ratio between the number of counter overflows to the number of times
                <addressOffset>0x94</addressOffset>
                <fields>
                   <field>
+                     <name>CHOC</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Software Output Control Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
                      <name>CH0OC</name>
                      <description>Channel 0 Software Output Control Enable</description>
                      <bitOffset>0</bitOffset>
@@ -1865,6 +1807,14 @@ Selects the ratio between the number of counter overflows to the number of times
                   <field derivedFrom="CH0OC" > <name>CH5OC</name> <description>Channel 5 Software Output Control Enable</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="CH0OC" > <name>CH6OC</name> <description>Channel 6 Software Output Control Enable</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="CH0OC" > <name>CH7OC</name> <description>Channel 7 Software Output Control Enable</description> <bitOffset>7</bitOffset> </field>
+                  <field>
+                     <name>CHOCV</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Software Output Control Value</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
                   <field>
                      <name>CH0OCV</name>
                      <description>Channel 0 Software Output Control Value</description>
@@ -1897,6 +1847,14 @@ Selects the ratio between the number of counter overflows to the number of times
                <description>FTM PWM Load</description>
                <addressOffset>0x98</addressOffset>
                <fields>
+                  <field>
+                     <name>CHSEL</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
                   <field>
                      <name>CH0SEL</name>
                      <description>Channel 0 Select</description>
@@ -2010,50 +1968,5 @@ Selects the ratio between the number of counter overflows to the number of times
                   </field>
                </fields>
             </register>
-            <register>
-               <name>PAIR0DEADTIME</name>
-               <description>Pair 0 Deadtime Configuration</description>
-               <addressOffset>0xA0</addressOffset>
-               <fields>
-                  <field>
-                     <name>DTVAL</name>
-                     <description>Deadtime Value</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>6</bitWidth>
-                  </field>
-                  <field>
-                     <name>DTPS</name>
-                     <description>Deadtime Prescaler Value</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0x</name>
-                           <description>Divide the FTM input clock by 1</description>
-                           <value>0b0x</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10</name>
-                           <description>Divide the FTM input clock by 4</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11</name>
-                           <description>Divide the FTM input clock by 16</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>DTVALEX</name>
-                     <description>Extended Deadtime Value</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>4</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register derivedFrom="PAIR0DEADTIME"> <name>PAIR1DEADTIME</name> <description>Pair 1 Deadtime Configuration</description> <addressOffset>0xA8</addressOffset> </register>
-            <register derivedFrom="PAIR0DEADTIME"> <name>PAIR2DEADTIME</name> <description>Pair 2 Deadtime Configuration</description> <addressOffset>0xB0</addressOffset> </register>
-            <register derivedFrom="PAIR0DEADTIME"> <name>PAIR3DEADTIME</name> <description>Pair 3 Deadtime Configuration</description> <addressOffset>0xB8</addressOffset> </register>
          </registers>
       </peripheral>

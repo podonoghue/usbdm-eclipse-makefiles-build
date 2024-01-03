@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral:
+Devices using this peripheral: 
       MK10D5
       MK20D5
 -->
@@ -937,15 +937,6 @@ Enables suspension of this channel by a higher priority channel</description>
                </fields>
             </register>
             <register derivedFrom="DCHPRI%s"><dim>4</dim><dimIndex>0,1,2,3</dimIndex> <name>DCHPRI</name> <addressOffset>0x100</addressOffset> <resetMask>0xFF</resetMask> </register>
-            <register>
-               <name>TCD_RAW</name>
-               <dim>32</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>0-31</dimIndex>
-               <size>32</size>
-               <description>Raw TCD array as uint32_t</description>
-               <addressOffset>0x1000</addressOffset>
-            </register>
             <cluster>
                <dim>4</dim>
                <dimIncrement>32</dimIncrement>
@@ -1580,5 +1571,15 @@ Allows the eDMA to be briefly stalled after each read/write</description>
                   </fields>
                </register>
             </cluster>
+            <register>
+               <dim>32</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31</dimIndex>
+               <name>TCD_RAW</name>
+               <description>Raw TCD array as uint32_t</description>
+               <addressOffset>0x1000</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+            </register>
          </registers>
       </peripheral>

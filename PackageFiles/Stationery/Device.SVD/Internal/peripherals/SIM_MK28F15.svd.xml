@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral:
+Devices using this peripheral: 
       MK28F15
 -->
       <peripheral>
@@ -2046,10 +2046,8 @@ Devices using this peripheral:
                   <field derivedFrom="FTF" > <name>PIT</name> <description>PIT Clock Gate Control</description> <bitOffset>23</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>FTM0</name> <description>FTM0 Clock Gate Control</description> <bitOffset>24</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>FTM1</name> <description>FTM1 Clock Gate Control</description> <bitOffset>25</bitOffset> </field>
-                  <!--field derivedFrom="FTF" > <name>FTM2</name> <description>FTM2 Clock Gate Control</description> <bitOffset>26</bitOffset> </field -->
                   <field derivedFrom="FTF" > <name>ADC0</name> <description>ADC0 Clock Gate Control</description> <bitOffset>27</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>RTC</name> <description>RTC Clock Gate Control</description> <bitOffset>29</bitOffset> </field>
-                  <!-- field derivedFrom="FTF" > <name>DAC0</name> <description>DAC0 Clock Gate Control</description> <bitOffset>31</bitOffset> </field -->
                </fields>
             </register>
             <register>

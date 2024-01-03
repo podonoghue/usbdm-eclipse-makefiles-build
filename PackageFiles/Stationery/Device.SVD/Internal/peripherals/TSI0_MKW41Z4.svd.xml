@@ -478,7 +478,7 @@ Number of Consecutive Scans Per Electrode</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="EXTCHRG" > <name>REFCHRG</name> <description>REFCHRG</description> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="EXTCHRG" > <name>REFCHRG</name> <description>REFCHRG</description> <bitOffset>21</bitOffset> <?ignoreOverlap?> </field>
                   <field>
                      <name>MODE</name>
                      <description>analogue modes setup and status bits</description>

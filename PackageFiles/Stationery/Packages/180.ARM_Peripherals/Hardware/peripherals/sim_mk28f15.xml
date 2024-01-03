@@ -11,6 +11,26 @@
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
+   <!-- TPM Trigger Sources - value:name:enum -->
+   <constant key="/TPM/_trigger_sources"
+      value="&quot;
+         0b0000 : 'ExternalTrigger'  :  External    ;
+         0b0001 : 'CMP0'             :  CMP0        ;
+         0b0010 : 'CMP1'             :  CMP1        ;
+         0b0100 : 'PIT Ch 0'         :  PIT_Ch0     ;
+         0b0101 : 'PIT Ch 1'         :  PIT_Ch1     ;
+         0b0110 : 'PIT Ch 2'         :  PIT_Ch2     ;
+         0b0111 : 'PIT Ch 3'         :  PIT_Ch3     ;
+         0b1000 : 'FTM0 (EXTTRIG)'   :  FTM0        ;
+         0b1001 : 'FTM1 (EXTTRIG)'   :  FTM1        ;
+         0b1010 : 'FTM2 (EXTTRIG)'   :  FTM2        ;
+         0b1011 : 'FTM3 (EXTTRIG)'   :  FTM3        ;
+         0b1100 : 'RTC Alarm'        :  RTC_Alarm   ;
+         0b1101 : 'RTC Seconds'      :  RTC_Seconds ;
+         0b1110 : 'LPTMR Output'     :  LPTMR       ;
+         0b1111 : 'Software Trigger' :  Software    &quot;"
+   />
+
    <!-- Flash characteristics -->
    <intOption key="/FTFE/pflash_sector_size" hidden="true" locked="true" derived="true" value="4096"
       description="Sector size for program flash" toolTip="Minimum erase element" />
@@ -505,7 +525,7 @@
             \t * @param %paramName %tooltip
             \t */
             \tstatic void setFtm%(f)ClockIn(%paramType %paramName) {
-            \t   %fieldAssignment
+            \t   %fieldAssignment;
             \t}
             \t
             \t/**
@@ -723,7 +743,7 @@
             \t * @param %paramName %tooltip
             \t */
             \tstatic void setTpm%(t)ClockIn(%paramType %paramName) {
-            \t   %fieldAssignment
+            \t   %fieldAssignment;
             \t}
             \t
             \t/**

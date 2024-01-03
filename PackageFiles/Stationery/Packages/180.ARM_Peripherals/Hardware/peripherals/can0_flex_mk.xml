@@ -173,7 +173,7 @@
       \t * @param %paramName %tooltip
       \t */
       \tstatic void setCanClock(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}
       \t
       \t/**

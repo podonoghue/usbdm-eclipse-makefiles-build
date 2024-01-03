@@ -1,10 +1,9 @@
 <!--
-Devices using this peripheral: 
-      MKE14Z7
-      MKE15Z7
+Devices using this peripheral:
+      MK28F15
 -->
       <peripheral>
-         <?sourceFile "FTM0_8CH_MKE15Z7" ?>
+         <?sourceFile "FTM0_8CH_DMA" ?>
          <name>FTM0</name>
          <description>FlexTimer Module (8 channels)</description>
          <groupName>FTM</groupName>
@@ -19,12 +18,12 @@ Devices using this peripheral:
          </parameters>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0xA0</size>
+            <size>0x80</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
-            <offset>0x200</offset>
-            <size>0x24</size>
+            <offset>0x84</offset>
+            <size>0x18</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -129,8 +128,9 @@ Selects between left and centre-aligned PWM pulse output</description>
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>RIE</name>
-                     <description>Reload Point Interrupt Enable</description>
+                     <name>TOIE</name>
+                     <description>Timer Overflow Interrupt Enable\n
+An interrupt is generated when TOF equals one</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -147,29 +147,9 @@ Selects between left and centre-aligned PWM pulse output</description>
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>RF</name>
-                     <description>Reload Flag</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>A selected reload point did not happen</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>A selected reload point happened</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field derivedFrom="RIE" > <name>TOIE</name> <description>Timer Overflow Interrupt Enable\n
-An interrupt is generated when TOF equals one</description> <bitOffset>8</bitOffset> </field>
-                  <field>
                      <name>TOF</name>
                      <description>Timer Overflow Flag</description>
-                     <bitOffset>9</bitOffset>
+                     <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
@@ -185,30 +165,23 @@ An interrupt is generated when TOF equals one</description> <bitOffset>8</bitOff
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>PWMEN0</name>
-                     <description>Channel 0 PWM enable bit</description>
-                     <bitOffset>16</bitOffset>
+                     <name>DMA</name>
+                     <description>DMA Enable for the overflow flag</description>
+                     <bitOffset>8</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Channel output port is disabled</description>
+                           <description>Disables DMA transfers</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Channel output port is enabled</description>
+                           <description>Enables DMA transfers</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="PWMEN0" > <name>PWMEN1</name> <description>Channel 1 PWM enable bit</description> <bitOffset>17</bitOffset> </field>
-                  <field derivedFrom="PWMEN0" > <name>PWMEN2</name> <description>Channel 2 PWM enable bit</description> <bitOffset>18</bitOffset> </field>
-                  <field derivedFrom="PWMEN0" > <name>PWMEN3</name> <description>Channel 3 PWM enable bit</description> <bitOffset>19</bitOffset> </field>
-                  <field derivedFrom="PWMEN0" > <name>PWMEN4</name> <description>Channel 4 PWM enable bit</description> <bitOffset>20</bitOffset> </field>
-                  <field derivedFrom="PWMEN0" > <name>PWMEN5</name> <description>Channel 5 PWM enable bit</description> <bitOffset>21</bitOffset> </field>
-                  <field derivedFrom="PWMEN0" > <name>PWMEN6</name> <description>Channel 6 PWM enable bit</description> <bitOffset>22</bitOffset> </field>
-                  <field derivedFrom="PWMEN0" > <name>PWMEN7</name> <description>Channel 7 PWM enable bit</description> <bitOffset>23</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -262,24 +235,6 @@ An interrupt is generated when TOF equals one</description> <bitOffset>8</bitOff
                            <enumeratedValue>
                               <name>0b1</name>
                               <description>DMA enabled</description>
-                              <value>0b1</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
-                     <field>
-                        <name>ICRST</name>
-                        <description>FTM counter reset by the selected input capture event</description>
-                        <bitOffset>1</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>FTM counter is not reset when the selected channel %s input event is detected</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>FTM counter is reset when the selected channel %s input event is detected</description>
                               <value>0b1</value>
                            </enumeratedValue>
                         </enumeratedValues>
@@ -400,43 +355,6 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                            <enumeratedValue>
                               <name>0b1</name>
                               <description>Channel event</description>
-                              <value>0b1</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
-                     <field>
-                        <name>TRIGMODE</name>
-                        <description>Trigger mode control</description>
-                        <bitOffset>8</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>Channel outputs will generate the normal PWM outputs without generating a pulse</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>If a match in the channel occurs, a trigger generation on channel output will happen. The trigger pulse width has one FTM clock cycle</description>
-                              <value>0b1</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
-                     <field>
-                        <name>CHIS</name>
-                        <description>Channel Input State</description>
-                        <bitOffset>9</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <access>read-only</access>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>The channel input is zero</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>The channel input is one</description>
                               <value>0b1</value>
                            </enumeratedValue>
                         </enumeratedValues>
@@ -713,6 +631,14 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <addressOffset>0x5C</addressOffset>
                <fields>
                   <field>
+                     <name>CHOI</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Output Initialization Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
                      <name>CH0OI</name>
                      <description>Channel 0 Output Initialization Value</description>
                      <bitOffset>0</bitOffset>
@@ -745,6 +671,14 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <addressOffset>0x60</addressOffset>
                <fields>
                   <field>
+                     <name>CHOM</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Output Mask</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
                      <name>CH0OM</name>
                      <description>Channel 0 Output Mask</description>
                      <bitOffset>0</bitOffset>
@@ -776,6 +710,14 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <description>Function for Linked Channels</description>
                <addressOffset>0x64</addressOffset>
                <fields>
+                  <field>
+                     <name>COMBINE</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Combination Control for CH 0 &amp; 1</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
                   <field>
                      <name>COMBINE0</name>
                      <description>Combine Channels 0 &amp; 1</description>
@@ -917,6 +859,14 @@ Controls whether channels are the some or complement</description>
                <addressOffset>0x6C</addressOffset>
                <fields>
                   <field>
+                     <name>CHTRIG</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Trigger Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
                      <name>CH2TRIG</name>
                      <description>Channel 2 Trigger Enable</description>
                      <bitOffset>0</bitOffset>
@@ -975,8 +925,6 @@ Controls whether channels are the some or complement</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="CH2TRIG" > <name>CH6TRIG</name> <description>Channel 6 External Trigger Enable</description> <bitOffset>8</bitOffset> </field>
-                  <field derivedFrom="CH2TRIG" > <name>CH7TRIG</name> <description>Channel 7 External Trigger Enable</description> <bitOffset>9</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -984,6 +932,14 @@ Controls whether channels are the some or complement</description>
                <description>Channels Polarity</description>
                <addressOffset>0x70</addressOffset>
                <fields>
+                  <field>
+                     <name>POL</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Polarity</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
                   <field>
                      <name>POL0</name>
                      <description>Channel 0 Polarity</description>
@@ -1128,6 +1084,14 @@ Controls whether channels are the some or complement</description>
                <addressOffset>0x7C</addressOffset>
                <fields>
                   <field>
+                     <name>FAULTEN</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Fault Input Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
                      <name>FAULT0EN</name>
                      <description>Fault Input 0 Enable</description>
                      <bitOffset>0</bitOffset>
@@ -1148,6 +1112,14 @@ Controls whether channels are the some or complement</description>
                   <field derivedFrom="FAULT0EN" > <name>FAULT1EN</name> <description>Fault Input 1 Enable</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="FAULT0EN" > <name>FAULT2EN</name> <description>Fault Input 2 Enable</description> <bitOffset>2</bitOffset> </field>
                   <field derivedFrom="FAULT0EN" > <name>FAULT3EN</name> <description>Fault Input 3 Enable</description> <bitOffset>3</bitOffset> </field>
+                  <field>
+                     <name>FFLTREN</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Fault Input Filter Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
                   <field>
                      <name>FFLTR0EN</name>
                      <description>Fault Input 0 Filter Enable</description>
@@ -1187,148 +1159,6 @@ Controls whether channels are the some or complement</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>FSTATE</name>
-                     <description>Fault output state</description>
-                     <bitOffset>15</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>FTM outputs will be placed into safe values when fault events in ongoing (defined by POL bits)</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>FTM outputs will be tri-stated when fault event is ongoing</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>QDCTRL</name>
-               <description>Quadrature Decoder Control and Status</description>
-               <addressOffset>0x80</addressOffset>
-               <fields>
-                  <field>
-                     <name>QUADEN</name>
-                     <description>Quadrature Decoder Mode Enable</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TOFDIR</name>
-                     <description>Timer Overflow Direction in Quadrature Decoder Mode\n
-Indicates if the TOF bit was set on the top or the bottom of counting</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <access>read-only</access>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Bottom of counting.\tThere was an FTM counter decrement and FTM counter changes from its minimum value (CNTIN register) to its maximum value (MOD register)</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Top of counting.\tThere was an FTM counter increment and FTM counter changes from its maximum value (MOD register) to its minimum value (CNTIN register)</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>QUADIR</name>
-                     <description>FTM Counter Direction in Quadrature Decoder Mode\n
-Indicates the counting direction and it is updated according to selected encoding mode</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <access>read-only</access>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Decreasing</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Increasing</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>QUADMODE</name>
-                     <description>Quadrature Decoder Mode\n
-Selects the encoding mode used in the quadrature decoder mode</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Phase A/B mode</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Count/direction mode</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PHBPOL</name>
-                     <description>Phase B Input Polarity</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Normal polarity\tPhase B input signal is not inverted before identifying the rising and falling edges of this signal</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Inverted polarity\tPhase B input signal is inverted before identifying the rising and falling edges of this signal</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PHAPOL</name>
-                     <description>Phase A Input Polarity</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Normal polarity\tPhase A input signal is not inverted before identifying the rising and falling edges of this signal</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Inverted polarity\tPhase A input signal is inverted before identifying the rising and falling edges of this signal</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field derivedFrom="QUADEN" > <name>PHBFLTREN</name> <description>Phase B Input Filter Enable\n
-Enables the filter for the quadrature decoder phase B input</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="QUADEN" > <name>PHAFLTREN</name> <description>Phase A Input Filter Enable\n
-Enables the filter for the quadrature decoder phase A input</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1337,8 +1167,8 @@ Enables the filter for the quadrature decoder phase A input</description> <bitOf
                <addressOffset>0x84</addressOffset>
                <fields>
                   <field>
-                     <name>LDFQ</name>
-                     <description>Frequency of the Reload Opportunities</description>
+                     <name>NUMTOF</name>
+                     <description>TOF Frequency</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>5</bitWidth>
                   </field>
@@ -1390,24 +1220,6 @@ Selects the ratio between the number of counter overflows to the number of times
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="GTBEEN" > <name>GTBEOUT</name> <description>Global Time Base Output</description> <bitOffset>10</bitOffset> </field>
-                  <field>
-                     <name>ITRIGR</name>
-                     <description>Initialization trigger on Reload Point</description>
-                     <bitOffset>11</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>On counter wrap events</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>When reload point is reached</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
                </fields>
             </register>
             <register>
@@ -1415,6 +1227,14 @@ Selects the ratio between the number of counter overflows to the number of times
                <description>FTM Fault Input Polarity</description>
                <addressOffset>0x88</addressOffset>
                <fields>
+                  <field>
+                     <name>FLTPOL</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Fault Input Polarity</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
                   <field>
                      <name>FLT0POL</name>
                      <description>Fault Input 0 Polarity</description>
@@ -1519,18 +1339,18 @@ Selects the ratio between the number of counter overflows to the number of times
                   </field>
                   <field>
                      <name>SWWRBUF</name>
-                     <description>MOD, HCR, CNTIN, and CV registers synchronization is activated by the software trigger</description>
+                     <description>MOD, CNTIN, and CV registers synchronization is activated by the software trigger</description>
                      <bitOffset>9</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The software trigger does not activate MOD, HCR, CNTIN, and CV registers synchronization</description>
+                           <description>The software trigger does not activate MOD, CNTIN, and CV registers synchronization</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The software trigger activates MOD, HCR, CNTIN, and CV registers synchronization</description>
+                           <description>The software trigger activates MOD, CNTIN, and CV registers synchronization</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1609,18 +1429,18 @@ Selects the ratio between the number of counter overflows to the number of times
                   </field>
                   <field>
                      <name>HWWRBUF</name>
-                     <description>MOD, HCR, CNTIN, and CV registers synchronization is activated by a hardware trigger</description>
+                     <description>MOD, CNTIN, and CV registers synchronization is activated by a hardware trigger</description>
                      <bitOffset>17</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>A hardware trigger does not activate MOD, HCR, CNTIN, and CV registers synchronization</description>
+                           <description>A hardware trigger does not activate MOD, CNTIN, and CV registers synchronization</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>A hardware trigger activates MOD, HCR, CNTIN, and CV registers synchronization</description>
+                           <description>A hardware trigger activates MOD, CNTIN, and CV registers synchronization</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1715,6 +1535,14 @@ Selects the ratio between the number of counter overflows to the number of times
                <addressOffset>0x94</addressOffset>
                <fields>
                   <field>
+                     <name>CHOC</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Software Output Control Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
                      <name>CH0OC</name>
                      <description>Channel 0 Software Output Control Enable</description>
                      <bitOffset>0</bitOffset>
@@ -1739,6 +1567,14 @@ Selects the ratio between the number of counter overflows to the number of times
                   <field derivedFrom="CH0OC" > <name>CH5OC</name> <description>Channel 5 Software Output Control Enable</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="CH0OC" > <name>CH6OC</name> <description>Channel 6 Software Output Control Enable</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="CH0OC" > <name>CH7OC</name> <description>Channel 7 Software Output Control Enable</description> <bitOffset>7</bitOffset> </field>
+                  <field>
+                     <name>CHOCV</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Software Output Control Value</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
                   <field>
                      <name>CH0OCV</name>
                      <description>Channel 0 Software Output Control Value</description>
@@ -1772,6 +1608,14 @@ Selects the ratio between the number of counter overflows to the number of times
                <addressOffset>0x98</addressOffset>
                <fields>
                   <field>
+                     <name>CHSEL</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
                      <name>CH0SEL</name>
                      <description>Channel 0 Select</description>
                      <bitOffset>0</bitOffset>
@@ -1797,24 +1641,6 @@ Selects the ratio between the number of counter overflows to the number of times
                   <field derivedFrom="CH0SEL" > <name>CH6SEL</name> <description>Channel 6 Select</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="CH0SEL" > <name>CH7SEL</name> <description>Channel 7 Select</description> <bitOffset>7</bitOffset> </field>
                   <field>
-                     <name>HCSEL</name>
-                     <description>Half Cycle Select</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Half cycle reload is disabled and it is not considered as a reload opportunity</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Half cycle reload is enabled and it is considered as a reload opportunity</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
                      <name>LDOK</name>
                      <description>Load Enable</description>
                      <bitOffset>9</bitOffset>
@@ -1832,102 +1658,7 @@ Selects the ratio between the number of counter overflows to the number of times
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>GLEN</name>
-                     <description>Global Load Enable</description>
-                     <bitOffset>10</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Global Load Ok disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Global Load OK enabled. A pulse event on the module global load input sets the LDOK bit</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>GLDOK</name>
-                     <description>Global Load OK</description>
-                     <bitOffset>11</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <access>write-only</access>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>No action</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>LDOK bit is set</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
                </fields>
             </register>
-            <register>
-               <name>HCR</name>
-               <description>Half Cycle Register</description>
-               <addressOffset>0x9C</addressOffset>
-               <fields>
-                  <field>
-                     <name>HCVAL</name>
-                     <description>Half Cycle Value</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>16</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>MOD_MIRROR</name>
-               <description>Mirror of Modulo Value</description>
-               <addressOffset>0x200</addressOffset>
-               <fields>
-                  <field>
-                     <name>FRACMOD</name>
-                     <description>Modulo Fractional Value</description>
-                     <bitOffset>11</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-                  <field>
-                     <name>MOD</name>
-                     <description>Mirror of the Modulo Integer Value</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>16</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>C0V_MIRROR</name>
-               <description>Mirror of Channel Match Value</description>
-               <addressOffset>0x204</addressOffset>
-               <fields>
-                  <field>
-                     <name>FRACVAL</name>
-                     <description>Channel Match Fractional Value</description>
-                     <bitOffset>11</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-                  <field>
-                     <name>VAL</name>
-                     <description>Mirror of the Channel Match Integer Value</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>16</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register derivedFrom="C0V_MIRROR"> <name>C1V_MIRROR</name> <addressOffset>0x208</addressOffset> </register>
-            <register derivedFrom="C0V_MIRROR"> <name>C2V_MIRROR</name> <addressOffset>0x20C</addressOffset> </register>
-            <register derivedFrom="C0V_MIRROR"> <name>C3V_MIRROR</name> <addressOffset>0x210</addressOffset> </register>
-            <register derivedFrom="C0V_MIRROR"> <name>C4V_MIRROR</name> <addressOffset>0x214</addressOffset> </register>
-            <register derivedFrom="C0V_MIRROR"> <name>C5V_MIRROR</name> <addressOffset>0x218</addressOffset> </register>
-            <register derivedFrom="C0V_MIRROR"> <name>C6V_MIRROR</name> <addressOffset>0x21C</addressOffset> </register>
-            <register derivedFrom="C0V_MIRROR"> <name>C7V_MIRROR</name> <addressOffset>0x220</addressOffset> </register>
          </registers>
       </peripheral>

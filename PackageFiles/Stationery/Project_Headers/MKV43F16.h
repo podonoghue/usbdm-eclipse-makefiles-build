@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2022/09
+ * @date     2023/12
  *
  */
 
@@ -2080,6 +2080,9 @@ typedef struct CRC_Type {
 /** @{ */
 
 /** @name DATA - Data register */ /** @{ */
+#define CRC_DATA_DATA_MASK                       (0xFFFFFFFFU)                                       /**< CRC0_DATA.DATA Mask                     */
+#define CRC_DATA_DATA_SHIFT                      (0U)                                                /**< CRC0_DATA.DATA Position                 */
+#define CRC_DATA_DATA(x)                         (((uint32_t)(((uint32_t)(x))<<CRC_DATA_DATA_SHIFT))&CRC_DATA_DATA_MASK) /**< CRC0_DATA.DATA Field                    */
 #define CRC_DATA_LL_MASK                         (0xFFU)                                             /**< CRC0_DATA.LL Mask                       */
 #define CRC_DATA_LL_SHIFT                        (0U)                                                /**< CRC0_DATA.LL Position                   */
 #define CRC_DATA_LL(x)                           (((uint32_t)(((uint32_t)(x))<<CRC_DATA_LL_SHIFT))&CRC_DATA_LL_MASK) /**< CRC0_DATA.LL Field                      */
@@ -2131,6 +2134,9 @@ typedef struct CRC_Type {
 /** @} */
 
 /** @name GPOLY - Polynomial register */ /** @{ */
+#define CRC_GPOLY_GPOLY_MASK                     (0xFFFFFFFFU)                                       /**< CRC0_GPOLY.GPOLY Mask                   */
+#define CRC_GPOLY_GPOLY_SHIFT                    (0U)                                                /**< CRC0_GPOLY.GPOLY Position               */
+#define CRC_GPOLY_GPOLY(x)                       (((uint32_t)(((uint32_t)(x))<<CRC_GPOLY_GPOLY_SHIFT))&CRC_GPOLY_GPOLY_MASK) /**< CRC0_GPOLY.GPOLY Field                  */
 #define CRC_GPOLY_LOW_MASK                       (0xFFFFU)                                           /**< CRC0_GPOLY.LOW Mask                     */
 #define CRC_GPOLY_LOW_SHIFT                      (0U)                                                /**< CRC0_GPOLY.LOW Position                 */
 #define CRC_GPOLY_LOW(x)                         (((uint32_t)(((uint32_t)(x))<<CRC_GPOLY_LOW_SHIFT))&CRC_GPOLY_LOW_MASK) /**< CRC0_GPOLY.LOW Field                    */
@@ -2260,29 +2266,32 @@ typedef struct DMA_Type {
       __IO uint8_t   DCHPRI[16];                /**< 0100: Channel  Priority Register                                   */
    };
         uint8_t   RESERVED_7[3824];             /**< 0110: 0xEF0 bytes                                                  */
-   struct {
-      __IO uint32_t  SADDR;                     /**< 1000: Source Address                                               */
-      __IO uint16_t  SOFF;                      /**< 1004: Signed Source Address Offset                                 */
-      __IO uint16_t  ATTR;                      /**< 1006: Transfer Attributes                                          */
-      union {                                   /**< 1008: (size=0004)                                                  */
-         __IO uint32_t  NBYTES_MLNO;            /**< 1008: Minor Byte Count (Minor Loop Disabled)                       */
-         __IO uint32_t  NBYTES_MLOFFNO;         /**< 1008: Signed Minor Loop Offset (Minor Loop Enabled and Offset Disabled) */
-         __IO uint32_t  NBYTES_MLOFFYES;        /**< 1008: Signed Minor Loop Offset (Minor Loop and Offset Enabled)     */
-      };
-      __IO uint32_t  SLAST;                     /**< 100C: Last Source Address Adjustment                               */
-      __IO uint32_t  DADDR;                     /**< 1010: Destination Address                                          */
-      __IO uint16_t  DOFF;                      /**< 1014: Signed Destination Address Offset                            */
-      union {                                   /**< 1016: (size=0002)                                                  */
-         __IO uint16_t  CITER_ELINKNO;          /**< 1016: Current Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
-         __IO uint16_t  CITER_ELINKYES;         /**< 1016: Current Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
-      };
-      __IO uint32_t  DLASTSGA;                  /**< 1018: Last Destination Address Adjustment/Scatter Gather Address   */
-      __IO uint16_t  CSR;                       /**< 101C: Control and Status                                           */
-      union {                                   /**< 101E: (size=0002)                                                  */
-         __IO uint16_t  BITER_ELINKNO;          /**< 101E: Beginning Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
-         __IO uint16_t  BITER_ELINKYES;         /**< 101E: Beginning Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
-      };
-   } TCD[16];                                   /**< 1000: (cluster: size=0x0200, 512)                                  */
+   union {                                      /**< 1000: (size=0200)                                                  */
+      struct {
+         __IO uint32_t  SADDR;                  /**< 1000: Source Address                                               */
+         __IO uint16_t  SOFF;                   /**< 1004: Signed Source Address Offset                                 */
+         __IO uint16_t  ATTR;                   /**< 1006: Transfer Attributes                                          */
+         union {                                /**< 1008: (size=0004)                                                  */
+            __IO uint32_t  NBYTES_MLNO;         /**< 1008: Minor Byte Count (Minor Loop Disabled)                       */
+            __IO uint32_t  NBYTES_MLOFFNO;      /**< 1008: Signed Minor Loop Offset (Minor Loop Enabled and Offset Disabled) */
+            __IO uint32_t  NBYTES_MLOFFYES;     /**< 1008: Signed Minor Loop Offset (Minor Loop and Offset Enabled)     */
+         };
+         __IO uint32_t  SLAST;                  /**< 100C: Last Source Address Adjustment                               */
+         __IO uint32_t  DADDR;                  /**< 1010: Destination Address                                          */
+         __IO uint16_t  DOFF;                   /**< 1014: Signed Destination Address Offset                            */
+         union {                                /**< 1016: (size=0002)                                                  */
+            __IO uint16_t  CITER_ELINKNO;       /**< 1016: Current Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
+            __IO uint16_t  CITER_ELINKYES;      /**< 1016: Current Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
+         };
+         __IO uint32_t  DLASTSGA;               /**< 1018: Last Destination Address Adjustment/Scatter Gather Address   */
+         __IO uint16_t  CSR;                    /**< 101C: Control and Status                                           */
+         union {                                /**< 101E: (size=0002)                                                  */
+            __IO uint16_t  BITER_ELINKNO;       /**< 101E: Beginning Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
+            __IO uint16_t  BITER_ELINKYES;      /**< 101E: Beginning Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
+         };
+      } TCD[16];                                /**< 1000: (cluster: size=0x0200, 512)                                  */
+      __IO uint32_t  TCD_RAW[128];              /**< 1000: Raw TCD array as uint32_t                                    */
+   };
 } DMA_Type;
 
 
@@ -8602,9 +8611,9 @@ typedef struct SIM_Type {
 #define SIM_SCGC4_UART1_MASK                     (0x800U)                                            /**< SIM_SCGC4.UART1 Mask                    */
 #define SIM_SCGC4_UART1_SHIFT                    (11U)                                               /**< SIM_SCGC4.UART1 Position                */
 #define SIM_SCGC4_UART1(x)                       (((uint32_t)(((uint32_t)(x))<<SIM_SCGC4_UART1_SHIFT))&SIM_SCGC4_UART1_MASK) /**< SIM_SCGC4.UART1 Field                   */
-#define SIM_SCGC4_CMP_MASK                       (0x80000U)                                          /**< SIM_SCGC4.CMP Mask                      */
-#define SIM_SCGC4_CMP_SHIFT                      (19U)                                               /**< SIM_SCGC4.CMP Position                  */
-#define SIM_SCGC4_CMP(x)                         (((uint32_t)(((uint32_t)(x))<<SIM_SCGC4_CMP_SHIFT))&SIM_SCGC4_CMP_MASK) /**< SIM_SCGC4.CMP Field                     */
+#define SIM_SCGC4_CMP0_MASK                      (0x80000U)                                          /**< SIM_SCGC4.CMP0 Mask                     */
+#define SIM_SCGC4_CMP0_SHIFT                     (19U)                                               /**< SIM_SCGC4.CMP0 Position                 */
+#define SIM_SCGC4_CMP0(x)                        (((uint32_t)(((uint32_t)(x))<<SIM_SCGC4_CMP0_SHIFT))&SIM_SCGC4_CMP0_MASK) /**< SIM_SCGC4.CMP0 Field                    */
 #define SIM_SCGC4_eFlexPWM0_MASK                 (0x1000000U)                                        /**< SIM_SCGC4.eFlexPWM0 Mask                */
 #define SIM_SCGC4_eFlexPWM0_SHIFT                (24U)                                               /**< SIM_SCGC4.eFlexPWM0 Position            */
 #define SIM_SCGC4_eFlexPWM0(x)                   (((uint32_t)(((uint32_t)(x))<<SIM_SCGC4_eFlexPWM0_SHIFT))&SIM_SCGC4_eFlexPWM0_MASK) /**< SIM_SCGC4.eFlexPWM0 Field               */
@@ -8620,9 +8629,9 @@ typedef struct SIM_Type {
 /** @} */
 
 /** @name SCGC5 - System Clock Gating Control Register 5 */ /** @{ */
-#define SIM_SCGC5_LPTMR_MASK                     (0x1U)                                              /**< SIM_SCGC5.LPTMR Mask                    */
-#define SIM_SCGC5_LPTMR_SHIFT                    (0U)                                                /**< SIM_SCGC5.LPTMR Position                */
-#define SIM_SCGC5_LPTMR(x)                       (((uint32_t)(((uint32_t)(x))<<SIM_SCGC5_LPTMR_SHIFT))&SIM_SCGC5_LPTMR_MASK) /**< SIM_SCGC5.LPTMR Field                   */
+#define SIM_SCGC5_LPTMR0_MASK                    (0x1U)                                              /**< SIM_SCGC5.LPTMR0 Mask                   */
+#define SIM_SCGC5_LPTMR0_SHIFT                   (0U)                                                /**< SIM_SCGC5.LPTMR0 Position               */
+#define SIM_SCGC5_LPTMR0(x)                      (((uint32_t)(((uint32_t)(x))<<SIM_SCGC5_LPTMR0_SHIFT))&SIM_SCGC5_LPTMR0_MASK) /**< SIM_SCGC5.LPTMR0 Field                  */
 #define SIM_SCGC5_PORTA_MASK                     (0x200U)                                            /**< SIM_SCGC5.PORTA Mask                    */
 #define SIM_SCGC5_PORTA_SHIFT                    (9U)                                                /**< SIM_SCGC5.PORTA Position                */
 #define SIM_SCGC5_PORTA(x)                       (((uint32_t)(((uint32_t)(x))<<SIM_SCGC5_PORTA_SHIFT))&SIM_SCGC5_PORTA_MASK) /**< SIM_SCGC5.PORTA Field                   */
@@ -8698,9 +8707,9 @@ typedef struct SIM_Type {
 /** @} */
 
 /** @name SCGC7 - System Clock Gating Control Register 7 */ /** @{ */
-#define SIM_SCGC7_DMA_MASK                       (0x100U)                                            /**< SIM_SCGC7.DMA Mask                      */
-#define SIM_SCGC7_DMA_SHIFT                      (8U)                                                /**< SIM_SCGC7.DMA Position                  */
-#define SIM_SCGC7_DMA(x)                         (((uint32_t)(((uint32_t)(x))<<SIM_SCGC7_DMA_SHIFT))&SIM_SCGC7_DMA_MASK) /**< SIM_SCGC7.DMA Field                     */
+#define SIM_SCGC7_DMA0_MASK                      (0x100U)                                            /**< SIM_SCGC7.DMA0 Mask                     */
+#define SIM_SCGC7_DMA0_SHIFT                     (8U)                                                /**< SIM_SCGC7.DMA0 Position                 */
+#define SIM_SCGC7_DMA0(x)                        (((uint32_t)(((uint32_t)(x))<<SIM_SCGC7_DMA0_SHIFT))&SIM_SCGC7_DMA0_MASK) /**< SIM_SCGC7.DMA0 Field                    */
 /** @} */
 
 /** @name CLKDIV1 - System Clock Divider Register 1 */ /** @{ */

@@ -1790,6 +1790,7 @@
          <param type="BooleanVariable"        name="ftm_combine_combine1_present"   value="true"             key="/FTM0/ftm_combine_combine1_present" />
          <param type="BooleanVariable"        name="ftm_combine_combine2_present"   value="true"             key="/FTM0/ftm_combine_combine2_present" />
          <param type="BooleanVariable"        name="ftm_combine_combine3_present"   value="true"             key="/FTM0/ftm_combine_combine3_present" />
+         <param type="BooleanVariable"        name="ftm_combine_combine_present"    value="true"             key="/FTM0/ftm_combine_combine_present" />
          <param type="BooleanVariable"        name="ftm_combine_comp0_present"      value="true"             key="/FTM0/ftm_combine_comp0_present" />
          <param type="BooleanVariable"        name="ftm_combine_comp1_present"      value="true"             key="/FTM0/ftm_combine_comp1_present" />
          <param type="BooleanVariable"        name="ftm_combine_comp2_present"      value="true"             key="/FTM0/ftm_combine_comp2_present" />
@@ -1830,6 +1831,7 @@
          <param type="BooleanVariable"        name="ftm_exttrig_ch3trig_present"    value="true"             key="/FTM0/ftm_exttrig_ch3trig_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_ch4trig_present"    value="true"             key="/FTM0/ftm_exttrig_ch4trig_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_ch5trig_present"    value="true"             key="/FTM0/ftm_exttrig_ch5trig_present" />
+         <param type="BooleanVariable"        name="ftm_exttrig_chtrig_present"     value="true"             key="/FTM0/ftm_exttrig_chtrig_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_inittrigen_present" value="true"             key="/FTM0/ftm_exttrig_inittrigen_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_present"            value="true"             key="/FTM0/ftm_exttrig_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_trigf_present"      value="true"             key="/FTM0/ftm_exttrig_trigf_present" />
@@ -1842,16 +1844,19 @@
          <param type="BooleanVariable"        name="ftm_fltctrl_fault1en_present"   value="true"             key="/FTM0/ftm_fltctrl_fault1en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_fault2en_present"   value="true"             key="/FTM0/ftm_fltctrl_fault2en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_fault3en_present"   value="true"             key="/FTM0/ftm_fltctrl_fault3en_present" />
+         <param type="BooleanVariable"        name="ftm_fltctrl_faulten_present"    value="true"             key="/FTM0/ftm_fltctrl_faulten_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffltr0en_present"   value="true"             key="/FTM0/ftm_fltctrl_ffltr0en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffltr1en_present"   value="true"             key="/FTM0/ftm_fltctrl_ffltr1en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffltr2en_present"   value="true"             key="/FTM0/ftm_fltctrl_ffltr2en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffltr3en_present"   value="true"             key="/FTM0/ftm_fltctrl_ffltr3en_present" />
+         <param type="BooleanVariable"        name="ftm_fltctrl_ffltren_present"    value="true"             key="/FTM0/ftm_fltctrl_ffltren_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffval_present"      value="true"             key="/FTM0/ftm_fltctrl_ffval_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_present"            value="true"             key="/FTM0/ftm_fltctrl_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_flt0pol_present"     value="true"             key="/FTM0/ftm_fltpol_flt0pol_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_flt1pol_present"     value="true"             key="/FTM0/ftm_fltpol_flt1pol_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_flt2pol_present"     value="true"             key="/FTM0/ftm_fltpol_flt2pol_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_flt3pol_present"     value="true"             key="/FTM0/ftm_fltpol_flt3pol_present" />
+         <param type="BooleanVariable"        name="ftm_fltpol_fltpol_present"      value="true"             key="/FTM0/ftm_fltpol_fltpol_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_present"             value="true"             key="/FTM0/ftm_fltpol_present" />
          <param type="BooleanVariable"        name="ftm_fms_faultf0_present"        value="true"             key="/FTM0/ftm_fms_faultf0_present" />
          <param type="BooleanVariable"        name="ftm_fms_faultf1_present"        value="true"             key="/FTM0/ftm_fms_faultf1_present" />
@@ -1884,6 +1889,7 @@
          <param type="BooleanVariable"        name="ftm_outinit_ch5oi_present"      value="true"             key="/FTM0/ftm_outinit_ch5oi_present" />
          <param type="BooleanVariable"        name="ftm_outinit_ch6oi_present"      value="true"             key="/FTM0/ftm_outinit_ch6oi_present" />
          <param type="BooleanVariable"        name="ftm_outinit_ch7oi_present"      value="true"             key="/FTM0/ftm_outinit_ch7oi_present" />
+         <param type="BooleanVariable"        name="ftm_outinit_choi_present"       value="true"             key="/FTM0/ftm_outinit_choi_present" />
          <param type="BooleanVariable"        name="ftm_outinit_present"            value="true"             key="/FTM0/ftm_outinit_present" />
          <param type="BooleanVariable"        name="ftm_outmask_ch0om_present"      value="true"             key="/FTM0/ftm_outmask_ch0om_present" />
          <param type="BooleanVariable"        name="ftm_outmask_ch1om_present"      value="true"             key="/FTM0/ftm_outmask_ch1om_present" />
@@ -1893,6 +1899,7 @@
          <param type="BooleanVariable"        name="ftm_outmask_ch5om_present"      value="true"             key="/FTM0/ftm_outmask_ch5om_present" />
          <param type="BooleanVariable"        name="ftm_outmask_ch6om_present"      value="true"             key="/FTM0/ftm_outmask_ch6om_present" />
          <param type="BooleanVariable"        name="ftm_outmask_ch7om_present"      value="true"             key="/FTM0/ftm_outmask_ch7om_present" />
+         <param type="BooleanVariable"        name="ftm_outmask_chom_present"       value="true"             key="/FTM0/ftm_outmask_chom_present" />
          <param type="BooleanVariable"        name="ftm_outmask_present"            value="true"             key="/FTM0/ftm_outmask_present" />
          <param type="BooleanVariable"        name="ftm_pol_pol0_present"           value="true"             key="/FTM0/ftm_pol_pol0_present" />
          <param type="BooleanVariable"        name="ftm_pol_pol1_present"           value="true"             key="/FTM0/ftm_pol_pol1_present" />
@@ -1902,6 +1909,7 @@
          <param type="BooleanVariable"        name="ftm_pol_pol5_present"           value="true"             key="/FTM0/ftm_pol_pol5_present" />
          <param type="BooleanVariable"        name="ftm_pol_pol6_present"           value="true"             key="/FTM0/ftm_pol_pol6_present" />
          <param type="BooleanVariable"        name="ftm_pol_pol7_present"           value="true"             key="/FTM0/ftm_pol_pol7_present" />
+         <param type="BooleanVariable"        name="ftm_pol_pol_present"            value="true"             key="/FTM0/ftm_pol_pol_present" />
          <param type="BooleanVariable"        name="ftm_pol_present"                value="true"             key="/FTM0/ftm_pol_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_ch0sel_present"     value="true"             key="/FTM0/ftm_pwmload_ch0sel_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_ch1sel_present"     value="true"             key="/FTM0/ftm_pwmload_ch1sel_present" />
@@ -1911,6 +1919,7 @@
          <param type="BooleanVariable"        name="ftm_pwmload_ch5sel_present"     value="true"             key="/FTM0/ftm_pwmload_ch5sel_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_ch6sel_present"     value="true"             key="/FTM0/ftm_pwmload_ch6sel_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_ch7sel_present"     value="true"             key="/FTM0/ftm_pwmload_ch7sel_present" />
+         <param type="BooleanVariable"        name="ftm_pwmload_chsel_present"      value="true"             key="/FTM0/ftm_pwmload_chsel_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_ldok_present"       value="true"             key="/FTM0/ftm_pwmload_ldok_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_present"            value="true"             key="/FTM0/ftm_pwmload_present" />
          <param type="BooleanVariable"        name="ftm_sc_clks_present"            value="true"             key="/FTM0/ftm_sc_clks_present" />
@@ -1944,6 +1953,8 @@
          <param type="BooleanVariable"        name="ftm_swoctrl_ch6ocv_present"     value="true"             key="/FTM0/ftm_swoctrl_ch6ocv_present" />
          <param type="BooleanVariable"        name="ftm_swoctrl_ch7oc_present"      value="true"             key="/FTM0/ftm_swoctrl_ch7oc_present" />
          <param type="BooleanVariable"        name="ftm_swoctrl_ch7ocv_present"     value="true"             key="/FTM0/ftm_swoctrl_ch7ocv_present" />
+         <param type="BooleanVariable"        name="ftm_swoctrl_choc_present"       value="true"             key="/FTM0/ftm_swoctrl_choc_present" />
+         <param type="BooleanVariable"        name="ftm_swoctrl_chocv_present"      value="true"             key="/FTM0/ftm_swoctrl_chocv_present" />
          <param type="BooleanVariable"        name="ftm_swoctrl_present"            value="true"             key="/FTM0/ftm_swoctrl_present" />
          <param type="BooleanVariable"        name="ftm_sync_cntmax_present"        value="true"             key="/FTM0/ftm_sync_cntmax_present" />
          <param type="BooleanVariable"        name="ftm_sync_cntmin_present"        value="true"             key="/FTM0/ftm_sync_cntmin_present" />
@@ -1997,6 +2008,7 @@
          <param type="BooleanVariable"        name="ftm_cnv_present"                value="true"             key="/FTM1/ftm_cnv_present" />
          <param type="BooleanVariable"        name="ftm_cnv_val_present"            value="true"             key="/FTM1/ftm_cnv_val_present" />
          <param type="BooleanVariable"        name="ftm_combine_combine0_present"   value="true"             key="/FTM1/ftm_combine_combine0_present" />
+         <param type="BooleanVariable"        name="ftm_combine_combine_present"    value="true"             key="/FTM1/ftm_combine_combine_present" />
          <param type="BooleanVariable"        name="ftm_combine_comp0_present"      value="true"             key="/FTM1/ftm_combine_comp0_present" />
          <param type="BooleanVariable"        name="ftm_combine_decap0_present"     value="true"             key="/FTM1/ftm_combine_decap0_present" />
          <param type="BooleanVariable"        name="ftm_combine_decapen0_present"   value="true"             key="/FTM1/ftm_combine_decapen0_present" />
@@ -2015,6 +2027,7 @@
          <param type="BooleanVariable"        name="ftm_deadtime_present"           value="true"             key="/FTM1/ftm_deadtime_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_ch0trig_present"    value="true"             key="/FTM1/ftm_exttrig_ch0trig_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_ch1trig_present"    value="true"             key="/FTM1/ftm_exttrig_ch1trig_present" />
+         <param type="BooleanVariable"        name="ftm_exttrig_chtrig_present"     value="true"             key="/FTM1/ftm_exttrig_chtrig_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_inittrigen_present" value="true"             key="/FTM1/ftm_exttrig_inittrigen_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_present"            value="true"             key="/FTM1/ftm_exttrig_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_trigf_present"      value="true"             key="/FTM1/ftm_exttrig_trigf_present" />
@@ -2025,16 +2038,19 @@
          <param type="BooleanVariable"        name="ftm_fltctrl_fault1en_present"   value="true"             key="/FTM1/ftm_fltctrl_fault1en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_fault2en_present"   value="true"             key="/FTM1/ftm_fltctrl_fault2en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_fault3en_present"   value="true"             key="/FTM1/ftm_fltctrl_fault3en_present" />
+         <param type="BooleanVariable"        name="ftm_fltctrl_faulten_present"    value="true"             key="/FTM1/ftm_fltctrl_faulten_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffltr0en_present"   value="true"             key="/FTM1/ftm_fltctrl_ffltr0en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffltr1en_present"   value="true"             key="/FTM1/ftm_fltctrl_ffltr1en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffltr2en_present"   value="true"             key="/FTM1/ftm_fltctrl_ffltr2en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffltr3en_present"   value="true"             key="/FTM1/ftm_fltctrl_ffltr3en_present" />
+         <param type="BooleanVariable"        name="ftm_fltctrl_ffltren_present"    value="true"             key="/FTM1/ftm_fltctrl_ffltren_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffval_present"      value="true"             key="/FTM1/ftm_fltctrl_ffval_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_present"            value="true"             key="/FTM1/ftm_fltctrl_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_flt0pol_present"     value="true"             key="/FTM1/ftm_fltpol_flt0pol_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_flt1pol_present"     value="true"             key="/FTM1/ftm_fltpol_flt1pol_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_flt2pol_present"     value="true"             key="/FTM1/ftm_fltpol_flt2pol_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_flt3pol_present"     value="true"             key="/FTM1/ftm_fltpol_flt3pol_present" />
+         <param type="BooleanVariable"        name="ftm_fltpol_fltpol_present"      value="true"             key="/FTM1/ftm_fltpol_fltpol_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_present"             value="true"             key="/FTM1/ftm_fltpol_present" />
          <param type="BooleanVariable"        name="ftm_fms_faultf0_present"        value="true"             key="/FTM1/ftm_fms_faultf0_present" />
          <param type="BooleanVariable"        name="ftm_fms_faultf1_present"        value="true"             key="/FTM1/ftm_fms_faultf1_present" />
@@ -2058,15 +2074,19 @@
          <param type="BooleanVariable"        name="ftm_mode_wpdis_present"         value="true"             key="/FTM1/ftm_mode_wpdis_present" />
          <param type="BooleanVariable"        name="ftm_outinit_ch0oi_present"      value="true"             key="/FTM1/ftm_outinit_ch0oi_present" />
          <param type="BooleanVariable"        name="ftm_outinit_ch1oi_present"      value="true"             key="/FTM1/ftm_outinit_ch1oi_present" />
+         <param type="BooleanVariable"        name="ftm_outinit_choi_present"       value="true"             key="/FTM1/ftm_outinit_choi_present" />
          <param type="BooleanVariable"        name="ftm_outinit_present"            value="true"             key="/FTM1/ftm_outinit_present" />
          <param type="BooleanVariable"        name="ftm_outmask_ch0om_present"      value="true"             key="/FTM1/ftm_outmask_ch0om_present" />
          <param type="BooleanVariable"        name="ftm_outmask_ch1om_present"      value="true"             key="/FTM1/ftm_outmask_ch1om_present" />
+         <param type="BooleanVariable"        name="ftm_outmask_chom_present"       value="true"             key="/FTM1/ftm_outmask_chom_present" />
          <param type="BooleanVariable"        name="ftm_outmask_present"            value="true"             key="/FTM1/ftm_outmask_present" />
          <param type="BooleanVariable"        name="ftm_pol_pol0_present"           value="true"             key="/FTM1/ftm_pol_pol0_present" />
          <param type="BooleanVariable"        name="ftm_pol_pol1_present"           value="true"             key="/FTM1/ftm_pol_pol1_present" />
+         <param type="BooleanVariable"        name="ftm_pol_pol_present"            value="true"             key="/FTM1/ftm_pol_pol_present" />
          <param type="BooleanVariable"        name="ftm_pol_present"                value="true"             key="/FTM1/ftm_pol_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_ch0sel_present"     value="true"             key="/FTM1/ftm_pwmload_ch0sel_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_ch1sel_present"     value="true"             key="/FTM1/ftm_pwmload_ch1sel_present" />
+         <param type="BooleanVariable"        name="ftm_pwmload_chsel_present"      value="true"             key="/FTM1/ftm_pwmload_chsel_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_ldok_present"       value="true"             key="/FTM1/ftm_pwmload_ldok_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_present"            value="true"             key="/FTM1/ftm_pwmload_present" />
          <param type="BooleanVariable"        name="ftm_qdctrl_phafltren_present"   value="true"             key="/FTM1/ftm_qdctrl_phafltren_present" />
@@ -2091,6 +2111,8 @@
          <param type="BooleanVariable"        name="ftm_swoctrl_ch0ocv_present"     value="true"             key="/FTM1/ftm_swoctrl_ch0ocv_present" />
          <param type="BooleanVariable"        name="ftm_swoctrl_ch1oc_present"      value="true"             key="/FTM1/ftm_swoctrl_ch1oc_present" />
          <param type="BooleanVariable"        name="ftm_swoctrl_ch1ocv_present"     value="true"             key="/FTM1/ftm_swoctrl_ch1ocv_present" />
+         <param type="BooleanVariable"        name="ftm_swoctrl_choc_present"       value="true"             key="/FTM1/ftm_swoctrl_choc_present" />
+         <param type="BooleanVariable"        name="ftm_swoctrl_chocv_present"      value="true"             key="/FTM1/ftm_swoctrl_chocv_present" />
          <param type="BooleanVariable"        name="ftm_swoctrl_present"            value="true"             key="/FTM1/ftm_swoctrl_present" />
          <param type="BooleanVariable"        name="ftm_sync_cntmax_present"        value="true"             key="/FTM1/ftm_sync_cntmax_present" />
          <param type="BooleanVariable"        name="ftm_sync_cntmin_present"        value="true"             key="/FTM1/ftm_sync_cntmin_present" />
@@ -2144,6 +2166,7 @@
          <param type="BooleanVariable"        name="ftm_cnv_present"                value="true"             key="/FTM2/ftm_cnv_present" />
          <param type="BooleanVariable"        name="ftm_cnv_val_present"            value="true"             key="/FTM2/ftm_cnv_val_present" />
          <param type="BooleanVariable"        name="ftm_combine_combine0_present"   value="true"             key="/FTM2/ftm_combine_combine0_present" />
+         <param type="BooleanVariable"        name="ftm_combine_combine_present"    value="true"             key="/FTM2/ftm_combine_combine_present" />
          <param type="BooleanVariable"        name="ftm_combine_comp0_present"      value="true"             key="/FTM2/ftm_combine_comp0_present" />
          <param type="BooleanVariable"        name="ftm_combine_decap0_present"     value="true"             key="/FTM2/ftm_combine_decap0_present" />
          <param type="BooleanVariable"        name="ftm_combine_decapen0_present"   value="true"             key="/FTM2/ftm_combine_decapen0_present" />
@@ -2162,6 +2185,7 @@
          <param type="BooleanVariable"        name="ftm_deadtime_present"           value="true"             key="/FTM2/ftm_deadtime_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_ch0trig_present"    value="true"             key="/FTM2/ftm_exttrig_ch0trig_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_ch1trig_present"    value="true"             key="/FTM2/ftm_exttrig_ch1trig_present" />
+         <param type="BooleanVariable"        name="ftm_exttrig_chtrig_present"     value="true"             key="/FTM2/ftm_exttrig_chtrig_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_inittrigen_present" value="true"             key="/FTM2/ftm_exttrig_inittrigen_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_present"            value="true"             key="/FTM2/ftm_exttrig_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_trigf_present"      value="true"             key="/FTM2/ftm_exttrig_trigf_present" />
@@ -2172,16 +2196,19 @@
          <param type="BooleanVariable"        name="ftm_fltctrl_fault1en_present"   value="true"             key="/FTM2/ftm_fltctrl_fault1en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_fault2en_present"   value="true"             key="/FTM2/ftm_fltctrl_fault2en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_fault3en_present"   value="true"             key="/FTM2/ftm_fltctrl_fault3en_present" />
+         <param type="BooleanVariable"        name="ftm_fltctrl_faulten_present"    value="true"             key="/FTM2/ftm_fltctrl_faulten_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffltr0en_present"   value="true"             key="/FTM2/ftm_fltctrl_ffltr0en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffltr1en_present"   value="true"             key="/FTM2/ftm_fltctrl_ffltr1en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffltr2en_present"   value="true"             key="/FTM2/ftm_fltctrl_ffltr2en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffltr3en_present"   value="true"             key="/FTM2/ftm_fltctrl_ffltr3en_present" />
+         <param type="BooleanVariable"        name="ftm_fltctrl_ffltren_present"    value="true"             key="/FTM2/ftm_fltctrl_ffltren_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffval_present"      value="true"             key="/FTM2/ftm_fltctrl_ffval_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_present"            value="true"             key="/FTM2/ftm_fltctrl_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_flt0pol_present"     value="true"             key="/FTM2/ftm_fltpol_flt0pol_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_flt1pol_present"     value="true"             key="/FTM2/ftm_fltpol_flt1pol_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_flt2pol_present"     value="true"             key="/FTM2/ftm_fltpol_flt2pol_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_flt3pol_present"     value="true"             key="/FTM2/ftm_fltpol_flt3pol_present" />
+         <param type="BooleanVariable"        name="ftm_fltpol_fltpol_present"      value="true"             key="/FTM2/ftm_fltpol_fltpol_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_present"             value="true"             key="/FTM2/ftm_fltpol_present" />
          <param type="BooleanVariable"        name="ftm_fms_faultf0_present"        value="true"             key="/FTM2/ftm_fms_faultf0_present" />
          <param type="BooleanVariable"        name="ftm_fms_faultf1_present"        value="true"             key="/FTM2/ftm_fms_faultf1_present" />
@@ -2205,15 +2232,19 @@
          <param type="BooleanVariable"        name="ftm_mode_wpdis_present"         value="true"             key="/FTM2/ftm_mode_wpdis_present" />
          <param type="BooleanVariable"        name="ftm_outinit_ch0oi_present"      value="true"             key="/FTM2/ftm_outinit_ch0oi_present" />
          <param type="BooleanVariable"        name="ftm_outinit_ch1oi_present"      value="true"             key="/FTM2/ftm_outinit_ch1oi_present" />
+         <param type="BooleanVariable"        name="ftm_outinit_choi_present"       value="true"             key="/FTM2/ftm_outinit_choi_present" />
          <param type="BooleanVariable"        name="ftm_outinit_present"            value="true"             key="/FTM2/ftm_outinit_present" />
          <param type="BooleanVariable"        name="ftm_outmask_ch0om_present"      value="true"             key="/FTM2/ftm_outmask_ch0om_present" />
          <param type="BooleanVariable"        name="ftm_outmask_ch1om_present"      value="true"             key="/FTM2/ftm_outmask_ch1om_present" />
+         <param type="BooleanVariable"        name="ftm_outmask_chom_present"       value="true"             key="/FTM2/ftm_outmask_chom_present" />
          <param type="BooleanVariable"        name="ftm_outmask_present"            value="true"             key="/FTM2/ftm_outmask_present" />
          <param type="BooleanVariable"        name="ftm_pol_pol0_present"           value="true"             key="/FTM2/ftm_pol_pol0_present" />
          <param type="BooleanVariable"        name="ftm_pol_pol1_present"           value="true"             key="/FTM2/ftm_pol_pol1_present" />
+         <param type="BooleanVariable"        name="ftm_pol_pol_present"            value="true"             key="/FTM2/ftm_pol_pol_present" />
          <param type="BooleanVariable"        name="ftm_pol_present"                value="true"             key="/FTM2/ftm_pol_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_ch0sel_present"     value="true"             key="/FTM2/ftm_pwmload_ch0sel_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_ch1sel_present"     value="true"             key="/FTM2/ftm_pwmload_ch1sel_present" />
+         <param type="BooleanVariable"        name="ftm_pwmload_chsel_present"      value="true"             key="/FTM2/ftm_pwmload_chsel_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_ldok_present"       value="true"             key="/FTM2/ftm_pwmload_ldok_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_present"            value="true"             key="/FTM2/ftm_pwmload_present" />
          <param type="BooleanVariable"        name="ftm_qdctrl_phafltren_present"   value="true"             key="/FTM2/ftm_qdctrl_phafltren_present" />
@@ -2238,6 +2269,8 @@
          <param type="BooleanVariable"        name="ftm_swoctrl_ch0ocv_present"     value="true"             key="/FTM2/ftm_swoctrl_ch0ocv_present" />
          <param type="BooleanVariable"        name="ftm_swoctrl_ch1oc_present"      value="true"             key="/FTM2/ftm_swoctrl_ch1oc_present" />
          <param type="BooleanVariable"        name="ftm_swoctrl_ch1ocv_present"     value="true"             key="/FTM2/ftm_swoctrl_ch1ocv_present" />
+         <param type="BooleanVariable"        name="ftm_swoctrl_choc_present"       value="true"             key="/FTM2/ftm_swoctrl_choc_present" />
+         <param type="BooleanVariable"        name="ftm_swoctrl_chocv_present"      value="true"             key="/FTM2/ftm_swoctrl_chocv_present" />
          <param type="BooleanVariable"        name="ftm_swoctrl_present"            value="true"             key="/FTM2/ftm_swoctrl_present" />
          <param type="BooleanVariable"        name="ftm_sync_cntmax_present"        value="true"             key="/FTM2/ftm_sync_cntmax_present" />
          <param type="BooleanVariable"        name="ftm_sync_cntmin_present"        value="true"             key="/FTM2/ftm_sync_cntmin_present" />
@@ -2294,6 +2327,7 @@
          <param type="BooleanVariable"        name="ftm_combine_combine1_present"   value="true"             key="/FTM3/ftm_combine_combine1_present" />
          <param type="BooleanVariable"        name="ftm_combine_combine2_present"   value="true"             key="/FTM3/ftm_combine_combine2_present" />
          <param type="BooleanVariable"        name="ftm_combine_combine3_present"   value="true"             key="/FTM3/ftm_combine_combine3_present" />
+         <param type="BooleanVariable"        name="ftm_combine_combine_present"    value="true"             key="/FTM3/ftm_combine_combine_present" />
          <param type="BooleanVariable"        name="ftm_combine_comp0_present"      value="true"             key="/FTM3/ftm_combine_comp0_present" />
          <param type="BooleanVariable"        name="ftm_combine_comp1_present"      value="true"             key="/FTM3/ftm_combine_comp1_present" />
          <param type="BooleanVariable"        name="ftm_combine_comp2_present"      value="true"             key="/FTM3/ftm_combine_comp2_present" />
@@ -2334,6 +2368,7 @@
          <param type="BooleanVariable"        name="ftm_exttrig_ch3trig_present"    value="true"             key="/FTM3/ftm_exttrig_ch3trig_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_ch4trig_present"    value="true"             key="/FTM3/ftm_exttrig_ch4trig_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_ch5trig_present"    value="true"             key="/FTM3/ftm_exttrig_ch5trig_present" />
+         <param type="BooleanVariable"        name="ftm_exttrig_chtrig_present"     value="true"             key="/FTM3/ftm_exttrig_chtrig_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_inittrigen_present" value="true"             key="/FTM3/ftm_exttrig_inittrigen_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_present"            value="true"             key="/FTM3/ftm_exttrig_present" />
          <param type="BooleanVariable"        name="ftm_exttrig_trigf_present"      value="true"             key="/FTM3/ftm_exttrig_trigf_present" />
@@ -2346,16 +2381,19 @@
          <param type="BooleanVariable"        name="ftm_fltctrl_fault1en_present"   value="true"             key="/FTM3/ftm_fltctrl_fault1en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_fault2en_present"   value="true"             key="/FTM3/ftm_fltctrl_fault2en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_fault3en_present"   value="true"             key="/FTM3/ftm_fltctrl_fault3en_present" />
+         <param type="BooleanVariable"        name="ftm_fltctrl_faulten_present"    value="true"             key="/FTM3/ftm_fltctrl_faulten_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffltr0en_present"   value="true"             key="/FTM3/ftm_fltctrl_ffltr0en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffltr1en_present"   value="true"             key="/FTM3/ftm_fltctrl_ffltr1en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffltr2en_present"   value="true"             key="/FTM3/ftm_fltctrl_ffltr2en_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffltr3en_present"   value="true"             key="/FTM3/ftm_fltctrl_ffltr3en_present" />
+         <param type="BooleanVariable"        name="ftm_fltctrl_ffltren_present"    value="true"             key="/FTM3/ftm_fltctrl_ffltren_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_ffval_present"      value="true"             key="/FTM3/ftm_fltctrl_ffval_present" />
          <param type="BooleanVariable"        name="ftm_fltctrl_present"            value="true"             key="/FTM3/ftm_fltctrl_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_flt0pol_present"     value="true"             key="/FTM3/ftm_fltpol_flt0pol_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_flt1pol_present"     value="true"             key="/FTM3/ftm_fltpol_flt1pol_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_flt2pol_present"     value="true"             key="/FTM3/ftm_fltpol_flt2pol_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_flt3pol_present"     value="true"             key="/FTM3/ftm_fltpol_flt3pol_present" />
+         <param type="BooleanVariable"        name="ftm_fltpol_fltpol_present"      value="true"             key="/FTM3/ftm_fltpol_fltpol_present" />
          <param type="BooleanVariable"        name="ftm_fltpol_present"             value="true"             key="/FTM3/ftm_fltpol_present" />
          <param type="BooleanVariable"        name="ftm_fms_faultf0_present"        value="true"             key="/FTM3/ftm_fms_faultf0_present" />
          <param type="BooleanVariable"        name="ftm_fms_faultf1_present"        value="true"             key="/FTM3/ftm_fms_faultf1_present" />
@@ -2388,6 +2426,7 @@
          <param type="BooleanVariable"        name="ftm_outinit_ch5oi_present"      value="true"             key="/FTM3/ftm_outinit_ch5oi_present" />
          <param type="BooleanVariable"        name="ftm_outinit_ch6oi_present"      value="true"             key="/FTM3/ftm_outinit_ch6oi_present" />
          <param type="BooleanVariable"        name="ftm_outinit_ch7oi_present"      value="true"             key="/FTM3/ftm_outinit_ch7oi_present" />
+         <param type="BooleanVariable"        name="ftm_outinit_choi_present"       value="true"             key="/FTM3/ftm_outinit_choi_present" />
          <param type="BooleanVariable"        name="ftm_outinit_present"            value="true"             key="/FTM3/ftm_outinit_present" />
          <param type="BooleanVariable"        name="ftm_outmask_ch0om_present"      value="true"             key="/FTM3/ftm_outmask_ch0om_present" />
          <param type="BooleanVariable"        name="ftm_outmask_ch1om_present"      value="true"             key="/FTM3/ftm_outmask_ch1om_present" />
@@ -2397,6 +2436,7 @@
          <param type="BooleanVariable"        name="ftm_outmask_ch5om_present"      value="true"             key="/FTM3/ftm_outmask_ch5om_present" />
          <param type="BooleanVariable"        name="ftm_outmask_ch6om_present"      value="true"             key="/FTM3/ftm_outmask_ch6om_present" />
          <param type="BooleanVariable"        name="ftm_outmask_ch7om_present"      value="true"             key="/FTM3/ftm_outmask_ch7om_present" />
+         <param type="BooleanVariable"        name="ftm_outmask_chom_present"       value="true"             key="/FTM3/ftm_outmask_chom_present" />
          <param type="BooleanVariable"        name="ftm_outmask_present"            value="true"             key="/FTM3/ftm_outmask_present" />
          <param type="BooleanVariable"        name="ftm_pol_pol0_present"           value="true"             key="/FTM3/ftm_pol_pol0_present" />
          <param type="BooleanVariable"        name="ftm_pol_pol1_present"           value="true"             key="/FTM3/ftm_pol_pol1_present" />
@@ -2406,6 +2446,7 @@
          <param type="BooleanVariable"        name="ftm_pol_pol5_present"           value="true"             key="/FTM3/ftm_pol_pol5_present" />
          <param type="BooleanVariable"        name="ftm_pol_pol6_present"           value="true"             key="/FTM3/ftm_pol_pol6_present" />
          <param type="BooleanVariable"        name="ftm_pol_pol7_present"           value="true"             key="/FTM3/ftm_pol_pol7_present" />
+         <param type="BooleanVariable"        name="ftm_pol_pol_present"            value="true"             key="/FTM3/ftm_pol_pol_present" />
          <param type="BooleanVariable"        name="ftm_pol_present"                value="true"             key="/FTM3/ftm_pol_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_ch0sel_present"     value="true"             key="/FTM3/ftm_pwmload_ch0sel_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_ch1sel_present"     value="true"             key="/FTM3/ftm_pwmload_ch1sel_present" />
@@ -2415,6 +2456,7 @@
          <param type="BooleanVariable"        name="ftm_pwmload_ch5sel_present"     value="true"             key="/FTM3/ftm_pwmload_ch5sel_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_ch6sel_present"     value="true"             key="/FTM3/ftm_pwmload_ch6sel_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_ch7sel_present"     value="true"             key="/FTM3/ftm_pwmload_ch7sel_present" />
+         <param type="BooleanVariable"        name="ftm_pwmload_chsel_present"      value="true"             key="/FTM3/ftm_pwmload_chsel_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_ldok_present"       value="true"             key="/FTM3/ftm_pwmload_ldok_present" />
          <param type="BooleanVariable"        name="ftm_pwmload_present"            value="true"             key="/FTM3/ftm_pwmload_present" />
          <param type="BooleanVariable"        name="ftm_sc_clks_present"            value="true"             key="/FTM3/ftm_sc_clks_present" />
@@ -2448,6 +2490,8 @@
          <param type="BooleanVariable"        name="ftm_swoctrl_ch6ocv_present"     value="true"             key="/FTM3/ftm_swoctrl_ch6ocv_present" />
          <param type="BooleanVariable"        name="ftm_swoctrl_ch7oc_present"      value="true"             key="/FTM3/ftm_swoctrl_ch7oc_present" />
          <param type="BooleanVariable"        name="ftm_swoctrl_ch7ocv_present"     value="true"             key="/FTM3/ftm_swoctrl_ch7ocv_present" />
+         <param type="BooleanVariable"        name="ftm_swoctrl_choc_present"       value="true"             key="/FTM3/ftm_swoctrl_choc_present" />
+         <param type="BooleanVariable"        name="ftm_swoctrl_chocv_present"      value="true"             key="/FTM3/ftm_swoctrl_chocv_present" />
          <param type="BooleanVariable"        name="ftm_swoctrl_present"            value="true"             key="/FTM3/ftm_swoctrl_present" />
          <param type="BooleanVariable"        name="ftm_sync_cntmax_present"        value="true"             key="/FTM3/ftm_sync_cntmax_present" />
          <param type="BooleanVariable"        name="ftm_sync_cntmin_present"        value="true"             key="/FTM3/ftm_sync_cntmin_present" />

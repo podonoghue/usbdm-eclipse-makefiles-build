@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral:
+Devices using this peripheral: 
       MKE06Z4
       SKEAZ1284
 -->
@@ -81,25 +81,8 @@ Allows the MSCAN to restart from sleep mode or from power down mode when traffic
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>TIME</name>
-                     <description>Timer Enable\n
-Enables an internal 16-bit wide free running timer which is clocked by the bit clock rate</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="WUPE" > <name>TIME</name> <description>Timer Enable\n
+Enables an internal 16-bit wide free running timer which is clocked by the bit clock rate</description> <bitOffset>3</bitOffset> <bitWidth>1</bitWidth> </field>
                   <field>
                      <name>SYNCH</name>
                      <description>Synchronized Status\n
@@ -329,25 +312,8 @@ This bit defines the clock source for the MSCAN module</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>CANE</name>
-                     <description>MSCAN Enable\n
-Module enable</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="LOOPB" > <name>CANE</name> <description>MSCAN Enable\n
+Module enable</description> <bitOffset>7</bitOffset> <bitWidth>1</bitWidth> </field>
                </fields>
             </register>
             <register>
@@ -593,24 +559,7 @@ CANRFLG register</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>OVRIE</name>
-                     <description>Overrun Interrupt Enable</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="RXFIE" > <name>OVRIE</name> <description>Overrun Interrupt Enable</description> <bitOffset>1</bitOffset> <bitWidth>1</bitWidth> </field>
                   <field>
                      <name>TSTATE</name>
                      <description>Transmitter Status Change Enable\n
@@ -671,43 +620,9 @@ interrupts</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>CSCIE</name>
-                     <description>CAN Status Change Interrupt Enable</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>WUPIE</name>
-                     <description>WakeUp Interrupt Enable\n
-WUPIE and WUPE must both be enabled if the recovery mechanism from stop or wait is required</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="RXFIE" > <name>CSCIE</name> <description>CAN Status Change Interrupt Enable</description> <bitOffset>6</bitOffset> <bitWidth>1</bitWidth> </field>
+                  <field derivedFrom="RXFIE" > <name>WUPIE</name> <description>WakeUp Interrupt Enable\n
+WUPIE and WUPE must both be enabled if the recovery mechanism from stop or wait is required</description> <bitOffset>7</bitOffset> <bitWidth>1</bitWidth> </field>
                </fields>
             </register>
             <register>
@@ -912,7 +827,6 @@ entered the bus-off state. Clearing this bit requests the recovery from bus-off<
             </register>
             <register>
                <name>CANRXERR</name>
-               <access>read-only</access>
                <description>Receive Error Counter\n
 This register reflects the status of the MSCAN receive error counter</description>
                <addressOffset>0xE</addressOffset>
@@ -922,7 +836,6 @@ This register reflects the status of the MSCAN receive error counter</descriptio
             </register>
             <register>
                <name>CANTXERR</name>
-               <access>read-only</access>
                <description>Transmit Error Counter\n
 This register reflects the status of the MSCAN transmit error counter</description>
                <addressOffset>0xF</addressOffset>

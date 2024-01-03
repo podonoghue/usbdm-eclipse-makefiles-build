@@ -185,7 +185,7 @@
       \t      return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
       \t   }
       \t
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t
       \t   // Make sure write completes
       \t   (void)smc->PMCTRL;
@@ -282,7 +282,7 @@
       \t * @param %paramName %tooltip
       \t */
       \tstatic void setPartialStopMode(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}\n\n
    ]]></clockCodeTemplate>
 
@@ -294,7 +294,7 @@
       \t * @param %paramName %tooltip
       \t */
       \tstatic void setPowerOnResetInVLLS0(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}\n\n
    ]]></clockCodeTemplate>
 
@@ -306,7 +306,7 @@
       \t * @param %paramName %tooltip
       \t */
       \tstatic void setLowLeakageStopMode(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}\n\n
    ]]></clockCodeTemplate>
 
@@ -318,7 +318,7 @@
       \t * @param %paramName %tooltip
       \t */
       \tstatic void setLowLeakageStopMode(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}\n\n
    ]]></clockCodeTemplate>
 
@@ -330,7 +330,7 @@
       \t * @param %paramName %tooltip
       \t */
       \tstatic void setRam2PoweredInLLS2_VLLS2(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}\n\n
    ]]></clockCodeTemplate>
 
@@ -342,7 +342,7 @@
       \t * @param %paramName %tooltip
       \t */
       \tstatic void setLpoPoweredInLLS_VLLS(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}\n\n
    ]]></clockCodeTemplate>
 
@@ -353,7 +353,7 @@
       \t * @param %paramName %tooltip
       \t */
       \tstatic void setLowLeakageStopMode(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}\n\n
    ]]></clockCodeTemplate>
 
@@ -417,7 +417,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t   // Make sure write has completed
          \t   (void)(%register);
          \t}

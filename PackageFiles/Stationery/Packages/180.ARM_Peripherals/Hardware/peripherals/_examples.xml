@@ -52,7 +52,7 @@ Symbols
       \t * @param %paramName %tooltip
       \t */
       \tstatic void setLpuart%(n)Clock(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}
 
       \t/**

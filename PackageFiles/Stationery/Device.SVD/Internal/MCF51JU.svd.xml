@@ -30,7 +30,7 @@
       <xi:include href="peripherals/FB_MCF51.svd.xml"/>
       <xi:include href="peripherals/FTFL_MCF51.svd.xml"/>
       <xi:include href="peripherals/FTM0_2CH_MCF51.svd.xml"/>
-      <xi:include href="peripherals/FTM1_6CH_MCF51.svd.xml"/>
+      <xi:include href="peripherals/FTM1_6CH_QDCTRL_MCF51.svd.xml"/>
       <xi:include href="peripherals/PTA_MCF51.svd.xml"/>
       <peripheral derivedFrom="GPIOA"><name>GPIOB</name><baseAddress>0xFFFF8010</baseAddress></peripheral>
       <peripheral derivedFrom="GPIOA"><name>GPIOC</name><baseAddress>0xFFFF8020</baseAddress></peripheral>

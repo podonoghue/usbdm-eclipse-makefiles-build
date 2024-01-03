@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral:
+Devices using this peripheral: 
       MKE02Z2
       MKE02Z4
       MKE04Z4
@@ -26,16 +26,6 @@ Devices using this peripheral:
          <addressBlock>
             <offset>0x0</offset>
             <size>0x1C</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x4C</offset>
-            <size>0x34</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x84</offset>
-            <size>0x18</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>

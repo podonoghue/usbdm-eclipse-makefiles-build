@@ -758,7 +758,7 @@
       \t * @param %paramName %tooltip
       \t */
       \tstatic void enableIcsIrClock(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}
 
       \t/**
@@ -905,7 +905,7 @@
          %paramDescription
          \t */
          \tstatic void configure%(name)(%params) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}\n\n
       ]]></variableTemplate>
    </for>

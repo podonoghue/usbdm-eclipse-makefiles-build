@@ -499,7 +499,7 @@
             \t * @param %paramName %tooltip
             \t */
             \tstatic void setFtm%(f)ClockIn(%paramType %paramName) {
-            \t   %fieldAssignment
+            \t   %fieldAssignment;
             \t}
             \t
             \t/**
@@ -717,7 +717,7 @@
             \t * @param %paramName %tooltip
             \t */
             \tstatic void setTpm%(t)ClockIn(%paramType %paramName) {
-            \t   %fieldAssignment
+            \t   %fieldAssignment;
             \t}
             \t
             \t/**

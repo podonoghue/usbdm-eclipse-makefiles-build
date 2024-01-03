@@ -309,7 +309,7 @@
       \t */
       \tstatic void setCrossbarArbitration(%paramType %paramName) {
       \t
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}\n\n
    ]]></variableTemplate>
 

@@ -42,7 +42,7 @@
     * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
     * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %fieldAssignment;         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
     * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
     * %variable[index]                Variable name from condition
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
@@ -300,7 +300,7 @@
       \tstatic void configureSpeed(
       %params) {
       \t
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}
       \t\n
    ]]></variableTemplate>
@@ -355,7 +355,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}
          \t
          \t/**

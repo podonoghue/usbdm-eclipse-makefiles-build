@@ -1,10 +1,10 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE14Z7
       MKE15Z7
 -->
       <peripheral>
-         <?sourceFile "FTM1_4CH_MKE15Z7" ?>
+         <?sourceFile "FTM1_4CH_QDCTRL_MKE15Z7" ?>
          <name>FTM1</name>
          <description>FlexTimer Module (4 channels)</description>
          <groupName>FTM</groupName>
@@ -710,6 +710,14 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <addressOffset>0x5C</addressOffset>
                <fields>
                   <field>
+                     <name>CHOI</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Output Initialization Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
                      <name>CH0OI</name>
                      <description>Channel 0 Output Initialization Value</description>
                      <bitOffset>0</bitOffset>
@@ -738,6 +746,14 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <addressOffset>0x60</addressOffset>
                <fields>
                   <field>
+                     <name>CHOM</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Output Mask</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
                      <name>CH0OM</name>
                      <description>Channel 0 Output Mask</description>
                      <bitOffset>0</bitOffset>
@@ -765,6 +781,14 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <description>Function for Linked Channels</description>
                <addressOffset>0x64</addressOffset>
                <fields>
+                  <field>
+                     <name>COMBINE</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Combination Control for CH 0 &amp; 1</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
                   <field>
                      <name>COMBINE0</name>
                      <description>Combine Channels 0 &amp; 1</description>
@@ -892,6 +916,14 @@ Controls whether channels are the some or complement</description>
                <addressOffset>0x6C</addressOffset>
                <fields>
                   <field>
+                     <name>CHTRIG</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Trigger Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
                      <name>CH2TRIG</name>
                      <description>Channel 2 Trigger Enable</description>
                      <bitOffset>0</bitOffset>
@@ -955,6 +987,14 @@ Controls whether channels are the some or complement</description>
                <description>Channels Polarity</description>
                <addressOffset>0x70</addressOffset>
                <fields>
+                  <field>
+                     <name>POL</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Polarity</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
                   <field>
                      <name>POL0</name>
                      <description>Channel 0 Polarity</description>
@@ -1095,6 +1135,14 @@ Controls whether channels are the some or complement</description>
                <addressOffset>0x7C</addressOffset>
                <fields>
                   <field>
+                     <name>FAULTEN</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Fault Input Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
                      <name>FAULT0EN</name>
                      <description>Fault Input 0 Enable</description>
                      <bitOffset>0</bitOffset>
@@ -1115,6 +1163,14 @@ Controls whether channels are the some or complement</description>
                   <field derivedFrom="FAULT0EN" > <name>FAULT1EN</name> <description>Fault Input 1 Enable</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="FAULT0EN" > <name>FAULT2EN</name> <description>Fault Input 2 Enable</description> <bitOffset>2</bitOffset> </field>
                   <field derivedFrom="FAULT0EN" > <name>FAULT3EN</name> <description>Fault Input 3 Enable</description> <bitOffset>3</bitOffset> </field>
+                  <field>
+                     <name>FFLTREN</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Fault Input Filter Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
                   <field>
                      <name>FFLTR0EN</name>
                      <description>Fault Input 0 Filter Enable</description>
@@ -1382,6 +1438,14 @@ Selects the ratio between the number of counter overflows to the number of times
                <description>FTM Fault Input Polarity</description>
                <addressOffset>0x88</addressOffset>
                <fields>
+                  <field>
+                     <name>FLTPOL</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Fault Input Polarity</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
                   <field>
                      <name>FLT0POL</name>
                      <description>Fault Input 0 Polarity</description>
@@ -1682,6 +1746,14 @@ Selects the ratio between the number of counter overflows to the number of times
                <addressOffset>0x94</addressOffset>
                <fields>
                   <field>
+                     <name>CHOC</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Software Output Control Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
                      <name>CH0OC</name>
                      <description>Channel 0 Software Output Control Enable</description>
                      <bitOffset>0</bitOffset>
@@ -1702,6 +1774,14 @@ Selects the ratio between the number of counter overflows to the number of times
                   <field derivedFrom="CH0OC" > <name>CH1OC</name> <description>Channel 1 Software Output Control Enable</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="CH0OC" > <name>CH2OC</name> <description>Channel 2 Software Output Control Enable</description> <bitOffset>2</bitOffset> </field>
                   <field derivedFrom="CH0OC" > <name>CH3OC</name> <description>Channel 3 Software Output Control Enable</description> <bitOffset>3</bitOffset> </field>
+                  <field>
+                     <name>CHOCV</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Software Output Control Value</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
                   <field>
                      <name>CH0OCV</name>
                      <description>Channel 0 Software Output Control Value</description>
@@ -1730,6 +1810,14 @@ Selects the ratio between the number of counter overflows to the number of times
                <description>FTM PWM Load</description>
                <addressOffset>0x98</addressOffset>
                <fields>
+                  <field>
+                     <name>CHSEL</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
                   <field>
                      <name>CH0SEL</name>
                      <description>Channel 0 Select</description>

@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2022/10
+ * @date     2023/12
  *
  */
 
@@ -3116,9 +3116,9 @@ typedef struct SIM_Type {
 /** @} */
 
 /** @name SCGC5 - System Clock Gating Control Register 5 */ /** @{ */
-#define SIM_SCGC5_LPTMR_MASK                     (0x1U)                                              /**< SIM_SCGC5.LPTMR Mask                    */
-#define SIM_SCGC5_LPTMR_SHIFT                    (0U)                                                /**< SIM_SCGC5.LPTMR Position                */
-#define SIM_SCGC5_LPTMR(x)                       (((uint32_t)(((uint32_t)(x))<<SIM_SCGC5_LPTMR_SHIFT))&SIM_SCGC5_LPTMR_MASK) /**< SIM_SCGC5.LPTMR Field                   */
+#define SIM_SCGC5_LPTMR0_MASK                    (0x1U)                                              /**< SIM_SCGC5.LPTMR0 Mask                   */
+#define SIM_SCGC5_LPTMR0_SHIFT                   (0U)                                                /**< SIM_SCGC5.LPTMR0 Position               */
+#define SIM_SCGC5_LPTMR0(x)                      (((uint32_t)(((uint32_t)(x))<<SIM_SCGC5_LPTMR0_SHIFT))&SIM_SCGC5_LPTMR0_MASK) /**< SIM_SCGC5.LPTMR0 Field                  */
 #define SIM_SCGC5_PORTA_MASK                     (0x200U)                                            /**< SIM_SCGC5.PORTA Mask                    */
 #define SIM_SCGC5_PORTA_SHIFT                    (9U)                                                /**< SIM_SCGC5.PORTA Position                */
 #define SIM_SCGC5_PORTA(x)                       (((uint32_t)(((uint32_t)(x))<<SIM_SCGC5_PORTA_SHIFT))&SIM_SCGC5_PORTA_MASK) /**< SIM_SCGC5.PORTA Field                   */
@@ -3352,13 +3352,16 @@ typedef struct SMC_Type {
  * @brief  C Struct allowing access to SPI registers
  */
 typedef struct SPI_Type {
-   __IO uint8_t   S;                            /**< 0000: Status register                                              */
-   __IO uint8_t   BR;                           /**< 0001: Baud rate register                                           */
-   __IO uint8_t   C2;                           /**< 0002: Control register 2                                           */
+   __I  uint8_t   S;                            /**< 0000: Status register                                              */
+        uint8_t   RESERVED_0;                   /**< 0001: 0x1 bytes                                                    */
+   union {                                      /**< 0002: (size=0001)                                                  */
+      __IO uint8_t   BR;                        /**< 0002: Baud rate register                                           */
+      __IO uint8_t   C2;                        /**< 0002: Control register 2                                           */
+   };
    __IO uint8_t   C1;                           /**< 0003: Control register 1                                           */
-   __IO uint8_t   M;                            /**< 0004: Match Register                                               */
-        uint8_t   RESERVED_0;                   /**< 0005: 0x1 bytes                                                    */
+        uint8_t   RESERVED_1[2];                /**< 0004: 0x2 bytes                                                    */
    __IO uint8_t   D;                            /**< 0006: Data register                                                */
+   __IO uint8_t   M;                            /**< 0007: Match register:                                              */
 } SPI_Type;
 
 
@@ -3443,16 +3446,16 @@ typedef struct SPI_Type {
 #define SPI_C1_SPIE(x)                           (((uint8_t)(((uint8_t)(x))<<SPI_C1_SPIE_SHIFT))&SPI_C1_SPIE_MASK) /**< SPI0_C1.SPIE Field                      */
 /** @} */
 
-/** @name M - Match Register */ /** @{ */
-#define SPI_M_Bits_MASK                          (0xFFU)                                             /**< SPI0_M.Bits Mask                        */
-#define SPI_M_Bits_SHIFT                         (0U)                                                /**< SPI0_M.Bits Position                    */
-#define SPI_M_Bits(x)                            (((uint8_t)(((uint8_t)(x))<<SPI_M_Bits_SHIFT))&SPI_M_Bits_MASK) /**< SPI0_M.Bits Field                       */
-/** @} */
-
 /** @name D - Data register */ /** @{ */
 #define SPI_D_Bits_MASK                          (0xFFU)                                             /**< SPI0_D.Bits Mask                        */
 #define SPI_D_Bits_SHIFT                         (0U)                                                /**< SPI0_D.Bits Position                    */
 #define SPI_D_Bits(x)                            (((uint8_t)(((uint8_t)(x))<<SPI_D_Bits_SHIFT))&SPI_D_Bits_MASK) /**< SPI0_D.Bits Field                       */
+/** @} */
+
+/** @name M - Match register: */ /** @{ */
+#define SPI_M_Bits_MASK                          (0xFFU)                                             /**< SPI0_M.Bits Mask                        */
+#define SPI_M_Bits_SHIFT                         (0U)                                                /**< SPI0_M.Bits Position                    */
+#define SPI_M_Bits(x)                            (((uint8_t)(((uint8_t)(x))<<SPI_M_Bits_SHIFT))&SPI_M_Bits_MASK) /**< SPI0_M.Bits Field                       */
 /** @} */
 
 /** @} */ /* End group SPI_Register_Masks_GROUP */

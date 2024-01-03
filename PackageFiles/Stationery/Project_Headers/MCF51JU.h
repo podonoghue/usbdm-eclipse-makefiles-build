@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V0.0
- * @date     2022/09
+ * @date     2023/12
  *
  */
 
@@ -5772,12 +5772,12 @@ typedef struct SIM_Type {
 #define SIM_SCGC2_TSI_MASK                       (0x20U)                                             /**< SIM_SCGC2.TSI Mask                      */
 #define SIM_SCGC2_TSI_SHIFT                      (5U)                                                /**< SIM_SCGC2.TSI Position                  */
 #define SIM_SCGC2_TSI(x)                         (((uint8_t)(((uint8_t)(x))<<SIM_SCGC2_TSI_SHIFT))&SIM_SCGC2_TSI_MASK) /**< SIM_SCGC2.TSI Field                     */
-#define SIM_SCGC2_CMP_MASK                       (0x40U)                                             /**< SIM_SCGC2.CMP Mask                      */
-#define SIM_SCGC2_CMP_SHIFT                      (6U)                                                /**< SIM_SCGC2.CMP Position                  */
-#define SIM_SCGC2_CMP(x)                         (((uint8_t)(((uint8_t)(x))<<SIM_SCGC2_CMP_SHIFT))&SIM_SCGC2_CMP_MASK) /**< SIM_SCGC2.CMP Field                     */
-#define SIM_SCGC2_I2S_MASK                       (0x80U)                                             /**< SIM_SCGC2.I2S Mask                      */
-#define SIM_SCGC2_I2S_SHIFT                      (7U)                                                /**< SIM_SCGC2.I2S Position                  */
-#define SIM_SCGC2_I2S(x)                         (((uint8_t)(((uint8_t)(x))<<SIM_SCGC2_I2S_SHIFT))&SIM_SCGC2_I2S_MASK) /**< SIM_SCGC2.I2S Field                     */
+#define SIM_SCGC2_CMP0_MASK                      (0x40U)                                             /**< SIM_SCGC2.CMP0 Mask                     */
+#define SIM_SCGC2_CMP0_SHIFT                     (6U)                                                /**< SIM_SCGC2.CMP0 Position                 */
+#define SIM_SCGC2_CMP0(x)                        (((uint8_t)(((uint8_t)(x))<<SIM_SCGC2_CMP0_SHIFT))&SIM_SCGC2_CMP0_MASK) /**< SIM_SCGC2.CMP0 Field                    */
+#define SIM_SCGC2_I2S0_MASK                      (0x80U)                                             /**< SIM_SCGC2.I2S0 Mask                     */
+#define SIM_SCGC2_I2S0_SHIFT                     (7U)                                                /**< SIM_SCGC2.I2S0 Position                 */
+#define SIM_SCGC2_I2S0(x)                        (((uint8_t)(((uint8_t)(x))<<SIM_SCGC2_I2S0_SHIFT))&SIM_SCGC2_I2S0_MASK) /**< SIM_SCGC2.I2S0 Field                    */
 /** @} */
 
 /** @name SCGC3 - Clock Gate Control Register 3 */ /** @{ */
@@ -5808,9 +5808,9 @@ typedef struct SIM_Type {
 #define SIM_SCGC4_IRQ_MASK                       (0x2U)                                              /**< SIM_SCGC4.IRQ Mask                      */
 #define SIM_SCGC4_IRQ_SHIFT                      (1U)                                                /**< SIM_SCGC4.IRQ Position                  */
 #define SIM_SCGC4_IRQ(x)                         (((uint8_t)(((uint8_t)(x))<<SIM_SCGC4_IRQ_SHIFT))&SIM_SCGC4_IRQ_MASK) /**< SIM_SCGC4.IRQ Field                     */
-#define SIM_SCGC4_DMA_MASK                       (0x8U)                                              /**< SIM_SCGC4.DMA Mask                      */
-#define SIM_SCGC4_DMA_SHIFT                      (3U)                                                /**< SIM_SCGC4.DMA Position                  */
-#define SIM_SCGC4_DMA(x)                         (((uint8_t)(((uint8_t)(x))<<SIM_SCGC4_DMA_SHIFT))&SIM_SCGC4_DMA_MASK) /**< SIM_SCGC4.DMA Field                     */
+#define SIM_SCGC4_DMA0_MASK                      (0x8U)                                              /**< SIM_SCGC4.DMA0 Mask                     */
+#define SIM_SCGC4_DMA0_SHIFT                     (3U)                                                /**< SIM_SCGC4.DMA0 Position                 */
+#define SIM_SCGC4_DMA0(x)                        (((uint8_t)(((uint8_t)(x))<<SIM_SCGC4_DMA0_SHIFT))&SIM_SCGC4_DMA0_MASK) /**< SIM_SCGC4.DMA0 Field                    */
 #define SIM_SCGC4_FTFL_MASK                      (0x80U)                                             /**< SIM_SCGC4.FTFL Mask                     */
 #define SIM_SCGC4_FTFL_SHIFT                     (7U)                                                /**< SIM_SCGC4.FTFL Position                 */
 #define SIM_SCGC4_FTFL(x)                        (((uint8_t)(((uint8_t)(x))<<SIM_SCGC4_FTFL_SHIFT))&SIM_SCGC4_FTFL_MASK) /**< SIM_SCGC4.FTFL Field                    */
@@ -5853,9 +5853,9 @@ typedef struct SIM_Type {
 #define SIM_SCGC6_USBDCD_MASK                    (0x40U)                                             /**< SIM_SCGC6.USBDCD Mask                   */
 #define SIM_SCGC6_USBDCD_SHIFT                   (6U)                                                /**< SIM_SCGC6.USBDCD Position               */
 #define SIM_SCGC6_USBDCD(x)                      (((uint8_t)(((uint8_t)(x))<<SIM_SCGC6_USBDCD_SHIFT))&SIM_SCGC6_USBDCD_MASK) /**< SIM_SCGC6.USBDCD Field                  */
-#define SIM_SCGC6_USBOTG_MASK                    (0x80U)                                             /**< SIM_SCGC6.USBOTG Mask                   */
-#define SIM_SCGC6_USBOTG_SHIFT                   (7U)                                                /**< SIM_SCGC6.USBOTG Position               */
-#define SIM_SCGC6_USBOTG(x)                      (((uint8_t)(((uint8_t)(x))<<SIM_SCGC6_USBOTG_SHIFT))&SIM_SCGC6_USBOTG_MASK) /**< SIM_SCGC6.USBOTG Field                  */
+#define SIM_SCGC6_USB0_MASK                      (0x80U)                                             /**< SIM_SCGC6.USB0 Mask                     */
+#define SIM_SCGC6_USB0_SHIFT                     (7U)                                                /**< SIM_SCGC6.USB0 Position                 */
+#define SIM_SCGC6_USB0(x)                        (((uint8_t)(((uint8_t)(x))<<SIM_SCGC6_USB0_SHIFT))&SIM_SCGC6_USB0_MASK) /**< SIM_SCGC6.USB0 Field                    */
 /** @} */
 
 /** @name CLKOUT - Clock-out Register */ /** @{ */

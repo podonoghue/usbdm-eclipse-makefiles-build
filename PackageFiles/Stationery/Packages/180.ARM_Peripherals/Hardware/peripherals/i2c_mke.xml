@@ -40,9 +40,9 @@
     * %paramType[index]               As for %paramType
     * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %symbolicExpression             Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment;               Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression              Based on variable etc. Similar to (%register&%mask)
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1
@@ -500,7 +500,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}
          \t\n
       ]]></variableTemplate>
@@ -554,7 +554,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}
          \t
          \t/**
@@ -589,7 +589,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}
          \t
          \t/**

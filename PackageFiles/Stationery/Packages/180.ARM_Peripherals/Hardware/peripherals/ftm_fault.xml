@@ -39,17 +39,20 @@
     * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
 -->
 
-<!--  ==== FTM Fault Controls ===== -->
+<!--  ____ FTM Fault Controls ____= -->
 
-   <categoryOption key="faultControl" description="Fault Input Configuration" condition="_control"
+   <categoryOption key="faultControl" description="Fault Input Configuration" 
+     condition="_control&amp;&amp;
+         (SignalExists(&quot;$(_NAME)_FLT0&quot;)||SignalExists(&quot;$(_NAME)_FLT1&quot;)||
+          SignalExists(&quot;$(_NAME)_FLT2&quot;)||SignalExists(&quot;$(_NAME)_FLT2&quot;))"
       hiddenBy="mode!=(Left,Centre)"
    >
       <!-- ************* MODE ****************** -->
 
       <choiceOption key="ftm_mode_faultm" condition="ftm_mode_faultm_present"      
-         hidden="true"
          enabledBy="ftm_mode_ftmen"
          typeName="FtmFaultMode"
+         enumType="uint8_t"
          description="Fault Control Mode"
          toolTip="This is a write-once after reset setting" >
          <choice name="Disabled"                                    value="0" enum="Disabled"/>
@@ -58,31 +61,22 @@
          <choice name="All channels with automatic fault clearing"  value="3" enum="AllChannelsAutomaticFaultClearing"/>
       </choiceOption >
       
-      <aliasOption key="ftm_mode_faultm" optional="true" locked="false"
-         condition="(SignalExists(&quot;$(_NAME)_FLT0&quot;)||SignalExists(&quot;$(_NAME)_FLT1&quot;)||
-                     SignalExists(&quot;$(_NAME)_FLT2&quot;)||SignalExists(&quot;$(_NAME)_FLT3&quot;))" />
-
       <binaryOption key="ftm_mode_faultie" condition="ftm_mode_faultie_present"
-         hidden="true"        
          enabledBy="ftm_mode_faultm>0"
          typeName="FtmFaultAction"
          description="Action on Fault event" >
-         <choice name="No action"    value="0" enum="Ignored"/>
-         <choice name="Interrupt"    value="1" enum="Interrupt"/>
+         <choice name="No action"    value="0" enum="Ignored"   />
+         <choice name="Interrupt"    value="1" enum="Interrupt" />
       </binaryOption >
-
-      <aliasOption key="ftm_mode_faultie" optional="true" locked="false"
-         condition="(SignalExists(&quot;$(_NAME)_FLT0&quot;)||SignalExists(&quot;$(_NAME)_FLT1&quot;)||
-                     SignalExists(&quot;$(_NAME)_FLT2&quot;)||SignalExists(&quot;$(_NAME)_FLT2&quot;))" />
 
       <!-- ************* FLTCTRL ****************** -->
 
       <choiceOption key="ftm_fltctrl_ffval"
-         hidden="true"
          condition="ftm_fltctrl_ffval_present"
          enabledBy="ftm_mode_faultm>0"
          description="Fault Input Filter"
          typeName="FtmFaultFilter"
+         enumType="uint16_t"
          toolTip="Selects the filter value for the fault inputs." >
          <choice value="0"  name="Filter Disabled"  enum="Disabled" isDefault="true" />
          <choice value="1"  name="1 Clock cycle "   enum="1_clock"   />
@@ -102,13 +96,7 @@
          <choice value="15" name="15 Clock cycles"  enum="15_clocks" />
       </choiceOption>
 
-      <aliasOption key="ftm_fltctrl_ffval" optional="true"  locked="false"
-         condition="(SignalExists(&quot;$(_NAME)_FLT0&quot;)||SignalExists(&quot;$(_NAME)_FLT1&quot;)||
-                     SignalExists(&quot;$(_NAME)_FLT2&quot;)||SignalExists(&quot;$(_NAME)_FLT2&quot;))"
-      />
       <floatOption key="ftm_fltctrl_filterdelay"
-         condition="(SignalExists(&quot;$(_NAME)_FLT0&quot;)||SignalExists(&quot;$(_NAME)_FLT1&quot;)||
-                     SignalExists(&quot;$(_NAME)_FLT2&quot;)||SignalExists(&quot;$(_NAME)_FLT2&quot;))"
          locked="true"
          derived="true"
          enabledBy="ftm_fltctrl_ffval!=0"
@@ -118,91 +106,41 @@
          min="0.0"
        />
 
-      <for keys="inp" dim="8" >
-         <choiceOption key="ftm_fltctrl_fault%(inp)en" condition="ftm_fltctrl_fault%(inp)en_present"
-            hidden="true"
-            valueFormat="FTM_FLTCTRL_FAULT%(inp)EN(%s),FTM_FLTCTRL_FFLTR%(inp)EN(%s)"
-            enabledBy="ftm_mode_faultm>0"
-            description="Fault Input %(inp) Enable and Filter"
-            toolTip="Enables the fault input.\n
-                     This field is write protected. It can be written only when MODE[WPDIS] = 1."
-            typeName="FtmFault%(inp)Mode"
-         >
-            <choice value="0,0" name="Fault input disabled"             enum="Disabled"  />
-            <choice value="1,0" name="Fault input enabled"              enum="Direct"    />
-            <choice value="1,1" name="Fault input enabled with filter"  enum="Filtered"  />
-         </choiceOption>
-
-      <!-- ************* FLTPOL ****************** -->
-
-         <binaryOption key="ftm_fltpol_flt%(inp)pol" condition="ftm_fltpol_flt%(inp)pol_present"
-            hidden="true"
-            enabledBy="ftm_fltctrl_fault%(inp)en>0"
-            description="Fault Input %(inp) Polarity"
-            toolTip="Defines the polarity of the fault input.\n
-                     This field is write protected. It can be written only when MODE[WPDIS] = 1."
-            typeName="FtmFault%(inp)Polarity"
-         >
-            <choice value="0" name="Active High" enum="ActiveHigh" />
-            <choice value="1" name="Active Low" enum="ActiveLow"   />
-         </binaryOption>
-
+      <for keys="inp" dim="4" >
          <if condition="SignalExists(&quot;$(_NAME)_FLT%(inp)&quot;)" >
+         
             <title description="Fault Input %(inp)" />
-            <aliasOption key="ftm_fltctrl_fault%(inp)en" optional="true" locked="false" />
-            <aliasOption key="ftm_fltpol_flt%(inp)pol"   optional="true" locked="false" />
+            <choiceOption key="ftm_fltctrl_fault%(inp)en" condition="ftm_fltctrl_fault%(inp)en_present"
+               valueFormat="FTM_FLTCTRL_FAULT%(inp)EN(%s),FTM_FLTCTRL_FFLTR%(inp)EN(%s)"
+               enabledBy="ftm_mode_faultm>0"
+               description='="Fault Input %(inp) ("+faultPinMap[%(inp)]+")"'
+               toolTip="Enables the fault input.\n
+                        This field is write protected. It can be written only when MODE[WPDIS] = 1."
+               typeName="FtmFault%(inp)Mode"
+               enumType="uint16_t" >
+               <choice value="0,0" name="Fault input disabled"             enum="Disabled"  />
+               <choice value="1,0" name="Fault input enabled"              enum="Direct"    />
+               <choice value="1,1" name="Fault input enabled with filter"  enum="Filtered"  />
+            </choiceOption>
+   
+         <!-- ************* FLTPOL ****************** -->
+   
+            <binaryOption key="ftm_fltpol_flt%(inp)pol" condition="ftm_fltpol_flt%(inp)pol_present"
+               enabledBy="ftm_fltctrl_fault%(inp)en>0"
+               description="Fault Input %(inp) Polarity"
+               toolTip="Defines the polarity of the fault input.\n
+                        This field is write protected. It can be written only when MODE[WPDIS] = 1."
+               typeName="FtmFault%(inp)Polarity"
+               enumType="uint8_t" >
+               <choice value="0" name="Active High" enum="ActiveHigh" />
+               <choice value="1" name="Active Low" enum="ActiveLow"   />
+            </binaryOption>
          </if>
       </for>
 
-      <!-- ************* POL ****************** -->
-
-      <for keys="ch" dim="8" >
-         <equation key="polarityEnums" value="" 
-            condition="!polarityEnums&amp;&amp;(/FTM0/ftm_pol_pol%(ch)_present||/FTM1/ftm_pol_pol%(ch)_present||
-                       /FTM2/ftm_pol_pol%(ch)_present||/FTM3/ftm_pol_pol%(ch)_present)"
-         />
-         <equation key="polarityEnums"
-            condition="/FTM0/ftm_pol_pol%(ch)_present||/FTM1/ftm_pol_pol%(ch)_present||
-                       /FTM2/ftm_pol_pol%(ch)_present||/FTM3/ftm_pol_pol%(ch)_present"
-            value="
-               =polarityEnums+
-               &quot;\t   FtmPolarity_Ch%(ch)_ActiveHigh  = uint16_t(1U&lt;&lt;(%(ch)+8)),\n&quot;"
-          />
-         <equation key="polarityChannels" condition="!polarityChannels&amp;&amp;ftm_pol_pol%(ch)_present"
-            value="" />
-         <equation key="polarityChannels" condition="ftm_pol_pol%(ch)_present"
-            value="=polarityChannels+&quot;CH%(ch)_ActiveLow,&quot;" />
-      </for>
-
-      <equation key="polarityEnums" condition="polarityEnums"
-         value="=polarityEnums+
-               &quot;\t   FtmPolarity_All_ActiveLow   = uint16_t(0b0000000011111111),\n&quot;+
-               &quot;\t   FtmPolarity_All_ActiveHigh  = uint16_t(0b1111111100000000),\n&quot;" />
-
-      <!--  
-      <printVar key="polarityEnums" /> 
-      <printVar key="polarityChannels" />
-      -->
-
-      <bitmaskOption key="ftm_pol_pol" condition="polarityChannels"
-         enabledBy="enablePeripheralSupport"
-         valueFormat="%s"
-         typeName="FtmPolarity"
-         enumType="uint16_t"
-         enumText="=polarityEnums"
-         description="Channel Output Polarity"
-         toolTip="Bitmask defining the active-low channel outputs (1=ActiveLow).\n
-                  This field is write protected. It can be written only when MODE[WPDIS] = 1."
-         value="0"
-         bitmask="0"
-         bitList="=polarityChannels"
-         bitDescription="Channel %i is active-low" />
-
-      <deleteVariables variables="polarityEnums" />
-      <deleteVariables variables="polarityChannels" />
    </categoryOption>
 
-<!--   ==== FTM Fault Init class ==== -->
+<!--   ____ FTM Fault Init class ____ -->
 
    <if condition="ftm_fltctrl_ffval&amp;&amp;_code" >
 
@@ -255,46 +193,38 @@
          \t\n
       ]]></template>
 
-   <!-- InitFault Member variables -->
+      <!-- ____ InitFault Member variables ____ -->
+   
+      <for keys=" type        : variables                                                 : init    "
+          values="%enumType   : ftm_mode_faultm,ftm_mode_faultie                          : 0       ;
+                  %enumType   : ftm_fltctrl_ffval,
+                                ftm_fltctrl_fault0en,ftm_fltctrl_fault1en,
+                                ftm_fltctrl_fault2en,ftm_fltctrl_fault3en                 : 0       ;
+                  %enumType   : ftm_fltpol_flt0pol,ftm_fltpol_flt1pol,
+                                ftm_fltpol_flt2pol,ftm_fltpol_flt3pol                     : 0       ">
+         <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+            variables="%(variables)"
+         ><![CDATA[
+            %multilineDescription
+            \t   %(type) %registerName = %(init);\n\n
+         ]]></variableTemplate>
+      </for>
+   
+      <!-- ____ InitFault Constructors ____ -->
 
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="ftm_mode_faultm,ftm_mode_faultie"
-      ><![CDATA[
-         \t   // Mode register
-         \t   uint8_t %registerName = 0;\n\n
-      ]]></variableTemplate>
-
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="ftm_fltctrl_ffval,ftm_fltctrl_fault0en,ftm_fltctrl_fault1en,ftm_fltctrl_fault2en,ftm_fltctrl_fault3en"
-      ><![CDATA[
-         \t   // Fault Control register
-         \t   uint16_t %registerName = 0;\n\n
-      ]]></variableTemplate>
-
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="ftm_fltpol_flt0pol,ftm_fltpol_flt1pol,ftm_fltpol_flt2pol,ftm_fltpol_flt4pol"
-      ><![CDATA[
-         \t   // Fault Input Polarity register
-         \t   uint8_t %registerName = 0;\n\n
-      ]]></variableTemplate
-      >
-
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables= "ftm_pol_pol"
-       ><![CDATA[
-         \t   // %description
-         \t   uint16_t %registerName = 0;\n\n
-      ]]></variableTemplate >
-
-   <!--  InitFault Constructors -->
-
-      <for keys="r" values="ftm_mode_faultm;ftm_mode_faultie;ftm_fltctrl_ffval" >
+      <for keys="r" values="ftm_mode_faultm;ftm_mode_faultie;
+                            ftm_fltctrl_ffval;
+                            ftm_fltctrl_fault0en;ftm_fltctrl_fault1en;
+                            ftm_fltctrl_fault2en;ftm_fltctrl_fault3en;
+                            ftm_fltpol_flt0pol;ftm_fltpol_flt1pol;
+                            ftm_fltpol_flt2pol;ftm_fltpol_flt3pol" >
          <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
             variables="%(r)"
             linePadding="xxx"
          ><![CDATA[
             \t   /**
             \t    * Constructor for %description
+            \t    * (%(r))
             \t    *
             \t    * @tparam   Types
             \t    * @param    rest
@@ -304,77 +234,44 @@
             \t   template <typename... Types>
             \t   constexpr FaultInit(%params, Types... rest) : FaultInit(rest...) {
             \t
-            \t      %registerName = (%registerName&~%mask) | %paramExpression;
+            \t      %constructorFieldAssignment;
             \t   }
             \t\n
          ]]></variableTemplate>
       </for>
 
-      <for keys="pin" dim="8" >
-         <for keys="r" values="ftm_fltctrl_fault%(pin)en;ftm_fltpol_flt%(pin)pol" >
-            <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-               variables="%(r)"
-               linePadding="xxx"
-            ><![CDATA[
-               \t   /**
-               \t    * Constructor for %description
-               \t    *
-               \t    * @tparam   Types
-               \t    * @param    rest
-               \t    *
-               %paramDescription
-               \t    */
-               \t   template <typename... Types>
-               \t   constexpr FaultInit(%params, Types... rest) : FaultInit(rest...) {
-               \t
-               \t      %registerName = (%registerName&~%mask) | %paramExpression;
-               \t   }
-               \t\n
-            ]]></variableTemplate>
-         </for>
-      </for>
+      <!-- ____ InitFault Configure methods ____ -->
 
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="ftm_pol_pol"
-      linePadding="xxx"
-      ><![CDATA[
-         \t   /**
-         \t    * Constructor for %description
-         \t    *
-         \t    * @tparam   Types
-         \t    * @param    rest
-         \t    *
-         %paramDescription
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr FaultInit(%params, Types... rest) : FaultInit(rest...) {
-         \t
-         \t      // Mark channels as active-low
-         \t      %registerName |= %paramExpression;
-         \t      %registerName &= ~(%paramExpression>>8U);
-         \t   }
-         \t\n
-      ]]></variableTemplate>
-
-      <!-- InitFault Configure methods -->
-
-      <template codeGenCondition="enablePeripheralSupport&amp;&amp;(mode!=Quad)" ><![CDATA[
+      <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
          \t/**
-         \t * Configure fault handling from values specified in faultInit
+         \t * Configure FTM fault handling from values specified in init
          \t *
-         \t * @param faultInit Class containing initialisation values
+         \t * @param init Class containing initialisation values
          \t */
-         \tstatic ErrorCode configureFaultHandling(const FaultInit &faultInit) {
+         \tstatic ErrorCode configure(const FaultInit &init) {
          \t
-         \t   ftm->FLTCTRL = faultInit.fltctrl;
-         \t   ftm->FLTPOL  = faultInit.fltpol;
-         \t   ftm->MODE    = (ftm->MODE&~(FTM_MODE_FAULTIE_MASK|FTM_MODE_FAULTM_MASK)) | faultInit.mode;
+      ]]></template>
+      <for keys=
+             " var                                        : statement               " 
+      values=" ftm_fltctrl_ffval,
+               ftm_fltctrl_fault0en,ftm_fltctrl_fault1en,
+               ftm_fltctrl_fault2en,ftm_fltctrl_fault3en  : %configRegAssignment    ;
+               ftm_fltpol_flt0pol,ftm_fltpol_flt1pol,
+               ftm_fltpol_flt2pol,ftm_fltpol_flt3pol      : %configRegAssignment    ;  
+               ftm_mode_faultm,ftm_mode_faultie           : %configFieldAssignment  " >
+         <variableTemplate variables="%(var)" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+            \t
+            %multilineDescription
+            \t   %(statement);\n
+         ]]></variableTemplate>
+      </for>
+      <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
          \t
          \t   return E_NO_ERROR;
          \t}\n\n
       ]]></template>
 
-      <!--  DefaultFaultInitValue value -->
+      <!-- ____ DefaultFaultInitValue value ____ -->
       
       <if condition="SignalExists(&quot;$(_NAME)_FLT0&quot;)||SignalExists(&quot;$(_NAME)_FLT1&quot;)||SignalExists(&quot;$(_NAME)_FLT2&quot;)||SignalExists(&quot;$(_NAME)_FLT3&quot;)">
          <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(mode!=Quad)"
@@ -384,8 +281,7 @@
                ftm_mode_faultm,
                ftm_mode_faultie,
                ftm_mode_ffval,
-               ftm_fltctrl_ffval,
-               ftm_pol_pol"
+               ftm_fltctrl_ffval"
          ><![CDATA[
             \t/**
             \t * Default initialisation value for $(_Class)

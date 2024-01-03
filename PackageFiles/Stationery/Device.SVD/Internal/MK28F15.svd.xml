@@ -38,7 +38,7 @@
       <xi:include href="peripherals/FLEXIO_8SH_8TMR_0x400DF000.svd.xml"/>
       <xi:include href="peripherals/FMC_MK28F15.svd.xml"/>
       <xi:include href="peripherals/FTFE_XACCH.svd.xml"/>
-      <xi:include href="peripherals/FTM0_8CH_ICRST.svd.xml"/>
+      <xi:include href="peripherals/FTM0_8CH_DMA.svd.xml"/>
       <xi:include href="peripherals/FTM1_2CH_QUAD_ICRST.svd.xml"/>
       <peripheral derivedFrom="FTM1"><name>FTM2</name><baseAddress>0x400B8000</baseAddress></peripheral>
       <peripheral derivedFrom="FTM0"><name>FTM3</name><baseAddress>0x400B9000</baseAddress></peripheral>

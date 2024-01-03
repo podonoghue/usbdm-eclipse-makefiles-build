@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2022/09
+ * @date     2023/12
  *
  */
 
@@ -1045,6 +1045,9 @@ typedef struct CRC_Type {
 /** @{ */
 
 /** @name DATA - Data register */ /** @{ */
+#define CRC_DATA_DATA_MASK                       (0xFFFFFFFFU)                                       /**< CRC0_DATA.DATA Mask                     */
+#define CRC_DATA_DATA_SHIFT                      (0U)                                                /**< CRC0_DATA.DATA Position                 */
+#define CRC_DATA_DATA(x)                         (((uint32_t)(((uint32_t)(x))<<CRC_DATA_DATA_SHIFT))&CRC_DATA_DATA_MASK) /**< CRC0_DATA.DATA Field                    */
 #define CRC_DATA_LL_MASK                         (0xFFU)                                             /**< CRC0_DATA.LL Mask                       */
 #define CRC_DATA_LL_SHIFT                        (0U)                                                /**< CRC0_DATA.LL Position                   */
 #define CRC_DATA_LL(x)                           (((uint32_t)(((uint32_t)(x))<<CRC_DATA_LL_SHIFT))&CRC_DATA_LL_MASK) /**< CRC0_DATA.LL Field                      */
@@ -1096,6 +1099,9 @@ typedef struct CRC_Type {
 /** @} */
 
 /** @name GPOLY - Polynomial register */ /** @{ */
+#define CRC_GPOLY_GPOLY_MASK                     (0xFFFFFFFFU)                                       /**< CRC0_GPOLY.GPOLY Mask                   */
+#define CRC_GPOLY_GPOLY_SHIFT                    (0U)                                                /**< CRC0_GPOLY.GPOLY Position               */
+#define CRC_GPOLY_GPOLY(x)                       (((uint32_t)(((uint32_t)(x))<<CRC_GPOLY_GPOLY_SHIFT))&CRC_GPOLY_GPOLY_MASK) /**< CRC0_GPOLY.GPOLY Field                  */
 #define CRC_GPOLY_LOW_MASK                       (0xFFFFU)                                           /**< CRC0_GPOLY.LOW Mask                     */
 #define CRC_GPOLY_LOW_SHIFT                      (0U)                                                /**< CRC0_GPOLY.LOW Position                 */
 #define CRC_GPOLY_LOW(x)                         (((uint32_t)(((uint32_t)(x))<<CRC_GPOLY_LOW_SHIFT))&CRC_GPOLY_LOW_MASK) /**< CRC0_GPOLY.LOW Field                    */
@@ -5325,9 +5331,9 @@ typedef struct SIM_Type {
 #define SIM_SCGC6_CRC_MASK                       (0x100000U)                                         /**< SIM_SCGC6.CRC Mask                      */
 #define SIM_SCGC6_CRC_SHIFT                      (20U)                                               /**< SIM_SCGC6.CRC Position                  */
 #define SIM_SCGC6_CRC(x)                         (((uint32_t)(((uint32_t)(x))<<SIM_SCGC6_CRC_SHIFT))&SIM_SCGC6_CRC_MASK) /**< SIM_SCGC6.CRC Field                     */
-#define SIM_SCGC6_LPTMR_MASK                     (0x10000000U)                                       /**< SIM_SCGC6.LPTMR Mask                    */
-#define SIM_SCGC6_LPTMR_SHIFT                    (28U)                                               /**< SIM_SCGC6.LPTMR Position                */
-#define SIM_SCGC6_LPTMR(x)                       (((uint32_t)(((uint32_t)(x))<<SIM_SCGC6_LPTMR_SHIFT))&SIM_SCGC6_LPTMR_MASK) /**< SIM_SCGC6.LPTMR Field                   */
+#define SIM_SCGC6_LPTMR0_MASK                    (0x10000000U)                                       /**< SIM_SCGC6.LPTMR0 Mask                   */
+#define SIM_SCGC6_LPTMR0_SHIFT                   (28U)                                               /**< SIM_SCGC6.LPTMR0 Position               */
+#define SIM_SCGC6_LPTMR0(x)                      (((uint32_t)(((uint32_t)(x))<<SIM_SCGC6_LPTMR0_SHIFT))&SIM_SCGC6_LPTMR0_MASK) /**< SIM_SCGC6.LPTMR0 Field                  */
 #define SIM_SCGC6_SIM_LP_MASK                    (0x40000000U)                                       /**< SIM_SCGC6.SIM_LP Mask                   */
 #define SIM_SCGC6_SIM_LP_SHIFT                   (30U)                                               /**< SIM_SCGC6.SIM_LP Position               */
 #define SIM_SCGC6_SIM_LP(x)                      (((uint32_t)(((uint32_t)(x))<<SIM_SCGC6_SIM_LP_SHIFT))&SIM_SCGC6_SIM_LP_MASK) /**< SIM_SCGC6.SIM_LP Field                  */
@@ -5340,9 +5346,9 @@ typedef struct SIM_Type {
 #define SIM_SCGC7_MPU_MASK                       (0x1U)                                              /**< SIM_SCGC7.MPU Mask                      */
 #define SIM_SCGC7_MPU_SHIFT                      (0U)                                                /**< SIM_SCGC7.MPU Position                  */
 #define SIM_SCGC7_MPU(x)                         (((uint32_t)(((uint32_t)(x))<<SIM_SCGC7_MPU_SHIFT))&SIM_SCGC7_MPU_MASK) /**< SIM_SCGC7.MPU Field                     */
-#define SIM_SCGC7_DMA_MASK                       (0x2U)                                              /**< SIM_SCGC7.DMA Mask                      */
-#define SIM_SCGC7_DMA_SHIFT                      (1U)                                                /**< SIM_SCGC7.DMA Position                  */
-#define SIM_SCGC7_DMA(x)                         (((uint32_t)(((uint32_t)(x))<<SIM_SCGC7_DMA_SHIFT))&SIM_SCGC7_DMA_MASK) /**< SIM_SCGC7.DMA Field                     */
+#define SIM_SCGC7_DMA0_MASK                      (0x2U)                                              /**< SIM_SCGC7.DMA0 Mask                     */
+#define SIM_SCGC7_DMA0_SHIFT                     (1U)                                                /**< SIM_SCGC7.DMA0 Position                 */
+#define SIM_SCGC7_DMA0(x)                        (((uint32_t)(((uint32_t)(x))<<SIM_SCGC7_DMA0_SHIFT))&SIM_SCGC7_DMA0_MASK) /**< SIM_SCGC7.DMA0 Field                    */
 /** @} */
 
 /** @name CLKDIV1 - System Clock Divider Register 1 */ /** @{ */

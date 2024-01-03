@@ -993,7 +993,7 @@
          %paramDescription
          \t */
          \tstatic void configure%(name)(%params) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}\n\n
       ]]></variableTemplate>
    </for>
@@ -1034,7 +1034,7 @@
          %paramDescription
          \t */
          \tstatic void select%(name)Pins(%params) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}\n\n
       ]]></variableTemplate>
    </for>
@@ -1101,7 +1101,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}\n\n
       ]]></variableTemplate>
    </for>

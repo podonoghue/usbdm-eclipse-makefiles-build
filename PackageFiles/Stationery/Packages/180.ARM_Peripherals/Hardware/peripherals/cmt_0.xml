@@ -325,7 +325,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}
          \t\n
       ]]></variableTemplate>
@@ -379,7 +379,7 @@
       \t   if (%paramName == %paramType_Auto) {
       \t      %paramName = CmtClockPrescaler(((SystemBusClock+4000000)/8000000)-1);
       \t   }
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}
       \t
       \t/**

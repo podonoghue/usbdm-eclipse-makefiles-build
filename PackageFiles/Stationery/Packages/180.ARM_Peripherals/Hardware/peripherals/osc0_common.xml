@@ -232,7 +232,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}
          \t\n
       ]]></variableTemplate>

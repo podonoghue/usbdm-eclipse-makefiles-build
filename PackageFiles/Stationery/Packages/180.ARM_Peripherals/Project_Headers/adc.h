@@ -1022,7 +1022,7 @@ public:
       /** GPIO pin associated with this channel (Not all channels have an associated GPIO!) */
       template<Polarity polarity=ActiveHigh>
       class GpioPin : public GpioTable_T<Info, channel, polarity> {
-         static_assert((AdcInfo::info[channel].portAddress != 0),
+         static_assert((Info::info[channel].portAddress != 0),
                "ADC channel does not have corresponding GPIO pin");
       };
 

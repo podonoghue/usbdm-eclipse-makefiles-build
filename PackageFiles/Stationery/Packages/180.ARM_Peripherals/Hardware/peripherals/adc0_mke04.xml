@@ -327,7 +327,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}
          \t
          \t/**
@@ -811,7 +811,7 @@
       \t * @param %paramName %tooltip
       \t */
       \tstatic void setClockout(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}
       \t
       \t/**

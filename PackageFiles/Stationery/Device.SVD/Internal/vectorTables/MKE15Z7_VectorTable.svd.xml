@@ -1,5 +1,5 @@
 <!--
-Devices using this vector table:
+Devices using this vector table: 
    MKE15Z7
 -->
 <interrupts>
@@ -154,7 +154,7 @@ Devices using this vector table:
       <name>TSI</name>
       <description>Touch sense input</description>
       <value>24</value>
-      <peripheral>TSI</peripheral>
+      <peripheral>TSI0</peripheral>
    </interrupt>
    <interrupt>
       <name>PDB0</name>

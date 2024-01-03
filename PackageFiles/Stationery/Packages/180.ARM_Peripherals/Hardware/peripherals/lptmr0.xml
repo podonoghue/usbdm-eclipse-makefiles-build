@@ -314,7 +314,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}
          \t\n
       ]]></variableTemplate>
@@ -368,7 +368,7 @@
       %paramDescription
       \t */
       \tstatic void setActionOnCompare(%params) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}\n\n
    ]]></variableTemplate>
 
@@ -381,7 +381,7 @@
       \t */
       \tstatic void selectPulseInput(
       %params) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}\n\n
    ]]></variableTemplate>
 
@@ -459,7 +459,7 @@
       \t * @param %paramName %tooltip
       \t */
       \tstatic void setInputClockSource(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}
       \t
       \t/**

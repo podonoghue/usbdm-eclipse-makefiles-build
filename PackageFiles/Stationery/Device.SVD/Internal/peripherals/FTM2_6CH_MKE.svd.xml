@@ -605,8 +605,9 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <addressOffset>0x5C</addressOffset>
                <fields>
                   <field>
-                     <?ignoreOverlap?>
                      <name>CHOI</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
                      <description>Channel Output Initialization Value</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>8</bitWidth>
@@ -642,8 +643,9 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <addressOffset>0x60</addressOffset>
                <fields>
                   <field>
-                     <?ignoreOverlap?>
                      <name>CHOM</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
                      <description>Channel Output Mask</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>8</bitWidth>
@@ -679,13 +681,13 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <addressOffset>0x64</addressOffset>
                <fields>
                   <field>
-                     <name>COMB0</name>
+                     <name>COMBINE</name>
                      <?ignoreOverlap?>
+                     <?hide?>
                      <description>Combination Control for CH 0 &amp; 1</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>7</bitWidth>
                   </field>
-
                   <field>
                      <name>COMBINE0</name>
                      <description>Combine Channels 0 &amp; 1</description>
@@ -762,7 +764,6 @@ Controls whether channels are the some or complement</description>
                   <field derivedFrom="DECAPEN0" > <name>DTEN0</name> <description>Deadtime Enable for Channels 0 &amp; 1</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="DECAPEN0" > <name>SYNCEN0</name> <description>PWM Synchronization Enable for Channels 0 &amp; 1</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="DECAPEN0" > <name>FAULTEN0</name> <description>Fault Control Enable for Channels 0 &amp; 1</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="COMB0" > <name>COMB1</name> <description>Combination Control for CH 2 &amp; 3</description> <bitOffset>8</bitOffset> </field>
                   <field derivedFrom="COMBINE0" > <name>COMBINE1</name> <description>Combine Channels 2 &amp; 3</description> <bitOffset>8</bitOffset> </field>
                   <field derivedFrom="COMP0" > <name>COMP1</name> <description>Complement for Channels 2 &amp; 3</description> <bitOffset>9</bitOffset> </field>
                   <field derivedFrom="DECAPEN0" > <name>DECAPEN1</name> <description>Dual Edge Capture Mode Enable for Channels 2 &amp; 3</description> <bitOffset>10</bitOffset> </field>
@@ -770,7 +771,6 @@ Controls whether channels are the some or complement</description>
                   <field derivedFrom="DTEN0" > <name>DTEN1</name> <description>Deadtime Enable for Channels 2 &amp; 3</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="SYNCEN0" > <name>SYNCEN1</name> <description>Synchronization Enable for Channels 2 &amp; 3</description> <bitOffset>13</bitOffset> </field>
                   <field derivedFrom="FAULTEN0" > <name>FAULTEN1</name> <description>Fault Control Enable for Channels 2 &amp; 3</description> <bitOffset>14</bitOffset> </field>
-                  <field derivedFrom="COMB0" > <name>COMB2</name> <description>Combination Control for CH 4 &amp; 5</description> <bitOffset>16</bitOffset> </field>
                   <field derivedFrom="COMBINE0" > <name>COMBINE2</name> <description>Combine Channels 4 &amp; 5</description> <bitOffset>16</bitOffset> </field>
                   <field derivedFrom="COMP0" > <name>COMP2</name> <description>Complement for Channels 4 &amp; 5</description> <bitOffset>17</bitOffset> </field>
                   <field derivedFrom="DECAPEN0" > <name>DECAPEN2</name> <description>Dual Edge Capture Mode Enable for Channels 4 &amp; 5</description> <bitOffset>18</bitOffset> </field>
@@ -822,16 +822,17 @@ Controls whether channels are the some or complement</description>
                <addressOffset>0x6C</addressOffset>
                <fields>
                   <field>
-                     <?ignoreOverlap?>
                      <name>CHTRIG</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
                      <description>Channel Trigger Enable</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>8</bitWidth>
                   </field>
                   <field>
-                     <name>CH0TRIG</name>
-                     <description>Channel 0 Trigger Enable</description>
-                     <bitOffset>4</bitOffset>
+                     <name>CH2TRIG</name>
+                     <description>Channel 2 Trigger Enable</description>
+                     <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
@@ -846,11 +847,11 @@ Controls whether channels are the some or complement</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="CH0TRIG" > <name>CH1TRIG</name> <description>Channel 1 Trigger Enable</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="CH0TRIG" > <name>CH2TRIG</name> <description>Channel 2 Trigger Enable</description> <bitOffset>0</bitOffset> </field>
-                  <field derivedFrom="CH0TRIG" > <name>CH3TRIG</name> <description>Channel 3 Trigger Enable</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="CH0TRIG" > <name>CH4TRIG</name> <description>Channel 4 Trigger Enable</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="CH0TRIG" > <name>CH5TRIG</name> <description>Channel 5 Trigger Enable</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CH2TRIG" > <name>CH3TRIG</name> <description>Channel 3 Trigger Enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CH2TRIG" > <name>CH4TRIG</name> <description>Channel 4 Trigger Enable</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="CH2TRIG" > <name>CH5TRIG</name> <description>Channel 5 Trigger Enable</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CH2TRIG" > <name>CH0TRIG</name> <description>Channel 0 Trigger Enable</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CH2TRIG" > <name>CH1TRIG</name> <description>Channel 1 Trigger Enable</description> <bitOffset>5</bitOffset> </field>
                   <field>
                      <name>INITTRIGEN</name>
                      <description>Initialization Trigger Enable</description>
@@ -895,8 +896,9 @@ Controls whether channels are the some or complement</description>
                <addressOffset>0x70</addressOffset>
                <fields>
                   <field>
-                     <?ignoreOverlap?>
                      <name>POL</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
                      <description>Channel Polarity</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>8</bitWidth>
@@ -1043,6 +1045,14 @@ Controls whether channels are the some or complement</description>
                <addressOffset>0x7C</addressOffset>
                <fields>
                   <field>
+                     <name>FAULTEN</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Fault Input Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
                      <name>FAULT0EN</name>
                      <description>Fault Input 0 Enable</description>
                      <bitOffset>0</bitOffset>
@@ -1063,6 +1073,14 @@ Controls whether channels are the some or complement</description>
                   <field derivedFrom="FAULT0EN" > <name>FAULT1EN</name> <description>Fault Input 1 Enable</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="FAULT0EN" > <name>FAULT2EN</name> <description>Fault Input 2 Enable</description> <bitOffset>2</bitOffset> </field>
                   <field derivedFrom="FAULT0EN" > <name>FAULT3EN</name> <description>Fault Input 3 Enable</description> <bitOffset>3</bitOffset> </field>
+                  <field>
+                     <name>FFLTREN</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Fault Input Filter Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
                   <field>
                      <name>FFLTR0EN</name>
                      <description>Fault Input 0 Filter Enable</description>
@@ -1170,6 +1188,14 @@ Selects the ratio between the number of counter overflows to the number of times
                <description>FTM Fault Input Polarity</description>
                <addressOffset>0x88</addressOffset>
                <fields>
+                  <field>
+                     <name>FLTPOL</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Fault Input Polarity</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
                   <field>
                      <name>FLT0POL</name>
                      <description>Fault Input 0 Polarity</description>
@@ -1469,8 +1495,9 @@ Selects the ratio between the number of counter overflows to the number of times
                <addressOffset>0x94</addressOffset>
                <fields>
                   <field>
-                     <?ignoreOverlap?>
                      <name>CHOC</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
                      <description>Channel Software Output Control Enable</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>8</bitWidth>
@@ -1499,8 +1526,9 @@ Selects the ratio between the number of counter overflows to the number of times
                   <field derivedFrom="CH0OC" > <name>CH4OC</name> <description>Channel 4 Software Output Control Enable</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="CH0OC" > <name>CH5OC</name> <description>Channel 5 Software Output Control Enable</description> <bitOffset>5</bitOffset> </field>
                   <field>
-                     <?ignoreOverlap?>
                      <name>CHOCV</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
                      <description>Channel Software Output Control Value</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>8</bitWidth>
@@ -1536,8 +1564,9 @@ Selects the ratio between the number of counter overflows to the number of times
                <addressOffset>0x98</addressOffset>
                <fields>
                   <field>
-                     <?ignoreOverlap?>
                      <name>CHSEL</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
                      <description>Channel Select</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>8</bitWidth>

@@ -30,7 +30,7 @@
    <constant key="llwu_device_list"
       description="LLWU Wakeup sources"
       type="String"
-      value="&quot;LPTMR0;CMP0;CMP1;;;RTC_Alarm;;RTC_Seconds&quot;" />
+      value='"LPTMR0;CMP0;CMP1;;;RTC_Alarm;;RTC_Seconds"' />
 
    <!-- Clock divider -->
    <constant key="clock_divider_type" type="Long" value="1" />
@@ -96,6 +96,18 @@
       <choice value="63" name="Always Enabled 63"  enum="AlwaysEnabled63"  />
    </choiceOption>
 
+   <!-- FTM Trigger sources -->
+   <constant key="/FTM0/hardwareTriggerPinMap" type="String" value='"FTM1_Match/CMP0,FTM2_Match/PDB_Ch1,FTM0_FLT0"'  />
+   <constant key="/FTM1/hardwareTriggerPinMap" type="String" value='"CMP0,CMP1,FTM1_FLT0"'  />
+   <constant key="/FTM2/hardwareTriggerPinMap" type="String" value='"CMP0,,FTM2_FLT0"'  />
+   <constant key="/FTM3/hardwareTriggerPinMap" type="String" value='"FTM1_Match,FTM2_Match,FTM3_FLT0"'       />
+
+   <!-- FTM Fault sources -->
+   <constant key="/FTM0/faultPinMap"    type="String" value='"FTM0_FLT0/CMP0","FTM0_FLT1/CMP1","FTM0_FLT2","FTM0_FLT3"'  />
+   <constant key="/FTM1/faultPinMap"    type="String" value='"FTM1_FLT0/CMP0","CMP1"'  />
+   <constant key="/FTM2/faultPinMap"    type="String" value='"FTM2_FLT0/CMP0","CMP1"'  />
+   <constant key="/FTM3/faultPinMap[0]" type="String" value='"FTM3_FLT0/CMP0"'       />
+
 <!--
     * General substitutions
     *  $(_NAME)         => e.g FTM2 => FTM2
@@ -137,7 +149,7 @@
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
+      value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
 
 
    <!-- ************* USB Clock ****************** -->
@@ -290,7 +302,7 @@
          <for keys="f" dim="6" >
             <if condition="sim_sopt4_ftm%(f)clksel_present" >
                <equation key="Ftm%(f)ExternalItems" value="" condition="!Ftm%(f)ExternalItems" />
-               <equation key="Ftm%(f)ExternalItems" value="=Ftm%(f)ExternalItems+&quot;FtmClkin%(n);&quot;"/>
+               <equation key="Ftm%(f)ExternalItems" value='=Ftm%(f)ExternalItems+"FtmClkin%(n);"'/>
             </if>
          </for>
          <variableTemplate variables="FtmClkin%(n)"
@@ -459,7 +471,7 @@
             \t * @param %paramName %tooltip
             \t */
             \tstatic void setFtm%(f)ClockIn(%paramType %paramName) {
-            \t   %fieldAssignment
+            \t   %fieldAssignment;
             \t}
             \t
             \t/**

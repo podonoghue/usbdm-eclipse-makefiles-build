@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral:
+Devices using this peripheral: 
       MKE04Z1284
       MKE06Z4
       SKEAZ1284
@@ -334,7 +334,7 @@ Controls PTA4 as PTA4/ACMP0_OUT or SWD_DIO, PTC4 as PTC4/RTCO/FTM1_CH0/ACMP0_IN2
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>PTA4, PTC4 used as GPIO pins </description>
+                           <description>PTA4, PTC4 used as GPIO pins</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>

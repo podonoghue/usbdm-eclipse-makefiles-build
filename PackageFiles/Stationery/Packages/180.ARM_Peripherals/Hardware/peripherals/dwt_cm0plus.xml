@@ -50,7 +50,7 @@ triggered and the trace buffer&apos;s recording state is changed.\n
          %paramDescription
          \t */
          \tstatic void configure%(name)(%params) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}\n\n
       ]]></variableTemplate>
    </for>

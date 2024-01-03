@@ -62,10 +62,10 @@
    <!ATTLIST for keys                 CDATA        #REQUIRED>
    <!-- Values for each key separated by ':'', each iteration separated by ';' -->
    <!ATTLIST for values               CDATA        #IMPLIED>
+   <!-- Delimiter to use to separate keys / iteration values??? -->
+   <!ATTLIST for delimiter            CDATA        #IMPLIED>
    <!-- For simple iterated list. Either N or A,B -->
    <!ATTLIST for dim                  CDATA        #IMPLIED>
-   <!-- Delimeter to use to separate keys / iteration values??? -->
-   <!ATTLIST for delimiter            CDATA        #IMPLIED>
 
 <!ELEMENT printVar EMPTY >
    <!--  Key identifying variable to print -->
@@ -73,6 +73,8 @@
    <!ATTLIST printVar  split              CDATA        #IMPLIED>
 
 <!ELEMENT break EMPTY >
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST break condition           CDATA        #IMPLIED>
 
 <!ELEMENT continue EMPTY >
 
@@ -664,10 +666,13 @@
    <!ATTLIST choiceOption disabledPinMap      CDATA        #IMPLIED>
 
 <!ELEMENT choice EMPTY >
+
    <!-- Values may be a list e.g. 1,0,3 for use with valueFormat -->
    <!ATTLIST choice value                     CDATA        #REQUIRED>
    <!-- Visible name of choice -->
    <!ATTLIST choice name                      CDATA        #REQUIRED>
+   <!-- enum value for this choice in enum generation -->
+   <!ATTLIST choice enum                      CDATA        #IMPLIED>
    <!-- Additional information added to the Tool-tip displayed in GUI -->
    <!ATTLIST choice toolTip                   CDATA        #IMPLIED>
    <!-- Condition evaluated during parsing that enables processing of this option -->
@@ -676,8 +681,6 @@
    <!ATTLIST choice isDefault                 CDATA        #IMPLIED>
    <!-- Used in conjunction with a target="varialbe" to control the target -->
    <!ATTLIST choice ref                       CDATA        #IMPLIED>
-   <!-- enum value for this choice in enum generation -->
-   <!ATTLIST choice enum                      CDATA        #IMPLIED>
    <!-- Code fragment associated with this choice -->
    <!ATTLIST choice code                      CDATA        #IMPLIED>
    <!-- Choice is hidden?? -->
@@ -688,19 +691,25 @@
    <!ATTLIST choice pinMap                    CDATA        #IMPLIED>
 
 <!ELEMENT choiceExpansion EMPTY >
-   <!-- A single key used for substitution e.g 'ch' => '%(ch)' will be replaced with index -->
-   <!ATTLIST choiceExpansion keys                      CDATA        #REQUIRED>
-   <!-- Dimension for index e.g. '6' => [0..6) '1,4' => [1..4)-->
-   <!ATTLIST choiceExpansion dim                       CDATA        #REQUIRED> 
-   <!-- Value for choice (substitutions will be applied) --> 
-   <!ATTLIST choiceExpansion value                     CDATA        #REQUIRED> 
-   <!-- Name of choice (substitutions will be applied) --> 
-   <!ATTLIST choiceExpansion name                      CDATA        #REQUIRED>
-   <!-- Enum for choice (substitutions will be applied) --> 
-   <!ATTLIST choiceExpansion enum                      CDATA        #IMPLIED>
-   <!-- Condition evaluated during parsing that enables processing of this option -->
-   <!ATTLIST choiceExpansion condition           CDATA        #IMPLIED>
 
+   <!-- Value for choice (substitutions will be applied) --> 
+   <!ATTLIST choiceExpansion value                CDATA        #REQUIRED> 
+   <!-- Name of choice (substitutions will be applied) --> 
+   <!ATTLIST choiceExpansion name                 CDATA        #REQUIRED>
+   <!-- Enum for choice (substitutions will be applied) --> 
+   <!ATTLIST choiceExpansion enum                 CDATA        #IMPLIED>
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST choiceExpansion condition            CDATA        #IMPLIED>
+
+   <!-- Substitution keys separated by ':'' e.g 'ch' => '%(ch)' -->
+   <!ATTLIST choiceExpansion keys                 CDATA        #REQUIRED>
+   <!-- Values for each key separated by ':'', each iteration separated by ';' -->
+   <!ATTLIST choiceExpansion values               CDATA        #IMPLIED>
+   <!-- Dimension for index e.g. '6' => (0..5) '1,4' => (1..4)-->
+   <!ATTLIST choiceExpansion dim                  CDATA        #IMPLIED>
+   <!--  Delimiter to separate multiple keys/values (default ';') -->
+   <!ATTLIST choiceExpansion delimiter            CDATA        #IMPLIED>
+   
 <!ELEMENT binaryOption (choice?, choice?) >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST binaryOption name                CDATA        #IMPLIED>
@@ -869,6 +878,7 @@
    <!-- List of pin mappings if option disabled#Expression to enable pin map -->
    <!ATTLIST pinMapOption disabledPinMap      CDATA        #IMPLIED>
    
+<!-- ____ constant ____ -->
 <!ELEMENT constant EMPTY >
    <!-- Used as visible name in GUI (model) -->
    <!ATTLIST constant name         CDATA                          #IMPLIED>
@@ -892,6 +902,7 @@
    <!-- Condition to include this constant -->
    <!ATTLIST constant condition    CDATA                          #IMPLIED>
    
+<!-- ____ template ____ -->
 <!ELEMENT template (#PCDATA)* >
    <!-- Where to place generated code -->
    <!ATTLIST template where                     (all|usbdm|info|basicInfo|commonInfo) #IMPLIED >
@@ -916,7 +927,10 @@
    <!ATTLIST template linePadding               CDATA                   #IMPLIED>
    <!-- Variables that will be available for immediate substitution -->
    <!ATTLIST template immediateVariables       CDATA                   #IMPLIED>
+   <!-- Indicates parameters should start on a new line if there are multiple -->
+   <!ATTLIST template multipleParamsOnNewline  (true)                   #IMPLIED >
 
+<!-- ____ variableTemplate ____ -->
 <!ELEMENT variableTemplate (#PCDATA)* >
    <!-- Where to place generated code -->
    <!ATTLIST variableTemplate where                     (all|usbdm|info|basicInfo|commonInfo) #IMPLIED >
@@ -960,8 +974,11 @@
    <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
    <!ATTLIST variableTemplate useDefinitions            CDATA                   #IMPLIED>
    <!-- Variables that will be available for immediate substitution -->
-   <!ATTLIST template immediateVariables       CDATA                   #IMPLIED>
+   <!ATTLIST variableTemplate immediateVariables       CDATA                   #IMPLIED>
+   <!-- Indicates parameters should start on a new line if there are multiple -->
+   <!ATTLIST variableTemplate multipleParamsOnNewline  (true)                   #IMPLIED >
 
+<!-- ____ clockCodeTemplate ____ -->
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
    <!-- Where to place generated code -->
    <!ATTLIST clockCodeTemplate where                     (all|usbdm|info|basicInfo|commonInfo)  #IMPLIED >
@@ -997,7 +1014,9 @@
    <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
    <!ATTLIST clockCodeTemplate useDefinitions            CDATA                   #IMPLIED>
    <!-- Variables that will be available for immediate substitution -->
-   <!ATTLIST template immediateVariables       CDATA                   #IMPLIED>
+   <!ATTLIST clockCodeTemplate immediateVariables       CDATA                   #IMPLIED>
+   <!-- Indicates parameters should start on a new line if there are multiple -->
+   <!ATTLIST clockCodeTemplate multipleParamsOnNewline  (true)                   #IMPLIED >
 
 <!ELEMENT validate (param*) >
    <!ATTLIST validate class         CDATA        #REQUIRED>

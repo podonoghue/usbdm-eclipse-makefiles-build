@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral:
+Devices using this peripheral: 
       MKE14Z7
       MKE15Z7
       MKL82Z7
@@ -1133,15 +1133,6 @@ Enables suspension of this channel by a higher priority channel</description>
                </fields>
             </register>
             <register derivedFrom="DCHPRI%s"><dim>8</dim><dimIndex>0,1,2,3,4,5,6,7</dimIndex> <name>DCHPRIn%s</name> <addressOffset>0x100</addressOffset> <resetMask>0xFF</resetMask> </register>
-            <register>
-               <name>TCD_RAW</name>
-               <dim>64</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>0-63</dimIndex>
-               <size>32</size>
-               <description>Raw TCD array as uint32_t</description>
-               <addressOffset>0x1000</addressOffset>
-            </register>
             <cluster>
                <dim>8</dim>
                <dimIncrement>32</dimIncrement>
@@ -1776,5 +1767,15 @@ Allows the eDMA to be briefly stalled after each read/write</description>
                   </fields>
                </register>
             </cluster>
+            <register>
+               <dim>64</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63</dimIndex>
+               <name>TCD_RAW</name>
+               <description>Raw TCD array as uint32_t</description>
+               <addressOffset>0x1000</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+            </register>
          </registers>
       </peripheral>

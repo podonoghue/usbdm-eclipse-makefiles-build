@@ -46,29 +46,12 @@
    <!-- ____ Constants ____________ -->
    <constant key = "disable_peripheral"      value = '"tpm->SC = TPM_SC_CMOD(0);"' type="String"  />
 
-   <intOption key="NumChannels"
-      hidden="true"
-      locked="true"
-      derived="true"
-      description="Number of Channels"
-      toolTip="The number of timer channels available"
-      value="=_channelCount" />
-
-   <intOption key="NumChannelVectors"
-      hidden="true"
-      locked="true"
-      derived="true"
-      description="Number of Channel interrupt vectors"
-      toolTip="Number of channel event interrupt vectors - \n
-               Multiple Channels may be mapped to the same vector"
-      value="=_irqCount" />
-
    <template><![CDATA[
       \t//! Number of channels implemented
-      \tstatic constexpr unsigned NumChannels = $(NumChannels);
+      \tstatic constexpr unsigned NumChannels = $(_channelCount);
 
       \t//! Number of channel event vectors implemented
-      \tstatic constexpr unsigned NumChannelVectors = $(NumChannelVectors);\n\n
+      \tstatic constexpr unsigned NumChannelVectors = $(_irqCount);\n\n
    ]]></template>
 
    <!-- ____ Class Declaration ________ -->
@@ -463,14 +446,14 @@
                         v                  -->
        <choice value="0b00" name="Disabled"              enum="Disabled"
           toolTip="The pin associated with the second channel is not used by the TPM" />
-          
+
        <choice value="0b01" name="Capture Rising-edge"   enum="RisingEdge"
          toolTip="Odd channel captures CNV on next rising edge of channel input" />
        <choice value="0b10" name="Capture Falling-edge"  enum="FallingEdge"
          toolTip="Odd channel captures CNV on next falling edge of channel input" />
        <choice value="0b11" name="Capture Either-edge"   enum="EitherEdge"
          toolTip="Odd channel captures CNV on next rising or falling edge of channel input" />
-         
+
        <choice value="0b01" name="Normal"         enum="Normal"
          toolTip="The odd channel pin equals the even channel pin (ignoring dead-time)" />
        <choice value="0b10" name="Complementary"  enum="Complementary"
@@ -478,7 +461,7 @@
    </choiceOption>
 
    <!-- COMBINE.COMSWAP -->
-   <choiceOption key="tpm_combine_comswap" condition="tpm_combine_comswap_present"
+   <choiceOption key="tpm_combine_comswap" condition="tpm_combine_comswap0_present"
       valueFormat="TPM_COMBINE_COMSWAP0(%s)"
       hiddenBy="true"
       typeName="TpmCombineSwap"
@@ -845,7 +828,6 @@
             <aliasOption key="tpm_filter_fval_independent[%(oddCh)]"       locked="false" optional="discard" />
             <aliasOption key="tpm_filter_fval_delay_independent[%(oddCh)]"                optional="discard" />
             <aliasOption key="tpm_cnsc_icrst_independent[%(oddCh)]"        locked="false" optional="discard" />
-
             <aliasOption key="tpm_cnv_independent[%(oddCh)]"               locked="false" />
             <aliasOption key="tpm_cnvEventTime_independent[%(oddCh)]"      locked="false" />
             <aliasOption key="tpm_cnvHighTime_independent[%(oddCh)]"       locked="false" />
@@ -862,24 +844,13 @@
 
             <aliasOption key="tpm_cnsc_mode_odd_pwm%(oddCh)"    locked="false" />
             <aliasOption key="tpm_cnsc_mode_odd_dec%(oddCh)"    locked="false" />
-            
+
             <aliasOption key="tpm_cnsc_icrst_paired[%(oddCh)]"  locked="false" optional="discard" />
 
             <aliasOption key="tpm_cnv_paired[%(evenCh)]"        locked="false" />
             <aliasOption key="tpm_cnv_paired[%(oddCh)]"         locked="false" />
             <aliasOption key="tpm_pwmHighTime[%(evenCh)]"   />
             <aliasOption key="tpm_pwmDutyCycle[%(evenCh)]"  />
-
-            <!-- Controlled by tpm_cnsc_mode_even
-            <aliasOption key="tpm_cnsc_secondOutput[%(oddCh)]"  locked="false" />
-            <aliasOption key="tpm_combine_combine[%(Num)]"  />
-            <aliasOption key="tpm_combine_decapen[%(Num)]"  />
-            <aliasOption key="tpm_combine_decap%(Num)"      locked="false" />
-            <aliasOption key="tpm_combine_comp%(Num)"       locked="false" />
-            <aliasOption key="tpm_combine_faulten%(Num)"    locked="false" />
-            <aliasOption key="tpm_combine_dten%(Num)"       locked="false" />
-            <aliasOption key="tpm_combine_syncen%(Num)"     locked="false" />
-            -->
 
             <aliasOption key="tpm_cnsc_action_paired[%(evenCh)]"  locked="false" />
             <aliasOption key="tpm_cnsc_action_paired[%(oddCh)]"   locked="false" />
@@ -898,418 +869,179 @@
    <categoryOption key="Miscellaneous" description="Miscellaneous"
       hiddenBy="mode==(None,Quad)" >
 
-      <choiceOption key="tpm_conf_bdmmode" condition="tpm_conf_bdmmode_present"
-         enabledBy="enablePeripheralSupport"
-         typeName="TpmConfBdmmode"
-         toolTip="Selects the TPM behavior in Debug mode."
-         description="Controls operation in BDM Mode" >
-         <choice name="Stopped, outputs functional"            value="0" enum="Stopped_OutputsFunctional"/>
-         <choice name="Stopped, outputs forced to safe value"  value="1" enum="Stopped_OutputsForcedToSafeValue"/>
-         <choice name="Stopped, outputs frozen"                value="2" enum="Stopped_OutputsFrozen"/>
-         <choice name="Functioning"                            value="3" enum="Functioning"/>
-      </choiceOption >
+      <choiceOption key="tpm_pol_pol_enum" condition="tpm_pol_present"
+         valueFormat="%s"
+         hidden="true"
+         derived="true"
+         typeName="TpmPolarity"
+         description="Channel Polarity"
+         toolTip="Selects the polarity of channels inputs/outputs" >
+         <choiceExpansion value='="0x"+Format("%04x",(1&lt;&lt;%(ch)))'            name="Channel %(ch) Active-low"  enum="Ch%(ch)ActiveLow"  keys="ch" dim="8"/>
+         <choiceExpansion value='="0x"+Format("%04x",0xFF00^(1&lt;&lt;(%(ch)+8)))' name="Channel %(ch) Active-high" enum="Ch%(ch)ActiveHigh" keys="ch" dim="8"/>
+      </choiceOption>
 
-      <intOption key="tpm_conf_numtof" condition="tpm_conf_numtof_present"
-         enumType="uint8_t"
+      <bitmaskOption key="tpm_pol_pol" condition="tpm_pol_present"
          enabledBy="enablePeripheralSupport"
-         typeName="TpmOverflowDivider"
-         description="TOF Frequency"
-         toolTip="Selects the ratio between counter overflows and the number of times the TOF bit is set.\n
-                  The TOF is set for the 1st overflow and then ignored for N further overflows."
-         min="0" max="31"
-         value="0"
+         typeName="TpmPolarity"
+         description="Channel Polarity"
+         toolTip="Selects the polarity of channels inputs/outputs"
+         bitmask="=(1&lt;&lt;_channelCount)-1"
+         bitList="Ch%iActiveLow"
+         bitDescription="Channel %i active-low"
       />
+
+      <binaryOption key="tpm_conf_dozeen" condition="tpm_conf_dozeen_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="TpmDozeMode"
+         description="Doze Enable"
+         toolTip="Selects the TPM behaviour in wait mode." >
+         <choice value="0" name="Continue in Doze mode."             enum="Running"/>
+         <choice value="1" name="Counter paused and inputs ignored"  enum="Paused"/>
+      </binaryOption >
+
+      <choiceOption key="tpm_conf_dbgmode" condition="tpm_conf_dbgmode_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="TpmBdmMode"
+         description="Debug Mode"
+         toolTip="Selects the TPM behaviour in Debug mode." >
+         <choice  value="0" name="Stopped, outputs functional" enum="Paused"/>
+         <choice  value="3" name="Running"                     enum="Running"/>
+      </choiceOption >
 
       <title description="Global timebase" />
 
-      <binaryOption key="tpm_conf_gtbeout" condition="tpm_conf_gtbeout_present"
+      <binaryOption key="tpm_conf_gtbsync" condition="tpm_conf_gtbsync_present"
          enabledBy="enablePeripheralSupport"
-         typeName="TpmConfGtbeout"
-         description="Global Time Base Output"
-         toolTip="Enables the global time base signal generation to other TPMs" >
-         <choice name="Disabled"    value="0" enum="Disabled"/>
-         <choice name="Enabled"     value="1" enum="Enabled"/>
+         typeName="TpmGlobalTimebaseSync"
+         description="Global Time Base Synchronization"
+         toolTip="When enabled, the TPM counter is synchronised to the global time base.\n
+                  It uses the global timebase enable, trigger and overflow to ensure the\n
+                  TPM counter starts incrementing at the same time as the global timebase,\n
+                  stops incrementing at the same time as the global timebase and is reset\n
+                  at the same time as the global timebase. This field should only be \n
+                  changed when the TPM counter is disabled." >
+         <choice value="0" name="Disabled"            enum="Disabled" />
+         <choice value="1" name="Use global timebase" enum="Enabled"  />
       </binaryOption >
 
       <binaryOption key="tpm_conf_gtbeen" condition="tpm_conf_gtbeen_present"
          enabledBy="enablePeripheralSupport"
-         typeName="TpmConfGtbeen"
-         description="External Global Time Base Enable"
-         toolTip="Configures the TPM to use an external global time base signal that is generated by another TPM." >
-         <choice name="Disabled"    value="0" enum="Disabled"/>
-         <choice name="Enabled"     value="1" enum="Enabled"/>
+         typeName="TpmUseGlobalTimebase"
+         description="Global Time Base Enable"
+         toolTip="Configures the TPM to use an externally generated global time base counter.\n
+                  When an externally generated timebase is used, the internal TPM counter is\n
+                  not used by the channels but can be used to generate a periodic interruptor\n
+                  DMA request using the Modulo register and timer overflow flag." >
+         <choice value="0" name="Use internally generated TPM counter"     enum="Disabled" />
+         <choice value="1" name="Use externally generated global timebase" enum="Enabled"  />
       </binaryOption >
 
-   </categoryOption>
-
-    <categoryOption key="load_points" description="Load Points"
-      hiddenBy="mode==(None,Quad)" >
-
-      <binaryOption key="tpm_pwmload_ldok" condition="tpm_pwmload_ldok_present"
+      <binaryOption key="tpm_conf_csot" condition="tpm_conf_csot_present"
          enabledBy="enablePeripheralSupport"
-         typeName="TpmPwmload"
-         description="Load Enable"
-         toolTip="Enables loading of MOD/CNTIN/CnV from buffers on load points.\n
-                  Loading is further qualified as follows:\n
-                  - MOD loading is unconditional\n
-                  - CNTIN is qualified by CNTINC\n
-                  - C(n)/C(n+1) is qualified by SYNCENm" >
-         <choice name="Loading disabled"  value="0" enum="Disabled"/>
-         <choice name="Loading enabled"   value="1" enum="Enabled"/>
-      </binaryOption >
+         typeName="TpmStart"
+         description="Counter Start on Trigger"
+         toolTip="When set, the TPM counter will not start incrementing after it is enabled\n
+                  until a rising edge on the selected trigger input is detected.\n
+                  If the TPM counter is stopped due to an overflow, a rising edge on the selected\n
+                  trigger input will also cause the TPM counter to start incrementing again.\n
+                  The trigger input is ignored if the TPM counter is paused during debug mode \n
+                  or doze mode.\n
+                  This field should only be changed when the TPM counter is disabled." >
+         <choice value="0" name="Normal operation (starts immediately)" enum="Immediately" />
+         <choice value="1" name="Starts on trigger"                     enum="OnTrigger" />
+      </binaryOption>
 
-      <bitmaskOption key="tpm_pwmload_chsel" condition="tpm_pwmload_present"
+      <binaryOption key="tpm_conf_csoo" condition="tpm_conf_csoo_present"
          enabledBy="enablePeripheralSupport"
-         enumType="uint16_t"
-         typeName="TpmLoad"
-         description="Match Channel Select"
-         toolTip="Selects which channels trigger loading of MOD/CNTIN/CnV from buffers\n
-                  If enabled, the loading occurs when the counter reaches CnV"
-         bitmask="0xFF"
-         bitList="CH%i"
-         bitDescription="Load on channel %i match"
-      />
+         typeName="TpmAfterOverflow"
+         description="Counter Stop On Overflow"
+         toolTip="When set, the TPM counter will stop incrementing once the counter equals\n
+                  the MOD value and incremented (this also sets the TOF).\n
+                  Reloading the counter with 0 by writing to the counter register or\n
+                  due to a trigger input does not cause the counter to stop incrementing.\n
+                  Once the counter has stopped incrementing, the counter will not start\n
+                  incrementing unless it is disabled and then enabled again, or a rising\n
+                  edge on the selected trigger input is detected when CSOT set.\n
+                  This field should only be changed when the TPM counter is disabled." >
+         <choice value="0" name="Continue after overflow"         enum="Continue" />
+         <choice value="1" name="Wait for trigger after overflow" enum="WaitForTrigger" />
+      </binaryOption>
 
-      <binaryOption key="tpm_sync_cntmin" condition="tpm_sync_cntmin_present"
+      <binaryOption key="tpm_conf_crot" condition="tpm_conf_crot_present"
          enabledBy="enablePeripheralSupport"
-         typeName="TpmSyncCntmin"
-         description="Minimum Loading Point Enable"
-         toolTip="Selects the minimum loading point for loading of MOD/CNTIN/CnV from buffers. \n
-                  If enabled, the loading occurs when the TPM counter reaches CNTIN." >
-         <choice name="Disabled"    value="0" enum="Disabled"/>
-         <choice name="Enabled"     value="1" enum="Enabled"/>
-      </binaryOption >
+         typeName="TpmReload"
+         description="Counter Reload On Trigger"
+         toolTip="When set, the TPM counter will reload with 0 (and initialize PWM outputs\n
+                  to their default value) when a rising edge is detected on the selected trigger input.\n
+                  The trigger input is ignored if the TPM counter is paused during debug mode or doze mode.\n
+                  This field should only be changed when the TPM counter is disabled." >
+         <choice value="0" name="No reload (Normal operation)" enum="IgnoreTrigger" />
+         <choice value="1" name="Reload counter on trigger"    enum="OnTrigger" />
+      </binaryOption>
 
-      <binaryOption key="tpm_sync_cntmax" condition="tpm_sync_cntmax_present"
+      <binaryOption key="tpm_conf_cpot" condition="tpm_conf_cpot_present"
          enabledBy="enablePeripheralSupport"
-         typeName="TpmSyncCntmax"
-         description="Maximum Loading Point Enable"
-         toolTip="Selects the maximum loading point for loading of MOD/CNTIN/CnV from buffers.\n
-                  If enabled, the loading occurs when the TPM counter reaches MOD." >
-         <choice name="Disabled"    value="0" enum="Disabled"/>
-         <choice name="Enabled"     value="1" enum="Enabled"/>
-      </binaryOption >
-   </categoryOption>
+         typeName="TpmPause"
+         description="Counter Pause On Trigger"
+         toolTip="When enabled, the counter will pause incrementing while the trigger\n
+                  remains asserted (level sensitive).\n
+                  This field should only be changed when the TPM counter is disabled." >
+         <choice value="0" name="Ignore trigger (Normal operation)" enum="Never" />
+         <choice value="1" name="Pause while trigger asserted"      enum="WhileTriggerAsserted" />
+      </binaryOption>
 
-   <categoryOption key="chanelInitialisation" description="Initialisation of Channel Outputs" hiddenBy="mode==(None,Quad)" >
+      <!-- ___ Triggers ___ -->
 
-      <binaryOption key="tpm_mode_init" condition="tpm_mode_init_present"
-         hiddenBy="mode==Quad"
+      <binaryOption key="tpm_conf_trgpol" condition="tpm_conf_trgpol_present"
          enabledBy="enablePeripheralSupport"
-         typeName="TpmInitialiseOutputs"
-         description="Initialisation of Channel Outputs"
-         toolTip="When written to 1 the channels outputs are initialised according to the state of\n
-                  their corresponding bit in the OUTINIT register\n
-                  This is applied after the main TPM configuration" >
-         <choice name="No initialisation" value="0" enum="Unchanged"/>
-         <choice name="Initialised"       value="1" enum="Initialised"/>
-      </binaryOption >
-
-      <!-- ____ OUTINIT __________________ -->
-      <bitmaskOption key="tpm_outinit_choi" condition="tpm_outinit_choi_present"
-         enabledBy="enablePeripheralSupport"
-         valueFormat="%s"
-         typeName="TpmInitialValue"
-         enumType="uint8_t"
-         enumText="\t   TpmInitialValue_AllLow  = 0x00,\n\t   TpmInitialValue_AllHigh = 0xFF"
-         description="Channel Output Initialization Value"
-         toolTip="Bitmask defining the value that is forced\n
-                  into the channel output when initialisation occurs."
-         value="0"
-         bitmask="0"
-         bitList="CH(0-7)" />
-
-   </categoryOption>
-
-   <!-- ____ SWOCTRL __________________ -->
-
-   <!-- Not sensible to configure statically -->
-   <choiceOption key="tpm_swoctrl_chNocv"
-      condition="/TPM0/tpm_swoctrl_ch0oc_present||/TPM1/tpm_swoctrl_ch0oc_present||
-                 /TPM2/tpm_swoctrl_ch0oc_present||/TPM3/tpm_swoctrl_ch0oc_present"
-      hidden="true"
-      valueFormat="(%s)"
-      enabledBy="enablePeripheralSupport"
-      typeName="TpmForceOutput"
-      description="Channel Output Control"
-      toolTip="Enables and selects value to force to channel output\n
-               Each value controls an individual bit\n
-               Non-conflicting values may be ORed together to affect multiple bits" >
-      <choice name="No outputs forced"  value="0" enum="NotForced" />
-      <choiceExpansion name="Force Ch%(ch) output 0" value="(1&lt;&lt;(%(ch)+8))|(0&lt;&lt;%(ch))" enum="Ch%(ch)Force0" dim="8" keys="ch" />
-      <choiceExpansion name="Force Ch%(ch) output 1" value="(1&lt;&lt;(%(ch)+8))|(1&lt;&lt;%(ch))" enum="Ch%(ch)Force1" dim="8" keys="ch" />
-   </choiceOption >
-
-  <!-- ____ PWM synchronisation ________________ -->
-
-   <categoryOption key="synchronisationConfiguration" description="Synchronisation Configuration"
-      hiddenBy="mode!=(Left,Centre)" toolTip="Only applies in combine mode" >
-
-      <binaryOption key="tpm_synconf_syncmode" condition="tpm_synconf_syncmode_present"
-         enabledBy="enablePeripheralSupport"
-         typeName="TpmSyncPwm"
-         description="Synchronisation Mode"
-         toolTip="Selects the PWM synchronisation mode" >
-         <choice name="Legacy PWM synchronisation"    value="0" enum="LegacyPwmSynch"   />
-         <choice name="Enhanced PWM synchronisation"  value="1" enum="EnhancedPwmSynch" />
-      </binaryOption >
-
-      <binaryOption key="tpm_mode_pwmsync" condition="tpm_mode_pwmsync_present"
-         hiddenBy="tpm_synconf_syncmode"
-         enabledBy="enablePeripheralSupport&amp;&amp;!tpm_synconf_syncmode"
-         typeName="TpmModePwmsync"
-         description="PWM Synchronisation Mode"
-         toolTip="Selects which triggers can be used by MOD, CnV, OUTMASK, and TPM\n
-                  counter synchronisation.\n
-                  Only available in legacy PWM synchronisation (SYNCMODE = 0)." >
-         <choice name="Unrestricted"  value="0" enum="NoRestrictions"
-               toolTip="MOD, CnV, OUTMASK and TPM counter synch may use software or hardware trigger" />
-         <choice name="Restricted"    value="1" enum="Restricted"
-               toolTip="MOD and CnV use software trigger, OUTMASK and counter synch use hardware trigger" />
-      </binaryOption >
-
-      <binaryOption key="tpm_sync_reinit" condition="tpm_sync_reinit_present"
-         hiddenBy="tpm_synconf_syncmode"
-         enabledBy="enablePeripheralSupport&amp;&amp;!tpm_synconf_syncmode"
-         typeName="TpmReinitOnSync"
-         description="Counter Reinitialisation"
-         toolTip="Determines if the TPM counter is reinitialised when \n
-                  the selected synchronisation trigger is detected. \n
-                  Only available in legacy PWM synchronisation (SYNCMODE = 0)." >
-         <choice name="Counts normally"                        value="0" enum="Disabled"/>
-         <choice name="Updated with initial value on trigger"  value="1" enum="Enabled"/>
-      </binaryOption >
-
-      <binaryOption key="tpm_sync_swsync" condition="tpm_sync_swsync_present"
-         hidden="true"
-         derived="true"
-         typeName="TpmSyncSwsync"
-         description="Software Trigger for PWM synchronisation "
-         toolTip="The software trigger happens when a 1 is written to SWSYNC bit.\n
-                  This bit will be cleared when the action happens." >
-         <choice name="Not selected"  value="0" enum="NotSelected"/>
-         <choice name="Selected"      value="1" enum="Selected"/>
-      </binaryOption >
-
-      <bitmaskOption key="tpm_sync_trig" condition="hardwareTriggerPinMap"
-         enabledBy="enablePeripheralSupport"
-         typeName="TpmHardwareTrigger"
-         enumType="uint32_t"
-         valueFormat="TpmHardwareTrigger(%s)"
-         description="Hardware Trigger Inputs"
-         toolTip="Enables hardware trigger to the PWM synchronisation.\n
-                  Hardware trigger occurs on a rising edge of the corresponding trigger input signal."
-         bitmask="0"
-         bitList="=hardwareTriggerPinMap"
-         pinMap='="TPM$(_instance)_TRIG%i:"+hardwareTriggerPinMap'
-         value="0" />
-
-      <binaryOption key="tpm_synconf_hwtrigmode" condition="tpm_synconf_hwtrigmode_present"
-         hiddenBy="!tpm_synconf_syncmode"
-         enabledBy="enablePeripheralSupport&amp;&amp;tpm_synconf_syncmode"
-         typeName="TpmTriggerSyncr"
-         description="Hardware Trigger Mode"
-         toolTip="Controls when hardware triggers are cleared\n
-                  Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
-         <choice name="TRIGj cleared on trigger detect"  value="0" enum="OnTrigger"/>
-         <choice name="TRIGj unaffected"                 value="1" enum="Unaffected"/>
-      </binaryOption >
-
-      <title />
-
-      <!-- .... CNTIN .... -->
-
-      <binaryOption key="tpm_synconf_cntinc" condition="tpm_synconf_cntinc_present"
-         hiddenBy="!tpm_synconf_syncmode"
-         enabledBy="enablePeripheralSupport&amp;&amp;tpm_synconf_syncmode"
-         typeName="TpmBufferSyncCounter"
-         description="CNTIN Register Synchronisation"
-         toolTip="CNTIN Register Synchronisation with buffer\n
-                  Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
-         <choice name="On rising edges of system clock"  value="0" enum="OnRisingClockEdge" />
-         <choice name="By PWM synchronisation"           value="1" enum="OnPwmSynch"        />
-      </binaryOption >
-
-      <!-- .... CNTIN/MOD/CV .... -->
-
-      <binaryOption key="tpm_synconf_swwrbuf" condition="tpm_synconf_swwrbuf_present"
-         hiddenBy="!tpm_synconf_syncmode"
-         enabledBy="enablePeripheralSupport&amp;&amp;tpm_synconf_syncmode"
-         typeName="TpmSwSyncRegs"
-         description="CNTIN/MOD/CV Software Synchronisation"
-         toolTip="Controls MOD/CNTIN/CV synchronisation by software trigger\n
-                  Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
-         <choice name="Unaffected"                      value="0" enum="Unaffected"/>
-         <choice name="MOD/CNTIN/CV register synched"   value="1" enum="OnSoftwareTrigger"/>
-      </binaryOption >
-
-      <binaryOption key="tpm_synconf_hwwrbuf" condition="tpm_synconf_hwwrbuf_present"
-         hiddenBy="!tpm_synconf_syncmode"
-         enabledBy="enablePeripheralSupport&amp;&amp;tpm_synconf_syncmode"
-         typeName="TpmHwSyncRegs"
-         description="CNTIN/MOD/CV Hardware Synchronisation"
-         toolTip="Controls MOD/CNTIN/CV synchronisation by hardware trigger\n
-                  Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
-         <choice name="Unaffected"                       value="0" enum="Unaffected"/>
-         <choice name="MOD/CNTIN/CV registers synched"   value="1" enum="OnHardwareTrigger"/>
-      </binaryOption >
-
-      <!-- .... OUTMASK .... -->
-
-      <binaryOption key="tpm_sync_synchom" condition="tpm_sync_synchom_present"
-         enabledBy="enablePeripheralSupport"
-         typeName="TpmSyncSynchom"
-         description="OUTMASK Register Synchronisation"
-         toolTip="Selects when the OUTMASK register is updated with the value of its buffer" >
-         <choice name="On rising edges of system clock"  value="0" enum="OnRisingClockEdge" />
-         <choice name="By PWM synchronisation"           value="1" enum="OnPwmSynch"        />
-      </binaryOption >
-
-      <binaryOption key="tpm_synconf_swom" condition="tpm_synconf_swom_present"
-         hiddenBy="!tpm_synconf_syncmode"
-         enabledBy="enablePeripheralSupport&amp;&amp;tpm_synconf_syncmode&amp;&amp;tpm_sync_synchom"
-         typeName="TpmSwSyncOutmask"
-         description="OUTMASK Software Synchronisation"
-         toolTip="Controls OUTMASK synchronisation by software trigger\n
-                  Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
-         <choice name="Unaffected"                 value="0" enum="Unaffected"/>
-         <choice name="OUTMASK register synched"   value="1" enum="OnSoftwareTrigger"/>
-      </binaryOption >
-
-      <binaryOption key="tpm_synconf_hwom" condition="tpm_synconf_hwom_present"
-         hiddenBy="!tpm_synconf_syncmode"
-         enabledBy="enablePeripheralSupport&amp;&amp;tpm_synconf_syncmode&amp;&amp;tpm_sync_synchom"
-         typeName="TpmHwSyncOutmask"
-         description="OUTMASK Hardware Synchronisation"
-         toolTip="Controls OUTMASK synchronisation by hardware trigger\n
-                  Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
-         <choice name="Unaffected"                 value="0" enum="Unaffected"/>
-         <choice name="OUTMASK register synched"   value="1" enum="OnHardwareTrigger"/>
-      </binaryOption >
-
-      <!-- .... INVCTRL .... -->
-
-      <binaryOption key="tpm_synconf_invc" condition="tpm_synconf_invc_present"
-         enabledBy="enablePeripheralSupport"
-         typeName="TpmBufferSyncInvctrl"
-         description="INVCTRL Register Synchronisation"
-         toolTip="Controls INVCTRL Register Synchronisation with buffer" >
-         <choice name="On rising edges of system clock"  value="0" enum="OnRisingClockEdge" />
-         <choice name="By PWM synchronisation"           value="1" enum="OnPwmSynch"        />
-      </binaryOption >
-
-      <binaryOption key="tpm_synconf_swinvc" condition="tpm_synconf_swinvc_present"
-         hiddenBy="!tpm_synconf_syncmode"
-         enabledBy="enablePeripheralSupport&amp;&amp;tpm_synconf_syncmode&amp;&amp;tpm_synconf_invc"
-         typeName="TpmSwSyncInvCtrl"
-         description="INVCTRL Software Synchronisation"
-         toolTip="Controls INVCTRL synchronisation by software trigger\n
-                  Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
-         <choice name="Unaffected"                 value="0" enum="Unaffected"/>
-         <choice name="INVCTRL register synched"   value="1" enum="OnSoftwareTrigger"/>
-      </binaryOption >
-
-      <binaryOption key="tpm_synconf_hwinvc" condition="tpm_synconf_hwinvc_present"
-         hiddenBy="!tpm_synconf_syncmode"
-         enabledBy="enablePeripheralSupport&amp;&amp;tpm_synconf_syncmode&amp;&amp;tpm_synconf_invc"
-         typeName="TpmHwSyncInvctrl"
-         description="INVCTRL Hardware Synchronisation"
-         toolTip="Controls INVCTRL synchronisation by hardware trigger\n
-                  Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
-         <choice name="Unaffected"                 value="0" enum="Unaffected"/>
-         <choice name="INVCTRL register synched"   value="1" enum="OnHardwareTrigger"/>
-      </binaryOption >
-
-      <!-- .... SWOCTRL .... -->
-
-      <binaryOption key="tpm_synconf_swoc" condition="tpm_synconf_swoc_present"
-         enabledBy="enablePeripheralSupport"
-         typeName="TpmBufferSyncSwoctrl"
-         description="SWOCTRL Register Synchronisation"
-         toolTip="Controls SWOCTRL Register Synchronisation with buffer" >
-         <choice name="On rising edges of system clock"  value="0" enum="OnRisingClockEdge" />
-         <choice name="By PWM synchronisation"           value="1" enum="OnPwmSynch"        />
-      </binaryOption >
-
-      <binaryOption key="tpm_synconf_swsoc" condition="tpm_synconf_swsoc_present"
-         hiddenBy="!tpm_synconf_syncmode"
-         enabledBy="enablePeripheralSupport&amp;&amp;tpm_synconf_syncmode&amp;&amp;tpm_synconf_swoc"
-         typeName="TpmSwSyncSwoctrl"
-         description="SWOCTRL Software Synchronisation"
-         toolTip="Controls SWOCTRL synchronisation by software trigger\n
-                  Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
-         <choice name="Unaffected"                 value="0" enum="Unaffected"/>
-         <choice name="SWOCTRL register synched"   value="1" enum="OnSoftwareTrigger"/>
-      </binaryOption >
-
-      <binaryOption key="tpm_synconf_hwsoc" condition="tpm_synconf_hwsoc_present"
-         hiddenBy="!tpm_synconf_syncmode"
-         enabledBy="enablePeripheralSupport&amp;&amp;tpm_synconf_syncmode&amp;&amp;tpm_synconf_swoc"
-         typeName="TpmHwSyncSwoctrl"
-         description="SWOCTRL Hardware Synchronisation"
-         toolTip="Controls SWOCTRL synchronisation by hardware trigger\n
-                  Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
-         <choice name="Unaffected"                 value="0" enum="Unaffected"/>
-         <choice name="SWOCTRL register synched"   value="1" enum="OnHardwareTrigger"/>
-      </binaryOption >
-
-      <!-- .... TPM CNT .... -->
-
-      <binaryOption key="tpm_synconf_swrstcnt" condition="tpm_synconf_swrstcnt_present"
-         hiddenBy="!tpm_synconf_syncmode"
-         enabledBy="enablePeripheralSupport&amp;&amp;tpm_synconf_syncmode"
-         typeName="TpmSwSyncCounter"
-         description="CNT Software Synchronisation"
-         toolTip="Controls counter synchronisation by software trigger\n
-                  Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
-         <choice name="Unaffected"                 value="0" enum="Unaffected"/>
-         <choice name="Counter register synched"   value="1" enum="OnSoftwareTrigger"/>
-      </binaryOption >
-
-      <binaryOption key="tpm_synconf_hwrstcnt" condition="tpm_synconf_hwrstcnt_present"
-         hiddenBy="!tpm_synconf_syncmode"
-         enabledBy="enablePeripheralSupport&amp;&amp;tpm_synconf_syncmode"
-         typeName="TpmHwSyncCounter"
-         description="CNT Hardware Synchronisation"
-         toolTip="Controls Counter synchronisation by hardware trigger\n
-                  Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
-         <choice name="Unaffected"                 value="0" enum="Unaffected"/>
-         <choice name="Counter register synched"   value="1" enum="OnHardwareTrigger"/>
-      </binaryOption >
-
-      <!-- .... External Triggers .... -->
-      <title description="External Trigger" />
-
-      <equation key="triggerChannels" value="" />
-      <for keys="ch" values="2;3;4;5;0;1" >
-         <equation key="triggerChannels"
-            condition="tpm_exttrig_ch%(ch)trig_present"
-            value='=triggerChannels+"CH%(ch),"'
-          />
-         <equation key="triggerChannels"
-            condition="!tpm_exttrig_ch%(ch)trig_present"
-            value='=triggerChannels+","'
-          />
-      </for>
-
-      <equation key="triggerChannels"
-         condition="tpm_exttrig_inittrigen_present"
-         value='=triggerChannels+"CNTIN,"' />
-
-      <bitmaskOption key="tpm_exttrig_trig" condition="tpm_exttrig_inittrigen_present"
-         enabledBy="enablePeripheralSupport"
-         description="External Trigger Enable"
-         toolTip="Bitmask enabling generation of the external trigger when the TPM\n
-                  counter is equal to a channel CnV register or CNTIN"
-         valueFormat="%s"
+         typeName="TpmTriggerPolarity"
+         description="Trigger Polarity"
+         toolTip="Selects the polarity of the external trigger source.\n
+                  This field should only be changed when the TPM counter is disabled." >
+         <choice value="0" name="Active-low"  enum="ActiveLow" />
+         <choice value="1" name="Active-high" enum="ActiveHigh" />
+      </binaryOption>
+      
+      <choiceOption key="tpm_conf_trgsel_ext" condition="tpm_conf_trgsrc_present&amp;&amp;tpm_conf_trgsel_present"
+         valueFormat="TPM_CONF_TRGSRC(%s),TPM_CONF_TRGSEL(%s)"
          typeName="TpmExternalTrigger"
-         enumType="uint8_t"
-         value="0"
-         bitmask="0"
-         bitList="=triggerChannels"
-         bitDescription="Trigger on CNV = %n"
-         />
-      <deleteVariables variables="triggerChannels" />
+         description="External Triggers"
+         toolTip="Selects the external input trigger to use for starting, reloading and/or pausing the counter.\n
+                  This field should only be changed when the TPM counter is disabled." >
+         <choice          value="1,0"        name="Internal Source" enum="Internal" />
+         <choiceExpansion value="0,%(value)" name="%(name)"  enum="%(enum)" keys="value:name:enum" values="=/TPM/_trigger_sources" condition="/TPM/_trigger_sources" />
+         <choiceExpansion value="0,%(i)"     name="External Source %(i)"  enum="Src%(i)" keys="i" dim="16" condition="!/TPM/_trigger_sources"/>
+      </choiceOption>
+
+      <choiceOption key="tpm_conf_trgsel_ext" condition="!tpm_conf_trgsrc_present&amp;&amp;tpm_conf_trgsel_present"
+         valueFormat="TPM_CONF_TRGSEL(%s)"
+         typeName="TpmExternalTrigger"
+         description="External Triggers"
+         toolTip="Selects the external input trigger to use for starting, reloading and/or pausing the counter.\n
+                  This field should only be changed when the TPM counter is disabled." >
+         <choiceExpansion value="%(value)" name="%(name)"  enum="%(enum)" keys="value:name:enum" values="=/TPM/_trigger_sources" condition="/TPM/_trigger_sources"/>
+         <choiceExpansion value="%(i)"     name="External Source %(i)"  enum="Src%(i)" keys="i" dim="16"       condition="!/TPM/_trigger_sources"/>
+      </choiceOption>
+
+      <bitmaskOption key="tpm_conf_trgsel_int" condition="tpm_conf_trgsrc_present&amp;&amp;tpm_conf_trgsel_present"
+         valueFormat="TPM_CONF_TRGSRC_MASK|TPM_CONF_TRGSEL(%s)"
+         enabledBy="tpm_conf_trgsel_ext==0"
+         hiddenBy="tpm_conf_trgsel_ext!=0"
+         typeName="TpmInternalTrigger"
+         description="Internal Triggers"
+         toolTip="Selects the internal input trigger to use for starting, reloading and/or pausing the counter.\n
+                  The channel selected should be configured for input capture.\n
+                  Only a rising edge input capture can be used to initially start the counter using\n
+                  the CSOT configuration; either rising edge or falling edge input capture can be\n
+                  used to reload the counter using the CROT configuration; and the state of the \n
+                  channel input pin is used to pause the counter using the CPOT configuration.\n
+                  The channel polarity register can be used to invert the polarity of the channel\n
+                  input pins.\n
+                  This field should only be changed when the TPM counter is disabled."
+         bitmask="=(1&lt;&lt;_channelCount)-1"
+         bitList="Ch%i"
+         bitDescription="Channel %i" />
+
    </categoryOption>
 
    <!-- ____ Quadrature decoder __________________ -->
@@ -1870,7 +1602,7 @@
          \t *
          \t * @param channelMask   Bit mask 0 => active-high, 1 => active-low
          \t */
-         \t%(static) void setPolarity(uint32_t channelMask)%(const) {
+         \t%(static)void setPolarity(uint32_t channelMask)%(const) {
          \t   tpm->POL = channelMask;
          \t}
          \t
@@ -1880,10 +1612,9 @@
          \t * @param tpmPolarity  Channel polarity to set
          \t */
          \t%(static)void setPolarity(TpmPolarity tpmPolarity)%(const) {
-         \t      uint8_t temp = tpm->POL;
-         \t      temp |= tpmPolarity;
-         \t      temp &= tpmPolarity>>8;
-         \t      tpm->POL = temp;
+         \t
+         \t   // Lower-8 bits of mask set bits while upper-8 clear bits
+         \t   tpm->POL = (tpm->POL|tpmPolarity) & (tpmPolarity>>8);
          \t}\n\n
       ]]></variableTemplate>
       <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
@@ -1892,6 +1623,18 @@
          \t *          Channel functions
          \t * *****************************************************************
          \t */
+         \t/**
+         \t * Set action on event
+         \t *
+         \t * @param[in] tpmChannelAction  Whether to enable the interrupt or DMA function on this channel
+         \t * @param[in] channel           Timer channel
+         \t */
+         \t%(static)void setAction(TpmChannelAction tpmChannelAction, int channel) %(const) {
+         \t
+         \t   tpm->CONTROLS[channel].CnSC =
+         \t      (tpm->CONTROLS[channel].CnSC&~(TPM_CnSC_CHIE_MASK|TPM_CnSC_DMA_MASK)) | tpmChannelAction;
+         \t}
+         \t
          \t/**
          \t * Set PWM duty cycle.
          \t * Higher precision float version
@@ -2032,7 +1775,8 @@
       \t    * @note This method has the side-effect of clearing the register update synchronisation i.e.
       \t    *       pending CnV register updates are discarded.
       \t    */
-      \t   %(static) void setAction(%params)%(const) {
+      \t   %(static)void setAction(%params)%(const) {
+      \t
       \t      tpm->CONTROLS[%(channel)].CnSC =
       \t           (tpm->CONTROLS[%(channel)].CnSC & ~%mask) | %paramExpression;
       \t   }\n\n
@@ -2049,7 +1793,7 @@
       \t    * @note This method has the side-effect of clearing the register update synchronisation i.e.
       \t    *       pending CnV register updates are discarded.
       \t    */
-      \t   %(static) void configure(
+      \t   %(static)void configure(
       \t         TpmChannelMode    tpmChannelMode,
       \t         TpmChannelAction  tpmChannelAction = TpmChannelAction_None)%(const) {
       \t
@@ -2059,7 +1803,7 @@
       \t   /**
       \t    * Disables timer channel (sets mode to TpmChannelMode_Disabled)
       \t    */
-      \t   %(static) void disable()%(const) {
+      \t   %(static)void disable()%(const) {
       \t      setMode(TpmChannelMode_Disabled);
       \t   }
       \t
@@ -2081,7 +1825,7 @@
       \t    * @note This method has the side-effect of clearing the register update synchronisation i.e.
       \t    *       pending CnV register updates are discarded.
       \t    */
-      \t   %(static) void setMode(TpmChannelMode tpmChannelMode)%(const) {
+      \t   %(static)void setMode(TpmChannelMode tpmChannelMode)%(const) {
       \t      tpm->CONTROLS[%(channel)].CnSC =
       \t            (tpm->CONTROLS[%(channel)].CnSC & ~(TPM_CnSC_MS_MASK|TPM_CnSC_ELS_MASK))|tpmChannelMode;
       \t   }
@@ -2113,6 +1857,18 @@
       \t   %(static) ErrorCode setHighTime(Seconds highTime)%(const) {
       \t      return %(Tpm)::setHighTime(highTime, %(channel));
       \t   }
+      \t
+      \t   /**
+      \t    * Set action on event
+      \t    *
+      \t    * @param[in] tpmChannelAction  Whether to enable the interrupt or DMA function on this channel
+      \t    */
+      \t   %(static)void setAction(TpmChannelAction tpmChannelAction) %(const) {
+      \t
+      \t      tpm->CONTROLS[%(channel)].CnSC =
+      \t         (tpm->CONTROLS[%(channel)].CnSC&~(TPM_CnSC_CHIE_MASK|TPM_CnSC_DMA_MASK)) | tpmChannelAction;
+      \t   }
+      \t
       \t   /**
       \t    * Set PWM duty cycle.
       \t    *
@@ -2120,7 +1876,7 @@
       \t    *
       \t    * @note The actual CnV register update will be delayed by the Register Synchronisation mechanism
       \t    */
-      \t   %(static) void setDutyCycle(int dutyCycle)%(const) {
+      \t   %(static)void setDutyCycle(int dutyCycle)%(const) {
       \t      %(Tpm)::setDutyCycle(dutyCycle, %(channel));
       \t   }
       \t
@@ -2131,7 +1887,7 @@
       \t    *
       \t    * @note The actual CnV register update will be delayed by the Register Synchronisation mechanism
       \t    */
-      \t   %(static) void setDutyCycle(float dutyCycle)%(const) {
+      \t   %(static)void setDutyCycle(float dutyCycle)%(const) {
       \t      %(Tpm)::setDutyCycle(dutyCycle, %(channel));
       \t   }
       \t
@@ -2142,7 +1898,7 @@
       \t    *
       \t    * @note The actual CnV register update will be delayed by the Register Synchronisation mechanism
       \t    */
-      \t   %(static) void setDeltaEventTime(Ticks offset)%(const) {
+      \t   %(static)void setDeltaEventTime(Ticks offset)%(const) {
       \t      %(Tpm)::setDeltaEventTime(offset, %(channel));
       \t   }
       \t
@@ -2153,7 +1909,7 @@
       \t    *
       \t    * @note The actual CnV register update will be delayed by the Register Synchronisation mechanism
       \t    */
-      \t   %(static) void setRelativeEventTime(Ticks offset)%(const) {
+      \t   %(static)void setRelativeEventTime(Ticks offset)%(const) {
       \t      %(Tpm)::setRelativeEventTime(offset, %(channel));
       \t   }
       \t
@@ -2164,7 +1920,7 @@
       \t    *
       \t    * @note The actual CnV register update will be delayed by the Register Synchronisation mechanism
       \t    */
-      \t   %(static) void setEventTime(Ticks eventTime)%(const) {
+      \t   %(static)void setEventTime(Ticks eventTime)%(const) {
       \t      %(Tpm)::setEventTime(eventTime, %(channel));
       \t   }
       \t
@@ -2206,7 +1962,7 @@
       \t   /**
       \t    * Clear interrupt flag on channel.
       \t    */
-      \t   %(static) void clearInterruptFlag()%(const) {
+      \t   %(static)void clearInterruptFlag()%(const) {
       \t      // Note - w1c flags
       \t      tpm->CONTROLS[CHANNEL].CnSC = TPM_CnSC_CHF_MASK;
       \t   }\n\n
@@ -2216,10 +1972,10 @@
       \t   /**
       \t    * Set polarity of channels.
       \t    *
-      \t    * @param polarity Polarity to set
+      \t    * @param active Polarity to set
       \t    */
-      \t   %(static) void setPolarity(Polarity polarity)%(const) {
-      \t      if (polarity == ActiveHigh) {
+      \t   %(static)void setPolarity(Polarity active)%(const) {
+      \t      if (active == ActiveHigh) {
       \t         tpm->POL = tpm->POL & ~CHANNEL_MASK;
       \t      }
       \t      else {
@@ -2425,7 +2181,7 @@
       \t */
       \t$(_Class)Info::ChannelCallbackFunction $(_Class)Info::channelCallbacks[] = {\n\n
    ]]></template>
-   <for keys="ch" dim="=NumChannelVectors" >
+   <for keys="ch" dim="=_irqCount" >
       <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
          \t   $(_Class)Info::unhandledChannelCallback,\n
       ]]></template>
@@ -2458,22 +2214,39 @@
       \t * static const $(_Class)::Init $(_Baseclass)Init {
       \t *
       \t *    // Omitted parameters are taken to be zero unless a base value is given
-      \t *    TpmMode_Freerunning,           // Alignment and whether interval or free-running mode
-      \t *    TpmOverflowInterrupt_Disabled, // Overflow Interrupt
-      \t *    NvicPriority_Normal,           // IRQ level for this peripheral
-      \t *    TpmClockSource_SystemClock,    // Clock Source
+      \t *    TpmCountMode_LeftAligned ,        // Alignment (Count mode) - Left-aligned (count up)
+      \t *    TpmOverflowAction_None ,          // Action on Counter overflow - No action
+      \t *    TpmClockSource_SystemTpmClock ,   // Clock Source - System clock
       \t *
-      \t *    // Either
-      \t *    TpmPrescale_DivBy16,           // Clock prescaler
-      \t *    3000_ticks,                    // Counter modulo (mod) value
-      \t *    // OR
-      \t *    100_ms,                        // Timer period or minimum interval in seconds
+      \t *    TpmPrescale_DivBy16,              // Clock prescaler
+      \t *    3000_ticks,                       // Counter modulo (mod) value
+      \t *                                      //  ----- OR -----
+      \t *    100_ms,                           // Timer period or minimum interval in seconds
       \t *
-      \t *    TpmPolarity_Ch0_ActiveLow,     // Channel polarity - Make channel 0 active-low
-      \t *    TpmPolarity_Ch3_ActiveLow,     // Channel polarity - Make channel 3 active-low
+      \t *    TpmDozeMode_Running ,             // Doze Enable - Continue in Doze mode.
+      \t *    TpmBdmMode_Running ,              // Debug Mode - Running
+      \t *    TpmGlobalTimebaseSync_Disabled ,  // Global Time Base Synchronization - Disabled
+      \t *    TpmUseGlobalTimebase_Disabled ,   // Global Time Base Enable - Use internally generated TPM counter
+      \t *    TpmStart_Immediately ,            // Counter Start on Trigger - Normal operation (starts immediately)
+      \t *    TpmAfterOverflow_Continue ,       // Counter Stop On Overflow - Continue after overflow
+      \t *    TpmReload_IgnoreTrigger ,         // Counter Reload On Trigger - No reload (Normal operation)
+      \t *    TpmPause_Never ,                  // Counter Pause On Trigger - Ignore trigger (Normal operation)
+      \t *    TpmPolarity_Ch0ActiveLow,         // Channel polarity - Channel 0 active-low
+      \t *    TpmPolarity_Ch1ActiveLow,         // Channel polarity - Channel 1 active-low
+      \t *    TpmTriggerPolarity_ActiveLow ,    // Trigger Polarity - Active-low
       \t *
-      \t *    $(_name)Callback,              // Call-back to execute on event - call-back function name
-      \t *    NvicPriority_Low,              // Priority for interrupt - Low
+      \t *                                      // Either internal with multiple sources
+      \t *    TpmTriggerSource_Internal ,       // Trigger Source - Trigger source is internal
+      \t *    TpmInternalTrigger_Ch0,           // Internal Trigger Select - Channel 0 Input capture
+      \t *    TpmInternalTrigger_Ch1,           // Internal Trigger Select - Channel 0 Input capture
+      \t *                                      //  --- OR ---
+      \t *                                      // External with a single source
+      \t *    TpmTriggerSource_External ,       // Trigger Source - Trigger source is external
+      \t *    TpmTriggerSelect_CMP0,            // Trigger Select - CMP0
+      \t *
+      \t *    timerCallback,                    // Shared call-back (overflow)
+      \t *    timerChannelCallback,             // Shared call-back (all channels)
+      \t *    NvicPriority_VeryHigh,            // IRQ level for this peripheral
       \t *
       \t *    // Optional base value to start with (must be last parameter)
       \t *    $(_Class)::DefaultValue
@@ -2517,7 +2290,7 @@
       variables="tpm_sc_action,tpm_sc_cpwms,tpm_sc_cmod,tpm_sc_ps"
    ><![CDATA[
       \t   // Status And Control Register
-      \t   uint8_t %registerName = 0;\n\n
+      \t   %enumType0 %registerName = 0;\n\n
    ]]></variableTemplate>
 
    <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
@@ -2545,7 +2318,16 @@
       variables= "tpm_pol_pol"
     ><![CDATA[
       \t   // %description
-      \t   uint16_t %registerName = 0;\n\n
+      \t   uint8_t %registerName = 0;\n\n
+   ]]></variableTemplate >
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables= "tpm_conf_dozeen,tpm_conf_dbgmode,tpm_conf_gtbsync,tpm_conf_gtbeen,
+                  tpm_conf_csot,tpm_conf_csoo,tpm_conf_crot,tpm_conf_cpot,
+                  tpm_conf_trgpol,tpm_conf_trgsel_int,tpm_conf_trgsel_ext"
+    ><![CDATA[
+      \t   // Configuration Register
+      \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate >
 
 <!-- ____ Init class Constructors ____________ -->
@@ -2622,14 +2404,18 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      // Mark channels as active-low
-      \t      %registerName |= %paramExpression;
-      \t      %registerName &= ~(%paramExpression>>8);
+      \t      // Mark channels as active-high/low
+      \t      // Lower-8 bits of mask set bits while upper-8 clear bits
+      \t      %registerName = (%registerName|%paramName0) & (%paramName0>>8);
       \t   }
       \t\n
    ]]></variableTemplate>
 
-   <for keys="r" values="tpm_sc_action;tpm_sc_cpwms;tpm_sc_cmod;tpm_sc_ps" >
+   <!-- Exclusive Fields -->
+   <for keys="r" values="tpm_sc_action;tpm_sc_cpwms;tpm_sc_cmod;tpm_sc_ps;
+                  tpm_conf_dozeen;tpm_conf_dbgmode;tpm_conf_gtbsync;tpm_conf_gtbeen;
+                  tpm_conf_csot;tpm_conf_csoo;tpm_conf_crot;tpm_conf_cpot;
+                  tpm_conf_trgpol;tpm_conf_trgsel_ext" >
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx"
@@ -2646,6 +2432,29 @@
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <!-- Cumulative Fields-->
+   <for keys="r" values="tpm_conf_trgsel_int" >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(r)"
+         linePadding="xxx"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName |= %paramName;
          \t   }
          \t\n
       ]]></variableTemplate>
@@ -2744,26 +2553,36 @@
       \t         return rc;
       \t      }\n
       \t   }
-      \t   // Disable timer to change clock (unable to switch directly between clock sources)
+      \t   // Disable timer to change configuration (e.g. unable to switch directly between clock sources)
       \t   tpm->SC  = 0;
       \t
       \t   // End value for counter
       \t   tpm->MOD = mod;
       \t
       \t   // Restart counter
-      \t   tpm->CNT = 0;
-      \t
-      \t   // Configure timer
-      \t   tpm->SC  = sc;\n
+      \t   tpm->CNT = 0;\n
    ]]></template>
-   <for keys="var" values="tpm_pol_pol" >
-      <variableTemplate variables="%(var)" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <for
+   keys="      vars                      : description"
+   values="
+      tpm_pol_pol                        : 'Pin polarity'           ;
+      tpm_conf_dozeen,tpm_conf_dbgmode,
+      tpm_conf_gtbsync,tpm_conf_gtbeen,
+      tpm_conf_csot,tpm_conf_csoo,
+      tpm_conf_crot,tpm_conf_cpot,
+      tpm_conf_trgpol,
+      tpm_conf_trgsel_int,
+      tpm_conf_trgsel_ext : 'Miscellaneous configuration' " >
+      <variableTemplate variables="%(vars)" codeGenCondition="enablePeripheralSupport" ><![CDATA[
          \t
-         \t   // %description (%(var))
+         \t   // %(description)
          \t   tpm->%registerNAME = init.%registerName;\n
       ]]></variableTemplate>
    </for>
    <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t
+      \t   // Configure timer
+      \t   tpm->SC  = sc;
       \t
       \t   return E_NO_ERROR;
       \t}\n\n
@@ -2779,7 +2598,12 @@
          tpm_sc_action,
          tpm_sc_cmod,
          tpm_sc_ps,
-         tpm_mod"
+         tpm_mod,
+         tpm_conf_dozeen,tpm_conf_dbgmode,
+         tpm_conf_gtbsync,tpm_conf_gtbeen,
+         tpm_conf_csot,tpm_conf_csoo,tpm_conf_crot,tpm_conf_cpot,
+         tpm_pol_pol,
+         tpm_conf_trgpol,tpm_conf_trgsel_ext,tpm_conf_trgsel_int"
    ><![CDATA[
       \t/**
       \t * Default initialisation value for $(_Class)
@@ -3005,7 +2829,7 @@
       \t *    // Omitted parameters are taken to be zero unless a base value is given
       \t *    // Paired values (i.e. corresponding values for both channels) must be present as pairs
       \t *    TpmChannelNum_0, // and TpmChannelNum_1
-      \t *    
+      \t *
       \t *    TpmEvenChannelMode_DualEdgeCaptureRisingEdge,   // Paired Channel mode and Ch 0 function - Dual-edge Capture Rising-edge
       \t *    TpmOddChannelMode_FallingEdge ,                 // Odd channel (1) Capture Polarity - Capture Falling-edge
       \t *    TpmCombineSwap_EvenChannelCapture,              // Combine Channel 0 and 1 Swap - Even channel capture
@@ -3412,7 +3236,7 @@
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors==1)" ><![CDATA[
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(_irqCount==1)" ><![CDATA[
       \t/**
       \t * Set channel call-back function
       \t * Configured for shared channel call-backs i.e. all channels use same call-back
@@ -3459,7 +3283,7 @@
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)" ><![CDATA[
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(_irqCount>1)" ><![CDATA[
       \t/**
       \t * Set channel call-back function
       \t * Configured for individual channel call-backs

@@ -37,7 +37,7 @@
       <peripheral derivedFrom="FGPIOA"><name>FGPIOD</name><baseAddress>0xF80000C0</baseAddress></peripheral>
       <peripheral derivedFrom="FGPIOA"><name>FGPIOE</name><baseAddress>0xF8000100</baseAddress></peripheral>
       <xi:include href="peripherals/FTFA.svd.xml"/>
-      <xi:include href="peripherals/FTM0_6CH_ICRST.svd.xml"/>
+      <xi:include href="peripherals/FTM0_6CH_QDCTRL_ICRST.svd.xml"/>
       <xi:include href="peripherals/FTM1_2CH_QUAD_ICRST.svd.xml"/>
       <peripheral derivedFrom="FTM1"><name>FTM2</name><baseAddress>0x4003A000</baseAddress></peripheral>
       <peripheral derivedFrom="FTM0"><name>FTM3</name><baseAddress>0x40026000</baseAddress></peripheral>

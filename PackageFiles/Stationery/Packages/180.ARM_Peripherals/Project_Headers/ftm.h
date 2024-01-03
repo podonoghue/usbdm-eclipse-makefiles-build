@@ -20,6 +20,7 @@
 #include <stddef.h>
 #include <cmath>
 #include "pin_mapping.h"
+#include "gpio.h"
 
 #if $(/FTM/enablePeripheralSupport) // /FTM/enablePeripheralSupport
 
@@ -595,16 +596,6 @@ $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
 
    };
 
-   /**
-    * Default configuration using settings from Configure.usbdmProject
-    */
-   static void defaultConfigure() {
-
-     configure(Info::DefaultInitValue);
-
-     NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
-   }
-
 };
 
 #ifdef FTM_QDCTRL_QUADEN_MASK
@@ -658,7 +649,8 @@ public:
 
    // Make these visible
    using Info::QuadInit;
-$(/FTM/quadinit_reference: // /FTM/quadinit_reference not found)
+   using Info::DefaultQuadInitValue;
+
    /** Hardware instance pointer */
    static constexpr HardwarePtr<FTMQUAD_Type> ftm = Info::baseAddress;
 

@@ -1110,7 +1110,7 @@
       \t * @param %paramName %tooltip
       \t */
       \tstatic void setInternalReferenceClock(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}
 
       \t/**
@@ -1136,7 +1136,7 @@
       \t * @param %paramName %tooltip
       \t */
       \tstatic void enableMcgIrClock(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}
 
       \t/**

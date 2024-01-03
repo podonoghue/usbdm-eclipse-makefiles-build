@@ -31,8 +31,8 @@
       <xi:include href="peripherals/EWM_INT_PR.svd.xml"/>
       <xi:include href="peripherals/FLEXIO_4SH_4TMR_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/FTFE_MKE15Z7.svd.xml"/>
-      <xi:include href="peripherals/FTM0_8CH_MKE15Z7.svd.xml"/>
-      <xi:include href="peripherals/FTM1_4CH_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/FTM0_8CH_QDCTRL_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/FTM1_4CH_QDCTRL_MKE15Z7.svd.xml"/>
       <peripheral derivedFrom="FTM1"><name>FTM2</name><baseAddress>0x4003A000</baseAddress></peripheral>
       <xi:include href="peripherals/GPIOA_0x400FF000.svd.xml"/>
       <peripheral derivedFrom="GPIOA"><name>GPIOB</name><baseAddress>0x400FF040</baseAddress></peripheral>

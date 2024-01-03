@@ -115,7 +115,7 @@
             \t * @param %paramName %tooltip
             \t */
             \tstatic void setRtcClockout(%paramType %paramName) {
-            \t   %fieldAssignment
+            \t   %fieldAssignment;
             \t}\n\n
          ]]></clockCodeTemplate>
       </if>
@@ -172,7 +172,7 @@
             \t * @param %paramName %tooltip
             \t */
             \tstatic void setRtcClockout(%paramType %paramName) {
-            \t   %fieldAssignment
+            \t   %fieldAssignment;
             \t}\n\n
          ]]></clockCodeTemplate>
       </if>
@@ -264,7 +264,7 @@
       \t * @param %paramName %tooltip
       \t */
       \tstatic void setErc32kClock(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}
 
       \t/**
@@ -301,7 +301,7 @@
       \t * @param %paramName %tooltip
       \t */
       \tstatic void setErc32kClkoutPin(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}\n\n
    ]]></clockCodeTemplate>
 
@@ -314,7 +314,7 @@
       \t */
       \tstatic void setUsbPowerModes(%paramType %paramName) {
       \t   sim->SOPT1CFG = SIM_SOPT1CFG_USSWE_MASK|SIM_SOPT1CFG_UVSWE_MASK|SIM_SOPT1CFG_URWE_MASK;
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}\n\n
    ]]></clockCodeTemplate>
 
@@ -338,7 +338,7 @@
          \t * @param %paramName %tooltip
          \t */
          \tstatic void set%(name)(%paramType %paramName) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}
          \t
          \t/**
@@ -373,7 +373,7 @@
          \t * @param %paramName %tooltip
          \t */
          \tstatic void set%(name)(%paramType %paramName) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}
 
          \t/**
@@ -402,7 +402,7 @@
          \t * @param %paramName %tooltip
          \t */
          \tstatic void setLpuart%(n)Clock(%paramType %paramName) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}
 
          \t/**
@@ -430,7 +430,7 @@
          \t * @param %paramName %tooltip
          \t */
          \tstatic void setUart%(n)Clock(%paramType %paramName) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}
 
          \t/**
@@ -511,7 +511,7 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}
          \t
          \t/**
@@ -924,7 +924,7 @@
             \t * @param %paramName %tooltip
             \t */
             \tstatic void setFtm%(ftm)Flt%(flt)(%paramType %paramName) {
-            \t   %fieldAssignment
+            \t   %fieldAssignment;
             \t}\n\n
             \t
             \t/**
@@ -949,7 +949,7 @@
             \t * @param %paramName %tooltip
             \t */
             \tstatic void setFtm%(ftm)Ch%(ch)Src(%paramType %paramName) {
-            \t   %fieldAssignment
+            \t   %fieldAssignment;
             \t}
             \t
             \t/**
@@ -973,7 +973,7 @@
          \t * @param %paramName %tooltip
          \t */
          \tstatic void setFtm%(ftm)ClkSel(%paramType %paramName) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}
          \t
          \t/**
@@ -997,7 +997,7 @@
             \t * @param %paramName %tooltip
             \t */
             \tstatic void setFtm%(ftm)Trg%(trg)Src(%paramType %paramName) {
-            \t   %fieldAssignment
+            \t   %fieldAssignment;
             \t}
             \t
             \t/**
@@ -1024,7 +1024,7 @@
          \t * through the appropriate pin control register in the port control module
          \t */
          \tstatic void setTpm%(tpm)ExternalClockInput(%paramType %paramName) {
-         \t   %fieldAssignment
+         \t   %fieldAssignment;
          \t}
          \t
          \t/**
@@ -1054,7 +1054,7 @@
             \t * through the appropriate pin control register in the port control module
             \t */
             \tstatic void setTpm%(tpm)Ch%(ch)InputCaptureSource(%paramType %paramName) {
-            \t   %fieldAssignment
+            \t   %fieldAssignment;
             \t}
             \t
             \t/**
@@ -1174,7 +1174,7 @@
             \t */
             \tstatic void configure%(Name)(
             %params) {
-            \t   %fieldAssignment
+            \t   %fieldAssignment;
             \t}\n\n
          ]]></variableTemplate>
 
@@ -1190,7 +1190,7 @@
                %paramDescription
                \t */
                \tstatic void set%(fullName)(%params) {
-               \t   %fieldAssignment
+               \t   %fieldAssignment;
                \t}
                \t
                \t/**
@@ -1417,7 +1417,7 @@ $(Adc%(p)Init_description)
             \t * @param %paramName %tooltip
             \t */
             \tstatic void setFtm%(p)Ch%(ch)OutputSrc(%paramType %paramName) {
-            \t   %fieldAssignment
+            \t   %fieldAssignment;
             \t}\n\n
          ]]></clockCodeTemplate>
       </for>
@@ -1470,7 +1470,7 @@ $(Adc%(p)Init_description)
             \t * @param %paramName %tooltip
             \t */
             \tstatic void setTpm%(p)%(Fn)(%paramType %paramName) {
-            \t   %fieldAssignment
+            \t   %fieldAssignment;
             \t}\n\n
          ]]></clockCodeTemplate>
       </for>
@@ -1493,7 +1493,7 @@ $(Adc%(p)Init_description)
       \t   sim->SCGC4 = sim->SCGC4 & ~SIM_SCGC4_USB0_MASK;
       \t
       \t   // Set clock source
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t\n
    ]]></clockCodeTemplate>
    <variableTemplate variables="sim_clkdiv2_usb[]" ><![CDATA[

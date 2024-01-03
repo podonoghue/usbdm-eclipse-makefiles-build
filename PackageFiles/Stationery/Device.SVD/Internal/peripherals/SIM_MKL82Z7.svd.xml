@@ -902,7 +902,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="DMA" > <name>MPU</name> <description>MPU Clock Gate Control</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="DMA0" > <name>MPU</name> <description>MPU Clock Gate Control</description> <bitOffset>2</bitOffset> </field>
                </fields>
             </register>
             <register>

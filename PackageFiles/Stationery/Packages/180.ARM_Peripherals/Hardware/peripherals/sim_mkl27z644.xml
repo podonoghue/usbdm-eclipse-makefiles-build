@@ -4,12 +4,28 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Integration Module" >
 
+<!-- ==================== Constants ==================== -->
+
    <constant key="generateDefault"           type="Boolean" value="false"         />
    <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-<!-- ==================== Constants ==================== -->
+   <!-- TPM Trigger Sources - value:name:enum -->
+   <constant key="/TPM/_trigger_sources"
+      value="&quot;
+         0b0000 : 'ExternalTrigger'  :  External    ;
+         0b0001 : 'CMP0'             :  CMP0        ;
+         0b0100 : 'PIT Ch 0'         :  PIT_Ch0     ;
+         0b0101 : 'PIT Ch 1'         :  PIT_Ch1     ;
+         0b1000 : 'TPM0 overflow'    :  TPM0        ;
+         0b1001 : 'TPM1 overflow'    :  TPM1        ;
+         0b1010 : 'TPM2 overflow'    :  TPM2        ;
+         0b1100 : 'RTC Alarm'        :  RTC_Alarm   ;
+         0b1101 : 'RTC Seconds'      :  RTC_Seconds ;
+         0b1110 : 'LPTMR Output'     :  LPTMR       ;
+         0b1111 : 'Software Trigger' :  Software    &quot;"
+   />
 
    <!-- Peripheral speeds                  RUN       VLPR     -->
    <constant key="MCGOUTCLK_max"  value=" 48MHz,     8MHz"   type="Long" />
@@ -325,7 +341,7 @@
                \t * @param %paramName %tooltip
                \t */
                \tstatic void setTpm%(p)ClockIn(%paramType %paramName) {
-               \t   %fieldAssignment
+               \t   %fieldAssignment;
                \t}
                \t
                \t/**

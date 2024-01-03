@@ -17,8 +17,8 @@ read -d '' TOx <<EOF
       \</for\> 
 EOF
 
-FROM="FrequencyFrequency"
-TO="Frequency"
+FROM="<li>%fieldAssignment;"
+TO="<li>%fieldAssignment"
 
 echo from "${FROM}"
 echo to "${TO}"

@@ -41,7 +41,7 @@
     * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
     * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %fieldAssignment         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %fieldAssignment;         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
     * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
     * %variable[index]                Variable name from condition
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
@@ -184,8 +184,8 @@
    </binaryOption>
 
    <bitmaskOption key="spi_mcr_pcsis" condition="spi_mcr_pcsis_present"
-      bitmask="0x3F0000"
-      bitList="PCS0,PCS1,PCS2,PCS3,PCS4,PCS5"
+      bitmask="0x3F"
+      bitList="Pcs0,Pcs1,Pcs2,Pcs3,Pcs4,Pcs5"
       typeName="SpiPcsActiveLow"
       description="Polarity for PCS signals"
       toolTip="Mask to select the polarity of Peripheral Chip Select Lines (PCSx)\n
@@ -408,8 +408,8 @@
       description="Peripheral Chip Select"
       toolTip="Mask to select which Peripheral Chip Select Line (PCS) to assert during transaction\n
                Note: more than one PCS may be asserted (allows use of an external decoder)"
-      bitmask="0x3F0000"
-      bitList="PCS0,PCS1,PCS2,PCS3,PCS4,PCS5"
+      bitmask="0x3F"
+      bitList="Pcs0,Pcs1,Pcs2,Pcs3,Pcs4,Pcs5"
       typeName="SpiPeripheralSelect"
       value="0"
       bitDescription="Assert %n during transaction"
@@ -1235,7 +1235,7 @@
       %paramDescription
       \t */
       \t void setContinousClock(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}\n\n
    ]]></variableTemplate>
 
@@ -1247,7 +1247,7 @@
       %paramDescription
       \t */
       \t void setMasterSlave(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}\n\n
    ]]></variableTemplate>
 
@@ -1269,7 +1269,7 @@
       \t * @endcode
       \t */
       \t void setPcsPolarity(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}\n\n
    ]]></variableTemplate>
 

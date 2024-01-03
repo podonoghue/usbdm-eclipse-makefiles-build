@@ -2,7 +2,7 @@
 <!DOCTYPE list SYSTEM "_menu.dtd" >
 <!-- new_project_actions.xml -->
 
-<list name="NewProjectActions" >
+<peripheralPage name="NewProjectActions" >
 
    <!-- if condition="/MCG/_present" >
       <projectActionList id = "_new_project_files_mcg" >
@@ -21,4 +21,4 @@
       </projectActionList>
    </if -->
 
-</list>
+</peripheralPage>

@@ -406,7 +406,7 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       \t * @param %paramName %tooltip
       \t */
       \tstatic void enableMcgIrClock(%paramType %paramName) {
-      \t   %fieldAssignment
+      \t   %fieldAssignment;
       \t}
 
       \t/**

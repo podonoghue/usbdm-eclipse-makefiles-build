@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral:
+Devices using this peripheral: 
       MKE02Z2
       MKE02Z4
       MKE04Z4
@@ -108,24 +108,7 @@ IRQF cannot be cleared while the IRQ pin remains at its asserted level</descript
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>IRQPE</name>
-                     <description>IRQ Pin Enable</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="IRQIE" > <name>IRQPE</name> <description>IRQ Pin Enable</description> <bitOffset>4</bitOffset> <bitWidth>1</bitWidth> </field>
                   <field>
                      <name>IRQEDG</name>
                      <description>Interrupt Request (IRQ) Edge Select</description>

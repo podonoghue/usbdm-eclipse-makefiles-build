@@ -186,7 +186,7 @@ An interrupt is generated when TOF equals one</description>
                   </field>
                   <field>
                      <name>DMA</name>
-                     <description>DMA Enable</description>
+                     <description>DMA Enable for the overflow flag</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>

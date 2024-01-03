@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2022/09
+ * @date     2023/12
  *
  */
 
@@ -455,6 +455,8 @@ typedef struct ADC_Type {
 #define ADC0_BasePtr                   0x4003B000UL //!< Peripheral base address
 #define ADC0                           ((ADC_Type *) ADC0_BasePtr) //!< Freescale base pointer
 #define ADC0_BASE_PTR                  (ADC0) //!< Freescale style base pointer
+#define ADC0_IRQS { ADC0_IRQn,  }
+
 
 /** @} */ /* End group ADC_Peripheral_access_layer_GROUP */
 
@@ -476,6 +478,8 @@ typedef struct ADC_Type {
 #define ADC1_BasePtr                   0x40027000UL //!< Peripheral base address
 #define ADC1                           ((ADC_Type *) ADC1_BasePtr) //!< Freescale base pointer
 #define ADC1_BASE_PTR                  (ADC1) //!< Freescale style base pointer
+#define ADC1_IRQS { ADC1_IRQn,  }
+
 
 /** @} */ /* End group ADC_Peripheral_access_layer_GROUP */
 
@@ -672,6 +676,8 @@ typedef struct CMP_Type {
 #define CMP0_BasePtr                   0x40073000UL //!< Peripheral base address
 #define CMP0                           ((CMP_Type *) CMP0_BasePtr) //!< Freescale base pointer
 #define CMP0_BASE_PTR                  (CMP0) //!< Freescale style base pointer
+#define CMP0_IRQS { CMP0_IRQn,  }
+
 
 /** @} */ /* End group CMP_Peripheral_access_layer_GROUP */
 
@@ -693,6 +699,8 @@ typedef struct CMP_Type {
 #define CMP1_BasePtr                   0x40074000UL //!< Peripheral base address
 #define CMP1                           ((CMP_Type *) CMP1_BasePtr) //!< Freescale base pointer
 #define CMP1_BASE_PTR                  (CMP1) //!< Freescale style base pointer
+#define CMP1_IRQS { CMP1_IRQn,  }
+
 
 /** @} */ /* End group CMP_Peripheral_access_layer_GROUP */
 
@@ -760,6 +768,9 @@ typedef struct CRC_Type {
 /** @{ */
 
 /** @name DATA - Data register */ /** @{ */
+#define CRC_DATA_DATA_MASK                       (0xFFFFFFFFU)                                       /**< CRC0_DATA.DATA Mask                     */
+#define CRC_DATA_DATA_SHIFT                      (0U)                                                /**< CRC0_DATA.DATA Position                 */
+#define CRC_DATA_DATA(x)                         (((uint32_t)(((uint32_t)(x))<<CRC_DATA_DATA_SHIFT))&CRC_DATA_DATA_MASK) /**< CRC0_DATA.DATA Field                    */
 #define CRC_DATA_LL_MASK                         (0xFFU)                                             /**< CRC0_DATA.LL Mask                       */
 #define CRC_DATA_LL_SHIFT                        (0U)                                                /**< CRC0_DATA.LL Position                   */
 #define CRC_DATA_LL(x)                           (((uint32_t)(((uint32_t)(x))<<CRC_DATA_LL_SHIFT))&CRC_DATA_LL_MASK) /**< CRC0_DATA.LL Field                      */
@@ -811,6 +822,9 @@ typedef struct CRC_Type {
 /** @} */
 
 /** @name GPOLY - Polynomial register */ /** @{ */
+#define CRC_GPOLY_GPOLY_MASK                     (0xFFFFFFFFU)                                       /**< CRC0_GPOLY.GPOLY Mask                   */
+#define CRC_GPOLY_GPOLY_SHIFT                    (0U)                                                /**< CRC0_GPOLY.GPOLY Position               */
+#define CRC_GPOLY_GPOLY(x)                       (((uint32_t)(((uint32_t)(x))<<CRC_GPOLY_GPOLY_SHIFT))&CRC_GPOLY_GPOLY_MASK) /**< CRC0_GPOLY.GPOLY Field                  */
 #define CRC_GPOLY_LOW_MASK                       (0xFFFFU)                                           /**< CRC0_GPOLY.LOW Mask                     */
 #define CRC_GPOLY_LOW_SHIFT                      (0U)                                                /**< CRC0_GPOLY.LOW Position                 */
 #define CRC_GPOLY_LOW(x)                         (((uint32_t)(((uint32_t)(x))<<CRC_GPOLY_LOW_SHIFT))&CRC_GPOLY_LOW_MASK) /**< CRC0_GPOLY.LOW Field                    */
@@ -932,29 +946,32 @@ typedef struct DMA_Type {
       __IO uint8_t   DCHPRIn[8];                /**< 0100: Channel  Priority Register                                   */
    };
         uint8_t   RESERVED_7[3832];             /**< 0108: 0xEF8 bytes                                                  */
-   struct {
-      __IO uint32_t  SADDR;                     /**< 1000: Source Address                                               */
-      __IO uint16_t  SOFF;                      /**< 1004: Signed Source Address Offset                                 */
-      __IO uint16_t  ATTR;                      /**< 1006: Transfer Attributes                                          */
-      union {                                   /**< 1008: (size=0004)                                                  */
-         __IO uint32_t  NBYTES_MLNO;            /**< 1008: Minor Byte Count (Minor Loop Disabled)                       */
-         __IO uint32_t  NBYTES_MLOFFNO;         /**< 1008: Signed Minor Loop Offset (Minor Loop Enabled and Offset Disabled) */
-         __IO uint32_t  NBYTES_MLOFFYES;        /**< 1008: Signed Minor Loop Offset (Minor Loop and Offset Enabled)     */
-      };
-      __IO uint32_t  SLAST;                     /**< 100C: Last Source Address Adjustment                               */
-      __IO uint32_t  DADDR;                     /**< 1010: Destination Address                                          */
-      __IO uint16_t  DOFF;                      /**< 1014: Signed Destination Address Offset                            */
-      union {                                   /**< 1016: (size=0002)                                                  */
-         __IO uint16_t  CITER_ELINKNO;          /**< 1016: Current Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
-         __IO uint16_t  CITER_ELINKYES;         /**< 1016: Current Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
-      };
-      __IO uint32_t  DLASTSGA;                  /**< 1018: Last Destination Address Adjustment/Scatter Gather Address   */
-      __IO uint16_t  CSR;                       /**< 101C: Control and Status                                           */
-      union {                                   /**< 101E: (size=0002)                                                  */
-         __IO uint16_t  BITER_ELINKNO;          /**< 101E: Beginning Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
-         __IO uint16_t  BITER_ELINKYES;         /**< 101E: Beginning Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
-      };
-   } TCD[8];                                    /**< 1000: (cluster: size=0x0100, 256)                                  */
+   union {                                      /**< 1000: (size=0100)                                                  */
+      struct {
+         __IO uint32_t  SADDR;                  /**< 1000: Source Address                                               */
+         __IO uint16_t  SOFF;                   /**< 1004: Signed Source Address Offset                                 */
+         __IO uint16_t  ATTR;                   /**< 1006: Transfer Attributes                                          */
+         union {                                /**< 1008: (size=0004)                                                  */
+            __IO uint32_t  NBYTES_MLNO;         /**< 1008: Minor Byte Count (Minor Loop Disabled)                       */
+            __IO uint32_t  NBYTES_MLOFFNO;      /**< 1008: Signed Minor Loop Offset (Minor Loop Enabled and Offset Disabled) */
+            __IO uint32_t  NBYTES_MLOFFYES;     /**< 1008: Signed Minor Loop Offset (Minor Loop and Offset Enabled)     */
+         };
+         __IO uint32_t  SLAST;                  /**< 100C: Last Source Address Adjustment                               */
+         __IO uint32_t  DADDR;                  /**< 1010: Destination Address                                          */
+         __IO uint16_t  DOFF;                   /**< 1014: Signed Destination Address Offset                            */
+         union {                                /**< 1016: (size=0002)                                                  */
+            __IO uint16_t  CITER_ELINKNO;       /**< 1016: Current Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
+            __IO uint16_t  CITER_ELINKYES;      /**< 1016: Current Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
+         };
+         __IO uint32_t  DLASTSGA;               /**< 1018: Last Destination Address Adjustment/Scatter Gather Address   */
+         __IO uint16_t  CSR;                    /**< 101C: Control and Status                                           */
+         union {                                /**< 101E: (size=0002)                                                  */
+            __IO uint16_t  BITER_ELINKNO;       /**< 101E: Beginning Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
+            __IO uint16_t  BITER_ELINKYES;      /**< 101E: Beginning Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
+         };
+      } TCD[8];                                 /**< 1000: (cluster: size=0x0100, 256)                                  */
+      __IO uint32_t  TCD_RAW[64];               /**< 1000: Raw TCD array as uint32_t                                    */
+   };
 } DMA_Type;
 
 
@@ -1484,6 +1501,8 @@ typedef struct DMA_Type {
 #define DMA0_BasePtr                   0x40008000UL //!< Peripheral base address
 #define DMA0                           ((DMA_Type *) DMA0_BasePtr) //!< Freescale base pointer
 #define DMA0_BASE_PTR                  (DMA0) //!< Freescale style base pointer
+#define DMA0_IRQS { DMA0_04_IRQn, DMA0_15_IRQn, DMA0_26_IRQn, DMA0_37_IRQn, DMA_Error_IRQn,  }
+
 
 /** @} */ /* End group DMA0_Peripheral_access_layer_GROUP */
 
@@ -1678,6 +1697,8 @@ typedef struct EWM_Type {
 #define EWM_BasePtr                    0x40061000UL //!< Peripheral base address
 #define EWM                            ((EWM_Type *) EWM_BasePtr) //!< Freescale base pointer
 #define EWM_BASE_PTR                   (EWM) //!< Freescale style base pointer
+#define EWM_IRQS { WDOG_EWM_IRQn,  }
+
 
 /** @} */ /* End group EWM_Peripheral_access_layer_GROUP */
 
@@ -1957,6 +1978,8 @@ typedef struct FLEXIO_Type {
 #define FLEXIO_BasePtr                 0x4005A000UL //!< Peripheral base address
 #define FLEXIO                         ((FLEXIO_Type *) FLEXIO_BasePtr) //!< Freescale base pointer
 #define FLEXIO_BASE_PTR                (FLEXIO) //!< Freescale style base pointer
+#define FLEXIO_IRQS { FLEXIO_IRQn,  }
+
 
 /** @} */ /* End group FLEXIO_Peripheral_access_layer_GROUP */
 
@@ -2165,6 +2188,8 @@ typedef struct FTFE_Type {
 #define FTFE_BasePtr                   0x40020000UL //!< Peripheral base address
 #define FTFE                           ((FTFE_Type *) FTFE_BasePtr) //!< Freescale base pointer
 #define FTFE_BASE_PTR                  (FTFE) //!< Freescale style base pointer
+#define FTFE_IRQS { FTFE_IRQn,  }
+
 
 /** @} */ /* End group FTFE_Peripheral_access_layer_GROUP */
 
@@ -3015,6 +3040,8 @@ typedef struct FTM_Type {
 #define FTM0_BasePtr                   0x40038000UL //!< Peripheral base address
 #define FTM0                           ((FTM_Type *) FTM0_BasePtr) //!< Freescale base pointer
 #define FTM0_BASE_PTR                  (FTM0) //!< Freescale style base pointer
+#define FTM0_IRQS { FTM0_IRQn,  }
+
 
 /** @} */ /* End group FTM_Peripheral_access_layer_GROUP */
 
@@ -3091,6 +3118,8 @@ typedef struct FTM1_Type {
 #define FTM1_BasePtr                   0x40039000UL //!< Peripheral base address
 #define FTM1                           ((FTM1_Type *) FTM1_BasePtr) //!< Freescale base pointer
 #define FTM1_BASE_PTR                  (FTM1) //!< Freescale style base pointer
+#define FTM1_IRQS { FTM1_IRQn,  }
+
 
 /** @} */ /* End group FTM_Peripheral_access_layer_GROUP */
 
@@ -3112,6 +3141,8 @@ typedef struct FTM1_Type {
 #define FTM2_BasePtr                   0x4003A000UL //!< Peripheral base address
 #define FTM2                           ((FTM1_Type *) FTM2_BasePtr) //!< Freescale base pointer
 #define FTM2_BASE_PTR                  (FTM2) //!< Freescale style base pointer
+#define FTM2_IRQS { FTM2_IRQn,  }
+
 
 /** @} */ /* End group FTM_Peripheral_access_layer_GROUP */
 
@@ -3781,6 +3812,8 @@ typedef struct LPI2C0_Type {
 #define LPI2C0_BasePtr                 0x40066000UL //!< Peripheral base address
 #define LPI2C0                         ((LPI2C0_Type *) LPI2C0_BasePtr) //!< Freescale base pointer
 #define LPI2C0_BASE_PTR                (LPI2C0) //!< Freescale style base pointer
+#define LPI2C0_IRQS { LPI2C0_IRQn,  }
+
 
 /** @} */ /* End group LPI2C_Peripheral_access_layer_GROUP */
 
@@ -3802,6 +3835,8 @@ typedef struct LPI2C0_Type {
 #define LPI2C1_BasePtr                 0x40067000UL //!< Peripheral base address
 #define LPI2C1                         ((LPI2C0_Type *) LPI2C1_BasePtr) //!< Freescale base pointer
 #define LPI2C1_BASE_PTR                (LPI2C1) //!< Freescale style base pointer
+#define LPI2C1_IRQS { LPI2C1_IRQn,  }
+
 
 /** @} */ /* End group LPI2C_Peripheral_access_layer_GROUP */
 
@@ -3992,6 +4027,8 @@ typedef struct LPIT_Type {
 #define LPIT0_BasePtr                  0x40037000UL //!< Peripheral base address
 #define LPIT0                          ((LPIT_Type *) LPIT0_BasePtr) //!< Freescale base pointer
 #define LPIT0_BASE_PTR                 (LPIT0) //!< Freescale style base pointer
+#define LPIT0_IRQS { LPIT0_IRQn,  }
+
 
 /** @} */ /* End group LPIT_Peripheral_access_layer_GROUP */
 
@@ -4308,6 +4345,8 @@ typedef struct LPSPI_Type {
 #define LPSPI0_BasePtr                 0x4002C000UL //!< Peripheral base address
 #define LPSPI0                         ((LPSPI_Type *) LPSPI0_BasePtr) //!< Freescale base pointer
 #define LPSPI0_BASE_PTR                (LPSPI0) //!< Freescale style base pointer
+#define LPSPI0_IRQS { LPSPI0_IRQn,  }
+
 
 /** @} */ /* End group LPSPI_Peripheral_access_layer_GROUP */
 
@@ -4329,6 +4368,8 @@ typedef struct LPSPI_Type {
 #define LPSPI1_BasePtr                 0x4002D000UL //!< Peripheral base address
 #define LPSPI1                         ((LPSPI_Type *) LPSPI1_BasePtr) //!< Freescale base pointer
 #define LPSPI1_BASE_PTR                (LPSPI1) //!< Freescale style base pointer
+#define LPSPI1_IRQS { LPSPI1_IRQn,  }
+
 
 /** @} */ /* End group LPSPI_Peripheral_access_layer_GROUP */
 
@@ -4424,6 +4465,8 @@ typedef struct LPTMR_Type {
 #define LPTMR0_BasePtr                 0x40040000UL //!< Peripheral base address
 #define LPTMR0                         ((LPTMR_Type *) LPTMR0_BasePtr) //!< Freescale base pointer
 #define LPTMR0_BASE_PTR                (LPTMR0) //!< Freescale style base pointer
+#define LPTMR0_IRQS { PWT_LPTMR0_IRQn,  }
+
 
 /** @} */ /* End group LPTMR_Peripheral_access_layer_GROUP */
 
@@ -4815,6 +4858,8 @@ typedef struct LPUART_Type {
 #define LPUART0_BasePtr                0x4006A000UL //!< Peripheral base address
 #define LPUART0                        ((LPUART_Type *) LPUART0_BasePtr) //!< Freescale base pointer
 #define LPUART0_BASE_PTR               (LPUART0) //!< Freescale style base pointer
+#define LPUART0_IRQS { LPUART0_IRQn,  }
+
 
 /** @} */ /* End group LPUART_Peripheral_access_layer_GROUP */
 
@@ -4836,6 +4881,8 @@ typedef struct LPUART_Type {
 #define LPUART1_BasePtr                0x4006B000UL //!< Peripheral base address
 #define LPUART1                        ((LPUART_Type *) LPUART1_BasePtr) //!< Freescale base pointer
 #define LPUART1_BASE_PTR               (LPUART1) //!< Freescale style base pointer
+#define LPUART1_IRQS { LPUART1_IRQn,  }
+
 
 /** @} */ /* End group LPUART_Peripheral_access_layer_GROUP */
 
@@ -4857,6 +4904,8 @@ typedef struct LPUART_Type {
 #define LPUART2_BasePtr                0x4006C000UL //!< Peripheral base address
 #define LPUART2                        ((LPUART_Type *) LPUART2_BasePtr) //!< Freescale base pointer
 #define LPUART2_BASE_PTR               (LPUART2) //!< Freescale style base pointer
+#define LPUART2_IRQS { LPUART2_IRQn,  }
+
 
 /** @} */ /* End group LPUART_Peripheral_access_layer_GROUP */
 
@@ -6271,6 +6320,8 @@ typedef struct PDB_Type {
 #define PDB0_BasePtr                   0x40036000UL //!< Peripheral base address
 #define PDB0                           ((PDB_Type *) PDB0_BasePtr) //!< Freescale base pointer
 #define PDB0_BASE_PTR                  (PDB0) //!< Freescale style base pointer
+#define PDB0_IRQS { PDB0_IRQn,  }
+
 
 /** @} */ /* End group PDB_Peripheral_access_layer_GROUP */
 
@@ -6367,6 +6418,8 @@ typedef struct PMC_Type {
 #define PMC_BasePtr                    0x4007D000UL //!< Peripheral base address
 #define PMC                            ((PMC_Type *) PMC_BasePtr) //!< Freescale base pointer
 #define PMC_BASE_PTR                   (PMC) //!< Freescale style base pointer
+#define PMC_IRQS { LVD_LVW_IRQn,  }
+
 
 /** @} */ /* End group PMC_Peripheral_access_layer_GROUP */
 
@@ -6476,6 +6529,8 @@ typedef struct PORT_DFER_Type {
 #define PORTA_BasePtr                  0x40049000UL //!< Peripheral base address
 #define PORTA                          ((PORT_DFER_Type *) PORTA_BasePtr) //!< Freescale base pointer
 #define PORTA_BASE_PTR                 (PORTA) //!< Freescale style base pointer
+#define PORTA_IRQS { PORTAE_IRQn,  }
+
 
 /** @} */ /* End group PORT_Peripheral_access_layer_GROUP */
 
@@ -6497,6 +6552,8 @@ typedef struct PORT_DFER_Type {
 #define PORTB_BasePtr                  0x4004A000UL //!< Peripheral base address
 #define PORTB                          ((PORT_DFER_Type *) PORTB_BasePtr) //!< Freescale base pointer
 #define PORTB_BASE_PTR                 (PORTB) //!< Freescale style base pointer
+#define PORTB_IRQS { PORTBCD_IRQn,  }
+
 
 /** @} */ /* End group PORT_Peripheral_access_layer_GROUP */
 
@@ -6518,6 +6575,8 @@ typedef struct PORT_DFER_Type {
 #define PORTC_BasePtr                  0x4004B000UL //!< Peripheral base address
 #define PORTC                          ((PORT_DFER_Type *) PORTC_BasePtr) //!< Freescale base pointer
 #define PORTC_BASE_PTR                 (PORTC) //!< Freescale style base pointer
+#define PORTC_IRQS { PORTBCD_IRQn,  }
+
 
 /** @} */ /* End group PORT_Peripheral_access_layer_GROUP */
 
@@ -6539,6 +6598,8 @@ typedef struct PORT_DFER_Type {
 #define PORTD_BasePtr                  0x4004C000UL //!< Peripheral base address
 #define PORTD                          ((PORT_DFER_Type *) PORTD_BasePtr) //!< Freescale base pointer
 #define PORTD_BASE_PTR                 (PORTD) //!< Freescale style base pointer
+#define PORTD_IRQS { PORTBCD_IRQn,  }
+
 
 /** @} */ /* End group PORT_Peripheral_access_layer_GROUP */
 
@@ -6560,6 +6621,8 @@ typedef struct PORT_DFER_Type {
 #define PORTE_BasePtr                  0x4004D000UL //!< Peripheral base address
 #define PORTE                          ((PORT_DFER_Type *) PORTE_BasePtr) //!< Freescale base pointer
 #define PORTE_BASE_PTR                 (PORTE) //!< Freescale style base pointer
+#define PORTE_IRQS { PORTAE_IRQn,  }
+
 
 /** @} */ /* End group PORT_Peripheral_access_layer_GROUP */
 
@@ -6689,6 +6752,8 @@ typedef struct PWT_Type {
 #define PWT_BasePtr                    0x40056000UL //!< Peripheral base address
 #define PWT                            ((PWT_Type *) PWT_BasePtr) //!< Freescale base pointer
 #define PWT_BASE_PTR                   (PWT) //!< Freescale style base pointer
+#define PWT_IRQS { PWT_LPTMR0_IRQn,  }
+
 
 /** @} */ /* End group PWT_Peripheral_access_layer_GROUP */
 
@@ -6917,6 +6982,8 @@ typedef struct RCM_Type {
 #define RCM_BasePtr                    0x4007F000UL //!< Peripheral base address
 #define RCM                            ((RCM_Type *) RCM_BasePtr) //!< Freescale base pointer
 #define RCM_BASE_PTR                   (RCM) //!< Freescale style base pointer
+#define RCM_IRQS { RCM_IRQn,  }
+
 
 /** @} */ /* End group RCM_Peripheral_access_layer_GROUP */
 
@@ -7222,6 +7289,8 @@ typedef struct RTC_Type {
 #define RTC_BasePtr                    0x4003D000UL //!< Peripheral base address
 #define RTC                            ((RTC_Type *) RTC_BasePtr) //!< Freescale base pointer
 #define RTC_BASE_PTR                   (RTC) //!< Freescale style base pointer
+#define RTC_IRQS { RTC_IRQn,  }
+
 
 /** @} */ /* End group RTC_Peripheral_access_layer_GROUP */
 
@@ -7571,6 +7640,8 @@ typedef struct SCG_Type {
 #define SCG_BasePtr                    0x40064000UL //!< Peripheral base address
 #define SCG                            ((SCG_Type *) SCG_BasePtr) //!< Freescale base pointer
 #define SCG_BASE_PTR                   (SCG) //!< Freescale style base pointer
+#define SCG_IRQS { SCG_IRQn,  }
+
 
 /** @} */ /* End group SCG_Peripheral_access_layer_GROUP */
 
@@ -8726,6 +8797,8 @@ typedef struct WDOG_Type {
 #define WDOG_BasePtr                   0x40052000UL //!< Peripheral base address
 #define WDOG                           ((WDOG_Type *) WDOG_BasePtr) //!< Freescale base pointer
 #define WDOG_BASE_PTR                  (WDOG) //!< Freescale style base pointer
+#define WDOG_IRQS { WDOG_EWM_IRQn,  }
+
 
 /** @} */ /* End group WDOG_Peripheral_access_layer_GROUP */
 
