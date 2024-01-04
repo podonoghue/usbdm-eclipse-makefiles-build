@@ -2206,7 +2206,7 @@
          \t}\n\n
       ]]></template>
 
-      <template key="/$(_BASENAME)/%(k)" namespace="%(namespace)" discardRepeats="true"
+      <variableTemplate key="/$(_BASENAME)/%(k)" namespace="%(namespace)" discardRepeats="true"
          variables="ftm_pol_pol" ><![CDATA[
          \t/**
          \t * Set polarity of all channels
@@ -2228,7 +2228,7 @@
          \t      temp &= ftmPolarity>>8;
          \t      ftm->POL = temp;
          \t}\n\n
-      ]]></template>
+      ]]></variableTemplate>
       <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
          \t/*
          \t * *****************************************************************
@@ -2460,7 +2460,7 @@
 
 <!-- ================== Channel Functions ================== -->
 
-   <template key="/$(_BASENAME)_CHANNEL/%(k)" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)_CHANNEL/%(k)" discardRepeats="true"
       variables="ftm_cnsc_action[]"
       linePadding="xxx"
    ><![CDATA[
@@ -2477,7 +2477,7 @@
       \t      ftm->CONTROLS[%(channel)].CnSC =
       \t           (ftm->CONTROLS[%(channel)].CnSC & ~%mask) | %paramExpression;
       \t   }\n\n
-   ]]></template>
+   ]]></variableTemplate>
 
    <template key="/$(_BASENAME)_CHANNEL/%(k)" discardRepeats="true" ><![CDATA[
       \t   /**
@@ -2666,7 +2666,7 @@
       \t      ftm->SWOCTRL = ((ftm->SWOCTRL & ~MASK)) | (ftmChannelForce & MASK);
       \t   }\n\n
    ]]></template>
-   <template key="/$(_BASENAME)_CHANNEL/%(k)" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)_CHANNEL/%(k)" discardRepeats="true"
       variables="ftm_pol_pol0" ><![CDATA[
       \t   /**
       \t    * Set polarity of channels.
@@ -2681,7 +2681,7 @@
       \t         ftm->POL = ftm->POL | CHANNEL_MASK;
       \t      }
       \t   }\n\n
-      ]]></template>
+      ]]></variableTemplate>
    </for>
 
    <clockCodeTemplate variable="ftm_sc_clks"
@@ -2978,7 +2978,7 @@
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   // %description
-      \t   %paramType %registerName = %paramType_Normal;\n\n
+      \t   %paramType %registerName = %defaultValue;\n\n
    ]]></variableTemplate>
 
    <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
@@ -3878,7 +3878,7 @@
          variables="/PCR/nvic_irqLevel"
       ><![CDATA[
          \t   // %description
-         \t   %paramType %registerName = %paramType_Normal;\n\n
+         \t   %paramType %registerName = %defaultValue;\n\n
       ]]></variableTemplate>
 
       <!-- QUAD Init class Constructors -->

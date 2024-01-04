@@ -391,7 +391,9 @@
    <!-- List of pin mappings applied if option disabled#Expression to enable use of any pin map -->
    <!ATTLIST bitmaskOption disabledPinMap CDATA        #IMPLIED>
    <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
-   <!ATTLIST bitmaskOption addToVar            CDATA        #IMPLIED>
+   <!ATTLIST bitmaskOption addToVar       CDATA        #IMPLIED>
+   <!-- Reference to a choice variable to obtain information from -->
+   <!ATTLIST bitmaskOption uses           CDATA        #IMPLIED>
 
 <!ELEMENT floatOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -478,7 +480,9 @@
    <!ATTLIST stringOption target           CDATA        #IMPLIED>
    <!ATTLIST stringOption code             CDATA        #IMPLIED>
    <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
-   <!ATTLIST StringOption addToVar            CDATA        #IMPLIED>
+   <!ATTLIST stringOption addToVar            CDATA        #IMPLIED>
+     <!-- Expression enables this option -->
+   <!ATTLIST stringOption enabledBy           CDATA        #IMPLIED>
   
 <!ELEMENT numericListOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->

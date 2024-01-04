@@ -962,7 +962,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %paramType %registerName0 = %symbolicExpression1;
+      \t   %paramType %registerName0 = %defaultValue;
       \t\n
    ]]></variableTemplate>
 

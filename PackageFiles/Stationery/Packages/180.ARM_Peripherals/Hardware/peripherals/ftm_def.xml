@@ -46,29 +46,12 @@
    <!-- ____ Constants ____________ -->
    <constant key = "disable_peripheral"      value = '"ftm->SC = FTM_SC_CLKS(0);"' type="String"  />
 
-   <intOption key="NumChannels"
-      hidden="true"
-      locked="true"
-      derived="true"
-      description="Number of Channels"
-      toolTip="The number of timer channels available"
-      value="=_channelCount" />
-
-   <intOption key="NumChannelVectors"
-      hidden="true"
-      locked="true"
-      derived="true"
-      description="Number of Channel interrupt vectors"
-      toolTip="Number of channel event interrupt vectors - \n
-               Multiple Channels may be mapped to the same vector"
-      value="=_irqCount" />
-
    <template><![CDATA[
       \t//! Number of channels implemented
-      \tstatic constexpr unsigned NumChannels = $(NumChannels);
+      \tstatic constexpr unsigned NumChannels = $(_channelCount);
 
       \t//! Number of channel event vectors implemented
-      \tstatic constexpr unsigned NumChannelVectors = $(NumChannelVectors);\n\n
+      \tstatic constexpr unsigned NumChannelVectors = $(_irqCount);\n\n
    ]]></template>
 
    <!-- ____ Class Declaration ________ -->
@@ -159,6 +142,7 @@
       locked="true"
       enabledBy="enablePeripheralSupport"
       typeName="FtmCountMode"
+      enumType="uint8_t"
       description="Alignment (Count mode)"
       toolTip="Left-aligned   (0...mod) or\n
                Centre-aligned (0...mod...0)" >
@@ -171,6 +155,7 @@
       enabledBy="enablePeripheralSupport"
       description="Clock prescaler"
       typeName="FtmPrescale"
+      enumType="uint8_t"
       target="clock"
       toolTip="Selects the prescaler for the module" >
       <choice value="0" name="Divide by 1"   ref="inputClockFrequency"        enum="DivBy1"  isDefault="true" />
@@ -217,8 +202,8 @@
       description="End value for counter"
       toolTip="The timer counts from 0 to this value"
       valueFormat="%s"
-      enumType="uint16_t"
       typeName="Ticks &amp;"
+      enumType="uint16_t"
       units="ticks"
       value="65535" min="0" max="65535" />
 
@@ -228,11 +213,9 @@
       derived="true"
       description="Main counter (writing any value clears counter)"
       toolTip="Main counter for FTM"
-      valueFormat="%s"
-      enumType="uint16_t"
       typeName="Ticks &amp;"
-      units="ticks"
-      value="0" min="0" max="65535" />
+      enumType="uint16_t"
+      value="0" />
 
    <intOption key="ftm_cntin" condition="ftm_cntin_present"
       hidden="true"
@@ -262,8 +245,8 @@
    <choiceOption key="ftm_sc_action" condition="ftm_sc_toie_present&amp;&amp;ftm_sc_dma_present"
       hiddenBy="mode==(None)"
       valueFormat="FTM_SC_TOIE(%s),FTM_SC_DMA(%s)"
-      enumType="uint16_t"
       typeName="FtmOverflowAction"
+      enumType="uint16_t"
       description="Action on Counter overflow"
       toolTip="Enable interrupt and/or DMA on counter overflow" >
        <choice value="0,0" name="No action"                    enum="None"             />
@@ -324,6 +307,7 @@
    <category hidden="true">
 
    <!-- ____ Independent Channels ________________ -->
+
    <for keys="ch" dim="=_channelCount" >
 
       <choiceOption key="ftm_cnsc_mode_independent[%(ch)]"
@@ -343,7 +327,7 @@
           <choice value="0b00,0b10"  name="Input Capture Falling-edge"          enum="InputCaptureFallingEdge"  />
           <choice value="0b00,0b11"  name="Input Capture Either-edge"           enum="InputCaptureEitherEdge"   />
           <!-- 4-7 -->
-          <choice value="0b01,0b00"  name="Output Compare No action"            enum="OutputCompare"            />
+          <choice value="0b01,0b00"  name="Software Compare (pin unused)"       enum="OutputCompare"            />
           <choice value="0b01,0b01"  name="Output Compare Toggle"               enum="OutputCompareToggle"      />
           <choice value="0b01,0b10"  name="Output Compare Clear"                enum="OutputCompareClear"       />
           <choice value="0b01,0b11"  name="Output Compare Set"                  enum="OutputCompareSet"         />
@@ -476,12 +460,14 @@
                         v                  -->
        <choice value="0b00" name="Pin Disabled"         enum="Disabled"
           toolTip="The pin associated with the second channel is not used by the FTM" />
+
        <choice value="0b01" name="Capture Rising-edge"   enum="RisingEdge"
          toolTip="Odd channel captures CNV on next rising edge of channel input" />
        <choice value="0b10" name="Capture Falling-edge"  enum="FallingEdge"
          toolTip="Odd channel captures CNV on next falling edge of channel input" />
        <choice value="0b11" name="Capture Either-edge"   enum="EitherEdge"
          toolTip="Odd channel captures CNV on next rising or falling edge of channel input" />
+
        <choice value="0b01" name="Pin controlled by FTM"  enum="Enabled"
          toolTip="The pin associated with the second channel is controlled by the FTM" />
    </choiceOption>
@@ -528,7 +514,7 @@
       <variable key="_dual_edge_capture%(Num)"     type="Boolean" expression="ftm_cnsc_mode_even[%(evenCh)]!=(0,1,2)" />
       <variable key="_dual_edge_continuous%(Num)"  type="Boolean" expression="ftm_cnsc_mode_even[%(evenCh)]==(4,6,8)" />
 
-      <!-- Odd channels when paired - Combined PWM -->
+      <!-- Odd channels when paired - PWM -->
       <choiceOption key="ftm_cnsc_secondOutput[%(oddCh)]"
          hiddenBy="!_combined_pwm%(Num)"
          enabledBy="_combined_pwm%(Num)"
@@ -763,6 +749,8 @@
           <choice value="1" name="Interrupt request"      enum="Interrupt"   />
       </binaryOption>
 
+      <!-- FILTER.FVAL -->
+
       <choiceOption key="ftm_filter_fval_paired[%(evenCh)]" condition="ftm_filter_ch%(evenCh)fval_present"
          hiddenBy="!(ftm_cnsc_mode_even[%(evenCh)]>=3)"
          enabledBy="ftm_cnsc_mode_even[%(evenCh)]>=3"
@@ -824,8 +812,6 @@
       </binaryOption>
 
    </for>
-
-
 
    </category>
 
@@ -899,6 +885,7 @@
             <aliasOption key="ftm_cnvHighTime_independent[%(oddCh)]"       locked="false" />
             <aliasOption key="ftm_cnvDutyCycle_independent[%(oddCh)]"      locked="false" />
          </list>
+
          <list name="*" hiddenBy="!channelPairing[%(evenCh)]" condition="ftm_combine_combine%(Num)_present">
 
             <!-- Paired channels -->
@@ -969,7 +956,7 @@
    </categoryOption>
 
    <!-- ____ Miscellaneous ______________ -->
-      
+
    <categoryOption key="Miscellaneous" description="Miscellaneous"
       hiddenBy="mode==(None,Quad)"
    >
@@ -983,13 +970,13 @@
       </binaryOption -->
 
       <!-- ____ POL ______________ -->
-      
+
       <choiceOption key="ftm_pol_pol_masks" condition="ftm_pol_present"
          valueFormat="%s"
          hidden="true"
          derived="true"
-         enumType="uint16_t"
          typeName="FtmPolarity"
+         enumType="uint16_t"
          description="Channel Output Polarity"
          toolTip="Bitmask defining the active-low channel outputs (1=ActiveLow).\n
                   This field is write protected. It can be written only when MODE[WPDIS] = 1." >
@@ -998,7 +985,7 @@
          <choiceExpansion name="Ch%(ch) Active-high" enum="Ch%(ch)_ActiveHigh" value='=Format("0x%04XU",0xFF00^(1&lt;&lt;(%(ch)+8)))' keys="ch" dim="8"/>
          <choice          name="All Active-high"     enum="All_ActiveHigh"     value='0x0000U' />
       </choiceOption>
-      
+
       <bitmaskOption key="ftm_pol_pol" condition="ftm_pol_present"
          enabledBy="enablePeripheralSupport"
          valueFormat="%s"
@@ -1010,11 +997,11 @@
                   This field is write protected. It can be written only when MODE[WPDIS] = 1."
          value="0"
          bitmask="=(1&lt;&lt;_channelCount)-1"
-         bitList="CH%i"
+         bitList="Ch%iActiveLow"
          bitDescription="Channel %i is active-low" />
 
       <!-- ____ MODE ______________ -->
-      
+
       <binaryOption key="ftm_mode_wpdis" condition="ftm_mode_wpdis_present"
          locked="true"
          enabledBy="enablePeripheralSupport"
@@ -1037,12 +1024,14 @@
          <choice name="All registers available"       value="1" enum="AllRegisters"     isDefault="true" />
       </binaryOption >
 
+      <!-- ____ CONF ______________ -->
+
       <choiceOption key="ftm_conf_bdmmode" condition="ftm_conf_bdmmode_present"
          enabledBy="enablePeripheralSupport"
          typeName="FtmBdmmode"
          enumType="uint16_t"
-         toolTip="Selects the FTM behavior in Debug mode."
-         description="Controls operation in BDM Mode" >
+         description="Behaviour in BDM Mode"
+         toolTip="Selects the FTM behavior in Debug mode.">
          <choice name="Stopped, outputs functional"            value="0" enum="Stopped_OutputsFunctional" />
          <choice name="Stopped, outputs forced to safe value"  value="1" enum="Stopped_OutputsSafeValue"  />
          <choice name="Stopped, outputs frozen"                value="2" enum="Stopped_OutputsFrozen"     />
@@ -1061,7 +1050,7 @@
       />
 
       <!-- ____ Global timebase ______________ -->
-      
+
       <title description="Global timebase" />
 
       <binaryOption key="ftm_conf_gtbeout" condition="ftm_conf_gtbeout_present"
@@ -1086,60 +1075,6 @@
 
    </categoryOption>
 
-   <!-- ____ Load Points ______________ -->
-      
-   <categoryOption key="loadPoints" description="Load Points"
-      hiddenBy="mode==(None,Quad)" >
-
-      <binaryOption key="ftm_pwmload_ldok" condition="ftm_pwmload_ldok_present"
-         enabledBy="enablePeripheralSupport"
-         enumType="uint16_t"
-         typeName="FtmPwmload"
-         description="Load Enable"
-         toolTip="Enables loading of MOD/CNTIN/CnV from buffers on load points.\n
-                  Loading is further qualified as follows:\n
-                  - MOD loading is unconditional\n
-                  - CNTIN is qualified by CNTINC\n
-                  - C(n)/C(n+1) is qualified by SYNCENm" >
-         <choice name="Loading disabled"  value="0" enum="Disabled"/>
-         <choice name="Loading enabled"   value="1" enum="Enabled"/>
-      </binaryOption >
-
-      <bitmaskOption key="ftm_pwmload_chsel" condition="ftm_pwmload_present"
-         enumType="uint16_t"
-         enabledBy="enablePeripheralSupport"
-         typeName="FtmLoad"
-         description="Match Channel Select"
-         toolTip="Selects which channels trigger loading of MOD/CNTIN/CnV from buffers\n
-                  If enabled, the loading occurs when the counter reaches CnV"
-         bitmask="0xFF"
-         bitList="Ch%i"
-         bitDescription="Load on channel %i match"
-      />
-
-      <binaryOption key="ftm_sync_cntmin" condition="ftm_sync_cntmin_present"
-         enabledBy="enablePeripheralSupport"
-         typeName="FtmSyncCntmin"
-         enumType="uint8_t"
-         description="Minimum Loading Point Enable"
-         toolTip="Selects the minimum loading point for loading of MOD/CNTIN/CnV from buffers. \n
-                  If enabled, the loading occurs when the FTM counter reaches CNTIN." >
-         <choice name="Disabled"    value="0" enum="Disabled"/>
-         <choice name="Enabled"     value="1" enum="Enabled"/>
-      </binaryOption >
-
-      <binaryOption key="ftm_sync_cntmax" condition="ftm_sync_cntmax_present"
-         enabledBy="enablePeripheralSupport"
-         typeName="FtmSyncCntmax"
-         enumType="uint8_t"
-         description="Maximum Loading Point Enable"
-         toolTip="Selects the maximum loading point for loading of MOD/CNTIN/CnV from buffers.\n
-                  If enabled, the loading occurs when the FTM counter reaches MOD." >
-         <choice name="Disabled"    value="0" enum="Disabled"/>
-         <choice name="Enabled"     value="1" enum="Enabled"/>
-      </binaryOption >
-   </categoryOption>
-
    <categoryOption key="chanelInitialisation" description="Initialisation of Channel Outputs" hiddenBy="mode==(None,Quad)" >
 
       <binaryOption key="ftm_mode_init" condition="ftm_mode_init_present"
@@ -1156,7 +1091,7 @@
       </binaryOption >
 
       <!-- ____ OUTINIT __________________ -->
-           
+
       <choiceOption key="ftm_outinit_choi_masks" condition="ftm_outinit_choi_present"
          valueFormat="%s"
          hidden="true"
@@ -1171,7 +1106,7 @@
          <choiceExpansion name="Ch%(ch) initially 1"  enum="Ch%(ch)_1"  value='=Format("0x%04XU",0xFF00+(1&lt;&lt;(%(ch))))'   keys="ch" dim="8"/>
          <choice          name="All initially 1"      enum="All_1"      value='0xFFFFU' />
       </choiceOption>
-      
+
       <bitmaskOption key="ftm_outinit_choi" condition="ftm_outinit_choi_present"
          enabledBy="enablePeripheralSupport"
          valueFormat="%s"
@@ -1205,7 +1140,7 @@
       <choiceExpansion name="Force Ch%(ch) output 0" enum="Ch%(ch)Forced0" value='=Format("0x%04X", (1&lt;&lt;(%(ch)+8))|(0&lt;&lt;%(ch)))' dim="8" keys="ch" />
       <choiceExpansion name="Force Ch%(ch) output 1" enum="Ch%(ch)Forced1" value='=Format("0x%04X", (1&lt;&lt;(%(ch)+8))|(1&lt;&lt;%(ch)))' dim="8" keys="ch" />
    </choiceOption >
- 
+
   <!-- ____ PWM synchronisation ________________ -->
 
    <categoryOption key="synchronisationConfiguration" description="Synchronisation Configuration"
@@ -1286,7 +1221,59 @@
          <choice name="TRIGj unaffected"                 value="1" enum="Unaffected"/>
       </binaryOption >
 
-      <title />
+      <!-- ____ Load Points ______________ -->
+
+      <title description="Load Points" />
+
+      <binaryOption key="ftm_pwmload_ldok" condition="ftm_pwmload_ldok_present"
+         enabledBy="enablePeripheralSupport"
+         enumType="uint16_t"
+         typeName="FtmPwmload"
+         description="Load Enable"
+         toolTip="Enables loading of MOD/CNTIN/CnV from buffers on load points.\n
+                  Loading is further qualified as follows:\n
+                  - MOD loading is unconditional\n
+                  - CNTIN is qualified by CNTINC\n
+                  - C(n)/C(n+1) is qualified by SYNCENm" >
+         <choice name="Loading disabled"  value="0" enum="Disabled"/>
+         <choice name="Loading enabled"   value="1" enum="Enabled"/>
+      </binaryOption >
+
+      <bitmaskOption key="ftm_pwmload_chsel" condition="ftm_pwmload_present"
+         enumType="uint16_t"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmLoad"
+         description="Match Channel Select"
+         toolTip="Selects which channels trigger loading of MOD/CNTIN/CnV from buffers\n
+                  If enabled, the loading occurs when the counter reaches CnV"
+         bitmask="0xFF"
+         bitList="Ch%i"
+         bitDescription="Load on channel %i match"
+      />
+
+      <binaryOption key="ftm_sync_cntmin" condition="ftm_sync_cntmin_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmSyncCntmin"
+         enumType="uint8_t"
+         description="Minimum Loading Point Enable"
+         toolTip="Selects the minimum loading point for loading of MOD/CNTIN/CnV from buffers. \n
+                  If enabled, the loading occurs when the FTM counter reaches CNTIN." >
+         <choice name="Disabled"    value="0" enum="Disabled"/>
+         <choice name="Enabled"     value="1" enum="Enabled"/>
+      </binaryOption >
+
+      <binaryOption key="ftm_sync_cntmax" condition="ftm_sync_cntmax_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="FtmSyncCntmax"
+         enumType="uint8_t"
+         description="Maximum Loading Point Enable"
+         toolTip="Selects the maximum loading point for loading of MOD/CNTIN/CnV from buffers.\n
+                  If enabled, the loading occurs when the FTM counter reaches MOD." >
+         <choice name="Disabled"    value="0" enum="Disabled"/>
+         <choice name="Enabled"     value="1" enum="Enabled"/>
+      </binaryOption >
+
+      <title description="Synchronisation" />
 
       <!-- .... CNTIN .... -->
 
@@ -1493,7 +1480,7 @@
          <choiceExpansion enum="OnCh%(ch)Match"           name="Use Ch%(ch) match"           value='=Format("0x%04X", 0xFF00+(1&lt;&lt;%(b)))'              keys="ch:b" values="0:2;1:3;2:4;3:5;4:0;5:1"/>
          <choiceExpansion enum="IgnoreCh%(ch)Match"       name="Ignore Ch%(ch) match"        value='=Format("0x%04X", 0xFF00^(1&lt;&lt;(%(b)+8)))' keys="ch:b" values="0:2;1:3;2:4;3:5;4:0;5:1" />
       </choiceOption >
-   
+
       <equation key="triggerChannels"
          condition="ftm_exttrig_inittrigen_present"
          value='=triggerChannels+"Cntin,"' />
@@ -1561,7 +1548,7 @@
    <xi:include href="ftm_quadrature_decoder.xml"/>
    <deleteVariables variables="_control"/>
 
-<!-- ____ Info class members ____________ -->
+   <!-- ____ Info class members ____________ -->
 
    <variableTemplate variables="minimumResolution"
    ><![CDATA[
@@ -1576,7 +1563,7 @@
    ]]></variableTemplate>
 
    <variableTemplate key="/$(_BASENAME)/static_functions" where="all"
-     discardRepeats="true"
+      discardRepeats="true"
       variables="ftm_sc_cpwms,ftm_sc_clks,ftm_sc_ps"
       nonDefaultParams="2"
    ><![CDATA[
@@ -2216,7 +2203,7 @@
          \t * @param channelMask   Bit mask 0 => active-high, 1 => active-low
          \t *                      This can be created by ORing together FtmPolarity_ChN_ActiveLow values
          \t */
-         \t%(static) void setPolarity(uint32_t channelMask)%(const) {
+         \t%(static)void setPolarity(uint32_t channelMask)%(const) {
          \t   ftm->POL = channelMask;
          \t}
          \t
@@ -2229,7 +2216,7 @@
          \t      ftm->POL= (ftm->POL&(ftmPolarity>>8))|ftmPolarity;
          \t}\n\n
       ]]></variableTemplate>
-      
+
       <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
          \t/*
          \t * *****************************************************************
@@ -2486,7 +2473,7 @@
       \t    * @note This method has the side-effect of clearing the register update synchronisation i.e.
       \t    *       pending CnV register updates are discarded.
       \t    */
-      \t   %(static) void setAction(%params)%(const) {
+      \t   %(static)void setAction(%params)%(const) {
       \t
       \t      ftm->CONTROLS[%(channel)].CnSC =
       \t           (ftm->CONTROLS[%(channel)].CnSC & ~%mask) | %paramExpression;
@@ -2504,7 +2491,7 @@
       \t    * @note This method has the side-effect of clearing the register update synchronisation i.e.
       \t    *       pending CnV register updates are discarded.
       \t    */
-      \t   %(static) void configure(
+      \t   %(static)void configure(
       \t         FtmChannelMode    ftmChannelMode,
       \t         FtmChannelAction  ftmChannelAction = FtmChannelAction_None)%(const) {
       \t
@@ -2514,7 +2501,7 @@
       \t   /**
       \t    * Disables timer channel (sets mode to FtmChannelMode_Disabled)
       \t    */
-      \t   %(static) void disable()%(const) {
+      \t   %(static)void disable()%(const) {
       \t      setMode(FtmChannelMode_Disabled);
       \t   }
       \t
@@ -2536,7 +2523,7 @@
       \t    * @note This method has the side-effect of clearing the register update synchronisation i.e.
       \t    *       pending CnV register updates are discarded.
       \t    */
-      \t   %(static) void setMode(FtmChannelMode ftmChannelMode)%(const) {
+      \t   %(static)void setMode(FtmChannelMode ftmChannelMode)%(const) {
       \t      ftm->CONTROLS[%(channel)].CnSC =
       \t            (ftm->CONTROLS[%(channel)].CnSC & ~(FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK))|ftmChannelMode;
       \t   }
@@ -2587,7 +2574,7 @@
       \t    *
       \t    * @note The actual CnV register update will be delayed by the Register Synchronisation mechanism
       \t    */
-      \t   %(static) void setDutyCycle(int dutyCycle)%(const) {
+      \t   %(static)void setDutyCycle(int dutyCycle)%(const) {
       \t      %(Ftm)::setDutyCycle(dutyCycle, %(channel));
       \t   }
       \t
@@ -2598,7 +2585,7 @@
       \t    *
       \t    * @note The actual CnV register update will be delayed by the Register Synchronisation mechanism
       \t    */
-      \t   %(static) void setDutyCycle(float dutyCycle)%(const) {
+      \t   %(static)void setDutyCycle(float dutyCycle)%(const) {
       \t      %(Ftm)::setDutyCycle(dutyCycle, %(channel));
       \t   }
       \t
@@ -2609,7 +2596,7 @@
       \t    *
       \t    * @note The actual CnV register update will be delayed by the Register Synchronisation mechanism
       \t    */
-      \t   %(static) void setDeltaEventTime(Ticks offset)%(const) {
+      \t   %(static)void setDeltaEventTime(Ticks offset)%(const) {
       \t      %(Ftm)::setDeltaEventTime(offset, %(channel));
       \t   }
       \t
@@ -2620,7 +2607,7 @@
       \t    *
       \t    * @note The actual CnV register update will be delayed by the Register Synchronisation mechanism
       \t    */
-      \t   %(static) void setRelativeEventTime(Ticks offset)%(const) {
+      \t   %(static)void setRelativeEventTime(Ticks offset)%(const) {
       \t      %(Ftm)::setRelativeEventTime(offset, %(channel));
       \t   }
       \t
@@ -2631,7 +2618,7 @@
       \t    *
       \t    * @note The actual CnV register update will be delayed by the Register Synchronisation mechanism
       \t    */
-      \t   %(static) void setEventTime(Ticks eventTime)%(const) {
+      \t   %(static)void setEventTime(Ticks eventTime)%(const) {
       \t      %(Ftm)::setEventTime(eventTime, %(channel));
       \t   }
       \t
@@ -2673,7 +2660,7 @@
       \t   /**
       \t    * Clear interrupt flag on channel.
       \t    */
-      \t   %(static) void clearInterruptFlag()%(const) {
+      \t   %(static)void clearInterruptFlag()%(const) {
       \t      // Note - requires read and write zero to clear flag
       \t      ftm->CONTROLS[CHANNEL].CnSC = ftm->CONTROLS[CHANNEL].CnSC & ~FTM_CnSC_CHF_MASK;
       \t   }
@@ -2687,7 +2674,7 @@
       \t    *
       \t    * @param ftmChannelForce  Select control of pin. One of FtmChannelForce_Low/High/Release
       \t    */
-      \t   %(static) void forceChannelOutput(FtmChannelForce ftmChannelForce)%(const) {
+      \t   %(static)void forceChannelOutput(FtmChannelForce ftmChannelForce)%(const) {
       \t      static const uint32_t MASK = ((1<<%(channel))|(1<<(%(channel)+8)));
       \t      ftm->SWOCTRL = ((ftm->SWOCTRL & ~MASK)) | (ftmChannelForce & MASK);
       \t   }\n\n
@@ -2697,10 +2684,10 @@
       \t   /**
       \t    * Set polarity of channels.
       \t    *
-      \t    * @param polarity Polarity to set
+      \t    * @param active Polarity to set
       \t    */
-      \t   %(static) void setPolarity(Polarity polarity)%(const) {
-      \t      if (polarity == ActiveHigh) {
+      \t   %(static)void setPolarity(Polarity active)%(const) {
+      \t      if (active == ActiveHigh) {
       \t         ftm->POL = ftm->POL & ~CHANNEL_MASK;
       \t      }
       \t      else {
@@ -2767,12 +2754,12 @@
       \t   (void)mask;
       \t   setAndCheckErrorCode(E_NO_HANDLER);
       \t}
-      \t   
+      \t
       \t/**
       \t * Calculate FTM timing parameters to achieve a given period
       \t *
       \t * @param[in]    period  Period in seconds
-      \t * @param[inout] sc      Proposed FTM.SC value (must include CLKS, CPWMS fields)
+      \t * @param[inout] sc      Proposed FTM.SC value (must include CPWMS fields)
       \t *                       PS field is updated
       \t * @param[out]   mod     Calculated FTM.MOD values
       \t *
@@ -2782,7 +2769,6 @@
       \t */
       \tstatic ErrorCode calculateTimingParameters(float inputClock, Seconds period, uint8_t &sc, uint16_t &mod) {
       \t
-      \t   //float inputClock = Info::getInputClockFrequency((FtmClockSource)(sc&FTM_SC_CLKS_MASK));
       \t   unsigned prescaleFactor=1;
       \t   unsigned prescalerValue=0;
       \t
@@ -2955,7 +2941,7 @@
       \t */
       \t$(_Class)Info::ChannelCallbackFunction $(_Class)Info::channelCallbacks[] = {\n\n
    ]]></template>
-   <for keys="ch" dim="=NumChannelVectors" >
+   <for keys="ch" dim="=_irqCount" >
       <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
          \t   $(_Class)Info::unhandledChannelCallback,\n
       ]]></template>
@@ -3068,8 +3054,8 @@
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   // %description
-      \t   %paramType %registerName = %paramType_Normal;\n\n
-   ]]></variableTemplate>
+      \t   %paramType %registerName = %defaultValue;\n\n
+   ]]></variableTemplate >
 
 <!-- ____ Init class Constructors ____________ -->
 
@@ -3130,6 +3116,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
+   <!-- Bit set/clear in Field -->
    <for keys="r" values=";
       ftm_pol_pol;
       ftm_outinit_choi;
@@ -3150,13 +3137,14 @@
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
-         \t      // Modify bit
-         \t      %registerName = (%registerName&(%paramExpression>>8))|%paramExpression;
-         \t   }
-         \t\n
-      ]]></variableTemplate>
-   </for>
+            \t      // Modify bit
+            \t      %registerName = (%registerName&(%paramExpression>>8))|%paramExpression;
+            \t   }
+            \t\n
+         ]]></variableTemplate>
+      </for>
 
+   <!-- Exclusive Fields -->
    <for keys="r" values="ftm_sc_action;ftm_sc_cpwms;ftm_sc_clks;
                          ftm_mode_pwmsync;ftm_mode_wpdis;ftm_mode_init;ftm_mode_ftmen;
                          ftm_conf_gtbeout;ftm_conf_gtbeen;ftm_conf_bdmmode;ftm_conf_numtof;
@@ -3274,7 +3262,7 @@
       \t   }\n
    ]]></template>
    <for keys=
-          " var                                   : statement                          " 
+          " var                                   : statement                          "
    values=" ftm_sc_action,ftm_sc_cpwms,
             ftm_sc_clks,ftm_sc_ps                 : %register = 0                      ;
             ftm_cntin                             : %register = 0                      ;
@@ -3304,12 +3292,22 @@
 
 <!-- ____ Default Initialisation value ________ -->
 
+   <variableTemplate where="usbdm" codeGenCondition='enablePeripheralSupport&amp;&amp;(mode!=Quad)&amp;&amp;(irqHandlerName!="")'
+      variables="irqHandlerName"
+   ><![CDATA[
+      \t/**
+      \t * Handler for callback
+      \t */
+      \textern void $(irqHandlerName)(void);
+      \t\n
+   ]]>
+   </variableTemplate>
    <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(mode!=Quad)"
       separator=","
       terminator=","
       variables="
          ftm_sc_action,ftm_sc_cpwms,ftm_sc_clks,ftm_sc_ps,
-         ftm_mod, 
+         ftm_mod,
          ftm_mode_faultie, ftm_mode_wpdis, ftm_mode_ftmen, ftm_mode_init,
          ftm_outinit_choi,
          ftm_pol_pol,
@@ -3322,6 +3320,7 @@
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression\n
+      \t  $(irqHandlerName)
       \t};
       \t\n
    ]]>
@@ -3373,13 +3372,13 @@
 
    <!-- ____ ChannelInit Class Member variables ________ -->
 
-   <for keys=" type        : variables                         : init                     "
-       values="%enumType   : ftm_cnv_independent[]             : 0                        ;
+   <for keys=" type        : variables                         : init                 "
+       values="%enumType   : ftm_cnv_independent[]             : 0                    ;
                uint8_t     : ftm_cnsc_mode_independent[],
                              ftm_cnsc_action_independent[],
-                             ftm_cnsc_icrst_independent[]      : 0                        ;
-               %paramType  : ftm_channel_number                : FtmChannelNum_None       ;
-               %paramType  : ftm_filter_fval_independent[]     : FtmInputFilter_Disabled  " >
+                             ftm_cnsc_icrst_independent[]      : 0                    ;
+               %paramType  : ftm_channel_number                : %paramType_None      ;
+               %enumType   : ftm_filter_fval_independent[]     : %paramType_Disabled  " >
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(variables)"
       ><![CDATA[
@@ -3441,12 +3440,11 @@
       \t *                    This allows applying channelInit to arbitrary channel
       \t * @param channelInit Class containing initialisation values
       \t */
-      \t
       \tstatic ErrorCode configure(FtmChannelNum channelNum, const ChannelInit &init) {
       \t\n
    ]]></template>
    <for keys=
-            "  var                          : reg" 
+            "  var                          : reg"
       values="
               ftm_cnsc_mode_independent[],
               ftm_cnsc_action_independent[],
@@ -3458,7 +3456,8 @@
          \t\n
       ]]></variableTemplate>
    </for>
-   <variableTemplate variables="ftm_filter_fval_independent[]" codeGenCondition="enablePeripheralSupport" 
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      variables="ftm_filter_fval_independent[]"
       condition="ftm_filter_fval_independent[]" ><![CDATA[
       %multilineDescription
       \t   ftm->FILTER = (ftm->FILTER & (FTM_FILTER_CH0FVAL_MASK<<(channelNum*4)))|(init.filter<<(channelNum*4));
@@ -3489,7 +3488,7 @@
    ]]></template>
 
    <!-- ____ ChannelInit Default Initialisation value ____________ -->
-   
+
    <template codeGenCondition="enablePeripheralSupport&amp;&amp;(mode!=Quad)" ><![CDATA[
       \t/**
       \t * Default initialisation value for $(_Class)ChannelInit
@@ -3590,8 +3589,8 @@
    <for keys=" type        : variables                               : init                     "
        values="%enumType   : ftm_combine_decap0,ftm_combine_comp0,
                              ftm_combine_faulten0,ftm_combine_dten0, : 0                    ;
-               %paramType  : ftm_channel_number                      : FtmChannelNum_None       ;
-               %paramType  : ftm_filter_fval_paired[]                : FtmInputFilter_Disabled  " >
+               %paramType  : ftm_channel_number                      : %paramType_None      ;
+               %enumType   : ftm_filter_fval_paired[]                : %paramType_Disabled  " >
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(variables)"
       ><![CDATA[
@@ -3824,7 +3823,9 @@
       \t      }
       \t   }
       \t   return rc;
-      \t}   ]]></template>
+      \t}
+      \t\n
+   ]]></template>
 
    <!--  DualChannelInit Default Initialisation value -->
 
@@ -3843,6 +3844,7 @@
       <if condition="=%(evenCh)>=_channelCount">
          <break/>
       </if>
+      <!-- Common -->
       <variableTemplate
          codeGenCondition="enablePeripheralSupport&amp;&amp;(mode!=Quad)&amp;&amp;(ftm_cnsc_mode_even[%(evenCh)]!=0)"
          separator=","
@@ -3888,6 +3890,7 @@
          %initExpression\n
       ]]></variableTemplate>
 
+      <!-- Common -->
       <variableTemplate
          codeGenCondition="enablePeripheralSupport&amp;&amp;(mode!=Quad)&amp;&amp;(ftm_cnsc_mode_even[%(evenCh)]!=0)"
          separator=","
@@ -3953,7 +3956,10 @@
       \t */
       \tstatic void setCallbacks(const Init &) {
       \t}
-      \t
+      \t\n
+   ]]></template>
+
+   <template  codeGenCondition="!irqHandlingMethod&amp;&amp;enablePeripheralSupport" condition="ftm_combine_present" ><![CDATA[
       \t/**
       \t * Set channel callbacks from DualChannelInit structure
       \t *
@@ -3964,7 +3970,7 @@
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors==1)" ><![CDATA[
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(_irqCount==1)" ><![CDATA[
       \t/**
       \t * Set channel call-back function
       \t * Configured for shared channel call-backs i.e. all channels use same call-back
@@ -4004,6 +4010,7 @@
       \t */
       \tstatic void setCallbacks(const Init &init) {
       \t
+      \t   disableNvicInterrupts();
       \t   setCallback(init.callbackFunction);
       \t   setChannelCallback(init.channelCallbackFunction);
       \t   enableNvicInterrupt(irqNums[0], init.irqlevel);
@@ -4011,7 +4018,7 @@
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(NumChannelVectors>1)" ><![CDATA[
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(_irqCount>1)" ><![CDATA[
       \t/**
       \t * Set channel call-back function
       \t * Configured for individual channel call-backs
@@ -4061,7 +4068,7 @@
       </if>
    </for>
    <equation key="do_channel_init" value='=do_channel_init+")"' />
-   
+
    <!-- printVar key="do_channel_init" / -->
    <for keys="ch" values="0;2;4;6" >
       <break condition="=%(ch)>=_channelCount" />
@@ -4074,7 +4081,7 @@
    </for>
    <equation key="do_dualchannel_init" value='=do_dualchannel_init+")"' />
    <!-- printVar key="do_dualchannel_init" / -->
-   
+
    <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Default configuration using settings from Configure.usbdmProject
@@ -4106,7 +4113,7 @@
       \t}
       \t\n
    ]]></template>
-   
+
    <!-- ____ Common __________________ -->
 
    <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
@@ -4127,7 +4134,7 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.FtmValidate" >
    </validate>
 
-   <projectActionList id = "ftm_common_files" >
+   <projectActionList id="ftm_common_files" >
       <copy source="Project_Headers/ftm.h"                target="Project_Headers/ftm.h"                overwrite="true" derived="true" />
       <copy source="Snippets/ftm-pwm-example.cpp"         target="Snippets/ftm-pwm-example.cpp"         overwrite="true" derived="true" />
       <copy source="Snippets/ftm-ic-example.cpp"          target="Snippets/ftm-ic-example.cpp"          overwrite="true" derived="true" />

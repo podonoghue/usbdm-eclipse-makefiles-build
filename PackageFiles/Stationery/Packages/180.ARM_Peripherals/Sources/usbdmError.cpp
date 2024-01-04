@@ -101,16 +101,23 @@ ErrorCode checkError() {
  * @param[in]  nvicPriority  Interrupt priority
  *
  * @note Any pending interrupts are cleared before enabling.
+ * @note NvicPriority_NotInstalled will actually disable interrupts
  */
-void enableNvicInterrupt(IRQn_Type irqNum, uint32_t nvicPriority) {
+void enableNvicInterrupt(IRQn_Type irqNum, NvicPriority nvicPriority) {
 
    // Clear Pending interrupts
    NVIC_ClearPendingIRQ(irqNum);
 
-   // Enable interrupts
-   NVIC_EnableIRQ(irqNum);
+   if(nvicPriority == NvicPriority_NotInstalled) {
+      // Disable interrupts
+      NVIC_DisableIRQ(irqNum);
+   }
+   else {
+      // Enable interrupts
+      NVIC_EnableIRQ(irqNum);
 
-   // Set priority level
-   NVIC_SetPriority(irqNum, nvicPriority);
+      // Set priority level
+      NVIC_SetPriority(irqNum, nvicPriority);
+   }
 }
 } // end namespace USBDM

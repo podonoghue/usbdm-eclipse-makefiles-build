@@ -20,6 +20,7 @@
 #include <stddef.h>
 #include <cmath>
 #include "pin_mapping.h"
+#include "gpio.h"
 
 #if $(/TPM/enablePeripheralSupport) // /TPM/enablePeripheralSupport
 
@@ -44,58 +45,9 @@ private:
    TpmBase(TpmBase&&) = delete;
 
 public:
-
-   /** Class to static check channel exists - it does not check that it is mapped to a pin */
-   template<class Info, int channel> class CheckChannel {
-      // Tests are chained so only a single assertion can fail so as to reduce noise
-
-      // Out of bounds value for function index
-      static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
-      // Non-existent function
-      static constexpr bool Test2 = !Test1 || (Info::info[channel].pinIndex != PinIndex::INVALID_PCR);
-
-      static_assert(Test1, "Illegal TPM channel - Check Configure.usbdm for available channels");
-      static_assert(Test2, "TPM channel doesn't exist in this device/package - Check Configure.usbdm for available channels");
-
-   public:
-      /** Dummy function to allow convenient in-line checking */
-      static constexpr void check() {}
-   };
-
-   /** Class to static check channel exists and is mapped to a pin */
-   template<class Info, int channel> class CheckChannelExistsAndMapped {
-      // Tests are chained so only a single assertion can fail so as to reduce noise
-
-      // Out of bounds value for function index
-      static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
-      // Function is not currently mapped to a pin
-      static constexpr bool Test2 = !Test1 || (Info::info[channel].pinIndex != PinIndex::UNMAPPED_PCR);
-      // Non-existent function and catch-all. (should be INVALID_PCR)
-      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[channel].pinIndex >= PinIndex::MIN_PIN_INDEX);
-
-      static_assert(Test1, "Illegal TPM channel - Check Configure.usbdm for available inputs");
-      static_assert(Test2, "TPM input is not mapped to a pin - Modify Configure.usbdm");
-      static_assert(Test3, "TPM channel doesn't exist in this device/package - Check Configure.usbdm for available input pins");
-
-   public:
-      /** Dummy function to allow convenient in-line checking */
-      static constexpr void check() {}
-   };
-
-   /** Class to static check channel is mapped to a pin - Ignores non-existence etc. */
-   template<class Info, int channel> class CheckChannelIsMappedToPinOnly {
-
-      // Out of bounds value for function index
-      static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
-      // Function is not currently mapped to a pin
-      static constexpr bool Test2 = !Test1 || (Info::info[channel].pinIndex != PinIndex::UNMAPPED_PCR);
-
-      static_assert(Test2, "TPM channel is not mapped to a pin - Modify Configure.usbdm");
-
-   public:
-      /** Dummy function to allow convenient in-line checking */
-      static constexpr void check() {}
-   };
+#if $(/PCR/_present:false) // /PCR/_present
+   CreatePeripheralPinChecker("TPM");
+#endif
 
 protected:
    // Constructor
@@ -206,6 +158,7 @@ private:
 #endif
 
 public:
+   // Make visible
    using Info::configure;
 
    // Empty constructor
@@ -331,6 +284,7 @@ public:
 #endif // /TPM/irqHandlingMethod
 
 public:
+
 $(/TPM/classInfo: // No class Info found)
 $(/TPM/InitMethod:// /TPM/InitMethod not found)
 $(/TPM/ChannelInitMethod: // /TPM/ChannelInitMethod not found)
@@ -367,12 +321,17 @@ public:
     * @tparam channel TPM timer channel
     */
    template <int channel>
-   class Channel : public PcrTable_T<Info, limitIndex<Info>(channel)>, public TpmChannel {
+   class Channel :
+#if $(/PCR/_present:false) // /PCR/_present
+   public PcrTable_T<Info, limitIndex<Info>(channel)>,
+#endif
+   public TpmChannel, public Info {
 
    private:
-      TpmBase::CheckChannel<Info, channel> check;
+#if $(/PCR/_present:false) // /PCR/_present
+      TpmBase::CheckPinExistsAndIsMapped<Info, channel> check;
+#endif
 
-   private:
       /**
        * This class is not intended to be instantiated
        */
@@ -380,7 +339,7 @@ public:
       Channel(Channel&&) = delete;
 
    public:
-      typedef typename Info::ChannelInit ChannelInit;
+//      typedef typename Info::ChannelInit ChannelInit;
 
       constexpr Channel() : TpmChannel(Info::baseAddress, (TpmChannelNum)channel) {}
       virtual ~Channel() = default;
@@ -396,12 +355,14 @@ public:
       }
 
    public:
+#if $(/PCR/_present:false) // /PCR/_present
       // GPIO associated with this channel
       template<Polarity polarity>
       using Gpio = GpioTable_T<Info, limitIndex<Info>(channel), polarity>; // Inactive is high
 
       /** Allow access to PCR of associated pin */
       using Pcr = PcrTable_T<Info, limitIndex<Info>(channel)>;
+#endif
 
       /** Allow access owning TPM */
       using OwningTpm = TpmBase_T<Info>;
@@ -487,22 +448,22 @@ $(/TPM_CHANNEL/static_functions:  // /TPM_CHANNEL/static_functions not found)
    }
 #endif // /TPM/irqHandlingMethod
 #if $(/PCR/_present:false) // /PCR/_present
-      /*******************************
-       *  PIN Functions
-       *******************************/
-      /**
-       * Set callback for Pin IRQ.
-       *
-       * @param[in] callback The function to call on Pin interrupt.\n
-       *                     nullptr to indicate none
-       *
-       * @note There is a single callback function for all pins on the related port.
-       */
-      static __attribute__((always_inline)) void setPinCallback(PinCallbackFunction callback) {
-         TpmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
-         static_assert(Pcr::HANDLER_INSTALLED, "Gpio associated with TPM channel not configured for PIN interrupts - Modify Configure.usbdm");
-         Pcr::setPinCallback(callback);
-      }
+   /*******************************
+    *  PIN Functions
+    *******************************/
+   /**
+    * Set callback for Pin IRQ.
+    *
+    * @param[in] callback The function to call on Pin interrupt.
+    *                     nullptr to indicate none
+    *
+    * @note There is a single callback function for all pins on the related port.
+    */
+   static __attribute__((always_inline)) void setPinCallback(PinCallbackFunction callback) {
+      TpmBase::CheckPinExistsAndIsMapped<Info, channel>::check();
+      static_assert(Pcr::HANDLER_INSTALLED, "Gpio associated with TPM channel not configured for PIN interrupts - Modify Configure.usbdm");
+      Pcr::setPinCallback(callback);
+   }
 
 #if defined(PORT_PCR_ODE_MASK) and defined (PORT_PCR_SRE_MASK)
    /**
@@ -520,7 +481,7 @@ $(/TPM_CHANNEL/static_functions:  // /TPM_CHANNEL/static_functions not found)
          PinDriveMode      pinDriveMode      = Pcr::defaultPcrValue,
          PinSlewRate       pinSlewRate       = Pcr::defaultPcrValue) {
 
-      TpmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+      TpmBase::CheckPinExistsAndIsMapped<Info, channel>::check();
 
 #ifdef TPM_SC_PWMEN0_SHIFT
       // Enable output pin in TPM
@@ -542,7 +503,7 @@ $(/TPM_CHANNEL/static_functions:  // /TPM_CHANNEL/static_functions not found)
          PinDriveStrength  pinDriveStrength  = Pcr::defaultPcrValue,
          PinDriveMode      pinDriveMode      = Pcr::defaultPcrValue) {
 
-      TpmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+      TpmBase::CheckPinExistsAndIsMappedIsMappedToPinOnly<Info, channel>::check();
 
 #ifdef TPM_SC_PWMEN0_SHIFT
       // Enable output pin in TPM
@@ -564,7 +525,7 @@ $(/TPM_CHANNEL/static_functions:  // /TPM_CHANNEL/static_functions not found)
          PinDriveStrength  pinDriveStrength  = Pcr::defaultPcrValue,
          PinSlewRate       pinSlewRate       = Pcr::defaultPcrValue) {
 
-      TpmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+      TpmBase::CheckPinExistsAndIsMappedIsMappedToPinOnly<Info, channel>::check();
 
 #ifdef TPM_SC_PWMEN0_SHIFT
       // Enable output pin in TPM
@@ -584,7 +545,7 @@ $(/TPM_CHANNEL/static_functions:  // /TPM_CHANNEL/static_functions not found)
    static void setOutput(
          PinDriveStrength  pinDriveStrength  = Pcr::defaultPcrValue) {
 
-      TpmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+      TpmBase::CheckPinExistsAndIsMappedIsMappedToPinOnly<Info, channel>::check();
 
 #ifdef TPM_SC_PWMEN0_SHIFT
       // Enable output pin in TPM
@@ -612,8 +573,8 @@ $(/TPM_CHANNEL/static_functions:  // /TPM_CHANNEL/static_functions not found)
             PinAction         pinAction         = Pcr::defaultPcrValue,
             PinFilter         pinFilter         = Pcr::defaultPcrValue) {
 
-         TpmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
-//         TpmBase::CheckChannelExistsAndMapped<Info, channel>::check(); // More noisy errors
+         TpmBase::CheckPinExistsAndIsMapped<Info, channel>::check();
+//         TpmBase::CheckPinExistsAndIsMappedExistsAndMapped<Info, channel>::check(); // More noisy errors
 
 #ifdef TPM_SC_PWMEN0_SHIFT
          // Disable output pin in TPM
@@ -625,16 +586,6 @@ $(/TPM_CHANNEL/static_functions:  // /TPM_CHANNEL/static_functions not found)
 #endif
 
    };
-
-   /**
-    * Default configuration using settings from Configure.usbdmProject
-    */
-   static void defaultConfigure() {
-
-     configure(Info::DefaultInitValue);
-
-     NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
-   }
 
 };
 
@@ -664,25 +615,21 @@ $(/TPM_CHANNEL/static_functions:  // /TPM_CHANNEL/static_functions not found)
  * @endcode
  */
 template <class Info>
-class TpmQuadDecoder_T : protected TpmBase_T<Info> {
+class TpmQuadDecoder_T : public Info {
 
 private:
    TpmQuadDecoder_T(const TpmQuadDecoder_T&) = delete;
    TpmQuadDecoder_T(TpmQuadDecoder_T&&) = delete;
 
-   TpmBase::CheckChannel<Info, 0> checkQ0;
-   TpmBase::CheckChannel<Info, 1> checkQ1;
+   TpmBase::CheckPinExistsAndIsMapped<Info, 0> checkQ0;
+   TpmBase::CheckPinExistsAndIsMapped<Info, 1> checkQ1;
 
 public:
    // Default constructor
    TpmQuadDecoder_T() = default;
 
+   // Make visible
    using Info::configure;
-   using Info::setCallback;
-
-   // Make these visible
-   using Info::QuadInit;
-   using Info::DefaultQuadInitValue;
 
    /** Hardware instance pointer */
    static constexpr HardwarePtr<TPM_Type> tpm = Info::baseAddress;
@@ -754,8 +701,8 @@ $(/TPM/QuadInitMethod:// /TPM/InitMethod not found)
          TpmQuadratureMode tpmQuadratureMode = TpmQuadratureMode_Phase_AB_Mode
          ) {
       // Assertions placed here so only checked if TpmQuadDecoder actually used
-      static_assert(Info::Info::info[0].pinIndex >= PinIndex::MIN_PIN_INDEX, "TpmQuadDecoder PHA is not mapped to a pin - Modify Configure.usbdm");
-      static_assert(Info::Info::info[1].pinIndex >= PinIndex::MIN_PIN_INDEX, "TpmQuadDecoder PHB is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[0].pinIndex >= PinIndex::MIN_PIN_INDEX, "TpmQuadDecoder PHA is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[1].pinIndex >= PinIndex::MIN_PIN_INDEX, "TpmQuadDecoder PHB is not mapped to a pin - Modify Configure.usbdm");
 
       Info::enable();
 

@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKL82Z7
 -->
       <peripheral>
@@ -530,6 +530,14 @@ Indicates if the TPM counter has overflowed</description>
                <description>Channel Polarity</description>
                <addressOffset>0x70</addressOffset>
                <fields>
+                  <field>
+                     <name>POL</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel 0 Polarity</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
                   <field>
                      <name>POL0</name>
                      <description>Channel 0 Polarity</description>

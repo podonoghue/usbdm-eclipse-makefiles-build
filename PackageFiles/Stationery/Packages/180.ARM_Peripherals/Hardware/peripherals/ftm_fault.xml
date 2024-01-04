@@ -109,6 +109,9 @@
       <for keys="inp" dim="4" >
          <if condition="SignalExists(&quot;$(_NAME)_FLT%(inp)&quot;)" >
          
+            <!--  Default mapping to FLT pins -->
+            <constant key="faultPinMap[%(inp)]" value='"$(_NAME)_FLT%(inp)"' type="String" condition="!faultPinMap[%(inp)]"/>
+            
             <title description="Fault Input %(inp)" />
             <choiceOption key="ftm_fltctrl_fault%(inp)en" condition="ftm_fltctrl_fault%(inp)en_present"
                valueFormat="FTM_FLTCTRL_FAULT%(inp)EN(%s),FTM_FLTCTRL_FFLTR%(inp)EN(%s)"

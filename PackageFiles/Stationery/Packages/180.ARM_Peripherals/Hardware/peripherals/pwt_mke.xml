@@ -428,7 +428,7 @@
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %paramType %registerName0 = %symbolicExpression1;
+      \t   %paramType %registerName0 = %defaultValue;
       \t\n
    ]]></variableTemplate>
 

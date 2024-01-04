@@ -146,7 +146,7 @@
          \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
          \t
          \t/**
-         \t * Configures all mapped pins associated with $(_BASENAME)
+         \t * Configures all mapped pins associated with $(_NAME)
          \t *
          \t * @note Locked pins will be unaffected
          \t */
@@ -159,7 +159,7 @@
          \t}
          \t
          \t/**
-         \t * Disabled all mapped pins associated with $(_BASENAME)
+         \t * Disabled all mapped pins associated with $(_NAME)
          \t *
          \t * @note Only the lower 16-bits of the PCR registers are modified
          \t *
@@ -297,11 +297,20 @@
          toolTip="Priority level used to configure the NVIC"
          valueFormat="%s"
          disabledValue="Not Installed"
-         derivedFrom="/PCR/nvic_irqLevel" >
+         derivedFrom="/PCR/nvic_irqLevel" 
+         >
       </choiceOption>
-
+      <stringOption key="irqHandlerName" condition="irqLevel&amp;&amp;!irqHandlerName"
+         valueFormat="%s"
+         hidden="true"
+         enabledBy="irqLevel>0"
+         description="Name of interrupt handler"
+         toolTip="This musr be the name of a globally accessible static function" 
+         value=""
+      />
       <!-- Display here (wherever the original) -->
-      <aliasOption key="irqLevel" locked="false" />
+      <aliasOption key="irqLevel"       locked="false" />
+      <aliasOption key="irqHandlerName" locked="false" />
 
       <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="irqHandlingMethod"

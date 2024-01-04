@@ -624,7 +624,7 @@ $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
  * @endcode
  */
 template <class Info>
-class FtmQuadDecoder_T : protected FtmBase_T<Info> {
+class FtmQuadDecoder_T : public Info {
 
 private:
    FtmQuadDecoder_T(const FtmQuadDecoder_T&) = delete;
@@ -634,6 +634,10 @@ private:
    FtmBase::CheckPinExistsAndIsMapped<typename Info::InfoQUAD, 1> check1;
 
 public:
+
+   // Make visible
+   using Info::configure;
+
    // Default constructor
    FtmQuadDecoder_T() = default;
 
@@ -784,8 +788,6 @@ public:
    }
 
 $(/FTM/QuadInitMethod:// /FTM/InitMethod not found)
-
-   using Info::configure;
 
    /**
     * Basic configuration of Quadrature decoder.

@@ -39,7 +39,7 @@
     * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
 -->
 
-<!--  ==== TPM QUAD Controls =============================== -->
+<!--  ____ TPM QUAD Controls ____________________________ -->
 
    <list key="quadDecoder" condition="tpm_qdctrl_quadmode_present&amp;&amp;_control"
       description="Quadrature decoder"
@@ -50,6 +50,7 @@
       <binaryOption key="tpm_qdctrl_quadmode"
          enabledBy="enablePeripheralSupport"
          typeName="TpmQuadratureMode"
+         enumType="uint8_t"
          description="Quadrature decoding mode"
          toolTip="Determines how the inputs control the counting sequence" >
          <choice value="0" name="Phase-AB Mode"         enum="Phase_AB_Mode" />
@@ -62,7 +63,8 @@
 
       <binaryOption key="tpm_pol_pol0" condition="tpm_pol_pol0_present"
          enabledBy="enablePeripheralSupport"
-         typeName="TpmPolarityPhaseA"
+         typeName="TpmPhaseAPolarity"
+         enumType="uint8_t"
          description="Polarity of Phase A input"
          toolTip="Polarity of Phase A input" >
          <choice value="0" name="Active High" enum="ActiveHigh" />
@@ -72,9 +74,9 @@
       <choiceOption key="tpm_filter_ch0" condition="tpm_filter_ch0fval_present"
          enabledBy="enablePeripheralSupport"
          valueFormat="TPM_FILTER_CH0FVAL(%s)"
-         description="Channel Filter for Phase A input"
          typeName="TpmFilterPhaseA"
          enumType="uint8_t"
+         description="Channel Filter for Phase A input"
          toolTip="Selects the filter value for the A channel used by the Quad-decoder.\n
                   On input capture this acts as a filter\n
                   On output compare this delays the output to provide dead-time between outputs" >
@@ -98,7 +100,7 @@
 
       <binaryOption key="tpm_pol_pol1" condition="tpm_pol_pol1_present"
          enabledBy="enablePeripheralSupport"
-         typeName="TpmPolarityPhaseB"
+         typeName="TpmPhaseBPolarity"
          description="Polarity of Phase B input"
          toolTip="Polarity of Phase B input" >
          <choice value="0" name="Active High" enum="ActiveHigh" />
@@ -108,9 +110,9 @@
       <choiceOption key="tpm_filter_ch1" condition="tpm_filter_ch1fval_present"
          enabledBy="enablePeripheralSupport"
          valueFormat="TPM_FILTER_CH1FVAL(%s)"
-         description="Channel Filter for Phase B input"
          typeName="TpmFilterPhaseB"
          enumType="uint8_t"
+         description="Channel Filter for Phase B input"
          toolTip="Selects the filter value for the B channel used by the Quad-decoder.\n
                   On input capture this acts as a filter\n
                   On output compare this delays the output to provide dead-time between outputs" >
@@ -130,9 +132,9 @@
 
    </list>
 
-<!--  ==== TPM QUAD Init class =============================== -->
+<!-- ___ TPM QUAD Init class _______________ -->
 
-   <if condition="tpm_qdctrl_quadmode_present&amp;&amp;_code" >
+   <if condition="tpm_qdctrl_present&amp;&amp;_code" >
 
       <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
          \t/**
@@ -182,58 +184,37 @@
          \t\n
       ]]></template>
 
-      <!-- QUAD Init class Member variables -->
+      <!-- ____ QUAD Init class Member variables ____ -->
 
    <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
          variables="irqHandlingMethod"
        ><![CDATA[
-         \t   // %description
+         %multilineDescription
          \t   %params = nullptr;\n\n
       ]]></variableTemplate>
 
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="tpm_filter_ch0,tpm_filter_ch1"
-      ><![CDATA[
-         \t   // Quad input filter control
-         \t   uint16_t %registerName = 0;\n\n
-      ]]></variableTemplate>
-
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="tpm_qdctrl_quadmode"
-      ><![CDATA[
-         \t   // Quadrature Decoder Control And Status Register
-         \t   uint8_t %registerName = TPM_QDCTRL_QUADEN_MASK;\n\n
-      ]]></variableTemplate>
-
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="tpm_sc_action,tpm_sc_ps"
-      ><![CDATA[
-         \t   // Status And Control Register
-         \t   uint8_t %registerName = 0;\n\n
-      ]]></variableTemplate>
-
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="tpm_mod"
-      ><![CDATA[
-         \t   // %description
-         \t   uint16_t %registerName = 0_ticks;\n\n
-      ]]></variableTemplate>
+      <for keys=" type        : variables                        : init    "
+          values="%enumType   : tpm_filter_ch0,tpm_filter_ch1    : 0       ;
+                  %enumType   : tpm_qdctrl_quadmode              : 0       ;
+                  %enumType   : tpm_sc_action,tpm_sc_ps          : 0       ;
+                  %enumType   : tpm_pol_pol0,tpm_pol_pol1        : 0       ;
+                  %enumType   : tpm_mod                          : 0       ">
+         <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+            variables="%(variables)"
+         ><![CDATA[
+            %multilineDescription
+            \t   %(type) %registerName = %(init);\n\n
+         ]]></variableTemplate>
+      </for>
 
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
          variables="/PCR/nvic_irqLevel"
       ><![CDATA[
-         \t   // %description
+         %multilineDescription
          \t   %paramType %registerName = %paramType_Normal;\n\n
       ]]></variableTemplate>
 
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables= "tpm_pol_pol0,tpm_pol_pol1"
-       ><![CDATA[
-         \t   // %description
-         \t   uint8_t %registerName = 0;\n\n
-      ]]></variableTemplate >
-
-      <!-- QUAD Init class Constructors -->
+      <!-- ____ QUAD Init class Constructors ____ -->
 
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
          variables="irqHandlingMethod"
@@ -273,33 +254,9 @@
 
       <for keys="r" values="
          tpm_qdctrl_quadmode;
-         tpm_sc_action;
-         tpm_sc_ps;
-         tpm_pol_pol0;
-         tpm_pol_pol1;
-         tpm_filter_ch0;
-         tpm_filter_ch1" >
-         <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-            variables="%(r)"
-            linePadding="xxx"
-         ><![CDATA[
-            \t   /**
-            \t    * Constructor for %description
-            \t    *
-            \t    * @tparam   Types
-            \t    * @param    rest
-            %paramDescription
-            \t    */
-            \t   template <typename... Types>
-            \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
-            \t
-            \t      %registerName = (%registerName&~%mask) | %paramExpression;
-            \t   }
-            \t\n
-         ]]></variableTemplate>
-      </for>
-
-      <for keys="r" values="
+         tpm_sc_action;tpm_sc_ps;
+         tpm_pol_pol0;tpm_pol_pol1;
+         tpm_filter_ch0;tpm_filter_ch1;
          tpm_mod" >
          <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
             variables="%(r)"
@@ -307,6 +264,7 @@
          ><![CDATA[
             \t   /**
             \t    * Constructor for %description
+            \t    * (%(r))
             \t    *
             \t    * @tparam   Types
             \t    * @param    rest
@@ -315,7 +273,7 @@
             \t   template <typename... Types>
             \t   constexpr QuadInit(%params, Types... rest) : QuadInit(rest...) {
             \t
-            \t      %registerName = %paramExpression;
+            \t      %constructorFieldAssignment;
             \t   }
             \t\n
          ]]></variableTemplate>
@@ -326,7 +284,50 @@
          \t\n
       ]]></template>
 
-   <!--  Default QuadInitValue value -->
+      <!-- ____ QUAD Init class Configure method ____ -->
+
+      <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+         \t/**
+         \t * Configure QuadDecoder from values specified in init
+         \t
+         \t * @param quadInit Class containing initialisation values
+         \t */
+         \tstatic ErrorCode configure(const QuadInit &init) {
+         \t
+         \t   // Configure pins as needed
+         \t   configureAllPins();
+         \t
+         \t   // Enable peripheral clock
+         \t   enableClock();\n\n
+      ]]></template>
+      <template codeGenCondition="irqHandlingMethod" ><![CDATA[
+         \t   // Set call-back
+         \t   setCallback(init.callbackFunction);
+         \t   enableNvicInterrupt(irqNums[0], init.irqlevel);\n
+      ]]></template>
+      <for keys=
+             " var                           : statement                                   "
+      values=" tpm_sc_action,tpm_sc_ps       : %register = 0                               ;
+               tpm_qdctrl_quadmode           : %register = 0                               ;
+               tpm_filter_ch0,tpm_filter_ch1 : %configRegAssignment                        ;
+               tpm_mod                       : %configRegAssignment                        ;
+               tpm_cnt                       : %register = 0                               ;
+               tpm_sc_action,tpm_sc_ps       : %configRegAssignment                        ;
+               tpm_pol_pol0,tpm_pol_pol1     : %configRegAssignment                        ;
+               tpm_qdctrl_quadmode           : %configRegAssignment|TPM_QDCTRL_QUADEN_MASK " >
+         <variableTemplate variables="%(var)" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+            \t
+            %multilineDescription
+            \t   %(statement);\n
+         ]]></variableTemplate>
+      </for>
+      <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+         \t
+         \t   return E_NO_ERROR;
+         \t}\n\n
+      ]]></template>
+
+      <!--  ____ Default QuadInitValue value ____ -->
 
       <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(mode==Quad)"
          separator=","
@@ -349,59 +350,9 @@
          \t};\n\n
       ]]></variableTemplate>
 
-      <!-- QUAD Init class Configure method -->
-
-      <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
-         \t/**
-         \t * Configure QuadDecoder from values specified in init
-         \t
-         \t * @param quadInit Class containing initialisation values
-         \t */
-         \tstatic ErrorCode configure(const QuadInit &quadInit) {
-         \t
-         \t   // Configure pins as needed
-         \t   configureAllPins();
-         \t
-         \t   // Enable peripheral clock
-         \t   enableClock();\n\n
-      ]]></template>
-      <template codeGenCondition="irqHandlingMethod" ><![CDATA[
-         \t   // Set call-back
-         \t   setCallback(quadInit.callbackFunction);
-         \t   enableNvicInterrupt(irqNums[0], quadInit.irqlevel);\n
-      ]]></template>
-      <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
-         \t
-         \t   // Disable timer to change clock (unable to switch directly between clock sources)
-         \t   tpm->SC     = 0;
-         \t   tpm->QDCTRL = 0;
-         \t
-         \t   // Restart counter
-         \t   tpm->CNT = 0;
-         \t
-      ]]></template>
-      <for keys="var" values="
-            tpm_pol_pol0,tpm_pol_pol1;
-            tpm_filter_ch0,tpm_filter_ch1;
-            tpm_mod;
-            tpm_sc_action,tpm_sc_ps" >
-         <variableTemplate variables="%(var)" codeGenCondition="enablePeripheralSupport" ><![CDATA[
-            \t
-            \t   // %(var)
-            \t   tpm->%registerNAME = quadInit.%registerName;\n
-         ]]></variableTemplate>
-      </for>
-      <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
-         \t
-         \t   tpm->QDCTRL = quadInit.qdctrl | TPM_QDCTRL_QUADEN_MASK;
-         \t
-         \t   return E_NO_ERROR;
-         \t}\n\n
-      ]]></template>
-
    </if> <!-- condition="tpm_qdctrl_quadmode_present" -->
 
-<!--  ==== TPM QUAD Declarations =============================== -->
+<!--  ____ TPM QUAD Declarations ____________________________ -->
 
    <template key="/$(_BASENAME)/declarations"  condition="_declaration&amp;&amp;tpm_qdctrl_present"
       codeGenCondition="enablePeripheralSupport"

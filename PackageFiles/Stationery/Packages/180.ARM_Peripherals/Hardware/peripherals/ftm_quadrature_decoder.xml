@@ -39,7 +39,7 @@
     * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
 -->
 
-<!--  ==== FTM QUAD Controls =============================== -->
+<!--  ____ FTM QUAD Controls ____________________________ -->
 
    <list key="quadDecoder" condition="ftm_qdctrl_quadmode_present&amp;&amp;_control"
       description="Quadrature decoder"
@@ -60,9 +60,11 @@
       <!-- ____ Channel A ____ -->
 
       <title name="Channel A" description="Channel A" condition="ftm_qdctrl_phapol_present" />
+
       <binaryOption key="ftm_qdctrl_phapol" condition="ftm_qdctrl_phapol_present"
          enabledBy="enablePeripheralSupport"
          typeName="FtmPhaseAPolarity"
+         enumType="uint8_t"
          description="Polarity of Phase A input"
          toolTip="Polarity of Phase A input" >
          <choice value="0" name="Active High" enum="ActiveHigh" />
@@ -81,7 +83,7 @@
       </choiceOption>
 
       <floatOption key="ftm_filter_qd_a_delay" condition="ftm_filter_qd_a"
-         description="Channel A Filter Delay"
+         description="Channel Filter Delay"
          toolTip="Calculated delay"
          ref="(4.0*ftm_filter_qd_a)/inputClockFrequency"
          derived="true"
@@ -93,6 +95,7 @@
       <!-- ____ Channel B ____ -->
 
       <title name="Channel B" description="Channel B" condition="ftm_qdctrl_phbpol_present" />
+
       <binaryOption key="ftm_qdctrl_phbpol" condition="ftm_qdctrl_phbpol_present"
          enabledBy="enablePeripheralSupport"
          typeName="FtmPhaseBPolarity"
@@ -122,11 +125,43 @@
          units="s"
          min="0.0"
       />
+
    </list>
 
 <!-- ___ FTM QUAD Init class _______________ -->
 
-   <if condition="ftm_qdctrl_quadmode_present&amp;&amp;_code" >
+   <if condition="ftm_qdctrl_present&amp;&amp;_code" >
+
+   <template><![CDATA[
+      \t/**
+      \t * Configures all mapped Quadrature decoder pins associated with $(_NAME)
+      \t *
+      \t * @note Locked pins will be unaffected
+      \t */
+      \tstatic void configureQuadPins() {
+      \t
+      \t   // Configure pins if selected and not already locked
+      \t   if constexpr (mapPinsOnEnable) {
+      \t      InfoQUAD::initPCRs();
+      \t   }
+      \t}
+      \t
+      \t/**
+      \t * Disabled all mapped Quadrature decoder pins associated with $(_NAME)
+      \t *
+      \t * @note Only the lower 16-bits of the PCR registers are modified
+      \t *
+      \t * @note Locked pins will be unaffected
+      \t */
+      \tstatic void disableQuadPins() {
+      \t
+      \t   // Disable pins if selected and not already locked
+      \t   if constexpr (mapPinsOnEnable) {
+      \t      InfoQUAD::clearPCRs();
+      \t   }
+      \t}
+      \t\n
+   ]]></template>
 
       <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
          \t/**
@@ -178,7 +213,7 @@
 
       <!-- ____ QUAD Init class Member variables ____ -->
 
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
          variables="irqHandlingMethod"
        ><![CDATA[
          %multilineDescription
@@ -197,12 +232,12 @@
             \t   %(type) %registerName = %(init);\n\n
          ]]></variableTemplate>
       </for>
-   
+
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
          variables="/PCR/nvic_irqLevel"
       ><![CDATA[
          %multilineDescription
-         \t   %paramType %registerName = %paramType_Normal;\n\n
+         \t   %paramType %registerName = %defaultValue;\n\n
       ]]></variableTemplate>
 
       <!-- ____ QUAD Init class Constructors ____ -->
@@ -326,7 +361,7 @@
          \tstatic ErrorCode configure(const QuadInit &init) {
          \t
          \t   // Configure pins as needed
-         \t   configureAllPins();
+         \t   configureQuadPins();
          \t
          \t   // Enable peripheral clock
          \t   enableClock();\n\n
@@ -337,9 +372,9 @@
          \t   enableNvicInterrupt(irqNums[0], init.irqlevel);\n
       ]]></template>
       <for keys=
-             " var                                                      : statement               " 
+             " var                                                      : statement               "
       values=" ftm_sc_action,ftm_sc_ps                                  : %register = 0           ;
-               ftm_qdctrl_phapol,ftm_qdctrl_phbpol,ftm_qdctrl_quadmode  : %register = 0           ;
+               ftm_qdctrl_quadmode,ftm_qdctrl_phapol,ftm_qdctrl_phbpol  : %register = 0           ;
                ftm_cntin                                                : %register = 0           ;
                ftm_mod                                                  : %configRegAssignment    ;
                ftm_cnt                                                  : %register = 0           ;
@@ -381,21 +416,9 @@
          \t};\n\n
       ]]></variableTemplate>
 
-      <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;!(mode==Quad))"
-         separator=","
-         terminator=","
-         variables=""
-      ><![CDATA[
-         \t/**
-         \t * Dummy value
-         \t */
-         \tstatic constexpr QuadInit DefaultQuadInitValue = {%initExpression
-         \t};\n\n
-      ]]></variableTemplate>
-
    </if> <!-- condition="ftm_qdctrl_quadmode_present" -->
 
-<!--  ==== FTM QUAD Declarations =============================== -->
+<!--  ____ FTM QUAD Declarations ____________________________ -->
 
    <template key="/$(_BASENAME)/declarations"  condition="_declaration&amp;&amp;ftm_qdctrl_present"
       codeGenCondition="enablePeripheralSupport"
