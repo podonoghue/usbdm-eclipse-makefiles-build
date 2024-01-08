@@ -75,6 +75,7 @@
    <binaryOption key="rtc_cr_osce" condition="rtc_cr_osce_present&amp;&amp;!/SIM/RtcForcing"
       enabledBy="enablePeripheralSupport"
       typeName="RtcOscEnable"
+      enumType="uint16_t"
       description="Enable RTC oscillator"
       toolTip="Enable 32kHz RTC oscillator">
       <choice value="0" enum="Disabled" name="Disabled" />
@@ -85,6 +86,7 @@
    <binaryOption key="rtc_cr_osce" condition="rtc_cr_osce_present&amp;&amp;/SIM/RtcForcing"
       ref="(/MCG/mcg_c2_oscMode == /OscMode_RTC_Controlled)?1:0"
       typeName="RtcOscEnable"
+      enumType="uint16_t"
       locked="true"
       derived="true"
       hidden="true"
@@ -118,6 +120,7 @@
       <binaryOption key="rtc_cr_clko" condition="rtc_cr_clko_present"
          enabledBy="rtc_cr_osce"
          typeName="RtcClockOut"
+         enumType="uint16_t"
          toolTip="Determines if RTC 32kHz Clock is available to peripherals"
          description="Enable RTC 32kHz Clock Output" >
          <choice value="1" enum="Disabled" name="Clock not output to peripherals" />
@@ -173,6 +176,7 @@
    <choiceOption key="rtc_cr_scp" condition="rtc_cr_scp_present"
       enabledBy="rtc_cr_osce"
       typeName="RtcOscLoadCap"
+      enumType="uint16_t"
       description="Oscillator load capacitance"
       toolTip="Configures the oscillator load capacitance" >
       <choice value="0"  enum="None" name="0 pF" />
@@ -203,6 +207,7 @@
    <binaryOption key="rtc_cr_um" condition="rtc_cr_um_present"
       enabledBy="enablePeripheralSupport"
       typeName="RtcTimeCounterEnableUpdate"
+      enumType="uint16_t"
       toolTip="Allows the time counter to be enabled even when the Status Register is locked.\n
                This allows the timer enable (SR[TCE]) value to be modified if:\n
                  - Timer not yet enabled (SR[TCE] clear)\n
@@ -216,6 +221,7 @@
    <binaryOption key="rtc_cr_sup" condition="rtc_cr_sup_present"
       enabledBy="enablePeripheralSupport"
       typeName="RtcUserWriteAccess"
+      enumType="uint16_t"
       toolTip="Determines if the RTC register access is available in non-supervisor mode \n
                Non supported write accesses generate a bus error"
       description="Supervisor access" >
@@ -227,6 +233,7 @@
       <binaryOption key="rtc_lr_lrl" condition="rtc_lr_lrl_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcLockRegLock"
+         enumType="uint8_t"      
          toolTip="Once cleared, this bit can only be set by VBAT POR or software reset"
          description="Lock Register Lock" >
          <choice value="0" enum="Locked"   name="Locked" />
@@ -236,6 +243,7 @@
       <binaryOption key="rtc_lr_srl" condition="rtc_lr_srl_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcStatusRegLock"
+         enumType="uint8_t"      
          toolTip="Once cleared, this bit can only be set by VBAT POR or software reset"
          description="Status Register Lock" >
          <choice value="0" enum="Locked"   name="Locked" />
@@ -245,6 +253,7 @@
       <binaryOption key="rtc_lr_crl" condition="rtc_lr_crl_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcControlRegLock"
+         enumType="uint8_t"      
          toolTip="Once cleared, this bit can only be set by VBAT POR or software reset"
          description="Control Register Lock" >
          <choice value="0" enum="Locked"   name="Locked" />
@@ -254,6 +263,7 @@
       <binaryOption key="rtc_lr_tcl" condition="rtc_lr_tcl_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcTimeCompensationRegLock"
+         enumType="uint8_t"      
          description="Time Compensation Lock"
          toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
          <choice value="0" enum="Locked"   name="Locked" />
@@ -265,6 +275,7 @@
       <binaryOption key="rtc_war_ierw" condition="rtc_war_ierw_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcWarIerw"
+         enumType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Interrupt Enable Register Write" >
@@ -275,6 +286,7 @@
       <binaryOption key="rtc_war_lrw" condition="rtc_war_lrw_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcWarLrw"
+         enumType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Lock Register Write" >
@@ -285,6 +297,7 @@
       <binaryOption key="rtc_war_srw" condition="rtc_war_srw_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcWarSrw"
+         enumType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Status Register Write" >
@@ -305,6 +318,7 @@
       <binaryOption key="rtc_war_tcrw" condition="rtc_war_tcrw_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcWarTcrw"
+         enumType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Compensation Register Write" >
@@ -315,6 +329,7 @@
       <binaryOption key="rtc_war_tarw" condition="rtc_war_tarw_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcWarTarw"
+         enumType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Alarm Register Write" >
@@ -325,6 +340,7 @@
       <binaryOption key="rtc_war_tprw" condition="rtc_war_tprw_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcWarTprw"
+         enumType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Prescaler Register Write" >
@@ -335,6 +351,7 @@
       <binaryOption key="rtc_war_tsrw" condition="rtc_war_tsrw_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcWarTsrw"
+         enumType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Seconds Register Write" >
@@ -347,6 +364,7 @@
       <binaryOption key="rtc_rar_ierr" condition="rtc_rar_ierr_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarIerr"
+         enumType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Interrupt Enable Register Read" >
@@ -357,6 +375,7 @@
       <binaryOption key="rtc_rar_lrr" condition="rtc_rar_lrr_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarLrr"
+         enumType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Lock Register Read" >
@@ -367,6 +386,7 @@
       <binaryOption key="rtc_rar_srr" condition="rtc_rar_srr_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarSrr"
+         enumType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Status Register Read" >
@@ -377,6 +397,7 @@
       <binaryOption key="rtc_rar_crr" condition="rtc_rar_crr_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarCrr"
+         enumType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Control Register Read" >
@@ -387,6 +408,7 @@
       <binaryOption key="rtc_rar_tcrr" condition="rtc_rar_tcrr_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarTcrr"
+         enumType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Compensation Register Read" >
@@ -397,6 +419,7 @@
       <binaryOption key="rtc_rar_tarr" condition="rtc_rar_tarr_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarTarr"
+         enumType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Alarm Register Read" >
@@ -407,6 +430,7 @@
       <binaryOption key="rtc_rar_tprr" condition="rtc_rar_tprr_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarTprr"
+         enumType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Prescaler Register Read" >
@@ -417,6 +441,7 @@
       <binaryOption key="rtc_rar_tsrr" condition="rtc_rar_tsrr_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarTsrr"
+         enumType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Seconds Register Read" >
@@ -498,14 +523,14 @@
                This value+32768 determines the number of clock cycles that makes up a second"
       description="Time Compensation Value"
       typeName="RtcCompensationValue"
-      enumType="int32_t"
+      enumType="int16_t"
       min="-128" max="127"
       value="0" />
 
    <intOption key="rtc_tcr_cir" condition="rtc_tcr_cir_present"
       enabledBy="rtc_tcr_tcr!=0"
       typeName="RtcCompensationInterval"
-      enumType="uint32_t"
+      enumType="uint16_t"
       description="Timer Compensation Interval"
       toolTip="Configures the compensation interval that controls how frequently the Time Compensation value \n
          		is applied to alter the number of 32.768 kHz cycles in each second. \n
@@ -516,7 +541,7 @@
    <intOption key="rtc_tpr_tpr" condition="rtc_tpr_tpr_present"
       hidden="true"
       typeName="Prescale"
-      enumType="uint32_t"
+      enumType="uint16_t"
       description="Time Prescaler Register"
       toolTip="When the time counter is enabled, the TPR is read only and increments every 32.768 kHz clock cycle.\n
                The time counter will read as zero when SR[TOF] or SR[TIF] are set.\n
@@ -550,6 +575,7 @@
    <binaryOption key="rtc_cr_swr" condition="rtc_cr_swr_present"
       hidden="true"
       typeName="RtcSoftwareReset"
+      enumType="uint16_t"
       toolTip="Resets all RTC registers except for the SWR bit and the RTC_WAR and RTC_RAR registers.\n
                The SWR bit is cleared by VBAT POR and by software explicitly clearing it"
       description="Software Reset" >
@@ -561,17 +587,19 @@
 
    <binaryOption key="rtc_sr_tce" condition="rtc_sr_tce_present"
       hidden="true"
-      typeName="RtcTimeCounterMode"
-      toolTip="When time counter is disabled the TSR register and TPR register are writeable, but do not increment.\n
-               When time counter is enabled the TSR register and TPR register are not writeable, but increment."
+      typeName="RtcCounterEnable"
+      enumType="uint8_t"
+      toolTip="When disabled the TSR register and TPR register are writeable, but do not increment.\n
+               When enabled the TSR register and TPR register are not writeable, but increment."
       description="Time Counter Enable" >
-      <choice name="Disabled"    value="0" enum="Disabled" />
-      <choice name="Enabled"     value="1" enum="Enabled" />
+      <choice name="Disabled, TSR and TPR writeable"  value="0" enum="Disabled" />
+      <choice name="Enabled, TSR and TPR increment"   value="1" enum="Enabled" />
    </binaryOption >
 
    <binaryOption key="rtc_sr_taf" condition="rtc_sr_taf_present"
       hidden="true"
       typeName="RtcTimeAlarmFLag"
+      enumType="uint8_t"      
       toolTip="Set when alarm time reached"
       description="Time Alarm Flag" >
       <choice name="No alarm"        value="0" enum="NoAlarm" />
@@ -581,6 +609,7 @@
    <binaryOption key="rtc_sr_tof" condition="rtc_sr_tof_present"
       hidden="true"
       typeName="RtcTimerOverflowFlag"
+      enumType="uint8_t"      
       toolTip="Indicates time overflow has occurred"
       description="Time Overflow Flag" >
       <choice name="No overflow"  value="0" enum="NoOverflow" />
@@ -590,6 +619,7 @@
    <binaryOption key="rtc_sr_tif" condition="rtc_sr_tif_present"
       hidden="true"
       typeName="RtcTimeInvalidFlag"
+      enumType="uint8_t"      
       toolTip="Indicates if the time is valid"
       description="Time Invalid Flag" >
       <choice name="Valid"       value="0" enum="Valid" />
@@ -601,6 +631,7 @@
    <binaryOption key="rtc_ier_tsie" condition="rtc_ier_tsie_present"
       enabledBy="enablePeripheralSupport"
       typeName="RtcSecondsAction"
+      enumType="uint8_t"      
       toolTip="The seconds interrupt is an edge-sensitive interrupt with a dedicated interrupt vector.\n
                It is generated once a second and requires no software overhead\n
                (there is no corresponding status flag to clear)."
@@ -612,6 +643,7 @@
    <binaryOption key="rtc_ier_taie" condition="rtc_ier_taie_present"
       enabledBy="enablePeripheralSupport"
       typeName="RtcAlarmAction"
+      enumType="uint8_t"      
       toolTip="Interrupt enable for Alarm"
       description="Time Alarm Interrupt Enable" >
       <choice name="Masked"      value="0" enum="None" />
@@ -621,6 +653,7 @@
    <binaryOption key="rtc_ier_toie" condition="rtc_ier_toie_present"
       enabledBy="enablePeripheralSupport"
       typeName="RtcOverflowAction"
+      enumType="uint8_t"      
       toolTip="Interrupt enable for overflow"
       description="Time Overflow Interrupt Enable" >
       <choice name="Masked"      value="0" enum="None" />
@@ -630,6 +663,7 @@
    <binaryOption key="rtc_ier_tiie" condition="rtc_ier_tiie_present"
       enabledBy="enablePeripheralSupport"
       typeName="RtcTimeInvalidAction"
+      enumType="uint8_t"      
       toolTip="Interrupt enable for time valule invalid"
       description="Time Invalid Interrupt Enable" >
       <choice name="Masked"      value="0" enum="None" />
@@ -643,6 +677,7 @@
    <binaryOption key="rtc_cr_wps" condition="rtc_cr_wps_present"
       enabledBy="enablePeripheralSupport"
       typeName="RtcWakeupPinFunction"
+      enumType="uint16_t"
       toolTip="Selects function of Wake-up pin (if present)\n
                - Asserts if the RTC interrupt asserts or the wake-up pin is turned on\n
                - Outputs the RTC 32kHz clock if wake-up pin is enabled and 32kHz clock available to peripherals"
@@ -654,6 +689,7 @@
    <binaryOption key="rtc_cr_wpe" condition="rtc_cr_wpe_present"
       enabledBy="enablePeripheralSupport"
       typeName="RtcWakeupPin"
+      enumType="uint16_t"
       toolTip="Determines if the wake-up pin is asserted on RTC interrupt when powered down. \n
                The wake-up pin is optional and not available on all devices"
       description="Wake-up Pin Enable" >
@@ -664,6 +700,7 @@
    <binaryOption key="rtc_ier_wpon" condition="rtc_ier_wpon_present"
       enabledBy="enablePeripheralSupport"
       typeName="RtcWakeupPinControl"
+      enumType="uint8_t"      
       toolTip="Whenever the wake-up pin is enabled and this bit is set, the wake-up pin will assert.\n
                The wake-up pin is optional and not available on all devices."
       description="Wake-up Pin Control" >
@@ -860,7 +897,7 @@
 
    <!--   ========== class $(_Structname)BasicInfo =============================== -->
 
-   <template namespace="baseClass" ><![CDATA[
+   <template where="basicInfo" ><![CDATA[
       class $(_Structname)BasicInfo {
 
       public:\n
@@ -868,7 +905,7 @@
 
    <!--   ========== Interrupt handling =============================== -->
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
    <![CDATA[
       \t/**
       \t * Type for Real Time Clock Alarm call back function.
@@ -980,9 +1017,9 @@
    ]]>
    </template>
 
-   <!--   ========== RTC Init class =============================== -->
+<!--  ___ Init class ______________ -->
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -1072,84 +1109,47 @@
    ]]>
    </template>
 
-   <!--   Member variables -->
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+<!-- ____ Init class Member variables ________ -->
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
    <![CDATA[
       \t   /// Real Time Clock Alarm
       \t   Alarm_CallbackFunction alarm_CallbackFunction = nullptr;\n\n
    ]]></template>
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
    <![CDATA[
       \t   /// Real Time Clock Seconds
       \t   Seconds_CallbackFunction seconds_CallbackFunction = nullptr;\n\n
    ]]></template>
 
+   <for keys=" type        : variables                                         : init    "
+       values="%enumType   : rtc_tsr_tsr                                       : 0       ;
+               %enumType   : rtc_tpr_tpr                                       : 0       ;
+               %enumType   : rtc_tar_tar                                       : 0       ;
+               %enumType   : rtc_tcr_cir,rtc_tcr_tcr                           : 0       ;
+               %enumType   : rtc_cr_scp,rtc_cr_clko,rtc_cr_osce,
+                             rtc_cr_wps,rtc_cr_um,rtc_cr_sup,
+                             rtc_cr_wpe                                        : 0       ;
+               %enumType   : rtc_lr_lrl,rtc_lr_srl,rtc_lr_crl,rtc_lr_tcl       : 0       ;
+               %enumType   : rtc_ier_wpon,rtc_ier_tsie,rtc_ier_taie,
+                             rtc_ier_toie,rtc_ier_tiie                         : 0       ;
+               %enumType   : rtc_war_ierw,rtc_war_lrw,rtc_war_srw,
+                             rtc_war_crw,rtc_war_tcrw,rtc_war_tarw,
+                             rtc_war_tprw,rtc_war_tsrw                         : 0       ;
+               %enumType   : rtc_rar_ierr,rtc_rar_lrr,rtc_rar_srr,
+                             rtc_rar_crr,rtc_rar_tcrr,rtc_rar_tarr,
+                             rtc_rar_tprr,rtc_rar_tsrr                         : 0       ">
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(variables)"
+         linePadding="xxx" 
+      ><![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]></variableTemplate>
+   </for>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="rtc_tsr_tsr"
-   ><![CDATA[
-      \t   /// Time Seconds Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="rtc_tpr_tpr"
-   ><![CDATA[
-      \t   /// Time Prescaler Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="rtc_tar_tar"
-   ><![CDATA[
-      \t   /// Time Alarm Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="rtc_tcr_cir,rtc_tcr_tcr"
-   ><![CDATA[
-      \t   /// Time Compensation Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="rtc_cr_scp,rtc_cr_clko,rtc_cr_osce,rtc_cr_wps,rtc_cr_um,rtc_cr_sup,rtc_cr_wpe,rtc_cr_swr"
-   ><![CDATA[
-      \t   /// Control Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="rtc_lr_lrl,rtc_lr_srl,rtc_lr_crl,rtc_lr_tcl"
-   ><![CDATA[
-      \t   /// Lock Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="rtc_ier_wpon,rtc_ier_tsie,rtc_ier_taie,rtc_ier_toie,rtc_ier_tiie"
-   ><![CDATA[
-      \t   /// Interrupt Enable Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="rtc_war_ierw,rtc_war_lrw,rtc_war_srw,rtc_war_crw,rtc_war_tcrw,rtc_war_tarw,rtc_war_tprw,rtc_war_tsrw"
-   ><![CDATA[
-      \t   /// Write Access Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="rtc_rar_ierr,rtc_rar_lrr,rtc_rar_srr,rtc_rar_crr,rtc_rar_tcrr,rtc_rar_tarr,rtc_rar_tprr,rtc_rar_tsrr"
-   ><![CDATA[
-      \t   /// Read Access Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -1157,8 +1157,9 @@
       \t\n
    ]]></variableTemplate>
 
-   <!-- Init Constructors -->
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+<!-- ____ Init class Constructors ____________ -->
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -1176,7 +1177,7 @@
       \t   }\n\n
    ]]></template>
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -1194,7 +1195,7 @@
       \t   }\n\n
    ]]></template>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -1216,49 +1217,26 @@
    <for keys="r"
       values="
             rtc_tcr_tcr;
-            rtc_cr_sc2p;
-            rtc_cr_sc4p;
-            rtc_cr_sc8p;
-            rtc_cr_sc16p;
-            rtc_cr_clko;
-            rtc_cr_osce;
-            rtc_cr_wps;
-            rtc_cr_um;
-            rtc_cr_sup;
-            rtc_cr_wpe;
-            rtc_cr_swr;
-            rtc_lr_lrl;
-            rtc_lr_srl;
-            rtc_lr_crl;
-            rtc_lr_tcl;
-            rtc_ier_wpon;
-            rtc_ier_tsie;
-            rtc_ier_taie;
-            rtc_ier_toie;
-            rtc_ier_tiie;
-            rtc_war_ierw;
-            rtc_war_lrw;
-            rtc_war_srw;
-            rtc_war_crw;
-            rtc_war_tcrw;
-            rtc_war_tarw;
-            rtc_war_tprw;
-            rtc_war_tsrw;
-            rtc_rar_ierr;
-            rtc_rar_lrr;
-            rtc_rar_srr;
-            rtc_rar_crr;
-            rtc_rar_tcrr;
-            rtc_rar_tarr;
-            rtc_rar_tprr;
-            rtc_rar_tsrr
-            " >
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+            rtc_cr_sc2p;rtc_cr_sc4p;rtc_cr_sc8p;rtc_cr_sc16p;rtc_cr_clko;rtc_cr_osce;
+            rtc_cr_wps;rtc_cr_um;rtc_cr_sup;rtc_cr_wpe;rtc_lr_lrl;
+            rtc_lr_srl;rtc_lr_crl;rtc_lr_tcl;
+            rtc_ier_wpon;rtc_ier_tsie;rtc_ier_taie;rtc_ier_toie;rtc_ier_tiie;rtc_war_ierw;
+            rtc_war_lrw;rtc_war_srw;rtc_war_crw;rtc_war_tcrw;rtc_war_tarw;
+            rtc_war_tprw;rtc_war_tsrw;
+            rtc_rar_ierr;rtc_rar_lrr;rtc_rar_srr;rtc_rar_crr;rtc_rar_tcrr;
+            rtc_rar_tarr;rtc_rar_tprr;rtc_rar_tsrr;
+            rtc_tsr_tsr;
+            rtc_tpr_tpr;
+            rtc_tar_tar;
+            rtc_tcr_cir;
+            rtc_cr_scp " >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
          \t   /**
          \t    * Constructor for %description
+         \t    * (%(r))
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -1268,43 +1246,133 @@
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
-         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t      %constructorFieldAssignment;
          \t   }
          \t\n
       ]]>
       </variableTemplate>
    </for>
 
+<!-- ____ Init class Configure method ____ -->
 
-   <for keys="r"
-      values="
-            rtc_tsr_tsr;
-            rtc_tpr_tpr;
-            rtc_tar_tar;
-            rtc_tcr_cir;
-            rtc_cr_scp
-            " >
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="%(r)"
-         linePadding="xxx" >
-      <![CDATA[
-         \t   /**
-         \t    * Constructor for %description
-         \t    *
-         \t    * @tparam   Types
-         \t    * @param    rest
-         \t    *
-         \t    * @param value %description
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr Init(%paramType0 value, Types... rest) : Init(rest...) {
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic void defaultConfigure() {
+      \t
+      \t   // Update settings if needed
+      \t   configure(DefaultInitValue, false);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init        Class containing initialisation values
+      \t * @param fullConfig  Whether to do full configuration
+      \t */
+      \tstatic void configure(const Init &init, bool fullConfig) {
+      \t
+      \t   // Enable peripheral clock
+      \t   enableClock();
+      \t
+      \t   configureAllPins();
+      \t\n
+   ]]></template>
+   <template codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t   // Set call-backs
+      \t   setCallback(init.alarm_CallbackFunction);
+      \t   enableNvicInterrupts(RtcIrqNum_Alarm, init.irqlevel);
+      \t   setCallback(init.seconds_CallbackFunction);
+      \t   enableNvicInterrupts(RtcIrqNum_Seconds, init.irqlevel);
+      \t\n
+   ]]></template>
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t   if (fullConfig || ((rtc->SR&RTC_SR_TIF_MASK) != 0)) {
+      \t      // RTC not running yet or invalid - re-initialise
+      \t\n
+   ]]></template>
+   <for keys=
+          " var                                   : statement                          "
+   values=" rtc_cr_swr                            : %register = RTC_CR_SWR_MASK        ;
+            rtc_cr_swr                            : %register = 0                      ;
+            rtc_cr_scp,rtc_cr_clko,rtc_cr_osce,
+            rtc_cr_wps,rtc_cr_um,rtc_cr_sup,
+            rtc_cr_wpe                            : %configRegAssignment               " >
+      <variableTemplate variables="%(var)" codeGenCondition="enablePeripheralSupport"
+      linePadding="xxxxxx" 
+      ><![CDATA[
          \t
-         \t      %registerName = (%registerName&~%mask0) | %macro0(value);
-         \t   }
-         \t\n
-      ]]>
-      </variableTemplate>
+         \t%multilineDescription
+         \t      %(statement);\n
+      ]]></variableTemplate>
    </for>
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t
+      \t      // Wait startup time
+      \t      for (int i=0; i<100000; i++) {
+      \t         __asm__("nop");
+      \t      }\n
+   ]]></template>
+   <for keys=
+          " var                                   : statement                          "
+   values=" rtc_sr_tce                            : rtc->SR = RTC_SR_TCE_MASK          ;
+            rtc_tpr_tpr                           : %configRegAssignment               ;
+            rtc_tcr_cir,rtc_tcr_tcr               : %configRegAssignment               ;
+            rtc_tsr_tsr                           : %configRegAssignment               ;
+            rtc_tar_tar                           : %configRegAssignment               ;
+            rtc_war_ierw,rtc_war_lrw,rtc_war_srw,
+            rtc_war_crw,rtc_war_tcrw,rtc_war_tarw,
+            rtc_war_tprw,rtc_war_tsrw             : %configRegAssignment               ;
+            rtc_rar_ierr,rtc_rar_lrr,rtc_rar_srr,
+            rtc_rar_crr,rtc_rar_tcrr,rtc_rar_tarr,
+            rtc_rar_tprr,rtc_rar_tsrr             : %configRegAssignment               ;
+            rtc_ier_wpon,rtc_ier_tsie,
+            rtc_ier_taie, rtc_ier_toie,
+            rtc_ier_tiie                          : %configRegAssignment               ;
+            rtc_lr_lrl,rtc_lr_srl,rtc_lr_crl,
+            rtc_lr_tcl                            : %configRegAssignment               " >
+      <variableTemplate variables="%(var)" codeGenCondition="enablePeripheralSupport" 
+      linePadding="xxxxxx" 
+      ><![CDATA[
+         \t
+         \t%multilineDescription
+         \t      %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t   }
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * Full configuration is only done if RTC is not already running
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configureIfNeeded(const Init &init) {
+      \t
+      \t   configure(init, false);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const Init &init) {
+      \t
+      \t   configure(init, true);
+      \t}
+      \t\n
+   ]]>
+   </template>
 
 <!--   Default Initialisation value -->
 
@@ -1323,7 +1391,6 @@
             rtc_cr_um,
             rtc_cr_sup,
             rtc_cr_wpe,
-            rtc_cr_swr,
             rtc_lr_lrl,
             rtc_lr_srl,
             rtc_lr_crl,
@@ -1360,119 +1427,16 @@
       \t\n
    ]]></variableTemplate>
 
-<!--   Configure methods -->
 
-   <template codeGenCondition="enablePeripheralSupport" >
-   <![CDATA[
-      \t/**
-      \t * Configure with default settings.
-      \t * Configuration determined from Configure.usbdmProject
-      \t */
-      \tstatic inline void defaultConfigure() {
-      \t
-      \t   // Update settings if needed
-      \t   configure(DefaultInitValue, false);
-      \t}
-      \t
-      \t/**
-      \t * Configure $(_BASENAME) from values specified in init
-      \t *
-      \t * @param init        Class containing initialisation values
-      \t * @param fullConfig  Whether to do full configuration
-      \t */
-      \tstatic void configure(const Init &init, bool fullConfig) {
-      \t
-      \t   // Enable peripheral clock
-      \t   enableClock();
-      \t
-      \t   configureAllPins();
-      \t\n
-   ]]></template>
-   <template codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t   // Set call-backs
-      \t   setCallback(init.alarm_CallbackFunction);
-      \t   enableNvicInterrupts(RtcIrqNum_Alarm, init.irqlevel);
-      \t   setCallback(init.seconds_CallbackFunction);
-      \t   enableNvicInterrupts(RtcIrqNum_Seconds, init.irqlevel);
-      \t\n
-   ]]></template>
-   <template codeGenCondition="enablePeripheralSupport" >
-   <![CDATA[
-      \t   if (fullConfig || ((rtc->SR&RTC_SR_TIF_MASK) != 0)) {
-      \t      // RTC not running yet or invalid - re-initialise
-      \t
-      \t      // Software reset RTC - trigger cold start
-      \t      rtc->CR  = RTC_CR_SWR_MASK;
-      \t      rtc->CR  = 0;
-      \t
-      \t      // Configure oscillator
-      \t      // Note - on KL devices this will disable the standard oscillator
-      \t      rtc->CR     = init.cr;
-      \t
-      \t      // Wait startup time
-      \t      for (int i=0; i<100000; i++) {
-      \t         __asm__("nop");
-      \t      }
-      \t
-      \t      // Prescaler
-      \t      rtc->TPR    = init.tpr;
-      \t
-      \t      // Time compensation values
-      \t      rtc->TCR    = init.tcr;
-      \t
-      \t      // Set current time
-      \t      rtc->TSR    = init.tsr;
-      \t
-      \t      // Set alarm time
-      \t      rtc->TAR    = init.tar;
-      \t
-      \t      // Enable counter
-      \t      rtc->SR     = RTC_SR_TCE_MASK;
-      \t
-      \t      // Write and Read access protection (Write-0-once)
-      \t      rtc->WAR    = init.war;
-      \t      rtc->RAR    = init.rar;
-      \t
-      \t      rtc->IER    = init.ier;
-      \t
-      \t      // Lock registers
-      \t      rtc->LR     = init.lr;
-      \t   }
-      \t}
-      \t
-      \t/**
-      \t * Configure $(_BASENAME) from values specified in init
-      \t * Full configuration is only done if RTC is not already running
-      \t *
-      \t * @param init Class containing initialisation values
-      \t */
-      \tstatic void configureIfNeeded(const Init &init) {
-      \t
-      \t   configure(init, false);
-      \t}
-      \t
-      \t/**
-      \t * Configure $(_BASENAME) from values specified in init
-      \t *
-      \t * @param init Class containing initialisation values
-      \t */
-      \tstatic void configure(const Init &init) {
-      \t
-      \t   configure(init, true);
-      \t}
-      \t\n
-   ]]>
-   </template>
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t}; // class $(_Structname)BasicInfo::Init
       \t\n
    ]]>
    </template>
 
-   <template namespace="baseClass" >
+   <template where="basicInfo" >
    <![CDATA[
       }; // class $(_Structname)BasicInfo
       \t\n

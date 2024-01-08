@@ -34,7 +34,7 @@
       <choice value="true"  name="Enabled"  isDefault="true" />
    </binaryOption>
 
-   <for keys="n" dim="=1,/SIM/numberOfClockSettings">
+   <for keys="n" dim="=1,/SIM/numberOfClockSettings" >
       <binaryOption key="enableClockConfiguration[%(n)]"
          hidden="true"
          description="Enable this clock settings"

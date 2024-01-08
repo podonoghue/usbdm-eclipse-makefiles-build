@@ -281,15 +281,6 @@
          derived="true"
          value="1m" min="0" units="s" />
 
-      <floatOption key="pit_frequency[%(ch)]" condition="pit_ldval_tsv_present"
-         enabledBy="pit_tctrl_ten[%(ch)]"
-         typeName="Hertz"
-         valueFormat="%s_Hz"
-         description="Default frequency of timer"
-         toolTip="Used to calculate the timer load value"
-         derived="true"
-         value="1k" min="0" units="Hz" />
-
       <binaryOption key="pit_tctrl_chn[%(ch)]"  condition="pit_tctrl_chn_present &amp;&amp; (%(ch)>0)"
          enabledBy="pit_tctrl_ten[%(ch)]"
          typeName="PitChannelChain"
@@ -1165,7 +1156,7 @@
       \t   Info::enableNvicInterrupts(init.irqlevel);
       \t\n
    ]]></template>
-   <!-- 
+   <!--
    <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" condition="!irq_enum"
              codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t   setCallback(init.callbackFunction);

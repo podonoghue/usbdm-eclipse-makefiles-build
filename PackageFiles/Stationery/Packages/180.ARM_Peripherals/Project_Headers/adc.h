@@ -18,6 +18,7 @@
 #include <climits>
 #include <cstddef>
 #include "pin_mapping.h"
+#include "gpio.h"
 
 #if $(/ADC/enablePeripheralSupport) // /ADC/enablePeripheralSupport
 

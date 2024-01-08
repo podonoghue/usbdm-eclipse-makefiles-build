@@ -137,9 +137,9 @@ enum TsiInput {
    TsiInput_13         = 13, //!< TSI input 13
    TsiInput_14         = 14, //!< TSI input 14
    TsiInput_15         = 15, //!< TSI input 15
+};
 $(/TSI/InputMapping:   // No user defined TSI inputs found)
 $(/TSI0/InputMapping:   // No user defined TSI0 inputs found)
-};
 
 /**
  * Type definition for TSI interrupt call back

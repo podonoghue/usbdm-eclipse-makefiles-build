@@ -721,7 +721,7 @@
          codeGenCondition="/$(_BASENAME)/irqHandlingMethod" ><![CDATA[
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      setCallback(init.callbackFunction);
-      \t      enableNvicInterrupts(init.irqlevel);
+      \t      Info::enableNvicInterrupts(init.irqlevel);
       \t   }
       \t\n
    ]]></template>

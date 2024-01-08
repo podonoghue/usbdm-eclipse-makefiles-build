@@ -71,9 +71,12 @@ public:
    /** Hardware instance pointer */
    static constexpr HardwarePtr<DMAMUX_Type> dmamux = Info::baseAddress;
 
-$(/DMAMUX/InitMethod:/DMAMUX/InitMethod)
+$(/DMAMUX/InitMethod: // /DMAMUX/InitMethod not found)
    /// Number of multiplexor channels
    static const unsigned numChannels = Info::NumChannels;
+
+   // Make visible as shadowed
+   using Info::configure;
 
    /**
     * Configures the hardware requests on a channel.

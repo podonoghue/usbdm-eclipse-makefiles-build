@@ -525,7 +525,7 @@ $(/TPM_CHANNEL/static_functions:  // /TPM_CHANNEL/static_functions not found)
          PinDriveStrength  pinDriveStrength  = Pcr::defaultPcrValue,
          PinSlewRate       pinSlewRate       = Pcr::defaultPcrValue) {
 
-      TpmBase::CheckPinExistsAndIsMappedIsMappedToPinOnly<Info, channel>::check();
+      TpmBase::CheckPinExistsAndIsMapped<Info, channel>::check();
 
 #ifdef TPM_SC_PWMEN0_SHIFT
       // Enable output pin in TPM

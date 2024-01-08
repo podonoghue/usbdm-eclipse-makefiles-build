@@ -44,6 +44,7 @@ $(/PMC/protectedMethods: // No protected methods found)
 
 public:
 
+#if $(/PMC/irqHandlingMethod:false) // /PMC/irqHandlingMethod
    /**
     * Wrapper to allow the use of a class member as a callback function
     * @note Only usable with static objects.
@@ -122,6 +123,7 @@ public:
       };
       return fn;
    }
+#endif
 
 protected:
    /** Hardware instance */

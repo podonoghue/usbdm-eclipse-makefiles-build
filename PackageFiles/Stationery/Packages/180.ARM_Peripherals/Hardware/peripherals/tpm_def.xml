@@ -324,7 +324,7 @@
 
       <binaryOption key="tpm_cnsc_action_independent[%(ch)]" condition="tpm_cnsc_chie_present&amp;&amp;!tpm_cnsc_dma_present"
          hiddenBy="!(tpm_cnsc_mode_independent[%(ch)]!=0)"
-         enabledBy="(tpm_cnsc_mode_even[%(evenCh)]!=0)&amp;&amp;irqHandlingMethod"
+         enabledBy="(tpm_cnsc_mode_independent[%(ch)]!=0)&amp;&amp;irqHandlingMethod"
          valueFormat="TPM_CnSC_CHIE(%s)"
          enumType="uint8_t"
          typeName="TpmChannelAction"
@@ -1159,13 +1159,39 @@
       \t}\n\n
    ]]></variableTemplate>
 
-<!--  ___ Static/Non-Static Methods ______________ -->
+   <variableTemplate where="info" discardRepeats="true"
+      variables="tpm_pol_pol" ><![CDATA[
+      \t/**
+      \t * Set polarity of all channels
+      \t *
+      \t * @param channelMask   Bit mask 0 => active-high, 1 => active-low
+      \t */
+      \tstatic void setPolarity(uint32_t channelMask) {
+      \t   tpm->POL = channelMask;
+      \t}
+      \t
+      \t/**
+      \t * Set polarity of selected channel
+      \t *
+      \t * @param tpmPolarity  Channel polarity to set
+      \t */
+      \tstatic void setPolarity(TpmPolarity tpmPolarity) {
+      \t      tpm->POL= (tpm->POL&(tpmPolarity>>8))|tpmPolarity;
+      \t}\n\n
+   ]]></variableTemplate>
+
+
+<!--  ___ Static/Non-Static Methods ______________
+
+      key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true"  => By name non_static_functions & static_functions in tpm.h
+
+
+-->
    <for  keys="    k                   : static    : const    : getInputClockFrequency         : channel : Tpm       : isStatic : namespace"
          values=" non_static_functions : ''        : ' const' : getInputClockFrequencyVirtual  : CHANNEL : TpmBase   : false    : all;
                   static_functions     : 'static ' : ''       : 'Info::getInputClockFrequency' : channel : OwningTpm : true     : forceInfo
    " >
-      <variableTemplate key="/$(_BASENAME)/%(k)" where="all"
-         discardRepeats="true"
+      <variableTemplate key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true"
          variables="tpm_sc_cmod,tpm_sc_ps"
          nonDefaultParams="2"
       ><![CDATA[
@@ -1207,8 +1233,7 @@
          values=" tpm_sc_cpwms  : CountMode;
                   tpm_sc_cmod   : ClockSource;
                   tpm_sc_ps     : Prescaler" >
-         <variableTemplate key="/$(_BASENAME)/%(k)" where="all"
-            discardRepeats="true"
+         <variableTemplate key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true"
             variables="%(f)"
             nonDefaultParams="2"
          ><![CDATA[
@@ -1249,8 +1274,7 @@
 
       <for keys="  f           :  n"
          values=" tpm_mod      : CounterMaximumValue" >
-         <variableTemplate key="/$(_BASENAME)/%(k)" where="all"
-            discardRepeats="true"
+         <variableTemplate key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true"
             variables="%(f)"
             nonDefaultParams="2"
          ><![CDATA[
@@ -1280,7 +1304,7 @@
          ]]></variableTemplate>
       </for>
 
-      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true" ><![CDATA[
          \t/**
          \t * Calculate TPM timing parameters to achieve a given period
          \t *
@@ -1317,7 +1341,7 @@
          \t      }
          \t      unsigned modValue = round(modValueF);\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
          \t      if constexpr (Info::minimumResolution>0) {
          \t         if (modValue < Info::minimumResolution) {
          \t            usbdm_assert(false, "Interval is too short");
@@ -1326,7 +1350,7 @@
          \t         }
          \t      }\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true" ><![CDATA[
          \t      if (modValue <= maxModValue) {
          \t         sc   = (sc&~TPM_SC_PS_MASK)|TPM_SC_PS(prescalerValue);
          \t         mod  = modValue;
@@ -1340,7 +1364,7 @@
          \t   return setErrorCode(E_TOO_LARGE);
          \t}\n\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true" ><![CDATA[
          \t/**
          \t * Set period
          \t *
@@ -1427,7 +1451,7 @@
          \t   return E_NO_ERROR;
          \t}\n\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true" ><![CDATA[
          \t/**
          \t * Get frequency of timer tick
          \t *
@@ -1454,7 +1478,7 @@
          \t   return %(getInputClockFrequency)((TpmClockSource)(tpm->SC&TPM_SC_CMOD_MASK))/prescaleFactor;
          \t}\n\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true" ><![CDATA[
          \t/**
          \t * Convert time in microseconds to time in ticks
          \t *
@@ -1476,7 +1500,7 @@
          \t      setErrorCode(E_TOO_LARGE);
          \t   }\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
          \t   if constexpr (Info::minimumInterval>0) {
          \t      if (rv < Info::minimumInterval) {
          \t         // Attempt to set too short a period
@@ -1484,7 +1508,7 @@
          \t      }
          \t   }\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true" ><![CDATA[
          \t   return Ticks(uint32_t(rv));
          \t}
          \t
@@ -1509,13 +1533,13 @@
          \t      setErrorCode(E_TOO_LARGE);
          \t   }\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
          \t   if (rv < Info::minimumInterval) {
          \t      // Attempt to set too short a period
          \t      setErrorCode(E_TOO_SMALL);
          \t   }\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true" ><![CDATA[
          \t   return Ticks(uint32_t(rv));
          \t}
          \t
@@ -1591,7 +1615,7 @@
          \t}
          \t\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
+      <template key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true" ><![CDATA[
          \t/**
          \t * Reset counter to initial value
          \t */
@@ -1663,28 +1687,9 @@
          \t}
          \t\n
       ]]></template>
-      <variableTemplate key="/$(_BASENAME)/%(k)" namespace="%(namespace)" discardRepeats="true"
-         variables="tpm_pol_pol" ><![CDATA[
-         \t/**
-         \t * Set polarity of all channels
-         \t *
-         \t * @param channelMask   Bit mask 0 => active-high, 1 => active-low
-         \t */
-         \t%(static)void setPolarity(uint32_t channelMask)%(const) {
-         \t   tpm->POL = channelMask;
-         \t}
-         \t
-         \t/**
-         \t * Set polarity of selected channel
-         \t *
-         \t * @param tpmPolarity  Channel polarity to set
-         \t */
-         \t%(static)void setPolarity(TpmPolarity tpmPolarity)%(const) {
-         \t      tpm->POL= (tpm->POL&(tpmPolarity>>8))|tpmPolarity;
-         \t}\n\n
-      ]]></variableTemplate>
-
-      <template key="/$(_BASENAME)/%(k)" discardRepeats="true" ><![CDATA[
+      <variableTemplate key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true"
+         variables="tpm_cnsc_action_independent[]"
+      ><![CDATA[
          \t/*
          \t * *****************************************************************
          \t *          Channel functions
@@ -1699,9 +1704,11 @@
          \t%(static)void setAction(TpmChannelAction tpmChannelAction, int channel) %(const) {
          \t
          \t   tpm->CONTROLS[channel].CnSC =
-         \t      (tpm->CONTROLS[channel].CnSC&~(TPM_CnSC_CHIE_MASK|TPM_CnSC_DMA_MASK)) | tpmChannelAction;
+         \t      (tpm->CONTROLS[channel].CnSC&~%mask) | tpmChannelAction;
          \t}
-         \t
+         \t\n
+      ]]></variableTemplate>
+      <template key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true" ><![CDATA[
          \t/**
          \t * Set PWM duty cycle.
          \t * Higher precision float version
@@ -1829,7 +1836,7 @@
 
    <!-- ___ Channel Functions __________________ -->
 
-   <variableTemplate key="/$(_BASENAME)_CHANNEL/%(k)" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)_CHANNEL/%(k)" where="all" discardRepeats="true"
       variables="tpm_cnsc_action[]"
       linePadding="xxx"
    ><![CDATA[
@@ -1849,7 +1856,23 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <template key="/$(_BASENAME)_CHANNEL/%(k)" discardRepeats="true" ><![CDATA[
+   <variableTemplate key="/$(_BASENAME)_CHANNEL/%(k)" where="all" discardRepeats="true"
+      variables="tpm_cnsc_action_independent[]"
+   ><![CDATA[
+      \t   /**
+      \t    * Set action on event
+      \t    *
+      \t    * @param[in] tpmChannelAction  Whether to enable the interrupt or DMA function on this channel
+      \t    */
+      \t   %(static)void setAction(TpmChannelAction tpmChannelAction) %(const) {
+      \t
+      \t      tpm->CONTROLS[%(channel)].CnSC =
+      \t         (tpm->CONTROLS[%(channel)].CnSC&~%mask) | tpmChannelAction;
+      \t   }
+      \t\n
+   ]]></variableTemplate>
+
+   <template key="/$(_BASENAME)_CHANNEL/%(k)" where="all" discardRepeats="true" ><![CDATA[
       \t   /**
       \t    * Configure channel.
       \t    * No affect on shared settings of owning Timer
@@ -1923,17 +1946,6 @@
       \t    */
       \t   %(static) ErrorCode setHighTime(Seconds highTime)%(const) {
       \t      return %(Tpm)::setHighTime(highTime, %(channel));
-      \t   }
-      \t
-      \t   /**
-      \t    * Set action on event
-      \t    *
-      \t    * @param[in] tpmChannelAction  Whether to enable the interrupt or DMA function on this channel
-      \t    */
-      \t   %(static)void setAction(TpmChannelAction tpmChannelAction) %(const) {
-      \t
-      \t      tpm->CONTROLS[%(channel)].CnSC =
-      \t         (tpm->CONTROLS[%(channel)].CnSC&~(TPM_CnSC_CHIE_MASK|TPM_CnSC_DMA_MASK)) | tpmChannelAction;
       \t   }
       \t
       \t   /**
@@ -2034,10 +2046,10 @@
       \t      tpm->CONTROLS[CHANNEL].CnSC = TPM_CnSC_CHF_MASK;
       \t   }\n\n
    ]]></template>
-   <variableTemplate key="/$(_BASENAME)_CHANNEL/%(k)" discardRepeats="true"
-      variables="tpm_pol_pol0" ><![CDATA[
+   <variableTemplate key="/$(_BASENAME)_CHANNEL/%(k)" where="all" discardRepeats="true"
+      variables="tpm_pol_pol" ><![CDATA[
       \t   /**
-      \t    * Set polarity of channels.
+      \t    * Set polarity of channel.
       \t    *
       \t    * @param active Polarity to set
       \t    */
@@ -2128,9 +2140,9 @@
       \t   unsigned prescalerValue=0;
       \t
       \t   // Check if CPWMS is set (affects period calculation)
-      \t   bool centreAligned = (sc&FTM_SC_CPWMS_MASK);
+      \t   bool centreAligned = (sc&TPM_SC_CPWMS_MASK);
       \t
-      \t   constexpr uint32_t maxModValue = FTM_MOD_MOD_MASK;
+      \t   constexpr uint32_t maxModValue = TPM_MOD_MOD_MASK;
       \t
       \t   while (prescalerValue<=7) {
       \t      float clock    = inputClock/prescaleFactor;
@@ -2145,7 +2157,7 @@
       \t      }
       \t      unsigned modValue = round(modValueF);
       \t      if (modValue <= maxModValue) {
-      \t         sc   = (sc&~FTM_SC_PS_MASK)|FTM_SC_PS(prescalerValue);
+      \t         sc   = (sc&~TPM_SC_PS_MASK)|TPM_SC_PS(prescalerValue);
       \t         mod  = modValue;
       \t         return E_NO_ERROR;
       \t      }
@@ -2415,6 +2427,7 @@
                              tpm_conf_trgsel_int,tpm_conf_trgsel_ext,          : 0       ">
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(variables)"
+         linePadding="xxx"
       ><![CDATA[
          %multilineDescription
          \t   %(type) %registerName = %(init);\n\n
@@ -2425,7 +2438,7 @@
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   // %description
-      \t   %paramType %registerName = %paramType_Normal;\n\n
+      \t   %paramType %registerName = %defaultValue;\n\n
    ]]></variableTemplate >
 
 <!-- ____ Init class Constructors ____________ -->
@@ -2488,7 +2501,7 @@
    ]]></variableTemplate>
 
    <!-- Bit set/clear in Field -->
-   <for keys="r" values=";
+   <for keys="r" values="
       tpm_pol_pol" >
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
@@ -2514,7 +2527,7 @@
       </for>
 
    <!-- Bit set in Field -->
-   <for keys="r" values=";
+   <for keys="r" values="
       tpm_conf_trgsel_int" >
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
@@ -2672,7 +2685,9 @@
             tpm_conf_trgpol,
             tpm_conf_trgsel_int,
             tpm_conf_trgsel_ext                   : %configRegAssignment               " >
-      <variableTemplate variables="%(var)" codeGenCondition="enablePeripheralSupport&amp;&amp;(mode!=Quad)" ><![CDATA[
+      <variableTemplate variables="%(var)" codeGenCondition="enablePeripheralSupport&amp;&amp;(mode!=Quad)"
+         linePadding="xxx"
+      ><![CDATA[
          \t
          %multilineDescription
          \t   %(statement);\n
@@ -2774,6 +2789,7 @@
                %enumType   : tpm_filter_fval_independent[]     : %paramType_Disabled  " >
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(variables)"
+         linePadding="xxx"
       ><![CDATA[
          %multilineDescription
          \t   %(type) %registerName = %(init);\n\n
@@ -2842,7 +2858,9 @@
               tpm_cnsc_mode_independent[],
               tpm_cnsc_action_independent[] : CnSC    ;
               tpm_cnv_independent[]         : CnV     " >
-      <variableTemplate variables="%(var)" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      <variableTemplate variables="%(var)" codeGenCondition="enablePeripheralSupport"
+         linePadding="xxx"
+      ><![CDATA[
          %multilineDescription
          \t   tpm->CONTROLS[channelNum].%(reg) = init.%registerName;
          \t\n
@@ -3443,7 +3461,7 @@
    <equation key="do_channel_init" value='=do_channel_init+")"' />
 
    <!-- printVar key="do_channel_init" / -->
-   <for keys="ch" values="0;2;4;6" >
+   <for keys="ch" values="0;2;4;6" condition="tpm_combine_present" >
       <break condition="=%(ch)>=_channelCount" />
       <if condition="!do_dualchannel_init">
          <!-- 1st time -->
@@ -3452,8 +3470,8 @@
          <equation key="do_dualchannel_init" value='=do_dualchannel_init+"||(tpm_cnsc_mode_even[%(ch)]>0)"' />
       </if>
    </for>
-   <equation key="do_dualchannel_init" value='=do_dualchannel_init+")"' />
-   <!-- printVar key="do_dualchannel_init" / -->
+   <equation key="do_dualchannel_init" value='=do_dualchannel_init+")"' condition="tpm_combine_present" />
+   <!--  printVar key="do_dualchannel_init" / -->
 
    <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
@@ -3477,7 +3495,7 @@
       \t   configure(DefaultChannelInitValues);
       \t\n
    ]]></template>
-   <template codeGenCondition="=do_dualchannel_init" ><![CDATA[
+   <template codeGenCondition="=do_dualchannel_init" condition="tpm_combine_present" ><![CDATA[
       \t   // Configuration of paired channels
       \t   configure(DefaultDualChannelInitValues);
       \t\n
@@ -3531,12 +3549,17 @@
 
    <category name="Advanced" description="SIM configuration"
       toolTip="Thes settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title description="$(_NAME) Specific" />
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
       <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
    </category>
-   <deleteVariables variables="_scgc_clock"  mustExist="false" />
+   <deleteVariables variables="_scgc_clock,/SIM/$(_Class)ExternalItems"  mustExist="false" />
 
    <!--  ____ Signal mapping __________________ -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />

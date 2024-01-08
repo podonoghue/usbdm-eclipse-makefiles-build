@@ -500,7 +500,7 @@ In other cases, if the master reads data from the slave, then it is required to 
 
       <binaryOption key="i2c_smb_siicaen" condition="i2c_smb_siicaen_present"
          enabledBy="/$(_BASENAME)/smbOptionsAvailable"
-         typeName="I2cSmbAddress"
+         typeName="I2cSmbAddressEnable"
          toolTip="Enables or disables SMBus device default address"
          description="Second I2C Address (SMB)" >
          <choice name="Address 2 (SMB) disabled"  value="0" enum="Disabled" />
@@ -699,7 +699,7 @@ In other cases, if the master reads data from the slave, then it is required to 
          \t * @return %tooltip
          \t */
          \tstatic %paramType get%(name)() {
-         \t   return %paramType(%register&%mask);
+         \t   return %paramType(%fieldExtract);
          \t}
          \t\n
       ]]></variableTemplate>

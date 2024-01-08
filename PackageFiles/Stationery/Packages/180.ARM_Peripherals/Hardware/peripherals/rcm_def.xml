@@ -72,13 +72,23 @@
    <!-- ************* RPFW ****************** -->
 
    <choiceOption key="rcm_rpfw_rstfltsel" condition="rcm_rpfw_rstfltsel_present"
-      enabledBy="enablePeripheralSupport"
+      enabledBy="rcm_rpfc_rstfltsrw==1"
       typeName="RcmResetFilter"
       toolTip="Selects the reset pin filter width"
       description="Reset pin filter bus clock select" >
-      <choiceExpansion keys="n" dim="1,32" value="%(n)-1" name="%(n) Cycles" enum="%(n)Cycles" />
+      <choiceExpansion keys="n" dim="1,32" value="=ToString(%(n)-1)" name="%(n) Cycles" enum="%(n)Cycles" />
    </choiceOption>
 
+   <floatOption key="rcm_rpfw_rstfltsel_period"
+      locked="true"
+      derived="true"
+      enabledBy="rcm_rpfc_rstfltsrw==1"
+      ref="(rcm_rpfw_rstfltsel+1.0)/(/SIM/system_bus_clock[0])"
+      units="s"
+      toolTip="Reset pin filter width"
+      description="Reset pin filter "
+   />
+   
    <!-- ************* MR ****************** -->
 
    <binaryOption key="rcm_mr_ezp_ms" condition="rcm_mr_ezp_ms_present"

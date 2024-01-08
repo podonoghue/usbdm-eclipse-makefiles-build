@@ -1154,7 +1154,7 @@
    </template>
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       condition="adc_sc2_adtrg"
-      variables="adc_sc2_adtrg,adc_sc1_diff" >
+      variables="adc_sc2_adtrg,adc_sc1_channel" >
    <![CDATA[
       \t   if (init.%registerName0 & %mask0) {
       \t      // Set up hardware trigger conversion information

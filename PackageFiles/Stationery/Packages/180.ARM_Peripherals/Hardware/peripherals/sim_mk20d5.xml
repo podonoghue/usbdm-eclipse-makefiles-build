@@ -135,7 +135,7 @@
    <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) does not share XTAL/EXTAL pins -->
    <constant key="rtc_independent"  type="Boolean" value="true" />
 
-   <xi:include href="simCommon.xml"/>
+   <xi:include href="simCommon.xml" />
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"

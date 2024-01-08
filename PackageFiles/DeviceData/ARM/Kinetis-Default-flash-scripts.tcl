@@ -200,6 +200,31 @@ proc loadSymbols {} {
    set ::PROGRAMMING_RC_ERROR_NO_VALID_FCDIV_VALUE 116
 
    return
+######################################################################################
+#
+#  This is used for the initial connection to the target
+#
+proc resetAndConnectTarget { args } {
+
+   puts "resetAndConnectTarget args"
+   
+   # Cycle power if feature available   
+   if [expr ( [getcap] & $::BDM_CAP_VDDCONTROL) != 0] {
+      settargetvdd off
+      pinSet rst=0
+      after $::RESET_DURATION
+      settargetvdd on
+      after $::POWER_ON_RECOVERY
+   }
+   reset sh 
+   
+   if { [catch {connect} rc] } {
+      puts "Failed connect"
+      return rc
+   }
+
+   puts "rc = $rc"
+   return $rc
 }
 
 ######################################################################################

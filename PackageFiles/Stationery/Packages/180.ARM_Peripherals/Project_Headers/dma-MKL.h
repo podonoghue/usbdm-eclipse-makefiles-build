@@ -589,7 +589,7 @@ $(/DMA/InitMethod: // /DMA/InitMethod not found)
     * @param[in]  dmaChannelNum  Channel being modified
     * @param[in]  nvicPriority   Interrupt priority
     */
-   static void enableNvicInterrupts(DmaChannelNum dmaChannelNum, uint32_t nvicPriority) {
+   static void enableNvicInterrupts(DmaChannelNum dmaChannelNum, NvicPriority nvicPriority) {
       usbdm_assert(dmaChannelNum<NumChannels, "Illegal DMA channel");
 
       const IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));

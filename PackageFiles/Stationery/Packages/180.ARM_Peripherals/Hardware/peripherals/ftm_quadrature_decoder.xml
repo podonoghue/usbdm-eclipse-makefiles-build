@@ -278,7 +278,7 @@
          \t   }\n\n
       ]]></variableTemplate>
 
-      <for keys="r" values=";
+      <for keys="r" values="
          ftm_qdctrl_quadmode;ftm_qdctrl_phapol;ftm_qdctrl_phbpol;
          ftm_sc_action;ftm_sc_ps;
          ftm_mod" >

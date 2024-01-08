@@ -106,9 +106,10 @@
       <choice value="1-1"                             name="32kHz Oscillator driven by RTC" enum="RTC_Controlled"       condition="/SIM/RtcForcing"     enabledBy="/RTC/enablePeripheralSupport"  />
    </choiceOption>
 
-   <constant key="/OscMode_NotConfigured"  type="Long" value="0"                                condition="mcg_c2_erefs0_present"/>
-   <constant key="/OscMode_ExternalClock"  type="Long" value="1"                                condition="mcg_c2_erefs0_present"/>
-   <constant key="/OscMode_RTC_Controlled" type="Long" value="Exists(mcg_c2_hgo0_present)?4:3"  condition="mcg_c2_erefs0_present"/>
+   <constant key="/OscMode_NotConfigured"  type="Long" value="0"  condition="mcg_c2_erefs0_present"/>
+   <constant key="/OscMode_ExternalClock"  type="Long" value="1"  condition="mcg_c2_erefs0_present"/>
+   <constant key="/OscMode_RTC_Controlled" type="Long" value="3"  condition="mcg_c2_erefs0_present&amp;&amp;!mcg_c2_hgo0_present"/>
+   <constant key="/OscMode_RTC_Controlled" type="Long" value="4"  condition="mcg_c2_erefs0_present&amp;&amp;mcg_c2_hgo0_present"/>
 
    <choiceOption key="mcg_c2_erefs0"  condition="mcg_c2_erefs0_present"
       hidden="true"

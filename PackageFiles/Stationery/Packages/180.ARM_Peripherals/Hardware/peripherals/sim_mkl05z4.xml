@@ -11,7 +11,20 @@
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-<!-- ==================== Constants ==================== -->
+   <!-- TPM Trigger Sources - value:name:enum -->
+   <constant key="/TPM/_trigger_sources"
+      value="&quot;
+         0b0000 : 'ExternalTrigger'  :  External    ;
+         0b0001 : 'CMP0'             :  CMP0        ;
+         0b0100 : 'PIT Ch 0'         :  PIT_Ch0     ;
+         0b0101 : 'PIT Ch 1'         :  PIT_Ch1     ;
+         0b1000 : 'TPM0 overflow'    :  TPM0        ;
+         0b1001 : 'TPM1 overflow'    :  TPM1        ;
+         0b1100 : 'RTC Alarm'        :  RTC_Alarm   ;
+         0b1101 : 'RTC Seconds'      :  RTC_Seconds ;
+         0b1110 : 'LPTMR Output'     :  LPTMR       ;
+         0b1111 : 'Software Trigger' :  Software    &quot;"
+   />
 
    <!-- Peripheral speeds                  RUN       VLPR     -->
    <constant key="MCGOUTCLK_max"  value=" 48MHz,     8MHz"   type="Long" />
@@ -486,6 +499,7 @@
                               tpm%(p)    : Tpm%(p)    : TPM%(p)    : TPM    " >
 
                   <choiceOption key="sim_sopt2_%(name)src[%(n)]" condition="sim_sopt2_%(name)src_present"
+                     addToVar="/SIM/%(Name)ExternalItems"
                      enabledBy="enablePeripheralSupport"
                      typeName="Sim%(Name)ClockSource"
                      target="system_%(name)_clock[%(n)]"
@@ -498,6 +512,7 @@
                   </choiceOption>
 
                   <intOption key="system_%(name)_clock[%(n)]" condition="sim_sopt2_%(name)src_present"
+                     addToVar="/SIM/%(Name)ExternalItems"
                      max="%(bNAME)_max[/SMC/smc_pmctrl_runm[%(n)]]"
                      derived="true"
                      locked="true"

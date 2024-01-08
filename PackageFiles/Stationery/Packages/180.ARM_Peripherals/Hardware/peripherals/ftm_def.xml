@@ -3044,6 +3044,7 @@
                              ftm_conf_bdmmode,ftm_conf_numtof,                 : 0       ">
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(variables)"
+         linePadding="xxx"
       ><![CDATA[
          %multilineDescription
          \t   %(type) %registerName = %(init);\n\n
@@ -3117,7 +3118,7 @@
    ]]></variableTemplate>
 
    <!-- Bit set/clear in Field -->
-   <for keys="r" values=";
+   <for keys="r" values="
       ftm_pol_pol;
       ftm_outinit_choi;
       ftm_exttrig_trig" >
@@ -3381,6 +3382,7 @@
                %enumType   : ftm_filter_fval_independent[]     : %paramType_Disabled  " >
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(variables)"
+         linePadding="xxx"
       ><![CDATA[
          %multilineDescription
          \t   %(type) %registerName = %(init);\n\n
@@ -4068,8 +4070,8 @@
       </if>
    </for>
    <equation key="do_channel_init" value='=do_channel_init+")"' />
-
    <!-- printVar key="do_channel_init" / -->
+
    <for keys="ch" values="0;2;4;6" >
       <break condition="=%(ch)>=_channelCount" />
       <if condition="!do_dualchannel_init">

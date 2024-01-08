@@ -766,7 +766,7 @@
             <aliasOption key="/OSC0/osc_input_freq"          locked="false"  />
             <aliasOption key="/OSC0/osc_clock"               optional="true"   />
             <aliasOption key="/OSC0/osc_div_erps"            optional="true" locked="false" />
-            <aliasOption key="/OSC0/oscer_clock"      />
+            <aliasOption key="/OSC0/oscer_clock"             />
          </category>
 
          <category name="OSC1 (Real Time Clock)" description="RTC External Reference Clock/Oscillator [ERCLK32K]" >
@@ -1892,15 +1892,30 @@
       </binaryOption>
    </category>
 
-   <!--
-      Global clock frequencies
-   -->
+<!--   ========== Global Clocks =============================== -->
+
+   <template namespace="usbdm" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
+      \t/*
+      \t * Global clocks
+      \t */
+      \t\n
+   ]]></template>
+   <template namespace="usbdm" codeGenCondition="!/MCG/enablePeripheralSupport" ><![CDATA[
+      \t/*
+      \t * Global clock constants
+      \t * These are provided when minimal clock generator code is used.
+      \t * They assume no clock changes are made after startup.
+      \t * Values provided are from USBDM configuration.
+      \t */
+      \t\n
+   ]]></template>
+
    <for keys=" clock                       : name "
       values=" system_mcgffclk_clock[0]    : SystemMcgFFClock;
                system_mcgoutclk_clock[0]   : SystemMcgOutClock;
                system_mcgfllclk_clock[0]   : SystemMcgFllClock;
                system_mcgpllclk_clock[0]   : SystemMcgPllClock
-         ">
+         " >
       <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport"
                    tooltipPadding="x*xx" ><![CDATA[
          \t/**
@@ -1939,6 +1954,8 @@
    <template key="/$(_BASENAME)/ClockStartup" ><![CDATA[
    \tUSBDM::$(_Class)::startupConfigure();\n
    ]]></template>
+
+   <!-- Validator is in parent file -->
 
    <projectActionList id="mcg_files" >
       <copy source="Project_Headers/mcg.h"                target="Project_Headers/mcg.h"                 overwrite="true"  derived="true" />

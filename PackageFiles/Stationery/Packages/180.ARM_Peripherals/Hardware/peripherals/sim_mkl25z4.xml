@@ -23,8 +23,7 @@
          0b1010 : 'TPM2 overflow'    :  TPM2        ;
          0b1100 : 'RTC Alarm'        :  RTC_Alarm   ;
          0b1101 : 'RTC Seconds'      :  RTC_Seconds ;
-         0b1110 : 'LPTMR Output'     :  LPTMR       ;
-         0b1111 : 'Software Trigger' :  Software    &quot;"
+         0b1110 : 'LPTMR Output'     :  LPTMR       &quot;"
    />
 
    <!-- Peripheral speeds                  RUN       VLPR     -->
@@ -228,17 +227,12 @@
 
       <for keys="n" values="0;1" >
          <intOption key="TpmClkin%(n)"
+            addToVar="TpmExternalItems"
             description="TPM External clock input #%(n)"
             toolTip="This input is available as a TPM external clock source"
             value="0"
             units="Hz"
          />
-         <for keys="p" dim="4" >
-            <if condition="sim_sopt4_tpm%(p)clksel_present" >
-               <equation key="Tpm%(p)ExternalItems" value="" condition="!Tpm%(p)ExternalItems" />
-               <equation key="Tpm%(p)ExternalItems" value="=Tpm%(p)ExternalItems+&quot;TpmClkin%(n);&quot;"/>
-            </if>
-         </for>
          <variableTemplate variables="TpmClkin%(n)"
             initExpressionOnSameLine="true"
          ><![CDATA[
@@ -511,6 +505,7 @@
                        2 : System bus clock : SystemBusClock : system_bus_clock[%(n)]" >
 
                <choiceOption key="system_uart%(u)_fixedclocksource[%(n)]"
+                  addToVar="/SIM/Uart%(u)ExternalItems"
                   target="system_uart%(u)_clock[%(n)]"
                   locked="true"
                   derived="true"
@@ -520,6 +515,7 @@
                </choiceOption>
 
                <intOption key="system_uart%(u)_clock[%(n)]"
+                  addToVar="/SIM/Uart%(u)ExternalItems"
                   locked="true"
                   derived="true"
                   units="Hz"
@@ -536,6 +532,7 @@
                               tpm%(p)    : Tpm%(p)    : TPM%(p)    : TPM    " >
 
                   <choiceOption key="sim_sopt2_%(name)src[%(n)]" condition="sim_sopt2_%(name)src_present"
+                     addToVar="/SIM/%(Name)ExternalItems"
                      enabledBy="enablePeripheralSupport"
                      typeName="Sim%(Name)ClockSource"
                      target="system_%(name)_clock[%(n)]"
@@ -548,6 +545,7 @@
                   </choiceOption>
 
                   <intOption key="system_%(name)_clock[%(n)]" condition="sim_sopt2_%(name)src_present"
+                     addToVar="/SIM/%(Name)ExternalItems"
                      max="%(bNAME)_max[/SMC/smc_pmctrl_runm[%(n)]]"
                      derived="true"
                      locked="true"

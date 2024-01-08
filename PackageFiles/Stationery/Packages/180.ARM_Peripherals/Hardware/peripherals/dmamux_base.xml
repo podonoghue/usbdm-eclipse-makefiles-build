@@ -435,7 +435,19 @@
 
 <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <!--  Calculate if any channels configured  -->
+   <for keys="ch" dim="=/DMA$(_instance)/NumChannels">
+      <if condition="!do_channel_init">
+         <!-- 1st time -->
+         <equation key="do_channel_init" value='enablePeripheralSupport&amp;&amp;((dmamux_chcfg_mode[%(ch)]>0)' />
+      <else />
+         <equation key="do_channel_init" value='=do_channel_init+"||(dmamux_chcfg_mode[%(ch)]>0)"' />
+      </if>
+   </for>
+   <equation key="do_channel_init" value='=do_channel_init+")"' />
+   <!--  printVar key="do_channel_init" / -->
+
+   <template codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Configure $(_BASENAME) channel
@@ -446,12 +458,12 @@
       \t *
       \t * @note The channel number in the initialisation is ignored
       \t */
-      \tstatic void configure(DmaChannelNum dmaChannelNum, const typename Info::Init &init) {
+      \tstatic void configure(DmaChannelNum dmaChannelNum, const Init &init) {
       \t
       #if defined(DEBUG_BUILD)
-      \t   if constexpr (Info::NumChannels>Info::NumPeriodicChannels) {
+      \t   if constexpr (NumChannels>NumPeriodicChannels) {
       \t      DmamuxMode mode = DmamuxMode(init.chcfg&(DMAMUX_CHCFG_ENBL_MASK|DMAMUX_CHCFG_TRIG_MASK));
-      \t      usbdm_assert((dmaChannelNum>Info::NumPeriodicChannels) && (mode == DmamuxMode_Throttled), "Channel cannot be throttled");
+      \t      usbdm_assert((dmaChannelNum>NumPeriodicChannels) && (mode == DmamuxMode_Throttled), "Channel cannot be throttled");
       \t   }
       #endif
       \t
@@ -468,7 +480,7 @@
       \t *
       \t * @note The channel number in the initialisation is used to select the channel being updated
       \t */
-      \tstatic void configure(const typename Info::Init &init) {
+      \tstatic void configure(const Init &init) {
       \t
       \t   configure(init.channelNum, init);
       \t}
@@ -482,10 +494,10 @@
       \t * @note The channel numbers in the initialisations are used to select the channel being updated
       \t */
       \ttemplate<size_t N>
-      \tstatic void configure(const typename Info::Init (&init)[N]) {
+      \tstatic void configure(const Init (&init)[N]) {
       \t
       \t   // Enable peripheral clock
-      \t   Info::enableClock();
+      \t   enableClock();
       \t
       \t   for (unsigned channel=0; channel<N; channel++) {
       \t      configure(init[channel]);
@@ -498,9 +510,17 @@
       \t * The clock to the peripheral is enabled.
       \t */
       \tstatic inline void defaultConfigure() {
-      \t
+      \t\n
+   ]]>
+   </template>
+   <template codeGenCondition="=do_channel_init" >
+   <![CDATA[
       \t   // Update settings
-      \t   configure(Info::DefaultInitValue);
+      \t   configure(DefaultInitValue);
+   ]]>
+   </template>
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
       \t}\n
    ]]>
    </template>

@@ -4,12 +4,27 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Integration Module" >
 
+<!-- ==================== Constants ==================== -->
+
    <constant key="generateDefault"           type="Boolean" value="false"         />
    <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-<!-- ==================== Constants ==================== -->
+   <!-- TPM Trigger Sources - value:name:enum -->
+   <constant key="/TPM/_trigger_sources"
+      value="&quot;
+         0b0000 : 'ExternalTrigger'  :  External    ;
+         0b0001 : 'CMP0'             :  CMP0        ;
+         0b0100 : 'PIT Ch 0'         :  PIT_Ch0     ;
+         0b0101 : 'PIT Ch 1'         :  PIT_Ch1     ;
+         0b1000 : 'TPM0 overflow'    :  TPM0        ;
+         0b1001 : 'TPM1 overflow'    :  TPM1        ;
+         0b1010 : 'TPM2 overflow'    :  TPM2        ;
+         0b1100 : 'RTC Alarm'        :  RTC_Alarm   ;
+         0b1101 : 'RTC Seconds'      :  RTC_Seconds ;
+         0b1110 : 'LPTMR Output'     :  LPTMR       &quot;"
+   />
 
    <!-- Peripheral speeds                  RUN       VLPR     -->
    <constant key="MCGOUTCLK_max"  value="100MHz,     4MHz"   type="Long" />
@@ -163,7 +178,6 @@
 
    <intOption key="system_usb_clkin_clock"
       hidden="true"
-      locked="true"
       origin="USB Clock In pin"
       units="Hz"
       description="Frequency of External USB Clock"
@@ -217,17 +231,12 @@
 
       <for keys="n" values="0;1" >
          <intOption key="TpmClkin%(n)"
+            addToVar="TpmExternalItems"
             description="TPM External clock input #%(n)"
             toolTip="This input is available as a TPM external clock source"
             value="0"
             units="Hz"
          />
-         <for keys="p" dim="4" >
-            <if condition="sim_sopt4_tpm%(p)clksel_present" >
-               <equation key="Tpm%(p)ExternalItems" value="" condition="!Tpm%(p)ExternalItems" />
-               <equation key="Tpm%(p)ExternalItems" value="=Tpm%(p)ExternalItems+&quot;TpmClkin%(n);&quot;"/>
-            </if>
-         </for>
          <variableTemplate variables="TpmClkin%(n)"
             initExpressionOnSameLine="true"
          ><![CDATA[
@@ -454,6 +463,7 @@
                toolTip="Clock available on CLKOUT pin" />
 
             <choiceOption key="sim_sopt2_pllfllsel[%(n)]"
+               enabledBy="enablePeripheralSupport"
                typeName="SimPeripheralClockSource"
                target="system_peripheral_clock[%(n)]"
                description="Peripheral Clock"
@@ -499,6 +509,7 @@
                        2 : System bus clock : SystemBusClock : system_bus_clock[%(n)]" >
 
                <choiceOption key="system_uart%(u)_fixedclocksource[%(n)]"
+                  addToVar="/SIM/Uart%(u)ExternalItems"
                   target="system_uart%(u)_clock[%(n)]"
                   locked="true"
                   derived="true"
@@ -508,6 +519,7 @@
                </choiceOption>
 
                <intOption key="system_uart%(u)_clock[%(n)]"
+                  addToVar="/SIM/Uart%(u)ExternalItems"
                   locked="true"
                   derived="true"
                   units="Hz"
@@ -524,6 +536,7 @@
                               tpm%(p)    : Tpm%(p)    : TPM%(p)    : TPM    " >
 
                   <choiceOption key="sim_sopt2_%(name)src[%(n)]" condition="sim_sopt2_%(name)src_present"
+                     addToVar="/SIM/%(Name)ExternalItems"
                      enabledBy="enablePeripheralSupport"
                      typeName="Sim%(Name)ClockSource"
                      target="system_%(name)_clock[%(n)]"
@@ -536,6 +549,7 @@
                   </choiceOption>
 
                   <intOption key="system_%(name)_clock[%(n)]" condition="sim_sopt2_%(name)src_present"
+                     addToVar="/SIM/%(Name)ExternalItems"
                      max="%(bNAME)_max[/SMC/smc_pmctrl_runm[%(n)]]"
                      derived="true"
                      locked="true"
