@@ -511,6 +511,7 @@ void MemoryDumpDialogue::loadSettings(AppSettings &appSettings) {
       memoryRangesGrid->SetCellValue(row, 1, endValue);
    }
 
+   this->targetType = T_NONE;
    setTargetType((TargetType_t)appSettings.getValue("targetType", (int)T_ARM));
 
    populateBDMChoices();
@@ -524,8 +525,6 @@ void MemoryDumpDialogue::loadSettings(AppSettings &appSettings) {
 
 void MemoryDumpDialogue::saveSettings(AppSettings &appSettings) {
    LOGGING_E;
-
-   appSettings.addValue("pageAddress", flashPageTextCntrl->GetValue());
 
    appSettings.addValue("directory", currentDirectory);
    appSettings.addValue("filename", currentFilename);
@@ -814,7 +813,7 @@ void MemoryDumpDialogue::setTargetType(TargetType_t targetType) {
       case T_ARM :
       default: break;
    }
-   // Save current page value
+   // Save current PPAGE value (if valid and target set)
    long currentPPageAddress = 0;
    if (flashPageTextCntrl->GetValue().ToLong(&currentPPageAddress, 16)) {
       switch(this->targetType) {
@@ -827,6 +826,7 @@ void MemoryDumpDialogue::setTargetType(TargetType_t targetType) {
          default: break;
       }
    }
+   // Save current EPAGE value (if valid and target set)
    long currentEPageAddress = 0;
    if (eepromPageTextCntrl->GetValue().ToLong(&currentEPageAddress, 16)
          && (this->targetType == T_HCS12)) {

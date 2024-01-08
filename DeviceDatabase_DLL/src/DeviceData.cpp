@@ -426,21 +426,30 @@ void FlexNVMInfo::setBackingRatio(unsigned  backingRatio) {
 //! @note - Uses cache
 //!
 int MemoryRegion::findMemoryRangeIndex(uint32_t address) const {
-   if (type == MemInvalid)
+   LOGGING;
+   if (type == MemInvalid) {
+      log.print("Address = %0X, type is invalid\n", address);
       return -1;
+   }
+   if (memoryRanges.size() == 0) {
+      log.print("Address = %0X, type is %s, memory region is empty\n", address, getMemoryTypeName(type));
+      return -1;
+   }
    // Check cached address
    if ((lastIndexUsed < memoryRanges.size()) &&
        (memoryRanges[lastIndexUsed].start <= address) && (address <= memoryRanges[lastIndexUsed].end)) {
+//      log.print("Address = 0x%0X, type is %s, address is cached, returning %d\n", address, getMemoryTypeName(type), lastIndexUsed);
       return lastIndexUsed;
    }
    // Look through all memory ranges
    for (lastIndexUsed=0; lastIndexUsed<memoryRanges.size(); lastIndexUsed++) {
+//      log.print("Checking range[0x%X..0x%X]\n",memoryRanges[lastIndexUsed].start, memoryRanges[lastIndexUsed].end);
       if ((memoryRanges[lastIndexUsed].start <= address) && (address <= memoryRanges[lastIndexUsed].end)) {
+//         log.print("Address = 0x%0X, type is %s, address is not cached, returning %d\n", address, getMemoryTypeName(type), lastIndexUsed);
          return lastIndexUsed;
       }
    }
-//      // clear cache
-//      lastIndexUsed = 1000;
+   log.print("Address = 0x%0X, type is %s, address not found\n", address, getMemoryTypeName(type));
    return -1;
 }
 

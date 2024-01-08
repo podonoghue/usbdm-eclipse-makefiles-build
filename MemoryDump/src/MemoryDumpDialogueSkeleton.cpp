@@ -55,7 +55,7 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	memoryRangesGrid = new wxGrid( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( 450,350 ), 0 );
 
 	// Grid
-	memoryRangesGrid->CreateGrid( 32, 3 );
+	memoryRangesGrid->CreateGrid( 64, 3 );
 	memoryRangesGrid->EnableEditing( true );
 	memoryRangesGrid->EnableGridLines( true );
 	memoryRangesGrid->EnableDragGridSize( false );

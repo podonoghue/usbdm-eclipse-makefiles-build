@@ -200,7 +200,7 @@ USBDM_ErrorCode FlashProgrammerCommon::runTCLCommand(const char *command) {
    USBDM_ErrorCode rc = tclInterpreter->evalTclScript(command);
    if (rc != PROGRAMMING_RC_OK) {
       USBDM_ErrorCode rcUsbdm = tclInterpreter->getErrorResult();
-      if (rcUsbdm != BDM_RC_OK) {
+      if ((rcUsbdm != BDM_RC_OK)&&(rcUsbdm != rc)) {
          log.error("Updating rc - old rc = %d (%s)\n", rc, bdmInterface->getErrorString(rc));
          rc = rcUsbdm;
       }
@@ -1608,6 +1608,7 @@ void FlashProgrammerCommon::restoreSecurityAreas(FlashImagePtr flashImage) {
    for (unsigned index=0; index<securityAreaCount; index++) {
       log.print("Restoring security area in image [0x%06X...0x%06X] : \n",
             securityData[index].address, securityData[index].address+securityData[index].size-1);
+      log.print("  ");
       for (uint32_t count=0; count<securityData[index].size; count++) {
          if (securityData[index].data[count] == SecurityDataCache::BLANK) {
             flashImage->remove(securityData[index].address+count);

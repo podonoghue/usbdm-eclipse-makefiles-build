@@ -334,6 +334,37 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::setBdmInterface(BdmInterfacePtr bdmInter
 }
 
 /**
+ * Save a USBDM Error code as last error and converts and sets the TCL return value
+ */
+static int checkUsbdmRC(Tcl_Interp *interp, USBDM_ErrorCode errorCode) {
+   lastResult = errorCode;
+   if (errorCode != BDM_RC_OK) {
+      lastError = errorCode;
+      Tcl_SetResult(interp, (char *)bdmInterface->getErrorString(errorCode), TCL_STATIC);
+      return TCL_ERROR;
+   }
+   return TCL_OK;
+}
+
+/**
+ * Returns the USBDM Error code from the last command
+ *
+ * @param script String containing the script to evaluate in the interpreter
+ */
+USBDM_ErrorCode UsbdmTclInterpreterImp::getLastResult() {
+   return lastResult;
+}
+
+/**
+ * Returns the USBDM Error code from the last failing command
+ *
+ * @param script String containing the script to evaluate in the interpreter
+ */
+USBDM_ErrorCode UsbdmTclInterpreterImp::getErrorResult() {
+   return lastError;
+}
+
+/**
  * Add device parameters to TCL interpreter\n
  * This includes running the flash script associated with the device
  *
@@ -560,24 +591,26 @@ int UsbdmTclInterpreterImp::appInitProc(Tcl_Interp *interp) {
 }
 
 /**
- * Evaluates a TCL script
+ * Evaluates a TCL script - deprecated
  *
  * @param script String containing the script to evaluate in the interpreter
  */
-USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script, int &result) {
+USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script, int &) {
    LOGGING_Q;
    MyLock lock;
 
    int rcTCL = Tcl_Eval(interp.get(), script);
-   const char *sResult = getTclResult();
 
    USBDM_ErrorCode rc = BDM_RC_OK;
+
    if (rcTCL != TCL_OK) {
       // We expect no error
       // Assume anything else is an error
       rc = PROGRAMMING_RC_ERROR_TCL_SCRIPT;
    }
    else {
+      const char *sResult = getTclResult();
+
       // Null result is OK
       if ((sResult != NULL) && (*sResult != '\0')) {
          // Return value from TCL script
@@ -590,11 +623,15 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script, int &r
          }
          else {
             log.error("Non-numeric return value = %s\n", sResult);
-            return PROGRAMMING_RC_ERROR_TCL_SCRIPT;
+            rc = PROGRAMMING_RC_ERROR_TCL_SCRIPT;
          }
       }
    }
-   if (tclChannel != NULL) {
+   checkUsbdmRC(interp.get(), rc);
+   if (rc != BDM_RC_OK) {
+      log.error("rc = %s", bdmInterface->getErrorString(rc));
+   }
+   if ((rc != BDM_RC_OK) && (tclChannel != NULL)) {
       Tcl_Flush(tclChannel);
       if (rcTCL != TCL_OK) {
          // Try to PRINT TCL stack frame
@@ -614,26 +651,7 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script, int &r
          }
       }
    }
-   log.error("rc = %s", bdmInterface->getErrorString(rc));
    return rc;
-}
-
-/**
- * Returns the USBDM Error code from the last command
- *
- * @param script String containing the script to evaluate in the interpreter
- */
-USBDM_ErrorCode UsbdmTclInterpreterImp::getLastResult() {
-   return lastResult;
-}
-
-/**
- * Returns the USBDM Error code from the last failing command
- *
- * @param script String containing the script to evaluate in the interpreter
- */
-USBDM_ErrorCode UsbdmTclInterpreterImp::getErrorResult() {
-   return lastError;
 }
 
 /**
@@ -647,12 +665,12 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script) {
 
    int rcTCL = Tcl_Eval(interp.get(), script);
    const char *result = getTclResult();
-
    USBDM_ErrorCode rc = BDM_RC_OK;
    if (rcTCL != TCL_OK) {
       // We expect no error
       // Assume anything else is an error
       rc = PROGRAMMING_RC_ERROR_TCL_SCRIPT;
+      checkUsbdmRC(interp.get(), rc);
    }
    else {
       // Null result is OK
@@ -664,14 +682,16 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script) {
          long temp = strtol(result, &eptr, 0);
          if (eptr != result) {
             rc = (USBDM_ErrorCode)temp;
+            checkUsbdmRC(interp.get(), rc);
          }
          else {
             log.error("Non-numeric return value = %s\n", result);
-            return PROGRAMMING_RC_ERROR_TCL_SCRIPT;
+            rc = PROGRAMMING_RC_ERROR_TCL_SCRIPT;
+            checkUsbdmRC(interp.get(), rc);
          }
       }
    }
-   if (tclChannel != NULL) {
+   if ((rc != BDM_RC_OK) && (tclChannel != NULL)) {
       Tcl_Flush(tclChannel);
       if (rcTCL != TCL_OK) {
          // Try to PRINT TCL stack frame
@@ -690,6 +710,9 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script) {
             }
          }
       }
+   }
+   if (rc != BDM_RC_OK) {
+      log.error("rc = %s", bdmInterface->getErrorString(rc));
    }
    return rc;
 }
@@ -721,19 +744,6 @@ const char *UsbdmTclInterpreterImp::getTclResult() {
 #define MAX_JTAG_CHAIN_LENGTH    (20)  //!< Max length of JTAG chain supported
 #define MAX_JTAG_IR_CHAIN_LENGTH (100) //!< Max length of JTAG IR chain supported
 #define MAX_KNOWN_DEVICES        (100) //!< Max number of know devices
-
-/**
- * Save a USBDM Error code as last error and converts and sets the TCL return value
- */
-static int checkUsbdmRC(Tcl_Interp *interp, USBDM_ErrorCode errorCode) {
-   lastResult = errorCode;
-   if (errorCode != BDM_RC_OK) {
-      lastError = errorCode;
-      Tcl_SetResult(interp, (char *)bdmInterface->getErrorString(errorCode), TCL_STATIC);
-      return TCL_ERROR;
-   }
-   return TCL_OK;
-}
 
 /**
  * Report BDM status

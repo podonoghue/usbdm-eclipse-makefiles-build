@@ -451,7 +451,7 @@
                                         <property name="row_label_values"></property>
                                         <property name="row_label_vert_alignment">wxALIGN_CENTER</property>
                                         <property name="row_sizes"></property>
-                                        <property name="rows">32</property>
+                                        <property name="rows">64</property>
                                         <property name="show">1</property>
                                         <property name="size">450,350</property>
                                         <property name="subclass"></property>

@@ -108,7 +108,14 @@ void AppSettings::writeToFile(FILE *fp, const string &comment) const {
    for (it=fMap.begin(); it != fMap.end(); it++ ) {
       switch (it->second->getType()) {
          case intType:
-            fprintf(fp, "%s %d,%d\n", it->first.c_str(), it->second->getType(), it->second->getIntValue());
+            if (it->second->getIntValue()<10) {
+               // For visibility print single digit numbers in decimal
+               fprintf(fp, "%s %d,%d\n", it->first.c_str(), it->second->getType(), it->second->getIntValue());
+            }
+            else {
+               // Larger numbers in hex
+               fprintf(fp, "%s %d,0x%X\n", it->first.c_str(), it->second->getType(), it->second->getIntValue());
+            }
             fflush(fp);
             break;
          case stringType:
@@ -226,7 +233,7 @@ void AppSettings::loadFromFile(FILE *fp) {
       optionString = strtok(NULL, "");
       switch (optionType) {
          case intType:
-            optionInt = atoi(optionString);
+            optionInt = std::strtol(optionString, nullptr, 0);
             addValue(string(optionName), optionInt);
             break;
          case stringType:

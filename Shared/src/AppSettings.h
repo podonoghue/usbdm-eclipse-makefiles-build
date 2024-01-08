@@ -57,9 +57,9 @@ private:
           *
           * @param value - value to create
           */
-         Value(int value) {
-            intValue = value;
-            type     = intType;
+         Value(int value) : stringValue("") {
+            intValue    = value;
+            type        = intType;
          }
          /**
           * Create a string attribute
@@ -67,8 +67,8 @@ private:
           * @param value - value to create
           */
          Value(const std::string &value) :
-            intValue(0)
-         {
+            intValue(0) {
+
             stringValue = value;
             type        = stringType;
          }

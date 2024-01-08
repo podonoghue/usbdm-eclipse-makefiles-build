@@ -2411,13 +2411,13 @@ USBDM_ErrorCode FlashProgrammer_HCS12::doReadbackVerify(FlashImagePtr flashImage
       while (regionSize>0) {
          // Get memory block containing address
          MemoryRegionConstPtr memRegion = device->getMemoryRegionFor(imageAddress, memorySpace);
-         AddressType addressType = memRegion->getAddressType();
-
-         if (memRegion == NULL) {
+         if (memRegion == nullptr) {
             checkResult = PROGRAMMING_RC_ERROR_OUTSIDE_TARGET_FLASH;
             log.error("Verifying Block %s[0x%8.8X..0x%8.8X] => %s\n", getMemSpaceName(memorySpace), imageAddress, imageAddress+regionSize-1, bdmInterface->getErrorString(checkResult));
             break;
          }
+         AddressType addressType = memRegion->getAddressType();
+
 #if (TARGET == ARM)
          if (memRegion->getAlignment()<memorySpace) {
             memorySpace = (MemorySpace_t)memRegion->getAlignment();
