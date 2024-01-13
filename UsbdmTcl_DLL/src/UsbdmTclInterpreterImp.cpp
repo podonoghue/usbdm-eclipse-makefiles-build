@@ -62,6 +62,10 @@ static UsbdmTclInterpreterImp *ppCache = nullptr;
 static size_t fSize;
 static DeviceInterfacePtr      deviceInterface;
 static FlashImagePtr           flashImage;
+/*
+ * Whether executing script or interactively
+ */
+static bool interactive = true;
 
 /**
  * Create singleton plug-in instance
@@ -122,7 +126,7 @@ UsbdmTclInterperPtr UsbdmTclInterpreterImp::interactiveInterpreter;
 static WxPluginPtr                 wxPlugin;
 static BdmInterfacePtr             bdmInterface;
 static MemorySpace_t               defaultMemorySpace   = MS_None;
-static USBDM_ErrorCode             lastError            = BDM_RC_OK;
+static USBDM_ErrorCode             lastUsbdmError       = BDM_RC_OK;
 static USBDM_ErrorCode             lastResult           = BDM_RC_OK;
 static int                         bigEndian            = true;
 static std::vector<BdmInformation> bdmList;
@@ -178,16 +182,16 @@ static int getQuietReqArg(Tcl_Interp *interp, int argc, Tcl_Obj *const *argv, bo
 int UsbdmTclInterpreterImp::main(int argc, char *argv[]) {
    LOGGING;
    try {
-//      Tcl_Obj *initPath = Tcl_NewStringObj("./init.tcl", -1);
-//      Tcl_SetStartupScript(initPath, NULL);
+      //      Tcl_Obj *initPath = Tcl_NewStringObj("./init.tcl", -1);
+      //      Tcl_SetStartupScript(initPath, NULL);
 
-//      Tcl_Obj *initPath = Tcl_GetStartupScript(NULL);
-//      if (initPath == NULL) {
-//         log.print("initPath is NULL\n");
-//      }
-//      else {
-//         log.print("initPath = %s\n", Tcl_GetString(initPath));
-//      }
+      //      Tcl_Obj *initPath = Tcl_GetStartupScript(NULL);
+      //      if (initPath == NULL) {
+      //         log.print("initPath is NULL\n");
+      //      }
+      //      else {
+      //         log.print("initPath = %s\n", Tcl_GetString(initPath));
+      //      }
       Tcl_Main(argc, argv, appInitProc);
       return EXIT_SUCCESS;
    } catch (std::exception &e) {
@@ -334,13 +338,37 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::setBdmInterface(BdmInterfacePtr bdmInter
 }
 
 /**
- * Save a USBDM Error code as last error and converts and sets the TCL return value
+ * Process a USBDM error code
+ *
+ * Always:
+ * - Sets last USBDM result code.
+ *
+ * If not an error code
+ * - return TCL_OK
+ *
+ * If an error code:
+ * - Sets the last USBDM error code
+ * - Sets the TCL result to the USBDM error message
+ * - Writes error message to standard output
+ * - Returns TCL_ERROR
+ *
+ * @param interp
+ *
+ * @param errorCode Error code to process
+ *
+ * @return TCL error code. Either TCL_OK or TCL_ERROR
  */
 static int checkUsbdmRC(Tcl_Interp *interp, USBDM_ErrorCode errorCode) {
+   static char lastUsbdmErrorAsString[50];
+
    lastResult = errorCode;
+
    if (errorCode != BDM_RC_OK) {
-      lastError = errorCode;
-      Tcl_SetResult(interp, (char *)bdmInterface->getErrorString(errorCode), TCL_STATIC);
+      lastUsbdmError = errorCode;
+      snprintf(lastUsbdmErrorAsString, sizeof(lastUsbdmErrorAsString), "%d" ,errorCode);
+      const char *msg = bdmInterface->getErrorString(errorCode);
+      PRINT("ERROR: %s\n", msg);
+      Tcl_SetResult(interp, (char *)lastUsbdmErrorAsString, TCL_STATIC);
       return TCL_ERROR;
    }
    return TCL_OK;
@@ -361,7 +389,7 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::getLastResult() {
  * @param script String containing the script to evaluate in the interpreter
  */
 USBDM_ErrorCode UsbdmTclInterpreterImp::getErrorResult() {
-   return lastError;
+   return lastUsbdmError;
 }
 
 /**
@@ -391,6 +419,7 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::setDeviceParameters(DeviceDataConstPtr d
 #if defined(LOG) && 0
    log.print(script->toString().c_str());
 #endif
+   log.print("Loading TCL script file\n");
    USBDM_ErrorCode rc = evalTclScript(script->getScript().c_str());
    if (rc != PROGRAMMING_RC_OK) {
       log.error("evalTclScript() failed\n");
@@ -404,9 +433,9 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::setDeviceParameters(DeviceDataConstPtr d
  */
 UsbdmTclInterpreterImp::~UsbdmTclInterpreterImp() {
    LOGGING_E;
-//   wxPlugin.reset();
-//   bdmInterface.reset();
-//   deviceInterface.reset();
+   //   wxPlugin.reset();
+   //   bdmInterface.reset();
+   //   deviceInterface.reset();
 
    // Following crashes on unload???
    Tcl_SetStdChannel(0, TCL_STDOUT);
@@ -512,6 +541,9 @@ int UsbdmTclInterpreterImp::setTCLExecutable() {
  *  @param format Format and parameters as for PRINT()
  */
 static void printChannel(int ch, const char *format, ...)  {
+   if (!interactive && (ch==TCL_STDOUT)) {
+      return;
+   }
    va_list list;
    if (format == NULL) {
       format = "PRINT() - Error - empty format string!\n";
@@ -539,7 +571,12 @@ static void listBdms() {
    bdmInterface->findBDMs(bdmList);
    unsigned numDevices = 0;
    for (std::vector<BdmInformation>::iterator it = bdmList.begin(); it != bdmList.end(); ++it) {
-      PRINT("%2d - %-20s : %s\n", numDevices, it->getSerialNumber().c_str(), it->getDescription().c_str());
+      USBDM_ErrorCode rc = it->getSuitable();
+      const char *status = "";
+      if (rc != BDM_RC_OK) {
+         status = bdmInterface->getErrorString(rc);
+      }
+      PRINT("%2d - %-25s : %-35s %s\n", numDevices, it->getSerialNumber().c_str(), it->getDescription().c_str(), status);
       numDevices++;
    }
    PRINT("Found %d devices\n", numDevices);
@@ -583,7 +620,7 @@ int UsbdmTclInterpreterImp::appInitProc(Tcl_Interp *interp) {
 
    //   Tcl_StaticPackage(nullptr, "", initProc, safeInitProc)
    // Set script to run on startup (if it exists)
-//   Tcl_SetVar(interp, "tcl_rcFileName", "$env(HOME)/usbdm_rc.tcl", TCL_GLOBAL_ONLY);
+   //   Tcl_SetVar(interp, "tcl_rcFileName", "$env(HOME)/usbdm_rc.tcl", TCL_GLOBAL_ONLY);
 
    Tcl_Eval(interp, "set tcl_rcFileName $env(HOME)/usbdm_rc.tcl");
 
@@ -591,49 +628,52 @@ int UsbdmTclInterpreterImp::appInitProc(Tcl_Interp *interp) {
 }
 
 /**
- * Evaluates a TCL script - deprecated
+ * Evaluates a TCL script
  *
  * @param script String containing the script to evaluate in the interpreter
+ * @param res    Result of TCL script execution
+ *
+ * @return  USBDM error code from TCL script
  */
-USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script, int &) {
-   LOGGING_Q;
+USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script, int &res) {
+   LOGGING;
    MyLock lock;
 
+   // Clear any USBDM error
+   getErrorResult();
+
+   // Clear TCL result
+   Tcl_ResetResult(interp.get());
+
+   if (strlen(script)<40) {
+      log.error("Executing TCL command '%s'\n", script);
+   }
+
+   // Run script
    int rcTCL = Tcl_Eval(interp.get(), script);
+
+   if (tclChannel != nullptr) {
+      Tcl_Flush(tclChannel);
+   }
+
+   const char *result = Tcl_GetStringResult(interp.get());
+   log.print("TCL result = '%s'\n", result);
 
    USBDM_ErrorCode rc = BDM_RC_OK;
 
    if (rcTCL != TCL_OK) {
-      // We expect no error
-      // Assume anything else is an error
-      rc = PROGRAMMING_RC_ERROR_TCL_SCRIPT;
-   }
-   else {
-      const char *sResult = getTclResult();
 
-      // Null result is OK
-      if ((sResult != NULL) && (*sResult != '\0')) {
-         // Return value from TCL script
-         // Use as return value if a number
-         // We do NOT accept zero
-         char *eptr = 0;
-         long temp = strtol(sResult, &eptr, 0);
-         if (eptr != sResult) {
-            rc = USBDM_ErrorCode(temp);
-         }
-         else {
-            log.error("Non-numeric return value = %s\n", sResult);
-            rc = PROGRAMMING_RC_ERROR_TCL_SCRIPT;
-         }
+      // This indicates the script failed
+      rc = PROGRAMMING_RC_ERROR_TCL_SCRIPT;
+
+      // Try to update from last USBDM error
+      if (getErrorResult() != BDM_RC_OK) {
+         rc = getErrorResult();
       }
-   }
-   checkUsbdmRC(interp.get(), rc);
-   if (rc != BDM_RC_OK) {
-      log.error("rc = %s", bdmInterface->getErrorString(rc));
-   }
-   if ((rc != BDM_RC_OK) && (tclChannel != NULL)) {
-      Tcl_Flush(tclChannel);
-      if (rcTCL != TCL_OK) {
+      if (tclChannel != NULL) {
+
+         Tcl_Flush(tclChannel);
+
          // Try to PRINT TCL stack frame
          Tcl_Obj *options = Tcl_GetReturnOptions(interp.get(), rcTCL);
          Tcl_Obj *key = Tcl_NewStringObj("-errorinfo", -1);
@@ -651,7 +691,14 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script, int &)
          }
       }
    }
-   return rc;
+   if (rc != BDM_RC_OK) {
+      log.error("Failed to execute '%s'\n", script);
+      log.error("rc = %s\n", bdmInterface->getErrorString(rc));
+      return rc;
+   }
+   res = atoi(result);
+
+   return BDM_RC_OK;
 }
 
 /**
@@ -660,40 +707,43 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script, int &)
  * @param script String containing the script to evaluate in the interpreter
  */
 USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script) {
-   LOGGING_Q;
+   LOGGING;
    MyLock lock;
 
+   // Clear any USBDM error
+   getErrorResult();
+
+   // Clear TCL result
+   Tcl_ResetResult(interp.get());
+
+   if (strlen(script)<40) {
+      log.error("Executing TCL command '%s'\n", script);
+   }
+
+   // Run script
    int rcTCL = Tcl_Eval(interp.get(), script);
-   const char *result = getTclResult();
-   USBDM_ErrorCode rc = BDM_RC_OK;
-   if (rcTCL != TCL_OK) {
-      // We expect no error
-      // Assume anything else is an error
-      rc = PROGRAMMING_RC_ERROR_TCL_SCRIPT;
-      checkUsbdmRC(interp.get(), rc);
-   }
-   else {
-      // Null result is OK
-      if ((result != NULL) && (*result != '\0')) {
-         // Return value from TCL script
-         // Use as return value if a number
-         // We do NOT accept zero
-         char *eptr = 0;
-         long temp = strtol(result, &eptr, 0);
-         if (eptr != result) {
-            rc = (USBDM_ErrorCode)temp;
-            checkUsbdmRC(interp.get(), rc);
-         }
-         else {
-            log.error("Non-numeric return value = %s\n", result);
-            rc = PROGRAMMING_RC_ERROR_TCL_SCRIPT;
-            checkUsbdmRC(interp.get(), rc);
-         }
-      }
-   }
-   if ((rc != BDM_RC_OK) && (tclChannel != NULL)) {
+
+   if (tclChannel != nullptr) {
       Tcl_Flush(tclChannel);
-      if (rcTCL != TCL_OK) {
+   }
+   const char *result = Tcl_GetStringResult(interp.get());
+   log.print("TCL result = '%s'\n", result);
+
+   USBDM_ErrorCode rc = BDM_RC_OK;
+
+   if (rcTCL != TCL_OK) {
+
+      // This indicates the script failed
+      rc = PROGRAMMING_RC_ERROR_TCL_SCRIPT;
+
+      // Try to update from last USBDM error
+      if (getErrorResult() != BDM_RC_OK) {
+         rc = getErrorResult();
+      }
+      if (tclChannel != NULL) {
+
+         Tcl_Flush(tclChannel);
+
          // Try to PRINT TCL stack frame
          Tcl_Obj *options = Tcl_GetReturnOptions(interp.get(), rcTCL);
          Tcl_Obj *key = Tcl_NewStringObj("-errorinfo", -1);
@@ -712,7 +762,8 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script) {
       }
    }
    if (rc != BDM_RC_OK) {
-      log.error("rc = %s", bdmInterface->getErrorString(rc));
+      log.error("Failed to execute '%s'\n", script);
+      log.error("rc = %s\n", bdmInterface->getErrorString(rc));
    }
    return rc;
 }
@@ -783,9 +834,12 @@ static int reportState(Tcl_Interp *interp) {
                (int)speed, (60000.0 * 128)/speed, (1000.0 * 128)/speed);
       }
    }
-   Tcl_SetResult(interp, (char*)getBDMStatusName(&usbdmStatus), TCL_VOLATILE);
+   PRINT("%s\n", getBDMStatusName(&usbdmStatus));
    return (TCL_OK);
 }
+
+
+//_______________________________________________________________________________________________
 
 /**
  *  S12Z Mass erase
@@ -806,7 +860,7 @@ static int cmd_s12zMassErase(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *
    }
    TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
    if (targetType != T_S12Z) {
-      PRINT("Illegal command (wrong target)");
+      checkUsbdmRC(interp, BDM_RC_OPERATION_NOT_SUPPORTED);
       return TCL_ERROR;
    }
    uint8_t s12ZEraseCommand[] = {CMD_CUSTOM_COMMAND};
@@ -861,8 +915,8 @@ static int cmd_setVdd(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
    }
    else {
       Tcl_SetResult(interp, (char*)"Illegal target voltage", TCL_STATIC);
+      return TCL_ERROR;
    }
-
    PRINT(":setTargetVdd %s %s\n", arg, immediateEffect?"":"(applied when BDM opened)");
    return TCL_OK;
 }
@@ -904,7 +958,7 @@ static int cmd_setMemorySpace(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj 
          defaultMemorySpace = MS_Global;
       }
       else {
-         PRINT("arg = '%s'", arg);
+         PRINT("arg = '%s' ", arg);
          Tcl_SetResult(interp, (char*)"Unrecognised parameter", TCL_STATIC);
          return TCL_ERROR;
       }
@@ -932,8 +986,7 @@ static int cmd_closeBDM(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
    }
 
    bdmIsOpen = false;
-   bdmInterface->closeBdm();
-   return (TCL_OK);
+   return checkUsbdmRC(interp, bdmInterface->closeBdm());
 }
 
 //! Open BDM before 1st use
@@ -948,25 +1001,22 @@ static int cmd_openBDM(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
       Tcl_WrongNumArgs(interp, 1, argv, "[<deviceNum>]");
       return TCL_ERROR;
    }
-   if (argc == 1) {
-      deviceNum = 0;
-   }
-   else {
+   if (argc != 1) {
       if (Tcl_GetIntFromObj(interp, argv[1], &deviceNum) != TCL_OK) {
-         Tcl_WrongNumArgs(interp, 1, argv, "[<deviceNum>]");
+         Tcl_SetResult(interp, (char*)"Illegal argument, should be openbdm [<deviceNum>]", TCL_STATIC);
          return TCL_ERROR;
       }
    }
+   deviceNum = 0;
    if (deviceNum>=(int)bdmList.size()) {
-      PRINT("Illegal BDM number\n");
+      Tcl_SetResult(interp, (char*)"Illegal BDM number", TCL_STATIC);
       return TCL_ERROR;
    }
    PRINT("Opening %s\n", bdmList.at(deviceNum).getSerialNumber().c_str());
    bdmInterface->setBdmSerialNumber(bdmList.at(deviceNum).getSerialNumber().c_str(), true);
-   USBDM_ErrorCode rc = bdmInterface->initBdm();
-   if (rc != BDM_RC_OK) {
-      PRINT("Opening BDM failed, reason = %s\n", bdmInterface->getErrorString(rc));
-      return TCL_ERROR;
+   int rc = checkUsbdmRC(interp, bdmInterface->initBdm());
+   if (rc != TCL_OK) {
+      return rc;
    }
    PRINT("BDM Version = %s\n", bdmInterface->getBdmVersionString().c_str());
 
@@ -979,7 +1029,7 @@ static int cmd_openBDM(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
  * than use a WxWidget dialogue
  */
 long nullCallback(std::string message, std::string caption, long style) {
-   fprintf(stderr, "Failing on error message %s:%s\n", caption.c_str(), message.c_str());
+   //   fprintf(stderr, "Failing on error message %s:%s\n", caption.c_str(), message.c_str());
    return UsbdmWxConstants::NO;
 }
 
@@ -994,67 +1044,72 @@ long nullCallback(std::string message, std::string caption, long style) {
  */
 static int cmd_setTarget(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    LOGGING;
-   if (argc != 2) {
-      Tcl_WrongNumArgs(interp, 2, argv, "<targetNumber>");
+   if (argc == 2) {
+      const char *arg = Tcl_GetString(argv[1]);
+      bigEndian = true;
+      TargetType_t targetType = T_OFF;
+      if (strncasecmp(arg, "HCS12", 5) == 0) {
+         targetType = T_HC12;
+      }
+      else if (strncasecmp(arg, "HCS08", 5) == 0) {
+         targetType = T_HCS08;
+      }
+      else if (strncasecmp(arg, "RS08", 4) == 0) {
+         targetType = T_RS08;
+      }
+      else if (strncasecmp(arg, "CFV1", 4) == 0) {
+         targetType = T_CFV1;
+      }
+      else if (strncasecmp(arg, "CFVx", 4) == 0) {
+         targetType = T_CFVx;
+      }
+      else if (strncasecmp(arg, "ARM", 3) == 0) {
+         targetType = T_ARM;
+         bigEndian = false;
+      }
+      else if (strncasecmp(arg, "SWD", 3) == 0) {
+         targetType = T_ARM;
+         bigEndian = false;
+      }
+      else if (strncasecmp(arg, "KIN", 3) == 0) {
+         targetType = T_ARM;
+         bigEndian = false;
+      }
+      else if (strncasecmp(arg, "JTAG", 4) == 0) {
+         targetType = T_JTAG;
+      }
+      else if (strncasecmp(arg, "DSC", 4) == 0) {
+         targetType = T_MC56F80xx;
+         bigEndian = false;
+      }
+      else if (strncasecmp(arg, "S12Z", 3) == 0) {
+         targetType = T_S12Z;
+      }
+      else if (strncasecmp(arg, "OFF", 4) == 0) {
+         targetType = T_OFF;
+      }
+      else {
+         Tcl_SetResult(interp, (char*)"Unexpected argument, should be: settarget (HCS12|HCS08|RS08|CFV1|DSC|JTAG|ARM)", TCL_STATIC);
+         return TCL_ERROR;
+      }
+      bdmInterface.reset();
+      bdmInterface = BdmInterfaceFactory::createInterface(targetType, nullCallback);
+      bdmInterface->getBdmOptions().targetVdd = targetVdd;
+      log.print("%s", printBdmOptions(&bdmInterface->getBdmOptions()));
+
+      PRINT("USBDM DLL Version = %s\n", bdmInterface->getDllVersionString().c_str());
+
+      listBdms();
+   }
+   else if (argc != 1) {
+      Tcl_WrongNumArgs(interp, 1, argv, "(HCS12|HCS08|RS08|CFV1|DSC|JTAG|ARM)");
       return TCL_ERROR;
    }
-   const char *arg = Tcl_GetString(argv[1]);
-   bigEndian = true;
-   TargetType_t targetType = T_OFF;
-   if (strncasecmp(arg, "HCS12", 5) == 0) {
-      targetType = T_HC12;
+   const char *targetType = "OFF";
+   if (bdmInterface != nullptr) {
+      targetType = getTargetTypeName(bdmInterface->getBdmOptions().targetType);
    }
-   else if (strncasecmp(arg, "HCS08", 5) == 0) {
-      targetType = T_HCS08;
-   }
-   else if (strncasecmp(arg, "RS08", 4) == 0) {
-      targetType = T_RS08;
-   }
-   else if (strncasecmp(arg, "CFV1", 4) == 0) {
-      targetType = T_CFV1;
-   }
-   else if (strncasecmp(arg, "CFVx", 4) == 0) {
-      targetType = T_CFVx;
-   }
-   else if (strncasecmp(arg, "ARM", 3) == 0) {
-      targetType = T_ARM;
-      bigEndian = false;
-   }
-   else if (strncasecmp(arg, "SWD", 3) == 0) {
-      targetType = T_ARM;
-      bigEndian = false;
-   }
-   else if (strncasecmp(arg, "KIN", 3) == 0) {
-      targetType = T_ARM;
-      bigEndian = false;
-   }
-   else if (strncasecmp(arg, "JTAG", 4) == 0) {
-      targetType = T_JTAG;
-   }
-   else if (strncasecmp(arg, "DSC", 4) == 0) {
-      targetType = T_MC56F80xx;
-      bigEndian = false;
-   }
-   else if (strncasecmp(arg, "S12Z", 3) == 0) {
-      targetType = T_S12Z;
-   }
-   else if (strncasecmp(arg, "OFF", 4) == 0) {
-      targetType = T_OFF;
-   }
-   else {
-      PRINT("Unrecognised target\n");
-      return TCL_ERROR;
-   }
-   bdmInterface.reset();
-   bdmInterface = BdmInterfaceFactory::createInterface(targetType, nullCallback);
-   bdmInterface->getBdmOptions().targetVdd = targetVdd;
-   log.print("%s", printBdmOptions(&bdmInterface->getBdmOptions()));
-
-   PRINT("USBDM DLL Version = %s\n", bdmInterface->getDllVersionString().c_str());
-
-   listBdms();
-
-   PRINT(":setTarget %s\n", getTargetTypeName(targetType));
+   Tcl_SetResult(interp, (char*)targetType, TCL_STATIC);
    return TCL_OK;
 }
 
@@ -1079,8 +1134,18 @@ static int cmd_useReset(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
       if (strncasecmp(arg, "1", 1) == 0) {
          useReset = true;
       }
-      if (strncasecmp(arg, "T", 1) == 0) {
+      else if (strncasecmp(arg, "T", 1) == 0) {
          useReset = true;
+      }
+      if (strncasecmp(arg, "0", 1) == 0) {
+         useReset = false;
+      }
+      else if (strncasecmp(arg, "F", 1) == 0) {
+         useReset = false;
+      }
+      else {
+         Tcl_SetResult(interp, (char*)"Illegal parameters, should be usereset (1|True|0|False)", TCL_STATIC);
+         return TCL_ERROR;
       }
    }
    bdmInterface->getBdmOptions().useResetSignal = useReset;
@@ -1122,6 +1187,7 @@ static int cmd_setVpp(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
    }
    else {
       Tcl_SetResult(interp, (char*)"Illegal target Vpp state", TCL_STATIC);
+      return TCL_ERROR;
    }
    PRINT(":setTargetVpp %s\n", arg);
    return TCL_OK;
@@ -1155,6 +1221,9 @@ static int cmd_reset(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *a
                targetMode = (TargetMode_t)(targetMode & ~RESET_MODE_MASK);
                targetMode = (TargetMode_t)(targetMode | RESET_SPECIAL);
                break;
+            default:
+               Tcl_SetResult(interp, (char *)"Illegal 1st operand, should be reset <N|S><H|S|P|V|A>", TCL_STATIC);
+               return TCL_ERROR;
          }
       }
    }
@@ -1195,6 +1264,9 @@ static int cmd_reset(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *a
                targetMode = (TargetMode_t)(targetMode & ~RESET_METHOD_MASK);
                targetMode = (TargetMode_t)(targetMode | RESET_VENDOR);
                break;
+            default:
+               Tcl_SetResult(interp, (char *)"Illegal 2nd operand, should be reset <N|S><H|S|P|V|A>", TCL_STATIC);
+               return TCL_ERROR;
          }
       }
    }
@@ -1221,7 +1293,7 @@ static int cmd_connect(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
       Tcl_WrongNumArgs(interp, 1, argv, "");
       return TCL_ERROR;
    }
-   if (checkUsbdmRC(interp,  bdmInterface->connect()) != 0) {
+   if (checkUsbdmRC(interp,  bdmInterface->connect()) != TCL_OK) {
       return TCL_ERROR;
    }
    PRINT(":connect\n");
@@ -1229,8 +1301,50 @@ static int cmd_connect(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
    TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
    if ((targetType != T_CFVx) && (targetType != T_JTAG) &&
          (targetType != T_ARM) && (targetType != T_MC56F80xx)) {
-      reportState(interp);
+      return reportState(interp);
    }
+   return TCL_OK;
+}
+
+/**
+ * setmode
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
+static int cmd_setMode(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
+   // setmode
+
+   if (argc == 1) {
+      PRINT(":interactive = %s \n", interactive?"true":"false");
+      Tcl_SetResult(interp, (char*)(interactive?"1":"0"), TCL_STATIC);
+      return TCL_OK;
+   }
+   if (argc != 2) {
+      Tcl_WrongNumArgs(interp, 1, argv, "(INTeractive|SCRipt|0|1)");
+      return TCL_ERROR;
+   }
+   const char *arg = Tcl_GetString(argv[1]);
+   if (strncasecmp(arg, "inter", 3) == 0) {
+      interactive = true;
+   }
+   else if (strcasecmp(arg, "1") == 0) {
+      interactive = true;
+   }
+   else if (strncasecmp(arg, "script", 3) == 0) {
+      interactive = false;
+   }
+   else if (strcasecmp(arg, "0") == 0) {
+      interactive = false;
+   }
+   else {
+      Tcl_SetResult(interp, (char*)"Unexpected argument, should be: setmode (INTeractive|SCRipt|0|1)", TCL_STATIC);
+      return TCL_ERROR;
+   }
+   PRINT(":interactive = %s \n", interactive?"true":"false");
    return TCL_OK;
 }
 
@@ -1314,7 +1428,7 @@ static int cmd_pinSet(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
       }
       reportBdmStatus(interp);
       PRINT(":pinSet - all released\n");
-      return (TCL_OK);
+      return TCL_OK;
    }
    while (argc-- > 1) {
       const char *arg = Tcl_GetString(argv[argc]);
@@ -1463,9 +1577,8 @@ static int cmd_step(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
 static int cmd_getCapabilities(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    HardwareCapabilities_t bdmCapabilities;
 
-   USBDM_ErrorCode rc = bdmInterface->getCapabilities(&bdmCapabilities);
-   if (rc != BDM_RC_OK) {
-      PRINT("getCapabilities() Failed, rc = %s\n", bdmInterface->getErrorString(rc));
+   int rc = checkUsbdmRC(interp, bdmInterface->getCapabilities(&bdmCapabilities));
+   if (rc != TCL_OK) {
       return TCL_ERROR;
    }
    PRINT("getcap => %s\n", getCapabilityName(bdmCapabilities));
@@ -1582,8 +1695,8 @@ static int cmd_status(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
  * @return
  */
 static int cmd_getLastError(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-   Tcl_SetObjResult(interp, Tcl_NewIntObj(lastError));
-   lastError = BDM_RC_OK;
+   Tcl_SetObjResult(interp, Tcl_NewIntObj(lastUsbdmError));
+   lastUsbdmError = BDM_RC_OK;
    return TCL_OK;
 }
 
@@ -1637,8 +1750,8 @@ static int cmd_getErrorMessage(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj
  * @return
  */
 static int cmd_getLastErrorMessage(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-   Tcl_SetResult(interp, (char*)bdmInterface->getErrorString(lastError), TCL_STATIC);
-   lastError = BDM_RC_OK;
+   Tcl_SetResult(interp, (char*)bdmInterface->getErrorString(lastUsbdmError), TCL_STATIC);
+   lastUsbdmError = BDM_RC_OK;
    return TCL_OK;
 }
 
@@ -1687,6 +1800,7 @@ static int cmd_readStatus(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *con
       default:
          break;
    }
+   checkUsbdmRC(interp, BDM_RC_ILLEGAL_COMMAND);
    return TCL_ERROR;
 }
 
@@ -1700,6 +1814,7 @@ static int cmd_readStatus(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *con
  * @return
  */
 static int cmd_registers(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
+
    static const int HCS12regList[] = {HCS12_RegPC, HCS12_RegD, HCS12_RegX, HCS12_RegY, HCS12_RegSP, HCS12_RegCCR, };
    static const int HCS12ZregList[] = {
          S12Z_RegD0, S12Z_RegD1, S12Z_RegD2, S12Z_RegD3, S12Z_RegD4, S12Z_RegD5, S12Z_RegD6, S12Z_RegD7,
@@ -2032,7 +2147,7 @@ static int strToULong(const char *start, uint32_t *value) {
    char *end_t;
    unsigned long value_t = strtoul(temp, &end_t, 0);
 
-//   PRINT("strToLong() - Num = '%s'\n", temp);
+   //   PRINT("strToLong() - Num = '%s'\n", temp);
 
    //   PRINT("strToULong() - s=\'%s\', e='%s', val=%ld(0x%lX)\n", start, end_t, value_t, value_t);
    if (end_t == temp) {
@@ -4176,9 +4291,10 @@ static const char usageText[] =
       "rdreg <regNo>                - Read debug register\n"
       "rcreg <regNo>                - Read control register\n"
       "setboot                      - Set USBDM module to ICP mode\n"
+      "setmode (INTeractive|SCRipt|0|1) - set interactive mode"
       "setdevice <deviceName|-list> - Set targetdevice (e.g. MK20DX128M5)\n"
       "setbytesex <big|little>      - Set big/little endian target\n"
-      "settarget <target>           - HCS12/HCS08/RS08/CFV1/DSC/JTAG/ARM\n"
+      "settarget <target>           - HCS12|HCS08|RS08|CFV1|DSC|JTAG|ARM\n"
       "settargetvdd <0|3|5|on|off>  - Set target Vdd (only has effect if target set)\n"
       "settargetvpp <standby|on|off>- Set target Vpp\n"
       "speed ?Hz?                   - Set/Get speed \n"
@@ -4229,14 +4345,12 @@ static int cmd_setByteSex(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *con
    const char *currentToken = Tcl_GetString(argv[1]);
    if (strncasecmp(currentToken, "big", 3) == 0) {
       bigEndian = true;
-      PRINT("bytesex => Big-endian\n");
    }
-   else if (strncasecmp(currentToken, "little", 6) == 0) {
+   else if (strncasecmp(currentToken, "little", 3) == 0) {
       bigEndian = false;
-      PRINT("bytesex => Little-endian\n");
    }
    else {
-      PRINT("bytesex [<little/big>]\n");
+      Tcl_SetResult(interp, (char*)"Illegal argument, should be bytesex [<LITtle/BIG>]", TCL_STATIC);
       return TCL_ERROR;
    }
    return TCL_OK;
@@ -4251,6 +4365,7 @@ static struct {
 
    const char *name;
 } myCommands[] = {
+      { cmd_setMode,              "setmode" },
       { cmd_connect,              "connect" },
       { cmd_debug,                "debug"},
       //    { initialiseCommand,        "initialise" },

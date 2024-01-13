@@ -47,19 +47,21 @@ public:
     * Evaluates a TCL script
     *
     * @param script String containing the script to evaluate in the interpreter
+    *
+    * @return BDM_RC_OK    => OK \n
+    * @return other        => Error code from TCL script - see \ref USBDM_ErrorCode
     */
    virtual USBDM_ErrorCode  evalTclScript(const char *script) override;
    /**
-    * Evaluates a TCL script - deprecated
+    * Evaluates a TCL script
     *
     * @param script String containing the script to evaluate in the interpreter
-    * @param result Not used
+    * @param res    Result of TCL script execution
     *
-    *  @return
-    *      BDM_RC_OK    => OK \n
-    *      other        => Error code - see \ref USBDM_ErrorCode
+    * @return BDM_RC_OK    => OK \n
+    * @return other        => Error code from TCL script - see \ref USBDM_ErrorCode
     */
-   virtual USBDM_ErrorCode  evalTclScript(const char *script, int &) override;
+   virtual USBDM_ErrorCode  evalTclScript(const char *script, int &res) override;
    /**
     * @param interp Interpreter to get result from
     *
@@ -171,8 +173,8 @@ public:
 
 protected:
    std::shared_ptr<Tcl_Interp>  interp;
-   Tcl_Channel                       tclChannel;       // Used as a TCL channel for STDERR & STDOUT
-   UsbdmTclInterperPtr tclInterper;
+   Tcl_Channel                  tclChannel;       // Used as a TCL channel for STDERR & STDOUT
+   UsbdmTclInterperPtr          tclInterper;
 
    static UsbdmTclInterperPtr interactiveInterpreter;
    /**

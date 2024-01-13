@@ -945,7 +945,7 @@ USBDM_ErrorCode BdmInterfaceCommon::findBDMs(vector<BdmInformation> &bdmInformat
    rc = BDM_RC_NO_USBDM_DEVICE; // Assume no devices
 
    for (unsigned index=0; index<deviceCount; index++) {
-      BdmInformation bdmInfo(index, "Device not responding or busy", "Unknown");
+      BdmInformation bdmInfo(index, "Not accessible", "Unknown");
       do {
          USBDM_ErrorCode bdmRc = USBDM_Open(index);
          if (bdmRc != BDM_RC_OK) {
@@ -969,10 +969,19 @@ USBDM_ErrorCode BdmInterfaceCommon::findBDMs(vector<BdmInformation> &bdmInformat
             break;
          }
          bdmInfo.setDescription(tempString);
+
+         // Get serial number
+         bdmRc = readBDMSerialNumber(tempString);
+         if (bdmRc != BDM_RC_OK) {
+            // Log error but ignore
+            log.error("USBDM_GetBDMSerialNumber(BDM #%d) failed, rc = %s\n", index, USBDM_GetErrorString(bdmRc));
+            break;
+         }
+         bdmInfo.setSerialNumber(tempString);
+
          // Check capabilities against target needs
          if ((theBdmInfo.capabilities & targetCapabilityMask) == 0) {
             log.print("BDM #%d is not suitable for target\n", index);
-            bdmInfo.setSerialNumber("BDM Doesn't support target");
             bdmInfo.setSuitable(BDM_RC_UNKNOWN_TARGET);
             break;
          }
@@ -992,16 +1001,10 @@ USBDM_ErrorCode BdmInterfaceCommon::findBDMs(vector<BdmInformation> &bdmInformat
             break;
          }
          bdmInfo.setSuitable(BDM_RC_OK);
+
          // At least one suitable device
          rc = BDM_RC_OK;
-         // Get serial number
-         bdmRc = readBDMSerialNumber(tempString);
-         if (bdmRc != BDM_RC_OK) {
-            // Log error but ignore
-            log.error("USBDM_GetBDMSerialNumber(BDM #%d) failed, rc = %s\n", index, USBDM_GetErrorString(bdmRc));
-            break;
-         }
-         bdmInfo.setSerialNumber(tempString);
+
       } while (false);
       USBDM_Close();
       if (bdmInfo.getSuitable() == BDM_RC_DEVICE_OPEN_FAILED) {

@@ -361,7 +361,9 @@ USBDM_ErrorCode FlashProgrammer_ARM::resetAndConnectTarget(void) {
    rc = runTCLCommand(args);
    if (rc != PROGRAMMING_RC_OK) {
       log.error("Failed - initTarget TCL failed, rc = %d (%s)\n", rc, bdmInterface->getErrorString(rc));
-      return rc;
+      if (rc != BDM_RC_SECURED) {
+         return rc;
+      }
    }
 
    // Use TCL script to set up target
@@ -1629,9 +1631,9 @@ USBDM_ErrorCode FlashProgrammer_ARM::partitionFlexNVM() {
 //=======================================================================
 //! Check security state of target
 //!
-//! @return PROGRAMMING_RC_OK => device is unsecured           \n
-//!         PROGRAMMING_RC_ERROR_SECURED => device is secured  \n
-//!         else error code see \ref USBDM_ErrorCode
+//! @return PROGRAMMING_RC_OK            => device is unsecured \n
+//! @return PROGRAMMING_RC_ERROR_SECURED => device is secured   \n
+//! @return Other error code see \ref USBDM_ErrorCode
 //!
 //! @note Assumes the target device has already been opened & USBDM options set.
 //!
@@ -1640,12 +1642,17 @@ USBDM_ErrorCode FlashProgrammer_ARM::checkTargetUnSecured() {
    USBDM_ErrorCode rc = initialiseTarget();
    if (rc != PROGRAMMING_RC_OK)
       return rc;
-   rc = runTCLCommand("isUnsecure");
+   int result = 0;
+   rc = runTCLCommandWithRc("isUnsecure", result);
    if (rc != PROGRAMMING_RC_OK) {
-      log.print("Secured\n");
+      log.print("isUnsecure command failed, rc = %s\n", bdmInterface->getErrorString(rc));
       return rc;
    }
-   log.print("Unsecured\n");
+   if (result == PROGRAMMING_RC_ERROR_SECURED) {
+      log.print("=> Target is Secured\n");
+      return (USBDM_ErrorCode)result;
+   }
+   log.print("=> Target is Unsecured\n");
    return PROGRAMMING_RC_OK;
 }
 
@@ -2842,13 +2849,23 @@ USBDM_ErrorCode FlashProgrammer_ARM::programFlash(FlashImagePtr flashImage,
          ))) {
       return rc;
    }
-   bool secured = checkTargetUnSecured() != PROGRAMMING_RC_OK;
 
-   // Check target security
-   if (secured && (getEraseMethod() != DeviceData::eraseMass)) {
-      // Can't program if secured
-      return PROGRAMMING_RC_ERROR_SECURED;
+   //=======================================
+   // Check if target is secured
+   rc = checkTargetUnSecured();
+
+   if (rc == PROGRAMMING_RC_ERROR_SECURED) {
+      // Check if target security is consistent with erase method
+      if (getEraseMethod() != DeviceData::eraseMass) {
+         // Can't program if secured
+         return PROGRAMMING_RC_ERROR_SECURED;
+      }
    }
+   else if (rc != BDM_RC_OK) {
+      // Some other error
+      return rc;
+   }
+
 #if (TARGET == HCS12)
    // Check for nasty chip of death
    rc = checkUnsupportedTarget(device->getSecurity());
@@ -2876,7 +2893,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::programFlash(FlashImagePtr flashImage,
    // Mass erase if selected
    if (getEraseMethod() == DeviceData::eraseMass) {
       // Mass erase and (temporarily) unsecure device
-      rc = massEraseTarget(true);
+      rc = massEraseTarget(false);
       if (rc != PROGRAMMING_RC_OK) {
          return rc;
       }
@@ -2906,6 +2923,8 @@ USBDM_ErrorCode FlashProgrammer_ARM::programFlash(FlashImagePtr flashImage,
       if (rc != PROGRAMMING_RC_OK) {
          break;
       }
+#else
+      flashOperationInfo.targetBusFrequency = 0;
 #endif
 #if (TARGET == RS08) || (TARGET == CFV1) || (TARGET == HCS08) || (TARGET == ARM)
       // Calculate clock trim values & update memory image

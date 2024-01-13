@@ -19,6 +19,7 @@
 #####################################################################################
 #  History
 #
+#  V4.12.1.330 - Added updated return code handling
 #  V4.12.1.320 - Added resetAndConnectTarget()
 #  V4.12.1.320 - Added clock trim
 #  V4.12.1.180 - Removed unnecessary semi-colons
@@ -47,17 +48,17 @@ proc loadSymbols {} {
    setbytesex littleEndian
 
    set ::NAME  "Kinetis-MKExxZ-flash-scripts"
-
-   puts stderr "$::NAME.loadSymbols{} - V4.12.1.320"
+   puts "==========================================================="
+   puts "$::NAME.loadSymbols{} - V4.12.1.330"
    
    # These variables are available from driver
-   #::RESET_DURATION
-   #::RESET_RECOVERY
-   #::RESET_RELEASE
-   #::POWER_OFF_DURATION
-   #::POWER_ON_RECOVERY
-   #::RESET_METHOD
-   #::ERASE_METHOD
+   # ::RESET_DURATION       
+   # ::RESET_RECOVERY       
+   # ::RESET_RELEASE        
+   # ::POWER_OFF_DURATION   
+   # ::POWER_ON_RECOVERY    
+   # ::RESET_METHOD         ;# TargetDefault/ResetHardware/ResetSoftware/ResetVendor/ResetNone
+   # ::ERASE_METHOD         ;# TargetDefault/EraseNone/EraseMass/EraseAll/EraseSelective
    
    set ::MDM_AP_Status                   0x01000000
    set ::MDM_AP_Control                  0x01000004
@@ -231,7 +232,6 @@ proc loadSymbols {} {
    set ::PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS -101
    set ::PROGRAMMING_RC_ERROR_TRIM           -113
 
-
    return
 }
 
@@ -241,7 +241,8 @@ proc loadSymbols {} {
 #
 proc resetAndConnectTarget { args } {
 
-   puts "resetAndConnectTarget args"
+   puts "================================================================="
+   puts "$::NAME.resetAndConnectTarget $args"
    
    # Cycle power if feature available   
    if [expr ( [getcap] & $::BDM_CAP_VDDCONTROL) != 0] {
@@ -254,21 +255,19 @@ proc resetAndConnectTarget { args } {
    reset sh 
    
    if { [catch {connect} rc] } {
-      puts "Failed connect"
-      return rc
+      puts "Failed 1st connect - retry"
+      connect
    }
-
-   puts "rc = $rc"
-   return $rc
 }
 
 ######################################################################################
 #
 #
 proc initTarget { args } {
+   puts "=============================================================="
+   puts "$::NAME.initTarget $args"
    # Not used
-   # puts stderr [format "MDM-AP-CONTROL = 0x%08X" [rcreg $::MDM_AP_Control]]
-   return $::PROGRAMMING_RC_OK
+   # puts [format "MDM-AP-CONTROL = 0x%08X" [rcreg $::MDM_AP_Control]]
 }
 
 ######################################################################################
@@ -276,26 +275,30 @@ proc initTarget { args } {
 #  frequency - Target bus frequency in kHz
 #
 proc initFlash { frequency } {
+
+   puts "============================================="
+   puts "$::NAME.initFlash $frequency"
    # Not used
-   # Uprotecting flash and caching done  by target routines
-   # puts stderr [format "MDM-AP-CONTROL = 0x%08X" [rcreg $::MDM_AP_Control]]
-   return $::PROGRAMMING_RC_OK
+   # Uprotecting flash and caching done by target routines
+   # puts [format "MDM-AP-CONTROL = 0x%08X" [rcreg $::MDM_AP_Control]]
 }
 
 ######################################################################################
 #  Target is mass erased and left unsecured (non-blank!)
 #
 proc massEraseTarget { } {
-   puts stderr "$::NAME.massEraseTarget{}"
+
+   puts "============================================="
+   puts "$::NAME.massEraseTarget"
    
    # Apply hardware reset
-   puts stderr "massEraseTarget{} - Applying hardware reset"
+   puts "massEraseTarget{} - Applying hardware reset"
    pinSet rst=0
 
    # Cycle power if feature available   
    # Upsets things on MK devices
    if [expr ( [getcap] & $::BDM_CAP_VDDCONTROL) != 0] {
-      puts stderr "massEraseTarget{} - Cycling Vdd"
+      puts "massEraseTarget{} - Cycling Vdd"
       settargetvdd off
       after $::RESET_DURATION
       settargetvdd on
@@ -303,20 +306,20 @@ proc massEraseTarget { } {
    }
 
    # Connect with reset asserted, ignore errors as may be secured
-   puts stderr "massEraseTarget{} - Connecting (Ignoring errors)"
+   puts "massEraseTarget{} - Connecting (Ignoring errors)"
    catch { connect }
    rcreg $::MDM_AP_Status
 
-   puts stderr "massEraseTarget{} - Doing reset s v (Ignoring errors)"
+   puts "massEraseTarget{} - Doing reset s v (Ignoring errors)"
    catch { reset s v }
    rcreg $::MDM_AP_Status
 
    # release target reset
-   puts stderr "massEraseTarget{} - releasing reset pin"
+   puts "massEraseTarget{} - releasing reset pin"
    pinSet
    
    # Reset recovery
-   puts stderr "massEraseTarget{} - wait reset recovery time ($::RESET_RECOVERY)"
+   puts "massEraseTarget{} - wait reset recovery time ($::RESET_RECOVERY)"
    after $::RESET_RECOVERY
 
    rcreg $::MDM_AP_Control
@@ -327,26 +330,26 @@ proc massEraseTarget { } {
       puts -nonewline stderr "massEraseTarget{} - Waiting for Flash ready  "
       set mdmApStatus [rcreg $::MDM_AP_Status]
       if [expr (($mdmApStatus & $::MDM_AP_ST_MASS_FLASH_RDY) != 0)] {
-         puts stderr "massEraseTarget{} - MDM_AP_ST_MASS_FLASH_RDY asserted OK"
+         puts "massEraseTarget{} - MDM_AP_ST_MASS_FLASH_RDY asserted OK"
          break;
       }
       after 20
    }
 
-   puts stderr "massEraseTarget{} - Asserting MDM_AP_C_DEBUG_REQUEST"
+   puts "massEraseTarget{} - Asserting MDM_AP_C_DEBUG_REQUEST"
    wcreg $::MDM_AP_Control $::MDM_AP_C_DEBUG_REQUEST
    rcreg $::MDM_AP_Control
    
-   puts stderr "massEraseTarget{} - Asserting MDM_AP_C_DEBUG_REQUEST|MDM_AP_C_MASS_ERASE"
+   puts "massEraseTarget{} - Asserting MDM_AP_C_DEBUG_REQUEST|MDM_AP_C_MASS_ERASE"
    wcreg $::MDM_AP_Control [expr $::MDM_AP_C_DEBUG_REQUEST|$::MDM_AP_C_MASS_ERASE]
    rcreg $::MDM_AP_Control
 
    # Wait for Flash Mass Erase ACK
    for {set retry 0} {$retry < 20} {incr retry} {
-      puts stderr "massEraseTarget{} - Waiting for Flash Erase ACK"
+      puts "massEraseTarget{} - Waiting for Flash Erase ACK"
       set mdmApStatus [rcreg $::MDM_AP_Status]
       if [expr (($mdmApStatus & $::MDM_AP_ST_MASS_ERASE_ACK) != 0)] {
-         puts stderr "massEraseTarget{} - MDM_AP_ST_MASS_ERASE_ACK asserted OK"
+         puts "massEraseTarget{} - MDM_AP_ST_MASS_ERASE_ACK asserted OK"
          break;
       }
       after 20
@@ -354,10 +357,10 @@ proc massEraseTarget { } {
 
    # Wait for Flash Mass Erase to complete
    for {set retry 0} {$retry < 20} {incr retry} {
-      puts -nonewline stderr "massEraseTarget{} - Waiting for Flash Mass Erase to complete"
+      puts "massEraseTarget{} - Waiting for Flash Mass Erase to complete"
       set mdmApControl [rcreg $::MDM_AP_Control]
       if [expr (($mdmApControl & $::MDM_AP_C_MASS_ERASE) == 0)] {
-         puts stderr "massEraseTarget{} - MDM_AP_C_MASS_ERASE cleared - OK"
+         puts "massEraseTarget{} - MDM_AP_C_MASS_ERASE cleared - OK"
          break;
       }
       after 50
@@ -367,44 +370,54 @@ proc massEraseTarget { } {
    rcreg $::MDM_AP_Status
    
    # Resetting target using MDM
-   puts stderr "massEraseTarget{} - Writing MDM_AP_C_SYSTEM_RESET|MDM_AP_C_CORE_HOLD"
+   puts "massEraseTarget{} - Writing MDM_AP_C_SYSTEM_RESET|MDM_AP_C_CORE_HOLD"
    wcreg $::MDM_AP_Control [expr $::MDM_AP_C_CORE_HOLD | $::MDM_AP_C_SYSTEM_RESET]
 
    # Disable NMI here so we can still debug target using Erase-All option
-   puts stderr "massEraseTarget{} - Disabling NMI"
+   puts "massEraseTarget{} - Disabling NMI"
    catch { connect }
    set soptValue [rb $::SIM_SOPT]
    wb  $::SIM_SOPT [ expr $soptValue & ~$::SIM_SOPT_NMIE_MASK]
    rb $::SIM_SOPT
 
-   puts stderr "massEraseTarget{} - Clearing MDM_AP_C_SYSTEM_RESET"
+   puts "massEraseTarget{} - Clearing MDM_AP_C_SYSTEM_RESET"
    wcreg $::MDM_AP_Control [expr $::MDM_AP_C_CORE_HOLD]
 
-   puts stderr "massEraseTarget{} - Releasing MDM_AP_C_CORE_HOLD"
+   puts "massEraseTarget{} - Releasing MDM_AP_C_CORE_HOLD"
    wcreg $::MDM_AP_Control 0
 
    set rc [ isUnsecure ]
    
+   # For debug
    rcreg $::MDM_AP_Status
    rcreg $::MDM_AP_Control
    
-   return $rc
+   if [expr ( $rc != 0 )] {
+      puts "massEraseTarget{} - Target is still secured!"
+      return -code error $::PROGRAMMING_RC_ERROR_SECURED
+   }
 }
 
 ######################################################################################
+# Checks if target is secured
+#
+# @return $::PROGRAMMING_RC_OK (= 0)      if unsecured
+# @return $::PROGRAMMING_RC_ERROR_SECURED if secured
 #
 proc isUnsecure { } {
-   puts stderr "isUnsecure{} - Checking if unsecured"
+
+   puts "============================================="
+   puts "isUnsecure{}"
    
    catch { connect }
 
    set securityValue [ rcreg $::MDM_AP_Status ]
-   puts stderr [format "isUnsecure{} - MDM_AP_Status=0x%X" $securityValue ]
+   puts [format "isUnsecure{} - MDM_AP_Status=0x%X" $securityValue ]
    if [ expr ( $securityValue & $::MDM_AP_ST_SYSTEM_SECURITY ) != 0 ] {
-      puts stderr "isUnsecure{} - Target is secured!"
+      puts "isUnsecure{} - Target is secured!"
       return $::PROGRAMMING_RC_ERROR_SECURED
    }
-   puts stderr "isUnsecure{} - Target is unsecured"
+   puts "isUnsecure{} - Target is unsecured"
    return $::PROGRAMMING_RC_OK
 }
 
@@ -431,9 +444,9 @@ proc m { } {
 
 # For testing
 proc d { } {
-   puts stderr ""
-   puts stderr ""
-   puts stderr ""
+   puts ""
+   puts ""
+   puts ""
    set ::RESET_RECOVERY  100
    o
    m
@@ -443,9 +456,9 @@ proc d { } {
 
 # For testing
 proc t { } {
-   puts stderr ""
-   puts stderr ""
-   puts stderr ""
+   puts ""
+   puts ""
+   puts ""
    
    reset s v
    pinSet rst=0
@@ -459,7 +472,7 @@ proc t { } {
 # @param value Trim value to write
 #   
 proc writeTrim { value } {
-   puts stderr [format "Trim = 0x%02X (%d)" $value $value]
+   puts [format "Trim = 0x%02X (%d)" $value $value]
    
    set ics_c4 [ expr [rb $::ICS_C4] & ~$::ICS_C4_SCFTRIM_MASK ]
    wb $::ICS_C4 [ expr $ics_c4|($value&$::ICS_C4_SCFTRIM_MASK) ]
@@ -469,11 +482,11 @@ proc writeTrim { value } {
 ###################################################   
 # Wait while CPU is executing
 #
-# @return wait time in ms or -1 on fail
+# @return wait time in ms
 #
 proc runUntilStopped { retries } {
 
-#   puts stderr "runUntilStopped{} - retries = $retries"
+#   puts "runUntilStopped{} - retries = $retries"
    
    set TIME_start [clock clicks -milliseconds]
    
@@ -482,17 +495,16 @@ proc runUntilStopped { retries } {
 #   rcreg $::MDM_AP_Status
    
    for {set retry 0} {$retry < $retries} {incr retry} {
-#      puts stderr "runUntilStopped{} - Waiting..."
+#      puts "runUntilStopped{} - Waiting..."
       set mdmApStatus [rcreg -q $::MDM_AP_Status]
       if [expr (($mdmApStatus & $::MDM_AP_ST_CORE_HALTED) != 0)] {
          set TIME_taken [expr [clock clicks -milliseconds] - $TIME_start]
-         puts stderr "runUntilStopped{} - MDM_AP_ST_CORE_HALTED asserted OK"
+         puts "runUntilStopped{} - MDM_AP_ST_CORE_HALTED asserted OK"
          return $TIME_taken;
       }
       after 5
    }
-   puts stderr "runUntilStopped{} - MDM_AP_ST_CORE_HALTED failed to set"
-   return -1
+   return -code error "runUntilStopped{} - MDM_AP_ST_CORE_HALTED failed to set"
 }
 
 ###################################################   
@@ -553,10 +565,11 @@ proc writeWdogCode {} {
 # Disable watch-dog
 #
 proc disableWdog {} {
+   puts "$::NAME.disableWdog"
    reset
    writeWdogCode
    wpc $::LOAD_ADDRESS
-   return [runUntilStopped 500]
+   runUntilStopped 500
 }
 
 ###################################################   
@@ -603,14 +616,14 @@ proc regress { targetCount } {
    set n [llength $yValues]
    
    foreach {yValue} $yValues {
-#      puts stderr "yValue = $yValue"
+#      puts "yValue = $yValue"
       set xValue [timingLoop $yValue]
       if [expr $xValue < 0 ] {
          return -1
       }
       lappend xValues $xValue
       
-#      puts stderr "xValue = $xValue"
+#      puts "xValue = $xValue"
       set sumx  [expr $sumx + $xValue] 
       set sumy  [expr $sumy + $yValue] 
       set sumx2 [expr $sumx2 + ($xValue * $xValue)] 
@@ -619,16 +632,16 @@ proc regress { targetCount } {
    }
    set denom [expr $n * $sumx2 - $sumx*$sumx]
    if [expr $denom == 0 ] {
-      return $::PROGRAMMING_RC_ERROR_TRIM
+      return -code error $::PROGRAMMING_RC_ERROR_TRIM
    }
-#   puts stderr "denom = $denom"
+#   puts "denom = $denom"
 #   
-#   puts stderr "Xs = $yValues"
-#   puts stderr "Ys = $xValues"
+#   puts "Xs = $yValues"
+#   puts "Ys = $xValues"
    
    set m [expr ($n * $sumxy  -  $sumx * $sumy) / $denom]
    set b [expr ($sumy * $sumx2  -  $sumx * $sumxy) / $denom]
-#   puts stderr [format "M = %.2f, B = %.1f" $m $b ]
+#   puts [format "M = %.2f, B = %.1f" $m $b ]
    
    set trimValue [expr round($m * $targetCount + $b)]
    
@@ -642,9 +655,12 @@ proc regress { targetCount } {
 #
 proc findTrim { targetfrequency } {
 
+   puts "============================================="
+   puts "$::NAME.findTrim"
+   
    # Only supports 37.50 kHz trimming
    if [expr $targetfrequency != 37500 ] {
-      return $::PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS
+      return -code error $::PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS
    }
 
    # The following value was found by trial and error for default MKE04 24MHz target clock out of reset
@@ -652,7 +668,7 @@ proc findTrim { targetfrequency } {
    
    disableWdog
    set trimValue [ regress $targetCount ]
-   puts stderr "Trim value = $trimValue"
+   puts "Trim value = $trimValue"
    return $trimValue
 }
 

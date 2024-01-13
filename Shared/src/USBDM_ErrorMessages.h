@@ -45,7 +45,7 @@ typedef enum  {
  BDM_RC_ILLEGAL_COMMAND                        = 4,     //!< Illegal (unknown) command (may be in wrong target mode)
  BDM_RC_NO_CONNECTION                          = 5,     //!< No connection to target
  BDM_RC_OVERRUN                                = 6,     //!< New command before previous command completed
- BDM_RC_CF_ILLEGAL_COMMAND                     = 7,     //!< Coldfire BDM interface did not recognize the command
+ BDM_RC_CF_ILLEGAL_COMMAND                     = 7,     //!< Coldfire BDM interface did not recognise the command
  BDM_RC_DEVICE_OPEN_FAILED                     = 8,     //!< BDM Open Failed - Other LIBUSB error on open
  BDM_RC_USB_DEVICE_BUSY                        = 9,     //!< BDM Open Failed - LIBUSB_ERROR_ACCESS on open - Probably open in another app
  BDM_RC_USB_DEVICE_NOT_INSTALLED               = 10,    //!< BDM Open Failed - LIBUSB_ERROR_ACCESS on claim I/F - Probably driver not installed

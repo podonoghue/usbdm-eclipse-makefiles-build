@@ -2305,11 +2305,13 @@ USBDM_ErrorCode FlashProgrammer_S12Z::doReadbackVerify(FlashImagePtr flashImage)
       while (regionSize>0) {
          // Get memory block containing address
          MemoryRegionConstPtr memRegion = device->getMemoryRegionFor(imageAddress, memorySpace);
-         if (memRegion == NULL) {
+         if (memRegion == nullptr) {
             checkResult = PROGRAMMING_RC_ERROR_OUTSIDE_TARGET_FLASH;
             log.error("Verifying Block %s[0x%8.8X..0x%8.8X] => %s\n", getMemSpaceName(memorySpace), imageAddress, imageAddress+regionSize-1, bdmInterface->getErrorString(checkResult));
             break;
          }
+         AddressType addressType = memRegion->getAddressType();
+
 #if (TARGET == ARM)
          if (memRegion->getAlignment()<memorySpace) {
             memorySpace = (MemorySpace_t)memRegion->getAlignment();
@@ -2337,6 +2339,10 @@ USBDM_ErrorCode FlashProgrammer_S12Z::doReadbackVerify(FlashImagePtr flashImage)
          if (((imageAddress+blockSize) & ((memorySpace&MS_SIZE)-1)) != 0) {
             // Unaligned end address
             memorySpace = (MemorySpace_t)((memorySpace&~MS_SIZE)|MS_Byte);
+         }
+         if (addressType == AddressType::AddrLinear) {
+            // Make Global address
+            memorySpace = MemorySpace_t(memorySpace|MS_Global);
          }
 #endif
          if (bdmInterface->readMemory(memorySpace, blockSize*sizeof(uint8_t), imageAddress, (uint8_t *)buffer) != BDM_RC_OK) {
