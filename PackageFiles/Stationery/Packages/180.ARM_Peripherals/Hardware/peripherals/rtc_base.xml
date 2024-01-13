@@ -849,7 +849,7 @@
          \t * @return %tooltip
          \t */
          \tstatic %paramType get%(name)() {
-         \t   return %paramType(%register&%mask);
+         \t   return %fieldExtract;
          \t}
          \t\n
       ]]></variableTemplate>
@@ -858,6 +858,7 @@
          \t/**
          \t * Clear %description
          \t *
+         \t */
          \tstatic void clear%(name)() {
          \t   %register = %register|%mask;
          \t}
@@ -895,7 +896,7 @@
       ]]></variableTemplate>
    </for>
 
-   <!--   ========== class $(_Structname)BasicInfo =============================== -->
+   <!-- ____ class $(_Structname)BasicInfo __________ -->
 
    <template where="basicInfo" ><![CDATA[
       class $(_Structname)BasicInfo {
@@ -903,7 +904,7 @@
       public:\n
    ]]></template>
 
-   <!--   ========== Interrupt handling =============================== -->
+   <!--   ____ Interrupt handling __________ -->
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
    <![CDATA[

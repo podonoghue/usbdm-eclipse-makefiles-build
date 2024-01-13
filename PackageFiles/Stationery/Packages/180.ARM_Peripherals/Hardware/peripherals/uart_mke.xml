@@ -335,11 +335,19 @@ Devices using this peripheral:
    ]]></template>
 
    <!-- ************* Signal mapping ****************** -->
-   <category name="SIM" description="Pin mapping">
-      <aliasOption key="/SIM/sim_pinsel_$(_name)ps"  locked="false" optional="true" />
+   <category name="Advanced" description="SIM configuration">
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title/>
       <aliasOption key="/SIM/sim_pinsel0_$(_name)ps" locked="false" optional="true" />
       <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" locked="false" optional="true" />
    </category>
+   <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
    <signals enabledBy="enablePeripheralSupport" locked="true" />
 

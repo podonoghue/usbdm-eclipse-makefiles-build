@@ -916,6 +916,7 @@
          <param type="BooleanVariable"        name="ftm_sync_trig0_present"         value="true"             key="/FTM0/ftm_sync_trig0_present" />
          <param type="BooleanVariable"        name="ftm_sync_trig1_present"         value="true"             key="/FTM0/ftm_sync_trig1_present" />
          <param type="BooleanVariable"        name="ftm_sync_trig2_present"         value="true"             key="/FTM0/ftm_sync_trig2_present" />
+         <param type="BooleanVariable"        name="ftm_sync_trig_present"          value="true"             key="/FTM0/ftm_sync_trig_present" />
          <param type="BooleanVariable"        name="ftm_synconf_cntinc_present"     value="true"             key="/FTM0/ftm_synconf_cntinc_present" />
          <param type="BooleanVariable"        name="ftm_synconf_hwinvc_present"     value="true"             key="/FTM0/ftm_synconf_hwinvc_present" />
          <param type="BooleanVariable"        name="ftm_synconf_hwom_present"       value="true"             key="/FTM0/ftm_synconf_hwom_present" />

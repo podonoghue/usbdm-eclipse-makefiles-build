@@ -6,7 +6,7 @@ Devices using this peripheral:
       MKL82Z7
 -->
       <peripheral>
-         <?sourceFile "TSI0_DMA_MK28F15" ?>
+         <?sourceFile "TSI0_DMA_MK82" ?>
          <name>TSI0</name>
          <description>Touch Sensing Input</description>
          <groupName>TSI</groupName>

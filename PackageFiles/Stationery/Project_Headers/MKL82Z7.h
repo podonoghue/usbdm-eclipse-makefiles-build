@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2023/12
+ * @date     2024/01
  *
  */
 
@@ -8669,6 +8669,9 @@ typedef struct TPM_Type {
 /** @} */
 
 /** @name POL - Channel Polarity */ /** @{ */
+#define TPM_POL_POL_MASK                         (0xFFU)                                             /**< TPM0_POL.POL Mask                       */
+#define TPM_POL_POL_SHIFT                        (0U)                                                /**< TPM0_POL.POL Position                   */
+#define TPM_POL_POL(x)                           (((uint32_t)(((uint32_t)(x))<<TPM_POL_POL_SHIFT))&TPM_POL_POL_MASK) /**< TPM0_POL.POL Field                      */
 #define TPM_POL_POL0_MASK                        (0x1U)                                              /**< TPM0_POL.POL0 Mask                      */
 #define TPM_POL_POL0_SHIFT                       (0U)                                                /**< TPM0_POL.POL0 Position                  */
 #define TPM_POL_POL0(x)                          (((uint32_t)(((uint32_t)(x))<<TPM_POL_POL0_SHIFT))&TPM_POL_POL0_MASK) /**< TPM0_POL.POL0 Field                     */
@@ -8805,6 +8808,12 @@ typedef struct TPM1_Type {
 
 /** @addtogroup TPM_Register_Masks_GROUP TPM Register Masks */
 /** @{ */
+
+/** @name FILTER - Filter Control */ /** @{ */
+#define TPM_FILTER_CHFVAL_MASK                   (0xFFU)                                             /**< TPM1_FILTER.CHFVAL Mask                 */
+#define TPM_FILTER_CHFVAL_SHIFT                  (0U)                                                /**< TPM1_FILTER.CHFVAL Position             */
+#define TPM_FILTER_CHFVAL(x)                     (((uint32_t)(((uint32_t)(x))<<TPM_FILTER_CHFVAL_SHIFT))&TPM_FILTER_CHFVAL_MASK) /**< TPM1_FILTER.CHFVAL Field                */
+/** @} */
 
 /** @} */ /* End group TPM_Register_Masks_GROUP */
 
@@ -9393,7 +9402,7 @@ typedef struct TRNG_Type {
 /** @{ */
 
 /* ================================================================================ */
-/* ================           TSI0 (file:TSI0_DMA_MK28F15)         ================ */
+/* ================           TSI0 (file:TSI0_DMA_MK82)            ================ */
 /* ================================================================================ */
 
 /**

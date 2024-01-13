@@ -348,17 +348,12 @@
 
       <for keys="n" values="0;1" >
          <intOption key="FtmClkin%(n)"
+            addToVar="FtmExternalItems"
             description="FTM External clock input #%(n)"
             toolTip="This input is available as a FTM external clock source"
             value="0"
             units="Hz"
          />
-         <for keys="f" dim="6" >
-            <if condition="sim_sopt4_ftm%(f)clksel_present" >
-               <equation key="Ftm%(f)ExternalItems" value="" condition="!Ftm%(f)ExternalItems" />
-               <equation key="Ftm%(f)ExternalItems" value="=Ftm%(f)ExternalItems+&quot;FtmClkin%(n);&quot;"/>
-            </if>
-         </for>
          <variableTemplate variables="FtmClkin%(n)"
             initExpressionOnSameLine="true"
          ><![CDATA[
@@ -679,18 +674,12 @@
 
       <for keys="clk" values="0;1" >
          <intOption key="TpmClkin%(clk)" condition="sim_sopt9_tpm0clksel_present||sim_sopt9_tpm1clksel_present"
+            addToVar="TpmExternalItems"
             toolTip="User supplied value for the clock available on TPM_CLKIN%(clk) pin"
             description="TPM_CLKIN%(clk) frequency"
             value="0"
             units="Hz"
          />
-         <for keys="f" dim="6" >
-            <if condition="TpmClkin%(clk)" >
-               <equation key="Tpm%(f)ExternalItems" value="" condition="!Tpm%(f)ExternalItems" />
-               <equation key="Tpm%(f)ExternalItems" value="=Tpm%(f)ExternalItems+&quot;TpmClkin%(clk);&quot;"/>
-            </if>
-         </for>
-
          <variableTemplate
             variables="TpmClkin%(clk)"
             initExpressionOnSameLine="true" >
@@ -960,6 +949,7 @@
                max="75_MHz" />
 
             <choiceOption key="sim_sopt2_lpuartsrc[%(n)]" condition="sim_sopt2_lpuartsrc_present"
+               addToVar="LpuartExternalItems"
                typeName="SimLpuartClockSource"
                target="system_lpuart_clock[%(n)]"
                description="LPUART Clock select"
@@ -973,6 +963,7 @@
             </choiceOption>
 
             <intOption key="system_lpuart_clock[%(n)]" condition="sim_sopt2_lpuartsrc_present"
+               addToVar="LpuartExternalItems"
                max="LPUART_max[/SMC/smc_pmctrl_runm[%(n)]]"
                derived="true"
                locked="true"
@@ -982,6 +973,7 @@
                value="0"/>
 
             <choiceOption key="sim_sopt2_flexiosrc[%(n)]" condition="sim_sopt2_flexiosrc_present"
+               addToVar="FlexioExternalItems"
                typeName="SimFlexioClockSource"
                target="system_flexio_clock[%(n)]"
                description="FLEXIO Clock source"
@@ -993,6 +985,7 @@
             </choiceOption>
 
             <intOption key="system_flexio_clock[%(n)]" condition="sim_sopt2_flexiosrc_present"
+               addToVar="FlexioExternalItems"
                derived="true"
                locked="true"
                units="Hz"
@@ -1002,6 +995,7 @@
                max="120MHz" />
 
             <choiceOption key="sim_sopt2_tpmsrc[%(n)]" condition="sim_sopt2_tpmsrc_present"
+               addToVar="TpmExternalItems"
                typeName="SimTpmClockSource"
                target="system_tpm_clock[%(n)]"
                description="TPM Clock source"
@@ -1013,6 +1007,7 @@
             </choiceOption>
 
             <intOption key="system_tpm_clock[%(n)]" condition="sim_sopt2_tpmsrc_present"
+               addToVar="TpmExternalItems"
                max="TPM_max[/SMC/smc_pmctrl_runm[%(n)]]"
                derived="true"
                locked="true"
@@ -1023,6 +1018,7 @@
             <aliasOption key="system_time_clockin" locked="false" optional="true" />
 
             <choiceOption key="sim_sopt2_timesrc[%(n)]"  condition="sim_sopt2_timesrc_present"
+               addToVar="IeeeExternalItems"
                target="system_time_clock[%(n)]"
                typeName="SimTimeStampClkSrc"
                description="IEEE 1588 timestamp clock source select"
@@ -1034,6 +1030,7 @@
             </choiceOption>
 
             <intOption key="system_time_clock[%(n)]" condition="sim_sopt2_timesrc_present"
+               addToVar="IeeeExternalItems"
                locked="true"
                derived="true"
                units="Hz"
@@ -1044,6 +1041,7 @@
             <aliasOption key="system_sdhc_clockin" locked="false" optional="true" />
 
             <choiceOption key="sim_sopt2_sdhcsrc[%(n)]" condition="sim_sopt2_sdhcsrc_present"
+               addToVar="SdhcExternalItems"
                target="system_sdhc_clock[%(n)]"
                typeName="SimSdhcClockSource"
                description="SDHC Clock select"
@@ -1055,6 +1053,7 @@
             </choiceOption>
 
             <intOption key="system_sdhc_clock[%(n)]" condition="sim_sopt2_sdhcsrc_present"
+               addToVar="SdhcExternalItems"
                locked="true"
                derived="true"
                units="Hz"
@@ -1063,6 +1062,7 @@
                value="0" max="120MHz" />
 
             <choiceOption key="sim_sopt2_emvsimsrc[%(n)]"  condition="sim_sopt2_emvsimsrc_present"
+               addToVar="EmvsimExternalItems"
                typeName="SimEmvsimClockSource"
                target="system_emvsim_clock[%(n)]"
                description="EMVSIM Clock source"
@@ -1074,6 +1074,7 @@
             </choiceOption>
 
             <intOption key="system_emvsim_clock[%(n)]" condition="sim_sopt2_emvsimsrc_present"
+               addToVar="EmvsimExternalItems"
                derived="true"
                locked="true"
                units="Hz"

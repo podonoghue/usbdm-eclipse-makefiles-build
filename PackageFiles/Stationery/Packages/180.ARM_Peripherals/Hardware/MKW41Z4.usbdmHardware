@@ -1725,6 +1725,7 @@
          <param type="BooleanVariable"        name="tpm_mod_present"                value="true"             key="/TPM1/tpm_mod_present" />
          <param type="BooleanVariable"        name="tpm_pol_pol0_present"           value="true"             key="/TPM1/tpm_pol_pol0_present" />
          <param type="BooleanVariable"        name="tpm_pol_pol1_present"           value="true"             key="/TPM1/tpm_pol_pol1_present" />
+         <param type="BooleanVariable"        name="tpm_pol_pol_present"            value="true"             key="/TPM1/tpm_pol_pol_present" />
          <param type="BooleanVariable"        name="tpm_pol_present"                value="true"             key="/TPM1/tpm_pol_present" />
          <param type="BooleanVariable"        name="tpm_qdctrl_present"             value="true"             key="/TPM1/tpm_qdctrl_present" />
          <param type="BooleanVariable"        name="tpm_qdctrl_quaden_present"      value="true"             key="/TPM1/tpm_qdctrl_quaden_present" />
@@ -1790,6 +1791,7 @@
          <param type="BooleanVariable"        name="tpm_mod_present"                value="true"             key="/TPM2/tpm_mod_present" />
          <param type="BooleanVariable"        name="tpm_pol_pol0_present"           value="true"             key="/TPM2/tpm_pol_pol0_present" />
          <param type="BooleanVariable"        name="tpm_pol_pol1_present"           value="true"             key="/TPM2/tpm_pol_pol1_present" />
+         <param type="BooleanVariable"        name="tpm_pol_pol_present"            value="true"             key="/TPM2/tpm_pol_pol_present" />
          <param type="BooleanVariable"        name="tpm_pol_present"                value="true"             key="/TPM2/tpm_pol_present" />
          <param type="BooleanVariable"        name="tpm_qdctrl_present"             value="true"             key="/TPM2/tpm_qdctrl_present" />
          <param type="BooleanVariable"        name="tpm_qdctrl_quaden_present"      value="true"             key="/TPM2/tpm_qdctrl_quaden_present" />

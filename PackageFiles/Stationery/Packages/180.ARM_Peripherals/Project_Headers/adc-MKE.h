@@ -160,7 +160,7 @@ public:
     *
     * @note The PGA requires use of AdcRefSel_VrefOut (~1.2V)
     */
-   void setReference(AdcRefSel adcRefSel=AdcRefSel_VrefhAndVrefl) {
+   void setReference(AdcReferenceSel adcRefSel=AdcReferenceSel_VrefhAndVrefl) {
       adc->SC2 = (adc->SC2&~ADC_SC2_REFSEL_MASK)|adcRefSel;
    }
 
@@ -179,20 +179,6 @@ public:
       // Set comparison fields
       adc->SC2 = adc->SC2 | (adc->SC2&~(ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)))|
             (adcCompare&(ADC_SC2_ACFE_MASK|ADC_SC2_ACFGT_MASK));
-   }
-
-   /**
-    * Enable/disable continuous conversion mode.
-    *
-    * @param[in] adcContinuous  Controls continuous conversion mode.
-    */
-   void enableContinuousConversions(AdcContinuous adcContinuous = AdcContinuous_Enabled) const {
-      if (adcContinuous) {
-         adc->SC1[0] = adc->SC1[0] | ADC_SC1_ADCO_MASK;
-      }
-      else {
-         adc->SC1[0] = adc->SC1[0] & ~ADC_SC1_ADCO_MASK;
-      }
    }
 
    /**
@@ -397,63 +383,13 @@ public:
    /** @return Base address of ADC.R[index] registers as uint32_t */
    static constexpr uint32_t adcR(unsigned index) { return adcBase() + offsetof(ADC_Type, R) + index*sizeof(ADC_Type::R[0]); }
 
-   // Template _mapPinsOption.xml
-
-   /**
-    * Configures all mapped pins associated with ADC
-    *
-    * @note Locked pins will be unaffected
-    */
-   static void configureAllPins() {
-
-      // Configure pins if selected and not already locked
-//      if constexpr (Info::mapPinsOnEnable && !(MapAllPinsOnStartup || ForceLockedPins)) {
-//         Info::initPCRs();
-//      }
-   }
-
-   /**
-    * Disabled all mapped pins associated with ADC
-    *
-    * @note Only the lower 16-bits of the PCR registers are modified
-    *
-    * @note Locked pins will be unaffected
-    */
-   static void disableAllPins() {
-
-      // Disable pins if selected and not already locked
-      if constexpr (Info::mapPinsOnEnable && !(MapAllPinsOnStartup || ForceLockedPins)) {
-         Info::clearPCRs();
-      }
-   }
-
-   /**
-    * Basic enable of ADC
-    * Includes enabling clock and configuring all mapped pins if mapPinsOnEnable is selected in configuration
-    */
-   static void enable() {
-      Info::enableClock();
-      configureAllPins();
-   }
-
-   /**
-    * Disables the clock to ADC and all mapped pins
-    */
-   static void disable() {
-      disableNvicInterrupts();
-      adc->SC1[0] = ADC_SC1_ADCH(-1);
-      disableAllPins();
-      Info::disableClock();
-   }
-   // End Template _mapPinsOption.xml
-
 public:
 
    constexpr AdcBase_T() : Adc(Info::baseAddress) {};
 
    /** Allow convenient access to associate AdcInfo */
    using AdcInfo = Info;
-
+   using Info::configure;
 
 $(/ADC/publicMethods: // No /ADC/publicMethods found)
 $(/ADC/InitMethod: // /ADC/InitMethod not found)
@@ -479,7 +415,7 @@ $(/ADC/InitMethod: // /ADC/InitMethod not found)
          AdcSample       adcSample       = AdcSample_Short,
          AdcPower        adcPower        = AdcPower_Normal
    ) {
-      enable();
+      Info::enable();
       adc->SC3 = adcResolution|calculateClockDivider(adcClockSource, adcPower)|adcPower|(adcSample&ADC_SC3_ADLSMP_MASK);
    }
 
@@ -540,6 +476,17 @@ $(/ADC/InitMethod: // /ADC/InitMethod not found)
    }
 
    /**
+    * Check if ADC result from last conversion is available.
+    * This statis will be cleared if when the result is retrieved.
+    *
+    * @return true   => ADC conversion result is available
+    * @return false  => ADC is idle
+    */
+   static bool isResultAvailable() {
+      return adc->SC1[0]&ADC_SC1_COCO_MASK;
+   }
+
+   /**
     * Set conversion mode
     *
     * @param[in] adcResolution Resolution for converter e.g. AdcResolution_16bit_se
@@ -570,7 +517,7 @@ $(/ADC/InitMethod: // /ADC/InitMethod not found)
     *
     * @param adcRefSel Reference to select
     */
-   static void setReference(AdcRefSel adcRefSel=AdcRefSel_VrefhAndVrefl) {
+   static void setReference(AdcReferenceSel adcRefSel=AdcReferenceSel_VrefhAndVrefl) {
       adc->SC2 = (adc->SC2&~ADC_SC2_REFSEL_MASK)|adcRefSel;
    }
 
@@ -589,20 +536,6 @@ $(/ADC/InitMethod: // /ADC/InitMethod not found)
       // Set comparison fields
       adc->SC2 = adc->SC2 | (adc->SC2&~(ADC_SC2_ACFE_MASK|ADC_SC2_ACFGT_MASK))|
             (adcCompare&(ADC_SC2_ACFE_MASK|ADC_SC2_ACFGT_MASK));
-   }
-
-   /**
-    * Enable/disable continuous conversion mode.
-    *
-    * @param[in] adcContinuous  Controls continuous conversion mode.
-    */
-   static void enableContinuousConversions(AdcContinuous adcContinuous) {
-      if (adcContinuous) {
-         adc->SC1 = adc->SC1[0] | ADC_SC1_ADCO_MASK;
-      }
-      else {
-         adc->SC1 = adc->SC1[0] & ~ADC_SC1_ADCO_MASK;
-      }
    }
 
 protected:
@@ -766,14 +699,49 @@ public:
    public:
       constexpr Channel() : AdcChannel(AdcInfo::baseAddress, channel) {}
 
+      /** Channel number */
+      static constexpr AdcChannelNum CHANNEL=(AdcChannelNum)channel;
+
       /** The ADC that owns this channel */
       using OwningAdc = AdcBase_T;
 
       /** Information about this ADC */
       using AdcInfo = Info;
 
-      /** Channel number */
-      static constexpr AdcChannelNum CHANNEL=(AdcChannelNum)channel;
+      /**
+       * Gets result of last software initiated conversion
+       *
+       * @return - The result of the conversion as an integer converted from 16-bit ADC value\n
+       *           For single-ended conversions this will be zero extended\n
+       *           For differential conversions this will be sign-extended
+       *
+       * @note Result is signed but will always be positive for single-ended channels.
+       * @note This will also clear the conversion flag if set
+       */
+      static int getConversionResult() {
+         return OwningAdc::getConversionResult();
+      }
+
+      /**
+       * Check if ADC result from last conversion is available.
+       * This statis will be cleared if when the result is retrieved.
+       *
+       * @return true   => ADC conversion result is available
+       * @return false  => ADC is idle
+       */
+      static bool isResultAvailable() {
+         return OwningAdc::isResultAvailable();
+      }
+
+      /**
+       * Check if ADC is current doing a conversion
+       *
+       * @return true   => ADC is busy doing a conversion
+       * @return false  => ADC is idle
+       */
+      static int isBusy() {
+         return OwningAdc::isBusy();
+      }
 
       /**
        * Initiates a conversion but does not wait for it to complete.

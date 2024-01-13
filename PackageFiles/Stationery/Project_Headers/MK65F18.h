@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2023/12
+ * @date     2024/01
  *
  */
 
@@ -7174,6 +7174,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name FLTCTRL - Fault Control */ /** @{ */
+#define FTM_FLTCTRL_FAULTEN_MASK                 (0xFU)                                              /**< FTM0_FLTCTRL.FAULTEN Mask               */
+#define FTM_FLTCTRL_FAULTEN_SHIFT                (0U)                                                /**< FTM0_FLTCTRL.FAULTEN Position           */
+#define FTM_FLTCTRL_FAULTEN(x)                   (((uint32_t)(((uint32_t)(x))<<FTM_FLTCTRL_FAULTEN_SHIFT))&FTM_FLTCTRL_FAULTEN_MASK) /**< FTM0_FLTCTRL.FAULTEN Field              */
 #define FTM_FLTCTRL_FAULT0EN_MASK                (0x1U)                                              /**< FTM0_FLTCTRL.FAULT0EN Mask              */
 #define FTM_FLTCTRL_FAULT0EN_SHIFT               (0U)                                                /**< FTM0_FLTCTRL.FAULT0EN Position          */
 #define FTM_FLTCTRL_FAULT0EN(x)                  (((uint32_t)(((uint32_t)(x))<<FTM_FLTCTRL_FAULT0EN_SHIFT))&FTM_FLTCTRL_FAULT0EN_MASK) /**< FTM0_FLTCTRL.FAULT0EN Field             */
@@ -7186,6 +7189,9 @@ typedef struct FTM_Type {
 #define FTM_FLTCTRL_FAULT3EN_MASK                (0x8U)                                              /**< FTM0_FLTCTRL.FAULT3EN Mask              */
 #define FTM_FLTCTRL_FAULT3EN_SHIFT               (3U)                                                /**< FTM0_FLTCTRL.FAULT3EN Position          */
 #define FTM_FLTCTRL_FAULT3EN(x)                  (((uint32_t)(((uint32_t)(x))<<FTM_FLTCTRL_FAULT3EN_SHIFT))&FTM_FLTCTRL_FAULT3EN_MASK) /**< FTM0_FLTCTRL.FAULT3EN Field             */
+#define FTM_FLTCTRL_FFLTREN_MASK                 (0xF0U)                                             /**< FTM0_FLTCTRL.FFLTREN Mask               */
+#define FTM_FLTCTRL_FFLTREN_SHIFT                (4U)                                                /**< FTM0_FLTCTRL.FFLTREN Position           */
+#define FTM_FLTCTRL_FFLTREN(x)                   (((uint32_t)(((uint32_t)(x))<<FTM_FLTCTRL_FFLTREN_SHIFT))&FTM_FLTCTRL_FFLTREN_MASK) /**< FTM0_FLTCTRL.FFLTREN Field              */
 #define FTM_FLTCTRL_FFLTR0EN_MASK                (0x10U)                                             /**< FTM0_FLTCTRL.FFLTR0EN Mask              */
 #define FTM_FLTCTRL_FFLTR0EN_SHIFT               (4U)                                                /**< FTM0_FLTCTRL.FFLTR0EN Position          */
 #define FTM_FLTCTRL_FFLTR0EN(x)                  (((uint32_t)(((uint32_t)(x))<<FTM_FLTCTRL_FFLTR0EN_SHIFT))&FTM_FLTCTRL_FFLTR0EN_MASK) /**< FTM0_FLTCTRL.FFLTR0EN Field             */
@@ -7219,6 +7225,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name FLTPOL - FTM Fault Input Polarity */ /** @{ */
+#define FTM_FLTPOL_FLTPOL_MASK                   (0xFU)                                              /**< FTM0_FLTPOL.FLTPOL Mask                 */
+#define FTM_FLTPOL_FLTPOL_SHIFT                  (0U)                                                /**< FTM0_FLTPOL.FLTPOL Position             */
+#define FTM_FLTPOL_FLTPOL(x)                     (((uint32_t)(((uint32_t)(x))<<FTM_FLTPOL_FLTPOL_SHIFT))&FTM_FLTPOL_FLTPOL_MASK) /**< FTM0_FLTPOL.FLTPOL Field                */
 #define FTM_FLTPOL_FLT0POL_MASK                  (0x1U)                                              /**< FTM0_FLTPOL.FLT0POL Mask                */
 #define FTM_FLTPOL_FLT0POL_SHIFT                 (0U)                                                /**< FTM0_FLTPOL.FLT0POL Position            */
 #define FTM_FLTPOL_FLT0POL(x)                    (((uint32_t)(((uint32_t)(x))<<FTM_FLTPOL_FLT0POL_SHIFT))&FTM_FLTPOL_FLT0POL_MASK) /**< FTM0_FLTPOL.FLT0POL Field               */
@@ -13931,6 +13940,9 @@ typedef struct TPM_Type {
 /** @} */
 
 /** @name POL - Channel Polarity */ /** @{ */
+#define TPM_POL_POL_MASK                         (0xFFU)                                             /**< TPM1_POL.POL Mask                       */
+#define TPM_POL_POL_SHIFT                        (0U)                                                /**< TPM1_POL.POL Position                   */
+#define TPM_POL_POL(x)                           (((uint32_t)(((uint32_t)(x))<<TPM_POL_POL_SHIFT))&TPM_POL_POL_MASK) /**< TPM1_POL.POL Field                      */
 #define TPM_POL_POL0_MASK                        (0x1U)                                              /**< TPM1_POL.POL0 Mask                      */
 #define TPM_POL_POL0_SHIFT                       (0U)                                                /**< TPM1_POL.POL0 Position                  */
 #define TPM_POL_POL0(x)                          (((uint32_t)(((uint32_t)(x))<<TPM_POL_POL0_SHIFT))&TPM_POL_POL0_MASK) /**< TPM1_POL.POL0 Field                     */
@@ -14041,7 +14053,7 @@ typedef struct TPM_Type {
 /** @{ */
 
 /* ================================================================================ */
-/* ================           TSI0 (file:TSI0_DMA_MK28F15)         ================ */
+/* ================           TSI0 (file:TSI0_DMA_MK82)            ================ */
 /* ================================================================================ */
 
 /**

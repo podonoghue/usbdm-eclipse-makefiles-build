@@ -98,6 +98,7 @@
    <!ATTLIST variable  expression         CDATA        #REQUIRED>
    <!-- Immediately evaluated expression used to guard creating this item -->
    <!ATTLIST variable  condition          CDATA        #IMPLIED>
+   <!ATTLIST variable  logging            CDATA        #IMPLIED>
 
 <!ELEMENT graphic ((%graphic_items;)*) >
    <!ATTLIST graphic  key                CDATA        #REQUIRED>
@@ -273,8 +274,7 @@
    <!ATTLIST timeOption units          (Hz|s|ticks) #REQUIRED>
    <!-- Equation that calculates the period from the variable primary value (only used if units = ticks) -->
    <!ATTLIST timeOption periodEquation  CDATA       #IMPLIED> 
-
-
+   <!ATTLIST timeOption logging            CDATA        #IMPLIED>
 
 <!ELEMENT intOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -338,6 +338,7 @@
    <!ATTLIST intOption isNamedClock  (true)       #IMPLIED>
    <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
    <!ATTLIST intOption addToVar            CDATA        #IMPLIED>
+   <!ATTLIST intOption logging            CDATA        #IMPLIED>
    
   
 <!ELEMENT bitmaskOption EMPTY >
@@ -394,6 +395,7 @@
    <!ATTLIST bitmaskOption addToVar       CDATA        #IMPLIED>
    <!-- Reference to a choice variable to obtain information from -->
    <!ATTLIST bitmaskOption uses           CDATA        #IMPLIED>
+   <!ATTLIST bitmaskOption logging            CDATA        #IMPLIED>
 
 <!ELEMENT floatOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -444,6 +446,7 @@
    <!ATTLIST floatOption derivedFrom   CDATA        #IMPLIED>
    <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
    <!ATTLIST floatOption addToVar            CDATA        #IMPLIED>
+   <!ATTLIST floatOption logging            CDATA        #IMPLIED>
 
 <!ELEMENT stringOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -483,6 +486,7 @@
    <!ATTLIST stringOption addToVar            CDATA        #IMPLIED>
      <!-- Expression enables this option -->
    <!ATTLIST stringOption enabledBy           CDATA        #IMPLIED>
+   <!ATTLIST stringOption logging            CDATA        #IMPLIED>
   
 <!ELEMENT numericListOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -512,6 +516,7 @@
    <!ATTLIST numericListOption derivedFrom   CDATA        #IMPLIED>
    <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
    <!ATTLIST numericListOption addToVar            CDATA        #IMPLIED>
+   <!ATTLIST numericListOption logging            CDATA        #IMPLIED>
   
 <!-- Signal to add a dependency -->
 
@@ -542,6 +547,7 @@
    <!ATTLIST pinListOption derivedFrom        CDATA        #IMPLIED>
    <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
    <!ATTLIST pinListOption addToVar            CDATA        #IMPLIED>
+   <!ATTLIST pinListOption logging            CDATA        #IMPLIED>
 
 <!ELEMENT clockSelectionOption ((choice)*) >
    <!-- Visible name of option - also used for key if not provided -->
@@ -589,6 +595,7 @@
    <!ATTLIST clockSelectionOption disabledValue       CDATA        #IMPLIED>
    <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
    <!ATTLIST clockSelectionOption addToVar            CDATA        #IMPLIED>
+   <!ATTLIST clockSelectionOption logging            CDATA        #IMPLIED>
    
 <!ELEMENT choiceOption ((choice|choiceExpansion)*) >
    <!-- Visible name of option - also used for key if not provided -->
@@ -668,6 +675,7 @@
    
    <!-- List of pin mappings applied if option disabled#Expression to enable use of any pin map -->
    <!ATTLIST choiceOption disabledPinMap      CDATA        #IMPLIED>
+   <!ATTLIST choiceOption logging            CDATA        #IMPLIED>
 
 <!ELEMENT choice EMPTY >
 
@@ -794,6 +802,7 @@
 
    <!-- List of pin mappings applied if option disabled#Expression to enable use of any pin map -->
    <!ATTLIST binaryOption disabledPinMap      CDATA        #IMPLIED>
+   <!ATTLIST binaryOption logging            CDATA        #IMPLIED>
 
 <!ELEMENT irqOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -838,6 +847,7 @@
    <!ATTLIST irqOption replace        CDATA        #IMPLIED>
    <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
    <!ATTLIST choiceOption addToVar            CDATA        #IMPLIED>
+   <!ATTLIST choiceOption logging            CDATA        #IMPLIED>
 
 <!ELEMENT rtcTimeOption (#PCDATA)>
    <!-- Key for option - also used as visible name if not provided -->
@@ -856,6 +866,7 @@
    <!ATTLIST rtcTimeOption hidden        (false|true) #IMPLIED>
    <!-- This choice is enabled by an expression -->
    <!ATTLIST rtcTimeOption enabledBy     CDATA        #IMPLIED>
+   <!ATTLIST rtcTimeOption logging            CDATA        #IMPLIED>
       
 <!-- Describes pin mapping for a peripheral -->
 <!ELEMENT pinMapOption (choice?, choice?) >

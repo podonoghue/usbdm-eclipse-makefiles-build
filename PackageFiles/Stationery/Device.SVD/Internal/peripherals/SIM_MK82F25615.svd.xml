@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MK82F25615
 -->
       <peripheral>
@@ -1774,7 +1774,7 @@ Devices using this peripheral:
                   </field>
                   <field derivedFrom="TRNG" > <name>SPI2</name> <description>SPI2 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="TRNG" > <name>SDHC</name> <description>SDHC Clock Gate Control</description> <bitOffset>17</bitOffset> </field>
-                  <field derivedFrom="TRNG" > <name>FTM2</name> <description>FTM2 Clock Gate Control</description> <bitOffset>24</bitOffset> </field>
+                  <!-- Unused access through AIPS1 field derivedFrom="TRNG" > <name>FTM2</name> <description>FTM2 Clock Gate Control</description> <bitOffset>24</bitOffset> </field -->
                   <field derivedFrom="TRNG" > <name>FTM3</name> <description>FTM3 Clock Gate Control</description> <bitOffset>25</bitOffset> </field>
                </fields>
             </register>
@@ -1806,7 +1806,7 @@ Devices using this peripheral:
                   <field derivedFrom="EWM" > <name>I2C0</name> <description>I2C0 Clock Gate Control</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>I2C1</name> <description>I2C1 Clock Gate Control</description> <bitOffset>7</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>USB0</name> <description>USB Clock Gate Control</description> <bitOffset>18</bitOffset> </field>
-                  <field derivedFrom="EWM" > <name>CMP0</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="EWM" > <name>CMP</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>VREF</name> <description>VREF Clock Gate Control</description> <bitOffset>20</bitOffset> </field>
                </fields>
             </register>
@@ -1914,7 +1914,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="FTF" > <name>DAC0</name> <description>DAC0 Clock Gate Control</description> <bitOffset>31</bitOffset> </field>
+                  <!-- field derivedFrom="FTF" > <name>DAC0</name> <description>DAC0 Clock Gate Control</description> <bitOffset>31</bitOffset> </field -->
                </fields>
             </register>
             <register>

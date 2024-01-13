@@ -194,7 +194,7 @@
    <for keys="field               : get   : set   : genCode                 : name"
         values="
          ewm_ctrl_inten           : true  : true  : enableGettersAndSetters : Action;
-         ewm_ctrl_input           : true  : true  : enableGettersAndSetters : InputPin;
+         ewm_ctrl_input           : true  : true  : true                    : InputPin;
          ewm_ctrl_ewmen           : true  : true  : enableGettersAndSetters : Enable;
          ewm_serv_service         : false : true  : enableGettersAndSetters : Service;
          ewm_cmpl_comparel        : true  : true  : enableGettersAndSetters : MinimumTime;

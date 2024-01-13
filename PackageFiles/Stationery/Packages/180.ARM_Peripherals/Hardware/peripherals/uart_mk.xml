@@ -359,13 +359,6 @@
       <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
-      <title/>
-      <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src[]"              optional="true" locked="false" />
-      <aliasOption key="/SIM/system_uart$(_instance)_fixedclocksource[]"   optional="true"/>
-      <aliasOption key="/SIM/system_uart$(_instance)_clock[]"              optional="true" />
-      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)ode"   optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)txsrc" optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" optional="true" locked="false" />
    </category>
    <deleteVariables variables="_scgc_clock"  mustExist="false" />
 

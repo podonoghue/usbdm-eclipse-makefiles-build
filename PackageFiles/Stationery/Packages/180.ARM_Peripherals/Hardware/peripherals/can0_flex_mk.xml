@@ -244,7 +244,7 @@
       \t *
       \t * @param[in]  nvicPriority  Interrupt priority
       \t */
-      \tstatic void enableMiscellaneousNvicInterrupts(uint32_t nvicPriority) {
+      \tstatic void enableMiscellaneousNvicInterrupts(NvicPriority nvicPriority) {
       \t   enableNvicInterrupt(irqNums[$(_Class)IrqNum_BusOff], nvicPriority);
       \t   enableNvicInterrupt(irqNums[$(_Class)IrqNum_TxWarning], nvicPriority);
       \t   enableNvicInterrupt(irqNums[$(_Class)IrqNum_RxWarning], nvicPriority);

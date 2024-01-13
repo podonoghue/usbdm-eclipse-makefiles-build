@@ -315,14 +315,21 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ************* SIM configuration ****************** -->
-   <category name="Advanced" description="SIM configuration" >
+   <!-- ____ SIM configuration __________________ -->
+
+   <category name="Advanced" description="SIM configuration"
+      toolTip="Thes settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title description="$(_NAME) Specific" />
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
       <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
    </category>
-   <deleteVariables variables="_scgc_clock"  mustExist="false" />
+   <deleteVariables variables="_scgc_clock,/SIM/$(_Class)ExternalItems" mustExist="false" />
 
    <!-- ************* Signal mapping ****************** -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />

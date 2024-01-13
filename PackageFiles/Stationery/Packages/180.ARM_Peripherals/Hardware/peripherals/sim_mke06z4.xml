@@ -341,6 +341,26 @@
       </choiceOption>
    </category>
 
+   <category name="ACMP" description="ACMP Options" >
+      <binaryOption key="sim_scgc_acmp0" condition="sim_scgc_acmp0_present"
+         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         typeName="SimScgcAcmp0"
+         description="ACMP0 Clock Gate Control" >
+         <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+         <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+      </binaryOption>
+
+      <binaryOption key="sim_scgc_acmp1" condition="sim_scgc_acmp1_present"
+         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         typeName="SimScgcAcmp1"
+         description="ACMP1 Clock Gate Control" >
+         <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+         <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+      </binaryOption>
+
+      <aliasOption key="sim_sopt0_actrg" locked="false" optional="true" />
+   </category>
+
    <category name="ADC" description="ADC Options" >
       <binaryOption key="sim_scgc_adc0" condition="sim_scgc_adc0_present"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
@@ -375,26 +395,6 @@
                   This is a one-shot counter that starts ticking when the trigger arrives and stops ticking when the counter value reaches the modulo value that is defined"
                   value="0"
       />
-   </category>
-
-   <category name="ACMP" description="ACMP Options" >
-      <binaryOption key="sim_scgc_acmp0" condition="sim_scgc_acmp0_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-         typeName="SimScgcAcmp0"
-         description="ACMP0 Clock Gate Control" >
-         <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
-         <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
-      </binaryOption>
-
-      <binaryOption key="sim_scgc_acmp1" condition="sim_scgc_acmp1_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-         typeName="SimScgcAcmp1"
-         description="ACMP1 Clock Gate Control" >
-         <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
-         <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
-      </binaryOption>
-
-      <aliasOption key="sim_sopt0_actrg" locked="false" optional="true" />
    </category>
 
    <category name="CAN" description="CAN Options" >

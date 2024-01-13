@@ -1306,66 +1306,6 @@
 
       <template key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true" ><![CDATA[
          \t/**
-         \t * Calculate TPM timing parameters to achieve a given period
-         \t *
-         \t * @param[in]    period  Period in seconds
-         \t * @param[inout] sc      Proposed TPM.SC value (must include CLKS, CPWMS fields)
-         \t *                       PS field is updated
-         \t * @param[out]   mod     Calculated TPM.MOD values
-         \t *
-         \t * @return E_NO_ERROR   Success!!
-         \t * @return E_TOO_SMALL  Requested period is too small for resolution (required resolution check to be enabled)
-         \t * @return E_TOO_LARGE  Requested period is too large
-         \t */
-         \t%(static)ErrorCode calculateTimingParameters(Seconds period, uint8_t &sc, uint16_t &mod)%(const) {
-         \t
-         \t   float inputClock = %(getInputClockFrequency)((TpmClockSource)(sc&TPM_SC_CMOD_MASK));
-         \t   unsigned prescaleFactor=1;
-         \t   unsigned prescalerValue=0;
-         \t
-         \t   // Check if CPWMS is set (affects period calculation)
-         \t   bool centreAligned = (sc&TPM_SC_CPWMS_MASK);
-         \t
-         \t   constexpr uint32_t maxModValue = TPM_MOD_MOD_MASK;
-         \t
-         \t   while (prescalerValue<=7) {
-         \t      float clock    = inputClock/prescaleFactor;
-         \t      float modValueF = period*clock;
-         \t      if (centreAligned) {
-         \t         // PeriodInTicks = 2*MOD
-         \t         modValueF = modValueF/2;
-         \t      }
-         \t      else {
-         \t         // PeriodInTicks = MOD+1
-         \t         modValueF = modValueF - 1;
-         \t      }
-         \t      unsigned modValue = round(modValueF);\n
-      ]]></template>
-      <template key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
-         \t      if constexpr (Info::minimumResolution>0) {
-         \t         if (modValue < Info::minimumResolution) {
-         \t            usbdm_assert(false, "Interval is too short");
-         \t            // Too short a period for minimum resolution
-         \t            return setErrorCode(E_TOO_SMALL);
-         \t         }
-         \t      }\n
-      ]]></template>
-      <template key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true" ><![CDATA[
-         \t      if (modValue <= maxModValue) {
-         \t         sc   = (sc&~TPM_SC_PS_MASK)|TPM_SC_PS(prescalerValue);
-         \t         mod  = modValue;
-         \t         return E_NO_ERROR;
-         \t      }
-         \t      prescalerValue++;
-         \t      prescaleFactor <<= 1;
-         \t   }
-         \t   // Too long a period
-         \t   usbdm_assert(false, "Interval is too long");
-         \t   return setErrorCode(E_TOO_LARGE);
-         \t}\n\n
-      ]]></template>
-      <template key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true" ><![CDATA[
-         \t/**
          \t * Set period
          \t *
          \t * @param[in] period   Period in seconds as a float
@@ -1387,8 +1327,8 @@
          \t
          \t   uint8_t sc = tpm->SC;
          \t
-         \t   ErrorCode rc = calculateTimingParameters(period, sc, modValue);
-         \t
+         \t   float inputClock = %(getInputClockFrequency)((TpmClockSource)(sc&TPM_SC_CMOD_MASK));
+         \t   ErrorCode rc = TpmCommonInfo::calculateTimingParameters(inputClock, period, sc, modValue);
          \t   if (rc != E_NO_ERROR) {
          \t      return rc;
          \t   }
@@ -1430,7 +1370,8 @@
          \t
          \t   uint8_t sc = tpm->SC;
          \t
-         \t   ErrorCode rc = calculateTimingParameters(interval, sc, modValue);
+         \t   float inputClock = %(getInputClockFrequency)((TpmClockSource)(sc&TPM_SC_CMOD_MASK));
+         \t   ErrorCode rc = TpmCommonInfo::calculateTimingParameters(inputClock, interval, sc, modValue);
          \t   if (rc != E_NO_ERROR) {
          \t      return rc;
          \t   }
@@ -2092,7 +2033,7 @@
       \t\n
    ]]></template>
 
-   <template where="commonInfo" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" condition="!/$(_basename)_common_info_done" ><![CDATA[
+   <template where="commonInfo" condition="!/$(_basename)_common_info_done" ><![CDATA[
       \t/**
       \t * Type definition for overflow and fault call-back.
       \t */
@@ -2701,7 +2642,7 @@
 
 <!-- ____ Default Initialisation value ________ -->
 
-   <variableTemplate where="usbdm" codeGenCondition='enablePeripheralSupport&amp;&amp;(mode!=Quad)&amp;&amp;(irqHandlerName!="")'
+   <!--  variableTemplate where="usbdm" codeGenCondition='enablePeripheralSupport&amp;&amp;(mode!=Quad)&amp;&amp;(irqHandlerName!="")'
       variables="irqHandlerName"
    ><![CDATA[
       \t/**
@@ -2710,7 +2651,7 @@
       \textern void $(irqHandlerName)(void);
       \t\n
    ]]>
-   </variableTemplate>
+   </variableTemplate  -->
    <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(mode!=Quad)"
       separator=","
       terminator=","
@@ -2728,7 +2669,7 @@
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression\n
-      \t  $(irqHandlerName)
+      \t // $(irqHandlerName)
       \t};
       \t\n
    ]]>
@@ -3459,8 +3400,8 @@
       </if>
    </for>
    <equation key="do_channel_init" value='=do_channel_init+")"' />
-
    <!-- printVar key="do_channel_init" / -->
+
    <for keys="ch" values="0;2;4;6" condition="tpm_combine_present" >
       <break condition="=%(ch)>=_channelCount" />
       <if condition="!do_dualchannel_init">
@@ -3471,7 +3412,7 @@
       </if>
    </for>
    <equation key="do_dualchannel_init" value='=do_dualchannel_init+")"' condition="tpm_combine_present" />
-   <!--  printVar key="do_dualchannel_init" / -->
+   <!-- printVar key="do_dualchannel_init" / -->
 
    <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
@@ -3550,7 +3491,7 @@
    <category name="Advanced" description="SIM configuration"
       toolTip="Thes settings only have effect if the SIM configuration is enabled" >
       <title description="$(_BASENAME) Shared" />
-      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
       <title description="$(_NAME) Specific" />
@@ -3559,7 +3500,9 @@
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
    </category>
-   <deleteVariables variables="_scgc_clock,/SIM/$(_Class)ExternalItems"  mustExist="false" />
+   <deleteVariables
+      variables="_scgc_clock,/SIM/$(_Class)ExternalItems"
+      mustExist="false" />
 
    <!--  ____ Signal mapping __________________ -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />

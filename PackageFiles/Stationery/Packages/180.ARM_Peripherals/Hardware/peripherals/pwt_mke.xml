@@ -641,21 +641,26 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ************* Signal mapping ****************** -->
-   <category name="SIM" description="Pin mapping">
-      <aliasOption key="/SIM/sim_scgc_$(_name)"             locked="false" optional="true" />
-      <aliasOption key="/SIM/sim_pinsel_$(_name)clkps"      locked="false" optional="true" />
+   <!-- ************* SIM configuration ****************** -->
+   <category name="Advanced" description="SIM configuration">
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title/>
+      
       <aliasOption key="/SIM/sim_pinsel0_$(_name)clkps"     locked="false" optional="true" />
 
       <aliasOption key="/SIM/sim_sopt1_acpwts"       locked="false" optional="true" />
       <aliasOption key="/SIM/sim_sopt1_uartpwts"     locked="false" optional="true" />
 
       <for keys="ch" dim="4" >
-         <aliasOption key="/SIM/sim_pinsel_$(_name)in%(ch)ps"  locked="false" optional="true" />
          <aliasOption key="/SIM/sim_pinsel0_$(_name)in%(ch)ps" locked="false" optional="true" />
          <aliasOption key="/SIM/sim_pinsel1_$(_name)in%(ch)ps" locked="false" optional="true" />
       </for>
    </category>
+   <deleteVariables variables="_scgc_clock"  mustExist="false" />
+
 
    <signals enabledBy="enablePeripheralSupport" locked="true" />
    <signals name="FTM" />

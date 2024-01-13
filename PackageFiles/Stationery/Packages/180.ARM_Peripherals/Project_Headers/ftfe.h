@@ -265,7 +265,7 @@ public:
     *
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicCollisionInterrupts(uint32_t nvicPriority) {
+   static void enableNvicCollisionInterrupts(NvicPriority nvicPriority) {
       enableNvicInterrupt(FTF_ReadCollision_IRQn, nvicPriority);
    }
 

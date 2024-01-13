@@ -306,17 +306,17 @@
       value="0"
    />
 
-<!-- Graphic here -->
+   <!-- ____ Setters and Getters ____________ -->
 
-   <for keys="field           : get   : set   : genCode                 : name"
+   <for keys="field           : get   : set   : clear : genCode                 : name"
         values="
-         cmt_oc_irol          : true  : true  : enableGettersAndSetters : OutputState;
-         cmt_msc_mode         : true  : true  : enableGettersAndSetters : Mode;
-         cmt_msc_eocf         : true  : false : true                    : EndOfCycleFlag;
-         cmt_msc_cmtdiv       : true  : true  : enableGettersAndSetters : Prescaler;
-         cmt_msc_exspc        : true  : true  : true                    : ExtendedSpace;
-         cmt_oc_output        : false : true  : enableGettersAndSetters : OutputControl;
-         cmt_dma_dma          : true  : true  : enableGettersAndSetters : DmaControl" >
+         cmt_oc_irol          : true  : true  : false : enableGettersAndSetters : OutputState;
+         cmt_msc_mode         : true  : true  : false : enableGettersAndSetters : Mode;
+         cmt_msc_eocf         : true  : false : false : true                    : EndOfCycleFlag;
+         cmt_msc_cmtdiv       : true  : true  : false : enableGettersAndSetters : Prescaler;
+         cmt_msc_exspc        : true  : true  : false : true                    : ExtendedSpace;
+         cmt_oc_output        : false : true  : false : enableGettersAndSetters : OutputControl;
+         cmt_dma_dma          : true  : true  : false : enableGettersAndSetters : DmaControl" >
       <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
       ><![CDATA[
          \t/**
@@ -337,7 +337,18 @@
          \t * @return %tooltip
          \t */
          \tstatic %paramType get%(name)() {
-         \t   return %paramType(%register&%mask);
+         \t   return %fieldExtract;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t *
+         \t */
+         \tstatic void clear%(name)() {
+         \t   %register = %register|%mask;
          \t}
          \t\n
       ]]></variableTemplate>
@@ -494,7 +505,7 @@
       \t\n
    ]]></variableTemplate>
 
-<!--   ========== CMT Init class =============================== -->
+   <!--  ___ Init class ______________ -->
 
    <template key="/$(_BASENAME)/init_description" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
@@ -646,7 +657,7 @@
    ]]>
    </template>
 
-<!--   Member variables -->
+<!-- ____ Init class Member variables ________ -->
 
    <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
@@ -733,7 +744,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <!--   Constructors -->
+   <!-- ____ Init class Constructors ____________ -->
 
    <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
@@ -857,35 +868,7 @@
       </variableTemplate>
    </for>
 
-<!--   Default Initialisation value -->
-
-   <variableTemplate codeGenCondition="enablePeripheralSupport"
-      separator=","
-      terminator=","
-      variables="
-            cmt_msc_mode,
-            cmt_pps_ppsdiv,
-            cmt_msc_cmtdiv,
-            cmt_oc_output,
-            cmt_dma_irq,
-            cmt_cgh1_ph,
-            cmt_cgl1_pl,
-            cmt_cgh2_sh,
-            cmt_cgl2_sl,
-            cmt_mark,
-            cmt_space
-         "
-   ><![CDATA[
-      \t/**
-      \t * Default initialisation value for $(_Class)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
-      \t};
-      \t\n
-   ]]></variableTemplate>
-
-<!--   Configure methods -->
+   <!-- ____ Init class Configure method ____ -->
 
    <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
@@ -936,6 +919,34 @@
       \t\n
    ]]>
    </template>
+
+<!-- ____  Default Initialisation value ____  -->
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      separator=","
+      terminator=","
+      variables="
+            cmt_msc_mode,
+            cmt_pps_ppsdiv,
+            cmt_msc_cmtdiv,
+            cmt_oc_output,
+            cmt_dma_irq,
+            cmt_cgh1_ph,
+            cmt_cgl1_pl,
+            cmt_cgh2_sh,
+            cmt_cgl2_sl,
+            cmt_mark,
+            cmt_space
+         "
+   ><![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};
+      \t\n
+   ]]></variableTemplate>
 
    <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
       <![CDATA[

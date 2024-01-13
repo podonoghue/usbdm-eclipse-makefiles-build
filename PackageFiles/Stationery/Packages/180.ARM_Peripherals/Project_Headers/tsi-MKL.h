@@ -26,16 +26,7 @@ namespace USBDM {
  * @{
  */
 
-/**
- * Determines if a DMA or Interrupt request is generated on a TSI event
- *
- * @note Requires TsiInterrupt selection
- */
-enum TsiDma {
-   TsiDma_Disabled = TSI_DATA_DMAEN(0b0), //!< Interrupt is generated on TSI event
-   TsiDma_Enabled  = TSI_DATA_DMAEN(0b1), //!< DMA request is generated on TSI event
-};
-
+#if 0
 /**
  * These 4 bits are used to select the noise threshold.\n
  * These combinations are the maximum possible combinations, not all values are valid.
@@ -60,45 +51,6 @@ enum TsiNoiseThreshold {
 };
 
 /**
- * Determines the number of scans when measuring an electrode\n
- * This directly affects the TSI counts.
- */
-enum TsiScanNumber {
-   TsiScanNumber_1  = TSI_GENCS_NSCN(0b00000), //!< 1 times per electrode
-   TsiScanNumber_2  = TSI_GENCS_NSCN(0b00001), //!< 2 times per electrode
-   TsiScanNumber_3  = TSI_GENCS_NSCN(0b00010), //!< 3 times per electrode
-   TsiScanNumber_4  = TSI_GENCS_NSCN(0b00011), //!< 4 times per electrode
-   TsiScanNumber_5  = TSI_GENCS_NSCN(0b00100), //!< 5 times per electrode
-   TsiScanNumber_6  = TSI_GENCS_NSCN(0b00101), //!< 6 times per electrode
-   TsiScanNumber_7  = TSI_GENCS_NSCN(0b00110), //!< 7 times per electrode
-   TsiScanNumber_8  = TSI_GENCS_NSCN(0b00111), //!< 8 times per electrode
-   TsiScanNumber_9  = TSI_GENCS_NSCN(0b01000), //!< 9 times per electrode
-   TsiScanNumber_10 = TSI_GENCS_NSCN(0b01001), //!< 10 times per electrode
-   TsiScanNumber_11 = TSI_GENCS_NSCN(0b01010), //!< 11 times per electrode
-   TsiScanNumber_12 = TSI_GENCS_NSCN(0b01011), //!< 12 times per electrode
-   TsiScanNumber_13 = TSI_GENCS_NSCN(0b01100), //!< 13 times per electrode
-   TsiScanNumber_14 = TSI_GENCS_NSCN(0b01101), //!< 14 times per electrode
-   TsiScanNumber_15 = TSI_GENCS_NSCN(0b01110), //!< 15 times per electrode
-   TsiScanNumber_16 = TSI_GENCS_NSCN(0b01111), //!< 16 times per electrode
-   TsiScanNumber_17 = TSI_GENCS_NSCN(0b10000), //!< 17 times per electrode
-   TsiScanNumber_18 = TSI_GENCS_NSCN(0b10001), //!< 18 times per electrode
-   TsiScanNumber_19 = TSI_GENCS_NSCN(0b10010), //!< 19 times per electrode
-   TsiScanNumber_20 = TSI_GENCS_NSCN(0b10011), //!< 20 times per electrode
-   TsiScanNumber_21 = TSI_GENCS_NSCN(0b10100), //!< 21 times per electrode
-   TsiScanNumber_22 = TSI_GENCS_NSCN(0b10101), //!< 22 times per electrode
-   TsiScanNumber_23 = TSI_GENCS_NSCN(0b10110), //!< 23 times per electrode
-   TsiScanNumber_24 = TSI_GENCS_NSCN(0b10111), //!< 24 times per electrode
-   TsiScanNumber_25 = TSI_GENCS_NSCN(0b11000), //!< 25 times per electrode
-   TsiScanNumber_26 = TSI_GENCS_NSCN(0b11001), //!< 26 times per electrode
-   TsiScanNumber_27 = TSI_GENCS_NSCN(0b11010), //!< 27 times per electrode
-   TsiScanNumber_28 = TSI_GENCS_NSCN(0b11011), //!< 28 times per electrode
-   TsiScanNumber_29 = TSI_GENCS_NSCN(0b11100), //!< 29 times per electrode
-   TsiScanNumber_30 = TSI_GENCS_NSCN(0b11101), //!< 30 times per electrode
-   TsiScanNumber_31 = TSI_GENCS_NSCN(0b11110), //!< 31 times per electrode
-   TsiScanNumber_32 = TSI_GENCS_NSCN(0b11111), //!< 32 times per electrode
-};
-
-/**
  * Series resistor for noise mode (overlaps EXTCHRG[0])
  */
 enum TsiSeriesResitor {
@@ -115,29 +67,8 @@ enum TsiNoiseFilter {
    TsiNoiseFilter_1Bits    = TSI_GENCS_FILTER(0b10), //!< TSI Noise filter 1 bits
    TsiNoiseFilter_Disabled = TSI_GENCS_FILTER(0b11), //!< TSI Noise filter disabled
 };
+#endif
 
-/**
- * Select TSI inputs
- */
-enum TsiInput {
-   // Mapped inputs
-   TsiInput_0          =  0, //!< TSI input 0
-   TsiInput_1          =  1, //!< TSI input 1
-   TsiInput_2          =  2, //!< TSI input 2
-   TsiInput_3          =  3, //!< TSI input 3
-   TsiInput_4          =  4, //!< TSI input 4
-   TsiInput_5          =  5, //!< TSI input 5
-   TsiInput_6          =  6, //!< TSI input 6
-   TsiInput_7          =  7, //!< TSI input 7
-   TsiInput_8          =  9, //!< TSI input 8
-   TsiInput_9          =  8, //!< TSI input 9
-   TsiInput_10         = 10, //!< TSI input 10
-   TsiInput_11         = 11, //!< TSI input 11
-   TsiInput_12         = 12, //!< TSI input 12
-   TsiInput_13         = 13, //!< TSI input 13
-   TsiInput_14         = 14, //!< TSI input 14
-   TsiInput_15         = 15, //!< TSI input 15
-};
 $(/TSI/InputMapping:   // No user defined TSI inputs found)
 $(/TSI0/InputMapping:   // No user defined TSI0 inputs found)
 
@@ -151,7 +82,7 @@ typedef void (*TSICallbackFunction)(uint8_t status);
 class TsiBase {
 public:
    /** Class to static check channel pin mapping is valid */
-   template<class Info, TsiInput channel> class CheckSignal {
+   template<class Info, TsiChannel channel> class CheckSignal {
       static_assert((channel<Info::numSignals),
             "Non-existent TSI channel - Check Configure.usbdm for available channels");
       static_assert((channel>=Info::numSignals)||(Info::info[channel].gpioBit != PinIndex::UNMAPPED_PCR),
@@ -197,7 +128,7 @@ public:
     * Enables and configure the TSI for TsiMode_Capacitive
     *
     * @param tsiLowPower            Determines operation in low power modes (STOP, VLPS, LLS and VLLS{3,2,1})
-    * @param tsiScanNumber          Determines the number of scans when measuring an electrode
+    * @param tsiConsecutiveScan     Determines the number of scans when measuring an electrode
     * @param tsiElectrodePrescaler  Determines the prescaler for the output of the electrode oscillator
     * @param tsiReferenceCharge     Determines the reference oscillator charge and discharge current value
     * @param tsiExternalCharge      Determines the electrode oscillator charge and discharge current value
@@ -205,20 +136,21 @@ public:
     */
    static void configure(
          TsiLowPower             tsiLowPower           = TsiLowPower_Disabled,
-         TsiScanNumber           tsiScanNumber         = TsiScanNumber_8,
+         TsiConsecutiveScan      tsiConsecutiveScan    = TsiConsecutiveScan_8Times,
          TsiElectrodePrescaler   tsiElectrodePrescaler = TsiElectrodePrescaler_DivBy8,
-         TsiReferenceCurrent      tsiReferenceCharge    = TsiReferenceCurrent_8uA,
+         TsiReferenceCurrent     tsiReferenceCharge    = TsiReferenceCurrent_8uA,
          TsiExternalCharge       tsiExternalCharge     = TsiExternalCharge_8uA,
          TsiDeltaVoltage         tsiDeltaVoltage       = TsiDeltaVoltage_High) {
 
       enable();
       tsi->GENCS =
             TSI_GENCS_TSIEN(1)|TsiMode_Capacitive|
-            tsiLowPower|tsiScanNumber|
+            tsiLowPower|tsiConsecutiveScan|
             tsiReferenceCharge|tsiExternalCharge|
             tsiDeltaVoltage|tsiElectrodePrescaler|TsiCurrentSource_NotSwapped;
    }
 
+#if 0
    /**
     * Enables and configure the TSI for Noise measurement mode
     *
@@ -226,7 +158,7 @@ public:
     * @param tsiSeriesResitor       Determines the series resistor for noise mode (overlaps EXTCHRG[0])
     * @param tsiNoiseFilter         Determines the noise filter bits (overlaps EXTCHRG[2:1])
     * @param tsiLowPower            Determines operation in low power modes (STOP, VLPS, LLS and VLLS{3,2,1})
-    * @param tsiScanNumber          Determines the number of scans when measuring an electrode
+    * @param tsiConsecutiveScan     Determines the number of scans when measuring an electrode
     * @param tsiElectrodePrescaler  Determines the prescaler for the output of the electrode oscillator
     * @param tsiReferenceCharge     Determines the reference oscillator charge and discharge current value
     * @param tsiDeltaVoltage        Determine the oscillators' voltage limits (not applicable in noise modes)
@@ -236,9 +168,9 @@ public:
          TsiSeriesResitor        tsiSeriesResitor      = TsiSeriesResitor_32k,
          TsiNoiseFilter          tsiNoiseFilter        = TsiNoiseFilter_Disabled,
          TsiLowPower             tsiLowPower           = TsiLowPower_Disabled,
-         TsiScanNumber           tsiScanNumber         = TsiScanNumber_8,
+         TsiConsecutiveScan      tsiConsecutiveScan    = TsiConsecutiveScan_8Times,
          TsiElectrodePrescaler   tsiElectrodePrescaler = TsiElectrodePrescaler_DivBy8,
-         TsiReferenceCurrent      tsiReferenceCharge    = TsiReferenceCurrent_8uA,
+         TsiReferenceCurrent     tsiReferenceCharge    = TsiReferenceCurrent_8uA,
          TsiDeltaVoltage         tsiDeltaVoltage       = TsiDeltaVoltage_High) {
 
       usbdm_assert(tsiMode != TsiMode_Capacitive, "Wrong mode for this configuration ");
@@ -246,10 +178,11 @@ public:
       tsi->GENCS =
             TSI_GENCS_TSIEN(1)|
             tsiMode|tsiSeriesResitor|tsiNoiseFilter|
-            tsiLowPower|tsiScanNumber|
+            tsiLowPower|tsiConsecutiveScan|
             tsiReferenceCharge|
             tsiDeltaVoltage|tsiElectrodePrescaler|TsiCurrentSource_NotSwapped;
    }
+#endif
 
    /**
     * Sets the Current Source swap option.\n
@@ -282,25 +215,16 @@ public:
    /**
     * Configures TSI counting operation
     *
-    * @param tsiScanNumber          Determines the number of scans when measuring an electrode
+    * @param tsiConsecutiveScan     Determines the number of scans when measuring an electrode
     * @param tsiElectrodePrescaler  Determines the prescaler for the output of the electrode oscillator
     */
    static void configureCounting(
-         TsiScanNumber           tsiScanNumber         = TsiScanNumber_8,
+         TsiConsecutiveScan      tsiConsecutiveScan    = TsiConsecutiveScan_8Times,
          TsiElectrodePrescaler   tsiElectrodePrescaler = TsiElectrodePrescaler_DivBy8) {
       enable();
       tsi->GENCS =
             (tsi->GENCS&~(TSI_GENCS_NSCN_MASK|TSI_GENCS_PS_MASK)) |
-            tsiScanNumber|tsiElectrodePrescaler;
-   }
-
-   /**
-    * Disables or selects touch sensing Interrupt/DMA source
-    *
-    * @param tsiInterrupt Interrupt source
-    */
-   static void selectTsiInterrupt(TsiInterrupt tsiInterrupt) {
-      tsi->GENCS = (tsi->GENCS&~TSI_GENCS_TSIIEN_MASK)|tsiInterrupt;
+            tsiConsecutiveScan|tsiElectrodePrescaler;
    }
 
    /**
@@ -317,7 +241,7 @@ public:
     *
     * @param channel Channel number
     */
-   static void startScan(TsiInput channel) {
+   static void startScan(TsiChannel channel) {
       // Clear flags
       Info::tsi->GENCS = Info::tsi->GENCS | TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK;
       // Start scan
@@ -329,7 +253,7 @@ public:
     *
     * @param channel Channel number
     */
-   static void startDmaScan(TsiInput channel) {
+   static void startDmaScan(TsiChannel channel) {
       // Clear flags
       Info::tsi->GENCS = Info::tsi->GENCS | TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK;
       // Select event of end of scan
@@ -345,7 +269,7 @@ public:
     *
     * @return Error code indicating if scan was successful
     */
-   static void startScanAndWait(TsiInput channel) {
+   static void startScanAndWait(TsiChannel channel) {
       // Clear flags
       Info::tsi->GENCS = Info::tsi->GENCS | TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK;
       // Start scan
@@ -372,7 +296,7 @@ public:
     * @tparam channel   Channel connected to the button
     * @tparam threshold Threshold for the button to be considered pressed
     */
-   template<TsiInput channel, int threshold=Info::defaultThreshold>
+   template<TsiChannel channel, int threshold=Info::defaultThreshold>
    class Pin {
 
       TsiBase::CheckSignal<Info, channel> check;
@@ -426,7 +350,7 @@ public:
     * @tparam channel2  Second channel connected to slider
     * @tparam threshold Threshold for the contact to be considered
     */
-   template<TsiInput channel1, TsiInput channel2, int threshold=Info::defaultThreshold>
+   template<TsiChannel channel1, TsiChannel channel2, int threshold=Info::defaultThreshold>
    class TsiSlider_T {
 
    public:

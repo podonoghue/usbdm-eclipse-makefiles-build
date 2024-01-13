@@ -4204,7 +4204,7 @@
          <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC6&quot;,&quot;FTF&quot;" key="/FTF/_clockMask" />
          <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC6&quot;,&quot;FTM0&quot;" key="/FTM0/_clockMask" />
          <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC6&quot;,&quot;FTM1&quot;" key="/FTM1/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC3&quot;,&quot;FTM2&quot;" key="/FTM2/_clockMask" />
+         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC6&quot;,&quot;FTM2&quot;" key="/FTM2/_clockMask" />
          <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC3&quot;,&quot;FTM3&quot;" key="/FTM3/_clockMask" />
          <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC4&quot;,&quot;I2C0&quot;" key="/I2C0/_clockMask" />
          <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC4&quot;,&quot;I2C1&quot;" key="/I2C1/_clockMask" />
@@ -4272,7 +4272,6 @@
          <param type="BooleanVariable"        name="sim_scgc2_qspi_present"         value="true"             key="/SIM/sim_scgc2_qspi_present" />
          <param type="BooleanVariable"        name="sim_scgc2_tpm1_present"         value="true"             key="/SIM/sim_scgc2_tpm1_present" />
          <param type="BooleanVariable"        name="sim_scgc2_tpm2_present"         value="true"             key="/SIM/sim_scgc2_tpm2_present" />
-         <param type="BooleanVariable"        name="sim_scgc3_ftm2_present"         value="true"             key="/SIM/sim_scgc3_ftm2_present" />
          <param type="BooleanVariable"        name="sim_scgc3_ftm3_present"         value="true"             key="/SIM/sim_scgc3_ftm3_present" />
          <param type="BooleanVariable"        name="sim_scgc3_i2s1_present"         value="true"             key="/SIM/sim_scgc3_i2s1_present" />
          <param type="BooleanVariable"        name="sim_scgc3_present"              value="true"             key="/SIM/sim_scgc3_present" />
@@ -4306,6 +4305,7 @@
          <param type="BooleanVariable"        name="sim_scgc6_ftf_present"          value="true"             key="/SIM/sim_scgc6_ftf_present" />
          <param type="BooleanVariable"        name="sim_scgc6_ftm0_present"         value="true"             key="/SIM/sim_scgc6_ftm0_present" />
          <param type="BooleanVariable"        name="sim_scgc6_ftm1_present"         value="true"             key="/SIM/sim_scgc6_ftm1_present" />
+         <param type="BooleanVariable"        name="sim_scgc6_ftm2_present"         value="true"             key="/SIM/sim_scgc6_ftm2_present" />
          <param type="BooleanVariable"        name="sim_scgc6_i2s0_present"         value="true"             key="/SIM/sim_scgc6_i2s0_present" />
          <param type="BooleanVariable"        name="sim_scgc6_pdb_present"          value="true"             key="/SIM/sim_scgc6_pdb_present" />
          <param type="BooleanVariable"        name="sim_scgc6_pit_present"          value="true"             key="/SIM/sim_scgc6_pit_present" />
@@ -4887,6 +4887,7 @@
          <param type="BooleanVariable"        name="tpm_mod_present"                value="true"             key="/TPM1/tpm_mod_present" />
          <param type="BooleanVariable"        name="tpm_pol_pol0_present"           value="true"             key="/TPM1/tpm_pol_pol0_present" />
          <param type="BooleanVariable"        name="tpm_pol_pol1_present"           value="true"             key="/TPM1/tpm_pol_pol1_present" />
+         <param type="BooleanVariable"        name="tpm_pol_pol_present"            value="true"             key="/TPM1/tpm_pol_pol_present" />
          <param type="BooleanVariable"        name="tpm_pol_present"                value="true"             key="/TPM1/tpm_pol_present" />
          <param type="BooleanVariable"        name="tpm_qdctrl_present"             value="true"             key="/TPM1/tpm_qdctrl_present" />
          <param type="BooleanVariable"        name="tpm_qdctrl_quaden_present"      value="true"             key="/TPM1/tpm_qdctrl_quaden_present" />
@@ -4951,6 +4952,7 @@
          <param type="BooleanVariable"        name="tpm_mod_present"                value="true"             key="/TPM2/tpm_mod_present" />
          <param type="BooleanVariable"        name="tpm_pol_pol0_present"           value="true"             key="/TPM2/tpm_pol_pol0_present" />
          <param type="BooleanVariable"        name="tpm_pol_pol1_present"           value="true"             key="/TPM2/tpm_pol_pol1_present" />
+         <param type="BooleanVariable"        name="tpm_pol_pol_present"            value="true"             key="/TPM2/tpm_pol_pol_present" />
          <param type="BooleanVariable"        name="tpm_pol_present"                value="true"             key="/TPM2/tpm_pol_present" />
          <param type="BooleanVariable"        name="tpm_qdctrl_present"             value="true"             key="/TPM2/tpm_qdctrl_present" />
          <param type="BooleanVariable"        name="tpm_qdctrl_quaden_present"      value="true"             key="/TPM2/tpm_qdctrl_quaden_present" />

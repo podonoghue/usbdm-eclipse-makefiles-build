@@ -29,13 +29,13 @@
    -->
    <!-- Pin mapping for ADC0 SE0-SE11 -->
    <constant key="/ADC0/inputPinMap" type="String"
-      value="&quot;PTA0,PTA1,PTA6,PTA7,PTB0,PTB1,PTB2,PTB3,PTC0,PTC1,PTC2,PTC3&quot;" />
+      value='"PTA0,PTA1,PTA6,PTA7,PTB0,PTB1,PTB2,PTB3,PTC0,PTC1,PTC2,PTC3"' />
 
    <!-- Pin mapping for ACMP0 IN0,IN1,IN2 -->
-   <constant key="/ACMP0/inputPinMap" type="String" value="&quot;PTB2,PTA1,PTA0&quot;" />
+   <constant key="/ACMP0/inputPinMap" type="String" value='"PTB2,PTA1,PTA0"' />
 
    <!-- Pin mapping for ACMP1 IN0,IN1,IN2 -->
-   <constant key="/ACMP1/inputPinMap" type="String" value="&quot;PTA6,PTA7,PTB4&quot;" />
+   <constant key="/ACMP1/inputPinMap" type="String" value='"PTA6,PTA7,PTB4"' />
 
 
    <!-- FTM0 channels -->
@@ -87,20 +87,20 @@
    </for>
 
    <!-- Pin mapping for IRQ -->
-   <constant key="/IRQ/pinMap"      type="String" value="&quot;IRQ,PTA5&quot;" />
+   <constant key="/IRQ/pinMap"      type="String" value='"IRQ,PTA5"' />
 
    <!-- Pin mapping for KBIs -->
-   <constant key="/KBI0/inputPinMap" type="String" value="&quot;PT(A-B)(0-3)&quot;"               />
-   <constant key="/KBI1/inputPinMap" type="String" value="&quot;PTC(4-5),PTC(0-3),PTB(4-5)&quot;" />
+   <constant key="/KBI0/inputPinMap" type="String" value='"PT(A-B)(0-3)"'               />
+   <constant key="/KBI1/inputPinMap" type="String" value='"PTC(4-5),PTC(0-3),PTB(4-5)"' />
 
    <!-- Pin mapping for OSC0 -->
-   <constant key="/OSC0/pinMap"      type="String" value="&quot;XTAL,PTB6;EXTAL,PTB7&quot;" />
+   <constant key="/OSC0/pinMap"      type="String" value='"XTAL,PTB6;EXTAL,PTB7"' />
 
    <!-- Pin mapping for PWT -->
-   <constant key="/PWT/inputMapping" value="&quot;PTC4&quot;,&quot;PTB0&quot;,&quot;ACMP0_O&quot;,&quot;ACMP1_O&quot;" type="String" />
+   <constant key="/PWT/inputMapping" value='"PTC4","PTB0","ACMP0_O","ACMP1_O"' type="String" />
 
    <!-- Pin mapping for RTC -->
-   <constant key="/RTC/outputPinMap" type="String" value="&quot;PTA0&quot;" />
+   <constant key="/RTC/outputPinMap" type="String" value='"PTA0"' />
 
    <!-- Pin mapping for TCLK 1 and 2 inputs -->
    <for keys=  " tclk : clksel "
@@ -164,6 +164,7 @@
             values="0 : System bus clock : SystemBusClock : system_bus_clock[%(n)]" >
 
             <choiceOption key="system_uart%(u)_fixedclocksource[%(n)]"
+               addToVar="Uart%(u)ExternalItems"
                hidden="true"
                target="system_uart%(u)_clock[%(n)]"
                locked="true"
@@ -174,6 +175,7 @@
             </choiceOption>
 
             <intOption key="system_uart%(u)_clock[%(n)]"
+               addToVar="Uart%(u)ExternalItems"
                hidden="true"
                locked="true"
                derived="true"
@@ -320,42 +322,6 @@
       </choiceOption>
    </category>
 
-   <category name="ADC" description="ADC Options" >
-      <binaryOption key="sim_scgc_adc" condition="sim_scgc_adc_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-         typeName="SimScgcAdc"
-         description="ADC Clock Gate Control" >
-         <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
-         <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
-      </binaryOption>
-
-      <choiceOption key="sim_sopt_adhwt" condition="sim_sopt_adhwt_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-         typeName="SimSoptAdhwt"
-         toolTip="Selects the ADC hardware trigger source. All trigger sources start ADC conversion on rising-edge"
-         description="ADC Hardware Trigger Source" >
-         <choice name="RTC overflow"                         value="0" enum="RtcOverflow" />
-         <choice name="FTM0"                                 value="1" enum="Ftm0" />
-         <choice name="FTM2 init trigger with 8-bit delay"   value="2" enum="Ftm2InitTriggerWith8BitDelay" />
-         <choice name="FTM2 match trigger with 8-bit delay"  value="3" enum="Ftm2MatchTriggerWith8BitDelay" />
-         <choice name="PIT channel 0 overflow"               value="4" enum="PitChannel0Overflow" />
-         <choice name="PIT channel 1 overflow"               value="5" enum="PitChannel1Overflow" />
-         <choice name="ACMP0 OUT"                            value="6" enum="Acmp0Out" />
-         <choice name="ACMP1 OUT"                            value="7" enum="Acmp1Out" />
-      </choiceOption>
-
-      <intOption key="sim_sopt_delay" condition="sim_sopt_delay_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-         typeName="Ticks"
-         units="ticks"
-         description="FTM2 Trigger Delay"
-         toolTip="Specifies the delay from FTM2 initial or match trigger to ADC hardware trigger when 1 is written to ADHWT.\n
-                  The 8-bit modulo value allows the delay from 0 to 255 upon the BUSREF clock settings.\n
-                  This is a one-shot counter that starts ticking when the trigger arrives and stops ticking when the counter value reaches the modulo value that is defined"
-                  value="0"
-      />
-   </category>
-
    <category name="ACMP" description="ACMP Options" >
       <binaryOption key="sim_scgc_acmp0" condition="sim_scgc_acmp0_present"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
@@ -366,6 +332,7 @@
       </binaryOption>
 
       <binaryOption key="sim_sopt_actrg" condition="sim_sopt_actrg_present"
+         addToVar="Acmp0ExternalItems,Acmp1ExternalItems,Ftm2ExternalItems"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimSoptActrg"
          toolTip="Selects ACMP output used as the trigger0 input of FTM2"
@@ -381,6 +348,44 @@
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
       </binaryOption>
+   </category>
+
+   <category name="ADC" description="ADC Options" >
+      <binaryOption key="sim_scgc_adc0" condition="sim_scgc_adc0_present"
+         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         typeName="SimScgcAdc"
+         description="ADC Clock Gate Control" >
+         <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+         <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+      </binaryOption>
+
+      <choiceOption key="sim_sopt_adhwt" condition="sim_sopt_adhwt_present"
+         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         addToVar="Adc0ExternalItems"
+         typeName="SimSoptAdhwt"
+         toolTip="Selects the ADC hardware trigger source. All trigger sources start ADC conversion on rising-edge"
+         description="ADC Hardware Trigger Source" >
+         <choice name="RTC overflow"                         value="0" enum="RtcOverflow" />
+         <choice name="FTM0"                                 value="1" enum="Ftm0" />
+         <choice name="FTM2 init trigger with 8-bit delay"   value="2" enum="Ftm2InitTriggerWith8BitDelay" />
+         <choice name="FTM2 match trigger with 8-bit delay"  value="3" enum="Ftm2MatchTriggerWith8BitDelay" />
+         <choice name="PIT channel 0 overflow"               value="4" enum="PitChannel0Overflow" />
+         <choice name="PIT channel 1 overflow"               value="5" enum="PitChannel1Overflow" />
+         <choice name="ACMP0 OUT"                            value="6" enum="Acmp0Out" />
+         <choice name="ACMP1 OUT"                            value="7" enum="Acmp1Out" />
+      </choiceOption>
+
+      <intOption key="sim_sopt_delay" condition="sim_sopt_delay_present"
+         addToVar="Adc0ExternalItems"
+         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         typeName="Ticks"
+         units="ticks"
+         description="FTM2 Trigger Delay"
+         toolTip="Specifies the delay from FTM2 initial or match trigger to ADC hardware trigger when 1 is written to ADHWT.\n
+                  The 8-bit modulo value allows the delay from 0 to 255 upon the BUSREF clock settings.\n
+                  This is a one-shot counter that starts ticking when the trigger arrives and stops ticking when the counter value reaches the modulo value that is defined"
+                  value="0"
+      />
    </category>
 
    <category name="CRC" description="CRC Options" >
@@ -427,6 +432,7 @@
       </binaryOption>
 
       <binaryOption key="sim_pinsel_ftm0clkps" condition="sim_pinsel_ftm0clkps_present"
+         addToVar="Ftm0ExternalItems"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimPinselFtm0clkps"
          description="FTM0 TCLK Pin Select" >
@@ -435,6 +441,7 @@
       </binaryOption>
 
       <binaryOption key="sim_pinsel_ftm0ps0" condition="sim_pinsel_ftm0ps0_present"
+         addToVar="Ftm0ExternalItems"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimPinselFtm0ps0"
          description="FTM0 channel 0 Pin Select" >
@@ -443,6 +450,7 @@
       </binaryOption>
 
       <binaryOption key="sim_pinsel_ftm0ps1" condition="sim_pinsel_ftm0ps1_present"
+         addToVar="Ftm0ExternalItems"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimPinselFtm0ps1"
          description="FTM0 channel 1 Pin Select" >
@@ -451,6 +459,7 @@
       </binaryOption>
 
       <choiceOption key="sim_sopt_ftmic" condition="sim_sopt_ftmic_present"
+         addToVar="Ftm0ExternalItems"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimSoptFtmic"
          toolTip="Selects the sources for FTM0CH0 as capture input"
@@ -462,6 +471,7 @@
       </choiceOption>
 
       <binaryOption key="sim_sopt_rxdce" condition="sim_sopt_rxdce_present"
+         addToVar="Ftm0ExternalItems,Uart0ExternalItems"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimSoptRxdce"
          toolTip="Enables the UART0_RX to be captured by FTM0 channel 1"
@@ -481,6 +491,7 @@
       </binaryOption>
 
       <binaryOption key="sim_pinsel_ftm2clkps" condition="sim_pinsel_ftm2clkps_present"
+         addToVar="Ftm2ExternalItems"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimPinselFtm2clkps"
          description="FTM2 TCLK Pin Select" >
@@ -489,6 +500,7 @@
       </binaryOption>
 
       <binaryOption key="sim_pinsel_ftm2ps2" condition="sim_pinsel_ftm2ps2_present"
+         addToVar="Ftm2ExternalItems"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimPinselFtm2ps2"
          description="FTM2 Channel 2 Pin Select" >
@@ -497,6 +509,7 @@
       </binaryOption>
 
       <binaryOption key="sim_pinsel_ftm2ps3" condition="sim_pinsel_ftm2ps3_present"
+         addToVar="Ftm2ExternalItems"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimPinselFtm2ps3"
          disabledPinMap="FTM2_CH3,PTC3#/FTM2/Ch3PinInUse"
@@ -517,6 +530,7 @@
       </binaryOption>
 
       <binaryOption key="sim_pinsel_i2c0ps" condition="sim_pinsel_i2c0ps_present"
+         addToVar="I2c0ExternalItems"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimPinselI2c0ps"
          disabledPinMap="I2C0_SCL,PTA3;I2C0_SDA,PTA2#/I2C0/enablePeripheralSupport"
@@ -575,6 +589,7 @@
       </binaryOption>
 
       <binaryOption key="sim_pinsel_pwtclkps" condition="sim_pinsel_pwtclkps_present"
+         addToVar="PwtExternalItems"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimPinselPwtclkps"
          description="PWT TCLK Pin Select" >
@@ -604,6 +619,7 @@
       </binaryOption>
 
       <binaryOption key="sim_pinsel_spi0ps" condition="sim_pinsel_spi0ps_present"
+         addToVar="Spi0ExternalItems"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimPinselSpi0ps"
          toolTip="Selects the SPI0 Pinouts"
@@ -625,6 +641,7 @@
       </binaryOption>
 
       <binaryOption key="sim_pinsel_uart0ps" condition="sim_pinsel_uart0ps_present"
+         addToVar="Uart0ExternalItems"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimPinselUart0ps"
          disabledPinMap="#/UART0/enablePeripheralSupport"
@@ -634,6 +651,7 @@
       </binaryOption>
 
       <binaryOption key="sim_sopt_txdme" condition="sim_sopt_txdme_present"
+         addToVar="Uart0ExternalItems"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimSoptTxdme"
          toolTip="Enables the UART0_TX output modulated by FTM0 channel 0"
@@ -643,6 +661,7 @@
       </binaryOption>
 
       <choiceOption key="sim_sopt_rxdfe" condition="sim_sopt_rxdfe_present"
+         addToVar="Uart0ExternalItems,AcmpExternalItems"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimSoptRxdfe"
          toolTip="Enables the UART0_RX input to be filtered by ACMP.\n
@@ -660,7 +679,7 @@
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
+      value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
 
    <template namespace="usbdm" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
       \t/*

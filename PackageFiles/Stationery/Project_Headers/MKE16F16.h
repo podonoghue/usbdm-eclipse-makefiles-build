@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2023/12
+ * @date     2024/01
  *
  */
 
@@ -3688,7 +3688,7 @@ typedef struct FTFE_Type {
 /** @{ */
 
 /* ================================================================================ */
-/* ================           FTM0 (file:FTM0_8CH_MKE16F16)        ================ */
+/* ================           FTM0 (file:FTM0_8CH_QDCTRL_MKE16F16)       ================ */
 /* ================================================================================ */
 
 /**
@@ -3930,6 +3930,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name OUTINIT - Initial State for Channels Output */ /** @{ */
+#define FTM_OUTINIT_CHOI_MASK                    (0xFFU)                                             /**< FTM0_OUTINIT.CHOI Mask                  */
+#define FTM_OUTINIT_CHOI_SHIFT                   (0U)                                                /**< FTM0_OUTINIT.CHOI Position              */
+#define FTM_OUTINIT_CHOI(x)                      (((uint32_t)(((uint32_t)(x))<<FTM_OUTINIT_CHOI_SHIFT))&FTM_OUTINIT_CHOI_MASK) /**< FTM0_OUTINIT.CHOI Field                 */
 #define FTM_OUTINIT_CH0OI_MASK                   (0x1U)                                              /**< FTM0_OUTINIT.CH0OI Mask                 */
 #define FTM_OUTINIT_CH0OI_SHIFT                  (0U)                                                /**< FTM0_OUTINIT.CH0OI Position             */
 #define FTM_OUTINIT_CH0OI(x)                     (((uint32_t)(((uint32_t)(x))<<FTM_OUTINIT_CH0OI_SHIFT))&FTM_OUTINIT_CH0OI_MASK) /**< FTM0_OUTINIT.CH0OI Field                */
@@ -3957,6 +3960,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name OUTMASK - Output Mask */ /** @{ */
+#define FTM_OUTMASK_CHOM_MASK                    (0xFFU)                                             /**< FTM0_OUTMASK.CHOM Mask                  */
+#define FTM_OUTMASK_CHOM_SHIFT                   (0U)                                                /**< FTM0_OUTMASK.CHOM Position              */
+#define FTM_OUTMASK_CHOM(x)                      (((uint32_t)(((uint32_t)(x))<<FTM_OUTMASK_CHOM_SHIFT))&FTM_OUTMASK_CHOM_MASK) /**< FTM0_OUTMASK.CHOM Field                 */
 #define FTM_OUTMASK_CH0OM_MASK                   (0x1U)                                              /**< FTM0_OUTMASK.CH0OM Mask                 */
 #define FTM_OUTMASK_CH0OM_SHIFT                  (0U)                                                /**< FTM0_OUTMASK.CH0OM Position             */
 #define FTM_OUTMASK_CH0OM(x)                     (((uint32_t)(((uint32_t)(x))<<FTM_OUTMASK_CH0OM_SHIFT))&FTM_OUTMASK_CH0OM_MASK) /**< FTM0_OUTMASK.CH0OM Field                */
@@ -3984,6 +3990,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name COMBINE - Function for Linked Channels */ /** @{ */
+#define FTM_COMBINE_COMBINE_MASK                 (0x7FU)                                             /**< FTM0_COMBINE.COMBINE Mask               */
+#define FTM_COMBINE_COMBINE_SHIFT                (0U)                                                /**< FTM0_COMBINE.COMBINE Position           */
+#define FTM_COMBINE_COMBINE(x)                   (((uint32_t)(((uint32_t)(x))<<FTM_COMBINE_COMBINE_SHIFT))&FTM_COMBINE_COMBINE_MASK) /**< FTM0_COMBINE.COMBINE Field              */
 #define FTM_COMBINE_COMBINE0_MASK                (0x1U)                                              /**< FTM0_COMBINE.COMBINE0 Mask              */
 #define FTM_COMBINE_COMBINE0_SHIFT               (0U)                                                /**< FTM0_COMBINE.COMBINE0 Position          */
 #define FTM_COMBINE_COMBINE0(x)                  (((uint32_t)(((uint32_t)(x))<<FTM_COMBINE_COMBINE0_SHIFT))&FTM_COMBINE_COMBINE0_MASK) /**< FTM0_COMBINE.COMBINE0 Field             */
@@ -4080,6 +4089,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name EXTTRIG - FTM External Trigger */ /** @{ */
+#define FTM_EXTTRIG_CHTRIG_MASK                  (0xFFU)                                             /**< FTM0_EXTTRIG.CHTRIG Mask                */
+#define FTM_EXTTRIG_CHTRIG_SHIFT                 (0U)                                                /**< FTM0_EXTTRIG.CHTRIG Position            */
+#define FTM_EXTTRIG_CHTRIG(x)                    (((uint32_t)(((uint32_t)(x))<<FTM_EXTTRIG_CHTRIG_SHIFT))&FTM_EXTTRIG_CHTRIG_MASK) /**< FTM0_EXTTRIG.CHTRIG Field               */
 #define FTM_EXTTRIG_CH2TRIG_MASK                 (0x1U)                                              /**< FTM0_EXTTRIG.CH2TRIG Mask               */
 #define FTM_EXTTRIG_CH2TRIG_SHIFT                (0U)                                                /**< FTM0_EXTTRIG.CH2TRIG Position           */
 #define FTM_EXTTRIG_CH2TRIG(x)                   (((uint32_t)(((uint32_t)(x))<<FTM_EXTTRIG_CH2TRIG_SHIFT))&FTM_EXTTRIG_CH2TRIG_MASK) /**< FTM0_EXTTRIG.CH2TRIG Field              */
@@ -4113,6 +4125,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name POL - Channels Polarity */ /** @{ */
+#define FTM_POL_POL_MASK                         (0xFFU)                                             /**< FTM0_POL.POL Mask                       */
+#define FTM_POL_POL_SHIFT                        (0U)                                                /**< FTM0_POL.POL Position                   */
+#define FTM_POL_POL(x)                           (((uint32_t)(((uint32_t)(x))<<FTM_POL_POL_SHIFT))&FTM_POL_POL_MASK) /**< FTM0_POL.POL Field                      */
 #define FTM_POL_POL0_MASK                        (0x1U)                                              /**< FTM0_POL.POL0 Mask                      */
 #define FTM_POL_POL0_SHIFT                       (0U)                                                /**< FTM0_POL.POL0 Position                  */
 #define FTM_POL_POL0(x)                          (((uint32_t)(((uint32_t)(x))<<FTM_POL_POL0_SHIFT))&FTM_POL_POL0_MASK) /**< FTM0_POL.POL0 Field                     */
@@ -4179,6 +4194,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name FLTCTRL - Fault Control */ /** @{ */
+#define FTM_FLTCTRL_FAULTEN_MASK                 (0xFU)                                              /**< FTM0_FLTCTRL.FAULTEN Mask               */
+#define FTM_FLTCTRL_FAULTEN_SHIFT                (0U)                                                /**< FTM0_FLTCTRL.FAULTEN Position           */
+#define FTM_FLTCTRL_FAULTEN(x)                   (((uint32_t)(((uint32_t)(x))<<FTM_FLTCTRL_FAULTEN_SHIFT))&FTM_FLTCTRL_FAULTEN_MASK) /**< FTM0_FLTCTRL.FAULTEN Field              */
 #define FTM_FLTCTRL_FAULT0EN_MASK                (0x1U)                                              /**< FTM0_FLTCTRL.FAULT0EN Mask              */
 #define FTM_FLTCTRL_FAULT0EN_SHIFT               (0U)                                                /**< FTM0_FLTCTRL.FAULT0EN Position          */
 #define FTM_FLTCTRL_FAULT0EN(x)                  (((uint32_t)(((uint32_t)(x))<<FTM_FLTCTRL_FAULT0EN_SHIFT))&FTM_FLTCTRL_FAULT0EN_MASK) /**< FTM0_FLTCTRL.FAULT0EN Field             */
@@ -4191,6 +4209,9 @@ typedef struct FTM_Type {
 #define FTM_FLTCTRL_FAULT3EN_MASK                (0x8U)                                              /**< FTM0_FLTCTRL.FAULT3EN Mask              */
 #define FTM_FLTCTRL_FAULT3EN_SHIFT               (3U)                                                /**< FTM0_FLTCTRL.FAULT3EN Position          */
 #define FTM_FLTCTRL_FAULT3EN(x)                  (((uint32_t)(((uint32_t)(x))<<FTM_FLTCTRL_FAULT3EN_SHIFT))&FTM_FLTCTRL_FAULT3EN_MASK) /**< FTM0_FLTCTRL.FAULT3EN Field             */
+#define FTM_FLTCTRL_FFLTREN_MASK                 (0xF0U)                                             /**< FTM0_FLTCTRL.FFLTREN Mask               */
+#define FTM_FLTCTRL_FFLTREN_SHIFT                (4U)                                                /**< FTM0_FLTCTRL.FFLTREN Position           */
+#define FTM_FLTCTRL_FFLTREN(x)                   (((uint32_t)(((uint32_t)(x))<<FTM_FLTCTRL_FFLTREN_SHIFT))&FTM_FLTCTRL_FFLTREN_MASK) /**< FTM0_FLTCTRL.FFLTREN Field              */
 #define FTM_FLTCTRL_FFLTR0EN_MASK                (0x10U)                                             /**< FTM0_FLTCTRL.FFLTR0EN Mask              */
 #define FTM_FLTCTRL_FFLTR0EN_SHIFT               (4U)                                                /**< FTM0_FLTCTRL.FFLTR0EN Position          */
 #define FTM_FLTCTRL_FFLTR0EN(x)                  (((uint32_t)(((uint32_t)(x))<<FTM_FLTCTRL_FFLTR0EN_SHIFT))&FTM_FLTCTRL_FFLTR0EN_MASK) /**< FTM0_FLTCTRL.FFLTR0EN Field             */
@@ -4257,6 +4278,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name FLTPOL - FTM Fault Input Polarity */ /** @{ */
+#define FTM_FLTPOL_FLTPOL_MASK                   (0xFU)                                              /**< FTM0_FLTPOL.FLTPOL Mask                 */
+#define FTM_FLTPOL_FLTPOL_SHIFT                  (0U)                                                /**< FTM0_FLTPOL.FLTPOL Position             */
+#define FTM_FLTPOL_FLTPOL(x)                     (((uint32_t)(((uint32_t)(x))<<FTM_FLTPOL_FLTPOL_SHIFT))&FTM_FLTPOL_FLTPOL_MASK) /**< FTM0_FLTPOL.FLTPOL Field                */
 #define FTM_FLTPOL_FLT0POL_MASK                  (0x1U)                                              /**< FTM0_FLTPOL.FLT0POL Mask                */
 #define FTM_FLTPOL_FLT0POL_SHIFT                 (0U)                                                /**< FTM0_FLTPOL.FLT0POL Position            */
 #define FTM_FLTPOL_FLT0POL(x)                    (((uint32_t)(((uint32_t)(x))<<FTM_FLTPOL_FLT0POL_SHIFT))&FTM_FLTPOL_FLT0POL_MASK) /**< FTM0_FLTPOL.FLT0POL Field               */
@@ -4335,6 +4359,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name SWOCTRL - FTM Software Output Control */ /** @{ */
+#define FTM_SWOCTRL_CHOC_MASK                    (0xFFU)                                             /**< FTM0_SWOCTRL.CHOC Mask                  */
+#define FTM_SWOCTRL_CHOC_SHIFT                   (0U)                                                /**< FTM0_SWOCTRL.CHOC Position              */
+#define FTM_SWOCTRL_CHOC(x)                      (((uint32_t)(((uint32_t)(x))<<FTM_SWOCTRL_CHOC_SHIFT))&FTM_SWOCTRL_CHOC_MASK) /**< FTM0_SWOCTRL.CHOC Field                 */
 #define FTM_SWOCTRL_CH0OC_MASK                   (0x1U)                                              /**< FTM0_SWOCTRL.CH0OC Mask                 */
 #define FTM_SWOCTRL_CH0OC_SHIFT                  (0U)                                                /**< FTM0_SWOCTRL.CH0OC Position             */
 #define FTM_SWOCTRL_CH0OC(x)                     (((uint32_t)(((uint32_t)(x))<<FTM_SWOCTRL_CH0OC_SHIFT))&FTM_SWOCTRL_CH0OC_MASK) /**< FTM0_SWOCTRL.CH0OC Field                */
@@ -4359,6 +4386,9 @@ typedef struct FTM_Type {
 #define FTM_SWOCTRL_CH7OC_MASK                   (0x80U)                                             /**< FTM0_SWOCTRL.CH7OC Mask                 */
 #define FTM_SWOCTRL_CH7OC_SHIFT                  (7U)                                                /**< FTM0_SWOCTRL.CH7OC Position             */
 #define FTM_SWOCTRL_CH7OC(x)                     (((uint32_t)(((uint32_t)(x))<<FTM_SWOCTRL_CH7OC_SHIFT))&FTM_SWOCTRL_CH7OC_MASK) /**< FTM0_SWOCTRL.CH7OC Field                */
+#define FTM_SWOCTRL_CHOCV_MASK                   (0xFF00U)                                           /**< FTM0_SWOCTRL.CHOCV Mask                 */
+#define FTM_SWOCTRL_CHOCV_SHIFT                  (8U)                                                /**< FTM0_SWOCTRL.CHOCV Position             */
+#define FTM_SWOCTRL_CHOCV(x)                     (((uint32_t)(((uint32_t)(x))<<FTM_SWOCTRL_CHOCV_SHIFT))&FTM_SWOCTRL_CHOCV_MASK) /**< FTM0_SWOCTRL.CHOCV Field                */
 #define FTM_SWOCTRL_CH0OCV_MASK                  (0x100U)                                            /**< FTM0_SWOCTRL.CH0OCV Mask                */
 #define FTM_SWOCTRL_CH0OCV_SHIFT                 (8U)                                                /**< FTM0_SWOCTRL.CH0OCV Position            */
 #define FTM_SWOCTRL_CH0OCV(x)                    (((uint32_t)(((uint32_t)(x))<<FTM_SWOCTRL_CH0OCV_SHIFT))&FTM_SWOCTRL_CH0OCV_MASK) /**< FTM0_SWOCTRL.CH0OCV Field               */
@@ -4386,6 +4416,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name PWMLOAD - FTM PWM Load */ /** @{ */
+#define FTM_PWMLOAD_CHSEL_MASK                   (0xFFU)                                             /**< FTM0_PWMLOAD.CHSEL Mask                 */
+#define FTM_PWMLOAD_CHSEL_SHIFT                  (0U)                                                /**< FTM0_PWMLOAD.CHSEL Position             */
+#define FTM_PWMLOAD_CHSEL(x)                     (((uint32_t)(((uint32_t)(x))<<FTM_PWMLOAD_CHSEL_SHIFT))&FTM_PWMLOAD_CHSEL_MASK) /**< FTM0_PWMLOAD.CHSEL Field                */
 #define FTM_PWMLOAD_CH0SEL_MASK                  (0x1U)                                              /**< FTM0_PWMLOAD.CH0SEL Mask                */
 #define FTM_PWMLOAD_CH0SEL_SHIFT                 (0U)                                                /**< FTM0_PWMLOAD.CH0SEL Position            */
 #define FTM_PWMLOAD_CH0SEL(x)                    (((uint32_t)(((uint32_t)(x))<<FTM_PWMLOAD_CH0SEL_SHIFT))&FTM_PWMLOAD_CH0SEL_MASK) /**< FTM0_PWMLOAD.CH0SEL Field               */

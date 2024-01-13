@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V0.0
- * @date     2023/12
+ * @date     2024/01
  *
  */
 
@@ -1997,7 +1997,7 @@ typedef struct FTM_Type {
 /** @{ */
 
 /* ================================================================================ */
-/* ================           FTM1 (file:FTM1_6CH_MCF51)           ================ */
+/* ================           FTM1 (file:FTM1_6CH_QDCTRL_MCF51)       ================ */
 /* ================================================================================ */
 
 /**
@@ -2113,6 +2113,24 @@ typedef struct FTM1_Type {
 #define FTM_OUTMASK_CH5OM_MASK                   (0x20U)                                             /**< FTM1_OUTMASK.CH5OM Mask                 */
 #define FTM_OUTMASK_CH5OM_SHIFT                  (5U)                                                /**< FTM1_OUTMASK.CH5OM Position             */
 #define FTM_OUTMASK_CH5OM(x)                     (((uint8_t)(((uint8_t)(x))<<FTM_OUTMASK_CH5OM_SHIFT))&FTM_OUTMASK_CH5OM_MASK) /**< FTM1_OUTMASK.CH5OM Field                */
+/** @} */
+
+/** @name EXTTRIG - FTM External Trigger */ /** @{ */
+#define FTM_EXTTRIG_CHTRIG_MASK                  (0xFFU)                                             /**< FTM1_EXTTRIG.CHTRIG Mask                */
+#define FTM_EXTTRIG_CHTRIG_SHIFT                 (0U)                                                /**< FTM1_EXTTRIG.CHTRIG Position            */
+#define FTM_EXTTRIG_CHTRIG(x)                    (((uint8_t)(((uint8_t)(x))<<FTM_EXTTRIG_CHTRIG_SHIFT))&FTM_EXTTRIG_CHTRIG_MASK) /**< FTM1_EXTTRIG.CHTRIG Field               */
+/** @} */
+
+/** @name POL - Channels Polarity */ /** @{ */
+#define FTM_POL_POL_MASK                         (0xFFU)                                             /**< FTM1_POL.POL Mask                       */
+#define FTM_POL_POL_SHIFT                        (0U)                                                /**< FTM1_POL.POL Position                   */
+#define FTM_POL_POL(x)                           (((uint8_t)(((uint8_t)(x))<<FTM_POL_POL_SHIFT))&FTM_POL_POL_MASK) /**< FTM1_POL.POL Field                      */
+/** @} */
+
+/** @name FLTCTRL - Fault Control */ /** @{ */
+#define FTM_FLTCTRL_FFLTREN_MASK                 (0xF0U)                                             /**< FTM1_FLTCTRL.FFLTREN Mask               */
+#define FTM_FLTCTRL_FFLTREN_SHIFT                (4U)                                                /**< FTM1_FLTCTRL.FFLTREN Position           */
+#define FTM_FLTCTRL_FFLTREN(x)                   (((uint8_t)(((uint8_t)(x))<<FTM_FLTCTRL_FFLTREN_SHIFT))&FTM_FLTCTRL_FFLTREN_MASK) /**< FTM1_FLTCTRL.FFLTREN Field              */
 /** @} */
 
 /** @} */ /* End group FTM_Register_Masks_GROUP */

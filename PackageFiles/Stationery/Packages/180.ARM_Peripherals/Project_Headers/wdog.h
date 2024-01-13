@@ -107,8 +107,8 @@ protected:
          float counterFrequency = clockFrequency/(float)prescale;
          maxTime = maxCount/clockFrequency;
          if (maxTime > timeout.toSeconds()) {
-            timeout.fromTicks(roundf(float(timeout.toSeconds())*counterFrequency));
-            window.fromTicks(roundf(float(window.toSeconds())*counterFrequency));
+            timeout.fromTicks(Ticks(roundf(float(timeout.toSeconds())*counterFrequency)));
+            window.fromTicks(Ticks(roundf(float(window.toSeconds())*counterFrequency)));
             presc = WDOG_PRESC_PRESCVAL(prescale-1);
             return E_NO_ERROR;
          }

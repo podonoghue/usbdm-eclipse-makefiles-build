@@ -62,7 +62,6 @@
       typeName="KbiEnableMask"
       enumType="uint32_t"
       valueFormat="KbiEnableMask(%s)"
-      defaultValue="0"
       description="KBI Pin Enables"
       toolTip="Bitmask selecting enabled pins"
       bitmask="0"
@@ -78,7 +77,6 @@
       typeName="KbiPolarityMask"
       enumType="uint32_t"
       valueFormat="KbiPolarityMask(%s)"
-      defaultValue="0"
       description="KBI Edge Selects"
       toolTip="Bitmask selecting polarity : 0=Falling edge/low level; 1=Rising edge/high level"
       bitmask="0"
@@ -659,5 +657,18 @@
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
+   
+   <!-- ************* SIM configuration ****************** -->
+   <category name="Advanced" description="SIM configuration">
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title/>
+   </category>
+   <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
 </peripheralPage>

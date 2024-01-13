@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2023/12
+ * @date     2024/01
  *
  */
 
@@ -7276,6 +7276,12 @@ typedef struct TPM1_Type {
 
 /** @addtogroup TPM_Register_Masks_GROUP TPM Register Masks */
 /** @{ */
+
+/** @name POL - Channel Polarity */ /** @{ */
+#define TPM_POL_POL_MASK                         (0xFFU)                                             /**< TPM1_POL.POL Mask                       */
+#define TPM_POL_POL_SHIFT                        (0U)                                                /**< TPM1_POL.POL Position                   */
+#define TPM_POL_POL(x)                           (((uint32_t)(((uint32_t)(x))<<TPM_POL_POL_SHIFT))&TPM_POL_POL_MASK) /**< TPM1_POL.POL Field                      */
+/** @} */
 
 /** @} */ /* End group TPM_Register_Masks_GROUP */
 

@@ -300,17 +300,17 @@
          derivedFrom="/PCR/nvic_irqLevel" 
          >
       </choiceOption>
-      <stringOption key="irqHandlerName" condition="irqLevel&amp;&amp;!irqHandlerName"
+      <!--  stringOption key="irqHandlerName" condition="irqLevel&amp;&amp;!irqHandlerName"
          valueFormat="%s"
          hidden="true"
          enabledBy="irqLevel>0"
          description="Name of interrupt handler"
          toolTip="This musr be the name of a globally accessible static function" 
          value=""
-      />
+      / -->
       <!-- Display here (wherever the original) -->
       <aliasOption key="irqLevel"       locked="false" />
-      <aliasOption key="irqHandlerName" locked="false" />
+      <!--  aliasOption key="irqHandlerName" locked="false" / -->
 
       <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="irqHandlingMethod"

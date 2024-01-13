@@ -1919,6 +1919,7 @@
          <param type="BooleanVariable"        name="tpm_pol_pol3_present"           value="true"             key="/TPM0/tpm_pol_pol3_present" />
          <param type="BooleanVariable"        name="tpm_pol_pol4_present"           value="true"             key="/TPM0/tpm_pol_pol4_present" />
          <param type="BooleanVariable"        name="tpm_pol_pol5_present"           value="true"             key="/TPM0/tpm_pol_pol5_present" />
+         <param type="BooleanVariable"        name="tpm_pol_pol_present"            value="true"             key="/TPM0/tpm_pol_pol_present" />
          <param type="BooleanVariable"        name="tpm_pol_present"                value="true"             key="/TPM0/tpm_pol_present" />
          <param type="BooleanVariable"        name="tpm_sc_cmod_present"            value="true"             key="/TPM0/tpm_sc_cmod_present" />
          <param type="BooleanVariable"        name="tpm_sc_cpwms_present"           value="true"             key="/TPM0/tpm_sc_cpwms_present" />
@@ -1977,6 +1978,7 @@
          <param type="BooleanVariable"        name="tpm_mod_present"                value="true"             key="/TPM1/tpm_mod_present" />
          <param type="BooleanVariable"        name="tpm_pol_pol0_present"           value="true"             key="/TPM1/tpm_pol_pol0_present" />
          <param type="BooleanVariable"        name="tpm_pol_pol1_present"           value="true"             key="/TPM1/tpm_pol_pol1_present" />
+         <param type="BooleanVariable"        name="tpm_pol_pol_present"            value="true"             key="/TPM1/tpm_pol_pol_present" />
          <param type="BooleanVariable"        name="tpm_pol_present"                value="true"             key="/TPM1/tpm_pol_present" />
          <param type="BooleanVariable"        name="tpm_sc_cmod_present"            value="true"             key="/TPM1/tpm_sc_cmod_present" />
          <param type="BooleanVariable"        name="tpm_sc_cpwms_present"           value="true"             key="/TPM1/tpm_sc_cpwms_present" />
@@ -2031,6 +2033,7 @@
          <param type="BooleanVariable"        name="tpm_mod_present"                value="true"             key="/TPM2/tpm_mod_present" />
          <param type="BooleanVariable"        name="tpm_pol_pol0_present"           value="true"             key="/TPM2/tpm_pol_pol0_present" />
          <param type="BooleanVariable"        name="tpm_pol_pol1_present"           value="true"             key="/TPM2/tpm_pol_pol1_present" />
+         <param type="BooleanVariable"        name="tpm_pol_pol_present"            value="true"             key="/TPM2/tpm_pol_pol_present" />
          <param type="BooleanVariable"        name="tpm_pol_present"                value="true"             key="/TPM2/tpm_pol_present" />
          <param type="BooleanVariable"        name="tpm_sc_cmod_present"            value="true"             key="/TPM2/tpm_sc_cmod_present" />
          <param type="BooleanVariable"        name="tpm_sc_cpwms_present"           value="true"             key="/TPM2/tpm_sc_cpwms_present" />

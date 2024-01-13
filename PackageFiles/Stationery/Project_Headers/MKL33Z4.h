@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2023/12
+ * @date     2024/01
  *
  */
 
@@ -5771,6 +5771,9 @@ typedef struct TPM_Type {
 /** @} */
 
 /** @name POL - Channel Polarity */ /** @{ */
+#define TPM_POL_POL_MASK                         (0xFFU)                                             /**< TPM0_POL.POL Mask                       */
+#define TPM_POL_POL_SHIFT                        (0U)                                                /**< TPM0_POL.POL Position                   */
+#define TPM_POL_POL(x)                           (((uint32_t)(((uint32_t)(x))<<TPM_POL_POL_SHIFT))&TPM_POL_POL_MASK) /**< TPM0_POL.POL Field                      */
 #define TPM_POL_POL0_MASK                        (0x1U)                                              /**< TPM0_POL.POL0 Mask                      */
 #define TPM_POL_POL0_SHIFT                       (0U)                                                /**< TPM0_POL.POL0 Position                  */
 #define TPM_POL_POL0(x)                          (((uint32_t)(((uint32_t)(x))<<TPM_POL_POL0_SHIFT))&TPM_POL_POL0_MASK) /**< TPM0_POL.POL0 Field                     */
