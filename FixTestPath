@@ -2,7 +2,7 @@
 
 SOURCE_DIRECTORY="$(dirname $(readlink -f $0))"
 
-echo Make sure you SOURCE this file!!
+echo Make sure you SOURCE this file in the correct directory!!
 
 echo  "export LD_LIBRARY_PATH=${SOURCE_DIRECTORY}/Tests"
 export LD_LIBRARY_PATH=${SOURCE_DIRECTORY}/Tests

@@ -13,6 +13,10 @@ ARCH=`uname -m`
 SOURCE_DIRECTORY="$(dirname $(readlink -f $0))"
 echo "Updating from file in ${SOURCE_DIRECTORY}"
 
+# Version Information
+source ${SOURCE_DIRECTORY}/version
+echo "Updating to Version ${VERSION}"
+
 pausing() {
    x=5
    echo -n Pausing ...
