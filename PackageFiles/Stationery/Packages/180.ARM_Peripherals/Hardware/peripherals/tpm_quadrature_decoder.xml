@@ -50,7 +50,7 @@
       <binaryOption key="tpm_qdctrl_quadmode"
          enabledBy="enablePeripheralSupport"
          typeName="TpmQuadratureMode"
-         enumType="uint8_t"
+         baseType="uint8_t"
          description="Quadrature decoding mode"
          toolTip="Determines how the inputs control the counting sequence" >
          <choice value="0" name="Phase-AB Mode"         enum="Phase_AB_Mode" />
@@ -64,7 +64,7 @@
       <binaryOption key="tpm_pol_pol0" condition="tpm_pol_pol0_present"
          enabledBy="enablePeripheralSupport"
          typeName="TpmPhaseAPolarity"
-         enumType="uint8_t"
+         baseType="uint8_t"
          description="Polarity of Phase A input"
          toolTip="Polarity of Phase A input" >
          <choice value="0" name="Active High" enum="ActiveHigh" />
@@ -75,7 +75,7 @@
          enabledBy="enablePeripheralSupport"
          valueFormat="TPM_FILTER_CH0FVAL(%s)"
          typeName="TpmFilterPhaseA"
-         enumType="uint8_t"
+         baseType="uint8_t"
          description="Channel Filter for Phase A input"
          toolTip="Selects the filter value for the A channel used by the Quad-decoder.\n
                   On input capture this acts as a filter\n
@@ -111,7 +111,7 @@
          enabledBy="enablePeripheralSupport"
          valueFormat="TPM_FILTER_CH1FVAL(%s)"
          typeName="TpmFilterPhaseB"
-         enumType="uint8_t"
+         baseType="uint8_t"
          description="Channel Filter for Phase B input"
          toolTip="Selects the filter value for the B channel used by the Quad-decoder.\n
                   On input capture this acts as a filter\n
@@ -194,11 +194,11 @@
       ]]></variableTemplate>
 
       <for keys=" type        : variables                        : init    "
-          values="%enumType   : tpm_filter_ch0,tpm_filter_ch1    : 0       ;
-                  %enumType   : tpm_qdctrl_quadmode              : 0       ;
-                  %enumType   : tpm_sc_action,tpm_sc_ps          : 0       ;
-                  %enumType   : tpm_pol_pol0,tpm_pol_pol1        : 0       ;
-                  %enumType   : tpm_mod                          : 0       ">
+          values="%baseType   : tpm_filter_ch0,tpm_filter_ch1    : 0       ;
+                  %baseType   : tpm_qdctrl_quadmode              : 0       ;
+                  %baseType   : tpm_sc_action,tpm_sc_ps          : 0       ;
+                  %baseType   : tpm_pol_pol0,tpm_pol_pol1        : 0       ;
+                  %baseType   : tpm_mod_mod                      : 0       ">
          <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
             variables="%(variables)"
          ><![CDATA[
@@ -257,7 +257,7 @@
          tpm_sc_action;tpm_sc_ps;
          tpm_pol_pol0;tpm_pol_pol1;
          tpm_filter_ch0;tpm_filter_ch1;
-         tpm_mod" >
+         tpm_mod_mod" >
          <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
             variables="%(r)"
             linePadding="xxx"
@@ -310,8 +310,8 @@
       values=" tpm_sc_action,tpm_sc_ps       : %register = 0                               ;
                tpm_qdctrl_quadmode           : %register = 0                               ;
                tpm_filter_ch0,tpm_filter_ch1 : %configRegAssignment                        ;
-               tpm_mod                       : %configRegAssignment                        ;
-               tpm_cnt                       : %register = 0                               ;
+               tpm_mod_mod                   : %configRegAssignment                        ;
+               tpm_cnt_count                 : %register = 0                               ;
                tpm_sc_action,tpm_sc_ps       : %configRegAssignment                        ;
                tpm_pol_pol0,tpm_pol_pol1     : %configRegAssignment                        ;
                tpm_qdctrl_quadmode           : %configRegAssignment|TPM_QDCTRL_QUADEN_MASK " >
@@ -336,7 +336,7 @@
             tpm_qdctrl_quadmode,
             tpm_sc_action,
             tpm_sc_ps,
-            tpm_mod,
+            tpm_mod_mod,
             tpm_pol_pol0,
             tpm_pol_pol1,
             tpm_filter_ch0,

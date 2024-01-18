@@ -58,7 +58,7 @@
    <!-- ************* CTRL ****************** -->
 
    <binaryOption key="ewm_ctrl_ewmen" condition="ewm_ctrl_ewmen_present"
-      enumType="uint8_t"
+      baseType="uint8_t"
       enabledBy="enablePeripheralSupport"
       typeName="EwmMode"
       toolTip="Enables the EWM module\n
@@ -70,7 +70,7 @@
 
    <binaryOption key="ewm_ctrl_inten" condition="ewm_ctrl_inten_present"
       enabledBy="ewm_ctrl_ewmen"
-      enumType="uint8_t"
+      baseType="uint8_t"
       typeName="EwmAction"
       toolTip="Action taken on EWM event"
       description="Action on event" >
@@ -80,7 +80,7 @@
 
    <choiceOption key="ewm_ctrl_input" condition="ewm_ctrl_inen_present&amp;&amp;ewm_ctrl_assin_present"
       enabledBy="ewm_ctrl_ewmen"
-      enumType="uint8_t"
+      baseType="uint8_t"
       valueFormat="EWM_CTRL_INEN(%s),EWM_CTRL_ASSIN(%s)"
       typeName="EwmInputPin"
       toolTip="Enables and selects the polarity of the EWM_in pin\n
@@ -96,7 +96,7 @@
    <choiceOption key="ewm_serv_service" condition="ewm_serv_service_present"
       enabledBy="ewm_ctrl_ewmen"
       hidden="true"
-      enumType="uint8_t"
+      baseType="uint8_t"
       typeName="EwmService"
       description="The EWM service mechanism requires the CPU to write two values to the SERV register:\n
             a first data byte of 0xB4, \n
@@ -112,7 +112,7 @@
       valueFormat="%s"
       enabledBy="ewm_ctrl_ewmen"
       typeName="EwmClockPrescaler"
-      enumType="uint16_t"
+      baseType="uint16_t"
       description="LPO Clock prescaler"
       toolTip="This selects a prescaler value for the LPO clock before it is used by the timer\n
                This is a write-once register."
@@ -218,8 +218,8 @@
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %paramType get%(name)() {
-         \t   return %paramType(%register&%mask);
+         \tstatic %returnType get%(name)() {
+         \t   return %returnType(%register&%mask);
          \t}
          \t\n
       ]]></variableTemplate>
@@ -247,8 +247,8 @@
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %paramType get%(name)() {
-         \t   return %paramType(%register+1);
+         \tstatic %returnType get%(name)() {
+         \t   return %returnType(%register+1);
          \t}
          \t\n
       ]]></variableTemplate>
@@ -446,7 +446,7 @@
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %paramType %registerName0 = %defaultValue;
+      \t   %returnType %registerName0 = %defaultValue;
       \t\n
    ]]></variableTemplate>
 

@@ -108,8 +108,7 @@
       \t *
       %paramDescription
       \t */
-      \tstatic void configurePeripheralSource(
-      %params) {
+      \tstatic void configurePeripheralSource(%params) {
       \t
       \t   if (%paramName1) {
       \t      %register = %register | %paramName0;
@@ -180,8 +179,7 @@
       \t *
       %paramDescription
       \t */
-      \tstatic void configureResetFilter(
-      %params) {
+      \tstatic void configureResetFilter(%params) {
       \t   %register = %paramExpression;
       \t}\n
    ]]></variableTemplate>

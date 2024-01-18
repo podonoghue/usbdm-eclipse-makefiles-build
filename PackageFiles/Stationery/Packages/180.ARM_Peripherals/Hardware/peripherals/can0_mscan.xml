@@ -190,7 +190,7 @@
    <intOption key="can_canbtr0_brp" condition="can_canbtr0_brp_present"
       enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       typeName="CanBaudPrescale"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Baud Rate Prescaler"
       toolTip="These bits determine the time quanta (Tq) clock which is used to build up the bit timing.\n
                Prescale = N+1"
@@ -211,7 +211,7 @@
 
    <choiceOption key="can_canbtr1_tseg1" condition="can_canbtr1_tseg1_present"
       enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-      enumType="uint8_t"
+      baseType="uint8_t"
       typeName="CanTimeSegment1"
       description="Time Segment 1"
       toolTip="Time segments within the bit time fix the number of clock cycles per bit time and the location of the sample point.\n
@@ -235,7 +235,7 @@
 
    <choiceOption key="can_canbtr1_tseg2" condition="can_canbtr1_tseg2_present"
       enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-      enumType="uint8_t"
+      baseType="uint8_t"
       typeName="CanTimeSegment2"
       description="Time Segment 2"
       toolTip="Time segments within the bit time fix the number of clock cycles per bit time and the location of the sample point.\n
@@ -441,7 +441,7 @@ flag is set"
 
    <choiceOption key="can_rdlr_rdlc" condition="can_rdlr_rdlc_present"
       enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-      enumType="uint8_t"
+      baseType="uint8_t"
       typeName="CanDataLength"
       description="Data Length Code Bits"
       toolTip="The data length code contains the number of bytes (data byte count) of the respective message. During\n

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- tpm_fault.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
+   <!-- ____ Setters and Getters ____________ -->
+
+   <for keys="field                     : set   : get   : clear : genCode                 : name"
+        values="
+
+         tpm_sc_action                  : true  : true  : false : enableGettersAndSetters : OverflowAction;
+         tpm_sc_tof                     : false : true  : true  : enableGettersAndSetters : OverflowFlag;
+         tpm_sc_cpwms                   : true  : true  : false : enableGettersAndSetters : CountMode;
+         tpm_sc_cmod                    : true  : true  : false : enableGettersAndSetters : ClockSource;
+         tpm_sc_ps                      : true  : true  : false : enableGettersAndSetters : Prescaler;
+
+         tpm_cnt_count                  : false : true  : true  : enableGettersAndSetters : Counter;
+
+         tpm_mod_mod                    : true  : true  : false : enableGettersAndSetters : CounterMaximumValue;
+
+         tpm_status_status              : true  : true  : false : enableGettersAndSetters : Status;
+         " >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t * (%(field))
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %fieldAssignment;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t * (%(field))
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %returnType get%(name)() {
+         \t   return %fieldExtract;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%(field))
+         \t *
+         \t */
+         \tstatic void clear%(name)() {
+         \t   %register = %register|%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <for keys="field                     : set   : get   : clear : genCode                 : context                 : name"
+        values="
+
+         " >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(int index, %params) {
+         \t   $(_basename)->%(context) = ($(_basename)->%(context) & ~%mask)|%paramExpression;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)(int index) {
+         \t   return %paramType($(_basename)->%(context)&%mask);
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t *
+         \tstatic void clear%(name)(int index) {
+         \t   $(_basename)->%(context) = $(_basename)->%(context)|%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+</fragment>

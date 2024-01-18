@@ -883,6 +883,7 @@
          <param type="BooleanVariable"        name="tpm_status_ch0f_present"        value="true"             key="/TPM0/tpm_status_ch0f_present" />
          <param type="BooleanVariable"        name="tpm_status_ch1f_present"        value="true"             key="/TPM0/tpm_status_ch1f_present" />
          <param type="BooleanVariable"        name="tpm_status_present"             value="true"             key="/TPM0/tpm_status_present" />
+         <param type="BooleanVariable"        name="tpm_status_status_present"      value="true"             key="/TPM0/tpm_status_status_present" />
          <param type="BooleanVariable"        name="tpm_status_tof_present"         value="true"             key="/TPM0/tpm_status_tof_present" />
       </peripheral>
       <peripheral baseName="TPM"      instance="1"        instanceList="TPM0;TPM1" version="tpm0_2ch_no_dma">
@@ -928,6 +929,7 @@
          <param type="BooleanVariable"        name="tpm_status_ch0f_present"        value="true"             key="/TPM1/tpm_status_ch0f_present" />
          <param type="BooleanVariable"        name="tpm_status_ch1f_present"        value="true"             key="/TPM1/tpm_status_ch1f_present" />
          <param type="BooleanVariable"        name="tpm_status_present"             value="true"             key="/TPM1/tpm_status_present" />
+         <param type="BooleanVariable"        name="tpm_status_status_present"      value="true"             key="/TPM1/tpm_status_status_present" />
          <param type="BooleanVariable"        name="tpm_status_tof_present"         value="true"             key="/TPM1/tpm_status_tof_present" />
       </peripheral>
       <peripheral baseName="VREF"     instance=""         instanceList="VREF" version="vref_c">

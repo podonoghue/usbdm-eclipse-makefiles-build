@@ -88,6 +88,7 @@
    </choiceOption>
 
    <intOption key="i2cInputClock"
+      enabledBy="enablePeripheralSupport"
       locked="true"
       derived="true"
       description="I2C input clock"
@@ -523,7 +524,6 @@ In other cases, if the master reads data from the slave, then it is required to 
          units="ticks"
          enabledBy="/$(_BASENAME)/smbOptionsAvailable"
          valueFormat="%s"
-         typeName="Ticks &amp;"
          description="SCL low timeout value"
          toolTip="SCL low timeout"
          value="0"
@@ -698,8 +698,8 @@ In other cases, if the master reads data from the slave, then it is required to 
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %paramType get%(name)() {
-         \t   return %paramType(%fieldExtract);
+         \tstatic %returnType get%(name)() {
+         \t   return %returnType(%fieldExtract);
          \t}
          \t\n
       ]]></variableTemplate>
@@ -1447,6 +1447,6 @@ In other cases, if the master reads data from the slave, then it is required to 
    </category>
    <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
-   <signals enabledBy="enablePeripheralSupport" />
+   <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present"  />
 
 </peripheralPage>

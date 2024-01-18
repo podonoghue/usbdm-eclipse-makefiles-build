@@ -507,7 +507,7 @@ public:
    virtual osStatus endTransaction() override {
       return mutex().release();
    }
-#endif
+#endif 
 
 public:
    $(/I2C/classInfo: // No class Info found)

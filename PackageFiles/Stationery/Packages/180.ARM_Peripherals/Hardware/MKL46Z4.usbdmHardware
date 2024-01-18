@@ -1670,6 +1670,7 @@
          <param type="BooleanVariable"        name="tpm_status_ch4f_present"        value="true"             key="/TPM0/tpm_status_ch4f_present" />
          <param type="BooleanVariable"        name="tpm_status_ch5f_present"        value="true"             key="/TPM0/tpm_status_ch5f_present" />
          <param type="BooleanVariable"        name="tpm_status_present"             value="true"             key="/TPM0/tpm_status_present" />
+         <param type="BooleanVariable"        name="tpm_status_status_present"      value="true"             key="/TPM0/tpm_status_status_present" />
          <param type="BooleanVariable"        name="tpm_status_tof_present"         value="true"             key="/TPM0/tpm_status_tof_present" />
       </peripheral>
       <peripheral baseName="TPM"      instance="1"        instanceList="TPM0;TPM1;TPM2" version="tpm1_2ch">
@@ -1717,6 +1718,7 @@
          <param type="BooleanVariable"        name="tpm_status_ch0f_present"        value="true"             key="/TPM1/tpm_status_ch0f_present" />
          <param type="BooleanVariable"        name="tpm_status_ch1f_present"        value="true"             key="/TPM1/tpm_status_ch1f_present" />
          <param type="BooleanVariable"        name="tpm_status_present"             value="true"             key="/TPM1/tpm_status_present" />
+         <param type="BooleanVariable"        name="tpm_status_status_present"      value="true"             key="/TPM1/tpm_status_status_present" />
          <param type="BooleanVariable"        name="tpm_status_tof_present"         value="true"             key="/TPM1/tpm_status_tof_present" />
       </peripheral>
       <peripheral baseName="TPM"      instance="2"        instanceList="TPM0;TPM1;TPM2" version="tpm1_2ch">
@@ -1764,6 +1766,7 @@
          <param type="BooleanVariable"        name="tpm_status_ch0f_present"        value="true"             key="/TPM2/tpm_status_ch0f_present" />
          <param type="BooleanVariable"        name="tpm_status_ch1f_present"        value="true"             key="/TPM2/tpm_status_ch1f_present" />
          <param type="BooleanVariable"        name="tpm_status_present"             value="true"             key="/TPM2/tpm_status_present" />
+         <param type="BooleanVariable"        name="tpm_status_status_present"      value="true"             key="/TPM2/tpm_status_status_present" />
          <param type="BooleanVariable"        name="tpm_status_tof_present"         value="true"             key="/TPM2/tpm_status_tof_present" />
       </peripheral>
       <peripheral baseName="TSI"      instance="0"        instanceList="TSI0" version="tsi0_mkl">

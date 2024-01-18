@@ -83,7 +83,7 @@
    <binaryOption key="wdog_cs1_en" condition="wdog_cs1_en_present"
       enabledBy="fullCodeSupport"
       typeName="WdogEnable"
-      enumType="uint16_t"
+      baseType="uint16_t"
       toolTip="Main enable for WDOG\n
       When disabled, the watchdog timer is kept in the reset state, but the other exception conditions can \n
       still trigger a reset/interrupt"
@@ -94,7 +94,7 @@
 
    <choiceOption key="wdog_cs1_tst" condition="wdog_cs1_tst_present"
       enabledBy="wdog_cs1_en"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="WdogTestMode"
       toolTip="Allows exercising all bits of the counter to confirm that the watchdog is functioning properly.\n
                This write-once field is cleared on POR only"
@@ -107,7 +107,7 @@
 
    <binaryOption key="wdog_cs1_wait" condition="wdog_cs1_wait_present"
       enabledBy="wdog_cs1_en"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="WdogEnableInWait"
       toolTip="This write-once bit enables the watchdog to operate when the chip is in wait mode"
       description="Enable watchdog in WAIT mode" >
@@ -117,7 +117,7 @@
 
    <binaryOption key="wdog_cs1_stop" condition="wdog_cs1_stop_present"
       enabledBy="wdog_cs1_en"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="WdogEnableInStop"
       toolTip="This write-once bit enables the watchdog to operate when the chip is in stop mode"
       description="Enable watchdog in STOP mode" >
@@ -127,7 +127,7 @@
 
    <binaryOption key="wdog_cs1_dbg" condition="wdog_cs1_dbg_present"
       enabledBy="wdog_cs1_en"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="WdogEnableInDebug"
       toolTip="This write-once bit enables the watchdog to operate when the chip is in debug mode"
       description="Enable watchdog in DEBUG mode" >
@@ -137,7 +137,7 @@
 
    <binaryOption key="wdog_cs1_update" condition="wdog_cs1_update_present"
       enabledBy="fullCodeSupport"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="WdogAllowUpdate"
       toolTip="Enables updates to watchdog write-once registers, after \n
                the reset-triggered initial configuration window closes\n
@@ -150,7 +150,7 @@
 
    <binaryOption key="wdog_cs2_win" condition="wdog_cs2_win_present"
       enabledBy="wdog_cs1_en"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="WdogWindow"
       toolTip="Windowing mode only allows refresh during a restricted window"
       description="Enable watchdog windowing mode" >
@@ -160,7 +160,7 @@
 
    <binaryOption key="wdog_cs1_int" condition="wdog_cs1_int_present"
       enabledBy="wdog_cs1_en"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="WdogAction"
       toolTip="This write-once bit allows an interrupt handler to record state prior to forcing a reset.\n
                The reset occurs after a delay of 128 bus clocks following the interrupt vector fetch."
@@ -172,7 +172,7 @@
    <choiceOption key="wdog_cs2_clk" condition="wdog_cs2_clk_present"
       enabledBy="fullCodeSupport"
       target="inputClockFrequency"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="WdogClock"
       description="Watchdog clock source"
       toolTip="This write-once field indicates the clock source that feeds the watchdog counter" >
@@ -234,7 +234,7 @@
       enabledBy="wdog_cs1_en"
       target="timerTickPeriod"
       typeName="WdogPrescale"
-      enumType="uint16_t"
+      baseType="uint16_t"
       description="Prescaler for the watchdog clock source"
       toolTip="This write-once bit enables a fixed 256 pre-scaling of watchdog counter reference clock" >
       <choice name="Prescale /1"    value="0" ref="1.0/inputClockFrequency"   enum="Direct" />
@@ -264,7 +264,6 @@
       units="ticks"
       description="Watchdog Timeout in ticks"
       toolTip="The watchdog must be refreshed before the counter reaches this value"
-      typeName="Ticks"
       derived="true"
       min="200" max="0xFFFF"
       disabledValue="0xFFFF"
@@ -290,7 +289,6 @@
       toolTip="If windowed operation is enabled, then the watchdog can only be refreshed \n
                if the timer reaches a value greater than or equal to this window length value.\n
                A refresh outside of this window resets the system"
-      typeName="Ticks"
       value="0" min="0" max="0xFFFF"
       disabledValue="0xFFFF"
    />

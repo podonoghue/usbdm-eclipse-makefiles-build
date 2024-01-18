@@ -421,6 +421,7 @@
          <param type="BooleanVariable"        name="ftm_invctrl_inv0en_present"     value="true"             key="/FTM2/ftm_invctrl_inv0en_present" />
          <param type="BooleanVariable"        name="ftm_invctrl_inv1en_present"     value="true"             key="/FTM2/ftm_invctrl_inv1en_present" />
          <param type="BooleanVariable"        name="ftm_invctrl_inv2en_present"     value="true"             key="/FTM2/ftm_invctrl_inv2en_present" />
+         <param type="BooleanVariable"        name="ftm_invctrl_inven_present"      value="true"             key="/FTM2/ftm_invctrl_inven_present" />
          <param type="BooleanVariable"        name="ftm_invctrl_present"            value="true"             key="/FTM2/ftm_invctrl_present" />
          <param type="BooleanVariable"        name="ftm_mod_mod_present"            value="true"             key="/FTM2/ftm_mod_mod_present" />
          <param type="BooleanVariable"        name="ftm_mod_present"                value="true"             key="/FTM2/ftm_mod_present" />
@@ -478,6 +479,7 @@
          <param type="BooleanVariable"        name="ftm_status_ch4f_present"        value="true"             key="/FTM2/ftm_status_ch4f_present" />
          <param type="BooleanVariable"        name="ftm_status_ch5f_present"        value="true"             key="/FTM2/ftm_status_ch5f_present" />
          <param type="BooleanVariable"        name="ftm_status_present"             value="true"             key="/FTM2/ftm_status_present" />
+         <param type="BooleanVariable"        name="ftm_status_status_present"      value="true"             key="/FTM2/ftm_status_status_present" />
          <param type="BooleanVariable"        name="ftm_swoctrl_ch0oc_present"      value="true"             key="/FTM2/ftm_swoctrl_ch0oc_present" />
          <param type="BooleanVariable"        name="ftm_swoctrl_ch0ocv_present"     value="true"             key="/FTM2/ftm_swoctrl_ch0ocv_present" />
          <param type="BooleanVariable"        name="ftm_swoctrl_ch1oc_present"      value="true"             key="/FTM2/ftm_swoctrl_ch1oc_present" />
@@ -502,6 +504,7 @@
          <param type="BooleanVariable"        name="ftm_sync_trig0_present"         value="true"             key="/FTM2/ftm_sync_trig0_present" />
          <param type="BooleanVariable"        name="ftm_sync_trig1_present"         value="true"             key="/FTM2/ftm_sync_trig1_present" />
          <param type="BooleanVariable"        name="ftm_sync_trig2_present"         value="true"             key="/FTM2/ftm_sync_trig2_present" />
+         <param type="BooleanVariable"        name="ftm_sync_trig_present"          value="true"             key="/FTM2/ftm_sync_trig_present" />
          <param type="BooleanVariable"        name="ftm_synconf_cntinc_present"     value="true"             key="/FTM2/ftm_synconf_cntinc_present" />
          <param type="BooleanVariable"        name="ftm_synconf_hwinvc_present"     value="true"             key="/FTM2/ftm_synconf_hwinvc_present" />
          <param type="BooleanVariable"        name="ftm_synconf_hwom_present"       value="true"             key="/FTM2/ftm_synconf_hwom_present" />
@@ -875,6 +878,7 @@
          <param type="BooleanVariable"        name="kbi_sc_present"                 value="true"             key="/KBI0/kbi_sc_present" />
          <param type="BooleanVariable"        name="kbi_sc_rstkbsp_present"         value="true"             key="/KBI0/kbi_sc_rstkbsp_present" />
          <param type="BooleanVariable"        name="kbi_sp_present"                 value="true"             key="/KBI0/kbi_sp_present" />
+         <param type="BooleanVariable"        name="kbi_sp_sp_present"              value="true"             key="/KBI0/kbi_sp_sp_present" />
          <param type="StringVariable"         name="structName"                     value="KBI"              key="/KBI0/structName" />
       </peripheral>
       <peripheral baseName="KBI"      instance="1"        instanceList="KBI0;KBI1" version="kbi0_mke06">
@@ -898,6 +902,7 @@
          <param type="BooleanVariable"        name="kbi_sc_present"                 value="true"             key="/KBI1/kbi_sc_present" />
          <param type="BooleanVariable"        name="kbi_sc_rstkbsp_present"         value="true"             key="/KBI1/kbi_sc_rstkbsp_present" />
          <param type="BooleanVariable"        name="kbi_sp_present"                 value="true"             key="/KBI1/kbi_sp_present" />
+         <param type="BooleanVariable"        name="kbi_sp_sp_present"              value="true"             key="/KBI1/kbi_sp_sp_present" />
          <param type="StringVariable"         name="structName"                     value="KBI"              key="/KBI1/structName" />
       </peripheral>
       <peripheral baseName="OSC"      instance="0"        instanceList="OSC0" version="osc0_mke">

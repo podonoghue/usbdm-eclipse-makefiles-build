@@ -303,7 +303,6 @@
       toolTip="Specifies the sampling period, in clock cycles, of the comparator output filter \n
                This has no effect if SE=1. In that case, the external SAMPLE signal is used to \n
                determine the sampling period."
-      typeName="const Ticks &amp;"
       units="ticks"
       disabledValue="0"
       value="1" min="1" max="255"/>
@@ -312,7 +311,6 @@
       enabledBy="cmp_filter>0"
       ref="(1.0*cmp_fpr_filt_per)/input_clock#input_clock"
       valueFormat="%s_seconds"
-      typeName="const Seconds &amp;"
       description="Filter Sample Period in seconds"
       toolTip="The calculated sampling period of the comparator output filter \n
                This has no effect if SE=1. In that case, the external SAMPLE signal is used to \n
@@ -321,19 +319,12 @@
       locked="true"
       value="1k" min="0" units="s" />
 
-   <intOption key="cmp_cr0_filter_cnt"
-      unlockedBy="(cmp_filter==4)||(cmp_filter==5)||(cmp_filter==8)"
-      enabledBy="((cmp_filter>=2)&amp;&amp;(cmp_filter&lt;=5))||(cmp_filter&gt;=7)"
-      disabledValue="0"
-      description="Filter Sample Count"
-      toolTip="Represents the number of consecutive samples that must agree prior \n
-               to the comparator output filter accepting a new output state"
-      value="2" min="1" max="7"/>
-
    <choiceOption key="cmp_cr0_filter"
+      hidden="true"
       ref="cmp_cr0_filter_cnt"
       valueFormat="CMP_CR0_FILTER_CNT(%s)"
       typeName="CmpFilterSamples"
+      baseType="uint8_t"
       description="Filter Sample Count"
       derived="true"
       locked="true"
@@ -349,11 +340,23 @@
       <choice value="7" name="7 samples must agree" enum="7"              />
    </choiceOption>
 
+   <intOption key="cmp_cr0_filter_cnt"
+      unlockedBy="(cmp_filter==4)||(cmp_filter==5)||(cmp_filter==8)"
+      enabledBy="((cmp_filter>=2)&amp;&amp;(cmp_filter&lt;=5))||(cmp_filter&gt;=7)"
+      disabledValue="0"
+      description="Filter Sample Count"
+      typeName="CmpFilterSamples"
+      baseType="uint8_t"
+      toolTip="Represents the number of consecutive samples that must agree prior \n
+               to the comparator output filter accepting a new output state"
+      value="2" min="1" max="7"/>
+
+   <aliasOption key="cmp_cr0_filter"/>
+   
    <floatOption key="cmp_fpr_filt_interval"
       enabledBy="cmp_filter>0"
       ref="cmp_fpr_filt_period*cmp_cr0_filter_cnt"
       valueFormat="%s_seconds"
-      typeName="const Seconds &amp;"
       description="Filter Sample Interval in seconds"
       toolTip="The calculated interval of the comparator output filter (sample period*number of samples)."
       derived="true"
@@ -376,7 +379,7 @@
       hidden="true"
       derived="true"
       typeName="CmpEventId"
-      enumType="uint8_t"
+      baseType="uint8_t"
       toolTip="Indicates edge detected"
       description="Edge detection flag" >
       <choice value="0,0" name="None"         enum="None" />
@@ -398,7 +401,7 @@
 
    <for keys="field           : get   : set   : genCode                 : name"
         values="
-         cmp_cr0_filter_cnt   : true  : true  : enableGettersAndSetters : FilterCount;
+         cmp_cr0_filter       : true  : true  : enableGettersAndSetters : FilterCount;
          cmp_cr0_hystctr      : true  : true  : enableGettersAndSetters : Hysteresis;
          cmp_cr1_se           : true  : true  : enableGettersAndSetters : SamppleEnable;
          cmp_cr1_we           : true  : true  : enableGettersAndSetters : WindowingEnable;
@@ -438,8 +441,8 @@
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %paramType get%(name)() {
-         \t   return %paramType(%register&%mask);
+         \tstatic %returnType get%(name)() {
+         \t   return %returnType(%register&%mask);
          \t}
          \t\n
       ]]></variableTemplate>
@@ -490,8 +493,7 @@
       \t *
          %paramDescription
       \t */
-      \tstatic void setOutput(
-            %params)  {
+      \tstatic void setOutput(%params)  {
       \t
       \t   setOutput(%paramExpression);
       \t}\n
@@ -751,7 +753,7 @@
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
-      \t   %paramType %registerName0 = %defaultValue;
+      \t   %returnType %registerName0 = %defaultValue;
       \t\n
    ]]></variableTemplate>
 
@@ -764,7 +766,7 @@
       linePadding="xxx"
    ><![CDATA[
       \t   /**
-      \t    * Constructor for %description and %description1
+      \t    * Constructor for %description
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -772,8 +774,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      %registerName0 = (%registerName0 & ~%mask0) | %paramName0;
       \t      this->%paramName1 = %paramName1;
@@ -849,8 +850,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      %registerName0 = (%registerName0&~%mask0) | %paramName;
       \t      %registerName1 = %paramName1;
@@ -873,8 +873,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      %registerName0 = (%registerName0&~%mask0) | %paramName;
       \t      period   = %paramName1;
@@ -897,8 +896,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      %registerName0 = (%registerName0&~(%mask0|%mask1)) | %paramName0 | %paramName1;
       \t      %registerName2 = (%registerName2&~%mask2) | %macro2(%paramName2);
@@ -950,8 +948,7 @@
       \t *
       %paramDescription
       \t */
-      \tstatic void selectInputs(
-      %params) {
+      \tstatic void selectInputs(%params) {
       \t
       \t   //! MUX Control Register
       \t   %register = %paramExpression;

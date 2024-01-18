@@ -389,7 +389,7 @@
          <choiceOption key="icsClockMode[%(n)]"
             enabledBy="enableClockConfiguration[%(n)]"
             typeName="IcsClockMode"
-            enumType="uint8_t"
+            baseType="uint8_t"
             valueFormat="%s"
             description="ICS Clock Mode"
             toolTip="Selects the basic clock mode for the Clock generator" >

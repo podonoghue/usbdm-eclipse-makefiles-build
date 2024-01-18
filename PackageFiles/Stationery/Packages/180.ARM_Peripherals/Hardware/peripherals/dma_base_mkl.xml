@@ -89,7 +89,7 @@
       description="DMA channel number"
       toolTip="Used to select DMA channel or indicate result of channel allocation"
       typeName="DmaChannelNum"
-      enumType="uint8_t"
+      baseType="uint8_t"
       valueFormat="%s" >
       <choiceExpansion keys="ch" dim="=NumChannels" value="%(ch)"        name="DMA channel %(ch)"         enum="%(ch)" />
       <choice                                       value="(1&lt;&lt;6)" name="All channels"              enum="All"   />
@@ -103,7 +103,7 @@
    <intOption key="dma_sar_addr" condition="dma_sar_addr_present"
       enabledBy="enablePeripheralSupport"
       typeName="DmaSource"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Source Address"
       toolTip="Each SAR contains the byte address used by the DMA controller to read data.\n
                The SARn is typically aligned on a 0-modulo-ssize boundary—that is, on the natural alignment of the source data.\n
@@ -174,7 +174,7 @@
    <intOption key="dma_dar_addr" condition="dma_dar_addr_present"
       enabledBy="enablePeripheralSupport"
       typeName="DmaDestination"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Destination Address"
       toolTip="Each SAR contains the byte address used by the DMA controller to write data.\n
                The SARn is typically aligned on a 0-modulo-dsize boundary—that is, on the natural alignment of the source data.\n
@@ -245,7 +245,7 @@
    <intOption key="dma_dsr_bcr_bcr" condition="dma_dsr_bcr_bcr_present"
       enabledBy="enablePeripheralSupport"
       typeName="DmaByteCount"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Byte Count"
       toolTip="This field contains the number of bytes yet to be transferred for a given block.\n
                BCR must be written with a value equal to or less than 0F_FFFFh.\n

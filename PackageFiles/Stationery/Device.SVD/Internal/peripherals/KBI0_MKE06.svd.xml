@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE04Z1284
       MKE06Z4
       SKEAZ1284
@@ -176,6 +176,14 @@ individual bit is set to 1 when corresponding keyboard pin is effective pushed, 
                <addressOffset>0xC</addressOffset>
                <size>32</size>
                <access>read-write</access>
+               <fields>
+                  <field>
+                     <name>SP</name>
+                     <description>KBI Source Pin</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>32</bitWidth>
+                  </field>
+               </fields>
             </register>
          </registers>
       </peripheral>

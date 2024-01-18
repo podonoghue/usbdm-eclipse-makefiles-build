@@ -4,25 +4,17 @@
 <!--
 Devices using this peripheral:
 -->
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART" >
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="$(_BASENAME)">
 
-   <stringOption key="irq_pattern"        locked="true" value="^UART%i_?((RxTx|Error|Lon)|.*)?$" hidden="true" />
-   <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irq$2Handler" hidden="true" />
-
-   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
-   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
-   <xi:include href="enablePeripheral.xml"  />
-   <title />
 
 <!--
     * General substitutions
+    *  $(_NAME)         => e.g FTM2 => FTM2
     *  $(_NAME)         => e.g FTM2                    (fProvider.getName())
     *  $(_Baseclass)   => e.g FTM0 => Ftm             (fPeripheral.getClassBaseName())
     *  $(_instance)     => e.g FTM0 => 0, PTA => A     (fPeripheral.getInstance())
     *  $(_Class)        => e.g FTM2 => Ftm2            (fPeripheral.getClassName())
+    *  $(_Baseclass)    => e.g FTM0 => Ftm
     *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT  (fPeripheral.getBaseName())
 -->
 
@@ -52,6 +44,37 @@ Devices using this peripheral:
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
 
+   <!-- Enable for this peripheral -->
+   <binaryOption key="usedAsConsole"
+      description="usedAsConsole"
+      toolTip="Indicates if this device is allocated as the Console for I/O"
+      ref='/Console/consoleDevice.name=="$(_Baseclass) $(_instance)"'
+      locked="true"
+      derived="true" >
+      <choice value="0" name="Not used as console" />
+      <choice value="1" name="Used as console" />
+   </binaryOption>
+
+   <binaryOption key="enablePeripheralSupport"
+      enabledBy="!usedAsConsole"
+      hidden="true"
+      description="Enable peripheral support"
+      toolTip="Code will also be generated if this UART is used as the console"
+      disabledValue="true"
+      >
+      <choice value="false" name="Minimal code for $(_NAME)"  />
+      <choice value="true"  name="Generate code for $(_NAME)"/>
+   </binaryOption>
+
+   <constant key="irq_pattern"               type="String"  value='"^$(_BASENAME)%i_?((RxTx|Error|Lon)|.*)?$"'  />
+   <constant key="irq_ClassHandler"          type="String"  value='"%c%i::irq$2Handler"'                        />
+   <constant key="irq_parameters"            type="String"  value='""'     />
+   <constant key="irq_dummy_parameters"      type="String"  value='""'     />
+   <constant key="irq_call"                  type="String"  value='""'     />
+   <constant key="generateDefault"           type="Boolean" value="false"  />
+   <constant key="configureInStartupDefault" type="Boolean" value="false"  />
+   <xi:include href="enablePeripheral.xml"  />
+   <title />
    <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src[]"              optional="true" locked="false" />
    <aliasOption key="/SIM/system_uart$(_instance)_fixedclocksource[]"   optional="true"/>
    <aliasOption key="/SIM/system_uart$(_instance)_clock[]"              optional="true" />
@@ -68,16 +91,6 @@ Devices using this peripheral:
    \t//! Number of samples per bit
    \tstatic constexpr uint32_t oversampleRatio = $(oversampleRatio);\n\n
    ]]></template>
-
-   <binaryOption key="usedAsConsole"
-      description="usedAsConsole"
-      toolTip="Indicates if this device is allocated as the Console for I/O"
-      ref="/Console/consoleDevice.name==&quot;$(_Baseclass) $(_instance)&quot;"
-      locked="true"
-      derived="true" >
-      <choice value="0" name="Not used as console" />
-      <choice value="1" name="Used as console" />
-   </binaryOption>
 
    <choiceOption key="defaultBaudRate"
       enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
@@ -111,7 +124,7 @@ Devices using this peripheral:
       <choice value="1"   name="Interrupt" enum="Interrupt" />
    </choiceOption>
 
-   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
       variables="uart_c2_tcie" ><![CDATA[
       \t/**
       \t * Set %description
@@ -133,7 +146,7 @@ Devices using this peripheral:
       <choice value="1"   name="Interrupt" enum="Interrupt" />
    </choiceOption>
 
-   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
       variables="uart_c2_ilie" ><![CDATA[
       \t/**
       \t * Set %description
@@ -168,7 +181,7 @@ Devices using this peripheral:
       <choice value="1,1"   name="DMA"       enum="Dma"       />
    </choiceOption>
 
-   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
        variables="uartTxEmptyAction" ><![CDATA[
       \t/**
       \t * Set %description
@@ -178,12 +191,12 @@ Devices using this peripheral:
       \tvoid setTransmitEmptyAction(%params) const {
       \t   uart->C2 = (uart->C2 & ~UART_C2_TIE_MASK)   | %paramExpression; \n
    ]]></variableTemplate>
-   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
       variables="uartTxEmptyAction"
       condition="uart_c5_tdmas_present" ><![CDATA[
       \t   uart->C5 = (uart->C5 & ~UART_C5_TDMAS_MASK) | %paramExpression>>8; \n
    ]]></variableTemplate>
-   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
        variables="uartTxEmptyAction" ><![CDATA[
       \t}\n\n
    ]]></variableTemplate>
@@ -211,7 +224,7 @@ Devices using this peripheral:
       <choice value="1,1"   name="DMA"       enum="Dma"       />
    </choiceOption>
 
-   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
       variables="uartRxFullAction" ><![CDATA[
       \t/**
       \t * Set %description
@@ -221,12 +234,12 @@ Devices using this peripheral:
       \tvoid setReceiveFullAction(%params) const {
       \t   uart->C2 = (uart->C2 & ~UART_C2_RIE_MASK)   | %paramExpression;\n
    ]]></variableTemplate>
-   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
       variables="uartRxFullAction"
       condition="uart_c5_rdmas_present" ><![CDATA[
       \t   uart->C5 = (uart->C5 & ~UART_C5_RDMAS_MASK) | %paramExpression>>8;\n
    ]]></variableTemplate>
-   <variableTemplate key="/UART/commonMethods" discardRepeats="true"
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
       variables="uartRxFullAction" ><![CDATA[
       \t}\n\n
    ]]></variableTemplate>
@@ -276,12 +289,6 @@ Devices using this peripheral:
        value="50" min="1" max="1000"
    />
 
-   <category name="Advanced" description="Advanced options" >
-      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)ode"   optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)txsrc" optional="true" locked="false" />
-      <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" optional="true" locked="false" />
-   </category>
-
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.UartValidate" >
    </validate>
@@ -293,41 +300,41 @@ Devices using this peripheral:
    </projectActionList>
 
    <template><![CDATA[
-   \t//! Indicates whether the UART needs a write to clear status errors
-   \tstatic constexpr bool statusNeedsWrite = false;
-   \t
-   \t//! Default Baud rate used if not explicitly given
-   \tstatic constexpr uint32_t defaultBaudRate = $(defaultBaudRate);
-   \t
-   \t//! Default buffer size for receive queue when interrupt driven
-   \tstatic constexpr unsigned receiveBufferSize = $(receiveBufferSize);
-   \t
-   \t//! Default buffer size for transmit queue when interrupt driven
-   \tstatic constexpr unsigned transmitBufferSize = $(transmitBufferSize);
+      \t//! Indicates whether the $(_BASENAME) needs a write to clear status errors
+      \tstatic constexpr bool statusNeedsWrite = false;
+      \t
+      \t//! Default Baud rate used if not explicitly given
+      \tstatic constexpr uint32_t defaultBaudRate = $(defaultBaudRate);
+      \t
+      \t//! Default buffer size for receive queue when interrupt driven
+      \tstatic constexpr unsigned receiveBufferSize = $(receiveBufferSize);
+      \t
+      \t//! Default buffer size for transmit queue when interrupt driven
+      \tstatic constexpr unsigned transmitBufferSize = $(transmitBufferSize);
 
-   \t/**
-   \t * Get input clock frequency
-   \t *
-   \t * @return Input clock frequency as a uint32_t in Hz
-   \t */
-   \tstatic inline uint32_t getInputClockFrequency() {
-   \t   return SimInfo::getUart$(_instance)Clock();
-   \t}\n\n
+      \t/**
+      \t * Get input clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic inline uint32_t getInputClockFrequency() {
+      \t   return SimInfo::getUart$(_instance)Clock();
+      \t}\n\n
    ]]></template>
 
-   <template key="/UART/Present"  ><![CDATA[\ ||\ 1]]></template>
+   <template key="/$(_BASENAME)/Present"  ><![CDATA[\ ||\ 1]]></template>
 
-   <template key="/UART/declarations"  ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Class representing $(_NAME) interface
       \t *
       \t * <b>Example</b>
       \t * @code
       \t *  // Instantiate interface
-      \t *  USBDM::$(_Class) uart;
+      \t *  USBDM::$(_Class) $(_basename);
       \t *
       \t *  for(int i=0; i++;) {
-      \t *     uart.writeln("Hello world ", i);
+      \t *     $(_basename).writeln("Hello world ", i);
       \t *  }
       \t *  @endcode
       \t */
@@ -343,12 +350,10 @@ Devices using this peripheral:
       <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
-      <title/>
-      <aliasOption key="/SIM/sim_pinsel0_$(_name)ps" locked="false" optional="true" />
-      <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" locked="false" optional="true" />
    </category>
    <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
-   <signals enabledBy="enablePeripheralSupport" locked="true" />
+   <!-- ************* Signal mapping ****************** -->
+   <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </peripheralPage>

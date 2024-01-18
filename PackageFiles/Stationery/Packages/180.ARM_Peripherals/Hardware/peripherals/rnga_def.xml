@@ -109,7 +109,7 @@
 
    <intOption key="rnga_sr_oreg_size" condition="rnga_sr_oreg_size_present"
       hidden="true"
-      enumType="uint8_t"
+      baseType="uint8_t"
       typeName="RngaOutputRegSize"
       toolTip="Indicates the size of the Output (OR) register in terms of the number of 32-bit random-data words it can hold."
       description="Output Register Size" />

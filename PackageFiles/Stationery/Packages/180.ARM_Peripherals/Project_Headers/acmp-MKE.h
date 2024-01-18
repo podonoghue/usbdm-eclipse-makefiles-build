@@ -32,6 +32,7 @@ $(/ACMP/InitMethod: // No /ACMP/InitMethod found)
 $(/ACMP/staticDefinitions: )
 $(/ACMP/declarations: )
 
+$(/ACMP/InputMapping:   // /CMP/InputMapping None Found)
 }; // namespace USBDM
 
 #endif // /ACMP/enablePeripheralSupport

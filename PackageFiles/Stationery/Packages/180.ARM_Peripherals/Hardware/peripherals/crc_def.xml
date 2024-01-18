@@ -54,7 +54,7 @@
 
    <intOption key="crc_gpoly_gpoly" condition="crc_gpoly_gpoly_present"
       enabledBy="enablePeripheralSupport"
-      enumType="uint32_t"
+      baseType="uint32_t"
       typeName="CrcPolynomial"
       description="CRC Polynomial"
       toolTip="Polynomial used for the CRC calculation"
@@ -64,7 +64,7 @@
 
    <intOption key="crc_data_data" condition="crc_data_data_present"
       enabledBy="enablePeripheralSupport"
-      enumType="uint32_t"
+      baseType="uint32_t"
       typeName="CrcSeed"
       description="CRC Seed"
       toolTip="Seed value used for the CRC calculation"

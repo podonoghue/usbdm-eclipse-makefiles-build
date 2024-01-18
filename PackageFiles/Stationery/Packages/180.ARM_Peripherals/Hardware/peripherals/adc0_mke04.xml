@@ -54,7 +54,7 @@
    <binaryOption key="adc_sc1_aien" condition="adc_sc1_aien_present"
       enabledBy="irqHandlingMethod"
       typeName="AdcInterrupt"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Conversion Complete Interrupt"
       toolTip="Allows an interrupt to be generated on when a conversion completes" >
       <choice name="Disabled"    value="0" enum="Disabled" />
@@ -67,7 +67,7 @@
       hidden="true"
       derived="true"
       typeName="AdcActive"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Conversion Active"
       toolTip="Indicates if the ADC is busy with a conversion" >
       <choice name="Idle"        value="0" enum="Idle" />
@@ -78,7 +78,7 @@
       hidden="true"
       derived="true"
       typeName="AdcFifoEmpty"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Result FIFO empty"
       toolTip="Indicates if the FIFO is empty" >
       <choice name="FIFO has data"  value="0" enum="FifoHasData" />
@@ -89,7 +89,7 @@
       hidden="true"
       derived="true"
       typeName="AdcFifofull"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Result FIFO full"
       toolTip="Indicates if the FIFO is full" >
       <choice name="FIFO not full"  value="0" enum="FifoNotFull" />
@@ -108,7 +108,7 @@
       hidden="true"
       derived="true"
       typeName="AdcConversionComplete"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Conversion Complete Flag"
       toolTip="Flag set when conversion completes" >
       <choice name="Not complete"  value="0" enum="NotComplete" />
@@ -122,7 +122,7 @@
    <binaryOption key="adc_sc3_adlpc" condition="adc_sc3_adlpc_present"
       enabledBy="enablePeripheralSupport"
       typeName="AdcPower"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Low-Power Configuration"
       toolTip="Controls trade-off between speed and power consumption\n
                It also determines the speed of the asynchronous clock" >
@@ -146,7 +146,7 @@
       target="adc_intermediate_clock_frequency"
       enabledBy="enablePeripheralSupport"
       typeName="AdcClockSource"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Input Clock Select"
       toolTip="Input clock for ADC" >
       <choice name="Bus clock"                   value="0" enum="BusClock"     code="SystemBusClock"           ref="/SIM/system_bus_clock[0]"   />
@@ -163,7 +163,7 @@
       target="adc_clock_frequency"
       enabledBy="enablePeripheralSupport"
       typeName="AdcClockDivider"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Clock Divide Select"
       toolTip="Sets the division of the available clock for use by the ADC" >
       <choice name="Divide by 1"  value="0" enum="DivBy1" ref="adc_intermediate_clock_frequency"     />
@@ -189,7 +189,7 @@
 
    <choiceOption key="adc_sc1_adch" condition="adc_sc1_adch_present"
       typeName="AdcChannelNum"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Input Channel Select"
       toolTip="ADC Channel to use" >
       <choiceExpansion keys="ch" dim="0,15" value="%(ch)" name="Channel %(ch)" enum="%(ch)" />
@@ -204,7 +204,7 @@
    <choiceOption key="adc_sc3_mode" condition="adc_sc3_mode_present"
       enabledBy="enablePeripheralSupport"
       typeName="AdcResolution"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="ADC resolution"
       toolTip="Resolution used for conversion" >
       <choice name="8-bit"       value="0" enum="8bit_se" />
@@ -215,7 +215,7 @@
    <choiceOption key="adc_sc2_refsel" condition="adc_sc2_refsel_present"
       enabledBy="enablePeripheralSupport"
       typeName="AdcReferenceSel"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Voltage Reference Selection"
       toolTip="Select the voltage reference used for the conversion" >
       <choice name="VREFH and VREFL"  value="0" enum="VrefhAndVrefl" />
@@ -226,7 +226,7 @@
    <binaryOption key="adc_sc3_adlsmp" condition="adc_sc3_adlsmp_present"
       enabledBy="enablePeripheralSupport"
       typeName="AdcSample"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Sample Time Configuration"
       toolTip="Selects between long and short sample times.\n
                Longer sample periods allow higher impedance inputs to be accurately sampled.\n
@@ -240,7 +240,7 @@
    <binaryOption key="adc_sc1_adco" condition="adc_sc1_adco_present"
       enabledBy="enablePeripheralSupport"
       typeName="AdcOperation"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Continuous Conversion Enable"
       toolTip="Selects between single and multiple conversions.\n
                Conversions are triggered by a write to the ADC_SC1 when software triggered operation is selected,\n
@@ -261,7 +261,7 @@
    <choiceOption key="adc_sc4_afdep" condition="adc_sc4_afdep_present"
       enabledBy="enablePeripheralSupport"
       typeName="AdcFifoDepth"
-      enumType="uint16_t"
+      baseType="uint16_t"
       description="FIFO Depth"
       toolTip="Emables the FIFO and selects FIFO depth" >
       <choice name="FIFO disabled"  value="0" enum="FifoDisabled" />
@@ -277,7 +277,7 @@
    <binaryOption key="adc_sc4_ascane" condition="adc_sc4_ascane_present"
       enabledBy="adc_sc4_afdep>0"
       typeName="AdcFifoScanMode"
-      enumType="uint16_t"
+      baseType="uint16_t"
       description="FIFO Scan Mode Enable"
       toolTip="When enabled, the FIFO always use the first channel written to SC1. \n
                The ADC will repeat conversions using this channel until the result\n
@@ -295,7 +295,7 @@
    <binaryOption key="adc_sc2_adtrg" condition="adc_sc2_adtrg_present"
       enabledBy="enablePeripheralSupport"
       typeName="AdcPretrigger"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Conversion Trigger Select"
       toolTip="Controls whether conversions are triggered by writes to ADC_SC1 (software)\n
                or assertion of ADHWT input (hardware)" >
@@ -306,7 +306,7 @@
    <choiceOption key="adc_sc5_htrigger" condition="adc_sc5_htrigger_present"
       enabledBy="adc_sc2_adtrg"
       typeName="AdcHardwareTriggerMask"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Hardware Trigger Mask"
       toolTip="Control hardware trigger" >
       <choice name="Masking disabled"              value="0b00" enum="Unmasked"              />
@@ -317,7 +317,7 @@
    <binaryOption key="adc_sc4_htrgme" condition="adc_sc4_htrgme_present"
       enabledBy="adc_sc2_adtrg&amp;&amp;(adc_sc4_afdep>0)"
       typeName="AdcHardwareAction"
-      enumType="uint16_t"
+      baseType="uint16_t"
       description="Hardware Trigger Multiple Conversion Enable"
       toolTip="Selects whether a hardware trigger event initiates a single conversion\n
                or multiple conversions until the FIFO is full" >
@@ -332,7 +332,7 @@
    <choiceOption key="adc_sc2_compare" condition="adc_sc2_acfe_present&amp;&amp;adc_sc2_acfgt_present"
       enabledBy="enablePeripheralSupport"
       typeName="AdcCompare"
-      enumType="uint8_t"
+      baseType="uint8_t"
       valueFormat="ADC_SC2_ACFE(%s),ADC_SC2_ACFGT(%s)"
       description="Compare Function Control"
       toolTip="Configures when the ADC compare function will generate events">
@@ -354,7 +354,7 @@
    <binaryOption key="adc_sc4_acfsel" condition="adc_sc4_acfsel_present"
       enabledBy="adc_sc4_afdep>0"
       typeName="AdcCompareCondition"
-      enumType="uint16_t"
+      baseType="uint16_t"
       description="Compare function OR/AND selection."
       toolTip="This controls how the compare events from the FIFO values are combined.\n
                If cleared, ADC will OR all of the compare events and set COCO if at least one events occurs. \n
@@ -370,7 +370,7 @@
    <bitmaskOption key="adc_apctl1_adpc"  condition="adc_apctl1_adpc_present"
       enabledBy="enablePeripheralSupport"
       typeName="AdcChannelMask"
-      enumType="uint16_t"
+      baseType="uint16_t"
       description="GPIO Pin Disable"
       toolTip="Bit mask disabling the GPIO function on the pin corresponding to a ADC channel.\n
                This is only necessary for Channels 0-15.\n
@@ -471,7 +471,7 @@
       derived="true"
       valueFormat="%s"
       typeName="AdcIndex"
-      enumType="int"
+      baseType="int"
       description="Index for SC1 or R registers"
       toolTip="Some ADCs have multiple SC1[] or R[] registers to\n
                allow multiple hardware triggers while retaining results" >
@@ -725,16 +725,16 @@
    ]]></variableTemplate>
 
    <for keys=" type        : variables                                            : init    "
-       values="%enumType   : adc_sc1_aien,adc_sc1_adco,adc_sc1_adch               :   0      ;
-               %enumType   : adc_sc2_adtrg,adc_sc2_compare,
+       values="%baseType   : adc_sc1_aien,adc_sc1_adco,adc_sc1_adch               :   0      ;
+               %baseType   : adc_sc2_adtrg,adc_sc2_compare,
                              adc_sc2_refsel                                       :   0      ;
-               %enumType   : adc_sc3_adlpc,adc_sc3_adiv,adc_sc3_adlsmp,
+               %baseType   : adc_sc3_adlpc,adc_sc3_adiv,adc_sc3_adlsmp,
                              adc_sc3_mode,adc_sc3_adiclk                          :   0      ;
-               %enumType   : adc_sc4_htrgme,adc_sc4_ascane,adc_sc4_acfsel,
+               %baseType   : adc_sc4_htrgme,adc_sc4_ascane,adc_sc4_acfsel,
                              adc_sc4_afdep                                        :   0      ;
-               %enumType   : adc_cv_cv                                            :   0      ;
-               %enumType   : adc_apctl1_adpc                                      :   0      ;
-               %enumType   : adc_sc5_htrigger                                     :   0      " >
+               %baseType   : adc_cv_cv                                            :   0      ;
+               %baseType   : adc_apctl1_adpc                                      :   0      ;
+               %baseType   : adc_sc5_htrigger                                     :   0      " >
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(variables)"
          linePadding="xxx"

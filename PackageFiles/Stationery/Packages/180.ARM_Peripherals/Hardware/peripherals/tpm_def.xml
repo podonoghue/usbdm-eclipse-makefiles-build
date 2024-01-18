@@ -58,6 +58,36 @@
    <constant key="_class_declaration" type="String"
       value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
+   <!-- ____ Hidden ________ -->
+   
+   <binaryOption key="tpm_sc_tof" condition="tpm_sc_tof_present"
+      typeName="TpmOverflowFlag"
+      baseType="uint8_t"
+      derived="true"
+      hidden="true" 
+      description="Timer Overflow Flag"
+      toolTip="Set by hardware when the TPM counter passes the value in the MOD register.\n
+               The TOF bit is cleared by reading the SC register while TOF is set and then\n
+               writing a 0 to TOF bit. Writing a 1 to TOF has no effect.\n
+               If another TPM overflow occurs between the read and write operations,\n
+               the write operation has no effect; therefore, TOF remains set indicating\n
+               an overflow has occurred. In this case, a TOF interrupt request is\n
+               not lost due to the clearing sequence for a previous TOF."
+      >
+      <choice value="0" name="No Overflow"            enum="NoOverflow"  />
+      <choice value="1" name="Counter Has Overflowed" enum="CounterHasOverflowed"  />
+   </binaryOption>
+   
+   <intOption key="tpm_status_status" condition="tpm_status_present"
+      typeName="TpmEventStatus"
+      baseType="uint16_t"
+      derived="true"
+      hidden="true"
+      description="Timer Events"
+      toolTip="The STATUS register contains a copy of the status flag CHnF\n
+               bit in CnSC for each TPM channel, as well as SC[TOF] for convenience"
+   />
+   
    <!-- ____ Clocking ________ -->
    <title description="Clocking" />
 
@@ -84,7 +114,7 @@
       enabledBy="enablePeripheralSupport"
       description="Clock Source"
       typeName="TpmClockSource"
-      enumType="uint8_t"
+      baseType="uint8_t"
       toolTip="Selects the clock source for the module" >
       <choice value="0" name="Disabled"         enum="Disabled"       ref="disabled"                    code="0" />
       <choice value="1" name="System TPM Clock" enum="SystemTpmClock" ref="system_tpm_clock"            code="SimInfo::getTpmClock()"                  isDefault="true"  />
@@ -148,7 +178,7 @@
       locked="true"
       enabledBy="enablePeripheralSupport"
       typeName="TpmCountMode"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Alignment (Count mode)"
       toolTip="Left-aligned   (0...mod) or\n
                Centre-aligned (0...mod...0)" >
@@ -161,7 +191,7 @@
       enabledBy="enablePeripheralSupport"
       description="Clock prescaler"
       typeName="TpmPrescale"
-      enumType="uint8_t"
+      baseType="uint8_t"
       target="clock"
       toolTip="Selects the prescaler for the module" >
       <choice value="0" name="Divide by 1"   ref="inputClockFrequency"        enum="DivBy1"  isDefault="true" />
@@ -202,34 +232,30 @@
       <choice value="1" name="Free-running mode" />
    </binaryOption>
 
-   <intOption key="tpm_mod"
+   <intOption key="tpm_mod_mod"
       hiddenBy="mode==(None)"
       enabledBy="!freeRunningCounter"
       description="End value for counter"
       toolTip="The timer counts from 0 to this value"
       valueFormat="%s"
-      typeName="Ticks &amp;"
-      enumType="uint16_t"
+      baseType="uint16_t"
       units="ticks"
       value="65535" min="0" max="65535" />
 
-   <intOption key="tpm_cnt"
+   <intOption key="tpm_cnt_count"
       hidden="true"
       locked="true"
       derived="true"
       description="Main counter (writing any value clears counter)"
       toolTip="Main counter for TPM"
-      typeName="Ticks &amp;"
-      enumType="uint16_t"
+      baseType="uint16_t"
       value="0" />
 
    <floatOption key="tpm_modPeriod"
       enabledBy="inputClockFrequency!=0"
       hiddenBy="mode==(None,Quad)"
-      ref="clockPeriod*(tpm_sc_cpwms?(2*(tpm_mod)):(tpm_mod+1))"
-      typeName="Seconds &amp;"
+      ref="clockPeriod*(tpm_sc_cpwms?(2*(tpm_mod_mod)):(tpm_mod_mod+1))"
       unlockedBy="!freeRunningCounter"
-      valueFormat="%s"
       description="Period or minimum interval of timer"
       toolTip="In left-aligned or centre-aligned this is the period of the timer\n
                In free-running mode it is the minimum interval"
@@ -240,7 +266,7 @@
       hiddenBy="mode==(None)"
       valueFormat="TPM_SC_TOIE(%s),TPM_SC_DMA(%s)"
       typeName="TpmOverflowAction"
-      enumType="uint16_t"
+      baseType="uint16_t"
       description="Action on Counter overflow"
       toolTip="Enable interrupt and/or DMA on counter overflow" >
        <choice value="0,0" name="No action"                    enum="None"             />
@@ -253,7 +279,7 @@
       hiddenBy="mode==(None)"
       enabledBy="irqHandlingMethod"
       valueFormat="TPM_SC_TOIE(%s)"
-      enumType="uint8_t"
+      baseType="uint8_t"
       typeName="TpmOverflowAction"
       description="Action on Counter overflow"
       toolTip="Enable interrupt on counter overflow" >
@@ -264,7 +290,7 @@
    <choiceOption key="tpm_channel_number"
       hidden="true"
       derived="true"
-      enumType="uint8_t"
+      baseType="uint8_t"
       valueFormat="%s"
       typeName="TpmChannelNum"
       description="Channel Number"
@@ -284,7 +310,7 @@
       <choiceOption key="tpm_cnsc_mode_independent[%(ch)]"
          enabledBy="enablePeripheralSupport&amp;&amp;!channelPairing[%(ch)&amp;0b1110]"
          valueFormat="TPM_CnSC_MS(%s),TPM_CnSC_ELS(%s)"
-         enumType="uint16_t"
+         baseType="uint16_t"
          typeName="TpmChannelMode"
          description="Channel %(ch) Mode"
          toolTip="Determines channel operation (PWM/Input capture/Output compare)" >
@@ -313,7 +339,7 @@
          hiddenBy="!(tpm_cnsc_mode_independent[%(ch)]!=0)"
          enabledBy="(tpm_cnsc_mode_independent[%(ch)]!=0)"
          valueFormat="TPM_CnSC_CHIE(%s),TPM_CnSC_DMA(%s)"
-         enumType="uint8_t"
+         baseType="uint8_t"
          typeName="TpmChannelAction"
          description="Action on Channel %(ch) Event"
          toolTip="Enable interrupt or DMA on channel event" >
@@ -326,7 +352,7 @@
          hiddenBy="!(tpm_cnsc_mode_independent[%(ch)]!=0)"
          enabledBy="(tpm_cnsc_mode_independent[%(ch)]!=0)&amp;&amp;irqHandlingMethod"
          valueFormat="TPM_CnSC_CHIE(%s)"
-         enumType="uint8_t"
+         baseType="uint8_t"
          typeName="TpmChannelAction"
          description="Action on Channel %(ch) Event"
          toolTip="Enable interrupt on channel event" >
@@ -340,7 +366,7 @@
          description="Channel Filter"
          typeName="TpmFilter"
          valueFormat="(%s)"
-         enumType="uint8_t"
+         baseType="uint8_t"
          toolTip="Selects the filter value for the channel.\n
                   On input capture this acts as a filter\n
                   On output compare this delays the output to provide dead-time between outputs" >
@@ -365,7 +391,7 @@
          enabledBy="(tpm_cnsc_mode_independent[%(ch)]==(1,2,3))"
          valueFormat="TPM_CnSC_ICRST(%s)"
          typeName="TpmChannelReset"
-         enumType="uint8_t"
+         baseType="uint8_t"
          description="Reset counter on channel IC event"
          toolTip="TPM counter reset is driven by the selected event of the channel\n
                   in the Input Capture mode.\n
@@ -378,12 +404,11 @@
          hiddenBy="!(tpm_cnsc_mode_independent[%(ch)]>=4)"
          enabledBy="(tpm_cnsc_mode_independent[%(ch)]>=4)"
          valueFormat="%s"
-         typeName="Ticks &amp;"
-         enumType="uint16_t"
+         baseType="uint16_t"
          units="ticks"
          description="Output Compare Event time in ticks"
          toolTip="This value is compared against the main counter"
-         value="0" min="0" max="tpm_mod" />
+         value="0" min="0" max="tpm_mod_mod" />
 
       <floatOption key="tpm_cnvEventTime_independent[%(ch)]"
          hiddenBy="!(tpm_cnsc_mode_independent[%(ch)]>=4)"
@@ -394,7 +419,7 @@
          units="s"
          description="Output Compare Event time in seconds"
          toolTip="This value, converted to ticks, is compared against the main counter"
-         value="0" min="0" max="tpm_mod*clockPeriod" />
+         value="0" min="0" max="tpm_mod_mod*clockPeriod" />
 
       <floatOption key="tpm_cnvHighTime_independent[%(ch)]"
          hiddenBy="tpm_cnsc_mode_independent[%(ch)]!=(8,9)"
@@ -402,7 +427,7 @@
          derived="true"
          ref="(tpm_cnsc_mode_independent[%(ch)]==8)?
             (tpm_sc_cpwms?2.0:1.0)*(tpm_cnv_independent[%(ch)])*clockPeriod:
-            (tpm_sc_cpwms?2.0:1.0)*(tpm_mod-tpm_cnv_independent[%(ch)])*clockPeriod"
+            (tpm_sc_cpwms?2.0:1.0)*(tpm_mod_mod-tpm_cnv_independent[%(ch)])*clockPeriod"
          valueFormat="%s"
          units="s"
          description="Output high-time in seconds"
@@ -421,7 +446,11 @@
 
    <!-- ____ Paired Channels ________________ -->
 
-   <!-- Odd channels when paired - Dual-edge Capture -->
+   <!-- Odd channels when paired - Dual-edge Capture or PWM
+        This combines the two separate sets of values from:
+        - tpm_cnsc_secondOutput[%(oddCh)]
+        - tpm_cnsc_secondEdge[%(oddCh)]
+   -->
    <choiceOption key="tpm_cnsc_mode_odd" condition="tpm_combine_present"
       derived="true"
       valueFormat="TPM_CnSC_ELS(%s)"
@@ -454,7 +483,7 @@
       valueFormat="TPM_COMBINE_COMSWAP0(%s)"
       hiddenBy="true"
       typeName="TpmCombineSwap"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Combine Channel Even and Odd Swap"
       toolTip="When set, the even channel is used for the input capture and 1st compare,\n
                the odd channel is used for the 2nd compare."
@@ -480,7 +509,7 @@
       <choiceOption key="tpm_cnsc_mode_even[%(evenCh)]" condition="tpm_combine_present"
          enabledBy="enablePeripheralSupport&amp;&amp;channelPairing[%(evenCh)]"
          valueFormat="(TPM_COMBINE_COMBINE0(%s)&lt;&lt;8),TPM_CnSC_MS(%s),TPM_CnSC_ELS(%s)"
-         enumType="uint16_t"
+         baseType="uint16_t"
          typeName="TpmEvenChannelMode"
          description="Paired Channel mode and Ch %(evenCh) function"
          toolTip="Determines channel operation (Combined PWM or Dual-edge capture)"
@@ -568,23 +597,21 @@
          hiddenBy="!(tpm_cnsc_mode_even[%(evenCh)]==(1,2))"
          enabledBy="(tpm_cnsc_mode_even[%(evenCh)]==(1,2))"
          valueFormat="%s"
-         typeName="Ticks &amp;"
-         enumType="uint16_t"
+         baseType="uint16_t"
          units="ticks"
          description="Even channel (%(evenCh)) O/C Event time in ticks"
          toolTip="This value is compared against the main counter"
-         value="0" min="0" max="tpm_mod" />
+         value="0" min="0" max="tpm_mod_mod" />
 
       <intOption key="tpm_cnv_paired[%(oddCh)]"
          hiddenBy="!(tpm_cnsc_mode_even[%(evenCh)]==(1,2))"
          enabledBy="(tpm_cnsc_mode_even[%(evenCh)]==(1,2))"
          valueFormat="%s"
-         typeName="Ticks &amp;"
-         enumType="uint16_t"
+         baseType="uint16_t"
          units="ticks"
          description="Odd channel (%(oddCh)) O/C Event time in ticks"
          toolTip="This value is compared against the main counter"
-         value="0" min="0" max="tpm_mod" />
+         value="0" min="0" max="tpm_mod_mod" />
 
       <floatOption key="tpm_pwmHighTime[%(evenCh)]"
          hiddenBy="!(tpm_cnsc_mode_even[%(evenCh)]==(1,2))"
@@ -639,9 +666,9 @@
          hiddenBy="!(tpm_cnsc_mode_even[%(evenCh)]!=0)"
          enabledBy="(tpm_cnsc_mode_even[%(evenCh)]!=0)"
          valueFormat="TPM_CnSC_CHIE(%s),TPM_CnSC_DMA(%s)"
-         enumType="uint8_t"
+         baseType="uint8_t"
          typeName="TpmChannelAction"
-         description="Action on First (Ch %(evenCh)) Event"
+         description="Action on Even Channel Event"
          toolTip="Enable interrupt or DMA on channel event" >
           <choice value="0,0" name="No action"          enum="None"      />
           <choice value="1,1" name="DMA request"        enum="Dma"       />
@@ -652,9 +679,9 @@
          hiddenBy="!(tpm_cnsc_mode_even[%(evenCh)]!=0)"
          enabledBy="(tpm_cnsc_mode_even[%(evenCh)]!=0)&amp;&amp;irqHandlingMethod"
          valueFormat="TPM_CnSC_CHIE(%s)"
-         enumType="uint8_t"
+         baseType="uint8_t"
          typeName="TpmChannelAction"
-         description="Action on First (Ch %(evenCh)) Event"
+         description="Action on Even Channel Event"
          toolTip="Enable interrupt on channel event" >
           <choice value="0" name="No action"              enum="None"        />
           <choice value="1" name="Interrupt request"      enum="Interrupt"   />
@@ -665,9 +692,9 @@
          hiddenBy="!(tpm_cnsc_mode_even[%(evenCh)]!=0)"
          enabledBy="(tpm_cnsc_mode_even[%(evenCh)]!=0)"
          valueFormat="TPM_CnSC_CHIE(%s),TPM_CnSC_DMA(%s)"
-         enumType="uint8_t"
+         baseType="uint8_t"
          typeName="TpmChannelAction"
-         description="Action on Second (Ch %(oddCh)) Event"
+         description="Action on Odd Channel Event"
          toolTip="Enable interrupt or DMA on channel event" >
           <choice value="0,0" name="No action"          enum="None"      />
           <choice value="1,1" name="DMA request"        enum="Dma"       />
@@ -678,9 +705,9 @@
          hiddenBy="!(tpm_cnsc_mode_even[%(evenCh)]!=0)"
          enabledBy="(tpm_cnsc_mode_even[%(evenCh)]!=0)&amp;&amp;irqHandlingMethod"
          valueFormat="TPM_CnSC_CHIE(%s)"
-         enumType="uint8_t"
+         baseType="uint8_t"
          typeName="TpmChannelAction"
-         description="Action on Second (Ch %(oddCh)) Event"
+         description="Action on Odd Channel Event"
          toolTip="Enable interrupt on channel event" >
           <choice value="0" name="No action"              enum="None"        />
           <choice value="1" name="Interrupt request"      enum="Interrupt"   />
@@ -694,7 +721,7 @@
          description="Channel %(evenCh) Filter"
          typeName="TpmFilter"
          valueFormat="(%s)"
-         enumType="uint8_t"
+         baseType="uint8_t"
          toolTip="Selects the filter value for the channel.\n
                   On input capture this acts as a filter\n
                   On output compare this delays the output to provide dead-time between outputs" >
@@ -720,7 +747,7 @@
          description="Channel %(oddCh) Filter"
          typeName="TpmFilter"
          valueFormat="(%s)"
-         enumType="uint8_t"
+         baseType="uint8_t"
          toolTip="Selects the filter value for the channel.\n
                   On input capture this acts as a filter\n
                   On output compare this delays the output to provide dead-time between outputs" >
@@ -745,7 +772,7 @@
          enabledBy="tpm_cnsc_mode_even[%(evenCh)]>=3"
          valueFormat="TPM_CnSC_ICRST(%s)"
          typeName="TpmChannelReset"
-         enumType="uint8_t"
+         baseType="uint8_t"
          description="Reset counter on 2nd IC event"
          toolTip="Enables the channel IC event to reset the shared counter" >
          <choice value="0" name="Disabled"                   enum="Disabled" />
@@ -765,6 +792,9 @@
                       1  :   2  :   3;
                       2  :   4  :   5;
                       3  :   6  :   7" >
+         <if condition="=%(evenCh) >=_channelCount">
+            <break/>
+         </if>
 
          <constant key="channelPairing[%(evenCh)]" value="false" condition="!tpm_combine_combine%(Num)_present" type="Boolean"/>
 
@@ -902,7 +932,7 @@
          hidden="true"
          derived="true"
          typeName="TpmPolarity"
-         enumType="uint16_t"
+         baseType="uint16_t"
          description="Channel Polarity"
          toolTip="Selects the polarity of channels inputs/outputs" >
          <choiceExpansion name="Ch%(ch) Active-low"  enum="Ch%(ch)_ActiveLow"  value='=Format("0x%04XU",0xFF00+(1&lt;&lt;(%(ch))))'            keys="ch" dim="8"/>
@@ -915,7 +945,7 @@
          enabledBy="enablePeripheralSupport"
          valueFormat="%s"
          typeName="TpmPolarity"
-         enumType="uint16_t"
+         baseType="uint16_t"
          enumText="=polarityEnums"
          description="Channel Polarity"
          toolTip="Selects the polarity of channels inputs/outputs"
@@ -929,7 +959,7 @@
       <binaryOption key="tpm_conf_dozeen" condition="tpm_conf_dozeen_present"
          enabledBy="enablePeripheralSupport"
          typeName="TpmDozeMode"
-         enumType="uint32_t"
+         baseType="uint32_t"
          description="Doze Enable"
          toolTip="Selects the TPM behaviour in wait mode." >
          <choice value="0" name="Continue in Doze mode."             enum="Running"/>
@@ -939,7 +969,7 @@
       <choiceOption key="tpm_conf_dbgmode" condition="tpm_conf_dbgmode_present"
          enabledBy="enablePeripheralSupport"
          typeName="TpmBdmMode"
-         enumType="uint32_t"
+         baseType="uint32_t"
          description="Behaviour in BDM Mode"
          toolTip="Selects the TPM behaviour in Debug mode." >
          <choice  value="0" name="Stopped, outputs functional" enum="Paused"/>
@@ -954,7 +984,7 @@
       <binaryOption key="tpm_conf_gtbsync" condition="tpm_conf_gtbsync_present"
          enabledBy="enablePeripheralSupport"
          typeName="TpmGlobalTimebaseSync"
-         enumType="uint32_t"
+         baseType="uint32_t"
          description="Global Time Base Synchronization"
          toolTip="When enabled, the TPM counter is synchronised to the global time base.\n
                   It uses the global timebase enable, trigger and overflow to ensure the\n
@@ -969,7 +999,7 @@
       <binaryOption key="tpm_conf_gtbeen" condition="tpm_conf_gtbeen_present"
          enabledBy="enablePeripheralSupport"
          typeName="TpmUseGlobalTimebase"
-         enumType="uint32_t"
+         baseType="uint32_t"
          description="Global Time Base Enable"
          toolTip="Configures the TPM to use an externally generated global time base counter.\n
                   When an externally generated timebase is used, the internal TPM counter is\n
@@ -982,7 +1012,7 @@
       <binaryOption key="tpm_conf_csot" condition="tpm_conf_csot_present"
          enabledBy="enablePeripheralSupport"
          typeName="TpmStart"
-         enumType="uint32_t"
+         baseType="uint32_t"
          description="Counter Start on Trigger"
          toolTip="When set, the TPM counter will not start incrementing after it is enabled\n
                   until a rising edge on the selected trigger input is detected.\n
@@ -998,7 +1028,7 @@
       <binaryOption key="tpm_conf_csoo" condition="tpm_conf_csoo_present"
          enabledBy="enablePeripheralSupport"
          typeName="TpmAfterOverflow"
-         enumType="uint32_t"
+         baseType="uint32_t"
          description="Counter Stop On Overflow"
          toolTip="When set, the TPM counter will stop incrementing once the counter equals\n
                   the MOD value and incremented (this also sets the TOF).\n
@@ -1015,7 +1045,7 @@
       <binaryOption key="tpm_conf_crot" condition="tpm_conf_crot_present"
          enabledBy="enablePeripheralSupport"
          typeName="TpmReload"
-         enumType="uint32_t"
+         baseType="uint32_t"
          description="Counter Reload On Trigger"
          toolTip="When set, the TPM counter will reload with 0 (and initialize PWM outputs\n
                   to their default value) when a rising edge is detected on the selected trigger input.\n
@@ -1041,7 +1071,7 @@
       <binaryOption key="tpm_conf_trgpol" condition="tpm_conf_trgpol_present"
          enabledBy="enablePeripheralSupport"
          typeName="TpmTriggerPolarity"
-         enumType="uint32_t"
+         baseType="uint32_t"
          description="Trigger Polarity"
          toolTip="Selects the polarity of the external trigger source.\n
                   This field should only be changed when the TPM counter is disabled." >
@@ -1052,7 +1082,7 @@
       <choiceOption key="tpm_conf_trgsel_ext" condition="tpm_conf_trgsrc_present&amp;&amp;tpm_conf_trgsel_present"
          valueFormat="TPM_CONF_TRGSRC(%s),TPM_CONF_TRGSEL(%s)"
          typeName="TpmExternalTrigger"
-         enumType="uint32_t"
+         baseType="uint32_t"
          description="External Triggers"
          toolTip="Selects the external input trigger to use for starting, reloading and/or pausing the counter.\n
                   This field should only be changed when the TPM counter is disabled." >
@@ -1064,7 +1094,7 @@
       <choiceOption key="tpm_conf_trgsel_ext" condition="!tpm_conf_trgsrc_present&amp;&amp;tpm_conf_trgsel_present"
          valueFormat="TPM_CONF_TRGSEL(%s)"
          typeName="TpmInternalTrigger"
-         enumType="uint32_t"
+         baseType="uint32_t"
          description="External Triggers"
          toolTip="Selects the external input trigger to use for starting, reloading and/or pausing the counter.\n
                   This field should only be changed when the TPM counter is disabled." >
@@ -1075,7 +1105,7 @@
       <choiceOption key="tpm_conf_trgsel_int_masks"
          valueFormat="TPM_CONF_TRGSRC_MASK|TPM_CONF_TRGSEL(%s)"
          typeName="TpmInternalTrigger"
-         enumType="uint32_t"
+         baseType="uint32_t"
          description="Internal Triggers"
          toolTip="Selects the internal input trigger to use for starting, reloading and/or pausing the counter.\n
                   The channel selected should be configured for input capture.\n
@@ -1095,7 +1125,7 @@
          enabledBy="tpm_conf_trgsel_ext==0"
          hiddenBy="tpm_conf_trgsel_ext!=0"
          typeName="TpmInternalTrigger"
-         enumType="uint32_t"
+         baseType="uint32_t"
          description="Internal Triggers"
          toolTip="Selects the internal input trigger to use for starting, reloading and/or pausing the counter.\n
                   The channel selected should be configured for input capture.\n
@@ -1142,8 +1172,7 @@
       \t *
       %paramDescription
       \t */
-      \tstatic void configure(
-      %params) {
+      \tstatic void configure(%params) {
       \t
       \t   // Enable clock to peripheral
       \t   Info::enable();
@@ -1180,6 +1209,7 @@
       \t}\n\n
    ]]></variableTemplate>
 
+   <xi:include href="tpm_getters_setters.xml"/>
 
 <!--  ___ Static/Non-Static Methods ______________
 
@@ -1212,8 +1242,7 @@
          \t *
          %paramDescription
          \t */
-         \t%(static)void selectClock(
-         %params)%(const) {
+         \t%(static)void selectClock(%params)%(const) {
          \t
          \t   // Calculate new SC value
          \t   uint32_t %registerName = (%register&~%mask)|(%paramExpression);
@@ -1273,7 +1302,7 @@
       </for>
 
       <for keys="  f           :  n"
-         values=" tpm_mod      : CounterMaximumValue" >
+         values=" tpm_mod_mod  : CounterMaximumValue" >
          <variableTemplate key="/$(_BASENAME)/%(k)" where="all" discardRepeats="true"
             variables="%(f)"
             nonDefaultParams="2"
@@ -1297,9 +1326,9 @@
             \t *
             %paramDescription
             \t */
-            \t%(static)%paramType get%(n)()%(const) {
+            \t%(static)%returnType get%(n)()%(const) {
             \t
-            \t   return (%paramType)%register;
+            \t   return (%returnType)%register;
             \t}\n\n
          ]]></variableTemplate>
       </for>
@@ -2356,11 +2385,11 @@
    ]]></variableTemplate>
 
    <for keys=" type        : variables                                         : init    "
-       values="%enumType   : tpm_pol_pol                                       : 0       ;
-               uint16_t    : tpm_mod                                           : 0_ticks ;
-               %paramType  : tpm_modPeriod                                     : 0_s     ;
-               %enumType   : tpm_sc_action,tpm_sc_cpwms,tpm_sc_cmod,tpm_sc_ps  : 0       ;
-               %enumType   : tpm_conf_dozeen,tpm_conf_dbgmode,
+       values="%baseType   : tpm_pol_pol                                       : 0       ;
+               %baseType   : tpm_mod_mod                                       : 0_ticks ;
+               %returnType : tpm_modPeriod                                 : 0_s     ;
+               %baseType   : tpm_sc_action,tpm_sc_cpwms,tpm_sc_cmod,tpm_sc_ps  : 0       ;
+               %baseType   : tpm_conf_dozeen,tpm_conf_dbgmode,
                              tpm_conf_gtbsync,tpm_conf_gtbeen,
                              tpm_conf_csot,tpm_conf_csoo,
                              tpm_conf_crot,tpm_conf_cpot,
@@ -2523,7 +2552,7 @@
    </for>
 
    <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="tpm_sc_ps, tpm_mod"
+      variables="tpm_sc_ps, tpm_mod_mod"
       params=",mod_ticks"
       linePadding="xxx"
       nonDefaultParams="2"
@@ -2537,8 +2566,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      %registerName0    = (%registerName0&~%mask0) | %paramName0;
       \t      %registerName1   = %paramName1;
@@ -2614,8 +2642,8 @@
           " var                                   : statement                          "
    values=" tpm_sc_action,tpm_sc_cpwms,
             tpm_sc_cmod,tpm_sc_ps                 : %register = 0                      ;
-            tpm_mod                               : %register = mod                    ;
-            tpm_cnt                               : %register = 0                      ;
+            tpm_mod_mod                           : %register = mod                    ;
+            tpm_cnt_count                         : %register = 0                      ;
             tpm_sc_action,tpm_sc_cpwms,
             tpm_sc_cmod,tpm_sc_ps                 : %register = sc                     ;
             tpm_pol_pol                           : %configRegAssignment               ;
@@ -2657,7 +2685,7 @@
       terminator=","
       variables="
          tpm_sc_action,tpm_sc_cpwms,tpm_sc_cmod,tpm_sc_ps,
-         tpm_mod,
+         tpm_mod_mod,
          tpm_pol_pol,
          tpm_conf_dozeen,tpm_conf_dbgmode,
          tpm_conf_gtbsync,tpm_conf_gtbeen,
@@ -2722,12 +2750,12 @@
    <!-- ____ ChannelInit Class Member variables ________ -->
 
    <for keys=" type        : variables                         : init                 "
-       values="%enumType   : tpm_cnv_independent[]             : 0                    ;
+       values="%baseType   : tpm_cnv_independent[]             : 0                    ;
                uint8_t     : tpm_cnsc_mode_independent[],
                              tpm_cnsc_action_independent[],
                              tpm_cnsc_icrst_independent[]      : 0                    ;
                %paramType  : tpm_channel_number                : %paramType_None      ;
-               %enumType   : tpm_filter_fval_independent[]     : %paramType_Disabled  " >
+               %baseType   : tpm_filter_fval_independent[]     : %paramType_Disabled  " >
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(variables)"
          linePadding="xxx"
@@ -2920,7 +2948,7 @@
    <!-- DualChannelInit Class Member variables -->
 
    <for keys=" type        : variables                               : init                     "
-       values="%enumType   : tpm_cnv_paired[]                        : {0,0}                    ;
+       values="%baseType   : tpm_cnv_paired[]                        : {0,0}                    ;
                uint8_t     : tpm_cnsc_mode_even[],tpm_cnsc_mode_odd  : {0,0}                    " >
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(variables)"
@@ -2931,9 +2959,9 @@
    </for>
 
    <for keys=" type        : variables                               : init                     "
-       values="%enumType   : tpm_combine_comswap                     : 0                    ;
+       values="%baseType   : tpm_combine_comswap                     : 0                    ;
                %paramType  : tpm_channel_number                      : %paramType_None      ;
-               %enumType   : tpm_filter_fval_paired[]                : %paramType_Disabled  " >
+               %baseType   : tpm_filter_fval_paired[]                : %paramType_Disabled  " >
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(variables)"
       ><![CDATA[
@@ -3013,8 +3041,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr DualChannelInit(
-      %params, Types... rest) : DualChannelInit(rest...) {
+      \t   constexpr DualChannelInit(%params, Types... rest) : DualChannelInit(rest...) {
       \t
       \t      %registerName[0]    = (%registerName[0]&~%mask0) | %paramName0;
       \t      %registerName[1]    = (%registerName[1]&~%mask0) | %paramName1;
@@ -3042,8 +3069,7 @@
          %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr DualChannelInit(
-         %params, Types... rest) : DualChannelInit(rest...) {
+         \t   constexpr DualChannelInit(%params, Types... rest) : DualChannelInit(rest...) {
          \t
          \t      %registerName[0] = %paramName0;
          \t      %registerName[1] = %paramName1;
@@ -3068,8 +3094,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr DualChannelInit(
-      %params, Types... rest) : DualChannelInit(rest...) {
+      \t   constexpr DualChannelInit(%params, Types... rest) : DualChannelInit(rest...) {
       \t
       \t      %registerName = %paramName0 | (%paramName1<<4);
       \t   }

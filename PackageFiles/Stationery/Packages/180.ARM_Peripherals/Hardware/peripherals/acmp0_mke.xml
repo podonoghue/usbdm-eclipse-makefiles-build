@@ -10,7 +10,6 @@
    <constant key="generateDefault"           type="Boolean" value="false"     />
    <constant key="configureInStartupDefault" type="Boolean" value="false"     />
    <xi:include href="enablePeripheral.xml"  />
-   <title />
 
 <!-- ____ General substitutions ____
     *  $(_NAME)         => e.g FTM2 => FTM2
@@ -48,12 +47,36 @@
    <constant key="_class_declaration" type="String"
       value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
+   <binaryOption key="acmp_cs_acie" condition="acmp_cs_acie_present"
+      enabledBy="irqHandlingMethod"
+      typeName="AcmpInterrupt"
+      baseType="uint8_t"
+      description="ACMP Interrupt Enable"
+      toolTip="Controls Interrupt generation" >
+      <choice name="Interrupt disabled"  value="0" enum="Disabled" />
+      <choice name="Interrupt enabled"   value="1" enum="Enabled" />
+   </binaryOption >
+
+   <choiceOption key="acmp_cs_acmod" condition="acmp_cs_acmod_present"
+      enabledBy="acmp_cs_acie"
+      typeName="AcmpMode"
+      baseType="uint8_t"
+      description="InterruptEdge"
+      toolTip="Determines the sensitivity modes of the interrupt trigger" >
+      <choice name="Falling edge"      value="0" enum="FallingEdge"     />
+      <choice name="Rising edge"       value="1" enum="RisingEdge"      />
+      <choice name="Falling edge alt"  value="2" enum="FallingEdgeAlt"  />
+      <choice name="Both edges"        value="3" enum="BothEdges"       />
+   </choiceOption >
+
    <!-- ____ CS ____ -->
+
+   <title />
 
    <binaryOption key="acmp_cs_ace" condition="acmp_cs_ace_present"
       enabledBy="enablePeripheralSupport"
       typeName="AcmpEnable"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Analogue Comparator Enable"
       toolTip="Enables the ACMP module." >
       <choice name="Disabled"    value="0" enum="Disabled" />
@@ -63,7 +86,7 @@
    <binaryOption key="acmp_cs_hyst" condition="acmp_cs_hyst_present"
       enabledBy="acmp_cs_ace"
       typeName="AcmpHysterisis"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Analogue Comparator Hysteresis Selection"
       toolTip="Selects ACMP hysterisis." >
       <choice name="20 mV"       value="0" enum="20mV" />
@@ -73,7 +96,7 @@
    <binaryOption key="acmp_cs_acf" condition="acmp_cs_acf_present"
       hidden="true"
       typeName="AcmpFlag"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="ACMP Interrupt Flag Bit"
       toolTip="Synchronously set by hardware when ACMP output has a valid edge defined by ACMOD.\n
                Cleared by writing a 0 to this bit. Writing a 1 to this bit has no effect.\n
@@ -82,70 +105,72 @@
       <choice name="No request"         value="1" enum="Write1Clear" />
    </binaryOption >
 
-   <binaryOption key="acmp_cs_acie" condition="acmp_cs_acie_present"
-      enabledBy="irqHandlingMethod"
-      typeName="AcmpInterrupt"
-      enumType="uint8_t"
-      description="ACMP Interrupt Enable"
-      toolTip="Controls Interrupt generation" >
-      <choice name="Interrupt disabled"  value="0" enum="Disabled" />
-      <choice name="Interrupt enabled"   value="1" enum="Enabled" />
-   </binaryOption >
-
    <binaryOption key="acmp_cs_aco" condition="acmp_cs_aco_present"
       hidden="true"
       typeName="AcmpOutputLevel"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="ACMP Output - current value of ACMP output when enabled"
       toolTip="" >
       <choice name="ACMP output is low or disabled"  value="0" enum="AcmpOutputLow" />
       <choice name="ACMP output is high"             value="1" enum="AcmpOutputHigh" />
    </binaryOption >
 
-   <choiceOption key="acmp_cs_acmod" condition="acmp_cs_acmod_present"
-      enabledBy="acmp_cs_ace"
-      typeName="AcmpMode"
-      enumType="uint8_t"
-      description="InterruptEdge"
-      toolTip="Determines the sensitivity modes of the interrupt trigger" >
-      <choice name="Falling edge"      value="0" enum="FallingEdge"     />
-      <choice name="Rising edge"       value="1" enum="RisingEdge"      />
-      <choice name="Falling edge alt"  value="2" enum="FallingEdgeAlt"  />
-      <choice name="Both edges"        value="3" enum="BothEdges"       />
-   </choiceOption >
-
    <!-- ____ C0 ____ -->
+
+   <constant key="inputPinMap" type="String" value='"Inp0,Inp1,Inp2"' condition="!inputPinMap" />
+
+   <choiceOption key="acmp_c0_acpsel_base" condition="acmp_c0_acpsel_present"
+      valueFormat="ACMP_C0_ACPSEL(%s)"
+      hidden="true"
+      derived="true"
+      typeName="AcmpInputPlus"
+      baseType="uint8_t"
+      description="ACMP Positive Input Select"
+      toolTip="Selects the positive input source" >
+      <choiceExpansion name="External input %(i)" value="%(i)" enum="%(i)" keys="i" dim="3" />
+      <choice          name="Internal DAC"        value="3"    enum="Dac" />
+   </choiceOption >
 
    <choiceOption key="acmp_c0_acpsel" condition="acmp_c0_acpsel_present"
       enabledBy="acmp_cs_ace"
-      typeName="AcmpPositiveInput"
-      enumType="uint8_t"
-      description="ACMP Positive Input Select"
-      toolTip="Selects the positive input source" >
-      <choice name="External ref 0"  value="0" enum="ExternalRef0" />
-      <choice name="External ref 1"  value="1" enum="ExternalRef1" />
-      <choice name="External ref 2"  value="2" enum="ExternalRef2" />
-      <choice name="DAC"             value="3" enum="Dac" />
+      typeName="AcmpInputPlus"
+      baseType="uint8_t"
+      description="ACMP$(_instance) Positive Input Select"
+      toolTip="Selects the $(_Class) positive input source" >
+      <choiceExpansion name="%(pin)"       value="%(i)" enum="%(i)" keys="pin" values="=inputPinMap" delimiter="," />
+      <choice          name="Internal DAC" value="Dac"  enum="Dac"    />
+   </choiceOption >
+
+   <choiceOption key="acmp_c0_acnsel_base" condition="acmp_c0_acnsel_present"
+      valueFormat="ACMP_C0_ACNSEL(%s)"
+      hidden="true"
+      derived="true"
+      typeName="AcmpInputMinus"
+      baseType="uint8_t"
+      description="ACMP Negative Input Select"
+      toolTip="Selects the negative input source" >
+      <choiceExpansion name="External input %(i)" value="%(i)" enum="%(i)" keys="i" dim="3" />
+      <choice          name="Internal DAC"        value="3"    enum="Dac" />
    </choiceOption >
 
    <choiceOption key="acmp_c0_acnsel" condition="acmp_c0_acnsel_present"
       enabledBy="acmp_cs_ace"
-      typeName="AcmpNegativeInput"
-      enumType="uint8_t"
+      typeName="AcmpInputMinus"
+      baseType="uint8_t"
       description="ACMP Negative Input Select"
       toolTip="Selects the negative input source" >
-      <choice name="External ref 0"  value="0" enum="ExternalRef0" />
-      <choice name="External ref 1"  value="1" enum="ExternalRef1" />
-      <choice name="External ref 2"  value="2" enum="ExternalRef2" />
-      <choice name="DAC"             value="3" enum="Dac" />
+      <choiceExpansion name="%(pin)"       value="%(i)" enum="%(i)" keys="pin" values="=inputPinMap" delimiter="," />
+      <choice          name="Internal DAC" value="Dac"  enum="Dac"    />
    </choiceOption >
 
    <!-- ____ C1 ____ -->
 
+   <title description="DAC" />
+
    <binaryOption key="acmp_c1_dacen" condition="acmp_c1_dacen_present"
       enabledBy="acmp_cs_ace"
       typeName="AcmpDacEnable"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="DAC Enable"
       toolTip="Enables the DAC" >
       <choice name="Disabled"    value="0" enum="Disabled" />
@@ -153,19 +178,19 @@
    </binaryOption >
 
    <binaryOption key="acmp_c1_dacref" condition="acmp_c1_dacref_present"
-      enabledBy="acmp_cs_ace"
+      enabledBy="acmp_c1_dacen"
       typeName="AcmpDacReference"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="DAC Reference Select"
       toolTip="Selects the reference for the DAC" >
       <choice name="Bandgap"     value="0" enum="Bandgap" />
-      <choice name="VDDA"        value="1" enum="Vdda" />
+      <choice name="VDDA"        value="1" enum="Vdda"   isDefault="true" />
    </binaryOption >
 
    <intOption key="acmp_c1_dacval" condition="acmp_c1_dacval_present"
-      enabledBy="acmp_cs_ace"
+      enabledBy="acmp_c1_dacen"
       typeName="AcmpDacValue"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="DAC Output Level Selection"
       toolTip="Selects the DAC output voltage using the formula: \n
                \tVoutput= (Vin/64)x(DACVAL[5:0]+1) \n
@@ -181,10 +206,22 @@
       value='"INP0,INP1,INP2"'
    />
 
+   <choiceOption  key="acmp_c2_acipe_base" condition="acmp_c2_acipe_present"
+      valueFormat="ACMP_C2_ACIPE(%s)"
+      hidden="true"
+      derived="true"
+      typeName="AcmpInputEnable"
+      baseType="uint8_t"
+      toolTip="Enables ACMP pins as analogue inputs\n
+               Disables other functions"
+      description="ACMP Input Pin Enables" >
+      <choiceExpansion name="Pin enable %(i)" value="1&lt;&lt;%(i)" enum="%(i)" keys="i" dim="3" />
+   </choiceOption>
+
    <bitmaskOption key="acmp_c2_acipe" condition="acmp_c2_acipe_present"
       enabledBy="acmp_cs_ace"
-      typeName="AcmpInput"
-      enumType="uint8_t"
+      typeName="AcmpInputEnable"
+      baseType="uint8_t"
       disabledValue="0"
       toolTip="Bitmask controlling which ACMP pins are available as analogue inputs"
       description="ACMP Input Pin Enables"
@@ -195,7 +232,7 @@
    />
 
    <binaryOption key="acmp_cs_acope" condition="acmp_cs_acope_present"
-      enumType="uint8_t"
+      baseType="uint8_t"
       enabledBy="acmp_cs_ace"
       typeName="AcmpOutputPin"
       toolTip="Allows the ACMP output to be placed onto external pin"
@@ -399,8 +436,8 @@
       \t *   AcmpInterrupt_Disabled ,         // ACMP Interrupt Enable - Interrupt disabled
       \t *   AcmpOutputPin_Disabled ,         // ACMP Output Pin Enable - Pin disabled
       \t *   AcmpMode_FallingEdge ,           // InterruptEdge - Falling edge
-      \t *   AcmpPositiveInput_ExternalRef0 , // ACMP Positive Input Select - External ref 0
-      \t *   AcmpNegativeInput_ExternalRef0 , // ACMP Negative Input Select - External ref 0
+      \t *   CmpInputPlus_ExternalRef0 , // ACMP Positive Input Select - External ref 0
+      \t *   CmpInputMinus_ExternalRef0 , // ACMP Negative Input Select - External ref 0
       \t *   AcmpDacEnable_Disabled ,         // DAC Enable - Disabled
       \t *   AcmpDacReference_Bandgap ,       // DAC Reference Select - Bandgap
       \t *   AcmpDacValue(100),               // DAC Output Level Selection
@@ -446,11 +483,11 @@
    ]]></variableTemplate>
 
    <for keys=" type        : variables                                            : init    "
-       values="%enumType   : acmp_cs_ace,acmp_cs_hyst,acmp_cs_acf,acmp_cs_acie,
+       values="%baseType   : acmp_cs_ace,acmp_cs_hyst,acmp_cs_acf,acmp_cs_acie,
                              acmp_cs_acope,acmp_cs_acmod                          :   0      ;
-               %enumType   : acmp_c0_acpsel,acmp_c0_acnsel                        :   0      ;
-               %enumType   : acmp_c1_dacen,acmp_c1_dacref,acmp_c1_dacval          :   0      ;
-               %enumType   : acmp_c2_acipe                                        :   0      " >
+               %baseType   : acmp_c0_acpsel,acmp_c0_acnsel                        :   0      ;
+               %baseType   : acmp_c1_dacen,acmp_c1_dacref,acmp_c1_dacval          :   0      ;
+               %baseType   : acmp_c2_acipe                                        :   0      " >
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(variables)"
          linePadding="xxx"

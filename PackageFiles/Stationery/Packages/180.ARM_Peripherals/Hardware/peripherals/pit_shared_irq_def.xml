@@ -17,7 +17,7 @@
       description="Pit Channel Number"
       typeName="PitChannelNum"
       valueFormat="%s"
-      enumType="uint8_t"
+      baseType="uint8_t"
       toolTip="Selected PIT channel">
       <choice value="0"          name="Channel 0"     enum="0" />
       <choice value="1"          name="Channel 1"     enum="1" />

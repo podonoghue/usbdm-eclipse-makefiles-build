@@ -4,16 +4,17 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Keyboard interrupts" >
 
-   <constant key="irq_parameters"            type="String"  value="&quot;uint32_t kbi_sp&quot;"  />
-   <constant key="irq_dummy_parameters"      type="String"  value="&quot;uint32_t&quot;"  />
-   <constant key="irq_call"                  type="String"  value="&quot;kbi_sp&quot;"    />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <constant key="captureSize"       type="String"  value='"32"'  />
+
+   <constant key="irq_parameters"            type="String"  value='""'     />
+   <constant key="irq_dummy_parameters"      type="String"  value='""'     />
+   <constant key="irq_call"                  type="String"  value='""'     />
+   <constant key="generateDefault"           type="Boolean" value="false"  />
+   <constant key="configureInStartupDefault" type="Boolean" value="false"  />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-<!--
-    * General substitutions
+<!-- ____ General substitutions ____
     *  $(_NAME)         => e.g FTM2 => FTM2
     *  $(_name)         => e.g FTM2 => ftm2
     *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
@@ -23,75 +24,116 @@
     *  $(_instance)     => e.g FTM0 => 0, PTA => A
 -->
 
-<!--
-    * Template substitutions
+<!-- ____ Template substitutions ________
     *
-    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
-    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
-    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
-    * %description[index]             Description from controlVar e.g. Compare Function Enable
-    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
-    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
-    * %params                         Formatted parameter list for function
-    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
-    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %paramType[index]               As for %paramType
-    * %paramName[index]               As for %paramName
-    * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicExpression             Symbolic variable value e.g. AdcCompare_Disabled
-    * %fieldAssignment;               Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %maskingExpression              Based on variable etc. Similar to (%register&%mask)
-    * %variable[index]                Variable name from condition
-    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * %register[index]                Register associated with variable e.g. adc->APCTL1
-    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
+    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
+    * <li>%valueExpression            Numeric variable value e.g. 0x3
+    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
+    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
+    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
+    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
+    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
+    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
+    * <li>%params                     Formatted parameter list for function
+    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
+    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
+    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
+    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
+    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
+    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
+    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
+    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
+    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
 -->
 
-   <!-- ************* Class Declaration ****************** -->
+   <!-- ____ Class Declaration __________________ -->
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Class)BasicInfo&quot;" />
+      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
-   <!-- ************* PE ****************** -->
+   <choiceOption key="kbi_pin_index"
+      valueFormat="%s"
+      hidden="true"
+      derived="true"
+      typeName="KbiPinIndex"
+      baseType="uint8_t"
+      description="KBI Common Pin Indices"
+      toolTip="These are used for the underlying pin indices for either KBI" >
+      <choiceExpansion value="%(i)" name="Enable Pin #%(i)" enum="Pin%(i)" keys="i" dim="=captureSize" />
+   </choiceOption>
 
-   <constant key="pinMap" type="String" value="&quot;PT(A-D)(0-7)&quot;"   condition="$(_instance)==0" />
-   <constant key="pinMap" type="String" value="&quot;PT(E-H)(0-7)&quot;"   condition="$(_instance)==1" />
+   <choiceOption key="kbi_pin_number"
+      valueFormat="%s"
+      hidden="true"
+      derived="true"
+      typeName="Kbi$(_instance)PinIndex"
+      baseType="uint8_t"
+      description="KBI$(_instance) Pin Indices"
+      toolTip="Pin indices for KBI$(_instance)" >
+      <choiceExpansion value="KbiPinIndex_Pin%(i)" name="Pin %(pin)"
+                       enum='=Prettify("%(pin)")' keys="pin" values='=ExpandPinList(inputPinMap,";")' />
+   </choiceOption>
 
-   <constant key="expandedPinMap" type="String" value="ExpandPinList(pinMap,&quot;,\n      &quot;)" />
+   <!-- ____ PE ____ -->
+
+   <choiceOption key="kbi_pe_enableMask"
+      hidden="true"
+      derived="true"
+      valueFormat="%s"
+      typeName="Kbi$(_instance)EnableMask"
+      baseType='="uint"+captureSize+"_t"'
+      description="KBI Pin Enables"
+      toolTip="Bitmask selecting enabled pins" >
+      <choiceExpansion name="Pin %(pin)" value='="1U&lt;&lt;Kbi$(_instance)PinIndex_"+Prettify("%(pin)")'
+                       enum='=Prettify("%(pin)")' keys="pin" values='=ExpandPinList(inputPinMap,";")'/>
+   </choiceOption>
 
    <bitmaskOption key="kbi_pe_kbipe" condition="kbi_pe_kbipe_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="enablePeripheralSupport"
       valueFormat="%s"
       typeName="KbiEnableMask"
-      enumType="uint32_t"
-      description="KBI Pin Enables"
+      baseType='="uint"+captureSize+"_t"'
+      generateEnum="empty"
+      description="KBI$(_instance) Pin Enables"
       toolTip="Bitmask selecting enabled pins"
       bitmask="0"
-      bitList="=pinMap"
-      pinMap="=&quot;KBI$(_instance)_P%i:&quot;+pinMap"
+      bitList="=inputPinMap"
+      pinMap='="KBI$(_instance)_P%i:"+inputPinMap'
       value="0"
    />
 
-   <!-- ************* ES ****************** -->
+   <!-- ____ ES ____ -->
+
+   <choiceOption key="kbi_pe_polarityMask"
+      hidden="true"
+      derived="true"
+      valueFormat="%s"
+      typeName="Kbi$(_instance)PolarityMask"
+      baseType='="uint"+captureSize+"_t"'
+      description="KBI Edge Selects"
+      toolTip="Bitmask selecting polarity : 0=Falling edge/low level; 1=Rising edge/high level" >
+      <choiceExpansion name="Pin %(pin)" value='="1U&lt;&lt;Kbi$(_instance)PinIndex_"+Prettify("%(pin)")'
+                       enum='=Prettify("%(pin)")' keys="pin" values='=ExpandPinList(inputPinMap,";")'/>
+   </choiceOption>
 
    <bitmaskOption key="kbi_es_kbedg" condition="kbi_es_kbedg_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="enablePeripheralSupport"
       valueFormat="%s"
       typeName="KbiPolarityMask"
-      enumType="uint32_t"
+      baseType='="uint"+captureSize+"_t"'
+      generateEnum="empty"
       description="KBI Edge Selects"
       toolTip="Bitmask selecting polarity : 0=Falling edge/low level; 1=Rising edge/high level"
       bitmask="0"
-      bitList="=pinMap"
+      bitList="=inputPinMap"
       value="0"
    />
 
-   <!-- ************* SC ****************** -->
+   <!-- ____ SC ____ -->
 
    <binaryOption key="kbi_sc_kbspen" condition="kbi_sc_kbspen_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="enablePeripheralSupport"
       typeName="KbiStatusReflects"
+      baseType="uint8_t"
       description="Real KBI_SP register enable"
       toolTip="The SP register may show either the current KBI pin values or\n
                the value captured when interrupt flag was set" >
@@ -100,55 +142,91 @@
    </binaryOption >
 
    <binaryOption key="kbi_sc_kbf" condition="kbi_sc_kbf_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="enablePeripheralSupport"
       hidden="true"
       typeName="KbiEvent"
-      description="KBI Interrupt Flag" >
+      baseType="uint8_t"
+      description="KBI Interrupt Flag"
+      toolTip="Indicates when a KBI interrupt request is detected.\n
+               Writes have no effect on KBF." >
       <choice name="Not detected"  value="0" enum="None"/>
       <choice name="Detected"      value="1" enum="InterruptDetected"/>
    </binaryOption >
 
    <binaryOption key="kbi_sc_kback" condition="kbi_sc_kback_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      derived="true"
       hidden="true"
       typeName="KbiAck"
+      baseType="uint8_t"
       description="KBI Acknowledge"
       toolTip="Writing a 1 to KBACK is part of the flag clearing mechanism" >
       <choice name="Clear"      value="1" enum="Write1ToClear"/>
    </binaryOption >
 
-   <binaryOption key="kbi_sc_rstkbsp" condition="kbi_sc_kbie_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+   <binaryOption key="kbi_sc_rstkbsp" condition="kbi_sc_rstkbsp_present"
+      enabledBy="enablePeripheralSupport"
       hidden="true"
-      description="Reset KBI_SP register"
+      derived="true"
       typeName="KbiRst"
+      baseType="uint8_t"
+      description="Reset KBI_SP register"
       toolTip="Writing a 1 to RSTKBSP is to clear the KBIxSP Register. This bit always reads as 0" >
       <choice name="Clear"      value="1" enum="Write1ToClear"/>
    </binaryOption >
 
    <binaryOption key="kbi_sc_kbie" condition="kbi_sc_kbie_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="enablePeripheralSupport"
       typeName="KbiInterrupt"
-      description="KBI Interrupt Enable" >
+      baseType="uint8_t"
+      description="KBI Interrupt Enable"
+      toolTip="Determines whether a KBI interrupt is enabled or not." >
       <choice name="Interrupt disabled"  value="0" enum="Disabled"/>
       <choice name="Interrupt enabled"   value="1" enum="Enabled"/>
    </binaryOption >
 
    <binaryOption key="kbi_sc_kbmod" condition="kbi_sc_kbmod_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="enablePeripheralSupport"
       typeName="KbiDetectionMode"
-      description="KBI Detection Mode" >
+      baseType="uint8_t"
+      description="KBI Detection Mode"
+      toolTip="KBMOD (along with ES[KBEDG]) controls the detection mode of the KBI interrupt pins." >
       <choice name="Edges only"       value="0" enum="EdgesOnly"/>
       <choice name="Edges or levels"  value="1" enum="EdgesOrLevels"/>
    </binaryOption >
 
-<!-- Graphic here -->
+   <!-- ____ SP ____ -->
 
-   <for keys="field:name"
+   <intOption key="kbi_sp_sp" condition="kbi_sp_sp_present"
+      hidden="true"
+      derived="true"
+      typeName="KbiSourcePin"
+      baseType="uint32_t"
+      description="Active KBI Source Pins"
+      toolTip="Bit-mask showing active pins\n
+               This may show the currently active pins or\n
+               those recorded at the last event time. (See KBSPEN)"
+      value="0"
+      min="0" max="0"
+   />
+
+   <!-- ____ Setters and Getters ____________ -->
+
+   <for keys="field                     : set   : get   : clear : genCode                 : name"
         values="
-      kbi_pe_kbipe:EnabledPins;
-      kbi_es_kbedg:PinPolarity" >
-      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+
+         kbi_pe_kbipe                   : true  : true  : false : enableGettersAndSetters : EnabledPins;
+
+         kbi_es_kbedg                   : true  : true  : false : enableGettersAndSetters : PinPolarity;
+
+         kbi_sc_rstkbsp                 : false : false : true  : enableGettersAndSetters : ResetSourcePin;
+         kbi_sc_kbspen                  : true  : true  : false : enableGettersAndSetters : Status;
+         kbi_sc_kbf                     : true  : false : false : enableGettersAndSetters : InterruptFlag;
+         kbi_sc_kback                   : true  : false : false : enableGettersAndSetters : Acknowledge;
+         kbi_sc_kbie                    : true  : true  : false : enableGettersAndSetters : InterruptEnable;
+         kbi_sc_kbmod                   : true  : true  : false : enableGettersAndSetters : DetectionMode;
+
+         kbi_sp_sp                      : false : true  : false : enableGettersAndSetters : SourcePin" >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -156,16 +234,30 @@
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %register = %paramName0;
+         \t   %fieldAssignment;
          \t}
-         \t
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
          \t/**
          \t * Get %description
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %paramType get%(name)() {
-         \t   return %paramType(%register);
+         \tstatic %returnType get%(name)() {
+         \t   return %fieldExtract;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t *
+         \t */
+         \tstatic void clear%(name)() {
+         \t   %register = %register|%mask;
          \t}
          \t\n
       ]]></variableTemplate>
@@ -204,131 +296,30 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate variables="kbi_sc_kback" codeGenCondition="enableGettersAndSetters"
-   ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      %paramDescription
-      \t */
-      \tstatic void clearInteruptFlag() {
-      \t   %register = %register|%mask;
-      \t}
-      \t
-      \t/**
-      \t * Get %description
-      \t *
-      \t * @return %tooltip
-      \t */
-      \tstatic %paramType getInteruptFlag() {
-      \t   return %paramType(%register&%mask);
-      \t}
-      \t\n
-   ]]></variableTemplate>
+   <!-- ____ class $(_Structname)BasicInfo ____________ -->
 
-   <for keys="field:name"
-        values="
-      kbi_sc_kbspen:Status;
-      kbi_sc_kbie:EnabledInterrupts;
-      kbi_sc_kbmod:DetectionMode" >
-      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
-      ><![CDATA[
-         \t/**
-         \t * Set %description
-         \t *
-         %paramDescription
-         \t */
-         \tstatic void set%(name)(%params) {
-         \t   %fieldAssignment;
-         \t}
-         \t
-         \t/**
-         \t * Get %description
-         \t *
-         \t * @return %tooltip
-         \t */
-         \tstatic %paramType get%(name)() {
-         \t   return %paramType(%register&%mask);
-         \t}
-         \t\n
-      ]]></variableTemplate>
-   </for>
-
-<!--   ========== KBI Init class =============================== -->
-
-   <template key="init_description" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
-   <![CDATA[
-      \t/**
-      \t * Class used to do initialisation of the $(_Class)
-      \t *
-      \t * This class has a templated constructor that accepts various values.
-      \t *
-      \t * @note This constructor may be used to create a const instance in Flash
-      \t *
-      \t * Example:
-      \t * ///
-      \t * /// $(_NAME) call-back
-      \t * ///
-      \t * /// @param status  Status reflecting active inputs
-      \t * ///
-      \t * void $(_name)Callback(uint32_t status) {
-      \t *    (void) status;
-      \t * }
-      \t *
-      \t * @code
-      \t * static const $(_Class)::Init $(_name)Init {
-      \t *
-      \t *    // Setup values
-      \t *    Kbi$(_instance)PinIndex::PTA3, ActiveHigh,  // Enabled pin and set associated polarity - PTA3, Rising-edge/High-level
-      \t *    Kbi$(_instance)PinIndex::PTB5, ActiveLow,   // Enabled pin and set associated polarity - PTB5, Falling-edge/Low-level
-      \t *    KbiStatusReflects_CurrentValue , // Real KBI_SP register enable - Current value
-      \t *    KbiInterrupt_Disabled ,          // KBI Interrupt Enable - Disabled
-      \t *    KbiDetectionMode_EdgesOnly,      // KBI Detection Mode - Edges only
-      \t *
-      \t *    $(_name)Callback,                // Call-back to execute on event - call-back function name
-      \t *    NvicPriority_Low,                // Priority for interrupt - Low
-      \t * };
-      \t *
-      \t * // Initialise $(_Class) from values specified above
-      \t * $(_Class)::configure($(_name)Init)
-      \t * @endcode
-      \t */
-   ]]>
-   </template>
-
-   <template namespace="usbdm" >
-   <![CDATA[
-      \t/**
-      \t *  Pin indices for Kbi$(_instance)
-      \t */
-      \tenum class Kbi$(_instance)PinIndex {
-      \t   $(expandedPinMap)
-      \t};
-      \t\n
-   ]]>
-   </template>
-
-   <template namespace="usbdm" >
-   <![CDATA[
-      class $(_Class)BasicInfo {
+   <template where="basicInfo" ><![CDATA[
+      class $(_Structname)BasicInfo {
       \t
       public:\n
-   ]]>
-   </template>
+   ]]></template>
 
-   <template namespace="usbdm" codeGenCondition="irqHandlingMethod" >
+   <!-- ____ Interrupt handling _____________ -->
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   ><![CDATA[
+       \t//! Common class based callback code has been generated for this class of peripheral
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
+       \t\n
+   ]]></variableTemplate>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
    <![CDATA[
       \t/**
-      \t * Type definition for $(_Class) interrupt call back.
+      \t * Type for Keyboard Interrupt call back function.
       \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));\n
-   ]]>
-   </template>
-
-   <template codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/** Callback function for ISR */
-      \tstatic CallbackFunction sCallback;
+      \ttypedef void (*CallbackFunction)($(irq_parameters));
       \t
       \t/**
       \t * Callback to catch unhandled interrupt
@@ -340,38 +331,73 @@
    ]]>
    </template>
 
-   <template codeGenCondition="irqHandlingMethod" >
+   <variableTemplate codeGenCondition="enablePeripheralSupport" condition="!kbi_sp_sp_present"
+      variables="kbi_sc_kback,kbi_sc_rstkbsp" >
    <![CDATA[
       \t/**
-      \t * Set interrupt callback function.
-      \t *
-      \t * @param[in]  kbiCallback Callback function to execute on interrupt
+      \t * Clear status
       \t */
-      \tstatic void setCallback(CallbackFunction kbiCallback) {
-      \t   if (kbiCallback == nullptr) {
-      \t      kbiCallback = unhandledCallback;
-      \t   }
-      \t   usbdm_assert(
-      \t         (sCallback == unhandledCallback) || (sCallback == kbiCallback),
-      \t         "Handler already set");
-      \t   sCallback = kbiCallback;
+      \tstatic void clearStatus() {
+      \t
+      \t   %register = %mask;
       \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport" condition="kbi_sp_sp_present"
+      variables="kbi_sc_kback,kbi_sc_rstkbsp,kbi_sp_sp"
+      params=",,*" >
+   <![CDATA[
+      \t/**
+      \t * Get and clear status
+      \t *
+      \t * @return %tooltip2
+      \t */
+      \tstatic %returnType2 getAndClearStatus() {
+      \t
+      \t   %returnType2 temp = %returnType2(%register2);
+      \t   %register1           = %mask0|%mask1;
+      \t
+      \t   return temp;
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <template codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/** Callback function for Keyboard Interrupt */
+      \tstatic CallbackFunction sCallback;
       \t
       \t/**
-      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
+      \t * Keyboard Interrupt interrupt handler
+      \t * Passes control to call-back function
       \t */
       \tstatic void irqHandler() {
       \t
-      \t   // Get pin capture value and mask for valid bits only
-      \t   uint32_t kbi_sp = kbi->SP & kbi->ES;
-      \t
-      \t   // Clear status
-      \t   kbi->SC = kbi->SC|KBI_SC_KBACK_MASK|KBI_SC_RSTKBSP_MASK;
-      \t
       \t   // Execute call-back
       \t   sCallback($(irq_call));
-      \t   return;
       \t}
+      \t
+      \t/**
+      \t * Set Keyboard Interrupt callback function.
+      \t *
+      \t * @param $(_basename)Callback Callback function to execute on interrupt
+      \t *                        Use nullptr to remove callback.
+      \t */
+      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
+      \t   if ($(_basename)Callback == nullptr) {
+      \t      $(_basename)Callback = (CallbackFunction)unhandledCallback;
+      \t   }
+      \t   // Allow either no handler set yet or removing handler
+      \t   usbdm_assert(
+      \t         ((void*)sCallback == (void*)unhandledCallback) ||
+      \t         ((void*)$(_basename)Callback == (void*)unhandledCallback),
+      \t         "Handler already set");
+      \t   sCallback = $(_basename)Callback;
+      \t}
+      \t
       \t\n
    ]]>
    </template>
@@ -379,15 +405,22 @@
    <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t
-      \t/** Callback for programmatically set handler */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
+      \t/**
+      \t * Callback function for Keyboard Interrupt
+      \t */
+      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = (CallbackFunction)$(_Class)Info::unhandledCallback;
+      \t
       \t\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <!-- ________ KbiBasicInfo::Init class ____________________________ -->
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
-      $(init_description)
+      \t/**
+      \t * Class used to do initialisation of the $(_Baseclass)
+      \t */
       \tclass Init {
       \t
       \tpublic:
@@ -404,36 +437,30 @@
    ]]>
    </template>
 
-<!--   Member variables -->
+   <!-- ____ KbiBasicInfo::Init class Member variables ________ -->
 
-   <variableTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
-    ><![CDATA[
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="irqHandlingMethod"
+   ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="kbi_pe_kbipe"
-   ><![CDATA[
-      \t   /// KBI Pin Enables
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
+   <for keys=" type        : variables                                            : init    "
+       values="%baseType   : kbi_pe_kbipe                                         :   0      ;
+               %baseType   : kbi_es_kbedg                                         :   0      ;
+               %baseType   : kbi_sc_rstkbsp,kbi_sc_kbspen,kbi_sc_kbf,kbi_sc_kback,
+                             kbi_sc_kbie,kbi_sc_kbmod                             :   0      " >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(variables)"
+         linePadding="xxx"
+      ><![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]></variableTemplate>
+   </for>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="kbi_es_kbedg"
-   ><![CDATA[
-      \t   /// KBI Edge Selects
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="kbi_sc_rstkbsp,kbi_sc_kbspen,kbi_sc_kbf,kbi_sc_kback,kbi_sc_kbie,kbi_sc_kbmod"
-   ><![CDATA[
-      \t   /// KBI Status and Control Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -441,63 +468,18 @@
       \t\n
    ]]></variableTemplate>
 
-<!--   Configure methods -->
+   <!-- ____ KbiBasicInfo::Init class Constructors ____________ -->
 
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
-      \t/**
-      \t * Configure with default settings.
-      \t * Configuration determined from Configure.usbdmProject
-      \t */
-      \tstatic inline void defaultConfigure() {
-      \t
-      \t   // Update settings
-      \t   configure(Info::DefaultInitValue);
-      \t}
-      \t\n
-   ]]></template>
-
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
-      \t/**
-      \t * Configure $(_BASENAME) from values specified in init
-      \t *
-      \t * @param init Class containing initialisation values
-      \t */
-      \tstatic void configure(const typename Info::Init &init) {
-      \t   // ..........  Configure ...........
-      \t
-      \t   // Enable peripheral clock
-      \t   Info::enableClock();
-      \t\n
-   ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-             condition="irqHandlingMethod" ><![CDATA[
-      \t   Info::setCallback(init.callbackFunction);
-      \t   enableNvicInterrupts(init.irqlevel);
-      \t\n
-   ]]></template>
-
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
-      \t   // ..........  Regs to init .......... ;
-      \t   kbi->SC    = KBI_SC_KBACK_MASK;
-      \t   kbi->SC    = KBI_SC_RSTKBSP_MASK;
-      \t   kbi->PE    = init.pe;
-      \t   kbi->ES    = init.es;
-      \t   kbi->SC    = init.sc;
-      \t}
-      \t\n
-   ]]></template>
-
-<!--   Constructors -->
-
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
       linePadding="xxx"
-    ><![CDATA[
+   ><![CDATA[
       \t   /**
       \t    * Constructor for %description
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
+      \t    *
       %paramDescription
       \t    */
       \t   template <typename... Types>
@@ -507,15 +489,16 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
-    ><![CDATA[
+   ><![CDATA[
       \t   /**
       \t    * Constructor for %description
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
+      \t    *
       %paramDescription
       \t    */
       \t   template <typename... Types>
@@ -525,53 +508,183 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="kbi_pe_kbipe"
-      params="enableMask"
-      nonDefaultParams="2"
-      linePadding="xxx" >
+   <for keys="r"
+      values="
+            kbi_pe_kbipe;
+            kbi_es_kbedg;
+            kbi_sc_rstkbsp;kbi_sc_kbspen;kbi_sc_kbf;
+            kbi_sc_kback;kbi_sc_kbie;kbi_sc_kbmod
+            " >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    * (%(r))
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %constructorFieldAssignment;
+         \t   }
+         \t\n
+      ]]>
+      </variableTemplate>
+   </for>
+
+   <!-- ____ KbiBasicInfo::Init class Configure method ____ -->
+
+   <template codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(DefaultInitValue);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const Init &init) {
+      \t
+      \t   // Enable peripheral clock
+      \t   enable();
+      \t\n
+   ]]></template>
+   <template codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t   // Only set call-backs if feature enabled
+      \t   setCallback(init.callbackFunction);
+      \t   enableNvicInterrupts(init.irqlevel);
+      \t\n
+   ]]></template>
+   <for keys=
+             " var                                                    : statement            "
+      values=" kbi_sc_kbie,                                           : %register = 0 ;
+               kbi_es_kbedg                                           : %configRegAssignment ;
+               kbi_pe_kbipe                                           : %configRegAssignment ;
+               kbi_sc_kback,                                          : %register = KBI_SC_KBACK_MASK ;
+               kbi_sc_rstkbsp,                                        : %register = KBI_SC_RSTKBSP_MASK ;
+               kbi_sc_rstkbsp,kbi_sc_kbspen,kbi_sc_kbf,kbi_sc_kback,
+               kbi_sc_kbie,kbi_sc_kbmod                               : %configRegAssignment" >
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      variables="%(var)"
+      linePadding="xxx"
+      ><![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____  Default Initialisation value ____ -->
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      separator=","
+      terminator=","
+      variables="
+            kbi_pe_kbipe,
+            kbi_es_kbedg,
+            kbi_sc_kbspen,kbi_sc_kbie,kbi_sc_kbmod" >
+   <![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr KbiBasicInfo::Init DefaultInitValue = {%initExpression
+      \t};
+      \t\n
+   ]]></variableTemplate>
+
+   <!-- ___ $(_Class)Info::Init ____ -->
+
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_Baseclass)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(uint32_t status) {
+      \t *    (void) status;
+      \t * }
+      \t *
+      \t * static const $(_Class)::Init $(_name)Init {
+      \t *
+      \t *   // Setup values
+      \t *   // Pin + Polarity - These must appear first
+      \t *   Kbi1PinIndex_Pte0, ActiveHigh,   // PTE0 active-high
+      \t *   Kbi1PinIndex_Pth3, ActiveLow,    // PTH3 active-low
+      \t *   KbiStatusReflects_LatchedValue , // Real KBI_SP register enable - Current value
+      \t *   KbiInterrupt_Enabled ,           // KBI Interrupt Enable - Enabled
+      \t *   KbiDetectionMode_EdgesOnly,      // KBI Detection Mode - Edges only
+      \t *
+      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
+      \t *   NvicPriority_Low,                 // Priority for interrupt - Low
+      \t *
+      \t *   // Optional base value to start with (must be last parameter)
+      \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
+      \t * };
+      \t *
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_name)Init)
+      \t * @endcode
+      \t */
+      \tclass Init : public $(_Structname)BasicInfo::Init {
+      \t
+      \tpublic:
       \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t
+      \t   /**
+      \t    * Constructor
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName = %paramName;
+      \t   constexpr Init(Types... rest) : $(_Structname)BasicInfo::Init(rest...) {
       \t   }
       \t\n
    ]]>
-   </variableTemplate>
+   </template>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="kbi_es_kbedg"
-      params="polarityMask"
-      nonDefaultParams="2"
-      linePadding="xxx" >
-   <![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName = %paramName;
-      \t   }
-      \t\n
-   ]]>
-   </variableTemplate>
+   <!-- ____ $(_Class)Info::Init class Constructors ____________ -->
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
       variables="/PORT/pin_index,kbi_pe_kbipe,kbi_es_kbedg"
       params=",polarity"
       linePadding="xxx" >
@@ -599,92 +712,48 @@
    ]]>
    </variableTemplate>
 
-   <for keys="r"
-      values="
-            kbi_sc_kbspen;
-            kbi_sc_kbie;
-            kbi_sc_kbmod
-            " >
-      <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="%(r)"
-         linePadding="xxx" >
-      <![CDATA[
-         \t   /**
-         \t    * Constructor for %description
-         \t    *
-         \t    * @tparam   Types
-         \t    * @param    rest
-         \t    *
-         %paramDescription
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-         \t
-         \t      %registerName = (%registerName&~%mask) | %paramExpression;
-         \t   }
-         \t\n
-      ]]>
-      </variableTemplate>
-   </for>
+   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t}; // class $(_Class)Info::Init
+      \t\n
+   ]]>
+   </template>
 
-<!--   Default Initialisation value -->
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t}; // class $(_Structname)BasicInfo::Init
+      \t\n
+   ]]>
+   </template>
 
-   <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      separator=","
-      terminator=","
-      variables="
-            kbi_pe_kbipe,
-            kbi_es_kbedg,
-            kbi_sc_kbspen,
-            kbi_sc_kbie,
-            kbi_sc_kbmod
-         "
-   ><![CDATA[
+   <template where="basicInfo" >
+   <![CDATA[
+      }; // class $(_Structname)BasicInfo
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ Common __________________ -->
+
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
       \t/**
-      \t * Default initialisation value for $(_Class)
-      \t * This value is created from Configure.usbdmProject settings
+      \t * Class representing $(_NAME)
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
-      \t};\n\n
-   ]]></variableTemplate>
-
-   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
-      <![CDATA[
-      \t}; // $(_Class)BasicInfo::Init\n\n
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
+      \t\n
    ]]>
    </template>
-
-   <template namespace="usbdm" >
-      <![CDATA[
-      }; // $(_Class)BasicInfo\n\n
-   ]]>
-   </template>
-
-   <!-- ************* Signal mapping ****************** -->
-   <category name="SIM" description="Pin mapping">
-      <aliasOption key="/SIM/sim_scgc_$(_name)"     locked="false" optional="true" />
-   </category>
-
-   <signals enabledBy="enablePeripheralSupport" locked="true" />
-
-   <!-- ************* Common ****************** -->
-
-   <template key="/$(_BASENAME)/declarations" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
-   \t/**
-   \t * Class representing $(_NAME)
-   \t */
-   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
-   ]]></template>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>
 
-   <projectActionList id = "kbi_files" >
+   <projectActionList id="kbi_files" >
       <copy source="Project_Headers/kbi-MKE.h"  target="Project_Headers/kbi.h"  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <!-- ************* Startup ****************** -->
+   <!-- ____ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -695,5 +764,22 @@
       \t/*  Initialise $(_Class) */
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
+
+   <!-- ____ SIM configuration __________________ -->
+
+   <category name="Advanced" description="SIM configuration"
+      toolTip="Thes settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title description="$(_NAME) Specific" />
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+   </category>
+
+   <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </peripheralPage>

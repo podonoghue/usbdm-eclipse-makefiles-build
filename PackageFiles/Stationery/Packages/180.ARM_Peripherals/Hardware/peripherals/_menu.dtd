@@ -98,7 +98,8 @@
    <!ATTLIST variable  expression         CDATA        #REQUIRED>
    <!-- Immediately evaluated expression used to guard creating this item -->
    <!ATTLIST variable  condition          CDATA        #IMPLIED>
-   <!ATTLIST variable  logging            CDATA        #IMPLIED>
+   <!-- Log changes to associated variable -->
+   <!ATTLIST variable  logging            (true)       #IMPLIED >
 
 <!ELEMENT graphic ((%graphic_items;)*) >
    <!ATTLIST graphic  key                CDATA        #REQUIRED>
@@ -140,7 +141,7 @@
    <!ATTLIST aliasCategoryOption  key          CDATA        #REQUIRED>
    <!ATTLIST aliasCategoryOption  derived      (false|true) #IMPLIED>
    <!-- Locks option in GUI -->
-   <!ATTLIST aliasCategoryOption  locked       (false|true) "true">
+   <!ATTLIST aliasCategoryOption  locked       (false|true) #IMPLIED>
 
 <!-- Expandable grouping -->
 <!ELEMENT category ((%general_items;)*) >
@@ -168,7 +169,7 @@
    <!ATTLIST categoryOption locked              (false|true) #IMPLIED>
    <!-- Hides option in GUI -->
    <!ATTLIST categoryOption hidden              CDATA        #IMPLIED>
-   <!-- Expression enables this option -->
+   <!-- Expression enables this option- 'expression#primaryVar#message'- 'expression#primaryVar#message' -->
    <!ATTLIST categoryOption enabledBy           CDATA        #IMPLIED> 
    <!-- Dynamic expression that disables and hides this option -->
    <!ATTLIST categoryOption hiddenBy            CDATA        #IMPLIED>
@@ -243,7 +244,7 @@
    <!ATTLIST timeOption toolTip       CDATA        #IMPLIED>
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST timeOption condition     CDATA        #IMPLIED>
-   <!-- Expression enables this option -->
+   <!-- Expression enables this option- 'expression#primaryVar#message' -->
    <!ATTLIST timeOption enabledBy     CDATA        #IMPLIED> 
    <!-- Dynamic expression that disables and hides this option -->
    <!ATTLIST timeOption hiddenBy      CDATA        #IMPLIED>
@@ -274,7 +275,8 @@
    <!ATTLIST timeOption units          (Hz|s|ticks) #REQUIRED>
    <!-- Equation that calculates the period from the variable primary value (only used if units = ticks) -->
    <!ATTLIST timeOption periodEquation  CDATA       #IMPLIED> 
-   <!ATTLIST timeOption logging            CDATA        #IMPLIED>
+   <!-- Log changes to associated variable -->
+   <!ATTLIST timeOption logging         (true)      #IMPLIED>
 
 <!ELEMENT intOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -297,7 +299,7 @@
    <!ATTLIST intOption hidden        (true)       #IMPLIED>
    <!-- Option value is derived and should not be saved -->
    <!ATTLIST intOption derived       (true)       #IMPLIED>
-   <!-- Expression enables this option -->
+   <!-- Expression enables this option- 'expression#primaryVar#message' -->
    <!ATTLIST intOption enabledBy     CDATA        #IMPLIED> 
    <!-- Dynamic expression that disables and hides this option -->
    <!ATTLIST intOption hiddenBy      CDATA        #IMPLIED>
@@ -310,7 +312,7 @@
    <!-- Equation that controls this variable -->
    <!ATTLIST intOption ref           CDATA        #IMPLIED> 
    <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
-   <!ATTLIST intOption enumType      CDATA        #IMPLIED>
+   <!ATTLIST intOption baseType      CDATA        #IMPLIED>
    <!-- C #if expression to guard enum declaration -->
    <!ATTLIST intOption enumGuard           CDATA        #IMPLIED>
    <!-- Type for int .e.g. Ticks & or name or enum wrapper -->
@@ -337,8 +339,9 @@
    <!ATTLIST intOption radix         CDATA        #IMPLIED>
    <!ATTLIST intOption isNamedClock  (true)       #IMPLIED>
    <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
-   <!ATTLIST intOption addToVar            CDATA        #IMPLIED>
-   <!ATTLIST intOption logging            CDATA        #IMPLIED>
+   <!ATTLIST intOption addToVar      CDATA        #IMPLIED>
+   <!-- Log changes to associated variable -->
+   <!ATTLIST intOption logging       (true)       #IMPLIED>
    
   
 <!ELEMENT bitmaskOption EMPTY >
@@ -360,7 +363,7 @@
    <!ATTLIST bitmaskOption hidden         (false|true) #IMPLIED>
    <!-- Option value is derived and should not be saved -->
    <!ATTLIST bitmaskOption derived        (true)       #IMPLIED>
-   <!-- Expression enables this option -->
+   <!-- Expression enables this option- 'expression#primaryVar#message' -->
    <!ATTLIST bitmaskOption enabledBy      CDATA        #IMPLIED> 
    <!-- Dynamic expression that disables and hides this option -->
    <!ATTLIST bitmaskOption hiddenBy       CDATA        #IMPLIED>
@@ -378,7 +381,7 @@
    <!-- Type for bitmask -->
    <!ATTLIST bitmaskOption typeName       CDATA        #IMPLIED>
    <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
-   <!ATTLIST bitmaskOption enumType       CDATA        #IMPLIED>
+   <!ATTLIST bitmaskOption baseType       CDATA        #IMPLIED>
    <!-- C #if expression to guard enum declaration -->
    <!ATTLIST bitmaskOption enumGuard           CDATA        #IMPLIED>
     <!-- Bit mask indicating active bits.  May be zero to indicate calculation from bitList -->
@@ -395,7 +398,10 @@
    <!ATTLIST bitmaskOption addToVar       CDATA        #IMPLIED>
    <!-- Reference to a choice variable to obtain information from -->
    <!ATTLIST bitmaskOption uses           CDATA        #IMPLIED>
-   <!ATTLIST bitmaskOption logging            CDATA        #IMPLIED>
+   <!-- Log changes to associated variable -->
+   <!ATTLIST bitmaskOption logging        (true)       #IMPLIED>
+   <!-- Used to control generation of enum (default is true) -->
+   <!ATTLIST bitmaskOption generateEnum   (empty|false)  #IMPLIED>
 
 <!ELEMENT floatOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -416,7 +422,7 @@
    <!ATTLIST floatOption hidden        (false|true) #IMPLIED>
    <!-- Option value is derived and should not be saved -->
    <!ATTLIST floatOption derived       (true)       #IMPLIED>
-   <!-- Expression enables this option -->
+   <!-- Expression enables this option- 'expression#primaryVar#message' -->
    <!ATTLIST floatOption enabledBy     CDATA        #IMPLIED> 
    <!-- Dynamic expression that disables and hides this option -->
    <!ATTLIST floatOption hiddenBy      CDATA        #IMPLIED>
@@ -445,8 +451,9 @@
    <!ATTLIST floatOption max           CDATA        #IMPLIED>
    <!ATTLIST floatOption derivedFrom   CDATA        #IMPLIED>
    <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
-   <!ATTLIST floatOption addToVar            CDATA        #IMPLIED>
-   <!ATTLIST floatOption logging            CDATA        #IMPLIED>
+   <!ATTLIST floatOption addToVar      CDATA        #IMPLIED>
+   <!-- Log changes to associated variable -->
+   <!ATTLIST floatOption logging       (true)       #IMPLIED>
 
 <!ELEMENT stringOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -483,10 +490,11 @@
    <!ATTLIST stringOption target           CDATA        #IMPLIED>
    <!ATTLIST stringOption code             CDATA        #IMPLIED>
    <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
-   <!ATTLIST stringOption addToVar            CDATA        #IMPLIED>
-     <!-- Expression enables this option -->
-   <!ATTLIST stringOption enabledBy           CDATA        #IMPLIED>
-   <!ATTLIST stringOption logging            CDATA        #IMPLIED>
+   <!ATTLIST stringOption addToVar         CDATA        #IMPLIED>
+     <!-- Expression enables this option- 'expression#primaryVar#message' -->
+   <!ATTLIST stringOption enabledBy        CDATA        #IMPLIED>
+   <!-- Log changes to associated variable -->
+   <!ATTLIST stringOption logging          (true)       #IMPLIED>
   
 <!ELEMENT numericListOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -515,8 +523,9 @@
    <!ATTLIST numericListOption max           CDATA        #IMPLIED>
    <!ATTLIST numericListOption derivedFrom   CDATA        #IMPLIED>
    <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
-   <!ATTLIST numericListOption addToVar            CDATA        #IMPLIED>
-   <!ATTLIST numericListOption logging            CDATA        #IMPLIED>
+   <!ATTLIST numericListOption addToVar      CDATA        #IMPLIED>
+   <!-- Log changes to associated variable -->
+   <!ATTLIST numericListOption logging       (true)       #IMPLIED>
   
 <!-- Signal to add a dependency -->
 
@@ -546,8 +555,9 @@
    <!ATTLIST pinListOption size               CDATA        #IMPLIED>
    <!ATTLIST pinListOption derivedFrom        CDATA        #IMPLIED>
    <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
-   <!ATTLIST pinListOption addToVar            CDATA        #IMPLIED>
-   <!ATTLIST pinListOption logging            CDATA        #IMPLIED>
+   <!ATTLIST pinListOption addToVar           CDATA        #IMPLIED>
+   <!-- Log changes to associated variable -->
+   <!ATTLIST pinListOption logging            (true)       #IMPLIED>
 
 <!ELEMENT clockSelectionOption ((choice)*) >
    <!-- Visible name of option - also used for key if not provided -->
@@ -580,7 +590,7 @@
    <!-- Name for enum and first part of enum values -->
    <!ATTLIST clockSelectionOption typeName            CDATA        #IMPLIED>
    <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
-   <!ATTLIST clockSelectionOption enumType            CDATA        #IMPLIED>
+   <!ATTLIST clockSelectionOption baseType            CDATA        #IMPLIED>
       <!-- C #if expression to guard enum declaration -->
    <!ATTLIST clockSelectionOption enumGuard           CDATA        #IMPLIED>
 <!-- Text to add to enum body generated from choices -->
@@ -595,7 +605,8 @@
    <!ATTLIST clockSelectionOption disabledValue       CDATA        #IMPLIED>
    <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
    <!ATTLIST clockSelectionOption addToVar            CDATA        #IMPLIED>
-   <!ATTLIST clockSelectionOption logging            CDATA        #IMPLIED>
+   <!-- Log changes to associated variable -->
+   <!ATTLIST clockSelectionOption logging             (true)       #IMPLIED>
    
 <!ELEMENT choiceOption ((choice|choiceExpansion)*) >
    <!-- Visible name of option - also used for key if not provided -->
@@ -616,7 +627,7 @@
    <!ATTLIST choiceOption hidden              CDATA        #IMPLIED>
    <!-- Value is derived and should not be saved -->
    <!ATTLIST choiceOption derived             (true)       #IMPLIED>
-   <!-- Expression enables this option -->
+   <!-- Expression enables this option- 'expression#primaryVar#message' -->
    <!ATTLIST choiceOption enabledBy           CDATA        #IMPLIED>
    
    <!--Used with enum generation to give explicit template name to enum template -->
@@ -646,7 +657,7 @@
    <!-- Name for enum and first part of enum values -->
    <!ATTLIST choiceOption typeName            CDATA        #IMPLIED>
    <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
-   <!ATTLIST choiceOption enumType            CDATA        #IMPLIED>
+   <!ATTLIST choiceOption baseType            CDATA        #IMPLIED>
    <!-- C #if expression to guard enum declaration -->
    <!ATTLIST choiceOption enumGuard           CDATA        #IMPLIED>
    <!-- Name of register. If not provided it is derived from variable -->
@@ -675,7 +686,10 @@
    
    <!-- List of pin mappings applied if option disabled#Expression to enable use of any pin map -->
    <!ATTLIST choiceOption disabledPinMap      CDATA        #IMPLIED>
-   <!ATTLIST choiceOption logging            CDATA        #IMPLIED>
+   <!-- Log changes to associated variable -->
+   <!ATTLIST choiceOption logging             (true) #IMPLIED>
+   <!-- Create choice values as constants rather than as an enum -->
+   <!ATTLIST choiceOption createAsConstants   (true) #IMPLIED>
 
 <!ELEMENT choice EMPTY >
 
@@ -741,7 +755,7 @@
    <!ATTLIST binaryOption hidden              CDATA      #IMPLIED>
    <!-- Value is derived and should not be saved -->
    <!ATTLIST binaryOption derived             (true)       #IMPLIED>
-   <!-- Expression enables this option -->
+   <!-- Expression enables this option- 'expression#primaryVar#message' -->
    <!ATTLIST binaryOption enabledBy           CDATA        #IMPLIED>
    <!-- Dynamic expression that disables and hides this option -->
    <!ATTLIST binaryOption hiddenBy            CDATA        #IMPLIED>
@@ -775,11 +789,11 @@
    <!-- Name for enum and first part of enum values -->
    <!ATTLIST binaryOption typeName            CDATA        #IMPLIED>
    <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
-   <!ATTLIST binaryOption enumType            CDATA        #IMPLIED>
+   <!ATTLIST binaryOption baseType            CDATA        #IMPLIED>
    <!-- C #if expression to guard enum declaration -->
-   <!ATTLIST choiceOption enumGuard           CDATA        #IMPLIED>
+   <!ATTLIST binaryOption enumGuard           CDATA        #IMPLIED>
    <!-- Name of register. If not provided it is derived from variable -->
-   <!ATTLIST choiceOption register            CDATA        #IMPLIED>
+   <!ATTLIST binaryOption register            CDATA        #IMPLIED>
    <!-- Text to add to enum body generated from choices -->
    <!ATTLIST binaryOption enumText            CDATA        #IMPLIED>
    <!-- Name of register. If not provided it is derived from variable -->
@@ -802,7 +816,8 @@
 
    <!-- List of pin mappings applied if option disabled#Expression to enable use of any pin map -->
    <!ATTLIST binaryOption disabledPinMap      CDATA        #IMPLIED>
-   <!ATTLIST binaryOption logging            CDATA        #IMPLIED>
+   <!-- Log changes to associated variable -->
+   <!ATTLIST binaryOption logging             (true)       #IMPLIED>
 
 <!ELEMENT irqOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -821,7 +836,7 @@
    <!ATTLIST irqOption locked        (false|true) #IMPLIED>
    <!-- Hides option in GUI -->
    <!ATTLIST irqOption hidden        (false|true) #IMPLIED>
-   <!-- Expression enables this option -->
+   <!-- Expression enables this option- 'expression#primaryVar#message' -->
    <!ATTLIST irqOption enabledBy     CDATA        #IMPLIED>
 
    <!-- Equation that controls this variable -->
@@ -844,10 +859,11 @@
         The variable behind this option is shared -->
    <!ATTLIST irqOption modify        CDATA        #IMPLIED>
    <!-- Replace existing variable associated with option quietly -->
-   <!ATTLIST irqOption replace        CDATA        #IMPLIED>
+   <!ATTLIST irqOption replace       CDATA        #IMPLIED>
    <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
-   <!ATTLIST choiceOption addToVar            CDATA        #IMPLIED>
-   <!ATTLIST choiceOption logging            CDATA        #IMPLIED>
+   <!ATTLIST irqOption addToVar   CDATA        #IMPLIED>
+   <!-- Log changes to associated variable -->
+   <!ATTLIST irqOption logging    (true)       #IMPLIED>
 
 <!ELEMENT rtcTimeOption (#PCDATA)>
    <!-- Key for option - also used as visible name if not provided -->
@@ -866,7 +882,8 @@
    <!ATTLIST rtcTimeOption hidden        (false|true) #IMPLIED>
    <!-- This choice is enabled by an expression -->
    <!ATTLIST rtcTimeOption enabledBy     CDATA        #IMPLIED>
-   <!ATTLIST rtcTimeOption logging            CDATA        #IMPLIED>
+   <!-- Log changes to associated variable -->
+   <!ATTLIST rtcTimeOption logging       (true)       #IMPLIED>
       
 <!-- Describes pin mapping for a peripheral -->
 <!ELEMENT pinMapOption (choice?, choice?) >
@@ -882,7 +899,7 @@
    <!ATTLIST pinMapOption key                 CDATA        #REQUIRED>
    <!-- Replace existing variable associated with option quietly -->
    <!ATTLIST pinMapOption replace             CDATA        #IMPLIED>
-   <!-- Expression enables this option -->
+   <!-- Expression enables this option- 'expression#primaryVar#message' -->
    <!ATTLIST pinMapOption enabledBy           CDATA        #IMPLIED>
     <!-- Equation that controls this variable -->
    <!ATTLIST pinMapOption ref                 CDATA        #IMPLIED>
@@ -1045,7 +1062,7 @@
    <!-- Visible name of signal -->
    <!ATTLIST signals name        CDATA          "" >
    <!ATTLIST signals optional    (false|true)   #IMPLIED>
-   <!-- Expression enables this option -->
+   <!-- Expression enables this option- 'expression#primaryVar#message' -->
    <!ATTLIST signals enabledBy   CDATA          #IMPLIED>
    <!-- Locks option in GUI -->
    <!ATTLIST signals locked      CDATA          #IMPLIED>

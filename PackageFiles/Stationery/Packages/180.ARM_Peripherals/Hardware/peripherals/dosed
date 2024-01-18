@@ -17,8 +17,8 @@ read -d '' TOx <<EOF
       \</for\> 
 EOF
 
-FROM="%paramType %registerName0 = %symbolicExpression1"
-TO="%paramType %registerName0 = %defaultValue"
+FROM="enumType"
+TO="baseType"
 
 echo from "${FROM}"
 echo to "${TO}"

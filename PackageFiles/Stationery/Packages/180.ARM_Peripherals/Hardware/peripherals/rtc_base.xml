@@ -75,7 +75,7 @@
    <binaryOption key="rtc_cr_osce" condition="rtc_cr_osce_present&amp;&amp;!/SIM/RtcForcing"
       enabledBy="enablePeripheralSupport"
       typeName="RtcOscEnable"
-      enumType="uint16_t"
+      baseType="uint16_t"
       description="Enable RTC oscillator"
       toolTip="Enable 32kHz RTC oscillator">
       <choice value="0" enum="Disabled" name="Disabled" />
@@ -86,7 +86,7 @@
    <binaryOption key="rtc_cr_osce" condition="rtc_cr_osce_present&amp;&amp;/SIM/RtcForcing"
       ref="(/MCG/mcg_c2_oscMode == /OscMode_RTC_Controlled)?1:0"
       typeName="RtcOscEnable"
-      enumType="uint16_t"
+      baseType="uint16_t"
       locked="true"
       derived="true"
       hidden="true"
@@ -120,7 +120,7 @@
       <binaryOption key="rtc_cr_clko" condition="rtc_cr_clko_present"
          enabledBy="rtc_cr_osce"
          typeName="RtcClockOut"
-         enumType="uint16_t"
+         baseType="uint16_t"
          toolTip="Determines if RTC 32kHz Clock is available to peripherals"
          description="Enable RTC 32kHz Clock Output" >
          <choice value="1" enum="Disabled" name="Clock not output to peripherals" />
@@ -176,7 +176,7 @@
    <choiceOption key="rtc_cr_scp" condition="rtc_cr_scp_present"
       enabledBy="rtc_cr_osce"
       typeName="RtcOscLoadCap"
-      enumType="uint16_t"
+      baseType="uint16_t"
       description="Oscillator load capacitance"
       toolTip="Configures the oscillator load capacitance" >
       <choice value="0"  enum="None" name="0 pF" />
@@ -207,7 +207,7 @@
    <binaryOption key="rtc_cr_um" condition="rtc_cr_um_present"
       enabledBy="enablePeripheralSupport"
       typeName="RtcTimeCounterEnableUpdate"
-      enumType="uint16_t"
+      baseType="uint16_t"
       toolTip="Allows the time counter to be enabled even when the Status Register is locked.\n
                This allows the timer enable (SR[TCE]) value to be modified if:\n
                  - Timer not yet enabled (SR[TCE] clear)\n
@@ -221,7 +221,7 @@
    <binaryOption key="rtc_cr_sup" condition="rtc_cr_sup_present"
       enabledBy="enablePeripheralSupport"
       typeName="RtcUserWriteAccess"
-      enumType="uint16_t"
+      baseType="uint16_t"
       toolTip="Determines if the RTC register access is available in non-supervisor mode \n
                Non supported write accesses generate a bus error"
       description="Supervisor access" >
@@ -233,7 +233,7 @@
       <binaryOption key="rtc_lr_lrl" condition="rtc_lr_lrl_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcLockRegLock"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          toolTip="Once cleared, this bit can only be set by VBAT POR or software reset"
          description="Lock Register Lock" >
          <choice value="0" enum="Locked"   name="Locked" />
@@ -243,7 +243,7 @@
       <binaryOption key="rtc_lr_srl" condition="rtc_lr_srl_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcStatusRegLock"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          toolTip="Once cleared, this bit can only be set by VBAT POR or software reset"
          description="Status Register Lock" >
          <choice value="0" enum="Locked"   name="Locked" />
@@ -253,7 +253,7 @@
       <binaryOption key="rtc_lr_crl" condition="rtc_lr_crl_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcControlRegLock"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          toolTip="Once cleared, this bit can only be set by VBAT POR or software reset"
          description="Control Register Lock" >
          <choice value="0" enum="Locked"   name="Locked" />
@@ -263,7 +263,7 @@
       <binaryOption key="rtc_lr_tcl" condition="rtc_lr_tcl_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcTimeCompensationRegLock"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          description="Time Compensation Lock"
          toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
          <choice value="0" enum="Locked"   name="Locked" />
@@ -275,7 +275,7 @@
       <binaryOption key="rtc_war_ierw" condition="rtc_war_ierw_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcWarIerw"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Interrupt Enable Register Write" >
@@ -286,7 +286,7 @@
       <binaryOption key="rtc_war_lrw" condition="rtc_war_lrw_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcWarLrw"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Lock Register Write" >
@@ -297,7 +297,7 @@
       <binaryOption key="rtc_war_srw" condition="rtc_war_srw_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcWarSrw"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Status Register Write" >
@@ -318,7 +318,7 @@
       <binaryOption key="rtc_war_tcrw" condition="rtc_war_tcrw_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcWarTcrw"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Compensation Register Write" >
@@ -329,7 +329,7 @@
       <binaryOption key="rtc_war_tarw" condition="rtc_war_tarw_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcWarTarw"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Alarm Register Write" >
@@ -340,7 +340,7 @@
       <binaryOption key="rtc_war_tprw" condition="rtc_war_tprw_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcWarTprw"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Prescaler Register Write" >
@@ -351,7 +351,7 @@
       <binaryOption key="rtc_war_tsrw" condition="rtc_war_tsrw_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcWarTsrw"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Seconds Register Write" >
@@ -364,7 +364,7 @@
       <binaryOption key="rtc_rar_ierr" condition="rtc_rar_ierr_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarIerr"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Interrupt Enable Register Read" >
@@ -375,7 +375,7 @@
       <binaryOption key="rtc_rar_lrr" condition="rtc_rar_lrr_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarLrr"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Lock Register Read" >
@@ -386,7 +386,7 @@
       <binaryOption key="rtc_rar_srr" condition="rtc_rar_srr_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarSrr"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Status Register Read" >
@@ -397,7 +397,7 @@
       <binaryOption key="rtc_rar_crr" condition="rtc_rar_crr_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarCrr"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Control Register Read" >
@@ -408,7 +408,7 @@
       <binaryOption key="rtc_rar_tcrr" condition="rtc_rar_tcrr_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarTcrr"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Compensation Register Read" >
@@ -419,7 +419,7 @@
       <binaryOption key="rtc_rar_tarr" condition="rtc_rar_tarr_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarTarr"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Alarm Register Read" >
@@ -430,7 +430,7 @@
       <binaryOption key="rtc_rar_tprr" condition="rtc_rar_tprr_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarTprr"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Prescaler Register Read" >
@@ -441,7 +441,7 @@
       <binaryOption key="rtc_rar_tsrr" condition="rtc_rar_tsrr_present"
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarTsrr"
-         enumType="uint8_t"      
+         baseType="uint8_t"      
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Seconds Register Read" >
@@ -489,16 +489,16 @@
       derived="true"
       locked="true"
       typeName="Time"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Time in Seconds"
-      toolTip="When the time counter is enabled, the TSR is read only and increments once a second provided\n
-               SR[TOF] or SR[TIF] are not set.\n
+      toolTip="When the time counter is enabled, the TSR is read only and increments once a second\n
+               provided SR[TOF] or SR[TIF] are not set.\n
                The time counter will read as zero when SR[TOF] or SR[TIF] are set.\n
                When the time counter is disabled, the TSR can be read or written.\n
                Writing to the TSR when the time counter is disabled will clear the \n
                SR[TOF] and/or the SR[TIF]. \n
                Writing to TSR with zero is supported, but not recommended because\n
-               TSR will read as zero when SR[TIF] or SR[TOF] are set (indicating the time is invalid)."
+               TSR will read as zero when SR[TIF] or SR[TOF] are set (indicates time is invalid)."
    />
 
    <rtcTimeOption key="rtc_alarm_value"
@@ -512,7 +512,7 @@
       ref="rtc_alarm_value+60*60*rtc_timezone"
       derived="true"
       typeName="Alarm"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Alarm time in seconds"
       toolTip="When the time counter is enabled, the SR[TAF] is set whenever the TAR[TAR]\n
                equals the TSR[TSR] and the TSR[TSR] increments. Writing to the TAR clears the SR[TAF]."
@@ -523,14 +523,14 @@
                This value+32768 determines the number of clock cycles that makes up a second"
       description="Time Compensation Value"
       typeName="RtcCompensationValue"
-      enumType="int16_t"
+      baseType="int16_t"
       min="-128" max="127"
       value="0" />
 
    <intOption key="rtc_tcr_cir" condition="rtc_tcr_cir_present"
       enabledBy="rtc_tcr_tcr!=0"
       typeName="RtcCompensationInterval"
-      enumType="uint16_t"
+      baseType="uint16_t"
       description="Timer Compensation Interval"
       toolTip="Configures the compensation interval that controls how frequently the Time Compensation value \n
          		is applied to alter the number of 32.768 kHz cycles in each second. \n
@@ -541,7 +541,7 @@
    <intOption key="rtc_tpr_tpr" condition="rtc_tpr_tpr_present"
       hidden="true"
       typeName="Prescale"
-      enumType="uint16_t"
+      baseType="uint16_t"
       description="Time Prescaler Register"
       toolTip="When the time counter is enabled, the TPR is read only and increments every 32.768 kHz clock cycle.\n
                The time counter will read as zero when SR[TOF] or SR[TIF] are set.\n
@@ -553,7 +553,7 @@
    <intOption key="rtc_tcr_cic" condition="rtc_tcr_cic_present"
       hidden="true"
       typeName="Compensation"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Compensation Interval Counter"
       toolTip="Current value of the compensation interval counter"
       value="0"
@@ -575,7 +575,7 @@
    <binaryOption key="rtc_cr_swr" condition="rtc_cr_swr_present"
       hidden="true"
       typeName="RtcSoftwareReset"
-      enumType="uint16_t"
+      baseType="uint16_t"
       toolTip="Resets all RTC registers except for the SWR bit and the RTC_WAR and RTC_RAR registers.\n
                The SWR bit is cleared by VBAT POR and by software explicitly clearing it"
       description="Software Reset" >
@@ -588,7 +588,7 @@
    <binaryOption key="rtc_sr_tce" condition="rtc_sr_tce_present"
       hidden="true"
       typeName="RtcCounterEnable"
-      enumType="uint8_t"
+      baseType="uint8_t"
       toolTip="When disabled the TSR register and TPR register are writeable, but do not increment.\n
                When enabled the TSR register and TPR register are not writeable, but increment."
       description="Time Counter Enable" >
@@ -599,7 +599,7 @@
    <binaryOption key="rtc_sr_taf" condition="rtc_sr_taf_present"
       hidden="true"
       typeName="RtcTimeAlarmFLag"
-      enumType="uint8_t"      
+      baseType="uint8_t"      
       toolTip="Set when alarm time reached"
       description="Time Alarm Flag" >
       <choice name="No alarm"        value="0" enum="NoAlarm" />
@@ -609,7 +609,7 @@
    <binaryOption key="rtc_sr_tof" condition="rtc_sr_tof_present"
       hidden="true"
       typeName="RtcTimerOverflowFlag"
-      enumType="uint8_t"      
+      baseType="uint8_t"      
       toolTip="Indicates time overflow has occurred"
       description="Time Overflow Flag" >
       <choice name="No overflow"  value="0" enum="NoOverflow" />
@@ -619,7 +619,7 @@
    <binaryOption key="rtc_sr_tif" condition="rtc_sr_tif_present"
       hidden="true"
       typeName="RtcTimeInvalidFlag"
-      enumType="uint8_t"      
+      baseType="uint8_t"      
       toolTip="Indicates if the time is valid"
       description="Time Invalid Flag" >
       <choice name="Valid"       value="0" enum="Valid" />
@@ -631,7 +631,7 @@
    <binaryOption key="rtc_ier_tsie" condition="rtc_ier_tsie_present"
       enabledBy="enablePeripheralSupport"
       typeName="RtcSecondsAction"
-      enumType="uint8_t"      
+      baseType="uint8_t"      
       toolTip="The seconds interrupt is an edge-sensitive interrupt with a dedicated interrupt vector.\n
                It is generated once a second and requires no software overhead\n
                (there is no corresponding status flag to clear)."
@@ -643,7 +643,7 @@
    <binaryOption key="rtc_ier_taie" condition="rtc_ier_taie_present"
       enabledBy="enablePeripheralSupport"
       typeName="RtcAlarmAction"
-      enumType="uint8_t"      
+      baseType="uint8_t"      
       toolTip="Interrupt enable for Alarm"
       description="Time Alarm Interrupt Enable" >
       <choice name="Masked"      value="0" enum="None" />
@@ -653,7 +653,7 @@
    <binaryOption key="rtc_ier_toie" condition="rtc_ier_toie_present"
       enabledBy="enablePeripheralSupport"
       typeName="RtcOverflowAction"
-      enumType="uint8_t"      
+      baseType="uint8_t"      
       toolTip="Interrupt enable for overflow"
       description="Time Overflow Interrupt Enable" >
       <choice name="Masked"      value="0" enum="None" />
@@ -663,7 +663,7 @@
    <binaryOption key="rtc_ier_tiie" condition="rtc_ier_tiie_present"
       enabledBy="enablePeripheralSupport"
       typeName="RtcTimeInvalidAction"
-      enumType="uint8_t"      
+      baseType="uint8_t"      
       toolTip="Interrupt enable for time valule invalid"
       description="Time Invalid Interrupt Enable" >
       <choice name="Masked"      value="0" enum="None" />
@@ -677,7 +677,7 @@
    <binaryOption key="rtc_cr_wps" condition="rtc_cr_wps_present"
       enabledBy="enablePeripheralSupport"
       typeName="RtcWakeupPinFunction"
-      enumType="uint16_t"
+      baseType="uint16_t"
       toolTip="Selects function of Wake-up pin (if present)\n
                - Asserts if the RTC interrupt asserts or the wake-up pin is turned on\n
                - Outputs the RTC 32kHz clock if wake-up pin is enabled and 32kHz clock available to peripherals"
@@ -689,7 +689,7 @@
    <binaryOption key="rtc_cr_wpe" condition="rtc_cr_wpe_present"
       enabledBy="enablePeripheralSupport"
       typeName="RtcWakeupPin"
-      enumType="uint16_t"
+      baseType="uint16_t"
       toolTip="Determines if the wake-up pin is asserted on RTC interrupt when powered down. \n
                The wake-up pin is optional and not available on all devices"
       description="Wake-up Pin Enable" >
@@ -700,7 +700,7 @@
    <binaryOption key="rtc_ier_wpon" condition="rtc_ier_wpon_present"
       enabledBy="enablePeripheralSupport"
       typeName="RtcWakeupPinControl"
-      enumType="uint8_t"      
+      baseType="uint8_t"      
       toolTip="Whenever the wake-up pin is enabled and this bit is set, the wake-up pin will assert.\n
                The wake-up pin is optional and not available on all devices."
       description="Wake-up Pin Control" >
@@ -1125,20 +1125,20 @@
    ]]></template>
 
    <for keys=" type        : variables                                         : init    "
-       values="%enumType   : rtc_tsr_tsr                                       : 0       ;
-               %enumType   : rtc_tpr_tpr                                       : 0       ;
-               %enumType   : rtc_tar_tar                                       : 0       ;
-               %enumType   : rtc_tcr_cir,rtc_tcr_tcr                           : 0       ;
-               %enumType   : rtc_cr_scp,rtc_cr_clko,rtc_cr_osce,
+       values="%baseType   : rtc_tsr_tsr                                       : 0       ;
+               %baseType   : rtc_tpr_tpr                                       : 0       ;
+               %baseType   : rtc_tar_tar                                       : 0       ;
+               %baseType   : rtc_tcr_cir,rtc_tcr_tcr                           : 0       ;
+               %baseType   : rtc_cr_scp,rtc_cr_clko,rtc_cr_osce,
                              rtc_cr_wps,rtc_cr_um,rtc_cr_sup,
                              rtc_cr_wpe                                        : 0       ;
-               %enumType   : rtc_lr_lrl,rtc_lr_srl,rtc_lr_crl,rtc_lr_tcl       : 0       ;
-               %enumType   : rtc_ier_wpon,rtc_ier_tsie,rtc_ier_taie,
+               %baseType   : rtc_lr_lrl,rtc_lr_srl,rtc_lr_crl,rtc_lr_tcl       : 0       ;
+               %baseType   : rtc_ier_wpon,rtc_ier_tsie,rtc_ier_taie,
                              rtc_ier_toie,rtc_ier_tiie                         : 0       ;
-               %enumType   : rtc_war_ierw,rtc_war_lrw,rtc_war_srw,
+               %baseType   : rtc_war_ierw,rtc_war_lrw,rtc_war_srw,
                              rtc_war_crw,rtc_war_tcrw,rtc_war_tarw,
                              rtc_war_tprw,rtc_war_tsrw                         : 0       ;
-               %enumType   : rtc_rar_ierr,rtc_rar_lrr,rtc_rar_srr,
+               %baseType   : rtc_rar_ierr,rtc_rar_lrr,rtc_rar_srr,
                              rtc_rar_crr,rtc_rar_tcrr,rtc_rar_tarr,
                              rtc_rar_tprr,rtc_rar_tsrr                         : 0       ">
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"

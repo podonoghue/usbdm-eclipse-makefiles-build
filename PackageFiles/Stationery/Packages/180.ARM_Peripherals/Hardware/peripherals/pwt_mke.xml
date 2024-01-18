@@ -4,9 +4,9 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Pulse Width Timer" >
 
-   <constant key="irq_parameters"            type="String"  value="&quot;&quot;"  />
-   <constant key="irq_dummy_parameters"      type="String"  value="&quot;&quot;"  />
-   <constant key="irq_call"                  type="String"  value="&quot;&quot;"  />
+   <constant key="irq_parameters"            type="String"  value='""'  />
+   <constant key="irq_dummy_parameters"      type="String"  value='""'  />
+   <constant key="irq_call"                  type="String"  value='""'  />
    <constant key="generateDefault"           type="Boolean" value="false"         />
    <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
@@ -49,11 +49,11 @@
     * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
 -->
 
-   <!-- ************* Class Declaration ****************** -->
+   <!-- _____________ Class Declaration __________________ -->
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
+      value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
 
-   <!-- ************* R1 ****************** -->
+   <!-- _____________ R1 __________________ -->
 
    <binaryOption key="pwt_r1_pwten" condition="pwt_r1_pwten_present"
       enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
@@ -68,10 +68,11 @@
    <binaryOption key="pwt_r1_pclks" condition="pwt_r1_pclks_present"
       enabledBy="pwt_r1_pwten"
       typeName="PwtClockSource"
+      target="inputClockFrequency"
       toolTip="Controls the selection of clock source for the PWT counter"
       description="PWT Clock Source Selection" >
-      <choice name="Timer clock"             value="0" enum="TimerClock"/>
-      <choice name="Alternative clock(TCLK)" value="1" enum="AlternativeClock"/>
+      <choice name="Timer clock"             value="0" enum="TimerClock"        ref="/SIM/system_timer_clock[0]" code="SystemTimerClock" />
+      <choice name="Alternative clock(TCLK)" value="1" enum="AlternativeClock"  ref="/SIM/pwtExternalClock"      code="SimInfo::getPwtExternalClockFrequency()" />
    </binaryOption >
 
    <binaryOption key="externalClockUsed"
@@ -84,17 +85,24 @@
       <choice value="1" name="External clock used"   />
    </binaryOption>
 
+   <intOption key="inputClockFrequency"
+      enabledBy="enablePeripheralSupport"
+      locked="true"
+      description="Frequency of input clock to timer"
+      derived="true"
+      units="Hz"/>
+
    <!-- Controlled by sim_mke04z4.xml -->
    <choiceOption key="pwt_r1_pinsel" condition="pwt_r1_pinsel_present &amp;&amp; inputMapping[]"
       enabledBy="pwt_r1_pwten"
       typeName="PwtInput"
       toolTip="Enables the corresponding PWT input port, if this PWT input comes from an external source"
       description="PWT Pulse Input Selection"
-      disabledPinMap="PWT_IN0,;PWT_IN1," >
-      <choice name="=inputMapping[0]"  value="0" enum="=inputMapping[0]" pinMap="=&quot;PWT_IN0,&quot;+inputMapping[0]+&quot;;PWT_IN1,;PWT_IN2,;PWT_IN3,&quot;" />
-      <choice name="=inputMapping[1]"  value="1" enum="=inputMapping[1]" pinMap="=&quot;PWT_IN0,;PWT_IN1,&quot;+inputMapping[1]+&quot;;PWT_IN2,;PWT_IN3,&quot;" />
-      <choice name="=inputMapping[2]"  value="2" enum="=inputMapping[2]" pinMap="=&quot;PWT_IN0,;PWT_IN1,;PWT_IN2,&quot;+inputMapping[2]+&quot;;PWT_IN3,&quot;"/>
-      <choice name="=inputMapping[3]"  value="3" enum="=inputMapping[3]" pinMap="=&quot;PWT_IN0,;PWT_IN1,;PWT_IN2,;PWT_IN3,&quot;+inputMapping[3]"/>
+      disabledPinMap="PWT_IN0,;PWT_IN1,;PWT_IN2,;PWT_IN3," >
+      <choice name="=inputMapping[0]"  value="0" enum="=inputMapping[0]" pinMap='="PWT_IN0,"+inputMapping[0]+";PWT_IN1,;PWT_IN2,;PWT_IN3,"' />
+      <choice name="=inputMapping[1]"  value="1" enum="=inputMapping[1]" pinMap='="PWT_IN0,;PWT_IN1,"+inputMapping[1]+";PWT_IN2,;PWT_IN3,"' />
+      <choice name="=inputMapping[2]"  value="2" enum="=inputMapping[2]" pinMap='="PWT_IN0,;PWT_IN1,;PWT_IN2,"+inputMapping[2]+";PWT_IN3,"'/>
+      <choice name="=inputMapping[3]"  value="3" enum="=inputMapping[3]" pinMap='="PWT_IN0,;PWT_IN1,;PWT_IN2,;PWT_IN3,"+inputMapping[3]'/>
    </choiceOption >
 
    <choiceOption key="pwt_r1_pinsel" condition="pwt_r1_pinsel_present &amp;&amp; inputNames[]"
@@ -612,7 +620,7 @@
    ]]>
    </template>
 
-   <!-- ************* Common ****************** -->
+   <!-- _____________ Common __________________ -->
 
    <template key="/$(_BASENAME)/declarations" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
    \t/**
@@ -629,7 +637,7 @@
       <copy source="Project_Headers/pwt-MKE.h"  target="Project_Headers/pwt.h"  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <!-- ************* Startup ****************** -->
+   <!-- _____________ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -641,28 +649,18 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ************* SIM configuration ****************** -->
-   <category name="Advanced" description="SIM configuration">
+   <!-- ____ SIM configuration __________________ -->
+
+   <category name="Advanced" description="SIM configuration"
+      toolTip="These settings only have effect if the SIM configuration is enabled" >
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
       <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
-      <title/>
-      
-      <aliasOption key="/SIM/sim_pinsel0_$(_name)clkps"     locked="false" optional="true" />
-
-      <aliasOption key="/SIM/sim_sopt1_acpwts"       locked="false" optional="true" />
-      <aliasOption key="/SIM/sim_sopt1_uartpwts"     locked="false" optional="true" />
-
-      <for keys="ch" dim="4" >
-         <aliasOption key="/SIM/sim_pinsel0_$(_name)in%(ch)ps" locked="false" optional="true" />
-         <aliasOption key="/SIM/sim_pinsel1_$(_name)in%(ch)ps" locked="false" optional="true" />
-      </for>
    </category>
-   <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
-
-   <signals enabledBy="enablePeripheralSupport" locked="true" />
+   <!--  ____ Signal mapping __________________ -->
+   <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
    <signals name="FTM" />
 
 </peripheralPage>

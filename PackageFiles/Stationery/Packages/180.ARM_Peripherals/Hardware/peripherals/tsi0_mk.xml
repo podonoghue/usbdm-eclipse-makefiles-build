@@ -115,7 +115,7 @@
 
    <intOption key="tsi_gencs_nscn"
       enabledBy="enablePeripheralSupport"
-      enumType="uint8_t"
+      baseType="uint8_t"
       typeName="TsiConsecutiveScan"
       description="Consecutive Scan number"
       toolTip="Number of Consecutive Scans Per Electrode"
@@ -209,7 +209,7 @@
 
    <intOption key="tsi_scanc_smod" condition="tsi_scanc_smod_present"
       enabledBy="enablePeripheralSupport"
-      enumType="uint8_t"
+      baseType="uint8_t"
       typeName="TsiScanPeriod"
       description="Scan Period Modulus"
       toolTip="Modulus == 0 indicates continuous mode"
@@ -320,7 +320,7 @@
       enabledBy="enablePeripheralSupport"
       description="Low Power Channel Low Threshold value"
       toolTip="Determines the low threshold for the channel active in low power mode"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="TsiLowThreshold"
       min="0" max="15625" value="0" />
 
@@ -328,7 +328,7 @@
       enabledBy="enablePeripheralSupport"
       description="Low Power Channel High Threshold value"
       toolTip="Determines the high threshold for the channel active in low power mode"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="TsiHighThreshold"
       min="0" max="15625" value="0" />
 

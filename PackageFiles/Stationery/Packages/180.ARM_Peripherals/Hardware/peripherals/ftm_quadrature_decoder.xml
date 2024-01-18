@@ -50,7 +50,7 @@
       <binaryOption key="ftm_qdctrl_quadmode" condition="ftm_qdctrl_quadmode_present"
          enabledBy="enablePeripheralSupport"
          typeName="FtmQuadratureMode"
-         enumType="uint8_t"
+         baseType="uint8_t"
          description="Quadrature decoding mode"
          toolTip="Determines how the inputs control the counting sequence" >
          <choice value="0" name="Phase-AB Mode"         enum="Phase_AB_Mode" />
@@ -64,7 +64,7 @@
       <binaryOption key="ftm_qdctrl_phapol" condition="ftm_qdctrl_phapol_present"
          enabledBy="enablePeripheralSupport"
          typeName="FtmPhaseAPolarity"
-         enumType="uint8_t"
+         baseType="uint8_t"
          description="Polarity of Phase A input"
          toolTip="Polarity of Phase A input" >
          <choice value="0" name="Active High" enum="ActiveHigh" />
@@ -74,7 +74,7 @@
       <choiceOption key="ftm_filter_qd_a" condition="ftm_qdctrl_phafltren_present"
          enabledBy="enablePeripheralSupport"
          valueFormat="(FTM_QDCTRL_PHAFLTREN(%s)&lt;&lt;8),FTM_FILTER_CH0FVAL(%s)"
-         enumType="uint16_t"
+         baseType="uint16_t"
          typeName="FtmPhaseAFilter"
          description="Filtering on Phase A input"
          toolTip="Filtering on Phase A input" >
@@ -108,7 +108,7 @@
       <choiceOption key="ftm_filter_qd_b" condition="ftm_qdctrl_phbfltren_present"
          enabledBy="enablePeripheralSupport"
          valueFormat="(FTM_QDCTRL_PHBFLTREN(%s)&lt;&lt;8),FTM_FILTER_CH1FVAL(%s)"
-         enumType="uint16_t"
+         baseType="uint16_t"
          typeName="FtmPhaseBFilter"
          description="Filtering on Phase B input"
          toolTip="Filtering on Phase B input" >
@@ -221,12 +221,13 @@
       ]]></variableTemplate>
 
       <for keys=" type        : variables                        : init    "
-          values="%enumType   : ftm_filter_qd_a,ftm_filter_qd_b  : 0       ;
-                  %enumType   : ftm_qdctrl_quadmode              : 0       ;
-                  %enumType   : ftm_sc_action,ftm_sc_ps          : 0       ;
-                  %enumType   : ftm_mod                          : 0       ">
+          values="%baseType   : ftm_filter_qd_a,ftm_filter_qd_b  : 0       ;
+                  %baseType   : ftm_qdctrl_quadmode              : 0       ;
+                  %baseType   : ftm_sc_action,ftm_sc_ps          : 0       ;
+                  %baseType   : ftm_mod_mod                      : 0       ">
          <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
             variables="%(variables)"
+            linePadding="xxx" 
          ><![CDATA[
             %multilineDescription
             \t   %(type) %registerName = %(init);\n\n
@@ -281,7 +282,7 @@
       <for keys="r" values="
          ftm_qdctrl_quadmode;ftm_qdctrl_phapol;ftm_qdctrl_phbpol;
          ftm_sc_action;ftm_sc_ps;
-         ftm_mod" >
+         ftm_mod_mod" >
          <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
             variables="%(r)"
             linePadding="xxx"
@@ -376,12 +377,15 @@
       values=" ftm_sc_action,ftm_sc_ps                                  : %register = 0           ;
                ftm_qdctrl_quadmode,ftm_qdctrl_phapol,ftm_qdctrl_phbpol  : %register = 0           ;
                ftm_cntin                                                : %register = 0           ;
-               ftm_mod                                                  : %configRegAssignment    ;
-               ftm_cnt                                                  : %register = 0           ;
+               ftm_mod_mod                                              : %configRegAssignment    ;
+               ftm_cnt_count                                            : %register = 0           ;
                ftm_sc_action,ftm_sc_ps                                  : %configRegAssignment    ;
                ftm_filter_qd_a,ftm_filter_qd_b                          : %configRegAssignment    ;
                ftm_qdctrl_phapol,ftm_qdctrl_phbpol,ftm_qdctrl_quadmode  : %configRegAssignment|FTM_QDCTRL_QUADEN_MASK    " >
-         <variableTemplate variables="%(var)" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+         <variableTemplate codeGenCondition="enablePeripheralSupport" 
+            variables="%(var)" 
+            linePadding="xxx"
+         ><![CDATA[
             \t
             %multilineDescription
             \t   %(statement);\n
@@ -402,7 +406,7 @@
             ftm_qdctrl_quadmode,
             ftm_sc_action,
             ftm_sc_ps,
-            ftm_mod,
+            ftm_mod_mod,
             ftm_qdctrl_phapol,
             ftm_qdctrl_phbpol,
             ftm_filter_qd_a,

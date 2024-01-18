@@ -58,7 +58,7 @@
          hidden="true"
          valueFormat="ADC_SC1_ADCH(%s)"
          typeName="AdcChannelNum"
-         enumType="uint8_t"
+         baseType="uint8_t"
          toolTip="Selects an ADC channel"
          description="ADC Channel number" >
          <choiceExpansion keys="ch" dim="31" value="%(ch)" name="Channel %(ch)" enum="%(ch)" />
@@ -69,7 +69,7 @@
          hidden="true"
          valueFormat="ADC_SC1_DIFF(%s),ADC_SC1_ADCH(%s)"
          typeName="AdcChannelNum"
-         enumType="uint8_t"
+         baseType="uint8_t"
          toolTip="Selects an ADC channel"
          description="ADC Channel number" >
          <choiceExpansion keys="ch" dim="31"  value="0,%(ch)" name="Channel %(ch)"   enum="%(ch)"      />
@@ -81,7 +81,7 @@
       hidden="true"
       valueFormat="ADC_SC1_ADCH(%s)"
       typeName="AdcChannelNumB"
-      enumType="uint8_t"
+      baseType="uint8_t"
          toolTip="Selects an ADC channel (alternative B)"
       description="ADC Channel number" >
       <choiceExpansion keys="ch" dim="4,7" value="%(ch)" name="Channel %(ch) B" enum="%(ch)"     />
@@ -432,8 +432,7 @@
          \t *
          %paramDescription
          \t */
-         \tstatic void set%(name)(
-         %params) {
+         \tstatic void set%(name)(%params) {
          \t   %register1[%paramName0] = (%register1[%paramName0]&~%mask1)|%paramName1; // %(field)
          \t}
          \t\n
@@ -964,8 +963,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      %registerName1[%paramName0] = %paramName1|%paramName2;
       \t   }

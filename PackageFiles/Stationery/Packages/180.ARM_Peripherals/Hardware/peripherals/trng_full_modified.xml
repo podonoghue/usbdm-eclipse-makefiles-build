@@ -196,7 +196,7 @@
    <intOption key="trng_scmisc_rty_ct" condition="trng_scmisc_rty_ct_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngScmiscRtyCt"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Retry Count"
       toolTip="If a statistical check fails during the TRNG Entropy Generation, the RTY_CT value\n
                indicates the number of times a retry should occur before generating an error.\n
@@ -209,7 +209,7 @@
    <intOption key="trng_scmisc_lrun_max" condition="trng_scmisc_lrun_max_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngScmiscLrunMax"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Long Run Limit"
       toolTip="This value is the largest allowable number of consecutive samples of all 1, or all 0 \n
                that is allowed during the Entropy generation.\n
@@ -226,7 +226,7 @@
    <intOption key="trng_pkrrng_pkr_rng" condition="trng_pkrrng_pkr_rng_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngPkrrngPkrRng"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Poker Range"
       toolTip="During the TRNG Statistical Checks, a Poker Test is run which requires a maximum and minimum limit.\n
                The maximum is programmed in the PKRMAX[PKR_MAX] register, and the minimum is derived by subtracting\n
@@ -243,7 +243,7 @@
    <intOption key="trng_pkrmax_pkr_max" condition="trng_pkrmax_pkr_max_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngPkrmaxPkrMax"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Poker Maximum Limit"
       toolTip="During the TRNG Statistical Checks, a Poker Test is run which requires a maximum and minimum limit.\n
                The maximum allowable result is programmed in the TRNG0_PKRMAX[PKR_MAX] register. \n
@@ -277,7 +277,7 @@
    <intOption key="trng_sdctl_ent_dly" condition="trng_sdctl_ent_dly_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngSdctlEntDly"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Entropy Delay"
       toolTip="Defines the length (in system clocks) of each Entropy sample taken.\n
                This field is writable only if TRNG0_MCTL[PRGM] bit is 1.\n
@@ -289,7 +289,7 @@
    <intOption key="trng_sdctl_samp_size" condition="trng_sdctl_samp_size_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngSdctlSampSize"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Sample Size"
       toolTip="Defines the total number of Entropy samples that will be taken during Entropy generation.\n
                This field is writable only if TRNG0_MCTL[PRGM] bit is 1.\n
@@ -303,7 +303,7 @@
    <intOption key="trng_sblim_sb_lim" condition="trng_sblim_sb_lim_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngSblimSbLim"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Sparse Bit Limit"
       toolTip="During Von Neumann sampling, samples are discarded if two consecutive raw samples\n
                are both 0 or both 1.\n
@@ -336,7 +336,7 @@
    <intOption key="trng_frqmin_frq_min" condition="trng_frqmin_frq_min_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngFrqminFrqMin"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Frequency Count Minimum Limit"
       toolTip="Defines the minimum allowable count taken during each entropy sample.\n
                This field is writable only if TRNG0_MCTL[PRGM] bit is 1\n
@@ -362,7 +362,7 @@
    <intOption key="trng_frqmax_frq_max" condition="trng_frqmax_frq_max_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngFrqmaxFrqMax"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Frequency Counter Maximum Limit"
       toolTip="Defines the maximum allowable count taken during each entropy sample.\n
                This field is writable only if TRNG0_MCTL[PRGM] bit is 1.\n
@@ -389,7 +389,7 @@
    <intOption key="trng_scml_mono_rng" condition="trng_scml_mono_rng_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngScmlMonoRng"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Monobit Range"
       toolTip="The number of ones/zeroes detected during entropy generation must be greater than\n
                MONO_MAX - MONO_RNG, else a retry or error will occur.\n
@@ -400,7 +400,7 @@
    <intOption key="trng_scml_mono_max" condition="trng_scml_mono_max_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngScmlMonoMax"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Monobit Maximum Limit"
       toolTip="Defines the maximum allowable count taken during entropy generation.\n
                The number of ones/zeroes detected during entropy generation must be\n
@@ -430,7 +430,7 @@
    <intOption key="trng_scr1l_run1_rng" condition="trng_scr1l_run1_rng_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngScr1lRun1Rng"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Run Length 1 Range"
       toolTip=""
       value="0"
@@ -439,7 +439,7 @@
    <intOption key="trng_scr1l_run1_max" condition="trng_scr1l_run1_max_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngScr1lRun1Max"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Run Length 1 Maximum Limit"
       toolTip=""
       value="0"
@@ -466,7 +466,7 @@
    <intOption key="trng_scr2l_run2_rng" condition="trng_scr2l_run2_rng_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngScr2lRun2Rng"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Run Length 2 Range"
       toolTip=""
       value="0"
@@ -475,7 +475,7 @@
    <intOption key="trng_scr2l_run2_max" condition="trng_scr2l_run2_max_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngScr2lRun2Max"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Run Length 2 Maximum Limit"
       toolTip=""
       value="0"
@@ -502,7 +502,7 @@
    <intOption key="trng_scr3l_run3_rng" condition="trng_scr3l_run3_rng_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngScr3lRun3Rng"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Run Length 3 Range"
       toolTip=""
       value="0"
@@ -511,7 +511,7 @@
    <intOption key="trng_scr3l_run3_max" condition="trng_scr3l_run3_max_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngScr3lRun3Max"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Run Length 3 Maximum Limit"
       toolTip=""
       value="0"
@@ -538,7 +538,7 @@
    <intOption key="trng_scr4l_run4_rng" condition="trng_scr4l_run4_rng_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngScr4lRun4Rng"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Run Length 4 Range"
       toolTip=""
       value="0"
@@ -547,7 +547,7 @@
    <intOption key="trng_scr4l_run4_max" condition="trng_scr4l_run4_max_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngScr4lRun4Max"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Run Length 4 Maximum Limit"
       toolTip=""
       value="0"
@@ -574,7 +574,7 @@
    <intOption key="trng_scr5l_run5_rng" condition="trng_scr5l_run5_rng_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngScr5lRun5Rng"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Run Length 5 Range"
       toolTip=""
       value="0"
@@ -583,7 +583,7 @@
    <intOption key="trng_scr5l_run5_max" condition="trng_scr5l_run5_max_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngScr5lRun5Max"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Run Length 5 Maximum Limit"
       toolTip=""
       value="0"
@@ -610,7 +610,7 @@
    <intOption key="trng_scr6pl_run6p_rng" condition="trng_scr6pl_run6p_rng_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngScr6plRun6pRng"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Run Length 6+ Range"
       toolTip=""
       value="0"
@@ -619,7 +619,7 @@
    <intOption key="trng_scr6pl_run6p_max" condition="trng_scr6pl_run6p_max_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngScr6plRun6pMax"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Run Length 6+ Maximum Limit"
       toolTip=""
       value="0"

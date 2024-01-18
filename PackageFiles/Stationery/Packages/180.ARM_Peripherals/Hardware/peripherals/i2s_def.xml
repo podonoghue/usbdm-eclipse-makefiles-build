@@ -325,7 +325,7 @@
    <intOption key="i2s_tcr2_div" condition="i2s_tcr2_div_present"
       enabledBy="enablePeripheralSupport"
       typeName="I2sTransmitBitClockDivider"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Bit Clock Divide"
       toolTip="Divides down the audio master clock to generate the bit clock when configured for an internal bit clock.\n
                The division value is (DIV + 1) * 2"
@@ -350,7 +350,7 @@
    <intOption key="i2s_tcr3_wdfl" condition="i2s_tcr3_wdfl_present"
       enabledBy="enablePeripheralSupport"
       typeName="I2sTransmitWordFlagNum"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Word Flag Configuration"
       toolTip="Configures which word sets the start of word flag.\n
                The value written must be one less than the word number.\n
@@ -363,7 +363,7 @@
    <intOption key="i2s_tcr4_frsz" condition="i2s_tcr4_frsz_present"
       enabledBy="enablePeripheralSupport"
       typeName="I2sTransmitFrameSize"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Frame size"
       toolTip="Configures the number of words in each frame.\n
                The value written must be one less than the number of words in the frame.\n
@@ -374,7 +374,7 @@
    <intOption key="i2s_tcr4_sywd" condition="i2s_tcr4_sywd_present"
       enabledBy="enablePeripheralSupport"
       typeName="I2sTransmitSyncWidth"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Sync Width"
       toolTip="Configures the length of the frame sync in number of bit clocks.\n
                The value written must be one less than the number of bit clocks.\n
@@ -423,7 +423,7 @@
    <intOption key="i2s_tcr5_wnw" condition="i2s_tcr5_wnw_present"
       enabledBy="enablePeripheralSupport"
       typeName="I2sTransmitWordNWidth"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Word N Width"
       toolTip="Configures the number of bits in each word, for each word except the first in the frame.\n
                The value written must be one less than the number of bits per word.\n
@@ -435,7 +435,7 @@
    <intOption key="i2s_tcr5_w0w" condition="i2s_tcr5_w0w_present"
       enabledBy="enablePeripheralSupport"
       typeName="I2sTransmitWord0Width"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Word 0 Width"
       toolTip="Configures the number of bits in the first word in each frame.\n
                The value written must be one less than the number of bits in the first word.\n
@@ -446,7 +446,7 @@
    <intOption key="i2s_tcr5_fbt" condition="i2s_tcr5_fbt_present"
       enabledBy="enablePeripheralSupport"
       typeName="I2sTransmitFirstBitShifted"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="First Bit Shifted"
       toolTip="Configures the bit index for the first bit transmitted for each word in the frame.\n
                If configured for MSB First, the index of the next bit transmitted is one less than the current bit transmitted.\n
@@ -469,7 +469,7 @@
    <intOption key="i2s_tfr_wfp" condition="i2s_tfr_wfp_present"
       hidden="true"
       typeName="I2sTransmitFifoWritePointer"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Transmit FIFO Write Pointer"
       toolTip="FIFO write pointer for transmit data channel"
       value="0"
@@ -478,7 +478,7 @@
    <intOption key="i2s_tfr_rfp" condition="i2s_tfr_rfp_present"
       hidden="true"
       typeName="I2sTransmitFifoReadPointer"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Transmit FIFO Read Pointer"
       toolTip="FIFO read pointer for transmit data channel"
       value="0"
@@ -662,7 +662,7 @@
    <intOption key="i2s_rcr1_rfw" condition="i2s_rcr1_rfw_present"
       enabledBy="enablePeripheralSupport"
       typeName="I2sReceiveFifoWatermark"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Receive FIFO Watermark"
       toolTip="Configures the watermark level for all enabled receiver channels"
       value="0"
@@ -740,7 +740,7 @@
    <intOption key="i2s_rcr2_div" condition="i2s_rcr2_div_present"
       enabledBy="enablePeripheralSupport"
       typeName="I2sReceiveBitClockDivider"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Bit Clock Divide"
       toolTip="Divides down the audio master clock to generate the bit clock when\n
                configured for an internal bit clock.\n
@@ -763,7 +763,7 @@
    <intOption key="i2s_rcr3_wdfl" condition="i2s_rcr3_wdfl_present"
       enabledBy="enablePeripheralSupport"
       typeName="I2sReceiveWordFlag"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Word Flag Configuration"
       toolTip="Configures which word the start of word flag is set.\n
                The value written should be one less than the word number \n
@@ -776,7 +776,7 @@
    <intOption key="i2s_rcr4_frsz" condition="i2s_rcr4_frsz_present"
       enabledBy="enablePeripheralSupport"
       typeName="I2sReceiveFrameSize"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Frame size"
       toolTip="Configures the number of words in each frame.\n
                The value written must be one less than the number of words in the frame.\n
@@ -787,7 +787,7 @@
    <intOption key="i2s_rcr4_sywd" condition="i2s_rcr4_sywd_present"
       enabledBy="enablePeripheralSupport"
       typeName="I2sReceiveSyncWidth"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Sync Width"
       toolTip="Configures the length of the frame sync in number of bit clocks.\n
                The value written must be one less than the number of bit clocks.\n
@@ -836,7 +836,7 @@
    <intOption key="i2s_rcr5_wnw" condition="i2s_rcr5_wnw_present"
       enabledBy="enablePeripheralSupport"
       typeName="I2sReceiveWordNWidth"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Word N Width"
       toolTip="Configures the number of bits in each word, for each word except the first in the frame.\n
                The value written must be one less than the number of bits per word.\n
@@ -848,7 +848,7 @@
    <intOption key="i2s_rcr5_w0w" condition="i2s_rcr5_w0w_present"
       enabledBy="enablePeripheralSupport"
       typeName="I2sReceiveWord0Width"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Word 0 Width"
       toolTip="Configures the number of bits in the first word in each frame.\n
                The value written must be one less than the number of bits in the first word.\n
@@ -859,7 +859,7 @@
    <intOption key="i2s_rcr5_fbt" condition="i2s_rcr5_fbt_present"
       enabledBy="enablePeripheralSupport"
       typeName="I2sReceiveFirstBitShifted"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="First Bit Shifted"
       toolTip="Configures the bit index for the first bit transmitted for each word in the frame.\n
                If configured for MSB First, the index of the next bit transmitted is one less than the current bit transmitted.\n
@@ -883,7 +883,7 @@
    <intOption key="i2s_rfr_wfp" condition="i2s_rfr_wfp_present"
       hidden="true"
       typeName="I2sReceiveFifoWritePointer"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Receiver FIFO Write Pointer"
       toolTip="FIFO write pointer for receive data channel"
       value="0"
@@ -892,7 +892,7 @@
    <intOption key="i2s_rfr_rfp" condition="i2s_rfr_rfp_present"
       hidden="true"
       typeName="I2sReceiveFifoReadPointer"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Receiver FIFO Read Pointer"
       toolTip="FIFO read pointer for receive data channel"
       value="0"
@@ -948,7 +948,7 @@
    <intOption key="i2s_mdr_fract" condition="i2s_mdr_fract_present"
       enabledBy="enablePeripheralSupport"
       typeName="I2sMasterClockFraction"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Master Clock Fraction"
       toolTip="Sets the MCLK divide ratio such that: \n
                MCLK output = MCLK input * ( (FRACT + 1) / (DIVIDE + 1) ).\n
@@ -959,7 +959,7 @@
    <intOption key="i2s_mdr_divide" condition="i2s_mdr_divide_present"
       enabledBy="enablePeripheralSupport"
       typeName="I2sMasterClockDivider"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Master Clock Divider"
       toolTip="Sets the MCLK divide ratio such that:\n
                MCLK output = MCLK input * ( (FRACT + 1) / (DIVIDE + 1) ).\n
@@ -1109,8 +1109,7 @@
       \t *
       %paramDescription
       \t */
-      \tstatic void writeData(
-      %params) {
+      \tstatic void writeData(%params) {
       \t   %register[%paramName0] = %paramName1;
       \t}
       \t\n

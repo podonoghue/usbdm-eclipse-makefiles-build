@@ -1658,6 +1658,7 @@
          <param type="BooleanVariable"        name="tpm_pol_pol1_present"           value="true"             key="/TPM0/tpm_pol_pol1_present" />
          <param type="BooleanVariable"        name="tpm_pol_pol2_present"           value="true"             key="/TPM0/tpm_pol_pol2_present" />
          <param type="BooleanVariable"        name="tpm_pol_pol3_present"           value="true"             key="/TPM0/tpm_pol_pol3_present" />
+         <param type="BooleanVariable"        name="tpm_pol_pol_present"            value="true"             key="/TPM0/tpm_pol_pol_present" />
          <param type="BooleanVariable"        name="tpm_pol_present"                value="true"             key="/TPM0/tpm_pol_present" />
          <param type="BooleanVariable"        name="tpm_qdctrl_present"             value="true"             key="/TPM0/tpm_qdctrl_present" />
          <param type="BooleanVariable"        name="tpm_qdctrl_quaden_present"      value="true"             key="/TPM0/tpm_qdctrl_quaden_present" />
@@ -1676,6 +1677,7 @@
          <param type="BooleanVariable"        name="tpm_status_ch2f_present"        value="true"             key="/TPM0/tpm_status_ch2f_present" />
          <param type="BooleanVariable"        name="tpm_status_ch3f_present"        value="true"             key="/TPM0/tpm_status_ch3f_present" />
          <param type="BooleanVariable"        name="tpm_status_present"             value="true"             key="/TPM0/tpm_status_present" />
+         <param type="BooleanVariable"        name="tpm_status_status_present"      value="true"             key="/TPM0/tpm_status_status_present" />
          <param type="BooleanVariable"        name="tpm_status_tof_present"         value="true"             key="/TPM0/tpm_status_tof_present" />
       </peripheral>
       <peripheral baseName="TPM"      instance="1"        instanceList="TPM0;TPM1;TPM2" version="tpm1_2ch_pol_quad_mkw41z4">
@@ -1720,6 +1722,7 @@
          <param type="LongVariable"           name="tpm_controls_dim"               value="2"                key="/TPM1/tpm_controls_dim" />
          <param type="BooleanVariable"        name="tpm_filter_ch0fval_present"     value="true"             key="/TPM1/tpm_filter_ch0fval_present" />
          <param type="BooleanVariable"        name="tpm_filter_ch1fval_present"     value="true"             key="/TPM1/tpm_filter_ch1fval_present" />
+         <param type="BooleanVariable"        name="tpm_filter_chfval_present"      value="true"             key="/TPM1/tpm_filter_chfval_present" />
          <param type="BooleanVariable"        name="tpm_filter_present"             value="true"             key="/TPM1/tpm_filter_present" />
          <param type="BooleanVariable"        name="tpm_mod_mod_present"            value="true"             key="/TPM1/tpm_mod_mod_present" />
          <param type="BooleanVariable"        name="tpm_mod_present"                value="true"             key="/TPM1/tpm_mod_present" />
@@ -1742,6 +1745,7 @@
          <param type="BooleanVariable"        name="tpm_status_ch0f_present"        value="true"             key="/TPM1/tpm_status_ch0f_present" />
          <param type="BooleanVariable"        name="tpm_status_ch1f_present"        value="true"             key="/TPM1/tpm_status_ch1f_present" />
          <param type="BooleanVariable"        name="tpm_status_present"             value="true"             key="/TPM1/tpm_status_present" />
+         <param type="BooleanVariable"        name="tpm_status_status_present"      value="true"             key="/TPM1/tpm_status_status_present" />
          <param type="BooleanVariable"        name="tpm_status_tof_present"         value="true"             key="/TPM1/tpm_status_tof_present" />
       </peripheral>
       <peripheral baseName="TPM"      instance="2"        instanceList="TPM0;TPM1;TPM2" version="tpm1_2ch_pol_quad_mkw41z4">
@@ -1786,6 +1790,7 @@
          <param type="LongVariable"           name="tpm_controls_dim"               value="2"                key="/TPM2/tpm_controls_dim" />
          <param type="BooleanVariable"        name="tpm_filter_ch0fval_present"     value="true"             key="/TPM2/tpm_filter_ch0fval_present" />
          <param type="BooleanVariable"        name="tpm_filter_ch1fval_present"     value="true"             key="/TPM2/tpm_filter_ch1fval_present" />
+         <param type="BooleanVariable"        name="tpm_filter_chfval_present"      value="true"             key="/TPM2/tpm_filter_chfval_present" />
          <param type="BooleanVariable"        name="tpm_filter_present"             value="true"             key="/TPM2/tpm_filter_present" />
          <param type="BooleanVariable"        name="tpm_mod_mod_present"            value="true"             key="/TPM2/tpm_mod_mod_present" />
          <param type="BooleanVariable"        name="tpm_mod_present"                value="true"             key="/TPM2/tpm_mod_present" />
@@ -1808,6 +1813,7 @@
          <param type="BooleanVariable"        name="tpm_status_ch0f_present"        value="true"             key="/TPM2/tpm_status_ch0f_present" />
          <param type="BooleanVariable"        name="tpm_status_ch1f_present"        value="true"             key="/TPM2/tpm_status_ch1f_present" />
          <param type="BooleanVariable"        name="tpm_status_present"             value="true"             key="/TPM2/tpm_status_present" />
+         <param type="BooleanVariable"        name="tpm_status_status_present"      value="true"             key="/TPM2/tpm_status_status_present" />
          <param type="BooleanVariable"        name="tpm_status_tof_present"         value="true"             key="/TPM2/tpm_status_tof_present" />
       </peripheral>
       <peripheral baseName="TRNG"     instance="0"        instanceList="TRNG0" version="trng0_0x40029000">

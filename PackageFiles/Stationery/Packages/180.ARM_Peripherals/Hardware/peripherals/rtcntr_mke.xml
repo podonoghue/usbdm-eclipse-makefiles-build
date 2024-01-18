@@ -137,7 +137,6 @@
 
    <intOption key="rtc_mod_mod" condition="rtc_mod_mod_present"
       enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-      typeName="Ticks"
       description="Modulo"
       units="ticks"
       toolTip="16-bit modulo value.\n

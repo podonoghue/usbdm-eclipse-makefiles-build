@@ -1117,8 +1117,7 @@
             \t    * Constructor
             %paramDescription
             \t    */
-            \t   constexpr %(Name)Init(
-            %params) {
+            \t   constexpr %(Name)Init(%params) {
             \t
             \t      %registerName = (%registerName & ~%mask) |
             \t                       %paramExpression;
@@ -1172,8 +1171,7 @@
             \t *
             %paramDescription
             \t */
-            \tstatic void configure%(Name)(
-            %params) {
+            \tstatic void configure%(Name)(%params) {
             \t   %fieldAssignment;
             \t}\n\n
          ]]></variableTemplate>
@@ -1287,8 +1285,7 @@ $(AdcInit_description)
          %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr AdcInit(
-         %params, Types... rest) : AdcInit(rest...) {
+         \t   constexpr AdcInit(%params, Types... rest) : AdcInit(rest...) {
          \t
          \t      %registerName = (%registerName & ~%mask) | %paramExpression;
          \t   }
@@ -1366,8 +1363,7 @@ $(Adc%(p)Init_description)
          \t    * Constructor
          %paramDescription
          \t    */
-         \t   constexpr Adc%(p)Init(
-         %params) {
+         \t   constexpr Adc%(p)Init(%params) {
          \t
          \t      %registerName = %paramExpression;
          \t   }
@@ -1390,15 +1386,14 @@ $(Adc%(p)Init_description)
       <variableTemplate variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel" codeGenCondition="enableGettersAndSetters" >
       <![CDATA[
          \t/**
-         \t * Set %description0 and %description2
+         \t * Set %description
          \t *
          %paramDescription
          \t *
          \t * For example, setAdc%(p)Triggers(SimAdc%(p)TriggerMode_Alt_PreTrigger_1, SimAdc0Trigger_PitCh0) will set the trigger source
          \t * to PIT channel 0 and conversion will use SC1[1]/R[1]
          \t */
-         \tstatic void setAdc%(p)Triggers(
-         %params) {
+         \tstatic void setAdc%(p)Triggers(%params) {
          \t
          \t   %register = (%register&~%mask)|(%paramExpression);
          \t};\n\n
@@ -2000,8 +1995,7 @@ $(Adc%(p)Init_description)
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      %registerName |= %paramExpression;
       \t   }

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- ftm_fault.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
+   <!-- ____ Setters and Getters ____________ -->
+
+   <for keys="field                     : set   : get   : clear : genCode                 : name"
+        values="
+
+         ftm_sc_action                  : true  : true  : false : enableGettersAndSetters : OverflowAction;
+         ftm_sc_tof                     : false : true  : true  : enableGettersAndSetters : OverflowFlag;
+         ftm_sc_cpwms                   : true  : true  : false : enableGettersAndSetters : CountMode;
+         ftm_sc_clks                    : true  : true  : false : enableGettersAndSetters : ClockSource;
+         ftm_sc_ps                      : true  : true  : false : enableGettersAndSetters : Prescaler;
+
+         ftm_cnt_count                  : false : true  : true  : enableGettersAndSetters : Counter;
+
+         ftm_mod_mod                    : true  : true  : false : enableGettersAndSetters : CounterMaximumValue;
+
+         ftm_status_status              : true  : true  : false : enableGettersAndSetters : Status;
+
+         ftm_mode_faultie               : true  : true  : false : enableGettersAndSetters : FaultAction;
+         ftm_mode_faultm                : true  : true  : false : enableGettersAndSetters : FaultMode;
+         ftm_mode_pwmsync               : true  : true  : false : enableGettersAndSetters : PwmSyncMode;
+         ftm_mode_init                  : true  : true  : false : enableGettersAndSetters : InitialiseOutputs;
+         ftm_mode_ftmen                 : true  : true  : false : enableGettersAndSetters : RegisterSet;
+
+         ftm_sync_swsync                : true  : true  : false : enableGettersAndSetters : SoftwareTrigger;
+         ftm_outmask_chom               : true  : true  : false : enableGettersAndSetters : OutmaskChom;
+         ftm_exttrig_chtrig             : true  : true  : false : enableGettersAndSetters : ExttrigChtrig;
+         ftm_pol_pol                    : true  : true  : false : enableGettersAndSetters : PolPol;
+         ftm_fltpol_fltpol              : true  : true  : false : enableGettersAndSetters : FltpolFltpol;
+         " >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t * (%(field))
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %fieldAssignment;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t * (%(field))
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %returnType get%(name)() {
+         \t   return %fieldExtract;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%(field))
+         \t *
+         \t */
+         \tstatic void clear%(name)() {
+         \t   %register = %register|%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <for keys="field                     : set   : get   : clear : genCode                 : context                 : name"
+        values="
+
+         " >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(int index, %params) {
+         \t   $(_basename)->%(context) = ($(_basename)->%(context) & ~%mask)|%paramExpression;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)(int index) {
+         \t   return %paramType($(_basename)->%(context)&%mask);
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t *
+         \tstatic void clear%(name)(int index) {
+         \t   $(_basename)->%(context) = $(_basename)->%(context)|%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+</fragment>

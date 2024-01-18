@@ -18,6 +18,7 @@
  * Any manual changes will be lost.
  */
 #include "pin_mapping.h"
+#include "gpio.h"
 
 #ifdef __CMSIS_RTOS
 #include "cmsis.h"
@@ -502,7 +503,7 @@ public:
    virtual osStatus endTransaction() override {
       return mutex().release();
    }
-#endif
+#endif 
 
 public:
    $(/I2C/classInfo: // No class Info found)
@@ -513,7 +514,7 @@ public:
     */
    I2cBase_T(const I2cBasicInfo::Init &init) : I2c(Info::baseAddress) {
 
-#ifdef PORT_PCR_MUX_MASK
+#if $(/PCR/_present:false) // /PCR/_present
       // Check pin assignments
       PcrBase::CheckPinExistsAndIsMapped<Info::info[Info::sclPin].pinIndex>::check();
       PcrBase::CheckPinExistsAndIsMapped<Info::info[Info::sclPin].pinIndex>::check();

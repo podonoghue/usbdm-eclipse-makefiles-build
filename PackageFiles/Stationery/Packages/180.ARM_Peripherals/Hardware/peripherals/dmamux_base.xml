@@ -83,7 +83,7 @@
    <choiceOption key="dma_low_channel_num" condition="NumLowChannels"
       hidden="true"
       valueFormat="%s"
-      enumType="uint8_t"
+      baseType="uint8_t"
       typeName="DmaChannelLowNum"
       description="DMA Low channel numbers"
       toolTip="Identifies Low DMA channel" >
@@ -95,7 +95,7 @@
    <choiceOption key="dma_high_channel_num" condition="NumHighChannels"
       hidden="true"
       valueFormat="%s"
-      enumType="uint8_t"
+      baseType="uint8_t"
       typeName="DmaChannelHighNum"
       description="DMA High channel numbers"
       toolTip="Identifies Low DMA channel" >
@@ -517,6 +517,7 @@
    <![CDATA[
       \t   // Update settings
       \t   configure(DefaultInitValue);
+      \t\n
    ]]>
    </template>
    <template codeGenCondition="enablePeripheralSupport" >

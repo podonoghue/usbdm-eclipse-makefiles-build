@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKL17Z4
       MKL27Z4
       MKL27Z644
@@ -180,7 +180,7 @@ An interrupt is generated when TOF equals one</description>
                   </field>
                   <field>
                      <name>DMA</name>
-                     <description>DMA Enable</description>
+                     <description>DMA Enable for the overflow flag</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -394,6 +394,15 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <description>Capture and Compare Status</description>
                <addressOffset>0x50</addressOffset>
                <fields>
+                  <field>
+                     <name>STATUS</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Event Flags\n
+These flags are cleared by writting 1.  Writing 0 has no effect.</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
                   <field>
                      <name>CH0F</name>
                      <description>Channel 0 Event Flag</description>

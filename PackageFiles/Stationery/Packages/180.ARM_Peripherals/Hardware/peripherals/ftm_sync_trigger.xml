@@ -6,6 +6,8 @@
 
 <!--  ___ SyncAndTriggerInit class ______________ -->
 
+<if condition="ftm_pwmload_present||ftm_sync_present||ftm_synconf_present">
+
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass) Synchronisation and Trigger settings
@@ -75,19 +77,20 @@
    <!-- ____ SyncAndTriggerInit class Member variables ________ -->
 
    <for keys=" type        : variables                                                 : init    "
-       values="%enumType   : ftm_pwmload_ldok, ftm_pwmload_chsel                       : 0       ;
-               %enumType   : ftm_sync_cntmin, ftm_sync_cntmax, ftm_sync_reinit,
+       values="%baseType   : ftm_pwmload_ldok, ftm_pwmload_chsel                       : 0       ;
+               %baseType   : ftm_sync_cntmin, ftm_sync_cntmax, ftm_sync_reinit,
                              ftm_sync_trig, ftm_sync_synchom                           : 0       ;
-               %enumType   : ftm_synconf_syncmode, 
-                             ftm_synconf_hwtrigmode, 
-                             ftm_synconf_cntinc, 
-                             ftm_synconf_swwrbuf, ftm_synconf_hwwrbuf, 
-                             ftm_synconf_swom, ftm_synconf_hwom, 
-                             ftm_synconf_invc, ftm_synconf_swinvc, ftm_synconf_hwinvc, 
+               %baseType   : ftm_synconf_syncmode,
+                             ftm_synconf_hwtrigmode,
+                             ftm_synconf_cntinc,
+                             ftm_synconf_swwrbuf, ftm_synconf_hwwrbuf,
+                             ftm_synconf_swom, ftm_synconf_hwom,
+                             ftm_synconf_invc, ftm_synconf_swinvc, ftm_synconf_hwinvc,
                              ftm_synconf_swoc, ftm_synconf_hwsoc
                              ftm_synconf_swrstcnt, ftm_synconf_hwrstcnt                : 0       ">
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(variables)"
+         linePadding="xxx"
       ><![CDATA[
          %multilineDescription
          \t   %(type) %registerName = %(init);\n\n
@@ -98,12 +101,12 @@
 
    <for keys="r" values="ftm_pwmload_ldok;ftm_pwmload_chsel;
                          ftm_sync_cntmin;ftm_sync_cntmax;ftm_sync_reinit;ftm_sync_trig;ftm_sync_synchom;
-                         ftm_synconf_syncmode; 
-                         ftm_synconf_hwtrigmode; 
-                         ftm_synconf_cntinc; 
-                         ftm_synconf_swwrbuf;ftm_synconf_hwwrbuf; 
-                         ftm_synconf_swom;ftm_synconf_hwom; 
-                         ftm_synconf_invc;ftm_synconf_swinvc;ftm_synconf_hwinvc; 
+                         ftm_synconf_syncmode;
+                         ftm_synconf_hwtrigmode;
+                         ftm_synconf_cntinc;
+                         ftm_synconf_swwrbuf;ftm_synconf_hwwrbuf;
+                         ftm_synconf_swom;ftm_synconf_hwom;
+                         ftm_synconf_invc;ftm_synconf_swinvc;ftm_synconf_hwinvc;
                          ftm_synconf_swoc;ftm_synconf_hwsoc;
                          ftm_synconf_swrstcnt;ftm_synconf_hwrstcnt" >
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
@@ -144,7 +147,7 @@
       \t
    ]]></template>
    <for keys=
-            "var                                               : statement" 
+            "var                                               : statement"
    values="
             ftm_pwmload_ldok,ftm_pwmload_chsel                 : %configRegAssignment  ;
             ftm_sync_cntmin,ftm_sync_cntmax,
@@ -158,7 +161,10 @@
             ftm_synconf_hwinvc,
             ftm_synconf_swoc,ftm_synconf_hwsoc,
             ftm_synconf_swrstcnt,ftm_synconf_hwrstcnt         : %configRegAssignment  " >
-      <variableTemplate variables="%(var)" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+         variables="%(var)" 
+         linePadding="xxx"
+       ><![CDATA[
          \t
          %multilineDescription
          \t   %(statement);\n
@@ -195,5 +201,7 @@
       \t\n
    ]]>
    </variableTemplate>
+
+</if>
 
 </fragment>

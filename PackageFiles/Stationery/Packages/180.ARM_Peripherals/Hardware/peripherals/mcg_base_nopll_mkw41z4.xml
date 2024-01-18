@@ -607,7 +607,7 @@
             enabledBy="enableClockConfiguration[%(n)]"
             errorIf="(/SMC/smc_pmctrl_runm[%(n)]==VLPR)&amp;&amp;(mcgClockMode[%(n)]&lt;4)##Illegal clock mode in VLPR"
             typeName="McgClockMode"
-            enumType="uint8_t"
+            baseType="uint8_t"
             valueFormat="%s"
             description="MCG Clock Mode"
             toolTip="FLL Engaged Internal(FEI)\n

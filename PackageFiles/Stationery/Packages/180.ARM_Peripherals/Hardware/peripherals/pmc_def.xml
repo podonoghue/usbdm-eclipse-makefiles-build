@@ -82,7 +82,7 @@
       enabledBy="enablePeripheralSupport"
       valueFormat="PMC_LVDSC1_LVDRE(%s),PMC_LVDSC1_LVDIE(%s)"
       typeName="PmcLowVoltageAction"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Low-voltage detect action"
       toolTip="Selects interrupt or reset on low voltage detect\n
                Note that selecting reset is a write-once selection">
@@ -94,7 +94,7 @@
    <choiceOption key="pmc_lvdsc1_lvdv" condition="pmc_lvdsc1_lvdv_present"
       enabledBy="enablePeripheralSupport"
       typeName="PmcLowVoltageDetectLevel"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Low-Voltage Detect level select"
       toolTip="Selects the LVD trip point voltage (Vlvd)">
       <choice value="0" enum="Low"  name="Low trip point selected"  />
@@ -123,7 +123,7 @@
    <binaryOption key="pmc_lvdsc2_lvwie" condition="pmc_lvdsc2_lvwie_present"
       enabledBy="enablePeripheralSupport"
       typeName="PmcLowVoltageWarningAction"
-      enumType="uint8_t"
+      baseType="uint8_t"
       toolTip="Action to take on Low Voltage Warning"
       description="Low-Voltage Warning Interrupt Enable" >
       <choice value="0" enum="None"      name="No action" isDefault="true" />
@@ -133,7 +133,7 @@
    <choiceOption key="pmc_lvdsc2_lvwv" condition="pmc_lvdsc2_lvwv_present"
       enabledBy="enablePeripheralSupport"
       typeName="PmcLowVoltageWarningLevel"
-      enumType="uint8_t"
+      baseType="uint8_t"
       toolTip="Selects the LVW trip point voltage (Vlvw)\n
                The actual voltage for the warning depends on pmc_lvdsc1_lvdv"
       description="Low-Voltage Warning Voltage Select" >
@@ -168,7 +168,7 @@
       <choiceOption key="pmc_regsc_bgen" condition="pmc_regsc_bgen_present"
          enabledBy="enablePeripheralSupport"
          typeName="PmcBandgapOperationInLowPower"
-         enumType="uint8_t"
+         baseType="uint8_t"
          description="Bandgap Enable In VLPx Operation"
          toolTip="BGEN controls whether the bandgap is enabled in \n
                   lower power modes of operation (VLPx, LLS, and VLLSx)">
@@ -180,7 +180,7 @@
       <binaryOption key="pmc_regsc_bgen" condition="pmc_regsc_bgen_present"
          enabledBy="enablePeripheralSupport"
          typeName="PmcBandgapOperationInLowPower"
-         enumType="uint8_t"
+         baseType="uint8_t"
          description="Bandgap Enable In VLPx Operation"
          toolTip="BGEN controls whether the bandgap is enabled in \n
                   lower power modes of operation (VLPx, LLS, and VLLSx)">
@@ -192,7 +192,7 @@
    <binaryOption key="pmc_regsc_bgbe" condition="pmc_regsc_bgbe_present"
       enabledBy="enablePeripheralSupport"
       typeName="PmcBandgapBuffer"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Bandgap Buffer Enable"
       toolTip="Controls whether the band-gap reference is available to internal devices e.g. CMP etc">
       <choice value="0" enum="Disabled" name="Disabled" isDefault="true" />

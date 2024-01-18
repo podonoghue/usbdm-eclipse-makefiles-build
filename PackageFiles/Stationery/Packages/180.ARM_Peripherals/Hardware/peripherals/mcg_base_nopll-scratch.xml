@@ -75,7 +75,7 @@
 
          <choiceOption key="icsClockMode[%(n)]"
             typeName="McgClockMode"
-            enumType="uint8_t"
+            baseType="uint8_t"
             valueFormat="%s"
             description="Default Clock Mode"
             toolTip="FLL Engaged Internal(FEI)\n

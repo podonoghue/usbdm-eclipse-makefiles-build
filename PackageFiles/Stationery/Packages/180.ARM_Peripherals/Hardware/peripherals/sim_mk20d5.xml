@@ -137,12 +137,12 @@
 
    <xi:include href="simCommon.xml" />
 
-   <!-- ************* Class Declaration ****************** -->
+   <!-- ___ Class Declaration ______ -->
    <constant key="_class_declaration" type="String"
       value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
 
 
-   <!-- ************* USB Clock ****************** -->
+   <!-- ___ USB Clock ______ -->
 
    <intOption key="system_usb_clkin_clock"
       hidden="true"
@@ -152,7 +152,7 @@
       toolTip="Externally provided clock for USB on USB_CLKIN"
       value="0" />
 
-   <!-- ************* SOPT1 ****************** -->
+   <!-- ___ SOPT1 ______ -->
 
    <category name="SOPT1" description="RTC clocks" >
 
@@ -176,7 +176,7 @@
       </choiceOption>
    </category>
 
-   <!-- ************* SOPT2 ****************** -->
+   <!-- ___ SOPT2 ______ -->
 
    <category name="SOPT2" description="Clock Gating" >
 
@@ -269,7 +269,7 @@
       </binaryOption>
    </category>
 
-   <!-- ************* SOPT4 ****************** -->
+   <!-- ___ SOPT4 ______ -->
 
    <category name="SOPT4" description="FTM signals" >
 
@@ -530,7 +530,7 @@
       </for>
    </category>
 
-   <!-- ************* SOPT5 ****************** -->
+   <!-- ___ SOPT5 ______ -->
 
    <category name="SOPT5" description="UART signals" >
 
@@ -563,7 +563,7 @@
       </for>
    </category>
 
-   <!-- ************* SOPT7 ****************** -->
+   <!-- ___ SOPT7 ______ -->
 
    <category name="SOPT7" description="ADC signals" >
       <for keys="adc" values="0;1" >
@@ -955,7 +955,7 @@
             value="24_MHz"
             disabledValue="0" />
 
-   <!-- ************* CLKDIV1 ****************** -->
+   <!-- ___ CLKDIV1 ______ -->
 
          <category name="CLKDIV1" description="System Clock Dividers" >
             <choiceOption key="sim_clkdiv1_outdiv1[%(n)]"  condition="sim_clkdiv1_outdiv1_present"
@@ -1002,8 +1002,8 @@
                         Divides MCGOUTCLK Clock to generate system_flexbus_clock."/>
 
             <choiceOption key="sim_clkdiv1_outdiv4[%(n)]"  condition="sim_clkdiv1_outdiv4_present"
+               locked="false"
                enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
-               locked="true"
                derivedFrom="sim_clkdiv1_outdiv1[%(n)]"
                typeName="SimFlashClkDivider"
                description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"
@@ -1017,7 +1017,7 @@
 
    <xi:include href="sim_commonTemplates.xml" />
 
-   <!-- ************* Clock Variables ****************** -->
+   <!-- ___ Clock Variables ______ -->
 
    <template namespace="usbdm" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
       \t/*
@@ -1092,7 +1092,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <!-- ************* Common ****************** -->
+   <!-- ___ Common ______ -->
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="=numberOfClockSettings" >
@@ -1107,7 +1107,7 @@
       <param type="long" value="1MHz"   />     <!-- VLPR Flash        -->
    </validate>
 
-   <!-- ************* Startup ****************** -->
+   <!-- ___ Startup ______ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n

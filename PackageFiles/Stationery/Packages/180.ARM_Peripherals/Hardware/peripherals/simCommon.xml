@@ -18,7 +18,7 @@
       hidden="true"
       templateKey="/PCR/nvicPriority"
       typeName="NvicPriority"
-      enumType="int8_t"
+      baseType="int8_t"
       valueFormat="%s"
       disabledValue="Not Installed"
       description="IRQ priority levels"

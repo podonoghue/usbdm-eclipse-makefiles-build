@@ -114,7 +114,6 @@
       enabledBy="enablePeripheralSupport"
       description="Timer Compare Register"
       valueFormat="%s"
-      typeName="Ticks &amp;"
       units="ticks"
       toolTip="Comparison value\n
       The timer comparison flag is set when the counter reaches this value and increments. \n
@@ -193,8 +192,6 @@
    <floatOption key="lptmr_cmrPeriod"
       enabledBy="enablePeripheralSupport&amp;&amp;!lptmr_csr_tms"
       ref="(lptmr_cmr_compare+1)/counterFrequency#counterFrequency"
-      typeName="Seconds &amp;"
-      valueFormat="%s_s"
       description="Timer Compare Interval"
       toolTip="Comparison value\n
                The timer comparison flag is set when the counter reaches this value and increments. \n
@@ -379,8 +376,7 @@
       \t *
       %paramDescription
       \t */
-      \tstatic void selectPulseInput(
-      %params) {
+      \tstatic void selectPulseInput(%params) {
       \t   %fieldAssignment;
       \t}\n\n
    ]]></variableTemplate>
@@ -419,8 +415,7 @@
       \t *
       %paramDescription
       \t */
-      \tstatic void setClock(
-      %params) {
+      \tstatic void setClock(%params) {
       \t   // Disable LPTMR before prescale change
       \t   uint32_t csr = lptmr->CSR;
       \t   lptmr->CSR   = 0;
@@ -439,8 +434,7 @@
       \t *
       %paramDescription
       \t */
-      \tstatic void setClock(
-      %params) {
+      \tstatic void setClock(%params) {
       \t   // Disable LPTMR before prescale change
       \t   uint32_t csr = lptmr->CSR;
       \t   lptmr->CSR   = 0;
@@ -534,8 +528,7 @@
       \t *
       %paramDescription
       \t */
-      \tstatic void configureTimeIntervalMode(
-      %params) {
+      \tstatic void configureTimeIntervalMode(%params) {
       \t
       \t   Info::enable();
       \t
@@ -568,8 +561,7 @@
       \t *
       %paramDescription
       \t */
-      \tstatic ErrorCode configureTimeIntervalMode(
-      %params) {
+      \tstatic ErrorCode configureTimeIntervalMode(%params) {
       \t
       \t   Info::enable();
       \t
@@ -618,8 +610,7 @@
       \t *
       %paramDescription
       \t */
-      \tstatic void configurePulseCountingMode(
-      %params) {
+      \tstatic void configurePulseCountingMode(%params) {
       \t
       \t   Info::enable();
       \t
@@ -777,7 +768,7 @@
       variables="lptmr_cmrPeriod"
     ><![CDATA[
       \t   /// %description
-      \t   %paramType %registerName = 0_s;\n\n
+      \t   %returnType %registerName = 0_s;\n\n
    ]]></variableTemplate >
 
    <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"

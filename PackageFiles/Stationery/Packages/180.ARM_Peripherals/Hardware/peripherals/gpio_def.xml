@@ -599,7 +599,7 @@
 
    <choiceOption key="port_pcr_pfe" condition="/PCR/dfer_register_present"
       typeName="PinFilter"
-      enumType="uint32_t"
+      baseType="uint32_t"
       valueFormat="PORT_PCR_DIGITALFILTER(%s),PORT_PCR_PFE(%s)"
       templateKey="/PCR/pcr_enums"
       description="Pin input filter"
@@ -612,7 +612,7 @@
 
    <choiceOption key="port_pcr_pfe" condition="!/PCR/dfer_register_present&amp;&amp;/PCR/pfe_present"
       typeName="PinFilter"
-      enumType="uint32_t"
+      baseType="uint32_t"
       templateKey="/PCR/pcr_enums"
       description="Pin input filter"
       toolTip="Pin filtering on digital inputs"
@@ -623,7 +623,7 @@
 
    <choiceOption key="port_pcr_pd" condition="/PCR/pd_present"
       typeName="PinPull"
-      enumType="uint32_t"
+      baseType="uint32_t"
       templateKey="/PCR/pcr_enums"
       description="Pin pull device"
       toolTip="Pin pull device (up/down/none) on digital inputs"
@@ -635,7 +635,7 @@
 
    <choiceOption key="port_pcr_dse" condition="/PCR/dse_present"
       typeName="PinDriveStrength"
-      enumType="uint32_t"
+      baseType="uint32_t"
       templateKey="/PCR/pcr_enums"
       description="Pin drive strength"
       toolTip="Pin drive strength of digital outputs"
@@ -646,7 +646,7 @@
 
    <choiceOption key="port_pcr_ode" condition="/PCR/ode_present"
       typeName="PinDriveMode"
-      enumType="uint32_t"
+      baseType="uint32_t"
       templateKey="/PCR/pcr_enums"
       description="Pin drive mode"
       toolTip="Pin drive mode (push-pull/open-drain) of digital outputs"
@@ -657,7 +657,7 @@
 
    <choiceOption key="port_pcr_sre" condition="/PCR/sre_present"
       typeName="PinSlewRate"
-      enumType="uint32_t"
+      baseType="uint32_t"
       templateKey="/PCR/pcr_enums"
       description="Pin slew rate"
       toolTip="Pin slew rate of digital outputs"
@@ -668,7 +668,7 @@
 
    <choiceOption key="port_pcr_lk" condition="(/PCR/lk_present)"
       typeName="PinLock"
-      enumType="uint32_t"
+      baseType="uint32_t"
       templateKey="/PCR/pcr_enums"
       description="Pin Control Register (PCR) lock"
       toolTip="Prevents modification of some of the PCR values once set"
@@ -679,7 +679,7 @@
 
    <choiceOption key="port_pcr_irqc" condition="/PCR/irqc_present"
       typeName="PinAction"
-      enumType="uint32_t"
+      baseType="uint32_t"
       templateKey="/PCR/pcr_enums"
       description="Pin interrupt/DMA actions"
       toolTip="DMA and/or interrupt actions to happen on pin change or level"
@@ -699,7 +699,7 @@
 
    <choiceOption key="port_pcr_mux" condition="/PCR/mux_present"
       typeName="PinMux"
-      enumType="uint32_t"
+      baseType="uint32_t"
       templateKey="/PCR/pcr_enums"
       description="Pin Multiplexor setting"
       toolTip="Which function is mapped to the pin"
@@ -843,8 +843,7 @@
       \t    *
       %paramDescription
       \t    */
-      \t   constexpr PcrInit(
-      %params
+      \t   constexpr PcrInit(%params
       \t   ) : value (%paramExpression) {
       \t   }
       \t\n
@@ -860,8 +859,7 @@
       \t    *
       %paramDescription
       \t    */
-      \t   constexpr PcrInit(
-      %params
+      \t   constexpr PcrInit(%params
       \t   ) : value (%paramExpression) {
       \t   }
       \t\n
@@ -877,8 +875,7 @@
       \t    *
       %paramDescription
       \t    */
-      \t   constexpr PcrInit(
-      %params
+      \t   constexpr PcrInit(%params
       \t   ) : value (%paramExpression) {
       \t   }
       \t\n
@@ -1051,8 +1048,7 @@
       \t *
          %paramDescription
       \t */
-      \tstatic void setPCR(
-            %params)  {
+      \tstatic void setPCR(%params)  {
       \t
       \t   if constexpr (portAddress != 0) {
       \t      PcrBase::enablePortClock(pinIndex);
@@ -1115,8 +1111,7 @@
       \t *
          %paramDescription
       \t */
-      \tstatic void setOutput(
-            %params)  {
+      \tstatic void setOutput(%params)  {
       \t
       \t   setPCR(%paramExpression);
       \t}\n
@@ -1158,8 +1153,7 @@
       \t *
          %paramDescription
       \t */
-      \tstatic void setInput(
-            %params)  {
+      \tstatic void setInput(%params)  {
       \t
       \t   setPCR(%paramExpression);
       \t}\n
@@ -1197,8 +1191,7 @@
          \t *
             %paramDescription
          \t */
-         \tstatic void setInOut(
-                        %params)  {
+         \tstatic void setInOut(%params)  {
          \t
          \t   // Make input initially
          \t   setIn();
@@ -1226,8 +1219,7 @@
          \t *
             %paramDescription
          \t */
-         \tstatic void setOutput(
-                        %params)  {
+         \tstatic void setOutput(%params)  {
          \t
          \t   // Set initial level before enabling pin drive
          \t   setInactive();
@@ -1253,8 +1245,7 @@
    \t *
       %paramDescription
    \t */
-   \tstatic void setInput(
-                  %params)  {
+   \tstatic void setInput(%params)  {
    \t
    \t   // Make input
    \t   setIn();
@@ -1279,8 +1270,7 @@
    \t *
       %paramDescription
    \t */
-   \tstatic void setInOut(
-                  %params)  {
+   \tstatic void setInOut(%params)  {
    \t
    \t   setInOut(%paramExpression);
    \t}\n
@@ -1303,8 +1293,7 @@
    \t *
       %paramDescription
    \t */
-   \tstatic void setOutput(
-                  %params)  {
+   \tstatic void setOutput(%params)  {
    \t
    \t   setOutput(%paramExpression);
    \t}\n
@@ -1325,8 +1314,7 @@
    \t *
       %paramDescription
    \t */
-   \tstatic void setInput(
-                  %params)  {
+   \tstatic void setInput(%params)  {
    \t
    \t   setInOut(%paramExpression);
    \t}\n

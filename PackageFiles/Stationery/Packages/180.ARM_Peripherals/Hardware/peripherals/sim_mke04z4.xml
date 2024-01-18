@@ -4,14 +4,16 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Integration Module" >
 
+<!-- ____________________ Constants ____________________ -->
+
    <constant key="generateDefault"           type="Boolean" value="false"         />
    <constant key="configureInStartupDefault" type="Boolean" value="false"         />
-   <xi:include href="enablePeripheral.xml" />
+   <xi:include href="enablePeripheral.xml"  />
    <title />
 
-<!-- ==================== Constants ==================== -->
+<!-- ____________________ Constants ____________________ -->
 
-   <!--                                   RUN        -->
+   <!-- Peripheral speeds                 RUN        -->
    <constant key="ICSOUTCLK_max"  value="50MHz"  type="Long"    hidden="false" />
    <constant key="ICSFLLCLK_max"  value="50MHz"  type="Long"    hidden="false" />
    <constant key="I2S_max"        value="25MHz"  type="Long"    hidden="false" />
@@ -21,11 +23,16 @@
    <!-- LLWU wakeup devices -->
    <!-- None -->
 
+   <!-- Clock divider -->
+   <!-- None -->
+   <!-- DMA slots -->
+   <!-- None -->
+
    <!--
         Simple pin mapping information
         inputPinMap  Input pins with custom mapping implementation in peripheral file
         outputPinMap Output pins with custom mapping implementation in peripheral file
-        pinMap       Default pin mapping enabled whenever the peripheral signal is enabled
+        pinMap       Default pin mapping enabled whenever the peripheral signal is enabled (done in enablePeripheral.xml)
    -->
    <!-- Pin mapping for ADC0 SE0-SE11 -->
    <constant key="/ADC0/inputPinMap" type="String"
@@ -78,6 +85,25 @@
       <signalMapping pin="*"    />
    </dynamicSignalMapping>
 
+   <!-- FTM2 Hardware Triggers -->
+
+   <constant key="/FTM2/hardwareTriggerSources" type="String"
+       value='"ACMP0/ACMP1,FTM0_CH0,FTMSYNC"'  />
+
+   <dynamicSignalMapping signal="FTM2_TRIG0" >
+      <signalMapping pin="-"         expression="(/FTM2/ftm_sync_trig&amp;0b1)==0" />
+      <signalMapping pin="ACMP1_O"   expression="sim_sopt_actrg" />
+      <signalMapping pin="ACMP0_O"   />
+   </dynamicSignalMapping>
+   <dynamicSignalMapping signal="FTM2_TRIG1" >
+      <signalMapping pin="-"         expression="(/FTM2/ftm_sync_trig&amp;0b10)==0" />
+      <signalMapping pin="FTM0_CH0"  />
+   </dynamicSignalMapping>
+   <dynamicSignalMapping signal="FTM2_TRIG2" >
+      <signalMapping pin="-"         expression="(/FTM2/ftm_sync_trig&amp;0b100)==0" />
+      <signalMapping pin="FTMSYNC"   />
+   </dynamicSignalMapping>
+
    <!-- Fault pin mapping for FTM2 -->
    <for keys="inp" dim="4">
       <dynamicSignalMapping signal="FTM2_FLT%(inp)" >
@@ -96,7 +122,7 @@
    <!-- Pin mapping for OSC0 -->
    <constant key="/OSC0/pinMap"      type="String" value='"XTAL,PTB6;EXTAL,PTB7"' />
 
-   <!-- Pin mapping for PWT -->
+   <!-- Pin mapping for PWT (mapping done by PWT XML) -->
    <constant key="/PWT/inputMapping" value='"PTC4","PTB0","ACMP0_O","ACMP1_O"' type="String" />
 
    <!-- Pin mapping for RTC -->
@@ -116,40 +142,6 @@
          <signalMapping pin="-" />
       </dynamicSignalMapping>
    </for>
-
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
-
-<!--
-    * Template substitutions
-    *
-    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
-    * <li>%valueExpression            Numeric variable value e.g. 0x3
-    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
-    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
-    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
-    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
-    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
-    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * <li>%params                     Formatted parameter list for function
-    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
-    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
-    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
-    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
-    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
-    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
-    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
-    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
--->
 
    <xi:include href="simCommon.xml" />
 
@@ -331,6 +323,14 @@
          <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
       </binaryOption>
 
+      <binaryOption key="sim_scgc_acmp1" condition="sim_scgc_acmp1_present"
+         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         typeName="SimScgcAcmp1"
+         description="ACMP1 Clock Gate Control" >
+         <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+         <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+      </binaryOption>
+
       <binaryOption key="sim_sopt_actrg" condition="sim_sopt_actrg_present"
          addToVar="Acmp0ExternalItems,Acmp1ExternalItems,Ftm2ExternalItems"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
@@ -339,14 +339,6 @@
          description="ACMP Trigger FTM2 selection" >
          <choice name="ACMP0_OUT"   value="0" enum="Acmp0_out" />
          <choice name="ACMP1_OUT"   value="1" enum="Acmp1_out" />
-      </binaryOption>
-
-      <binaryOption key="sim_scgc_acmp1" condition="sim_scgc_acmp1_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-         typeName="SimScgcAcmp1"
-         description="ACMP1 Clock Gate Control" >
-         <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
-         <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
       </binaryOption>
    </category>
 
@@ -378,7 +370,6 @@
       <intOption key="sim_sopt_delay" condition="sim_sopt_delay_present"
          addToVar="Adc0ExternalItems"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-         typeName="Ticks"
          units="ticks"
          description="FTM2 Trigger Delay"
          toolTip="Specifies the delay from FTM2 initial or match trigger to ADC hardware trigger when 1 is written to ADHWT.\n
@@ -409,7 +400,29 @@
       </binaryOption>
    </category>
 
+   <for keys="n" values="1;2" >
+      <intOption key="Tclk%(n)"
+         hidden="true"
+         addToVar="FtmExternalItems,PwtExternalItems"
+         description="Timer External clock input #%(n)"
+         toolTip="This input is available as an external clock source for the timers"
+         value="0"
+         units="Hz"
+      />
+      <variableTemplate variables="Tclk%(n)"
+         initExpressionOnSameLine="true"
+      ><![CDATA[
+         \t/// %tooltip
+         \tstatic constexpr uint32_t Tclk%(n) =  %initExpression;
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
    <category name="FTM" description="FTM Options" >
+
+      <for keys="n" values="1;2" >
+         <aliasOption key="Tclk%(n)" locked="false" />
+      </for>
       <binaryOption key="sim_sopt_ftmsync" condition="sim_sopt_ftmsync_present"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimSoptFtmsync"
@@ -421,103 +434,113 @@
          <choice name="Generates trigger"  value="1" enum="GenerateFtmTrigger" isDefault="true" />
       </binaryOption>
 
-      <title description="FTM 0"/>
+      <for keys="ftmNum" values="0;2" >
 
-      <binaryOption key="sim_scgc_ftm0" condition="sim_scgc_ftm0_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-         typeName="SimScgcFtm0"
-         description="FTM0 Clock Gate Control" >
-         <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
-         <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
-      </binaryOption>
+         <title description="FTM %(ftmNum)"/>
 
-      <binaryOption key="sim_pinsel_ftm0clkps" condition="sim_pinsel_ftm0clkps_present"
-         addToVar="Ftm0ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-         typeName="SimPinselFtm0clkps"
-         description="FTM0 TCLK Pin Select" >
-         <choice name="Selects TCLK1 for FTM0 module"  value="0" enum="SelectsTclk1ForFtm0Module" />
-         <choice name="Selects TCLK2 for FTM0 module"  value="1" enum="SelectsTclk2ForFtm0Module" />
-      </binaryOption>
+         <binaryOption key="sim_scgc_ftm%(ftmNum)" condition="sim_scgc_ftm%(ftmNum)_present"
+            addToVar="Ftm%(ftmNum)ExternalItems"
+            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            typeName="SimScgcFtm%(ftmNum)"
+            description="FTM%(ftmNum) Clock Gate Control" >
+            <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
+            <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
+         </binaryOption>
 
-      <binaryOption key="sim_pinsel_ftm0ps0" condition="sim_pinsel_ftm0ps0_present"
-         addToVar="Ftm0ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-         typeName="SimPinselFtm0ps0"
-         description="FTM0 channel 0 Pin Select" >
-         <choice name="PTA0"        value="0" enum="Pta0" />
-         <choice name="PTB2"        value="1" enum="Ptb2" />
-      </binaryOption>
+         <binaryOption key="sim_pinsel_ftm%(ftmNum)clkps" condition="sim_pinsel_ftm%(ftmNum)clkps_present"
+            target="ftm%(ftmNum)ExternalClock"
+            addToVar="Ftm%(ftmNum)ExternalItems"
+            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            typeName="SimPinselFtm%(ftmNum)clkps"
+            description="FTM%(ftmNum) TCLK Pin Select" >
+            <choice name="Selects TCLK1 for FTM%(ftmNum) module"  value="0" enum="Tclk1" ref="Tclk1" code="Tclk1" />
+            <choice name="Selects TCLK2 for FTM%(ftmNum) module"  value="1" enum="Tclk2" ref="Tclk2" code="Tclk2" />
+         </binaryOption>
 
-      <binaryOption key="sim_pinsel_ftm0ps1" condition="sim_pinsel_ftm0ps1_present"
-         addToVar="Ftm0ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-         typeName="SimPinselFtm0ps1"
-         description="FTM0 channel 1 Pin Select" >
-         <choice name="PTA1"        value="0" enum="Pta1" />
-         <choice name="PTB3"        value="1" enum="Ptb3" />
-      </binaryOption>
+         <intOption key="ftm%(ftmNum)ExternalClock" condition="sim_pinsel_ftm%(ftmNum)clkps"
+            addToVar="Ftm%(ftmNum)ExternalItems"
+            toolTip="The frequency of the external clock selected for FTM%(ftmNum)"
+            description="FTM%(ftmNum) external clock"
+            locked="true"
+            derived="true"
+            units="Hz" />
 
-      <choiceOption key="sim_sopt_ftmic" condition="sim_sopt_ftmic_present"
-         addToVar="Ftm0ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-         typeName="SimSoptFtmic"
-         toolTip="Selects the sources for FTM0CH0 as capture input"
-         description="FTM0 channel 0 Input Capture Source" >
-         <choice name="FTM0_CH0 pin"  value="0" enum="Ftm0_ch0Pin" />
-         <choice name="ACMP0_OUT"     value="1" enum="Acmp0_out" />
-         <choice name="ACMP1_OUT"     value="2" enum="Acmp1_out" />
-         <choice name="RTC overflow"  value="3" enum="RtcOverflow" />
-      </choiceOption>
+         <clockCodeTemplate variable="sim_pinsel_ftm%(ftmNum)clkps"
+            returnFormat="%s"
+         ><![CDATA[
+            \t/**
+            \t * Get %description
+            \t *
+            \t * @return Clock frequency in Hz
+            \t */
+            \tstatic uint32_t getFtm%(ftmNum)ExternalClockFrequency() {
+            \t
+            \t   switch(%maskingExpression) {
+            \t      default: return 0;
+            %body
+            \t   }
+            \t}\n\n
+         ]]></clockCodeTemplate>
 
-      <binaryOption key="sim_sopt_rxdce" condition="sim_sopt_rxdce_present"
-         addToVar="Ftm0ExternalItems,Uart0ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-         typeName="SimSoptRxdce"
-         toolTip="Enables the UART0_RX to be captured by FTM0 channel 1"
-         description="UART0_RX Capture on FTM0 channel 1" >
-         <choice name="Not connected"                         value="0" enum="NotConnected" />
-         <choice name="UART0_RX connected as FTM0 channel 1"  value="1" enum="Uart0_rxConnectedAsFtm0Channel1" />
-      </binaryOption>
+         <binaryOption key="sim_pinsel_ftm0ps0" condition="sim_pinsel_ftm0ps0_present&amp;&amp;(%(ftmNum)==0)"
+            addToVar="Ftm0ExternalItems"
+            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            typeName="SimPinselFtm0ps0"
+            description="FTM0 channel 0 Pin Select" >
+            <choice name="PTA0"        value="0" enum="Pta0" />
+            <choice name="PTB2"        value="1" enum="Ptb2" />
+         </binaryOption>
 
-      <title description="FTM 2"/>
+         <binaryOption key="sim_pinsel_ftm0ps1" condition="sim_pinsel_ftm0ps1_present&amp;&amp;(%(ftmNum)==0)"
+            addToVar="Ftm0ExternalItems"
+            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            typeName="SimPinselFtm0ps1"
+            description="FTM0 channel 1 Pin Select" >
+            <choice name="PTA1"        value="0" enum="Pta1" />
+            <choice name="PTB3"        value="1" enum="Ptb3" />
+         </binaryOption>
 
-      <binaryOption key="sim_scgc_ftm2" condition="sim_scgc_ftm2_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-         typeName="SimScgcFtm2"
-         description="FTM2 Clock Gate Control" >
-         <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
-         <choice name="Clock enabled"   value="1" enum="ClockEnabled" />
-      </binaryOption>
+         <choiceOption key="sim_sopt_ftmic" condition="sim_sopt_ftmic_present&amp;&amp;(%(ftmNum)==0)"
+            addToVar="Ftm0ExternalItems"
+            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            typeName="SimSoptFtmic"
+            toolTip="Selects the sources for FTM0CH0 as capture input"
+            description="FTM0 channel 0 Input Capture Source" >
+            <choice name="FTM0_CH0 pin"  value="0" enum="Ftm0_ch0Pin" />
+            <choice name="ACMP0_OUT"     value="1" enum="Acmp0_out" />
+            <choice name="ACMP1_OUT"     value="2" enum="Acmp1_out" />
+            <choice name="RTC overflow"  value="3" enum="RtcOverflow" />
+         </choiceOption>
 
-      <binaryOption key="sim_pinsel_ftm2clkps" condition="sim_pinsel_ftm2clkps_present"
-         addToVar="Ftm2ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-         typeName="SimPinselFtm2clkps"
-         description="FTM2 TCLK Pin Select" >
-         <choice name="Selects TCLK1 for FTM2 module"  value="0" enum="SelectsTclk1ForFtm2Module" />
-         <choice name="Selects TCLK2 for FTM2 module"  value="1" enum="SelectsTclk2ForFtm2Module" />
-      </binaryOption>
+         <binaryOption key="sim_sopt_rxdce" condition="sim_sopt_rxdce_present&amp;&amp;(%(ftmNum)==0)"
+            addToVar="Ftm0ExternalItems,Uart0ExternalItems"
+            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            typeName="SimSoptRxdce"
+            toolTip="Enables the UART0_RX to be captured by FTM0 channel 1"
+            description="UART0_RX Capture on FTM0 channel 1" >
+            <choice name="Not connected"                         value="0" enum="NotConnected" />
+            <choice name="UART0_RX connected as FTM0 channel 1"  value="1" enum="Uart0_rxConnectedAsFtm0Channel1" />
+         </binaryOption>
 
-      <binaryOption key="sim_pinsel_ftm2ps2" condition="sim_pinsel_ftm2ps2_present"
-         addToVar="Ftm2ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-         typeName="SimPinselFtm2ps2"
-         description="FTM2 Channel 2 Pin Select" >
-         <choice name="PTC2"        value="0" enum="Ptc2"  />
-         <choice name="PTC4"        value="1" enum="Ptc4"  />
-      </binaryOption>
+         <binaryOption key="sim_pinsel_ftm2ps2" condition="sim_pinsel_ftm2ps2_present&amp;&amp;(%(ftmNum)==2)"
+            addToVar="Ftm2ExternalItems"
+            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            typeName="SimPinselFtm2ps2"
+            description="FTM2 Channel 2 Pin Select" >
+            <choice name="PTC2"        value="0" enum="Ptc2"  />
+            <choice name="PTC4"        value="1" enum="Ptc4"  />
+         </binaryOption>
 
-      <binaryOption key="sim_pinsel_ftm2ps3" condition="sim_pinsel_ftm2ps3_present"
-         addToVar="Ftm2ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-         typeName="SimPinselFtm2ps3"
-         disabledPinMap="FTM2_CH3,PTC3#/FTM2/Ch3PinInUse"
-         description="FTM2 Channel 3 Pin Select" >
-         <choice name="PTC3"  value="0" enum="Ptc3" />
-         <choice name="PTC5"  value="1" enum="Ptc5" />
-      </binaryOption>
-
+         <binaryOption key="sim_pinsel_ftm2ps3" condition="sim_pinsel_ftm2ps3_present&amp;&amp;(%(ftmNum)==2)"
+            addToVar="Ftm2ExternalItems"
+            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            typeName="SimPinselFtm2ps3"
+            disabledPinMap="FTM2_CH3,PTC3#/FTM2/Ch3PinInUse"
+            description="FTM2 Channel 3 Pin Select" >
+            <choice name="PTC3"  value="0" enum="Ptc3" />
+            <choice name="PTC5"  value="1" enum="Ptc5" />
+         </binaryOption>
+      </for>
    </category>
 
    <category name="I2C" description="I2C Options" >
@@ -580,6 +603,9 @@
    </category>
 
    <category name="PWT" description="PWT Options" >
+      <for keys="n" values="1;2" >
+         <aliasOption key="Tclk%(n)" locked="false" />
+      </for>
       <binaryOption key="sim_scgc_pwt" condition="sim_scgc_pwt_present"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimScgcPwt"
@@ -590,12 +616,39 @@
 
       <binaryOption key="sim_pinsel_pwtclkps" condition="sim_pinsel_pwtclkps_present"
          addToVar="PwtExternalItems"
+         target="pwtExternalClock"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimPinselPwtclkps"
          description="PWT TCLK Pin Select" >
-         <choice name="Selects TCLK1 for PWT module"  value="0" enum="SelectsTclk1ForPwtModule" />
-         <choice name="Selects TCLK2 for PWT module"  value="1" enum="SelectsTclk2ForPwtModule" />
+         <choice name="Selects TCLK1 for PWT module"  value="0" enum="Tclk1" ref="Tclk1" code="Tclk1" />
+         <choice name="Selects TCLK2 for PWT module"  value="1" enum="Tclk2" ref="Tclk2" code="Tclk2" />
       </binaryOption>
+
+      <intOption key="pwtExternalClock" condition="sim_pinsel_pwtclkps"
+         addToVar="PwtExternalItems"
+         toolTip="The frequency of the external clock selected for PWT"
+         description="PWT external clock"
+         locked="true"
+         derived="true"
+         units="Hz" />
+
+      <clockCodeTemplate variable="sim_pinsel_pwtclkps"
+         returnFormat="%s"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return Clock frequency in Hz
+         \t */
+         \tstatic uint32_t getPwtExternalClockFrequency() {
+         \t
+         \t   switch(%maskingExpression) {
+         \t      default: return 0;
+         %body
+         \t   }
+         \t}\n\n
+      ]]></clockCodeTemplate>
+
    </category>
 
    <category name="RTC" description="RTC Options" >
@@ -651,7 +704,7 @@
       </binaryOption>
 
       <binaryOption key="sim_sopt_txdme" condition="sim_sopt_txdme_present"
-         addToVar="Uart0ExternalItems"
+         addToVar="Uart0ExternalItems,Ftm0ExternalItems"
          enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
          typeName="SimSoptTxdme"
          toolTip="Enables the UART0_TX output modulated by FTM0 channel 0"
@@ -677,56 +730,9 @@
 
 <!-- Grahic here -->
 
-   <!-- ************* Class Declaration ****************** -->
+   <!-- _____________ Class Declaration __________________ -->
    <constant key="_class_declaration" type="String"
       value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
-
-   <template namespace="usbdm" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
-      \t/*
-      \t * Global clocks
-      \t */
-      \t\n
-   ]]></template>
-   <template namespace="usbdm" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
-      \t/*
-      \t * Global clocks constants
-      \t * These are provided when minimal clock generator code is used.
-      \t * They assume no clock changes are made after startup.
-      \t * Values provided are from USBDM configuration.
-      \t */
-      \t\n
-   ]]></template>
-
-   <for keys=" clock                  : name "
-      values=" system_core_clock[0]   : SystemCoreClock;
-               system_bus_clock[0]    : SystemBusClock;
-               system_timer_clock[0]  : SystemTimerClock
-         ">
-      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
-         \t/**
-         \t *  %description
-         \t *  %tooltip
-         \t */
-         \textern "C" uint32_t %(name);
-         \t\n
-      ]]></variableTemplate>
-      <variableTemplate key="/SYSTEM/Clocks" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
-         \t/**
-         \t *  %description
-         \t *  %tooltip
-         \t */
-         \tuint32_t %(name);
-         \t\n
-      ]]></variableTemplate>
-      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
-         \t/**
-         \t *  %description
-         \t *  %tooltip
-         \t */
-         \tconstexpr uint32_t %(name) = %valueExpression;
-         \t\n
-      ]]></variableTemplate>
-   </for>
 
    <variableTemplate variables="sim_sopt_ftmsync" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
@@ -740,19 +746,19 @@
       \t}\n\n
    ]]></variableTemplate>
 
-   <for keys="field:name"
-        values="
-      sim_sopt_delay : Ftm2Delay;
-      sim_sopt_adhwt : SoptAdhwt;
-      sim_sopt_busref: SoptClkOut;
-      sim_sopt_txdme : SoptTxdme;
-      sim_sopt_rxdce : SoptRxdce;
-      sim_sopt_ftmic : SoptFtmic;
-      sim_sopt_rxdfe : SoptRxdfe;
-      sim_sopt_actrg : SoptActrg;
-      sim_sopt_swde  : SingleWireDebugPins;
-      sim_sopt_rstpe : ResetPin;
-      sim_sopt_nmie  : NonMaskableInterruptPin" >
+   <for keys="field        : name"
+      values="
+      sim_sopt_delay       : Ftm2Delay;
+      sim_sopt_adhwt       : SoptAdhwt;
+      sim_sopt_busref      : SoptClkOut;
+      sim_sopt_txdme       : SoptTxdme;
+      sim_sopt_rxdce       : SoptRxdce;
+      sim_sopt_ftmic       : SoptFtmic;
+      sim_sopt_rxdfe       : SoptRxdfe;
+      sim_sopt_actrg       : SoptActrg;
+      sim_sopt_swde        : SingleWireDebugPins;
+      sim_sopt_rstpe       : ResetPin;
+      sim_sopt_nmie        : NonMaskableInterruptPin" >
       <variableTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
@@ -768,16 +774,16 @@
 
    <for keys="field:name"
         values="
-      sim_pinsel_pwtclkps  : Pwtclkps;
-      sim_pinsel_ftm2clkps : Ftm2clkps;
-      sim_pinsel_ftm0clkps : Ftm0clkps;
-      sim_pinsel_ftm2ps3   : Ftm2ps3;
-      sim_pinsel_ftm2ps2   : Ftm2ps2;
-      sim_pinsel_ftm0ps1   : Ftm0ps1;
-      sim_pinsel_ftm0ps0   : Ftm0ps0;
-      sim_pinsel_uart0ps   : Uart0ps;
-      sim_pinsel_spi0ps    : Spi0ps;
-      sim_pinsel_i2c0ps    : I2c0ps" >
+      sim_pinsel_pwtclkps  : PwtExternalClockPin;
+      sim_pinsel_ftm2clkps : Ftm2ExternalClockPin;
+      sim_pinsel_ftm0clkps : Ftm0ExternalClockPin;
+      sim_pinsel_ftm2ps3   : Ftm2Ch3Pin;
+      sim_pinsel_ftm2ps2   : Ftm2Ch2Pin;
+      sim_pinsel_ftm0ps1   : Ftm0Ch1Pin;
+      sim_pinsel_ftm0ps0   : Ftm0Ch0Pin;
+      sim_pinsel_uart0ps   : Uart0Pins;
+      sim_pinsel_spi0ps    : Spi0Pins;
+      sim_pinsel_i2c0ps    : I2c0Pins" >
       <variableTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
@@ -785,7 +791,7 @@
          \t *
          %paramDescription
          \t */
-         \tstatic void select%(name)Pins(%params) {
+         \tstatic void select%(name)(%params) {
          \t   %fieldAssignment;
          \t}\n\n
       ]]></variableTemplate>
@@ -813,12 +819,24 @@
       <variableTemplate variables="%(field)" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t/**
-         \t * Set %description
-         \t *
-         %paramDescription
+         \t * Get %description
          \t */
-         \tstatic void enable%(name)Clock(%params) {
-         \t   %fieldAssignment;
+         \tstatic bool get%(name)ClockEnable() {
+         \t   return %register & %mask;
+         \t}
+         \t
+         \t/**
+         \t * Disable %description
+         \t */
+         \tstatic void enable%(name)Clock() {
+         \t   %register = %register | %mask;
+         \t}
+         \t
+         \t/**
+         \t * Enable %description
+         \t */
+         \tstatic void disable%(name)Clock() {
+         \t   %register = %register & ~%mask;
          \t}\n\n
       ]]></variableTemplate>
    </for>
@@ -840,9 +858,18 @@
       ]]></variableTemplate>
    </for>
 
-<!--   ========== SIM Init class =============================== -->
+<!--   ________== SIM Init class ____________________________=== -->
 
-   <template key="init_description"  codeGenCondition="enablePeripheralSupport">
+   <template namespace="usbdm" >
+   <![CDATA[
+      class $(_Class)BasicInfo {
+      \t
+      public:
+      \t\n
+   ]]>
+   </template>
+
+   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Class)
@@ -901,21 +928,6 @@
       \t * $(_Class)::configure(init)
       \t * @endcode
       \t */
-   ]]>
-   </template>
-
-   <template namespace="usbdm" >
-   <![CDATA[
-      class $(_Class)BasicInfo {
-      \t
-      public:
-      \t\n
-   ]]>
-   </template>
-
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
-   <![CDATA[
-      $(init_description)
       \tclass Init {
       \t
       \tpublic:
@@ -936,22 +948,25 @@
 
    <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="sim_sopt_delay,sim_sopt_dlyact,sim_sopt_adhwt,sim_sopt_busref,sim_sopt_txdme,sim_sopt_ftmsync,sim_sopt_rxdce,sim_sopt_rxdfe,sim_sopt_ftmic,sim_sopt_actrg,sim_sopt_swde,sim_sopt_rstpe,sim_sopt_nmie"
+      linePadding="xxx"
    ><![CDATA[
-      \t   /// System Options Register
+      %multilineDescription
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
    <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="sim_pinsel_pwtclkps,sim_pinsel_ftm2clkps,sim_pinsel_ftm0clkps,sim_pinsel_ftm2ps3,sim_pinsel_ftm2ps2,sim_pinsel_ftm0ps1,sim_pinsel_ftm0ps0,sim_pinsel_uart0ps,sim_pinsel_spi0ps,sim_pinsel_i2c0ps"
+      linePadding="xxx"
    ><![CDATA[
-      \t   /// Pin Selection Register
+      %multilineDescription
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
    <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="sim_scgc_acmp1,sim_scgc_acmp0,sim_scgc_adc,sim_scgc_irq,sim_scgc_kbi1,sim_scgc_kbi0,sim_scgc_uart0,sim_scgc_spi0,sim_scgc_i2c,sim_scgc_swd,sim_scgc_flash,sim_scgc_crc,sim_scgc_ftm2,sim_scgc_ftm0,sim_scgc_pwt,sim_scgc_pit,sim_scgc_rtc"
+      linePadding="xxx"
    ><![CDATA[
-      \t   /// System Clock Gating Control Register
+      %multilineDescription
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
@@ -996,7 +1011,8 @@
             sim_scgc_ftm0;
             sim_scgc_pwt;
             sim_scgc_pit;
-            sim_scgc_rtc
+            sim_scgc_rtc;
+            sim_sopt_delay
             " >
       <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
@@ -1019,29 +1035,6 @@
       ]]>
       </variableTemplate>
    </for>
-
-<!--   Constructors -->
-
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-      variables="sim_sopt_delay"
-      linePadding="xxx" >
-   <![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      \t    * @param value %description
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%paramType0 value, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName = (%registerName&~%mask0) | %macro0(value);
-      \t   }
-      \t\n
-   ]]>
-   </variableTemplate>
 
 <!--   Default Initialisation value -->
 
@@ -1098,20 +1091,6 @@
       \t};\n\n
    ]]></variableTemplate>
 
-   <template codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
-      \t/**
-      \t * Update system clock values
-      \t *
-      \t * @param systemClock Frequency of clock provided to system clock dividers
-      \t */
-      \tstatic void updateSystemClocks(unsigned systemClock) {
-      \t
-      \t   SystemCoreClock    = systemClock/(((SIM->CLKDIV&SIM_CLKDIV_OUTDIV1_MASK)>>SIM_CLKDIV_OUTDIV1_SHIFT)+1);
-      \t   SystemBusClock     = SystemCoreClock/(((SIM->CLKDIV&SIM_CLKDIV_OUTDIV2_MASK)>>SIM_CLKDIV_OUTDIV2_SHIFT)+1);
-      \t   SystemTimerClock   = systemClock/(((SIM->CLKDIV&SIM_CLKDIV_OUTDIV3_MASK)>>SIM_CLKDIV_OUTDIV3_SHIFT)+1);
-      \t}\n\n
-   ]]></template>
-
    <template  codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
       \t/**
@@ -1147,7 +1126,70 @@
    ]]>
    </template>
 
-   <!-- ************* Common ****************** -->
+   <!-- _____________ Clock Variables __________________ -->
+
+   <template namespace="usbdm" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+      \t/*
+      \t * Global clocks
+      \t */
+      \t\n
+   ]]></template>
+   <template namespace="usbdm" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
+      \t/*
+      \t * Global clocks constants
+      \t * These are provided when minimal clock generator code is used.
+      \t * They assume no clock changes are made after startup.
+      \t * Values provided are from USBDM configuration.
+      \t */
+      \t\n
+   ]]></template>
+
+   <for keys=" clock                  : name "
+      values=" system_core_clock[0]   : SystemCoreClock;
+               system_bus_clock[0]    : SystemBusClock;
+               system_timer_clock[0]  : SystemTimerClock
+         ">
+      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \textern "C" uint32_t %(name);
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate key="/SYSTEM/Clocks" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \tuint32_t %(name);
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \tconstexpr uint32_t %(name) = %valueExpression;
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <template codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+      \t/**
+      \t * Update system clock values
+      \t *
+      \t * @param systemClock Frequency of clock provided to system clock dividers
+      \t */
+      \tstatic void updateSystemClocks(unsigned systemClock) {
+      \t
+      \t   SystemCoreClock    = systemClock/(((SIM->CLKDIV&SIM_CLKDIV_OUTDIV1_MASK)>>SIM_CLKDIV_OUTDIV1_SHIFT)+1);
+      \t   SystemBusClock     = SystemCoreClock/(((SIM->CLKDIV&SIM_CLKDIV_OUTDIV2_MASK)>>SIM_CLKDIV_OUTDIV2_SHIFT)+1);
+      \t   SystemTimerClock   = systemClock/(((SIM->CLKDIV&SIM_CLKDIV_OUTDIV3_MASK)>>SIM_CLKDIV_OUTDIV3_SHIFT)+1);
+      \t}\n\n
+   ]]></template>
+
+   <!-- _____________ Common __________________ -->
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >

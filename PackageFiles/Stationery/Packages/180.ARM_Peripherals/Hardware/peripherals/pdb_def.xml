@@ -144,7 +144,6 @@
    <intOption key="Minimum_resolution"
       enabledBy="secondsSupport"
       valueFormat="%s"
-      typeName="const Ticks &amp;"
       units="ticks"
       description="Minumum value for counter modulus"
       toolTip="This can be used to ensure that a reasonable resolution is available when using Seconds\n
@@ -276,7 +275,6 @@
 
    <intOption key="pdb_mod" condition="pdb_mod_mod_present"
       valueFormat="%s"
-      typeName="const Ticks &amp;"
       units="ticks"
       enabledBy="pdb_sc_trgsel>0"
       description="Counter modulo value"
@@ -289,7 +287,6 @@
    <floatOption key="pdb_mod_period" condition="pdb_mod_mod_present"
       enabledBy="pdb_sc_trgsel>0"
       ref="(pdb_mod+1)*pdb_clock_period"
-      typeName="const Seconds &amp;"
       description="Counter period in seconds"
       derivedFrom="pdb_mod"
       derived="true"
@@ -311,7 +308,6 @@
    <intOption key="pdb_idly" condition="pdb_idly_idly_present"
       enabledBy="pdb_sc_trgsel>0"
       valueFormat="%s"
-      typeName="const Ticks &amp;"
       units="ticks"
       description="Interrupt delay"
       toolTip="Specifies the delay value to schedule the PDB event.\n
@@ -321,7 +317,6 @@
    <floatOption key="pdb_idly_delay" condition="pdb_idly_idly_present"
       enabledBy="pdb_sc_trgsel>0"
       ref="(pdb_idly+1)*pdb_clock_period"
-      typeName="const Seconds &amp;"
       description="Interrupt delay in seconds"
       derived="true"
       derivedFrom="pdb_idly"
@@ -350,7 +345,6 @@
 
             <intOption key="pdb_ch%(n)_dly%(m)"
                valueFormat="%s"
-               typeName="const Ticks &amp;"
                units="ticks"
                enabledBy="pdb_ch%(n)_c1_pt%(m) == 2"
                description="Delay"
@@ -359,7 +353,6 @@
 
             <floatOption key="pdb_ch%(n)_dly%(m)_delay"
                ref="(pdb_ch%(n)_dly%(m)+1)*pdb_clock_period"
-               typeName="const Seconds &amp;"
                enabledBy="pdb_ch%(n)_c1_pt%(m) == 2"
                description="Delay in seconds"
                derivedFrom="pdb_ch%(n)_dly%(m)"
@@ -399,7 +392,6 @@
             enabledBy="pdb_intc%(x)_triggerMode==1"
             valueFormat="%s"
             units="ticks"
-            typeName="const Ticks &amp;"
             description="DAC interval"
             toolTip="Specifies the interval value for DAC interval counter.\n
                      When the DAC interval counter is equal to this value, the DAC is triggered and\n
@@ -410,7 +402,6 @@
 
          <floatOption key="pdb_int%(x)_delay"
             ref="(pdb_int%(x)+1)*pdb_clock_period"
-            typeName="const Seconds &amp;"
             enabledBy="pdb_intc%(x)_triggerMode==1"
             description="DAC interval in seconds"
             derivedFrom="pdb_int%(x)"
@@ -441,7 +432,6 @@
             enabledBy="pdb_poen_en%(y)"
             valueFormat="%s"
             units="ticks"
-            typeName="const Ticks &amp;"
             description="Pulse-Output Delay 1 - rising edge"
             toolTip="This specifies the delay 1 value for the Pulse-Out\n
                Pulse-Output goes high when the counter is equal to the dly1"
@@ -450,7 +440,6 @@
          <floatOption key="pdb_po%(y)_dly1_delay"
             enabledBy="pdb_poen_en%(y)"
             ref="(pdb_po%(y)_dly1+1)*pdb_clock_period"
-            typeName="const Seconds &amp;"
             description="Pulse-Output Delay 1 - rising edge in seconds"
             derived="true"
             derivedFrom="pdb_po%(y)_dly1"
@@ -460,7 +449,6 @@
             enabledBy="pdb_poen_en%(y)"
             valueFormat="%s"
             units="ticks"
-            typeName="const Ticks &amp;"
             description="Pulse-Output Delay 2 - falling edge"
             toolTip="These bits specify the delay 2 value for the Pulse-Out\n
                Pulse-Output goes low when the counter is equal to the dly2"
@@ -469,7 +457,6 @@
          <floatOption key="pdb_po%(y)_dly2_delay"
             enabledBy="pdb_poen_en%(y)"
             ref="(pdb_po%(y)_dly2+1)*pdb_clock_period"
-            typeName="const Seconds &amp;"
             description="Pulse-Output Delay 2 - falling edge in seconds"
             derived="true"
             derivedFrom="pdb_po%(y)_dly2"
@@ -806,30 +793,36 @@
 
    <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="pdb_sc_divider, pdb_sc_trgsel, pdb_sc_action, pdb_sc_pdbeie, pdb_sc_cont, pdb_sc_ldmod"
+      linePadding="xxx"
    ><![CDATA[
-      \t   /// Status and Control register
+      %multilineDescription
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
    <for keys="r" values="pdb_mod;pdb_idly" >
       <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
+         linePadding="xxx"
       ><![CDATA[
-         \t   /// %description
+      %multilineDescription
          \t   Seconds_Ticks %registerName;\n\n
       ]]></variableTemplate>
    </for>
 
    <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="pdb_ch0_c1_pt0"
+      linePadding="xxx"
    ><![CDATA[
+      %multilineDescription
       \t   /// Channel[N] Pretrigger control
       \t   uint32_t c1[$(NumChannels)] = {0};\n\n
    ]]></variableTemplate>
 
    <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
       variables="pdb_ch0_dly0"
+      linePadding="xxx"
    ><![CDATA[
+      %multilineDescription
       \t   /// Channel[N] PretriggerDelay[M]
       \t   Seconds_Ticks dly[$(NumChannels)][$(NumPreTriggers)];\n\n
    ]]></variableTemplate>
@@ -846,6 +839,7 @@
        ><![CDATA[
          \t   /**
          \t    * Constructor for %description
+         \t    * (%variable)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -866,6 +860,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description
+      \t    * (%variable)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -886,6 +881,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description and %description1
+      \t    * (%variable)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -893,8 +889,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      %registerName0 = (%registerName0 & ~%mask0) | %paramName0;
       \t      %registerName1.fromTicks(%paramName1);
@@ -908,6 +903,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description and %description1
+      \t    * (%variable)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -915,8 +911,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      %registerName0 = (%registerName0 & ~%mask0) | %paramName0;
       \t      %registerName1.fromSeconds(%paramName1);
@@ -931,6 +926,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description and %description1
+      \t    * (%variable)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -938,8 +934,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      %registerName0 = (%registerName0 & ~%mask0) | %paramName0;
       \t      %registerName1.fromTicks(%paramName1);
@@ -955,6 +950,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description and %description1
+      \t    * (%variable)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -962,8 +958,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      %registerName0 = (%registerName0 & ~%mask0) | %paramName0;
       \t      %registerName1.fromSeconds(%paramName1);
@@ -977,6 +972,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description
+      \t    * (%variable)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -997,6 +993,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description
+      \t    * (%variable)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -1019,6 +1016,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description0 and %description1
+      \t    * (%variable)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -1026,8 +1024,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      %registerName0        = (%registerName0 & ~%mask0) | %paramName0;
       \t      %registerName1.fromTicks(%paramName1);
@@ -1042,6 +1039,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description0 and %description1
+      \t    * (%variable)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -1049,8 +1047,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      %registerName0          = (%registerName0 & ~%mask0) | %paramName0;
       \t      %registerName1.fromSeconds(%paramName1);
@@ -1073,8 +1070,7 @@
          %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr Init(
-         %params, Types... rest) : Init(rest...) {
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
          \t      c1[%paramName0] |= %paramName1;
          \t      dly[%paramName0][%(m)].fromTicks(%paramName2);
@@ -1088,6 +1084,7 @@
        ><![CDATA[
          \t   /**
          \t    * Constructor for Channel Pretrigger %(m) with delay
+         \t    * (%variable)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -1095,8 +1092,7 @@
          %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr Init(
-         %params, Types... rest) : Init(rest...) {
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
          \t      c1[%paramName0] |= %paramName1;
          \t      dly[%paramName0][%(m)].fromSeconds(%paramName2);
@@ -1109,6 +1105,7 @@
        ><![CDATA[
          \t   /**
          \t    * Constructor for Channel Pretrigger %(m)
+         \t    * (%variable)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -1116,8 +1113,7 @@
          %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr Init(
-         %params, Types... rest) : Init(rest...) {
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
          \t      c1[%paramName0] |= %paramName1;
          \t      dly[%paramName0][%(m)].fromTicks(0_ticks);
@@ -1134,6 +1130,7 @@
        ><![CDATA[
          \t   /**
          \t    * Constructor for %description0 with %description1
+         \t    * (%variable)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -1141,8 +1138,7 @@
          %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr Init(
-         %params, Types... rest) : Init(rest...) {
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
          \t      intc[%(x)] = %paramName0;
          \t      interval[%(x)].fromTicks(%paramName1);
@@ -1156,6 +1152,7 @@
        ><![CDATA[
          \t   /**
          \t    * Constructor for %description0 with %description1
+         \t    * (%variable)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -1163,8 +1160,7 @@
          %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr Init(
-         %params, Types... rest) : Init(rest...) {
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
          \t      intc[%(x)]             = %paramName0;
          \t      interval[%(x)].fromSeconds(%paramName1);
@@ -1177,6 +1173,7 @@
        ><![CDATA[
          \t   /**
          \t    * Constructor for %description0
+         \t    * (%variable)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -1204,6 +1201,7 @@
          \t    * Constructor for %description0 %(y) with
          \t    *         %description1,
          \t    *         %description2
+         \t    * (%variable)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -1211,8 +1209,7 @@
          %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr Init(
-         %params, Types... rest) : Init(rest...) {
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
          \t      poen          |= %paramName0;
          \t      dly1[%(y)].fromTicks(%paramName1);
@@ -1230,6 +1227,7 @@
          \t    * Constructor for %description0 %(y) with
          \t    *         %description1,
          \t    *         %description2
+         \t    * (%variable)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -1237,8 +1235,7 @@
          %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr Init(
-         %params, Types... rest) : Init(rest...) {
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
          \t      poen            |= %paramName0;
          \t      dly1[%(y)].fromSeconds(%paramName1);

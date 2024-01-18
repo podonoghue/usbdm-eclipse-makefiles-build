@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- ftm_fault.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
+   <!-- ____ Setters and Getters ____________ -->
+
+   <for keys="field                     : set   : get   : clear : genCode                 : name"
+        values="
+
+         ftm_sc_action                  : false : true  : true  : enableGettersAndSetters : OverflowFlag;
+         ftm_sc_toie                    : true  : true  : false : enableGettersAndSetters : Action;
+         ftm_sc_cpwms                   : true  : true  : false : enableGettersAndSetters : CountMode;
+         ftm_sc_clks                    : true  : true  : false : enableGettersAndSetters : ClockSource;
+         ftm_sc_ps                      : true  : true  : false : enableGettersAndSetters : Prescaler;
+
+         ftm_cnt                        : false : true  : true  : enableGettersAndSetters : Time;
+
+         ftm_mod_mod                    : true  : true  : false : enableGettersAndSetters : CounterMaximumValue;
+
+         ftm_status_status              : true  : true  : false : enableGettersAndSetters : Status;
+
+         ftm_mode_faultie               : true  : true  : false : enableGettersAndSetters : FaultAction;
+         ftm_mode_faultm                : true  : true  : false : enableGettersAndSetters : FaultMode;
+         ftm_mode_pwmsync               : true  : true  : false : enableGettersAndSetters : PwmSyncMode;
+         ftm_mode_init                  : true  : true  : false : enableGettersAndSetters : InitialiseOutputs;
+         ftm_mode_ftmen                 : true  : true  : false : enableGettersAndSetters : RegisterSet;
+
+         ftm_sync_swsync                : true  : true  : false : enableGettersAndSetters : SoftwareTrigger;
+         ftm_sync_trig2                 : true  : true  : false : enableGettersAndSetters : SyncTrig2;
+         ftm_sync_trig1                 : true  : true  : false : enableGettersAndSetters : SyncTrig1;
+         ftm_sync_trig0                 : true  : true  : false : enableGettersAndSetters : SyncTrig0;
+         ftm_sync_synchom               : true  : true  : false : enableGettersAndSetters : SyncSynchom;
+         ftm_sync_reinit                : true  : true  : false : enableGettersAndSetters : SyncReinit;
+         ftm_sync_cntmax                : true  : true  : false : enableGettersAndSetters : SyncCntmax;
+         ftm_sync_cntmin                : true  : true  : false : enableGettersAndSetters : SyncCntmin;
+
+         ftm_outinit_ch5oi              : true  : true  : false : enableGettersAndSetters : OutinitCh5oi;
+         ftm_outinit_ch4oi              : true  : true  : false : enableGettersAndSetters : OutinitCh4oi;
+         ftm_outinit_ch3oi              : true  : true  : false : enableGettersAndSetters : OutinitCh3oi;
+         ftm_outinit_ch2oi              : true  : true  : false : enableGettersAndSetters : OutinitCh2oi;
+         ftm_outinit_ch1oi              : true  : true  : false : enableGettersAndSetters : OutinitCh1oi;
+         ftm_outinit_ch0oi              : true  : true  : false : enableGettersAndSetters : OutinitCh0oi;
+         ftm_outinit_choi               : true  : true  : false : enableGettersAndSetters : OutinitChoi;
+
+         ftm_outmask_ch5om              : true  : true  : false : enableGettersAndSetters : OutmaskCh5om;
+         ftm_outmask_ch4om              : true  : true  : false : enableGettersAndSetters : OutmaskCh4om;
+         ftm_outmask_ch3om              : true  : true  : false : enableGettersAndSetters : OutmaskCh3om;
+         ftm_outmask_ch2om              : true  : true  : false : enableGettersAndSetters : OutmaskCh2om;
+         ftm_outmask_ch1om              : true  : true  : false : enableGettersAndSetters : OutmaskCh1om;
+         ftm_outmask_ch0om              : true  : true  : false : enableGettersAndSetters : OutmaskCh0om;
+         ftm_outmask_chom               : true  : true  : false : enableGettersAndSetters : OutmaskChom;
+
+         ftm_combine_faulten2           : true  : true  : false : enableGettersAndSetters : CombineFaulten2;
+         ftm_combine_syncen2            : true  : true  : false : enableGettersAndSetters : CombineSyncen2;
+         ftm_combine_dten2              : true  : true  : false : enableGettersAndSetters : CombineDten2;
+         ftm_combine_decap2             : true  : true  : false : enableGettersAndSetters : CombineDecap2;
+         ftm_combine_decapen2           : true  : true  : false : enableGettersAndSetters : CombineDecapen2;
+         ftm_combine_comp2              : true  : true  : false : enableGettersAndSetters : CombineComp2;
+         ftm_combine_combine2           : true  : true  : false : enableGettersAndSetters : CombineCombine2;
+         ftm_combine_faulten1           : true  : true  : false : enableGettersAndSetters : CombineFaulten1;
+         ftm_combine_syncen1            : true  : true  : false : enableGettersAndSetters : CombineSyncen1;
+         ftm_combine_dten1              : true  : true  : false : enableGettersAndSetters : CombineDten1;
+         ftm_combine_decap1             : true  : true  : false : enableGettersAndSetters : CombineDecap1;
+         ftm_combine_decapen1           : true  : true  : false : enableGettersAndSetters : CombineDecapen1;
+         ftm_combine_comp1              : true  : true  : false : enableGettersAndSetters : CombineComp1;
+         ftm_combine_combine1           : true  : true  : false : enableGettersAndSetters : CombineCombine1;
+         ftm_combine_faulten0           : true  : true  : false : enableGettersAndSetters : CombineFaulten0;
+         ftm_combine_syncen0            : true  : true  : false : enableGettersAndSetters : CombineSyncen0;
+         ftm_combine_dten0              : true  : true  : false : enableGettersAndSetters : CombineDten0;
+         ftm_combine_decap0             : true  : true  : false : enableGettersAndSetters : CombineDecap0;
+         ftm_combine_decapen0           : true  : true  : false : enableGettersAndSetters : CombineDecapen0;
+         ftm_combine_comp0              : true  : true  : false : enableGettersAndSetters : CombineComp0;
+         ftm_combine_combine0           : true  : true  : false : enableGettersAndSetters : CombineCombine0;
+         ftm_combine_combine            : true  : true  : false : enableGettersAndSetters : CombineCombine;
+
+         ftm_deadtime_dtps              : true  : true  : false : enableGettersAndSetters : DeadtimeDtps;
+         ftm_deadtime_dtval             : true  : true  : false : enableGettersAndSetters : DeadtimeDtval;
+
+         ftm_exttrig_trigf              : true  : true  : false : enableGettersAndSetters : ExttrigTrigf;
+         ftm_exttrig_inittrigen         : true  : true  : false : enableGettersAndSetters : ExttrigInittrigen;
+         ftm_exttrig_ch1trig            : true  : true  : false : enableGettersAndSetters : ExttrigCh1trig;
+         ftm_exttrig_ch0trig            : true  : true  : false : enableGettersAndSetters : ExttrigCh0trig;
+         ftm_exttrig_ch5trig            : true  : true  : false : enableGettersAndSetters : ExttrigCh5trig;
+         ftm_exttrig_ch4trig            : true  : true  : false : enableGettersAndSetters : ExttrigCh4trig;
+         ftm_exttrig_ch3trig            : true  : true  : false : enableGettersAndSetters : ExttrigCh3trig;
+         ftm_exttrig_ch2trig            : true  : true  : false : enableGettersAndSetters : ExttrigCh2trig;
+         ftm_exttrig_chtrig             : true  : true  : false : enableGettersAndSetters : ExttrigChtrig;
+
+         ftm_pol_pol5                   : true  : true  : false : enableGettersAndSetters : PolPol5;
+         ftm_pol_pol4                   : true  : true  : false : enableGettersAndSetters : PolPol4;
+         ftm_pol_pol3                   : true  : true  : false : enableGettersAndSetters : PolPol3;
+         ftm_pol_pol2                   : true  : true  : false : enableGettersAndSetters : PolPol2;
+         ftm_pol_pol1                   : true  : true  : false : enableGettersAndSetters : PolPol1;
+         ftm_pol_pol0                   : true  : true  : false : enableGettersAndSetters : PolPol0;
+         ftm_pol_pol                    : true  : true  : false : enableGettersAndSetters : PolPol;
+
+         ftm_fms_faultf                 : true  : true  : false : enableGettersAndSetters : FmsFaultf;
+         ftm_fms_wpen                   : true  : true  : false : enableGettersAndSetters : FmsWpen;
+         ftm_fms_faultin                : false : true  : false : enableGettersAndSetters : FmsFaultin;
+         ftm_fms_faultf3                : true  : true  : false : enableGettersAndSetters : FmsFaultf3;
+         ftm_fms_faultf2                : true  : true  : false : enableGettersAndSetters : FmsFaultf2;
+         ftm_fms_faultf1                : true  : true  : false : enableGettersAndSetters : FmsFaultf1;
+         ftm_fms_faultf0                : true  : true  : false : enableGettersAndSetters : FmsFaultf0;
+
+         ftm_filter_ch3fval             : true  : true  : false : enableGettersAndSetters : FilterCh3fval;
+         ftm_filter_ch2fval             : true  : true  : false : enableGettersAndSetters : FilterCh2fval;
+         ftm_filter_ch1fval             : true  : true  : false : enableGettersAndSetters : FilterCh1fval;
+         ftm_filter_ch0fval             : true  : true  : false : enableGettersAndSetters : FilterCh0fval;
+
+         ftm_fltctrl_ffval              : true  : true  : false : enableGettersAndSetters : FltctrlFfval;
+         ftm_fltctrl_ffltr3en           : true  : true  : false : enableGettersAndSetters : FltctrlFfltr3en;
+         ftm_fltctrl_ffltr2en           : true  : true  : false : enableGettersAndSetters : FltctrlFfltr2en;
+         ftm_fltctrl_ffltr1en           : true  : true  : false : enableGettersAndSetters : FltctrlFfltr1en;
+         ftm_fltctrl_ffltr0en           : true  : true  : false : enableGettersAndSetters : FltctrlFfltr0en;
+         ftm_fltctrl_ffltren            : true  : true  : false : enableGettersAndSetters : FltctrlFfltren;
+         ftm_fltctrl_fault3en           : true  : true  : false : enableGettersAndSetters : FltctrlFault3en;
+         ftm_fltctrl_fault2en           : true  : true  : false : enableGettersAndSetters : FltctrlFault2en;
+         ftm_fltctrl_fault1en           : true  : true  : false : enableGettersAndSetters : FltctrlFault1en;
+         ftm_fltctrl_fault0en           : true  : true  : false : enableGettersAndSetters : FltctrlFault0en;
+         ftm_fltctrl_faulten            : true  : true  : false : enableGettersAndSetters : FltctrlFaulten;
+
+         ftm_conf_gtbeout               : true  : true  : false : enableGettersAndSetters : ConfGtbeout;
+         ftm_conf_gtbeen                : true  : true  : false : enableGettersAndSetters : ConfGtbeen;
+         ftm_conf_bdmmode               : true  : true  : false : enableGettersAndSetters : ConfBdmmode;
+         ftm_conf_numtof                : true  : true  : false : enableGettersAndSetters : ConfNumtof;
+
+         ftm_fltpol_flt3pol             : true  : true  : false : enableGettersAndSetters : FltpolFlt3pol;
+         ftm_fltpol_flt2pol             : true  : true  : false : enableGettersAndSetters : FltpolFlt2pol;
+         ftm_fltpol_flt1pol             : true  : true  : false : enableGettersAndSetters : FltpolFlt1pol;
+         ftm_fltpol_flt0pol             : true  : true  : false : enableGettersAndSetters : FltpolFlt0pol;
+         ftm_fltpol_fltpol              : true  : true  : false : enableGettersAndSetters : FltpolFltpol;
+
+         ftm_synconf_hwsoc              : true  : true  : false : enableGettersAndSetters : SynconfHwsoc;
+         ftm_synconf_hwinvc             : true  : true  : false : enableGettersAndSetters : SynconfHwinvc;
+         ftm_synconf_hwom               : true  : true  : false : enableGettersAndSetters : SynconfHwom;
+         ftm_synconf_hwwrbuf            : true  : true  : false : enableGettersAndSetters : SynconfHwwrbuf;
+         ftm_synconf_hwrstcnt           : true  : true  : false : enableGettersAndSetters : SynconfHwrstcnt;
+         ftm_synconf_swsoc              : true  : true  : false : enableGettersAndSetters : SynconfSwsoc;
+         ftm_synconf_swinvc             : true  : true  : false : enableGettersAndSetters : SynconfSwinvc;
+         ftm_synconf_swom               : true  : true  : false : enableGettersAndSetters : SynconfSwom;
+         ftm_synconf_swwrbuf            : true  : true  : false : enableGettersAndSetters : SynconfSwwrbuf;
+         ftm_synconf_swrstcnt           : true  : true  : false : enableGettersAndSetters : SynconfSwrstcnt;
+         ftm_synconf_syncmode           : true  : true  : false : enableGettersAndSetters : SynconfSyncmode;
+         ftm_synconf_swoc               : true  : true  : false : enableGettersAndSetters : SynconfSwoc;
+         ftm_synconf_invc               : true  : true  : false : enableGettersAndSetters : SynconfInvc;
+         ftm_synconf_cntinc             : true  : true  : false : enableGettersAndSetters : SynconfCntinc;
+         ftm_synconf_hwtrigmode         : true  : true  : false : enableGettersAndSetters : SynconfHwtrigmode;
+
+         ftm_invctrl_inv2en             : true  : true  : false : enableGettersAndSetters : InvctrlInv2en;
+         ftm_invctrl_inv1en             : true  : true  : false : enableGettersAndSetters : InvctrlInv1en;
+         ftm_invctrl_inv0en             : true  : true  : false : enableGettersAndSetters : InvctrlInv0en;
+         ftm_invctrl_inven              : true  : true  : false : enableGettersAndSetters : InvctrlInven;
+
+         ftm_swoctrl_ch5ocv             : true  : true  : false : enableGettersAndSetters : SwoctrlCh5ocv;
+         ftm_swoctrl_ch4ocv             : true  : true  : false : enableGettersAndSetters : SwoctrlCh4ocv;
+         ftm_swoctrl_ch3ocv             : true  : true  : false : enableGettersAndSetters : SwoctrlCh3ocv;
+         ftm_swoctrl_ch2ocv             : true  : true  : false : enableGettersAndSetters : SwoctrlCh2ocv;
+         ftm_swoctrl_ch1ocv             : true  : true  : false : enableGettersAndSetters : SwoctrlCh1ocv;
+         ftm_swoctrl_ch0ocv             : true  : true  : false : enableGettersAndSetters : SwoctrlCh0ocv;
+         ftm_swoctrl_chocv              : true  : true  : false : enableGettersAndSetters : SwoctrlChocv;
+         ftm_swoctrl_ch5oc              : true  : true  : false : enableGettersAndSetters : SwoctrlCh5oc;
+         ftm_swoctrl_ch4oc              : true  : true  : false : enableGettersAndSetters : SwoctrlCh4oc;
+         ftm_swoctrl_ch3oc              : true  : true  : false : enableGettersAndSetters : SwoctrlCh3oc;
+         ftm_swoctrl_ch2oc              : true  : true  : false : enableGettersAndSetters : SwoctrlCh2oc;
+         ftm_swoctrl_ch1oc              : true  : true  : false : enableGettersAndSetters : SwoctrlCh1oc;
+         ftm_swoctrl_ch0oc              : true  : true  : false : enableGettersAndSetters : SwoctrlCh0oc;
+         ftm_swoctrl_choc               : true  : true  : false : enableGettersAndSetters : SwoctrlChoc;
+
+         ftm_pwmload_ldok               : true  : true  : false : enableGettersAndSetters : PwmloadLdok;
+         ftm_pwmload_ch5sel             : true  : true  : false : enableGettersAndSetters : PwmloadCh5sel;
+         ftm_pwmload_ch4sel             : true  : true  : false : enableGettersAndSetters : PwmloadCh4sel;
+         ftm_pwmload_ch3sel             : true  : true  : false : enableGettersAndSetters : PwmloadCh3sel;
+         ftm_pwmload_ch2sel             : true  : true  : false : enableGettersAndSetters : PwmloadCh2sel;
+         ftm_pwmload_ch1sel             : true  : true  : false : enableGettersAndSetters : PwmloadCh1sel;
+         ftm_pwmload_ch0sel             : true  : true  : false : enableGettersAndSetters : PwmloadCh0sel;
+         ftm_pwmload_chsel              : true  : true  : false : enableGettersAndSetters : PwmloadChsel
+         " >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %fieldAssignment;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t   return %fieldExtract;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t *
+         \t */
+         \tstatic void clear%(name)() {
+         \t   %register = %register|%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <for keys="field                     : set   : get   : clear : genCode                 : context                 : name"
+        values="
+
+         ftm_cnsc_chf                   : true  : true  : false : enableGettersAndSetters : CONTROLS[index].CnSC : CnscChf;
+         ftm_cnsc_chie                  : true  : true  : false : enableGettersAndSetters : CONTROLS[index].CnSC : CnscChie;
+         ftm_cnsc_msb                   : true  : true  : false : enableGettersAndSetters : CONTROLS[index].CnSC : CnscMsb;
+         ftm_cnsc_msa                   : true  : true  : false : enableGettersAndSetters : CONTROLS[index].CnSC : CnscMsa;
+         ftm_cnsc_ms                    : true  : true  : false : enableGettersAndSetters : CONTROLS[index].CnSC : CnscMs;
+         ftm_cnsc_elsb                  : true  : true  : false : enableGettersAndSetters : CONTROLS[index].CnSC : CnscElsb;
+         ftm_cnsc_elsa                  : true  : true  : false : enableGettersAndSetters : CONTROLS[index].CnSC : CnscElsa;
+         ftm_cnsc_els                   : true  : true  : false : enableGettersAndSetters : CONTROLS[index].CnSC : CnscEls;
+         ftm_cnv_val                    : true  : true  : false : enableGettersAndSetters : CONTROLS[index].CnV  : CnvVal" >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(int index, %params) {
+         \t   $(_basename)->%(context) = ($(_basename)->%(context) & ~%mask)|%paramExpression;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)(int index) {
+         \t   return %paramType($(_basename)->%(context)&%mask);
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t *
+         \tstatic void clear%(name)(int index) {
+         \t   $(_basename)->%(context) = $(_basename)->%(context)|%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+</fragment>

@@ -317,7 +317,6 @@
       <intOption key="speed[%(c)]"
          description="Speed of interface"
          toolTip="Speed of transmission"
-         typeName="const Hertz &amp;"
          valueFormat="%s"
          units="Hz"
          value="10_MHz"
@@ -374,7 +373,7 @@
       />
 
    <choiceOption key="spi_ctar_sel"
-      enumType="uint8_t"
+      baseType="uint8_t"
       typeName="SpiCtarSelect"
       valueFormat="%s"
       description="CTAR Selection"
@@ -385,7 +384,7 @@
 
    <choiceOption key="PeripheralSelectMode"
       typeName="SpiPeripheralSelectMode"
-      enumType="uint8_t"
+      baseType="uint8_t"
       valueFormat="(%s)"
       description="Controls PCS between transfers/transactions"
       toolTip="Select whether Peripheral Select is returned to idle between transfers or transactions" >

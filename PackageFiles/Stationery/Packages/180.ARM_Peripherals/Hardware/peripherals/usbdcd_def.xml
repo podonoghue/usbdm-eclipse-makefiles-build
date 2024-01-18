@@ -128,7 +128,7 @@
       locked="true"
       enabledBy="enablePeripheralSupport"
       typeName="UsbdcdClockSpeed"
-      enumType="uint16_t"
+      baseType="uint16_t"
       description="Numerical Value of Clock Speed"
       toolTip="This value allows the USBDCD to accurately determine time intervals\n
                The unit of measure can be kHz or MHz as controlled by usbdcd_clock_clock_unit"
@@ -206,7 +206,7 @@
    <intOption key="usbdcd_timer0_tseq_init" condition="usbdcd_timer0_tseq_init_present"
       enabledBy="enablePeripheralSupport"
       typeName="UsbdcdInitiationTime"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Sequence Initiation Time (in ms)"
       toolTip="This represents the system latency (in ms) measured from the time VBUS goes active to the time\n
                system software initiates the charger detection sequence in the USBDCD module. \n
@@ -231,7 +231,7 @@
    <intOption key="usbdcd_timer1_tdcd_dbnc" condition="usbdcd_timer1_tdcd_dbnc_present"
       enabledBy="enablePeripheralSupport"
       typeName="UsbdcdDataPlusDebounceTime"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Time Period to Debounce D+ Signal (in ms)"
       toolTip="Sets the time period (ms) to debounce the D+ signal during the data pin contact detection phase.\n
                The USB Battery Charging Specification requires a minimum value of 10 ms"
@@ -241,7 +241,7 @@
    <intOption key="usbdcd_timer1_tvdpsrc_on" condition="usbdcd_timer1_tvdpsrc_on_present"
       enabledBy="enablePeripheralSupport"
       typeName="UsbdcdComparatorEnabledTime"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Time Period Comparator Enabled (in ms)"
       toolTip="This timing parameter is used after detection of the data pin.\n
                The USB Battery Charging Specification requires a minimum value of 40 ms."
@@ -253,7 +253,7 @@
    <intOption key="usbdcd_timer2_tvdpsrc_con" condition="usbdcd_timer2_tvdpsrc_con_present"
       enabledBy="enablePeripheralSupport"
       typeName="UsbdcdDataPlusPullupDelayTime"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Time Period Before Enabling D+ Pullup (in ms)"
       toolTip="Sets the time period (ms) that the module waits after charging port detection before system software must\n
                enable the D+ pullup to connect to the USB host. Valid values are 1–1023, but the USB Battery Charging\n
@@ -264,7 +264,7 @@
    <intOption key="usbdcd_timer2_check_dm" condition="usbdcd_timer2_check_dm_present"
       enabledBy="enablePeripheralSupport"
       typeName="UsbdcdDataMinusCheckDelayTime"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Time Before Check of D- Line (in ms)"
       toolTip="Sets the amount of time (in ms) that the module waits after the device connects to the USB bus until\n
                checking the state of the D- line to determine the type of charging port. See Charger Type Detection.\n
@@ -278,7 +278,7 @@
       enabledBy="enablePeripheralSupport"
       register="timer2_bc11"
       typeName="UsbdcdDataPlusPullupDelayTime"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Time Period Before Enabling D+ Pullup (in ms)"
       toolTip="Sets the time period (ms) that the module waits after charging port detection before system software must\n
                enable the D+ pullup to connect to the USB host. Valid values are 1–1023, but the USB Battery Charging\n
@@ -290,7 +290,7 @@
       enabledBy="enablePeripheralSupport"
       register="timer2_bc11"
       typeName="UsbdcdDataMinusCheckDelayTime"
-      enumType="uint8_t"
+      baseType="uint8_t"
       description="Time Before Check of D- Line (in ms)"
       toolTip="Sets the amount of time (in ms) that the module waits after the device connects to the USB bus until\n
                checking the state of the D- line to determine the type of charging port. See Charger Type Detection.\n
@@ -304,7 +304,7 @@
       enabledBy="enablePeripheralSupport"
       register="timer2_bc12"
       typeName="UsbdcdPrimaryToSecondaryWait"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Wait time after primary detection."
       toolTip="Sets the amount of time (in ms) that the module waits after primary detection\n
                before start to secondary detection\n
@@ -316,7 +316,7 @@
       enabledBy="enablePeripheralSupport"
       register="timer2_bc12"
       typeName="UsbdcdTvdmsrcOnTime"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="VDM_SRC time"
       toolTip="Sets the amount of time (in ms) that the module enables the VDM_SRC.\n
                Valid values are 0-40ms"

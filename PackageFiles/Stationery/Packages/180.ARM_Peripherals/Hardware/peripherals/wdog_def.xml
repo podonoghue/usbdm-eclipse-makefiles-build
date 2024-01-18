@@ -34,7 +34,7 @@
     * Template substitutions
     *
     * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
+    * %symbolicExpression[index]      Symbolic formatted value e.g. AdcCompare_Disabled
     * %variable[index]                Variable name /ADC0/adc_sc2_acfe
     * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
     * %description[index]             Description from controlVar e.g. Compare Function Enable
@@ -47,9 +47,9 @@
     * %paramType[index]               As for %paramType
     * %paramName[index]               As for %paramName
     * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %fieldAssignment;         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
+    * %symbolicExpression             Symbolic variable value e.g. AdcCompare_Disabled
+    * %fieldAssignment                Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
+    * %maskingExpression              Based on variable etc. Similar to (%register&%mask)
     * %variable[index]                Variable name from condition
     * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
     * %register[index]                Register associated with variable e.g. adc->APCTL1
@@ -83,7 +83,7 @@
    <binaryOption key="wdog_stctrlh_wdogen" condition="wdog_stctrlh_wdogen_present"
       enabledBy="fullCodeSupport"
       typeName="WdogEnable"
-      enumType="uint16_t"
+      baseType="uint16_t"
       toolTip="Main enable for WDOG\n
       When disabled, the watchdog timer is kept in the reset state, but the other exception conditions can \n
       still trigger a reset/interrupt"
@@ -94,7 +94,7 @@
 
    <binaryOption key="wdog_stctrlh_distestwdog" condition="wdog_stctrlh_distestwdog_present"
       enabledBy="wdog_stctrlh_wdogen"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="WdogTestMode"
       toolTip="Disables watchdog test mode until next reset"
       description="Test mode disable" >
@@ -104,7 +104,7 @@
 
    <binaryOption key="wdog_stctrlh_waiten" condition="wdog_stctrlh_waiten_present"
       enabledBy="wdog_stctrlh_wdogen"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="WdogEnableInWait"
       toolTip="Control watchdog operation in WAIT mode"
       description="Enable watchdog in WAIT mode" >
@@ -114,7 +114,7 @@
 
    <binaryOption key="wdog_stctrlh_stopen" condition="wdog_stctrlh_stopen_present"
       enabledBy="wdog_stctrlh_wdogen"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="WdogEnableInStop"
       toolTip="Control watchdog operation in STOP mode"
       description="Enable watchdog in STOP mode" >
@@ -124,7 +124,7 @@
 
    <binaryOption key="wdog_stctrlh_dbgen" condition="wdog_stctrlh_dbgen_present"
       enabledBy="wdog_stctrlh_wdogen"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="WdogEnableInDebug"
       toolTip="Control watchdog operation in DEBUG mode"
       description="Enable watchdog in DEBUG mode" >
@@ -134,7 +134,7 @@
 
    <binaryOption key="wdog_stctrlh_allowupdate" condition="wdog_stctrlh_allowupdate_present"
       enabledBy="fullCodeSupport"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="WdogAllowUpdate"
       toolTip="Enables updates to watchdog write-once registers, after \n
                the reset-triggered initial configuration window closes\n
@@ -147,7 +147,7 @@
 
    <binaryOption key="wdog_stctrlh_winen" condition="wdog_stctrlh_winen_present"
       enabledBy="wdog_stctrlh_wdogen"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="WdogWindow"
       toolTip="Windowing mode only allows refresh during a restricted window"
       description="Enable watchdog windowing mode" >
@@ -157,7 +157,7 @@
 
    <binaryOption key="wdog_stctrlh_irqrsten" condition="wdog_stctrlh_irqrsten_present"
       enabledBy="wdog_stctrlh_wdogen"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="WdogAction"
       toolTip="This write-once bit allows an interrupt handler to record state prior to forcing a reset.\n
                The reset occurs after a delay of 128 bus clocks following the interrupt vector fetch."
@@ -169,7 +169,7 @@
    <binaryOption key="wdog_stctrlh_clksrc" condition="wdog_stctrlh_clksrc_present"
       enabledBy="fullCodeSupport"
       target="inputClockFrequency"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="WdogClock"
       description="Watchdog clock source"
       toolTip="Clock source for watchdog" >
@@ -229,7 +229,7 @@
       enabledBy="wdog_stctrlh_wdogen"
       target="timerTickPeriod"
       typeName="WdogPrescale"
-      enumType="uint16_t"
+      baseType="uint16_t"
       description="Prescaler for the watchdog clock source"
       toolTip="This prescaler divides the input clock for the watchdog counter" >
       <choice value="0"  name="Prescaler = 1"  ref="1.0/inputClockFrequency" enum="Direct" />
@@ -254,7 +254,6 @@
       enabledBy="wdog_stctrlh_wdogen"
       description="Watchdog Timeout"
       toolTip="The watchdog must be refreshed before this interval expires"
-      typeName="const Seconds &amp;"
       units="s"
       value="1"/>
 
@@ -265,7 +264,6 @@
       units="ticks"
       description="Watchdog Timeout in ticks"
       toolTip="The watchdog must be refreshed before the counter reaches this value"
-      typeName="Ticks"
       derived="true"
       min="200" max="0xFFFF"
       disabledValue="0xFFFF"
@@ -278,7 +276,6 @@
       toolTip="Refresh of the watchdog may not be carried out before this interval has expired i.e.\n
                Refresh must occur within [window...timeout] if window mode is enabled.\n
                A refresh outside of this range resets the system"
-      typeName="const Seconds &amp;"
       derived="true"
       units="s"
       value="0"/>
@@ -292,7 +289,6 @@
       toolTip="If windowed operation is enabled, then the watchdog can only be refreshed \n
                if the timer reaches a value greater than or equal to this window length value.\n
                A refresh outside of this window resets the system"
-      typeName="Ticks"
       value="0" min="0" max="0xFFFF"
       disabledValue="0xFFFF"
    />
@@ -372,8 +368,7 @@
       \t
       %paramDescription
       \t */
-      \tstatic void configure(
-      %params) {
+      \tstatic void configure(%params) {
       \t
       \t   // Protect sequence from interrupts
       \t   CriticalSection cs;
@@ -673,8 +668,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      this->%registerName1.fromTicks(%paramName1);
       \t      this->%registerName2.fromTicks(%paramName2);
@@ -697,8 +691,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      this->%paramName0.fromSeconds(%paramName0);
       \t      this->%paramName1.fromSeconds(%paramName1);

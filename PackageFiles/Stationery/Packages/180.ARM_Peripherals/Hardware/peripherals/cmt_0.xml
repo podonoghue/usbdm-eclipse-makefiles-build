@@ -218,7 +218,7 @@
 
    <intOption key="cmt_cgh1_ph" condition="cmt_cgh1_ph_present"
       enabledBy="enablePeripheralSupport"
-      enumType="uint8_t"
+      baseType="uint8_t"
       typeName="CmtPrimaryCarrierHighTime"
       description="Primary Carrier High Time Data Value"
       toolTip="Contains the number of input clocks required to generate the carrier high time period.\n
@@ -235,7 +235,7 @@
 
    <intOption key="cmt_cgl1_pl" condition="cmt_cgl1_pl_present"
       enabledBy="enablePeripheralSupport"
-      enumType="uint8_t"
+      baseType="uint8_t"
       typeName="CmtPrimaryCarrierLowTime"
       description="Primary Carrier Low Time Data Value"
       toolTip="Contains the number of input clocks required to generate the carrier low time period.\n
@@ -252,7 +252,7 @@
 
    <intOption key="cmt_cgh2_sh" condition="cmt_cgh2_sh_present"
       enabledBy="enablePeripheralSupport"
-      enumType="uint8_t"
+      baseType="uint8_t"
       typeName="CmtSecondaryCarrierHighTime"
       description="Secondary Carrier High Time Data Value"
       toolTip="Contains the number of input clocks required to generate the carrier high time period.\n
@@ -269,7 +269,7 @@
 
    <intOption key="cmt_cgl2_sl" condition="cmt_cgl2_sl_present"
       enabledBy="enablePeripheralSupport"
-      enumType="uint8_t"
+      baseType="uint8_t"
       typeName="CmtSecondaryCarrierLowTime"
       description="Secondary Carrier Low Time Data Value"
       toolTip="Contains the number of input clocks required to generate the carrier low time period.\n
@@ -287,7 +287,7 @@
    <intOption key="cmt_mark" condition="cmt_cmd1_mb_present"
       enabledBy="enablePeripheralSupport"
       valueFormat="%s"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="CmtMarkPeriod"
       description="Mark period"
       toolTip="Controls the mark period of the modulator for all modes"
@@ -299,7 +299,7 @@
    <intOption key="cmt_space" condition="cmt_cmd3_sb_present"
       enabledBy="enablePeripheralSupport"
       valueFormat="%s"
-      enumType="uint16_t"
+      baseType="uint16_t"
       typeName="CmtSpacePeriod"
       description="Space period"
       toolTip="Controls the space periods of the modulator for all modes"

@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE14Z7
       MKE15Z7
 -->
@@ -275,12 +275,12 @@ An interrupt is generated when TOF equals one</description> <bitOffset>8</bitOff
                         <enumeratedValues>
                            <enumeratedValue>
                               <name>0b0</name>
-                              <description>FTM counter is not reset when the selected channel %s input event is detected</description>
+                              <description>FTM counter is not reset when the selected channel input event is detected</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
                               <name>0b1</name>
-                              <description>FTM counter is reset when the selected channel %s input event is detected</description>
+                              <description>FTM counter is reset when the selected channel input event is detected</description>
                               <value>0b1</value>
                            </enumeratedValue>
                         </enumeratedValues>
@@ -476,6 +476,14 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <description>Capture and Compare Status</description>
                <addressOffset>0x50</addressOffset>
                <fields>
+                  <field>
+                     <name>STATUS</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Channel Event Flags</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
                   <field>
                      <name>CH0F</name>
                      <description>Channel 0 Event Flag</description>
@@ -680,6 +688,14 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TRIG</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>PWM Synchronization Hardware Trigger</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>3</bitWidth>
                   </field>
                   <field derivedFrom="CNTMIN" > <name>TRIG0</name> <description>PWM Synchronization Hardware Trigger 0</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="TRIG0" > <name>TRIG1</name> <description>PWM Synchronization Hardware Trigger 1</description> <bitOffset>5</bitOffset> </field>
@@ -1717,6 +1733,14 @@ Selects the ratio between the number of counter overflows to the number of times
                <description>FTM Inverting Control</description>
                <addressOffset>0x90</addressOffset>
                <fields>
+                  <field>
+                     <name>INVEN</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Paired Channels Inverting Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
                   <field>
                      <name>INV0EN</name>
                      <description>Pair Channels 0 Inverting Enable</description>

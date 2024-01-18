@@ -60,7 +60,7 @@
       hidden="true"
       derived="true"
       typeName="TsiEnable"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Module Enable" >
       <choice name="Module disabled"  value="0" enum="ModuleDisabled" />
       <choice name="Module enabled"   value="1" enum="ModuleEnabled"  isDefault="true" />
@@ -70,7 +70,7 @@
       hidden="true"
       derived="true"
       typeName="TsiOutOfRangeFlag"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Out of Range Flag"
       toolTip="This flag is set if the result register of the enabled electrode is out\n
                of the range defined by the TSI_THRESHOLD register. \n
@@ -83,7 +83,7 @@
    <binaryOption key="tsi_gencs_cursw" condition="tsi_gencs_cursw_present"
       enabledBy="enablePeripheralSupport"
       typeName="TsiCurrentSource"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Electrode/Reference OSC swap"
       toolTip="This bit specifies if the current sources of electrode oscillator and reference oscillator are swapped" >
       <choice name="Not swapped" value="0" enum="NotSwapped" isDefault="true" />
@@ -93,7 +93,7 @@
    <binaryOption key="tsi_gencs_stm" condition="tsi_gencs_stm_present"
       enabledBy="enablePeripheralSupport"
       typeName="TsiScanTrigger"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Scan Trigger Mode"
       toolTip="Selects between software and hardware triggers" >
       <choice name="Software trigger"  value="0" enum="SoftwareTrigger"/>
@@ -103,7 +103,7 @@
    <binaryOption key="tsi_gencs_stpe" condition="tsi_gencs_stpe_present"
       enabledBy="enablePeripheralSupport"
       typeName="TsiLowPower"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="TSI STOP Enable"
       toolTip="Controls operation while in Low Power Modes (STOP, VLPS, LLS and VLLS{3,2,1})" >
       <choice name="Disabled in low power"  value="0" enum="Disabled"/>
@@ -114,7 +114,7 @@
       enabledBy="irqHandlingMethod"
       valueFormat="TSI_GENCS_TSIIEN(%s),TSI_GENCS_ESOR(%s)"
       typeName="TsiAction"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Touch Sensing Input Event Enable"
       toolTip="Enables events from Out-of-Range and End-of-Scan conditions" >
       <choice name="Interrupt/DMA disabled"                value="0,0" enum="Disabled"/>
@@ -126,7 +126,7 @@
       enabledBy="irqHandlingMethod"
       valueFormat="TSI_GENCS_TSIIEN(%s),TSI_GENCS_EOSDMEO(%s),TSI_GENCS_ESOR(%s)"
       typeName="TsiAction"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Touch Sensing Input Event Enable" 
       toolTip="Enables events from Out-of-Range and End-of-Scan conditions\n
                It may also be used to direct OOR events to generate interrupts rather than DMA requests.\n
@@ -140,7 +140,7 @@
    <binaryOption key="tsi_data_dmaen" condition="tsi_data_dmaen_present"
       enabledBy="tsi_gencs_action>0"
       typeName="TsiEventAction"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Interrupt/DMA Selection"
       toolTip="Select between DMA and Interrupt request\n
                This bit is used together with the TSI interrupt enable bits(TSIIE, ESOR, EOSDMEO)\n
@@ -152,7 +152,7 @@
    <choiceOption key="tsi_gencs_nscn" condition="tsi_gencs_nscn_present"
       enabledBy="enablePeripheralSupport"
       typeName="TsiConsecutiveScan"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Consecutive Scan number"
       toolTip="Number of Consecutive Scans Per Electrode" >
       <choice          name="Scan Electrode 1 time"     enum="1Time"      value="0"   />
@@ -162,7 +162,7 @@
    <choiceOption key="tsi_gencs_ps" condition="tsi_gencs_ps_present"
       enabledBy="enablePeripheralSupport"
       typeName="TsiElectrodePrescaler"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Prescaler for Electrode Oscillator Frequency" >
       <choice name="Divided by 1"    value="0" enum="DivBy1"  />
       <choice name="Divided by 2"    value="1" enum="DivBy2"  />
@@ -177,7 +177,7 @@
    <choiceOption key="tsi_gencs_extchrg" condition="tsi_gencs_extchrg_present"
       enabledBy="enablePeripheralSupport"
       typeName="TsiExternalCharge"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="External Oscillator Charge Current select"
       toolTip="Control the electrode oscillator charge and discharge current value" >
       <choice name="500 nA"      value="0" enum="500na"/>
@@ -195,7 +195,7 @@
    <choiceOption key="tsi_gencs_refchrg" condition="tsi_gencs_refchrg_present"
       enabledBy="enablePeripheralSupport"
       typeName="TsiReferenceCurrent"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Reference Oscillator Charge Current select"
       toolTip="Controls the reference oscillator charge and discharge current value" >
       <choice name="500 nA"      value="0" enum="500nA"/>
@@ -211,7 +211,7 @@
    <choiceOption key="tsi_gencs_mode" condition="tsi_gencs_mode_present"
       enabledBy="enablePeripheralSupport"
       typeName="TsiMode"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="TSI analogue modes setup and status bits"
       toolTip="Set up TSI analogue modes\n
       Mode[3..2] == 00 => Capacitive sensing mode\n
@@ -227,7 +227,7 @@
       hidden="true"
       derived="true"
       typeName="TsiEndOfScanFlag"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="End of Scan Flag"
       toolTip="This flag is set when all active electrodes are finished scanning\n
                after a scan trigger.\n
@@ -241,7 +241,7 @@
       hidden="true"
       derived="true"
       typeName="TsiStatus"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Scan In Progress Status"
       toolTip="This read-only bit indicates if scan is in progress.\n
                This bit will get asserted after the analogue bias circuit is\n
@@ -254,7 +254,7 @@
    <choiceOption key="tsi_gencs_filter" condition="tsi_gencs_filter_present"
       enabledBy="enablePeripheralSupport"
       typeName="TsiFilter"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Filter" >
       <choice name="8 peak increments the count"  value="0" enum="8Peaks" />
       <choice name="4 peak increments the count"  value="1" enum="4Peaks" />
@@ -265,7 +265,7 @@
    <choiceOption key="tsi_gencs_noise_threshold" condition="tsi_gencs_noise_threshold_present"
       enabledBy="enablePeripheralSupport"
       typeName="TsiGencsNoiseThreshold"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Threholds or noise measurement \tValues vary with device" >
       <choice name="DVpm = 0.038 V, Vp = 0.834 V, Vm = 0.796 V"  value="0" enum="Dvpm0038V_Vp0834V_Vm0796V"/>
       <choice name="DVpm = 0.050 V, Vp = 0.830 V, Vm = 0.790 V"  value="1" enum="Dvpm0050V_Vp0830V_Vm0790V"/>
@@ -288,7 +288,7 @@
    <binaryOption key="tsi_gencs_resistor" condition="tsi_gencs_resistor_present"
       enabledBy="enablePeripheralSupport"
       typeName="TsiGencsResistor"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Filter" >
       <choice name="32K Series resistor"   value="0" enum="32kSeriesResistor"/>
       <choice name="187K Series resistor"  value="1" enum="187kSeriesResistor"/>
@@ -297,7 +297,7 @@
    <choiceOption key="tsi_gencs_rs" condition="tsi_gencs_rs_present"
       enabledBy="enablePeripheralSupport"
       typeName="TsiGencsRs"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Rs Series resistor for noise mode" >
       <choice name="Reserved"    value="0" enum="Reserved"/>
       <choice name="Reserved"    value="1" enum="Reserved"/>
@@ -316,7 +316,7 @@
    <intOption key="tsi_tshd_thresl" condition="tsi_tshd_thresl_present"
       enabledBy="enablePeripheralSupport"
       typeName="TsiHighThreshold"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Wake-up Channel High Threshold value"
       toolTip="Determines the high threshold for the wakeup channel active in low power mode"
       min="0" max="65535" value="65535" />
@@ -324,7 +324,7 @@
    <intOption key="tsi_tshd_thresh" condition="tsi_tshd_thresh_present"
       enabledBy="enablePeripheralSupport"
       typeName="TsiLowThreshold"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Wake-up Channel Low Threshold value"
       toolTip="Determines the low threshold for the wakeup channel active in low power mode"
       min="0" max="65535" value="0" />
@@ -338,7 +338,7 @@
       hidden="true"
       derived="true"
       typeName="TsiChannel"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Tsi Channel"
       toolTip="These bits specify channel to be measured.\n
                In hardware trigger mode (TSI_GENCS[STM] = 1), the scan will not start\n
@@ -353,7 +353,7 @@
    <binaryOption key="tsi_data_swts" condition="tsi_data_swts_present"
       hidden="true"
       typeName="TsiSoftwareTrigger"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="Software Trigger Start"
       toolTip="Used to start a scan when sowftare trigger mode is selected (STM=0)" >
       <choice name="No effect"   value="0" enum="NoEffect"/>
@@ -364,7 +364,7 @@
       hidden="true"
       derived="true"
       typeName="TsiConversionCount"
-      enumType="uint32_t"
+      baseType="uint32_t"
       description="TSI Conversion Counter Value"
       toolTip="These read-only bits record the accumulated scan counter value ticked by the reference oscillator."   />
 
@@ -602,7 +602,7 @@
    ]]></variableTemplate>
 
    <for keys=" type        : variables                                            : init    "
-       values="%enumType   : tsi_gencs_action,tsi_gencs_mode,
+       values="%baseType   : tsi_gencs_action,tsi_gencs_mode,
                              tsi_gencs_refchrg,tsi_gencs_dvolt,tsi_gencs_extchrg,
                              tsi_gencs_ps,tsi_gencs_nscn,tsi_gencs_stpe,
                              tsi_gencs_stm,tsi_gencs_cursw,
@@ -610,8 +610,8 @@
 
                              tsi_gencs_filter,tsi_gencs_noise_threshold,
                              tsi_gencs_resistor,tsi_gencs_rs                      : 0        ;
-               %enumType   : tsi_data_tsich,tsi_data_dmaen                        : 0        ;
-               %enumType   : tsi_tshd_thresh,tsi_tshd_thresl                      : 0        " >
+               %baseType   : tsi_data_tsich,tsi_data_dmaen                        : 0        ;
+               %baseType   : tsi_tshd_thresh,tsi_tshd_thresl                      : 0        " >
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(variables)"
          linePadding="xxx"
