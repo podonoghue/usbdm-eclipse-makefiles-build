@@ -2787,7 +2787,7 @@ USBDM_ErrorCode USBDM_ReadMemory( unsigned int  memorySpace,
 
    bdmState.activityFlag = BDM_ACTIVE;
 
-   log.printq("elementSize=%d, count=0x%X(%d), addr=[%s0x%06X..0x%06X]\n",
+   log.warning("elementSize=%d, count=0x%X(%d), addr=[%s0x%06X..0x%06X]\n",
           elementSize, byteCount, byteCount, getMemSpaceAbbreviatedName((MemorySpace_t)memorySpace), address, address+byteCount-1);
 
    #ifdef FIX_ALIGNMENT

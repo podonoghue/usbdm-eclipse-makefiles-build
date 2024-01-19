@@ -4250,6 +4250,10 @@ static int cmd_exit(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
 
 //! Usage message
 static const char usageText[] =
+      "Accepts decimal, octal with \'0\' prefix or hex with \'0x\' prefix.\n"
+      "Addresses may have optional memory space prefix (X: P: G:)\n"
+      ""
+      "Addresses may be prefixed with \n"
       "connect                      - Connect to target\n"
       "closeBDM                     - Close BDM connection\n"
       "debug <value>                - Debug commands\n"
@@ -4273,7 +4277,7 @@ static const char usageText[] =
       "jtag-shift-ir                - Set up for IR chain shift\n"
       "jtag-idcode                  - Read IDCODE from JTAG\n"
       "load <filename>              - Load file image into buffer\n"
-      "log 0|1                      - setting ARM loggin OFF/ON\n"
+      "log 0|1                      - setting ARM logging OFF/ON\n"
       "memorySpace [<N|X|P|G>]      - set memory space (DSC=N,X,P, HCS12=N|G)\n"
       "massErase                    - S12Z Mass erase\n"
       "openbdm [<bdmNumber>]        - Open given BDM\n"

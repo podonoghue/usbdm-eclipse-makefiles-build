@@ -25,6 +25,7 @@
 +============================================================================================
 | Revision History
 +============================================================================================
+| 19 Jan 24 | Removed MS_FAST for HCS08/HCS12 as fails if BDM memory space  - pgo
 | 14 Apr 17 | Fixed loadTargetProgram() for OpWriteRam                      - pgo 4.12.1.170
 | 4  Mar 16 | Fixed saving/restoring security regions                       - pgo 4.12.1.90
 |  7 Aug 15 | Aded setDeviceData()                                          - pgo 4.12.1.10
@@ -2459,6 +2460,8 @@ USBDM_ErrorCode FlashProgrammer_HCS08::doReadbackVerify(FlashImagePtr flashImage
 #elif (TARGET == ARM)
       memorySpace = MS_Long;
 #elif (TARGET == HCS08) || (TARGET == HCS12)
+      // Removed as fails if verifying Flash Configuration Field as accesses BDM memory space
+      // memorySpace = (MemorySpace_t)(MS_Fast|MS_Byte);
       memorySpace = (MemorySpace_t)(MS_Fast|MS_Byte);
 #elif (TARGET == S12Z)
       memorySpace = MS_Word;
