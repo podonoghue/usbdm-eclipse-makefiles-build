@@ -48,16 +48,16 @@ fi
 directories="i386-win-gnu x86_64-win-gnu"
 for dir in ${directories}; do
 echo "--- Filling ${BIN_DIR}/${dir}"
-cp -r  "${PACKAGE_FILEs}/bin/${dir}"               "${BIN_DIR}"
+cp -p -r  "${PACKAGE_FILEs}/bin/${dir}"               "${BIN_DIR}"
 done
 
-#*** usbdm.dll is just a renamed usbdm.dll
+#*** usbdm.dll is just a renamed tbdml.dll
 echo "--- Creating ${BIN_DIRx32}/usbdm.dll"
-cp "${PACKAGE_FILEs}/bin/i386-win-gnu/tbdml.dll"          "${BIN_DIRx32}/usbdm.dll"
+cp -p "${PACKAGE_FILEs}/bin/i386-win-gnu/tbdml.dll"          "${BIN_DIRx32}/usbdm.dll"
 echo "--- Creating ${BIN_DIRx32}/usbdm-debug.dll"
-cp "${PACKAGE_FILEs}/bin/i386-win-gnu/tbdml-debug.dll"    "${BIN_DIRx32}/usbdm-debug.dll"
+cp -p "${PACKAGE_FILEs}/bin/i386-win-gnu/tbdml-debug.dll"    "${BIN_DIRx32}/usbdm-debug.dll"
 echo "--- Copying ${BIN_DIR}/*.ico"
-cp "${APP_ROOT}/Shared/src/"*.ico                         "${BIN_DIR}"
+cp -p "${APP_ROOT}/Shared/src/"*.ico                         "${BIN_DIR}"
 
 echo "--- ====================================="
 echo "    Complete Folders "
@@ -66,7 +66,7 @@ echo "--- ====================================="
 directories="DeviceData FlashImages Stationery LaunchConfig Licenses WinDrivers Wix WizardPatches"
 for dir in ${directories}; do
 echo  "--- Filling ${INSTALLATION_DIR}/${dir}"
-cp -r  "${PACKAGE_FILEs}/${dir}"                  "${INSTALLATION_DIR}"
+cp -p -r  "${PACKAGE_FILEs}/${dir}"                  "${INSTALLATION_DIR}"
 done
 
 # Cleanup testing dir
@@ -79,37 +79,37 @@ echo "--- ========================================"
 miscWin="TryProgrammer.cmd MakeTestImages.cmd usbdm.tgt"
 for file in ${miscWin}; do
 echo  "--- Copying ${INSTALLATION_DIR}/${file}"
-cp -r  "${PACKAGE_FILEs}/MiscellaneousWin/${file}"   "${BIN_DIR}"
+cp -p -r  "${PACKAGE_FILEs}/MiscellaneousWin/${file}"   "${BIN_DIR}"
 done
 
 miscSuffixes="s19 wav specs xlkr xml elf"
 for suffix in ${miscSuffixes}; do
 echo "--- Copying ${BIN_DIR}/*.${suffix}"
-cp -r  "${PACKAGE_FILEs}/Miscellaneous/"*.${suffix}   "${BIN_DIR}"
+cp -p -r  "${PACKAGE_FILEs}/Miscellaneous/"*.${suffix}   "${BIN_DIR}"
 done
 
 echo "--- Copying ${BIN_DIR}/ReadMeWizard"
-cp "${PACKAGE_FILEs}/WizardPatches/ReadMeWizard.txt" "${BIN_DIR}"
+cp -p "${PACKAGE_FILEs}/WizardPatches/ReadMeWizard.txt" "${BIN_DIR}"
 
 echo "--- Copying ${BIN_DIR}/*.tcl"
-cp "${PACKAGE_FILEs}/Scripts/"*.tcl                  "${BIN_DIR}"
+cp -p "${PACKAGE_FILEs}/Scripts/"*.tcl                  "${BIN_DIR}"
 
 echo "--- Copying ${BIN_DIR}/USBDM-CFFlasher-Readme.txt"
-cp "${PACKAGE_FILEs}/MiscellaneousWin/USBDM-CFFlasher-Readme.txt"         "${BIN_DIR}"
+cp -p "${PACKAGE_FILEs}/MiscellaneousWin/USBDM-CFFlasher-Readme.txt"         "${BIN_DIR}"
 
 echo "--- ====================================="
 echo "    Codewarrior Plugin files "
 echo "--- ====================================="
 echo "--- Filling ${CODEWARRIOR_UPDATE_SITE}"
 mkdir -p "${CODEWARRIOR_UPDATE_SITE}"
-cp -r "${CODEWARRIOR_PLUGIN_ROOT}/UpdateSite/"*      "${CODEWARRIOR_UPDATE_SITE}"
+cp -p -r "${CODEWARRIOR_PLUGIN_ROOT}/UpdateSite/"*      "${CODEWARRIOR_UPDATE_SITE}"
 
 echo "--- ====================================="
 echo "    Eclipse Plugin files "
 echo "--- ====================================="
 echo "--- Filling ${ECLIPSE_UPDATE_SITE}"
 mkdir -p "${ECLIPSE_UPDATE_SITE}"
-cp -r "${ECLIPSE_PLUGIN_ROOT}/UpdateSite/"*          "${ECLIPSE_UPDATE_SITE}"
+cp -p -r "${ECLIPSE_PLUGIN_ROOT}/UpdateSite/"*          "${ECLIPSE_UPDATE_SITE}"
 
 echo "--- ====================================="
 echo "    Cleanup unneeded files "
