@@ -25,18 +25,32 @@
 <!-- ____ Template substitutions ________
     *
 
-    * <li>%baseType[index]                Underlying type for enum
+    In config function
+    ---------------------
+    * <li>%configFieldAssignment          Expression of form '%register = (%register & ~%mask)|%registerName
+    * <li>%configRegAssignment            Expression of form '%register = %registerName
+    
+    In constructor
+    ----------------
+    * <li>%constructorBitSet              Expression of form '%registerName |= %paramExpression
+    * <li>%constructorFieldAssignment     Expression of form '%registerName  = (%registerName & ~%mask)|%paramExpression
+    * <li>%constructorRegAssignment       Expression of form '%registerName  = %paramExpression
 
-    * <li>%configFieldAssignment          Expression of form '%register     <= (%register & ~%mask)|%registerName
-    * <li>%configRegAssignment            Expression of form '%register     <= %registerName
-    * <li>%constructorFieldAssignment     Expression of form '%registerName <= (%registerName & ~%mask)|%paramExpression
-    * <li>%constructorRegAssignment       Expression of form '%registerName <= %paramExpression
+    In setter
+    -----------
+    * <li>%regAssignment                  Expression of form '%register = %paramExpression
+    * <li>%fieldAssignment                Expression of form '%register = (%register & ~%mask)|%paramExpression
+    
+    In getter
+    -----------
+    * <li>%fieldExtract                   Expression of form '(%register & %mask)
 
+    General
+    ---------
+    
+    * <li>%baseType[index]                Underlying type for enum or int etc
     * <li>%defaultValue[index]            Default value of variable
     * <li>%description[index]             Description from variable e.g. Compare Function Enable
-
-    * <li>%fieldExtract                   Expression of form '(%register & %mask)
-    * <li>%fieldAssignment                Expression of form '%register     <= (%register & ~%mask)|%paramExpression
 
     * <li>%initExpression                 Based on variables etc. Similar to (%register&%mask)
     
@@ -52,7 +66,6 @@
     * <li>%params                         Formatted parameter list for function
     * <li>%paramType[index]               Based on typeName e.g. AdcCompare (or uint32_t)
 
-    * <li>%regAssignment                  Expression of form '%register     <= %paramExpression
     * <li>%register[index]                Register associated with variable e.g. adc->APCTL1
     * <li>%registerName[index]            Name of corresponding register (lower-case for Init()) e.g. apctl1
     * <li>%registerNAME[index]            Name of corresponding register (upper-case for Init()) e.g. APCTL1

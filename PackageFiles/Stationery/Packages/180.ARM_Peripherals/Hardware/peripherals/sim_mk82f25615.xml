@@ -513,7 +513,7 @@
             \t *
             \t * @param %paramName %tooltip
             \t */
-            \tstatic void setFtm%(f)ClockIn(%paramType %paramName) {
+            \tstatic void setFtm%(f)ExternalClock(%paramType %paramName) {
             \t   %fieldAssignment;
             \t}
             \t
@@ -522,7 +522,7 @@
             \t *
             \t * @return Clock frequency in Hz
             \t */
-            \tstatic uint32_t getFtm%(f)ClockIn() {
+            \tstatic uint32_t getFtm%(f)ExternalClock() {
             \t
             \t   return %paramType(%register&%mask);
             \t   }
@@ -533,7 +533,7 @@
             \t *
             \t * @return Clock frequency in Hz
             \t */
-            \tstatic uint32_t getFtm%(f)ClockInFrequency() {
+            \tstatic uint32_t getFtm%(f)ExternalClockFrequency() {
             \t
             \t   switch(%maskingExpression) {
             \t      default: return 0;
@@ -744,7 +744,7 @@
             \t *
             \t * @return Clock frequency in Hz
             \t */
-            \tstatic uint32_t getTpm%(t)ClockInFrequency() {
+            \tstatic uint32_t getTpm%(t)ExternalClockFrequency() {
             \t
             \t   switch(%maskingExpression) {
             \t      default: return 0;

@@ -286,7 +286,7 @@
                \t *
                \t * @return Clock frequency in Hz
                \t */
-               \tstatic uint32_t getTpm%(p)ClockInFrequency() {
+               \tstatic uint32_t getTpm%(p)ExternalClockFrequency() {
                \t
                \t   switch(%maskingExpression) {
                %body

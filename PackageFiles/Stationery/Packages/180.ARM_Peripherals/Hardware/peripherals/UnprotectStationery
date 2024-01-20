@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo Unprotecting Stationery and DeviceData
+sudo chmod -R a+rw /usr/share/usbdm/Stationery
+sudo chmod -R a+rw /usr/share/usbdm/DeviceData
+
+

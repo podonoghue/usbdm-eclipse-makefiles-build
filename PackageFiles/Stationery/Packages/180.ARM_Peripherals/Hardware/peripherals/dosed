@@ -17,8 +17,8 @@ read -d '' TOx <<EOF
       \</for\> 
 EOF
 
-FROM="enumType"
-TO="baseType"
+FROM="Ftm%(f)ClockIn"
+TO="Ftm%(f)ExternalClock"
 
 echo from "${FROM}"
 echo to "${TO}"

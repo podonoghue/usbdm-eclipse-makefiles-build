@@ -1010,7 +1010,7 @@
          </memory>
          <memory pageAddress="0x0015" registerAddress="0x0100" type="flash" securityAddress="0xFF00" sectorSize="512" alignment="8">
             <securityEntryRef ref="HCS12-fprot-eeprot-fopt-security" />
-            <memoryRange start="0x8000" end="0xBFFF" pages="2"  pageEnd="0x0F" />
+            <memoryRange start="0x8000" end="0xBFFF" pageReset="0xE" pages="2"  pageEnd="0x0F" />
             <memoryRange start="0xC000" end="0xFFFF" />
          </memory>
          <sdid value="0xF380" mask="0xFFF0"/>
@@ -1033,7 +1033,7 @@
          <memory pageAddress="0x0015" registerAddress="0x0100" type="flash" securityAddress="0xFF00" sectorSize="512" alignment="8">
             <securityEntryRef ref="HCS12-fprot-eeprot-fopt-security" />
             <memoryRange start="0x4000" end="0x7FFF" />
-            <memoryRange start="0x8000" end="0xBFFF" pages="3"  pageEnd="0x0F" />
+            <memoryRange start="0x8000" end="0xBFFF" pageReset="0xE" pages="3"  pageEnd="0x0F" />
             <memoryRange start="0xC000" end="0xFFFF" />
          </memory>
          <sdid value="0xF280" mask="0xFFF0"/>
@@ -1057,7 +1057,7 @@
             <securityEntryRef ref="HCS12-fprot-eeprot-fopt-security" />
             <memoryRange start="0x0C00" end="0x2FFF" />  <!-- Gap between EEPROM and RAM -->
             <memoryRange start="0x4000" end="0x7FFF" />
-            <memoryRange start="0x8000" end="0xBFFF" pages="4"  pageEnd="0x0F" />
+            <memoryRange start="0x8000" end="0xBFFF" pageReset="0xE" pages="4"  pageEnd="0x0F" />
             <memoryRange start="0xC000" end="0xFFFF" />
          </memory>
          <sdid value="0xF280" mask="0xFFF0"/>
@@ -1081,7 +1081,7 @@
             <securityEntryRef ref="HCS12-fprot-eeprot-fopt-security" />
             <memoryRange start="0x1000" end="0x1FFF" />  <!-- Gap between EEPROM and RAM -->
             <memoryRange start="0x4000" end="0x7FFF" />
-            <memoryRange start="0x8000" end="0xBFFF" pages="6"  pageEnd="0x0F" />
+            <memoryRange start="0x8000" end="0xBFFF" pageReset="0xE" pages="6"  pageEnd="0x0F" />
             <memoryRange start="0xC000" end="0xFFFF" />
          </memory>
          <sdid value="0xF180" mask="0xFFF0"/>
@@ -1105,7 +1105,7 @@
             <securityEntryRef ref="HCS12-fprot-eeprot-fopt-security" />
             <memoryRange start="0x1400" end="0x1FFF" />  <!-- Gap between EEPROM and RAM -->
             <memoryRange start="0x4000" end="0x7FFF" />
-            <memoryRange start="0x8000" end="0xBFFF" pages="8"  pageEnd="0x0F" />
+            <memoryRange start="0x8000" end="0xBFFF" pageReset="0xE" pages="8"  pageEnd="0x0F" />
             <memoryRange start="0xC000" end="0xFFFF" />
          </memory>
          <sdid value="0xF180" mask="0xFFF0"/>
@@ -1128,7 +1128,7 @@
          <memory pageAddress="0x0015" registerAddress="0x0100" type="flash" securityAddress="0xFF00" sectorSize="512" alignment="8">
             <securityEntryRef ref="HCS12-fprot-eeprot-fopt-security" />
             <memoryRange start="0x4000" end="0x7FFF" />
-            <memoryRange start="0x8000" end="0xBFFF" pages="12"  pageEnd="0x0F" />
+            <memoryRange start="0x8000" end="0xBFFF" pageReset="0xE" pages="12"  pageEnd="0x0F" />
             <memoryRange start="0xC000" end="0xFFFF" />
          </memory>
          <sdid value="0xF080" mask="0xFFF0"/>
@@ -1151,7 +1151,7 @@
          <memory pageAddress="0x0015" registerAddress="0x0100" type="flash" securityAddress="0xFF00" sectorSize="512" alignment="8">
             <securityEntryRef ref="HCS12-fprot-eeprot-fopt-security" />
             <memoryRange start="0x4000" end="0x7FFF" />
-            <memoryRange start="0x8000" end="0xBFFF" pages="15"  pageEnd="0x0F" />
+            <memoryRange start="0x8000" end="0xBFFF" pageReset="0xE" pages="15"  pageEnd="0x0F" />
             <memoryRange start="0xC000" end="0xFFFF" />
          </memory>
          <sdid value="0xF080" mask="0xFFF0"/>

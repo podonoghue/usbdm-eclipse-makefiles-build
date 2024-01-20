@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- ftm_pwmload.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
+
+   <binaryOption key="ftm_pwmload_ldok" condition="ftm_pwmload_ldok_present"
+      hidden="true"
+      derived="true"
+      enabledBy="enablePeripheralSupport"
+      baseType="uint16_t"
+      typeName="FtmPwmload"
+      description="Load Enable"
+      toolTip="Enables loading of MOD/CNTIN/CnV from buffers on load points.\n
+               Loading will occur when the FTM counter wraps from MOD value to CNTIN\n
+               value or at additional load points specified (e.g. FtmLoadPoint_Ch0)\n
+               Loading is further qualified as follows:\n
+               - MOD loading is unconditional\n
+               - CNTIN is qualified by CNTINC\n
+               - C(n)/C(n+1) is qualified by SYNCENm" >
+      <choice name="Loading disabled"  value="0" enum="Disabled"/>
+      <choice name="Loading enabled"   value="1" enum="Enabled"/>
+   </binaryOption >
+
+   <bitmaskOption key="ftm_pwmload_chsel" condition="ftm_pwmload_present"
+      hidden="true"
+      derived="true"
+      baseType="uint16_t"
+      enabledBy="enablePeripheralSupport"
+      typeName="FtmLoadPoint"
+      description="Load on Channel Match enable"
+      toolTip="Selects which channels trigger loading of MOD/CNTIN/CnV from buffers. \n
+               If enabled, the loading occurs when the counter reaches CnV"
+      bitmask="0xFF"
+      bitList="Ch%i"
+      bitDescription="Load on channel %i match"
+      enumText="\t   %(typeName)_NoChannels = 0"
+   />
+
+<!--  ___ PwmLoad class ______________ -->
+
+<if condition="ftm_pwmload_present">
+
+   <template  codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_Baseclass) PWM load settings
+      \t * When enabled (FtmPwmload_Enabled) loading will occur when the FTM counter wraps from 
+      \t * MOD value to CNTIN value or at additional load points specified (e.g. FtmLoadPoint_Ch0)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t *
+      \t * @code
+      \t * static const $(_Class)::PwmLoad $(_Baseclass)PwmLoad {
+      \t *
+      \t *    // Load Enable - This enables loading on counter wrap and additional load points,
+      \t *    FtmPwmload_Enabled ,      
+      \t *
+      \t *    // Additional load points
+      \t *    FtmLoadPoint_Ch0,         // Load on Channel 0 match
+      \t *    FtmLoadPoint_Ch4,         // Load on Channel 4 match
+      \t * };
+      \t * 
+      \t * // Set up load points
+      \t * $(_Baseclass)PwmLoad.configure();
+      \t *
+      \t * Wait for load to occur
+      \t * $(_Baseclass)PwmLoad.waitForLoadPoint();
+      \t * @endcode
+      \t */
+      \tclass PwmLoad {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr PwmLoad(const PwmLoad &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr PwmLoad() = default;
+      \t\n
+   ]]></template>
+
+   <!-- ____ PwmLoad class Member variables ________ -->
+
+   <for keys=" type        : variables                                                 : init    "
+       values="%baseType   : ftm_pwmload_ldok, ftm_pwmload_chsel                       : 0       ">
+      <variableTemplate  codeGenCondition="enablePeripheralSupport"
+         variables="%(variables)"
+         linePadding="xxx"
+      ><![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]></variableTemplate>
+   </for>
+
+<!-- ____ PwmLoad class Constructors ____________ -->
+
+   <for keys="r" values="ftm_pwmload_ldok;ftm_pwmload_chsel" >
+      <variableTemplate  codeGenCondition="enablePeripheralSupport"
+         variables="%(r)"
+         linePadding="xxx"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    * (%(r))
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr PwmLoad(%params, Types... rest) : PwmLoad(rest...) {
+         \t
+         \t      %constructorBitSet;
+         \t   }
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+<!--  PwmLoad class Configure method -->
+
+   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t   /**
+      \t    * Configure FTM PWM load from values specified in constructor
+      \t    */
+      \t   void configure() const {
+      \t
+   ]]></template>
+   <for keys=
+            "var                                               : statement"
+   values="
+            ftm_pwmload_ldok,ftm_pwmload_chsel                 : %register = %registerName  " >
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+         variables="%(var)"
+         linePadding="xxxxxx"
+       ><![CDATA[
+         \t
+         \t%multilineDescription
+         \t      %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t
+      \t   }\n\n
+   ]]></template>
+   
+   <variableTemplate codeGenCondition="enablePeripheralSupport" 
+      variables="ftm_pwmload_ldok"
+   ><![CDATA[
+      \t   /**
+      \t    * Wait for load-point that clears PWM load
+      \t    */
+      \t   void waitForLoadPoint() const {
+      \t      while (%fieldExtract) { 
+      \t      }
+      \t   }\n\n
+   ]]></variableTemplate>
+   
+   <template  codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t}; // class $(_Class)Info::OutputInitialise\n\n
+   ]]></template>
+
+</if>
+
+</fragment>

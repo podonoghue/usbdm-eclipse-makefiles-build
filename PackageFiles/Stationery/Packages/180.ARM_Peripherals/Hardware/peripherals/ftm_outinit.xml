@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- ftm_outinit.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
+
+<if condition="ftm_outinit_present">
+
+   <binaryOption key="ftm_mode_init" condition="ftm_mode_init_present"
+      hidden="true"
+      hiddenBy="mode==Quad"
+      enabledBy="enablePeripheralSupport"
+      baseType="uint8_t"
+      typeName="FtmInitialiseOutputs"
+      description="Initialisation of Channel Outputs"
+      toolTip="When written to 1 the channels outputs are initialised according to the state of\n
+               their corresponding bit in the OUTINIT register\n
+               This is applied after the main FTM configuration" >
+      <choice name="Initialise" value="1" enum="Initialise" isDefault="true" />
+   </binaryOption >
+
+   <!-- ____ OUTINIT __________________ -->
+
+   <choiceOption key="ftm_outinit_choi_masks" condition="ftm_outinit_choi_present"
+      hidden="true"
+      derived="true"
+      valueFormat="%s"
+      baseType="uint16_t"
+      typeName="FtmInitialValue"
+      description="Channel Output Initialisation Value"
+      toolTip="Bitmask defining the value that is forced\n
+               into the channel output when initialisation occurs." >
+      <choiceExpansion name="Ch%(ch) initially 0"  enum="Ch%(ch)_0"  value='=Format("0x%04XU",0xFF00^(1&lt;&lt;(%(ch)+8)))' keys="ch" dim="8"/>
+      <choice          name="All initially 0"      enum="All_0"      value='0x0000U' />
+      <choiceExpansion name="Ch%(ch) initially 1"  enum="Ch%(ch)_1"  value='=Format("0x%04XU",0xFF00+(1&lt;&lt;(%(ch))))'   keys="ch" dim="8"/>
+      <choice          name="All initially 1"      enum="All_1"      value='0xFFFFU' />
+   </choiceOption>
+
+   <bitmaskOption key="ftm_outinit_choi" condition="ftm_outinit_choi_present"
+      hidden="true"
+      enabledBy="enablePeripheralSupport"
+      valueFormat="%s"
+      typeName="FtmInitialValue"
+      baseType="uint8_t"
+      description="Channel Output Initialisation Value"
+      toolTip="Bitmask defining the value that is forced\n
+               into the channel output when initialisation occurs."
+      value="0"
+      bitmask="=(1&lt;&lt;_channelCount)-1"
+      bitList="Ch%i"
+      bitDescription="Channel %n initial value" />
+
+<!--  ___ OutputInitialise class ______________ -->
+
+   <template  codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_Baseclass)Output initilisation settings
+      \t * When applied the FTM outputs are initilised to the values specified in the constructor
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t *
+      \t * @code
+      \t * static const $(_Class)::OutputInitialise $(_Baseclass)OutputInitialise {
+      \t *
+      \t *    // Output levels
+      \t *    FtmInitialValue,         //...
+      \t * };
+      \t * 
+      \t * // Set up load points
+      \t * $(_Baseclass)OutputInitialise.configure();
+      \t *
+      \t * @endcode
+      \t */
+      \tclass OutputInitialise {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr OutputInitialise(const OutputInitialise &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr OutputInitialise() = default;
+      \t\n
+   ]]></template>
+
+   <!-- ____ OutputInitialise class Member variables ________ -->
+
+   <for keys=" type        : variables                                         : init    "
+       values="%baseType   : ftm_outinit_choi                                  : 0       ">
+      <variableTemplate  codeGenCondition="enablePeripheralSupport"
+         variables="%(variables)"
+         linePadding="xxx"
+      ><![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]></variableTemplate>
+   </for>
+
+<!-- ____ OutputInitialise class Constructors ____________ -->
+
+   <for keys="r" values="ftm_outinit_choi_masks" >
+      <variableTemplate  codeGenCondition="enablePeripheralSupport"
+         variables="%(r)"
+         linePadding="xxx"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    * (%(r))
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr OutputInitialise(%params, Types... rest) : OutputInitialise(rest...) {
+         \t
+         \t      %registerName = (%registerName&(%paramExpression>>8)) | %paramExpression;
+         \t   }
+         \t
+         \t   /**
+         \t    * Constructor for %description
+         \t    * (%(r))
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr OutputInitialise(%baseType %paramName0, Types... rest) : OutputInitialise(rest...) {
+         \t
+         \t      %registerName = %paramExpression;
+         \t   }
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+<!--  OutputInitialise class Configure method -->
+
+   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t   /**
+      \t    * Apply the values specified in the constructor as an initialisation value for the FTM outputs 
+      \t    */
+      \t   void apply() const {
+      \t
+   ]]></template>
+   <for keys="    var                    : statement"
+      values=" ftm_outinit_choi          : %register = %registerName                    ;
+               ftm_mode_init             : %register = %register|%defaultValue  " >
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+         variables="%(var)"
+         linePadding="xxxxxx"
+       ><![CDATA[
+         \t
+         \t%multilineDescription
+         \t      %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t
+      \t   }\n\n
+   ]]></template>
+   
+   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t   /**
+      \t    * Re-apply the initialisation of the FTM outputs.
+      \t    * This assumes that the initialisation has been previously applied so
+      \t    * is slightly quicker (does not update the value). 
+      \t    */
+      \t   void quickReapply() const {
+      \t
+   ]]></template>
+   <for keys="    var                    : statement"
+      values=" ftm_mode_init             : %register = %register|%defaultValue  " >
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+         variables="%(var)"
+         linePadding="xxxxxx"
+       ><![CDATA[
+         \t
+         \t%multilineDescription
+         \t      %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t
+      \t   }\n\n
+   ]]></template>
+   
+   <template  codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t}; // class $(_Class)Info::OutputInitialise\n\n
+   ]]></template>
+
+</if>
+
+</fragment>

@@ -97,10 +97,10 @@
    </choiceOption>
 
    <!-- FTM Trigger sources -->
-   <constant key="/FTM0/hardwareTriggerPinMap" type="String" value='"FTM1_Match/CMP0,FTM2_Match/PDB_Ch1,FTM0_FLT0"'  />
-   <constant key="/FTM1/hardwareTriggerPinMap" type="String" value='"CMP0,CMP1,FTM1_FLT0"'  />
-   <constant key="/FTM2/hardwareTriggerPinMap" type="String" value='"CMP0,,FTM2_FLT0"'  />
-   <constant key="/FTM3/hardwareTriggerPinMap" type="String" value='"FTM1_Match,FTM2_Match,FTM3_FLT0"'       />
+   <constant key="/FTM0/hardwareTriggerSources" type="String" value='"FTM1_Match/CMP0,FTM2_Match/PDB_Ch1,FTM0_FLT0"'  />
+   <constant key="/FTM1/hardwareTriggerSources" type="String" value='"CMP0,CMP1,FTM1_FLT0"'  />
+   <constant key="/FTM2/hardwareTriggerSources" type="String" value='"CMP0,,FTM2_FLT0"'  />
+   <constant key="/FTM3/hardwareTriggerSources" type="String" value='"FTM1_Match,FTM2_Match,FTM3_FLT0"'       />
 
    <!-- FTM Fault sources -->
    <constant key="/FTM0/faultPinMap"    type="String" value='"FTM0_FLT0/CMP0","FTM0_FLT1/CMP1","FTM0_FLT2","FTM0_FLT3"'  />
@@ -470,7 +470,7 @@
             \t *
             \t * @param %paramName %tooltip
             \t */
-            \tstatic void setFtm%(f)ClockIn(%paramType %paramName) {
+            \tstatic void setFtm%(f)ExternalClock(%paramType %paramName) {
             \t   %fieldAssignment;
             \t}
             \t
@@ -479,7 +479,7 @@
             \t *
             \t * @return Clock frequency in Hz
             \t */
-            \tstatic uint32_t getFtm%(f)ClockIn() {
+            \tstatic uint32_t getFtm%(f)ExternalClock() {
             \t
             \t   return %paramType(%register&%mask);
             \t   }
@@ -490,7 +490,7 @@
             \t *
             \t * @return Clock frequency in Hz
             \t */
-            \tstatic uint32_t getFtm%(f)ClockInFrequency() {
+            \tstatic uint32_t getFtm%(f)ExternalClockFrequency() {
             \t
             \t   switch(%maskingExpression) {
             \t      default: return 0;

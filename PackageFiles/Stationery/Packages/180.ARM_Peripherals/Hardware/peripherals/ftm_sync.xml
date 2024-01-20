@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- ftm_fault.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
+
+<!--  ___ SyncInit class ______________ -->
+
+<if condition="ftm_sync_present||ftm_synconf_present">
+
+   <binaryOption key="ftm_synconf_syncmode" condition="ftm_synconf_syncmode_present"
+      hidden="true"
+      enabledBy="enablePeripheralSupport"
+      typeName="FtmSyncPwm"
+      baseType="uint32_t"
+      description="Synchronisation Mode"
+      toolTip="Selects the PWM synchronisation mode" >
+      <choice name="Legacy PWM synchronisation"    value="0" enum="LegacyPwmSynch"   />
+      <choice name="Enhanced PWM synchronisation"  value="1" enum="EnhancedPwmSynch" isDefault="true" />
+   </binaryOption >
+
+   <binaryOption key="ftm_sync_reinit" condition="ftm_sync_reinit_present"
+      hidden="true"
+      hiddenBy="ftm_synconf_syncmode"
+      enabledBy="enablePeripheralSupport&amp;&amp;!ftm_synconf_syncmode"
+      typeName="FtmReinitOnSync"
+      baseType="uint32_t"
+      description="Counter Reinitialisation"
+      toolTip="Determines if the FTM counter is reinitialised when \n
+               the selected synchronisation trigger is detected. \n
+               Only available in legacy PWM synchronisation (SYNCMODE = 0)." >
+      <choice name="Counts normally"                        value="0" enum="Disabled"/>
+      <choice name="Updated with initial value on trigger"  value="1" enum="Enabled"/>
+   </binaryOption >
+
+   <binaryOption key="ftm_sync_swsync" condition="ftm_sync_swsync_present"
+      hidden="true"
+      derived="true"
+      typeName="FtmSyncSwsync"
+      baseType="uint8_t"
+      description="Software Trigger for PWM synchronisation "
+      toolTip="The software trigger happens when a 1 is written to SWSYNC bit.\n
+               This bit will be cleared when the action happens." >
+      <choice name="Not selected"  value="0" enum="NotSelected"/>
+      <choice name="Selected"      value="1" enum="Selected"/>
+   </binaryOption >
+
+   <bitmaskOption key="ftm_sync_trig" condition="hardwareTriggerSources"
+      hidden="true"
+      enabledBy="enablePeripheralSupport"
+      typeName="FtmHardwareTrigger"
+      baseType="uint8_t"
+      description="Hardware Trigger Inputs"
+      toolTip="Enables hardware trigger to the PWM synchronisation.\n
+               Hardware trigger occurs on a rising edge of the corresponding trigger input signal."
+      bitmask="0"
+      bitList="=hardwareTriggerSources"
+      bitDescription="Trigger from %n"
+      value="0" />
+
+   <binaryOption key="ftm_synconf_hwtrigmode" condition="ftm_synconf_hwtrigmode_present"
+      hidden="true"
+      hiddenBy="!ftm_synconf_syncmode"
+      enabledBy="enablePeripheralSupport&amp;&amp;ftm_synconf_syncmode"
+      typeName="FtmTriggerClear"
+      baseType="uint32_t"
+      description="Hardware Trigger Clearing"
+      toolTip="Controls when hardware triggers are cleared\n
+               Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
+      <choice name="TRIGj cleared on trigger detect"   value="0" enum="OnTrigger" />
+      <choice name="TRIGj unaffected on trigger event" value="1" enum="Never"     />
+   </binaryOption >
+
+   <!-- ____ Load Points ______________ -->
+
+   <binaryOption key="ftm_sync_cntmin" condition="ftm_sync_cntmin_present"
+      hidden="true"
+      enabledBy="enablePeripheralSupport"
+      typeName="FtmSyncCntmin"
+      baseType="uint8_t"
+      description="Minimum Loading Point Enable"
+      toolTip="Selects the minimum loading point for loading of MOD/CNTIN/CnV from buffers. \n
+               If enabled, the loading occurs when the FTM counter reaches CNTIN." >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption >
+
+   <binaryOption key="ftm_sync_cntmax" condition="ftm_sync_cntmax_present"
+      hidden="true"
+      enabledBy="enablePeripheralSupport"
+      typeName="FtmSyncCntmax"
+      baseType="uint8_t"
+      description="Maximum Loading Point Enable"
+      toolTip="Selects the maximum loading point for loading of MOD/CNTIN/CnV from buffers.\n
+               If enabled, the loading occurs when the FTM counter reaches MOD." >
+      <choice name="Disabled"    value="0" enum="Disabled"/>
+      <choice name="Enabled"     value="1" enum="Enabled"/>
+   </binaryOption >
+
+   <!-- .... CNTIN .... -->
+
+   <binaryOption key="ftm_synconf_cntinc" condition="ftm_synconf_cntinc_present"
+      hidden="true"
+      hiddenBy="!ftm_synconf_syncmode"
+      enabledBy="enablePeripheralSupport&amp;&amp;ftm_synconf_syncmode"
+      typeName="FtmBufferSyncCounter"
+      baseType="uint32_t"
+      description="CNTIN Register Synchronisation"
+      toolTip="CNTIN Register Synchronisation with buffer\n
+               Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
+      <choice name="On rising edges of system clock"  value="0" enum="OnRisingClockEdge" />
+      <choice name="By PWM synchronisation"           value="1" enum="OnPwmSynch"        />
+   </binaryOption >
+
+   <!-- .... CNTIN/MOD/CV .... -->
+
+   <binaryOption key="ftm_synconf_swwrbuf" condition="ftm_synconf_swwrbuf_present"
+      hidden="true"
+      hiddenBy="!ftm_synconf_syncmode"
+      enabledBy="enablePeripheralSupport&amp;&amp;ftm_synconf_syncmode"
+      typeName="FtmSwSyncRegs"
+      baseType="uint32_t"
+      description="CNTIN/MOD/CV Software Synchronisation"
+      toolTip="Controls MOD/CNTIN/CV synchronisation by software trigger\n
+               Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
+      <choice name="Unaffected"                      value="0" enum="Unaffected"/>
+      <choice name="MOD/CNTIN/CV register synched"   value="1" enum="OnSoftwareTrigger"/>
+   </binaryOption >
+
+   <binaryOption key="ftm_synconf_hwwrbuf" condition="ftm_synconf_hwwrbuf_present"
+      hidden="true"
+      hiddenBy="!ftm_synconf_syncmode"
+      enabledBy="enablePeripheralSupport&amp;&amp;ftm_synconf_syncmode"
+      typeName="FtmHwSyncRegs"
+      baseType="uint32_t"
+      description="CNTIN/MOD/CV Hardware Synchronisation"
+      toolTip="Controls MOD/CNTIN/CV synchronisation by hardware trigger\n
+               Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
+      <choice name="Unaffected"                       value="0" enum="Unaffected"/>
+      <choice name="MOD/CNTIN/CV registers synched"   value="1" enum="OnHardwareTrigger"/>
+   </binaryOption >
+
+   <!-- .... OUTMASK .... -->
+
+   <binaryOption key="ftm_sync_synchom" condition="ftm_sync_synchom_present"
+      hidden="true"
+      enabledBy="enablePeripheralSupport"
+      typeName="FtmSyncSynchom"
+      baseType="uint8_t"
+      description="OUTMASK Register Synchronisation"
+      toolTip="Selects when the OUTMASK register is updated with the value of its buffer" >
+      <choice name="On rising edges of system clock"  value="0" enum="OnRisingClockEdge" />
+      <choice name="By PWM synchronisation"           value="1" enum="OnPwmSynch"        />
+   </binaryOption >
+
+   <binaryOption key="ftm_synconf_swom" condition="ftm_synconf_swom_present"
+      hidden="true"
+      hiddenBy="!ftm_synconf_syncmode"
+      enabledBy="enablePeripheralSupport&amp;&amp;ftm_synconf_syncmode&amp;&amp;ftm_sync_synchom"
+      typeName="FtmSwSyncOutmask"
+      baseType="uint32_t"
+      description="OUTMASK Software Synchronisation"
+      toolTip="Controls OUTMASK synchronisation by software trigger\n
+               Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
+      <choice name="Unaffected"                 value="0" enum="Unaffected"/>
+      <choice name="OUTMASK register synched"   value="1" enum="OnSoftwareTrigger"/>
+   </binaryOption >
+
+   <binaryOption key="ftm_synconf_hwom" condition="ftm_synconf_hwom_present"
+      hidden="true"
+      hiddenBy="!ftm_synconf_syncmode"
+      enabledBy="enablePeripheralSupport&amp;&amp;ftm_synconf_syncmode&amp;&amp;ftm_sync_synchom"
+      typeName="FtmHwSyncOutmask"
+      baseType="uint32_t"
+      description="OUTMASK Hardware Synchronisation"
+      toolTip="Controls OUTMASK synchronisation by hardware trigger\n
+               Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
+      <choice name="Unaffected"                 value="0" enum="Unaffected"/>
+      <choice name="OUTMASK register synched"   value="1" enum="OnHardwareTrigger"/>
+   </binaryOption >
+
+   <!-- .... INVCTRL .... -->
+
+   <binaryOption key="ftm_synconf_invc" condition="ftm_synconf_invc_present"
+      hidden="true"
+      enabledBy="enablePeripheralSupport"
+      typeName="FtmBufferSyncInvctrl"
+      baseType="uint32_t"
+      description="INVCTRL Register Synchronisation"
+      toolTip="Controls INVCTRL Register Synchronisation with buffer" >
+      <choice name="On rising edges of system clock"  value="0" enum="OnRisingClockEdge" />
+      <choice name="By PWM synchronisation"           value="1" enum="OnPwmSynch"        />
+   </binaryOption >
+
+   <binaryOption key="ftm_synconf_swinvc" condition="ftm_synconf_swinvc_present"
+      hidden="true"
+      hiddenBy="!ftm_synconf_syncmode"
+      enabledBy="enablePeripheralSupport&amp;&amp;ftm_synconf_syncmode&amp;&amp;ftm_synconf_invc"
+      typeName="FtmSwSyncInvCtrl"
+      baseType="uint32_t"
+      description="INVCTRL Software Synchronisation"
+      toolTip="Controls INVCTRL synchronisation by software trigger\n
+               Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
+      <choice name="Unaffected"                 value="0" enum="Unaffected"/>
+      <choice name="INVCTRL register synched"   value="1" enum="OnSoftwareTrigger"/>
+   </binaryOption >
+
+   <binaryOption key="ftm_synconf_hwinvc" condition="ftm_synconf_hwinvc_present"
+      hidden="true"
+      hiddenBy="!ftm_synconf_syncmode"
+      enabledBy="enablePeripheralSupport&amp;&amp;ftm_synconf_syncmode&amp;&amp;ftm_synconf_invc"
+      typeName="FtmHwSyncInvctrl"
+      baseType="uint32_t"
+      description="INVCTRL Hardware Synchronisation"
+      toolTip="Controls INVCTRL synchronisation by hardware trigger\n
+               Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
+      <choice name="Unaffected"                 value="0" enum="Unaffected"/>
+      <choice name="INVCTRL register synched"   value="1" enum="OnHardwareTrigger"/>
+   </binaryOption >
+
+   <!-- .... SWOCTRL .... -->
+
+   <binaryOption key="ftm_synconf_swoc" condition="ftm_synconf_swoc_present"
+      hidden="true"
+      enabledBy="enablePeripheralSupport"
+      typeName="FtmBufferSyncSwoctrl"
+      baseType="uint32_t"
+      description="SWOCTRL Register Synchronisation"
+      toolTip="Controls SWOCTRL Register Synchronisation with buffer" >
+      <choice name="On rising edges of system clock"  value="0" enum="OnRisingClockEdge" />
+      <choice name="By PWM synchronisation"           value="1" enum="OnPwmSynch"        />
+   </binaryOption >
+
+   <binaryOption key="ftm_synconf_swsoc" condition="ftm_synconf_swsoc_present"
+      hidden="true"
+      hiddenBy="!ftm_synconf_syncmode"
+      enabledBy="enablePeripheralSupport&amp;&amp;ftm_synconf_syncmode&amp;&amp;ftm_synconf_swoc"
+      typeName="FtmSwSyncSwoctrl"
+      baseType="uint32_t"
+      description="SWOCTRL Software Synchronisation"
+      toolTip="Controls SWOCTRL synchronisation by software trigger\n
+               Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
+      <choice name="Unaffected"                 value="0" enum="Unaffected"/>
+      <choice name="SWOCTRL register synched"   value="1" enum="OnSoftwareTrigger"/>
+   </binaryOption >
+
+   <binaryOption key="ftm_synconf_hwsoc" condition="ftm_synconf_hwsoc_present"
+      hidden="true"
+      hiddenBy="!ftm_synconf_syncmode"
+      enabledBy="enablePeripheralSupport&amp;&amp;ftm_synconf_syncmode&amp;&amp;ftm_synconf_swoc"
+      typeName="FtmHwSyncSwoctrl"
+      baseType="uint32_t"
+      description="SWOCTRL Hardware Synchronisation"
+      toolTip="Controls SWOCTRL synchronisation by hardware trigger\n
+               Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
+      <choice name="Unaffected"                 value="0" enum="Unaffected"/>
+      <choice name="SWOCTRL register synched"   value="1" enum="OnHardwareTrigger"/>
+   </binaryOption >
+
+   <!-- .... FTM CNT .... -->
+
+   <binaryOption key="ftm_synconf_swrstcnt" condition="ftm_synconf_swrstcnt_present"
+      hidden="true"
+      hiddenBy="!ftm_synconf_syncmode"
+      enabledBy="enablePeripheralSupport&amp;&amp;ftm_synconf_syncmode"
+      typeName="FtmSwSyncCounter"
+      baseType="uint32_t"
+      description="CNT Software Synchronisation"
+      toolTip="Controls counter synchronisation by software trigger\n
+               Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
+      <choice name="Unaffected"                 value="0" enum="Unaffected"/>
+      <choice name="Counter register synched"   value="1" enum="OnSoftwareTrigger"/>
+   </binaryOption >
+
+   <binaryOption key="ftm_synconf_hwrstcnt" condition="ftm_synconf_hwrstcnt_present"
+      hidden="true"
+      hiddenBy="!ftm_synconf_syncmode"
+      enabledBy="enablePeripheralSupport&amp;&amp;ftm_synconf_syncmode"
+      typeName="FtmHwSyncCounter"
+      baseType="uint32_t"
+      description="CNT Hardware Synchronisation"
+      toolTip="Controls Counter synchronisation by hardware trigger\n
+               Only available in enhanced PWM synchronisation (SYNCMODE = 1)." >
+      <choice name="Unaffected"                 value="0" enum="Unaffected"/>
+      <choice name="Counter register synched"   value="1" enum="OnHardwareTrigger"/>
+   </binaryOption >
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_Baseclass) Trigger settings
+      \t *
+      \t * This class has a templated constructor that accepts various values:
+      \t *
+      \t * @note This constructor may be used to create a const instance in ROM
+      \t *
+      \t * Example:
+      \t * //
+      \t * // $(_BASENAME) call-back
+      \t * //
+      \t * // @param status  Status reflecting active inputs
+      \t * //
+      \t * void $(_basename)Callback() {
+      \t *    ...
+      \t * }
+      \t *
+      \t * @code
+      \t * static const $(_Class)::SyncInit $(_Baseclass)SyncInit {
+      \t *
+      \t *    // Omitted parameters are taken to be zero unless a base value is given
+      \t *    FtmSyncCntmin_Disabled ,                 // Minimum Loading Point Enable - Disabled
+      \t *    FtmSyncCntmax_Enabled ,                  // Maximum Loading Point Enable - Enabled
+      \t *    FtmReinitOnSync_Disabled ,               // Counter Reinitialisation - Counts normally
+      \t *    FtmHardwareTrigger_FTM0_FLT0_CMP0 ,      // Hardware Trigger Inputs
+      \t *    FtmSyncSynchom_OnRisingClockEdge ,       // OUTMASK Register Synchronisation - On rising edges of system clock
+      \t *    FtmSyncPwm_LegacyPwmSynch ,              // Synchronisation Mode - Legacy PWM synchronisation
+      \t *    FtmTriggerSyncr_OnTrigger ,              // Hardware Trigger Mode - TRIGj cleared on trigger detect
+      \t *    FtmBufferSyncCounter_OnRisingClockEdge , // CNTIN Register Synchronisation - On rising edges of system clock
+      \t *    FtmSwSyncRegs_Unaffected ,               // CNTIN/MOD/CV Software Synchronisation - Unaffected
+      \t *    FtmHwSyncRegs_Unaffected ,               // CNTIN/MOD/CV Hardware Synchronisation - Unaffected
+      \t *    FtmSwSyncOutmask_Unaffected ,            // OUTMASK Software Synchronisation - Unaffected
+      \t *    FtmHwSyncOutmask_Unaffected ,            // OUTMASK Hardware Synchronisation - Unaffected
+      \t *    FtmBufferSyncInvctrl_OnRisingClockEdge , // INVCTRL Register Synchronisation - On rising edges of system clock
+      \t *    FtmSwSyncInvCtrl_Unaffected ,            // INVCTRL Software Synchronisation - Unaffected
+      \t *    FtmHwSyncInvctrl_Unaffected ,            // INVCTRL Hardware Synchronisation - Unaffected
+      \t *    FtmBufferSyncSwoctrl_OnRisingClockEdge , // SWOCTRL Register Synchronisation - On rising edges of system clock
+      \t *    FtmHwSyncSwoctrl_Unaffected ,            // SWOCTRL Hardware Synchronisation - Unaffected
+      \t *    FtmSwSyncCounter_Unaffected ,            // CNT Software Synchronisation - Unaffected
+      \t *    FtmHwSyncCounter_Unaffected,             // CNT Hardware Synchronisation - Unaffected
+      \t *
+      \t *    // Optional base value to start with (must be last parameter)
+      \t *    $(_Class)::DefaultValue
+      \t * };
+      \t *
+      \t * @endcode
+      \t */
+      \tclass SyncInit {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr SyncInit(const SyncInit &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr SyncInit() = default;
+      \t\n
+   ]]></template>
+
+   <!-- ____ SyncInit class Member variables ________ -->
+
+   <for keys=" type        : variables                                                 : init    "
+       values="%baseType   : ftm_sync_cntmin, ftm_sync_cntmax, ftm_sync_reinit,
+                             ftm_sync_trig, ftm_sync_synchom                           : 0       ;
+               %baseType   : ftm_synconf_syncmode,
+                             ftm_synconf_hwtrigmode,
+                             ftm_synconf_cntinc,
+                             ftm_synconf_swwrbuf, ftm_synconf_hwwrbuf,
+                             ftm_synconf_swom, ftm_synconf_hwom,
+                             ftm_synconf_invc, ftm_synconf_swinvc, ftm_synconf_hwinvc,
+                             ftm_synconf_swoc, ftm_synconf_hwsoc
+                             ftm_synconf_swrstcnt, ftm_synconf_hwrstcnt                : 0       ">
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(variables)"
+         linePadding="xxx"
+      ><![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]></variableTemplate>
+   </for>
+
+<!-- ____ SyncInit class Constructors ____________ -->
+
+   <for keys="r" values="ftm_sync_cntmin;ftm_sync_cntmax;ftm_sync_reinit;ftm_sync_synchom;
+                         ftm_synconf_hwtrigmode;
+                         ftm_synconf_syncmode;
+                         ftm_synconf_cntinc;
+                         ftm_synconf_swwrbuf;ftm_synconf_hwwrbuf;
+                         ftm_synconf_swom;ftm_synconf_hwom;
+                         ftm_synconf_invc;ftm_synconf_swinvc;ftm_synconf_hwinvc;
+                         ftm_synconf_swoc;ftm_synconf_hwsoc;
+                         ftm_synconf_swrstcnt;ftm_synconf_hwrstcnt" >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(r)"
+         linePadding="xxx"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    * (%(r))
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr SyncInit(%params, Types... rest) : SyncInit(rest...) {
+         \t
+         \t      %constructorFieldAssignment;
+         \t   }
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <for keys="r" values="ftm_sync_trig" >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(r)"
+         linePadding="xxx"
+      ><![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    * (%(r))
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr SyncInit(%params, Types... rest) : SyncInit(rest...) {
+         \t
+         \t      %constructorBitSet;
+         \t   }
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+      \t}; // class $(_Structname)BasicInfo::SyncInit\n\n
+   ]]></template>
+
+<!--  SyncInit class Configure method -->
+
+   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t/**
+      \t * Configure FTM synchronisation from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic ErrorCode configure(const SyncInit &init) {
+      \t
+   ]]></template>
+   <for keys=
+            "var                                               : statement"
+   values=" ftm_sync_cntmin,ftm_sync_cntmax,
+            ftm_sync_reinit,ftm_sync_trig,ftm_sync_synchom     : %configRegAssignment  ;
+            ftm_synconf_syncmode,
+            ftm_synconf_hwtrigmode,
+            ftm_synconf_cntinc,
+            ftm_synconf_swwrbuf,ftm_synconf_hwwrbuf,
+            ftm_synconf_swom,ftm_synconf_hwom,
+            ftm_synconf_invc,ftm_synconf_swinvc,
+            ftm_synconf_hwinvc,
+            ftm_synconf_swoc,ftm_synconf_hwsoc,
+            ftm_synconf_swrstcnt,ftm_synconf_hwrstcnt         : %configRegAssignment  " >
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+         variables="%(var)"
+         linePadding="xxx"
+       ><![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t
+      \t   return E_NO_ERROR;
+      \t}\n\n
+   ]]></template>
+
+<!-- ____ Default Initialisation value ________ -->
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(mode!=Quad)"
+      separator=","
+      terminator=","
+      variables="ftm_sync_cntmin,ftm_sync_cntmax,ftm_sync_reinit,ftm_sync_trig,ftm_sync_synchom,
+                 ftm_synconf_syncmode,
+                 ftm_synconf_hwtrigmode,
+                 ftm_synconf_cntinc,
+                 ftm_synconf_swwrbuf,ftm_synconf_hwwrbuf,
+                 ftm_synconf_swom,ftm_synconf_hwom,
+                 ftm_synconf_invc,ftm_synconf_swinvc,ftm_synconf_hwinvc,
+                 ftm_synconf_swoc,ftm_synconf_hwsoc,
+                 ftm_synconf_swrstcnt,ftm_synconf_hwrstcnt"
+   ><![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr SyncInit DefaultSyncInitValue = {%initExpression\n
+      \t};
+      \t\n
+   ]]>
+   </variableTemplate>
+
+</if> <!-- condition="ftm_sync_present||ftm_synconf_present" -->
+
+</fragment>

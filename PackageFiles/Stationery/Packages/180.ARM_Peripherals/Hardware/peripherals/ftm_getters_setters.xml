@@ -72,6 +72,19 @@
       ]]></variableTemplate>
    </for>
 
+   <variableTemplate variables="ftm_sync_swsync" codeGenCondition="enableGettersAndSetters"
+   ><![CDATA[
+      \t/**
+      \t * Wait for  %description complete
+      \t * (%variable)
+      \t */
+      \tstatic void waitForSyncComplete() {
+      \t   while(%fieldExtract) {
+      \t   }
+      \t}
+      \t\n
+   ]]></variableTemplate>
+   
    <for keys="field                     : set   : get   : clear : genCode                 : context                 : name"
         values="
 
